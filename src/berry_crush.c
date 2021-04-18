@@ -1,3 +1,4 @@
+/*
 #include "global.h"
 #include "gflib.h"
 #include "berry_crush.h"
@@ -228,3 +229,4 @@ void BerryCrush_InitPlayerNamesAndTextSpeed(struct BerryCrushGame *game)
         break;
     }
 }
+*/

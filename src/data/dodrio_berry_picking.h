@@ -1,3 +1,4 @@
+/*
 #ifndef GUARD_DATA_DODRIO_BERRY_PICKING_H
 #define GUARD_DATA_DODRIO_BERRY_PICKING_H
 
@@ -245,3 +246,4 @@ static const u32 sDodrioBerryBgTilemap2Right[] = INCBIN_U32("graphics/link_games
 static const u32 sDodrioBerryBgTilemap2Left[] = INCBIN_U32("graphics/link_games/dodrioberry_bg2left.bin.lz");
 
 #endif //GUARD_DATA_DODRIO_BERRY_PICKING_H
+*/

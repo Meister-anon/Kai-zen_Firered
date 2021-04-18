@@ -1,10 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src",
-    "\\src\\data",
-    "\\src\\data\\graphics"
+    "\\src"
   ],
-  "SelectedNode": "\\src\\data\\graphics\\items.h",
+  "SelectedNode": "\\src\\item_menu_icons.c",
   "PreviewInSolutionExplorer": false
 }

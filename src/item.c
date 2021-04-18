@@ -593,7 +593,7 @@ void TrySetObtainedItemQuestLogEvent(u16 itemId)
      || itemId == ITEM_TEACHY_TV
      || itemId == ITEM_RAINBOW_PASS
      || itemId == ITEM_TEA
-     || itemId == ITEM_POWDER_JAR
+  // || itemId == ITEM_POWDER_JAR
      || itemId == ITEM_RUBY
      || itemId == ITEM_SAPPHIRE
     )

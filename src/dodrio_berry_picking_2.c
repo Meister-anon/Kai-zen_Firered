@@ -1,3 +1,4 @@
+/*
 #include "global.h"
 #include "gflib.h"
 #include "dodrio_berry_picking.h"
@@ -1615,3 +1616,4 @@ static bool32 sub_8155FE0(void)
     gUnknown_203F440->unk3018++;
     return FALSE;
 }
+*/

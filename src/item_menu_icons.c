@@ -488,7 +488,7 @@ static const void *const sItemIconGfxPtrs[][2] = {
     [ITEM_TEA] = {gItemIcon_Tea, gItemIconPalette_Tea},
     [ITEM_MYSTIC_TICKET] = {gItemIcon_MysticTicket, gItemIconPalette_MysticTicket},
     [ITEM_AURORA_TICKET] = {gItemIcon_AuroraTicket, gItemIconPalette_AuroraTicket},
-    [ITEM_POWDER_JAR] = {gItemIcon_PowderJar, gItemIconPalette_PowderJar},
+  //[ITEM_POWDER_JAR] = {gItemIcon_PowderJar, gItemIconPalette_PowderJar},
     [ITEM_RUBY] = {gItemIcon_Gem, gItemIconPalette_Ruby},
     [ITEM_SAPPHIRE] = {gItemIcon_Gem, gItemIconPalette_Sapphire},
     // Emerald-only key items
@@ -998,8 +998,8 @@ void DestroyItemMenuIcon(u8 idx)
 
 const void * GetItemIconGfxPtr(u16 itemId, u8 attrId)
 {
-    if (itemId > ITEM_N_A)
-        itemId = ITEM_NONE;
+    if (itemId > ITEM_N_A) //think this equation is what was messing up my field arrow,
+        itemId = ITEM_NONE; //because it was listed grater than ITEM_N_A
     return sItemIconGfxPtrs[itemId][attrId];
 }
 

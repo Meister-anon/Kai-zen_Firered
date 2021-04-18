@@ -6889,6 +6889,8 @@ extern const u8 gItemPcTilemap[];
 //for some reason firered is u8 while emerald is u32.
 //what I did was add all the emerald items (excluding battle facility stuff,
 //I can compare to firered to add back anything missing later.
+//so don't have any items yet, bug bag icon is bugged I'm thinking I need to make this u8, gonna try that first adn see
+//with field return arrow.  that didn't change anything, I'll set it back and look for reference files.
 extern const u32 gUnknown_8E8362C[];
 extern const u32 gUnknown_8E83DBC[];
 extern const u32 gUnknown_8E84560[];
@@ -7309,7 +7311,7 @@ extern const u32 gItemIconPalette_HoennFossil[];
 extern const u32 gItemIcon_ClawFossil[];
 extern const u32 gItemIcon_DevonScope[];
 extern const u32 gItemIconPalette_DevonScope[];
-// TMs/HMs
+// TMs/HMs			//need to learn palette edit, to make one for fairy
 extern const u32 gItemIcon_TM[];
 extern const u32 gItemIconPalette_FightingTMHM[];
 extern const u32 gItemIconPalette_DragonTMHM[];
@@ -7949,8 +7951,8 @@ extern const u32 gItemIcon_TapuniumZ[];
 extern const u32 gItemIconPalette_TapuniumZ[];
 extern const u32 gItemIcon_UltranecroziumZ[];
 extern const u32 gItemIconPalette_UltranecroziumZ[];
-extern const u8 gFile_graphics_items_icons_return_to_field_arrow_sheet[];
-extern const u8 gFile_graphics_items_icon_palettes_return_to_field_arrow_palette[];
+extern const u32 gFile_graphics_items_icons_return_to_field_arrow_sheet[]; 
+extern const u32 gFile_graphics_items_icon_palettes_return_to_field_arrow_palette[];
 
 // battle_anim_utility_funcs
 extern const u32 gFile_graphics_battle_anims_masks_curse_sheet[];
@@ -8884,7 +8886,7 @@ extern const u8 gMonIcon_Umbreon[];
 extern const u8 gMonIcon_Murkrow[];
 extern const u8 gMonIcon_Slowking[];
 extern const u8 gMonIcon_Misdreavus[];
-extern const u8 gMonIcon_Unown_A[];
+extern const u8 gMonIcon_Unown[];
 extern const u8 gMonIcon_Wobbuffet[];
 extern const u8 gMonIcon_Girafarig[];
 extern const u8 gMonIcon_Pineco[];
@@ -9071,33 +9073,33 @@ extern const u8 gMonIcon_Jirachi[];
 extern const u8 gMonIcon_Deoxys[];
 extern const u8 gMonIcon_Chimecho[];
 extern const u8 gMonIcon_Egg[];
-extern const u8 gMonIcon_Unown_B[];
-extern const u8 gMonIcon_Unown_C[];
-extern const u8 gMonIcon_Unown_D[];
-extern const u8 gMonIcon_Unown_E[];
-extern const u8 gMonIcon_Unown_F[];
-extern const u8 gMonIcon_Unown_G[];
-extern const u8 gMonIcon_Unown_H[];
-extern const u8 gMonIcon_Unown_I[];
-extern const u8 gMonIcon_Unown_J[];
-extern const u8 gMonIcon_Unown_K[];
-extern const u8 gMonIcon_Unown_L[];
-extern const u8 gMonIcon_Unown_M[];
-extern const u8 gMonIcon_Unown_N[];
-extern const u8 gMonIcon_Unown_O[];
-extern const u8 gMonIcon_Unown_P[];
-extern const u8 gMonIcon_Unown_Q[];
-extern const u8 gMonIcon_Unown_R[];
-extern const u8 gMonIcon_Unown_S[];
-extern const u8 gMonIcon_Unown_T[];
-extern const u8 gMonIcon_Unown_U[];
-extern const u8 gMonIcon_Unown_V[];
-extern const u8 gMonIcon_Unown_W[];
-extern const u8 gMonIcon_Unown_X[];
-extern const u8 gMonIcon_Unown_Y[];
-extern const u8 gMonIcon_Unown_Z[];
-extern const u8 gMonIcon_Unown_ExclamationMark[];
-extern const u8 gMonIcon_Unown_QuestionMark[];
+extern const u8 gMonIcon_UnownB[];
+extern const u8 gMonIcon_UnownC[];
+extern const u8 gMonIcon_UnownD[];
+extern const u8 gMonIcon_UnownE[];
+extern const u8 gMonIcon_UnownF[];
+extern const u8 gMonIcon_UnownG[];
+extern const u8 gMonIcon_UnownH[];
+extern const u8 gMonIcon_UnownI[];
+extern const u8 gMonIcon_UnownJ[];
+extern const u8 gMonIcon_UnownK[];
+extern const u8 gMonIcon_UnownL[];
+extern const u8 gMonIcon_UnownM[];
+extern const u8 gMonIcon_UnownN[];
+extern const u8 gMonIcon_UnownO[];
+extern const u8 gMonIcon_UnownP[];
+extern const u8 gMonIcon_UnownQ[];
+extern const u8 gMonIcon_UnownR[];
+extern const u8 gMonIcon_UnownS[];
+extern const u8 gMonIcon_UnownT[];
+extern const u8 gMonIcon_UnownU[];
+extern const u8 gMonIcon_UnownV[];
+extern const u8 gMonIcon_UnownW[];
+extern const u8 gMonIcon_UnownX[];
+extern const u8 gMonIcon_UnownY[];
+extern const u8 gMonIcon_UnownZ[];
+extern const u8 gMonIcon_UnownExclamationMark[];
+extern const u8 gMonIcon_UnownQuestionMark[];
 extern const u8 gMonIcon_QuestionMark[];
 
 // trade

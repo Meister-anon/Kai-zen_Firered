@@ -713,7 +713,7 @@
 #define FLAG_0x2B8                                       0x2B8
 #define FLAG_0x2B9                                       0x2B9
 #define FLAG_0x2BA                                       0x2BA
-#define FLAG_GOT_POWDER_JAR                              0x2BB
+#define FLAG_GOT_POWDER_JAR                              0x2BB //remove or change this flag later, its not necessary now.
 #define FLAG_FOUGHT_MEWTWO                               0x2BC
 #define FLAG_FOUGHT_MOLTRES                              0x2BD
 #define FLAG_FOUGHT_ARTICUNO                             0x2BE

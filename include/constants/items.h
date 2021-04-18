@@ -436,8 +436,8 @@
 #define ITEM_RAINBOW_PASS 368
 #define ITEM_TEA 369
 #define ITEM_MYSTIC_TICKET 370
-#define ITEM_AURORA_TICKET 371
-#define ITEM_POWDER_JAR 372
+#define ITEM_AURORA_TICKET 371 /*
+#define ITEM_POWDER_JAR 372 */
 #define ITEM_RUBY 373
 #define ITEM_SAPPHIRE 374
 #define ITEM_ULTIMA_BRACE 375
@@ -669,8 +669,8 @@
 #define ITEM_GRISEOUS_ORB */
 #define ITEM_N_A 386 // keep this as last item value,   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
 #define ITEMS_COUNT ITEM_N_A +1
-#define ITEM_FIELD_ARROW ITEMS_COUNT
-// Emerald
+#define ITEM_FIELD_ARROW ITEM_N_A//field arrow isn't defined as an item, it just end of item_menu_icons.c list
+// Emerald   BUT based on list from vanilla its actually ID was equal to items N_A, circumventing that equation.
 #define ITEM_MAGMA_EMBLEM 388
 #define ITEM_OLD_SEA_MAP 389
 

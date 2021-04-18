@@ -1284,7 +1284,7 @@ static void Task_TryJoinLinkGroup(u8 taskId)
 {
     s32 id;
     struct UnkStruct_Group * data = sUnionRoomMain.group;
-
+    return;
     switch (data->state)
     {
     case 0:
@@ -1661,6 +1661,7 @@ static void ListMenuItemPrintFunc_UnionRoomGroups(u8 windowId, s32 itemId, u8 y)
 {
     struct UnkStruct_Group * data = sUnionRoomMain.group;
     u8 color_idx = URoomGroupListGetTextColor(data, itemId);
+    return;
 
     PrintUnionRoomGroupOnWindow(windowId, 8, y, &data->field_0->arr[itemId], color_idx, itemId);
 }
@@ -1823,16 +1824,17 @@ static void Task_ExchangeCards(u8 taskId)
 
 static void CB2_ShowCard(void)
 {
+    return;
     switch (gMain.state)
     {
     case 0:
         CreateTask(Task_ExchangeCards, 5);
         gMain.state++;
         break;
-    case 1:
-        if (!FuncIsActiveTask(Task_ExchangeCards))
-            ShowTrainerCardInLink(GetMultiplayerId() ^ 1, CB2_ReturnToField);
-        break;
+   // case 1:
+     //   if (!FuncIsActiveTask(Task_ExchangeCards))
+       //     ShowTrainerCardInLink(GetMultiplayerId() ^ 1, CB2_ReturnToField);
+   //     break;
     }
 
     RunTasks();
@@ -1895,7 +1897,7 @@ static void CB2_TransitionToCableClub(void)
 
 static void CreateTrainerCardInBuffer(void *dest, bool32 setWonderCard)
 {
-    TrainerCard_GenerateCardForLinkPlayer((struct TrainerCard * )dest);
+    return;//TrainerCard_GenerateCardForLinkPlayer((struct TrainerCard * )dest);
     if (setWonderCard)
         *((u16 *)(dest + sizeof(struct TrainerCard))) = GetWonderCardFlagId();
     else
@@ -1904,6 +1906,7 @@ static void CreateTrainerCardInBuffer(void *dest, bool32 setWonderCard)
 
 static void Task_StartActivity(u8 taskId)
 {
+    return;
     ResetReceivedWonderCardFlag();
     switch (sPlayerCurrActivity)
     {
@@ -1981,7 +1984,7 @@ static void Task_StartActivity(u8 taskId)
     case ACTIVITY_CARD | IN_UNION_ROOM:
         CreateTrainerCardInBuffer(gBlockSendBuffer, FALSE);
         SetMainCallback2(CB2_ShowCard);
-        break;
+        break;/*
     case ACTIVITY_PJUMP:
         SetCableClubStateAndWarpCurrentMap(USING_MINIGAME, 5, 1);
         StartPokemonJump(GetCursorSelectionMonId(), CB2_LoadMap);
@@ -1993,13 +1996,13 @@ static void Task_StartActivity(u8 taskId)
     case ACTIVITY_BPICK:
         SetCableClubStateAndWarpCurrentMap(USING_MINIGAME, 5, 1);
         StartDodrioBerryPicking(GetCursorSelectionMonId(), CB2_LoadMap);
-        break;
+        break; */
     }
 
-    DestroyTask(taskId);
-    gSpecialVar_Result = 1;
-    ScriptContext2_Disable();
-}
+        DestroyTask(taskId);
+        gSpecialVar_Result = 1;
+        ScriptContext2_Disable();
+    };
 
 static void Task_RunScriptAndFadeToActivity(u8 taskId)
 {
@@ -2666,7 +2669,7 @@ static void Task_RunUnionRoom(u8 taskId)
     s32 playerGender = MALE;
     struct UnkStruct_URoom * data = sUnionRoomMain.uRoom;
     s16 *taskData = gTasks[taskId].data;
-
+    return;
     switch (data->state)
     {
     case 0:
@@ -2959,8 +2962,9 @@ static void Task_RunUnionRoom(u8 taskId)
             {
                 if (sPlayerCurrActivity == ACTIVITY_CARD)
                 {
-                    ViewURoomPartnerTrainerCard(gStringVar4, data, MODE_CHILD);
-                    data->state = 40;
+                    return;
+                   // ViewURoomPartnerTrainerCard(gStringVar4, data, MODE_CHILD);
+                  //  data->state = 40;
                 }
                 else
                 {
@@ -3419,6 +3423,7 @@ void var_800D_set_xB(void)
 
 static void ReceiveUnionRoomActivityPacket(struct UnkStruct_URoom * uroom)
 {
+    return;
     if (gRecvCmds[1][1] != 0 && (gRecvCmds[1][0] & 0xFF00) == RFU_COMMAND_0x2f00)
     {
         uroom->recvActivityRequest[0] = gRecvCmds[1][1];
@@ -3432,6 +3437,7 @@ static void ReceiveUnionRoomActivityPacket(struct UnkStruct_URoom * uroom)
 
 static bool32 UnionRoom_HandleContactFromOtherPlayer(struct UnkStruct_URoom * uroom)
 {
+    return;
     if (uroom->recvActivityRequest[0] != 0)
     {
         s32 var = GetChatLeaderActionRequestMessage(gStringVar4, gLinkPlayers[1].gender, &uroom->recvActivityRequest[0], uroom);
@@ -3779,6 +3785,7 @@ static u8 CreateTask_ListenForPartnersWithSerial7F7D(struct UnkStruct_Main4 * ma
 
 static bool32 UR_PrintFieldMessage(const u8 *src)
 {
+    return;
     LoadStdWindowFrameGfx();
     DrawDialogueFrame(0, 1);
     StringExpandPlaceholders(gStringVar4, src);
@@ -3788,6 +3795,7 @@ static bool32 UR_PrintFieldMessage(const u8 *src)
 
 static bool32 UR_RunTextPrinters_CheckPrinter0Active(void)
 {
+    return;
     if (!RunTextPrinters_CheckPrinter0Active())
     {
         return TRUE;
@@ -4687,7 +4695,7 @@ static void ViewURoomPartnerTrainerCard(u8 *unused, struct UnkStruct_URoom * uro
     struct TrainerCard * trainerCard = &gTrainerCards[GetMultiplayerId() ^ 1];
     s32 i;
     s32 n;
-
+    return;
     DynamicPlaceholderTextUtil_Reset();
 
     StringCopy(uroom->trainerCardStrbufs[0], gTrainerClassNames[GetUnionRoomTrainerClass()]);
@@ -4708,20 +4716,20 @@ static void ViewURoomPartnerTrainerCard(u8 *unused, struct UnkStruct_URoom * uro
 
     DynamicPlaceholderTextUtil_ExpandPlaceholders(uroom->field_1A4, gUnknown_84594C4);
     StringCopy(gStringVar4, uroom->field_1A4);
-
-    n = trainerCard->rse.linkBattleWins;
+    
+   /* n = trainerCard->rse.linkBattleWins;
     if (n > 9999)
     {
         n = 9999;
-    }
+    }*/
     ConvertIntToDecimalStringN(uroom->trainerCardStrbufs[0], n, STR_CONV_MODE_LEFT_ALIGN, 4);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, uroom->trainerCardStrbufs[0]);
 
-    n = trainerCard->rse.linkBattleLosses;
+    /*n = trainerCard->rse.linkBattleLosses;
     if (n > 9999)
     {
         n = 9999;
-    }
+    }*/
     ConvertIntToDecimalStringN(uroom->trainerCardStrbufs[1], n, STR_CONV_MODE_LEFT_ALIGN, 4);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(2, uroom->trainerCardStrbufs[1]);
 

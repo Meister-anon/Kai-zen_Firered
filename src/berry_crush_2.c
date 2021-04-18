@@ -1,3 +1,4 @@
+/*
 #include "global.h"
 #include "gflib.h"
 #include "berry.h"
@@ -1439,3 +1440,4 @@ void BerryCrush_SetShowMessageParams(u8 *params, u8 stringId, u8 flags, u16 wait
     params[3] = ((u8 *)&waitKeys)[1];
     params[4] = followupCmd;
 }
+*/

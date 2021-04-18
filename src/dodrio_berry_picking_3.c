@@ -1,3 +1,4 @@
+/*
 #include "global.h"
 #include "dodrio_berry_picking.h"
 #include "link.h"
@@ -239,3 +240,4 @@ u32 sub_815AB60(u32 arg0)
 
     return 0;
 }
+*/

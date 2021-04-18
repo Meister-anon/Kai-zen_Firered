@@ -343,7 +343,7 @@ void FieldUseFunc_CoinCase(u8 taskId)
     else
         DisplayItemMessageOnField(taskId, 2, gStringVar4, Task_ItemUse_CloseMessageBoxAndReturnToField);
 }
-
+/*
 void FieldUseFunc_PowderJar(u8 taskId)
 {
     ConvertIntToDecimalStringN(gStringVar1, GetBerryPowder(), STR_CONV_MODE_LEFT_ALIGN, 5);
@@ -353,7 +353,7 @@ void FieldUseFunc_PowderJar(u8 taskId)
         DisplayItemMessageInBag(taskId, 2, gStringVar4, Task_ReturnToBagFromContextMenu);
     else
         DisplayItemMessageOnField(taskId, 2, gStringVar4, Task_ItemUse_CloseMessageBoxAndReturnToField);
-}
+} */
 
 void FieldUseFunc_PokeFlute(u8 taskId)
 {

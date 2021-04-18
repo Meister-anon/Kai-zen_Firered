@@ -1,3 +1,4 @@
+/*
 #include "global.h"
 #include "gflib.h"
 #include "dodrio_berry_picking.h"
@@ -18,57 +19,57 @@
 
 struct DodrioStruct
 {
-    /*0x0000*/ void (*savedCallback)(void);
-    /*0x0004*/ u8 ALIGNED(4) unk04;
-    /*0x0008*/ u8 ALIGNED(4) unk08;
-    /*0x000C*/ u8 ALIGNED(4) unk0C;
-    /*0x0010*/ u8 ALIGNED(4) unk10;
-    /*0x0014*/ u8 ALIGNED(4) unk14;
-    /*0x0018*/ u8 ALIGNED(4) unk18;
-    /*0x001C*/ u8 ALIGNED(4) unk1C;
-    /*0x0020*/ u8 ALIGNED(4) unk20;
-    /*0x0024*/ u8 ALIGNED(4) unk24;
-    /*0x0028*/ u8 ALIGNED(4) multiplayerId;
-    /*0x0030*/ u8 ALIGNED(8) unk30;
-    /*0x0034*/ u8 ALIGNED(4) unk34[5];
-    /*0x003C*/ u8 ALIGNED(4) unk3C;
-    /*0x0040*/ u8 ALIGNED(4) unk40;
-    /*0x0044*/ u8 ALIGNED(4) unk44;
-    /*0x0048*/ u8 ALIGNED(4) unk48;
-    /*0x004A*/ u16 unk4A[5][6];
-    /*0x0086*/ u16 unk86[5];
-    /*0x0090*/ u8 ALIGNED(4) unk90[5];
-    /*0x0098*/ u8 ALIGNED(4) unk98[4];
-    /*0x009C*/ u8 ALIGNED(4) unk9C[11];
-    /*0x00A8*/ u8 ALIGNED(4) unkA8[5];
-    /*0x00B0*/ u8 ALIGNED(4) unkB0[5];
-    /*0x00B8*/ u8 ALIGNED(4) unkB8[11];
-    /*0x00C4*/ u8 ALIGNED(4) unkC4[11];
-    /*0x00D0*/ u8 ALIGNED(4) unkD0[11];
-    /*0x00DC*/ u8 ALIGNED(4) unkDC[11];
-    /*0x00E8*/ u8 ALIGNED(4) unkE8[11];
-    /*0x00F4*/ u8 ALIGNED(4) unkF4[11][2];
-    /*0x010C*/ u8 ALIGNED(4) unk10C[5];
-    /*0x0112*/ u16 unk112;
-    /*0x0114*/ u16 unk114;
-    /*0x0118*/ u32 unk118;
-    /*0x011C*/ u32 unk11C;
-    /*0x0120*/ u32 unk120;
-    /*0x0124*/ u8 ALIGNED(4) unk124;
-    /*0x0128*/ u8 ALIGNED(4) unk128;
-    /*0x012C*/ u32 unk12C;
-    /*0x0130*/ u32 unk130[5];
-    /*0x0144*/ u8 ALIGNED(4) unk144;
-    /*0x0148*/ u8 ALIGNED(4) unk148[11];
-    /*0x0154*/ u8 ALIGNED(4) unk154;
-    /*0x0158*/ u8 ALIGNED(4) unk158[5];
-    /*0x0160*/ struct DodrioSubstruct_0160 unk160;
-    /*0x318C*/ struct DodrioSubstruct_318C unk318C[5];
-    /*0x31A0*/ struct DodrioSubstruct_31A0 unk31A0[5];
-    /*0x32CC*/ struct DodrioSubstruct_31A0 unk32CC;
-    /*0x3308*/ struct DodrioSubstruct_3308 unk3308[5];
-}; // size = 0x3330
-
+    ///*0x0000*/ //void (*savedCallback)(void);
+    //*0x0004*/ u8 ALIGNED(4) unk04;
+    //*0x0008*/ u8 ALIGNED(4) unk08;
+    //*0x000C*/ u8 ALIGNED(4) unk0C;
+    //*0x0010*/ u8 ALIGNED(4) unk10;
+    //*0x0014*/ u8 ALIGNED(4) unk14;
+    //*0x0018*/ u8 ALIGNED(4) unk18;
+    //*0x001C*/ u8 ALIGNED(4) unk1C;
+    //*0x0020*/ u8 ALIGNED(4) unk20;
+    //*0x0024*/ u8 ALIGNED(4) unk24;
+    //*/0x0028*/ u8 ALIGNED(4) multiplayerId;
+    //*0x0030*/ u8 ALIGNED(8) unk30;
+    //*0x0034*/ u8 ALIGNED(4) unk34[5];
+    //*0x003C*/ u8 ALIGNED(4) unk3C;
+    //*0x0040*/ u8 ALIGNED(4) unk40;
+    //*0x0044*/ u8 ALIGNED(4) unk44;
+    //*0x0048*/ u8 ALIGNED(4) unk48;
+    //*0x004A*/ u16 unk4A[5][6];
+    //*0x0086*/ u16 unk86[5];
+    //*0x0090*/ u8 ALIGNED(4) unk90[5];
+    //*0x0098*/ u8 ALIGNED(4) unk98[4];
+    //*0x009C*/ u8 ALIGNED(4) unk9C[11];
+    //*0x00A8*/ u8 ALIGNED(4) unkA8[5];
+    ///*0x00B0*/ u8 ALIGNED(4) unkB0[5];
+   // /*0x00B8*/ u8 ALIGNED(4) unkB8[11];
+    ///*0x00C4*/ u8 ALIGNED(4) unkC4[11];
+    ///*0x00D0*/ u8 ALIGNED(4) unkD0[11];
+    //*0x00DC*/ u8 ALIGNED(4) unkDC[11];
+    ///*0x00E8*/ u8 ALIGNED(4) unkE8[11];
+    ///*0x00F4*/ u8 ALIGNED(4) unkF4[11][2];
+    ///*0x010C*/ u8 ALIGNED(4) unk10C[5];
+    ///*0x0112*/ u16 unk112;
+    ///*0x0114*/ u16 unk114;
+    ///*0x0118*/ u32 unk118;
+    ///*0x011C*/ u32 unk11C;
+    ///*0x0120*/ u32 unk120;
+    ///*0x0124*/ u8 ALIGNED(4) unk124;
+    ///*0x0128*/ u8 ALIGNED(4) unk128;
+    ///*0x012C*/ u32 unk12C;
+    ///*0x0130*/ u32 unk130[5];
+    ///*0x0144*/ u8 ALIGNED(4) unk144;
+    ///*0x0148*/ u8 ALIGNED(4) unk148[11];
+    ///*0x//0154*/ u8 ALIGNED(4) unk154;
+    ///*0x0158*/ u8 ALIGNED(4) unk158[5];
+    //*0x0160*/ struct DodrioSubstruct_0160 unk160;
+    ///*0x318C*/ struct DodrioSubstruct_318C unk318C[5];
+    ///*0x31A0*/ struct DodrioSubstruct_31A0 unk31A0[5];
+   // /*0x32CC*/ struct DodrioSubstruct_31A0 unk32CC;
+  //  /*0x3308*/ struct DodrioSubstruct_3308 unk3308[5];
+//}; // size = 0x3330
+/*
 static EWRAM_DATA struct DodrioStruct * gUnknown_203F3E0 = NULL;
 
 static bool32 gUnknown_3002044;
@@ -2433,3 +2434,4 @@ static void sub_8153A04(void)
             gUnknown_203F3E0->unk4A[playerId][i] = sUnknown_8475608[playerId][i];
     }
 }
+*/

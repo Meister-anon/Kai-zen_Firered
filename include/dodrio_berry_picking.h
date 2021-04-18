@@ -1,20 +1,21 @@
+/*
 #ifndef GUARD_DODRIO_BERRY_PICKING_H
 #define GUARD_DODRIO_BERRY_PICKING_H
 
 struct DodrioSubstruct_0160
 {
-    /*0x0000 : 0x3000*/ u16 ALIGNED(4) tilemapBuffers[3][BG_SCREEN_SIZE];
-    /*0x3000 : 0x3160*/ bool32 finished;
-    /*0x3004 : 0x3164*/ u8 ALIGNED(4) unk3004;
-    /*0x3008 : 0x3168*/ u8 ALIGNED(4) unk3008[10];
-    /*0x3014 : 0x3174*/ u8 ALIGNED(4) state;
-    /*0x3018 : 0x3178*/ u8 ALIGNED(4) unk3018;
-    /*0x301C : 0x317C*/ u16 ALIGNED(4) unk301C;
-    /*0x3020 : 0x3180*/ u8 ALIGNED(4) unk3020;
-    /*0x3024 : 0x3184*/ u8 ALIGNED(4) unk3024;
-    /*0x3024 : 0x3184*/ void (*unk3028)(void);
-}; // size = 0x302C
-
+    /*0x0000 : 0x3000*/// u16 ALIGNED(4) tilemapBuffers[3][BG_SCREEN_SIZE];
+    //*0x3000 : 0x3160*/ bool32 finished;
+    //*0x3004 : 0x3164*/ u8 ALIGNED(4) unk3004;
+    //*0x3008 : 0x3168*/ u8 ALIGNED(4) unk3008[10];
+    //*0x3014 : 0x3174*/ u8 ALIGNED(4) state;
+    //*0x3018 : 0x3178*/ u8 ALIGNED(4) unk3018;
+    //*0x301C : 0x317C*/ u16 ALIGNED(4) unk301C;
+    //*0x3020 : 0x3180*/ u8 ALIGNED(4) unk3020;
+   // /*0x3024 : 0x3184*/ u8 ALIGNED(4) unk3024;
+  //  /*0x3024 : 0x3184*/ void (*unk3028)(void);
+//}; // size = 0x302C 
+/*
 struct DodrioSubstruct_318C
 {
     bool8 isShiny;
@@ -104,3 +105,4 @@ void ShowDodrioBerryPickingRecords(void);
 void IsDodrioInParty(void);
 
 #endif //GUARD_DODRIO_BERRY_PICKING_H
+*/

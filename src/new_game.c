@@ -35,7 +35,7 @@
 //on card instead.
 
 // this file's functions
-static void ResetMiniGamesResults(void);
+//static void ResetMiniGamesResults(void);
 
 // EWRAM vars
 EWRAM_DATA bool8 gDifferentSaveFile = FALSE;
@@ -69,7 +69,7 @@ static void SetDefaultOptions(void) //
     gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SHIFT;
     gSaveBlock2Ptr->optionsBattleSceneOff = FALSE;
     gSaveBlock2Ptr->regionMapZoom = FALSE;
-    gSaveBlock2Ptr->optionsButtonMode = OPTIONS_BUTTON_MODE_HELP;
+    gSaveBlock2Ptr->optionsButtonMode = OPTIONS_BUTTON_MODE_LR;
 }
 
 static void ClearPokedexFlags(void)
@@ -135,7 +135,7 @@ void NewGameInitData(void)
     InitHeracrossSizeRecord();
     InitMagikarpSizeRecord();
     sub_806E190();
-    gPlayerPartyCount = 0;
+    gPlayerPartyCount = 0; // change this & zeroplayerpartymons for new game+
     ZeroPlayerPartyMons();
     ResetPokemonStorageSystem();
     ClearRoamerData();
@@ -146,7 +146,7 @@ void NewGameInitData(void)
     InitEasyChatPhrases();
     ResetTrainerFanClub();
     UnionRoomChat_InitializeRegisteredTexts();
-    ResetMiniGamesResults();
+    //ResetMiniGamesResults();
     InitMEventData();
     SetAllRenewableItemFlags();
     WarpToPlayersRoom();
@@ -154,11 +154,11 @@ void NewGameInitData(void)
     StringCopy(gSaveBlock1Ptr->rivalName, rivalName);
     ResetTrainerTowerResults();
 }
-
+/*
 static void ResetMiniGamesResults(void)
 {
     CpuFill16(0, &gSaveBlock2Ptr->berryCrush, sizeof(struct BerryCrush));
-    SetBerryPowder(&gSaveBlock2Ptr->berryCrush.berryPowderAmount, 0);
+   // SetBerryPowder(&gSaveBlock2Ptr->berryCrush.berryPowderAmount, 0);
     ResetPokeJumpResults();
     CpuFill16(0, &gSaveBlock2Ptr->berryPick, sizeof(struct BerryPickingResults));
-}
+}*/

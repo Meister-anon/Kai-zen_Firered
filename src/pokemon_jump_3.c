@@ -1,3 +1,4 @@
+/*
 #include "global.h"
 #include "link_rfu.h"
 #include "pokemon_jump.h"
@@ -165,3 +166,4 @@ bool32 sub_8149C90(struct PokemonJump1_82E4 *arg0, int multiplayerId)
     arg0->unkE = packet.unk4;
     return TRUE;
 }
+*/

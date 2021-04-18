@@ -1,3 +1,4 @@
+/*
 #include "global.h"
 #include "event_data.h"
 #include "load_save.h"
@@ -130,3 +131,4 @@ void RemoveBerryPowderVendorMenu(void)
     ClearStdWindowAndFrameToTransparent(sBerryPowderVendorWindowId, 1);
     RemoveWindow(sBerryPowderVendorWindowId);
 }
+*/

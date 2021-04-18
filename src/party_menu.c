@@ -238,8 +238,8 @@ static s8 GetNewSlotDoubleLayout(s8 slotId, s8 movementDir);
 static void Task_PrintAndWaitForText(u8 taskId);
 static void PartyMenuPrintText(const u8 *text);
 static void SetSwappedHeldItemQuestLogEvent(struct Pokemon *mon, u16 item, u16 item2);
-static bool16 IsMonAllowedInPokemonJump(struct Pokemon *mon);
-static bool16 IsMonAllowedInDodrioBerryPicking(struct Pokemon *mon);
+//static bool16 IsMonAllowedInPokemonJump(struct Pokemon *mon);
+//static bool16 IsMonAllowedInDodrioBerryPicking(struct Pokemon *mon);
 static void Task_CancelParticipationYesNo(u8 taskId);
 static void Task_HandleCancelParticipationYesNoInput(u8 taskId);
 static void Task_TryCreateSelectionWindow(u8 taskId);
@@ -1799,17 +1799,19 @@ static void SetPartyMonsAllowedInMinigame(void)
         gPartyMenu.data1 = 0;
         if (gSpecialVar_0x8005 == 0)
         {
-            for (i = 0; i < gPlayerPartyCount; ++i)
-                *ptr += IsMonAllowedInPokemonJump(&gPlayerParty[i]) << i;
+            return;
+          //  for (i = 0; i < gPlayerPartyCount; ++i)
+               // *ptr += IsMonAllowedInPokemonJump(&gPlayerParty[i]) << i;
         }
         else
         {
-            for (i = 0; i < gPlayerPartyCount; ++i)
-                *ptr += IsMonAllowedInDodrioBerryPicking(&gPlayerParty[i]) << i;
+            return;
+          //  for (i = 0; i < gPlayerPartyCount; ++i)
+              //  *ptr += IsMonAllowedInDodrioBerryPicking(&gPlayerParty[i]) << i;
         }
     }
 }
-
+/*
 static bool16 IsMonAllowedInPokemonJump(struct Pokemon *mon)
 {
     if (GetMonData(mon, MON_DATA_IS_EGG) != TRUE && IsSpeciesAllowedInPokemonJump(GetMonData(mon, MON_DATA_SPECIES)))
@@ -1823,7 +1825,7 @@ static bool16 IsMonAllowedInDodrioBerryPicking(struct Pokemon *mon)
     if (GetMonData(mon, MON_DATA_IS_EGG) != TRUE && GetMonData(mon, MON_DATA_SPECIES) == SPECIES_DODRIO)
         return TRUE;
     return FALSE;
-}
+}*/
 
 static bool8 IsMonAllowedInMinigame(u8 slot)
 {
@@ -4083,11 +4085,13 @@ static void FieldCallback_Surf(void)
 static bool8 SetUpFieldMove_Surf(void)
 {
     s16 x, y;
+    u16 item;
+    struct Pokemon *mon;
     
     GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
     if (MetatileBehavior_IsSemiDeepWater(MapGridGetMetatileBehaviorAt(x, y)) != TRUE
-     && PartyHasMonWithSurf() == TRUE
-     && IsPlayerFacingSurfableFishableWater() == TRUE)
+        && IsPlayerFacingSurfableFishableWater() == TRUE
+        && CanMonLearnTMHM(mon, item - ITEM_HM03_SURF)) //hopefully that works
     {
         gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
         gPostMenuFieldCallback = FieldCallback_Surf;
@@ -4437,10 +4441,10 @@ static void GetMedicineItemEffectMessage(u16 item)
     }
 }
 
-static bool8 NotUsingHPEVItemOnShedinja(struct Pokemon *mon, u16 item)
+static bool8 NotUsingHPEVItemOnShedinja(struct Pokemon *mon, u16 item, u16 ability)
 {
-    if (GetItemEffectType(item) == ITEM_EFFECT_HP_EV && GetMonData(mon, MON_DATA_SPECIES) == SPECIES_SHEDINJA)
-        return FALSE;
+    if (GetItemEffectType(item) == ITEM_EFFECT_HP_EV && GetMonData(mon, MON_DATA_SPECIES) == SPECIES_SHEDINJA && ability == ABILITY_WONDER_GUARD)
+        return TRUE;
     return TRUE;
 }
 
@@ -4465,8 +4469,9 @@ void ItemUseCB_Medicine(u8 taskId, TaskFunc func)
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     u16 item = gSpecialVar_ItemId;
     bool8 canHeal;
+    u16 ability;
 
-    if (!NotUsingHPEVItemOnShedinja(mon, item))
+    if (!NotUsingHPEVItemOnShedinja(mon, item, ability))
     {
         canHeal = TRUE;
     }
@@ -4502,8 +4507,9 @@ void ItemUseCB_MedicineStep(u8 taskId, TaskFunc func)
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     u16 item = gSpecialVar_ItemId;
     bool8 canHeal;
+    u16 ability;
 
-    if (NotUsingHPEVItemOnShedinja(mon, item))
+    if (NotUsingHPEVItemOnShedinja(mon, item, ability))
     {
         canHeal = IsHPRecoveryItem(item);
         if (canHeal == TRUE)

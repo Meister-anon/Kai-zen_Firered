@@ -1,3 +1,4 @@
+/*
 #ifndef GUARD_POKEMON_JUMP_H
 #define GUARD_POKEMON_JUMP_H
 
@@ -121,3 +122,4 @@ void sub_814B168(struct PokemonJump2 *, int multiplayerId);
 bool32 sub_814B190(struct PokemonJump2 *);
 
 #endif // GUARD_POKEMON_JUMP_H
+*/

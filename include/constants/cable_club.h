@@ -8,7 +8,7 @@
 #define USING_RECORD_CORNER  4
 #define USING_MULTI_BATTLE   5
 #define USING_UNION_ROOM     6
-#define USING_BERRY_CRUSH    7
+//efine USING_BERRY_CRUSH    7
 #define USING_MINIGAME       8
 #define USING_BATTLE_TOWER   9
 

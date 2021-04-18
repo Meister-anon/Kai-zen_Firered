@@ -71,8 +71,8 @@ static u8 (*sSaveDialogCB)(void);
 static u8 sSaveDialogDelay;
 static bool8 sSaveDialogIsPrinting;
 
-static void SetUpStartMenu_Link(void);
-static void SetUpStartMenu_UnionRoom(void);
+//static void SetUpStartMenu_Link(void);
+//static void SetUpStartMenu_UnionRoom(void);
 static void SetUpStartMenu_SafariZone(void);
 static void SetUpStartMenu_NormalField(void);
 static bool8 StartCB_HandleInput(void);
@@ -86,7 +86,7 @@ static bool8 StartMenuSaveCallback(void);
 static bool8 StartMenuOptionCallback(void);
 static bool8 StartMenuExitCallback(void);
 static bool8 StartMenuSafariZoneRetireCallback(void);
-static bool8 StartMenuLinkPlayerCallback(void);
+//static bool8 StartMenuLinkPlayerCallback(void);
 static bool8 StartCB_Save1(void);
 static bool8 StartCB_Save2(void);
 static void StartMenu_PrepareForSave(void);
@@ -121,7 +121,7 @@ static const struct MenuAction sStartMenuActionTable[] = {
     { gStartMenuText_Option, {.u8_void = StartMenuOptionCallback} },
     { gStartMenuText_Exit, {.u8_void = StartMenuExitCallback} },
     { gStartMenuText_Retire, {.u8_void = StartMenuSafariZoneRetireCallback} },
-    { gStartMenuText_Player, {.u8_void = StartMenuLinkPlayerCallback} }
+    //{ gStartMenuText_Player, {.u8_void = StartMenuLinkPlayerCallback} }
 };
 
 static const struct WindowTemplate sSafariZoneStatsWindowTemplate = {
@@ -156,8 +156,7 @@ static const struct BgTemplate sBGTemplates_AfterLinkSaveMessage[] = {
         .priority = 0,
         .baseTile = 0x000
     }
-};
-
+};/*
 static const struct WindowTemplate sWindowTemplates_AfterLinkSaveMessage[] = {
     {
         .bg = 0,
@@ -168,7 +167,7 @@ static const struct WindowTemplate sWindowTemplates_AfterLinkSaveMessage[] = {
         .paletteNum = 15,
         .baseBlock = 0x198
     }, DUMMY_WIN_TEMPLATE
-};
+};*/
 
 static const struct WindowTemplate sSaveStatsWindowTemplate = {
     .bg = 0,
@@ -187,11 +186,11 @@ static ALIGNED(2) const u8 sTextColor_LocationHeader[] = { 1, 6, 7 };
 static void SetUpStartMenu(void)
 {
     sNumStartMenuItems = 0;
-    if (IsUpdateLinkStateCBActive() == TRUE)
-        SetUpStartMenu_Link();
-    else if (InUnionRoom() == TRUE)
-        SetUpStartMenu_UnionRoom();
-    else if (GetSafariZoneFlag() == TRUE)
+   // if (IsUpdateLinkStateCBActive() == TRUE)
+     //   SetUpStartMenu_Link();
+   // else if (InUnionRoom() == TRUE)
+   //     SetUpStartMenu_UnionRoom();
+    if (GetSafariZoneFlag() == TRUE)
         SetUpStartMenu_SafariZone();
     else
         SetUpStartMenu_NormalField();
@@ -212,7 +211,11 @@ static void SetUpStartMenu_NormalField(void)
     AppendToStartMenuItems(STARTMENU_PLAYER);
     AppendToStartMenuItems(STARTMENU_SAVE);
     AppendToStartMenuItems(STARTMENU_OPTION);
-    AppendToStartMenuItems(STARTMENU_EXIT);
+    AppendToStartMenuItems(STARTMENU_EXIT); //prob need to use a switch case, to replace startmenu_exit with iv/ev
+    /*if (gSaveBlock2Ptr->optionsButtonMode != OPTIONS_BUTTON_MODE_HELP)
+        AppendToStartMenuItems(STARTMENU_EV_IV);*/
+    /*if (FlagGet(FLAG_SYS_DEXNAV_GET) == TRUE)
+        AppendToStartMenuItems(STARTMENU_DEXNAV);*/
 }
 
 static void SetUpStartMenu_SafariZone(void)
@@ -544,7 +547,7 @@ static bool8 StartMenuSafariZoneRetireCallback(void)
     return TRUE;
 }
 
-
+/*
 static bool8 StartMenuLinkPlayerCallback(void)
 {
     if (!gPaletteFade.active)
@@ -555,7 +558,7 @@ static bool8 StartMenuLinkPlayerCallback(void)
         return TRUE;
     }
     return FALSE;
-}
+}*/
 
 static bool8 StartCB_Save1(void)
 {

@@ -720,14 +720,15 @@ static void sub_8081624(void)
         break;
     }
 }
-/*
+
 void CB2_ReturnFromCableClubBattle(void)
 {
+    return;
     gBattleTypeFlags &= (u16)~BATTLE_TYPE_20;
     Overworld_ResetMapMusic();
     LoadPlayerParty();
     SavePlayerBag();
-    Special_UpdateTrainerFansAfterLinkBattle();
+  /*Special_UpdateTrainerFansAfterLinkBattle();
     if (gSpecialVar_0x8004 != USING_MULTI_BATTLE)
     {
         TryRecordLinkBattleOutcome(gLocalLinkPlayerId ^ 1);
@@ -743,7 +744,7 @@ void CB2_ReturnFromCableClubBattle(void)
                 break;
             }
         }
-    }
+    }*/
     if (InUnionRoom() == TRUE)
     {
         gMain.savedCallback = sub_8081624;
@@ -752,7 +753,7 @@ void CB2_ReturnFromCableClubBattle(void)
     {
         gMain.savedCallback = CB2_ReturnToFieldFromMultiplayer;
     }
-    SetMainCallback2(CB2_SetUpSaveAfterLinkBattle);
+  //SetMainCallback2(CB2_SetUpSaveAfterLinkBattle);
 }
 
 void CleanupLinkRoomState(void)
@@ -769,7 +770,7 @@ void ExitLinkRoom(void)
 {
     QueueExitLinkRoomKey();
 }
-*/
+
 static void Task_EnterCableClubSeat(u8 taskId)
 {
     struct Task * task = &gTasks[taskId];

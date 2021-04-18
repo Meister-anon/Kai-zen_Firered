@@ -44,13 +44,15 @@
 #define NUM_STORYTELLER_TALES  4
 #define NUM_TRADER_ITEMS       4
 
-#define OPTIONS_BUTTON_MODE_HELP         0 //may make only L call help, & use select, R, & start for ev iv screen.
+#define OPTIONS_BUTTON_MODE_HELP         0 //may make only L call help, & use select, R, & start for ev iv screen. may use for alt ev/iv screen,the one from modexe
 #define OPTIONS_BUTTON_MODE_LR           1 //new default for change, for iv ev status, actually may change that.
-#define OPTIONS_BUTTON_MODE_L_EQUALS_A   2
+#define OPTIONS_BUTTON_MODE_L_EQUALS_A   2// i think modexe ev/iv thing is actually just adding menu and printing evs onto pokemon diploma image
+// since I realize print will display text on whatever baground image you chose, the modexe thing is probably asm that tells the 
+//rom where to print, and what values to print, onto what image.
 
 #define OPTIONS_TEXT_SPEED_SLOW  0
 #define OPTIONS_TEXT_SPEED_MID   1
-#define OPTIONS_TEXT_SPEED_FAST  2 //new defaul
+#define OPTIONS_TEXT_SPEED_FAST  2 //new default
 
 #define OPTIONS_SOUND_MONO    0
 #define OPTIONS_SOUND_STEREO  1

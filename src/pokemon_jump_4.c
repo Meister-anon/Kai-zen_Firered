@@ -1,3 +1,4 @@
+/*
 #include "global.h"
 #include "gflib.h"
 #include "data.h"
@@ -920,3 +921,4 @@ static void sub_814AD50(u8 taskId)
     if (!sub_814AD18())
         DestroyTask(taskId);
 }
+*/

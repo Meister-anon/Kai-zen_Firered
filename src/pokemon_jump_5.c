@@ -1,3 +1,4 @@
+/*
 #include "global.h"
 #include "gflib.h"
 #include "decompress.h"
@@ -635,3 +636,4 @@ bool32 sub_814B460(void)
 {
     return IsMinigameCountdownRunning();
 }
+*/

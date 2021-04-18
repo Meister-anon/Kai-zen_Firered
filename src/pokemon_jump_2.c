@@ -1,3 +1,4 @@
+/*
 #include "global.h"
 #include "gflib.h"
 #include "event_data.h"
@@ -2032,3 +2033,4 @@ void IsPokemonJumpSpeciesInParty(void)
 
     gSpecialVar_Result = FALSE;
 }
+*/

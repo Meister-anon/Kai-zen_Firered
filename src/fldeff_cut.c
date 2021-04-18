@@ -216,7 +216,7 @@ bool8 FldEff_CutGrass(void)
     struct MapPosition *pos;
 
     i = 0;
-    PlaySE(SE_M_CUT);
+    PlaySE(SE_M_CUT);// think sound effect for move cut
     PlayerGetDestCoords(&gPlayerFacingPosition.x, &gPlayerFacingPosition.y);
 
     for (i = 0, pos = &gPlayerFacingPosition, neg1 = 0xFFFF; i < 3; i++)

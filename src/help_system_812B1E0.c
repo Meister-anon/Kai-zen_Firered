@@ -1746,11 +1746,12 @@ static const u8 sDungeonMaps[][3] = {
 
 void SetHelpContextDontCheckBattle(u8 contextId)
 {
-    sHelpSystemContextId = contextId;
+    return;// sHelpSystemContextId = contextId;
 }
 
 void SetHelpContext(u8 contextId)
 {
+    return;
     switch (sHelpSystemContextId)
     {
     case HELPCONTEXT_WILD_BATTLE:
@@ -1765,14 +1766,16 @@ void SetHelpContext(u8 contextId)
             break;
         // fallthrough
     default:
-        sHelpSystemContextId = contextId;
+        return; // sHelpSystemContextId = contextId;
         break;
     }
 }
 
-void Script_SetHelpContext(void)
+void Script_SetHelpContext(void)// new plan just backup the help system so it never initializes, instead of tryign to remove.
+// will hae same affect. so stuff like this may be part of it.   bluerose said to make it "return" instantly would do it.
 {
-    sHelpSystemContextId = gSpecialVar_0x8004;
+    return;
+    sHelpSystemContextId =  gSpecialVar_0x8004;
 }
 
 void BackupHelpContext(void)
@@ -1841,6 +1844,7 @@ static bool8 IsInDungeonMap(void)
 
 void SetHelpContextForMap(void)
 {
+    return;
     HelpSystem_EnableToggleWithRButton();
     if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
         SetHelpContext(HELPCONTEXT_SURFING);
@@ -1862,11 +1866,12 @@ void SetHelpContextForMap(void)
             SetHelpContext(HELPCONTEXT_INDOORS);
     }
     else
-        SetHelpContext(HELPCONTEXT_OVERWORLD);
+        return;// SetHelpContext(HELPCONTEXT_OVERWORLD);
 }
 
 bool8 HelpSystem_UpdateHasntSeenIntro(void)
 {
+    return;
     if (sSeenHelpSystemIntro == TRUE)
         return FALSE;
 
@@ -1906,7 +1911,7 @@ void HelpSystem_DisableToggleWithRButton(void)
 
 void HelpSystem_EnableToggleWithRButton(void)
 {
-    gHelpSystemToggleWithRButtonDisabled = FALSE;
+    return;// gHelpSystemToggleWithRButtonDisabled = FALSE;
 }
 
 static void ResetHelpSystemListMenu(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
@@ -1918,8 +1923,9 @@ static void ResetHelpSystemListMenu(struct HelpSystemListMenu * helpListMenu, st
     helpListMenu->sub.top = 4;
 }
 
-static void BuildAndPrintMainTopicsListMenu(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
+static void BuildAndPrintMainTopicsListMenu(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)//this might the main thing.
 {
+    return;
     ResetHelpSystemListMenu(helpListMenu, listMenuItemsBuffer);
     BuildMainTopicsListAndMoveToH00(helpListMenu, listMenuItemsBuffer);
     PrintTextOnPanel2Row52RightAlign(gUnknown_841DFAC);
@@ -1950,6 +1956,7 @@ static void BuildMainTopicsListAndMoveToH00(struct HelpSystemListMenu * helpList
 
 static void BuildAndPrintSubmenuList(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
 {
+    return;
     sub_813BDE8(0);
     sub_813BFC0(0);
     sub_813BE78(1);
@@ -1964,9 +1971,11 @@ static void BuildAndPrintSubmenuList(struct HelpSystemListMenu * helpListMenu, s
 
 static void SetHelpSystemSubmenuItems(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
 {
-    u8 totalItems = 0;
+     u8 totalItems = 0;
     const u8 * submenuItems = sHelpSystemSubmenuItemLists[sHelpSystemContextId * 5 + gHelpSystemState[1]]; // accessing as 2D array
     u8 i;
+
+    return;
     for (i = 0; submenuItems[i] != HELP_END; i++)
     {
         if (IsHelpSystemSubmenuEnabled(submenuItems[i]) == TRUE)
@@ -2012,10 +2021,11 @@ static bool8 HelpSystem_ShouldShowBasicTerms(void)
 
 static bool8 IsHelpSystemSubmenuEnabled(u8 id)
 {
-    u8 i = 0;
-
+     u8 i = 0;
+     return;
     if (gHelpSystemState[1] == TOPIC_WHAT_TO_DO)
     {
+        return;
         switch (id)
         {
         case HELP_PLAYING_FOR_FIRST_TIME:
@@ -2243,6 +2253,7 @@ static bool8 HasGottenAtLeastOneHM(void)
 
 bool8 RunHelpMenuSubroutine(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
 {
+    return;
     switch (helpListMenu->state)
     {
     case  8:
@@ -2368,11 +2379,13 @@ bool8 HelpMenuSubroutine_SubmenuInputHandler(struct HelpSystemListMenu * helpLis
 
 void HelpSystem_PrintTopicLabel(void)
 {
+    return;
     HelpSystem_PrintTextAt(sHelpSystemTopicPtrs[gHelpSystemState[1]], 0, 0);
 }
 
 bool8 HelpMenuSubroutine_HelpItemPrint(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
 {
+    return;
     gHelpSystemState[0] = 2;
     sub_813BDA4(0);
     HelpSystem_FillPanel1();
@@ -2431,19 +2444,21 @@ bool8 HelpMenuSubroutine_HelpItemWaitButton(struct HelpSystemListMenu * helpList
 
 static void PrintWelcomeMessageOnPanel1(void)
 {
+    return;
     HelpSystem_FillPanel1();
     HelpSystem_PrintTextAt(Help_Text_Greetings, 0, 0);
 }
 
 static void PrintTextOnPanel2Row52RightAlign(const u8 * str)
 {
+    return;
     HelpSystem_FillPanel2();
     HelpSystem_PrintTextRightAlign_Row52(str);
 }
 
 u8 sub_812BF88(void)
 {
-    return gHelpSystemState[0];
+    return;// gHelpSystemState[0];
 }
 
 static void ResetHelpSystemCursor(struct HelpSystemListMenu * helpListMenu)
@@ -2454,7 +2469,8 @@ static void ResetHelpSystemCursor(struct HelpSystemListMenu * helpListMenu)
 
 static void PrintHelpSystemTopicMouseoverDescription(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
 {
-    s32 index = listMenuItemsBuffer[helpListMenu->itemsAbove + helpListMenu->cursorPos].index;
+       s32 index = listMenuItemsBuffer[helpListMenu->itemsAbove + helpListMenu->cursorPos].index;
+       return;
     if (index == -2)
         HelpSystem_PrintText_813C584(sHelpSystemTopicMouseoverDescriptionPtrs[5]);
     else

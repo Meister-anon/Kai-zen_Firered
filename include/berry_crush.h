@@ -1,3 +1,4 @@
+/*
 #ifndef GUARD_BERRY_CRUSH_H
 #define GUARD_BERRY_CRUSH_H
 
@@ -210,3 +211,4 @@ void SpriteCB_DropBerryIntoCrusher(struct Sprite * sprite);
 void ShowBerryCrushRankings(void);
 
 #endif //GUARD_BERRY_CRUSH_H
+*/

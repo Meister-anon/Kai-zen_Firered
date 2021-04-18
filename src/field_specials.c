@@ -1516,11 +1516,13 @@ void ForcePlayerToStartSurfing(void)
     SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_SURFING);
 }
 
-static const u16 sStarterSpecies[] = {
-    SPECIES_BULBASAUR,
-    SPECIES_SQUIRTLE,
+static const u16 sStarterSpecies[] = { //ok didn't realize changing starter species was this simple and I didn't need a script but wtvr.
+    // but looking at this gives me idea for setting up the other thing I wanted, if I use switch cases to include multiple pokemon on same idea, with random chance.
+    SPECIES_BULBASAUR,// then I can have multiple options so each playthrough the mon in the pokeball is different, 
+    SPECIES_SQUIRTLE, //not sure if that change needs to be HERE or with the VAR_STARTER_MON from getstarterspecies down below..
     SPECIES_CHARMANDER
-};
+};//maybe could do something like form_species_table_pointers file where spcies = another table, which can be an array of different species?
+//if I can get to that point, I just need to make it chose a value within that array, with random % n (where n will be size of array)
 
 static u16 GetStarterSpeciesById(u16 idx)
 {

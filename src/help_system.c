@@ -44,8 +44,9 @@ static const u16 sPals[] = INCBIN_U16("graphics/help_system/unk_8464008.gbapal")
 
 u8 RunHelpSystemCallback(void)
 {
+    
     s32 i;
-
+    return;
     switch (sVideoState.state)
     {
     case 0:

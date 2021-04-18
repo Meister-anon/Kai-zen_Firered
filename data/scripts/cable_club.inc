@@ -29,7 +29,6 @@ CableClub_OnWarp:: @ 81BB1ED
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_MULTI_BATTLE, EventScript_CheckTurnAttendant
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_TRADE_CENTER, EventScript_CheckTurnAttendant
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_UNION_ROOM, EventScript_CheckTurnAttendant
-	map_script_2 VAR_CABLE_CLUB_STATE, USING_BERRY_CRUSH, EventScript_CheckTurnAttendant
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_MINIGAME, EventScript_CheckTurnAttendant
 	.2byte 0
 
@@ -51,8 +50,6 @@ CableClub_OnLoad:: @ 81BB237
 	goto_if_eq EventScript_OnLoadFromTradeCenter
 	compare VAR_CABLE_CLUB_STATE, USING_UNION_ROOM
 	goto_if_eq EventScript_OnLoadFromUnionRoom
-	compare VAR_CABLE_CLUB_STATE, USING_BERRY_CRUSH
-	goto_if_eq EventScript_OnLoadFromBerryCrush
 	compare VAR_CABLE_CLUB_STATE, USING_MINIGAME
 	goto_if_eq EventScript_OnLoadFromGameCorner
 	end
@@ -69,10 +66,6 @@ EventScript_OnLoadFromUnionRoom:: @ 81BB291
 	call CableClub_EventScript_OpenUnionRoomBarrier
 	end
 
-EventScript_OnLoadFromBerryCrush:: @ 81BB297
-	call CableClub_EventScript_OpenDirectCornerBarrier
-	end
-
 EventScript_OnLoadFromGameCorner:: @ 81BB29D
 	call CableClub_EventScript_OpenGameCornerBarrier
 	end
@@ -84,7 +77,6 @@ CableClub_OnFrame:: @ 81BB2A3
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_MULTI_BATTLE, CableClub_EventScript_ExitLinkRoom
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_TRADE_CENTER, CableClub_EventScript_ExitTradeCenter
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_UNION_ROOM, CableClub_EventScript_ExitUnionRoom
-	map_script_2 VAR_CABLE_CLUB_STATE, USING_BERRY_CRUSH, CableClub_EventScript_ExitLinkRoom
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_MINIGAME, CableClub_EventScript_ExitMinigameRoom
 	.2byte 0
 
@@ -709,21 +701,6 @@ RecordCenter_EventScript_Spot2:: @ 81BB980
 RecordCenter_EventScript_Spot3:: @ 81BB980
 	end
 
-CableClub_EventScript_ReadTrainerCard:: @ 81BB981
-	textcolor 3
-	msgbox Text_LookedAtPlayersTrainerCard
-	fadescreen FADE_TO_BLACK
-	special Script_ShowLinkTrainerCard
-	waitstate
-	end
-
-CableClub_EventScript_ReadTrainerCardColored:: @ 81BB992
-	textcolor 3
-	msgbox Text_LookedAtPlayersTrainerCardColored
-	fadescreen FADE_TO_BLACK
-	special Script_ShowLinkTrainerCard
-	waitstate
-	end
 
 CableClub_EventScript_TooBusyToNotice:: @ 81BB9A3
 	textcolor 3
@@ -755,22 +732,8 @@ TradeCenter_ConfirmLeaveRoom:: @ 81BB9D4
 	textcolor 3
 	msgbox Text_TerminateLinkIfYouLeaveRoom, MSGBOX_YESNO
 	compare VAR_RESULT, YES
-	goto_if_eq TradeCenter_TerminateLink
 	erasebox 0, 0, 29, 19
 	releaseall
-	end
-
-TradeCenter_TerminateLink:: @ 81BB9F0
-	textcolor 3
-	messageautoscroll Text_TerminateLinkConfirmation
-	waitmessage
-	special ExitLinkRoom
-	end
-
-CableClub_EventScript_DoLinkRoomExit:: @ 81BB9FC
-	special CleanupLinkRoomState
-	special ReturnFromLinkRoom
-	waitstate
 	end
 
 CableClub_EventScript_UnionRoomAttendant:: @ 81BBA04
@@ -907,7 +870,6 @@ CableClub_EventScript_DirectCornerSelectService:: @ 81BBBE7
 	switch VAR_RESULT
 	case 0, CableClub_EventScript_WirelessTrade
 	case 1, CableClub_EventScript_WirelessBattleSelect
-	case 2, CableClub_EventScript_WirelessBerryCrush
 	case 3, CableClub_EventScript_AbortLink
 	case SCR_MENU_CANCEL, CableClub_EventScript_AbortLink
 	end
@@ -973,19 +935,7 @@ CableClub_EventScript_WirelessBattleInfo:: @ 81BBD27
 	goto CableClub_EventScript_WirelessBattleSelect
 	end
 
-CableClub_EventScript_WirelessBerryCrush:: @ 81BBD35
-	msgbox CableClub_Text_UseBerryCrush, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq CableClub_EventScript_AbortLink
-	special CheckHasAtLeastOneBerry
-	compare VAR_RESULT, FALSE
-	goto_if_eq CableClub_EventScript_NeedBerryForBerryCrush
-	setvar VAR_0x8004, LINK_GROUP_BERRY_CRUSH
-	goto CableClub_EventScript_SaveAndChooseLinkLeader
-	end
-
 CableClub_EventScript_NeedBerryForBerryCrush:: @ 81BBD61
-	msgbox CableClub_Text_NeedBerryForBerryCrush
 	goto CableClub_EventScript_DirectCornerSelectService
 	end
 
@@ -1202,20 +1152,8 @@ JoyfulGameCorner_EventScript_InfoMan2:: @ 81BC060
 	waitmessage
 	multichoice 0, 0, MULTICHOICE_POKEJUMP_DODRIO, FALSE
 	switch VAR_RESULT
-	case 0, CableClub_EventScript_PokemonJumpInfo
-	case 1, CableClub_EventScript_DodrioBerryPickingInfo
 	case 2, CableClub_EventScript_MinigameInfoExit
 	case SCR_MENU_CANCEL, CableClub_EventScript_MinigameInfoExit
-	end
-
-CableClub_EventScript_PokemonJumpInfo:: @ 81BC0B0
-	msgbox Text_PokemonJumpInfo
-	release
-	end
-
-CableClub_EventScript_DodrioBerryPickingInfo:: @ 81BC0BA
-	msgbox Text_DodrioBerryPickingInfo
-	release
 	end
 
 CableClub_EventScript_MinigameInfoExit:: @ 81BC0C4
@@ -1239,47 +1177,11 @@ JoyfulGameCorner_EventScript_MinigameAttendant:: @ 81BC0CE
 	waitmessage
 	multichoice 0, 0, MULTICHOICE_POKEJUMP_DODRIO, FALSE
 	switch VAR_RESULT
-	case 0, CableClub_EventScript_PlayPokemonJump
-	case 1, CableClub_EventScript_PlayDodrioBerryPicking
 	case 2, CableClub_EventScript_AbortMinigame
 	case SCR_MENU_CANCEL, CableClub_EventScript_AbortMinigame
 	end
 
-CableClub_EventScript_PlayPokemonJump:: @ 81BC13A
-	setvar VAR_0x8005, 0
-	special IsPokemonJumpSpeciesInParty
-	compare VAR_RESULT, FALSE
-	goto_if_eq CableClub_EventScript_NoEligiblePkmn
-	msgbox Text_EnterWhichPokemon
-	setvar VAR_0x8005, 0
-	special ChooseMonForWirelessMinigame
-	waitstate
-	compare VAR_0x8004, PARTY_SIZE
-	goto_if_ge CableClub_EventScript_AbortMinigame
-	call EventScript_AskSaveGame
-	compare VAR_RESULT, 0
-	goto_if_eq CableClub_EventScript_AbortMinigame
-	setvar VAR_0x8004, LINK_GROUP_POKEMON_JUMP
-	goto CableClub_EventScript_ChooseLinkLeaderMinigame
-	end
 
-CableClub_EventScript_PlayDodrioBerryPicking:: @ 81BC184
-	setvar VAR_0x8005, 1
-	special IsDodrioInParty
-	compare VAR_RESULT, 0
-	goto_if_eq CableClub_EventScript_NoEligiblePkmn
-	msgbox Text_EnterWhichPokemon
-	setvar VAR_0x8005, 1
-	special ChooseMonForWirelessMinigame
-	waitstate
-	compare VAR_0x8004, PARTY_SIZE
-	goto_if_ge CableClub_EventScript_AbortMinigame
-	call EventScript_AskSaveGame
-	compare VAR_RESULT, 0
-	goto_if_eq CableClub_EventScript_AbortMinigame
-	setvar VAR_0x8004, LINK_GROUP_BERRY_PICKING
-	goto CableClub_EventScript_ChooseLinkLeaderMinigame
-	end
 
 CableClub_EventScript_ChooseLinkLeaderMinigame:: @ 81BC1CE
 	textcolor 3
@@ -1342,38 +1244,7 @@ CableClub_EventScript_AdapterNotConnectedMinigame:: @ 81BC29C
 	end
 
 CableClub_EventScript_NoEligiblePkmn:: @ 81BC2A6
-	msgbox EventScript_ExplainPokemonJumpRequirements, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq CableClub_EventScript_AbortMinigame
-	compare VAR_0x8005, 0
-	call_if_eq CableClub_EventScript_ExplainPokemonJumpRequirements
-	compare VAR_0x8005, 1
-	call_if_eq CableClub_EventScript_ExplainDodrioBerryPickingRequirements
 	goto CableClub_EventScript_AbortMinigame
-	end
-
-CableClub_EventScript_ExplainPokemonJumpRequirements:: @ 81BC2D5
-	msgbox Text_ShortJumpingPokemonAllowed
-	return
-
-CableClub_EventScript_ExplainDodrioBerryPickingRequirements:: @ 81BC2DE
-	msgbox Text_OnlyDodrioAllowed
-	return
-
-TwoIsland_JoyfulGameCorner_EventScript_ShowPokemonJumpRecords:: @ 81BC2E7
-	goto_if_questlog EventScript_ReleaseEnd
-	lockall
-	special ShowPokemonJumpRecords
-	waitstate
-	releaseall
-	end
-
-TwoIsland_JoyfulGameCorner_EventScript_ShowDodrioBerryPickingRecords:: @ 81BC2FC
-	goto_if_questlog EventScript_ReleaseEnd
-	lockall
-	special ShowDodrioBerryPickingRecords
-	waitstate
-	releaseall
 	end
 
 CableClub_Text_WelcomeWhichCableClubService:: @ 81BC311
@@ -1607,28 +1478,6 @@ Text_DescribeWhichGame:: @ 81BCCFF
 	.string "if you'd like.\p"
 	.string "Which game should I describe?$"
 
-Text_PokemonJumpInfo:: @ 81BCD4D
-	.string "“POKéMON JUMP”\p"
-	.string "Make your POKéMON skip the\n"
-	.string "VINE WHIP rope with the A Button.\p"
-	.string "Only mini POKéMON around 28 inches\n"
-	.string "or less may participate.\p"
-	.string "POKéMON that only swim, burrow, or\n"
-	.string "fly are not good at jumping.\p"
-	.string "As a result, those POKéMON may not\n"
-	.string "participate.\p"
-	.string "Good things happen if everyone\n"
-	.string "jumps in time.$"
-
-Text_DodrioBerryPickingInfo:: @ 81BCE73
-	.string "“DODRIO BERRY-PICKING”\p"
-	.string "Command DODRIO's three heads to\n"
-	.string "catch falling BERRIES.\p"
-	.string "Press right, up, or left on the\n"
-	.string "{PLUS} Control Pad to move the heads.\p"
-	.string "To play this game, you must have\n"
-	.string "a DODRIO.$"
-
 Text_TalkToManToPlay:: @ 81BCF2E
 	.string "If you want to play a game,\n"
 	.string "please tell the man beside me.$"
@@ -1664,27 +1513,6 @@ Text_LeavingDoComeAgain:: @ 81BD0BC
 	.string "きょうは　けえるのか？\n"
 	.string "またこいよ！$"
 
-EventScript_ExplainPokemonJumpRequirements:: @ 81BD0CF
-	.string "It doesn't look like you have any\n"
-	.string "POKéMON that you can enter…\p"
-	.string "Would you like me to explain what\n"
-	.string "kinds of POKéMON can enter?$"
-
-Text_ShortJumpingPokemonAllowed:: @ 81BD14B
-	.string "“POKéMON JUMP” is open to POKéMON\n"
-	.string "around 28 inches or less.\p"
-	.string "What you can't enter are those\n"
-	.string "POKéMON that can't jump.\p"
-	.string "You know, like POKéMON that only\n"
-	.string "swim, burrow, or fly.\p"
-	.string "That's all you need to know.$"
-
-Text_OnlyDodrioAllowed:: @ 81BD213
-	.string "“DODRIO BERRY-PICKING”…\n"
-	.string "Well, the name says it all.\p"
-	.string "You have to have a DODRIO to play\n"
-	.string "this game.$"
-
 @ Unused, translated in Emerald
 Text_RetryFromStartPlease:: @ 81BD274
 	.string "もういちど　はじめから\n"
@@ -1704,10 +1532,6 @@ CableClub_Text_TradePokemon:: @ 81BD317
 CableClub_Text_PlayWhichBattleMode:: @ 81BD338
 	.string "Which Battle Mode would you like\n"
 	.string "to play?$"
-
-CableClub_Text_UseBerryCrush:: @ 81BD362
-	.string "Would you like to use the\n"
-	.string "BERRY CRUSH System?$"
 
 CableClub_Text_ExplainBattleModes:: @ 81BD390
 	.string "There are three Battle Modes.\p"

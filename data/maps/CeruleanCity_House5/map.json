@@ -45,8 +45,7 @@
       "x": 3,
       "y": 1,
       "elevation": 0,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "CeruleanCity_House5_EventScript_BerryCrushRankings"
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY"
     }
   ]
 }

@@ -383,7 +383,7 @@ static void VBlankIntr(void)
     sVcountAfterSound = REG_VCOUNT;
 #endif
 
-    TryReceiveLinkBattleData();
+  //  TryReceiveLinkBattleData();
     Random();
     UpdateWirelessStatusIndicatorSprite();
 

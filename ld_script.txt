@@ -1034,12 +1034,12 @@ SECTIONS {
         data/multiboot_pokemon_colosseum.o(.rodata);
     } =0
 
-    . = 0x08D00000;
+    
     gfx_data :
     ALIGN(4)
     {
         src/graphics.o(.rodata);
-    } =0
+    } 
 
     /* DWARF 2 sections */
     .debug_aranges  0 : { *(.debug_aranges) }

@@ -12,8 +12,6 @@ gSpecials:: @ 815FD60
 	def_special SetCableClubWarp
 	def_special DoCableClubWarp
 	def_special ReturnFromLinkRoom
-	def_special CleanupLinkRoomState
-	def_special ExitLinkRoom
 	def_special NullFieldSpecial  @ Secret Base specials
 	def_special NullFieldSpecial
 	def_special NullFieldSpecial
@@ -50,7 +48,6 @@ gSpecials:: @ 815FD60
 	def_special SavePlayerParty
 	def_special LoadPlayerParty
 	def_special ChooseHalfPartyForBattle
-	def_special Script_ShowLinkTrainerCard
 	def_special NullFieldSpecial  @ Berry Tree specials
 	def_special NullFieldSpecial
 	def_special NullFieldSpecial
@@ -174,7 +171,6 @@ gSpecials:: @ 815FD60
 	def_special Script_IsFanClubMemberFanOfPlayer
 	def_special Script_GetNumFansOfPlayerInTrainerFanClub
 	def_special Script_BufferFanClubTrainerName
-	def_special Script_TryLoseFansFromPlayTimeAfterLinkBattle
 	def_special Script_TryLoseFansFromPlayTime
 	def_special Script_SetPlayerGotFirstFans
 	def_special Script_UpdateTrainerFanClubGameClear
@@ -410,27 +406,18 @@ gSpecials:: @ 815FD60
 	def_special SetBattledTrainerFlag
 	def_special SetHelpContextForMap
 	def_special DoSSAnneDepartureCutscene
-	def_special IsPokemonJumpSpeciesInParty
 	def_special IsNationalPokedexEnabled
 	def_special CallTrainerTowerFunc
-	def_special ShowPokemonJumpRecords
 	def_special BufferTMHMMoveName
 	def_special DaisyMassageServices
 	def_special HelpSystem_Disable
 	def_special HelpSystem_Enable
 	def_special SetPostgameFlags
 	def_special CheckHasAtLeastOneBerry
-	def_special DisplayBerryPowderVendorMenu
-	def_special RemoveBerryPowderVendorMenu
-	def_special Script_HasEnoughBerryPowder
-	def_special Script_TakeBerryPowder
-	def_special PrintPlayerBerryPowderAmount
 	def_special DoPokemonLeagueLightingEffect
-	def_special ShowBerryCrushRankings
 	def_special CapeBrinkGetMoveToTeachLeadPokemon
 	def_special HasLearnedAllMovesFromCapeBrinkTutor
 	def_special DoCredits
-	def_special ShowDodrioBerryPickingRecords
 	def_special DrawSeagallopDestinationMenu
 	def_special GetSelectedSeagallopDestination
 	def_special GetSeagallopNumber
@@ -446,7 +433,6 @@ gSpecials:: @ 815FD60
 	def_special Script_ResetUnionRoomTrade
 	def_special PlayerPartyContainsSpeciesWithPlayerID
 	def_special AnimateTeleporterHousing
-	def_special IsDodrioInParty
 	def_special AnimateTeleporterCable
 	def_special InitElevatorFloorSelectMenuPos
 	def_special UpdateLoreleiDollCollection

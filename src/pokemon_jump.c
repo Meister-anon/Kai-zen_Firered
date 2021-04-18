@@ -1,3 +1,4 @@
+/*
 #include "global.h"
 #include "gflib.h"
 #include "battle_anim.h"
@@ -252,3 +253,4 @@ static void sub_8147A34(u8 taskId)
         data[11]++;
     }
 }
+*/

@@ -19,7 +19,7 @@ struct LoadedSaveData
  /*0x00F0*/ struct ItemSlot pokeBalls[BAG_POKEBALLS_COUNT];
  /*0x0130*/ struct ItemSlot TMsHMs[BAG_TMHM_COUNT];
  /*0x0230*/ struct ItemSlot berries[BAG_BERRIES_COUNT];
- /*0x02E8*/ struct MailStruct mail[MAIL_COUNT];
+ /*0x02E8*/ //struct MailStruct mail[MAIL_COUNT];
 };
 
 // EWRAM DATA
@@ -225,10 +225,10 @@ void LoadPlayerBag(void)
         gLoadedSaveData.berries[i] = gSaveBlock1Ptr->bagPocket_Berries[i];
 
     // load mail.
-    for (i = 0; i < MAIL_COUNT; i++)
-        gLoadedSaveData.mail[i] = gSaveBlock1Ptr->mail[i];
-
-    gLastEncryptionKey = gSaveBlock2Ptr->encryptionKey;
+   /* for (i = 0; i < MAIL_COUNT; i++)
+        gLoadedSaveData.mail[i] = gSaveBlock1Ptr->mail[i]; if I did this right, mail will still be part of bag menu, just not have any mail
+                                                            or not save maill between loads.
+    gLastEncryptionKey = gSaveBlock2Ptr->encryptionKey;*/
 }
 
 void SavePlayerBag(void)
@@ -257,8 +257,9 @@ void SavePlayerBag(void)
         gSaveBlock1Ptr->bagPocket_Berries[i] = gLoadedSaveData.berries[i];
 
     // save mail.
-    for (i = 0; i < MAIL_COUNT; i++)
-        gSaveBlock1Ptr->mail[i] = gLoadedSaveData.mail[i];
+   /*for (i = 0; i < MAIL_COUNT; i++)
+        gSaveBlock1Ptr->mail[i] = gLoadedSaveData.mail[i];*/ //guess i could remove this too. instead of messing with all the files
+    //I could just uncomment this so it just isn't saved. i guess.
 
     encryptionKeyBackup = gSaveBlock2Ptr->encryptionKey;
     gSaveBlock2Ptr->encryptionKey = gLastEncryptionKey;
@@ -287,7 +288,7 @@ void ApplyNewEncryptionKeyToAllEncryptedData(u32 encryptionKey)
 
     ApplyNewEncryptionKeyToGameStats(encryptionKey);
     ApplyNewEncryptionKeyToBagItems_(encryptionKey);
-    ApplyNewEncryptionKeyToBerryPowder(encryptionKey);
+   // ApplyNewEncryptionKeyToBerryPowder(encryptionKey);
     ApplyNewEncryptionKeyToWord(&gSaveBlock1Ptr->money, encryptionKey);
     ApplyNewEncryptionKeyToHword(&gSaveBlock1Ptr->coins, encryptionKey);
 }

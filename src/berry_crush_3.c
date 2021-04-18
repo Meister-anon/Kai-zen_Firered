@@ -1,3 +1,4 @@
+/*
 #include "global.h"
 #include "gflib.h"
 #include "battle_anim.h"
@@ -1388,3 +1389,4 @@ static void sub_814F0D8(struct Sprite * sprite)
     sprite->animPaused = FALSE;
     sprite->invisible = FALSE;
 }
+*/
