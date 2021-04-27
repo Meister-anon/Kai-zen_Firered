@@ -15,7 +15,7 @@ extern const u8 gBattleIntroRegOffsBgCnt[];
 static void BattleIntroSlide1(u8 taskId);
 static void BattleIntroSlide2(u8 taskId);
 static void BattleIntroSlide3(u8 taskId);
-//static void BattleIntroSlideLink(u8 taskId);
+static void BattleIntroSlideLink(u8 taskId);
 
 static const TaskFunc sBattleIntroSlideFuncs[] =
 {
@@ -95,12 +95,12 @@ s32 GetAnimBgAttribute(u8 bgId, u8 attributeId)
 void HandleIntroSlide(u8 terrain)
 {
     u8 taskId;
-/*
+
     if (gBattleTypeFlags & BATTLE_TYPE_LINK)
     {
         taskId = CreateTask(BattleIntroSlideLink, 0);
-    }*/
-    if ((gBattleTypeFlags & BATTLE_TYPE_KYOGRE_GROUDON) && gGameVersion != VERSION_RUBY)
+    }
+    else if ((gBattleTypeFlags & BATTLE_TYPE_KYOGRE_GROUDON) && gGameVersion != VERSION_RUBY)
     {
         terrain = BATTLE_TERRAIN_UNDERWATER;
         taskId = CreateTask(BattleIntroSlide2, 0);
@@ -390,7 +390,7 @@ static void BattleIntroSlide3(u8 taskId)
     if (gTasks[taskId].data[0] != 4)
         SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(gTasks[taskId].data[4], 0));
 }
-/*
+
 static void BattleIntroSlideLink(u8 taskId)
 {
     s32 i;
@@ -421,10 +421,10 @@ static void BattleIntroSlideLink(u8 taskId)
         if (--gTasks[taskId].data[2] == 0)
         {
             ++gTasks[taskId].data[0];
-            gSprites[gBattleStruct->linkBattleVsSpriteId_V].oam.objMode = ST_OAM_OBJ_WINDOW;
-            gSprites[gBattleStruct->linkBattleVsSpriteId_V].callback = SpriteCB_VsLetterInit;
-            gSprites[gBattleStruct->linkBattleVsSpriteId_S].oam.objMode = ST_OAM_OBJ_WINDOW;
-            gSprites[gBattleStruct->linkBattleVsSpriteId_S].callback = SpriteCB_VsLetterInit;
+     //       gSprites[gBattleStruct->linkBattleVsSpriteId_V].oam.objMode = ST_OAM_OBJ_WINDOW;
+       //     gSprites[gBattleStruct->linkBattleVsSpriteId_V].callback = SpriteCB_VsLetterInit;
+        //    gSprites[gBattleStruct->linkBattleVsSpriteId_S].oam.objMode = ST_OAM_OBJ_WINDOW;
+        //    gSprites[gBattleStruct->linkBattleVsSpriteId_S].callback = SpriteCB_VsLetterInit;
             SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG_ALL | WININ_WIN0_OBJ | WININ_WIN0_CLR);
             SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WINOBJ_BG_ALL | WINOUT_WINOBJ_OBJ | WINOUT_WINOBJ_CLR | WINOUT_WIN01_BG1 | WINOUT_WIN01_BG2);
         }
@@ -464,7 +464,7 @@ static void BattleIntroSlideLink(u8 taskId)
         break;
     }
 }
-*/
+
 void CopyBattlerSpriteToBg(s32 bgId, u8 x, u8 y, u8 battlerPosition, u8 palno, u8 *tilesDest, u16 *tilemapDest, u16 tilesOffset)
 {
     s32 i, j;

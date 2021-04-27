@@ -684,7 +684,7 @@ void LoadBattleTextboxAndBackground(void)
     LoadBattleMenuWindowGfx();
     DrawMainBattleBackground();
 }
-/*
+
 static void DrawLinkBattleParticipantPokeballs(u8 taskId, u8 multiplayerId, u8 bgId, u8 destX, u8 destY)
 {
     s32 i;
@@ -939,7 +939,7 @@ void InitLinkBattleVsScreen(u8 taskId)
         break;
     }
 }
-*/
+
 void DrawBattleEntryBackground(void)
 {
     if (gBattleTypeFlags & BATTLE_TYPE_LINK)

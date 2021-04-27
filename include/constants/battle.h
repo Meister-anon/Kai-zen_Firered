@@ -47,7 +47,7 @@
 #define BATTLE_TYPE_DOUBLE           0x0001
 #define BATTLE_TYPE_LINK             0x0002
 #define BATTLE_TYPE_IS_MASTER        0x0004 // In not-link battles, it's always set.
-#define BATTLE_TYPE_TRAINER          0x0008
+#define BATTLE_TYPE_TRAINER          0x0008// ^this may be key.
 #define BATTLE_TYPE_FIRST_BATTLE     0x0010
 #define BATTLE_TYPE_20               0x0020
 #define BATTLE_TYPE_MULTI            0x0040
@@ -109,7 +109,7 @@
 #define STATUS1_TOXIC_COUNTER    0xF00
 #define STATUS1_PSN_ANY          (STATUS1_POISON | STATUS1_TOXIC_POISON)
 #define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON)
-
+#define STATUS_ALL				 (STATUS1_SLEEP & STATUS1_PARALYSIS & STATUS1_BURN & STATUS1_FREEZE & STATUS1_PSN_ANY)
 // Volatile status ailments
 // These are removed after exiting the battle or switching out
 #define STATUS2_CONFUSION             0x00000007

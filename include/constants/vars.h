@@ -93,8 +93,8 @@
 #define VAR_0x402F                         0x402F
 
 #define VAR_ICE_STEP_COUNT                 0x4030
-#define VAR_STARTER_MON                    0x4031 // 0: Bulbasaur, 1: Squirtle, 2: Charmander
-#define VAR_0x4032                         0x4032
+#define VAR_STARTER_MON                    0x4031 // 0: Bulbasaur, 1: Squirtle, 2: Charmander	is 0,1,2 those pokemon  because it sets them to that, or because those are the ones assigned to started by default.
+#define VAR_0x4032                         0x4032 // if its the latter than actual starter species doesn't matter.  it was the latter
 #define VAR_ENIGMA_BERRY_AVAILABLE         0x4033
 
 #define VAR_0x4034                         0x4034

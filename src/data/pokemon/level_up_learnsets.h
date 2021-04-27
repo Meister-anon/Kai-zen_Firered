@@ -530,8 +530,8 @@ static const u16 sWigglytuffLevelUpLearnset[] = {
 static const u16 sZubatLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_LEECH_LIFE),
     LEVEL_UP_MOVE(6, MOVE_ASTONISH),
-    LEVEL_UP_MOVE(11, MOVE_SUPERSONIC),
-    LEVEL_UP_MOVE(16, MOVE_BITE),
+    LEVEL_UP_MOVE(1, MOVE_SUPERSONIC),
+    LEVEL_UP_MOVE(1, MOVE_BITE),
     LEVEL_UP_MOVE(21, MOVE_WING_ATTACK),
     LEVEL_UP_MOVE(26, MOVE_CONFUSE_RAY),
     LEVEL_UP_MOVE(31, MOVE_AIR_CUTTER),
@@ -595,8 +595,8 @@ static const u16 sVileplumeLevelUpLearnset[] = {
 
 static const u16 sParasLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_SCRATCH),
-    LEVEL_UP_MOVE(7, MOVE_STUN_SPORE),
-    LEVEL_UP_MOVE(13, MOVE_POISON_POWDER),
+    LEVEL_UP_MOVE(3, MOVE_STUN_SPORE),
+    LEVEL_UP_MOVE(4, MOVE_POISON_POWDER),
     LEVEL_UP_MOVE(19, MOVE_LEECH_LIFE),
     LEVEL_UP_MOVE(25, MOVE_SPORE),
     LEVEL_UP_MOVE(31, MOVE_SLASH),
@@ -5284,6 +5284,8 @@ static const u16 sAggronLevelUpLearnset[] = {
 
 static const u16 sCastformLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
+    LEVEL_UP_MOVE(1, MOVE_WEATHER_BALL),
+    LEVEL_UP_MOVE(1, MOVE_HAIL),
     LEVEL_UP_MOVE(10, MOVE_WATER_GUN),
     LEVEL_UP_MOVE(10, MOVE_EMBER),
     LEVEL_UP_MOVE(10, MOVE_POWDER_SNOW),
@@ -5709,7 +5711,9 @@ static const u16 sChimechoLevelUpLearnset[] = {
 static const u16 sVulpixAlolanLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_POWDER_SNOW),
     LEVEL_UP_MOVE(4, MOVE_TAIL_WHIP),
-    LEVEL_UP_MOVE(7, MOVE_ROAR),
-    LEVEL_UP_MOVE(9, MOVE_SKILL_SWAP),
-    LEVEL_UP_END
-};
+    LEVEL_UP_MOVE(5, MOVE_EMBER),
+    LEVEL_UP_MOVE(5, MOVE_SKILL_SWAP), // So I've learned something while testing moves in the learnsets here.
+    LEVEL_UP_MOVE(7, MOVE_ROAR), // to decide what moves a pokemon has the game will go through the list from top to bottom, 
+                          // and stops when it reaches a number value higher than the pokemon's level 
+    LEVEL_UP_END    //regardless of if you've changed the learn level of a move further down to be at or below the spawn level, it won't learn it 
+};      //because the moves above it are a higher level.   figure if, that info can be useful for hidden ability custom learnsets

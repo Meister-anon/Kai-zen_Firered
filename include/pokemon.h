@@ -26,13 +26,13 @@ struct PokemonSubstruct1
 struct PokemonSubstruct2
 {
     u8 hpEV;
-    u8 attackEV;
-    u8 defenseEV;
+    u8 attackEV; //still unsure if these are actually evs, or the ev they give, but I believe its evs, since normal wild pokemon wouldnt have contest stats. 
+    u8 defenseEV; //checked and this is something different I've already got u16 evs setup. actually this is it, I have evs set to u16 but need to increase the struct so they can be saved/applied.
     u8 speedEV;
-    u8 spAttackEV;
-    u8 spDefenseEV;
+    u8 spAttackEV;// from what ghoulslash said, I believe for me to set a value field to a pokemon it must be part of the struct for it to be stored/saved.
+    u8 spDefenseEV; //based on that for me to do flag based breeding, I'd need "flag" to be part of pokemon struct  think I'll replace sheen to try and save space.
     u8 cool;
-    u8 beauty;
+    u8 beauty;//sheen is apparently used in rse to limit the amount of pokeblocks a pokemon can have. whcih increase these stats here, for contests.
     u8 cute;
     u8 smart;
     u8 tough;
@@ -43,6 +43,7 @@ struct PokemonSubstruct3
 {
  /* 0x00 */ u8 pokerus;
  /* 0x01 */ u8 metLocation;
+      //      u8 DLocation;  for pokemon death
 
  /* 0x02 */ u16 metLevel:7;
  /* 0x02 */ u16 metGame:4;
@@ -55,7 +56,7 @@ struct PokemonSubstruct3
  /* 0x05 */ u32 speedIV:5;
  /* 0x05 */ u32 spAttackIV:5;
  /* 0x06 */ u32 spDefenseIV:5;
- /* 0x07 */ u32 isEgg:1;
+ /* 0x07 */ u32 isEgg:1; //will attempt to use this for pokemon death.
  /* 0x07 */ u32 abilityNum:1;
 
  /* 0x08 */ u32 coolRibbon:3;
@@ -110,10 +111,14 @@ struct BoxPokemon
     } secure;
 };
 
-struct Pokemon
-{
+struct Pokemon // this says box pokemon but its actually just pokemon data, all the data that's held constant I think. if I want to store additional status
+{ // I believe I'd need to add my fields here.
     struct BoxPokemon box;
     u32 status;
+    //u32 statusX;
+    //u32 statusY;
+    //u32 statusZ;
+    //u32 statusSIGMA;
     u8 level;
     u8 mail;
     u16 hp;
@@ -123,6 +128,7 @@ struct Pokemon
     u16 speed;
     u16 spAttack;
     u16 spDefense;
+   // u16 ability;
 };
 
 struct PokemonStorage
@@ -195,8 +201,8 @@ struct BattlePokemon
     /*0x3C*/ u8 otName[8];
     /*0x44*/ u32 experience;
     /*0x48*/ u32 personality;
-    /*0x4C*/ u32 status1;
-    /*0x50*/ u32 status2;
+    /*0x4C*/ u32 status1; // what makes status1 permamnenet if they are both stored in this struct
+    /*0x50*/ u32 status2; //status2 doesn't show up in the battle_controller function only status1
     /*0x54*/ u32 otId;
 };
 

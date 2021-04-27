@@ -30,6 +30,7 @@
 #define ABILITYEFFECT_COUNT_BATTLER_SIDE         0x11
 #define ABILITYEFFECT_COUNT_ON_FIELD             0x12
 #define ABILITYEFFECT_CHECK_ON_FIELD             0x13
+#define ABILITYEFFECT_NUISANCE				     0x14 // test alt name pokemon altering could put wonderguard hp drop here as well
 #define ABILITYEFFECT_SWITCH_IN_WEATHER          0xFF
 
 #define ABILITY_ON_OPPOSING_FIELD(battlerId, abilityId)(AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, battlerId, abilityId, 0, 0))
@@ -88,5 +89,6 @@ void ClearFuryCutterDestinyBondGrudge(u8 battlerId);
 void HandleAction_RunBattleScript(void);
 u8 GetMoveTarget(u16 move, u8 setTarget);
 u8 IsMonDisobedient(void);
+void WonderGuardHealthDrop(u8 battler);
 
 #endif // GUARD_BATTLE_UTIL_H

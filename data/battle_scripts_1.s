@@ -234,6 +234,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectCalmMind
 	.4byte BattleScript_EffectDragonDance
 	.4byte BattleScript_EffectCamouflage
+	.4byte BattleScript_PoisonWorsened
 
 BattleScript_EffectHit::
 	jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler
@@ -695,9 +696,8 @@ BattleScript_EffectToxic::
 	ppreduce
 	jumpifability BS_TARGET, ABILITY_IMMUNITY, BattleScript_ImmunityProtected
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
-	jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_AlreadyPoisoned
 	jumpifstatus BS_TARGET, STATUS1_TOXIC_POISON, BattleScript_AlreadyPoisoned
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
+	jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_PoisonWorsened
 	jumpiftype BS_TARGET, TYPE_POISON, BattleScript_NotAffected
 	jumpiftype BS_TARGET, TYPE_STEEL, BattleScript_NotAffected
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
@@ -994,11 +994,10 @@ BattleScript_EffectPoison::
 	ppreduce
 	jumpifability BS_TARGET, ABILITY_IMMUNITY, BattleScript_ImmunityProtected
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
-	jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_AlreadyPoisoned
 	jumpifstatus BS_TARGET, STATUS1_TOXIC_POISON, BattleScript_AlreadyPoisoned
+	jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_PoisonWorsened
 	jumpiftype BS_TARGET, TYPE_POISON, BattleScript_NotAffected
 	jumpiftype BS_TARGET, TYPE_STEEL, BattleScript_NotAffected
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
 	attackanimation
@@ -1008,6 +1007,21 @@ BattleScript_EffectPoison::
 	resultmessage
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
+
+BattleScript_PoisonWorsened::
+	jumpiftype BS_TARGET, TYPE_POISON, BattleScript_NotAffected
+	jumpiftype BS_TARGET, TYPE_STEEL, BattleScript_NotAffected
+	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
+	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	attackanimation
+	waitanimation
+	printstring	STRINGID_PKMNPOISONWORSENED
+	waitmessage 0x40
+	setmoveeffect MOVE_EFFECT_TOXIC
+	seteffectprimary
+	resultmessage
+	waitmessage 0x40
+	goto BattleScript_MoveEnd 
 
 BattleScript_EffectParalyze::
 	attackcanceler
@@ -2188,8 +2202,8 @@ BattleScript_EffectWillOWisp::
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
 	jumpifstatus BS_TARGET, STATUS1_BURN, BattleScript_AlreadyBurned
 	jumpiftype BS_TARGET, TYPE_FIRE, BattleScript_NotAffected
-	jumpifability BS_TARGET, ABILITY_WATER_VEIL, BattleScript_WaterVeilPrevents
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
+	jumpifability BS_TARGET, ABILITY_WATER_VEIL, BattleScript_WaterVeilPrevents
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
 	attackanimation
@@ -2359,6 +2373,8 @@ BattleScript_EffectRolePlay::
 	trycopyability BattleScript_ButItFailed
 	attackanimation
 	waitanimation
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
 	printstring STRINGID_PKMNCOPIEDFOE
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
@@ -2510,6 +2526,8 @@ BattleScript_EffectSkillSwap::
 	tryswapabilities BattleScript_ButItFailed
 	attackanimation
 	waitanimation
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
 	printstring STRINGID_PKMNSWAPPEDABILITIES
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
@@ -3934,6 +3952,16 @@ BattleScript_DrizzleActivates::
 	call BattleScript_HandleWeatherFormChanges
 	end3
 
+BattleScript_HailActivates::
+	pause 0x20
+	printstring STRINGID_PKMNSXCALLEDDOWNHAIL
+	waitstate
+	sethail
+	playanimation BS_BATTLER_0, B_ANIM_HAIL_CONTINUES, NULL
+	waitanimation
+	call BattleScript_HandleWeatherFormChanges
+	end3
+
 BattleScript_SpeedBoostActivates::
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_PKMNRAISEDSPEED
@@ -3944,6 +3972,8 @@ BattleScript_TraceActivates::
 	pause 0x20
 	printstring STRINGID_PKMNTRACED
 	waitmessage 0x40
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
 	end3
 
 BattleScript_RainDishActivates::

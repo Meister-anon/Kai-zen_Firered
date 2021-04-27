@@ -6,6 +6,8 @@
 #define TOTAL_BOXES_COUNT       14 // so if I'm making all pokemon/forms availale I'll need way more than 14 slots, I'm prob need to double or triple that.
 #define IN_BOX_COUNT            30 //that requires save block expansion, but even after that, managing so many boxes would still be too tedious.
 
+
+
 // I think if I can get that cfru thing, where you carry a secondary storage on you that may solve it, you can keep the important pokemon on you, and just swap from the pc.
 // allowing me to cut down on the needed number of boxes.
 
@@ -14,6 +16,9 @@
 
 //that way pressing the register button would swap the default location new pokemon go, so if you have a pokemon you want to use, right away, just hit register before you catch.
 //this still requiers save expansion, but its just a more efficient interface.
+
+//Maybe what I could do is have a certain number of boxes, but make the last 6 not accessible from the pc, instead be resered for external storage.
+//i.e 29 boxes but  24-29 are specifically for the external storage.
 enum
 {
     WALLPAPER_FOREST,

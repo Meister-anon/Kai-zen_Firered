@@ -1219,7 +1219,7 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 40,
         .baseAttack = 45,
         .baseDefense = 35,
-        .baseSpeed = 55,
+        .baseSpeed = 8,
         .baseSpAttack = 30,
         .baseSpDefense = 40,
         .type1 = TYPE_POISON,
@@ -1233,7 +1233,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_INNER_FOCUS, ABILITY_NONE},
+        .abilities = {ABILITY_NUISANCE, ABILITY_NUISANCE},
         #ifdef BATTLE_ENGINE
             .abilityHidden = ABILITY_INFILTRATOR,
         #endif
@@ -1358,12 +1358,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_PARAS] =
     {
-        .baseHP = 35,
+        .baseHP = 55,
         .baseAttack = 70,
-        .baseDefense = 55,
+        .baseDefense = 77,
         .baseSpeed = 25,
         .baseSpAttack = 45,
-        .baseSpDefense = 55,
+        .baseSpDefense = 65,
         .type1 = TYPE_BUG,
         .type2 = TYPE_GRASS,
         .catchRate = 190,
@@ -1390,12 +1390,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_PARASECT] =
     {
-        .baseHP = 60,
+        .baseHP = 78,
         .baseAttack = 95,
-        .baseDefense = 80,
+        .baseDefense = 95,
         .baseSpeed = 30,
         .baseSpAttack = 60,
-        .baseSpDefense = 80,
+        .baseSpDefense = 88,
         .type1 = TYPE_BUG,
         .type2 = TYPE_GRASS,
         .catchRate = 75,
@@ -27237,7 +27237,7 @@ const struct BaseStats gBaseStats[] =
             .abilities = {ABILITY_SNOW_CLOAK, ABILITY_NONE},
             .abilityHidden = ABILITY_SNOW_WARNING,
         #else
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilities = {ABILITY_OBLIVIOUS, ABILITY_NONE}, //temp ability so I can use skill swap
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,

@@ -73,6 +73,7 @@
 #define T2_READ_32(ptr) ((ptr)[0] + ((ptr)[1] << 8) + ((ptr)[2] << 16) + ((ptr)[3] << 24))
 #define T2_READ_PTR(ptr) (void*) T2_READ_32(ptr)
 
+//believe I added this for u16 ability stuff.  i think
 #define HIBYTE(n) (((n) >> 8) & 0xFF)
 #define LOBYTE(n) ((n) & 0xFF)
 #define HIHALF(n) (((n) & 0xFFFF0000) >> 16)
@@ -94,7 +95,7 @@ extern u8 gStringVar4[];
 
 #define ROUND_BITS_TO_BYTES(numBits)(((numBits) / 8) + (((numBits) % 8) ? 1 : 0))
 
-#define DEX_FLAGS_NO (ROUND_BITS_TO_BYTES(NUM_SPECIES))
+#define DEX_FLAGS_NO (ROUND_BITS_TO_BYTES(NATIONAL_DEX_COUNT))
 #define NUM_FLAG_BYTES (ROUND_BITS_TO_BYTES(FLAGS_COUNT))
 
 struct Coords8
@@ -143,19 +144,19 @@ struct Time
 
 struct Pokedex
 {
-    /*0x00*/ u8 order;
+    /*0x00*/ u8 order; //for now I think this can stay u8, because I believe its referrign to the number of orders. ex. a-z, weight, etc..
     /*0x01*/ u8 unknown1;
     /*0x02*/ u8 nationalMagic; // must equal 0xDA in order to have National mode
     /*0x03*/ u8 unknown2; // set to 0xB9 when national dex is first enabled
     /*0x04*/ u32 unownPersonality; // set when you first see Unown
     /*0x08*/ u32 spindaPersonality; // set when you first see Spinda
     /*0x0C*/ u32 unknown3;
-    /*0x10*/ u8 owned[DEX_FLAGS_NO];
-    /*0x44*/ u8 seen[DEX_FLAGS_NO];
-};
+    /*0x10*/ u16 owned[DEX_FLAGS_NO]; //not sure if right, but set to match species before form data.
+    /*0x44*/ u16 seen[DEX_FLAGS_NO];// right now that works, but I've been told I can expand passed the 999 limit, by increase dex space in save blocks, so I guess make these u16?
+};// once I do that I'll prob need to remove the part that equates forms with regular species num.
 
-struct PokemonJumpResults // possibly used in the game itself?
-{
+struct PokemonJumpResults // possibly used in the game itself?  for now haven't been able to remove but will try again later.
+{ //    along with other part set at line 294.
     u16 jumpsInRow;
     u16 field2;
     u16 excellentsInRow;
@@ -164,7 +165,7 @@ struct PokemonJumpResults // possibly used in the game itself?
     u32 bestJumpScore;
 };
 
-struct BerryPickingResults // possibly used in the game itself? Size may be wrong as well
+struct BerryPickingResults // possibly used in the game itself? Size may be wrong as well  dodrio berry pick minigame
 {
     u32 bestScore;
     u16 berriesPicked;
@@ -184,7 +185,7 @@ struct BerryCrush
     u16 berryCrushResults[4];
     u32 berryPowderAmount;
     u32 unk;
-};
+}; 
 
 #define PLAYER_NAME_LENGTH   7
 /*
@@ -771,7 +772,7 @@ struct SaveBlock1
     /*0x0004*/ struct WarpData location;
     /*0x000C*/ struct WarpData continueGameWarp;
     /*0x0014*/ struct WarpData dynamicWarp;
-    /*0x001C*/ struct WarpData lastHealLocation;
+    /*0x001C*/ struct WarpData lastHealLocation; // make sure chane healing location to work on location flag instead of use.
     /*0x0024*/ struct WarpData escapeWarp;
     /*0x002C*/ u16 savedMusic;
     /*0x002E*/ u8 weather;
@@ -789,21 +790,21 @@ struct SaveBlock1
     /*0x0430*/ struct ItemSlot bagPocket_PokeBalls[BAG_POKEBALLS_COUNT];
     /*0x0464*/ struct ItemSlot bagPocket_TMHM[BAG_TMHM_COUNT];
     /*0x054c*/ struct ItemSlot bagPocket_Berries[BAG_BERRIES_COUNT];
-    /*0x05F8*/ u8 seen1[DEX_FLAGS_NO];
-    /*0x062C*/ u16 berryBlenderRecords[3]; // unused
+    /*0x05F8*/ u16 seen1[DEX_FLAGS_NO];
+    /*0x062C*/ //u16 berryBlenderRecords[3]; // unused
     /*0x0632*/ u8 field_632[6]; // unused?
     /*0x0638*/ u16 trainerRematchStepCounter;
-    /*0x063A*/ u8 ALIGNED(2) trainerRematches[100];
-    /*0x06A0*/ struct ObjectEvent objectEvents[OBJECT_EVENTS_COUNT];
-    /*0x08E0*/ struct ObjectEventTemplate objectEventTemplates[64];
-    /*0x0EE0*/ u8 flags[NUM_FLAG_BYTES];
-    /*0x1000*/ u16 vars[VARS_COUNT];
-    /*0x1200*/ u32 gameStats[NUM_GAME_STATS];
+    /*0x063A*/ u8 ALIGNED(2) trainerRematches[100]; //believe this is vs seeker, could make functions for rematch instead of needing this, by adding levels to trainer pokemon based on 
+    /*0x06A0*/ struct ObjectEvent objectEvents[OBJECT_EVENTS_COUNT]; //average level of player team, & badge count.  maybe evolve their pokemon too, or chance too, after first fight.
+    /*0x08E0*/ struct ObjectEventTemplate objectEventTemplates[64];//perhaps make a field to keep track of number of times fought, maybe be too much space and not really needed.
+    /*0x0EE0*/ u8 flags[NUM_FLAG_BYTES];// but I like the idea of using random chance to determine if trainer will have gym type (must talk to start battle) or normal trainer behavior
+    /*0x1000*/ u16 vars[VARS_COUNT];//done with a level script whenever player walks into an area.  Alright so instead of using if I fought them before, do it based on
+    /*0x1200*/ u32 gameStats[NUM_GAME_STATS];//if I have the map place set for the next town over. (that way just back tracking to heal wouldn't retrigger battles.
     /*0x1300*/ struct QuestLog questLog[QUEST_LOG_SCENE_COUNT];
     /*0x2CA0*/ u16 easyChatProfile[6];
-    /*0x2CAC*/ u16 easyChatBattleStart[6];
-    /*0x2CB8*/ u16 easyChatBattleWon[6];
-    /*0x2CC4*/ u16 easyChatBattleLost[6];
+    /*0x2CAC*/ u16 easyChatBattleStart[6]; //also don't forget to add more healing places in the world to ease the grind and help progression
+    /*0x2CB8*/ u16 easyChatBattleWon[6];// like the idea dylanryaz has,(well kinda mine) pokemon in every area must be lower level than the coming challenges to advocate training
+    /*0x2CC4*/ u16 easyChatBattleLost[6];// but either equal to, or slightly above average level for player team.
     /*0x2CD0*/ struct MailStruct mail[MAIL_COUNT];
     /*0x2F10*/ u8 additionalPhrases[EASY_CHAT_EXTRA_PHRASES_SIZE];
     /*0x2F18*/ OldMan oldMan; // unused
@@ -818,7 +819,7 @@ struct SaveBlock1
     /*0x348C*/ u8 filler_348C[400];
     /*0x361C*/ struct RamScript ramScript;
     /*0x3A08*/ u8 filler3A08[16];
-    /*0x3A18*/ u8 seen2[DEX_FLAGS_NO];
+    /*0x3A18*/ u16 seen2[DEX_FLAGS_NO];
     /*0x3A4C*/ u8 rivalName[PLAYER_NAME_LENGTH + 1];
     /*0x3A54*/ struct FameCheckerSaveData fameChecker[NUM_FAMECHECKER_PERSONS];
     /*0x3A94*/ u8 filler3A94[0x40];

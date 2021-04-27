@@ -305,6 +305,7 @@ static void atkF4_subattackerhpbydmg(void);
 static void atkF5_removeattackerstatus1(void);
 static void atkF6_finishaction(void);
 static void atkF7_finishturn(void);
+//static void atkF8_sethpto1(void);
 
 void (* const gBattleScriptingCommandsTable[])(void) =
 {
@@ -556,6 +557,7 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atkF5_removeattackerstatus1,
     atkF6_finishaction,
     atkF7_finishturn,
+   // atkF8_sethpto1,
 };
 
 struct StatFractions
@@ -1066,6 +1068,7 @@ static void atk01_accuracycheck(void)
         u8 type, moveAcc, holdEffect, param;
         s8 buff;
         u16 calc;
+        u8 eva;
 
         if (move == MOVE_NONE)
             move = gCurrentMove;
@@ -1089,17 +1092,51 @@ static void atk01_accuracycheck(void)
         if (buff > 0xC)
             buff = 0xC;
         moveAcc = gBattleMoves[move].accuracy;
-        // check Thunder on sunny weather
+        // check Thunder on sunny weather / need add hail blizzard buff?
         if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY && gBattleMoves[move].effect == EFFECT_THUNDER)
             moveAcc = 50;
+        if (moveAcc > 100)
+            moveAcc = 100; // to prevent possible broken values.
         calc = sAccuracyStageRatios[buff].dividend * moveAcc;
         calc /= sAccuracyStageRatios[buff].divisor;
         if (gBattleMons[gBattlerAttacker].ability == ABILITY_COMPOUND_EYES)
             calc = (calc * 130) / 100; // 1.3 compound eyes boost
         if (WEATHER_HAS_EFFECT && gBattleMons[gBattlerTarget].ability == ABILITY_SAND_VEIL && gBattleWeather & WEATHER_SANDSTORM_ANY)
             calc = (calc * 80) / 100; // 1.2 sand veil loss
-        if (gBattleMons[gBattlerAttacker].ability == ABILITY_HUSTLE && IS_TYPE_PHYSICAL(type))
-            calc = (calc * 80) / 100; // 1.2 hustle loss
+        if (gBattleMons[gBattlerAttacker].ability == ABILITY_HUSTLE && IS_TYPE_PHYSICAL(type)) //can put status based evasion/accuracy effects here
+            calc = (calc * 80) / 100; // 1.2 hustle loss    since it uses accuract not evasion, I'll add an accuracy boost for different statuses.
+        // I'll use calc,  to adjust the move accuracy, but to avoid break, will include check that if moveAcc > 100  would instead moveAcc = 100.
+        //remember I plan to do this for more than just status 1.
+        //for the status effects that already lower change of doing attack, I'll lower the accuracy drop.  wait I'm thinking wrong, this is how much they'd take attacks not give. nvm
+       eva = gBattleMons[gBattlerTarget].statStages[STAT_EVASION];
+        if (gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATED_WITH(gBattlerAttacker)) //need to figure out how to lower evasion to go along with these accuracy boosts.
+            calc = (calc * 160) / 100;
+            eva = 4;
+        if (gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION) //thought instead of self attack, make confusion chance to change move target to random
+            calc = (calc * 120) / 100; //that way they're still doing the same move, but they also have chance to hit attack themselves with it .
+            eva = 5; // with that there should be as much benefit as danger in being confused, singled moves could hit everyone, etc. random & interesting..
+        if (gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
+            calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
+            eva = 5;
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP) //.target = MOVE_TARGET_SELECTED, 
+            calc = (calc * 260) / 100; // gBattleMoves[gCurrentMove].target that's the comamnd I need, then just set the target I want
+            eva = 3;//if I set it random % I can do more with it, I can make it use the normal confused hit itself, text command if it lands on target user.
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_BURN)
+            calc = (calc * 120) / 100;
+            eva = 4;
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_POISON)
+            calc = (calc * 115) / 100;
+            eva = 5;
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_FREEZE)
+            calc = (calc * 260) / 100;
+            eva = 3;
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_PARALYSIS)
+            calc = (calc * 130) / 100;
+            eva = 4;
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_TOXIC_POISON)
+            calc = (calc * 156) / 100;
+            eva = 4;
+
         if (gBattleMons[gBattlerTarget].item == ITEM_ENIGMA_BERRY)
         {
             holdEffect = gEnigmaBerries[gBattlerTarget].holdEffect;
@@ -1497,7 +1534,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
     if (IS_BATTLER_OF_TYPE(attacker, moveType))
     {
         gBattleMoveDamage = gBattleMoveDamage * 15;
-        gBattleMoveDamage = gBattleMoveDamage / 10;
+        gBattleMoveDamage = gBattleMoveDamage / 10; //so instead of just writing it as 1 equation, they decided it was better idea to break it into 2... x 15 then divide by 10 to get 1.5
     }
 
     if (gBattleMons[defender].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
@@ -2184,7 +2221,7 @@ void SetMoveEffect(bool8 primary, u8 certain)
                     ++gActiveBattler);
             else
                 gActiveBattler = gBattlersCount;
-            if (gBattleMons[gEffectBattler].status1)
+            if (gBattleMons[gEffectBattler].status1) // ok the status 1 check was double baked in
                 break;
             if (gActiveBattler != gBattlersCount)
                 break;
@@ -6965,6 +7002,8 @@ static void atk95_setsandstorm(void)
 
 static void atk96_weatherdamage(void)
 {
+    u16 species;
+    u16 ability;
     if (IS_BATTLE_TYPE_GHOST_WITHOUT_SCOPE(gBattleTypeFlags)
      && (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT))
     {
@@ -6972,6 +7011,7 @@ static void atk96_weatherdamage(void)
         ++gBattlescriptCurrInstr;
         return;
     }
+    
     if (WEATHER_HAS_EFFECT)
     {
         if (gBattleWeather & WEATHER_SANDSTORM_ANY)
@@ -6984,7 +7024,8 @@ static void atk96_weatherdamage(void)
              && gBattleMons[gBattlerAttacker].type2 != TYPE_GROUND
              && gBattleMons[gBattlerAttacker].ability != ABILITY_SAND_VEIL
              && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERGROUND)
-             && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER))
+             && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER)
+             && (gBattleMons[gBattlerAttacker].ability != ABILITY_FORECAST && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM))
             {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                 if (gBattleMoveDamage == 0)
@@ -8498,7 +8539,13 @@ static void atkD3_trycopyability(void) // role play
         gBattleMons[gBattlerAttacker].ability = gBattleMons[gBattlerTarget].ability;
         gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
         gBattlescriptCurrInstr += 5;
-    }
+        if (gBattleMons[gBattlerTarget].ability == ABILITY_WONDER_GUARD
+            && gBattleMons[gBattlerAttacker].hp != 1)
+        {
+            gBattleMoveDamage = gBattleMons[gBattlerAttacker].hp - 1;
+            gBattleMons[gBattlerAttacker].hp = gBattleMons[gBattlerTarget].hp;
+        } //still need to change if wonderguard shedinja's hp grows when ability isn't wonderguard, its aparent there wouldn't be a physical change in hp bar.
+    } //nope doesn't do shit I think I can do it with battle script commands? will have to experiment with hpbar and hpupdate battlescripts more. 
     else
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
@@ -8604,19 +8651,27 @@ static void atkDA_tryswapabilities(void) // skill swap . //remember need to remo
 {
     if ((gBattleMons[gBattlerAttacker].ability == 0
         && gBattleMons[gBattlerTarget].ability == 0)
-     || gMoveResultFlags & MOVE_RESULT_NO_EFFECT) //not sure if nor effect clause would still prevent working on wonderguard.
+     || gMoveResultFlags & MOVE_RESULT_NO_EFFECT) //not sure if or effect clause would still prevent working on wonderguard. it works
      {
          gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
      }
     else
     {
         u16 abilityAtk = gBattleMons[gBattlerAttacker].ability;
-        
         gBattleMons[gBattlerAttacker].ability = gBattleMons[gBattlerTarget].ability;
         gBattleMons[gBattlerTarget].ability = abilityAtk;
 
             gBattlescriptCurrInstr += 5;
+            if (gBattleMons[gBattlerAttacker].ability == ABILITY_WONDER_GUARD //swapped bracket value
+                && gBattleMons[gBattlerAttacker].hp != 1)
+            {
+               gBattleMoveDamage = gBattleMons[gBattlerAttacker].hp - 1;
+               gBattleMons[gBattlerAttacker].hp = gBattleMons[gBattlerTarget].hp;
+               //for some reason hp doesn't drop until used twice, but then character dies, i think problem is move damage
+               //and reversal of attacker and target for swap,  I may need to change them around?
+            }
     }
+    
 }
 
 static void atkDB_tryimprison(void)
@@ -9116,7 +9171,7 @@ static void atkEF_handleballthrow(void)
             if (gBattleMons[gBattlerTarget].status1 & (STATUS1_SLEEP | STATUS1_FREEZE))
                 odds *= 2;
             if (gBattleMons[gBattlerTarget].status1 & (STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON))
-                odds = (odds * 15) / 10;
+                odds = (odds * 15) / 10; //odds of pokemon catch when status, for multi status catch chance make field total odds and second odds field, and add odds fields together
             if (gLastUsedItem != ITEM_SAFARI_BALL)
             {
                 if (gLastUsedItem == ITEM_MASTER_BALL)
@@ -9433,3 +9488,15 @@ static void atkF7_finishturn(void)
     gCurrentActionFuncId = B_ACTION_FINISHED;
     gCurrentTurnActionNumber = gBattlersCount;
 }
+/*
+static void atkF8_sethpto1(void)
+{
+    if ((!gBattleControllerExecFlags)
+        && (gBattleMons[gActiveBattler].ability == ABILITY_WONDER_GUARD))
+    {
+                gBattleMons[gActiveBattler].hp = 1;
+        BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, 0, 2, &gBattleMons[gActiveBattler].hp);
+        MarkBattlerForControllerExec(gActiveBattler);
+        ++gBattlescriptCurrInstr;
+    }
+}*/

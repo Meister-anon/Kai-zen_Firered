@@ -32,7 +32,7 @@
 #define B_ACTION_USE_ITEM                  1
 #define B_ACTION_SWITCH                    2
 #define B_ACTION_RUN                       3
-#define B_ACTION_SAFARI_WATCH_CAREFULLY    4
+#define B_ACTION_SAFARI_WATCH_CAREFULLY    4 //could probably use for my turn skip idea.
 #define B_ACTION_SAFARI_BALL               5
 #define B_ACTION_SAFARI_BAIT          6
 #define B_ACTION_SAFARI_GO_NEAR            7
@@ -287,7 +287,7 @@ struct UsedMoves
     u16 unknown[MAX_BATTLERS_COUNT];
 };
 
-struct BattleHistory
+struct BattleHistory //could I use this for battle ai? have them keep track of moves.
 {
     /*0x00*/ u16 usedMoves[2][8]; // 0xFFFF means move not used (confuse self hit, etc)
     /*0x20*/ u16 abilities[MAX_BATTLERS_COUNT / 2];
@@ -401,8 +401,8 @@ struct BattleStruct
     u8 safariPkblThrowCounter;
     u8 safariEscapeFactor;
     u8 safariCatchFactor;
-    //u8 linkBattleVsSpriteId_V;
-    //u8 linkBattleVsSpriteId_S;
+    u8 linkBattleVsSpriteId_V;
+    u8 linkBattleVsSpriteId_S;
     u8 formToChangeInto;
     u8 chosenMovePositions[MAX_BATTLERS_COUNT];
     u8 stateIdAfterSelScript[MAX_BATTLERS_COUNT];
@@ -594,8 +594,10 @@ struct BattleSpriteData
 
 extern struct BattleSpriteData *gBattleSpritesDataPtr;
 
+#define BATTLE_BUFFER_LINK_SIZE 0x1000
 
-
+extern u8 *gLinkBattleSendBuffer;
+extern u8 *gLinkBattleRecvBuffer;									  
 // Move this somewhere else
 
 #include "sprite.h"

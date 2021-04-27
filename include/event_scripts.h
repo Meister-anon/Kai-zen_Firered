@@ -772,8 +772,8 @@ extern const u8 gOakText_ConfirmRivalName[];
 extern const u8 gOakText_RememberRivalName[];
 extern const u8 gOakText_LegendAboutToUnfold[];
 
-// Help System
-extern const u8 Help_Text_WhatShouldIDo[];
+// Help System  removing all these help script should help me save on rom size.
+/*extern const u8 Help_Text_WhatShouldIDo[];
 extern const u8 Help_Text_HowDoIDoThis[];
 extern const u8 Help_Text_WhatDoesThisTermMean[];
 extern const u8 Help_Text_AboutThisGame[];
@@ -1141,7 +1141,7 @@ extern const u8 Help_Text_TypeMatchupOwnPokemonFire[];
 extern const u8 Help_Text_TypeMatchupOwnMoveWater[];
 extern const u8 Help_Text_TypeMatchupOwnPokemonWater[];
 extern const u8 Help_Text_TypeMatchupOwnMoveBug[];
-extern const u8 Help_Text_TypeMatchupOwnPokemonBug[];
+extern const u8 Help_Text_TypeMatchupOwnPokemonBug[];*/
 
 extern const u8 EventScript_FldEffStrength[];
 extern const u8 EventScript_FailSweetScent[];
@@ -1191,6 +1191,14 @@ extern const u8 CableClub_Text_CanMakeBerryPowder[];
 extern const u8 EventScript_PC[];
 
 extern const u8 EventScript_RepelWoreOff[];
+extern const u8 EventScript_BwRepelWoreOff[];
+extern const u8 EventScript_AnotherRepel[];
+extern const u8 EventScript_UseAnotherRepel[];
+extern const u8 EventScript_UseAnotherSuperRepel[];
+extern const u8 EventScript_UseAnotherMaxRepel[];
+extern const u8 EventScript_FinishNewRepel[];
+extern const u8 EventScript_EndScript[];
+
 
 // battle_message
 extern const u8 Text_MonSentToBoxInSomeonesPC[];

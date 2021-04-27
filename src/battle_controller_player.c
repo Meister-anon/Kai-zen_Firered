@@ -185,8 +185,14 @@ void SetControllerToPlayer(void)
 static void PlayerBufferExecCompleted(void)
 {
     gBattlerControllerFuncs[gActiveBattler] = PlayerBufferRunCommand;
-    if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
+    if (gBattleTypeFlags & BATTLE_TYPE_LINK)
+    {
+        u8 playerId = GetMultiplayerId();
 
+   //     PrepareBufferDataTransferLink(2, 4, &playerId);
+        gBattleBufferA[gActiveBattler][0] = CONTROLLER_TERMINATOR_NOP;
+    }
+    else
     {
         gBattleControllerExecFlags &= ~gBitTable[gActiveBattler];
     }
@@ -795,7 +801,7 @@ static void SetLinkBattleEndCallbacks(void)
             m4aSongNumStop(SE_LOW_HEALTH);
             gMain.inBattle = 0;
             gMain.callback1 = gPreBattleCallback1;
-         //   SetMainCallback2(CB2_InitEndLinkBattle);
+       //     SetMainCallback2(CB2_InitEndLinkBattle);
             FreeAllWindowBuffers();
         }
     }
@@ -804,7 +810,7 @@ static void SetLinkBattleEndCallbacks(void)
         m4aSongNumStop(SE_LOW_HEALTH);
         gMain.inBattle = 0;
         gMain.callback1 = gPreBattleCallback1;
-      //  SetMainCallback2(CB2_InitEndLinkBattle);
+    //    SetMainCallback2(CB2_InitEndLinkBattle);
         FreeAllWindowBuffers();
     }
 } 
@@ -829,7 +835,7 @@ void SetBattleEndCallbacks(void)
             SetMainCallback2(gMain.savedCallback);
         }
     }
-}
+} 
 
 static void CompleteOnBattlerSpriteCallbackDummy(void)
 {
@@ -2152,7 +2158,7 @@ static void PlayerHandleDrawTrainerPic(void)
     s16 xPos;
     u32 trainerPicId;
 
-    if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
+    if (gBattleTypeFlags & BATTLE_TYPE_MULTI) //could I be wrong about what multi battles are?
     {
         if ((GetBattlerPosition(gActiveBattler) & BIT_FLANK) != B_FLANK_LEFT) // Second mon, on the right.
             xPos = 90;
@@ -2245,7 +2251,7 @@ static void PlayerHandleFaintAnimation(void)
         if (!gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].specialAnimActive)
         {
             gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].animationState = 0;
-            HandleLowHpMusicChange(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
+            HandleLowHpMusicChange(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler); //found it here we go. : D
             PlaySE12WithPanning(SE_FAINT, SOUND_PAN_ATTACKER);
             gSprites[gBattlerSpriteIds[gActiveBattler]].data[1] = 0;
             gSprites[gBattlerSpriteIds[gActiveBattler]].data[2] = 5;
@@ -2469,7 +2475,7 @@ static void PlayerHandleChoosePokemon(void)
 
 static void PlayerHandleCmd23(void)
 {
-    BattleStopLowHpSound();
+    BattleStopLowHpSound(); // think there is a music change that goes along with this, I'll remove the sound, and just keep the battle music change instead. if its emerald only I'll port.
     BeginNormalPaletteFade(0xFFFFFFFF, 2, 0, 16, RGB_BLACK);
     PlayerBufferExecCompleted();
 }

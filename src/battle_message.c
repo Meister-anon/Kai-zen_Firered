@@ -503,6 +503,8 @@ const u8 gText_EmptyString3[] = _("");
 static const u8 sText_PlayedFluteCatchyTune[] = _("{B_PLAYER_NAME} played the {B_LAST_ITEM}.\pNow, that's a catchy tune!");
 static const u8 sText_PlayedThe[] = _("{B_PLAYER_NAME} played the\n{B_LAST_ITEM}.");
 static const u8 sText_PkmnHearingFluteAwoke[] = _("The POKéMON hearing the FLUTE\nawoke!");
+static const u8 sText_PxmnsXCalledDownHail[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\ncalled down hail!");
+static const u8 sText_PkmnsPoisonWorsened[] = _("{B_DEF_NAME_WITH_PREFIX}'s poisoning became worse!");
 static const u8 sText_YouThrowABallNowRight[] = _("You throw a BALL now, right?\nI… I'll do my best!");
 const u8 gText_ForPetesSake[] = _("OAK: Oh, for Pete's sake…\nSo pushy, as always.\p{B_PLAYER_NAME}.\pYou've never had a POKéMON battle\nbefore, have you?\pA POKéMON battle is when TRAINERS\npit their POKéMON against each\lother.\p");
 const u8 gText_TheTrainerThat[] = _("The TRAINER that makes the other\nTRAINER's POKéMON faint by lowering\ltheir HP to “0,” wins.\p");
@@ -878,6 +880,8 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_POKEFLUTECATCHY - 12]               = sText_PlayedFluteCatchyTune,
     [STRINGID_POKEFLUTE - 12]                     = sText_PlayedThe,
     [STRINGID_MONHEARINGFLUTEAWOKE - 12]          = sText_PkmnHearingFluteAwoke,
+    [STRINGID_PKMNSXCALLEDDOWNHAIL - 12]          = sText_PxmnsXCalledDownHail,
+    [STRINGID_PKMNPOISONWORSENED - 12]            = sText_PkmnsPoisonWorsened,
     [STRINGID_TRAINER2CLASS - 12]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - 12]                  = sText_Trainer2Name,
     [STRINGID_PLAYERWHITEDOUT - 12]               = sText_PlayerWhiteout2,
@@ -1334,7 +1338,8 @@ static const u8 *const sATypeMove_Table[] = {
     gUnknown_83FE94D,
     gUnknown_83FE95C,
     gUnknown_83FE968,
-    gUnknown_83FE976
+    gUnknown_83FE976,
+    gFairy_movetype
 };
 
 static const u16 sGrammarMoveUsedTable[] = {
@@ -1723,7 +1728,7 @@ u32 BattleStringExpandPlaceholdersToDisplayedString(const u8* src)
     BattleStringExpandPlaceholders(src, gDisplayedStringBattle);
 }
 
-static const u8* TryGetStatusString(u8 *src)
+static const u8* TryGetStatusString(u8 *src) //useful
 {
     u32 i;
     u8 status[] = _("$$$$$$$");

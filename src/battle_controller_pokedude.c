@@ -689,8 +689,14 @@ static void CompleteOnFinishedStatusAnimation(void)
 static void PokedudeBufferExecCompleted(void)
 {
     gBattlerControllerFuncs[gActiveBattler] = PokedudeBufferRunCommand;
-    if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
+    if (gBattleTypeFlags & BATTLE_TYPE_LINK)
+    {
+        u8 playerId = GetMultiplayerId();
 
+   //     PrepareBufferDataTransferLink(2, 4, &playerId);
+        gBattleBufferA[gActiveBattler][0] = CONTROLLER_TERMINATOR_NOP;
+    }
+    else
     {
         gBattleControllerExecFlags &= ~gBitTable[gActiveBattler];
     }

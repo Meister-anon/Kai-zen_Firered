@@ -227,8 +227,8 @@ void LoadPlayerBag(void)
     // load mail.
    /* for (i = 0; i < MAIL_COUNT; i++)
         gLoadedSaveData.mail[i] = gSaveBlock1Ptr->mail[i]; if I did this right, mail will still be part of bag menu, just not have any mail
-                                                            or not save maill between loads.
-    gLastEncryptionKey = gSaveBlock2Ptr->encryptionKey;*/
+                                                            or not save maill between loads. */
+    gLastEncryptionKey = gSaveBlock2Ptr->encryptionKey;
 }
 
 void SavePlayerBag(void)

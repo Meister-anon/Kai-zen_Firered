@@ -307,8 +307,8 @@ static const struct WindowTemplate sUnknown_8451F64 = {
    .baseBlock = 0x0178
  };
 
-static const struct ListMenuItem sUnknown_8451F6C[] = {
-    {gText_PokemonList, -3},
+static const struct ListMenuItem sUnknown_8451F6C[] = { //list seems to be set up like enum? except values -3, are specifically those the cursor skips over, also use dif font.
+    {gText_PokemonList, -3},//array sUnknown_8451F6C is pokedex table of contents, i.e the main pokedex menu.
     {gText_NumericalMode, 9},
     {gText_PokemonHabitats, -3},
     {gText_DexCategory_GrasslandPkmn, 0},
@@ -350,7 +350,7 @@ static const struct ListMenuTemplate sUnknown_8452004 = {
     .cursorKind = 0,
 };
 
-static const struct ListMenuItem sUnknown_845201C[] = {
+static const struct ListMenuItem sUnknown_845201C[] = { // same as other, except specifically for national dex mode.
     {gText_PokemonList, -3},
     {gText_NumericalModeKanto, 9},
     {gText_NumericalModeNational, 14},
@@ -2639,7 +2639,7 @@ void sub_8105800(u8 a0, u16 species, u8 a2, u8 a3)
     sub_81047C8(a0, 0, gText_PokedexPokemon, a2, a3, 0);
 }
 
-void sub_81058C4(u8 windowId, u16 species, u8 x, u8 y)
+void sub_81058C4(u8 windowId, u16 species, u8 x, u8 y) // part of dex entry displlay screen, holds height data.
 {
     u16 height;
     u32 inches, feet;
@@ -2696,7 +2696,7 @@ void sub_81058C4(u8 windowId, u16 species, u8 x, u8 y)
     sub_81047C8(windowId, 0, buffer, x, y, 0);
 }
 
-void sub_8105A3C(u8 windowId, u16 species, u8 x, u8 y)
+void sub_8105A3C(u8 windowId, u16 species, u8 x, u8 y) //part of dex entry display screen holds weight data.
 {
     u16 weight;
     u32 lbs;
@@ -2787,7 +2787,7 @@ void sub_8105A3C(u8 windowId, u16 species, u8 x, u8 y)
     sub_81047C8(windowId, 0, buffer, x, y, 0);
 }
 
-void sub_8105CB0(u8 a0, u16 species, u8 x, u8 y)
+void sub_8105CB0(u8 a0, u16 species, u8 x, u8 y) // part of dex entry function, seems to handle writing/printing the actual entry descriptions
 {
     struct TextPrinterTemplate printerTemplate;
     u16 length;
@@ -2824,7 +2824,7 @@ void sub_8105CB0(u8 a0, u16 species, u8 x, u8 y)
     }
 }
 
-void sub_8105D64(u8 a0, u16 species, u8 a2, u8 a3)
+void sub_8105D64(u8 a0, u16 species, u8 a2, u8 a3) // part of dex entry data, footprint data
 {
     u16 i, j, unused, v3;
     u8 v4, v5;
@@ -2855,7 +2855,7 @@ void sub_8105D64(u8 a0, u16 species, u8 a2, u8 a3)
     BlitBitmapRectToWindow(a0, buffer, 0, 0, 16, 16, a2, a3, 16, 16);
 }
 
-u8 sub_8105E1C(bool8 a0)
+u8 sub_8105E1C(bool8 a0) //uses listed species name for something
 {
     sub_8105594(3, 6);
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
@@ -2872,7 +2872,7 @@ u8 sub_8105E1C(bool8 a0)
     CopyWindowToVram(gUnknown_203ACF0->field_4A[0], 2);
     FillWindowPixelBuffer(gUnknown_203ACF0->field_4A[1], 0);
     sub_8104A34(gUnknown_203ACF0->field_4A[1], 0, gUnknown_203ACF0->field_5A, 0, 8);
-    sub_81047C8(gUnknown_203ACF0->field_4A[1], 2, gSpeciesNames[gUnknown_203ACF0->field_5A], 28, 8, 0);
+    sub_81047C8(gUnknown_203ACF0->field_4A[1], 2, gSpeciesNames[gUnknown_203ACF0->field_5A], 28, 8, 0); //species name
     sub_8105800(gUnknown_203ACF0->field_4A[1], gUnknown_203ACF0->field_5A, 0, 24);
     sub_81058C4(gUnknown_203ACF0->field_4A[1], gUnknown_203ACF0->field_5A, 0, 36);
     sub_8105A3C(gUnknown_203ACF0->field_4A[1], gUnknown_203ACF0->field_5A, 0, 48);
@@ -2916,7 +2916,7 @@ u8 sub_810603C(void)
     u16 speciesId, species;
     u16 v8;
 
-    species = gUnknown_203ACF0->field_5A;
+    species = gUnknown_203ACF0->field_5A; // this unknown and field were for speices name before.
     speciesId = SpeciesToNationalPokedexNum(species);
     v3 = sub_8104AB0(species, 1, 1);
     v1 = 28;
@@ -2999,7 +2999,7 @@ u8 sub_810603C(void)
     CopyWindowToVram(gUnknown_203ACF0->field_4A[10], 2);
     FillWindowPixelBuffer(gUnknown_203ACF0->field_4A[8], 0);
     sub_8104A34(gUnknown_203ACF0->field_4A[8], 0, species, 0, 0);
-    sub_81047C8(gUnknown_203ACF0->field_4A[8], 2, gSpeciesNames[species], 3, 12, 0);
+    sub_81047C8(gUnknown_203ACF0->field_4A[8], 2, gSpeciesNames[species], 3, 12, 0); // how now it explicitly says species name, but now its field 4A not 5A?
     PutWindowTilemap(gUnknown_203ACF0->field_4A[8]);
     CopyWindowToVram(gUnknown_203ACF0->field_4A[8], 2);
     FillWindowPixelBuffer(gUnknown_203ACF0->field_4A[12], 0);
@@ -3009,9 +3009,9 @@ u8 sub_810603C(void)
     {
         BlitMoveInfoIcon(gUnknown_203ACF0->field_4A[12], 1 + gBaseStats[species].type1, 0, 1);
         if (gBaseStats[species].type1 != gBaseStats[species].type2)
-            BlitMoveInfoIcon(gUnknown_203ACF0->field_4A[12], 1 + gBaseStats[species].type2, 32, 1);
-    }
-    PutWindowTilemap(gUnknown_203ACF0->field_4A[12]);
+            BlitMoveInfoIcon(gUnknown_203ACF0->field_4A[12], 1 + gBaseStats[species].type2, 32, 1); //think like type image chart, 32 is width of icon,
+    }//                                     So these types are same y, but different x. just right beside each other though.
+    PutWindowTilemap(gUnknown_203ACF0->field_4A[12]); //not sure what the 12 in the brackets is, above its handling types, but there are more than 12 types even before fairy.
     CopyWindowToVram(gUnknown_203ACF0->field_4A[12], 2);
     ResetAllPicSprites();
     LoadPalette(gUnknown_8452368, 288, 32);
@@ -3019,7 +3019,7 @@ u8 sub_810603C(void)
     if (v3)
     {
         gUnknown_203ACF0->field_4A[14] = CreateMonPicSprite_HandleDeoxys(species, 8, sub_81049CC(species), 1, 40, 104, 0, 65535);
-        gSprites[gUnknown_203ACF0->field_4A[14]].oam.paletteNum = 2;
+        gSprites[gUnknown_203ACF0->field_4A[14]].oam.paletteNum = 2; // ^ this seems to do general pokemon front sprite not just deoxys
         gSprites[gUnknown_203ACF0->field_4A[14]].oam.affineMode = 1;
         gSprites[gUnknown_203ACF0->field_4A[14]].oam.matrixNum = 2;
         gSprites[gUnknown_203ACF0->field_4A[14]].oam.priority = 1;
@@ -3083,12 +3083,12 @@ int sub_8106810(u16 species)
     return FALSE;
 }
 
-u8 sub_8106838(u8 categoryNum, u8 pageNum)
+u8 sub_8106838(u8 categoryNum, u8 pageNum) 
 {
     int i, count;
     u16 species;
 
-    count = gDexCategories[categoryNum].page[pageNum].count;
+    count = gDexCategories[categoryNum].page[pageNum].count;//think this is, for the habitats, page num is the number of pages in each habitat.
 
     for (i = 0; i < 4; i++)
     {
@@ -3167,7 +3167,7 @@ u8 sub_810699C(u8 category)
     }
 }
 
-u8 sub_8106A20(u16 a0)
+u8 sub_8106A20(u16 a0) // think this covers all the fields for the habitats, number of habitats, pages per habitat, & species per page.
 {
     int i, j, k, categoryCount, categoryPageCount, v5;
     u16 species;
@@ -3207,11 +3207,11 @@ u8 sub_8106AF8(u16 a0)
     return v1 + 1;
 }
 
-void sub_8106B34(void)
+void sub_8106B34(void) //activates cry function shown on dex entry page.
 {
     if (JOY_NEW(START_BUTTON))
-        PlayCry2(gUnknown_203ACF0->field_5A, 0, 125, 10);
-}
+        PlayCry2(gUnknown_203ACF0->field_5A, 0, 125, 10);//  look at yellow value for explanation of values in parenthesis. playcry2 has 4 parameters.
+}// based on that "field_5A is holding the species data. least it is here. or maybe its just field_5A of gUnknown_203ACF0
 
 u8 sub_8106B60(u16 species)
 {

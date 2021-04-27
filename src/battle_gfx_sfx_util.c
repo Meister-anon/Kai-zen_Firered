@@ -183,6 +183,7 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_SLP);
         else if (status == STATUS1_PARALYSIS)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PRZ);
+     //   else if (status == )//most all status arguments are listed in terms of ||, so I need to include some cases for and, so here I will list every possible combo of status
         else // no animation
             gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 0;
     }
