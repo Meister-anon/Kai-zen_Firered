@@ -418,8 +418,14 @@ static void CompleteOnFinishedBattleAnimation(void)
 static void LinkOpponentBufferExecCompleted(void)
 {
     gBattlerControllerFuncs[gActiveBattler] = LinkOpponentBufferRunCommand;
-    if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
-
+    if (gBattleTypeFlags & BATTLE_TYPE_LINK)
+    {
+        u8 playerId = GetMultiplayerId();
+        
+    //    PrepareBufferDataTransferLink(2, 4, &playerId);
+        gBattleBufferA[gActiveBattler][0] = CONTROLLER_TERMINATOR_NOP;
+    }
+    else
     {
         gBattleControllerExecFlags &= ~gBitTable[gActiveBattler];
     }
@@ -448,9 +454,9 @@ static void LinkOpponentHandleGetMonData(void)
     }
     BtlController_EmitDataTransfer(1, size, monData);
     LinkOpponentBufferExecCompleted();
-} 
+}
 
-static u32 CopyLinkOpponentMonData(u8 monId, u8 *dst) // keep an eye on this for enemy mon exp idea.
+static u32 CopyLinkOpponentMonData(u8 monId, u8 *dst)
 {
     struct BattlePokemon battleMon;
     struct MovePpInfo moveData;
@@ -551,7 +557,7 @@ static u32 CopyLinkOpponentMonData(u8 monId, u8 *dst) // keep an eye on this for
         dst[2] = (data32 & 0x00FF0000) >> 16;
         size = 3;
         break;
-    case REQUEST_EXP_BATTLE: // what is this??!  a functino for enemy mon exp?!!
+    case REQUEST_EXP_BATTLE:
         data32 = GetMonData(&gEnemyParty[monId], MON_DATA_EXP);
         dst[0] = (data32 & 0x000000FF);
         dst[1] = (data32 & 0x0000FF00) >> 8;
@@ -1661,7 +1667,7 @@ static void LinkOpponentHandleCmd55(void)
     FadeOutMapMusic(5);
     BeginFastPaletteFade(3);
     LinkOpponentBufferExecCompleted();
-    gBattlerControllerFuncs[gActiveBattler] = SetBattleEndCallbacks;
+  //  gBattlerControllerFuncs[gActiveBattler] = SetBattleEndCallbacks;
 }
 
 static void LinkOpponentCmdEnd(void)

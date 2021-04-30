@@ -401,8 +401,8 @@ struct BattleStruct
     u8 safariPkblThrowCounter;
     u8 safariEscapeFactor;
     u8 safariCatchFactor;
-    //u8 linkBattleVsSpriteId_V;
-    //u8 linkBattleVsSpriteId_S;
+    u8 linkBattleVsSpriteId_V;
+    u8 linkBattleVsSpriteId_S;
     u8 formToChangeInto;
     u8 chosenMovePositions[MAX_BATTLERS_COUNT];
     u8 stateIdAfterSelScript[MAX_BATTLERS_COUNT];

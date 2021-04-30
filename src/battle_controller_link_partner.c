@@ -361,8 +361,14 @@ static void SwitchIn_TryShinyAnim(void)
 static void LinkPartnerBufferExecCompleted(void)
 {
     gBattlerControllerFuncs[gActiveBattler] = LinkPartnerBufferRunCommand;
-    if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
+    if (gBattleTypeFlags & BATTLE_TYPE_LINK)
+    {
+        u8 playerId = GetMultiplayerId();
 
+     //   PrepareBufferDataTransferLink(2, 4, &playerId);
+        gBattleBufferA[gActiveBattler][0] = CONTROLLER_TERMINATOR_NOP;
+    }
+    else
     {
         gBattleControllerExecFlags &= ~gBitTable[gActiveBattler];
     }
@@ -1573,7 +1579,7 @@ static void LinkPartnerHandleCmd55(void)
     FadeOutMapMusic(5);
     BeginFastPaletteFade(3);
     LinkPartnerBufferExecCompleted();
-    gBattlerControllerFuncs[gActiveBattler] = SetBattleEndCallbacks;
+  //  gBattlerControllerFuncs[gActiveBattler] = SetBattleEndCallbacks;
 }
 
 static void LinkPartnerCmdEnd(void)

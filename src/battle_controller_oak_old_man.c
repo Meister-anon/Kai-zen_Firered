@@ -944,11 +944,17 @@ static void CompleteOnFinishedBattleAnimation(void)
         OakOldManBufferExecCompleted();
 }
 
-static void OakOldManBufferExecCompleted(void)// this may be the problem with oak script.
+static void OakOldManBufferExecCompleted(void)
 {
     gBattlerControllerFuncs[gActiveBattler] = OakOldManBufferRunCommand;
-    if (gBattleTypeFlags & !BATTLE_TYPE_LINK)
+    if (gBattleTypeFlags & BATTLE_TYPE_LINK)
+    {
+        u8 playerId = GetMultiplayerId();
 
+   //     PrepareBufferDataTransferLink(2, 4, &playerId);
+        gBattleBufferA[gActiveBattler][0] = CONTROLLER_TERMINATOR_NOP;
+    }
+    else
     {
         gBattleControllerExecFlags &= ~gBitTable[gActiveBattler];
     }

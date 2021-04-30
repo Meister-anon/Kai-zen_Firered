@@ -3934,6 +3934,16 @@ BattleScript_DrizzleActivates::
 	call BattleScript_HandleWeatherFormChanges
 	end3
 
+BattleScript_HailActivates::
+	pause 0x20
+	printstring STRINGID_PKMNSXCALLEDDOWNHAIL
+	waitstate
+	sethail
+	playanimation BS_BATTLER_0, B_ANIM_HAIL_CONTINUES, NULL
+	waitanimation
+	call BattleScript_HandleWeatherFormChanges
+	end3
+
 BattleScript_SpeedBoostActivates::
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_PKMNRAISEDSPEED

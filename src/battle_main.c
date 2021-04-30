@@ -73,8 +73,8 @@ static void TryCorrectShedinjaLanguage(struct Pokemon *mon);
 static void BattleMainCB1(void);
 static void CB2_QuitPokedudeBattle(void);
 static void SpriteCB_UnusedDebugSprite_Step(struct Sprite *sprite);
-//static void CB2_EndLinkBattle(void);
-//static void EndLinkBattleInSteps(void);
+static void CB2_EndLinkBattle(void);
+static void EndLinkBattleInSteps(void);
 static void SpriteCB_MoveWildMonToRight(struct Sprite *sprite);
 static void SpriteCB_WildMonShowHealthbox(struct Sprite *sprite);
 static void SpriteCB_Unused_8011E28_Step(struct Sprite *sprite);
@@ -129,9 +129,9 @@ static EWRAM_DATA u32 gUnknown_2022AE8[25] = {0};
 EWRAM_DATA u32 gBattleTypeFlags = 0;
 EWRAM_DATA u8 gBattleTerrain = 0;
 EWRAM_DATA u32 gUnknown_2022B54 = 0;
-EWRAM_DATA struct MultiBattlePokemonTx gMultiPartnerParty[3] = {0};//for space I can remove multi battle too. since thats link cable which isnt availabe and i dont care about
+EWRAM_DATA struct MultiBattlePokemonTx gMultiPartnerParty[3] = {0};
 EWRAM_DATA u8 *gBattleAnimMons_BgTilesBuffer = NULL;
-EWRAM_DATA u8 *gBattleAnimMons_BgTilemapBuffer = NULL;//uncommented multibattleTx ^ because hadn't removed multi battle yet was  causing build error.
+EWRAM_DATA u8 *gBattleAnimMons_BgTilemapBuffer = NULL;
 static EWRAM_DATA u16 *sUnknownDebugSpriteDataBuffer = NULL;
 EWRAM_DATA u8 gBattleBufferA[MAX_BATTLERS_COUNT][0x200] = {0};
 EWRAM_DATA u8 gBattleBufferB[MAX_BATTLERS_COUNT][0x200] = {0};
@@ -201,6 +201,8 @@ EWRAM_DATA u16 gExpShareExp = 0;
 EWRAM_DATA struct BattleEnigmaBerry gEnigmaBerries[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA struct BattleScripting gBattleScripting = {0};
 EWRAM_DATA struct BattleStruct *gBattleStruct = NULL;
+EWRAM_DATA u8 *gLinkBattleSendBuffer = NULL;
+EWRAM_DATA u8 *gLinkBattleRecvBuffer = NULL;
 EWRAM_DATA struct BattleResources *gBattleResources = NULL;
 EWRAM_DATA u8 gActionSelectionCursor[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gMoveSelectionCursor[MAX_BATTLERS_COUNT] = {0};
@@ -612,13 +614,13 @@ const u8 gStatusConditionString_LoveJpn[8] = _("メロメロ$$$");
 
 const u8 *const gStatusConditionStringsTable[7][2] =
 {
-    { gStatusConditionString_PoisonJpn, gText_Poison },
-    { gStatusConditionString_SleepJpn, gText_Sleep },
-    { gStatusConditionString_ParalysisJpn, gText_Paralysis },
-    { gStatusConditionString_BurnJpn, gText_Burn },
-    { gStatusConditionString_IceJpn, gText_Ice },
-    { gStatusConditionString_ConfusionJpn, gText_Confusion },
-    { gStatusConditionString_LoveJpn, gText_Love }
+    {gStatusConditionString_PoisonJpn, gText_Poison},
+    {gStatusConditionString_SleepJpn, gText_Sleep},
+    {gStatusConditionString_ParalysisJpn, gText_Paralysis},
+    {gStatusConditionString_BurnJpn, gText_Burn},
+    {gStatusConditionString_IceJpn, gText_Ice},
+    {gStatusConditionString_ConfusionJpn, gText_Confusion},
+    {gStatusConditionString_LoveJpn, gText_Love}
 };
 
 void CB2_InitBattle(void)
@@ -627,16 +629,16 @@ void CB2_InitBattle(void)
     AllocateBattleResources();
     AllocateBattleSpritesData();
     AllocateMonSpritesGfx();
-    if (gBattleTypeFlags & BATTLE_TYPE_MULTI) //n Generation III, up to four players can battle with each other in a Multi Battle via Game Link Cable by choosing the "Multi Battle" mode in the Pokémon Cable Club Colosseum.
+    if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
     {
-        //HandleLinkBattleSetup();
+        return;
         SetMainCallback2(CB2_PreInitMultiBattle);
         gBattleCommunication[MULTIUSE_STATE] = 0;
-    }
+    } 
     else
     {
         CB2_InitBattleInternal();
-        if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
+      /*  if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
         {
             if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
             {
@@ -653,7 +655,7 @@ void CB2_InitBattle(void)
             {
                 SetHelpContext(HELPCONTEXT_WILD_BATTLE);
             }
-        }
+        }*/
     }
 }
 
@@ -703,7 +705,7 @@ static void CB2_InitBattleInternal(void)
     SetVBlankCallback(VBlankCB_Battle);
     SetUpBattleVars();
     if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
-        SetMainCallback2(CB2_HandleStartMultiBattle); /*
+        SetMainCallback2(CB2_HandleStartMultiBattle);
     else
         SetMainCallback2(CB2_HandleStartBattle);
     if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
@@ -714,9 +716,9 @@ static void CB2_InitBattleInternal(void)
     gMain.inBattle = TRUE;
     for (i = 0; i < PARTY_SIZE; ++i)
         AdjustFriendship(&gPlayerParty[i], 3);
-    gBattleCommunication[MULTIUSE_STATE] = 0; */
+    gBattleCommunication[MULTIUSE_STATE] = 0;
 }
-
+//believe this is summary screen during battle 
 #define BUFFER_PARTY_VS_SCREEN_STATUS(party, flags, i)              \
     for ((i) = 0; (i) < PARTY_SIZE; (i)++)                          \
     {                                                               \
@@ -879,7 +881,7 @@ static void SetAllPlayersBerryData(void)
         }
     }
 }
-/*
+
 static void LinkBattleComputeBattleTypeFlags(u8 numPlayers, u8 multiPlayerId)
 {
     u8 found = 0;
@@ -979,14 +981,14 @@ static void CB2_HandleStartBattle(void)
             gBattleCommunication[MULTIUSE_STATE] = 15;
             SetAllPlayersBerryData();
         }
-        break;
+        break; 
     case 2:
         if ((GetBlockReceivedStatus() & 3) == 3)
         {
             u8 taskId;
 
             ResetBlockReceivedFlags();
-            //LinkBattleComputeBattleTypeFlags(2, playerMultiplayerId);
+            LinkBattleComputeBattleTypeFlags(2, playerMultiplayerId);
             SetAllPlayersBerryData();
             taskId = CreateTask(InitLinkBattleVsScreen, 0);
             gTasks[taskId].data[1] = 270;
@@ -1079,7 +1081,7 @@ static void CB2_HandleStartBattle(void)
             ++gBattleCommunication[MULTIUSE_STATE];
         break;
     }
-} */
+}
 
 static void PrepareOwnMultiPartnerBuffer(void)
 {
@@ -1228,7 +1230,7 @@ static void CB2_HandleStartMultiBattle(void)
             if (gWirelessCommType)
                 CreateWirelessStatusIndicatorSprite(0, 0);
         }
-        break; /*
+        break; 
     case 2:
         if ((GetBlockReceivedStatus() & 0xF) == 0xF)
         {
@@ -1237,7 +1239,7 @@ static void CB2_HandleStartMultiBattle(void)
             SetAllPlayersBerryData();
             SetDeoxysStats();
             memcpy(gDecompressionBuffer, gPlayerParty, sizeof(struct Pokemon) * 3);
-           // taskId = CreateTask(InitLinkBattleVsScreen, 0);
+            taskId = CreateTask(InitLinkBattleVsScreen, 0);
             gTasks[taskId].data[1] = 270;
             gTasks[taskId].data[2] = 90;
             gTasks[taskId].data[5] = 0;
@@ -1264,11 +1266,11 @@ static void CB2_HandleStartMultiBattle(void)
             ZeroPlayerPartyMons();
             ZeroEnemyPartyMons();
             ++gBattleCommunication[MULTIUSE_STATE];
-        } 
+        }
         else
         {
             break;
-        } */
+        }
         // fall through
     case 3:
         if (IsLinkTaskFinished())
@@ -1339,7 +1341,7 @@ static void CB2_HandleStartMultiBattle(void)
             SendBlock(bitmask_all_link_players_but_self(), gDecompressionBuffer + sizeof(struct Pokemon) * 2, sizeof(struct Pokemon));
             ++gBattleCommunication[MULTIUSE_STATE];
         }
-        break;
+        break; 
     case 8:
         if ((GetBlockReceivedStatus() & 0xF) == 0xF)
         {
@@ -1392,7 +1394,7 @@ static void CB2_HandleStartMultiBattle(void)
                         }
                     }
                 }
-            }
+            } 
             TryCorrectShedinjaLanguage(&gPlayerParty[0]);
             TryCorrectShedinjaLanguage(&gPlayerParty[1]);
             TryCorrectShedinjaLanguage(&gPlayerParty[2]);
@@ -1710,7 +1712,7 @@ static void BufferPartyVsScreenHealth_AtEnd(u8 taskId)
     BUFFER_PARTY_VS_SCREEN_STATUS(party2, r7, i);
     gTasks[taskId].data[4] = r7;
 }
-/*
+
 void CB2_InitEndLinkBattle(void)
 {
     s32 i;
@@ -1728,6 +1730,7 @@ void CB2_InitEndLinkBattle(void)
     gBattle_WIN0V = WIN_RANGE(0x50, 0x51);
     ScanlineEffect_Clear();
     for (i = 0; i < 80; ++i)
+        return;
     {
         gScanlineEffectRegBuffers[0][i] = 0xF0;
         gScanlineEffectRegBuffers[1][i] = 0xF0;
@@ -1768,6 +1771,7 @@ void CB2_InitEndLinkBattle(void)
 
 static void CB2_EndLinkBattle(void)
 {
+    return;
     EndLinkBattleInSteps();
     AnimateSprites();
     BuildOamBuffer();
@@ -1799,7 +1803,7 @@ static void EndLinkBattleInSteps(void)
         if (!gPaletteFade.active)
         {
             SetMainCallback2(gMain.savedCallback);
-            TrySetQuestLogLinkBattleEvent();
+          //  TrySetQuestLogLinkBattleEvent();
             FreeMonSpritesGfx();
             FreeBattleSpritesData();
             FreeBattleResources();
@@ -1807,7 +1811,7 @@ static void EndLinkBattleInSteps(void)
         break;
     }
 }
-*/
+
 u32 GetBattleBgAttribute(u8 arrayId, u8 caseId)
 {
     u32 ret = 0;
@@ -1947,8 +1951,8 @@ void SpriteCB_FaintOpponentMon(struct Sprite *sprite)
     }
     else if (species > NUM_SPECIES)
     {
-        yOffset = gMonFrontPicCoords[SPECIES_NONE].y_offset;
-    }
+        yOffset = gMonFrontPicCoords[SPECIES_NONE].y_offset; //again capitalization matters. mime broke because it wasn't Mime
+    } //                                           
     else
     {
         yOffset = gMonFrontPicCoords[species].y_offset;
@@ -2772,7 +2776,9 @@ static void TryDoEventsBeforeFirstTurn(void)
 
     if (!gBattleControllerExecFlags)
     {
-
+        /*if (gBattleMons[battler].hp != 1 | 0)
+            while (ability == ABILITY_WONDER_GUARD)
+            gBattleMons[battler].hp = 1; *///hopefully makes wonder guard hp drop happen before everything else
         if (gBattleStruct->switchInAbilitiesCounter == 0)
         {
             for (i = 0; i < gBattlersCount; ++i)
@@ -2789,7 +2795,7 @@ static void TryDoEventsBeforeFirstTurn(void)
             return;
         }
         // Check all switch in abilities happening from the fastest mon to slowest.
-        while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount)
+        while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount) //change to work on switchin and when opponent switches pokemon.
         {
             if (AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter], 0, 0, 0) != 0)
                 ++effect;
@@ -3612,7 +3618,7 @@ static void CheckFocusPunch_ClearVarsBeforeTurnStarts(void)
     gBattleResources->battleScriptsStack->size = 0;
 }
 
-static void RunTurnActionsFunctions(void)
+static void RunTurnActionsFunctions(void) //important
 {
     if (gBattleOutcome != 0)
         gCurrentActionFuncId = B_ACTION_FINISHED;
@@ -3635,16 +3641,16 @@ static void RunTurnActionsFunctions(void)
 }
 
 static void HandleEndTurn_BattleWon(void)
-{/*
+{
     gCurrentActionFuncId = 0;
     if (gBattleTypeFlags & BATTLE_TYPE_LINK)
     {
         gBattleTextBuff1[0] = gBattleOutcome;
         gBattlerAttacker = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
-        gBattlescriptCurrInstr = BattleScript_LinkBattleWonOrLost;
+    //    gBattlescriptCurrInstr = BattleScript_LinkBattleWonOrLost;
         gBattleOutcome &= ~(B_OUTCOME_LINK_BATTLE_RAN);
-    }*/
-    if (gBattleTypeFlags & (BATTLE_TYPE_TRAINER_TOWER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_BATTLE_TOWER))
+    }
+    else if (gBattleTypeFlags & (BATTLE_TYPE_TRAINER_TOWER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_BATTLE_TOWER))
     {
         BattleStopLowHpSound();
         PlayBGM(MUS_VICTORY_TRAINER);
@@ -3678,20 +3684,20 @@ static void HandleEndTurn_BattleWon(void)
 }
 
 static void HandleEndTurn_BattleLost(void)
-{/*
+{
     gCurrentActionFuncId = 0;
     if (gBattleTypeFlags & BATTLE_TYPE_LINK)
     {
         gBattleTextBuff1[0] = gBattleOutcome;
         gBattlerAttacker = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
-        gBattlescriptCurrInstr = BattleScript_LinkBattleWonOrLost;
+    //    gBattlescriptCurrInstr = BattleScript_LinkBattleWonOrLost;
         gBattleOutcome &= ~(B_OUTCOME_LINK_BATTLE_RAN);
     }
-    else */
+    else
     {
-        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && GetTrainerBattleMode() == TRAINER_BATTLE_EARLY_RIVAL) // very useful keep in mind.
+        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && GetTrainerBattleMode() == TRAINER_BATTLE_EARLY_RIVAL)
         {
-            if (GetRivalBattleFlags() & RIVAL_BATTLE_HEAL_AFTER) // could use for heals, or for gameover screen.
+            if (GetRivalBattleFlags() & RIVAL_BATTLE_HEAL_AFTER)
                 gBattleCommunication[MULTISTRING_CHOOSER] = 1; // Dont do white out text
             else
                 gBattleCommunication[MULTISTRING_CHOOSER] = 2; // Do white out text
@@ -3774,7 +3780,7 @@ static void FreeResetData_ReturnToOvOrDoEvolutions(void) //  this causes end bat
     if (!gPaletteFade.active)
     { // Ok it wasn't that simple for some reason, so this leads to one function, which leads to another that actually does the palette fade that triggers the evo...
         ResetSpriteData();
-        if (gLeveledUpInBattle == 0 || gBattleOutcome != B_OUTCOME_WON)
+        if (gLeveledUpInBattle == 0 || gBattleOutcome != B_OUTCOME_WON) //0 is false anything but 0.
             gBattleMainFunc = ReturnFromBattleToOverworld;
         else
             gBattleMainFunc = TryEvolvePokemon;
@@ -3809,8 +3815,8 @@ static void TryEvolvePokemon(void) //want battle evolution for player and oppone
                     gBattleMainFunc = WaitForEvoSceneToFinish;
                     EvolutionScene(&gPlayerParty[i], species, 0x81, i);
                     return;
-                }
-            }
+                }// for evo in battle, use  if (gCurrentTurnActionNumber >= gBattlersCount) && (gLeveledUpInBattle != 0 || gBattleOutcome != B_OUTCOME_WON)
+            }// need to import mega evo graphic,  also make it check for or come after learn move on level up then, go into gBattleMainFunc = TryEvolvePokemon;
         }
     }
     gBattleMainFunc = ReturnFromBattleToOverworld;
