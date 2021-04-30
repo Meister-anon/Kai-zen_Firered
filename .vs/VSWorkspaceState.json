@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
+    "\\include",
     "\\src"
   ],
-  "SelectedNode": "\\src\\item_menu_icons.c",
+  "SelectedNode": "\\include\\battle_util.h",
   "PreviewInSolutionExplorer": false
 }

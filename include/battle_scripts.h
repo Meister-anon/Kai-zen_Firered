@@ -220,6 +220,7 @@ extern const u8 BattleScript_GhostGetOutGetOut[];
 extern const u8 BattleScript_TooScaredToMove[];
 extern const u8 BattleScript_IntimidateActivates[];
 extern const u8 BattleScript_IntimidateActivatesEnd3[];
+extern const u8 BattleScript_HailActivates[]; //wondering if it matters where I put battlescript ehre, poisonworsened was only one put at end, adn thats when problem started.
 extern const u8 BattleScript_IgnoresWhileAsleep[];
 extern const u8 BattleScript_IgnoresAndHitsItself[];
 extern const u8 BattleScript_MoveEffectRecoil[];
