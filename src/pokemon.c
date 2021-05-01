@@ -10,6 +10,7 @@
 #include "item.h"
 #include "event_data.h"
 #include "util.h"
+#include "pokemon.h"
 #include "pokemon_storage_system.h"
 #include "battle_gfx_sfx_util.h"
 #include "battle_controllers.h"
@@ -41,7 +42,7 @@
 #include "constants/weather.h"
 //#include "data/pokemon/form_species_table_pointers.h"
 //#include "data/pokemon/form_species_tables.h"
-#include "pokemon.h"
+//#include "pokemon.h"
 //#include "rtc.h"    // weird but failure to build pokemon.s was literally all becuase of these two, inclusions that I guess I didn't add to repository correctly
 //#include "species_names.h"
 // oh wait include weather doesn't exist, in pokeemerald its include/constants weather.h    ... facepalm
@@ -2900,28 +2901,44 @@ void CalculateMonStats(struct Pokemon *mon)
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     s32 level = GetLevelFromMonExp(mon);
     s32 newMaxHP;
-    u16 ability;
+    u16 ability = GetMonAbility(mon);
+    // u16 abilityAtk = gBattleMons[gBattlerAttacker].ability;
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
+    
+  if (ability == ABILITY_DISPIRIT_GUARD)
+  {
+       s32 n = 2 * gBaseStats[species].baseHP + hpIV;
+       newMaxHP = (((n + hpEV / 4) * level) / 100) + level;
+  }  //not sure but may need to change else to else if, excluding these 2 abilities to ensure the hp functions are separate.
 
-    if (ability == ABILITY_WONDER_GUARD)
-    {
-        newMaxHP = 1;
-    }
-   else if (ability == ABILITY_DISPIRIT_GUARD
-   && species == SPECIES_SHEDINJA)
-    {
-        s32 n = 2 * gBaseStats[species].baseHP + hpIV;
-        newMaxHP = (((n + hpEV / 4) * level) / 100) + level;
-    }
-    else
-    {
+ // if (!((ability == ABILITY_WONDER_GUARD && species == SPECIES_SHEDINJA) | (ability == ABILITY_DISPIRIT_GUARD && species == SPECIES_SHEDINJA))) // changed to line up with other if(!(   statements
+
+
+   if (species == SPECIES_SHEDINJA) // thinnk I may need to change this since I don't want pokemon to look like they have max hp, I went them to look almost dead,
+   {    
+       if (ability == ABILITY_WONDER_GUARD) {
+           currentHP = 1;
+           newMaxHP = 1;
+       }
+       while (ability != ABILITY_WONDER_GUARD && ability != ABILITY_DISPIRIT_GUARD) //ok changing this to shedinja but not wonderguard somehow made dispirit guard shedinja invincible, which is fine for castform testing I guess.
+       { // changed above from or to and
+           s32 n = 2 * gBaseStats[species].baseHP + hpIV;
+          newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
+          currentHP = newMaxHP; // if done right this shoud allow shedinja hp to grow after swapping off ability. still working on hp drop
+       } // actually its probn ^ this equalizing that causes it.
+   }
+       //if correct, this should set wonder shedinja to maxhp 1,max hp will grow when he loses ability, and any other pokemon with wonder guard,
+    // will have max hp stay same, while current hp should drop to 1.
+
+   else
+   {
         s32 n = 2 * gBaseStats[species].baseHP + hpIV;
         newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
-    }
-
+   } //may change this statement to a while so it tracks mid battle if it doesn't already, also realized what I'm doing is essentially dynamax
+   //  an event that triggers a growth or loss in max hp.  So I should check cfru function to see how that's done.
     gBattleScripting.field_23 = newMaxHP - oldMaxHP;
-    if (gBattleScripting.field_23 == 0)
+    if (gBattleScripting.field_23 == 0) //field_23 is for level up hp change
         gBattleScripting.field_23 = 1;
 
     SetMonData(mon, MON_DATA_MAX_HP, &newMaxHP);
@@ -2932,18 +2949,12 @@ void CalculateMonStats(struct Pokemon *mon)
     CALC_STAT(baseSpAttack, spAttackIV, spAttackEV, STAT_SPATK, MON_DATA_SPATK)
     CALC_STAT(baseSpDefense, spDefenseIV, spDefenseEV, STAT_SPDEF, MON_DATA_SPDEF)
 
-    if (ability == ABILITY_WONDER_GUARD)
-    {
-        if (currentHP != 0 || oldMaxHP == 0)
-            currentHP = 1;
-        else
-            return;
-    }
-    else
+             // switched to while, because apparently it is a loop, so while continuously check. if this works I still need to set it to only do so in battle.
+    if (ability != ABILITY_WONDER_GUARD) //had to change else to if, because can't follow "while" with else
     {
         if (currentHP == 0 && oldMaxHP == 0)
             currentHP = newMaxHP;
-        else if (currentHP != 0)
+        else if (currentHP != 0 && newMaxHP >= oldMaxHP) //To prevent garbage data after Dynamax form change (from cfru hopefully will allow hp shift mid battle)
             currentHP += newMaxHP - oldMaxHP;
         else
             return;
@@ -3100,7 +3111,7 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove)
     return retVal;
 }
 
-void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move)
+void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move) // this important too, and above.
 {
     s32 i;
     u16 moves[4];
@@ -3127,7 +3138,7 @@ void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move)
     SetMonData(mon, MON_DATA_PP_BONUSES, &ppBonuses);
 }
 
-static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move)
+static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move) // this may be used for daycare and wild mon level up laernset, prob need 2 change.
 {
     s32 i;
     u16 moves[4];
@@ -4274,22 +4285,22 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         SET8(substruct1->pp[field - MON_DATA_PP1]);
         break;
     case MON_DATA_HP_EV:
-        SET8(substruct2->hpEV);
+        SET16(substruct2->hpEV);
         break;
     case MON_DATA_ATK_EV:
-        SET8(substruct2->attackEV);
+        SET16(substruct2->attackEV);
         break;
     case MON_DATA_DEF_EV:
-        SET8(substruct2->defenseEV);
+        SET16(substruct2->defenseEV);
         break;
     case MON_DATA_SPEED_EV:
-        SET8(substruct2->speedEV);
+        SET16(substruct2->speedEV);
         break;
     case MON_DATA_SPATK_EV:
-        SET8(substruct2->spAttackEV);
+        SET16(substruct2->spAttackEV);
         break;
     case MON_DATA_SPDEF_EV:
-        SET8(substruct2->spDefenseEV);
+        SET16(substruct2->spDefenseEV);
         break;
     case MON_DATA_COOL:
         SET8(substruct2->cool);
@@ -4559,7 +4570,9 @@ u8 GetMonsStateToDoubles(void)
 
 u16 GetAbilityBySpecies(u16 species, bool8 abilityNum)
 {
-    if (abilityNum)
+    if (abilityNum == 2)
+        gLastUsedAbility = gBaseStats[species].abilityHidden;
+    else if (abilityNum == 1)
         gLastUsedAbility = gBaseStats[species].abilities[1];
     else
         gLastUsedAbility = gBaseStats[species].abilities[0];

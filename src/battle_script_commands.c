@@ -1043,11 +1043,11 @@ static void atk01_accuracycheck(void)
         && !BtlCtrl_OakOldMan_TestState2Flag(1)
         && gBattleMoves[move].power != 0
         && GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
-     || (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE
-        && !BtlCtrl_OakOldMan_TestState2Flag(2)
-        && gBattleMoves[move].power == 0
-        && GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
-     || (gBattleTypeFlags & BATTLE_TYPE_POKEDUDE))
+        || (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE
+            && !BtlCtrl_OakOldMan_TestState2Flag(2)
+            && gBattleMoves[move].power == 0
+            && GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
+        || (gBattleTypeFlags & BATTLE_TYPE_POKEDUDE))
     {
         JumpIfMoveFailed(7, move);
         return;
@@ -1066,6 +1066,7 @@ static void atk01_accuracycheck(void)
         u8 type, moveAcc, holdEffect, param;
         s8 buff;
         u16 calc;
+        u8 eva;
 
         if (move == MOVE_NONE)
             move = gCurrentMove;
@@ -1089,17 +1090,55 @@ static void atk01_accuracycheck(void)
         if (buff > 0xC)
             buff = 0xC;
         moveAcc = gBattleMoves[move].accuracy;
-        // check Thunder on sunny weather
+        // check Thunder on sunny weather / need add hail blizzard buff?
         if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY && gBattleMoves[move].effect == EFFECT_THUNDER)
             moveAcc = 50;
+        if (moveAcc > 100)
+            moveAcc = 100; // to prevent possible broken values.
         calc = sAccuracyStageRatios[buff].dividend * moveAcc;
         calc /= sAccuracyStageRatios[buff].divisor;
         if (gBattleMons[gBattlerAttacker].ability == ABILITY_COMPOUND_EYES)
             calc = (calc * 130) / 100; // 1.3 compound eyes boost
         if (WEATHER_HAS_EFFECT && gBattleMons[gBattlerTarget].ability == ABILITY_SAND_VEIL && gBattleWeather & WEATHER_SANDSTORM_ANY)
             calc = (calc * 80) / 100; // 1.2 sand veil loss
-        if (gBattleMons[gBattlerAttacker].ability == ABILITY_HUSTLE && IS_TYPE_PHYSICAL(type))
-            calc = (calc * 80) / 100; // 1.2 hustle loss
+        if (gBattleMons[gBattlerAttacker].ability == ABILITY_HUSTLE && IS_TYPE_PHYSICAL(type)) //can put status based evasion/accuracy effects here
+            calc = (calc * 80) / 100; // 1.2 hustle loss    since it uses accuract not evasion, I'll add an accuracy boost for different statuses.
+        // I'll use calc,  to adjust the move accuracy, but to avoid break, will include check that if moveAcc > 100  would instead moveAcc = 100.
+        //remember I plan to do this for more than just status 1.
+        // need a way to make sure I'm not raising evasiveness when appplying status, in case enemy evasion is lower than the level I would lower it beforehand.
+        eva = gBattleMons[gBattlerTarget].statStages[STAT_EVASION]; //think I just need nest if, and have my default value in an else
+        if (gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATED_WITH(gBattlerAttacker)) //need to figure out how to lower evasion to go along with these accuracy boosts.
+       //     calc = (calc * 160) / 100;
+        eva = 3;
+        if (gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION) //thought instead of self attack, make confusion chance to change move target to random
+         //   calc = (calc * 120) / 100; //that way they're still doing the same move, but they also have chance to hit attack themselves with it .
+        eva = 5; // with that there should be as much benefit as danger in being confused, singled moves could hit everyone, etc. random & interesting..
+        if (gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
+        //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
+        eva = 5;
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP) { //.target = MOVE_TARGET_SELECTED, 
+            if (type == TYPE_PSYCHIC)
+                eva = 5; // to take advantage of these buffs I want to have a button to display real move accuracy in battle. maybe L
+            else
+                //     calc = (calc * 260) / 100; // gBattleMoves[gCurrentMove].target that's the comamnd I need, then just set the target I want
+                eva = 1;//if I set it random % I can do more with it, I can make it use the normal confused hit itself, text command if it lands on target user.
+        }
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_BURN)
+     //       calc = (calc * 120) / 100;
+        eva = 4;
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_POISON) // I think I may remove the accuracy buff and just keep evasion drop, or make it more severe.
+       //     calc = (calc * 115) / 100; //depends on how evasion works, if lowered evasion alone increases chance of move hitting, then I don't need accuracy buff.
+        eva = 4;
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_FREEZE)
+        //    calc = (calc * 260) / 100;
+        eva = 1;
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_PARALYSIS) //ok evasion and accuracy stages are put together, so I'll just use evasion.
+        //    calc = (calc * 130) / 100;
+        eva = 3;
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_TOXIC_POISON)
+        //    calc = (calc * 156) / 100;
+        eva = 3;
+
         if (gBattleMons[gBattlerTarget].item == ITEM_ENIGMA_BERRY)
         {
             holdEffect = gEnigmaBerries[gBattlerTarget].holdEffect;
@@ -1118,8 +1157,8 @@ static void atk01_accuracycheck(void)
         if ((Random() % 100 + 1) > calc)
         {
             gMoveResultFlags |= MOVE_RESULT_MISSED;
-            if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE 
-             && (gBattleMoves[move].target == MOVE_TARGET_BOTH || gBattleMoves[move].target == MOVE_TARGET_FOES_AND_ALLY))
+            if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
+                && (gBattleMoves[move].target == MOVE_TARGET_BOTH || gBattleMoves[move].target == MOVE_TARGET_FOES_AND_ALLY))
                 gBattleCommunication[6] = 2;
             else
                 gBattleCommunication[6] = 0;
@@ -2118,7 +2157,7 @@ u8 GetBattlerTurnOrderNum(u8 battlerId)
     return i;
 }
 
-void SetMoveEffect(bool8 primary, u8 certain)
+void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what prevents applying status here, don't forget setyawn  after that grfx for status animation next
 {
     bool32 statusChanged = FALSE;
     u8 affectsUser = 0; // 0x40 otherwise
@@ -6984,7 +7023,8 @@ static void atk96_weatherdamage(void)
              && gBattleMons[gBattlerAttacker].type2 != TYPE_GROUND
              && gBattleMons[gBattlerAttacker].ability != ABILITY_SAND_VEIL
              && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERGROUND)
-             && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER))
+             && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER)
+             && (gBattleMons[gBattlerAttacker].ability != ABILITY_FORECAST && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM))
             {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                 if (gBattleMoveDamage == 0)

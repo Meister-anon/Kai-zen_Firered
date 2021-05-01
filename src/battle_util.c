@@ -1829,8 +1829,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gBattleScripting.battler = battler;
                         *(&gBattleStruct->formToChangeInto) = effect - 1;// sandstorm effect is continuing oddly, before I change "while" I'm trying line up
                     }// the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
-                    if (gCurrentTurnActionNumber >= gBattlersCount)//ok right its notting changing on turn end, so I'm guessing this part is problem.
-                    { //or it could be that I have this in the switch in abilities case?
+                    if (gCurrentTurnActionNumber >= gBattlersCount
+                        && Random() % 2 == 0)
+                    { // trying to make it not switch every turn, and find a good balance.
                         u16 value2;// trying to store the value returned by random function in one field as per phoenixbound's suggestion. since it seemed I was calling 5 separate random functions
                         value2 = Random() % 5;
                         if (value2 == 0
