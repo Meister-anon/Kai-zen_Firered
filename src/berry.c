@@ -871,7 +871,7 @@ const struct Berry gBerries[] = {
 
 };
 
-const struct BerryCrushStats gBerryCrushStats[] = {
+/*const struct BerryCrushStats gBerryCrushStats[] = {
     { 50,  20},
     { 50,  20},
     { 50,  20},
@@ -915,7 +915,7 @@ const struct BerryCrushStats gBerryCrushStats[] = {
     {200, 750},
     {200, 750},
     {150, 200}
-};
+};*/
 
 // Leftover from R/S
 const struct BerryTree gBlankBerryTree = {};

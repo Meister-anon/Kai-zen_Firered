@@ -47,9 +47,9 @@
 #define LINK_GROUP_DOUBLE_BATTLE        1
 #define LINK_GROUP_MULTI_BATTLE         2
 #define LINK_GROUP_TRADE                3
-#define LINK_GROUP_POKEMON_JUMP         4
-#define LINK_GROUP_BERRY_CRUSH          5
-#define LINK_GROUP_BERRY_PICKING        6
+//#define LINK_GROUP_POKEMON_JUMP         4
+//#define LINK_GROUP_BERRY_CRUSH          5
+//#define LINK_GROUP_BERRY_PICKING        6
 #define LINK_GROUP_WONDER_CARD          7
 #define LINK_GROUP_WONDER_NEWS          8
 #define NUM_LINK_GROUP_TYPES            9

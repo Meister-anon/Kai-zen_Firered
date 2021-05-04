@@ -31,8 +31,8 @@ enum
     TRAINER_CARD_STRING_LINK_LOSSES,
     TRAINER_CARD_STRING_TRADES,
     TRAINER_CARD_STRING_TRADE_COUNT,
-    TRAINER_CARD_STRING_BERRY_CRUSH,
-    TRAINER_CARD_STRING_BERRY_CRUSH_COUNT,
+   // TRAINER_CARD_STRING_BERRY_CRUSH,
+   // TRAINER_CARD_STRING_BERRY_CRUSH_COUNT,
     TRAINER_CARD_STRING_UNION_ROOM,
     TRAINER_CARD_STRING_UNION_ROOM_NUM,
     TRAINER_CARD_STRING_COUNT,
@@ -123,8 +123,8 @@ static void PrintHofDebutTimeOnCard(void);
 //static void PrintLinkBattleResultsOnCard(void);
 static void BufferNumTrades(void);
 static void PrintTradesStringOnCard(void);
-static void BufferBerryCrushPoints(void);
-static void PrintBerryCrushStringOnCard(void);
+//static void BufferBerryCrushPoints(void);
+//static void PrintBerryCrushStringOnCard(void);
 static void BufferUnionRoomStats(void);
 static void PrintUnionStringOnCard(void);
 static void PrintPokemonIconsOnCard(void);
@@ -360,7 +360,7 @@ static const u8 sPokemonIconXOffsets[] = {0, 4, 8, 12, 16, 20};
 static const u8 sStickerPalSlots[] = {11, 12, 13, 14};
 static const u8 sStarYOffsets[] = {7, 6, 0, 0};
 
-static const struct TrainerCard sLinkPlayerTrainerCardTemplate1 = 
+static const struct TrainerCard sLinkPlayerTrainerCardTemplate1 = // yeah can replace berry crush with playthrough number here.
 {
     .rse = {
         .gender = MALE,
@@ -371,10 +371,10 @@ static const struct TrainerCard sLinkPlayerTrainerCardTemplate1 =
         .hofDebutHours = 999,
         .hofDebutMinutes = 59,
         .hofDebutSeconds = 59,
-        .caughtMonsCount = 200,
+        .caughtMonsCount = 1599,//prob need to increase this number ok set to 999, updated again set higher hopefully no problems its defined as u16 already
         .trainerId = 0x6072,
-        .playTimeHours = 999,
-        .playTimeMinutes = 59,
+        .playTimeHours = 999, //and these values seem to all show/set upper limit anyway, oh wait this is rse not firered  un changed, then changed back
+        .playTimeMinutes = 59, // firered doesn't seem to have all fields, and I assume branches off of these here.
         //.linkBattleWins = 5535,
         //.linkBattleLosses = 5535,
         .battleTowerWins = 5535,
@@ -388,10 +388,10 @@ static const struct TrainerCard sLinkPlayerTrainerCardTemplate1 =
     },
     .version = VERSION_FIRE_RED,
     .hasAllFrontierSymbols = FALSE,
-    .berryCrushPoints = 5555,
+    //.berryCrushPoints = 5555,
     .unionRoomNum = 8500,
-    .berriesPicked = 5456,
-    .jumpsInRow = 6300,
+    //.berriesPicked = 5456,
+    //.jumpsInRow = 6300,
     .shouldDrawStickers = TRUE,
     .hasAllMons = TRUE,
     .monIconTint = MON_ICON_TINT_PINK,
@@ -411,7 +411,7 @@ static const struct TrainerCard sLinkPlayerTrainerCardTemplate2 =
         .hofDebutHours = 999,
         .hofDebutMinutes = 59,
         .hofDebutSeconds = 59,
-        .caughtMonsCount = 200,
+        .caughtMonsCount = 1599, //set same in case some how important
         .trainerId = 0x6072,
         .playTimeHours = 999,
         .playTimeMinutes = 59,
@@ -428,10 +428,10 @@ static const struct TrainerCard sLinkPlayerTrainerCardTemplate2 =
     },
     .version = 0,
     .hasAllFrontierSymbols = FALSE,
-    .berryCrushPoints = 555,
+   // .berryCrushPoints = 555,
     .unionRoomNum = 500,
-    .berriesPicked = 456,
-    .jumpsInRow = 300,
+   // .berriesPicked = 456,
+ //   .jumpsInRow = 300,
     .shouldDrawStickers = TRUE,
     .hasAllMons = TRUE,
     .monIconTint = MON_ICON_TINT_PINK,
@@ -870,10 +870,10 @@ void TrainerCard_GenerateCardForLinkPlayer(struct TrainerCard *trainerCard)
 
     trainerCard->rse.caughtAllHoenn = HasAllKantoMons();
     trainerCard->hasAllMons = HasAllMons();
-    trainerCard->berriesPicked = gSaveBlock2Ptr->berryPick.berriesPicked;
-    trainerCard->jumpsInRow = gSaveBlock2Ptr->pokeJump.jumpsInRow;
+   // trainerCard->berriesPicked = gSaveBlock2Ptr->berryPick.berriesPicked;
+   // trainerCard->jumpsInRow = gSaveBlock2Ptr->pokeJump.jumpsInRow;
 
-    trainerCard->berryCrushPoints = GetCappedGameStat(GAME_STAT_BERRY_CRUSH_POINTS, 0xFFFF);
+   // trainerCard->berryCrushPoints = GetCappedGameStat(GAME_STAT_BERRY_CRUSH_POINTS, 0xFFFF);
     trainerCard->unionRoomNum = GetCappedGameStat(GAME_STAT_NUM_UNION_ROOM_BATTLES, 0xFFFF);
     trainerCard->shouldDrawStickers = TRUE;
 
@@ -883,8 +883,8 @@ void TrainerCard_GenerateCardForLinkPlayer(struct TrainerCard *trainerCard)
     if (trainerCard->hasAllMons)
         trainerCard->rse.stars++;
 
-    if (trainerCard->berriesPicked >= 200 && trainerCard->jumpsInRow >= 200)
-        trainerCard->rse.stars++;
+   /* if (trainerCard->berriesPicked >= 200 && trainerCard->jumpsInRow >= 200)
+        trainerCard->rse.stars++;*/
 
     id = ((u16)trainerCard->rse.trainerId) % NUM_LINK_TRAINER_CARD_CLASSES;
     if (trainerCard->rse.gender == FEMALE)
@@ -1090,7 +1090,7 @@ static bool8 PrintAllOnCardBack(void)
         PrintTradesStringOnCard();
         break;
     case 4:
-        PrintBerryCrushStringOnCard();
+      //  PrintBerryCrushStringOnCard();
         break;
     case 5:
         PrintUnionStringOnCard();
@@ -1115,7 +1115,7 @@ static void BufferTextForCardBack(void)
     BufferHofDebutTime();
  //   BufferLinkBattleResults();   could possibly replace with new game+ count
     BufferNumTrades();
-    BufferBerryCrushPoints();
+  //  BufferBerryCrushPoints();
     BufferUnionRoomStats();
 }
 
@@ -1351,23 +1351,23 @@ static void PrintTradesStringOnCard(void)
     }
 }
 
-static void BufferBerryCrushPoints(void)
+/*static void BufferBerryCrushPoints(void)
 {
     if (sTrainerCardDataPtr->cardType != CARD_TYPE_RSE)
     {
         StringCopy(sTrainerCardDataPtr->strings[TRAINER_CARD_STRING_BERRY_CRUSH], gText_BerryCrushes);
         ConvertIntToDecimalStringN(sTrainerCardDataPtr->strings[TRAINER_CARD_STRING_BERRY_CRUSH_COUNT], sTrainerCardDataPtr->trainerCard.berryCrushPoints, STR_CONV_MODE_RIGHT_ALIGN, 5);
     }
-}
+}*/
 
-static void PrintBerryCrushStringOnCard(void)
+/*static void PrintBerryCrushStringOnCard(void) may be able to replace with playthrough number or something
 {
     if (sTrainerCardDataPtr->cardType != CARD_TYPE_RSE && sTrainerCardDataPtr->trainerCard.berryCrushPoints)
     {
         AddTextPrinterParameterized3(1, sTrainerCardFontIds[1], sTrainerCardHofDebutXPositions[sTrainerCardDataPtr->cardType], 99, sTrainerCardTextColors, TEXT_SPEED_FF, sTrainerCardDataPtr->strings[TRAINER_CARD_STRING_BERRY_CRUSH]);
         AddTextPrinterParameterized3(1, sTrainerCardFontIds[1], 186, 99, sTrainerCardStatColors, TEXT_SPEED_FF, sTrainerCardDataPtr->strings[TRAINER_CARD_STRING_BERRY_CRUSH_COUNT]);
     }
-}
+}*/
 
 static void BufferUnionRoomStats(void)
 {
@@ -1586,11 +1586,11 @@ static void DrawCardBackStats(void)
             FillBgTilemapBufferRect(3, 157, 26, 10, 1, 1, 1);
         }
 
-        if (sTrainerCardDataPtr->trainerCard.berryCrushPoints)
+      /*  if (sTrainerCardDataPtr->trainerCard.berryCrushPoints)
         {
             FillBgTilemapBufferRect(3, 141, 21, 13, 1, 1, 1);
             FillBgTilemapBufferRect(3, 157, 21, 14, 1, 1, 1);
-        }
+        }*/
 
         if (sTrainerCardDataPtr->trainerCard.unionRoomNum)
         {

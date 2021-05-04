@@ -10,7 +10,7 @@ enum BerryPouchType
     BERRYPOUCH_FROMMARTSELL,
     BERRYPOUCH_FROMPOKEMONSTORAGEPC,
     BERRYPOUCH_FROMBATTLE,
-    BERRYPOUCH_FROMBERRYCRUSH,
+    BERRYPOUCH_FROMBERRYCRUSH, //need this, but its just an enum, so doesnt' take much space
     BERRYPOUCH_NA
 };
 

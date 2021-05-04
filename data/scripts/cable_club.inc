@@ -948,7 +948,6 @@ CableClub_EventScript_SaveAndChooseLinkLeader:: @ 81BBD6F
 	case LINK_GROUP_SINGLE_BATTLE, CableClub_EventScript_ChooseLinkLeaderFrom2
 	case LINK_GROUP_DOUBLE_BATTLE, CableClub_EventScript_ChooseLinkLeaderFrom2
 	case LINK_GROUP_MULTI_BATTLE, CableClub_EventScript_ChooseLinkLeaderFrom4
-	case LINK_GROUP_BERRY_CRUSH, CableClub_EventScript_ChooseLinkLeader
 	end
 
 CableClub_EventScript_ChooseLinkLeaderFrom2:: @ 81BBDBC

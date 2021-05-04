@@ -150,11 +150,11 @@ struct Pokedex
     /*0x04*/ u32 unownPersonality; // set when you first see Unown
     /*0x08*/ u32 spindaPersonality; // set when you first see Spinda
     /*0x0C*/ u32 unknown3;
-    /*0x10*/ u8 owned[DEX_FLAGS_NO];//willl make u16 to be safe
-    /*0x44*/ u8 seen[DEX_FLAGS_NO];
+    /*0x10*/ u16 owned[DEX_FLAGS_NO];//willl make u16 to be safe
+    /*0x44*/ u16 seen[DEX_FLAGS_NO];
 };
 
-struct PokemonJumpResults // possibly used in the game itself?
+/*struct PokemonJumpResults // possibly used in the game itself?
 {
     u16 jumpsInRow;
     u16 field2;
@@ -162,9 +162,9 @@ struct PokemonJumpResults // possibly used in the game itself?
     u16 field6;
     u32 field8;
     u32 bestJumpScore;
-};
+};*/
 
-struct BerryPickingResults // possibly used in the game itself? Size may be wrong as well
+/*struct BerryPickingResults // possibly used in the game itself? Size may be wrong as well
 {
     u32 bestScore;
     u16 berriesPicked;
@@ -184,9 +184,9 @@ struct BerryCrush
     u16 berryCrushResults[4];
     u32 berryPowderAmount;
     u32 unk;
-};
+};*/
 
-#define PLAYER_NAME_LENGTH   7
+#define PLAYER_NAME_LENGTH   7 // may increase to add more unique names
 /*
 #define LINK_B_RECORDS_COUNT 5
 
@@ -290,9 +290,9 @@ struct SaveBlock2
     /*0x0B0*/ struct BattleTowerData battleTower;
     /*0x898*/ u16 mapView[0x100];
     /*0xA98*/ //struct LinkBattleRecords linkBattleRecords;
-    /*0xAF0*/ struct BerryCrush berryCrush; // think I'll try removing these again.
-    /*0xB00*/ struct PokemonJumpResults pokeJump;
-    /*0xB10*/ struct BerryPickingResults berryPick;
+    /*0xAF0*/// struct BerryCrush berryCrush; // think I'll try removing these again.
+    /*0xB00*/ //struct PokemonJumpResults pokeJump;
+    /*0xB10*/// struct BerryPickingResults berryPick;
     /*0xB20*/ u8 filler_B20[0x400];
     /*0xF20*/ u32 encryptionKey;
 }; // size: 0xF24
@@ -789,8 +789,8 @@ struct SaveBlock1
     /*0x0430*/ struct ItemSlot bagPocket_PokeBalls[BAG_POKEBALLS_COUNT];
     /*0x0464*/ struct ItemSlot bagPocket_TMHM[BAG_TMHM_COUNT];
     /*0x054c*/ struct ItemSlot bagPocket_Berries[BAG_BERRIES_COUNT];
-    /*0x05F8*/ u8 seen1[DEX_FLAGS_NO];
-    /*0x062C*/ u16 berryBlenderRecords[3]; // unused
+    /*0x05F8*/ u16 seen1[DEX_FLAGS_NO];
+    /*0x062C*/// u16 berryBlenderRecords[3]; // unused
     /*0x0632*/ u8 field_632[6]; // unused?
     /*0x0638*/ u16 trainerRematchStepCounter;
     /*0x063A*/ u8 ALIGNED(2) trainerRematches[100];
@@ -818,7 +818,7 @@ struct SaveBlock1
     /*0x348C*/ u8 filler_348C[400];
     /*0x361C*/ struct RamScript ramScript;
     /*0x3A08*/ u8 filler3A08[16];
-    /*0x3A18*/ u8 seen2[DEX_FLAGS_NO];
+    /*0x3A18*/ u16 seen2[DEX_FLAGS_NO];
     /*0x3A4C*/ u8 rivalName[PLAYER_NAME_LENGTH + 1];
     /*0x3A54*/ struct FameCheckerSaveData fameChecker[NUM_FAMECHECKER_PERSONS];
     /*0x3A94*/ u8 filler3A94[0x40];

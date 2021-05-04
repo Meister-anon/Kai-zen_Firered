@@ -58,7 +58,7 @@ u16 GetStageDurationByBerryType(u8);
 void Bag_ChooseBerry(void);
 void ObjectEventInteractionGetBerryTreeData(void);
 void ObjectEventInteractionPlantBerryTree(void);
-void ObjectEventInteractionPickBerryTree(void);
+void ObjectEventInteractionPickBerryTree(void); //cool, good to know i have opptions for berry trees
 void ObjectEventInteractionRemoveBerryTree(void);
 u8 PlayerHasBerries(void);
 void ResetBerryTreeSparkleFlags(void);
@@ -67,11 +67,11 @@ const struct Berry * GetBerryInfo(u8 berryIdx);
 
 extern const struct Berry gBerries[];
 
-struct BerryCrushStats {
+/*struct BerryCrushStats {
     u8 unk0;
     u16 powder;
-};
+};*/
 
-extern const struct BerryCrushStats gBerryCrushStats[];
+//extern const struct BerryCrushStats gBerryCrushStats[];
 
 #endif // GUARD_BERRY_H
