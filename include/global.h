@@ -94,8 +94,8 @@ extern u8 gStringVar4[];
 
 #define ROUND_BITS_TO_BYTES(numBits)(((numBits) / 8) + (((numBits) % 8) ? 1 : 0))
 
-#define DEX_FLAGS_NO (ROUND_BITS_TO_BYTES(NUM_SPECIES))
-#define NUM_FLAG_BYTES (ROUND_BITS_TO_BYTES(FLAGS_COUNT))
+#define DEX_FLAGS_NO (ROUND_BITS_TO_BYTES(NUM_SPECIES)) // remember to expand I guess to u16 so I can have a entry for each form i.e dex can go over 999
+#define NUM_FLAG_BYTES (ROUND_BITS_TO_BYTES(FLAGS_COUNT)) //may have already done so?
 
 struct Coords8
 {
@@ -150,7 +150,7 @@ struct Pokedex
     /*0x04*/ u32 unownPersonality; // set when you first see Unown
     /*0x08*/ u32 spindaPersonality; // set when you first see Spinda
     /*0x0C*/ u32 unknown3;
-    /*0x10*/ u8 owned[DEX_FLAGS_NO];
+    /*0x10*/ u8 owned[DEX_FLAGS_NO];//willl make u16 to be safe
     /*0x44*/ u8 seen[DEX_FLAGS_NO];
 };
 

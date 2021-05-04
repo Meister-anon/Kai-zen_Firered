@@ -34,13 +34,15 @@
 //keep all items, so don't affect pc,  and keep track of when the new game +/ number of playthroughs.  Since i removed link battle, maybe I can have playthrough numbers shown 
 //on card instead.
 
+// will comment things I need to change or not change for newgame+
+
 // this file's functions
 //static void ResetMiniGamesResults(void);
 
 // EWRAM vars
 EWRAM_DATA bool8 gDifferentSaveFile = FALSE;
 
-void SetTrainerId(u32 trainerId, u8 *dst)
+void SetTrainerId(u32 trainerId, u8 *dst) // don't change
 {
     dst[0] = trainerId;
     dst[1] = trainerId >> 8;
@@ -61,7 +63,7 @@ static void InitPlayerTrainerId(void)
     SetTrainerId(trainerId, gSaveBlock2Ptr->playerTrainerId);
 }
 
-static void SetDefaultOptions(void) //
+static void SetDefaultOptions(void) // don't change
 {
     gSaveBlock2Ptr->optionsTextSpeed = OPTIONS_TEXT_SPEED_FAST;
     gSaveBlock2Ptr->optionsWindowFrameType = 0;
@@ -72,7 +74,7 @@ static void SetDefaultOptions(void) //
     gSaveBlock2Ptr->optionsButtonMode = OPTIONS_BUTTON_MODE_LR;
 }
 
-static void ClearPokedexFlags(void)
+static void ClearPokedexFlags(void) // don't use
 {
     memset(&gSaveBlock2Ptr->pokedex.owned, 0, sizeof(gSaveBlock2Ptr->pokedex.owned));
     memset(&gSaveBlock2Ptr->pokedex.seen, 0, sizeof(gSaveBlock2Ptr->pokedex.seen));
@@ -83,13 +85,13 @@ static void sub_80549D4(void)
     CpuFill32(0, &gSaveBlock2Ptr->battleTower, sizeof(gSaveBlock2Ptr->battleTower));
 }
 
-static void WarpToPlayersRoom(void)
+static void WarpToPlayersRoom(void) // use
 {
     SetWarpDestination(MAP_GROUP(PALLET_TOWN_PLAYERS_HOUSE_2F), MAP_NUM(PALLET_TOWN_PLAYERS_HOUSE_2F), -1, 6, 6);
     WarpIntoMap();
 }
 
-void Sav2_ClearSetDefault(void)
+void Sav2_ClearSetDefault(void) // don't use
 {
     ClearSav2();
     SetDefaultOptions();
@@ -98,8 +100,8 @@ void Sav2_ClearSetDefault(void)
 void ResetMenuAndMonGlobals(void)
 {
     gDifferentSaveFile = FALSE;
-    ZeroPlayerPartyMons();
-    ZeroEnemyPartyMons();
+    ZeroPlayerPartyMons(); // change use to make set party level function
+    ZeroEnemyPartyMons(); // is this rival? don't know if will use
     ResetBagCursorPositions();
     ResetTMCaseCursorPos();
     BerryPouch_CursorResetToTop();
@@ -127,9 +129,9 @@ void NewGameInitData(void)
     InitPlayerTrainerId();
     PlayTimeCounter_Reset();
     ClearPokedexFlags();
-    InitEventData();
-    ResetFameChecker();
-    SetMoney(&gSaveBlock1Ptr->money, 3000);
+    InitEventData(); // need to take a closer look, but may keep if it resets flag stuff but I can still keep track of number of playthroughs oh ok this seems to reset flags keep for now.
+    ResetFameChecker(); //keep
+    SetMoney(&gSaveBlock1Ptr->money, 3000); // keep
     ResetGameStats();
     //ClearPlayerLinkBattleRecords();
     InitHeracrossSizeRecord();
@@ -138,19 +140,19 @@ void NewGameInitData(void)
     gPlayerPartyCount = 0; // change this & zeroplayerpartymons for new game+
     ZeroPlayerPartyMons();
     ResetPokemonStorageSystem();
-    ClearRoamerData();
-    gSaveBlock1Ptr->registeredItem = 0;
+    ClearRoamerData(); // keep
+    gSaveBlock1Ptr->registeredItem = 0; // keep maybe not
     ClearBag();
-    NewGameInitPCItems();
+    NewGameInitPCItems(); // may need to do this may not
     sub_809C794();
     InitEasyChatPhrases();
-    ResetTrainerFanClub();
+    ResetTrainerFanClub(); // think I'll leave this, may add some in on the joke text scripts
     UnionRoomChat_InitializeRegisteredTexts();
     //ResetMiniGamesResults();
     InitMEventData();
-    SetAllRenewableItemFlags();
-    WarpToPlayersRoom();
-    ScriptContext2_RunNewScript(EventScript_ResetAllMapFlags);
+    SetAllRenewableItemFlags(); //keep
+    WarpToPlayersRoom(); //keep
+    ScriptContext2_RunNewScript(EventScript_ResetAllMapFlags); // keep
     StringCopy(gSaveBlock1Ptr->rivalName, rivalName);
     ResetTrainerTowerResults();
 }
@@ -162,3 +164,22 @@ static void ResetMiniGamesResults(void)
     ResetPokeJumpResults();
     CpuFill16(0, &gSaveBlock2Ptr->berryPick, sizeof(struct BerryPickingResults));
 }*/
+
+void NewGame_Plus(void){
+    gDifferentSaveFile = FALSE;
+    ResetPlayerPartyMons();
+    gSaveBlock2Ptr->specialSaveWarpFlags = 0;
+    SetMoney(&gSaveBlock1Ptr->money, 3000);
+    ClearRoamerData();
+    ResetSpecialVars(); // not 100% on this one
+    SetAllRenewableItemFlags(); //keep
+    InitEventData(); //seems to reset all flags, I'll need to eventually make a custom one, that excludes the flags I want to stay. should be simple just use a not equal and a range i.e less than y greater than x
+    ScriptContext2_RunNewScript(EventScript_ResetAllMapFlags);
+    ResetBagCursorPositions();
+    ResetTMCaseCursorPos();
+    BerryPouch_CursorResetToTop(); // kind of want to remove certain items for this actually, like remove all healing items, key items would also pose a problem for progression...
+    ResetQuestLog(); // ok here's the strat remove all items except capture items and fishing rods, (remember to edit those npc to check for rod first) 
+    SeedWildEncounterRng(Random());// but also set hm checks to use a separate flag from badge, that just is also set when you beat the gym the first time.  As long as those aren't reset, newgame+ can have a cool open world experience.
+    //ClearBag(); do custom, but this seems to check all bag pockets and then set the amount to remove to the full capacity,thus zeroing it out.
+    WarpToPlayersRoom(); //otherwise the clear item functions works by selecting id / item slot and how much to remove. think I'll do if not item id rods clear pocket capacity for key items
+}

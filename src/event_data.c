@@ -31,12 +31,12 @@ u16 gLastQuestLogStoredFlagOrVarIdx;
 
 extern u16 *const gSpecialVars[];
 
-void InitEventData(void)
+void InitEventData(void) //yeah this is reseting flags and vars   if I remember 1 is set 0 is not set, so yeah this resets everything
 {
-    memset(gSaveBlock1Ptr->flags, 0, NUM_FLAG_BYTES);
+    memset(gSaveBlock1Ptr->flags, 0, NUM_FLAG_BYTES); // flag byte includes num flags count, so includes all flags
     memset(gSaveBlock1Ptr->vars, 0, VARS_COUNT * 2);
-    memset(sSpecialFlags, 0, SPECIAL_FLAGS_COUNT);
-}
+    memset(sSpecialFlags, 0, SPECIAL_FLAGS_COUNT); // in flags.h flags and special flags are separate areas which is why this is needed to reset all flags
+} // I believe can make it selective with a range command, long as I put my new flags together at the end, of flags should be simple.
 
 void ClearTempFieldEventData(void)
 {
