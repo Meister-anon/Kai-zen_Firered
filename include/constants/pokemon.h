@@ -219,4 +219,10 @@
 #define EVO_MODE_ITEM_USE   2
 #define EVO_MODE_ITEM_CHECK 3 // If an Everstone is being held, still want to show that the stone *could* be used on that Pokémon to evolve
 
+// Split defines.
+#define SPLIT_PHYSICAL  0x0
+#define SPLIT_SPECIAL   0x1
+#define SPLIT_STATUS    0x2
+
+
 #endif // GUARD_CONSTANTS_POKEMON_H

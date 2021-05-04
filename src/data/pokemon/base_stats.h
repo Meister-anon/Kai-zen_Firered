@@ -6771,7 +6771,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_TYROGUE] =
     {
-        .baseHP = 35,
+        .baseHP = 78,
         .baseAttack = 35,
         .baseDefense = 35,
         .baseSpeed = 35,
@@ -6779,7 +6779,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpDefense = 35,
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
-        .catchRate = 75,
+        .catchRate = 65,
         .expYield = 42,
         .evYield_Attack = 1,
         .genderRatio = MON_MALE,

@@ -63,10 +63,11 @@
 #define MOVE_TARGET_DEPENDS           0x1
 #define MOVE_TARGET_USER_OR_SELECTED  0x2
 #define MOVE_TARGET_RANDOM            0x4
-#define MOVE_TARGET_BOTH              0x8
+#define MOVE_TARGET_BOTH              0x8 //each one is just doubling
 #define MOVE_TARGET_USER              0x10
 #define MOVE_TARGET_FOES_AND_ALLY     0x20
 #define MOVE_TARGET_OPPONENTS_FIELD   0x40
+//#define MOVE_TARGET_ANY_OR_ALL        0x80
 
 struct TrainerMonNoItemDefaultMoves
 {
@@ -463,8 +464,11 @@ extern struct BattleStruct *gBattleStruct;
         typeArg = gBattleMoves[move].type;                  \
 }
 
-#define IS_TYPE_PHYSICAL(moveType)(moveType < TYPE_MYSTERY)
-#define IS_TYPE_SPECIAL(moveType)(moveType > TYPE_MYSTERY)
+//#define IS_TYPE_PHYSICAL(moveType)(moveType < TYPE_MYSTERY)
+//#define IS_TYPE_SPECIAL(moveType)(moveType > TYPE_MYSTERY)
+#define IS_MOVE_PHYSICAL(move)(GetBattleMoveSplit(move) == SPLIT_PHYSICAL)
+#define IS_MOVE_SPECIAL(move)(GetBattleMoveSplit(move) == SPLIT_SPECIAL)
+#define IS_MOVE_STATUS(move)(gBattleMoves[move].split == SPLIT_STATUS)
 #define TARGET_TURN_DAMAGED ((gSpecialStatuses[gBattlerTarget].physicalDmg != 0 || gSpecialStatuses[gBattlerTarget].specialDmg != 0))
 #define IS_BATTLER_OF_TYPE(battlerId, type)((gBattleMons[battlerId].type1 == type || gBattleMons[battlerId].type2 == type))
 #define SET_BATTLER_TYPE(battlerId, type)   \

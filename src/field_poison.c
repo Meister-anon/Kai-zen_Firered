@@ -1,6 +1,7 @@
 #include "global.h"
 #include "gflib.h"
 #include "strings.h"
+#include "constants/abilities.h"
 #include "task.h"
 #include "field_message_box.h"
 #include "script.h"
@@ -100,6 +101,7 @@ s32 DoPoisonFieldEffect(void)
     for (i = 0; i < PARTY_SIZE; i++)
     {
         if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES) && GetAilmentFromStatus(GetMonData(pokemon, MON_DATA_STATUS)) == AILMENT_PSN)
+          //  && GetMonAbility(&gPlayerParty[i]) != ABILITY_POISON_HEAL)
         {
             hp = GetMonData(pokemon, MON_DATA_HP);
             if (hp == 0 || --hp == 0)

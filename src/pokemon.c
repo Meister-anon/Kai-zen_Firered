@@ -3255,7 +3255,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (attackerHoldEffect == sHoldEffectToType[i][0]
             && type == sHoldEffectToType[i][1])
         {
-            if (IS_TYPE_PHYSICAL(type))
+            if (IS_MOVE_PHYSICAL(move))
                 attack = (attack * (attackerHoldEffectParam + 100)) / 100;
             else
                 spAttack = (spAttack * (attackerHoldEffectParam + 100)) / 100;
@@ -3306,7 +3306,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)
         defense /= 2;
 
-    if (IS_TYPE_PHYSICAL(type))
+    if (IS_MOVE_PHYSICAL(move))
     {
         if (gCritMultiplier == 2)
         {
@@ -3334,7 +3334,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage = damage / damageHelper;
         damage /= 50;
 
-        if ((attacker->status1 & STATUS1_BURN) && attacker->ability != ABILITY_GUTS)
+        if ((attacker->status1 & STATUS1_BURN) && attacker->ability != ABILITY_GUTS) //nvm don't need is physical because its already in the bracket for that ^
             damage /= 2;
 
         if ((sideStatus & SIDE_STATUS_REFLECT) && gCritMultiplier == 1)
@@ -3342,11 +3342,11 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
                 damage = 2 * (damage / 3);
             else
-                damage /= 2;
+                damage /= 1;
         }
 
-        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == 8 && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
-            damage /= 2;
+        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == 8 && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2) // this is spread move cut
+            damage /= 1; //target 0x8 is target both
 
         // moves always do at least 1 damage.
         if (damage == 0)
@@ -3356,7 +3356,46 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (type == TYPE_MYSTERY)
         damage = 0; // is ??? type. does 0 damage.
 
-    if (IS_TYPE_SPECIAL(type))
+    // are effects of weather negated with cloud nine or air lock
+    if (WEATHER_HAS_EFFECT2)
+    {
+        if (gBattleWeather & WEATHER_RAIN_TEMPORARY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+                damage /= 2;
+                break;
+            case TYPE_WATER:
+                damage = (15 * damage) / 10;
+                break;
+            }
+        }
+        //moved these here, because they don't have to do with physical or special damage alone anymore.  since I removed the type link
+        // any weather except sun weakens solar beam
+        if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gCurrentMove == MOVE_SOLAR_BEAM)
+            damage /= 2;
+
+        // sunny
+        if (gBattleWeather & WEATHER_SUN_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+                damage = (15 * damage) / 10;
+                break;
+            case TYPE_WATER:
+                damage /= 2;
+                break;
+            }
+        }
+    }
+
+    // flash fire triggered
+    if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
+        damage = (15 * damage) / 10;
+
+    if (IS_MOVE_SPECIAL(move))
     {
         if (gCritMultiplier == 2)
         {
@@ -3389,50 +3428,13 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
                 damage = 2 * (damage / 3);
             else
-                damage /= 2;
+                damage /= 1;
         }
 
         if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == 8 && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
-            damage /= 2;
+            damage /= 1;
 
-        // are effects of weather negated with cloud nine or air lock
-        if (WEATHER_HAS_EFFECT2)
-        {
-            if (gBattleWeather & WEATHER_RAIN_TEMPORARY)
-            {
-                switch (type)
-                {
-                case TYPE_FIRE:
-                    damage /= 2;
-                    break;
-                case TYPE_WATER:
-                    damage = (15 * damage) / 10;
-                    break;
-                }
-            }
-
-            // any weather except sun weakens solar beam
-            if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gCurrentMove == MOVE_SOLAR_BEAM)
-                damage /= 2;
-
-            // sunny
-            if (gBattleWeather & WEATHER_SUN_ANY)
-            {
-                switch (type)
-                {
-                case TYPE_FIRE:
-                    damage = (15 * damage) / 10;
-                    break;
-                case TYPE_WATER:
-                    damage /= 2;
-                    break;
-                }
-            }
-        }
-
-        // flash fire triggered
-        if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
-            damage = (15 * damage) / 10;
+        
     }
 
     return damage + 2;
@@ -3999,26 +4001,11 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
     case MON_DATA_EFFORT_RIBBON:
         retVal = substruct3->effortRibbon;
         break;
-    case MON_DATA_MARINE_RIBBON:
-        retVal = substruct3->marineRibbon;
-        break;
-    case MON_DATA_LAND_RIBBON:
-        retVal = substruct3->landRibbon;
-        break;
-    case MON_DATA_SKY_RIBBON:
-        retVal = substruct3->skyRibbon;
-        break;
-    case MON_DATA_COUNTRY_RIBBON:
-        retVal = substruct3->countryRibbon;
-        break;
     case MON_DATA_NATIONAL_RIBBON:
         retVal = substruct3->nationalRibbon;
         break;
     case MON_DATA_EARTH_RIBBON:
         retVal = substruct3->earthRibbon;
-        break;
-    case MON_DATA_WORLD_RIBBON:
-        retVal = substruct3->worldRibbon;
         break;
     case MON_DATA_FILLER:
         retVal = substruct3->filler;
@@ -4066,13 +4053,8 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
             retVal += substruct3->victoryRibbon;
             retVal += substruct3->artistRibbon;
             retVal += substruct3->effortRibbon;
-            retVal += substruct3->marineRibbon;
-            retVal += substruct3->landRibbon;
-            retVal += substruct3->skyRibbon;
-            retVal += substruct3->countryRibbon;
             retVal += substruct3->nationalRibbon;
             retVal += substruct3->earthRibbon;
-            retVal += substruct3->worldRibbon;
         }
         break;
     case MON_DATA_RIBBONS:
@@ -4089,13 +4071,8 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
                 | (substruct3->victoryRibbon << 17)
                 | (substruct3->artistRibbon << 18)
                 | (substruct3->effortRibbon << 19)
-                | (substruct3->marineRibbon << 20)
-                | (substruct3->landRibbon << 21)
-                | (substruct3->skyRibbon << 22)
-                | (substruct3->countryRibbon << 23)
                 | (substruct3->nationalRibbon << 24)
-                | (substruct3->earthRibbon << 25)
-                | (substruct3->worldRibbon << 26);
+                | (substruct3->earthRibbon << 25);
         }
         break;
     default:
@@ -4162,13 +4139,8 @@ void SetMonData(struct Pokemon *mon, s32 field, const void *dataArg)
     case MON_DATA_VICTORY_RIBBON:
     case MON_DATA_ARTIST_RIBBON:
     case MON_DATA_EFFORT_RIBBON:
-    case MON_DATA_MARINE_RIBBON:
-    case MON_DATA_LAND_RIBBON:
-    case MON_DATA_SKY_RIBBON:
-    case MON_DATA_COUNTRY_RIBBON:
     case MON_DATA_NATIONAL_RIBBON:
     case MON_DATA_EARTH_RIBBON:
-    case MON_DATA_WORLD_RIBBON:
     case MON_DATA_FILLER:
     case MON_DATA_EVENT_LEGAL:
     case MON_DATA_KNOWN_MOVES:
@@ -4405,26 +4377,11 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
     case MON_DATA_EFFORT_RIBBON:
         SET8(substruct3->effortRibbon);
         break;
-    case MON_DATA_MARINE_RIBBON:
-        SET8(substruct3->marineRibbon);
-        break;
-    case MON_DATA_LAND_RIBBON:
-        SET8(substruct3->landRibbon);
-        break;
-    case MON_DATA_SKY_RIBBON:
-        SET8(substruct3->skyRibbon);
-        break;
-    case MON_DATA_COUNTRY_RIBBON:
-        SET8(substruct3->countryRibbon);
-        break;
     case MON_DATA_NATIONAL_RIBBON:
         SET8(substruct3->nationalRibbon);
         break;
     case MON_DATA_EARTH_RIBBON:
         SET8(substruct3->earthRibbon);
-        break;
-    case MON_DATA_WORLD_RIBBON:
-        SET8(substruct3->worldRibbon);
         break;
     case MON_DATA_FILLER:
         SET8(substruct3->filler);

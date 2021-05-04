@@ -1101,7 +1101,7 @@ static void atk01_accuracycheck(void)
             calc = (calc * 130) / 100; // 1.3 compound eyes boost
         if (WEATHER_HAS_EFFECT && gBattleMons[gBattlerTarget].ability == ABILITY_SAND_VEIL && gBattleWeather & WEATHER_SANDSTORM_ANY)
             calc = (calc * 80) / 100; // 1.2 sand veil loss
-        if (gBattleMons[gBattlerAttacker].ability == ABILITY_HUSTLE && IS_TYPE_PHYSICAL(type)) //can put status based evasion/accuracy effects here
+        if (gBattleMons[gBattlerAttacker].ability == ABILITY_HUSTLE && IS_MOVE_PHYSICAL(move)) //can put status based evasion/accuracy effects here
             calc = (calc * 80) / 100; // 1.2 hustle loss    since it uses accuract not evasion, I'll add an accuracy boost for different statuses.
         // I'll use calc,  to adjust the move accuracy, but to avoid break, will include check that if moveAcc > 100  would instead moveAcc = 100.
         //remember I plan to do this for more than just status 1.
@@ -1811,6 +1811,7 @@ static void atk0B_healthbarupdate(void)
 static void atk0C_datahpupdate(void)
 {
     u32 moveType;
+    u16 move; //don't know if should be u32
 
     if (!gBattleControllerExecFlags)
     {
@@ -1885,7 +1886,7 @@ static void atk0C_datahpupdate(void)
                     }
                     if (!gSpecialStatuses[gActiveBattler].dmg && !(gHitMarker & HITMARKER_x100000))
                         gSpecialStatuses[gActiveBattler].dmg = gHpDealt;
-                    if (IS_TYPE_PHYSICAL(moveType) && !(gHitMarker & HITMARKER_x100000) && gCurrentMove != MOVE_PAIN_SPLIT)
+                    if (IS_MOVE_PHYSICAL(move) && !(gHitMarker & HITMARKER_x100000) && gCurrentMove != MOVE_PAIN_SPLIT)
                     {
                         gProtectStructs[gActiveBattler].physicalDmg = gHpDealt;
                         gSpecialStatuses[gActiveBattler].physicalDmg = gHpDealt;
@@ -1900,7 +1901,7 @@ static void atk0C_datahpupdate(void)
                             gSpecialStatuses[gActiveBattler].physicalBattlerId = gBattlerTarget;
                         }
                     }
-                    else if (!IS_TYPE_PHYSICAL(moveType) && !(gHitMarker & HITMARKER_x100000))
+                    else if (IS_MOVE_SPECIAL(move) && !(gHitMarker & HITMARKER_x100000))
                     {
                         gProtectStructs[gActiveBattler].specialDmg = gHpDealt;
                         gSpecialStatuses[gActiveBattler].specialDmg = gHpDealt;

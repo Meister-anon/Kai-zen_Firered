@@ -56,7 +56,7 @@ struct PokemonSubstruct3
  /* 0x05 */ u32 spAttackIV:5;
  /* 0x06 */ u32 spDefenseIV:5;
  /* 0x07 */ u32 isEgg:1;
- /* 0x07 */ u32 abilityNum:1;
+ /* 0x07 */ u32 abilityNum:2; // allability num are 2 in emerald. so that is the right call
 
  /* 0x08 */ u32 coolRibbon:3;
  /* 0x08 */ u32 beautyRibbon:3;
@@ -68,13 +68,8 @@ struct PokemonSubstruct3
  /* 0x0A */ u32 victoryRibbon:1;
  /* 0x0A */ u32 artistRibbon:1;
  /* 0x0A */ u32 effortRibbon:1;
- /* 0x0A */ u32 marineRibbon:1; // never distributed
- /* 0x0A */ u32 landRibbon:1; // never distributed
- /* 0x0A */ u32 skyRibbon:1; // never distributed
- /* 0x0A */ u32 countryRibbon:1; // distributed during Pokémon Festa '04 and '05 to tournament winners
  /* 0x0B */ u32 nationalRibbon:1;
  /* 0x0B */ u32 earthRibbon:1;
- /* 0x0B */ u32 worldRibbon:1; // distributed during Pokémon Festa '04 and '05 to tournament winners
  /* 0x0B */ u32 filler:4;
  /* 0x0B */ u32 eventLegal:1; // controls Mew & Deoxys obedience; if set, Pokémon is a fateful encounter in FRLG & Gen 4+ summary screens; set for in-game event island legendaries, some distributed events, and Pokémon from XD: Gale of Darkness.
 };
@@ -154,7 +149,7 @@ struct BattleTowerPokemon
              u32 spAttackIV:5;
              u32 spDefenseIV:5;
              u32 gap:1;
-             u32 abilityNum:1;
+             u32 abilityNum:2;
     /*0x1C*/ u32 personality;
     /*0x20*/ u8 nickname[11];
     /*0x2B*/ u8 friendship;
@@ -178,7 +173,7 @@ struct BattlePokemon
     /*0x16*/ u32 spAttackIV:5;
     /*0x17*/ u32 spDefenseIV:5;
     /*0x17*/ u32 isEgg:1;
-    /*0x17*/ u32 abilityNum:1;
+    /*0x17*/ u32 abilityNum:2; //need to check bit math make sure it goes up to 2, since hidden ability is num 2.  ok cant find equation I'll just make it 2.
     /*0x18*/ s8 statStages[BATTLE_STATS_NO];
     /*0x20*/ u16 ability;
     /*0x21*/ u8 type1;
@@ -236,7 +231,7 @@ struct BaseStats  // had to adjust struct order to match paste value from base_s
 
 struct BattleMove
 {
-    u8 effect;
+    u16 effect;
     u8 power;
     u8 type;
     u8 accuracy;
@@ -244,7 +239,9 @@ struct BattleMove
     u8 secondaryEffectChance;
     u8 target;
     s8 priority;
-    u8 flags;
+    u8 flags; // is u32 in emerald, might not need to do that, will ask
+    u8 split;
+  //  u8 argument;
 };
 
 extern const struct BattleMove gBattleMoves[];

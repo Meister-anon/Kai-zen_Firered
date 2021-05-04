@@ -1763,6 +1763,23 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                 }
                 break;
+            case ABILITY_NUISANCE: 
+                { //since abilituy effect macro has proven to have an affect on weather/how the function activates, I may need to move this to an existing category.
+                    u32 move; //not sure why this shouldn't just be u16 but pokemon.c line 3166    ah because its "move" not "moves"
+                    u16 moveBattler = 0;
+                    s8 priority; //this threw up a syntax error before I rearranged type listing, into order it appears in function
+                    moveBattler = gBattleMons[gBattlerAttacker].moves[*(gBattleStruct->chosenMovePositions + gBattlerAttacker)];
+                    priority = gBattleMoves[moveBattler].priority;
+                //also power is better than using gbattlemovedamage as movedamage takes all other factors into account to boost damage.
+                     //apparently gchosenmoves refers to move used previously, not a buffer for the move you will use in your turn, so gcurrentmove is best here.
+                //movearg works for other abiities so I'll try it, combined with gcurrentmove
+                   
+                    if (gBattleMoves[move].power <= 60)
+                      priority = priority + 3; //tried putting in parenthesis that may ado it
+                 // taken from battle_main.c function GetWhoStrikesFirst
+                
+                }
+                break;
             }
             break;
         case ABILITYEFFECT_ENDTURN: // 1
@@ -3317,4 +3334,9 @@ u8 IsMonDisobedient(void)
             return 1;
         }
     }
+}
+
+u8 GetBattleMoveSplit(u32 moveId)
+{
+    return gBattleMoves[moveId].split;
 }

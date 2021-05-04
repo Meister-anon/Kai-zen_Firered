@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\include",
     "\\src"
   ],
-  "SelectedNode": "\\include\\battle_util.h",
+  "SelectedNode": "\\src\\field_tasks.c",
   "PreviewInSolutionExplorer": false
 }
