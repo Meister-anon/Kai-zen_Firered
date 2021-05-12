@@ -25,18 +25,23 @@
 #define sFIELD_20 gBattleScripting + 0x20
 #define sRESHOW_MAIN_STATE gBattleScripting + 0x21
 #define sRESHOW_HELPER_STATE gBattleScripting + 0x22
-#define sFIELD_23 gBattleScripting + 0x23
-#define sWINDOWS_TYPE gBattleScripting + 0x24
+#define sFIELD_23 gBattleScripting + 0x23 // numbers match byte valeu from battlescripting struct
+#define sWINDOWS_TYPE gBattleScripting + 0x24 // need to get this checked to be sure its right...
 #define sMULTIPLAYER_ID gBattleScripting + 0x25
 #define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x26
-
+#define sMON_CAUGHT gBattleScripting + 0x27 // all below field23 ported from emerald, window isn't used
+#define sSAVED_DMG gBattleScripting + 0x28 //for now kept in for sake of number match
+#define sSAVED_MOVE_EFFECT gBattleScripting + 0x2C
+#define sMOVE_EFFECT gBattleScripting + 0x2E
+#define sMULTIHIT_EFFECT gBattleScripting + 0x30
+//#define sEXP_CATCH gBattleScripting + 0x32
 #define cEFFECT_CHOOSER gBattleCommunication + 3
 #define cMULTISTRING_CHOOSER gBattleCommunication + 5
 
 // Battle Script defines for getting the wanted battler
 #define BS_TARGET                   0
 #define BS_ATTACKER                 1
-#define BS_EFFECT_BATTLER           2
+#define BS_EFFECT_BATTLER           2 //sees to be just for move effects, not sure if it'll work for wonder_guard 
 #define BS_FAINTED                  3
 #define BS_ATTACKER_WITH_PARTNER    4 // for atk98_updatestatusicon
 #define BS_UNKNOWN_5                5 // for openpartyscreen
@@ -49,6 +54,7 @@
 #define BS_OPPONENT1                12
 #define BS_PLAYER2                  13 // for atk98_updatestatusicon
 #define BS_OPPONENT2                14
+#define BS_ABILITY_BATTLER          15 //from emerald may not need
 
 // used for openpartyscreen
 #define OPEN_PARTY_ALLOW_CANCEL     0x80
@@ -118,8 +124,14 @@
 #define ATK49_UPDATE_LAST_MOVES                 14
 #define ATK49_MIRROR_MOVE                       15
 #define ATK49_NEXT_TARGET                       16
+/*#define MOVEEND_NEXT_TARGET 20
+#define MOVEEND_LIFE_ORB 21
+#define MOVEEND_DANCER 22		// check and possibly add to atk49
+#define MOVEEND_EMERGENCY_EXIT 23
+#define MOVEEND_CLEAR_BITS 24 */
 #define ATK49_COUNT                             17
 
+// stat flags for Cmd_playstatchangeanimation
 #define BIT_HP                      0x1
 #define BIT_ATK                     0x2
 #define BIT_DEF                     0x4

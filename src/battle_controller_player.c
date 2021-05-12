@@ -285,11 +285,11 @@ static void HandleInputChooseAction(void)
     else if (JOY_NEW(B_BUTTON))
     {
         if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
-         && GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_RIGHT
+         && GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_RIGHT // 2nd player pokemon
          && !(gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)])
          && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
         {
-            if (gBattleBufferA[gActiveBattler][1] == B_ACTION_USE_ITEM)
+            if (gBattleBufferA[gActiveBattler][1] == B_ACTION_USE_ITEM) //cancel planned item use by 1st player pokemon
             {
                 // Add item to bag if it is a ball
                 if (itemId <= ITEM_PREMIER_BALL)
@@ -297,8 +297,26 @@ static void HandleInputChooseAction(void)
                 else
                     return;
             }
+            PlaySE(SE_SELECT); //play selection sound effect
+            BtlController_EmitTwoReturnValues(1, B_ACTION_CANCEL_PARTNER, 0); //return chosen action
+            PlayerBufferExecCompleted(); //finish action
+        }
+        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) // will hopefully setup run with b button
+            && GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_LEFT
+            && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
+        {
+            
             PlaySE(SE_SELECT);
-            BtlController_EmitTwoReturnValues(1, B_ACTION_CANCEL_PARTNER, 0);
+            BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0); // checked seems to work how I think, will trigger run not just move cursor.
+            PlayerBufferExecCompleted();
+        }
+        if ((gBattleTypeFlags & !BATTLE_TYPE_DOUBLE) // for single i think
+            && GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_LEFT
+            && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
+        {
+
+            PlaySE(SE_SELECT);
+            BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0);
             PlayerBufferExecCompleted();
         }
     }
@@ -438,7 +456,7 @@ void HandleInputChooseMove(void)
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
 
     PreviewDeterminativeMoveTargets();
-    if (JOY_NEW(A_BUTTON))
+    if (JOY_NEW(A_BUTTON)) //will prob need to put confusion effect here if I do it
     {
         u8 moveTarget;
 
@@ -471,7 +489,7 @@ void HandleInputChooseMove(void)
                 ++canSelectTarget; // either selected or user
             if (moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]] == 0)
             {
-                canSelectTarget = FALSE;
+                canSelectTarget = FALSE; // for confusion try keep this TRUE I just want the target selection, then attack going randomly
             }
             else if (!(moveTarget & (MOVE_TARGET_USER | MOVE_TARGET_USER_OR_SELECTED)) && CountAliveMonsInBattle(BATTLE_ALIVE_EXCEPT_ACTIVE) <= 1)
             {

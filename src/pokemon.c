@@ -2918,7 +2918,7 @@ void CalculateMonStats(struct Pokemon *mon)
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
     
-  if (ability == ABILITY_DISPIRIT_GUARD)
+  if (ability == ABILITY_DISPIRIT_GUARD && species == SPECIES_SHEDINJA)
   {
        s32 n = 2 * gBaseStats[species].baseHP + hpIV;
        newMaxHP = (((n + hpEV / 4) * level) / 100) + level;
@@ -2927,23 +2927,26 @@ void CalculateMonStats(struct Pokemon *mon)
  // if (!((ability == ABILITY_WONDER_GUARD && species == SPECIES_SHEDINJA) | (ability == ABILITY_DISPIRIT_GUARD && species == SPECIES_SHEDINJA))) // changed to line up with other if(!(   statements
 
 
-   if (species == SPECIES_SHEDINJA) // thinnk I may need to change this since I don't want pokemon to look like they have max hp, I went them to look almost dead,
-   {    
-       if (ability == ABILITY_WONDER_GUARD) {
-           currentHP = 1;
+   if (ability == ABILITY_WONDER_GUARD) //changed some things around, hopefully this works, to create 2 different states for shedinja & wonderguard
+   {
+       currentHP = 1;
+       if (species == SPECIES_SHEDINJA) {
+           
            newMaxHP = 1;
        }
-       while (ability != ABILITY_WONDER_GUARD && ability != ABILITY_DISPIRIT_GUARD) //ok changing this to shedinja but not wonderguard somehow made dispirit guard shedinja invincible, which is fine for castform testing I guess.
-       { // changed above from or to and
-           s32 n = 2 * gBaseStats[species].baseHP + hpIV;
-          newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
-          currentHP = newMaxHP; // if done right this shoud allow shedinja hp to grow after swapping off ability. still working on hp drop
-       } // actually its probn ^ this equalizing that causes it.
+       
    }
        //if correct, this should set wonder shedinja to maxhp 1,max hp will grow when he loses ability, and any other pokemon with wonder guard,
     // will have max hp stay same, while current hp should drop to 1.
-
-   else
+   if (species == SPECIES_SHEDINJA) {
+       while (ability != ABILITY_WONDER_GUARD && ability != ABILITY_DISPIRIT_GUARD) //ok changing this to shedinja but not wonderguard somehow made dispirit guard shedinja invincible, which is fine for castform testing I guess.
+       { // changed above from or to and
+           s32 n = 2 * gBaseStats[species].baseHP + hpIV;
+           newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
+           currentHP = newMaxHP; // if done right this shoud allow shedinja hp to grow after swapping off ability. still working on hp drop
+       } // actually its probn ^ this equalizing that causes it.
+   } // From what I learned from skill swap I need battle script for hp bar and hpupdate 
+   else // which both involve battlemovedamage I believe, so I think I may need to write a function for it, move damage to prevent fainting, think false swipe
    {
         s32 n = 2 * gBaseStats[species].baseHP + hpIV;
         newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
@@ -3091,7 +3094,7 @@ static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon)
     }
 }
 
-u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove)
+u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try and match cfru lvl 0 evo learn move function
 {
     u32 retVal = 0;
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -3105,15 +3108,16 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove)
     {
         sLearningMoveTableID = 0;
 
-        while ((gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) != (level << 9))
+        while ((gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) != (level << 9) && (gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) != 0)
         {
             sLearningMoveTableID++;
-            if (gLevelUpLearnsets[species][sLearningMoveTableID] == LEVEL_UP_END)
+            if (gLevelUpLearnsets[species][sLearningMoveTableID] == LEVEL_UP_END
+            && gLevelUpLearnsets[species][sLearningMoveTableID] == 0)
                 return 0;
         }
     }
 
-    if ((gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) == (level << 9))
+    if ((gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) == (level << 9) || (gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) == 0)
     {
         gMoveToLearn = (gLevelUpLearnsets[species][sLearningMoveTableID] & 0x1FF);
         sLearningMoveTableID++;
@@ -6403,6 +6407,41 @@ u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves)
 
      return numMoves;
 }
+
+/*u16 MonTryLearningNewMoveAfterEvolution(struct Pokemon* mon, bool8 firstMove) // ported direct from cfru
+{
+    u32 retVal = 0;
+    u16 species = mon->species;
+    u8 level = mon->level;
+    struct LevelUpMove lvlUpMove;
+
+    if (firstMove)
+    {
+        sLearningMoveTableID = 0;
+        lvlUpMove = gLevelUpLearnsets[species][sLearningMoveTableID];
+
+        while (lvlUpMove.level != 0 && lvlUpMove.level != level)
+        {
+            lvlUpMove = gLevelUpLearnsets[species][++sLearningMoveTableID];
+            if (lvlUpMove.move == 0
+                && lvlUpMove.level == 0xFF)
+                return retVal; //0
+        }
+    }
+
+    lvlUpMove = gLevelUpLearnsets[species][sLearningMoveTableID];
+    if (lvlUpMove.level == level || lvlUpMove.level == 0)
+    {
+        gMoveToLearn = lvlUpMove.move;
+
+
+
+        ++sLearningMoveTableID;
+        retVal = GiveMoveToMon(mon, gMoveToLearn);
+    }
+
+    return retVal;
+} */
 
 u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
 {

@@ -87,6 +87,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn);
 void ClearFuryCutterDestinyBondGrudge(u8 battlerId);
 void HandleAction_RunBattleScript(void);
 u8 GetMoveTarget(u16 move, u8 setTarget);
+bool32 IsBattlerAlive(u8 battlerId);
 u8 IsMonDisobedient(void);
 u8 GetBattleMoveSplit(u32 moveId);
 

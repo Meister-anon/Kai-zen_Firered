@@ -90,9 +90,12 @@ void BattleTurnPassed(void);
 u8 IsRunningFromBattleImpossible(void);
 void UpdatePartyOwnerOnSwitch_NonMulti(u8 battler);
 void SwapTurnOrder(u8 id1, u8 id2);
+s8 GetChosenMovePriority(u32 battlerId);
+s8 GetMovePriority(u32 battlerId, u16 move);										   
 u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves);
 void RunBattleScriptCommands_PopCallbacksStack(void);
 void RunBattleScriptCommands(void);
 bool8 TryRunFromBattle(u8 battler);
+//void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk); // from emerlad for move type change
 
 #endif // GUARD_BATTLE_MAIN_H

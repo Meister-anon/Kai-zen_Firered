@@ -1,7 +1,13 @@
 {
   "ExpandedNodes": [
     "",
+    "\\asm",
+    "\\asm\\macros",
+    "\\data",
+    "\\include",
+    "\\include\\constants",
     "\\src"
   ],
+  "SelectedNode": "\\include\\battle_scripts.h",
   "PreviewInSolutionExplorer": false
 }

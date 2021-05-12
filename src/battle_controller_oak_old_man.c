@@ -269,6 +269,24 @@ static void HandleInputChooseAction(void)
             BtlController_EmitTwoReturnValues(1, B_ACTION_CANCEL_PARTNER, 0);
             OakOldManBufferExecCompleted();
         }
+        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) // will hopefully setup run with b button
+            && GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_LEFT
+            && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
+        {
+
+            PlaySE(SE_SELECT);
+            BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0); // checked seems to work how I think, will trigger run not just move cursor.
+            OakOldManBufferExecCompleted();
+        }
+        if ((gBattleTypeFlags & !BATTLE_TYPE_DOUBLE) // for single i think
+            && GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_LEFT
+            && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
+        {
+
+            PlaySE(SE_SELECT);
+            BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0);
+            OakOldManBufferExecCompleted();
+        }
     }
     else if (JOY_NEW(START_BUTTON))
     {

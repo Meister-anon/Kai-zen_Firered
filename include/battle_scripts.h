@@ -226,8 +226,11 @@ extern const u8 BattleScript_IgnoresAndHitsItself[];
 extern const u8 BattleScript_MoveEffectRecoil[];
 extern const u8 BattleScript_FlushMessageBox[];
 extern const u8 BattleScript_SpikesOnFaintedBattler[];
-extern const u8 BattleScript_GhostBallDodge[];
-extern const u8 BattleScript_OldMan_Pokedude_CaughtMessage[];
+extern const u8 BattleScript_WildMonBallBlock[];
+extern const u8 BattleScript_NonGhost_BallDodge[];
+extern const u8 BattleScript_GhostBallDodge[]; //seems approximately here onward things are broken out onto battle_script_2.s file instead of the 1.s
+extern const u8 BattleScript_ExpOnCatch[];
+extern const u8 BattleScript_OldMan_Pokedude_CaughtMessage[]; // so maybe there's a cut off and things shouldn't be added below a certain point
 extern const u8 BattleScript_SilphScopeUnveiled[];
 extern const u8 BattleScript_BattleTowerTrainerBattleWon[];
 

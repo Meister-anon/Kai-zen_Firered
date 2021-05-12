@@ -763,7 +763,7 @@ struct ExternalEventFlags
 
 } __attribute__((packed));/*size = 0x15*/
 
-#define UNION_ROOM_KB_ROW_COUNT 10 //find out what this is?
+//#define UNION_ROOM_KB_ROW_COUNT 10 //find out what this is?
 
 struct SaveBlock1
 {
