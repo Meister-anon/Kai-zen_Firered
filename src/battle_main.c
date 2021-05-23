@@ -160,6 +160,7 @@ EWRAM_DATA u8 gBattlerAttacker = 0;
 EWRAM_DATA u8 gBattlerTarget = 0;
 EWRAM_DATA u8 gBattlerFainted = 0;
 EWRAM_DATA u8 gEffectBattler = 0;
+//EWRAM_DATA u8 gIsCriticalHit = FALSE; //added 
 EWRAM_DATA u8 gPotentialItemEffectBattler = 0;
 EWRAM_DATA u8 gAbsentBattlerFlags = 0;
 EWRAM_DATA u8 gCritMultiplier = 0;
@@ -215,8 +216,11 @@ EWRAM_DATA struct MonSpritesGfx *gMonSpritesGfxPtr = NULL;
 EWRAM_DATA u16 gBattleMovePower = 0;
 EWRAM_DATA u16 gMoveToLearn = 0;
 EWRAM_DATA u8 gBattleMonForms[MAX_BATTLERS_COUNT] = {0};
-//EWRAM_DATA struct FieldTimer gFieldTimers = { 0 };
+EWRAM_DATA u32 gFieldStatuses = 0;
+EWRAM_DATA struct FieldTimer gFieldTimers = { 0 };
 EWRAM_DATA u8 gBattlerAbility = 0;
+EWRAM_DATA bool8 gHasFetchedBall = FALSE;
+EWRAM_DATA u8 gLastUsedBall = 0;
 
 void (*gPreBattleCallback1)(void);
 void (*gBattleMainFunc)(void);
@@ -311,8 +315,8 @@ static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 
 // 10 is ×1.0 TYPE_MUL_NORMAL
 // 05 is ×0.5 TYPE_MUL_NOT_EFFECTIVE
 // 00 is ×0.0 TYPE_MUL_NO_EFFECT
-const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
-{ // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.
+const u8 gTypeEffectiveness[378] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+{ // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.  also means for every 1 line I add, array gets increased by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIRE, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
@@ -325,6 +329,7 @@ const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of
     TYPE_FIRE, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_WATER, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_WATER, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_WATER, TYPE_GRASS, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_WATER, TYPE_GROUND, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
@@ -345,7 +350,7 @@ const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of
     TYPE_GRASS, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_GRASS, TYPE_DRAGON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GRASS, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_ICE, TYPE_WATER, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_ICE, TYPE_BUG, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ICE, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ICE, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_ICE, TYPE_GROUND, TYPE_MUL_SUPER_EFFECTIVE,
@@ -1538,6 +1543,14 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
     u32 personalityValue;
     u8 fixedIV;
     s32 i, j;
+    u16 hEV;
+    u16 aEV;
+    u16 dEV;
+    u16 sEV;
+    u16 spaEV;
+    u16 spdEV;
+    u16 ability;
+    u8 abilityNum;
 
     if (trainerNum == TRAINER_SECRET_BASE)
         return 0;
@@ -1562,11 +1575,18 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             {
                 const struct TrainerMonNoItemDefaultMoves *partyData = gTrainers[trainerNum].party.NoItemDefaultMoves;
 
-                for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j)
-                    nameHash += gSpeciesNames[partyData[i].species][j];
+                for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j) // pt.2 it sets all ivs the same as long as iv is less than 32, & here uses u8 type and divisor to ensure it maxes @ 31.
+                    nameHash += gSpeciesNames[partyData[i].species][j]; // pt.3 making it always true, as long as using fixedIV 
                 personalityValue += nameHash << 8;
-                fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                fixedIV = partyData[i].iv * 31 / 255; //ok starting to get it, this part is linked with implementation from createboxmon in pokemon.c
+                hEV = partyData[i].hpEV;
+                aEV = partyData[i].attackEV;
+                dEV = partyData[i].defenseEV;
+                sEV = partyData[i].speedEV;
+                spaEV = partyData[i].spAttackEV;
+                spdEV = partyData[i].spDefenseEV;
+                CreateMon_ex(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                
                 break;
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET:
@@ -1577,6 +1597,12 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     nameHash += gSpeciesNames[partyData[i].species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
+                hEV = partyData[i].hpEV;
+                aEV = partyData[i].attackEV;
+                dEV = partyData[i].defenseEV;
+                sEV = partyData[i].speedEV;
+                spaEV = partyData[i].spAttackEV;
+                spdEV = partyData[i].spDefenseEV;
                 CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 for (j = 0; j < MAX_MON_MOVES; ++j)
                 {
@@ -1593,6 +1619,12 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     nameHash += gSpeciesNames[partyData[i].species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
+                hEV = partyData[i].hpEV;
+                aEV = partyData[i].attackEV;
+                dEV = partyData[i].defenseEV;
+                sEV = partyData[i].speedEV;
+                spaEV = partyData[i].spAttackEV;
+                spdEV = partyData[i].spDefenseEV;
                 CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
@@ -1606,6 +1638,12 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     nameHash += gSpeciesNames[partyData[i].species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
+                hEV = partyData[i].hpEV;
+                aEV = partyData[i].attackEV;
+                dEV = partyData[i].defenseEV;
+                sEV = partyData[i].speedEV;
+                spaEV = partyData[i].spAttackEV;
+                spdEV = partyData[i].spDefenseEV;
                 CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
                 for (j = 0; j < MAX_MON_MOVES; ++j)
@@ -1613,7 +1651,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
                     SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp);
                 }
-                break;
+                break;// still need to add my 2 fully custom structs need to figure out how to set abilityNum & any Ability
             }
             }
         }
@@ -2280,7 +2318,7 @@ void SwitchInClearSetData(void)
     s32 i;
     u8 *ptr;
 
-    if (gBattleMoves[gCurrentMove].effect != EFFECT_BATON_PASS)
+    if (gBattleMoves[gCurrentMove].effect != EFFECT_BATON_PASS) //baton pass is the only effect that saves values between switches
     {
         for (i = 0; i < NUM_BATTLE_STATS; ++i)
             gBattleMons[gActiveBattler].statStages[i] = 6;
@@ -2312,8 +2350,8 @@ void SwitchInClearSetData(void)
     }
     else
     {
-        gBattleMons[gActiveBattler].status2 = 0;
-        gStatuses3[gActiveBattler] = 0;
+        gBattleMons[gActiveBattler].status2 = 0; //this says status 2 & 3 get cleared on switch
+        gStatuses3[gActiveBattler] = 0; // if effect isn't baton pass
     }
     for (i = 0; i < gBattlersCount; ++i)
     {
@@ -2327,16 +2365,16 @@ void SwitchInClearSetData(void)
     ptr = (u8 *)&gDisableStructs[gActiveBattler];
     for (i = 0; i < sizeof(struct DisableStruct); ++i)
         ptr[i] = 0;
-    if (gBattleMoves[gCurrentMove].effect == EFFECT_BATON_PASS)
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_BATON_PASS)//tells it to copy values
     {
         gDisableStructs[gActiveBattler].substituteHP = disableStructCopy.substituteHP;
         gDisableStructs[gActiveBattler].battlerWithSureHit = disableStructCopy.battlerWithSureHit;
         gDisableStructs[gActiveBattler].perishSongTimer = disableStructCopy.perishSongTimer;
         gDisableStructs[gActiveBattler].perishSongTimerStartValue = disableStructCopy.perishSongTimerStartValue;
         gDisableStructs[gActiveBattler].battlerPreventingEscape = disableStructCopy.battlerPreventingEscape;
-    }
-    gMoveResultFlags = 0;
-    gDisableStructs[gActiveBattler].isFirstTurn = 2;
+    } // everything below this are the things cleared on switch
+    gMoveResultFlags = 0; // 0 nulls it
+    gDisableStructs[gActiveBattler].isFirstTurn = 2; //don't know what the 2 does.
     gLastMoves[gActiveBattler] = MOVE_NONE;
     gLastLandedMoves[gActiveBattler] = MOVE_NONE;
     gLastHitByType[gActiveBattler] = 0;
@@ -2355,7 +2393,7 @@ void SwitchInClearSetData(void)
     *(3 * 2 + gActiveBattler * 8 + (u8 *)(gBattleStruct->lastTakenMoveFrom) + 1) = 0;
     for (i = 0; i < gBattlersCount; ++i)
     {
-        if (i != gActiveBattler)
+        if (i != gActiveBattler) //battler that isn't being used
         {
             *(gBattleStruct->lastTakenMove + i * 2 + 0) = MOVE_NONE;
             *(gBattleStruct->lastTakenMove + i * 2 + 1) = MOVE_NONE;
@@ -2798,7 +2836,10 @@ static void TryDoEventsBeforeFirstTurn(void)
         }
         // Check all switch in abilities happening from the fastest mon to slowest.
         while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount) //change to work on switchin and when opponent switches pokemon.
-        {
+        { // maybe when opponent switch, can set switchabilcounter to player mon either 0 or 1
+            // prob need to make new if statement so it doesn't retrigger these may not work
+            //since I only want it to redo certain switchin abilities
+            //think I'll put them in array so they can be referred to by category
             if (AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter], 0, 0, 0) != 0)
                 ++effect;
             ++gBattleStruct->switchInAbilitiesCounter;
@@ -2819,7 +2860,7 @@ static void TryDoEventsBeforeFirstTurn(void)
                 return;
         }
         for (i = 0; i < gBattlersCount; ++i) // pointless, ruby leftover
-            ;
+            ; //semi-colon is normal
         for (i = 0; i < MAX_BATTLERS_COUNT; ++i)
         {
             *(gBattleStruct->monToSwitchIntoId + i) = PARTY_SIZE;
@@ -3114,7 +3155,7 @@ static void HandleTurnActionSelectionState(void)
                         MarkBattlerForControllerExec(gActiveBattler);
                     }
                     break;
-                case B_ACTION_SWITCH:
+                case B_ACTION_SWITCH: // does this work for opponenets if its not I can't use it.  checked pursuit function and it does
                     *(gBattleStruct->battlerPartyIndexes + gActiveBattler) = gBattlerPartyIndexes[gActiveBattler];
                     if (gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION) || gStatuses3[gActiveBattler] & STATUS3_ROOTED)
                     {
@@ -3330,15 +3371,15 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     if (WEATHER_HAS_EFFECT)
     {
         if ((gBattleMons[battler1].ability == ABILITY_SWIFT_SWIM && gBattleWeather & WEATHER_RAIN_ANY)
-         || (gBattleMons[battler1].ability == ABILITY_CHLOROPHYLL && gBattleWeather & WEATHER_SUN_ANY))
-         || (gBattleMons[battler1].ability == ABILITY_SAND_RUSH && gBattleWeather & WEATHER_SANDSTORM_ANY))
+         || (gBattleMons[battler1].ability == ABILITY_CHLOROPHYLL && gBattleWeather & WEATHER_SUN_ANY)
+         || (gBattleMons[battler1].ability == ABILITY_SAND_RUSH && gBattleWeather & WEATHER_SANDSTORM_ANY)
          || (gBattleMons[battler1].ability == ABILITY_SLUSH_RUSH && gBattleWeather & WEATHER_HAIL_ANY))
             speedMultiplierBattler1 = 2;
         else
             speedMultiplierBattler1 = 1;
         if ((gBattleMons[battler2].ability == ABILITY_SWIFT_SWIM && gBattleWeather & WEATHER_RAIN_ANY)
-         || (gBattleMons[battler2].ability == ABILITY_CHLOROPHYLL && gBattleWeather & WEATHER_SUN_ANY))
-         || (gBattleMons[battler2].ability == ABILITY_SAND_RUSH && gBattleWeather & WEATHER_SANDSTORM_ANY))
+         || (gBattleMons[battler2].ability == ABILITY_CHLOROPHYLL && gBattleWeather & WEATHER_SUN_ANY)
+         || (gBattleMons[battler2].ability == ABILITY_SAND_RUSH && gBattleWeather & WEATHER_SANDSTORM_ANY)
          || (gBattleMons[battler2].ability == ABILITY_SLUSH_RUSH && gBattleWeather & WEATHER_HAIL_ANY))
             speedMultiplierBattler2 = 2;
         else
@@ -3463,21 +3504,21 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         // both priorities are the same
         if (gBattleMoves[moveBattler1].priority == gBattleMoves[moveBattler2].priority)
         {
-            u8 holdeffect = ItemId_GetHoldEffect(gBattleMons[battler1].item;
-            u8 holdeffect2 = ItemId_GetHoldEffect(gBattleMons[battler2].item;
+            u8 holdEffect = ItemId_GetHoldEffect(gBattleMons[battler1].item);
+            u8 holdEffect2 = ItemId_GetHoldEffect(gBattleMons[battler2].item);
              //if (speedBattler1 == speedBattler2 && Random() & 1)
                  // QUICK CLAW - always first    0
                  // LAGGING TAIL - always last   1
                  // STALL - always last          2
 
 
-            if (holdeffect == HOLD_EFFECT_LAGGING_TAIL && holdeffect2 != HOLD_EFFECT_LAGGING_TAIL)
+            if (holdEffect == HOLD_EFFECT_LAGGING_TAIL && holdEffect2 != HOLD_EFFECT_LAGGING_TAIL)
                 strikesFirst = 1;
-            else if (holdeffect == HOLD_EFFECT_LAGGING_TAIL && holdeffect != HOLD_EFFECT_LAGGING_TAIL)
+            else if (holdEffect2 == HOLD_EFFECT_LAGGING_TAIL && holdEffect != HOLD_EFFECT_LAGGING_TAIL)
                 strikesFirst = 0;
-            else if (GetMonAbility(battler1) == ABILITY_STALL && GetMonAbility(battler2) != ABILITY_STALL)
+            else if (GetBattlerAbility(battler1) == ABILITY_STALL && GetBattlerAbility(battler2) != ABILITY_STALL)
                 strikesFirst = 1;
-            else if (GetMonAbility(battler2) == ABILITY_STALL && GetMonAbility(battler1) != ABILITY_STALL)
+            else if (GetBattlerAbility(battler2) == ABILITY_STALL && GetBattlerAbility(battler1) != ABILITY_STALL)
                 strikesFirst = 0;
             else
             {
@@ -3548,7 +3589,7 @@ static void SetActionsAndBattlersTurnOrder(void)
             gActiveBattler = 0;
             turnOrderId = 5;
         }
-        if (turnOrderId == 5) // One of battlers wants to run.
+        if (turnOrderId == 5) // One of battlers wants to run.  //important !!
         {
             gActionsByTurnOrder[0] = gChosenActionByBattler[gActiveBattler];
             gBattlerByTurnOrder[0] = gActiveBattler;
@@ -3913,11 +3954,11 @@ static void ReturnFromBattleToOverworld(void)
         if (gBattleTypeFlags & BATTLE_TYPE_ROAMER)
         {
             UpdateRoamerHPStatus(&gEnemyParty[0]);
-#ifdef BUGFIX
+
             if ((gBattleOutcome == B_OUTCOME_WON) || gBattleOutcome == B_OUTCOME_CAUGHT)
-#else
+/*#else
             if ((gBattleOutcome & B_OUTCOME_WON) || gBattleOutcome == B_OUTCOME_CAUGHT) // Bug: When Roar is used by roamer, gBattleOutcome is B_OUTCOME_PLAYER_TELEPORTED (5).
-#endif                                                                                  // & with B_OUTCOME_WON (1) will return TRUE and deactivates the roamer.
+#endif */                                                                                 // & with B_OUTCOME_WON (1) will return TRUE and deactivates the roamer.
                 SetRoamerInactive();
         }
         m4aSongNumStop(SE_LOW_HEALTH);
@@ -4118,7 +4159,7 @@ static void HandleAction_UseMove(void)
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 }
 
-static void HandleAction_Switch(void)
+static void HandleAction_Switch(void) // important also could be useful for switch  think this is the one
 {
     gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     gBattle_BG0_X = 0;
@@ -4126,8 +4167,8 @@ static void HandleAction_Switch(void)
     gActionSelectionCursor[gBattlerAttacker] = 0;
     gMoveSelectionCursor[gBattlerAttacker] = 0;
     PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, gBattlerAttacker, *(gBattleStruct->battlerPartyIndexes + gBattlerAttacker));
-    gBattleScripting.battler = gBattlerAttacker;
-    gBattlescriptCurrInstr = BattleScript_ActionSwitch;
+    gBattleScripting.battler = gBattlerAttacker; // will use this line also to ensure  the effet start here, then use && with the next line
+    gBattlescriptCurrInstr = BattleScript_ActionSwitch; // if this line I'll make sure those list of switch in abiities get re-applied.
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
     if (gBattleResults.playerSwitchesCounter < 255)
         ++gBattleResults.playerSwitchesCounter;
@@ -4554,16 +4595,16 @@ s8 GetMovePriority(u32 battlerId, u16 move) //ported from emerald the EXACT thin
 
 
     priority = gBattleMoves[move].priority;
-    if (GetMonAbility(battlerId) == ABILITY_GALE_WINGS
+    if (GetBattlerAbility(battlerId) == ABILITY_GALE_WINGS
         && gBattleMoves[move].type == TYPE_FLYING)
     {
         priority++;
     }
-    else if (GetMonAbility(battlerId) == ABILITY_PRANKSTER && IS_MOVE_STATUS(move))
+    else if (GetBattlerAbility(battlerId) == ABILITY_PRANKSTER && IS_MOVE_STATUS(move))
     {
         priority++;
     }
-    else if (GetMonAbility(battlerId) == ABILITY_TRIAGE)
+    else if (GetBattlerAbility(battlerId) == ABILITY_TRIAGE)
     {
         switch (gBattleMoves[move].effect)
         {
@@ -4583,7 +4624,7 @@ s8 GetMovePriority(u32 battlerId, u16 move) //ported from emerald the EXACT thin
             break;
         }
     }
-    else if (GetMonAbility(battlerId) == ABILITY_NUISANCE
+    else if (GetBattlerAbility(battlerId) == ABILITY_NUISANCE
         && gBattleMoves[move].power <= 60) 
     {
         priority += 3;

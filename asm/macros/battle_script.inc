@@ -1366,6 +1366,11 @@
 	.byte 0x10e
 	.endm
 
+	.macro jumpifdamaged param0:req
+	.byte 0x10f
+	.4byte \param0
+	.endm
+
 
 @ various command changed to more readable macros
 	.macro cancelmultiturnmoves battler:req

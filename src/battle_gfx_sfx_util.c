@@ -818,9 +818,9 @@ void HandleLowHpMusicChange(struct Pokemon *mon, u8 battlerId)
         if (!gBattleSpritesDataPtr->battlerData[battlerId].lowHpSong)
         {
             if (!gBattleSpritesDataPtr->battlerData[battlerId ^ BIT_FLANK].lowHpSong)
-                PlaySE(SE_LOW_HEALTH);
-            gBattleSpritesDataPtr->battlerData[battlerId].lowHpSong = 1;
-        }
+                PlaySE(SE_LOW_HEALTH); //no more annoying beeping, but I still get the music change, actually music change I'm thinking of is in black&white..
+            gBattleSpritesDataPtr->battlerData[battlerId].lowHpSong = 1; //ok I replaced the midi, with the black&white midi shiniysnover shared with me,
+        } // though I may need to adjust the .s to get the right tempo etc.
     }
     else
     {

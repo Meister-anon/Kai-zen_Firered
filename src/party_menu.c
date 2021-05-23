@@ -4320,8 +4320,8 @@ static void sub_8124E48(void)
     {
         GiveMoveToMon(&gPlayerParty[gPartyMenu.slotId], ItemIdToBattleMoveId(gSpecialVar_ItemId));
         AdjustFriendship(&gPlayerParty[gPartyMenu.slotId], 4);
-        if (gSpecialVar_ItemId <= ITEM_TM50)
-            RemoveBagItem(gSpecialVar_ItemId, 1);
+      //  if (gSpecialVar_ItemId <= ITEM_TM50)
+        //    RemoveBagItem(gSpecialVar_ItemId, 1);  ok THIS should make tms reusable
         SetMainCallback2(gPartyMenu.exitCallback);
     }
     else
@@ -4330,7 +4330,7 @@ static void sub_8124E48(void)
     }
 }
 
-static void sub_8124EFC(void)
+static void sub_8124EFC(void) //
 {
     if (PSA_IsCancelDisabled() == TRUE)
     {
@@ -4342,8 +4342,8 @@ static void sub_8124EFC(void)
         SetMonMoveSlot(mon, ItemIdToBattleMoveId(gSpecialVar_ItemId), moveIdx);
         AdjustFriendship(mon, 4);
         ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, mon, gSpecialVar_ItemId, move);
-        if (gSpecialVar_ItemId <= ITEM_TM50)
-            RemoveBagItem(gSpecialVar_ItemId, 1);
+        if (gSpecialVar_ItemId <= ITEM_TM50)   //think changing above is enough, need test to check it.
+            RemoveBagItem(gSpecialVar_ItemId, 1);  
         SetMainCallback2(gPartyMenu.exitCallback);
     }
     else

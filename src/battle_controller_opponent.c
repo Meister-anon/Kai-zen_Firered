@@ -1490,7 +1490,7 @@ static void OpponentHandleStatusIconUpdate(void)
     }
 }
 
-static void OpponentHandleStatusAnimation(void)
+static void OpponentHandleStatusAnimation(void) // may need to look into this
 {
     if (!IsBattleSEPlaying(gActiveBattler))
     {

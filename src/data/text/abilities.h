@@ -808,5 +808,5 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_AIR_LOCK] = _("AIR LOCK"),
     [ABILITY_DISPIRIT_GUARD] = _("DISPIRIT GUARD"),
     [ABILITY_NUISANCE] = _("NUISANCE"),
-    [ABILITY_HI_PRESSURE] = _("Hi_PRESSURE"),
+    [ABILITY_HI_PRESSURE] = _("Hi PRESSURE"), // had to remove underscore from name
 };

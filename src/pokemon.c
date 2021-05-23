@@ -2415,7 +2415,8 @@ static const u8 sGetMonDataEVConstants[] =
 static const u8 sStatsToRaise[] = 
 {
     STAT_ATK, STAT_ATK, STAT_SPEED, STAT_DEF, STAT_SPATK, STAT_ACC
-};
+}; // don't know why this has atk twice and no evasion or special defense
+// also apparently putting a comment aftre an array equal sign is the only time it actually breaks things.  for somer reason having this statement above by stateraise[]= broke connections
 
 static const s8 sFriendshipEventDeltas[][3] = 
 {
@@ -2509,7 +2510,7 @@ void ZeroMonData(struct Pokemon *mon)
     ZeroBoxMonData(&mon->box);
     arg = 0;
     SetMonData(mon, MON_DATA_STATUS, &arg); // looks like arg is 0 for all but mail. 
-    SetMonData(mon, MON_DATA_LEVEL, &arg); // I'll use this to make change level function, just set arg to 3
+    SetMonData(mon, MON_DATA_LEVEL, &arg); // I'll use this to make change level function, just set arg to 3    // did it, its function below
     SetMonData(mon, MON_DATA_HP, &arg);
     SetMonData(mon, MON_DATA_MAX_HP, &arg);
     SetMonData(mon, MON_DATA_ATK, &arg);
@@ -2521,7 +2522,7 @@ void ZeroMonData(struct Pokemon *mon)
     SetMonData(mon, MON_DATA_MAIL, &arg);
 }
 
-void ResetMonLevel(struct Pokemon* mon)
+void ResetMonLevel(struct Pokemon* mon) //.. did I do that?  huh yes I did. damn I forgot I made all those newgame+ functions
 {
     u32 arg;
     arg = 3;
@@ -2556,6 +2557,159 @@ void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFix
     arg = 255;
     SetMonData(mon, MON_DATA_MAIL, &arg);
     CalculateMonStats(mon);
+}
+
+void CreateMon_ex(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
+{
+    u32 arg; //duplicated original functions beause I just want to change it for trainers without having to redo all the parameters through entire rom
+    ZeroMonData(mon); //since create mon seems to use boxmon parameters, I need to add evs to boxmon then add same paremters to createmon_ex   also may rename Ex_CreateMon
+    CreateBoxMon_ex(&mon->box, species, level, fixedIV, hasFixedPersonality, fixedPersonality, otIdType, fixedOtId);
+    SetMonData(mon, MON_DATA_LEVEL, &level);
+    arg = 255;
+    SetMonData(mon, MON_DATA_MAIL, &arg);
+    CalculateMonStats(mon);
+}
+
+void CreateBoxMon_ex(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
+{
+    u8 speciesName[POKEMON_NAME_LENGTH + 1];
+    u32 personality;
+    u32 value;
+    u16 checksum;
+    u16 hEV;
+    u16 aEV;
+    u16 dEV;
+    u16 sEV;
+    u16 spaEV;
+    u16 spdEV;
+    u16 totalEVs;
+    u32 evAvg = MAX_TOTAL_EVS / NUM_STATS; //actually I may not need to even add the ev stuff to the parameters
+
+    totalEVs = (hEV + aEV + dEV + sEV + spaEV + spdEV);
+        hEV = SetMonData(boxMon, MON_DATA_HP_EV, &hEV);
+        aEV = SetMonData(boxMon, MON_DATA_ATK_EV, &aEV);
+        dEV = SetMonData(boxMon, MON_DATA_DEF_EV, &dEV);
+        sEV = SetMonData(boxMon, MON_DATA_SPEED_EV, &sEV);
+        spaEV = SetMonData(boxMon, MON_DATA_SPATK_EV, &spaEV);
+        spdEV = SetMonData(boxMon, MON_DATA_SPDEF_EV, &spdEV);
+
+        if (hEV > 564)
+            hEV = 564;
+
+        if (aEV > 564)
+            aEV = 564;
+
+        if (dEV > 564)
+            dEV = 564;
+
+        if (sEV > 564)
+            sEV = 564;
+
+        if (spaEV > 564)
+            spaEV = 564;
+
+        if (spdEV > 564)
+            spdEV = 564;
+
+        if (totalEVs >= MAX_TOTAL_EVS){
+            SetMonData(boxMon, MON_DATA_HP_EV, &evAvg;
+            SetMonData(boxMon, MON_DATA_ATK_EV, &evAvg);
+            SetMonData(boxMon, MON_DATA_DEF_EV, &evAvg);
+            SetMonData(boxMon, MON_DATA_SPEED_EV, &evAvg);
+            SetMonData(boxMon, MON_DATA_SPATK_EV, &evAvg);
+            SetMonData(boxMon, MON_DATA_SPDEF_EV, &evAvg);
+        }
+    
+    
+    ZeroBoxMonData(boxMon);
+
+    if (hasFixedPersonality)
+        personality = fixedPersonality;
+    else
+        personality = Random32();
+
+    SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
+
+    //Determine original trainer ID
+    if (otIdType == OT_ID_RANDOM_NO_SHINY) //Pokemon cannot be shiny
+    {
+        u32 shinyValue;
+        do
+        {
+            value = Random32();
+            shinyValue = HIHALF(value) ^ LOHALF(value) ^ HIHALF(personality) ^ LOHALF(personality);
+        } while (shinyValue < 8);
+    }
+    else if (otIdType == OT_ID_PRESET) //Pokemon has a preset OT ID
+    {
+        value = fixedOtId;
+    }
+    else //Player is the OT
+    {
+        value = gSaveBlock2Ptr->playerTrainerId[0]
+            | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+            | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+            | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
+    }
+
+    SetBoxMonData(boxMon, MON_DATA_OT_ID, &value);
+
+    checksum = CalculateBoxMonChecksum(boxMon);
+    SetBoxMonData(boxMon, MON_DATA_CHECKSUM, &checksum);
+    EncryptBoxMon(boxMon);
+    GetSpeciesName(speciesName, species);
+    SetBoxMonData(boxMon, MON_DATA_NICKNAME, speciesName);
+    SetBoxMonData(boxMon, MON_DATA_LANGUAGE, &gGameLanguage);
+    SetBoxMonData(boxMon, MON_DATA_OT_NAME, gSaveBlock2Ptr->playerName);
+    SetBoxMonData(boxMon, MON_DATA_SPECIES, &species);
+    SetBoxMonData(boxMon, MON_DATA_EXP, &gExperienceTables[gBaseStats[species].growthRate][level]);
+    SetBoxMonData(boxMon, MON_DATA_FRIENDSHIP, &gBaseStats[species].friendship);
+    value = GetCurrentRegionMapSectionId();
+    SetBoxMonData(boxMon, MON_DATA_MET_LOCATION, &value);
+    SetBoxMonData(boxMon, MON_DATA_MET_LEVEL, &level);
+    SetBoxMonData(boxMon, MON_DATA_MET_GAME, &gGameVersion);
+    value = ITEM_POKE_BALL;
+    SetBoxMonData(boxMon, MON_DATA_POKEBALL, &value);
+    SetBoxMonData(boxMon, MON_DATA_OT_GENDER, &gSaveBlock2Ptr->playerGender);
+
+    if (fixedIV < 32)
+    {
+        SetBoxMonData(boxMon, MON_DATA_HP_IV, &fixedIV);
+        SetBoxMonData(boxMon, MON_DATA_ATK_IV, &fixedIV);
+        SetBoxMonData(boxMon, MON_DATA_DEF_IV, &fixedIV);
+        SetBoxMonData(boxMon, MON_DATA_SPEED_IV, &fixedIV);
+        SetBoxMonData(boxMon, MON_DATA_SPATK_IV, &fixedIV);
+        SetBoxMonData(boxMon, MON_DATA_SPDEF_IV, &fixedIV);
+    }
+    else
+    {
+        u32 iv;
+        value = Random();
+
+        iv = value & 0x1F;
+        SetBoxMonData(boxMon, MON_DATA_HP_IV, &iv);
+        iv = (value & 0x3E0) >> 5;
+        SetBoxMonData(boxMon, MON_DATA_ATK_IV, &iv);
+        iv = (value & 0x7C00) >> 10;
+        SetBoxMonData(boxMon, MON_DATA_DEF_IV, &iv);
+
+        value = Random();
+
+        iv = value & 0x1F;
+        SetBoxMonData(boxMon, MON_DATA_SPEED_IV, &iv);
+        iv = (value & 0x3E0) >> 5;
+        SetBoxMonData(boxMon, MON_DATA_SPATK_IV, &iv);
+        iv = (value & 0x7C00) >> 10;
+        SetBoxMonData(boxMon, MON_DATA_SPDEF_IV, &iv);
+    }
+
+    if (gBaseStats[species].abilities[1]) //since these functions are used for creating wild mon too, (i think) I need to be careful here
+    {
+        value = personality & 1;
+        SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
+    }
+
+    GiveBoxMonInitialMoveset(boxMon);
 }
 
 void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
@@ -3025,13 +3179,14 @@ static u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move)
     for (i = 0; i < 4; i++)
     {
         u16 existingMove = GetBoxMonData(boxMon, MON_DATA_MOVE1 + i, NULL);
-        if (!existingMove)
+        if (!existingMove) //... this confuses me ..phoenixbound helped me out, since existing move is move +i and the ! is tellign to be false (which is 0)
+            // this essentially means stop at move 0, so it never loops further to possibly replace other moves and instead always takes the first
         {
             SetBoxMonData(boxMon, MON_DATA_MOVE1 + i, &move);
             SetBoxMonData(boxMon, MON_DATA_PP1 + i, &gBattleMoves[move].pp);
             return move;
         }
-        if (existingMove == move)
+        if (existingMove == move) ///uuh since move is u16 I guess this is the case where its returning 0xFFFF and deletes a move.
             return -2;
     }
     return -1;
@@ -3071,11 +3226,15 @@ static void GiveMonInitialMoveset(struct Pokemon *mon)
     GiveBoxMonInitialMoveset(&mon->box);
 }
 
-static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon)
+static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //important can use this to set up my nature based moveset ranking system
 {
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     s32 level = GetLevelFromBoxMonExp(boxMon);
     s32 i;
+    s32 personality; // added these two for later edits
+    u8 nature;
+
+    nature = GetNatureFromPersonality(personality); //put this somewhere
 
     for (i = 0; gLevelUpLearnsets[species][i] != LEVEL_UP_END; i++)
     {
@@ -3084,14 +3243,14 @@ static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon)
 
         moveLevel = (gLevelUpLearnsets[species][i] & 0xFE00);
 
-        if (moveLevel > (level << 9))
+        if (moveLevel > (level << 9)) // prevents learnign moves above level
             break;
 
         move = (gLevelUpLearnsets[species][i] & 0x1FF);
 
-        if (GiveMoveToBoxMon(boxMon, move) == 0xFFFF)
-            DeleteFirstMoveAndGiveMoveToBoxMon(boxMon, move);
-    }
+        if (GiveMoveToBoxMon(boxMon, move) == 0xFFFF) // this may be the move learn function I need.
+            DeleteFirstMoveAndGiveMoveToBoxMon(boxMon, move); //important since I know boxmon works for enemy npc & i think wild as well.
+    } // that function should be very useful for setting up wild move learning.
 }
 
 u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try and match cfru lvl 0 evo learn move function
@@ -3154,7 +3313,7 @@ void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move) // this impo
     SetMonData(mon, MON_DATA_PP_BONUSES, &ppBonuses);
 }
 
-static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move) // this may be used for daycare and wild mon level up laernset, prob need 2 change.
+static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move) //important this may be used for daycare and wild mon level up laernset, prob need 2 change.
 {
     s32 i;
     u16 moves[4];
@@ -3172,8 +3331,10 @@ static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 mo
     moves[3] = move;
     pp[3] = gBattleMoves[move].pp;
 
-    for (i = 0; i < 4; i++)
-    {
+    for (i = 0; i < 4; i++) // don't quite get what part of this is removing the move
+        // but if its starting at 0,i.e first move and looping through, it may just always stop at 0, and just replace that.
+    { // if tha's the case then all I'd need to do is ensure the move slot with the lowest ranking became i.
+        // then do the same thing for learning a move, but make sure the highest ranked becomes i, that's only in the case more than 1 move is to be learned.
         SetBoxMonData(boxMon, MON_DATA_MOVE1 + i, &moves[i]);
         SetBoxMonData(boxMon, MON_DATA_PP1 + i, &pp[i]);
     }
@@ -4541,7 +4702,7 @@ u8 GetMonsStateToDoubles(void)
     return (aliveCount > 1) ? PLAYER_HAS_TWO_USABLE_MONS : PLAYER_HAS_ONE_USABLE_MON;
 }
 
-u16 GetAbilityBySpecies(u16 species, bool8 abilityNum)
+u16 GetAbilityBySpecies(u16 species, bool8 abilityNum) //important  will try to add ability number to trainer mon type in trainers.h
 {
     if (abilityNum == 2)
         gLastUsedAbility = gBaseStats[species].abilityHidden;
@@ -6126,7 +6287,7 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
 void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function doesn't use exp, it proves ev gain is separate from exp gain.
 { //                                            this means making an item to 0 out exp gain wouldn't break exp gain.
     u16 evs[NUM_STATS]; //per stat evs                That means I can still hvae my item that blocks exp, and one that blocks ev but not exp.
-    u16 evIncrease = 0;
+    u16 evIncrease = 0; // above line means thre are 6 ev fields
     u16 totalEVs = 0;
     u16 heldItem;
     u8 holdEffect;

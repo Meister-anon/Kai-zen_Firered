@@ -13411,11 +13411,11 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_GLACEON] =
     {
-        .baseHP = 65,
+        .baseHP = 75,
         .baseAttack = 60,
         .baseDefense = 110,
-        .baseSpeed = 65,
-        .baseSpAttack = 130,
+        .baseSpeed = 75,
+        .baseSpAttack = 116,
         .baseSpDefense = 95,
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,

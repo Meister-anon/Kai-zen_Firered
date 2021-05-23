@@ -30,6 +30,8 @@
 #define ABILITYEFFECT_COUNT_BATTLER_SIDE         0x11
 #define ABILITYEFFECT_COUNT_ON_FIELD             0x12
 #define ABILITYEFFECT_CHECK_ON_FIELD             0x13
+#define ABILITYEFFECT_MOVE_END_OTHER             0x14
+#define ABILITYEFFECT_MOVE_END_ATTACKER          0x15
 #define ABILITYEFFECT_SWITCH_IN_WEATHER          0xFF
 
 #define ABILITY_ON_OPPOSING_FIELD(battlerId, abilityId)(AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, battlerId, abilityId, 0, 0))
@@ -39,6 +41,8 @@
 #define ITEMEFFECT_ON_SWITCH_IN                 0x0
 #define ITEMEFFECT_MOVE_END                     0x3
 #define ITEMEFFECT_KINGSROCK_SHELLBELL          0x4
+#define ITEMEFFECT_TARGET                       0x5
+#define ITEMEFFECT_ORBS                         0x6
 
 #define WEATHER_HAS_EFFECT ((!AbilityBattleEffects(ABILITYEFFECT_CHECK_ON_FIELD, 0, ABILITY_CLOUD_NINE, 0, 0) && !AbilityBattleEffects(ABILITYEFFECT_CHECK_ON_FIELD, 0, ABILITY_AIR_LOCK, 0, 0)))
 #define WEATHER_HAS_EFFECT2 ((!AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, ABILITY_CLOUD_NINE, 0, 0) && !AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, ABILITY_AIR_LOCK, 0, 0)))
@@ -88,6 +92,10 @@ void ClearFuryCutterDestinyBondGrudge(u8 battlerId);
 void HandleAction_RunBattleScript(void);
 u8 GetMoveTarget(u16 move, u8 setTarget);
 bool32 IsBattlerAlive(u8 battlerId);
+u32 GetBattlerAbility(u8 battlerId);
+bool32 IsBattlerGrounded(u8 battlerId);
+u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating);
+u32 GetBattlerHoldEffectParam(u8 battlerId);
 u8 IsMonDisobedient(void);
 u8 GetBattleMoveSplit(u32 moveId);
 

@@ -327,11 +327,11 @@
 #define TRAINER_BLACK_BELT_KIYO                  323
 #define TRAINER_BLACK_BELT_TAKASHI               324
 #define TRAINER_BLACK_BELT_DAISUKE               325
-#define TRAINER_RIVAL_OAKS_LAB_SQUIRTLE          326
-#define TRAINER_RIVAL_OAKS_LAB_BULBASAUR         327
-#define TRAINER_RIVAL_OAKS_LAB_CHARMANDER        328
+#define TRAINER_RIVAL_OAKS_LAB_SQUIRTLE          326  //first battle encounter in fire red
+#define TRAINER_RIVAL_OAKS_LAB_BULBASAUR         327	// can do simple re-defines by doing like strings and just subtracting by a number t ochange value, 
+#define TRAINER_RIVAL_OAKS_LAB_CHARMANDER        328 //think I'd just subtract 326 fromm everything as I think lab squirtle is first real firered value.
 #define TRAINER_RIVAL_ROUTE22_EARLY_SQUIRTLE     329
-#define TRAINER_RIVAL_ROUTE22_EARLY_BULBASAUR    330
+#define TRAINER_RIVAL_ROUTE22_EARLY_BULBASAUR    330	//actually that's not completely right, as scientist isn't the next battle after rival battle...
 #define TRAINER_RIVAL_ROUTE22_EARLY_CHARMANDER   331
 #define TRAINER_RIVAL_CERULEAN_SQUIRTLE          332
 #define TRAINER_RIVAL_CERULEAN_BULBASAUR         333

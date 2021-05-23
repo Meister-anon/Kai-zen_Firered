@@ -459,6 +459,23 @@ const u8 *const gPokeblockWasTooXStringTable[] = {
     sText_PokeblockWasTooSour
 };
 
+//ported from emerald
+static const u8 sText_MoldBreakerEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} breaks the mold!");
+static const u8 sText_TeravoltEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating \na bursting aura!");
+static const u8 sText_TurboblazeEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating\na blazing aura!");
+static const u8 sText_SlowStartEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} can't get going!");
+static const u8 sText_SlowStartEnd[] = _("{B_ATK_NAME_WITH_PREFIX} finally got\nstarted!");
+static const u8 sText_AnticipationActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} shuddered\nin anticipation!");
+static const u8 sText_ForewarnActivates[] = _("{B_SCR_ACTIVE_ABILITY} alerted {B_SCR_ACTIVE_NAME_WITH_PREFIX}\nto the {B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}!");
+static const u8 sText_UnnerveEnters[] = _("The opposing team is too nervous\nto eat Berries!");
+static const u8 sText_PressureActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is exerting its\npressure!");
+static const u8 sText_DarkAuraActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating\na dark aura!");
+static const u8 sText_FairyAuraActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating\na fairy aura!");
+static const u8 sText_AuraBreakActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} reversed all\nother POKéMON's auras!");
+static const u8 sText_ComatoseActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is drowsing!");
+static const u8 sText_ScreenCleanerActivates[] = _("All screens on the field were\ncleansed!");
+
+
 static const u8 sText_PlayerUsedItem[] = _("{B_PLAYER_NAME} used\n{B_LAST_ITEM}!");
 static const u8 sText_OldManUsedItem[] = _("The old man used\n{B_LAST_ITEM}!");
 static const u8 sText_PokedudeUsedItem[] = _("The POKé DUDE used\n{B_LAST_ITEM}!");
@@ -892,7 +909,21 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_TRAINER1MON1COMEBACK - 12]          = sText_Trainer1RecallPkmn1,
     [STRINGID_TRAINER1WINTEXT - 12]               = sText_Trainer1WinText,
     [STRINGID_TRAINER1MON2COMEBACK - 12]          = sText_Trainer1RecallPkmn2,
-    [STRINGID_TRAINER1MON1AND2COMEBACK - 12]      = sText_Trainer1RecallBoth
+    [STRINGID_TRAINER1MON1AND2COMEBACK - 12]      = sText_Trainer1RecallBoth,
+    [STRINGID_PRESSUREENTERS - 12]                = sText_PressureActivates,
+    [STRINGID_DARKAURAENTERS - 12]                = sText_DarkAuraActivates,
+    [STRINGID_FAIRYAURAENTERS - 12]               = sText_FairyAuraActivates,
+    [STRINGID_AURABREAKENTERS - 12]               = sText_AuraBreakActivates,
+    [STRINGID_COMATOSEENTERS - 12]                = sText_ComatoseActivates,
+    [STRINGID_SCREENCLEANERENTERS - 12]           = sText_ScreenCleanerActivates,
+    [STRINGID_ANTICIPATIONACTIVATES - 12]         = sText_AnticipationActivates,
+    [STRINGID_FOREWARNACTIVATES - 12]             = sText_ForewarnActivates,
+    [STRINGID_UNNERVEENTERS - 12] = sText_UnnerveEnters,
+    [STRINGID_MOLDBREAKERENTERS - 12] = sText_MoldBreakerEnters,
+    [STRINGID_TERAVOLTENTERS - 12] = sText_TeravoltEnters,
+    [STRINGID_TURBOBLAZEENTERS - 12] = sText_TurboblazeEnters,
+    [STRINGID_SLOWSTARTENTERS - 12] = sText_SlowStartEnters,
+    [STRINGID_SLOWSTARTEND - 12] = sText_SlowStartEnd,
 };
 
 const u16 gMissStringIds[] = {
@@ -919,6 +950,24 @@ const u16 gMoveWeatherChangeStringIds[] = {
     STRINGID_SUNLIGHTGOTBRIGHT,
     STRINGID_STARTEDHAIL
 };
+
+const u16 gSwitchInAbilityStringIds[] =
+{
+    [MULTI_SWITCHIN_MOLDBREAKER] = STRINGID_MOLDBREAKERENTERS,
+    [MULTI_SWITCHIN_TERAVOLT] = STRINGID_TERAVOLTENTERS,
+    [MULTI_SWITCHIN_TURBOBLAZE] = STRINGID_TURBOBLAZEENTERS,
+    [MULTI_SWITCHIN_SLOWSTART] = STRINGID_SLOWSTARTENTERS,
+    [MULTI_SWITCHIN_UNNERVE] = STRINGID_UNNERVEENTERS,
+    [MULTI_SWITCHIN_ANTICIPATION] = STRINGID_ANTICIPATIONACTIVATES,
+    [MULTI_SWITCHIN_FOREWARN] = STRINGID_FOREWARNACTIVATES,
+    [MULTI_SWITCHIN_PRESSURE] = STRINGID_PRESSUREENTERS,
+    [MULTI_SWITCHIN_DARKAURA] = STRINGID_DARKAURAENTERS,
+    [MULTI_SWITCHIN_FAIRYAURA] = STRINGID_FAIRYAURAENTERS,
+    [MULTI_SWITCHIN_AURABREAK] = STRINGID_AURABREAKENTERS,
+    [MULTI_SWITCHIN_COMATOSE] = STRINGID_COMATOSEENTERS,
+    [MULTI_SWITCHIN_SCREENCLEANER] = STRINGID_SCREENCLEANERENTERS,
+};
+
 
 const u16 gSandstormHailContinuesStringIds[] = {
     STRINGID_SANDSTORMRAGES,

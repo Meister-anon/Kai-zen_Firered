@@ -23,14 +23,14 @@ struct PokemonSubstruct1
     u8 pp[4];
 };
 
-struct PokemonSubstruct2
+struct PokemonSubstruct2 // keep going back and forth but I'm pretty sure these must be u16
 {
-    u8 hpEV;
-    u8 attackEV;
-    u8 defenseEV;
-    u8 speedEV;
-    u8 spAttackEV;
-    u8 spDefenseEV;
+    u16 hpEV;
+    u16 attackEV;
+    u16 defenseEV;
+    u16 speedEV;
+    u16 spAttackEV;
+    u16 spDefenseEV;
     u8 cool;
     u8 beauty;
     u8 cute;
@@ -49,7 +49,7 @@ struct PokemonSubstruct3
  /* 0x03 */ u16 pokeball:4;
  /* 0x03 */ u16 otGender:1;
 
- /* 0x04 */ u32 hpIV:5;
+ /* 0x04 */ u32 hpIV:5;  // bit 5 is 31  i.e 32-1
  /* 0x04 */ u32 attackIV:5;
  /* 0x05 */ u32 defenseIV:5;
  /* 0x05 */ u32 speedIV:5;
@@ -128,7 +128,7 @@ struct PokemonStorage
     /*0x83C2*/ u8 boxWallpapers[TOTAL_BOXES_COUNT];
 };
 
-struct BattleTowerPokemon
+struct BattleTowerPokemon //since this struct is separate think I can leave the evs here, but not much reason not to increase them too
 {
     /*0x00*/ u16 species;
     /*0x02*/ u16 heldItem;
@@ -211,7 +211,7 @@ struct BaseStats  // had to adjust struct order to match paste value from base_s
  /* 0x0A */ u16 evYield_Attack:2;
  /* 0x0A */ u16 evYield_Defense:2;
  /* 0x0A */ u16 evYield_Speed:2;
- /* 0x0B */ u16 evYield_SpAttack:2;
+ /* 0x0B */ u16 evYield_SpAttack:2; //can confirm this value is yield from defeated pokeomn since bit 2 is 0-2
  /* 0x0B */ u16 evYield_SpDefense:2;
  /* 0x0C */ u16 item1;
  /* 0x0E */ u16 item2;
@@ -247,11 +247,11 @@ struct BattleMove
 extern const struct BattleMove gBattleMoves[];
 
 /*#define FLAG_MAKES_CONTACT          0x1
-#define FLAG_PROTECT_AFFECTED       0x2
-#define FLAG_MAGICCOAT_AFFECTED     0x4
-#define FLAG_SNATCH_AFFECTED        0x8
+#define FLAG_PROTECT_AFFECTED       0x2 these only match because I went back and replaced all instances of the old names
+#define FLAG_MAGIC_COAT_AFFECTED     0x4
+#define FLAG_SNATCH_AFFECTED        0x8 only had to change kings rock & magic coat
 #define FLAG_MIRROR_MOVE_AFFECTED   0x10
-#define FLAG_KINGSROCK_AFFECTED     0x20*/
+#define FLAG_KINGS_ROCK_AFFECTED     0x20*/
 
 // Battle move flags
 #define FLAG_MAKES_CONTACT          (1 << 0)
@@ -287,7 +287,7 @@ struct SpindaSpot
 
 struct __attribute__((packed)) LevelUpMove
 {
-    u16 move:9;
+    u16 move; //removed the :9 bitwise stuff, think it may be larger without it
     u16 level:7;
 };
 
@@ -384,7 +384,9 @@ void ZeroEnemyPartyMons(void);
 void ResetPlayerPartyMons(void);
 void ResetMonLevel(struct Pokemon *mon);
 void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId);
+void CreateMon_ex(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId);
 void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId);
+void CreateBoxMon_ex(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId);
 void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 nature);
 void CreateMonWithGenderNatureLetter(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 gender, u8 nature, u8 unownLetter);
 void CreateMaleMon(struct Pokemon *mon, u16 species, u8 level);

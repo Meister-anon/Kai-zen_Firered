@@ -152,14 +152,12 @@
 #define STATUS3_YAWN                    0x1800  // two bits
 #define STATUS3_IMPRISONED_OTHERS       0x2000
 #define STATUS3_GRUDGE                  0x4000
-#define STATUS3_CANT_SCORE_A_CRIT       0x8000
-#define STATUS3_MUDSPORT                0x10000
-#define STATUS3_WATERSPORT              0x20000
-#define STATUS3_UNDERWATER              0x40000
-#define STATUS3_INTIMIDATE_POKES        0x80000
-#define STATUS3_TRACE                   0x100000
-#define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER)
-*/
+#define STATUS3_CANT_SCORE_A_CRIT       0x8000 */
+//#define STATUS3_UNDERWATER              0x40000
+//#define STATUS3_INTIMIDATE_POKES        0x80000
+//#define STATUS3_TRACE                   0x100000
+//#define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER)
+
 #define STATUS3_LEECHSEED_BATTLER       (1 << 0 | 1 << 1) // The battler to receive HP from Leech Seed
 #define STATUS3_LEECHSEED               (1 << 2)
 #define STATUS3_ALWAYS_HITS             (1 << 3 | 1 << 4)
@@ -191,6 +189,10 @@
 #define STATUS3_LASER_FOCUS             (1 << 29)
 #define STATUS3_ELECTRIFIED             (1 << 30)
 #define STATUS3_POWER_TRICK             (1 << 31)
+#define STATUS3_MUDSPORT                0x10000  //hopefully can still work,    it worked, thanks goodness
+#define STATUS3_WATERSPORT              0x20000
+//#define STATUS3_MUDSPORT                (1 << 32) //figured its easier to just stick to the end... too big for u32 type...
+//#define STATUS3_WATERSPORT              (1 << 33)
 #define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER | STATUS3_PHANTOM_FORCE)
 
 // Not really sure what a "hitmarker" is.
@@ -247,8 +249,8 @@
 #define STATUS_FIELD_MAGIC_ROOM         0x1
 #define STATUS_FIELD_TRICK_ROOM         0x2
 #define STATUS_FIELD_WONDER_ROOM        0x4
-#define STATUS_FIELD_MUDSPORT           0x8
-#define STATUS_FIELD_WATERSPORT         0x10
+//#define STATUS_FIELD_MUDSPORT           0x8  will try to keep these 2 in status3 because they didn't use a timer
+//#define STATUS_FIELD_WATERSPORT         0x10
 #define STATUS_FIELD_GRAVITY            0x20
 #define STATUS_FIELD_GRASSY_TERRAIN     0x40
 #define STATUS_FIELD_MISTY_TERRAIN      0x80
@@ -285,7 +287,17 @@
 #define WEATHER_HAIL_ANY            (WEATHER_HAIL)
 #define WEATHER_ANY                 (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_SUN_ANY | WEATHER_HAIL_ANY)
 
-// Move Effects
+// Battle Weather as enum
+#define ENUM_WEATHER_NONE           0
+#define ENUM_WEATHER_RAIN           1
+#define ENUM_WEATHER_SUN            2
+#define ENUM_WEATHER_SANDSTORM      3
+#define ENUM_WEATHER_HAIL           4
+#define REPEAT_SWITCH_IN            5 // Value added hopefully to make macro for list of abilities
+
+// Move Effects     
+//since it counts move effects to determine if status 1
+//I'll  prob need to reorder list and put spirit lock @ 7
 #define MOVE_EFFECT_NOTHING_0           0x0
 #define MOVE_EFFECT_SLEEP               0x1
 #define MOVE_EFFECT_POISON              0x2
@@ -324,7 +336,7 @@
 #define MOVE_EFFECT_RAPIDSPIN           0x23
 #define MOVE_EFFECT_REMOVE_PARALYSIS    0x24
 #define MOVE_EFFECT_ATK_DEF_DOWN        0x25
-#define MOVE_EFFECT_RECOIL_33           0x26
+#define MOVE_EFFECT_RECOIL_33           0x26  //Double Edge
 #define MOVE_EFFECT_ATK_PLUS_2          0x27
 #define MOVE_EFFECT_DEF_PLUS_2          0x28
 #define MOVE_EFFECT_SPD_PLUS_2          0x29
@@ -341,17 +353,28 @@
 #define MOVE_EFFECT_EVS_MINUS_2         0x34
 #define MOVE_EFFECT_THRASH              0x35
 #define MOVE_EFFECT_KNOCK_OFF           0x36
-#define MOVE_EFFECT_NOTHING_37          0x37
-#define MOVE_EFFECT_NOTHING_38          0x38
-#define MOVE_EFFECT_NOTHING_39          0x39
-#define MOVE_EFFECT_NOTHING_3A          0x3A
+#define MOVE_EFFECT_INLOVE				0x37
+#define MOVE_EFFECT_CLEAR_SMOG          0x38
+#define MOVE_EFFECT_SMACK_DOWN          0x39
+#define MOVE_EFFECT_FLAME_BURST         0x3A
 #define MOVE_EFFECT_SP_ATK_TWO_DOWN     0x3B
-#define MOVE_EFFECT_NOTHING_3C          0x3C
-#define MOVE_EFFECT_NOTHING_3D          0x3D
-#define MOVE_EFFECT_NOTHING_3E          0x3E
-#define MOVE_EFFECT_NOTHING_3F          0x3F
-#define MOVE_EFFECT_AFFECTS_USER        0x40
-#define MOVE_EFFECT_CERTAIN             0x80
+#define MOVE_EFFECT_FEINT				0x3C
+#define MOVE_EFFECT_SPECTRAL_THIEF      0x3D
+#define MOVE_EFFECT_V_CREATE	        0x3E
+#define MOVE_EFFECT_HAPPY_HOUR          0x3F
+#define MOVE_EFFECT_CORE_ENFORCER       0x40
+#define MOVE_EFFECT_THROAT_CHOP         0x41
+#define MOVE_EFFECT_INCINERATE          0x42
+#define MOVE_EFFECT_BUG_BITE	        0x43
+#define MOVE_EFFECT_DEF_SPDEF_DOWN	    0x44
+#define MOVE_EFFECT_RECOIL_50	        0x45
+#define MOVE_EFFECT_RECOIL_33_STATUS	0x46
+#define MOVE_EFFECT_AFFECTS_USER        0x47 //going to add new move effects below this and redifine thsi to 41 hpoefullt no issues
+#define MOVE_EFFECT_CERTAIN             0x87 //actuallyI can just replace a "nothing" effect
+// not sure but guessing these have to end in 0,
+//so moved up (not to thousands like in emerald,)
+//but still enough that I'll never run into it.
+//setting to 400 & 800 caused a type overflow so I set back to previous
 
 /*// Move Effects
 #define MOVE_EFFECT_SLEEP               0x1
@@ -412,6 +435,7 @@
 #define MOVE_EFFECT_DEF_SPDEF_DOWN      0x37
 #define MOVE_EFFECT_RECOIL_33_STATUS    0x38
 #define MOVE_EFFECT_RECOIL_50           0x39
+//new move effects
 #define MOVE_EFFECT_CLEAR_SMOG          0x3A
 #define MOVE_EFFECT_SP_ATK_TWO_DOWN     0x3B
 #define MOVE_EFFECT_SMACK_DOWN          0x3C

@@ -31,6 +31,8 @@
 #define __(x) (x)
 #endif // __APPLE__
 
+//#define ARRAY_COUNT(array) (size_t)(sizeof(array) / sizeof((array)[0]))
+
 #define NELEMS(array) (sizeof(array) / sizeof((array)[0]))
 
 #define SWAP(a, b, temp)    \
@@ -47,6 +49,7 @@
 
 // Converts a number to Q4.12 fixed-point format
 #define Q_4_12(n)  ((s16)((n) * 4096))
+#define UQ_4_12(n)  ((u16)((n) * 4096))
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 #define max(a, b) ((a) >= (b) ? (a) : (b))
@@ -822,7 +825,7 @@ struct SaveBlock1
     /*0x3A4C*/ u8 rivalName[PLAYER_NAME_LENGTH + 1];
     /*0x3A54*/ struct FameCheckerSaveData fameChecker[NUM_FAMECHECKER_PERSONS];
     /*0x3A94*/ u8 filler3A94[0x40];
-    /*0x3AD4*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21];
+    /*0x3AD4*/ //u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21]; removed elsewhere so uncommented here
     /*0x3BA8*/ struct TrainerNameRecord trainerNameRecords[20];
     /*0x3C98*/ struct DaycareMon route5DayCareMon;
     /*0x3D24*/ u8 filler3D24[0x10];

@@ -10,6 +10,8 @@
 #define WINDOW_x80              0x80
 
 void SetMoveEffect(bool8 primary, u8 certain);
+bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move);
+bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move);
 bool8 UproarWakeUpCheck(u8 battlerId);
 bool32 CanUseLastResort(u8 battlerId);
 u32 IsFlowerVeilProtected(u32 battler);
@@ -25,6 +27,12 @@ void BattleDestroyYesNoCursorAt(void);
 void HandleBattleWindow(u8 xStart, u8 yStart, u8 xEnd, u8 yEnd, u8 flags);
 u8 GetBattlerTurnOrderNum(u8 battlerId);
 void BufferMoveToLearnIntoBattleTextBuff2(void);
+s32 atk_diff(void);  // removed because it seems functions in script_commands need to be defined in the .c instead of the .h   nope that didn't do it.
+s32 spatk_diff(void);
+
+
+//static s32 set_physicalsplit(void);
+//static s32 set_specialsplit(void);
 
 extern void (* const gBattleScriptingCommandsTable[])(void);
 

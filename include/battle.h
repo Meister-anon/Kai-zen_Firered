@@ -74,6 +74,12 @@ struct TrainerMonNoItemDefaultMoves
     u16 iv;
     u8 lvl;
     u16 species;
+    u16 hpEV;
+    u16 attackEV;
+    u16 defenseEV;
+    u16 speedEV;
+    u16 spAttackEV;
+    u16 spDefenseEV;
 };
 
 struct TrainerMonItemDefaultMoves
@@ -82,6 +88,12 @@ struct TrainerMonItemDefaultMoves
     u8 lvl;
     u16 species;
     u16 heldItem;
+    u16 hpEV;
+    u16 attackEV;
+    u16 defenseEV;
+    u16 speedEV;
+    u16 spAttackEV;
+    u16 spDefenseEV;
 };
 
 struct TrainerMonNoItemCustomMoves
@@ -90,8 +102,14 @@ struct TrainerMonNoItemCustomMoves
     u8 lvl;
     u16 species;
     u16 moves[4];
-    u16 ability;
-};
+   // u16 ability; //believe I'll change these to either abilityNum or keep the same, may put ability; on CustomAll so can pick abilities not typical on pokemon
+    u16 hpEV;
+    u16 attackEV;
+    u16 defenseEV;
+    u16 speedEV;
+    u16 spAttackEV;
+    u16 spDefenseEV;
+}; // also need to figure out how iv is being used/calculated then replace with evs if possible. Note remember abilityNum is u8  usually shown as abilityNum:2  
 
 struct TrainerMonItemCustomMoves
 {
@@ -100,8 +118,45 @@ struct TrainerMonItemCustomMoves
     u16 species;
     u16 heldItem;
     u16 moves[4];
-    u16 ability;
+    //u16 ability;
+    u16 hpEV;
+    u16 attackEV;
+    u16 defenseEV;
+    u16 speedEV;
+    u16 spAttackEV;
+    u16 spDefenseEV;
 };
+
+/*struct TrainerMonNoItemCustomAll
+{
+    u16 iv;
+    u8 lvl;
+    u16 species;
+    u16 moves[4];
+    u16 ability; // setting abilityNum shouldn't be difficult as its part of the set/get data struct but just abilities isn't
+    u16 hpEV; // and from what I now know of run time changes I can't simply change it by adding a struct value
+    u16 attackEV; // what I'll have to do is set up a field/value that will equate the ability in basestats species ability num to the ability I want
+    u16 defenseEV;
+    u16 speedEV;
+    u16 spAttackEV; // essentially I'll be generating a pokemon where all of there ability slots are changed to the ability I want.
+    u16 spDefenseEV; // I'll just need an approrpriate condition to trigger it on as well.  I imagine it should be simple to how I worked out changing split for hidden power
+}; //           in battle_script_commands.c
+
+struct TrainerMonItemCustomAll
+{
+    u16 iv;
+    u8 lvl;
+    u16 species;
+    u16 heldItem;
+    u16 moves[4];
+    u16 ability;
+    u16 hpEV;
+    u16 attackEV;
+    u16 defenseEV;
+    u16 speedEV;
+    u16 spAttackEV;
+    u16 spDefenseEV;
+};*/
 
 union TrainerMonPtr
 {
@@ -191,6 +246,9 @@ struct ProtectStruct
 {
     /* field_0 */
     u32 protected:1;
+    u32 spikyShielded:1;
+    u32 kingsShielded:1;
+    u32 banefulBunkered:1;
     u32 endured:1;
     u32 noValidMoves:1;
     u32 helpingHand:1;
@@ -198,6 +256,7 @@ struct ProtectStruct
     u32 stealMove:1;
     u32 flag0Unknown:1;
     u32 prlzImmobility:1;
+    //u32 sprtlockImmobility:1;
     /* field_1 */
     u32 confusionSelfDmg:1;
     u32 targetNotAffected:1;
@@ -306,6 +365,7 @@ struct FieldTimer
     u8 echoVoiceCounter;
     u8 gravityTimer;
     u8 fairyLockTimer;
+
 };
 
 
@@ -367,7 +427,7 @@ struct BattleHistory
     /*0x20*/ u16 abilities[MAX_BATTLERS_COUNT / 2]; //why are these divided by 2?
     /*0x24*/ u8 itemEffects[MAX_BATTLERS_COUNT / 2];
     /*0x26*/ u16 trainerItems[MAX_BATTLERS_COUNT];
-             u16 usedMoves[MAX_BATTLERS_COUNT][MAX_MON_MOVES];
+           //  u16 usedMoves[MAX_BATTLERS_COUNT][MAX_MON_MOVES]; think from here after was added from emerald so this part is a duplicate
              u16 moveHistory[MAX_BATTLERS_COUNT][AI_MOVE_HISTORY_COUNT]; // 3 last used moves for each battler
              u8 moveHistoryIndex[MAX_BATTLERS_COUNT]; //move history hopefully useful for my ai purposes, they learn movesets as they're used
     /*0x2E*/ u8 itemsNo;  //don't know what count is but no longer 2E
@@ -562,6 +622,8 @@ struct BattleStruct
     u8 friskedBattler; // Frisk needs to identify 2 battlers in double battles.
     bool8 friskedAbility; // If identifies two mons, show the ability pop-up only once.
     u16 changedSpecies[PARTY_SIZE]; // For Zygarde or future forms when multiple mons can change into the same pokemon.
+    u8 roostTypes[MAX_BATTLERS_COUNT][3];
+    u8 ateBerry[2]; // array id determined by side, each party pokemon as bit
     u8 padding_1E4[0x1C];
 }; // size == 0x200 bytes / different now,prob more also not sure if all after multibuffer are needed
 
@@ -587,9 +649,11 @@ extern struct BattleStruct *gBattleStruct;
 {                                                   \
     gBattleMons[battlerId].type1 = type;            \
     gBattleMons[battlerId].type2 = type;            \
-    gBattleMons[battlerId].type3 = TYPE_MYSTERY;    \ 
+    gBattleMons[battlerId].type3 = TYPE_MYSTERY;    \
 } //think I understand this type 3, some moves add a 3rd type but they can't "add" it if it doesn't exist
 // so setting type 3 to mystery ensures it doesn't effect type match ups until its changed.
+
+//#define SET_MOVE_SPLIT(moveId, split)
 
 #define GET_STAT_BUFF_ID(n)((n & 0xF))              // first four bits 0x1, 0x2, 0x4, 0x8
 #define GET_STAT_BUFF_VALUE2(n)((n & 0xF0))
@@ -600,7 +664,7 @@ extern struct BattleStruct *gBattleStruct;
 
 #define SET_STATCHANGER(statId, stage, goesDown)(gBattleScripting.statChanger = (statId) + (stage << 4) + (goesDown << 7))
 #define SET_STATCHANGER2(dst, statId, stage, goesDown)(dst = (statId) + ((stage) << 3) + (goesDown << 7))
-// believe ^ is or moody
+// believe ^ is for moody
 struct BattleScripting
 {
     s32 painSplitHp;
@@ -632,7 +696,8 @@ struct BattleScripting
     s32 savedDmg;
     u16 savedMoveEffect; // For moves hitting multiple targets.
     u16 moveEffect; // acutall exponcatch I'll prob make into bs command so can control with function
-    u16 multihitMoveEffect;
+    u8 savedBattler;
+    // u16 multihitMoveEffect;
  //   bool8 expOnCatch;// may add but tie to taking damage
   //  u8 illusionNickHack; // To properly display nick in STRINGID_ENEMYABOUTTOSWITCHPKMN. // I've removed that from my game so I don't need that in my game, but do if I plan to make a normal base for everyone
   //  bool8 fixedPopup;   // force ability popup to stick until manually called back
@@ -722,30 +787,8 @@ struct BattleSpriteData
 
 extern struct BattleSpriteData *gBattleSpritesDataPtr;
 
-struct MegaEvolutionData
-{
-    u8 toEvolve; // As flags using gBitTable.
-    u8 evolvedPartyIds[2]; // As flags using gBitTable;
-    bool8 alreadyEvolved[4]; // Array id is used for mon position.
-    u16 evolvedSpecies[MAX_BATTLERS_COUNT];
-    u16 playerEvolvedSpecies;
-    u8 battlerId;
-    bool8 playerSelect;
-    u8 triggerSpriteId;
-    bool8 isWishMegaEvo;
-};
 
-struct Illusion
-{
-    u8 on;
-    u8 set;
-    u8 broken;
-    u8 partyId;
-    struct Pokemon* mon;
-};
-
-
-// Move this somewhere else
+// Move this somewhere else   (can't remember if I wrote thi sor not
 
 #include "sprite.h"
 
@@ -803,6 +846,7 @@ extern u16 gCurrentMove;
 extern u16 gChosenMove;
 extern u16 gCalledMove;
 extern u8 gCritMultiplier;
+//extern u8 gIsCriticalHit;
 extern u16 gBattleWeather;
 extern u16 gLastUsedAbility;
 extern u8 gBattlerInMenuId;
@@ -873,7 +917,10 @@ extern u8 gChosenActionByBattler[MAX_BATTLERS_COUNT];
 extern u8 gBattleTerrain;
 extern struct MultiBattlePokemonTx gMultiPartnerParty[3];
 extern u16 gRandomTurnNumber;
-//extern struct FieldTimer gFieldTimers;
+extern u32 gFieldStatuses;
+extern struct FieldTimer gFieldTimers; //both needed for things like gravity etc.
 extern u8 gBattlerAbility;
+extern bool8 gHasFetchedBall;
+extern u8 gLastUsedBall;
 
 #endif // GUARD_BATTLE_H

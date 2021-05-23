@@ -17044,7 +17044,7 @@ index 1fa7f75a..54974c65 100644
 +++ b/src/data/battle_moves.h
 @@ -571,7 +571,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
          .priority = 0,
-         .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGICCOAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+         .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
      },
 -
 +    // fairy addition need change some moves like with hma, then expand moves.

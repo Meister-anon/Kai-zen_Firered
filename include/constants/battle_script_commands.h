@@ -33,7 +33,7 @@
 #define sSAVED_DMG gBattleScripting + 0x28 //for now kept in for sake of number match
 #define sSAVED_MOVE_EFFECT gBattleScripting + 0x2C
 #define sMOVE_EFFECT gBattleScripting + 0x2E
-#define sMULTIHIT_EFFECT gBattleScripting + 0x30
+//#define sMULTIHIT_EFFECT gBattleScripting + 0x30
 //#define sEXP_CATCH gBattleScripting + 0x32
 #define cEFFECT_CHOOSER gBattleCommunication + 3
 #define cMULTISTRING_CHOOSER gBattleCommunication + 5
