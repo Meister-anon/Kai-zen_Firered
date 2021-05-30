@@ -3243,6 +3243,9 @@ static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //important can 
 
         moveLevel = (gLevelUpLearnsets[species][i] & 0xFE00);
 
+        if (moveLevel == 0)
+            continue;
+
         if (moveLevel > (level << 9)) // prevents learnign moves above level
             break;
 
@@ -3267,7 +3270,7 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try 
     {
         sLearningMoveTableID = 0;
 
-        while ((gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) != (level << 9) && (gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) != 0)
+        while ((gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) != (level << 9) || (gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) != 0)
         {
             sLearningMoveTableID++;
             if (gLevelUpLearnsets[species][sLearningMoveTableID] == LEVEL_UP_END

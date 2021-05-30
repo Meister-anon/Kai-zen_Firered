@@ -924,13 +924,13 @@ static void Task_EvolutionScene(u8 taskId)
                 else
                 {
                     u16 move = GetMonData(mon, var + MON_DATA_MOVE1);
-                    if (IsHMMove2(move))
+                    /*if (IsHMMove2(move))
                     {
                         BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_HMMOVESCANTBEFORGOTTEN - BATTLESTRINGS_ID_ADDER]);
                         BattlePutTextOnWindow(gDisplayedStringBattle, 0);
                         gTasks[taskId].tLearnMoveState = 12;
                     }
-                    else
+                    else*/
                     {
                         PREPARE_MOVE_BUFFER(gBattleTextBuff2, move)
 
@@ -1192,7 +1192,7 @@ static void Task_TradeEvolutionScene(u8 taskId)
             gTasks[taskId].tState = 13;
         break;
     case 20:
-        switch (gTasks[taskId].tLearnMoveState)
+        switch (gTasks[taskId].tLearnMoveState) //important  task for learnmove case ids
         {
         case 0:
             if (!IsTextPrinterActive(0) && !IsSEPlaying())
@@ -1278,13 +1278,13 @@ static void Task_TradeEvolutionScene(u8 taskId)
                 else
                 {
                     u16 move = GetMonData(mon, var + MON_DATA_MOVE1);
-                    if (IsHMMove2(move))
+                   /* if (IsHMMove2(move))
                     {
                         BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_HMMOVESCANTBEFORGOTTEN - BATTLESTRINGS_ID_ADDER]);
                         DrawTextOnTradeWindow(0, gDisplayedStringBattle, 1);
                         gTasks[taskId].tLearnMoveState = 11;
                     }
-                    else
+                    else*/
                     {
                         PREPARE_MOVE_BUFFER(gBattleTextBuff2, move)
 

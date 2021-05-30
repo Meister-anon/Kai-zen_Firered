@@ -3746,7 +3746,7 @@ static u8 sub_8139388(void)
     move = sub_8138BEC(&sMonSummaryScreen->currentMon, sUnknown_203B16D);
 
     if (IsMoveHm(move) == TRUE && sMonSummaryScreen->mode != PSS_MODE_FORGET_MOVE)
-        return FALSE;
+        return TRUE; //changed to true, think needed for forget HM
 
     return TRUE;
 }

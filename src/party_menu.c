@@ -4320,8 +4320,8 @@ static void sub_8124E48(void)
     {
         GiveMoveToMon(&gPlayerParty[gPartyMenu.slotId], ItemIdToBattleMoveId(gSpecialVar_ItemId));
         AdjustFriendship(&gPlayerParty[gPartyMenu.slotId], 4);
-      //  if (gSpecialVar_ItemId <= ITEM_TM50)
-        //    RemoveBagItem(gSpecialVar_ItemId, 1);  ok THIS should make tms reusable
+        if (gSpecialVar_ItemId < ITEM_TM01)
+            RemoveBagItem(gSpecialVar_ItemId, 1);
         SetMainCallback2(gPartyMenu.exitCallback);
     }
     else
@@ -4342,10 +4342,10 @@ static void sub_8124EFC(void) //
         SetMonMoveSlot(mon, ItemIdToBattleMoveId(gSpecialVar_ItemId), moveIdx);
         AdjustFriendship(mon, 4);
         ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, mon, gSpecialVar_ItemId, move);
-        if (gSpecialVar_ItemId <= ITEM_TM50)   //think changing above is enough, need test to check it.
+        if (gSpecialVar_ItemId < ITEM_TM01)   //think changing above is enough, need test to check it.
             RemoveBagItem(gSpecialVar_ItemId, 1);  
         SetMainCallback2(gPartyMenu.exitCallback);
-    }
+    } // can't remeber what above comment was but changed to tm01 to make reusabe tms
     else
     {
         InitPartyMenu(gPartyMenu.menuType, KEEP_PARTY_LAYOUT, gPartyMenu.action, gPartyMenu.slotId, PARTY_MSG_NONE, Task_SetSacredAshCB, gPartyMenu.exitCallback);
@@ -4537,7 +4537,7 @@ void ItemUseCB_MedicineStep(u8 taskId, TaskFunc func)
     if (!IsItemFlute(item))
     {
         PlaySE(SE_USE_ITEM);
-        if (gPartyMenu.action != PARTY_ACTION_REUSABLE_ITEM)
+        if (gPartyMenu.action != PARTY_ACTION_REUSABLE_ITEM) //important keep na eye on this
             RemoveBagItem(item, 1);
     }
     else
@@ -4844,7 +4844,7 @@ static void Task_LearnedMove(u8 taskId)
     if (move[1] == 0)
     {
         AdjustFriendship(mon, 4);
-        if (item < ITEM_HM01_CUT)
+        if (item < ITEM_TM01_FOCUS_PUNCH)
             RemoveBagItem(item, 1);
     }
     GetMonNickname(mon, gStringVar1);
