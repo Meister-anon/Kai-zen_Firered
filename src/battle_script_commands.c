@@ -1343,14 +1343,21 @@ static void atk04_critcalc(void)
     if (critChance >= NELEMS(sCriticalHitChance))
         critChance = NELEMS(sCriticalHitChance) - 1;
     if ((gBattleMons[gBattlerTarget].ability != ABILITY_BATTLE_ARMOR && gBattleMons[gBattlerTarget].ability != ABILITY_SHELL_ARMOR)
-     && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
-     && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
-     && !(Random() % sCriticalHitChance[critChance])
-     && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))
-     && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE))
+        && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
+        && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
+        && !(Random() % sCriticalHitChance[critChance])
+        && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))
+        && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE)) 
+    { 
+        
         gCritMultiplier = 2;
+
+        if (gBattleMons[gBattlerAttacker].ability == ABILITY_SNIPER)
+            gCritMultiplier = 3;
+
+    }
     else
-        gCritMultiplier = 1;
+        gCritMultiplier = 1; //non crit 
     ++gBattlescriptCurrInstr;
 }
 
@@ -1510,7 +1517,7 @@ static void CheckWonderGuardAndLevitate(void)
     u8 flags = 0;
     s32 i = 0;
     u8 moveType;
-
+    // since this checked on each move think I can put scrappy here
     if (gCurrentMove == MOVE_STRUGGLE || !gBattleMoves[gCurrentMove].power)
         return;
     GET_MOVE_TYPE(gCurrentMove, moveType);
@@ -1520,6 +1527,12 @@ static void CheckWonderGuardAndLevitate(void)
         gBattleCommunication[6] = moveType;
         RecordAbilityBattle(gBattlerTarget, ABILITY_LEVITATE);
         return;
+    }
+    if (((gBattleMons[gBattlerTarget].type1 || gBattleMons[gBattlerTarget].type2) == TYPE_GHOST)
+        && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY && moveType == (TYPE_NORMAL || TYPE_FIGHTING)
+        && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)) //not sure what i is doing here
+    {
+    TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL; // hppe this works
     }
     while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
     {
@@ -1539,8 +1552,8 @@ static void CheckWonderGuardAndLevitate(void)
                 gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
                 gProtectStructs[gBattlerAttacker].targetNotAffected = 1;
             }
-            if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2 &&
-                gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2 && // from the way this reads I can prob add type3 right here in the case type 3 = mystery
+            if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2
+                && gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2 && // from the way this reads I can prob add type3 right here in the case type 3 = mystery
                 TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT) // then I'd need ..actually I'll make a separate one for  type 3, in case it is mystery then when it != type_mystery
             {
                 gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE; //  would need one for each effectiveness
@@ -1663,7 +1676,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
         }
     }
     if (gBattleMons[defender].ability == ABILITY_WONDER_GUARD
-     && !(flags & MOVE_RESULT_MISSED)
+     && !(flags & MOVE_RESULT_MISSED) //believe this just means if move didn't miss, 
      && AttacksThisTurn(attacker, move) == 2
      && (!(flags & MOVE_RESULT_SUPER_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
      && gBattleMoves[move].power)
@@ -2044,8 +2057,8 @@ static void atk0D_critmessage(void)
 {
     if (!gBattleControllerExecFlags)
     {
-        if (gCritMultiplier == 2 && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
-        {
+        if (gCritMultiplier >= 2 && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+        { //will change to greater or equal to account for crit boost
             PrepareStringBattle(STRINGID_CRITICALHIT, gBattlerAttacker);
             gBattleCommunication[MSG_DISPLAY] = 1;
         }
@@ -3722,7 +3735,7 @@ static void atk23_getexp(void)
     }
 }
 
-static void atk24(void)
+static void atk24(void) // believe this is try to faint mon? &/or check if battle end
 {
     u16 HP_count = 0;
     s32 i;
@@ -9060,9 +9073,9 @@ static void atkD3_trycopyability(void) // role play
         if (gBattleMons[gBattlerTarget].ability == ABILITY_WONDER_GUARD) { // thinking and I may need to make a separate batltlescript to do this, since right now it would just affect target hp I htink??
             gBattleMoveDamage = 1 - gBattleMons[gBattlerAttacker].hp; // should do damage and leave 1 hp
 
-            if (gBattleMons[gBattlerAttacker].hp == 1) {
+            /*if (gBattleMons[gBattlerAttacker].hp == 1) {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].hp - 1;  // should do false swipe effect, and always leave 1 hp
-            }
+            }*/
         }
     }
     else
@@ -9174,7 +9187,7 @@ static void atkDA_tryswapabilities(void) // skill swap . //remember need to remo
      {
          gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
      }
-    else
+    else //don't forgot to make sure hpupdate commands are included in skill swap role play & trace battlescripts
     {
         u16 abilityAtk = gBattleMons[gBattlerAttacker].ability;
         
@@ -9183,12 +9196,12 @@ static void atkDA_tryswapabilities(void) // skill swap . //remember need to remo
 
             gBattlescriptCurrInstr += 5;
             
-            if (abilityAtk == ABILITY_WONDER_GUARD) {
+            if (gBattleMons[gBattlerTarget].ability == ABILITY_WONDER_GUARD) {
                 gBattleMoveDamage = 1 - gBattleMons[gBattlerAttacker].hp; // should do damage and leave 1 hp
                 
-                if (gBattleMons[gBattlerAttacker].hp == 1) {
+                /*if (gBattleMons[gBattlerAttacker].hp == 1) {
                     gBattleMoveDamage = gBattleMons[gBattlerAttacker].hp - 1;  // should do false swipe effect, and always leave 1 hp
-                }
+                }*/
             }
 
     }

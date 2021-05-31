@@ -98,7 +98,7 @@ extern u8 gStringVar4[];
 #define ROUND_BITS_TO_BYTES(numBits)(((numBits) / 8) + (((numBits) % 8) ? 1 : 0))
 
 #define DEX_FLAGS_NO (ROUND_BITS_TO_BYTES(NUM_SPECIES)) // remember to expand I guess to u16 so I can have a entry for each form i.e dex can go over 999
-#define NUM_FLAG_BYTES (ROUND_BITS_TO_BYTES(FLAGS_COUNT)) //may have already done so?
+#define NUM_FLAG_BYTES (ROUND_BITS_TO_BYTES(FLAGS_COUNT)) //done
 
 struct Coords8
 {

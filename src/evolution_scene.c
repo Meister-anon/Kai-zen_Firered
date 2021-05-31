@@ -702,7 +702,7 @@ static void Task_EvolutionScene(u8 taskId)
         }
         break;
     case 12: // stop music, return screen to pre-fade state
-        if (IsSEPlaying())
+        if (IsSEPlaying()) //if this automatically returns ot the state before screen fade I don't have to do anything to change in battle evos
         {
             m4aMPlayAllStop();
             memcpy(&gPlttBufferUnfaded[0x20], sEvoStructPtr->savedPalette, 0x60);

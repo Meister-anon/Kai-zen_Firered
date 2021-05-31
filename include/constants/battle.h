@@ -191,6 +191,9 @@
 #define STATUS3_POWER_TRICK             (1 << 31)
 #define STATUS3_MUDSPORT                0x10000  //hopefully can still work,    it worked, thanks goodness
 #define STATUS3_WATERSPORT              0x20000
+#define STATUS3_ROOTED_SHIFT (21)
+#define STATUS3_ROOTED_COUNTER (0xF << STATUS3_ROOTED_SHIFT)
+#define STATUS3_ROOTED_TURN(num) ((num) << STATUS3_ROOTED_SHIFT)
 //#define STATUS3_MUDSPORT                (1 << 32) //figured its easier to just stick to the end... too big for u32 type...
 //#define STATUS3_WATERSPORT              (1 << 33)
 #define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER | STATUS3_PHANTOM_FORCE)

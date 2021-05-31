@@ -1251,8 +1251,13 @@ enum
 // Ingrain, Leech Seed, Strength Sap and Aqua Ring
 s32 GetDrainedBigRootHp(u32 battler, s32 hp)
 {
-    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BIG_ROOT)
+    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BIG_ROOT) //prob need to balance this for ingrain,
+    {
         hp = (hp * 1300) / 1000;
+        if (gStatuses3[gActiveBattler] & STATUS3_ROOTED) //hopefully that works.
+            hp = (hp * 1100) / 1000;
+    }
+       
     if (hp == 0)
         hp = 1;
 
@@ -1287,15 +1292,20 @@ u8 DoBattlerEndTurnEffects(void)
                 if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED)
                  && !BATTLER_MAX_HP(gActiveBattler)
                  && !(gStatuses3[gActiveBattler] & STATUS3_HEAL_BLOCK)
-                 && gBattleMons[gActiveBattler].hp != 0)
+                 && gBattleMons[gActiveBattler].hp != 0) //function changes & new rooted defines courtesy of phoenix_bound
                 {
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
-                    if (gBattleMoveDamage == 0)
-                        gBattleMoveDamage = 1;
-                    gBattleMoveDamage *= -1;
+                    if (gBattleMoveDamage == 0)//this caps at 16 turns because the orginal & bit calculation == 0, then it adds 0x100 if it doesn't equal 0xF00 which is 1500
+                        gBattleMoveDamage = 1; // so it caps the turns by essentially counting from 0 to 15. so controlling/balancing the effect is as simple as lowering 0xF00!!!
+                    if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED_COUNTER) != STATUS3_ROOTED_TURN(15)) { // not 16 turns facepalm just realized how this works!1!
+                        gStatuses3[gActiveBattler] += STATUS3_ROOTED_TURN(1); //seriously spitballin' here, nothing's broken atleast all the colors below are still right
+                    }
+                    gBattleMoveDamage *= gStatuses3 >> STATUS3_ROOTED_SHIFT;       // need understand
+                    gBattleMoveDamage *= -1; //moved this to the bottom previously, because it doesn't need to be up top, and so its read last, 
                     BattleScriptExecute(BattleScript_IngrainTurnHeal);
-                    ++effect;
-                }
+                    ++effect; //next step augment battlescript to be similar to poisonturndamage../no changes needed everything handled by gbattlemovedamage in these funtions
+                    //and the  updatehp commands in the battle script.  purpose of these changes was to ingrain work like but opposite to toxic, increase heal by same amount each turn
+                } //I'm completely guessing but if done right, should heal an additional 1/16th per turn
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_AQUA_RING:  // aqua ring
@@ -1388,7 +1398,7 @@ u8 DoBattlerEndTurnEffects(void)
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
                             if (gBattleMoveDamage == 0)
                                 gBattleMoveDamage = 1;
-                            gBattleMoveDamage *= -1;
+                            gBattleMoveDamage *= -1; //this is what I need to make it heal.
                             BattleScriptExecute(BattleScript_PoisonHealActivates);
                             effect++;
                         }
@@ -1397,10 +1407,10 @@ u8 DoBattlerEndTurnEffects(void)
                     {
                         gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
                         if (gBattleMoveDamage == 0)
-                            gBattleMoveDamage = 1;
+                            gBattleMoveDamage = 1; //guess part below handles toxic counter allong with battlescript
                         if ((gBattleMons[gActiveBattler].status1 & 0xF00) != 0xF00) // not 16 turns
                             gBattleMons[gActiveBattler].status1 += 0x100;
-                        gBattleMoveDamage *= (gBattleMons[gActiveBattler].status1 & 0xF00) >> 8;
+                        gBattleMoveDamage *= (gBattleMons[gActiveBattler].status1 & 0xF00) >> 8;// think 0xF00 is also value for poison counter so will have to change first part for ingrain
                         BattleScriptExecute(BattleScript_PoisonTurnDmg);
                         ++effect;
                     }
@@ -3655,7 +3665,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             case ABILITY_ANGER_POINT:
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && gCritMultiplier == 2; // looked this should be case where hit is critical
-                    && TARGET_TURN_DAMAGED
+                    && TARGET_TURN_DAMAGED //setting to 2 makes crit, because it defaults to 1
                     && IsBattlerAlive(battler)
                     && gBattleMons[battler].statStages[STAT_ATK] != 12)
                 {
@@ -4124,28 +4134,23 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             gActiveBattler = target1;
                             gBattleMons[i].ability = gBattleMons[gActiveBattler].ability;
                             gLastUsedAbility = gBattleMons[gActiveBattler].ability;
-                            ++effect;
                             if (gBattleMons[gActiveBattler].ability == ABILITY_WONDER_GUARD) {
                                 gBattleMoveDamage = 1 - gBattleMons[i].hp; // should do damage and leave 1 hp
-
-                                if (gBattleMons[i].hp == 1) {
-                                    gBattleMoveDamage = gBattleMons[i].hp - 1;  // should do false swipe effect, and always leave 1 hp
-                                }
                             }
+                            ++effect;
+                            
                         }
                         else if (gBattleMons[target2].ability != 0 && gBattleMons[target2].hp != 0)
                         { // double battle targets 2
                             gActiveBattler = target2;
                             gBattleMons[i].ability = gBattleMons[gActiveBattler].ability;
                             gLastUsedAbility = gBattleMons[gActiveBattler].ability;
-                            ++effect;
                             if (gBattleMons[gActiveBattler].ability == ABILITY_WONDER_GUARD) {
                                 gBattleMoveDamage = 1 - gBattleMons[i].hp; // should do damage and leave 1 hp
-
-                                if (gBattleMons[i].hp == 1) {
-                                    gBattleMoveDamage = gBattleMons[i].hp - 1;  // should do false swipe effect, and always leave 1 hp
-                                }
+                                // maybe these if statements should go ABOVE effect?
                             }
+                            ++effect;
+                            
                         }
                     }
                     else // single battle
@@ -4155,13 +4160,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         {
                             gBattleMons[i].ability = gBattleMons[target1].ability;
                             gLastUsedAbility = gBattleMons[target1].ability;
-                            ++effect;
                             if (gBattleMons[target1].ability == ABILITY_WONDER_GUARD) {
                                 gBattleMoveDamage = 1 - gBattleMons[i].hp; // should do damage and leave 1 hp
-
-                                if (gBattleMons[i].hp == 1) {
-                                    gBattleMoveDamage = gBattleMons[i].hp - 1;  // should do false swipe effect, and always leave 1 hp
-                                }
+                            ++effect;
+                            
                             }
                         }
                     }

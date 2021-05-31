@@ -3244,7 +3244,7 @@ static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //important can 
         moveLevel = (gLevelUpLearnsets[species][i] & 0xFE00);
 
         if (moveLevel == 0)
-            continue;
+            continue; //ok this line means after evo move learning code changes are in, still need test if works
 
         if (moveLevel > (level << 9)) // prevents learnign moves above level
             break;
@@ -3357,8 +3357,11 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     s32 damage = 0;
     s32 damageHelper;
     u8 type;
-    u16 attack, defense;
+    u16 attack, defense, defStat;
     u16 spAttack, spDefense;
+    bool8 usesDefStat;
+    u8 atkStage;
+    u8 defStage;
     u8 defenderHoldEffect;
     u8 defenderHoldEffectParam;
     u8 attackerHoldEffect;
@@ -3374,8 +3377,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     else
         type = typeOverride & 0x3F;
 
-    attack = attacker->attack;
-    defense = defender->defense;
+    attack = attacker->attack; // maybe can use something like this
+    defense = defender->defense; //but for type to do scrappy type effectiveness change
     spAttack = attacker->spAttack;
     spDefense = defender->spDefense;
 
@@ -3488,7 +3491,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     if (IS_MOVE_PHYSICAL(move))
     {
-        if (gCritMultiplier == 2)
+        if (gCritMultiplier >= 2) //changed to greater or equal
         {
             if (attacker->statStages[STAT_ATK] > 6)
                 APPLY_STAT_MOD(damage, attacker, attack, STAT_ATK)
@@ -3501,7 +3504,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage = damage * gBattleMovePower;
         damage *= (2 * attacker->level / 5 + 2);
 
-        if (gCritMultiplier == 2)
+        if (gCritMultiplier >= 2) //changed to greater or equal to account for crit boost like sniper
         {
             if (defender->statStages[STAT_DEF] < 6)
                 APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)
@@ -3577,7 +3580,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     if (IS_MOVE_SPECIAL(move))
     {
-        if (gCritMultiplier == 2)
+        if (gCritMultiplier >= 2) //changed to greater or equal
         {
             if (attacker->statStages[STAT_SPATK] > 6)
                 APPLY_STAT_MOD(damage, attacker, spAttack, STAT_SPATK)
@@ -3590,7 +3593,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage = damage * gBattleMovePower;
         damage *= (2 * attacker->level / 5 + 2);
 
-        if (gCritMultiplier == 2)
+        if (gCritMultiplier >= 2) //changed to greater or equal
         {
             if (defender->statStages[STAT_SPDEF] < 6)
                 APPLY_STAT_MOD(damageHelper, defender, spDefense, STAT_SPDEF)
@@ -6517,7 +6520,7 @@ u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm)
     }
     else
     {
-        u32 mask = 1 << (tm - 32);
+        u32 mask = 1 << (tm - 32); //hex value, 32 is actually 50 i.e the number of tms
         return sTMHMLearnsets[species][1] & mask;
     }
 }
