@@ -1773,23 +1773,29 @@ bool8 ScrCmd_setmonmove(struct ScriptContext * ctx)
 bool8 ScrCmd_checkpartymove(struct ScriptContext * ctx)
 {
     u8 i;
-    u16 moveId = ScriptReadHalfword(ctx);
-
+    u16 moveId = ScriptReadHalfword(ctx); //am using itemId in the code, but don't think I need to change this to itemId
+    u16 j;
     gSpecialVar_Result = PARTY_SIZE;
     for (i = 0; i < PARTY_SIZE; i++)
     {
         u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
         if (!species)
             break;
-        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && MonKnowsMove(&gPlayerParty[i], moveId) == TRUE)
-        {
-            gSpecialVar_Result = i;
-            gSpecialVar_0x8004 = species;
-            break;
+        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG)) {
+            for (j = 0; j < NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES; j++) //should loop through all tms & hms
+            {
+                if (moveId == ItemIdToBattleMoveId(ITEM_TM01/*_FOCUS_PUNCH*/ + j)
+                    && CanMonLearnTMHM(&gPlayerParty[i], ItemIdToBattleMoveId(ITEM_TM01/*_FOCUS_PUNCH*/ + j)))
+                {
+                    gSpecialVar_Result = i;
+                        gSpecialVar_0x8004 = species;
+                        break;
+                }
+            }
         }
     }
     return FALSE;
-}
+} // thank god I posted this in the discord, just saved me a lot of time after I lost my file changes
 
 bool8 ScrCmd_addmoney(struct ScriptContext * ctx)
 {

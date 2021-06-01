@@ -1,8 +1,8 @@
-EventScript_CutTree:: @ 81BDF13
+EventScript_CutTree::
 	goto_if_questlog EventScript_ReleaseEnd
 	lockall
 	goto_if_unset FLAG_BADGE02_GET, EventScript_CantCutTree
-	checkpartymove MOVE_CUT
+	checkpartymove ITEM_HM01_CUT
 	compare VAR_RESULT, PARTY_SIZE
 	goto_if_eq EventScript_CantCutTree
 	setfieldeffectarg 0, VAR_RESULT
@@ -58,11 +58,11 @@ Text_TreeCanBeCutDown:: @ 81BDFE3
 	.string "This tree looks like it can be CUT\n"
 	.string "down!$"
 
-EventScript_RockSmash:: @ 81BE00C
+EventScript_RockSmash::
 	goto_if_questlog EventScript_ReleaseEnd
 	lockall
 	goto_if_unset FLAG_BADGE06_GET, EventScript_CantSmashRock
-	checkpartymove MOVE_ROCK_SMASH
+	checkpartymove ITEM_HM06_ROCK_SMASH
 	compare VAR_RESULT, PARTY_SIZE
 	goto_if_eq EventScript_CantSmashRock
 	setfieldeffectarg 0, VAR_RESULT
@@ -121,12 +121,12 @@ Text_MonMaySmashRock:: @ 81BE0E2
 	.string "It's a rugged rock, but a POKéMON\n"
 	.string "may be able to smash it.$"
 
-EventScript_StrengthBoulder:: @ 81BE11D
+EventScript_StrengthBoulder::
 	goto_if_questlog EventScript_ReleaseEnd
 	lockall
 	goto_if_unset FLAG_BADGE04_GET, EventScript_CantMoveBoulder
 	goto_if_set FLAG_SYS_USE_STRENGTH, EventScript_AlreadyUsedStrength
-	checkpartymove MOVE_STRENGTH
+	checkpartymove ITEM_HM04_STRENGTH
 	compare VAR_RESULT, PARTY_SIZE
 	goto_if_eq EventScript_CantMoveBoulder
 	setfieldeffectarg 0, VAR_RESULT
@@ -182,10 +182,10 @@ Text_StrengthMadeMovingBouldersPossible:: @ 81BE284
 	.string "STRENGTH made it possible to move\n"
 	.string "boulders around.$"
 
-EventScript_Waterfall:: @ 81BE2B7
+EventScript_Waterfall::
 	goto_if_questlog EventScript_ReleaseEnd
 	lockall
-	checkpartymove MOVE_WATERFALL
+	checkpartymove ITEM_HM07_WATERFALL
 	compare VAR_RESULT, PARTY_SIZE
 	goto_if_eq EventScript_WaterCrashingDown
 	getpartymonname 0, VAR_RESULT
@@ -217,9 +217,9 @@ Text_MonUsedWaterfall:: @ 81BE378
 	.string "{STR_VAR_1} used WATERFALL.$"
 
 @ Unused leftover from R/S
-EventScript_DeepWater:: @ 81BE38B
+EventScript_DeepWater::
 	lockall
-	checkpartymove MOVE_DIVE
+	checkpartymove ITEM_HM08_DIVE
 	compare VAR_RESULT, PARTY_SIZE
 	goto_if_eq EventScript_MayGoUnderwater
 	getpartymonname 0, VAR_RESULT
@@ -240,9 +240,9 @@ EventScript_EndDive:
 	releaseall
 	end
 
-EventScript_TrySurface:: @ 81BE3D4
+EventScript_TrySurface::
 	lockall
-	checkpartymove MOVE_DIVE
+	checkpartymove ITEM_HM08_DIVE
 	compare VAR_RESULT, PARTY_SIZE
 	goto_if_eq EventScript_CantSurface
 	getpartymonname 0, VAR_RESULT

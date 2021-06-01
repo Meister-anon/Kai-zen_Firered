@@ -1,4 +1,4 @@
-EventScript_UseSurf:: @ 81A6AC8
+EventScript_UseSurf::
 	goto_if_questlog EventScript_UseSurfEnd
 	checkpartymove MOVE_SURF
 	compare VAR_RESULT, PARTY_SIZE

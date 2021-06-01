@@ -2593,7 +2593,7 @@ void CreateBoxMon_ex(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedI
         spaEV = SetMonData(boxMon, MON_DATA_SPATK_EV, &spaEV);
         spdEV = SetMonData(boxMon, MON_DATA_SPDEF_EV, &spdEV);
 
-        if (hEV > 564)
+        if (hEV > 564) //to be used with trainerstructs to set evs & ivs
             hEV = 564;
 
         if (aEV > 564)
@@ -2611,15 +2611,15 @@ void CreateBoxMon_ex(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedI
         if (spdEV > 564)
             spdEV = 564;
 
-        if (totalEVs >= MAX_TOTAL_EVS){
+        if (totalEVs > MAX_TOTAL_EVS){
             SetMonData(boxMon, MON_DATA_HP_EV, &evAvg;
             SetMonData(boxMon, MON_DATA_ATK_EV, &evAvg);
             SetMonData(boxMon, MON_DATA_DEF_EV, &evAvg);
             SetMonData(boxMon, MON_DATA_SPEED_EV, &evAvg);
             SetMonData(boxMon, MON_DATA_SPATK_EV, &evAvg);
             SetMonData(boxMon, MON_DATA_SPDEF_EV, &evAvg);
-        }
-    
+        } //if anyone sets evs above the total max, the game will
+    //only read the max and then average that between all the stats evenly. kind of a pentalty
     
     ZeroBoxMonData(boxMon);
 
