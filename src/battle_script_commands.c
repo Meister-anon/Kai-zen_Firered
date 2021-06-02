@@ -1041,9 +1041,12 @@ static void atk40_jumpifaffectedbyprotect(void)
     }
 }
 
-static bool8 JumpIfMoveAffectedByProtect(u16 move)
+static bool8 JumpIfMoveAffectedByProtect(u16 move) // think I can put weather break condition here, elemental beam equivalent w weather & several 150 power moves no condition
 {
     bool8 affected = FALSE;
+    u16 rand = Random();
+    u16 randPercent = 100 - (rand % 12);
+    // u8 power = gBattleMoves[move].power;
 
     if (DEFENDER_IS_PROTECTED)
     {
@@ -1052,8 +1055,30 @@ static bool8 JumpIfMoveAffectedByProtect(u16 move)
         gBattleCommunication[6] = 1;
         affected = TRUE;
     }
+    
+    
+    else if ((DEFENDER_IS_PROTECTED
+        && WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gCurrentMove == MOVE_HYDRO_PUMP || MOVE_ZAP_CANNON))
+        || (WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_HAIL_ANY) && gCurrentMove == MOVE_BLIZZARD)
+        || (WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_SUN_ANY) && (gCurrentMove == MOVE_FIRE_BLAST || MOVE_SOLAR_BEAM || MOVE_SOLAR_BLADE || MOVE_OVERHEAT))
+        || (gCurrentMove == MOVE_BLAST_BURN || MOVE_HYDRO_CANNON || MOVE_FRENZY_PLANT || MOVE_HYPER_BEAM || MOVE_GIGA_IMPACT || MOVE_ROCK_WRECKER)
+        && Random() % 4)
+    {
+        affected = FALSE;
+        if (gBattleMoveDamage != 0) // in case using gbattlemovedamage prevents hi/lo rolls since aparently movedamage is the last calculation, I may switch this to power
+            //gBattleMoves[move].power   keep the first check that move does damage, but otherwise replace movedamage with power, if I find I need to because modulate damage is no longer working
+        {
+            gBattleMoveDamage *= randPercent;
+            gBattleMoveDamage /= 100;
+            if (gBattleMoveDamage == 0)
+                gBattleMoveDamage = 1;
+        }
+    }
     return affected;
-}
+} // ok believe I've got this, should be 1 in 4 chance for 150bp move to break through protect and other moves to do so with proper weather boosts
+// this idea of breaking protect was initially just thunder in gen 4 having a 30% chance in rain, then gen 8 brought back with dynamax moves at a portion of full damage
+// I'm using my own conditions, and...I THINK I may do a reduction in damage too, but do it randomly like high/low rolls just to a lesser degree
+// also maybe I'll add a text string for this, but for now I'll do without.
 
 static bool8 AccuracyCalcHelper(u16 move)
 {
