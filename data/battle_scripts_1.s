@@ -81,7 +81,6 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectAttackDown2
 	.4byte BattleScript_EffectDefenseDown2
 	.4byte BattleScript_EffectSpeedDown2
-	.4byte BattleScript_EffectHit
 	.4byte BattleScript_EffectSpecialDefenseDown2
 	.4byte BattleScript_EffectSpecialAttackDown2
 	.4byte BattleScript_EffectHit
@@ -152,7 +151,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectHit
 	.4byte BattleScript_EffectRapidSpin
 	.4byte BattleScript_EffectSonicboom
-	.4byte BattleScript_EffectHit
+	.4byte BattleScript_EffectTwoTurnsAttack
 	.4byte BattleScript_EffectMorningSun
 	.4byte BattleScript_EffectMorningSun
 	.4byte BattleScript_EffectMorningSun
@@ -230,7 +229,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectCosmicPower
 	.4byte BattleScript_EffectSkyUppercut
 	.4byte BattleScript_EffectBulkUp
-	.4byte BattleScript_EffectPoisonHit
+	.4byte BattleScript_EffectHit
 	.4byte BattleScript_EffectMudSport
 	.4byte BattleScript_EffectCalmMind
 	.4byte BattleScript_EffectDragonDance
@@ -381,6 +380,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectFusionCombo
 	.4byte BattleScript_EffectHealBlock
 	.4byte BattleScript_EffectSpecialAttackUp3
+	.4byte BattleScript_EffectStrengthUpHit
 
 BattleScript_EffectSleepHit:
 	setmoveeffect MOVE_EFFECT_SLEEP
@@ -3677,6 +3677,12 @@ BattleScript_EffectDefenseUpHit::
 BattleScript_EffectAttackUpHit::
 	setmoveeffect MOVE_EFFECT_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
 	goto BattleScript_EffectHit
+	
+BattleScript_EffectStrengthUpHit::
+	setstatchanger STAT_ATK, 1, FALSE
+	call BattleScript_StatUp
+	goto BattleScript_EffectHit
+
 
 BattleScript_EffectAllStatsUpHit::
 	setmoveeffect MOVE_EFFECT_ALL_STATS_UP | MOVE_EFFECT_AFFECTS_USER

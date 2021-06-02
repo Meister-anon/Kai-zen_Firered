@@ -111,7 +111,7 @@
 #define EFFECT_NIGHTMARE 107
 #define EFFECT_MINIMIZE 108
 #define EFFECT_CURSE 109
-#define EFFECT_UNUSED_6E 110
+#define EFFECT_UNUSED_6E 110 //unused
 #define EFFECT_PROTECT 111
 #define EFFECT_SPIKES 112
 #define EFFECT_FORESIGHT 113
@@ -367,6 +367,7 @@
 #define EFFECT_FUSION_COMBO 356
 #define EFFECT_HEAL_BLOCK 357
 #define EFFECT_SPECIAL_ATTACK_UP_3 358 //tailglow
+#define EFFECT_STRENGTH_UP_HIT 358 //HOPE works, point is to increase attack before hit
 #endif  // GUARD_CONSTANTS_BATTLE_MOVE_EFFECTS_H
 // gBattleScriptsForMoveEffects found at top of battle_scripts_1.s
 //must be in same order as this file.  because they are pointers
