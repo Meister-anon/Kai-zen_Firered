@@ -32,17 +32,17 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectMirrorMove
 	.4byte BattleScript_EffectAttackUp
 	.4byte BattleScript_EffectDefenseUp
-	.4byte BattleScript_EffectHit
+	.4byte BattleScript_EffectSpeedUp
 	.4byte BattleScript_EffectSpecialAttackUp
-	.4byte BattleScript_EffectHit
-	.4byte BattleScript_EffectHit
+	.4byte BattleScript_EffectSpecialDefenseUp
+	.4byte BattleScript_EffectAccuracyUp
 	.4byte BattleScript_EffectEvasionUp
 	.4byte BattleScript_EffectHit
 	.4byte BattleScript_EffectAttackDown
 	.4byte BattleScript_EffectDefenseDown
 	.4byte BattleScript_EffectSpeedDown
-	.4byte BattleScript_EffectHit
-	.4byte BattleScript_EffectHit
+	.4byte BattleScript_EffectSpecialAttackDown
+	.4byte BattleScript_EffectSpecialDefenseDown
 	.4byte BattleScript_EffectAccuracyDown
 	.4byte BattleScript_EffectEvasionDown
 	.4byte BattleScript_EffectHaze
@@ -83,6 +83,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectSpeedDown2
 	.4byte BattleScript_EffectHit
 	.4byte BattleScript_EffectSpecialDefenseDown2
+	.4byte BattleScript_EffectSpecialAttackDown2
 	.4byte BattleScript_EffectHit
 	.4byte BattleScript_EffectHit
 	.4byte BattleScript_EffectReflect
@@ -234,6 +235,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectCalmMind
 	.4byte BattleScript_EffectDragonDance
 	.4byte BattleScript_EffectCamouflage
+	@ new effects  @@@@@@@@@@
 	.4byte BattleScript_EffectPledge
 	.4byte BattleScript_EffectFling
 	.4byte BattleScript_EffectNaturalGift
@@ -368,6 +370,17 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectFairyLock
 	.4byte BattleScript_EffectAllySwitch
 	.4byte BattleScript_EffectSleepHit
+	.4byte BattleScript_EffectHitEscape
+	.4byte BattleScript_EffectWorrySeed
+	.4byte BattleScript_EffectFellStinger
+	.4byte BattleScript_EffectCaptivate
+	.4byte BattleScript_EffectAlwaysCrit
+	.4byte BattleScript_EffectHealingWish
+	.4byte BattleScript_EffectHammerArm
+	.4byte BattleScript_EffectVitalThrow
+	.4byte BattleScript_EffectFusionCombo
+	.4byte BattleScript_EffectHealBlock
+	.4byte BattleScript_EffectSpecialAttackUp3
 
 BattleScript_EffectSleepHit:
 	setmoveeffect MOVE_EFFECT_SLEEP
@@ -2335,6 +2348,18 @@ BattleScript_EffectDefenseUp::
 	setstatchanger STAT_DEF, 1, FALSE
 	goto BattleScript_EffectStatUp
 
+BattleScript_EffectSpeedUp:
+	setstatchanger STAT_SPEED, 1, FALSE
+	goto BattleScript_EffectStatUp
+
+BattleScript_EffectSpecialDefenseUp:
+	setstatchanger STAT_SPDEF, 1, FALSE
+	goto BattleScript_EffectStatUp
+
+BattleScript_EffectAccuracyUp:
+	setstatchanger STAT_ACC, 1, FALSE
+	goto BattleScript_EffectStatUp
+
 BattleScript_EffectSpecialAttackUp::
 	setstatchanger STAT_SPATK, 1, FALSE
 	goto BattleScript_EffectStatUp
@@ -2383,6 +2408,14 @@ BattleScript_EffectSpeedDown::
 
 BattleScript_EffectAccuracyDown::
 	setstatchanger STAT_ACC, 1, TRUE
+	goto BattleScript_EffectStatDown
+
+BattleScript_EffectSpecialAttackDown:
+	setstatchanger STAT_SPATK, 1, TRUE
+	goto BattleScript_EffectStatDown
+
+BattleScript_EffectSpecialDefenseDown:
+	setstatchanger STAT_SPDEF, 1, TRUE
 	goto BattleScript_EffectStatDown
 
 BattleScript_EffectEvasionDown::
@@ -2832,6 +2865,10 @@ BattleScript_EffectSpeedDown2::
 
 BattleScript_EffectSpecialDefenseDown2::
 	setstatchanger STAT_SPDEF, 2, TRUE
+	goto BattleScript_EffectStatDown
+
+BattleScript_EffectSpecialAttackDown2:
+	setstatchanger STAT_SPATK, 2, TRUE
 	goto BattleScript_EffectStatDown
 
 BattleScript_EffectReflect::

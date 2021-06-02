@@ -2,10 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\asm",
-    "\\asm\\macros",
     "\\data",
     "\\include",
-    "\\include\\constants",
     "\\src"
   ],
   "PreviewInSolutionExplorer": false

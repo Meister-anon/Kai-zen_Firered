@@ -15,15 +15,15 @@
 #define EFFECT_DEFENSE_UP 11
 #define EFFECT_SPEED_UP 12
 #define EFFECT_SPECIAL_ATTACK_UP 13
-#define EFFECT_SPECIAL_DEFENSE_UP 14
-#define EFFECT_ACCURACY_UP 15
+#define EFFECT_SPECIAL_DEFENSE_UP 14 //unused..actually used in later gen
+#define EFFECT_ACCURACY_UP 15 //unused..actually used in later gen
 #define EFFECT_EVASION_UP 16
 #define EFFECT_ALWAYS_HIT 17
 #define EFFECT_ATTACK_DOWN 18
 #define EFFECT_DEFENSE_DOWN 19
 #define EFFECT_SPEED_DOWN 20
-#define EFFECT_SPECIAL_ATTACK_DOWN 21  // unused
-#define EFFECT_SPECIAL_DEFENSE_DOWN 22  // unused
+#define EFFECT_SPECIAL_ATTACK_DOWN 21  // unused..actually used in later gen
+#define EFFECT_SPECIAL_DEFENSE_DOWN 22  // unused..actually used in later gen
 #define EFFECT_ACCURACY_DOWN 23
 #define EFFECT_EVASION_DOWN 24
 #define EFFECT_HAZE 25
@@ -56,16 +56,16 @@
 #define EFFECT_SPEED_UP_2 52
 #define EFFECT_SPECIAL_ATTACK_UP_2 53
 #define EFFECT_SPECIAL_DEFENSE_UP_2 54
-#define EFFECT_ACCURACY_UP_2 55
-#define EFFECT_EVASION_UP_2 56
+#define EFFECT_ACCURACY_UP_2 55 // unused
+#define EFFECT_EVASION_UP_2 56 // unused
 #define EFFECT_TRANSFORM 57
 #define EFFECT_ATTACK_DOWN_2 58
 #define EFFECT_DEFENSE_DOWN_2 59
 #define EFFECT_SPEED_DOWN_2 60
-#define EFFECT_SPECIAL_ATTACK_DOWN_2 61
-#define EFFECT_SPECIAL_DEFENSE_DOWN_2 62
-#define EFFECT_ACCURACY_DOWN_2 63
-#define EFFECT_EVASION_DOWN_2 64
+#define EFFECT_SPECIAL_DEFENSE_DOWN_2 61
+#define EFFECT_SPECIAL_ATTACK_DOWN_2 62
+#define EFFECT_ACCURACY_DOWN_2 63 //UNUSED
+#define EFFECT_EVASION_DOWN_2 64 //unnused
 #define EFFECT_REFLECT 65
 #define EFFECT_POISON 66
 #define EFFECT_PARALYZE 67
@@ -75,8 +75,8 @@
 #define EFFECT_SPECIAL_ATTACK_DOWN_HIT 71
 #define EFFECT_SPECIAL_DEFENSE_DOWN_HIT 72
 #define EFFECT_ACCURACY_DOWN_HIT 73
-#define EFFECT_EVASION_DOWN_HIT 74
-#define EFFECT_SKY_ATTACK 75
+#define EFFECT_EVASION_DOWN_HIT 74 // unused.. ok i get why this isn't needed,
+#define EFFECT_SKY_ATTACK 75 // post gen 3 accu & evas got wrapped into one calc
 #define EFFECT_CONFUSE_HIT 76
 #define EFFECT_TWINEEDLE 77
 #define EFFECT_VITAL_THROW 78
@@ -210,8 +210,8 @@
 #define EFFECT_COSMIC_POWER 206
 #define EFFECT_SKY_UPPERCUT 207
 #define EFFECT_BULK_UP 208
-#define EFFECT_POISON_TAIL 209
-#define EFFECT_WATER_SPORT 210
+#define EFFECT_PLACEHOLDER 209 //put placeholder back here incase its needed
+#define EFFECT_WATER_SPORT 210 //feel stupid poison_tail wasn't even an effect FP
 #define EFFECT_CALM_MIND 211
 #define EFFECT_DRAGON_DANCE 212
 #define EFFECT_CAMOUFLAGE 213
@@ -356,5 +356,21 @@
 #define EFFECT_FAIRY_LOCK 345
 #define EFFECT_ALLY_SWITCH 346
 #define EFFECT_SLEEP_HIT 347 // Relic Song
-#define EFFECT_HEALING_WISH 348
+#define EFFECT_HIT_ESCAPE 348
+#define EFFECT_WORRY_SEED 349
+#define EFFECT_FELL_STINGER 350
+#define EFFECT_FUSION_COMBO 351
+#define EFFECT_CAPTIVATE 352
+#define EFFECT_ALWAYS_CRIT 353
+#define EFFECT_HAMMER_ARM 354
+#define EFFECT_VITAL_THROW 355
+#define EFFECT_FUSION_COMBO 356
+#define EFFECT_HEAL_BLOCK 357
+#define EFFECT_SPECIAL_ATTACK_UP_3 358 //tailglow
 #endif  // GUARD_CONSTANTS_BATTLE_MOVE_EFFECTS_H
+// gBattleScriptsForMoveEffects found at top of battle_scripts_1.s
+//must be in same order as this file.  because they are pointers
+//the battle_script below that don't matter far as order
+
+//in gBattleScriptsForMoveEffects effect_hit is used to stand in for unused effects 
+//so should be able to be safely replaced
