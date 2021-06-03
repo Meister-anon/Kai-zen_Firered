@@ -462,8 +462,8 @@ struct BattleResources
     struct BattleScriptsStack *AI_ScriptsStack;
 };
 
-extern struct BattleResources *gBattleResources;
-
+extern struct BattleResources *gBattleResources; //egg & mcgriffin recommmended I check here for keeping track of player damage throughout battle
+ // as my script would probably only work per turn
 struct BattleResults
 {
     u8 playerFaintCounter;    // 0x0

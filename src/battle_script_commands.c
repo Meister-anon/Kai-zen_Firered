@@ -10479,10 +10479,10 @@ static void atk10E_setatkhpto1(void)
     // realize using script as a call is also an option, so maybe I'll just do that, instead and remove any "move end" stuff from the bs command.
 } //also pretty sure I made this irrelevant by updating the battle script I was plannign to use this in, to work like false swipe, and use movedamage so prob never use this
 
-static void atk10F_jumpifdamaged(void)
+static void atk10F_jumpifdamaged(void) //edited based on recommendation from mcgriffin & egg (aka dizzyegg)
 {
-    if (gProtectStructs[gBattlerAttacker].physicalDmg || gProtectStructs[gBattlerAttacker].specialDmg
-        || gProtectStructs[gBattlerTarget].physicalDmg || gProtectStructs[gBattlerTarget].specialDmg)
+    if (gBattleResults[gBattlerAttacker].playerMonWasDamaged == TRUE || gBattleResults[gBattlerAttacker].playerMonWasDamaged == TRUE
+        || gBattleResults[gBattlerTarget].playerMonWasDamaged == TRUE || gBattleResults[gBattlerTarget].playerMonWasDamaged == TRUE)
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     else
         gBattlescriptCurrInstr += 5;
