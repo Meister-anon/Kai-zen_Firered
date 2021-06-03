@@ -9798,8 +9798,11 @@ static void atkEF_handleballthrow(void) //important changed
                 else // not caught  think this is the part I need to change to replace shakes with miss or block
                 { //based on brackets this should be if odds are  "less than 254"  and shake is guaranteed to fail,  meaning all fail.
                     u16 catchstate;
-                    catchstate = Random() % 2;
-                    if (catchstate == 0) {
+                    catchstate = Random() % 2; // while I prefer the idea that the only time its in the ball it stays in the ball. it may be more interesting game wise
+                    if (!gHasFetchedBall)
+                        gLastUsedBall = gLastUsedItem;
+
+                    if (catchstate == 0) { // to add a 3rd option where it can shake and fail normally.
                         BtlController_EmitBallThrowAnim(0, BALL_TRAINER_BLOCK);
                         MarkBattlerForControllerExec(gActiveBattler);
                         gBattlescriptCurrInstr = BattleScript_WildMonBallBlock;
@@ -9809,6 +9812,11 @@ static void atkEF_handleballthrow(void) //important changed
                         MarkBattlerForControllerExec(gActiveBattler);
                         gBattlescriptCurrInstr = BattleScript_NonGhost_BallDodge;
                     }
+                    /*if (catchstate == 2) {
+                        BtlController_EmitBallThrowAnim(0, shakes);
+                        MarkBattlerForControllerExec(gActiveBattler);
+                        gBattlescriptCurrInstr = BattleScript_ShakeBallThrow;   //normal catch shake mechanic in case I decide to do, but I want this to be least chosen option
+                    } */    // so insteaad of %3  I may do %5 and give the first 2 sates 2 success criteria (i.e 0,1 & 2,3   then have this only work on 4.  will have to test odds in effect)
                 }
             }
         }
@@ -10468,7 +10476,8 @@ static void atk10E_setatkhpto1(void)
         ++gBattlescriptCurrInstr;
     }
     BattleScriptPop(); //hopefully this will make it return to pprevious script since I want to use this with jump
-}
+    // realize using script as a call is also an option, so maybe I'll just do that, instead and remove any "move end" stuff from the bs command.
+} //also pretty sure I made this irrelevant by updating the battle script I was plannign to use this in, to work like false swipe, and use movedamage so prob never use this
 
 static void atk10F_jumpifdamaged(void)
 {

@@ -698,7 +698,7 @@ struct BattleScripting
     u16 moveEffect; // acutall exponcatch I'll prob make into bs command so can control with function
     u8 savedBattler;
     // u16 multihitMoveEffect;
- //   bool8 expOnCatch;// may add but tie to taking damage
+ //   bool8 expOnCatch;// may add but tie to taking damage  // did that but based on how I implemented it, I may not need this field?
   //  u8 illusionNickHack; // To properly display nick in STRINGID_ENEMYABOUTTOSWITCHPKMN. // I've removed that from my game so I don't need that in my game, but do if I plan to make a normal base for everyone
   //  bool8 fixedPopup;   // force ability popup to stick until manually called back
 };
