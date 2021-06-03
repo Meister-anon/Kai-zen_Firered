@@ -10481,8 +10481,12 @@ static void atk10E_setatkhpto1(void)
 
 static void atk10F_jumpifdamaged(void) //edited based on recommendation from mcgriffin & egg (aka dizzyegg)
 {
-    if (gBattleResults[gBattlerAttacker].playerMonWasDamaged == TRUE || gBattleResults[gBattlerAttacker].playerMonWasDamaged == TRUE
-        || gBattleResults[gBattlerTarget].playerMonWasDamaged == TRUE || gBattleResults[gBattlerTarget].playerMonWasDamaged == TRUE)
+    if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER && gBattleMoveDamage > 0)
+        gBattleResults.playerMonWasDamaged = TRUE;
+    if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT && gBattleMoveDamage > 0)
+        gBattleResults.playerMonWasDamaged = TRUE;
+
+    if (gBattleResults.playerMonWasDamaged == TRUE)
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     else
         gBattlescriptCurrInstr += 5;
