@@ -1045,7 +1045,7 @@ static bool8 JumpIfMoveAffectedByProtect(u16 move) // think I can put weather br
 {
     bool8 affected = FALSE;
     u16 rand = Random();
-    u16 randPercent = 100 - (rand % 12);
+    u16 randPercent = 100 - (rand % 12); //should work as final adjustment to damage to do 89-100 percent of total after breaking protect
     // u8 power = gBattleMoves[move].power;
 
     if (DEFENDER_IS_PROTECTED)
@@ -1057,8 +1057,8 @@ static bool8 JumpIfMoveAffectedByProtect(u16 move) // think I can put weather br
     }
     
     
-    else if ((DEFENDER_IS_PROTECTED
-        && WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gCurrentMove == MOVE_HYDRO_PUMP || MOVE_ZAP_CANNON))
+    else if (DEFENDER_IS_PROTECTED
+        && WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || (gCurrentMove == MOVE_HYDRO_PUMP || MOVE_ZAP_CANNON))
         || (WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_HAIL_ANY) && gCurrentMove == MOVE_BLIZZARD)
         || (WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_SUN_ANY) && (gCurrentMove == MOVE_FIRE_BLAST || MOVE_SOLAR_BEAM || MOVE_SOLAR_BLADE || MOVE_OVERHEAT))
         || (gCurrentMove == MOVE_BLAST_BURN || MOVE_HYDRO_CANNON || MOVE_FRENZY_PLANT || MOVE_HYPER_BEAM || MOVE_GIGA_IMPACT || MOVE_ROCK_WRECKER)
@@ -1347,7 +1347,7 @@ static void atk02_attackstring(void)
 }
 
 static void atk04_critcalc(void)
-{
+{//crit chance section
     u8 holdEffect;
     u16 item, critChance;
 
@@ -1355,24 +1355,28 @@ static void atk04_critcalc(void)
     if (item == ITEM_ENIGMA_BERRY)
         holdEffect = gEnigmaBerries[gBattlerAttacker].holdEffect;
     else
-        holdEffect = ItemId_GetHoldEffect(item);
+        holdEffect = ItemId_GetHoldEffect(item); //find out if all these all these +'s affect the total effect chance?
     gPotentialItemEffectBattler = gBattlerAttacker;
     critChance  = 2 * ((gBattleMons[gBattlerAttacker].status2 & STATUS2_FOCUS_ENERGY) != 0)
-                + (gBattleMoves[gCurrentMove].effect == EFFECT_HIGH_CRITICAL)
+                + (gBattleMoves[gCurrentMove].effect == EFFECT_HIGH_CRITICAL) // gen3 use this but pokeemerald uses high_crit flag.
                 + (gBattleMoves[gCurrentMove].effect == EFFECT_SKY_ATTACK)
                 + (gBattleMoves[gCurrentMove].effect == EFFECT_BLAZE_KICK)
                 + (gBattleMoves[gCurrentMove].effect == EFFECT_POISON_TAIL)
-                + (holdEffect == HOLD_EFFECT_SCOPE_LENS)
+                + ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0) // since both effects are given here, I'll change battle_moves to use flag instead of effect
+                + (holdEffect == HOLD_EFFECT_SCOPE_LENS) // but otherwise I'll keep effect in so I don't need to reorder lists.
                 + 2 * (holdEffect == HOLD_EFFECT_LUCKY_PUNCH && gBattleMons[gBattlerAttacker].species == SPECIES_CHANSEY)
-                + 2 * (holdEffect == HOLD_EFFECT_STICK && gBattleMons[gBattlerAttacker].species == SPECIES_FARFETCHD);
+                + 2 * (holdEffect == HOLD_EFFECT_STICK && gBattleMons[gBattlerAttacker].species == SPECIES_FARFETCHD)
+                + (gBattleMons[gBattlerAttacker].ability == ABILITY_SUPER_LUCK);
     if (critChance >= NELEMS(sCriticalHitChance))
         critChance = NELEMS(sCriticalHitChance) - 1;
-    if ((gBattleMons[gBattlerTarget].ability != ABILITY_BATTLE_ARMOR && gBattleMons[gBattlerTarget].ability != ABILITY_SHELL_ARMOR)
+    //portion for crit calc
+    if ((gBattleMons[gBattlerTarget].ability != ABILITY_BATTLE_ARMOR || gBattleMons[gBattlerTarget].ability != ABILITY_SHELL_ARMOR)
         && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
         && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
         && !(Random() % sCriticalHitChance[critChance])
         && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))
-        && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE)) 
+        && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE)
+        && !(gSideStatuses[battlerDef] & SIDE_STATUS_LUCKY_CHANT)
     { 
         
         gCritMultiplier = 2;
@@ -1555,7 +1559,7 @@ static void CheckWonderGuardAndLevitate(void)
     }
     if (((gBattleMons[gBattlerTarget].type1 || gBattleMons[gBattlerTarget].type2) == TYPE_GHOST)
         && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY && moveType == (TYPE_NORMAL || TYPE_FIGHTING)
-        && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)) //not sure what i is doing here
+        && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT) //not sure what i is doing here
     {
     TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL; // hppe this works
     }
@@ -1765,10 +1769,10 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u8 targetAbility)
     return flags; // took me forever to realize why these functions were included twice, ones is for normal damage calc while this one is for ai calculations
 }
 
-static inline void ApplyRandomDmgMultiplier(void) // seems like this is the function for the high/low damage rolls peopile always talk about, seems to have a chance to do between 86-100% of actual damage.
+static inline void ApplyRandomDmgMultiplier(void) // seems like this is the function for the high/low damage rolls peopile always talk about. 
 {
     u16 rand = Random();
-    u16 randPercent = 100 - (rand % 16);
+    u16 randPercent = 100 - (rand % 16);  // seems to have a chance to do between 85-100% of actual damage.
 
     if (gBattleMoveDamage != 0)
     {
@@ -1789,6 +1793,10 @@ static void atk07_adjustnormaldamage(void)
     u8 holdEffect, param;
 
     ApplyRandomDmgMultiplier(); //oh just not in THAT function but it is used
+
+    if (DoesDisguiseBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))
+        goto END; //hope this works?
+
     if (gBattleMons[gBattlerTarget].item == ITEM_ENIGMA_BERRY)
     {
         holdEffect = gEnigmaBerries[gBattlerTarget].holdEffect;
@@ -1820,7 +1828,29 @@ static void atk07_adjustnormaldamage(void)
             gLastUsedItem = gBattleMons[gBattlerTarget].item;
         }
     }
+END:
     ++gBattlescriptCurrInstr;
+    //below ported from emerald
+    if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && gBattleMoveDamage >= 1)
+        gSpecialStatuses[gBattlerAttacker].damagedMons |= gBitTable[gBattlerTarget];
+
+    // Check gems and damage reducing berries.
+    if (gSpecialStatuses[gBattlerTarget].berryReduced
+        && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        && gBattleMons[gBattlerTarget].item)
+    {
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_BerryReduceDmg;
+        gLastUsedItem = gBattleMons[gBattlerTarget].item;
+    }
+    if (gSpecialStatuses[gBattlerAttacker].gemBoost
+        && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        && gBattleMons[gBattlerAttacker].item)
+    {
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_GemActivates;
+        gLastUsedItem = gBattleMons[gBattlerAttacker].item;
+    }
 }
 
 // The same as 0x7 except it doesn't check for false swipe move effect.
@@ -1829,6 +1859,10 @@ static void atk08_adjustnormaldamage2(void)
     u8 holdEffect, param;
 
     ApplyRandomDmgMultiplier();
+
+    if (DoesDisguiseBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))
+        goto END; //hope this works?
+
     if (gBattleMons[gBattlerTarget].item == ITEM_ENIGMA_BERRY)
     {
         holdEffect = gEnigmaBerries[gBattlerTarget].holdEffect;
@@ -1860,7 +1894,29 @@ static void atk08_adjustnormaldamage2(void)
             gLastUsedItem = gBattleMons[gBattlerTarget].item;
         }
     }
+END:
     ++gBattlescriptCurrInstr;
+    //below ported from emerald
+    if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && gBattleMoveDamage >= 1)
+        gSpecialStatuses[gBattlerAttacker].damagedMons |= gBitTable[gBattlerTarget];
+
+    // Check gems and damage reducing berries.
+    if (gSpecialStatuses[gBattlerTarget].berryReduced
+        && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        && gBattleMons[gBattlerTarget].item)
+    {
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_BerryReduceDmg;
+        gLastUsedItem = gBattleMons[gBattlerTarget].item;
+    }
+    if (gSpecialStatuses[gBattlerAttacker].gemBoost
+        && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        && gBattleMons[gBattlerAttacker].item)
+    {
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_GemActivates;
+        gLastUsedItem = gBattleMons[gBattlerAttacker].item;
+    }
 }
 
 static void atk09_attackanimation(void)
@@ -1930,11 +1986,11 @@ static void atk0B_healthbarupdate(void)
         {
             gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
-            if (gBattleMons[gActiveBattler].status2 & STATUS2_SUBSTITUTE && gDisableStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE))
+            if (gBattleMons[gActiveBattler].status2 & STATUS2_SUBSTITUTE && gDisableStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE) && (gBattleMons[gBattlerAttacker].ability != ABILITY_INFILTRATOR))
             {
                 PrepareStringBattle(STRINGID_SUBSTITUTEDAMAGED, gActiveBattler);
             }
-            else
+            else if (!DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
             {
                 s16 healthValue;
                 s32 currDmg = gBattleMoveDamage;
@@ -1970,7 +2026,7 @@ static void atk0C_datahpupdate(void)
         if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
         {
             gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
-            if (gBattleMons[gActiveBattler].status2 & STATUS2_SUBSTITUTE && gDisableStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE))
+            if (gBattleMons[gActiveBattler].status2 & STATUS2_SUBSTITUTE && gDisableStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE) && (gBattleMons[gBattlerAttacker].ability != ABILITY_INFILTRATOR))
             {
                 if (gDisableStructs[gActiveBattler].substituteHP >= gBattleMoveDamage)
                 {
@@ -1995,6 +2051,12 @@ static void atk0C_datahpupdate(void)
                     return;
                 }
             } //end of substitute effects
+            else if (DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
+            {
+                gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU_BUSTED;
+                BattleScriptPush(gBattlescriptCurrInstr + 2);
+                gBattlescriptCurrInstr = BattleScript_TargetFormChange;
+            }
             else 
             {
                 gHitMarker &= ~(HITMARKER_IGNORE_SUBSTITUTE);
@@ -2047,7 +2109,7 @@ static void atk0C_datahpupdate(void)
                             gSpecialStatuses[gActiveBattler].physicalBattlerId = gBattlerTarget;
                         }
                     }
-                    else if (IS_MOVE_SPECIAL(move) && !(gHitMarker & HITMARKER_x100000))
+                    else if (!IS_MOVE_PHYSICAL(move) && !(gHitMarker & HITMARKER_x100000))
                     {
                         gProtectStructs[gActiveBattler].specialDmg = gHpDealt;
                         gSpecialStatuses[gActiveBattler].specialDmg = gHpDealt;
@@ -2155,7 +2217,10 @@ static void atk0F_resultmessage(void)
     if (!gBattleControllerExecFlags)
     {
         if (gMoveResultFlags & MOVE_RESULT_MISSED && (!(gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE) || gBattleCommunication[6] > 2))
-        {
+        { /*  //for ability popup.
+          if (gBattleCommunication[6] > 2) // Wonder Guard or Levitate - show the ability pop-up
+            CreateAbilityPopUp(gBattlerTarget, gBattleMons[gBattlerTarget].ability, (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) != 0); 
+            */
             stringId = gMissStringIds[gBattleCommunication[6]];
             gBattleCommunication[MSG_DISPLAY] = 1;
         }
@@ -2232,6 +2297,15 @@ static void atk0F_resultmessage(void)
         if (stringId)
             PrepareStringBattle(stringId, gBattlerAttacker);
         ++gBattlescriptCurrInstr;
+
+        // Print berry reducing message after result message.
+        if (gSpecialStatuses[gBattlerTarget].berryReduced
+            && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+        {
+            gSpecialStatuses[gBattlerTarget].berryReduced = 0;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_PrintBerryReduceString;
+        }
     }
 }
 
@@ -2312,6 +2386,23 @@ u8 GetBattlerTurnOrderNum(u8 battlerId)
     
     for (i = 0; i < gBattlersCount && gBattlerByTurnOrder[i] != battlerId; ++i);
     return i;
+}
+
+//don't know if I need but ported anyway
+#define INCREMENT_RESET_RETURN                  \
+{                                               \
+    gBattlescriptCurrInstr++;                   \
+    gBattleScripting.moveEffect = 0; \
+    return;                                     \
+} 
+//believe don't need them increment reset return is same as
+//++gBattlescriptCurrInstr;
+//return;
+
+#define RESET_RETURN                            \
+{                                               \
+    gBattleScripting.moveEffect = 0; \
+    return;                                     \
 }
 
 void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what prevents applying status here, don't forget setyawn  after that grfx for status animation next
@@ -2437,7 +2528,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 break;
             if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_STEEL))
                 break;
-            if (gBattleMons[gEffectBattler].status1)
+            if (gBattleMons[gEffectBattler].status1) // will remove all when ready to tackle mutli status phase
                 break;
             if (gBattleMons[gEffectBattler].ability == ABILITY_IMMUNITY)
                 break;
@@ -2507,10 +2598,10 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
             break;
         case STATUS1_PARALYSIS: // electric type doesnt' blcok paralysis til gen 6
             if (gBattleMons[gEffectBattler].ability == ABILITY_LIMBER)
-            {
-                if (primary == TRUE || certain == MOVE_EFFECT_CERTAIN)
+            { //I think I'll keep them unimmune since paralysis isn't explictly only because of electric moves i.e body slam
+                if (primary == TRUE || certain == MOVE_EFFECT_CERTAIN) // that means there's also a physical/injury based component
                 {
-                    gLastUsedAbility = ABILITY_LIMBER;
+                    gLastUsedAbility = ABILITY_LIMBER; //actually decided to just prevent paralysis from electricity
                     RecordAbilityBattle(gEffectBattler, ABILITY_LIMBER);
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
                     gBattlescriptCurrInstr = BattleScript_PRLZPrevention;
@@ -2528,9 +2619,13 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 else
                     break;
             }
+            if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_ELECTRIC) //if did right should prevent paralysis to electric types
+                && gBattleMoves(gCurrentMove).type == TYPE_ELECTRIC) //while still allowing non electric moves like bodyslam to paralyze
+                break;
             if (gBattleMons[gEffectBattler].status1)
                 break;
-            if (gBattleMons[gEffectBattler].ability == ABILITY_COMATOSE)
+            if (GetBattlerAbility(gEffectBattler) == ABILITY_COMATOSE
+                || GetBattlerAbility(gEffectBattler) == ABILITY_LIMBER)
                 break;
             if (IsAbilityStatusProtected(gEffectBattler))
                 break;

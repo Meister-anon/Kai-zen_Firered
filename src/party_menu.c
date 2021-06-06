@@ -2988,9 +2988,11 @@ static void SetPartyMonSelectionActions(struct Pokemon *mons, u8 slotId, u8 acti
 
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
-    u8 i, j, e; //works but need second for, to check number of moves added to list by the first
+    u8 i, j, e, g; //works but need second for, to check number of moves added to list by the first
     // and only add to it, if less than 4, also give preference to fieldmoves pokemon actually knows.
-    
+    g = MOVE_TELEPORT
+        || MOVE_DIG || MOVE_MILK_DRINK
+        || MOVE_SOFT_BOILED || MOVE_SWEET_SCENT;
     // so make sure never overwrite moves added by the first for i.e non-hm field moves actually learned.
     //also need to ensure it doesn't repeat things already added to the list.
     //so I need to compare what's added from the first section of the formula
@@ -3004,7 +3006,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     // Add field moves to action list
     for (i = 0; i < MAX_MON_MOVES; ++i)
     {
-        for (j = FIELD_MOVE_WATERFALL + 1; sFieldMoves[j] != FIELD_MOVE_END; ++j)
+        for (j = FIELD_MOVE_WATERFALL + 1; sFieldMoves[j] != FIELD_MOVE_END; ++j) // only non HM field moves, works by looping through array of moveIDs for fieldmoves i.e flash cut fly surf etc.
         { // to start with non-hm field moves
             if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) == sFieldMoves[j])
             {
@@ -3015,14 +3017,15 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
         for (j = 0; j <= FIELD_MOVE_WATERFALL; ++j) //only checks HM field moves
         {
             for (e = 0; e < NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES; e++) { // loop through all tms & hms
-                if (sFieldMoves[j] == ItemIdToBattleMoveId(ITEM_TM01 /*_FOCUS_PUNCH*/ + e) && CanMonLearnTMHM(&mons[slotId], e))
+                if (sFieldMoves[j] == ItemIdToBattleMoveId(ITEM_TM01 /*_FOCUS_PUNCH*/ + e) && CanMonLearnTMHM(&mons[slotId], e) //slotId isn't just move slot think this stands in for party so it should work
+                    && (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) != g)) //this line should bring back the 4 limit and check for non-hm fieldmoves in move slots before adding to list
                 { // ^ converts tmhm itemID to move check,  adds to list if matches field move HM & mon can learn
                     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES); //this part adds to list
                         break;
                 }
-            }
+            } //had to use g to explicitly define non-hm field moves, because using array was excluding by the moveID not just being a fieldmove...hope it works??
 
-        } //can put here becuase second for, isn't using i, so isn't limited, need to get it to use i I think.
+        } // becuase second for, isn't using i, so isn't limited, need to get it to use i I think.
     }
     if (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE)
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SWITCH);
