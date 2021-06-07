@@ -54,6 +54,20 @@
 #define min(a, b) ((a) < (b) ? (a) : (b))
 #define max(a, b) ((a) >= (b) ? (a) : (b))
 
+// Converts a number to Q24.8 fixed-point format
+#define Q_24_8(n)  ((s32)((n) << 8))
+
+// Converts a Q8.8 fixed-point format number to a regular integer
+#define Q_8_8_TO_INT(n) ((int)((n) / 256))
+
+// Converts a Q4.12 fixed-point format number to a regular integer
+#define Q_4_12_TO_INT(n)  ((int)((n) / 4096))
+#define UQ_4_12_TO_INT(n)  ((int)((n) / 4096))
+
+// Converts a Q24.8 fixed-point format number to a regular integer
+#define Q_24_8_TO_INT(n) ((int)((n) >> 8))
+
+
 #if MODERN
 #define abs(x) (((x) < 0) ? -(x) : (x))
 #endif
@@ -136,7 +150,7 @@ struct UCoords32
     u32 y;
 };
 
-struct Time
+struct Time //interesting if i have this already then I should be able to do day/night stuff
 {
     /*0x00*/ s16 days;
     /*0x02*/ s8 hours;

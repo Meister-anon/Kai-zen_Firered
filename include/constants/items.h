@@ -177,7 +177,31 @@
 #define ITEM_APICOT_BERRY 172
 #define ITEM_LANSAT_BERRY 173
 #define ITEM_STARF_BERRY 174
-#define ITEM_ENIGMA_BERRY 175
+/*#define ITEM_OCCA_BERRY 175
+#define ITEM_PASSHO_BERRY 176
+#define ITEM_WACAN_BERRY 178
+#define ITEM_RINDO_BERRY 179
+#define ITEM_YACHE_BERRY 180
+#define ITEM_CHOPLE_BERRY 181
+#define ITEM_KEBIA_BERRY 182
+#define ITEM_SHUCA_BERRY 183
+#define ITEM_COBA_BERRY 184
+#define ITEM_PAYAPA_BERRY 185
+#define ITEM_TANGA_BERRY 186
+#define ITEM_CHARTI_BERRY 187
+#define ITEM_KASIB_BERRY 188
+#define ITEM_HABAN_BERRY 189
+#define ITEM_COLBUR_BERRY 190
+#define ITEM_BABIRI_BERRY 191
+#define ITEM_CHILAN_BERRY 192
+#define ITEM_ROSELI_BERRY 193
+#define ITEM_MICLE_BERRY 194
+#define ITEM_CUSTAP_BERRY 195
+#define ITEM_JABOCA_BERRY 196
+#define ITEM_ROWAP_BERRY 197
+#define ITEM_KEE_BERRY 198
+#define ITEM_MARANGA_BERRY 199*/
+#define ITEM_ENIGMA_BERRY 175 //think this is actually last thing to be used "in battle"
 #define ITEM_PROTECTOR 176 // add more evo "use" items below 0B2
 #define ITEM_DRAGON_SCALE 177
 #define ITEM_0B2 178 //last value for can be used on pokemon
@@ -677,6 +701,10 @@
 #define FIRST_BERRY_INDEX ITEM_CHERI_BERRY
 #define LAST_BERRY_INDEX ITEM_ENIGMA_BERRY
 #define ITEM_TO_BERRY(itemId)(((itemId - FIRST_BERRY_INDEX) + 1))
+//emerald has more berries, will need to add them in UNDER Enigma berry
+//also enigma berry in the rom is used as a check of if the item can be "used"
+
+//will need to completely reorder list...AGAIN
 
 #define NUM_TECHNICAL_MACHINES 50 //change to 120 later
 #define NUM_HIDDEN_MACHINES     8

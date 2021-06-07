@@ -40,10 +40,16 @@ enum
 #define TAG_STATUS_SUMMARY_BAR_TILE     0xD70C
 #define TAG_STATUS_SUMMARY_BALLS_TILE   0xD714
 
+#define TAG_MEGA_TRIGGER_TILE			0xD777
+#define TAG_MEGA_INDICATOR_TILE         0xD778
+
 #define TAG_HEALTHBOX_PAL               0xD6FF
 #define TAG_HEALTHBAR_PAL               0xD704
 #define TAG_STATUS_SUMMARY_BAR_PAL      0xD710
 #define TAG_STATUS_SUMMARY_BALLS_PAL    0xD712
+
+#define TAG_MEGA_TRIGGER_PAL			0xD777
+#define TAG_MEGA_INDICATOR_PAL			0xD778
 
 enum
 {
@@ -80,5 +86,16 @@ u8 GetHPBarLevel(s16 hp, s16 maxhp);
 void UpdateNickInHealthbox(u8 spriteId, struct Pokemon *mon);
 void TryAddPokeballIconToHealthbox(u8 spriteId, u8);
 s32 MoveBattleBar(u8 battler, u8 healthboxSpriteId, u8 whichBar, u8 arg3);
+void ChangeMegaTriggerSprite(u8 spriteId, u8 animId); //here & below is ported
+void CreateMegaTriggerSprite(u8 battlerId, u8 palId);
+bool32 IsMegaTriggerSpriteActive(void);
+void HideMegaTriggerSprite(void);
+void DestroyMegaTriggerSprite(void);
+u32 CreateMegaIndicatorSprite(u32 battlerId, u32 which);
+void DestroyMegaIndicatorSprite(u32 healthboxSpriteId);
+u8 CreatePartyStatusSummarySprites(u8 battler, struct HpAndStatus* partyInfo, u8 arg2, bool8 isBattleStart);
+void CreateAbilityPopUp(u8 battlerId, u32 ability, bool32 isDoubleBattle);
+void DestroyAbilityPopUp(u8 battlerId);
+u8 GetMegaIndicatorSpriteId(u32 healthboxSpriteId);
 
 #endif // GUARD_BATTLE_INTERFACE_H

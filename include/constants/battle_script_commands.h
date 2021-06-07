@@ -87,11 +87,95 @@
 #define VARIOUS_RETURN_OPPONENT_MON2            10
 #define VARIOUS_CHECK_POKEFLUTE                 11
 #define VARIOUS_WAIT_FANFARE                    12
+#define VARIOUS_SET_TELEPORT_OUTCOME            25
+#define VARIOUS_STAT_TEXT_BUFFER                27
+//#define VARIOUS_SWITCHIN_ABILITIES              28
+#define VARIOUS_SAVE_TARGET                     29
+#define VARIOUS_RESTORE_TARGET                  30
+#define VARIOUS_CLEAR_STATUS                    32
+#define VARIOUS_RESTORE_PP                      33
+#define VARIOUS_TRY_ACTIVATE_MOXIE              34
+#define VARIOUS_TRY_ACTIVATE_FELL_STINGER       35
+#define VARIOUS_PLAY_MOVE_ANIMATION             36
+#define VARIOUS_SET_LUCKY_CHANT                 37
+#define VARIOUS_SUCKER_PUNCH_CHECK              38
+#define VARIOUS_SET_SIMPLE_BEAM                 39
+#define VARIOUS_TRY_ENTRAINMENT                 40
+#define VARIOUS_SET_LAST_USED_ABILITY           41
+#define VARIOUS_TRY_HEAL_PULSE                  42
+#define VARIOUS_TRY_QUASH                       43
+#define VARIOUS_INVERT_STAT_STAGES              44
+#define VARIOUS_SET_TERRAIN                     45
+#define VARIOUS_TRY_ME_FIRST                    46
+#define VARIOUS_JUMP_IF_BATTLE_END              47
+#define VARIOUS_TRY_ELECTRIFY                   48
+#define VARIOUS_TRY_REFLECT_TYPE                49
+#define VARIOUS_TRY_SOAK                        50
+#define VARIOUS_HANDLE_MEGA_EVO                 51
+#define VARIOUS_TRY_LAST_RESORT                 52
+#define VARIOUS_ARGUMENT_STATUS_EFFECT          53
+#define VARIOUS_TRY_HIT_SWITCH_TARGET           54
+#define VARIOUS_TRY_AUTOTOMIZE                  55
+#define VARIOUS_TRY_COPYCAT                     56
+#define VARIOUS_ABILITY_POPUP                   57
+#define VARIOUS_DEFOG                           58
+#define VARIOUS_JUMP_IF_TARGET_ALLY             59
+#define VARIOUS_TRY_SYNCHRONOISE                60
+#define VARIOUS_PSYCHO_SHIFT                    61
+#define VARIOUS_CURE_STATUS                     62
+#define VARIOUS_POWER_TRICK                     63
+#define VARIOUS_AFTER_YOU                       64
+#define VARIOUS_BESTOW                          65
+#define VARIOUS_ARGUMENT_TO_MOVE_EFFECT         66
+#define VARIOUS_JUMP_IF_NOT_GROUNDED            67
+#define VARIOUS_HANDLE_TRAINER_SLIDE_MSG        68
+#define VARIOUS_TRY_TRAINER_SLIDE_MSG_FIRST_OFF 69
+#define VARIOUS_TRY_TRAINER_SLIDE_MSG_LAST_ON   70
+#define VARIOUS_SET_AURORA_VEIL                 71
+#define VARIOUS_TRY_THIRD_TYPE                  72
+#define VARIOUS_ACUPRESSURE                     73
+#define VARIOUS_SET_POWDER                      74
+#define VARIOUS_SPECTRAL_THIEF                  75
+#define VARIOUS_GRAVITY_ON_AIRBORNE_MONS        76
+#define VARIOUS_CHECK_IF_GRASSY_TERRAIN_HEALS   77
+#define VARIOUS_JUMP_IF_ROAR_FAILS              78
+#define VARIOUS_TRY_INSTRUCT                    79
+#define VARIOUS_JUMP_IF_NOT_BERRY               80
+#define VARIOUS_TRACE_ABILITY                   81
+#define VARIOUS_UPDATE_NICK                     82
+#define VARIOUS_TRY_ILLUSION_OFF                83
+#define VARIOUS_SET_SPRITEIGNORE0HP             84
+#define VARIOUS_HANDLE_FORM_CHANGE              85
+#define VARIOUS_GET_STAT_VALUE                  86
+#define VARIOUS_JUMP_IF_FULL_HP                 87
+#define VARIOUS_LOSE_TYPE                       88
+#define VARIOUS_TRY_ACTIVATE_SOULHEART          89
+#define VARIOUS_TRY_ACTIVATE_RECEIVER           90
+#define VARIOUS_TRY_ACTIVATE_BEAST_BOOST        91
+#define VARIOUS_TRY_FRISK                       92
+#define VARIOUS_JUMP_IF_SHIELDS_DOWN_PROTECTED  93
+#define VARIOUS_TRY_FAIRY_LOCK                  94
+#define VARIOUS_JUMP_IF_NO_ALLY                 95
+#define VARIOUS_POISON_TYPE_IMMUNITY            96
+#define VARIOUS_JUMP_IF_NO_HOLD_EFFECT          97
+#define VARIOUS_INFATUATE_WITH_BATTLER          98
+#define VARIOUS_SET_LAST_USED_ITEM              99
+#define VARIOUS_PARALYZE_TYPE_IMMUNITY          100
+#define VARIOUS_JUMP_IF_ABSENT                  101
+#define VARIOUS_DESTROY_ABILITY_POPUP           102
+#define VARIOUS_TOTEM_BOOST                     103
 
 // atk80, dmg manipulation
 #define ATK80_DMG_CHANGE_SIGN                               0
 #define ATK80_DMG_HALF_BY_TWO_NOT_MORE_THAN_HALF_MAX_HP     1
 #define ATK80_DMG_DOUBLED                                   2
+#define DMG_1_8_TARGET_HP          3
+#define DMG_FULL_ATTACKER_HP       4
+#define DMG_CURR_ATTACKER_HP       5
+#define DMG_BIG_ROOT               6
+#define DMG_RECOIL_FROM_MISS        7
+#define DMG_RECOIL_FROM_IMMUNE     8 // Used to calculate recoil for the Gen 4 version of Jump Kick
+#define DMG_1_2_ATTACKER_HP			9 //realized was different from other half
 
 // atk4F, a flag used for the jumpifcantswitch command
 #define ATK4F_DONT_CHECK_STATUSES   0x80
@@ -124,12 +208,16 @@
 #define ATK49_UPDATE_LAST_MOVES                 14
 #define ATK49_MIRROR_MOVE                       15
 #define ATK49_NEXT_TARGET                       16
-/*#define MOVEEND_NEXT_TARGET 20
-#define MOVEEND_LIFE_ORB 21
+#define MOVEEND_PROTECT_LIKE_EFFECT				17                
+#define MOVEEND_ABILITIES_ATTACKER				18                 
+#define MOVEEND_ITEM_EFFECTS_TARGET				19               
+#define MOVEEND_MOVE_EFFECTS2					20                
+//#define MOVEEND_NEXT_TARGET 20
+#define MOVEEND_LIFE_ORB						21
 #define MOVEEND_DANCER 22		// check and possibly add to atk49
 #define MOVEEND_EMERGENCY_EXIT 23
-#define MOVEEND_CLEAR_BITS 24 */
-#define ATK49_COUNT                             17
+#define MOVEEND_CLEAR_BITS 24
+#define ATK49_COUNT                             25
 
 // stat flags for Cmd_playstatchangeanimation
 #define BIT_HP                      0x1

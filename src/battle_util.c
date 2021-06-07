@@ -601,6 +601,16 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
     return unusableMoves;
 }
 
+static void MulModifier(u16* modifier, u16 val)
+{
+    *modifier = UQ_4_12_TO_INT((*modifier * val) + UQ_4_12_ROUND);
+}
+
+static u32 ApplyModifier(u16 modifier, u32 val)
+{
+    return UQ_4_12_TO_INT((modifier * val) + UQ_4_12_ROUND);
+}
+
 /*static void UpdateMoveResultFlags(u16 modifier) //  start of ported effect flags  
 //may instead just use move result flags instead of these functions...yeah I'll just use that.
 {
@@ -5079,6 +5089,67 @@ u8 GetMoveTarget(u16 move, u8 setTarget)
     }
     *(gBattleStruct->moveTarget + gBattlerAttacker) = targetBattler;
     return targetBattler;
+}
+
+struct Pokemon *GetIllusionMonPtr(u32 battlerId)
+{
+    if (gBattleStruct->illusion[battlerId].broken)
+        return NULL;
+    if (!gBattleStruct->illusion[battlerId].set)
+    {
+        if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+            SetIllusionMon(&gPlayerParty[gBattlerPartyIndexes[battlerId]], battlerId);
+        else
+            SetIllusionMon(&gEnemyParty[gBattlerPartyIndexes[battlerId]], battlerId);
+    }
+    if (!gBattleStruct->illusion[battlerId].on)
+        return NULL;
+
+    return gBattleStruct->illusion[battlerId].mon;
+}
+
+void ClearIllusionMon(u32 battlerId)
+{
+    memset(&gBattleStruct->illusion[battlerId], 0, sizeof(gBattleStruct->illusion[battlerId]));
+}
+
+bool32 SetIllusionMon(struct Pokemon* mon, u32 battlerId)
+{
+    struct Pokemon* party, * partnerMon;
+    s32 i, id;
+
+    gBattleStruct->illusion[battlerId].set = 1;
+    if (GetMonAbility(mon) != ABILITY_ILLUSION)
+        return FALSE;
+
+    if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+        party = gPlayerParty;
+    else
+        party = gEnemyParty;
+
+    if (IsBattlerAlive(BATTLE_PARTNER(battlerId)))
+        partnerMon = &party[gBattlerPartyIndexes[BATTLE_PARTNER(battlerId)]];
+    else
+        partnerMon = mon;
+
+    // Find last alive non-egg pokemon.
+    for (i = PARTY_SIZE - 1; i >= 0; i--)
+    {
+        id = i;
+        if (GetMonData(&party[id], MON_DATA_SANITY_HAS_SPECIES)
+            && GetMonData(&party[id], MON_DATA_HP)
+            && &party[id] != mon
+            && &party[id] != partnerMon)
+        {
+            gBattleStruct->illusion[battlerId].on = 1;
+            gBattleStruct->illusion[battlerId].broken = 0;
+            gBattleStruct->illusion[battlerId].partyId = id;
+            gBattleStruct->illusion[battlerId].mon = &party[id];
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 static bool32 IsNotEventLegalMewOrDeoxys(u8 battlerId)

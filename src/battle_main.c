@@ -2318,6 +2318,7 @@ void SwitchInClearSetData(void)
     s32 i;
     u8 *ptr;
 
+    ClearIllusionMon(gActiveBattler);
     if (gBattleMoves[gCurrentMove].effect != EFFECT_BATON_PASS) //baton pass is the only effect that saves values between switches
     {
         for (i = 0; i < NUM_BATTLE_STATS; ++i)
@@ -2348,7 +2349,7 @@ void SwitchInClearSetData(void)
             }
         }
     }
-    else
+    else //important so for survival hack with status lasting after switch change these parts
     {
         gBattleMons[gActiveBattler].status2 = 0; //this says status 2 & 3 get cleared on switch
         gStatuses3[gActiveBattler] = 0; // if effect isn't baton pass
@@ -2375,6 +2376,7 @@ void SwitchInClearSetData(void)
     } // everything below this are the things cleared on switch
     gMoveResultFlags = 0; // 0 nulls it
     gDisableStructs[gActiveBattler].isFirstTurn = 2; //don't know what the 2 does.
+    gDisableStructs[gActiveBattler].truantSwitchInHack = disableStructCopy.truantSwitchInHack;
     gLastMoves[gActiveBattler] = MOVE_NONE;
     gLastLandedMoves[gActiveBattler] = MOVE_NONE;
     gLastHitByType[gActiveBattler] = 0;
@@ -2405,6 +2407,11 @@ void SwitchInClearSetData(void)
     *((u8 *)(&gBattleStruct->choicedMove[gActiveBattler]) + 1) = MOVE_NONE;
     gBattleResources->flags->flags[gActiveBattler] = 0;
     gCurrentMove = MOVE_NONE;
+
+    //ClearBattlerMoveHistory(gActiveBattler);
+    //ClearBattlerAbilityHistory(gActiveBattler);
+    //seems to be to make ai forget data of opponenet pokemon on switch
+    //don't think I want that but will keep in mind
 }
 
 void FaintClearSetData(void)

@@ -32,11 +32,14 @@
 #define ABILITYEFFECT_CHECK_ON_FIELD             0x13
 #define ABILITYEFFECT_MOVE_END_OTHER             0x14
 #define ABILITYEFFECT_MOVE_END_ATTACKER          0x15
+#define ABILITYEFFECT_TRACE2			         0x16 //added don't know if need
 #define ABILITYEFFECT_SWITCH_IN_WEATHER          0xFF
 
 #define ABILITY_ON_OPPOSING_FIELD(battlerId, abilityId)(AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, battlerId, abilityId, 0, 0))
 #define ABILITY_ON_FIELD(abilityId)(AbilityBattleEffects(ABILITYEFFECT_CHECK_ON_FIELD, 0, abilityId, 0, 0))
 #define ABILITY_ON_FIELD2(abilityId)(AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, abilityId, 0, 0))
+
+#define IS_WHOLE_SIDE_ALIVE(battler)((IsBattlerAlive(battler) && IsBattlerAlive(BATTLE_PARTNER(battler))))
 
 #define ITEMEFFECT_ON_SWITCH_IN                 0x0
 #define ITEMEFFECT_MOVE_END                     0x3
@@ -55,6 +58,16 @@
 #define BS_GET_OPPONENT1                12
 #define BS_GET_PLAYER2                  13
 #define BS_GET_OPPONENT2                14
+
+// for Natural Gift and Fling
+struct TypePower
+{
+    u8 type;
+    u8 power;
+    u16 effect;
+};
+
+extern const struct TypePower gNaturalGiftTable[];
 
 u8 GetBattlerForBattleScript(u8 caseId);
 void PressurePPLose(u8 target, u8 attacker, u16 move);
@@ -96,6 +109,17 @@ u32 GetBattlerAbility(u8 battlerId);
 bool32 IsBattlerGrounded(u8 battlerId);
 u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating);
 u32 GetBattlerHoldEffectParam(u8 battlerId);
+struct Pokemon *GetIllusionMonPtr(u32 battlerId);
+void ClearIllusionMon(u32 battlerId);
+bool32 SetIllusionMon(struct Pokemon* mon, u32 battlerId);
+u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId);
+u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16 moveId3, u16 moveId4);
+bool32 CanMegaEvolve(u8 battlerId);
+void UndoMegaEvolution(u32 monId);
+void UndoFormChange(u32 monId, u32 side);
+bool32 DoBattlersShareType(u32 battler1, u32 battler2);
+bool32 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId);
+s32 GetStealthHazardDamage(u8 hazardType, u8 battlerId); //think just for stealthrock
 u8 IsMonDisobedient(void);
 u8 GetBattleMoveSplit(u32 moveId);
 

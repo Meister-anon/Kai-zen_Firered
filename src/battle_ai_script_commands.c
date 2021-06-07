@@ -455,6 +455,35 @@ static void BattleAI_DoAIProcessing(void)
     }
 }
 
+void ClearBattlerItemEffectHistory(u8 battlerId)
+{
+    BATTLE_HISTORY->itemEffects[battlerId] = 0;
+}
+
+/*void RecordLastUsedMoveBy(u32 battlerId, u32 move)
+{
+    u8* index = &BATTLE_HISTORY->moveHistoryIndex[battlerId];
+
+    if (++(*index) >= AI_MOVE_HISTORY_COUNT)
+        *index = 0;
+    BATTLE_HISTORY->moveHistory[battlerId][*index] = move;
+}
+
+void RecordKnownMove(u8 battlerId, u32 move)
+{
+    s32 i;
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (BATTLE_HISTORY->usedMoves[battlerId][i] == move)
+            break;
+        if (BATTLE_HISTORY->usedMoves[battlerId][i] == MOVE_NONE)
+        {
+            BATTLE_HISTORY->usedMoves[battlerId][i] = move;
+            break;
+        }
+    }
+}*/
+//above ported for later consideration
 static void RecordLastUsedMoveByTarget(void)
 {
     s32 i;
