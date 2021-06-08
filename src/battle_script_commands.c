@@ -10627,7 +10627,7 @@ static void atkC1_hiddenpowercalc(void)
         moveSplit = SPLIT_PHYSICAL; 
     if (j > i)
         moveSplit = SPLIT_SPECIAL; 
-    if (i == j)
+    if (i == j) // i & j are equal when my stats equal my oppoenenets or both my stats are higher.
     {
         if (value == 0) {
             moveSplit = SPLIT_PHYSICAL;
@@ -10668,11 +10668,13 @@ static void atkC1_hiddenpowercalc(void)
                 && moveSplit = SPLIT_SPECIAL)
             gBattleMoveDamage = gBattleMoveDamage * 17 / 10;
 
-            if (gBattleMons[gBattlerAttacker].spAttack == gBattleMons[gBattlerAttacker].attack) {
+            if (gBattleMons[gBattlerAttacker].spAttack == gBattleMons[gBattlerAttacker].attack
+                || i == j) // to ensure I don't get the boost if my stats are greater than my opponenet
+            {
                 gBattleMoveDamage = gBattleMoveDamage;
                 
             }
-        //} this should work much better, split is decided by the lower compoarison of my atk stats
+        //} this should work much better, split is decided by the lower compoarison of my atk stats to my opponenets
             //then if that stat is also my lowest atk stat it gets a shonen style damage boost
     }
 
