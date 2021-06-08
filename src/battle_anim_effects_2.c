@@ -3807,7 +3807,7 @@ void AnimGuardRing(struct Sprite *sprite)
     StoreSpriteCallbackInData6(sprite, DestroyAnimSprite);
 }
 
-void AnimTask_IsFuryCutterHitRight(u8 taskId)
+void AnimTask_IsFuryCutterHitRight(u8 taskId)//important keep an eye on,, not sure how works
 {
     gBattleAnimArgs[7] = gAnimDisableStructPtr->furyCutterCounter & 1;
     DestroyAnimVisualTask(taskId);

@@ -2542,7 +2542,7 @@ static void BattleIntroDrawTrainersOrMonsSprites(void)
                 for (i = 0; i < sizeof(struct BattlePokemon); ++i)
                     ptr[i] = 0;
             }
-            else
+            else //any battle type, opponent side
             {
                 u16 *hpOnSwitchout;
 
@@ -2675,7 +2675,7 @@ static void BattleIntroDrawPartySummaryScreens(void)
                 {
                     hpStatus[i].hp = GetMonData(&gPlayerParty[i], MON_DATA_HP);
                     hpStatus[i].status = GetMonData(&gPlayerParty[i], MON_DATA_STATUS);
-                }
+                } //I guess by party summary they mean the pokeball graphics
             }
             gBattleMainFunc = BattleIntroPrintWildMonAttacked;
         }
@@ -3893,7 +3893,7 @@ static void HandleEndTurn_FinishBattle(void)
     }
 }
 
-static void FreeResetData_ReturnToOvOrDoEvolutions(void) //  this causes end battle, and starts evolutions, need to make one for in battle, 
+static void FreeResetData_ReturnToOvOrDoEvolutions(void) //important  this causes end battle, and starts evolutions, need to make one for in battle, 
 { // the way this is setup to work on palettefade causes it to happen one after another, return to overworld causes palette fade the else make evo happen during palette fade.
     if (!gPaletteFade.active)
     { // Ok it wasn't that simple for some reason, so this leads to one function, which leads to another that actually does the palette fade that triggers the evo...
@@ -3905,14 +3905,14 @@ static void FreeResetData_ReturnToOvOrDoEvolutions(void) //  this causes end bat
         FreeAllWindowBuffers();
         if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
         {
-            FreeMonSpritesGfx();
+            FreeMonSpritesGfx(); //look into these
             FreeBattleSpritesData();
             FreeBattleResources();
         }
     }
 }
 
-static void TryEvolvePokemon(void) //want battle evolution for player and opponenet for enemy need to work out how to give them exp.
+static void TryEvolvePokemon(void) //important want battle evolution for player and opponenet for enemy need to work out how to give them exp.
 { //     after they have exp need set function to make it feel real that they would level up i.e they aren't starting from 0.
     s32 i; //  for that make random function that would get their needed exp to level and then random divide that by either 2, 3, or 4 to increase their chance of lvl in battle.
     // player can use this and the above function to evolve, but enemy needs a specific one, that won't take out of battle, make it so if they can evolve they will. 

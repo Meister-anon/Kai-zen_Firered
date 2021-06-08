@@ -334,7 +334,9 @@ void CancelMultiTurnMoves(u8 battler)
     gBattleMons[battler].status2 &= ~(STATUS2_BIDE);
     gStatuses3[battler] &= ~(STATUS3_SEMI_INVULNERABLE);
     gDisableStructs[battler].rolloutTimer = 0;
-    gDisableStructs[battler].furyCutterCounter = 0;
+    gDisableStructs[battler].furyCutterCounter = 0; //need test but if worked
+    //this is no longer a multi-turn effect so guess
+    //I may not need furycounter.. 
 }
 
 bool8 WasUnableToUseMove(u8 battler) //put in spirit lock here
@@ -2744,8 +2746,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     gBattlerTarget = BATTLE_OPPOSITE(battler);
                     BattleScriptPushCursorAndCallback(BattleScript_ImposterActivates);
-                    effect++;
-                }
+                    effect++; // code ahs error attempt to fix by using trace targetting
+                }//set target 1  target 2 position then assign either based on battler positoin on player player party & enemy party side
                 break;
             case ABILITY_MOLD_BREAKER:
                 if (!gSpecialStatuses[battler].switchInAbilityDone)
@@ -3588,7 +3590,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     // Had more than half of hp before, now has less
                     && gBattleStruct->hpBefore[battler] > gBattleMons[battler].maxHP / 2
                     && gBattleMons[battler].hp < gBattleMons[battler].maxHP / 2
-                    && (gMultiHitCounter == 0 || gMultiHitCounter == 1)
+                    && (gMultiHitCounter == 0 || gMultiHitCounter == 1) //guess this is to ensure the effect triggers when move ends
                     && !(GetBattlerAbility(gBattlerAttacker) == ABILITY_SHEER_FORCE && gBattleMoves[gCurrentMove].flags & FLAG_SHEER_FORCE_BOOST)
                     && gBattleMons[battler].statStages[STAT_SPATK] != 12)
                 {
@@ -3608,7 +3610,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && gBattleMons[battler].hp < gBattleMons[battler].maxHP / 2
                     && (gMultiHitCounter == 0 || gMultiHitCounter == 1)
                     && !(GetBattlerAbility(gBattlerAttacker) == ABILITY_SHEER_FORCE && gBattleMoves[gCurrentMove].flags & FLAG_SHEER_FORCE_BOOST)
-                    && (CanBattlerSwitch(battler) || !(gBattleTypeFlags & BATTLE_TYPE_TRAINER)))
+                    && (CanBattlerSwitch(battler) || !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+                    && !IsLastAliveMon(battler)) //prevents soft lock, could also be useful for double battle fix?
                     //&& !(gBattleTypeFlags & BATTLE_TYPE_ARENA))
                 {
                     gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_EMERGENCY_EXIT;
@@ -4128,8 +4131,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     
                     side = (GetBattlerPosition(i) ^ BIT_SIDE) & BIT_SIDE; // side of the opposing pokemon
                     target1 = GetBattlerAtPosition(side);
-                    target2 = GetBattlerAtPosition(side + BIT_FLANK);
-                    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+                    target2 = GetBattlerAtPosition(side + BIT_FLANK); //can possibly use this with getbattler position
+                    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) //to make fix for Imposter ability
                     {
                         if (gBattleMons[target1].ability != 0 && gBattleMons[target1].hp != 0
                          && gBattleMons[target2].ability != 0 && gBattleMons[target2].hp != 0)
@@ -4229,7 +4232,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         case ABILITYEFFECT_FIELD_SPORT: // 14
             switch (gLastUsedAbility)
             {
-            case 0xFD:
+            case 0xFD: // check this value
                 for (i = 0; i < gBattlersCount; ++i)
                     if (gStatuses3[i] & STATUS3_MUDSPORT)
                         effect = i + 1;
@@ -5252,6 +5255,29 @@ u8 IsMonDisobedient(void)
             return 1;
         }
     }
+}
+
+bool32 IsLastAliveMon(u8 battlerId)
+{
+    struct Pokemon* party;
+    u8 i;
+    u8 count = 0;
+
+    if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+        party = gPlayerParty;
+    else
+        party = gEnemyParty;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&party[i], MON_DATA_HP) != 0)
+            count++;
+    }
+
+    if (count > 1)
+        return FALSE;
+    else
+        return TRUE;
 }
 
 u32 GetBattlerAbility(u8 battlerId)

@@ -3381,6 +3381,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     defense = defender->defense; //but for type to do scrappy type effectiveness change
     spAttack = attacker->spAttack;
     spDefense = defender->spDefense;
+    //may put fury cutter function here, so damage etc. is separte from a command,
 
     if (attacker->item == ITEM_ENIGMA_BERRY)
     {

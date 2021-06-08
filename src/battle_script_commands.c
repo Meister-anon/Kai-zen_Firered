@@ -10022,19 +10022,22 @@ static void atkAC_remaininghptopower(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atkAD_tryspiteppreduce(void)
+static void atkAD_tryspiteppreduce(void) //slight edit, added 10% chance for bad luck effect
 {
     if (gLastMoves[gBattlerTarget] != MOVE_NONE && gLastMoves[gBattlerTarget] != 0xFFFF)
     {
         s32 i;
+        u16 luck = Random() % 10;
 
         for (i = 0; i < MAX_MON_MOVES; ++i)
             if (gLastMoves[gBattlerTarget] == gBattleMons[gBattlerTarget].moves[i])
                 break;
-        if (i != MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] > 1)
+        if (i != MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] != 0)
         {
-            s32 ppToDeduct = (Random() & 3) + 2;
-
+            if (luck != 0)
+                s32 ppToDeduct = (Random() & 3) + 2; //removes 2-5 pp
+            else
+                s32 ppToDeduct = 10;
             if (gBattleMons[gBattlerTarget].pp[i] < ppToDeduct)
                 ppToDeduct = gBattleMons[gBattlerTarget].pp[i];
             PREPARE_MOVE_BUFFER(gBattleTextBuff1, gLastMoves[gBattlerTarget])
@@ -10230,7 +10233,7 @@ static void atkB3_rolloutdamagecalculation(void)
             gDisableStructs[gBattlerAttacker].rolloutTimer = 5;
             gDisableStructs[gBattlerAttacker].rolloutTimerStartValue = 5;
             gBattleMons[gBattlerAttacker].status2 |= STATUS2_MULTIPLETURNS;
-            gLockedMoves[gBattlerAttacker] = gCurrentMove;
+            gLockedMoves[gBattlerAttacker] = gCurrentMove; //important prob use for metronome
         }
         if (--gDisableStructs[gBattlerAttacker].rolloutTimer == 0) // last hit
             gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_MULTIPLETURNS);
@@ -10254,22 +10257,25 @@ static void atkB4_jumpifconfusedandstatmaxed(void)
 
 static void atkB5_furycuttercalc(void)
 {
-    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT || gMultiHitCounter == 0) //to make sure it resets when move is used again, even if don't miss
     {
         gDisableStructs[gBattlerAttacker].furyCutterCounter = 0;
         gBattlescriptCurrInstr = BattleScript_MoveMissedPause;
     }
     else
     {
-        s32 i;
-
-        if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5)
+        s32 i; // need to figure what triggers the counter to see if I can make it work withi multihit
+        //Im guessing it incremenets whenever this command is hit, so I put in the loop, hopefully that does it
+        if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5) //increment until reach 5
             ++gDisableStructs[gBattlerAttacker].furyCutterCounter;
         gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+        u16 berserker = gBattleMoves[gCurrentMove].accuracy;
 
         for (i = 1; i < gDisableStructs[gBattlerAttacker].furyCutterCounter; ++i)
-            gDynamicBasePower *= 2;
-        ++gBattlescriptCurrInstr;
+            gDynamicBasePower *= 2; //...I guess damage doubles with each use until it stops at 5?
+            berserker *= 3;
+            berserker /= 4; //dizzyegg confirs doing this way also works for establishing 3/4
+        ++gBattlescriptCurrInstr; // if done right power should double and accuracy should drop off by a fourth each hti
     }
 }
 
@@ -11270,6 +11276,14 @@ static void atkE2_switchoutabilities(void)
     case ABILITY_NATURAL_CURE:
         gBattleMons[gActiveBattler].status1 = 0;
         BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, gBitTable[*(gBattleStruct->battlerPartyIndexes + gActiveBattler)], 4, &gBattleMons[gActiveBattler].status1);
+        MarkBattlerForControllerExec(gActiveBattler);
+        break;
+    case ABILITY_REGENERATOR:
+        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 3;
+        gBattleMoveDamage += gBattleMons[gActiveBattler].hp;
+        if (gBattleMoveDamage > gBattleMons[gActiveBattler].maxHP)
+            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP;
+        BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[*(gBattleStruct->field_58 + gActiveBattler)], 2, &gBattleMoveDamage);
         MarkBattlerForControllerExec(gActiveBattler);
         break;
     }

@@ -2941,9 +2941,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_FURY_CUTTER] =
     {
-        .effect = EFFECT_FURY_CUTTER,
-        .power = 25,
-        .type = TYPE_BUG,
+        .effect = EFFECT_FURY_CUTTER, //test made like triple kick, into its own multi-hit effect
+        .power = 10,
+        .type = TYPE_BUG, //should retain damage boost,but do each strike, and cut accuracy each hit
         .accuracy = 95,
         .pp = 20,
         .secondaryEffectChance = 0,
