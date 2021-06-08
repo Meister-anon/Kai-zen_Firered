@@ -10504,6 +10504,27 @@ static void atkBE_rapidspinfree(void)
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_SpikesFree;
     }
+    else if (gSideStatuses[GetBattlerSide(gBattlerAttacker)] & SIDE_STATUS_TOXIC_SPIKES)
+    {
+        gSideStatuses[GetBattlerSide(gBattlerAttacker)] &= ~(SIDE_STATUS_TOXIC_SPIKES);
+        gSideTimers[GetBattlerSide(gBattlerAttacker)].toxicSpikesAmount = 0;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_ToxicSpikesFree;
+    }
+    else if (gSideStatuses[GetBattlerSide(gBattlerAttacker)] & SIDE_STATUS_STICKY_WEB)
+    {
+        gSideStatuses[GetBattlerSide(gBattlerAttacker)] &= ~(SIDE_STATUS_STICKY_WEB);
+        gSideTimers[GetBattlerSide(gBattlerAttacker)].stickyWebAmount = 0;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_StickyWebFree;
+    }
+    else if (gSideStatuses[GetBattlerSide(gBattlerAttacker)] & SIDE_STATUS_STEALTH_ROCK)
+    {
+        gSideStatuses[GetBattlerSide(gBattlerAttacker)] &= ~(SIDE_STATUS_STEALTH_ROCK);
+        gSideTimers[GetBattlerSide(gBattlerAttacker)].stealthRockAmount = 0;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_StealthRockFree;
+    }
     else
     {
         ++gBattlescriptCurrInstr;
@@ -10521,12 +10542,22 @@ static void atkC0_recoverbasedonsunlight(void)
     gBattlerTarget = gBattlerAttacker;
     if (gBattleMons[gBattlerAttacker].hp != gBattleMons[gBattlerAttacker].maxHP)
     {
-        if (gBattleWeather == 0 || !WEATHER_HAS_EFFECT)
-            gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
-        else if (gBattleWeather & WEATHER_SUN_ANY)
-            gBattleMoveDamage = 20 * gBattleMons[gBattlerAttacker].maxHP / 30;
-        else // not sunny weather
-            gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
+        if (gCurrentMove == MOVE_SHORE_UP)
+        {
+            if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY)
+                gBattleMoveDamage = 20 * gBattleMons[gBattlerAttacker].maxHP / 30;
+            else
+                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
+        }
+        else
+        {
+            if (gBattleWeather == 0 || !WEATHER_HAS_EFFECT)
+                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
+            else if (gBattleWeather & WEATHER_SUN_ANY)
+                gBattleMoveDamage = 20 * gBattleMons[gBattlerAttacker].maxHP / 30;
+            else // not sunny weather
+                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
+        }
 
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
@@ -10562,6 +10593,8 @@ static void atkC1_hiddenpowercalc(void)
 
     s32 powerBits, typeBits;
     s32 i, j;
+    u8 moveSplit = gBattleMoves[gCurrentMove].split;
+    u16 value = Random() % 2;
 
     powerBits = ((gBattleMons[gBattlerAttacker].hpIV & 2) >> 1)
               | ((gBattleMons[gBattlerAttacker].attackIV & 2) << 0)
@@ -10591,20 +10624,31 @@ static void atkC1_hiddenpowercalc(void)
     j = spatk_diff();  // since the values are a differnece  the lower stat will actually be the one with the greater value. so I should use greater than for these.
     // if equal I think I'll just toss up a 50/50 Random() % 2  setting each, like I did for forecast.
     if (i > j)
-        gBattleMoveDamage = gBattleMoveDamage * 17 / 10;
+        moveSplit = SPLIT_PHYSICAL; 
     if (j > i)
-        gBattleMoveDamage = gBattleMoveDamage * 17 / 10;
+        moveSplit = SPLIT_SPECIAL; 
     if (i == j)
-        gBattleMoveDamage = gBattleMoveDamage;
+    {
+        if (value == 0) {
+            moveSplit = SPLIT_PHYSICAL;
+        }
+        if (value == 1) {
+            moveSplit = SPLIT_SPECIAL;
+        } //set split here,  put boost below and add split for lower stat to condtion
+    }
     
     if (gCurrentMove == MOVE_HIDDEN_POWER) // also see about putting split condition for hidden power onto the function for getbattlesplit
     {
-        u16 value;
-        u8 validMoves = 0;
-        u8 moveChecked;
-        u8 moveSplit;
-        
-        while (validMoves < MAX_MON_MOVES)
+        //u8 moveSplit = gBattleMoves[gCurrentMove].split;
+        //u16 value = Random() % 2;
+        //u8 validMoves = 0;
+        //u8 moveChecked; //made split work but wondering if I shouldn't
+        //have it calc random value before actually using the move..
+        //will have to see if it causes lag.
+                
+        /*while (validMoves < MAX_MON_MOVES) //may revise this, looking back I don't see why I need
+            // all these checks instead of just if current move is hidden power
+            // moveSplit = gBattleMoves[gCurrentMove].split;
         {
             if (gBattleMons[gBattlerAttacker].moves[validMoves] != MOVE_HIDDEN_POWER)
                 break;
@@ -10613,23 +10657,23 @@ static void atkC1_hiddenpowercalc(void)
         for (moveChecked = 0; moveChecked < validMoves; ++moveChecked)
         {
             moveSplit = gBattleMoves[gBattleMons[gBattlerAttacker].moves[moveChecked]].split;
+            */
 
-            if (gBattleMons[gBattlerAttacker].attack < gBattleMons[gBattlerAttacker].spAttack)
-                moveSplit = SPLIT_PHYSICAL;
+        //so this should boost attack,if atk is lower & split is physical
+            if (gBattleMons[gBattlerAttacker].attack < gBattleMons[gBattlerAttacker].spAttack
+                && moveSplit = SPLIT_PHYSICAL)
+            gBattleMoveDamage = gBattleMoveDamage * 17 / 10;
 
-            if (gBattleMons[gBattlerAttacker].spAttack < gBattleMons[gBattlerAttacker].attack)
-                moveSplit = SPLIT_SPECIAL;
+            if (gBattleMons[gBattlerAttacker].spAttack < gBattleMons[gBattlerAttacker].attack
+                && moveSplit = SPLIT_SPECIAL)
+            gBattleMoveDamage = gBattleMoveDamage * 17 / 10;
 
             if (gBattleMons[gBattlerAttacker].spAttack == gBattleMons[gBattlerAttacker].attack) {
-                value = Random() % 2;
-                if (value == 0) {
-                    moveSplit = SPLIT_PHYSICAL;
-                }
-                if (value == 1) {
-                    moveSplit = SPLIT_SPECIAL;
-                }
+                gBattleMoveDamage = gBattleMoveDamage;
+                
             }
-        }
+        //} this should work much better, split is decided by the lower compoarison of my atk stats
+            //then if that stat is also my lowest atk stat it gets a shonen style damage boost
     }
 
     //compare abililty_download that is most similar as it does a boost based on opponenet stat comparison
