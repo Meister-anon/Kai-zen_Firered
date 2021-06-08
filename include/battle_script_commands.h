@@ -10,7 +10,7 @@
 #define WINDOW_x80              0x80
 
 void SetMoveEffect(bool8 primary, u8 certain);
-bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move);
+bool16 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef);
 bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move);
 bool8 UproarWakeUpCheck(u8 battlerId);
 bool32 CanUseLastResort(u8 battlerId);

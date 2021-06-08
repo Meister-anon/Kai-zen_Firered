@@ -1155,7 +1155,7 @@ static bool8 JumpIfMoveAffectedByProtect(u16 move) // think I can put weather br
 // I'm using my own conditions, and...I THINK I may do a reduction in damage too, but do it randomly like high/low rolls just to a lesser degree
 // also maybe I'll add a text string for this, but for now I'll do without.
 
-static bool8 AccuracyCalcHelper(u16 move)
+static bool8 AccuracyCalcHelper(u16 move) //forgot to reupdate this
 {
     if (gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS && gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker)
     {
@@ -1225,6 +1225,8 @@ static void atk01_accuracycheck(void)
         u16 calc;
         u8 eva;
         u8 acc;// = gBattleMons[gBattlerAttacker].statStages[STAT_ACC];
+        u16 effect = gBattleMoves[move].effect;
+        u8 chance = gBattleMoves[move].secondaryEffectChance
 
         if (move == MOVE_NONE)
             move = gCurrentMove;
@@ -1318,6 +1320,22 @@ static void atk01_accuracycheck(void)
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_TOXIC_POISON)
         //    calc = (calc * 156) / 100;
         eva = 3;
+
+        //ice effect buff
+        //keeping here instead of seteffect with chance so it should always trigger, need test
+        if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ICE) && gBattleWeather & WEATHER_HAIL_ANY
+            && gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
+        {
+            chance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2; //should double freeze chance to 20% in hail if ice type
+            
+            if (gBattleMons[gBattlerAttacker].species == SPECIES_CASTFORM)
+            {
+                chance = gBattleMoves[gCurrentMove].secondaryEffectChance * 12;
+                chance = gBattleMoves[gCurrentMove].secondaryEffectChance / 10;
+                //lowered boost for castfom
+            }
+        } //decided to lower categorical boost, when considered multi-hit moves
+        //actually nevermind ice shard etc. can't freeze
 
         if (gBattleMons[gBattlerTarget].item == ITEM_ENIGMA_BERRY)
         {
@@ -1869,6 +1887,9 @@ static void atk07_adjustnormaldamage(void)
 
     ApplyRandomDmgMultiplier(); //oh just not in THAT function but it is used
 
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget))
+        goto END;
+
     if (DoesDisguiseBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))
         goto END; //hope this works?
 
@@ -1888,8 +1909,13 @@ static void atk07_adjustnormaldamage(void)
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gSpecialStatuses[gBattlerTarget].focusBanded = 1;
     }
-    if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
-     && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded)
+    else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && BATTLER_MAX_HP(gBattlerTarget))
+    {
+        RecordItemEffectBattle(gBattlerTarget, holdEffect);
+        gSpecialStatuses[gBattlerTarget].focusSashed = 1;
+    }
+    if (!(DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget)
+     && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded || gSpecialStatuses[gBattlerTarget].focusSashed)
      && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage)
     {
         gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
@@ -1897,7 +1923,7 @@ static void atk07_adjustnormaldamage(void)
         {
             gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED;
         }
-        else if (gSpecialStatuses[gBattlerTarget].focusBanded)
+        else if (gSpecialStatuses[gBattlerTarget].focusBanded || gSpecialStatuses[gBattlerTarget].focusSashed)
         {
             gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
             gLastUsedItem = gBattleMons[gBattlerTarget].item;
@@ -1935,6 +1961,9 @@ static void atk08_adjustnormaldamage2(void)
 
     ApplyRandomDmgMultiplier();
 
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget))
+        goto END;
+
     if (DoesDisguiseBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))
         goto END; //hope this works?
 
@@ -1954,8 +1983,13 @@ static void atk08_adjustnormaldamage2(void)
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gSpecialStatuses[gBattlerTarget].focusBanded = 1;
     }
-    if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
-     && (gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded)
+    else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && BATTLER_MAX_HP(gBattlerTarget))
+    {
+        RecordItemEffectBattle(gBattlerTarget, holdEffect);
+        gSpecialStatuses[gBattlerTarget].focusSashed = 1;
+    }
+    if (!(DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget)
+     && (gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded || gSpecialStatuses[gBattlerTarget].focusSashed)
      && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage)
     {
         gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
@@ -1963,7 +1997,7 @@ static void atk08_adjustnormaldamage2(void)
         {
             gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED;
         }
-        else if (gSpecialStatuses[gBattlerTarget].focusBanded)
+        else if (gSpecialStatuses[gBattlerTarget].focusBanded || gSpecialStatuses[gBattlerTarget].focusSashed)
         {
             gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
             gLastUsedItem = gBattleMons[gBattlerTarget].item;
@@ -2101,8 +2135,8 @@ static void atk0C_datahpupdate(void)
         if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
         {
             gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
-            if (gBattleMons[gActiveBattler].status2 & STATUS2_SUBSTITUTE && gDisableStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE) && (gBattleMons[gBattlerAttacker].ability != ABILITY_INFILTRATOR))
-            {
+            if (DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler) && gDisableStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE))
+            { // changed above function to use 2 arguements and remove sound based move bypass
                 if (gDisableStructs[gActiveBattler].substituteHP >= gBattleMoveDamage)
                 {
                     if (gSpecialStatuses[gActiveBattler].dmg == 0)
@@ -2535,7 +2569,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
         ++gBattlescriptCurrInstr;
         return;
     }
-    if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler, gCurrentMove)
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler)
      && affectsUser != MOVE_EFFECT_AFFECTS_USER)
     {
         ++gBattlescriptCurrInstr;
@@ -6203,7 +6237,7 @@ static void atk5C_hitanimation(void)
         gBattlescriptCurrInstr += 2;
     }
     else if (!(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE)
-          || !(gBattleMons[gActiveBattler].status2 & STATUS2_SUBSTITUTE)
+          || !(DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler))
           || gDisableStructs[gActiveBattler].substituteHP == 0)
     {
         BtlController_EmitHitAnimation(0);
@@ -8356,7 +8390,8 @@ static void atk7C_trymirrormove(void)
         if (i != gBattlerAttacker)
         {
             move = T1_READ_16(i * 2 + gBattlerAttacker * 8 + gBattleStruct->lastTakenMoveFrom);
-            if (move != MOVE_NONE && move != 0xFFFF)
+            if (move != MOVE_NONE && move != 0xFFFF
+                || (!IsTwoTurnsMove(move)))
                 movesArray[validMovesCount++] = move;
         }
     }
@@ -9510,6 +9545,7 @@ static void atk9B_transformdataexecution(void)
         gDisableStructs[gBattlerAttacker].disableTimer = 0;
         gDisableStructs[gBattlerAttacker].transformedMonPersonality = gBattleMons[gBattlerTarget].personality;
         gDisableStructs[gBattlerAttacker].mimickedMoves = 0;
+        gDisableStructs[gBattlerAttacker].usedMoves = 0;
         PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerTarget].species)
         battleMonAttacker = (u8 *)(&gBattleMons[gBattlerAttacker]);
         battleMonTarget = (u8 *)(&gBattleMons[gBattlerTarget]);
@@ -9615,8 +9651,9 @@ static void atk9E_metronome(void)
             ++i;
             if (sMovesForbiddenToCopy[i] == gCurrentMove)
                 break;
-            if (sMovesForbiddenToCopy[i] == METRONOME_FORBIDDEN_END)
-                break;
+            if (sMovesForbiddenToCopy[i] == METRONOME_FORBIDDEN_END
+                || IsTwoTurnsMove(gBattleMons[gBattlerAttacker].moves[i]))
+                break; //block metronome from using two turn move because think that isn't fixed
         }
         if (sMovesForbiddenToCopy[i] == METRONOME_FORBIDDEN_END)
         {
@@ -9705,7 +9742,7 @@ static void atkA3_disablelastusedattack(void)
     {
         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerTarget].moves[i])
         gDisableStructs[gBattlerTarget].disabledMove = gBattleMons[gBattlerTarget].moves[i];
-        gDisableStructs[gBattlerTarget].disableTimer = (Random() & 3) + 2;
+        gDisableStructs[gBattlerTarget].disableTimer = (Random() & 3) + 4; //gen 4 standard last 4-7  turns
         gDisableStructs[gBattlerTarget].disableTimerStartValue = gDisableStructs[gBattlerTarget].disableTimer; // used to save the random amount of turns?
         gBattlescriptCurrInstr += 5;
     }
@@ -9732,7 +9769,7 @@ static void atkA4_trysetencore(void)
     {
         gDisableStructs[gBattlerTarget].encoredMove = gBattleMons[gBattlerTarget].moves[i];
         gDisableStructs[gBattlerTarget].encoredMovePos = i;
-        gDisableStructs[gBattlerTarget].encoreTimer = (Random() & 3) + 3;
+        gDisableStructs[gBattlerTarget].encoreTimer = (Random() & 3) + 3; //lasts 3-6
         gDisableStructs[gBattlerTarget].encoreTimerStartValue = gDisableStructs[gBattlerTarget].encoreTimer;
         gBattlescriptCurrInstr += 5;
     }
@@ -9744,7 +9781,7 @@ static void atkA4_trysetencore(void)
 
 static void atkA5_painsplitdmgcalc(void)
 {
-    if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE))
+    if (!(DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler)))
     {
         s32 hpDiff = (gBattleMons[gBattlerAttacker].hp + gBattleMons[gBattlerTarget].hp) / 2;
         s32 painSplitHp = gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - hpDiff;
@@ -9823,6 +9860,7 @@ static void atkA6_settypetorandomresistance(void) // conversion 2
 static void atkA7_setalwayshitflag(void)
 {
     gStatuses3[gBattlerTarget] &= ~(STATUS3_ALWAYS_HITS);
+    gStatuses3[gBattlerTarget] |= STATUS3_ALWAYS_HITS_TURN(2);
     gStatuses3[gBattlerTarget] |= 0x10;
     gDisableStructs[gBattlerTarget].battlerWithSureHit = gBattlerAttacker;
     ++gBattlescriptCurrInstr;
@@ -9871,12 +9909,12 @@ static void atkA8_copymovepermanently(void) // sketch
     }
 }
 
-static bool8 IsTwoTurnsMove(u16 move)
+static bool8 IsTwoTurnsMove(u16 move) //made slight edit to solarbeam,
 {
     if (gBattleMoves[move].effect == EFFECT_SKULL_BASH
      || gBattleMoves[move].effect == EFFECT_RAZOR_WIND
      || gBattleMoves[move].effect == EFFECT_SKY_ATTACK
-     || gBattleMoves[move].effect == EFFECT_SOLARBEAM
+     || gBattleMoves[move].effect == EFFECT_SOLARBEAM && (!(gBattleWeather & WEATHER_SUN_ANY))
      || gBattleMoves[move].effect == EFFECT_SEMI_INVULNERABLE
      || gBattleMoves[move].effect == EFFECT_TWO_TURNS_ATTACK // need to set up battle script for..done
      || gBattleMoves[move].effect == EFFECT_BIDE)
@@ -9897,8 +9935,8 @@ static bool8 IsInvalidForSleepTalkOrAssist(u16 move)
 static u8 AttacksThisTurn(u8 battlerId, u16 move) // Note: returns 1 if it's a charging turn, otherwise 2
 {
     // first argument is unused
-    if (gBattleMoves[move].effect == EFFECT_SOLARBEAM
-     && (gBattleWeather & WEATHER_SUN_ANY))
+    if (gBattleMoves[move].effect == EFFECT_SOLARBEAM //its unlisted but does solarblade still work?
+     && (gBattleWeather & WEATHER_SUN_ANY)) //yes becuause its effect is solar_beam
         return 2;
     if (gBattleMoves[move].effect == EFFECT_SKULL_BASH
      || gBattleMoves[move].effect == EFFECT_RAZOR_WIND
@@ -11160,7 +11198,7 @@ static void atkDE_assistattackselect(void)
             if (IsInvalidForSleepTalkOrAssist(move))
                 continue;
             for (; sMovesForbiddenToCopy[i] != ASSIST_FORBIDDEN_END && move != sMovesForbiddenToCopy[i]; ++i);
-            if (sMovesForbiddenToCopy[i] != ASSIST_FORBIDDEN_END || move == MOVE_NONE)
+            if (sMovesForbiddenToCopy[i] != ASSIST_FORBIDDEN_END || move == MOVE_NONE || IsTwoTurnsMove(move))
                 continue;
             movesArray[chooseableMovesNo] = move;
             ++chooseableMovesNo;
@@ -11362,12 +11400,12 @@ static void atkE8_settypebasedhalvers(void) // water and mud sport
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 }
 
-bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move)
+bool16 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef) //sound bypass is dumb, guess now it works how I want
 {
     if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE))
         return FALSE;
-    else if (gBattleMoves[move].flags & FLAG_SOUND)
-        return FALSE;
+    //else if (gBattleMoves[move].flags & FLAG_SOUND)
+      //  return FALSE;
     else if (GetBattlerAbility(battlerAtk) == ABILITY_INFILTRATOR)
         return FALSE;
     else
@@ -12144,7 +12182,7 @@ static void atk103_setstealthrock(void){
 }
  //may not need sub block? don't really need it but using will save time
 static void atk104_jumpifsubstituteblocks(void){
-    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget))
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     else
         gBattlescriptCurrInstr += 5;
