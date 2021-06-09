@@ -315,8 +315,15 @@ static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 
 // 10 is ×1.0 TYPE_MUL_NORMAL
 // 05 is ×0.5 TYPE_MUL_NOT_EFFECTIVE
 // 00 is ×0.0 TYPE_MUL_NO_EFFECT
-const u8 gTypeEffectiveness[378] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
-{ // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.  also means for every 1 line I add, array gets increased by 3.
+
+// 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+ // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.  
+//also means for every 1 line I add, array gets increased by 3. viceversa
+
+//subtracted 3 for removing ground to flying interaction.
+const u8 gTypeEffectiveness[375] = 
+
+{
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIRE, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
@@ -377,9 +384,9 @@ const u8 gTypeEffectiveness[378] = // 336 is number of entries x 3 i.e number of
     TYPE_GROUND, TYPE_ELECTRIC, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_GROUND, TYPE_GRASS, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GROUND, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_GROUND, TYPE_FLYING, TYPE_MUL_NO_EFFECT,
-    TYPE_GROUND, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_GROUND, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
+    //TYPE_GROUND, TYPE_FLYING, TYPE_MUL_NO_EFFECT, // delete so its set to normal effective
+    TYPE_GROUND, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE, //then create condition where its
+    TYPE_GROUND, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE, //set to no effect if not grounded
     TYPE_GROUND, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FLYING, TYPE_ELECTRIC, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FLYING, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
@@ -726,6 +733,7 @@ static void CB2_InitBattleInternal(void)
     gBattleCommunication[MULTIUSE_STATE] = 0;
 }
 //believe this is summary screen during battle 
+//or effect to display on balls during battle i.e if greyed out
 #define BUFFER_PARTY_VS_SCREEN_STATUS(party, flags, i)              \
     for ((i) = 0; (i) < PARTY_SIZE; (i)++)                          \
     {                                                               \
@@ -760,7 +768,8 @@ static void BufferPartyVsScreenHealth_AtStart(void)
     u16 flags = 0;
     s32 i;
 
-    BUFFER_PARTY_VS_SCREEN_STATUS(gPlayerParty, flags, i);
+    BUFFER_PARTY_VS_SCREEN_STATUS(gPlayerParty, 
+        flags, i);
     gBattleStruct->multiBuffer.linkPartnerHeader.vsScreenHealthFlagsLo = flags;
     *(&gBattleStruct->multiBuffer.linkPartnerHeader.vsScreenHealthFlagsHi) = flags >> 8;
 }
@@ -1537,7 +1546,7 @@ static void SpriteCB_UnusedDebugSprite_Step(struct Sprite *sprite)
     }
 }
 
-static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
+static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum) //important
 {
     u32 nameHash = 0;
     u32 personalityValue;
@@ -3063,8 +3072,8 @@ enum
     STATE_WAIT_SET_BEFORE_ACTION,
 };
 
-static void HandleTurnActionSelectionState(void)
-{
+static void HandleTurnActionSelectionState(void) //important add on to this from emerald
+{ // need port wild_double_battles its in expansion but not firered
     s32 i;
 
     gBattleCommunication[ACTIONS_CONFIRMED_COUNT] = 0;
@@ -4515,7 +4524,11 @@ static void HandleAction_ActionFinished(void)
 //will check later after looking at battle script if this should be function 
 //or battle script
 
-/* void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
+//completely forgot about this... checked emerald there isn't a battle script for this, 
+//so it needs to be a function, simple thing is either put it same place as weather ball type change
+//or leave here but remove parts already don elsewhere i.e hiddenpoewr & W-ball
+
+/* void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk) //important very very
 {
 if (gBattleMoves[move].effect == EFFECT_CHANGE_TYPE_ON_ITEM)
     {

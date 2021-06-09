@@ -236,6 +236,7 @@ struct DisableStruct
     u8 laserFocusTimer;
     u8 throatChopTimer;
     u8 usedMoves : 4;
+    u8 RoostTimer; // to set random % 4 effect after use roost
     u8 wrapTurns;
     u8 unk1A[2];
 };
@@ -353,8 +354,8 @@ extern struct SideTimer gSideTimers[];
 
 struct FieldTimer
 {
-    u8 mudSportTimer;
-    u8 waterSportTimer;
+    //u8 mudSportTimer;
+    //u8 waterSportTimer;  //forgot to remove these earlier, since I'm using gen 3 effects for them
     u8 wonderRoomTimer;
     u8 magicRoomTimer;
     u8 trickRoomTimer;
@@ -365,7 +366,8 @@ struct FieldTimer
     u8 echoVoiceCounter;
     u8 gravityTimer;
     u8 fairyLockTimer;
-
+    u8 IonDelugeTimer; // this & roost will be only ones that don't fail if used when timer isn't 0
+    
 };
 
 
@@ -622,7 +624,6 @@ struct BattleStruct
     u8 friskedBattler; // Frisk needs to identify 2 battlers in double battles.
     bool8 friskedAbility; // If identifies two mons, show the ability pop-up only once.
     u16 changedSpecies[PARTY_SIZE]; // For Zygarde or future forms when multiple mons can change into the same pokemon.
-    u8 roostTypes[MAX_BATTLERS_COUNT][3];
     u8 ateBerry[2]; // array id determined by side, each party pokemon as bit
     u8 padding_1E4[0x1C];
 }; // size == 0x200 bytes / different now,prob more also not sure if all after multibuffer are needed

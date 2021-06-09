@@ -3918,8 +3918,6 @@ BattleScript_BeatUpLoop::
 	trydobeatup BattleScript_BeatUpEnd, BattleScript_ButItFailed
 	printstring STRINGID_PKMNATTACK
 	critcalc
-	jumpifbyte CMP_NOT_EQUAL, gCritMultiplier, 2, BattleScript_BeatUpAttack
-	manipulatedamage 2
 BattleScript_BeatUpAttack::
 	adjustnormaldamage
 	attackanimation
@@ -4842,6 +4840,11 @@ BattleScript_GiveExp::
 	setbyte sGIVEEXP_STATE, 0
 	getexp BS_TARGET
 	end2
+
+BattleScript_BallFetch::
+	printstring STRINGID_FETCHEDPOKEBALL
+	waitmessage 0x40
+	end3
 
 BattleScript_HandleFaintedMon::
 	atk24 BattleScript_LinkBattleHandleFaint

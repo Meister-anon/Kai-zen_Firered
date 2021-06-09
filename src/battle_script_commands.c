@@ -331,7 +331,8 @@ static void atk10C_metalburstdamagecalculator(void);
 static void atk10D_setattackerstatus3(void);
 static void atk10E_setatkhpto1(void);
 static void atk10F_jumpifdamaged(void); // made this command to work for exponcatch  inverted jumpifnodamage
-//static void atk10F_giveexponcatch(void);
+static void atk110_set_iondeluge(void);
+//static void atk111_setroost(void);    //static void atk10F_giveexponcatch(void);
 
 
 void (* const gBattleScriptingCommandsTable[])(void) =
@@ -608,6 +609,8 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atk10D_setattackerstatus3,
     atk10E_setatkhpto1,
     atk10F_jumpifdamaged,
+    atk110_set_iondeluge,
+    //atk111_setroost, I'm stupid set roost already exists
    // atk10F_giveexponcatch,
 };
 
@@ -1752,7 +1755,7 @@ static void ModulateDmgByType2(u8 multiplier, u16 move, u8 *flags)
     }
 }
 
-u8 TypeCalc(u16 move, u8 attacker, u8 defender)
+u8 TypeCalc(u16 move, u8 attacker, u8 defender) //realize should/could put scrappy here
 {
     s32 i = 0;
     u8 flags = 0;
@@ -1768,7 +1771,8 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
         gBattleMoveDamage = gBattleMoveDamage / 10;
     }
 
-    if (gBattleMons[defender].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
+    if (!IsBattlerGrounded(defender) //set without ! it means if function is TRUE aka non-zero
+        && moveType == TYPE_GROUND) //just realized grounded already has conditions for levitate so I just need that.
     {
         flags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
     }
@@ -10720,9 +10724,11 @@ static void atkC3_trysetfutureattack(void)
     }
 }
 
-static void atkC4_trydobeatup(void)
+static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no stab,
+// I'm going to augment this add psuedo stab by increasing damage if pokemon attacking is dark type
 {
     struct Pokemon *party;
+    //u16 power = gBattleMoves[gCurrentMove].power = GetMonData(&party[gBattleCommunication[0]], STAT_ATK) / 10 + 5;
 
     if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
         party = gPlayerParty;
@@ -10736,24 +10742,28 @@ static void atkC4_trydobeatup(void)
     {
         u8 beforeLoop = gBattleCommunication[0];
 
-        for (;gBattleCommunication[0] < 6; ++gBattleCommunication[0])
+        for (;gBattleCommunication[0] < PARTY_SIZE; ++gBattleCommunication[0])
         {
             if (GetMonData(&party[gBattleCommunication[0]], MON_DATA_HP)
              && GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES2)
              && GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES2) != SPECIES_EGG
              && !GetMonData(&party[gBattleCommunication[0]], MON_DATA_STATUS))
-                break;
+                break; // continue party loop if mon alive, not an egg, and not statused
         }
-        if (gBattleCommunication[0] < 6)
-        {
+        if (gBattleCommunication[0] < PARTY_SIZE)
+        { //don't want to use base attack that would ignore all gains
             PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerAttacker, gBattleCommunication[0])
             gBattlescriptCurrInstr += 9;
-            gBattleMoveDamage = gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].baseAttack;
-            gBattleMoveDamage *= gBattleMoves[gCurrentMove].power;
-            gBattleMoveDamage *= (GetMonData(&party[gBattleCommunication[0]], MON_DATA_LEVEL) * 2 / 5 + 2);
-            gBattleMoveDamage /= gBaseStats[gBattleMons[gBattlerTarget].species].baseDefense;
-            gBattleMoveDamage = (gBattleMoveDamage / 50) + 2;
+            //gBattleMoveDamage = gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].baseAttack;
+            gBattleMoveDamage = (GetMonData(&party[gBattleCommunication[0]], STAT_ATK) / 10 + 5);
+            //gBattleMoveDamage *= power;
+            //gBattleMoveDamage *= (GetMonData(&party[gBattleCommunication[0]], MON_DATA_LEVEL) * 2 / 5 + 2);
+            //gBattleMoveDamage /= gBaseStats[gBattleMons[gBattlerTarget].species].baseDefense;
+            //gBattleMoveDamage = (gBattleMoveDamage / 50) + 2;
             if (gProtectStructs[gBattlerAttacker].helpingHand)
+                gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
+            if (gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type1 == TYPE_DARK
+                || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK)
                 gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
             ++gBattleCommunication[0];
         }
@@ -10762,7 +10772,9 @@ static void atkC4_trydobeatup(void)
         else
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 5);
     }
-}
+} //if I did this correctly it should still be typeless, but calculate on battle attack
+//instead of species base attack, give stab multiplier if attaking party member is type dark
+// as well as use the gen 5 base power calculation
 
 static void atkC5_setsemiinvulnerablebit(void)
 {
@@ -10777,6 +10789,10 @@ static void atkC5_setsemiinvulnerablebit(void)
         break;
     case MOVE_DIVE:
         gStatuses3[gBattlerAttacker] |= STATUS3_UNDERWATER;
+        break;
+    case MOVE_PHANTOM_FORCE:
+    case MOVE_SHADOW_FORCE:
+        gStatuses3[gBattlerAttacker] |= STATUS3_PHANTOM_FORCE;
         break;
     }
     ++gBattlescriptCurrInstr;
@@ -10795,6 +10811,10 @@ static void atkC6_clearsemiinvulnerablebit(void)
         break;
     case MOVE_DIVE:
         gStatuses3[gBattlerAttacker] &= ~STATUS3_UNDERWATER;
+        break;
+    case MOVE_PHANTOM_FORCE:
+    case MOVE_SHADOW_FORCE:
+        gStatuses3[gBattlerAttacker] &= ~STATUS3_PHANTOM_FORCE;
         break;
     }
     ++gBattlescriptCurrInstr;
@@ -10906,8 +10926,10 @@ static void atkD0_settaunt(void)
 {
     if (gDisableStructs[gBattlerTarget].tauntTimer == 0)
     {
-        gDisableStructs[gBattlerTarget].tauntTimer = 2;
-        gDisableStructs[gBattlerTarget].tauntTimer2 = 2;
+        u8 turns = 4;
+        if (GetBattlerTurnOrderNum(gBattlerTarget) > GetBattlerTurnOrderNum(gBattlerAttacker))
+            turns--; // If the target hasn't yet moved this turn, Taunt lasts for only three turns (source: Bulbapedia)
+        gDisableStructs[gBattlerTarget].tauntTimer = gDisableStructs[gBattlerTarget].tauntTimer2 = turns;
         gBattlescriptCurrInstr += 5;
     }
     else
@@ -11000,8 +11022,14 @@ static void atkD2_tryswapitems(void) // trick
             if (oldItemAtk != ITEM_NONE && *newItemAtk != ITEM_NONE)
                 gBattleCommunication[MULTISTRING_CHOOSER] = 2; // attacker's item -> <- target's item
             else if (oldItemAtk == ITEM_NONE && *newItemAtk != ITEM_NONE)
+            {
+                if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNBURDEN && gBattleResources->flags->flags[gBattlerAttacker] & RESOURCE_FLAG_UNBURDEN)
+                    gBattleResources->flags->flags[gBattlerAttacker] &= ~(RESOURCE_FLAG_UNBURDEN);
+
                 gBattleCommunication[MULTISTRING_CHOOSER] = 0; // nothing -> <- target's item
+            }
             else
+                CheckSetUnburden(gBattlerAttacker);
                 gBattleCommunication[MULTISTRING_CHOOSER] = 1; // attacker's item -> <- nothing
         }
     }
@@ -11009,7 +11037,7 @@ static void atkD2_tryswapitems(void) // trick
 
 static void atkD3_trycopyability(void) // role play
 {
-    if (gBattleMons[gBattlerTarget].ability != ABILITY_NONE) //changed to remove excluding abilities like wonderguard
+    if (gBattleMons[gBattlerTarget].ability != ABILITY_NONE && gBattleMons[gBattlerTarget].ability != ABILITY_DISGUISE) //changed to remove excluding abilities like wonderguard
     {
         gBattleMons[gBattlerAttacker].ability = gBattleMons[gBattlerTarget].ability;
         gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
@@ -11126,8 +11154,8 @@ static void atkD9_scaledamagebyhealthratio(void)
 
 static void atkDA_tryswapabilities(void) // skill swap . //remember need to remove wonderguard from all abiility swap functions,. because game freak
 {
-    if ((gBattleMons[gBattlerAttacker].ability == 0
-        && gBattleMons[gBattlerTarget].ability == 0)
+    if ((gBattleMons[gBattlerAttacker].ability == 0 || gBattleMons[gBattlerAttacker].ability == ABILITY_DISGUISE)
+        && (gBattleMons[gBattlerTarget].ability == 0 || gBattleMons[gBattlerTarget].ability == ABILITY_DISGUISE)
      || gMoveResultFlags & MOVE_RESULT_NO_EFFECT) //not sure if nor effect clause would still prevent working on wonderguard.
      {
          gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
@@ -11423,9 +11451,9 @@ static void atkE7_trycastformdatachange(void)
 {
     u8 form;
 
-    ++gBattlescriptCurrInstr;
+    ++gBattlescriptCurrInstr; //still need setup cherrim form change, emerald done here
     form = CastformDataTypeChange(gBattleScripting.battler);
-    if (form)
+    if (form) //uses tryweatherformchange for both castform & cherrim
     {
         BattleScriptPushCursorAndCallback(BattleScript_CastformChange);
         *(&gBattleStruct->formToChangeInto) = form - 1;
@@ -11544,7 +11572,7 @@ static void atkEC_pursuitrelated(void)
 
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
      && !(gAbsentBattlerFlags & gBitTable[gActiveBattler])
-     && gChosenActionByBattler[gActiveBattler] == 0
+     && gChosenActionByBattler[gActiveBattler] == B_ACTION_USE_MOVE
      && gChosenMoveByBattler[gActiveBattler] == MOVE_PURSUIT)
     {
         gActionsByTurnOrder[gActiveBattler] = 11;
@@ -11591,6 +11619,17 @@ static void atkEE_removelightscreenreflect(void) // brick break
     }
     ++gBattlescriptCurrInstr;
 }
+
+//not using yet, but seems to be something for selecting catch target in wild double
+//possibly flawed may have to tweak if I use
+
+/*static u8 GetCatchingBattler(void)
+{
+    if (IsBattlerAlive(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)))
+        return GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+    else
+        return GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
+}*/
 
 static void atkEF_handleballthrow(void) //important changed
 {
@@ -11752,7 +11791,7 @@ static void atkEF_handleballthrow(void) //important changed
 }
 
 
-static void atkF0_givecaughtmon(void)
+static void atkF0_givecaughtmon(void) //important
 {
     if (GiveMonToPlayer(&gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker ^ BIT_SIDE]]) != MON_GIVEN_TO_PARTY)
     {
@@ -11777,7 +11816,7 @@ static void atkF0_givecaughtmon(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atkF1_trysetcaughtmondexflags(void)
+static void atkF1_trysetcaughtmondexflags(void) //important double wild catch
 {
     u16 species = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, NULL);
     u32 personality = GetMonData(&gEnemyParty[0], MON_DATA_PERSONALITY, NULL);
@@ -11793,7 +11832,7 @@ static void atkF1_trysetcaughtmondexflags(void)
     }
 }
 
-static void atkF2_displaydexinfo(void)
+static void atkF2_displaydexinfo(void) //important
 {
     u16 species = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, NULL);
 
@@ -11919,7 +11958,7 @@ void BattleDestroyYesNoCursorAt(void)
     CopyBgTilemapBufferToVram(0);
 }
 
-static void atkF3_trygivecaughtmonnick(void)
+static void atkF3_trygivecaughtmonnick(void) //important double wild 
 {
     switch (gBattleCommunication[MULTIUSE_STATE])
     {
@@ -12005,12 +12044,12 @@ static void atkF5_removeattackerstatus1(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atkF6_finishaction(void)
+static void atkF6_finishaction(void) //important
 {
     gCurrentActionFuncId = B_ACTION_FINISHED;
 }
 
-static void atkF7_finishturn(void)
+static void atkF7_finishturn(void) //important double wild
 {
     gCurrentActionFuncId = B_ACTION_FINISHED;
     gCurrentTurnActionNumber = gBattlersCount;
@@ -12040,7 +12079,14 @@ static void atkF8_jump_basedontype(void){
 }
 
 static void atkF9_setroost(void){ //actually I don't like this type change idea so not gonna do it.
+   
+    u16 virtue = Random() % 4;
+
+     //should be set timer value, and if flag not set, set flag
+    gDisableStructs[battler].RoostTimer = virtue;
+    if (!(gBattleResources->flags->flags[gActiveBattler] & RESOURCE_FLAG_ROOST)) //check if this means flag not set
     gBattleResources->flags->flags[gBattlerAttacker] |= RESOURCE_FLAG_ROOST;
+    // then check if need to update battlescript to for a loop like gravity
     /*
     // Pure flying type.
     if (gBattleMons[gBattlerAttacker].type1 == TYPE_FLYING && gBattleMons[gBattlerAttacker].type2 == TYPE_FLYING)
@@ -12064,8 +12110,8 @@ static void atkF9_setroost(void){ //actually I don't like this type change idea 
     // Non-flying type.
     else if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_FLYING))
     {*/
-        gBattleStruct->roostTypes[gBattlerAttacker][0] = gBattleMons[gBattlerAttacker].type1;
-        gBattleStruct->roostTypes[gBattlerAttacker][1] = gBattleMons[gBattlerAttacker].type2;
+        //gBattleStruct->roostTypes[gBattlerAttacker][0] = gBattleMons[gBattlerAttacker].type1;
+        //gBattleStruct->roostTypes[gBattlerAttacker][1] = gBattleMons[gBattlerAttacker].type2;
   //  }
 
     gBattlescriptCurrInstr++;
@@ -12420,6 +12466,16 @@ static void atk10F_jumpifdamaged(void) //edited based on recommendation from mcg
         gBattlescriptCurrInstr += 5;
         
 } // ok was able to get my commands file working, seems problem was changing the flag_kingsrock to the emerald one, but old name was stil used so had to replace all.
+
+//ion deluge //don't forget to add to inc & battle clear files
+static void atk110_set_iondeluge(void)
+{
+    gFieldStatuses |= STATUS_FIELD_ION_DELUGE;
+    gFieldTimers.IonDelugeTimer = 4;
+    gBattlescriptCurrInstr += 5;
+}
+
+//roost  //the move itself sets flag so I just need this to set the timer.
 
 /*static void atk10F_giveexponcatch(void) // set to work only if player side pokemon either did damage to battler or took damage from battler before catching pokemon
 {

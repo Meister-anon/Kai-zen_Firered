@@ -3516,7 +3516,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BEAT_UP] =
     {
         .effect = EFFECT_BEAT_UP,
-        .power = 10,
+        .power = 1,
         .type = TYPE_DARK,
         .accuracy = 100,
         .pp = 10,

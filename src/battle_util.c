@@ -1205,7 +1205,10 @@ u8 DoFieldEndTurnEffects(void)
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_ION_DELUGE:
-            gFieldStatuses &= ~(STATUS_FIELD_ION_DELUGE);
+            if (gFieldStatuses & STATUS_FIELD_ION_DELUGE && --gFieldTimers.IonDelugeTimer == 0) //
+            {
+                gFieldStatuses &= ~(STATUS_FIELD_ION_DELUGE); //timers seems to be set in bs commands (fairylock is different)
+            }
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_FAIRY_LOCK:
@@ -1726,11 +1729,19 @@ u8 DoBattlerEndTurnEffects(void)
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_ROOST: // Return flying type.
-                if (gBattleResources->flags->flags[gActiveBattler] & RESOURCE_FLAG_ROOST)
+                //may change sounds like its only lost for duration of move i.e 1 turn
+                //which is dumb -_- that could only be taken advantage of in double battle
+                //think I'll add a timer use Random() % 4 to find start value
+                //pokemon will be grounded for the duration. and succeptible to all ground moves
+                //setup like healblock timer above.
+                //I'd like to have a little battlestring display when timer is at 0
+                //something like "pokemonname" returned to the air or something..
+                if (gBattleResources->flags->flags[gActiveBattler] & RESOURCE_FLAG_ROOST
+                    && --gDisableStructs[gActiveBattler].RoostTimer == 0)
                 {
                     gBattleResources->flags->flags[gActiveBattler] &= ~(RESOURCE_FLAG_ROOST);
-                    gBattleMons[gActiveBattler].type1 = gBattleStruct->roostTypes[gActiveBattler][0];
-                    gBattleMons[gActiveBattler].type2 = gBattleStruct->roostTypes[gActiveBattler][1];
+                    //gBattleMons[gActiveBattler].type1 = gBattleStruct->roostTypes[gActiveBattler][0];
+                    //gBattleMons[gActiveBattler].type2 = gBattleStruct->roostTypes[gActiveBattler][1];
                 }
                 gBattleStruct->turnEffectsTracker++;
                 break;
@@ -1846,8 +1857,8 @@ bool8 HandleWishPerishSongOnTurnEnd(void)
 
 #define FAINTED_ACTIONS_MAX_CASE 7
 
-bool8 HandleFaintedMonActions(void)
-{
+bool8 HandleFaintedMonActions(void) //important looking here can prob find what need 
+{ // for setup switch in ability reset when opponent pokemon is fainted
     if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
         return FALSE;
     do
@@ -2356,8 +2367,11 @@ bool32 IsBattlerGrounded(u8 battlerId)
     else if (gStatuses3[battlerId] & STATUS3_ROOTED)
         return TRUE;
     else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
-        return TRUE;
-
+        return TRUE; //important roost change
+    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
+        return TRUE; //hope this set up right/works
+    //according to Mcgriffin need make flying & roost flag true statement
+    //as else at bottom just means not flyign or has roost flag
     else if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
         return FALSE;
     else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
@@ -2366,7 +2380,7 @@ bool32 IsBattlerGrounded(u8 battlerId)
         return FALSE;
     else if (GetBattlerAbility(battlerId) == ABILITY_LEVITATE)
         return FALSE;
-    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING))
+    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
         return FALSE;
 
     else
