@@ -1591,6 +1591,7 @@ BattleScript_EffectIonDeluge:
 	attackstring
 	ppreduce
 	orword gFieldStatuses, STATUS_FIELD_ION_DELUGE
+	set_iondeluge
 	attackanimation
 	waitanimation
 	printstring STRINGID_IONDELUGEON

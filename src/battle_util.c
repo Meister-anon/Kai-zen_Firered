@@ -603,7 +603,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
     return unusableMoves;
 }
 
-static void MulModifier(u16* modifier, u16 val)
+/*static void MulModifier(u16* modifier, u16 val)
 {
     *modifier = UQ_4_12_TO_INT((*modifier * val) + UQ_4_12_ROUND);
 }
@@ -611,7 +611,7 @@ static void MulModifier(u16* modifier, u16 val)
 static u32 ApplyModifier(u16 modifier, u32 val)
 {
     return UQ_4_12_TO_INT((modifier * val) + UQ_4_12_ROUND);
-}
+}*/
 
 /*static void UpdateMoveResultFlags(u16 modifier) //  start of ported effect flags  
 //may instead just use move result flags instead of these functions...yeah I'll just use that.
@@ -2358,7 +2358,8 @@ u8 AtkCanceller_UnableToUseMove2(void)
     return effect;
 }
 
-bool32 IsBattlerGrounded(u8 battlerId)
+bool32 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
+//finihsed adding to type calc, so should be battle ready
 {
     if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
         return TRUE;
@@ -2367,11 +2368,11 @@ bool32 IsBattlerGrounded(u8 battlerId)
     else if (gStatuses3[battlerId] & STATUS3_ROOTED)
         return TRUE;
     else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
-        return TRUE; //important roost change
+        return TRUE; //important roost change  ..[unsure if want to make random % but no one would gamble it anyway...
     else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
         return TRUE; //hope this set up right/works
-    //according to Mcgriffin need make flying & roost flag true statement
-    //as else at bottom just means not flyign or has roost flag
+    //according to Mcgriffin needed make flying & roost flag true statement
+    //as else at bottom just means not flyign or has roost flag, TRUE
     else if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
         return FALSE;
     else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
@@ -2601,7 +2602,7 @@ static bool32 ShouldChangeFormHpBased(u32 battler)
 }
 
 
-static u8 ForewarnChooseMove(u32 battler)
+static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in moves to work on reset
 {
     struct Forewarn {
         u8 battlerId;

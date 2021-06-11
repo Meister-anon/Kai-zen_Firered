@@ -1069,7 +1069,7 @@ static void atk00_attackcanceler(void)
         gBattlescriptCurrInstr = BattleScript_TookAttack;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
-    else if (DEFENDER_IS_PROTECTED
+    else if (DEFENDER_IS_PROTECTED //elemental beam stuff will be used here, when I change to isbattlerprotected
           && (gCurrentMove != MOVE_CURSE || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST))
           && ((!IsTwoTurnsMove(gCurrentMove) || (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))))
     {
@@ -1119,30 +1119,66 @@ static void atk40_jumpifaffectedbyprotect(void)
     }
 }
 
-static bool8 JumpIfMoveAffectedByProtect(u16 move) // think I can put weather break condition here, elemental beam equivalent w weather & several 150 power moves no condition
-{
-    bool8 affected = FALSE;
+bool32 IsBattlerProtected(u8 battlerId, u16 move)
+{ //setprotectlike does the protection, then hre I can undo it when this gets checked in attack canceleror
+    
+
+    if (!(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
+        return FALSE;
+    else if (gBattleMoves[move].effect == MOVE_EFFECT_FEINT)
+        return FALSE;
+    else if (gProtectStructs[battlerId].protected)
+        return TRUE;
+    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD
+        && gBattleMoves[move].target & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
+        return TRUE;
+    else if (gProtectStructs[battlerId].banefulBunkered)
+        return TRUE;
+    else if (gProtectStructs[battlerId].spikyShielded)
+        return TRUE;
+    else if (gProtectStructs[battlerId].kingsShielded && gBattleMoves[move].power != 0)
+        return TRUE;
+    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD
+        && GetChosenMovePriority(gBattlerAttacker) > 0)
+        return TRUE;
+    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_CRAFTY_SHIELD
+        && gBattleMoves[move].power == 0)
+        return TRUE;
+    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_MAT_BLOCK
+        && gBattleMoves[move].power != 0)
+        return TRUE; //think below should instead be its own function start fromweather has effect down
+    //else if (ProtectBreak) //idk may work, should be if not 0
+       // return TRUE; // nah doesn't work becuase of how function returns work, 
+    //my function isn't returning the random value its using it.
+        //I'll just leave this off,  I'll not worry about spikyshield physical damagage
+    //function below should be fine by itself.
+    else
+        return FALSE;
+}
+
+static void ProtectBreak(void) //part in parenthesis is argument going into function
+{ //part left of name is what's returned from function.
+    //made void again since don't think I need it to return something.
     u16 rand = Random();
     u16 randPercent = 100 - (rand % 12); //should work as final adjustment to damage to do 89-100 percent of total after breaking protect
-    // u8 power = gBattleMoves[move].power;
 
-    if (DEFENDER_IS_PROTECTED)
+    if ((WEATHER_HAS_EFFECT &&
+        (((gBattleWeather & WEATHER_RAIN_ANY) && ((gBattleMoves[gCurrentMove].effect == EFFECT_THUNDER) || (gCurrentMove == MOVE_HYDRO_PUMP || gCurrentMove == MOVE_ZAP_CANNON)))
+        || ((gBattleWeather & WEATHER_HAIL_ANY) && (gCurrentMove == MOVE_BLIZZARD))
+        || ((gBattleWeather & WEATHER_SUN_ANY) && (gCurrentMove == MOVE_FIRE_BLAST || gCurrentMove == MOVE_SOLAR_BEAM || gCurrentMove == MOVE_SOLAR_BLADE || gCurrentMove == MOVE_OVERHEAT))))
+        || (gCurrentMove == MOVE_BLAST_BURN || gCurrentMove == MOVE_HYDRO_CANNON || gCurrentMove == MOVE_FRENZY_PLANT || gCurrentMove == MOVE_HYPER_BEAM || gCurrentMove == MOVE_GIGA_IMPACT || gCurrentMove == MOVE_ROCK_WRECKER)
+        && IsBattlerProtected 
+        && Random() % 3 == 0) // don't know if should be chance effect or certain effect
     {
-        gMoveResultFlags |= MOVE_RESULT_MISSED;
-        JumpIfMoveFailed(7, move);
-        gBattleCommunication[6] = 1;
-        affected = TRUE;
-    }
-    
-    
-    else if (DEFENDER_IS_PROTECTED
-        && WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || (gCurrentMove == MOVE_HYDRO_PUMP || MOVE_ZAP_CANNON))
-        || (WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_HAIL_ANY) && gCurrentMove == MOVE_BLIZZARD)
-        || (WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_SUN_ANY) && (gCurrentMove == MOVE_FIRE_BLAST || MOVE_SOLAR_BEAM || MOVE_SOLAR_BLADE || MOVE_OVERHEAT))
-        || (gCurrentMove == MOVE_BLAST_BURN || MOVE_HYDRO_CANNON || MOVE_FRENZY_PLANT || MOVE_HYPER_BEAM || MOVE_GIGA_IMPACT || MOVE_ROCK_WRECKER)
-        && Random() % 4)
-    {
-        affected = FALSE;
+        gProtectStructs[gBattlerTarget].protected = 0; //removes affects
+        gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_WIDE_GUARD);
+        gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_QUICK_GUARD);
+        gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_CRAFTY_SHIELD);
+        gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_MAT_BLOCK);
+        gProtectStructs[gBattlerTarget].spikyShielded = 0; //need else if to ensure the phpysical moves 
+        gProtectStructs[gBattlerTarget].kingsShielded = 0; //that break protect still take spiky shield damage
+        gProtectStructs[gBattlerTarget].banefulBunkered = 0;
+        
         if (gBattleMoveDamage != 0) // in case using gbattlemovedamage prevents hi/lo rolls since aparently movedamage is the last calculation, I may switch this to power
             //gBattleMoves[move].power   keep the first check that move does damage, but otherwise replace movedamage with power, if I find I need to because modulate damage is no longer working
         {
@@ -1152,18 +1188,41 @@ static bool8 JumpIfMoveAffectedByProtect(u16 move) // think I can put weather br
                 gBattleMoveDamage = 1;
         }
     }
-    return affected;
-} // ok believe I've got this, should be 1 in 4 chance for 150bp move to break through protect and other moves to do so with proper weather boosts
-// this idea of breaking protect was initially just thunder in gen 4 having a 30% chance in rain, then gen 8 brought back with dynamax moves at a portion of full damage
-// I'm using my own conditions, and...I THINK I may do a reduction in damage too, but do it randomly like high/low rolls just to a lesser degree
-// also maybe I'll add a text string for this, but for now I'll do without.
 
-static bool8 AccuracyCalcHelper(u16 move) //forgot to reupdate this
+
+    // ok believe I've got this, should be 1 in 4 chance for 150bp move to break through protect and other moves to do so with proper weather boosts
+   // this idea of breaking protect was initially just thunder in gen 4 having a 30% chance in rain, then gen 8 brought back with dynamax moves at a portion of full damage
+   // I'm using my own conditions, and...I THINK I may do a reduction in damage too, but do it randomly like high/low rolls just to a lesser degree
+   // also maybe I'll add a text string for this, but for now I'll do without.
+}
+
+static bool8 JumpIfMoveAffectedByProtect(u16 move) // think I can put weather break condition here, elemental beam equivalent w weather & several 150 power moves no condition
+{
+    bool8 affected = FALSE;
+    
+    if (IsBattlerProtected(gBattlerTarget, move))
+    {
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        JumpIfMoveFailed(7, move);
+        gBattleCommunication[6] = 1;
+        affected = TRUE;
+    }    
+    
+    return affected;
+}
+
+static bool8 AccuracyCalcHelper(u16 move) //forgot to reupdate this..done
 {
     if (gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS && gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker)
     {
         JumpIfMoveFailed(7, move);
         return TRUE;
+    }
+    if (gBattleMoves[move].effect == EFFECT_TOXIC
+        && IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_POISON))
+    {
+        JumpIfMoveFailed(7, move);
+            return TRUE;
     }
     if (!(gHitMarker & HITMARKER_IGNORE_ON_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
     {
@@ -1192,6 +1251,42 @@ static bool8 AccuracyCalcHelper(u16 move) //forgot to reupdate this
         JumpIfMoveFailed(7, move);
         return TRUE;
     }
+    if ((gStatuses3[gBattlerTarget] & STATUS3_PHANTOM_FORCE)
+        || (!(gBattleMoves[move].flags & FLAG_HIT_IN_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+        || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
+        || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER))
+    {
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        JumpIfMoveFailed(7, move);
+        return TRUE;
+    }
+    //important perfect comparison for tiered &&  OR statement  for fix protect break
+    if ((WEATHER_HAS_EFFECT &&
+        (((gBattleWeather & WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
+            || (((gBattleWeather & WEATHER_HAIL_ANY) && move == MOVE_BLIZZARD))))
+        || (gBattleMoves[move].effect == EFFECT_VITAL_THROW)
+        || (gBattleMoves[move].accuracy == 0)
+        || ((gStatuses3[gBattlerTarget] & STATUS3_MINIMIZED) && (gBattleMoves[move].flags & FLAG_DMG_MINIMIZE)))
+    {
+        JumpIfMoveFailed(7, move);
+        return TRUE;
+    }
+
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NO_GUARD)
+    {
+        if (!JumpIfMoveFailed(7, move))
+            RecordAbilityBattle(gBattlerAttacker, ABILITY_NO_GUARD);
+        return TRUE;
+    }
+
+    if (GetBattlerAbility(gBattlerTarget) == ABILITY_NO_GUARD)
+    {
+        if (!JumpIfMoveFailed(7, move))
+            RecordAbilityBattle(gBattlerTarget, ABILITY_NO_GUARD);
+        return TRUE;
+    }
+
+
     return FALSE;
 }
 
@@ -1253,7 +1348,8 @@ static void atk01_accuracycheck(void)
         if (buff > 0xC)
             buff = 0xC;
         moveAcc = gBattleMoves[move].accuracy;
-        // check Thunder on sunny weather / need add hail blizzard buff?
+        // check Thunder on sunny weather / need add hail blizzard buff? 
+        //nope that all goes in function above, accucalc helper
         if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE)) //ladded open parenthesis before thunder
             moveAcc = 50;
         // Check Wonder Skin.
@@ -1295,7 +1391,7 @@ static void atk01_accuracycheck(void)
         if (gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATED_WITH(gBattlerAttacker)) //need to figure out how to lower evasion to go along with these accuracy boosts.
        //     calc = (calc * 160) / 100;
         eva = 3;
-        if (gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION) //thought instead of self attack, make confusion chance to change move target to random
+        if (gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION) //important thought instead of self attack, make confusion chance to change move target to random
          //   calc = (calc * 120) / 100; //that way they're still doing the same move, but they also have chance to hit attack themselves with it .
         eva = 5; // with that there should be as much benefit as danger in being confused, singled moves could hit everyone, etc. random & interesting..
         if (gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
@@ -1586,6 +1682,12 @@ static void atk06_typecalc(void)
         gBattleCommunication[6] = moveType;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
+    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND)
+    {
+        gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
+        gLastLandedMoves[gBattlerTarget] = 0;
+        gBattleCommunication[6] = moveType;
+    }
     else
     {
         while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
@@ -1637,7 +1739,7 @@ static void atk06_typecalc(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void CheckWonderGuardAndLevitate(void)
+static void CheckWonderGuardAndLevitate(void) //added scrappy check
 {
     u8 flags = 0;
     s32 i = 0;
@@ -1658,6 +1760,9 @@ static void CheckWonderGuardAndLevitate(void)
         && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT) //not sure what i is doing here
     {
     TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL; // hppe this works
+    gLastUsedAbility = ABILITY_SCRAPPY; //important check see if this works right with ghost dark, should do super
+    gBattleCommunication[6] = moveType;
+    RecordAbilityBattle(gBattlerAttacker, ABILITY_SCRAPPY);
     }
     while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
     {
@@ -1755,8 +1860,8 @@ static void ModulateDmgByType2(u8 multiplier, u16 move, u8 *flags)
     }
 }
 
-u8 TypeCalc(u16 move, u8 attacker, u8 defender) //realize should/could put scrappy here
-{
+u8 TypeCalc(u16 move, u8 attacker, u8 defender) //this is just the function still need add grounded to battlersript commands
+{ //defender was th default value for this function which is why battlergrounded uses it here
     s32 i = 0;
     u8 flags = 0;
     u8 moveType;
@@ -1828,7 +1933,7 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u8 targetAbility)
     if (move == MOVE_STRUGGLE)
         return 0;
     moveType = gBattleMoves[move].type;
-    if (targetAbility == ABILITY_LEVITATE && moveType == TYPE_GROUND)
+    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND)
     {
         flags = MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE;
     }
@@ -4698,7 +4803,7 @@ static void atk49_moveend(void)
                     i = gBattlerAttacker;
                     gBattlerAttacker = gBattlerTarget;
                     gBattlerTarget = i; // gBattlerTarget and gBattlerAttacker are swapped in order to activate Defiant, if applicable
-                    gBattleScripting.moveEffect = MOVE_EFFECT_ATK_MINUS_1;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_ATK_MINUS_2;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
                     effect = 1;
@@ -5108,6 +5213,12 @@ static void atk4A_typecalc2(void)
         gLastLandedMoves[gBattlerTarget] = 0;
         gBattleCommunication[6] = moveType;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
+    }
+    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND)
+    {
+        gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
+        gLastLandedMoves[gBattlerTarget] = 0;
+        gBattleCommunication[6] = moveType;
     }
     else
     {
@@ -8245,7 +8356,7 @@ static void atk77_setprotectlike(void)
                 gBattleCommunication[MULTISTRING_CHOOSER] = 1;
             }
             if (gCurrentMove == MOVE_SPIKY_SHIELD)
-            {
+            { //think I need to update the battlescript to use setprotectlike for this & below
                 gProtectStructs[gBattlerAttacker].spikyShielded = 1;
                 gBattleCommunication[MULTISTRING_CHOOSER] = 0;
             }
@@ -12087,6 +12198,11 @@ static void atkF9_setroost(void){ //actually I don't like this type change idea 
     if (!(gBattleResources->flags->flags[gActiveBattler] & RESOURCE_FLAG_ROOST)) //check if this means flag not set
     gBattleResources->flags->flags[gBattlerAttacker] |= RESOURCE_FLAG_ROOST;
     // then check if need to update battlescript to for a loop like gravity
+    //need make change for flying type 1 || type 2 & resource flag roost
+
+    //actually don't need to change anything, forgot I removed round to flying immunity
+    //so when ground hits, it should just be treated as a normally effective attack without interfering
+
     /*
     // Pure flying type.
     if (gBattleMons[gBattlerAttacker].type1 == TYPE_FLYING && gBattleMons[gBattlerAttacker].type2 == TYPE_FLYING)
@@ -12469,8 +12585,7 @@ static void atk10F_jumpifdamaged(void) //edited based on recommendation from mcg
 
 //ion deluge //don't forget to add to inc & battle clear files
 static void atk110_set_iondeluge(void)
-{
-    gFieldStatuses |= STATUS_FIELD_ION_DELUGE;
+{ //since battlescript alrady sets field effect, just sets timer here
     gFieldTimers.IonDelugeTimer = 4;
     gBattlescriptCurrInstr += 5;
 }
