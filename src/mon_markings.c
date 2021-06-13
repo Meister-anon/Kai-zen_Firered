@@ -5,7 +5,9 @@
 #include "graphics.h"
 #include "constants/songs.h"
 
-static EWRAM_DATA struct PokemonMarkMenu * sMenu = NULL;
+//static EWRAM_DATA struct PokemonMarkMenu * sMenu = NULL;
+
+//zsonic  removal o f pokemon marking system, pretty dumb really
 
 static void CreateMonMarkingsMenuSprites(s16 x, s16 y, u16 tilesTag, u16 paletteTag);
 static void nullsub_62(struct Sprite * sprite);
@@ -209,7 +211,7 @@ static const union AnimCmd *const sSpriteAnimTable_MonMarkSet[] = {
     sAnimCmd_MonMark_1111
 };
 
-void SetMonMarkingsMenuPointer(struct PokemonMarkMenu * markMenu)
+/*void SetMonMarkingsMenuPointer(struct PokemonMarkMenu * markMenu)
 {
     sMenu = markMenu;
 }
@@ -510,5 +512,5 @@ static struct Sprite * CreateMonMarkingSprite(u16 tileTag, u16 paletteTag, const
 void RequestDma3LoadMonMarking(u8 markings, void * dest)
 {
     RequestDma3Copy(&sMonMarkingsTiles[64 * markings], dest, 0x80, DMA3_32BIT);
-}
+}*/
 

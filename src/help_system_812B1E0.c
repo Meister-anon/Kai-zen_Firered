@@ -16,8 +16,15 @@
 #include "constants/maps.h"
 #include "constants/songs.h"
 
-static EWRAM_DATA u16 sHelpSystemContextId = 0;
-static EWRAM_DATA u8 sSeenHelpSystemIntro = 0;
+/*static EWRAM_DATA u16 sHelpSystemContextId = 0;
+static EWRAM_DATA u8 sSeenHelpSystemIntro = 0;*/
+
+
+//zsonic ok apprarently I used return on these instead and kept them in because
+//otherwise these were two annoying entwined to remove
+
+//so removing the ewram listed here in help systems may not save me any ewram?
+
 
 u8 gHelpSystemState[4];
 u16 gHelpContextIdBackup;

@@ -51,6 +51,11 @@ struct TeachyTvBuf
 static EWRAM_DATA struct TeachyTvCtrlBlk sStaticResources = {0};
 static EWRAM_DATA struct TeachyTvBuf * sResources = NULL;
 
+//was plannign to repurpose this for my new changes btu will just remove for now.
+//don't forget change old man in viridian so game can progress
+
+//zsonic
+
 static void TTVcmd_TransitionRenderBg2TeachyTvGraphicInitNpcPos(u8 taskId);
 static void TTVcmd_ClearBg2TeachyTvGraphic(u8 taskId);
 static void TTVcmd_NpcMoveAndSetupTextPrinter(u8 taskId);

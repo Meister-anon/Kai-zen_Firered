@@ -23,14 +23,14 @@ struct PokemonSubstruct1
     u8 pp[4];
 };
 
-struct PokemonSubstruct2
+struct PokemonSubstruct2 // keep going back and forth but I'm pretty sure these must be u16
 {
-    u8 hpEV;
-    u8 attackEV;
-    u8 defenseEV;
-    u8 speedEV;
-    u8 spAttackEV;
-    u8 spDefenseEV;
+    u16 hpEV;
+    u16 attackEV;
+    u16 defenseEV;
+    u16 speedEV;
+    u16 spAttackEV;
+    u16 spDefenseEV;
     u8 cool;
     u8 beauty;
     u8 cute;
@@ -178,7 +178,7 @@ struct BattlePokemon
     /*0x20*/ u16 ability;
     /*0x21*/ u8 type1;
     /*0x22*/ u8 type2;
-    /*0x23*/ u8 unknown;
+    /*0x23*/ u8 type3; //no space change replaced unknown
     /*0x24*/ u8 pp[4];
     /*0x28*/ u16 hp;
     /*0x2A*/ u8 level;
@@ -241,17 +241,43 @@ struct BattleMove
     s8 priority;
     u8 flags; // is u32 in emerald, might not need to do that, will ask
     u8 split;
-  //  u8 argument;
+    u8 argument;
 };
 
 extern const struct BattleMove gBattleMoves[];
 
-#define FLAG_MAKES_CONTACT          0x1
-#define FLAG_PROTECT_AFFECTED       0x2
-#define FLAG_MAGICCOAT_AFFECTED     0x4
-#define FLAG_SNATCH_AFFECTED        0x8
+/*#define FLAG_MAKES_CONTACT          0x1
+#define FLAG_PROTECT_AFFECTED       0x2 these only match because I went back and replaced all instances of the old names
+#define FLAG_MAGIC_COAT_AFFECTED     0x4
+#define FLAG_SNATCH_AFFECTED        0x8 only had to change kings rock & magic coat
 #define FLAG_MIRROR_MOVE_AFFECTED   0x10
-#define FLAG_KINGSROCK_AFFECTED     0x20
+#define FLAG_KINGS_ROCK_AFFECTED     0x20*/
+
+// Battle move flags
+#define FLAG_MAKES_CONTACT          (1 << 0)
+#define FLAG_PROTECT_AFFECTED       (1 << 1)
+#define FLAG_MAGIC_COAT_AFFECTED    (1 << 2)
+#define FLAG_SNATCH_AFFECTED        (1 << 3)
+#define FLAG_MIRROR_MOVE_AFFECTED   (1 << 4)
+#define FLAG_KINGS_ROCK_AFFECTED    (1 << 5)
+#define FLAG_HIGH_CRIT              (1 << 6)
+#define FLAG_RECKLESS_BOOST         (1 << 7)
+#define FLAG_IRON_FIST_BOOST        (1 << 8)
+#define FLAG_SHEER_FORCE_BOOST      (1 << 9)
+#define FLAG_STRONG_JAW_BOOST       (1 << 10)
+#define FLAG_MEGA_LAUNCHER_BOOST    (1 << 11)
+#define FLAG_STAT_STAGES_IGNORED    (1 << 12)
+#define FLAG_DMG_MINIMIZE           (1 << 13)
+#define FLAG_DMG_UNDERGROUND        (1 << 14)
+#define FLAG_DMG_UNDERWATER         (1 << 15)
+#define FLAG_SOUND                  (1 << 16)
+#define FLAG_BALLISTIC              (1 << 17)
+#define FLAG_PROTECTION_MOVE        (1 << 18)
+#define FLAG_POWDER                 (1 << 19)
+#define FLAG_TARGET_ABILITY_IGNORED (1 << 20)
+#define FLAG_DANCE                  (1 << 21)
+#define FLAG_DMG_IN_AIR             (1 << 22) // X2 dmg on air, always hits target on air
+#define FLAG_HIT_IN_AIR             (1 << 23) // dmg is normal, always hits target on air
 
 struct SpindaSpot
 {

@@ -80,7 +80,7 @@ struct SaveBlockChunk gRamSaveSectionLocations[0xE];
 u16 gSaveSucceeded;
 
 EWRAM_DATA struct SaveSection gSaveDataBuffer = {0};
-EWRAM_DATA u32 gSaveUnusedVar2 = 0;
+EWRAM_DATA u32 gSaveUnusedVar2 = 0; //zsonic  ..is this really unused?
 
 void ClearSaveData(void)
 {

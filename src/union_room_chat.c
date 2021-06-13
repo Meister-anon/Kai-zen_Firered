@@ -17,7 +17,7 @@
 #include "keyboard_text.h"
 #include "constants/songs.h"
 
-#define MESSAGE_BUFFER_NCHAR 15
+/*#define MESSAGE_BUFFER_NCHAR 15
 
 #define CHAT_MESSAGE_0 0
 #define CHAT_MESSAGE_CHAT 1
@@ -71,7 +71,9 @@ struct UnionRoomChat
     u8 sendMessageBuffer[0x28];
 };
 
-static EWRAM_DATA struct UnionRoomChat * sWork = NULL;
+//static EWRAM_DATA struct UnionRoomChat * sWork = NULL;
+
+//zsonic
 
 static void InitChatWork(struct UnionRoomChat * unionRoomChat);
 static void CB2_LoadInterface(void);
@@ -1450,3 +1452,4 @@ static void Task_ReceiveChatMessage(u8 taskId)
 #undef tCurrLinkPlayer
 #undef tI
 #undef tState
+*/

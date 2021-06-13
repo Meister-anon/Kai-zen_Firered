@@ -130,7 +130,10 @@ struct ResourceFlags
     u32 flags[4];
 };
 
-#define RESOURCE_FLAG_FLASH_FIRE 1
+#define RESOURCE_FLAG_FLASH_FIRE     1
+#define RESOURCE_FLAG_ROOST          2
+#define RESOURCE_FLAG_UNBURDEN       4
+#define RESOURCE_FLAG_EMERGENCY_EXIT 8
 
 struct DisableStruct
 {
@@ -164,6 +167,8 @@ struct DisableStruct
     /*0x18*/ u8 unk18_a_2 : 2;
     /*0x18*/ u8 mimickedMoves : 4;
     /*0x19*/ u8 rechargeTimer;
+             u8 RoostTimer; // to set random % 4 effect after use roost
+             u8 RoostTimerStartValue;
     /*0x1A*/ u8 unk1A[2];
 };
 
@@ -701,6 +706,7 @@ extern u8 gChosenMovePos;
 extern u8 gBattleControllerData[MAX_BATTLERS_COUNT];
 extern u8 gBattlerStatusSummaryTaskId[MAX_BATTLERS_COUNT];
 extern u16 gDynamicBasePower;
+extern u32 gFieldStatuses;
 extern u16 gLastLandedMoves[MAX_BATTLERS_COUNT];
 extern u8 gLastHitBy[MAX_BATTLERS_COUNT];
 extern u8 gMultiUsePlayerCursor;

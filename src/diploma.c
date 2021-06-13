@@ -10,17 +10,17 @@
 #include "task.h"
 #include "constants/fanfares.h"
 
-struct Diploma
+/*struct Diploma
 {
     u8 state;
     u8 gfxStep;
     u8 callbackStep;
     u16 tilemapBuffer[0x800];
-};
+};*/
 
-static EWRAM_DATA struct Diploma *gDiploma = NULL;
-
-static void DiplomaBgInit(void);
+//static EWRAM_DATA struct Diploma *gDiploma = NULL; //zsonic guess I'm removing the diploma for completing dex..
+// if I can I'd like to bring this back for those that like that aspect/goal of the game
+/*static void DiplomaBgInit(void);
 static void DiplomaPrintText(void);
 static u8 DiplomaLoadGfx(void);
 static void DiplomaVblankHandler(void);
@@ -271,4 +271,4 @@ static void DiplomaPrintText(void)
     AddTextPrinterParameterized3(0, 0x2, 0x78 - (width / 2), 0x1E, gUnknown_8415A04, -1, arr);
     AddTextPrinterParameterized3(0, 0x2, 0x78, 0x69, gUnknown_8415A04, 0, gUnknown_841B684);
     PutWindowTilemap(0);
-}
+}*/

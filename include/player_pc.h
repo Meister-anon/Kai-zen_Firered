@@ -24,7 +24,9 @@ extern struct PlayerPCItemPageStruct gPlayerPcMenuManager;
 // Exported ROM declarations
 
 void sub_816B060(u8 taskId);
-void NewGameInitPCItems(void);
-void Mailbox_ReturnToMailListAfterDeposit(void);
+void NewGameInitPCItems(void); //pull over   newgame plus function form otehr brnach
+// also possibly setup pc items or exclusion case for newgame +
+
+//void Mailbox_ReturnToMailListAfterDeposit(void);
 
 #endif //GUARD_PLAYER_PC_H

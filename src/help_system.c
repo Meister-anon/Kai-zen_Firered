@@ -30,19 +30,21 @@ struct HelpSystemVideoState
     /*0x15*/ u8 state;
 };
 
-static EWRAM_DATA u8 sMapTilesBackup[BG_CHAR_SIZE] = {0};
+//zsonic ...can't believe I still had pieces of the help system still here.
+
+/*static EWRAM_DATA u8 sMapTilesBackup[BG_CHAR_SIZE] = {0};
 EWRAM_DATA u8 gUnknown_203F174 = 0;
 EWRAM_DATA bool8 gHelpSystemToggleWithRButtonDisabled = FALSE;
 static EWRAM_DATA u8 sDelayTimer = 0;
 static EWRAM_DATA u8 sInHelpSystem = 0;
 static EWRAM_DATA struct HelpSystemVideoState sVideoState = {0};
 EWRAM_DATA struct HelpSystemListMenu gHelpSystemListMenu = {0};
-EWRAM_DATA struct ListMenuItem gHelpSystemListMenuItems[52] = {0};
+EWRAM_DATA struct ListMenuItem gHelpSystemListMenuItems[52] = {0};*/
 
 static const u16 sTiles[] = INCBIN_U16("graphics/help_system/unk_8464008.4bpp");
 static const u16 sPals[] = INCBIN_U16("graphics/help_system/unk_8464008.gbapal");
 
-u8 RunHelpSystemCallback(void)
+/*u8 RunHelpSystemCallback(void)
 {
     
     s32 i;
@@ -206,7 +208,7 @@ void RestoreMapTextColors(void)
         &sVideoState.savedTextColor[1],
         &sVideoState.savedTextColor[2]
     );
-}
+}*/
 
 void CommitTilemap(void)
 {
@@ -992,7 +994,7 @@ void HelpSystem_InitListMenuController(struct HelpSystemListMenu * a0, u8 a1, u8
     PlaceListMenuCursor();
 }
 
-void HelpSystem_SetInputDelay(u8 a0)
+/*void HelpSystem_SetInputDelay(u8 a0)
 {
     sDelayTimer = a0;
 }
@@ -1044,8 +1046,9 @@ s32 HelpSystem_GetMenuInput(void)
     }
     else
         return -1;
-}
-
+}*/
+//zsonic trying to be selective, only removing things that relied on the ewram I removed I'll leave everything else
+//I know how entwined the help menu is from experience.
 void sub_813C75C(void)
 {
     u8 r6 = gHelpSystemListMenu.sub.totalItems - 7;

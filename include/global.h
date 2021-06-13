@@ -393,14 +393,14 @@ struct EasyChatPair
     u16 words[2];
 }; /*size = 0x8*/
 
-struct MailStruct
-{
-    /*0x00*/ u16 words[9];
-    /*0x12*/ u8 playerName[8];
-    /*0x1A*/ u8 trainerId[4];
-    /*0x1E*/ u16 species;
-    /*0x20*/ u16 itemId;
-};
+//struct MailStruct
+//{
+    /*0x00*/ //u16 words[9];
+    /*0x12*/ //u8 playerName[8];
+    /*0x1A*/ //u8 trainerId[4];
+    /*0x1E*/ //u16 species;
+    /*0x20*/ //u16 itemId;
+//};
 
 struct MauvilleManCommon
 {
@@ -506,9 +506,9 @@ struct ContestWinner
     u8 contestRank;
 };
 
-struct DayCareMail
+struct DayCareMail //don't know what this is, but since I removed MailStruct, have to remove message as well.
 {
-    struct MailStruct message;
+    //struct MailStruct message;
     u8 OT_name[OT_NAME_LENGTH + 1];
     u8 monName[POKEMON_NAME_LENGTH + 1];
     u8 gameLanguage:4;
@@ -557,8 +557,8 @@ struct QuestLogNPCData
 };
 
 #define BERRY_TREES_COUNT  128
-#define MAIL_COUNT         (PARTY_SIZE + 10)
-#define PC_MAIL_NUM(i)     (PARTY_SIZE + (i))
+//#define MAIL_COUNT         (PARTY_SIZE + 10)
+//#define PC_MAIL_NUM(i)     (PARTY_SIZE + (i))
 
 struct QuestLogObjectEvent
 {
@@ -707,8 +707,8 @@ struct TrainerTower
 
 struct TrainerRematchState
 {
-    u16 stepCounter;
-    u8 rematches[100];
+    u16 stepCounter; // if this is the vs seeker counter, than I'll keep here, and just rename struct to use it for dark souls mode
+    //u8 rematches[100];  //believe this is rematch table
 };
 
 struct TrainerNameRecord
@@ -792,8 +792,8 @@ struct SaveBlock1
     /*0x05F8*/ u8 seen1[DEX_FLAGS_NO];
     /*0x062C*/ u16 berryBlenderRecords[3]; // unused
     /*0x0632*/ u8 field_632[6]; // unused?
-    /*0x0638*/ u16 trainerRematchStepCounter;
-    /*0x063A*/ u8 ALIGNED(2) trainerRematches[100];
+    /*0x0638*/ u16 trainerRematchStepCounter; //important also vs seeker, but since its an established step counter I may rename & use for dark souls mode
+    /*0x063A*/ //u8 ALIGNED(2) trainerRematches[100]; //can possibly remove since I think this was for vs seeker
     /*0x06A0*/ struct ObjectEvent objectEvents[OBJECT_EVENTS_COUNT];
     /*0x08E0*/ struct ObjectEventTemplate objectEventTemplates[64];
     /*0x0EE0*/ u8 flags[NUM_FLAG_BYTES];
@@ -804,7 +804,7 @@ struct SaveBlock1
     /*0x2CAC*/ u16 easyChatBattleStart[6];
     /*0x2CB8*/ u16 easyChatBattleWon[6];
     /*0x2CC4*/ u16 easyChatBattleLost[6];
-    /*0x2CD0*/ struct MailStruct mail[MAIL_COUNT];
+    /*0x2CD0*/ //struct MailStruct mail[MAIL_COUNT];
     /*0x2F10*/ u8 additionalPhrases[EASY_CHAT_EXTRA_PHRASES_SIZE];
     /*0x2F18*/ OldMan oldMan; // unused
     /*0x2F54*/ struct EasyChatPair easyChatPairs[5]; // unused

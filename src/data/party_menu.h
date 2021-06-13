@@ -1071,7 +1071,7 @@ static const u16 sTMHMMoves_Duplicate[] =
     MOVE_DIVE,
 };
 
-enum
+enum //zsonic will not change enum, in case some things refer by number instead of name
 {
     MENU_SUMMARY,
     MENU_SWITCH,
@@ -1106,9 +1106,9 @@ static struct
     [MENU_ITEM] = {gText_Item, CursorCB_Item},
     [MENU_GIVE] = {gOtherText_Give, CursorCB_Give},
     [MENU_TAKE_ITEM] = {gText_Take, CursorCB_TakeItem},
-    [MENU_MAIL] = {gText_Mail, CursorCB_Mail},
-    [MENU_TAKE_MAIL] = {gText_Take2, CursorCB_TakeMail},
-    [MENU_READ] = {gText_Read2, CursorCB_Read},
+    //[MENU_MAIL] = {gText_Mail, CursorCB_Mail},
+    //[MENU_TAKE_MAIL] = {gText_Take2, CursorCB_TakeMail},
+    //[MENU_READ] = {gText_Read2, CursorCB_Read},
     [MENU_CANCEL2] = {gFameCheckerText_Cancel, CursorCB_Cancel2},
     [MENU_SHIFT] = {gText_Shift, CursorCB_SendMon},
     [MENU_SEND_OUT] = {gText_SendOut, CursorCB_SendMon},

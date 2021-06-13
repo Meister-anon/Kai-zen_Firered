@@ -9,9 +9,9 @@ static const struct InGameTrade sInGameTrades[] = {
         .conditions = {5, 5, 5, 30, 5},
         .personality = 0x00009cae,
         .heldItem = ITEM_NONE,
-        .mailNum = 255,
+        //.mailNum = 255,
         .otName = _("REYLEY"),
-        .otGender = MALE,
+        .otGender = MALE, //replaced mailNum set removed mail items on jynx, may use trades as a way to get rare items
         .sheen = 10,
         .requestedSpecies = SPECIES_ABRA
     }, 
@@ -24,8 +24,8 @@ static const struct InGameTrade sInGameTrades[] = {
         .otId = 36728,
         .conditions = {5, 30, 5, 5, 5},
         .personality = 0x498a2e1d,
-        .heldItem = ITEM_FAB_MAIL,
-        .mailNum = 0,
+        .heldItem = ITEM_NONE,
+        //.mailNum = 0,
         .otName = _("DONTAE"),
         .otGender = MALE,
         .sheen = 10,
@@ -42,7 +42,7 @@ static const struct InGameTrade sInGameTrades[] = {
         .conditions = {5, 5, 5, 5, 30},
         .personality = 0x4c970b89,
         .heldItem = ITEM_TINY_MUSHROOM,
-        .mailNum = 255,
+        //.mailNum = 255,
         .otName = _("SAIGE"),
         .otGender = FEMALE,
         .sheen = 10,
@@ -56,7 +56,7 @@ static const struct InGameTrade sInGameTrades[] = {
         .conditions = {30, 5, 5, 5, 5},
         .personality = 0x4c970b9e,
         .heldItem = ITEM_TINY_MUSHROOM,
-        .mailNum = 255,
+        //.mailNum = 255,
         .otName = _("SAIGE"),
         .otGender = FEMALE,
         .sheen = 10,
@@ -73,7 +73,7 @@ static const struct InGameTrade sInGameTrades[] = {
         .conditions = {30, 5, 5, 5, 5},
         .personality = 0x151943d7,
         .heldItem = ITEM_STICK,
-        .mailNum = 255,
+        //.mailNum = 255,
         .otName = _("ELYSSA"),
         .otGender = MALE,
         .sheen = 10,
@@ -90,7 +90,7 @@ static const struct InGameTrade sInGameTrades[] = {
         .conditions = {5, 5, 30, 5, 5},
         .personality = 0x00eeca15,
         .heldItem = ITEM_NONE,
-        .mailNum = 255,
+        //.mailNum = 255,
         .otName = _("TURNER"),
         .otGender = MALE,
         .sheen = 10,
@@ -104,7 +104,7 @@ static const struct InGameTrade sInGameTrades[] = {
         .conditions = {5, 5, 5, 5, 30},
         .personality = 0x00eeca19,
         .heldItem = ITEM_NONE,
-        .mailNum = 255,
+        //.mailNum = 255,
         .otName = _("TURNER"),
         .otGender = MALE,
         .sheen = 10,
@@ -121,7 +121,7 @@ static const struct InGameTrade sInGameTrades[] = {
         .conditions = {5, 5, 5, 5, 30},
         .personality = 0x451308ab,
         .heldItem = ITEM_NONE,
-        .mailNum = 255,
+        //.mailNum = 255,
         .otName = _("HADEN"),
         .otGender = MALE,
         .sheen = 10,
@@ -141,7 +141,7 @@ static const struct InGameTrade sInGameTrades[] = {
         .conditions = {30, 5, 5, 5, 5},
         .personality = 0x06341016,
         .heldItem = ITEM_NONE,
-        .mailNum = 255,
+        //.mailNum = 255,
         .otName = _("CLIFTON"),
         .otGender = MALE,
         .sheen = 10,
@@ -157,7 +157,7 @@ static const struct InGameTrade sInGameTrades[] = {
         .conditions = {5, 5, 30, 5, 5},
         .personality = 0x5c77ecfa,
         .heldItem = ITEM_STARDUST,
-        .mailNum = 255,
+        //.mailNum = 255,
         .otName = _("NORMA"),
         .otGender = FEMALE,
         .sheen = 10,
@@ -173,7 +173,7 @@ static const struct InGameTrade sInGameTrades[] = {
         .conditions = {5, 5, 5, 5, 30},
         .personality = 0x482cac89,
         .heldItem = ITEM_NONE,
-        .mailNum = 255,
+        //.mailNum = 255,
         .otName = _("GARETT"),
         .otGender = MALE,
         .sheen = 10,
@@ -181,7 +181,7 @@ static const struct InGameTrade sInGameTrades[] = {
     }
 };
 
-static const u16 sInGameTradeMailMessages[][10] = {
+/*static const u16 sInGameTradeMailMessages[][10] = {
     {
         EC_WORD_THAT_S,
         EC_WORD_A,
@@ -193,4 +193,4 @@ static const u16 sInGameTradeMailMessages[][10] = {
         EC_WORD_TO,
         EC_WORD_IT
     }
-};
+};*/

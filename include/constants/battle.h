@@ -119,6 +119,7 @@
 #define STATUS2_LOCK_CONFUSE          0x00000C00
 #define STATUS2_MULTIPLETURNS         0x00001000
 #define STATUS2_WRAPPED               0x0000E000
+#define STATUS2_POWDER                (1 << 14)
 #define STATUS2_INFATUATION           0x000F0000  // 4 bits, one for every battler
 #define STATUS2_INFATUATED_WITH(battler) (gBitTable[battler] << 16)
 #define STATUS2_FOCUS_ENERGY          0x00100000
@@ -135,7 +136,7 @@
 #define STATUS2_TORMENT               0x80000000
 
 // Seems like per-battler statuses. Not quite sure how to categorize these
-#define STATUS3_LEECHSEED_BATTLER       0x3
+/*#define STATUS3_LEECHSEED_BATTLER       0x3
 #define STATUS3_LEECHSEED               0x4
 #define STATUS3_ALWAYS_HITS             0x18    // two bits
 #define STATUS3_PERISH_SONG             0x20
@@ -147,13 +148,51 @@
 #define STATUS3_YAWN                    0x1800  // two bits
 #define STATUS3_IMPRISONED_OTHERS       0x2000
 #define STATUS3_GRUDGE                  0x4000
-#define STATUS3_CANT_SCORE_A_CRIT       0x8000
-#define STATUS3_MUDSPORT                0x10000
+#define STATUS3_CANT_SCORE_A_CRIT       0x8000 */
+//#define STATUS3_UNDERWATER              0x40000
+//#define STATUS3_INTIMIDATE_POKES        0x80000
+//#define STATUS3_TRACE                   0x100000
+//#define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER)
+
+#define STATUS3_LEECHSEED_BATTLER       (1 << 0 | 1 << 1) // The battler to receive HP from Leech Seed
+#define STATUS3_LEECHSEED               (1 << 2)
+#define STATUS3_ALWAYS_HITS             (1 << 3 | 1 << 4)
+#define STATUS3_ALWAYS_HITS_TURN(num)   (((num) << 3) & STATUS3_ALWAYS_HITS) // "Always Hits" is set as a 2 turn timer, i.e. next turn is the last turn when it's active
+#define STATUS3_PERISH_SONG             (1 << 5)
+#define STATUS3_ON_AIR                  (1 << 6)
+#define STATUS3_UNDERGROUND             (1 << 7)
+#define STATUS3_MINIMIZED               (1 << 8)
+#define STATUS3_CHARGED_UP              (1 << 9)
+#define STATUS3_ROOTED                  (1 << 10)
+#define STATUS3_YAWN                    (1 << 11 | 1 << 12) // Number of turns to sleep
+#define STATUS3_YAWN_TURN(num)          (((num) << 11) & STATUS3_YAWN)
+#define STATUS3_IMPRISONED_OTHERS       (1 << 13)
+#define STATUS3_GRUDGE                  (1 << 14)
+#define STATUS3_CANT_SCORE_A_CRIT       (1 << 15)
+#define STATUS3_GASTRO_ACID             (1 << 16)
+#define STATUS3_EMBARGO                 (1 << 17)
+#define STATUS3_UNDERWATER              (1 << 18)
+#define STATUS3_INTIMIDATE_POKES        (1 << 19)
+#define STATUS3_TRACE                   (1 << 20)
+#define STATUS3_SMACKED_DOWN            (1 << 21)
+#define STATUS3_ME_FIRST                (1 << 22)
+#define STATUS3_TELEKINESIS             (1 << 23)
+#define STATUS3_PHANTOM_FORCE           (1 << 24)
+#define STATUS3_MIRACLE_EYED            (1 << 25)
+#define STATUS3_MAGNET_RISE             (1 << 26)
+#define STATUS3_HEAL_BLOCK              (1 << 27)
+#define STATUS3_AQUA_RING               (1 << 28)
+#define STATUS3_LASER_FOCUS             (1 << 29)
+#define STATUS3_ELECTRIFIED             (1 << 30)
+#define STATUS3_POWER_TRICK             (1 << 31)
+#define STATUS3_MUDSPORT                0x10000  //hopefully can still work,    it worked, thanks goodness
 #define STATUS3_WATERSPORT              0x20000
-#define STATUS3_UNDERWATER              0x40000
-#define STATUS3_INTIMIDATE_POKES        0x80000
-#define STATUS3_TRACE                   0x100000
-#define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER)
+#define STATUS3_ROOTED_SHIFT (21)
+#define STATUS3_ROOTED_COUNTER (0xF << STATUS3_ROOTED_SHIFT)
+#define STATUS3_ROOTED_TURN(num) ((num) << STATUS3_ROOTED_SHIFT)
+//#define STATUS3_MUDSPORT                (1 << 32) //figured its easier to just stick to the end... too big for u32 type...
+//#define STATUS3_WATERSPORT              (1 << 33)
+#define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER | STATUS3_PHANTOM_FORCE)
 
 // Not really sure what a "hitmarker" is.
 #define HITMARKER_x10                   0x00000010
@@ -184,14 +223,42 @@
 #define HITMARKER_FAINTED2(battler)     (0x10000000 << battler)
 
 // Per-side statuses that affect an entire party
-#define SIDE_STATUS_REFLECT          (1 << 0)
-#define SIDE_STATUS_LIGHTSCREEN      (1 << 1)
-#define SIDE_STATUS_X4               (1 << 2)
-#define SIDE_STATUS_SPIKES           (1 << 4)
-#define SIDE_STATUS_SAFEGUARD        (1 << 5)
-#define SIDE_STATUS_FUTUREATTACK     (1 << 6)
-#define SIDE_STATUS_MIST             (1 << 8)
-#define SIDE_STATUS_SPIKES_DAMAGED   (1 << 9)
+#define SIDE_STATUS_REFLECT                 (1 << 0)
+#define SIDE_STATUS_LIGHTSCREEN             (1 << 1)
+#define SIDE_STATUS_STICKY_WEB              (1 << 2)
+#define SIDE_STATUS_SPIKES                  (1 << 4)
+#define SIDE_STATUS_SAFEGUARD               (1 << 5)
+#define SIDE_STATUS_FUTUREATTACK            (1 << 6)
+#define SIDE_STATUS_MIST                    (1 << 8)
+#define SIDE_STATUS_SPIKES_DAMAGED          (1 << 9)
+#define SIDE_STATUS_TAILWIND                (1 << 10)
+#define SIDE_STATUS_AURORA_VEIL             (1 << 11)
+#define SIDE_STATUS_LUCKY_CHANT             (1 << 12)
+#define SIDE_STATUS_TOXIC_SPIKES            (1 << 13)
+#define SIDE_STATUS_STEALTH_ROCK            (1 << 14)
+#define SIDE_STATUS_STEALTH_ROCK_DAMAGED    (1 << 15)
+#define SIDE_STATUS_TOXIC_SPIKES_DAMAGED    (1 << 16)
+#define SIDE_STATUS_STICKY_WEB_DAMAGED      (1 << 17)
+#define SIDE_STATUS_QUICK_GUARD             (1 << 18)
+#define SIDE_STATUS_WIDE_GUARD              (1 << 19)
+#define SIDE_STATUS_CRAFTY_SHIELD           (1 << 20)
+#define SIDE_STATUS_MAT_BLOCK               (1 << 21)
+
+// Field affecting statuses.
+#define STATUS_FIELD_MAGIC_ROOM         0x1
+#define STATUS_FIELD_TRICK_ROOM         0x2
+#define STATUS_FIELD_WONDER_ROOM        0x4
+//#define STATUS_FIELD_MUDSPORT           0x8  will try to keep these 2 in status3 because they didn't use a timer
+//#define STATUS_FIELD_WATERSPORT         0x10
+#define STATUS_FIELD_GRAVITY            0x20
+#define STATUS_FIELD_GRASSY_TERRAIN     0x40
+#define STATUS_FIELD_MISTY_TERRAIN      0x80
+#define STATUS_FIELD_ELECTRIC_TERRAIN   0x100
+#define STATUS_FIELD_PSYCHIC_TERRAIN    0x200
+#define STATUS_FIELD_ION_DELUGE         0x400
+#define STATUS_FIELD_FAIRY_LOCK         0x800
+
+#define STATUS_TERRAIN_ANY              (STATUS_FIELD_GRASSY_TERRAIN | STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_PSYCHIC_TERRAIN)
 
 // Flags describing move's result
 #define MOVE_RESULT_MISSED             (1 << 0)

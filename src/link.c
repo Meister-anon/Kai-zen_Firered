@@ -99,6 +99,7 @@ struct Link gLink;
 u8 gLastRecvQueueCount;
 u16 gLinkSavedIme;
 
+//zsonic check these last, some of these I need for battles to work
 EWRAM_DATA bool8 gLinkTestDebugValuesEnabled = FALSE;
 EWRAM_DATA bool8 gUnknown_2022111 = FALSE;
 EWRAM_DATA u32 gUnknown_2022114 = 0;

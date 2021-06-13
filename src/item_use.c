@@ -45,7 +45,7 @@ static void Task_WaitFadeIn_CallItemUseOnFieldCB(u8 taskId);
 static void Task_ItemUse_CloseMessageBoxAndReturnToField(u8 taskId);
 static void sub_80A11C0(u8 taskId);
 static bool8 sub_80A1194(void);
-static void sub_80A1208(void);
+//static void sub_80A1208(void); // part of mail use
 static void ItemUseOnFieldCB_Bicycle(u8 taskId);
 static bool8 ItemUseCheckFunc_Rod(void);
 static void ItemUseOnFieldCB_Rod(u8 taskId);
@@ -235,19 +235,21 @@ static void sub_80A11C0(u8 taskId)
     }
 }
 
-void FieldUseFunc_OrangeMail(u8 taskId)
+/*void FieldUseFunc_OrangeMail(u8 taskId) //pretty sure removing that, makes this function break game,
+//should be fine if I remember to remove all options for getting mail items
+//realy don't want to have to reorder item listings again.
 {
-    ItemMenu_SetExitCallback(sub_80A1208);
+    //ItemMenu_SetExitCallback(sub_80A1208);
     ItemMenu_StartFadeToExitCallback(taskId);
-}
+}*/
 
-static void sub_80A1208(void)
+/*static void sub_80A1208(void)
 {
     struct MailStruct mail;
 
     mail.itemId = gSpecialVar_ItemId;
     ReadMail(&mail, CB2_BagMenuFromStartMenu, 0);
-}
+}*/
 
 void FieldUseFunc_MachBike(u8 taskId)
 {
@@ -709,7 +711,7 @@ static void sub_80A1D68(u8 taskId)
     }
 }
 
-void FieldUseFunc_VsSeeker(u8 taskId)
+void FieldUseFunc_VsSeeker(u8 taskId) //really annoying to remove,  may do later but don't feel like it now. just like powder jar
 {
     if ((gMapHeader.mapType != MAP_TYPE_ROUTE
       && gMapHeader.mapType != MAP_TYPE_TOWN
@@ -724,7 +726,7 @@ void FieldUseFunc_VsSeeker(u8 taskId)
     }
     else
     {
-        sItemUseOnFieldCB = Task_VsSeeker_0;
+       // sItemUseOnFieldCB = Task_VsSeeker_0;
         sub_80A103C(taskId);
     }
 }

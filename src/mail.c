@@ -19,7 +19,11 @@
 #include "strings.h"
 #include "constants/items.h"
 
-enum MailIconParam
+//zsonic removal of mail system, don't forget to change bag to remove the pocket, maybe redefine later
+//as something else.
+
+
+/*enum MailIconParam
 {
     MAIL_ICON_NONE = 0,
     MAIL_ICON_BEAD,
@@ -72,7 +76,9 @@ struct MailViewResources {
     u16 bg2TilemapBuffer[BG_SCREEN_SIZE];
 };
 
-static EWRAM_DATA struct MailViewResources * sMailViewResources = NULL;
+//static EWRAM_DATA struct MailViewResources * sMailViewResources = NULL;
+
+//zsonic guess I can remove mail
 
 static void CB2_InitMailView(void);
 static void BufferMailMessage(void);
@@ -730,4 +736,4 @@ static void ShowMailCB_Teardown(void)
         FreeAllWindowBuffers();
         FREE_AND_SET_NULL(sMailViewResources);
     }
-}
+} */

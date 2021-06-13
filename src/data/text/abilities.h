@@ -78,6 +78,7 @@ static const u8 sCacophonyDescription[] = _("Avoids sound-based moves.");
 static const u8 sAirLockDescription[] = _("Negates weather effects.");
 static const u8 sDispiritGuardDescription[] = _("“Not very effective” hits.");
 static const u8 sNuisanceDescription[] = _("“Weak attacks” strike first.");
+static const u8 sMoldBreakerDescription[] = _("Moves hit through abilities.");
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
 {
@@ -161,6 +162,9 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_AIR_LOCK] = sAirLockDescription,
     [ABILITY_DISPIRIT_GUARD] = sDispiritGuardDescription,
     [ABILITY_NUISANCE] = sNuisanceDescription,
+    [ABILITY_MOLD_BREAKER] = sMoldBreakerDescription,
+    [ABILITY_TURBOBLAZE] = sMoldBreakerDescription,
+    [ABILITY_TERAVOLT] = sMoldBreakerDescription,
 };
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
@@ -245,4 +249,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_AIR_LOCK] = _("AIR LOCK"),
     [ABILITY_DISPIRIT_GUARD] = _("DISPIRIT GUARD"),
     [ABILITY_NUISANCE] = _("NUISANCE"),
+    [ABILITY_MOLD_BREAKER] = _("Mold Breaker"),
+    [ABILITY_TURBOBLAZE] = _("Turboblaze"),
+    [ABILITY_TERAVOLT] = _("Teravolt"),
 };

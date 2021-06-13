@@ -48,6 +48,10 @@ struct FameCheckerData
     u8 unk_23_1:1; // unused
     u8 pickModeOverCancel:1;
 };
+//zsonic  while I find it interesting, for now think I'll remove fame checker too, need remember to change 
+//gary script in cerulean to account.
+
+//hold off on this for now, since I'm removing mail, I can also save ram by removing the allocated bag space
 
 static EWRAM_DATA u16 * sBg3TilemapBuffer = NULL;
 static EWRAM_DATA u16 * sBg1TilemapBuffer = NULL;

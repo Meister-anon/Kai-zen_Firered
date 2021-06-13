@@ -59,7 +59,8 @@ struct VsSeekerTrainerInfo
     u8 graphicsId;
 };
 
-struct VsSeekerStruct
+struct VsSeekerStruct //important, will replace item, but think will keep vsseeker table...actualy I won't
+    // it'll be easier to setup battle conditions with functions & script, and will save me space.
 {
     /*0x000*/ struct VsSeekerTrainerInfo trainerInfo[OBJECT_EVENTS_COUNT];
     /*0x100*/ u8 filler_100[0x300];
@@ -77,7 +78,10 @@ extern struct ObjectEvent gObjectEvents[OBJECT_EVENTS_COUNT];
 extern u8 gSelectedObjectEvent;
 
 // static declarations
-static EWRAM_DATA struct VsSeekerStruct *sVsSeeker = NULL;
+//static EWRAM_DATA struct VsSeekerStruct *sVsSeeker = NULL;
+
+//zsonic I could remove this, I don't really need it, 
+//I planned to just use functions and reset flags in game without this item anyway with level script.
 
 static void VsSeekerResetInBagStepCounter(void);
 static void VsSeekerResetChargingStepCounter(void);
@@ -87,20 +91,20 @@ static void Task_VsSeeker_1(u8 taskId);
 static void Task_VsSeeker_2(u8 taskId);
 static void GatherNearbyTrainerInfo(void);
 static void Task_VsSeeker_3(u8 taskId);
-static bool8 CanUseVsSeeker(void);
-static u8 GetVsSeekerResponseInArea(const VsSeekerData *);
+//static bool8 CanUseVsSeeker(void);
+//static u8 GetVsSeekerResponseInArea(const VsSeekerData *);
 static u8 GetRematchTrainerIdGivenGameState(const u16 *trainerIdxs, u8 rematchIdx);
-static u8 ShouldTryRematchBattleInternal(const VsSeekerData *, u16);
-static u8 HasRematchTrainerAlreadyBeenFought(const VsSeekerData *, u16);
-static int LookupVsSeekerOpponentInArray(const VsSeekerData * array, u16 trainerId);
-static bool8 IsTrainerReadyForRematchInternal(const VsSeekerData *, u16);
+//static u8 ShouldTryRematchBattleInternal(const VsSeekerData *, u16);
+//static u8 HasRematchTrainerAlreadyBeenFought(const VsSeekerData *, u16);
+//static int LookupVsSeekerOpponentInArray(const VsSeekerData * array, u16 trainerId);
+//static bool8 IsTrainerReadyForRematchInternal(const VsSeekerData *, u16);
 static u8 GetRunningBehaviorFromGraphicsId(u8);
 static u16 GetTrainerFlagFromScript(const u8 *);
-static int GetRematchIdx(const VsSeekerData *, u16);
-static bool32 IsThisTrainerRematchable(u32);
-static void ClearAllTrainerRematchStates(void);
+//static int GetRematchIdx(const VsSeekerData *, u16);
+//static bool32 IsThisTrainerRematchable(u32);
+//static void ClearAllTrainerRematchStates(void);
 static bool8 IsTrainerVisibleOnScreen(struct VsSeekerTrainerInfo *);
-static u8 GetNextAvailableRematchTrainer(const VsSeekerData *, u16, u8 *);
+//static u8 GetNextAvailableRematchTrainer(const VsSeekerData *, u16, u8 *);
 static u8 GetRematchableTrainerLocalId(void);
 static void StartTrainerObjectMovementScript(struct VsSeekerTrainerInfo *, const u8 *);
 static u8 GetCurVsSeekerResponse(s32, u16);
@@ -108,8 +112,14 @@ static void StartAllRespondantIdleMovements(void);
 static bool8 ObjectEventIdIsSane(u8 a0);
 static u8 GetRandomFaceDirectionMovementType();
 
-// rodata
-static const VsSeekerData sVsSeekerData[] = {
+//not sure what rodata is, but after changing this I think I need to make clean again  if that doesn't work
+//I'll probably have to undo this/..I probably should have made a commit sometime between this... but thta's hindsite 
+
+//recheck so ran again after putting this back, and there were still rodata stuff that needed to be removed
+//so think I can safely remove this table, just need to edit rodata?
+
+// rodata //ok other part was wrong THIS is the actual data for vs seeker stuff I should remove to save space
+/*static const VsSeekerData sVsSeekerData[] = {
    { {TRAINER_YOUNGSTER_BEN, TRAINER_YOUNGSTER_BEN_2, 0xFFFF, TRAINER_YOUNGSTER_BEN_3, TRAINER_YOUNGSTER_BEN_4},
       MAP_GROUP(ROUTE3), MAP_NUM(ROUTE3) },
    { {TRAINER_YOUNGSTER_CALVIN, TRAINER_YOUNGSTER_CALVIN},
@@ -552,7 +562,7 @@ static const VsSeekerData sVsSeekerData[] = {
       MAP_GROUP(SEVEN_ISLAND_TANOBY_RUINS), MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS) },
    { {TRAINER_GENTLEMAN_CLIFFORD, TRAINER_GENTLEMAN_CLIFFORD},
       MAP_GROUP(SEVEN_ISLAND_TANOBY_RUINS), MAP_NUM(SEVEN_ISLAND_TANOBY_RUINS) },
-};
+};*/
 
 static const u8 sMovementScript_Wait48[] = {
     MOVEMENT_ACTION_DELAY_16,
@@ -649,7 +659,7 @@ void VsSeekerResetObjectMovementAfterChargeComplete(void)
     }
 }
 
-bool8 UpdateVsSeekerStepCounter(void)
+/*bool8 UpdateVsSeekerStepCounter(void)
 {
     if (CheckBagHasItem(ITEM_VS_SEEKER, 1) == TRUE)
     {
@@ -855,9 +865,10 @@ static u8 CanUseVsSeeker(void)
         TV_PrintIntToStringVar(0, 100 - vsSeekerChargeSteps);
         return VSSEEKER_NOT_CHARGED;
     }
-}
+}*/
 
-static u8 GetVsSeekerResponseInArea(const VsSeekerData * a0)
+/*static u8 GetVsSeekerResponseInArea(const VsSeekerData * a0) //important could be useful for setting up two npc 
+//double battle, since this covers how the game can know the player is "visible" to npcs.
 {
     u16 r8 = 0;
     u8 sp0 = 0;
@@ -942,9 +953,9 @@ static u8 GetVsSeekerResponseInArea(const VsSeekerData * a0)
     if (sVsSeeker->trainerHasNotYetBeenFought)
         return VSSEEKER_RESPONSE_UNFOUGHT_TRAINERS;
     return VSSEEKER_RESPONSE_NO_RESPONSE;
-}
+}*/
 
-void ClearRematchStateByTrainerId(void)
+/*void ClearRematchStateByTrainerId(void)
 {
     u8 objEventId = 0;
     struct ObjectEventTemplate *objectEventTemplates = gSaveBlock1Ptr->objectEventTemplates;
@@ -972,7 +983,7 @@ void ClearRematchStateByTrainerId(void)
             }
         }
     }
-}
+}*/
 
 static void TryGetRematchTrainerIdGivenGameState(const u16 * trainerIdxs, u8 * rematchIdx_p)
 {
@@ -1014,16 +1025,16 @@ static u8 GetRematchTrainerIdGivenGameState(const u16 *trainerIdxs, u8 rematchId
     return 0;
 }
 
-u8 ShouldTryRematchBattle(void)
+/*u8 ShouldTryRematchBattle(void)
 {
     if (ShouldTryRematchBattleInternal(sVsSeekerData, gTrainerBattleOpponent_A))
     {
         return 1;
     }
     return HasRematchTrainerAlreadyBeenFought(sVsSeekerData, gTrainerBattleOpponent_A);
-}
+}*/
 
-static bool8 ShouldTryRematchBattleInternal(const VsSeekerData *vsSeekerData, u16 trainerBattleOpponent)
+/*static bool8 ShouldTryRematchBattleInternal(const VsSeekerData *vsSeekerData, u16 trainerBattleOpponent)
 {
     s32 rematchIdx = GetRematchIdx(vsSeekerData, trainerBattleOpponent);
 
@@ -1035,9 +1046,9 @@ static bool8 ShouldTryRematchBattleInternal(const VsSeekerData *vsSeekerData, u1
             return TRUE;
     }
     return FALSE;
-}
+}*/
 
-static bool8 HasRematchTrainerAlreadyBeenFought(const VsSeekerData *vsSeekerData, u16 trainerBattleOpponent)
+/*static bool8 HasRematchTrainerAlreadyBeenFought(const VsSeekerData *vsSeekerData, u16 trainerBattleOpponent)
 {
     s32 rematchIdx = GetRematchIdx(vsSeekerData, trainerBattleOpponent);
 
@@ -1103,7 +1114,7 @@ static bool8 IsTrainerReadyForRematchInternal(const VsSeekerData * array, u16 tr
     if (!IsThisTrainerRematchable(gSpecialVar_LastTalked))
         return FALSE;
     return TRUE;
-}
+}*/
 
 static bool8 ObjectEventIdIsSane(u8 objectEventId)
 {
@@ -1169,7 +1180,11 @@ static u8 GetRunningBehaviorFromGraphicsId(u8 graphicsId)
     }
 }
 
-static u16 GetTrainerFlagFromScript(const u8 *script)
+static u16 GetTrainerFlagFromScript(const u8 *script) //important for rematches, this is the function I need to use to get the right flag
+//but combine with map header to clear trainer flags on said map, either use random function, step counter, or time for if & how many to reset.
+//then set up growth that will scale enemies based on partylvl & progression.
+//for when using different teams maybe scale to highest level in party o rsomething  
+
 /*
  * The trainer flag is a little-endian short located +2 from
  * the script pointer, assuming the trainerbattle command is
@@ -1190,7 +1205,7 @@ static u16 GetTrainerFlagFromScript(const u8 *script)
     return trainerFlag;
 }
 
-static int GetRematchIdx(const VsSeekerData * vsSeekerData, u16 trainerFlagIdx)
+/*static int GetRematchIdx(const VsSeekerData * vsSeekerData, u16 trainerFlagIdx)
 {
     int i;
 
@@ -1201,24 +1216,24 @@ static int GetRematchIdx(const VsSeekerData * vsSeekerData, u16 trainerFlagIdx)
     }
 
     return -1;
-}
+}*/
 
-static bool32 IsThisTrainerRematchable(u32 a0)
+/*static bool32 IsThisTrainerRematchable(u32 a0)
 {
     if (!gSaveBlock1Ptr->trainerRematches[a0])
         return FALSE;
     return TRUE;
-}
+}*/
 
-static void ClearAllTrainerRematchStates(void)
+/*static void ClearAllTrainerRematchStates(void)
 {
     u8 i;
 
     for (i = 0; i < NELEMS(gSaveBlock1Ptr->trainerRematches); i++)
         gSaveBlock1Ptr->trainerRematches[i] = 0;
-}
+}*/
 
-static bool8 IsTrainerVisibleOnScreen(struct VsSeekerTrainerInfo * trainerInfo)
+static bool8 IsTrainerVisibleOnScreen(struct VsSeekerTrainerInfo * trainerInfo) //important 
 {
     s16 x;
     s16 y;
@@ -1236,7 +1251,7 @@ static bool8 IsTrainerVisibleOnScreen(struct VsSeekerTrainerInfo * trainerInfo)
     return FALSE;
 }
 
-static u8 GetNextAvailableRematchTrainer(const VsSeekerData * vsSeekerData, u16 trainerFlagNo, u8 * idxPtr)
+/*static u8 GetNextAvailableRematchTrainer(const VsSeekerData * vsSeekerData, u16 trainerFlagNo, u8 * idxPtr)
 {
     int i, j;
 
@@ -1261,9 +1276,9 @@ static u8 GetNextAvailableRematchTrainer(const VsSeekerData * vsSeekerData, u16 
 
     *idxPtr = 0;
     return 0;
-}
+}*/
 
-static u8 GetRematchableTrainerLocalId(void)
+/*static u8 GetRematchableTrainerLocalId(void)
 {
     u8 idx;
     u8 i;
@@ -1278,7 +1293,7 @@ static u8 GetRematchableTrainerLocalId(void)
     }
 
     return 0xFF;
-}
+}*/
 
 static void StartTrainerObjectMovementScript(struct VsSeekerTrainerInfo * trainerInfo, const u8 * script)
 {
@@ -1286,7 +1301,7 @@ static void StartTrainerObjectMovementScript(struct VsSeekerTrainerInfo * traine
     ScriptMovement_StartObjectMovementScript(trainerInfo->localId, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, script);
 }
 
-static u8 GetCurVsSeekerResponse(s32 a0, u16 a1)
+/*static u8 GetCurVsSeekerResponse(s32 a0, u16 a1)
 {
     s32 i;
     s32 j;
@@ -1327,4 +1342,4 @@ static void StartAllRespondantIdleMovements(void)
             }
         }
     }
-}
+}*/

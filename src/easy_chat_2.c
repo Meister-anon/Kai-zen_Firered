@@ -273,9 +273,9 @@ void ShowEasyChatScreen(void)
     case EASY_CHAT_TYPE_QUESTIONNAIRE:
         words = GetMEventProfileECWordsMaybe();
         break;
-    case EASY_CHAT_TYPE_MAIL:
+    /*case EASY_CHAT_TYPE_MAIL:
         words = gSaveBlock1Ptr->mail[gSpecialVar_0x8005].words;
-        break;
+        break;*/
     default:
         return;
     }
@@ -347,7 +347,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .instructionsText2 = gUnknown_8418725,
         .confirmText1 = gUnknown_841885F,
         .confirmText2 = gUnknown_8418902
-    }, {
+    },/* {
         .type = EASY_CHAT_TYPE_MAIL,
         .numColumns = 2,
         .numRows = 5,
@@ -364,7 +364,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .frameId = 0,
         .instructionsText1 = gUnknown_8418780,
         .instructionsText2 = gUnknown_841879E,
-    }, {
+    },*/ {
         .type = EASY_CHAT_TYPE_BARD_SONG,
         .numColumns = 2,
         .numRows = 3,
@@ -1234,10 +1234,10 @@ void GetEasyChatConfirmCancelText(const u8 **str1, const u8 **str2)
 {
     switch (sEasyChatScreen->type)
     {
-    case EASY_CHAT_TYPE_MAIL:
+    /*case EASY_CHAT_TYPE_MAIL:
         *str1 = gUnknown_84189EE;
         *str2 = NULL;
-        break;
+        break;*/
     default:
         *str1 = gUnknown_84189E0;
         *str2 = NULL;

@@ -8,7 +8,8 @@ static EWRAM_DATA struct MemBlock *pos = NULL;
 static EWRAM_DATA struct MemBlock *splitBlock = NULL;
 
 #define MALLOC_SYSTEM_ID 0xA3A3
-
+//zsonic , remembered malloc was the thing I had to remove the hardcode for, check if that's done already 
+//for this build...
 struct MemBlock {
     // Whether this block is currently allocated.
     bool16 flag;

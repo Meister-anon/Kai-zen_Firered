@@ -119,7 +119,7 @@ void NewGameInitData(void)
     ZeroEnemyPartyMons();
     sub_80549D4();
     ClearSav1();
-    ClearMailData();
+    //ClearMailData();
     gSaveBlock2Ptr->specialSaveWarpFlags = 0;
     gSaveBlock2Ptr->gcnLinkFlags = 0;
     gSaveBlock2Ptr->field_AC = 1;

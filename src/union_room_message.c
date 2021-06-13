@@ -2,6 +2,9 @@
 #include "mevent_server.h"
 #include "constants/union_room.h"
 
+//zsonic possiby here is where I'd change union room text strings
+//also may remove these for physical space
+
 ALIGNED(4) const u8 gUnionRoomActivity_Blank[] = _("");
 ALIGNED(4) const u8 gUnknown_84571B0[] = _(":");
 ALIGNED(4) const u8 gUnknown_84571B4[] = _("{ID}");

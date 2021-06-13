@@ -154,6 +154,54 @@ void PressurePPLoseOnUsingPerishSong(u8 attacker)
     }
 }
 
+u32 GetBattlerAbility(u8 battlerId)
+{
+    if (gStatuses3[battlerId] & STATUS3_GASTRO_ACID)
+        return ABILITY_NONE;
+    else if ((((gBattleMons[gBattlerAttacker].ability == ABILITY_MOLD_BREAKER
+        || gBattleMons[gBattlerAttacker].ability == ABILITY_TERAVOLT
+        || gBattleMons[gBattlerAttacker].ability == ABILITY_TURBOBLAZE)
+        && !(gStatuses3[gBattlerAttacker] & STATUS3_GASTRO_ACID))
+        || gBattleMoves[gCurrentMove].flags & FLAG_TARGET_ABILITY_IGNORED)
+        //&& sAbilitiesAffectedByMoldBreaker[gBattleMons[battlerId].ability]
+        && gBattlerByTurnOrder[gCurrentTurnActionNumber] == gBattlerAttacker
+        && gActionsByTurnOrder[gBattlerByTurnOrder[gBattlerAttacker]] == B_ACTION_USE_MOVE
+        && gCurrentTurnActionNumber < gBattlersCount)
+        return ABILITY_NONE;
+    else
+        return gBattleMons[battlerId].ability;
+}
+
+u32 GetBattlerHoldEffectParam(u8 battlerId)
+{
+    if (gBattleMons[battlerId].item == ITEM_ENIGMA_BERRY)
+        return gEnigmaBerries[battlerId].holdEffectParam;
+    else
+        return ItemId_GetHoldEffectParam(gBattleMons[battlerId].item);
+}
+
+u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating)
+{
+    if (checkNegating)
+    {
+        if (gStatuses3[battlerId] & STATUS3_EMBARGO)
+            return HOLD_EFFECT_NONE;
+        /*if (gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)
+            return HOLD_EFFECT_NONE;
+        if (gBattleMons[battlerId].ability == ABILITY_KLUTZ && !(gStatuses3[battlerId] & STATUS3_GASTRO_ACID))
+            return HOLD_EFFECT_NONE;*/
+    }
+
+    gPotentialItemEffectBattler = battlerId;
+
+    //if (gBattleStruct->debugHoldEffects[battlerId] != 0 && gBattleMons[battlerId].item)
+      //  return gBattleStruct->debugHoldEffects[battlerId];
+    if (gBattleMons[battlerId].item == ITEM_ENIGMA_BERRY)
+        return gEnigmaBerries[battlerId].holdEffect;
+    else
+        return ItemId_GetHoldEffect(gBattleMons[battlerId].item);
+}
+
 void MarkAllBattlersForControllerExec(void)
 {
     s32 i;
@@ -658,6 +706,36 @@ u8 DoFieldEndTurnEffects(void)
     return (gBattleMainFunc != BattleTurnPassed);
 }
 
+bool32 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
+//finihsed adding to type calc, so should be battle ready
+{
+    //if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
+      //  return TRUE;
+    if (gFieldStatuses & STATUS_FIELD_GRAVITY)
+        return TRUE;
+    else if (gStatuses3[battlerId] & STATUS3_ROOTED)
+        return TRUE;
+    else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
+        return TRUE; //important roost change  ..[unsure if want to make random % but no one would gamble it anyway...
+    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
+        return TRUE; //hope this set up right/works
+    //according to Mcgriffin needed make flying & roost flag true statement
+    //as else at bottom just means not flyign or has roost flag, TRUE
+    else if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
+        return FALSE;
+    else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
+        return FALSE;
+    //else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
+      //  return FALSE;
+    else if (GetBattlerAbility(battlerId) == ABILITY_LEVITATE)
+        return FALSE;
+    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
+        return FALSE;
+
+    else
+        return TRUE;
+}
+
 enum
 {
     ENDTURN_INGRAIN,
@@ -678,6 +756,7 @@ enum
     ENDTURN_CHARGE,
     ENDTURN_TAUNT,
     ENDTURN_YAWN,
+    ENDTURN_ROOST,
     ENDTURN_ITEMS2,
     ENDTURN_BATTLER_COUNT
 };
@@ -3109,7 +3188,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                  && TARGET_TURN_DAMAGED
                  && (Random() % 100) < battlerHoldEffectParam
-                 && gBattleMoves[gCurrentMove].flags & FLAG_KINGSROCK_AFFECTED
+                 && gBattleMoves[gCurrentMove].flags & FLAG_KINGS_ROCK_AFFECTED
                  && gBattleMons[gBattlerTarget].hp)
                 {
                     gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_FLINCH;

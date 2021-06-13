@@ -5,15 +5,15 @@
 #include "constants/items.h"
 #include "pokemon_icon.h"
 
-void ClearMailData(void)
+/*void ClearMailData(void)
 {
     u8 i;
 
     for (i = 0; i < MAIL_COUNT; i++)
         ClearMailStruct(&gSaveBlock1Ptr->mail[i]);
-}
+}*/
 
-void ClearMailStruct(struct MailStruct *mail)
+/*void ClearMailStruct(struct MailStruct *mail)
 {
     s32 i;
 
@@ -25,7 +25,7 @@ void ClearMailStruct(struct MailStruct *mail)
         mail->trainerId[i] = 0;
     mail->species = SPECIES_BULBASAUR;
     mail->itemId = ITEM_NONE;
-}
+}*/
 
 bool8 MonHasMail(struct Pokemon *mon)
 {
@@ -36,7 +36,7 @@ bool8 MonHasMail(struct Pokemon *mon)
         return FALSE;
 }
 
-u8 GiveMailToMon(struct Pokemon *mon, u16 itemId)
+/*u8 GiveMailToMon(struct Pokemon *mon, u16 itemId)
 {
     u8 heldItem[2];
     u8 id, i;
@@ -68,7 +68,7 @@ u8 GiveMailToMon(struct Pokemon *mon, u16 itemId)
         }
     }
     return 0xFF;
-}
+}*/
 
 u16 SpeciesToMailSpecies(u16 species, u32 personality)
 {
@@ -95,7 +95,7 @@ u16 MailSpeciesToSpecies(u16 mailSpecies, u16 *unownLetter)
     return result;
 }
 
-u8 GiveMailToMon2(struct Pokemon *mon, struct MailStruct *mail)
+/*u8 GiveMailToMon2(struct Pokemon *mon, struct MailStruct *mail)
 {
     u8 heldItem[2];
     u16 itemId = mail->itemId;
@@ -111,14 +111,14 @@ u8 GiveMailToMon2(struct Pokemon *mon, struct MailStruct *mail)
     SetMonData(mon, MON_DATA_HELD_ITEM, heldItem);
 
     return mailId;
-}
+}*/
 
 static bool32 DummyMailFunc(void)
 {
     return FALSE;
 }
 
-void TakeMailFromMon(struct Pokemon *mon)
+/*void TakeMailFromMon(struct Pokemon *mon)
 {
     u8 heldItem[2];
     u8 mailId;
@@ -133,14 +133,14 @@ void TakeMailFromMon(struct Pokemon *mon)
         SetMonData(mon, MON_DATA_MAIL, &mailId);
         SetMonData(mon, MON_DATA_HELD_ITEM, heldItem);
     }
-}
+}*/
 
-void ClearMailItemId(u8 mailId)
+/*void ClearMailItemId(u8 mailId)
 {
     gSaveBlock1Ptr->mail[mailId].itemId = ITEM_NONE;
-}
+}*/
 
-u8 TakeMailFromMon2(struct Pokemon *mon)
+/*u8 TakeMailFromMon2(struct Pokemon *mon)
 {
     u8 i, newMailId;
     u8 newHeldItem[2];
@@ -160,7 +160,7 @@ u8 TakeMailFromMon2(struct Pokemon *mon)
         }
     }
     return 0xFF;
-}
+}*/
 
 bool8 ItemIsMail(u16 itemId)
 {

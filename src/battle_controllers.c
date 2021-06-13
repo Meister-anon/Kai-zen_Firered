@@ -17,9 +17,10 @@
 
 //static EWRAM_DATA u8 sLinkSendTaskId = 0;
 //static EWRAM_DATA u8 sLinkReceiveTaskId = 0;
-static EWRAM_DATA u8 gUnknown_202286E = 0;
-EWRAM_DATA struct UnusedControllerStruct gUnknown_2022870 = {0};
-static EWRAM_DATA u8 sBattleBuffersTransferData[0x100] = {0};
+static EWRAM_DATA u8 gUnknown_202286E = 0; //v wil leave for now
+EWRAM_DATA struct UnusedControllerStruct gUnknown_2022870 = {0}; //says unused so will try removing for ewram
+static EWRAM_DATA u8 sBattleBuffersTransferData[0x100] = {0};//zsonic is mark for ewram removed
+//unused struct seems to actually be used -_-
 
 //static void CreateTasksForSendRecvLinkBuffers(void);
 static void InitLinkBtlControllers(void);

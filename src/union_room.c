@@ -48,7 +48,9 @@
 #include "constants/trainer_card.h"
 #include "constants/union_room.h"
 
-static EWRAM_DATA u8 sUnionRoomPlayerName[12] = {};
+//zsonic oh, THIS is union room stuff.
+
+/*static EWRAM_DATA u8 sUnionRoomPlayerName[12] = {};
 static EWRAM_DATA u8 sPlayerCurrActivity = 0;
 static EWRAM_DATA u8 sPlayerActivityGroupSize = 0;
 static EWRAM_DATA union UnkUnion_Main sUnionRoomMain = {};
@@ -56,7 +58,7 @@ static EWRAM_DATA u32 sUnref_203B060 = 0;
 EWRAM_DATA struct GFtgtGnameSub gPartnerTgtGnameSub = {};
 EWRAM_DATA u16 gUnionRoomOfferedSpecies = SPECIES_NONE;
 EWRAM_DATA u8 gUnionRoomRequestedMonType = TYPE_NORMAL;
-static EWRAM_DATA struct UnionRoomTrade sUnionRoomTrade = {};
+static EWRAM_DATA struct UnionRoomTrade sUnionRoomTrade = {};*/
 
 static struct UnkStruct_Leader * sLeader;
 static struct UnkStruct_Group * sGroup;
@@ -132,7 +134,7 @@ static void ViewURoomPartnerTrainerCard(u8 *dest, struct UnkStruct_URoom * uRoom
 
 #define _8456CD8(a, b) ((a) | ((b) << 8))
 
-static const u8 *const sUnionRoomActivityStringPtrs[] = {
+/*static const u8 *const sUnionRoomActivityStringPtrs[] = {
     gUnionRoomActivity_Blank,
     gUnionRoomActivity_SingleBattle,
     gUnionRoomActivity_DoubleBattle,
@@ -637,7 +639,7 @@ static const u8 sLinkGroupToURoomActivity[] = {
     [LINK_GROUP_BERRY_PICKING] = ACTIVITY_BPICK,
     [LINK_GROUP_WONDER_CARD]   = ACTIVITY_WCARD2,
     [LINK_GROUP_WONDER_NEWS]   = ACTIVITY_WNEWS2
-};
+};*/
 
 static const u8 sUnref_84570D1[] = _("{DYNAMIC 00}·{DYNAMIC 01}");
 
@@ -668,7 +670,7 @@ static const u8 sUnref_84570D1[] = _("{DYNAMIC 00}·{DYNAMIC 01}");
 // capacityCode is a 2-nybble code
 // Bits 0-3: Capacity
 // Bits 4-7: Min required (if 0, must have exactly Capacity players
-static void PrintNumPlayersWaitingForMsg(u8 windowId, u8 capacityCode, u8 count)
+/*static void PrintNumPlayersWaitingForMsg(u8 windowId, u8 capacityCode, u8 count)
 {
     FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
     switch (capacityCode << 8)
@@ -1996,7 +1998,7 @@ static void Task_StartActivity(u8 taskId)
     case ACTIVITY_BPICK:
         SetCableClubStateAndWarpCurrentMap(USING_MINIGAME, 5, 1);
         StartDodrioBerryPicking(GetCursorSelectionMonId(), CB2_LoadMap);
-        break; */
+        break; 
     }
 
         DestroyTask(taskId);
@@ -4717,11 +4719,11 @@ static void ViewURoomPartnerTrainerCard(u8 *unused, struct UnkStruct_URoom * uro
     DynamicPlaceholderTextUtil_ExpandPlaceholders(uroom->field_1A4, gUnknown_84594C4);
     StringCopy(gStringVar4, uroom->field_1A4);
     
-   /* n = trainerCard->rse.linkBattleWins;
+    n = trainerCard->rse.linkBattleWins;
     if (n > 9999)
     {
         n = 9999;
-    }*/
+    }
     ConvertIntToDecimalStringN(uroom->trainerCardStrbufs[0], n, STR_CONV_MODE_LEFT_ALIGN, 4);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, uroom->trainerCardStrbufs[0]);
 
@@ -4729,7 +4731,7 @@ static void ViewURoomPartnerTrainerCard(u8 *unused, struct UnkStruct_URoom * uro
     if (n > 9999)
     {
         n = 9999;
-    }*/
+    }
     ConvertIntToDecimalStringN(uroom->trainerCardStrbufs[1], n, STR_CONV_MODE_LEFT_ALIGN, 4);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(2, uroom->trainerCardStrbufs[1]);
 
@@ -4755,4 +4757,4 @@ static void ViewURoomPartnerTrainerCard(u8 *unused, struct UnkStruct_URoom * uro
         DynamicPlaceholderTextUtil_ExpandPlaceholders(uroom->field_1A4, gUnknown_8459580[trainerCard->rse.gender]);
         StringAppend(gStringVar4, uroom->field_1A4);
     }
-}
+}*/

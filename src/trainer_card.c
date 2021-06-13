@@ -1113,7 +1113,7 @@ static void BufferTextForCardBack(void)
 {
     BufferNameForCardBack();
     BufferHofDebutTime();
- //   BufferLinkBattleResults();   could possibly replace with new game+ count
+ //   BufferLinkBattleResults();  //important could possibly replace with new game+ count
     BufferNumTrades();
     BufferBerryCrushPoints();
     BufferUnionRoomStats();

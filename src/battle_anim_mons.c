@@ -33,8 +33,8 @@ static void sub_8077268(struct Sprite *sprite);
 static void sub_80772F4(struct Sprite *sprite);
 
 static EWRAM_DATA union AffineAnimCmd *sAnimTaskAffineAnim = NULL;
-static EWRAM_DATA u32 gUnknown_2037F2C = 0; // not used
-
+//static EWRAM_DATA u32 gUnknown_2037F2C = 0; // not used   //I'm trusting you mysterious commentor
+//zsonic
 static const struct UCoords8 sBattlerCoords[][4] =
 {
     {
