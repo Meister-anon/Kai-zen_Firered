@@ -26,7 +26,7 @@
 #include "fieldmap.h"
 #include "strings.h"
 
-struct TeachyTvCtrlBlk
+/*struct TeachyTvCtrlBlk
 {
     MainCallback callback;
     u8 mode;
@@ -48,8 +48,8 @@ struct TeachyTvBuf
     u8 scrollIndicatorArrowPairId;
 };
 
-static EWRAM_DATA struct TeachyTvCtrlBlk sStaticResources = {0};
-static EWRAM_DATA struct TeachyTvBuf * sResources = NULL;
+//static EWRAM_DATA struct TeachyTvCtrlBlk sStaticResources = {0};
+//static EWRAM_DATA struct TeachyTvBuf * sResources = NULL;
 
 //was plannign to repurpose this for my new changes btu will just remove for now.
 //don't forget change old man in viridian so game can progress
@@ -1400,4 +1400,4 @@ static void TeachyTvLoadMapPalette(const struct MapLayout * mStruct, const u8 * 
             dest = (u16 *)mStruct->primaryTileset->palettes + 0x10 * palIndexArray[i];
         LoadPalette(dest, 0x10 * (15 - i), 0x20);
     }
-}
+}*/

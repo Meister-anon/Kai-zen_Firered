@@ -56,15 +56,15 @@ static void Task_InitTMCaseFromField(u8 taskId);
 static void InitBerryPouchFromBag(void);
 static void Task_InitBerryPouchFromField(u8 taskId);
 static void InitBerryPouchFromBattle(void);
-static void InitTeachyTvFromBag(void);
-static void Task_InitTeachyTvFromField(u8 taskId);
+//static void InitTeachyTvFromBag(void);
+//static void Task_InitTeachyTvFromField(u8 taskId);
 static void sub_80A19E8(u8 taskId);
 static void sub_80A1A44(void);
 static void sub_80A1B48(u8 taskId);
 static void sub_80A1C08(u8 taskId);
 static void sub_80A1CAC(void);
 static void sub_80A1CC0(u8 taskId);
-static void sub_80A1D58(void);
+//static void sub_80A1D58(void);
 static void sub_80A1D68(u8 taskId);
 static void Task_BattleUse_StatBooster_DelayAndPrint(u8 taskId);
 static void Task_BattleUse_StatBooster_WaitButton_ReturnToBattle(u8 taskId);
@@ -235,13 +235,13 @@ static void sub_80A11C0(u8 taskId)
     }
 }
 
-/*void FieldUseFunc_OrangeMail(u8 taskId) //pretty sure removing that, makes this function break game,
+void FieldUseFunc_OrangeMail(u8 taskId) //pretty sure removing that, makes this function break game,
 //should be fine if I remember to remove all options for getting mail items
 //realy don't want to have to reorder item listings again.
 {
     //ItemMenu_SetExitCallback(sub_80A1208);
     ItemMenu_StartFadeToExitCallback(taskId);
-}*/
+}
 
 /*static void sub_80A1208(void)
 {
@@ -274,14 +274,21 @@ void FieldUseFunc_MachBike(u8 taskId)
         PrintNotTheTimeToUseThat(taskId, gTasks[taskId].data[3]);
 }
 
-static void ItemUseOnFieldCB_Bicycle(u8 taskId)
+static void ItemUseOnFieldCB_Bicycle(u8 taskId)// I like the idea of being able to shift between the two like shifting gears
+//if I did that I'd use freeze player, because you can't switch gears while riding, wait a period of time unfreeze and then you're using the other bike
+//simply done by pressing L or R buttons while cycling 
 {
     if (!TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE))
         PlaySE(SE_BIKE_BELL);
     StartTransitionToFlipBikeState(PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE);
-    ClearPlayerHeldMovementAndUnfreezeObjectEvents();
-    ScriptContext2_Disable();
-    DestroyTask(taskId);
+    ClearPlayerHeldMovementAndUnfreezeObjectEvents();//oh wait seems like its alrady doing that here?
+    ScriptContext2_Disable(); //can't really tell maybe not
+    DestroyTask(taskId); //also acro bike was always too slow, doesn't match pro bikers that speed through 
+    // on their bike doing tricks, if I can I'll bump teh speed up, to slighly below mach back.
+    //maybe give mach bike a 2nd mode that can go even faster? 
+
+    //or or, just use acro bike but with mach bikke speed? ro fuse the two's mechanics somehow
+    //important
 }
 
 void FieldUseFunc_OldRod(u8 taskId)
@@ -517,23 +524,23 @@ static void InitBerryPouchFromBattle(void)
     InitBerryPouch(BERRYPOUCH_FROMBATTLE, CB2_BagMenuFromBattle, 0);
 }
 
-void FieldUseFunc_TeachyTv(u8 taskId)
+void FieldUseFunc_TeachyTv(u8 taskId) //zsonic
 {
     ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, NULL, gSpecialVar_ItemId, 0xFFFF);
     if (gTasks[taskId].data[3] == 0)
     {
-        ItemMenu_SetExitCallback(InitTeachyTvFromBag);
+       // ItemMenu_SetExitCallback(InitTeachyTvFromBag);
         ItemMenu_StartFadeToExitCallback(taskId);
     }
     else
     {
         StopPokemonLeagueLightingEffectTask();
         FadeScreen(FADE_TO_BLACK, 0);
-        gTasks[taskId].func = Task_InitTeachyTvFromField;
+       // gTasks[taskId].func = Task_InitTeachyTvFromField;
     }
 }
 
-static void InitTeachyTvFromBag(void)
+/*static void InitTeachyTvFromBag(void)
 {
     InitTeachyTvController(0, CB2_BagMenuFromStartMenu);
 }
@@ -547,7 +554,7 @@ static void Task_InitTeachyTvFromField(u8 taskId)
         InitTeachyTvController(0, CB2_ReturnToField);
         DestroyTask(taskId);
     }
-}
+}*/
 
 void FieldUseFunc_SuperRepel(u8 taskId)
 {
@@ -684,7 +691,7 @@ void FieldUseFunc_FameChecker(u8 taskId)
     ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, NULL, gSpecialVar_ItemId, 0xFFFF);
     if (gTasks[taskId].data[3] == 0)
     {
-        ItemMenu_SetExitCallback(sub_80A1D58);
+        //ItemMenu_SetExitCallback(sub_80A1D58);
         ItemMenu_StartFadeToExitCallback(taskId);
     }
     else
@@ -695,10 +702,10 @@ void FieldUseFunc_FameChecker(u8 taskId)
     }
 }
 
-static void sub_80A1D58(void)
+/*static void sub_80A1D58(void)
 {
     UseFameChecker(CB2_BagMenuFromStartMenu);
-}
+}*/
 
 static void sub_80A1D68(u8 taskId)
 {
@@ -706,7 +713,7 @@ static void sub_80A1D68(u8 taskId)
     {
         CleanupOverworldWindowsAndTilemaps();
         sub_80A1184();
-        UseFameChecker(CB2_ReturnToField);
+        //UseFameChecker(CB2_ReturnToField);
         DestroyTask(taskId);
     }
 }

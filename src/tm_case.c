@@ -1140,7 +1140,7 @@ void Pokedude_InitTMCase(void)
     AddBagItem(ITEM_TM03, 1);
     AddBagItem(ITEM_TM09, 1);
     AddBagItem(ITEM_TM35, 1);
-    InitTMCase(4, CB2_ReturnToTeachyTV, 0);
+    //InitTMCase(4, CB2_ReturnToTeachyTV, 0);
 }
 
 static void Task_TMCaseDude1(u8 taskId)
@@ -1161,11 +1161,12 @@ static void Task_TMCaseDude_Playback(u8 taskId)
 
     if (JOY_NEW(B_BUTTON))
     {
-        if (data[8] < 21)
+        return;
+        /*if (data[8] < 21)
         {
             data[8] = 21;
             SetTeachyTvControllerModeToResume();
-        }
+        }*/
     }
 
     switch (data[8])

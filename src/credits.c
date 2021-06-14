@@ -26,6 +26,8 @@ asm(".set TITLE_TEXT, gString_PokemonLeafGreen_Staff");
 #define static
 #endif
 
+EWRAM_DATA bool8 gHasHallOfFameRecords = FALSE;
+
 /*enum CreditsSceneIdx
 {
     CREDITSSCENE_INIT_WIN0 = 0,
@@ -189,7 +191,7 @@ struct CreditsTaskData
 
 //static EWRAM_DATA struct CreditsResources * sCreditsMgr = NULL; //zsonic  last resut may remove credits...
                                 //  replace with congratulations image instead
-EWRAM_DATA bool8 gHasHallOfFameRecords = FALSE;
+
 
 static void CB2_Credits(void);
 static s32 RollCredits(void);
@@ -806,7 +808,7 @@ static bool32 DoOverworldMapScrollScene(UNUSED u8 unused)
     default:
         return FALSE;
     }
-}*/
+}
 
 #ifdef NONMATCHING
 static s32 RollCredits(void)
@@ -1747,7 +1749,7 @@ static s32 RollCredits(void)
 }
 #endif //NONMATCHING
 
-/*static void VBlankCB(void)
+static void VBlankCB(void)
 {
     LoadOam();
     ProcessSpriteCopyRequests();

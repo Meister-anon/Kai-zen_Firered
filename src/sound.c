@@ -16,7 +16,9 @@ struct Fanfare
 
 // TODO: what are these
 extern u8 gDisableMapMusicChangeOnMapLoad;
-extern u8 gUnknown_203F174;
+extern u8 gUnknown_203F174; //I think its the sound for help menu?
+
+//ok but think its also sound for pokedex so I can't remove that.
 
 // ewram
 EWRAM_DATA struct MusicPlayerInfo* gMPlay_PokemonCry = NULL;

@@ -2177,8 +2177,9 @@ void InitPokedudeBag(u8 a0)
     switch (a0)
     {
     default:
-        cb2 = CB2_ReturnToTeachyTV;
-        location = a0;
+        return;
+        //cb2 = CB2_ReturnToTeachyTV;
+        //location = a0;
         break;
     case 7:
         cb2 = SetCB2ToReshowScreenAfterMenu2;
@@ -2197,8 +2198,8 @@ static bool8 Task_BButtonInterruptTeachyTv(u8 taskId)
     if (JOY_NEW(B_BUTTON))
     {
         RestorePlayerBag();
-        SetTeachyTvControllerModeToResume();
-        sBagMenuDisplay->exitCB = CB2_ReturnToTeachyTV;
+       // SetTeachyTvControllerModeToResume();
+        //sBagMenuDisplay->exitCB = CB2_ReturnToTeachyTV;
         gTasks[taskId].func = Task_Pokedude_FadeFromBag;
         return TRUE;
     }

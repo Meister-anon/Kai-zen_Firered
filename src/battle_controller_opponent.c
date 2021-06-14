@@ -1547,25 +1547,25 @@ static void OpponentHandleOneReturnValue_Duplicate(void)
 
 static void OpponentHandleCmd37(void)
 {
-    gUnknown_2022870.field_0 = 0;
+    //gUnknown_2022870.field_0 = 0;
     OpponentBufferExecCompleted();
 }
 
 static void OpponentHandleCmd38(void)
 {
-    gUnknown_2022870.field_0 = gBattleBufferA[gActiveBattler][1];
+    //gUnknown_2022870.field_0 = gBattleBufferA[gActiveBattler][1];
     OpponentBufferExecCompleted();
 }
 
 static void OpponentHandleCmd39(void)
 {
-    gUnknown_2022870.flag_x80 = 0;
+    //gUnknown_2022870.flag_x80 = 0;
     OpponentBufferExecCompleted();
 }
 
 static void OpponentHandleCmd40(void)
 {
-    gUnknown_2022870.flag_x80 ^= 1;
+    //gUnknown_2022870.flag_x80 ^= 1;
     OpponentBufferExecCompleted();
 }
 

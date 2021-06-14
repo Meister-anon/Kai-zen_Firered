@@ -3,7 +3,10 @@
 
 #define BERRY_NAME_LENGTH 6
 #define BERRY_NAME_COUNT 7
-#define BERRY_ITEM_EFFECT_COUNT 18
+#define BERRY_ITEM_EFFECT_COUNT 18 //this may need to be changed 
+//with added berries
+//checked and luckily values are the same in emerald, 
+//but there's no name_count field
 
 struct Berry
 {

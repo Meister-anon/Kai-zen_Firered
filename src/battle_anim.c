@@ -36,8 +36,7 @@ EWRAM_DATA static u16 sAnimMoveIndex = 0;
 EWRAM_DATA u8 gBattleAnimAttacker = 0;
 EWRAM_DATA u8 gBattleAnimTarget = 0;
 EWRAM_DATA u16 gAnimBattlerSpecies[MAX_BATTLERS_COUNT] = {0};
-EWRAM_DATA u8 gUnknown_2037F24 = 0;
-
+EWRAM_DATA u8 gUnknown_2037F24 = 0; //does something with confuse ray etc. need to keep
 // Function Declarations
 static void AddSpriteIndex(u16 index);
 static void ClearSpriteIndex(u16 index);

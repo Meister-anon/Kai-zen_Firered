@@ -745,14 +745,14 @@ void CB2_ReturnFromCableClubBattle(void)
             }
         }
     }*/
-    if (InUnionRoom() == TRUE)
+    /*if (InUnionRoom() == TRUE)
     {
         gMain.savedCallback = sub_8081624;
     }
-    else
-    {
+    else*/
+    //{
         gMain.savedCallback = CB2_ReturnToFieldFromMultiplayer;
-    }
+  //  }
   //SetMainCallback2(CB2_SetUpSaveAfterLinkBattle);
 }
 
@@ -877,7 +877,7 @@ static void Task_StartWirelessCableClubTrade(u8 taskId)
     case 3:
         if (IsLinkTaskFinished())
         {
-            UnionRoom_CreateTask_CallCB2ReturnFromLinkTrade();
+            //UnionRoom_CreateTask_CallCB2ReturnFromLinkTrade();
             DestroyTask(taskId);
         }
         break;

@@ -87,12 +87,12 @@ static u8 *const sStringVarPtrs[] = {
     gStringVar3
 };
 
-void ShowDiploma(void)
+/*void ShowDiploma(void)
 {
     QuestLog_CutRecording();
     SetMainCallback2(CB2_ShowDiploma);
     ScriptContext2_Enable();
-}
+}*/
 
 void ForcePlayerOntoBike(void)
 {

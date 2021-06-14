@@ -31,15 +31,17 @@ struct HelpSystemVideoState
 };
 
 //zsonic ...can't believe I still had pieces of the help system still here.
+//actually it may just be the sound effect for opening the help menu?
 
-/*static EWRAM_DATA u8 sMapTilesBackup[BG_CHAR_SIZE] = {0};
-EWRAM_DATA u8 gUnknown_203F174 = 0;
-EWRAM_DATA bool8 gHelpSystemToggleWithRButtonDisabled = FALSE;
-static EWRAM_DATA u8 sDelayTimer = 0;
-static EWRAM_DATA u8 sInHelpSystem = 0;
+//this is a backup don't know if I need it
+static EWRAM_DATA u8 sMapTilesBackup[BG_CHAR_SIZE] = {0};
+EWRAM_DATA u8 gUnknown_203F174 = 0;  //k this has something to with sounds, so I'll keep this in. moslty foud in sound.c
+//EWRAM_DATA bool8 gHelpSystemToggleWithRButtonDisabled = FALSE;
+//static EWRAM_DATA u8 sDelayTimer = 0;
+//static EWRAM_DATA u8 sInHelpSystem = 0;
 static EWRAM_DATA struct HelpSystemVideoState sVideoState = {0};
-EWRAM_DATA struct HelpSystemListMenu gHelpSystemListMenu = {0};
-EWRAM_DATA struct ListMenuItem gHelpSystemListMenuItems[52] = {0};*/
+//EWRAM_DATA struct HelpSystemListMenu gHelpSystemListMenu = {0};
+//EWRAM_DATA struct ListMenuItem gHelpSystemListMenuItems[52] = {0};
 
 static const u16 sTiles[] = INCBIN_U16("graphics/help_system/unk_8464008.4bpp");
 static const u16 sPals[] = INCBIN_U16("graphics/help_system/unk_8464008.gbapal");
@@ -143,7 +145,7 @@ static const u16 sPals[] = INCBIN_U16("graphics/help_system/unk_8464008.gbapal")
     }
     return sVideoState.state;
 }
-
+*/
 void SaveCallbacks(void)
 {
     vu16 * dma;
@@ -208,7 +210,7 @@ void RestoreMapTextColors(void)
         &sVideoState.savedTextColor[1],
         &sVideoState.savedTextColor[2]
     );
-}*/
+}
 
 void CommitTilemap(void)
 {
@@ -374,7 +376,7 @@ void sub_813C004(u8 a0, u8 mode)
             HS_DrawBgTilemapRect(0x1FD, 28, 18, 1, 1, 0);
         break;
     }
-}
+}/*
 
 #define HelpSystemHandleRenderGlyph(character) ({\
     do {DecompressAndRenderGlyph(font, character, &srcBlit, &destBlit, dest, x, y, width, height);} while (0); font;\

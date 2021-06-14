@@ -2095,8 +2095,8 @@ static void PartyMenuHandlePokedudeCancel(void)
 {
     FreeRestoreBattleData();
     LoadPlayerParty();
-    SetTeachyTvControllerModeToResume();
-    SetMainCallback2(CB2_ReturnToTeachyTV);
+    //SetTeachyTvControllerModeToResume();
+    //SetMainCallback2(CB2_ReturnToTeachyTV);
 }
 
 // Pokedude uses item on his own Pokemon

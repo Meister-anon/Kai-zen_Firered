@@ -24,7 +24,7 @@ u16 UnionRoomChat_GetReceivedPlayerIndex(void);
 int UnionRoomChat_GetMessageEntryCursorPosition(void);
 int UnionRoomChat_GetWhetherShouldShowCaseToggleIcon(void);
 u8 *UnionRoomChat_GetNameOfPlayerWhoDisbandedChat(void);
-void UnionRoomChat_InitializeRegisteredTexts(void);
+//void UnionRoomChat_InitializeRegisteredTexts(void);
 u8 GetCurrentKeyboardPage(void);
 
 #endif // GUARD_UNION_ROOM_CHAT_H

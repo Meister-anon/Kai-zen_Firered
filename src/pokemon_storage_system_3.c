@@ -47,7 +47,7 @@ static void Cb_ShiftMon(u8 taskId);
 static void Cb_WithdrawMon(u8 taskId);
 static void Cb_DepositMenu(u8 taskId);
 static void Cb_ReleaseMon(u8 taskId);
-static void Cb_ShowMarkMenu(u8 taskId);
+//static void Cb_ShowMarkMenu(u8 taskId);
 static void Cb_TakeItemForMoving(u8 taskId);
 static void Cb_GiveMovingItemToMon(u8 taskId);
 static void Cb_ItemToBag(u8 taskId);
@@ -533,8 +533,8 @@ static void Cb_InitPSS(u8 taskId)
         {
             gPSSData->field_DA4.baseTileTag = TAG_TILE_D;
             gPSSData->field_DA4.basePaletteTag = TAG_PAL_DACE;
-            SetMonMarkingsMenuPointer(&gPSSData->field_DA4);
-            LoadMonMarkingsFrameGfx();
+           // SetMonMarkingsMenuPointer(&gPSSData->field_DA4);
+            //LoadMonMarkingsFrameGfx();
         }
         else
         {
@@ -1005,10 +1005,10 @@ static void Cb_OnSelectedMon(u8 taskId)
             PlaySE(SE_SELECT);
             SetPSSCallback(Cb_ShowMonSummary);
             break;
-        case 8:
+        /*case 8:
             PlaySE(SE_SELECT);
             SetPSSCallback(Cb_ShowMarkMenu);
-            break;
+            break;*/
         case 12:
             PlaySE(SE_SELECT);
             SetPSSCallback(Cb_TakeItemForMoving);
@@ -1366,7 +1366,7 @@ static void Cb_ReleaseMon(u8 taskId)
     }
 }
 
-static void Cb_ShowMarkMenu(u8 taskId)
+/*static void Cb_ShowMarkMenu(u8 taskId) //may remove this whole hting// //zsonic
 {
     switch (gPSSData->state)
     {
@@ -1387,7 +1387,7 @@ static void Cb_ShowMarkMenu(u8 taskId)
         }
         break;
     }
-}
+}*/
 
 static void Cb_TakeItemForMoving(u8 taskId)
 {
@@ -2156,12 +2156,12 @@ static void sub_808F078(void)
 
     SetGpuReg(REG_OFFSET_BG1CNT, BGCNT_PRIORITY(1) | BGCNT_CHARBASE(1) | BGCNT_16COLOR | BGCNT_SCREENBASE(30));
     LoadCursorMonSprite();
-    PSS_CreateMonMarkingSprite();
+    //PSS_CreateMonMarkingSprite();
     CreateWaveformSprites();
     RefreshCursorMonData();
 }
 
-static void PSS_CreateMonMarkingSprite(void)
+/*static void PSS_CreateMonMarkingSprite(void)
 {
     gPSSData->monMarkingSprite = CreateMonMarkingSprite_AllOff(TAG_TILE_10, TAG_PAL_DAC8, NULL);
     gPSSData->monMarkingSprite->oam.priority = 1;
@@ -2169,7 +2169,7 @@ static void PSS_CreateMonMarkingSprite(void)
     gPSSData->monMarkingSprite->pos1.x = 40;
     gPSSData->monMarkingSprite->pos1.y = 150;
     gPSSData->monMarkingSpriteTileStart = (void *)OBJ_VRAM0 + 32 * GetSpriteTileStartByTag(TAG_TILE_10);
-}
+}*/
 
 static void CreateWaveformSprites(void)
 {
@@ -2310,8 +2310,8 @@ static void PrintCursorMonInfo(void)
     CopyWindowToVram(0, COPYWIN_GFX);
     if (gPSSData->cursorMonSpecies != SPECIES_NONE)
     {
-        RequestDma3LoadMonMarking(gPSSData->cursorMonMarkings, gPSSData->monMarkingSpriteTileStart);
-        gPSSData->monMarkingSprite->invisible = FALSE;
+        //RequestDma3LoadMonMarking(gPSSData->cursorMonMarkings, gPSSData->monMarkingSpriteTileStart);
+        //gPSSData->monMarkingSprite->invisible = FALSE;
     }
     else
     {

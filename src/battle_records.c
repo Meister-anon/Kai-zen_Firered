@@ -17,6 +17,8 @@
 #include "constants/maps.h"
 
 static EWRAM_DATA u16 * sBg3TilemapBuffer_p = NULL;
+//zsonic, think this is for trainer card and link battle keep track of
+//how many battles we had.  //actually think it has to do with battle backgrounds
 
 static void MainCB2_SetUp(void);
 static void VBlankCB(void);

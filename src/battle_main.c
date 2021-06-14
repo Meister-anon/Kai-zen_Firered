@@ -125,8 +125,8 @@ EWRAM_DATA u8 gDisplayedStringBattle[300] = {0};
 EWRAM_DATA u8 gBattleTextBuff1[TEXT_BUFF_ARRAY_COUNT] = {0};
 EWRAM_DATA u8 gBattleTextBuff2[TEXT_BUFF_ARRAY_COUNT] = {0};
 EWRAM_DATA u8 gBattleTextBuff3[TEXT_BUFF_ARRAY_COUNT] = {0};
-static EWRAM_DATA u32 gUnknown_2022AE8[25] = {0}; //what is this? //zsonic
-EWRAM_DATA u32 gBattleTypeFlags = 0;
+//static EWRAM_DATA u32 gUnknown_2022AE8[25] = {0}; //what is this? //zsonic
+EWRAM_DATA u32 gBattleTypeFlags = 0; //^ say its only used in unused function, so hopefully this will give me enough room
 EWRAM_DATA u8 gBattleTerrain = 0;
 EWRAM_DATA u32 gUnknown_2022B54 = 0;
 EWRAM_DATA struct MultiBattlePokemonTx gMultiPartnerParty[3] = {0};
@@ -204,7 +204,7 @@ EWRAM_DATA struct BattleScripting gBattleScripting = {0};
 EWRAM_DATA struct BattleStruct *gBattleStruct = NULL;
 EWRAM_DATA u8 *gLinkBattleSendBuffer = NULL;
 EWRAM_DATA u8 *gLinkBattleRecvBuffer = NULL;
-EWRAM_DATA struct BattleResources *gBattleResources = NULL;
+EWRAM_DATA struct BattleResources *gBattleResources = NULL; //includes flags I added i.e flashfire etc.
 EWRAM_DATA u8 gActionSelectionCursor[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gMoveSelectionCursor[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gBattlerStatusSummaryTaskId[MAX_BATTLERS_COUNT] = {0};
@@ -1921,7 +1921,7 @@ static void SpriteCB_Unused_8011E28_Step(struct Sprite *sprite)
         {
             sprite->invisible = FALSE;
             sprite->callback = SpriteCallbackDummy2;
-            gUnknown_2022AE8[0] = 0;
+           // gUnknown_2022AE8[0] = 0;
         }
     }
 }
@@ -2274,6 +2274,8 @@ static void BattleStartClearSetData(void)
         gBattleResults.playerMon2Name[i] = 0;
         gBattleResults.caughtMonNick[i] = 0;
     }
+
+    gFieldStatuses = 0;
 }
 
 void SwitchInClearSetData(void)

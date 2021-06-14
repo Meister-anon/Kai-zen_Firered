@@ -21,8 +21,8 @@ struct PokemonMarkMenu
     /*0x10B4*/ u8 tileLoadState;
 }; // 10b8
 
-void SetMonMarkingsMenuPointer(struct PokemonMarkMenu * markMenu);
-void LoadMonMarkingsFrameGfx(void);
+//void SetMonMarkingsMenuPointer(struct PokemonMarkMenu * markMenu);
+//void LoadMonMarkingsFrameGfx(void);
 void DrawMonMarkingsMenu(u8 markings, s16 x, s16 y);
 void TeardownMonMarkingsMenu(void);
 bool8 MonMarkingsHandleInput(void);

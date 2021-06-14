@@ -13,7 +13,12 @@
 static EWRAM_DATA struct UnionObj * UnionObjWork = NULL;
 static EWRAM_DATA u32 sUnionObjRefreshTimer = 0;
 //zsonic think these are for union room, which is wireless stuff, 
-//should be fine to remove  look into, seemsto not be union room
+//looked into, seemsto not be union room
+
+//actuallly is union room, I believe, but I'll just remove teachtv 
+//instead, will leave this for later.
+
+//hopfully can build for showoff sunday : ) 
 
 static u8 StartUnionObjAnimTask(void);
 static u32 RfuUnionGroupMemberIsInvisible(u32 group, u32 member);

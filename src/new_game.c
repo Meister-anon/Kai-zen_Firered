@@ -121,7 +121,7 @@ void NewGameInitData(void)
     ClearSav1();
     //ClearMailData();
     gSaveBlock2Ptr->specialSaveWarpFlags = 0;
-    gSaveBlock2Ptr->gcnLinkFlags = 0;
+    //gSaveBlock2Ptr->gcnLinkFlags = 0;
     gSaveBlock2Ptr->field_AC = 1;
     gSaveBlock2Ptr->field_AD = 0;
     InitPlayerTrainerId();
@@ -145,7 +145,7 @@ void NewGameInitData(void)
     sub_809C794();
     InitEasyChatPhrases();
     ResetTrainerFanClub();
-    UnionRoomChat_InitializeRegisteredTexts();
+    //UnionRoomChat_InitializeRegisteredTexts();
     //ResetMiniGamesResults();
     InitMEventData();
     SetAllRenewableItemFlags();

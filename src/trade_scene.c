@@ -2573,7 +2573,7 @@ static void sub_8053E8C(void)
         StringExpandPlaceholders(gStringVar4, gText_SavingDontTurnOffThePower2);
         DrawTextOnTradeWindow(0, gStringVar4, 0);
         break;
-    case 50:
+    /*case 50:
         if (InUnionRoom())
         {
             SetQuestLogEvent(QL_EVENT_LINK_TRADED_UNION, sTradeData->monSpecies);
@@ -2591,7 +2591,7 @@ static void sub_8053E8C(void)
         sub_80DA3AC();
         gMain.state++;
         sTradeData->timer = 0;
-        break;
+        break;*/
     case 51:
         if (++sTradeData->timer == 5)
         {

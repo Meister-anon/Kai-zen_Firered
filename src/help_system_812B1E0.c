@@ -1841,7 +1841,7 @@ static bool8 IsInDungeonMap(void)
 
     return FALSE;
 }
-
+//apparently needs to be written like this for the defines be on more than 1 line.
 #define IN_PLAYERS_HOUSE \
     ((gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(PALLET_TOWN_PLAYERS_HOUSE_1F) \
   && gSaveBlock1Ptr->location.mapNum == MAP_NUM(PALLET_TOWN_PLAYERS_HOUSE_1F))     \

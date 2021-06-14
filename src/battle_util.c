@@ -711,9 +711,9 @@ bool32 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
 {
     //if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
       //  return TRUE;
-    if (gFieldStatuses & STATUS_FIELD_GRAVITY)
+    /*if (gFieldStatuses & STATUS_FIELD_GRAVITY)
         return TRUE;
-    else if (gStatuses3[battlerId] & STATUS3_ROOTED)
+    else */if (gStatuses3[battlerId] & STATUS3_ROOTED)
         return TRUE;
     else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
         return TRUE; //important roost change  ..[unsure if want to make random % but no one would gamble it anyway...

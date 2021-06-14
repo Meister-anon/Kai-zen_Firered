@@ -150,11 +150,11 @@ struct Pokedex
     /*0x04*/ u32 unownPersonality; // set when you first see Unown
     /*0x08*/ u32 spindaPersonality; // set when you first see Spinda
     /*0x0C*/ u32 unknown3;
-    /*0x10*/ u8 owned[DEX_FLAGS_NO];
-    /*0x44*/ u8 seen[DEX_FLAGS_NO];
+    /*0x10*/ u8 owned[DEX_FLAGS_NO];  //was gonna make u16, to give forms on entry
+    /*0x44*/ u8 seen[DEX_FLAGS_NO];  //but that'll take up more ewram so pass, till later
 };
 
-struct PokemonJumpResults // possibly used in the game itself?
+/*struct PokemonJumpResults // possibly used in the game itself?
 {
     u16 jumpsInRow;
     u16 field2;
@@ -184,7 +184,7 @@ struct BerryCrush
     u16 berryCrushResults[4];
     u32 berryPowderAmount;
     u32 unk;
-};
+};*/
 
 #define PLAYER_NAME_LENGTH   7
 /*
@@ -284,22 +284,22 @@ struct SaveBlock2
     /*0x090*/ u8 filler_90[0x8];
     /*0x098*/ struct Time localTimeOffset;
     /*0x0A0*/ struct Time lastBerryTreeUpdate;
-    /*0x0A8*/ u32 gcnLinkFlags; // Read by Pokemon Colosseum/XD
+    /*0x0A8*/ //u32 gcnLinkFlags; // Read by Pokemon Colosseum/XD   //zsonic
     /*0x0AC*/ u8 field_AC;
     /*0x0AD*/ u8 field_AD;
     /*0x0B0*/ struct BattleTowerData battleTower;
     /*0x898*/ u16 mapView[0x100];
     /*0xA98*/ //struct LinkBattleRecords linkBattleRecords;
-    /*0xAF0*/ struct BerryCrush berryCrush; // think I'll try removing these again.
-    /*0xB00*/ struct PokemonJumpResults pokeJump;
-    /*0xB10*/ struct BerryPickingResults berryPick;
+    /*0xAF0*/ //struct BerryCrush berryCrush; // think I'll try removing these again.
+    /*0xB00*/ //struct PokemonJumpResults pokeJump;
+    /*0xB10*/ //struct BerryPickingResults berryPick;
     /*0xB20*/ u8 filler_B20[0x400];
     /*0xF20*/ u32 encryptionKey;
 }; // size: 0xF24
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;
 
-struct SecretBaseParty
+/*struct SecretBaseParty
 {
     u32 personality[PARTY_SIZE];
     u16 moves[PARTY_SIZE * 4];
@@ -307,25 +307,25 @@ struct SecretBaseParty
     u16 heldItems[PARTY_SIZE];
     u8 levels[PARTY_SIZE];
     u16 evs[PARTY_SIZE];
-};
+};*/
 
-struct SecretBaseRecord
-{
-    /*0x1A9C*/ u8 secretBaseId;
-    /*0x1A9D*/ u8 sbr_field_1_0:4;
-    /*0x1A9D*/ u8 gender:1;
-    /*0x1A9D*/ u8 sbr_field_1_5:1;
-    /*0x1A9D*/ u8 sbr_field_1_6:2;
-    /*0x1A9E*/ u8 trainerName[PLAYER_NAME_LENGTH];
-    /*0x1AA5*/ u8 trainerId[4]; // byte 0 is used for determining trainer class
-    /*0x1AA9*/ u8 language;
-    /*0x1AAA*/ u16 sbr_field_e;
-    /*0x1AAC*/ u8 sbr_field_10;
-    /*0x1AAD*/ u8 sbr_field_11;
-    /*0x1AAE*/ u8 decorations[16];
-    /*0x1ABE*/ u8 decorationPos[16];
-    /*0x1AD0*/ struct SecretBaseParty party;
-};
+//struct SecretBaseRecord
+//{
+    /*0x1A9C*/// u8 secretBaseId;
+    /*0x1A9D*/ //u8 sbr_field_1_0:4;
+    /*0x1A9D*/ //u8 gender:1;
+    /*0x1A9D*/ //u8 sbr_field_1_5:1;
+    /*0x1A9D*/ //u8 sbr_field_1_6:2;
+    /*0x1A9E*/ //u8 trainerName[PLAYER_NAME_LENGTH];
+    /*0x1AA5*/ //u8 trainerId[4]; // byte 0 is used for determining trainer class
+    /*0x1AA9*/ //u8 language;
+    /*0x1AAA*/ //u16 sbr_field_e;
+    /*0x1AAC*/ //u8 sbr_field_10;
+    /*0x1AAD*/ //u8 sbr_field_11;
+    /*0x1AAE*/ //u8 decorations[16];
+    /*0x1ABE*/ //u8 decorationPos[16];
+    /*0x1AD0*/ //struct SecretBaseParty party;
+//};
 
 struct WarpData
 {
@@ -402,24 +402,34 @@ struct EasyChatPair
     /*0x20*/ //u16 itemId;
 //};
 
-struct MauvilleManCommon
+/*struct MauvilleManCommon
 {
     u8 id;
-};
+};*/
 
-struct MauvilleManBard
-{
-    /*0x00*/ u8 id;
-    /*0x02*/ u16 songLyrics[BARD_SONG_LENGTH];
-    /*0x0E*/ u16 temporaryLyrics[BARD_SONG_LENGTH];
-    /*0x1A*/ u8 playerName[PLAYER_NAME_LENGTH + 1];
-    /*0x22*/ u8 filler_2DB6[0x3];
-    /*0x25*/ u8 playerTrainerId[TRAINER_ID_LENGTH];
-    /*0x29*/ bool8 hasChangedSong;
-    /*0x2A*/ u8 language;
-}; /*size = 0x2C*/
+//struct MauvilleManBard
+//{
+    /*0x00*/// u8 id;
+    /*0x02*/// u16 songLyrics[BARD_SONG_LENGTH];
+    /*0x0E*/ //u16 temporaryLyrics[BARD_SONG_LENGTH];
+    /*0x1A*/ //u8 playerName[PLAYER_NAME_LENGTH + 1];
+    /*0x22*/ //u8 filler_2DB6[0x3];
+    /*0x25*/ //u8 playerTrainerId[TRAINER_ID_LENGTH];
+    /*0x29*/ //bool8 hasChangedSong;
+    /*0x2A*/ ///u8 language;
+//}; /*size = 0x2C*/
 
-struct MauvilleManStoryteller
+//struct MauvilleManGiddy
+//{
+    /*0x00*/// u8 id;
+    /*0x01*/ //u8 taleCounter;
+    /*0x02*/ //u8 questionNum;
+    /*0x04*/ //u16 randomWords[10];
+    /*0x18*/ //u8 questionList[8];
+    /*0x20*/ //u8 language;
+//}; /*size = 0x2C*/
+
+/*struct MauvilleManStoryteller
 {
     u8 id;
     bool8 alreadyRecorded;
@@ -430,15 +440,7 @@ struct MauvilleManStoryteller
     u8 language[NUM_STORYTELLER_TALES];
 };
 
-struct MauvilleManGiddy
-{
-    /*0x00*/ u8 id;
-    /*0x01*/ u8 taleCounter;
-    /*0x02*/ u8 questionNum;
-    /*0x04*/ u16 randomWords[10];
-    /*0x18*/ u8 questionList[8];
-    /*0x20*/ u8 language;
-}; /*size = 0x2C*/
+
 
 struct MauvilleManHipster
 {
@@ -493,7 +495,7 @@ struct RecordMixingGift
 {
     int checksum;
     struct RecordMixingGiftData data;
-};
+};*/
 
 struct ContestWinner
 {
@@ -790,15 +792,15 @@ struct SaveBlock1
     /*0x0464*/ struct ItemSlot bagPocket_TMHM[BAG_TMHM_COUNT];
     /*0x054c*/ struct ItemSlot bagPocket_Berries[BAG_BERRIES_COUNT];
     /*0x05F8*/ u8 seen1[DEX_FLAGS_NO];
-    /*0x062C*/ u16 berryBlenderRecords[3]; // unused
-    /*0x0632*/ u8 field_632[6]; // unused?
+    /*0x062C*/ //u16 berryBlenderRecords[3]; // unused   //zsonic
+    /*0x0632*/ u8 field_632[6]; // unused?   //only referenced here.
     /*0x0638*/ u16 trainerRematchStepCounter; //important also vs seeker, but since its an established step counter I may rename & use for dark souls mode
     /*0x063A*/ //u8 ALIGNED(2) trainerRematches[100]; //can possibly remove since I think this was for vs seeker
     /*0x06A0*/ struct ObjectEvent objectEvents[OBJECT_EVENTS_COUNT];
     /*0x08E0*/ struct ObjectEventTemplate objectEventTemplates[64];
     /*0x0EE0*/ u8 flags[NUM_FLAG_BYTES];
     /*0x1000*/ u16 vars[VARS_COUNT];
-    /*0x1200*/ u32 gameStats[NUM_GAME_STATS];
+    /*0x1200*/ u32 gameStats[NUM_GAME_STATS]; //zsonic v(check later) could possibly save space by removing some stats
     /*0x1300*/ struct QuestLog questLog[QUEST_LOG_SCENE_COUNT];
     /*0x2CA0*/ u16 easyChatProfile[6];
     /*0x2CAC*/ u16 easyChatBattleStart[6];
@@ -806,7 +808,7 @@ struct SaveBlock1
     /*0x2CC4*/ u16 easyChatBattleLost[6];
     /*0x2CD0*/ //struct MailStruct mail[MAIL_COUNT];
     /*0x2F10*/ u8 additionalPhrases[EASY_CHAT_EXTRA_PHRASES_SIZE];
-    /*0x2F18*/ OldMan oldMan; // unused
+    /*0x2F18*/ //OldMan oldMan; // unused //zsonic was mauville man
     /*0x2F54*/ struct EasyChatPair easyChatPairs[5]; // unused
     /*0x2F80*/ struct DayCare daycare;
     /*0x309C*/ u8 giftRibbons[11];
@@ -820,9 +822,9 @@ struct SaveBlock1
     /*0x3A08*/ u8 filler3A08[16];
     /*0x3A18*/ u8 seen2[DEX_FLAGS_NO];
     /*0x3A4C*/ u8 rivalName[PLAYER_NAME_LENGTH + 1];
-    /*0x3A54*/ struct FameCheckerSaveData fameChecker[NUM_FAMECHECKER_PERSONS];
+    /*0x3A54*/ //struct FameCheckerSaveData fameChecker[NUM_FAMECHECKER_PERSONS];
     /*0x3A94*/ u8 filler3A94[0x40];
-    /*0x3AD4*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21];
+    /*0x3AD4*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21]; //zsonic keep an eye on this
     /*0x3BA8*/ struct TrainerNameRecord trainerNameRecords[20];
     /*0x3C98*/ struct DaycareMon route5DayCareMon;
     /*0x3D24*/ u8 filler3D24[0x10];

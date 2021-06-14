@@ -566,7 +566,7 @@ static void Task_TrainerCard(u8 taskId)
         }
         else if (JOY_NEW(B_BUTTON))
         {
-            if (gReceivedRemoteLinkPlayers && sTrainerCardDataPtr->isLink && InUnionRoom() == TRUE)
+            if (gReceivedRemoteLinkPlayers && sTrainerCardDataPtr->isLink)
             {
                 sTrainerCardDataPtr->mainState = STATE_WAIT_LINK_PARTNER;
             }
@@ -587,7 +587,7 @@ static void Task_TrainerCard(u8 taskId)
     case STATE_HANDLE_INPUT_BACK:
         if (JOY_NEW(B_BUTTON))
         {
-            if (gReceivedRemoteLinkPlayers && sTrainerCardDataPtr->isLink && InUnionRoom() == TRUE)
+            if (gReceivedRemoteLinkPlayers && sTrainerCardDataPtr->isLink)
             {
                 sTrainerCardDataPtr->mainState = STATE_WAIT_LINK_PARTNER;
             }
@@ -606,7 +606,7 @@ static void Task_TrainerCard(u8 taskId)
         }
         else if (JOY_NEW(A_BUTTON))
         {
-           if (gReceivedRemoteLinkPlayers && sTrainerCardDataPtr->isLink && InUnionRoom() == TRUE)
+           if (gReceivedRemoteLinkPlayers && sTrainerCardDataPtr->isLink)
            {
                sTrainerCardDataPtr->mainState = STATE_WAIT_LINK_PARTNER;
            }
@@ -806,7 +806,8 @@ static void SetPlayerCardData(struct TrainerCard *trainerCard, u8 cardType)
     trainerCard->rse.hofDebutHours = playTime >> 16;
     trainerCard->rse.hofDebutMinutes = (playTime >> 8) & 0xFF;
     trainerCard->rse.hofDebutSeconds = playTime & 0xFF;
-    if ((playTime >> 16) > 999)
+    if ((playTime >> 16) > 999) //important may do something so can keep track of hours play past 999
+        //maybe like add a star with it gets to 999, and reset values to 0, so it can keep being tracked
     {
         trainerCard->rse.hofDebutHours = 999;
         trainerCard->rse.hofDebutMinutes = 59;
@@ -870,10 +871,10 @@ void TrainerCard_GenerateCardForLinkPlayer(struct TrainerCard *trainerCard)
 
     trainerCard->rse.caughtAllHoenn = HasAllKantoMons();
     trainerCard->hasAllMons = HasAllMons();
-    trainerCard->berriesPicked = gSaveBlock2Ptr->berryPick.berriesPicked;
-    trainerCard->jumpsInRow = gSaveBlock2Ptr->pokeJump.jumpsInRow;
+    //trainerCard->berriesPicked = gSaveBlock2Ptr->berryPick.berriesPicked;
+    //trainerCard->jumpsInRow = gSaveBlock2Ptr->pokeJump.jumpsInRow;
 
-    trainerCard->berryCrushPoints = GetCappedGameStat(GAME_STAT_BERRY_CRUSH_POINTS, 0xFFFF);
+    //trainerCard->berryCrushPoints = GetCappedGameStat(GAME_STAT_BERRY_CRUSH_POINTS, 0xFFFF);
     trainerCard->unionRoomNum = GetCappedGameStat(GAME_STAT_NUM_UNION_ROOM_BATTLES, 0xFFFF);
     trainerCard->shouldDrawStickers = TRUE;
 
@@ -883,8 +884,8 @@ void TrainerCard_GenerateCardForLinkPlayer(struct TrainerCard *trainerCard)
     if (trainerCard->hasAllMons)
         trainerCard->rse.stars++;
 
-    if (trainerCard->berriesPicked >= 200 && trainerCard->jumpsInRow >= 200)
-        trainerCard->rse.stars++;
+    /*if (trainerCard->berriesPicked >= 200 && trainerCard->jumpsInRow >= 200)
+        trainerCard->rse.stars++;*/
 
     id = ((u16)trainerCard->rse.trainerId) % NUM_LINK_TRAINER_CARD_CLASSES;
     if (trainerCard->rse.gender == FEMALE)
@@ -1852,9 +1853,9 @@ void ShowPlayerTrainerCard(void (*callback)(void))
 {
     sTrainerCardDataPtr = AllocZeroed(sizeof(*sTrainerCardDataPtr));
     sTrainerCardDataPtr->callback2 = callback;
-    if (InUnionRoom() == TRUE)
+    /*if (InUnionRoom() == TRUE)
         sTrainerCardDataPtr->isLink = TRUE;
-    else
+    else*/
         sTrainerCardDataPtr->isLink = FALSE;
 
     sTrainerCardDataPtr->language = GAME_LANGUAGE;
@@ -1912,14 +1913,14 @@ static void CreateTrainerCardTrainerPic(void)
 {
     u8 facilityClass = sTrainerPicFacilityClasses[sTrainerCardDataPtr->cardType][sTrainerCardDataPtr->trainerCard.rse.gender];
 
-    if (InUnionRoom() == TRUE && gReceivedRemoteLinkPlayers == 1)
+    /*if (InUnionRoom() == TRUE && gReceivedRemoteLinkPlayers == 1)
     {
         facilityClass = sTrainerCardDataPtr->trainerCard.facilityClass;
         CreateTrainerCardTrainerPicSprite(FacilityClassToPicIndex(facilityClass), TRUE, sTrainerPicOffsets[sTrainerCardDataPtr->cardType][sTrainerCardDataPtr->trainerCard.rse.gender][0],
                     sTrainerPicOffsets[sTrainerCardDataPtr->cardType][sTrainerCardDataPtr->trainerCard.rse.gender][1], 8, 2);
     }
     else
-    {
+    {*/
         if (sTrainerCardDataPtr->cardType != CARD_TYPE_FRLG)
         {
             CreateTrainerCardTrainerPicSprite(FacilityClassToPicIndex(facilityClass), TRUE, sTrainerPicOffsets[sTrainerCardDataPtr->cardType][sTrainerCardDataPtr->trainerCard.rse.gender][0],
@@ -1932,7 +1933,7 @@ static void CreateTrainerCardTrainerPic(void)
                     sTrainerPicOffsets[sTrainerCardDataPtr->cardType][sTrainerCardDataPtr->trainerCard.rse.gender][1],
                     8, 2);
         }
-    }
+   // }
 }
 
 // Unused

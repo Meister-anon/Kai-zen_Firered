@@ -5275,13 +5275,13 @@ static void atk5D_getmoneyreward(void)
 
     if (gBattleOutcome == B_OUTCOME_WON)
     {
-        if (gTrainerBattleOpponent_A == TRAINER_SECRET_BASE)
+        /*if (gTrainerBattleOpponent_A == TRAINER_SECRET_BASE)
         {
             moneyReward = gBattleResources->secretBase->party.levels[0] * 20 * gBattleStruct->moneyMultiplier;
         }
         else
         {
-            switch (gTrainers[gTrainerBattleOpponent_A].partyFlags)
+            */switch (gTrainers[gTrainerBattleOpponent_A].partyFlags)
             {
             case 0:
                 {
@@ -5319,7 +5319,7 @@ static void atk5D_getmoneyreward(void)
             }
             party4 = gTrainers[gTrainerBattleOpponent_A].party.ItemCustomMoves; // Needed to Match. Has no effect.
             moneyReward = 4 * lastMonLevel * gBattleStruct->moneyMultiplier * (gBattleTypeFlags & BATTLE_TYPE_DOUBLE ? 2 : 1) * gTrainerMoneyTable[i].value;
-        }
+        //}
         AddMoney(&gSaveBlock1Ptr->money, moneyReward);
     }
     else

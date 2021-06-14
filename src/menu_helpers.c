@@ -96,15 +96,15 @@ bool8 itemid_link_can_give_berry(u16 itemId)
         return TRUE;
     else if (!gSaveBlock1Ptr->location.mapGroup && gSaveBlock1Ptr->location.mapNum == 1)
         return FALSE;
-    else if (InUnionRoom() != TRUE)
-        return TRUE;
+    /*else if (InUnionRoom() != TRUE)
+        return TRUE;*/
     else
         return FALSE;
 }
 
 bool8 CanWriteMailHere(u16 itemId)
 {
-    if (IsUpdateLinkStateCBActive() != TRUE && InUnionRoom() != TRUE)
+    if (IsUpdateLinkStateCBActive() != TRUE)
         return TRUE;
     else if (ItemIsMail(itemId) != TRUE)
         return TRUE;
