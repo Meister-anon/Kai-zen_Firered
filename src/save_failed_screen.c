@@ -155,7 +155,7 @@ static void PrintTextOnSaveFailedScreen(const u8 *str)
 {
     GenerateFontHalfRowLookupTable(TEXT_COLOR_DARK_GREY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GREY);
     CpuFill16(PIXEL_FILL(1) | (PIXEL_FILL(1) << 8), gDecompressionBuffer + 0x20, 0x2300);
-    HelpSystemRenderText(2, gDecompressionBuffer + 0x20, str, 2, 2, 28, 10);
+   // HelpSystemRenderText(2, gDecompressionBuffer + 0x20, str, 2, 2, 28, 10);
     RequestDmaCopyFromCharBuffer();
 }
 

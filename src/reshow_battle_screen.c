@@ -15,11 +15,13 @@ static bool8 LoadBattlerSpriteGfx(u8 battlerId);
 static void CreateBattlerSprite(u8 battlerId);
 static void CreateHealthboxSprite(u8 battlerId);
 
-void ReshowBattleScreenDummy(void)
+void ReshowBattleScreenDummy(void) //important, could prob also use this file, for mid battle evolution
 {
 }
 
-void ReshowBattleScreenAfterMenu(void)
+void ReshowBattleScreenAfterMenu(void) //important could use to get around new pokedex entry mid battle
+//idea, do like tv show, when ash encountered a new pokemon the entire entry would be shown before he battled
+//I'm not 100% on the idea, I still prefer showing them both after if possible
 {
     gPaletteFade.bufferTransferDisabled = 1;
     SetHBlankCallback(NULL);
@@ -30,18 +32,19 @@ void ReshowBattleScreenAfterMenu(void)
     {
         if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
         {
-            if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
-                SetHelpContext(HELPCONTEXT_TRAINER_BATTLE_DOUBLE);
-            else
-                SetHelpContext(HELPCONTEXT_TRAINER_BATTLE_SINGLE);
+            return;
+            //if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+               // SetHelpContext(HELPCONTEXT_TRAINER_BATTLE_DOUBLE);
+           //else
+                //SetHelpContext(HELPCONTEXT_TRAINER_BATTLE_SINGLE);
         }
         else if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
         {
-            SetHelpContext(HELPCONTEXT_SAFARI_BATTLE);
+            //SetHelpContext(HELPCONTEXT_SAFARI_BATTLE);
         }
         else
         {
-            SetHelpContext(HELPCONTEXT_WILD_BATTLE);
+            //SetHelpContext(HELPCONTEXT_WILD_BATTLE);
         }
     }
     SetMainCallback2(CB2_ReshowBattleScreenAfterMenu);

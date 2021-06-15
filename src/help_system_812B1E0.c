@@ -16,10 +16,10 @@
 #include "constants/maps.h"
 #include "constants/songs.h"
 
-static EWRAM_DATA u16 sHelpSystemContextId = 0;
-static EWRAM_DATA u8 sSeenHelpSystemIntro = 0;
+//static EWRAM_DATA u16 sHelpSystemContextId = 0;
+//static EWRAM_DATA u8 sSeenHelpSystemIntro = 0;
 
-u8 gHelpSystemState[4];
+/*u8 gHelpSystemState[4];
 u16 gHelpContextIdBackup;
 
 static bool32 IsCurrentMapInArray(const u16 * mapIdxs);
@@ -35,7 +35,7 @@ static void ResetHelpSystemCursor(struct HelpSystemListMenu * a0);
 static void PrintHelpSystemTopicMouseoverDescription(struct HelpSystemListMenu * a0, struct ListMenuItem * a1);
 
 #define HELP_NONE  0
-#define HELP_END   0xFF
+#define HELP_END   0xFF*/
 
 // Help Main Topics
 /*
@@ -548,7 +548,8 @@ static const u8 *const sHelpSystemGeneralTopicDescriptionTextPtrs[] = {
 
 // An enum for the type matchups isn't necessary, when used they're always used in their entirety
 // Macro below is used to reference the entire group at once
-#define HELP_TYPE_MATCHUPS  \
+
+/*#define HELP_TYPE_MATCHUPS  \
     1,                      \
     2, 3,                   \
     4, 5,                   \
@@ -566,7 +567,7 @@ static const u8 *const sHelpSystemGeneralTopicDescriptionTextPtrs[] = {
     28, 29,                 \
     30, 31,                 \
     32, 33,                 \
-    34, 35                  \
+    34, 35                  \*/
 
 /*static const u8 *const sHelpSystemTypeMatchupTextPtrs[] = {
     [HELP_NONE] = NULL,
@@ -1690,7 +1691,7 @@ static const bool8 sHelpSystemContextTopicFlags[HELPCONTEXT_COUNT + 1][TOPIC_COU
     [HELPCONTEXT_UNUSED]                = {},
     [HELPCONTEXT_COUNT]                 = {}
 };*/
-
+//this one is used elsewhere.
 static const u16 sMartMaps[] = {
     MAP_VIRIDIAN_CITY_MART,
     MAP_PEWTER_CITY_MART,
@@ -1714,7 +1715,7 @@ static const u16 sMartMaps[] = {
     MAP_UNDEFINED
 };
 
-static const u16 sGymMaps[] = {
+/*static const u16 sGymMaps[] = {
     MAP_PEWTER_CITY_GYM,
     MAP_CERULEAN_CITY_GYM,
     MAP_VERMILION_CITY_GYM,
@@ -1725,7 +1726,7 @@ static const u16 sGymMaps[] = {
     MAP_VIRIDIAN_CITY_GYM,
     MAP_UNDEFINED
 };
-
+//weird again only used here.
 static const u8 sDungeonMaps[][3] = {
     { MAP_GROUP(VIRIDIAN_FOREST), MAP_NUM(VIRIDIAN_FOREST), 1 },
     { MAP_GROUP(MT_MOON_1F), MAP_NUM(MT_MOON_1F), 3 },
@@ -1769,7 +1770,7 @@ void SetHelpContext(u8 contextId)
     default:
         return; // sHelpSystemContextId = contextId;
         break;
-    }*/
+    }
 }
 
 void Script_SetHelpContext(void)// new plan just backup the help system so it never initializes, instead of tryign to remove.
@@ -1826,7 +1827,7 @@ static bool8 IsInDungeonMap(void)
             if (
                    sDungeonMaps[i][0] == gSaveBlock1Ptr->location.mapGroup
                 && sDungeonMaps[i][1] + j == gSaveBlock1Ptr->location.mapNum
-                && (i != 15 /* TANOBY */ || FlagGet(FLAG_SYS_UNLOCKED_TANOBY_RUINS) == TRUE)
+                && (i != 15  || FlagGet(FLAG_SYS_UNLOCKED_TANOBY_RUINS) == TRUE)
             )
                 return TRUE;
         }
@@ -1909,7 +1910,7 @@ void HelpSystem_Enable(void)
 
 void HelpSystem_DisableToggleWithRButton(void)
 {
-    gHelpSystemToggleWithRButtonDisabled = TRUE;
+    return; // gHelpSystemToggleWithRButtonDisabled = TRUE;
 }
 
 void HelpSystem_EnableToggleWithRButton(void)
@@ -1955,7 +1956,7 @@ static void BuildMainTopicsListAndMoveToH00(struct HelpSystemListMenu * helpList
     listMenuItemsBuffer[totalItems - 1].index = -2;
     helpListMenu->sub.totalItems = totalItems;
     helpListMenu->sub.maxShowed = totalItems;
-    helpListMenu->sub.left = 0;*/
+    helpListMenu->sub.left = 0;
 }
 
 static void BuildAndPrintSubmenuList(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
@@ -2013,7 +2014,7 @@ static void SetHelpSystemSubmenuItems(struct HelpSystemListMenu * helpListMenu, 
     helpListMenu->sub.totalItems = totalItems;
     helpListMenu->sub.maxShowed = 7;
     helpListMenu->sub.left = 0;
-    helpListMenu->sub.top = 21;*/
+    helpListMenu->sub.top = 21;
 }
 
 static bool8 HelpSystem_ShouldShowBasicTerms(void)
@@ -2022,7 +2023,7 @@ static bool8 HelpSystem_ShouldShowBasicTerms(void)
     if (FlagGet(FLAG_DEFEATED_BROCK) == TRUE)// && gHelpSystemState[1] == TOPIC_TERMS)
         return TRUE;
     return FALSE;
-}
+}*/
 
 /*static bool8 IsHelpSystemSubmenuEnabled(u8 id)
 {
@@ -2241,7 +2242,7 @@ static bool8 HelpSystem_ShouldShowBasicTerms(void)
     return FALSE;
 }*/
 
-static bool8 HasGottenAtLeastOneHM(void)
+/*static bool8 HasGottenAtLeastOneHM(void)  // ?? this seems like a useful function but its only used in help menu?
 {
     if (FlagGet(FLAG_GOT_HM01) == TRUE)
         return TRUE;
@@ -2363,7 +2364,7 @@ bool8 HelpMenuSubroutine_ReturnFromSubmenu(struct HelpSystemListMenu * helpListM
     return TRUE;
 }
 
-/*bool8 HelpMenuSubroutine_SubmenuInputHandler(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
+bool8 HelpMenuSubroutine_SubmenuInputHandler(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
 {
     s32 input = HelpSystem_GetMenuInput();
     switch (input)
@@ -2384,7 +2385,7 @@ bool8 HelpMenuSubroutine_ReturnFromSubmenu(struct HelpSystemListMenu * helpListM
         break;
     }
     return TRUE;
-} */
+} 
 
 void HelpSystem_PrintTopicLabel(void)
 {
@@ -2425,7 +2426,7 @@ bool8 HelpMenuSubroutine_HelpItemPrint(struct HelpSystemListMenu * helpListMenu,
     sub_813BDA4(1);
     sub_813BD5C(1);
     helpListMenu->state = 6;
-    return TRUE;*/
+    return TRUE;
 }
 
 bool8 HelpMenuSubroutine_ReturnFromHelpItem(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
@@ -2484,5 +2485,5 @@ static void PrintHelpSystemTopicMouseoverDescription(struct HelpSystemListMenu *
         HelpSystem_PrintText_813C584(sHelpSystemTopicMouseoverDescriptionPtrs[5]);
     else
         HelpSystem_PrintText_813C584(sHelpSystemTopicMouseoverDescriptionPtrs[index]);
-    sub_813BE30(1);*/
-}
+    sub_813BE30(1);
+}*/

@@ -1512,7 +1512,7 @@ static void Task_ListMenuRemoveScrollIndicatorArrowPair(u8 taskId)
 
 void ForcePlayerToStartSurfing(void)
 {
-    SetHelpContext(HELPCONTEXT_SURFING);
+    //SetHelpContext(HELPCONTEXT_SURFING);
     SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_SURFING);
 }
 
@@ -1531,7 +1531,7 @@ static u16 GetStarterSpeciesById(u16 idx)
     return sStarterSpecies[idx];
 }
 
-u16 GetStarterSpecies(void)
+u16 GetStarterSpecies(void) //this seems to just be used for the name
 {
     return GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
 }
@@ -1964,7 +1964,7 @@ u16 BattleCardAction(void)
     }
 }
 
-void SetPCBoxToSendMon(u8 boxId)
+void SetPCBoxToSendMon(u8 boxId) //
 {
     sPCBoxToSendMon = boxId;
 }

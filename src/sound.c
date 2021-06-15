@@ -16,7 +16,7 @@ struct Fanfare
 
 // TODO: what are these
 extern u8 gDisableMapMusicChangeOnMapLoad;
-extern u8 gUnknown_203F174;
+//extern u8 gUnknown_203F174;
 
 // ewram
 EWRAM_DATA struct MusicPlayerInfo* gMPlay_PokemonCry = NULL;
@@ -660,12 +660,12 @@ bool8 IsSpecialSEPlaying(void)
 
 void sub_8072474(u16 volume)
 {
-    gUnknown_203F174 = 1;
+   // gUnknown_203F174 = 1;
     m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, volume);
 }
 
 void sub_807249C(void)
 {
-    gUnknown_203F174 = 0;
+   // gUnknown_203F174 = 0;
     m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 256);
 }

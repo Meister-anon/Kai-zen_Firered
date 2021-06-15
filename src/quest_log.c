@@ -430,7 +430,7 @@ void TrySetUpQuestLogScenes_ElseContinueFromSave(u8 taskId)
 
     if (sNumScenes != 0)
     {
-        gHelpSystemEnabled = FALSE;
+       // gHelpSystemEnabled = FALSE;
         Task_BeginQuestLogPlayback(taskId);
         DestroyTask(taskId);
     }
@@ -1186,7 +1186,7 @@ static void Task_EndQuestLog(u8 taskId)
         gTextFlags.autoScroll = FALSE;
         gUnknown_2036E28 = 0;
         DisableWildEncounters(FALSE);
-        gHelpSystemEnabled = TRUE;
+       // gHelpSystemEnabled = TRUE;
         DestroyTask(taskId);
         break;
     }
