@@ -336,7 +336,7 @@ CinnabarIsland_Movement_ForcePlayerFromDoor:: @ 81671ED
 CinnabarIsland_EventScript_Woman:: @ 81671EF
 	lock
 	faceplayer
-	famechecker FAMECHECKER_BLAINE, 3
+	@  famechecker FAMECHECKER_BLAINE, 3
 	msgbox CinnabarIsland_Text_BlaineLivedHereSinceBeforeLab
 	release
 	end
@@ -355,7 +355,7 @@ CinnabarIsland_EventScript_PokemonLabSign:: @ 816721A
 
 CinnabarIsland_EventScript_GymSign:: @ 8167223
 	lockall
-	famechecker FAMECHECKER_BLAINE, 0
+	@  famechecker FAMECHECKER_BLAINE, 0
 	msgbox CinnabarIsland_Text_GymSign
 	releaseall
 	end

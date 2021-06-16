@@ -446,8 +446,8 @@ static const u8 *GetInteractedObjectEventScript(struct MapPosition *position, u8
             return NULL;
     }
 
-    if (InUnionRoom() == TRUE && !ObjectEventCheckHeldMovementStatus(&gObjectEvents[objectEventId]))
-        return NULL;
+   /* if (InUnionRoom() == TRUE && !ObjectEventCheckHeldMovementStatus(&gObjectEvents[objectEventId]))
+        return NULL;*/
 
     gSelectedObjectEvent = objectEventId;
     gSpecialVar_LastTalked = gObjectEvents[objectEventId].localId;
@@ -648,8 +648,8 @@ static bool8 TryStartMiscWalkingScripts(u16 metatileBehavior)
 
 static bool8 TryStartStepCountScript(u16 metatileBehavior)
 {
-    if (InUnionRoom() == TRUE)
-        return FALSE;
+    /*if (InUnionRoom() == TRUE)
+        return FALSE;*/
     if (gQuestLogState == QL_STATE_PLAYBACK)
         return FALSE;
 
@@ -657,12 +657,12 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
 
     if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_FISHING) && !MetatileBehavior_IsForcedMovementTile(metatileBehavior))
     {
-        if (UpdateVsSeekerStepCounter() == TRUE)
+        /*if (UpdateVsSeekerStepCounter() == TRUE)
         {
             ScriptContext1_SetupScript(EventScript_VsSeekerChargingDone);
             return TRUE;
         }
-        else if (UpdatePoisonStepCounter() == TRUE)
+        else */if (UpdatePoisonStepCounter() == TRUE)
         {
             ScriptContext1_SetupScript(EventScript_FieldPoison);
             return TRUE;

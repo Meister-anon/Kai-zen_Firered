@@ -728,7 +728,7 @@ PalletTown_ProfessorOaksLab_EventScript_ReceiveDexScene:: @ 816961E
 	msgbox PalletTown_ProfessorOaksLab_Text_OakCatchMonsForDataTakeThese
 	giveitem_msg PalletTown_ProfessorOaksLab_Text_ReceivedFivePokeBalls, ITEM_POKE_BALL, 5
 	msgbox PalletTown_ProfessorOaksLab_Text_OakExplainCatching
-	famechecker FAMECHECKER_OAK, 1
+	@  famechecker FAMECHECKER_OAK, 1
 	msgbox PalletTown_ProfessorOaksLab_Text_OakCompleteMonGuideWasMyDream
 	msgbox PalletTown_ProfessorOaksLab_Text_RivalLeaveItToMeGramps
 	compare VAR_FACING, DIR_NORTH
@@ -1354,7 +1354,7 @@ PalletTown_ProfessorOaksLab_EventScript_Aide1:: @ 8169DEE
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_Aide1GameClear:: @ 8169E03
-	famechecker FAMECHECKER_OAK, 5
+	@  famechecker FAMECHECKER_OAK, 5
 	msgbox PalletTown_ProfessorOaksLab_Text_OakIsGoingToHaveRadioShow
 	release
 	end
@@ -1368,7 +1368,7 @@ PalletTown_ProfessorOaksLab_EventScript_Aide2:: @ 8169E1A
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_Aide2GameClear:: @ 8169E2F
-	famechecker FAMECHECKER_DAISY, 0
+	@  famechecker FAMECHECKER_DAISY, 0
 	msgbox PalletTown_ProfessorOaksLab_Text_DaisyWillGroomMons
 	release
 	end
@@ -1376,7 +1376,7 @@ PalletTown_ProfessorOaksLab_EventScript_Aide2GameClear:: @ 8169E2F
 PalletTown_ProfessorOaksLab_EventScript_Aide3:: @ 8169E46
 	lock
 	faceplayer
-	famechecker FAMECHECKER_OAK, 2
+	@  famechecker FAMECHECKER_OAK, 2
 	msgbox PalletTown_ProfessorOaksLab_Text_OakIsAuthorityOnMons
 	release
 	end

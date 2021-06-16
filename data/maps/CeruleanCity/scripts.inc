@@ -55,7 +55,7 @@ CeruleanCity_EventScript_Rival:: @ 81664CC
 	call_if_eq CeruleanCity_EventScript_RivalBulbasaur
 	compare VAR_STARTER_MON, 0
 	call_if_eq CeruleanCity_EventScript_RivalCharmander
-	famechecker FAMECHECKER_BILL, 0
+	@  famechecker FAMECHECKER_BILL, 0
 	msgbox CeruleanCity_Text_RivalPostBattle
 	closemessage
 	playbgm MUS_RIVAL_EXIT, 0
@@ -376,7 +376,7 @@ CeruleanCity_EventScript_BikeShopSign:: @ 816684A
 
 CeruleanCity_EventScript_GymSign:: @ 8166853
 	lockall
-	famechecker FAMECHECKER_MISTY, 0
+	@  famechecker FAMECHECKER_MISTY, 0
 	msgbox CeruleanCity_Text_GymSign
 	releaseall
 	end

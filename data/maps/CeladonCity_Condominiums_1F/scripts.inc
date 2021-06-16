@@ -22,7 +22,7 @@ CeladonCity_Condominiums_1F_EventScript_TeaWomanAfterTea:: @ 816C36A
 	end
 
 CeladonCity_Condominiums_1F_EventScript_TeaWomanMentionDaisy:: @ 816C374
-	famechecker FAMECHECKER_DAISY, 4
+	@  famechecker FAMECHECKER_DAISY, 4
 	setflag FLAG_TALKED_TO_TEA_LADY_AFTER_HOF
 	msgbox CeladonCity_Condominiums_1F_Text_DaisyComesToBuyTea
 	release

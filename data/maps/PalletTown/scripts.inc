@@ -186,7 +186,7 @@ PalletTown_EventScript_OakTriggerRight:: @ 81655F9
 	end
 
 PalletTown_EventScript_OakTrigger:: @ 8165605
-	famechecker FAMECHECKER_OAK, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
+	@  famechecker FAMECHECKER_OAK, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
 	textcolor 0
 	delay 30
 	playbgm MUS_OAK, 0
@@ -408,7 +408,7 @@ PalletTown_EventScript_FatMan:: @ 816582F
 
 PalletTown_EventScript_OaksLabSign:: @ 8165838
 	lockall
-	famechecker FAMECHECKER_OAK, 0
+	@  famechecker FAMECHECKER_OAK, 0
 	msgbox PalletTown_Text_OakPokemonResearchLab
 	releaseall
 	end

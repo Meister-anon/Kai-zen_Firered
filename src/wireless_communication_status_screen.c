@@ -189,7 +189,7 @@ static void CB2_InitWirelessCommunicationScreen(void)
     m4aSoundVSyncOn();
     SetVBlankCallback(VBlankCB_WirelessCommunicationScreen);
     sWCSS->taskId = CreateTask(Task_WirelessCommunicationScreen, 0);
-    sWCSS->rfuTaskId = CreateTask_ListenToWireless();
+    //sWCSS->rfuTaskId = CreateTask_ListenToWireless();
     sWCSS->lastCounts[3] = 1;
     ChangeBgX(0, 0, 0);
     ChangeBgY(0, 0, 0);

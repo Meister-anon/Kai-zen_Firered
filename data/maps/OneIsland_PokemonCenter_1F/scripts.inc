@@ -236,19 +236,19 @@ OneIsland_PokemonCenter_1F_EventScript_CelioGiveBillFact:: @ 8170F35
 	goto_if_eq OneIsland_PokemonCenter_1F_EventScript_BillFact1
 	compare VAR_RESULT, 1
 	goto_if_eq OneIsland_PokemonCenter_1F_EventScript_BillFact2
-	famechecker FAMECHECKER_BILL, 5
+	@  famechecker FAMECHECKER_BILL, 5
 	msgbox OneIsland_PokemonCenter_1F_Text_BillCantStomachMilk
 	release
 	end
 
 OneIsland_PokemonCenter_1F_EventScript_BillFact1:: @ 8170F6D
-	famechecker FAMECHECKER_BILL, 3
+	@  famechecker FAMECHECKER_BILL, 3
 	msgbox OneIsland_PokemonCenter_1F_Text_BillsFirstMonWasAbra
 	release
 	end
 
 OneIsland_PokemonCenter_1F_EventScript_BillFact2:: @ 8170F84
-	famechecker FAMECHECKER_BILL, 4
+	@  famechecker FAMECHECKER_BILL, 4
 	msgbox OneIsland_PokemonCenter_1F_Text_BillsHometownInGoldenrod
 	release
 	end

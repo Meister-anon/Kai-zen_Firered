@@ -270,7 +270,7 @@ VermilionCity_EventScript_PokemonFanClubSign:: @ 8166C65
 
 VermilionCity_EventScript_GymSign:: @ 8166C6E
 	lockall
-	famechecker FAMECHECKER_LTSURGE, 0
+	@  famechecker FAMECHECKER_LTSURGE, 0
 	msgbox VermilionCity_Text_GymSign
 	releaseall
 	end

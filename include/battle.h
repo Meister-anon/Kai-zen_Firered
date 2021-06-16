@@ -26,7 +26,7 @@
 #define TRAINER_OPPONENT_3FE        0x3FE
 #define TRAINER_OPPONENT_C00        0xC00
 #define TRAINER_LINK_OPPONENT       0x800
-#define SECRET_BASE_OPPONENT        0x400
+//#define SECRET_BASE_OPPONENT        0x400
 
 #define B_ACTION_USE_MOVE                  0
 #define B_ACTION_USE_ITEM                  1
@@ -67,7 +67,7 @@
 #define MOVE_TARGET_USER              0x10
 #define MOVE_TARGET_FOES_AND_ALLY     0x20
 #define MOVE_TARGET_OPPONENTS_FIELD   0x40
-//#define MOVE_TARGET_ANY_OR_ALL        0x80
+//#define MOVE_TARGET_ANY_OR_ALL        0x80 //think added for confuse hit idea change
 
 struct TrainerMonNoItemDefaultMoves
 {
@@ -130,7 +130,10 @@ struct ResourceFlags
     u32 flags[4];
 };
 
-#define RESOURCE_FLAG_FLASH_FIRE 1
+#define RESOURCE_FLAG_FLASH_FIRE     1
+#define RESOURCE_FLAG_ROOST          2
+#define RESOURCE_FLAG_UNBURDEN       4
+#define RESOURCE_FLAG_EMERGENCY_EXIT 8
 
 struct DisableStruct
 {
@@ -164,6 +167,8 @@ struct DisableStruct
     /*0x18*/ u8 unk18_a_2 : 2;
     /*0x18*/ u8 mimickedMoves : 4;
     /*0x19*/ u8 rechargeTimer;
+             //u8 RoostTimer; // to set random % 4 effect after use roost
+             //u8 RoostTimerStartValue;  //remove for now until I get 
     /*0x1A*/ u8 unk1A[2];
 };
 
@@ -316,7 +321,7 @@ struct StatsArray
 
 struct BattleResources
 {
-    struct SecretBaseRecord *secretBase;
+   // struct SecretBaseRecord *secretBase; //prob remove this,
     struct ResourceFlags *flags;
     struct BattleScriptsStack *battleScriptsStack;
     struct BattleCallbacksStack *battleCallbackStack;
@@ -344,7 +349,7 @@ struct BattleResults
     u8 playerMon1Name[11];    // 0x8
     u8 battleTurnCounter;     // 0x13
     u8 playerMon2Name[11];    // 0x14
-    u8 pokeblockThrows;       // 0x1F
+    u8 pokeblockThrows;       // 0x1F   //leave in in case I can implement contest/ emerlad style safari zone planters
     u16 lastOpponentSpecies;  // 0x20
     u16 lastUsedMovePlayer;   // 0x22
     u16 lastUsedMoveOpponent; // 0x24
@@ -366,7 +371,7 @@ struct LinkPartnerHeader
     struct BattleEnigmaBerry battleEnigmaBerry;
 };
 
-struct BattleStruct
+struct BattleStruct //fill in unused fields when porting
 {
     u8 turnEffectsTracker;
     u8 turnEffectsBattlerId;
@@ -415,7 +420,7 @@ struct BattleStruct
     u8 field_8D; // unused
     u8 stringMoveType;
     u8 expGetterBattlerId;
-    u8 field_90; // unused
+    u8 field_90; // unused   //ok thank god these really are unused, I'll replace when I need to bing stuff from emerald
     u8 absentBattlerFlags;
     u8 AI_monToSwitchIntoId[2];
     u8 simulatedInputState[4];  // used by Oak/Old Man/Pokedude controllers
@@ -442,7 +447,7 @@ struct BattleStruct
     u8 fillerDC[0xDF-0xDC];
     u8 givenExpMons;
     u8 lastTakenMoveFrom[MAX_BATTLERS_COUNT * MAX_BATTLERS_COUNT * 2];
-    u16 castformPalette[MAX_BATTLERS_COUNT][16];
+    u16 castformPalette[MAX_BATTLERS_COUNT][16]; //important, may be how they fixed alcremie?
     u8 wishPerishSongState;
     u8 wishPerishSongBattlerId;
     u8 field_182;
@@ -495,10 +500,10 @@ struct BattleScripting
     u8 twoTurnsMoveStringId;
     u8 animArg1;
     u8 animArg2;
-    u16 tripleKickPower;
+    u16 tripleKickPower; //important
     u8 atk49_state;
     u8 battlerWithAbility;
-    u8 multihitMoveEffect;
+    u8 multihitMoveEffect; //important, why do these need to go here
     u8 battler;
     u8 animTurn;
     u8 animTargetsHit;
@@ -701,6 +706,7 @@ extern u8 gChosenMovePos;
 extern u8 gBattleControllerData[MAX_BATTLERS_COUNT];
 extern u8 gBattlerStatusSummaryTaskId[MAX_BATTLERS_COUNT];
 extern u16 gDynamicBasePower;
+extern u32 gFieldStatuses;
 extern u16 gLastLandedMoves[MAX_BATTLERS_COUNT];
 extern u8 gLastHitBy[MAX_BATTLERS_COUNT];
 extern u8 gMultiUsePlayerCursor;

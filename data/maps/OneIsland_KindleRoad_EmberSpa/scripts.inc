@@ -20,7 +20,7 @@ OneIsland_KindleRoad_EmberSpa_EventScript_OldWoman:: @ 8165377
 OneIsland_KindleRoad_EmberSpa_EventScript_BlackBelt:: @ 8165380
 	lock
 	faceplayer
-	famechecker FAMECHECKER_BRUNO, 3
+	@  famechecker FAMECHECKER_BRUNO, 3
 	msgbox OneIsland_KindleRoad_EmberSpa_Text_BrunoVisitsSpaOnOccasion
 	release
 	end

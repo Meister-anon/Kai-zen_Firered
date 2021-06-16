@@ -4,7 +4,7 @@ ThreeIsland_House2_MapScripts:: @ 81718DF
 ThreeIsland_House2_EventScript_Man:: @ 81718E0
 	lock
 	faceplayer
-	famechecker FAMECHECKER_SABRINA, 1
+	@  famechecker FAMECHECKER_SABRINA, 1
 	msgbox ThreeIsland_House2_Text_IAdmireSabrina
 	release
 	end

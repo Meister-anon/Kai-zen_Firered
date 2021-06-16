@@ -11,7 +11,9 @@
 #include "union_room_chat_display.h"
 #include "union_room_chat_objects.h"
 
-#define STDMESSAGE_QUIT_CHATTING 0
+//zsonic
+
+/*#define STDMESSAGE_QUIT_CHATTING 0
 #define STDMESSAGE_REGISTER_WHERE 1
 #define STDMESSAGE_REGISTER_HERE 2
 #define STDMESSAGE_INPUT_TEXT 3
@@ -65,7 +67,9 @@ struct MessageWindowInfo
     bool8 widerBox;
 };
 
-static EWRAM_DATA struct UnionRoomChat2 * sWork = NULL;
+//static EWRAM_DATA struct UnionRoomChat2 * sWork = NULL;
+
+//zsonic
 
 static void InitWork(struct UnionRoomChat2 * ptr);
 static void UnionRoomChat_ResetDisplaySubtasks(void);
@@ -1336,4 +1340,4 @@ static void FillScanlineEffectWithValue2col(s16 arg0)
     CpuFill16(0,    gScanlineEffectRegBuffers[0] +  0x90, 0x20);
     CpuFill16(arg0, gScanlineEffectRegBuffers[0] + 0x3C0, 0x120);
     CpuFill16(0,    gScanlineEffectRegBuffers[0] + 0x450, 0x20);
-}
+}*/

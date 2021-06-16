@@ -32,7 +32,7 @@ EventScript_PkmnCenterNurse_CheckTrainerTowerAndUnionRoom:: @ 81A65EC
 	specialvar VAR_RESULT, IsPlayerNotInTrainerTowerLobby
 	compare VAR_RESULT, FALSE
 	goto_if_eq EventScript_PkmnCenterNurse_ReturnPkmn
-	specialvar VAR_RESULT, BufferUnionRoomPlayerName
+ @	specialvar VAR_RESULT, BufferUnionRoomPlayerName
 	copyvar VAR_0x8008, VAR_RESULT
 	compare VAR_0x8008, 0
 	goto_if_eq EventScript_PkmnCenterNurse_ReturnPkmn

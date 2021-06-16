@@ -104,7 +104,7 @@ Route25_SeaCottage_EventScript_BillGoToSSAnne:: @ 8170640
 	end
 
 Route25_SeaCottage_EventScript_BillGiveSSTicket:: @ 817064A
-	famechecker FAMECHECKER_BILL, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
+	@  famechecker FAMECHECKER_BILL, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
 	checkplayergender
 	compare VAR_RESULT, MALE
 	call_if_eq Route25_SeaCottage_EventScript_BillThanksMale

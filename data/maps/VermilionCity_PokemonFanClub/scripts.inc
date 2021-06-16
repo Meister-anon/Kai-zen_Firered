@@ -48,7 +48,7 @@ VermilionCity_PokemonFanClub_EventScript_WorkerF:: @ 816B4FC
 	end
 
 VermilionCity_PokemonFanClub_EventScript_WorkerFGameClear:: @ 816B511
-	famechecker FAMECHECKER_DAISY, 1
+	@  famechecker FAMECHECKER_DAISY, 1
 	msgbox VermilionCity_PokemonFanClub_Text_ChairmanReallyAdoresHisMons
 	release
 	end

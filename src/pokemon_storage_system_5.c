@@ -912,7 +912,7 @@ s16 CompactPartySlots(void)
     return retVal;
 }
 
-void SetMonMarkings(u8 markings)
+/*void SetMonMarkings(u8 markings)
 {
     gPSSData->cursorMonMarkings = markings;
     if (sIsMonBeingMoved)
@@ -926,7 +926,7 @@ void SetMonMarkings(u8 markings)
         if (sBoxCursorArea == CURSOR_AREA_IN_BOX)
             SetCurrentBoxMonData(sBoxCursorPosition, MON_DATA_MARKINGS, &markings);
     }
-}
+}*/
 
 bool8 CanMovePartyMon(void)
 {

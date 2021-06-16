@@ -11,14 +11,19 @@
 #include "union_room.h"
 #include "constants/union_room.h"
 
-struct UnionRoomBattleWork
+//zsonic remember to remove connections to union room, believe their in pokemon center?
+//yeah its in the pokemon center, change script to "sorry the union room isn't available right now"
+
+/*struct UnionRoomBattleWork
 {
     s16 textState;
-};
+};*/
 
-static EWRAM_DATA struct UnionRoomBattleWork * sWork = NULL;
+//static EWRAM_DATA struct UnionRoomBattleWork * sWork = NULL;
 
-static const struct BgTemplate sBgTemplates[] = {
+//zsonic  removing cause will never use unionroom
+
+/*static const struct BgTemplate sBgTemplates[] = {
     {
         .bg = 0,
         .charBaseIndex = 3,
@@ -219,4 +224,4 @@ void CB2_UnionRoomBattle(void)
     AnimateSprites();
     BuildOamBuffer();
     UpdatePaletteFade();
-}
+}*/

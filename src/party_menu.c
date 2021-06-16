@@ -135,17 +135,17 @@ static void CursorCB_Cancel1(u8 taskId);
 static void CursorCB_Item(u8 taskId);
 static void CursorCB_Give(u8 taskId);
 static void CursorCB_TakeItem(u8 taskId);
-static void CursorCB_Mail(u8 taskId);
-static void CursorCB_Read(u8 taskId);
-static void CursorCB_TakeMail(u8 taskId);
+//static void CursorCB_Mail(u8 taskId);
+//static void CursorCB_Read(u8 taskId);
+//static void CursorCB_TakeMail(u8 taskId);
 static void CursorCB_Cancel2(u8 taskId);
 static void CursorCB_SendMon(u8 taskId);
 static void CursorCB_Enter(u8 taskId);
 static void CursorCB_NoEntry(u8 taskId);
 static void CursorCB_Store(u8 taskId);
-static void CursorCB_Register(u8 taskId);
-static void CursorCB_Trade1(u8 taskId);
-static void CursorCB_Trade2(u8 taskId);
+//static void CursorCB_Register(u8 taskId);
+//static void CursorCB_Trade1(u8 taskId);
+//static void CursorCB_Trade2(u8 taskId);
 static void CursorCB_FieldMove(u8 taskId);
 static bool8 SetUpFieldMove_Fly(void);
 static bool8 SetUpFieldMove_Waterfall(void);
@@ -216,7 +216,7 @@ static void HandleChooseMonCancel(u8 taskId, s8 *slotPtr);
 static void MoveCursorToConfirm(void);
 static bool8 IsSelectedMonNotEgg(u8 *slotPtr);
 static void TryTutorSelectedMon(u8 taskId);
-static void TryGiveMailToSelectedMon(u8 taskId);
+//static void TryGiveMailToSelectedMon(u8 taskId);
 static void SwitchSelectedMons(u8 taskId);
 static void TryEnterMonForMinigame(u8 taskId, u8 slot);
 static void Task_TryCreateSelectionWindow(u8 taskId);
@@ -267,7 +267,7 @@ static void SlidePartyMenuBoxOneStep(u8 taskId);
 static void Task_SlideSelectedSlotsOffscreen(u8 taskId);
 static void SwitchPartyMon(void);
 static void Task_SlideSelectedSlotsOnscreen(u8 taskId);
-static void CB2_WriteMailToGiveMon(void);
+//static void CB2_WriteMailToGiveMon(void);
 static void Task_SwitchHoldItemsPrompt(u8 taskId);
 static void Task_GiveHoldItem(u8 taskId);
 static void Task_UpdateHeldItemSprite(u8 taskId);
@@ -334,7 +334,7 @@ static void CB2_ReturnToTMCaseMenu(void);
 static void GiveItemOrMailToSelectedMon(u8 taskId);
 static void RemoveItemToGiveFromBag(u16 item);
 static void DisplayItemMustBeRemovedFirstMessage(u8 taskId);
-static void CB2_WriteMailToGiveMonFromBag(void);
+//static void CB2_WriteMailToGiveMonFromBag(void);
 static void GiveItemToSelectedMon(u8 taskId);
 static void Task_UpdateHeldItemSpriteAndClosePartyMenu(u8 taskId);
 static void Task_SwitchItemsFromBagYesNo(u8 taskId);
@@ -392,10 +392,12 @@ EWRAM_DATA MainCallback gPostMenuFieldCallback = NULL;
 static EWRAM_DATA u16 *sSlot1TilemapBuffer = NULL; // for switching party slots
 static EWRAM_DATA u16 *sSlot2TilemapBuffer = NULL;
 static EWRAM_DATA struct Pokemon *sSacredAshQuestLogMonBackup = NULL;
-EWRAM_DATA u8 gSelectedOrderFromParty[3] = {0};
+EWRAM_DATA u8 gSelectedOrderFromParty[PARTY_SIZE] = {0}; //important expshare actually can just make this 6, all references already limit check to 3 in their functions so it wouldn't ruin anything.
 static EWRAM_DATA u16 sPartyMenuItemId = ITEM_NONE;
 ALIGNED(4) EWRAM_DATA u8 gBattlePartyCurrentOrder[PARTY_SIZE / 2] = {0}; // bits 0-3 are the current pos of Slot 1, 4-7 are Slot 2, and so on
 
+//gselectedorderfromparty is 3 because that's max that can be selected, for select half party
+//for exp share prob need make another version here with 6
 void (*gItemUseCB)(u8, TaskFunc);
 
 #include "data/pokemon/tutor_learnsets.h"
@@ -565,7 +567,7 @@ static bool8 ShowPartyMenu(void)
         ++gMain.state;
         break;
     case 19:
-      //  SetHelpContext(HELPCONTEXT_PARTY_MENU);
+        //SetHelpContext(HELPCONTEXT_PARTY_MENU);
         ++gMain.state;
         break;
     case 20:
@@ -1106,7 +1108,10 @@ u8 GetPartyMenuType(void)
     return gPartyMenu.menuType;
 }
 
-void Task_HandleChooseMonInput(u8 taskId)
+void Task_HandleChooseMonInput(u8 taskId) //important, seems can use this for expshare selection
+//to make sure it tracks if I swap positions, I think what I'll do is set up a function
+//that usess slot value to get the personality value & species.
+//that'll be enough to make sure it's perectly individualized
 {
     if (!gPaletteFade.active && sub_80BF748() != TRUE)
     {
@@ -1168,13 +1173,13 @@ static void HandleChooseMonSelection(u8 taskId, s8 *slotPtr)
                 TryTutorSelectedMon(taskId);
             }
             break;
-        case PARTY_ACTION_GIVE_MAILBOX_MAIL:
+        /*case PARTY_ACTION_GIVE_MAILBOX_MAIL:
             if (IsSelectedMonNotEgg((u8 *)slotPtr))
             {
                 PlaySE(SE_SELECT);
                 TryGiveMailToSelectedMon(taskId);
             }
-            break;
+            break;*/
         case PARTY_ACTION_GIVE_ITEM:
         case PARTY_ACTION_GIVE_PC_ITEM:
             if (IsSelectedMonNotEgg((u8 *)slotPtr))
@@ -1641,7 +1646,7 @@ static void GiveItemToMon(struct Pokemon *mon, u16 item)
 
     if (ItemIsMail(item) == TRUE)
     {
-        if (GiveMailToMon(mon, item) == 0xFF)
+       // if (GiveMailToMon(mon, item) == 0xFF)
             return;
     }
     itemBytes[0] = item;
@@ -2090,8 +2095,8 @@ static void PartyMenuHandlePokedudeCancel(void)
 {
     FreeRestoreBattleData();
     LoadPlayerParty();
-    SetTeachyTvControllerModeToResume();
-    SetMainCallback2(CB2_ReturnToTeachyTV);
+    //SetTeachyTvControllerModeToResume();
+    //SetMainCallback2(CB2_ReturnToTeachyTV);
 }
 
 // Pokedude uses item on his own Pokemon
@@ -3007,7 +3012,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     if (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE)
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SWITCH);
     if (ItemIsMail(GetMonData(&mons[slotId], MON_DATA_HELD_ITEM)))
-        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MAIL);
+        return; // AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MAIL);
     else
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_ITEM);
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_CANCEL1);
@@ -3463,12 +3468,12 @@ void CB2_GiveHoldItem(void)
             InitPartyMenu(gPartyMenu.menuType, KEEP_PARTY_LAYOUT, gPartyMenu.action, TRUE, PARTY_MSG_NONE, Task_SwitchHoldItemsPrompt, gPartyMenu.exitCallback);
         }
         // Give mail
-        else if (ItemIsMail(gSpecialVar_ItemId))
+       /* else if (ItemIsMail(gSpecialVar_ItemId))
         {
             RemoveBagItem(gSpecialVar_ItemId, 1);
             GiveItemToMon(&gPlayerParty[gPartyMenu.slotId], gSpecialVar_ItemId);
             CB2_WriteMailToGiveMon();
-        }
+        }*/
         // Give item
         else
         {
@@ -3525,11 +3530,11 @@ static void Task_HandleSwitchItemsYesNoInput(u8 taskId)
             gTasks[taskId].func = Task_ReturnToChooseMonAfterText;
         }
         // Giving mail
-        else if (ItemIsMail(gSpecialVar_ItemId))
+       /* else if (ItemIsMail(gSpecialVar_ItemId))
         {
             GiveItemToMon(&gPlayerParty[gPartyMenu.slotId], gSpecialVar_ItemId);
             gTasks[taskId].func = Task_WriteMailToGiveMonAfterText;
-        }
+        }*/
         // Giving item
         else
         {
@@ -3547,7 +3552,7 @@ static void Task_HandleSwitchItemsYesNoInput(u8 taskId)
     }
 }
 
-static void Task_WriteMailToGiveMonAfterText(u8 taskId)
+/*static void Task_WriteMailToGiveMonAfterText(u8 taskId)
 {
     if (IsPartyMenuTextPrinterActive() != TRUE)
     {
@@ -3597,7 +3602,7 @@ static void Task_DisplayGaveMailFromPartyMessage(u8 taskId)
             DisplaySwitchedHeldItemMessage(gSpecialVar_ItemId, sPartyMenuItemId, FALSE);
         gTasks[taskId].func = Task_UpdateHeldItemSprite;
     }
-}
+}*/
 
 static void Task_UpdateHeldItemSprite(u8 taskId)
 {
@@ -3637,7 +3642,7 @@ static void CursorCB_TakeItem(u8 taskId)
     gTasks[taskId].func = Task_UpdateHeldItemSprite;
 }
 
-static void CursorCB_Mail(u8 taskId)
+/*static void CursorCB_Mail(u8 taskId)
 {
     PlaySE(SE_SELECT);
     PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[0]);
@@ -3748,7 +3753,7 @@ static void Task_HandleLoseMailMessageYesNoInput(u8 taskId)
         gTasks[taskId].func = Task_ReturnToChooseMonAfterText;
         break;
     }
-}
+}*/
 
 static void CursorCB_Cancel2(u8 taskId)
 {
@@ -3869,7 +3874,7 @@ static void CursorCB_Store(u8 taskId)
 }
 
 // Register mon for the Trading Board in Union Room
-static void CursorCB_Register(u8 taskId)
+/*static void CursorCB_Register(u8 taskId)
 {
     u16 species2 = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES2);
     u16 species = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES);
@@ -3896,12 +3901,12 @@ static void CursorCB_Register(u8 taskId)
     gTasks[taskId].func = Task_ReturnToChooseMonAfterText;
 }
 
-static void CursorCB_Trade1(u8 taskId)
+static void CursorCB_Trade1(u8 taskId) //oh thse are both for union room, I cna just remove
 {
     u16 species2 = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES2);
     u16 species = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES);
     u8 isEventLegal = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_EVENT_LEGAL);
-    u32 stringId = GetUnionRoomTradeMessageId(*(struct GFtgtGnameSub *)GetHostRFUtgtGname(), gPartnerTgtGnameSub, species2, gUnionRoomOfferedSpecies, gUnionRoomRequestedMonType, species, isEventLegal);
+    //u32 stringId = GetUnionRoomTradeMessageId(*(struct GFtgtGnameSub *)GetHostRFUtgtGname(), gPartnerTgtGnameSub, species2, gUnionRoomOfferedSpecies, gUnionRoomRequestedMonType, species, isEventLegal);
 
     if (stringId != UR_TRADE_MSG_NONE)
     {
@@ -3918,13 +3923,13 @@ static void CursorCB_Trade1(u8 taskId)
         PlaySE(SE_SELECT);
         Task_ClosePartyMenu(taskId);
     }
-}
+}*/
 
 // Spin Trade (based on the translation of the Japanese trade prompt)
 // Not implemented, and normally unreachable because PARTY_MENU_TYPE_SPIN_TRADE is never used
-static void CursorCB_Trade2(u8 taskId)
+/*static void CursorCB_Trade2(u8 taskId)
 {
-}
+}*/
 
 static void CursorCB_FieldMove(u8 taskId)
 {
@@ -3936,7 +3941,7 @@ static void CursorCB_FieldMove(u8 taskId)
         return;
     PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[0]);
     PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[1]);
-    if (MenuHelpers_LinkSomething() == TRUE || InUnionRoom() == TRUE)
+    if (MenuHelpers_LinkSomething() == TRUE)
     {
         if (fieldMove == FIELD_MOVE_MILK_DRINK || fieldMove == FIELD_MOVE_SOFT_BOILED)
             DisplayPartyMenuStdMessage(PARTY_MSG_CANT_USE_HERE);
@@ -5510,13 +5515,13 @@ static void TryGiveItemOrMailToSelectedMon(u8 taskId)
 
 static void GiveItemOrMailToSelectedMon(u8 taskId)
 {
-    if (ItemIsMail(gPartyMenu.bagItem))
+   /* if (ItemIsMail(gPartyMenu.bagItem))
     {
         RemoveItemToGiveFromBag(gPartyMenu.bagItem);
         sPartyMenuInternal->exitCallback = CB2_WriteMailToGiveMonFromBag;
         Task_ClosePartyMenu(taskId);
     }
-    else
+    else*/
     {
         GiveItemToSelectedMon(taskId);
     }
@@ -5547,7 +5552,7 @@ static void Task_UpdateHeldItemSpriteAndClosePartyMenu(u8 taskId)
     }
 }
 
-static void CB2_WriteMailToGiveMonFromBag(void)
+/*static void CB2_WriteMailToGiveMonFromBag(void)
 {
     u8 mail;
 
@@ -5587,7 +5592,7 @@ static void Task_DisplayGaveMailFromBagMessage(u8 taskId)
             DisplayGaveHeldItemMessage(&gPlayerParty[gPartyMenu.slotId], gPartyMenu.bagItem, FALSE, TRUE);
         gTasks[taskId].func = Task_UpdateHeldItemSpriteAndClosePartyMenu;
     }
-}
+}*/
 
 static void Task_SwitchItemsFromBagYesNo(u8 taskId)
 {
@@ -5614,11 +5619,11 @@ static void Task_HandleSwitchItemsFromBagYesNoInput(u8 taskId)
             DisplayPartyMenuMessage(gStringVar4, FALSE);
             gTasks[taskId].func = Task_UpdateHeldItemSpriteAndClosePartyMenu;
         }
-        else if (ItemIsMail(item))
+        /*else if (ItemIsMail(item))
         {
             sPartyMenuInternal->exitCallback = CB2_WriteMailToGiveMonFromBag;
             Task_ClosePartyMenu(taskId);
-        }
+        }*/
         else
         {
             GiveItemToMon(&gPlayerParty[gPartyMenu.slotId], item);
@@ -5660,7 +5665,7 @@ static bool8 ReturnGiveItemToBagOrPC(u16 item)
         return AddPCItem(item, 1);
 }
 
-void ChooseMonToGiveMailFromMailbox(void)
+/*void ChooseMonToGiveMailFromMailbox(void)
 {
     InitPartyMenu(PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_GIVE_MAILBOX_MAIL, FALSE, PARTY_MSG_GIVE_TO_WHICH_MON, Task_HandleChooseMonInput, Mailbox_ReturnToMailListAfterDeposit);
 }
@@ -5684,7 +5689,7 @@ static void TryGiveMailToSelectedMon(u8 taskId)
     }
     ScheduleBgCopyTilemapToVram(2);
     gTasks[taskId].func = Task_UpdateHeldItemSpriteAndClosePartyMenu;
-}
+}*/
 
 void InitChooseHalfPartyForBattle(u8 a1)
 {
@@ -5770,8 +5775,8 @@ static u8 CheckBattleEntriesAndGetMessage(void)
     return 0xFF;
 }
 
-static bool8 HasPartySlotAlreadyBeenSelected(u8 slot)
-{
+static bool8 HasPartySlotAlreadyBeenSelected(u8 slot) //important for field moves may prevent repeats
+{ //actually can also use this for exp share, just change gselectedorder to 6 instead of 3
     u8 i;
 
     for (i = 0; i < NELEMS(gSelectedOrderFromParty); ++i)

@@ -29,7 +29,7 @@ UnionRoom_OnResume:: @ 8160487
 	removeobject LOCALID_UNION_ROOM_PLAYER_6
 	removeobject LOCALID_UNION_ROOM_PLAYER_7
 	removeobject LOCALID_UNION_ROOM_PLAYER_8
-	special UnionRoomSpecial
+@	special UnionRoomSpecial
 	end
 
 UnionRoom_OnTransition:: @ 81604BB

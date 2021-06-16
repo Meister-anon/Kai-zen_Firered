@@ -143,7 +143,7 @@ union UnkUnion_Main
     struct UnkStruct_URoom * uRoom;
 };
 
-struct UnionRoomTrade
+/*struct UnionRoomTrade
 {
     u16 field_0;
     u16 type;
@@ -156,13 +156,13 @@ struct UnionRoomTrade
     u16 level;
     u16 field_12;
     u32 personality;
-};
+};*/
 
-extern struct GFtgtGnameSub gPartnerTgtGnameSub;
-extern u16 gUnionRoomOfferedSpecies;
-extern u8 gUnionRoomRequestedMonType;
+//extern struct GFtgtGnameSub gPartnerTgtGnameSub;
+//extern u16 gUnionRoomOfferedSpecies;
+//extern u8 gUnionRoomRequestedMonType;
 
-void StartUnionRoomBattle(u16 battleFlags);
-u8 UnionRoom_CreateTask_CallCB2ReturnFromLinkTrade(void);
+//void StartUnionRoomBattle(u16 battleFlags);
+//u8 UnionRoom_CreateTask_CallCB2ReturnFromLinkTrade(void);
 
 #endif //GUARD_UNION_ROOM_H

@@ -26,7 +26,7 @@ PalletTown_GarysHouse_EventScript_AlreadyReceivedTownMap:: @ 8168D50
 PalletTown_GarysHouse_EventScript_Daisy:: @ 8168D56
 	lock
 	faceplayer
-	famechecker FAMECHECKER_DAISY, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
+	@  famechecker FAMECHECKER_DAISY, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
 	goto_if_set FLAG_SYS_GAME_CLEAR, PalletTown_GarysHouse_EventScript_GroomMon
 	compare RECEIVED_TOWN_MAP, TRUE
 	goto_if_eq PalletTown_GarysHouse_EventScript_PleaseGiveMonsRest

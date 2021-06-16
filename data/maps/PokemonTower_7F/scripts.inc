@@ -8,7 +8,7 @@ PokemonTower_7F_MapScripts:: @ 8163559
 PokemonTower_7F_EventScript_MrFuji:: @ 816355A
 	lock
 	faceplayer
-	famechecker FAMECHECKER_MRFUJI, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
+	@  famechecker FAMECHECKER_MRFUJI, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
 	setflag FLAG_HIDE_TOWER_FUJI
 	clearflag FLAG_HIDE_POKEHOUSE_FUJI
 	setflag FLAG_RESCUED_MR_FUJI
@@ -112,7 +112,7 @@ PokemonTower_7F_EventScript_Grunt2:: @ 816363D
 	end
 
 PokemonTower_7F_EventScript_DefeatedGrunt2:: @ 8163658
-	famechecker FAMECHECKER_MRFUJI, 1
+	@  famechecker FAMECHECKER_MRFUJI, 1
 	msgbox PokemonTower_7F_Text_Grunt2PostBattle
 	closemessage
 	getplayerxy VAR_0x8004, VAR_0x8005

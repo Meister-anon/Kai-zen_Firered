@@ -1004,7 +1004,7 @@ static void CreateNormalContextMenu(u8 taskId)
         sContextMenuOptions = sOptions_UseToss_Exit;
         sContextMenuNumOptions = 3;
     }
-    else if (MenuHelpers_LinkSomething() == TRUE || InUnionRoom() == TRUE)
+    else if (MenuHelpers_LinkSomething() == TRUE)
     {
         if (!itemid_link_can_give_berry(gSpecialVar_ItemId))
         {

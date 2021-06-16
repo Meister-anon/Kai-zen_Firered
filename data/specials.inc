@@ -63,7 +63,7 @@ gSpecials:: @ 815FD60
 	def_special EndTrainerApproach
 	def_special PlayTrainerEncounterMusic
 	def_special ShouldTryRematchBattle
-	def_special IsTrainerReadyForRematch
+@	def_special IsTrainerReadyForRematch
 	def_special StartRematchBattle
 	def_special ShowPokemonStorageSystemPC
 	def_special HasEnoughMonsForDoubleBattle
@@ -199,7 +199,7 @@ gSpecials:: @ 815FD60
 	def_special TakePokemonFromDaycare
 	def_special ScriptHatchMon
 	def_special EggHatch
-	def_special DaycareMonReceivedMail
+@	def_special DaycareMonReceivedMail
 	def_special ShowBattleRecords
 	def_special IsEnoughForCostInVar0x8005
 	def_special SubtractMoneyFromVar0x8005
@@ -268,7 +268,7 @@ gSpecials:: @ 815FD60
 	def_special NullFieldSpecial
 	def_special CreatePCMenu
 	def_special HallOfFamePCBeginFade
-	def_special ShowDiploma
+	@	def_special ShowDiploma
 	def_special NullFieldSpecial  @ Check lead mon Contest strength specials
 	def_special NullFieldSpecial
 	def_special NullFieldSpecial
@@ -367,16 +367,16 @@ gSpecials:: @ 815FD60
 	def_special StickerManGetBragFlags
 	def_special SetUsedPkmnCenterQuestLogEvent
 	def_special IsWirelessAdapterConnected
-	def_special TryBecomeLinkLeader
-	def_special TryJoinLinkGroup
-	def_special UnionRoomSpecial
+@	def_special TryBecomeLinkLeader
+@	def_special TryJoinLinkGroup
+@	def_special UnionRoomSpecial
 	def_special ShowWirelessCommunicationScreen
 	def_special EnableNationalPokedex
 	def_special SetWalkingIntoSignVars
 	def_special DisableMsgBoxWalkaway
 	def_special VsSeekerFreezeObjectsAfterChargeComplete
-	def_special SetFlavorTextFlagFromSpecialVars
-	def_special UpdatePickStateFromSpecialVar8005
+@	def_special SetFlavorTextFlagFromSpecialVars
+@	def_special UpdatePickStateFromSpecialVar8005
 	def_special OverworldWhiteOutGetMoneyLoss
 	def_special PutMonInRoute5Daycare
 	def_special GetCostToWithdrawRoute5DaycareMon
@@ -387,8 +387,8 @@ gSpecials:: @ 815FD60
 	def_special DoesPlayerPartyContainSpecies
 	def_special ValidateReceivedWonderCard
 	def_special SetUnlockedPokedexFlags
-	def_special InitUnionRoom
-	def_special BufferUnionRoomPlayerName
+@	def_special InitUnionRoom
+@	def_special BufferUnionRoomPlayerName
 	def_special QuestLog_StartRecordingInputsAfterDeferredEvent
 	def_special GetMartClerkObjectId
 	def_special BattleCardAction
@@ -424,7 +424,7 @@ gSpecials:: @ 815FD60
 	def_special HasAllMons
 	def_special IsPlayerNotInTrainerTowerLobby
 	def_special BrailleCursorToggle
-	def_special Script_ResetUnionRoomTrade
+@	def_special Script_ResetUnionRoomTrade
 	def_special PlayerPartyContainsSpeciesWithPlayerID
 	def_special AnimateTeleporterHousing
 	def_special AnimateTeleporterCable

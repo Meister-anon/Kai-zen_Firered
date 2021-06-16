@@ -421,7 +421,7 @@ static s8 Daycare_FindEmptySpot(struct DayCare *daycare)
 
 static void StorePokemonInDaycare(struct Pokemon *mon, struct DaycareMon *daycareMon)
 {
-    if (MonHasMail(mon))
+    /*if (MonHasMail(mon))
     {
         u8 mailId;
 
@@ -433,7 +433,7 @@ static void StorePokemonInDaycare(struct Pokemon *mon, struct DaycareMon *daycar
         mailId = GetMonData(mon, MON_DATA_MAIL);
         daycareMon->mail.message = gSaveBlock1Ptr->mail[mailId];
         TakeMailFromMon(mon);
-    }
+    }*/
 
     daycareMon->mon = mon->box;
     BoxMonRestorePP(&daycareMon->mon);
@@ -520,11 +520,11 @@ static u16 TakeSelectedPokemonFromDaycare(struct DaycareMon *daycareMon)
     }
 
     gPlayerParty[PARTY_SIZE - 1] = pokemon;
-    if (daycareMon->mail.message.itemId)
+   /* if (daycareMon->mail.message.itemId)
     {
         GiveMailToMon2(&gPlayerParty[PARTY_SIZE - 1], &daycareMon->mail.message);
         ClearDaycareMonMail(&daycareMon->mail);
-    }
+    }*/
 
     ZeroBoxMonData(&daycareMon->mon);
     daycareMon->steps = 0;
@@ -617,7 +617,7 @@ static void ClearDaycareMonMail(struct DayCareMail *mail)
     for (i = 0; i < POKEMON_NAME_LENGTH + 1; i++)
         mail->monName[i] = 0;
 
-    ClearMailStruct(&mail->message);
+    //ClearMailStruct(&mail->message);
 }
 
 static void ClearDaycareMon(struct DaycareMon *daycareMon)
@@ -673,7 +673,7 @@ static u16 GetEggSpecies(u16 species)
 
     return species;
 }
-//
+//      look into this
 //static s32 GetSlotToInheritNature(struct DayCare *daycare)
 //{
 //    u32 species[DAYCARE_MON_COUNT];
@@ -999,7 +999,7 @@ static void AlterEggSpeciesWithIncenseItem(u16 *species, struct DayCare *daycare
         }
     }
 }
-
+//v  set this up later, this was a default comment out
 /*static void GiveVoltTackleIfLightBall(struct Pokemon *mon, struct DayCare *daycare)
 {
     u32 motherItem = GetBoxMonData(&daycare->mons[0].mon, MON_DATA_HELD_ITEM);
@@ -1682,7 +1682,7 @@ void ScriptHatchMon(void)
     AddHatchedMonToParty(gSpecialVar_0x8004);
 }
 
-static bool8 sub_8046E34(struct DayCare *daycare, u8 daycareId)
+/*static bool8 sub_8046E34(struct DayCare *daycare, u8 daycareId)
 {
     u8 nick[0x20];
     struct DaycareMon *daycareMon = &daycare->mons[daycareId];
@@ -1703,7 +1703,7 @@ static bool8 sub_8046E34(struct DayCare *daycare, u8 daycareId)
 bool8 DaycareMonReceivedMail(void)
 {
     return sub_8046E34(&gSaveBlock1Ptr->daycare, gSpecialVar_0x8004);
-}
+}*/
 
 extern const struct CompressedSpriteSheet gMonFrontPicTable[];
 

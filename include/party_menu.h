@@ -24,7 +24,7 @@ extern struct PartyMenu gPartyMenu;
 extern bool8 gPartyMenuUseExitCallback;
 extern u8 gSelectedMonPartyId;
 extern MainCallback gPostMenuFieldCallback;
-extern u8 gSelectedOrderFromParty[3];
+extern u8 gSelectedOrderFromParty[PARTY_SIZE]; //forgot to update the .h, now it can be used to select entire party
 extern u8 gBattlePartyCurrentOrder[PARTY_SIZE / 2];
 
 extern void (*gItemUseCB)(u8, TaskFunc);

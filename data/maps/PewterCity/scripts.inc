@@ -622,7 +622,7 @@ PewterCity_Movement_MuseumGuideExit:: @ 816621C
 PewterCity_EventScript_FatMan:: @ 816622B
 	lock
 	faceplayer
-	famechecker FAMECHECKER_BROCK, 2
+	@  famechecker FAMECHECKER_BROCK, 2
 	msgbox PewterCity_Text_BrockOnlySeriousTrainerHere
 	release
 	end
@@ -656,7 +656,7 @@ PewterCity_EventScript_MuseumSign:: @ 816627F
 
 PewterCity_EventScript_GymSign:: @ 8166288
 	lockall
-	famechecker FAMECHECKER_BROCK, 0
+	@  famechecker FAMECHECKER_BROCK, 0
 	msgbox PewterCity_Text_GymSign
 	releaseall
 	end

@@ -1448,25 +1448,25 @@ static void LinkOpponentHandleOneReturnValue_Duplicate(void)
 
 static void LinkOpponentHandleCmd37(void)
 {
-    gUnknown_2022870.field_0 = 0;
+    ////gUnknown_2022870.field_0 = 0;
     LinkOpponentBufferExecCompleted();
 }
 
 static void LinkOpponentHandleCmd38(void)
 {
-    gUnknown_2022870.field_0 = gBattleBufferA[gActiveBattler][1];
+    ////gUnknown_2022870.field_0 = gBattleBufferA[gActiveBattler][1];
     LinkOpponentBufferExecCompleted();
 }
 
 static void LinkOpponentHandleCmd39(void)
 {
-    gUnknown_2022870.flag_x80 = 0;
+   // //gUnknown_2022870.flag_x80 = 0;
     LinkOpponentBufferExecCompleted();
 }
 
 static void LinkOpponentHandleCmd40(void)
 {
-    gUnknown_2022870.flag_x80 ^= 1;
+    ////gUnknown_2022870.flag_x80 ^= 1;
     LinkOpponentBufferExecCompleted();
 }
 

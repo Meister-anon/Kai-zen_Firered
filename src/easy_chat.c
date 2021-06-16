@@ -453,11 +453,11 @@ void InitEasyChatPhrases(void)
         gSaveBlock1Ptr->easyChatBattleLost[i] = EC_WORD_UNDEFINED;
     }
 
-    for (i = 0; i < MAIL_COUNT; i++)
+   /* for (i = 0; i < MAIL_COUNT; i++)
     {
         for (j = 0; j < MAIL_WORDS_COUNT; j++)
             gSaveBlock1Ptr->mail[i].words[j] = EC_WORD_UNDEFINED;
-    }
+    }*/
 
     // BUG: This is supposed to clear 64 bits, but this loop is clearing 64 bytes.
     // However, this bug has no resulting effect on gameplay because only the

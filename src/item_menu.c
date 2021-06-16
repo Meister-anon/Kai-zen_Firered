@@ -1370,7 +1370,7 @@ static void OpenContextMenu(u8 taskId)
         sContextMenuNumItems = 2;
         break;
     default:
-        if (MenuHelpers_LinkSomething() == TRUE || InUnionRoom() == TRUE)
+        if (MenuHelpers_LinkSomething() == TRUE)
         {
             if (gSpecialVar_ItemId == ITEM_TM_CASE || gSpecialVar_ItemId == ITEM_BERRY_POUCH)
             {
@@ -2025,10 +2025,10 @@ static void Task_TryDoItemDeposit(u8 taskId)
 bool8 UseRegisteredKeyItemOnField(void)
 {
     u8 taskId;
-    if (InUnionRoom() == TRUE)
+   /*if (InUnionRoom() == TRUE)
         return FALSE;
     DismissMapNamePopup();
-    ChangeBgY(0, 0, 0);
+    ChangeBgY(0, 0, 0);*/
     if (gSaveBlock1Ptr->registeredItem != ITEM_NONE)
     {
         if (CheckBagHasItem(gSaveBlock1Ptr->registeredItem, 1) == TRUE)
@@ -2177,8 +2177,9 @@ void InitPokedudeBag(u8 a0)
     switch (a0)
     {
     default:
-        cb2 = CB2_ReturnToTeachyTV;
-        location = a0;
+        return;
+        //cb2 = CB2_ReturnToTeachyTV;
+        //location = a0;
         break;
     case 7:
         cb2 = SetCB2ToReshowScreenAfterMenu2;
@@ -2197,8 +2198,8 @@ static bool8 Task_BButtonInterruptTeachyTv(u8 taskId)
     if (JOY_NEW(B_BUTTON))
     {
         RestorePlayerBag();
-        SetTeachyTvControllerModeToResume();
-        sBagMenuDisplay->exitCB = CB2_ReturnToTeachyTV;
+       // SetTeachyTvControllerModeToResume();
+        //sBagMenuDisplay->exitCB = CB2_ReturnToTeachyTV;
         gTasks[taskId].func = Task_Pokedude_FadeFromBag;
         return TRUE;
     }

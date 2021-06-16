@@ -781,11 +781,11 @@ CableClub_EventScript_EnterUnionRoom:: @ 81BBA94
 	hideobject OBJ_EVENT_ID_PLAYER, 0
 	closedoor 5, 1
 	waitdooranim
-	special Script_ResetUnionRoomTrade
+ @	special Script_ResetUnionRoomTrade
 	special SetCableClubWarp
 	warpteleport2 MAP_UNION_ROOM, 255, 7, 11
 	waitstate
-	special UnionRoomSpecial
+@	special UnionRoomSpecial
 	waitstate
 	end
 
@@ -875,7 +875,7 @@ CableClub_EventScript_WirelessTrade:: @ 81BBC69
 	compare VAR_RESULT, FALSE
 	goto_if_eq CableClub_EventScript_AbortLink
 	setvar VAR_0x8004, LINK_GROUP_TRADE
-	goto CableClub_EventScript_SaveAndChooseLinkLeader
+	@ goto CableClub_EventScript_SaveAndChooseLinkLeader
 	end
 
 CableClub_EventScript_WirelessBattleSelect:: @ 81BBC97
@@ -893,7 +893,7 @@ CableClub_EventScript_WirelessBattleSelect:: @ 81BBC97
 
 CableClub_EventScript_WirelessSingleBattle:: @ 81BBCEA
 	setvar VAR_0x8004, LINK_GROUP_SINGLE_BATTLE
-	goto CableClub_EventScript_SaveAndChooseLinkLeader
+	@ goto CableClub_EventScript_SaveAndChooseLinkLeader
 	end
 
 CableClub_EventScript_WirelessDoubleBattle:: @ 81BBCF5
@@ -901,7 +901,7 @@ CableClub_EventScript_WirelessDoubleBattle:: @ 81BBCF5
 	compare VAR_RESULT, PLAYER_HAS_TWO_USABLE_MONS
 	goto_if_ne CableClub_EventScript_TwoMonsNeededForWirelessDoubleBattle
 	setvar VAR_0x8004, LINK_GROUP_DOUBLE_BATTLE
-	goto CableClub_EventScript_SaveAndChooseLinkLeader
+	@ goto CableClub_EventScript_SaveAndChooseLinkLeader
 	end
 
 CableClub_EventScript_TwoMonsNeededForWirelessDoubleBattle:: @ 81BBD0E
@@ -911,7 +911,7 @@ CableClub_EventScript_TwoMonsNeededForWirelessDoubleBattle:: @ 81BBD0E
 
 CableClub_EventScript_WirelessMultiBattle:: @ 81BBD1C
 	setvar VAR_0x8004, LINK_GROUP_MULTI_BATTLE
-	goto CableClub_EventScript_SaveAndChooseLinkLeader
+	@ goto CableClub_EventScript_SaveAndChooseLinkLeader
 	end
 
 CableClub_EventScript_WirelessBattleInfo:: @ 81BBD27
@@ -923,132 +923,132 @@ CableClub_EventScript_NeedBerryForBerryCrush:: @ 81BBD61
 	goto CableClub_EventScript_DirectCornerSelectService
 	end
 
-CableClub_EventScript_SaveAndChooseLinkLeader:: @ 81BBD6F
-	call EventScript_AskSaveGame
-	compare VAR_RESULT, 0
-	goto_if_eq CableClub_EventScript_AbortLink
-	switch VAR_0x8004
-	case LINK_GROUP_TRADE, CableClub_EventScript_ChooseLinkLeaderFrom2
-	case LINK_GROUP_SINGLE_BATTLE, CableClub_EventScript_ChooseLinkLeaderFrom2
-	case LINK_GROUP_DOUBLE_BATTLE, CableClub_EventScript_ChooseLinkLeaderFrom2
-	case LINK_GROUP_MULTI_BATTLE, CableClub_EventScript_ChooseLinkLeaderFrom4
-	case LINK_GROUP_BERRY_CRUSH, CableClub_EventScript_ChooseLinkLeader
-	end
+@CableClub_EventScript_SaveAndChooseLinkLeader:: @ 81BBD6F
+@	call EventScript_AskSaveGame
+@	compare VAR_RESULT, 0
+@	goto_if_eq CableClub_EventScript_AbortLink
+@	switch VAR_0x8004
+@	case LINK_GROUP_TRADE, CableClub_EventScript_ChooseLinkLeaderFrom2
+@	case LINK_GROUP_SINGLE_BATTLE, CableClub_EventScript_ChooseLinkLeaderFrom2
+@	case LINK_GROUP_DOUBLE_BATTLE, CableClub_EventScript_ChooseLinkLeaderFrom2
+@	case LINK_GROUP_MULTI_BATTLE, CableClub_EventScript_ChooseLinkLeaderFrom4
+@	case LINK_GROUP_BERRY_CRUSH, CableClub_EventScript_ChooseLinkLeader
+@	end
 
-CableClub_EventScript_ChooseLinkLeaderFrom2:: @ 81BBDBC
-	textcolor 3
-	message CableClub_Text_ChooseGroupLeaderOfTwo
-	waitmessage
-	call EventScript_RestorePrevTextColor
-	multichoice 13, 6, MULTICHOICE_JOIN_OR_LEAD, FALSE
-	switch VAR_RESULT
-	case 0, CableClub_EventScript_TryJoinGroup2Players
-	case 1, CableClub_EventScript_TryLeadGroup2Players
-	case 2, CableClub_EventScript_AbortLink
-	case SCR_MENU_CANCEL, CableClub_EventScript_AbortLink
-	end
+@CableClub_EventScript_ChooseLinkLeaderFrom2:: @ 81BBDBC
+@	textcolor 3
+@	message CableClub_Text_ChooseGroupLeaderOfTwo
+@	waitmessage
+@	call EventScript_RestorePrevTextColor
+@	multichoice 13, 6, MULTICHOICE_JOIN_OR_LEAD, FALSE
+@	switch VAR_RESULT
+@	case 0, CableClub_EventScript_TryJoinGroup2Players
+@	case 1, CableClub_EventScript_TryLeadGroup2Players
+@	case 2, CableClub_EventScript_AbortLink
+@	case SCR_MENU_CANCEL, CableClub_EventScript_AbortLink
+@	end
 
-CableClub_EventScript_TryLeadGroup2Players:: @ 81BBE00
-	call CableClub_EventScript_TryBecomeLinkLeader
-	compare VAR_RESULT, 1
-	goto_if_eq CableClub_EventScript_EnterWirelessLinkRoom
-	compare VAR_RESULT, 5
-	goto_if_eq CableClub_EventScript_ChooseLinkLeaderFrom2
-	compare VAR_RESULT, 8
-	goto_if_eq CableClub_EventScript_TryLeadGroup2Players
-	release
-	return
+@CableClub_EventScript_TryLeadGroup2Players:: @ 81BBE00
+@	call CableClub_EventScript_TryBecomeLinkLeader
+@	compare VAR_RESULT, 1
+@	goto_if_eq CableClub_EventScript_EnterWirelessLinkRoom
+@	compare VAR_RESULT, 5
+@	goto_if_eq CableClub_EventScript_ChooseLinkLeaderFrom2
+@	compare VAR_RESULT, 8
+@	goto_if_eq CableClub_EventScript_TryLeadGroup2Players
+@	release
+@	return
 
-CableClub_EventScript_TryJoinGroup2Players:: @ 81BBE28
-	call CableClub_EventScript_TryJoinLinkGroup
-	compare VAR_RESULT, 1
-	goto_if_eq CableClub_EventScript_EnterWirelessLinkRoom
-	compare VAR_RESULT, 5
-	goto_if_eq CableClub_EventScript_ChooseLinkLeaderFrom2
-	compare VAR_RESULT, 8
-	goto_if_eq CableClub_EventScript_TryJoinGroup2Players
-	release
-	return
+@CableClub_EventScript_TryJoinGroup2Players:: @ 81BBE28
+@	call CableClub_EventScript_TryJoinLinkGroup
+@	compare VAR_RESULT, 1
+@	goto_if_eq CableClub_EventScript_EnterWirelessLinkRoom
+@	compare VAR_RESULT, 5
+@	goto_if_eq CableClub_EventScript_ChooseLinkLeaderFrom2
+@	compare VAR_RESULT, 8
+@	goto_if_eq CableClub_EventScript_TryJoinGroup2Players
+@	release
+@	return
 
-CableClub_EventScript_ChooseLinkLeaderFrom4:: @ 81BBE50
-	textcolor 3
-	message CableClub_Text_ChooseGroupLeaderOfFour
-	waitmessage
-	call EventScript_RestorePrevTextColor
-	multichoice 13, 6, MULTICHOICE_JOIN_OR_LEAD, FALSE
-	switch VAR_RESULT
-	case 0, CableClub_EventScript_TryJoinGroup4Players
-	case 1, CableClub_EventScript_TryLeadGroup4Players
-	case 2, CableClub_EventScript_AbortLink
-	case SCR_MENU_CANCEL, CableClub_EventScript_AbortLink
-	end
+@CableClub_EventScript_ChooseLinkLeaderFrom4:: @ 81BBE50
+@	textcolor 3
+@	message CableClub_Text_ChooseGroupLeaderOfFour
+@	waitmessage
+@	call EventScript_RestorePrevTextColor
+@	multichoice 13, 6, MULTICHOICE_JOIN_OR_LEAD, FALSE
+@	switch VAR_RESULT
+@	case 0, CableClub_EventScript_TryJoinGroup4Players
+@	case 1, CableClub_EventScript_TryLeadGroup4Players
+@	case 2, CableClub_EventScript_AbortLink
+@	case SCR_MENU_CANCEL, CableClub_EventScript_AbortLink
+@	end
 
-CableClub_EventScript_TryLeadGroup4Players:: @ 81BBE94
-	call CableClub_EventScript_TryBecomeLinkLeader
-	compare VAR_RESULT, 1
-	goto_if_eq CableClub_EventScript_EnterWirelessLinkRoom
-	compare VAR_RESULT, 5
-	goto_if_eq CableClub_EventScript_ChooseLinkLeaderFrom4
-	compare VAR_RESULT, 8
-	goto_if_eq CableClub_EventScript_TryLeadGroup4Players
-	release
-	return
+@CableClub_EventScript_TryLeadGroup4Players:: @ 81BBE94
+@	call CableClub_EventScript_TryBecomeLinkLeader
+@	compare VAR_RESULT, 1
+@	goto_if_eq CableClub_EventScript_EnterWirelessLinkRoom
+@	compare VAR_RESULT, 5
+@	goto_if_eq CableClub_EventScript_ChooseLinkLeaderFrom4
+@	compare VAR_RESULT, 8
+@	goto_if_eq CableClub_EventScript_TryLeadGroup4Players
+@	release
+@	return
 
-CableClub_EventScript_TryJoinGroup4Players:: @ 81BBEBC
-	call CableClub_EventScript_TryJoinLinkGroup
-	compare VAR_RESULT, 1
-	goto_if_eq CableClub_EventScript_EnterWirelessLinkRoom
-	compare VAR_RESULT, 5
-	goto_if_eq CableClub_EventScript_ChooseLinkLeaderFrom4
-	compare VAR_RESULT, 8
-	goto_if_eq CableClub_EventScript_TryJoinGroup4Players
-	release
-	return
+@CableClub_EventScript_TryJoinGroup4Players:: @ 81BBEBC
+@	call CableClub_EventScript_TryJoinLinkGroup
+@	compare VAR_RESULT, 1
+@	goto_if_eq CableClub_EventScript_EnterWirelessLinkRoom
+@	compare VAR_RESULT, 5
+@	goto_if_eq CableClub_EventScript_ChooseLinkLeaderFrom4
+@	compare VAR_RESULT, 8
+@	goto_if_eq CableClub_EventScript_TryJoinGroup4Players
+@	release
+@	return
 
-CableClub_EventScript_ChooseLinkLeader:: @ 81BBEE4
-	textcolor 3
-	message CableClub_Text_ChooseGroupLeader
-	waitmessage
-	call EventScript_RestorePrevTextColor
-	multichoice 13, 6, MULTICHOICE_JOIN_OR_LEAD, FALSE
-	switch VAR_RESULT
-	case 0, CableClub_EventScript_TryJoinGroupXPlayers
-	case 1, CableClub_EventScript_TryLeadGroupXPlayers
-	case 2, CableClub_EventScript_AbortLink
-	case SCR_MENU_CANCEL, CableClub_EventScript_AbortLink
-	end
+@CableClub_EventScript_ChooseLinkLeader:: @ 81BBEE4
+@	textcolor 3
+@	message CableClub_Text_ChooseGroupLeader
+@	waitmessage
+@	call EventScript_RestorePrevTextColor
+@	multichoice 13, 6, MULTICHOICE_JOIN_OR_LEAD, FALSE
+@	switch VAR_RESULT
+@	case 0, CableClub_EventScript_TryJoinGroupXPlayers
+@	case 1, CableClub_EventScript_TryLeadGroupXPlayers
+@	case 2, CableClub_EventScript_AbortLink
+@	case SCR_MENU_CANCEL, CableClub_EventScript_AbortLink
+@	end
 
-CableClub_EventScript_TryLeadGroupXPlayers:: @ 81BBF28
-	call CableClub_EventScript_TryBecomeLinkLeader
-	compare VAR_RESULT, 1
-	goto_if_eq CableClub_EventScript_EnterWirelessLinkRoom
-	compare VAR_RESULT, 5
-	goto_if_eq CableClub_EventScript_ChooseLinkLeader
-	compare VAR_RESULT, 8
-	goto_if_eq CableClub_EventScript_TryLeadGroupXPlayers
-	release
-	return
+@CableClub_EventScript_TryLeadGroupXPlayers:: @ 81BBF28
+@	call CableClub_EventScript_TryBecomeLinkLeader
+@	compare VAR_RESULT, 1
+@	goto_if_eq CableClub_EventScript_EnterWirelessLinkRoom
+@	compare VAR_RESULT, 5
+@	goto_if_eq CableClub_EventScript_ChooseLinkLeader
+@	compare VAR_RESULT, 8
+@	goto_if_eq CableClub_EventScript_TryLeadGroupXPlayers
+@	release
+@	return
 
-CableClub_EventScript_TryJoinGroupXPlayers:: @ 81BBF50
-	call CableClub_EventScript_TryJoinLinkGroup
-	compare VAR_RESULT, 1
-	goto_if_eq CableClub_EventScript_EnterWirelessLinkRoom
-	compare VAR_RESULT, 5
-	goto_if_eq CableClub_EventScript_ChooseLinkLeader
-	compare VAR_RESULT, 8
-	goto_if_eq CableClub_EventScript_TryJoinGroupXPlayers
-	release
-	return
+@CableClub_EventScript_TryJoinGroupXPlayers:: @ 81BBF50
+@	call CableClub_EventScript_TryJoinLinkGroup
+@	compare VAR_RESULT, 1
+@	goto_if_eq CableClub_EventScript_EnterWirelessLinkRoom
+@	compare VAR_RESULT, 5
+@	goto_if_eq CableClub_EventScript_ChooseLinkLeader
+@	compare VAR_RESULT, 8
+@	goto_if_eq CableClub_EventScript_TryJoinGroupXPlayers
+@	release
+@	return
 
-CableClub_EventScript_TryBecomeLinkLeader:: @ 81BBF78
-	special TryBecomeLinkLeader
-	waitstate
-	return
+@CableClub_EventScript_TryBecomeLinkLeader:: @ 81BBF78
+@	special TryBecomeLinkLeader
+@	waitstate
+@	return
 
-CableClub_EventScript_TryJoinLinkGroup:: @ 81BBF80
-	special TryJoinLinkGroup
-	waitstate
-	return
+@CableClub_EventScript_TryJoinLinkGroup:: @ 81BBF80
+@	special TryJoinLinkGroup
+@	waitstate
+@	return
 
 CableClub_EventScript_EnterWirelessLinkRoom:: @ 81BBF88
 	messageautoscroll CableClub_Text_DirectYouToYourRoom
@@ -1120,7 +1120,7 @@ CableClub_EventScript_CloseGameCornerBarrier:: @ 81BC052
 	return
 
 CableClub_OnResume:: @ 81BC05C
-	special InitUnionRoom
+	@ special InitUnionRoom
 	end
 
 JoyfulGameCorner_EventScript_InfoMan2:: @ 81BC060
@@ -1162,40 +1162,40 @@ JoyfulGameCorner_EventScript_MinigameAttendant:: @ 81BC0CE
 
 
 
-CableClub_EventScript_ChooseLinkLeaderMinigame:: @ 81BC1CE
-	textcolor 3
-	message CableClub_Text_ChooseGroupLeader
-	waitmessage
-	call EventScript_RestorePrevTextColor
-	multichoice 13, 6, MULTICHOICE_JOIN_OR_LEAD, FALSE
-	switch VAR_RESULT
-	case 0, CableClub_EventScript_TryJoinMinigameLinkGroup
-	case 1, CableClub_EventScript_TryBecomeMinigameLinkLeader
-	case 2, CableClub_EventScript_AbortMinigame
-	case SCR_MENU_CANCEL, CableClub_EventScript_AbortMinigame
-	end
+@CableClub_EventScript_ChooseLinkLeaderMinigame:: @ 81BC1CE
+@	textcolor 3
+@	message CableClub_Text_ChooseGroupLeader
+@	waitmessage
+@	call EventScript_RestorePrevTextColor
+@	multichoice 13, 6, MULTICHOICE_JOIN_OR_LEAD, FALSE
+@	switch VAR_RESULT
+@	case 0, CableClub_EventScript_TryJoinMinigameLinkGroup
+@	case 1, CableClub_EventScript_TryBecomeMinigameLinkLeader
+@	case 2, CableClub_EventScript_AbortMinigame
+@	case SCR_MENU_CANCEL, CableClub_EventScript_AbortMinigame
+@	end
 
-CableClub_EventScript_TryBecomeMinigameLinkLeader:: @ 81BC212
-	call CableClub_EventScript_TryBecomeLinkLeader
-	compare VAR_RESULT, 1
-	goto_if_eq CableClub_EventScript_EnterMinigame
-	compare VAR_RESULT, 5
-	goto_if_eq CableClub_EventScript_ChooseLinkLeaderMinigame
-	compare VAR_RESULT, 8
-	goto_if_eq CableClub_EventScript_TryBecomeMinigameLinkLeader
-	release
-	return
+@CableClub_EventScript_TryBecomeMinigameLinkLeader:: @ 81BC212
+@	call CableClub_EventScript_TryBecomeLinkLeader
+@	compare VAR_RESULT, 1
+@	goto_if_eq CableClub_EventScript_EnterMinigame
+@	compare VAR_RESULT, 5
+@	goto_if_eq CableClub_EventScript_ChooseLinkLeaderMinigame
+@	compare VAR_RESULT, 8
+@	goto_if_eq CableClub_EventScript_TryBecomeMinigameLinkLeader
+@	release
+@	return
 
-CableClub_EventScript_TryJoinMinigameLinkGroup:: @ 81BC23A
-	call CableClub_EventScript_TryJoinLinkGroup
-	compare VAR_RESULT, 1
-	goto_if_eq CableClub_EventScript_EnterMinigame
-	compare VAR_RESULT, 5
-	goto_if_eq CableClub_EventScript_ChooseLinkLeaderMinigame
-	compare VAR_RESULT, 8
-	goto_if_eq CableClub_EventScript_TryJoinMinigameLinkGroup
-	release
-	return
+@CableClub_EventScript_TryJoinMinigameLinkGroup:: @ 81BC23A
+@	call CableClub_EventScript_TryJoinLinkGroup
+@	compare VAR_RESULT, 1
+@	goto_if_eq CableClub_EventScript_EnterMinigame
+@	compare VAR_RESULT, 5
+@	goto_if_eq CableClub_EventScript_ChooseLinkLeaderMinigame
+@	compare VAR_RESULT, 8
+@	goto_if_eq CableClub_EventScript_TryJoinMinigameLinkGroup
+@	release
+@	return
 
 CableClub_EventScript_EnterMinigame:: @ 81BC262
 	messageautoscroll Text_AllGoodToGo

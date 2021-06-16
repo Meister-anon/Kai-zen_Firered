@@ -193,7 +193,7 @@ TwoIsland_EventScript_Woman:: @ 8167755
 TwoIsland_EventScript_Beauty:: @ 816775E
 	lock
 	faceplayer
-	famechecker FAMECHECKER_BRUNO, 4
+	@  famechecker FAMECHECKER_BRUNO, 4
 	msgbox TwoIsland_Text_BrunoCameToIslandWhileBack
 	release
 	end

@@ -3,7 +3,7 @@
 
 #include "main.h"
 #include "constants/fame_checker.h"
-
+/*
 enum {
     FCWINDOWID_LIST,
     FCWINDOWID_UIHELP,
@@ -18,6 +18,6 @@ void ResetFameChecker(void);
 void FullyUnlockFameChecker(void);
 void UseFameChecker(MainCallback savedCallback);
 void SetFlavorTextFlagFromSpecialVars(void);
-void UpdatePickStateFromSpecialVar8005(void);
+void UpdatePickStateFromSpecialVar8005(void);*/
 
 #endif //GUARD_FAME_CHECKER_H

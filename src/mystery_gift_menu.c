@@ -1229,21 +1229,22 @@ void task00_mystery_gift(u8 taskId)
         case 0:
             if (data->source == 1)
             {
-                MEvent_CreateTask_CardOrNewsWithFriend(ACTIVITY_WCARD2);
+                return;
+                // MEvent_CreateTask_CardOrNewsWithFriend(ACTIVITY_WCARD2);
             }
             else if (data->source == 0)
             {
-                MEvent_CreateTask_CardOrNewsOverWireless(ACTIVITY_WCARD2);
+                return;// MEvent_CreateTask_CardOrNewsOverWireless(ACTIVITY_WCARD2);
             }
             break;
         case 1:
             if (data->source == 1)
             {
-                MEvent_CreateTask_CardOrNewsWithFriend(ACTIVITY_WNEWS2);
+                return; // MEvent_CreateTask_CardOrNewsWithFriend(ACTIVITY_WNEWS2);
             }
             else if (data->source == 0)
             {
-                MEvent_CreateTask_CardOrNewsOverWireless(ACTIVITY_WNEWS2);
+                return; //  MEvent_CreateTask_CardOrNewsOverWireless(ACTIVITY_WNEWS2);
             }
             break;
         }
@@ -1591,10 +1592,10 @@ void task00_mystery_gift(u8 taskId)
             switch (data->IsCardOrNews)
             {
             case 0:
-                MEvent_CreateTask_Leader(ACTIVITY_WCARD2);
+                return;// MEvent_CreateTask_Leader(ACTIVITY_WCARD2);
                 break;
             case 1:
-                MEvent_CreateTask_Leader(ACTIVITY_WNEWS2);
+                return; // MEvent_CreateTask_Leader(ACTIVITY_WNEWS2);
                 break;
             }
             data->source = 1;

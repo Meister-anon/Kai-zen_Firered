@@ -147,7 +147,7 @@ FourIsland_EventScript_OldWoman:: @ 8167E2E
 	end
 
 FourIsland_EventScript_OldWomanLoreleiLeft:: @ 8167E43
-	famechecker FAMECHECKER_LORELEI, 5
+	@  famechecker FAMECHECKER_LORELEI, 5
 	msgbox FourIsland_Text_LoreleiMetLaprasAsChild
 	release
 	end
@@ -155,7 +155,7 @@ FourIsland_EventScript_OldWomanLoreleiLeft:: @ 8167E43
 FourIsland_EventScript_LittleGirl:: @ 8167E5A
 	lock
 	faceplayer
-	famechecker FAMECHECKER_LORELEI, 4
+	@  famechecker FAMECHECKER_LORELEI, 4
 	msgbox FourIsland_Text_LoreleiHasLotsOfStuffedDolls
 	release
 	end

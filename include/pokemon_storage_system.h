@@ -2,7 +2,7 @@
 #define GUARD_POKEMON_STORAGE_SYSTEM_H
 
 #include "global.h"
-
+//important
 #define TOTAL_BOXES_COUNT       14 // so if I'm making all pokemon/forms availale I'll need way more than 14 slots, I'm prob need to double or triple that.
 #define IN_BOX_COUNT            30 //that requires save block expansion, but even after that, managing so many boxes would still be too tedious.
 

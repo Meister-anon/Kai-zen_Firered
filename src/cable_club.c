@@ -877,7 +877,7 @@ static void Task_StartWirelessCableClubTrade(u8 taskId)
     case 3:
         if (IsLinkTaskFinished())
         {
-            UnionRoom_CreateTask_CallCB2ReturnFromLinkTrade();
+            //UnionRoom_CreateTask_CallCB2ReturnFromLinkTrade();
             DestroyTask(taskId);
         }
         break;

@@ -97,7 +97,7 @@ u32 gFiller_3003F9C; // here?
 u8 gLastSendQueueCount;
 struct Link gLink;
 u8 gLastRecvQueueCount;
-u16 gLinkSavedIme;
+u16 gLinkSavedIme; //zsonic
 
 EWRAM_DATA bool8 gLinkTestDebugValuesEnabled = FALSE;
 EWRAM_DATA bool8 gUnknown_2022111 = FALSE;

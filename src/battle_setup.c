@@ -522,7 +522,7 @@ static u8 GetBattleTransitionTypeByMap(void)
     return B_TRANSITION_BIG_POKEBALL;
 }
 
-static u16 GetSumOfPlayerPartyLevel(u8 numMons)
+static u16 GetSumOfPlayerPartyLevel(u8 numMons) //important useful data
 {
     u8 sum = 0;
     s32 i;
@@ -629,7 +629,14 @@ static u8 GetTrainerBattleTransition(void)
         return B_TRANSITION_BLUE;
     if (gTrainers[gTrainerBattleOpponent_A].doubleBattle == TRUE)
         minPartyCount = 2; // double battles always at least have 2 pokemon.
-    else
+    else //important, test 2 on 1 battles
+        //Ketsuban in pret, informed me that by default if 1 pokemon in double battle
+        //player pokemon will get split between both positions.
+
+        //so will prob have to set up special battle type just for that, 
+        //where there are 2 positions on opponent side, and only 1 on player side.
+        
+        //maybe set it be used in the case you only have 1.
         minPartyCount = 1;
     transitionType = GetBattleTransitionTypeByMap();
     enemyLevel = GetSumOfEnemyPartyLevel(gTrainerBattleOpponent_A, minPartyCount);
@@ -790,18 +797,18 @@ const u8 *BattleSetup_ConfigureTrainerBattle(const u8 *data)
         TrainerBattleLoadArgs(sContinueScriptDoubleBattleParams, data);
         SetMapVarsToTrainer();
         return EventScript_TryDoDoubleTrainerBattle;
-    case TRAINER_BATTLE_REMATCH_DOUBLE:
+    /*case TRAINER_BATTLE_REMATCH_DOUBLE:
         FinishRecordingQuestLogScene();
         TrainerBattleLoadArgs(sDoubleBattleParams, data);
         SetMapVarsToTrainer();
-        gTrainerBattleOpponent_A = GetRematchTrainerId(gTrainerBattleOpponent_A);
+        //gTrainerBattleOpponent_A = GetRematchTrainerId(gTrainerBattleOpponent_A);
         return EventScript_TryDoDoubleRematchBattle;
     case TRAINER_BATTLE_REMATCH:
         FinishRecordingQuestLogScene();
         TrainerBattleLoadArgs(sOrdinaryBattleParams, data);
         SetMapVarsToTrainer();
-        gTrainerBattleOpponent_A = GetRematchTrainerId(gTrainerBattleOpponent_A);
-        return EventScript_TryDoRematchBattle;
+        //gTrainerBattleOpponent_A = GetRematchTrainerId(gTrainerBattleOpponent_A);
+        return EventScript_TryDoRematchBattle;*/
     case TRAINER_BATTLE_EARLY_RIVAL:
         TrainerBattleLoadArgs(sEarlyRivalBattleParams, data);
         return EventScript_DoNoIntroTrainerBattle;
@@ -917,11 +924,11 @@ static void CB2_EndTrainerBattle(void)
     }
     else
     {
-        if (gTrainerBattleOpponent_A == TRAINER_SECRET_BASE)
+       /* if (gTrainerBattleOpponent_A == TRAINER_SECRET_BASE)
         {
             SetMainCallback2(CB2_ReturnToFieldContinueScriptPlayMapMusic);
         }
-        else if (IsPlayerDefeated(gBattleOutcome) == TRUE)
+        else */if (IsPlayerDefeated(gBattleOutcome) == TRUE)
         {
             SetMainCallback2(CB2_WhiteOut);
         }
@@ -934,13 +941,13 @@ static void CB2_EndTrainerBattle(void)
     }
 }
 
-static void CB2_EndRematchBattle(void)
+static void CB2_EndRematchBattle(void) //can't just remove rematch far too difficult, have change every trainer script
 {
-    if (gTrainerBattleOpponent_A == TRAINER_SECRET_BASE)
+    /*if (gTrainerBattleOpponent_A == TRAINER_SECRET_BASE)
     {
         SetMainCallback2(CB2_ReturnToFieldContinueScriptPlayMapMusic);
     }
-    else if (IsPlayerDefeated(gBattleOutcome) == TRUE)
+    else */if (IsPlayerDefeated(gBattleOutcome) == TRUE)
     {
         SetMainCallback2(CB2_WhiteOut);
     }
@@ -948,7 +955,7 @@ static void CB2_EndRematchBattle(void)
     {
         SetMainCallback2(CB2_ReturnToFieldContinueScriptPlayMapMusic);
         SetBattledTrainerFlag();
-        ClearRematchStateOfLastTalked();
+        //ClearRematchStateOfLastTalked();
         ResetDeferredLinkEvent();
     }
 }

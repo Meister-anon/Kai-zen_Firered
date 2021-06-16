@@ -35,7 +35,7 @@ FuchsiaCity_EventScript_Youngster:: @ 8166DB8
 FuchsiaCity_EventScript_Lass:: @ 8166DC1
 	lock
 	faceplayer
-	famechecker FAMECHECKER_KOGA, 3
+	@  famechecker FAMECHECKER_KOGA, 3
 	msgbox FuchsiaCity_Text_MyFatherIsGymLeader
 	release
 	end
@@ -63,7 +63,7 @@ FuchsiaCity_EventScript_SafariZoneOfficeSign:: @ 8166DFE
 
 FuchsiaCity_EventScript_GymSign:: @ 8166E07
 	lockall
-	famechecker FAMECHECKER_KOGA, 0
+	@  famechecker FAMECHECKER_KOGA, 0
 	msgbox FuchsiaCity_Text_GymSign
 	releaseall
 	end

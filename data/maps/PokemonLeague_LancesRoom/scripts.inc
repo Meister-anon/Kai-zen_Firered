@@ -102,10 +102,10 @@ PokemonLeague_LancesRoom_Movement_WalkThroughCorridor:: @ 81629F1
 PokemonLeague_LancesRoom_EventScript_Lance:: @ 8162A14
 	lock
 	faceplayer
-	famechecker FAMECHECKER_LANCE, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
+	@  famechecker FAMECHECKER_LANCE, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
 	goto_if_set FLAG_DEFEATED_LANCE, PokemonLeague_LancesRoom_EventScript_PostBattle
-	famechecker FAMECHECKER_LANCE, 0
-	famechecker FAMECHECKER_LANCE, 1
+	@  famechecker FAMECHECKER_LANCE, 0
+	@  famechecker FAMECHECKER_LANCE, 1
 	call_if_unset FLAG_SYS_GAME_CLEAR, PokemonLeague_LancesRoom_EventScript_Intro
 	call_if_set FLAG_SYS_GAME_CLEAR, PokemonLeague_LancesRoom_EventScript_RematchIntro
 	setflag FLAG_TEMP_3

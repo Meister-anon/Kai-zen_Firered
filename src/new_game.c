@@ -119,16 +119,16 @@ void NewGameInitData(void)
     ZeroEnemyPartyMons();
     sub_80549D4();
     ClearSav1();
-    ClearMailData();
+    //ClearMailData();
     gSaveBlock2Ptr->specialSaveWarpFlags = 0;
-    gSaveBlock2Ptr->gcnLinkFlags = 0;
+    //gSaveBlock2Ptr->gcnLinkFlags = 0;
     gSaveBlock2Ptr->field_AC = 1;
-    gSaveBlock2Ptr->field_AD = 0;
+    gSaveBlock2Ptr->field_AD = 0; //pretty sure these are pokedex stuff
     InitPlayerTrainerId();
     PlayTimeCounter_Reset();
     ClearPokedexFlags();
     InitEventData();
-    ResetFameChecker();
+    //ResetFameChecker();
     SetMoney(&gSaveBlock1Ptr->money, 3000);
     ResetGameStats();
     //ClearPlayerLinkBattleRecords();
@@ -145,7 +145,7 @@ void NewGameInitData(void)
     sub_809C794();
     InitEasyChatPhrases();
     ResetTrainerFanClub();
-    UnionRoomChat_InitializeRegisteredTexts();
+    //UnionRoomChat_InitializeRegisteredTexts();
     //ResetMiniGamesResults();
     InitMEventData();
     SetAllRenewableItemFlags();

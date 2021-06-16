@@ -1079,9 +1079,9 @@ enum
     MENU_ITEM,
     MENU_GIVE,
     MENU_TAKE_ITEM,
-    MENU_MAIL,
-    MENU_TAKE_MAIL,
-    MENU_READ,
+    //MENU_MAIL,
+    //MENU_TAKE_MAIL,
+    //MENU_READ,
     MENU_CANCEL2,
     MENU_SHIFT,
     MENU_SEND_OUT,
@@ -1106,18 +1106,18 @@ static struct
     [MENU_ITEM] = {gText_Item, CursorCB_Item},
     [MENU_GIVE] = {gOtherText_Give, CursorCB_Give},
     [MENU_TAKE_ITEM] = {gText_Take, CursorCB_TakeItem},
-    [MENU_MAIL] = {gText_Mail, CursorCB_Mail},
-    [MENU_TAKE_MAIL] = {gText_Take2, CursorCB_TakeMail},
-    [MENU_READ] = {gText_Read2, CursorCB_Read},
+    //[MENU_MAIL] = {gText_Mail, CursorCB_Mail},
+    //[MENU_TAKE_MAIL] = {gText_Take2, CursorCB_TakeMail},
+    //[MENU_READ] = {gText_Read2, CursorCB_Read},
     [MENU_CANCEL2] = {gFameCheckerText_Cancel, CursorCB_Cancel2},
     [MENU_SHIFT] = {gText_Shift, CursorCB_SendMon},
     [MENU_SEND_OUT] = {gText_SendOut, CursorCB_SendMon},
     [MENU_ENTER] = {gText_Enter, CursorCB_Enter},
     [MENU_NO_ENTRY] = {gText_NoEntry, CursorCB_NoEntry},
     [MENU_STORE] = {gText_Store, CursorCB_Store},
-    [MENU_REGISTER] = {gText_Register, CursorCB_Register},
-    [MENU_TRADE1] = {gText_Trade4, CursorCB_Trade1},
-    [MENU_TRADE2] = {gText_Trade4, CursorCB_Trade2},
+    //[MENU_REGISTER] = {gText_Register, CursorCB_Register},
+    //[MENU_TRADE1] = {gText_Trade4, CursorCB_Trade1},
+    //[MENU_TRADE2] = {gText_Trade4, CursorCB_Trade2},
     [MENU_FIELD_MOVES + FIELD_MOVE_FLASH] = {gMoveNames[MOVE_FLASH], CursorCB_FieldMove},
     [MENU_FIELD_MOVES + FIELD_MOVE_CUT] = {gMoveNames[MOVE_CUT], CursorCB_FieldMove},
     [MENU_FIELD_MOVES + FIELD_MOVE_FLY] = {gMoveNames[MOVE_FLY], CursorCB_FieldMove},
@@ -1140,10 +1140,11 @@ static const u8 sPartyMenuAction_EnterSummaryCancel[] = {MENU_ENTER, MENU_SUMMAR
 static const u8 sPartyMenuAction_NoEntrySummaryCancel[] = {MENU_NO_ENTRY, MENU_SUMMARY, MENU_CANCEL1};
 static const u8 sPartyMenuAction_StoreSummaryCancel[] = {MENU_STORE, MENU_SUMMARY, MENU_CANCEL1};
 static const u8 sPartyMenuAction_GiveTakeItemCancel[] = {MENU_GIVE, MENU_TAKE_ITEM, MENU_CANCEL2};
-static const u8 sPartyMenuAction_ReadTakeMailCancel[] = {MENU_READ, MENU_TAKE_MAIL, MENU_CANCEL2};
+//static const u8 sPartyMenuAction_ReadTakeMailCancel[] = {MENU_READ, MENU_TAKE_MAIL, MENU_CANCEL2};
 static const u8 sPartyMenuAction_RegisterSummaryCancel[] = {MENU_REGISTER, MENU_SUMMARY, MENU_CANCEL1};
 static const u8 sPartyMenuAction_TradeSummaryCancel1[] = {MENU_TRADE1, MENU_SUMMARY, MENU_CANCEL1};
 static const u8 sPartyMenuAction_TradeSummaryCancel2[] = {MENU_TRADE2, MENU_SUMMARY, MENU_CANCEL1};
+//think I need to only remove mail, because other options have other places they could be used besides union room
 
 // IDs for the action lists that appear when a party mon is selected
 enum
@@ -1157,7 +1158,7 @@ enum
     ACTIONS_STORE,
     ACTIONS_SUMMARY_ONLY,
     ACTIONS_ITEM,
-    ACTIONS_MAIL,
+  //  ACTIONS_MAIL,
     ACTIONS_REGISTER,
     ACTIONS_TRADE,
     ACTIONS_SPIN_TRADE,
@@ -1174,7 +1175,7 @@ static const u8 *const sPartyMenuActions[] =
     [ACTIONS_STORE]         = sPartyMenuAction_StoreSummaryCancel,
     [ACTIONS_SUMMARY_ONLY]  = sPartyMenuAction_SummaryCancel,
     [ACTIONS_ITEM]          = sPartyMenuAction_GiveTakeItemCancel,
-    [ACTIONS_MAIL]          = sPartyMenuAction_ReadTakeMailCancel,
+    //[ACTIONS_MAIL]          = sPartyMenuAction_ReadTakeMailCancel,
     [ACTIONS_REGISTER]      = sPartyMenuAction_RegisterSummaryCancel,
     [ACTIONS_TRADE]         = sPartyMenuAction_TradeSummaryCancel1,
     [ACTIONS_SPIN_TRADE]    = sPartyMenuAction_TradeSummaryCancel2,
@@ -1191,7 +1192,7 @@ static const u8 sPartyMenuActionCounts[] =
     [ACTIONS_STORE]         = NELEMS(sPartyMenuAction_StoreSummaryCancel),
     [ACTIONS_SUMMARY_ONLY]  = NELEMS(sPartyMenuAction_SummaryCancel),
     [ACTIONS_ITEM]          = NELEMS(sPartyMenuAction_GiveTakeItemCancel),
-    [ACTIONS_MAIL]          = NELEMS(sPartyMenuAction_ReadTakeMailCancel),
+    //[ACTIONS_MAIL]          = NELEMS(sPartyMenuAction_ReadTakeMailCancel),
     [ACTIONS_REGISTER]      = NELEMS(sPartyMenuAction_RegisterSummaryCancel),
     [ACTIONS_TRADE]         = NELEMS(sPartyMenuAction_TradeSummaryCancel1),
     [ACTIONS_SPIN_TRADE]    = NELEMS(sPartyMenuAction_TradeSummaryCancel2),
@@ -1235,7 +1236,8 @@ static const u8 *const sUnionRoomTradeMessages[] =
     [UR_TRADE_MSG_CANT_TRADE_WITH_PARTNER_1 - 1]   = gText_CantTradeWithTrainer,
     [UR_TRADE_MSG_CANT_TRADE_WITH_PARTNER_2 - 1]   = gText_CantTradeWithTrainer,
 };
-
+//important, for adding tms, will have to update this list,
+//and keep it in proper order
 static const u16 sTMHMMoves[] =
 {
     MOVE_FOCUS_PUNCH,

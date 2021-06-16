@@ -8,8 +8,10 @@
 #include "menu_indicators.h"
 #include "constants/songs.h"
 
-static EWRAM_DATA u8 sWindowIds[3] = {};
-static EWRAM_DATA struct ListMenuItem * sListMenuItems = NULL;
+//static EWRAM_DATA u8 sWindowIds[3] = {};
+//static EWRAM_DATA struct ListMenuItem * sListMenuItems = NULL;
+
+//zsonic supposedly remove mail option from pcs, I'm ok with that, if I do it right.
 
 static void MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu * list);
 
@@ -44,7 +46,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
 static const u8 sTextColor[3] = {1, 2, 3};
 static const u8 sString_Dummy[] = _("");
 
-bool8 MailboxPC_InitBuffers(u8 num)
+/*bool8 MailboxPC_InitBuffers(u8 num)
 {
     u8 i;
 
@@ -137,4 +139,4 @@ void MailboxPC_AddScrollIndicatorArrows(struct PlayerPCItemPageStruct * playerPc
 void MailboxPC_DestroyListMenuBuffer(void)
 {
     Free(sListMenuItems);
-}
+}*/

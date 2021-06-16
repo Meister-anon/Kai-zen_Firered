@@ -77,7 +77,7 @@ static void CB2_EndLinkBattle(void);
 static void EndLinkBattleInSteps(void);
 static void SpriteCB_MoveWildMonToRight(struct Sprite *sprite);
 static void SpriteCB_WildMonShowHealthbox(struct Sprite *sprite);
-static void SpriteCB_Unused_8011E28_Step(struct Sprite *sprite);
+//static void SpriteCB_Unused_8011E28_Step(struct Sprite *sprite);
 static void SpriteCB_AnimFaintOpponent(struct Sprite *sprite);
 static void SpriteCb_BlinkVisible(struct Sprite *sprite);
 static void oac_poke_ally_(struct Sprite *sprite);
@@ -125,7 +125,7 @@ EWRAM_DATA u8 gDisplayedStringBattle[300] = {0};
 EWRAM_DATA u8 gBattleTextBuff1[TEXT_BUFF_ARRAY_COUNT] = {0};
 EWRAM_DATA u8 gBattleTextBuff2[TEXT_BUFF_ARRAY_COUNT] = {0};
 EWRAM_DATA u8 gBattleTextBuff3[TEXT_BUFF_ARRAY_COUNT] = {0};
-static EWRAM_DATA u32 gUnknown_2022AE8[25] = {0};
+//static EWRAM_DATA u32 gUnknown_2022AE8[25] = {0}; //zsonic
 EWRAM_DATA u32 gBattleTypeFlags = 0;
 EWRAM_DATA u8 gBattleTerrain = 0;
 EWRAM_DATA u32 gUnknown_2022B54 = 0;
@@ -203,7 +203,7 @@ EWRAM_DATA struct BattleScripting gBattleScripting = {0};
 EWRAM_DATA struct BattleStruct *gBattleStruct = NULL;
 EWRAM_DATA u8 *gLinkBattleSendBuffer = NULL;
 EWRAM_DATA u8 *gLinkBattleRecvBuffer = NULL;
-EWRAM_DATA struct BattleResources *gBattleResources = NULL;
+EWRAM_DATA struct BattleResources *gBattleResources = NULL;  //edited includes flags I added i.e flashfire etc.
 EWRAM_DATA u8 gActionSelectionCursor[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gMoveSelectionCursor[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gBattlerStatusSummaryTaskId[MAX_BATTLERS_COUNT] = {0};
@@ -323,6 +323,7 @@ const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of
     TYPE_FIRE, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_WATER, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_WATER, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_WATER, TYPE_GRASS, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_WATER, TYPE_GROUND, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
@@ -343,7 +344,7 @@ const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of
     TYPE_GRASS, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_GRASS, TYPE_DRAGON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GRASS, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_ICE, TYPE_WATER, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_ICE, TYPE_BUG, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ICE, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ICE, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_ICE, TYPE_GROUND, TYPE_MUL_SUPER_EFFECTIVE,
@@ -369,10 +370,9 @@ const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of
     TYPE_GROUND, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_GROUND, TYPE_ELECTRIC, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_GROUND, TYPE_GRASS, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_GROUND, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_GROUND, TYPE_FLYING, TYPE_MUL_NO_EFFECT,
-    TYPE_GROUND, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_GROUND, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_GROUND, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,// delete ground to flying so its set to normal effective
+    TYPE_GROUND, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE, //then create condition where its
+    TYPE_GROUND, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE, //set to no effect if not grounded
     TYPE_GROUND, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FLYING, TYPE_ELECTRIC, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FLYING, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
@@ -1897,7 +1897,7 @@ void SpriteCallbackDummy2(struct Sprite *sprite)
 }
 
 // not used
-UNUSED static void SpriteCB_Unused_8011E28(struct Sprite *sprite)
+/*UNUSED static void SpriteCB_Unused_8011E28(struct Sprite *sprite)
 {
     sprite->data[3] = 6;
     sprite->data[4] = 1;
@@ -1920,7 +1920,7 @@ static void SpriteCB_Unused_8011E28_Step(struct Sprite *sprite)
             gUnknown_2022AE8[0] = 0;
         }
     }
-}
+}*/
 
 void SpriteCB_FaintOpponentMon(struct Sprite *sprite)
 {
@@ -3763,7 +3763,7 @@ static void HandleEndTurn_FinishBattle(void)
         }
         TrySetQuestLogBattleEvent();
         if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-            ClearRematchStateByTrainerId();
+            //ClearRematchStateByTrainerId();
         BeginFastPaletteFade(3);
         FadeOutMapMusic(5);
         gBattleMainFunc = FreeResetData_ReturnToOvOrDoEvolutions;

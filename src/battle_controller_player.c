@@ -2626,25 +2626,25 @@ static void PlayerHandleOneReturnValue_Duplicate(void)
 
 static void PlayerHandleCmd37(void)
 {
-    gUnknown_2022870.field_0 = 0;
+    //gUnknown_2022870.field_0 = 0;
     PlayerBufferExecCompleted();
 }
 
 static void PlayerHandleCmd38(void)
 {
-    gUnknown_2022870.field_0 = gBattleBufferA[gActiveBattler][1];
+    //gUnknown_2022870.field_0 = gBattleBufferA[gActiveBattler][1];
     PlayerBufferExecCompleted();
 }
 
 static void PlayerHandleCmd39(void)
 {
-    gUnknown_2022870.flag_x80 = 0;
+    //gUnknown_2022870.flag_x80 = 0;
     PlayerBufferExecCompleted();
 }
 
 static void PlayerHandleCmd40(void)
 {
-    gUnknown_2022870.flag_x80 ^= 1;
+    //gUnknown_2022870.flag_x80 ^= 1;
     PlayerBufferExecCompleted();
 }
 

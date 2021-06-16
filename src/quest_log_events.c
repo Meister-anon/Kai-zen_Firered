@@ -192,8 +192,8 @@ void SetQuestLogEvent(u16 eventId, const u16 *eventData)
     if (MenuHelpers_LinkSomething() == TRUE)
         return;
 
-    if (InUnionRoom() == TRUE)
-        return;
+   /* if (InUnionRoom() == TRUE)
+        return;*/
 
     if (TrySetTrainerBattleQuestLogEvent(eventId, eventData) == TRUE)
         return;

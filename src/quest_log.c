@@ -91,7 +91,7 @@ static void QLogCB_Playback(void);
 static void SetPlayerInitialCoordsAtScene(u8);
 static void SetNPCInitialCoordsAtScene(u8);
 static void TryRecordEvent39_GoToNextScene(void);
-static void BackUpTrainerRematchesToVars(void);
+//static void BackUpTrainerRematchesToVars(void);
 static void BackUpMapLayoutToVar(void);
 static void SetGameStateAtScene(u8);
 static u8 TryRecordQuestLogEntrySequence(struct QuestLogEntry *);
@@ -101,7 +101,7 @@ static void QLPlayback_InitOverworldState(void);
 static void QuestLog_GetSaneMonCounts(void);
 static u16 QuestLog_GetSanePartyCount(void);
 static u16 QuestLog_GetSaneBoxCount(void);
-static void sub_8111688(void);
+//static void sub_8111688(void);  //seems to also be for rematches
 static void ReadQuestLogScriptFromSav1(u8, struct QuestLogEntry *);
 static void QuestLog_BeginFadeAtEndOfScene(s8 delay);
 static void QuestLog_AdvancePlayhead(void);
@@ -290,7 +290,7 @@ void StartRecordingQuestLogEntry(u16 eventId)
     QuestLog_GetSaneMonCounts();
     SetPlayerInitialCoordsAtScene(sCurrentSceneNum);
     SetNPCInitialCoordsAtScene(sCurrentSceneNum);
-    BackUpTrainerRematchesToVars();
+  //  BackUpTrainerRematchesToVars();
     BackUpMapLayoutToVar();
     SetGameStateAtScene(sCurrentSceneNum);
     gUnknown_203ADFC = 0;
@@ -351,7 +351,7 @@ static void SetGameStateAtScene(u8 sceneNum)
     CpuCopy16(gSaveBlock1Ptr->vars, questLog->vars, VARS_COUNT * sizeof(u16));
 }
 
-static void BackUpTrainerRematchesToVars(void)
+/*static void BackUpTrainerRematchesToVars(void)
 {
     u16 i, j;
     u16 sp0[4];
@@ -368,7 +368,7 @@ static void BackUpTrainerRematchesToVars(void)
         }
         VarSet(VAR_QLBAK_TRAINER_REMATCHES + i, sp0[i]);
     }
-}
+}*/
 
 static void BackUpMapLayoutToVar(void)
 {
@@ -585,7 +585,7 @@ void sub_81113E4(void)
 
     CpuCopy16(questLog->flags, gSaveBlock1Ptr->flags, NUM_FLAG_BYTES * sizeof(u8));
     CpuCopy16(questLog->vars, gSaveBlock1Ptr->vars, VARS_COUNT * sizeof(u16));
-    sub_8111688();
+   // sub_8111688();  //think this is rematches
 }
 
 struct PokemonAndSomethingElse
@@ -705,7 +705,7 @@ static u16 QuestLog_GetSaneBoxCount(void)
     return count;
 }
 
-static void sub_8111688(void)
+/*static void sub_8111688(void)
 {
     u16 i, j;
     u16 sp0[4];
@@ -723,7 +723,7 @@ static void sub_8111688(void)
             sp0[i] >>= 1;
         }
     }
-}
+}*/
 
 void sub_8111708(void)
 {

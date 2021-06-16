@@ -53,7 +53,7 @@ struct InGameTrade {
     /*0x1C*/ u8 conditions[5];
     /*0x24*/ u32 personality;
     /*0x28*/ u16 heldItem;
-    /*0x2A*/ u8 mailNum;
+    /*0x2A*/ //u8 mailNum;
     /*0x2B*/ u8 otName[11];
     /*0x36*/ u8 otGender;
     /*0x37*/ u8 sheen;
@@ -1065,7 +1065,8 @@ static void TradeMons(u8 playerPartyIdx, u8 partnerPartyIdx)
 
     // The mail attached to the sent Pokemon no longer exists in your file.
     if (playerMail != 0xFF)
-        ClearMailStruct(&gSaveBlock1Ptr->mail[playerMail]);
+        return;
+        //ClearMailStruct(&gSaveBlock1Ptr->mail[playerMail]);
 
     // This is where the actual trade happens!!
     sTradeData->mon = *playerMon;
@@ -1079,7 +1080,7 @@ static void TradeMons(u8 playerPartyIdx, u8 partnerPartyIdx)
 
     // Associate your partner's mail with the Pokemon they sent over.
     if (partnerMail != 0xFF)
-        GiveMailToMon2(playerMon, &gLinkPartnerMail[partnerMail]);
+        //GiveMailToMon2(playerMon, &gLinkPartnerMail[partnerMail]);
 
     ReceivedMonSetPokedexFlags(playerPartyIdx);
     if (gReceivedRemoteLinkPlayers)
@@ -2428,14 +2429,14 @@ static void BufferInGameTradeMonName(void)
     StringCopy(gStringVar2, gSpeciesNames[inGameTrade->species]);
 }
 
-static void CreateInGameTradePokemonInternal(u8 playerSlot, u8 inGameTradeIdx)
+static void CreateInGameTradePokemonInternal(u8 playerSlot, u8 inGameTradeIdx) //make sure to remove any mail items from in game trades
 {
     const struct InGameTrade * inGameTrade = &sInGameTrades[inGameTradeIdx];
     u8 level = GetMonData(&gPlayerParty[playerSlot], MON_DATA_LEVEL);
-    struct MailStruct mail;
+    //struct MailStruct mail;
     u8 metLocation = METLOC_IN_GAME_TRADE;
     struct Pokemon * tradeMon = &gEnemyParty[0];
-    u8 mailNum;
+    //u8 mailNum;
     CreateMon(tradeMon, inGameTrade->species, level, 32, TRUE, inGameTrade->personality, TRUE, inGameTrade->otId);
     SetMonData(tradeMon, MON_DATA_HP_IV, &inGameTrade->ivs[0]);
     SetMonData(tradeMon, MON_DATA_ATK_IV, &inGameTrade->ivs[1]);
@@ -2454,17 +2455,17 @@ static void CreateInGameTradePokemonInternal(u8 playerSlot, u8 inGameTradeIdx)
     SetMonData(tradeMon, MON_DATA_TOUGH, &inGameTrade->conditions[4]);
     SetMonData(tradeMon, MON_DATA_SHEEN, &inGameTrade->sheen);
     SetMonData(tradeMon, MON_DATA_MET_LOCATION, &metLocation);
-    mailNum = 0;
+    //mailNum = 0;
     if (inGameTrade->heldItem != ITEM_NONE)
     {
-        if (ItemIsMail(inGameTrade->heldItem))
+        /*if (ItemIsMail(inGameTrade->heldItem))
         {
             GetInGameTradeMail(&mail, inGameTrade);
             gLinkPartnerMail[0] = mail;
             SetMonData(tradeMon, MON_DATA_MAIL, &mailNum);
             SetMonData(tradeMon, MON_DATA_HELD_ITEM, &inGameTrade->heldItem);
         }
-        else
+        else*/
         {
             SetMonData(tradeMon, MON_DATA_HELD_ITEM, &inGameTrade->heldItem);
         }
@@ -2472,7 +2473,7 @@ static void CreateInGameTradePokemonInternal(u8 playerSlot, u8 inGameTradeIdx)
     CalculateMonStats(&gEnemyParty[0]);
 }
 
-static void GetInGameTradeMail(struct MailStruct * mail, const struct InGameTrade * inGameTrade)
+/*static void GetInGameTradeMail(struct MailStruct * mail, const struct InGameTrade * inGameTrade)
 {
     int i;
     for (i = 0; i < MAIL_WORDS_COUNT; i++)
@@ -2484,7 +2485,7 @@ static void GetInGameTradeMail(struct MailStruct * mail, const struct InGameTrad
     mail->trainerId[3] = inGameTrade->otId;
     mail->species = inGameTrade->species;
     mail->itemId = inGameTrade->heldItem;
-}
+}*/
 
 u16 GetTradeSpecies(void)
 {
@@ -2572,7 +2573,7 @@ static void sub_8053E8C(void)
         StringExpandPlaceholders(gStringVar4, gText_SavingDontTurnOffThePower2);
         DrawTextOnTradeWindow(0, gStringVar4, 0);
         break;
-    case 50:
+    /*case 50:
         if (InUnionRoom())
         {
             SetQuestLogEvent(QL_EVENT_LINK_TRADED_UNION, sTradeData->monSpecies);
@@ -2590,7 +2591,7 @@ static void sub_8053E8C(void)
         sub_80DA3AC();
         gMain.state++;
         sTradeData->timer = 0;
-        break;
+        break;*/
     case 51:
         if (++sTradeData->timer == 5)
         {
@@ -2731,7 +2732,7 @@ void DoInGameTradeScene(void)
     ScriptContext2_Enable();
     CreateTask(Task_WaitFadeAndStartInGameTradeAnim, 10);
     BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-    //HelpSystem_Disable();
+   // HelpSystem_Disable();
 }
 
 static void Task_WaitFadeAndStartInGameTradeAnim(u8 taskId)

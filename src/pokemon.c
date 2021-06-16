@@ -4544,7 +4544,7 @@ u16 GetMonAbility(struct Pokemon *mon)
     return GetAbilityBySpecies(species, abilityNum);
 }
 
-static void CreateSecretBaseEnemyParty(struct SecretBaseRecord *secretBaseRecord)
+/*static void CreateSecretBaseEnemyParty(struct SecretBaseRecord *secretBaseRecord)
 {
     s32 i, j;
 
@@ -4590,7 +4590,7 @@ u8 GetSecretBaseTrainerNameIndex(void)
 {
     u8 facilityClass = sSecretBaseFacilityClasses[gBattleResources->secretBase->gender][gBattleResources->secretBase->trainerId[0] % 5];
     return gFacilityClassToTrainerClass[facilityClass];
-}
+}*/
 
 bool8 IsPlayerPartyAndPokemonStorageFull(void)
 {

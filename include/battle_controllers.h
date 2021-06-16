@@ -179,7 +179,7 @@ enum
     CONTROLLER_CMDS_COUNT
 };
 
-extern struct UnusedControllerStruct gUnknown_2022870;
+//extern struct UnusedControllerStruct gUnknown_2022870;
 
 // general functions
 //void HandleLinkBattleSetup(void);

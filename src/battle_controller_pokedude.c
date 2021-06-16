@@ -119,7 +119,7 @@ static void SetPokedudeMonData(u8 monId);
 static void StartSendOutAnim(u8 battlerId);
 static void PokedudeDoMoveAnimation(void);
 static void Task_StartSendOutAnim(u8 taskId);
-static const u8 *GetPokedudeText(void);
+//static const u8 *GetPokedudeText(void);
 
 static void (*const sPokedudeBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
     {
@@ -362,13 +362,14 @@ static void OpenBagAndChooseItem(void)
         FreeAllWindowBuffers();
         switch (gSpecialVar_0x8004)
         {
-        case TTVSCR_STATUS:
+        //case TTVSCR_STATUS:
         default:
-            callbackId = ITEMMENULOCATION_TTVSCR_STATUS;
+            return;//  callbackId = ITEMMENULOCATION_TTVSCR_STATUS;
             break;
-        case TTVSCR_CATCHING:
+        /*case TTVSCR_CATCHING:
             callbackId = ITEMMENULOCATION_TTVSCR_CATCHING;
             break;
+*/
         }
         InitPokedudeBag(callbackId);
     }
@@ -2062,10 +2063,11 @@ static const struct PokedudeInputScript sInputScripts_ChooseAction_Catching[] =
 
 static const struct PokedudeInputScript *const sInputScripts_ChooseAction[] =
 {
-    [TTVSCR_BATTLE]   = sInputScripts_ChooseAction_Battle,
+    
+    /*[TTVSCR_BATTLE]   = sInputScripts_ChooseAction_Battle,
     [TTVSCR_STATUS]   = sInputScripts_ChooseAction_Status,
     [TTVSCR_MATCHUPS] = sInputScripts_ChooseAction_Matchups,
-    [TTVSCR_CATCHING] = sInputScripts_ChooseAction_Catching,
+    [TTVSCR_CATCHING] = sInputScripts_ChooseAction_Catching,*/
 };
 
 static const struct PokedudeInputScript sInputScripts_ChooseMove_Battle[] =
@@ -2136,13 +2138,13 @@ static const struct PokedudeInputScript sInputScripts_ChooseMove_Catching[] =
     },
 };
 
-static const struct PokedudeInputScript *const sInputScripts_ChooseMove[] =
+/*static const struct PokedudeInputScript *const sInputScripts_ChooseMove[] =
 {
     [TTVSCR_BATTLE]   = sInputScripts_ChooseMove_Battle,
     [TTVSCR_STATUS]   = sInputScripts_ChooseMove_Status,
     [TTVSCR_MATCHUPS] = sInputScripts_ChooseMove_Matchups,
     [TTVSCR_CATCHING] = sInputScripts_ChooseMove_Catching,
-};
+};*/
 
 static const struct PokedudeTextScriptHeader sPokedudeTextScripts_Battle[] =
 {
@@ -2278,7 +2280,7 @@ static const struct PokedudeTextScriptHeader sPokedudeTextScripts_Catching[] =
     },
 };
 
-static const struct PokedudeTextScriptHeader *const sPokedudeTextScripts[] =
+/*static const struct PokedudeTextScriptHeader *const sPokedudeTextScripts[] =
 {
     [TTVSCR_BATTLE]   = sPokedudeTextScripts_Battle,
     [TTVSCR_STATUS]   = sPokedudeTextScripts_Status,
@@ -2322,7 +2324,7 @@ static const u8 *const sPokedudeTexts_Catching[] =
     Pokedude_Text_CantDoubleUpOnStatus,
     Pokedude_Text_LetMeThrowBall,
     Pokedude_Text_PickBestKindOfBall,
-};
+};*/
 
 static const struct PokedudeBattlePartyInfo sParties_Battle[] =
 {
@@ -2417,13 +2419,13 @@ static const struct PokedudeBattlePartyInfo sParties_Catching[] =
 };
 
 
-static const struct PokedudeBattlePartyInfo *const sPokedudeBattlePartyPointers[] =
+/*static const struct PokedudeBattlePartyInfo *const sPokedudeBattlePartyPointers[] =
 {
     [TTVSCR_BATTLE]   = sParties_Battle,
     [TTVSCR_STATUS]   = sParties_Status,
     [TTVSCR_MATCHUPS] = sParties_Matchups,
     [TTVSCR_CATCHING] = sParties_Catching,
-};
+};*/
 
 struct PokedudeBattlerState *gPokedudeBattlerStates[MAX_BATTLERS_COUNT];
 
@@ -2477,7 +2479,7 @@ static void PokedudeSimulateInputChooseAction(void)
 
 static void PokedudeSimulateInputChooseMove(void)
 {
-    const struct PokedudeInputScript *script_p = sInputScripts_ChooseMove[gBattleStruct->pdScriptNum];
+    const struct PokedudeInputScript *script_p = NULL;//zsonic guess changee
 
     if (script_p[gPokedudeBattlerStates[gActiveBattler]->move_idx].delay[gActiveBattler] == gPokedudeBattlerStates[gActiveBattler]->timer)
     {
@@ -2508,7 +2510,7 @@ static void PokedudeSimulateInputChooseMove(void)
 
 static bool8 HandlePokedudeVoiceoverEtc(void)
 {
-    const struct PokedudeTextScriptHeader *header_p = sPokedudeTextScripts[gBattleStruct->pdScriptNum];
+    const struct PokedudeTextScriptHeader *header_p = NULL;
     const u16 * bstringid_p = (const u16 *)&gBattleBufferA[gActiveBattler][2];
 
     if (gBattleBufferA[gActiveBattler][0] != header_p[gBattleStruct->pdMessageNo].btlcmd)
@@ -2556,7 +2558,7 @@ static void PokedudeAction_PrintVoiceoverMessage(void)
         break;
     case 2:
         gBattle_BG0_Y = 0;
-        BattleStringExpandPlaceholdersToDisplayedString(GetPokedudeText());
+        //BattleStringExpandPlaceholdersToDisplayedString(GetPokedudeText());
         BattlePutTextOnWindow(gDisplayedStringBattle, 24);
         ++gPokedudeBattlerStates[gActiveBattler]->timer;
         break;
@@ -2617,7 +2619,7 @@ static void PokedudeAction_PrintMessageWithHealthboxPals(void)
         }
         break;
     case 3:
-        BattleStringExpandPlaceholdersToDisplayedString(GetPokedudeText());
+       // BattleStringExpandPlaceholdersToDisplayedString(GetPokedudeText());
         BattlePutTextOnWindow(gDisplayedStringBattle, 24);
         ++gPokedudeBattlerStates[gActiveBattler]->timer;
         break;
@@ -2657,7 +2659,7 @@ static void PokedudeAction_PrintMessageWithHealthboxPals(void)
     }
 }
 
-static const u8 *GetPokedudeText(void)
+/*static const u8 *GetPokedudeText(void)
 {
     switch (gBattleStruct->pdScriptNum)
     {
@@ -2671,9 +2673,10 @@ static const u8 *GetPokedudeText(void)
     case TTVSCR_CATCHING:
         return sPokedudeTexts_Catching[gBattleStruct->pdMessageNo - 1];
     }
-}
+}*/
 
-void InitPokedudePartyAndOpponent(void)
+void InitPokedudePartyAndOpponent(void) //may be best to just remove all these functions, just unsure if 
+//these are just for teachtv guy/fight
 {
     s32 i, j;
     struct Pokemon *mon;
@@ -2684,7 +2687,7 @@ void InitPokedudePartyAndOpponent(void)
     gBattleTypeFlags = BATTLE_TYPE_POKEDUDE;
     ZeroPlayerPartyMons();
     ZeroEnemyPartyMons();
-    data = sPokedudeBattlePartyPointers[gSpecialVar_0x8004];
+    data = NULL;
     i = 0;
     do
     {

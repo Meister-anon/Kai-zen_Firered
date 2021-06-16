@@ -52,42 +52,42 @@ EventScript_DoNoIntroTrainerBattle:: @ 81A4F21
 	battlebegin
 	ontrainerbattleend
 
-EventScript_TryDoRematchBattle:: @ 81A4F3E
-	call EventScript_RevealTrainer
-	specialvar VAR_RESULT, IsTrainerReadyForRematch
-	compare VAR_RESULT, FALSE
-	goto_if_eq EventScript_NoRematchBattle
-	special PlayTrainerEncounterMusic
-	special SetUpTrainerMovement
-	special ShowTrainerIntroSpeech
-	waitmessage
-	waitbuttonpress
-	goto_if_questlog EventScript_EndQuestLogRematch
-	special StartRematchBattle
-	waitstate
-	releaseall
-	end
+@EventScript_TryDoRematchBattle:: @ 81A4F3E
+@	call EventScript_RevealTrainer
+@	specialvar VAR_RESULT, IsTrainerReadyForRematch
+@	compare VAR_RESULT, FALSE
+@	goto_if_eq EventScript_NoRematchBattle
+@	special PlayTrainerEncounterMusic
+@	special SetUpTrainerMovement
+@	special ShowTrainerIntroSpeech
+@	waitmessage
+@	waitbuttonpress
+@	goto_if_questlog EventScript_EndQuestLogRematch
+@	special StartRematchBattle
+@	waitstate
+@	releaseall
+@	end
 
 EventScript_NoRematchBattle:: @ 81A4F72
 	ontrainerbattleend
 
-EventScript_TryDoDoubleRematchBattle:: @ 81A4F73
-	specialvar VAR_RESULT, IsTrainerReadyForRematch
-	compare VAR_RESULT, FALSE
-	goto_if_eq EventScript_NoDoubleRematchBattle
-	special HasEnoughMonsForDoubleBattle
-	compare VAR_RESULT, PLAYER_HAS_TWO_USABLE_MONS
-	goto_if_ne EventScript_NotEnoughMonsForDoubleRematchBattle
-	special PlayTrainerEncounterMusic
-	special SetUpTrainerMovement
-	special ShowTrainerIntroSpeech
-	waitmessage
-	waitbuttonpress
-	goto_if_questlog EventScript_EndQuestLogRematch
-	special StartRematchBattle
-	waitstate
-	releaseall
-	end
+@EventScript_TryDoDoubleRematchBattle:: @ 81A4F73
+@	specialvar VAR_RESULT, IsTrainerReadyForRematch
+@	compare VAR_RESULT, FALSE
+@	goto_if_eq EventScript_NoDoubleRematchBattle
+@	special HasEnoughMonsForDoubleBattle
+@	compare VAR_RESULT, PLAYER_HAS_TWO_USABLE_MONS
+@	goto_if_ne EventScript_NotEnoughMonsForDoubleRematchBattle
+@	special PlayTrainerEncounterMusic
+@	special SetUpTrainerMovement
+@	special ShowTrainerIntroSpeech
+@	waitmessage
+@	waitbuttonpress
+@	goto_if_questlog EventScript_EndQuestLogRematch
+@	special StartRematchBattle
+@	waitstate
+@	releaseall
+@	end
 
 EventScript_NoDoubleRematchBattle:: @ 81A4FB0
 	ontrainerbattleend

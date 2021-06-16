@@ -1,7 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\graphics",
+    "\\graphics\\interface",
+    "\\graphics\\object_events",
+    "\\graphics\\object_events\\pics",
+    "\\graphics\\object_events\\pics\\people",
+    "\\sound",
+    "\\sound\\songs",
+    "\\sound\\songs\\midi",
+    "\\src"
   ],
-  "SelectedNode": "\\asmdiff.sh",
+  "SelectedNode": "\\src\\union_room.c",
   "PreviewInSolutionExplorer": false
 }

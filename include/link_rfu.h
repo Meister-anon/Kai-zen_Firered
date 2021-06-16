@@ -193,9 +193,9 @@ void MG_DrawCheckerboardPattern(void);
 void Rfu_BeginBuildAndSendCommand5F(void);
 bool8 IsLinkRfuTaskFinished(void);
 void DestroyWirelessStatusIndicatorSprite(void);
-void MEvent_CreateTask_CardOrNewsWithFriend(u32 arg0);
+/*void MEvent_CreateTask_CardOrNewsWithFriend(u32 arg0);
 void MEvent_CreateTask_CardOrNewsOverWireless(u32 arg0);
-void MEvent_CreateTask_Leader(u32 arg0);
+void MEvent_CreateTask_Leader(u32 arg0);*/
 void RfuPrepareSend0x2f00(void * data);
 u8 CreateTask_ListenToWireless(void);
 void LinkRfu_DestroyIdleTask(void);

@@ -206,7 +206,7 @@ VermilionCity_Gym_EventScript_SetBeamsOn:: @ 816B8EF
 	return
 
 VermilionCity_Gym_EventScript_LtSurge:: @ 816B94A
-	famechecker FAMECHECKER_LTSURGE, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
+	@  famechecker FAMECHECKER_LTSURGE, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
 	trainerbattle_single TRAINER_LEADER_LT_SURGE, VermilionCity_Gym_Text_LtSurgeIntro, VermilionCity_Gym_Text_LtSurgeDefeat, VermilionCity_Gym_EventScript_DefeatedLtSurge, NO_MUSIC
 	goto_if_unset FLAG_GOT_TM34_FROM_SURGE, VermilionCity_Gym_EventScript_GiveTM34
 	msgbox VermilionCity_Gym_Text_LtSurgePostBattle
@@ -214,7 +214,7 @@ VermilionCity_Gym_EventScript_LtSurge:: @ 816B94A
 	end
 
 VermilionCity_Gym_EventScript_DefeatedLtSurge:: @ 816B97C
-	famechecker FAMECHECKER_LTSURGE, 1
+	@  famechecker FAMECHECKER_LTSURGE, 1
 	call_if_unset FLAG_GOT_HM05, VermilionCity_Gym_EventScript_ShowOaksAide
 	clearflag FLAG_HIDE_FAME_CHECKER_LT_SURGE_JOURNAL
 	setflag FLAG_DEFEATED_LT_SURGE
@@ -245,7 +245,7 @@ VermilionCity_Gym_EventScript_NoRoomForTM34:: @ 816B9F0
 
 VermilionCity_Gym_EventScript_Dwayne:: @ 816B9FA
 	trainerbattle_single TRAINER_SAILOR_DWAYNE, VermilionCity_Gym_Text_DwayneIntro, VermilionCity_Gym_Text_DwayneDefeat
-	famechecker FAMECHECKER_LTSURGE, 4
+	@  famechecker FAMECHECKER_LTSURGE, 4
 	msgbox VermilionCity_Gym_Text_DwaynePostBattle, MSGBOX_AUTOCLOSE
 	end
 
@@ -256,12 +256,12 @@ VermilionCity_Gym_EventScript_Baily:: @ 816BA1E
 
 VermilionCity_Gym_EventScript_Tucker:: @ 816BA35
 	trainerbattle_single TRAINER_GENTLEMAN_TUCKER, VermilionCity_Gym_Text_TuckerIntro, VermilionCity_Gym_Text_TuckerDefeat, VermilionCity_Gym_EventScript_DefeatedTucker
-	famechecker FAMECHECKER_LTSURGE, 3
+	@  famechecker FAMECHECKER_LTSURGE, 3
 	msgbox VermilionCity_Gym_Text_TuckerPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 VermilionCity_Gym_EventScript_DefeatedTucker:: @ 816BA5D
-	famechecker FAMECHECKER_LTSURGE, 2
+	@  famechecker FAMECHECKER_LTSURGE, 2
 	release
 	end
 

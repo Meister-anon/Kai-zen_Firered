@@ -80,7 +80,7 @@ CeladonCity_EventScript_CitySign:: @ 8166D27
 
 CeladonCity_EventScript_GymSign:: @ 8166D30
 	lockall
-	famechecker FAMECHECKER_ERIKA, 0
+	@  famechecker FAMECHECKER_ERIKA, 0
 	msgbox CeladonCity_Text_GymSign
 	releaseall
 	end

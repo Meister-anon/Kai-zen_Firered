@@ -233,7 +233,7 @@ bool8 MEScrCmd_setrecordmixinggift(struct ScriptContext *ctx)
 
 bool8 MEScrCmd_givepokemon(struct ScriptContext *ctx)
 {
-    struct MailStruct mail;
+    //struct MailStruct mail;
     struct Pokemon pokemon;
     u16 species;
     u16 heldItem;
@@ -257,7 +257,7 @@ bool8 MEScrCmd_givepokemon(struct ScriptContext *ctx)
     else
     {
         memcpy(&gPlayerParty[5], pokemonPtr, sizeof(struct Pokemon));
-        memcpy(&mail, mailPtr, sizeof(struct MailStruct));
+      //  memcpy(&mail, mailPtr, sizeof(struct MailStruct));
 
         if (species != SPECIES_EGG)
         {
@@ -267,8 +267,8 @@ bool8 MEScrCmd_givepokemon(struct ScriptContext *ctx)
         }
 
         heldItem = GetMonData(&gPlayerParty[5], MON_DATA_HELD_ITEM);
-        if (ItemIsMail(heldItem))
-            GiveMailToMon2(&gPlayerParty[5], &mail);
+        //if (ItemIsMail(heldItem))
+          //  GiveMailToMon2(&gPlayerParty[5], &mail);
         CompactPartySlots();
         CalculatePlayerPartyCount();
         StringExpandPlaceholders(gStringVar4, gText_MysteryGiftSentOver);

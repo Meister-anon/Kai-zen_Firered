@@ -4,7 +4,7 @@ ViridianCity_Gym_MapScripts:: @ 8169EC9
 	.byte 0
 
 ViridianCity_Gym_EventScript_Giovanni:: @ 8169ECA
-	famechecker FAMECHECKER_GIOVANNI, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
+	@  famechecker FAMECHECKER_GIOVANNI, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
 	trainerbattle_single TRAINER_LEADER_GIOVANNI, ViridianCity_Gym_Text_GiovanniIntro, ViridianCity_Gym_Text_GiovanniDefeat, ViridianCity_Gym_EventScript_DefeatedGiovanni, NO_MUSIC
 	goto_if_unset FLAG_GOT_TM26_FROM_GIOVANNI, ViridianCity_Gym_EventScript_GiveTM26
 	msgbox ViridianCity_Gym_Text_GiovanniPostBattle
@@ -16,7 +16,7 @@ ViridianCity_Gym_EventScript_Giovanni:: @ 8169ECA
 	end
 
 ViridianCity_Gym_EventScript_DefeatedGiovanni:: @ 8169F04
-	famechecker FAMECHECKER_GIOVANNI, 3
+	@  famechecker FAMECHECKER_GIOVANNI, 3
 	setflag FLAG_HIDE_MISC_KANTO_ROCKETS
 	setflag FLAG_DEFEATED_LEADER_GIOVANNI
 	setflag FLAG_BADGE08_GET
@@ -90,7 +90,7 @@ ViridianCity_Gym_EventScript_GymGuy:: @ 816A032
 	end
 
 ViridianCity_Gym_EventScript_GymGuyPostVictory:: @ 816A047
-	famechecker FAMECHECKER_GIOVANNI, 4
+	@  famechecker FAMECHECKER_GIOVANNI, 4
 	msgbox ViridianCity_Gym_Text_GymGuyPostVictory
 	release
 	end
