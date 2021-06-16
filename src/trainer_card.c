@@ -855,7 +855,7 @@ static void SetPlayerCardData(struct TrainerCard *trainerCard, u8 cardType)
     }
 }
 
-/*void TrainerCard_GenerateCardForLinkPlayer(struct TrainerCard *trainerCard)
+void TrainerCard_GenerateCardForLinkPlayer(struct TrainerCard *trainerCard) //think I misunderstood this function, its not linkplayer its for links & player
 {
     u8 id = 0;
 
@@ -903,8 +903,8 @@ static void SetPlayerCardData(struct TrainerCard *trainerCard, u8 cardType)
     trainerCard->monSpecies[2] = MailSpeciesToIconSpecies(VarGet(VAR_TRAINER_CARD_MON_ICON_3));
     trainerCard->monSpecies[3] = MailSpeciesToIconSpecies(VarGet(VAR_TRAINER_CARD_MON_ICON_4));
     trainerCard->monSpecies[4] = MailSpeciesToIconSpecies(VarGet(VAR_TRAINER_CARD_MON_ICON_5));
-    trainerCard->monSpecies[5] = MailSpeciesToIconSpecies(VarGet(VAR_TRAINER_CARD_MON_ICON_6));
-}*/
+    trainerCard->monSpecies[5] = MailSpeciesToIconSpecies(VarGet(VAR_TRAINER_CARD_MON_ICON_6));*/
+}
 
 static void SetDataFromTrainerCard(void)
 {
@@ -1860,7 +1860,7 @@ void ShowPlayerTrainerCard(void (*callback)(void))
         sTrainerCardDataPtr->isLink = FALSE;*/
 
     sTrainerCardDataPtr->language = GAME_LANGUAGE;
-  //  TrainerCard_GenerateCardForLinkPlayer(&sTrainerCardDataPtr->trainerCard);
+    TrainerCard_GenerateCardForLinkPlayer(&sTrainerCardDataPtr->trainerCard);
     SetMainCallback2(CB2_InitTrainerCard);
 }
 
