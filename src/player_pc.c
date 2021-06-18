@@ -101,6 +101,7 @@ static const struct ItemSlot gNewGamePCItems[] = {
     { ITEM_POTION, 1 },
     //{ ITEM_NONE,   0 }
     { ITEM_POKE_BALL, 10 }, //temporary addition to test catch mechaincs
+    { ITEM_NONE,   0 } //apparently this has to be on end to prevent garbage item data. or just remove comma
 };  //important game start items
 
 /*static const struct MenuAction sMenuActions_MailSubmenu[] = {
