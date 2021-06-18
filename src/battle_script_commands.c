@@ -305,6 +305,7 @@ static void atkF4_subattackerhpbydmg(void);
 static void atkF5_removeattackerstatus1(void);
 static void atkF6_finishaction(void);
 static void atkF7_finishturn(void);
+static void atkF8_setroost(void);
 
 void (* const gBattleScriptingCommandsTable[])(void) =
 {
@@ -556,6 +557,7 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atkF5_removeattackerstatus1,
     atkF6_finishaction,
     atkF7_finishturn,
+    atkF8_setroost,
 };
 
 struct StatFractions
@@ -1351,7 +1353,7 @@ static void atk06_typecalc(void)
         gBattleMoveDamage = gBattleMoveDamage / 10;
     }
 
-    if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
+    /*if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     {
         gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
         gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
@@ -1359,6 +1361,19 @@ static void atk06_typecalc(void)
         gLastHitByType[gBattlerTarget] = 0;
         gBattleCommunication[6] = moveType;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
+    }*/
+    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND)
+    {
+        gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
+        gLastLandedMoves[gBattlerTarget] = 0;
+        gLastHitByType[gBattlerTarget] = 0; //typecalc & typecalc2 are different, tp2 doesn't have this
+        gBattleCommunication[6] = moveType;
+
+        if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE)
+        {
+            gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
+            RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
+        }
     }
     else
     {
@@ -1539,7 +1554,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
         gBattleMoveDamage = gBattleMoveDamage / 10;
     }
 
-    if (gBattleMons[defender].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
+    //if (gBattleMons[defender].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
+    if (!IsBattlerGrounded(defender) //set without ! it means if function is TRUE aka non-zero
+        && moveType == TYPE_GROUND) //just realized grounded already has conditions for levitate so I just need that.
     {
         flags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
     }
@@ -1595,7 +1612,9 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u8 targetAbility)
     if (move == MOVE_STRUGGLE)
         return 0;
     moveType = gBattleMoves[move].type;
-    if (targetAbility == ABILITY_LEVITATE && moveType == TYPE_GROUND)
+    //if (targetAbility == ABILITY_LEVITATE && moveType == TYPE_GROUND)
+    if (!IsBattlerGrounded(gBattlerTarget) //set without ! it means if function is TRUE aka non-zero
+        && moveType == TYPE_GROUND)
     {
         flags = MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE;
     }
@@ -4324,13 +4343,25 @@ static void atk4A_typecalc2(void)
     s32 i = 0;
     u8 moveType = gBattleMoves[gCurrentMove].type;
 
-    if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
+    /*if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
+   {
+       gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
+       gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
+       gLastLandedMoves[gBattlerTarget] = 0;
+       gBattleCommunication[6] = moveType;
+       RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
+   }*/
+    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND)
     {
-        gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
         gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
         gLastLandedMoves[gBattlerTarget] = 0;
         gBattleCommunication[6] = moveType;
-        RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
+
+        if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE)
+        {
+            gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
+            RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
+        }
     }
     else
     {
@@ -9474,3 +9505,68 @@ static void atkF7_finishturn(void)
     gCurrentActionFuncId = B_ACTION_FINISHED;
     gCurrentTurnActionNumber = gBattlersCount;
 }
+
+static void atkF8_setroost(void) { //actually I don't like this type change idea so not gonna do it.
+
+    u16 virtue = Random() % 4; //had to make start value timer and set equal so they use the same value without recalc
+    gDisableStructs[gBattlerAttacker].RoostTimer = 0;
+    //gDisableStructs[gBattlerAttacker].RoostTimerStartValue = 0;
+    //u8 timervalue = gDisableStructs[gBattlerAttacker].RoostTimer && gDisableStructs[gBattlerAttacker].RoostTimerStartValue;
+
+    
+   // gDisableStructs[gBattlerAttacker].RoostTimer = gDisableStructs[gBattlerAttacker].RoostTimerStartValue += virtue;
+    gDisableStructs[gBattlerAttacker].RoostTimer += virtue;
+    //ok made slight adjustment here, I think since its starts at zero, this should be enough that timer is always increased when setting roost
+    //which shoud give a nice balance to repeatedly using the move.
+
+    //should be set timer value, and if flag not set, set flag
+    if (!(gBattleResources->flags->flags[gActiveBattler] & RESOURCE_FLAG_ROOST)) //check if this means flag not set
+        gBattleResources->flags->flags[gBattlerAttacker] |= RESOURCE_FLAG_ROOST;
+
+    
+    //need to come up with adjustment to ensure subsequent uses of roost can't give
+    //a value lower than what's already on the timer.
+
+    //think I can use += virtue to do what I want so if timer isn't 0, and roost is set,
+    //the value gets added to time remaining.
+
+    /*else if (gDisableStructs[gBattlerAttacker].RoostTimer && gDisableStructs[gBattlerAttacker].RoostTimerStartValue != 0)
+        timervalue += virtue;*/
+
+
+    // then check if need to update battlescript to for a loop like gravity
+    //need make change for flying type 1 || type 2 & resource flag roost
+
+    //actually don't need to change anything, forgot I removed round to flying immunity
+    //so when ground hits, it should just be treated as a normally effective attack without interfering
+
+    /*
+    // Pure flying type.
+    if (gBattleMons[gBattlerAttacker].type1 == TYPE_FLYING && gBattleMons[gBattlerAttacker].type2 == TYPE_FLYING)
+    {
+        gBattleStruct->roostTypes[gBattlerAttacker][0] = TYPE_FLYING;
+        gBattleStruct->roostTypes[gBattlerAttacker][1] = TYPE_FLYING;
+        gBattleStruct->roostTypes[gBattlerAttacker][2] = TYPE_FLYING;
+        SET_BATTLER_TYPE(gBattlerAttacker, TYPE_NORMAL);
+    }
+    // Dual Type with Flying Type.
+    else if ((gBattleMons[gBattlerAttacker].type1 == TYPE_FLYING && gBattleMons[gBattlerAttacker].type2 != TYPE_FLYING)
+        || (gBattleMons[gBattlerAttacker].type2 == TYPE_FLYING && gBattleMons[gBattlerAttacker].type1 != TYPE_FLYING))
+    {
+        gBattleStruct->roostTypes[gBattlerAttacker][0] = gBattleMons[gBattlerAttacker].type1;
+        gBattleStruct->roostTypes[gBattlerAttacker][1] = gBattleMons[gBattlerAttacker].type2;
+        if (gBattleMons[gBattlerAttacker].type1 == TYPE_FLYING)
+            gBattleMons[gBattlerAttacker].type1 = TYPE_MYSTERY;
+        if (gBattleMons[gBattlerAttacker].type2 == TYPE_FLYING)
+            gBattleMons[gBattlerAttacker].type2 = TYPE_MYSTERY;
+    }
+    // Non-flying type.
+    else if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_FLYING))
+    {*/
+    //gBattleStruct->roostTypes[gBattlerAttacker][0] = gBattleMons[gBattlerAttacker].type1;
+    //gBattleStruct->roostTypes[gBattlerAttacker][1] = gBattleMons[gBattlerAttacker].type2;
+//  }
+
+    gBattlescriptCurrInstr++;
+} //should have effect of doing pretty much nothing
+

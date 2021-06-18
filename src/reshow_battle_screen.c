@@ -32,7 +32,7 @@ void ReshowBattleScreenAfterMenu(void) //important could use to get around new p
     {
         if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
         {
-            return;
+            //return;
             //if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
                // SetHelpContext(HELPCONTEXT_TRAINER_BATTLE_DOUBLE);
            //else

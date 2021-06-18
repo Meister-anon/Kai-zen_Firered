@@ -678,6 +678,7 @@ enum
     ENDTURN_CHARGE,
     ENDTURN_TAUNT,
     ENDTURN_YAWN,
+    ENDTURN_ROOST,
     ENDTURN_ITEMS2,
     ENDTURN_BATTLER_COUNT
 };
@@ -699,17 +700,23 @@ u8 DoBattlerEndTurnEffects(void)
             switch (gBattleStruct->turnEffectsTracker)
             {
             case ENDTURN_INGRAIN:  // ingrain
-                if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED)
-                 && gBattleMons[gActiveBattler].hp != gBattleMons[gActiveBattler].maxHP
-                 && gBattleMons[gActiveBattler].hp != 0)
+                if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED) //IT FUCKING WORKS!!!   prob need lower limit from 15 to llike 7
+                 && !BATTLER_MAX_HP(gActiveBattler)
+                 //&& !(gStatuses3[gActiveBattler] & STATUS3_HEAL_BLOCK)
+                 && gBattleMons[gActiveBattler].hp != 0) //function changes & new rooted defines courtesy of phoenix_bound
                 {
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
-                    if (gBattleMoveDamage == 0)
-                        gBattleMoveDamage = 1;
-                    gBattleMoveDamage *= -1;
+                    if (gBattleMoveDamage == 0)//this caps at 16 turns because the orginal & bit calculation == 0, then it adds 0x100 if it doesn't equal 0xF00 which is 1500
+                        gBattleMoveDamage = 1; // so it caps the turns by essentially counting from 0 to 15. so controlling/balancing the effect is as simple as lowering 0xF00!!!
+                    if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED_COUNTER) != STATUS3_ROOTED_TURN(15)) { // not 16 turns/ facepalm just realized how this works!1!
+                        gStatuses3[gActiveBattler] += STATUS3_ROOTED_TURN(1); //seriously spitballin' here, nothing's broken atleast all the colors below are still right
+                    }
+                    gBattleMoveDamage *= gStatuses3[gActiveBattler] >> STATUS3_ROOTED_SHIFT;       // need understand
+                    gBattleMoveDamage *= -1; //moved this to the bottom previously, because it doesn't need to be up top, and so its read last, 
                     BattleScriptExecute(BattleScript_IngrainTurnHeal);
-                    ++effect;
-                }
+                    ++effect; //next step augment battlescript to be similar to poisonturndamage../no changes needed everything handled by gbattlemovedamage in these funtions
+                    //and the  updatehp commands in the battle script.  purpose of these changes was to ingrain work like but opposite to toxic, increase heal by same amount each turn
+                } //I'm completely guessing but if done right, should heal an additional 1/16th per turn
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_ABILITIES:  // end turn abilities
@@ -989,6 +996,23 @@ u8 DoBattlerEndTurnEffects(void)
                     }
                 }
                 ++gBattleStruct->turnEffectsTracker;
+                break;
+                case ENDTURN_ROOST: // Return flying type.
+                //may change sounds like its only lost for duration of move i.e 1 turn
+                //which is dumb -_- that could only be taken advantage of in double battle
+                //think I'll add a timer use Random() % 4 to find start value
+                //pokemon will be grounded for the duration. and succeptible to all ground moves
+                //setup like healblock timer above.
+                //I'd like to have a little battlestring display when timer is at 0
+                //something like "pokemonname" returned to the air or something..
+                if (gBattleResources->flags->flags[gActiveBattler] & RESOURCE_FLAG_ROOST
+                    && --gDisableStructs[gActiveBattler].RoostTimer == 0)
+                {
+                    gBattleResources->flags->flags[gActiveBattler] &= ~(RESOURCE_FLAG_ROOST);
+                    //gBattleMons[gActiveBattler].type1 = gBattleStruct->roostTypes[gActiveBattler][0];
+                    //gBattleMons[gActiveBattler].type2 = gBattleStruct->roostTypes[gActiveBattler][1];
+                }
+                gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_BATTLER_COUNT:  // done
                 gBattleStruct->turnEffectsTracker = 0;
@@ -1465,6 +1489,37 @@ u8 AtkCanceller_UnableToUseMove(void)
         MarkBattlerForControllerExec(gActiveBattler);
     }
     return effect;
+}
+
+bool8 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
+//finihsed adding to type calc, so should be battle ready
+//set as type 8, instead of 32 for test build
+{
+    /*if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
+        return TRUE;
+    else if (gFieldStatuses & STATUS_FIELD_GRAVITY)
+        return TRUE;
+    else */if (gStatuses3[battlerId] & STATUS3_ROOTED)
+        return TRUE;
+    /*else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
+        return TRUE;*/ //important roost change  ..[unsure if want to make random % but no one would gamble it anyway...
+    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
+        return TRUE; //hope this set up right/works
+    //according to Mcgriffin needed make flying & roost flag true statement
+    //as else at bottom just means not flyign or has roost flag, TRUE
+    /*else if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
+        return FALSE;
+    else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
+        return FALSE;
+    else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
+        return FALSE;*/
+    else if (gBattleMons[battlerId].ability == ABILITY_LEVITATE)
+        return FALSE;
+    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
+        return FALSE;
+
+    else
+        return TRUE;
 }
 
 bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2)

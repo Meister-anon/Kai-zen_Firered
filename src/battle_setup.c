@@ -282,7 +282,8 @@ static void DoTrainerBattle(void)
     IncrementGameStat(GAME_STAT_TRAINER_BATTLES);
 }
 
-void StartOldManTutorialBattle(void)
+void StartOldManTutorialBattle(void) // teech tv battle interesting wonder if, I can change his actions 
+// to battle first maybe demo feature/type changes?
 {
     CreateMaleMon(&gEnemyParty[0], SPECIES_WEEDLE, 5);
     ScriptContext2_Enable();

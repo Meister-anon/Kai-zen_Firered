@@ -33,11 +33,11 @@ EventScript_PkmnCenterNurse_CheckTrainerTowerAndUnionRoom:: @ 81A65EC
 	compare VAR_RESULT, FALSE
 	goto_if_eq EventScript_PkmnCenterNurse_ReturnPkmn
  @	specialvar VAR_RESULT, BufferUnionRoomPlayerName
-	copyvar VAR_0x8008, VAR_RESULT
-	compare VAR_0x8008, 0
-	goto_if_eq EventScript_PkmnCenterNurse_ReturnPkmn
-	compare VAR_0x8008, 1
-	goto_if_eq EventScript_PkmnCenterNurse_PlayerWaitingInUionRoom
+ @	copyvar VAR_0x8008, VAR_RESULT
+ @	compare VAR_0x8008, 0
+	goto EventScript_PkmnCenterNurse_ReturnPkmn
+	@compare VAR_0x8008, 1
+ @	goto_if_eq EventScript_PkmnCenterNurse_PlayerWaitingInUionRoom
 	end
 
 EventScript_PkmnCenterNurse_ReturnPkmn:: @ 81A661D
@@ -51,7 +51,7 @@ EventScript_PkmnCenterNurse_ReturnPkmn:: @ 81A661D
 EventScript_PkmnCenterNurse_PlayerWaitingInUionRoom:: @ 81A6636
 	goto_if_set FLAG_SYS_INFORMED_OF_LOCAL_WIRELESS_PLAYER, EventScript_PkmnCenterNurse_ReturnPkmn
 	msgbox Text_RestoredPkmnToFullHealth
-	setflag FLAG_SYS_INFORMED_OF_LOCAL_WIRELESS_PLAYER
+	@setflag FLAG_SYS_INFORMED_OF_LOCAL_WIRELESS_PLAYER
 	message Text_PlayerIsPlayingRightNowGoForIt
 	waitmessage
 	applymovement VAR_LAST_TALKED, Movement_Bow

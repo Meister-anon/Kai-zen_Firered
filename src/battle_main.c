@@ -3319,6 +3319,8 @@ void SwapTurnOrder(u8 id1, u8 id2)
 u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
 {
     u8 strikesFirst = 0;
+    u16 move;
+    s8 priority = gBattleMoves[move].priority;
     u8 speedMultiplierBattler1 = 0, speedMultiplierBattler2 = 0;
     u32 speedBattler1 = 0, speedBattler2 = 0;
     u8 holdEffect = 0;
@@ -3417,6 +3419,11 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         }
         else
             moveBattler2 = MOVE_NONE;
+    }
+    if (gBattleMons[gActiveBattler].ability == ABILITY_NUISANCE
+        && gBattleMoves[move].power <= 60) //could replace "move" with gcurrent mo
+    {
+        priority += 3; //putting here will hopefully make it actually activate
     }
     // both move priorities are different than 0
     if (gBattleMoves[moveBattler1].priority != 0 || gBattleMoves[moveBattler2].priority != 0)
@@ -4391,3 +4398,58 @@ static void HandleAction_ActionFinished(void)
     gBattleScripting.multihitMoveEffect = 0;
     gBattleResources->battleScriptsStack->size = 0;
 }
+
+/*s8 GetChosenMovePriority(u8 battlerId) //made u8 (in test build)
+{
+    u16 move;
+
+    if (gProtectStructs[battlerId].noValidMoves)
+        move = MOVE_STRUGGLE;
+    else
+        move = gBattleMons[battlerId].moves[*(gBattleStruct->chosenMovePositions + battlerId)];
+
+    return GetMovePriority(battlerId, move);
+}
+
+s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing I needed to make nuisance work (facepalm)
+{ //adjusted battlerId made u8,
+    s8 priority;
+
+
+    priority = gBattleMoves[move].priority;
+    /*if (GetBattlerAbility(battlerId) == ABILITY_GALE_WINGS
+        && gBattleMoves[move].type == TYPE_FLYING)
+    {
+        priority++;
+    }
+    else if (GetBattlerAbility(battlerId) == ABILITY_PRANKSTER && IS_MOVE_STATUS(move))
+    {
+        priority++;
+    }
+    else if (GetBattlerAbility(battlerId) == ABILITY_TRIAGE)
+    {
+        switch (gBattleMoves[move].effect)
+        {
+        case EFFECT_RESTORE_HP:
+        case EFFECT_REST:
+        case EFFECT_MORNING_SUN:
+        case EFFECT_MOONLIGHT:
+        case EFFECT_SYNTHESIS:
+        case EFFECT_HEAL_PULSE:
+        case EFFECT_HEALING_WISH:
+        case EFFECT_ROOST:
+        case EFFECT_SWALLOW:
+        case EFFECT_WISH:
+        case EFFECT_SOFTBOILED:
+        case EFFECT_ABSORB:
+            priority += 3;
+            break;
+        }
+    }
+    else if (gBattleMons[gActiveBattler].ability == ABILITY_NUISANCE
+        && gBattleMoves[move].power <= 60)
+    {
+        priority += 3;
+    }
+    return priority;
+}*/

@@ -374,7 +374,18 @@
 #define B_ANIM_GHOST_GET_OUT            0x18
 #define B_ANIM_SILPH_SCOPED             0x19
 #define B_ANIM_ROCK_THROW               0x1A
-#define B_ANIM_SAFARI_REACTION          0x1B
+#define B_ANIM_SAFARI_REACTION          0x1B // all above are ported from emerald
+#define B_ANIM_MEGA_EVOLUTION           0x1C // prob need to make animations
+#define B_ANIM_TERRAIN_MISTY            0x1D
+#define B_ANIM_TERRAIN_GRASSY           0x1E
+#define B_ANIM_TERRAIN_ELECTRIC         0x1F
+#define B_ANIM_TERRAIN_PSYCHIC          0x20
+#define B_ANIM_ILLUSION_OFF             0x21
+#define B_ANIM_FORM_CHANGE              0x22
+#define B_ANIM_SLIDE_OFFSCREEN          0x23 // for Emergency Exit
+#define B_ANIM_RESTORE_BG               0x24 // for Terrain Endings
+#define B_ANIM_TOTEM_FLARE              0x25 // Totem boosts aura flare
+
 
 // special animations table
 #define B_ANIM_LVL_UP                   0x0
@@ -407,6 +418,7 @@
 #define TRAP_ANIM_WHIRLPOOL 2
 #define TRAP_ANIM_CLAMP 3
 #define TRAP_ANIM_SAND_TOMB 4
+#define TRAP_ANIM_INFESTATION 5  //new value prob need create
 
 // Weather defines for battle animation scripts.
 #define ANIM_WEATHER_NONE 0
@@ -442,6 +454,16 @@
 #define BACK_ANIM_FADE_RED_WITH_SHAKE          0x17
 #define BACK_ANIM_FADE_GREEN_WITH_SHAKE        0x18
 #define BACK_ANIM_FADE_BLUE_WITH_SHAKE         0x19
+
+//ALL below ported from emerald incase I need
+// mon pal blend
+#define ANIM_PAL_BG             0x1
+#define ANIM_PAL_ATK            0x2
+#define ANIM_PAL_DEF            0x4
+#define ANIM_PAL_ATK_PARTNER    0x8
+#define ANIM_PAL_DEF_PARTNER    0x10
+#define ANIM_PAL_ALL            0x1f
+#define ANIM_PAL_BG_4           0x20
 
 
 #endif // GUARD_CONSTANTS_BATTLE_ANIM_H

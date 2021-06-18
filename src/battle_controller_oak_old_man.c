@@ -276,7 +276,7 @@ static void HandleInputChooseAction(void)
     }
 }
 
-static void SimulateInputChooseAction(void)
+static void SimulateInputChooseAction(void) // old man tutorial actions
 {
     // Old Man
     switch (gBattleStruct->simulatedInputState[0])
