@@ -3762,7 +3762,7 @@ static void HandleEndTurn_FinishBattle(void)
             }
         }
         TrySetQuestLogBattleEvent();
-        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+        //if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)  //GriffinR helped apparently leaving if statement made battle fade exclusive to trainer only fights
             //ClearRematchStateByTrainerId();
         BeginFastPaletteFade(3);
         FadeOutMapMusic(5);
