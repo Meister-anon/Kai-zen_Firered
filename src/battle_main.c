@@ -3319,13 +3319,12 @@ void SwapTurnOrder(u8 id1, u8 id2)
 u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
 {
     u8 strikesFirst = 0;
-    u16 move;
-    s8 priority = gBattleMoves[move].priority;
     u8 speedMultiplierBattler1 = 0, speedMultiplierBattler2 = 0;
     u32 speedBattler1 = 0, speedBattler2 = 0;
     u8 holdEffect = 0;
     u8 holdEffectParam = 0;
-    u16 moveBattler1 = 0, moveBattler2 = 0;
+    //u16 moveBattler1 = 0, moveBattler2 = 0;
+    s8 priority1 = 0, priority2 = 0;
 
     if (WEATHER_HAS_EFFECT)
     {
@@ -3394,19 +3393,21 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         speedBattler2 /= 4;
     if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)
         speedBattler2 = UINT_MAX;
-    if (ignoreChosenMoves)
+    if (!ignoreChosenMoves)
     {
-        moveBattler1 = MOVE_NONE;
-        moveBattler2 = MOVE_NONE;
+        if (gChosenActionByBattler[battler1] == B_ACTION_USE_MOVE)
+            priority1 = GetChosenMovePriority(battler1);
+        if (gChosenActionByBattler[battler2] == B_ACTION_USE_MOVE)
+            priority2 = GetChosenMovePriority(battler2);
     }
-    else
+    /*else
     {
         if (gChosenActionByBattler[battler1] == B_ACTION_USE_MOVE)
         {
             if (gProtectStructs[battler1].noValidMoves)
                 moveBattler1 = MOVE_STRUGGLE;
             else
-                moveBattler1 = gBattleMons[battler1].moves[*(gBattleStruct->chosenMovePositions + battler1)];
+                gBattleMoves[moveBattler1].priority = GetChosenMovePriority;
         }
         else
             moveBattler1 = MOVE_NONE;
@@ -3415,21 +3416,17 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
             if (gProtectStructs[battler2].noValidMoves)
                 moveBattler2 = MOVE_STRUGGLE;
             else
-                moveBattler2 = gBattleMons[battler2].moves[*(gBattleStruct->chosenMovePositions + battler2)];
+                moveBattler2 = GetChosenMovePriority;
         }
         else
             moveBattler2 = MOVE_NONE;
-    }
-    if (gBattleMons[gActiveBattler].ability == ABILITY_NUISANCE
-        && gBattleMoves[move].power <= 60) //could replace "move" with gcurrent mo
-    {
-        priority += 3; //putting here will hopefully make it actually activate
-    }
+    }*/
+    
     // both move priorities are different than 0
-    if (gBattleMoves[moveBattler1].priority != 0 || gBattleMoves[moveBattler2].priority != 0)
+    if (priority1 != 0 || priority2 != 0)
     {
         // both priorities are the same
-        if (gBattleMoves[moveBattler1].priority == gBattleMoves[moveBattler2].priority)
+        if (priority1 == priority2)
         {
             if (speedBattler1 == speedBattler2 && Random() & 1)
                 strikesFirst = 2; // same speeds, same priorities
@@ -3437,7 +3434,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
                 strikesFirst = 1; // battler2 has more speed
             // else battler1 has more speed
         }
-        else if (gBattleMoves[moveBattler1].priority < gBattleMoves[moveBattler2].priority)
+        else if (priority1 < priority2)
             strikesFirst = 1; // battler2's move has greater priority
         // else battler1's move has greater priority
     }
@@ -4399,7 +4396,7 @@ static void HandleAction_ActionFinished(void)
     gBattleResources->battleScriptsStack->size = 0;
 }
 
-/*s8 GetChosenMovePriority(u8 battlerId) //made u8 (in test build)
+s8 GetChosenMovePriority(u8 battlerId) //made u8 (in test build)
 {
     u16 move;
 
@@ -4446,10 +4443,10 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
             break;
         }
     }
-    else if (gBattleMons[gActiveBattler].ability == ABILITY_NUISANCE
+    else */if (gBattleMons[battlerId].ability == ABILITY_NUISANCE
         && gBattleMoves[move].power <= 60)
     {
         priority += 3;
     }
     return priority;
-}*/
+}

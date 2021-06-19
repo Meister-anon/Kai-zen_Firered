@@ -697,7 +697,7 @@ u8 DoBattlerEndTurnEffects(void)
         }
         else
         {
-            switch (gBattleStruct->turnEffectsTracker)
+            switch (gBattleStruct->turnEffectsTracker) //adjusting to 8 instead of 15 to limit amount of healing
             {
             case ENDTURN_INGRAIN:  // ingrain
                 if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED) //IT FUCKING WORKS!!!   prob need lower limit from 15 to llike 7
@@ -708,7 +708,7 @@ u8 DoBattlerEndTurnEffects(void)
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
                     if (gBattleMoveDamage == 0)//this caps at 16 turns because the orginal & bit calculation == 0, then it adds 0x100 if it doesn't equal 0xF00 which is 1500
                         gBattleMoveDamage = 1; // so it caps the turns by essentially counting from 0 to 15. so controlling/balancing the effect is as simple as lowering 0xF00!!!
-                    if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED_COUNTER) != STATUS3_ROOTED_TURN(15)) { // not 16 turns/ facepalm just realized how this works!1!
+                    if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED_COUNTER) != STATUS3_ROOTED_TURN(8)) { // not 16 turns/ facepalm just realized how this works!1!
                         gStatuses3[gActiveBattler] += STATUS3_ROOTED_TURN(1); //seriously spitballin' here, nothing's broken atleast all the colors below are still right
                     }
                     gBattleMoveDamage *= gStatuses3[gActiveBattler] >> STATUS3_ROOTED_SHIFT;       // need understand
@@ -1818,23 +1818,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                 }
                 break;
-            case ABILITY_NUISANCE: 
-                { //since abilituy effect macro has proven to have an affect on weather/how the function activates, I may need to move this to an existing category.
-                    u32 move; //not sure why this shouldn't just be u16 but pokemon.c line 3166    ah because its "move" not "moves"
-                    u16 moveBattler = 0;
-                    s8 priority; //this threw up a syntax error before I rearranged type listing, into order it appears in function
-                    moveBattler = gBattleMons[gBattlerAttacker].moves[*(gBattleStruct->chosenMovePositions + gBattlerAttacker)];
-                    priority = gBattleMoves[moveBattler].priority;
-                //also power is better than using gbattlemovedamage as movedamage takes all other factors into account to boost damage.
-                     //apparently gchosenmoves refers to move used previously, not a buffer for the move you will use in your turn, so gcurrentmove is best here.
-                //movearg works for other abiities so I'll try it, combined with gcurrentmove
-                   
-                    if (gBattleMoves[move].power <= 60)
-                      priority = priority + 3; //tried putting in parenthesis that may ado it
-                 // taken from battle_main.c function GetWhoStrikesFirst
-                
-                }
-                break;
+            
             }
             break;
         case ABILITYEFFECT_ENDTURN: // 1
@@ -2402,6 +2386,26 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
             }
             break;
+           /* case ABILITYEFFECT_NUISANCE:
+                { //since abilituy effect macro has proven to have an affect on weather/how the function activates, I may need to move this to an existing category.
+                    //u32 move = 0; //not sure why this shouldn't just be u16 but pokemon.c line 3166    ah because its "move" not "moves"
+                    //u16 moveBattler = 0;
+                    s8 priority; //this threw up a syntax error before I rearranged type listing, into order it appears in function
+                    //u16 moves = 0;
+                    //moveBattler = gBattleMons[gBattlerAttacker].moves[*(gBattleStruct->chosenMovePositions + gBattlerAttacker)];
+                    priority = gBattleMoves[gCurrentMove].priority;
+               
+                    for (i = 0; i < gBattlersCount; ++i)
+                    {
+                        if (gBattleMons[i].ability == ABILITY_NUISANCE) {
+                            if (gBattleMoves[gCurrentMove].power <= 60)
+                                priority += 3;
+                            gLastUsedAbility = ABILITY_NUISANCE;
+                            ++effect;
+                        }
+                    }
+                }
+                break;*/
         case ABILITYEFFECT_CHECK_OTHER_SIDE: // 12
             side = GetBattlerSide(battler);
             for (i = 0; i < gBattlersCount; ++i)
