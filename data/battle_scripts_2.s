@@ -241,11 +241,11 @@ BattleScript_LeftoverWallyPrepToThrow::
 BattleScript_NonGhost_BallDodge::
 	waitmessage 64
 	printstring STRINGID_YOUMISSEDPKMN
-	waitmessage 64
+	waitmessage 46 @ first part needs to be long to match the dodge anim, but this should make it smoother
 	finishaction
 
 BattleScript_WildMonBallBlock::
-	waitmessage 64
+	waitmessage 32	@ adjusted feels much more dynamic now
 	printstring STRINGID_POKEMONBLOCKEDBALL
 	waitmessage 64
 	finishaction
