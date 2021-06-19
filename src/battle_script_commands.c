@@ -306,6 +306,7 @@ static void atkF5_removeattackerstatus1(void);
 static void atkF6_finishaction(void);
 static void atkF7_finishturn(void);
 static void atkF8_setroost(void);
+static void atkF9_jumpifdamaged(void); // made this command to work for exponcatch  inverted jumpifnodamage
 
 void (* const gBattleScriptingCommandsTable[])(void) =
 {
@@ -558,6 +559,7 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atkF6_finishaction,
     atkF7_finishturn,
     atkF8_setroost,
+    atkF9_jumpifdamaged,
 };
 
 struct StatFractions
@@ -3236,9 +3238,10 @@ static void atk23_getexp(void)
             else if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) == MAX_LEVEL)
             {
                 *(&gBattleStruct->sentInPokes) >>= 1;
-                gBattleScripting.atk23_state = 5;
-                gBattleMoveDamage = 0; // used for exp
-            }
+                gBattleScripting.atk23_state = 3;  //commented out to remove the jump to case 5. should allow for ev gain at max level
+                gBattleMoveDamage = 0; // used for exp // confirmed from Lunos, apparently the case jump only happens after everything in the code block is run so he added the evgain function here and it ran even though it was below the case jump
+                MonGainEVs(&gPlayerParty[gBattleStruct->expGetterMonId], gBattleMons[gBattlerFainted].species);// his method works but not sure if stats will change since think that's in case 3,  so I'm removing the jump and putting ev gain to here.
+            } //hopefully this works without issue
             else
             {
                 // music change in wild battle after fainting a poke
@@ -3307,8 +3310,8 @@ static void atk23_getexp(void)
         if (!gBattleControllerExecFlags)
         {
             gBattleBufferB[gBattleStruct->expGetterBattlerId][0] = 0;
-            if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP) && GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) != MAX_LEVEL)
-            {
+            if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP))// && GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) != MAX_LEVEL)
+            { // that and case 2 change were all for ev again/stat change @ level 100, think peak condition/phsycal prime like track stars. they can still get small marginal gains form training
                 gBattleResources->beforeLvlUp->stats[STAT_HP]    = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_MAX_HP);
                 gBattleResources->beforeLvlUp->stats[STAT_ATK]   = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_ATK);
                 gBattleResources->beforeLvlUp->stats[STAT_DEF]   = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_DEF);
@@ -3328,6 +3331,7 @@ static void atk23_getexp(void)
             gActiveBattler = gBattleStruct->expGetterBattlerId;
             if (gBattleBufferB[gActiveBattler][0] == CONTROLLER_TWORETURNVALUES && gBattleBufferB[gActiveBattler][1] == RET_VALUE_LEVELED_UP)
             {
+                u16 temp, battlerId = 0xFF;
                 if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && gBattlerPartyIndexes[gActiveBattler] == gBattleStruct->expGetterMonId)
                     HandleLowHpMusicChange(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
                 PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gActiveBattler, gBattleStruct->expGetterMonId);
@@ -3363,6 +3367,9 @@ static void atk23_getexp(void)
                     gBattleMons[2].speed = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPEED);
                     gBattleMons[2].speed = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPEED);
                     gBattleMons[2].spAttack = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPATK);
+
+                    //if (gStatuses3[battlerId] & STATUS3_POWER_TRICK)
+                      //  SWAP(gBattleMons[battlerId].attack, gBattleMons[battlerId].defense, temp);
                 }
                 gBattleScripting.atk23_state = 5;
             }
@@ -3381,7 +3388,7 @@ static void atk23_getexp(void)
         else
         {
             ++gBattleStruct->expGetterMonId;
-            if (gBattleStruct->expGetterMonId <= 5)
+            if (gBattleStruct->expGetterMonId <= 5) // this isn't caseid, this is a mon id, so I believe this just says check every pokemon in party
                 gBattleScripting.atk23_state = 2; // loop again
             else
                 gBattleScripting.atk23_state = 6; // we're done
@@ -9100,7 +9107,7 @@ static void atkEE_removelightscreenreflect(void) // brick break
     ++gBattlescriptCurrInstr;
 }
 
-static void atkEF_handleballthrow(void)
+static void atkEF_handleballthrow(void) //important changed
 {
     u8 ballMultiplier = 0;
 
@@ -9135,8 +9142,7 @@ static void atkEF_handleballthrow(void)
                 catchRate = gBattleStruct->safariCatchFactor * 1275 / 100;
             else
                 catchRate = gBaseStats[gBattleMons[gBattlerTarget].species].catchRate;
-            if (gLastUsedItem > ITEM_SAFARI_BALL)
-            {
+            if (gLastUsedItem > ITEM_SAFARI_BALL) //pretty much if pokeball is one of the special balls (not poke, great, ultra, or master
                 switch (gLastUsedItem)
                 {
                 case ITEM_NET_BALL:
@@ -9179,16 +9185,18 @@ static void atkEF_handleballthrow(void)
                     ballMultiplier = 10;
                     break;
                 }
-            }
+
             else
                 ballMultiplier = sBallCatchBonuses[gLastUsedItem - 2];
             odds = (catchRate * ballMultiplier / 10)
-                    * (gBattleMons[gBattlerTarget].maxHP * 3 - gBattleMons[gBattlerTarget].hp * 2)
-                    / (3 * gBattleMons[gBattlerTarget].maxHP);
-            if (gBattleMons[gBattlerTarget].status1 & (STATUS1_SLEEP | STATUS1_FREEZE))
+                * (gBattleMons[gBattlerTarget].maxHP * 3 - gBattleMons[gBattlerTarget].hp * 2)
+                / (3 * gBattleMons[gBattlerTarget].maxHP);
+            if (gBattleMons[gBattlerTarget].status1 & (STATUS1_SLEEP | STATUS1_FREEZE)) //juset realiszed I could stack statsus bonsu by including status 2, since right now rules exclude status 1 overlap
                 odds *= 2;
             if (gBattleMons[gBattlerTarget].status1 & (STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON))
                 odds = (odds * 15) / 10;
+            if (gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION)
+                odds = (odds * 11) / 10;  //TO increase catch chance by 10%, also getting deja vu from this??
             if (gLastUsedItem != ITEM_SAFARI_BALL)
             {
                 if (gLastUsedItem == ITEM_MASTER_BALL)
@@ -9201,16 +9209,16 @@ static void atkEF_handleballthrow(void)
                         ++gBattleResults.catchAttempts[gLastUsedItem - ITEM_ULTRA_BALL];
                 }
             }
-            if (odds > 254) // mon caught
+            if ((odds > 254) || (gLastUsedItem == ITEM_MASTER_BALL)) // mon caught  //successful capture
             {
                 BtlController_EmitBallThrowAnim(0, BALL_3_SHAKES_SUCCESS);
                 MarkBattlerForControllerExec(gActiveBattler);
                 gBattlescriptCurrInstr = BattleScript_SuccessBallThrow;
                 SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_POKEBALL, &gLastUsedItem);
                 if (CalculatePlayerPartyCount() == 6)
-                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 0; // party full
                 else
-                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 1; //add to party
             }
             else // mon may be caught, calculate shakes
             {
@@ -9219,12 +9227,14 @@ static void atkEF_handleballthrow(void)
                 odds = Sqrt(Sqrt(16711680 / odds));
                 odds = 1048560 / odds;
                 for (shakes = 0; shakes < 4 && Random() < odds; ++shakes);
-                if (gLastUsedItem == ITEM_MASTER_BALL)
-                    shakes = BALL_3_SHAKES_SUCCESS; // why calculate the shakes before that check?
-                BtlController_EmitBallThrowAnim(0, shakes);
-                MarkBattlerForControllerExec(gActiveBattler);
+                //if (gLastUsedItem == ITEM_MASTER_BALL) // moved above for convenience
+                //    shakes = BALL_3_SHAKES_SUCCESS; // why calculate the shakes before that check?
+               // BtlController_EmitBallThrowAnim(0, shakes);
+                //MarkBattlerForControllerExec(gActiveBattler);
                 if (shakes == BALL_3_SHAKES_SUCCESS) // mon caught, copy of the code above
                 {
+                    BtlController_EmitBallThrowAnim(0, BALL_3_SHAKES_SUCCESS);
+                    MarkBattlerForControllerExec(gActiveBattler);
                     gBattlescriptCurrInstr = BattleScript_SuccessBallThrow;
                     SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_POKEBALL, &gLastUsedItem);
                     if (CalculatePlayerPartyCount() == 6)
@@ -9232,10 +9242,28 @@ static void atkEF_handleballthrow(void)
                     else
                         gBattleCommunication[MULTISTRING_CHOOSER] = 1;
                 }
-                else // not caught
-                {
-                    gBattleCommunication[MULTISTRING_CHOOSER] = shakes;
-                    gBattlescriptCurrInstr = BattleScript_ShakeBallThrow;
+                else // not caught  think this is the part I need to change to replace shakes with miss or block
+                { //based on brackets this should be if odds are  "less than 254"  and shake is guaranteed to fail,  meaning all fail.
+                    u16 catchstate;
+                    catchstate = Random() % 2; // while I prefer the idea that the only time its in the ball it stays in the ball. it may be more interesting game wise
+                   // if (!gHasFetchedBall)
+                     //   gLastUsedBall = gLastUsedItem;
+
+                    if (catchstate == 0) { // to add a 3rd option where it can shake and fail normally.
+                        BtlController_EmitBallThrowAnim(0, BALL_TRAINER_BLOCK);
+                        MarkBattlerForControllerExec(gActiveBattler);
+                        gBattlescriptCurrInstr = BattleScript_WildMonBallBlock;
+                    }
+                    if (catchstate == 1) {
+                        BtlController_EmitBallThrowAnim(0, BALL_GHOST_DODGE);
+                        MarkBattlerForControllerExec(gActiveBattler);
+                        gBattlescriptCurrInstr = BattleScript_NonGhost_BallDodge;
+                    }
+                    /*if (catchstate == 2) {
+                        BtlController_EmitBallThrowAnim(0, shakes);
+                        MarkBattlerForControllerExec(gActiveBattler);
+                        gBattlescriptCurrInstr = BattleScript_ShakeBallThrow;   //normal catch shake mechanic in case I decide to do, but I want this to be least chosen option
+                    } */    // so insteaad of %3  I may do %5 and give the first 2 sates 2 success criteria (i.e 0,1 & 2,3   then have this only work on 4.  will have to test odds in effect)
                 }
             }
         }
@@ -9569,4 +9597,18 @@ static void atkF8_setroost(void) { //actually I don't like this type change idea
 
     gBattlescriptCurrInstr++;
 } //should have effect of doing pretty much nothing
+
+static void atkF9_jumpifdamaged(void) //edited based on recommendation from mcgriffin & egg (aka dizzyegg)
+{
+    if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER && gBattleMoveDamage > 0)
+        gBattleResults.playerMonWasDamaged = TRUE;
+    if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT && gBattleMoveDamage > 0)
+        gBattleResults.playerMonWasDamaged = TRUE;
+
+    if (gBattleResults.playerMonWasDamaged == TRUE)
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    else
+        gBattlescriptCurrInstr += 5;
+
+}
 

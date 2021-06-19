@@ -75,7 +75,9 @@ BattleScript_SuccessBallThrow::
 	incrementgamestat GAME_STAT_POKEMON_CAPTURES
 BattleScript_SafariNoIncGameStat::
 	printstring STRINGID_GOTCHAPKMNCAUGHT
-	trysetcaughtmondexflags BattleScript_CaughtPokemonSkipNewDex
+	setbyte sGIVEEXP_STATE, 0x0			@ want to set only on damage, but making script is difficult
+	getexp BS_TARGET
+	trysetcaughtmondexflags BattleScript_CaughtPokemonSkipNewDex  @ also couldnt repeat scripts like this one
 	printstring STRINGID_PKMNDATAADDEDTODEX
 	waitstate
 	setbyte gBattleCommunication, 0
@@ -236,3 +238,36 @@ BattleScript_LeftoverWallyPrepToThrow::
 	printstring STRINGID_YOUTHROWABALLNOWRIGHT
 	waitmessage 64
 	end2
+
+BattleScript_NonGhost_BallDodge::
+	waitmessage 64
+	printstring STRINGID_YOUMISSEDPKMN
+	waitmessage 64
+	finishaction
+
+BattleScript_WildMonBallBlock::
+	waitmessage 64
+	printstring STRINGID_POKEMONBLOCKEDBALL
+	waitmessage 64
+	finishaction
+
+
+
+
+@BattleScript_ExpOnCatch::
+@	setbyte sGIVEEXP_STATE, 0x0
+@	getexp BS_TARGET
+@	trysetcaughtmondexflags BattleScript_CaughtPokemonSkipNewDex
+@	printstring STRINGID_PKMNDATAADDEDTODEX
+@	waitstate
+@	setbyte gBattleCommunication, 0
+@	displaydexinfo
+@BattleScript_CaughtPokemonSkipNewDex::
+@	printstring STRINGID_GIVENICKNAMECAPTURED
+@	waitstate
+@	setbyte gBattleCommunication, 0
+@	trygivecaughtmonnick BattleScript_CaughtPokemonSkipNickname
+@	givecaughtmon
+@	printfromtable gCaughtMonStringIds
+@	waitmessage 64
+@	goto BattleScript_CaughtPokemonDone

@@ -10162,9 +10162,9 @@ Move_ROOST::
 	waitforvisualfinish
 	end
 
-Move_COCOON::	@ slight variation to see if it changes color belly drum anim task
+Move_COCOON::
 	loopsewithpan SE_M_HARDEN, 192, 28, 2
-	createvisualtask AnimTask_MetallicShine, 5, 0, 0, 0
+	createvisualtask AnimTask_MetallicShine, 5, 0, 0, 0	 @ these values affect color of shine
 	waitforvisualfinish
 	end
 
