@@ -54,6 +54,7 @@ static void DrawLevelUpWindow2(void);
 static bool8 sub_8026648(void);
 static void PutMonIconOnLvlUpBox(void);
 static void PutLevelAndGenderOnLvlUpBox(void);
+//static bool8 mondamaged(void);
 
 static void SpriteCB_MonIconOnLvlUpBox(struct Sprite *sprite);
 
@@ -306,7 +307,7 @@ static void atkF5_removeattackerstatus1(void);
 static void atkF6_finishaction(void);
 static void atkF7_finishturn(void);
 static void atkF8_setroost(void);
-static void atkF9_jumpifdamaged(void); // made this command to work for exponcatch  inverted jumpifnodamage
+static void atkF9_mondamaged(void); // made this command to work for exponcatch, might remove if mondamaged works
 
 void (* const gBattleScriptingCommandsTable[])(void) =
 {
@@ -559,7 +560,7 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atkF6_finishaction,
     atkF7_finishturn,
     atkF8_setroost,
-    atkF9_jumpifdamaged,
+    atkF9_mondamaged,
 };
 
 struct StatFractions
@@ -9209,7 +9210,19 @@ static void atkEF_handleballthrow(void) //important changed
                         ++gBattleResults.catchAttempts[gLastUsedItem - ITEM_ULTRA_BALL];
                 }
             }
-            if ((odds > 254) || (gLastUsedItem == ITEM_MASTER_BALL)) // mon caught  //successful capture
+            if (((odds > 254) || (gLastUsedItem == ITEM_MASTER_BALL))
+                && gBattleResults.playerMonWasDamaged == TRUE) // mon caught  //successful capture
+            {
+                BtlController_EmitBallThrowAnim(0, BALL_3_SHAKES_SUCCESS);
+                MarkBattlerForControllerExec(gActiveBattler);
+                gBattlescriptCurrInstr = BattleScript_ExpOnCatch;
+                SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_POKEBALL, &gLastUsedItem);
+                if (CalculatePlayerPartyCount() == 6)
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 0; // party full
+                else
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 1; //add to party
+            }
+            else if ((odds > 254) || (gLastUsedItem == ITEM_MASTER_BALL)) // mon caught  //successful capture
             {
                 BtlController_EmitBallThrowAnim(0, BALL_3_SHAKES_SUCCESS);
                 MarkBattlerForControllerExec(gActiveBattler);
@@ -9231,7 +9244,18 @@ static void atkEF_handleballthrow(void) //important changed
                 //    shakes = BALL_3_SHAKES_SUCCESS; // why calculate the shakes before that check?
                // BtlController_EmitBallThrowAnim(0, shakes);
                 //MarkBattlerForControllerExec(gActiveBattler);
-                if (shakes == BALL_3_SHAKES_SUCCESS) // mon caught, copy of the code above
+                if (shakes == BALL_3_SHAKES_SUCCESS && gBattleResults.playerMonWasDamaged == TRUE) // mon caught, copy of the code above
+                {
+                    BtlController_EmitBallThrowAnim(0, BALL_3_SHAKES_SUCCESS);
+                    MarkBattlerForControllerExec(gActiveBattler);
+                    gBattlescriptCurrInstr = BattleScript_ExpOnCatch;
+                    SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_POKEBALL, &gLastUsedItem);
+                    if (CalculatePlayerPartyCount() == 6)
+                        gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                    else
+                        gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                }
+                else if (shakes == BALL_3_SHAKES_SUCCESS) // mon caught, copy of the code above
                 {
                     BtlController_EmitBallThrowAnim(0, BALL_3_SHAKES_SUCCESS);
                     MarkBattlerForControllerExec(gActiveBattler);
@@ -9595,20 +9619,21 @@ static void atkF8_setroost(void) { //actually I don't like this type change idea
     //gBattleStruct->roostTypes[gBattlerAttacker][1] = gBattleMons[gBattlerAttacker].type2;
 //  }
 
-    gBattlescriptCurrInstr++;
+    ++gBattlescriptCurrInstr;
 } //should have effect of doing pretty much nothing
 
-static void atkF9_jumpifdamaged(void) //edited based on recommendation from mcgriffin & egg (aka dizzyegg)
+static void atkF9_mondamaged(void) //edited based on recommendation from mcgriffin & egg (aka dizzyegg)
 {
+    //screw it. can't make it work when enemy is damaged probably something to do with how playermonwasdamaged works
     if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER && gBattleMoveDamage > 0)
-        gBattleResults.playerMonWasDamaged = TRUE;
-    if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT && gBattleMoveDamage > 0)
-        gBattleResults.playerMonWasDamaged = TRUE;
+        gBattleResults.playerMonWasDamaged = TRUE; //besides that still makes good sense, you only grow when your body exerts itself/exeriences pain
+       
+    ++gBattlescriptCurrInstr; //without this script doesn't continue stays stuck on this
+    //also leanred that order matters for stacked ifs or else ifs, since it will
+    //take the first true statement for either if or else if, and igonore any other following.
+    //..i think, need to read logic
+    
 
-    if (gBattleResults.playerMonWasDamaged == TRUE)
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
-    else
-        gBattlescriptCurrInstr += 5;
-
+    //plus that would avoid any confusion from combining and with else statements
 }
 

@@ -1246,6 +1246,10 @@
 	.byte 0xf8
 	.endm
 
+	.macro mondamaged
+	.byte 0xf9
+	.endm
+
 @ various command changed to more readable macros
 	.macro cancelmultiturnmoves battler:req
 	various \battler, VARIOUS_CANCEL_MULTI_TURN_MOVES
@@ -1374,8 +1378,4 @@
 
 	.macro jumpifnotbattletype flags:req, jumpptr:req
 	jumpifword CMP_NO_COMMON_BITS, gBattleTypeFlags, \flags, \jumpptr
-	.endm
-
-	.macro jumpifdamaged battler:req, jumpptr:req
-	jumpifdamaged \battler, 0x1, \jumpptr
 	.endm

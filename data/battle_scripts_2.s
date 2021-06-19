@@ -55,6 +55,7 @@ BattleScript_ThrowBall::
 	jumpifbattletype BATTLE_TYPE_OLD_MAN_TUTORIAL, BattleScript_OldManThrowBall
 	jumpifbattletype BATTLE_TYPE_POKEDUDE, BattleScript_PokedudeThrowBall
 	printstring STRINGID_PLAYERUSEDITEM
+	mondamaged		@ put here to try and set playermondamaged before catching
 	handleballthrow
 
 BattleScript_OldManThrowBall::
@@ -75,8 +76,6 @@ BattleScript_SuccessBallThrow::
 	incrementgamestat GAME_STAT_POKEMON_CAPTURES
 BattleScript_SafariNoIncGameStat::
 	printstring STRINGID_GOTCHAPKMNCAUGHT
-	setbyte sGIVEEXP_STATE, 0x0			@ want to set only on damage, but making script is difficult
-	getexp BS_TARGET
 	trysetcaughtmondexflags BattleScript_CaughtPokemonSkipNewDex  @ also couldnt repeat scripts like this one
 	printstring STRINGID_PKMNDATAADDEDTODEX
 	waitstate
@@ -254,20 +253,22 @@ BattleScript_WildMonBallBlock::
 
 
 
-@BattleScript_ExpOnCatch::
-@	setbyte sGIVEEXP_STATE, 0x0
-@	getexp BS_TARGET
-@	trysetcaughtmondexflags BattleScript_CaughtPokemonSkipNewDex
-@	printstring STRINGID_PKMNDATAADDEDTODEX
-@	waitstate
-@	setbyte gBattleCommunication, 0
-@	displaydexinfo
-@BattleScript_CaughtPokemonSkipNewDex::
-@	printstring STRINGID_GIVENICKNAMECAPTURED
-@	waitstate
-@	setbyte gBattleCommunication, 0
-@	trygivecaughtmonnick BattleScript_CaughtPokemonSkipNickname
-@	givecaughtmon
-@	printfromtable gCaughtMonStringIds
-@	waitmessage 64
-@	goto BattleScript_CaughtPokemonDone
+BattleScript_ExpOnCatch:: @ can skip safari stusff, but need copy everything till caughtpokemondone
+	incrementgamestat GAME_STAT_POKEMON_CAPTURES
+	printstring STRINGID_GOTCHAPKMNCAUGHT
+	setbyte sGIVEEXP_STATE, 0x0			@ want to set only on damage, but making script is difficult
+	getexp BS_TARGET
+	trysetcaughtmondexflags BattleScript_CaughtPokemonSkipNewDex2  @ also couldnt repeat scripts like this one so changed name
+	printstring STRINGID_PKMNDATAADDEDTODEX
+	waitstate
+	setbyte gBattleCommunication, 0
+	displaydexinfo
+BattleScript_CaughtPokemonSkipNewDex2::
+	printstring STRINGID_GIVENICKNAMECAPTURED
+	waitstate
+	setbyte gBattleCommunication, 0
+	trygivecaughtmonnick BattleScript_CaughtPokemonSkipNickname
+	givecaughtmon
+	printfromtable gCaughtMonStringIds
+	waitmessage 64
+	goto BattleScript_CaughtPokemonDone
