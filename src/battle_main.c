@@ -4444,7 +4444,8 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
         }
     }
     else */if (gBattleMons[battlerId].ability == ABILITY_NUISANCE
-        && gBattleMoves[move].power <= 60)
+        && gBattleMoves[move].power <= 60
+        && gDynamicBasePower <= 60) //added dynamic for moves like hidden power
     {
         priority += 3;
     }

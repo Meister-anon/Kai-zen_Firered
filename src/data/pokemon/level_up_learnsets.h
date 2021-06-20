@@ -538,6 +538,7 @@ static const u16 sWigglytuffLevelUpLearnset[] = {
 
 static const u16 sZubatLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_LEECH_LIFE),
+    LEVEL_UP_MOVE(1, MOVE_HIDDEN_POWER),
     LEVEL_UP_MOVE(6, MOVE_ASTONISH),
     LEVEL_UP_MOVE(11, MOVE_SUPERSONIC),
     LEVEL_UP_MOVE(16, MOVE_BITE),
@@ -679,7 +680,7 @@ static const u16 sDiglettLevelUpLearnset[] = {
 };
 
 static const u16 sDugtrioLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_TRI_ATTACK),
+    LEVEL_UP_MOVE(0, MOVE_TRI_ATTACK), //don't know why its here, but i'll use for evo learn test
 #if defined(FIRERED)
     LEVEL_UP_MOVE(1, MOVE_SCRATCH),
     LEVEL_UP_MOVE(1, MOVE_SAND_ATTACK),
@@ -851,6 +852,8 @@ static const u16 sPoliwrathLevelUpLearnset[] = {
 
 static const u16 sAbraLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TELEPORT),
+    LEVEL_UP_MOVE(1, MOVE_HIDDEN_POWER),
+    LEVEL_UP_MOVE(1, MOVE_PSYWAVE),
     LEVEL_UP_END
 };
 

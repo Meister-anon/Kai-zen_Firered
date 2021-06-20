@@ -54,7 +54,9 @@ static void DrawLevelUpWindow2(void);
 static bool8 sub_8026648(void);
 static void PutMonIconOnLvlUpBox(void);
 static void PutLevelAndGenderOnLvlUpBox(void);
-//static bool8 mondamaged(void);
+s16 atk_diff(void);
+s16 spatk_diff(void); //hopefully this works, and I don't actually need to define these in the .h,
+//since its not static
 
 static void SpriteCB_MonIconOnLvlUpBox(struct Sprite *sprite);
 
@@ -2014,7 +2016,7 @@ static void atk0E_effectivenesssound(void)
     }
 }
 
-static void atk0F_resultmessage(void)
+static void atk0F_resultmessage(void) //covers the battle message displayed after attacks
 {
     u32 stringId = 0;
 
@@ -8223,28 +8225,98 @@ static void atkC0_recoverbasedonsunlight(void)
     }
 }
 
+s16 atk_diff(void) {
+    s16 diff = (gBattleMons[gBattlerTarget].attack - gBattleMons[gBattlerAttacker].attack);
+    if (diff <= 0)
+    {
+        diff = 0;
+    }
+    return diff;
+}
+
+s16 spatk_diff(void) {
+    s16 diff = (gBattleMons[gBattlerTarget].spAttack - gBattleMons[gBattlerAttacker].spAttack);
+    if (diff <= 0) {
+        diff = 0;
+    }
+    return diff;
+}
+
 static void atkC1_hiddenpowercalc(void)
 {
+
     s32 powerBits, typeBits;
+    s16 i, j;
+    u8 moveSplit = gBattleMoves[gCurrentMove].split;
+    u16 value = Random() % 2;
 
     powerBits = ((gBattleMons[gBattlerAttacker].hpIV & 2) >> 1)
-              | ((gBattleMons[gBattlerAttacker].attackIV & 2) << 0)
-              | ((gBattleMons[gBattlerAttacker].defenseIV & 2) << 1)
-              | ((gBattleMons[gBattlerAttacker].speedIV & 2) << 2)
-              | ((gBattleMons[gBattlerAttacker].spAttackIV & 2) << 3)
-              | ((gBattleMons[gBattlerAttacker].spDefenseIV & 2) << 4);
-    typeBits  = ((gBattleMons[gBattlerAttacker].hpIV & 1) << 0)
-              | ((gBattleMons[gBattlerAttacker].attackIV & 1) << 1)
-              | ((gBattleMons[gBattlerAttacker].defenseIV & 1) << 2)
-              | ((gBattleMons[gBattlerAttacker].speedIV & 1) << 3)
-              | ((gBattleMons[gBattlerAttacker].spAttackIV & 1) << 4)
-              | ((gBattleMons[gBattlerAttacker].spDefenseIV & 1) << 5);
+        | ((gBattleMons[gBattlerAttacker].attackIV & 2) << 0)
+        | ((gBattleMons[gBattlerAttacker].defenseIV & 2) << 1)
+        | ((gBattleMons[gBattlerAttacker].speedIV & 2) << 2)
+        | ((gBattleMons[gBattlerAttacker].spAttackIV & 2) << 3)
+        | ((gBattleMons[gBattlerAttacker].spDefenseIV & 2) << 4);
+    typeBits = ((gBattleMons[gBattlerAttacker].hpIV & 1) << 0)
+        | ((gBattleMons[gBattlerAttacker].attackIV & 1) << 1)
+        | ((gBattleMons[gBattlerAttacker].defenseIV & 1) << 2)
+        | ((gBattleMons[gBattlerAttacker].speedIV & 1) << 3)
+        | ((gBattleMons[gBattlerAttacker].spAttackIV & 1) << 4)
+        | ((gBattleMons[gBattlerAttacker].spDefenseIV & 1) << 5);
     gDynamicBasePower = (40 * powerBits) / 63 + 30;
-    gBattleStruct->dynamicMoveType = (15 * typeBits) / 63 + 1;
-    if (gBattleStruct->dynamicMoveType >= TYPE_MYSTERY)
-        ++gBattleStruct->dynamicMoveType;
-    gBattleStruct->dynamicMoveType |= 0xC0;
-    ++gBattlescriptCurrInstr;
+    gBattleStruct->dynamicMoveType = (16 * typeBits) / 63 + 1; //think changing from 15 to 16 adds one more type to options so now have fairy
+    if (gBattleStruct->dynamicMoveType == TYPE_MYSTERY)
+        gBattleStruct->dynamicMoveType = TYPE_FAIRY; // or may need to increase it by 6 to get over other types to 21 since the +1 and ++ adds 2 tellign the last type added
+    gBattleStruct->dynamicMoveType |= 0xC0; // i.e 15 +2= 17 which is type dark 0x11 == 17
+    
+
+    // don't know if this workks still need to add 1.7 boost if lower than opponenent stat
+        //make sure I use the right stat field so it calculates dynamically not just use base stat by take into account stat changing moves too.
+        // stat atk seems to be your stat stage for that specifc stat
+      //  u16 move = MOVE_HIDDEN_POWER;
+
+    i = atk_diff();
+    j = spatk_diff();  // since the values are a differnece  the lower stat will actually be the one with the greater value. so I should use greater than for these.
+    // if equal I think I'll just toss up a 50/50 Random() % 2  setting each, like I did for forecast.
+     //so this should boost attack,if atk is lower & split is physical
+    if (i > 0 && moveSplit == SPLIT_PHYSICAL)
+        gBattleMoveDamage = gBattleMoveDamage * 17 / 10;
+
+    if (j > 0 && moveSplit == SPLIT_SPECIAL)
+        gBattleMoveDamage = gBattleMoveDamage * 17 / 10;
+
+    if ((i || j) == 0) // to ensure I don't get the boost if my stats are greater than my opponenet
+    { //hope that syntax is right?
+        gBattleMoveDamage = gBattleMoveDamage;
+
+    } //ok it compiles but seems to be severly underperforming in first tests, 
+    //I forgot about the varied power part
+
+
+    if (gCurrentMove == MOVE_HIDDEN_POWER) // also see about putting split condition for hidden power onto the function for getbattlesplit
+    {
+
+        //} this should work much better, split is decided by the lower compoarison of my atk stats to my opponenets
+            //then if that stat is also my lowest atk stat it gets a shonen style damage boost
+        //that was dumb, that would almost guarantee boosted damage.
+        if (gBattleMons[gBattlerAttacker].attack < gBattleMons[gBattlerAttacker].spAttack)
+            moveSplit = SPLIT_PHYSICAL;
+        if (gBattleMons[gBattlerAttacker].spAttack < gBattleMons[gBattlerAttacker].attack)
+            moveSplit = SPLIT_SPECIAL;
+        if (gBattleMons[gBattlerAttacker].spAttack == gBattleMons[gBattlerAttacker].attack) // i & j are equal when my stats equal my oppoenenets or both my stats are higher.
+        {
+            if (value == 0) {
+                moveSplit = SPLIT_PHYSICAL;
+            }
+            if (value == 1) {
+                moveSplit = SPLIT_SPECIAL;
+            } //set split here,  put boost below and add split for lower stat to condtion
+        }
+    }
+    ++gBattlescriptCurrInstr; //moved downhere to hopefully make sure it doesn't jump scripts until everything done
+
+    //compare abililty_download that is most similar as it does a boost based on opponenet stat comparison
+    // gCurrentMove = gChosenMove = MOVE_HIDDEN_POWER;
+        //realized will need function call to set i & j value. so will make two functions and comme back.
 }
 
 static void atkC2_selectfirstvalidtarget(void)
