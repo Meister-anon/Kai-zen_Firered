@@ -3013,47 +3013,45 @@ static void atk1D_jumpifstatus2(void)
 static void atk1E_jumpifability(void)
 {
     u8 battlerId;
-    u16 ability = T2_READ_16(gBattlescriptCurrInstr + 2);
-    const u8 *jumpPtr = T2_READ_PTR(gBattlescriptCurrInstr + 4);
+    bool8 hasAbility = FALSE;
+    u32 ability = T2_READ_16(gBattlescriptCurrInstr + 2);
 
-    if (gBattlescriptCurrInstr[1] == BS_ATTACKER_SIDE)
+    switch (gBattlescriptCurrInstr[1]) //hodge podge port of rh emerald stuff mixed with vanilla firered macros
+        //with adjusted type
     {
+    default:
+        battlerId = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+        if (gBattleMons[battlerId].ability == ability)
+            hasAbility = TRUE;
+        break;
+    case BS_ATTACKER_SIDE:
         battlerId = AbilityBattleEffects(ABILITYEFFECT_CHECK_BATTLER_SIDE, gBattlerAttacker, ability, 0, 0);
         if (battlerId)
         {
-            gLastUsedAbility = ability;
-            gBattlescriptCurrInstr = jumpPtr;
-            RecordAbilityBattle(battlerId - 1, gLastUsedAbility);
-            gBattleScripting.battlerWithAbility = battlerId - 1;
+            --battlerId;
+            hasAbility = TRUE;
         }
-        else
-            gBattlescriptCurrInstr += 8;
-    }
-    else if (gBattlescriptCurrInstr[1] == BS_NOT_ATTACKER_SIDE)
-    {
+        break;
+    case BS_NOT_ATTACKER_SIDE:
         battlerId = AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, gBattlerAttacker, ability, 0, 0);
         if (battlerId)
         {
-            gLastUsedAbility = ability;
-            gBattlescriptCurrInstr = jumpPtr;
-            RecordAbilityBattle(battlerId - 1, gLastUsedAbility);
-            gBattleScripting.battlerWithAbility = battlerId - 1;
+            --battlerId;
+            hasAbility = TRUE;
         }
-        else
-            gBattlescriptCurrInstr += 7;
+        break;
+    }
+
+    if (hasAbility)
+    {
+        gLastUsedAbility = ability;
+        gBattlescriptCurrInstr = T2_READ_PTR(gBattlescriptCurrInstr + 4);
+        RecordAbilityBattle(battlerId, gLastUsedAbility);
+        gBattleScripting.battlerWithAbility = battlerId;
     }
     else
     {
-        battlerId = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
-        if (gBattleMons[battlerId].ability == ability)
-        {
-            gLastUsedAbility = ability;
-            gBattlescriptCurrInstr = jumpPtr;
-            RecordAbilityBattle(battlerId, gLastUsedAbility);
-            gBattleScripting.battlerWithAbility = battlerId;
-        }
-        else
-            gBattlescriptCurrInstr += 7;
+        gBattlescriptCurrInstr += 8;
     }
 }
 
@@ -8279,14 +8277,15 @@ static void atkC1_hiddenpowercalc(void)
     // if equal I think I'll just toss up a 50/50 Random() % 2  setting each, like I did for forecast.
      //so this should boost attack,if atk is lower & split is physical
     if (i > 0 && moveSplit == SPLIT_PHYSICAL)
-        gBattleMoveDamage = gBattleMoveDamage * 17 / 10;
+        gDynamicBasePower = gDynamicBasePower * 17 / 10; //boosted from 17 to 50 just to see if it works
 
     if (j > 0 && moveSplit == SPLIT_SPECIAL)
-        gBattleMoveDamage = gBattleMoveDamage * 17 / 10;
+        gDynamicBasePower = gDynamicBasePower * 17 / 10; //doesn't seem to be workign, I'll swap to gdynamic
+    //O.o now it works ...ow
 
     if ((i || j) == 0) // to ensure I don't get the boost if my stats are greater than my opponenet
     { //hope that syntax is right?
-        gBattleMoveDamage = gBattleMoveDamage;
+        gDynamicBasePower = gDynamicBasePower;
 
     } //ok it compiles but seems to be severly underperforming in first tests, 
     //I forgot about the varied power part
@@ -9338,28 +9337,31 @@ static void atkEF_handleballthrow(void) //important changed
                     else
                         gBattleCommunication[MULTISTRING_CHOOSER] = 1;
                 }
-                else // not caught  think this is the part I need to change to replace shakes with miss or block
+                else
+                    //ok think my above functions messed up the else, so I had to explicitly define the fail conditions here
+
+                    // not caught  think this is the part I need to change to replace shakes with miss or block
                 { //based on brackets this should be if odds are  "less than 254"  and shake is guaranteed to fail,  meaning all fail.
                     u16 catchstate;
-                    catchstate = Random() % 2; // while I prefer the idea that the only time its in the ball it stays in the ball. it may be more interesting game wise
+                    catchstate = Random() % 5; // while I prefer the idea that the only time its in the ball it stays in the ball. it may be more interesting game wise
                    // if (!gHasFetchedBall)
                      //   gLastUsedBall = gLastUsedItem;
 
-                    if (catchstate == 0) { // to add a 3rd option where it can shake and fail normally.
+                    if (catchstate == 0 || catchstate == 1)  { // to add a 3rd option where it can shake and fail normally.
                         BtlController_EmitBallThrowAnim(0, BALL_TRAINER_BLOCK);
                         MarkBattlerForControllerExec(gActiveBattler);
                         gBattlescriptCurrInstr = BattleScript_WildMonBallBlock;
                     }
-                    if (catchstate == 1) {
+                    if (catchstate == 2 || catchstate == 3) {
                         BtlController_EmitBallThrowAnim(0, BALL_GHOST_DODGE);
                         MarkBattlerForControllerExec(gActiveBattler);
                         gBattlescriptCurrInstr = BattleScript_NonGhost_BallDodge;
                     }
-                    /*if (catchstate == 2) {
+                    if (catchstate == 4 && shakes != BALL_3_SHAKES_SUCCESS) {//extra protection -_-
                         BtlController_EmitBallThrowAnim(0, shakes);
                         MarkBattlerForControllerExec(gActiveBattler);
                         gBattlescriptCurrInstr = BattleScript_ShakeBallThrow;   //normal catch shake mechanic in case I decide to do, but I want this to be least chosen option
-                    } */    // so insteaad of %3  I may do %5 and give the first 2 sates 2 success criteria (i.e 0,1 & 2,3   then have this only work on 4.  will have to test odds in effect)
+                    }    // so insteaad of %3  I may do %5 and give the first 2 sates 2 success criteria (i.e 0,1 & 2,3   then have this only work on 4.  will have to test odds in effect)
                 }
             }
         }

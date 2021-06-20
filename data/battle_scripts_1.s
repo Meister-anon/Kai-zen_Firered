@@ -330,7 +330,7 @@ BattleScript_EffectAbsorb::
 	critcalc
 	damagecalc
 	typecalc
-	adjustnormaldamage
+ 	adjustnormaldamage
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -342,14 +342,14 @@ BattleScript_EffectAbsorb::
 	waitmessage 0x40
 	resultmessage
 	waitmessage 0x40
-	negativedamage
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
-	jumpifability BS_TARGET, ABILITY_LIQUID_OOZE, BattleScript_AbsorbLiquidOoze
+	negativedamage	@ without this, damgae to attacker is doubleed
+ 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
+ 	jumpifability BS_TARGET, ABILITY_LIQUID_OOZE, BattleScript_AbsorbLiquidOoze
 	setbyte cMULTISTRING_CHOOSER, 0
-	goto BattleScript_AbsorbUpdateHp
+	goto BattleScript_AbsorbUpdateHp @went one by one, the problem was jumpifability from when I expanded abilities 
 
 BattleScript_AbsorbLiquidOoze::
-	manipulatedamage 0
+  	manipulatedamage 0
 	setbyte cMULTISTRING_CHOOSER, 1
 BattleScript_AbsorbUpdateHp::
 	healthbarupdate BS_ATTACKER
