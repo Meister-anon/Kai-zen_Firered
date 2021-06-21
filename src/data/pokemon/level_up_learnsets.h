@@ -4019,6 +4019,7 @@ static const u16 sNinjaskLevelUpLearnset[] = {
 static const u16 sShedinjaLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_SCRATCH),
     LEVEL_UP_MOVE(1, MOVE_HARDEN),
+    LEVEL_UP_MOVE(1, MOVE_FURY_CUTTER),
     LEVEL_UP_MOVE(5, MOVE_LEECH_LIFE),
     LEVEL_UP_MOVE(9, MOVE_SAND_ATTACK),
     LEVEL_UP_MOVE(14, MOVE_FURY_SWIPES),

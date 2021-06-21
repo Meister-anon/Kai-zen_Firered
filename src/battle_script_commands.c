@@ -57,6 +57,8 @@ static void PutLevelAndGenderOnLvlUpBox(void);
 s16 atk_diff(void);
 s16 spatk_diff(void); //hopefully this works, and I don't actually need to define these in the .h,
 //since its not static
+bool8 IsBattlerProtected(u8 battlerId, u16 move);
+//static void ProtectBreak(void);
 
 static void SpriteCB_MonIconOnLvlUpBox(struct Sprite *sprite);
 
@@ -873,6 +875,10 @@ static void atk00_attackcanceler(void)
 {
     s32 i;
 
+    if (gCurrentMove == MOVE_FURY_CUTTER) {
+        ResetFuryCutterCounter(gBattlerAttacker);
+    } //should check for move at start, and make sure damage gets reset
+
     if (gBattleOutcome)
     {
         gCurrentActionFuncId = B_ACTION_FINISHED;
@@ -1005,6 +1011,83 @@ static bool8 JumpIfMoveAffectedByProtect(u16 move)
     return affected;
 }
 
+bool8 IsBattlerProtected(u8 battlerId, u16 move)
+{ //setprotectlike does the protection, then hre I can undo it when this gets checked in attack canceleror
+
+
+    if (gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED)
+        return TRUE;
+    //else if (gBattleMoves[move].effect == MOVE_EFFECT_FEINT)
+        //return FALSE;
+    else if (gProtectStructs[battlerId].protected)
+        return TRUE;
+    /*else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD
+        && gBattleMoves[move].target & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
+        return TRUE;
+    else if (gProtectStructs[battlerId].banefulBunkered)
+        return TRUE;
+    else if (gProtectStructs[battlerId].spikyShielded)
+        return TRUE;
+    else if (gProtectStructs[battlerId].kingsShielded && gBattleMoves[move].power != 0)
+        return TRUE;
+    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD
+        && GetChosenMovePriority(gBattlerAttacker) > 0)
+        return TRUE;
+    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_CRAFTY_SHIELD
+        && gBattleMoves[move].power == 0)
+        return TRUE;
+    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_MAT_BLOCK
+        && gBattleMoves[move].power != 0)
+        return TRUE;*/ //think below should instead be its own function start fromweather has effect down
+    //else if (ProtectBreak) //idk may work, should be if not 0
+       // return TRUE; // nah doesn't work becuase of how function returns work, 
+    //my function isn't returning the random value its using it.
+        //I'll just leave this off,  I'll not worry about spikyshield physical damagage
+    //function below should be fine by itself.
+    else
+        return FALSE;
+}
+
+/*static void ProtectBreak(void) //part in parenthesis is argument going into function
+{ //part left of name is what's returned from function.
+    //made void again since don't think I need it to return something.
+    u16 rand = Random();
+    u16 randPercent = 100 - (rand % 12); //should work as final adjustment to damage to do 89-100 percent of total after breaking protect
+
+    if ((WEATHER_HAS_EFFECT &&
+        (((gBattleWeather & WEATHER_RAIN_ANY) && ((gBattleMoves[gCurrentMove].effect == EFFECT_THUNDER) || (gCurrentMove == MOVE_HYDRO_PUMP || gCurrentMove == MOVE_ZAP_CANNON)))
+            || ((gBattleWeather & WEATHER_HAIL_ANY) && (gCurrentMove == MOVE_BLIZZARD))
+            || ((gBattleWeather & WEATHER_SUN_ANY) && (gCurrentMove == MOVE_FIRE_BLAST || gCurrentMove == MOVE_SOLAR_BEAM || gCurrentMove == MOVE_SOLAR_BLADE || gCurrentMove == MOVE_OVERHEAT))))
+            || (gCurrentMove == MOVE_BLAST_BURN || gCurrentMove == MOVE_HYDRO_CANNON || gCurrentMove == MOVE_FRENZY_PLANT || gCurrentMove == MOVE_HYPER_BEAM || gCurrentMove == MOVE_GIGA_IMPACT || gCurrentMove == MOVE_ROCK_WRECKER)
+            && IsBattlerProtected
+            && Random() % 3 == 0) // don't know if should be chance effect or certain effect
+    {
+        gProtectStructs[gBattlerTarget].protected = 0; //removes affects
+        gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_WIDE_GUARD);
+        gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_QUICK_GUARD);
+        gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_CRAFTY_SHIELD);
+        gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_MAT_BLOCK);
+        gProtectStructs[gBattlerTarget].spikyShielded = 0; //need else if to ensure the phpysical moves 
+        gProtectStructs[gBattlerTarget].kingsShielded = 0; //that break protect still take spiky shield damage
+        gProtectStructs[gBattlerTarget].banefulBunkered = 0;
+
+        if (gBattleMoveDamage != 0) // in case using gbattlemovedamage prevents hi/lo rolls since aparently movedamage is the last calculation, I may switch this to power
+            //gBattleMoves[move].power   keep the first check that move does damage, but otherwise replace movedamage with power, if I find I need to because modulate damage is no longer working
+        {
+            gBattleMoveDamage *= randPercent;
+            gBattleMoveDamage /= 100;
+            if (gBattleMoveDamage == 0)
+                gBattleMoveDamage = 1;
+        }
+    }
+
+
+    // ok believe I've got this, should be 1 in 4 chance for 150bp move to break through protect and other moves to do so with proper weather boosts
+   // this idea of breaking protect was initially just thunder in gen 4 having a 30% chance in rain, then gen 8 brought back with dynamax moves at a portion of full damage
+   // I'm using my own conditions, and...I THINK I may do a reduction in damage too, but do it randomly like high/low rolls just to a lesser degree
+   // also maybe I'll add a text string for this, but for now I'll do without.
+}*/
+
 static bool8 AccuracyCalcHelper(u16 move)
 {
     if (gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS && gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker)
@@ -1074,6 +1157,7 @@ static void atk01_accuracycheck(void)
         s8 buff;
         u16 calc;
         u8 eva;
+        s32 i;
 
         if (move == MOVE_NONE)
             move = gCurrentMove;
@@ -1097,6 +1181,18 @@ static void atk01_accuracycheck(void)
         if (buff > 0xC)
             buff = 0xC;
         moveAcc = gBattleMoves[move].accuracy;
+
+        if (gCurrentMove == MOVE_FURY_CUTTER) {
+           // if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5) { //increment until reach 5
+             //   ++gDisableStructs[gBattlerAttacker].furyCutterCounter; //removing to test that it isn't incrementing twice.
+
+                for (i = 1; i < gDisableStructs[gBattlerAttacker].furyCutterCounter; ++i) {
+                    moveAcc = (moveAcc * 3) / 4; //so far is working to stop the move,
+                    //but isn't displaying the miss message...
+                }
+            //}
+        } //hopefully THIS  will affect the accuracy.
+
         // check Thunder on sunny weather / need add hail blizzard buff?
         if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY && gBattleMoves[move].effect == EFFECT_THUNDER)
             moveAcc = 50;
@@ -3484,6 +3580,7 @@ static void MoveValuesCleanUp(void)
     gBattleCommunication[6] = 0;
     gHitMarker &= ~(HITMARKER_DESTINYBOND);
     gHitMarker &= ~(HITMARKER_SYNCHRONISE_EFFECT);
+
 }
 
 static void atk25_movevaluescleanup(void)
@@ -6709,11 +6806,11 @@ static void atk8D_setmultihitcounter(void)
     }
     else
     {
-        gMultiHitCounter = Random() & 3;
-        if (gMultiHitCounter > 1)
-            gMultiHitCounter = (Random() & 3) + 2;
+        gMultiHitCounter = Random() & 3; //return a number between 0 & 3
+        if (gMultiHitCounter > 1) 
+            gMultiHitCounter = (Random() & 3) + 2; // if non 0, multihit is between 2-5 htis
         else
-            gMultiHitCounter += 2;
+            gMultiHitCounter += 2; //else add 2 to multi counter, returning a multihit of 2.
     }
     gBattlescriptCurrInstr += 2;
 }
@@ -7711,28 +7808,33 @@ static void atkAC_remaininghptopower(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atkAD_tryspiteppreduce(void)
+static void atkAD_tryspiteppreduce(void) //slight edit, added 10% chance for bad luck effect
 {
     if (gLastMoves[gBattlerTarget] != MOVE_NONE && gLastMoves[gBattlerTarget] != 0xFFFF)
     {
         s32 i;
+        u16 luck = Random() % 10;
+        s32 ppToDeduct;
 
         for (i = 0; i < MAX_MON_MOVES; ++i)
             if (gLastMoves[gBattlerTarget] == gBattleMons[gBattlerTarget].moves[i])
                 break;
-        if (i != MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] > 1)
+        if (i != MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] != 0)
         {
-            s32 ppToDeduct = (Random() & 3) + 2;
+            if (luck != 0)
+                ppToDeduct = (Random() & 3) + 2; //removes 2-5 pp
+            else
+                ppToDeduct = 10;
 
             if (gBattleMons[gBattlerTarget].pp[i] < ppToDeduct)
                 ppToDeduct = gBattleMons[gBattlerTarget].pp[i];
             PREPARE_MOVE_BUFFER(gBattleTextBuff1, gLastMoves[gBattlerTarget])
-            ConvertIntToDecimalStringN(gBattleTextBuff2, ppToDeduct, 0, 1);
+                ConvertIntToDecimalStringN(gBattleTextBuff2, ppToDeduct, 0, 1);
             PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff2, 1, ppToDeduct)
-            gBattleMons[gBattlerTarget].pp[i] -= ppToDeduct;
+                gBattleMons[gBattlerTarget].pp[i] -= ppToDeduct;
             gActiveBattler = gBattlerTarget;
             if (!(gDisableStructs[gActiveBattler].mimickedMoves & gBitTable[i])
-             && !(gBattleMons[gActiveBattler].status2 & STATUS2_TRANSFORMED))
+                && !(gBattleMons[gActiveBattler].status2 & STATUS2_TRANSFORMED))
             {
                 BtlController_EmitSetMonData(0, REQUEST_PPMOVE1_BATTLE + i, 0, 1, &gBattleMons[gActiveBattler].pp[i]);
                 MarkBattlerForControllerExec(gActiveBattler);
@@ -7943,24 +8045,35 @@ static void atkB4_jumpifconfusedandstatmaxed(void)
 
 static void atkB5_furycuttercalc(void)
 {
-    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+    u16 berserker;
+    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT) 
     {
         gDisableStructs[gBattlerAttacker].furyCutterCounter = 0;
         gBattlescriptCurrInstr = BattleScript_MoveMissedPause;
     }
+    /*if  (gBattlescriptCurrInstr == BattleScript_FuryCutterEnd) //to make sure it resets before move is used again, even if don't miss
+    {
+        gDisableStructs[gBattlerAttacker].furyCutterCounter = 0; //this isn't working to clear the damage
+    }*/ //but of course it isn't, its in a battle_script command that's only run BEFORE
+    //the command its supposed to check.  I'll put this in a function instead and add it to atkcancelor
     else
     {
-        s32 i;
-
-        if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5)
+        s32 i; 
+       
+        if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5) //increment until reach 5
             ++gDisableStructs[gBattlerAttacker].furyCutterCounter;
-        gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+        gDynamicBasePower = gBattleMoves[gCurrentMove].power; //it's working now.
+        berserker = gBattleMoves[gCurrentMove].accuracy;
 
-        for (i = 1; i < gDisableStructs[gBattlerAttacker].furyCutterCounter; ++i)
-            gDynamicBasePower *= 2;
-        ++gBattlescriptCurrInstr;
+        for (i = 1; i < gDisableStructs[gBattlerAttacker].furyCutterCounter; ++i) {
+            gDynamicBasePower *= 2; 
+           // berserker *= 3;  //change from 3 to 1, for large test, should reduce accuracy by 4 each hit if its working
+            //berserker /= 4; 
+        }//dizzyegg confirms doing this way also works for establishing 3/4
+        ++gBattlescriptCurrInstr; // if done right power should double and accuracy should drop off by a fourth each hti
     }
-}
+} //don't know if i'm just unlucky but it seeems to be hitting every time, so I'm still unsure
+//if the accuracy reduction on hit is working  ok did test, accuracy reduction or accuracy checks just aren't working at all.
 
 static void atkB6_happinesstodamagecalculation(void)
 {
@@ -8298,7 +8411,7 @@ static void atkC1_hiddenpowercalc(void)
             //then if that stat is also my lowest atk stat it gets a shonen style damage boost
         //that was dumb, that would almost guarantee boosted damage.
         if (gBattleMons[gBattlerAttacker].attack < gBattleMons[gBattlerAttacker].spAttack)
-            moveSplit = SPLIT_PHYSICAL;
+            moveSplit = SPLIT_PHYSICAL; //may reverse this, and set split to highest attack stat
         if (gBattleMons[gBattlerAttacker].spAttack < gBattleMons[gBattlerAttacker].attack)
             moveSplit = SPLIT_SPECIAL;
         if (gBattleMons[gBattlerAttacker].spAttack == gBattleMons[gBattlerAttacker].attack) // i & j are equal when my stats equal my oppoenenets or both my stats are higher.

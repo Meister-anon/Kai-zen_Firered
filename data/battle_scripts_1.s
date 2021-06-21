@@ -1641,15 +1641,55 @@ BattleScript_EffectFuryCutter::
 	attackcanceler
 	attackstring
 	ppreduce
-	accuracycheck .+6, ACC_CURR_MOVE
-BattleScript_FuryCutterHit::
+	setmultihitcounter 5
+	initmultihitstring
+BattleScript_FuryCutterLoop::
+	jumpifhasnohp BS_ATTACKER, BattleScript_FuryCutterEnd
+	jumpifhasnohp BS_TARGET, BattleScript_FuryCutterNoMoreHits
+	jumpifhalfword CMP_EQUAL, gChosenMove, MOVE_SLEEP_TALK, BattleScript_DoFuryCutterAttack
+	jumpifstatus BS_ATTACKER, STATUS1_SLEEP, BattleScript_FuryCutterNoMoreHits
+BattleScript_DoFuryCutterAttack::
+	accuracycheck BattleScript_FuryCutterNoMoreHits, ACC_CURR_MOVE
+	movevaluescleanup
+	addbyte gBattleScripting + 12, 1
 	furycuttercalc
 	critcalc
 	damagecalc
 	typecalc
-	jumpifmovehadnoeffect BattleScript_FuryCutterHit
 	adjustnormaldamage
-	goto BattleScript_HitFromAtkAnimation
+	jumpifmovehadnoeffect BattleScript_FuryCutterNoMoreHits
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage 0x40
+	printstring STRINGID_EMPTYSTRING3
+	waitmessage 1
+	moveendto 16
+	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_FOE_ENDURED, BattleScript_FuryCutterPrintStrings
+	decrementmultihit BattleScript_FuryCutterLoop
+	goto BattleScript_FuryCutterPrintStrings
+BattleScript_FuryCutterNoMoreHits::
+	pause 0x20
+	jumpifbyte CMP_EQUAL, gBattleScripting + 12, 0, BattleScript_FuryCutterPrintStrings
+	bicbyte gMoveResultFlags, MOVE_RESULT_MISSED
+BattleScript_FuryCutterPrintStrings::
+	resultmessage
+	waitmessage 0x40
+	jumpifbyte CMP_EQUAL, gBattleScripting + 12, 0, BattleScript_FuryCutterEnd
+	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE, BattleScript_FuryCutterEnd
+	copyarray gBattleTextBuff1, sMULTIHIT_STRING, 6
+	printstring STRINGID_HITXTIMES
+	waitmessage 0x40
+BattleScript_FuryCutterEnd::
+	seteffectwithchance
+	tryfaintmon BS_TARGET, 0, NULL
+	moveendfrom 14
+	end
 
 BattleScript_EffectAttract::
 	attackcanceler

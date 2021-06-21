@@ -268,7 +268,7 @@ enum
 #define WILD_CHECK_REPEL    0x1
 #define WILD_CHECK_KEEN_EYE 0x2
 
-static bool8 TryGenerateWildMon(const struct WildPokemonInfo * info, u8 area, u8 flags)
+static bool8 TryGenerateWildMon(const struct WildPokemonInfo * info, u8 area, u8 flags) //important can use for dexnav hidden slot
 {
     u8 slot = 0;
     u8 level;

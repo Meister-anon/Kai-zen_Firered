@@ -168,7 +168,7 @@ void SpriteCB_TrainerSlideIn(struct Sprite *sprite)
     }
 }
 
-void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
+void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status) //important status changes
 {
     gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 1;
     if (!isStatus2)
@@ -815,15 +815,17 @@ void HandleLowHpMusicChange(struct Pokemon *mon, u8 battlerId)
 
     if (GetHPBarLevel(hp, maxHP) == HP_BAR_RED)
     {
-        if (!gBattleSpritesDataPtr->battlerData[battlerId].lowHpSong)
+        if (!gBattleSpritesDataPtr->battlerData[battlerId].lowHpSong) //since my file is larger maybe I need to increase type?
         {
-            if (!gBattleSpritesDataPtr->battlerData[battlerId ^ BIT_FLANK].lowHpSong)
+            if (!gBattleSpritesDataPtr->battlerData[battlerId ^ BIT_FLANK].lowHpSong) //think this and above means, if lowhpsong = 0
                 PlaySE(SE_LOW_HEALTH);
             gBattleSpritesDataPtr->battlerData[battlerId].lowHpSong = 1;
         }
     }
-    else
-    {
+    else // I'm unsure about putting song change here, I worry it would cause feedback loop
+    { // since it essentially would be changing the song, when hp is not in the red.
+        //it'll either work without problem, or I'll have to make an else if specifically
+        //for using healing when in the red.
         gBattleSpritesDataPtr->battlerData[battlerId].lowHpSong = 0;
         if (!IsDoubleBattle())
             m4aSongNumStop(SE_LOW_HEALTH);
@@ -832,7 +834,7 @@ void HandleLowHpMusicChange(struct Pokemon *mon, u8 battlerId)
     }
 }
 
-void BattleStopLowHpSound(void)
+void BattleStopLowHpSound(void) //what's the point of this, when its handled the same in the above function?
 {
     u8 playerBattler = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
 
@@ -840,7 +842,7 @@ void BattleStopLowHpSound(void)
     if (IsDoubleBattle())
         gBattleSpritesDataPtr->battlerData[playerBattler ^ BIT_FLANK].lowHpSong = 0;
     m4aSongNumStop(SE_LOW_HEALTH);
-}
+} //also seems to be only for double battles?
 
 // not used
 static u8 GetMonHPBarLevel(struct Pokemon *mon)

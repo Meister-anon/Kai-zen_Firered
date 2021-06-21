@@ -3211,11 +3211,16 @@ void ClearFuryCutterDestinyBondGrudge(u8 battlerId)
     gStatuses3[battlerId] &= ~(STATUS3_GRUDGE);
 }
 
+void ResetFuryCutterCounter(u8 battlerId)
+{
+    gDisableStructs[battlerId].furyCutterCounter = 0;
+}
 void HandleAction_RunBattleScript(void) // identical to RunBattleScriptCommands
 {
     if (!gBattleControllerExecFlags)
         gBattleScriptingCommandsTable[*gBattlescriptCurrInstr]();
 }
+
 
 u8 GetMoveTarget(u16 move, u8 setTarget)
 {
@@ -3394,6 +3399,24 @@ u8 IsMonDisobedient(void)
         }
     }
 }
+
+/*u16 GetBattlerAbility(u8 battlerId)
+{
+    if (gStatuses3[battlerId] & STATUS3_GASTRO_ACID)
+        return ABILITY_NONE;
+    else if ((((gBattleMons[gBattlerAttacker].ability == ABILITY_MOLD_BREAKER
+        || gBattleMons[gBattlerAttacker].ability == ABILITY_TERAVOLT
+        || gBattleMons[gBattlerAttacker].ability == ABILITY_TURBOBLAZE)
+        && !(gStatuses3[gBattlerAttacker] & STATUS3_GASTRO_ACID))
+        || gBattleMoves[gCurrentMove].flags & FLAG_TARGET_ABILITY_IGNORED)
+        && sAbilitiesAffectedByMoldBreaker[gBattleMons[battlerId].ability]
+        && gBattlerByTurnOrder[gCurrentTurnActionNumber] == gBattlerAttacker
+        && gActionsByTurnOrder[gBattlerByTurnOrder[gBattlerAttacker]] == B_ACTION_USE_MOVE
+        && gCurrentTurnActionNumber < gBattlersCount)
+        return ABILITY_NONE;
+    else
+        return gBattleMons[battlerId].ability;
+}*/
 
 u8 GetBattleMoveSplit(u32 moveId)
 {

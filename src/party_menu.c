@@ -4576,7 +4576,7 @@ static void Task_DisplayHPRestoredMessage(u8 taskId)
     StringExpandPlaceholders(gStringVar4, gText_PkmnHPRestoredByVar2);
     DisplayPartyMenuMessage(gStringVar4, FALSE);
     ScheduleBgCopyTilemapToVram(2);
-    HandleBattleLowHpMusicChange();
+    HandleBattleLowHpMusicChange(); //this is here to update the state of the function based on change in hp
     gTasks[taskId].func = Task_ClosePartyMenuAfterText;
 }
 
