@@ -1184,11 +1184,11 @@ static void atk01_accuracycheck(void)
 
         if (gCurrentMove == MOVE_FURY_CUTTER) {
            // if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5) { //increment until reach 5
-             //   ++gDisableStructs[gBattlerAttacker].furyCutterCounter; //removing to test that it isn't incrementing twice.
+             //   ++gDisableStructs[gBattlerAttacker].furyCutterCounter; //removing to test that it isn't incrementing twice. (it was)
 
                 for (i = 1; i < gDisableStructs[gBattlerAttacker].furyCutterCounter; ++i) {
                     moveAcc = (moveAcc * 3) / 4; //so far is working to stop the move,
-                    //but isn't displaying the miss message...
+                    //but isn't displaying the miss message...    apparently that's normal
                 }
             //}
         } //hopefully THIS  will affect the accuracy.
@@ -8468,15 +8468,17 @@ static void atkC3_trysetfutureattack(void)
     }
 }
 
-static void atkC4_trydobeatup(void)
+static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no stab,
+// I'm going to augment this add psuedo stab by increasing damage if pokemon attacking is dark type
 {
     struct Pokemon *party;
+    //u16 power = gBattleMoves[gCurrentMove].power = GetMonData(&party[gBattleCommunication[0]], STAT_ATK) / 10 + 5;
 
     if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
         party = gPlayerParty;
     else
         party = gEnemyParty;
-    if (gBattleMons[gBattlerTarget].hp == 0)
+    if (gBattleMons[gBattlerTarget].hp == 0) //why isn't this ending the move?
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
@@ -8484,33 +8486,50 @@ static void atkC4_trydobeatup(void)
     {
         u8 beforeLoop = gBattleCommunication[0];
 
-        for (;gBattleCommunication[0] < 6; ++gBattleCommunication[0])
+        for (;gBattleCommunication[0] < PARTY_SIZE; ++gBattleCommunication[0])
         {
             if (GetMonData(&party[gBattleCommunication[0]], MON_DATA_HP)
              && GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES2)
              && GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES2) != SPECIES_EGG
              && !GetMonData(&party[gBattleCommunication[0]], MON_DATA_STATUS))
-                break;
+                break; // continue party loop if mon alive, not an egg, and not statused
+            //if bs change doesn't fix the issue, I'll add gbattle target hp != 0, to this break condition
         }
-        if (gBattleCommunication[0] < 6)
-        {
+        if (gBattleCommunication[0] < PARTY_SIZE)
+        { //don't want to use base attack that would ignore all gains
             PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerAttacker, gBattleCommunication[0])
             gBattlescriptCurrInstr += 9;
-            gBattleMoveDamage = gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].baseAttack;
-            gBattleMoveDamage *= gBattleMoves[gCurrentMove].power;
-            gBattleMoveDamage *= (GetMonData(&party[gBattleCommunication[0]], MON_DATA_LEVEL) * 2 / 5 + 2);
-            gBattleMoveDamage /= gBaseStats[gBattleMons[gBattlerTarget].species].baseDefense;
-            gBattleMoveDamage = (gBattleMoveDamage / 50) + 2;
-            if (gProtectStructs[gBattlerAttacker].helpingHand)
+            //gBattleMoveDamage = gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].baseAttack;
+            gBattleMoveDamage = (GetMonData(&party[gBattleCommunication[0]], STAT_ATK) / 10 + 5);
+
+            //ok using stat_atk, may have been a problem, think I'l do an equivalency check
+            //so that if its &party[gBattleCommunication[0] it'll use actual stat, and for the others use base stat.
+            //that way it can still be boosted..
+
+            //stat_atk is fine, the ENTIRE reason damage was so broken was because the script, didn't
+            //have a damaagecalc command in it  FACEPALM!!!
+            //still weird since the default didn't need one, but whatever...
+
+            //gBattleMoveDamage *= power;
+            //gBattleMoveDamage *= (GetMonData(&party[gBattleCommunication[0]], MON_DATA_LEVEL) * 2 / 5 + 2);
+            //gBattleMoveDamage /= gBaseStats[gBattleMons[gBattlerTarget].species].baseDefense;
+            //gBattleMoveDamage = (gBattleMoveDamage / 50) + 2; //this most likely will do nothing, and stat_atk is hhe problem but I'll try it.
+            if (gProtectStructs[gBattlerAttacker].helpingHand) //yup did jack shit... -_-
+                gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
+            if (gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type1 == TYPE_DARK
+                || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK)
                 gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
             ++gBattleCommunication[0];
-        }
+            //while I would like to use isbattlertype, this is looping the entire party, and that macro can only check battlers
+        } //may have calculated this wrong, its one shotting the world...
         else if (beforeLoop != 0)
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
         else
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 5);
     }
-}
+} //if I did this correctly it should still be typeless, but calculate on battle attack
+//instead of species base attack, give stab multiplier if attaking party member is type dark
+// as well as use the gen 5 base power calculation
 
 static void atkC5_setsemiinvulnerablebit(void)
 {

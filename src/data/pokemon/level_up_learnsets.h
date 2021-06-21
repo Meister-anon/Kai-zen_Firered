@@ -256,6 +256,7 @@ static const u16 sPidgeotLevelUpLearnset[] = {
 static const u16 sRattataLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
     LEVEL_UP_MOVE(1, MOVE_TAIL_WHIP),
+    LEVEL_UP_MOVE(1, MOVE_BEAT_UP),
     LEVEL_UP_MOVE(7, MOVE_QUICK_ATTACK),
     LEVEL_UP_MOVE(13, MOVE_HYPER_FANG),
     LEVEL_UP_MOVE(20, MOVE_FOCUS_ENERGY),

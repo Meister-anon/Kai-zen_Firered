@@ -1994,12 +1994,14 @@ BattleScript_EffectBeatUp::
 	setbyte gBattleCommunication, 0
 BattleScript_BeatUpLoop::
 	movevaluescleanup
+	jumpifhasnohp BS_TARGET, BattleScript_BeatUpEnd @for some reaosn hda to add this, move continued after battler hp was 0
 	trydobeatup BattleScript_BeatUpEnd, BattleScript_ButItFailed
 	printstring STRINGID_PKMNATTACK
 	critcalc
-	jumpifbyte CMP_NOT_EQUAL, gCritMultiplier, 2, BattleScript_BeatUpAttack
-	manipulatedamage 2
+	@ jumpifbyte CMP_NOT_EQUAL, gCritMultiplier, 2, BattleScript_BeatUpAttack
+	@ manipulatedamage 2
 BattleScript_BeatUpAttack::
+	damagecalc	@ maybe this is what was missing?
 	adjustnormaldamage
 	attackanimation
 	waitanimation

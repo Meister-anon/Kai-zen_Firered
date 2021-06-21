@@ -2415,7 +2415,8 @@ static const u8 sGetMonDataEVConstants[] =
 static const u8 sStatsToRaise[] = 
 {
     STAT_ATK, STAT_ATK, STAT_SPEED, STAT_DEF, STAT_SPATK, STAT_ACC
-};
+}; //the double atk, here is normal
+//why isn't evasion in this, wouldn't double team fit the criteria?
 
 static const s8 sFriendshipEventDeltas[][3] = 
 {
