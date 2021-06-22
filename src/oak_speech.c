@@ -1036,7 +1036,7 @@ static void Task_OakSpeech17(u8 taskId)
     }
 }
 
-static void Task_OakSpeech18(u8 taskId)
+static void Task_OakSpeech18(u8 taskId) //ok HERE is where it asks gender.
 {
     s16 * data = gTasks[taskId].data;
 
@@ -1076,7 +1076,7 @@ static void Task_OakSpeech19(u8 taskId)
     }
 }
 
-static void Task_OakSpeech20(u8 taskId)
+static void Task_OakSpeech20(u8 taskId) //gender finalized
 {
     s8 input = Menu_ProcessInputNoWrapAround();
     switch (input)
@@ -1095,7 +1095,7 @@ static void Task_OakSpeech20(u8 taskId)
 
 }
 
-static void Task_OakSpeech21(u8 taskId)
+static void Task_OakSpeech21(u8 taskId) //believe its change window, and set background
 {
     s16 * data = gTasks[taskId].data;
     ClearStdWindowAndFrameToTransparent(data[13], 1);
@@ -1107,18 +1107,18 @@ static void Task_OakSpeech21(u8 taskId)
     gTasks[taskId].func = Task_OakSpeech22;
 }
 
-static void Task_OakSpeech22(u8 taskId)
+static void Task_OakSpeech22(u8 taskId) //loads the big trainer pic, for after naming
 {
     if (gSaveBlock2Ptr->playerGender == MALE)
         LoadOaksSpeechTrainerPic(MALE, 0);
     else
         LoadOaksSpeechTrainerPic(FEMALE, 0);
     CreateFadeOutTask(taskId, 2);
-    gTasks[taskId].data[3] = 32;
+    gTasks[taskId].data[3] = 32; //first case of data[3]
     gTasks[taskId].func = Task_OakSpeech23;
 }
 
-static void Task_OakSpeech23(u8 taskId)
+static void Task_OakSpeech23(u8 taskId) //beginning of player naming
 {
     s16 * data = gTasks[taskId].data;
 
@@ -1165,7 +1165,7 @@ static void Task_OakSpeech35(u8 taskId)
     }
 }
 
-static void Task_OakSpeech28(u8 taskId)
+static void Task_OakSpeech28(u8 taskId) //believe paired with task_23 alternates to rival if palyer name chosen
 {
     PrintNameChoiceOptions(taskId, sOakSpeechResources->unk_0010);
     if (sOakSpeechResources->unk_0010 == 0)
@@ -1188,25 +1188,25 @@ static void Task_OakSpeech29(u8 taskId)
     case 1:
     case 2:
     case 3:
-    case 4:
+    case 4: // if you accecpt default name,
         PlaySE(SE_SELECT);
         ClearStdWindowAndFrameToTransparent(data[13], TRUE);
         RemoveWindow(data[13]);
         GetDefaultName(sOakSpeechResources->unk_0010, input - 1);
         data[15] = 1;
-        gTasks[taskId].func = Task_OakSpeech26;
+        gTasks[taskId].func = Task_OakSpeech26; // go to task setname choose rival name
         break;
-    case 0:
+    case 0: //if you don't choose default name
         PlaySE(SE_SELECT);
         BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, 0);
-        gTasks[taskId].func = Task_OakSpeech25;
+        gTasks[taskId].func = Task_OakSpeech25; //go to task choose name
         break;
     case -1:
         break;
     }
 }
 
-static void Task_OakSpeech25(u8 taskId)
+static void Task_OakSpeech25(u8 taskId) //important  
 {
     if (!gPaletteFade.active)
     {
@@ -1226,7 +1226,7 @@ static void Task_OakSpeech25(u8 taskId)
     }
 }
 
-static void Task_OakSpeech26(u8 taskId)
+static void Task_OakSpeech26(u8 taskId) //this is where name is finallized think I need to jump from here.
 {
     s16 * data = gTasks[taskId].data;
 
@@ -1270,10 +1270,10 @@ static void Task_OakSpeech27(u8 taskId)
         if (sOakSpeechResources->unk_0010 == 0)
         {
             ClearDialogWindowAndFrame(0, 1);
-            CreateFadeInTask(taskId, 2);
-            gTasks[taskId].func = Task_OakSpeech30;
+            CreateFadeInTask(taskId, 2);        //choose default
+            gTasks[taskId].func = Task_OakSpeech30; // finalize rival name
         }
-        else
+        else //otherwise chose rival name
         {
             StringExpandPlaceholders(gStringVar4, gOakText_RememberRivalName);
             OaksSpeechPrintMessage(gStringVar4, sOakSpeechResources->textSpeed);
@@ -1284,7 +1284,8 @@ static void Task_OakSpeech27(u8 taskId)
     case -1:
         PlaySE(SE_SELECT);
         if (sOakSpeechResources->unk_0010 == 0)
-            gTasks[taskId].func = Task_OakSpeech24;
+            //gTasks[taskId].func = Task_OakSpeech24; //ok think this is what I need to replace
+            gTasks[taskId].func = Task_OakSpeech16; //worked perfectly
         else
             gTasks[taskId].func = Task_OakSpeech28;
         break;

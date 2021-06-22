@@ -903,6 +903,11 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_BugCatcherSammy[] 
         .lvl = 9,
         .species = SPECIES_WEEDLE,
     },
+    {
+        .iv = 0,
+        .lvl = 6,
+        .species = SPECIES_SHEDINJA,
+    },
 };
 
 static const struct TrainerMonNoItemDefaultMoves sTrainerMons_BugCatcherColton[] = {

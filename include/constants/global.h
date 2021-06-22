@@ -28,7 +28,7 @@
 #define BAG_ITEMS_COUNT     52
 #define BAG_KEYITEMS_COUNT  50
 #define BAG_POKEBALLS_COUNT 13
-#define BAG_TMHM_COUNT      128
+#define BAG_TMHM_COUNT      58 //brocks gym battle crashes, when giving tm & badge, maybe not having an accurate count was the problem.
 #define BAG_BERRIES_COUNT   23
 #define OBJECT_EVENT_TEMPLATES_COUNT 64
 

@@ -578,7 +578,7 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_CATERPIE"
+                "species": "SPECIES_KAKUNA"
               },
               {
                 "min_level": 5,
@@ -587,8 +587,8 @@
               },
               {
                 "min_level": 3,
-                "max_level": 3,
-                "species": "SPECIES_CATERPIE"
+                "max_level": 6,
+                "species": "SPECIES_METAPOD"
               },
               {
                 "min_level": 3,
