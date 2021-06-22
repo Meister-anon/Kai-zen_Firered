@@ -1632,12 +1632,14 @@ u8 CastformDataTypeChange(u8 battler)
 u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 moveArg)
 {
     u8 effect = 0;
+    u8 effected = 0;
     struct Pokemon *pokeAtk;
     struct Pokemon *pokeDef;
     u16 speciesAtk;
     u16 speciesDef;
     u32 pidAtk;
     u32 pidDef;
+    u16 value;
 
     if (gBattlerAttacker >= gBattlersCount)
         gBattlerAttacker = battler;
@@ -1752,7 +1754,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gSpecialStatuses[battler].intimidatedMon = 1;
                 }
                 break;
-            case ABILITY_FORECAST: //plan setup weather to check if first turn, else if all battlers have completed actions. ok is working on start now.
+            case ABILITY_FORECAST: //think I figured out the switch problem, this case works on switch in,
+                //while the other is after all turns are done, by switching castform in mid battle.
+                //I think I create a situation where both cases are true and both try to activate.
+                
+                //plan setup weather to check if first turn, else if all battlers have completed actions. ok is working on start now.
                 effect = CastformDataTypeChange(battler);// I think if I copy the function values to an else if using random chance to activate & turn ended it should work how I want
                 if (effect != 0)//i,e if (gCurrentTurnActionNumber >= gBattlersCount) && (gBattleMons[battler].hp != 0)  do value and random as before but a higher number and include
                 {// value for setting weather timers to 0, prob should use if for each weather type, and link it with its respective timer.
@@ -1762,38 +1768,45 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     // the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
                 }// before I had 4 separate random functions, so If I used while it could have been because they were returning multiple values at once.
 
-                if (gBattleMons[battler].hp != 0) // don't want to change weather every turn but I do want it to change, mid battle, and trigger after all battlers have had their turns. think that's turn action count > battlers count.
-                { //I want it to trigger once at start of battle I think, but maybe not. Some people could make use of "normal" form castform. i guess
-                    u16 value;// trying to store the value returned by random function in one field as per phoenixbound's suggestion. since it seemed I was calling 5 separate random functions
+                //maybe problem was the condition was always true?
+
+               // if (gBattleMons[battler].hp != 0 && effect != 0) // don't want to change weather every turn but I do want it to change, mid battle, and trigger after all battlers have had their turns. think that's turn action count > battlers count.
+              //  { //I want it to trigger once at start of battle I think, but maybe not. Some people could make use of "normal" form castform. i guess
+                   // u16 value;// trying to store the value returned by random function in one field as per phoenixbound's suggestion. since it seemed I was calling 5 separate random functions
                     value = Random() % 4; //and having random() in the if function was causing the effect to only work if true, which means a non 0 value, so a 3/4 chance.
-                    if (value == 0) {
-                        // confusing but will test next, if  doesn't work may try usign turn order or turn count tracker
-                        gBattleWeather = (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY); // so there's a chance every turn  for the weather to be changed. 
-                        BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates); // that should fit my plans for the effect.
-                        gBattleScripting.battler = battler;
-                        ++effect; //seems to be working, but I think I need to change my hail value to use the battlescript "sethail" right now its starting on battle end, and not doing it began to hail
-                    }// instead its using hail continues, other than that it works now.
-                    if (value == 1) {
-                        gBattleWeather = (WEATHER_SANDSTORM_PERMANENT | WEATHER_SANDSTORM_TEMPORARY);
-                        BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);//still not triggering every battle, also for some reason rain script is retriggering
-                        gBattleScripting.battler = battler;// on opponent ability too. I guess it has to do with gbattlescripting.battler  since battler is attacker?
-                        ++effect;
+                        if (value == 0
+                            && (!(gBattleWeather & WEATHER_ANY))) {
+                            gBattleWeather = (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY);
+                            BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
+                            gBattleScripting.battler = battler;
+                            ++effect;
+                        }
+                        if (value == 1
+                            && (!(gBattleWeather & WEATHER_ANY))) {
+                            gBattleWeather = (WEATHER_SANDSTORM_PERMANENT | WEATHER_SANDSTORM_TEMPORARY);
+                            BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
+                            gBattleScripting.battler = battler;
+                            ++effect;
 
-                    }
-                    if (value == 2) {
-                        gBattleWeather = (WEATHER_SUN_PERMANENT | WEATHER_SUN_TEMPORARY);
-                        BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
-                        gBattleScripting.battler = battler;
-                        ++effect;
-                    }
-                    if (value == 3) {
-                        gBattleWeather = WEATHER_HAIL; //ok weather is still a little trippy, effect isn't triggering all the time, battle script isn't right yet,
-                        BattleScriptPushCursorAndCallback(BattleScript_HailActivates); // for some reason hail animation isnt playing, but the form change works.
-                        gBattleScripting.battler = battler;// made battlescript change, got it working now.
-                        ++effect;
+                        }
+                        if (value == 2
+                            && (!(gBattleWeather & WEATHER_ANY))) {
+                            gBattleWeather = (WEATHER_SUN_PERMANENT | WEATHER_SUN_TEMPORARY);
+                            BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
+                            gBattleScripting.battler = battler;
+                            ++effect;
+                        }
+                        if (value == 3
+                            && (!(gBattleWeather & WEATHER_ANY))) {
+                            gBattleWeather = WEATHER_HAIL;
+                            BattleScriptPushCursorAndCallback(BattleScript_HailActivates);
+                            gBattleScripting.battler = battler;// made battlescript change, got it working now.
+                            ++effect;
 
-                    }
-                }
+                        } //since this one is only meant to trigger on switch in,
+                        //I've set it to fail if any weather condition is already present.
+                        //that will at least prevent the looping...I hope
+            //    }
                 break;
             case ABILITY_TRACE:
                 if (!(gSpecialStatuses[battler].traced))
@@ -1877,16 +1890,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gDisableStructs[gBattlerAttacker].truantCounter ^= 1;
                     break;
 
+                    //can conifirm error was entirely because of switch in, not end turn
                 case ABILITY_FORECAST: //plan setup weather to check if first turn, else if all battlers have completed actions. ok is working on start now.
-                    effect = CastformDataTypeChange(battler);// I think if I copy the function values to an else if using random chance to activate & turn ended it should work how I want
+                   /* effect = CastformDataTypeChange(battler);// I think if I copy the function values to an else if using random chance to activate & turn ended it should work how I want
                     if (effect != 0)//i,e if (gCurrentTurnActionNumber >= gBattlersCount) && (gBattleMons[battler].hp != 0)  do value and random as before but a higher number and include
                     {// value for setting weather timers to 0, prob should use if for each weather type, and link it with its respective timer.
                         BattleScriptPushCursorAndCallback(BattleScript_CastformChange);
                         gBattleScripting.battler = battler;
                         *(&gBattleStruct->formToChangeInto) = effect - 1;// sandstorm effect is continuing oddly, before I change "while" I'm trying line up
-                    }// the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
+                    }*/// the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
                     if (gCurrentTurnActionNumber >= gBattlersCount
-                        && Random() % 2 == 0)
+                        && Random() % 2 == 0) //actually since the bug happens everytime, its most likely do to the first case and not this one.
+                        //since this effect only happens on a chance.
+
                     { // trying to make it not switch every turn, and find a good balance.
                         u16 value2;// trying to store the value returned by random function in one field as per phoenixbound's suggestion. since it seemed I was calling 5 separate random functions
                         value2 = Random() % 5;
@@ -1952,7 +1968,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                 ++effect;
 
                             }
-
+                           // ++effect;
                         }
 
 

@@ -1206,7 +1206,7 @@ static void Task_OakSpeech29(u8 taskId)
     }
 }
 
-static void Task_OakSpeech25(u8 taskId) //important  
+static void Task_OakSpeech25(u8 taskId) //important reset player gender new game  done
 {
     if (!gPaletteFade.active)
     {
