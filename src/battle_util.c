@@ -1770,8 +1770,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                 //maybe problem was the condition was always true?
 
-               // if (gBattleMons[battler].hp != 0 && effect != 0) // don't want to change weather every turn but I do want it to change, mid battle, and trigger after all battlers have had their turns. think that's turn action count > battlers count.
-              //  { //I want it to trigger once at start of battle I think, but maybe not. Some people could make use of "normal" form castform. i guess
+                if (!(gBattleTypeFlags & (BATTLE_TYPE_OLD_MAN_TUTORIAL))) // don't want to change weather every turn but I do want it to change, mid battle, and trigger after all battlers have had their turns. think that's turn action count > battlers count.
+                { //I want it to trigger once at start of battle I think, but maybe not. Some people could make use of "normal" form castform. i guess
                    // u16 value;// trying to store the value returned by random function in one field as per phoenixbound's suggestion. since it seemed I was calling 5 separate random functions
                     value = Random() % 4; //and having random() in the if function was causing the effect to only work if true, which means a non 0 value, so a 3/4 chance.
                         if (value == 0
@@ -1806,7 +1806,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         } //since this one is only meant to trigger on switch in,
                         //I've set it to fail if any weather condition is already present.
                         //that will at least prevent the looping...I hope
-            //    }
+                }
                 break;
             case ABILITY_TRACE:
                 if (!(gSpecialStatuses[battler].traced))

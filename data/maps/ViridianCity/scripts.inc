@@ -177,6 +177,7 @@ ViridianCity_EventScript_YoungsterExplainCaterpillars:: @ 8165AB0
 
 ViridianCity_EventScript_YoungsterDeclineExplanation:: @ 8165ABA
 	msgbox ViridianCity_Text_OhOkayThen
+	setvar VAR_MAP_SCENE_VIRIDIAN_CITY_OLD_MAN, 2 @ hopefully doesn't break stuff'
 	release
 	end
 
@@ -237,9 +238,10 @@ ViridianCity_EventScript_TutorialTriggerRight:: @ 8165B2E
 	release
 	end
 
-ViridianCity_EventScript_DoTutorialBattle:: @ 8165B4C
-	msgbox ViridianCity_Text_ShowYouHowToCatchMons
-	closemessage
+ViridianCity_EventScript_DoTutorialBattle::
+	msgbox ViridianCity_Text_ShowYouHowToCatchMons MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq ViridianCity_EventScript_YoungsterDeclineExplanation //hopefully allows to skip without him still blocking road each time u pass.
 	goto_if_questlog EventScript_ReleaseEnd
 	special QuestLog_CutRecording
 	special StartOldManTutorialBattle

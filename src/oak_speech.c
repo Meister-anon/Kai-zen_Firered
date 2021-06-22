@@ -1264,7 +1264,7 @@ static void Task_OakSpeech27(u8 taskId)
     s8 input = Menu_ProcessInputNoWrapClearOnChoose();
     switch (input)
     {
-    case 0:
+    case 0: //choose no.
         PlaySE(SE_SELECT);
         gTasks[taskId].data[3] = 40;
         if (sOakSpeechResources->unk_0010 == 0)
@@ -1273,7 +1273,7 @@ static void Task_OakSpeech27(u8 taskId)
             CreateFadeInTask(taskId, 2);        //choose default
             gTasks[taskId].func = Task_OakSpeech30; // finalize rival name
         }
-        else //otherwise chose rival name
+        else //choose yes, goto chose rival name
         {
             StringExpandPlaceholders(gStringVar4, gOakText_RememberRivalName);
             OaksSpeechPrintMessage(gStringVar4, sOakSpeechResources->textSpeed);
