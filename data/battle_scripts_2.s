@@ -51,6 +51,11 @@ gBattlescriptsForSafariActions::
 	.4byte BattleScript_ThrowBait
 	.4byte BattleScript_LeftoverWallyPrepToThrow
 
+BattleScript_SkipTurn::
+	printstring STRINGID_PKMNWAITSFORTARGET
+	waitmessage 0x40
+	end2
+
 BattleScript_ThrowBall::
 	jumpifbattletype BATTLE_TYPE_OLD_MAN_TUTORIAL, BattleScript_OldManThrowBall
 	jumpifbattletype BATTLE_TYPE_POKEDUDE, BattleScript_PokedudeThrowBall

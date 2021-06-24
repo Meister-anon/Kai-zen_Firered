@@ -302,9 +302,18 @@ static void HandleInputChooseAction(void)
             PlayerBufferExecCompleted();
         }
     }
-    else if (JOY_NEW(START_BUTTON))
+    else if (JOY_NEW(START_BUTTON)) //broken? haven't seen thsi work yet
     {
         SwapHpBarsWithHpText();
+    }//could set to Joy_rept to avoid accident press?
+    else if (JOY_NEW(L_BUTTON)) // should display message on atk turn, and skip turn.
+    {//need add to handleinput choosetarget & choosemove
+       // if (!(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL))
+       // { // should make sure it works for all but old man tutorial battle
+            PlaySE(SE_SELECT);
+            BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
+            PlayerBufferExecCompleted();
+       // }
     }
 }
 
@@ -573,6 +582,15 @@ void HandleInputChooseMove(void)
             BattlePutTextOnWindow(gText_BattleSwitchWhich, 0xB);
             gBattlerControllerFuncs[gActiveBattler] = HandleMoveSwitching;
         }
+    }
+    else if (JOY_NEW(L_BUTTON)) // should display message on atk turn, and skip turn.
+    {
+    // if (!(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL))
+    // { // should make sure it works for all but old man tutorial battle
+    PlaySE(SE_SELECT);
+    BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
+    PlayerBufferExecCompleted();
+    // }
     }
 }
 

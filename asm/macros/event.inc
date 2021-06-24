@@ -1143,7 +1143,7 @@
 	.endm
 
 	@ Queues a weather change to the default weather for the map.
-	.macro resetweather
+	.macro resetweather //important for openword setting seasons
 	.byte 0xa3
 	.endm
 

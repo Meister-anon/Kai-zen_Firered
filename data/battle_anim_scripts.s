@@ -402,6 +402,7 @@ gBattleAnims_Moves::
 	.4byte Move_DOOM_DESIRE
 	.4byte Move_PSYCHO_BOOST
 	.4byte Move_ROOST
+	.4byte Move_COCOON
 	.4byte Move_COUNT
 
 gBattleAnims_StatusConditions::
@@ -10162,9 +10163,10 @@ Move_ROOST::
 	waitforvisualfinish
 	end
 
-Move_COCOON::
+Move_COCOON:: @ animation didn''t work because I forgot to define it at top
 	loopsewithpan SE_M_HARDEN, 192, 28, 2
-	createvisualtask AnimTask_MetallicShine, 5, 0, 0, 0	 @ these values affect color of shine
+	createvisualtask AnimTask_MusicNotesRainbowBlend, 2,
+	createvisualtask AnimTask_MetallicShine, 5, 0, 0, 0
 	waitforvisualfinish
 	end
 

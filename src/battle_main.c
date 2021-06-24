@@ -57,6 +57,7 @@ static void HandleAction_SafariZoneRun(void);
 static void HandleAction_OldManBallThrow(void);
 static void HandleAction_TryFinish(void);
 static void HandleAction_NothingIsFainted(void);
+static void HandleAction_WaitTurnEnd(void);
 static void HandleAction_ActionFinished(void);
 static void HandleEndTurn_ContinueBattle(void);
 static void HandleEndTurn_BattleWon(void);
@@ -589,6 +590,7 @@ static void (*const sTurnActionsFuncsTable[])(void) =
     [B_ACTION_TRY_FINISH] = HandleAction_TryFinish,
     [B_ACTION_FINISHED] = HandleAction_ActionFinished,
     [B_ACTION_NOTHING_FAINTED] = HandleAction_NothingIsFainted,
+    [B_ACTION_SKIP_TURN] = HandleAction_WaitTurnEnd,
 };
 
 static void (*const sEndTurnFuncsTable[])(void) =
@@ -1533,8 +1535,8 @@ static void SpriteCB_UnusedDebugSprite_Step(struct Sprite *sprite)
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 {
     u32 nameHash = 0;
-    u32 personalityValue;
-    u8 fixedIV;
+    u32 personalityValue; //personality now uses name hash, which is trainer name
+    u8 fixedIV; //figure how to set personality for individual pokemon, or at least set their ability
     s32 i, j;
 
     if (trainerNum == TRAINER_SECRET_BASE)
@@ -3148,6 +3150,13 @@ static void HandleTurnActionSelectionState(void)
                         return;
                     }
                     break;
+                case B_ACTION_SKIP_TURN:
+                    if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
+                    {
+                        gSelectionBattleScripts[gActiveBattler] = BattleScript_SkipTurn;
+                        gBattleCommunication[gActiveBattler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
+                        MarkBattlerForControllerExec(gActiveBattler);
+                    }
                 case B_ACTION_CANCEL_PARTNER:
                     gBattleCommunication[gActiveBattler] = STATE_WAIT_SET_BEFORE_ACTION;
                     gBattleCommunication[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gActiveBattler)))] = STATE_BEFORE_ACTION_CHOSEN;
@@ -4357,6 +4366,16 @@ static void HandleAction_TryFinish(void)
         gBattleStruct->faintedActionsState = 0;
         gCurrentActionFuncId = B_ACTION_FINISHED;
     }
+}
+
+static void HandleAction_WaitTurnEnd(void)
+{
+    gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
+    PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, gBattlerAttacker, gBattlerPartyIndexes[gBattlerAttacker])
+   gBattleScripting.battler = gBattlerAttacker;
+   gBattlescriptCurrInstr = BattleScript_SkipTurn;
+    gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
+    ++gCurrentTurnActionNumber;
 }
 
 static void HandleAction_NothingIsFainted(void)

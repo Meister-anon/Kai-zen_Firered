@@ -229,13 +229,14 @@ extern const u8 BattleScript_FlushMessageBox[];
 extern const u8 BattleScript_SpikesOnFaintedBattler[];
 extern const u8 BattleScript_WildMonBallBlock[];
 extern const u8 BattleScript_NonGhost_BallDodge[];
+extern const u8 BattleScript_SkipTurn[];
 extern const u8 BattleScript_ExpOnCatch[];
 extern const u8 BattleScript_GhostBallDodge[];
 extern const u8 BattleScript_OldMan_Pokedude_CaughtMessage[];
 extern const u8 BattleScript_SilphScopeUnveiled[];
 extern const u8 BattleScript_BattleTowerTrainerBattleWon[];
 
-extern const u8 *const gBattleScriptsForMoveEffects[];
+extern const u8 *const gBattleScriptsForMoveEffects[]; //down here because these are pointers
 extern const u8 *const gBattlescriptsForBallThrow[];
 extern const u8 *const gBattlescriptsForRunningByItem[];
 extern const u8 *const gBattlescriptsForUsingItem[];

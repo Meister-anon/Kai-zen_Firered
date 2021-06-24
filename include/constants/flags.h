@@ -1517,6 +1517,7 @@
 #define FLAG_NEW_EXP_SHARE											(SYS_FLAGS + 0x100)
 #define FLAGS_COUNT (FLAG_NEW_EXP_SHARE + 1)
 
+
 // SPECIAL FLAGS (unknown purpose)
 #define SPECIAL_FLAGS_START 0x4000
 #define SPECIAL_FLAGS_COUNT 16

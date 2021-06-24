@@ -3079,6 +3079,7 @@ BattleScript_WildMonFled::
 	waitmessage 0x40
 	end2
 
+
 BattleScript_PrintCantRunFromTrainer::
 	jumpifbattletype BATTLE_TYPE_FIRST_BATTLE, BattleScript_LeftoverBirchString
 	printstring STRINGID_NORUNNINGFROMTRAINERS

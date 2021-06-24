@@ -8389,10 +8389,17 @@ static void atkC1_hiddenpowercalc(void)
     j = spatk_diff();  // since the values are a differnece  the lower stat will actually be the one with the greater value. so I should use greater than for these.
     // if equal I think I'll just toss up a 50/50 Random() % 2  setting each, like I did for forecast.
      //so this should boost attack,if atk is lower & split is physical
-    if (i > 0 && moveSplit == SPLIT_PHYSICAL)
+    
+    //based on feedback from anthroyd, I may just simplify this
+    //and set the boost to apply against stronger opponents in general
+    //so just remove the moveSplit part of the boost function.
+
+    //I hesitate on that beause in that case, the boost would always be active,
+    //unless facing much lower level pokemon.   will need balance test
+    if (i > 0)// && moveSplit == SPLIT_PHYSICAL)
         gDynamicBasePower = gDynamicBasePower * 17 / 10; //boosted from 17 to 50 just to see if it works
 
-    if (j > 0 && moveSplit == SPLIT_SPECIAL)
+    if (j > 0)// && moveSplit == SPLIT_SPECIAL)
         gDynamicBasePower = gDynamicBasePower * 17 / 10; //doesn't seem to be workign, I'll swap to gdynamic
     //O.o now it works ...ow
 
@@ -8500,7 +8507,11 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerAttacker, gBattleCommunication[0])
             gBattlescriptCurrInstr += 9;
             //gBattleMoveDamage = gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].baseAttack;
-            gBattleMoveDamage = (GetMonData(&party[gBattleCommunication[0]], STAT_ATK) / 10 + 5);
+            /*gBattleMoveDamage*/ gDynamicBasePower = (GetMonData(&party[gBattleCommunication[0]], STAT_ATK) / 10 + 5);
+
+            //I think using this, makes it do fixed damage, instead of use base power,
+            //which is fine exect I think it excludes it from defense calculations
+            //so I'm going to try using gdynamicbasepower and see if the damage is still the same-ish
 
             //ok using stat_atk, may have been a problem, think I'l do an equivalency check
             //so that if its &party[gBattleCommunication[0] it'll use actual stat, and for the others use base stat.
@@ -8516,12 +8527,30 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             //gBattleMoveDamage = (gBattleMoveDamage / 50) + 2; //this most likely will do nothing, and stat_atk is hhe problem but I'll try it.
             if (gProtectStructs[gBattlerAttacker].helpingHand) //yup did jack shit... -_-
                 gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
+            //may adjst later to be like below, replace gbattleattacker
+            //and make it only work on the attacking pokemon's hit.
+            //or what I can do is, keep gbattleattacker, and run getMondata species & personality
+            //and if party[gbattlecommunication[0] match it,
+            //THEN gbattlemovedamage = what I have below.
+
+            //i.e if gBaseStats[GetMonData(gbattleAttacker, MON_DATA_SPECIES)
+            // && gBaseStats[GetMonData(gbattleAttacker, MON_DATA_PERSONALITY)
+            // == gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)
+            // && gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_PERSONALITY)
+
+            //if gbattleattacker has helping hand flag
+            //step 1, get species & personality of attacker,
+            //step 2, compare with party loop,
+            //step 3, another if statement, if equal increase battle damage for party loop[0]
+
             if (gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type1 == TYPE_DARK
                 || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK)
-                gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
-            ++gBattleCommunication[0];
+                //gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
+                gBattleMoveDamage = (GetMonData(&party[gBattleCommunication[0]], STAT_ATK) / 10 + 5) * 15 / 10;
+            ++gBattleCommunication[0]; // THIS stab boost may not be right, get second opinion,
+             // it may actually only boost total damage instead of individual hit
             //while I would like to use isbattlertype, this is looping the entire party, and that macro can only check battlers
-        } //may have calculated this wrong, its one shotting the world...
+        }
         else if (beforeLoop != 0)
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
         else
