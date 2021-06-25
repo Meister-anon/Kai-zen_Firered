@@ -631,7 +631,7 @@ void CB2_InitBattle(void)
     AllocateBattleResources();
     AllocateBattleSpritesData();
     AllocateMonSpritesGfx();
-    if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
+    if (gBattleTypeFlags & BATTLE_TYPE_MULTI) //not link, but multiplayer
     {
         return;
         SetMainCallback2(CB2_PreInitMultiBattle);
@@ -881,6 +881,19 @@ static void SetAllPlayersBerryData(void)
                 gEnigmaBerries[i + 2].holdEffectParam = src->holdEffectParam;
             }
         }
+    }
+}
+
+static void HandleAction_WaitTurnEnd(void) {
+    if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+    {
+        gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
+        PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, gBattlerAttacker, *(gBattleStruct->battlerPartyIndexes + gBattlerAttacker));
+        gBattleScripting.battler = gBattlerAttacker;
+        gBattlescriptCurrInstr = BattleScript_SkipTurn;
+        gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
+        //gCurrentActionFuncId = B_ACTION_FINISHED;
+        //++gCurrentTurnActionNumber;
     }
 }
 
@@ -1732,7 +1745,7 @@ void CB2_InitEndLinkBattle(void)
     gBattle_WIN0V = WIN_RANGE(0x50, 0x51);
     ScanlineEffect_Clear();
     for (i = 0; i < 80; ++i)
-        return;
+    //    return; //why did I add this again?
     {
         gScanlineEffectRegBuffers[0][i] = 0xF0;
         gScanlineEffectRegBuffers[1][i] = 0xF0;
@@ -1771,9 +1784,9 @@ void CB2_InitEndLinkBattle(void)
     gBattleCommunication[MULTIUSE_STATE] = 0;
 }
 
-static void CB2_EndLinkBattle(void)
+static void CB2_EndLinkBattle(void) 
 {
-    return;
+  //  return; //possible brock issue?
     EndLinkBattleInSteps();
     AnimateSprites();
     BuildOamBuffer();
@@ -2803,9 +2816,9 @@ static void TryDoEventsBeforeFirstTurn(void)
                 ++effect;
             ++gBattleStruct->switchInAbilitiesCounter;
             if (effect)
-                return;
+                return; //could this be cause of infini loop?
         }
-        if (AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE1, 0, 0, 0, 0) != 0)
+        if (AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE1, 0, 0, 0, 0) != 0) //important find out how works
             return;
         if (AbilityBattleEffects(ABILITYEFFECT_TRACE, 0, 0, 0, 0) != 0)
             return;
@@ -3015,7 +3028,7 @@ enum
     STATE_WAIT_SET_BEFORE_ACTION,
 };
 
-static void HandleTurnActionSelectionState(void)
+static void HandleTurnActionSelectionState(void) //think need add case for my swith action
 {
     s32 i;
 
@@ -3151,12 +3164,9 @@ static void HandleTurnActionSelectionState(void)
                     }
                     break;
                 case B_ACTION_SKIP_TURN:
-                    if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
-                    {
-                        gSelectionBattleScripts[gActiveBattler] = BattleScript_SkipTurn;
-                        gBattleCommunication[gActiveBattler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
-                        MarkBattlerForControllerExec(gActiveBattler);
-                    }
+                    gBattleCommunication[gActiveBattler] = STATE_WAIT_SET_BEFORE_ACTION; //still unsure which state to use
+                    MarkBattlerForControllerExec(gActiveBattler);
+                    break;
                 case B_ACTION_CANCEL_PARTNER:
                     gBattleCommunication[gActiveBattler] = STATE_WAIT_SET_BEFORE_ACTION;
                     gBattleCommunication[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gActiveBattler)))] = STATE_BEFORE_ACTION_CHOSEN;
@@ -4368,15 +4378,6 @@ static void HandleAction_TryFinish(void)
     }
 }
 
-static void HandleAction_WaitTurnEnd(void)
-{
-    gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
-    PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, gBattlerAttacker, gBattlerPartyIndexes[gBattlerAttacker])
-   gBattleScripting.battler = gBattlerAttacker;
-   gBattlescriptCurrInstr = BattleScript_SkipTurn;
-    gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
-    ++gCurrentTurnActionNumber;
-}
 
 static void HandleAction_NothingIsFainted(void)
 {

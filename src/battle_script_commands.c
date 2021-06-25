@@ -6600,8 +6600,21 @@ static void atk87_stockpiletohpheal(void)
     }
 }
 
-static void atk88_negativedamage(void)
+static void atk88_negativedamage(void) //to make absorbing life from ghosts damaging
 {
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_ABSORB
+        && IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST))
+    {
+        if ((gHpDealt / 4) < gBattleMons[gBattlerAttacker].maxHP / 16)
+            gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
+
+        if ((gHpDealt / 4) > gBattleMons[gBattlerAttacker].maxHP / 16)
+            gBattleMoveDamage = gHpDealt / 4;
+        //take the greater of the two, changed from else, so I don't have to worry about it
+        else if (gBattleMoveDamage == 0)
+            gBattleMoveDamage = 1;
+    } //hopefully will make it do damage instead of healing, and doesn't change effect of below.
+
     gBattleMoveDamage = -(gHpDealt / 2);
     if (gBattleMoveDamage == 0)
         gBattleMoveDamage = -1;
@@ -8479,7 +8492,14 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
 // I'm going to augment this add psuedo stab by increasing damage if pokemon attacking is dark type
 {
     struct Pokemon *party;
+    //u16 gDynamicBasePower = 0; //setting to 0, made it not insta kill,
+    //still don't know if it now works propperly against defenses, believe it should.
+
     //u16 power = gBattleMoves[gCurrentMove].power = GetMonData(&party[gBattleCommunication[0]], STAT_ATK) / 10 + 5;
+
+    // talked with GriffinR, gbattlemovedamage deals with the hp damage dealt,
+    //but it still factors in enemy defenses in the final damage calculation
+    //because ofthe calculatebasedamage command.
 
     if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
         party = gPlayerParty;
@@ -8507,7 +8527,7 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerAttacker, gBattleCommunication[0])
             gBattlescriptCurrInstr += 9;
             //gBattleMoveDamage = gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].baseAttack;
-            /*gBattleMoveDamage*/ gDynamicBasePower = (GetMonData(&party[gBattleCommunication[0]], STAT_ATK) / 10 + 5);
+            gBattleMoveDamage = (GetMonData(&party[gBattleCommunication[0]], STAT_ATK) / 10 + 5);
 
             //I think using this, makes it do fixed damage, instead of use base power,
             //which is fine exect I think it excludes it from defense calculations

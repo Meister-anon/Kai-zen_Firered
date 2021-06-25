@@ -22,6 +22,7 @@
 #include "constants/items.h"
 #include "constants/moves.h"
 #include "constants/songs.h"
+#include "battle_scripts.h"
 
 static void PlayerHandleGetMonData(void);
 static void PlayerHandleSetMonData(void);
@@ -38,6 +39,7 @@ static void PlayerHandleSuccessBallThrowAnim(void);
 static void PlayerHandleBallThrowAnim(void);
 static void PlayerHandlePause(void);
 static void PlayerHandleMoveAnimation(void);
+static void HandleAction_WaitTurnEnd(void);
 static void PlayerHandlePrintString(void);
 static void PlayerHandlePrintSelectionString(void);
 static void PlayerHandleChooseAction(void);
@@ -105,6 +107,7 @@ static void Task_GiveExpWithExpBar(u8 taskId);
 static void Task_CreateLevelUpVerticalStripes(u8 taskId);
 static void StartSendOutAnim(u8 battlerId, bool8 dontClearSubstituteBit);
 static void EndDrawPartyStatusSummary(void);
+static void HandleAction_WaitTurnEnd(void);
 
 static void (*const sPlayerBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
 {
@@ -240,7 +243,10 @@ static void HandleInputChooseAction(void)
             BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0);
             break;
         }
-        PlayerBufferExecCompleted();
+        PlayerBufferExecCompleted(); //realized why it uses move, using playerbufexec without an argument
+        //is the same as selecting use move, but skipping target select,
+        //which apparently makes it default to the user.
+        //or it targets the attaker, because of how the function is set, or because thats battler 0
     }
     else if (JOY_NEW(DPAD_LEFT))
     {
@@ -289,8 +295,8 @@ static void HandleInputChooseAction(void)
          && !(gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)])
          && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
         {
-            if (gBattleBufferA[gActiveBattler][1] == B_ACTION_USE_ITEM)
-            {
+            if (gBattleBufferA[gActiveBattler][1] == B_ACTION_USE_ITEM) //if first pokemon has chosen actoin use item
+            { //and player presses B button with second pokemon.
                 // Add item to bag if it is a ball
                 if (itemId <= ITEM_PREMIER_BALL)
                     AddBagItem(itemId, 1);
@@ -309,11 +315,10 @@ static void HandleInputChooseAction(void)
     else if (JOY_NEW(L_BUTTON)) // should display message on atk turn, and skip turn.
     {//need add to handleinput choosetarget & choosemove
        // if (!(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL))
-       // { // should make sure it works for all but old man tutorial battle
-            PlaySE(SE_SELECT);
-            BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
-            PlayerBufferExecCompleted();
-       // }
+       // { // should make sure it works for all but old man tutorial
+        PlaySE(SE_SELECT);
+        BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
+        PlayerBufferExecCompleted();
     }
 }
 
@@ -440,6 +445,8 @@ static void HandleInputChooseTarget(void)
         gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCb_ShowAsMoveTarget;
     }
 }
+
+
 
 void HandleInputChooseMove(void)
 {
@@ -584,13 +591,12 @@ void HandleInputChooseMove(void)
         }
     }
     else if (JOY_NEW(L_BUTTON)) // should display message on atk turn, and skip turn.
-    {
-    // if (!(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL))
-    // { // should make sure it works for all but old man tutorial battle
-    PlaySE(SE_SELECT);
-    BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
-    PlayerBufferExecCompleted();
-    // }
+    {//need add to handleinput choosetarget & choosemove
+       // if (!(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL))
+       // { // should make sure it works for all but old man tutorial
+       PlaySE(SE_SELECT);
+       BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
+       PlayerBufferExecCompleted();
     }
 }
 
@@ -924,6 +930,20 @@ static void Intro_WaitForShinyAnimAndHealthbox(void)
         gBattlerControllerFuncs[gActiveBattler] = Intro_DelayAndEnd;
     }
 }
+
+/*static void HandleAction_WaitTurnEnd(void) {
+    if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+    {
+        gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
+        PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, gBattlerAttacker, *(gBattleStruct->battlerPartyIndexes + gBattlerAttacker));
+        gBattleScripting.battler = gBattlerAttacker;
+        gBattlescriptCurrInstr = BattleScript_SkipTurn;
+        gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
+        //gCurrentActionFuncId = B_ACTION_FINISHED;
+        //++gCurrentTurnActionNumber;
+    }
+}*/
+
 
 static void Intro_TryShinyAnimShowHealthbox(void)
 {

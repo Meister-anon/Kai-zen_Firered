@@ -828,7 +828,7 @@ void HandleLowHpMusicChange(struct Pokemon *mon, u8 battlerId)
         //for using healing when in the red.
         gBattleSpritesDataPtr->battlerData[battlerId].lowHpSong = 0;
         if (!IsDoubleBattle())
-            m4aSongNumStop(SE_LOW_HEALTH);
+            m4aSongNumStop(SE_LOW_HEALTH);//all I need do is put playbgm under this, with loop of normal battle music
         else if (IsDoubleBattle() && !gBattleSpritesDataPtr->battlerData[battlerId ^ BIT_FLANK].lowHpSong)
             m4aSongNumStop(SE_LOW_HEALTH);
     }
