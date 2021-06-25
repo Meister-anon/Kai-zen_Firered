@@ -6603,7 +6603,9 @@ static void atk87_stockpiletohpheal(void)
 static void atk88_negativedamage(void) //to make absorbing life from ghosts damaging
 {
     if (gBattleMoves[gCurrentMove].effect == EFFECT_ABSORB
-        && IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST))
+        && IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST)
+        && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST)) //if done right,
+        //should prevent damage for ghost types
     {
         if ((gHpDealt / 4) < gBattleMons[gBattlerAttacker].maxHP / 16)
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
