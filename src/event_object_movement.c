@@ -5933,8 +5933,17 @@ static bool8 MovementActionFunc_x0F_1(struct ObjectEvent *objectEvent, struct Sp
 
 static bool8 MovementAction_WalkNormalDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
-    do_go_anim(objectEvent, sprite, DIR_SOUTH, 0);
-    return MovementAction_WalkNormalDown_Step1(objectEvent, sprite);
+    if (sprite == &gSprites[gPlayerAvatar.spriteId]) //works perfectly, need make custom speed, will set to 5
+    {
+        do_go_anim(objectEvent, sprite, DIR_SOUTH, 0);
+        return MovementAction_WalkNormalDown_Step1(objectEvent, sprite);
+    }
+    else
+    {
+        do_go_anim(objectEvent, sprite, DIR_SOUTH, 0);
+        return MovementAction_WalkNormalDown_Step1(objectEvent, sprite);
+    }
+    
 }
 
 static bool8 MovementAction_WalkNormalDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
@@ -5949,8 +5958,17 @@ static bool8 MovementAction_WalkNormalDown_Step1(struct ObjectEvent *objectEvent
 
 static bool8 MovementAction_WalkNormalUp_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
-    do_go_anim(objectEvent, sprite, DIR_NORTH, 0);
-    return MovementAction_WalkNormalUp_Step1(objectEvent, sprite);
+    if (sprite == &gSprites[gPlayerAvatar.spriteId])
+    {
+        do_go_anim(objectEvent, sprite, DIR_NORTH, 0);
+        return MovementAction_WalkNormalUp_Step1(objectEvent, sprite);
+    }
+    else 
+    {
+        do_go_anim(objectEvent, sprite, DIR_NORTH, 0);
+        return MovementAction_WalkNormalUp_Step1(objectEvent, sprite);
+    }
+    
 }
 
 static bool8 MovementAction_WalkNormalUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
@@ -5965,8 +5983,17 @@ static bool8 MovementAction_WalkNormalUp_Step1(struct ObjectEvent *objectEvent, 
 
 static bool8 MovementAction_WalkNormalLeft_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
-    do_go_anim(objectEvent, sprite, DIR_WEST, 0);
-    return MovementAction_WalkNormalLeft_Step1(objectEvent, sprite);
+    if (sprite == &gSprites[gPlayerAvatar.spriteId])
+    {
+        do_go_anim(objectEvent, sprite, DIR_WEST, 0);
+        return MovementAction_WalkNormalLeft_Step1(objectEvent, sprite);
+    }
+    else
+    {
+        do_go_anim(objectEvent, sprite, DIR_WEST, 0);
+        return MovementAction_WalkNormalLeft_Step1(objectEvent, sprite);
+    }
+    
 }
 
 static bool8 MovementAction_WalkNormalLeft_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
@@ -5981,9 +6008,25 @@ static bool8 MovementAction_WalkNormalLeft_Step1(struct ObjectEvent *objectEvent
 
 static bool8 MovementAction_WalkNormalRight_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
-    do_go_anim(objectEvent, sprite, DIR_EAST, 0);
-    return MovementAction_WalkNormalRight_Step1(objectEvent, sprite);
-}
+    if (sprite == &gSprites[gPlayerAvatar.spriteId])
+    {
+        do_go_anim(objectEvent, sprite, DIR_EAST, 0);
+        return MovementAction_WalkNormalRight_Step1(objectEvent, sprite);
+    }
+    else
+    {
+        do_go_anim(objectEvent, sprite, DIR_EAST, 0);
+        return MovementAction_WalkNormalRight_Step1(objectEvent, sprite);
+    }
+    //formula npc_apply_direction(objectEvent, sprite, direction, speed);
+    //so the last value is speed, with I believe 0, applies to normal speed, i.e playergospeed1
+    //I think setting to 1, is running speed, animations remain smooth, but its just faster than I want.
+    //preferrably I could create my own define, enum, that works for the speed I want.
+
+    //then possibly use if function to single out the players object event only,
+    //so everyone else is still at normal speed.
+    
+}//confirmed speed, uses values at bottom of this file in sprite step function sSpeed round line 9157
 
 static bool8 MovementAction_WalkNormalRight_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
@@ -5997,7 +6040,7 @@ static bool8 MovementAction_WalkNormalRight_Step1(struct ObjectEvent *objectEven
 
 void sub_8064E3C(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction, u8 speed, u8 a5)
 {
-    s16 displacements[NELEMS(gUnknown_83A6958)];
+    s16 displacements[NELEMS(gUnknown_83A6958)]; //important this appears to be what defines speed?
     s16 x;
     s16 y;
 
@@ -6039,7 +6082,7 @@ u8 sub_8064F3C(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 callba
         objectEvent->triggerGroundEffectsOnMove = TRUE;
         objectEvent->disableCoveringGroundEffects = TRUE;
     }
-    else if (result == 0xFF)
+    else if (result == 0xFF) //guess this is for ledge jump?
     {
         ShiftStillObjectEventCoords(objectEvent);
         objectEvent->triggerGroundEffectsOnStop = TRUE;
@@ -9114,19 +9157,19 @@ static void little_step(struct Sprite * sprite, u8 direction)
 {
     sprite->pos1.x += sDirectionToVectors[direction].x;
     sprite->pos1.y += sDirectionToVectors[direction].y;
-}
-
-static void double_little_steps(struct Sprite * sprite, u8 direction)
+} //may experiment by making 1.5 step where ist += 15/10 or something 
+//or try different combiniations of little & double little?
+static void double_little_steps(struct Sprite * sprite, u8 direction) //is speed1 and believe bike speed
 {
-    sprite->pos1.x += 2 * (u16)sDirectionToVectors[direction].x;
+    sprite->pos1.x += 2 * (u16)sDirectionToVectors[direction].x; //which is why bike is double walk speed
     sprite->pos1.y += 2 * (u16)sDirectionToVectors[direction].y;
 }
 
 static void triple_little_steps(struct Sprite * sprite, u8 direction)
-{
+{//is there a reason they couldn't multiply by 3 here, and did this instead?
     sprite->pos1.x += 2 * (u16)sDirectionToVectors[direction].x + (u16)sDirectionToVectors[direction].x;
     sprite->pos1.y += 2 * (u16)sDirectionToVectors[direction].y + (u16)sDirectionToVectors[direction].y;
-}
+} //that in mind, the triple step speed, is the only one to combine different step types?
 
 static void quad_little_steps(struct Sprite * sprite, u8 direction)
 {
@@ -9147,8 +9190,9 @@ void oamt_npc_ministep_reset(struct Sprite * sprite, u8 direction, u8 speed)
     sprite->tStepNo = 0;
 }
 
-typedef void (*SpriteStepFunc)(struct Sprite *sprite, u8 direction);
-
+typedef void (*SpriteStepFunc)(struct Sprite *sprite, u8 direction); //important,ok think I may have really found the speed stuff.
+//so sSpeed0, is normal speed, which gets transferred in to value 0, in the doanim function, 
+//I just need to figure out the rules for this, and I can make my own.
 static const SpriteStepFunc sSpeed0[] = {
     little_step,
     little_step,

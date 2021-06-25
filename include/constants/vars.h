@@ -61,7 +61,7 @@
 // renewable hidden items and this counter is capped,
 // the counter resets to 0 and all renewable hidden
 // item flags are resampled.
-#define VAR_RENEWABLE_ITEM_STEP_COUNTER     0x4023
+#define VAR_RENEWABLE_ITEM_STEP_COUNTER     0x4023 //important make another like this, but for trainer flags
 
 // Determines which wild encounter set to use in the
 // Altering Cave. Incremented by Mystery Event.
@@ -126,7 +126,8 @@
 #define VAR_0x404E                         0x404E
 #define VAR_LOTAD_SIZE_RECORD              0x404F
 
-// Map Scene
+// Map Scene //I'm guessign these are just for displaying questlog
+//was wrong these are progression vars, their values are changed in script to progress events.
 #define VAR_MAP_SCENE_PALLET_TOWN_OAK                                          0x4050
 #define VAR_MAP_SCENE_VIRIDIAN_CITY_OLD_MAN                                    0x4051
 #define VAR_MAP_SCENE_CERULEAN_CITY_RIVAL                                      0x4052

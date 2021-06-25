@@ -6,6 +6,8 @@
 const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
 {  // REMOVED specific map evolution cause don't know how to doit, replaced with general map evolution with mapsec
     //blocked mega evolution for now, so I can hopefully build within having to define mega items first
+   
+    //since ice types usually evolve really late, might adjust levels here for  better balance
     [SPECIES_BULBASAUR] = {{EVO_LEVEL, 16, SPECIES_IVYSAUR}},
     [SPECIES_IVYSAUR] = {{EVO_LEVEL, 32, SPECIES_VENUSAUR}},
     [SPECIES_VENUSAUR]             // = {{EVO_MEGA_EVOLUTION, ITEM_VENUSAURITE, SPECIES_VENUSAUR_MEGA}},

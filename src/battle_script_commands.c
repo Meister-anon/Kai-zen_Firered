@@ -6616,7 +6616,7 @@ static void atk88_negativedamage(void) //to make absorbing life from ghosts dama
         else if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
     } //hopefully will make it do damage instead of healing, and doesn't change effect of below.
-    else
+    else //all works.
     {
         gBattleMoveDamage = -(gHpDealt / 2);
         if (gBattleMoveDamage == 0)

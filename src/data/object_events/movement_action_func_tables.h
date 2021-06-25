@@ -759,8 +759,8 @@ static bool8 (*const sMovementActionFuncs_x13[])(struct ObjectEvent *, struct Sp
     MovementAction_PauseSpriteAnim,
 };
 
-const s16 gUnknown_83A6958[] = {0, 1, 1};
-const s16 gUnknown_83A695E[] = {0, 0, 1};
+const s16 gUnknown_83A6958[] = {0, 1, 1}; //important seems to apply to speed?
+const s16 gUnknown_83A695E[] = {0, 0, 1}; //think I sohuldn't change these, just change speed itself
 
 static bool8 (*const sMovementActionFuncs_x14[])(struct ObjectEvent *, struct Sprite *) = {
     MovementAction_Jump2Down_Step0,
