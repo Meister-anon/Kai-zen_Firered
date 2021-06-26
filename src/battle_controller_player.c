@@ -318,7 +318,7 @@ static void HandleInputChooseAction(void)
        // { // should make sure it works for all but old man tutorial
         PlaySE(SE_SELECT);
         BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
-        PlayerBufferExecCompleted();
+        //PlayerBufferExecCompleted();
     }
 }
 
@@ -596,7 +596,7 @@ void HandleInputChooseMove(void)
        // { // should make sure it works for all but old man tutorial
        PlaySE(SE_SELECT);
        BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
-       PlayerBufferExecCompleted();
+       //PlayerBufferExecCompleted();
     }
 }
 

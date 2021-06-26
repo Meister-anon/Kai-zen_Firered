@@ -1675,13 +1675,14 @@ BattleScript_DoFuryCutterAttack::
 	goto BattleScript_FuryCutterPrintStrings
 BattleScript_FuryCutterNoMoreHits::
 	pause 0x20
+	jumpifmovehadnoeffect BattleScript_FuryCutterEnd
 	jumpifbyte CMP_EQUAL, gBattleScripting + 12, 0, BattleScript_FuryCutterPrintStrings
 	bicbyte gMoveResultFlags, MOVE_RESULT_MISSED
 BattleScript_FuryCutterPrintStrings::
 	resultmessage
 	waitmessage 0x40
 	jumpifbyte CMP_EQUAL, gBattleScripting + 12, 0, BattleScript_FuryCutterEnd
-	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE, BattleScript_FuryCutterEnd
+	@ jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE, BattleScript_FuryCutterEnd
 	copyarray gBattleTextBuff1, sMULTIHIT_STRING, 6
 	printstring STRINGID_HITXTIMES
 	waitmessage 0x40

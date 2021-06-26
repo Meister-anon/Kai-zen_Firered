@@ -1182,16 +1182,17 @@ static void atk01_accuracycheck(void)
             buff = 0xC;
         moveAcc = gBattleMoves[move].accuracy;
 
-        if (gCurrentMove == MOVE_FURY_CUTTER) {
+        if (gCurrentMove == MOVE_FURY_CUTTER) { //still not quite right, doesn't display right message for things like wonderguard
            // if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5) { //increment until reach 5
              //   ++gDisableStructs[gBattlerAttacker].furyCutterCounter; //removing to test that it isn't incrementing twice. (it was)
 
                 for (i = 1; i < gDisableStructs[gBattlerAttacker].furyCutterCounter; ++i) {
-                    moveAcc = (moveAcc * 3) / 4; //so far is working to stop the move,
+                    moveAcc = (moveAcc * 2) / 3; //so far is working to stop the move,
                     //but isn't displaying the miss message...    apparently that's normal
                 }
             //}
-        } //hopefully THIS  will affect the accuracy.
+        } //hopefully THIS  will affect the accuracy. works , it loses 1/4 per hit. 
+        //changed from 3/4 to 2/3 to drop 1/3 per hit.
 
         // check Thunder on sunny weather / need add hail blizzard buff?
         if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY && gBattleMoves[move].effect == EFFECT_THUNDER)
