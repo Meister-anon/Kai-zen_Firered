@@ -691,8 +691,9 @@ void FieldUseFunc_FameChecker(u8 taskId)
     ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, NULL, gSpecialVar_ItemId, 0xFFFF);
     if (gTasks[taskId].data[3] == 0)
     {
-        //ItemMenu_SetExitCallback(sub_80A1D58);
-        ItemMenu_StartFadeToExitCallback(taskId);
+        return;
+       // ItemMenu_SetExitCallback(sub_80A1D58);
+        //ItemMenu_StartFadeToExitCallback(taskId);
     }
     else
     {

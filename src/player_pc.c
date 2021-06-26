@@ -116,7 +116,7 @@ static const struct WindowTemplate sWindowTemplate_TopMenu_3Items = {
     .tilemapLeft = 1,
     .tilemapTop = 1,
     .width = 13,
-    .height = 6,
+    .height = 4, //assume 2 height for each entry so for 2 options should be 4.
     .paletteNum = 15,
     .baseBlock = 0x008
 };
@@ -157,7 +157,7 @@ void BedroomPC(void)
     gPlayerPcMenuManager.notInRoom = FALSE;
     //BackupHelpContext();
     sItemOrder = gUnknown_8402200;
-    sTopMenuItemCount = 3;
+    sTopMenuItemCount = 2;
     taskId = CreateTask(TaskDummy, 0);
     DisplayItemMessageOnField(taskId, 2, gText_WhatWouldYouLikeToDo, Task_DrawPlayerPcTopMenu);
 }
@@ -169,7 +169,7 @@ void PlayerPC(void)
     gPlayerPcMenuManager.notInRoom = TRUE;
     //BackupHelpContext();
     sItemOrder = gUnknown_8402203;
-    sTopMenuItemCount = 3;
+    sTopMenuItemCount = 2;
     taskId = CreateTask(TaskDummy, 0);
     DisplayItemMessageOnField(taskId, 2, gText_WhatWouldYouLikeToDo, Task_DrawPlayerPcTopMenu);
 }
@@ -177,7 +177,7 @@ void PlayerPC(void)
 static void Task_DrawPlayerPcTopMenu(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
-    if (sTopMenuItemCount == 3)
+    if (sTopMenuItemCount == 2)
         tWindowId = AddWindow(&sWindowTemplate_TopMenu_3Items);
     else
         tWindowId = AddWindow(&sWindowTemplate_TopMenu_4Items);
