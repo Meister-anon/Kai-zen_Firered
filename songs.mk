@@ -829,6 +829,4 @@ $(MID_SUBDIR)/se_dex_search.s: %.s: %.mid
 	$(MID) $< $@ -E -R$(STD_REVERB) -G127 -v100 -P5
 
 $(MID_SUBDIR)/se_low_health2.s: %.s: %.mid
-	$(MID) $< $@ -E -R$(STD_REVERB) -G011 -V079 -P3 //voice group 011 works pretty well se just doesn't loop
-											//odd while 138 seems more accurate it doesn't bop like 011
-											//still doesn't resume normal music after healing even with priority change
+	$(MID) $< $@ -E -R$(STD_REVERB) -G011 -V079 -P3
