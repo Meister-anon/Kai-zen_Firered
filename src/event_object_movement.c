@@ -919,9 +919,9 @@ bool8 (*const gDirectionBlockedMetatileFuncs[])(u8) = {
 
 static const struct Coords16 sDirectionToVectors[] = {
     [DIR_NONE]      = { 0,  0},
-    [DIR_SOUTH]     = { 0,  1},
-    [DIR_NORTH]     = { 0, -1},
-    [DIR_WEST]      = {-1,  0},
+    [DIR_SOUTH]     = { 0,  1},  //doubled for test from 1 to 2
+    [DIR_NORTH]     = { 0, -1}, //ok figured out how this works, each step corresponds to a different tile
+    [DIR_WEST]      = {-1,  0}, // first byte x axis second byte 1 axis
     [DIR_EAST]      = { 1,  0},
     [DIR_SOUTHWEST] = {-1,  1},
     [DIR_SOUTHEAST] = { 1,  1},
@@ -5661,9 +5661,9 @@ void sub_8064830(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 dire
 
 bool8 an_walk_any_2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
-    if (sub_8068BCC(sprite))
+    if (sub_8068BCC(sprite)) //seems to cover the perception of walking, when take a step or move in a direction, all objects that don't' move get their coordinates shifted back by equal amount
     {
-        ShiftStillObjectEventCoords(objectEvent);
+        ShiftStillObjectEventCoords(objectEvent); //to appear as if you're moving past them?  I guess that's what's happening.
         objectEvent->triggerGroundEffectsOnStop = TRUE;
         sprite->animPaused = TRUE;
         return TRUE;
@@ -5933,7 +5933,7 @@ static bool8 MovementActionFunc_x0F_1(struct ObjectEvent *objectEvent, struct Sp
 
 static bool8 MovementAction_WalkNormalDown_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
-    if (sprite == &gSprites[gPlayerAvatar.spriteId]) //works perfectly, need make custom speed, will set to 5
+    if (sprite == &gSprites[gPlayerAvatar.spriteId]) //works perfectly, need make custom speed, will set to 5   custom speed failed
     {
         do_go_anim(objectEvent, sprite, DIR_SOUTH, 0);
         return MovementAction_WalkNormalDown_Step1(objectEvent, sprite);
@@ -6071,9 +6071,9 @@ u8 sub_8064F3C(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 callba
     s16 y;
     u8 result;
 
-    memcpy(displacements, gUnknown_83A695E, sizeof gUnknown_83A695E);
-    result = callback(sprite);
-    if (result == 1 && displacements[sprite->data[4]] != 0)
+    memcpy(displacements, gUnknown_83A695E, sizeof gUnknown_83A695E); // looked at this, can tell each walking animation has step 0, step 1 & a pause animation
+    result = callback(sprite); //possibly tdelay is that pause's duration  
+    if (result == 1 && displacements[sprite->data[4]] != 0) //for it to look how i want, think I need identical pause & num steps regardless of "speed" to speed0.
     {
         x = 0;
         y = 0;
@@ -9153,12 +9153,41 @@ void UnfreezeObjectEvents(void)
 #define tSpeed     data[4]
 #define tStepNo    data[5]
 
-static void little_step(struct Sprite * sprite, u8 direction)
-{
-    sprite->pos1.x += sDirectionToVectors[direction].x;
-    sprite->pos1.y += sDirectionToVectors[direction].y;
+static void little_step(struct Sprite * sprite, u8 direction) // speed moves the position a number of tiles based current positions
+{ // which is why setting to 1.5 does nothing, it only recognized whole tiles,
+    //and why setting littlestep to 2, causes border issues, metatiles etc. only work when "ON" them
+  // setting it to 2 essentially allows you to skip over them, without the game realizing you were ever on them.
+    //because your postion gets moved from 0, to 2. That's also why border stop you early.
+
+    //so before I can even attempt to set the speed how I want, I need a way for the game,
+ // to read you covering the tiles between your previous position and current position.
+
+    //and stop you "at" an important tile or border, if that type was in the space between.
+ //would probably need to discard all button inputs until the process/calculation is done too,
+    //so you don't just fly down the road after a jump or something.
+
+    //that may alerady be covered actually?  since it doesn't happen after a jump now.
+    
+    /*if (sprite == &gSprites[gPlayerAvatar.spriteId]) //no idea if this will work, but if it does it'll solve the custom speed issue.
+    { // as well as having to set two speeds for  player vs npc
+        sprite->pos1.x += 2 * sDirectionToVectors[direction].x;
+        sprite->pos1.y += 2 * sDirectionToVectors[direction].y;
+    }
+    else
+    {*/
+        sprite->pos1.x += sDirectionToVectors[direction].x;  //FACEPALM half steps do nothing. but 2x is too fast
+        sprite->pos1.y += sDirectionToVectors[direction].y; //I just want a speed in between single & double step!!!
+   // }
+
 } //may experiment by making 1.5 step where ist += 15/10 or something 
 //or try different combiniations of little & double little?
+
+static void x_step(struct Sprite * sprite, u8 direction)
+{
+    sprite->pos1.x += (15 / 10) * sDirectionToVectors[direction].x;
+    sprite->pos1.y += (15 / 10) * sDirectionToVectors[direction].y;
+}
+
 static void double_little_steps(struct Sprite * sprite, u8 direction) //is speed1 and believe bike speed
 {
     sprite->pos1.x += 2 * (u16)sDirectionToVectors[direction].x; //which is why bike is double walk speed
@@ -9193,6 +9222,7 @@ void oamt_npc_ministep_reset(struct Sprite * sprite, u8 direction, u8 speed)
 typedef void (*SpriteStepFunc)(struct Sprite *sprite, u8 direction); //important,ok think I may have really found the speed stuff.
 //so sSpeed0, is normal speed, which gets transferred in to value 0, in the doanim function, 
 //I just need to figure out the rules for this, and I can make my own.
+
 static const SpriteStepFunc sSpeed0[] = {
     little_step,
     little_step,
@@ -9244,20 +9274,41 @@ static const SpriteStepFunc sSpeed4[] = {
     oct_little_steps
 };
 
+/*static const SpriteStepFunc sSpeed5[] = {
+    x_step,
+    x_step,
+    x_step,
+    x_step,
+    x_step,
+    x_step,
+    x_step,
+    x_step,
+    x_step,
+    x_step,
+    x_step,
+    x_step,
+    x_step,
+    x_step,
+    x_step,
+    x_step
+};*/
+
 static const SpriteStepFunc *const sSpriteStepFuncsBySpeed[] = {
     sSpeed0,
+    //sSpeed5,  //same reason as below.  //change did jack shit I give up .
     sSpeed1,
     sSpeed2,
     sSpeed3,
-    sSpeed4
+    sSpeed4,    
 };
 
 static const s16 sSpriteStepCountsBySpeed[] = {
     NELEMS(sSpeed0),
+    //NELEMS(sSpeed5),//maybe the problem was putting this at the end when it isnt' the "fastest"?
     NELEMS(sSpeed1),
     NELEMS(sSpeed2),
     NELEMS(sSpeed3),
-    NELEMS(sSpeed4)
+    NELEMS(sSpeed4)   
 };
 
 bool8 obj_npc_ministep(struct Sprite *sprite)
@@ -9316,9 +9367,9 @@ void sub_8068C08(struct Sprite *sprite, u8 direction)
 
 bool8 sub_8068C18(struct Sprite *sprite)
 {
-    if (++sprite->tDelay < 3)
+    if (++sprite->tDelay < 3) //I'm guess tDelay is a timed delay for how long a step should be
     {
-        little_step(sprite, sprite->tDirection);
+        little_step(sprite, sprite->tDirection); //and I guess aft the delay has passed it can move to the next "step" i the walk animation? step 0 step 1 step 0 step 1?
         sprite->tStepNo++;
     }
     else
