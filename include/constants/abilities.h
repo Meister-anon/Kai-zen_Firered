@@ -82,7 +82,7 @@
 #define ABILITY_DISPIRIT_GUARD 78
 #define ABILITY_NUISANCE 79
 
-#define ABILITIES_COUNT 80
+#define ABILITIES_COUNT 80 //note make perish body, only affect target, possibly
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H
 

@@ -19,7 +19,7 @@
 	.section script_data, "aw", %progbits
 	.align 2
 
-gBattleScriptsForMoveEffects::
+gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectHit
 	.4byte BattleScript_EffectSleep
 	.4byte BattleScript_EffectPoisonHit
@@ -1675,14 +1675,13 @@ BattleScript_DoFuryCutterAttack::
 	goto BattleScript_FuryCutterPrintStrings
 BattleScript_FuryCutterNoMoreHits::
 	pause 0x20
-	jumpifmovehadnoeffect BattleScript_FuryCutterEnd
 	jumpifbyte CMP_EQUAL, gBattleScripting + 12, 0, BattleScript_FuryCutterPrintStrings
 	bicbyte gMoveResultFlags, MOVE_RESULT_MISSED
 BattleScript_FuryCutterPrintStrings::
 	resultmessage
 	waitmessage 0x40
 	jumpifbyte CMP_EQUAL, gBattleScripting + 12, 0, BattleScript_FuryCutterEnd
-	@ jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE, BattleScript_FuryCutterEnd
+	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE, BattleScript_FuryCutterEnd
 	copyarray gBattleTextBuff1, sMULTIHIT_STRING, 6
 	printstring STRINGID_HITXTIMES
 	waitmessage 0x40
@@ -2309,7 +2308,7 @@ BattleScript_MementoNoReduceStats::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectFacade::
-	jumpifstatus BS_ATTACKER, STATUS1_POISON | STATUS1_PARALYSIS | STATUS1_BURN | STATUS1_TOXIC_POISON, BattleScript_FacadeDoubleDmg
+	jumpifstatus BS_ATTACKER, STATUS1_POISON | STATUS1_PARALYSIS | STATUS1_BURN | STATUS1_SPIRIT_LOCK | STATUS1_TOXIC_POISON, BattleScript_FacadeDoubleDmg
 	goto BattleScript_EffectHit
 
 BattleScript_FacadeDoubleDmg::
@@ -3931,6 +3930,9 @@ BattleScript_MoveEffectParalysis::
 	statusanimation BS_EFFECT_BATTLER
 	printfromtable gGotParalyzedStringIds
 	waitmessage 0x40
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectSpiritLock::
 	goto BattleScript_UpdateEffectStatusIconRet
 
 BattleScript_MoveEffectUproar::

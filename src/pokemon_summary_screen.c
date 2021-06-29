@@ -218,7 +218,7 @@ struct PokemonSummaryScreenData
     u8 ALIGNED(4) unk3264; /* 0x3264 */
     u8 ALIGNED(4) unk3268; /* 0x3268 */
 
-    u8 ALIGNED(4) unk326C; /* 0x326C */
+    u8 ALIGNED(4) unk326C; /* 0x326C */  //important seems to be for displaying status
 
     u8 ALIGNED(4) state3270; /* 0x3270 */
     u8 ALIGNED(4) unk3274; /* 0x3274 */
@@ -317,7 +317,7 @@ struct Struct203B168
 static EWRAM_DATA struct PokemonSummaryScreenData * sMonSummaryScreen = NULL;
 static EWRAM_DATA struct Struct203B144 * sUnknown_203B144 = NULL;
 static EWRAM_DATA struct Struct203B148 * sUnknown_203B148[4] = {};
-static EWRAM_DATA struct Struct203B158 * sUnknown_203B158 = NULL;
+static EWRAM_DATA struct Struct203B158 * sUnknown_203B158 = NULL; //important believe this is for displaying status icon in summary screens
 static EWRAM_DATA struct Struct203B15C * sUnknown_203B15C = NULL;
 static EWRAM_DATA struct Struct203B160 * sUnknown_203B160 = NULL;
 static EWRAM_DATA struct Struct203B164 * sUnknown_203B164 = NULL;
@@ -2213,7 +2213,7 @@ static void sub_8136350(void) // seems to be PSS_PAGE_SKILLS or data for it.
     StringCopy(sMonSummaryScreen->summary.unk31BC, gAbilityNames[type]);
     StringCopy(sMonSummaryScreen->summary.unk31CC, gAbilityDescriptionPointers[type]);
 
-    sMonSummaryScreen->unk326C = sub_8138C5C(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_STATUS));
+    sMonSummaryScreen->unk326C = sub_8138C5C(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_STATUS)); //important status screen, unk326c & this sub seem to be important for displaying status.
     if (sMonSummaryScreen->unk326C == AILMENT_NONE)
         if (CheckPartyPokerus(&sMonSummaryScreen->currentMon, 0))
             sMonSummaryScreen->unk326C = AILMENT_PKRS;
@@ -3462,10 +3462,13 @@ static u8 sub_8138C5C(u32 status)
 
     if ((status & STATUS1_BURN) != 0)
         return AILMENT_BRN;
+    
+    if ((status & STATUS1_SPIRIT_LOCK) != 0)
+        return AILMENT_SPRT;
 
-    if (CheckPartyPokerus(&sMonSummaryScreen->currentMon, 0))
-        return AILMENT_PKRS;
-
+    if (CheckPartyPokerus(&sMonSummaryScreen->currentMon, 0)) //important very !!
+        return AILMENT_PKRS; // !! if this function can check and return/display both status1 ailment and pokerus ailment
+    //then multi status should be pheasible!!!
     return AILMENT_NONE;
 }
 
@@ -4332,18 +4335,20 @@ static void sub_813A35C(void)
 
     if (sMonSummaryScreen->unk326C == AILMENT_NONE)
     {
-        sub_813A3B8(1);
-        return;
-    }
+        sub_813A3B8(1); //will need to havea defautl arrangement of invisible status icons
+        return; // check the order of list and swap order and then make visible as statuses are applied
+
+    } //I'm thinking work backwards like evo table, order based on turn order status applied in, FIFO style,
+      // next check that the status is still in affect, if it isn't, swap it to the bottom of the stack and make invisible
 
     StartSpriteAnim(sUnknown_203B158->sprite, sMonSummaryScreen->unk326C - 1);
     sub_813A3B8(0);
 }
 
-static void sub_813A3B8(u8 invisible)
+static void sub_813A3B8(u8 invisible) //important status icon visibility and position
 {
     if (sMonSummaryScreen->unk326C == AILMENT_NONE || sMonSummaryScreen->isEgg)
-        sUnknown_203B158->sprite->invisible = TRUE;
+        sUnknown_203B158->sprite->invisible = TRUE; //believe this just means make ailment none sprite invisible,
     else
         sUnknown_203B158->sprite->invisible = invisible;
 
@@ -4351,12 +4356,12 @@ static void sub_813A3B8(u8 invisible)
     {
         if (sUnknown_203B158->sprite->pos1.y != 45)
         {
-            sUnknown_203B158->sprite->pos1.x = 16;
+            sUnknown_203B158->sprite->pos1.x = 16; //important this unknown and data may be for position of status icon when on move page.
             sUnknown_203B158->sprite->pos1.y = 45;
             return;
         }
     }
-    else if (sUnknown_203B158->sprite->pos1.y != 38)
+    else if (sUnknown_203B158->sprite->pos1.y != 38) //and this may be for every other windows.
     {
         sUnknown_203B158->sprite->pos1.x = 16;
         sUnknown_203B158->sprite->pos1.y = 38;

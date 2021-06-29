@@ -898,7 +898,7 @@ static void UpdateHpTextInHealthboxInDoubles(u8 healthboxSpriteId, s16 value, u8
         {
             if (GetBattlerSide(battlerId) == B_SIDE_PLAYER) // Impossible to reach part, because the battlerId is from the opponent's side.
             {
-                CpuCopy32(GetHealthboxElementGfxPtr(HEALTHBOX_GFX_116),
+                CpuCopy32(GetHealthboxElementGfxPtr(HEALTHBOX_GFX_116), //dang its a good thing I kept notes on the previous values of those things.
                           (void*)(OBJ_VRAM0) + ((gSprites[healthboxSpriteId].oam.tileNum + 52) * TILE_SIZE_4BPP),
                           0x20);
             }
@@ -1565,6 +1565,7 @@ enum
     PAL_STATUS_SLP,
     PAL_STATUS_FRZ,
     PAL_STATUS_BRN
+    //PAL_STATUS_SPRT
 };
 
 static const u16 sStatusIconColors[] = {
@@ -1573,6 +1574,7 @@ static const u16 sStatusIconColors[] = {
     [PAL_STATUS_SLP] = RGB(20, 20, 17),
     [PAL_STATUS_FRZ] = RGB(17, 22, 28),
     [PAL_STATUS_BRN] = RGB(28, 14, 10)
+    //[PAL_STATUS_SPRT] = RGB(32, 23, 26)
 };
 
 static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
@@ -1625,6 +1627,11 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
         statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_PRZ_BATTLER0, battlerId));
         statusPalId = PAL_STATUS_PAR;
     }
+    /*else if (status & STATUS1_SPIRIT_LOCK)
+    {
+        statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_SPRT_BATTLER0, battlerId));
+        statusPalId = PAL_STATUS_SPRT;
+    }*/
     else
     {
         statusGfxPtr = GetHealthboxElementGfxPtr(HEALTHBOX_GFX_39);
@@ -1712,6 +1719,16 @@ static u8 GetStatusIconForBattlerId(u8 statusElementId, u8 battlerId)
         else
             ret = HEALTHBOX_GFX_STATUS_BRN_BATTLER3;
         break;
+    /*case HEALTHBOX_GFX_STATUS_SPRT_BATTLER0
+        if (battlerId == 0)
+            ret = HEALTHBOX_GFX_STATUS_SPRT_BATTLER0;
+        else if (battlerId == 1)
+            ret = HEALTHBOX_GFX_STATUS_SPRT_BATTLER1;
+        else if (battlerId == 2)
+            ret = HEALTHBOX_GFX_STATUS_SPRT_BATTLER2;
+        else
+            ret = HEALTHBOX_GFX_STATUS_SPRT_BATTLER3;
+        break;*/
     }
     return ret;
 }

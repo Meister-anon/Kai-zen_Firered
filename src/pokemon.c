@@ -95,7 +95,7 @@ static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon);
 static u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
 static u8 GetLevelFromMonExp(struct Pokemon *mon);
 static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon);
-//const u16* const gFormSpeciesIdTables[NUM_SPECIES]
+static u16 AbilitybasedStatChanges(u16 species);
 
 #include "data/battle_moves.h"
 
@@ -2545,10 +2545,10 @@ void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFix
     arg = 255;
     SetMonData(mon, MON_DATA_MAIL, &arg);
     CalculateMonStats(mon);
-}
+} //believe used for wild poke generation, and give mons etc.
 
 void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
-{
+{ //because its in above function, though it says box, its actually for wild/all pokemon
     u8 speciesName[POKEMON_NAME_LENGTH + 1];
     u32 personality;
     u32 value;
@@ -2964,6 +2964,11 @@ void CalculateMonStats(struct Pokemon *mon)
     SetMonData(mon, MON_DATA_HP, &currentHP);
 }
 
+/*static u16 AbilitybasedStatChanges(u16 species) //important will use to change constants i.e pokemon stats based on ability hidden ability etc.
+{
+    if (species ==  SPECIES_ZUBAT && gBaseStats[species].abilty == ABILITY_NUISANCE)
+}*/
+
 void BoxMonToMon(struct BoxPokemon *src, struct Pokemon *dest)
 {
     u32 value = 0;
@@ -3309,7 +3314,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     if (IS_MOVE_PHYSICAL(move))
     {
-        if (gCritMultiplier == 2)
+        if (gCritMultiplier >= 2)
         {
             if (attacker->statStages[STAT_ATK] > 6)
                 APPLY_STAT_MOD(damage, attacker, attack, STAT_ATK)
@@ -3322,7 +3327,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage = damage * gBattleMovePower;
         damage *= (2 * attacker->level / 5 + 2);
 
-        if (gCritMultiplier == 2)
+        if (gCritMultiplier >= 2)
         {
             if (defender->statStages[STAT_DEF] < 6)
                 APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)
@@ -3394,11 +3399,11 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     // flash fire triggered
     if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
-        damage = (15 * damage) / 10;
+        damage = (15 * damage) / 10;  //how does this work, do I need to move it, or does it auto boost all damage?
 
     if (IS_MOVE_SPECIAL(move))
     {
-        if (gCritMultiplier == 2)
+        if (gCritMultiplier >= 2)
         {
             if (attacker->statStages[STAT_SPATK] > 6)
                 APPLY_STAT_MOD(damage, attacker, spAttack, STAT_SPATK)
@@ -3411,7 +3416,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage = damage * gBattleMovePower;
         damage *= (2 * attacker->level / 5 + 2);
 
-        if (gCritMultiplier == 2)
+        if (gCritMultiplier >= 2)
         {
             if (defender->statStages[STAT_SPDEF] < 6)
                 APPLY_STAT_MOD(damageHelper, defender, spDefense, STAT_SPDEF)
@@ -3431,6 +3436,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             else
                 damage /= 1;
         }
+
+        if (attacker->status1 & STATUS1_SPIRIT_LOCK) //function that gives spirit_lock special atk cut
+            damage /= 2;
 
         if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == 8 && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
             damage /= 1;
@@ -4526,7 +4534,7 @@ u8 GetMonsStateToDoubles(void)
     return (aliveCount > 1) ? PLAYER_HAS_TWO_USABLE_MONS : PLAYER_HAS_ONE_USABLE_MON;
 }
 
-u16 GetAbilityBySpecies(u16 species, bool8 abilityNum)
+u16 GetAbilityBySpecies(u16 species, bool8 abilityNum) //important tells game abilitynum2 is hidden ability
 {
     if (abilityNum == 2)
         gLastUsedAbility = gBaseStats[species].abilityHidden;
@@ -5690,10 +5698,19 @@ static u8 GetNatureFromPersonality(u32 personality)
     return personality % 25;
 }
 
+/*u16 GetBreedingTargetSpecies(struct Pokemon* mon, u8 type, u16 breedingItem) //got an error because variable name "type" was same as parameter "type"
+{
+    u16 targetSpecies = 0;
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
+    u16 heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
+    u8 montype = ((gBaseStats[GetMonData(mon, MON_DATA_SPECIES, 0)].type1) 
+        || (gBaseStats[GetMonData(mon, MON_DATA_SPECIES, 0)].type2)) //forgot this is pokemon.c so gemondata is different, added 0, hpoefully works
+}*/
+
 u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
 {
     int i;
-    u16 targetSpecies = 0;
+    u16 targetSpecies = 0; //need figure out weird problem with summary screen ps5 page  search keyword move info
     u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
     u16 heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);

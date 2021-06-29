@@ -35,6 +35,13 @@
 	.2byte 0 @ padding
 	.endm
 
+	.macro breeding_table method, parameter, target_species
+	.2byte \method
+	.2byte \parameter
+	.2byte \target_species
+	.2byte 0 @ padding
+	.endm
+
 	.macro empty_evo_entries count
 	.fill 8 * \count, 1, 0
 	.endm

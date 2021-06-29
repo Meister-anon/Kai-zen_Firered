@@ -9140,8 +9140,8 @@ extern const u32 gHoennTrainerCard_Gfx[];
 
 // battle_interface
 extern const u32 gFile_graphics_battle_interface_ball_status_bar_sheet[];
-extern const u8 gHealthboxElementsGfxTable[][32];
-extern const u16 gBattleInterface_BallStatusBarPal[];
+extern const u8 gHealthboxElementsGfxTable[][32]; // if this is like evo table, where 1st bracket is species num and 2nd bracket is num evolutions, I guess I don't change 32
+extern const u16 gBattleInterface_BallStatusBarPal[]; //when I add a new field. so adding a new status I don't change anything here.
 extern const u16 gBattleInterface_BallDisplayPal[];
 extern const u16 gUnknown_8D12404[];
 

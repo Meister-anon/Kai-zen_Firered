@@ -365,6 +365,7 @@ const u8 gHealthboxElementsGfxTable_StatusPar[] = INCBIN_U8("graphics/battle_int
 const u8 gHealthboxElementsGfxTable_StatusSlp[] = INCBIN_U8("graphics/battle_interface/status_slp.4bpp");
 const u8 gHealthboxElementsGfxTable_StatusFrz[] = INCBIN_U8("graphics/battle_interface/status_frz.4bpp");
 const u8 gHealthboxElementsGfxTable_StatusBrn[] = INCBIN_U8("graphics/battle_interface/status_brn.4bpp");
+//const u8 gHealthboxElementsGfxTable_StatusSprt[] = INCBIN_U8("graphics/battle_interface/status_sprt.4bpp");
 const u8 gHealthboxElementsGfxTable_Misc[] = INCBIN_U8("graphics/battle_interface/misc.4bpp");
 const u8 gHealthboxElementsGfxTable_HpBarAnim[] = INCBIN_U8("graphics/battle_interface/hp_bar_anim.4bpp");
 const u8 gHealthboxElementsGfxTable_MiscFrameEnd[] = INCBIN_U8("graphics/battle_interface/misc_frame_end.4bpp");

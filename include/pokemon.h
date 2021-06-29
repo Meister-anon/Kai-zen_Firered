@@ -221,9 +221,9 @@ struct BaseStats  // had to adjust struct order to match paste value from base_s
  /* 0x13 */ u8 growthRate;
  /* 0x14 */ u8 eggGroup1;
  /* 0x15 */ u8 eggGroup2;
- /* 0x16 */ u16 abilities[2];
+ /* 0x16 */ u16 abilities[2]; //[partysize] is 6 values, so this is ability 1 and ability 2, doesn't include hidden
  /* 0x1A */ u8 safariZoneFleeRate;
- /* 0x1B */ u16 abilityHidden;
+ /* 0x1B */ u16 abilityHidden; //need to make sure ability num can be 2, then set that as hidden ability
  /* 0x1D */ u8 bodyColor : 7;
             u8 noFlip : 1;
  /* 0x1E */ u8 flags;
@@ -332,6 +332,58 @@ struct Evolution
 };
 
 #define EVOS_PER_MON 16 // set to 16 in case I need the shedinja byte change fix
+#define FORMS_PER_MON 5 //for breeding
+
+
+#define RATTATA_EVO_LINE SPECIES_RATTATA || SPECIES_RATICATE
+
+#define PIKACHU_EVO_LINE SPECIES_PIKACHU || SPECIES_RAICHU
+
+#define SANDSHREW_EVO_LINE SPECIES_SANDSHREW || SPECIES_SANDSLASH
+
+#define VULPIX_EVO_LINE SPECIES_VULPIX || SPECIES_NINETALES
+
+#define DIGLETT_EVO_LINE SPECIES_DIGLETT || SPECIES_DUGTRIO
+
+#define MEOWTH_EVO_LINE SPECIES_MEOWTH || SPECIES_PERSIAN //(meowth has 2 form, persian 1 just alolan)
+
+#define GEODUDE_EVO_LINE SPECIES_GEODUDE || SPECIES_GRAVELER || SPECIES_GOLEM
+
+#define PONYTA_EVO_LINE SPECIES_PONYTA || SPECIES_RAPIDASH
+
+#define SLOWPOKE_EVO_LINE SPECIES_SLOWPOKE || SPECIES_SLOWBRO || SPECIES_SLOWKING
+
+#define FARFETCHD_EVO_LINE SPECIES_FARFETCHD
+
+#define GRIMER_EVO_LINE SPECIES_GRIMER || SPECIES_MUK
+
+#define EXEGGCUTE_EVO_LINE SPECIES_EXEGGCUTE || SPECIES_EXEGGUTOR
+
+#define CUBONE_EVO_LINE SPECIES_CUBONE || SPECIES_MAROWAK
+
+#define KOFFING_EVO_LINE SPECIES_KOFFING || SPECIES_WEEZING
+
+#define MR_MIME_EVO_LINE SPECIES_MR_MIME
+
+#define CORSOLA_EVO_LINE SPECIES_CORSOLA
+
+#define ZIGZAGOON_EVO_LINE SPECIES_ZIGZAGOON || SPECIES_LINOONE
+
+#define DARUMAKA_EVO_LINE SPECIES_DARUMAKA || SPECIES_DARMANITAN || SPECIES_DARMANITAN_ZEN_MODE
+
+#define YAMASK_EVO_LINE SPECIES_YAMASK || SPECIES_COFAGRIGUS
+
+#define STUNFISK_EVO_LINE SPECIES_STUNFISK
+
+struct Breeding
+{
+    u16 evo_line; //template name, looked at daycare function and will have to related it to my start species
+    u16 method;
+    u16 param;
+    u16 targetSpecies;
+};
+
+
 
 extern u8 gPlayerPartyCount;
 extern struct Pokemon gPlayerParty[PARTY_SIZE];
@@ -340,7 +392,8 @@ extern struct Pokemon gEnemyParty[PARTY_SIZE];
 extern const struct BaseStats gBaseStats[];
 extern const u8 *const gItemEffectTable[];
 extern const struct Evolution gEvolutionTable[][EVOS_PER_MON];
-extern const u8 gStatStageRatios[][2];
+extern const struct Breeding gBreedingTable[][FORMS_PER_MON]; //important second bracket is num rows/forms, 
+extern const u8 gStatStageRatios[][2]; //start with 5 expand as needed
 extern struct SpriteTemplate gMultiuseSpriteTemplate;
 extern struct PokemonStorage* gPokemonStoragePtr;
 extern const u32 gExperienceTables[][MAX_LEVEL + 1];

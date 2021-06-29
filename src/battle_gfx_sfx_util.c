@@ -182,9 +182,9 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status) //important
         else if (status & STATUS1_SLEEP)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_SLP);
         else if (status == STATUS1_PARALYSIS)
-            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PRZ);
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PRZ); //need to make an animation for spirit lock, chain sounds and wrapped in chains 
         else // no animation
-            gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 0;
+            gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 0; //think sound and graphic may exist from things ported from emerald
     }
     else
     {

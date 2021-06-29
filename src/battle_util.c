@@ -1200,6 +1200,7 @@ enum
     CANCELLER_IMPRISONED,
     CANCELLER_CONFUSED,
     CANCELLER_PARALYSED,
+    CANCELLER_SPIRIT_LOCKED,
     CANCELLER_GHOST,
     CANCELLER_IN_LOVE,
     CANCELLER_BIDE,
@@ -1398,6 +1399,16 @@ u8 AtkCanceller_UnableToUseMove(void)
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
+                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                effect = 1;
+            }
+            ++gBattleStruct->atkCancellerTracker;
+            break;
+        case CANCELLER_SPIRIT_LOCKED: //spirit lock
+            if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_SPIRIT_LOCK) && (Random() % 4) == 2) //just an extra precaution in case this and paralysis would use the same counter
+            {
+                //gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
+                //gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 effect = 1;
             }

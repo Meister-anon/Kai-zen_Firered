@@ -601,6 +601,7 @@ static const u32 sStatusFlagsForMoveEffects[] =
     STATUS1_BURN,
     STATUS1_FREEZE,
     STATUS1_PARALYSIS,
+    STATUS1_SPIRIT_LOCK,
     STATUS1_TOXIC_POISON,
     STATUS2_CONFUSION,
     STATUS2_FLINCHED,
@@ -698,7 +699,9 @@ static const u8 *const sMoveEffectBS_Ptrs[] =
     [MOVE_EFFECT_REMOVE_PARALYSIS] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_ATK_DEF_DOWN] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_RECOIL_33] = BattleScript_MoveEffectRecoil,
-};
+    [MOVE_EFFECT_ATTRACT] = BattleScript_MoveEffectSleep,
+    //[MOVE_EFFECT_SPIRIT_LOCK] = BattleScript_MoveEffectSpiritLock,
+}; //don't know why a lot of these default to sleep, but I added attract to hopefully do something?
 
 // not used
 static const struct WindowTemplate sUnusedWinTemplate =
@@ -1230,6 +1233,8 @@ static void atk01_accuracycheck(void)
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_BURN)
      //       calc = (calc * 120) / 100;
         eva = 4;
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_SPIRIT_LOCK)
+           eva = 4;
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_POISON) // I think I may remove the accuracy buff and just keep evasion drop, or make it more severe.
        //     calc = (calc * 115) / 100; //depends on how evasion works, if lowered evasion alone increases chance of move hitting, then I don't need accuracy buff.
         eva = 4;
@@ -2057,7 +2062,7 @@ static void atk0D_critmessage(void)
 {
     if (!gBattleControllerExecFlags)
     {
-        if (gCritMultiplier == 2 && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+        if (gCritMultiplier >= 2 && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
         {
             PrepareStringBattle(STRINGID_CRITICALHIT, gBattlerAttacker);
             gBattleCommunication[MSG_DISPLAY] = 1;
@@ -2394,6 +2399,13 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 break;
             statusChanged = TRUE;
             break;
+        case STATUS1_SPIRIT_LOCK:
+            if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_FAIRY))
+                break;
+            if (gBattleMons[gEffectBattler].status1)
+                break;
+            statusChanged = TRUE;
+            break;
         case STATUS1_BURN:
             if (gBattleMons[gEffectBattler].ability == ABILITY_WATER_VEIL
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
@@ -2540,10 +2552,11 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
             if (gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_POISON
              || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_TOXIC
              || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_PARALYSIS
-             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_BURN)
+             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_ATTRACT
+             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_BURN) //figure out how to add infatuation here.
              {
                 u8 *synchronizeEffect = &gBattleStruct->synchronizeMoveEffect;
-                *synchronizeEffect = gBattleCommunication[MOVE_EFFECT_BYTE];
+                *synchronizeEffect = gBattleCommunication[MOVE_EFFECT_BYTE]; //believe I'll need to 
                 gHitMarker |= HITMARKER_SYNCHRONISE_EFFECT;
              }
         }
@@ -2919,8 +2932,13 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
     }
 }
 
-static void atk15_seteffectwithchance(void)
-{
+static void atk15_seteffectwithchance(void) //occurs to me that fairy moves weren't meant with applying a status in mind, so all fairy moves would have other effects
+{ //so I think I'll need to make some code specifically to apply the effect separate from fairy moves normal effect
+    //right now I'm thinking if move is fairy and does damage, that's a good starting point, and I may exclude certain other moves as well,
+    //that are high damage already and should be left alone, so something like like current move does not equal move list of moves from array.
+
+    //I can probably put it here, since the secondary effect chance field isn't completely necessary I think.
+    //just need to make percentChance = 10, under the conditions I already listed above.  and to specifcially be for settign spirit lock
     u32 percentChance;
 
     if (gBattleMons[gBattlerAttacker].ability == ABILITY_SERENE_GRACE)
@@ -9188,7 +9206,7 @@ static void atkE5_pickup(void)
     {
         species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
         heldItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
-        if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) != ABILITY_NONE)
+        if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) != ABILITY_NONE) //important need change this
             ability = gBaseStats[species].abilities[1];
         else
             ability = gBaseStats[species].abilities[0];
@@ -9451,7 +9469,7 @@ static void atkEF_handleballthrow(void) //important changed
                 / (3 * gBattleMons[gBattlerTarget].maxHP);
             if (gBattleMons[gBattlerTarget].status1 & (STATUS1_SLEEP | STATUS1_FREEZE)) //juset realiszed I could stack statsus bonsu by including status 2, since right now rules exclude status 1 overlap
                 odds *= 2;
-            if (gBattleMons[gBattlerTarget].status1 & (STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON))
+            if (gBattleMons[gBattlerTarget].status1 & (STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_SPIRIT_LOCK | STATUS1_TOXIC_POISON))
                 odds = (odds * 15) / 10;
             if (gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION)
                 odds = (odds * 11) / 10;  //TO increase catch chance by 10%, also getting deja vu from this??

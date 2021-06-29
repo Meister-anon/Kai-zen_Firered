@@ -105,10 +105,11 @@
 #define STATUS1_BURN             0x10
 #define STATUS1_FREEZE           0x20
 #define STATUS1_PARALYSIS        0x40
+#define STATUS1_SPIRIT_LOCK      0x60
 #define STATUS1_TOXIC_POISON     0x80
 #define STATUS1_TOXIC_COUNTER    0xF00
 #define STATUS1_PSN_ANY          (STATUS1_POISON | STATUS1_TOXIC_POISON)
-#define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON)
+#define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_SPIRIT_LOCK | STATUS1_TOXIC_POISON)
 
 // Volatile status ailments
 // These are removed after exiting the battle or switching out
@@ -285,8 +286,8 @@
 #define MOVE_EFFECT_SP_ATK_TWO_DOWN     0x3B
 #define MOVE_EFFECT_NOTHING_3C          0x3C
 #define MOVE_EFFECT_NOTHING_3D          0x3D
-#define MOVE_EFFECT_NOTHING_3E          0x3E
-#define MOVE_EFFECT_NOTHING_3F          0x3F
+#define MOVE_EFFECT_ATTRACT          0x3E	//just need to set this to the effect attract?
+#define MOVE_EFFECT_SPIRIT_LOCK		 0x3F  
 #define MOVE_EFFECT_AFFECTS_USER        0x40
 #define MOVE_EFFECT_CERTAIN             0x80
 

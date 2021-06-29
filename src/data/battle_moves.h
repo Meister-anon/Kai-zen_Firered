@@ -2,7 +2,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 {
     [MOVE_NONE] =
     {
-        .effect = EFFECT_HIT,
+        .effect = MOVE_EFFECT_SPIRIT_LOCK, //put here just so would compile, ie has a place where its used
         .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 0,

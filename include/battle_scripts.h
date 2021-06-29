@@ -124,6 +124,7 @@ extern const u8 BattleScript_CurseTurnDmg[];
 extern const u8 BattleScript_TargetPRLZHeal[];
 extern const u8 BattleScript_MoveEffectSleep[];
 extern const u8 BattleScript_YawnMakesAsleep[];
+extern const u8 BattleScript_MoveEffectSpiritLock[];
 extern const u8 BattleScript_MoveEffectPoison[];
 extern const u8 BattleScript_MoveEffectBurn[];
 extern const u8 BattleScript_MoveEffectFreeze[];

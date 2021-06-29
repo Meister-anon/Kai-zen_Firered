@@ -641,33 +641,35 @@ static void ClearAllDaycareData(struct DayCare *daycare)
 // Determines what the species of an Egg would be based on the given species.
 // It determines this by working backwards through the evolution chain of the
 // given species.
-static u16 GetEggSpecies(u16 species)
+static u16 GetEggSpecies(u16 species) //ok what I'll do is add my breeding table call in,
+//in place of j bein
 {
-    int i, j, k;
+    int i, j, k, b, a, d;
     bool8 found;
 
     // Working backwards up to 5 times seems arbitrary, since the maximum number
     // of times would only be 3 for 3-stage evolutions.
-    for (i = 0; i < EVOS_PER_MON; i++)
+
+    for (i = 0; i < EVOS_PER_MON; i++) //loop through each evolution in species
     {
         found = FALSE;
-        for (j = 1; j < NUM_SPECIES; j++)
+        for (j = 1; j < NUM_SPECIES; j++) //loop through each species in the table, from bulbasaur
         {
-            for (k = 0; k < EVOS_PER_MON; k++)
+            for (k = 0; k < EVOS_PER_MON; k++) //loop through each row of evolutions for species
             {
-                if (gEvolutionTable[j][k].targetSpecies == species)
+                if (gEvolutionTable[j][k].targetSpecies == species) //replace species with start species from gbreedingtable
                 {
-                    species = j;
+                    species = j; // then that will make it search through my table for the actual species, it should be.
                     found = TRUE;
-                    break;
-                }
+                    break; // then use an else condition so if the species found in the evo table, isn't that of evo_line
+                }// run the normal function. i.e egg species equals same as female species
             }
 
             if (found)
-                break;
-        }
-
-        if (j == NUM_SPECIES)
+                break; //make sure to set up  exlcusion for ditto, actually no, ditto could never 
+        } //trigger my breeding equation, as it would just return the same pokemon.
+        //my setup will have breeding change based on type bred with
+        if (j == NUM_SPECIES) //tentative solution, need to check how works with egg groups
             break;
     }
 
@@ -1036,7 +1038,14 @@ static u16 DetermineEggSpeciesAndParentSlots(struct DayCare *daycare, u8 *parent
         }
     }
 
-    eggSpecies = GetEggSpecies(species[parentSlots[0]]);
+    eggSpecies = GetEggSpecies(species[parentSlots[0]]); // mon is female, the're in parentslot0  
+    //because of this above line, geteggspecies checks only for the female pokemon species
+
+    //think what I'll do is set it so egg is alt form, if father is of the type of target species
+    //or is a different species from mother, and holding the right type boosting item.
+    //that way I won't have to worry about having to match type with egg groups
+
+    //for example for alolan vulpix, I'd need either an ice type, or a pokemon holding nevermeltice
     if (eggSpecies == SPECIES_NIDORAN_F && daycare->offspringPersonality & EGG_GENDER_MALE)
     {
         eggSpecies = SPECIES_NIDORAN_M;
