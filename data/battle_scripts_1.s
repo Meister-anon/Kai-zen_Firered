@@ -242,6 +242,7 @@ BattleScript_EffectHit::
 	orword gHitMarker, HITMARKER_IGNORE_UNDERWATER
 	setbyte sDMG_MULTIPLIER, 2
 BattleScript_HitFromAtkCanceler::
+	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	attackcanceler
 BattleScript_HitFromAccCheck::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
@@ -616,7 +617,7 @@ BattleScript_EffectMultiHit::
 BattleScript_MultiHitFromAtkString::
 	attackstring
 	ppreduce
-	setmultihitcounter 0
+	setmultihitcounter2 0
 	initmultihitstring
 	setbyte sMULTIHIT_EFFECT, 0
 BattleScript_MultiHitLoop::

@@ -312,7 +312,7 @@ static void atkF6_finishaction(void);
 static void atkF7_finishturn(void);
 static void atkF8_setroost(void);
 static void atkF9_mondamaged(void); // made this command to work for exponcatch, might remove if mondamaged works
-
+static void atkFA_setmultihitcounter2(void);
 void (* const gBattleScriptingCommandsTable[])(void) =
 {
     atk00_attackcanceler,
@@ -565,6 +565,7 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atkF7_finishturn,
     atkF8_setroost,
     atkF9_mondamaged,
+    atkFA_setmultihitcounter2,
 };
 
 struct StatFractions
@@ -1372,6 +1373,7 @@ static void atk04_critcalc(void)
 static void atk05_damagecalc(void)
 {
     u16 sideStatus = gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)];
+    //gMultiTask = 0; //don't know if i actually need to set equal to zero.  think I don't actually, will do anyway for now..
 
     gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker],
                                             &gBattleMons[gBattlerTarget],
@@ -1381,13 +1383,19 @@ static void atk05_damagecalc(void)
                                             gBattleStruct->dynamicMoveType,
                                             gBattlerAttacker,
                                             gBattlerTarget);
-    gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier;
+    gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier; // this makes it so gcritmultiplier value is how much crit is, so sniper shuold work
     if (gStatuses3[gBattlerAttacker] & STATUS3_CHARGED_UP && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC)
         gBattleMoveDamage *= 2;
     if (gProtectStructs[gBattlerAttacker].helpingHand)
         gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
-    ++gBattlescriptCurrInstr;
-}
+    if (gBattleMons[gBattlerAttacker].ability == ABILITY_MULTI_TASK
+        && gBattleMoves[gCurrentMove].power > 0)
+        gBattleMoveDamage = (gBattleMoveDamage / gMultiTask); //depending on how this works,
+    ++gBattlescriptCurrInstr; //may need to put in its on command, depends on multihitcounter & decrement string
+} //yup working as I feared, when multi hit gets decrimented the damage gets increased.
+//think what i need is to somehow copy the initial value to another field,
+//and have that be what my damage is based on.
+//but even that doesn't solve the issue of decrement lowering the value.
 
 void AI_CalcDmg(u8 attacker, u8 defender)
 {
@@ -1401,12 +1409,16 @@ void AI_CalcDmg(u8 attacker, u8 defender)
                                             gBattleStruct->dynamicMoveType,
                                             attacker,
                                             defender);
+    //gMultiTask = 0;
     gDynamicBasePower = 0;
     gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier;
     if (gStatuses3[attacker] & STATUS3_CHARGED_UP && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC)
         gBattleMoveDamage *= 2;
     if (gProtectStructs[attacker].helpingHand)
         gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
+    if (gBattleMons[gBattlerAttacker].ability == ABILITY_MULTI_TASK
+        && gBattleMoves[gCurrentMove].power > 0)
+        gBattleMoveDamage = (gBattleMoveDamage / gMultiTask);
 }
 
 void ModulateDmgByType(u8 multiplier)
@@ -2942,9 +2954,9 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     u32 percentChance;
     //hail based freeze boost, right not works all but hail, for testing,
     //remove !  once I find the percentage I like.
-    if ((gBattleWeather & WEATHER_HAIL_ANY)
-        && gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 15 / 10; 
+    if (/*(gBattleWeather & WEATHER_HAIL_ANY)
+        &&*/ gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2; 
     else //15 isn't bad, may try 17, nah I'll leave it there.
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
 
@@ -6843,6 +6855,9 @@ static void atk8C_confuseifrepeatingattackends(void)
 
 static void atk8D_setmultihitcounter(void)
 {
+   // gMultiTask = gMultiHitCounter;  //not sure if doing this way will work, but I'll try it
+    //multihitcounter is outside of the loop and only run once, so if it copies the value from here
+    //instead of directly it may work.
     if (gBattlescriptCurrInstr[1])
     {
         gMultiHitCounter = gBattlescriptCurrInstr[1];
@@ -6855,8 +6870,10 @@ static void atk8D_setmultihitcounter(void)
         else
             gMultiHitCounter += 2; //else add 2 to multi counter, returning a multihit of 2.
     }
+   // gMultiTask = gMultiHitCounter;
     gBattlescriptCurrInstr += 2;
 }
+
 
 static void atk8E_initmultihitstring(void)
 {
@@ -9925,5 +9942,26 @@ static void atkF9_mondamaged(void) //edited based on recommendation from mcgriff
     
 
     //plus that would avoid any confusion from combining and with else statements
+}
+
+static void atkFA_setmultihitcounter2(void)
+{
+    // gMultiTask = gMultiHitCounter;  //not sure if doing this way will work, but I'll try it
+     //multihitcounter is outside of the loop and only run once, so if it copies the value from here
+     //instead of directly it may work.
+    if (gBattlescriptCurrInstr[1])
+    {
+        gMultiTask = gBattlescriptCurrInstr[1];
+    }
+    else
+    {
+        gMultiTask = Random() & 3; //return a number between 0 & 3
+        if (gMultiTask > 1)
+            gMultiTask = (Random() & 3) + 2; // if non 0, multihit is between 2-5 htis
+        else
+            gMultiTask += 2; //else add 2 to multi counter, returning a multihit of 2.
+    }
+    gMultiHitCounter = gMultiTask;
+    gBattlescriptCurrInstr += 2;
 }
 

@@ -790,8 +790,8 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_FREEZE:  //FROZEN
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_FREEZE) && gBattleMons[gActiveBattler].hp != 0)
                 {
-                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
-                    if (gBattleMoveDamage == 0)
+                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8; //changed to same as others, combined with hail will do  .186 kills in about 5 turns by itself
+                    if (gBattleMoveDamage == 0) //balanced by being a temporary status and needing the hail setup to have a good chance of being applied.
                         gBattleMoveDamage = 1;
                     BattleScriptExecute(BattleScript_FreezeTurnDmg);
                     ++effect;

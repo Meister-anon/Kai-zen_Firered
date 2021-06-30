@@ -1250,6 +1250,11 @@
 	.byte 0xf9
 	.endm
 
+	.macro setmultihitcounter2 param0:req
+	.byte 0xfa
+	.byte \param0
+	.endm
+
 @ various command changed to more readable macros
 	.macro cancelmultiturnmoves battler:req
 	various \battler, VARIOUS_CANCEL_MULTI_TURN_MOVES
