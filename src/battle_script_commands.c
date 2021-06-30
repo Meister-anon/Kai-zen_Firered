@@ -2942,10 +2942,10 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     u32 percentChance;
     //hail based freeze boost, right not works all but hail, for testing,
     //remove !  once I find the percentage I like.
-    if (/*(gBattleWeather & WEATHER_HAIL_ANY)
-        &&*/ gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
+    if ((gBattleWeather & WEATHER_HAIL_ANY)
+        && gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 15 / 10; 
-    else //15 isn't bad, may try 17
+    else //15 isn't bad, may try 17, nah I'll leave it there.
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
 
     if (gBattleMons[gBattlerAttacker].ability == ABILITY_SERENE_GRACE)
