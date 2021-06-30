@@ -93,6 +93,7 @@ static const u8 sText_PkmnEnergyDrained[] = _("{B_DEF_NAME_WITH_PREFIX} had its\
 static const u8 sText_PkmnWasBurned[] = _("{B_EFF_NAME_WITH_PREFIX} was burned!");
 static const u8 sText_PkmnBurnedBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nburned {B_EFF_NAME_WITH_PREFIX}!");
 static const u8 sText_PkmnHurtByBurn[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt\nby its burn!");
+static const u8 sText_PkmnHurtByFrost[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt\nby the cold!");
 static const u8 sText_PkmnAlreadyHasBurn[] = _("{B_DEF_NAME_WITH_PREFIX} already\nhas a burn.");
 static const u8 sText_PkmnWasFrozen[] = _("{B_EFF_NAME_WITH_PREFIX} was\nfrozen solid!");
 static const u8 sText_PkmnFrozenBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nfroze {B_EFF_NAME_WITH_PREFIX} solid!");
@@ -554,6 +555,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_PKMNWASBURNED - 12]                 = sText_PkmnWasBurned,
     [STRINGID_PKMNBURNEDBY - 12]                  = sText_PkmnBurnedBy,
     [STRINGID_PKMNHURTBYBURN - 12]                = sText_PkmnHurtByBurn,
+    [STRINGID_PKMNHURTBYFREEZE - 12]              = sText_PkmnHurtByFrost,
     [STRINGID_PKMNWASFROZEN - 12]                 = sText_PkmnWasFrozen,
     [STRINGID_PKMNFROZENBY - 12]                  = sText_PkmnFrozenBy,
     [STRINGID_PKMNISFROZEN - 12]                  = sText_PkmnIsFrozen,
@@ -1341,6 +1343,7 @@ static const u8 *const sATypeMove_Table[] = {
     gUnknown_83FE976
 };
 
+//find out why this here
 static const u16 sGrammarMoveUsedTable[] = {
     MOVE_SWORDS_DANCE,
     MOVE_STRENGTH,

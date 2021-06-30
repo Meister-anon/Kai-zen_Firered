@@ -3177,14 +3177,17 @@ static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 mo
     (var) /= (gStatStageRatios)[(mon)->statStages[(statIndex)]][1];                 \
 }
 
+// seems this is the equivalent of emerald's CalcDefenseStat function
 s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *defender, u32 move, u16 sideStatus, u16 powerOverride, u8 typeOverride, u8 battlerIdAtk, u8 battlerIdDef)
 {
     u32 i;
     s32 damage = 0;
     s32 damageHelper;
     u8 type;
+    bool8 usesDefStat;
+    u8 defStage;
     u16 attack, defense;
-    u16 spAttack, spDefense;
+    u16 spAttack, spDefense, defStat;
     u8 defenderHoldEffect;
     u8 defenderHoldEffectParam;
     u8 attackerHoldEffect;
@@ -3204,6 +3207,19 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     defense = defender->defense;
     spAttack = attacker->spAttack;
     spDefense = defender->spDefense;
+
+    if (/*gBattleMoves[move].effect == EFFECT_PSYSHOCK ||*/ IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
+    {
+        defStat = defense;
+        defStage = gBattleMons[battlerIdDef].statStages[STAT_DEF];
+        usesDefStat = TRUE;
+    }
+    else // is special
+    {
+        defStat = spDefense;
+        defStage = gBattleMons[battlerIdDef].statStages[STAT_SPDEF];
+        usesDefStat = FALSE; //ported from emerald, will use this later
+    }
 
     if (attacker->item == ITEM_ENIGMA_BERRY)
     {
@@ -3269,6 +3285,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         }
     }
 
+
     if (attackerHoldEffect == HOLD_EFFECT_CHOICE_BAND)
         attack = (150 * attack) / 100;
     if (attackerHoldEffect == HOLD_EFFECT_SOUL_DEW && !(gBattleTypeFlags & (BATTLE_TYPE_BATTLE_TOWER)) && (attacker->species == SPECIES_LATIAS || attacker->species == SPECIES_LATIOS))
@@ -3311,6 +3328,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         gBattleMovePower = (150 * gBattleMovePower) / 100;
     if (gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)
         defense /= 2;
+    // sandstorm sp.def boost for rock types
+    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK) && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY && !usesDefStat)
+        spDefense = (150 * spDefense) / 100;
 
     if (IS_MOVE_PHYSICAL(move))
     {

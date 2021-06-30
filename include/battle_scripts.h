@@ -4,7 +4,6 @@
 #include "global.h"
 
 extern const u8 BattleScript_HitFromCritCalc[]; //only defined because its refered to in function
-extern const u8 BattleScript_FuryCutterEnd[]; //hope this works to reset fury counter on move end
 extern const u8 BattleScript_MoveEnd[];
 extern const u8 BattleScript_MakeMoveMissed[];
 extern const u8 BattleScript_PrintMoveMissed[];
@@ -104,6 +103,7 @@ extern const u8 BattleScript_MoveUsedWokeUp[];
 extern const u8 BattleScript_MonWokeUpInUproar[];
 extern const u8 BattleScript_PoisonTurnDmg[];
 extern const u8 BattleScript_BurnTurnDmg[];
+extern const u8 BattleScript_FreezeTurnDmg[];
 extern const u8 BattleScript_MoveUsedIsFrozen[];
 extern const u8 BattleScript_MoveUsedUnfroze[];
 extern const u8 BattleScript_DefrostedViaFireMove[];

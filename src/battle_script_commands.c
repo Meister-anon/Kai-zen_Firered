@@ -2940,6 +2940,13 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     //I can probably put it here, since the secondary effect chance field isn't completely necessary I think.
     //just need to make percentChance = 10, under the conditions I already listed above.  and to specifcially be for settign spirit lock
     u32 percentChance;
+    //hail based freeze boost, right not works all but hail, for testing,
+    //remove !  once I find the percentage I like.
+    if (/*(gBattleWeather & WEATHER_HAIL_ANY)
+        &&*/ gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 15 / 10; 
+    else //15 isn't bad, may try 17
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
 
     if (gBattleMons[gBattlerAttacker].ability == ABILITY_SERENE_GRACE)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
@@ -4600,7 +4607,7 @@ static void atk4C_getswitchedmondata(void)
     }
 }
 
-static void atk4D_switchindataupdate(void)
+static void atk4D_switchindataupdate(void)  //important, think can use THIS to make switchin abilities repeat, would work for both fainted and turn switched.
 {
     struct BattlePokemon oldData;
     s32 i;
@@ -8081,32 +8088,37 @@ static void atkB4_jumpifconfusedandstatmaxed(void)
 
 static void atkB5_furycuttercalc(void)
 {
-    u16 berserker;
-    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT) 
+    if (gCurrentMove == MOVE_FURY_CUTTER) //changing script to just use the multi-hit bs, need to add this to its loop though,
+        //so to ensure it doesn't trigger for other moves, made the entire thing contingent on move fury cutter, 
+        //will need to find & test other multi hit (try spearow fury attack,) to ensure I didn't break it.
     {
-        gDisableStructs[gBattlerAttacker].furyCutterCounter = 0;
-        gBattlescriptCurrInstr = BattleScript_MoveMissedPause;
-    }
-    /*if  (gBattlescriptCurrInstr == BattleScript_FuryCutterEnd) //to make sure it resets before move is used again, even if don't miss
-    {
-        gDisableStructs[gBattlerAttacker].furyCutterCounter = 0; //this isn't working to clear the damage
-    }*/ //but of course it isn't, its in a battle_script command that's only run BEFORE
-    //the command its supposed to check.  I'll put this in a function instead and add it to atkcancelor
-    else
-    {
-        s32 i; 
-       
-        if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5) //increment until reach 5
-            ++gDisableStructs[gBattlerAttacker].furyCutterCounter;
-        gDynamicBasePower = gBattleMoves[gCurrentMove].power; //it's working now.
-        berserker = gBattleMoves[gCurrentMove].accuracy;
+        u16 berserker;
+        if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        {
+            gDisableStructs[gBattlerAttacker].furyCutterCounter = 0;
+            gBattlescriptCurrInstr = BattleScript_MoveMissedPause;
+        }
+        /*if  (gBattlescriptCurrInstr == BattleScript_FuryCutterEnd) //to make sure it resets before move is used again, even if don't miss
+        {
+            gDisableStructs[gBattlerAttacker].furyCutterCounter = 0; //this isn't working to clear the damage
+        }*/ //but of course it isn't, its in a battle_script command that's only run BEFORE
+        //the command its supposed to check.  I'll put this in a function instead and add it to atkcancelor
+        else
+        {
+            s32 i;
 
-        for (i = 1; i < gDisableStructs[gBattlerAttacker].furyCutterCounter; ++i) {
-            gDynamicBasePower *= 2; 
-           // berserker *= 3;  //change from 3 to 1, for large test, should reduce accuracy by 4 each hit if its working
-            //berserker /= 4; 
-        }//dizzyegg confirms doing this way also works for establishing 3/4
-        ++gBattlescriptCurrInstr; // if done right power should double and accuracy should drop off by a fourth each hti
+            if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5) //increment until reach 5
+                ++gDisableStructs[gBattlerAttacker].furyCutterCounter;
+            gDynamicBasePower = gBattleMoves[gCurrentMove].power; //it's working now.
+            berserker = gBattleMoves[gCurrentMove].accuracy;
+
+            for (i = 1; i < gDisableStructs[gBattlerAttacker].furyCutterCounter; ++i) {
+                gDynamicBasePower *= 2;
+                // berserker *= 3;  //change from 3 to 1, for large test, should reduce accuracy by 4 each hit if its working
+                 //berserker /= 4; 
+            }//dizzyegg confirms doing this way also works for establishing 3/4
+            ++gBattlescriptCurrInstr; // if done right power should double and accuracy should drop off by a fourth each hti
+        }
     }
 } //don't know if i'm just unlucky but it seeems to be hitting every time, so I'm still unsure
 //if the accuracy reduction on hit is working  ok did test, accuracy reduction or accuracy checks just aren't working at all.

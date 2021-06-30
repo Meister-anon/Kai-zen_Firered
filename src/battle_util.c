@@ -667,6 +667,7 @@ enum
     ENDTURN_POISON,
     ENDTURN_BAD_POISON,
     ENDTURN_BURN,
+    ENDTURN_FREEZE,
     ENDTURN_NIGHTMARES,
     ENDTURN_CURSE,
     ENDTURN_WRAP,
@@ -782,6 +783,17 @@ u8 DoBattlerEndTurnEffects(void)
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
                     BattleScriptExecute(BattleScript_BurnTurnDmg);
+                    ++effect;
+                }
+                ++gBattleStruct->turnEffectsTracker;
+                break;
+            case ENDTURN_FREEZE:  //FROZEN
+                if ((gBattleMons[gActiveBattler].status1 & STATUS1_FREEZE) && gBattleMons[gActiveBattler].hp != 0)
+                {
+                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
+                    if (gBattleMoveDamage == 0)
+                        gBattleMoveDamage = 1;
+                    BattleScriptExecute(BattleScript_FreezeTurnDmg);
                     ++effect;
                 }
                 ++gBattleStruct->turnEffectsTracker;
@@ -1428,11 +1440,13 @@ u8 AtkCanceller_UnableToUseMove(void)
             break;
         case CANCELLER_IN_LOVE: // infatuation
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION)
+                //&& gBattleMons[gBattlerAttacker].status2 |= STATUS2_INFATUATED_WITH(gBattlerTarget)) //important change ot add check that the target is the one pokemon is infatuated with
             {
                 gBattleScripting.battler = CountTrailingZeroBits((gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION) >> 0x10);
-                if (Random() & 1)
+                if (Random() & 1) //test if that worked, next step change so infatuation animation only plays if battler their infatuated with is on the field.
+                    //well maybe not, if it reminds you each turn, even if not there, its a good reminder the status is still in effect.
                 {
-                    BattleScriptPushCursor();
+                    BattleScriptPushCursor(); //unfortunately didn't work, will look into it later
                 }
                 else
                 {
@@ -3242,6 +3256,7 @@ void ResetFuryCutterCounter(u8 battlerId)
 {
     gDisableStructs[battlerId].furyCutterCounter = 0;
 }
+
 void HandleAction_RunBattleScript(void) // identical to RunBattleScriptCommands
 {
     if (!gBattleControllerExecFlags)
