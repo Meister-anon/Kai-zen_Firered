@@ -720,8 +720,8 @@ void BtlController_EmitMoveAnimation(u8 bufferId, u16 move, u8 turnOfMove, u16 m
     sBattleBuffersTransferData[8] = (dmg & 0x00FF0000) >> 16;
     sBattleBuffersTransferData[9] = (dmg & 0xFF000000) >> 24;
     sBattleBuffersTransferData[10] = friendship;
-    sBattleBuffersTransferData[11] = gMultiHitCounter; // multihit in pokeem
-    if (WEATHER_HAS_EFFECT2)
+    sBattleBuffersTransferData[11] = gMultiHitCounter, gMultiTask; // multihit in pokeem
+    if (WEATHER_HAS_EFFECT2) //not sure if right idea, but since its to serve the same role I'll try it.
     {
         sBattleBuffersTransferData[12] = gBattleWeather;
         sBattleBuffersTransferData[13] = (gBattleWeather & 0xFF00) >> 8;

@@ -54,12 +54,12 @@ struct PokemonSubstruct3
  /* 0x05 */ u32 defenseIV:5;
  /* 0x05 */ u32 speedIV:5;
  /* 0x05 */ u32 spAttackIV:5;
- /* 0x06 */ u32 spDefenseIV:5;
+ /* 0x06 */ u32 spDefenseIV:5; //changed abilityNum to 3, so I can get the second hidden ability slot.
  /* 0x07 */ u32 isEgg:1;
- /* 0x07 */ u32 abilityNum:2; // allability num are 2 in emerald. so that is the right call
+ /* 0x07 */ u32 abilityNum:3; // allability num are 2 in emerald. so that is the right call
 
  /* 0x08 */ u32 coolRibbon:3;
- /* 0x08 */ u32 beautyRibbon:3;
+ /* 0x08 */ u32 beautyRibbon:3; //having this be 3 seems to correspond to 4 options, which matches the above's 3 ability options of 2 slots and 1 hidden.
  /* 0x08 */ u32 cuteRibbon:3;
  /* 0x09 */ u32 smartRibbon:3;
  /* 0x09 */ u32 toughRibbon:3;
@@ -149,7 +149,7 @@ struct BattleTowerPokemon
              u32 spAttackIV:5;
              u32 spDefenseIV:5;
              u32 gap:1;
-             u32 abilityNum:2;
+             u32 abilityNum:3;
     /*0x1C*/ u32 personality;
     /*0x20*/ u8 nickname[11];
     /*0x2B*/ u8 friendship;
@@ -173,7 +173,7 @@ struct BattlePokemon
     /*0x16*/ u32 spAttackIV:5;
     /*0x17*/ u32 spDefenseIV:5;
     /*0x17*/ u32 isEgg:1;
-    /*0x17*/ u32 abilityNum:2; //need to check bit math make sure it goes up to 2, since hidden ability is num 2.  ok cant find equation I'll just make it 2.
+    /*0x17*/ u32 abilityNum:3; //need to check bit math make sure it goes up to 2, since hidden ability is num 2.  ok cant find equation I'll just make it 2.
     /*0x18*/ s8 statStages[BATTLE_STATS_NO];
     /*0x20*/ u16 ability;
     /*0x21*/ u8 type1;
@@ -221,9 +221,9 @@ struct BaseStats  // had to adjust struct order to match paste value from base_s
  /* 0x13 */ u8 growthRate;
  /* 0x14 */ u8 eggGroup1;
  /* 0x15 */ u8 eggGroup2;
- /* 0x16 */ u16 abilities[2]; //[partysize] is 6 values, so this is ability 1 and ability 2, doesn't include hidden
+ /* 0x16 */ u16 abilities[2]; //[partysize] is 6 values, so this is ability 1 and ability 2, doesn't include hidden //this means 2 states, 0 & 1
  /* 0x1A */ u8 safariZoneFleeRate;
- /* 0x1B */ u16 abilityHidden; //need to make sure ability num can be 2, then set that as hidden ability
+ /* 0x1B */ u16 abilityHidden[2]; //need to make sure ability num can be 2, then set that as hidden ability
  /* 0x1D */ u8 bodyColor : 7;
             u8 noFlip : 1;
  /* 0x1E */ u8 flags;

@@ -313,6 +313,7 @@ static void atkF7_finishturn(void);
 static void atkF8_setroost(void);
 static void atkF9_mondamaged(void); // made this command to work for exponcatch, might remove if mondamaged works
 static void atkFA_setmultihitcounter2(void);
+
 void (* const gBattleScriptingCommandsTable[])(void) =
 {
     atk00_attackcanceler,
@@ -1389,9 +1390,15 @@ static void atk05_damagecalc(void)
     if (gProtectStructs[gBattlerAttacker].helpingHand)
         gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
     if (gBattleMons[gBattlerAttacker].ability == ABILITY_MULTI_TASK
-        && gBattleMoves[gCurrentMove].power > 0)
-        gBattleMoveDamage = (gBattleMoveDamage / gMultiTask); //depending on how this works,
-    ++gBattlescriptCurrInstr; //may need to put in its on command, depends on multihitcounter & decrement string
+        && gBattleMoves[gCurrentMove].split != SPLIT_STATUS)
+        //&& gMultiHitCounter > 0) //setup a function that checks if move is multihit, or multiturn, with bool8 so it returns true or false, then use false here.
+    {
+        gBattleMoveDamage = (gBattleMoveDamage / gMultiHitCounter);
+        if (gBattleMoveDamage == 0)
+            gBattleMoveDamage = 1;
+    }
+           //depending on how this works,
+    ++gBattlescriptCurrInstr; //may need to put in its own command, depends on multihitcounter & decrement string
 } //yup working as I feared, when multi hit gets decrimented the damage gets increased.
 //think what i need is to somehow copy the initial value to another field,
 //and have that be what my damage is based on.
@@ -1416,9 +1423,14 @@ void AI_CalcDmg(u8 attacker, u8 defender)
         gBattleMoveDamage *= 2;
     if (gProtectStructs[attacker].helpingHand)
         gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
-    if (gBattleMons[gBattlerAttacker].ability == ABILITY_MULTI_TASK
-        && gBattleMoves[gCurrentMove].power > 0)
-        gBattleMoveDamage = (gBattleMoveDamage / gMultiTask);
+    if (gBattleMons[attacker].ability == ABILITY_MULTI_TASK
+        && gBattleMoves[attacker].split != SPLIT_STATUS)
+        //&& gMultiHitCounter > 0) //setup a function that checks if move is multihit, or multiturn, with bool8 so it returns true or false, then use false here.
+    {
+        gBattleMoveDamage = (gBattleMoveDamage / gMultiHitCounter);
+        if (gBattleMoveDamage == 0)
+            gBattleMoveDamage = 1;
+    }
 }
 
 void ModulateDmgByType(u8 multiplier)
@@ -2074,7 +2086,7 @@ static void atk0D_critmessage(void)
 {
     if (!gBattleControllerExecFlags)
     {
-        if (gCritMultiplier >= 2 && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+        if (gCritMultiplier > 1 && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
         {
             PrepareStringBattle(STRINGID_CRITICALHIT, gBattlerAttacker);
             gBattleCommunication[MSG_DISPLAY] = 1;
@@ -2544,7 +2556,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
         {
             BattleScriptPush(gBattlescriptCurrInstr + 1);
             if (sStatusFlagsForMoveEffects[gBattleCommunication[MOVE_EFFECT_BYTE]] == STATUS1_SLEEP)
-                gBattleMons[gEffectBattler].status1 |= ((Random() & 3) + 2);
+                gBattleMons[gEffectBattler].status1 |= ((Random() & 3) + 2); //think this is the duration of sleep, and its 2-5 here.
             else
                 gBattleMons[gEffectBattler].status1 |= sStatusFlagsForMoveEffects[gBattleCommunication[MOVE_EFFECT_BYTE]];
             gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleCommunication[MOVE_EFFECT_BYTE]];
@@ -2598,7 +2610,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 }
                 else
                 {
-                    gBattleMons[gEffectBattler].status2 |= (((Random()) % 0x4)) + 2;
+                    gBattleMons[gEffectBattler].status2 |= (((Random()) % 0x4)) + 2; //think this odds for confusion duration again 2-5
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
                     gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleCommunication[MOVE_EFFECT_BYTE]];
                 }
@@ -2954,9 +2966,9 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     u32 percentChance;
     //hail based freeze boost, right not works all but hail, for testing,
     //remove !  once I find the percentage I like.
-    if (/*(gBattleWeather & WEATHER_HAIL_ANY)
-        &&*/ gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2; 
+    if ((gBattleWeather & WEATHER_HAIL_ANY)
+        && gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;  //its good, happened 2 out of 5 hits. decided to make it 1/16
     else //15 isn't bad, may try 17, nah I'll leave it there.
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
 
@@ -4240,8 +4252,9 @@ static void atk49_moveend(void)
         case ATK49_DEFROST: // defrosting check
             if (gBattleMons[gBattlerTarget].status1 & STATUS1_FREEZE
              && gBattleMons[gBattlerTarget].hp != 0
+             && gBattleMoveDamage != 0 // test to see if this works right. should be all damaging fire moves can defrost.
              && gBattlerAttacker != gBattlerTarget
-             && gSpecialStatuses[gBattlerTarget].specialDmg
+             //&& gSpecialStatuses[gBattlerTarget].specialDmg  //important MIGHT need to remove this think this is a leftover from split based on type
              && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
              && moveType == TYPE_FIRE)
             {
@@ -6867,8 +6880,8 @@ static void atk8D_setmultihitcounter(void)
         gMultiHitCounter = Random() & 3; //return a number between 0 & 3
         if (gMultiHitCounter > 1) 
             gMultiHitCounter = (Random() & 3) + 2; // if non 0, multihit is between 2-5 htis
-        else
-            gMultiHitCounter += 2; //else add 2 to multi counter, returning a multihit of 2.
+        else // value 0 or 1
+            gMultiHitCounter += 2; //else add 2 to multi counter, returning a multihit of 2 or 3.
     }
    // gMultiTask = gMultiHitCounter;
     gBattlescriptCurrInstr += 2;
@@ -9952,6 +9965,7 @@ static void atkFA_setmultihitcounter2(void)
     if (gBattlescriptCurrInstr[1])
     {
         gMultiTask = gBattlescriptCurrInstr[1];
+        
     }
     else
     {
@@ -9960,8 +9974,10 @@ static void atkFA_setmultihitcounter2(void)
             gMultiTask = (Random() & 3) + 2; // if non 0, multihit is between 2-5 htis
         else
             gMultiTask += 2; //else add 2 to multi counter, returning a multihit of 2.
+
     }
     gMultiHitCounter = gMultiTask;
+    
     gBattlescriptCurrInstr += 2;
 }
 

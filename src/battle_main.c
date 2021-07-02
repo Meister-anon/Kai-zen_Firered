@@ -2432,7 +2432,6 @@ void FaintClearSetData(void)
     gProtectStructs[gActiveBattler].flinchImmobility = FALSE;
     gProtectStructs[gActiveBattler].notFirstStrike = FALSE;
     gDisableStructs[gActiveBattler].isFirstTurn = 2;
-    gMultiTask = 0;
     gLastMoves[gActiveBattler] = MOVE_NONE;
     gLastLandedMoves[gActiveBattler] = MOVE_NONE;
     gLastHitByType[gActiveBattler] = MOVE_NONE;
@@ -2518,7 +2517,7 @@ static void BattleIntroDrawTrainersOrMonsSprites(void)
                 for (i = 0; i < sizeof(struct BattlePokemon); ++i)
                     ptr[i] = 0;
             }
-            else
+            else // all non-safari battles
             {
                 u16 *hpOnSwitchout;
 
@@ -2531,7 +2530,7 @@ static void BattleIntroDrawTrainersOrMonsSprites(void)
                 hpOnSwitchout = &gBattleStruct->hpOnSwitchout[GetBattlerSide(gActiveBattler)];
                 *hpOnSwitchout = gBattleMons[gActiveBattler].hp;
                 for (i = 0; i < NUM_BATTLE_STATS; ++i)
-                    gBattleMons[gActiveBattler].statStages[i] = 6;
+                    gBattleMons[gActiveBattler].statStages[i] = 6; //important, these two reset stat buffs, and clear status2 effects on switch
                 gBattleMons[gActiveBattler].status2 = 0;
             }
             if (GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_LEFT)

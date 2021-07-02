@@ -790,10 +790,10 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_FREEZE:  //FROZEN
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_FREEZE) && gBattleMons[gActiveBattler].hp != 0)
                 {
-                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8; //changed to same as others, combined with hail will do  .186 kills in about 5 turns by itself
+                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16; //changed to same as others, combined with hail will do  .186 kills in about 5 turns by itself
                     if (gBattleMoveDamage == 0) //balanced by being a temporary status and needing the hail setup to have a good chance of being applied.
                         gBattleMoveDamage = 1;
-                    BattleScriptExecute(BattleScript_FreezeTurnDmg);
+                    BattleScriptExecute(BattleScript_FreezeTurnDmg); //changed back to 1/16, when hail is active it'll be 1/8 so equal to all others.
                     ++effect;
                 }
                 ++gBattleStruct->turnEffectsTracker;
@@ -1246,7 +1246,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                     gBattlescriptCurrInstr = BattleScript_MoveUsedWokeUp;
                     effect = 2;
                 }
-                else
+                else // ok need to figure how this works, but seems to be sleep chance
                 {
                     u8 toSub;
 
@@ -1282,7 +1282,7 @@ u8 AtkCanceller_UnableToUseMove(void)
         case CANCELLER_FROZEN: // check being frozen
             if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE)
             {
-                if (Random() % 5)
+                if (Random() % 5) //ok found freeze chance, so 1 in 5 chance of thawing out, on freeze.  pretty much  random % 5 if not 0 stays frozen.
                 {
                     if (gBattleMoves[gCurrentMove].effect != EFFECT_THAW_HIT) // unfreezing via a move effect happens in case 13
                     {
@@ -1295,7 +1295,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                         break;
                     }
                 }
-                else // unfreeze
+                else // unfreeze    //imortant if random % 5 is 0, pokemon  defrosts.
                 {
                     gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_FREEZE);
                     BattleScriptPushCursor();

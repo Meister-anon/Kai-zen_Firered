@@ -321,7 +321,6 @@ BattleScript_CantMakeAsleep::
 
 BattleScript_EffectPoisonHit::
 	setmoveeffect MOVE_EFFECT_POISON
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectAbsorb::
@@ -366,17 +365,14 @@ BattleScript_AbsorbTryFainting::
 
 BattleScript_EffectBurnHit::
 	setmoveeffect MOVE_EFFECT_BURN
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectFreezeHit::
 	setmoveeffect MOVE_EFFECT_FREEZE
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectParalyzeHit::
 	setmoveeffect MOVE_EFFECT_PARALYSIS
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectExplosion::
@@ -614,10 +610,10 @@ BattleScript_EffectRoar::
 
 BattleScript_EffectMultiHit::
 	attackcanceler
-BattleScript_MultiHitFromAtkString::
+	@ accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	setmultihitcounter2 0
+	setmultihitcounter 0
 	initmultihitstring
 	setbyte sMULTIHIT_EFFECT, 0
 BattleScript_MultiHitLoop::
@@ -630,13 +626,11 @@ BattleScript_DoMultiHit::
 	movevaluescleanup
 	copybyte cEFFECT_CHOOSER, sMULTIHIT_EFFECT
 	furycuttercalc
-BattleScript_DoMultiHitFromCritCalc::
 	critcalc
 	damagecalc
 	typecalc
 	jumpifmovehadnoeffect BattleScript_MultiHitNoMoreHits
 	adjustnormaldamage
-BattleScript_MultiHitFromAnimation::
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -683,7 +677,6 @@ BattleScript_EffectConversion::
 
 BattleScript_EffectFlinchHit::
 	setmoveeffect MOVE_EFFECT_FLINCH
-   	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit	@ this may be a bad idea..
 	goto BattleScript_EffectHit
 
 BattleScript_EffectRestoreHp::
@@ -735,7 +728,6 @@ BattleScript_ImmunityProtected::
 
 BattleScript_EffectPayDay::
 	setmoveeffect MOVE_EFFECT_PAYDAY
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectLightScreen::
@@ -747,7 +739,6 @@ BattleScript_EffectLightScreen::
 
 BattleScript_EffectTriAttack::
 	setmoveeffect MOVE_EFFECT_TRI_ATTACK
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectRest::
@@ -1056,32 +1047,26 @@ BattleScript_LimberProtected::
 
 BattleScript_EffectAttackDownHit::
 	setmoveeffect MOVE_EFFECT_ATK_MINUS_1
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectDefenseDownHit::
 	setmoveeffect MOVE_EFFECT_DEF_MINUS_1
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectSpeedDownHit::
 	setmoveeffect MOVE_EFFECT_SPD_MINUS_1
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectSpecialAttackDownHit::
 	setmoveeffect MOVE_EFFECT_SP_ATK_MINUS_1
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectSpecialDefenseDownHit::
 	setmoveeffect MOVE_EFFECT_SP_DEF_MINUS_1
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectAccuracyDownHit::
 	setmoveeffect MOVE_EFFECT_ACC_MINUS_1
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectSkyAttack::
@@ -1093,7 +1078,6 @@ BattleScript_EffectSkyAttack::
 
 BattleScript_EffectConfuseHit::
 	setmoveeffect MOVE_EFFECT_CONFUSION
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectTwineedle::
@@ -1150,7 +1134,6 @@ BattleScript_EffectRage::
 	setmoveeffect MOVE_EFFECT_RAGE
 	seteffectprimary
 	setmoveeffect 0
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_MultiHitFromAtkString
 	goto BattleScript_HitFromAtkString
 
 BattleScript_RageMiss::
@@ -1226,7 +1209,6 @@ BattleScript_EffectLevelDamage::
 	bicbyte gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
 	dmgtolevel
 	adjustsetdamage
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_MultiHitFromAnimation
 	goto BattleScript_HitFromAtkAnimation
 
 BattleScript_EffectPsywave::
@@ -1238,7 +1220,6 @@ BattleScript_EffectPsywave::
 	bicbyte gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
 	psywavedamageeffect
 	adjustsetdamage
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_MultiHitFromAnimation
 	goto BattleScript_HitFromAtkAnimation
 
 BattleScript_EffectCounter::
@@ -1294,11 +1275,10 @@ BattleScript_SnoreIsAsleep::
 	waitmessage 0x40
 	statusanimation BS_ATTACKER
 BattleScript_DoSnore::
-	setmoveeffect MOVE_EFFECT_FLINCH
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_MultiHitFromAtkString
 	attackstring
 	ppreduce
 	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
+	setmoveeffect MOVE_EFFECT_FLINCH
 	goto BattleScript_HitFromCritCalc
 
 BattleScript_EffectConversion2::
@@ -1471,7 +1451,6 @@ BattleScript_TripleKickEnd::
 
 BattleScript_EffectThief::
 	setmoveeffect MOVE_EFFECT_STEAL_ITEM
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectMeanLook::
@@ -1734,7 +1713,6 @@ BattleScript_EffectReturn::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	happinesstodamagecalculation
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_MultiHitFromAtkString
 	goto BattleScript_HitFromAtkString
 
 BattleScript_EffectPresent::
@@ -1753,7 +1731,6 @@ BattleScript_EffectSafeguard::
 
 BattleScript_EffectThawHit::
 	setmoveeffect MOVE_EFFECT_BURN
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectMagnitude::
@@ -1790,7 +1767,6 @@ BattleScript_EffectBatonPass::
 
 BattleScript_EffectRapidSpin::
 	setmoveeffect MOVE_EFFECT_RAPIDSPIN | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectSonicboom::
@@ -1838,17 +1814,14 @@ BattleScript_EffectSunnyDay::
 
 BattleScript_EffectDefenseUpHit::
 	setmoveeffect MOVE_EFFECT_DEF_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectAttackUpHit::
 	setmoveeffect MOVE_EFFECT_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectAllStatsUpHit::
 	setmoveeffect MOVE_EFFECT_ALL_STATS_UP | MOVE_EFFECT_AFFECTS_USER
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectBellyDrum::
@@ -1907,7 +1880,6 @@ BattleScript_EffectTwister::
 	setbyte sDMG_MULTIPLIER, 2
 BattleScript_FlinchEffect::
 	setmoveeffect MOVE_EFFECT_FLINCH
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectEarthquake::
@@ -1974,7 +1946,6 @@ BattleScript_EffectGust::
 	jumpifnostatus3 BS_TARGET, STATUS3_ON_AIR, BattleScript_EffectHit
 	orword gHitMarker, HITMARKER_IGNORE_ON_AIR
 	setbyte sDMG_MULTIPLIER, 2
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectFlinchMinimizeHit::
@@ -2003,7 +1974,6 @@ BattleScript_SolarbeamOnFirstTurn::
 BattleScript_EffectThunder::
 	setmoveeffect MOVE_EFFECT_PARALYSIS
 	orword gHitMarker, HITMARKER_IGNORE_ON_AIR
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectTeleport::
@@ -2137,7 +2107,6 @@ BattleScript_EffectFakeOut::
 	attackcanceler
 	jumpifnotfirstturn BattleScript_ButItFailedAtkStringPpReduce
 	setmoveeffect MOVE_EFFECT_FLINCH | MOVE_EFFECT_CERTAIN
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_ButItFailedAtkStringPpReduce::
@@ -2346,12 +2315,10 @@ BattleScript_MementoNoReduceStats::
 
 BattleScript_EffectFacade::
 	jumpifstatus BS_ATTACKER, STATUS1_POISON | STATUS1_PARALYSIS | STATUS1_BURN | STATUS1_SPIRIT_LOCK | STATUS1_TOXIC_POISON, BattleScript_FacadeDoubleDmg
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_FacadeDoubleDmg::
 	setbyte sDMG_MULTIPLIER, 2
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectFocusPunch::
@@ -2366,12 +2333,10 @@ BattleScript_EffectSmellingsalt::
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_EffectHit
 	setmoveeffect MOVE_EFFECT_REMOVE_PARALYSIS | MOVE_EFFECT_CERTAIN
 	jumpifstatus BS_TARGET, STATUS1_PARALYSIS, BattleScript_SmellingSaltBuff
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_SmellingSaltBuff::
 	setbyte sDMG_MULTIPLIER, 2
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectFollowMe::
@@ -2486,7 +2451,6 @@ BattleScript_EffectIngrain::
 
 BattleScript_EffectSuperpower::
 	setmoveeffect MOVE_EFFECT_ATK_DEF_DOWN | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectMagicCoat::
@@ -2513,7 +2477,6 @@ BattleScript_EffectRecycle::
 
 BattleScript_EffectRevenge::
 	doubledamagedealtifdamaged
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectBrickBreak::
@@ -2576,7 +2539,6 @@ BattleScript_PrintAbilityMadeIneffective::
 
 BattleScript_EffectKnockOff::
 	setmoveeffect MOVE_EFFECT_KNOCK_OFF
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectEndeavor::
@@ -2595,7 +2557,6 @@ BattleScript_EffectEndeavor::
 
 BattleScript_EffectEruption::
 	scaledamagebyhealthratio
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectSkillSwap::
@@ -2662,17 +2623,14 @@ BattleScript_EffectLowKick::
 	ppreduce
 	weightdamagecalculation
 	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_DoMultiHitFromCritCalc
 	goto BattleScript_HitFromCritCalc
 
 BattleScript_EffectSecretPower::
 	getsecretpowereffect
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectDoubleEdge::
 	setmoveeffect MOVE_EFFECT_RECOIL_33 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectTeeterDance::
@@ -2742,17 +2700,14 @@ BattleScript_EffectMudSport::
 
 BattleScript_EffectPoisonFang::
 	setmoveeffect MOVE_EFFECT_TOXIC
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectWeatherBall::
 	setweatherballtype
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectOverheat::
 	setmoveeffect MOVE_EFFECT_SP_ATK_TWO_DOWN | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectTickle::
@@ -2817,7 +2772,6 @@ BattleScript_CosmicPowerEnd::
 
 BattleScript_EffectSkyUppercut::
 	orword gHitMarker, HITMARKER_IGNORE_ON_AIR
-	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	goto BattleScript_EffectHit
 
 BattleScript_EffectBulkUp::
@@ -2936,7 +2890,7 @@ BattleScript_GiveExp::
 	getexp BS_TARGET
 	end2
 
-BattleScript_HandleFaintedMon::   @ maybe should edit this for repeat switch in stuff, would work for fainting at least, would still need regular switch out
+BattleScript_HandleFaintedMon::
 	atk24 BattleScript_LinkBattleHandleFaint
 	jumpifbyte CMP_NOT_EQUAL, gBattleOutcome, 0, BattleScript_FaintedMonEnd
 	jumpifbattletype BATTLE_TYPE_TRAINER, BattleScript_FaintedMonTryChooseAnother
@@ -3897,7 +3851,7 @@ BattleScript_WrapEnds::
 	waitmessage 0x40
 	end2
 
-BattleScript_MoveUsedIsInLove::  @ check back to try and make move effect attract from this, for synchronize, moveeffect goes in this file
+BattleScript_MoveUsedIsInLove::
 	printstring STRINGID_PKMNINLOVE
 	waitmessage 0x40
 	status2animation BS_ATTACKER, STATUS2_INFATUATION

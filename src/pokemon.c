@@ -2636,12 +2636,22 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         SetBoxMonData(boxMon, MON_DATA_SPDEF_IV, &iv);
     }
 
-    if (gBaseStats[species].abilities[1])
+    if (gBaseStats[species].abilityHidden[1]) //will have if at highest i.e = abilityNum, meaniing all all slots are filled, with else ifs below decreasing by 1.
+    {
+        value = personality & 3; //setup just to have something in here, but this relies on bit math,  think it means if personality value ends in 3,
+        SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);// so I'd need to check odds, and if it actually works.
+    }
+    else if (gBaseStats[species].abilityHidden[0]) //ok I haven't tested but these should work, previously there was no way for pokemon to have hidden ability in wild
+    {
+        value = personality & 2; //to make it sufficiently rare, I think I may have to add a random () % n value to the hidden ability clauses, maybe % 10 == 0
+        SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
+    }
+    else if (gBaseStats[species].abilities[1]) // if ability slot 1, is not 0 aka is not ability_none, is saying if pokemon has 2 abilities
     {
         value = personality & 1;
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
-    }
-
+    } //note, since pokemon will have the same ability slot when they evolve based on their ability num, I may need to ensure
+    //a pokemon's evolved form also alway has a 2nd hiddden ability slot, so it doesn't just become ability_none.
     GiveBoxMonInitialMoveset(boxMon);
 }
 
@@ -3184,10 +3194,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     s32 damage = 0;
     s32 damageHelper;
     u8 type;
-    bool8 usesDefStat;
-    u8 defStage;
+    //bool8 usesDefStat;
+    //u8 defStage;
     u16 attack, defense;
-    u16 spAttack, spDefense, defStat;
+    u16 spAttack, spDefense;// defStat;
     u8 defenderHoldEffect;
     u8 defenderHoldEffectParam;
     u8 attackerHoldEffect;
@@ -3208,7 +3218,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     spAttack = attacker->spAttack;
     spDefense = defender->spDefense;
 
-    if (/*gBattleMoves[move].effect == EFFECT_PSYSHOCK ||*/ IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
+    /*if (gBattleMoves[move].effect == EFFECT_PSYSHOCK || IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
     {
         defStat = defense;
         defStage = gBattleMons[battlerIdDef].statStages[STAT_DEF];
@@ -3219,7 +3229,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         defStat = spDefense;
         defStage = gBattleMons[battlerIdDef].statStages[STAT_SPDEF];
         usesDefStat = FALSE; //ported from emerald, will use this later
-    }
+    }*/
 
     if (attacker->item == ITEM_ENIGMA_BERRY)
     {
@@ -3328,13 +3338,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         gBattleMovePower = (150 * gBattleMovePower) / 100;
     if (gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)
         defense /= 2;
-    // sandstorm sp.def boost for rock types
-    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK) && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY && !usesDefStat)
+    // sandstorm sp.def boost for rock types  // decided to add this for ground types as well,
+    if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK) || (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)))
+        && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY)// && !usesDefStat)
         spDefense = (150 * spDefense) / 100;
 
     if (IS_MOVE_PHYSICAL(move))
     {
-        if (gCritMultiplier >= 2)
+        if (gCritMultiplier > 1)
         {
             if (attacker->statStages[STAT_ATK] > 6)
                 APPLY_STAT_MOD(damage, attacker, attack, STAT_ATK)
@@ -3347,7 +3358,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage = damage * gBattleMovePower;
         damage *= (2 * attacker->level / 5 + 2);
 
-        if (gCritMultiplier >= 2)
+        if (gCritMultiplier > 1) //forgot about the else/ or effect of using >= since using else means, less than, or not equal, so changed to just use greater than 1 for crit
         {
             if (defender->statStages[STAT_DEF] < 6)
                 APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)
@@ -3423,7 +3434,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     if (IS_MOVE_SPECIAL(move))
     {
-        if (gCritMultiplier >= 2)
+        if (gCritMultiplier > 1)
         {
             if (attacker->statStages[STAT_SPATK] > 6)
                 APPLY_STAT_MOD(damage, attacker, spAttack, STAT_SPATK)
@@ -3436,7 +3447,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage = damage * gBattleMovePower;
         damage *= (2 * attacker->level / 5 + 2);
 
-        if (gCritMultiplier >= 2)
+        if (gCritMultiplier > 1)
         {
             if (defender->statStages[STAT_SPDEF] < 6)
                 APPLY_STAT_MOD(damageHelper, defender, spDefense, STAT_SPDEF)
@@ -4368,12 +4379,12 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
     case MON_DATA_IS_EGG:
         SET8(substruct3->isEgg);
-        if (substruct3->isEgg)
+        if (substruct3->isEgg) //?
             boxMon->isEgg = 1;
         else
             boxMon->isEgg = 0;
         break;
-    case MON_DATA_ABILITY_NUM:
+    case MON_DATA_ABILITY_NUM: //this is just setting the abiityNum tothe mon, not calculating what it should be.
         SET8(substruct3->abilityNum);
         break;
     case MON_DATA_COOL_RIBBON:
@@ -4554,17 +4565,19 @@ u8 GetMonsStateToDoubles(void)
     return (aliveCount > 1) ? PLAYER_HAS_TWO_USABLE_MONS : PLAYER_HAS_ONE_USABLE_MON;
 }
 
-u16 GetAbilityBySpecies(u16 species, bool8 abilityNum) //important tells game abilitynum2 is hidden ability
+u16 GetAbilityBySpecies(u16 species, bool8 abilityNum) //important tells game abilitynum2 is hidden ability  think I'm going to make a second hidden ability field,
 {
-    if (abilityNum == 2)
-        gLastUsedAbility = gBaseStats[species].abilityHidden;
+    if (abilityNum == 3)
+        gLastUsedAbility = gBaseStats[species].abilityHidden[1];
+    else if (abilityNum == 2)
+        gLastUsedAbility = gBaseStats[species].abilityHidden[0];
     else if (abilityNum == 1)
         gLastUsedAbility = gBaseStats[species].abilities[1];
     else
         gLastUsedAbility = gBaseStats[species].abilities[0];
 
     return gLastUsedAbility;
-}
+} //so 4 ability optionns total, would like to set hidden ability chance like shiny odds, just much better odds, then have gauranteed hidden ability with dexnav
 
 u16 GetMonAbility(struct Pokemon *mon)
 {
