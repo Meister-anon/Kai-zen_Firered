@@ -378,9 +378,9 @@ struct Evolution
 struct Breeding
 {
     u16 evo_line; //template name, looked at daycare function and will have to related it to my start species
-    u16 method;
-    u16 param;
-    u16 targetSpecies;
+    u16 method; // based either on father type (may call pedigree) or held item, (may call affinity)  //both are based on the type of the target form i.e dark for alola rattata
+    u16 param;  //specific value for the method
+    u16 targetSpecies; //egg species
 };
 
 

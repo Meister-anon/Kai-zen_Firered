@@ -2,6 +2,8 @@
 #define GUARD_CONSTANTS_ITEMS_H
 // because of my change to the item table I need to change all values that are ITEM_(some hex value) into ITEM_NONE I think..yeah I do, because they were previously
 //auto aligned with a question mark icon & palette.   actually imma leave it for now, since I plan to fill those placeholders in.
+
+//actually I think this file just needs to match the items.json //yup confirmed
 #define ITEM_NONE 0
 #define ITEM_MASTER_BALL 1
 #define ITEM_ULTRA_BALL 2
@@ -88,8 +90,8 @@
 #define ITEM_SUPER_REPEL 83
 #define ITEM_MAX_REPEL 84
 #define ITEM_ESCAPE_ROPE 85
-#define ITEM_ABILITY_CAPSULE 86
-#define ITEM_REPEL 87
+#define ITEM_REPEL 86
+#define ITEM_ABILITY_CAPSULE 87
 #define ITEM_058 88
 #define ITEM_059 89
 #define ITEM_05A 90
