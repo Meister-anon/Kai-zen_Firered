@@ -768,6 +768,7 @@ static const u16 sProtectSuccessRates[] =
 #define MIMIC_FORBIDDEN_END             0xFFFE
 #define METRONOME_FORBIDDEN_END         0xFFFF
 #define ASSIST_FORBIDDEN_END            0xFFFF
+#define MULTI_TASK_FORBIDDEN_END        0xFFFF
 
 static const u16 sMovesForbiddenToCopy[] =
 {
@@ -802,6 +803,45 @@ static const u8 sFlailHpScaleToPowerTable[] =
     32, 40,
     48, 20
 };
+//these two arrays relate only to multi_task, could probably do with just 1, but just some extra redundancy
+static const u16 sMultiTaskExcludedEffects[] =
+{ 
+    EFFECT_MAGNITUDE,
+    EFFECT_ROLLOUT,
+    EFFECT_SKY_ATTACK,
+    EFFECT_SOLARBEAM,
+    EFFECT_SKULL_BASH,
+    EFFECT_SEMI_INVULNERABLE,
+    EFFECT_RAZOR_WIND,
+    EFFECT_MULTI_HIT,
+    EFFECT_FURY_CUTTER,
+    EFFECT_DOUBLE_HIT,
+    EFFECT_TRIPLE_KICK,
+    EFFECT_SUPER_FANG,
+    EFFECT_ENDEAVOR,
+    EFFECT_SONICBOOM,
+    EFFECT_COUNTER, //because can't crit
+    EFFECT_LEVEL_DAMAGE, //same
+    EFFECT_DRAGON_RAGE,
+    EFFECT_BIDE,
+    EFFECT_PRESENT, //would be fun but difficult to manage battlescript
+    EFFECT_MIRROR_COAT,
+    EFFECT_BEAT_UP,
+    EFFECT_TWINEEDLE,
+    EFFECT_EXPLOSION,  //ya ALMOST snuck by me, but not quite!!
+    EFFECT_FUTURE_SIGHT,  //yeah, you can come too!! I gotcha.
+    EFFECT_UPROAR,
+    EFFECT_RAMPAGE,
+    //EFFECT_OHKO, //no pokemon I'm giving this to normally learns a ohko move, so I may leave in for something potentially fun for the player.
+    //EFFECT_HIT,  //for testing   test passed
+    //EFFECT_TWO_TURNS_ATTACK
+    MULTI_TASK_FORBIDDEN_END
+};
+
+// the moves that are multihit without the effect i.e use setmultihit or setmultihitcounter, before going to multihitloop...it was only twinneedle
+//so don't need this now
+/*static const u16 sBlockedMoves[] =
+{};*/
 
 static const u16 sNaturePowerMoves[] =
 {
@@ -1371,6 +1411,14 @@ static void atk04_critcalc(void)
     ++gBattlescriptCurrInstr;
 }
 
+static bool8 CanMultiTask(u16 move) //works, but now I need to negate the jump, because it will still attack multiple times otherwise
+{
+    u16 i;
+    for (i = 0; sMultiTaskExcludedEffects[i] != MULTI_TASK_FORBIDDEN_END && sMultiTaskExcludedEffects[i] != gBattleMoves[move].effect; ++i);
+    if (sMultiTaskExcludedEffects[i] == MULTI_TASK_FORBIDDEN_END) //should mean if loop through till end, move can be multi tasked
+        return TRUE;
+}
+
 static void atk05_damagecalc(void)
 {
     u16 sideStatus = gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)];
@@ -1387,15 +1435,16 @@ static void atk05_damagecalc(void)
     gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier; // this makes it so gcritmultiplier value is how much crit is, so sniper shuold work
     if (gStatuses3[gBattlerAttacker] & STATUS3_CHARGED_UP && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC)
         gBattleMoveDamage *= 2;
-    if (gProtectStructs[gBattlerAttacker].helpingHand)
+    if (gProtectStructs[gBattlerAttacker].helpingHand)//below works, but because hit still jumps to multihit,  I need to add the below check to jumpifability 
         gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
     if (gBattleMons[gBattlerAttacker].ability == ABILITY_MULTI_TASK
-        && gBattleMoves[gCurrentMove].split != SPLIT_STATUS)
+        && CanMultiTask(gCurrentMove) == TRUE
+        && gBattleMoves[gCurrentMove].split != SPLIT_STATUS) // normal syntax (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE)
         //&& gMultiHitCounter > 0) //setup a function that checks if move is multihit, or multiturn, with bool8 so it returns true or false, then use false here.
     {
-        gBattleMoveDamage = (gBattleMoveDamage / gMultiHitCounter);
-        if (gBattleMoveDamage == 0)
-            gBattleMoveDamage = 1;
+        gBattleMoveDamage = (gBattleMoveDamage / gMultiTask); //works, problem was furycalc in multihit, fixed
+       if (gBattleMoveDamage == 0) //need to add move exclusions for multi hit & multi turn moves before its compolete.
+            gBattleMoveDamage = 1;  //(gCurrentMove == MOVE_BLIZZARD) //need to block effects & certain move names, like twinneedle that are multihit without the effect
     }
            //depending on how this works,
     ++gBattlescriptCurrInstr; //may need to put in its own command, depends on multihitcounter & decrement string
@@ -1424,10 +1473,11 @@ void AI_CalcDmg(u8 attacker, u8 defender)
     if (gProtectStructs[attacker].helpingHand)
         gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
     if (gBattleMons[attacker].ability == ABILITY_MULTI_TASK
+        && CanMultiTask(gCurrentMove) == TRUE
         && gBattleMoves[attacker].split != SPLIT_STATUS)
         //&& gMultiHitCounter > 0) //setup a function that checks if move is multihit, or multiturn, with bool8 so it returns true or false, then use false here.
     {
-        gBattleMoveDamage = (gBattleMoveDamage / gMultiHitCounter);
+        gBattleMoveDamage = (gBattleMoveDamage / gMultiTask);
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
     }
@@ -3168,7 +3218,18 @@ static void atk1E_jumpifability(void)
     default:
         battlerId = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
         if (gBattleMons[battlerId].ability == ability)
-            hasAbility = TRUE;
+        {
+            if (ability == ABILITY_MULTI_TASK)
+            {
+                if (!CanMultiTask(gCurrentMove)
+                    || gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
+                {
+                    hasAbility = FALSE;
+                }
+            }
+            else
+                hasAbility = TRUE;
+        }
         break;
     case BS_ATTACKER_SIDE:
         battlerId = AbilityBattleEffects(ABILITYEFFECT_CHECK_BATTLER_SIDE, gBattlerAttacker, ability, 0, 0);
@@ -8126,7 +8187,7 @@ static void atkB5_furycuttercalc(void)
         if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
         {
             gDisableStructs[gBattlerAttacker].furyCutterCounter = 0;
-            gBattlescriptCurrInstr = BattleScript_MoveMissedPause;
+            //gBattlescriptCurrInstr = BattleScript_MoveMissedPause; //...realized don't need that, since I made an entire bs for it.
         }
         /*if  (gBattlescriptCurrInstr == BattleScript_FuryCutterEnd) //to make sure it resets before move is used again, even if don't miss
         {
@@ -8147,9 +8208,10 @@ static void atkB5_furycuttercalc(void)
                 // berserker *= 3;  //change from 3 to 1, for large test, should reduce accuracy by 4 each hit if its working
                  //berserker /= 4; 
             }//dizzyegg confirms doing this way also works for establishing 3/4
-            ++gBattlescriptCurrInstr; // if done right power should double and accuracy should drop off by a fourth each hti
+            //++gBattlescriptCurrInstr; // if done right power should double and accuracy should drop off by a fourth each hti
         }
     }
+    ++gBattlescriptCurrInstr;
 } //don't know if i'm just unlucky but it seeems to be hitting every time, so I'm still unsure
 //if the accuracy reduction on hit is working  ok did test, accuracy reduction or accuracy checks just aren't working at all.
 
@@ -9957,7 +10019,7 @@ static void atkF9_mondamaged(void) //edited based on recommendation from mcgriff
     //plus that would avoid any confusion from combining and with else statements
 }
 
-static void atkFA_setmultihitcounter2(void)
+static void atkFA_setmultihitcounter2(void) //should do what the original does but in a separate variable, then pass the original value to gmultihitcounter so the script can complete.
 {
     // gMultiTask = gMultiHitCounter;  //not sure if doing this way will work, but I'll try it
      //multihitcounter is outside of the loop and only run once, so if it copies the value from here

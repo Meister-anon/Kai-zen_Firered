@@ -247,6 +247,7 @@ BattleScript_HitFromAtkCanceler::
 BattleScript_HitFromAccCheck::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 BattleScript_HitFromAtkString::
+	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	attackstring
 	ppreduce
 BattleScript_HitFromCritCalc::
@@ -610,10 +611,11 @@ BattleScript_EffectRoar::
 
 BattleScript_EffectMultiHit::
 	attackcanceler
-	@ accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
+	@ accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE  realized dont need 2 accuracycheck it could just as well miss on the first strike from the one below
+BattleScript_MultiHitFromAtkString::
 	attackstring
 	ppreduce
-	setmultihitcounter 0
+	setmultihitcounter2 0
 	initmultihitstring
 	setbyte sMULTIHIT_EFFECT, 0
 BattleScript_MultiHitLoop::
@@ -622,7 +624,7 @@ BattleScript_MultiHitLoop::
 	jumpifhalfword CMP_EQUAL, gChosenMove, MOVE_SLEEP_TALK, BattleScript_DoMultiHit
 	jumpifstatus BS_ATTACKER, STATUS1_SLEEP, BattleScript_MultiHitPrintStrings
 BattleScript_DoMultiHit::
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
 	movevaluescleanup
 	copybyte cEFFECT_CHOOSER, sMULTIHIT_EFFECT
 	furycuttercalc
@@ -2619,9 +2621,11 @@ BattleScript_EffectSnatch::
 
 BattleScript_EffectLowKick::
 	attackcanceler
+	weightdamagecalculation
+	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_MultiHitFromAtkString
 	attackstring
 	ppreduce
-	weightdamagecalculation
+	@ weightdamagecalculation
 	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
 	goto BattleScript_HitFromCritCalc
 
