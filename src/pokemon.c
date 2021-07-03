@@ -2636,17 +2636,18 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         SetBoxMonData(boxMon, MON_DATA_SPDEF_IV, &iv);
     }
 
-    if (gBaseStats[species].abilityHidden[1]) //will have if at highest i.e = abilityNum, meaniing all all slots are filled, with else ifs below decreasing by 1.
+    //from what I can see 2nd hidden ability  seems to be the rarest even before adding random boost.
+    if (gBaseStats[species].abilityHidden[1] && Random() % 2 == 0) //will have if at highest i.e = abilityNum, meaniing all all slots are filled, with else ifs below decreasing by 1.
     {
         value = personality & 3; //setup just to have something in here, but this relies on bit math,  think it means if personality value ends in 3,
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);// so I'd need to check odds, and if it actually works.
     }
-    else if (gBaseStats[species].abilityHidden[0]) //ok I haven't tested but these should work, previously there was no way for pokemon to have hidden ability in wild
+    else if (gBaseStats[species].abilityHidden[0] && Random() % 3 == 0) //ok I haven't tested but these should work, previously there was no way for pokemon to have hidden ability in wild
     {
         value = personality & 2; //to make it sufficiently rare, I think I may have to add a random () % n value to the hidden ability clauses, maybe % 10 == 0
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
     }
-    else if (gBaseStats[species].abilities[1]) // if ability slot 1, is not 0 aka is not ability_none, is saying if pokemon has 2 abilities
+    else if (gBaseStats[species].abilities[1]) //important if ability slot 1, & is not ability_none, is saying if pokemon has 2 abilities
     {
         value = personality & 1;
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
@@ -3228,7 +3229,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     {
         defStat = spDefense;
         defStage = gBattleMons[battlerIdDef].statStages[STAT_SPDEF];
-        usesDefStat = FALSE; //ported from emerald, will use this later
+        usesDefStat = FALSE; //ported from emerald, will use this later  this wasn't actually the problem can most likely safely bring back in.
     }*/
 
     if (attacker->item == ITEM_ENIGMA_BERRY)
