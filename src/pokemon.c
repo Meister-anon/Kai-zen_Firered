@@ -2553,6 +2553,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     u32 personality;
     u32 value;
     u16 checksum;
+    u16 odds = Random() % 4;
 
     ZeroBoxMonData(boxMon);
 
@@ -2635,14 +2636,14 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         iv = (value & 0x7C00) >> 10;
         SetBoxMonData(boxMon, MON_DATA_SPDEF_IV, &iv);
     }
-
-    //from what I can see 2nd hidden ability  seems to be the rarest even before adding random boost.
-    if (gBaseStats[species].abilityHidden[1] && Random() % 2 == 0) //will have if at highest i.e = abilityNum, meaniing all all slots are filled, with else ifs below decreasing by 1.
+    
+    //from what I can see 2nd hidden ability  seems to be the rarest even before adding random boost.   may boost higher
+    if (gBaseStats[species].abilityHidden[1] && odds == 1) //will have if at highest i.e = abilityNum, meaniing all all slots are filled, with else ifs below decreasing by 1.
     {
         value = personality & 3; //setup just to have something in here, but this relies on bit math,  think it means if personality value ends in 3,
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);// so I'd need to check odds, and if it actually works.
     }
-    else if (gBaseStats[species].abilityHidden[0] && Random() % 3 == 0) //ok I haven't tested but these should work, previously there was no way for pokemon to have hidden ability in wild
+    else if (gBaseStats[species].abilityHidden[0] && odds == 0) //ok I haven't tested but these should work, previously there was no way for pokemon to have hidden ability in wild
     {
         value = personality & 2; //to make it sufficiently rare, I think I may have to add a random () % n value to the hidden ability clauses, maybe % 10 == 0
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
