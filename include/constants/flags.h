@@ -1398,7 +1398,12 @@
 #define FLAG_SYS_UNLOCKED_TANOBY_RUINS                              (SYS_FLAGS + 0x49)
 #define FLAG_ENABLE_SHIP_NAVEL_ROCK                                 (SYS_FLAGS + 0x4A)
 #define FLAG_ENABLE_SHIP_BIRTH_ISLAND                               (SYS_FLAGS + 0x4B)
-#define FLAG_DECLINED_STARTER_CHOICE	                            (SYS_FLAGS + 0x4C)
+#define FLAG_DECLINED_BULBASAUR										(SYS_FLAGS + 0x4C)
+#define FLAG_DECLINED_SQUIRTLE										(SYS_FLAGS + 0x4D)
+#define FLAG_DECLINED_CHARMANDER									(SYS_FLAGS + 0x4E)
+#define FLAG_CHOOSE_STARTER_1										(SYS_FLAGS + 0x4F)
+#define FLAG_CHOOSE_STARTER_2										(SYS_FLAGS + 0x50)
+#define FLAG_CHOOSE_STARTER_3										(SYS_FLAGS + 0x51)
 
 // World Map Flags
 #define FLAG_WORLD_MAP_PALLET_TOWN                                  (SYS_FLAGS + 0x90)

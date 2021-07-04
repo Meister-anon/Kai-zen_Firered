@@ -1154,6 +1154,7 @@ PalletTown_ProfessorOaksLab_Movement_RivalExit:: @ 8169BA4
 PalletTown_ProfessorOaksLab_EventScript_BulbasaurBall:: @ 8169BAB
 	lock
 	faceplayer
+	setflag FLAG_CHOOSE_STARTER_1
 	setvar PLAYER_STARTER_NUM, 0
 	callnative SetPlayerBulbasaurBall
 	callnative SetRivalBulbasaurBall
@@ -1183,6 +1184,12 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmBulbasaur:: @ 8169C14
 	msgbox PalletTown_ProfessorOaksLab_Text_OakChoosingBulbasaur, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_ChoseStarter
+	clearflag FLAG_CHOOSE_STARTER_1
+	setflag FLAG_DECLINED_BULBASAUR
+	callnative PlayerPassVar
+	callnative PlayerPassVar2
+	callnative RivalPassVar
+	callnative RivalPassVar2
 	compare VAR_RESULT, NO
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_DeclinedStarter
 	end
@@ -1191,6 +1198,12 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmSquirtle:: @ 8169C33
 	msgbox PalletTown_ProfessorOaksLab_Text_OakChoosingSquirtle, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_ChoseStarter
+	clearflag FLAG_CHOOSE_STARTER_2
+	setflag FLAG_DECLINED_SQUIRTLE
+	callnative PlayerPassVar
+	callnative PlayerPassVar2
+	callnative RivalPassVar
+	callnative RivalPassVar2
 	compare VAR_RESULT, NO
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_DeclinedStarter
 	end
@@ -1199,15 +1212,18 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmCharmander:: @ 8169C52
 	msgbox PalletTown_ProfessorOaksLab_Text_OakChoosingCharmander, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_ChoseStarter
+	clearflag FLAG_CHOOSE_STARTER_3
+	setflag FLAG_DECLINED_CHARMANDER
+	callnative PlayerPassVar
+	callnative PlayerPassVar2
+	callnative RivalPassVar
+	callnative RivalPassVar2
 	compare VAR_RESULT, NO
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_DeclinedStarter
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_DeclinedStarter:: @ 8169C71
 	erasemonpic
-	setflag FLAG_DECLINED_STARTER_CHOICE
-	callnative PlayerPassVar
-	callnative RivalPassVar
 	release
 	end
 
@@ -1316,6 +1332,7 @@ PalletTown_ProfessorOaksLab_Movement_RivalWalksToBulbasaur:: @ 8169D72
 PalletTown_ProfessorOaksLab_EventScript_SquirtleBall:: @ 8169D78
 	lock
 	faceplayer
+	setflag FLAG_CHOOSE_STARTER_2
 	setvar PLAYER_STARTER_NUM, 1
 	callnative SetPlayerSquirtleBall
 	callnative SetRivalSquirtleBall
@@ -1331,6 +1348,7 @@ PalletTown_ProfessorOaksLab_EventScript_SquirtleBall:: @ 8169D78
 PalletTown_ProfessorOaksLab_EventScript_CharmanderBall:: @ 8169DAE
 	lock
 	faceplayer
+	setflag FLAG_CHOOSE_STARTER_3
 	setvar PLAYER_STARTER_NUM, 2
 	callnative SetPlayerCharmanderBall
 	callnative SetRivalCharmanderBall

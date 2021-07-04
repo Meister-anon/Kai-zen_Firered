@@ -1634,8 +1634,13 @@ void SetPlayerBulbasaurBall(void) //OK GriffinR again with the save, helped me a
 {
     //u16 i = Random() % 13; //return value between 0-13 to match 13 value array
     //if (sBulbasaurBall[i] != LIST_END)
-    if (FlagGet(FLAG_DECLINED_STARTER_CHOICE))
-        VarSet(VAR_TEMP_2, VAR_PLAYER_PASS);
+    if (FlagGet(FLAG_DECLINED_BULBASAUR))
+    {
+        VarSet(VAR_TEMP_2, 0);
+
+        if (FlagGet(FLAG_CHOOSE_STARTER_1)) //had to put this here, because I only want it to do something when both the flags are set.
+            VarSet(VAR_TEMP_2, VAR_PLAYER_PASS1);
+    }
     else
         VarSet(VAR_PLAYER_STARTER, sBulbasaurBall[Random() % 13]);
         
@@ -1647,8 +1652,13 @@ void SetPlayerSquirtleBall(void)
 {
     //u16 i = Random() % 13; //return value between 0-13 to match 13 value array  
     //if (sSquirtleBall[i] != LIST_END)
-    if (FlagGet(FLAG_DECLINED_STARTER_CHOICE))
-        VarSet(VAR_TEMP_2, VAR_PLAYER_PASS);
+    if (FlagGet(FLAG_DECLINED_SQUIRTLE))
+    {
+        VarSet(VAR_TEMP_2, 0);
+
+        if (FlagGet(FLAG_CHOOSE_STARTER_2))
+            VarSet(VAR_TEMP_2, VAR_PLAYER_PASS2);
+    }
     else
         VarSet(VAR_PLAYER_STARTER, sSquirtleBall[Random() % 13]);
     //return  VAR_PLAYER_STARTER;
@@ -1659,8 +1669,13 @@ void SetPlayerCharmanderBall(void)
 {
     //u16 i = Random() % 13; //return value between 0-13 to match 13 value array
     //if (sCharmanderBall[i] != LIST_END)
-    if (FlagGet(FLAG_DECLINED_STARTER_CHOICE))
-        VarSet(VAR_TEMP_2, VAR_PLAYER_PASS);
+    if (FlagGet(FLAG_DECLINED_CHARMANDER))
+    {
+        VarSet(VAR_TEMP_2, 0); //changed doing this hopefully clean the var, before setting the pass value directly below
+
+        if (FlagGet(FLAG_CHOOSE_STARTER_3))
+            VarSet(VAR_TEMP_2, VAR_PLAYER_PASS3);
+    }
     else
         VarSet(VAR_PLAYER_STARTER, sCharmanderBall[Random() % 13]);
     //return  VAR_PLAYER_STARTER;
@@ -1671,8 +1686,13 @@ void SetRivalBulbasaurBall(void) //these hold the rival choices, for when the pl
 {
     //u16 j = Random() % 13; ///for rival
     //if (sCharmanderBall[j] != LIST_END)
-    if (FlagGet(FLAG_DECLINED_STARTER_CHOICE))
-        VarSet(VAR_TEMP_3, VAR_RIVAL_PASS);
+    if (FlagGet(FLAG_DECLINED_BULBASAUR))
+    {
+        VarSet(VAR_TEMP_3, 0);
+
+        if (FlagGet(FLAG_CHOOSE_STARTER_1))
+            VarSet(VAR_TEMP_3, VAR_RIVAL_PASS1);
+    }
     else
         VarSet(VAR_RIVAL_STARTER, sCharmanderBall[Random() % 13]);
     //return VAR_RIVAL_STARTER;
@@ -1682,8 +1702,13 @@ void SetRivalSquirtleBall(void) //when player choose squirtle ball, this is riva
 {
     //u16 j = Random() % 13; //for rival
     //if (sBulbasaurBall[j] != LIST_END)
-    if (FlagGet(FLAG_DECLINED_STARTER_CHOICE))
-        VarSet(VAR_TEMP_3, VAR_RIVAL_PASS);
+    if (FlagGet(FLAG_DECLINED_SQUIRTLE))
+    {
+        VarSet(VAR_TEMP_3, 0);
+
+        if (FlagGet(FLAG_CHOOSE_STARTER_2))
+            VarSet(VAR_TEMP_3, VAR_RIVAL_PASS2);
+    }
     else
         VarSet(VAR_RIVAL_STARTER, sBulbasaurBall[Random() % 13]);
     //return VAR_RIVAL_STARTER;
@@ -1693,22 +1718,52 @@ void SetRivalCharmanderBall(void) //when player choose charmander ball, this is 
 {
     //u16 j = Random() % 13; // for rival
     //if (sSquirtleBall[j] != LIST_END)
-    if (FlagGet(FLAG_DECLINED_STARTER_CHOICE))
-        VarSet(VAR_TEMP_3, VAR_RIVAL_PASS);
+    if (FlagGet(FLAG_DECLINED_CHARMANDER))
+    {
+        VarSet(VAR_TEMP_3, 0);
+
+        if (FlagGet(FLAG_CHOOSE_STARTER_3)) //needed a loop, incase player declined pokemon multiple times, 
+            VarSet(VAR_TEMP_3, VAR_RIVAL_PASS3); //set and clear this flag, so it will always return the same value
+    }
     else
         VarSet(VAR_RIVAL_STARTER, sSquirtleBall[Random() % 13]);
     //return VAR_RIVAL_STARTER;
 } //using 2 VarSets doesn't work because its just replacing with the same var not writing it to the other var,  I think...
-//may need to make a copyvar since seems command doesn't exist.
+//I need to pass to a blank var, I believe, and since I have 3 values, that meals I need A different var for each function
 
-void PlayerPassVar(void)
+//no I need a different flag for each ball (since rival and player functions are called together
+//, as well as a different set pass values for player and rival for each ball, So 4 more of the pass values
+//and possibly another set of 6 vars to write to.     //if the var needs to be blank
+
+void PlayerPassVar(void) //put if else here for each flag keep player st
 {
-    VarSet(VAR_PLAYER_PASS, VAR_PLAYER_STARTER);
+    if (FlagGet(FLAG_DECLINED_BULBASAUR))
+        VarSet(VAR_PLAYER_PASS1, VAR_PLAYER_STARTER);
+
+    else if (FlagGet(FLAG_DECLINED_SQUIRTLE))
+        VarSet(VAR_PLAYER_PASS2, VAR_PLAYER_STARTER);
+
+}
+
+void PlayerPassVar2(void) //put if else here for each flag keep player st
+{
+    if (FlagGet(FLAG_DECLINED_CHARMANDER))
+        VarSet(VAR_PLAYER_PASS3, VAR_PLAYER_STARTER);
 }
 
 void RivalPassVar(void)
 {
-    VarSet(VAR_RIVAL_PASS, VAR_RIVAL_STARTER);
+    if (FlagGet(FLAG_DECLINED_BULBASAUR))
+        VarSet(VAR_RIVAL_PASS1, VAR_RIVAL_STARTER);
+
+    else if (FlagGet(FLAG_DECLINED_SQUIRTLE))
+        VarSet(VAR_RIVAL_PASS2, VAR_RIVAL_STARTER);
+}
+
+void RivalPassVar2(void)
+{
+    if (FlagGet(FLAG_DECLINED_CHARMANDER))
+        VarSet(VAR_RIVAL_PASS3, VAR_RIVAL_STARTER);
 }
 
 void SetSeenMon(void)

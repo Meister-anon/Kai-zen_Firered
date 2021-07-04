@@ -307,10 +307,14 @@
 #define VAR_0x40FF                 0x40FF
 #define VAR_PLAYER_STARTER         0x4100 //use for player & rival starter species
 #define VAR_RIVAL_STARTER          0x4101
-#define VAR_PLAYER_PASS			   0x4102
-#define VAR_RIVAL_PASS             0x4103
+#define VAR_PLAYER_PASS1		   0x4102
+#define VAR_PLAYER_PASS2		   0x4103
+#define VAR_PLAYER_PASS3		   0x4104
+#define VAR_RIVAL_PASS1            0x4105
+#define VAR_RIVAL_PASS2            0x4106
+#define VAR_RIVAL_PASS3            0x4107
 
-#define VARS_END                   0x4103
+#define VARS_END                   0x4107
 #define VARS_COUNT                 (VARS_END - VARS_START + 1)
 
 #define SPECIAL_VARS_START         0x8000

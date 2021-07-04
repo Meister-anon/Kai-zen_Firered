@@ -43,6 +43,8 @@ void SetRivalBulbasaurBall(void);
 void SetRivalSquirtleBall(void);
 void SetRivalCharmanderBall(void);
 void PlayerPassVar(void);
+void PlayerPassVar2(void);
 void RivalPassVar(void);
+void RivalPassVar2(void);
 
 #endif // GUARD_FIELD_SPECIALS_H
