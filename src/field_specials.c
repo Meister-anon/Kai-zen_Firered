@@ -417,8 +417,8 @@ bool8 AreLeadMonEVsMaxedOut(void)
 
 bool8 IsStarterFirstStageInParty(void)
 {
-    u16 species = GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
-    u8 partyCount = CalculatePlayerPartyCount();
+    u16 species = GetStarterSpeciesById(VarGet(VAR_STARTER_MON)); //important ,set for change to starter selection GriffinR recommened I can use callnative functionname 
+    u8 partyCount = CalculatePlayerPartyCount(); //I don't need to change this part
     u8 i;
     for (i = 0; i < partyCount; i++)
     {
@@ -1516,24 +1516,168 @@ void ForcePlayerToStartSurfing(void)
     SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_SURFING);
 }
 
+
+//change this to show return value from arrays.
+//use regional pokemon only
+//will be list of alternative starters, for the most part try keep type relation between each the same.
+//player    rival
+//bulbasaur -> charmander
+//squirtle ->  bulbasaur
+//charmander -> squirtle
+
+#define LIST_END 0xFFFF
+
+u16 sBulbasaurBall[] = {
+    SPECIES_BULBASAUR,
+    SPECIES_CHIKORITA,
+    SPECIES_TREECKO,
+    SPECIES_AIPOM,
+    SPECIES_PARAS,
+    SPECIES_VULPIX_ALOLAN,
+    SPECIES_TYROGUE,
+    SPECIES_EEVEE,
+    SPECIES_MAGNEMITE,
+    SPECIES_SCYTHER,
+    SPECIES_ODDISH,
+    SPECIES_SWINUB,
+    SPECIES_SKITTY,
+    LIST_END
+};
+
+u16 sSquirtleBall[] = {
+    SPECIES_SQUIRTLE,
+    SPECIES_TOTODILE,
+    SPECIES_MUDKIP,
+    SPECIES_CORSOLA,
+    SPECIES_EEVEE,
+    SPECIES_TOGEPI,
+    SPECIES_RALTS,
+    SPECIES_AZURILL,
+    SPECIES_MISDREAVUS,
+    SPECIES_SANDSHREW,
+    SPECIES_WOOPER,
+    SPECIES_WAILMER,
+    SPECIES_SPHEAL,
+    LIST_END
+};
+
+u16 sCharmanderBall[] = {
+    SPECIES_CHARMANDER,
+    SPECIES_CYNDAQUIL,
+    SPECIES_TORCHIC,
+    SPECIES_GLIGAR,
+    SPECIES_CASTFORM,
+    SPECIES_EEVEE,
+    SPECIES_MURKROW,
+    SPECIES_PONYTA,
+    SPECIES_TEDDIURSA,
+    SPECIES_MILTANK,
+    SPECIES_SABLEYE,
+    SPECIES_DODUO,
+    SPECIES_HOUNDOUR,
+    LIST_END
+};
+
+
 static const u16 sStarterSpecies[] = { //ok didn't realize changing starter species was this simple and I didn't need a script but wtvr.
     // but looking at this gives me idea for setting up the other thing I wanted, if I use switch cases to include multiple pokemon on same idea, with random chance.
-    SPECIES_BULBASAUR,// then I can have multiple options so each playthrough the mon in the pokeball is different, 
-    SPECIES_SQUIRTLE, //not sure if that change needs to be HERE or with the VAR_STARTER_MON from getstarterspecies down below..
+   // then I can have multiple options so each playthrough the mon in the pokeball is different, 
+    //not sure if that change needs to be HERE or with the VAR_STARTER_MON from getstarterspecies down below..
+
+    SPECIES_BULBASAUR,
+    SPECIES_SQUIRTLE, 
     SPECIES_CHARMANDER
 };//maybe could do something like form_species_table_pointers file where spcies = another table, which can be an array of different species?
 //if I can get to that point, I just need to make it chose a value within that array, with random % n (where n will be size of array)
 
-static u16 GetStarterSpeciesById(u16 idx)
+/*static const u16 sNewStarterSet[] = {
+    sBulbasaurBall,
+    sSquirtleBall,
+    sCharmanderBall
+};*/ //will test this after I get main thing working, I think I can get this to work like the original thing but asign based on list.
+
+static u16 GetStarterSpeciesById(u16 idx) //adjusted this to make sure the roamer gets set
 {
+    u16 i;
     if (idx >= NELEMS(sStarterSpecies))
         idx = 0;
     return sStarterSpecies[idx];
-}
+    
+    /*if (idx >= NELEMS(sBulbasaurBall)) //may neeed to put [i] in these
+        idx = 0;
+    return sBulbasaurBall[idx];
+    
+   if (idx >= NELEMS(sSquirtleBall))
+        idx = 0;
+    return sSquirtleBall[idx];
+    
+    if (idx >= NELEMS(sCharmanderBall))
+        idx = 0;
+    return sCharmanderBall[idx];*/
+} //this shouldbe good
 
-u16 GetStarterSpecies(void) //this seems to just be used for the name
+u16 GetStarterSpecies(void) //this is just used for the roamer,
 {
     return GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
+}
+
+//set function for putting starter species from array to var for player starter species. here.
+
+//second function to be used for rival. since var isn't temp, should keep value whole game, so can probaby put in place of species 
+//in  trainer party for all rival battles.    // USE CanMultiTask in bs_commands.c as template for how to make array assign to value.
+
+//Since I have a different array for each ball, I'm going to need 3 different functions to assign the player and rival var for each ball.
+//actually I think I need a function for player and another set for rival.
+
+u16 SetPlayerBulbasaurBall(void)
+{
+    u16 i = Random() % 13; //return value between 0-13 to match 13 value array
+    if (sBulbasaurBall[i] != LIST_END)
+        VarSet(VAR_PLAYER_STARTER, sBulbasaurBall[i]);
+    //return  VAR_PLAYER_STARTER;
+    
+}
+
+u16 SetPlayerSquirtleBall(void)
+{
+    u16 i = Random() % 13; //return value between 0-13 to match 13 value array  
+    if (sSquirtleBall[i] != LIST_END)
+        VarSet(VAR_PLAYER_STARTER, sSquirtleBall[i]);
+    //return  VAR_PLAYER_STARTER;
+    
+} //changed to % 13 to return 0-12 since array value was counting from 1, so would need to be 1 less.
+
+u16 SetPlayerCharmanderBall(void)
+{
+    u16 i = Random() % 13; //return value between 0-13 to match 13 value array
+    if (sCharmanderBall[i] != LIST_END)
+        VarSet(VAR_PLAYER_STARTER, sCharmanderBall[i]);
+    //return  VAR_PLAYER_STARTER;
+    
+}
+
+u16 SetRivalBulbasaurBall(void) //these hold the rival choices, for when the player chooses this ball. i.e when player choose bulb, this is rival choice
+{
+    u16 j = Random() % 13; ///for rival
+    if (sCharmanderBall[j] != LIST_END)
+        VarSet(VAR_RIVAL_STARTER, sCharmanderBall[j]);
+    //return VAR_RIVAL_STARTER;
+}
+
+u16 SetRivalSquirtleBall(void) //when player choose squirtle ball, this is rival choice
+{
+    u16 j = Random() % 13; //for rival
+    if (sBulbasaurBall[j] != LIST_END)
+        VarSet(VAR_RIVAL_STARTER, sBulbasaurBall[j]);
+    //return VAR_RIVAL_STARTER;
+}
+
+u16 SetRivalCharmanderBall(void) //when player choose charmander ball, this is rival choice
+{
+    u16 j = Random() % 13; // for rival
+    if (sSquirtleBall[j] != LIST_END)
+        VarSet(VAR_RIVAL_STARTER, sSquirtleBall[j]);
+    //return VAR_RIVAL_STARTER;
 }
 
 void SetSeenMon(void)
