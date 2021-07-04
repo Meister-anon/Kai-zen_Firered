@@ -1525,9 +1525,10 @@ void ForcePlayerToStartSurfing(void)
 //squirtle ->  bulbasaur
 //charmander -> squirtle
 
-#define LIST_END 0xFFFF
+//#define LIST_END 0xFFFF   //since I'm not doing a loop, I don't really need List_End, just need to match my random function to number of values 
+//couting first list value as 0. Need to use random percent equal to value shown when hovering over array.
 
-u16 sBulbasaurBall[] = {
+const u16 sBulbasaurBall[] = {
     SPECIES_BULBASAUR,
     SPECIES_CHIKORITA,
     SPECIES_TREECKO,
@@ -1540,11 +1541,11 @@ u16 sBulbasaurBall[] = {
     SPECIES_SCYTHER,
     SPECIES_ODDISH,
     SPECIES_SWINUB,
-    SPECIES_SKITTY,
-    LIST_END
+    SPECIES_SKITTY
+    //LIST_END
 };
 
-u16 sSquirtleBall[] = {
+const u16 sSquirtleBall[] = {
     SPECIES_SQUIRTLE,
     SPECIES_TOTODILE,
     SPECIES_MUDKIP,
@@ -1557,11 +1558,11 @@ u16 sSquirtleBall[] = {
     SPECIES_SANDSHREW,
     SPECIES_WOOPER,
     SPECIES_WAILMER,
-    SPECIES_SPHEAL,
-    LIST_END
+    SPECIES_SPHEAL
+    //LIST_END
 };
 
-u16 sCharmanderBall[] = {
+const u16 sCharmanderBall[] = {
     SPECIES_CHARMANDER,
     SPECIES_CYNDAQUIL,
     SPECIES_TORCHIC,
@@ -1574,8 +1575,8 @@ u16 sCharmanderBall[] = {
     SPECIES_MILTANK,
     SPECIES_SABLEYE,
     SPECIES_DODUO,
-    SPECIES_HOUNDOUR,
-    LIST_END
+    SPECIES_HOUNDOUR
+    //LIST_END
 };
 
 
@@ -1629,55 +1630,85 @@ u16 GetStarterSpecies(void) //this is just used for the roamer,
 //Since I have a different array for each ball, I'm going to need 3 different functions to assign the player and rival var for each ball.
 //actually I think I need a function for player and another set for rival.
 
-u16 SetPlayerBulbasaurBall(void)
+void SetPlayerBulbasaurBall(void) //OK GriffinR again with the save, helped me adjust my array and function values. it builds about to test.
 {
-    u16 i = Random() % 13; //return value between 0-13 to match 13 value array
-    if (sBulbasaurBall[i] != LIST_END)
-        VarSet(VAR_PLAYER_STARTER, sBulbasaurBall[i]);
+    //u16 i = Random() % 13; //return value between 0-13 to match 13 value array
+    //if (sBulbasaurBall[i] != LIST_END)
+    if (FlagGet(FLAG_DECLINED_STARTER_CHOICE))
+        VarSet(VAR_TEMP_2, VAR_PLAYER_PASS);
+    else
+        VarSet(VAR_PLAYER_STARTER, sBulbasaurBall[Random() % 13]);
+        
     //return  VAR_PLAYER_STARTER;
     
 }
 
-u16 SetPlayerSquirtleBall(void)
+void SetPlayerSquirtleBall(void)
 {
-    u16 i = Random() % 13; //return value between 0-13 to match 13 value array  
-    if (sSquirtleBall[i] != LIST_END)
-        VarSet(VAR_PLAYER_STARTER, sSquirtleBall[i]);
+    //u16 i = Random() % 13; //return value between 0-13 to match 13 value array  
+    //if (sSquirtleBall[i] != LIST_END)
+    if (FlagGet(FLAG_DECLINED_STARTER_CHOICE))
+        VarSet(VAR_TEMP_2, VAR_PLAYER_PASS);
+    else
+        VarSet(VAR_PLAYER_STARTER, sSquirtleBall[Random() % 13]);
     //return  VAR_PLAYER_STARTER;
     
 } //changed to % 13 to return 0-12 since array value was counting from 1, so would need to be 1 less.
 
-u16 SetPlayerCharmanderBall(void)
+void SetPlayerCharmanderBall(void)
 {
-    u16 i = Random() % 13; //return value between 0-13 to match 13 value array
-    if (sCharmanderBall[i] != LIST_END)
-        VarSet(VAR_PLAYER_STARTER, sCharmanderBall[i]);
+    //u16 i = Random() % 13; //return value between 0-13 to match 13 value array
+    //if (sCharmanderBall[i] != LIST_END)
+    if (FlagGet(FLAG_DECLINED_STARTER_CHOICE))
+        VarSet(VAR_TEMP_2, VAR_PLAYER_PASS);
+    else
+        VarSet(VAR_PLAYER_STARTER, sCharmanderBall[Random() % 13]);
     //return  VAR_PLAYER_STARTER;
     
 }
 
-u16 SetRivalBulbasaurBall(void) //these hold the rival choices, for when the player chooses this ball. i.e when player choose bulb, this is rival choice
+void SetRivalBulbasaurBall(void) //these hold the rival choices, for when the player chooses this ball. i.e when player choose bulb, this is rival choice
 {
-    u16 j = Random() % 13; ///for rival
-    if (sCharmanderBall[j] != LIST_END)
-        VarSet(VAR_RIVAL_STARTER, sCharmanderBall[j]);
+    //u16 j = Random() % 13; ///for rival
+    //if (sCharmanderBall[j] != LIST_END)
+    if (FlagGet(FLAG_DECLINED_STARTER_CHOICE))
+        VarSet(VAR_TEMP_3, VAR_RIVAL_PASS);
+    else
+        VarSet(VAR_RIVAL_STARTER, sCharmanderBall[Random() % 13]);
     //return VAR_RIVAL_STARTER;
 }
 
-u16 SetRivalSquirtleBall(void) //when player choose squirtle ball, this is rival choice
+void SetRivalSquirtleBall(void) //when player choose squirtle ball, this is rival choice
 {
-    u16 j = Random() % 13; //for rival
-    if (sBulbasaurBall[j] != LIST_END)
-        VarSet(VAR_RIVAL_STARTER, sBulbasaurBall[j]);
+    //u16 j = Random() % 13; //for rival
+    //if (sBulbasaurBall[j] != LIST_END)
+    if (FlagGet(FLAG_DECLINED_STARTER_CHOICE))
+        VarSet(VAR_TEMP_3, VAR_RIVAL_PASS);
+    else
+        VarSet(VAR_RIVAL_STARTER, sBulbasaurBall[Random() % 13]);
     //return VAR_RIVAL_STARTER;
 }
 
-u16 SetRivalCharmanderBall(void) //when player choose charmander ball, this is rival choice
+void SetRivalCharmanderBall(void) //when player choose charmander ball, this is rival choice
 {
-    u16 j = Random() % 13; // for rival
-    if (sSquirtleBall[j] != LIST_END)
-        VarSet(VAR_RIVAL_STARTER, sSquirtleBall[j]);
+    //u16 j = Random() % 13; // for rival
+    //if (sSquirtleBall[j] != LIST_END)
+    if (FlagGet(FLAG_DECLINED_STARTER_CHOICE))
+        VarSet(VAR_TEMP_3, VAR_RIVAL_PASS);
+    else
+        VarSet(VAR_RIVAL_STARTER, sSquirtleBall[Random() % 13]);
     //return VAR_RIVAL_STARTER;
+} //using 2 VarSets doesn't work because its just replacing with the same var not writing it to the other var,  I think...
+//may need to make a copyvar since seems command doesn't exist.
+
+void PlayerPassVar(void)
+{
+    VarSet(VAR_PLAYER_PASS, VAR_PLAYER_STARTER);
+}
+
+void RivalPassVar(void)
+{
+    VarSet(VAR_RIVAL_PASS, VAR_RIVAL_STARTER);
 }
 
 void SetSeenMon(void)

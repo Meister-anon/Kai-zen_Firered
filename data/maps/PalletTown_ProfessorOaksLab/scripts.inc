@@ -1155,8 +1155,8 @@ PalletTown_ProfessorOaksLab_EventScript_BulbasaurBall:: @ 8169BAB
 	lock
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 0
-	setvar PLAYER_STARTER_SPECIES, SPECIES_VULPIX_ALOLAN
-	setvar RIVAL_STARTER_SPECIES, SPECIES_CHARMANDER
+	callnative SetPlayerBulbasaurBall
+	callnative SetRivalBulbasaurBall
 	setvar RIVAL_STARTER_ID, LOCALID_CHARMANDER_BALL
 	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3
 	goto_if_ge PalletTown_ProfessorOaksLab_EventScript_LastPokeBall
@@ -1169,7 +1169,7 @@ PalletTown_ProfessorOaksLab_EventScript_BulbasaurBall:: @ 8169BAB
 PalletTown_ProfessorOaksLab_EventScript_ConfirmStarterChoice:: @ 8169BE1
 	applymovement LOCALID_PROF_OAK, Movement_FaceRight
 	waitmovement 0
-	drawmonpic PLAYER_STARTER_SPECIES, 10, 3
+	drawmonpic VAR_PLAYER_STARTER, 10, 3
 	textcolor 0
 	compare PLAYER_STARTER_NUM, 0
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_ConfirmBulbasaur
@@ -1205,6 +1205,9 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmCharmander:: @ 8169C52
 
 PalletTown_ProfessorOaksLab_EventScript_DeclinedStarter:: @ 8169C71
 	erasemonpic
+	setflag FLAG_DECLINED_STARTER_CHOICE
+	callnative PlayerPassVar
+	callnative RivalPassVar
 	release
 	end
 
@@ -1215,9 +1218,9 @@ PalletTown_ProfessorOaksLab_EventScript_ChoseStarter:: @ 8169C74
 	call EventScript_RestorePrevTextColor
 	setflag FLAG_SYS_POKEMON_GET
 	setflag FLAG_PALLET_LADY_NOT_BLOCKING_SIGN
-	givemon PLAYER_STARTER_SPECIES, 5, ITEM_NONE
+	givemon VAR_PLAYER_STARTER, 5, ITEM_NONE
 	copyvar VAR_STARTER_MON, PLAYER_STARTER_NUM
-	getspeciesname 0, PLAYER_STARTER_SPECIES
+	getspeciesname 0, VAR_PLAYER_STARTER
 	message PalletTown_ProfessorOaksLab_Text_ReceivedMonFromOak
 	waitmessage
 	playfanfare MUS_OBTAIN_KEY_ITEM
@@ -1268,7 +1271,7 @@ PalletTown_ProfessorOaksLab_EventScript_RivalTakesStarter:: @ 8169D2F
 	msgbox PalletTown_ProfessorOaksLab_Text_RivalIllTakeThisOneThen
 	removeobject RIVAL_STARTER_ID
 	textcolor 3
-	getspeciesname 0, RIVAL_STARTER_SPECIES
+	getspeciesname 0, VAR_RIVAL_STARTER
 	message PalletTown_ProfessorOaksLab_Text_RivalReceivedMonFromOak
 	waitmessage
 	playfanfare MUS_OBTAIN_KEY_ITEM
@@ -1314,8 +1317,8 @@ PalletTown_ProfessorOaksLab_EventScript_SquirtleBall:: @ 8169D78
 	lock
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 1
-	setvar PLAYER_STARTER_SPECIES, SPECIES_PARAS
-	setvar RIVAL_STARTER_SPECIES, SPECIES_BULBASAUR
+	callnative SetPlayerSquirtleBall
+	callnative SetRivalSquirtleBall
 	setvar RIVAL_STARTER_ID, LOCALID_BULBASAUR_BALL
 	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3
 	goto_if_ge PalletTown_ProfessorOaksLab_EventScript_LastPokeBall
@@ -1329,8 +1332,8 @@ PalletTown_ProfessorOaksLab_EventScript_CharmanderBall:: @ 8169DAE
 	lock
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 2
-	setvar PLAYER_STARTER_SPECIES, SPECIES_CASTFORM
-	setvar RIVAL_STARTER_SPECIES, SPECIES_SQUIRTLE
+	callnative SetPlayerCharmanderBall
+	callnative SetRivalCharmanderBall
 	setvar RIVAL_STARTER_ID, LOCALID_SQUIRTLE_BALL
 	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3
 	goto_if_ge PalletTown_ProfessorOaksLab_EventScript_LastPokeBall
