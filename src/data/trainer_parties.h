@@ -4340,7 +4340,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalOaksLabSquirt
     {
         .iv = 0,
         .lvl = 5,
-        .species = VAR_RIVAL_STARTER, //this isn't working, it returned an ? pokemon with just struggle.
+        .species = SPECIES_SQUIRTLE,
     },
 };
 
@@ -4348,7 +4348,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalOaksLabBulbas
     {
         .iv = 0,
         .lvl = 5,
-        .species = VAR_RIVAL_STARTER,
+        .species = SPECIES_BULBASAUR,
     },
 };
 
@@ -4356,7 +4356,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalOaksLabCharma
     {
         .iv = 0,
         .lvl = 5,
-        .species = VAR_RIVAL_STARTER,
+        .species = SPECIES_CHARMANDER,
     },
 };
 

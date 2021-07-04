@@ -1597,7 +1597,8 @@ static const u16 sStarterSpecies[] = { //ok didn't realize changing starter spec
     sCharmanderBall
 };*/ //will test this after I get main thing working, I think I can get this to work like the original thing but asign based on list.
 
-static u16 GetStarterSpeciesById(u16 idx) //adjusted this to make sure the roamer gets set
+static u16 GetStarterSpeciesById(u16 idx) //this should work unchanged since its not running based on the actual player starter
+//but the vars set when choosing a pokeball.
 {
     u16 i;
     if (idx >= NELEMS(sStarterSpecies))
@@ -1622,6 +1623,24 @@ u16 GetStarterSpecies(void) //this is just used for the roamer,
     return GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
 }
 
+void SetPlayerRandomStarterSpecies(void)
+{
+    VarSet(VAR_TEMP_5, sBulbasaurBall[Random() % 13]);
+    VarSet(VAR_TEMP_6, sSquirtleBall[Random() % 13]);
+    VarSet(VAR_TEMP_7, sCharmanderBall[Random() % 13]);
+}
+
+void SetRivalRandomStarterSpecies(void)
+{
+    VarSet(VAR_TEMP_8, sCharmanderBall[Random() % 13]);
+    VarSet(VAR_TEMP_9, sBulbasaurBall[Random() % 13]);
+    VarSet(VAR_TEMP_A, sSquirtleBall[Random() % 13]);
+}
+
+
+// comment below is previous code for this dynamic starter feature that I learned from.
+//didn't work but still a lesson.
+
 //set function for putting starter species from array to var for player starter species. here.
 
 //second function to be used for rival. since var isn't temp, should keep value whole game, so can probaby put in place of species 
@@ -1630,7 +1649,10 @@ u16 GetStarterSpecies(void) //this is just used for the roamer,
 //Since I have a different array for each ball, I'm going to need 3 different functions to assign the player and rival var for each ball.
 //actually I think I need a function for player and another set for rival.
 
-void SetPlayerBulbasaurBall(void) //OK GriffinR again with the save, helped me adjust my array and function values. it builds about to test.
+
+
+
+/*void SetPlayerBulbasaurBall(void) //OK GriffinR again with the save, helped me adjust my array and function values. it builds about to test.
 {
     //u16 i = Random() % 13; //return value between 0-13 to match 13 value array
     //if (sBulbasaurBall[i] != LIST_END)
@@ -1764,7 +1786,7 @@ void RivalPassVar2(void)
 {
     if (FlagGet(FLAG_DECLINED_CHARMANDER))
         VarSet(VAR_RIVAL_PASS3, VAR_RIVAL_STARTER);
-}
+}*/
 
 void SetSeenMon(void)
 {

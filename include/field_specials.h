@@ -46,5 +46,7 @@ void PlayerPassVar(void);
 void PlayerPassVar2(void);
 void RivalPassVar(void);
 void RivalPassVar2(void);
+void SetPlayerRandomStarterSpecies(void);
+void SetRivalRandomStarterSpecies(void);
 
 #endif // GUARD_FIELD_SPECIALS_H
