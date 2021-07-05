@@ -1270,7 +1270,7 @@ PalletTown_ProfessorOaksLab_EventScript_RivalTakesStarter:: @ 8169D2F
 	msgbox PalletTown_ProfessorOaksLab_Text_RivalIllTakeThisOneThen
 	removeobject RIVAL_STARTER_ID
 	textcolor 3
-	getspeciesname 0, RIVAL_STARTER_SPECIES
+	getspeciesname 0, VAR_RIVAL_STARTER
 	message PalletTown_ProfessorOaksLab_Text_RivalReceivedMonFromOak
 	waitmessage
 	playfanfare MUS_OBTAIN_KEY_ITEM
