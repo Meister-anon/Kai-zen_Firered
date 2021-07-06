@@ -1878,11 +1878,13 @@ static void atk07_adjustnormaldamage(void)
      && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage)
     {
         gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
-        if (gProtectStructs[gBattlerTarget].endured)
+        if (gProtectStructs[gBattlerTarget].endured
+            && gMultiHitCounter == 0) //should work but change lateer tothe one where decrement is 0. --gmultihit something like that.
         {
-            gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED;
+            gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED; //and don't forget sturdy
         }
-        else if (gSpecialStatuses[gBattlerTarget].focusBanded)
+        else if (gSpecialStatuses[gBattlerTarget].focusBanded
+            && gMultiHitCounter == 0)
         {
             gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
             gLastUsedItem = gBattleMons[gBattlerTarget].item;

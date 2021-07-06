@@ -1561,37 +1561,6 @@ bool8 IsRivalBattle(u16 trainerNum)
         return FALSE;
 }
 
-const u16 sRivalBattles[] = {
-    TRAINER_RIVAL_OAKS_LAB_SQUIRTLE,
-    TRAINER_RIVAL_OAKS_LAB_BULBASAUR,
-    TRAINER_RIVAL_OAKS_LAB_CHARMANDER,
-    TRAINER_RIVAL_ROUTE22_EARLY_SQUIRTLE,
-    TRAINER_RIVAL_ROUTE22_EARLY_BULBASAUR,
-    TRAINER_RIVAL_ROUTE22_EARLY_CHARMANDER,
-    TRAINER_RIVAL_CERULEAN_SQUIRTLE,
-    TRAINER_RIVAL_CERULEAN_BULBASAUR,
-    TRAINER_RIVAL_CERULEAN_CHARMANDER,
-    TRAINER_RIVAL_SS_ANNE_SQUIRTLE,
-    TRAINER_RIVAL_SS_ANNE_BULBASAUR,
-    TRAINER_RIVAL_SS_ANNE_CHARMANDER,
-    TRAINER_RIVAL_POKENON_TOWER_SQUIRTLE,
-    TRAINER_RIVAL_POKENON_TOWER_BULBASAUR,
-    TRAINER_RIVAL_POKENON_TOWER_CHARMANDER,
-    TRAINER_RIVAL_SILPH_SQUIRTLE,
-    TRAINER_RIVAL_SILPH_BULBASAUR,
-    TRAINER_RIVAL_SILPH_CHARMANDER,
-    TRAINER_RIVAL_ROUTE22_LATE_SQUIRTLE,
-    TRAINER_RIVAL_ROUTE22_LATE_BULBASAUR,
-    TRAINER_RIVAL_ROUTE22_LATE_CHARMANDER,
-    TRAINER_CHAMPION_FIRST_SQUIRTLE,
-    TRAINER_CHAMPION_FIRST_BULBASAUR,
-    TRAINER_CHAMPION_FIRST_CHARMANDER,
-    TRAINER_CHAMPION_REMATCH_SQUIRTLE,
-    TRAINER_CHAMPION_REMATCH_CHARMANDER,
-    TRAINER_CHAMPION_REMATCH_BULBASAUR
-};
-
-
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 {
     u32 nameHash = 0;
@@ -1637,22 +1606,22 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 break; //&party[i] checks mon slot.   next one checks species for that slot
             }
-            case F_TRAINER_PARTY_CUSTOM_MOVESET:
-            {
+            case F_TRAINER_PARTY_CUSTOM_MOVESET: //could probably get custom moves working with same trick as above but going to a different array
+            { //but that can probably better be solved by getting my smart learnsets up and running
                 const struct TrainerMonNoItemCustomMoves *partyData = gTrainers[trainerNum].party.NoItemCustomMoves;
-                if (IsRivalBattle(trainerNum) && i == gTrainers[trainerNum].partySize - 1)
+                /*if (IsRivalBattle(trainerNum) && i == gTrainers[trainerNum].partySize - 1)
                 {
                     species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
 
                 }
                 else
-                    species = partyData[i].species;
+                    species = partyData[i].species;*/
 
-                for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
-                    nameHash += gSpeciesNames[species][j];
+                for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j)
+                    nameHash += gSpeciesNames[partyData[i].species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 for (j = 0; j < MAX_MON_MOVES; ++j)
                 {
                     SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
@@ -1683,19 +1652,19 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
             {
                 const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerNum].party.ItemCustomMoves;
-                if (IsRivalBattle(trainerNum) && i == gTrainers[trainerNum].partySize - 1)
+                /*if (IsRivalBattle(trainerNum) && i == gTrainers[trainerNum].partySize - 1)
                 {
                     species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
 
                 }
                 else
-                    species = partyData[i].species;
+                    species = partyData[i].species;*/
 
-                for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
-                    nameHash += gSpeciesNames[species][j];
+                for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j)
+                    nameHash += gSpeciesNames[partyData[i].species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
                 for (j = 0; j < MAX_MON_MOVES; ++j)
                 {
