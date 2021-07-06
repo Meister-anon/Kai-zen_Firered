@@ -306,6 +306,7 @@
 #define VAR_0x40FE                 0x40FE
 #define VAR_0x40FF                 0x40FF
 #define VAR_RIVAL_STARTER		   0x4100 //use rival starter species
+#define VAR_RIVAL_STARTER_ID	   0x4101 //use to check which ball rival took
 
 
 
