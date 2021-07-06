@@ -1579,6 +1579,8 @@ const u16 sCharmanderBall[] = {
     //LIST_END
 };
 
+//setup define for nuber of starters, to plug in for in place of % n
+//right now value matches hover over value for array, so count of values in array should be able to make things more efficient.
 
 static const u16 sStarterSpecies[] = { //ok didn't realize changing starter species was this simple and I didn't need a script but wtvr.
     // but looking at this gives me idea for setting up the other thing I wanted, if I use switch cases to include multiple pokemon on same idea, with random chance.
@@ -1591,11 +1593,6 @@ static const u16 sStarterSpecies[] = { //ok didn't realize changing starter spec
 };//maybe could do something like form_species_table_pointers file where spcies = another table, which can be an array of different species?
 //if I can get to that point, I just need to make it chose a value within that array, with random % n (where n will be size of array)
 
-/*static const u16 sNewStarterSet[] = {
-    sBulbasaurBall,
-    sSquirtleBall,
-    sCharmanderBall
-};*/ //will test this after I get main thing working, I think I can get this to work like the original thing but asign based on list.
 
 static u16 GetStarterSpeciesById(u16 idx) //this should work unchanged since its not running based on the actual player starter
 //but the vars set when choosing a pokeball.

@@ -1591,10 +1591,30 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case 0:
             {
                 const struct TrainerMonNoItemDefaultMoves *partyData = gTrainers[trainerNum].party.NoItemDefaultMoves;
-                if (IsRivalBattle(trainerNum) && i == gTrainers[trainerNum].partySize - 1)
+                if (IsRivalBattle(trainerNum)) // && i == gTrainers[trainerNum].partySize - 1) //probably go back & make a nested function based on the species
+                    //of the starter in trainer_parties, it may need to be constant so instead of a variable I'll use a define like weather_hail but for starter 
+                    //to set teh species checks it'll be partyData[i].species == StarterEvo_0  up to StarterEvo_2 for last evolution
+                    //if species can't evolve target species will be species
                 {
-                    species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
-
+                    if (partyData[i].species == SPECIES_BULBASAUR
+                        || partyData[i].species == SPECIES_SQUIRTLE
+                        || partyData[i].species == SPECIES_CHARMANDER)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
+                    }
+                   else if (partyData[i].species == SPECIES_IVYSAUR
+                        || partyData[i].species == SPECIES_WARTORTLE
+                        || partyData[i].species == SPECIES_CHARMELEON)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //check first evo 
+                        //if evolution branches preferrably pick the one with type advantage to player starter
+                    }
+                   else if (partyData[i].species == SPECIES_VENUSAUR
+                        || partyData[i].species == SPECIES_BLASTOISE
+                        || partyData[i].species == SPECIES_CHARIZARD)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //check 2nd evo
+                    }
                 }
                 else
                     species = partyData[i].species;
@@ -1609,33 +1629,71 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case F_TRAINER_PARTY_CUSTOM_MOVESET: //could probably get custom moves working with same trick as above but going to a different array
             { //but that can probably better be solved by getting my smart learnsets up and running
                 const struct TrainerMonNoItemCustomMoves *partyData = gTrainers[trainerNum].party.NoItemCustomMoves;
-                /*if (IsRivalBattle(trainerNum) && i == gTrainers[trainerNum].partySize - 1)
+                if (IsRivalBattle(trainerNum))
                 {
-                    species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
-
+                    if (partyData[i].species == SPECIES_BULBASAUR
+                        || partyData[i].species == SPECIES_SQUIRTLE
+                        || partyData[i].species == SPECIES_CHARMANDER)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
+                    }
+                   else if (partyData[i].species == SPECIES_IVYSAUR
+                        || partyData[i].species == SPECIES_WARTORTLE
+                        || partyData[i].species == SPECIES_CHARMELEON)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //check first evo 
+                        //if evolution branches preferrably pick the one with type advantage to player starter
+                    }
+                   else if (partyData[i].species == SPECIES_VENUSAUR
+                        || partyData[i].species == SPECIES_BLASTOISE
+                        || partyData[i].species == SPECIES_CHARIZARD)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //check 2nd evo
+                    }
                 }
                 else
-                    species = partyData[i].species;*/
+                    species = partyData[i].species;
 
-                for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j)
-                    nameHash += gSpeciesNames[partyData[i].species][j];
+                for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
+                    nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 for (j = 0; j < MAX_MON_MOVES; ++j)
+                    if (partyData[i].moves[j] != MOVE_NONE) //hopefully this'll do what I want. set to default moves, if mon has none set
                 {
-                    SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
-                    SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp);
+                    SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]); //actually I need custom moves, otherwise its not a good base
+                    SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp); //so I need a way to change how this works
                 }
-                break;
+                break; //like custom moves for some, but if its blank just give them default moves.  I think it defaults to 0, if nothing is there.
+                //so making it break if move is move_none should let it default to normal learnset.?
+
+                //note, to change battle type, i.e custom moves no item, etc. need to change trainer.h & trainer_parties.h files
             }
             case F_TRAINER_PARTY_HELD_ITEM:
             {
                 const struct TrainerMonItemDefaultMoves *partyData = gTrainers[trainerNum].party.ItemDefaultMoves;
-                if (IsRivalBattle(trainerNum) && i == gTrainers[trainerNum].partySize - 1)
+                if (IsRivalBattle(trainerNum))
                 {
-                    species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
-
+                    if (partyData[i].species == SPECIES_BULBASAUR
+                        || partyData[i].species == SPECIES_SQUIRTLE
+                        || partyData[i].species == SPECIES_CHARMANDER)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
+                    }
+                   else if (partyData[i].species == SPECIES_IVYSAUR
+                        || partyData[i].species == SPECIES_WARTORTLE
+                        || partyData[i].species == SPECIES_CHARMELEON)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //check first evo 
+                        //if evolution branches preferrably pick the one with type advantage to player starter
+                    }
+                   else if (partyData[i].species == SPECIES_VENUSAUR
+                        || partyData[i].species == SPECIES_BLASTOISE
+                        || partyData[i].species == SPECIES_CHARIZARD)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //check 2nd evo
+                    }
                 }
                 else
                     species = partyData[i].species;
@@ -1652,21 +1710,39 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
             {
                 const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerNum].party.ItemCustomMoves;
-                /*if (IsRivalBattle(trainerNum) && i == gTrainers[trainerNum].partySize - 1)
+                if (IsRivalBattle(trainerNum))
                 {
-                    species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
-
+                    if (partyData[i].species == SPECIES_BULBASAUR
+                        || partyData[i].species == SPECIES_SQUIRTLE
+                        || partyData[i].species == SPECIES_CHARMANDER)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
+                    }
+                   else if (partyData[i].species == SPECIES_IVYSAUR
+                        || partyData[i].species == SPECIES_WARTORTLE
+                        || partyData[i].species == SPECIES_CHARMELEON)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //check first evo 
+                        //if evolution branches preferrably pick the one with type advantage to player starter
+                    }
+                   else if (partyData[i].species == SPECIES_VENUSAUR
+                        || partyData[i].species == SPECIES_BLASTOISE
+                        || partyData[i].species == SPECIES_CHARIZARD)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //check 2nd evo
+                    }
                 }
                 else
-                    species = partyData[i].species;*/
+                    species = partyData[i].species;
 
-                for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j)
-                    nameHash += gSpeciesNames[partyData[i].species][j];
+                for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
+                    nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
                 for (j = 0; j < MAX_MON_MOVES; ++j)
+                    if (partyData[i].moves[j] != MOVE_NONE)
                 {
                     SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
                     SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp);
