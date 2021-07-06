@@ -4382,12 +4382,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_CHIKORITA] =
     {
-        .baseHP = 45,
+        .baseHP = 55,
         .baseAttack = 49,
         .baseDefense = 65,
         .baseSpeed = 45,
         .baseSpAttack = 49,
-        .baseSpDefense = 65,
+        .baseSpDefense = 75,
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
         .catchRate = 45,
@@ -4409,12 +4409,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_BAYLEEF] =
     {
-        .baseHP = 60,
-        .baseAttack = 62,
+        .baseHP = 75,
+        .baseAttack = 57,
         .baseDefense = 80,
         .baseSpeed = 60,
         .baseSpAttack = 63,
-        .baseSpDefense = 80,
+        .baseSpDefense = 95,
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
         .catchRate = 45,
@@ -4437,12 +4437,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_MEGANIUM] =
     {
-        .baseHP = 80,
-        .baseAttack = 82,
+        .baseHP = 100,
+        .baseAttack = 72,
         .baseDefense = 100,
         .baseSpeed = 80,
         .baseSpAttack = 83,
-        .baseSpDefense = 100,
+        .baseSpDefense = 133,
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
         .catchRate = 45,
