@@ -5771,7 +5771,8 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
         level = GetMonData(mon, MON_DATA_LEVEL, 0);
         friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
 
-        for (i = 0; i < 5; i++)
+        for (i = 0; i < EVOS_PER_MON; i++) //may need change, think this is looping based on previous num evolutions this is 5 options
+            //which was old evos per mon I may need change to 16   yup that is the case
         {
             switch (gEvolutionTable[species][i].method)
             {
@@ -5833,7 +5834,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
         }
         break;
     case EVO_MODE_TRADE:
-        for (i = 0; i < 5; i++)
+        for (i = 0; i < EVOS_PER_MON; i++)
         {
             switch (gEvolutionTable[species][i].method)
             {
@@ -5857,7 +5858,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
         break;
     case EVO_MODE_ITEM_USE:
     case EVO_MODE_ITEM_CHECK:
-        for (i = 0; i < 5; i++)
+        for (i = 0; i < EVOS_PER_MON; i++)
         {
             if (gEvolutionTable[species][i].method == EVO_ITEM
              && gEvolutionTable[species][i].param == evolutionItem)

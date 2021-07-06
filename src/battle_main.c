@@ -1568,6 +1568,8 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
     u8 fixedIV; //figure how to set personality for individual pokemon, or at least set their ability
     u16 species;
     s32 i, j;
+    int l = 0;
+    u16 targetSpecies = 0;
 
     if (trainerNum == TRAINER_SECRET_BASE)
         return 0;
@@ -1600,20 +1602,43 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         || partyData[i].species == SPECIES_SQUIRTLE
                         || partyData[i].species == SPECIES_CHARMANDER)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
+                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter
+                        VarSet(VAR_RIVAL_EVO, 0);
                     }
                    else if (partyData[i].species == SPECIES_IVYSAUR
                         || partyData[i].species == SPECIES_WARTORTLE
                         || partyData[i].species == SPECIES_CHARMELEON)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //check first evo 
-                        //if evolution branches preferrably pick the one with type advantage to player starter
+                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO)) 
+                        {
+                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, targetSpecies);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
+                            
+                        }
+                        //check first evo 
+                        //if evolution branches preferrably pick the one with type advantage to player starter,
+                        //to do this realize I need another var to hold player starter, and use basestates type (playervar) to check its type
+                        //to help ai pick evolution     actually only eevee has branch evo
                     }
                    else if (partyData[i].species == SPECIES_VENUSAUR
                         || partyData[i].species == SPECIES_BLASTOISE
                         || partyData[i].species == SPECIES_CHARIZARD)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //check 2nd evo
+                        if (VarGet(VAR_RIVAL_STARTER) == VarGet(VAR_RIVAL_EVO))
+                        {
+                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, 0);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
+                        }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
                     }
                 }
                 else

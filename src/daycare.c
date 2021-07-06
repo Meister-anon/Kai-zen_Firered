@@ -644,7 +644,7 @@ static void ClearAllDaycareData(struct DayCare *daycare)
 static u16 GetEggSpecies(u16 species) //ok what I'll do is add my breeding table call in,
 //in place of j bein
 {
-    int i, j, k, b, a, d;
+    int i, j, k, b, a, d; //b a d were added by me, I beleive to keep track of alt forms
     bool8 found;
 
     // Working backwards up to 5 times seems arbitrary, since the maximum number

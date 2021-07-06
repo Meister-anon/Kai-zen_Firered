@@ -4340,7 +4340,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalOaksLabSquirt
     {
         .iv = 0,
         .lvl = 5,
-        .species = SPECIES_SQUIRTLE,
+        .species = SPECIES_WARTORTLE,
     },
 };
 
@@ -4348,7 +4348,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalOaksLabBulbas
     {
         .iv = 0,
         .lvl = 5,
-        .species = SPECIES_BULBASAUR,
+        .species = SPECIES_IVYSAUR,
     },
 };
 
@@ -4356,7 +4356,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalOaksLabCharma
     {
         .iv = 0,
         .lvl = 5,
-        .species = SPECIES_CHARMANDER,
+        .species = SPECIES_CHARMELEON,
     },
 };
 

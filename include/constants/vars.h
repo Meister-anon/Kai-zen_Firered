@@ -306,8 +306,11 @@
 #define VAR_0x40FE                 0x40FE
 #define VAR_0x40FF                 0x40FF
 #define VAR_RIVAL_STARTER		   0x4100 //use rival starter species
-#define VAR_RIVAL_STARTER_ID	   0x4101 //use to check which ball rival took
+#define VAR_RIVAL_EVO			   0x4101 //use rival starter Evolution
+#define VAR_PLAYER_STARTER		   0x4102 //use to hold player starter for rival branch evo check (pretty much just eevee)  not using right now
 
+//actually may not need since game already keeps track of player starter with the roamer check
+//so instead of really complex evo ai, I'll try to just block rival eevee from doing certain evolutions based on player starter group
 
 
 
