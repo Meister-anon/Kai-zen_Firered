@@ -2551,6 +2551,8 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
 { //because its in above function, though it says box, its actually for wild/all pokemon
     u8 speciesName[POKEMON_NAME_LENGTH + 1];
     u32 personality;
+    u16 trainerNum;
+    s32 i;
     u32 value;
     u16 checksum;
     u16 odds = Random() % 4;
@@ -2564,6 +2566,19 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
 
     SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
 
+   // u16 trainerNum = 0;
+    //s32 i;
+
+    if (IsRivalBattle(trainerNum))
+    {
+        for (i = 0; i < gTrainers[trainerNum].partySize; ++i)
+            if (i == gTrainers[trainerNum].partySize - 1)
+                species = SPECIES_PIKACHU;
+        GetSpeciesName(speciesName, species);
+        SetBoxMonData(boxMon, MON_DATA_NICKNAME, speciesName);
+        SetBoxMonData(boxMon, MON_DATA_SPECIES, &species);
+        //&& (partyData[i].species == SPECIES_BULBASAUR || partyData[i].species == SPECIES_SQUIRTLE || partyData[i].species == SPECIES_CHARMANDER))
+    }
     //Determine original trainer ID
     if (otIdType == OT_ID_RANDOM_NO_SHINY) //Pokemon cannot be shiny
     {

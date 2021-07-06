@@ -1596,8 +1596,6 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
     u32 nameHash = 0;
     u32 personalityValue; //personality now uses name hash, which is trainer name
     u8 fixedIV; //figure how to set personality for individual pokemon, or at least set their ability
-    u16 starter = (SPECIES_BULBASAUR || SPECIES_SQUIRTLE || SPECIES_CHARMANDER);
-    u16 species;
     s32 i, j;
 
     if (trainerNum == TRAINER_SECRET_BASE)
@@ -1622,14 +1620,14 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case 0:
             {
                 const struct TrainerMonNoItemDefaultMoves *partyData = gTrainers[trainerNum].party.NoItemDefaultMoves;
-                if (IsRivalBattle(trainerNum) && partyData[i].species == starter)
+         
+                if (IsRivalBattle(trainerNum) && i == gTrainers[trainerNum].partySize - 1)
                 {
-                    species = SPECIES_PIKACHU;  //VAR_RIVAL_STARTER
-
+                   
+                    partyData[i].species = SPECIES_PIKACHU;  //VAR_RIVAL_STARTER
+                    
                 }
-                else
-                    species = partyData[i].species;
-
+                
                 for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j) //starting from 0, loops through all the species names until it matches for each slot in party
                     nameHash += gSpeciesNames[partyData[i].species][j];
                 personalityValue += nameHash << 8;
