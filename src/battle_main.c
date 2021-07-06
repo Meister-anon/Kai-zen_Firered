@@ -43,6 +43,7 @@
 #include "constants/pokemon.h"
 #include "constants/songs.h"
 #include "constants/trainer_classes.h"
+#include "constants/opponents.h" //believe trainerNum, should be same as values for opponents in opponents.h since trainer.h is in same order
 
 static void SpriteCB_UnusedDebugSprite(struct Sprite *sprite);
 static void HandleAction_UseMove(void);
@@ -1551,11 +1552,52 @@ static void SpriteCB_UnusedDebugSprite_Step(struct Sprite *sprite)
     }
 }
 
+bool8 IsRivalBattle(u16 trainerNum)
+{
+    u8 trainerClass = gTrainers[trainerNum].trainerClass;
+    if (trainerClass == CLASS_RIVAL || trainerClass == CLASS_RIVAL_2 || trainerClass == CLASS_CHAMPION_2)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+const u16 sRivalBattles[] = {
+    TRAINER_RIVAL_OAKS_LAB_SQUIRTLE,
+    TRAINER_RIVAL_OAKS_LAB_BULBASAUR,
+    TRAINER_RIVAL_OAKS_LAB_CHARMANDER,
+    TRAINER_RIVAL_ROUTE22_EARLY_SQUIRTLE,
+    TRAINER_RIVAL_ROUTE22_EARLY_BULBASAUR,
+    TRAINER_RIVAL_ROUTE22_EARLY_CHARMANDER,
+    TRAINER_RIVAL_CERULEAN_SQUIRTLE,
+    TRAINER_RIVAL_CERULEAN_BULBASAUR,
+    TRAINER_RIVAL_CERULEAN_CHARMANDER,
+    TRAINER_RIVAL_SS_ANNE_SQUIRTLE,
+    TRAINER_RIVAL_SS_ANNE_BULBASAUR,
+    TRAINER_RIVAL_SS_ANNE_CHARMANDER,
+    TRAINER_RIVAL_POKENON_TOWER_SQUIRTLE,
+    TRAINER_RIVAL_POKENON_TOWER_BULBASAUR,
+    TRAINER_RIVAL_POKENON_TOWER_CHARMANDER,
+    TRAINER_RIVAL_SILPH_SQUIRTLE,
+    TRAINER_RIVAL_SILPH_BULBASAUR,
+    TRAINER_RIVAL_SILPH_CHARMANDER,
+    TRAINER_RIVAL_ROUTE22_LATE_SQUIRTLE,
+    TRAINER_RIVAL_ROUTE22_LATE_BULBASAUR,
+    TRAINER_RIVAL_ROUTE22_LATE_CHARMANDER,
+    TRAINER_CHAMPION_FIRST_SQUIRTLE,
+    TRAINER_CHAMPION_FIRST_BULBASAUR,
+    TRAINER_CHAMPION_FIRST_CHARMANDER,
+    TRAINER_CHAMPION_REMATCH_SQUIRTLE,
+    TRAINER_CHAMPION_REMATCH_CHARMANDER,
+    TRAINER_CHAMPION_REMATCH_BULBASAUR
+};
+
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 {
     u32 nameHash = 0;
     u32 personalityValue; //personality now uses name hash, which is trainer name
     u8 fixedIV; //figure how to set personality for individual pokemon, or at least set their ability
+    u16 starter = (SPECIES_BULBASAUR || SPECIES_SQUIRTLE || SPECIES_CHARMANDER);
+    u16 species;
     s32 i, j;
 
     if (trainerNum == TRAINER_SECRET_BASE)
@@ -1580,13 +1622,20 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case 0:
             {
                 const struct TrainerMonNoItemDefaultMoves *partyData = gTrainers[trainerNum].party.NoItemDefaultMoves;
+                if (IsRivalBattle(trainerNum) && partyData[i].species == starter)
+                {
+                    species = SPECIES_PIKACHU;  //VAR_RIVAL_STARTER
 
-                for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j)
+                }
+                else
+                    species = partyData[i].species;
+
+                for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j) //starting from 0, loops through all the species names until it matches for each slot in party
                     nameHash += gSpeciesNames[partyData[i].species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
                 CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
-                break;
+                break; //&party[i] checks mon slot.   next one checks species for that slot
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET:
             {

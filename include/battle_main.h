@@ -96,5 +96,6 @@ void RunBattleScriptCommands(void);
 bool8 TryRunFromBattle(u8 battler);
 s8 GetMovePriority(u8 battlerId, u16 move);
 s8 GetChosenMovePriority(u8 battlerId);
+bool8 IsRivalBattle(u16 trainerNum);
 
 #endif // GUARD_BATTLE_MAIN_H

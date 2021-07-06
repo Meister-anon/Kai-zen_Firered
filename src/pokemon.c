@@ -2545,7 +2545,7 @@ void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFix
     arg = 255;
     SetMonData(mon, MON_DATA_MAIL, &arg);
     CalculateMonStats(mon);
-} //believe used for wild poke generation, and give mons etc.
+} //believe used for wild poke generation, and give mons etc. actually used for all mon, trainer included
 
 void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
 { //because its in above function, though it says box, its actually for wild/all pokemon
@@ -2636,7 +2636,9 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         iv = (value & 0x7C00) >> 10;
         SetBoxMonData(boxMon, MON_DATA_SPDEF_IV, &iv);
     }
-    
+    //just realized because I don't have this in a filter this will also possibly affect trainer pokemon, will need to test,
+    //fight bug catcher at end of viridian forest see if his shedinja ever doesn't have wonder guard.
+
     //from what I can see 2nd hidden ability  seems to be the rarest even before adding random boost.   may boost higher
     if (gBaseStats[species].abilityHidden[1] && odds == 1) //will have if at highest i.e = abilityNum, meaniing all all slots are filled, with else ifs below decreasing by 1.
     {
