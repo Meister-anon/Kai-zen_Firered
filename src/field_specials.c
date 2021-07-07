@@ -1621,7 +1621,7 @@ u16 GetStarterSpecies(void) //this is just used for the roamer,
 }
 
 #define STARTERCOUNT 13
-#define size (sizeof(sBulbasaurBall) / sizeof(u16))
+//#define size (sizeof(sBulbasaurBall) / sizeof(u16))
 //eventually make dynamic so it works off of counting and averaging the arrays essentially  (n + n + n) / 3 = n
 void SetPlayerRandomStarterSpecies(void)
 {
