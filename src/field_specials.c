@@ -1620,18 +1620,21 @@ u16 GetStarterSpecies(void) //this is just used for the roamer,
     return GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
 }
 
+#define STARTERCOUNT 13
+#define size (sizeof(sBulbasaurBall) / sizeof(u16))
+//eventually make dynamic so it works off of counting and averaging the arrays essentially  (n + n + n) / 3 = n
 void SetPlayerRandomStarterSpecies(void)
 {
-    VarSet(VAR_TEMP_5, sBulbasaurBall[Random() % 13]);
-    VarSet(VAR_TEMP_6, sSquirtleBall[Random() % 13]);
-    VarSet(VAR_TEMP_7, sCharmanderBall[Random() % 13]);
+    VarSet(VAR_TEMP_5, sBulbasaurBall[Random() % STARTERCOUNT]);
+    VarSet(VAR_TEMP_6, sSquirtleBall[Random() % STARTERCOUNT]);
+    VarSet(VAR_TEMP_7, sCharmanderBall[Random() % STARTERCOUNT]);
 }
 
 void SetRivalRandomStarterSpecies(void)
 {
-    VarSet(VAR_TEMP_8, sCharmanderBall[Random() % 13]);
-    VarSet(VAR_TEMP_9, sBulbasaurBall[Random() % 13]);
-    VarSet(VAR_TEMP_A, sSquirtleBall[Random() % 13]);
+    VarSet(VAR_TEMP_8, sCharmanderBall[Random() % STARTERCOUNT]);
+    VarSet(VAR_TEMP_9, sBulbasaurBall[Random() % STARTERCOUNT]);
+    VarSet(VAR_TEMP_A, sSquirtleBall[Random() % STARTERCOUNT]);
 }
 
 
