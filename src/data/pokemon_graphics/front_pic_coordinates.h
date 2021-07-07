@@ -208,7 +208,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_ZUBAT] =
     {
         .size = 0x67,
-        .y_offset = 16,
+        .y_offset = 5, //fixed, so weird the lower the number the higher they are...
     },
     [SPECIES_GOLBAT] =
     {

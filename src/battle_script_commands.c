@@ -603,7 +603,7 @@ static const u32 sStatusFlagsForMoveEffects[] =
     STATUS1_BURN,
     STATUS1_FREEZE,
     STATUS1_PARALYSIS,
-    STATUS1_SPIRIT_LOCK,
+   // STATUS1_SPIRIT_LOCK,  //for some reason flinch was doing confusion instead, I can only guess it was this...
     STATUS1_TOXIC_POISON,
     STATUS2_CONFUSION,
     STATUS2_FLINCHED,
