@@ -4680,25 +4680,6 @@ void GetSpeciesName(u8 *name, u16 species)
     name[i] = EOS;
 }
 
-void BufferSpeciesType(u16 species)
-{
-   // s32 i;
-    /*u8 type = 0;
-    u8 type1 = gBaseStats[species].type1;   
-    u8 type2 = gBaseStats[species].type2;
-
-    if (species != SPECIES_NONE)
-    {
-        if (type1 != type2)
-            type = type2;
-
-        if (type1 == type2)
-            type = type1;
-       
-    }
-    return type;*/
-}
-
 u8 CalculatePPWithBonus(u16 move, u8 ppBonuses, u8 moveIndex)
 {
     u8 basePP = gBattleMoves[move].pp;

@@ -1182,6 +1182,8 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmStarterChoice:: @ 8169BE1
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_ConfirmBulbasaur:: @ 8169C14
+	getspeciesname  0, VAR_TEMP_5
+	getspeciestype 1, VAR_TEMP_5
 	msgbox PalletTown_ProfessorOaksLab_Text_OakChoosingBulbasaur, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_ChoseStarter
@@ -1190,6 +1192,8 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmBulbasaur:: @ 8169C14
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_ConfirmSquirtle:: @ 8169C33
+	getspeciesname  0, VAR_TEMP_6
+	getspeciestype 1, VAR_TEMP_6
 	msgbox PalletTown_ProfessorOaksLab_Text_OakChoosingSquirtle, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_ChoseStarter
@@ -1198,6 +1202,8 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmSquirtle:: @ 8169C33
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_ConfirmCharmander:: @ 8169C52
+	getspeciesname  0, VAR_TEMP_7
+	getspeciestype 1, VAR_TEMP_7
 	msgbox PalletTown_ProfessorOaksLab_Text_OakChoosingCharmander, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_ChoseStarter

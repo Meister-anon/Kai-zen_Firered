@@ -101,22 +101,28 @@ PalletTown_ProfessorOaksLab_Text_OakHeyDontGoAwayYet:: @ 818E177
     .string "Don't go away yet!$"
 
 PalletTown_ProfessorOaksLab_Text_OakChoosingCharmander:: @ 818E194
-    .string "Ah! CHARMANDER is your choice.\n"
+   @ .string "Ah! CHARMANDER is your choice.\n"
+    .string "Ah! {STR_VAR_1} is your choice.\n"
     .string "You should raise it patiently.\p"
     .string "So, {PLAYER}, you're claiming the\n"
-    .string "FIRE POKéMON CHARMANDER?$"
+   @ .string "FIRE POKéMON CHARMANDER?$"
+    .string "{STR_VAR_2} POKéMON {STR_VAR_1}?$"
 
 PalletTown_ProfessorOaksLab_Text_OakChoosingSquirtle:: @ 818E207
-    .string "Hm! SQUIRTLE is your choice.\n"
+    @ .string "Hm! SQUIRTLE is your choice.\n"
+    .string "Hm! {STR_VAR_1} is your choice.\n"
     .string "It's one worth raising.\p"
     .string "So, {PLAYER}, you've decided on the\n"
-    .string "WATER POKéMON SQUIRTLE?$"
+    @ .string "WATER POKéMON SQUIRTLE?$"
+    .string "{STR_VAR_2} POKéMON {STR_VAR_1}?$"
 
 PalletTown_ProfessorOaksLab_Text_OakChoosingBulbasaur:: @ 818E272
-    .string "I see! BULBASAUR is your choice.\n"
+    @ .string "I see! BULBASAUR is your choice.\n"
+    .string "I see! {STR_VAR_1} is your choice.\n"
     .string "It's very easy to raise.\p"
     .string "So, {PLAYER}, you want to go with\n"
-    .string "the GRASS POKéMON BULBASAUR?$"
+    @ .string "the GRASS POKéMON BULBASAUR?$"
+    .string "the {STR_VAR_2} POKéMON {STR_VAR_1}?$"
 
 PalletTown_ProfessorOaksLab_Text_OakThisMonIsEnergetic:: @ 818E2E5
     .string "This POKéMON is really quite\n"

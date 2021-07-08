@@ -12,6 +12,8 @@ enum HiddenItemAttr
 };
 
 u8 GetLeadMonIndex(void);
+//extern const u8 gTypeNames[][TYPE_NAME_LENGTH + 1];
+extern const u16 sTypeExceptions[9]; //update this value when adding to the array
 s32 CountDigits(s32 number);
 void TV_PrintIntToStringVar(u8 varidx, s32 number);
 u16 GetStarterSpecies(void);
@@ -42,10 +44,6 @@ void SetPlayerCharmanderBall(void);
 void SetRivalBulbasaurBall(void);
 void SetRivalSquirtleBall(void);
 void SetRivalCharmanderBall(void);
-void PlayerPassVar(void);
-void PlayerPassVar2(void);
-void RivalPassVar(void);
-void RivalPassVar2(void);
 void SetPlayerRandomStarterSpecies(void);
 void SetRivalRandomStarterSpecies(void);
 

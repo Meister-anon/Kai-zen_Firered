@@ -1582,6 +1582,21 @@ const u16 sCharmanderBall[] = {
 //setup define for nuber of starters, to plug in for in place of % n
 //right now value matches hover over value for array, so count of values in array should be able to make things more efficient.
 
+
+//started with entire list step 1, remove mono type, step 2 remove all I want to list as type 1.  keep all I want listed as type 2 in teh script here.
+
+const u16 sTypeExceptions[] = {
+    SPECIES_BULBASAUR,
+    SPECIES_TOGEPI,
+    SPECIES_RALTS,
+    SPECIES_AZURILL,
+    SPECIES_MISDREAVUS,
+    SPECIES_SPHEAL,
+    SPECIES_MURKROW,
+    SPECIES_DODUO,
+    SPECIES_HOUNDOUR
+};
+
 static const u16 sStarterSpecies[] = { //ok didn't realize changing starter species was this simple and I didn't need a script but wtvr.
     // but looking at this gives me idea for setting up the other thing I wanted, if I use switch cases to include multiple pokemon on same idea, with random chance.
    // then I can have multiple options so each playthrough the mon in the pokeball is different, 
@@ -1620,8 +1635,8 @@ u16 GetStarterSpecies(void) //this is just used for the roamer,
     return GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
 }
 
-#define STARTERCOUNT 13
-//#define size (sizeof(sBulbasaurBall) / sizeof(u16))
+#define STARTERCOUNT 13 //(NELEMS(sBulbasaurBall) + NELEMS(sSquirtleBall) + NELEMS(sCharmanderBall)) / 3
+
 //eventually make dynamic so it works off of counting and averaging the arrays essentially  (n + n + n) / 3 = n
 void SetPlayerRandomStarterSpecies(void)
 {
