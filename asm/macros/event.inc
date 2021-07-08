@@ -1446,6 +1446,13 @@
 	.2byte \quantity
 	.endm
 
+	@ Writes the main type of the Pokemon at index species to the specified buffer.
+	.macro getspeciestype out:req, species:req
+	.byte 0xd5
+	.byte \out
+	.2byte \species
+	.endm
+
 
 @ Supplementary
 
