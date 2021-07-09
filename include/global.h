@@ -186,7 +186,8 @@ struct BerryCrush
     u32 unk;
 };*/
 
-#define PLAYER_NAME_LENGTH   7
+#define PLAYER_NAME_LENGTH   7  //remember to test expnading this, see if it
+//throws off the placeholder [player] text.
 /*
 #define LINK_B_RECORDS_COUNT 5
 

@@ -1585,8 +1585,9 @@ const u16 sCharmanderBall[] = {
 
 //started with entire list step 1, remove mono type, step 2 remove all I want to list as type 1.  keep all I want listed as type 2 in teh script here.
 
+//update the definitnion this value when adding to the array
+//should be number of values in array count from 1 not 0.
 const u16 sTypeExceptions[] = {
-    SPECIES_BULBASAUR,
     SPECIES_TOGEPI,
     SPECIES_RALTS,
     SPECIES_AZURILL,
@@ -1608,6 +1609,9 @@ static const u16 sStarterSpecies[] = { //ok didn't realize changing starter spec
 };//maybe could do something like form_species_table_pointers file where spcies = another table, which can be an array of different species?
 //if I can get to that point, I just need to make it chose a value within that array, with random % n (where n will be size of array)
 
+
+//#define qp ((sizeof(sBulbasaurBall) / sizeof(sBulbasaurBall[0])) + (sizeof(sSquirtleBall) / sizeof(sSquirtleBall[0])) + (sizeof(sCharmanderBall) / sizeof(sCharmanderBall[0]))) / 3;   //[test confirmed that
+//NELEMS is same as hover over value  of array  6u / 2u returns 3u aka 3
 
 static u16 GetStarterSpeciesById(u16 idx) //this should work unchanged since its not running based on the actual player starter
 //but the vars set when choosing a pokeball.
@@ -1634,8 +1638,12 @@ u16 GetStarterSpecies(void) //this is just used for the roamer,
 {
     return GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
 }
-
-#define STARTERCOUNT 13 //(NELEMS(sBulbasaurBall) + NELEMS(sSquirtleBall) + NELEMS(sCharmanderBall)) / 3
+//NELEMS average doesn't work, whatever happened, it caused the game to reset...on some value.
+//trying it again, may have been parenthesis.
+//it was the parenthesis, cause of how nelems works, needed each one
+//to be separated before adding, group them all in a parenthesis, and then set the divider on the outside
+//but also in parenthesis.
+#define STARTERCOUNT (((NELEMS(sBulbasaurBall)) + (NELEMS(sSquirtleBall)) + (NELEMS(sCharmanderBall))) / 3)
 
 //eventually make dynamic so it works off of counting and averaging the arrays essentially  (n + n + n) / 3 = n
 void SetPlayerRandomStarterSpecies(void)

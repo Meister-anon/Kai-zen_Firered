@@ -2,7 +2,7 @@ gOtherText_NewName:: @ 81C574F
     .string "NEW NAME$"
 
 gNameChoice_Green:: @ 81C5758
-    .string "GREEN$"
+    .string "BLUE$"
 
 gNameChoice_Red:: @ 81C575E
     .string "RED$"
@@ -83,7 +83,7 @@ gNameChoice_Amanda:: @ 81C57D9
     .string "AMANDA$"
 
 gNameChoice_Hillary:: @ 81C57E0
-    .string "HILLARY$"
+    .string "GREEN$"
 
 gNameChoice_Makey:: @ 81C57E8
     .string "MAKEY$"
@@ -101,7 +101,7 @@ gNameChoice_Cassie:: @ 81C57FF
     .string "CASSIE$"
 
 gNameChoice_Rey:: @ 81C5806
-    .string "REY$"
+    .string "GREEN$"
 
 gNameChoice_Seda:: @ 81C580A
     .string "SEDA$"

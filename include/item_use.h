@@ -13,6 +13,7 @@ void FieldUseFunc_CoinCase(u8 taskId);
 void FieldUseFunc_PowderJar(u8 taskId);
 void FieldUseFunc_PokeFlute(u8 taskId);
 void FieldUseFunc_Medicine(u8 taskId);
+void ItemUseOutOfBattle_AbilityCapsule(u8 taskId);
 void FieldUseFunc_Ether(u8 taskId);
 void FieldUseFunc_PpUp(u8 taskId);
 void FieldUseFunc_RareCandy(u8 taskId);
