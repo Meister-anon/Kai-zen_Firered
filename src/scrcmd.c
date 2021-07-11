@@ -1590,6 +1590,9 @@ u8 *const sScriptStringVars[] =
     gStringVar3,
 };
 
+//ok so learned a word is 2 bytes, halfword is 1 byte, and everything
+//in this function is u8.  so I guess that fits, but why is this going wrong?
+
 bool8 ScrCmd_bufferspeciesname(struct ScriptContext * ctx)
 {
     u8 stringVarIndex = ScriptReadByte(ctx);
@@ -1597,22 +1600,23 @@ bool8 ScrCmd_bufferspeciesname(struct ScriptContext * ctx)
 
     StringCopy(sScriptStringVars[stringVarIndex], gSpeciesNames[species]);
     return FALSE;
-}
+} //if using u16 src for new string copy function doesn't workr, try make gStringVar1 u16
 
 bool8 ScrCmd_bufferspeciestype(struct ScriptContext * ctx)
 {
     u8 stringVarIndex = ScriptReadByte(ctx);
     u16 species = VarGet(ScriptReadHalfword(ctx));
-    u8 i;
+    s32 i;
     u8 type;// = gBaseStats[species].type1 == gBaseStats[species].type2 ? gBaseStats[species].type1 : gBaseStats[species].type2;
     for (i = 0; i < NELEMS(sTypeExceptions); i++) {
         if (species == sTypeExceptions[i])
-            break;
+            break; // break needs to be in loop/ that's what tells it to stop looping
     }
     if (i == NELEMS(sTypeExceptions)) // did not find the species
         type = gBaseStats[species].type1;
     else // found the species
         type = gBaseStats[species].type2;
+    
     StringCopy(sScriptStringVars[stringVarIndex], gTypeNames[type]);
     return FALSE;
 }

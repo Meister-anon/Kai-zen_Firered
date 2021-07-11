@@ -256,6 +256,7 @@ void EnableVCountIntrAtLine150(void)
     EnableInterrupts(INTR_FLAG_VCOUNT);
 }
 
+
 void InitKeys(void)
 {
     gKeyRepeatContinueDelay = 5;

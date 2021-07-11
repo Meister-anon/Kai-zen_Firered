@@ -93,13 +93,17 @@ const struct MoveMenuInfoIcon gMoveMenuInfoIcons[] = //fairy addition this shoul
     { 32, 12, 0x4C },       // Ice icon     -0F
     { 32, 12, 0xA0 },       // Dragon icon  -10
     { 32, 12, 0x8C },       // Dark icon    -11
-    { 40, 12, 0xA8 },       // -Type- icon  -12  This is why setting fairy to 0x12 put up type icon instead of fairy.
-    { 40, 12, 0xC0 },       // -Power- icon -13
+    { 40, 12, 0x08 },       // Fairy Icon   -12    //fixed was 17 realized I could put here.
+    { 40, 12, 0xA8 },       // -Type- icon  -13  This is why setting fairy to 0x12 put up type icon instead of fairy.
+    { 40, 12, 0xC0 },       // -Power- icon -14
     { 40, 12, 0xC8 },       // -Accuracy- icon
-    { 40, 12, 0xE0 },       // -PP- icon    -15
-    { 40, 12, 0xE8 },       // -Effect- icon 16
-    { 40, 12, 0x08 },       // Fairy Icon   -17
+    { 40, 12, 0xE0 },       // -PP- icon    -16
+    { 40, 12, 0xE8 },       // -Effect- icon 17    
 }; // use this comment order for any additional types
+//important  fairy addition ok so found out putting fairy at end as 0x17 messes up gTypeNames
+//which I need to make my dynamic starter text work, so I'll try rearranging the order of the icons
+//in the list,  note put any future type icons after type dark, that way the game will read it as next.
+//and avoid any issue.
 
 static void ListMenuDummyTask(u8 taskId)
 {

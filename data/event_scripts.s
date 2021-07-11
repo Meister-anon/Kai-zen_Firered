@@ -1082,7 +1082,7 @@ EventScript_GymBadgeFanfare:: @ 81A6C21
 	waitfanfare
 	return
 
-EventScript_OutOfCenterPartyHeal:: @ 81A6C26
+EventScript_OutOfCenterPartyHeal:: @ 81A6C26 //important progression healing
 	fadescreen FADE_TO_BLACK
 	playfanfare MUS_HEAL
 	waitfanfare

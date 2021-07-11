@@ -1598,7 +1598,9 @@ const u16 sTypeExceptions[] = {
     SPECIES_HOUNDOUR
 };
 
-static const u16 sStarterSpecies[] = { //ok didn't realize changing starter species was this simple and I didn't need a script but wtvr.
+static const u16 sStarterSpecies[] = { 
+    
+    //ok didn't realize changing starter species was this simple and I didn't need a script but wtvr.
     // but looking at this gives me idea for setting up the other thing I wanted, if I use switch cases to include multiple pokemon on same idea, with random chance.
    // then I can have multiple options so each playthrough the mon in the pokeball is different, 
     //not sure if that change needs to be HERE or with the VAR_STARTER_MON from getstarterspecies down below..
@@ -1638,26 +1640,33 @@ u16 GetStarterSpecies(void) //this is just used for the roamer,
 {
     return GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
 }
+
 //NELEMS average doesn't work, whatever happened, it caused the game to reset...on some value.
 //trying it again, may have been parenthesis.
 //it was the parenthesis, cause of how nelems works, needed each one
 //to be separated before adding, group them all in a parenthesis, and then set the divider on the outside
 //but also in parenthesis.
-#define STARTERCOUNT (((NELEMS(sBulbasaurBall)) + (NELEMS(sSquirtleBall)) + (NELEMS(sCharmanderBall))) / 3)
+
+//ok so none of that was actually the issue, the problem seems to be that a pokemon's name
+//is too long for the  buffer and is causing overflow just like brock's text
+
+//#define STARTERCOUNT 13 //(((NELEMS(sBulbasaurBall)) + (NELEMS(sSquirtleBall)) + (NELEMS(sCharmanderBall))) / 3)
+
+//with advice from ExpoSeed, instead of using a define averaging the array, just use NELEMS array in place of n
 
 //eventually make dynamic so it works off of counting and averaging the arrays essentially  (n + n + n) / 3 = n
 void SetPlayerRandomStarterSpecies(void)
 {
-    VarSet(VAR_TEMP_5, sBulbasaurBall[Random() % STARTERCOUNT]);
-    VarSet(VAR_TEMP_6, sSquirtleBall[Random() % STARTERCOUNT]);
-    VarSet(VAR_TEMP_7, sCharmanderBall[Random() % STARTERCOUNT]);
+    VarSet(VAR_TEMP_5, sBulbasaurBall[Random() % NELEMS(sBulbasaurBall)]);
+    VarSet(VAR_TEMP_6, sSquirtleBall[Random() % NELEMS(sSquirtleBall)]);
+    VarSet(VAR_TEMP_7, sCharmanderBall[Random() % NELEMS(sCharmanderBall)]);
 }
 
 void SetRivalRandomStarterSpecies(void)
 {
-    VarSet(VAR_TEMP_8, sCharmanderBall[Random() % STARTERCOUNT]);
-    VarSet(VAR_TEMP_9, sBulbasaurBall[Random() % STARTERCOUNT]);
-    VarSet(VAR_TEMP_A, sSquirtleBall[Random() % STARTERCOUNT]);
+    VarSet(VAR_TEMP_8, sCharmanderBall[Random() % NELEMS(sCharmanderBall)]);
+    VarSet(VAR_TEMP_9, sBulbasaurBall[Random() % NELEMS(sBulbasaurBall)]);
+    VarSet(VAR_TEMP_A, sSquirtleBall[Random() % NELEMS(sSquirtleBall)]);
 }
 
 

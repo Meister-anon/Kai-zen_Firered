@@ -2404,7 +2404,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MINERAL,
         .abilities = {ABILITY_MAGNET_PULL, ABILITY_STURDY},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_ANALYTIC, ABILITY_MULTI_TASK},
+            .abilityHidden = {ABILITY_MULTI_TASK, ABILITY_VOLT_ABSORB},
         #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,

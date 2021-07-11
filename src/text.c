@@ -1002,7 +1002,7 @@ s32 (*GetFontWidthFunc(u8 glyphId))(u16 _glyphId, bool32 _isJapanese)
     return NULL;
 }
 
-s32 GetStringWidth(u8 fontId, const u8 *str, s16 letterSpacing)
+s32 GetStringWidth(u8 fontId, const u8 *str, s16 letterSpacing) //important
 {
     bool8 isJapanese;
     int minGlyphWidth;

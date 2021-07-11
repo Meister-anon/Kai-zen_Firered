@@ -251,7 +251,7 @@ PalletTown_ProfessorOaksLab_ChooseStarterScene:: @ 816923E
 	waitmovement 0
 	msgbox PalletTown_ProfessorOaksLab_Text_RivalNoFairWhatAboutMe
 	msgbox PalletTown_ProfessorOaksLab_Text_OakBePatientRival
-	callnative SetPlayerRandomStarterSpecies
+	@ callnative SetPlayerRandomStarterSpecies
 	callnative SetRivalRandomStarterSpecies
 	setvar VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 2
 	releaseall
@@ -1214,6 +1214,7 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmCharmander:: @ 8169C52
 PalletTown_ProfessorOaksLab_EventScript_DeclinedStarter:: @ 8169C71
 	erasemonpic
 	release
+	callnative SetPlayerRandomStarterSpecies
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_ChoseStarter:: @ 8169C74

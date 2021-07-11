@@ -1,11 +1,17 @@
 #include "global.h"
 #include "gflib.h"
 
-EWRAM_DATA u8 gStringVar1[32] = {};
+EWRAM_DATA u8 gStringVar1[32] = {}; 
 EWRAM_DATA u8 gStringVar2[20] = {};
 EWRAM_DATA u8 gStringVar3[20] = {};
 EWRAM_DATA u8 gStringVar4[1000] = {};
 EWRAM_DATA u8 gUnknownStringVar[16] = {0};
+//seems tobe like problem with brock gym text, so maybe same solution, increase stringvar1?
+//or maybe I can use stringvar4 whatever that's for??
+//no stringvar4, isn't used for scripting, ie not in the scripting stringvar array
+
+//ok made var1 48 instead of 32, will try again see if that makes a difference
+//instead of c
 
 static const u8 sDigits[] = __("0123456789ABCDEF");
 

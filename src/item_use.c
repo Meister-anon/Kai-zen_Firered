@@ -54,7 +54,7 @@ static void sub_80A1674(u8 taskId);
 static void InitTMCaseFromBag(void);
 static void Task_InitTMCaseFromField(u8 taskId);
 static void InitBerryPouchFromBag(void);
-void ItemUseOutOfBattle_AbilityCapsule(u8 taskId);
+//void FieldUseFunc_AbilityCapsule(u8 taskId);
 static void Task_InitBerryPouchFromField(u8 taskId);
 static void InitBerryPouchFromBattle(void);
 //static void InitTeachyTvFromBag(void);
@@ -472,7 +472,7 @@ static void InitTMCaseFromBag(void)
     InitTMCase(0, CB2_BagMenuFromStartMenu, 0);
 }
 
-void ItemUseOutOfBattle_AbilityCapsule(u8 taskId)
+void FieldUseFunc_AbilityCapsule(u8 taskId)
 {
     gItemUseCB = ItemUseCB_AbilityCapsule;
     sub_80A16D0(taskId);
@@ -871,7 +871,6 @@ void ItemUseOutOfBattle_EnigmaBerry(u8 taskId)
         gTasks[taskId].data[4] = 1;
         FieldUseFunc_Medicine(taskId);
         break;
-    case 9:
         gTasks[taskId].data[4] = 1;
         FieldUseFunc_SacredAsh(taskId);
         break;
@@ -887,6 +886,10 @@ void ItemUseOutOfBattle_EnigmaBerry(u8 taskId)
     case 20:
         gTasks[taskId].data[4] = 1;
         FieldUseFunc_Ether(taskId);
+        break;
+    case 21:
+        gTasks[taskId].data[4] = 1;
+        FieldUseFunc_AbilityCapsule(taskId);
         break;
     default:
         gTasks[taskId].data[4] = 4;

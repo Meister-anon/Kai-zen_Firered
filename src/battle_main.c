@@ -122,12 +122,12 @@ EWRAM_DATA u16 gBattle_BG3_Y = 0;
 EWRAM_DATA u16 gBattle_WIN0H = 0;
 EWRAM_DATA u16 gBattle_WIN0V = 0;
 EWRAM_DATA u16 gBattle_WIN1H = 0;
-EWRAM_DATA u16 gBattle_WIN1V = 0;
-EWRAM_DATA u8 gDisplayedStringBattle[300] = {0};
+EWRAM_DATA u16 gBattle_WIN1V = 0; //gonna try 380, estimated by counting hover over values for 3 buffs and gunown below whih was about 73
+EWRAM_DATA u8 gDisplayedStringBattle[380] = {0}; //need increase from 300 to fix brocks
 EWRAM_DATA u8 gBattleTextBuff1[TEXT_BUFF_ARRAY_COUNT] = {0};
 EWRAM_DATA u8 gBattleTextBuff2[TEXT_BUFF_ARRAY_COUNT] = {0};
 EWRAM_DATA u8 gBattleTextBuff3[TEXT_BUFF_ARRAY_COUNT] = {0};
-static EWRAM_DATA u32 gUnknown_2022AE8[25] = {0}; //zsonic  //GriffinR came through again,  thought this was unused but removing is what broke brocks battle.
+//static EWRAM_DATA u32 gUnknown_2022AE8[25] = {0}; //zsonic  //GriffinR came through again,  thought this was unused but removing is what broke brocks battle.
 EWRAM_DATA u32 gBattleTypeFlags = 0;
 EWRAM_DATA u8 gBattleTerrain = 0;
 EWRAM_DATA u32 gUnknown_2022B54 = 0;
@@ -467,7 +467,10 @@ const u8 gTypeNames[][TYPE_NAME_LENGTH + 1] =
     _("DRAGON"),
     _("DARK"),
     _("FAIRY"), //fairy addition
-};
+}; //uses same type order as list_menu.c so this fairy is 12, but my actuall fairy type
+//was at 17. fixed now they are both 12.
+
+//also needed change value in type_constants.inc & pokemon.h
 
 // This is a factor in how much money you get for beating a trainer.
 const struct TrainerMoney gTrainerMoneyTable[] =

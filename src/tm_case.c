@@ -241,7 +241,8 @@ static const struct SpriteTemplate sTMSpriteTemplate = {
     SpriteCallbackDummy
 };
 
-static const u16 sTMSpritePaletteOffsetByType[] = { // fairy addition need do
+// fairy addition need do
+static const u16 sTMSpritePaletteOffsetByType[] = {
     [TYPE_NORMAL]   = 0x000,
     [TYPE_FIRE]     = 0x010,
     [TYPE_WATER]    = 0x020,
@@ -781,12 +782,12 @@ static void Task_SelectTMAction_FromFieldBag(u8 taskId)
         sTMCaseDynamicResources->menuActionIndices = sMenuActionIndices_Field;
         sTMCaseDynamicResources->numMenuActions = NELEMS(sMenuActionIndices_Field);
     }
-    /*else
+    else
     {
-        AddTMContextMenu(&sTMCaseDynamicResources->contextMenuWindowId, 1);
+       /* AddTMContextMenu(&sTMCaseDynamicResources->contextMenuWindowId, 1);
         sTMCaseDynamicResources->menuActionIndices = sMenuActionIndices_UnionRoom;
-        sTMCaseDynamicResources->numMenuActions = NELEMS(sMenuActionIndices_UnionRoom);
-    }*/
+        sTMCaseDynamicResources->numMenuActions = NELEMS(sMenuActionIndices_UnionRoom);*/
+    }
     AddItemMenuActionTextPrinters(sTMCaseDynamicResources->contextMenuWindowId, 2, GetMenuCursorDimensionByFont(2, 0), 2, 0, GetFontAttribute(2, 1) + 2, sTMCaseDynamicResources->numMenuActions, sMenuActions_UseGiveExit, sTMCaseDynamicResources->menuActionIndices);
     Menu_InitCursor(sTMCaseDynamicResources->contextMenuWindowId, 2, 0, 2, GetFontAttribute(2, 1) + 2, sTMCaseDynamicResources->numMenuActions, 0);
     strbuf = Alloc(256);

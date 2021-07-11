@@ -4808,7 +4808,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
         battleMonId = 4;
     }
 
-    if (!IS_POKEMON_ITEM(item))// || !IS_POKEMON_ITEM2(item))
+    if ((!IS_POKEMON_ITEM(item)) || !IS_POKEMON_ITEM2(item))
         return TRUE;
     if (gItemEffectTable[item - ITEM_POTION] == NULL && item != ITEM_ENIGMA_BERRY)
         return TRUE;
@@ -5328,7 +5328,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
         gActiveBattler = 0;
         battlerId = 4;
     }
-    if (!IS_POKEMON_ITEM(item))// || !IS_POKEMON_ITEM2(item))
+    if ((!IS_POKEMON_ITEM(item)) || !IS_POKEMON_ITEM2(item))
         return TRUE;
     if (gItemEffectTable[item - ITEM_POTION] == NULL && item != ITEM_ENIGMA_BERRY)
         return TRUE;

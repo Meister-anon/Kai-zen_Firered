@@ -1403,7 +1403,7 @@
       "exitsBagOnUse": 0,
       "pocket": "POCKET_ITEMS",
       "type": 1,
-      "fieldUseFunc": "ItemUseOutOfBattle_AbilityCapsule",
+      "fieldUseFunc": "FieldUseFunc_AbilityCapsule",
       "battleUsage": 0,
       "battleUseFunc": "NULL",
       "secondaryId": 0
