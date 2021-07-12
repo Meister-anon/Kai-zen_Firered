@@ -1250,8 +1250,108 @@
 	.byte 0xf9
 	.endm
 
-	.macro setmultihitcounter2 param0:req
+	.macro sethealblock ptr
 	.byte 0xfa
+	.4byte \ptr
+	.endm
+
+	.macro setgravity ptr
+	.byte 0xfb
+	.4byte \ptr
+	.endm
+
+	.macro setmiracleeye ptr
+	.byte 0xfc
+	.4byte \ptr
+	.endm
+
+	.macro settailwind ptr:req
+	.byte 0xfd
+	.4byte \ptr
+	.endm
+
+	.macro setembargo ptr
+	.byte 0fe
+	.4byte \ptr
+	.endm
+
+	.macro setstickyweb ptr
+	.byte 0xff
+	.4byte \ptr
+	.endm
+
+	.macro settoxicspikes ptr:req
+	.byte 0x100
+	.4byte \ptr
+	.endm
+
+	.macro setgastroacid ptr
+	.byte 0x101
+	.4byte \ptr
+	.endm
+
+	.macro setroom
+	.byte 0x102
+	.endm
+
+	.macro setstealthrock ptr:req
+	.byte 0x103
+	.4byte \ptr
+	.endm
+
+	.macro jumpifsubstituteblocks ptr
+	.byte 0x104
+	.4byte \ptr
+	.endm
+
+	.macro trainerslideout param0:req
+	.byte 0x105
+	.byte \param0
+	.endm
+
+	.macro settelekinesis ptr:req
+	.byte 0x106
+	.4byte \ptr
+	.endm
+
+	.macro swapstatstages stat:req
+	.byte 0x107
+	.byte \stat
+	.endm
+
+	.macro averagestats stat:req
+	.byte 0x108
+	.byte \stat
+	.endm
+
+	.macro jumpifoppositegenders ptr:req
+	.byte 0x109
+	.4byte \ptr
+	.endm
+
+	.macro trygetbaddreamstarget ptr:req
+	.byte 0x10a
+	.4byte \ptr
+	.endm
+
+	.macro tryworryseed ptr:req
+	.byte 0x10b
+	.4byte \ptr
+	.endm
+
+	.macro metalburstdamagecalculator ptr:req
+	.byte 0x10c
+	.4byte \ptr
+	.endm
+
+	.macro setattackerstatus3 flags ptr
+	.byte 0x10d
+	.4byte \flags
+	.4byte \ptr
+	.endm
+
+	.macro setmultihitcounter2 param0:req
+	.byte 0x10e
 	.byte \param0
 	.endm
 

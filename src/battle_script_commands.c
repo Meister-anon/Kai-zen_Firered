@@ -312,7 +312,28 @@ static void atkF6_finishaction(void);
 static void atkF7_finishturn(void);
 static void atkF8_setroost(void);
 static void atkF9_mondamaged(void); // made this command to work for exponcatch, might remove if mondamaged works
-static void atkFA_setmultihitcounter2(void);
+static void atkFA_sethealblock(void);
+static void atkFB_setgravity(void);
+static void atkFC_setmiracle_eye(void);
+static void atkFD_settailwind(void);
+static void atkFE_setembargo(void);
+static void atkFF_setstickyweb(void);
+static void atk100_settoxicspikes(void);
+static void atk101_setgastroacid(void);
+static void atk102_setroom(void);
+static void atk103_setstealthrock(void);
+static void atk104_jumpifsubstituteblocks(void);
+static void atk105_trainerslideout(void);
+static void atk106_settelekinesis(void);
+static void atk107_swapstatstages(void);
+static void atk108_averagestats(void);
+static void atk109_jumpifoppositegenders(void);
+static void atk10A_trygetbaddreamstarget(void);
+static void atk10B_tryworryseed(void);
+static void atk10C_metalburstdamagecalculator(void);
+static void atk10D_setattackerstatus3(void);
+static void atk10E_setmultihitcounter2(void);
+static void atk10F_set_iondeluge(void);
 
 void (* const gBattleScriptingCommandsTable[])(void) =
 {
@@ -566,7 +587,28 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atkF7_finishturn,
     atkF8_setroost,
     atkF9_mondamaged,
-    atkFA_setmultihitcounter2,
+    atkFA_sethealblock,
+    atkFB_setgravity,
+    atkFC_setmiracle_eye,
+    atkFD_settailwind,
+    atkFE_setembargo,
+    atkFF_setstickyweb,
+    atk100_settoxicspikes,
+    atk101_setgastroacid,
+    atk102_setroom,
+    atk103_setstealthrock,
+    atk104_jumpifsubstituteblocks,
+    atk105_trainerslideout,
+    atk106_settelekinesis,
+    atk107_swapstatstages,
+    atk108_averagestats,
+    atk109_jumpifoppositegenders,
+    atk10A_trygetbaddreamstarget,
+    atk10B_tryworryseed,
+    atk10C_metalburstdamagecalculator,
+    atk10D_setattackerstatus3,
+    atk10E_setmultihitcounter2,
+    atk10F_set_iondeluge,
 };
 
 struct StatFractions
@@ -9425,6 +9467,18 @@ static void atkE8_settypebasedhalvers(void) // water and mud sport
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 }
 
+bool16 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef) //sound bypass is dumb, guess now it works how I want
+{
+    if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE))
+        return FALSE;
+    //else if (gBattleMoves[move].flags & FLAG_SOUND)
+      //  return FALSE;
+    else if (GetBattlerAbility(battlerAtk) == ABILITY_INFILTRATOR)
+        return FALSE;
+    else
+        return TRUE;
+}
+
 static void atkE9_setweatherballtype(void)
 {
     if (WEATHER_HAS_EFFECT)
@@ -9533,6 +9587,17 @@ static void atkEE_removelightscreenreflect(void) // brick break
     }
     ++gBattlescriptCurrInstr;
 }
+
+//not using yet, but seems to be something for selecting catch target in wild double
+//possibly flawed may have to tweak if I use
+
+/*static u8 GetCatchingBattler(void)
+{
+    if (IsBattlerAlive(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)))
+        return GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+    else
+        return GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
+}*/
 
 static void atkEF_handleballthrow(void) //important changed
 {
@@ -10066,7 +10131,329 @@ static void atkF9_mondamaged(void) //edited based on recommendation from mcgriff
     //plus that would avoid any confusion from combining and with else statements
 }
 
-static void atkFA_setmultihitcounter2(void) //should do what the original does but in a separate variable, then pass the original value to gmultihitcounter so the script can complete.
+static void atkFA_sethealblock(void) {
+    if (gStatuses3[gBattlerTarget] & STATUS3_HEAL_BLOCK)
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    else
+    {
+        gStatuses3[gBattlerTarget] |= STATUS3_HEAL_BLOCK;
+        gDisableStructs[gBattlerTarget].healBlockTimer = 5;
+        gBattlescriptCurrInstr += 5;
+    }
+}
+
+static void atkFB_setgravity(void) {
+    if (gFieldStatuses & STATUS_FIELD_GRAVITY)
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    else
+    {
+        gFieldStatuses |= STATUS_FIELD_GRAVITY;
+        gFieldTimers.gravityTimer = 5;
+        gBattlescriptCurrInstr += 5;
+    }
+}
+
+static void atkFC_setmiracle_eye(void) {
+    if (!(gStatuses3[gBattlerTarget] & STATUS3_MIRACLE_EYED))
+    {
+        gStatuses3[gBattlerTarget] |= STATUS3_MIRACLE_EYED;
+        gBattlescriptCurrInstr += 5;
+    }
+    else
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+}
+
+static void atkFD_settailwind(void) {
+    u8 side = GetBattlerSide(gBattlerAttacker);
+
+    if (!(gSideStatuses[side] & SIDE_STATUS_TAILWIND))
+    {
+        gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
+        gSideTimers[side].tailwindBattlerId = gBattlerAttacker;
+        gSideTimers[side].tailwindTimer = 3;
+        gBattlescriptCurrInstr += 5;
+    }
+    else
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+}
+
+static void atkFE_setembargo(void) {
+    if (gStatuses3[gBattlerTarget] & STATUS3_EMBARGO)
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    else
+    {
+        gStatuses3[gBattlerTarget] |= STATUS3_EMBARGO;
+        gDisableStructs[gBattlerTarget].embargoTimer = 5;
+        gBattlescriptCurrInstr += 5;
+    }
+}
+
+static void atkFF_setstickyweb(void) {
+    u8 targetSide = GetBattlerSide(gBattlerTarget);
+    if (gSideStatuses[targetSide] & SIDE_STATUS_STICKY_WEB)
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    else
+    {
+        gSideStatuses[targetSide] |= SIDE_STATUS_STICKY_WEB;
+        gSideTimers[targetSide].stickyWebAmount = 1;
+        gBattlescriptCurrInstr += 5;
+    }
+}
+
+static void atk100_settoxicspikes(void) {
+    u8 targetSide = GetBattlerSide(gBattlerTarget);
+    if (gSideTimers[targetSide].toxicSpikesAmount >= 2)
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    else
+    {
+        gSideTimers[targetSide].toxicSpikesAmount++;
+        gSideStatuses[targetSide] |= SIDE_STATUS_TOXIC_SPIKES;
+        gBattlescriptCurrInstr += 5;
+    }
+}
+
+static void atk101_setgastroacid(void) {
+    switch (gBattleMons[gBattlerTarget].ability)
+    {
+    case ABILITY_AS_ONE_ICE_RIDER:
+    case ABILITY_AS_ONE_SHADOW_RIDER:
+    case ABILITY_BATTLE_BOND:
+    case ABILITY_COMATOSE:
+    case ABILITY_DISGUISE:
+    case ABILITY_GULP_MISSILE:
+    case ABILITY_ICE_FACE:
+    case ABILITY_MULTITYPE:
+    case ABILITY_POWER_CONSTRUCT:
+    case ABILITY_RKS_SYSTEM:
+    case ABILITY_SCHOOLING:
+    case ABILITY_SHIELDS_DOWN:
+    case ABILITY_STANCE_CHANGE:
+    case ABILITY_ZEN_MODE:
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        break;
+    default:
+        gStatuses3[gBattlerTarget] |= STATUS3_GASTRO_ACID;
+        gBattlescriptCurrInstr += 5;
+        break;
+    }
+}
+
+static void HandleRoomMove(u32 statusFlag, u8 *timer, u8 stringId)
+{
+    if (gFieldStatuses & statusFlag)
+    {
+        gFieldStatuses &= ~(statusFlag);
+        *timer = 0;
+        gBattleCommunication[MULTISTRING_CHOOSER] = stringId + 1;
+    }
+    else
+    {
+        gFieldStatuses |= statusFlag;
+        *timer = 5;
+        gBattleCommunication[MULTISTRING_CHOOSER] = stringId;
+    }
+}
+
+static void atk102_setroom(void) {
+    switch (gBattleMoves[gCurrentMove].effect)
+    {
+    /*case EFFECT_TRICK_ROOM:
+        HandleRoomMove(STATUS_FIELD_TRICK_ROOM, &gFieldTimers.trickRoomTimer, 0);
+        break;
+    case EFFECT_WONDER_ROOM:
+        HandleRoomMove(STATUS_FIELD_WONDER_ROOM, &gFieldTimers.wonderRoomTimer, 2);
+        break;
+    case EFFECT_MAGIC_ROOM:
+        HandleRoomMove(STATUS_FIELD_MAGIC_ROOM, &gFieldTimers.magicRoomTimer, 4);
+        break;*/
+    default:
+        gBattleCommunication[MULTISTRING_CHOOSER] = 6;
+        break;
+    }
+    gBattlescriptCurrInstr++;
+}
+
+static void atk103_setstealthrock(void) {
+    u8 targetSide = GetBattlerSide(gBattlerTarget);
+    if (gSideStatuses[targetSide] & SIDE_STATUS_STEALTH_ROCK)
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    else
+    {
+        gSideStatuses[targetSide] |= SIDE_STATUS_STEALTH_ROCK;
+        gSideTimers[targetSide].stealthRockAmount = 1;
+        gBattlescriptCurrInstr += 5;
+    }
+}
+//may not need sub block? don't really need it but using will save time
+static void atk104_jumpifsubstituteblocks(void) {
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget))
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    else
+        gBattlescriptCurrInstr += 5;
+}
+//for those that want it
+static void atk105_trainerslideout(void) {
+    gActiveBattler = GetBattlerAtPosition(gBattlescriptCurrInstr[1]);
+    BtlController_EmitTrainerSlideBack(0);
+    MarkBattlerForControllerExec(gActiveBattler);
+
+    gBattlescriptCurrInstr += 2;
+}
+
+static void atk106_settelekinesis(void) {
+    if (gStatuses3[gBattlerTarget] & (STATUS3_TELEKINESIS | STATUS3_ROOTED | STATUS3_SMACKED_DOWN)
+        || gFieldStatuses & STATUS_FIELD_GRAVITY
+        || (gBattleMons[gBattlerTarget].species == SPECIES_DIGLETT || gBattleMons[gBattlerTarget].species == SPECIES_DUGTRIO))
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    else
+    {
+        gStatuses3[gBattlerTarget] |= STATUS3_TELEKINESIS;
+        gDisableStructs[gBattlerTarget].telekinesisTimer = 3;
+        gBattlescriptCurrInstr += 5;
+    }
+}
+
+static void atk107_swapstatstages(void) {
+    u8 statId = T1_READ_8(gBattlescriptCurrInstr + 1);
+    s8 atkStatStage = gBattleMons[gBattlerAttacker].statStages[statId];
+    s8 defStatStage = gBattleMons[gBattlerTarget].statStages[statId];
+
+    gBattleMons[gBattlerAttacker].statStages[statId] = defStatStage;
+    gBattleMons[gBattlerTarget].statStages[statId] = atkStatStage;
+
+    gBattlescriptCurrInstr += 2;
+}
+
+static void atk108_averagestats(void) {
+    u8 statId = T1_READ_8(gBattlescriptCurrInstr + 1);
+    u16 atkStat = *(u16*)((&gBattleMons[gBattlerAttacker].attack) + (statId - 1));
+    u16 defStat = *(u16*)((&gBattleMons[gBattlerTarget].attack) + (statId - 1));
+    u16 average = (atkStat + defStat) / 2;
+
+    *(u16*)((&gBattleMons[gBattlerAttacker].attack) + (statId - 1)) = average;
+    *(u16*)((&gBattleMons[gBattlerTarget].attack) + (statId - 1)) = average;
+
+    gBattlescriptCurrInstr += 2;
+}
+
+static void atk109_jumpifoppositegenders(void) {
+    u32 atkGender = GetGenderFromSpeciesAndPersonality(gBattleMons[gBattlerAttacker].species, gBattleMons[gBattlerAttacker].personality);
+    u32 defGender = GetGenderFromSpeciesAndPersonality(gBattleMons[gBattlerTarget].species, gBattleMons[gBattlerTarget].personality);
+
+    if ((atkGender == MON_MALE && defGender == MON_FEMALE) || (atkGender == MON_FEMALE && defGender == MON_MALE))
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    else
+        gBattlescriptCurrInstr += 5;
+}
+
+static void atk10A_trygetbaddreamstarget(void) {
+    u8 badDreamsMonSide = GetBattlerSide(gBattlerAttacker);
+    for (; gBattlerTarget < gBattlersCount; gBattlerTarget++)
+    {
+        if (GetBattlerSide(gBattlerTarget) == badDreamsMonSide)
+            continue;
+        if ((gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || GetBattlerAbility(gBattlerTarget) == ABILITY_COMATOSE)
+            && IsBattlerAlive(gBattlerTarget))
+            break;
+    }
+
+    if (gBattlerTarget >= gBattlersCount)
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    else
+        gBattlescriptCurrInstr += 5;
+}
+
+static void atk10B_tryworryseed(void) {
+    switch (gBattleMons[gBattlerTarget].ability)
+    {
+    case ABILITY_INSOMNIA:
+    case ABILITY_MULTITYPE:
+    case ABILITY_TRUANT:
+    case ABILITY_STANCE_CHANGE:
+    case ABILITY_DISGUISE:
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        break;
+    default:
+        gBattleMons[gBattlerTarget].ability = ABILITY_INSOMNIA;
+        gBattlescriptCurrInstr += 5;
+        break;
+    }
+}
+
+static void atk10C_metalburstdamagecalculator(void) {
+    u8 sideAttacker = GetBattlerSide(gBattlerAttacker);
+    u8 sideTarget = 0;
+
+    if (gProtectStructs[gBattlerAttacker].physicalDmg
+        && sideAttacker != (sideTarget = GetBattlerSide(gProtectStructs[gBattlerAttacker].physicalBattlerId))
+        && gBattleMons[gProtectStructs[gBattlerAttacker].physicalBattlerId].hp)
+    {
+        gBattleMoveDamage = gProtectStructs[gBattlerAttacker].physicalDmg * 150 / 100;
+
+        if (gSideTimers[sideTarget].followmeTimer && gBattleMons[gSideTimers[sideTarget].followmeTarget].hp)
+            gBattlerTarget = gSideTimers[sideTarget].followmeTarget;
+        else
+            gBattlerTarget = gProtectStructs[gBattlerAttacker].physicalBattlerId;
+
+        gBattlescriptCurrInstr += 5;
+    }
+    else if (gProtectStructs[gBattlerAttacker].specialDmg
+        && sideAttacker != (sideTarget = GetBattlerSide(gProtectStructs[gBattlerAttacker].specialBattlerId))
+        && gBattleMons[gProtectStructs[gBattlerAttacker].specialBattlerId].hp)
+    {
+        gBattleMoveDamage = gProtectStructs[gBattlerAttacker].specialDmg * 150 / 100;
+
+        if (gSideTimers[sideTarget].followmeTimer && gBattleMons[gSideTimers[sideTarget].followmeTarget].hp)
+            gBattlerTarget = gSideTimers[sideTarget].followmeTarget;
+        else
+            gBattlerTarget = gProtectStructs[gBattlerAttacker].specialBattlerId;
+
+        gBattlescriptCurrInstr += 5;
+    }
+    else
+    {
+        gSpecialStatuses[gBattlerAttacker].ppNotAffectedByPressure = 1;
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+}
+
+static void atk10D_setattackerstatus3(void) {
+    u32 flags = T1_READ_32(gBattlescriptCurrInstr + 1);
+
+    if (gStatuses3[gBattlerAttacker] & flags)
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 5);
+    }
+    else
+    {
+        gStatuses3[gBattlerAttacker] |= flags;
+        if (flags & STATUS3_MAGNET_RISE)
+            gDisableStructs[gBattlerAttacker].magnetRiseTimer = 5;
+        if (flags & STATUS3_LASER_FOCUS)
+            gDisableStructs[gBattlerAttacker].laserFocusTimer = 2;
+        gBattlescriptCurrInstr += 9;
+    }
+}
+
+static void atk10E_setmultihitcounter2(void) //should do what the original does but in a separate variable, then pass the original value to gmultihitcounter so the script can complete.
 {
     // gMultiTask = gMultiHitCounter;  //not sure if doing this way will work, but I'll try it
      //multihitcounter is outside of the loop and only run once, so if it copies the value from here
@@ -10090,3 +10477,8 @@ static void atkFA_setmultihitcounter2(void) //should do what the original does b
     gBattlescriptCurrInstr += 2;
 }
 
+static void atk10F_set_iondeluge(void)
+{ //since battlescript alrady sets field effect, just sets timer here
+    gFieldTimers.IonDelugeTimer = 4;
+    gBattlescriptCurrInstr += 5;
+}

@@ -168,6 +168,14 @@ struct DisableStruct
     /*0x18*/ u8 unk18_a_2 : 2;
     /*0x18*/ u8 mimickedMoves : 4;
     /*0x19*/ u8 rechargeTimer;
+             u8 autotomizeCount;
+            u8 slowStartTimer;
+            u8 embargoTimer;
+            u8 magnetRiseTimer;
+            u8 telekinesisTimer;
+            u8 healBlockTimer;
+            u8 laserFocusTimer;
+            u8 throatChopTimer;
              u8 RoostTimer; // to set random % 4 effect after use roost
              //u8 RoostTimerStartValue;  //remove for now until I get 
     /*0x1A*/ u8 unk1A[2];
@@ -249,10 +257,37 @@ struct SideTimer
     /*0x08*/ u8 followmeTimer;
     /*0x09*/ u8 followmeTarget;
     /*0x0A*/ u8 spikesAmount;
+             u8 toxicSpikesAmount;
+             u8 stealthRockAmount;
+             u8 stickyWebAmount;
+             u8 auroraVeilTimer;
+             u8 auroraVeilBattlerId;
+             u8 tailwindTimer;
+             u8 tailwindBattlerId;
+             u8 luckyChantTimer;
+             u8 luckyChantBattlerId;
     /*0x0B*/ u8 fieldB;
 };
 
 extern struct SideTimer gSideTimers[];
+
+struct FieldTimer
+{
+    //u8 mudSportTimer;
+    //u8 waterSportTimer;  //forgot to remove these earlier, since I'm using gen 3 effects for them
+    u8 wonderRoomTimer;
+    u8 magicRoomTimer;
+    u8 trickRoomTimer;
+    u8 grassyTerrainTimer;
+    u8 mistyTerrainTimer;
+    u8 electricTerrainTimer;
+    u8 psychicTerrainTimer;
+    u8 echoVoiceCounter;
+    u8 gravityTimer;
+    u8 fairyLockTimer;
+    u8 IonDelugeTimer; // this & roost will be only ones that don't fail if used when timer isn't 0
+
+};
 
 struct WishFutureKnock
 {
@@ -711,6 +746,8 @@ extern u8 gBattleControllerData[MAX_BATTLERS_COUNT];
 extern u8 gBattlerStatusSummaryTaskId[MAX_BATTLERS_COUNT];
 extern u16 gDynamicBasePower;
 extern u32 gFieldStatuses;
+extern struct FieldTimer gFieldTimers; //both needed for things like gravity etc.
+extern bool8 gHasFetchedBall;
 extern u16 gLastLandedMoves[MAX_BATTLERS_COUNT];
 extern u8 gLastHitBy[MAX_BATTLERS_COUNT];
 extern u8 gMultiUsePlayerCursor;
