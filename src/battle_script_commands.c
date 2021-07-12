@@ -964,7 +964,7 @@ static void atk00_attackcanceler(void)
         }
     }
     gHitMarker |= HITMARKER_OBEYS;
-    if (gProtectStructs[gBattlerTarget].bounceMove && gBattleMoves[gCurrentMove].flags & FLAG_MAGICCOAT_AFFECTED)
+    if (gProtectStructs[gBattlerTarget].bounceMove && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED)
     {
         PressurePPLose(gBattlerAttacker, gBattlerTarget, MOVE_MAGIC_COAT);
         gProtectStructs[gBattlerTarget].bounceMove = FALSE;
@@ -1387,31 +1387,42 @@ static void atk04_critcalc(void)
     if (item == ITEM_ENIGMA_BERRY)
         holdEffect = gEnigmaBerries[gBattlerAttacker].holdEffect;
     else
-        holdEffect = ItemId_GetHoldEffect(item);
-    gPotentialItemEffectBattler = gBattlerAttacker;
+        holdEffect = ItemId_GetHoldEffect(item); //find out if all these all these +'s affect the total effect chance?
+    gPotentialItemEffectBattler = gBattlerAttacker; //realized these don't increase total crit chance but are all the things that raise crit odds,
     critChance  = 2 * ((gBattleMons[gBattlerAttacker].status2 & STATUS2_FOCUS_ENERGY) != 0)
-                + (gBattleMoves[gCurrentMove].effect == EFFECT_HIGH_CRITICAL)
+                + (gBattleMoves[gCurrentMove].effect == EFFECT_HIGH_CRITICAL) // gen3 use this but pokeemerald uses high_crit flag.
                 + (gBattleMoves[gCurrentMove].effect == EFFECT_SKY_ATTACK)
                 + (gBattleMoves[gCurrentMove].effect == EFFECT_BLAZE_KICK)
                 + (gBattleMoves[gCurrentMove].effect == EFFECT_POISON_TAIL)
+                + ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0)
                 + (holdEffect == HOLD_EFFECT_SCOPE_LENS)
                 + 2 * (holdEffect == HOLD_EFFECT_LUCKY_PUNCH && gBattleMons[gBattlerAttacker].species == SPECIES_CHANSEY)
                 + 2 * (holdEffect == HOLD_EFFECT_STICK && gBattleMons[gBattlerAttacker].species == SPECIES_FARFETCHD);
+                //+ (gBattleMons[gBattlerAttacker].ability == ABILITY_SUPER_LUCK);
     if (critChance >= NELEMS(sCriticalHitChance))
         critChance = NELEMS(sCriticalHitChance) - 1;
+    //while everything here is calculating crit damage, so need to add gCritMultiplier = 3; for that crit boosting ability
     if ((gBattleMons[gBattlerTarget].ability != ABILITY_BATTLE_ARMOR && gBattleMons[gBattlerTarget].ability != ABILITY_SHELL_ARMOR)
      && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
      && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
      && !(Random() % sCriticalHitChance[critChance])
      && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))
      && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE))
+    // && !(gSideStatuses[battlerDef] & SIDE_STATUS_LUCKY_CHANT)
+    {
         gCritMultiplier = 2;
+        /*else if (gBattleMons[gBattlerAttacker].ability == ABILITY_SNIPER)  //could possibly be if instead of else if
+        {
+            gCritMultiplier = 3;
+        }*/
+
+    }
     else
         gCritMultiplier = 1;
     ++gBattlescriptCurrInstr;
 }
 
-static bool8 CanMultiTask(u16 move) //works, but now I need to negate the jump, because it will still attack multiple times otherwise
+static bool8 CanMultiTask(u16 move) //works, but now I need to negate the jump, because it will still attack multiple times otherwise  done!
 {
     u16 i;
     for (i = 0; sMultiTaskExcludedEffects[i] != MULTI_TASK_FORBIDDEN_END && sMultiTaskExcludedEffects[i] != gBattleMoves[move].effect; ++i);
@@ -1986,7 +1997,7 @@ static void atk0B_healthbarupdate(void)
         {
             gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
-            if (gBattleMons[gActiveBattler].status2 & STATUS2_SUBSTITUTE && gDisableStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE))
+            if (gBattleMons[gActiveBattler].status2 & STATUS2_SUBSTITUTE && gDisableStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE)) //&& (gBattleMons[gBattlerAttacker].ability != ABILITY_INFILTRATOR))
             {
                 PrepareStringBattle(STRINGID_SUBSTITUTEDAMAGED, gActiveBattler);
             }
@@ -2026,7 +2037,7 @@ static void atk0C_datahpupdate(void)
         if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
         {
             gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
-            if (gBattleMons[gActiveBattler].status2 & STATUS2_SUBSTITUTE && gDisableStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE))
+            if (gBattleMons[gActiveBattler].status2 & STATUS2_SUBSTITUTE && gDisableStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE)) //&& (gBattleMons[gBattlerAttacker].ability != ABILITY_INFILTRATOR))
             {
                 if (gDisableStructs[gActiveBattler].substituteHP >= gBattleMoveDamage)
                 {
@@ -2103,7 +2114,7 @@ static void atk0C_datahpupdate(void)
                             gSpecialStatuses[gActiveBattler].physicalBattlerId = gBattlerTarget;
                         }
                     }
-                    else if (IS_MOVE_SPECIAL(move) && !(gHitMarker & HITMARKER_x100000))
+                    else if (!IS_MOVE_PHYSICAL(move) && !(gHitMarker & HITMARKER_x100000)) //changed from special to not phsyical to account for status moves
                     {
                         gProtectStructs[gActiveBattler].specialDmg = gHpDealt;
                         gSpecialStatuses[gActiveBattler].specialDmg = gHpDealt;
@@ -2360,6 +2371,23 @@ u8 GetBattlerTurnOrderNum(u8 battlerId)
     return i;
 }
 
+#define INCREMENT_RESET_RETURN                  \
+{                                               \
+    gBattlescriptCurrInstr++;                   \
+    gBattleScripting.moveEffect = 0; \
+    return;                                     \
+} 
+//believe don't need them increment reset return is same as
+//++gBattlescriptCurrInstr;
+//return;
+
+#define RESET_RETURN                            \
+{                                               \
+    gBattleScripting.moveEffect = 0; \
+    return;                                     \
+}
+
+
 void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what prevents applying status here, don't forget setyawn  after that grfx for status animation next
 {
     bool32 statusChanged = FALSE;
@@ -2555,7 +2583,24 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 else
                     break;
             }
+            if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_ELECTRIC) //if did right should prevent paralysis to electric types
+                && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC
+                && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
+                && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
+            {
+                BattleScriptPush(gBattlescriptCurrInstr + 1);
+                gBattlescriptCurrInstr = BattleScript_PRLZPrevention;
+
+                gBattleCommunication[MULTISTRING_CHOOSER] = 2; // may need to setup a string for this
+                return;
+            }
+            if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_ELECTRIC)
+                && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC) //while still allowing non electric moves like bodyslam to paralyze
+                break;
             if (gBattleMons[gEffectBattler].status1)
+                break;
+            if /*(GetBattlerAbility(gEffectBattler) == ABILITY_COMATOSE
+                ||*/ (GetBattlerAbility(gEffectBattler) == ABILITY_LIMBER)
                 break;
             statusChanged = TRUE;
             break;

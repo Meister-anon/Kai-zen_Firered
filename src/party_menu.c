@@ -5477,7 +5477,7 @@ u8 GetItemEffectType(u16 item)
     const u8 *itemEffect;
     u32 statusCure;
 
-    if ((!IS_POKEMON_ITEM(item)) || !IS_POKEMON_ITEM2(item))
+    if ((!IS_POKEMON_ITEM(item)) && !IS_POKEMON_ITEM2(item))
         return ITEM_EFFECT_NONE;
     // Read the item's effect properties.
     if (item == ITEM_ENIGMA_BERRY)

@@ -183,6 +183,102 @@ void sub_8017298(u8 arg0)
     gBattleControllerExecFlags &= ~(0x10000000 << arg0);
 }
 
+static const u8 sAbilitiesAffectedByMoldBreaker[] =
+{
+    [ABILITY_BATTLE_ARMOR] = 1,
+    [ABILITY_CLEAR_BODY] = 1,
+    [ABILITY_DAMP] = 1,
+    [ABILITY_DRY_SKIN] = 1,
+    [ABILITY_FILTER] = 1,
+    [ABILITY_FLASH_FIRE] = 1,
+    [ABILITY_FLOWER_GIFT] = 1,
+    [ABILITY_HEATPROOF] = 1,
+    [ABILITY_HYPER_CUTTER] = 1,
+    [ABILITY_IMMUNITY] = 1,
+    [ABILITY_INNER_FOCUS] = 1,
+    [ABILITY_INSOMNIA] = 1,
+    [ABILITY_KEEN_EYE] = 1,
+    [ABILITY_LEAF_GUARD] = 1,
+    [ABILITY_LEVITATE] = 1,
+    [ABILITY_LIGHTNING_ROD] = 1,
+    [ABILITY_LIMBER] = 1,
+    [ABILITY_MAGMA_ARMOR] = 1,
+    [ABILITY_MARVEL_SCALE] = 1,
+    [ABILITY_MOTOR_DRIVE] = 1,
+    [ABILITY_OBLIVIOUS] = 1,
+    [ABILITY_OWN_TEMPO] = 1,
+    [ABILITY_SAND_VEIL] = 1,
+    [ABILITY_SHELL_ARMOR] = 1,
+    [ABILITY_SHIELD_DUST] = 1,
+    [ABILITY_SIMPLE] = 1,
+    [ABILITY_SNOW_CLOAK] = 1,
+    [ABILITY_SOLID_ROCK] = 1,
+    [ABILITY_SOUNDPROOF] = 1,
+    [ABILITY_STICKY_HOLD] = 1,
+    [ABILITY_STORM_DRAIN] = 1,
+    [ABILITY_STURDY] = 1,
+    [ABILITY_SUCTION_CUPS] = 1,
+    [ABILITY_TANGLED_FEET] = 1,
+    [ABILITY_THICK_FAT] = 1,
+    [ABILITY_UNAWARE] = 1,
+    [ABILITY_VITAL_SPIRIT] = 1,
+    [ABILITY_VOLT_ABSORB] = 1,
+    [ABILITY_WATER_ABSORB] = 1,
+    [ABILITY_WATER_VEIL] = 1,
+    [ABILITY_WHITE_SMOKE] = 1,
+    [ABILITY_WONDER_GUARD] = 1,
+    [ABILITY_DISPIRIT_GUARD] = 1,
+    [ABILITY_BIG_PECKS] = 1,
+    [ABILITY_CONTRARY] = 1,
+    [ABILITY_FRIEND_GUARD] = 1,
+    [ABILITY_HEAVY_METAL] = 1,
+    [ABILITY_LIGHT_METAL] = 1,
+    [ABILITY_MAGIC_BOUNCE] = 1,
+    [ABILITY_MULTISCALE] = 1,
+    [ABILITY_SAP_SIPPER] = 1,
+    [ABILITY_TELEPATHY] = 1,
+    [ABILITY_WONDER_SKIN] = 1,
+    [ABILITY_AROMA_VEIL] = 1,
+    [ABILITY_BULLETPROOF] = 1,
+    [ABILITY_FLOWER_VEIL] = 1,
+    [ABILITY_FUR_COAT] = 1,
+    [ABILITY_OVERCOAT] = 1,
+    [ABILITY_SWEET_VEIL] = 1,
+    [ABILITY_DAZZLING] = 1,
+    [ABILITY_DISGUISE] = 1,
+    [ABILITY_FLUFFY] = 1,
+    [ABILITY_QUEENLY_MAJESTY] = 1,
+    [ABILITY_WATER_BUBBLE] = 1,
+};
+
+static const u8 sAbilitiesNotTraced[ABILITIES_COUNT] =
+{
+    [ABILITY_AS_ONE_ICE_RIDER] = 1,
+    [ABILITY_AS_ONE_SHADOW_RIDER] = 1,
+    [ABILITY_BATTLE_BOND] = 1,
+    [ABILITY_COMATOSE] = 1,
+    [ABILITY_DISGUISE] = 1,
+    [ABILITY_FLOWER_GIFT] = 1,
+    [ABILITY_FORECAST] = 1,
+    [ABILITY_GULP_MISSILE] = 1,
+    [ABILITY_HUNGER_SWITCH] = 1,
+    [ABILITY_ICE_FACE] = 1,
+    [ABILITY_ILLUSION] = 1,
+    [ABILITY_IMPOSTER] = 1,
+    [ABILITY_MULTITYPE] = 1,
+    [ABILITY_NEUTRALIZING_GAS] = 1,
+    [ABILITY_NONE] = 1,
+    [ABILITY_POWER_CONSTRUCT] = 1,
+    [ABILITY_POWER_OF_ALCHEMY] = 1,
+    [ABILITY_RECEIVER] = 1,
+    [ABILITY_RKS_SYSTEM] = 1,
+    [ABILITY_SCHOOLING] = 1,
+    [ABILITY_SHIELDS_DOWN] = 1,
+    [ABILITY_STANCE_CHANGE] = 1,
+    [ABILITY_TRACE] = 1,
+    [ABILITY_ZEN_MODE] = 1,
+};
+
 void CancelMultiTurnMoves(u8 battler)
 {
     gBattleMons[battler].status2 &= ~(STATUS2_MULTIPLETURNS);
@@ -3209,7 +3305,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                  && TARGET_TURN_DAMAGED
                  && (Random() % 100) < battlerHoldEffectParam
-                 && gBattleMoves[gCurrentMove].flags & FLAG_KINGSROCK_AFFECTED
+                 && gBattleMoves[gCurrentMove].flags & FLAG_KINGS_ROCK_AFFECTED
                  && gBattleMons[gBattlerTarget].hp)
                 {
                     gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_FLINCH;
@@ -3442,9 +3538,11 @@ u8 IsMonDisobedient(void)
     }
 }
 
-/*u16 GetBattlerAbility(u8 battlerId)
+u32 GetBattlerAbility(u8 battlerId)  //Deokishishu in pret mentioned there is a practice of making things that could
+ // be type u8 either s32 or u32, because it has an positive effect on speed, ussually done for things 
+ //constantly refernced or looped.
 {
-    if (gStatuses3[battlerId] & STATUS3_GASTRO_ACID)
+    if (gStatuses3[battlerId] & STATUS3_GASTRO_ACID) //only added this, because focusing abilities should work
         return ABILITY_NONE;
     else if ((((gBattleMons[gBattlerAttacker].ability == ABILITY_MOLD_BREAKER
         || gBattleMons[gBattlerAttacker].ability == ABILITY_TERAVOLT
@@ -3458,7 +3556,7 @@ u8 IsMonDisobedient(void)
         return ABILITY_NONE;
     else
         return gBattleMons[battlerId].ability;
-}*/
+}
 
 u8 GetBattleMoveSplit(u32 moveId)
 {

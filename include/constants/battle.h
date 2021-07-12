@@ -159,6 +159,8 @@
 #define STATUS3_ROOTED_TURN(num) ((num) << STATUS3_ROOTED_SHIFT)
 #define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER)
 
+#define STATUS3_GASTRO_ACID             (1 << 16)
+
 // Not really sure what a "hitmarker" is.
 #define HITMARKER_x10                   0x00000010
 #define HITMARKER_x20                   0x00000020
