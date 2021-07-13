@@ -98,7 +98,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectSkyAttack
 	.4byte BattleScript_EffectConfuseHit
 	.4byte BattleScript_EffectTwineedle
-	.4byte BattleScript_EffectHit
+	.4byte BattleScript_EffectVitalThrow
 	.4byte BattleScript_EffectSubstitute
 	.4byte BattleScript_EffectRecharge
 	.4byte BattleScript_EffectRage
@@ -374,17 +374,18 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectFellStinger
 	.4byte BattleScript_EffectCaptivate
 	.4byte BattleScript_EffectAlwaysCrit
-	.4byte BattleScript_EffectHealingWish
 	.4byte BattleScript_EffectHammerArm
-	.4byte BattleScript_EffectVitalThrow
 	.4byte BattleScript_EffectFusionCombo
 	.4byte BattleScript_EffectHealBlock
 	.4byte BattleScript_EffectSpecialAttackUp3
 	.4byte BattleScript_EffectStrengthUpHit
+	.4byte BattleScript_EffectBodyPress
+	.4byte BattleScript_EffectAttackerDefenseDownHit
 
 BattleScript_EffectSleepHit:
 	setmoveeffect MOVE_EFFECT_SLEEP
 	goto BattleScript_EffectHit
+
 	
 BattleScript_EffectAllySwitch:
 	attackcanceler
@@ -420,7 +421,7 @@ BattleScript_BurnUpWorks:
 	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
 	critcalc
 	damagecalc
-	adjustdamage
+	adjustnormaldamage
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -980,7 +981,7 @@ BattleScript_SynchronoiseLoop:
 	accuracycheck BattleScript_SynchronoiseMissed, ACC_CURR_MOVE
 	critcalc
 	damagecalc
-	adjustdamage
+	adjustnormaldamage
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -1117,7 +1118,7 @@ BattleScript_EffectFinalGambit:
 	typecalc
 	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
 	dmgtocurrattackerhp
-	adjustdamage
+	adjustnormaldamage
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -1143,7 +1144,7 @@ BattleScript_EffectHitSwitchTarget:
 	ppreduce
 	critcalc
 	damagecalc
-	adjustdamage
+	adjustnormaldamage
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -1675,7 +1676,7 @@ BattleScript_EffectMetalBurst:
 	ppreduce
 	typecalc
 	bichalfword gMoveResultFlags, MOVE_RESULT_NOT_VERY_EFFECTIVE | MOVE_RESULT_SUPER_EFFECTIVE
-	adjustdamage
+	adjustnormaldamage
 	goto BattleScript_HitFromAtkAnimation
 
 BattleScript_EffectHealingWish:
@@ -2006,7 +2007,7 @@ BattleScript_EffectHitEscape:
 	ppreduce
 	critcalc
 	damagecalc
-	adjustdamage
+	adjustnormaldamage
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -3741,11 +3742,14 @@ BattleScript_EffectAttackUpHit::
 	setmoveeffect MOVE_EFFECT_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
 	goto BattleScript_EffectHit
 	
-BattleScript_EffectStrengthUpHit::
+BattleScript_EffectStrengthUpHit:: @ if doesnt work put seteffectwithchance before goto
 	setstatchanger STAT_ATK, 1, FALSE
 	call BattleScript_StatUp
 	goto BattleScript_EffectHit
 
+BattleScript_EffectAttackerDefenseDownHit:
+	setmoveeffect MOVE_EFFECT_DEF_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+	goto BattleScript_EffectHit
 
 BattleScript_EffectAllStatsUpHit::
 	setmoveeffect MOVE_EFFECT_ALL_STATS_UP | MOVE_EFFECT_AFFECTS_USER
@@ -5775,6 +5779,11 @@ BattleScript_BurnTurnDmg::
 	waitmessage 0x40
 	goto BattleScript_DoStatusTurnDmg
 
+BattleScript_FreezeTurnDmg::
+	printstring STRINGID_PKMNHURTBYFREEZE
+	waitmessage 0x40
+	goto BattleScript_DoStatusTurnDmg
+
 BattleScript_MoveUsedIsFrozen::
 	printstring STRINGID_PKMNISFROZEN
 	waitmessage 0x40
@@ -6015,6 +6024,9 @@ BattleScript_MoveEffectParalysis::
 	statusanimation BS_EFFECT_BATTLER
 	printfromtable gGotParalyzedStringIds
 	waitmessage 0x40
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectSpiritLock::
 	goto BattleScript_UpdateEffectStatusIconRet
 
 BattleScript_AftermathDmg::

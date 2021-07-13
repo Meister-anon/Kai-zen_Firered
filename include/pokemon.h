@@ -239,10 +239,10 @@ struct BattleMove
     u8 secondaryEffectChance;
     u8 target;
     s8 priority;
-    u8 flags; // is u32 in emerald, might not need to do that, will ask
+    u32 flags; // is u32 in emerald, might not need to do that, will ask //they use a lot of move flags will update
     u8 split;
-  //  u8 argument;
-};
+    u8 argument;//  still don't know what this does
+};//without u32 flags, type overflowed with added moves
 
 extern const struct BattleMove gBattleMoves[];
 /*

@@ -1281,87 +1281,97 @@
 	.endm
 
 	.macro settoxicspikes ptr:req
-	.byte 0x100
+	.2byte 0x100
 	.4byte \ptr
 	.endm
 
 	.macro setgastroacid ptr
-	.byte 0x101
+	.2byte 0x101
 	.4byte \ptr
 	.endm
 
 	.macro setroom
-	.byte 0x102
+	.2byte 0x102
 	.endm
 
 	.macro setstealthrock ptr:req
-	.byte 0x103
+	.2byte 0x103
 	.4byte \ptr
 	.endm
 
 	.macro jumpifsubstituteblocks ptr
-	.byte 0x104
+	.2byte 0x104
 	.4byte \ptr
 	.endm
 
 	.macro trainerslideout param0:req
-	.byte 0x105
+	.2byte 0x105
 	.byte \param0
 	.endm
 
 	.macro settelekinesis ptr:req
-	.byte 0x106
+	.2byte 0x106
 	.4byte \ptr
 	.endm
 
 	.macro swapstatstages stat:req
-	.byte 0x107
+	.2byte 0x107
 	.byte \stat
 	.endm
 
 	.macro averagestats stat:req
-	.byte 0x108
+	.2byte 0x108
 	.byte \stat
 	.endm
 
 	.macro jumpifoppositegenders ptr:req
-	.byte 0x109
+	.2byte 0x109
 	.4byte \ptr
 	.endm
 
 	.macro trygetbaddreamstarget ptr:req
-	.byte 0x10a
+	.2byte 0x10a
 	.4byte \ptr
 	.endm
 
 	.macro tryworryseed ptr:req
-	.byte 0x10b
+	.2byte 0x10b
 	.4byte \ptr
 	.endm
 
 	.macro metalburstdamagecalculator ptr:req
-	.byte 0x10c
+	.2byte 0x10c
 	.4byte \ptr
 	.endm
 
 	.macro setattackerstatus3 flags ptr
-	.byte 0x10d
+	.2byte 0x10d
 	.4byte \flags
 	.4byte \ptr
 	.endm
 
 	.macro setmultihitcounter2 param0:req
-	.byte 0x10e
+	.2byte 0x10e
 	.byte \param0
 	.endm
 
-@ various command changed to more readable macros
+	.macro set_iondeluge
+	.2byte 0x10f
+	.endm
+
+	.macro setuserstatus3 flags ptr
+	.2byte 0x110
+	.4byte \flags
+	.4byte \ptr
+	.endm
+
+@ various command changed to more readable macros		various \battler, is like byte goes in sequence
 	.macro cancelmultiturnmoves battler:req
-	various \battler, VARIOUS_CANCEL_MULTI_TURN_MOVES
+	various \battler, VARIOUS_CANCEL_MULTI_TURN_MOVES		@this is 0
 	.endm
 
 	.macro setmagiccoattarget battler:req
-	various \battler, VARIOUS_SET_MAGIC_COAT_TARGET
+	various \battler, VARIOUS_SET_MAGIC_COAT_TARGET		@this is 1
 	.endm
 
 	.macro getifcantrunfrombattle battler:req

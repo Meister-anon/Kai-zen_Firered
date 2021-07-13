@@ -3384,7 +3384,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_SAND_FORCE:
-        if ((moveType == TYPE_STEEL || moveType == TYPE_ROCK || moveType == TYPE_GROUND)
+        if ((type == TYPE_STEEL || type == TYPE_ROCK || type == TYPE_GROUND)
             && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY)
             gBattleMovePower = (gBattleMovePower * 13 / 10);
             //MulModifier(&modifier, UQ_4_12(1.3));
@@ -3423,37 +3423,37 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_WATER_BUBBLE:
-        if (moveType == TYPE_WATER)
+        if (type == TYPE_WATER)
             gBattleMovePower = (gBattleMovePower * 20 / 10);
             //MulModifier(&modifier, UQ_4_12(2.0));
         break;
     case ABILITY_STEELWORKER:
-        if (moveType == TYPE_STEEL)
+        if (type == TYPE_STEEL)
             gBattleMovePower = (gBattleMovePower * 15 / 10);
             //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_PIXILATE:
-        if (moveType == TYPE_FAIRY && gBattleStruct->ateBoost[gBattlerAttacker])
+        if (type == TYPE_FAIRY && gBattleStruct->ateBoost[gBattlerAttacker])
             gBattleMovePower = (gBattleMovePower * 12 / 10);
             //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_GALVANIZE:
-        if (moveType == TYPE_ELECTRIC && gBattleStruct->ateBoost[gBattlerAttacker])
+        if (type == TYPE_ELECTRIC && gBattleStruct->ateBoost[gBattlerAttacker])
             gBattleMovePower = (gBattleMovePower * 12 / 10);
             //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_REFRIGERATE:
-        if (moveType == TYPE_ICE && gBattleStruct->ateBoost[gBattlerAttacker])
+        if (type == TYPE_ICE && gBattleStruct->ateBoost[gBattlerAttacker])
             gBattleMovePower = (gBattleMovePower * 12 / 10);
             //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_AERILATE:
-        if (moveType == TYPE_FLYING && gBattleStruct->ateBoost[gBattlerAttacker])
+        if (type == TYPE_FLYING && gBattleStruct->ateBoost[gBattlerAttacker])
             gBattleMovePower = (gBattleMovePower * 12 / 10);
             //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_NORMALIZE:
-        if (moveType == TYPE_NORMAL && gBattleStruct->ateBoost[gBattlerAttacker])
+        if (type == TYPE_NORMAL && gBattleStruct->ateBoost[gBattlerAttacker])
             gBattleMovePower = (gBattleMovePower * 12 / 10);
             //MulModifier(&modifier, UQ_4_12(1.2));
         break;
@@ -3463,25 +3463,25 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_STEELY_SPIRIT:
-        if (moveType == TYPE_STEEL)
+        if (type == TYPE_STEEL)
             gBattleMovePower = (gBattleMovePower * 15 / 10);
             //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_TRANSISTOR:
-        if (moveType == TYPE_ELECTRIC)
+        if (type == TYPE_ELECTRIC)
             gBattleMovePower = (gBattleMovePower * 15 / 10);
             //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_DRAGONS_MAW:
-        if (moveType == TYPE_DRAGON)
+        if (type == TYPE_DRAGON)
             gBattleMovePower = (gBattleMovePower * 15 / 10);
             //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     }
 
     // field abilities
-    if ((IsAbilityOnField(ABILITY_DARK_AURA) && moveType == TYPE_DARK)
-        || (IsAbilityOnField(ABILITY_FAIRY_AURA) && moveType == TYPE_FAIRY))
+    if ((IsAbilityOnField(ABILITY_DARK_AURA) && type == TYPE_DARK)
+        || (IsAbilityOnField(ABILITY_FAIRY_AURA) && type == TYPE_FAIRY))
     {
         if (IsAbilityOnField(ABILITY_AURA_BREAK))
             gBattleMovePower = (gBattleMovePower * 30 / 40);
@@ -3506,7 +3506,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             //MulModifier(&modifier, UQ_4_12(1.3));
             break;
         case ABILITY_STEELY_SPIRIT:
-            if (moveType == TYPE_STEEL)
+            if (type == TYPE_STEEL)
                 gBattleMovePower = (gBattleMovePower * 15 / 10);
                 //MulModifier(&modifier, UQ_4_12(1.5));
             break;
@@ -3514,12 +3514,12 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     }
 
     // target's abilities
-    ability = GetBattlerAbility(gBattlerTarget);
-    switch (ability)
+    //ability = GetBattlerAbility(gBattlerTarget);
+    switch (GetBattlerAbility(gBattlerTarget))
     {
     case ABILITY_HEATPROOF:
     case ABILITY_WATER_BUBBLE:
-        if (moveType == TYPE_FIRE)
+        if (type == TYPE_FIRE)
         {
             gBattleMoveDamage /= 2;
             //MulModifier(&modifier, UQ_4_12(0.5));
@@ -3528,7 +3528,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         }
         break;
     case ABILITY_DRY_SKIN:
-        if (moveType == TYPE_FIRE)
+        if (type == TYPE_FIRE)
             gBattleMoveDamage = gBattleMoveDamage * 125 / 100;
             //MulModifier(&modifier, UQ_4_12(1.25));
         break;
@@ -3540,7 +3540,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             //if (updateFlags)
                 //RecordAbilityBattle(gBattlerTarget, ability);//test if I need this line.
         }
-        if (moveType == TYPE_FIRE)
+        if (type == TYPE_FIRE)
             gBattleMoveDamage *= 2;
             //MulModifier(&modifier, UQ_4_12(2.0));
         break;

@@ -407,6 +407,28 @@ struct LinkPartnerHeader
     struct BattleEnigmaBerry battleEnigmaBerry;
 };
 
+struct MegaEvolutionData
+{
+    u8 toEvolve; // As flags using gBitTable.
+    u8 evolvedPartyIds[2]; // As flags using gBitTable;
+    bool8 alreadyEvolved[4]; // Array id is used for mon position.
+    u16 evolvedSpecies[MAX_BATTLERS_COUNT];
+    u16 playerEvolvedSpecies;
+    u8 battlerId;
+    bool8 playerSelect;
+    u8 triggerSpriteId;
+    bool8 isWishMegaEvo;
+};
+
+struct Illusion
+{
+    u8 on;
+    u8 set;
+    u8 broken;
+    u8 partyId;
+    struct Pokemon* mon;
+};
+
 struct BattleStruct //fill in unused fields when porting
 {
     u8 turnEffectsTracker;
@@ -438,7 +460,8 @@ struct BattleStruct //fill in unused fields when porting
     u8 battlerPartyOrders[MAX_BATTLERS_COUNT][3];
     u8 runTries;
     u8 caughtMonNick[POKEMON_NAME_LENGTH + 1];
-    u8 field_78; // unused
+    struct MegaEvolutionData mega;
+    //u8 field_78; // unused
     u8 safariGoNearCounter;
     u8 safariPkblThrowCounter;
     u8 safariEscapeFactor;
@@ -448,15 +471,23 @@ struct BattleStruct //fill in unused fields when porting
     u8 formToChangeInto;
     u8 chosenMovePositions[MAX_BATTLERS_COUNT];
     u8 stateIdAfterSelScript[MAX_BATTLERS_COUNT];
-    u8 field_88; // unused
-    u8 field_89; // unused
-    u8 field_8A; // unused
+    struct Illusion illusion[MAX_BATTLERS_COUNT];
+    //u8 field_88; // unused
+    //u8 field_89; // unused
+    //u8 field_8A; // unused
     u8 playerPartyIdx;
-    u8 field_8C; // unused
-    u8 field_8D; // unused
+    //u8 field_8C; // unused
+    //u8 field_8D; // unused
+    u8 soulheartBattlerId;  //Magearna ability
+    u8 friskedBattler; // Frisk needs to identify 2 battlers in double battles.
+    bool8 friskedAbility; // If identifies two mons, show the ability pop-up only once.
+    u16 changedSpecies[PARTY_SIZE]; // For Zygarde or future forms when multiple mons can change into the same pokemon.
     u8 stringMoveType;
     u8 expGetterBattlerId;
-    u8 field_90; // unused   //ok thank god these really are unused, I'll replace when I need to bing stuff from emerald
+    bool8 ateBoost[MAX_BATTLERS_COUNT];
+    u8 ateBerry[2]; // array id determined by side, each party pokemon as bit
+    u8 stolenStats[NUM_BATTLE_STATS]; // hp byte is used for which stats to raise, other inform about by how many stages
+    //u8 field_90; // unused   //ok thank god these really are unused, I'll replace when I need to bing stuff from emerald
     u8 absentBattlerFlags;
     u8 AI_monToSwitchIntoId[2];
     u8 simulatedInputState[4];  // used by Oak/Old Man/Pokedude controllers

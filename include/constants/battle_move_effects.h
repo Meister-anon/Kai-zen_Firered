@@ -359,15 +359,18 @@
 #define EFFECT_HIT_ESCAPE 348
 #define EFFECT_WORRY_SEED 349
 #define EFFECT_FELL_STINGER 350
-#define EFFECT_FUSION_COMBO 351
-#define EFFECT_CAPTIVATE 352
-#define EFFECT_ALWAYS_CRIT 353
-#define EFFECT_HAMMER_ARM 354
-#define EFFECT_VITAL_THROW 355
-#define EFFECT_FUSION_COMBO 356
-#define EFFECT_HEAL_BLOCK 357
-#define EFFECT_SPECIAL_ATTACK_UP_3 358 //tailglow
-#define EFFECT_STRENGTH_UP_HIT 358 //HOPE works, point is to increase attack before hit
+//#define EFFECT_FUSION_COMBO 351
+#define EFFECT_CAPTIVATE 351
+#define EFFECT_ALWAYS_CRIT 352
+#define EFFECT_HAMMER_ARM 353
+//#define EFFECT_VITAL_THROW 355
+#define EFFECT_FUSION_COMBO 354
+#define EFFECT_HEAL_BLOCK 355
+#define EFFECT_SPECIAL_ATTACK_UP_3 356 //tailglow
+#define EFFECT_STRENGTH_UP_HIT 357 //HOPE works, point is to increase attack before hit
+#define EFFECT_BODY_PRESS 358
+#define EFFECT_ATTACKER_DEFENSE_DOWN_HIT 359
+
 #endif  // GUARD_CONSTANTS_BATTLE_MOVE_EFFECTS_H
 // gBattleScriptsForMoveEffects found at top of battle_scripts_1.s
 //must be in same order as this file.  because they are pointers

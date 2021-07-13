@@ -1791,24 +1791,24 @@ bool8 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
 //finihsed adding to type calc, so should be battle ready
 //set as type 8, instead of 32 for test build
 {
-    /*if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
+    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
         return TRUE;
     else if (gFieldStatuses & STATUS_FIELD_GRAVITY)
         return TRUE;
-    else */if (gStatuses3[battlerId] & STATUS3_ROOTED)
+    else if (gStatuses3[battlerId] & STATUS3_ROOTED)
         return TRUE;
-    /*else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
-        return TRUE;*/ //important roost change  ..[unsure if want to make random % but no one would gamble it anyway...
+    else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
+        return TRUE; //important roost change  ..[unsure if want to make random % but no one would gamble it anyway...
     else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
         return TRUE; //hope this set up right/works
     //according to Mcgriffin needed make flying & roost flag true statement
     //as else at bottom just means not flyign or has roost flag, TRUE
-    /*else if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
+    else if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
         return FALSE;
     else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
         return FALSE;
     else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
-        return FALSE;*/
+        return FALSE;
     else if (gBattleMons[battlerId].ability == ABILITY_LEVITATE)
         return FALSE;
     else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
@@ -3881,7 +3881,7 @@ bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId)
         party = gEnemyParty;
 
     if (IsBattlerAlive(BATTLE_PARTNER(battlerId)))
-        - partnerMon = &party[gBattlerPartyIndexes[BATTLE_PARTNER(battlerId)]];
+        partnerMon = &party[gBattlerPartyIndexes[BATTLE_PARTNER(battlerId)]];
     else
         partnerMon = mon;
 
@@ -4105,7 +4105,7 @@ u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability)
 
 bool32 CanBattlerEscape(u32 battlerId) // no ability check
 {
-    if (ItemId_GetHoldEffect(battlerId, TRUE) == HOLD_EFFECT_SHED_SHELL)
+    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_SHED_SHELL)
         return TRUE;
     else if ((!IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && gBattleMons[battlerId].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))
         return FALSE;
@@ -4144,7 +4144,7 @@ bool32 CanFling(u8 battlerId)
 bool32 IsRolePlayBannedAbilityAtk(u16 ability)
 {
     u32 i;
-    for (i = 0; i < ARRAY_COUNT(sRolePlayBannedAttackerAbilities); i++)
+    for (i = 0; i < NELEMS(sRolePlayBannedAttackerAbilities); i++)
     {
         if (ability == sRolePlayBannedAttackerAbilities[i])
             return TRUE;
@@ -4155,7 +4155,7 @@ bool32 IsRolePlayBannedAbilityAtk(u16 ability)
 bool32 IsRolePlayBannedAbility(u16 ability)
 {
     u32 i;
-    for (i = 0; i < ARRAY_COUNT(sRolePlayBannedAbilities); i++)
+    for (i = 0; i < NELEMS(sRolePlayBannedAbilities); i++)
     {
         if (ability == sRolePlayBannedAbilities[i])
             return TRUE;
@@ -4166,7 +4166,7 @@ bool32 IsRolePlayBannedAbility(u16 ability)
 bool32 IsSkillSwapBannedAbility(u16 ability)
 {
     u32 i;
-    for (i = 0; i < ARRAY_COUNT(sSkillSwapBannedAbilities); i++)
+    for (i = 0; i < NELEMS(sSkillSwapBannedAbilities); i++)
     {
         if (ability == sSkillSwapBannedAbilities[i])
             return TRUE;
@@ -4177,7 +4177,7 @@ bool32 IsSkillSwapBannedAbility(u16 ability)
 bool32 IsWorrySeedBannedAbility(u16 ability)
 {
     u32 i;
-    for (i = 0; i < ARRAY_COUNT(sWorrySeedBannedAbilities); i++)
+    for (i = 0; i < NELEMS(sWorrySeedBannedAbilities); i++)
     {
         if (ability == sWorrySeedBannedAbilities[i])
             return TRUE;
@@ -4188,7 +4188,7 @@ bool32 IsWorrySeedBannedAbility(u16 ability)
 bool32 IsGastroAcidBannedAbility(u16 ability)
 {
     u32 i;
-    for (i = 0; i < ARRAY_COUNT(sGastroAcidBannedAbilities); i++)
+    for (i = 0; i < NELEMS(sGastroAcidBannedAbilities); i++)
     {
         if (ability == sGastroAcidBannedAbilities[i])
             return TRUE;
@@ -4199,7 +4199,7 @@ bool32 IsGastroAcidBannedAbility(u16 ability)
 bool32 IsEntrainmentBannedAbilityAttacker(u16 ability)
 {
     u32 i;
-    for (i = 0; i < ARRAY_COUNT(sEntrainmentBannedAttackerAbilities); i++)
+    for (i = 0; i < NELEMS(sEntrainmentBannedAttackerAbilities); i++)
     {
         if (ability == sEntrainmentBannedAttackerAbilities[i])
             return TRUE;
@@ -4210,7 +4210,7 @@ bool32 IsEntrainmentBannedAbilityAttacker(u16 ability)
 bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability)
 {
     u32 i;
-    for (i = 0; i < ARRAY_COUNT(sEntrainmentTargetSimpleBeamBannedAbilities); i++)
+    for (i = 0; i < NELEMS(sEntrainmentTargetSimpleBeamBannedAbilities); i++)
     {
         if (ability == sEntrainmentTargetSimpleBeamBannedAbilities[i])
             return TRUE;

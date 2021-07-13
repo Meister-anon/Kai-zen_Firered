@@ -20,6 +20,13 @@ void BattleDestroyYesNoCursorAt(void);
 void HandleBattleWindow(u8 xStart, u8 yStart, u8 xEnd, u8 yEnd, u8 flags);
 u8 GetBattlerTurnOrderNum(u8 battlerId);
 void BufferMoveToLearnIntoBattleTextBuff2(void);
+bool32 CanUseLastResort(u8 battlerId);
+u32 IsFlowerVeilProtected(u32 battler);
+u32 IsLeafGuardProtected(u32 battler);
+bool32 IsShieldsDownProtected(u32 battler);
+u32 IsAbilityStatusProtected(u32 battler);
+bool32 TryResetBattlerStatChanges(u8 battler);
+bool32 CanCamouflage(u8 battlerId);
 
 extern void (* const gBattleScriptingCommandsTable[])(void);
 

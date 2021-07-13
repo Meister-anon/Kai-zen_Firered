@@ -332,16 +332,23 @@
 #define MOVE_EFFECT_EVS_MINUS_2         0x34
 #define MOVE_EFFECT_THRASH              0x35
 #define MOVE_EFFECT_KNOCK_OFF           0x36
-#define MOVE_EFFECT_NOTHING_37          0x37
-#define MOVE_EFFECT_NOTHING_38          0x38
-#define MOVE_EFFECT_NOTHING_39          0x39
-#define MOVE_EFFECT_NOTHING_3A          0x3A
+#define MOVE_EFFECT_CLEAR_SMOG          0x37
+#define MOVE_EFFECT_SMACK_DOWN          0x38
+#define MOVE_EFFECT_FLAME_BURST         0x39
+#define MOVE_EFFECT_DEF_SPDEF_DOWN      0x3A
 #define MOVE_EFFECT_SP_ATK_TWO_DOWN     0x3B
-#define MOVE_EFFECT_NOTHING_3C          0x3C
-#define MOVE_EFFECT_NOTHING_3D          0x3D
-#define MOVE_EFFECT_ATTRACT          0x3E	//just need to set this to the effect attract?
-#define MOVE_EFFECT_SPIRIT_LOCK		 0x3F  
-#define MOVE_EFFECT_AFFECTS_USER        0x40
+#define MOVE_EFFECT_FEINT				0x3C
+#define MOVE_EFFECT_SPECTRAL_THIEF      0x3D
+#define MOVE_EFFECT_ATTRACT				0x3E	//just need to set this to the effect attract?
+#define MOVE_EFFECT_SPIRIT_LOCK			0x3F  
+#define MOVE_EFFECT_HAPPY_HOUR          0x40
+#define MOVE_EFFECT_CORE_ENFORCER       0x41
+#define MOVE_EFFECT_THROAT_CHOP         0x42
+#define MOVE_EFFECT_INCINERATE          0x43
+#define MOVE_EFFECT_BUG_BITE	        0x44
+#define MOVE_EFFECT_RECOIL_50	        0x45
+#define MOVE_EFFECT_RECOIL_33_STATUS	0x46
+#define MOVE_EFFECT_AFFECTS_USER        0x50
 #define MOVE_EFFECT_CERTAIN             0x80
 
 // Battle terrain defines for gBattleTerrain.
