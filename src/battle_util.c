@@ -3,6 +3,7 @@
 #include "text.h"
 #include "util.h"
 #include "link.h"
+#include "malloc.h"
 #include "berry.h"
 #include "random.h"
 #include "pokemon.h"
@@ -26,6 +27,8 @@
 #include "constants/hold_effects.h"
 #include "constants/battle_move_effects.h"
 #include "constants/battle_script_commands.h"
+
+static bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId);
 
 static const u16 sSoundMovesTable[] =
 {
@@ -183,6 +186,9 @@ void sub_8017298(u8 arg0)
     gBattleControllerExecFlags &= ~(0x10000000 << arg0);
 }
 
+//if wonder guard is in one of these lists (and I want it to be) make sure to add dispirit guard too
+//also need to remember to add all custom abilities to these lists as I see fit
+
 static const u8 sAbilitiesAffectedByMoldBreaker[] =
 {
     [ABILITY_BATTLE_ARMOR] = 1,
@@ -277,6 +283,175 @@ static const u8 sAbilitiesNotTraced[ABILITIES_COUNT] =
     [ABILITY_STANCE_CHANGE] = 1,
     [ABILITY_TRACE] = 1,
     [ABILITY_ZEN_MODE] = 1,
+};
+
+//come back to this when doing move expansion
+/*static const u8 sMovesNotAffectedByStench[] =
+{
+    [MOVE_AIR_SLASH] = 1,
+    [MOVE_ASTONISH] = 1,
+    [MOVE_BITE] = 1,
+    [MOVE_BONE_CLUB] = 1,
+    [MOVE_DARK_PULSE] = 1,
+    [MOVE_DOUBLE_IRON_BASH] = 1,
+    [MOVE_DRAGON_RUSH] = 1,
+    [MOVE_EXTRASENSORY] = 1,
+    [MOVE_FAKE_OUT] = 1,
+    [MOVE_FIERY_WRATH] = 1,
+    [MOVE_FIRE_FANG] = 1,
+    [MOVE_FLING] = 1,
+    [MOVE_FLOATY_FALL] = 1,
+    [MOVE_HEADBUTT] = 1,
+    [MOVE_HEART_STAMP] = 1,
+    [MOVE_HYPER_FANG] = 1,
+    [MOVE_ICE_FANG] = 1,
+    [MOVE_ICICLE_CRASH] = 1,
+    [MOVE_IRON_HEAD] = 1,
+    [MOVE_NEEDLE_ARM] = 1,
+    [MOVE_NONE] = 1,
+    [MOVE_ROCK_SLIDE] = 1,
+    [MOVE_ROLLING_KICK] = 1,
+    [MOVE_SECRET_POWER] = 1,
+    [MOVE_SKY_ATTACK] = 1,
+    [MOVE_SNORE] = 1,
+    [MOVE_STEAMROLLER] = 1,
+    [MOVE_STOMP] = 1,
+    [MOVE_THUNDER_FANG] = 1,
+    [MOVE_TWISTER] = 1,
+    [MOVE_WATERFALL] = 1,
+    [MOVE_ZEN_HEADBUTT] = 1,
+    [MOVE_ZING_ZAP] = 1,
+};*/
+
+static const u16 sSkillSwapBannedAbilities[] =
+{
+    //ABILITY_WONDER_GUARD,
+    //ABILITY_DISPIRIT_GUARD,
+    ABILITY_MULTITYPE,
+    ABILITY_ILLUSION,
+    ABILITY_STANCE_CHANGE,
+    ABILITY_SCHOOLING,
+    ABILITY_COMATOSE,
+    ABILITY_SHIELDS_DOWN,
+    ABILITY_DISGUISE,
+    ABILITY_RKS_SYSTEM,
+    ABILITY_BATTLE_BOND,
+    ABILITY_POWER_CONSTRUCT,
+    ABILITY_NEUTRALIZING_GAS,
+    ABILITY_ICE_FACE,
+    ABILITY_HUNGER_SWITCH,
+    ABILITY_GULP_MISSILE,
+};
+
+static const u16 sRolePlayBannedAbilities[] =
+{
+    ABILITY_TRACE,
+    //ABILITY_WONDER_GUARD,
+    //ABILITY_DISPIRIT_GUARD,
+    ABILITY_FORECAST,
+    ABILITY_FLOWER_GIFT,
+    ABILITY_MULTITYPE,
+    ABILITY_ILLUSION,
+    ABILITY_ZEN_MODE,
+    ABILITY_IMPOSTER,
+    ABILITY_STANCE_CHANGE,
+    ABILITY_POWER_OF_ALCHEMY,
+    ABILITY_RECEIVER,
+    ABILITY_SCHOOLING,
+    ABILITY_COMATOSE,
+    ABILITY_SHIELDS_DOWN,
+    ABILITY_DISGUISE,
+    ABILITY_RKS_SYSTEM,
+    ABILITY_BATTLE_BOND,
+    ABILITY_POWER_CONSTRUCT,
+    ABILITY_ICE_FACE,
+    ABILITY_HUNGER_SWITCH,
+    ABILITY_GULP_MISSILE,
+};
+
+//don't understand what this does yet
+static const u16 sRolePlayBannedAttackerAbilities[] =
+{
+    ABILITY_MULTITYPE,
+    ABILITY_ZEN_MODE,
+    ABILITY_STANCE_CHANGE,
+    ABILITY_SCHOOLING,
+    ABILITY_COMATOSE,
+    ABILITY_SHIELDS_DOWN,
+    ABILITY_DISGUISE,
+    ABILITY_RKS_SYSTEM,
+    ABILITY_BATTLE_BOND,
+    ABILITY_POWER_CONSTRUCT,
+    ABILITY_ICE_FACE,
+    ABILITY_GULP_MISSILE,
+};
+
+static const u16 sWorrySeedBannedAbilities[] =
+{
+    ABILITY_MULTITYPE,
+    ABILITY_STANCE_CHANGE,
+    ABILITY_SCHOOLING,
+    ABILITY_COMATOSE,
+    ABILITY_SHIELDS_DOWN,
+    ABILITY_DISGUISE,
+    ABILITY_RKS_SYSTEM,
+    ABILITY_BATTLE_BOND,
+    ABILITY_POWER_CONSTRUCT,
+    ABILITY_TRUANT,
+    ABILITY_ICE_FACE,
+    ABILITY_GULP_MISSILE,
+};
+
+//or this...
+static const u16 sGastroAcidBannedAbilities[] =
+{
+    ABILITY_AS_ONE_ICE_RIDER,
+    ABILITY_AS_ONE_SHADOW_RIDER,
+    ABILITY_BATTLE_BOND,
+    ABILITY_COMATOSE,
+    ABILITY_DISGUISE,
+    ABILITY_GULP_MISSILE,
+    ABILITY_ICE_FACE,
+    ABILITY_MULTITYPE,
+    ABILITY_POWER_CONSTRUCT,
+    ABILITY_RKS_SYSTEM,
+    ABILITY_SCHOOLING,
+    ABILITY_SHIELDS_DOWN,
+    ABILITY_STANCE_CHANGE,
+    ABILITY_ZEN_MODE,
+};
+
+static const u16 sEntrainmentBannedAttackerAbilities[] =
+{
+    ABILITY_TRACE,
+    ABILITY_FORECAST,
+    ABILITY_FLOWER_GIFT,
+    ABILITY_ZEN_MODE,
+    ABILITY_ILLUSION,
+    ABILITY_IMPOSTER,
+    ABILITY_POWER_OF_ALCHEMY,
+    ABILITY_RECEIVER,
+    ABILITY_DISGUISE,
+    ABILITY_POWER_CONSTRUCT,
+    ABILITY_NEUTRALIZING_GAS,
+    ABILITY_ICE_FACE,
+    ABILITY_HUNGER_SWITCH,
+    ABILITY_GULP_MISSILE,
+};
+
+static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] =
+{
+    ABILITY_TRUANT,
+    ABILITY_MULTITYPE,
+    ABILITY_STANCE_CHANGE,
+    ABILITY_SCHOOLING,
+    ABILITY_COMATOSE,
+    ABILITY_SHIELDS_DOWN,
+    ABILITY_DISGUISE,
+    ABILITY_RKS_SYSTEM,
+    ABILITY_BATTLE_BOND,
+    ABILITY_ICE_FACE,
+    ABILITY_GULP_MISSILE,
 };
 
 void CancelMultiTurnMoves(u8 battler)
@@ -1706,6 +1881,160 @@ bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2)
     }
 }
 
+static const u16 sWeatherFlagsInfo[][3] =
+{
+    [ENUM_WEATHER_RAIN] = {WEATHER_RAIN_TEMPORARY, WEATHER_RAIN_PERMANENT, HOLD_EFFECT_DAMP_ROCK},
+    [ENUM_WEATHER_SUN] = {WEATHER_SUN_TEMPORARY, WEATHER_SUN_PERMANENT, HOLD_EFFECT_HEAT_ROCK},
+    [ENUM_WEATHER_SANDSTORM] = {WEATHER_SANDSTORM_TEMPORARY, WEATHER_SANDSTORM_PERMANENT, HOLD_EFFECT_SMOOTH_ROCK},
+    [ENUM_WEATHER_HAIL] = {WEATHER_HAIL, HOLD_EFFECT_ICY_ROCK, WEATHER_HAIL_PERMANENT},
+};
+
+//first bracket number of rows in array, (auto defined)
+//second bracket number of members in array, each line willl have that many arguments
+static const u16 sSwitchAbilities[][10] =
+{
+[REPEAT_SWITCH_IN] = {ABILITY_MOLD_BREAKER, ABILITY_TERAVOLT, ABILITY_TURBOBLAZE, ABILITY_UNNERVE, ABILITY_ANTICIPATION, ABILITY_FRISK, ABILITY_FOREWARN, ABILITY_INTIMIDATE, ABILITY_TRACE, ABILITY_NEUTRALIZING_GAS}
+};
+//ok set it up correctly so now it doesn't break connections
+
+bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
+{
+    if (viaAbility
+        && !(gBattleWeather & sWeatherFlagsInfo[weatherEnumId][1]))
+    {
+        gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1]);
+        return TRUE;
+    }
+    else if (!(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))
+    {
+        gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]);
+        if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2])
+            gWishFutureKnock.weatherDuration = 8;
+        else
+            gWishFutureKnock.weatherDuration = 5;
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer)
+{
+    if (!(gFieldStatuses & statusFlag))
+    {
+        gFieldStatuses &= ~(STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_GRASSY_TERRAIN | EFFECT_ELECTRIC_TERRAIN | EFFECT_PSYCHIC_TERRAIN);
+        gFieldStatuses |= statusFlag;
+
+        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
+            *timer = 8;
+        else
+            *timer = 5;
+
+        gBattlerAttacker = gBattleScripting.battler = battler;
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static bool32 ShouldChangeFormHpBased(u32 battler)
+{
+    // Ability,     form >, form <=, hp divided
+    static const u16 forms[][4] =
+    {
+        {ABILITY_ZEN_MODE, SPECIES_DARMANITAN, SPECIES_DARMANITAN_ZEN_MODE, 2},
+        {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR, SPECIES_MINIOR_CORE_RED, 2},
+        {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_BLUE, SPECIES_MINIOR_CORE_BLUE, 2},
+        {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_GREEN, SPECIES_MINIOR_CORE_GREEN, 2},
+        {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_INDIGO, SPECIES_MINIOR_CORE_INDIGO, 2},
+        {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_ORANGE, SPECIES_MINIOR_CORE_ORANGE, 2},
+        {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_VIOLET, SPECIES_MINIOR_CORE_VIOLET, 2},
+        {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_YELLOW, SPECIES_MINIOR_CORE_YELLOW, 2},
+        {ABILITY_SCHOOLING, SPECIES_WISHIWASHI_SCHOOL, SPECIES_WISHIWASHI, 4},
+    };
+    u32 i;
+
+    for (i = 0; i < NELEMS(forms); i++) //try see if nelems will work here, or I need to use emerald array count
+    {
+        if (gBattleMons[battler].ability == forms[i][0])
+        {
+            if (gBattleMons[battler].species == forms[i][2]
+                && gBattleMons[battler].hp > gBattleMons[battler].maxHP / forms[i][3])
+            {
+                gBattleMons[battler].species = forms[i][1];
+                return TRUE;
+            }
+            if (gBattleMons[battler].species == forms[i][1]
+                && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / forms[i][3])
+            {
+                gBattleMons[battler].species = forms[i][2];
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+
+
+static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in moves to work on reset
+{
+    struct Forewarn {
+        u8 battlerId;
+        u8 power;
+        u16 moveId;
+    };
+    u32 i, j, bestId, count;
+    struct Forewarn* data = malloc(sizeof(struct Forewarn) * MAX_BATTLERS_COUNT * MAX_MON_MOVES);
+
+    // Put all moves
+    for (count = 0, i = 0; i < MAX_BATTLERS_COUNT; i++)
+    {
+        if (IsBattlerAlive(i) && GetBattlerSide(i) != GetBattlerSide(battler))
+        {
+            for (j = 0; j < MAX_MON_MOVES; j++)
+            {
+                if (gBattleMons[i].moves[j] == MOVE_NONE)
+                    continue;
+                data[count].moveId = gBattleMons[i].moves[j];
+                data[count].battlerId = i;
+                switch (gBattleMoves[data[count].moveId].effect)
+                {
+                case EFFECT_OHKO:
+                    data[count].power = 150;
+                    break;
+                case EFFECT_COUNTER:
+                case EFFECT_MIRROR_COAT:
+                case EFFECT_METAL_BURST:
+                    data[count].power = 120;
+                    break;
+                default:
+                    if (gBattleMoves[data[count].moveId].power == 1)
+                        data[count].power = 80;
+                    else
+                        data[count].power = gBattleMoves[data[count].moveId].power;
+                    break;
+                }
+                count++;
+            }
+        }
+    }
+
+    for (bestId = 0, i = 1; i < count; i++)
+    {
+        if (data[i].power > data[bestId].power)
+            bestId = i;
+        else if (data[i].power == data[bestId].power && Random() & 1)
+            bestId = i;
+    }
+
+    gBattlerTarget = data[bestId].battlerId;
+    PREPARE_MOVE_BUFFER(gBattleTextBuff1, data[bestId].moveId)
+        RecordKnownMove(gBattlerTarget, data[bestId].moveId);
+
+    free(data);
+}
+
 enum
 {
     CASTFORM_NO_CHANGE,
@@ -1718,37 +2047,50 @@ enum
 u8 CastformDataTypeChange(u8 battler)
 {
     u8 formChange = 0;
-    if (gBattleMons[battler].species != SPECIES_CASTFORM || gBattleMons[battler].ability != ABILITY_FORECAST || gBattleMons[battler].hp == 0)
-        return CASTFORM_NO_CHANGE;
-    if (!WEATHER_HAS_EFFECT && !IS_BATTLER_OF_TYPE(battler, TYPE_NORMAL))
+    if (gBattleMons[battler].species == SPECIES_CASTFORM)
     {
-        SET_BATTLER_TYPE(battler, TYPE_NORMAL);
-        return CASTFORM_TO_NORMAL;
+        if (gBattleMons[battler].ability != ABILITY_FORECAST || gBattleMons[battler].hp == 0)
+            return CASTFORM_NO_CHANGE;
+        if (!WEATHER_HAS_EFFECT && !IS_BATTLER_OF_TYPE(battler, TYPE_NORMAL))
+        {
+            SET_BATTLER_TYPE(battler, TYPE_NORMAL);
+            return CASTFORM_TO_NORMAL;
+        }
+        if (!WEATHER_HAS_EFFECT)
+            return CASTFORM_NO_CHANGE;
+        if (!(gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SUN_ANY | WEATHER_HAIL_ANY)) && !IS_BATTLER_OF_TYPE(battler, TYPE_NORMAL))
+        {
+            SET_BATTLER_TYPE(battler, TYPE_NORMAL);
+            formChange = CASTFORM_TO_NORMAL;
+        }
+        if (gBattleWeather & WEATHER_SUN_ANY && !IS_BATTLER_OF_TYPE(battler, TYPE_FIRE))
+        {
+            SET_BATTLER_TYPE(battler, TYPE_FIRE);
+            formChange = CASTFORM_TO_FIRE;
+        }
+        if (gBattleWeather & WEATHER_RAIN_ANY && !IS_BATTLER_OF_TYPE(battler, TYPE_WATER))
+        {
+            SET_BATTLER_TYPE(battler, TYPE_WATER);
+            formChange = CASTFORM_TO_WATER;
+        }
+        if (gBattleWeather & WEATHER_HAIL_ANY && !IS_BATTLER_OF_TYPE(battler, TYPE_ICE))
+        {
+            SET_BATTLER_TYPE(battler, TYPE_ICE);
+            formChange = CASTFORM_TO_ICE;
+        }
     }
-    if (!WEATHER_HAS_EFFECT)
-        return CASTFORM_NO_CHANGE;
-    if (!(gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SUN_ANY | WEATHER_HAIL_ANY)) && !IS_BATTLER_OF_TYPE(battler, TYPE_NORMAL))
+    else if (gBattleMons[battler].species == SPECIES_CHERRIM)
     {
-        SET_BATTLER_TYPE(battler, TYPE_NORMAL);
-        formChange = CASTFORM_TO_NORMAL;
+        if (gBattleMons[battler].ability != ABILITY_FLOWER_GIFT || gBattleMons[battler].hp == 0)
+            formChange = 0;
+        else if (gBattleMonForms[battler] == 0 && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY)
+            formChange = 2;
+        else if (gBattleMonForms[battler] != 0 && (!WEATHER_HAS_EFFECT || !(gBattleWeather & WEATHER_SUN_ANY)))
+            formChange = 1;
     }
-    if (gBattleWeather & WEATHER_SUN_ANY && !IS_BATTLER_OF_TYPE(battler, TYPE_FIRE))
-    {
-        SET_BATTLER_TYPE(battler, TYPE_FIRE);
-        formChange = CASTFORM_TO_FIRE;
-    }
-    if (gBattleWeather & WEATHER_RAIN_ANY && !IS_BATTLER_OF_TYPE(battler, TYPE_WATER))
-    {
-        SET_BATTLER_TYPE(battler, TYPE_WATER);
-        formChange = CASTFORM_TO_WATER;
-    }
-    if (gBattleWeather & WEATHER_HAIL_ANY && !IS_BATTLER_OF_TYPE(battler, TYPE_ICE))
-    {
-        SET_BATTLER_TYPE(battler, TYPE_ICE);
-        formChange = CASTFORM_TO_ICE;
-    }
-    return formChange;
-}
+        return formChange;
+    
+} //check to make sure cherrim form change works
 
 u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 moveArg)
 {
@@ -3436,6 +3778,133 @@ u8 GetMoveTarget(u16 move, u8 setTarget)
     return targetBattler;
 }
 
+u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating)
+{
+    if (checkNegating)
+    {
+        if (gStatuses3[battlerId] & STATUS3_EMBARGO)
+            return HOLD_EFFECT_NONE;
+        if (gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)
+            return HOLD_EFFECT_NONE;
+        if (gBattleMons[battlerId].ability == ABILITY_KLUTZ && !(gStatuses3[battlerId] & STATUS3_GASTRO_ACID))
+            return HOLD_EFFECT_NONE;
+    }
+
+    gPotentialItemEffectBattler = battlerId;
+
+    /*if (B_ENABLE_DEBUG && gBattleStruct->debugHoldEffects[battlerId] != 0 && gBattleMons[battlerId].item)
+        return gBattleStruct->debugHoldEffects[battlerId];
+    else */if (gBattleMons[battlerId].item == ITEM_ENIGMA_BERRY)
+        return gEnigmaBerries[battlerId].holdEffect;
+    else
+        return ItemId_GetHoldEffect(gBattleMons[battlerId].item);
+}
+
+u32 GetBattlerHoldEffectParam(u8 battlerId)
+{
+    if (gBattleMons[battlerId].item == ITEM_ENIGMA_BERRY)
+        return gEnigmaBerries[battlerId].holdEffectParam;
+    else
+        return ItemId_GetHoldEffectParam(gBattleMons[battlerId].item);
+}
+
+bool8 IsMoveMakingContact(u16 move, u8 battlerAtk)
+{
+    if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT))
+        return FALSE;
+    else if (GetBattlerAbility(battlerAtk) == ABILITY_LONG_REACH)
+        return FALSE;
+    else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PROTECTIVE_PADS)
+        return FALSE;
+    else
+        return TRUE;
+}
+
+bool8 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId)
+{
+    u16 species = gBattleMons[battlerId].species;
+
+    if (itemId == ITEM_ENIGMA_BERRY)
+        return FALSE;
+    else if (species == SPECIES_KYOGRE && itemId == ITEM_BLUE_ORB)
+        return FALSE;
+    else if (species == SPECIES_GROUDON && itemId == ITEM_RED_ORB)
+        return FALSE;
+    // Mega stone cannot be lost if pokemon can mega evolve with it or is already mega evolved.
+    else if (ItemId_GetHoldEffect(itemId) == HOLD_EFFECT_MEGA_STONE)
+        //&& ((GetMegaEvolutionSpecies(species, itemId) != SPECIES_NONE) || gBattleStruct->mega.evolvedPartyIds[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]]))
+        return FALSE;
+    //else if (species == SPECIES_GIRATINA && itemId == ITEM_GRISEOUS_ORB)
+      //  return FALSE;
+    else if (species == SPECIES_GENESECT && GetBattlerHoldEffect(battlerId, FALSE) == HOLD_EFFECT_DRIVE)
+        return FALSE;
+    else if (species == SPECIES_SILVALLY && GetBattlerHoldEffect(battlerId, FALSE) == HOLD_EFFECT_MEMORY)
+        return FALSE;
+    else
+        return TRUE;
+}
+
+struct Pokemon *GetIllusionMonPtr(u32 battlerId)
+{
+    if (gBattleStruct->illusion[battlerId].broken)
+        return NULL;
+    if (!gBattleStruct->illusion[battlerId].set)
+    {
+        if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+            SetIllusionMon(&gPlayerParty[gBattlerPartyIndexes[battlerId]], battlerId);
+        else
+            SetIllusionMon(&gEnemyParty[gBattlerPartyIndexes[battlerId]], battlerId);
+    }
+    if (!gBattleStruct->illusion[battlerId].on)
+        return NULL;
+
+    return gBattleStruct->illusion[battlerId].mon;
+}
+
+void ClearIllusionMon(u32 battlerId)
+{
+    memset(&gBattleStruct->illusion[battlerId], 0, sizeof(gBattleStruct->illusion[battlerId]));
+}
+
+bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId)
+{
+    struct Pokemon *party, *partnerMon;
+    s32 i, id;
+
+    gBattleStruct->illusion[battlerId].set = 1;
+    if (GetMonAbility(mon) != ABILITY_ILLUSION)
+        return FALSE;
+
+    if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+        party = gPlayerParty;
+    else
+        party = gEnemyParty;
+
+    if (IsBattlerAlive(BATTLE_PARTNER(battlerId)))
+        - partnerMon = &party[gBattlerPartyIndexes[BATTLE_PARTNER(battlerId)]];
+    else
+        partnerMon = mon;
+
+    // Find last alive non-egg pokemon.
+    for (i = PARTY_SIZE - 1; i >= 0; i--)
+    {
+        id = i;
+        if (GetMonData(&party[id], MON_DATA_SANITY_HAS_SPECIES)
+            && GetMonData(&party[id], MON_DATA_HP)
+            && &party[id] != mon
+            && &party[id] != partnerMon)
+        {
+            gBattleStruct->illusion[battlerId].on = 1;
+            gBattleStruct->illusion[battlerId].broken = 0;
+            gBattleStruct->illusion[battlerId].partyId = id;
+            gBattleStruct->illusion[battlerId].mon = &party[id];
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 static bool32 IsNotEventLegalMewOrDeoxys(u8 battlerId)
 {
     if (GetBattlerSide(battlerId) == B_SIDE_OPPONENT
@@ -3573,4 +4042,187 @@ bool8 IsBattlerAlive(u8 battlerId)
         return FALSE;
     else
         return TRUE;
+}
+
+u32 IsAbilityOnSide(u32 battlerId, u32 ability)
+{
+    if (IsBattlerAlive(battlerId) && GetBattlerAbility(battlerId) == ability)
+        return battlerId + 1;
+    else if (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && GetBattlerAbility(BATTLE_PARTNER(battlerId)) == ability)
+        return BATTLE_PARTNER(battlerId) + 1;
+    else
+        return 0;
+}
+
+u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability)
+{
+    return IsAbilityOnSide(BATTLE_OPPOSITE(battlerId), ability);
+}
+
+
+u32 IsAbilityOnField(u32 ability)
+{
+    u32 i;
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (IsBattlerAlive(i) && GetBattlerAbility(i) == ability)
+            return i + 1;
+    }
+
+    return 0;
+}
+
+u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability)
+{
+    u32 i;
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (i != battlerId && IsBattlerAlive(i) && GetBattlerAbility(i) == ability)
+            return i + 1;
+    }
+
+    return 0;
+}
+
+/*u32 IsAbilityPreventingEscape(u32 battlerId) //move to battle main.c is runnign from battle impossible
+{
+    u32 id;
+
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
+        return 0;
+
+    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_SHADOW_TAG)) && gBattleMons[battlerId].ability != ABILITY_SHADOW_TAG)
+        return id;
+    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_ARENA_TRAP)) && IsBattlerGrounded(battlerId))
+        return id;
+    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_MAGNET_PULL)) && IS_BATTLER_OF_TYPE(battlerId, TYPE_STEEL))
+        return id;
+
+    return 0;
+}*/
+
+bool32 CanBattlerEscape(u32 battlerId) // no ability check
+{
+    if (ItemId_GetHoldEffect(battlerId, TRUE) == HOLD_EFFECT_SHED_SHELL)
+        return TRUE;
+    else if ((!IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && gBattleMons[battlerId].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))
+        return FALSE;
+    else if (gStatuses3[battlerId] & STATUS3_ROOTED)
+        return FALSE;
+    else if (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK)
+        return FALSE;
+    else
+        return TRUE;
+}
+
+//Make sure the input bank is any bank on the specific mon's side
+bool32 CanFling(u8 battlerId)
+{
+    u16 item = gBattleMons[battlerId].item;
+    u16 itemEffect = ItemId_GetHoldEffect(item);
+
+    if (item == ITEM_NONE
+        || GetBattlerAbility(battlerId) == ABILITY_KLUTZ
+        || gFieldStatuses & STATUS_FIELD_MAGIC_ROOM
+        || gDisableStructs[battlerId].embargoTimer != 0
+        || !CanBattlerGetOrLoseItem(battlerId, item)
+        //|| itemEffect == HOLD_EFFECT_PRIMAL_ORB
+        || itemEffect == HOLD_EFFECT_GEMS
+#ifdef ITEM_ABILITY_CAPSULE
+        || item == ITEM_ABILITY_CAPSULE
+#endif
+        || ((item == ITEM_BERRY_POUCH) && IsAbilityOnSide(battlerId, ABILITY_UNNERVE))
+        || GetPocketByItemId(item) == POCKET_POKE_BALLS)
+        return FALSE;
+
+    return TRUE;
+}
+
+// ability checks
+bool32 IsRolePlayBannedAbilityAtk(u16 ability)
+{
+    u32 i;
+    for (i = 0; i < ARRAY_COUNT(sRolePlayBannedAttackerAbilities); i++)
+    {
+        if (ability == sRolePlayBannedAttackerAbilities[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+bool32 IsRolePlayBannedAbility(u16 ability)
+{
+    u32 i;
+    for (i = 0; i < ARRAY_COUNT(sRolePlayBannedAbilities); i++)
+    {
+        if (ability == sRolePlayBannedAbilities[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+bool32 IsSkillSwapBannedAbility(u16 ability)
+{
+    u32 i;
+    for (i = 0; i < ARRAY_COUNT(sSkillSwapBannedAbilities); i++)
+    {
+        if (ability == sSkillSwapBannedAbilities[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+bool32 IsWorrySeedBannedAbility(u16 ability)
+{
+    u32 i;
+    for (i = 0; i < ARRAY_COUNT(sWorrySeedBannedAbilities); i++)
+    {
+        if (ability == sWorrySeedBannedAbilities[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+bool32 IsGastroAcidBannedAbility(u16 ability)
+{
+    u32 i;
+    for (i = 0; i < ARRAY_COUNT(sGastroAcidBannedAbilities); i++)
+    {
+        if (ability == sGastroAcidBannedAbilities[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+bool32 IsEntrainmentBannedAbilityAttacker(u16 ability)
+{
+    u32 i;
+    for (i = 0; i < ARRAY_COUNT(sEntrainmentBannedAttackerAbilities); i++)
+    {
+        if (ability == sEntrainmentBannedAttackerAbilities[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability)
+{
+    u32 i;
+    for (i = 0; i < ARRAY_COUNT(sEntrainmentTargetSimpleBeamBannedAbilities); i++)
+    {
+        if (ability == sEntrainmentTargetSimpleBeamBannedAbilities[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
+static bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId)
+{
+    if (IsAbilityOnOpposingSide(battlerId, ABILITY_UNNERVE)
+        || IsAbilityOnOpposingSide(battlerId, ABILITY_AS_ONE_ICE_RIDER)
+        || IsAbilityOnOpposingSide(battlerId, ABILITY_AS_ONE_SHADOW_RIDER))
+        return TRUE;
+    return FALSE;
 }

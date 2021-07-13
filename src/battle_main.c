@@ -3087,7 +3087,7 @@ void BattleTurnPassed(void)
     gRandomTurnNumber = Random();
 }
 
-u8 IsRunningFromBattleImpossible(void)
+u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing escape  put logic in here.
 {
     u8 holdEffect;
     u8 side;
@@ -3100,13 +3100,16 @@ u8 IsRunningFromBattleImpossible(void)
     gPotentialItemEffectBattler = gActiveBattler;
     if (holdEffect == HOLD_EFFECT_CAN_ALWAYS_RUN
      || (gBattleTypeFlags & BATTLE_TYPE_LINK)
-     || gBattleMons[gActiveBattler].ability == ABILITY_RUN_AWAY)
+     || gBattleMons[gActiveBattler].ability == ABILITY_RUN_AWAY
+     || holdEffect == HOLD_EFFECT_SHED_SHELL)
         return BATTLE_RUN_SUCCESS;
     side = GetBattlerSide(gActiveBattler);
     for (i = 0; i < gBattlersCount; ++i)
     {
         if (side != GetBattlerSide(i)
-         && gBattleMons[i].ability == ABILITY_SHADOW_TAG)
+         && gBattleMons[i].ability == ABILITY_SHADOW_TAG) //since shadow tag is like an exorcism talismon 
+            //meant to keep spirits from escaping it makes sense for shadow tag
+            // to still lock in ghost types
         {
             gBattleScripting.battler = i;
             gLastUsedAbility = gBattleMons[i].ability;
@@ -3116,6 +3119,7 @@ u8 IsRunningFromBattleImpossible(void)
         if (side != GetBattlerSide(i)
          && gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
          && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
+         && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
          && gBattleMons[i].ability == ABILITY_ARENA_TRAP)
         {
             gBattleScripting.battler = i;
@@ -3132,8 +3136,10 @@ u8 IsRunningFromBattleImpossible(void)
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
         return BATTLE_RUN_FAILURE;
     }
-    if ((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))
-     || (gStatuses3[gActiveBattler] & STATUS3_ROOTED))
+    if (((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))
+     || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
+     || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK))
+     && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)) //use paras ingraint to check I didn't break affect with this
     {
         gBattleCommunication[MULTISTRING_CHOOSER] = 0;
         return BATTLE_RUN_FORBIDDEN;

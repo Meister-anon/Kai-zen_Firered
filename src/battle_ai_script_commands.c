@@ -478,6 +478,21 @@ static void ClearBattlerMoveHistory(u8 battlerId)
         BATTLE_HISTORY->usedMoves[battlerId / 2][i] = MOVE_NONE;
 }
 
+void RecordKnownMove(u8 battlerId, u32 move)
+{
+    s32 i;
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (BATTLE_HISTORY->usedMoves[battlerId][i] == move)
+            break;
+        if (BATTLE_HISTORY->usedMoves[battlerId][i] == MOVE_NONE)
+        {
+            BATTLE_HISTORY->usedMoves[battlerId][i] = move;
+            break;
+        }
+    }
+}
+
 void RecordAbilityBattle(u8 battlerId, u16 abilityId)
 {
     if (GetBattlerSide(battlerId) == 0)

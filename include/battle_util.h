@@ -81,6 +81,10 @@ void TryClearRageStatuses(void);
 u8 AtkCanceller_UnableToUseMove(void);
 bool8 IsBattlerGrounded(u8 battlerId);
 bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2);
+bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
+static bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer);
+static bool32 ShouldChangeFormHpBased(u32 battler);
+static u8 ForewarnChooseMove(u32 battler);
 u8 CastformDataTypeChange(u8 battler);
 u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 moveArg);
 void BattleScriptExecute(const u8 *BS_ptr);
@@ -90,9 +94,31 @@ void ClearFuryCutterDestinyBondGrudge(u8 battlerId);
 void HandleAction_RunBattleScript(void);
 u8 GetMoveTarget(u16 move, u8 setTarget);
 u8 IsMonDisobedient(void);
+bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
 u8 GetBattleMoveSplit(u32 moveId);
 bool8 IsBattlerAlive(u8 battlerId);
 u32 GetBattlerAbility(u8 battlerId);
+bool32 CanBattlerEscape(u32 battlerId);
+u32 IsAbilityPreventingEscape(u32 battlerId);
+u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability);
+u32 IsAbilityOnField(u32 ability);
+u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating);
+u32 GetBattlerHoldEffectParam(u8 battlerId);
+bool8 IsMoveMakingContact(u16 move, u8 battlerAtk); //made bool8 since its just a true false return
+bool8 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId); //same as above
+struct Pokemon *GetIllusionMonPtr(u32 battlerId);
+void ClearIllusionMon(u32 battlerId);
+bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
+u32 IsAbilityOnSide(u32 battlerId, u32 ability);
+u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability);
+bool32 CanFling(u8 battlerId);
+bool32 IsRolePlayBannedAbilityAtk(u16 ability);  //looping array kept 32
+bool32 IsRolePlayBannedAbility(u16 ability);
+bool32 IsSkillSwapBannedAbility(u16 ability);
+bool32 IsWorrySeedBannedAbility(u16 ability);
+bool32 IsGastroAcidBannedAbility(u16 ability);
+bool32 IsEntrainmentBannedAbilityAttacker(u16 ability);
+bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability);
 void ResetFuryCutterCounter(u8 battlerId);
 
 #endif // GUARD_BATTLE_UTIL_H

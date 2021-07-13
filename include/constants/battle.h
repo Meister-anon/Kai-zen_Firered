@@ -250,6 +250,16 @@
 #define MOVE_RESULT_FOE_HUNG_ON        (1 << 7)
 #define MOVE_RESULT_NO_EFFECT          (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE | MOVE_RESULT_FAILED)
 
+// Battle Weather as enum
+#define ENUM_WEATHER_NONE           0
+#define ENUM_WEATHER_RAIN           1
+#define ENUM_WEATHER_SUN            2
+#define ENUM_WEATHER_SANDSTORM      3
+#define ENUM_WEATHER_HAIL           4
+#define REPEAT_SWITCH_IN            5 // Value added
+//hopefully to make macro for list of abilities
+//to repeat on opponent switch in/send out
+
 // Battle Weather flags
 #define WEATHER_RAIN_TEMPORARY      (1 << 0)
 #define WEATHER_RAIN_DOWNPOUR       (1 << 1)  // unused
@@ -262,7 +272,8 @@
 #define WEATHER_SUN_PERMANENT     (1 << 6)
 #define WEATHER_SUN_ANY           (WEATHER_SUN_TEMPORARY | WEATHER_SUN_PERMANENT)
 #define WEATHER_HAIL                (1 << 7)
-#define WEATHER_HAIL_ANY            (WEATHER_HAIL)
+#define WEATHER_HAIL_PERMANENT      (1 << 8)
+#define WEATHER_HAIL_ANY            (WEATHER_HAIL | WEATHER_HAIL_PERMANENT)
 #define WEATHER_ANY                 (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_SUN_ANY | WEATHER_HAIL_ANY)
 
 // Move Effects

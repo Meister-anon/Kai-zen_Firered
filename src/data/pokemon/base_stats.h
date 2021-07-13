@@ -24725,7 +24725,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WEAK_ARMOR, ABILITY_LEVITATE},
-            .abilityHidden = {ABILITY_PERISH_BODY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_PERISH_BODY, ABILITY_LIQUID_OOZE},
         #else
             .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
         #endif
@@ -27993,14 +27993,14 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WEAK_ARMOR, ABILITY_LEVITATE},
-            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_LIQUID_OOZE},
         #else
             .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
-    },
+    }, //gave this line liquid ooze to double up on absorb damage from ghost tweak :)
 
     [SPECIES_ZIGZAGOON_GALARIAN] =
     {
