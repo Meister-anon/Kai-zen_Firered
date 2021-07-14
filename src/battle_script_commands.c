@@ -6352,6 +6352,61 @@ bool32 CanUseLastResort(u8 battlerId)
     return (knownMovesCount >= 2 && usedMovesCount >= knownMovesCount - 1);
 }
 
+static bool32 HasAttackerFaintedTarget(void)
+{
+    if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        && gBattleMoves[gCurrentMove].power != 0
+        && (gLastHitBy[gBattlerTarget] == 0xFF || gLastHitBy[gBattlerTarget] == gBattlerAttacker)
+        && gBattleStruct->moveTarget[gBattlerAttacker] == gBattlerTarget
+        && gBattlerTarget != gBattlerAttacker
+        && gCurrentTurnActionNumber == GetBattlerTurnOrderNum(gBattlerAttacker)
+        && (gChosenMove == gChosenMoveByBattler[gBattlerAttacker] || gChosenMove == gBattleMons[gBattlerAttacker].moves[gChosenMovePos]))
+        return TRUE;
+    else
+        return FALSE;
+}
+
+static void HandleTerrainMove(u32 moveEffect)
+{
+    u32 statusFlag = 0;
+    u8 *timer = NULL;
+
+    switch (moveEffect)
+    {
+    case EFFECT_MISTY_TERRAIN:
+        statusFlag = STATUS_FIELD_MISTY_TERRAIN, timer = &gFieldTimers.mistyTerrainTimer;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+        break;
+    case EFFECT_GRASSY_TERRAIN:
+        statusFlag = STATUS_FIELD_GRASSY_TERRAIN, timer = &gFieldTimers.grassyTerrainTimer;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+        break;
+    case EFFECT_ELECTRIC_TERRAIN:
+        statusFlag = STATUS_FIELD_ELECTRIC_TERRAIN, timer = &gFieldTimers.electricTerrainTimer;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+        break;
+    case EFFECT_PSYCHIC_TERRAIN:
+        statusFlag = STATUS_FIELD_PSYCHIC_TERRAIN, timer = &gFieldTimers.psychicTerrainTimer;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 3;
+        break;
+    }
+
+    if (gFieldStatuses & statusFlag || statusFlag == 0)
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
+    }
+    else
+    {
+        gFieldStatuses &= ~STATUS_TERRAIN_ANY;
+        gFieldStatuses |= statusFlag;
+        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
+            *timer = 8;
+        else
+            *timer = 5;
+        gBattlescriptCurrInstr += 7;
+    }
+}
+
 
 static void RecalcBattlerStats(u32 battler, struct Pokemon* mon)
 {
@@ -6386,7 +6441,8 @@ static u32 GetHighestStatId(u32 battlerId)
 }
 
 static void atk76_various(void) //will need to add all these emerald various commands to the inc...
-{
+{                   //will also need to go through all the new stuff and make sure any
+    //functions they relay on have already been ported. THen do the inc stuff.
     struct Pokemon *mon;
     u32 side, bits;
     s32 i, j;

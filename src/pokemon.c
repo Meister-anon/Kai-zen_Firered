@@ -3076,11 +3076,15 @@ static void GiveMonInitialMoveset(struct Pokemon *mon)
     GiveBoxMonInitialMoveset(&mon->box);
 }
 
-static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon)
+static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //important can use this to set up my nature based moveset ranking system
 {
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     s32 level = GetLevelFromBoxMonExp(boxMon);
     s32 i;
+    s32 personality; // added these two for later edits
+    u8 nature;
+
+    nature = GetNatureFromPersonality(personality); //put this somewhere
 
     for (i = 0; gLevelUpLearnsets[species][i] != LEVEL_UP_END; i++)
     {
@@ -3089,17 +3093,20 @@ static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon)
 
         moveLevel = (gLevelUpLearnsets[species][i] & 0xFE00);
 
-        if (moveLevel > (level << 9))
+        if (moveLevel == 0)
+            continue; //ok this line means after evo move learning code changes are in, still need test if works
+
+        if (moveLevel > (level << 9)) // prevents learnign moves above level
             break;
 
         move = (gLevelUpLearnsets[species][i] & 0x1FF);
 
-        if (GiveMoveToBoxMon(boxMon, move) == 0xFFFF)
-            DeleteFirstMoveAndGiveMoveToBoxMon(boxMon, move);
-    }
+        if (GiveMoveToBoxMon(boxMon, move) == 0xFFFF) // this may be the move learn function I need.
+            DeleteFirstMoveAndGiveMoveToBoxMon(boxMon, move); //important since I know boxmon works for enemy npc & i think wild as well.
+    } // that function should be very useful for setting up wild move learning.
 }
 
-u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove)
+u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try and match cfru lvl 0 evo learn move function
 {
     u32 retVal = 0;
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -3113,15 +3120,16 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove)
     {
         sLearningMoveTableID = 0;
 
-        while ((gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) != (level << 9))
+        while ((gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) != (level << 9) || (gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) != 0)
         {
             sLearningMoveTableID++;
-            if (gLevelUpLearnsets[species][sLearningMoveTableID] == LEVEL_UP_END)
+            if (gLevelUpLearnsets[species][sLearningMoveTableID] == LEVEL_UP_END
+            && gLevelUpLearnsets[species][sLearningMoveTableID] == 0)
                 return 0;
         }
     }
 
-    if ((gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) == (level << 9))
+    if ((gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) == (level << 9) || (gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) == 0)
     {
         gMoveToLearn = (gLevelUpLearnsets[species][sLearningMoveTableID] & 0x1FF);
         sLearningMoveTableID++;
@@ -3130,6 +3138,7 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove)
 
     return retVal;
 }
+
 
 void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move) // this important too, and above.
 {

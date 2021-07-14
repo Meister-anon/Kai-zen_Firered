@@ -26,7 +26,7 @@
 #include "constants/songs.h"
 #include "constants/maps.h"
 
-struct HallofFameMon
+struct HallofFameMon //changes this allows expanded species to show correctly in hall of fame
 {
     u32 tid;
     u32 personality;
