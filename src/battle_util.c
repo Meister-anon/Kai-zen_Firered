@@ -475,8 +475,8 @@ bool8 WasUnableToUseMove(u8 battler)
      || gProtectStructs[battler].usedTauntedMove
      || gProtectStructs[battler].flag2Unknown
      || gProtectStructs[battler].flinchImmobility
-     || gProtectStructs[battler].confusionSelfDmg)
-        return TRUE;
+     || gProtectStructs[battler].confusionSelfDmg) //prob need adjust this when done
+        return TRUE; //actually no I'll keep that as is, but only have it trigger when using non-status move on self at bad oods
     else
         return FALSE;
 }
@@ -1647,24 +1647,65 @@ u8 AtkCanceller_UnableToUseMove(void)
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
-        case CANCELLER_CONFUSED: // confusion
+        case CANCELLER_CONFUSED: // confusion need test but done, until double battles are in
+            u16 rando = Random() % 4;
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
-            {
+            { //users most likely won't notice the difference unless they attack themselves
                 --gBattleMons[gBattlerAttacker].status2;
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
                 {
-                    if (Random() & 1)
+                    if (Random() & 1) //chance confused but used move anyway   think 50% may equal random % 2 not 0
                     {
-                        gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-                        BattleScriptPushCursor();
+                        if (Random() % 3) {   //2/3 chance succesful attack
+                            gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                            BattleScriptPushCursor();
+                        }
+                        else { // 1/3 odds target gets randomly changed
+                            if (rando == 0) {
+                                gBattleMoves[gCurrentMove].target = MOVE_TARGET_RANDOM;
+                                gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                                BattleScriptPushCursor();
+                            }
+                            if (rando == 1) {
+                                gBattleMoves[gCurrentMove].target = MOVE_TARGET_BOTH;
+                                gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                                BattleScriptPushCursor();
+                            }
+                            if (rando == 2) {
+                                gBattleMoves[gCurrentMove].target = MOVE_TARGET_FOES_AND_ALLY;
+                                gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                                BattleScriptPushCursor();
+                            }
+                            if (rando == 3) //hits everyone
+                            {
+                                gBattleMoves[gCurrentMove].target = MOVE_TARGET_USER | MOVE_TARGET_FOES_AND_ALLY;
+                                gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                                gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
+                                BattleScriptPushCursor(); //not sure what this is doing
+                            } //if it works  may still add just target ally
+
+                                
+                        }
+                        //gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                        //BattleScriptPushCursor();
                     }
-                    else // confusion dmg
-                    {
-                        gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                    else // confusion dmg  //yup oddds are 50%  this is the other side where they attack themselves
+                    { //ok I want to keep the sucess condition the same, but split the failure condition.
+                        //into different effects,
+                        //1 attack a random target
                         gBattlerTarget = gBattlerAttacker;
-                        gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, 40, 0, gBattlerAttacker, gBattlerAttacker);
-                        gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
-                        gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                        if (gBattleMoveDamage < gBattleMons[gBattlerTarget].maxHP / 16
+                            && gBattleMovePower > 0)
+                            gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 16;
+                            gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
+
+                        if (gBattleMovePower == 0 && Random() % 2) {
+                            gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                            gBattlerTarget = gBattlerAttacker;
+                            gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, 40, 0, gBattlerAttacker, gBattlerAttacker);
+                            gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
+                            gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                        }
                     }
                     gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused;
                 }
@@ -3702,7 +3743,7 @@ void HandleAction_RunBattleScript(void) // identical to RunBattleScriptCommands
 }
 
 
-u8 GetMoveTarget(u16 move, u8 setTarget)
+u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who gets attacked?
 {
     u8 targetBattler = 0;
     u8 moveTarget;
@@ -3735,8 +3776,8 @@ u8 GetMoveTarget(u16 move, u8 setTarget)
             }
         }
         break;
-    case MOVE_TARGET_DEPENDS:
-    case MOVE_TARGET_BOTH:
+    case MOVE_TARGET_DEPENDS: //since realized I can set mullti targets using | 
+    case MOVE_TARGET_BOTH: //I just need to add ally to this list
     case MOVE_TARGET_FOES_AND_ALLY:
     case MOVE_TARGET_OPPONENTS_FIELD:
         targetBattler = GetBattlerAtPosition((GetBattlerPosition(gBattlerAttacker) & BIT_SIDE) ^ BIT_SIDE);
