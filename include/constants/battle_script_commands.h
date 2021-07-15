@@ -84,6 +84,7 @@
 //emerald ported luckily doesn't have to be in sequence so I'll just leave
 //here in case they're needed
 #define VARIOUS_SET_TELEPORT_OUTCOME            25
+#define VARIOUS_SWITCHIN_ABILITIES				28
 #define VARIOUS_SAVE_TARGET                     29
 #define VARIOUS_RESTORE_TARGET                  30
 #define VARIOUS_INSTANT_HP_DROP                 31
@@ -165,6 +166,15 @@
 #define ATK80_DMG_CHANGE_SIGN                               0
 #define ATK80_DMG_HALF_BY_TWO_NOT_MORE_THAN_HALF_MAX_HP     1
 #define ATK80_DMG_DOUBLED                                   2
+#define DMG_1_8_TARGET_HP          3
+#define DMG_FULL_ATTACKER_HP       4
+#define DMG_CURR_ATTACKER_HP       5
+#define DMG_BIG_ROOT               6
+#define DMG_1_2_ATTACKER_HP        7
+#define DMG_RECOIL_FROM_IMMUNE     8 // Used to calculate recoil for the Gen 4 version of Jump Kick
+
+// Cmd_jumpifcantswitch
+#define SWITCH_IGNORE_ESCAPE_PREVENTION   (1 << 7)
 
 // atk4F, a flag used for the jumpifcantswitch command
 #define ATK4F_DONT_CHECK_STATUSES   0x80
@@ -177,7 +187,7 @@
 #define ATK48_STAT_NEGATIVE         0x1
 #define ATK48_STAT_BY_TWO           0x2
 #define ATK48_ONLY_MULTIPLE         0x4
-#define ATK48_DONT_CHECK_LOWER      0x8
+#define ATK48_DONT_CHECK_LOWER      0x8	//think equivalent of stat_change_cant_prevent
 
 // atk49, moveend cases
 #define ATK49_RAGE                              0
@@ -197,7 +207,14 @@
 #define ATK49_UPDATE_LAST_MOVES                 14
 #define ATK49_MIRROR_MOVE                       15
 #define ATK49_NEXT_TARGET                       16
-#define ATK49_COUNT                             17
+#define ATK49_MOVE_EFFECTS2						17         
+#define ATK49_ITEM_EFFECTS_TARGET				18
+#define ATK49_DANCER							19
+#define ATK49_EMERGENCY_EXIT					20          
+#define ATK49_CLEAR_BITS						21
+#define ATK49_ABILITIES_ATTACKER				22
+#define ATK49_PROTECT_LIKE_EFFECT				23
+#define ATK49_COUNT								24
 
 #define BIT_HP                      0x1
 #define BIT_ATK                     0x2

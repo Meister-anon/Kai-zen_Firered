@@ -55,7 +55,7 @@
 #define BATTLE_TYPE_BATTLE_TOWER     0x0100
 #define BATTLE_TYPE_OLD_MAN_TUTORIAL 0x0200
 #define BATTLE_TYPE_ROAMER           0x0400
-#define BATTLE_TYPE_EREADER_TRAINER  0x0800
+#define BATTLE_TYPE_EREADER_TRAINER  0x0800	//remove this, so I can replace it.
 #define BATTLE_TYPE_KYOGRE_GROUDON   0x1000
 #define BATTLE_TYPE_LEGENDARY        0x2000
 #define BATTLE_TYPE_GHOST_UNVEILED   0x2000 // Re-use of BATTLE_TYPE_LEGENDARY, when combined with BATTLE_TYPE_GHOST
@@ -68,7 +68,7 @@
 #define BATTLE_TYPE_x100000          0x100000
 #define BATTLE_TYPE_x200000          0x200000
 #define BATTLE_TYPE_INGAME_PARTNER   0x400000
-#define BATTLE_TYPE_x800000          0x800000
+#define BATTLE_TYPE_TWO_OPPONENTS    0x800000
 #define BATTLE_TYPE_RECORDED         0x1000000
 #define BATTLE_TYPE_x2000000         0x2000000
 #define BATTLE_TYPE_x4000000         0x4000000
@@ -83,6 +83,10 @@
 
 #define RIVAL_BATTLE_HEAL_AFTER  1
 #define RIVAL_BATTLE_TUTORIAL    3
+
+#define WILD_DOUBLE_BATTLE ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_TRAINER))))
+//#define BATTLE_TWO_VS_ONE_OPPONENT ((gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && gTrainerBattleOpponent_B == 0xFFFF))
+
 
 // Battle Outcome defines
 #define B_OUTCOME_WON                  0x1
@@ -106,8 +110,8 @@
 #define STATUS1_FREEZE           0x20
 #define STATUS1_PARALYSIS        0x40
 #define STATUS1_SPIRIT_LOCK      0x60
-#define STATUS1_TOXIC_POISON     0x80
-#define STATUS1_TOXIC_COUNTER    0xF00
+#define STATUS1_TOXIC_POISON     0x80		//remembered need change toxic, so it still toxic on switch out
+#define STATUS1_TOXIC_COUNTER    0xF00		//idea change pokemon summary box from red to black to show dead ... play the runescape death music   XD
 #define STATUS1_PSN_ANY          (STATUS1_POISON | STATUS1_TOXIC_POISON)
 #define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_SPIRIT_LOCK | STATUS1_TOXIC_POISON)
 
@@ -120,6 +124,7 @@
 #define STATUS2_LOCK_CONFUSE          0x00000C00
 #define STATUS2_MULTIPLETURNS         0x00001000
 #define STATUS2_WRAPPED               0x0000E000
+#define STATUS2_POWDER                (1 << 14)
 #define STATUS2_INFATUATION           0x000F0000  // 4 bits, one for every battler
 #define STATUS2_INFATUATED_WITH(battler) (gBitTable[battler] << 16)
 #define STATUS2_FOCUS_ENERGY          0x00100000
@@ -348,6 +353,7 @@
 #define MOVE_EFFECT_BUG_BITE	        0x44
 #define MOVE_EFFECT_RECOIL_50	        0x45
 #define MOVE_EFFECT_RECOIL_33_STATUS	0x46
+#define MOVE_EFFECT_V_CREATE			0x47
 #define MOVE_EFFECT_AFFECTS_USER        0x50
 #define MOVE_EFFECT_CERTAIN             0x80
 

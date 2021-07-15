@@ -177,7 +177,7 @@ static void SafariTextIntoHealthboxObject(void *dest, u8 *windowTileData, u32 wi
 static u8 *AddTextPrinterAndCreateWindowOnHealthbox(const u8 *str, u32 x, u32 y, u32 *windowId);
 static void RemoveWindowOnHealthbox(u32 windowId);
 static void TextIntoHealthboxObject(void *dest, u8 *windowTileData, s32 windowWidth);
-void CreateAbilityPopUp(u8 battlerId, u32 ability, bool32 isDoubleBattle)
+//void CreateAbilityPopUp(u8 battlerId, u32 ability, bool32 isDoubleBattle)
 
 static const struct OamData gOamData_8260270 = {
     .shape = SPRITE_SHAPE(64x32),
@@ -2440,9 +2440,9 @@ static void PrintAbilityOnAbilityPopUp(u32 ability, u8 spriteId1, u8 spriteId2)
         7, 1,
         4,
         7, 9, 1);
-}
+}*/
 
-#define PIXEL_COORDS_TO_OFFSET(x, y)(            \
+//#define PIXEL_COORDS_TO_OFFSET(x, y)(            \
 /*Add tiles by X*/                                \
 ((y / 8) * 32 * 8)                                \
 /*Add tiles by X*/                                \
@@ -2452,7 +2452,7 @@ static void PrintAbilityOnAbilityPopUp(u32 ability, u8 spriteId1, u8 spriteId2)
 /*Add pixels by X*/                                \
 + ((((x) - ((x / 8) * 8)) / 2)))
 
-static const u16 sOverwrittenPixelsTable[][2] =
+/*static const u16 sOverwrittenPixelsTable[][2] =
 {
     {PIXEL_COORDS_TO_OFFSET(0, 0), 5},
     {PIXEL_COORDS_TO_OFFSET(0, 1), 5},

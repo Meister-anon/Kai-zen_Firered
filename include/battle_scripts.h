@@ -4,6 +4,18 @@
 #include "global.h"
 
 extern const u8 BattleScript_HitFromCritCalc[]; //only defined because its refered to in function
+extern const u8 BattleScript_EffectWithChance[]; //putting more emerald ports below this
+extern const u8 BattleScript_SideStatusWoreOff[];
+extern const u8 BattleScript_ToxicSpikesFree[];
+extern const u8 BattleScript_StickyWebFree[];
+extern const u8 BattleScript_StealthRockFree[];
+extern const u8 BattleScript_MegaEvolution[];
+extern const u8 BattleScript_WishMegaEvolution[];
+extern const u8 BattleScript_AttackerAbilityStatRaise[];
+extern const u8 BattleScript_RaiseStatOnFaintingTarget[];
+extern const u8 BattleScript_ScriptingAbilityStatRaise[];
+extern const u8 BattleScript_TotemVar[];
+extern const u8 BattleScript_TotemFlaredToLife[];
 extern const u8 BattleScript_MoveEnd[];
 extern const u8 BattleScript_MakeMoveMissed[];
 extern const u8 BattleScript_PrintMoveMissed[];
@@ -15,6 +27,7 @@ extern const u8 BattleScript_StatDown[];
 extern const u8 BattleScript_AlreadyAtFullHp[];
 extern const u8 BattleScript_PresentHealTarget[];
 extern const u8 BattleScript_MoveUsedMustRecharge[];
+extern const u8 BattleScript_SkyAttackTurn2[];
 extern const u8 BattleScript_FaintAttacker[];
 extern const u8 BattleScript_FaintTarget[];
 extern const u8 BattleScript_GiveExp[];
@@ -48,6 +61,7 @@ extern const u8 BattleScript_SunlightContinues[];
 extern const u8 BattleScript_SunlightFaded[];
 extern const u8 BattleScript_OverworldWeatherStarts[];
 extern const u8 BattleScript_SideStatusWoreOff[];
+extern const u8 BattleScript_SideStatusWoreOffReturn[];
 extern const u8 BattleScript_SafeguardProtected[];
 extern const u8 BattleScript_SafeguardEnds[];
 extern const u8 BattleScript_LeechSeedTurnDrain[];
@@ -486,6 +500,8 @@ extern const u8 BattleScript_EffectPartingShotTryAtk[];
 extern const u8 BattleScript_EffectPartingShot[];
 extern const u8 BattleScript_EffectSpectralThief[];
 extern const u8 BattleScript_SpectralThiefSteal[];
+extern const u8 BattleScript_StatUpMsg[];
+extern const u8 BattleScript_StatUp[];
 extern const u8 BattleScript_VCreateStatLossRet[];
 extern const u8 BattleScript_VCreateTrySpeed[];
 extern const u8 BattleScript_VCreateTrySpDef[];

@@ -32,8 +32,8 @@ struct HallofFameMon //changes this allows expanded species to show correctly in
     u32 personality;
     u16 species :11; // since Species_egg with expand mon is 1260, and bit 9 is 2^9-1 aka 511, had to increase to bit 11.
     u16 lvl :7;
-    u8 nick[10];
-};
+    u8 nick[10]; //because its bitwise which is 0 or 1, i.e the base of the number system, raised to the power of the numbers place - 1.
+}; // that's what I should do when I see a number next to a colon
 
 struct HallofFameTeam
 {

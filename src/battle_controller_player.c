@@ -2917,7 +2917,8 @@ static void PlayerCmdEnd(void)
 {
 }
 
-static void PreviewDeterminativeMoveTargets(void)
+static void PreviewDeterminativeMoveTargets(void) //determine who targetting
+//will need to port final changes here to all controllers
 {
     u32 bitMask = 0;
     u8 startY = 0;
@@ -2989,6 +2990,17 @@ static void PreviewDeterminativeMoveTargets(void)
             bitMask = (gBitTable[GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)] 
                      | gBitTable[GetBattlerAtPosition(GetBattlerPosition(gActiveBattler) ^ BIT_FLANK)] 
                      | gBitTable[GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT)]) << 16;
+            startY = 8;
+            break;
+        case MOVE_TARGET_USER_AND_ALL:
+            bitMask = (gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]
+                     | gBitTable[GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)]
+                     | gBitTable[GetBattlerAtPosition(GetBattlerPosition(gActiveBattler) ^ BIT_FLANK)] 
+                     | gBitTable[GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT)]) << 16;
+            startY = 8;
+            break;
+        case MOVE_TARGET_ALLY:
+            bitMask = (gBitTable[GetBattlerAtPosition(GetBattlerPosition(gActiveBattler) ^ BIT_FLANK)]) << 16;
             startY = 8;
             break;
         }

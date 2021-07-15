@@ -68,9 +68,10 @@
 #define MOVE_TARGET_USER              0x10
 #define MOVE_TARGET_FOES_AND_ALLY     0x20
 #define MOVE_TARGET_OPPONENTS_FIELD   0x40
-//#define MOVE_TARGET_ANY_OR_ALL        0x80 //think added for confuse hit idea change
+#define MOVE_TARGET_USER_AND_ALL      0x80 //think added for confuse hit idea change
+#define MOVE_TARGET_ALLY              0x160
 
-struct TrainerMonNoItemDefaultMoves
+struct TrainerMonNoItemDefaultMoves //pull from 4-12 later
 {
     u16 iv;
     u8 lvl;
@@ -143,6 +144,10 @@ struct DisableStruct
     /*0x06*/ u16 encoredMove;
     /*0x08*/ u8 protectUses;
     /*0x09*/ u8 stockpileCounter;
+             s8 stockpileDef;
+             s8 stockpileSpDef;
+             s8 stockpileBeforeDef;
+             s8 stockpileBeforeSpDef;
     /*0x0A*/ u8 substituteHP;
     /*0x0B*/ u8 disableTimer : 4;
     /*0x0B*/ u8 disableTimerStartValue : 4;
@@ -177,6 +182,7 @@ struct DisableStruct
             u8 laserFocusTimer;
             u8 throatChopTimer;
              u8 RoostTimer; // to set random % 4 effect after use roost
+             u8 usedMoves : 4;
              //u8 RoostTimerStartValue;  //remove for now until I get 
     /*0x1A*/ u8 unk1A[2];
 }; //think I may not actually need roost start value, long as I have timer
@@ -195,8 +201,8 @@ struct ProtectStruct
     u32 flag0Unknown:1;
     u32 prlzImmobility:1;
     /* field_1 */
-    u32 confusionSelfDmg:1;
-    u32 targetNotAffected:1;
+    u32 confusionSelfDmg:1;  //will instead change ot make random target,
+    u32 targetNotAffected:1; //and within that if move is non-damaging do normal confusion hit, or use move against self
     u32 chargingTurn:1;
     u32 fleeFlag:2; // for RunAway and Smoke Ball
     u32 usedImprisonedMove:1;
@@ -217,6 +223,14 @@ struct ProtectStruct
     u32 specialDmg;
     u8 physicalBattlerId;
     u8 specialBattlerId;
+    u32 spikyShielded : 1;
+    u32 kingsShielded : 1;
+    u32 banefulBunkered : 1;
+    u32 usesBouncedMove : 1;
+    u32 usedHealBlockedMove : 1;
+    u32 usedGravityPreventedMove : 1;
+    u32 powderSelfDmg : 1;
+    u32 usedThroatChopPreventedMove : 1;
     u16 fieldE;
 };
 
@@ -233,6 +247,11 @@ struct SpecialStatus
     u8 flag40 : 1;
     u8 focusBanded : 1;
     u8 field1[3];
+    u8 instructedChosenTarget : 3;
+    u8 gemBoost : 1;
+    u8 gemParam;
+    u8 dancerUsedMove : 1;
+    u8 dancerOriginalTarget : 3;
     s32 dmg;
     s32 physicalDmg;
     s32 specialDmg;
@@ -318,6 +337,7 @@ struct AI_ThinkingStruct
 };
 
 extern u8 gActiveBattler;
+extern u8 gBattlerAbility;
 extern u8 gBattlerTarget;
 extern u8 gAbsentBattlerFlags;
 
@@ -365,7 +385,13 @@ struct BattleResources
     struct AI_ThinkingStruct *ai;
     struct BattleHistory *battleHistory;
     struct BattleScriptsStack *AI_ScriptsStack;
+    u8 bufferA[MAX_BATTLERS_COUNT][0x200];
+    u8 bufferB[MAX_BATTLERS_COUNT][0x200];
 };
+
+//#define AI_THINKING_STRUCT ((struct AI_ThinkingStruct *)(gBattleResources->ai))
+#define AI_DATA ((struct AiLogicData *)(&gBattleResources->ai->data))
+//#define BATTLE_HISTORY ((struct BattleHistory *)(gBattleResources->battleHistory))
 
 extern struct BattleResources *gBattleResources;
 
@@ -492,8 +518,9 @@ struct BattleStruct //fill in unused fields when porting
     u8 AI_monToSwitchIntoId[2];
     u8 simulatedInputState[4];  // used by Oak/Old Man/Pokedude controllers
     u8 lastTakenMove[MAX_BATTLERS_COUNT * 2 * 2]; // ask gamefreak why they declared it that way
+    u8 lastMoveTarget[MAX_BATTLERS_COUNT]; // The last target on which each mon used a move, for the sake of Instruct
     u16 hpOnSwitchout[2];
-    u16 abilityPreventingSwitchout;
+    u16 abilityPreventingSwitchout; //could probably use lastTakenMove with ai, to keep a count of a party mons moveset.
     u8 hpScale;
     u16 savedBattleTypeFlags;
     void (*savedCallback)(void);
@@ -517,6 +544,12 @@ struct BattleStruct //fill in unused fields when porting
     u16 castformPalette[MAX_BATTLERS_COUNT][16]; //important, may be how they fixed alcremie?
     u8 wishPerishSongState;
     u8 wishPerishSongBattlerId;
+    u8 savedBattlerTarget;
+    bool8 anyMonHasTransformed;
+    bool8 terrainDone;
+    u16 tracedAbility[MAX_BATTLERS_COUNT]; //didn't really need to port, but prob can use it to show current ability in menu summary screen //important
+    u16 hpBefore[MAX_BATTLERS_COUNT]; // Hp of battlers before using a move. For Berserk
+    bool8 spriteIgnore0Hp;
     u8 field_182;
     // align 4
     union {
@@ -585,6 +618,7 @@ struct BattleScripting
     u8 field_20;
     u8 reshowMainState;
     u8 reshowHelperState;
+    u16 abilityPopupOverwrite;
     u8 field_23;
 };
 
@@ -699,6 +733,13 @@ struct PokedudeBattlerState
     u8 saved_bg0y;
 };
 
+struct TotemBoost
+{
+    u8 stats;   // bitfield for each battle stat that is set if the stat changes
+    s8 statChanges[NUM_BATTLE_STATS - 1];    // highest bit being set decreases the stat
+}; /* size = 8 */
+
+// All battle variables are declared in battle_main.c
 extern u16 gBattle_BG0_X;
 extern u16 gBattle_BG0_Y;
 extern u16 gBattle_BG1_X;
@@ -784,10 +825,12 @@ extern u8 gLastHitBy[MAX_BATTLERS_COUNT];
 extern u8 gMultiUsePlayerCursor;
 extern u8 gNumberOfMovesToChoose;
 extern u16 gLastHitByType[MAX_BATTLERS_COUNT];
+extern struct TotemBoost gTotemBoosts[MAX_BATTLERS_COUNT];
 extern s32 gHpDealt;
 extern u16 gPauseCounterBattle;
 extern u16 gPaydayMoney;
 extern u16 gLockedMoves[MAX_BATTLERS_COUNT];
+extern u16 gLastUsedMove;
 extern u8 gCurrentTurnActionNumber;
 extern u16 gExpShareExp;
 extern u8 gLeveledUpInBattle;

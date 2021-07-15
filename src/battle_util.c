@@ -25,6 +25,7 @@
 #include "constants/abilities.h"
 #include "constants/pokemon.h"
 #include "constants/hold_effects.h"
+#include "pokedex.h"
 #include "constants/battle_move_effects.h"
 #include "constants/battle_script_commands.h"
 
@@ -674,7 +675,7 @@ u8 GetImprisonedMovesCount(u8 battlerId, u16 move)
     return imprisonedMoves;
 }
 
-enum
+/*enum
 {
     ENDTURN_ORDER,
     ENDTURN_REFLECT,
@@ -686,6 +687,36 @@ enum
     ENDTURN_SANDSTORM,
     ENDTURN_SUN,
     ENDTURN_HAIL,
+    ENDTURN_FIELD_COUNT,
+};*/
+
+enum
+{
+    ENDTURN_ORDER,
+    ENDTURN_REFLECT,
+    ENDTURN_LIGHT_SCREEN,
+    ENDTURN_AURORA_VEIL,
+    ENDTURN_MIST,
+    ENDTURN_LUCKY_CHANT,
+    ENDTURN_SAFEGUARD,
+    ENDTURN_TAILWIND,
+    ENDTURN_WISH,
+    ENDTURN_RAIN,
+    ENDTURN_SANDSTORM,
+    ENDTURN_SUN,
+    ENDTURN_HAIL,
+    ENDTURN_GRAVITY,
+    //ENDTURN_WATER_SPORT,
+    //ENDTURN_MUD_SPORT,
+    ENDTURN_TRICK_ROOM,
+    ENDTURN_WONDER_ROOM,
+    ENDTURN_MAGIC_ROOM,
+    ENDTURN_ELECTRIC_TERRAIN,
+    ENDTURN_MISTY_TERRAIN,
+    ENDTURN_GRASSY_TERRAIN,
+    ENDTURN_PSYCHIC_TERRAIN,
+    ENDTURN_ION_DELUGE,
+    ENDTURN_FAIRY_LOCK,
     ENDTURN_FIELD_COUNT,
 };
 
@@ -929,7 +960,7 @@ u8 DoFieldEndTurnEffects(void)
     return (gBattleMainFunc != BattleTurnPassed);
 }
 
-enum
+/*enum
 {
     ENDTURN_INGRAIN,
     ENDTURN_ABILITIES,
@@ -953,7 +984,61 @@ enum
     ENDTURN_ROOST,
     ENDTURN_ITEMS2,
     ENDTURN_BATTLER_COUNT
+};*/
+
+enum
+{
+    ENDTURN_INGRAIN,
+    ENDTURN_AQUA_RING,
+    ENDTURN_ABILITIES,
+    ENDTURN_ITEMS1,
+    ENDTURN_LEECH_SEED,
+    ENDTURN_POISON,
+    ENDTURN_BAD_POISON,
+    ENDTURN_BURN,
+    ENDTURN_FREEZE,
+    ENDTURN_NIGHTMARES,
+    ENDTURN_CURSE,
+    ENDTURN_WRAP,
+    ENDTURN_UPROAR,
+    ENDTURN_THRASH,
+    ENDTURN_FLINCH,
+    ENDTURN_DISABLE,
+    ENDTURN_ENCORE,
+    ENDTURN_MAGNET_RISE,
+    ENDTURN_TELEKINESIS,
+    ENDTURN_HEALBLOCK,
+    ENDTURN_EMBARGO,
+    ENDTURN_LOCK_ON,
+    ENDTURN_CHARGE,
+    ENDTURN_LASER_FOCUS,
+    ENDTURN_TAUNT,
+    ENDTURN_YAWN,
+    ENDTURN_ITEMS2,
+    ENDTURN_ORBS,
+    ENDTURN_ROOST,
+    ENDTURN_ELECTRIFY,
+    ENDTURN_POWDER,
+    ENDTURN_THROAT_CHOP,
+    ENDTURN_SLOW_START,
+    ENDTURN_BATTLER_COUNT
 };
+
+// Ingrain, Leech Seed, Strength Sap and Aqua Ring
+s32 GetDrainedBigRootHp(u32 battler, s32 hp)
+{
+    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BIG_ROOT) //prob need to balance this for ingrain,
+    {
+        hp = (hp * 1300) / 1000;
+        if (gStatuses3[gActiveBattler] & STATUS3_ROOTED) //hopefully that works.
+            hp = (hp * 1100) / 1000;
+    }
+
+    if (hp == 0)
+        hp = 1;
+
+    return hp * -1;
+}
 
 u8 DoBattlerEndTurnEffects(void)
 {
@@ -1015,10 +1100,14 @@ u8 DoBattlerEndTurnEffects(void)
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
+                    if (IS_BATTLER_OF_TYPE(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED, TYPE_GHOST))
+                        gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 16; //check if correct, but should heal, and then take 1/16 max health of pokemon healed
+                    if (gBattleMoveDamage == 0) //intersting because that doesn't necessarily equate to half of the health gained.
+                        gBattleMoveDamage = 1;
                     gBattleScripting.animArg1 = gBattlerTarget;
                     gBattleScripting.animArg2 = gBattlerAttacker;
-                    BattleScriptExecute(BattleScript_LeechSeedTurnDrain);
-                    ++effect;
+                    BattleScriptExecute(BattleScript_LeechSeedTurnDrain); //I'll figure this out, and I think what I want to do is for all these ghost effects
+                    ++effect; //if absorbign from a ghost just change the color of the effect animation to a purple one
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
@@ -1648,9 +1737,10 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_CONFUSED: // confusion need test but done, until double battles are in
-            u16 rando = Random() % 4;
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
             { //users most likely won't notice the difference unless they attack themselves
+                u16 rando = Random() % 4;
+                u8 target = gBattleMoves[gCurrentMove].target;
                 --gBattleMons[gBattlerAttacker].status2;
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
                 {
@@ -1662,23 +1752,23 @@ u8 AtkCanceller_UnableToUseMove(void)
                         }
                         else { // 1/3 odds target gets randomly changed
                             if (rando == 0) {
-                                gBattleMoves[gCurrentMove].target = MOVE_TARGET_RANDOM;
+                                target = MOVE_TARGET_RANDOM;
                                 gBattleCommunication[MULTISTRING_CHOOSER] = 0;
                                 BattleScriptPushCursor();
                             }
                             if (rando == 1) {
-                                gBattleMoves[gCurrentMove].target = MOVE_TARGET_BOTH;
+                                target = MOVE_TARGET_BOTH;
                                 gBattleCommunication[MULTISTRING_CHOOSER] = 0;
                                 BattleScriptPushCursor();
                             }
                             if (rando == 2) {
-                                gBattleMoves[gCurrentMove].target = MOVE_TARGET_FOES_AND_ALLY;
+                                target = MOVE_TARGET_FOES_AND_ALLY;
                                 gBattleCommunication[MULTISTRING_CHOOSER] = 0;
                                 BattleScriptPushCursor();
                             }
                             if (rando == 3) //hits everyone
                             {
-                                gBattleMoves[gCurrentMove].target = MOVE_TARGET_USER | MOVE_TARGET_FOES_AND_ALLY;
+                                target = MOVE_TARGET_USER | MOVE_TARGET_FOES_AND_ALLY;
                                 gBattleCommunication[MULTISTRING_CHOOSER] = 1;
                                 gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
                                 BattleScriptPushCursor(); //not sure what this is doing
@@ -4068,7 +4158,211 @@ u32 GetBattlerAbility(u8 battlerId)  //Deokishishu in pret mentioned there is a 
         return gBattleMons[battlerId].ability;
 }
 
-u8 GetBattleMoveSplit(u32 moveId)
+u32 GetBattlerWeight(u8 battlerId)
+{
+    u32 i;
+    u32 weight = GetPokedexHeightWeight(SpeciesToNationalPokedexNum(gBattleMons[battlerId].species), 1);
+    u32 ability = GetBattlerAbility(battlerId);
+    u32 holdEffect = GetBattlerHoldEffect(battlerId, TRUE);
+
+    if (ability == ABILITY_HEAVY_METAL)
+        weight *= 2;
+    else if (ability == ABILITY_LIGHT_METAL)
+        weight /= 2;
+
+    if (holdEffect == HOLD_EFFECT_FLOAT_STONE)
+        weight /= 2;
+
+    for (i = 0; i < gDisableStructs[battlerId].autotomizeCount; i++)
+    {
+        if (weight > 1000)
+        {
+            weight -= 1000;
+        }
+        else if (weight <= 1000)
+        {
+            weight = 1;
+            break;
+        }
+    }
+
+    if (weight == 0)
+        weight = 1;
+
+    return weight;
+}
+
+static bool32 IsPartnerMonFromSameTrainer(u8 battlerId)
+{
+    if (GetBattlerSide(battlerId) == B_SIDE_OPPONENT && gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS) // replaced flag after ingamepartner
+        return FALSE;
+    else if (GetBattlerSide(battlerId) == B_SIDE_PLAYER && gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER)
+        return FALSE;
+    else if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
+        return FALSE;
+    else
+        return TRUE;
+}
+
+u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId)
+{
+    u32 i;
+
+    for (i = 0; i < EVOS_PER_MON; i++)
+    {
+        if (gEvolutionTable[preEvoSpecies][i].method == EVO_MEGA_EVOLUTION
+            && gEvolutionTable[preEvoSpecies][i].param == heldItemId)
+                return gEvolutionTable[preEvoSpecies][i].targetSpecies;
+    }
+    return SPECIES_NONE;
+}
+
+u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16 moveId3, u16 moveId4)
+{
+    u32 i, par;
+
+    for (i = 0; i < EVOS_PER_MON; i++)
+    {
+        if (gEvolutionTable[preEvoSpecies][i].method == EVO_MOVE_MEGA_EVOLUTION)
+        {
+            par = gEvolutionTable[preEvoSpecies][i].param;
+            if (par == moveId1 || par == moveId2 || par == moveId3 || par == moveId4)
+                return gEvolutionTable[preEvoSpecies][i].targetSpecies;
+        }
+    }
+    return SPECIES_NONE;
+}
+
+bool32 CanMegaEvolve(u8 battlerId)
+{
+    u32 itemId, holdEffect, species;
+    struct Pokemon *mon;
+    u8 battlerPosition = GetBattlerPosition(battlerId);
+    u8 partnerPosition = GetBattlerPosition(BATTLE_PARTNER(battlerId));
+    struct MegaEvolutionData *mega = &(((struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]))->mega);
+/*
+#ifdef ITEM_EXPANSION
+    // Check if Player has a Mega Bracelet
+    if ((GetBattlerPosition(battlerId) == B_POSITION_PLAYER_LEFT || (!(gBattleTypeFlags & BATTLE_TYPE_MULTI) && GetBattlerPosition(battlerId) == B_POSITION_PLAYER_RIGHT))
+     && !CheckBagHasItem(ITEM_MEGA_BRACELET, 1))
+        return FALSE;
+#endif*/
+
+    // Check if trainer already mega evolved a pokemon.
+    if (mega->alreadyEvolved[battlerPosition])
+        return FALSE;
+    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+    {
+        if (IsPartnerMonFromSameTrainer(battlerId)
+            && (mega->alreadyEvolved[partnerPosition] || (mega->toEvolve & gBitTable[BATTLE_PARTNER(battlerId)])))
+            return FALSE;
+    }
+
+    // Gets mon data.
+    if (GetBattlerSide(battlerId) == B_SIDE_OPPONENT)
+        mon = &gEnemyParty[gBattlerPartyIndexes[battlerId]];
+    else
+        mon = &gPlayerParty[gBattlerPartyIndexes[battlerId]];
+
+    species = GetMonData(mon, MON_DATA_SPECIES);
+    itemId = GetMonData(mon, MON_DATA_HELD_ITEM);
+
+    // Check if there is an entry in the evolution table for regular Mega Evolution.
+    if (GetMegaEvolutionSpecies(species, itemId) != SPECIES_NONE)
+    {
+        if (itemId == ITEM_ENIGMA_BERRY)
+            holdEffect = gEnigmaBerries[battlerId].holdEffect;
+        else
+            holdEffect = ItemId_GetHoldEffect(itemId);
+
+        // Can Mega Evolve via Item.
+        if (holdEffect == HOLD_EFFECT_MEGA_STONE)
+        {
+            gBattleStruct->mega.isWishMegaEvo = FALSE;
+            return TRUE;
+        }
+    }
+
+    // Check if there is an entry in the evolution table for Wish Mega Evolution.
+    if (GetWishMegaEvolutionSpecies(species, GetMonData(mon, MON_DATA_MOVE1), GetMonData(mon, MON_DATA_MOVE2), GetMonData(mon, MON_DATA_MOVE3), GetMonData(mon, MON_DATA_MOVE4)))
+    {
+        gBattleStruct->mega.isWishMegaEvo = TRUE;
+        return TRUE;
+    }
+
+    // No checks passed, the mon CAN'T mega evolve.
+    return FALSE;
+}
+
+void UndoMegaEvolution(u32 monId)
+{
+    if (gBattleStruct->mega.evolvedPartyIds[B_SIDE_PLAYER] & gBitTable[monId])
+    {
+        gBattleStruct->mega.evolvedPartyIds[B_SIDE_PLAYER] &= ~(gBitTable[monId]);
+        SetMonData(&gPlayerParty[monId], MON_DATA_SPECIES, &gBattleStruct->mega.playerEvolvedSpecies);
+        CalculateMonStats(&gPlayerParty[monId]);
+    }
+    // While not exactly a mega evolution, Zygarde follows the same rules.
+    else if (GetMonData(&gPlayerParty[monId], MON_DATA_SPECIES, NULL) == SPECIES_ZYGARDE_COMPLETE)
+    {
+        SetMonData(&gPlayerParty[monId], MON_DATA_SPECIES, &gBattleStruct->changedSpecies[monId]);
+        gBattleStruct->changedSpecies[monId] = 0;
+        CalculateMonStats(&gPlayerParty[monId]);
+    }
+}
+
+void UndoFormChange(u32 monId, u32 side)
+{
+    u32 i, currSpecies;
+    struct Pokemon *party = (side == B_SIDE_PLAYER) ? gPlayerParty : gEnemyParty;
+    static const u16 species[][2] = // changed form id, default form id
+    {
+        {SPECIES_AEGISLASH_BLADE, SPECIES_AEGISLASH},
+        {SPECIES_MIMIKYU_BUSTED, SPECIES_MIMIKYU},
+        {SPECIES_DARMANITAN_ZEN_MODE, SPECIES_DARMANITAN},
+        {SPECIES_MINIOR, SPECIES_MINIOR_CORE_RED},
+        {SPECIES_MINIOR_METEOR_BLUE, SPECIES_MINIOR_CORE_BLUE},
+        {SPECIES_MINIOR_METEOR_GREEN, SPECIES_MINIOR_CORE_GREEN},
+        {SPECIES_MINIOR_METEOR_INDIGO, SPECIES_MINIOR_CORE_INDIGO},
+        {SPECIES_MINIOR_METEOR_ORANGE, SPECIES_MINIOR_CORE_ORANGE},
+        {SPECIES_MINIOR_METEOR_VIOLET, SPECIES_MINIOR_CORE_VIOLET},
+        {SPECIES_MINIOR_METEOR_YELLOW, SPECIES_MINIOR_CORE_YELLOW},
+        {SPECIES_WISHIWASHI_SCHOOL, SPECIES_WISHIWASHI},
+    };
+
+    currSpecies = GetMonData(&party[monId], MON_DATA_SPECIES, NULL);
+    for (i = 0; i < NELEMS(species); i++)
+    {
+        if (currSpecies == species[i][0])
+        {
+            SetMonData(&party[monId], MON_DATA_SPECIES, &species[i][1]);
+            CalculateMonStats(&party[monId]);
+            break;
+        }
+    }
+}
+
+bool32 DoBattlersShareType(u32 battler1, u32 battler2)
+{
+    s32 i;
+    u8 types1[3] = { gBattleMons[battler1].type1, gBattleMons[battler1].type2, gBattleMons[battler1].type3 };
+    u8 types2[3] = { gBattleMons[battler2].type1, gBattleMons[battler2].type2, gBattleMons[battler2].type3 };
+
+    if (types1[2] == TYPE_MYSTERY)
+        types1[2] = types1[0];
+    if (types2[2] == TYPE_MYSTERY)
+        types2[2] = types2[0];
+
+    for (i = 0; i < 3; i++)
+    {
+        if (types1[i] == types2[0] || types1[i] == types2[1] || types1[i] == types2[2])
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+u32 GetBattleMoveSplit(u32 moveId)
 {
     return gBattleMoves[moveId].split;
 }
@@ -4169,12 +4463,12 @@ bool32 CanFling(u8 battlerId)
         || gFieldStatuses & STATUS_FIELD_MAGIC_ROOM
         || gDisableStructs[battlerId].embargoTimer != 0
         || !CanBattlerGetOrLoseItem(battlerId, item)
-        //|| itemEffect == HOLD_EFFECT_PRIMAL_ORB
+        //|| itemEffect == HOLD_EFFECT_PRIMAL_ORB       //this isnt wrong, its commented out even in emerald
         || itemEffect == HOLD_EFFECT_GEMS
 #ifdef ITEM_ABILITY_CAPSULE
         || item == ITEM_ABILITY_CAPSULE
 #endif
-        || ((item == ITEM_BERRY_POUCH) && IsAbilityOnSide(battlerId, ABILITY_UNNERVE))
+        || ((ItemId_GetPocket(item) == POCKET_BERRY_POUCH) && IsAbilityOnSide(battlerId, ABILITY_UNNERVE))
         || GetPocketByItemId(item) == POCKET_POKE_BALLS)
         return FALSE;
 

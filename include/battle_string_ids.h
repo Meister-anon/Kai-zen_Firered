@@ -10,6 +10,19 @@
 #define STRINGID_USEDMOVE   4
 #define STRINGID_BATTLEEND  5
 
+// gStatUpStringIds
+#define B_MSG_ATTACKER_STAT_ROSE 0
+#define B_MSG_DEFENDER_STAT_ROSE 1
+#define B_MSG_STAT_WONT_INCREASE 2
+#define B_MSG_STAT_ROSE_EMPTY    3
+#define B_MSG_STAT_ROSE_ITEM     4
+#define B_MSG_USED_DIRE_HIT      5
+
+// gStatDownStringIds
+#define B_MSG_ATTACKER_STAT_FELL 0
+#define B_MSG_DEFENDER_STAT_FELL 1
+#define B_MSG_STAT_WONT_DECREASE 2
+#define B_MSG_STAT_FELL_EMPTY    3
 
 // todo: make some of those names less vague: attacker/target vs pkmn, etc.
 #define STRINGID_TRAINER1LOSETEXT 12

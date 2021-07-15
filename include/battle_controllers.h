@@ -80,7 +80,7 @@ enum
 #define BALL_TRAINER_BLOCK      5
 #define BALL_GHOST_DODGE        6
 
-#define RET_VALUE_LEVELLED_UP   11
+//#define RET_VALUE_LEVELLED_UP   11
 
 #define INSTANT_HP_BAR_DROP     0x7FFF
 
@@ -101,19 +101,21 @@ struct HpAndStatus
 
 struct MovePpInfo
 {
-    u16 moves[4];
-    u8 pp[4];
+    u16 moves[MAX_MON_MOVES];
+    u8 pp[MAX_MON_MOVES];
     u8 ppBonuses;
 };
 
 struct ChooseMoveStruct
 {
-    u16 moves[4];
-    u8 currentPp[4];
-    u8 maxPp[4];
+    u16 moves[MAX_MON_MOVES];
+    u8 currentPp[MAX_MON_MOVES];
+    u8 maxPp[MAX_MON_MOVES];
     u16 species;
     u8 monType1;
     u8 monType2;
+    u8 monType3;
+    struct MegaEvolutionData mega;
 };
 
 enum
