@@ -5,7 +5,7 @@
 #include "random.h"
 #include "gpu_regs.h"
 #include "item.h"
-#include "item_icon.h"
+//#include "item_icon.h"  //maybe add its functions to item_menu_icons
 #include "sound.h"
 #include "menu.h"
 #include "malloc.h"
@@ -4977,7 +4977,8 @@ void CoreEnforcerLoadBeamTarget(struct Sprite* sprite)
                     +  GetBattlerSpriteCoord(BATTLE_PARTNER(gBattleAnimTarget), BATTLER_COORD_Y_PIC_OFFSET)) / 2;
 }
 
-void AnimTask_CreateBestowItem(u8 taskId)
+//important figure later
+/*void AnimTask_CreateBestowItem(u8 taskId)
 {
     u8 iconSpriteId = AddItemIconSprite(ANIM_TAG_ITEM_BAG, ANIM_TAG_ITEM_BAG, gLastUsedItem);
 
@@ -4988,7 +4989,7 @@ void AnimTask_CreateBestowItem(u8 taskId)
         ++gAnimVisualTaskCount;
     }
     DestroyAnimVisualTask(taskId);
-}
+}*/
 
 //Creates purple flames that surround the target.
 //No args.

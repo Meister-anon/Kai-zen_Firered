@@ -763,7 +763,9 @@ static void AnimClawSlash(struct Sprite *sprite)
 // arg1: if true, use custom color
 // arg2: custom color
 // Custom color argument is used in MOVE_POISON_TAIL to make the mon turn purplish/pinkish as if became cloaked in poison.
-void AnimTask_MetallicShine(u8 taskId)
+void AnimTask_MetallicShine(u8 taskId) //think will do the same for ghost absorb,
+//will add logic to anim tasks for if target is ghost that will change the color of eth bubles 
+//using a custom color argument
 {
     u16 species;
     u8 spriteId, newSpriteId;

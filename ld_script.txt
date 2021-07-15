@@ -107,6 +107,7 @@ SECTIONS {
         src/palette.o(.text);
         src/sound.o(.text);
         src/battle_anim.o(.text);
+        src/battle_anim_new.o(.text);
         src/battle_anim_mons.o(.text);
         src/task.o(.text);
         src/reshow_battle_screen.o(.text);
@@ -312,7 +313,6 @@ SECTIONS {
         src/berry_powder.o(.text);
         src/minigame_countdown.o(.text);
         src/berry_fix_program.o(.text);
-        src/battle_anim_new.o(.text);
     } =0
 
     script_data :
@@ -445,6 +445,7 @@ SECTIONS {
         src/palette.o(.rodata);
         src/sound.o(.rodata);
         src/battle_anim.o(.rodata);
+        src/battle_anim_new.o(.rodata);
         src/battle_anim_mons.o(.rodata);
         data/map_events.o(.rodata);
         src/battle_anim_status_effects.o(.rodata);

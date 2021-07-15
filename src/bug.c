@@ -11,10 +11,10 @@ static void AnimSpiderWeb(struct Sprite *sprite);
 static void AnimTranslateStinger(struct Sprite *sprite);
 static void AnimMissileArc(struct Sprite *sprite);
 static void AnimTailGlowOrb(struct Sprite *sprite);
-static void sub_80B41C0(struct Sprite *sprite);
-static void sub_80B4274(struct Sprite *sprite);
-static void sub_80B42E8(struct Sprite *sprite);
-static void sub_80B4344(struct Sprite *sprite);
+static void AnimTranslateWebThread_Step(struct Sprite *sprite);
+static void AnimStringWrap_Step(struct Sprite *sprite);
+static void AnimSpiderWeb_Step(struct Sprite *sprite);
+static void AnimSpiderWeb_End(struct Sprite *sprite);
 static void AnimMissileArcStep(struct Sprite *sprite);
 
 static const union AffineAnimCmd sAffineAnim_MegahornHorn_0[] =
@@ -266,10 +266,10 @@ static void AnimTranslateWebThread(struct Sprite *sprite)
     }
     BattleAnim_InitLinearTranslationWithDuration(sprite);
     sprite->data[5] = gBattleAnimArgs[3];
-    sprite->callback = sub_80B41C0;
+    sprite->callback = AnimTranslateWebThread_Step;
 }
 
-static void sub_80B41C0(struct Sprite *sprite)
+static void AnimTranslateWebThread_Step(struct Sprite *sprite)
 {
     if (AnimTranslateLinear(sprite))
     {
@@ -290,10 +290,10 @@ static void AnimStringWrap(struct Sprite *sprite)
     sprite->pos1.y += gBattleAnimArgs[1];
     if (GetBattlerSide(gBattleAnimTarget) == B_SIDE_PLAYER)
         sprite->pos1.y += 8;
-    sprite->callback = sub_80B4274;
+    sprite->callback = AnimStringWrap_Step;
 }
 
-static void sub_80B4274(struct Sprite *sprite)
+static void AnimStringWrap_Step(struct Sprite *sprite)
 {
     if (++sprite->data[0] == 3)
     {
@@ -311,10 +311,10 @@ static void AnimSpiderWeb(struct Sprite *sprite)
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND);
     SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(16, 0));
     sprite->data[0] = 16;
-    sprite->callback = sub_80B42E8;
+    sprite->callback = AnimSpiderWeb_Step;
 }
 
-static void sub_80B42E8(struct Sprite *sprite)
+static void AnimSpiderWeb_Step(struct Sprite *sprite)
 {
     if (sprite->data[2] < 20)
     {
@@ -328,12 +328,12 @@ static void sub_80B42E8(struct Sprite *sprite)
         if (sprite->data[0] == 0)
         {
             sprite->invisible = TRUE;
-            sprite->callback = sub_80B4344;
+            sprite->callback = AnimSpiderWeb_End;
         }
     }
 }
 
-static void sub_80B4344(struct Sprite *sprite)
+static void AnimSpiderWeb_End(struct Sprite *sprite)
 {
     SetGpuReg(REG_OFFSET_BLDCNT, 0);
     SetGpuReg(REG_OFFSET_BLDALPHA, 0);
