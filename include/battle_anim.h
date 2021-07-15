@@ -476,6 +476,12 @@ void AnimTask_RotateMonSpriteToSide(u8 taskId);
 void AnimTask_RotateMonToSideAndRestore(u8 taskId);
 void AnimTask_ShakeTargetBasedOnMovePowerOrDmg(u8 taskId);
 
+//bug.c
+void AnimStringWrap_Step(struct Sprite *sprite);
+void AnimMissileArc(struct Sprite *sprite);
+void AnimSpiderWeb(struct Sprite *sprite);
+void AnimMissileArc_Step(struct Sprite *sprite);
+
 // normal.c
 extern const struct SpriteTemplate gFlashingHitSplatSpriteTemplate;
 extern const struct SpriteTemplate gBasicHitSplatSpriteTemplate;
@@ -497,6 +503,15 @@ void AnimTask_PositionFissureBgOnBattler(u8 taskId);
 
 // dragon.c
 void AnimTask_DragonDanceWaver(u8 taskId);
+void AnimDragonRageFirePlume(struct Sprite *sprite);
+void AnimDragonFireToTarget(struct Sprite *sprite);
+void AnimDragonDanceOrb(struct Sprite *sprite);
+void AnimOverheatFlame(struct Sprite *sprite);
+extern const union AnimCmd *const gAnims_DragonBreathFire[];
+extern const union AffineAnimCmd *const gAffineAnims_DragonBreathFire[];
+extern const union AnimCmd *const gAnims_DragonRageFirePlume[];
+extern const union AffineAnimCmd *const gAffineAnims_DragonRageFire[];
+extern const union AnimCmd *const gAnims_DragonRageFire[];
 
 // ghost.c
 void AnimTask_NightShadeClone(u8 taskId);
@@ -524,6 +539,8 @@ void AnimTask_TransparentCloneGrowAndShrink(u8 taskId);
 
 // dark.c
 extern const union AffineAnimCmd *const gAffineAnims_Bite[];
+extern const union AffineAnimCmd *const gAffineAnims_TearDrop[];
+extern const union AnimCmd *const gAnims_ClawSlash[];
 void AnimTask_AttackerFadeToInvisible(u8 taskId);
 void AnimTask_AttackerFadeFromInvisible(u8 taskId);
 void AnimTask_InitAttackerFadeFromInvisible(u8 taskId);
@@ -534,6 +551,9 @@ void sub_80B8664(u8 taskId);
 void AnimTask_MetallicShine(u8 taskId);
 void AnimTask_SetGreyscaleOrOriginalPal(u8 taskId);
 void GetIsDoomDesireHitTurn(u8 taskId);
+void AnimClawSlash(struct Sprite *sprite);
+void AnimTearDrop(struct Sprite *sprite);
+void AnimBite(struct Sprite *sprite);
 
 // flying.c
 void AnimTask_AnimateGustTornadoPalette(u8 taskId);
@@ -610,5 +630,8 @@ void AnimTask_SetAttackerInvisibleWaitForSignal(u8 taskId);
 extern const u8 *const gBattleAnims_StatusConditions[];
 extern const u16 gMovesWithQuietBGM[];
 extern const u8 *const gBattleAnims_Moves[];
+
+// battle_anim_new.c
+void CoreEnforcerLoadBeamTarget(struct Sprite* sprite);
 
 #endif // GUARD_BATTLE_ANIM_H

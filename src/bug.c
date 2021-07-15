@@ -7,16 +7,16 @@ static void AnimMegahornHorn(struct Sprite *sprite);
 static void AnimLeechLifeNeedle(struct Sprite *sprite);
 static void AnimTranslateWebThread(struct Sprite *sprite);
 static void AnimStringWrap(struct Sprite *sprite);
-static void AnimSpiderWeb(struct Sprite *sprite);
+//void AnimSpiderWeb(struct Sprite *sprite); like this some for emerald are not static
 static void AnimTranslateStinger(struct Sprite *sprite);
-static void AnimMissileArc(struct Sprite *sprite);
+//static void AnimMissileArc(struct Sprite *sprite);
 static void AnimTailGlowOrb(struct Sprite *sprite);
 static void AnimTranslateWebThread_Step(struct Sprite *sprite);
-static void AnimStringWrap_Step(struct Sprite *sprite);
+//static void AnimStringWrap_Step(struct Sprite *sprite);
 static void AnimSpiderWeb_Step(struct Sprite *sprite);
 static void AnimSpiderWeb_End(struct Sprite *sprite);
-static void AnimMissileArcStep(struct Sprite *sprite);
-
+//static void AnimMissileArcStep(struct Sprite *sprite);
+//in that case are defined in battle_anim.h
 static const union AffineAnimCmd sAffineAnim_MegahornHorn_0[] =
 {
     AFFINEANIMCMD_FRAME(0x100, 0x100, 30, 0),
@@ -306,10 +306,23 @@ static void AnimStringWrap_Step(struct Sprite *sprite)
     }
 }
 
-static void AnimSpiderWeb(struct Sprite *sprite)
+// arg0: x
+// arg1: y
+// arg2: targets both
+void AnimSpiderWeb(struct Sprite *sprite)
 {
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND);
     SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(16, 0));
+
+    if (gBattleAnimArgs[2])
+        SetAverageBattlerPositions(gBattleAnimTarget, FALSE, &sprite->pos1.x, &sprite->pos1.y);
+
+    if (GetBattlerSide(gBattleAnimAttacker) == B_SIDE_OPPONENT)
+        sprite->pos1.x -= gBattleAnimArgs[0];
+    else
+        sprite->pos1.x += gBattleAnimArgs[0];
+
+    sprite->pos1.y += gBattleAnimArgs[1];
     sprite->data[0] = 16;
     sprite->callback = AnimSpiderWeb_Step;
 }
