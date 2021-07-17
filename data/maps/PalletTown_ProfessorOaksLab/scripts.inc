@@ -6,6 +6,7 @@
 .equ LOCALID_POKEDEX_1,       9
 .equ LOCALID_POKEDEX_2,       10
 
+
 .equ PLAYER_STARTER_NUM,      VAR_TEMP_1
 .equ PLAYER_STARTER_SPECIES,  VAR_TEMP_2
 .equ RIVAL_STARTER_SPECIES,   VAR_TEMP_3
@@ -251,8 +252,6 @@ PalletTown_ProfessorOaksLab_ChooseStarterScene:: @ 816923E
 	waitmovement 0
 	msgbox PalletTown_ProfessorOaksLab_Text_RivalNoFairWhatAboutMe
 	msgbox PalletTown_ProfessorOaksLab_Text_OakBePatientRival
-	@ callnative SetPlayerRandomStarterSpecies
-	callnative SetRivalRandomStarterSpecies
 	setvar VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 2
 	releaseall
 	end
@@ -730,7 +729,7 @@ PalletTown_ProfessorOaksLab_EventScript_ReceiveDexScene:: @ 816961E
 	msgbox PalletTown_ProfessorOaksLab_Text_OakCatchMonsForDataTakeThese
 	giveitem_msg PalletTown_ProfessorOaksLab_Text_ReceivedFivePokeBalls, ITEM_POKE_BALL, 5
 	msgbox PalletTown_ProfessorOaksLab_Text_OakExplainCatching
-	@  famechecker FAMECHECKER_OAK, 1
+	famechecker FAMECHECKER_OAK, 1
 	msgbox PalletTown_ProfessorOaksLab_Text_OakCompleteMonGuideWasMyDream
 	msgbox PalletTown_ProfessorOaksLab_Text_RivalLeaveItToMeGramps
 	compare VAR_FACING, DIR_NORTH
@@ -757,7 +756,7 @@ PalletTown_ProfessorOaksLab_EventScript_ReceiveDexScene:: @ 816961E
 	setvar VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 6
 	setvar VAR_MAP_SCENE_VIRIDIAN_CITY_MART, 2
 	setvar VAR_MAP_SCENE_VIRIDIAN_CITY_OLD_MAN, 1
-	setvar VAR_MAP_SCENE_PALLET_TOWN_GARYS_HOUSE, 1
+	setvar VAR_MAP_SCENE_PALLET_TOWN_RIVALS_HOUSE, 1
 	setvar VAR_MAP_SCENE_ROUTE22, 1
 	release
 	end
@@ -1157,8 +1156,8 @@ PalletTown_ProfessorOaksLab_EventScript_BulbasaurBall:: @ 8169BAB
 	lock
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 0
-	copyvar PLAYER_STARTER_SPECIES, VAR_TEMP_5
-	copyvar VAR_RIVAL_STARTER, VAR_TEMP_8
+	callnative SetPlayerBulbasaurBall
+	setvar RIVAL_STARTER_SPECIES, SPECIES_CHARMANDER
 	setvar RIVAL_STARTER_ID, LOCALID_CHARMANDER_BALL
 	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3
 	goto_if_ge PalletTown_ProfessorOaksLab_EventScript_LastPokeBall
@@ -1182,8 +1181,8 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmStarterChoice:: @ 8169BE1
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_ConfirmBulbasaur:: @ 8169C14
-	getspeciesname  0, VAR_TEMP_5
-	getspeciestype 1, VAR_TEMP_5
+	getspeciesname  0, VAR_TEMP_2
+	getspeciestype 1, VAR_TEMP_2
 	msgbox PalletTown_ProfessorOaksLab_Text_OakChoosingBulbasaur, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_ChoseStarter
@@ -1192,8 +1191,8 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmBulbasaur:: @ 8169C14
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_ConfirmSquirtle:: @ 8169C33
-	getspeciesname  0, VAR_TEMP_6
-	getspeciestype 1, VAR_TEMP_6
+	getspeciesname  0, VAR_TEMP_2
+	getspeciestype 1, VAR_TEMP_2
 	msgbox PalletTown_ProfessorOaksLab_Text_OakChoosingSquirtle, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_ChoseStarter
@@ -1202,8 +1201,8 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmSquirtle:: @ 8169C33
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_ConfirmCharmander:: @ 8169C52
-	getspeciesname  0, VAR_TEMP_7
-	getspeciestype 1, VAR_TEMP_7
+	getspeciesname  0, VAR_TEMP_2
+	getspeciestype 1, VAR_TEMP_2
 	msgbox PalletTown_ProfessorOaksLab_Text_OakChoosingCharmander, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_ChoseStarter
@@ -1214,17 +1213,16 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmCharmander:: @ 8169C52
 PalletTown_ProfessorOaksLab_EventScript_DeclinedStarter:: @ 8169C71
 	erasemonpic
 	release
-	callnative SetPlayerRandomStarterSpecies
 	end
 
-PalletTown_ProfessorOaksLab_EventScript_ChoseStarter:: @ 8169C74
+PalletTown_ProfessorOaksLab_EventScript_ChoseStarter:: @ 8169C74   Important for setup use pory to make 2 table with 6 pokeballs
 	erasemonpic
-	removeobject VAR_LAST_TALKED
+	@ removeobject VAR_LAST_TALKED
 	msgbox PalletTown_ProfessorOaksLab_Text_OakThisMonIsEnergetic
 	call EventScript_RestorePrevTextColor
 	setflag FLAG_SYS_POKEMON_GET
 	setflag FLAG_PALLET_LADY_NOT_BLOCKING_SIGN
-	givemon PLAYER_STARTER_SPECIES, 5, ITEM_NONE
+	givemon PLAYER_STARTER_SPECIES, 25, ITEM_NONE
 	copyvar VAR_STARTER_MON, PLAYER_STARTER_NUM
 	getspeciesname 0, PLAYER_STARTER_SPECIES
 	message PalletTown_ProfessorOaksLab_Text_ReceivedMonFromOak
@@ -1234,13 +1232,23 @@ PalletTown_ProfessorOaksLab_EventScript_ChoseStarter:: @ 8169C74
 	msgbox Text_GiveNicknameToThisMon, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq EventScript_GiveNicknameToStarter
-	compare VAR_RESULT, NO
-	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_RivalPicksStarter
+	getpartysize
+	compare VAR_RESULT, 6
+	goto_if_ne EventScript_ChooseAnotherPokemon
+	goto PalletTown_ProfessorOaksLab_EventScript_RivalPicksStarter
+	@ goto_if_eq PalletTown_ProfessorOaksLab_EventScript_RivalPicksStarter
+	end
+
+EventScript_ChooseAnotherPokemon::
+	release
 	end
 
 EventScript_GiveNicknameToStarter:: @ 8169CCC
 	setvar VAR_0x8004, 0
 	call EventScript_ChangePokemonNickname
+	getpartysize
+	compare VAR_RESULT, 6
+	goto_if_ne EventScript_ChooseAnotherPokemon
 	goto PalletTown_ProfessorOaksLab_EventScript_RivalPicksStarter
 	end
 
@@ -1277,7 +1285,7 @@ PalletTown_ProfessorOaksLab_EventScript_RivalTakesStarter:: @ 8169D2F
 	msgbox PalletTown_ProfessorOaksLab_Text_RivalIllTakeThisOneThen
 	removeobject RIVAL_STARTER_ID
 	textcolor 3
-	getspeciesname 0, VAR_RIVAL_STARTER
+	getspeciesname 0, RIVAL_STARTER_SPECIES
 	message PalletTown_ProfessorOaksLab_Text_RivalReceivedMonFromOak
 	waitmessage
 	playfanfare MUS_OBTAIN_KEY_ITEM
@@ -1323,8 +1331,8 @@ PalletTown_ProfessorOaksLab_EventScript_SquirtleBall:: @ 8169D78
 	lock
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 1
-	copyvar PLAYER_STARTER_SPECIES, VAR_TEMP_6
-	copyvar VAR_RIVAL_STARTER, VAR_TEMP_9
+	callnative SetPlayerSquirtleBall
+	setvar RIVAL_STARTER_SPECIES, SPECIES_BULBASAUR
 	setvar RIVAL_STARTER_ID, LOCALID_BULBASAUR_BALL
 	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3
 	goto_if_ge PalletTown_ProfessorOaksLab_EventScript_LastPokeBall
@@ -1338,8 +1346,8 @@ PalletTown_ProfessorOaksLab_EventScript_CharmanderBall:: @ 8169DAE
 	lock
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 2
-	copyvar PLAYER_STARTER_SPECIES, VAR_TEMP_7
-	copyvar VAR_RIVAL_STARTER, VAR_TEMP_A
+	callnative SetPlayerSquirtleBall
+	setvar RIVAL_STARTER_SPECIES, SPECIES_SQUIRTLE
 	setvar RIVAL_STARTER_ID, LOCALID_SQUIRTLE_BALL
 	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3
 	goto_if_ge PalletTown_ProfessorOaksLab_EventScript_LastPokeBall
@@ -1363,7 +1371,7 @@ PalletTown_ProfessorOaksLab_EventScript_Aide1:: @ 8169DEE
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_Aide1GameClear:: @ 8169E03
-	@  famechecker FAMECHECKER_OAK, 5
+	famechecker FAMECHECKER_OAK, 5
 	msgbox PalletTown_ProfessorOaksLab_Text_OakIsGoingToHaveRadioShow
 	release
 	end
@@ -1377,7 +1385,7 @@ PalletTown_ProfessorOaksLab_EventScript_Aide2:: @ 8169E1A
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_Aide2GameClear:: @ 8169E2F
-	@  famechecker FAMECHECKER_DAISY, 0
+	famechecker FAMECHECKER_DAISY, 0
 	msgbox PalletTown_ProfessorOaksLab_Text_DaisyWillGroomMons
 	release
 	end
@@ -1385,7 +1393,7 @@ PalletTown_ProfessorOaksLab_EventScript_Aide2GameClear:: @ 8169E2F
 PalletTown_ProfessorOaksLab_EventScript_Aide3:: @ 8169E46
 	lock
 	faceplayer
-	@  famechecker FAMECHECKER_OAK, 2
+	famechecker FAMECHECKER_OAK, 2
 	msgbox PalletTown_ProfessorOaksLab_Text_OakIsAuthorityOnMons
 	release
 	end

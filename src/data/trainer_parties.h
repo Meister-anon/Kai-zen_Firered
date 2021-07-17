@@ -4759,37 +4759,33 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_BossGiovanni2[] = 
     },
 };
 
+//Grass /Ghost version for MAGM4
 static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderGiovanni[] = {
     {
         .iv = 0,
-        .lvl = 45,
-        .species = SPECIES_RHYHORN,
-        .moves = {MOVE_TAKE_DOWN, MOVE_ROCK_BLAST, MOVE_SCARY_FACE, MOVE_EARTHQUAKE},
+        .lvl = 30,
+        .species = SPECIES_SHIFTRY,
+        .moves = {MOVE_QUICK_ATTACK, MOVE_SUNNY_DAY, MOVE_LEECH_SEED, MOVE_EXPLOSION},
     },
     {
-        .iv = 0,
-        .lvl = 42,
-        .species = SPECIES_DUGTRIO,
-        .moves = {MOVE_SLASH, MOVE_SAND_TOMB, MOVE_MUD_SLAP, MOVE_EARTHQUAKE},
+        .iv = 45,
+        .lvl = 30,
+        .species = SPECIES_SHEDINJA,
+        .moves = {MOVE_GRUDGE, MOVE_SPITE, MOVE_MUD_SLAP, MOVE_SOLAR_BEAM},
     },
     {
-        .iv = 0,
-        .lvl = 44,
-        .species = SPECIES_NIDOQUEEN,
-        .moves = {MOVE_BODY_SLAM, MOVE_DOUBLE_KICK, MOVE_POISON_STING, MOVE_EARTHQUAKE},
+        .iv = 45,
+        .lvl = 30,
+        .species = SPECIES_SABLEYE,
+        .moves = {MOVE_MEAN_LOOK, MOVE_NIGHT_SHADE, MOVE_CONFUSE_RAY, MOVE_DETECT},
     },
     {
-        .iv = 0,
-        .lvl = 45,
-        .species = SPECIES_NIDOKING,
-        .moves = {MOVE_THRASH, MOVE_DOUBLE_KICK, MOVE_POISON_STING, MOVE_EARTHQUAKE},
+        .iv = 75,
+        .lvl = 30,
+        .species = SPECIES_MEGANIUM,
+        .moves = {MOVE_ANCIENT_POWER, MOVE_HIDDEN_POWER, MOVE_LIGHT_SCREEN, MOVE_SOLAR_BEAM},
     },
-    {
-        .iv = 0,
-        .lvl = 50,
-        .species = SPECIES_RHYHORN,
-        .moves = {MOVE_TAKE_DOWN, MOVE_ROCK_BLAST, MOVE_SCARY_FACE, MOVE_EARTHQUAKE},
-    },
+
 };
 
 static const struct TrainerMonNoItemDefaultMoves sTrainerMons_TeamRocketGrunt[] = {
