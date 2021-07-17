@@ -4182,7 +4182,7 @@ const struct Trainer gTrainers[] = {
         .trainerPic = TRAINER_PIC_LEADER_GIOVANNI,
         .trainerName = _("GIOVANNI"),
         .items = {},
-        .doubleBattle = FALSE,
+        .doubleBattle = TRUE,
         .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE,
         .partySize = NELEMS(sTrainerMons_BossGiovanni),
         .party = {.NoItemDefaultMoves = sTrainerMons_BossGiovanni}
