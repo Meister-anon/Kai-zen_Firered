@@ -55,14 +55,19 @@ AI_CheckBadMove:: @ 81D9C74
 	get_how_powerful_move_is
 	if_equal MOVE_POWER_DISCOURAGED, AI_CheckBadMove_CheckSoundproof
 
-AI_CBM_CheckIfNegatesType::
+AI_CBM_CheckIfNegatesType::	@ temp fix until can check for grounded
 	if_type_effectiveness AI_EFFECTIVENESS_x0, Score_Minus10
 	get_ability AI_TARGET
 	if_equal ABILITY_VOLT_ABSORB, CheckIfVoltAbsorbCancelsElectric
 	if_equal ABILITY_WATER_ABSORB, CheckIfWaterAbsorbCancelsWater
 	if_equal ABILITY_FLASH_FIRE, CheckIfFlashFireCancelsFire
 	if_equal ABILITY_WONDER_GUARD, CheckIfWonderGuardCancelsMove
+	if_equal ABILITY_DISPIRIT_GUARD, CheckIfDispiritGuardCancelsMove
 	if_equal ABILITY_LEVITATE, CheckIfLevitateCancelsGroundMove
+	get_target_type1
+	if_equal TYPE_FLYING, CheckIfLevitateCancelsGroundMove
+	get_target_type2
+	if_equal TYPE_FLYING, CheckIfLevitateCancelsGroundMove
 	goto AI_CheckBadMove_CheckSoundproof
 
 CheckIfVoltAbsorbCancelsElectric:: @ 81D9CA6
@@ -82,6 +87,10 @@ CheckIfFlashFireCancelsFire:: @ 81D9CC0
 
 CheckIfWonderGuardCancelsMove:: @ 81D9CCD
 	if_type_effectiveness AI_EFFECTIVENESS_x2, AI_CheckBadMove_CheckSoundproof
+	goto Score_Minus10
+
+CheckIfDispiritGuardCancelsMove::
+	if_type_effectiveness AI_EFFECTIVENESS_x0_5, AI_CheckBadMove_CheckSoundproof
 	goto Score_Minus10
 
 CheckIfLevitateCancelsGroundMove:: @ 81D9CD8
@@ -2307,13 +2316,18 @@ AI_CV_MirrorCoat_SpecialTypeList:: @ 81DB63C
 	.byte TYPE_DARK
 	.byte -1
 
-AI_CV_ChargeUpMove:: @ 81DB645
+AI_CV_ChargeUpMove:: @ 81DB645   @ add checks for wonder guard no weather & dispirit guard and
 	if_type_effectiveness AI_EFFECTIVENESS_x0_25, AI_CV_ChargeUpMove_ScoreDown2
 	if_type_effectiveness AI_EFFECTIVENESS_x0_5, AI_CV_ChargeUpMove_ScoreDown2
 	if_has_move_with_effect AI_TARGET, EFFECT_PROTECT, AI_CV_ChargeUpMove_ScoreDown2
+	get_ability AI_USER
+	if_equal ABILITY_DISPIRIT_GUARD, AI_CV_ChargeUpMove_ScoreUp
 	if_hp_more_than AI_USER, 38, AI_CV_ChargeUpMove_End
 	score -1
 	goto AI_CV_ChargeUpMove_End
+
+AI_CV_ChargeUpMove_ScoreUp::
+	score +2
 
 AI_CV_ChargeUpMove_ScoreDown2:: @ 81DB666
 	score -2
@@ -2334,9 +2348,9 @@ AI_CV_SemiInvulnerable2:: @ 81DB677
 	if_status2 AI_TARGET, STATUS2_CURSED, AI_CV_SemiInvulnerable_TryEncourage
 	if_status3 AI_TARGET, STATUS3_LEECHSEED, AI_CV_SemiInvulnerable_TryEncourage
 	get_weather
-	if_equal AI_WEATHER_HAIL, AI_CV_SemiInvulnerable_CheckSandstormTypes
-	if_equal AI_WEATHER_SANDSTORM, AI_CV_SemiInvulnerable_CheckIceType
-	goto AI_CV_SemiInvulnerable5
+	if_equal AI_WEATHER_HAIL, AI_CV_SemiInvulnerable_CheckIceType
+	if_equal AI_WEATHER_SANDSTORM, AI_CV_SemiInvulnerable_CheckSandstormTypes
+	goto AI_CV_SemiInvulnerable5 
 
 AI_CV_SemiInvulnerable_CheckSandstormTypes:: @ 81DB6A7
 	get_user_type1
