@@ -353,8 +353,8 @@
 #define ITEM_HM05 344
 #define ITEM_HM06 345
 #define ITEM_HM07 346
-#define ITEM_HM08 347
-#define ITEM_15C 348
+#define ITEM_HM08 347	//found problem, because of how I updated these, I needed to remove the 2nd blank ??? entry between hm08 & oak parcel
+#define ITEM_15C 348	//since I shifted HM08 into the first one.
 
 #define ITEM_TM01_FOCUS_PUNCH ITEM_TM01
 #define ITEM_TM02_DRAGON_CLAW ITEM_TM02

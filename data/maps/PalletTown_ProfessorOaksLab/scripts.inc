@@ -729,7 +729,7 @@ PalletTown_ProfessorOaksLab_EventScript_ReceiveDexScene:: @ 816961E
 	msgbox PalletTown_ProfessorOaksLab_Text_OakCatchMonsForDataTakeThese
 	giveitem_msg PalletTown_ProfessorOaksLab_Text_ReceivedFivePokeBalls, ITEM_POKE_BALL, 5
 	msgbox PalletTown_ProfessorOaksLab_Text_OakExplainCatching
-	famechecker FAMECHECKER_OAK, 1
+	@ famecheckerFAMECHECKER_OAK, 1
 	msgbox PalletTown_ProfessorOaksLab_Text_OakCompleteMonGuideWasMyDream
 	msgbox PalletTown_ProfessorOaksLab_Text_RivalLeaveItToMeGramps
 	compare VAR_FACING, DIR_NORTH
@@ -756,7 +756,7 @@ PalletTown_ProfessorOaksLab_EventScript_ReceiveDexScene:: @ 816961E
 	setvar VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 6
 	setvar VAR_MAP_SCENE_VIRIDIAN_CITY_MART, 2
 	setvar VAR_MAP_SCENE_VIRIDIAN_CITY_OLD_MAN, 1
-	setvar VAR_MAP_SCENE_PALLET_TOWN_RIVALS_HOUSE, 1
+	setvar VAR_MAP_SCENE_PALLET_TOWN_GARYS_HOUSE, 1
 	setvar VAR_MAP_SCENE_ROUTE22, 1
 	release
 	end
@@ -1371,7 +1371,7 @@ PalletTown_ProfessorOaksLab_EventScript_Aide1:: @ 8169DEE
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_Aide1GameClear:: @ 8169E03
-	famechecker FAMECHECKER_OAK, 5
+	@ famecheckerFAMECHECKER_OAK, 5
 	msgbox PalletTown_ProfessorOaksLab_Text_OakIsGoingToHaveRadioShow
 	release
 	end
@@ -1385,7 +1385,7 @@ PalletTown_ProfessorOaksLab_EventScript_Aide2:: @ 8169E1A
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_Aide2GameClear:: @ 8169E2F
-	famechecker FAMECHECKER_DAISY, 0
+	@ famecheckerFAMECHECKER_DAISY, 0
 	msgbox PalletTown_ProfessorOaksLab_Text_DaisyWillGroomMons
 	release
 	end
@@ -1393,7 +1393,7 @@ PalletTown_ProfessorOaksLab_EventScript_Aide2GameClear:: @ 8169E2F
 PalletTown_ProfessorOaksLab_EventScript_Aide3:: @ 8169E46
 	lock
 	faceplayer
-	famechecker FAMECHECKER_OAK, 2
+	@ famecheckerFAMECHECKER_OAK, 2
 	msgbox PalletTown_ProfessorOaksLab_Text_OakIsAuthorityOnMons
 	release
 	end
