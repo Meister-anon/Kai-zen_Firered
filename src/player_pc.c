@@ -98,11 +98,12 @@ static const struct MenuAction sMenuActions_ItemPc[] = {
 };
 
 static const struct ItemSlot gNewGamePCItems[] = {
-    { ITEM_POTION, 1 },
-    //{ ITEM_NONE,   0 }
-    { ITEM_POKE_BALL, 10 }, //temporary addition to test catch mechaincs
-    { ITEM_REPEL, 3},
-    { ITEM_TM39_ROCK_TOMB, 1},
+    { ITEM_SUN_STONE, 1 },
+    { ITEM_MOON_STONE, 1 },
+    { ITEM_FIRE_STONE, 1 },
+    { ITEM_THUNDER_STONE, 1 },
+    { ITEM_WATER_STONE, 1 },
+    { ITEM_LEAF_STONE, 1 },
     { ITEM_NONE,   0 } //apparently this has to be on end to prevent garbage item data. or just remove comma
 };  //important game start items
 

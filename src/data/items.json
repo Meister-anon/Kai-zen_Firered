@@ -5475,6 +5475,23 @@
       "moveId": "Overheat"
     },
     {
+      "english": "TM51",
+      "itemId": "ITEM_TM51",
+      "price": 3000,
+      "holdEffect": "HOLD_EFFECT_NONE",
+      "holdEffectParam": 0,
+      "description_english": "All party POKéMON\\njoin in the attack.\\nThe more allies,\\nthe more damage.",
+      "importance": 0,
+      "exitsBagOnUse": 0,
+      "pocket": "POCKET_TM_CASE",
+      "type": 1,
+      "fieldUseFunc": "NULL",
+      "battleUsage": 0,
+      "battleUseFunc": "NULL",
+      "secondaryId": 0,
+      "moveId": "BeatUp"
+    },
+    {
       "english": "HM01",
       "itemId": "ITEM_HM01",
       "price": 0,

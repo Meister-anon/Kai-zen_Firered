@@ -345,15 +345,15 @@
 #define ITEM_TM48 336
 #define ITEM_TM49 337
 #define ITEM_TM50 338
-#define ITEM_HM01 339
-#define ITEM_HM02 340
-#define ITEM_HM03 341
-#define ITEM_HM04 342
-#define ITEM_HM05 343
-#define ITEM_HM06 344
-#define ITEM_HM07 345
-#define ITEM_HM08 346
-#define ITEM_15B 347
+#define ITEM_TM51 339
+#define ITEM_HM01 340
+#define ITEM_HM02 341
+#define ITEM_HM03 342
+#define ITEM_HM04 343
+#define ITEM_HM05 344
+#define ITEM_HM06 345
+#define ITEM_HM07 346
+#define ITEM_HM08 347
 #define ITEM_15C 348
 
 #define ITEM_TM01_FOCUS_PUNCH ITEM_TM01
@@ -406,6 +406,7 @@
 #define ITEM_TM48_SKILL_SWAP ITEM_TM48
 #define ITEM_TM49_SNATCH ITEM_TM49
 #define ITEM_TM50_OVERHEAT ITEM_TM50
+#define ITEM_TM51_BEAT_UP ITEM_TM51
 #define ITEM_HM01_CUT ITEM_HM01
 #define ITEM_HM02_FLY ITEM_HM02
 #define ITEM_HM03_SURF ITEM_HM03
@@ -680,7 +681,7 @@
 #define LAST_BERRY_INDEX ITEM_ENIGMA_BERRY
 #define ITEM_TO_BERRY(itemId)(((itemId - FIRST_BERRY_INDEX) + 1))
 
-#define NUM_TECHNICAL_MACHINES 50 //change to 120 later
+#define NUM_TECHNICAL_MACHINES 51 //change to 120 later
 #define NUM_HIDDEN_MACHINES     8
 
 // Check if the item is one that can be used on a Pokemon.

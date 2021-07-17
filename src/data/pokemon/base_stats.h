@@ -4438,9 +4438,9 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_MEGANIUM] =
     {
         .baseHP = 100,
-        .baseAttack = 72,
+        .baseAttack = 77,
         .baseDefense = 100,
-        .baseSpeed = 80,
+        .baseSpeed = 70,
         .baseSpAttack = 83,
         .baseSpDefense = 133,
         .type1 = TYPE_GRASS,
@@ -4455,7 +4455,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
+        .abilities = {ABILITY_CHLOROPHYLL, ABILITY_CHLOROPHYLL},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_LEAF_GUARD, ABILITY_NONE},
         #endif
@@ -8377,7 +8377,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_ERRATIC,
         .eggGroup1 = EGG_GROUP_MINERAL,
         .eggGroup2 = EGG_GROUP_MINERAL,
-        .abilities = {ABILITY_WONDER_GUARD, ABILITY_DISPIRIT_GUARD},
+        .abilities = {ABILITY_DISPIRIT_GUARD, ABILITY_DISPIRIT_GUARD},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },

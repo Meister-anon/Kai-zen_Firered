@@ -19,6 +19,7 @@
 #include "roamer.h"
 #include "item.h"
 #include "player_pc.h"
+#include "constants/items.h"
 #include "berry.h"
 #include "easy_chat.h"
 #include "union_room_chat.h"
@@ -66,7 +67,7 @@ static void SetDefaultOptions(void) //
     gSaveBlock2Ptr->optionsTextSpeed = OPTIONS_TEXT_SPEED_FAST;
     gSaveBlock2Ptr->optionsWindowFrameType = 0;
     gSaveBlock2Ptr->optionsSound = OPTIONS_SOUND_MONO;
-    gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SHIFT;
+    gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SET;
     gSaveBlock2Ptr->optionsBattleSceneOff = FALSE;
     gSaveBlock2Ptr->regionMapZoom = FALSE;
     gSaveBlock2Ptr->optionsButtonMode = OPTIONS_BUTTON_MODE_LR;
@@ -150,6 +151,13 @@ void NewGameInitData(void)
     InitMEventData();
     SetAllRenewableItemFlags();
     WarpToPlayersRoom();
+    AddBagItem(ITEM_TM51_BEAT_UP, 1);
+    AddBagItem(ITEM_TM28_DIG, 1);
+    AddBagItem(ITEM_TM11_SUNNY_DAY, 1);
+    AddBagItem(ITEM_HM06_ROCK_SMASH, 1);
+    AddBagItem(ITEM_POTION, 8);
+    AddBagItem(ITEM_ETHER, 4);
+    AddBagItem(ITEM_TM09_BULLET_SEED, 1);
     ScriptContext2_RunNewScript(EventScript_ResetAllMapFlags);
     StringCopy(gSaveBlock1Ptr->rivalName, rivalName);
     ResetTrainerTowerResults();
