@@ -10313,8 +10313,8 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
                 || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK){
                 //gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
                gBattleMoveDamage = ((GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)) / 10 + 5) * 15 / 10;
-               gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier;
-               }
+               //gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier;
+               } //thikn that above line doubled crit damage again.
 
                 //gBattleMoveDamage = ((gBattleMons[GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)].attack) / 10 + 5) * 15 / 10;
             ++gBattleCommunication[0]; // THIS stab boost may not be right, get second opinion,
