@@ -275,7 +275,7 @@ struct AI_ThinkingStruct
     u16 moveConsidered;
     s8 score[4];
     u32 funcResult;
-    u32 aiFlags;
+    u32 aiFlags;    // want a way to set ai flags to individual pokemon/battlers, instead of just entire party
     u8 aiAction;
     u8 aiLogicId;
     u8 filler12[6];

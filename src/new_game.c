@@ -109,7 +109,13 @@ void ResetMenuAndMonGlobals(void)
     ResetSpecialVars();
 }
 
-void NewGameInitData(void)
+/*special DoCredits
+	waitstate
+	releaseall
+	end*/
+
+void NewGameInitData(void) //to make new game can use this in end of white out script use callnative NewGameInitData
+// and [ special DoCredits ]  for  beating the leader and end of rocket leader event script.
 {
     u8 rivalName[PLAYER_NAME_LENGTH + 1];
 
@@ -155,6 +161,7 @@ void NewGameInitData(void)
     AddBagItem(ITEM_TM28_DIG, 1);
     AddBagItem(ITEM_TM11_SUNNY_DAY, 1);
     AddBagItem(ITEM_HM06_ROCK_SMASH, 1);
+    AddBagItem(ITEM_TM48_SKILL_SWAP, 1);
     AddBagItem(ITEM_POTION, 8);
     AddBagItem(ITEM_ETHER, 4);
     AddBagItem(ITEM_TM09_BULLET_SEED, 1);

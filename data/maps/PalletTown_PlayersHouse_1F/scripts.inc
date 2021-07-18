@@ -18,6 +18,25 @@ PalletTown_PlayersHouse_1F_EventScript_Mom:: @ 8168C09
 	release
 	end
 
+PalletTown_PlayersHouse_1F_EventScript_PlayerToLab::
+	lock
+	applymovement OBJ_EVENT_ID_PLAYER, PalletTown_Movement_PlayerEntersLab
+	@waitmovement 0
+	setvar VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 1
+	clearflag FLAG_HIDE_OAK_IN_HIS_LAB
+	setvar VAR_MAP_SCENE_PALLET_TOWN_OAK, 1
+	setflag FLAG_HIDE_OAK_IN_PALLET_TOWN
+	setflag FLAG_DONT_TRANSITION_MUSIC
+	warp MAP_PALLET_TOWN_PROFESSOR_OAKS_LAB, 255, 6, 12
+	waitstate
+	releaseall
+	end
+
+PalletTown_Movement_PlayerEntersLab::
+	walk_down
+	set_invisible
+	step_end
+
 PalletTown_PlayersHouse_1F_EventScript_MomOakLookingForYouMale:: @ 8168C38
 	msgbox PalletTown_PlayersHouse_1F_Text_AllBoysLeaveOakLookingForYou
 	return

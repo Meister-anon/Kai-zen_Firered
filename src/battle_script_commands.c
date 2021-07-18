@@ -8423,7 +8423,7 @@ static void atkBB_setsunny(void)
     {
         gBattleWeather = WEATHER_SUN_TEMPORARY;
         gBattleCommunication[MULTISTRING_CHOOSER] = 4;
-        gWishFutureKnock.weatherDuration = 5;
+        gWishFutureKnock.weatherDuration = 8; //instead of setting up heatrock, I just set duration to 8.
     }
     ++gBattlescriptCurrInstr;
 }
@@ -8584,10 +8584,10 @@ static void atkC1_hiddenpowercalc(void)
     //I hesitate on that beause in that case, the boost would always be active,
     //unless facing much lower level pokemon.   will need balance test
     if (i > 0)// && moveSplit == SPLIT_PHYSICAL)
-        gDynamicBasePower = gDynamicBasePower * 17 / 10; //boosted from 17 to 50 just to see if it works
+        gDynamicBasePower = gDynamicBasePower * 13 / 10; //boosted from 17 to 50 just to see if it works
 
     if (j > 0)// && moveSplit == SPLIT_SPECIAL)
-        gDynamicBasePower = gDynamicBasePower * 17 / 10; //doesn't seem to be workign, I'll swap to gdynamic
+        gDynamicBasePower = gDynamicBasePower * 13 / 10; //doesn't seem to be workign, I'll swap to gdynamic
     //O.o now it works ...ow
 
     if ((i || j) == 0) // to ensure I don't get the boost if my stats are greater than my opponenet

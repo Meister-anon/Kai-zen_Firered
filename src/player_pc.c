@@ -98,12 +98,6 @@ static const struct MenuAction sMenuActions_ItemPc[] = {
 };
 
 static const struct ItemSlot gNewGamePCItems[] = {
-    { ITEM_SUN_STONE, 1 },
-    { ITEM_MOON_STONE, 1 },
-    { ITEM_FIRE_STONE, 1 },
-    { ITEM_THUNDER_STONE, 1 },
-    { ITEM_WATER_STONE, 1 },
-    { ITEM_LEAF_STONE, 1 },
     { ITEM_NONE,   0 } //apparently this has to be on end to prevent garbage item data. or just remove comma
 };  //important game start items
 

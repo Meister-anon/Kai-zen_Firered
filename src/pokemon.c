@@ -3414,8 +3414,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         }
         //moved these here, because they don't have to do with physical or special damage alone anymore.  since I removed the type link
         // any weather except sun weakens solar beam
-        if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gCurrentMove == MOVE_SOLAR_BEAM)
-            damage /= 2;
+        if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
+            damage = (20 * damage) / 30;  //cutting in half was too much imo, changed to 2/3rd
 
         // sunny
         if (gBattleWeather & WEATHER_SUN_ANY)

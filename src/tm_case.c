@@ -1339,10 +1339,10 @@ static void PrintStringTMCaseOnWindow3(void)
 
 static void DrawMoveInfoUIMarkers(void)
 {
-    BlitMoveInfoIcon(4, 19, 0, 0);
-    BlitMoveInfoIcon(4, 20, 0, 12);
-    BlitMoveInfoIcon(4, 21, 0, 24);
-    BlitMoveInfoIcon(4, 22, 0, 36);
+    BlitMoveInfoIcon(4, 20, 0, 0); //srced in list_menu.c may have to do with type count, will try increasing by 1, since fairy is
+    BlitMoveInfoIcon(4, 21, 0, 12); //replacing type again.
+    BlitMoveInfoIcon(4, 22, 0, 24);
+    BlitMoveInfoIcon(4, 23, 0, 36);
     CopyWindowToVram(4, COPYWIN_GFX);
 }
 

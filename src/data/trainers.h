@@ -4205,9 +4205,9 @@ const struct Trainer gTrainers[] = {
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_AQUA,
         .trainerPic = TRAINER_PIC_LEADER_GIOVANNI,
         .trainerName = _("GIOVANNI"),
-        .items = {ITEM_HYPER_POTION, ITEM_HYPER_POTION, ITEM_FULL_HEAL},
-        .doubleBattle = FALSE,
-        .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY,
+        .items = {ITEM_HYPER_POTION, ITEM_FULL_HEAL},
+        .doubleBattle = TRUE,
+        .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_SETUP_FIRST_TURN,// | AI_SCRIPT_CHECK_VIABILITY,
         .partySize = NELEMS(sTrainerMons_LeaderGiovanni),
         .party = {.NoItemCustomMoves = sTrainerMons_LeaderGiovanni}
     },

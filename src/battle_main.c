@@ -470,7 +470,9 @@ const u8 gTypeNames[][TYPE_NAME_LENGTH + 1] =
 }; //uses same type order as list_menu.c so this fairy is 12, but my actuall fairy type
 //was at 17. fixed now they are both 12.
 
-//also needed change value in type_constants.inc & pokemon.h
+//also needed change value in type_constants.inc & pokemon.
+
+//list in graphics_file_rules.mk also
 
 // This is a factor in how much money you get for beating a trainer.
 const struct TrainerMoney gTrainerMoneyTable[] =
@@ -1555,14 +1557,14 @@ static void SpriteCB_UnusedDebugSprite_Step(struct Sprite *sprite)
     }
 }
 
-bool8 IsRivalBattle(u16 trainerNum)
+/*bool8 IsRivalBattle(u16 trainerNum)
 {
     u8 trainerClass = gTrainers[trainerNum].trainerClass;
     if (trainerClass == CLASS_RIVAL || trainerClass == CLASS_RIVAL_2 || trainerClass == CLASS_CHAMPION_2)
         return TRUE;
     else
         return FALSE;
-}
+}*/
 
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 {
@@ -1597,7 +1599,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 //because their both using the same var, it just eliminated the unevolved version of the pokemon if it comes after the evolved form.
             {
                 const struct TrainerMonNoItemDefaultMoves *partyData = gTrainers[trainerNum].party.NoItemDefaultMoves;
-                if (IsRivalBattle(trainerNum)) // && i == gTrainers[trainerNum].partySize - 1) //probably go back & make a nested function based on the species
+                /*if (IsRivalBattle(trainerNum)) // && i == gTrainers[trainerNum].partySize - 1) //probably go back & make a nested function based on the species
                     //of the starter in trainer_parties, it may need to be constant so instead of a variable I'll use a define like weather_hail but for starter 
                     //to set teh species checks it'll be partyData[i].species == StarterEvo_0  up to StarterEvo_2 for last evolution
                     //if species can't evolve target species will be species
@@ -1645,7 +1647,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
                     }
                 }
-                else
+                else*/
                     species = partyData[i].species;
 
                 for (j = 0; gSpeciesNames[species][j] != EOS; ++j) //starting from 0, loops through all the species names until it matches for each slot in party
@@ -1658,7 +1660,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case F_TRAINER_PARTY_CUSTOM_MOVESET: //could probably get custom moves working with same trick as above but going to a different array
             { //but that can probably better be solved by getting my smart learnsets up and running
                 const struct TrainerMonNoItemCustomMoves *partyData = gTrainers[trainerNum].party.NoItemCustomMoves;
-                if (IsRivalBattle(trainerNum))
+                /*if (IsRivalBattle(trainerNum))
                 {
                     if (partyData[i].species == SPECIES_BULBASAUR
                         || partyData[i].species == SPECIES_SQUIRTLE
@@ -1680,7 +1682,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         species = VarGet(VAR_RIVAL_STARTER);  //check 2nd evo
                     }
                 }
-                else
+                else*/
                     species = partyData[i].species;
 
                 for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
@@ -1702,7 +1704,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case F_TRAINER_PARTY_HELD_ITEM:
             {
                 const struct TrainerMonItemDefaultMoves *partyData = gTrainers[trainerNum].party.ItemDefaultMoves;
-                if (IsRivalBattle(trainerNum))
+                /*if (IsRivalBattle(trainerNum))
                 {
                     if (partyData[i].species == SPECIES_BULBASAUR
                         || partyData[i].species == SPECIES_SQUIRTLE
@@ -1724,7 +1726,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         species = VarGet(VAR_RIVAL_STARTER);  //check 2nd evo
                     }
                 }
-                else
+                else*/
                     species = partyData[i].species;
 
                 for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
@@ -1739,7 +1741,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
             {
                 const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerNum].party.ItemCustomMoves;
-                if (IsRivalBattle(trainerNum))
+                /*if (IsRivalBattle(trainerNum))
                 {
                     if (partyData[i].species == SPECIES_BULBASAUR
                         || partyData[i].species == SPECIES_SQUIRTLE
@@ -1761,7 +1763,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         species = VarGet(VAR_RIVAL_STARTER);  //check 2nd evo
                     }
                 }
-                else
+                else*/
                     species = partyData[i].species;
 
                 for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
