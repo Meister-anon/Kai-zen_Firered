@@ -510,9 +510,9 @@
 	.endm
 
 	@ unused
-	.macro call ptr:req
-	.byte 0x58
-	.4byte \ptr
+	.macro call ptr:req	   @Id like to change structure of ai script
+	.byte 0x58		@ instead of jumping with a bunch of ifs, I want to use calls
+	.4byte \ptr  @so make call ifs so I can bring score into same file
 	.endm
 
 	.macro goto ptr:req

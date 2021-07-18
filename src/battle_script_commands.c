@@ -1788,7 +1788,7 @@ static void atk06_typecalc(void)
         gBattleCommunication[6] = moveType;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }*/
-    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND)
+    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND) //need to add to ai, they can't understand this.
     {
         gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
         gLastLandedMoves[gBattlerTarget] = 0;
@@ -10154,10 +10154,10 @@ static void atkC1_hiddenpowercalc(void)
     //I hesitate on that beause in that case, the boost would always be active,
     //unless facing much lower level pokemon.   will need balance test
     if (i > 0)// && moveSplit == SPLIT_PHYSICAL)
-        gDynamicBasePower = gDynamicBasePower * 17 / 10; //boosted from 17 to 50 just to see if it works
+        gDynamicBasePower = gDynamicBasePower * 13 / 10; //boosted from 17 to 50 just to see if it works
 
     if (j > 0)// && moveSplit == SPLIT_SPECIAL)
-        gDynamicBasePower = gDynamicBasePower * 17 / 10; //doesn't seem to be workign, I'll swap to gdynamic
+        gDynamicBasePower = gDynamicBasePower * 13 / 10; //doesn't seem to be workign, I'll swap to gdynamic
     //O.o now it works ...ow
 
     if ((i || j) == 0) // to ensure I don't get the boost if my stats are greater than my opponenet
@@ -10271,8 +10271,10 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerAttacker, gBattleCommunication[0])
             gBattlescriptCurrInstr += 9;
             //gBattleMoveDamage = gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].baseAttack;
-            gBattleMoveDamage = (GetMonData(&party[gBattleCommunication[0]], STAT_ATK) / 10 + 5);
-
+            gBattleMoveDamage = ((GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)) / 10 + 5);
+            gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier; //should allow to crit without damagecalc
+            //gBattleMoveDamage = (gBattleMons[GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)].attack) / 10 + 5;
+            //gBattleMons
             //I think using this, makes it do fixed damage, instead of use base power,
             //which is fine exect I think it excludes it from defense calculations
             //so I'm going to try using gdynamicbasepower and see if the damage is still the same-ish
@@ -10307,10 +10309,14 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             //step 2, compare with party loop,
             //step 3, another if statement, if equal increase battle damage for party loop[0]
 
-            if (gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type1 == TYPE_DARK
-                || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK)
+           else if (gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type1 == TYPE_DARK
+                || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK){
                 //gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
-                gBattleMoveDamage = (GetMonData(&party[gBattleCommunication[0]], STAT_ATK) / 10 + 5) * 15 / 10;
+               gBattleMoveDamage = ((GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)) / 10 + 5) * 15 / 10;
+               gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier;
+               }
+
+                //gBattleMoveDamage = ((gBattleMons[GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)].attack) / 10 + 5) * 15 / 10;
             ++gBattleCommunication[0]; // THIS stab boost may not be right, get second opinion,
              // it may actually only boost total damage instead of individual hit
             //while I would like to use isbattlertype, this is looping the entire party, and that macro can only check battlers
