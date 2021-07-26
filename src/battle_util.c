@@ -4036,13 +4036,13 @@ bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId)
     return FALSE;
 }
 
-static bool32 IsNotEventLegalMewOrDeoxys(u8 battlerId)
+static bool32 IsNotEventLegalMewOrDeoxys(u8 battlerId) //fix to remove GF mew deoxys lock check
 {
     if (GetBattlerSide(battlerId) == B_SIDE_OPPONENT
      || (GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerId]], MON_DATA_SPECIES, NULL) != SPECIES_DEOXYS
      && GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerId]], MON_DATA_SPECIES, NULL) != SPECIES_MEW))
         return TRUE;
-    return GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerId]], MON_DATA_EVENT_LEGAL, NULL);
+    //return GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerId]], MON_DATA_EVENT_LEGAL, NULL);
 }
 
 u8 IsMonDisobedient(void)
