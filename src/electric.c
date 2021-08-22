@@ -321,11 +321,29 @@ static const union AffineAnimCmd sAffineAnim_GrowingElectricOrb_2[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sAffineAnims_GrowingElectricOrb[] =
+static const union AffineAnimCmd sAffineAnim_GrowingElectricOrb_4[] =
+{
+    AFFINEANIMCMD_FRAME(5, 5, 0, 0),
+    AFFINEANIMCMD_FRAME(0x2, 0x2, 0, 20),
+    AFFINEANIMCMD_FRAME(0x3, 0x3, 0, 15),
+    AFFINEANIMCMD_FRAME(0x1, 0x1, 0, 25),
+    AFFINEANIMCMD_FRAME(0xFFFC, 0xFFFC, 0, 5),
+    AFFINEANIMCMD_FRAME(0x3, 0x3, 0, 5),
+    AFFINEANIMCMD_FRAME(0xFFFB, 0xFFFB, 0, 5),
+    AFFINEANIMCMD_FRAME(0x4, 0x4, 0, 5),
+    AFFINEANIMCMD_END
+};
+
+const union AffineAnimCmd *const gAffineAnims_GrowingElectricOrb[] =
 {
     sAffineAnim_GrowingElectricOrb_0,
     sAffineAnim_GrowingElectricOrb_1,
     sAffineAnim_GrowingElectricOrb_2,
+};
+
+const union AffineAnimCmd *const gAffineAnims_GrowingElectricOrb2[] =
+{
+    sAffineAnim_GrowingElectricOrb_4,
 };
 
 const struct SpriteTemplate gGrowingChargeOrbSpriteTemplate =
@@ -339,6 +357,18 @@ const struct SpriteTemplate gGrowingChargeOrbSpriteTemplate =
     .callback = AnimGrowingChargeOrb,
 };
 
+// For Electro Ball - smaller orb.
+const struct SpriteTemplate gGrowingChargeOrb2SpriteTemplate =
+{
+    .tileTag = ANIM_TAG_CIRCLE_OF_LIGHT,
+    .paletteTag = ANIM_TAG_CIRCLE_OF_LIGHT,
+    .oam = &gOamData_AffineNormal_ObjBlend_64x64,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_GrowingElectricOrb2,
+    .callback = AnimGrowingChargeOrb,
+};
+
 static const union AnimCmd sAnim_ElectricPuff[] =
 {
     ANIMCMD_FRAME(0, 3),
@@ -348,7 +378,7 @@ static const union AnimCmd sAnim_ElectricPuff[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_ElectricPuff[] =
+const union AnimCmd *const gAnims_ElectricPuff[] =
 {
     sAnim_ElectricPuff,
 };
@@ -358,7 +388,7 @@ const struct SpriteTemplate gElectricPuffSpriteTemplate =
     .tileTag = ANIM_TAG_ELECTRICITY,
     .paletteTag = ANIM_TAG_ELECTRICITY,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnims_ElectricPuff,
+    .anims = gAnims_ElectricPuff,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimElectricPuff,
@@ -449,6 +479,53 @@ static const struct SpriteTemplate sShockWaveProgressingBoltSpriteTemplate =
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimShockWaveProgressingBolt,
+};
+
+const struct SpriteTemplate gFlashCannonGrayChargeTemplate =
+{
+    .tileTag = ANIM_TAG_CIRCLE_OF_LIGHT,
+    .paletteTag = ANIM_TAG_HANDS_AND_FEET,
+    .oam = &gOamData_AffineNormal_ObjBlend_64x64,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_GrowingElectricOrb,
+    .callback = AnimGrowingChargeOrb
+};
+
+static const union AffineAnimCmd sSpriteAffineAnim_JudgmentBall[] =
+{
+	AFFINEANIMCMD_FRAME(16, 16, 0, 0),
+	AFFINEANIMCMD_FRAME(8, 8, 0, 15), //Half size
+	AFFINEANIMCMD_FRAME(0, 0, 0, 120), //Delay
+	AFFINEANIMCMD_FRAME(24, 24, 0, 5), //Normal size
+	AFFINEANIMCMD_FRAME(0, 0, 0, 10), //Delay
+	AFFINEANIMCMD_FRAME(-16, -16, 0, 15), //Revert to 1 px
+	AFFINEANIMCMD_END,
+};
+static const union AffineAnimCmd* const sSpriteAffineAnimTable_JudgmentBall[] =
+{
+	sSpriteAffineAnim_JudgmentBall,
+};
+const struct SpriteTemplate gJudgmentBlackChargeTemplate =
+{
+    .tileTag = ANIM_TAG_CIRCLE_OF_LIGHT,
+    .paletteTag = ANIM_TAG_HANDS_AND_FEET,
+    .oam = &gOamData_AffineNormal_ObjBlend_64x64,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = sSpriteAffineAnimTable_JudgmentBall,
+    .callback = AnimGrowingChargeOrb
+};
+
+const struct SpriteTemplate gSeedFlareGreenChargeTemplate =
+{
+    .tileTag = ANIM_TAG_CIRCLE_OF_LIGHT,
+    .paletteTag = ANIM_TAG_LEAF,
+    .oam = &gOamData_AffineNormal_ObjBlend_64x64,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_GrowingElectricOrb,
+    .callback = AnimGrowingChargeOrb
 };
 
 static void AnimLightning(struct Sprite *sprite)
@@ -758,9 +835,9 @@ static void AnimThunderWave(struct Sprite *sprite)
     sprite->pos1.y += gBattleAnimArgs[1];
     if (gAnimMoveIndex == MOVE_THUNDER_WAVE) //important use something like this for ghost
         spriteId = CreateSprite(&gThunderWaveSpriteTemplate, sprite->pos1.x + 32, sprite->pos1.y, sprite->subpriority);
-    else
+    else //so I can use a different animation for leech seed ghost
         spriteId = CreateSprite(&gAnchorShotChainTemplate, sprite->pos1.x + 32, sprite->pos1.y, sprite->subpriority);
-    gSprites[spriteId].oam.tileNum += 8;
+    gSprites[spriteId].oam.tileNum += 8; //I want to make the green heal orbs blck or purple
     ++gAnimVisualTaskCount;
     gSprites[spriteId].callback = AnimThunderWave_Step;
     sprite->callback = AnimThunderWave_Step;

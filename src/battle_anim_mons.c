@@ -1750,7 +1750,7 @@ void *LoadPointerFromVars(s16 lo, s16 hi)
     return (void *)((u16)lo | ((u16)hi << 16));
 }
 
-void sub_80765D4(struct Task *task, u8 spriteId, s16 a3, s16 a4, s16 a5, s16 a6, u16 a7)
+void PrepareEruptAnimTaskData(struct Task *task, u8 spriteId, s16 a3, s16 a4, s16 a5, s16 a6, u16 a7)
 {
     task->data[8] = a7;
     task->data[15] = spriteId;
@@ -1762,7 +1762,7 @@ void sub_80765D4(struct Task *task, u8 spriteId, s16 a3, s16 a4, s16 a5, s16 a6,
     task->data[12] = (a6 - a4) / a7;
 }
 
-u8 sub_8076640(struct Task *task)
+u8 UpdateEruptAnimTask(struct Task *task)
 {
     if (!task->data[8])
         return 0;

@@ -1704,8 +1704,8 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 
                 //note, to change battle type, i.e custom moves no item, etc. need to change trainer.h & trainer_parties.h files
             }
-            case F_TRAINER_PARTY_HELD_ITEM:
-            {
+            case F_TRAINER_PARTY_HELD_ITEM: //make choose ai flags for individual pokemon, instead of party/trainer
+            { //also add pp bonus setting to custom moves,for more strategy/control //important
                 const struct TrainerMonItemDefaultMoves *partyData = gTrainers[trainerNum].party.ItemDefaultMoves;
                 if (IsRivalBattle(trainerNum))
                 {

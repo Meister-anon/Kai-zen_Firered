@@ -439,8 +439,8 @@ void SetBattlerSpriteYOffsetFromYScale(u8 spriteId);
 void SetBattlerSpriteYOffsetFromOtherYScale(u8 spriteId, u8 otherSpriteId);
 void StorePointerInVars(s16 *lo, s16 *hi, const void *ptr);
 void *LoadPointerFromVars(s16 lo, s16 hi);
-void sub_80765D4(struct Task *task, u8 spriteId, s16 a3, s16 a4, s16 a5, s16 a6, u16 a7);
-u8 sub_8076640(struct Task *task);
+void PrepareEruptAnimTaskData(struct Task *task, u8 spriteId, s16 a3, s16 a4, s16 a5, s16 a6, u16 a7);
+u8 UpdateEruptAnimTask(struct Task *task);
 void AnimTask_GetFrustrationPowerLevel(u8 taskId);
 void sub_80767F0(void);
 u8 GetBattlerSpriteSubpriority(u8 battlerId);
@@ -565,6 +565,11 @@ extern const union AffineAnimCmd *const gAffineAnims_Droplet[];
 
 // fighting.c
 void AnimTask_MoveSkyUppercutBg(u8 taskId);
+extern const union AnimCmd *const gAnims_HandsAndFeet[];
+extern const union AffineAnimCmd *const gAffineAnims_MegaPunchKick[];
+extern const union AffineAnimCmd *const gAffineAnims_SpinningHandOrFoot[];
+extern const union AnimCmd *const gAnims_RevengeBigScratch[];
+extern const union AnimCmd *const gAnims_RevengeSmallScratch[];
 
 // ice.c
 extern const union AnimCmd *const gAnims_SmallBubblePair[];
@@ -580,6 +585,11 @@ void AnimTask_VoltTackleAttackerReappear(u8 taskId);
 void AnimTask_VoltTackleBolt(u8 taskId);
 void AnimTask_ShockWaveProgressingBolt(u8 taskId);
 void AnimTask_ShockWaveLightning(u8 taskId);
+extern const union AffineAnimCmd *const gAffineAnims_GrowingElectricOrb[];
+extern const union AffineAnimCmd *const gAffineAnims_FlashingSpark[];
+extern const union AnimCmd *const gAnims_ThunderboltOrb[];
+extern const union AnimCmd *const gAnims_ElectricPuff[];
+extern const union AnimCmd *const gAnims_ElectricChargingParticles[];
 
 // fire.c
 extern const union AnimCmd *const gAnims_BasicFire[];
@@ -587,6 +597,7 @@ void AnimTask_EruptionLaunchRocks(u8 taskId);
 void AnimTask_ShakeTargetInPattern(u8 taskId);
 void AnimTask_BlendBackground(u8 taskId);
 void AnimTask_MoveHeatWaveTargets(u8 taskId);
+extern const union AnimCmd *const gAnims_FireBlastCross[];
 
 // water.c
 extern const union AnimCmd *const gAnims_WaterMudOrb[];
