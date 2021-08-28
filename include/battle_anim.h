@@ -557,8 +557,11 @@ void AnimBite(struct Sprite *sprite);
 
 // flying.c
 void AnimTask_AnimateGustTornadoPalette(u8 taskId);
-void sub_80B1D3C(struct Sprite *sprite);
+void DestroyAnimSpriteAfterTimer(struct Sprite *sprite);
 void AnimTask_DrillPeckHitSplats(u8 taskId);
+extern const union AnimCmd *const gAffineAnims_AirWaveCrescent[];
+extern const union AffineAnimCmd *const gAffineAnims_FlyBallUp[];
+extern const union AffineAnimCmd *const gAffineAnims_FlyBallAttack[];
 
 // poison.c
 extern const union AffineAnimCmd *const gAffineAnims_Droplet[];
@@ -597,6 +600,8 @@ void AnimTask_EruptionLaunchRocks(u8 taskId);
 void AnimTask_ShakeTargetInPattern(u8 taskId);
 void AnimTask_BlendBackground(u8 taskId);
 void AnimTask_MoveHeatWaveTargets(u8 taskId);
+void AnimFireSpread(struct Sprite *sprite);
+void AnimFireSpiralOutward(struct Sprite *sprite);
 extern const union AnimCmd *const gAnims_FireBlastCross[];
 
 // water.c
