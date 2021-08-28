@@ -5,34 +5,35 @@
 #include "constants/songs.h"
 
 static void AnimLightning(struct Sprite *sprite);
+static void AnimLightning_Step(struct Sprite *sprite);
 static void AnimUnusedSpinningFist(struct Sprite *sprite);
+static void AnimUnusedSpinningFist_Step(struct Sprite *sprite);
 static void AnimUnusedCirclingShock(struct Sprite *sprite);
-static void AnimSparkElectricity(struct Sprite *sprite);
 static void AnimZapCannonSpark(struct Sprite *sprite);
+static void AnimZapCannonSpark_Step(struct Sprite *sprite);
 static void AnimThunderboltOrb(struct Sprite *sprite);
+static void AnimSparkElectricity(struct Sprite *sprite);
 static void AnimSparkElectricityFlashing(struct Sprite *sprite);
+static void AnimSparkElectricityFlashing_Step(struct Sprite *sprite);
 static void AnimElectricity(struct Sprite *sprite);
+static void AnimTask_ElectricBolt_Step(u8 taskId);
 static void AnimElectricBoltSegment(struct Sprite *sprite);
 static void AnimThunderWave(struct Sprite *sprite);
-static void AnimGrowingChargeOrb(struct Sprite *sprite);
-static void AnimElectricPuff(struct Sprite *sprite);
-static void AnimVoltTackleOrbSlide(struct Sprite *sprite);
-static void AnimVoltTackleBolt(struct Sprite *sprite);
-static void AnimGrowingShockWaveOrb(struct Sprite *sprite);
-static void AnimShockWaveProgressingBolt(struct Sprite *sprite);
-static void AnimLightning_Step(struct Sprite *sprite);
-static void AnimUnusedSpinningFist_Step(struct Sprite *sprite);
-static void AnimZapCannonSpark_Step(struct Sprite *sprite);
-static void AnimSparkElectricityFlashing_Step(struct Sprite *sprite);
-static void AnimTask_ElectricBolt_Step(u8 taskId);
 static void AnimThunderWave_Step(struct Sprite *sprite);
 static void AnimTask_ElectricChargingParticles_Step(u8 taskId);
 static void AnimElectricChargingParticles(struct Sprite *sprite);
+static void AnimElectricChargingParticles_Step(struct Sprite* sprite);
+static void AnimVoltTackleOrbSlide(struct Sprite *sprite);
 static void AnimVoltTackleOrbSlide_Step(struct Sprite *sprite);
 static bool8 CreateVoltTackleBolt(struct Task *task, u8 taskId);
+static void AnimVoltTackleBolt(struct Sprite *sprite);
 static bool8 CreateShockWaveBoltSprite(struct Task *task, u8 taskId);
 static bool8 CreateShockWaveLightningSprite(struct Task *task, u8 taskId);
 static void AnimShockWaveLightning(struct Sprite *sprite);
+static void AnimGrowingShockWaveOrb(struct Sprite *sprite);
+static void AnimShockWaveProgressingBolt(struct Sprite *sprite);
+static void AnimGrowingChargeOrb(struct Sprite *sprite);
+static void AnimElectricPuff(struct Sprite *sprite);
 
 static const union AnimCmd sAnim_Lightning[] =
 {
