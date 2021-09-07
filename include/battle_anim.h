@@ -520,7 +520,11 @@ void AnimTask_SpiteTargetShadow(u8 taskId);
 void AnimTask_DestinyBondWhiteShadow(u8 taskId);
 void AnimTask_CurseStretchingBlackBg(u8 taskId);
 void AnimTask_GrudgeFlames(u8 taskId);
+void AnimTask_GrudgeFlames_Step(u8 taskId);
+void AnimShadowBall(struct Sprite *sprite);
+void AnimGhostStatusSprite(struct Sprite *sprite);
 void sub_80B6BBC(u8 taskId);
+extern const union AffineAnimCmd *const gAffineAnims_ShadowBall[];
 
 // rock.c
 void AnimTask_LoadSandstormBackground(u8 taskId);
@@ -564,7 +568,7 @@ void AnimFlyBallUp(struct Sprite *sprite);
 void AnimFlyBallUp_Step(struct Sprite *sprite);
 void AnimFlyBallAttack(struct Sprite *sprite);
 void AnimFlyBallAttack_Step(struct Sprite *sprite);
-extern const union AnimCmd *const gAffineAnims_AirWaveCrescent[];
+extern const union AnimCmd *const gAffineAnims_AirWaveCrescent[]; //looks wrong but is right
 extern const union AffineAnimCmd *const gAffineAnims_FlyBallUp[];
 extern const union AffineAnimCmd *const gAffineAnims_FlyBallAttack[];
 

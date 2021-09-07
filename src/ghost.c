@@ -16,7 +16,7 @@ static void AnimConfuseRayBallSpiral(struct Sprite *sprite);
 static void AnimConfuseRayBallSpiral_Step(struct Sprite *sprite);
 static void AnimTask_NightShadeClone_Step1(u8 taskId);
 static void AnimTask_NightShadeClone_Step2(u8 taskId);
-static void AnimShadowBall(struct Sprite *sprite);
+//static void AnimShadowBall(struct Sprite *sprite);
 static void AnimShadowBallStep(struct Sprite *sprite);
 static void AnimLick(struct Sprite *sprite);
 static void AnimLick_Step(struct Sprite *sprite);
@@ -33,9 +33,9 @@ static void AnimCurseNail(struct Sprite *sprite);
 static void AnimCurseNail_Step1(struct Sprite *sprite);
 static void AnimCurseNail_Step2(struct Sprite *sprite);
 static void AnimCurseNail_End(struct Sprite *sprite);
-static void AnimGhostStatusSprite(struct Sprite *sprite);
+//static void AnimGhostStatusSprite(struct Sprite *sprite);
 static void AnimGhostStatusSprite_Step(struct Sprite *sprite);
-static void AnimTask_GrudgeFlames_Step(u8 taskId);
+//static void AnimTask_GrudgeFlames_Step(u8 taskId);
 static void AnimGrudgeFlame(struct Sprite *sprite);
 static void AnimMonMoveCircular(struct Sprite *sprite);
 static void sub_80B6BE4(u8 taskId);
@@ -83,7 +83,7 @@ static const union AffineAnimCmd sAffineAnim_ShadowBall[] =
     AFFINEANIMCMD_JUMP(0),
 };
 
-static const union AffineAnimCmd *const sAffineAnims_ShadowBall[] =
+const union AffineAnimCmd *const gAffineAnims_ShadowBall[] =
 {
     sAffineAnim_ShadowBall,
 };
@@ -95,7 +95,7 @@ const struct SpriteTemplate gShadowBallSpriteTemplate =
     .oam = &gOamData_AffineNormal_ObjNormal_32x32,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sAffineAnims_ShadowBall,
+    .affineAnims = gAffineAnims_ShadowBall,
     .callback = AnimShadowBall,
 };
 
@@ -394,7 +394,7 @@ static void AnimTask_NightShadeClone_Step2(u8 taskId)
 // arg 0: duration step 1 (attacker -> center)
 // arg 1: duration step 2 (spin center)
 // arg 2: duration step 3 (center -> target)
-static void AnimShadowBall(struct Sprite *sprite)
+void AnimShadowBall(struct Sprite *sprite)
 {
     s16 oldPosX = sprite->pos1.x;
     s16 oldPosY = sprite->pos1.y;
@@ -1096,7 +1096,7 @@ static void AnimCurseNail_End(struct Sprite *sprite)
     DestroyAnimSprite(sprite);
 }
 
-static void AnimGhostStatusSprite(struct Sprite *sprite)
+void AnimGhostStatusSprite(struct Sprite *sprite)
 {
     u16 coeffB, coeffA;
 
@@ -1160,7 +1160,7 @@ void AnimTask_GrudgeFlames(u8 taskId)
     task->func = AnimTask_GrudgeFlames_Step;
 }
 
-static void AnimTask_GrudgeFlames_Step(u8 taskId)
+void AnimTask_GrudgeFlames_Step(u8 taskId)
 {
     u16 i;
     u8 spriteId;

@@ -102,7 +102,7 @@ static const union AffineAnimCmd sAffineAnim_FlyBallUp[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const gAffineAnims_FlyBallUp[] =
+const union AffineAnimCmd *const gAffineAnims_FlyBallUp[] =
 {
     sAffineAnim_FlyBallUp,
 };
@@ -119,7 +119,7 @@ static const union AffineAnimCmd sAffineAnim_FlyBallAttack_1[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const gAffineAnims_FlyBallAttack[] =
+const union AffineAnimCmd *const gAffineAnims_FlyBallAttack[] =
 {
     sAffineAnim_FlyBallAttack_0,
     sAffineAnim_FlyBallAttack_1,
