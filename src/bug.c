@@ -6,15 +6,15 @@
 static void AnimMegahornHorn(struct Sprite *sprite);
 static void AnimLeechLifeNeedle(struct Sprite *sprite);
 static void AnimTranslateWebThread(struct Sprite *sprite);
+static void AnimTranslateWebThread_Step(struct Sprite *sprite);
 static void AnimStringWrap(struct Sprite *sprite);
+static void AnimSpiderWeb_Step(struct Sprite *sprite);
+static void AnimSpiderWeb_End(struct Sprite *sprite);
 //void AnimSpiderWeb(struct Sprite *sprite); like this some for emerald are not static
 static void AnimTranslateStinger(struct Sprite *sprite);
 //static void AnimMissileArc(struct Sprite *sprite);
 static void AnimTailGlowOrb(struct Sprite *sprite);
-static void AnimTranslateWebThread_Step(struct Sprite *sprite);
 //static void AnimStringWrap_Step(struct Sprite *sprite);
-static void AnimSpiderWeb_Step(struct Sprite *sprite);
-static void AnimSpiderWeb_End(struct Sprite *sprite);
 //static void AnimMissileArcStep(struct Sprite *sprite);
 //in that case are defined in battle_anim.h
 static const union AffineAnimCmd sAffineAnim_MegahornHorn_0[] =
@@ -293,7 +293,7 @@ static void AnimStringWrap(struct Sprite *sprite)
     sprite->callback = AnimStringWrap_Step;
 }
 
-static void AnimStringWrap_Step(struct Sprite *sprite)
+void AnimStringWrap_Step(struct Sprite *sprite)
 {
     if (++sprite->data[0] == 3)
     {
@@ -409,7 +409,7 @@ static void AnimTranslateStinger(struct Sprite *sprite)
 // arg 3: target y pixel offset
 // arg 4: duration
 // arg 5: wave amplitude
-static void AnimMissileArc(struct Sprite *sprite)
+void AnimMissileArc(struct Sprite *sprite)
 {
     InitSpritePosToAnimAttacker(sprite, 1);
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
@@ -423,7 +423,7 @@ static void AnimMissileArc(struct Sprite *sprite)
     sprite->invisible = TRUE;
 }
 
-static void AnimMissileArcStep(struct Sprite *sprite)
+void AnimMissileArcStep(struct Sprite *sprite)
 {
     sprite->invisible = FALSE;
 

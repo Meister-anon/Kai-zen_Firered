@@ -26,12 +26,12 @@ static void AnimUnusedFlashingLight(struct Sprite *sprite);
 static void AnimUnusedFlashingLight_Step(struct Sprite *sprite);
 static void AnimSkyAttackBird(struct Sprite *sprite);
 static void AnimSkyAttackBird_Step(struct Sprite *sprite);
-static void AnimTask_AnimateGustTornadoPalette_Step(u8 taskId);
-static void AnimAirWaveCrescent(struct Sprite *sprite);
+/*static void AnimAirWaveCrescent(struct Sprite *sprite);
 static void AnimFlyBallUp(struct Sprite *sprite);
 static void AnimFlyBallUp_Step(struct Sprite *sprite);
 static void AnimFlyBallAttack(struct Sprite *sprite);
-static void AnimFlyBallAttack_Step(struct Sprite *sprite);
+static void AnimFlyBallAttack_Step(struct Sprite *sprite);*/
+static void AnimTask_AnimateGustTornadoPalette_Step(u8 taskId);
 
 
 const struct SpriteTemplate gEllipticalGustSpriteTemplate =
@@ -432,7 +432,7 @@ static void AnimGustToTarget_Step(struct Sprite *sprite)
         DestroyAnimSprite(sprite);
 }
 
-static void AnimAirWaveCrescent(struct Sprite *sprite)
+void AnimAirWaveCrescent(struct Sprite *sprite)
 {
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
     {
@@ -467,7 +467,7 @@ static void AnimAirWaveCrescent(struct Sprite *sprite)
     SeekSpriteAnim(sprite, gBattleAnimArgs[5]);
 }
 
-static void AnimFlyBallUp(struct Sprite *sprite)
+void AnimFlyBallUp(struct Sprite *sprite)
 {
     InitSpritePosToAnimAttacker(sprite, TRUE);
     sprite->data[0] = gBattleAnimArgs[2];
@@ -476,7 +476,7 @@ static void AnimFlyBallUp(struct Sprite *sprite)
     gSprites[GetAnimBattlerSpriteId(ANIM_ATTACKER)].invisible = TRUE;
 }
 
-static void AnimFlyBallUp_Step(struct Sprite *sprite)
+void AnimFlyBallUp_Step(struct Sprite *sprite)
 {
     if (sprite->data[0] > 0)
     {
@@ -491,7 +491,7 @@ static void AnimFlyBallUp_Step(struct Sprite *sprite)
         DestroyAnimSprite(sprite);
 }
 
-static void AnimFlyBallAttack(struct Sprite *sprite)
+void AnimFlyBallAttack(struct Sprite *sprite)
 {
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
     {
@@ -513,7 +513,7 @@ static void AnimFlyBallAttack(struct Sprite *sprite)
     sprite->callback = AnimFlyBallAttack_Step;
 }
 
-static void AnimFlyBallAttack_Step(struct Sprite *sprite)
+void AnimFlyBallAttack_Step(struct Sprite *sprite)
 {
     sprite->data[0] = 1;
     AnimTranslateLinear(sprite);
@@ -1158,7 +1158,7 @@ static void AnimDiveWaterSplash(struct Sprite *sprite)
         sprite->pos2.y = t2;
         if (sprite->data[2] == 24)
         {
-            sub_8075AD8(sprite);
+            ResetSpriteRotScale_PreserveAffine(sprite);
             DestroyAnimSprite(sprite);
         }
         break;

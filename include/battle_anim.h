@@ -418,7 +418,7 @@ void PrepareBattlerSpriteForRotScale(u8 spriteId, u8 objMode);
 void ResetSpriteRotScale(u8 spriteId);
 void SetBattlerSpriteYOffsetFromRotation(u8 spriteId);
 void TrySetSpriteRotScale(struct Sprite *sprite, bool8 recalcCenterVector, s16 xScale, s16 yScale, u16 rotation);
-void sub_8075AD8(struct Sprite *sprite);
+void ResetSpriteRotScale_PreserveAffine(struct Sprite *sprite);
 u16 ArcTan2Neg(s16 a, s16 b);
 void SetGreyscaleOrOriginalPalette(u16 paletteNum, bool8 restoreOriginalColor);
 u32 SelectBattleAnimSpriteAndBgPalettes(bool8 battleBackground, bool8 attacker, bool8 target, bool8 attackerPartner, bool8 targetPartner, bool8 a6, bool8 a7);
@@ -547,7 +547,7 @@ void AnimTask_InitAttackerFadeFromInvisible(u8 taskId);
 void AnimTask_MoveAttackerMementoShadow(u8 taskId);
 void AnimTask_MoveTargetMementoShadow(u8 taskId);
 void AnimTask_InitMementoShadow(u8 taskId);
-void sub_80B8664(u8 taskId);
+void sub_80B8664(u8 taskId);  //sub_8114470 in emerald
 void AnimTask_MetallicShine(u8 taskId);
 void AnimTask_SetGreyscaleOrOriginalPal(u8 taskId);
 void GetIsDoomDesireHitTurn(u8 taskId);
@@ -557,8 +557,13 @@ void AnimBite(struct Sprite *sprite);
 
 // flying.c
 void AnimTask_AnimateGustTornadoPalette(u8 taskId);
-void DestroyAnimSpriteAfterTimer(struct Sprite *sprite);
 void AnimTask_DrillPeckHitSplats(u8 taskId);
+void DestroyAnimSpriteAfterTimer(struct Sprite *sprite);
+void AnimAirWaveCrescent(struct Sprite *sprite);
+void AnimFlyBallUp(struct Sprite *sprite);
+void AnimFlyBallUp_Step(struct Sprite *sprite);
+void AnimFlyBallAttack(struct Sprite *sprite);
+void AnimFlyBallAttack_Step(struct Sprite *sprite);
 extern const union AnimCmd *const gAffineAnims_AirWaveCrescent[];
 extern const union AffineAnimCmd *const gAffineAnims_FlyBallUp[];
 extern const union AffineAnimCmd *const gAffineAnims_FlyBallAttack[];
@@ -567,7 +572,15 @@ extern const union AffineAnimCmd *const gAffineAnims_FlyBallAttack[];
 extern const union AffineAnimCmd *const gAffineAnims_Droplet[];
 
 // fighting.c
-void AnimTask_MoveSkyUppercutBg(u8 taskId);
+void AnimTask_MoveSkyUppercutBg(u8 taskId); //defined here in firered not emerald
+void AnimStompFoot(struct Sprite *sprite);
+void AnimBrickBreakWall_Step(struct Sprite *sprite);
+void AnimSpinningKickOrPunch(struct Sprite *sprite);
+void AnimSpinningKickOrPunchFinish(struct Sprite *sprite);
+void AnimJumpKick(struct Sprite *sprite);
+void AnimBasicFistOrFoot(struct Sprite *sprite);
+void AnimRevengeScratch(struct Sprite *sprite);
+void AnimDizzyPunchDuck(struct Sprite *sprite);
 extern const union AnimCmd *const gAnims_HandsAndFeet[];
 extern const union AffineAnimCmd *const gAffineAnims_MegaPunchKick[];
 extern const union AffineAnimCmd *const gAffineAnims_SpinningHandOrFoot[];
@@ -595,13 +608,13 @@ extern const union AnimCmd *const gAnims_ElectricPuff[];
 extern const union AnimCmd *const gAnims_ElectricChargingParticles[];
 
 // fire.c
-extern const union AnimCmd *const gAnims_BasicFire[];
 void AnimTask_EruptionLaunchRocks(u8 taskId);
 void AnimTask_ShakeTargetInPattern(u8 taskId);
 void AnimTask_BlendBackground(u8 taskId);
 void AnimTask_MoveHeatWaveTargets(u8 taskId);
 void AnimFireSpread(struct Sprite *sprite);
 void AnimFireSpiralOutward(struct Sprite *sprite);
+extern const union AnimCmd *const gAnims_BasicFire[];
 extern const union AnimCmd *const gAnims_FireBlastCross[];
 
 // water.c

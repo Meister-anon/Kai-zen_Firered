@@ -7,19 +7,19 @@
 #include "util.h"
 
 static void AnimUnusedBagSteal(struct Sprite *sprite);
+static void AnimUnusedBagSteal_Step(struct Sprite *sprite);
 //static void AnimBite(struct Sprite *sprite);
 //static void AnimTearDrop(struct Sprite *sprite);
 //static void AnimClawSlash(struct Sprite *sprite);
 static void AnimTask_AttackerFadeToInvisible_Step(u8 taskId);
 static void AnimTask_AttackerFadeFromInvisible_Step(u8 taskId);
-static void AnimUnusedBagSteal_Step(struct Sprite *sprite);
 static void AnimBite_Step1(struct Sprite *sprite);
 static void AnimBite_Step2(struct Sprite *sprite);
 static void AnimTearDrop_Step(struct Sprite *sprite);
-static void SetAllBattlersSpritePriority(u8 priority);
 static void AnimTask_MoveAttackerMementoShadow_Step(u8 taskId);
-static void DoMementoShadowEffect(struct Task *task);
 static void AnimTask_MoveTargetMementoShadow_Step(u8 taskId);
+static void DoMementoShadowEffect(struct Task *task);
+static void SetAllBattlersSpritePriority(u8 priority);
 static void AnimPunishment(struct Sprite *sprite);
 static void AnimTask_MetallicShine_Step(u8 taskId);
 
@@ -391,7 +391,7 @@ static void AnimUnusedBagSteal_Step(struct Sprite *sprite)
         DestroyAnimSprite(sprite);
 }
 
-static void AnimBite(struct Sprite *sprite)
+void AnimBite(struct Sprite *sprite)
 {
     sprite->pos1.x += gBattleAnimArgs[0];
     sprite->pos1.y += gBattleAnimArgs[1];
@@ -422,7 +422,7 @@ static void AnimBite_Step2(struct Sprite *sprite)
         DestroySpriteAndMatrix(sprite);
 }
 
-static void AnimTearDrop(struct Sprite *sprite)
+void AnimTearDrop(struct Sprite *sprite)
 {
     u8 battler;
     s8 xOffset;
@@ -834,7 +834,7 @@ void sub_80B8664(u8 taskId)
     DestroyAnimVisualTask(taskId);
 }
 
-static void AnimClawSlash(struct Sprite *sprite)
+void AnimClawSlash(struct Sprite *sprite)
 {
     sprite->pos1.x += gBattleAnimArgs[0];
     sprite->pos1.y += gBattleAnimArgs[1];
