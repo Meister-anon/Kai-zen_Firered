@@ -1094,7 +1094,7 @@ void InitAnimFastLinearTranslationWithSpeed(struct Sprite *sprite)
     InitAnimFastLinearTranslation(sprite);
 }
 
-void sub_8075830(struct Sprite *sprite)
+void InitAnimFastLinearTranslationWithSpeedAndPos(struct Sprite *sprite)
 {
     sprite->data[1] = sprite->pos1.x;
     sprite->data[3] = sprite->pos1.y;

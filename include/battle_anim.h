@@ -412,7 +412,7 @@ void BattleAnim_InitAndRunLinearTranslationWithDuration(struct Sprite *sprite);
 void InitAndRunAnimFastLinearTranslation(struct Sprite *sprite);
 bool8 AnimFastTranslateLinear(struct Sprite *sprite);
 void InitAnimFastLinearTranslationWithSpeed(struct Sprite *sprite);
-void sub_8075830(struct Sprite *sprite);
+void InitAnimFastLinearTranslationWithSpeedAndPos(struct Sprite *sprite);
 void SetSpriteRotScale(u8 spriteId, s16 xScale, s16 yScale, u16 rotation);
 void PrepareBattlerSpriteForRotScale(u8 spriteId, u8 objMode);
 void ResetSpriteRotScale(u8 spriteId);
@@ -593,6 +593,15 @@ extern const union AnimCmd *const gAnims_RevengeSmallScratch[];
 
 // ice.c
 extern const union AnimCmd *const gAnims_SmallBubblePair[];
+extern const union AnimCmd *const gAnims_Snowball[];
+extern const union AffineAnimCmd *const gAffineAnims_IceCrystalHit[];
+extern const union AnimCmd *const gAnims_IceCrystalLarge[];
+extern const union AnimCmd *const gAnims_IceBallChunk[];
+extern const union AnimCmd *const gAnims_BlizzardIceCrystal[];
+void AnimThrowMistBall(struct Sprite *sprite);
+void AnimSwirlingSnowball_Step1(struct Sprite *sprite);
+void AnimMoveParticleBeyondTarget(struct Sprite *sprite);
+void AnimIceEffectParticle(struct Sprite *sprite);
 void AnimTask_Haze1(u8 taskId);
 void AnimTask_LoadMistTiles(u8 taskId);
 void AnimTask_Hail1(u8 taskId);
