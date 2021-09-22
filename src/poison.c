@@ -4,7 +4,7 @@
 
 static void AnimSludgeProjectile(struct Sprite *sprite);
 static void AnimAcidPoisonBubble(struct Sprite *sprite);
-static void AnimSludgeBombHitParticle(struct Sprite *sprite);
+//void AnimSludgeBombHitParticle(struct Sprite *sprite);
 static void AnimAcidPoisonDroplet(struct Sprite *sprite);
 static void AnimBubbleEffect(struct Sprite *sprite);
 static void sub_80B1684(struct Sprite *sprite);
@@ -227,7 +227,7 @@ static void sub_80B1728(struct Sprite *sprite)
         DestroyAnimSprite(sprite);
 }
 
-static void AnimSludgeBombHitParticle(struct Sprite *sprite)
+void AnimSludgeBombHitParticle(struct Sprite *sprite)
 {
     sprite->data[0] = gBattleAnimArgs[2];
     sprite->data[1] = sprite->pos1.x;

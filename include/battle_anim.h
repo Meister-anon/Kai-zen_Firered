@@ -500,6 +500,10 @@ void AnimTask_DigUpMovement(u8 taskId);
 void AnimTask_HorizontalShake(u8 taskId);
 void AnimTask_IsPowerOver99(u8 taskId);
 void AnimTask_PositionFissureBgOnBattler(u8 taskId);
+void AnimMudSportDirt(struct Sprite *sprite);
+void AnimDirtScatter(struct Sprite *sprite);
+void AnimMudSportDirtRising(struct Sprite *sprite);
+extern const union AffineAnimCmd *const gAffineAnims_SpinningBone[];
 
 // dragon.c
 void AnimTask_DragonDanceWaver(u8 taskId);
@@ -574,6 +578,7 @@ extern const union AffineAnimCmd *const gAffineAnims_FlyBallAttack[];
 
 // poison.c
 extern const union AffineAnimCmd *const gAffineAnims_Droplet[];
+void AnimSludgeBombHitParticle(struct Sprite *sprite);  //only strut Sprite * in emerald, this should be fine
 
 // fighting.c
 void AnimTask_MoveSkyUppercutBg(u8 taskId); //defined here in firered not emerald
