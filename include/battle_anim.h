@@ -493,6 +493,12 @@ void AnimTask_BlendColorCycleByTag(u8 taskId);
 void AnimTask_FlashAnimTagWithColor(u8 taskId);
 void AnimTask_InvertScreenColor(u8 taskId);
 void AnimTask_ShakeBattleTerrain(u8 taskId);
+void AnimHitSplatBasic(struct Sprite *sprite);
+void AnimFlashingHitSplat(struct Sprite *sprite);
+void AnimFlashingHitSplat_Step(struct Sprite *sprite);
+void AnimHitSplatRandom(struct Sprite *sprite);
+void AnimCrossImpact(struct Sprite *sprite);
+void AnimHitSplatOnMonEdge(struct Sprite *sprite);
 
 // ground.c
 void AnimTask_DigDownMovement(u8 taskId);
