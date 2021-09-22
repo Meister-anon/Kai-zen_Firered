@@ -7,13 +7,13 @@
 
 static void AnimBonemerangProjectile(struct Sprite *sprite);
 static void AnimBoneHitProjectile(struct Sprite *sprite);
-static void AnimDirtScatter(struct Sprite *sprite);
-static void AnimMudSportDirt(struct Sprite *sprite);
+//static void AnimDirtScatter(struct Sprite *sprite);
+//static void AnimMudSportDirt(struct Sprite *sprite);
 static void AnimFissureDirtPlumeParticle(struct Sprite *sprite);
 static void AnimDigDirtMound(struct Sprite *sprite);
 static void AnimBonemerangProjectileStep(struct Sprite *sprite);
 static void AnimBonemerangProjectileEnd(struct Sprite *sprite);
-static void AnimMudSportDirtRising(struct Sprite *sprite);
+//static void AnimMudSportDirtRising(struct Sprite *sprite);
 static void AnimMudSportDirtFalling(struct Sprite *sprite);
 static void AnimTask_DigBounceMovement(u8 taskId);
 static void AnimTask_DigEndBounceMovementSetInvisible(u8 taskId);
