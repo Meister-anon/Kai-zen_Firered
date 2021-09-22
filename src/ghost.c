@@ -126,16 +126,16 @@ const struct SpriteTemplate gLickSpriteTemplate =
 };
 
 // not used
-static const union AffineAnimCmd gUnknown_83E7654[] =
+static const union AffineAnimCmd sAffineAnim_Unused[] =
 {
     AFFINEANIMCMD_FRAME(0x200, 0x200, 0, 0),
     AFFINEANIMCMD_END,
 };
 
 // not used
-static const union AffineAnimCmd *const gUnknown_83E7664[] =
+static const union AffineAnimCmd *const sAffineAnims_Unused[] =
 {
-    gUnknown_83E7654,
+    sAffineAnim_Unused,
 };
 
 const struct SpriteTemplate gDestinyBondWhiteShadowSpriteTemplate =
@@ -147,6 +147,17 @@ const struct SpriteTemplate gDestinyBondWhiteShadowSpriteTemplate =
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimDestinyBondWhiteShadow,
+};
+
+const struct SpriteTemplate gDarkVoidBlackHoleTemplate =
+{
+    .tileTag = ANIM_TAG_WHITE_SHADOW,
+    .paletteTag = ANIM_TAG_QUICK_GUARD_HAND,
+    .oam = &gOamData_AffineOff_ObjBlend_64x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimDestinyBondWhiteShadow
 };
 
 const struct SpriteTemplate gCurseNailSpriteTemplate =
@@ -207,7 +218,7 @@ const struct SpriteTemplate gGrudgeFlameSpriteTemplate =
     .callback = AnimGrudgeFlame,
 };
 
-const struct SpriteTemplate gUnknown_83E76F8 =
+const struct SpriteTemplate sMonMoveCircularSpriteTemplate =
 {
     .tileTag = 0,
     .paletteTag = 0,
@@ -216,6 +227,17 @@ const struct SpriteTemplate gUnknown_83E76F8 =
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimMonMoveCircular,
+};
+
+const struct SpriteTemplate gFlashCannonBallMovementTemplate =
+{
+    .tileTag = ANIM_TAG_FLASH_CANNON_BALL,
+    .paletteTag = ANIM_TAG_FLASH_CANNON_BALL,
+    .oam = &gOamData_AffineNormal_ObjNormal_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_ShadowBall,
+    .callback = AnimShadowBall
 };
 
 static void AnimConfuseRayBallBounce(struct Sprite *sprite)
@@ -252,7 +274,7 @@ static void AnimConfuseRayBallBounce_Step1(struct Sprite *sprite)
         return;
     if (r0 <= 0)
         return;
-    PlaySE12WithPanning(SE_M_CONFUSE_RAY, gUnknown_2037F24);
+    PlaySE12WithPanning(SE_M_CONFUSE_RAY, gAnimCustomPanning);
 }
 
 static void AnimConfuseRayBallBounce_Step2(struct Sprite *sprite)
@@ -811,7 +833,11 @@ void AnimTask_DestinyBondWhiteShadow(u8 taskId)
              && battler != (gBattleAnimAttacker ^ 2)
              && IsBattlerSpriteVisible(battler))
             {
+                if (gAnimMoveIndex == MOVE_DARK_VOID)
+                    spriteId = CreateSprite(&gDarkVoidBlackHoleTemplate, baseX, baseY, 55);   //dark void
+                else
                 spriteId = CreateSprite(&gDestinyBondWhiteShadowSpriteTemplate, baseX, baseY, 55);
+                
                 if (spriteId != MAX_SPRITES)
                 {
                     x = GetBattlerSpriteCoord(battler, 2);
