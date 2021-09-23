@@ -584,7 +584,10 @@ extern const union AffineAnimCmd *const gAffineAnims_FlyBallAttack[];
 
 // poison.c
 extern const union AffineAnimCmd *const gAffineAnims_Droplet[];
+extern const union AnimCmd *const gAnims_PoisonProjectile[];
+extern const union AnimCmd *const gAnims_AcidPoisonDroplet[];
 void AnimSludgeBombHitParticle(struct Sprite *sprite);  //only strut Sprite * in emerald, this should be fine
+void AnimAcidPoisonBubble_Step(struct Sprite *sprite);
 
 // fighting.c
 void AnimTask_MoveSkyUppercutBg(u8 taskId); //defined here in firered not emerald
