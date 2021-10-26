@@ -544,6 +544,9 @@ void AnimTask_MoveSeismicTossBg(u8 taskId);
 void AnimTask_SeismicTossBgAccelerateDownAtEnd(u8 taskId);
 
 // psychic.c
+extern const union AffineAnimCmd *const gAffineAnims_PsychoBoostOrb[];
+extern const union AffineAnimCmd *const gAffineAnims_LusterPurgeCircle[];
+void AnimPsychoBoost(struct Sprite *sprite);
 void AnimTask_MeditateStretchAttacker(u8 taskId);
 void AnimTask_Teleport(u8 taskId);
 void AnimTask_ImprisonOrbs(u8 taskId);

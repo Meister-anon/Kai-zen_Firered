@@ -11,7 +11,7 @@ static void AnimBentSpoon(struct Sprite *sprite);
 static void AnimQuestionMark(struct Sprite *sprite);
 static void AnimRedX(struct Sprite *sprite);
 static void AnimSkillSwapOrb(struct Sprite *sprite);
-static void AnimPsychoBoost(struct Sprite *sprite);
+//static void AnimPsychoBoost(struct Sprite *sprite);
 static void AnimDefensiveWall_Step1(struct Sprite *sprite);
 static void AnimDefensiveWall_Step2(struct Sprite *sprite);
 static void AnimDefensiveWall_Step3(struct Sprite *sprite);
@@ -1188,7 +1188,7 @@ static void AnimTask_TransparentCloneGrowAndShrink_Step(u8 taskId)
     }
 }
 
-static void AnimPsychoBoost(struct Sprite *sprite)
+void AnimPsychoBoost(struct Sprite *sprite)
 {
     switch (sprite->data[0])
     {
