@@ -658,6 +658,11 @@ extern const union AnimCmd *const gAnims_FireBlastCross[];
 extern const union AnimCmd *const gAnims_WaterMudOrb[];
 extern const union AnimCmd *const gAnims_WaterBubble[];
 void AnimWaterPulseRing(struct Sprite *sprite);
+void AnimSmallBubblePair(struct Sprite *sprite);
+void AnimWaterPulseBubble(struct Sprite *sprite);
+extern const union AnimCmd *const gAnims_WaterBubbleProjectile[];
+extern const union AnimCmd *const gAnims_FlamethrowerFlame[];
+extern const union AnimCmd *const gAnims_WaterPulseBubble[];
 
 // smokescreen.c
 u8 SmokescreenImpact(s16 x, s16 y, u8 a3);
