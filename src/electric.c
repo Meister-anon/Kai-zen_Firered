@@ -9,16 +9,16 @@ static void AnimLightning_Step(struct Sprite *sprite);
 static void AnimUnusedSpinningFist(struct Sprite *sprite);
 static void AnimUnusedSpinningFist_Step(struct Sprite *sprite);
 static void AnimUnusedCirclingShock(struct Sprite *sprite);
-static void AnimZapCannonSpark(struct Sprite *sprite);
+//static void AnimZapCannonSpark(struct Sprite *sprite);
 static void AnimZapCannonSpark_Step(struct Sprite *sprite);
 static void AnimThunderboltOrb(struct Sprite *sprite);
-static void AnimSparkElectricity(struct Sprite *sprite);
-static void AnimSparkElectricityFlashing(struct Sprite *sprite);
+//static void AnimSparkElectricity(struct Sprite *sprite);
+//static void AnimSparkElectricityFlashing(struct Sprite *sprite);
 static void AnimSparkElectricityFlashing_Step(struct Sprite *sprite);
 static void AnimElectricity(struct Sprite *sprite);
 static void AnimTask_ElectricBolt_Step(u8 taskId);
 static void AnimElectricBoltSegment(struct Sprite *sprite);
-static void AnimThunderWave(struct Sprite *sprite);
+//static void AnimThunderWave(struct Sprite *sprite);
 static void AnimThunderWave_Step(struct Sprite *sprite);
 static void AnimTask_ElectricChargingParticles_Step(u8 taskId);
 static void AnimElectricChargingParticles(struct Sprite *sprite);
@@ -30,10 +30,10 @@ static void AnimVoltTackleBolt(struct Sprite *sprite);
 static bool8 CreateShockWaveBoltSprite(struct Task *task, u8 taskId);
 static bool8 CreateShockWaveLightningSprite(struct Task *task, u8 taskId);
 static void AnimShockWaveLightning(struct Sprite *sprite);
-static void AnimGrowingShockWaveOrb(struct Sprite *sprite);
+//static void AnimGrowingShockWaveOrb(struct Sprite *sprite);
 static void AnimShockWaveProgressingBolt(struct Sprite *sprite);
-static void AnimGrowingChargeOrb(struct Sprite *sprite);
-static void AnimElectricPuff(struct Sprite *sprite);
+//static void AnimGrowingChargeOrb(struct Sprite *sprite);
+//static void AnimElectricPuff(struct Sprite *sprite);
 
 static const union AnimCmd sAnim_Lightning[] =
 {
@@ -582,7 +582,7 @@ static void AnimUnusedCirclingShock(struct Sprite *sprite)
     sprite->callback = TranslateSpriteInCircleOverDuration;
 }
 
-static void AnimSparkElectricity(struct Sprite *sprite)
+void AnimSparkElectricity(struct Sprite *sprite)
 {
     u8 battler;
     u32 matrixNum;
@@ -633,7 +633,7 @@ static void AnimSparkElectricity(struct Sprite *sprite)
     sprite->callback = DestroyAnimSpriteAfterTimer;
 }
 
-static void AnimZapCannonSpark(struct Sprite *sprite)
+void AnimZapCannonSpark(struct Sprite *sprite)
 {
     InitSpritePosToAnimAttacker(sprite, 1);
     sprite->data[0] = gBattleAnimArgs[3];
@@ -689,7 +689,7 @@ static void AnimThunderboltOrb(struct Sprite *sprite)
     sprite->callback = AnimThunderboltOrb_Step;
 }
 
-static void AnimSparkElectricityFlashing(struct Sprite *sprite)
+void AnimSparkElectricityFlashing(struct Sprite *sprite)
 {
     u8 battler;
 
@@ -963,7 +963,7 @@ static void AnimGrowingChargeOrb(struct Sprite *sprite)
 }
 
 // The quick electric burst at the end of Charge / during the Volt Tackle hit
-static void AnimElectricPuff(struct Sprite *sprite)
+void AnimElectricPuff(struct Sprite *sprite)
 {
     if (!gBattleAnimArgs[0])
     {
@@ -1172,7 +1172,7 @@ static void AnimVoltTackleBolt(struct Sprite *sprite)
     }
 }
 
-static void AnimGrowingShockWaveOrb(struct Sprite *sprite)
+void AnimGrowingShockWaveOrb(struct Sprite *sprite)
 {
     switch (sprite->data[0])
     {

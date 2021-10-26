@@ -60,7 +60,7 @@ extern u8 gBattleAnimTarget;
 extern u8 gBattlerSpriteIds[MAX_BATTLERS_COUNT];
 extern s32 gAnimMoveDmg;
 extern u16 gAnimBattlerSpecies[MAX_BATTLERS_COUNT];
-extern u8 gUnknown_2037F24;
+extern u8 gAnimCustomPanning;
 
 // battle_anim.c
 extern const struct OamData gOamData_AffineOff_ObjNormal_8x8;
@@ -638,6 +638,13 @@ void AnimTask_VoltTackleAttackerReappear(u8 taskId);
 void AnimTask_VoltTackleBolt(u8 taskId);
 void AnimTask_ShockWaveProgressingBolt(u8 taskId);
 void AnimTask_ShockWaveLightning(u8 taskId);
+void AnimThunderWave(struct Sprite *sprite);
+void AnimGrowingChargeOrb(struct Sprite *sprite);
+void AnimZapCannonSpark(struct Sprite *sprite);
+void AnimSparkElectricity(struct Sprite *sprite);
+void AnimElectricPuff(struct Sprite *sprite);
+void AnimSparkElectricityFlashing(struct Sprite *sprite);
+void AnimGrowingShockWaveOrb(struct Sprite *sprite);
 extern const union AffineAnimCmd *const gAffineAnims_GrowingElectricOrb[];
 extern const union AffineAnimCmd *const gAffineAnims_FlashingSpark[];
 extern const union AnimCmd *const gAnims_ThunderboltOrb[];
