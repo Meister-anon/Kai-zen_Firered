@@ -1690,7 +1690,7 @@ const struct SpriteTemplate gOctazookaSmokeSpriteTemplate =
     .callback = AnimSpriteOnMonPos,
 };
 
-static const union AnimCmd sConversionAnimCmds[] =
+static const union AnimCmd gConversionAnimCmds[] =
 {
     ANIMCMD_FRAME(3, 5),
     ANIMCMD_FRAME(2, 5),
@@ -1699,20 +1699,20 @@ static const union AnimCmd sConversionAnimCmds[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sConversionAnimTable[] =
+const union AnimCmd *const gConversionAnimTable[] =
 {
-    sConversionAnimCmds,
+    gConversionAnimCmds,
 };
 
-static const union AffineAnimCmd sConversionAffineAnimCmds[] =
+const union AffineAnimCmd gConversionAffineAnimCmds[] =
 {
     AFFINEANIMCMD_FRAME(0x200, 0x200, 0, 0),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sConversionAffineAnimTable[] =
+const union AffineAnimCmd *const gConversionAffineAnimTable[] =
 {
-    sConversionAffineAnimCmds,
+    gConversionAffineAnimCmds,
 };
 
 const struct SpriteTemplate gConversionSpriteTemplate =
@@ -1720,9 +1720,9 @@ const struct SpriteTemplate gConversionSpriteTemplate =
     .tileTag = ANIM_TAG_CONVERSION,
     .paletteTag = ANIM_TAG_CONVERSION,
     .oam = &gOamData_AffineDouble_ObjBlend_8x8,
-    .anims = sConversionAnimTable,
+    .anims = gConversionAnimTable,
     .images = NULL,
-    .affineAnims = sConversionAffineAnimTable,
+    .affineAnims = gConversionAffineAnimTable,
     .callback = AnimConversion,
 };
 
@@ -1747,7 +1747,7 @@ const struct SpriteTemplate gConversion2SpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjBlend_8x8,
     .anims = sConversion2AnimTable,
     .images = NULL,
-    .affineAnims = sConversionAffineAnimTable,
+    .affineAnims = gConversionAffineAnimTable,
     .callback = AnimConversion2,
 };
 

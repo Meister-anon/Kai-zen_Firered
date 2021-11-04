@@ -419,11 +419,11 @@ void AnimMissileArc(struct Sprite *sprite)
     sprite->data[4] = GetBattlerSpriteCoord(gBattleAnimTarget, 3) + gBattleAnimArgs[3];
     sprite->data[5] = gBattleAnimArgs[5];
     InitAnimArcTranslation(sprite);
-    sprite->callback = AnimMissileArcStep;
+    sprite->callback = AnimMissileArc_Step; //forgot to make function name match definition missed underscore
     sprite->invisible = TRUE;
 }
 
-void AnimMissileArcStep(struct Sprite *sprite)
+void AnimMissileArc_Step(struct Sprite *sprite)
 {
     sprite->invisible = FALSE;
 
