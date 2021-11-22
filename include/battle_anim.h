@@ -242,6 +242,7 @@ extern const union AffineAnimCmd *const gThinRingExpandingAffineAnimTable[];
 extern const union AffineAnimCmd *const gHyperVoiceRingAffineAnimTable[];
 extern const union AffineAnimCmd *const gGuardRingAffineAnimTable[];
 extern const union AffineAnimCmd *const gAngerMarkAffineAnimTable[];
+extern const union AffineAnimCmd *const gHiddenPowerOrbAffineAnimTable[];
 void AnimCirclingFinger(struct Sprite *);
 void AnimBouncingMusicNote(struct Sprite *);
 void AnimVibrateBattlerBack(struct Sprite *);
@@ -464,16 +465,16 @@ u8 GetBattlerSpriteBGPriority(u8 battlerId);
 // Returns 2 if player left or opp right
 // Returns 1 if player right or opp left
 u8 GetBattlerSpriteBGPriorityRank(u8 battlerId);
-u8 sub_80768D0(u16 species, bool8 isBackpic, u8 a3, s16 x, s16 y, u8 subpriority, u32 personality, u32 trainerId, u32 battlerId, u32 a10);
+u8 CreateAdditionalMonSpriteForMoveAnim(u16 species, bool8 isBackpic, u8 a3, s16 x, s16 y, u8 subpriority, u32 personality, u32 trainerId, u32 battlerId, u32 a10);
 void DestroySpriteAndFreeResources_(struct Sprite *sprite);
 s16 GetBattlerSpriteCoordAttr(u8 battlerId, u8 attr);
 void SetAverageBattlerPositions(u8 battlerId, bool8 respectMonPicOffsets, s16 *x, s16 *y);
-u8 sub_8076E34(s32 battlerId, u8 spriteId, s32 species);
-void sub_8076ED8(struct Sprite *sprite);
-void sub_8076F58(struct Sprite *sprite);
-void sub_8076FD0(struct Sprite *sprite);
+u8 CreateInvisibleSpriteCopy(s32 battlerId, u8 spriteId, s32 species);
+void AnimTranslateLinearAndFlicker_Flipped(struct Sprite *sprite);
+void AnimTranslateLinearAndFlicker(struct Sprite *sprite);
+void AnimSpinningSparkle(struct Sprite *sprite);
 void AnimTask_AttackerPunchWithTrace(u8 taskId);
-void sub_807729C(struct Sprite *sprite);
+void AnimWeatherBallUp(struct Sprite *sprite);
 void AnimWeatherBallDown(struct Sprite *sprite);
 
 // battle_anim_mon_movement.c

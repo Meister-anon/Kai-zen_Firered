@@ -23,14 +23,14 @@ static void PlayerThrowBall_RunLinearTranslation_ThenceSetCBtoStoredInData6(stru
 static void SpriteCB_RunAnimFastLinearTranslation(struct Sprite *sprite);
 static bool8 Dummy_ReturnFalse(void);
 static void AnimThrowProjectile_Step(struct Sprite *sprite);
-static void sub_80760D0(u8 taskId);
+static void AnimTask_AlphaFadeIn_Step(u8 taskId);
 static void AnimTask_BlendMonInAndOutSetup(struct Task *task);
 static void AnimTask_BlendMonInAndOutStep(u8 taskId);
 static u16 GetBattlerYDeltaFromSpriteId(u8 spriteId);
-static void sub_8077118(u8 taskId);
+static void AnimTask_AttackerPunchWithTrace_Step(u8 taskId);
 static void sub_80771E4(struct Task *task, u8 taskId);
 static void sub_8077268(struct Sprite *sprite);
-static void sub_80772F4(struct Sprite *sprite);
+static void AnimWeatherBallUp_Step(struct Sprite *sprite);
 
 static EWRAM_DATA union AffineAnimCmd *sAnimTaskAffineAnim = NULL;
 static EWRAM_DATA u32 gUnknown_2037F2C = 0; // not used
@@ -1465,6 +1465,7 @@ void obj_delete_but_dont_free_vram(struct Sprite *sprite)
     DestroySprite(sprite);
 }
 
+// Only used to fade Moonlight moon sprite in
 void AnimTask_AlphaFadeIn(u8 taskId)
 {
     s16 v1 = 0, v2 = 0;
@@ -1487,10 +1488,10 @@ void AnimTask_AlphaFadeIn(u8 taskId)
     gTasks[taskId].data[7] = gBattleAnimArgs[2];
     gTasks[taskId].data[8] = gBattleAnimArgs[3];
     SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(gBattleAnimArgs[0], gBattleAnimArgs[1]));
-    gTasks[taskId].func = sub_80760D0;
+    gTasks[taskId].func = AnimTask_AlphaFadeIn_Step;
 }
 
-static void sub_80760D0(u8 taskId)
+static void AnimTask_AlphaFadeIn_Step(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
 
@@ -1863,7 +1864,10 @@ u8 GetBattlerSpriteBGPriorityRank(u8 battlerId)
         return 1;
 }
 
-u8 sub_80768D0(u16 species, bool8 isBackpic, u8 a3, s16 x, s16 y, u8 subpriority, u32 personality, u32 trainerId, u32 battlerId, u32 a10)
+//may need to remove deoxys checks, also check function for species personality filter
+//in case can use for exp share to identify pokemon
+// Create pokemon sprite to be used for a move animation effect (e.g. Role Play / Snatch)
+u8 CreateAdditionalMonSpriteForMoveAnim(u16 species, bool8 isBackpic, u8 a3, s16 x, s16 y, u8 subpriority, u32 personality, u32 trainerId, u32 battlerId, u32 a10)
 {
     u8 spriteId;
     u16 sheet = LoadSpriteSheet(&gUnknown_83AE084[a3]);
@@ -2048,7 +2052,7 @@ void SetAverageBattlerPositions(u8 battlerId, bool8 respectMonPicOffsets, s16 *x
     *y = (battlerY + partnerY) / 2;
 }
 
-u8 sub_8076E34(s32 battlerId, u8 spriteId, s32 species)
+u8 CreateInvisibleSpriteCopy(s32 battlerId, u8 spriteId, s32 species)
 {
     u8 newSpriteId = CreateInvisibleSpriteWithCallback(SpriteCallbackDummy);
 
@@ -2061,7 +2065,7 @@ u8 sub_8076E34(s32 battlerId, u8 spriteId, s32 species)
     return newSpriteId;
 }
 
-void sub_8076ED8(struct Sprite *sprite)
+void AnimTranslateLinearAndFlicker_Flipped(struct Sprite *sprite)
 {
     SetSpriteCoordsToAnimAttackerCoords(sprite);
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
@@ -2083,7 +2087,8 @@ void sub_8076ED8(struct Sprite *sprite)
     sprite->callback = TranslateSpriteLinearAndFlicker;
 }
 
-void sub_8076F58(struct Sprite *sprite)
+// Used by three different unused battle anim sprite templates.
+void AnimTranslateLinearAndFlicker(struct Sprite *sprite)
 {
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
     {
@@ -2104,7 +2109,8 @@ void sub_8076F58(struct Sprite *sprite)
     sprite->callback = TranslateSpriteLinearAndFlicker;
 }
 
-void sub_8076FD0(struct Sprite *sprite)
+// Used by Detect/Disable
+void AnimSpinningSparkle(struct Sprite *sprite)
 {
     SetSpriteCoordsToAnimAttackerCoords(sprite);
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
@@ -2116,6 +2122,9 @@ void sub_8076FD0(struct Sprite *sprite)
     StoreSpriteCallbackInData6(sprite, DestroyAnimSprite);
 }
 
+// Slides attacker to right and back with a cloned trace of the specified color
+// arg0: Trace palette blend color
+// arg1: Trace palette blend coeff
 void AnimTask_AttackerPunchWithTrace(u8 taskId)
 {
     u16 src;
@@ -2138,10 +2147,10 @@ void AnimTask_AttackerPunchWithTrace(u8 taskId)
         task->data[6] = 3;
     CpuCopy32(&gPlttBufferUnfaded[src], &gPlttBufferFaded[dest], 0x20);
     BlendPalette(dest, 16, gBattleAnimArgs[1], gBattleAnimArgs[0]);
-    task->func = sub_8077118;
+    task->func = AnimTask_AttackerPunchWithTrace_Step;
 }
 
-static void sub_8077118(u8 taskId)
+static void AnimTask_AttackerPunchWithTrace_Step(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
     switch (task->data[2])
@@ -2200,7 +2209,7 @@ static void sub_8077268(struct Sprite *sprite)
     }
 }
 
-void sub_807729C(struct Sprite *sprite)
+void AnimWeatherBallUp(struct Sprite *sprite)
 {
     sprite->pos1.x = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2);
     sprite->pos1.y = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_Y_PIC_OFFSET);
@@ -2209,10 +2218,10 @@ void sub_807729C(struct Sprite *sprite)
     else
         sprite->data[0] = -10;
     sprite->data[1] = -40;
-    sprite->callback = sub_80772F4;
+    sprite->callback = AnimWeatherBallUp_Step;
 }
 
-static void sub_80772F4(struct Sprite *sprite)
+static void AnimWeatherBallUp_Step(struct Sprite *sprite)
 {
     sprite->data[2] += sprite->data[0];
     sprite->data[3] += sprite->data[1];
