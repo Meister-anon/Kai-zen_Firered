@@ -214,7 +214,7 @@ static const union AffineAnimCmd sAffineAnim_HitSplat_3[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const gAffineAnims_HitSplat[] =
+const union AffineAnimCmd *const gAffineAnims_HitSplat[] =
 {
     sAffineAnim_HitSplat_0,
     sAffineAnim_HitSplat_1,

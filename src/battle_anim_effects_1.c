@@ -82,6 +82,10 @@ static void AnimFollowMeFingerStep1(struct Sprite *);
 static void AnimFollowMeFingerStep2(struct Sprite *);
 static void AnimTauntFingerStep1(struct Sprite *);
 static void AnimTauntFingerStep2(struct Sprite *);
+static void AnimGrassKnotStep(struct Sprite *sprite);
+static void AnimGrassKnot(struct Sprite *sprite);
+static void AnimWoodHammerSmall(struct Sprite *sprite);
+static void AnimWoodHammerBig(struct Sprite *sprite);
 
 // Unused
 static const u8 sUnknown_83E2964[] = {0x02, 0x04, 0x01, 0x03};
@@ -137,90 +141,90 @@ const struct SpriteTemplate gPoisonPowderParticleSpriteTemplate =
     .callback = AnimMovePowderParticle,
 };
 
-static const union AnimCmd sSolarbeamBigOrbAnimCmds1[] =
+const union AnimCmd gSolarbeamBigOrbAnimCmds1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sSolarbeamBigOrbAnimCmds2[] =
+const union AnimCmd gSolarbeamBigOrbAnimCmds2[] =
 {
     ANIMCMD_FRAME(1, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sSolarbeamBigOrbAnimCmds3[] =
+const union AnimCmd gSolarbeamBigOrbAnimCmds3[] =
 {
     ANIMCMD_FRAME(2, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sSolarbeamBigOrbAnimCmds4[] =
+const union AnimCmd gSolarbeamBigOrbAnimCmds4[] =
 {
     ANIMCMD_FRAME(3, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sSolarbeamBigOrbAnimCmds5[] =
+const union AnimCmd gSolarbeamBigOrbAnimCmds5[] =
 {
     ANIMCMD_FRAME(4, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sSolarbeamBigOrbAnimCmds6[] =
+const union AnimCmd gSolarbeamBigOrbAnimCmds6[] =
 {
     ANIMCMD_FRAME(5, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sSolarbeamBigOrbAnimCmds7[] =
+const union AnimCmd gSolarbeamBigOrbAnimCmds7[] =
 {
     ANIMCMD_FRAME(6, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sSolarbeamSmallOrbAnimCms[] =
+static const union AnimCmd gSolarbeamSmallOrbAnimCms[] =
 {
     ANIMCMD_FRAME(7, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sPowerAbsorptionOrbAnimCmds[] =
+static const union AnimCmd gPowerAbsorptionOrbAnimCmds[] =
 {
     ANIMCMD_FRAME(8, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sSolarbeamBigOrbAnimTable[] =
+static const union AnimCmd *const gSolarbeamBigOrbAnimTable[] =
 {
-    sSolarbeamBigOrbAnimCmds1,
-    sSolarbeamBigOrbAnimCmds2,
-    sSolarbeamBigOrbAnimCmds3,
-    sSolarbeamBigOrbAnimCmds4,
-    sSolarbeamBigOrbAnimCmds5,
-    sSolarbeamBigOrbAnimCmds6,
-    sSolarbeamBigOrbAnimCmds7,
+    gSolarbeamBigOrbAnimCmds1,
+    gSolarbeamBigOrbAnimCmds2,
+    gSolarbeamBigOrbAnimCmds3,
+    gSolarbeamBigOrbAnimCmds4,
+    gSolarbeamBigOrbAnimCmds5,
+    gSolarbeamBigOrbAnimCmds6,
+    gSolarbeamBigOrbAnimCmds7,
 };
 
-static const union AnimCmd *const sSolarbeamSmallOrbAnimTable[] =
+const union AnimCmd *const gSolarbeamSmallOrbAnimTable[] =
 {
-    sSolarbeamSmallOrbAnimCms,
+    gSolarbeamSmallOrbAnimCms,
 };
 
-static const union AnimCmd *const sPowerAbsorptionOrbAnimTable[] =
+const union AnimCmd *const gPowerAbsorptionOrbAnimTable[] =
 {
-    sPowerAbsorptionOrbAnimCmds,
+    gPowerAbsorptionOrbAnimCmds,
 };
 
-static const union AffineAnimCmd sPowerAbsorptionOrbAffineAnimCmds[] =
+const union AffineAnimCmd gPowerAbsorptionOrbAffineAnimCmds[] =
 {
     AFFINEANIMCMD_FRAME(-5, -5, 0, 1),
     AFFINEANIMCMD_JUMP(0),
 };
 
-static const union AffineAnimCmd *const sPowerAbsorptionOrbAffineAnimTable[] =
+static const union AffineAnimCmd *const gPowerAbsorptionOrbAffineAnimTable[] =
 {
-    sPowerAbsorptionOrbAffineAnimCmds,
+    gPowerAbsorptionOrbAffineAnimCmds,
 };
 
 const struct SpriteTemplate gPowerAbsorptionOrbSpriteTemplate =
@@ -228,9 +232,9 @@ const struct SpriteTemplate gPowerAbsorptionOrbSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_ORBS,
     .oam = &gOamData_AffineNormal_ObjBlend_16x16,
-    .anims = sPowerAbsorptionOrbAnimTable,
+    .anims = gPowerAbsorptionOrbAnimTable,
     .images = NULL,
-    .affineAnims = sPowerAbsorptionOrbAffineAnimTable,
+    .affineAnims = gPowerAbsorptionOrbAffineAnimTable,
     .callback = AnimPowerAbsorptionOrb,
 };
 
@@ -239,7 +243,7 @@ const struct SpriteTemplate gSolarbeamBigOrbSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_ORBS,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = sSolarbeamBigOrbAnimTable,
+    .anims = gSolarbeamBigOrbAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimSolarbeamBigOrb,
@@ -250,7 +254,7 @@ const struct SpriteTemplate gSolarbeamSmallOrbSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_ORBS,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = sSolarbeamSmallOrbAnimTable,
+    .anims = gSolarbeamSmallOrbAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimSolarbeamSmallOrb,
@@ -295,7 +299,7 @@ const struct SpriteTemplate gAbsorptionOrbSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_ORBS,
     .oam = &gOamData_AffineNormal_ObjBlend_16x16,
-    .anims = sPowerAbsorptionOrbAnimTable,
+    .anims = gPowerAbsorptionOrbAnimTable,
     .images = NULL,
     .affineAnims = sAbsorptionOrbAffineAnimTable,
     .callback = AnimAbsorptionOrb,
@@ -306,7 +310,7 @@ const struct SpriteTemplate gHyperBeamOrbSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_ORBS,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = sSolarbeamBigOrbAnimTable,
+    .anims = gSolarbeamBigOrbAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimHyperBeamOrb,
@@ -342,22 +346,22 @@ const struct SpriteTemplate gLeechSeedSpriteTemplate =
     .callback = AnimLeechSeed,
 };
 
-static const union AnimCmd sSporeParticleAnimCmds1[] =
+const union AnimCmd gSporeParticleAnimCmds1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd sSporeParticleAnimCmds2[] =
+const union AnimCmd gSporeParticleAnimCmds2[] =
 {
     ANIMCMD_FRAME(4, 7),
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sSporeParticleAnimTable[] =
+const union AnimCmd *const gSporeParticleAnimTable[] =
 {
-    sSporeParticleAnimCmds1,
-    sSporeParticleAnimCmds2,
+    gSporeParticleAnimCmds1,
+    gSporeParticleAnimCmds2,
 };
 
 const struct SpriteTemplate gSporeParticleSpriteTemplate =
@@ -365,7 +369,7 @@ const struct SpriteTemplate gSporeParticleSpriteTemplate =
     .tileTag = ANIM_TAG_SPORE,
     .paletteTag = ANIM_TAG_SPORE,
     .oam = &gOamData_AffineOff_ObjNormal_16x16,
-    .anims = sSporeParticleAnimTable,
+    .anims = gSporeParticleAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimSporeParticle,
@@ -415,7 +419,7 @@ const struct SpriteTemplate gPetalDanceSmallFlowerSpriteTemplate =
     .callback = AnimPetalDanceSmallFlower,
 };
 
-static const union AnimCmd sRazorLeafParticleAnimCmds1[] =
+const union AnimCmd gRazorLeafParticleAnimCmds1[] =
 {
     ANIMCMD_FRAME(0, 5),
     ANIMCMD_FRAME(4, 5),
@@ -430,7 +434,7 @@ static const union AnimCmd sRazorLeafParticleAnimCmds1[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sRazorLeafParticleAnimCmds2[] =
+const union AnimCmd gRazorLeafParticleAnimCmds2[] =
 {
     ANIMCMD_FRAME(24, 5),
     ANIMCMD_FRAME(28, 5),
@@ -438,10 +442,10 @@ static const union AnimCmd sRazorLeafParticleAnimCmds2[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sRazorLeafParticleAnimTable[] =
+const union AnimCmd *const gRazorLeafParticleAnimTable[] =
 {
-    sRazorLeafParticleAnimCmds1,
-    sRazorLeafParticleAnimCmds2,
+    gRazorLeafParticleAnimCmds1,
+    gRazorLeafParticleAnimCmds2,
 };
 
 const struct SpriteTemplate gRazorLeafParticleSpriteTemplate =
@@ -449,7 +453,7 @@ const struct SpriteTemplate gRazorLeafParticleSpriteTemplate =
     .tileTag = ANIM_TAG_LEAF,
     .paletteTag = ANIM_TAG_LEAF,
     .oam = &gOamData_AffineOff_ObjNormal_16x16,
-    .anims = sRazorLeafParticleAnimTable,
+    .anims = gRazorLeafParticleAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimRazorLeafParticle,
@@ -460,7 +464,7 @@ const struct SpriteTemplate gTwisterLeafParticleSpriteTemplate =
     .tileTag = ANIM_TAG_LEAF,
     .paletteTag = ANIM_TAG_LEAF,
     .oam = &gOamData_AffineOff_ObjNormal_16x16,
-    .anims = sRazorLeafParticleAnimTable,
+    .anims = gRazorLeafParticleAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimMoveTwisterParticle,
@@ -594,7 +598,7 @@ const struct SpriteTemplate gMimicOrbSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_ORBS,
     .oam = &gOamData_AffineDouble_ObjNormal_16x16,
-    .anims = sPowerAbsorptionOrbAnimTable,
+    .anims = gPowerAbsorptionOrbAnimTable,
     .images = NULL,
     .affineAnims = sMimicOrbAffineAnimTable,
     .callback = AnimMimicOrb,
@@ -1108,79 +1112,79 @@ static const struct SpriteTemplate sUnknown_83E31AC =
     .callback = sub_80A43F8,
 };
 
-static const union AffineAnimCmd sUnknown_83E31C4[] =
+static const union AffineAnimCmd sAffineAnim_FlickeringPunch_Normal[] =
 {
     AFFINEANIMCMD_FRAME(256, 256, 0, 0),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sUnknown_83E31D4[] =
+static const union AffineAnimCmd sAffineAnim_FlickeringPunch_TurnedTopLeft[] =
 {
     AFFINEANIMCMD_FRAME(256, 256, 32, 0),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sUnknown_83E31E4[] =
+static const union AffineAnimCmd sAffineAnim_FlickeringPunch_TurnedLeft[] =
 {
     AFFINEANIMCMD_FRAME(256, 256, 64, 0),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sUnknown_83E31F4[] =
+static const union AffineAnimCmd sAffineAnim_FlickeringPunch_TurnedBottomLeft[] =
 {
     AFFINEANIMCMD_FRAME(256, 256, 96, 0),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sUnknown_83E3204[] =
+static const union AffineAnimCmd sAffineAnim_FlickeringPunch_UpsideDown[] =
 {
     AFFINEANIMCMD_FRAME(256, 256, -128, 0),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sUnknown_83E3214[] =
+static const union AffineAnimCmd sAffineAnim_FlickeringPunch_TurnedBottomRight[] =
 {
     AFFINEANIMCMD_FRAME(256, 256, -96, 0),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sUnknown_83E3224[] =
+static const union AffineAnimCmd sAffineAnim_FlickeringPunch_TurnedRight[] =
 {
     AFFINEANIMCMD_FRAME(256, 256, -64, 0),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sUnknown_83E3234[] =
+static const union AffineAnimCmd sAffineAnim_FlickeringPunch_TurnedTopRight[] =
 {
     AFFINEANIMCMD_FRAME(256, 256, -32, 0),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sUnknown_83E3244[] = 
+static const union AffineAnimCmd *const sAffineAnims_FlickeringPunch[] = 
 {
-    sUnknown_83E31C4,
-    sUnknown_83E31D4,
-    sUnknown_83E31E4,
-    sUnknown_83E31F4,
-    sUnknown_83E3204,
-    sUnknown_83E3214,
-    sUnknown_83E3224,
-    sUnknown_83E3234,
+    sAffineAnim_FlickeringPunch_Normal,
+    sAffineAnim_FlickeringPunch_TurnedTopLeft,
+    sAffineAnim_FlickeringPunch_TurnedLeft,
+    sAffineAnim_FlickeringPunch_TurnedBottomLeft,
+    sAffineAnim_FlickeringPunch_UpsideDown,
+    sAffineAnim_FlickeringPunch_TurnedBottomRight,
+    sAffineAnim_FlickeringPunch_TurnedRight,
+    sAffineAnim_FlickeringPunch_TurnedTopRight,
 };
 
 // Unused
-static const struct SpriteTemplate sUnknown_83E3264 =
+static const struct SpriteTemplate sFlickeringPunchSpriteTemplate =
 {
     .tileTag = ANIM_TAG_HANDS_AND_FEET,
     .paletteTag = ANIM_TAG_HANDS_AND_FEET,
     .oam = &gOamData_AffineNormal_ObjNormal_32x32,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sUnknown_83E3244,
-    .callback = sub_80A4494,
+    .affineAnims = sAffineAnims_FlickeringPunch,
+    .callback = AnimFlickeringPunch,
 };
 
-static const union AnimCmd sCuttingSliceAnimCmds[] =
+const union AnimCmd gCuttingSliceAnimCmds[] =
 {
     ANIMCMD_FRAME(0, 5),
     ANIMCMD_FRAME(16, 5),
@@ -1189,9 +1193,9 @@ static const union AnimCmd sCuttingSliceAnimCmds[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sCuttingSliceAnimTable[] =
+const union AnimCmd *const gCuttingSliceAnimTable[] =
 {
-    sCuttingSliceAnimCmds,
+    gCuttingSliceAnimCmds,
 };
 
 const struct SpriteTemplate gCuttingSliceSpriteTemplate =
@@ -1199,7 +1203,7 @@ const struct SpriteTemplate gCuttingSliceSpriteTemplate =
     .tileTag = ANIM_TAG_CUT,
     .paletteTag = ANIM_TAG_CUT,
     .oam = &gOamData_AffineOff_ObjBlend_32x32,
-    .anims = sCuttingSliceAnimTable,
+    .anims = gCuttingSliceAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimCuttingSlice,
@@ -1210,7 +1214,7 @@ const struct SpriteTemplate gAirCutterSliceSpriteTemplate =
     .tileTag = ANIM_TAG_CUT,
     .paletteTag = ANIM_TAG_CUT,
     .oam = &gOamData_AffineOff_ObjBlend_32x32,
-    .anims = sCuttingSliceAnimTable,
+    .anims = gCuttingSliceAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimAirCutterSlice,
@@ -1690,7 +1694,7 @@ const struct SpriteTemplate gOctazookaSmokeSpriteTemplate =
     .callback = AnimSpriteOnMonPos,
 };
 
-static const union AnimCmd gConversionAnimCmds[] =
+const union AnimCmd gConversionAnimCmds[] =
 {
     ANIMCMD_FRAME(3, 5),
     ANIMCMD_FRAME(2, 5),
@@ -2156,6 +2160,79 @@ const struct SpriteTemplate gTauntFingerSpriteTemplate =
 };
 
 // Functions
+
+static void AnimGrassKnot(struct Sprite* sprite)
+{
+    if (BATTLE_PARTNER(gBattleAnimAttacker) == gBattleAnimTarget && GetBattlerPosition(gBattleAnimTarget) < B_POSITION_PLAYER_RIGHT)
+        gBattleAnimArgs[0] *= -1;
+
+    InitSpritePosToAnimTarget(sprite, TRUE);
+
+    if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
+        gBattleAnimArgs[2] = -gBattleAnimArgs[2];
+
+    sprite->data[0] = gBattleAnimArgs[3];
+    sprite->data[1] = sprite->pos1.x;
+    sprite->data[2] = sprite->pos1.x + gBattleAnimArgs[2];
+    sprite->data[3] = sprite->pos1.y;
+    sprite->data[4] = sprite->pos1.y;
+
+    InitAnimLinearTranslation(sprite);
+
+    sprite->data[5] = gBattleAnimArgs[5];
+    sprite->data[6] = gBattleAnimArgs[4];
+    sprite->data[7] = 0;
+
+    sprite->callback = AnimGrassKnotStep;
+}
+
+static void AnimGrassKnotStep(struct Sprite* sprite)
+{
+    if (!AnimTranslateLinear(sprite))
+    {
+        sprite->pos2.y += Sin(sprite->data[7] >> 8, sprite->data[5]);
+        sprite->data[7] += sprite->data[6];
+    }
+    else
+    {
+        DestroyAnimSprite(sprite);
+    }
+}
+
+static void AnimWoodHammerBig(struct Sprite* sprite)
+{
+    if (GetBattlerSide(gBattleAnimAttacker) == B_SIDE_OPPONENT)
+        StartSpriteAffineAnim(sprite, 1);
+
+    TranslateAnimSpriteToTargetMonLocation(sprite);
+}
+
+static void AnimWoodHammerSmall(struct Sprite* sprite)
+{
+    StartSpriteAnim(sprite, gBattleAnimArgs[5]);
+    AnimateSprite(sprite);
+
+    if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
+        sprite->pos1.x -= gBattleAnimArgs[0];
+    else
+        sprite->pos1.x += gBattleAnimArgs[0];
+
+    sprite->pos1.y += gBattleAnimArgs[1];
+
+    sprite->data[0] = gBattleAnimArgs[4];
+    sprite->data[1] = sprite->pos1.x;
+    sprite->data[2] = sprite->pos1.x + gBattleAnimArgs[2];
+    sprite->data[3] = sprite->pos1.y;
+    sprite->data[4] = sprite->pos1.y + gBattleAnimArgs[3];
+
+    InitSpriteDataForLinearTranslation(sprite);
+    sprite->data[3] = 0;
+    sprite->data[4] = 0;
+
+    sprite->callback = TranslateSpriteLinearFixedPoint;
+    StoreSpriteCallbackInData6(sprite, DestroySpriteAndMatrix);
+}
+
 // Animates the falling particles that horizontally wave back and forth.
 // Used by Sleep Powder, Stun Spore, and Poison Powder.
 // arg 0: initial x pixel offset
@@ -3741,7 +3818,7 @@ void AnimWhipHit(struct Sprite* sprite)
     sprite->pos1.y += gBattleAnimArgs[1];
 }
 
-void sub_80A4494(struct Sprite* sprite)
+void AnimFlickeringPunch(struct Sprite* sprite)
 {
     sprite->pos1.x += gBattleAnimArgs[0];
     sprite->pos1.y += gBattleAnimArgs[1];

@@ -72,7 +72,7 @@ static void AnimRecycleStep(struct Sprite *);
 static void AnimTask_SlackOffSquishStep(u8);
 
 // Data
-static const union AnimCmd sScratchAnimCmds[] =
+const union AnimCmd gScratchAnimCmds[] =
 {
     ANIMCMD_FRAME(0, 4),
     ANIMCMD_FRAME(16, 4),
@@ -82,9 +82,9 @@ static const union AnimCmd sScratchAnimCmds[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sScratchAnimTable[] =
+const union AnimCmd *const gScratchAnimTable[] =
 {
-    sScratchAnimCmds,
+    gScratchAnimCmds,
 };
 
 const struct SpriteTemplate gScratchSpriteTemplate =
@@ -92,7 +92,7 @@ const struct SpriteTemplate gScratchSpriteTemplate =
     .tileTag = ANIM_TAG_SCRATCH,
     .paletteTag = ANIM_TAG_SCRATCH,
     .oam = &gOamData_AffineOff_ObjBlend_32x32,
-    .anims = sScratchAnimTable,
+    .anims = gScratchAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimSpriteOnMonPos,
