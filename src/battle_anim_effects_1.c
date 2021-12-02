@@ -604,7 +604,7 @@ const struct SpriteTemplate gMimicOrbSpriteTemplate =
     .callback = AnimMimicOrb,
 };
 
-static const union AnimCmd sIngrainRootAnimCmds1[] =
+const union AnimCmd gIngrainRootAnimCmds1[] =
 {
     ANIMCMD_FRAME(0, 7),
     ANIMCMD_FRAME(16, 7),
@@ -613,7 +613,7 @@ static const union AnimCmd sIngrainRootAnimCmds1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sIngrainRootAnimCmds2[] =
+const union AnimCmd gIngrainRootAnimCmds2[] =
 {
     ANIMCMD_FRAME(0, 7, .hFlip = TRUE),
     ANIMCMD_FRAME(16, 7, .hFlip = TRUE),
@@ -622,7 +622,7 @@ static const union AnimCmd sIngrainRootAnimCmds2[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sIngrainRootAnimCmds3[] =
+const union AnimCmd gIngrainRootAnimCmds3[] =
 {
     ANIMCMD_FRAME(0, 7),
     ANIMCMD_FRAME(16, 7),
@@ -630,7 +630,7 @@ static const union AnimCmd sIngrainRootAnimCmds3[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sIngrainRootAnimCmds4[] =
+const union AnimCmd gIngrainRootAnimCmds4[] =
 {
     ANIMCMD_FRAME(0, 7, .hFlip = TRUE),
     ANIMCMD_FRAME(16, 7, .hFlip = TRUE),
@@ -638,12 +638,12 @@ static const union AnimCmd sIngrainRootAnimCmds4[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sIngrainRootAnimTable[] =
+const union AnimCmd *const gIngrainRootAnimTable[] =
 {
-    sIngrainRootAnimCmds1,
-    sIngrainRootAnimCmds2,
-    sIngrainRootAnimCmds3,
-    sIngrainRootAnimCmds4,
+    gIngrainRootAnimCmds1,
+    gIngrainRootAnimCmds2,
+    gIngrainRootAnimCmds3,
+    gIngrainRootAnimCmds4,
 };
 
 const struct SpriteTemplate gIngrainRootSpriteTemplate =
@@ -651,7 +651,7 @@ const struct SpriteTemplate gIngrainRootSpriteTemplate =
     .tileTag = ANIM_TAG_ROOTS,
     .paletteTag = ANIM_TAG_ROOTS,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sIngrainRootAnimTable,
+    .anims = gIngrainRootAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimIngrainRoot,
@@ -662,7 +662,7 @@ const struct SpriteTemplate gFrenzyPlantRootSpriteTemplate =
     .tileTag = ANIM_TAG_ROOTS,
     .paletteTag = ANIM_TAG_ROOTS,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sIngrainRootAnimTable,
+    .anims = gIngrainRootAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimFrenzyPlantRoot,
@@ -1668,7 +1668,7 @@ const struct SpriteTemplate gOctazookaBallSpriteTemplate =
     .callback = TranslateAnimSpriteToTargetMonLocation,
 };
 
-static const union AnimCmd sOctazookaAnimCmds[] =
+const union AnimCmd gOctazookaAnimCmds[] =
 {
     ANIMCMD_FRAME(0, 3),
     ANIMCMD_FRAME(16, 3),
@@ -1678,9 +1678,9 @@ static const union AnimCmd sOctazookaAnimCmds[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sOctazookaAnimTable[] =
+const union AnimCmd *const gOctazookaAnimTable[] =
 {
-    sOctazookaAnimCmds,
+    gOctazookaAnimCmds,
 };
 
 const struct SpriteTemplate gOctazookaSmokeSpriteTemplate =
@@ -1688,7 +1688,7 @@ const struct SpriteTemplate gOctazookaSmokeSpriteTemplate =
     .tileTag = ANIM_TAG_GRAY_SMOKE,
     .paletteTag = ANIM_TAG_GRAY_SMOKE,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sOctazookaAnimTable,
+    .anims = gOctazookaAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimSpriteOnMonPos,
@@ -1766,7 +1766,7 @@ const struct SpriteTemplate gMoonSpriteTemplate =
     .callback = AnimMoon,
 };
 
-static const union AnimCmd sMoonlightSparkleAnimCmds[] =
+const union AnimCmd gMoonlightSparkleAnimCmds[] =
 {
     ANIMCMD_FRAME(0, 8),
     ANIMCMD_FRAME(4, 8),
@@ -1775,9 +1775,9 @@ static const union AnimCmd sMoonlightSparkleAnimCmds[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sMoonlightSparkleAnimTable[] =
+const union AnimCmd *const gMoonlightSparkleAnimTable[] =
 {
-    sMoonlightSparkleAnimCmds,
+    gMoonlightSparkleAnimCmds,
 };
 
 const struct SpriteTemplate gMoonlightSparkleSpriteTemplate =
@@ -1785,7 +1785,7 @@ const struct SpriteTemplate gMoonlightSparkleSpriteTemplate =
     .tileTag = ANIM_TAG_GREEN_SPARKLE,
     .paletteTag = ANIM_TAG_GREEN_SPARKLE,
     .oam = &gOamData_AffineOff_ObjNormal_16x16,
-    .anims = sMoonlightSparkleAnimTable,
+    .anims = gMoonlightSparkleAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimMoonlightSparkle,

@@ -427,7 +427,7 @@ const struct SpriteTemplate gTriAttackTriangleSpriteTemplate =
     .callback = AnimTriAttackTriangle,
 };
 
-static const union AnimCmd sEclipsingOrbAnimCmds[] =
+const union AnimCmd gEclipsingOrbAnimCmds[] =
 {
     ANIMCMD_FRAME(0, 3),
     ANIMCMD_FRAME(16, 3),
@@ -440,9 +440,9 @@ static const union AnimCmd sEclipsingOrbAnimCmds[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sEclipsingOrbAnimTable[] =
+const union AnimCmd *const gEclipsingOrbAnimTable[] =
 {
-    sEclipsingOrbAnimCmds,
+    gEclipsingOrbAnimCmds,
 };
 
 const struct SpriteTemplate gEclipsingOrbSpriteTemplate =
@@ -450,7 +450,7 @@ const struct SpriteTemplate gEclipsingOrbSpriteTemplate =
     .tileTag = ANIM_TAG_ECLIPSING_ORB,
     .paletteTag = ANIM_TAG_ECLIPSING_ORB,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sEclipsingOrbAnimTable,
+    .anims = gEclipsingOrbAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimSpriteOnMonPos,
