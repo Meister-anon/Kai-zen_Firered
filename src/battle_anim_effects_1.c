@@ -731,7 +731,7 @@ const struct SpriteTemplate gTwisterLeafParticleSpriteTemplate =
     .callback = AnimMoveTwisterParticle,
 };
 
-static const union AnimCmd sRazorLeafCutterAnimCmds[] =
+const union AnimCmd gRazorLeafCutterAnimCmds[] =
 {
     ANIMCMD_FRAME(0, 3),
     ANIMCMD_FRAME(0, 3, .hFlip = TRUE),
@@ -740,9 +740,9 @@ static const union AnimCmd sRazorLeafCutterAnimCmds[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sRazorLeafCutterAnimTable[] =
+const union AnimCmd *const gRazorLeafCutterAnimTable[] =
 {
-    sRazorLeafCutterAnimCmds,
+    gRazorLeafCutterAnimCmds,
 };
 
 const struct SpriteTemplate gRazorLeafCutterSpriteTemplate =
@@ -750,7 +750,7 @@ const struct SpriteTemplate gRazorLeafCutterSpriteTemplate =
     .tileTag = ANIM_TAG_RAZOR_LEAF,
     .paletteTag = ANIM_TAG_RAZOR_LEAF,
     .oam = &gOamData_AffineOff_ObjNormal_32x16,
-    .anims = sRazorLeafCutterAnimTable,
+    .anims = gRazorLeafCutterAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimTranslateLinearSingleSineWave,
@@ -1611,7 +1611,7 @@ const struct SpriteTemplate gMilkBottleSpriteTemplate =
     .callback = AnimMilkBottle,
 };
 
-static const union AnimCmd sGrantingStarsAnimCmds[] =
+const union AnimCmd gGrantingStarsAnimCmds[] =
 {
     ANIMCMD_FRAME(0, 7),
     ANIMCMD_FRAME(16, 7),
@@ -1624,9 +1624,9 @@ static const union AnimCmd sGrantingStarsAnimCmds[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sGrantingStarsAnimTable[] =
+const union AnimCmd *const gGrantingStarsAnimTable[] =
 {
-    sGrantingStarsAnimCmds,
+    gGrantingStarsAnimCmds,
 };
 
 const struct SpriteTemplate gGrantingStarsSpriteTemplate =    
@@ -1634,7 +1634,7 @@ const struct SpriteTemplate gGrantingStarsSpriteTemplate =
     .tileTag = ANIM_TAG_SPARKLE_2,
     .paletteTag = ANIM_TAG_SPARKLE_2,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sGrantingStarsAnimTable,
+    .anims = gGrantingStarsAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimGrantingStars,
@@ -1645,7 +1645,7 @@ const struct SpriteTemplate gSparklingStarsSpriteTemplate =
     .tileTag = ANIM_TAG_SPARKLE_2,
     .paletteTag = ANIM_TAG_SPARKLE_2,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sGrantingStarsAnimTable,
+    .anims = gGrantingStarsAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimSparkingStars,
@@ -6664,9 +6664,9 @@ static void AnimMoveWringOut(struct Sprite* sprite)
 // Animates a white streak by giving it a random rotation.
 // arg 0: initial x pixel offset
 // arg 1: initial y pixel offset
-static void AnimRockPolishStreak(struct Sprite *sprite)
+static void AnimRockPolishStreak(struct Sprite *sprite) //replaced array count wiht nelems
 {
-    int affineAnimNum = Random2() % ARRAY_COUNT(gRockPolishStreak_AffineAnimCmds);
+    int affineAnimNum = Random2() % NELEMS(gRockPolishStreak_AffineAnimCmds);
     InitSpritePosToAnimAttacker(sprite, TRUE);
     StartSpriteAffineAnim(sprite, affineAnimNum);
     StoreSpriteCallbackInData6(sprite, DestroySpriteAndMatrix);
