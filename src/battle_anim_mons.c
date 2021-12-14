@@ -950,7 +950,7 @@ void StartAnimLinearTranslation(struct Sprite *sprite)
     sprite->sTransl_InitX = sprite->pos1.x;
     sprite->sTransl_InitY = sprite->pos1.y;
     InitAnimLinearTranslation(sprite);
-    sprite->callback = RunLinearTranslation_ThenceSetCBtoStoredInData6;
+    sprite->callback = AnimTranslateLinear_WaitEnd;
     sprite->callback(sprite);
 }
 
@@ -990,11 +990,11 @@ bool8 AnimTranslateLinear(struct Sprite *sprite)
     return FALSE;
 }
 
-void RunLinearTranslation_ThenceSetCBtoStoredInData6(struct Sprite *sprite)
+void AnimTranslateLinear_WaitEnd(struct Sprite *sprite)
 {
     if (AnimTranslateLinear(sprite))
         SetCallbackToStoredInData6(sprite);
-}
+}//formerly RunLinearTranslation_ThenceSetCBtoStoredInData6
 
 static void PlayerThrowBall_RunLinearTranslation_ThenceSetCBtoStoredInData6(struct Sprite *sprite)
 {
@@ -1016,7 +1016,7 @@ void BattleAnim_InitAndRunLinearTranslationWithDuration(struct Sprite *sprite)
     sprite->sTransl_InitX = sprite->pos1.x;
     sprite->sTransl_InitY = sprite->pos1.y;
     BattleAnim_InitLinearTranslationWithDuration(sprite);
-    sprite->callback = RunLinearTranslation_ThenceSetCBtoStoredInData6;
+    sprite->callback = AnimTranslateLinear_WaitEnd;
     sprite->callback(sprite);
 }
 

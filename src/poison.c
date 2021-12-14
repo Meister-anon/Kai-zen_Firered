@@ -75,7 +75,7 @@ static const union AnimCmd *const sAnims_SludgeBombHit[] =
     sAnim_SludgeBombHit,
 };
 
-static const union AffineAnimCmd sAffineAnim_PoisonProjectile[] =
+const union AffineAnimCmd gAffineAnim_PoisonProjectile[] =
 {
     AFFINEANIMCMD_FRAME(0x160, 0x160, 0, 0),
     AFFINEANIMCMD_FRAME(-0xA, -0xA, 0, 10),
@@ -89,9 +89,9 @@ static const union AffineAnimCmd sAffineAnim_SludgeBombHit[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const gAffineAnims_PoisonProjectile[] =
+const union AffineAnimCmd *const gAffineAnims_PoisonProjectile[] =
 {
-    sAffineAnim_PoisonProjectile,
+    gAffineAnim_PoisonProjectile,
 };
 
 static const union AffineAnimCmd *const sAffineAnims_SludgeBombHit[] =

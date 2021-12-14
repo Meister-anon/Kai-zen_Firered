@@ -237,6 +237,17 @@ const struct SpriteTemplate gThunderWaveSpriteTemplate =
     .callback = AnimThunderWave,
 };
 
+const struct SpriteTemplate gAnchorShotChainTemplate =
+{
+    .tileTag = ANIM_TAG_CHAIN_LINK,
+    .paletteTag = ANIM_TAG_CHAIN_LINK,
+    .oam = &gOamData_AffineOff_ObjNormal_32x16,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimThunderWave
+};
+
 static const s8 sElectricChargingParticleCoordOffsets[][2] =
 {
     { 58, -60},
@@ -291,6 +302,18 @@ static const struct SpriteTemplate gElectricChargingParticlesSpriteTemplate =
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCallbackDummy,
 };
+
+const struct SpriteTemplate gLightOfRuinGrayChargeTemplate =
+{
+    .tileTag = ANIM_TAG_ELECTRIC_ORBS,
+    .paletteTag = ANIM_TAG_GUST,
+    .oam = &gOamData_AffineOff_ObjNormal_8x8,
+    .anims = gAnims_ElectricChargingParticles,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallbackDummy
+};
+
 
 static const union AffineAnimCmd sAffineAnim_GrowingElectricOrb_0[] =
 {
@@ -354,7 +377,7 @@ const struct SpriteTemplate gGrowingChargeOrbSpriteTemplate =
     .oam = &gOamData_AffineNormal_ObjBlend_64x64,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sAffineAnims_GrowingElectricOrb,
+    .affineAnims = gAffineAnims_GrowingElectricOrb,
     .callback = AnimGrowingChargeOrb,
 };
 
@@ -402,7 +425,7 @@ const struct SpriteTemplate gVoltTackleOrbSlideSpriteTemplate =
     .oam = &gOamData_AffineNormal_ObjBlend_64x64,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sAffineAnims_GrowingElectricOrb,
+    .affineAnims = gAffineAnims_GrowingElectricOrb,
     .callback = AnimVoltTackleOrbSlide,
 };
 
@@ -467,7 +490,7 @@ const struct SpriteTemplate gGrowingShockWaveOrbSpriteTemplate =
     .oam = &gOamData_AffineNormal_ObjBlend_64x64,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sAffineAnims_GrowingElectricOrb,
+    .affineAnims = gAffineAnims_GrowingElectricOrb,
     .callback = AnimGrowingShockWaveOrb,
 };
 
@@ -828,7 +851,7 @@ static void AnimElectricBoltSegment(struct Sprite *sprite)
 }
 
 // The horizontal bands of electricity used in Thunder Wave
-static void AnimThunderWave(struct Sprite *sprite)
+void AnimThunderWave(struct Sprite *sprite)
 {
     u8 spriteId;
 
@@ -838,11 +861,11 @@ static void AnimThunderWave(struct Sprite *sprite)
         spriteId = CreateSprite(&gThunderWaveSpriteTemplate, sprite->pos1.x + 32, sprite->pos1.y, sprite->subpriority);
     else //so I can use a different animation for leech seed ghost
         spriteId = CreateSprite(&gAnchorShotChainTemplate, sprite->pos1.x + 32, sprite->pos1.y, sprite->subpriority);
-    gSprites[spriteId].oam.tileNum += 8; //I want to make the green heal orbs blck or purple
+    gSprites[spriteId].oam.tileNum += 8; //I want to make the green heal orbs blck or purple if target is ghost
     ++gAnimVisualTaskCount;
     gSprites[spriteId].callback = AnimThunderWave_Step;
     sprite->callback = AnimThunderWave_Step;
-}
+} //use not just for leech seed but for any absorption move targetting a ghost
 
 static void AnimThunderWave_Step(struct Sprite *sprite)
 {
@@ -946,7 +969,7 @@ static void AnimElectricChargingParticles(struct Sprite *sprite)
     sprite->callback = AnimElectricChargingParticles_Step;
 }
 
-static void AnimGrowingChargeOrb(struct Sprite *sprite)
+void AnimGrowingChargeOrb(struct Sprite *sprite)
 {
     if (!gBattleAnimArgs[0])
     {

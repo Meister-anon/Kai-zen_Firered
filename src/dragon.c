@@ -368,7 +368,7 @@ static void sub_80B72F8(struct Sprite *sprite)
     StoreSpriteCallbackInData6(sprite, DestroySpriteAndMatrix);
 }
 
-static void AnimDragonRageFirePlume(struct Sprite *sprite)
+void AnimDragonRageFirePlume(struct Sprite *sprite)
 {
     if (gBattleAnimArgs[0] == 0)
     {
@@ -386,14 +386,14 @@ static void AnimDragonRageFirePlume(struct Sprite *sprite)
     StoreSpriteCallbackInData6(sprite, DestroySpriteAndMatrix);
 }
 
-static void AnimDragonFireToTarget(struct Sprite *sprite)
+void AnimDragonFireToTarget(struct Sprite *sprite)
 {
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
         StartSpriteAffineAnim(sprite, 1);
     sub_80B72F8(sprite);
 }
 
-static void AnimDragonDanceOrb(struct Sprite *sprite)
+void AnimDragonDanceOrb(struct Sprite *sprite)
 {
     u16 r5;
     u16 r0;
@@ -537,7 +537,7 @@ static void UpdateDragonDanceScanlineEffect(struct Task *task)
     task->data[5] = (task->data[5] + 9) & 0xFF;
 }
 
-static void AnimOverheatFlame(struct Sprite *sprite)
+void AnimOverheatFlame(struct Sprite *sprite)
 {
     s32 i, r6 = (gBattleAnimArgs[2] * 3) / 5;
 

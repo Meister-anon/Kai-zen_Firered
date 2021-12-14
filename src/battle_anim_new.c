@@ -4546,7 +4546,7 @@ static void SpriteCB_MindBlownExplosion(struct Sprite* sprite)
         sprite->data[3] = (sprite->data[5] - sprite->pos1.x) * 16 / gBattleAnimArgs[4];
         sprite->data[4] = (sprite->data[6] - sprite->pos1.y) * 16 / gBattleAnimArgs[4];
 
-        sprite->callback = AnimNeedleArmSpike_Step;
+        sprite->callback = AnimNeedleArmSpikeStep;
     }
 }
 

@@ -120,7 +120,7 @@ const struct SpriteTemplate gBlackBallSpriteTemplate =
     .callback = AnimThrowProjectile,
 };
 
-static const union AnimCmd sOpeningEyeAnimCmds[] =    
+const union AnimCmd gOpeningEyeAnimCmds[] =    
 {
     ANIMCMD_FRAME(0, 40),
     ANIMCMD_FRAME(16, 8),
@@ -128,9 +128,9 @@ static const union AnimCmd sOpeningEyeAnimCmds[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sOpeningEyeAnimTable[] =    
+const union AnimCmd *const gOpeningEyeAnimTable[] =    
 {
-    sOpeningEyeAnimCmds,
+    gOpeningEyeAnimCmds,
 };
 
 const struct SpriteTemplate gOpeningEyeSpriteTemplate =    
@@ -138,7 +138,7 @@ const struct SpriteTemplate gOpeningEyeSpriteTemplate =
     .tileTag = ANIM_TAG_OPENING_EYE,
     .paletteTag = ANIM_TAG_OPENING_EYE,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sOpeningEyeAnimTable,
+    .anims = gOpeningEyeAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimSpriteOnMonPos,

@@ -38,7 +38,7 @@ static s16 LeafBladeGetPosFactor(struct Sprite *);
 static void AnimTask_LeafBladeStep2(struct Task *, u8);
 static void AnimTask_LeafBladeStep2_Callback(struct Sprite *);
 static void AnimFlyingParticleStep(struct Sprite *);
-static void AnimNeedleArmSpikeStep(struct Sprite *);
+//void AnimNeedleArmSpikeStep(struct Sprite *);
 static void AnimSliceStep(struct Sprite *);
 static void AnimCirclingMusicNote_Step(struct Sprite *);
 static void AnimProtectStep(struct Sprite *);
@@ -106,7 +106,7 @@ static void AnimPluck(struct Sprite* sprite);
 // Unused
 static const u8 sUnknown_83E2964[] = {0x02, 0x04, 0x01, 0x03};
 
-static const union AnimCmd sPowderParticlesAnimCmds[] =
+const union AnimCmd gPowderParticlesAnimCmds[] =
 {
     ANIMCMD_FRAME(0, 5),
     ANIMCMD_FRAME(2, 5),
@@ -119,9 +119,9 @@ static const union AnimCmd sPowderParticlesAnimCmds[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sPowderParticlesAnimTable[] =
+const union AnimCmd *const gPowderParticlesAnimTable[] =
 {
-    sPowderParticlesAnimCmds,
+    gPowderParticlesAnimCmds,
 };
 
 static const union AffineAnimCmd sFeintAffineSwipe[] = { AFFINEANIMCMD_END };
@@ -374,7 +374,7 @@ const struct SpriteTemplate gSleepPowderParticleSpriteTemplate =
     .tileTag = ANIM_TAG_SLEEP_POWDER,
     .paletteTag = ANIM_TAG_SLEEP_POWDER,
     .oam = &gOamData_AffineOff_ObjNormal_8x16,
-    .anims = sPowderParticlesAnimTable,
+    .anims = gPowderParticlesAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimMovePowderParticle,
@@ -385,7 +385,7 @@ const struct SpriteTemplate gStunSporeParticleSpriteTemplate =
     .tileTag = ANIM_TAG_STUN_SPORE,
     .paletteTag = ANIM_TAG_STUN_SPORE,
     .oam = &gOamData_AffineOff_ObjNormal_8x16,
-    .anims = sPowderParticlesAnimTable,
+    .anims = gPowderParticlesAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimMovePowderParticle,
@@ -396,7 +396,7 @@ const struct SpriteTemplate gPoisonPowderParticleSpriteTemplate =
     .tileTag = ANIM_TAG_POISON_POWDER,
     .paletteTag = ANIM_TAG_POISON_POWDER,
     .oam = &gOamData_AffineOff_ObjNormal_8x16,
-    .anims = sPowderParticlesAnimTable,
+    .anims = gPowderParticlesAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimMovePowderParticle,
@@ -544,15 +544,15 @@ const struct SpriteTemplate gStockpileAbsorptionOrbSpriteTemplate =
     .callback = AnimPowerAbsorptionOrb,
 };
 
-static const union AffineAnimCmd sAbsorptionOrbAffineAnimCmds[] =
+const union AffineAnimCmd gAbsorptionOrbAffineAnimCmds[] =
 {
     AFFINEANIMCMD_FRAME(-5, -5, 0, 1),
     AFFINEANIMCMD_JUMP(0),
 };
 
-static const union AffineAnimCmd *const sAbsorptionOrbAffineAnimTable[] =
+const union AffineAnimCmd *const gAbsorptionOrbAffineAnimTable[] =
 {
-    sAbsorptionOrbAffineAnimCmds,
+    gAbsorptionOrbAffineAnimCmds,
 };
 
 const struct SpriteTemplate gAbsorptionOrbSpriteTemplate =
@@ -562,7 +562,7 @@ const struct SpriteTemplate gAbsorptionOrbSpriteTemplate =
     .oam = &gOamData_AffineNormal_ObjBlend_16x16,
     .anims = gPowerAbsorptionOrbAnimTable,
     .images = NULL,
-    .affineAnims = sAbsorptionOrbAffineAnimTable,
+    .affineAnims = gAbsorptionOrbAffineAnimTable,
     .callback = AnimAbsorptionOrb,
 };
 
@@ -756,15 +756,15 @@ const struct SpriteTemplate gRazorLeafCutterSpriteTemplate =
     .callback = AnimTranslateLinearSingleSineWave,
 };
 
-static const union AffineAnimCmd sSwiftStarAffineAnimCmds[] = 
+const union AffineAnimCmd gSwiftStarAffineAnimCmds[] = 
 {
     AFFINEANIMCMD_FRAME(0, 0, 0, 1),
     AFFINEANIMCMD_JUMP(0),
 };
 
-static const union AffineAnimCmd *const sSwiftStarAffineAnimTable[] = 
+const union AffineAnimCmd *const gSwiftStarAffineAnimTable[] = 
 {
-    sSwiftStarAffineAnimCmds,
+    gSwiftStarAffineAnimCmds,
 };
 
 const struct SpriteTemplate gSwiftStarSpriteTemplate =
@@ -774,7 +774,7 @@ const struct SpriteTemplate gSwiftStarSpriteTemplate =
     .oam = &gOamData_AffineNormal_ObjNormal_32x32,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sSwiftStarAffineAnimTable,
+    .affineAnims = gSwiftStarAffineAnimTable,
     .callback = AnimTranslateLinearSingleSineWave,
 };
 
@@ -835,23 +835,23 @@ const struct SpriteTemplate gConstrictBindingSpriteTemplate =
     .callback = AnimConstrictBinding,
 };
 
-static const union AffineAnimCmd sMimicOrbAffineAnimCmds1[] = 
+const union AffineAnimCmd gMimicOrbAffineAnimCmds1[] = 
 {
     AFFINEANIMCMD_FRAME(0, 0, 0, 0),
     AFFINEANIMCMD_FRAME(48, 48, 0, 14),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sMimicOrbAffineAnimCmds2[] = 
+const union AffineAnimCmd gMimicOrbAffineAnimCmds2[] = 
 {
     AFFINEANIMCMD_FRAME(-16, -16, 0, 1),
     AFFINEANIMCMD_JUMP(0),
 };
 
-static const union AffineAnimCmd *const sMimicOrbAffineAnimTable[] = 
+const union AffineAnimCmd *const gMimicOrbAffineAnimTable[] = 
 {
-    sMimicOrbAffineAnimCmds1,
-    sMimicOrbAffineAnimCmds2,
+    gMimicOrbAffineAnimCmds1,
+    gMimicOrbAffineAnimCmds2,
 };
 
 const struct SpriteTemplate gMimicOrbSpriteTemplate =
@@ -861,7 +861,7 @@ const struct SpriteTemplate gMimicOrbSpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjNormal_16x16,
     .anims = gPowerAbsorptionOrbAnimTable,
     .images = NULL,
-    .affineAnims = sMimicOrbAffineAnimTable,
+    .affineAnims = gMimicOrbAffineAnimTable,
     .callback = AnimMimicOrb,
 };
 
@@ -1858,7 +1858,7 @@ const struct SpriteTemplate gFalseSwipePositionedSliceSpriteTemplate =
     .callback = AnimFalseSwipePositionedSlice,
 };
 
-static const union AnimCmd sEndureEnergyAnimCmds[] =
+const union AnimCmd gEndureEnergyAnimCmds[] =
 {
     ANIMCMD_FRAME(0, 4),
     ANIMCMD_FRAME(8, 12),
@@ -1867,9 +1867,9 @@ static const union AnimCmd sEndureEnergyAnimCmds[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sEndureEnergyAnimTable[] =
+const union AnimCmd *const gEndureEnergyAnimTable[] =
 {
-    sEndureEnergyAnimCmds,
+    gEndureEnergyAnimCmds,
 };
 
 const struct SpriteTemplate gEndureEnergySpriteTemplate =
@@ -1877,7 +1877,7 @@ const struct SpriteTemplate gEndureEnergySpriteTemplate =
     .tileTag = ANIM_TAG_FOCUS_ENERGY,
     .paletteTag = ANIM_TAG_FOCUS_ENERGY,
     .oam = &gOamData_AffineOff_ObjNormal_16x32,
-    .anims = sEndureEnergyAnimTable,
+    .anims = gEndureEnergyAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimEndureEnergy,
@@ -2253,7 +2253,7 @@ const struct SpriteTemplate gSlowFlyingMusicNotesSpriteTemplate =
     .callback = AnimSlowFlyingMusicNotes,
 };
 
-static const union AnimCmd sMetronomeThroughtBubbleAnimCmds1[] =
+const union AnimCmd gMetronomeThroughtBubbleAnimCmds1[] =
 {
     ANIMCMD_FRAME(0, 2, .hFlip = TRUE),
     ANIMCMD_FRAME(16, 2, .hFlip = TRUE),
@@ -2262,7 +2262,7 @@ static const union AnimCmd sMetronomeThroughtBubbleAnimCmds1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sMetronomeThroughtBubbleAnimCmds3[] =
+const union AnimCmd gMetronomeThroughtBubbleAnimCmds3[] =
 {
     ANIMCMD_FRAME(48, 2, .hFlip = TRUE),
     ANIMCMD_FRAME(32, 2, .hFlip = TRUE),
@@ -2271,7 +2271,7 @@ static const union AnimCmd sMetronomeThroughtBubbleAnimCmds3[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sMetronomeThroughtBubbleAnimCmds2[] =
+const union AnimCmd gMetronomeThroughtBubbleAnimCmds2[] =
 {
     ANIMCMD_FRAME(0, 2),
     ANIMCMD_FRAME(16, 2),
@@ -2280,7 +2280,7 @@ static const union AnimCmd sMetronomeThroughtBubbleAnimCmds2[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sMetronomeThroughtBubbleAnimCmds4[] =
+const union AnimCmd gMetronomeThroughtBubbleAnimCmds4[] =
 {
     ANIMCMD_FRAME(48, 2),
     ANIMCMD_FRAME(32, 2),
@@ -2289,12 +2289,12 @@ static const union AnimCmd sMetronomeThroughtBubbleAnimCmds4[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sMetronomeThroughtBubbleAnimTable[] =
+const union AnimCmd *const gMetronomeThroughtBubbleAnimTable[] =
 {
-    sMetronomeThroughtBubbleAnimCmds1,
-    sMetronomeThroughtBubbleAnimCmds2,
-    sMetronomeThroughtBubbleAnimCmds3,
-    sMetronomeThroughtBubbleAnimCmds4,
+    gMetronomeThroughtBubbleAnimCmds1,
+    gMetronomeThroughtBubbleAnimCmds2,
+    gMetronomeThroughtBubbleAnimCmds3,
+    gMetronomeThroughtBubbleAnimCmds4,
 };
 
 const struct SpriteTemplate gThoughtBubbleSpriteTemplate =
@@ -2302,20 +2302,20 @@ const struct SpriteTemplate gThoughtBubbleSpriteTemplate =
     .tileTag = ANIM_TAG_THOUGHT_BUBBLE,
     .paletteTag = ANIM_TAG_THOUGHT_BUBBLE,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sMetronomeThroughtBubbleAnimTable,
+    .anims = gMetronomeThroughtBubbleAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimThoughtBubble,
 };
 
-static const union AffineAnimCmd sMetronomeFingerAffineAnimCmds1[] =
+const union AffineAnimCmd gMetronomeFingerAffineAnimCmds1[] =
 {
     AFFINEANIMCMD_FRAME(0x10, 0x10, 0, 0),
     AFFINEANIMCMD_FRAME(0x1E, 0x1E, 0, 8),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sMetronomeFingerAffineAnimCmds2[] =
+const union AffineAnimCmd gMetronomeFingerAffineAnimCmds2[] =
 {
     AFFINEANIMCMD_FRAME(0x0, 0x0, 4, 11),
     AFFINEANIMCMD_FRAME(0x0, 0x0, -4, 11),
@@ -2324,7 +2324,7 @@ static const union AffineAnimCmd sMetronomeFingerAffineAnimCmds2[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sMetronomeFingerAffineAnimCmds2_2[] =
+const union AffineAnimCmd gMetronomeFingerAffineAnimCmds2_2[] =
 {
     AFFINEANIMCMD_FRAME(16, 16, 0, 0),
     AFFINEANIMCMD_FRAME(30, 30, 0, 8),
@@ -2337,10 +2337,10 @@ static const union AffineAnimCmd sMetronomeFingerAffineAnimCmds2_2[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sMetronomeFingerAffineAnimTable[] =
+const union AffineAnimCmd *const gMetronomeFingerAffineAnimTable[] =
 {
-    sMetronomeFingerAffineAnimCmds1,
-    sMetronomeFingerAffineAnimCmds2,
+    gMetronomeFingerAffineAnimCmds1,
+    gMetronomeFingerAffineAnimCmds2,
 };
 
 const struct SpriteTemplate gMetronomeFingerSpriteTemplate =
@@ -2350,7 +2350,7 @@ const struct SpriteTemplate gMetronomeFingerSpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjNormal_32x32,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sMetronomeFingerAffineAnimTable,
+    .affineAnims = gMetronomeFingerAffineAnimTable,
     .callback = AnimMetronomeFinger,
 };
 
@@ -2361,7 +2361,7 @@ const struct SpriteTemplate gFollowMeFingerSpriteTemplate =
     .oam = &gOamData_AffineNormal_ObjNormal_32x32,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sMetronomeFingerAffineAnimTable,
+    .affineAnims = gMetronomeFingerAffineAnimTable,
     .callback = AnimFollowMeFinger,
 };
 
@@ -4448,7 +4448,7 @@ void AnimNeedleArmSpike(struct Sprite* sprite)
     }
 }
 
-static void AnimNeedleArmSpikeStep(struct Sprite* sprite)
+void AnimNeedleArmSpikeStep(struct Sprite* sprite)
 {
     if (sprite->data[0])
     {

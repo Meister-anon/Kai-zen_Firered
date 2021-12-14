@@ -239,7 +239,7 @@ static const union AffineAnimCmd sGrowingRingAffineAnimCmds[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sWaterPulseRingAffineAnimCmds[] =
+const union AffineAnimCmd gWaterPulseRingAffineAnimCmds[] =
 {
     AFFINEANIMCMD_FRAME(5, 5, 0, 10),
     AFFINEANIMCMD_FRAME(-10, -10, 0, 10),
@@ -256,9 +256,9 @@ const union AffineAnimCmd *const gGrowingRingAffineAnimTable[] =
     sGrowingRingAffineAnimCmds,
 };
 
-static const union AffineAnimCmd *const sWaterPulseRingAffineAnimTable[] =    
+const union AffineAnimCmd *const gWaterPulseRingAffineAnimTable[] =    
 {
-    sWaterPulseRingAffineAnimCmds,
+    gWaterPulseRingAffineAnimCmds,
 };
 
 const struct SpriteTemplate gSupersonicWaveSpriteTemplate =    
@@ -301,7 +301,7 @@ const struct SpriteTemplate gWaterPulseRingSpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjNormal_16x32,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sWaterPulseRingAffineAnimTable,
+    .affineAnims = gWaterPulseRingAffineAnimTable,
     .callback = AnimWaterPulseRing,
 };
 
@@ -327,26 +327,26 @@ static const struct SpriteTemplate sVoidLinesSpriteTemplate =
     .callback = AnimVoidLines,
 };
 
-static const union AnimCmd sCoinAnimCmds[] =
+const union AnimCmd gCoinAnimCmds[] =
 {
     ANIMCMD_FRAME(8, 1),
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sCoinAnimTable[] =
+const union AnimCmd *const gCoinAnimTable[] =
 {
-    sCoinAnimCmds,
+    gCoinAnimCmds,
 };
 
-static const union AffineAnimCmd sFallingCoinAffineAnimCmds[] =
+const union AffineAnimCmd gFallingCoinAffineAnimCmds[] =
 {
     AFFINEANIMCMD_FRAME(0, 0, 10, 1),
     AFFINEANIMCMD_JUMP(0),
 };
 
-static const union AffineAnimCmd *const sFallingCoinAffineAnimTable[] =
+const union AffineAnimCmd *const gFallingCoinAffineAnimTable[] =
 {
-    sFallingCoinAffineAnimCmds,
+    gFallingCoinAffineAnimCmds,
 };
 
 const struct SpriteTemplate gCoinThrowSpriteTemplate =    
@@ -354,7 +354,7 @@ const struct SpriteTemplate gCoinThrowSpriteTemplate =
     .tileTag = ANIM_TAG_COIN,
     .paletteTag = ANIM_TAG_COIN,
     .oam = &gOamData_AffineNormal_ObjNormal_16x16,
-    .anims = sCoinAnimTable,
+    .anims = gCoinAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimCoinThrow,
@@ -365,9 +365,9 @@ const struct SpriteTemplate gFallingCoinSpriteTemplate =
     .tileTag = ANIM_TAG_COIN,
     .paletteTag = ANIM_TAG_COIN,
     .oam = &gOamData_AffineNormal_ObjNormal_16x16,
-    .anims = sCoinAnimTable,
+    .anims = gCoinAnimTable,
     .images = NULL,
-    .affineAnims = sFallingCoinAffineAnimTable,
+    .affineAnims = gFallingCoinAffineAnimTable,
     .callback = AnimFallingCoin,
 };
 
