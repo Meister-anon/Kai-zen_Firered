@@ -2612,6 +2612,7 @@ BattleScript_EffectFlinchHit::
 	setmoveeffect MOVE_EFFECT_FLINCH
 	goto BattleScript_EffectHit
 
+@test if works
 BattleScript_EffectFlinchWithStatus:
 	setmoveeffect MOVE_EFFECT_FLINCH
 	attackcanceler
@@ -2620,7 +2621,8 @@ BattleScript_EffectFlinchWithStatus:
 	ppreduce
 	critcalc
 	damagecalc
-	adjustdamage
+	@adjustdamage
+	adjustnormaldamage
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -3549,7 +3551,7 @@ BattleScript_EffectMatBlock::
 
 BattleScript_EffectProtect::
 	attackcanceler
-BattleScript_ProtectLikeAtkString
+BattleScript_ProtectLikeAtkString::
 	attackstring
 	ppreduce
 	setprotectlike
@@ -3645,6 +3647,8 @@ BattleScript_SwaggerTryConfuse::
 	seteffectprimary
 	goto BattleScript_MoveEnd
 
+@Need to fix this so it displays miss message
+@ and then number of hits
 BattleScript_EffectFuryCutter::
 	attackcanceler
 	attackstring
