@@ -48,11 +48,6 @@ static const union AffineAnimCmd *const sAffineAnims_SpinningBone[] =
     sAffineAnim_SpinningBone,
 };
 
-static const union AffineAnimCmd *const sAffineAnims_Bonemerang[] =
-{
-    sAffineAnim_Bonemerang,
-};
-
 const union AffineAnimCmd *const gAffineAnims_SpinningBone[] =
 {
     sAffineAnim_SpinningBone,
