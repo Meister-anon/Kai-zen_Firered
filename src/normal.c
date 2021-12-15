@@ -33,7 +33,7 @@ static void AnimShakeMonOrBattleTerrain_UpdateCoordOffsetEnabled(void);
 static void AnimShakeMonOrBattleTerrain_Step(struct Sprite *sprite);
 static void AnimTask_ShakeBattleTerrain_Step(u8 taskId);
 //static void AnimFlashingHitSplat_Step(struct Sprite *sprite);
-
+static void AnimMovePowerSwapGuardSwap(struct Sprite *sprite);
 
 static const union AnimCmd sAnim_ConfusionDuck_0[] =
 {
@@ -159,7 +159,8 @@ static const union AnimCmd sAnim_CirclingSparkle[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnim_CirclingSparkle[] =
+//this name should be different ok think I fixed it
+static const union AnimCmd *const sAnims_CirclingSparkle[] =
 {
     sAnim_CirclingSparkle,
 };
@@ -170,7 +171,7 @@ const struct SpriteTemplate sCirclingSparkleSpriteTemplate =
     .tileTag = ANIM_TAG_SPARKLE_4,
     .paletteTag = ANIM_TAG_SPARKLE_4,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnim_CirclingSparkle,
+    .anims = sAnims_CirclingSparkle,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimCirclingSparkle,
