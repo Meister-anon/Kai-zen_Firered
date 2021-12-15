@@ -25,6 +25,8 @@ static void AnimTask_ImprisonOrbs_Step(u8 taskId);
 static void AnimTask_SkillSwap_Step(u8 taskId);
 static void AnimTask_ExtrasensoryDistortion_Step(u8 taskId);
 static void AnimTask_TransparentCloneGrowAndShrink_Step(u8 taskId);
+static void AnimateZenHeadbutt(struct Sprite *sprite);
+static void AnimPsychoCut(struct Sprite *sprite);
 
 static const union AffineAnimCmd sAffineAnim_PsychUpSpiral[] =
 {
