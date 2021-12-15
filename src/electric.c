@@ -3,6 +3,7 @@
 #include "trig.h"
 #include "sound.h"
 #include "constants/songs.h"
+#include "constants/moves.h"
 
 static void AnimLightning(struct Sprite *sprite);
 static void AnimLightning_Step(struct Sprite *sprite);
