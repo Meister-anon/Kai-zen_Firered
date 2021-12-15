@@ -5642,7 +5642,8 @@ BattleScript_StealthRockFree::
 BattleScript_MegaEvolution::
 	printstring STRINGID_MEGAEVOREACTING
 	waitmessage 0x40
-	setbyte gIsCriticalHit, 0
+	@setbyte gIsCriticalHit, 0
+	setbyte gCritMultiplier, 1
 	handlemegaevo BS_ATTACKER, 0
 	handlemegaevo BS_ATTACKER, 1
 	playanimation BS_ATTACKER, B_ANIM_MEGA_EVOLUTION, NULL
@@ -5653,10 +5654,13 @@ BattleScript_MegaEvolution::
 	switchinabilities BS_ATTACKER
 	end2
 
+@changed to 2 hopefully means when crits,
+@sometimes value is greater than 2 so hopefully no problem
 BattleScript_WishMegaEvolution::
 	printstring STRINGID_FERVENTWISHREACHED
 	waitmessage 0x40
-	setbyte gIsCriticalHit, 0
+	@setbyte gIsCriticalHit, 1
+	setbyte gCritMultiplier, 2
 	handlemegaevo BS_ATTACKER, 0
 	handlemegaevo BS_ATTACKER, 1
 	playanimation BS_ATTACKER, B_ANIM_MEGA_EVOLUTION, NULL
@@ -6337,11 +6341,11 @@ BattleScript_DefiantActivates::
 	waitmessage 0x40
 	return
 
-BattleScript_AbilityPopUp:
-	showabilitypopup BS_ABILITY_BATTLER
-	recordlastability BS_ABILITY_BATTLER
-	pause 40
-	return
+@BattleScript_AbilityPopUp:
+@	showabilitypopup BS_ABILITY_BATTLER
+@	recordlastability BS_ABILITY_BATTLER
+@	pause 40
+@	return
 
 BattleScript_SpeedBoostActivates::
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
