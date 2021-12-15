@@ -32,6 +32,8 @@ static void AnimFlyBallUp_Step(struct Sprite *sprite);
 static void AnimFlyBallAttack(struct Sprite *sprite);
 static void AnimFlyBallAttack_Step(struct Sprite *sprite);*/
 static void AnimTask_AnimateGustTornadoPalette_Step(u8 taskId);
+static void sub_80B2514(struct Sprite *sprite);
+static void sub_80B268C(struct Sprite *sprite);
 
 
 const struct SpriteTemplate gEllipticalGustSpriteTemplate =
@@ -634,7 +636,7 @@ static void AnimFallingFeather(struct Sprite *sprite)
     sprite->callback = AnimFallingFeather_Step;
 }
 
-static void AnimFallingFeather_Step(struct Sprite *sprite)
+static void AnimFallingFeather_Step(struct Sprite *sprite) //test this & sub_80B2514
 {
     u8 matrixNum, sinIndex;
     s16 sinVal = 0;
@@ -890,7 +892,7 @@ static void AnimUnusedBubbleThrow(struct Sprite *sprite)
     sprite->callback = TranslateAnimSpriteToTargetMonLocation;
 }
 
-static void AnimFallingFeather(struct Sprite *sprite)
+static void sub_80B2514(struct Sprite *sprite)
 {
     u8 matrixNum;
     s16 rn, sinVal;
@@ -934,10 +936,10 @@ static void AnimFallingFeather(struct Sprite *sprite)
         sprite->animNum = 1;
         sprite->hFlip = TRUE;
     }
-    sprite->callback = AnimFallingFeather_Step;
+    sprite->callback = sub_80B268C;
 }
 
-static void AnimFallingFeather_Step(struct Sprite *sprite)
+static void sub_80B268C(struct Sprite *sprite)
 {
     struct FeatherDanceData fData;
     struct FeatherDanceData *tData = (struct FeatherDanceData *)sprite->data;

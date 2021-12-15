@@ -7,6 +7,7 @@
 #include "util.h"
 #include "decompress.h"
 #include "constants/songs.h"
+#include "constants/moves.h"
 
 static void AnimConfuseRayBallBounce(struct Sprite *sprite);
 static void AnimConfuseRayBallBounce_Step1(struct Sprite *sprite);

@@ -384,7 +384,7 @@ static const union AnimCmd sAnim_RevengeBigScratch_2[] =
     ANIMCMD_FRAME(0, 6, .hFlip = TRUE),
     ANIMCMD_FRAME(64, 6, .hFlip = TRUE),
     ANIMCMD_END,
-};
+};//may need to make global, and non-static, i.e name ganim instead of s
 
 const union AnimCmd *const gAnims_RevengeBigScratch[] =
 {
@@ -398,7 +398,7 @@ const struct SpriteTemplate gRevengeBigScratchSpriteTemplate =
     .tileTag = ANIM_TAG_PURPLE_SWIPE,
     .paletteTag = ANIM_TAG_PURPLE_SWIPE,
     .oam = &gOamData_AffineOff_ObjNormal_64x64,
-    .anims = sAnims_RevengeBigScratch,
+    .anims = gAnims_RevengeBigScratch,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimRevengeScratch,
