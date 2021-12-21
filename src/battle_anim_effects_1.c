@@ -456,7 +456,7 @@ static const union AnimCmd gPowerAbsorptionOrbAnimCmds[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const gSolarbeamBigOrbAnimTable[] =
+const union AnimCmd *const gSolarbeamBigOrbAnimTable[] =
 {
     gSolarbeamBigOrbAnimCmds1,
     gSolarbeamBigOrbAnimCmds2,
@@ -483,7 +483,7 @@ const union AffineAnimCmd gPowerAbsorptionOrbAffineAnimCmds[] =
     AFFINEANIMCMD_JUMP(0),
 };
 
-static const union AffineAnimCmd *const gPowerAbsorptionOrbAffineAnimTable[] =
+const union AffineAnimCmd *const gPowerAbsorptionOrbAffineAnimTable[] =
 {
     gPowerAbsorptionOrbAffineAnimCmds,
 };
@@ -648,12 +648,12 @@ static const union AnimCmd sPetalDanceSmallFlowerAnimCmds[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sPetalDanceBigFlowerAnimTable[] =
+const union AnimCmd *const gPetalDanceBigFlowerAnimTable[] =
 {
     sPetalDanceBigFlowerAnimCmds,
 };
 
-static const union AnimCmd *const sPetalDanceSmallFlowerAnimTable[] =
+const union AnimCmd *const gPetalDanceSmallFlowerAnimTable[] =
 {
     sPetalDanceSmallFlowerAnimCmds,
 };
@@ -663,7 +663,7 @@ const struct SpriteTemplate gPetalDanceBigFlowerSpriteTemplate =
     .tileTag = ANIM_TAG_FLOWER,
     .paletteTag = ANIM_TAG_FLOWER,
     .oam = &gOamData_AffineOff_ObjNormal_16x16,
-    .anims = sPetalDanceBigFlowerAnimTable,
+    .anims = gPetalDanceBigFlowerAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimPetalDanceBigFlower,
@@ -674,7 +674,7 @@ const struct SpriteTemplate gPetalDanceSmallFlowerSpriteTemplate =
     .tileTag = ANIM_TAG_FLOWER,
     .paletteTag = ANIM_TAG_FLOWER,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = sPetalDanceSmallFlowerAnimTable,
+    .anims = gPetalDanceSmallFlowerAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimPetalDanceSmallFlower,
@@ -1179,7 +1179,7 @@ const struct SpriteTemplate gAromatherapySmallFlowerSpriteTemplate =
     .tileTag = ANIM_TAG_FLOWER,
     .paletteTag = ANIM_TAG_FLOWER,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = sPetalDanceSmallFlowerAnimTable,
+    .anims = gPetalDanceSmallFlowerAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimFlyingParticle,
@@ -1190,7 +1190,7 @@ const struct SpriteTemplate gAromatherapyBigFlowerSpriteTemplate =
     .tileTag = ANIM_TAG_FLOWER,
     .paletteTag = ANIM_TAG_FLOWER,
     .oam = &gOamData_AffineNormal_ObjNormal_16x16,
-    .anims = sPetalDanceBigFlowerAnimTable,
+    .anims = gPetalDanceBigFlowerAnimTable,
     .images = NULL,
     .affineAnims = sAromatherapyBigFlowerAffineAnimTable,
     .callback = AnimFlyingParticle,

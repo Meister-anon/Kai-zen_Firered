@@ -93,7 +93,7 @@ static const union AffineAnimCmd sAffineAnim_Whirlpool[] =
     AFFINEANIMCMD_JUMP(1),
 };
 
-static const union AffineAnimCmd *const gAffineAnims_Whirlpool[] =
+const union AffineAnimCmd *const gAffineAnims_Whirlpool[] =
 {
     sAffineAnim_Whirlpool,
 };
@@ -266,7 +266,7 @@ static const union AffineAnimCmd sAffineAnim_BasicRock_1[] =
     AFFINEANIMCMD_JUMP(0),
 };
 
-static const union AffineAnimCmd *const gAffineAnims_BasicRock[] =
+const union AffineAnimCmd *const gAffineAnims_BasicRock[] =
 {
     sAffineAnim_BasicRock_0,
     sAffineAnim_BasicRock_1,

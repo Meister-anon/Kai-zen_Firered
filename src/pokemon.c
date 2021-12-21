@@ -6397,6 +6397,11 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
     }
 }
 
+
+//removed battle evs just need to add power items and custom item changes
+//for the new system will need to change ultima brace to work like exp share idea
+//where it registers a pokemon, and activates on top of any held items
+
 void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function doesn't use exp, it proves ev gain is separate from exp gain.
 { //                                            this means making an item to 0 out exp gain wouldn't break exp gain.
     u16 evs[NUM_STATS]; //per stat evs                That means I can still hvae my item that blocks exp, and one that blocks ev but not exp.
@@ -6427,7 +6432,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
         else
             multiplier = 1;
 
-        switch (i)
+        /*switch (i)
         {
         case 0:
             evIncrease = gBaseStats[defeatedSpecies].evYield_HP * multiplier;
@@ -6447,7 +6452,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
         case 5:
             evIncrease = gBaseStats[defeatedSpecies].evYield_SpDefense * multiplier;
             break;
-        }
+        }*/
 
         heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
 
@@ -6486,6 +6491,8 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
         if (holdEffect == HOLD_EFFECT_ULTIMA_BRACE)
             evIncrease *= 5;
     }
+    //ev shackles and ultima brace will no longer work with 
+    //current change to ev gain, so will have to adjust somehow
 }
 
 u16 GetMonEVCount(struct Pokemon *mon)

@@ -81,7 +81,7 @@ static const union AffineAnimCmd sAffineAnim_DragonBreathFire_1[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const gAffineAnims_DragonBreathFire[] =
+const union AffineAnimCmd *const gAffineAnims_DragonBreathFire[] =
 {
     sAffineAnim_DragonBreathFire_0,
     sAffineAnim_DragonBreathFire_1,

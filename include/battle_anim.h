@@ -579,13 +579,13 @@ void AnimTask_Rollout(u8 taskId);
 void AnimTask_GetSeismicTossDamageLevel(u8 taskId);
 void AnimTask_MoveSeismicTossBg(u8 taskId);
 void AnimTask_SeismicTossBgAccelerateDownAtEnd(u8 taskId);
-extern const union AffineAnimCmd* const gAffineAnims_Whirlpool[];
-extern const union AffineAnimCmd* const gAffineAnims_BasicRock[];
-void AnimParticleInVortex(struct Sprite* sprite);
-void AnimFallingRock(struct Sprite* sprite);
-void AnimRaiseSprite(struct Sprite* sprite);
-void AnimFallingRock_Step(struct Sprite* sprite);
-void AnimFlyingSandCrescent(struct Sprite* sprite);
+extern const union AffineAnimCmd *const gAffineAnims_Whirlpool[];
+extern const union AffineAnimCmd *const gAffineAnims_BasicRock[];
+void AnimParticleInVortex(struct Sprite *sprite);
+void AnimFallingRock(struct Sprite *sprite);
+void AnimRaiseSprite(struct Sprite *sprite);
+void AnimFallingRock_Step(struct Sprite *sprite);
+void AnimFlyingSandCrescent(struct Sprite *sprite);
 
 // psychic.c
 extern const union AffineAnimCmd *const gAffineAnims_PsychoBoostOrb[];

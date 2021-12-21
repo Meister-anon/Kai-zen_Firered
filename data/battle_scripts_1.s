@@ -5639,11 +5639,14 @@ BattleScript_StealthRockFree::
 	waitmessage 0x40
 	return
 
+@just relized set byte is wrong
+@what I need is to check if byte is that value
+@since crit are handled differently here
 BattleScript_MegaEvolution::
 	printstring STRINGID_MEGAEVOREACTING
 	waitmessage 0x40
 	@setbyte gIsCriticalHit, 0
-	setbyte gCritMultiplier, 1
+	@setbyte gCritMultiplier, 1
 	handlemegaevo BS_ATTACKER, 0
 	handlemegaevo BS_ATTACKER, 1
 	playanimation BS_ATTACKER, B_ANIM_MEGA_EVOLUTION, NULL
@@ -5660,7 +5663,7 @@ BattleScript_WishMegaEvolution::
 	printstring STRINGID_FERVENTWISHREACHED
 	waitmessage 0x40
 	@setbyte gIsCriticalHit, 1
-	setbyte gCritMultiplier, 2
+	@setbyte gCritMultiplier, 2
 	handlemegaevo BS_ATTACKER, 0
 	handlemegaevo BS_ATTACKER, 1
 	playanimation BS_ATTACKER, B_ANIM_MEGA_EVOLUTION, NULL
