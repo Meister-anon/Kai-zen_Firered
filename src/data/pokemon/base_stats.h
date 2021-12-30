@@ -8075,7 +8075,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_TRUANT, ABILITY_SLOW_START},
-        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_MOODY, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -8125,7 +8125,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_TRUANT, ABILITY_SLOW_START},
-        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -14008,7 +14008,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    }, //need to add ground moves to learn list for this and mid evo
 
     [SPECIES_OSHAWOTT] =
     {
@@ -14254,10 +14254,10 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_LIEPARD] =
     {
         .baseHP = 64,
-        .baseAttack = 88,
+        .baseAttack = 98,
         .baseDefense = 50,
-        .baseSpeed = 106,
-        .baseSpAttack = 88,
+        .baseSpeed = 116,
+        .baseSpAttack = 98,
         .baseSpDefense = 50,
         .type1 = TYPE_DARK,
         .type2 = TYPE_DARK,
@@ -14474,8 +14474,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_FOREWARN, ABILITY_SYNCHRONIZE},
-            .abilityHidden = {ABILITY_TELEPATHY, ABILITY_NONE},
+            .abilities = {ABILITY_FOREWARN, ABILITY_ANALYTIC},
+            .abilityHidden = {ABILITY_TELEPATHY, ABILITY_MAGIC_BOUNCE},
         #else
             .abilities = {ABILITY_NONE, ABILITY_SYNCHRONIZE},
         #endif
@@ -14503,8 +14503,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_FOREWARN, ABILITY_SYNCHRONIZE},
-            .abilityHidden = {ABILITY_TELEPATHY, ABILITY_NONE},
+            .abilities = {ABILITY_FOREWARN, ABILITY_ANALYTIC},
+            .abilityHidden = {ABILITY_TELEPATHY, ABILITY_MAGIC_BOUNCE},
         #else
             .abilities = {ABILITY_NONE, ABILITY_SYNCHRONIZE},
         #endif
@@ -14515,11 +14515,11 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_PIDOVE] =
     {
         .baseHP = 50,
-        .baseAttack = 55,
-        .baseDefense = 50,
+        .baseAttack = 36,
+        .baseDefense = 40,
         .baseSpeed = 43,
-        .baseSpAttack = 36,
-        .baseSpDefense = 30,
+        .baseSpAttack = 56,
+        .baseSpDefense = 50,
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 255,
@@ -14532,8 +14532,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_BIG_PECKS, ABILITY_SUPER_LUCK},
-            .abilityHidden = {ABILITY_RIVALRY, ABILITY_NONE},
+            .abilities = {ABILITY_RIVALRY, ABILITY_SUPER_LUCK},
+            .abilityHidden = {ABILITY_HUGE_POWER, ABILITY_STALWART},
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
@@ -14544,11 +14544,11 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_TRANQUILL] =
     {
         .baseHP = 62,
-        .baseAttack = 77,
-        .baseDefense = 62,
+        .baseAttack = 50,
+        .baseDefense = 52,
         .baseSpeed = 65,
-        .baseSpAttack = 50,
-        .baseSpDefense = 42,
+        .baseSpAttack = 77,
+        .baseSpDefense = 62,
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 120,
@@ -14561,8 +14561,38 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_BIG_PECKS, ABILITY_SUPER_LUCK},
-            .abilityHidden = {ABILITY_RIVALRY, ABILITY_NONE},
+            .abilities = {ABILITY_RIVALRY, ABILITY_SUPER_LUCK},
+            .abilityHidden = {ABILITY_HUGE_POWER, ABILITY_STALWART},
+        #else
+            .abilities = {ABILITY_NONE, ABILITY_NONE},
+        #endif
+        .bodyColor = BODY_COLOR_GRAY,
+        .noFlip = FALSE,
+    },//seaprate final evo into gender forms
+    //will need to reupdate species file again...
+
+    [SPECIES_UNFEZANT_F] =
+    {
+        .baseHP = 100,
+        .baseDefense = 65,
+        .baseSpeed = 103,
+        .baseSpAttack = 115,
+        .baseSpDefense = 100,
+        .baseAttack = 65,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FLYING,
+        .catchRate = 45,
+        .expYield = 220,
+        //.evYield_Attack = 3,
+        .genderRatio = MON_FEMALE,
+        .eggCycles = 15,
+        .friendship = 70,
+        .growthRate = GROWTH_MEDIUM_SLOW,
+        .eggGroup1 = EGG_GROUP_FLYING,
+        .eggGroup2 = EGG_GROUP_FLYING,
+        #ifdef BATTLE_ENGINE
+            .abilities = {ABILITY_SERENE_GRACE, ABILITY_SUPER_LUCK},
+            .abilityHidden = {ABILITY_QUEENLY_MAJESTY, ABILITY_STAMINA},
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
@@ -14570,32 +14600,28 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     },
 
-    [SPECIES_UNFEZANT] =
+    [SPECIES_UNFEZANT_M] =
     {
         .baseHP = 80,
-        .baseDefense = 80,
-        .baseSpeed = 93,
-        .baseSpAttack = 65,
-        .baseSpDefense = 55,
-        #if P_UPDATED_STATS >= GEN_6
-            .baseAttack = 115,
-        #else
-            .baseAttack = 105,
-        #endif
+        .baseDefense = 65,
+        .baseSpeed = 113,
+        .baseSpAttack = 115,
+        .baseSpDefense = 100,
+        .baseAttack = 65,
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
         .expYield = 220,
         //.evYield_Attack = 3,
-        .genderRatio = PERCENT_FEMALE(50),
+        .genderRatio = MON_MALE,
         .eggCycles = 15,
         .friendship = 70,
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_BIG_PECKS, ABILITY_SUPER_LUCK},
-            .abilityHidden = {ABILITY_RIVALRY, ABILITY_NONE},
+            .abilities = {ABILITY_SERENE_GRACE, ABILITY_SUPER_LUCK},
+            .abilityHidden = {ABILITY_SNIPER, ABILITY_NONE},
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
@@ -14760,11 +14786,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 72,
         .baseSpAttack = 55,
         .baseSpDefense = 43,
-        #if P_UPDATED_STATS >= GEN_7
-            .baseHP = 65,
-        #else
-            .baseHP = 55,
-        #endif
+        .baseHP = 65,
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FLYING,
         .catchRate = 190,
@@ -14777,7 +14799,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FLYING,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_UNAWARE, ABILITY_KLUTZ},
+            .abilities = {ABILITY_UNAWARE, ABILITY_SIMPLE},
             .abilityHidden = {ABILITY_SIMPLE, ABILITY_NONE},
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
@@ -14788,12 +14810,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_SWOOBAT] =
     {
-        .baseHP = 67,
-        .baseAttack = 57,
+        .baseHP = 77,
+        .baseAttack = 67,
         .baseDefense = 55,
         .baseSpeed = 114,
-        .baseSpAttack = 77,
-        .baseSpDefense = 55,
+        .baseSpAttack = 97,
+        .baseSpDefense = 65,
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -14806,7 +14828,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FLYING,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_UNAWARE, ABILITY_KLUTZ},
+            .abilities = {ABILITY_UNAWARE, ABILITY_SIMPLE},
             .abilityHidden = {ABILITY_SIMPLE, ABILITY_NONE},
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
