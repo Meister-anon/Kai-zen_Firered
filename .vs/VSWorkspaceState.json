@@ -1,16 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\graphics",
-    "\\graphics\\interface",
-    "\\graphics\\object_events",
-    "\\graphics\\object_events\\pics",
-    "\\graphics\\object_events\\pics\\people",
-    "\\sound",
-    "\\sound\\songs",
-    "\\sound\\songs\\midi",
     "\\src"
   ],
-  "SelectedNode": "\\src\\union_room.c",
+  "SelectedNode": "\\src\\data\\pokemon\\base_stats.h",
   "PreviewInSolutionExplorer": false
 }
