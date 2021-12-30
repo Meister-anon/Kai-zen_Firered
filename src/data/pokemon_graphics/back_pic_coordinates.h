@@ -2605,7 +2605,12 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x76,
         .y_offset = 9,
     },
-    [SPECIES_UNFEZANT] =
+    [SPECIES_UNFEZANT_F] =
+    {
+        .size = 0x88,
+        .y_offset = 1,
+    },
+    [SPECIES_UNFEZANT_M] =
     {
         .size = 0x88,
         .y_offset = 1,

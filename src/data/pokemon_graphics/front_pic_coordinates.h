@@ -2605,7 +2605,12 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 7,
     },
-    [SPECIES_UNFEZANT] =
+    [SPECIES_UNFEZANT_F] =
+    {
+        .size = 0x45,
+        .y_offset = 0,
+    },
+    [SPECIES_UNFEZANT_M] =
     {
         .size = 0x45,
         .y_offset = 0,
