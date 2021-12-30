@@ -14917,8 +14917,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FAIRY,
         .eggGroup2 = EGG_GROUP_FAIRY,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_HEALER, ABILITY_REGENERATOR},
-            .abilityHidden = {ABILITY_KLUTZ, ABILITY_NONE},
+            .abilities = {ABILITY_SERENE_GRACE, ABILITY_REGENERATOR},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
