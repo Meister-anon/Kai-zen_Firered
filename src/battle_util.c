@@ -1918,6 +1918,87 @@ u8 AtkCanceller_UnableToUseMove(void)
     return effect;
 }
 
+const u16 sFloatingSpecies[] = {
+    SPECIES_BEAUTIFLY,
+    SPECIES_DUSTOX,
+    SPECIES_NINJASK,
+    SPECIES_DUSCLOPS,
+    SPECIES_DUSKNOIR,
+    SPECIES_DUSKULL,
+    SPECIES_GASTLY,
+    SPECIES_HAUNTER,
+    SPECIES_GENGAR,
+    SPECIES_BELDUM,
+    SPECIES_METANG,
+    SPECIES_METAGROSS,
+    SPECIES_LATIAS,
+    SPECIES_LATIOS,
+    SPECIES_BRONZOR,
+    SPECIES_BRONZONG,
+    SPECIES_CHATOT,
+    SPECIES_CARNIVINE,
+    SPECIES_ROTOM,
+    SPECIES_UXIE,
+    SPECIES_AZELF,
+    SPECIES_MESPRIT,
+    SPECIES_GIRATINA_ORIGIN,
+    SPECIES_GENGAR_MEGA,
+    SPECIES_LATIAS_MEGA,
+    SPECIES_LATIOS_MEGA,
+    SPECIES_CRESSELIA,
+    SPECIES_MUNNA,
+    SPECIES_MUSHARNA,
+    SPECIES_DARKRAI,
+    SPECIES_VIBRAVA,
+    SPECIES_FLYGON,
+    SPECIES_HYDREIGON,
+    SPECIES_TYNAMO,
+    SPECIES_EELEKTRIK,
+    SPECIES_EELEKTROSS,
+    SPECIES_VIKAVOLT,
+    SPECIES_CURSOLA,
+    SPECIES_KOFFING,
+    SPECIES_WEEZING,
+    SPECIES_WEEZING_GALARIAN,
+    SPECIES_CORSOLA_GALARIAN,
+    SPECIES_UNOWN,
+    SPECIES_UNOWN_B,
+    SPECIES_UNOWN_C,
+    SPECIES_UNOWN_D,
+    SPECIES_UNOWN_E,
+    SPECIES_UNOWN_EMARK,
+    SPECIES_UNOWN_F,
+    SPECIES_UNOWN_QMARK,
+    SPECIES_UNOWN_G,
+    SPECIES_UNOWN_H,
+    SPECIES_UNOWN_I,
+    SPECIES_UNOWN_J,
+    SPECIES_UNOWN_K,
+    SPECIES_UNOWN_L,
+    SPECIES_UNOWN_M,
+    SPECIES_UNOWN_N,
+    SPECIES_UNOWN_O,
+    SPECIES_UNOWN_P,
+    SPECIES_UNOWN_Q,
+    SPECIES_UNOWN_R,
+    SPECIES_UNOWN_S,
+    SPECIES_UNOWN_T,
+    SPECIES_UNOWN_U,
+    SPECIES_UNOWN_V,
+    SPECIES_UNOWN_W,
+    SPECIES_UNOWN_X,
+    SPECIES_UNOWN_Y,
+    SPECIES_UNOWN_Z,
+    SPECIES_CASTFORM,
+    SPECIES_CASTFORM_RAINY,
+    SPECIES_CASTFORM_SNOWY,
+    SPECIES_CASTFORM_SUNNY,
+    SPECIES_ROTOM_FAN,
+    SPECIES_ROTOM_FROST,
+    SPECIES_ROTOM_MOW,
+    SPECIES_ROTOM_HEAT,
+};
+
 bool8 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
 //finihsed adding to type calc, so should be battle ready
 //set as type 8, instead of 32 for test build
@@ -1942,6 +2023,8 @@ bool8 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
         return FALSE;
     else if (gBattleMons[battlerId].ability == ABILITY_LEVITATE)
         return FALSE;
+    else if (gBattleMons[battlerId].species == sFloatingSpecies)
+        return FALSE;//this alone might enough since if smacked down it counts as grounded
     else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
         return FALSE;
 

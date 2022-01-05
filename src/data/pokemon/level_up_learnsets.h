@@ -5326,7 +5326,9 @@ static const u16 sCastformLevelUpLearnset[] = {
     LEVEL_UP_MOVE(20, MOVE_HAIL),
     LEVEL_UP_MOVE(30, MOVE_WEATHER_BALL),
     LEVEL_UP_END
-};
+}; //add more moves and make it so if castform uses weather move
+//it'll superseed the ability's random weather changing
+//that way the weather will be consistent until the move ends
 
 static const u16 sVolbeatLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),

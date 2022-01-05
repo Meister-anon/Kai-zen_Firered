@@ -1547,7 +1547,7 @@ static void atk01_accuracycheck(void)
                 gBattleCommunication[6] = 2;
             else
                 gBattleCommunication[6] = 0;
-            CheckWonderGuardAndLevitate();
+            CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
         }
         JumpIfMoveFailed(7, move);
     }
@@ -1859,7 +1859,7 @@ static void CheckWonderGuardAndLevitate(void)
     u8 moveType;
 
     if (gCurrentMove == MOVE_STRUGGLE || !gBattleMoves[gCurrentMove].power)
-        return;
+        return;//if move is struggle or fixed damage ignores checks
     GET_MOVE_TYPE(gCurrentMove, moveType);
     if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     {
@@ -2690,7 +2690,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
     }
     if (gBattleCommunication[MOVE_EFFECT_BYTE] <= 6) // status change
     {
-        switch (sStatusFlagsForMoveEffects[gBattleCommunication[MOVE_EFFECT_BYTE]])
+        switch (sStatusFlagsForMoveEffects[gBattleCommunication[MOVE_EFFECT_BYTE]])  //find out what this exactly is
         {
         case STATUS1_SLEEP:
             // check active uproar
@@ -2700,7 +2700,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                     ++gActiveBattler);
             else
                 gActiveBattler = gBattlersCount;
-            if (gBattleMons[gEffectBattler].status1)
+            if (gBattleMons[gEffectBattler].status1) //part that prevents status inflict while statused 
                 break;
             if (gActiveBattler != gBattlersCount)
                 break;
