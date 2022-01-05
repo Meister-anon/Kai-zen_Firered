@@ -1996,13 +1996,28 @@ const u16 sFloatingSpecies[] = {
     SPECIES_ROTOM_FAN,
     SPECIES_ROTOM_FROST,
     SPECIES_ROTOM_MOW,
-    SPECIES_ROTOM_HEAT,
+    SPECIES_ROTOM_HEAT
 };
+
+bool8 IsFloatingSpecies(u8 battlerId) {
+  s32 i;
+    
+
+    for (i = 0; i < NELEMS(sFloatingSpecies); i++)
+    {
+        if (gBattleMons[battlerId].species == sFloatingSpecies[i])
+            return TRUE;
+    }
+    return FALSE;
+        
+}
 
 bool8 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
 //finihsed adding to type calc, so should be battle ready
 //set as type 8, instead of 32 for test build
 {
+    s32 i;
+
     if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
         return TRUE;
     else if (gFieldStatuses & STATUS_FIELD_GRAVITY)
@@ -2023,7 +2038,7 @@ bool8 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
         return FALSE;
     else if (gBattleMons[battlerId].ability == ABILITY_LEVITATE)
         return FALSE;
-    else if (gBattleMons[battlerId].species == sFloatingSpecies)
+    else if (IsFloatingSpecies(battlerId))
         return FALSE;//this alone might enough since if smacked down it counts as grounded
     else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
         return FALSE;

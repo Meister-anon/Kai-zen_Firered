@@ -83,6 +83,7 @@ bool8 HandleWishPerishSongOnTurnEnd(void);
 bool8 HandleFaintedMonActions(void);
 void TryClearRageStatuses(void);
 u8 AtkCanceller_UnableToUseMove(void);
+bool8 IsFloatingSpecies(u8 battlerId);
 bool8 IsBattlerGrounded(u8 battlerId);
 bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2);
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
