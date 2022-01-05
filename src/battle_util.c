@@ -1918,6 +1918,8 @@ u8 AtkCanceller_UnableToUseMove(void)
     return effect;
 }
 
+//logic for this is non-flying pokemon that are typically
+//floating or attack while in the air/ can fly
 const u16 sFloatingSpecies[] = {
     SPECIES_BEAUTIFLY,
     SPECIES_DUSTOX,
@@ -1925,9 +1927,24 @@ const u16 sFloatingSpecies[] = {
     SPECIES_DUSCLOPS,
     SPECIES_DUSKNOIR,
     SPECIES_DUSKULL,
+    SPECIES_CHARIZARD_MEGA_X,
+    SPECIES_VENOMOTH,
     SPECIES_GASTLY,
     SPECIES_HAUNTER,
     SPECIES_GENGAR,
+    SPECIES_MEW,
+    SPECIES_MEWTWO,
+    SPECIES_MEWTWO_MEGA_X,
+    SPECIES_MEWTWO_MEGA_Y,
+    SPECIES_SCIZOR,
+    SPECIES_CELEBI,
+    SPECIES_ALTARIA_MEGA,
+    SPECIES_LUNATONE,
+    SPECIES_SOLROCK,
+    SPECIES_MISDREAVUS,
+    SPECIES_MISMAGIUS,
+    SPECIES_BALTOY,
+    SPECIES_CLAYDOL,
     SPECIES_BELDUM,
     SPECIES_METANG,
     SPECIES_METAGROSS,
@@ -1941,6 +1958,11 @@ const u16 sFloatingSpecies[] = {
     SPECIES_UXIE,
     SPECIES_AZELF,
     SPECIES_MESPRIT,
+    SPECIES_JIRACHI,
+    SPECIES_DEOXYS,
+    SPECIES_DEOXYS_ATTACK,
+    SPECIES_DEOXYS_DEFENSE,
+    SPECIES_DEOXYS_SPEED,
     SPECIES_GIRATINA_ORIGIN,
     SPECIES_GENGAR_MEGA,
     SPECIES_LATIAS_MEGA,
@@ -1952,6 +1974,7 @@ const u16 sFloatingSpecies[] = {
     SPECIES_VIBRAVA,
     SPECIES_FLYGON,
     SPECIES_HYDREIGON,
+    SPECIES_VOLCARONA,
     SPECIES_TYNAMO,
     SPECIES_EELEKTRIK,
     SPECIES_EELEKTROSS,
@@ -1961,6 +1984,7 @@ const u16 sFloatingSpecies[] = {
     SPECIES_WEEZING,
     SPECIES_WEEZING_GALARIAN,
     SPECIES_CORSOLA_GALARIAN,
+    SPECIES_RAICHU_ALOLAN,
     SPECIES_UNOWN,
     SPECIES_UNOWN_B,
     SPECIES_UNOWN_C,
@@ -1997,10 +2021,19 @@ const u16 sFloatingSpecies[] = {
     SPECIES_ROTOM_FROST,
     SPECIES_ROTOM_MOW,
     SPECIES_ROTOM_HEAT,
+    SPECIES_CUTIEFLY,
+    SPECIES_RIBOMBEE,
+    SPECIES_SOLOSIS,
+    SPECIES_DUOSION,
+    SPECIES_REUNICLUS,
     SPECIES_COMFEY,
+    SPECIES_RESHIRAM,
+    SPECIES_ZEKROM,
     SPECIES_COSMOG,
     SPECIES_COSMOEM,
     SPECIES_LUNALA,
+    SPECIES_NECROZMA_DAWN_WINGS,
+    SPECIES_NECROZMA_ULTRA,
     SPECIES_NIHILEGO,
     SPECIES_POIPOLE,
     SPECIES_NAGANADEL,
@@ -2039,6 +2072,8 @@ bool8 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
         return TRUE;
     else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
         return TRUE; //important roost change  ..[unsure if want to make random % but no one would gamble it anyway...
+    else if (gBattleMons[battlerId].species == (SPECIES_DODUO || SPECIES_DODRIO))
+        return TRUE;//edit because flightless bird
     else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
         return TRUE; //hope this set up right/works
     //according to Mcgriffin needed make flying & roost flag true statement
