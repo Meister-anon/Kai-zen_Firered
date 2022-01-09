@@ -58,7 +58,7 @@ s16 atk_diff(void);
 s16 spatk_diff(void); //hopefully this works, and I don't actually need to define these in the .h,
 //since its not static
 bool8 IsBattlerProtected(u8 battlerId, u16 move);
-//static void ProtectBreak(void);
+//static void ProtectBreak(void); add back later when I figure it out
 
 static void SpriteCB_MonIconOnLvlUpBox(struct Sprite *sprite);
 

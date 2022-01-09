@@ -2955,7 +2955,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 45,
         .baseSpAttack = 40,
         .baseSpDefense = 50,
-        .type1 = TYPE_GROUND,
+        .type1 = TYPE_NORMAL,
         .type2 = TYPE_GROUND,
         .catchRate = 190,
         .expYield = 64,
@@ -2978,10 +2978,10 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 60,
         .baseAttack = 80,
         .baseDefense = 110,
-        .baseSpeed = 65,
+        .baseSpeed = 55,
         .baseSpAttack = 50,
         .baseSpDefense = 80,
-        .type1 = TYPE_GROUND,
+        .type1 = TYPE_NORMAL,
         .type2 = TYPE_GROUND,
         .catchRate = 75,
         .expYield = 149,
@@ -12404,8 +12404,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_DRAGON,
-        .abilities = {ABILITY_SAND_VEIL, ABILITY_NONE},
-        .abilityHidden = {ABILITY_ROUGH_SKIN, ABILITY_NONE},
+        .abilities = {ABILITY_ROUGH_SKIN, ABILITY_NONE},
+        .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -12429,8 +12429,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_DRAGON,
-        .abilities = {ABILITY_SAND_VEIL, ABILITY_NONE},
-        .abilityHidden = {ABILITY_ROUGH_SKIN, ABILITY_NONE},
+        .abilities = {ABILITY_ROUGH_SKIN, ABILITY_NONE},
+        .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -12454,11 +12454,11 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_DRAGON,
-        .abilities = {ABILITY_SAND_VEIL, ABILITY_NONE},
-        .abilityHidden = {ABILITY_ROUGH_SKIN, ABILITY_NONE},
+        .abilities = {ABILITY_ROUGH_SKIN, ABILITY_NONE},
+        .abilityHidden = {ABILITY_SIROCCO, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-    },
+    },//MAKE new garchomp ability to replace sand spit, that works only on contact
 
     [SPECIES_MUNCHLAX] =
     {
@@ -26532,7 +26532,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-    },
+    }, //ugly don't want to use
 
     [SPECIES_LUCARIO_MEGA] =
     {
@@ -26784,7 +26784,7 @@ const struct BaseStats gBaseStats[] =
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GLUTTONY, ABILITY_HUSTLE},
         #else
-            .abilities = {ABILITY_NONE, ABILITY_HUSTLE},
+            .abilities = {ABILITY_GLUTTONY, ABILITY_HUSTLE},
         #endif
         .abilityHidden = {ABILITY_THICK_FAT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
@@ -26815,7 +26815,7 @@ const struct BaseStats gBaseStats[] =
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GLUTTONY, ABILITY_HUSTLE},
         #else
-            .abilities = {ABILITY_NONE, ABILITY_HUSTLE},
+            .abilities = {ABILITY_GLUTTONY, ABILITY_HUSTLE},
         #endif
         .abilityHidden = {ABILITY_THICK_FAT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
@@ -27277,7 +27277,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_GRASS,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_FRISK, ABILITY_NONE},
+            .abilities = {ABILITY_FRISK, ABILITY_LONG_REACH},
             .abilityHidden = {ABILITY_HARVEST, ABILITY_NONE},
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
@@ -27291,10 +27291,10 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP = 60,
         .baseAttack = 80,
-        .baseDefense = 110,
-        .baseSpeed = 45,
+        .baseDefense = 80,
+        .baseSpeed = 55,
         .baseSpAttack = 50,
-        .baseSpDefense = 80,
+        .baseSpDefense = 110,
         .type1 = TYPE_FIRE,
         .type2 = TYPE_GHOST,
         .catchRate = 75,

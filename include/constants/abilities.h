@@ -291,9 +291,10 @@
 #define ABILITY_DISPIRIT_GUARD 269
 #define ABILITY_NUISANCE 270
 #define ABILITY_MULTI_TASK 271
+#define ABILITY_SIROCCO 272
 //#define ABILITY_HI_PRESSURE 271
 
-#define ABILITIES_COUNT 272 //note make perish body, only affect target, possibly
+#define ABILITIES_COUNT 273 //note make perish body, only affect target, possibly
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H
 

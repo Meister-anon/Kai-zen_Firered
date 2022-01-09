@@ -2836,6 +2836,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     ++effect;
                 }
                 break;
+                case ABILITY_SIROCCO:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                 && gBattleMons[gBattlerAttacker].hp != 0
+                 && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                 && TARGET_TURN_DAMAGED
+                 && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT))
+                {
+                    gBattleWeather = (WEATHER_SANDSTORM_TEMPORARY);
+                    BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
+                    gBattleScripting.battler = battler;
+                    ++effect;
+                }
+                break;
             case ABILITY_EFFECT_SPORE:
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                  && gBattleMons[gBattlerAttacker].hp != 0
@@ -3128,13 +3141,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_INTIMIDATE2: // 10
-            for (i = 0; i < gBattlersCount; ++i)
-            {
+            for (i = 0; i < gBattlersCount; ++i) //any battler
+            {//with intimidate and status 3 intimidate pokes
                 if (gBattleMons[i].ability == ABILITY_INTIMIDATE && (gStatuses3[i] & STATUS3_INTIMIDATE_POKES))
                 {
                     gLastUsedAbility = ABILITY_INTIMIDATE;
-                    gStatuses3[i] &= ~(STATUS3_INTIMIDATE_POKES);
-                    BattleScriptPushCursor();
+                    gStatuses3[i] &= ~(STATUS3_INTIMIDATE_POKES);// I "think" this removes the status
+                    BattleScriptPushCursor(); //so it does'nt reactivate
                     gBattlescriptCurrInstr = BattleScript_IntimidateActivates;
                     gBattleStruct->intimidateBattler = i;
                     ++effect;

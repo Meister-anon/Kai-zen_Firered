@@ -2478,7 +2478,7 @@ void SwitchInClearSetData(void)
             }
         }
     }
-    else
+    else //if not using baton pass clear status 2 on switch?
     {
         gBattleMons[gActiveBattler].status2 = 0;
         gStatuses3[gActiveBattler] = 0;
@@ -2504,7 +2504,7 @@ void SwitchInClearSetData(void)
         gDisableStructs[gActiveBattler].battlerPreventingEscape = disableStructCopy.battlerPreventingEscape;
     }
     gMoveResultFlags = 0;
-    gDisableStructs[gActiveBattler].isFirstTurn = 2;
+    gDisableStructs[gActiveBattler].isFirstTurn = 2; //??
     gLastMoves[gActiveBattler] = MOVE_NONE;
     gLastLandedMoves[gActiveBattler] = MOVE_NONE;
     gLastHitByType[gActiveBattler] = 0;

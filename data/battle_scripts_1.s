@@ -6488,7 +6488,7 @@ BattleScript_ShedSkinActivates::
 BattleScript_HandleWeatherFormChanges::
 	setbyte sBATTLER, 0
 BattleScript_WeatherFormChangesLoop::
-	trycastformdatachange
+	trycastformdatachange @PROB why cherrim change didnt work, update for cherrim species
 	addbyte sBATTLER, 1
 	jumpifbytenotequal sBATTLER, gBattlersCount, BattleScript_WeatherFormChangesLoop
 	return
