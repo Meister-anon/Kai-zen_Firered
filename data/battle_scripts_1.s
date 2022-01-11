@@ -381,6 +381,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectStrengthUpHit
 	.4byte BattleScript_EffectBodyPress
 	.4byte BattleScript_EffectAttackerDefenseDownHit
+	.4byte BattleScript_EffectMonotype
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -3300,7 +3301,19 @@ BattleScript_EffectLockOn::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectSketch::
+BattleScript_EffectSketch:: @changes should allow temp copy, just need to add stat increase
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
+	mimicattackcopy BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	printstring STRINGID_PKMNSKETCHEDMOVE
+	waitmessage 0x40
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectMonotype::
 	attackcanceler
 	attackstring
 	ppreduce

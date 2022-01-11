@@ -5522,7 +5522,9 @@ bool32 NoAliveMonsForEitherParty(void)
 }
 
 static void atk52_switchineffects(void) //important, think can put ability reset here.. also prob need add stealth rock toxic spikes to this
-{
+{ //yeah realized this is where I need to change it, need to add activation of switch in abilities again here
+    //actually side status already does what I want, what if I just make intimidate and
+    //and the like side status?
     s32 i;
 
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
@@ -9156,18 +9158,32 @@ static void atk9D_mimicattackcopy(void)
         for (i = 0; i < MAX_MON_MOVES; ++i)
         {
             if (gBattleMons[gBattlerAttacker].moves[i] == gLastMoves[gBattlerTarget])
-                break;
+                break; //believe it means do nothing if current move is same as target move
         }
         if (i == MAX_MON_MOVES)
         {
-            gBattleMons[gBattlerAttacker].moves[gCurrMovePos] = gLastMoves[gBattlerTarget];
-            if (gBattleMoves[gLastMoves[gBattlerTarget]].pp < 5)
-                gBattleMons[gBattlerAttacker].pp[gCurrMovePos] = gBattleMoves[gLastMoves[gBattlerTarget]].pp;
+            if (gCurrentMove == MOVE_SKETCH)
+            { 
+                gBattleMons[gBattlerAttacker].moves[gCurrMovePos] = gLastMoves[gBattlerTarget];
+                if (gBattleMoves[gLastMoves[gBattlerTarget]].pp < 5)
+                    gBattleMons[gBattlerAttacker].pp[gCurrMovePos] = gBattleMoves[gLastMoves[gBattlerTarget]].pp;
+                else
+                    gBattleMons[gBattlerAttacker].pp[gCurrMovePos] = BattleMoves[gLastMoves[gBattlerTarget]].pp;
+                PREPARE_MOVE_BUFFER(gBattleTextBuff1, gLastMoves[gBattlerTarget])
+                    gDisableStructs[gBattlerAttacker].mimickedMoves |= gBitTable[gCurrMovePos];
+                gBattlescriptCurrInstr += 5;
+            } //CHANGED should let you have max pp for move, or close to it..
             else
-                gBattleMons[gBattlerAttacker].pp[gCurrMovePos] = 5;
-            PREPARE_MOVE_BUFFER(gBattleTextBuff1, gLastMoves[gBattlerTarget])
-            gDisableStructs[gBattlerAttacker].mimickedMoves |= gBitTable[gCurrMovePos];
-            gBattlescriptCurrInstr += 5;
+            {
+                gBattleMons[gBattlerAttacker].moves[gCurrMovePos] = gLastMoves[gBattlerTarget];
+                if (gBattleMoves[gLastMoves[gBattlerTarget]].pp < 5)
+                    gBattleMons[gBattlerAttacker].pp[gCurrMovePos] = gBattleMoves[gLastMoves[gBattlerTarget]].pp;
+                else
+                    gBattleMons[gBattlerAttacker].pp[gCurrMovePos] = 5;
+                PREPARE_MOVE_BUFFER(gBattleTextBuff1, gLastMoves[gBattlerTarget])
+                    gDisableStructs[gBattlerAttacker].mimickedMoves |= gBitTable[gCurrMovePos];
+                gBattlescriptCurrInstr += 5;
+            }
         }
         else
         {
@@ -9448,7 +9464,7 @@ static void atkA8_copymovepermanently(void) // sketch
     }
 }
 
-static bool8 IsTwoTurnsMove(u16 move)
+static bool8 IsTwoTurnsMove(u16 move) //prob need to add on to this
 {
     if (gBattleMoves[move].effect == EFFECT_SKULL_BASH
      || gBattleMoves[move].effect == EFFECT_RAZOR_WIND

@@ -6618,7 +6618,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-    }, //change sketch to raise all stats 2 levels
+    }, //change sketch to raise all stats 2 levels  //or all but speed stat?
     //this way it can overcome the disadvantage
     //of using another mons move with worse stats,
     //and without type advanage.
