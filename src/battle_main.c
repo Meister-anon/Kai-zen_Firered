@@ -2442,7 +2442,7 @@ static void BattleStartClearSetData(void)
     }
 }
 
-void SwitchInClearSetData(void)
+void SwitchInClearSetData(void) //handles what gets reset on switchout
 {
     struct DisableStruct disableStructCopy = gDisableStructs[gActiveBattler];
     s32 i;
@@ -2451,7 +2451,7 @@ void SwitchInClearSetData(void)
     if (gBattleMoves[gCurrentMove].effect != EFFECT_BATON_PASS)
     {
         for (i = 0; i < NUM_BATTLE_STATS; ++i)
-            gBattleMons[gActiveBattler].statStages[i] = 6;
+            gBattleMons[gActiveBattler].statStages[i] = 6; //6 is 0 so this resets to normal levels
         for (i = 0; i < gBattlersCount; ++i)
         {
             if ((gBattleMons[i].status2 & STATUS2_ESCAPE_PREVENTION) && gDisableStructs[i].battlerPreventingEscape == gActiveBattler)

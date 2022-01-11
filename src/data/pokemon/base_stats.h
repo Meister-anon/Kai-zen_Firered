@@ -6591,6 +6591,8 @@ const struct BaseStats gBaseStats[] =
     //ok I've decided I'll call it "Monotype" from the one-time art
     //print process   
 
+    //increased priority of sketch, so I'll not increase speed stat
+
     [SPECIES_SMEARGLE] =
     {
         .baseHP = 55,
