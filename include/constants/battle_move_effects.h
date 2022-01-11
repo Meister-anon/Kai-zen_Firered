@@ -370,6 +370,7 @@
 #define EFFECT_STRENGTH_UP_HIT 357 //HOPE works, point is to increase attack before hit
 #define EFFECT_BODY_PRESS 358
 #define EFFECT_ATTACKER_DEFENSE_DOWN_HIT 359
+#define EFFECT_MONOTYPE 360 //new sketch
 
 #endif  // GUARD_CONSTANTS_BATTLE_MOVE_EFFECTS_H
 // gBattleScriptsForMoveEffects found at top of battle_scripts_1.s
