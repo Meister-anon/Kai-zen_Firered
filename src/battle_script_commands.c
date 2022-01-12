@@ -5534,7 +5534,8 @@ static void atk52_switchineffects(void) //important, think can put ability reset
     if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES_DAMAGED)
      && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
      && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
-     && gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE)
+     && gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
+     && !IsBattlerGrounded(gActiveBattler))
     {
         u8 spikesDmg;
 
