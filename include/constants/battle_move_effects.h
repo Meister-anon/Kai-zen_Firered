@@ -371,6 +371,7 @@
 #define EFFECT_BODY_PRESS 358
 #define EFFECT_ATTACKER_DEFENSE_DOWN_HIT 359
 #define EFFECT_MONOTYPE 360 //new sketch
+#define EFFECT_SKETCH_STAT_UP 361 //stat increase for sketch should jump to script but not use effect alone
 
 #endif  // GUARD_CONSTANTS_BATTLE_MOVE_EFFECTS_H
 // gBattleScriptsForMoveEffects found at top of battle_scripts_1.s

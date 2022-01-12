@@ -382,6 +382,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectBodyPress
 	.4byte BattleScript_EffectAttackerDefenseDownHit
 	.4byte BattleScript_EffectMonotype
+	.4byte BattleScript_SketchStatUp
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -3307,6 +3308,7 @@ BattleScript_EffectSketch:: @changes should allow temp copy, just need to add st
 	ppreduce
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
 	mimicattackcopy BattleScript_ButItFailed
+	call BattleScript_SketchStatUp @if done right checks for move sucess does stat increase then move animation
 	attackanimation
 	waitanimation
 	printstring STRINGID_PKMNSKETCHEDMOVE
@@ -5615,6 +5617,36 @@ BattleScript_AllStatsUpSpDef::
 	printfromtable gStatUpStringIds
 	waitmessage 0x40
 BattleScript_AllStatsUpRet::
+	return
+
+BattleScript_SketchStatUp::
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_ATK, 12, BattleScript_AllStatsUpAtk2
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_DEF, 12, BattleScript_AllStatsUpAtk2
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_SPATK, 12, BattleScript_AllStatsUpAtk2
+	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPDEF, 12, BattleScript_AllStatsUpRet2
+BattleScript_AllStatsUpAtk2::
+	setbyte sSTAT_ANIM_PLAYED, 0
+	playstatchangeanimation BS_ATTACKER, BIT_ATK | BIT_DEF | BIT_SPATK | BIT_SPDEF, 0
+	setstatchanger STAT_ATK, 2, FALSE
+	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_AllStatsUpDef2
+	printfromtable gStatUpStringIds
+	waitmessage 0x40
+BattleScript_AllStatsUpDef2::
+	setstatchanger STAT_DEF, 2, FALSE
+	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_AllStatsUpSpAtk2
+	printfromtable gStatUpStringIds
+	waitmessage 0x40
+BattleScript_AllStatsUpSpAtk2::
+	setstatchanger STAT_SPATK, 2, FALSE
+	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_AllStatsUpSpDef2
+	printfromtable gStatUpStringIds
+	waitmessage 0x40
+BattleScript_AllStatsUpSpDef2::
+	setstatchanger STAT_SPDEF, 2, FALSE
+	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_AllStatsUpRet2
+	printfromtable gStatUpStringIds
+	waitmessage 0x40
+BattleScript_AllStatsUpRet2::
 	return
 
 BattleScript_RapidSpinAway::

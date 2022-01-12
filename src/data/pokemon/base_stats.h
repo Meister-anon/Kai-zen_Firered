@@ -6613,9 +6613,9 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_OWN_TEMPO, ABILITY_TECHNICIAN},
+            .abilities = {ABILITY_PROTEAN, ABILITY_TECHNICIAN},
             .abilityHidden = {ABILITY_MOODY, ABILITY_SIMPLE},
-        #else
+        #else //protean and libero make both types same as last move
             .abilities = {ABILITY_OWN_TEMPO, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_WHITE,
