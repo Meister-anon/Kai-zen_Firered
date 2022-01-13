@@ -494,6 +494,7 @@
 	.byte \param1
 	.endm
 
+	@ believe this is different from ability stuff?
 	.macro switchineffects battler:req
 	.byte 0x52
 	.byte \battler

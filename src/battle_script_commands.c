@@ -5535,7 +5535,7 @@ static void atk52_switchineffects(void) //important, think can put ability reset
      && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
      && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
      && gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
-     && !IsBattlerGrounded(gActiveBattler))
+     && !IsBattlerGrounded(gActiveBattler)) //if grounded works can remove flying and levitate check
     {
         u8 spikesDmg;
 
@@ -6730,7 +6730,7 @@ static void atk76_various(void) //will need to add all these emerald various com
 
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
-    switch (gBattlescriptCurrInstr[2])
+    switch (gBattlescriptCurrInstr[2]) //belive order must match the .inc since its like a macro
     {
     case VARIOUS_CANCEL_MULTI_TURN_MOVES:
         CancelMultiTurnMoves(gActiveBattler);
@@ -6888,7 +6888,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         {
             gBattleOutcome = B_OUTCOME_MON_TELEPORTED;
         }
-        break;
+        break;//abilities isnt in base firered so switch in stuff is handled elsewhere typically
     case VARIOUS_SWITCHIN_ABILITIES:
         gBattlescriptCurrInstr += 3;
         AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gActiveBattler, 0, 0, 0);
@@ -11226,7 +11226,7 @@ static void atkEF_handleballthrow(void) //important changed
                         ballMultiplier = 10;
                     break;
                 case ITEM_TIMER_BALL:
-                    ballMultiplier = gBattleResults.battleTurnCounter + 10;
+                    ballMultiplier = (gBattleResults.battleTurnCounter * 3) + 10;
                     if (ballMultiplier > 40)
                         ballMultiplier = 40;
                     break;
