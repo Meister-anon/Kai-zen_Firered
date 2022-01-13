@@ -4730,7 +4730,7 @@ BattleScript_EffectStrengthUpHit:: @hope works put seteffectwithchance from effe
 	setgraphicalstatchangevalues
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printfromtable gStatUpStringIds
-	waitmessage 0x50
+	waitmessage 0x30
 	goto BattleScript_HitFromAccCheck @try this then swap comments and try that
 
 BattleScript_EffectSecretPower::
