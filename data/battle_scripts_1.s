@@ -4718,12 +4718,20 @@ BattleScript_EffectLowKick::
 	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
 	goto BattleScript_HitFromCritCalc
 
+@hope works based around intimidate
+@ok got the effect to work but its causing a slight menu glitch for some reason
 BattleScript_EffectStrengthUpHit:: @hope works put seteffectwithchance from effecthit, to trigger first
 	@ setmoveeffect MOVE_EFFECT_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
 	@ seteffectwithchance
+	attackcanceler
 	setstatchanger STAT_ATK, 1, FALSE
-	call BattleScript_StatUp
-	goto BattleScript_EffectHit @try this then swap comments and try that
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_HitFromAccCheck
+	@ call BattleScript_StatUp
+	setgraphicalstatchangevalues
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatUpStringIds
+	waitmessage 0x50
+	goto BattleScript_HitFromAccCheck @try this then swap comments and try that
 
 BattleScript_EffectSecretPower::
 	getsecretpowereffect
