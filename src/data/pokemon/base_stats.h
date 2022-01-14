@@ -13958,7 +13958,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_THICK_FAT, ABILITY_RATTLED},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    },//add ground moves to learnset
 
     [SPECIES_PIGNITE] =
     {
@@ -13979,7 +13979,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_FLASH_FIRE, ABILITY_FLAME_BODY},
+        .abilities = {ABILITY_FLASH_FIRE, ABILITY_SAND_RUSH},
         .abilityHidden = {ABILITY_THICK_FAT, ABILITY_RATTLED},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -14004,13 +14004,14 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_FLASH_FIRE, ABILITY_FLAME_BODY},
+        .abilities = {ABILITY_FLASH_FIRE, ABILITY_SAND_RUSH},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_THICK_FAT, ABILITY_ADAPTABILITY},
         #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     }, //need to add ground moves to learn list for this and mid evo
+    //also sandstorm for stat buff
 
     [SPECIES_OSHAWOTT] =
     {

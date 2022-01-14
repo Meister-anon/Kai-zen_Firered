@@ -1982,16 +1982,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_WATERFALL] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_5
-            .effect = EFFECT_FLINCH_HIT,
-            .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
-        #elif B_UPDATED_MOVE_DATA == GEN_4
-            .effect = EFFECT_FLINCH_HIT,
-            .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
-        #else
-            .effect = EFFECT_HIT,
-            .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
-        #endif
+        .effect = EFFECT_FLINCH_HIT,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .power = 80,
         .type = TYPE_WATER,
         .accuracy = 100,
@@ -2019,7 +2011,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-    },
+    },//I'd like to also add a flinch chance to this if I can, maybe with argument?
 
     [MOVE_SWIFT] =
     {
@@ -2329,16 +2321,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_FLASH] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_4
-            .accuracy = 100,
+        #if B_UPDATED_MOVE_DATA >= GEN_4 //since I'm strengthening effect I may lower accuracy
+            .accuracy = 85,
         #else
             .accuracy = 70,
         #endif
-        .effect = EFFECT_ACCURACY_DOWN,
+        .effect = EFFECT_FLASH,
         .power = 0,
         .type = TYPE_NORMAL,
         .pp = 20,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 35,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
@@ -3921,11 +3913,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_FUTURE_SIGHT] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_6
+        #if B_UPDATED_MOVE_DATA >= GEN_6 //actually Ill use this since there are no 120 power psychic moves
             .power = 120,
-            .accuracy = 100,
+            .accuracy = 95,
             .pp = 10,
-        #elif B_UPDATED_MOVE_DATA == GEN_5
+        #elif B_UPDATED_MOVE_DATA == GEN_5 //may lower accuracy to 95
             .power = 100,
             .accuracy = 100,
             .pp = 10,
@@ -3946,7 +3938,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ROCK_SMASH] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_4
-            .power = 40,
+            .power = 55,
         #else
             .power = 20,
         #endif
@@ -3959,7 +3951,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
-    },
+    }, //same as how I did function for hidden power make conditions to augment damage
+    //specifically if target is a rock type, want to double move power.  works!
 
     [MOVE_WHIRLPOOL] =
     {
@@ -3982,11 +3975,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_BEAT_UP] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_5
-            .power = 1,
-        #else
-            .power = 10,
-        #endif
+
+        .power = 1,
         .effect = EFFECT_BEAT_UP,
         .type = TYPE_DARK,
         .accuracy = 100,

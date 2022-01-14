@@ -1382,6 +1382,10 @@
 	.4byte \ptr
 	.endm
 
+	.macro rocksmashdamagecalc
+	.2byte 0x111
+	.endm
+
 @ various command changed to more readable macros		various \battler, is like byte goes in sequence
 	.macro cancelmultiturnmoves battler:req
 	various \battler, VARIOUS_CANCEL_MULTI_TURN_MOVES		@this is 0

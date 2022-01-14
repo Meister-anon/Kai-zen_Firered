@@ -62,7 +62,7 @@ bool8 IsBattlerProtected(u8 battlerId, u16 move);
 
 static void SpriteCB_MonIconOnLvlUpBox(struct Sprite *sprite);
 
-static void atk00_attackcanceler(void);
+static void atk00_attackcanceler(void); //all commands must be ordered in .inc file
 static void atk01_accuracycheck(void);
 static void atk02_attackstring(void);
 static void atk03_ppreduce(void);
@@ -335,6 +335,7 @@ static void atk10D_setattackerstatus3(void);
 static void atk10E_setmultihitcounter2(void);
 static void atk10F_setiondeluge(void);
 static void atk110_setuserstatus3(void);
+static void atk111_rocksmashdamagecalc(void);
 
 void (* const gBattleScriptingCommandsTable[])(void) =
 {
@@ -611,6 +612,7 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atk10E_setmultihitcounter2,
     atk10F_setiondeluge,
     atk110_setuserstatus3,
+    atk111_rocksmashdamagecalc,
 };
 
 struct StatFractions
@@ -1068,7 +1070,7 @@ static const u16 sMultiTaskExcludedEffects[] =
     EFFECT_RAMPAGE,
     //EFFECT_OHKO, //no pokemon I'm giving this to normally learns a ohko move, so I may leave in for something potentially fun for the player.
     //EFFECT_HIT,  //for testing   test passed
-    //EFFECT_TWO_TURNS_ATTACK
+    //EFFECT_TWO_TURNS_ATTACK  because I'm not using two turns attack??  doube check this
     MULTI_TASK_FORBIDDEN_END
 };
 
@@ -10674,12 +10676,12 @@ static void atkD7_setyawn(void)
 }
 
 static void atkD8_setdamagetohealthdifference(void) //make case here for final gambit
-{
+{//remember wanted to change how final gambit works more damage lower hp or it equals health lost?
     if (gBattleMons[gBattlerTarget].hp <= gBattleMons[gBattlerAttacker].hp)
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
-    else
+    else //should prob make new command instead actually
     {
         gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - gBattleMons[gBattlerAttacker].hp;
         gBattlescriptCurrInstr += 5;
@@ -12058,4 +12060,22 @@ static void atk110_setuserstatus3(void)
             gDisableStructs[gBattlerAttacker].laserFocusTimer = 2;
         gBattlescriptCurrInstr += 9;
     }
+
+}
+
+static void atk111_rocksmashdamagecalc(void)
+{
+    if (gCurrentMove == MOVE_ROCK_SMASH)
+    {
+        gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+
+        /*if (gBattleMons[gBattlerTarget].type1 != TYPE_FIGHTING
+            || gBattleMons[gBattlerTarget].type2 != TYPE_FIGHTING)
+            gDynamicBasePower = gBattleMoves[gCurrentMove].power;*/
+
+        if (gBattleMons[gBattlerTarget].type1 == TYPE_ROCK
+            || gBattleMons[gBattlerTarget].type2 == TYPE_ROCK)
+            gDynamicBasePower *= 2;
+    }
+    ++gBattlescriptCurrInstr;
 }

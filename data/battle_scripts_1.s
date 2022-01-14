@@ -382,7 +382,9 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectBodyPress
 	.4byte BattleScript_EffectAttackerDefenseDownHit
 	.4byte BattleScript_EffectMonotype
-	.4byte BattleScript_SketchStatUp
+	.4byte BattleScript_EffectSketchStatUp
+	.4byte BattleScript_EffectRockSmash
+	.4byte BattleScript_EffectFlash
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -2102,6 +2104,7 @@ BattleScript_EffectPlaceholder:
 
 
 BattleScript_EffectHit::
+	jumpifmove MOVE_ROCK_SMASH, BattleScript_EffectRockSmash
 	jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler
 	jumpifnostatus3 BS_TARGET, STATUS3_UNDERWATER, BattleScript_HitFromAtkCanceler
 	orword gHitMarker, HITMARKER_IGNORE_UNDERWATER
@@ -2425,7 +2428,7 @@ BattleScript_EffectStatUpAfterAtkCanceler::
 	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_StatUpEnd
 	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, 2, BattleScript_StatUpAttackAnim
 	pause 0x20
-	goto BattleScript_StatUpPrintString
+	goto BattleScript_StatUpCantGoHigher
 
 BattleScript_StatUpAttackAnim::
 	attackanimation
@@ -2437,6 +2440,13 @@ BattleScript_StatUpPrintString::
 	printfromtable gStatUpStringIds
 	waitmessage 0x40
 BattleScript_StatUpEnd::
+	goto BattleScript_MoveEnd
+
+BattleScript_StatUpCantGoHigher::
+	attackanimation
+	waitanimation
+	printfromtable gStatUpStringIds
+	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
 @BattleScript_StatUp::
@@ -2461,6 +2471,18 @@ BattleScript_EffectAccuracyDown::
 	setstatchanger STAT_ACC, 1, TRUE
 	goto BattleScript_EffectStatDown
 
+@HOPE works if eerror would be because seteffectwithchance is not at end of script hope not an issue dont know how else to deal with it
+@had a weird thing where move missed but it still caused flinh effect, think its because I had seteffectwithchance before an accuracy check
+@that worked last fix is to still do move animation even when stat wont go lower
+BattleScript_EffectFlash::
+	setmoveeffect MOVE_EFFECT_FLINCH
+	attackcanceler
+	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailedAtkStringPpReduce
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	seteffectwithchance
+	setstatchanger STAT_ACC, 1, TRUE
+	goto BattleScript_StatDownFromAttackString
+
 BattleScript_EffectSpecialAttackDown:
 	setstatchanger STAT_SPATK, 1, TRUE
 	goto BattleScript_EffectStatDown
@@ -2475,13 +2497,16 @@ BattleScript_EffectStatDown::
 	attackcanceler
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailedAtkStringPpReduce
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+BattleScript_StatDownFromAttackString::
 	attackstring
 	ppreduce
 	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_StatDownEnd
 	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, 2, BattleScript_StatDownDoAnim
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 3, BattleScript_StatDownEnd
 	pause 0x20
-	goto BattleScript_StatDownPrintString
+	@goto BattleScript_StatDownPrintString
+	goto BattleScript_StatDownCantGoLower
+@believe its referring to gStatDownStringIds less than 2 is stat fell, 2 is cant lower
 
 BattleScript_StatDownDoAnim::
 	attackanimation
@@ -2492,6 +2517,13 @@ BattleScript_StatDownPrintString::
 	printfromtable gStatDownStringIds
 	waitmessage 0x40
 BattleScript_StatDownEnd::
+	goto BattleScript_MoveEnd
+
+BattleScript_StatDownCantGoLower::
+	attackanimation
+	waitanimation
+	printfromtable gStatDownStringIds
+	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
 BattleScript_StatDown::
@@ -2583,7 +2615,7 @@ BattleScript_DoMultiHit::
 	decrementmultihit BattleScript_MultiHitLoop
 	goto BattleScript_MultiHitPrintStrings
 
-BattleScript_MultiHitNoMoreHits::
+BattleScript_MultiHitNoMoreHits:: @@MAKE multihit miss script specifically for fury cutter to print miss & number hits
 	pause 0x20
 BattleScript_MultiHitPrintStrings::
 	resultmessage
@@ -3308,7 +3340,7 @@ BattleScript_EffectSketch:: @changes should allow temp copy, just need to add st
 	ppreduce
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
 	mimicattackcopy BattleScript_ButItFailed
-	call BattleScript_SketchStatUp @if done right checks for move sucess does stat increase then move animation
+	call BattleScript_EffectSketchStatUp @if done right checks for move sucess does stat increase then move animation
 	attackanimation
 	waitanimation
 	printstring STRINGID_PKMNSKETCHEDMOVE
@@ -3664,6 +3696,7 @@ BattleScript_SwaggerTryConfuse::
 
 @Need to fix this so it displays miss message
 @ and then number of hits
+@ accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE  think I need that
 BattleScript_EffectFuryCutter::
 	attackcanceler
 	attackstring
@@ -3736,6 +3769,12 @@ BattleScript_EffectReturn::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	happinesstodamagecalculation
+	goto BattleScript_HitFromAtkString
+
+BattleScript_EffectRockSmash::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	rocksmashdamagecalc
 	goto BattleScript_HitFromAtkString
 
 BattleScript_EffectPresent::
@@ -5627,7 +5666,7 @@ BattleScript_AllStatsUpSpDef::
 BattleScript_AllStatsUpRet::
 	return
 
-BattleScript_SketchStatUp::
+BattleScript_EffectSketchStatUp::
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_ATK, 12, BattleScript_AllStatsUpAtk2
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_DEF, 12, BattleScript_AllStatsUpAtk2
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_SPATK, 12, BattleScript_AllStatsUpAtk2
