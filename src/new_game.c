@@ -29,6 +29,7 @@
 #include "berry_powder.h"
 #include "pokemon_jump.h"
 #include "event_scripts.h"
+#include "rtc.h"
 //may be able to ues some of these functions to make a new file, for "new game+" just need be selective in which things get reset.
 //my idea for new game place, was to keep all pokemon, change level (probably do by changing amount of exp) of party pokemon, 
 //keep all items, so don't affect pc,  and keep track of when the new game +/ number of playthroughs.  Since i removed link battle, maybe I can have playthrough numbers shown 
@@ -111,7 +112,7 @@ void ResetMenuAndMonGlobals(void)
 void NewGameInitData(void)
 {
     u8 rivalName[PLAYER_NAME_LENGTH + 1];
-
+	RtcReset();
     StringCopy(rivalName, gSaveBlock1Ptr->rivalName);
     gDifferentSaveFile = TRUE;
     gSaveBlock2Ptr->encryptionKey = 0;

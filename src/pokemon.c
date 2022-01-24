@@ -43,7 +43,7 @@
 //#include "data/pokemon/form_species_table_pointers.h"
 //#include "data/pokemon/form_species_tables.h"
 //#include "pokemon.h"
-//#include "rtc.h"    // weird but failure to build pokemon.s was literally all becuase of these two, inclusions that I guess I didn't add to repository correctly
+#include "rtc.h"    // weird but failure to build pokemon.s was literally all becuase of these two, inclusions that I guess I didn't add to repository correctly
 //#include "species_names.h"
 // oh wait include weather doesn't exist, in pokeemerald its include/constants weather.h    ... facepalm
 //wrong again the problem was literally all from the species names include??!!
@@ -6016,18 +6016,18 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 break;
             // FR/LG removed the time of day evolutions due to having no RTC.
             case EVO_FRIENDSHIP_DAY:
-                /*
+                
                 RtcCalcLocalTime();
                 if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && friendship >= 220)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
-                */
+                
                 break;
             case EVO_FRIENDSHIP_NIGHT:
-                /*
+                
                 RtcCalcLocalTime();
                 if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && friendship >= 220)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
-                */
+                
                 break;
             case EVO_LEVEL:
                 if (gEvolutionTable[species][i].param <= level)

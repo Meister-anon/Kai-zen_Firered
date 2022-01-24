@@ -84,7 +84,7 @@ u16 ConvertDateToDayCount(u8 year, u8 month, u8 day)
     dayCount += day;
 
     return dayCount;
-}
+}//left normal for people to use berry glitch if they want
 
 u16 RtcGetDayCount(struct SiiRtcInfo *rtc)
 {

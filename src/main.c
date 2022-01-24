@@ -15,6 +15,9 @@
 #include "scanline_effect.h"
 #include "save_failed_screen.h"
 #include "quest_log.h"
+#include "rtc.h"
+#include "siirtc.h"
+#include "main.h"
 
 extern u32 intr_main[];
 
@@ -85,6 +88,7 @@ EWRAM_DATA u16 gTrainerId = 0;
 static void UpdateLinkAndCallCallbacks(void);
 static void InitMainCallbacks(void);
 static void CallCallbacks(void);
+static void SeedRngWithRtc(void);
 static void ReadKeys(void);
 void InitIntrHandlers(void);
 static void WaitForVBlank(void);
@@ -131,11 +135,13 @@ void AgbMain()
     InitKeys();
     InitIntrHandlers();
     m4aSoundInit();
+	RtcInit();
     EnableVCountIntrAtLine150();
     InitRFU();
     CheckForFlashMemory();
     InitMainCallbacks();
     InitMapMusic();
+	SeedRngWithRtc();
     ClearDma3Requests();
     ResetBgs();
     InitHeap(gHeap, HEAP_SIZE);
@@ -256,6 +262,12 @@ void EnableVCountIntrAtLine150(void)
     EnableInterrupts(INTR_FLAG_VCOUNT);
 }
 
+static void SeedRngWithRtc(void)
+{
+    u32 seed = RtcGetMinuteCount();
+    seed = (seed >> 16) ^ (seed & 0xFFFF);
+    SeedRng(seed);
+}
 
 void InitKeys(void)
 {
@@ -461,6 +473,7 @@ void DoSoftReset(void)
     DmaStop(1);
     DmaStop(2);
     DmaStop(3);
+	SiiRtcProtect();
     SoftReset(RESET_ALL & ~RESET_SIO_REGS);
 }
 
