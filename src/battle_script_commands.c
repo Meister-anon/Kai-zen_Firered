@@ -10233,7 +10233,7 @@ static void atkC2_selectfirstvalidtarget(void)
 
 static void atkC3_trysetfutureattack(void)
 {
-    if (gWishFutureKnock.futureSightCounter[gBattlerTarget] != 0)
+    if (gWishFutureKnock.futureSightCounter[gBattlerTarget] != 0) //prevents spamming each turn
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
@@ -10258,7 +10258,21 @@ static void atkC3_trysetfutureattack(void)
             gBattleCommunication[MULTISTRING_CHOOSER] = 0;
         gBattlescriptCurrInstr += 5;
     }
-}
+}//made add a way to do a second future sight before timer is up for a bit of strategy
+//should be simple as adding a 2nd futureSightCounter, with same effects
+//but make it default to counter2 if the first counter isn't 0.
+//then add the anti spam thing to the counter 2, so if both counters are being used
+//nothing will be done the move will fail.
+
+//problem is there's no way to make the player aware of this change,
+//so what I think I'll do is add a special event to lavender town
+//after you defeat cubone's mother the priest will say there still apears to be 
+//a dark presence here. when you reach the top of the tower
+
+// the lights should flash and a mismagius should appear
+//I'll give it pain split and future sight to better make use 
+//of the move change and show off the effect
+//as well as give you something special you can potentially catch there.
 
 static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no stab,
 // I'm going to augment this add psuedo stab by increasing damage if pokemon attacking is dark type
@@ -10617,7 +10631,7 @@ static void atkD3_trycopyability(void) // role play
 
 static void atkD4_trywish(void)
 {
-    switch (gBattlescriptCurrInstr[1])
+    switch (gBattlescriptCurrInstr[1]) //figure out how this works
     {
     case 0: // use wish
         if (gWishFutureKnock.wishCounter[gBattlerAttacker] == 0)
