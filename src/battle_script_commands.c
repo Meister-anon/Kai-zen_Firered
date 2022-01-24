@@ -8496,7 +8496,13 @@ static u8 ChangeStatBuffs(s8 statValue, u8 statId, u8 flags, const u8 *BS_ptr)
 }//because I changed the battle script I believe this should play the animation
 //but still not affect the stats
 //it worked animation played, message played, and it still activated the flinch effect
-//will need to update ai to be able to switch to clense stats in a way I want
+//will need to update ai to be able to switch to clense stats in a way I want.
+
+//will have to give some leeway since ai countering everything like unbound
+//insane mode isn't fun, maybe do nothing if they'd die when you're stat boosting
+//but switch to their highest defense/resisting mon next
+//or switch out the mon after it takes the attack if it calculates it can survive it.
+//to the high defense mon.
 
 static void atk89_statbuffchange(void)
 {
