@@ -2428,6 +2428,7 @@ BattleScript_EffectStatUpAfterAtkCanceler::
 	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_StatUpEnd
 	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, 2, BattleScript_StatUpAttackAnim
 	pause 0x20
+	@goto BattleScript_StatUpPrintString
 	goto BattleScript_StatUpCantGoHigher
 
 BattleScript_StatUpAttackAnim::
@@ -2445,15 +2446,13 @@ BattleScript_StatUpEnd::
 BattleScript_StatUpCantGoHigher::
 	attackanimation
 	waitanimation
+	goto BattleScript_StatUpPrintString
+
+BattleScript_StatUp::
+	playanimation BS_EFFECT_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printfromtable gStatUpStringIds
 	waitmessage 0x40
-	goto BattleScript_MoveEnd
-
-@BattleScript_StatUp::
-@	playanimation BS_EFFECT_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-@	printfromtable gStatUpStringIds
-@	waitmessage 0x40
-@	return
+	return
 
 BattleScript_EffectAttackDown::
 	setstatchanger STAT_ATK, 1, TRUE
@@ -2522,9 +2521,7 @@ BattleScript_StatDownEnd::
 BattleScript_StatDownCantGoLower::
 	attackanimation
 	waitanimation
-	printfromtable gStatDownStringIds
-	waitmessage 0x40
-	goto BattleScript_MoveEnd
+	goto BattleScript_StatDownPrintString
 
 BattleScript_StatDown::
 	playanimation BS_EFFECT_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1

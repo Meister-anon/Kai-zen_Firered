@@ -6388,10 +6388,10 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_HOUNDOUR] =
     {
         .baseHP = 45,
-        .baseAttack = 60,
+        .baseAttack = 75,
         .baseDefense = 30,
         .baseSpeed = 65,
-        .baseSpAttack = 80,
+        .baseSpAttack = 70,
         .baseSpDefense = 50,
         .type1 = TYPE_DARK,
         .type2 = TYPE_FIRE,
@@ -6415,10 +6415,10 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_HOUNDOOM] =
     {
         .baseHP = 75,
-        .baseAttack = 90,
+        .baseAttack = 100,
         .baseDefense = 50,
         .baseSpeed = 95,
-        .baseSpAttack = 110,
+        .baseSpAttack = 95,
         .baseSpDefense = 80,
         .type1 = TYPE_DARK,
         .type2 = TYPE_FIRE,

@@ -6028,7 +6028,7 @@ static void atk63_jumptocalledmove(void)
     gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect];
 }
 
-static void atk64_statusanimation(void)
+static void atk64_statusanimation(void)//eventually figure update this for spirit lock
 {
     if (!gBattleControllerExecFlags)
     {
@@ -8488,12 +8488,15 @@ static u8 ChangeStatBuffs(s8 statValue, u8 statId, u8 flags, const u8 *BS_ptr)
         gBattleMons[gActiveBattler].statStages[statId] = 0;
     if (gBattleMons[gActiveBattler].statStages[statId] > 0xC)
         gBattleMons[gActiveBattler].statStages[statId] = 0xC;
-    if (gBattleCommunication[MULTISTRING_CHOOSER] == 2 && flags & STAT_CHANGE_BS_PTR)
-        gMoveResultFlags |= MOVE_RESULT_MISSED;
+    /*if (gBattleCommunication[MULTISTRING_CHOOSER] == 2 && flags & STAT_CHANGE_BS_PTR)
+        gMoveResultFlags |= MOVE_RESULT_MISSED;*/ //according to GriffinR this is why animation change didn't work
     if (gBattleCommunication[MULTISTRING_CHOOSER] == 2 && !(flags & STAT_CHANGE_BS_PTR))
         return STAT_CHANGE_DIDNT_WORK;
     return STAT_CHANGE_WORKED;
-}
+}//because I changed the battle script I believe this should play the animation
+//but still not affect the stats
+//it worked animation played, message played, and it still activated the flinch effect
+//will need to update ai to be able to switch to clense stats in a way I want
 
 static void atk89_statbuffchange(void)
 {
