@@ -206,7 +206,7 @@ gMoveDescription_SeismicToss:: @ 84839F8
 	.string "A gravity-fed throw\nthat causes damage\nmatching the user's\nlevel.$"
 
 gMoveDescription_Strength:: @ 8483A3A
-	.string "The foe is slugged\nat maximum power.\nCan also be used\nto move boulders.$"
+	.string "The user raises\nits ATK stat,\nthen slugs the foe\nat maximum power.$"
 
 gMoveDescription_Absorb:: @ 8483A82
 	.string "An attack that\nabsorbs half the\ndamage it inflicted\nto restore HP.$"
@@ -440,7 +440,7 @@ gMoveDescription_Spore:: @ 8484EE5
 	.string "The user scatters\nbursts of fine\nspores that induce\nsleep.$"
 
 gMoveDescription_Flash:: @ 8484F20
-	.string "A blast of light\nthat cuts the foe's\naccuracy. It also\nilluminates caves.$"
+	.string "A blast of light\nthat cuts the foe's\naccuracy. It also\may cause flinch.$"
 
 gMoveDescription_Psywave:: @ 8484F6A
 	.string "The foe is attacked\nwith an odd, hot\nenergy wave that\nvaries in intensity.$"
@@ -743,7 +743,7 @@ gMoveDescription_FutureSight:: @ 8486A62
 	.string "Two turns after\nthis move is used,\nthe foe is attacked\npsychically.$"
 
 gMoveDescription_RockSmash:: @ 8486AA6
-	.string "An attack that may\nalso cut DEFENSE.\nIt can also smash\ncracked boulders.$"
+	.string "An attack that may\nalso cut DEFENSE.\nIts power increases\nagainst rock types.$"
 
 gMoveDescription_Whirlpool:: @ 8486AEF
 	.string "The foe is trapped\nin a fast, vicious\nwhirlpool for two\nto five turns.$"
