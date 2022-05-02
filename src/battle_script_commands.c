@@ -3371,22 +3371,24 @@ static void atk19_tryfaintmon(void)
 {
     const u8 *BS_ptr;
 
-    if (gBattlescriptCurrInstr[2] != 0)
+    if (gBattlescriptCurrInstr[2] != 0) //0 corresponses to BS_Target so this I think is for fainting
+        //anyone but the target attacked that turn   
+        //idk maybe not?
     {
         gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
-        if (gHitMarker & HITMARKER_FAINTED(gActiveBattler))
+        if (gHitMarker & HITMARKER_FAINTED(gActiveBattler))  //believe this is for self-faint
         {
             BS_ptr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
             BattleScriptPop();
             gBattlescriptCurrInstr = BS_ptr;
             gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~(SIDE_STATUS_SPIKES_DAMAGED);
         }
-        else
+        else //think jump to another instruction
         {
             gBattlescriptCurrInstr += 7;
         }
     }
-    else
+    else  
     {
         u8 battlerId;
 

@@ -1783,6 +1783,9 @@ u8 AtkCanceller_UnableToUseMove(void)
                     { //ok I want to keep the sucess condition the same, but split the failure condition.
                         //into different effects,
                         //1 attack a random target
+                        //ok understand what I did, I have to separte activation conditions for if its a status move
+                        //or not and make sure the move does at least 1/16 health damage, 
+                        //if its a status it'll do normal confusion self damage I didn't remove that.
                         gBattlerTarget = gBattlerAttacker;
                         if (gBattleMoveDamage < gBattleMons[gBattlerTarget].maxHP / 16
                             && gBattleMovePower > 0)
@@ -1797,8 +1800,8 @@ u8 AtkCanceller_UnableToUseMove(void)
                             gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                         }
                     }
-                    gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused;
-                }
+                    gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused; //want to make sure still takes confusion damage 
+                } //even for status move or 0 power move, it makes sense they attempt ot attack but fail and hurt themselves.
                 else // snapped out of confusion
                 {
                     BattleScriptPushCursor();
@@ -3000,7 +3003,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 if (effect)
                 {
-                    switch (effect)
+                    switch (effect) //this switch case tells the effect values what to do
+                        //maybe I can change intimidate and synchronize to a switch case to do the swtich in actiation I want?
                     {
                     case 1: // status cleared
                         gBattleMons[battler].status1 = 0;
