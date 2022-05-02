@@ -5081,7 +5081,7 @@ BattleScript_FaintedMonTryChooseAnother::
 	switchhandleorder BS_ATTACKER, 2
 	jumpifbyte CMP_EQUAL, gBattleCommunication, 6, BattleScript_FaintedMonChooseAnother
 	atknameinbuff1
-	resetintimidatetracebits BS_ATTACKER
+	resetintimidatetracebits BS_ATTACKER  @check what this means think it allows intimidate to cast again if sent out
 	hpthresholds2 BS_ATTACKER
 	printstring STRINGID_RETURNMON
 	switchoutabilities BS_ATTACKER
