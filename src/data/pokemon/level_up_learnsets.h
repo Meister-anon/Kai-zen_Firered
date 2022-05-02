@@ -135,6 +135,7 @@ static const u16 sBlastoiseLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TAIL_WHIP),
     LEVEL_UP_MOVE(1, MOVE_BUBBLE),
     LEVEL_UP_MOVE(1, MOVE_WITHDRAW),
+    LEVEL_UP_MOVE(1, MOVE_IRON_DEFENSE),
     LEVEL_UP_MOVE(4, MOVE_TAIL_WHIP),
     LEVEL_UP_MOVE(7, MOVE_BUBBLE),
     LEVEL_UP_MOVE(10, MOVE_WITHDRAW),
@@ -142,11 +143,15 @@ static const u16 sBlastoiseLevelUpLearnset[] = {
     LEVEL_UP_MOVE(19, MOVE_BITE),
     LEVEL_UP_MOVE(25, MOVE_RAPID_SPIN),
     LEVEL_UP_MOVE(31, MOVE_PROTECT),
+    LEVEL_UP_MOVE(36, MOVE_FLASH_CANNON),
+    LEVEL_UP_MOVE(36, MOVE_IRON_DEFENSE),
     LEVEL_UP_MOVE(42, MOVE_RAIN_DANCE),
+    LEVEL_UP_MOVE(46, MOVE_HEAVY_SLAM),
+    LEVEL_UP_MOVE(51, MOVE_METAL_BURST),
     LEVEL_UP_MOVE(55, MOVE_SKULL_BASH),
     LEVEL_UP_MOVE(68, MOVE_HYDRO_PUMP),
     LEVEL_UP_END
-};
+};  //figure out how to balance this right for added steel moves
 
 static const u16 sCaterpieLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
