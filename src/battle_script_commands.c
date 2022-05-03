@@ -6760,9 +6760,9 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattleCommunication[0] = 0;
         break;
     case VARIOUS_RESET_INTIMIDATE_TRACE_BITS:
-        gSpecialStatuses[gActiveBattler].intimidatedMon = 0;
-        gSpecialStatuses[gActiveBattler].traced = 0;
-        break;
+        gSpecialStatuses[gActiveBattler].intimidatedMon = 0;//pairs with battle_util.c
+        gSpecialStatuses[gActiveBattler].traced = 0; //BattleScript_IntimidateActivates
+        break; // & trygetintimidatetarget command in this file
     case VARIOUS_UPDATE_CHOICE_MOVE_ON_LVL_UP:
         if (gBattlerPartyIndexes[0] == gBattleStruct->expGetterMonId || gBattlerPartyIndexes[2] == gBattleStruct->expGetterMonId)
         {
@@ -10739,7 +10739,7 @@ static void atkDA_tryswapabilities(void) // skill swap . //remember need to remo
         u16 abilityAtk = gBattleMons[gBattlerAttacker].ability;
         
         gBattleMons[gBattlerAttacker].ability = gBattleMons[gBattlerTarget].ability;
-        gBattleMons[gBattlerTarget].ability = abilityAtk;
+        gBattleMons[gBattlerTarget].ability = abilityAtk;  //potentially use this as an example of how to swap hp for wonderguard swap
 
             gBattlescriptCurrInstr += 5;
     }
@@ -10895,17 +10895,20 @@ static void atkE1_trygetintimidatetarget(void)
 {
     u8 side;
 
-    gBattleScripting.battler = gBattleStruct->intimidateBattler;
-    side = GetBattlerSide(gBattleScripting.battler);
+    gBattleScripting.battler = gBattleStruct->intimidateBattler;//
+    side = GetBattlerSide(gBattleScripting.battler); //
     PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gBattleMons[gBattleScripting.battler].ability)
-    for (;gBattlerTarget < gBattlersCount; ++gBattlerTarget)
+    for (;gBattlerTarget < gBattlersCount; ++gBattlerTarget) //loops through battlers to find mon on opposite side to mon with ability
         if (GetBattlerSide(gBattlerTarget) != side && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
-            break;
+            break; //if mon is not on opposite side, or is in an invulnerable state undergruond underwater or in fly it will break
+    //not activate on that potential target
     if (gBattlerTarget >= gBattlersCount)
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     else
         gBattlescriptCurrInstr += 5;
-}
+}//this prob important for my implementaiton of intimidate, since
+//I need to have selective targetting, since I don't want it to reactivate
+//for mon that have already been intimidated.  unless i switch in again
 
 static void atkE2_switchoutabilities(void)
 {
