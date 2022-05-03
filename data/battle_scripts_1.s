@@ -6636,7 +6636,7 @@ BattleScript_IntimidateActivationAnimLoop::
 	printstring STRINGID_PKMNCUTSATTACKWITH
 	waitmessage 0x40
 BattleScript_IntimidateFail::
-	addbyte gBattlerTarget, 1
+	addbyte gBattlerTarget, 1 @changing this value keeps the command from looping on single target
 	goto BattleScript_IntimidateActivationAnimLoop
 
 BattleScript_IntimidateEnd::
