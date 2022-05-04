@@ -5529,7 +5529,7 @@ static void atk52_switchineffects(void) //important, think can put ability reset
 { //yeah realized this is where I need to change it, need to add activation of switch in abilities again here
     //actually side status already does what I want, what if I just make intimidate and
     //and the like side status?
-    s32 i;
+    s32 i; //yeah I believe I can do trace intimidate resets here
 
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     UpdateSentPokesToOpponentValue(gActiveBattler);
