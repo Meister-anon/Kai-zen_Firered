@@ -6898,7 +6898,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_TRACE, gActiveBattler, 0, 0, 0);
-        return;
+        return; //not sure what this does
     case VARIOUS_SAVE_TARGET:
         gBattleStruct->savedBattlerTarget = gBattlerTarget;
         break;

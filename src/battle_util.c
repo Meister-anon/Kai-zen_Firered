@@ -3079,7 +3079,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (gBattleMons[i].ability == ABILITY_INTIMIDATE && gStatuses3[i] & STATUS3_INTIMIDATE_POKES)
                 {
                     gLastUsedAbility = ABILITY_INTIMIDATE;
-                    gStatuses3[i] &= ~(STATUS3_INTIMIDATE_POKES);
+                    gStatuses3[i] &= ~(STATUS3_INTIMIDATE_POKES); //need test this may prevent ativation loop
                     BattleScriptPushCursorAndCallback(BattleScript_IntimidateActivatesEnd3);
                     gBattleStruct->intimidateBattler = i;
                     ++effect;
@@ -3088,7 +3088,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_TRACE: // 11
-            for (i = 0; i < gBattlersCount; ++i)
+            for (i = 0; i < gBattlersCount; ++i) //handles ability targetting
             {
                 if (gBattleMons[i].ability == ABILITY_TRACE && (gStatuses3[i] & STATUS3_TRACE))
                 {
@@ -4552,7 +4552,7 @@ u32 IsAbilityOnSide(u32 battlerId, u32 ability)
         return 0;
 }
 
-u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability)
+u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability) // use for intimidate on enemy team
 {
     return IsAbilityOnSide(BATTLE_OPPOSITE(battlerId), ability);
 }
@@ -4599,7 +4599,7 @@ u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability)
         return id;
 
     return 0;
-}*/
+}*/  //implemented in battle_main
 
 bool32 CanBattlerEscape(u32 battlerId) // no ability check
 {
