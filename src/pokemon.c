@@ -6627,7 +6627,7 @@ u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm)
     {
         return 0;
     }
-    else if (tm < 32)
+    else if (tm < 32) //this may be hex 32, since 32 in hex is 50 in decimal?
     {
         u32 mask = 1 << tm;
         return sTMHMLearnsets[species][0] & mask;

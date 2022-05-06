@@ -4552,7 +4552,7 @@ static void HandleAction_NothingIsFainted(void)
                     | HITMARKER_CHARGING | HITMARKER_x4000000);
 }
 
-static void HandleAction_ActionFinished(void)
+static void HandleAction_ActionFinished(void) //may be important for intimidate synchronize adn trace changes
 {
     ++gCurrentTurnActionNumber;
     gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];

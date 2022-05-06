@@ -2921,8 +2921,8 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
             if (gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_POISON
              || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_TOXIC
              || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_PARALYSIS
-             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_ATTRACT
-             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_BURN) //figure out how to add infatuation here.
+             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_ATTRACT // doestn' yet exist, I'm trying to add
+             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_BURN) //figure out how infatuation works
              {
                 u8 *synchronizeEffect = &gBattleStruct->synchronizeMoveEffect;
                 *synchronizeEffect = gBattleCommunication[MOVE_EFFECT_BYTE]; //believe I'll need to 
@@ -5529,7 +5529,28 @@ static void atk52_switchineffects(void) //important, think can put ability reset
 { //yeah realized this is where I need to change it, need to add activation of switch in abilities again here
     //actually side status already does what I want, what if I just make intimidate and
     //and the like side status?
-    s32 i; //yeah I believe I can do trace intimidate resets here
+    //yeah I believe I can do trace intimidate resets here
+
+    //will use a switch case to make this more efficient
+    //use GetBattlerAbility function to returnability 
+    //with IsAbilityOnOpposingSide function think if I put it inside the other
+    //it'll return the battle id, then I can use that to return the ability itself
+    //
+    //use switch to check if its intimidate, trace, or synchronize
+
+    //intimidate lower avtivebattler attack stat, and play the intimidate text
+    //since can't use intimidate script will have to make new text to run
+
+    //for trace check if ability is already the same as the mon with trace
+    //and give a percent chance to reactivate trace for a new ability
+    //or just make it always activate just to reveil what ability is.
+    //yeah I like that better
+
+    //make synchronize the one that works on chance, 
+    //and change ability so self afflicted status also activates the ability
+
+    //all abilities use active battler for targetting
+    s32 i; 
 
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     UpdateSentPokesToOpponentValue(gActiveBattler);

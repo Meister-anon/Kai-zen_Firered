@@ -4320,7 +4320,7 @@ static void sub_8124DE0(void)
     }
 }
 
-static void sub_8124E48(void)
+static void sub_8124E48(void) //check emerald if tms
 {
     if (ItemId_GetPocket(gSpecialVar_ItemId) == POCKET_TM_CASE
      && PSA_IsCancelDisabled() == TRUE)
@@ -4337,7 +4337,7 @@ static void sub_8124E48(void)
     }
 }
 
-static void sub_8124EFC(void)
+static void sub_8124EFC(void) //check emerald if is tms
 {
     if (PSA_IsCancelDisabled() == TRUE)
     {

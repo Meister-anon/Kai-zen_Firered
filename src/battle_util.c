@@ -3049,7 +3049,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gHitMarker &= ~(HITMARKER_SYNCHRONISE_EFFECT);
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                 if (gBattleStruct->synchronizeMoveEffect == MOVE_EFFECT_TOXIC)
-                    gBattleStruct->synchronizeMoveEffect = MOVE_EFFECT_POISON;
+                    gBattleStruct->synchronizeMoveEffect = MOVE_EFFECT_TOXIC; //changed so it transfers bad poison
                 gBattleCommunication[MOVE_EFFECT_BYTE] = gBattleStruct->synchronizeMoveEffect + MOVE_EFFECT_AFFECTS_USER;
                 gBattleScripting.battler = gBattlerTarget;
                 BattleScriptPushCursor();
@@ -3064,7 +3064,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gHitMarker &= ~(HITMARKER_SYNCHRONISE_EFFECT);
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                 if (gBattleStruct->synchronizeMoveEffect == MOVE_EFFECT_TOXIC)
-                    gBattleStruct->synchronizeMoveEffect = MOVE_EFFECT_POISON;
+                    gBattleStruct->synchronizeMoveEffect = MOVE_EFFECT_TOXIC;
                 gBattleCommunication[MOVE_EFFECT_BYTE] = gBattleStruct->synchronizeMoveEffect;
                 gBattleScripting.battler = gBattlerAttacker;
                 BattleScriptPushCursor();
