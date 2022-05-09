@@ -704,7 +704,9 @@ static const u32 sStatusFlagsForMoveEffects[] =
     0x00000000,
     0x00000000,
     0x00000000
-};
+};//I believe the spaces between status are deliberate
+//adding someting inbetween existing entries seemed to cause overlap and cause effects to get mixed up.
+//so if I want to add status (if its even possible) I'll have to figure out pattern and most likely add to end.
 
 static const u8 *const sMoveEffectBS_Ptrs[] =
 {
