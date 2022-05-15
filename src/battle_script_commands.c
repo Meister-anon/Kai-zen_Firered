@@ -10724,7 +10724,9 @@ static void atkD7_setyawn(void)
 }
 
 static void atkD8_setdamagetohealthdifference(void) //make case here for final gambit
-{//remember wanted to change how final gambit works more damage lower hp or it equals health lost?
+{//remember wanted to change how final gambit works more damage lower your hp or it equals health lost?
+    //could do percent of hp lost, and then also add an extra fixed hp damage on top so it can actually kill
+    //like say %hp lost + 40hp.
     if (gBattleMons[gBattlerTarget].hp <= gBattleMons[gBattlerAttacker].hp)
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
@@ -10734,7 +10736,8 @@ static void atkD8_setdamagetohealthdifference(void) //make case here for final g
         gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - gBattleMons[gBattlerAttacker].hp;
         gBattlescriptCurrInstr += 5;
     }
-}
+} //to get percent do gbatmovedamage = (target.hp * attacker.hp/attacker.maxhp) -40    //for final gambit
+//then I need to change this conditional to make it
 
 static void atkD9_scaledamagebyhealthratio(void)
 {
