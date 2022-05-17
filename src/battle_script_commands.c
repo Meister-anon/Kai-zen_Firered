@@ -10739,6 +10739,15 @@ static void atkD8_setdamagetohealthdifference(void) //make case here for final g
 } //to get percent do gbatmovedamage = (target.hp * attacker.hp/attacker.maxhp) -40    //for final gambit
 //then I need to change this conditional to make it
 
+//that was wrong, that way would do the opposite of what I want it would be less damage the lower my hp.
+//I need to make move damgage teh percentage of hp I've lost, not percentage I have remainnig.
+//to do that I need attacker.max hp - attacker.hp / attacker.max hp * target.max hp + 40
+
+//alternatively (((attacker.max hp - attacker.hp) / attacker.max hp) * target.hp) + attacker.maxhp
+//more complex but scales with level and isn't a guaranteed 1 shot regardless of level. actually this may be even stronger
+//will change the move to instead of faint attacker, reduce attaker hp to 1.
+//i.e all their energy is spent, plus it makes the move useful for power leveling.
+
 static void atkD9_scaledamagebyhealthratio(void)
 {
     if (gDynamicBasePower == 0)
