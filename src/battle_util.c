@@ -2495,7 +2495,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 { //further having this on a switch case ensures it only works for mon with the ability
                     gStatuses3[battler] |= STATUS3_INTIMIDATE_POKES;
                     gSpecialStatuses[battler].intimidatedMon = 1;
-                }
+                }//special status intimidated mon is set on mon with intimidate, it then applies status3 intimidate pokes to do stat drop
+                //and changes intimdiatedmon to 1 so it can't reactivate/loop
+                // but intimidatedMon is reset by faintmon battlescript as well as the SpecialStatusClear function from battle_main.c
+                //that is called seemingly each turn and at battle start?  need to figure how this doesn't cause a loop issue.
+                //if intimidated mon is reset to 0 each turn
                 break;
             case ABILITY_FORECAST: //think I figured out the switch problem, this case works on switch in,
                 //while the other is after all turns are done, by switching castform in mid battle.

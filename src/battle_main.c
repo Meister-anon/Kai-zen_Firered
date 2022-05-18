@@ -3755,7 +3755,7 @@ static void TurnValuesCleanUp(bool8 var0)
     gSideTimers[1].followmeTimer = 0;
 }
 
-static void SpecialStatusesClear(void)
+static void SpecialStatusesClear(void) //intimidatedmon is a special status so this function is what's resetting it outside of the faint condition
 {
     for (gActiveBattler = 0; gActiveBattler < gBattlersCount; ++gActiveBattler)
     {
@@ -4556,21 +4556,21 @@ static void HandleAction_ActionFinished(void) //may be important for intimidate 
 {
     ++gCurrentTurnActionNumber;
     gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
-    SpecialStatusesClear();
-    gHitMarker &= ~(HITMARKER_DESTINYBOND | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_ATTACKSTRING_PRINTED
+    SpecialStatusesClear(); //yeah the function call here is what resets intimidated mon status,
+    gHitMarker &= ~(HITMARKER_DESTINYBOND | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_ATTACKSTRING_PRINTED 
                     | HITMARKER_NO_PPDEDUCT | HITMARKER_IGNORE_SAFEGUARD | HITMARKER_IGNORE_ON_AIR
                     | HITMARKER_IGNORE_UNDERGROUND | HITMARKER_IGNORE_UNDERWATER | HITMARKER_x100000
                     | HITMARKER_OBEYS | HITMARKER_x10 | HITMARKER_SYNCHRONISE_EFFECT
                     | HITMARKER_CHARGING | HITMARKER_x4000000);
-    gCurrentMove = MOVE_NONE;
+    gCurrentMove = MOVE_NONE; // but it doesn't loop because the function doesn't get called except at battle start and switch i.e switch in abilities
     gBattleMoveDamage = 0;
-    gMoveResultFlags = 0;
-    gBattleScripting.animTurn = 0;
-    gBattleScripting.animTargetsHit = 0;
+    gMoveResultFlags = 0; //so what I need is to change activation condition or add a new activation condtions
+    gBattleScripting.animTurn = 0; //that will be on switch in but check opposite field for a mon with intimidate
+    gBattleScripting.animTargetsHit = 0;//and reactivate intimidate if mon doesn't have STATUS3_INTIMIDATE_POKES
     gLastLandedMoves[gBattlerAttacker] = 0;
-    gLastHitByType[gBattlerAttacker] = 0;
-    gBattleStruct->dynamicMoveType = 0;
-    gDynamicBasePower = 0;
+    gLastHitByType[gBattlerAttacker] = 0;//actually all I need to do is add that extra function call, for switch in
+    gBattleStruct->dynamicMoveType = 0;//and then add STATUS3_INTIMIDATE_POKES filter to existing break condition and it should work perfect
+    gDynamicBasePower = 0;//if target is on opposite side and visible and not already intimidated it will activate otherwise it'll skip/do nothing!! need test
     gBattleScripting.atk49_state = 0;
     gBattleCommunication[MOVE_EFFECT_BYTE] = 0;
     gBattleCommunication[ACTIONS_CONFIRMED_COUNT] = 0;
