@@ -2969,11 +2969,11 @@ static void TryDoEventsBeforeFirstTurn(void)
         {
             if (AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter], 0, 0, 0) != 0)
                 ++effect;
-            ++gBattleStruct->switchInAbilitiesCounter;
+            ++gBattleStruct->switchInAbilitiesCounter; //intimidate2 isn't referenced anywhere, so I assume its just baked into normal switchin
             if (effect)
-                return; //could this be cause of infini loop?
+                return;
         }
-        if (AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE1, 0, 0, 0, 0) != 0) //important find out how works
+        if (AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE1, 0, 0, 0, 0) != 0) //this is battle start intimidate.
             return;
         if (AbilityBattleEffects(ABILITYEFFECT_TRACE, 0, 0, 0, 0) != 0)
             return;

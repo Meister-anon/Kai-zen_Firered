@@ -5619,7 +5619,7 @@ static void atk52_switchineffects(void) //important, think can put ability reset
             gBattlescriptCurrInstr += 2;
         }
     }
-}
+}//I have no idea what this function is doing other than setting spike damage
 
 static void atk53_trainerslidein(void)
 {
@@ -6923,7 +6923,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_TRACE, gActiveBattler, 0, 0, 0);
-        return; //not sure what this does
+        return; //not sure what this does  its only used in mega evo and trace in gen 8 emerald expansion
     case VARIOUS_SAVE_TARGET:
         gBattleStruct->savedBattlerTarget = gBattlerTarget;
         break;
