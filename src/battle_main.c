@@ -2478,12 +2478,12 @@ void SwitchInClearSetData(void) //handles what gets reset on switchout
             }
         }
     }
-    else //if not using baton pass clear status 2 on switch?
+    else //if not using baton pass clear status 2 & 3 on switch?
     {
         gBattleMons[gActiveBattler].status2 = 0;
-        gStatuses3[gActiveBattler] = 0;
+        gStatuses3[gActiveBattler] = 0; //guess so but seems I misunderstood switch clear it clears data when they switch into battle not switching out
     }
-    for (i = 0; i < gBattlersCount; ++i)
+    for (i = 0; i < gBattlersCount; ++i)// is this something that removes wrap, and infatuation if the mon that caused the effect is switched out?
     {
         if (gBattleMons[i].status2 & STATUS2_INFATUATED_WITH(gActiveBattler))
             gBattleMons[i].status2 &= ~(STATUS2_INFATUATED_WITH(gActiveBattler));

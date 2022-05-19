@@ -1020,9 +1020,9 @@ static u32 CopyOakOldManMonData(u8 monId, u8 *dst)
         battleMon.speedIV = GetMonData(&gPlayerParty[monId], MON_DATA_SPEED_IV);
         battleMon.spAttackIV = GetMonData(&gPlayerParty[monId], MON_DATA_SPATK_IV);
         battleMon.spDefenseIV = GetMonData(&gPlayerParty[monId], MON_DATA_SPDEF_IV);
-        battleMon.personality = GetMonData(&gPlayerParty[monId], MON_DATA_PERSONALITY);
-        battleMon.status1 = GetMonData(&gPlayerParty[monId], MON_DATA_STATUS);
-        battleMon.level = GetMonData(&gPlayerParty[monId], MON_DATA_LEVEL);
+        battleMon.personality = GetMonData(&gPlayerParty[monId], MON_DATA_PERSONALITY); 
+        battleMon.status1 = GetMonData(&gPlayerParty[monId], MON_DATA_STATUS); //wonder if this has anything to do with why status1 seemingly can't stack statuses?
+        battleMon.level = GetMonData(&gPlayerParty[monId], MON_DATA_LEVEL); //like it seems to just pattently be set up differently
         battleMon.hp = GetMonData(&gPlayerParty[monId], MON_DATA_HP);
         battleMon.maxHP = GetMonData(&gPlayerParty[monId], MON_DATA_MAX_HP);
         battleMon.attack = GetMonData(&gPlayerParty[monId], MON_DATA_ATK);

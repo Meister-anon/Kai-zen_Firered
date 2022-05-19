@@ -289,7 +289,8 @@
 #define MOVE_EFFECT_FREEZE              0x4
 #define MOVE_EFFECT_PARALYSIS           0x5
 #define MOVE_EFFECT_TOXIC               0x6
-#define MOVE_EFFECT_CONFUSION           0x7
+//#define MOVE_EFFECT_SPIRIT_LOCK       0x6  //increase everything til v create by 1 use incrementer from discord for that
+#define MOVE_EFFECT_CONFUSION           0x7 //have to do it by hand since incrementer tool cant handle hexadecimal
 #define MOVE_EFFECT_FLINCH              0x8
 #define MOVE_EFFECT_TRI_ATTACK          0x9
 #define MOVE_EFFECT_UPROAR              0xA

@@ -2489,17 +2489,20 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattleScripting.battler = battler;
                     ++effect;
                 }
-                break;
+                break; //C |= 2 is same as C = C | 2
+                // from GriffinR  But yes it's setting a specific status for that battler.
+                // But pokemon can have many of these statuses at once, so you want to set those bits in addition to what's already there
+                //writing gStatuses3[battler] = STATUS3_INTIMIDATE_POKES; would clear all status which isn't what I want
             case ABILITY_INTIMIDATE:
                 if (!(gSpecialStatuses[battler].intimidatedMon)) //if intimidated mon is 0 set intimidate pokes
                 { //further having this on a switch case ensures it only works for mon with the ability
                     gStatuses3[battler] |= STATUS3_INTIMIDATE_POKES;
                     gSpecialStatuses[battler].intimidatedMon = 1;
-                }//special status intimidated mon is set on mon with intimidate, it then applies status3 intimidate pokes to do stat drop
+                }//special status intimidated mon is set on mon with intimidate, it then applies status3 intimidate pokes to activate intimidate
                 //and changes intimdiatedmon to 1 so it can't reactivate/loop
                 // but intimidatedMon is reset by faintmon battlescript as well as the SpecialStatusClear function from battle_main.c
                 //that is called seemingly each turn and at battle start?  need to figure how this doesn't cause a loop issue.
-                //if intimidated mon is reset to 0 each turn
+                //if intimidated mon is reset to 0 each turn  //doesn't loop because intimidate battle script is only called at battle start and switch in
                 break;
             case ABILITY_FORECAST: //think I figured out the switch problem, this case works on switch in,
                 //while the other is after all turns are done, by switching castform in mid battle.
@@ -2789,9 +2792,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             effect = 2;
                         }
                     }
-                    break;
+                    break;//checked and its standard still not sure what it refers too
                 }
-                if (effect == 1)
+                if (effect == 1) //wait what is this??  check clean repo to compare
                 {
                     if (gBattleMons[battler].maxHP == gBattleMons[battler].hp)
                     {
@@ -3011,7 +3014,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         //maybe I can change intimidate and synchronize to a switch case to do the swtich in actiation I want?
                     {
                     case 1: // status cleared
-                        gBattleMons[battler].status1 = 0;
+                        gBattleMons[battler].status1 = 0; //if I'm able to apply multiple status may have to change this
                         break;
                     case 2: // get rid of confusion
                         gBattleMons[battler].status2 &= ~(STATUS2_CONFUSION);
@@ -3078,16 +3081,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_INTIMIDATE1: // 9
-            for (i = 0; i < gBattlersCount; ++i)
+            for (i = 0; i < gBattlersCount; ++i) //activates this intimidate script is ability intimidate and has status3 intimidate, then removes status 3
             {
                 if (gBattleMons[i].ability == ABILITY_INTIMIDATE && gStatuses3[i] & STATUS3_INTIMIDATE_POKES)
                 {
                     gLastUsedAbility = ABILITY_INTIMIDATE;
                     gStatuses3[i] &= ~(STATUS3_INTIMIDATE_POKES); //need test this may prevent ativation loop
-                    BattleScriptPushCursorAndCallback(BattleScript_IntimidateActivatesEnd3);
+                    BattleScriptPushCursorAndCallback(BattleScript_IntimidateActivatesEnd3); //intimidate script with extra pause beforehand
                     gBattleStruct->intimidateBattler = i;
                     ++effect;
-                    break;
+                    break; //this version is for battle start
                 }
             }
             break;
@@ -3158,9 +3161,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     BattleScriptPushCursor(); //so it does'nt reactivate
                     gBattlescriptCurrInstr = BattleScript_IntimidateActivates;
                     gBattleStruct->intimidateBattler = i;
-                    ++effect;
-                    break;
-                }
+                    ++effect;//so this intimidate has the same activation conditon as other one,  but without the pause
+                    break; //I'm assumig one is for battle start and one is for switch in... confirmed
+                }//this version is for switch in, so I only need to change this one to make my switch in ability change
             }
             break;
            /* case ABILITYEFFECT_NUISANCE:

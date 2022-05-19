@@ -649,9 +649,9 @@ static const u32 sStatusFlagsForMoveEffects[] =
     STATUS1_BURN,
     STATUS1_FREEZE,
     STATUS1_PARALYSIS,
-   // STATUS1_SPIRIT_LOCK,  //for some reason flinch was doing confusion instead, I can only guess it was this...
     STATUS1_TOXIC_POISON,
-    STATUS2_CONFUSION,
+    // STATUS1_SPIRIT_LOCK,  //for some reason flinch was doing confusion instead, I can only guess it was this...
+    STATUS2_CONFUSION, //think i have to line up with the pointer array below
     STATUS2_FLINCHED,
     0x00000000,
     STATUS2_UPROAR,
@@ -707,6 +707,7 @@ static const u32 sStatusFlagsForMoveEffects[] =
 };//I believe the spaces between status are deliberate
 //adding someting inbetween existing entries seemed to cause overlap and cause effects to get mixed up.
 //so if I want to add status (if its even possible) I'll have to figure out pattern and most likely add to end.
+//ok so it lines up with the array below,  all the 0x0000 are for entiries in the pointer list that don't correspond to a status
 
 static const u8 *const sMoveEffectBS_Ptrs[] =
 {
@@ -717,6 +718,7 @@ static const u8 *const sMoveEffectBS_Ptrs[] =
     [MOVE_EFFECT_FREEZE] = BattleScript_MoveEffectFreeze,
     [MOVE_EFFECT_PARALYSIS] = BattleScript_MoveEffectParalysis,
     [MOVE_EFFECT_TOXIC] = BattleScript_MoveEffectToxic,
+    //[MOVE_EFFECT_TOXIC] = BattleScript_MoveEffectToxic,
     [MOVE_EFFECT_CONFUSION] = BattleScript_MoveEffectConfusion,
     [MOVE_EFFECT_FLINCH] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_TRI_ATTACK] = BattleScript_MoveEffectSleep,
@@ -5017,7 +5019,7 @@ static void atk4C_getswitchedmondata(void)
 }
 
 static void atk4D_switchindataupdate(void)  //important, think can use THIS to make switchin abilities repeat, would work for both fainted and turn switched.
-{
+{ // ok switch in repeat isn't here can do it elsewhere
     struct BattlePokemon oldData;
     s32 i;
     u8 *monData;
@@ -7466,7 +7468,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         gBattlescriptCurrInstr += 4;
         return;
-    case VARIOUS_PSYCHO_SHIFT:
+    case VARIOUS_PSYCHO_SHIFT: //transfers status condition
         i = TRUE;
         if (gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS)
         {
@@ -7548,14 +7550,14 @@ static void atk76_various(void) //will need to add all these emerald various com
 
         if (i == TRUE)
         {
-            gBattleMons[gBattlerTarget].status1 = gBattleMons[gBattlerAttacker].status1 & STATUS1_ANY;
+            gBattleMons[gBattlerTarget].status1 = gBattleMons[gBattlerAttacker].status1 & STATUS1_ANY; //may have to change to |= if get multi status 1 setup
             gActiveBattler = gBattlerTarget;
             BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
             MarkBattlerForControllerExec(gActiveBattler);
             gBattlescriptCurrInstr += 7;
         }
         return;
-    case VARIOUS_CURE_STATUS:
+    case VARIOUS_CURE_STATUS: //if change status instea of flat 0, may need to have multiple conditional statement to remove specific status
         gBattleMons[gActiveBattler].status1 = 0;
         BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
         MarkBattlerForControllerExec(gActiveBattler);
@@ -8198,7 +8200,7 @@ static void atk81_trysetrest(void)
             gBattleCommunication[MULTISTRING_CHOOSER] = 1;
         else
             gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-        gBattleMons[gBattlerTarget].status1 = 3;
+        gBattleMons[gBattlerTarget].status1 = 3; //what does this mean??
         BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
         MarkBattlerForControllerExec(gActiveBattler);
         gBattlescriptCurrInstr += 5;
@@ -11667,7 +11669,7 @@ static void atkF4_subattackerhpbydmg(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atkF5_removeattackerstatus1(void)
+static void atkF5_removeattackerstatus1(void) //this doesn't appear to be used anywhere?
 {
     gBattleMons[gBattlerAttacker].status1 = 0;
     ++gBattlescriptCurrInstr;
