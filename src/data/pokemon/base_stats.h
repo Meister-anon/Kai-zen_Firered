@@ -289,7 +289,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_WATER_1,
-        .abilities = {ABILITY_TORRENT, ABILITY_NONE},
+        .abilities = {ABILITY_TORRENT, ABILITY_HEAVY_METAL},
         .abilityHidden = {ABILITY_RAIN_DISH, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -13630,7 +13630,7 @@ const struct BaseStats gBaseStats[] =
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SLOW_START, ABILITY_NONE},
         #else
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilities = {ABILITY_NONE, ABILITY_TRUANT},
         #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,

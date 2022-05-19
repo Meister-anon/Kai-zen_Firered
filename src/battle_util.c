@@ -2422,7 +2422,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         case ABILITYEFFECT_ON_SWITCHIN: // 0
             if (gBattlerAttacker >= gBattlersCount)
                 gBattlerAttacker = battler;
-            switch (gLastUsedAbility)
+            switch (gLastUsedAbility) //guessing but I think...that each abiltiy switch case is based off the ability getting logged in glastusedability 
             {
             case ABILITYEFFECT_SWITCH_IN_WEATHER:
                 switch (GetCurrentWeather())
@@ -2497,7 +2497,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gSpecialStatuses[battler].intimidatedMon)) //if intimidated mon is 0 set intimidate pokes
                 { //further having this on a switch case ensures it only works for mon with the ability
                     gStatuses3[battler] |= STATUS3_INTIMIDATE_POKES;
-                    gSpecialStatuses[battler].intimidatedMon = 1;
+                    gSpecialStatuses[battler].intimidatedMon = 1;           //not changing intimidateMon to 1 causes intimidate case to /the switchin case to loop
                 }//special status intimidated mon is set on mon with intimidate, it then applies status3 intimidate pokes to activate intimidate
                 //and changes intimdiatedmon to 1 so it can't reactivate/loop
                 // but intimidatedMon is reset by faintmon battlescript as well as the SpecialStatusClear function from battle_main.c
@@ -3090,7 +3090,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     BattleScriptPushCursorAndCallback(BattleScript_IntimidateActivatesEnd3); //intimidate script with extra pause beforehand
                     gBattleStruct->intimidateBattler = i;
                     ++effect;
-                    break; //this version is for battle start
+                    break; //this version is for battle start, because its is called in TryDoEventsBeforeFirstTurn function
                 }
             }
             break;
@@ -3132,7 +3132,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     else
                     {
                         gActiveBattler = target1;
-                        if (gBattleMons[target1].ability && gBattleMons[target1].hp)
+                        if (gBattleMons[target1].ability && gBattleMons[target1].hp) //can use for skill swap wonder gaurd effect
                         {
                             gBattleMons[i].ability = gBattleMons[target1].ability;
                             gLastUsedAbility = gBattleMons[target1].ability;

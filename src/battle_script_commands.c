@@ -10928,24 +10928,29 @@ static void atkE0_trysetsnatch(void) // snatch
     }
 }
 
-static void atkE1_trygetintimidatetarget(void)
+static void atkE1_trygetintimidatetarget(void) //I'd like to be able to get it ot target based on the case id abilityeffect in the util.c
+//ABILITYEFFECT_INTIMIDATE2 is the one  for switchin  so changing the targetting for just that should make it work how I want
+//maybe do it like trace and have the targetting built into the activation function
 {
     u8 side;
 
-    gBattleScripting.battler = gBattleStruct->intimidateBattler;//
+    gBattleScripting.battler = gBattleStruct->intimidateBattler;//linked with intimidate in util.c, it finds mon with intimidate/condition and sets the battler to that struct
     side = GetBattlerSide(gBattleScripting.battler); //
-    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gBattleMons[gBattleScripting.battler].ability)
-    for (;gBattlerTarget < gBattlersCount; ++gBattlerTarget) //loops through battlers to find mon on opposite side to mon with ability
+    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gBattleMons[gBattleScripting.battler].ability) //mon iwth intimidate
+    for (;gBattlerTarget < gBattlersCount; ++gBattlerTarget) //loops through battlers to find mon on opposite side to mon
         if (GetBattlerSide(gBattlerTarget) != side && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
-            break; //if mon is not on opposite side, or is in an invulnerable state undergruond underwater or in fly it will break
-    //not activate on that potential target
-    if (gBattlerTarget >= gBattlersCount)
+            break; //If they are on the opposite side and not absent, it breaks to end the loop, saying that its found an valid target
+    
+    if (gBattlerTarget >= gBattlersCount) //from Griffin R if it break before reaching the end of the loop then gBattlerTarget >= gBattlersCount will be false. 
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
-    else
+    else //It has found a valid target for intimidate, and it won't take jump to the specified pointer, it will instead move to the next command
         gBattlescriptCurrInstr += 5;
 }//this prob important for my implementaiton of intimidate, since
 //I need to have selective targetting, since I don't want it to reactivate
 //for mon that have already been intimidated.  unless i switch in again
+
+//switch is handled by 2 battle scripts  BattleScript_DoSwitchOut  & BattleScript_FaintedMonTryChooseAnother
+//will use BattleScript_FaintedMonChooseAnother  if no party members let besides last mon
 
 static void atkE2_switchoutabilities(void)
 {

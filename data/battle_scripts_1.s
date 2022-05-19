@@ -5286,7 +5286,7 @@ BattleScript_PursuitSwitchLoop::
 	swapattackerwithtarget
 BattleScript_DoSwitchOut::
 	decrementmultihit BattleScript_PursuitSwitchLoop
-	switchoutabilities BS_ATTACKER
+	switchoutabilities BS_ATTACKER  @abilities that activate when switching out
 	waitstate
 	returnatktoball
 	waitstate
@@ -6624,11 +6624,15 @@ BattleScript_IntimidateActivates::
 	setbyte gBattlerTarget, 0
 	setstatchanger STAT_ATK, 1, TRUE
 BattleScript_IntimidateActivationAnimLoop::
-	trygetintimidatetarget BattleScript_IntimidateEnd
+	trygetintimidatetarget BattleScript_IntimidateEnd @update intimidate to current gen standard
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_IntimidateFail
 	jumpifability BS_TARGET, ABILITY_CLEAR_BODY, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_WHITE_SMOKE, BattleScript_IntimidateAbilityFail
+	jumpifability BS_TARGET, ABILITY_INNER_FOCUS, BattleScript_IntimidateAbilityFail
+	jumpifability BS_TARGET, ABILITY_SCRAPPY, BattleScript_IntimidateAbilityFail
+	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_IntimidateAbilityFail
+	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_IntimidateAbilityFail
 	statbuffchange STAT_CHANGE_BS_PTR | STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_IntimidateFail
 	jumpifbyte CMP_GREATER_THAN, cMULTISTRING_CHOOSER, 1, BattleScript_IntimidateFail
 	setgraphicalstatchangevalues
