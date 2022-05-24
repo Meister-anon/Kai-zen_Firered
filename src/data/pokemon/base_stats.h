@@ -4651,7 +4651,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_LEDYBA] =
     {
         .baseHP = 40,
-        .baseAttack = 40,
+        .baseAttack = 55,
         .baseDefense = 30,
         .baseSpeed = 55,
         .baseSpAttack = 20,

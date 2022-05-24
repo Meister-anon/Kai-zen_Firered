@@ -8666,11 +8666,11 @@ static void atk8F_forcerandomswitch(void)
         else
         {
             valid = 0;
-            for (i = 0; i < 6; ++i)
+            for (i = 0; i < 6; ++i) //loops through the party for a valid mon
             {
-                if (GetMonData(&party[i], MON_DATA_SPECIES) != SPECIES_NONE
-                 && !GetMonData(&party[i], MON_DATA_IS_EGG)
-                 && GetMonData(&party[i], MON_DATA_HP) != 0)
+                if (GetMonData(&party[i], MON_DATA_SPECIES) != SPECIES_NONE //is a pokemom
+                 && !GetMonData(&party[i], MON_DATA_IS_EGG) //not an egg
+                 && GetMonData(&party[i], MON_DATA_HP) != 0) //not fainted
                     ++valid;
             }
         }
@@ -10934,7 +10934,7 @@ static void atkE1_trygetintimidatetarget(void) //I'd like to be able to get it o
 {
     u8 side;
 
-    gBattleScripting.battler = gBattleStruct->intimidateBattler;//linked with intimidate in util.c, it finds mon with intimidate/condition and sets the battler to that struct
+    gBattleScripting.battler = gBattleStruct->intimidateBattler;//linked with intimidate in util.c, it finds mon with intimidate/condition and sets that battler to the battlescript battler
     side = GetBattlerSide(gBattleScripting.battler); //
     PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gBattleMons[gBattleScripting.battler].ability) //mon iwth intimidate
     for (;gBattlerTarget < gBattlersCount; ++gBattlerTarget) //loops through battlers to find mon on opposite side to mon

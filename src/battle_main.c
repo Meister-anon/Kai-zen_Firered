@@ -2968,11 +2968,11 @@ static void TryDoEventsBeforeFirstTurn(void)
         while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount) //change to work on switchin and when opponent switches pokemon.
         {
             if (AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter], 0, 0, 0) != 0)
-                ++effect;
+                ++effect; //believe this is looping through only switch in abilities, I think long as ability isn't none?
             ++gBattleStruct->switchInAbilitiesCounter; //intimidate2 isn't referenced anywhere, so I assume its just baked into normal switchin
             if (effect)
-                return;
-        }
+                return; //yeah checking mon in battle for if they have switchin abilities, and activates them if they do.
+        } //check pursuit it may be the best way to do this, since it tells when a battler is switching and activates an effect
         if (AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE1, 0, 0, 0, 0) != 0) //this is battle start intimidate.
             return;
         if (AbilityBattleEffects(ABILITYEFFECT_TRACE, 0, 0, 0, 0) != 0)
@@ -4233,7 +4233,7 @@ static void HandleAction_UseMove(void)
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 }
 
-static void HandleAction_Switch(void)
+static void HandleAction_Switch(void) //actual switch code
 {
     gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     gBattle_BG0_X = 0;
