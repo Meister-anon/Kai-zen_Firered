@@ -1177,7 +1177,7 @@ BattleScript_EffectHitSwitchTarget:
 	tryfaintmon BS_TARGET, FALSE, NULL
 	jumpifability BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_AbilityPreventsPhasingOut
 	jumpifstatus3 BS_TARGET, STATUS3_ROOTED, BattleScript_PrintMonIsRooted
-	tryhitswitchtarget BattleScript_EffectHitSwitchTargetMoveEnd
+	tryhitswitchtarget BattleScript_EffectHitSwitchTargetMoveEnd @check hitswitch make sure all moves are not based on level to work
 BattleScript_EffectHitSwitchTargetMoveEnd:
 	moveendall
 	end

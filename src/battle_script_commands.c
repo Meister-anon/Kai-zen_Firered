@@ -10952,6 +10952,21 @@ static void atkE1_trygetintimidatetarget(void) //I'd like to be able to get it o
 //switch is handled by 2 battle scripts  BattleScript_DoSwitchOut  & BattleScript_FaintedMonTryChooseAnother
 //will use BattleScript_FaintedMonChooseAnother  if no party members let besides last mon
 
+//instead of changing intimdiate/switch in funcitons
+//I think the best way may be to make a psudo similar bs command function, and add it to every switch battle script
+//make sure it activates on attacker since all switch stuff uses attacker
+//and make a function that will loop through all the abilities I want to reactivate with a switch case that
+//will recreate the effects  hopefully will not have to make new strings.
+
+//essentially I'm not going to be able to actually reactivate the scripts because of how they activate
+//so I'll just make it look like they are activating/have the same effect
+
+//WILL NEED to make sure I have something to prevent it activating in the case I switch in, when the enemy is also switching mon.
+//otherwise I think it would cause a double activation or loop. 
+//as it would call the normal switch in activation as well.  //assuming that's possible since it runs on turn order...
+//might not be if I switch in, and the enemy hasn't brought there mon in, or they switch in, and I"m not on the field yet.
+//do an explosion test...
+
 static void atkE2_switchoutabilities(void)
 {
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
