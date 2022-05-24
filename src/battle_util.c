@@ -4309,13 +4309,52 @@ u8 IsMonDisobedient(void)
     }
 }
 
+bool32 IsNeutralizingGasBannedAbility(u32 ability)
+{
+    switch (ability)
+    {
+    case ABILITY_MULTITYPE:
+    case ABILITY_ZEN_MODE:
+    case ABILITY_STANCE_CHANGE:
+    case ABILITY_POWER_CONSTRUCT:
+    case ABILITY_SCHOOLING:
+    case ABILITY_RKS_SYSTEM:
+    case ABILITY_SHIELDS_DOWN:
+    case ABILITY_COMATOSE:
+    case ABILITY_DISGUISE:
+    case ABILITY_GULP_MISSILE:
+    case ABILITY_ICE_FACE:
+    case ABILITY_AS_ONE_ICE_RIDER:
+    case ABILITY_AS_ONE_SHADOW_RIDER:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+} //abilities excluded  from neutralizing gas, as they are intrinsic to the pokemon biology/unique to themselves/involves changing their body.
+
+
+bool32 IsNeutralizingGasOnField(void)
+{
+    u32 i;
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (IsBattlerAlive(i) && gBattleMons[i].ability == ABILITY_NEUTRALIZING_GAS && !(gStatuses3[i] & STATUS3_GASTRO_ACID))
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
 u32 GetBattlerAbility(u8 battlerId)  //Deokishishu in pret mentioned there is a practice of making things that could
  // be type u8 either s32 or u32, because it has an positive effect on speed, ussually done for things 
  //constantly refernced or looped.
 {
     if (gStatuses3[battlerId] & STATUS3_GASTRO_ACID) //only added this, because focusing abilities should work
         return ABILITY_NONE;
-    else if ((((gBattleMons[gBattlerAttacker].ability == ABILITY_MOLD_BREAKER
+    if (IsNeutralizingGasOnField() && !IsNeutralizingGasBannedAbility(gBattleMons[battlerId].ability))
+        return ABILITY_NONE;
+    /*else */if ((((gBattleMons[gBattlerAttacker].ability == ABILITY_MOLD_BREAKER
         || gBattleMons[gBattlerAttacker].ability == ABILITY_TERAVOLT
         || gBattleMons[gBattlerAttacker].ability == ABILITY_TURBOBLAZE)
         && !(gStatuses3[gBattlerAttacker] & STATUS3_GASTRO_ACID))
