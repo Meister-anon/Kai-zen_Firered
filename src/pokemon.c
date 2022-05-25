@@ -3603,13 +3603,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if ((sideStatus & SIDE_STATUS_REFLECT) && gCritMultiplier == 1)
         {
             if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
-                damage = 2 * (damage / 3);
-            else
-                damage /= 1;
+               // damage = 2 * (damage / 3); //believe what's happening here is it lowers the effectiveness of reflect for doubles 
+           // else //to balance the decreased amount of damage double damaging moves do.
+                damage /= 2;
         }
 
         if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == 8 && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2) // this is spread move cut
-            damage /= 1; //target 0x8 is target both
+            damage /= 1; //target 0x8 is target both    
+        //this removes the split damage from double target moves
 
         // moves always do at least 1 damage.
         if (damage == 0)

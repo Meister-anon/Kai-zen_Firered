@@ -5627,7 +5627,7 @@ static void atk52_switchineffects(void) //important, think can put ability reset
     //need to look more into switch cases, but it makes sense just make new battle script for each ability to reset but swapping target and attacker from the normal
      
     switch ((GetBattlerAbility(BATTLE_OPPOSITE(gActiveBattler)))) //think I"ve got it now, adjusted based on pokeomn.c calcbaseddamaeg line 3506
-    {
+    { //should check the opposite side of pokemon active in switch script, but does it  check entire side incase its a double battle?
     case ABILITY_INTIMIDATE:
           BattleScriptPushCursor(); 
           gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
