@@ -5299,8 +5299,7 @@ BattleScript_DoSwitchOut::
 	hidepartystatussummary BS_ATTACKER
 	switchinanim BS_ATTACKER, 0
 	waitstate
-	switchineffects BS_ATTACKER @this should be where switch in works, and its only on attacker thats the problem
-	moveendcase 4
+	switchineffects BS_ATTACKER @this should be where switch in works,
 	moveendcase 15
 	end2
 

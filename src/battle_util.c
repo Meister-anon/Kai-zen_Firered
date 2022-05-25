@@ -287,7 +287,7 @@ static const u8 sAbilitiesNotTraced[ABILITIES_COUNT] =
 };
 
 //come back to this when doing move expansion
-/*static const u8 sMovesNotAffectedByStench[] =
+static const u8 sMovesNotAffectedByStench[] =
 {
     [MOVE_AIR_SLASH] = 1,
     [MOVE_ASTONISH] = 1,
@@ -322,7 +322,7 @@ static const u8 sAbilitiesNotTraced[ABILITIES_COUNT] =
     [MOVE_WATERFALL] = 1,
     [MOVE_ZEN_HEADBUTT] = 1,
     [MOVE_ZING_ZAP] = 1,
-};*/
+};
 
 static const u16 sSkillSwapBannedAbilities[] =
 {
@@ -748,7 +748,7 @@ u8 DoFieldEndTurnEffects(void)
                 u8 *var = &gBattleStruct->turnCountersTracker;
                 
                 ++*var;
-                gBattleStruct->turnSideTracker = 0;
+                gBattleStruct->turnSideTracker = 0;//I assume the note about fallthrough is there because there is no break;
             }
             // fall through
         case ENDTURN_REFLECT:
@@ -1108,7 +1108,7 @@ u8 DoBattlerEndTurnEffects(void)
                     gBattleScripting.animArg2 = gBattlerAttacker;
                     BattleScriptExecute(BattleScript_LeechSeedTurnDrain); //I'll figure this out, and I think what I want to do is for all these ghost effects
                     ++effect; //if absorbign from a ghost just change the color of the effect animation to a purple one
-                }
+                }//TODO
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_POISON:  // poison
@@ -4354,7 +4354,7 @@ u32 GetBattlerAbility(u8 battlerId)  //Deokishishu in pret mentioned there is a 
         return ABILITY_NONE;
     if (IsNeutralizingGasOnField() && !IsNeutralizingGasBannedAbility(gBattleMons[battlerId].ability))
         return ABILITY_NONE;
-    /*else */if ((((gBattleMons[gBattlerAttacker].ability == ABILITY_MOLD_BREAKER
+    if ((((gBattleMons[gBattlerAttacker].ability == ABILITY_MOLD_BREAKER
         || gBattleMons[gBattlerAttacker].ability == ABILITY_TERAVOLT
         || gBattleMons[gBattlerAttacker].ability == ABILITY_TURBOBLAZE)
         && !(gStatuses3[gBattlerAttacker] & STATUS3_GASTRO_ACID))
@@ -4364,8 +4364,8 @@ u32 GetBattlerAbility(u8 battlerId)  //Deokishishu in pret mentioned there is a 
         && gActionsByTurnOrder[gBattlerByTurnOrder[gBattlerAttacker]] == B_ACTION_USE_MOVE
         && gCurrentTurnActionNumber < gBattlersCount)
         return ABILITY_NONE;
-    else
-        return gBattleMons[battlerId].ability;
+            
+    return gBattleMons[battlerId].ability;
 }
 
 u32 GetBattlerWeight(u8 battlerId)
@@ -4631,7 +4631,7 @@ u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability)
     return 0;
 }
 
-/*u32 IsAbilityPreventingEscape(u32 battlerId) //move to battle main.c is runnign from battle impossible
+/*u32 IsAbilityPreventingEscape(u32 battlerId) //move to battle main.c is runnign from battle impossible /done
 {
     u32 id;
 

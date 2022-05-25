@@ -2698,7 +2698,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
     {
         switch (sStatusFlagsForMoveEffects[gBattleCommunication[MOVE_EFFECT_BYTE]])  //find out what this exactly is
         {
-        case STATUS1_SLEEP:
+        case STATUS1_SLEEP:  //best switch case example
             // check active uproar
             if (gBattleMons[gEffectBattler].ability != ABILITY_SOUNDPROOF)
                 for (gActiveBattler = 0;
@@ -5555,18 +5555,21 @@ static void atk52_switchineffects(void) //important, think can put ability reset
 
     //all abilities use active battler for targetting
     s32 i; 
+    u8 side;
 
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     UpdateSentPokesToOpponentValue(gActiveBattler);
     gHitMarker &= ~(HITMARKER_FAINTED(gActiveBattler));
     gSpecialStatuses[gActiveBattler].flag40 = 0;
+    side = GetBattlerSide(gBattleScripting.battler); //added for switch case for intimidate I'll add, will be same as trygetintimidatetarget
+    //will make new battle script to be called, identical to intimidate but switching target with attacker
     if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES_DAMAGED)
      && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
      && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
      && gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
      && !IsBattlerGrounded(gActiveBattler)) //if grounded works can remove flying and levitate check
     {
-        u8 spikesDmg;
+        u8 spikesDmg; //I have no idea what this function is doing other than setting spike damage
 
         gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_SPIKES_DAMAGED;
         spikesDmg = (5 - gSideTimers[GetBattlerSide(gActiveBattler)].spikesAmount) * 2;
@@ -5618,8 +5621,24 @@ static void atk52_switchineffects(void) //important, think can put ability reset
             }
             gBattlescriptCurrInstr += 2;
         }
+    }//this line is end of initial if statement can add switch statements for reactivation here below this bracket
+    //think switch can use IsAbilityOnSide(BATTLE_OPPOSITE(battlerId), ability)
+    //this version IsAbilityOnSide(BATTLE_OPPOSITE(gActiveBattler), ability)  the switch will be to change the "ability" bracket/field 
+    //need to look more into switch cases, but it makes sense just make new battle script for each ability to reset but swapping target and attacker from the normal
+     
+    switch ((GetBattlerAbility(BATTLE_OPPOSITE(gActiveBattler)))) //think I"ve got it now, adjusted based on pokeomn.c calcbaseddamaeg line 3506
+    {
+    case ABILITY_INTIMIDATE:
+          BattleScriptPushCursor(); 
+          gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
     }
-}//I have no idea what this function is doing other than setting spike damage
+    break;
+   
+    
+    //actually to make this work I believe I'll have to make a new function like IsNeutralizingGasBannedAbility in util.c
+    //to with the battlerid and ability factors build in, that will loop through the abilities I want on the other side I want to check
+    //refer to that function and get battler ability in battle_util.c
+}
 
 static void atk53_trainerslidein(void)
 {
@@ -10936,7 +10955,7 @@ static void atkE1_trygetintimidatetarget(void) //I'd like to be able to get it o
 
     gBattleScripting.battler = gBattleStruct->intimidateBattler;//linked with intimidate in util.c, it finds mon with intimidate/condition and sets that battler to the battlescript battler
     side = GetBattlerSide(gBattleScripting.battler); //
-    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gBattleMons[gBattleScripting.battler].ability) //mon iwth intimidate
+    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gBattleMons[gBattleScripting.battler].ability) //sets mon ability to string buffer for activation text i believe
     for (;gBattlerTarget < gBattlersCount; ++gBattlerTarget) //loops through battlers to find mon on opposite side to mon
         if (GetBattlerSide(gBattlerTarget) != side && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
             break; //If they are on the opposite side and not absent, it breaks to end the loop, saying that its found an valid target
