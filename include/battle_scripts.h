@@ -6,6 +6,7 @@
 extern const u8 BattleScript_HitFromCritCalc[]; //only defined because its refered to in function
 extern const u8 BattleScript_EffectWithChance[]; //putting more emerald ports below this
 extern const u8 BattleScript_SideStatusWoreOff[];
+extern const u8 BattleScript_NeutralizingGasExits[];
 extern const u8 BattleScript_ToxicSpikesFree[];
 extern const u8 BattleScript_StickyWebFree[];
 extern const u8 BattleScript_StealthRockFree[];
@@ -237,6 +238,7 @@ extern const u8 BattleScript_BanefulBunkerEffect[];
 extern const u8 BattleScript_ForceRandomSwitch[];
 extern const u8 BattleScript_PoisonHealActivates[];
 extern const u8 BattleScript_SwitchInAbilityMsg[];
+extern const u8 BattleScript_SwitchInAbilityMsgRet[];
 extern const u8 BattleScript_ToxicSpikesPoisoned[];
 extern const u8 BattleScript_ToxicSpikesAbsorbed[];
 extern const u8 BattleScript_StickyWebOnSwitchIn[];
@@ -579,8 +581,8 @@ extern const u8 BattleScript_TooScaredToMove[];
 extern const u8 BattleScript_IntimidateActivates[];
 extern const u8 BattleScript_IntimidateActivatesEnd3[];
 extern const u8 BattleScript_HailActivates[]; //wondering if it matters where I put battlescript ehre, poisonworsened was only one put at end, adn thats when problem started.
-extern const u8 BattleScript_IgnoresWhileAsleep[];
-extern const u8 BattleScript_IgnoresAndHitsItself[];
+extern const u8 BattleScript_IgnoresWhileAsleep[]; //need remember to add effect to change poison to toxic poison
+extern const u8 BattleScript_IgnoresAndHitsItself[];// and set toxic timer to 3 so it does more damage than normal poison
 extern const u8 BattleScript_MoveEffectRecoil[];
 extern const u8 BattleScript_FlushMessageBox[];
 extern const u8 BattleScript_SpikesOnFaintedBattler[];

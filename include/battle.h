@@ -129,13 +129,14 @@ extern const struct Trainer gTrainers[];
 
 struct ResourceFlags
 {
-    u32 flags[4];
+    u32 flags[MAX_BATTLERS_COUNT];
 };
 
 #define RESOURCE_FLAG_FLASH_FIRE     1
 #define RESOURCE_FLAG_ROOST          2
 #define RESOURCE_FLAG_UNBURDEN       4
 #define RESOURCE_FLAG_EMERGENCY_EXIT 8
+#define RESOURCE_FLAG_NEUTRALIZING_GAS 16 //works by doubling previous
 
 struct DisableStruct
 {
@@ -247,11 +248,15 @@ struct SpecialStatus
     u8 flag40 : 1;
     u8 focusBanded : 1;
     u8 field1[3];
+    u8 berryReduced : 1;
+    u8 rototillerAffected : 1;  // to be affected by rototiller
     u8 instructedChosenTarget : 3;
     u8 gemBoost : 1;
     u8 gemParam;
     u8 dancerUsedMove : 1;
     u8 dancerOriginalTarget : 3;
+    u8 announceNeutralizingGas : 1;   // See Cmd_switchineffects
+    u8 neutralizingGasRemoved : 1;    // See VARIOUS_TRY_END_NEUTRALIZING_GAS
     s32 dmg;
     s32 physicalDmg;
     s32 specialDmg;

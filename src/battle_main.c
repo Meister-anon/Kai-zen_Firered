@@ -2964,6 +2964,10 @@ static void TryDoEventsBeforeFirstTurn(void)
             gBattleStruct->overworldWeatherDone = TRUE;
             return;
         }
+        // Check neutralizing gas
+        if (AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, 0, 0, 0, 0) != 0)
+            return;
+
         // Check all switch in abilities happening from the fastest mon to slowest.
         while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount) //change to work on switchin and when opponent switches pokemon.
         {
@@ -3297,7 +3301,8 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                     else if ((i = ABILITY_ON_OPPOSING_FIELD(gActiveBattler, ABILITY_SHADOW_TAG))
                           || ((i = ABILITY_ON_OPPOSING_FIELD(gActiveBattler, ABILITY_ARENA_TRAP))
                               && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
-                              && gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE)
+                              //&& gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
+                              && !IsBattlerGrounded(gActiveBattler))
                           || ((i = AbilityBattleEffects(ABILITYEFFECT_CHECK_FIELD_EXCEPT_BATTLER, gActiveBattler, ABILITY_MAGNET_PULL, 0, 0))
                               && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL)))
                     {

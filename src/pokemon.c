@@ -3232,7 +3232,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     spAttack = attacker->spAttack;
     spDefense = defender->spDefense;
 
-    /*if (gBattleMoves[move].effect == EFFECT_PSYSHOCK || IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
+    if (gBattleMoves[move].effect == EFFECT_PSYSHOCK || IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
     {
         defStat = defense;
         defStage = gBattleMons[battlerIdDef].statStages[STAT_DEF];
@@ -3243,7 +3243,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         defStat = spDefense;
         defStage = gBattleMons[battlerIdDef].statStages[STAT_SPDEF];
         usesDefStat = FALSE; //ported from emerald, will use this later  this wasn't actually the problem can most likely safely bring back in.
-    }*/
+    }
 
     if (attacker->item == ITEM_ENIGMA_BERRY)
     {

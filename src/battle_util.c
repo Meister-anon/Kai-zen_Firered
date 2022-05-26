@@ -3167,26 +3167,23 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }//this version is for switch in, so I only need to change this one to make my switch in ability change
             }
             break;
-           /* case ABILITYEFFECT_NUISANCE:
-                { //since abilituy effect macro has proven to have an affect on weather/how the function activates, I may need to move this to an existing category.
-                    //u32 move = 0; //not sure why this shouldn't just be u16 but pokemon.c line 3166    ah because its "move" not "moves"
-                    //u16 moveBattler = 0;
-                    s8 priority; //this threw up a syntax error before I rearranged type listing, into order it appears in function
-                    //u16 moves = 0;
-                    //moveBattler = gBattleMons[gBattlerAttacker].moves[*(gBattleStruct->chosenMovePositions + gBattlerAttacker)];
-                    priority = gBattleMoves[gCurrentMove].priority;
-               
-                    for (i = 0; i < gBattlersCount; ++i)
-                    {
-                        if (gBattleMons[i].ability == ABILITY_NUISANCE) {
-                            if (gBattleMoves[gCurrentMove].power <= 60)
-                                priority += 3;
-                            gLastUsedAbility = ABILITY_NUISANCE;
-                            ++effect;
-                        }
-                    }
+        case ABILITYEFFECT_NEUTRALIZINGGAS:
+            // Prints message only. separate from ABILITYEFFECT_ON_SWITCHIN bc activates before entry hazards
+            for (i = 0; i < gBattlersCount; i++)
+            {
+                if (gBattleMons[i].ability == ABILITY_NEUTRALIZING_GAS && !(gBattleResources->flags->flags[i] & RESOURCE_FLAG_NEUTRALIZING_GAS))
+                {
+                    gBattleResources->flags->flags[i] |= RESOURCE_FLAG_NEUTRALIZING_GAS;
+                    gBattlerAbility = i;
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_NEUTRALIZING_GAS;
+                    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                    effect++;
                 }
-                break;*/
+
+                if (effect)
+                    break;
+            }
+            break;
         case ABILITYEFFECT_CHECK_OTHER_SIDE: // 12
             side = GetBattlerSide(battler);
             for (i = 0; i < gBattlersCount; ++i)
@@ -4336,13 +4333,17 @@ bool32 IsNeutralizingGasBannedAbility(u32 ability)
 bool32 IsNeutralizingGasOnField(void)
 {
     u32 i;
+    u8 side;
+    side = GetBattlerSide(gActiveBattler);
 
     for (i = 0; i < gBattlersCount; i++)
     {
-        if (IsBattlerAlive(i) && gBattleMons[i].ability == ABILITY_NEUTRALIZING_GAS && !(gStatuses3[i] & STATUS3_GASTRO_ACID))
+        //if (IsBattlerAlive(i) && GetBattlerSide(i) != side && gBattleMons[i].ability == ABILITY_NEUTRALIZING_GAS && !(gStatuses3[i] & STATUS3_GASTRO_ACID))
+        //if (IsBattlerAlive(i) && gBattleMons[i].ability == ABILITY_NEUTRALIZING_GAS && !(gStatuses3[i] & STATUS3_GASTRO_ACID))  //original code 
+        if (IsAbilityOnOpposingSide(i, ABILITY_NEUTRALIZING_GAS) && !(gStatuses3[i] & STATUS3_GASTRO_ACID))
             return TRUE;
-    }
-
+    } //added side statement, should make it only remove ability if neutralzing gas is on other side,
+    //change how the ability is used a bit ,but I'm fixing bad abilities anyway so it shouldn't be used to remove bad abiliites.
     return FALSE;
 }
 

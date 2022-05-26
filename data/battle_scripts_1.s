@@ -5732,6 +5732,18 @@ BattleScript_StealthRockFree::
 	waitmessage 0x40
 	return
 
+BattleScript_SwitchInAbilityMsg::
+	@call BattleScript_AbilityPopUp
+	printfromtable gSwitchInAbilityStringIds
+	waitmessage 0x40
+	end3
+
+BattleScript_SwitchInAbilityMsgRet::
+	@call BattleScript_AbilityPopUp
+	printfromtable gSwitchInAbilityStringIds
+	waitmessage 0x40
+	return
+
 @just relized set byte is wrong
 @what I need is to check if byte is that value
 @since crit are handled differently here
@@ -6595,6 +6607,22 @@ BattleScript_DoCastformChangeAnim::
 	waitstate
 	printstring STRINGID_PKMNTRANSFORMED
 	waitmessage 0x40
+	return
+
+sByteFour:
+.byte MAX_BATTLERS_COUNT
+
+BattleScript_NeutralizingGasExits::
+	savetarget
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_NEUTRALIZINGGASOVER
+	waitmessage B_WAIT_TIME_LONG
+	setbyte gBattlerTarget, 0
+BattleScript_NeutralizingGasExitsLoop:
+	switchinabilities BS_TARGET
+	addbyte gBattlerTarget, 1
+	jumpifbytenotequal gBattlerTarget, sByteFour, BattleScript_NeutralizingGasExitsLoop	@ SOMEHOW, comparing to gBattlersCount is problematic.
+	restoretarget
 	return
 
 BattleScript_TryAdrenalineOrb:

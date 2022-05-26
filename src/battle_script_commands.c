@@ -5563,7 +5563,17 @@ static void atk52_switchineffects(void) //important, think can put ability reset
     gSpecialStatuses[gActiveBattler].flag40 = 0;
     side = GetBattlerSide(gBattleScripting.battler); //added for switch case for intimidate I'll add, will be same as trygetintimidatetarget
     //will make new battle script to be called, identical to intimidate but switching target with attacker
-    if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES_DAMAGED)
+    
+    // Neutralizing Gas announces itself before hazards
+    if (gBattleMons[gActiveBattler].ability == ABILITY_NEUTRALIZING_GAS && gSpecialStatuses[gActiveBattler].announceNeutralizingGas == 0)
+    {
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_NEUTRALIZING_GAS;
+        gSpecialStatuses[gActiveBattler].announceNeutralizingGas = TRUE;
+        gBattlerAbility = gActiveBattler;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_SwitchInAbilityMsgRet;
+    }
+    else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES_DAMAGED)
      && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
      && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
      && gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
@@ -5625,20 +5635,63 @@ static void atk52_switchineffects(void) //important, think can put ability reset
     //think switch can use IsAbilityOnSide(BATTLE_OPPOSITE(battlerId), ability)
     //this version IsAbilityOnSide(BATTLE_OPPOSITE(gActiveBattler), ability)  the switch will be to change the "ability" bracket/field 
     //need to look more into switch cases, but it makes sense just make new battle script for each ability to reset but swapping target and attacker from the normal
-     
-    switch ((GetBattlerAbility(BATTLE_OPPOSITE(gActiveBattler)))) //think I"ve got it now, adjusted based on pokeomn.c calcbaseddamaeg line 3506
+    u16 ability;
+    u8 side;
+    ability = 0;
+    /*switch ((GetBattlerAbility(BATTLE_OPPOSITE(gActiveBattler)))) //think I"ve got it now, adjusted based on pokeomn.c calcbaseddamaeg line 3506
     { //should check the opposite side of pokemon active in switch script, but does it  check entire side incase its a double battle?
     case ABILITY_INTIMIDATE:
           BattleScriptPushCursor(); 
           gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
     }
-    break;
+    break;*/
    
+        side = GetBattlerSide(gActiveBattler);
+    for (i = 0; i < gBattlersCount; ++i)
+    {
+        if (GetBattlerSide(i) != side && gBattleMons[i].ability == ability)
+        {
+            
+            switch (ability)
+            {
+            case ABILITY_INTIMIDATE:
+                gLastUsedAbility = ability
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
+                break;
+            case ABILITY_ANTICIPATION:
+                gLastUsedAbility = ability
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
+                break;
+            case ABILITY_FRISK:
+                gLastUsedAbility = ability
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
+                break;
+            case ABILITY_FOREWARN:
+                gLastUsedAbility = ability
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
+                break;
+            case ABILITY_MOLD_BREAKER:
+                gLastUsedAbility = ability
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
+                break;
+            }
+            
+        }
+    }
     
     //actually to make this work I believe I'll have to make a new function like IsNeutralizingGasBannedAbility in util.c
     //to with the battlerid and ability factors build in, that will loop through the abilities I want on the other side I want to check
     //refer to that function and get battler ability in battle_util.c
 }
+
+/*{
+[REPEAT_SWITCH_IN] = { ABILITY_MOLD_BREAKER, ABILITY_TERAVOLT, ABILITY_TURBOBLAZE, ABILITY_UNNERVE, ABILITY_ANTICIPATION, ABILITY_FRISK, ABILITY_FOREWARN, ABILITY_INTIMIDATE, ABILITY_TRACE, ABILITY_NEUTRALIZING_GAS }
+};*/
 
 static void atk53_trainerslidein(void)
 {
@@ -6939,6 +6992,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         break;//abilities isnt in base firered so switch in stuff is handled elsewhere typically
     case VARIOUS_SWITCHIN_ABILITIES:
         gBattlescriptCurrInstr += 3;
+        AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_TRACE, gActiveBattler, 0, 0, 0);
@@ -7110,9 +7164,11 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         else
         {
-            gBattleMons[gActiveBattler].ability = ABILITY_SIMPLE;
+            if (gBattleMons[gBattlerTarget].ability == ABILITY_NEUTRALIZING_GAS)
+                gSpecialStatuses[gBattlerTarget].neutralizingGasRemoved = TRUE;
+
+            gBattleMons[gBattlerTarget].ability = ABILITY_SIMPLE;
             gBattlescriptCurrInstr += 7;
-            break;
         }
         return;
     case VARIOUS_TRY_ENTRAINMENT:
@@ -7891,6 +7947,15 @@ static void atk76_various(void) //will need to add all these emerald various com
                 gBattleCommunication[MULTISTRING_CHOOSER] = 5;
             else
                 gBattleCommunication[MULTISTRING_CHOOSER] = 5;
+        }
+        break;
+    case VARIOUS_TRY_END_NEUTRALIZING_GAS:
+        if (gSpecialStatuses[gActiveBattler].neutralizingGasRemoved)
+        {
+            gSpecialStatuses[gActiveBattler].neutralizingGasRemoved = FALSE;
+            BattleScriptPush(gBattlescriptCurrInstr + 3);
+            gBattlescriptCurrInstr = BattleScript_NeutralizingGasExits;
+            return;
         }
         break;
     case VARIOUS_TRY_THIRD_TYPE:
@@ -10989,26 +11054,37 @@ static void atkE1_trygetintimidatetarget(void) //I'd like to be able to get it o
 static void atkE2_switchoutabilities(void)
 {
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
-    switch (gBattleMons[gActiveBattler].ability)
+    if (gBattleMons[gActiveBattler].ability == ABILITY_NEUTRALIZING_GAS)
     {
-    case ABILITY_NATURAL_CURE:
-        gBattleMons[gActiveBattler].status1 = 0;
-        BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, gBitTable[*(gBattleStruct->battlerPartyIndexes + gActiveBattler)], 4, &gBattleMons[gActiveBattler].status1);
-        MarkBattlerForControllerExec(gActiveBattler);
-        break;
-    case ABILITY_REGENERATOR: //just added
-        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 3;
-        gBattleMoveDamage += gBattleMons[gActiveBattler].hp;
-        if (gBattleMoveDamage > gBattleMons[gActiveBattler].maxHP)
-            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP;
-        BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[*(gBattleStruct->battlerPartyIndexes + gActiveBattler)], 2, &gBattleMoveDamage);
-        MarkBattlerForControllerExec(gActiveBattler);
-        break;
+        gBattleMons[gActiveBattler].ability = ABILITY_NONE;
+        BattleScriptPush(gBattlescriptCurrInstr);
+        gBattlescriptCurrInstr = BattleScript_NeutralizingGasExits;
     }
-    }
-    gBattlescriptCurrInstr += 2;
-}
+    else
+    {
+        switch (GetBattlerAbility(gActiveBattler))
+        {
+        case ABILITY_NATURAL_CURE:
+            gBattleMons[gActiveBattler].status1 = 0;
+            BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, gBitTable[*(gBattleStruct->battlerPartyIndexes + gActiveBattler)], 4, &gBattleMons[gActiveBattler].status1);
+            MarkBattlerForControllerExec(gActiveBattler);
+            break;
+        case ABILITY_REGENERATOR: //just added
+            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 3;
+            gBattleMoveDamage += gBattleMons[gActiveBattler].hp;
+            if (gBattleMoveDamage > gBattleMons[gActiveBattler].maxHP)
+                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP;
+            BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[*(gBattleStruct->battlerPartyIndexes + gActiveBattler)], 2, &gBattleMoveDamage);
+            MarkBattlerForControllerExec(gActiveBattler);
+            break;
+        }
 
+        gBattlescriptCurrInstr += 2;
+    }
+    
+} //this had wrong brackets this entire time *facepalm
+
+ 
 static void atkE3_jumpifhasnohp(void)
 {
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
@@ -11899,29 +11975,19 @@ static void atk100_settoxicspikes(void) {
     }
 }
 
-static void atk101_setgastroacid(void) {
-    switch (gBattleMons[gBattlerTarget].ability)
+static void atk101_setgastroacid(void) 
+{
+    if (IsGastroAcidBannedAbility(gBattleMons[gBattlerTarget].ability))
     {
-    case ABILITY_AS_ONE_ICE_RIDER:
-    case ABILITY_AS_ONE_SHADOW_RIDER:
-    case ABILITY_BATTLE_BOND:
-    case ABILITY_COMATOSE:
-    case ABILITY_DISGUISE:
-    case ABILITY_GULP_MISSILE:
-    case ABILITY_ICE_FACE:
-    case ABILITY_MULTITYPE:
-    case ABILITY_POWER_CONSTRUCT:
-    case ABILITY_RKS_SYSTEM:
-    case ABILITY_SCHOOLING:
-    case ABILITY_SHIELDS_DOWN:
-    case ABILITY_STANCE_CHANGE:
-    case ABILITY_ZEN_MODE:
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
-        break;
-    default:
+    }
+    else
+    {
+        if (gBattleMons[gBattlerTarget].ability == ABILITY_NEUTRALIZING_GAS)
+            gSpecialStatuses[gBattlerTarget].neutralizingGasRemoved = TRUE;
+
         gStatuses3[gBattlerTarget] |= STATUS3_GASTRO_ACID;
         gBattlescriptCurrInstr += 5;
-        break;
     }
 }
 
