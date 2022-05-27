@@ -44,7 +44,7 @@ static bool32 MonFaintedFromPoison(u8 partyIdx)
 {
     struct Pokemon *pokemon = gPlayerParty + partyIdx;
     if (IsMonValidSpecies(pokemon) && !GetMonData(pokemon, MON_DATA_HP) && GetAilmentFromStatus(GetMonData(pokemon, MON_DATA_STATUS)) == AILMENT_PSN)
-        return TRUE;
+        return TRUE; //if species, hp == 0, and status is poisoned
     return FALSE;
 }
 
@@ -98,20 +98,20 @@ s32 DoPoisonFieldEffect(void)
     struct Pokemon *pokemon = gPlayerParty;
     u32 numPoisoned = 0;
     u32 numFainted = 0;
-    for (i = 0; i < PARTY_SIZE; i++)
-    {
+    for (i = 0; i < PARTY_SIZE; i++) //yeah this part will excclue poison heal mon from the poison effect
+    { //believe I wanted to do more with it, make them heal instead of only excluding them
         if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES) && GetAilmentFromStatus(GetMonData(pokemon, MON_DATA_STATUS)) == AILMENT_PSN)
           //  && GetMonAbility(&gPlayerParty[i]) != ABILITY_POISON_HEAL)
         {
             hp = GetMonData(pokemon, MON_DATA_HP);
-            if (hp == 0 || --hp == 0)
+            if (hp == 0 || --hp == 0) //believe this is condition for ending task, as its 1hp in emerald expasion
                 numFainted++;
-            SetMonData(pokemon, MON_DATA_HP, &hp);
+            SetMonData(pokemon, MON_DATA_HP, &hp);//this might be the effect itself?
             numPoisoned++;
-        }
-        pokemon++;
-    }
-    if (numFainted || numPoisoned)
+        } //sets hp to the value at address i.e the offset I guess
+        pokemon++;//i.e its just setting hp to what is there, not changing it itself.
+    }//loops through the party checking for activation condition, then incrementing poison to start task
+    if (numFainted || numPoisoned) //if not 0
         FldEffPoison_Start();
     if (numFainted)
         return FLDPSN_FNT;

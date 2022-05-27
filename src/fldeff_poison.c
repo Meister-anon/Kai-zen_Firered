@@ -3,7 +3,7 @@
 #include "task.h"
 #include "constants/songs.h"
 
-static void Task_FieldPoisonEffect(u8 taskId)
+static void Task_FieldPoisonEffect(u8 taskId) //is this the health effect too, or just the graphic?
 {
     s16 *data = gTasks[taskId].data;
 
