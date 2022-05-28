@@ -3,8 +3,8 @@
 #include "task.h"
 #include "constants/songs.h"
 
-static void Task_FieldPoisonEffect(u8 taskId) //is this the health effect too, or just the graphic?
-{
+static void Task_FieldPoisonEffect(u8 taskId) //no its just the graphic
+{ //prob make exclusion for poison heal in party here.
     s16 *data = gTasks[taskId].data;
 
     switch (data[0])
