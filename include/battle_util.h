@@ -123,6 +123,7 @@ void ClearIllusionMon(u32 battlerId);
 bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
 u32 IsAbilityOnSide(u32 battlerId, u32 ability);
 u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability);
+u32 DoesSideHaveAbility(u32 battlerId, u32 ability); // //adapted abilityonside function that doesn't use getbattlerability
 bool32 CanFling(u8 battlerId);
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);  //looping array kept 32
 bool32 IsRolePlayBannedAbility(u16 ability);

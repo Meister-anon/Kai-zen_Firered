@@ -4339,8 +4339,8 @@ bool32 IsNeutralizingGasOnField(void)
     for (i = 0; i < gBattlersCount; i++)
     {
         //if (IsBattlerAlive(i) && GetBattlerSide(i) != side && gBattleMons[i].ability == ABILITY_NEUTRALIZING_GAS && !(gStatuses3[i] & STATUS3_GASTRO_ACID))
-        //if (IsBattlerAlive(i) && gBattleMons[i].ability == ABILITY_NEUTRALIZING_GAS && !(gStatuses3[i] & STATUS3_GASTRO_ACID))  //original code 
-        if (IsAbilityOnOpposingSide(i, ABILITY_NEUTRALIZING_GAS) && !(gStatuses3[i] & STATUS3_GASTRO_ACID))
+        if (IsBattlerAlive(i) && gBattleMons[i].ability == ABILITY_NEUTRALIZING_GAS && !(gStatuses3[i] & STATUS3_GASTRO_ACID))  //original code 
+        //if (IsAbilityOnOpposingSide(i, ABILITY_NEUTRALIZING_GAS) && !(gStatuses3[i] & STATUS3_GASTRO_ACID))
             return TRUE;
     } //added side statement, should make it only remove ability if neutralzing gas is on other side,
     //change how the ability is used a bit ,but I'm fixing bad abilities anyway so it shouldn't be used to remove bad abiliites.
@@ -4353,8 +4353,9 @@ u32 GetBattlerAbility(u8 battlerId)  //Deokishishu in pret mentioned there is a 
 {
     if (gStatuses3[battlerId] & STATUS3_GASTRO_ACID) //only added this, because focusing abilities should work
         return ABILITY_NONE;
-    if (IsNeutralizingGasOnField() && !IsNeutralizingGasBannedAbility(gBattleMons[battlerId].ability))
-        return ABILITY_NONE;
+    //if (IsNeutralizingGasOnField() && !IsNeutralizingGasBannedAbility(gBattleMons[battlerId].ability))
+     if (DoesSideHaveAbility(BATTLE_OPPOSITE(battlerId), ABILITY_NEUTRALIZING_GAS) && !IsNeutralizingGasBannedAbility(gBattleMons[battlerId].ability))
+            return ABILITY_NONE;
     if ((((gBattleMons[gBattlerAttacker].ability == ABILITY_MOLD_BREAKER
         || gBattleMons[gBattlerAttacker].ability == ABILITY_TERAVOLT
         || gBattleMons[gBattlerAttacker].ability == ABILITY_TURBOBLAZE)
@@ -4368,6 +4369,87 @@ u32 GetBattlerAbility(u8 battlerId)  //Deokishishu in pret mentioned there is a 
             
     return gBattleMons[battlerId].ability;
 }
+
+bool8 IsBattlerAlive(u8 battlerId)
+{
+    if (gBattleMons[battlerId].hp == 0)
+        return FALSE;
+    else if (battlerId >= gBattlersCount)
+        return FALSE;
+    else if (gAbsentBattlerFlags & gBitTable[battlerId])
+        return FALSE;
+    else
+        return TRUE;
+}
+
+u32 IsAbilityOnSide(u32 battlerId, u32 ability)
+{
+    if (IsBattlerAlive(battlerId) && GetBattlerAbility(battlerId) == ability)
+        return battlerId + 1;
+    else if (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && GetBattlerAbility(BATTLE_PARTNER(battlerId)) == ability)
+        return BATTLE_PARTNER(battlerId) + 1;
+    else
+        return 0;
+}
+
+u32 DoesSideHaveAbility(u32 battlerId, u32 ability) //adapted ability search function that doesn't use getbattlerability
+{
+    if (IsBattlerAlive(battlerId) && gBattleMons[battlerId].ability == ability)
+        return battlerId + 1;
+    else if (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && gBattleMons[BATTLE_PARTNER(battlerId)].ability == ability)
+        return BATTLE_PARTNER(battlerId) + 1;
+    else
+        return 0;
+}
+
+u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability) // use for intimidate on enemy team
+{
+    return IsAbilityOnSide(BATTLE_OPPOSITE(battlerId), ability);
+}
+
+
+u32 IsAbilityOnField(u32 ability)
+{
+    u32 i;
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (IsBattlerAlive(i) && GetBattlerAbility(i) == ability)
+            return i + 1;
+    }
+
+    return 0;
+}
+
+u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability)
+{
+    u32 i;
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (i != battlerId && IsBattlerAlive(i) && GetBattlerAbility(i) == ability)
+            return i + 1;
+    }
+
+    return 0;
+}
+
+/*u32 IsAbilityPreventingEscape(u32 battlerId) //move to battle main.c is runnign from battle impossible /done
+{
+    u32 id;
+
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
+        return 0;
+
+    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_SHADOW_TAG)) && gBattleMons[battlerId].ability != ABILITY_SHADOW_TAG)
+        return id;
+    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_ARENA_TRAP)) && IsBattlerGrounded(battlerId))
+        return id;
+    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_MAGNET_PULL)) && IS_BATTLER_OF_TYPE(battlerId, TYPE_STEEL))
+        return id;
+
+    return 0;
+}*/  //implemented in battle_main
 
 u32 GetBattlerWeight(u8 battlerId) //use ethis for calculating  seismic toss damage change
 { //since way I plan to make damage formula may make it strong at early levels
@@ -4581,77 +4663,6 @@ u32 GetBattleMoveSplit(u32 moveId)
 {
     return gBattleMoves[moveId].split;
 }
-
-bool8 IsBattlerAlive(u8 battlerId)
-{
-    if (gBattleMons[battlerId].hp == 0)
-        return FALSE;
-    else if (battlerId >= gBattlersCount)
-        return FALSE;
-    else if (gAbsentBattlerFlags & gBitTable[battlerId])
-        return FALSE;
-    else
-        return TRUE;
-}
-
-u32 IsAbilityOnSide(u32 battlerId, u32 ability)
-{
-    if (IsBattlerAlive(battlerId) && GetBattlerAbility(battlerId) == ability)
-        return battlerId + 1;
-    else if (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && GetBattlerAbility(BATTLE_PARTNER(battlerId)) == ability)
-        return BATTLE_PARTNER(battlerId) + 1;
-    else
-        return 0;
-}
-
-u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability) // use for intimidate on enemy team
-{
-    return IsAbilityOnSide(BATTLE_OPPOSITE(battlerId), ability);
-}
-
-
-u32 IsAbilityOnField(u32 ability)
-{
-    u32 i;
-
-    for (i = 0; i < gBattlersCount; i++)
-    {
-        if (IsBattlerAlive(i) && GetBattlerAbility(i) == ability)
-            return i + 1;
-    }
-
-    return 0;
-}
-
-u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability)
-{
-    u32 i;
-
-    for (i = 0; i < gBattlersCount; i++)
-    {
-        if (i != battlerId && IsBattlerAlive(i) && GetBattlerAbility(i) == ability)
-            return i + 1;
-    }
-
-    return 0;
-}
-
-/*u32 IsAbilityPreventingEscape(u32 battlerId) //move to battle main.c is runnign from battle impossible /done
-{
-    u32 id;
-
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
-        return 0;
-
-    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_SHADOW_TAG)) && gBattleMons[battlerId].ability != ABILITY_SHADOW_TAG)
-        return id;
-    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_ARENA_TRAP)) && IsBattlerGrounded(battlerId))
-        return id;
-    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_MAGNET_PULL)) && IS_BATTLER_OF_TYPE(battlerId, TYPE_STEEL))
-        return id;
-
-    return 0;
-}*/  //implemented in battle_main
 
 bool32 CanBattlerEscape(u32 battlerId) // no ability check
 {
