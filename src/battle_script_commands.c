@@ -5529,6 +5529,73 @@ bool32 NoAliveMonsForEitherParty(void)
     return (NoAliveMonsForPlayer() || NoAliveMonsForOpponent());
 }
 
+/*u32 IsAbilityPreventingEscape(u32 battlerId)
+{
+    u32 id;
+    #if B_GHOSTS_ESCAPE >= GEN_6
+        if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
+            return 0;
+    #endif
+    #if B_SHADOW_TAG_ESCAPE >= GEN_4
+        if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_SHADOW_TAG)) && GetBattlerAbility(battlerId) != ABILITY_SHADOW_TAG)
+    #else
+        if (id = IsAbilityOnOpposingSide(battlerId, ABILITY_SHADOW_TAG))
+    #endif
+        return id;
+    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_ARENA_TRAP)) && IsBattlerGrounded(battlerId))
+        return id;
+    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_MAGNET_PULL)) && IS_BATTLER_OF_TYPE(battlerId, TYPE_STEEL))
+        return id;
+
+    return 0;
+
+
+    if ((i = IsAbilityPreventingEscape(gActiveBattler)))
+    {
+        gBattleScripting.battler = i - 1;
+        gLastUsedAbility = gBattleMons[i - 1].ability;
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PREVENTS_ESCAPE;
+        return 2;
+    }
+
+    u32 IsAbilityOnSide(u32 battlerId, u32 ability)
+{
+    if (IsBattlerAlive(battlerId) && GetBattlerAbility(battlerId) == ability)
+        return battlerId + 1;
+    else if (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && GetBattlerAbility(BATTLE_PARTNER(battlerId)) == ability)
+        return BATTLE_PARTNER(battlerId) + 1;
+    else
+        return 0;
+}
+
+THIS MAY BE THE KEY,  they use a constant to return the battlerId of the mon with the ability they are looking for at top with id
+ because the abilityonside function uses id + 1 to identify the battler
+
+ I can use i - 1 to set the mon affected by battlescript, and have it use their id
+ that way I can make it all work on one script using battle attacker instead of needin to make two,
+ long as I set gactivebattler to battlerattacker
+ 
+ From there I just need to call the relevant script include a return at the bottom instead of an end script.
+ set activebattler back to me i.e use id + 1 and continue the normal switch in script from there.
+ and I should be able to do all that from the switch in effect function
+
+ because things execute in order I'll need to put my switch code and everything
+ AFTER the neutralizing gas code but before the hazard code. 
+
+ order of steps,switch in, if gactivebattler on opposite side == ability
+ gactivebattler or gBattleScripting.battler = i - 1;
+ 
+ then use switch case to pick the ability
+ for each ability case make a battlescript that activates like normal ability but with return instead of end condition
+ in the function switch case put a call for that battle script
+ and after that put battlerid back on switching in mon with 
+ gactivebattler or gBattleScripting.battler = i + 1;
+
+ then have it continue through the rest of the switchineffects function as normal.
+ may have to put a return in the function for that so it continues to the outside effects
+ 5-29-22  IMPORTANT
+}*/
+
 static void atk52_switchineffects(void) //important, think can put ability reset here.. also prob need add stealth rock toxic spikes to this
 { //yeah realized this is where I need to change it, need to add activation of switch in abilities again here
     //actually side status already does what I want, what if I just make intimidate and
