@@ -5712,44 +5712,46 @@ static void atk52_switchineffects(void) //important, think can put ability reset
           gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
     }
     break;*/
-   
-        side = GetBattlerSide(gActiveBattler);
-    for (i = 0; i < gBattlersCount; ++i)
-    {
-        if (GetBattlerSide(i) != side && gBattleMons[i].ability == ability)
-        {
+    
+    if (i = IsAbilityOnOpposingSide(gActiveBattler, ability)) //believe the switch case and will put the id of the battle on variable i
+    {//will need to put "gBattleScripting.battler = i - 1;" in top of every switch case
             
             switch (ability)
             {
             case ABILITY_INTIMIDATE:
-                gLastUsedAbility = ability
+                gLastUsedAbility = ability;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
                 break;
             case ABILITY_ANTICIPATION:
-                gLastUsedAbility = ability
+                gLastUsedAbility = ability;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
                 break;
             case ABILITY_FRISK:
-                gLastUsedAbility = ability
+                gLastUsedAbility = ability;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
                 break;
             case ABILITY_FOREWARN:
-                gLastUsedAbility = ability
+                gLastUsedAbility = ability;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
                 break;
-            case ABILITY_MOLD_BREAKER:
-                gLastUsedAbility = ability
+            case ABILITY_TRACE:
+                gLastUsedAbility = ability;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
+                break;
+            case ABILITY_SYNCHRONIZE:
+                gLastUsedAbility = ability;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
                 break;
             }
             
-        }
     }
+    
     
     //actually to make this work I believe I'll have to make a new function like IsNeutralizingGasBannedAbility in util.c
     //to with the battlerid and ability factors build in, that will loop through the abilities I want on the other side I want to check

@@ -25345,7 +25345,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-    },
+    }, //note setup ability so it plays the cry before the stat boost
 
     [SPECIES_SPECTRIER] =
     {
@@ -25373,7 +25373,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-    },
+    },//note setup ability so it plays the cry before the stat boost
 
     [SPECIES_CALYREX] =
     {
@@ -33989,7 +33989,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-    },
+    },//note setup ability so it plays the cry of glastrier before the stat boost
 
     [SPECIES_CALYREX_SHADOW_RIDER] =
     {
@@ -34017,5 +34017,5 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-    },
+    },//note setup ability so it plays the cry of spectrier before the stat boost
 };
