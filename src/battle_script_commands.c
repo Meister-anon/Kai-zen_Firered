@@ -5649,6 +5649,64 @@ static void atk52_switchineffects(void) //important, think can put ability reset
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_SwitchInAbilityMsgRet;
     }
+    u16 ability;
+    ability = 0;
+
+    if (i = IsAbilityOnOpposingSide(gActiveBattler, ability)) //believe the switch case and will put the id of the battle on variable i
+    {//will need to put "gBattleScripting.battler = i - 1;" in top of every switch case
+
+        switch (ability)
+        {
+        case ABILITY_INTIMIDATE:
+            //gBattleScripting.battler = i - 1;
+            gActiveBattler = i - 1; //should set current script "target" to mon with ability found from switch case
+            gLastUsedAbility = gBattleMons[gActiveBattler].ability;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_IntimidateActivates;
+            gActiveBattler = j; //should reset activebattler back to original target for post switch actions
+            break;
+        case ABILITY_ANTICIPATION:
+            gActiveBattler = i - 1;
+            gLastUsedAbility = gBattleMons[gActiveBattler].ability;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
+            gActiveBattler = j;
+            break;
+        case ABILITY_FRISK:
+            gActiveBattler = i - 1;
+            gLastUsedAbility = gBattleMons[gActiveBattler].ability;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
+            gActiveBattler = j;
+            break;
+        case ABILITY_FOREWARN:
+            gActiveBattler = i - 1;
+            gLastUsedAbility = gBattleMons[gActiveBattler].ability;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
+            gActiveBattler = j;
+            break;
+        case ABILITY_TRACE:
+            gActiveBattler = i - 1;
+            gLastUsedAbility = gBattleMons[gActiveBattler].ability;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
+            gActiveBattler = j;
+            break;
+        case ABILITY_SYNCHRONIZE:
+            gActiveBattler = i - 1;
+            gLastUsedAbility = gBattleMons[gActiveBattler].ability;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
+            gActiveBattler = j;
+            break;
+        }
+
+    }
+    /*{
+[REPEAT_SWITCH_IN] = { ABILITY_MOLD_BREAKER, ABILITY_TERAVOLT, ABILITY_TURBOBLAZE, ABILITY_UNNERVE, ABILITY_ANTICIPATION, ABILITY_FRISK, ABILITY_FOREWARN, ABILITY_INTIMIDATE, ABILITY_TRACE, ABILITY_NEUTRALIZING_GAS }
+};*/
+
     else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES_DAMAGED)
      && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
      && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
@@ -5707,81 +5765,9 @@ static void atk52_switchineffects(void) //important, think can put ability reset
             }
             gBattlescriptCurrInstr += 2;
         }
-    }//this line is end of initial if statement can add switch statements for reactivation here below this bracket
-    //think switch can use IsAbilityOnSide(BATTLE_OPPOSITE(battlerId), ability)
-    //this version IsAbilityOnSide(BATTLE_OPPOSITE(gActiveBattler), ability)  the switch will be to change the "ability" bracket/field 
-    //need to look more into switch cases, but it makes sense just make new battle script for each ability to reset but swapping target and attacker from the normal
-    u16 ability;
-    ability = 0;
-    /*switch ((GetBattlerAbility(BATTLE_OPPOSITE(gActiveBattler)))) //think I"ve got it now, adjusted based on pokeomn.c calcbaseddamaeg line 3506
-    { //should check the opposite side of pokemon active in switch script, but does it  check entire side incase its a double battle?
-    case ABILITY_INTIMIDATE:
-          BattleScriptPushCursor(); 
-          gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
-    }
-    break;*/
-    
-    if (i = IsAbilityOnOpposingSide(gActiveBattler, ability)) //believe the switch case and will put the id of the battle on variable i
-    {//will need to put "gBattleScripting.battler = i - 1;" in top of every switch case
-            
-            switch (ability)
-            {
-            case ABILITY_INTIMIDATE:
-                //gBattleScripting.battler = i - 1;
-                gActiveBattler = i - 1; //should set current script "target" to mon with ability found from switch case
-                gLastUsedAbility = gBattleMons[gActiveBattler].ability;
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_IntimidateActivates;
-                gActiveBattler = j; //should reset activebattler back to original target for post switch actions
-                break;
-            case ABILITY_ANTICIPATION:
-                gActiveBattler = i - 1;
-                gLastUsedAbility = gBattleMons[gActiveBattler].ability;
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
-                gActiveBattler = j;
-                break;
-            case ABILITY_FRISK:
-                gActiveBattler = i - 1;
-                gLastUsedAbility = gBattleMons[gActiveBattler].ability;
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
-                gActiveBattler = j;
-                break;
-            case ABILITY_FOREWARN:
-                gActiveBattler = i - 1;
-                gLastUsedAbility = gBattleMons[gActiveBattler].ability;
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
-                gActiveBattler = j;
-                break;
-            case ABILITY_TRACE:
-                gActiveBattler = i - 1;
-                gLastUsedAbility = gBattleMons[gActiveBattler].ability;
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
-                gActiveBattler = j;
-                break;
-            case ABILITY_SYNCHRONIZE:
-                gActiveBattler = i - 1;
-                gLastUsedAbility = gBattleMons[gActiveBattler].ability;
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_ReactivateIntimidate;
-                gActiveBattler = j;
-                break;
-            }
-            
-    }
-    
-    
-    //actually to make this work I believe I'll have to make a new function like IsNeutralizingGasBannedAbility in util.c
-    //to with the battlerid and ability factors build in, that will loop through the abilities I want on the other side I want to check
-    //refer to that function and get battler ability in battle_util.c
+    }  
 }
 
-/*{
-[REPEAT_SWITCH_IN] = { ABILITY_MOLD_BREAKER, ABILITY_TERAVOLT, ABILITY_TURBOBLAZE, ABILITY_UNNERVE, ABILITY_ANTICIPATION, ABILITY_FRISK, ABILITY_FOREWARN, ABILITY_INTIMIDATE, ABILITY_TRACE, ABILITY_NEUTRALIZING_GAS }
-};*/
 
 static void atk53_trainerslidein(void)
 {
