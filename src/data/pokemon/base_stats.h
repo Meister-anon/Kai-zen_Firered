@@ -4080,7 +4080,8 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-    },
+    },//IMPORTANT make change to gluttony that it raises attack and speed by 1 stage when opponent uses berry
+    //make function that checks lastuseditem from opposite side, and one that looks through berries just like neutralizing gas does abilities
 
     [SPECIES_ARTICUNO] =
     {
@@ -5983,7 +5984,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_BUG,
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STURDY, ABILITY_GLUTTONY},
-            .abilityHidden = {ABILITY_CONTRARY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_CONTRARY, ABILITY_ANALYTIC},
         #else
             .abilities = {ABILITY_STURDY, ABILITY_NONE},
         #endif
@@ -14307,7 +14308,7 @@ const struct BaseStats gBaseStats[] =
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
-        .abilityHidden = {ABILITY_OVERGROW, ABILITY_NONE},
+        .abilityHidden = {ABILITY_OVERGROW, ABILITY_VITAL_SPIRIT},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -14336,7 +14337,7 @@ const struct BaseStats gBaseStats[] =
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
-        .abilityHidden = {ABILITY_OVERGROW, ABILITY_NONE},
+        .abilityHidden = {ABILITY_OVERGROW, ABILITY_SAP_SIPPER},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -14365,7 +14366,7 @@ const struct BaseStats gBaseStats[] =
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
-        .abilityHidden = {ABILITY_BLAZE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_BLAZE, ABILITY_VITAL_SPIRIT},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -14394,7 +14395,7 @@ const struct BaseStats gBaseStats[] =
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
-        .abilityHidden = {ABILITY_BLAZE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_BLAZE, ABILITY_FLASH_FIRE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -14423,7 +14424,7 @@ const struct BaseStats gBaseStats[] =
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
-        .abilityHidden = {ABILITY_TORRENT, ABILITY_NONE},
+        .abilityHidden = {ABILITY_TORRENT, ABILITY_VITAL_SPIRIT},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -14452,7 +14453,7 @@ const struct BaseStats gBaseStats[] =
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
-        .abilityHidden = {ABILITY_TORRENT, ABILITY_NONE},
+        .abilityHidden = {ABILITY_TORRENT, ABILITY_WATER_COMPACTION},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -25373,7 +25374,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-    },//note setup ability so it plays the cry before the stat boost
+    },//note setup ability so it plays the cry before the stat boost IMPORTANT
 
     [SPECIES_CALYREX] =
     {
@@ -34017,5 +34018,5 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-    },//note setup ability so it plays the cry of spectrier before the stat boost
+    },//note setup ability so it plays the cry of spectrier before the stat boost IMPORTANT
 };

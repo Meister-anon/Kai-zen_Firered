@@ -135,7 +135,7 @@ void NewGameInitData(void)
     //ClearPlayerLinkBattleRecords();
     InitHeracrossSizeRecord();
     InitMagikarpSizeRecord();
-    sub_806E190();
+    sub_806E190(); //something to do with pokeedex or national pokedex
     gPlayerPartyCount = 0; // change this & zeroplayerpartymons for new game+
     ZeroPlayerPartyMons();
     ResetPokemonStorageSystem();
@@ -143,7 +143,7 @@ void NewGameInitData(void)
     gSaveBlock1Ptr->registeredItem = 0;
     ClearBag();
     NewGameInitPCItems();
-    sub_809C794();
+    sub_809C794();  //something to do with berries? or maybe key items since its enigmaberry mentioned here
     InitEasyChatPhrases();
     ResetTrainerFanClub();
     //UnionRoomChat_InitializeRegisteredTexts();

@@ -3035,9 +3035,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_FORECAST: // 6
-            for (battler = 0; battler < gBattlersCount; ++battler)
+            for (battler = 0; battler < gBattlersCount; ++battler) //change to hopefully trigger cherrim form change
             {
-                if (gBattleMons[battler].ability == ABILITY_FORECAST)
+                if (gBattleMons[battler].ability == ABILITY_FORECAST || gBattleMons[battler].ability == ABILITY_FLOWER_GIFT)
                 {
                     effect = CastformDataTypeChange(battler);
                     if (effect)
@@ -3057,7 +3057,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                 if (gBattleStruct->synchronizeMoveEffect == MOVE_EFFECT_TOXIC)
                     gBattleStruct->synchronizeMoveEffect = MOVE_EFFECT_TOXIC; //changed so it transfers bad poison
-                gBattleCommunication[MOVE_EFFECT_BYTE] = gBattleStruct->synchronizeMoveEffect + MOVE_EFFECT_AFFECTS_USER;
+                gBattleCommunication[MOVE_EFFECT_BYTE] = gBattleStruct->synchronizeMoveEffect + MOVE_EFFECT_AFFECTS_USER; //need to understand this
                 gBattleScripting.battler = gBattlerTarget;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_SynchronizeActivates;
@@ -3073,7 +3073,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (gBattleStruct->synchronizeMoveEffect == MOVE_EFFECT_TOXIC)
                     gBattleStruct->synchronizeMoveEffect = MOVE_EFFECT_TOXIC;
                 gBattleCommunication[MOVE_EFFECT_BYTE] = gBattleStruct->synchronizeMoveEffect;
-                gBattleScripting.battler = gBattlerAttacker;
+                gBattleScripting.battler = gBattlerAttacker; //shows that changing battler for gBattlecripting is enough to shift who script affects
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_SynchronizeActivates;
                 gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
@@ -4355,7 +4355,7 @@ u32 GetBattlerAbility(u8 battlerId)  //Deokishishu in pret mentioned there is a 
         return ABILITY_NONE;
     //if (IsNeutralizingGasOnField() && !IsNeutralizingGasBannedAbility(gBattleMons[battlerId].ability))
      if (DoesSideHaveAbility(BATTLE_OPPOSITE(battlerId), ABILITY_NEUTRALIZING_GAS) && !IsNeutralizingGasBannedAbility(gBattleMons[battlerId].ability))
-            return ABILITY_NONE;
+            return ABILITY_NONE;//I don't need to subtract 1 from Id because my function isn't doing anything with the id returned by the function
     if ((((gBattleMons[gBattlerAttacker].ability == ABILITY_MOLD_BREAKER
         || gBattleMons[gBattlerAttacker].ability == ABILITY_TERAVOLT
         || gBattleMons[gBattlerAttacker].ability == ABILITY_TURBOBLAZE)
