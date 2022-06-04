@@ -315,7 +315,7 @@ bool8 IsBGMStopped(void)
     return FALSE;
 }
 
-void PlayCry1(u16 species, s8 pan)
+void PlayCry_Normal(u16 species, s8 pan) //IMPORTANT update this file with names from emerald
 {
     m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 85);
     PlayCryInternal(species, pan, CRY_VOLUME, 10, 0);
@@ -323,12 +323,13 @@ void PlayCry1(u16 species, s8 pan)
     RestoreBGMVolumeAfterPokemonCry();
 }
 
-void PlayCry2(u16 species, s8 pan, s8 volume, u8 priority)
+void PlayCry_NormalNoDucking(u16 species, s8 pan, s8 volume, u8 priority)
 {
     PlayCryInternal(species, pan, volume, priority, 0);
 }
 
-void PlayCry3(u16 species, s8 pan, u8 mode)
+// Assuming it's not CRY_MODE_DOUBLES, this is equivalent to PlayCry_Normal except it allows other modes.
+void PlayCry_ByMode(u16 species, s8 pan, u8 mode)
 {
     if (mode == 1)
     {
@@ -343,7 +344,8 @@ void PlayCry3(u16 species, s8 pan, u8 mode)
     }
 }
 
-void PlayCry4(u16 species, s8 pan, u8 mode)
+// Used when releasing multiple Pokémon at once in battle.
+void PlayCry_ReleaseDouble(u16 species, s8 pan, u8 mode)
 {
     if (mode == 1)
     {

@@ -1295,7 +1295,7 @@ static bool8 DoTradeAnim_Cable(void)
 
         if (sTradeData->tradeSpecies[0] != SPECIES_EGG)
         {
-            PlayCry1(sTradeData->tradeSpecies[0], 0);
+            PlayCry_Normal(sTradeData->tradeSpecies[0], 0);
         }
 
         sTradeData->state = 11;
@@ -1678,7 +1678,7 @@ static bool8 DoTradeAnim_Cable(void)
         {
             if (sTradeData->tradeSpecies[1] != SPECIES_EGG)
             {
-                PlayCry1(sTradeData->tradeSpecies[1], 0);
+                PlayCry_Normal(sTradeData->tradeSpecies[1], 0);
             }
             sTradeData->state = 267;
             sTradeData->timer = 0;
@@ -1792,7 +1792,7 @@ static bool8 DoTradeAnim_Wireless(void)
 
         if (sTradeData->tradeSpecies[0] != SPECIES_EGG)
         {
-            PlayCry1(sTradeData->tradeSpecies[0], 0);
+            PlayCry_Normal(sTradeData->tradeSpecies[0], 0);
         }
 
         sTradeData->state = 11;
@@ -2199,7 +2199,7 @@ static bool8 DoTradeAnim_Wireless(void)
         {
             if (sTradeData->tradeSpecies[1] != SPECIES_EGG)
             {
-                PlayCry1(sTradeData->tradeSpecies[1], 0);
+                PlayCry_Normal(sTradeData->tradeSpecies[1], 0);
             }
             sTradeData->state = 267;
             sTradeData->timer = 0;

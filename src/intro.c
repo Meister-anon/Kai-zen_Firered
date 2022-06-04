@@ -2205,7 +2205,7 @@ static void SpriteCB_NidorinoRearsUp(struct Sprite * sprite)
         }
         break;
     case 1:
-        PlayCry3(SPECIES_NIDORINO, 0x3F, 1);
+        PlayCry_ByMode(SPECIES_NIDORINO, 0x3F, 1);
         sprite->data[1] = 0;
         sprite->data[0]++;
         break;

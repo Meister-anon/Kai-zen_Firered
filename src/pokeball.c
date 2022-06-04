@@ -681,9 +681,9 @@ static void Task_PlayCryWhenReleasedFromBall(u8 taskId)
         break;
     case 1:
         if (ShouldPlayNormalPokeCry(mon) == TRUE)
-            PlayCry3(species, pan, 0);
+            PlayCry_ByMode(species, pan, 0);
         else
-            PlayCry3(species, pan, 11);
+            PlayCry_ByMode(species, pan, 11);
         
         DestroyTask(taskId);
         break;
@@ -696,9 +696,9 @@ static void Task_PlayCryWhenReleasedFromBall(u8 taskId)
         if (gTasks[taskId].tCryTaskFrames == 0)
         {
             if (ShouldPlayNormalPokeCry(mon) == TRUE)
-                PlayCry4(species, pan, 1);
+                PlayCry_ReleaseDouble(species, pan, 1);
             else
-                PlayCry4(species, pan, 12);
+                PlayCry_ReleaseDouble(species, pan, 12);
 
             DestroyTask(taskId);
         }
@@ -734,9 +734,9 @@ static void Task_PlayCryWhenReleasedFromBall(u8 taskId)
         }
         
         if (ShouldPlayNormalPokeCry(mon) == TRUE)
-            PlayCry4(species, pan, 0);
+            PlayCry_ReleaseDouble(species, pan, 0);
         else
-            PlayCry4(species, pan, 11);
+            PlayCry_ReleaseDouble(species, pan, 11);
 
         DestroyTask(taskId);
         break;

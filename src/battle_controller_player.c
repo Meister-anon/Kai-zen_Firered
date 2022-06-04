@@ -2726,7 +2726,7 @@ static void PlayerHandlePlayFanfare(void)
 
 static void PlayerHandleFaintingCry(void)
 {
-    PlayCry3(GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES), -25, 5);
+    PlayCry_ByMode(GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES), -25, 5);
     PlayerBufferExecCompleted();
 }
 

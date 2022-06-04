@@ -142,7 +142,7 @@ void SoundTask_PlayCryHighPitch(u8 taskId)
     else
         species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerId]], MON_DATA_SPECIES);
     if (species != SPECIES_NONE)
-        PlayCry3(species, pan, 3);
+        PlayCry_ByMode(species, pan, 3);
     DestroyAnimVisualTask(taskId);
 }
 
@@ -178,9 +178,9 @@ void SoundTask_PlayDoubleCry(u8 taskId)
     if (species != SPECIES_NONE)
     {
         if (gBattleAnimArgs[1] == TAIL_SENTINEL)
-            PlayCry3(species, pan, 9);
+            PlayCry_ByMode(species, pan, 9);
         else
-            PlayCry3(species, pan, 7);
+            PlayCry_ByMode(species, pan, 7);
         gTasks[taskId].func = sub_80DD270;
     }
     else
@@ -202,13 +202,13 @@ static void sub_80DD270(u8 taskId)
     {
         if (!IsCryPlaying())
         {
-            PlayCry3(species, pan, 10);
+            PlayCry_ByMode(species, pan, 10);
             DestroyAnimVisualTask(taskId);
         }
     }
     else if (!IsCryPlaying())
     {
-        PlayCry3(species, pan, 8);
+        PlayCry_ByMode(species, pan, 8);
         DestroyAnimVisualTask(taskId);
     }
 }
@@ -232,7 +232,7 @@ void sub_80DD334(u8 taskId)
     gTasks[taskId].data[2] = pan;
     if (species != SPECIES_NONE)
     {
-        PlayCry3(species, pan, 4);
+        PlayCry_ByMode(species, pan, 4);
         gTasks[taskId].func = sub_80DD390;
     }
     else
@@ -253,7 +253,7 @@ static void sub_80DD390(u8 taskId)
         u16 species = gTasks[taskId].data[1];
         s8 pan = gTasks[taskId].data[2];
         
-        PlayCry3(species, pan, 6);
+        PlayCry_ByMode(species, pan, 6);
         DestroyAnimVisualTask(taskId);
     }
 }

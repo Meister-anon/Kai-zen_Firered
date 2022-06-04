@@ -5589,7 +5589,7 @@ THIS MAY BE THE KEY,  they use a constant to return the battlerId of the mon wit
  for each ability case make a battlescript that activates like normal ability but with return instead of end condition
  in the function switch case put a call for that battle script
  and after that put battlerid back on switching in mon with 
- gactivebattler or gBattleScripting.battler = i + 1;
+ gactivebattler or gBattleScripting.battler = i + 1;        IMPORTANT need to identify if these 2 are different or have identical use here
 
  (only need make new battlescript if original ability activate battlescript doesn't end in return)
 
@@ -5649,19 +5649,18 @@ static void atk52_switchineffects(void) //important, think can put ability reset
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_SwitchInAbilityMsgRet;
     }
-    u16 ability;
-    ability = 0;
 
-    if (i = IsAbilityOnOpposingSide(gActiveBattler, ability)) //believe the switch case and will put the id of the battle on variable i
+
+    if (i = IsAbilityOnOpposingSide(gActiveBattler, gBattleMons[battler].ability)) //believe the switch case and will put the id of the battle on variable i
     {//will need to put "gBattleScripting.battler = i - 1;" in top of every switch case
 
-        switch (ability)
+        switch (gBattleMons[battler].ability) //I don't understand what a switch is actually doing apparently
         {
         case ABILITY_INTIMIDATE:
             //gBattleScripting.battler = i - 1;
             gActiveBattler = i - 1; //should set current script "target" to mon with ability found from switch case
-            gLastUsedAbility = gBattleMons[gActiveBattler].ability;
-            BattleScriptPushCursor();
+            //gLastUsedAbility = gBattleMons[gActiveBattler].ability;  other part of intimidate activation already does this
+            BattleScriptPushCursor(); //I may need to set intimidatedMon to 0
             gBattlescriptCurrInstr = BattleScript_IntimidateActivates;
             gActiveBattler = j; //should reset activebattler back to original target for post switch actions
             break;
@@ -7106,13 +7105,16 @@ static void atk76_various(void) //will need to add all these emerald various com
             && !NoAliveMonsForEitherParty()
             && gBattleMons[gBattlerAttacker].statStages[STAT_ATK] != 12)
         {
+            u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
+
+            PlayCry_Normal(species, 25);
             gBattleMons[gBattlerAttacker].statStages[STAT_ATK]++;
             SET_STATCHANGER(STAT_ATK, 1, FALSE);
             PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_ATK);
             BattleScriptPush(gBattlescriptCurrInstr + 3);
             gLastUsedAbility = GetBattlerAbility(gActiveBattler);
-            if (GetBattlerAbility(gActiveBattler) == ABILITY_AS_ONE_ICE_RIDER)
-                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_CHILLING_NEIGH;
+            //if (GetBattlerAbility(gActiveBattler) == ABILITY_AS_ONE_ICE_RIDER)
+            //    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_CHILLING_NEIGH;
             gBattlescriptCurrInstr = BattleScript_RaiseStatOnFaintingTarget;
             return;
         }
@@ -7124,13 +7126,16 @@ static void atk76_various(void) //will need to add all these emerald various com
             && !NoAliveMonsForEitherParty()
             && gBattleMons[gBattlerAttacker].statStages[STAT_SPATK] != 12)
         {
+            u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
+
+            PlayCry_Normal(species, 25);
             gBattleMons[gBattlerAttacker].statStages[STAT_SPATK]++;
             SET_STATCHANGER(STAT_SPATK, 1, FALSE);
             PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_SPATK);
             BattleScriptPush(gBattlescriptCurrInstr + 3);
             gLastUsedAbility = GetBattlerAbility(gActiveBattler);
-            if (GetBattlerAbility(gActiveBattler) == ABILITY_AS_ONE_SHADOW_RIDER)
-                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_GRIM_NEIGH;
+            //if (GetBattlerAbility(gActiveBattler) == ABILITY_AS_ONE_SHADOW_RIDER)
+              //  gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_GRIM_NEIGH;
             gBattlescriptCurrInstr = BattleScript_RaiseStatOnFaintingTarget;
             return;
         }
@@ -11092,7 +11097,8 @@ static void atkE1_trygetintimidatetarget(void) //I'd like to be able to get it o
 //ABILITYEFFECT_INTIMIDATE2 is the one  for switchin  so changing the targetting for just that should make it work how I want
 //maybe do it like trace and have the targetting built into the activation function
 {
-    u8 side;
+    u8 side; //if use of gbattletarget messes up switchin use, I can take notes from synchronize ability scrpit
+    //and add different activation to the function based on if its attacker or target  IMPORTANT
 
     gBattleScripting.battler = gBattleStruct->intimidateBattler;//linked with intimidate in util.c, it finds mon with intimidate/condition and sets that battler to the battlescript battler
     side = GetBattlerSide(gBattleScripting.battler); //

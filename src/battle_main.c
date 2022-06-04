@@ -2044,7 +2044,7 @@ static void SpriteCB_MoveWildMonToRight(struct Sprite *sprite)
         if (sprite->pos2.x == 0)
         {
             sprite->callback = SpriteCB_WildMonShowHealthbox;
-            PlayCry1(sprite->data[2], 25);
+            PlayCry_Normal(sprite->data[2], 25);
         }
     }
 }
