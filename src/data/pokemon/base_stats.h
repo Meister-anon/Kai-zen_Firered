@@ -13864,7 +13864,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 45,
         .baseSpDefense = 55,
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_GROUND,
         .catchRate = 45,
         .expYield = 62,
         //.evYield_Speed = 1,
@@ -13891,7 +13891,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 60,
         .baseSpDefense = 75,
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_GROUND,
         .catchRate = 45,
         .expYield = 145,
         //.evYield_Speed = 2,
@@ -13901,7 +13901,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
+        .abilities = {ABILITY_CONTRARY, ABILITY_NONE},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_CONTRARY, ABILITY_NONE},
         #endif
@@ -13918,7 +13918,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 75,
         .baseSpDefense = 95,
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_GROUND,
         .catchRate = 45,
         .expYield = 238,
         //.evYield_Speed = 3,
@@ -13928,7 +13928,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
+        .abilities = {ABILITY_CONTRARY, ABILITY_NONE},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_CONTRARY, ABILITY_NONE},
         #endif

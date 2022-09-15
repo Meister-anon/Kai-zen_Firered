@@ -321,7 +321,7 @@ static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 
 //each line adds 3 because there are 3 arguments in each line, atk type, def type, & effectiveness
 //DON'T FORGET every time I change below, need to update in the .h
 
-const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+const u8 gTypeEffectiveness[378] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -331,6 +331,7 @@ const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of
     TYPE_FIRE, TYPE_ICE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIRE, TYPE_BUG, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIRE, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FIRE, TYPE_GROUND, TYPE_MUL_NOT_EFFECTIVE, //NEW effectiveness for snivy, may remove
     TYPE_FIRE, TYPE_DRAGON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIRE, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
@@ -376,7 +377,7 @@ const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of
     TYPE_POISON, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_POISON, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_POISON, TYPE_GROUND, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_POISON, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_POISON, TYPE_ROCK, TYPE_MUL_NO_EFFECT,
     TYPE_POISON, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_POISON, TYPE_STEEL, TYPE_MUL_NO_EFFECT,
     TYPE_GROUND, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
@@ -1632,6 +1633,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         //if evolution branches preferrably pick the one with type advantage to player starter,
                         //to do this realize I need another var to hold player starter, and use basestates type (playervar) to check its type
                         //to help ai pick evolution     actually only eevee has branch evo
+
+                        //in that case make it based on partydatea.species if its charizard be flareon, if venusaur lefeon or jolteon
+                        //and vaporeon if blastoise check what mon I put in lists again I may make the eeveelutions have 2 options per starter group
                     }
                    else if (partyData[i].species == SPECIES_VENUSAUR
                         || partyData[i].species == SPECIES_BLASTOISE
