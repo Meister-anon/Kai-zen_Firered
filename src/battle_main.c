@@ -1598,7 +1598,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 nameHash += gTrainers[trainerNum].trainerName[j];
             switch (gTrainers[trainerNum].partyFlags)
             {
-            case 0: //evolutnion works, only issue is if you give the rival multiple instances of the same starter line, with the evolved form first
+            case 0: //evolution works, only issue is if you give the rival multiple instances of the same starter line, with the evolved form first
                 //because their both using the same var, it just eliminated the unevolved version of the pokemon if it comes after the evolved form.
             {
                 const struct TrainerMonNoItemDefaultMoves *partyData = gTrainers[trainerNum].party.NoItemDefaultMoves;

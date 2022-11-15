@@ -13,9 +13,9 @@ const struct Trainer gTrainers[] = {
     },
     [TRAINER_AQUA_LEADER_1] = {
         .partyFlags = 0,
-        .trainerClass = CLASS_AQUA_LEADER,
-        .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_AQUA,
-        .trainerPic = TRAINER_PIC_AQUA_LEADER_ARCHIE,
+        .trainerClass = CLASS_AQUA_LEADER,//works like a lookup table value define in trainer_classes.h then refers to array order in 
+        .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_AQUA,//trainer_class_names.h so renaming output is just changing names file
+        .trainerPic = TRAINER_PIC_AQUA_LEADER_ARCHIE, //reverted "gamer" back to "gambler
         .trainerName = _(""),
         .items = {},
         .doubleBattle = FALSE,

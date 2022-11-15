@@ -2063,8 +2063,8 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                      || gTrainers[gTrainerBattleOpponent_A].trainerClass == CLASS_CHAMPION_2)
                         toCpy = GetExpandedPlaceholder(PLACEHOLDER_ID_RIVAL);
                     else
-                        toCpy = gTrainers[gTrainerBattleOpponent_A].trainerName;
-                }
+                        toCpy = gTrainers[gTrainerBattleOpponent_A].trainerName;// can prob use this to save value for custom mon
+                }//i.e the custom starter unlelss its already working  save value pull value type thing
                 break;
             case B_TXT_LINK_PLAYER_NAME: // link player name
                 toCpy = gLinkPlayers[multiplayerId].name;
