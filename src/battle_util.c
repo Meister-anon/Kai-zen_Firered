@@ -81,9 +81,7 @@ u8 GetBattlerForBattleScript(u8 caseId)
 
 void PressurePPLose(u8 target, u8 attacker, u16 move)
 {
-    s32 i, z, x;
-    x = i - 1;
-    z = x;
+    s32 i;
 
     if (gBattleMons[target].ability == ABILITY_PRESSURE)
     {
@@ -107,26 +105,24 @@ void PressurePPLose(u8 target, u8 attacker, u16 move)
         if (i != MAX_MON_MOVES)
         {
             if (gBattleMons[attacker].pp[i])
-                --gBattleMons[attacker].pp[z];
-                gBattleMons[attacker].pp[i] = gBattleMons[attacker].pp[z];
+                --gBattleMons[attacker].pp[i];
+                --gBattleMons[attacker].pp[i];
             if (!(gBattleMons[attacker].status2 & STATUS2_TRANSFORMED)
-             && !(gDisableStructs[attacker].mimickedMoves & gBitTable[i]))
+                && !(gDisableStructs[attacker].mimickedMoves & gBitTable[i]))
             {
                 gActiveBattler = attacker;
                 BtlController_EmitSetMonData(0, REQUEST_PPMOVE1_BATTLE + i, 0, 1, &gBattleMons[gActiveBattler].pp[i]);
                 MarkBattlerForControllerExec(gActiveBattler);
             }
         }
-    }// will need to test this ability implementation may need to either replace emitset stuff with "z"
-}// or add a line that makes i = z; under the decrement. yeah I'll just do that now to be sure
+    }//so now that I understand this pretty sure all I have to do is repeat the decrement action -_-
+}//since I belive i isn't the value of the pp, but the position of the move who's pp we're lowering
 
-void PressurePPLoseOnUsingImprison(u8 attacker)
+void PressurePPLoseOnUsingImprison(u8 attacker)//it was so simple *facepalm*
 {
-    s32 i, j, z, x;
+    s32 i, j;
     s32 imprisonPos = 4;
     u8 atkSide = GetBattlerSide(attacker);
-    x = j - 1;
-    z = x;
 
     for (i = 0; i < gBattlersCount; ++i)
     {
@@ -140,6 +136,7 @@ void PressurePPLoseOnUsingImprison(u8 attacker)
                     --gBattleMons[attacker].pp[j];
             }
         }
+
         else if (atkSide != GetBattlerSide(i) && gBattleMons[i].ability == ABILITY_HI_PRESSURE)
         {
             for (j = 0; j < MAX_MON_MOVES && gBattleMons[attacker].moves[j] != MOVE_IMPRISON; ++j);
@@ -147,8 +144,8 @@ void PressurePPLoseOnUsingImprison(u8 attacker)
             {
                 imprisonPos = j;
                 if (gBattleMons[attacker].pp[j])
-                    --gBattleMons[attacker].pp[z];
-                    gBattleMons[attacker].pp[j] = gBattleMons[attacker].pp[z];
+                    --gBattleMons[attacker].pp[j];
+                    --gBattleMons[attacker].pp[j];
             }
         }
     }
@@ -164,10 +161,8 @@ void PressurePPLoseOnUsingImprison(u8 attacker)
 
 void PressurePPLoseOnUsingPerishSong(u8 attacker)
 {
-    s32 i, j, z, x;
+    s32 i, j;
     s32 perishSongPos = 4;
-    x = j - 1;
-    z = x;
 
     for (i = 0; i < gBattlersCount; ++i)
     {
@@ -188,8 +183,8 @@ void PressurePPLoseOnUsingPerishSong(u8 attacker)
             {
                 perishSongPos = j;
                 if (gBattleMons[attacker].pp[j])
-                    --gBattleMons[attacker].pp[x]; //!important  need test hopefully these implementations work
-                    gBattleMons[attacker].pp[j] = gBattleMons[attacker].pp[z];
+                    --gBattleMons[attacker].pp[j];
+                    --gBattleMons[attacker].pp[j];
             }
         }
     }
@@ -233,7 +228,7 @@ void sub_8017298(u8 arg0)
 }
 
 //if wonder guard is in one of these lists (and I want it to be) make sure to add dispirit guard too
-//also need to remember to add all custom abilities to these lists as I see fit
+//also need to remember to add all custom abilities to these lists as I see fit  !important
 
 static const u8 sAbilitiesAffectedByMoldBreaker[] =
 {
