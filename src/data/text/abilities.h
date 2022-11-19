@@ -257,7 +257,9 @@ static const u8 sAsOneShadowRiderDescription[] = _("Unnerve and Grim Neigh.");
 static const u8 sAirLockDescription[] = _("Negates weather effects.");
 static const u8 sDispiritGuardDescription[] = _("“Not very effective” hits.");
 static const u8 sNuisanceDescription[] = _("“Weak attacks” strike first.");
-static const u8 sMultiTaskDescription[] = _("Damaging Attacks are multi-hit");
+static const u8 sMultiTaskDescription[] = _("Damaging Attacks are multi-hit.");
+static const u8 sSiroccoDescription[] = _("Kicks up a sandstorm on contact.");
+static const u8 sHipressureDescription[] = _("Sharply raises foe's PP usage.");
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
 {
@@ -533,6 +535,8 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_DISPIRIT_GUARD] = sDispiritGuardDescription,
     [ABILITY_NUISANCE] = sNuisanceDescription,
     [ABILITY_MULTI_TASK] = sMultiTaskDescription,
+    [ABILITY_SIROCCO] = sSiroccoDescription,
+    [ABILITY_HI_PRESSURE] = sHipressureDescription,
 };
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
@@ -809,4 +813,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_DISPIRIT_GUARD] = _("DISPIRIT GUARD"),
     [ABILITY_NUISANCE] = _("NUISANCE"),
     [ABILITY_MULTI_TASK] =_("Multi-task"),
+    [ABILITY_SIROCCO] =_("Sirocco"),
+    [ABILITY_HI_PRESSURE] =_("Hi-Pressure"),
 };

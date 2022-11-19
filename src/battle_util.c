@@ -81,7 +81,9 @@ u8 GetBattlerForBattleScript(u8 caseId)
 
 void PressurePPLose(u8 target, u8 attacker, u16 move)
 {
-    s32 i;
+    s32 i, z, x;
+    x = i - 1;
+    z = x;
 
     if (gBattleMons[target].ability == ABILITY_PRESSURE)
     {
@@ -99,13 +101,32 @@ void PressurePPLose(u8 target, u8 attacker, u16 move)
             }
         }
     }
-}
+    else if (gBattleMons[target].ability == ABILITY_HI_PRESSURE)
+    {
+        for (i = 0; i < MAX_MON_MOVES && gBattleMons[attacker].moves[i] != move; ++i);
+        if (i != MAX_MON_MOVES)
+        {
+            if (gBattleMons[attacker].pp[i])
+                --gBattleMons[attacker].pp[z];
+                gBattleMons[attacker].pp[i] = gBattleMons[attacker].pp[z];
+            if (!(gBattleMons[attacker].status2 & STATUS2_TRANSFORMED)
+             && !(gDisableStructs[attacker].mimickedMoves & gBitTable[i]))
+            {
+                gActiveBattler = attacker;
+                BtlController_EmitSetMonData(0, REQUEST_PPMOVE1_BATTLE + i, 0, 1, &gBattleMons[gActiveBattler].pp[i]);
+                MarkBattlerForControllerExec(gActiveBattler);
+            }
+        }
+    }// will need to test this ability implementation may need to either replace emitset stuff with "z"
+}// or add a line that makes i = z; under the decrement. yeah I'll just do that now to be sure
 
 void PressurePPLoseOnUsingImprison(u8 attacker)
 {
-    s32 i, j;
+    s32 i, j, z, x;
     s32 imprisonPos = 4;
     u8 atkSide = GetBattlerSide(attacker);
+    x = j - 1;
+    z = x;
 
     for (i = 0; i < gBattlersCount; ++i)
     {
@@ -117,6 +138,17 @@ void PressurePPLoseOnUsingImprison(u8 attacker)
                 imprisonPos = j;
                 if (gBattleMons[attacker].pp[j])
                     --gBattleMons[attacker].pp[j];
+            }
+        }
+        else if (atkSide != GetBattlerSide(i) && gBattleMons[i].ability == ABILITY_HI_PRESSURE)
+        {
+            for (j = 0; j < MAX_MON_MOVES && gBattleMons[attacker].moves[j] != MOVE_IMPRISON; ++j);
+            if (j != MAX_MON_MOVES)
+            {
+                imprisonPos = j;
+                if (gBattleMons[attacker].pp[j])
+                    --gBattleMons[attacker].pp[z];
+                    gBattleMons[attacker].pp[j] = gBattleMons[attacker].pp[z];
             }
         }
     }
@@ -132,8 +164,10 @@ void PressurePPLoseOnUsingImprison(u8 attacker)
 
 void PressurePPLoseOnUsingPerishSong(u8 attacker)
 {
-    s32 i, j;
+    s32 i, j, z, x;
     s32 perishSongPos = 4;
+    x = j - 1;
+    z = x;
 
     for (i = 0; i < gBattlersCount; ++i)
     {
@@ -145,6 +179,17 @@ void PressurePPLoseOnUsingPerishSong(u8 attacker)
                 perishSongPos = j;
                 if (gBattleMons[attacker].pp[j])
                     --gBattleMons[attacker].pp[j];
+            }
+        }
+        else if (gBattleMons[i].ability == ABILITY_HI_PRESSURE && i != attacker)
+        {
+            for (j = 0; j < MAX_MON_MOVES && gBattleMons[attacker].moves[j] != MOVE_PERISH_SONG; ++j);
+            if (j != MAX_MON_MOVES)
+            {
+                perishSongPos = j;
+                if (gBattleMons[attacker].pp[j])
+                    --gBattleMons[attacker].pp[x]; //!important  need test hopefully these implementations work
+                    gBattleMons[attacker].pp[j] = gBattleMons[attacker].pp[z];
             }
         }
     }
