@@ -2716,7 +2716,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 break;
             CancelMultiTurnMoves(gEffectBattler);
             statusChanged = TRUE;
-            break;
+            break;//NEED to better check swithch statements to see if break ends entire switch, or it just makes it continue checking for matches in other cases
         case STATUS1_POISON:
             if (gBattleMons[gEffectBattler].ability == ABILITY_IMMUNITY
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
@@ -2781,6 +2781,24 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 }
                 return;
             }
+            if (gBattleMons[gEffectBattler].ability == ABILITY_WATER_BUBBLE
+                && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
+            {
+                gLastUsedAbility = ABILITY_WATER_BUBBLE;
+                RecordAbilityBattle(gEffectBattler, ABILITY_WATER_BUBBLE);
+                BattleScriptPush(gBattlescriptCurrInstr + 1);
+                gBattlescriptCurrInstr = BattleScript_BRNPrevention;
+                if (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
+                {
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                    gHitMarker &= ~(HITMARKER_IGNORE_SAFEGUARD);
+                }
+                else
+                {
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                }
+                return;
+            }
             if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_FIRE)
              && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
@@ -2793,6 +2811,8 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
             if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_FIRE))
                 break;
             if (gBattleMons[gEffectBattler].ability == ABILITY_WATER_VEIL)
+                break;
+            if (gBattleMons[gEffectBattler].ability == ABILITY_WATER_BUBBLE)
                 break;
             if (gBattleMons[gEffectBattler].status1)
                 break;
