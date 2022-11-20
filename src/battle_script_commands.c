@@ -718,7 +718,7 @@ static const u8 *const sMoveEffectBS_Ptrs[] =
     [MOVE_EFFECT_FREEZE] = BattleScript_MoveEffectFreeze,
     [MOVE_EFFECT_PARALYSIS] = BattleScript_MoveEffectParalysis,
     [MOVE_EFFECT_TOXIC] = BattleScript_MoveEffectToxic,
-    //[MOVE_EFFECT_TOXIC] = BattleScript_MoveEffectToxic,
+    //[MOVE_EFFECT_TOXIC] = BattleScript_MoveEffectToxic, //think should put spirit lock here so values stay in order
     [MOVE_EFFECT_CONFUSION] = BattleScript_MoveEffectConfusion,
     [MOVE_EFFECT_FLINCH] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_TRI_ATTACK] = BattleScript_MoveEffectSleep,
@@ -2697,7 +2697,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
     if (gBattleCommunication[MOVE_EFFECT_BYTE] <= 6) // status change
     {
         switch (sStatusFlagsForMoveEffects[gBattleCommunication[MOVE_EFFECT_BYTE]])  //find out what this exactly is
-        {
+        {//for switch to work, parenthesis value in "switch" most be a single value,  value in case must also be a single value
         case STATUS1_SLEEP:  //best switch case example
             // check active uproar
             if (gBattleMons[gEffectBattler].ability != ABILITY_SOUNDPROOF)
