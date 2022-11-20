@@ -2714,7 +2714,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 break;
             if (gBattleMons[gEffectBattler].ability == ABILITY_INSOMNIA)
                 break;
-            CancelMultiTurnMoves(gEffectBattler);
+            CancelMultiTurnMoves(gEffectBattler); //if it passes all checks cancel multi turn moves and appply sleep. I think
             statusChanged = TRUE;
             break;//NEED to better check swithch statements to see if break ends entire switch, or it just makes it continue checking for matches in other cases
         case STATUS1_POISON:
