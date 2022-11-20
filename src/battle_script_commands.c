@@ -2706,7 +2706,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                     ++gActiveBattler);
             else
                 gActiveBattler = gBattlersCount;
-            if (gBattleMons[gEffectBattler].status1) //part that prevents status inflict while statused 
+            if (gBattleMons[gEffectBattler].status1) //!important part that prevents status inflict while statused 
                 break;
             if (gActiveBattler != gBattlersCount)
                 break;
@@ -2717,10 +2717,11 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
             CancelMultiTurnMoves(gEffectBattler); //if it passes all checks cancel multi turn moves and appply sleep. I think
             statusChanged = TRUE;
             break;//NEED to better check swithch statements to see if break ends entire switch, or it just makes it continue checking for matches in other cases
-        case STATUS1_POISON:
-            if (gBattleMons[gEffectBattler].ability == ABILITY_IMMUNITY
-             && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
-            {
+        case STATUS1_POISON: //checked break ends entire switch function, but they have fallthrough, w/o breaks it would continue to next case
+            if (gBattleMons[gEffectBattler].ability == ABILITY_IMMUNITY// so when multi status is set will need to remove breaks
+             && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))//and reorganize statements so it follows alternate paths rather than just going down
+            {   //so make it if   and else using multiple or operands to group up the thinigs that break status and status changd will equal false
+                // then an else that will do the normal things that go along with status being applied. and then keeps going without a break
                 gLastUsedAbility = ABILITY_IMMUNITY;
                 RecordAbilityBattle(gEffectBattler, ABILITY_IMMUNITY);
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
