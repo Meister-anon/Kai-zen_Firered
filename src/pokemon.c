@@ -3406,9 +3406,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                 == GetGenderFromSpeciesAndPersonality(gBattleMons[gBattlerTarget].species, gBattleMons[gBattlerTarget].personality))
                 gBattleMovePower = (gBattleMovePower * 125 / 100);
                 //MulModifier(&modifier, UQ_4_12(1.25));
-            else
-                gBattleMovePower = (gBattleMovePower * 75 / 100);
-                //MulModifier(&modifier, UQ_4_12(0.75));
+            /*else
+                gBattleMovePower = (gBattleMovePower * 75 / 100);*/ 
+                //MulModifier(&modifier, UQ_4_12(0.75));  removed above section cause don't want negative effects of rivalry.
         }
         break;
     case ABILITY_ANALYTIC:

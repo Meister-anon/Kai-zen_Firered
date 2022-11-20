@@ -49,7 +49,7 @@ if it would otherwise be 0/NONE except in the case of ability.
 //finished adding safari stuff, just remember to add the flee rate 
 //if I plan to add more pokemon to safari zone.
 
-//may need add flag to every pokemon, so can set it as evo case, i.e pokemon with this flag, can evolve to this.
+//may need add flag to every pokemon, so can set it as evo case, i.e pokemon with this flag, can evolve to this variant.
 
 //adjusted geodude, added drayano stat changes
 
@@ -2156,7 +2156,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 130,
         .baseSpeed = 45,
         .baseSpAttack = 55,
-        .baseSpDefense = 85,
+        .baseSpDefense = 75,
         .baseAttack = 120,
         .type1 = TYPE_ROCK,
         .type2 = TYPE_GROUND,
@@ -2709,7 +2709,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MINERAL,
         .abilities = {ABILITY_ROCK_HEAD, ABILITY_STURDY},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_SAND_RUSH},
         #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -5841,9 +5841,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_MINERAL,
         .eggGroup2 = EGG_GROUP_MINERAL,
-        .abilities = {ABILITY_ROCK_HEAD, ABILITY_STURDY},
+        .abilities = {ABILITY_SHEER_FORCE, ABILITY_STURDY},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_SAND_RUSH},
         #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -17616,7 +17616,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         .abilities = {ABILITY_DEFIANT, ABILITY_INNER_FOCUS},
-        .abilityHidden = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },//GIVE Hi pressure ability
@@ -27176,7 +27176,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 130,
         .baseSpeed = 45,
         .baseSpAttack = 55,
-        .baseSpDefense = 85,
+        .baseSpDefense = 75,
         .type1 = TYPE_ROCK,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 45,
