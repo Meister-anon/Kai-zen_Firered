@@ -2578,14 +2578,14 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_CLOYSTER] =
     {
-        .baseHP = 50,
+        .baseHP = 55,
         .baseAttack = 95,
         .baseDefense = 180,
-        .baseSpeed = 70,
+        .baseSpeed = 60,
         .baseSpAttack = 85,
-        .baseSpDefense = 45,
+        .baseSpDefense = 50,
         .type1 = TYPE_WATER,
-        .type2 = TYPE_ICE,
+        .type2 = TYPE_ROCK,
         .catchRate = 60,
         .expYield = 184,
         //.evYield_Defense = 2,
@@ -2605,7 +2605,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-    },
+    },//need add rock moves
 
     [SPECIES_GASTLY] =
     {
