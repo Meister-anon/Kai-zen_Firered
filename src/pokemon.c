@@ -3623,7 +3623,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     // are effects of weather negated with cloud nine or air lock
     if (WEATHER_HAS_EFFECT2)
     {
-        if (gBattleWeather & WEATHER_RAIN_TEMPORARY)
+        if (gBattleWeather & WEATHER_RAIN_ANY)
         {
             switch (type)
             {
@@ -3653,6 +3653,17 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                 break;
             }
         }
+
+        // hail
+        if (gBattleWeather & WEATHER_HAIL_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+                damage = (20 * damage) / 30;
+                break;
+            }
+        }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
     }
 
     // flash fire triggered
