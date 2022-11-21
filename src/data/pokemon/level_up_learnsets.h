@@ -131,6 +131,7 @@ static const u16 sWartortleLevelUpLearnset[] = {
 };
 
 static const u16 sBlastoiseLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_FLASH_CANNON),
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
     LEVEL_UP_MOVE(1, MOVE_TAIL_WHIP),
     LEVEL_UP_MOVE(1, MOVE_BUBBLE),
@@ -145,6 +146,7 @@ static const u16 sBlastoiseLevelUpLearnset[] = {
     LEVEL_UP_MOVE(31, MOVE_PROTECT),
     LEVEL_UP_MOVE(36, MOVE_FLASH_CANNON),
     LEVEL_UP_MOVE(36, MOVE_IRON_DEFENSE),
+    LEVEL_UP_MOVE(40, MOVE_AUTOTOMIZE),
     LEVEL_UP_MOVE(42, MOVE_RAIN_DANCE),
     LEVEL_UP_MOVE(46, MOVE_HEAVY_SLAM),
     LEVEL_UP_MOVE(51, MOVE_METAL_BURST),
@@ -1276,6 +1278,7 @@ static const u16 sShellderLevelUpLearnset[] = {
 };
 
 static const u16 sCloysterLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_ROCK_BLAST),
     LEVEL_UP_MOVE(1, MOVE_WITHDRAW),
     LEVEL_UP_MOVE(1, MOVE_SUPERSONIC),
     LEVEL_UP_MOVE(1, MOVE_AURORA_BEAM),
