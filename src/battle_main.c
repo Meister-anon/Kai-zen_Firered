@@ -321,7 +321,7 @@ static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 
 //each line adds 3 because there are 3 arguments in each line, atk type, def type, & effectiveness
 //DON'T FORGET every time I change below, need to update in the .h
 
-const u8 gTypeEffectiveness[381] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+const u8 gTypeEffectiveness[378] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -446,7 +446,6 @@ const u8 gTypeEffectiveness[381] = // 336 is number of entries x 3 i.e number of
     TYPE_DARK, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIGHTING, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GHOST, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_BUG, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_PSYCHIC, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_DRAGON, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_ENDTABLE, TYPE_ENDTABLE, TYPE_MUL_NO_EFFECT
