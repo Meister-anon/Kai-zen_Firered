@@ -572,7 +572,7 @@
 // Gen 6 moves.
 #define MOVE_FLYING_PRESS 560
 #define MOVE_MAT_BLOCK 561
-#define MOVE_BELCH 562
+#define MOVE_BELCH 562	//change belch so it also works with stockpile
 #define MOVE_ROTOTILLER 563
 #define MOVE_STICKY_WEB 564
 #define MOVE_FELL_STINGER 565
