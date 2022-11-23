@@ -6484,13 +6484,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_DRAIN_PUNCH] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_5
-            .power = 75,
-            .pp = 10,
-        #else
-            .power = 60,
-            .pp = 5,
-        #endif
+        .power = 60,
+        .pp = 10,
         .effect = EFFECT_ABSORB,
         .type = TYPE_FIGHTING,
         .accuracy = 100,

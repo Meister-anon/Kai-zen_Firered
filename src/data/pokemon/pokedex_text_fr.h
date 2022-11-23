@@ -905,10 +905,15 @@ const u8 gTaurosPokedexText[] = _(
 
 const u8 gTaurosPokedexTextUnused[] = _("");
 
-const u8 gMagikarpPokedexText[] = _(
+/*const u8 gMagikarpPokedexText[] = _(
     "It is virtually worthless in terms of both\n"
     "power and speed. It is the most weak and\n"
-    "pathetic POKéMON in the world.");
+    "pathetic POKéMON in the world.");*/
+
+const u8 gMagikarpPokedexText[] = _(
+    "Tired of being called worthless and weak.\n"
+    "It became the strongest POKéMON in the world!\n"
+    "Unfortunately it still only knows splash.");
 
 const u8 gMagikarpPokedexTextUnused[] = _("");
 

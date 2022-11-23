@@ -904,10 +904,15 @@ const u8 gTaurosPokedexText[] = _(
 
 const u8 gTaurosPokedexTextUnused[] = _("");
 
-const u8 gMagikarpPokedexText[] = _(
+/*const u8 gMagikarpPokedexText[] = _(
     "In the distant past, it was somewhat\n"
     "stronger than the horribly weak\n"
-    "descendants that exist today.");
+    "descendants that exist today.");*/
+
+const u8 gMagikarpPokedexText[] = _(
+    "Tired of being called worthless and weak.\n"
+    "It attempted to regain its past strength.\n"
+    "Unfortunately it still only knows splash.");
 
 const u8 gMagikarpPokedexTextUnused[] = _("");
 
