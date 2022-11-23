@@ -2764,11 +2764,11 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
             statusChanged = TRUE;
             break;
         case STATUS1_BURN:
-            if (gBattleMons[gEffectBattler].ability == ABILITY_WATER_VEIL
+            if ((gBattleMons[gEffectBattler].ability == ABILITY_WATER_VEIL || ABILITY_WATER_BUBBLE)
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             {
-                gLastUsedAbility = ABILITY_WATER_VEIL;
-                RecordAbilityBattle(gEffectBattler, ABILITY_WATER_VEIL);
+                gLastUsedAbility = gBattleMons[gEffectBattler].ability;
+                RecordAbilityBattle(gEffectBattler, gBattleMons[gEffectBattler].ability);
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
                 gBattlescriptCurrInstr = BattleScript_BRNPrevention;
                 if (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
@@ -2782,7 +2782,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 }
                 return;
             }
-            if (gBattleMons[gEffectBattler].ability == ABILITY_WATER_BUBBLE
+            /*if (gBattleMons[gEffectBattler].ability == ABILITY_WATER_BUBBLE
                 && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             {
                 gLastUsedAbility = ABILITY_WATER_BUBBLE;
@@ -2799,7 +2799,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                     gBattleCommunication[MULTISTRING_CHOOSER] = 0;
                 }
                 return;
-            }
+            }*/
             if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_FIRE)
              && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
