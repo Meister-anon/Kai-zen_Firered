@@ -406,7 +406,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 50,
         .baseSpeed = 35,
         .baseSpAttack = 25,
-        .baseSpDefense = 25,
+        .baseSpDefense = 35,
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
         .catchRate = 120,
@@ -418,7 +418,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_BUG,
         .eggGroup2 = EGG_GROUP_BUG,
-        .abilities = {ABILITY_SHED_SKIN, ABILITY_NONE},
+        .abilities = {ABILITY_POISON_POINT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -8386,11 +8386,11 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MINERAL,
         .abilities = {ABILITY_STURDY, ABILITY_MAGNET_PULL},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_DRY_SKIN},
         #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-    },//change evo to work with certain type in party, either electric type or electric & steel stype
+    },//change evo to work with certain type in party, either electric type or electric & steel stype [DONE]
 
     [SPECIES_SKITTY] =
     {
@@ -13351,7 +13351,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MINERAL,
         .abilities = {ABILITY_STURDY, ABILITY_MAGNET_PULL},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_DRY_SKIN},
         #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
