@@ -5199,7 +5199,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_MINERAL,
         .eggGroup2 = EGG_GROUP_MINERAL,
-        .abilities = {ABILITY_STURDY, ABILITY_ROCK_HEAD},
+        .abilities = {ABILITY_SOLID_ROCK, ABILITY_ROCK_HEAD},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_RATTLED, ABILITY_SAP_SIPPER},
         #endif
@@ -6138,7 +6138,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_MAGMA_ARMOR, ABILITY_FLAME_BODY},
+        .abilities = {ABILITY_STEAM_ENGINE, ABILITY_FLAME_BODY},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_NONE},
         #endif
@@ -11253,7 +11253,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 40,
         .baseSpDefense = 34,
         .type1 = TYPE_ELECTRIC,
-        .type2 = TYPE_DARK,
+        .type2 = TYPE_ELECTRIC,
         .catchRate = 235,
         .expYield = 53,
         //.evYield_Attack = 1,
@@ -11282,7 +11282,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 60,
         .baseSpDefense = 49,
         .type1 = TYPE_ELECTRIC,
-        .type2 = TYPE_DARK,
+        .type2 = TYPE_ELECTRIC,
         .catchRate = 120,
         .expYield = 127,
         //.evYield_Attack = 2,
@@ -11326,7 +11326,7 @@ const struct BaseStats gBaseStats[] =
         #else
             .abilities = {ABILITY_NONE, ABILITY_INTIMIDATE},
         #endif
-        .abilityHidden = {ABILITY_GUTS, ABILITY_NONE},
+        .abilityHidden = {ABILITY_STRONG_JAW, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
