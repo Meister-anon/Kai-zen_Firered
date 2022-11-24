@@ -5981,7 +5981,9 @@ static u8 GetNatureFromPersonality(u32 personality)
     return personality % 25;
 }
 
-/*u16 GetBreedingTargetSpecies(struct Pokemon* mon, u8 type, u16 breedingItem) //got an error because variable name "type" was same as parameter "type"
+//type is only used in evoltion function for switch case while here I want it to be pokeon type so don't need type as parameter
+//unless I make a switch case that checks parent mon typing
+/*u16 GetBreedingTargetSpecies(struct Pokemon *mon, u8 type, u16 breedingItem) //got an error because variable name "type" was same as parameter "type"
 {
     u16 targetSpecies = 0;
     u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
@@ -5992,7 +5994,7 @@ static u8 GetNatureFromPersonality(u32 personality)
 
 u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
 {
-    int i;
+    int i, j;
     u16 targetSpecies = 0; //need figure out weird problem with summary screen ps5 page  search keyword move info
     u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
     u16 heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
@@ -6002,6 +6004,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
     u8 beauty = GetMonData(mon, MON_DATA_BEAUTY, 0);
     u16 upperPersonality = personality >> 16;
     u8 holdEffect;
+    u16 currentMap;
 
     if (heldItem == ITEM_ENIGMA_BERRY)
         holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
@@ -6074,6 +6077,72 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 break;
             case EVO_BEAUTY:
                 if (gEvolutionTable[species][i].param <= beauty)
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_MOVE:
+                if (MonKnowsMove(mon, gEvolutionTable[species][i].param))
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_MOVE_TYPE:
+                for (j = 0; j < 4; j++)
+                {
+                    if (gBattleMoves[GetMonData(mon, MON_DATA_MOVE1 + j, NULL)].type == gEvolutionTable[species][i].param)
+                    {
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        break;
+                    }
+                }
+                break;
+            case EVO_SPECIFIC_MON_IN_PARTY:
+                for (j = 0; j < PARTY_SIZE; j++)
+                {
+                    if (GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL) == gEvolutionTable[species][i].param)
+                    {
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        break;
+                    }
+                }
+                break;
+            case EVO_SPECIFIC_TYPE_IN_PARTY: //need to get type stored in variable so can use as parameter in evo table like mondataspecies
+                for (j = 0; j < PARTY_SIZE; j++)//OK should work, should loop through party get species read type of species
+                    //and then compare it against the parameter listed in the table for evo, which will be variable value for type
+                {
+                    u16 species = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
+                    if (gBaseStats[species].type1 == gEvolutionTable[species][i].param
+                        || gBaseStats[species].type2 == gEvolutionTable[species][i].param)
+                    {
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        break;
+                    }
+                }
+                break;
+            case EVO_LEVEL_DARK_TYPE_MON_IN_PARTY:
+                if (gEvolutionTable[species][i].param <= level) //checks if mons level is greater or equal to lvl required for evo in table
+                {
+                    for (j = 0; j < PARTY_SIZE; j++)
+                    {
+                        u16 species = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
+                        if (gBaseStats[species].type1 == TYPE_DARK
+                            || gBaseStats[species].type2 == TYPE_DARK)
+                        {
+                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                            break;
+                        }
+                    }
+                }
+                break;
+            case EVO_LEVEL_RAIN:
+                j = GetCurrentWeather();
+                if (j == WEATHER_RAIN || j == WEATHER_RAIN_THUNDERSTORM || j == WEATHER_DOWNPOUR)
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_MAPSEC:
+                if (gMapHeader.regionMapSectionId == gEvolutionTable[species][i].param)
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_SPECIFIC_MAP:
+                currentMap = ((gSaveBlock1Ptr->location.mapGroup) << 8 | gSaveBlock1Ptr->location.mapNum);
+                if (currentMap == gEvolutionTable[species][i].param)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 break;
             }
@@ -6504,7 +6573,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
             evIncrease *= 5;
     }
     //ev shackles and ultima brace will no longer work with 
-    //current change to ev gain, so will have to adjust somehow
+    //current change to ev gain, so will have to adjust somehow  maybe make like gen 1 exp share, make it a key item that switches on off
 }
 
 u16 GetMonEVCount(struct Pokemon *mon)
@@ -6662,7 +6731,7 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
     for (i = 0; i < 4; i++)
         learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
 
-    for (i = 0; i < 20; i++)
+    for (i = 0; i < 20; i++)//find what this 20 is
     {
         u16 moveLevel;
 
@@ -6695,7 +6764,7 @@ u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves)
     u8 numMoves = 0;
     int i;
 
-    for (i = 0; i < 20 && gLevelUpLearnsets[species][i] != 0xFFFF; i++)
+    for (i = 0; i < 20 && gLevelUpLearnsets[species][i] != 0xFFFF; i++) //20 again, 
          moves[numMoves++] = gLevelUpLearnsets[species][i] & 0x1FF;
 
      return numMoves;
@@ -6704,7 +6773,7 @@ u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves)
 u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
 {
     u16 learnedMoves[4];
-    u16 moves[20];
+    u16 moves[20]; //again 20. hmm possibly a limit for move lists? I heard something like that existing
     u8 numMoves = 0;
     u16 species = GetMonData(mon, MON_DATA_SPECIES2, 0);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, 0);
@@ -6753,7 +6822,7 @@ u16 SpeciesToPokedexNum(u16 species)
     return species;
 }
 
-void ClearBattleMonForms(void)
+void ClearBattleMonForms(void) //!important if I make mega evos permanent I may need to add an exclusion here
 {
     int i;
     for (i = 0; i < 4; i++)

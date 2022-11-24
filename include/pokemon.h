@@ -346,11 +346,12 @@ enum
 #define EVO_ITEM_FEMALE    				    0x001b // specified item is used on a female Pokémon
 #define EVO_LEVEL_RAIN     				    0x001c // Pokémon reaches the specified level while it's raining
 #define EVO_SPECIFIC_MON_IN_PARTY         	0x001d // Pokémon levels up with a specified Pokémon in party
-#define EVO_LEVEL_DARK_TYPE_MON_IN_PARTY    0x001e // Pokémon reaches the specified level with a Dark Type Pokémon in party
-#define EVO_TRADE_SPECIFIC_MON   			0x001f // Pokémon is traded for a specified Pokémon
-#define EVO_SPECIFIC_MAP   				    0x0020 // Pokémon levels up in a specific room of a specified map.
-#define EVO_MEGA_EVOLUTION					0x0021 // (change later)Not an actual evolution, used to temporarily mega evolve in battle.
-#define EVO_MOVE_MEGA_EVOLUTION		        0x0022 // Mega Evolution that checks for a move instead of held item.
+#define EVO_SPECIFIC_TYPE_IN_PARTY         	0x001e // Pokémon levels up with a specified Pokémon Type in party (made to bypass nosepass evo location requirement)
+#define EVO_LEVEL_DARK_TYPE_MON_IN_PARTY    0x001f // Pokémon reaches the specified level with a Dark Type Pokémon in party
+#define EVO_TRADE_SPECIFIC_MON   			0x0020 // Pokémon is traded for a specified Pokémon
+#define EVO_SPECIFIC_MAP   				    0x0021 // Pokémon levels up in a specific room of a specified map.
+#define EVO_MEGA_EVOLUTION					0x0022 // (change later)Not an actual evolution, used to temporarily mega evolve in battle.
+#define EVO_MOVE_MEGA_EVOLUTION		        0x0023 // Mega Evolution that checks for a move instead of held item.
 
 struct Evolution
 {

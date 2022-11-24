@@ -5205,7 +5205,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-    },
+    },//make revisions to add grass moves to lvl up and tm learnsets   thinkin ingrain & bullet seed
 
     [SPECIES_POLITOED] =
     {
@@ -8390,7 +8390,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-    },
+    },//change evo to work with certain type in party, either electric type or electric & steel stype
 
     [SPECIES_SKITTY] =
     {

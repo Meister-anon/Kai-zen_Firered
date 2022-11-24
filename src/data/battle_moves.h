@@ -5217,11 +5217,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_MUDDY_WATER] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_6
-            .power = 90,
-        #else
-            .power = 95,
-        #endif
+        .power = 95,
         .effect = EFFECT_ACCURACY_DOWN_HIT,
         .type = TYPE_WATER,
         .accuracy = 85,
