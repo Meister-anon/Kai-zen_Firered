@@ -339,10 +339,10 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_BUG,
         .eggGroup2 = EGG_GROUP_BUG,
-        .abilities = {ABILITY_SHED_SKIN, ABILITY_NONE},
+        .abilities = {ABILITY_MARVEL_SCALE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-    },
+    },//Lunos explained hidden ability is saved even if mid evo doesn't have  a hidden ability final evo will go back to hidden ability slot
 
     [SPECIES_BUTTERFREE] =
     {
