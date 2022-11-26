@@ -385,6 +385,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectSketchStatUp
 	.4byte BattleScript_EffectRockSmash
 	.4byte BattleScript_EffectFlash
+	.4byte BattleScript_EffectCocoon
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -2506,6 +2507,7 @@ BattleScript_StatDownFromAttackString::
 	@goto BattleScript_StatDownPrintString
 	goto BattleScript_StatDownCantGoLower
 @believe its referring to gStatDownStringIds less than 2 is stat fell, 2 is cant lower
+@ pretty sure I commented out the other line to make it play animation even if stat cant be lowered need test, replace statdownend if need too
 
 BattleScript_StatDownDoAnim::
 	attackanimation
@@ -2976,6 +2978,8 @@ BattleScript_EffectTransform::
 	printfromtable gTransformUsedStringIds
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
+
+@ using True on end means stat lowers, False means stat raises, number represents number of stat stages to change
 
 BattleScript_EffectAttackDown2::
 	setstatchanger STAT_ATK, 2, TRUE
@@ -3537,7 +3541,7 @@ BattleScript_EffectMinimize::
 	setstatchanger STAT_EVASION, 1, FALSE
 	goto BattleScript_EffectStatUpAfterAtkCanceler
 
-BattleScript_EffectCurse::
+BattleScript_EffectCurse::	@
 	jumpiftype2 BS_ATTACKER, TYPE_GHOST, BattleScript_GhostCurse
 	attackcanceler
 	attackstring
@@ -4920,6 +4924,39 @@ BattleScript_CosmicPowerTrySpDef::
 	printfromtable gStatUpStringIds
 	waitmessage 0x40
 BattleScript_CosmicPowerEnd::
+	goto BattleScript_MoveEnd	@ change cocoon to lower speed so its not so easy to just keep and use for beedrill/butterfree lower speed 2 stages
+
+@ ended up making new effect to do what I want mostly copied from cosmic power, dont know if need a speed stat check
+BattleScript_EffectCocoon::
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_DEF, 12, BattleScript_CocoonDoMoveAnim
+	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPDEF, 12, BattleScript_CantRaiseMultipleStats
+BattleScript_CocoonDoMoveAnim::
+	attackanimation
+	waitanimation
+	setbyte sSTAT_ANIM_PLAYED, 0
+	playstatchangeanimation BS_ATTACKER, BIT_DEF | BIT_SPDEF, 0
+	playstatchangeanimation BS_ATTACKER, BIT_SPEED, ATK48_STAT_NEGATIVE | ATK48_DONT_CHECK_LOWER
+	setstatchanger STAT_DEF, 1, FALSE
+	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_CocoonTrySpDef
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 2, BattleScript_CocoonTrySpDef
+	printfromtable gStatUpStringIds
+	waitmessage 0x40
+BattleScript_CocoonTrySpDef::
+	setstatchanger STAT_SPDEF, 1, FALSE
+	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_CocoonTrySpeed
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 2, BattleScript_CocoonTrySpeed
+	printfromtable gStatUpStringIds
+	waitmessage 0x40
+BattleScript_CocoonTrySpeed::
+	setstatchanger STAT_SPEED, 2, TRUE
+	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_CocoonEnd
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 2, BattleScript_CocoonEnd
+	printfromtable gStatDownStringIds
+	waitmessage 0x40
+BattleScript_CocoonEnd::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectSkyUppercut::

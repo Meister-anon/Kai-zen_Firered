@@ -374,6 +374,7 @@
 #define EFFECT_SKETCH_STAT_UP 361 //stat increase for sketch should jump to script but not use effect alone
 #define EFFECT_ROCK_SMASH 362 //checked on fire red worked perfectly
 #define EFFECT_FLASH 363
+#define EFFECT_COCOON 364
 
 #endif  // GUARD_CONSTANTS_BATTLE_MOVE_EFFECTS_H
 // gBattleScriptsForMoveEffects found at top of battle_scripts_1.s
