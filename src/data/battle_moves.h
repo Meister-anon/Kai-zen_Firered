@@ -11595,7 +11595,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_COCOON] =
     {
-        .effect = EFFECT_COSMIC_POWER,
+        .effect = EFFECT_COCOON,
         .power = 0,
         .type = TYPE_BUG,
         .accuracy = 0,
