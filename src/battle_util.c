@@ -1961,7 +1961,7 @@ u8 AtkCanceller_UnableToUseMove(void)
     return effect;
 }
 
-//logic for this is non-flying pokemon that are typically
+//logic for this is non-flying type pokemon that are typically
 //floating or attack while in the air/ can fly
 const u16 sFloatingSpecies[] = {
     SPECIES_BEAUTIFLY,
@@ -2115,8 +2115,7 @@ bool8 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
         return TRUE;
     else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
         return TRUE; //important roost change  ..[unsure if want to make random % but no one would gamble it anyway...
-    else if (gBattleMons[battlerId].species == (SPECIES_DODUO || SPECIES_DODRIO))
-        return TRUE;//edit because flightless bird
+   
     else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
         return TRUE; //hope this set up right/works
     //according to Mcgriffin needed make flying & roost flag true statement
@@ -2127,6 +2126,8 @@ bool8 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
         return FALSE;
     else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
         return FALSE;
+    else if (gBattleMons[battlerId].species == (SPECIES_DODUO || SPECIES_DODRIO))
+        return TRUE;//edit because flightless bird ; moved lower so exceptions could apply 
     else if (gBattleMons[battlerId].ability == ABILITY_LEVITATE)
         return FALSE;
     else if (IsFloatingSpecies(battlerId))
