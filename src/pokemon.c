@@ -6131,6 +6131,42 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                     }
                 }
                 break;
+            case EVO_LEVEL_KARRABLAST: //plan for this is have rival mon in party as well as an electric type mon parameter will be lvl
+                if (gEvolutionTable[species][i].param <= level) //checks if mons level is greater or equal to lvl required for evo in table
+                {
+                    for (j = 0; j < PARTY_SIZE; j++)
+                    {
+                        u16 species = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
+                        if (gBaseStats[species].type1 == TYPE_ELECTRIC
+                            || gBaseStats[species].type2 == TYPE_ELECTRIC)
+                        {
+                            if (GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL) == SPECIES_SHELMET)
+                            {
+                                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            case EVO_LEVEL_SHELMET:
+                if (gEvolutionTable[species][i].param <= level) //checks if mons level is greater or equal to lvl required for evo in table
+                {
+                    for (j = 0; j < PARTY_SIZE; j++)
+                    {
+                        u16 species = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
+                        if (gBaseStats[species].type1 == TYPE_ELECTRIC
+                            || gBaseStats[species].type2 == TYPE_ELECTRIC)
+                        {
+                            if (GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL) == SPECIES_KARRABLAST)
+                            {
+                                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
             case EVO_LEVEL_RAIN:
                 j = GetCurrentWeather();
                 if (j == WEATHER_RAIN || j == WEATHER_RAIN_THUNDERSTORM || j == WEATHER_DOWNPOUR)
