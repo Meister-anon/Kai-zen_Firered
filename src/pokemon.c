@@ -6148,7 +6148,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                         }
                     } //important need to test this
                 }
-                break;
+                break;//if species change doesn't work use one evo method for both and a switch case for species for either
             case EVO_LEVEL_SHELMET:
                 if ((gEvolutionTable[species][i].param || gEvolutionTable[SPECIES_KARRABLAST][i].param) <= level) //should make them both evolve when either levels up
                 {
