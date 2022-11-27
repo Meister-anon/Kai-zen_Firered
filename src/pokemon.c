@@ -6132,7 +6132,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 }
                 break;
             case EVO_LEVEL_KARRABLAST: //plan for this is have rival mon in party as well as an electric type mon parameter will be lvl
-                if (gEvolutionTable[species][i].param <= level) //checks if mons level is greater or equal to lvl required for evo in table
+                if ((gEvolutionTable[species][i].param || gEvolutionTable[SPECIES_SHELMET][i].param) <= level) //should let it evolve regardless of which one in your party levels up
                 {
                     for (j = 0; j < PARTY_SIZE; j++)
                     {
@@ -6146,11 +6146,11 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                                 break;
                             }
                         }
-                    }
+                    } //important need to test this
                 }
                 break;
             case EVO_LEVEL_SHELMET:
-                if (gEvolutionTable[species][i].param <= level) //checks if mons level is greater or equal to lvl required for evo in table
+                if ((gEvolutionTable[species][i].param || gEvolutionTable[SPECIES_KARRABLAST][i].param) <= level) //should make them both evolve when either levels up
                 {
                     for (j = 0; j < PARTY_SIZE; j++)
                     {
@@ -6165,7 +6165,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                             }
                         }
                     }
-                }
+                }//want them both to evolve at the same time since one evolving would keep the other from evolving otherwise
                 break;
             case EVO_LEVEL_RAIN:
                 j = GetCurrentWeather();
