@@ -777,15 +777,20 @@
 #define MOVE_THUNDEROUS_KICK 751
 #define MOVE_GLACIAL_LANCE 752
 #define MOVE_ASTRAL_BARRAGE 753
-#define MOVE_COCOON 754 //new end before eerie spell
-#define MOVE_EERIE_SPELL 755
+#define MOVE_EERIE_SPELL 754
+// New Custom Additions
+#define MOVE_COCOON 755
 #define MOVE_MONOTYPE 756
 
-#define MOVES_COUNT_GEN8 757
+//#define MOVES_COUNT_GEN8 757
 
-#define MOVES_COUNT MOVES_COUNT_GEN8
+//#define MOVES_COUNT MOVES_COUNT_GEN8
 
 #define LAST_MOVE_INDEX     MOVE_MONOTYPE
+
+#define MOVES_COUNT_GEN8 (LAST_MOVE_INDEX + 1) //changed so define auto updates
+
+#define MOVES_COUNT MOVES_COUNT_GEN8
 
 
 //#define LAST_MOVE_INDEX     MOVE_COCOON
