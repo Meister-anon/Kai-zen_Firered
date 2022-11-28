@@ -4,6 +4,7 @@
 #include "constants/pokemon.h"
 #include "constants/easy_chat.h"
 #include "constants/facility_trainer_classes.h"
+#include "data/text/move_descriptions.h"
 
 #define MALE 0
 #define FEMALE 1
@@ -775,6 +776,7 @@ gMoveDescriptionPointers:: @ 84886E8
     .4byte gGLACIAL_LANCEDescription
     .4byte gASTRAL_BARRAGEDescription
     .4byte gEERIE_SPELLDescription
+    .4byte gNotDoneYetDescription
     .4byte gNotDoneYetDescription
 
     

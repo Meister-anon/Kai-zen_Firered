@@ -786,6 +786,9 @@
 
 //#define MOVES_COUNT MOVES_COUNT_GEN8
 
+//for completion new moves have to be defined in:  move_descriptions.inc,  move_names.h, battle_anim_scripts.s & data_8479668.s
+//
+
 #define LAST_MOVE_INDEX     MOVE_MONOTYPE
 
 #define MOVES_COUNT_GEN8 (LAST_MOVE_INDEX + 1) //changed so define auto updates

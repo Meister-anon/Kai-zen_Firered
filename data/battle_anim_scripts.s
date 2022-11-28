@@ -805,9 +805,10 @@ gBattleAnims_Moves::
 	.4byte Move_THUNDEROUS_KICK
 	.4byte Move_GLACIAL_LANCE
 	.4byte Move_ASTRAL_BARRAGE
-	.4byte Move_COCOON
 	.4byte Move_EERIE_SPELL
-	.4byte Move_COUNT @ cannot be reached, because last move is Eerie Spell
+	.4byte Move_COCOON
+	.4byte Move_MONOTYPE
+	.4byte Move_COUNT @ cannot be reached, because last move is Eerie Spell  important check move order moves.h
 
 gBattleAnims_StatusConditions::
 	.4byte Status_Poison
@@ -23756,6 +23757,9 @@ Move_GLACIAL_LANCE::
 Move_ASTRAL_BARRAGE::
 	end @to do:
 
+Move_EERIE_SPELL::
+	end @to do:
+
 Move_COCOON:: @ animation didn''t work because I forgot to define it at top
 	loopsewithpan SE_M_HARDEN, 192, 28, 2
 	createvisualtask AnimTask_MusicNotesRainbowBlend, 2,
@@ -23763,7 +23767,7 @@ Move_COCOON:: @ animation didn''t work because I forgot to define it at top
 	waitforvisualfinish
 	end
 
-Move_EERIE_SPELL::
+Move_MONOTYPE::
 	end @to do:
 
 Move_COUNT:: @ 81D53D9
