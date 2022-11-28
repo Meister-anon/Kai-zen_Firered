@@ -2942,7 +2942,10 @@ const u8 gEERIE_SPELLDescription[] = _(
     "Attacks with psychic power.\n"
     "Foe's last move has 3 PP cut.");
 
-const u8 gNotDoneYetDescription[] = _(
+const u8 gMoveDescription_Cocoon[] = _(
+    "Not done yet.");
+
+const u8 gMoveDescription_Monotype[] = _(
     "Not done yet.");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.

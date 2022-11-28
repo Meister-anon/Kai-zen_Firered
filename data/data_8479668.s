@@ -776,7 +776,5 @@ gMoveDescriptionPointers:: @ 84886E8
     .4byte gGLACIAL_LANCEDescription
     .4byte gASTRAL_BARRAGEDescription
     .4byte gEERIE_SPELLDescription
-    .4byte gNotDoneYetDescription
-    .4byte gNotDoneYetDescription
-
-    
+    .4byte gMoveDescription_Cocoon
+    .4byte gMoveDescription_Monotype    
