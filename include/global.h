@@ -9,6 +9,9 @@
 #include "constants/vars.h"
 #include "constants/species.h"
 
+/*code added in this commit was to upgrade ld_script to sync wild cards
+    i.e make it auto recognize new .c files*/
+
 // Prevent cross-jump optimization.
 #define BLOCK_CROSS_JUMP asm("");
 
