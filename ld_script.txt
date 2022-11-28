@@ -620,6 +620,7 @@ SECTIONS {
         data/data_8479668.o(.rodata);
 		src/rtc.o(.rodata);
 
+        /* my note unsure but think most of this deals with only .c files may not need to make an addition for just a .h */
         /* These should not be moved to C files */
         src/mystery_event_msg.o(.rodata);
         data/mystery_event_msg.o(.rodata);
