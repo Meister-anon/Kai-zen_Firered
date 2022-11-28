@@ -872,14 +872,14 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_NIDOQUEEN] =
     {
-        .baseHP = 90,
+        .baseHP = 97,
         .baseDefense = 87,
         .baseSpeed = 76,
         .baseSpAttack = 90,
         .baseSpDefense = 85,
         .baseAttack = 92,
         .type1 = TYPE_POISON,
-        .type2 = TYPE_GROUND,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 227,
         //.evYield_HP = 3,
@@ -968,7 +968,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpDefense = 75,
         .baseAttack = 102,
         .type1 = TYPE_POISON,
-        .type2 = TYPE_GROUND,
+        .type2 = TYPE_DARK,
         .catchRate = 45,
         .expYield = 227,
         //.evYield_Attack = 3,
