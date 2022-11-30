@@ -4601,9 +4601,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_INSOMNIA, ABILITY_KEEN_EYE},
+        .abilities = {ABILITY_INSOMNIA, ABILITY_TINTED_LENS},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_TINTED_LENS, ABILITY_NONE},
+            .abilityHidden = {ABILITY_COMPOUND_EYES, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -4617,7 +4617,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 70,
         .baseSpDefense = 96,
         .baseSpAttack = 120,
-        .type1 = TYPE_NORMAL,
+        .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FLYING,
         .catchRate = 90,
         .expYield = 158,
@@ -4628,13 +4628,13 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_INSOMNIA, ABILITY_KEEN_EYE},
+        .abilities = {ABILITY_INSOMNIA, ABILITY_TINTED_LENS},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_TINTED_LENS, ABILITY_NONE},
+            .abilityHidden = {ABILITY_COMPOUND_EYES, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-    },//change the type to match grand colloseum
+    },//change the type to match grand colloseum [done]
 
     [SPECIES_LEDYBA] =
     {
