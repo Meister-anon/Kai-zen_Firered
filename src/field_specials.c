@@ -34,6 +34,7 @@
 #include "dynamic_placeholder_text_util.h"
 #include "new_menu_helpers.h"
 #include "constants/songs.h"
+#include "constants/pokemon.h"
 #include "constants/items.h"
 #include "constants/maps.h"
 #include "constants/region_map_sections.h"
@@ -409,7 +410,7 @@ void GiveLeadMonEffortRibbon(void)
 bool8 AreLeadMonEVsMaxedOut(void)
 {
     u8 leadMonIndex = GetLeadMonIndex();
-    if (GetMonEVCount(&gPlayerParty[leadMonIndex]) >= 788)
+    if (GetMonEVCount(&gPlayerParty[leadMonIndex]) >= MAX_TOTAL_EVS)
         return TRUE;
     else
         return FALSE;
@@ -1526,21 +1527,29 @@ void ForcePlayerToStartSurfing(void)
 //charmander -> squirtle
 
 //#define LIST_END 0xFFFF   //since I'm not doing a loop, I don't really need List_End, just need to match my random function to number of values 
-//couting first list value as 0. Need to use random percent equal to value shown when hovering over array.
+//couting first list value as 0. Need to use random percent equal to value shown when hovering over array. Just used nelms so I don't have to manually change
+//just need each array to be equal on hover  and check for type exceptions
 
 const u16 sBulbasaurBall[] = {
     SPECIES_BULBASAUR,
     SPECIES_CHIKORITA,
     SPECIES_TREECKO,
+    SPECIES_TURTWIG,
+    SPECIES_SNIVY,
+    SPECIES_CHESPIN,
+    SPECIES_ROWLET,
     SPECIES_AIPOM,
     SPECIES_PARAS,
     SPECIES_VULPIX_ALOLAN,
     SPECIES_TYROGUE,
     SPECIES_EEVEE,
+    SPECIES_RALTS,
     SPECIES_MAGNEMITE,
     SPECIES_SCYTHER,
     SPECIES_ODDISH,
+    SPECIES_MISDREAVUS,
     SPECIES_SWINUB,
+    SPECIES_TYNAMO,
     SPECIES_SKITTY
     //LIST_END
 };
@@ -1549,14 +1558,21 @@ const u16 sSquirtleBall[] = {
     SPECIES_SQUIRTLE,
     SPECIES_TOTODILE,
     SPECIES_MUDKIP,
+    SPECIES_PIPLUP,
+    SPECIES_OSHAWOTT,
+    SPECIES_FROAKIE,
+    SPECIES_POPPLIO,
     SPECIES_CORSOLA,
+    SPECIES_BONSLY,
     SPECIES_EEVEE,
-    SPECIES_TOGEPI,
-    SPECIES_RALTS,
+    SPECIES_LOTAD,
+    SPECIES_PHANPY,
     SPECIES_AZURILL,
-    SPECIES_MISDREAVUS,
+    SPECIES_ROCKRUFF,
+    SPECIES_BIDOOF,
     SPECIES_SANDSHREW,
     SPECIES_WOOPER,
+    SPECIES_GABITE,
     SPECIES_WAILMER,
     SPECIES_SPHEAL
     //LIST_END
@@ -1566,12 +1582,19 @@ const u16 sCharmanderBall[] = {
     SPECIES_CHARMANDER,
     SPECIES_CYNDAQUIL,
     SPECIES_TORCHIC,
+    SPECIES_CHIMCHAR,
+    SPECIES_TEPIG,
+    SPECIES_FENNEKIN,
+    SPECIES_LITTEN,
     SPECIES_GLIGAR,
     SPECIES_CASTFORM,
     SPECIES_EEVEE,
     SPECIES_MURKROW,
+    SPECIES_LICKITUNG,
     SPECIES_PONYTA,
+    SPECIES_TOGEPI,
     SPECIES_TEDDIURSA,
+    SPECIES_SPINARAK,
     SPECIES_MILTANK,
     SPECIES_SABLEYE,
     SPECIES_DODUO,
@@ -1584,6 +1607,7 @@ const u16 sCharmanderBall[] = {
 
 
 //started with entire list step 1, remove mono type, step 2 remove all I want to list as type 1.  keep all I want listed as type 2 in teh script here.
+//this array below is to substitute type 2 in the oak script where he reads the starter choice. "you picked the *blank* type, species name"
 
 //update the definitnion this value when adding to the array
 //should be number of values in array count from 1 not 0.
@@ -1595,7 +1619,9 @@ const u16 sTypeExceptions[] = {
     SPECIES_SPHEAL,
     SPECIES_MURKROW,
     SPECIES_DODUO,
-    SPECIES_HOUNDOUR
+    SPECIES_LICKITUNG,
+    SPECIES_HOUNDOUR,
+    SPECIES_TEPIG
 };
 
 static const u16 sStarterSpecies[] = { 

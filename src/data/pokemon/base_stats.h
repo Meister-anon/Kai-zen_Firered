@@ -2729,7 +2729,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_INSOMNIA, ABILITY_FOREWARN},
+            .abilities = {ABILITY_BAD_DREAMS, ABILITY_FOREWARN},
         #else
             .abilities = {ABILITY_INSOMNIA, ABILITY_NONE},
         #endif
@@ -2758,7 +2758,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_INSOMNIA, ABILITY_FOREWARN},
+            .abilities = {ABILITY_BAD_DREAMS, ABILITY_FOREWARN},
         #else
             .abilities = {ABILITY_INSOMNIA, ABILITY_NONE},
         #endif
@@ -2987,14 +2987,14 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_HITMONLEE] =
     {
-        .baseHP = 57,
+        .baseHP = 50,
         .baseAttack = 121,
         .baseDefense = 53,
         .baseSpeed = 87,
         .baseSpAttack = 35,
         .baseSpDefense = 110,
-        .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FIGHTING,
         .catchRate = 45,
         .expYield = 159,
         //.evYield_Attack = 2,
@@ -3016,14 +3016,14 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_HITMONCHAN] =
     {
-        .baseHP = 57,
+        .baseHP = 50,
         .baseAttack = 105,
         .baseDefense = 79,
         .baseSpeed = 76,
         .baseSpAttack = 35,
         .baseSpDefense = 123,
-        .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FIGHTING,
         .catchRate = 45,
         .expYield = 159,
         //.evYield_SpDefense = 2,
@@ -3266,10 +3266,10 @@ const struct BaseStats gBaseStats[] =
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_EARLY_BIRD, ABILITY_SCRAPPY},
         #else
-            .abilities = {ABILITY_EARLY_BIRD, ABILITY_NONE},
+            .abilities = {ABILITY_SCRAPPY, ABILITY_NONE},
         #endif
         .safariZoneFleeRate = 125,
-        .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_NONE},
+        .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_PARENTAL_BOND},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -5199,9 +5199,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_MINERAL,
         .eggGroup2 = EGG_GROUP_MINERAL,
-        .abilities = {ABILITY_SOLID_ROCK, ABILITY_ROCK_HEAD},
+        .abilities = {ABILITY_SOLID_ROCK, ABILITY_SAP_SIPPER},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_RATTLED, ABILITY_SAP_SIPPER},
+            .abilityHidden = {ABILITY_RATTLED, ABILITY_ROCK_HEAD},
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -6624,12 +6624,12 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 35,
         .baseSpAttack = 35,
         .baseSpDefense = 35,
-        .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FIGHTING,
         .catchRate = 65,
         .expYield = 42,
         //.evYield_Attack = 1,
-        .genderRatio = MON_MALE,
+        .genderRatio = PERCENT_FEMALE(25),
         .eggCycles = 25,
         .friendship = 70,
         .growthRate = GROWTH_MEDIUM_FAST,
@@ -6653,12 +6653,12 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 70,
         .baseSpAttack = 35,
         .baseSpDefense = 115,
-        .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FIGHTING,
         .catchRate = 45,
         .expYield = 159,
         //.evYield_SpDefense = 2,
-        .genderRatio = MON_MALE,
+        .genderRatio = PERCENT_FEMALE(35),
         .eggCycles = 25,
         .friendship = 70,
         .growthRate = GROWTH_MEDIUM_FAST,
@@ -11936,14 +11936,14 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_RUN_AWAY, ABILITY_KLUTZ},
+            .abilities = {ABILITY_RUN_AWAY, ABILITY_KLUTZ},// 2 ideas for klutz, either they're klutz behavior makes the enemy not take them seriously
         #else
-            .abilities = {ABILITY_RUN_AWAY, ABILITY_MULTI_TASK},
+            .abilities = {ABILITY_RUN_AWAY, ABILITY_MULTI_TASK},// and doesn't attack as hard, or they open themselves up to attack
         #endif
-        .abilityHidden = {ABILITY_LIMBER, ABILITY_NONE}, //ABILITY_KLUTZ
+        .abilityHidden = {ABILITY_LIMBER, ABILITY_NONE}, //ABILITY_KLUTZ  no instead I'll fix the ability
         .bodyColor = BODY_COLOR_BROWN,
-        .noFlip = FALSE,
-    },
+        .noFlip = FALSE,//so either klutz will be unable to hold items, but instead either take 75% damage or do 25% more damage I like the former, 
+    },//like you're used to stumbling and falling so are able to shrug off blows
 
     [SPECIES_LOPUNNY] =
     {
@@ -12243,9 +12243,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_STURDY, ABILITY_ROCK_HEAD},
+        .abilities = {ABILITY_STURDY, ABILITY_SAP_SIPPER},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_RATTLED, ABILITY_SAP_SIPPER},
+            .abilityHidden = {ABILITY_RATTLED, ABILITY_ROCK_HEAD},
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -21173,9 +21173,9 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_BUG,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_WATER_BUBBLE, ABILITY_NONE},
+            .abilities = {ABILITY_WATER_BUBBLE, ABILITY_WATER_ABSORB},
         #else
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilities = {ABILITY_WATER_BUBBLE, ABILITY_NONE},
         #endif
         .abilityHidden = {ABILITY_WATER_ABSORB, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
@@ -21205,7 +21205,7 @@ const struct BaseStats gBaseStats[] =
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WATER_BUBBLE, ABILITY_NONE},
         #else
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilities = {ABILITY_WATER_BUBBLE, ABILITY_NONE},
         #endif
         .abilityHidden = {ABILITY_WATER_ABSORB, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,

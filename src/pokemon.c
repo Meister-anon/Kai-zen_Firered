@@ -5202,10 +5202,10 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
      
                     switch (i)
                     {
-                    case 0: // EV_HP    delta is ev change 510 should be max total, and 100 is how many vitamins can be used, each vitamin use ads 10 evs.
+                    case 0: // EV_HP    delta is ev change, 510 (changed)should be max total, and 100 is how many vitamins can be used, each vitamin use ads 10 evs.
                     case 1: // EV_ATK
                         evCount = GetMonEVCount(mon);
-                        if (evCount >= 788)
+                        if (evCount >= MAX_TOTAL_EVS)
                             return TRUE;
                         data = GetMonData(mon, sGetMonDataEVConstants[i], NULL);
                         if (data < 200)
@@ -5214,8 +5214,8 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                                 evDelta = 200 - (data + itemEffect[idx]) + itemEffect[idx];
                             else
                                 evDelta = itemEffect[idx];
-                            if (evCount + evDelta > 788)
-                                evDelta += 788 - (evCount + evDelta);
+                            if (evCount + evDelta > MAX_TOTAL_EVS)
+                                evDelta += MAX_TOTAL_EVS - (evCount + evDelta);
                             data += evDelta;
                             SetMonData(mon, sGetMonDataEVConstants[i], &data);
                             CalculateMonStats(mon);
@@ -5389,7 +5389,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                     case 2: // EV_SPDEF
                     case 3: // EV_SPATK
                         evCount = GetMonEVCount(mon);
-                        if (evCount >= 788)
+                        if (evCount >= MAX_TOTAL_EVS)
                             return TRUE;
                         data = GetMonData(mon, sGetMonDataEVConstants[i + 2], NULL);
                         if (data < 200)
@@ -5398,8 +5398,8 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                                 evDelta = 200 - (data + itemEffect[idx]) + itemEffect[idx];
                             else
                                 evDelta = itemEffect[idx];
-                            if (evCount + evDelta > 788)
-                                evDelta += 788 - (evCount + evDelta);
+                            if (evCount + evDelta > MAX_TOTAL_EVS)
+                                evDelta += MAX_TOTAL_EVS - (evCount + evDelta);
                             data += evDelta;
                             SetMonData(mon, sGetMonDataEVConstants[i + 2], &data);
                             CalculateMonStats(mon);
@@ -5667,7 +5667,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
                     {
                     case 0: // EV_HP
                     case 1: // EV_ATK
-                        if (GetMonEVCount(mon) >= 788)
+                        if (GetMonEVCount(mon) >= MAX_TOTAL_EVS)
                             return TRUE;
                         data = GetMonData(mon, sGetMonDataEVConstants[i], NULL);
                         if (data < 200) // not 100% sure about this
@@ -5744,7 +5744,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
                     case 1: // EV_SPEED
                     case 2: // EV_SPDEF
                     case 3: // EV_SPATK
-                        if (GetMonEVCount(mon) >= 788)
+                        if (GetMonEVCount(mon) >= MAX_TOTAL_EVS)
                             return TRUE;
                         data = GetMonData(mon, sGetMonDataEVConstants[i + 2], NULL);
                         if (data < 200)

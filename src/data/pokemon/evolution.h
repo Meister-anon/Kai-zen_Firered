@@ -168,10 +168,10 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_HOUNDOOM]         //     = {{EVO_MEGA_EVOLUTION, ITEM_HOUNDOOMINITE, SPECIES_HOUNDOOM_MEGA}},
     [SPECIES_PHANPY] = {{EVO_LEVEL, 25, SPECIES_DONPHAN}},
     [SPECIES_PORYGON2] = {{EVO_ITEM, ITEM_DUBIOUS_DISC, SPECIES_PORYGON_Z}},
-    [SPECIES_TYROGUE] = {{EVO_LEVEL_FEMALE, 20, SPECIES_HITMONCHAN},
-                                       {EVO_LEVEL_MALE, 20, SPECIES_HITMONLEE},
-                                       {EVO_LEVEL_ATK_EQ_DEF, 20, SPECIES_HITMONTOP}},
-    [SPECIES_SMOOCHUM] = {{EVO_LEVEL, 30, SPECIES_JYNX}},
+    [SPECIES_TYROGUE] = {{EVO_LEVEL_FEMALE, 15, SPECIES_HITMONCHAN},
+                                       {EVO_LEVEL_MALE, 15, SPECIES_HITMONLEE},
+                                       {EVO_MOVE, MOVE_RAPID_SPIN, SPECIES_HITMONTOP}}, //need to figure out how to make this work, evs are gone early
+    [SPECIES_SMOOCHUM] = {{EVO_LEVEL, 30, SPECIES_JYNX}}, //prob change above to evo move
     [SPECIES_ELEKID] = {{EVO_LEVEL, 30, SPECIES_ELECTABUZZ}},
     [SPECIES_MAGBY] = {{EVO_LEVEL, 30, SPECIES_MAGMAR}},
     [SPECIES_LARVITAR] = {{EVO_LEVEL, 30, SPECIES_PUPITAR}},
