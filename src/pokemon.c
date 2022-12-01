@@ -3680,6 +3680,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     // flash fire triggered
     if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
         damage = (15 * damage) / 10;  //how does this work, do I need to move it, or does it auto boost all damage?
+                                        //it boosts all because its not in physical or special formula 
 
     if (IS_MOVE_SPECIAL(move))
     {
@@ -3724,16 +3725,16 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if ((sideStatus & SIDE_STATUS_LIGHTSCREEN) && gCritMultiplier == 1)
         {
             if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
-                damage = 2 * (damage / 3);
-            else
-                damage /= 1;
+                /*damage = 2 * (damage / 3);
+            else*/
+                damage /= 2;
         }
 
         if (attacker->status1 & STATUS1_SPIRIT_LOCK) //function that gives spirit_lock special atk cut
             damage /= 2;
 
         if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == 8 && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
-            damage /= 1;
+            damage /= 1; //special verision double battle damage change
 
         
     }
