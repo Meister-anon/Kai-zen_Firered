@@ -3654,10 +3654,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             switch (type)
             {
             case TYPE_FIRE:
-                damage = (15 * damage) / 10;
+                damage = (15 * damage) / 10;  //50% damage increase
                 break;
             case TYPE_WATER:
-                damage /= 2;
+                damage /= 2;            //50% damage cut
                 break;
             }
         }
@@ -3668,11 +3668,12 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             switch (type)
             {
             case TYPE_FIRE:
-                damage = (20 * damage) / 30;
+                damage = (20 * damage) / 30;  //33% damage cut, so less of a cut than in rain
                 break;
             }
             case TYPE_ICE:
-                damage = (25 * damage) / 10;
+                damage = (125 * damage) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
+
         }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
     }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing
 
