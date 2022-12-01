@@ -1296,7 +1296,7 @@ static bool8 JumpIfMoveAffectedByProtect(u16 move)
     return affected;
 }
 
-bool8 IsBattlerProtected(u8 battlerId, u16 move)
+bool8 IsBattlerProtected(u8 battlerId, u16 move)//IMPORTANT change to false if protectbreak condition met
 { //setprotectlike does the protection, then hre I can undo it when this gets checked in attack canceleror
 
 
@@ -1373,7 +1373,7 @@ bool8 IsBattlerProtected(u8 battlerId, u16 move)
    // also maybe I'll add a text string for this, but for now I'll do without.
 }*/
 
-static bool8 AccuracyCalcHelper(u16 move)
+static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accuracy ignore
 {
     if (gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS && gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker)
     {

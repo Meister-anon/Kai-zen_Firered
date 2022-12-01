@@ -3358,6 +3358,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY)// && !usesDefStat)
         spDefense = (150 * spDefense) / 100;
 
+    // hail sp.def & def boost for ice types  // still deciding if I want a 50% defense boost or a 25% boost to def & sp def
+    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ICE)
+        && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_HAIL_ANY)// && !usesDefStat)
+    {
+        spDefense = (125 * spDefense) / 100;
+        defense = (125 * defense) / 100;
+    }
+
     //put abilities ported here
     // attacker's abilities
     switch (GetBattlerAbility(gBattlerAttacker))
@@ -3663,8 +3671,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                 damage = (20 * damage) / 30;
                 break;
             }
+            case TYPE_ICE:
+                damage = (25 * damage) / 10;
         }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
-    }
+    }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing
 
     // flash fire triggered
     if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
