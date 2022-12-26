@@ -19,9 +19,9 @@ const struct Trainer gTrainers[] = {
         .trainerName = _(""),
         .items = {},
         .doubleBattle = FALSE,
-        .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE,
+        .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE,//noticed trainer_class_names had .inc file, changed Gamer string there as well just in case
         .partySize = NELEMS(sTrainerMons_AquaLeader1),
-        .party = {.NoItemDefaultMoves = sTrainerMons_AquaLeader1}
+        .party = {.NoItemDefaultMoves = sTrainerMons_AquaLeader1}//got weird compiler error so reverted, may be one ofthose files u don't change
     },
     [TRAINER_TEAM_AQUA_1] = {
         .partyFlags = 0,
