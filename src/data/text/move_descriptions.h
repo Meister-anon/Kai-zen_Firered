@@ -2949,8 +2949,8 @@ const u8 gMoveDescription_Monotype[] = _(
     "Not done yet.");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
-/*const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] = */
-{
+/*const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] = 
+{*/
     /*[MOVE_POUND - 1] = sPoundDescription,
     [MOVE_KARATE_CHOP - 1] = sKarateChopDescription,
     [MOVE_DOUBLE_SLAP - 1] = sDoubleSlapDescription,

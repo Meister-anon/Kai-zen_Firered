@@ -260,6 +260,7 @@ static const u8 sText_PkmnMoveIsDisabled[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s {B
 static const u8 sText_PkmnCantUseMoveTorment[] = _("{B_ACTIVE_NAME_WITH_PREFIX} can't use the same\nmove in a row due to the TORMENT!\p");
 static const u8 sText_PkmnCantUseMoveTaunt[] = _("{B_ACTIVE_NAME_WITH_PREFIX} can't use\n{B_CURRENT_MOVE} after the TAUNT!\p");
 static const u8 sText_PkmnCantUseMoveSealed[] = _("{B_ACTIVE_NAME_WITH_PREFIX} can't use the\nsealed {B_CURRENT_MOVE}!\p");
+static const u8 sText_PkmnCantUseMoveThroatChop[] = _("{B_ACTIVE_NAME_WITH_PREFIX} can't use\n{B_CURRENT_MOVE} due to Throat Chop!\p");
 static const u8 sText_PkmnMadeItRain[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nmade it rain!");
 static const u8 sText_PkmnRaisedSpeed[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nraised its SPEED!");
 static const u8 sText_PkmnProtectedBy[] = _("{B_DEF_NAME_WITH_PREFIX} was protected\nby {B_DEF_ABILITY}!");
@@ -2535,7 +2536,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                     toCpy = sText_AllyPkmnPrefix3;
                 else
                     toCpy = sText_FoePkmnPrefix4;
-                break;
+                break; //ported fucnctionis don't exist adjust
             case B_TXT_TRAINER2_CLASS:
                 toCpy = BattleStringGetOpponentClassByTrainerId(gTrainerBattleOpponent_B);
                 break;
@@ -2562,7 +2563,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                     toCpy = BattleStringGetOpponentClassByTrainerId(gTrainerBattleOpponent_A);
                     break;
                 case B_POSITION_OPPONENT_RIGHT:
-                    if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS && !BATTLE_TWO_VS_ONE_OPPONENT)
+                    if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)// && !BATTLE_TWO_VS_ONE_OPPONENT)
                         toCpy = BattleStringGetOpponentClassByTrainerId(gTrainerBattleOpponent_B);
                     else
                         toCpy = BattleStringGetOpponentClassByTrainerId(gTrainerBattleOpponent_A);

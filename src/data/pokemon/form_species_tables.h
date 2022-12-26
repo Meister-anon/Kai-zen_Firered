@@ -792,7 +792,7 @@ static const u16 sMeowsticFormSpeciesIdTable[] = {
     SPECIES_MEOWSTIC,
     SPECIES_MEOWSTIC_FEMALE,
     FORM_SPECIES_END,
-};
+};//do I need gender forms? since the mon won't be switching between them, if I do then I need to add unfezant change here too
 
 static const u16 sAegislashFormSpeciesIdTable[] = {
     SPECIES_AEGISLASH,

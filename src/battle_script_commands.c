@@ -5672,10 +5672,10 @@ static void atk52_switchineffects(void) //important, think can put ability reset
     }
 
 
-    if (i = IsAbilityOnOpposingSide(gActiveBattler, gBattleMons[battler].ability)) //believe the switch case and will put the id of the battle on variable i
+    if (i = IsAbilityOnOpposingSide(gActiveBattler, gBattleMons[gActiveBattler].ability)) //believe the switch case and will put the id of the battle on variable i
     {//will need to put "gBattleScripting.battler = i - 1;" in top of every switch case
 
-        switch (gBattleMons[battler].ability) //I don't understand what a switch is actually doing apparently
+        switch (gBattleMons[gActiveBattler].ability) //I don't understand what a switch is actually doing apparently
         {
         case ABILITY_INTIMIDATE:
             //gBattleScripting.battler = i - 1;
@@ -9393,7 +9393,7 @@ static void atk9D_mimicattackcopy(void)
                 if (gBattleMoves[gLastMoves[gBattlerTarget]].pp < 5)
                     gBattleMons[gBattlerAttacker].pp[gCurrMovePos] = gBattleMoves[gLastMoves[gBattlerTarget]].pp;
                 else
-                    gBattleMons[gBattlerAttacker].pp[gCurrMovePos] = BattleMoves[gLastMoves[gBattlerTarget]].pp;
+                    gBattleMons[gBattlerAttacker].pp[gCurrMovePos] = gBattleMoves[gLastMoves[gBattlerTarget]].pp;
                 PREPARE_MOVE_BUFFER(gBattleTextBuff1, gLastMoves[gBattlerTarget])
                     gDisableStructs[gBattlerAttacker].mimickedMoves |= gBitTable[gCurrMovePos];
                 gBattlescriptCurrInstr += 5;

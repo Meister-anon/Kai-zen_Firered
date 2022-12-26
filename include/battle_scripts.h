@@ -580,12 +580,13 @@ extern const u8 BattleScript_GhostGetOutGetOut[];
 extern const u8 BattleScript_TooScaredToMove[];
 extern const u8 BattleScript_IntimidateActivates[];
 extern const u8 BattleScript_IntimidateActivatesEnd3[];
+extern const u8 BattleScript_ReactivateIntimidate[];
 extern const u8 BattleScript_HailActivates[]; //wondering if it matters where I put battlescript ehre, poisonworsened was only one put at end, adn thats when problem started.
 extern const u8 BattleScript_IgnoresWhileAsleep[]; //need remember to add effect to change poison to toxic poison
 extern const u8 BattleScript_IgnoresAndHitsItself[];// and set toxic timer to 3 so it does more damage than normal poison
 extern const u8 BattleScript_MoveEffectRecoil[];
-extern const u8 BattleScript_FlushMessageBox[];
-extern const u8 BattleScript_SpikesOnFaintedBattler[];
+extern const u8 BattleScript_FlushMessageBox[];//i think the issue was because I put it in the wrong place in battle_scripts_1.s
+extern const u8 BattleScript_SpikesOnFaintedBattler[]; //order here shouldn't matter
 extern const u8 BattleScript_WildMonBallBlock[];
 extern const u8 BattleScript_NonGhost_BallDodge[];
 extern const u8 BattleScript_SkipTurn[];
