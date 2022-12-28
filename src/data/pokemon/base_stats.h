@@ -10359,10 +10359,10 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_LUVDISC] =
     {
         .baseHP = 43,
-        .baseAttack = 30,
+        .baseAttack = 33,
         .baseDefense = 75,
         .baseSpeed = 77,
-        .baseSpAttack = 40,
+        .baseSpAttack = 44,
         .baseSpDefense = 85,
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,

@@ -3264,33 +3264,33 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2)))
                         {
                             gBattlerTarget = GetBattlerAtPosition(((Random() & 1) * 2) | side); //select on target from enemy 
-                            gLastUsedAbility = gBattleMons[i].ability;
-                            atk97_tryinfatuating();
-                            BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
                             gBattleScripting.battler = i;
+                            gLastUsedAbility = gBattleMons[i].ability;
+                            infatuationchecks();
                             PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
+                            BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
                             ++effect;
                         }
                         else if (gBattleMons[target1].ability != 0 && gBattleMons[target1].hp != 0
                             && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1)))
                         {
                             gBattlerTarget = target1;
-                            gLastUsedAbility = gBattleMons[i].ability;
-                            atk97_tryinfatuating();
-                            BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
                             gBattleScripting.battler = i;
+                            gLastUsedAbility = gBattleMons[i].ability;
+                            infatuationchecks();
                             PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
+                            BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
                             ++effect;
                         }
                         else if (gBattleMons[target2].ability != 0 && gBattleMons[target2].hp != 0
                             && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2)))
                         {
                             gBattlerTarget = target2;
-                            gLastUsedAbility = gBattleMons[i].ability;
-                            atk97_tryinfatuating();
-                            BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
                             gBattleScripting.battler = i;
+                            gLastUsedAbility = gBattleMons[i].ability;
+                            infatuationchecks();
                             PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
+                            BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
                             ++effect;
                         }
                     }
@@ -3301,11 +3301,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1))) 
                         {
                             gBattlerTarget = target1;
-                            gLastUsedAbility = gBattleMons[i].ability;
-                            atk97_tryinfatuating();
-                            BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
                             gBattleScripting.battler = i;
+                            gLastUsedAbility = gBattleMons[i].ability;
+                            infatuationchecks();
                             PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
+                            BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
                             ++effect;
                         }
                     }

@@ -214,6 +214,7 @@ static void atk94_damagetohalftargethp(void);
 static void atk95_setsandstorm(void);
 static void atk96_weatherdamage(void);
 static void atk97_tryinfatuating(void);
+static void infatuationchecks(void);
 static void atk98_updatestatusicon(void);
 static void atk99_setmist(void);
 static void atk9A_setfocusenergy(void);
@@ -9177,6 +9178,30 @@ static void atk96_weatherdamage(void)
 
 // use for cupid's arrow think can just call this function after my conditions are set
 //switch in if effect works string is "targtet name fell in love w attcaker name at first sight"
+//not sure it'll target correctly  so will make custom effect
+
+static void infatuationchecks(void)//cusotm effect used for cupidarrow
+{
+    if (gBattleMons[gBattlerTarget].ability == ABILITY_OBLIVIOUS)
+    {
+        gBattlescriptCurrInstr = BattleScript_ObliviousPreventsAttraction;
+        gLastUsedAbility = ABILITY_OBLIVIOUS;
+        RecordAbilityBattle(gBattlerTarget, ABILITY_OBLIVIOUS);
+    }
+    if (gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION)
+
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    else
+    {
+
+            gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
+            gBattlescriptCurrInstr += 5;
+
+    }
+}
+
 static void atk97_tryinfatuating(void)
 {
     struct Pokemon *monAttacker, *monTarget;
