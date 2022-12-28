@@ -10376,12 +10376,12 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_WATER_2,
         .eggGroup2 = EGG_GROUP_WATER_2,
-        .abilities = {ABILITY_CUPIDS_ARROW, ABILITY_SWIFT_SWIM},
+        .abilities = {ABILITY_CUPIDS_ARROW, ABILITY_NONE},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_HYDRATION, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_PINK,
-        .noFlip = FALSE,
+        .noFlip = FALSE,//changed to 100% make luv disc a stall/setup mon add moves as needed. give early game endure
     }, //NEW ability will be 33% or 50% chance to infatuate on switch in loop check for target that can infatuate if double use trace targetting
 
     [SPECIES_BAGON] =

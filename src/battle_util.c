@@ -1117,6 +1117,26 @@ u8 DoBattlerEndTurnEffects(void)
                 } //I'm completely guessing but if done right, should heal an additional 1/16th per turn
                 ++gBattleStruct->turnEffectsTracker;
                 break;
+            case ENDTURN_AQUA_RING:  // aqua ring
+                if ((gStatuses3[gActiveBattler] & STATUS3_AQUA_RING) //hopefully allows to just reuse counter here for aqua ring to duplicate effect
+                    && !BATTLER_MAX_HP(gActiveBattler)
+                    //&& !(gStatuses3[gActiveBattler] & STATUS3_HEAL_BLOCK)
+                    && gBattleMons[gActiveBattler].hp != 0) //function changes & new rooted defines courtesy of phoenix_bound
+                {
+                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
+                    if (gBattleMoveDamage == 0)
+                        gBattleMoveDamage = 1;
+                    if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED_COUNTER) != STATUS3_ROOTED_TURN(6)) //forgot how this works but lowered value since not rooted
+                    {
+                        gStatuses3[gActiveBattler] += STATUS3_ROOTED_TURN(1); //to balance
+                    }
+                    gBattleMoveDamage *= gStatuses3[gActiveBattler] >> STATUS3_ROOTED_SHIFT;  
+                    gBattleMoveDamage *= -1; 
+                    BattleScriptExecute(BattleScript_AquaRingHeal);
+                    ++effect; 
+                } 
+                ++gBattleStruct->turnEffectsTracker;
+                break;
             case ENDTURN_ABILITIES:  // end turn abilities
                 if (AbilityBattleEffects(ABILITYEFFECT_ENDTURN, gActiveBattler, 0, 0, 0))
                     ++effect;
@@ -1133,7 +1153,7 @@ u8 DoBattlerEndTurnEffects(void)
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_LEECH_SEED:  // leech seed
-                if ((gStatuses3[gActiveBattler] & STATUS3_LEECHSEED)
+                if ((gStatuses3[gActiveBattler] & STATUS3_LEECHSEED) //idea increased healing if in rain or hit with water gBattleMoveDamage *= 2 
                  && gBattleMons[gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER].hp != 0
                  && gBattleMons[gActiveBattler].hp != 0)
                 {
@@ -1150,7 +1170,7 @@ u8 DoBattlerEndTurnEffects(void)
                     BattleScriptExecute(BattleScript_LeechSeedTurnDrain); //I'll figure this out, and I think what I want to do is for all these ghost effects
                     ++effect; //if absorbign from a ghost just change the color of the effect animation to a purple one
                 }//TODO
-                ++gBattleStruct->turnEffectsTracker;
+                ++gBattleStruct->turnEffectsTracker;//ghost drain works need to find proper graphic though/plus do same for if draining poison top
                 break;
             case ENDTURN_POISON:  // poison
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_POISON) && gBattleMons[gActiveBattler].hp != 0)
