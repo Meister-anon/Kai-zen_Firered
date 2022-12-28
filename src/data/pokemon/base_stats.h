@@ -2575,10 +2575,10 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 55,
         .baseAttack = 95,
         .baseDefense = 180,
-        .baseSpeed = 60,
+        .baseSpeed = 65,
         .baseSpAttack = 85,
         .baseSpDefense = 50,
-        .type1 = TYPE_WATER,
+        .type1 = TYPE_ICE,  //most moves were ice rather than water related plus its a clam which makes pearls so kinda fitting
         .type2 = TYPE_ROCK,
         .catchRate = 60,
         .expYield = 184,
@@ -10376,13 +10376,13 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_WATER_2,
         .eggGroup2 = EGG_GROUP_WATER_2,
-        .abilities = {ABILITY_SWIFT_SWIM, ABILITY_NONE},
+        .abilities = {ABILITY_CUPIDS_ARROW, ABILITY_SWIFT_SWIM},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_HYDRATION, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-    },
+    }, //NEW ability will be 33% or 50% chance to infatuate on switch in loop check for target that can infatuate if double use trace targetting
 
     [SPECIES_BAGON] =
     {
@@ -26344,7 +26344,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 120,
         .baseSpDefense = 80,
         .type1 = TYPE_ICE,
-        .type2 = TYPE_ICE,
+        .type2 = TYPE_ROCK,
         .catchRate = 75,
         .expYield = 203,
         //.evYield_HP = 2,

@@ -1506,7 +1506,7 @@ static void atk01_accuracycheck(void)
         //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
         eva = 5;
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP) { //.target = MOVE_TARGET_SELECTED, 
-            if (type == TYPE_PSYCHIC)
+            if ((gBattleMons[gBattlerTarget].type1 || gBattleMons[gBattlerTarget].type2) == TYPE_PSYCHIC) //important chek this think have function for type checking
                 eva = 5; // to take advantage of these buffs I want to have a button to display real move accuracy in battle. maybe L
             else
                 //     calc = (calc * 260) / 100; // gBattleMoves[gCurrentMove].target that's the comamnd I need, then just set the target I want
@@ -9175,6 +9175,8 @@ static void atk96_weatherdamage(void)
     ++gBattlescriptCurrInstr;
 }
 
+// use for cupid's arrow think can just call this function after my conditions are set
+//switch in if effect works string is "targtet name fell in love w attcaker name at first sight"
 static void atk97_tryinfatuating(void)
 {
     struct Pokemon *monAttacker, *monTarget;

@@ -28,6 +28,7 @@
 #include "pokedex.h"
 #include "constants/battle_move_effects.h"
 #include "constants/battle_script_commands.h"
+#include "battle_script_commands.c"
 
 static bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId);
 
@@ -1581,7 +1582,7 @@ bool8 HandleFaintedMonActions(void)
         case 6:
             if (AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE1, 0, 0, 0, 0) || AbilityBattleEffects(ABILITYEFFECT_TRACE, 0, 0, 0, 0) || ItemBattleEffects(1, 0, TRUE) || AbilityBattleEffects(ABILITYEFFECT_FORECAST, 0, 0, 0, 0))
                 return TRUE;
-            ++gBattleStruct->faintedActionsState;
+            ++gBattleStruct->faintedActionsState; //should I add neutralizing gas here?
             break;
         case FAINTED_ACTIONS_MAX_CASE:
             break;
@@ -2602,7 +2603,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             case ABILITY_TRACE:
-                if (!(gSpecialStatuses[battler].traced))
+                if (!(gSpecialStatuses[battler].traced)) //this is needed to prevent infini loop because its not a "status"
                 {
                     gStatuses3[battler] |= STATUS3_TRACE;
                     gSpecialStatuses[battler].traced = 1;
@@ -3227,6 +3228,90 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
             }
             break;
+        case ABILITYEFFECT_CUPIDSARROW: // 
+            for (i = 0; i < gBattlersCount; ++i) //handles ability targetting
+            {
+                u16 speciesAttacker, speciesTarget1, speciesTarget2;
+                u32 personalityAttacker, personalityTarget1, personalityTarget2;
+                
+                if (gBattleMons[i].ability == ABILITY_CUPIDS_ARROW && (Random() % 1) == 0) //hopefully 50% odds,
+                    //using high odds since it can only activate on switch in, and if opposite gender is on other side
+                {
+                    u8 target2;
+
+                    side = (GetBattlerPosition(i) ^ BIT_SIDE) & BIT_SIDE; // side of the opposing pokemon
+                    target1 = GetBattlerAtPosition(side);
+                    target2 = GetBattlerAtPosition(side + BIT_FLANK);
+
+                    speciesAttacker = GetMonData(i, MON_DATA_SPECIES);
+                    personalityAttacker = GetMonData(i, MON_DATA_PERSONALITY);
+                    speciesTarget1 = GetMonData(target1, MON_DATA_SPECIES);
+                    speciesTarget2 = GetMonData(target2, MON_DATA_SPECIES);
+                    personalityTarget1 = GetMonData(target1, MON_DATA_PERSONALITY);
+                    personalityTarget2 = GetMonData(target2, MON_DATA_PERSONALITY);
+
+                    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+                    {
+                        //end function if all genders are the same
+                        if (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) == (GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1) && GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2)))
+                        {
+                            break;
+                        }
+                        if (gBattleMons[target1].ability != 0 && gBattleMons[target1].hp != 0 
+                            && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1))
+                            && gBattleMons[target2].ability != 0 && gBattleMons[target2].hp != 0
+                            && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2)))
+                        {
+                            gBattlerTarget = GetBattlerAtPosition(((Random() & 1) * 2) | side); //select on target from enemy 
+                            gLastUsedAbility = gBattleMons[i].ability;
+                            atk97_tryinfatuating();
+                            BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
+                            gBattleScripting.battler = i;
+                            PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
+                            ++effect;
+                        }
+                        else if (gBattleMons[target1].ability != 0 && gBattleMons[target1].hp != 0
+                            && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1)))
+                        {
+                            gBattlerTarget = target1;
+                            gLastUsedAbility = gBattleMons[i].ability;
+                            atk97_tryinfatuating();
+                            BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
+                            gBattleScripting.battler = i;
+                            PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
+                            ++effect;
+                        }
+                        else if (gBattleMons[target2].ability != 0 && gBattleMons[target2].hp != 0
+                            && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2)))
+                        {
+                            gBattlerTarget = target2;
+                            gLastUsedAbility = gBattleMons[i].ability;
+                            atk97_tryinfatuating();
+                            BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
+                            gBattleScripting.battler = i;
+                            PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
+                            ++effect;
+                        }
+                    }
+                    else
+                    {
+                        
+                        if (gBattleMons[target1].ability && gBattleMons[target1].hp
+                            && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1))) 
+                        {
+                            gBattlerTarget = target1;
+                            gLastUsedAbility = gBattleMons[i].ability;
+                            atk97_tryinfatuating();
+                            BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
+                            gBattleScripting.battler = i;
+                            PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
+                            ++effect;
+                        }
+                    }
+                    
+                }
+            }//ok think this should be right for this effect, should infatuate target on switch in  w 50% success odds
+            break;
         case ABILITYEFFECT_CHECK_OTHER_SIDE: // 12
             side = GetBattlerSide(battler);
             for (i = 0; i < gBattlersCount; ++i)
@@ -3284,7 +3369,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
             }
             break;
-        case ABILITYEFFECT_CHECK_FIELD_EXCEPT_BATTLER: // 15
+        case ABILITYEFFECT_CHECK_FIELD_EXCEPT_BATTLER: // 15  ?
             side = GetBattlerSide(battler);
             for (i = 0; i < gBattlersCount; ++i)
             {

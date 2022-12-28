@@ -7112,6 +7112,12 @@ BattleScript_CuteCharmActivates::
 	printstring STRINGID_PKMNSXINFATUATEDY
 	waitmessage 0x40
 	return
+	
+BattleScript_CupidsArrowActivates::
+	status2animation BS_TARGET, STATUS2_INFATUATION
+	printstring STRINGID_CUPIDSARROWSTRUCK
+	waitmessage 0x40
+	return
 
 BattleScript_DancerActivates::	
 	waitmessage 0x20

@@ -2,8 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\data",
-    "\\tools"
+    "\\src\\data"
   ],
+  "SelectedNode": "\\data\\text\\trainer_class_names.inc",
   "PreviewInSolutionExplorer": false
 }

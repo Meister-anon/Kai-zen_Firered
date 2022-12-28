@@ -693,6 +693,7 @@ static const u8 sText_BattlerAbilityRaisedStat[] = _("{B_SCR_ACTIVE_NAME_WITH_PR
 static const u8 sText_ASandstormKickedUp[] = _("A sandstorm kicked up!");
 static const u8 sText_PkmnsWillPerishIn3Turns[] = _("Both Pokémon will perish\nin three turns!");
 static const u8 sText_AbilityRaisedStatDrastically[] = _("{B_DEF_ABILITY} raised {B_DEF_NAME_WITH_PREFIX}'s\n{B_BUFF1} drastically!");
+static const u8 sText_FellInLoveAtFirstSight[] = _("{B_DEF_NAME_WITH_PREFIX} fell in love at first sight!");
 
 //extra stuff new
 static const u8 sText_Your1[] = _("Your");
@@ -1265,6 +1266,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_PKMNSWILLPERISHIN3TURNS - BATTLESTRINGS_TABLE_START]       = sText_PkmnsWillPerishIn3Turns,
     [STRINGID_ABILITYRAISEDSTATDRASTICALLY - BATTLESTRINGS_TABLE_START]  = sText_AbilityRaisedStatDrastically,  
     [STRINGID_AURAFLAREDTOLIFE - BATTLESTRINGS_TABLE_START]              = sText_AuraFlaredToLife,
+    [STRINGID_CUPIDSARROWSTRUCK - BATTLESTRINGS_TABLE_START]             = sText_FellInLoveAtFirstSight,
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
     [STRINGID_PLAYERWHITEDOUT - BATTLESTRINGS_TABLE_START]               = sText_PlayerWhiteout2,

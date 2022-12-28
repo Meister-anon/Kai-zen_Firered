@@ -815,4 +815,5 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_MULTI_TASK] =_("Multi-task"),
     [ABILITY_SIROCCO] =_("Sirocco"),
     [ABILITY_HI_PRESSURE] =_("Hi-Pressure"),
+    [ABILITY_CUPIDS_ARROW] =_("Cupid's Arrow"),
 };
