@@ -1964,6 +1964,7 @@ u8 AtkCanceller_UnableToUseMove(void)
 
 //logic for this is non-flying type pokemon that are typically
 //floating or attack while in the air/ can fly
+//already checked to add all pokemon that have levitate as their ability
 const u16 sFloatingSpecies[] = {
     SPECIES_BEAUTIFLY,
     SPECIES_DUSTOX,
