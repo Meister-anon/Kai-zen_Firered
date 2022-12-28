@@ -1582,7 +1582,7 @@ bool8 HandleFaintedMonActions(void)
         case 6:
             if (AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE1, 0, 0, 0, 0) || AbilityBattleEffects(ABILITYEFFECT_TRACE, 0, 0, 0, 0) || ItemBattleEffects(1, 0, TRUE) || AbilityBattleEffects(ABILITYEFFECT_FORECAST, 0, 0, 0, 0))
                 return TRUE;
-            ++gBattleStruct->faintedActionsState; //should I add neutralizing gas here?
+            ++gBattleStruct->faintedActionsState; //should I add neutralizing gas here? // no neutralizing gas is already working
             break;
         case FAINTED_ACTIONS_MAX_CASE:
             break;
