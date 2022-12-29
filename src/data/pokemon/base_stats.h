@@ -9674,7 +9674,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         .abilities = {ABILITY_SUCTION_CUPS, ABILITY_NONE},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_STORM_DRAIN, ABILITY_NONE},
+            .abilityHidden = {ABILITY_STORM_DRAIN, ABILITY_SOLID_ROCK},
         #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -9704,7 +9704,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         .abilities = {ABILITY_SUCTION_CUPS, ABILITY_NONE},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_STORM_DRAIN, ABILITY_NONE},
+            .abilityHidden = {ABILITY_STORM_DRAIN, ABILITY_SOLID_ROCK},
         #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -18268,7 +18268,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
+        .abilities = {ABILITY_OVERGROW, ABILITY_OVERGROW},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_BULLETPROOF, ABILITY_NONE},
         #endif
@@ -18295,7 +18295,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
+        .abilities = {ABILITY_STURDY, ABILITY_ROCK_HEAD},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_BULLETPROOF, ABILITY_NONE},
         #endif
@@ -18305,7 +18305,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_CHESNAUGHT] =
     {
-        .baseHP = 88,
+        .baseHP = 98,
         .baseAttack = 107,
         .baseDefense = 122,
         .baseSpeed = 64,
@@ -18322,13 +18322,14 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
+        .abilities = {ABILITY_ROUGH_SKIN, ABILITY_SHELL_ARMOR},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_BULLETPROOF, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-    },
+    },//change signature move spike shield to apply field spikes as well as normal effect
+    //also re arrange move learn order pain split belly drum possibly ingrain
 
     [SPECIES_FENNEKIN] =
     {
