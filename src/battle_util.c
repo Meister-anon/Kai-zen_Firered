@@ -1200,6 +1200,10 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_BURN:  // burn
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_BURN) && gBattleMons[gActiveBattler].hp != 0)
                 {
+                    if (gbattlemons[gActiveBattler].ability == ABILITY_HEATPROOF) {
+                        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
+                    }
+                    else
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
@@ -3136,6 +3140,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                     break;
                 case ABILITY_WATER_VEIL:
+                case ABILITY_WATER_BUBBLE:
                     if (gBattleMons[battler].status1 & STATUS1_BURN)
                     {
                         StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);

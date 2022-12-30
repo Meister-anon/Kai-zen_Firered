@@ -68,7 +68,7 @@
 #define BATTLE_TYPE_x100000          0x100000
 #define BATTLE_TYPE_x200000          0x200000
 #define BATTLE_TYPE_INGAME_PARTNER   0x400000
-#define BATTLE_TYPE_TWO_OPPONENTS    0x800000
+#define BATTLE_TYPE_TWO_OPPONENTS    0x800000	//carry over from emerald, not used here but is reason for gTrainerBattleOpponent_B  when 2 trainers approach player
 #define BATTLE_TYPE_RECORDED         0x1000000
 #define BATTLE_TYPE_x2000000         0x2000000
 #define BATTLE_TYPE_x4000000         0x4000000

@@ -104,7 +104,7 @@ bool8 CheckForTrainersWantingBattle(void)
     return FALSE;
 }
 
-static bool8 CheckTrainer(u8 trainerObjId)
+static bool8 CheckTrainer(u8 trainerObjId)//important for idea of 2 trainers meeting at once causing double battle prob have to work with this
 {
     const u8 *script = GetObjectEventScriptPointerByObjectEventId(trainerObjId);
     u8 approachDistance;
@@ -113,7 +113,7 @@ static bool8 CheckTrainer(u8 trainerObjId)
     approachDistance = GetTrainerApproachDistance(&gObjectEvents[trainerObjId]);
     if (approachDistance != 0)
     {
-        if (script[1] == TRAINER_BATTLE_DOUBLE && GetMonsStateToDoubles())
+        if (script[1] == TRAINER_BATTLE_DOUBLE && GetMonsStateToDoubles())//figure what this means,
             return FALSE;
         ConfigureAndSetUpOneTrainerBattle(trainerObjId, script);
         TrainerApproachPlayer(&gObjectEvents[trainerObjId], approachDistance - 1);

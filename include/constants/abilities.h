@@ -294,8 +294,9 @@
 #define ABILITY_SIROCCO 272
 #define ABILITY_HI_PRESSURE 273
 #define ABILITY_CUPIDS_ARROW 274
+#define ABILITY_BATTLE_MATRON 275
 
-#define ABILITIES_COUNT 275 //note make perish body, only affect target, possibly 
+#define ABILITIES_COUNT 276 //note make perish body, only affect target, possibly 
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 

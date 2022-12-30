@@ -884,6 +884,27 @@ void ClearTrainerFlag(u16 trainerId)
     FlagClear(TRAINER_FLAGS_START + trainerId);
 }
 
+/*void BattleSetup_StartTrainerBattle(void)  important port from emerald expansion relevant for idea of 2 trainer becoming double battle
+{
+    if (gNoOfApproachingTrainers == 2)
+        gBattleTypeFlags = (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_TWO_OPPONENTS | BATTLE_TYPE_TRAINER);
+    else
+        gBattleTypeFlags = (BATTLE_TYPE_TRAINER);
+
+    sNoOfPossibleTrainerRetScripts = gNoOfApproachingTrainers;
+    gNoOfApproachingTrainers = 0;
+    sShouldCheckTrainerBScript = FALSE;
+    gWhichTrainerToFaceAfterBattle = 0;
+    gMain.savedCallback = CB2_EndTrainerBattle;
+
+    if (InBattlePyramid() || InTrainerHillChallenge())
+        sub_80B0828();
+    else
+        DoTrainerBattle();
+
+    ScriptContext1_Stop();
+}*/
+
 void StartTrainerBattle(void)
 {
     gBattleTypeFlags = BATTLE_TYPE_TRAINER;

@@ -3194,6 +3194,18 @@ static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 mo
     SetBoxMonData(boxMon, MON_DATA_PP_BONUSES, &ppBonuses);
 }
 
+static bool32 CanEvolve(u32 species) //default use for eviolite but will also use for new nidoqueen ability
+{
+    u32 i;
+
+    for (i = 0; i < EVOS_PER_MON; i++)
+    {
+        if (gEvolutionTable[species][i].method && gEvolutionTable[species][i].method != EVO_MEGA_EVOLUTION)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 #define APPLY_STAT_MOD(var, mon, stat, statIndex)                                   \
 {                                                                                   \
     (var) = (stat) * (gStatStageRatios)[(mon)->statStages[(statIndex)]][0];         \
@@ -3494,6 +3506,13 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMovePower = (gBattleMovePower * 15 / 10);
             //MulModifier(&modifier, UQ_4_12(1.5));
         break;
+    case ABILITY_BATTLE_MATRON:
+        if (IsBattlerAlive(BATTLE_PARTNER(gBattlerAttacker)) && CanEvolve(BATTLE_PARTNER(gBattleMons[gBattlerAttacker].species)))
+            //gBattleMovePower = (gBattleMovePower * 125 / 100);
+            //gBattleMoveDamage = gBattleMoveDamage * 125 / 100;
+        break;
+            //if checks work and it pulls species of partner mon need to decide if I boost move power or total move damage
+        //move power is less damage 
     }
 
     // field abilities
@@ -4824,7 +4843,7 @@ u8 GetMonsStateToDoubles(void)
             aliveCount++;
     }
 
-    return (aliveCount > 1) ? PLAYER_HAS_TWO_USABLE_MONS : PLAYER_HAS_ONE_USABLE_MON;
+    return (aliveCount > 1) ? PLAYER_HAS_TWO_USABLE_MONS : PLAYER_HAS_ONE_USABLE_MON;//need to understand this line
 }
 
 u16 GetAbilityBySpecies(u16 species, bool8 abilityNum) //important tells game abilitynum2 is hidden ability  think I'm going to make a second hidden ability field,

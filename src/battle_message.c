@@ -1419,14 +1419,17 @@ const u16 gStatDownStringIds[] = {
 };
 
 const u16 gFirstTurnOfTwoStringIds[] = {
-    STRINGID_PKMNWHIPPEDWHIRLWIND,
-    STRINGID_PKMNTOOKSUNLIGHT,
-    STRINGID_PKMNLOWEREDHEAD,
-    STRINGID_PKMNISGLOWING,
-    STRINGID_PKMNFLEWHIGH,
-    STRINGID_PKMNDUGHOLE,
-    STRINGID_PKMNHIDUNDERWATER,
-    STRINGID_PKMNSPRANGUP
+    STRINGID_PKMNWHIPPEDWHIRLWIND,      // MOVE_RAZOR_WIND
+    STRINGID_PKMNTOOKSUNLIGHT,          // MOVE_SOLAR_BEAM
+    STRINGID_PKMNLOWEREDHEAD,           // MOVE_SKULL_BASH
+    STRINGID_PKMNISGLOWING,             // MOVE_SKY_ATTACK
+    STRINGID_PKMNFLEWHIGH,              // MOVE_FLY
+    STRINGID_PKMNDUGHOLE,               // MOVE_DIG
+    STRINGID_PKMNHIDUNDERWATER,         // MOVE_DIVE
+    STRINGID_PKMNSPRANGUP,              // MOVE_BOUNCE
+    STRINGID_VANISHEDINSTANTLY,         // MOVE_PHANTOM_FORCE
+    STRINGID_PKNMABSORBINGPOWER,        // MOVE_GEOMANCY
+    STRINGID_CLOAKEDINAFREEZINGLIGHT    // MOVE_FREEZE_SHOCK
 };
 
 const u16 gWrappedStringIds[] = {
@@ -1937,7 +1940,7 @@ void BufferStringBattle(u16 stringId)
             else if (gBattleTypeFlags & BATTLE_TYPE_LEGENDARY)
                 stringPtr = sText_WildPkmnAppeared2;
             else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) // interesting, looks like they had something planned for wild double battles
-                stringPtr = sText_TwoWildPkmnAppeared;
+                stringPtr = sText_TwoWildPkmnAppeared;  //important
             else if (gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
                 stringPtr = sText_WildPkmnAppearedPause;
             else
@@ -2137,7 +2140,87 @@ u32 BattleStringExpandPlaceholdersToDisplayedString(const u8* src)
     BattleStringExpandPlaceholders(src, gDisplayedStringBattle);
 }
 
-static const u8* TryGetStatusString(u8 *src)
+static const u8 *BattleStringGetOpponentNameByTrainerId(u16 trainerId, u8 *text, u8 multiplayerId, u8 battlerId)
+{
+    const u8 *toCpy;
+
+    if (gBattleTypeFlags & BATTLE_TYPE_SECRET_BASE)
+    {
+        /*u32 i;
+        for (i = 0; i < ARRAY_COUNT(gBattleResources->secretBase->trainerName); i++)
+            text[i] = gBattleResources->secretBase->trainerName[i];
+        text[i] = EOS;
+        ConvertInternationalString(text, gBattleResources->secretBase->language);
+        toCpy = text;*/
+    }
+    else if (trainerId == TRAINER_UNION_ROOM)
+    {
+        toCpy = gLinkPlayers[multiplayerId ^ BIT_SIDE].name;
+    }
+    else if (trainerId == TRAINER_LINK_OPPONENT)
+    {
+        if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
+            toCpy = gLinkPlayers[GetBattlerMultiplayerId(battlerId)].name;
+        else
+            toCpy = gLinkPlayers[GetBattlerMultiplayerId(battlerId) & BIT_SIDE].name;
+    }
+    /*else if (trainerId == TRAINER_FRONTIER_BRAIN)
+    {
+        CopyFrontierBrainTrainerName(text);
+        toCpy = text;
+    }
+    else if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
+    {
+        GetFrontierTrainerName(text, trainerId);
+        toCpy = text;
+    }
+    else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_HILL)
+    {
+        GetTrainerHillTrainerName(text, trainerId);
+        toCpy = text;
+    }*/
+    else if (gBattleTypeFlags & BATTLE_TYPE_EREADER_TRAINER)
+    {
+        GetEreaderTrainerName(text);
+        toCpy = text;
+    }
+    else
+    {
+        toCpy = gTrainers[trainerId].trainerName;
+    }
+
+    return toCpy;
+}
+
+static const u8 *BattleStringGetOpponentClassByTrainerId(u16 trainerId)
+{
+    const u8 *toCpy;
+
+    if (gBattleTypeFlags & BATTLE_TYPE_SECRET_BASE)
+        toCpy = gTrainerClassNames[GetSecretBaseTrainerClass()];
+
+    else if (trainerId == TRAINER_UNION_ROOM)
+        toCpy = gTrainerClassNames[GetUnionRoomTrainerClass()];
+
+    /*else if (trainerId == TRAINER_FRONTIER_BRAIN)
+        toCpy = gTrainerClassNames[GetFrontierBrainTrainerClass()];
+
+    else if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
+        toCpy = gTrainerClassNames[GetFrontierOpponentClass(trainerId)];
+
+    else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_HILL)
+        toCpy = gTrainerClassNames[GetTrainerHillOpponentClass(trainerId)];*/
+
+    else if (gBattleTypeFlags & BATTLE_TYPE_EREADER_TRAINER)
+        toCpy = gTrainerClassNames[GetEreaderTrainerClassId()];
+
+    else
+        toCpy = gTrainerClassNames[gTrainers[trainerId].trainerClass];
+
+    return toCpy;
+}
+
+static const u8* TryGetStatusString(u8 *src) //important
 {
     u32 i;
     u8 status[] = _("$$$$$$$");

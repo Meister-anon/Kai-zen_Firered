@@ -87,9 +87,9 @@ u8 ScriptGiveEgg(u16 species)
     return sentToPc;
 }
 
-void HasEnoughMonsForDoubleBattle(void)
+void HasEnoughMonsForDoubleBattle(void) //used in special of same name, & used for check in EventScript_TryDoDoubleTrainerBattle
 {
-    switch (GetMonsStateToDoubles())
+    switch (GetMonsStateToDoubles())    //checks party size and how many usable (alive non egg) mon are in party
     {
     case PLAYER_HAS_TWO_USABLE_MONS:
         gSpecialVar_Result = PLAYER_HAS_TWO_USABLE_MONS;

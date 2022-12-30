@@ -894,7 +894,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_PARENTAL_BOND},//new idea ability Battle Matron, damage increase if paired w unevolved mon
         #else
             .abilities = {ABILITY_POISON_POINT, ABILITY_NONE},// so same condition for eviolite if mon can evolve increase dmg by 1.2 or smth
-        #endif //work w turn order loop your side of the field before nidoqueen attacks to do calc
+        #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -18301,7 +18301,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-    },
+    },//has takedown wood hammer so rock head could be useful plus has enough stats for eviolite to be worthwhile
 
     [SPECIES_CHESNAUGHT] =
     {
