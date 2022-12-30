@@ -3508,11 +3508,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_BATTLE_MATRON:
         if (IsBattlerAlive(BATTLE_PARTNER(gBattlerAttacker)) && CanEvolve(BATTLE_PARTNER(gBattleMons[gBattlerAttacker].species)))
-            //gBattleMovePower = (gBattleMovePower * 150 / 100);   //current preference
-            //gBattleMoveDamage = gBattleMoveDamage * 125 / 100;
+            gBattleMovePower = (gBattleMovePower * 150 / 100);   //current preference
         break;
             //if checks work and it pulls species of partner mon need to decide if I boost move power or total move damage
-        //move power is less damage 
+        //move power is less damage than gBattleMoveDamage
     }
 
     // field abilities

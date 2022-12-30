@@ -260,6 +260,8 @@ static const u8 sNuisanceDescription[] = _("“Weak attacks” strike first.");
 static const u8 sMultiTaskDescription[] = _("Damaging Attacks are multi-hit.");
 static const u8 sSiroccoDescription[] = _("Kicks up a sandstorm on contact.");
 static const u8 sHipressureDescription[] = _("Sharply raises foe's PP usage.");
+static const u8 sCupidsArrowDescription[] = _("Infatuates a target when enters.");
+static const u8 sBattleMatronDescription[] = _("Powers up moves to protect young PKMN.");
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
 {
@@ -537,6 +539,8 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_MULTI_TASK] = sMultiTaskDescription,
     [ABILITY_SIROCCO] = sSiroccoDescription,
     [ABILITY_HI_PRESSURE] = sHipressureDescription,
+    [ABILITY_CUPIDS_ARROW] = sHipressureDescription,
+    [ABILITY_BATTLE_MATRON] = sHipressureDescription,
 };
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
