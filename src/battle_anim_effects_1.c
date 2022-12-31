@@ -563,8 +563,8 @@ const struct SpriteTemplate gAbsorptionOrbSpriteTemplate =
     .anims = gPowerAbsorptionOrbAnimTable,
     .images = NULL,
     .affineAnims = gAbsorptionOrbAffineAnimTable,
-    .callback = AnimAbsorptionOrb,
-};
+    .callback = AnimAbsorptionOrb,//animates spirte
+};//used for leech and absorbing moves need to find a way to open and read palette data 
 
 const struct SpriteTemplate gHyperBeamOrbSpriteTemplate =
 {

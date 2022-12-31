@@ -2305,9 +2305,11 @@ void AnimTask_GetTrappedMoveAnimId(u8 taskId)
     DestroyAnimVisualTask(taskId);
 }
 
-void AnimTask_GetBattlersFromArg(u8 taskId)
+void AnimTask_GetBattlersFromArg(u8 taskId)//think i either need to create special animtask to check for target typing
+//and then jump to different animation for drain moves w different pallet
 {
     gBattleAnimAttacker = gBattleSpritesDataPtr->animationData->animArg;
     gBattleAnimTarget = gBattleSpritesDataPtr->animationData->animArg >> 8;
     DestroyAnimVisualTask(taskId);
-}
+}//or I put if statement in fuciton that uses gAbsorptionOrbSpriteTemplate  and changes the palleteTag if its ghost/poison
+//maybe can use gAbsorptionOrbSpriteTemplate.paletteTag =  or something like that
