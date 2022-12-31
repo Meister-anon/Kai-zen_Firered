@@ -1690,24 +1690,24 @@ const u8 gText_Loss[] = _("{HIGHLIGHT 0}Loss");
 const u8 gText_Draw[] = _("{HIGHLIGHT 0}Draw");
 static const u8 sText_SpaceIs[] = _(" is");
 static const u8 sText_ApostropheS[] = _("'s");
-const u8 gUnknown_83FE892[] = _("a NORMAL move");
-const u8 gUnknown_83FE8A0[] = _("a FIGHTING move");
-const u8 gUnknown_83FE8B0[] = _("a FLYING move");
-const u8 gUnknown_83FE8BE[] = _("a POISON move");
-const u8 gUnknown_83FE8CC[] = _("a GROUND move");
-const u8 gUnknown_83FE8DA[] = _("a ROCK move");
-const u8 gUnknown_83FE8E6[] = _("a BUG move");
-const u8 gUnknown_83FE8F1[] = _("a GHOST move");
-const u8 gUnknown_83FE8FE[] = _("a STEEL move");
-const u8 gUnknown_83FE90B[] = _("a ??? move");
-const u8 gUnknown_83FE916[] = _("a FIRE move");
-const u8 gUnknown_83FE922[] = _("a WATER move");
-const u8 gUnknown_83FE92F[] = _("a GRASS move");
-const u8 gUnknown_83FE93C[] = _("an ELECTRIC move");
-const u8 gUnknown_83FE94D[] = _("a PSYCHIC move");
-const u8 gUnknown_83FE95C[] = _("an ICE move");
-const u8 gUnknown_83FE968[] = _("a DRAGON move");
-const u8 gUnknown_83FE976[] = _("a DARK move");
+const u8 gNormal_movetype[] = _("a NORMAL move");
+const u8 gFighting_movetype[] = _("a FIGHTING move");
+const u8 gFlying_movetype[] = _("a FLYING move");
+const u8 gPoison_movetype[] = _("a POISON move");
+const u8 gGround_movetype[] = _("a GROUND move");
+const u8 gRock_movetype[] = _("a ROCK move");
+const u8 gBug_movetype[] = _("a BUG move");
+const u8 gGhost_movetype[] = _("a GHOST move");
+const u8 gSteel_movetype[] = _("a STEEL move");
+const u8 gUnknown_movetype[] = _("a ??? move");
+const u8 gFire_movetype[] = _("a FIRE move");
+const u8 gWater_movetype[] = _("a WATER move");
+const u8 gGrass_movetype[] = _("a GRASS move");
+const u8 gElectric_movetype[] = _("an ELECTRIC move");
+const u8 gPsychic_movetype[] = _("a PSYCHIC move");
+const u8 gIce_movetype[] = _("an ICE move");
+const u8 gDragon_movetype[] = _("a DRAGON move");
+const u8 gDark_movetype[] = _("a DARK move");
 const u8 gFairy_movetype[] = _("a FAIRY move"); //Fairy addition; make sure to add this in, where others are referenced.
 const u8 gText_TimeBoard[] = _("TIME BOARD");
 const u8 gText_ClearTime[] = _("CLEAR TIME"); // Unused
@@ -1733,24 +1733,25 @@ static const u8 sText_PlayerLostAgainstTrainer1[] = _("Player lost against\n{B_T
 static const u8 sText_PlayerBattledToDrawTrainer1[] = _("Player battled to a draw against\n{B_TRAINER1_CLASS} {B_TRAINER1_NAME}!");
 
 static const u8 *const sATypeMove_Table[] = {
-    gUnknown_83FE892,
-    gUnknown_83FE8A0,
-    gUnknown_83FE8B0,
-    gUnknown_83FE8BE,
-    gUnknown_83FE8CC,
-    gUnknown_83FE8DA,
-    gUnknown_83FE8E6,
-    gUnknown_83FE8F1,
-    gUnknown_83FE8FE,
-    gUnknown_83FE90B,
-    gUnknown_83FE916,
-    gUnknown_83FE922,
-    gUnknown_83FE92F,
-    gUnknown_83FE93C,
-    gUnknown_83FE94D,
-    gUnknown_83FE95C,
-    gUnknown_83FE968,
-    gUnknown_83FE976
+    gNormal_movetype,
+    gFighting_movetype,
+    gFlying_movetype,
+    gPoison_movetype,
+    gGround_movetype,
+    gRock_movetype,
+    gBug_movetype,
+    gGhost_movetype,
+    gSteel_movetype,
+    gUnknown_movetype,
+    gFire_movetype,
+    gWater_movetype,
+    gGrass_movetype,
+    gElectric_movetype,
+    gPsychic_movetype,
+    gIce_movetype,
+    gDragon_movetype,
+    gDark_movetype,
+    gFairy_movetype
 };
 
 //find out why this here
