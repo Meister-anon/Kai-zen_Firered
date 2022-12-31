@@ -2657,7 +2657,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     } //note, since pokemon will have the same ability slot when they evolve based on their ability num, I may need to ensure
     //a pokemon's evolved form also alway has a 2nd hiddden ability slot, so it doesn't just become ability_none.
     GiveBoxMonInitialMoveset(boxMon);
-}
+}// found out if mon evos into form without slot the original ability num is saved for when it evos again
 
 void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 nature)
 {
@@ -2928,6 +2928,11 @@ void CalculateMonStats(struct Pokemon *mon)
   }  //not sure but may need to change else to else if, excluding these 2 abilities to ensure the hp functions are separate.
 
  // if (!((ability == ABILITY_WONDER_GUARD && species == SPECIES_SHEDINJA) | (ability == ABILITY_DISPIRIT_GUARD && species == SPECIES_SHEDINJA))) // changed to line up with other if(!(   statements
+  //face palm the reason hp drop doesn't work is because I only have  that hp formula linked to shedinja w wonder guard...maybe /2022 end note
+
+  // noat 100% this function may just be for creating mon I may need to put mid battle changes into battle_util /2022 end note
+  //if true configer hp drop with skill swap trace etc the same way leech seed does hp gain for since it sets attacker as target
+  //hopefully that's not an end turn trick
 
 
    if (species == SPECIES_SHEDINJA) // thinnk I may need to change this since I don't want pokemon to look like they have max hp, I went them to look almost dead,
@@ -2941,7 +2946,8 @@ void CalculateMonStats(struct Pokemon *mon)
            s32 n = 2 * gBaseStats[species].baseHP + hpIV;
           newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
           currentHP = newMaxHP; // if done right this shoud allow shedinja hp to grow after swapping off ability. still working on hp drop
-       } // actually its probn ^ this equalizing that causes it.
+       } // actually its probn ^ this equalizing that causes it.   //this also works if neutralizing gas is on field wait..
+       //ok nvm I can just use gastro acid in a teamfight wait nvm, that means it wouldn't be immune to damage...
    }
        //if correct, this should set wonder shedinja to maxhp 1,max hp will grow when he loses ability, and any other pokemon with wonder guard,
     // will have max hp stay same, while current hp should drop to 1.
@@ -2978,10 +2984,6 @@ void CalculateMonStats(struct Pokemon *mon)
     SetMonData(mon, MON_DATA_HP, &currentHP);
 }
 
-/*static u16 AbilitybasedStatChanges(u16 species) //important will use to change constants i.e pokemon stats based on ability hidden ability etc.
-{
-    if (species ==  SPECIES_ZUBAT && gBaseStats[species].abilty == ABILITY_NUISANCE)
-}*/
 
 void BoxMonToMon(struct BoxPokemon *src, struct Pokemon *dest)
 {
