@@ -763,6 +763,7 @@ extern u16 gLastUsedItem;
 extern u32 gBattleTypeFlags;
 extern struct MonSpritesGfx *gMonSpritesGfxPtr;
 extern u16 gTrainerBattleOpponent_A;
+extern u16 gTrainerBattleOpponent_B;
 extern u16 gMoveToLearn;
 extern u16 gBattleMovePower;
 extern struct BattleEnigmaBerry gEnigmaBerries[MAX_BATTLERS_COUNT];

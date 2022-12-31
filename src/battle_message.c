@@ -2630,7 +2630,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                 toCpy = BattleStringGetOpponentNameByTrainerId(gTrainerBattleOpponent_B, text, multiplayerId, GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT));
                 break;
             case B_TXT_PARTNER_CLASS:
-                toCpy = gTrainerClassNames[GetFrontierOpponentClass(gPartnerTrainerId)];
+                //toCpy = gTrainerClassNames[GetFrontierOpponentClass(gPartnerTrainerId)];
                 break;
             case B_TXT_PARTNER_NAME:
                 toCpy = BattleStringGetPlayerName(text, GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT));
@@ -2643,8 +2643,8 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                 {
                 case B_POSITION_PLAYER_RIGHT:
                     if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER)
-                        toCpy = gTrainerClassNames[GetFrontierOpponentClass(gPartnerTrainerId)];
-                    break;
+                       // toCpy = gTrainerClassNames[GetFrontierOpponentClass(gPartnerTrainerId)];  not in default game so hod off for now
+                    break;//until fronteir inclusion
                 case B_POSITION_OPPONENT_LEFT:
                     toCpy = BattleStringGetOpponentClassByTrainerId(gTrainerBattleOpponent_A);
                     break;

@@ -65,6 +65,7 @@ static const u8 *GetTrainerCantBattleSpeech(void);
 
 static EWRAM_DATA u16 sTrainerBattleMode = 0;
 EWRAM_DATA u16 gTrainerBattleOpponent_A = 0;
+EWRAM_DATA u16 gTrainerBattleOpponent_B = 0;    //not for double battle, for updated trainer see interaction 2 trainers meet for one battle
 static EWRAM_DATA u16 sTrainerObjectEventLocalId = 0;
 static EWRAM_DATA u8 *sTrainerAIntroSpeech = NULL;
 static EWRAM_DATA u8 *sTrainerADefeatSpeech = NULL;
