@@ -1158,12 +1158,12 @@ u8 DoBattlerEndTurnEffects(void)
                  && gBattleMons[gActiveBattler].hp != 0)
                 {
                     gBattlerTarget = gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER; // Notice gBattlerTarget is actually the HP receiver.
-                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
+                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;//heal leech target max hp
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
                     if (IS_BATTLER_OF_TYPE(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED, TYPE_GHOST))
                         gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 16; //check if correct, but should heal, and then take 1/16 max health of pokemon healed
-                    if (gBattleMoveDamage == 0) //intersting because that doesn't necessarily equate to half of the health gained.
+                    if (gBattleMoveDamage == 0) //take damage based on leech user max hp
                         gBattleMoveDamage = 1;
                     gBattleScripting.animArg1 = gBattlerTarget;
                     gBattleScripting.animArg2 = gBattlerAttacker;
@@ -1171,7 +1171,7 @@ u8 DoBattlerEndTurnEffects(void)
                     ++effect; //if absorbign from a ghost just change the color of the effect animation to a purple one
                 }//TODO
                 ++gBattleStruct->turnEffectsTracker;//ghost drain works need to find proper graphic though/plus do same for if draining poison top
-                break;
+                break;//pretty sure it uses the water bubble graphic
             case ENDTURN_POISON:  // poison
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_POISON) && gBattleMons[gActiveBattler].hp != 0)
                 {

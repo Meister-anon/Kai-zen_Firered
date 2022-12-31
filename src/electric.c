@@ -915,7 +915,7 @@ static void AnimTask_ElectricChargingParticles_Step(u8 taskId)
         {
             u8 spriteId;
 
-            task->data[12] = 0;
+            task->data[12] = 0;  //important best example of what i need for leech effect use same tileTag w different palletTag to change color
             if (gAnimMoveIndex == MOVE_FLASH_CANNON || gAnimMoveIndex == MOVE_STEEL_BEAM)
                 spriteId = CreateSprite(&gLightOfRuinGrayChargeTemplate, task->data[14], task->data[15], 2);
             else
