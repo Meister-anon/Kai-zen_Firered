@@ -319,7 +319,7 @@ static void HandleInputChooseAction(void)
         PlaySE(SE_SELECT);
         BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
         //PlayerBufferExecCompleted();
-    }
+    }//not gonna skip turn will instead use this to show true move power and type
 }
 
 UNUSED static void UnusedEndBounceEffect(void)
@@ -574,7 +574,7 @@ void HandleInputChooseMove(void)
             MoveSelectionDisplayPpNumber();
             MoveSelectionDisplayMoveType();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
-        }
+        }//the dpad inputs that move the move selection cursor seem to use gActiveBattler for something/movechoice guess bcause its 0-4
     }
     else if (JOY_NEW(SELECT_BUTTON))
     {
@@ -597,7 +597,7 @@ void HandleInputChooseMove(void)
        PlaySE(SE_SELECT);
        BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
        //PlayerBufferExecCompleted();
-    }
+    }//no longer plan to make skip turn, instead can use this to display true move power & true type
 }
 
 // not used
@@ -1055,7 +1055,7 @@ void CompleteOnInactiveTextPrinter(void)
 #define tExpTask_frames     data[10]
 // TODO: document other used fields
 
-static void Task_GiveExpToMon(u8 taskId)
+static void Task_GiveExpToMon(u8 taskId)//important note for later will need to adjust catch mechanic when it comes to doubles wild battles
 {
     u32 monId = (u8)(gTasks[taskId].tExpTask_monId);
     u8 battlerId = gTasks[taskId].tExpTask_battler;
@@ -1397,7 +1397,7 @@ static void DoHitAnimBlinkSpriteEffect(void)
     }
 }
 
-static void MoveSelectionDisplayMoveNames(void)
+static void MoveSelectionDisplayMoveNames(void)//relevant
 {
     s32 i;
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
@@ -1408,19 +1408,19 @@ static void MoveSelectionDisplayMoveNames(void)
         MoveSelectionDestroyCursorAt(i);
         StringCopy(gDisplayedStringBattle, gUnknown_83FE770);
         StringAppend(gDisplayedStringBattle, gMoveNames[moveInfo->moves[i]]);
-        BattlePutTextOnWindow(gDisplayedStringBattle, i + 3);
+        BattlePutTextOnWindow(gDisplayedStringBattle, i + 3); //not sure how this works with move slots and coordinate
         if (moveInfo->moves[i] != MOVE_NONE)
             ++gNumberOfMovesToChoose;
-    }
+    }//belive this means as long as you haven't looped 4 times and move does not equal move none (i.e a move does exist) keep looping
 }
 
-static void MoveSelectionDisplayPpString(void)
+static void MoveSelectionDisplayPpString(void)//will change where in window pp is shown & window size so relevant
 {
-    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 7);
-}
+    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP); //pp text 
+    BattlePutTextOnWindow(gDisplayedStringBattle, 7); //think 7 is x coordinate in window
+}//note these are the values I'm looking for since file refers to in battle
 
-static void MoveSelectionDisplayPpNumber(void)
+static void MoveSelectionDisplayPpNumber(void)//displays actual pp current & max value
 {
     u8 *txtPtr;
     struct ChooseMoveStruct *moveInfo;
@@ -1432,15 +1432,15 @@ static void MoveSelectionDisplayPpNumber(void)
     txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
     *txtPtr = CHAR_SLASH;
     ConvertIntToDecimalStringN(++txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 9);
+    BattlePutTextOnWindow(gDisplayedStringBattle, 9);//think number is x coordinate since this is to the right of pp value which is 7
 }
 
-static void MoveSelectionDisplayMoveType(void)
+static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
 {
     u8 *txtPtr;
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
 
-    txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceType);
+    txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceType); //type/
     *txtPtr++ = EXT_CTRL_CODE_BEGIN;
     *txtPtr++ = 6;
     *txtPtr++ = 1;
@@ -1449,7 +1449,7 @@ static void MoveSelectionDisplayMoveType(void)
     BattlePutTextOnWindow(gDisplayedStringBattle, 8);
 }
 
-void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 arg1)
+void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 arg1)//will change box size & move position so this is relevant
 {
     u16 src[2];
 
@@ -1459,7 +1459,7 @@ void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 arg1)
     CopyBgTilemapBufferToVram(0);
 }
 
-void MoveSelectionDestroyCursorAt(u8 cursorPosition)
+void MoveSelectionDestroyCursorAt(u8 cursorPosition)//will change box size & move position so this is relevant
 {
     u16 src[2];
 
@@ -2311,7 +2311,7 @@ static void PlayerHandleSuccessBallThrowAnim(void)
     gDoingBattleAnim = TRUE;
     InitAndLaunchSpecialAnimation(gActiveBattler, gActiveBattler, GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), B_ANIM_BALL_THROW);
     gBattlerControllerFuncs[gActiveBattler] = CompleteOnSpecialAnimDone;
-}
+}//same as below
 
 static void PlayerHandleBallThrowAnim(void)
 {
@@ -2321,7 +2321,7 @@ static void PlayerHandleBallThrowAnim(void)
     gDoingBattleAnim = TRUE;
     InitAndLaunchSpecialAnimation(gActiveBattler, gActiveBattler, GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), B_ANIM_BALL_THROW);
     gBattlerControllerFuncs[gActiveBattler] = CompleteOnSpecialAnimDone;
-}
+}//look into may be relatedd to why can't catch double wild mon it and why it only ever targets the left mon for catching.
 
 static void PlayerHandlePause(void)
 {
@@ -2457,7 +2457,7 @@ static void PlayerHandleUnknownYesNoBox(void)
 {
 }
 
-static void HandleChooseMoveAfterDma3(void)
+static void HandleChooseMoveAfterDma3(void)//need to find what this means, if it has anythiing to do with window size
 {
     if (!IsDma3ManagerBusyWithBgCopy())
     {
@@ -2473,7 +2473,7 @@ static void PlayerHandleChooseMove(void)
     gBattlerControllerFuncs[gActiveBattler] = HandleChooseMoveAfterDma3;
 }
 
-void InitMoveSelectionsVarsAndStrings(void)
+void InitMoveSelectionsVarsAndStrings(void)//think relevant
 {
     MoveSelectionDisplayMoveNames();
     gMultiUsePlayerCursor = 0xFF;
@@ -2565,7 +2565,7 @@ static void PlayerHandleExpUpdate(void)
     }
 }
 
-static void PlayerHandleStatusIconUpdate(void)
+static void PlayerHandleStatusIconUpdate(void)//important for spirit lock
 {
     if (!IsBattleSEPlaying(gActiveBattler))
     {
