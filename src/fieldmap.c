@@ -398,7 +398,8 @@ u8 MapGridGetZCoordAt(s32 x, s32 y)
     return block >> 12;
 }
 
-u8 MapGridIsImpassableAt(s32 x, s32 y)
+u8 MapGridIsImpassableAt(s32 x, s32 y)//look into this, when you speed up movement too much it breaks collision because you can skip
+//over the tile/coordinate it was meant to block you at.
 {
 
     u16 block = MapGridGetTileAt(x, y);
@@ -468,7 +469,7 @@ void MapGridSetMetatileEntryAt(s32 x, s32 y, u16 metatile)
     }
 }
 
-void MapGridSetMetatileImpassabilityAt(s32 x, s32 y, bool32 arg2)
+void MapGridSetMetatileImpassabilityAt(s32 x, s32 y, bool32 arg2)//same as above look into this
 {
     if (x >= 0 && x < VMap.Xsize
         && y >= 0 && y < VMap.Ysize)
@@ -719,7 +720,7 @@ bool8 CameraMove(s32 x, s32 y)
     s32 old_x, old_y;
     gCamera.active = FALSE;
     direction = GetPostCameraMoveMapBorderId(x, y);
-    if (direction + 1 <= 1)
+    if (direction + 1 <= 1)//consider shifting this section in case it makes camera movement smoother after trying
     {
         gSaveBlock1Ptr->pos.x += x;
         gSaveBlock1Ptr->pos.y += y;

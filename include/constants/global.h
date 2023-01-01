@@ -4,7 +4,7 @@
 #define ITEM_NAME_LENGTH 18
 #define POKEMON_NAME_LENGTH 10
 #define OT_NAME_LENGTH 7
-#define MOVE_NAME_LENGTH 12
+#define MOVE_NAME_LENGTH 12 //longest move name is 17 chars need move length 16 to fit
 
 #define VERSION_SAPPHIRE    1
 #define VERSION_RUBY        2
