@@ -1200,7 +1200,7 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_BURN:  // burn
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_BURN) && gBattleMons[gActiveBattler].hp != 0)
                 {
-                    if (gbattlemons[gActiveBattler].ability == ABILITY_HEATPROOF) {
+                    if (gBattleMons[gActiveBattler].ability == ABILITY_HEATPROOF) {
                         gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
                     }
                     else

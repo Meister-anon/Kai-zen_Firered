@@ -5672,7 +5672,7 @@ static void atk52_switchineffects(void) //important, think can put ability reset
         gBattlescriptCurrInstr = BattleScript_SwitchInAbilityMsgRet;
     }
 
-
+    //pretty sure I need to move this down, right now its happening before spikes
     if (i = IsAbilityOnOpposingSide(gActiveBattler, gBattleMons[gActiveBattler].ability)) //believe the switch case and will put the id of the battle on variable i
     {//will need to put "gBattleScripting.battler = i - 1;" in top of every switch case
 

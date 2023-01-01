@@ -2154,10 +2154,10 @@ static const u8 *BattleStringGetOpponentNameByTrainerId(u16 trainerId, u8 *text,
         ConvertInternationalString(text, gBattleResources->secretBase->language);
         toCpy = text;*/
     }
-    else if (trainerId == TRAINER_UNION_ROOM)
+    /*else if (trainerId == TRAINER_UNION_ROOM)
     {
         toCpy = gLinkPlayers[multiplayerId ^ BIT_SIDE].name;
-    }
+    }*/
     else if (trainerId == TRAINER_LINK_OPPONENT)
     {
         if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
@@ -2179,12 +2179,12 @@ static const u8 *BattleStringGetOpponentNameByTrainerId(u16 trainerId, u8 *text,
     {
         GetTrainerHillTrainerName(text, trainerId);
         toCpy = text;
-    }*/
+    }
     else if (gBattleTypeFlags & BATTLE_TYPE_EREADER_TRAINER)
     {
         GetEreaderTrainerName(text);
         toCpy = text;
-    }
+    }*/
     else
     {
         toCpy = gTrainers[trainerId].trainerName;
@@ -2197,11 +2197,11 @@ static const u8 *BattleStringGetOpponentClassByTrainerId(u16 trainerId)
 {
     const u8 *toCpy;
 
-    if (gBattleTypeFlags & BATTLE_TYPE_SECRET_BASE)
+    /*if (gBattleTypeFlags & BATTLE_TYPE_SECRET_BASE)
         toCpy = gTrainerClassNames[GetSecretBaseTrainerClass()];
 
-    else if (trainerId == TRAINER_UNION_ROOM)
-        toCpy = gTrainerClassNames[GetUnionRoomTrainerClass()];
+   if (trainerId == TRAINER_UNION_ROOM)
+        toCpy = gTrainerClassNames[GetUnionRoomTrainerClass()];*/
 
     /*else if (trainerId == TRAINER_FRONTIER_BRAIN)
         toCpy = gTrainerClassNames[GetFrontierBrainTrainerClass()];
@@ -2212,7 +2212,7 @@ static const u8 *BattleStringGetOpponentClassByTrainerId(u16 trainerId)
     else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_HILL)
         toCpy = gTrainerClassNames[GetTrainerHillOpponentClass(trainerId)];*/
 
-    else if (gBattleTypeFlags & BATTLE_TYPE_EREADER_TRAINER)
+    if (gBattleTypeFlags & BATTLE_TYPE_EREADER_TRAINER)
         toCpy = gTrainerClassNames[GetEreaderTrainerClassId()];
 
     else
@@ -2220,6 +2220,67 @@ static const u8 *BattleStringGetOpponentClassByTrainerId(u16 trainerId)
 
     return toCpy;
 }
+
+static const u8 *BattleStringGetOpponentName(u8 *text, u8 multiplayerId, u8 battlerId)
+{
+    const u8 *toCpy;
+
+    switch (GetBattlerPosition(battlerId))
+    {
+    case B_POSITION_OPPONENT_LEFT:
+        toCpy = BattleStringGetOpponentNameByTrainerId(gTrainerBattleOpponent_A, text, multiplayerId, battlerId);
+        break;
+    case B_POSITION_OPPONENT_RIGHT:
+        if (gBattleTypeFlags & (BATTLE_TYPE_TWO_OPPONENTS | BATTLE_TYPE_MULTI))// && !BATTLE_TWO_VS_ONE_OPPONENT)
+            toCpy = BattleStringGetOpponentNameByTrainerId(gTrainerBattleOpponent_B, text, multiplayerId, battlerId);
+        else
+            toCpy = BattleStringGetOpponentNameByTrainerId(gTrainerBattleOpponent_A, text, multiplayerId, battlerId);
+        break;
+    }
+
+    return toCpy;
+}
+
+static const u8 *BattleStringGetPlayerName(u8 *text, u8 battlerId)
+{
+    const u8 *toCpy;
+
+    switch (GetBattlerPosition(battlerId))
+    {
+    case B_POSITION_PLAYER_LEFT:
+        if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
+            toCpy = gLinkPlayers[0].name;
+        else
+            toCpy = gSaveBlock2Ptr->playerName;
+        break;
+    case B_POSITION_PLAYER_RIGHT:
+        if (gBattleTypeFlags & BATTLE_TYPE_LINK && gBattleTypeFlags & (BATTLE_TYPE_RECORDED | BATTLE_TYPE_MULTI))
+        {
+            toCpy = gLinkPlayers[2].name;
+        }
+        else if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER)
+        {
+            //GetFrontierTrainerName(text, gPartnerTrainerId);
+            //toCpy = text;
+        }
+        else
+        {
+            toCpy = gSaveBlock2Ptr->playerName;
+        }
+        break;
+    }
+
+    return toCpy;
+}
+
+static const u8 *BattleStringGetTrainerName(u8 *text, u8 multiplayerId, u8 battlerId)
+{
+    if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+        return BattleStringGetPlayerName(text, battlerId);
+    else
+        return BattleStringGetOpponentName(text, multiplayerId, battlerId);
+}
+
 
 static const u8* TryGetStatusString(u8 *src) //important
 {
@@ -2632,7 +2693,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
             case B_TXT_PARTNER_CLASS:
                 //toCpy = gTrainerClassNames[GetFrontierOpponentClass(gPartnerTrainerId)];
                 break;
-            case B_TXT_PARTNER_NAME:
+            case B_TXT_PARTNER_NAME://prob need to add back when I get around to adding fronteir stuff but no partners in base game
                 toCpy = BattleStringGetPlayerName(text, GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT));
                 break;
             case B_TXT_ATK_TRAINER_NAME:
