@@ -6682,6 +6682,10 @@ BattleScript_IntimidateActivatesEnd3::
 	call BattleScript_DoIntimidateActivationAnim
 	end3
 
+@does nothing now, but put here to compile from use in battle_script_commands
+BattleScript_ReactivateIntimidate::
+	end3
+
 BattleScript_DoIntimidateActivationAnim::
 	pause 0x20
 BattleScript_IntimidateActivates::
