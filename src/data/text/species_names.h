@@ -520,7 +520,6 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_MUSHARNA] = _("Musharna"),
     [SPECIES_PIDOVE] = _("Pidove"),
     [SPECIES_TRANQUILL] = _("Tranquill"),
-    [SPECIES_UNFEZANT_F] = _("Unfezant"),
     [SPECIES_UNFEZANT_M] = _("Unfezant"),
     [SPECIES_BLITZLE] = _("Blitzle"),
     [SPECIES_ZEBSTRIKA] = _("Zebstrika"),
@@ -1140,6 +1139,10 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_VIVILLON_JUNGLE] = _("Vivillon"),
     [SPECIES_VIVILLON_FANCY] = _("Vivillon"),
     [SPECIES_VIVILLON_POKE_BALL] = _("Vivillon"),
+    //Unfezant
+    [SPECIES_UNFEZANT_F] = _("Unfezant"),
+    //Pyroar
+    [SPECIES_PYROAR_F] = _("Pyroar"),
     // Flabébé
     [SPECIES_FLABEBE_YELLOW_FLOWER] = _("Flabébé"),
     [SPECIES_FLABEBE_ORANGE_FLOWER] = _("Flabébé"),

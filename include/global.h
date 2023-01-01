@@ -100,6 +100,10 @@ extern u8 gStringVar4[];
 #define DEX_FLAGS_NO (ROUND_BITS_TO_BYTES(NUM_SPECIES))
 #define NUM_FLAG_BYTES (ROUND_BITS_TO_BYTES(FLAGS_COUNT))
 
+//gonna use in places of num species for dex flags so I can have dex entries for forms & gen 
+//POKEMON_SLOTS_NUMBER
+//...nvm I'm stupid num species already encompases all the different forms
+
 struct Coords8
 {
     s8 x;

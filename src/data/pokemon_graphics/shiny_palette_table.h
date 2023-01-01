@@ -1137,6 +1137,10 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(VIVILLON_FANCY, gMonShinyPalette_VivillonFancy),
     SPECIES_SHINY_PAL(VIVILLON_POKE_BALL, gMonShinyPalette_VivillonPokeBall),
 
+    SPECIES_SHINY_PAL(UNFEZANT_F, gMonShinyPalette_Unfezant_F),
+
+    SPECIES_SHINY_PAL(PYROAR_F, gMonShinyPalette_PyroarF),
+
     SPECIES_SHINY_PAL(FLABEBE_YELLOW_FLOWER, gMonShinyPalette_FlabebeYellowFlower),
     SPECIES_SHINY_PAL(FLABEBE_ORANGE_FLOWER, gMonShinyPalette_FlabebeOrangeFlower),
     SPECIES_SHINY_PAL(FLABEBE_BLUE_FLOWER, gMonShinyPalette_FlabebeBlueFlower),
@@ -1275,6 +1279,9 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(EGG, gMonPalette_Egg),
 };
 
+//think I'll only include gender variations  that are actually distinct enough to be a different mon like meosic & unfezant & pyroar
+//actually this struct isn't even referenced anywhere yet, so its prob better for me to just make them all distinct species
+//like indeedee & meowstic are already done
 const struct CompressedSpritePalette gMonShinyPaletteTableFemale[] =
 {
     SPECIES_SHINY_PAL(EEVEE, gMonShinyPalette_Eevee),
@@ -1286,10 +1293,9 @@ const struct CompressedSpritePalette gMonShinyPaletteTableFemale[] =
     SPECIES_SHINY_PAL(KRICKETUNE, gMonShinyPalette_Kricketune),
     SPECIES_SHINY_PAL(SHINX, gMonShinyPalette_Shinx),
     SPECIES_SHINY_PAL(COMBEE, gMonShinyPalette_Combee),
-    SPECIES_SHINY_PAL(HIPPOPOTAS, gMonShinyPalette_HippopotasF),
-    SPECIES_SHINY_PAL(HIPPOWDON, gMonShinyPalette_HippowdonF),
-    SPECIES_SHINY_PAL(UNFEZANT_F, gMonShinyPalette_Unfezant_F),
-    SPECIES_SHINY_PAL(FRILLISH, gMonShinyPalette_FrillishF),
-    SPECIES_SHINY_PAL(JELLICENT, gMonShinyPalette_JellicentF),
-    SPECIES_SHINY_PAL(PYROAR, gMonShinyPalette_PyroarF),
-};
+   // SPECIES_SHINY_PAL(HIPPOPOTAS, gMonShinyPalette_HippopotasF),
+    //SPECIES_SHINY_PAL(HIPPOWDON, gMonShinyPalette_HippowdonF),
+    
+    /*SPECIES_SHINY_PAL(FRILLISH, gMonShinyPalette_FrillishF),
+    SPECIES_SHINY_PAL(JELLICENT, gMonShinyPalette_JellicentF),*/
+};//think I'll only include gender variations  that are actually distinct enough to be a different mon like meosic & unfezant & pyroar

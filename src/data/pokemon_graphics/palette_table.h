@@ -1137,6 +1137,10 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(VIVILLON_FANCY, gMonPalette_VivillonFancy),
     SPECIES_PAL(VIVILLON_POKE_BALL, gMonPalette_VivillonPokeBall),
 
+    SPECIES_PAL(UNFEZANT_F, gMonPalette_Unfezant_F),
+    
+    SPECIES_PAL(PYROAR_F, gMonPalette_PyroarF),
+
     SPECIES_PAL(FLABEBE_YELLOW_FLOWER, gMonPalette_FlabebeYellowFlower),
     SPECIES_PAL(FLABEBE_ORANGE_FLOWER, gMonPalette_FlabebeOrangeFlower),
     SPECIES_PAL(FLABEBE_BLUE_FLOWER, gMonPalette_FlabebeBlueFlower),
@@ -1286,10 +1290,9 @@ const struct CompressedSpritePalette gMonPaletteTableFemale[] =
     SPECIES_PAL(KRICKETOT, gMonPalette_Kricketot),
     SPECIES_PAL(KRICKETUNE, gMonPalette_Kricketune),
     SPECIES_PAL(SHINX, gMonPalette_Shinx),
-    SPECIES_PAL(HIPPOPOTAS, gMonPalette_HippopotasF),
-    SPECIES_PAL(HIPPOWDON, gMonPalette_HippowdonF),
-    SPECIES_PAL(UNFEZANT_F, gMonPalette_Unfezant_F),
-    SPECIES_PAL(FRILLISH, gMonPalette_FrillishF),
-    SPECIES_PAL(JELLICENT, gMonPalette_JellicentF),
-    SPECIES_PAL(PYROAR, gMonPalette_PyroarF),
+    //SPECIES_PAL(HIPPOPOTAS, gMonPalette_HippopotasF),
+    //SPECIES_PAL(HIPPOWDON, gMonPalette_HippowdonF),
+    /*SPECIES_PAL(FRILLISH, gMonPalette_FrillishF),
+    SPECIES_PAL(JELLICENT, gMonPalette_JellicentF),*/
+    
 };
