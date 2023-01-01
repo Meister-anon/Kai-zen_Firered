@@ -891,7 +891,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POISON_POINT, ABILITY_RIVALRY},
-            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_PARENTAL_BOND},//new idea ability Battle Matron, damage increase if paired w unevolved mon
+            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_BATTLE_MATRON},//new idea ability Battle Matron, damage increase if paired w unevolved mon
         #else
             .abilities = {ABILITY_POISON_POINT, ABILITY_NONE},// so same condition for eviolite if mon can evolve increase dmg by 1.2 or smth
         #endif
@@ -2386,7 +2386,7 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_RUN_AWAY, ABILITY_EARLY_BIRD},
         .safariZoneFleeRate = 50,
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_TANGLED_FEET, ABILITY_MULTI_TASK},
+            .abilityHidden = {ABILITY_AERILATE, ABILITY_MULTI_TASK},
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -2414,7 +2414,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         .abilities = {ABILITY_RUN_AWAY, ABILITY_EARLY_BIRD},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_TANGLED_FEET, ABILITY_MULTI_TASK},
+            .abilityHidden = {ABILITY_AERILATE, ABILITY_MULTI_TASK},
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -14562,35 +14562,6 @@ const struct BaseStats gBaseStats[] =
     },//seaprate final evo into gender forms
     //will need to reupdate species file again...
 
-    [SPECIES_UNFEZANT_F] =
-    {
-        .baseHP = 100,
-        .baseDefense = 65,
-        .baseSpeed = 93,
-        .baseSpAttack = 115,
-        .baseSpDefense = 100,
-        .baseAttack = 65,
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_FLYING,
-        .catchRate = 45,
-        .expYield = 220,
-        //.evYield_Attack = 3,
-        .genderRatio = MON_FEMALE,
-        .eggCycles = 15,
-        .friendship = 70,
-        .growthRate = GROWTH_MEDIUM_SLOW,
-        .eggGroup1 = EGG_GROUP_FLYING,
-        .eggGroup2 = EGG_GROUP_FLYING,
-        #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_SERENE_GRACE, ABILITY_SUPER_LUCK},
-            .abilityHidden = {ABILITY_QUEENLY_MAJESTY, ABILITY_STAMINA},
-        #else
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        #endif
-        .bodyColor = BODY_COLOR_GRAY,
-        .noFlip = FALSE,
-    },
-
     [SPECIES_UNFEZANT_M] =
     {
         .baseHP = 80,
@@ -18749,8 +18720,8 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_PYROAR] =
     {
         .baseHP = 86,
-        .baseAttack = 68,
-        .baseDefense = 72,
+        .baseAttack = 78,
+        .baseDefense = 87,
         .baseSpeed = 106,
         .baseSpAttack = 109,
         .baseSpDefense = 66,
@@ -18774,7 +18745,7 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
-
+    
     [SPECIES_FLABEBE] =
     {
         .baseHP = 44,
@@ -31113,6 +31084,64 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_FRIEND_GUARD, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_RED,
+        .noFlip = FALSE,
+    },
+
+    [SPECIES_UNFEZANT_F] =
+    {
+        .baseHP = 100,
+        .baseDefense = 65,
+        .baseSpeed = 93,
+        .baseSpAttack = 115,
+        .baseSpDefense = 100,
+        .baseAttack = 65,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FLYING,
+        .catchRate = 45,
+        .expYield = 220,
+        //.evYield_Attack = 3,
+        .genderRatio = MON_FEMALE,
+        .eggCycles = 15,
+        .friendship = 70,
+        .growthRate = GROWTH_MEDIUM_SLOW,
+        .eggGroup1 = EGG_GROUP_FLYING,
+        .eggGroup2 = EGG_GROUP_FLYING,
+        #ifdef BATTLE_ENGINE
+            .abilities = {ABILITY_SERENE_GRACE, ABILITY_SUPER_LUCK},
+            .abilityHidden = {ABILITY_QUEENLY_MAJESTY, ABILITY_STAMINA},
+        #else
+            .abilities = {ABILITY_NONE, ABILITY_NONE},
+        #endif
+        .bodyColor = BODY_COLOR_GRAY,
+        .noFlip = FALSE,
+    },
+
+    [SPECIES_PYROAR_F] =
+    {
+        .baseHP = 101,
+        .baseAttack = 68,
+        .baseDefense = 72,
+        .baseSpeed = 116,
+        .baseSpAttack = 109,
+        .baseSpDefense = 66,
+        .type1 = TYPE_FIRE,
+        .type2 = TYPE_NORMAL,
+        .catchRate = 65,
+        .expYield = 177,
+        //.evYield_SpAttack = 2,
+        .genderRatio = PERCENT_FEMALE(87.5),
+        .eggCycles = 20,
+        .friendship = 70,
+        .growthRate = GROWTH_MEDIUM_SLOW,
+        .eggGroup1 = EGG_GROUP_FIELD,
+        .eggGroup2 = EGG_GROUP_FIELD,
+        #ifdef BATTLE_ENGINE
+            .abilities = {ABILITY_RIVALRY, ABILITY_BATTLE_MATRON},
+            .abilityHidden = {ABILITY_MOXIE, ABILITY_NONE},
+        #else
+            .abilities = {ABILITY_NONE, ABILITY_NONE},
+        #endif
+        .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
 
