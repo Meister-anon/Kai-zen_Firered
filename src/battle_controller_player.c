@@ -1397,6 +1397,10 @@ static void DoHitAnimBlinkSpriteEffect(void)
     }
 }
 
+//Quotes from GriffinR
+//BattleWindowText is information about the text on the window, not the window itself.
+//So the coordinates would be the text's position relative to the window's position
+//The coordinates for the windows themselves are in src/battle_bg.c   sStandardBattleWindowTemplates
 static void MoveSelectionDisplayMoveNames(void)//relevant
 {
     s32 i;
