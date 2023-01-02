@@ -1406,19 +1406,27 @@ static void MoveSelectionDisplayMoveNames(void)//relevant
     for (i = 0; i < MAX_MON_MOVES; ++i)
     {
         MoveSelectionDestroyCursorAt(i);
-        StringCopy(gDisplayedStringBattle, gUnknown_83FE770);
+        StringCopy(gDisplayedStringBattle, gUnknown_83FE770);   //shadow/ font shading
         StringAppend(gDisplayedStringBattle, gMoveNames[moveInfo->moves[i]]);
         BattlePutTextOnWindow(gDisplayedStringBattle, i + 3); //not sure how this works with move slots and coordinate
         if (moveInfo->moves[i] != MOVE_NONE)
             ++gNumberOfMovesToChoose;
     }//belive this means as long as you haven't looped 4 times and move does not equal move none (i.e a move does exist) keep looping
 }
+//MoveSelectionDisplayMoveNames loops through move slots, and fills slots 3-6   flows left to right, from top and then bottom
+//MoveSelectionDisplayPpString prints the PP text and fills slot 7
+//MoveSelectionDisplayMoveType  prints the Type/ string & displays move type they fill slot 8
+//MoveSelectionDisplayPpNumber  displays the current and max pp of a move and fills slot 9
+//window pp & movetype is in seems to follow different order top to bottom and then left to right, but apparently only 3 spaces rather than 4?
 
 static void MoveSelectionDisplayPpString(void)//will change where in window pp is shown & window size so relevant
 {
     StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP); //pp text 
     BattlePutTextOnWindow(gDisplayedStringBattle, 7); //think 7 is x coordinate in window
 }//note these are the values I'm looking for since file refers to in battle
+//experiemented with shifting this, the value can't take the space of a buffer already printing/displaying some other value.
+//the number wasn't an x coordinate instead it was a slot within the main window, they all have fixed points
+//which are determined elsewhere
 
 static void MoveSelectionDisplayPpNumber(void)//displays actual pp current & max value
 {
@@ -1430,10 +1438,11 @@ static void MoveSelectionDisplayPpNumber(void)//displays actual pp current & max
     SetPpNumbersPaletteInMoveSelection();
     moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
     txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
-    *txtPtr = CHAR_SLASH;
+    *txtPtr = CHAR_SLASH; //this the backslash between current & max pp
     ConvertIntToDecimalStringN(++txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 9);//think number is x coordinate since this is to the right of pp value which is 7
-}
+    BattlePutTextOnWindow(gDisplayedStringBattle, 9);
+}//gDisplayedStringBattle is a ewram container used to store values for battle text strings  including win/lose text & move selection
+//think I can also call it a text buffer,BattlePutTextOnWindow uses text as first argument but the buffer can be used in place
 
 static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
 {
@@ -1444,10 +1453,12 @@ static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
     *txtPtr++ = EXT_CTRL_CODE_BEGIN;
     *txtPtr++ = 6;
     *txtPtr++ = 1;
-    txtPtr = StringCopy(txtPtr, gUnknown_83FE770);
+    txtPtr = StringCopy(txtPtr, gUnknown_83FE770); //shadow/ font shading
     StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
     BattlePutTextOnWindow(gDisplayedStringBattle, 8);
-}
+}//can't use convertIntToDecimalString to attempt make right align, text becomes garbalded numbers and still is left alingned...
+//used StringCopyPadded to have 4 elements to use str_conv right aline it doens't actually right align, but correctly displayed movetype
+//no idea where to go from here.
 
 void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 arg1)//will change box size & move position so this is relevant
 {

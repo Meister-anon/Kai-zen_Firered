@@ -2967,32 +2967,310 @@ static void ChooseTypeOfMoveUsedString(u8* dst)
     }
 }
 
+//used by BattlePutTextOnWindow formats the text within the window IDs
+//this is only the text not where the text is displayed within its individual window 
+//each constant refers to a windowID that is the window/area for each value within the main window/border of the menu
 static const struct BattleWindowText sTextOnWindowsInfo_Normal[] = {
-    {PIXEL_FILL(0xf), 2, 0x02, 2, 0, 2, 1, 0x1, 0xf, 0x6},
-    {PIXEL_FILL(0xf), 2, 0x02, 2, 0, 2, 0, 0x1, 0xf, 0x6},
-    {PIXEL_FILL(0xe), 1, 0x00, 2, 0, 2, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 0, 0x00, 1, 0, 0, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 0, 0x00, 1, 0, 0, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 0, 0x00, 1, 0, 0, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 0, 0x00, 1, 0, 0, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 0, 0x00, 2, 0, 0, 0, 0xc, 0xe, 0xb},
-    {PIXEL_FILL(0xe), 0, 0x00, 2, 0, 0, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 1, 0x0a, 2, 0, 2, 0, 0xc, 0xe, 0xb},
-    {PIXEL_FILL(0xe), 1, 0x00, 2, 0, 2, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 1, 0x00, 2, 0, 2, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 2, 0x00, 0, 0, 0, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0x0), 0, 0x20, 0, 0, 0, 0, 0x1, 0x0, 0x2},
-    {PIXEL_FILL(0xe), 2, 0x00, 2, 1, 2, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 2, 0x00, 2, 0, 0, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 2, 0x00, 2, 0, 0, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 2, 0x00, 2, 0, 0, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 2, 0x00, 2, 0, 0, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 2, 0x00, 2, 0, 0, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0xe), 2, 0x00, 2, 0, 0, 0, 0xd, 0xe, 0xf},
-    {PIXEL_FILL(0x0), 2, 0x00, 2, 0, 0, 0, 0x1, 0x0, 0x6},
-    {PIXEL_FILL(0x0), 2, 0x00, 2, 0, 0, 0, 0x1, 0x0, 0x6},
-    {PIXEL_FILL(0x0), 2, 0x00, 2, 0, 0, 0, 0x1, 0x0, 0x6},
-    {PIXEL_FILL(0x1), 4, 0x00, 1, 0, 1, 1, 0x2, 0x1, 0x3}
+    [B_WIN_MSG] = {
+        .fillValue = PIXEL_FILL(0xf),
+        .fontId = FONT_NORMAL,
+        .x = 2,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 2,
+        .speed = 1,
+        .fgColor = 1,
+        .bgColor = 15,
+        .shadowColor = 6,
+    },
+    [B_WIN_ACTION_PROMPT] = {
+        .fillValue = PIXEL_FILL(0xf),
+        .fontId = FONT_NORMAL,
+        .x = 2,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 2,
+        .speed = 0,
+        .fgColor = 1,
+        .bgColor = 15,
+        .shadowColor = 6,
+    },
+    [B_WIN_ACTION_MENU] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_NORMAL_COPY_1,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 2,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_MOVE_NAME_1] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_SMALL,
+        .x = 0,
+        .y = 1,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_MOVE_NAME_2] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_SMALL,
+        .x = 0,
+        .y = 1,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_MOVE_NAME_3] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_SMALL,
+        .x = 0,
+        .y = 1,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_MOVE_NAME_4] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_SMALL,
+        .x = 0,
+        .y = 1,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_PP] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_SMALL,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 12,
+        .bgColor = 14,
+        .shadowColor = 11,
+    },
+    [B_WIN_MOVE_TYPE] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_SMALL,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_PP_REMAINING] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_NORMAL_COPY_1,
+        .x = 10,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 2,
+        .speed = 0,
+        .fgColor = 12,
+        .bgColor = 14,
+        .shadowColor = 11,
+    },
+    [B_WIN_DUMMY] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_NORMAL_COPY_1,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 2,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_SWITCH_PROMPT] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_NORMAL_COPY_1,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 2,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_LEVEL_UP_BOX] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_NORMAL,
+        .x = 0,
+        .y = 0,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_LEVEL_UP_BANNER] = {
+        .fillValue = PIXEL_FILL(0x0),
+        .fontId = FONT_SMALL,
+        .x = 0x20,
+        .y = 0,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 1,
+        .bgColor = 0,
+        .shadowColor = 2,
+    },
+    [B_WIN_YESNO] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_NORMAL,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 1,
+        .lineSpacing = 2,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_VS_PLAYER] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_NORMAL,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_VS_OPPONENT] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_NORMAL,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_VS_MULTI_PLAYER_1] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_NORMAL,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_VS_MULTI_PLAYER_2] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_NORMAL,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_VS_MULTI_PLAYER_3] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_NORMAL,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_VS_MULTI_PLAYER_4] = {
+        .fillValue = PIXEL_FILL(0xe),
+        .fontId = FONT_NORMAL,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 13,
+        .bgColor = 14,
+        .shadowColor = 15,
+    },
+    [B_WIN_VS_OUTCOME_DRAW] = {
+        .fillValue = PIXEL_FILL(0x0),
+        .fontId = FONT_NORMAL,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 1,
+        .bgColor = 0,
+        .shadowColor = 6,
+    },
+    [B_WIN_VS_OUTCOME_LEFT] = {
+        .fillValue = PIXEL_FILL(0x0),
+        .fontId = FONT_NORMAL,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 1,
+        .bgColor = 0,
+        .shadowColor = 6,
+    },
+    [B_WIN_VS_OUTCOME_RIGHT] = {
+        .fillValue = PIXEL_FILL(0x0),
+        .fontId = FONT_NORMAL,
+        .x = 0,
+        .y = 2,
+        .letterSpacing = 0,
+        .lineSpacing = 0,
+        .speed = 0,
+        .fgColor = 1,
+        .bgColor = 0,
+        .shadowColor = 6,
+    },
+    [B_WIN_OAK_OLD_MAN] = {
+        .fillValue = PIXEL_FILL(0x1),
+        .fontId = FONT_MALE,
+        .x = 0,
+        .y = 1,
+        .letterSpacing = 0,
+        .lineSpacing = 1,
+        .speed = 1,
+        .fgColor = 2,
+        .bgColor = 1,
+        .shadowColor = 3,
+    }
 };
 
 const u8 gUnknown_83FEC90[] = {0x04, 0x05, 0x02, 0x02};
@@ -3020,11 +3298,18 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId) {
     }
     switch (windowId)
     {
-    case 15 ... 20:
+    case B_WIN_VS_PLAYER:
+    case B_WIN_VS_OPPONENT:
+    case B_WIN_VS_MULTI_PLAYER_1:
+    case B_WIN_VS_MULTI_PLAYER_2:
+    case B_WIN_VS_MULTI_PLAYER_3:
+    case B_WIN_VS_MULTI_PLAYER_4:
         x = (48 - GetStringWidth(sTextOnWindowsInfo_Normal[windowId].fontId, text,
                                  sTextOnWindowsInfo_Normal[windowId].letterSpacing)) / 2;
         break;
-    case 21 ... 23:
+    case B_WIN_VS_OUTCOME_DRAW:
+    case B_WIN_VS_OUTCOME_LEFT:
+    case B_WIN_VS_OUTCOME_RIGHT:
         x = (64 - GetStringWidth(sTextOnWindowsInfo_Normal[windowId].fontId, text,
                                  sTextOnWindowsInfo_Normal[windowId].letterSpacing)) / 2;
         break;
@@ -3046,17 +3331,17 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId) {
     printerTemplate.fgColor = sTextOnWindowsInfo_Normal[windowId].fgColor;
     printerTemplate.bgColor = sTextOnWindowsInfo_Normal[windowId].bgColor;
     printerTemplate.shadowColor = sTextOnWindowsInfo_Normal[windowId].shadowColor;
-    if (windowId == 24)
+    if (windowId == B_WIN_OAK_OLD_MAN)
         gTextFlags.useAlternateDownArrow = FALSE;
     else
         gTextFlags.useAlternateDownArrow = TRUE;
 
-    if ((gBattleTypeFlags & BATTLE_TYPE_LINK) || ((gBattleTypeFlags & BATTLE_TYPE_POKEDUDE) && windowId != 24))
+    if ((gBattleTypeFlags & BATTLE_TYPE_LINK) || ((gBattleTypeFlags & BATTLE_TYPE_POKEDUDE) && windowId != B_WIN_OAK_OLD_MAN))
         gTextFlags.autoScroll = TRUE;
     else
         gTextFlags.autoScroll = FALSE;
 
-    if (windowId == 0 || windowId == 24)
+    if (windowId == B_WIN_MSG || windowId == B_WIN_OAK_OLD_MAN)
     {
         if (gBattleTypeFlags & BATTLE_TYPE_LINK)
             speed = 1;
@@ -3130,4 +3415,4 @@ u8 GetCurrentPpToMaxPpState(u8 currentPp, u8 maxPp)
     }
 
     return 0;
-}
+}//the FUCK?? what does this even mean!

@@ -139,8 +139,12 @@ const struct BgTemplate gBattleBgTemplates[4] = {
     }
 };
 
-static const struct WindowTemplate gUnknown_8248330[] = {
-    {
+//each constant refers to a windowID that is the window/area for each value within the main window/border of the menu
+//this struct tells the dimmenssions and relative location of each windowID within the main window/border
+//can rearrange move type pp etc from here, but need to figure out how to change the main window size so I can move the movenames
+//tilemapLeft & tilemapTop are the respective X & Y coordinates
+static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
+    [B_WIN_MSG] = {
         .bg = 0,
         .tilemapLeft = 1,
         .tilemapTop = 15,
@@ -148,7 +152,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 4,
         .paletteNum = 0,
         .baseBlock = 0x090
-    }, {
+    },
+    [B_WIN_ACTION_PROMPT] = {
         .bg = 0,
         .tilemapLeft = 1,
         .tilemapTop = 35,
@@ -156,7 +161,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 4,
         .paletteNum = 0,
         .baseBlock = 0x1c0
-    }, {
+    },
+    [B_WIN_ACTION_MENU] = {
         .bg = 0,
         .tilemapLeft = 17,
         .tilemapTop = 35,
@@ -164,7 +170,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 4,
         .paletteNum = 5,
         .baseBlock = 0x190
-    }, {
+    },
+    [B_WIN_MOVE_NAME_1] = {
         .bg = 0,
         .tilemapLeft = 2,
         .tilemapTop = 55,
@@ -172,7 +179,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x300
-    }, {
+    },
+    [B_WIN_MOVE_NAME_2] = {
         .bg = 0,
         .tilemapLeft = 11,
         .tilemapTop = 55,
@@ -180,7 +188,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x310
-    }, {
+    },
+    [B_WIN_MOVE_NAME_3] = {
         .bg = 0,
         .tilemapLeft = 2,
         .tilemapTop = 57,
@@ -188,7 +197,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x320
-    }, {
+    },
+    [B_WIN_MOVE_NAME_4] = {
         .bg = 0,
         .tilemapLeft = 11,
         .tilemapTop = 57,
@@ -196,7 +206,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x330
-    }, {
+    },
+    [B_WIN_PP] = {
         .bg = 0,
         .tilemapLeft = 21,
         .tilemapTop = 55,
@@ -204,7 +215,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x290
-    }, {
+    },
+    [B_WIN_MOVE_TYPE] = {
         .bg = 0,
         .tilemapLeft = 21,
         .tilemapTop = 57,
@@ -212,7 +224,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x296
-    }, {
+    },
+    [B_WIN_PP_REMAINING] = {
         .bg = 0,
         .tilemapLeft = 24,
         .tilemapTop = 55,
@@ -220,7 +233,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x2a6
-    }, {
+    },
+    [B_WIN_DUMMY] = {
         .bg = 0,
         .tilemapLeft = 25,
         .tilemapTop = 57,
@@ -228,7 +242,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 0,
         .paletteNum = 5,
         .baseBlock = 0x2b0
-    }, {
+    },
+    [B_WIN_SWITCH_PROMPT] = {
         .bg = 0,
         .tilemapLeft = 21,
         .tilemapTop = 55,
@@ -236,7 +251,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 4,
         .paletteNum = 5,
         .baseBlock = 0x2b0
-    }, {
+    },
+    [B_WIN_LEVEL_UP_BOX] = {
         .bg = 1,
         .tilemapLeft = 19,
         .tilemapTop = 8,
@@ -244,7 +260,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 11,
         .paletteNum = 5,
         .baseBlock = 0x100
-    }, {
+    },
+    [B_WIN_LEVEL_UP_BANNER] = {
         .bg = 2,
         .tilemapLeft = 18,
         .tilemapTop = 0,
@@ -252,7 +269,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 3,
         .paletteNum = 6,
         .baseBlock = 0x16e
-    }, {
+    },
+    [B_WIN_YESNO] = {
         .bg = 0,
         .tilemapLeft = 25,
         .tilemapTop = 9,
@@ -260,7 +278,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 4,
         .paletteNum = 5,
         .baseBlock = 0x100
-    }, {
+    },
+    [B_WIN_VS_PLAYER] = {
         .bg = 1,
         .tilemapLeft = 2,
         .tilemapTop = 3,
@@ -268,7 +287,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x020
-    }, {
+    },
+    [B_WIN_VS_OPPONENT] = {
         .bg = 2,
         .tilemapLeft = 2,
         .tilemapTop = 3,
@@ -276,7 +296,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x040
-    }, {
+    },
+    [B_WIN_VS_MULTI_PLAYER_1] = {
         .bg = 1,
         .tilemapLeft = 2,
         .tilemapTop = 2,
@@ -284,7 +305,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x020
-    }, {
+    },
+    [B_WIN_VS_MULTI_PLAYER_2] = {
         .bg = 2,
         .tilemapLeft = 2,
         .tilemapTop = 2,
@@ -292,7 +314,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x040
-    }, {
+    },
+    [B_WIN_VS_MULTI_PLAYER_3] = {
         .bg = 1,
         .tilemapLeft = 2,
         .tilemapTop = 6,
@@ -300,7 +323,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x060
-    }, {
+    },
+    [B_WIN_VS_MULTI_PLAYER_4] = {
         .bg = 2,
         .tilemapLeft = 2,
         .tilemapTop = 6,
@@ -308,7 +332,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x080
-    }, {
+    },
+    [B_WIN_VS_OUTCOME_DRAW] = {
         .bg = 0,
         .tilemapLeft = 11,
         .tilemapTop = 2,
@@ -316,7 +341,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 0,
         .baseBlock = 0x0a0
-    }, {
+    },
+    [B_WIN_VS_OUTCOME_LEFT] = {
         .bg = 0,
         .tilemapLeft = 4,
         .tilemapTop = 2,
@@ -324,7 +350,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 0,
         .baseBlock = 0x0a0
-    }, {
+    },
+    [B_WIN_VS_OUTCOME_RIGHT] = {
         .bg = 0,
         .tilemapLeft = 19,
         .tilemapTop = 2,
@@ -332,7 +359,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 0,
         .baseBlock = 0x0b0
-    }, {
+    },
+    [B_WIN_OAK_OLD_MAN] = {
         .bg = 0,
         .tilemapLeft = 2,
         .tilemapTop = 15,
@@ -340,7 +368,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 4,
         .paletteNum = 7,
         .baseBlock = 0x090
-    }, DUMMY_WIN_TEMPLATE
+    },
+    DUMMY_WIN_TEMPLATE
 };
 
 static const u32 sBattleTerrainPalette_Grass[] = INCBIN_U32("graphics/battle/unk_8248400.gbapal.lz");
@@ -634,18 +663,18 @@ UNUSED void GetBattleTerrainGfxPtrs(u8 terrain, const u32 **tilesPtr, const u32 
     *palPtr = sBattleTerrainTable[terrain].palette;
 }
 
-void sub_800F324(void)
+void BattleInitBgsAndWindows(void)
 {
     ResetBgsAndClearDma3BusyFlags(FALSE);
     InitBgsFromTemplates(0, gBattleBgTemplates, NELEMS(gBattleBgTemplates));
-    InitWindows(gUnknown_8248330);
+    InitWindows(sStandardBattleWindowTemplates);
     DeactivateAllTextPrinters();
 }
 
 void InitBattleBgsVideo(void)
 {
     EnableInterrupts(INTR_FLAG_VBLANK | INTR_FLAG_VCOUNT | INTR_FLAG_TIMER3 | INTR_FLAG_SERIAL);
-    sub_800F324();
+    BattleInitBgsAndWindows();
     SetGpuReg(REG_OFFSET_BLDCNT, 0);
     SetGpuReg(REG_OFFSET_BLDALPHA, 0);
     SetGpuReg(REG_OFFSET_BLDY, 0);
