@@ -1453,13 +1453,13 @@ static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
     u8 *txtPtr;
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
 
-    txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceType); //type/
+    /*txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceType); //type/
     *txtPtr++ = EXT_CTRL_CODE_BEGIN;
     *txtPtr++ = 6;
-    *txtPtr++ = 1;
-    txtPtr = StringCopy(txtPtr, gUnknown_83FE770); //shadow/ font shading
+    *txtPtr++ = 1;*/ //based on results I think this somehow changed the base font from small to normal  normal font is value 1 so idk?
+    txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceDynamicColors);
     StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 8);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_TYPE);
 }//can't use convertIntToDecimalString to attempt make right align, text becomes garbalded numbers and still is left alingned...
 //used StringCopyPadded to have 4 elements to use str_conv right aline it doens't actually right align, but correctly displayed movetype
 //no idea where to go from here.

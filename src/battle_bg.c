@@ -143,6 +143,7 @@ const struct BgTemplate gBattleBgTemplates[4] = {
 //this struct tells the dimmenssions and relative location of each windowID within the main window/border
 //can rearrange move type pp etc from here, but need to figure out how to change the main window size so I can move the movenames
 //tilemapLeft & tilemapTop are the respective X & Y coordinates
+//need to figure out  what baseBlock means
 static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
     [B_WIN_MSG] = {
         .bg = 0,
@@ -206,34 +207,37 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x330
-    },
+    },//width 2 starting from x coordinate 22 means my characters will fill positions 22 & 23!
+    //width appears to be left alligned meaning changing with will shift the right dimmension and not the left
     [B_WIN_PP] = {
         .bg = 0,
-        .tilemapLeft = 21,
+        .tilemapLeft = 23,
         .tilemapTop = 55,
-        .width = 3,
+        .width = 2,
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x290
-    },
+    },//moving the window from 21 to 24 has overwritten the border bounds I now understand the width counts the tilemap left position as 1
     [B_WIN_MOVE_TYPE] = {
         .bg = 0,
-        .tilemapLeft = 21,
-        .tilemapTop = 57,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x296
-    },
-    [B_WIN_PP_REMAINING] = {
-        .bg = 0,
         .tilemapLeft = 24,
-        .tilemapTop = 55,
+        .tilemapTop = 57,
         .width = 5,
         .height = 2,
         .paletteNum = 5,
+        .baseBlock = 0x296
+    },//that's based on seeing the limit from pp remaining if I cound 8 from 21 & 5 from 24 I get the same ending position of 28
+    //also seems width may not exactly equal number of characters since I can fit NORMAL which is 6 characters in a 5 width window
+    //but width does affect the border dimmensions so I need to manage width, with tilemapLeft to make sure my window is within the bg
+    [B_WIN_PP_REMAINING] = {
+        .bg = 0,
+        .tilemapLeft = 25,
+        .tilemapTop = 55,
+        .width = 4,
+        .height = 2,
+        .paletteNum = 5,
         .baseBlock = 0x2a6
-    },
+    },//to make room for pp symbol I will move this over move, shorten the width, and then lower the .x value in the battle text window
     [B_WIN_DUMMY] = {
         .bg = 0,
         .tilemapLeft = 25,

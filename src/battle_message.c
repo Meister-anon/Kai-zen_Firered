@@ -3058,7 +3058,7 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] = {
     [B_WIN_PP] = {
         .fillValue = PIXEL_FILL(0xe),
         .fontId = FONT_SMALL,
-        .x = 0,
+        .x = 4,
         .y = 2,
         .letterSpacing = 0,
         .lineSpacing = 0,
@@ -3066,11 +3066,11 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] = {
         .fgColor = 12,
         .bgColor = 14,
         .shadowColor = 11,
-    },
+    },// since these are my values within my window if I want to left or right align my text it should use the .x value from here!
     [B_WIN_MOVE_TYPE] = {
         .fillValue = PIXEL_FILL(0xe),
-        .fontId = FONT_SMALL,
-        .x = 0,
+        .fontId = FONT_NORMAL_COPY_1,
+        .x = 6,
         .y = 2,
         .letterSpacing = 0,
         .lineSpacing = 0,
@@ -3078,11 +3078,11 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] = {
         .fgColor = 13,
         .bgColor = 14,
         .shadowColor = 15,
-    },
+    },//.x value is probalby not 1 to 1 with window width as width of pp is 5, but x value is 10
     [B_WIN_PP_REMAINING] = {
         .fillValue = PIXEL_FILL(0xe),
         .fontId = FONT_NORMAL_COPY_1,
-        .x = 10,
+        .x = 2,
         .y = 2,
         .letterSpacing = 0,
         .lineSpacing = 2,
