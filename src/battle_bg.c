@@ -666,9 +666,9 @@ UNUSED void GetBattleTerrainGfxPtrs(u8 terrain, const u32 **tilesPtr, const u32 
 void BattleInitBgsAndWindows(void)
 {
     ResetBgsAndClearDma3BusyFlags(FALSE);
-    InitBgsFromTemplates(0, gBattleBgTemplates, NELEMS(gBattleBgTemplates));
-    InitWindows(sStandardBattleWindowTemplates);
-    DeactivateAllTextPrinters();
+    InitBgsFromTemplates(0, gBattleBgTemplates, NELEMS(gBattleBgTemplates));//I believe bgs & windows have different definitions than i use
+    InitWindows(sStandardBattleWindowTemplates); //windows seem to be spaces where text/strings can be printed or displayed
+    DeactivateAllTextPrinters();//while the bg (background) holds the window themselves?
 }
 
 void InitBattleBgsVideo(void)
