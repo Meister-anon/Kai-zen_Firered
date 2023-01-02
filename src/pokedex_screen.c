@@ -2820,7 +2820,7 @@ void sub_8105CB0(u8 a0, u16 species, u8 x, u8 y)
         printerTemplate.currentX = x;
         printerTemplate.currentY = y;
 
-        AddTextPrinter(&printerTemplate, TEXT_SPEED_FF, NULL);
+        AddTextPrinter(&printerTemplate, TEXT_SKIP_DRAW, NULL);
     }
 }
 

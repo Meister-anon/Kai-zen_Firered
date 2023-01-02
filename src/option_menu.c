@@ -12,7 +12,7 @@
 #include "gba/m4a_internal.h"
 
 // can't include the one in menu_helpers.h since Task_OptionMenu needs bool32 for matching
-bool32 MenuHelpers_CallLinkSomething(void);
+bool32 IsActiveOverworldLinkBusy(void);
 
 // Menu items
 enum
@@ -371,7 +371,7 @@ static void Task_OptionMenu(u8 taskId)
         sOptionMenuPtr->loadState++;
         break;
     case 2:
-        if (((bool32)MenuHelpers_CallLinkSomething()) == TRUE)
+        if (((bool32)IsActiveOverworldLinkBusy()) == TRUE)
             break;
         switch (OptionMenu_ProcessInput())
         {
@@ -524,7 +524,7 @@ static void CloseAndSaveOptionMenu(u8 taskId)
 static void PrintOptionMenuHeader(void)
 {
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
-    AddTextPrinterParameterized(WIN_TEXT_OPTION, 2, gText_MenuOption, 8, 1, TEXT_SPEED_FF, NULL);
+    AddTextPrinterParameterized(WIN_TEXT_OPTION, 2, gText_MenuOption, 8, 1, TEXT_SKIP_DRAW, NULL);
     PutWindowTilemap(0);
     CopyWindowToVram(0, COPYWIN_BOTH);
 }
@@ -560,7 +560,7 @@ static void LoadOptionMenuItemNames(void)
     FillWindowPixelBuffer(1, PIXEL_FILL(1));
     for (i = 0; i < MENUITEM_COUNT; i++)
     {
-        AddTextPrinterParameterized(WIN_OPTIONS, 2, sOptionMenuItemsNames[i], 8, (u8)((i * (GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT))) + 2) - i, TEXT_SPEED_FF, NULL);    
+        AddTextPrinterParameterized(WIN_OPTIONS, 2, sOptionMenuItemsNames[i], 8, (u8)((i * (GetFontAttribute(2, FONTATTR_MAX_LETTER_HEIGHT))) + 2) - i, TEXT_SKIP_DRAW, NULL);    
     }
 }
 

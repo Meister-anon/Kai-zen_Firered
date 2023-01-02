@@ -238,6 +238,8 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .paletteNum = 5,
         .baseBlock = 0x2a6
     },//to make room for pp symbol I will move this over move, shorten the width, and then lower the .x value in the battle text window
+    //next step figure out how dimmenssions work the entire horizontal dimension for the battle menu seem to be a width of 28
+    //so need to see how tilemap becomes a background and how dimmenssions work
     [B_WIN_DUMMY] = {
         .bg = 0,
         .tilemapLeft = 25,

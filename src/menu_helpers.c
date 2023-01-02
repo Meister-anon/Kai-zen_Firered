@@ -112,7 +112,7 @@ bool8 CanWriteMailHere(u16 itemId)
         return FALSE;
 }
 
-bool8 MenuHelpers_LinkSomething(void)
+bool8 MenuHelpers_IsLinkActive(void)
 {
     if (IsUpdateLinkStateCBActive() == TRUE || gReceivedRemoteLinkPlayers == 1)
         return TRUE;
@@ -120,9 +120,9 @@ bool8 MenuHelpers_LinkSomething(void)
         return FALSE;
 }
 
-bool8 MenuHelpers_CallLinkSomething(void)
+bool8 IsActiveOverworldLinkBusy(void)
 {
-    if (!MenuHelpers_LinkSomething())
+    if (!MenuHelpers_IsLinkActive())
         return FALSE;
     else
         return (u8)Overworld_LinkRecvQueueLengthMoreThan2();
@@ -130,9 +130,9 @@ bool8 MenuHelpers_CallLinkSomething(void)
 
 bool8 sub_80BF748(void)
 {
-    if (MenuHelpers_CallLinkSomething() == TRUE)
+    if (IsActiveOverworldLinkBusy() == TRUE)
         return TRUE;
-    else if (sub_800B270() != TRUE)
+    else if (IsLinkRecvQueueAtOverworldMax() != TRUE)
         return FALSE;
     else
         return TRUE;

@@ -462,7 +462,7 @@ static void CB2_InitPartyMenu(void)
 {
     while (TRUE)
     {
-        if (sub_80BF748() == TRUE || ShowPartyMenu() == TRUE || MenuHelpers_LinkSomething() == TRUE)
+        if (sub_80BF748() == TRUE || ShowPartyMenu() == TRUE || MenuHelpers_IsLinkActive() == TRUE)
             break;
     }
 }
@@ -495,7 +495,7 @@ static bool8 ShowPartyMenu(void)
         ++gMain.state;
         break;
     case 5:
-        if (!MenuHelpers_LinkSomething())
+        if (!MenuHelpers_IsLinkActive())
             ResetTasks();
         ++gMain.state;
         break;
@@ -1247,7 +1247,7 @@ static void HandleChooseMonCancel(u8 taskId, s8 *slotPtr)
         }
         else
         {
-            if (!MenuHelpers_LinkSomething())
+            if (!MenuHelpers_IsLinkActive())
                 gSpecialVar_0x8004 = PARTY_SIZE + 1;
             gPartyMenuUseExitCallback = FALSE;
             *slotPtr = PARTY_SIZE + 1;
@@ -1584,7 +1584,7 @@ static void Task_ReturnToChooseMonAfterText(u8 taskId)
     {
         ClearStdWindowAndFrameToTransparent(6, 0);
         ClearWindowTilemap(6);
-        if (MenuHelpers_LinkSomething() == TRUE)
+        if (MenuHelpers_IsLinkActive() == TRUE)
         {
             gTasks[taskId].func = Task_WaitForLinkAndReturnToChooseMon;
         }
@@ -3020,7 +3020,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_CANCEL1);
 }
 
-static u8 GetPartyMenuActionsType(struct Pokemon *mon)
+static u8 GetPartyMenuActionsType(struct Pokemon *mon)//ok so from the chose half thing this is the mon selection screen not screen for each mon
 {
     u32 actionType;
 
@@ -3943,7 +3943,7 @@ static void CursorCB_FieldMove(u8 taskId)
         return;
     PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[0]);
     PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[1]);
-    if (MenuHelpers_LinkSomething() == TRUE)
+    if (MenuHelpers_IsLinkActive() == TRUE)
     {
         if (fieldMove == FIELD_MOVE_MILK_DRINK || fieldMove == FIELD_MOVE_SOFT_BOILED)
             DisplayPartyMenuStdMessage(PARTY_MSG_CANT_USE_HERE);
@@ -4708,14 +4708,14 @@ static void ShowMoveSelectWindow(u8 slot)
                                     gMoveNames[move],
                                     GetFontAttribute(fontId, FONTATTR_MAX_LETTER_WIDTH) + GetFontAttribute(fontId, FONTATTR_LETTER_SPACING),
                                     (i * 16) + 2,
-                                    TEXT_SPEED_FF,
+                                    TEXT_SKIP_DRAW,
                                     NULL);
         if (move != MOVE_NONE)
             ++moveCount;
     }
     Menu_InitCursor(windowId, fontId, 0, 2, 16, moveCount, FALSE);
     ScheduleBgCopyTilemapToVram(2);
-}
+}//may be relevant to party menu ui
 
 static void Task_HandleWhichMoveInput(u8 taskId)
 {
@@ -4817,7 +4817,7 @@ static void sub_8125898(u8 taskId, UNUSED TaskFunc func)
     DisplayPartyMenuMessage(gStringVar4, 1);
     ScheduleBgCopyTilemapToVram(2);
     gTasks[taskId].func = Task_ClosePartyMenuAfterText;
-}
+}//may be ether, item used with moves
 
 static void TryUsePPItem(u8 taskId)
 {
@@ -5073,7 +5073,7 @@ static void sub_8125F5C(u8 taskId)
     RemoveMonPPBonus(mon, moveIdx);
     SetMonMoveSlot(mon, gPartyMenu.data1, moveIdx);
     Task_LearnedMove(taskId);
-}
+}//could be replacing a move or deleting a move
 
 static void DisplayPartyMenuForgotMoveMessage(u8 taskId)
 {

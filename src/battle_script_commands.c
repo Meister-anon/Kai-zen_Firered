@@ -6569,7 +6569,7 @@ static void PutLevelAndGenderOnLvlUpBox(void)
     }
     printerTemplate.y = 10;
     printerTemplate.currentY = 10;
-    AddTextPrinter(&printerTemplate, TEXT_SPEED_FF, NULL);
+    AddTextPrinter(&printerTemplate, TEXT_SKIP_DRAW, NULL);
     CopyWindowToVram(13, COPYWIN_GFX);
 }
 
