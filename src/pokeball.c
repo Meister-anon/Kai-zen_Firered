@@ -1162,6 +1162,7 @@ static void sub_804BD6C(struct Sprite *sprite)
         sprite->callback = SpriteCallbackDummy;
 }
 
+// Unreferenced in RSE, but used here, possibly by mistake.
 void DestroySpriteAndFreeResources2(struct Sprite *sprite)
 {
     DestroySpriteAndFreeResources(sprite);

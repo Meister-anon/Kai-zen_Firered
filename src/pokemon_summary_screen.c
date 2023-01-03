@@ -38,25 +38,25 @@
 extern s16 SeekToNextMonInBox(struct BoxPokemon * boxMons, u8 curIndex, u8 maxIndex, u8 flags);
 
 static void BufferSelectedMonData(struct Pokemon * mon);
-static void sub_8135C34(void);
+static void CB2_SetUpPSS(void);
 static void PokeSum_TryPlayMonCry(void);
 static void PokeSum_RemoveWindows(u8 curPageIndex);
-static void sub_8134BAC(u8 taskId);
-static void sub_8134E84(u8 taskId);
-static void sub_813B3F0(u8 taskId);
-static void sub_813B120(u8, s8);
+static void Task_PokeSum_FlipPages(u8 taskId);
+static void Task_FlipPages_FromInfo(u8 taskId);
+static void Task_PokeSum_SwitchDisplayedPokemon(u8 taskId);
+static void PokeSum_SeekToNextMon(u8, s8);
 static void Task_DestroyResourcesOnExit(u8 taskId);
-static void sub_8135638(void);
-static void sub_81356EC(void);
-static void sub_813B750(u8 curPageIndex);
+static void PokeSum_HideSpritesBeforePageFlip(void);
+static void PokeSum_ShowSpritesBeforePageFlip(void);
+static void PokeSum_UpdateWin1ActiveFlag(u8 curPageIndex);
 static void PokeSum_AddWindows(u8 curPageIndex);
 static void PokeSum_PrintPageHeaderText(u8 curPageIndex);
-static void sub_8135514(void);
-static u8 sub_81357A0(u8);
+static void PokeSum_InitBgCoordsBeforePageFlips(void);
+static u8 PokeSum_IsPageFlipFinished(u8);
 static void PokeSum_SetHelpContext(void);
 static void Task_HandleInput_SelectMove(u8 taskId);
-static void sub_8135AA4(void);
-static void sub_8135B90(void);
+static void PokeSum_CopyNewBgTilemapBeforePageFlip_2(void);
+static void PokeSum_CopyNewBgTilemapBeforePageFlip(void);
 static void PokeSum_DrawBg3Tilemap(void);
 static void PokeSum_PrintPageHeaderText(u8 curPageIndex);
 static void PokeSum_PrintRightPaneText(void);
@@ -66,44 +66,44 @@ static void PokeSum_PrintMonTypeIcons(void);
 static void PokeSum_PrintPageName(const u8 * str);
 static void PokeSum_PrintControlsString(const u8 * str);
 static void PrintMonLevelNickOnWindow2(const u8 * str);
-static void sub_81358DC(u8, u8);
-static void sub_813A838(u8 invisible);
-static void sub_813AB70(u8 invisible);
-static void sub_8139C44(u8 invisible);
-static void sub_813B084(u8 invisible);
-static void sub_8139D54(u8 invisible);
-static void sub_813A3B8(u8 invisible);
-static void sub_813ACF8(u8 invisible);
-static void sub_813AEB0(u8 invisible);
+static void PokeSum_UpdateBgPriorityForPageFlip(u8 setBg0Priority, u8 keepBg1Bg2PriorityOrder);
+static void ShowOrHideHpBarObjs(u8 invisible);
+static void ShowOrHideExpBarObjs(u8 invisible);
+static void PokeSum_ShowOrHideMonPicSprite(u8 invisible);
+static void PokeSum_ShowOrHideMonMarkingsSprite(u8 invisible);
+static void ShowOrHideBallIconObj(u8 invisible);
+static void ShowOrHideStatusIcon(u8 invisible);
+static void HideShowPokerusIcon(u8 invisible);
+static void HideShowShinyStar(u8 invisible);
 static void ShoworHideMoveSelectionCursor(u8 invisible);
-static void sub_8139EE4(u8 invisible);
+static void PokeSum_ShowOrHideMonIconSprite(u8 invisible);
 static void PokeSum_Setup_ResetCallbacks(void);
-static void sub_8136BC4(void);
-static void sub_8136BAC(void);
-static u8 sub_8135F20(void);
-static u8 sub_8136AEC(void);
+static void PokeSum_Setup_InitGpu(void);
+static void PokeSum_Setup_SpritesReset(void);
+static u8 PokeSum_HandleLoadBgGfx(void);
+static u8 PokeSum_HandleCreateSprites(void);
 static void PokeSum_CreateWindows(void);
-static u8 sub_8136040(void);
+static u8 PokeSum_Setup_BufferStrings(void);
 static void CommitStaticWindowTilemaps(void);
 static void PokeSum_Setup_SetVBlankCallback(void);
 static void PokeSum_FinishSetup(void);
-static void sub_81360D4(void);
-static void sub_8136350(void);
+static void BufferMonInfo(void);
+static void BufferMonSkills(void);
 static void BufferMonMoves(void);
 static u8 StatusToAilment(u32 status);
 static void BufferMonMoveI(u8);
 static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot);
 static u16 GetMonPpByMoveSlot(struct Pokemon * mon, u8 moveSlot);
-static void sub_813ADA8(u16, u16);
-static void sub_813ABAC(u16, u16);
-static void sub_813AFFC(void);
-static void sub_8139F64(u16, u16);
-static void sub_813A254(u16, u16);
-static void sub_813A45C(u16, u16);
-static void sub_813A874(u16, u16);
-static void sub_8139CB0(void);
-static void sub_8139DBC(void);
-static void sub_813995C(void);
+static void CreateShinyStarObj(u16, u16);
+static void CreatePokerusIconObj(u16, u16);
+static void PokeSum_CreateMonMarkingsSprite(void);
+static void CreateMoveSelectionCursorObjs(u16, u16);
+static void CreateMonStatusIconObj(u16, u16);
+static void CreateHpBarObjs(u16, u16);
+static void CreateExpBarObjs(u16, u16);
+static void CreateBallIconObj(void);
+static void PokeSum_CreateMonIconSprite(void);
+static void PokeSum_CreateMonPicSprite(void);
 static void Task_InputHandler_SelectOrForgetMove(u8 taskId);
 static void CB2_RunPokemonSummaryScreen(void);
 static void PrintInfoPage(void);
@@ -128,17 +128,17 @@ static void PokeSum_FlipPages_HandleBgHofs(void);
 static void SwapMonMoveSlots(void);
 static void SwapBoxMonMoveSlots(void);
 static void UpdateCurrentMonBufferFromPartyOrBox(struct Pokemon * mon);
-static void sub_8139AAC(u16 spriteId);
-static void sub_813A124(struct Sprite * sprite);
-static void sub_813A35C(void);
-static void sub_813A620(void);
-static void sub_813A994(void);
-static void sub_813ACB4(void);
-static void sub_813AF50(void);
-static void sub_813B068(void);
-static void sub_813B0E4(void);
-static s8 sub_813B20C(s8);
-static s8 sub_813B38C(s8);
+static void PokeSum_SetMonPicSpriteCallback(u16 spriteId);
+static void SpriteCB_MoveSelectionCursor(struct Sprite * sprite);
+static void UpdateMonStatusIconObj(void);
+static void UpdateHpBarObjs(void);
+static void UpdateExpBarObjs(void);
+static void ShowPokerusIconObjIfHasOrHadPokerus(void);
+static void ShowShinyStarObjIfMonShiny(void);
+static void PokeSum_DestroyMonMarkingsSprite(void);
+static void PokeSum_UpdateMonMarkingsAnim(void);
+static s8 SeekToNextMonInSingleParty(s8);
+static s8 SeekToNextMonInMultiParty(s8);
 
 struct PokemonSummaryScreenData
 {
@@ -274,44 +274,44 @@ struct HpBarObjs
 {
     struct Sprite * sprites[10]; /* 0x00 */
     u16 xpos[10]; /* 0x28 */
-    u16 unk3C; /* 0x3c */
-    u16 unk3E; /* 0x3e */
+    u16 tileTag; /* 0x3c */
+    u16 palTag; /* 0x3e */
 };
 
 struct MonPicBounceState
 {
-    u8 ALIGNED(4) unk00; /* 0x00 */
-    u8 ALIGNED(4) atkStr; /* 0x04 */
-    u8 ALIGNED(4) spAStr; /* 0x08 */
+    u8 ALIGNED(4) animFrame; /* 0x00 */
+    u8 ALIGNED(4) initDelay; /* 0x04 */
+    u8 ALIGNED(4) vigor; /* 0x08 */
 };
 
 struct MoveSelectionCursor
 {
     struct Sprite * sprite; /* 0x00 */
-    u16 atkStr; /* 0x04 */
-    u16 defStr; /* 0x06 */
-    u16 spAStr; /* 0x08 */
+    u16 whichSprite; /* 0x04 */
+    u16 tileTag; /* 0x06 */
+    u16 palTag; /* 0x08 */
 };
 
 struct MonStatusIconObj
 {
     struct Sprite * sprite; /* 0x00 */
-    u16 atkStr; /* 0x04 */
-    u16 defStr; /* 0x06 */
+    u16 tileTag; /* 0x04 */
+    u16 palTag; /* 0x06 */
 };
 
 struct PokerusIconObj
 {
     struct Sprite * sprite; /* 0x00 */
-    u16 atkStr; /* 0x04 */
-    u16 defStr; /* 0x06 */
+    u16 tileTag; /* 0x04 */
+    u16 palTag; /* 0x06 */
 };
 
 struct ShinyStarObjData
 {
     struct Sprite * sprite; /* 0x00 */
-    u16 atkStr; /* 0x04 */
-    u16 defStr; /* 0x06 */
+    u16 tileTag; /* 0x04 */
+    u16 palTag; /* 0x06 */
 };
 
 static EWRAM_DATA struct PokemonSummaryScreenData * sMonSummaryScreen = NULL;
@@ -348,7 +348,7 @@ static const u16 sMoveSelectionCursorPals[] = INCBIN_U16("graphics/interface/pok
 static const u32 sMoveSelectionCursorTiles_Left[] = INCBIN_U32("graphics/interface/pokesummary_unk_8463740.4bpp.lz");
 static const u32 sMoveSelectionCursorTiles_Right[] = INCBIN_U32("graphics/interface/pokesummary_unk_846386C.4bpp.lz");
 
-static const struct OamData sUnknown_846398C =
+static const struct OamData sMoveSelectionCursorOamData =
 {
     .y = 0,
     .affineMode = ST_OAM_AFFINE_OFF,
@@ -376,13 +376,13 @@ static const union AnimCmd sUnknown_846399C[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd * const sUnknown_84639A4[] =
+static const union AnimCmd * const sMoveSelectionCursorOamAnimTable[] =
 {
     sUnknown_8463994,
     sUnknown_846399C
 };
 
-static const struct OamData sUnknown_84639AC = {
+static const struct OamData sStatusAilmentIconOamData = {
     .y = 0,
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
@@ -445,7 +445,7 @@ static const union AnimCmd sUnknown_84639EC[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd * const sUnknown_84639F4[] =
+static const union AnimCmd * const sStatusAilmentIconAnimTable[] =
 {
     sUnknown_84639B4,
     sUnknown_84639BC,
@@ -457,7 +457,7 @@ static const union AnimCmd * const sUnknown_84639F4[] =
     sUnknown_84639EC
 };
 
-static const struct OamData sUnknown_8463A14 = {
+static const struct OamData sHpOrExpBarOamData = {
     .y = 0,
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
@@ -544,7 +544,7 @@ static const union AnimCmd sUnknown_8463A74[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd * const sUnknown_8463A7C[] =
+static const union AnimCmd * const sHpOrExpBarAnimTable[] =
 {
     sUnknown_8463A1C,
     sUnknown_8463A24,
@@ -563,7 +563,7 @@ static const union AnimCmd * const sUnknown_8463A7C[] =
 static const u16 sUnknown_8463AAC[] = INCBIN_U16("graphics/interface/pokesummary_unk_8463AAC.gbapal");
 static const u16 sUnknown_8463ACC[] = INCBIN_U16("graphics/interface/pokesummary_unk_8463ACC.gbapal");
 
-static const struct OamData sUnknown_8463AEC = {
+static const struct OamData sPokerusIconObjOamData = {
     .y = 0,
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
@@ -584,15 +584,15 @@ static const union AnimCmd sUnknown_8463AF4[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd * const sUnknown_8463AFC[] =
+static const union AnimCmd * const sPokerusIconObjAnimTable[] =
 {
     sUnknown_8463AF4
 };
 
-static const u16 sUnknown_8463B00[] = INCBIN_U16("graphics/interface/pokesummary_unk_8463B00.gbapal");
-static const u32 sUnknown_8463B20[] = INCBIN_U32("graphics/interface/pokesummary_unk_8463B20.4bpp.lz");
+static const u16 sPokerusIconObjPal[] = INCBIN_U16("graphics/interface/pokesummary_unk_8463B00.gbapal");
+static const u32 sPokerusIconObjTiles[] = INCBIN_U32("graphics/interface/pokesummary_unk_8463B20.4bpp.lz");
 
-static const struct OamData sUnknown_8463B30 =
+static const struct OamData sStarObjOamData =
 {
     .y = 0,
     .affineMode = ST_OAM_AFFINE_OFF,
@@ -614,13 +614,13 @@ static const union AnimCmd sUnknown_8463B38[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd * const sUnknown_8463B40[] =
+static const union AnimCmd * const sStarObjAnimTable[] =
 {
     sUnknown_8463B38
 };
 
-static const u16 sUnknown_8463B44[] = INCBIN_U16( "graphics/interface/pokesummary_unk_8463B44.gbapal");
-static const u32 sUnknown_8463B64[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463B64.4bpp.lz");
+static const u16 sStarObjPal[] = INCBIN_U16( "graphics/interface/pokesummary_unk_8463B44.gbapal");
+static const u32 sStarObjTiles[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463B64.4bpp.lz");
 static const u32 sUnknown_8463B88[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463B88.bin.lz");
 static const u32 sUnknown_8463C80[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463C80.bin.lz");
 
@@ -917,7 +917,7 @@ static const u8 sLevelNickTextColors[][3] =
     {0, 11, 10},
 };
 
-static const u8 ALIGNED(4) sUnknown_8463FB8[] =
+static const u8 ALIGNED(4) sMultiBattlePartyOrder[] =
 {
     0, 2, 3, 1, 4, 5
 };
@@ -927,37 +927,37 @@ static const s8 sMonPicBounceYDelta_Under60[] =
     -1, 0, 1
 };
 
-static const s8 sUnknown_8463FC1[] =
+static const s8 sMonPicBounceYDelta_60to80[] =
 {
     -2, -1, 0, 1, 2
 };
 
-static const s8 sUnknown_8463FC6[] =
+static const s8 sMonPicBounceYDelta_80to99[] =
 {
     -3, -2, -1, 0, 1, 2, 3
 };
 
-static const s8 sUnknown_8463FCD[] =
+static const s8 sMonPicBounceYDelta_Full[] =
 {
     -5, -3, -1, 0, 1, 3, 5
 };
 
-static const s8 sUnknown_8463FD4[] =
+static const s8 sEggPicShakeXDelta_ItWillTakeSomeTime[] =
 {
     1, 1, 0, -1, -1, 0, -1, -1, 0, 1, 1
 };
 
-static const s8 sUnknown_8463FDF[] =
+static const s8 sEggPicShakeXDelta_OccasionallyMoves[] =
 {
     2, 1, 0, -1, -2, 0, -2, -1, 0, 1, 2
 };
 
-static const s8 sUnknown_8463FEA[] =
+static const s8 sEggPicShakeXDelta_AlmostReadyToHatch[] =
 {
     2, 1, 1, 0, -1, -1, -2, 0, -2, -1, -1, 0, 1, 1, 2
 };
 
-static const u16 * const sUnknown_8463FFC[] =
+static const u16 * const sHpBarPals[] =
 {
     gPokeSummary_ExpBarPals,
     sUnknown_8463AAC,
@@ -1045,7 +1045,7 @@ void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, 
         sMonSummaryScreen->isEgg = TRUE;
 
     sMonSummaryScreen->lastPageFlipDirection[0] = 0xff;
-    SetMainCallback2(sub_8135C34);
+    SetMainCallback2(CB2_SetUpPSS);
 }
 
 void ShowSelectMovePokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, MainCallback savedCallback, u16 a4)
@@ -1121,14 +1121,14 @@ static void Task_InputHandler_Info(u8 taskId)
             return;
         else if (IsLinkRecvQueueAtOverworldMax() == TRUE)
             return;
-        else if (FuncIsActiveTask(sub_813B3F0))
+        else if (FuncIsActiveTask(Task_PokeSum_SwitchDisplayedPokemon))
             return;
 
         if (sMonSummaryScreen->curPageIndex != PSS_PAGE_MOVES_INFO)
         {
             if (sub_81347A4(1) == TRUE)
             {
-                if (FuncIsActiveTask(sub_8134BAC))
+                if (FuncIsActiveTask(Task_PokeSum_FlipPages))
                 {
                     sMonSummaryScreen->lastPageFlipDirection[0] = 1;
                     return;
@@ -1146,7 +1146,7 @@ static void Task_InputHandler_Info(u8 taskId)
             }
             else if (sub_81347A4(0) == TRUE)
             {
-                if (FuncIsActiveTask(sub_8134BAC))
+                if (FuncIsActiveTask(Task_PokeSum_FlipPages))
                 {
                     sMonSummaryScreen->lastPageFlipDirection[0] = 0;
                     return;
@@ -1164,16 +1164,16 @@ static void Task_InputHandler_Info(u8 taskId)
             }
         }
 
-        if ((!FuncIsActiveTask(sub_8134BAC)) || FuncIsActiveTask(sub_813B3F0))
+        if ((!FuncIsActiveTask(Task_PokeSum_FlipPages)) || FuncIsActiveTask(Task_PokeSum_SwitchDisplayedPokemon))
         { // put summary screen actions else if
             if (JOY_NEW(DPAD_UP))
             {
-                sub_813B120(taskId, -1);
+                PokeSum_SeekToNextMon(taskId, -1);
                 return;
             }
             else if (JOY_NEW(DPAD_DOWN))
             {
-                sub_813B120(taskId, 1);
+                PokeSum_SeekToNextMon(taskId, 1);
                 return;
             }
             else if (JOY_NEW(A_BUTTON))
@@ -1202,12 +1202,12 @@ static void Task_InputHandler_Info(u8 taskId)
     case PSS_STATE3270_3:
         if (sMonSummaryScreen->curPageIndex != PSS_PAGE_MOVES_INFO)
         {
-            CreateTask(sub_8134BAC, 0);
+            CreateTask(Task_PokeSum_FlipPages, 0);
             sMonSummaryScreen->state3270 = PSS_STATE3270_2;
         }
         else
         {
-            gTasks[sMonSummaryScreen->inputHandlerTaskId].func = sub_8134E84;
+            gTasks[sMonSummaryScreen->inputHandlerTaskId].func = Task_FlipPages_FromInfo;
             sMonSummaryScreen->state3270 = PSS_STATE3270_2;
         }
         break;
@@ -1231,18 +1231,18 @@ static void Task_InputHandler_Info(u8 taskId)
     }
 }
 
-static void sub_8134BAC(u8 taskId)
+static void Task_PokeSum_FlipPages(u8 taskId)
 {
     s16 * data = gTasks[taskId].data;
 
     switch (data[0])
     {
     case 0:
-        sub_8135638();
-        sub_81356EC();
+        PokeSum_HideSpritesBeforePageFlip();
+        PokeSum_ShowSpritesBeforePageFlip();
         sMonSummaryScreen->lockMovesFlag = TRUE;
         sMonSummaryScreen->inhibitPageFlipInput = TRUE;
-        sub_813B750(sMonSummaryScreen->curPageIndex);
+        PokeSum_UpdateWin1ActiveFlag(sMonSummaryScreen->curPageIndex);
         PokeSum_AddWindows(sMonSummaryScreen->curPageIndex);
         break;
     case 1:
@@ -1260,8 +1260,8 @@ static void sub_8134BAC(u8 taskId)
         FillBgTilemapBufferRect_Palette0(2, 0, 0, 2, 15, 2);
         break;
     case 2:
-        sub_8135AA4();
-        sub_8135B90();
+        PokeSum_CopyNewBgTilemapBeforePageFlip_2();
+        PokeSum_CopyNewBgTilemapBeforePageFlip();
         PokeSum_DrawBg3Tilemap();
         PokeSum_PrintPageHeaderText(sMonSummaryScreen->curPageIndex);
         break;
@@ -1282,11 +1282,11 @@ static void sub_8134BAC(u8 taskId)
 
         break;
     case 5:
-        sub_8135514();
+        PokeSum_InitBgCoordsBeforePageFlips();
         sMonSummaryScreen->flippingPages = TRUE;
         break;
     case 6:
-        if (!sub_81357A0(sMonSummaryScreen->pageFlipDirection))
+        if (!PokeSum_IsPageFlipFinished(sMonSummaryScreen->pageFlipDirection))
             return;
 
         break;
@@ -1330,7 +1330,7 @@ static void sub_8134BAC(u8 taskId)
     data[0]++;
 }
 
-static void sub_8134E84(u8 taskId)
+static void Task_FlipPages_FromInfo(u8 taskId)
 {
     switch (sMonSummaryScreen->state3284)
     {
@@ -1355,11 +1355,11 @@ static void sub_8134E84(u8 taskId)
         FillBgTilemapBufferRect_Palette0(2, 0, 0, 2, 15, 2);
         break;
     case 2:
-        sub_8135638();
-        sub_813B750(sMonSummaryScreen->curPageIndex);
-        sub_8135B90();
+        PokeSum_HideSpritesBeforePageFlip();
+        PokeSum_UpdateWin1ActiveFlag(sMonSummaryScreen->curPageIndex);
+        PokeSum_CopyNewBgTilemapBeforePageFlip();
         PokeSum_DrawBg3Tilemap();
-        sub_8135AA4();
+        PokeSum_CopyNewBgTilemapBeforePageFlip_2();
         break;
     case 3:
         PokeSum_PrintPageName(gText_PokeSum_PageName_KnownMoves);
@@ -1394,7 +1394,7 @@ static void sub_8134E84(u8 taskId)
         if (!IsDma3ManagerBusyWithBgCopy())
         {
             CopyBgTilemapBufferToVram(0);
-            sub_8135514();
+            PokeSum_InitBgCoordsBeforePageFlips();
             sMonSummaryScreen->flippingPages = TRUE;
         }
         else
@@ -1402,7 +1402,7 @@ static void sub_8134E84(u8 taskId)
 
         break;
     case 8:
-        if (!sub_81357A0(sMonSummaryScreen->pageFlipDirection))
+        if (!PokeSum_IsPageFlipFinished(sMonSummaryScreen->pageFlipDirection))
             return;
 
         PokeSum_PrintBottomPaneText();
@@ -1413,7 +1413,7 @@ static void sub_8134E84(u8 taskId)
         PrintMonLevelNickOnWindow2(gText_PokeSum_NoData);
         break;
     case 10:
-        sub_81356EC();
+        PokeSum_ShowSpritesBeforePageFlip();
         CopyWindowToVram(sMonSummaryScreen->windowIds[6], 2);
         CopyWindowToVram(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], 2);
         break;
@@ -1465,7 +1465,7 @@ static void Task_BackOutOfSelectMove(u8 taskId)
         FillBgTilemapBufferRect_Palette0(2, 0, 0, 2, 15, 2);
         break;
     case 2:
-        sub_8135AA4();
+        PokeSum_CopyNewBgTilemapBeforePageFlip_2();
         break;
     case 3:
         PokeSum_PrintRightPaneText();
@@ -1487,16 +1487,16 @@ static void Task_BackOutOfSelectMove(u8 taskId)
         CopyBgTilemapBufferToVram(1);
         break;
     case 6:
-        sub_8135514();
+        PokeSum_InitBgCoordsBeforePageFlips();
         sMonSummaryScreen->flippingPages = TRUE;
-        sub_8135638();
-        sub_813B750(sMonSummaryScreen->curPageIndex);
+        PokeSum_HideSpritesBeforePageFlip();
+        PokeSum_UpdateWin1ActiveFlag(sMonSummaryScreen->curPageIndex);
         PokeSum_PrintMonTypeIcons();
         break;
     case 7:
         break;
     case 8:
-        if (sub_81357A0(sMonSummaryScreen->pageFlipDirection) == 0)
+        if (PokeSum_IsPageFlipFinished(sMonSummaryScreen->pageFlipDirection) == 0)
             return;
 
         PrintMonLevelNickOnWindow2(gText_PokeSum_NoData);
@@ -1509,10 +1509,10 @@ static void Task_BackOutOfSelectMove(u8 taskId)
         CopyBgTilemapBufferToVram(1);
         break;
     case 10:
-        sub_8135B90();
+        PokeSum_CopyNewBgTilemapBeforePageFlip();
         PokeSum_DrawBg3Tilemap();
         CopyBgTilemapBufferToVram(3);
-        sub_81356EC();
+        PokeSum_ShowSpritesBeforePageFlip();
         break;
     default:
         PokeSum_SetHelpContext();
@@ -1556,7 +1556,7 @@ static void sub_81354C4(void)
     }
 }
 
-static void sub_8135514(void)
+static void PokeSum_InitBgCoordsBeforePageFlips(void)
 {
     s8 pageDelta = 1;
 
@@ -1571,7 +1571,7 @@ static void sub_8135514(void)
 
     if ((sMonSummaryScreen->curPageIndex + pageDelta) == PSS_PAGE_MOVES_INFO)
     {
-        sub_81358DC(0, 0);
+        PokeSum_UpdateBgPriorityForPageFlip(0, 0);
         sMonSummaryScreen->flipPagesBgHofs = 0;
         SetGpuReg(REG_OFFSET_BG1HOFS, 0);
         SetGpuReg(REG_OFFSET_BG2HOFS, 0);
@@ -1584,7 +1584,7 @@ static void sub_8135514(void)
         SetGpuReg(REG_OFFSET_BG0HOFS, 0);
         SetGpuReg(REG_OFFSET_BG1HOFS, 0);
         SetGpuReg(REG_OFFSET_BG2HOFS, 0);
-        sub_81358DC(1, 1);
+        PokeSum_UpdateBgPriorityForPageFlip(1, 1);
     }
     else
     {
@@ -1598,7 +1598,7 @@ static void sub_8135514(void)
             SetGpuReg(REG_OFFSET_BG2HOFS, 240);
 
         SetGpuReg(REG_OFFSET_BG0HOFS, 240);
-        sub_81358DC(1, 0);
+        PokeSum_UpdateBgPriorityForPageFlip(1, 0);
     }
 
     if (sMonSummaryScreen->curPageIndex == PSS_PAGE_SKILLS)
@@ -1613,7 +1613,7 @@ static void sub_8135514(void)
 
 }
 
-static void sub_8135638(void)
+static void PokeSum_HideSpritesBeforePageFlip(void)
 {
     u8 newPage;
 
@@ -1627,32 +1627,32 @@ static void sub_8135638(void)
     case PSS_PAGE_INFO:
         break;
     case PSS_PAGE_SKILLS:
-        sub_813A838(1);
-        sub_813AB70(1);
+        ShowOrHideHpBarObjs(1);
+        ShowOrHideExpBarObjs(1);
         break;
     case PSS_PAGE_MOVES:
         if (sMonSummaryScreen->pageFlipDirection == 1)
         {
-            sub_8139C44(1);
-            sub_813B084(1);
-            sub_8139D54(1);
-            sub_813A3B8(1);
-            sub_813ACF8(1);
-            sub_813AEB0(1);
+            PokeSum_ShowOrHideMonPicSprite(1);
+            PokeSum_ShowOrHideMonMarkingsSprite(1);
+            ShowOrHideBallIconObj(1);
+            ShowOrHideStatusIcon(1);
+            HideShowPokerusIcon(1);
+            HideShowShinyStar(1);
         }
 
         break;
     case PSS_PAGE_MOVES_INFO:
         ShoworHideMoveSelectionCursor(1);
-        sub_8139EE4(1);
-        sub_813A3B8(1);
-        sub_813ACF8(1);
-        sub_813AEB0(1);
+        PokeSum_ShowOrHideMonIconSprite(1);
+        ShowOrHideStatusIcon(1);
+        HideShowPokerusIcon(1);
+        HideShowShinyStar(1);
         break;
     }
 }
 
-static void sub_81356EC(void)
+static void PokeSum_ShowSpritesBeforePageFlip(void)
 {
     u8 newPage;
 
@@ -1664,38 +1664,38 @@ static void sub_81356EC(void)
     switch (newPage)
     {
     case PSS_PAGE_INFO:
-        sub_813A838(0);
-        sub_813AB70(0);
+        ShowOrHideHpBarObjs(0);
+        ShowOrHideExpBarObjs(0);
         break;
     case PSS_PAGE_SKILLS:
         break;
     case PSS_PAGE_MOVES:
         if (sMonSummaryScreen->pageFlipDirection == 0)
         {
-            sub_813A838(0);
-            sub_813AB70(0);
+            ShowOrHideHpBarObjs(0);
+            ShowOrHideExpBarObjs(0);
         }
         else
         {
             ShoworHideMoveSelectionCursor(0);
-            sub_813ACF8(0);
-            sub_8139EE4(0);
-            sub_813AEB0(0);
+            HideShowPokerusIcon(0);
+            PokeSum_ShowOrHideMonIconSprite(0);
+            HideShowShinyStar(0);
         }
 
         break;
     case PSS_PAGE_MOVES_INFO:
-        sub_8139C44(0);
-        sub_813B084(0);
-        sub_813A3B8(0);
-        sub_8139D54(0);
-        sub_813ACF8(0);
-        sub_813AEB0(0);
+        PokeSum_ShowOrHideMonPicSprite(0);
+        PokeSum_ShowOrHideMonMarkingsSprite(0);
+        ShowOrHideStatusIcon(0);
+        ShowOrHideBallIconObj(0);
+        HideShowPokerusIcon(0);
+        HideShowShinyStar(0);
         break;
     }
 }
 
-static u8 sub_81357A0(u8 a0)
+static u8 PokeSum_IsPageFlipFinished(u8 a0)
 {
     s8 pageDelta = 1;
 
@@ -1707,7 +1707,7 @@ static u8 sub_81357A0(u8 a0)
         {
             sMonSummaryScreen->flipPagesBgHofs = 0;
             sMonSummaryScreen->whichBgLayerToTranslate ^= 1;
-            sub_81358DC(0, 0);
+            PokeSum_UpdateBgPriorityForPageFlip(0, 0);
             sMonSummaryScreen->flippingPages = FALSE;
             return TRUE;
         }
@@ -1727,7 +1727,7 @@ static u8 sub_81357A0(u8 a0)
         {
             sMonSummaryScreen->flipPagesBgHofs = 240;
             sMonSummaryScreen->whichBgLayerToTranslate ^= 1;
-            sub_81358DC(0, 0);
+            PokeSum_UpdateBgPriorityForPageFlip(0, 0);
             sMonSummaryScreen->flippingPages = FALSE;
             return TRUE;
         }
@@ -1743,7 +1743,7 @@ static u8 sub_81357A0(u8 a0)
     return FALSE;
 }
 
-static void sub_81358DC(u8 a0, u8 a1)
+static void PokeSum_UpdateBgPriorityForPageFlip(u8 setBg0Priority, u8 keepBg1Bg2PriorityOrder)
 {
     u8 i;
     u32 bg0Priority;
@@ -1756,11 +1756,11 @@ static void sub_81358DC(u8 a0, u8 a1)
 
     if (sMonSummaryScreen->pageFlipDirection == 1)
     {
-        if (a0 == 0)
+        if (setBg0Priority == 0)
         {
             bg0Priority = 0;
 
-            if (a1 == 0)
+            if (keepBg1Bg2PriorityOrder == 0)
             {
                 if (bg1Priority > bg2Priority)
                     bg1Priority = 1, bg2Priority = 2;
@@ -1775,11 +1775,11 @@ static void sub_81358DC(u8 a0, u8 a1)
                     bg1Priority = 1, bg2Priority = 2;
             }
         }
-        if (a0 == 1)
+        if (setBg0Priority == 1)
         {
             bg0Priority = 1;
 
-            if (a1 == 0)
+            if (keepBg1Bg2PriorityOrder == 0)
             {
                 if (bg1Priority > bg2Priority)
                     bg1Priority = 0, bg2Priority = 2;
@@ -1826,7 +1826,7 @@ static void sub_81358DC(u8 a0, u8 a1)
     SetGpuReg(REG_OFFSET_BG2CNT, (GetGpuReg(REG_OFFSET_BG2CNT) & 0xfffc) | bg2Priority);
 }
 
-static void sub_8135AA4(void)
+static void PokeSum_CopyNewBgTilemapBeforePageFlip_2(void)
 {
     u8 newPage;
 
@@ -1860,7 +1860,7 @@ static void sub_8135AA4(void)
     }
 }
 
-static void sub_8135B90(void)
+static void PokeSum_CopyNewBgTilemapBeforePageFlip(void)
 {
     u8 newPage;
 
@@ -1889,7 +1889,7 @@ static void sub_8135B90(void)
     }
 }
 
-static void sub_8135C34(void)
+static void CB2_SetUpPSS(void)
 {
     switch (sMonSummaryScreen->summarySetupStep)
     {
@@ -1897,24 +1897,24 @@ static void sub_8135C34(void)
         PokeSum_Setup_ResetCallbacks();
         break;
     case 1:
-        sub_8136BC4();
+        PokeSum_Setup_InitGpu();
         break;
     case 2:
-        sub_8136BAC();
+        PokeSum_Setup_SpritesReset();
         break;
     case 3:
-        if (!sub_8135F20())
+        if (!PokeSum_HandleLoadBgGfx())
             return;
         break;
     case 4:
-        if (!sub_8136AEC())
+        if (!PokeSum_HandleCreateSprites())
             return;
         break;
     case 5:
         PokeSum_CreateWindows();
         break;
     case 6:
-        if (!sub_8136040())
+        if (!PokeSum_Setup_BufferStrings())
             return;
         break;
     case 7:
@@ -1977,21 +1977,21 @@ static void sub_8135C34(void)
     case 15:
         if (sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE || sMonSummaryScreen->mode == PSS_MODE_FORGET_MOVE)
         {
-            sub_8139EE4(0);
+            PokeSum_ShowOrHideMonIconSprite(0);
             ShoworHideMoveSelectionCursor(0);
         }
         else
         {
-            sub_8139C44(0);
-            sub_813B084(0);
-            sub_8139D54(0);
-            sub_813A838(0);
-            sub_813AB70(0);
+            PokeSum_ShowOrHideMonPicSprite(0);
+            PokeSum_ShowOrHideMonMarkingsSprite(0);
+            ShowOrHideBallIconObj(0);
+            ShowOrHideHpBarObjs(0);
+            ShowOrHideExpBarObjs(0);
         }
 
-        sub_813A3B8(0);
-        sub_813ACF8(0);
-        sub_813AEB0(0);
+        ShowOrHideStatusIcon(0);
+        HideShowPokerusIcon(0);
+        HideShowShinyStar(0);
         break;
     default:
         PokeSum_Setup_SetVBlankCallback();
@@ -2002,7 +2002,7 @@ static void sub_8135C34(void)
     sMonSummaryScreen->summarySetupStep++;
 }
 
-static u8 sub_8135F20(void)
+static u8 PokeSum_HandleLoadBgGfx(void)
 {
     switch (sMonSummaryScreen->loadBgGfxStep)
     {
@@ -2048,12 +2048,12 @@ static u8 sub_8135F20(void)
     return FALSE;
 }
 
-static u8 sub_8136040(void)
+static u8 PokeSum_Setup_BufferStrings(void)
 {
     switch (sMonSummaryScreen->bufferStringsStep)
     {
     case 0:
-        sub_81360D4();
+        BufferMonInfo();
         if (sMonSummaryScreen->isEgg)
         {
             sMonSummaryScreen->bufferStringsStep = 0;
@@ -2063,7 +2063,7 @@ static u8 sub_8136040(void)
         break;
     case 1:
         if (sMonSummaryScreen->isEgg == 0)
-            sub_8136350();
+            BufferMonSkills();
         break;
     case 2:
         if (sMonSummaryScreen->isEgg == 0)
@@ -2078,7 +2078,7 @@ static u8 sub_8136040(void)
     return FALSE;
 }
 
-static void sub_81360D4(void) // seems to be PSS_PAGE_INFO or data for it
+static void BufferMonInfo(void) // seems to be PSS_PAGE_INFO or data for it
 {
     u8 tempStr[20];
     u16 dexNum;
@@ -2149,7 +2149,7 @@ static void sub_81360D4(void) // seems to be PSS_PAGE_INFO or data for it
 #define MACRO_8136350_0(x) (63 - StringLength((x)) * 6)
 #define MACRO_8136350_1(x) (27 - StringLength((x)) * 6)
 
-static void sub_8136350(void) // seems to be PSS_PAGE_SKILLS or data for it.
+static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
 {
     u8 tempStr[20];
     u8 level;
@@ -2303,39 +2303,39 @@ static void BufferMonMoveI(u8 i)//think this is the menu/function I need has mov
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.moveAccuracyStrBufs[i], gBattleMoves[sMonSummaryScreen->moveIds[i]].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
 }//will update rest of file but for now all names have been updated for this function
 
-static u8 sub_8136AEC(void)
+static u8 PokeSum_HandleCreateSprites(void)
 {
     switch (sMonSummaryScreen->spriteCreationStep)
     {
     case 0:
-        sub_813ADA8(TAG_PSS_UNK_A0, TAG_PSS_UNK_A0);
+        CreateShinyStarObj(TAG_PSS_UNK_A0, TAG_PSS_UNK_A0);
         break;
     case 1:
-        sub_813ABAC(TAG_PSS_UNK_96, TAG_PSS_UNK_96);
+        CreatePokerusIconObj(TAG_PSS_UNK_96, TAG_PSS_UNK_96);
         break;
     case 2:
-        sub_813AFFC();
+        PokeSum_CreateMonMarkingsSprite();
         break;
     case 3:
-        sub_8139F64(TAG_PSS_UNK_64, TAG_PSS_UNK_64);
+        CreateMoveSelectionCursorObjs(TAG_PSS_UNK_64, TAG_PSS_UNK_64);
         break;
     case 4:
-        sub_813A254(TAG_PSS_UNK_6E, TAG_PSS_UNK_6E);
+        CreateMonStatusIconObj(TAG_PSS_UNK_6E, TAG_PSS_UNK_6E);
         break;
     case 5:
-        sub_813A45C(TAG_PSS_UNK_78, TAG_PSS_UNK_78);
+        CreateHpBarObjs(TAG_PSS_UNK_78, TAG_PSS_UNK_78);
         break;
     case 6:
-        sub_813A874(TAG_PSS_UNK_82, TAG_PSS_UNK_82);
+        CreateExpBarObjs(TAG_PSS_UNK_82, TAG_PSS_UNK_82);
         break;
     case 7:
-        sub_8139CB0();
+        CreateBallIconObj();
         break;
     case 8:
-        sub_8139DBC();
+        PokeSum_CreateMonIconSprite();
         break;
     default:
-        sub_813995C();
+        PokeSum_CreateMonPicSprite();
         return TRUE;
     }
 
@@ -2343,7 +2343,7 @@ static u8 sub_8136AEC(void)
     return FALSE;
 }
 
-static void sub_8136BAC(void)
+static void PokeSum_Setup_SpritesReset(void)
 {
     ResetSpriteData();
     ResetPaletteFade();
@@ -2351,7 +2351,7 @@ static void sub_8136BAC(void)
     ScanlineEffect_Stop();
 }
 
-static void sub_8136BC4(void)
+static void PokeSum_Setup_InitGpu(void)
 {
     DmaClearLarge16(3, (void *)VRAM, VRAM_SIZE, 0x1000);
     DmaClear32(3, (void *)OAM, OAM_SIZE);
@@ -2375,7 +2375,7 @@ static void sub_8136BC4(void)
 
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_1D_MAP | DISPCNT_OBJ_ON | DISPCNT_WIN1_ON);
 
-    sub_813B750(sMonSummaryScreen->curPageIndex);
+    PokeSum_UpdateWin1ActiveFlag(sMonSummaryScreen->curPageIndex);
 
     SetGpuReg(REG_OFFSET_WININ, (WININ_WIN0_OBJ | WININ_WIN0_BG0 | WININ_WIN0_BG1 | WININ_WIN0_BG2 | WININ_WIN0_BG3) << 8);
     SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WIN01_BG0 | WINOUT_WIN01_BG1 | WINOUT_WIN01_BG2 | WINOUT_WIN01_BG3);
@@ -3926,81 +3926,81 @@ static void SpriteCB_PokeSum_MonPicSprite(struct Sprite * sprite)
     if (sMonSummaryScreen->numMonPicBounces >= 2)
         return;
 
-    if (sMonPicBounceState->atkStr++ >= 2)
+    if (sMonPicBounceState->initDelay++ >= 2)
     {
         u8 v0;
 
-        switch (sMonPicBounceState->spAStr)
+        switch (sMonPicBounceState->vigor)
         {
         case 0:
-            sprite->pos1.y += sMonPicBounceYDelta_Under60[sMonPicBounceState->unk00++];
+            sprite->pos1.y += sMonPicBounceYDelta_Under60[sMonPicBounceState->animFrame++];
             v0 = NELEMS(sMonPicBounceYDelta_Under60);
             break;
         case 1:
-            sprite->pos1.y += sUnknown_8463FC1[sMonPicBounceState->unk00++];
-            v0 = NELEMS(sUnknown_8463FC1);
+            sprite->pos1.y += sMonPicBounceYDelta_60to80[sMonPicBounceState->animFrame++];
+            v0 = NELEMS(sMonPicBounceYDelta_60to80);
             break;
         case 2:
-            sprite->pos1.y += sUnknown_8463FC6[sMonPicBounceState->unk00++];
-            v0 = NELEMS(sUnknown_8463FC6);
+            sprite->pos1.y += sMonPicBounceYDelta_80to99[sMonPicBounceState->animFrame++];
+            v0 = NELEMS(sMonPicBounceYDelta_80to99);
             break;
         case 3:
         default:
-            sprite->pos1.y += sUnknown_8463FCD[sMonPicBounceState->unk00++];
-            v0 = NELEMS(sUnknown_8463FCD);
+            sprite->pos1.y += sMonPicBounceYDelta_Full[sMonPicBounceState->animFrame++];
+            v0 = NELEMS(sMonPicBounceYDelta_Full);
             break;
         }
 
-        if (sMonPicBounceState->unk00 >= v0)
+        if (sMonPicBounceState->animFrame >= v0)
         {
-            sMonPicBounceState->unk00 = 0;
+            sMonPicBounceState->animFrame = 0;
             sMonSummaryScreen->numMonPicBounces++;
         }
 
-        sMonPicBounceState->atkStr = 0;
+        sMonPicBounceState->initDelay = 0;
     }
 }
 
-static void sub_8139868(struct Sprite * sprite)
+static void SpriteCB_PokeSum_EggPicShake(struct Sprite * sprite)//sprite pos1 was changed more than I feel comfortable dealing w right now
 {
     if (sMonSummaryScreen->numMonPicBounces >= 2)
         return;
 
-    switch (sMonPicBounceState->spAStr)
+    switch (sMonPicBounceState->vigor)
     {
     case 0:
     default:
-        if (sMonPicBounceState->atkStr++ >= 120)
+        if (sMonPicBounceState->initDelay++ >= 120)
         {
-            sprite->pos1.x += sUnknown_8463FD4[sMonPicBounceState->unk00];
-            if (++sMonPicBounceState->unk00 >= NELEMS(sUnknown_8463FD4))
+            sprite->pos1.x += sEggPicShakeXDelta_ItWillTakeSomeTime[sMonPicBounceState->animFrame];
+            if (++sMonPicBounceState->animFrame >= NELEMS(sEggPicShakeXDelta_ItWillTakeSomeTime))
             {
-                sMonPicBounceState->unk00 = 0;
-                sMonPicBounceState->atkStr = 0;
+                sMonPicBounceState->animFrame = 0;
+                sMonPicBounceState->initDelay = 0;
                 sMonSummaryScreen->numMonPicBounces++;
             }
         }
         break;
     case 1:
-        if (sMonPicBounceState->atkStr++ >= 90)
+        if (sMonPicBounceState->initDelay++ >= 90)
         {
-            sprite->pos1.x += sUnknown_8463FDF[sMonPicBounceState->unk00];
-            if (++sMonPicBounceState->unk00 >= NELEMS(sUnknown_8463FDF))
+            sprite->pos1.x += sEggPicShakeXDelta_OccasionallyMoves[sMonPicBounceState->animFrame];
+            if (++sMonPicBounceState->animFrame >= NELEMS(sEggPicShakeXDelta_OccasionallyMoves))
             {
-                sMonPicBounceState->unk00 = 0;
-                sMonPicBounceState->atkStr = 0;
+                sMonPicBounceState->animFrame = 0;
+                sMonPicBounceState->initDelay = 0;
                 sMonSummaryScreen->numMonPicBounces++;
             }
         }
         break;
     case 2:
-        if (sMonPicBounceState->atkStr++ >= 60)
+        if (sMonPicBounceState->initDelay++ >= 60)
         {
-            sprite->pos1.x += sUnknown_8463FEA[sMonPicBounceState->unk00];
-            if (++sMonPicBounceState->unk00 >= NELEMS(sUnknown_8463FEA))
+            sprite->pos1.x += sEggPicShakeXDelta_AlmostReadyToHatch[sMonPicBounceState->animFrame];
+            if (++sMonPicBounceState->animFrame >= NELEMS(sEggPicShakeXDelta_AlmostReadyToHatch))
             {
-                sMonPicBounceState->unk00 = 0;
-                sMonPicBounceState->atkStr = 0;
+                sMonPicBounceState->animFrame = 0;
+                sMonPicBounceState->initDelay = 0;
                 sMonSummaryScreen->numMonPicBounces++;
             }
         }
@@ -4008,11 +4008,11 @@ static void sub_8139868(struct Sprite * sprite)
     }
 }
 
-static void nullsub_96(struct Sprite * sprite)
+static void SpriteCB_MonPicDummy(struct Sprite * sprite)
 {
 }
 
-static void sub_813995C(void)
+static void PokeSum_CreateMonPicSprite(void)
 {
     u16 spriteId;
     u16 species;
@@ -4028,17 +4028,17 @@ static void sub_813995C(void)
     if (sMonSummaryScreen->savedCallback == CB2_ReturnToTradeMenuFromSummary)
     {
         if (sMonSummaryScreen->isEnemyParty == TRUE)
-            spriteId = CreateMonPicSprite(species, trainerId, personality, 1, 60, 65, 12, 0xffff, 1);
+            spriteId = CreateMonPicSprite(species, trainerId, personality, TRUE, 60, 65, 12, 0xffff, TRUE);
         else
-            spriteId = CreateMonPicSprite_HandleDeoxys(species, trainerId, personality, 1, 60, 65, 12, 0xffff);
+            spriteId = CreateMonPicSprite_HandleDeoxys(species, trainerId, personality, TRUE, 60, 65, 12, 0xffff);
     }
     else
     {
-        if (ShouldIgnoreDeoxysForm(3, sLastViewedMonIndex))
-            spriteId = CreateMonPicSprite(species, trainerId, personality, 1, 60, 65, 12, 0xffff, 1);
+        if (ShouldIgnoreDeoxysForm(DEOXYS_CHECK_TRADE_MAIN, sLastViewedMonIndex))
+            spriteId = CreateMonPicSprite(species, trainerId, personality, TRUE, 60, 65, 12, 0xffff, TRUE);
         else
-            spriteId = CreateMonPicSprite_HandleDeoxys(species, trainerId, personality, 1, 60, 65, 12, 0xffff);
-    }
+            spriteId = CreateMonPicSprite_HandleDeoxys(species, trainerId, personality, TRUE, 60, 65, 12, 0xffff);
+    }//do something with this later to make sure I can change forms in game
 
     FreeSpriteOamMatrix(&gSprites[spriteId]);
 
@@ -4049,11 +4049,11 @@ static void sub_813995C(void)
 
     sMonSummaryScreen->monPicSpriteId = spriteId;
 
-    sub_8139C44(1);
-    sub_8139AAC(spriteId);
+    PokeSum_ShowOrHideMonPicSprite(TRUE);
+    PokeSum_SetMonPicSpriteCallback(spriteId);
 }
 
-static void sub_8139AAC(u16 spriteId)
+static void PokeSum_SetMonPicSpriteCallback(u16 spriteId)
 {
     u16 curHp;
     u16 maxHp;
@@ -4065,16 +4065,16 @@ static void sub_8139AAC(u16 spriteId)
         u8 friendship = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FRIENDSHIP);
 
         if (friendship <= 5)
-            sMonPicBounceState->spAStr = 2;
+            sMonPicBounceState->vigor = 2;
         else
         {
             if (friendship <= 10)
-                sMonPicBounceState->spAStr = 1;
+                sMonPicBounceState->vigor = 1;
             else if (friendship <= 40)
-                sMonPicBounceState->spAStr = 0;
+                sMonPicBounceState->vigor = 0;
         }
 
-        gSprites[spriteId].callback = sub_8139868;
+        gSprites[spriteId].callback = SpriteCB_PokeSum_EggPicShake;
         return;
     }
 
@@ -4083,7 +4083,7 @@ static void sub_8139AAC(u16 spriteId)
         if (sMonSummaryScreen->curMonStatusAilment == AILMENT_FNT)
             return;
 
-        gSprites[spriteId].callback = nullsub_96;
+        gSprites[spriteId].callback = SpriteCB_MonPicDummy;
         return;
     }
 
@@ -4091,29 +4091,30 @@ static void sub_8139AAC(u16 spriteId)
     maxHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MAX_HP);
 
     if (curHp == maxHp)
-        sMonPicBounceState->spAStr = 3;
+        sMonPicBounceState->vigor = 3;
     else if (maxHp * 0.8 <= curHp)
-        sMonPicBounceState->spAStr = 2;
+        sMonPicBounceState->vigor = 2;
     else if (maxHp * 0.6 <= curHp)
-        sMonPicBounceState->spAStr = 1;
+        sMonPicBounceState->vigor = 1;
     else
-        sMonPicBounceState->spAStr = 0;
+        sMonPicBounceState->vigor = 0;
 
     gSprites[spriteId].callback = SpriteCB_PokeSum_MonPicSprite;
-}
+}//changes how mon appears in party screen (I think) based on hp
+//can prob use this for nuzlocke feature for when mon dies
 
-static void sub_8139C44(u8 invisible)
+static void PokeSum_ShowOrHideMonPicSprite(u8 invisible)
 {
     gSprites[sMonSummaryScreen->monPicSpriteId].invisible = invisible;
 }
 
-static void sub_8139C80(void)
+static void PokeSum_DestroyMonPicSprite(void)
 {
     FreeAndDestroyMonPicSprite(sMonSummaryScreen->monPicSpriteId);
     FREE_AND_SET_NULL(sMonPicBounceState);
 }
 
-static void sub_8139CB0(void)
+static void CreateBallIconObj(void)
 {
     u16 ballItemId;
     u8 ballId;
@@ -4130,20 +4131,21 @@ static void sub_8139CB0(void)
     gSprites[sMonSummaryScreen->ballIconSpriteId].callback = SpriteCallbackDummy;
     gSprites[sMonSummaryScreen->ballIconSpriteId].oam.priority = 0;
 
-    sub_8139D54(1);
+    ShowOrHideBallIconObj(TRUE);
 }
 
-static void sub_8139D54(u8 invisible)
+static void ShowOrHideBallIconObj(u8 invisible)
 {
     gSprites[sMonSummaryScreen->ballIconSpriteId].invisible = invisible;
 }
 
-static void sub_8139D90(void)
+static void DestroyBallIconObj(void)
 {
-    DestroySpriteAndFreeResources2(&gSprites[sMonSummaryScreen->ballIconSpriteId]);
+    // Redundant, as DestroySpriteAndFreeResources could've been used.
+    DestroySpriteAndFreeResources_Ball(&gSprites[sMonSummaryScreen->ballIconSpriteId]);
 }
 
-static void sub_8139DBC(void)
+static void PokeSum_CreateMonIconSprite(void)
 {
     u16 species;
     u32 personality;
@@ -4162,7 +4164,7 @@ static void sub_8139DBC(void)
     }
     else
     {
-        if (ShouldIgnoreDeoxysForm(3, sLastViewedMonIndex))
+        if (ShouldIgnoreDeoxysForm(DEOXYS_CHECK_TRADE_MAIN, sLastViewedMonIndex))
             sMonSummaryScreen->monIconSpriteId = CreateMonIcon(species, SpriteCallbackDummy, 24, 32, 0, personality, 0);
         else
             sMonSummaryScreen->monIconSpriteId = CreateMonIcon(species, SpriteCallbackDummy, 24, 32, 0, personality, 1);
@@ -4173,15 +4175,15 @@ static void sub_8139DBC(void)
     else
         gSprites[sMonSummaryScreen->monIconSpriteId].hFlip = FALSE;
 
-    sub_8139EE4(1);
+    PokeSum_ShowOrHideMonIconSprite(TRUE);
 }
 
-static void sub_8139EE4(u8 invisible)
+static void PokeSum_ShowOrHideMonIconSprite(u8 invisible)
 {
     gSprites[sMonSummaryScreen->monIconSpriteId].invisible = invisible;
 }
 
-static void sub_8139F20(void)
+static void PokeSum_DestroyMonIconSprite(void)
 {
     u16 species;
     species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES2);
@@ -4189,7 +4191,7 @@ static void sub_8139F20(void)
     DestroyMonIcon(&gSprites[sMonSummaryScreen->monIconSpriteId]);
 }
 
-static void sub_8139F64(u16 tileTag, u16 palTag)
+static void CreateMoveSelectionCursorObjs(u16 tileTag, u16 palTag)
 {
     u8 i;
     u8 spriteId;
@@ -4217,11 +4219,11 @@ static void sub_8139F64(u16 tileTag, u16 palTag)
         struct SpriteTemplate template = {
             .tileTag = tileTag + i,
             .paletteTag = palTag,
-            .oam = &sUnknown_846398C,
-            .anims = sUnknown_84639A4,
+            .oam = &sMoveSelectionCursorOamData,
+            .anims = sMoveSelectionCursorOamAnimTable,
             .images = NULL,
             .affineAnims = gDummySpriteAffineAnimTable,
-            .callback = sub_813A124,
+            .callback = SpriteCB_MoveSelectionCursor,
         };
 
         LoadSpriteSheet(&sheet);
@@ -4229,16 +4231,16 @@ static void sub_8139F64(u16 tileTag, u16 palTag)
 
         spriteId = CreateSprite(&template, 64 * (i % 2) + 152, sMoveSelectionCursorPos * 28 + 34, i % 2);
         sMoveSelectionCursorObjs[i]->sprite = &gSprites[spriteId];
-        sMoveSelectionCursorObjs[i]->atkStr = i;
-        sMoveSelectionCursorObjs[i]->defStr = tileTag + i;
-        sMoveSelectionCursorObjs[i]->spAStr = palTag;
+        sMoveSelectionCursorObjs[i]->whichSprite = i;
+        sMoveSelectionCursorObjs[i]->tileTag = tileTag + i;
+        sMoveSelectionCursorObjs[i]->palTag = palTag;
         sMoveSelectionCursorObjs[i]->sprite->subpriority = i;
 
         if (i > 1)
             StartSpriteAnim(sMoveSelectionCursorObjs[i]->sprite, 1);
     }
 
-    ShoworHideMoveSelectionCursor(1);
+    ShoworHideMoveSelectionCursor(TRUE);
 
     FREE_AND_SET_NULL_IF_SET(gfxBufferPtrs[0]);
     FREE_AND_SET_NULL_IF_SET(gfxBufferPtrs[1]);
@@ -4251,7 +4253,7 @@ static void ShoworHideMoveSelectionCursor(u8 invisible)
         sMoveSelectionCursorObjs[i]->sprite->invisible = invisible;
 }
 
-static void sub_813A124(struct Sprite * sprite)
+static void SpriteCB_MoveSelectionCursor(struct Sprite * sprite)
 {
     u8 i;
 
@@ -4294,7 +4296,7 @@ static void sub_813A124(struct Sprite * sprite)
     }
 }
 
-static void sub_813A21C(void)
+static void DestroyMoveSelectionCursorObjs(void)
 {
     u8 i;
 
@@ -4307,7 +4309,7 @@ static void sub_813A21C(void)
     }
 }
 
-static void sub_813A254(u16 tileTag, u16 palTag)
+static void CreateMonStatusIconObj(u16 tileTag, u16 palTag) //important very for new status
 {
     u16 spriteId;
     void * gfxBufferPtr;
@@ -4329,8 +4331,8 @@ static void sub_813A254(u16 tileTag, u16 palTag)
         struct SpriteTemplate template = {
             .tileTag = tileTag,
             .paletteTag = palTag,
-            .oam = &sUnknown_84639AC,
-            .anims = sUnknown_84639F4,
+            .oam = &sStatusAilmentIconOamData,
+            .anims = sStatusAilmentIconAnimTable,
             .images = NULL,
             .affineAnims = gDummySpriteAffineAnimTable,
             .callback = SpriteCallbackDummy,
@@ -4341,16 +4343,16 @@ static void sub_813A254(u16 tileTag, u16 palTag)
 
         spriteId = CreateSprite(&template, 0, 0, 0);
         sStatusIcon->sprite = &gSprites[spriteId];
-        sStatusIcon->atkStr = tileTag;
-        sStatusIcon->defStr = palTag;
+        sStatusIcon->tileTag = tileTag;
+        sStatusIcon->palTag = palTag;
     }
 
-    sub_813A3B8(1);
-    sub_813A35C();
+    ShowOrHideStatusIcon(TRUE);
+    UpdateMonStatusIconObj();
     FREE_AND_SET_NULL_IF_SET(gfxBufferPtr);
 }
 
-static void sub_813A334(void)
+static void DestroyMonStatusIconObj(void)
 {
     if (sStatusIcon->sprite != NULL)
         DestroySpriteAndFreeResources(sStatusIcon->sprite);
@@ -4358,23 +4360,23 @@ static void sub_813A334(void)
     FREE_AND_SET_NULL_IF_SET(sStatusIcon);
 }
 
-static void sub_813A35C(void)
+static void UpdateMonStatusIconObj(void)//important
 {
     sMonSummaryScreen->curMonStatusAilment = StatusToAilment(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_STATUS));
 
     if (sMonSummaryScreen->curMonStatusAilment == AILMENT_NONE)
     {
-        sub_813A3B8(1); //will need to havea defautl arrangement of invisible status icons
+        ShowOrHideStatusIcon(1); //will need to havea defautl arrangement of invisible status icons
         return; // check the order of list and swap order and then make visible as statuses are applied
 
     } //I'm thinking work backwards like evo table, order based on turn order status applied in, FIFO style,
       // next check that the status is still in affect, if it isn't, swap it to the bottom of the stack and make invisible
 
     StartSpriteAnim(sStatusIcon->sprite, sMonSummaryScreen->curMonStatusAilment - 1);
-    sub_813A3B8(0);
+    ShowOrHideStatusIcon(0);
 }
 
-static void sub_813A3B8(u8 invisible) //important status icon visibility and position
+static void ShowOrHideStatusIcon(u8 invisible) //important status icon visibility and position
 {
     if (sMonSummaryScreen->curMonStatusAilment == AILMENT_NONE || sMonSummaryScreen->isEgg)
         sStatusIcon->sprite->invisible = TRUE; //believe this just means make ailment none sprite invisible,
@@ -4398,7 +4400,7 @@ static void sub_813A3B8(u8 invisible) //important status icon visibility and pos
     }
 }
 
-static void sub_813A45C(u16 tileTag, u16 palTag)
+static void CreateHpBarObjs(u16 tileTag, u16 palTag)
 {
     u8 i;
     u8 spriteId;
@@ -4427,9 +4429,9 @@ static void sub_813A45C(u16 tileTag, u16 palTag)
             .tag = tileTag
         };
 
-        struct SpritePalette palette1 = {.data = sUnknown_8463FFC[0], .tag = palTag};
-        struct SpritePalette palette2 = {.data = sUnknown_8463FFC[1], .tag = palTag + 1};
-        struct SpritePalette palette3 = {.data = sUnknown_8463FFC[2], .tag = palTag + 2};
+        struct SpritePalette palette1 = {.data = sHpBarPals[0], .tag = palTag};
+        struct SpritePalette palette2 = {.data = sHpBarPals[1], .tag = palTag + 1};
+        struct SpritePalette palette3 = {.data = sHpBarPals[2], .tag = palTag + 2};
 
         LoadSpriteSheet(&sheet);
         LoadSpritePalette(&palette1);
@@ -4442,8 +4444,8 @@ static void sub_813A45C(u16 tileTag, u16 palTag)
         struct SpriteTemplate template = {
             .tileTag = tileTag,
             .paletteTag = palTag + hpBarPalTagOffset,
-            .oam = &sUnknown_8463A14,
-            .anims = sUnknown_8463A7C,
+            .oam = &sHpOrExpBarOamData,
+            .anims = sHpOrExpBarAnimTable,
             .images = NULL,
             .affineAnims = gDummySpriteAffineAnimTable,
             .callback = SpriteCallbackDummy,
@@ -4454,18 +4456,18 @@ static void sub_813A45C(u16 tileTag, u16 palTag)
         sHpBarObjs->sprites[i] = &gSprites[spriteId];
         sHpBarObjs->sprites[i]->invisible = FALSE;
         sHpBarObjs->sprites[i]->oam.priority = 2;
-        sHpBarObjs->unk3C = tileTag;
-        sHpBarObjs->unk3E = palTag;
+        sHpBarObjs->tileTag = tileTag;
+        sHpBarObjs->palTag = palTag;
         StartSpriteAnim(sHpBarObjs->sprites[i], 8);
     }
 
-    sub_813A620();
-    sub_813A838(1);
+    UpdateHpBarObjs();
+    ShowOrHideHpBarObjs(TRUE);
 
     FREE_AND_SET_NULL_IF_SET(gfxBufferPtr);
 }
 
-static void sub_813A620(void)
+static void UpdateHpBarObjs(void)
 {
     u8 numWholeHpBarTiles = 0;
     u8 i;
@@ -4474,8 +4476,8 @@ static void sub_813A620(void)
     u8 hpBarPalOffset = 0;
     u32 curHp;
     u32 maxHp;
-    s64 v0;
-    s64 v1;
+    s64 pointsPerTile;
+    s64 totalPoints;
 
     if (sMonSummaryScreen->isEgg)
         return;
@@ -4511,14 +4513,14 @@ static void sub_813A620(void)
 
     else
     {
-        v0 = (maxHp << 2) / 6;
-        v1 = (curHp << 2);
+        pointsPerTile = (maxHp << 2) / 6;
+        totalPoints = (curHp << 2);
 
         while (TRUE)
         {
-            if (v1 <= v0)
+            if (totalPoints <= pointsPerTile)
                 break;
-            v1 -= v0;
+            totalPoints -= pointsPerTile;
             numWholeHpBarTiles++;
         }
 
@@ -4527,7 +4529,7 @@ static void sub_813A620(void)
         for (i = two; i < numWholeHpBarTiles; i++)
             StartSpriteAnim(sHpBarObjs->sprites[i], 8);
 
-        animNum = (v1 * 6) / v0;
+        animNum = (totalPoints * 6) / pointsPerTile;
         StartSpriteAnim(sHpBarObjs->sprites[numWholeHpBarTiles], animNum);
 
         for (i = numWholeHpBarTiles + 1; i < 8; i++)
@@ -4539,7 +4541,7 @@ static void sub_813A620(void)
     StartSpriteAnim(sHpBarObjs->sprites[8], 11);
 }
 
-static void sub_813A800(void)
+static void DestroyHpBarObjs(void)
 {
     u8 i;
 
@@ -4550,7 +4552,7 @@ static void sub_813A800(void)
     FREE_AND_SET_NULL_IF_SET(sHpBarObjs);
 }
 
-static void sub_813A838(u8 invisible)
+static void ShowOrHideHpBarObjs(u8 invisible)
 {
     u8 i;
 
@@ -4558,7 +4560,7 @@ static void sub_813A838(u8 invisible)
         sHpBarObjs->sprites[i]->invisible = invisible;
 }
 
-static void sub_813A874(u16 tileTag, u16 palTag)
+static void CreateExpBarObjs(u16 tileTag, u16 palTag)
 {
     u8 i;
     u8 spriteId;
@@ -4586,8 +4588,8 @@ static void sub_813A874(u16 tileTag, u16 palTag)
         struct SpriteTemplate template = {
             .tileTag = tileTag,
             .paletteTag = palTag,
-            .oam = &sUnknown_8463A14,
-            .anims = sUnknown_8463A7C,
+            .oam = &sHpOrExpBarOamData,
+            .anims = sHpOrExpBarAnimTable,
             .images = NULL,
             .affineAnims = gDummySpriteAffineAnimTable,
             .callback = SpriteCallbackDummy,
@@ -4601,13 +4603,13 @@ static void sub_813A874(u16 tileTag, u16 palTag)
         sExpBarObjs->palTag = palTag;
     }
 
-    sub_813A994();
-    sub_813AB70(1);
+    UpdateExpBarObjs();
+    ShowOrHideExpBarObjs(TRUE);
 
     FREE_AND_SET_NULL_IF_SET(gfxBufferPtr);
 }
 
-static void sub_813A994(void)
+static void UpdateExpBarObjs(void)
 {
     u8 numWholeExpBarTiles = 0;
     u8 i;
@@ -4616,8 +4618,8 @@ static void sub_813A994(void)
     u32 totalExpToNextLevel;
     u32 curExpToNextLevel;
     u16 species;
-    s64 v0;
-    s64 v1;
+    s64 pointsPerTile;
+    s64 totalPoints;
     u8 animNum;
     u8 two = 2;
 
@@ -4632,14 +4634,14 @@ static void sub_813A994(void)
     {
         totalExpToNextLevel = gExperienceTables[gBaseStats[species].growthRate][level + 1] - gExperienceTables[gBaseStats[species].growthRate][level];
         curExpToNextLevel = exp - gExperienceTables[gBaseStats[species].growthRate][level];
-        v0 = ((totalExpToNextLevel << 2) / 8);
-        v1 = (curExpToNextLevel << 2);
+        pointsPerTile = ((totalExpToNextLevel << 2) / 8);
+        totalPoints = (curExpToNextLevel << 2);
 
         while (TRUE)
         {
-            if (v1 <= v0)
+            if (totalPoints <= pointsPerTile)
                 break;
-            v1 -= v0;
+            totalPoints -= pointsPerTile;
             numWholeExpBarTiles++;
         }
 
@@ -4656,7 +4658,7 @@ static void sub_813A994(void)
                 StartSpriteAnim(sExpBarObjs->sprites[9], 7);
         }
 
-        animNum = (v1 * 8) / v0;
+        animNum = (totalPoints * 8) / pointsPerTile;
         StartSpriteAnim(sExpBarObjs->sprites[numWholeExpBarTiles], animNum);
 
         for (i = numWholeExpBarTiles + 1; i < 10; i++)
@@ -4671,7 +4673,7 @@ static void sub_813A994(void)
     StartSpriteAnim(sExpBarObjs->sprites[10], 11);
 }
 
-static void sub_813AB38(void)
+static void DestroyExpBarObjs(void)
 {
     u8 i;
 
@@ -4682,7 +4684,7 @@ static void sub_813AB38(void)
     FREE_AND_SET_NULL_IF_SET(sExpBarObjs);
 }
 
-static void sub_813AB70(u8 invisible)
+static void ShowOrHideExpBarObjs(u8 invisible)
 {
     u8 i;
 
@@ -4690,7 +4692,7 @@ static void sub_813AB70(u8 invisible)
         sExpBarObjs->sprites[i]->invisible = invisible;
 }
 
-static void sub_813ABAC(u16 tileTag, u16 palTag)
+static void CreatePokerusIconObj(u16 tileTag, u16 palTag)
 {
     u16 spriteId;
     void * gfxBufferPtr;
@@ -4698,7 +4700,7 @@ static void sub_813ABAC(u16 tileTag, u16 palTag)
     sPokerusIconObj = AllocZeroed(sizeof(struct PokerusIconObj));
     gfxBufferPtr = AllocZeroed(0x20 * 1);
 
-    LZ77UnCompWram(sUnknown_8463B20, gfxBufferPtr);
+    LZ77UnCompWram(sPokerusIconObjTiles, gfxBufferPtr);
 
     if (sPokerusIconObj != NULL)
     {
@@ -4708,12 +4710,12 @@ static void sub_813ABAC(u16 tileTag, u16 palTag)
             .tag = tileTag
         };
 
-        struct SpritePalette palette = {.data = sUnknown_8463B00, .tag = palTag};
+        struct SpritePalette palette = {.data = sPokerusIconObjPal, .tag = palTag};
         struct SpriteTemplate template = {
             .tileTag = tileTag,
             .paletteTag = palTag,
-            .oam = &sUnknown_8463AEC,
-            .anims = sUnknown_8463AFC,
+            .oam = &sPokerusIconObjOamData,
+            .anims = sPokerusIconObjAnimTable,
             .images = NULL,
             .affineAnims = gDummySpriteAffineAnimTable,
             .callback = SpriteCallbackDummy,
@@ -4724,17 +4726,17 @@ static void sub_813ABAC(u16 tileTag, u16 palTag)
 
         spriteId = CreateSprite(&template, 114, 92, 0);
         sPokerusIconObj->sprite = &gSprites[spriteId];
-        sPokerusIconObj->atkStr = tileTag;
-        sPokerusIconObj->defStr = palTag;
+        sPokerusIconObj->tileTag = tileTag;
+        sPokerusIconObj->palTag = palTag;
     }
 
-    sub_813ACF8(1);
-    sub_813ACB4();
+    HideShowPokerusIcon(TRUE);
+    ShowPokerusIconObjIfHasOrHadPokerus();
 
     FREE_AND_SET_NULL_IF_SET(gfxBufferPtr);
 }
 
-static void sub_813AC8C(void)
+static void DestroyPokerusIconObj(void)
 {
     if (sPokerusIconObj->sprite != NULL)
         DestroySpriteAndFreeResources(sPokerusIconObj->sprite);
@@ -4742,16 +4744,16 @@ static void sub_813AC8C(void)
     FREE_AND_SET_NULL_IF_SET(sPokerusIconObj);
 }
 
-static void sub_813ACB4(void)
+static void ShowPokerusIconObjIfHasOrHadPokerus(void)
 {
     if (!CheckPartyPokerus(&sMonSummaryScreen->currentMon, 0)
         && CheckPartyHasHadPokerus(&sMonSummaryScreen->currentMon, 0))
-        sub_813ACF8(0);
+        HideShowPokerusIcon(0);
     else
-        sub_813ACF8(1);
+        HideShowPokerusIcon(1);
 }
 
-static void sub_813ACF8(u8 invisible)
+static void HideShowPokerusIcon(u8 invisible)
 {
     if (!CheckPartyPokerus(&sMonSummaryScreen->currentMon, 0)
         && CheckPartyHasHadPokerus(&sMonSummaryScreen->currentMon, 0))
@@ -4775,7 +4777,7 @@ static void sub_813ACF8(u8 invisible)
     }
 }
 
-static void sub_813ADA8(u16 tileTag, u16 palTag)
+static void CreateShinyStarObj(u16 tileTag, u16 palTag)
 {
     u16 spriteId;
     void * gfxBufferPtr;
@@ -4783,7 +4785,7 @@ static void sub_813ADA8(u16 tileTag, u16 palTag)
     sShinyStarObjData = AllocZeroed(sizeof(struct ShinyStarObjData));
     gfxBufferPtr = AllocZeroed(0x20 * 2);
 
-    LZ77UnCompWram(sUnknown_8463B64, gfxBufferPtr);
+    LZ77UnCompWram(sStarObjTiles, gfxBufferPtr);
 
     if (sShinyStarObjData != NULL)
     {
@@ -4793,12 +4795,12 @@ static void sub_813ADA8(u16 tileTag, u16 palTag)
             .tag = tileTag
         };
 
-        struct SpritePalette palette = {.data = sUnknown_8463B44, .tag = palTag};
+        struct SpritePalette palette = {.data = sStarObjPal, .tag = palTag};
         struct SpriteTemplate template = {
             .tileTag = tileTag,
             .paletteTag = palTag,
-            .oam = &sUnknown_8463B30,
-            .anims = sUnknown_8463B40,
+            .oam = &sStarObjOamData,
+            .anims = sStarObjAnimTable,
             .images = NULL,
             .affineAnims = gDummySpriteAffineAnimTable,
             .callback = SpriteCallbackDummy,
@@ -4808,17 +4810,17 @@ static void sub_813ADA8(u16 tileTag, u16 palTag)
         LoadSpritePalette(&palette);
         spriteId = CreateSprite(&template, 106, 40, 0);
         sShinyStarObjData->sprite = &gSprites[spriteId];
-        sShinyStarObjData->atkStr = tileTag;
-        sShinyStarObjData->defStr = palTag;
+        sShinyStarObjData->tileTag = tileTag;
+        sShinyStarObjData->palTag = palTag;
     }
 
-    sub_813AEB0(1);
-    sub_813AF50();
+    HideShowShinyStar(TRUE);
+    ShowShinyStarObjIfMonShiny();
 
     FREE_AND_SET_NULL_IF_SET(gfxBufferPtr);
 }
 
-static void sub_813AE88(void)
+static void DestroyShinyStarObj(void)
 {
     if (sShinyStarObjData->sprite != NULL)
         DestroySpriteAndFreeResources(sShinyStarObjData->sprite);
@@ -4826,7 +4828,7 @@ static void sub_813AE88(void)
     FREE_AND_SET_NULL_IF_SET(sShinyStarObjData);
 }
 
-static void sub_813AEB0(u8 invisible)
+static void HideShowShinyStar(u8 invisible)
 {
     if (IsMonShiny(&sMonSummaryScreen->currentMon) == TRUE
         && !sMonSummaryScreen->isEgg)
@@ -4846,45 +4848,45 @@ static void sub_813AEB0(u8 invisible)
     }
 }
 
-static void sub_813AF50(void)
+static void ShowShinyStarObjIfMonShiny(void)
 {
     if (IsMonShiny(&sMonSummaryScreen->currentMon) == TRUE && !sMonSummaryScreen->isEgg)
-        sub_813AEB0(0);
+        HideShowShinyStar(0);
     else
-        sub_813AEB0(1);
+        HideShowShinyStar(1);
 }
 
 static void PokeSum_DestroySprites(void)
 {
-    sub_813A21C();
-    sub_813A800();
-    sub_813AB38();
-    sub_8139C80();
-    sub_8139F20();
-    sub_8139D90();
-    sub_813B068();
-    sub_813A334();
-    sub_813AC8C();
-    sub_813AE88();
+    DestroyMoveSelectionCursorObjs();
+    DestroyHpBarObjs();
+    DestroyExpBarObjs();
+    PokeSum_DestroyMonPicSprite();
+    PokeSum_DestroyMonIconSprite();
+    DestroyBallIconObj();
+    PokeSum_DestroyMonMarkingsSprite();
+    DestroyMonStatusIconObj();
+    DestroyPokerusIconObj();
+    DestroyShinyStarObj();
     ResetSpriteData();
 }
 
-static void sub_813AFC4(void)
+static void PokeSum_CreateSprites(void)
 {
-    sub_8139CB0();
-    sub_8139D54(0);
-    sub_8139DBC();
-    sub_813995C();
-    sub_8139C44(0);
-    sub_813A620();
-    sub_813A994();
-    sub_813B0E4();
-    sub_813A35C();
-    sub_813ACB4();
-    sub_813AF50();
+    CreateBallIconObj();
+    ShowOrHideBallIconObj(0);
+    PokeSum_CreateMonIconSprite();
+    PokeSum_CreateMonPicSprite();
+    PokeSum_ShowOrHideMonPicSprite(0);
+    UpdateHpBarObjs();
+    UpdateExpBarObjs();
+    PokeSum_UpdateMonMarkingsAnim();
+    UpdateMonStatusIconObj();
+    ShowPokerusIconObjIfHasOrHadPokerus();
+    ShowShinyStarObjIfMonShiny();
 }
 
-static void sub_813AFFC(void)
+static void PokeSum_CreateMonMarkingsSprite(void)
 {
     u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS);
 
@@ -4898,15 +4900,15 @@ static void sub_813AFFC(void)
         sMonSummaryScreen->markingSprite->pos1.y = 91;
     }
 
-    sub_813B084(1);
+    PokeSum_ShowOrHideMonMarkingsSprite(TRUE);
 }
 
-static void sub_813B068(void)
+static void PokeSum_DestroyMonMarkingsSprite(void)
 {
     DestroySpriteAndFreeResources(sMonSummaryScreen->markingSprite);
 }
 
-static void sub_813B084(u8 invisible)
+static void PokeSum_ShowOrHideMonMarkingsSprite(u8 invisible)
 {
     u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS);
 
@@ -4916,56 +4918,57 @@ static void sub_813B084(u8 invisible)
         sMonSummaryScreen->markingSprite->invisible = invisible;
 }
 
-static void sub_813B0E4(void)
+static void PokeSum_UpdateMonMarkingsAnim(void)
 {
     u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS);
 
     StartSpriteAnim(sMonSummaryScreen->markingSprite, markings);
-    sub_813B084(0);
+    PokeSum_ShowOrHideMonMarkingsSprite(0);
 }
 
-static void sub_813B120(u8 taskId, s8 a1)
+static void PokeSum_SeekToNextMon(u8 taskId, s8 direction)
 {
-    s8 v0 = -1;
+    s8 scrollResult = -1;
 
     if (sMonSummaryScreen->isBoxMon == TRUE)
     {
-        if (sMonSummaryScreen->curPageIndex != 0)
+        if (sMonSummaryScreen->curPageIndex != PSS_PAGE_INFO)
         {
-            if (a1 == 1)
-                a1 = 0;
+            if (direction == 1)
+                direction = 0;
             else
-                a1 = 2;
+                direction = 2;
         }
         else
         {
-            if (a1 == 1)
-                a1 = 1;
+            // Allow Eggs
+            if (direction == 1)
+                direction = 1;
             else
-                a1 = 3;
+                direction = 3;
         }
 
-        v0 = SeekToNextMonInBox(sMonSummaryScreen->monList.boxMons, GetLastViewedMonIndex(), sMonSummaryScreen->lastIndex, (u8)a1);
+        scrollResult = SeekToNextMonInBox(sMonSummaryScreen->monList.boxMons, GetLastViewedMonIndex(), sMonSummaryScreen->lastIndex, (u8)direction);
     }
     else
     {
         if (IsUpdateLinkStateCBActive() == FALSE
             && gReceivedRemoteLinkPlayers == 1
             && IsMultiBattle() == TRUE)
-            v0 = sub_813B38C(a1);
+            scrollResult = SeekToNextMonInMultiParty(direction);
         else
-            v0 = sub_813B20C(a1);
+            scrollResult = SeekToNextMonInSingleParty(direction);
     }
 
-    if (v0 == -1)
+    if (scrollResult == -1)
         return;
 
-    sLastViewedMonIndex = v0;
-    CreateTask(sub_813B3F0, 0);
+    sLastViewedMonIndex = scrollResult;
+    CreateTask(Task_PokeSum_SwitchDisplayedPokemon, 0);
     sMonSummaryScreen->switchMonTaskState = 0;
 }
 
-static s8 sub_813B20C(s8 a0)
+static s8 SeekToNextMonInSingleParty(s8 a0)
 {
     struct Pokemon * partyMons = sMonSummaryScreen->monList.mons;
     s8 v1 = 0;
@@ -4993,7 +4996,7 @@ static s8 sub_813B20C(s8 a0)
     return -1;
 }
 
-static u8 sub_813B2C8(struct Pokemon * partyMons)
+static u8 PokeSum_CanSeekToMon(struct Pokemon * partyMons)
 {
     if (GetMonData(partyMons, MON_DATA_SPECIES) != 0 && (sMonSummaryScreen->curPageIndex != 0 || GetMonData(partyMons, MON_DATA_IS_EGG) == 0))
         return TRUE;
@@ -5001,60 +5004,60 @@ static u8 sub_813B2C8(struct Pokemon * partyMons)
     return FALSE;
 }
 
-static s8 sub_813B304(u8 a0)
+static s8 SeekToMonInMultiParty_SeekForward(u8 startingIdx)
 {
     while (TRUE)
     {
-        a0++;
+        startingIdx++;
 
-        if (a0 == 6)
+        if (startingIdx == 6)
             return -1;
-        if (sub_813B2C8(&gPlayerParty[sUnknown_8463FB8[a0]]) == TRUE)
+        if (PokeSum_CanSeekToMon(&gPlayerParty[sMultiBattlePartyOrder[startingIdx]]) == TRUE)
             break;
     }
 
-    return (s8)sUnknown_8463FB8[a0];
+    return (s8)sMultiBattlePartyOrder[startingIdx];
 }
 
-static s8 sub_813B348(u8 a0)
+static s8 sub_813B348(u8 startingIdx)
 {
     while (1)
     {
-        if (a0 == 0)
+        if (startingIdx == 0)
             return -1;
 
-        a0--;
+        startingIdx--;
 
-        if (sub_813B2C8(&gPlayerParty[sUnknown_8463FB8[a0]]) == TRUE)
+        if (PokeSum_CanSeekToMon(&gPlayerParty[sMultiBattlePartyOrder[startingIdx]]) == TRUE)
             break;
     }
 
-    return (s8)(sUnknown_8463FB8[a0]);
+    return (s8)(sMultiBattlePartyOrder[startingIdx]);
 }
 
-static s8 sub_813B38C(s8 a0)
+static s8 SeekToNextMonInMultiParty(s8 direction)
 {
-    u8 v0 = 0;
+    u8 foundPartyIdx = 0;
     u8 i;
 
     for (i = 0; i < PARTY_SIZE; i++)
-        if (sUnknown_8463FB8[i] == GetLastViewedMonIndex())
+        if (sMultiBattlePartyOrder[i] == GetLastViewedMonIndex())
         {
-            v0 = i;
+            foundPartyIdx = i;
             break;
         }
 
-    if ((a0 == -1 && v0 == 0)
-        || (a0 == 1 && v0 == 5))
+    if ((direction == -1 && foundPartyIdx == 0)
+        || (direction == 1 && foundPartyIdx == 5))
         return -1;
 
-    if (a0 == 1)
-        return sub_813B304(v0);
+    if (direction == 1)
+        return SeekToMonInMultiParty_SeekForward(foundPartyIdx);
     else
-        return sub_813B348(v0);
+        return sub_813B348(foundPartyIdx);
 }
 
-static void sub_813B3F0(u8 id)
+static void Task_PokeSum_SwitchDisplayedPokemon(u8 id)
 {
     switch (sMonSummaryScreen->switchMonTaskState)
     {
@@ -5065,9 +5068,9 @@ static void sub_813B3F0(u8 id)
         sMonSummaryScreen->switchMonTaskState++;
         break;
     case 1:
-        sub_8139C80();
-        sub_8139F20();
-        sub_8139D90();
+        PokeSum_DestroyMonPicSprite();
+        PokeSum_DestroyMonIconSprite();
+        DestroyBallIconObj();
         sMonSummaryScreen->switchMonTaskState++;
         break;
     case 2:
@@ -5114,12 +5117,12 @@ static void sub_813B3F0(u8 id)
         sMonSummaryScreen->switchMonTaskState++;
         break;
     case 5:
-        sub_81360D4();
+        BufferMonInfo();
         sMonSummaryScreen->switchMonTaskState++;
         break;
     case 6:
         if (!sMonSummaryScreen->isEgg)
-            sub_8136350();
+            BufferMonSkills();
 
         sMonSummaryScreen->switchMonTaskState++;
         break;
@@ -5146,8 +5149,8 @@ static void sub_813B3F0(u8 id)
         CopyWindowToVram(sMonSummaryScreen->windowIds[POKESUM_WIN_CONTROLS], 2);
         CopyWindowToVram(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], 2);
         CopyWindowToVram(sMonSummaryScreen->windowIds[6], 2);
-        CopyWindowToVram(sMonSummaryScreen->windowIds[3], 2);
-        CopyWindowToVram(sMonSummaryScreen->windowIds[4], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], 2);
         CopyWindowToVram(sMonSummaryScreen->windowIds[5], 2);
         CopyBgTilemapBufferToVram(0);
         CopyBgTilemapBufferToVram(2);
@@ -5157,7 +5160,7 @@ static void sub_813B3F0(u8 id)
     case 11:
         if (!Overworld_LinkRecvQueueLengthMoreThan2() && !IsLinkRecvQueueAtOverworldMax())
         {
-            sub_813AFC4();
+            PokeSum_CreateSprites();
             PokeSum_TryPlayMonCry();
             sMonSummaryScreen->switchMonTaskState++;
         }
@@ -5169,7 +5172,7 @@ static void sub_813B3F0(u8 id)
     }
 }
 
-static void sub_813B750(u8 curPageIndex)
+static void PokeSum_UpdateWin1ActiveFlag(u8 curPageIndex)
 {
     ClearGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_WIN1_ON);
 
@@ -5225,7 +5228,8 @@ static bool32 MapSecIsInKantoOrSevii(u8 place)
     return FALSE;
 }
 
-static void sub_813B854(void)
+// Unused
+static void ShowPokemonSummaryScreen_NullParty(void)
 {
     ShowPokemonSummaryScreen(0, 0, 0, CB2_ReturnToField, PSS_MODE_NORMAL);
 }

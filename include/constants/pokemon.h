@@ -228,5 +228,13 @@
 #define SPLIT_SPECIAL   0x1
 #define SPLIT_STATUS    0x2
 
+#define MON_PIC_WIDTH 64
+#define MON_PIC_HEIGHT 64
+#define MON_PIC_SIZE (MON_PIC_WIDTH * MON_PIC_HEIGHT / 2)
+
+// used by ShouldIgnoreDeoxysForm
+#define DEOXYS_CHECK_BATTLE_SPRITE      1
+#define DEOXYS_CHECK_TRADE_MAIN         3
+#define DEOXYS_CHECK_BATTLE_ANIM        5
 
 #endif // GUARD_CONSTANTS_POKEMON_H
