@@ -220,9 +220,9 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
     },//moving the window from 21 to 24 has overwritten the border bounds I now understand the width counts the tilemap left position as 1
     [B_WIN_MOVE_TYPE] = {
         .bg = 0,
-        .tilemapLeft = 24,
+        .tilemapLeft = 23,
         .tilemapTop = 57,
-        .width = 5,
+        .width = 6,
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x296

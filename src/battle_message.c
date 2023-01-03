@@ -3070,7 +3070,7 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] = {
     [B_WIN_MOVE_TYPE] = {
         .fillValue = PIXEL_FILL(0xe),
         .fontId = FONT_NORMAL_COPY_1,
-        .x = 6,
+        .x = 0,
         .y = 2,
         .letterSpacing = 0,
         .lineSpacing = 0,
@@ -3079,6 +3079,7 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] = {
         .bgColor = 14,
         .shadowColor = 15,
     },//.x value is probalby not 1 to 1 with window width as width of pp is 5, but x value is 10
+    //changing move type to fit the full type name instead of shortened version
     [B_WIN_PP_REMAINING] = {
         .fillValue = PIXEL_FILL(0xe),
         .fontId = FONT_NORMAL_COPY_1,

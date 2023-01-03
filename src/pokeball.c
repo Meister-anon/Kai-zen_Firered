@@ -1163,7 +1163,7 @@ static void sub_804BD6C(struct Sprite *sprite)
 }
 
 // Unreferenced in RSE, but used here, possibly by mistake.
-void DestroySpriteAndFreeResources2(struct Sprite *sprite)
+void DestroySpriteAndFreeResources_Ball(struct Sprite *sprite)
 {
     DestroySpriteAndFreeResources(sprite);
 }

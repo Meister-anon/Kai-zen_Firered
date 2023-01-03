@@ -454,7 +454,7 @@ const u8 gTypeEffectiveness[378] = // 336 is number of entries x 3 i.e number of
 const u8 gTypeNames[][TYPE_NAME_LENGTH + 1] =
 {
     _("NORMAL"),
-    _("FIGHT"),
+    _("FIGHTING"),
     _("FLYING"),
     _("POISON"),
     _("GROUND"),
@@ -466,8 +466,8 @@ const u8 gTypeNames[][TYPE_NAME_LENGTH + 1] =
     _("FIRE"),
     _("WATER"),
     _("GRASS"),
-    _("ELECTR"),
-    _("PSYCHC"),
+    _("ELECTRIC"),
+    _("PSYCHIC"),
     _("ICE"),
     _("DRAGON"),
     _("DARK"),
