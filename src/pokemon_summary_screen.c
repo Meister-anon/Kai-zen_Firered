@@ -364,13 +364,13 @@ static const struct OamData sMoveSelectionCursorOamData =
     .paletteNum = 0
 };
 
-static const union AnimCmd sUnknown_8463994[] = 
+static const union AnimCmd sMoveSelectionCursorOamAnim_Red[] = 
 {
     ANIMCMD_FRAME(0, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_846399C[] = 
+static const union AnimCmd sMoveSelectionCursorOamAnim_Blue[] = 
 {
     ANIMCMD_FRAME(0x20, 20),
     ANIMCMD_JUMP(0),
@@ -378,8 +378,8 @@ static const union AnimCmd sUnknown_846399C[] =
 
 static const union AnimCmd * const sMoveSelectionCursorOamAnimTable[] =
 {
-    sUnknown_8463994,
-    sUnknown_846399C
+    sMoveSelectionCursorOamAnim_Red,
+    sMoveSelectionCursorOamAnim_Blue
 };
 
 static const struct OamData sStatusAilmentIconOamData = {
@@ -397,64 +397,65 @@ static const struct OamData sStatusAilmentIconOamData = {
     .paletteNum = 0
 };
 
-static const union AnimCmd sUnknown_84639B4[] = 
+static const union AnimCmd sStatusAilmentIconAnim_PSN[] = 
 {
     ANIMCMD_FRAME(0, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_84639BC[] = 
+static const union AnimCmd sStatusAilmentIconAnim_PRZ[] = 
 {
     ANIMCMD_FRAME(4, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_84639C4[] = 
+static const union AnimCmd sStatusAilmentIconAnim_SLP[] = 
 {
     ANIMCMD_FRAME(8, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_84639CC[] = 
+static const union AnimCmd sStatusAilmentIconAnim_FRZ[] = 
 {
     ANIMCMD_FRAME(12, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_84639D4[] = 
+static const union AnimCmd sStatusAilmentIconAnim_BRN[] = 
 {
     ANIMCMD_FRAME(16, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_84639DC[] = 
+static const union AnimCmd sStatusAilmentIconAnim_PKRS[] = 
 {
     ANIMCMD_FRAME(20, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_84639E4[] = 
+static const union AnimCmd sStatusAilmentIconAnim_FNT[] = 
 {
     ANIMCMD_FRAME(24, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_84639EC[] = 
+static const union AnimCmd sStatusAilmentIconAnim_Blank[] = 
 {
     ANIMCMD_FRAME(28, 20),
     ANIMCMD_JUMP(0),
 };
 
+//believe to make icons bounce with menu bounce
 static const union AnimCmd * const sStatusAilmentIconAnimTable[] =
 {
-    sUnknown_84639B4,
-    sUnknown_84639BC,
-    sUnknown_84639C4,
-    sUnknown_84639CC,
-    sUnknown_84639D4,
-    sUnknown_84639DC,
-    sUnknown_84639E4,
-    sUnknown_84639EC
+    sStatusAilmentIconAnim_PSN,
+    sStatusAilmentIconAnim_PRZ,
+    sStatusAilmentIconAnim_SLP,
+    sStatusAilmentIconAnim_FRZ,
+    sStatusAilmentIconAnim_BRN,
+    sStatusAilmentIconAnim_PKRS,
+    sStatusAilmentIconAnim_FNT,
+    sStatusAilmentIconAnim_Blank
 };
 
 static const struct OamData sHpOrExpBarOamData = {
@@ -472,73 +473,73 @@ static const struct OamData sHpOrExpBarOamData = {
     .paletteNum = 0
 };
 
-static const union AnimCmd sUnknown_8463A1C[] = 
+static const union AnimCmd sHpOrExpAnim_0[] = 
 {
     ANIMCMD_FRAME(0, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_8463A24[] = 
+static const union AnimCmd sHpOrExpAnim_1[] = 
 {
     ANIMCMD_FRAME(1, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_8463A2C[] = 
+static const union AnimCmd sHpOrExpAnim_2[] = 
 {
     ANIMCMD_FRAME(2, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_8463A34[] = 
+static const union AnimCmd sHpOrExpAnim_3[] = 
 {
     ANIMCMD_FRAME(3, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_8463A3C[] = 
+static const union AnimCmd sHpOrExpAnim_4[] = 
 {
     ANIMCMD_FRAME(4, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_8463A44[] = 
+static const union AnimCmd sHpOrExpAnim_5[] = 
 {
     ANIMCMD_FRAME(5, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_8463A4C[] = 
+static const union AnimCmd sHpOrExpAnim_6[] = 
 {
     ANIMCMD_FRAME(6, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_8463A54[] = 
+static const union AnimCmd sHpOrExpAnim_7[] = 
 {
     ANIMCMD_FRAME(7, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_8463A5C[] = 
+static const union AnimCmd sHpOrExpAnim_8[] = 
 {
     ANIMCMD_FRAME(8, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_8463A64[] = 
+static const union AnimCmd sHpOrExpAnim_9[] = 
 {
     ANIMCMD_FRAME(9, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_8463A6C[] = 
+static const union AnimCmd sHpOrExpAnim_10[] = 
 {
     ANIMCMD_FRAME(10, 20),
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sUnknown_8463A74[] = 
+static const union AnimCmd sHpOrExpAnim_11[] = 
 {
     ANIMCMD_FRAME(11, 20),
     ANIMCMD_JUMP(0),
@@ -546,22 +547,22 @@ static const union AnimCmd sUnknown_8463A74[] =
 
 static const union AnimCmd * const sHpOrExpBarAnimTable[] =
 {
-    sUnknown_8463A1C,
-    sUnknown_8463A24,
-    sUnknown_8463A2C,
-    sUnknown_8463A34,
-    sUnknown_8463A3C,
-    sUnknown_8463A44,
-    sUnknown_8463A4C,
-    sUnknown_8463A54,
-    sUnknown_8463A5C,
-    sUnknown_8463A64,
-    sUnknown_8463A6C,
-    sUnknown_8463A74
+    sHpOrExpAnim_0,
+    sHpOrExpAnim_1,
+    sHpOrExpAnim_2,
+    sHpOrExpAnim_3,
+    sHpOrExpAnim_4,
+    sHpOrExpAnim_5,
+    sHpOrExpAnim_6,
+    sHpOrExpAnim_7,
+    sHpOrExpAnim_8,
+    sHpOrExpAnim_9,
+    sHpOrExpAnim_10,
+    sHpOrExpAnim_11
 };
 
-static const u16 sUnknown_8463AAC[] = INCBIN_U16("graphics/interface/pokesummary_unk_8463AAC.gbapal");
-static const u16 sUnknown_8463ACC[] = INCBIN_U16("graphics/interface/pokesummary_unk_8463ACC.gbapal");
+static const u16 sPokeSummary_HpBarPalYellow[] = INCBIN_U16("graphics/interface/pokesummary_unk_8463AAC.gbapal");
+static const u16 sPokeSummary_HpBarPalRed[] = INCBIN_U16("graphics/interface/pokesummary_unk_8463ACC.gbapal");
 
 static const struct OamData sPokerusIconObjOamData = {
     .y = 0,
@@ -578,7 +579,7 @@ static const struct OamData sPokerusIconObjOamData = {
     .paletteNum = 0
 };
 
-static const union AnimCmd sUnknown_8463AF4[] = 
+static const union AnimCmd sPokerusIconObjAnim0[] = 
 {
     ANIMCMD_FRAME(0, 20),
     ANIMCMD_JUMP(0),
@@ -586,7 +587,7 @@ static const union AnimCmd sUnknown_8463AF4[] =
 
 static const union AnimCmd * const sPokerusIconObjAnimTable[] =
 {
-    sUnknown_8463AF4
+    sPokerusIconObjAnim0
 };
 
 static const u16 sPokerusIconObjPal[] = INCBIN_U16("graphics/interface/pokesummary_unk_8463B00.gbapal");
@@ -608,7 +609,7 @@ static const struct OamData sStarObjOamData =
     .paletteNum = 0
 };
 
-static const union AnimCmd sUnknown_8463B38[] = 
+static const union AnimCmd sStarObjAnim0[] = 
 {
     ANIMCMD_FRAME(1, 20),
     ANIMCMD_JUMP(0),
@@ -616,31 +617,31 @@ static const union AnimCmd sUnknown_8463B38[] =
 
 static const union AnimCmd * const sStarObjAnimTable[] =
 {
-    sUnknown_8463B38
+    sStarObjAnim0
 };
 
 static const u16 sStarObjPal[] = INCBIN_U16( "graphics/interface/pokesummary_unk_8463B44.gbapal");
 static const u32 sStarObjTiles[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463B64.4bpp.lz");
-static const u32 sUnknown_8463B88[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463B88.bin.lz");
-static const u32 sUnknown_8463C80[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463C80.bin.lz");
+static const u32 sBgTilemap_MovesInfoPage[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463B88.bin.lz");
+static const u32 sBgTilemap_MovesPage[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463C80.bin.lz");
 
 #include "data/text/nature_names.h"
 
-static const u8 * const sUnknown_8463EC4[] = {
-    gUnknown_8419B44,
-    gUnknown_8419B7B,
-    gUnknown_8419BAE,
-    gUnknown_8419BDB
+static const u8 * const sEggHatchTimeTexts[] = {
+    gText_PokeSum_EggHatch_LongTime,
+    gText_PokeSum_EggHatch_SomeTime,
+    gText_PokeSum_EggHatch_Soon,
+    gText_PokeSum_EggHatch_AlmostReady
 };
 
 static const u8 * const sEggOriginTexts[] = {
-    gUnknown_8419A3D,
-    gUnknown_8419B18,
-    gUnknown_8419A6E,
-    gUnknown_8419B18,
-    gUnknown_8419AA2,
-    gUnknown_8419ADE,
-    gUnknown_8419B18
+    gText_PokeSum_EggOrigin_DayCare,
+    gText_PokeSum_EggOrigin_Trade,
+    gText_PokeSum_EggOrigin_TravelingMan,
+    gText_PokeSum_EggOrigin_Trade,
+    gText_PokeSum_EggOrigin_NicePlace,
+    gText_PokeSum_EggOrigin_Spa,
+    gText_PokeSum_EggOrigin_Trade
 };
 
 static const u8 sPrintMoveTextColors[][3] = {
@@ -650,7 +651,7 @@ static const u8 sPrintMoveTextColors[][3] = {
     {0, 5, 6}
 };
 
-static const struct BgTemplate sUnknown_8463EFC[] = 
+static const struct BgTemplate sBgTempaltes[] = 
 {
 	 {
 	 	.bg = 0,
@@ -713,7 +714,7 @@ static const struct BgTemplate sUnknown_8463EFC[] =
 
 static const struct WindowTemplate sWindowTemplates_Permanent_Bg1[] =
 {
-    {
+    [POKESUM_WIN_PAGE_NAME] = {
         .bg = 1,
         .tilemapLeft = 0,
         .tilemapTop = 0,
@@ -722,7 +723,7 @@ static const struct WindowTemplate sWindowTemplates_Permanent_Bg1[] =
         .paletteNum = 7,
         .baseBlock = 0x0258
     },
-    {
+    [POKESUM_WIN_CONTROLS] = {
         .bg = 1,
         .tilemapLeft = 19,
         .tilemapTop = 0,
@@ -731,7 +732,7 @@ static const struct WindowTemplate sWindowTemplates_Permanent_Bg1[] =
         .paletteNum = 7,
         .baseBlock = 0x0272
     },
-    {
+    [POKESUM_WIN_LVL_NICK] = {
         .bg = 1,
         .tilemapLeft = 0,
         .tilemapTop = 2,
@@ -742,6 +743,7 @@ static const struct WindowTemplate sWindowTemplates_Permanent_Bg1[] =
     }
 };
 
+//if above is other windows wonder if here can be right pane
 static const struct WindowTemplate sWindowTemplates_Permanent_Bg2[] = 
 {
     {
@@ -775,7 +777,7 @@ static const struct WindowTemplate sWindowTemplates_Permanent_Bg2[] =
 
 static const struct WindowTemplate sWindowTemplates_Info[] = 
 {
-    {
+    [POKESUM_WIN_INFO_3 - 3] = {
         .bg = 0,
         .tilemapLeft = 15,
         .tilemapTop = 2,
@@ -784,7 +786,7 @@ static const struct WindowTemplate sWindowTemplates_Info[] =
         .paletteNum = 6,
         .baseBlock = 0x0001
     },
-    {
+    [POKESUM_WIN_INFO_4 - 3] = {
         .bg = 0,
         .tilemapLeft = 1,
         .tilemapTop = 14,
@@ -793,7 +795,7 @@ static const struct WindowTemplate sWindowTemplates_Info[] =
         .paletteNum = 6,
         .baseBlock = 0x00b5
     },
-    {
+    [POKESUM_WIN_INFO_5 - 3] = {
         .bg = 0,
         .tilemapLeft = 0,
         .tilemapTop = 0,
@@ -802,7 +804,7 @@ static const struct WindowTemplate sWindowTemplates_Info[] =
         .paletteNum = 0,
         .baseBlock = 0x0000
     },
-    {
+    [POKESUM_WIN_INFO_6 - 3] = {
         .bg = 0,
         .tilemapLeft = 0,
         .tilemapTop = 0,
@@ -815,7 +817,7 @@ static const struct WindowTemplate sWindowTemplates_Info[] =
 
 static const struct WindowTemplate sWindowTemplates_Skills[] = 
 {
-    {
+    [POKESUM_WIN_SKILLS_3 - 3] = {
         .bg = 0,
         .tilemapLeft = 20,
         .tilemapTop = 2,
@@ -824,7 +826,7 @@ static const struct WindowTemplate sWindowTemplates_Skills[] =
         .paletteNum = 6,
         .baseBlock = 0x0001
     },
-    {
+    [POKESUM_WIN_SKILLS_4 - 3] = {
         .bg = 0,
         .tilemapLeft = 6,
         .tilemapTop = 12,
@@ -833,7 +835,7 @@ static const struct WindowTemplate sWindowTemplates_Skills[] =
         .paletteNum = 6,
         .baseBlock = 0x008d
     },
-    {
+    [POKESUM_WIN_SKILLS_5 - 3] = {
         .bg = 0,
         .tilemapLeft = 1,
         .tilemapTop = 16,
@@ -842,7 +844,7 @@ static const struct WindowTemplate sWindowTemplates_Skills[] =
         .paletteNum = 6,
         .baseBlock = 0x00c5
     },
-    {
+    [POKESUM_WIN_SKILLS_6 - 3] = {
         .bg = 0,
         .tilemapLeft = 0,
         .tilemapTop = 0,
@@ -853,9 +855,11 @@ static const struct WindowTemplate sWindowTemplates_Skills[] =
     },
 };
 
+//experiement see how this affects windows maybe is what i need
 static const struct WindowTemplate sWindowTemplates_Moves[] = 
 {
-    {
+    //appears to be window for all move data? move names, pp, even the cancel button was shifted for selection
+    [POKESUM_WIN_MOVES_3 - 3] = {
         .bg = 0,
         .tilemapLeft = 20,
         .tilemapTop = 2,
@@ -864,7 +868,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .paletteNum = 8,
         .baseBlock = 0x0001
     },
-    {
+    [POKESUM_WIN_MOVES_4 - 3] = {
         .bg = 0,
         .tilemapLeft = 0,
         .tilemapTop = 7,
@@ -873,7 +877,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .paletteNum = 6,
         .baseBlock = 0x00b5
     },
-    {
+    [POKESUM_WIN_MOVES_5 - 3] = {
         .bg = 0,
         .tilemapLeft = 15,
         .tilemapTop = 2,
@@ -882,7 +886,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .paletteNum = 6,
         .baseBlock = 0x0178
     },
-    {
+    [POKESUM_WIN_MOVES_6 - 3] = {
         .bg = 0,
         .tilemapLeft = 6,
         .tilemapTop = 4,
@@ -960,8 +964,8 @@ static const s8 sEggPicShakeXDelta_AlmostReadyToHatch[] =
 static const u16 * const sHpBarPals[] =
 {
     gPokeSummary_ExpBarPals,
-    sUnknown_8463AAC,
-    sUnknown_8463ACC,
+    sPokeSummary_HpBarPalYellow,
+    sPokeSummary_HpBarPalRed,
 };
 
 
@@ -1878,13 +1882,13 @@ static void PokeSum_CopyNewBgTilemapBeforePageFlip(void)
         break;
     case PSS_PAGE_MOVES:
         if (sMonSummaryScreen->pageFlipDirection == 1)
-            CopyToBgTilemapBuffer(3, sUnknown_8463C80, 0, 0);
+            CopyToBgTilemapBuffer(3, sBgTilemap_MovesPage, 0, 0);
         else
-            CopyToBgTilemapBuffer(3, sUnknown_8463B88, 0, 0);
+            CopyToBgTilemapBuffer(3, sBgTilemap_MovesInfoPage, 0, 0);
 
         break;
     case PSS_PAGE_MOVES_INFO:
-        CopyToBgTilemapBuffer(3, sUnknown_8463B88, 0, 0);
+        CopyToBgTilemapBuffer(3, sBgTilemap_MovesInfoPage, 0, 0);
         break;
     }
 }
@@ -1929,9 +1933,9 @@ static void CB2_SetUpPSS(void)
         break;
     case 10:
         if (sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE || sMonSummaryScreen->mode == PSS_MODE_FORGET_MOVE)
-            CopyToBgTilemapBuffer(3, sUnknown_8463C80, 0, 0);
+            CopyToBgTilemapBuffer(3, sBgTilemap_MovesPage, 0, 0);
         else
-            CopyToBgTilemapBuffer(3, sUnknown_8463B88, 0, 0);
+            CopyToBgTilemapBuffer(3, sBgTilemap_MovesInfoPage, 0, 0);
 
         PokeSum_DrawBg3Tilemap();
         break;
@@ -2360,7 +2364,7 @@ static void PokeSum_Setup_InitGpu(void)
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
 
     ResetBgsAndClearDma3BusyFlags(0);
-    InitBgsFromTemplates(0, sUnknown_8463EFC, NELEMS(sUnknown_8463EFC));
+    InitBgsFromTemplates(0, sBgTempaltes, NELEMS(sBgTempaltes));
 
     ChangeBgX(0, 0, 0);
     ChangeBgY(0, 0, 0);
@@ -2493,7 +2497,7 @@ static void PrintInfoPage(void)
         if (sMonSummaryScreen->isBadEgg)
             hatchMsgIndex = 0;
 
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 7, 45, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sUnknown_8463EC4[hatchMsgIndex]);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 7, 45, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sEggHatchTimeTexts[hatchMsgIndex]);
     }
 }
 
@@ -2530,7 +2534,7 @@ static void PrintMovesPage(void)
                                          3, GetMoveNamePrinterYpos(4),
                                          sPrintMoveTextColors[0], TEXT_SKIP_DRAW, gFameCheckerText_Cancel);
     }
-}
+}//ok this function doenst' matter its just for displaying the cancel button when you select a move, and for telling the main funtion below how to loop
 
 #define GetMovePpPrinterYpos(x) ((x) * 28 + 16)
 //function for printing pp values & changing position
@@ -2545,8 +2549,13 @@ static void PokeSum_PrintMoveName(u8 i)
     if (i == 4)//used for move slot loop, believe i==4 is moves being learned
         curPP = maxPP;
 
+    //this line prints the move names in the windows I got it to move how I want by swapping all GetMoveNamePrinterYpos & GetMovePpPrinterYpos in this funtion
+    //I have the y value I just need to move this further to the left now
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 3, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
-
+    //making x value after font 0 did move it over without shifting the y value but not nearly enough, it was like the text instead of moving the window..
+    //actually I think that is what it does, its like battle_message.c its only moving text within the window not the window itself hmm
+    //tried a negative number onfirmed can go below zero to move text left, also confirm the x y values are only for text need to move window itslef some how
+    //I think it may be a matter of changing windowIds,  think window ID has a fixed coordinate?
     if (sMonSummaryScreen->moveIds[i] == 0 || (curPP == maxPP))//
         colorIdx = 0;
     else if (curPP == 0)
@@ -2928,7 +2937,7 @@ static void PokeSum_DrawMoveTypeIcons(void)
 
     if (sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE)
         BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->moveTypes[4] + 1, 3, GetMoveNamePrinterYpos(4));
-}
+}// movetype 4 is after all moves believe in this case it relates to when you have selected a move and hover over the cancel button
 
 static void PokeSum_PrintPageHeaderText(u8 curPageIndex) //
 {
