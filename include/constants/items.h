@@ -445,8 +445,8 @@
 #define ITEM_ULTIMA_BRACE 375
 #define ITEM_EV_SHACKLES  376
 // Secondary Set of Use items  (mostly for evo) 
-#define ITEM_UP_GRADE 377  //need to change these items in other items.h so they are evo items.
-#define ITEM_ELECTIRIZER 378
+#define ITEM_UP_GRADE 377  //need to change these items in items.json so they are evo items.
+#define ITEM_ELECTIRIZER 378 //don't forget to list in evolutions table as well
 #define ITEM_MAGMARIZER 379
 #define ITEM_DUBIOUS_DISC 380
 #define ITEM_REAPER_CLOTH 381

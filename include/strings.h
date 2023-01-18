@@ -1536,16 +1536,16 @@ extern const u8 gText_PokeSum_PageName_PokemonSkills[];
 extern const u8 gText_PokeSum_Controls_Page[];
 extern const u8 gText_PokeSum_Controls_PickDelete[];
 extern const u8 gUnknown_8419CB9[];
-extern const u8 gUnknown_8419B44[];
-extern const u8 gUnknown_8419B7B[];
-extern const u8 gUnknown_8419BAE[];
-extern const u8 gUnknown_8419BDB[];
-extern const u8 gUnknown_8419A3D[];
-extern const u8 gUnknown_8419B18[];
-extern const u8 gUnknown_8419A6E[];
-extern const u8 gUnknown_8419B18[];
-extern const u8 gUnknown_8419AA2[];
-extern const u8 gUnknown_8419ADE[];
-extern const u8 gUnknown_8419B18[];
+extern const u8 gText_PokeSum_EggHatch_LongTime[];
+extern const u8 gText_PokeSum_EggHatch_SomeTime[];
+extern const u8 gText_PokeSum_EggHatch_Soon[];
+extern const u8 gText_PokeSum_EggHatch_AlmostReady[];
+extern const u8 gText_PokeSum_EggOrigin_DayCare[];
+extern const u8 gText_PokeSum_EggOrigin_Trade[];
+extern const u8 gText_PokeSum_EggOrigin_TravelingMan[];
+extern const u8 gText_PokeSum_EggOrigin_Trade[];
+extern const u8 gText_PokeSum_EggOrigin_NicePlace[];
+extern const u8 gText_PokeSum_EggOrigin_Spa[];
+extern const u8 gText_PokeSum_EggOrigin_Trade[];
 
 #endif //GUARD_STRINGS_H

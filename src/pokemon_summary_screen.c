@@ -697,6 +697,15 @@ static const struct BgTemplate sBgTempaltes[] =
 #define POKESUM_WIN_RIGHT_PANE       3
 #define POKESUM_WIN_TRAINER_MEMO     4
 
+//PokeSum_CreateWindows function  loops 4 times 0-3
+//to create 4 windows/templates for each page of the 3 summary screens
+//loop is 0-3 but then functions adds 3 to the loop value
+//which is why these constants are 3-6
+//this is important because I could potentially use those functionns
+//to create new window templates to more easily split up the existing ui.
+
+//PokeSum_AddWindows is used via PokeSum_CreateWindows so look into that as well
+
 #define POKESUM_WIN_INFO_3           3
 #define POKESUM_WIN_INFO_4           4
 #define POKESUM_WIN_INFO_5           5
@@ -859,6 +868,9 @@ static const struct WindowTemplate sWindowTemplates_Skills[] =
 static const struct WindowTemplate sWindowTemplates_Moves[] = 
 {
     //appears to be window for all move data? move names, pp, even the cancel button was shifted for selection
+    //since all these things moves together the fix is either separting them into individual windows
+    //or to move this left enough for what I want and then compensate by making the width much wider (since it just extends it right)
+    //and then adjusting the x position for the pp and cancel button until it looks like it wasn't moved...
     [POKESUM_WIN_MOVES_3 - 3] = {
         .bg = 0,
         .tilemapLeft = 20,
@@ -867,7 +879,11 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .height = 18,
         .paletteNum = 8,
         .baseBlock = 0x0001
-    },
+    },//is the baseblock telling it what tile to use or is that the actual window so if I swap the base block can I get it to move the text values 
+    //associated with the window to the position of the other stuff?   like make it make the window in a different place?
+
+    //appears to be left window move data, only noticeable when selecting a move,
+    //shifts here affect move power, accuracy, and effect/description windows/values
     [POKESUM_WIN_MOVES_4 - 3] = {
         .bg = 0,
         .tilemapLeft = 0,
@@ -877,6 +893,10 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .paletteNum = 6,
         .baseBlock = 0x00b5
     },
+    //shifts the type icons for the moves on the right panel
+    //apparently mon pic is on a different layer than the text
+    //moved the type icon and it appeared above the mon name
+    //but behind the mon pic hmm
     [POKESUM_WIN_MOVES_5 - 3] = {
         .bg = 0,
         .tilemapLeft = 15,
@@ -886,6 +906,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .paletteNum = 6,
         .baseBlock = 0x0178
     },
+    //moves the mon type icons that appear when moves are selected
     [POKESUM_WIN_MOVES_6 - 3] = {
         .bg = 0,
         .tilemapLeft = 6,
@@ -977,6 +998,9 @@ static const u16 * const sHpBarPals[] =
         (ptr) = NULL;                 \
     }                                 \
 }
+
+#define FLIP_RIGHT 1
+#define FLIP_LEFT 0
 
 void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, MainCallback savedCallback, u8 mode)
 {
@@ -2066,11 +2090,11 @@ static u8 PokeSum_Setup_BufferStrings(void)
 
         break;
     case 1:
-        if (sMonSummaryScreen->isEgg == 0)
+        if (sMonSummaryScreen->isEgg == 0) //if false
             BufferMonSkills();
         break;
     case 2:
-        if (sMonSummaryScreen->isEgg == 0)
+        if (sMonSummaryScreen->isEgg == 0) //if false
             BufferMonMoves();
         break;
     default:
@@ -2128,7 +2152,7 @@ static void BufferMonInfo(void) // seems to be PSS_PAGE_INFO or data for it
 
     if (dexNum == SPECIES_NIDORAN_M || dexNum == SPECIES_NIDORAN_F)
         if (StringCompare(sMonSummaryScreen->summary.nicknameStrBuf, gSpeciesNames[dexNum]) == 0)
-            StringCopy(sMonSummaryScreen->summary.genderSymbolStrBuf, gString_Dummy);
+            StringCopy(sMonSummaryScreen->summary.genderSymbolStrBuf, gString_Dummy); //important may use for other gender difference mon
 
     GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_OT_NAME, tempStr);
     StringCopyN_Multibyte(sMonSummaryScreen->summary.otNameStrBuf, tempStr, OT_NAME_LENGTH);
@@ -2465,7 +2489,7 @@ static void PokeSum_PrintRightPaneText(void)
     }
 
     PutWindowTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE]);
-}
+}//could be relevant
 
 static void PrintInfoPage(void)
 {
@@ -3164,7 +3188,7 @@ static void PokeSum_CreateWindows(void)
         sMonSummaryScreen->windowIds[i] = AddWindow(&sWindowTemplates_Permanent_Bg1[i]);
 
     for (i = 0; i < 4; i++)
-        switch (sMonSummaryScreen->curPageIndex)
+        switch (sMonSummaryScreen->curPageIndex)//loops 4 times
         {
         case PSS_PAGE_INFO:
             sMonSummaryScreen->windowIds[i + 3] = AddWindow(&sWindowTemplates_Info[i]);
@@ -3175,11 +3199,11 @@ static void PokeSum_CreateWindows(void)
         case PSS_PAGE_MOVES:
         case PSS_PAGE_MOVES_INFO:
             sMonSummaryScreen->windowIds[i + 3] = AddWindow(&sWindowTemplates_Moves[i]);
-            break;
+            break;//possibly make 2 more loops for move info page to split the template up, would need loop to 6 instead of 4
         default:
             break;
         }
-}
+}//pretty much to separate pp, and cancel button from window for move names
 
 static void PokeSum_AddWindows(u8 curPageIndex)
 {
@@ -3227,7 +3251,7 @@ static void PokeSum_AddWindows(u8 curPageIndex)
         }
 }
 
-static void PokeSum_RemoveWindows(u8 curPageIndex)
+static void PokeSum_RemoveWindows(u8 curPageIndex)//loops to 6 because windowId are 3 more than windowtemplate 6 is actually value 6 in remove window
 {
     u8 i;
 

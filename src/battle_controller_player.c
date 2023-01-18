@@ -298,14 +298,14 @@ static void HandleInputChooseAction(void)
             if (gBattleBufferA[gActiveBattler][1] == B_ACTION_USE_ITEM) //if first pokemon has chosen actoin use item
             { //and player presses B button with second pokemon.
                 // Add item to bag if it is a ball
-                if (itemId <= ITEM_PREMIER_BALL)
-                    AddBagItem(itemId, 1);
+                if (itemId <= ITEM_PREMIER_BALL)//!important keep in mind to put all pokeballs below premier and just increment
+                    AddBagItem(itemId, 1);//also make note to make didffernet type of premier ball for each tier of pokeball so its actually useful.
                 else
-                    return;
-            }
+                    return; //for great ball use gs premier ball (throwback to gs ball from gen 2) or just gs ball
+            }//can have ultra ball version be omega ball?  idea is each unique premier style ball will have catch rate equal to what you have to purchase to get it
             PlaySE(SE_SELECT);
             BtlController_EmitTwoReturnValues(1, B_ACTION_CANCEL_PARTNER, 0);
-            PlayerBufferExecCompleted();
+            PlayerBufferExecCompleted();//since gs ball is cool and has lore I'll make its catch rate higher, closer to an ultra ball
         }
     }
     else if (JOY_NEW(START_BUTTON)) //broken? haven't seen thsi work yet
