@@ -181,9 +181,10 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .paletteNum = 5,
         .baseBlock = 0x300
     },
+    //adjusted so (MoveSelectionCreateCursorAt) will use this window position to update itself
     [B_WIN_MOVE_NAME_2] = {
         .bg = 0,
-        .tilemapLeft = 12,
+        .tilemapLeft = 13,
         .tilemapTop = 55,
         .width = 8,
         .height = 2,
@@ -203,7 +204,7 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
     },
     [B_WIN_MOVE_NAME_4] = {
         .bg = 0,
-        .tilemapLeft = 12,
+        .tilemapLeft = 13,
         .tilemapTop = 57,
         .width = 8,
         .height = 2,

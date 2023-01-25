@@ -12,6 +12,7 @@
 #include "task.h"
 #include "util.h"
 #include "battle.h"
+#include "src/battle_bg.c"
 #include "battle_anim.h"
 #include "battle_controllers.h"
 #include "battle_interface.h"
@@ -1464,23 +1465,32 @@ static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
 //used StringCopyPadded to have 4 elements to use str_conv right aline it doens't actually right align, but correctly displayed movetype
 //no idea where to go from here.
 
-void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 arg1)//will change box size & move position so this is relevant
+#define MOVE_NAME_2_X_VALUE [sStandardBattleWindowTemplates[B_WIN_MOVE_NAME_2].tilemapLeft - 2]
+#define MOVE_NAME_2_Y_VALUE [sStandardBattleWindowTemplates[B_WIN_MOVE_NAME_2].tilemapTop]
+
+void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 arg1) //actually I think this may not be what i need its create cursor
+//it may just be the start position, which is move 1
 {
     u16 src[2];
 
     src[0] = arg1 + 1;
-    src[1] = arg1 + 2;
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 9 * (cursorPosition & 1) + 1, 55 + (cursorPosition & 2), 1, 2, 0x11);
+    src[1] = arg1 + 2; //changing  + 2 value seems to change tilemap/symbol
+    CopyToBgTilemapBufferRect_ChangePalette(0, src, MOVE_NAME_2_X_VALUE * (cursorPosition & 1) + 1,
+        MOVE_NAME_2_Y_VALUE + (cursorPosition & 2), 1, 2, 0x11);//55 just changes y value
     CopyBgTilemapBufferToVram(0);
-}
+}//figured it out change the multiplyer to move x value, 9 *  12 is too high, it removes any valueu below it when it moves so needs perfect space
+//11 before cursor & 1 represents tilemapleft    55 before cursor & 2 represents tilemaptop
+//not sure what src[0] & src[1] do but I know the relation to the window so I'll just use that
 
-void MoveSelectionDestroyCursorAt(u8 cursorPosition)//will change box size & move position so this is relevant
+
+void MoveSelectionDestroyCursorAt(u8 cursorPosition)//with these defines in the 2 functions cursor position will auto update with move name window position changes
 {
     u16 src[2];
 
     src[0] = 32;
     src[1] = 32;
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 9 * (cursorPosition & 1) + 1, 55 + (cursorPosition & 2), 1, 2, 0x11);
+    CopyToBgTilemapBufferRect_ChangePalette(0, src, MOVE_NAME_2_X_VALUE * (cursorPosition & 1) + 1,
+        MOVE_NAME_2_Y_VALUE + (cursorPosition & 2), 1, 2, 0x11);
     CopyBgTilemapBufferToVram(0);
 }
 
