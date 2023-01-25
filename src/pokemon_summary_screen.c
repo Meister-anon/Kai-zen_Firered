@@ -716,10 +716,14 @@ static const struct BgTemplate sBgTempaltes[] =
 #define POKESUM_WIN_SKILLS_5         5
 #define POKESUM_WIN_SKILLS_6         6
 
-#define POKESUM_WIN_MOVES_3          3
-#define POKESUM_WIN_MOVES_4          4
-#define POKESUM_WIN_MOVES_5          5
-#define POKESUM_WIN_MOVES_6          6
+#define POKESUM_WIN_MOVES_3          3  //mon move names & pp window
+#define POKESUM_WIN_MOVES_4          4  //move selct descriptions & info
+#define POKESUM_WIN_MOVES_5          5  //Type Icon Move 1
+#define POKESUM_WIN_MOVES_6          6  //Mon Type Icons
+#define POKESUM_WIN_MOVES_5_1        7  //Type Icon Move 2
+#define POKESUM_WIN_MOVES_5_2        8  //Type Icon Move 3
+#define POKESUM_WIN_MOVES_5_3        9  //Type Icon Move 4
+#define POKESUM_WIN_MOVES_5_4        10  //Type Icon Move 5 potentially for new move learning?
 
 static const struct WindowTemplate sWindowTemplates_Permanent_Bg1[] =
 {
@@ -873,9 +877,9 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
     //and then adjusting the x position for the pp and cancel button until it looks like it wasn't moved...
     [POKESUM_WIN_MOVES_3 - 3] = {
         .bg = 0,
-        .tilemapLeft = 20,
+        .tilemapLeft = 16,
         .tilemapTop = 2,
-        .width = 10,
+        .width = 13,
         .height = 18,
         .paletteNum = 8,
         .baseBlock = 0x0001
@@ -891,7 +895,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .width = 15,
         .height = 13,
         .paletteNum = 6,
-        .baseBlock = 0x00b5
+        .baseBlock = 0x00e5
     },
     //shifts the type icons for the moves on the right panel
     //apparently mon pic is on a different layer than the text
@@ -904,7 +908,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .width = 5,
         .height = 18,
         .paletteNum = 6,
-        .baseBlock = 0x0178
+        .baseBlock = 0x01a8
     },
     //moves the mon type icons that appear when moves are selected
     [POKESUM_WIN_MOVES_6 - 3] = {
@@ -914,7 +918,46 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .width = 9,
         .height = 2,
         .paletteNum = 6,
-        .baseBlock = 0x01d2
+        .baseBlock = 0x0202
+    },
+    [POKESUM_WIN_MOVES_5_1 - 3] = {
+        .bg = 0,
+        .tilemapLeft = 15,
+        .tilemapTop = 6,
+        .width = 5,
+        .height = 2,
+        .paletteNum = 6,
+        .baseBlock = 0x0232
+    },
+    [POKESUM_WIN_MOVES_5_2 - 3] = {
+        .bg = 0,
+        .tilemapLeft = 15,
+        .tilemapTop = 9,
+        .width = 5,
+        .height = 3,
+        .paletteNum = 6,
+        .baseBlock = 0x0242
+    },//changed tilemaptop to same as 5, proves the window isn't getting written/added at all
+    //compared in tilemap studio and values for tilemap seem to match, and surprsingly my y position matches perfectly
+    //the 3rd move window, isn't really even, its a bit high, so I set the height higher so I can have more room to lower it later
+    //just need to find how to get these to display
+    [POKESUM_WIN_MOVES_5_3 - 3] = {
+        .bg = 0,
+        .tilemapLeft = 15,
+        .tilemapTop = 13,
+        .width = 5,
+        .height = 2,
+        .paletteNum = 6,
+        .baseBlock = 0x0252
+    },
+    [POKESUM_WIN_MOVES_5_4 - 3] = {
+        .bg = 0,
+        .tilemapLeft = 15,
+        .tilemapTop = 18,
+        .width = 5,
+        .height = 2,
+        .paletteNum = 6,
+        .baseBlock = 0x0262
     },
 };
 
@@ -2555,7 +2598,7 @@ static void PrintMovesPage(void)
             PokeSum_PrintMoveName(4);
         else
             AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL,
-                                         3, GetMoveNamePrinterYpos(4),
+                                         33, GetMoveNamePrinterYpos(4),
                                          sPrintMoveTextColors[0], TEXT_SKIP_DRAW, gFameCheckerText_Cancel);
     }
 }//ok this function doenst' matter its just for displaying the cancel button when you select a move, and for telling the main funtion below how to loop
@@ -2575,7 +2618,7 @@ static void PokeSum_PrintMoveName(u8 i)
 
     //this line prints the move names in the windows I got it to move how I want by swapping all GetMoveNamePrinterYpos & GetMovePpPrinterYpos in this funtion
     //I have the y value I just need to move this further to the left now
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 3, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 1, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
     //making x value after font 0 did move it over without shifting the y value but not nearly enough, it was like the text instead of moving the window..
     //actually I think that is what it does, its like battle_message.c its only moving text within the window not the window itself hmm
     //tried a negative number onfirmed can go below zero to move text left, also confirm the x y values are only for text need to move window itslef some how
@@ -2604,13 +2647,13 @@ static void PokeSum_PrintMoveName(u8 i)
             colorIdx = 1;
     }
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 36, GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_PokeSum_PP);
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 46 + sMonSkillsPrinterXpos->curPp[i], GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 64, GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_PokeSum_PP);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 74 + sMonSkillsPrinterXpos->curPp[i], GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
 
     if (sMonSummaryScreen->moveIds[i] != MOVE_NONE)
     {
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 58, GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 64 + sMonSkillsPrinterXpos->maxPp[i], GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 86, GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 92 + sMonSkillsPrinterXpos->maxPp[i], GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
     }
 }//AddTextPrinter functions above put the pp symbol back slash and current & max pp values in menu
 

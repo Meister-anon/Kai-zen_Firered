@@ -57,7 +57,7 @@ static void PutLevelAndGenderOnLvlUpBox(void);
 s16 atk_diff(void);
 s16 spatk_diff(void); //hopefully this works, and I don't actually need to define these in the .h,
 //since its not static
-bool8 IsBattlerProtected(u8 battlerId, u16 move);
+static bool8 IsBattlerProtected(u8 battlerId, u16 move);//gabe me compiler double definition error so made static
 //static void ProtectBreak(void); add back later when I figure it out
 
 static void SpriteCB_MonIconOnLvlUpBox(struct Sprite *sprite);
@@ -1297,16 +1297,14 @@ static bool8 JumpIfMoveAffectedByProtect(u16 move)
     return affected;
 }
 
-bool8 IsBattlerProtected(u8 battlerId, u16 move)//IMPORTANT change to false if protectbreak condition met
+static bool8 IsBattlerProtected(u8 battlerId, u16 move)//IMPORTANT change to false if protectbreak condition met
 { //setprotectlike does the protection, then hre I can undo it when this gets checked in attack canceleror
+    //make sure add check for if move is protect affected to all protectstructs listed below
 
-
-    if (gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED)
+    if ((gProtectStructs[battlerId].protected) && (gBattleMoves[gCurrentMove].flags & FLAG_PROTECT_AFFECTED))
         return TRUE;
     else if (gBattleMoves[move].effect == MOVE_EFFECT_FEINT)
         return FALSE;
-    else if (gProtectStructs[battlerId].protected)
-        return TRUE;
     else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD
         && gBattleMoves[move].target & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
         return TRUE;
@@ -3562,7 +3560,7 @@ static void atk1E_jumpifability(void)
             hasAbility = TRUE;
         }
         break;
-    case BS_NOT_ATTACKER_SIDE:
+    case BS_TARGET_SIDE:
         battlerId = AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, gBattlerAttacker, ability, 0, 0);
         if (battlerId)
         {

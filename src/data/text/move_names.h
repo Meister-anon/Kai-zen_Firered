@@ -1,4 +1,4 @@
-const u8 gMoveNames[][13] = {
+const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("-$$$$$$"),
     _("POUND"),
     _("KARATE CHOP"),
@@ -8,7 +8,7 @@ const u8 gMoveNames[][13] = {
     _("PAY DAY"),
     _("FIRE PUNCH"),
     _("ICE PUNCH"),
-    _("THUNDERPUNCH"),
+    _("THUNDER PUNCH"),
     _("SCRATCH"),
     _("VICEGRIP"),
     _("GUILLOTINE"),

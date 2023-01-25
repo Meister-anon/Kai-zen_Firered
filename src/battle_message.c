@@ -1173,7 +1173,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_FRISKACTIVATES - BATTLESTRINGS_TABLE_START]                = sText_FriskActivates,
     [STRINGID_UNNERVEENTERS - BATTLESTRINGS_TABLE_START]                 = sText_UnnerveEnters,
     [STRINGID_HARVESTBERRY - BATTLESTRINGS_TABLE_START]                  = sText_HarvestBerry,
-    [STRINGID_MOXIEATKRISE - BATTLESTRINGS_TABLE_START]                  = sText_MoxieAtkRise,
+    [STRINGID_LASTABILITYRAISEDSTAT - BATTLESTRINGS_TABLE_START]         = sText_MoxieAtkRise,
     [STRINGID_MAGICBOUNCEACTIVATES - BATTLESTRINGS_TABLE_START]          = sText_MagicBounceActivates,
     [STRINGID_PROTEANTYPECHANGE - BATTLESTRINGS_TABLE_START]             = sText_ProteanTypeChange,
     [STRINGID_SYMBIOSISITEMPASS - BATTLESTRINGS_TABLE_START]             = sText_SymbiosisItemPass,
@@ -1644,7 +1644,7 @@ const u8 gText_BattleMenu[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW 13 14 15}FIG
 const u8 gUnknown_83FE747[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW 13 14 15}BALL{CLEAR_TO 56}BAIT\nROCK{CLEAR_TO 56}RUN");
 const u8 gText_MoveInterfacePP[] = _("PP ");
 const u8 gText_MoveInterfaceType[] = _("TYPE/");
-const u8 gUnknown_83FE770[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW 13 14 15}");
+const u8 gText_MoveInterfaceDynamicColors[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW 13 14 15}");
 const u8 gUnknown_83FE779[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW 13 14 15}どの わざを\nわすれさせたい?");
 const u8 gText_BattleYesNoChoice[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW 13 14 15}Yes\nNo");
 const u8 gText_BattleSwitchWhich[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW 13 14 15}Switch\nwhich?");
@@ -1659,6 +1659,7 @@ const u8 gUnknown_83FE7DC[] = _("DEFENSE");
 const u8 gUnknown_83FE7E4[] = _("SP. ATK");
 const u8 gUnknown_83FE7EC[] = _("SP. DEF");
 
+//unused
 const u8 *const gUnknown_83FE7F4[] = {
     gUnknown_83FE7C7,
     gUnknown_83FE7E4,

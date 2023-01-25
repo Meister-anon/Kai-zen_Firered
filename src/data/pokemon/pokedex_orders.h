@@ -1,5 +1,6 @@
 const u16 gPokedexOrder_Alphabetical[] =
 {
+    //can find each list by searching u16, when I'm done building learn git and make branch for pokedex updates
     NATIONAL_DEX_ABOMASNOW,
     NATIONAL_DEX_ABRA,
     NATIONAL_DEX_ABSOL,
@@ -843,8 +844,8 @@ const u16 gPokedexOrder_Alphabetical[] =
     NATIONAL_DEX_TYRUNT,
 
     NATIONAL_DEX_UMBREON,
-    NATIONAL_DEX_UNFEZANT,
-    NATIONAL_DEX_UNOWN,
+    NATIONAL_DEX_UNFEZANT_M,    //need later find how I'll setup gender & form variants for dex entries etc.
+    NATIONAL_DEX_UNOWN,         //as I want them to be offshoots of the main entry
     NATIONAL_DEX_URSARING,
     NATIONAL_DEX_URSHIFU,
     NATIONAL_DEX_UXIE,
@@ -1435,7 +1436,7 @@ const u16 gPokedexOrder_Weight[] =
     NATIONAL_DEX_LARVESTA,
     NATIONAL_DEX_VAPOREON,
     NATIONAL_DEX_SIMIPOUR,
-    NATIONAL_DEX_UNFEZANT,
+    NATIONAL_DEX_UNFEZANT_M,
     NATIONAL_DEX_QUILLADIN,
     NATIONAL_DEX_BEEDRILL,
     NATIONAL_DEX_SANDSLASH,
@@ -2598,7 +2599,7 @@ const u16 gPokedexOrder_Height[] =
     NATIONAL_DEX_LUMINEON,
     NATIONAL_DEX_MAGNEZONE,
     NATIONAL_DEX_STOUTLAND,
-    NATIONAL_DEX_UNFEZANT,
+    NATIONAL_DEX_UNFEZANT_M,
     NATIONAL_DEX_GURDURR,
     NATIONAL_DEX_LEAVANNY,
     NATIONAL_DEX_WHIRLIPEDE,
@@ -3060,7 +3061,7 @@ const u16 gPokedexOrder_Height[] =
 	.set TYPE_ICE,      0x0f
 	.set TYPE_DRAGON,   0x10
 	.set TYPE_DARK,     0x11
-	.set TYPE_FAIRY,	0x1*/
+	.set TYPE_FAIRY,	0x12*/
 const u16 gPokedexOrder_Type[] =
 {
     SPECIES_RATTATA, //NORMAL

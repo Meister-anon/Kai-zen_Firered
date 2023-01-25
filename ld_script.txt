@@ -44,10 +44,10 @@ SECTIONS {
 
     . = 0x8000000;
     /* added src/rom_header.o(.text); from Griffin wasn't from commit was extra but not in my base repo; remove if causes issue */
+    /*it did along with rom_header_gf.o removed both should fix build issue */
     .text :
     ALIGN(4)
     {
-        src/rom_header_gf.o(.text*);
         src/crt0.o(.text);
         src/main.o(.text);
         src/gpu_regs.o(.text);

@@ -22,13 +22,18 @@
 #define sBATTLE_STYLE gBattleScripting + 0x1D
 #define sLVLBOX_STATE gBattleScripting + 0x1E
 #define sLEARNMOVE_STATE gBattleScripting + 0x1F
-#define sFIELD_20 gBattleScripting + 0x20
+#define sSAVED_BATTLER gBattleScripting + 0x20
 #define sRESHOW_MAIN_STATE gBattleScripting + 0x21
 #define sRESHOW_HELPER_STATE gBattleScripting + 0x22
 #define sFIELD_23 gBattleScripting + 0x23
 #define sWINDOWS_TYPE gBattleScripting + 0x24
 #define sMULTIPLAYER_ID gBattleScripting + 0x25
 #define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x26
+#define sSAVED_STAT_CHANGER gBattleScripting + 0x27
+#define sSHIFT_SWITCHED gBattleScripting + 0x28
+#define sILLUSION_NICK_HACK gBattleScripting + 0x29
+#define sSAVED_DMG gBattleScripting + 0x2A
+
 
 #define cEFFECT_CHOOSER gBattleCommunication + 3
 #define cMULTISTRING_CHOOSER gBattleCommunication + 5
@@ -43,12 +48,13 @@
 #define BS_UNKNOWN_6                6 // for openpartyscreen
 #define BS_BATTLER_0                7
 #define BS_ATTACKER_SIDE            8 // for atk1E_jumpifability
-#define BS_NOT_ATTACKER_SIDE        9 // for atk1E_jumpifability
+#define BS_TARGET_SIDE				9 // for atk1E_jumpifability
 #define BS_SCRIPTING                10
 #define BS_PLAYER1                  11
 #define BS_OPPONENT1                12
-#define BS_PLAYER2                  13 // for atk98_updatestatusicon
+#define BS_PLAYER2                  13 // for atk98_updatestatusicon  /?? i don't remember tis
 #define BS_OPPONENT2                14
+#define BS_ABILITY_BATTLER          15	//port from emerald
 
 // used for openpartyscreen
 #define OPEN_PARTY_ALLOW_CANCEL     0x80
@@ -225,8 +231,10 @@
 // atk4F, a flag used for the jumpifcantswitch command
 #define ATK4F_DONT_CHECK_STATUSES   0x80
 
+//equivalent of STAT_BUFF_ALLOW_PTR  just has different name
+
 // statchange defines
-#define STAT_CHANGE_BS_PTR                  0x1
+#define STAT_CHANGE_BS_PTR                  0x1 // If set, allow use of jumpptr. Set in every use of statbuffchange
 #define STAT_CHANGE_NOT_PROTECT_AFFECTED    0x20
 
 // atk48

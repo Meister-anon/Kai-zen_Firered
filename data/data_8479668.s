@@ -4,7 +4,7 @@
 #include "constants/pokemon.h"
 #include "constants/easy_chat.h"
 #include "constants/facility_trainer_classes.h"
-#include "data/text/move_descriptions.h"
+
 
 #define MALE 0
 #define FEMALE 1
@@ -437,10 +437,10 @@ gMoveDescriptionPointers:: @ 84886E8
     .4byte gBRAVE_BIRDDescription
     .4byte gEARTH_POWERDescription
     .4byte gSWITCHEROODescription
-    .4byte gHyperBeamDescription
+    .4byte gMoveDescription_HyperBeam
     .4byte gNASTY_PLOTDescription
     .4byte gBULLET_PUNCHDescription
-    .4byte gRevengeDescription
+    .4byte gMoveDescription_Revenge
     .4byte gICE_SHARDDescription
     .4byte gSHADOW_CLAWDescription
     .4byte gTHUNDER_FANGDescription
@@ -460,7 +460,7 @@ gMoveDescriptionPointers:: @ 84886E8
     .4byte gLAVA_PLUMEDescription
     .4byte gLEAF_STORMDescription
     .4byte gPOWER_WHIPDescription
-    .4byte gHyperBeamDescription
+    .4byte gMoveDescription_HyperBeam
     .4byte gCROSS_POISONDescription
     .4byte gGUNK_SHOTDescription
     .4byte gIRON_HEADDescription
@@ -553,7 +553,7 @@ gMoveDescriptionPointers:: @ 84886E8
     .4byte gDRILL_RUNDescription
     .4byte gDUAL_CHOPDescription
     .4byte gHEART_STAMPDescription
-    .4byte gMegaDrainDescription
+    .4byte gMoveDescription_MegaDrain
     .4byte gCHIP_AWAYDescription
     .4byte gRAZOR_SHELLDescription
     .4byte gHEAVY_SLAMDescription
@@ -631,7 +631,7 @@ gMoveDescriptionPointers:: @ 84886E8
     .4byte gHOLD_HANDSDescription
     .4byte gBABYDOLL_EYESDescription
     .4byte gNUZZLEDescription
-    .4byte gFalseSwipeDescription
+    .4byte gMoveDescription_FalseSwipe
     .4byte gINFESTATIONDescription
     .4byte gPOWER_UP_PUNCHDescription
     .4byte gDRAINING_KISSDescription

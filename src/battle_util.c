@@ -71,6 +71,15 @@ u8 GetBattlerForBattleScript(u8 caseId)
     case BS_OPPONENT1:
         ret = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
         break;
+    case BS_PLAYER2:
+        ret = GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT);
+        break;
+    case BS_OPPONENT2:
+        ret = GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
+        break;
+    case BS_ABILITY_BATTLER:
+        ret = gBattlerAbility;
+        break;
     case 4:
     case 6:
     case 8:

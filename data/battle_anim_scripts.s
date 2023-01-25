@@ -820,6 +820,7 @@ gBattleAnims_StatusConditions::
 	.4byte Status_Freeze
 	.4byte Status_Curse
 	.4byte Status_Nightmare
+	@.4byte Status_Spiritlock
 
 gBattleAnims_General::
 	.4byte General_CastformChange

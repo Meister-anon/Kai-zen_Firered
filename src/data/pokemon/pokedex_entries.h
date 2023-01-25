@@ -1,5 +1,7 @@
 const struct PokedexEntry gPokedexEntries[] =
-{
+{   //need to make additions here and then think just add to species file but not pokedex orders so they only show the main pookemon entry
+    //but if I'm filtering by type and have found the pokemon variant I want it to show up in types
+
     [NATIONAL_DEX_NONE] =
     {
         .categoryName = _("Unknown"),
@@ -6252,7 +6254,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_UNFEZANT] =
+    [NATIONAL_DEX_UNFEZANT_M] =
     {
         .categoryName = _("Proud"),
         .height = 12,

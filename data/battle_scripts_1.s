@@ -2039,7 +2039,7 @@ BattleScript_EffectHealBlock:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	jumpifability BS_NOT_ATTACKER_SIDE, ABILITY_AROMA_VEIL, BattleScript_AromaVeilProtects
+	jumpifability BS_TARGET_SIDE, ABILITY_AROMA_VEIL, BattleScript_AromaVeilProtects
 	sethealblock BattleScript_ButItFailed
 	attackanimation
 	waitanimation
@@ -2164,7 +2164,7 @@ BattleScript_EffectSleep::
 	jumpifcantmakeasleep BattleScript_CantMakeAsleep
 	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_LeafGuardProtects
 	jumpifflowerveil BattleScript_FlowerVeilProtects
-	jumpifability BS_NOT_ATTACKER_SIDE, ABILITY_SWEET_VEIL, BattleScript_SweetVeilProtects
+	jumpifability BS_TARGET_SIDE, ABILITY_SWEET_VEIL, BattleScript_SweetVeilProtects
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
@@ -2664,9 +2664,9 @@ BattleScript_EffectFlinchWithStatus:
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
 	critmessage
-	waitmessage B_WAIT_TIME_LONG
+	waitmessage 0x40
 	resultmessage
-	waitmessage B_WAIT_TIME_LONG
+	waitmessage 0x40
 	seteffectwithchance
 	argumentstatuseffect
 	tryfaintmon BS_TARGET, FALSE, NULL
@@ -4764,7 +4764,7 @@ BattleScript_EffectLowKick::
 BattleScript_EffectStrengthUpHit::
 	attackcanceler
 	setstatchanger STAT_ATK, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_HitFromAccCheck
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_BS_PTR, BattleScript_HitFromAccCheck
 	setgraphicalstatchangevalues
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 0x1
@@ -5057,21 +5057,30 @@ BattleScript_EffectCamouflage::
 	goto BattleScript_MoveEnd
 
 BattleScript_FaintAttacker::
+	tryillusionoff BS_ATTACKER
 	playfaintcry BS_ATTACKER
 	pause 0x40
 	dofaintanimation BS_ATTACKER
 	cleareffectsonfaint BS_ATTACKER
 	printstring STRINGID_ATTACKERFAINTED
 	printstring STRINGID_EMPTYSTRING3
+	tryactivatesoulheart
+	tryactivatereceiver BS_ATTACKER
 	return
 
 BattleScript_FaintTarget::
+	tryillusionoff BS_TARGET
 	playfaintcry BS_TARGET
 	pause 0x40
 	dofaintanimation BS_TARGET
 	cleareffectsonfaint BS_TARGET
 	printstring STRINGID_TARGETFAINTED
 	printstring STRINGID_EMPTYSTRING3
+	tryactivatefellstinger BS_ATTACKER
+	tryactivatesoulheart
+	tryactivatereceiver BS_TARGET
+	tryactivatemoxie BS_ATTACKER
+	tryactivatebeastboost BS_ATTACKER
 	return
 
 BattleScript_GiveExp::
@@ -5493,7 +5502,7 @@ BattleScript_LeechSeedTurnDrain::
 	manipulatedamage DMG_BIG_ROOT
 	goto BattleScript_LeechSeedTurnPrintAndUpdateHp
 BattleScript_LeechSeedTurnPrintLiquidOoze::
-	@ copybyte gBattlerAbility, gBattlerAttacker
+	copybyte gBattlerAbility, gBattlerAttacker
 	setbyte cMULTISTRING_CHOOSER, 0x4
 BattleScript_LeechSeedTurnPrintAndUpdateHp::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_x100000
@@ -5817,7 +5826,7 @@ BattleScript_WishMegaEvolution::
 	end2
 
 BattleScript_RaiseStatOnFaintingTarget::
-	@ copybyte gBattlerAbility, gBattlerAttacker
+	copybyte gBattlerAbility, gBattlerAttacker
 	@ call BattleScript_AbilityPopUp
 	setgraphicalstatchangevalues
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
@@ -6498,6 +6507,10 @@ BattleScript_SpeedBoostActivates::
 	waitmessage 0x40
 	end3
 
+@ Cant compare directly to a value, have to compare to value at pointer
+sZero:
+.byte 0
+
 BattleScript_MoodyActivates::	
 	jumpifbyteequal sSTATCHANGER, sZero, BattleScript_MoodyLower
 	statbuffchange MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN | STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_MoodyLower
@@ -6651,9 +6664,9 @@ sByteFour:
 
 BattleScript_NeutralizingGasExits::
 	savetarget
-	pause B_WAIT_TIME_SHORT
+	pause 0x20
 	printstring STRINGID_NEUTRALIZINGGASOVER
-	waitmessage B_WAIT_TIME_LONG
+	waitmessage 0x40
 	setbyte gBattlerTarget, 0
 BattleScript_NeutralizingGasExitsLoop:
 	switchinabilities BS_TARGET
@@ -6667,7 +6680,7 @@ BattleScript_TryAdrenalineOrb:
 	jumpifstat BS_TARGET, CMP_EQUAL, STAT_SPEED, 12, BattleScript_TryAdrenalineOrbRet
 	setstatchanger STAT_SPEED, 1, FALSE
 	statbuffchange STAT_CHANGE_NOT_PROTECT_AFFECTED | MOVE_EFFECT_CERTAIN | STAT_CHANGE_BS_PTR, BattleScript_TryAdrenalineOrbRet
-	playanimation BS_TARGET, B_ANIM_HELD_ITEM_EFFECT, NULL
+	playanimation BS_TARGET, B_ANIM_ITEM_EFFECT, NULL
 	setgraphicalstatchangevalues
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	copybyte sBATTLER, gBattlerTarget
@@ -7011,15 +7024,8 @@ BattleScript_FellStingerRaisesStat::
 BattleScript_FellStingerRaisesAtkEnd:
 	return
 
-BattleScript_StatUp::
-	playanimation BS_EFFECT_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-BattleScript_StatUpMsg::
-	printfromtable gStatUpStringIds
-	waitmessage 0x40
-	return
-
 BattleScript_AttackerAbilityStatRaise::
-	@ copybyte gBattlerAbility, gBattlerAttacker
+	copybyte gBattlerAbility, gBattlerAttacker
 	@ call BattleScript_AbilityPopUp
 	setgraphicalstatchangevalues
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
@@ -7078,7 +7084,7 @@ BattleScript_RoughSkinActivates::
 BattleScript_RockyHelmetActivates::
 	@ don''t play the animation for a fainted mon
 	jumpifabsent BS_TARGET, BattleScript_RockyHelmetActivatesDmg
-	playanimation BS_TARGET, B_ANIM_HELD_ITEM_EFFECT, NULL
+	playanimation BS_TARGET, B_ANIM_ITEM_EFFECT, NULL
 	waitanimation
 BattleScript_RockyHelmetActivatesDmg:
 	call BattleScript_HurtAttacker

@@ -493,7 +493,7 @@
 #define BG_DYNAMAX_CANNON                       76
 #define BG_AURA_SPHERE                          77
 
-// table ids for general animations
+// table ids for general animations	(gBattleAnims_General)
 #define B_ANIM_CASTFORM_CHANGE          0x0
 #define B_ANIM_STATS_CHANGE             0x1
 #define B_ANIM_SUBSTITUTE_FADE          0x2

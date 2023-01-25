@@ -1410,7 +1410,7 @@ static void MoveSelectionDisplayMoveNames(void)//relevant
     for (i = 0; i < MAX_MON_MOVES; ++i)
     {
         MoveSelectionDestroyCursorAt(i);
-        StringCopy(gDisplayedStringBattle, gUnknown_83FE770);   //shadow/ font shading
+        StringCopy(gDisplayedStringBattle, gText_MoveInterfaceDynamicColors);   //shadow/ font shading
         StringAppend(gDisplayedStringBattle, gMoveNames[moveInfo->moves[i]]);
         BattlePutTextOnWindow(gDisplayedStringBattle, i + 3); //not sure how this works with move slots and coordinate
         if (moveInfo->moves[i] != MOVE_NONE)

@@ -1027,7 +1027,7 @@ static const u16 sSpeciesToNationalPokedexNum[] = // Assigns all species to the 
     SPECIES_TO_NATIONAL(MUSHARNA),
     SPECIES_TO_NATIONAL(PIDOVE),
     SPECIES_TO_NATIONAL(TRANQUILL),
-    SPECIES_TO_NATIONAL(UNFEZANT),
+    SPECIES_TO_NATIONAL(UNFEZANT_M),
     SPECIES_TO_NATIONAL(BLITZLE),
     SPECIES_TO_NATIONAL(ZEBSTRIKA),
     SPECIES_TO_NATIONAL(ROGGENROLA),
@@ -3222,10 +3222,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     s32 damage = 0;
     s32 damageHelper;
     u8 type;
-    //bool8 usesDefStat;
-    //u8 defStage;
+    bool8 usesDefStat;
+    u8 defStage;
     u16 attack, defense;
-    u16 spAttack, spDefense;// defStat;
+    u16 spAttack, spDefense, defStat;
     u8 defenderHoldEffect;
     u8 defenderHoldEffectParam;
     u8 attackerHoldEffect;
@@ -3249,7 +3249,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (gBattleMoves[move].effect == EFFECT_PSYSHOCK || IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
     {
         defStat = defense;
-        defStage = gBattleMons[battlerIdDef].statStages[STAT_DEF];
+        defStage = gBattleMons[battlerIdDef].statStages[STAT_DEF];  //defined these now hopefully it works fine and doens't mess up normla damage calc
         usesDefStat = TRUE;
     }
     else // is special
@@ -3690,10 +3690,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             case TYPE_FIRE:
                 damage = (20 * damage) / 30;  //33% damage cut, so less of a cut than in rain
                 break;
-            }
+
             case TYPE_ICE:
                 damage = (125 * damage) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
-
+            }
         }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
     }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing
 

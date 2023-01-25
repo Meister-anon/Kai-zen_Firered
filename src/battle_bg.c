@@ -183,13 +183,15 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
     },
     [B_WIN_MOVE_NAME_2] = {
         .bg = 0,
-        .tilemapLeft = 11,
+        .tilemapLeft = 12,
         .tilemapTop = 55,
         .width = 8,
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x310
-    },
+    },//original was 11, difference of 9 beetween left and right move, so increased by 4 to add increase spacing by about half, was too much 
+    //brought back down to only 1 up, 13 didn't leave enough room for right side long moves
+    //need to find how move cursor
     [B_WIN_MOVE_NAME_3] = {
         .bg = 0,
         .tilemapLeft = 2,
@@ -201,7 +203,7 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
     },
     [B_WIN_MOVE_NAME_4] = {
         .bg = 0,
-        .tilemapLeft = 11,
+        .tilemapLeft = 12,
         .tilemapTop = 57,
         .width = 8,
         .height = 2,
@@ -251,13 +253,14 @@ static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
     },
     [B_WIN_SWITCH_PROMPT] = {
         .bg = 0,
-        .tilemapLeft = 21,
+        .tilemapLeft = 23,
         .tilemapTop = 55,
-        .width = 8,
+        .width = 6,
         .height = 4,
         .paletteNum = 5,
         .baseBlock = 0x2b0
-    },
+    },//thsi at 21 no longer fits new window had to move to 23 then need to make sure it clears, this come up with move swap in battle
+        //clearing text worked after moving tileleft, just need to lower width set to 6 asame as type
     [B_WIN_LEVEL_UP_BOX] = {
         .bg = 1,
         .tilemapLeft = 19,
@@ -712,10 +715,10 @@ void DrawMainBattleBackground(void)
 
 void LoadBattleTextboxAndBackground(void)
 {
-    LZDecompressVram(gBattleTextboxTiles, (void *)BG_CHAR_ADDR(0));
-    CopyToBgTilemapBuffer(0, gBattleTextboxTilemap, 0, 0x000);
+    LZDecompressVram(gBattleInterface_Textbox_Gfx, (void *)BG_CHAR_ADDR(0));
+    CopyToBgTilemapBuffer(0, gBattleInterface_Textbox_Tilemap, 0, 0x000);
     CopyBgTilemapBufferToVram(0);
-    LoadCompressedPalette(gBattleTextboxPalette, 0x00, 0x40);
+    LoadCompressedPalette(gBattleInterface_Textbox_Pal, 0x00, 0x40);
     LoadBattleMenuWindowGfx();
     DrawMainBattleBackground();
 }
@@ -1079,14 +1082,14 @@ bool8 LoadChosenBattleElement(u8 caseId)
     switch (caseId)
     {
     case 0:
-        LZDecompressVram(gBattleTextboxTiles, (void *)BG_CHAR_ADDR(0));
+        LZDecompressVram(gBattleInterface_Textbox_Gfx, (void *)BG_CHAR_ADDR(0));
         break;
     case 1:
-        CopyToBgTilemapBuffer(0, gBattleTextboxTilemap, 0, 0x000);
+        CopyToBgTilemapBuffer(0, gBattleInterface_Textbox_Tilemap, 0, 0x000);
         CopyBgTilemapBufferToVram(0);
         break;
     case 2:
-        LoadCompressedPalette(gBattleTextboxPalette, 0x00, 0x40);
+        LoadCompressedPalette(gBattleInterface_Textbox_Pal, 0x00, 0x40);
         break;
     case 3:
         battleScene = GetBattleTerrainOverride();

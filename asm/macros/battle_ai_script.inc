@@ -124,9 +124,10 @@
 	.4byte \ptr
 	.endm
 
+	@ change \value from .byte because there was issue with reading high abilities
 	.macro if_equal value:req, ptr:req
 	.byte 0x13
-	.byte \value
+	.2byte \value
 	.4byte \ptr
 	.endm
 
