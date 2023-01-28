@@ -393,9 +393,9 @@
 #define B_WIN_MOVE_NAME_2         4 // Top right
 #define B_WIN_MOVE_NAME_3         5 // Bottom left
 #define B_WIN_MOVE_NAME_4         6 // Bottom right
-#define B_WIN_PP                  7
-#define B_WIN_MOVE_TYPE           8
-#define B_WIN_PP_REMAINING        9
+#define B_WIN_PP				  9	// pp symbol	B_WIN_PP_REMAINING
+#define B_WIN_MOVE_TYPE           8 // name of selected move type
+#define B_WIN_PP_REMAINING        7 // current & max pp values	B_WIN_PP
 #define B_WIN_DUMMY              10
 #define B_WIN_SWITCH_PROMPT      11 // "Switch which?"
 #define B_WIN_LEVEL_UP_BOX       12

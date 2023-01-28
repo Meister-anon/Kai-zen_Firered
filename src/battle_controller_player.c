@@ -1424,7 +1424,8 @@ static void MoveSelectionDisplayMoveNames(void)//relevant
 //MoveSelectionDisplayPpNumber  displays the current and max pp of a move and fills slot 9
 //window pp & movetype is in seems to follow different order top to bottom and then left to right, but apparently only 3 spaces rather than 4?
 
-static void MoveSelectionDisplayPpString(void)//will change where in window pp is shown & window size so relevant
+
+/*static void MoveSelectionDisplayPpString(void)//will change where in window pp is shown & window size so relevant
 {
     StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP); //pp text 
     BattlePutTextOnWindow(gDisplayedStringBattle, 7); //think 7 is x coordinate in window
@@ -1448,6 +1449,39 @@ static void MoveSelectionDisplayPpNumber(void)//displays actual pp current & max
     BattlePutTextOnWindow(gDisplayedStringBattle, 9);
 }//gDisplayedStringBattle is a ewram container used to store values for battle text strings  including win/lose text & move selection
 //think I can also call it a text buffer,BattlePutTextOnWindow uses text as first argument but the buffer can be used in place
+*/
+
+static void MoveSelectionDisplayPpNumber(void)//function content swap to fix reversed values
+{
+    /*u8 *txtPtr;
+    struct ChooseMoveStruct *moveInfo;
+
+    if (gBattleBufferA[gActiveBattler][2] == TRUE) // check if we didn't want to display pp number
+        return;
+    SetPpNumbersPaletteInMoveSelection();
+    moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
+    txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
+    *txtPtr = CHAR_SLASH;
+    ConvertIntToDecimalStringN(++txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);*/
+    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP); //B_WIN_PP
+}//tested last two values in convertint do absolutely nothing in this function changing it doesn't even craete a new build
+
+static void MoveSelectionDisplayPpString(void)
+{
+    /*StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);*/
+    u8 *txtPtr;
+    struct ChooseMoveStruct *moveInfo;
+
+    if (gBattleBufferA[gActiveBattler][2] == TRUE) // check if we didn't want to display pp number
+        return;
+    SetPpNumbersPaletteInMoveSelection();
+    moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
+    txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
+    *txtPtr = CHAR_SLASH;
+    ConvertIntToDecimalStringN(++txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP_REMAINING); //B_WIN_PP_REMAINING
+}
 
 static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
 {
