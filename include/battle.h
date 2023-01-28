@@ -744,6 +744,8 @@ struct TotemBoost
     s8 statChanges[NUM_BATTLE_STATS - 1];    // highest bit being set decreases the stat
 }; /* size = 8 */
 
+extern const struct WindowTemplate sStandardBattleWindowTemplates[];
+
 // All battle variables are declared in battle_main.c
 extern u16 gBattle_BG0_X;
 extern u16 gBattle_BG0_Y;

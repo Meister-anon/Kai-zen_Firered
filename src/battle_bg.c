@@ -144,7 +144,7 @@ const struct BgTemplate gBattleBgTemplates[4] = {
 //can rearrange move type pp etc from here, but need to figure out how to change the main window size so I can move the movenames
 //tilemapLeft & tilemapTop are the respective X & Y coordinates
 //need to figure out  what baseBlock means
-static const struct WindowTemplate sStandardBattleWindowTemplates[] = {
+const struct WindowTemplate sStandardBattleWindowTemplates[] = {
     [B_WIN_MSG] = {
         .bg = 0,
         .tilemapLeft = 1,

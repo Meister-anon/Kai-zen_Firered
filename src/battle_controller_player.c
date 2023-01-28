@@ -1465,8 +1465,10 @@ static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
 //used StringCopyPadded to have 4 elements to use str_conv right aline it doens't actually right align, but correctly displayed movetype
 //no idea where to go from here.
 
-#define MOVE_NAME_2_X_VALUE [sStandardBattleWindowTemplates[B_WIN_MOVE_NAME_2].tilemapLeft - 2]
-#define MOVE_NAME_2_Y_VALUE [sStandardBattleWindowTemplates[B_WIN_MOVE_NAME_2].tilemapTop]
+#define MOVE_NAME_2_X_VALUE (sStandardBattleWindowTemplates[B_WIN_MOVE_NAME_2].tilemapLeft - 2) //had put parenthesis to fix/make work
+#define MOVE_NAME_2_Y_VALUE sStandardBattleWindowTemplates[B_WIN_MOVE_NAME_2].tilemapTop
+
+//putting brackets around values was the issue
 
 void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 arg1) //actually I think this may not be what i need its create cursor
 //it may just be the start position, which is move 1
