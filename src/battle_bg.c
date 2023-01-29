@@ -216,33 +216,31 @@ const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .bg = 0,
         .tilemapLeft = 23,
         .tilemapTop = 55,
-        .width = 2,
+        .width = 3,
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x290
     },//moving the window from 21 to 24 has overwritten the border bounds I now understand the width counts the tilemap left position as 1
     [B_WIN_MOVE_TYPE] = {
         .bg = 0,
-        .tilemapLeft = 23,
+        .tilemapLeft = 24,
         .tilemapTop = 57,
-        .width = 6,
+        .width = 5,
         .height = 2,
         .paletteNum = 5,
-        .baseBlock = 0x296
+        .baseBlock = 0x2a6
     },//that's based on seeing the limit from pp remaining if I cound 8 from 21 & 5 from 24 I get the same ending position of 28
     //also seems width may not exactly equal number of characters since I can fit NORMAL which is 6 characters in a 5 width window
     //but width does affect the border dimmensions so I need to manage width, with tilemapLeft to make sure my window is within the bg
     [B_WIN_PP_REMAINING] = {
         .bg = 0,
-        .tilemapLeft = 25,
+        .tilemapLeft = 24,
         .tilemapTop = 55,
-        .width = 4,
+        .width = 5,
         .height = 2,
         .paletteNum = 5,
-        .baseBlock = 0x2a6
-    },//to make room for pp symbol I will move this over move, shorten the width, and then lower the .x value in the battle text window
-    //next step figure out how dimmenssions work the entire horizontal dimension for the battle menu seem to be a width of 28
-    //so need to see how tilemap becomes a background and how dimmenssions work
+        .baseBlock = 0x2b6
+    },
     [B_WIN_DUMMY] = {
         .bg = 0,
         .tilemapLeft = 25,
@@ -250,7 +248,7 @@ const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .width = 0,
         .height = 0,
         .paletteNum = 5,
-        .baseBlock = 0x2b0
+        .baseBlock = 0x2c0
     },
     [B_WIN_SWITCH_PROMPT] = {
         .bg = 0,
@@ -259,9 +257,11 @@ const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .width = 6,
         .height = 4,
         .paletteNum = 5,
-        .baseBlock = 0x2b0
+        .baseBlock = 0x2c0
     },//thsi at 21 no longer fits new window had to move to 23 then need to make sure it clears, this come up with move swap in battle
         //clearing text worked after moving tileleft, just need to lower width set to 6 asame as type
+        //need to move this and ppsymbol & type further over, move right lower width as needed gonna assume full width value is 30
+            //since I have to account for border will make 29 max
     [B_WIN_LEVEL_UP_BOX] = {
         .bg = 1,
         .tilemapLeft = 19,

@@ -1643,6 +1643,7 @@ const u8 gText_LinkStandby[] = _("{PAUSE 16}Link standby…");
 const u8 gText_BattleMenu[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW 13 14 15}FIGHT{CLEAR_TO 56}BAG\nPOKéMON{CLEAR_TO 56}RUN");
 const u8 gUnknown_83FE747[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW 13 14 15}BALL{CLEAR_TO 56}BAIT\nROCK{CLEAR_TO 56}RUN");
 const u8 gText_MoveInterfacePP[] = _("PP ");
+const u8 gText_BattleMoveInterfacePP[] = _("PP");
 const u8 gText_MoveInterfaceType[] = _("TYPE/");
 const u8 gText_MoveInterfaceDynamicColors[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW 13 14 15}");
 const u8 gUnknown_83FE779[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW 13 14 15}どの わざを\nわすれさせたい?");
@@ -3059,7 +3060,7 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] = {
     [B_WIN_PP] = {
         .fillValue = PIXEL_FILL(0xe),
         .fontId = FONT_SMALL,
-        .x = 4,
+        .x = 13,
         .y = 2,
         .letterSpacing = 0,
         .lineSpacing = 0,
@@ -3068,10 +3069,11 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] = {
         .bgColor = 14,
         .shadowColor = 11,
     },// since these are my values within my window if I want to left or right align my text it should use the .x value from here!
+    //x value of 0 is left aligned
     [B_WIN_MOVE_TYPE] = {
         .fillValue = PIXEL_FILL(0xe),
         .fontId = FONT_NORMAL_COPY_1,
-        .x = 0,
+        .x = 4,
         .y = 2,
         .letterSpacing = 0,
         .lineSpacing = 0,
@@ -3080,11 +3082,10 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] = {
         .bgColor = 14,
         .shadowColor = 15,
     },//.x value is probalby not 1 to 1 with window width as width of pp is 5, but x value is 10
-    //changing move type to fit the full type name instead of shortened version
     [B_WIN_PP_REMAINING] = {
-        .fillValue = PIXEL_FILL(0xe),
-        .fontId = FONT_NORMAL_COPY_1,
-        .x = 2,
+        .fillValue = PIXEL_FILL(0xe),//set to 0x0 to better see window border set back to 0xe when done adjusting
+        .fontId = FONT_SMALL,
+        .x = 16,
         .y = 2,
         .letterSpacing = 0,
         .lineSpacing = 2,

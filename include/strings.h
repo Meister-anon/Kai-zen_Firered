@@ -223,6 +223,7 @@ extern const u8 gText_WhatWillPlayerThrow[];
 extern const u8 gText_BattleSwitchWhich[];
 extern const u8 gText_MoveInterfaceDynamicColors[];
 extern const u8 gText_MoveInterfacePP[];
+extern const u8 gText_BattleMoveInterfacePP[];
 extern const u8 gText_MoveInterfaceType[];
 extern const u8 gText_LinkStandby[];
 extern const u8 gText_BattleMenu[];

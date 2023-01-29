@@ -1463,7 +1463,7 @@ static void MoveSelectionDisplayPpNumber(void)//function content swap to fix rev
     txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
     *txtPtr = CHAR_SLASH;
     ConvertIntToDecimalStringN(++txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);*/
-    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);
+    StringCopy(gDisplayedStringBattle, gText_BattleMoveInterfacePP);
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP); //B_WIN_PP
 }//tested last two values in convertint do absolutely nothing in this function changing it doesn't even craete a new build
 
