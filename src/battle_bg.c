@@ -234,9 +234,9 @@ const struct WindowTemplate sStandardBattleWindowTemplates[] = {
     //but width does affect the border dimmensions so I need to manage width, with tilemapLeft to make sure my window is within the bg
     [B_WIN_PP_REMAINING] = {
         .bg = 0,
-        .tilemapLeft = 24,
+        .tilemapLeft = 26,
         .tilemapTop = 55,
-        .width = 5,
+        .width = 3,
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x2b6

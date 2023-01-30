@@ -8,6 +8,7 @@
 #include "constants/flags.h"
 #include "constants/vars.h"
 #include "constants/species.h"
+#include "field_specials.h"
 
 /*code added in this commit was to upgrade ld_script to sync wild cards
     i.e make it auto recognize new .c files*/
@@ -195,7 +196,12 @@ struct BerryCrush
 
 #define PLAYER_NAME_LENGTH   7  // important remember to test expnading this, see if it
 //throws off the placeholder [player] text.
-/*
+
+//special code jumps, 
+sTypeExceptions;
+sBulbasaurBall;
+
+/*  
 #define LINK_B_RECORDS_COUNT 5
 
 struct LinkBattleRecord

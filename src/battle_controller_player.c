@@ -531,7 +531,8 @@ void HandleInputChooseMove(void)
             gMoveSelectionCursor[gActiveBattler] ^= 1;
             PlaySE(SE_SELECT);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-            MoveSelectionDisplayPpNumber();
+            //MoveSelectionDisplayPpNumber();
+            MoveSelectionDisplayPpString();
             MoveSelectionDisplayMoveType();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
         }
@@ -539,13 +540,14 @@ void HandleInputChooseMove(void)
     else if (JOY_NEW(DPAD_RIGHT))
     {
         if (!(gMoveSelectionCursor[gActiveBattler] & 1)
-         && (gMoveSelectionCursor[gActiveBattler] ^ 1) < gNumberOfMovesToChoose)
+            && (gMoveSelectionCursor[gActiveBattler] ^ 1) < gNumberOfMovesToChoose)
         {
             MoveSelectionDestroyCursorAt(gMoveSelectionCursor[gActiveBattler]);
             gMoveSelectionCursor[gActiveBattler] ^= 1;
             PlaySE(SE_SELECT);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-            MoveSelectionDisplayPpNumber();
+            //MoveSelectionDisplayPpNumber();
+            MoveSelectionDisplayPpString();
             MoveSelectionDisplayMoveType();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
         }
@@ -558,7 +560,8 @@ void HandleInputChooseMove(void)
             gMoveSelectionCursor[gActiveBattler] ^= 2;
             PlaySE(SE_SELECT);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-            MoveSelectionDisplayPpNumber();
+            //MoveSelectionDisplayPpNumber();
+            MoveSelectionDisplayPpString();
             MoveSelectionDisplayMoveType();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
         }
@@ -566,16 +569,17 @@ void HandleInputChooseMove(void)
     else if (JOY_NEW(DPAD_DOWN))
     {
         if (!(gMoveSelectionCursor[gActiveBattler] & 2)
-         && (gMoveSelectionCursor[gActiveBattler] ^ 2) < gNumberOfMovesToChoose)
+            && (gMoveSelectionCursor[gActiveBattler] ^ 2) < gNumberOfMovesToChoose)
         {
             MoveSelectionDestroyCursorAt(gMoveSelectionCursor[gActiveBattler]);
             gMoveSelectionCursor[gActiveBattler] ^= 2;
             PlaySE(SE_SELECT);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-            MoveSelectionDisplayPpNumber();
+            //MoveSelectionDisplayPpNumber();
+            MoveSelectionDisplayPpString();
             MoveSelectionDisplayMoveType();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
-        }//the dpad inputs that move the move selection cursor seem to use gActiveBattler for something/movechoice guess bcause its 0-4
+        }
     }
     else if (JOY_NEW(SELECT_BUTTON))
     {
