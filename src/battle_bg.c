@@ -184,9 +184,9 @@ const struct WindowTemplate sStandardBattleWindowTemplates[] = {
     //adjusted so (MoveSelectionCreateCursorAt) will use this window position to update itself
     [B_WIN_MOVE_NAME_2] = {
         .bg = 0,
-        .tilemapLeft = 13,
+        .tilemapLeft = 12,
         .tilemapTop = 55,
-        .width = 8,
+        .width = 9,
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x310
@@ -200,23 +200,23 @@ const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .width = 8,
         .height = 2,
         .paletteNum = 5,
-        .baseBlock = 0x320
+        .baseBlock = 0x326
     },
     [B_WIN_MOVE_NAME_4] = {
         .bg = 0,
-        .tilemapLeft = 13,
+        .tilemapLeft = 12,
         .tilemapTop = 57,
-        .width = 8,
+        .width = 9,
         .height = 2,
         .paletteNum = 5,
-        .baseBlock = 0x330
+        .baseBlock = 0x336
     },//width 2 starting from x coordinate 22 means my characters will fill positions 22 & 23!
     //width appears to be left alligned meaning changing with will shift the right dimmension and not the left
     [B_WIN_PP] = {
         .bg = 0,
-        .tilemapLeft = 23,
+        .tilemapLeft = 24,
         .tilemapTop = 55,
-        .width = 3,
+        .width = 2,
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x290
