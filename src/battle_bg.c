@@ -186,7 +186,7 @@ const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .bg = 0,
         .tilemapLeft = 12,
         .tilemapTop = 55,
-        .width = 9,
+        .width = 10,
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x310
@@ -200,16 +200,16 @@ const struct WindowTemplate sStandardBattleWindowTemplates[] = {
         .width = 8,
         .height = 2,
         .paletteNum = 5,
-        .baseBlock = 0x326
+        .baseBlock = 0x32c
     },
     [B_WIN_MOVE_NAME_4] = {
         .bg = 0,
         .tilemapLeft = 12,
         .tilemapTop = 57,
-        .width = 9,
+        .width = 10,
         .height = 2,
         .paletteNum = 5,
-        .baseBlock = 0x336
+        .baseBlock = 0x33f
     },//width 2 starting from x coordinate 22 means my characters will fill positions 22 & 23!
     //width appears to be left alligned meaning changing with will shift the right dimmension and not the left
     [B_WIN_PP] = {
@@ -252,9 +252,9 @@ const struct WindowTemplate sStandardBattleWindowTemplates[] = {
     },
     [B_WIN_SWITCH_PROMPT] = {
         .bg = 0,
-        .tilemapLeft = 23,
+        .tilemapLeft = 24,
         .tilemapTop = 55,
-        .width = 6,
+        .width = 5,
         .height = 4,
         .paletteNum = 5,
         .baseBlock = 0x2c0
