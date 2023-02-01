@@ -731,6 +731,17 @@ const struct SpriteTemplate gTwisterLeafParticleSpriteTemplate =
     .callback = AnimMoveTwisterParticle,
 };
 
+const struct SpriteTemplate gAttackOrderParticleSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_ATTACK_ORDER,
+    .paletteTag = ANIM_TAG_ATTACK_ORDER,
+    .oam = &gOamData_AffineOff_ObjNormal_16x16,
+    .anims = gRazorLeafParticleAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimMoveTwisterParticle,
+};
+
 const union AnimCmd gRazorLeafCutterAnimCmds[] =
 {
     ANIMCMD_FRAME(0, 3),
@@ -1567,6 +1578,7 @@ static const struct SpriteTemplate sUnknown_83E333C =
     .callback = AnimCirclingMusicNote,
 };
 
+//equivalent of gProtectSpriteTemplate from emerald
 const struct SpriteTemplate gProtectWallSpriteTemplate =
 {
     .tileTag = ANIM_TAG_PROTECT,
@@ -5730,10 +5742,10 @@ static void AnimMoonlightSparkleStep(struct Sprite* sprite)
         DestroyAnimSprite(sprite);
 }
 
-void AnimTask_FadeScreenBlueStep(u8);
+void AnimTask_MoonlightEndFade_Step(u8);
 
 
-void AnimTask_FadeScreenBlue(u8 taskId)
+void AnimTask_MoonlightEndFade(u8 taskId) //changed from FadeScreenBlue
 {
     int a = SelectBattleAnimSpriteAndBgPalettes(1, 0, 0, 0, 0, 0, 0) & 0xFFFF;
     int b;
@@ -5756,11 +5768,11 @@ void AnimTask_FadeScreenBlue(u8 taskId)
     b = b | (0x10000 << IndexOfSpritePaletteTag(ANIM_TAG_MOON));
     d = IndexOfSpritePaletteTag(ANIM_TAG_GREEN_SPARKLE);
     BeginNormalPaletteFade((0x10000 << d) | b, 0, 0, 16, RGB(27, 29, 31));
-    gTasks[taskId].func = AnimTask_FadeScreenBlueStep;
+    gTasks[taskId].func = AnimTask_MoonlightEndFade_Step;
     gTasks[taskId].func(taskId);
 }
 
-void AnimTask_FadeScreenBlueStep(u8 taskId)
+void AnimTask_MoonlightEndFade_Step(u8 taskId)
 {
     struct Task* task = &gTasks[taskId];
     

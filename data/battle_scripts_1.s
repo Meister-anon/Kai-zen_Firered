@@ -7090,6 +7090,15 @@ BattleScript_RockyHelmetActivatesDmg:
 	call BattleScript_HurtAttacker
 	return
 
+BattleScript_HurtAttacker:
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	printstring STRINGID_PKMNHURTSWITH
+	waitmessage 0x40
+	tryfaintmon BS_ATTACKER
+	return
+
 BattleScript_SpikyShieldEffect::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_x100000
 	bichalfword gMoveResultFlags, MOVE_RESULT_NO_EFFECT

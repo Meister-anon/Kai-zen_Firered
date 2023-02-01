@@ -197,9 +197,6 @@ struct BerryCrush
 #define PLAYER_NAME_LENGTH   7  // important remember to test expnading this, see if it
 //throws off the placeholder [player] text.
 
-//special code jumps, 
-sTypeExceptions;
-sBulbasaurBall;
 
 /*  
 #define LINK_B_RECORDS_COUNT 5

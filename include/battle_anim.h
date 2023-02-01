@@ -524,7 +524,7 @@ extern const struct SpriteTemplate gBasicHitSplatSpriteTemplate;
 extern const struct SpriteTemplate gWaterHitSplatSpriteTemplate;
 extern const union AffineAnimCmd *const gAffineAnims_HitSplat[];
 u32 UnpackSelectedBattleAnimPalettes(s16 selector);
-void AnimTask_CurseBlendEffect(u8 taskId);
+void AnimTask_BlendColorCycle(u8 taskId);
 void AnimTask_BlendColorCycleExclude(u8 taskId);
 void AnimTask_BlendColorCycleByTag(u8 taskId);
 void AnimTask_FlashAnimTagWithColor(u8 taskId);

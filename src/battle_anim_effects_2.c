@@ -2796,7 +2796,8 @@ static void AnimSoftBoiledEgg_Step4_Callback(struct Sprite *sprite)
     DestroyAnimSprite(sprite);
 }
 
-void AnimTask_StretchAttacker(u8 taskId)
+//used by Extreme Speed
+void AnimTask_StretchAttacker(u8 taskId)  //AnimTask_AttackerStretchAndDisappear equivalent of
 {
     struct Task* task = &gTasks[taskId];
     u8 spriteId = GetAnimBattlerSpriteId(ANIM_ATTACKER);

@@ -9,8 +9,8 @@ static void sub_80DCE78(u8 taskId);
 static void sub_80DCEE4(u8 taskId);
 static void sub_80DCFE8(u8 taskId);
 static void sub_80DD270(u8 taskId);
-static void sub_80DD390(u8 taskId);
-static void sub_80DD4D4(u8 taskId);
+static void SoundTask_PlayCryWithEcho_Step(u8 taskId);
+static void SoundTask_AdjustPanningVar_Step(u8 taskId);
 
 void sub_80DCE10(u8 taskId)
 {
@@ -221,7 +221,7 @@ void SoundTask_WaitForCry(u8 taskId)
         DestroyAnimVisualTask(taskId);
 }
 
-void sub_80DD334(u8 taskId)
+void SoundTask_PlayCryWithEcho(u8 taskId)
 {
     u16 species;
     s8 pan;
@@ -233,7 +233,7 @@ void sub_80DD334(u8 taskId)
     if (species != SPECIES_NONE)
     {
         PlayCry_ByMode(species, pan, 4);
-        gTasks[taskId].func = sub_80DD390;
+        gTasks[taskId].func = SoundTask_PlayCryWithEcho_Step;
     }
     else
     {
@@ -241,7 +241,7 @@ void sub_80DD334(u8 taskId)
     }
 }
 
-static void sub_80DD390(u8 taskId)
+static void SoundTask_PlayCryWithEcho_Step(u8 taskId)
 {
 
     if (gTasks[taskId].data[9] < 2)
@@ -291,11 +291,11 @@ void SoundTask_AdjustPanningVar(u8 taskId)
     gTasks[taskId].data[5] = r9;
     gTasks[taskId].data[10] = 0;
     gTasks[taskId].data[11] = sourcePan;
-    gTasks[taskId].func = sub_80DD4D4;
-    sub_80DD4D4(taskId);
+    gTasks[taskId].func = SoundTask_AdjustPanningVar_Step;
+    SoundTask_AdjustPanningVar_Step(taskId);
 }
 
-static void sub_80DD4D4(u8 taskId)
+static void SoundTask_AdjustPanningVar_Step(u8 taskId)
 {
     u16 oldPan, panIncrement = gTasks[taskId].data[3];
 

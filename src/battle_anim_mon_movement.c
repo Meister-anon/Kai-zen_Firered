@@ -328,7 +328,7 @@ static void AnimTask_ShakeAndSinkMonStep(u8 taskId)
 // arg 2: ellipse height
 // arg 3: num loops
 // arg 4: speed (valid values are 0-5)
-void AnimTask_TranslateMonElliptical(u8 taskId)
+void AnimTask_TranslateMonElliptical(u8 taskId) // equivalent AnimTask_RotateVertically from emerald consider upgrading 2 em expansion version
 {
     u8 wavePeriod = 1;
     u8 i;

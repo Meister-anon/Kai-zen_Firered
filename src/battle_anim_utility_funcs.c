@@ -50,7 +50,7 @@ const u8 gBattleIntroRegOffsBgCnt[] = { REG_OFFSET_BG0CNT, REG_OFFSET_BG1CNT, RE
 //   8: Player battler right
 //   9: Enemy battler left
 //  10: Enemy battler right
-void AnimTask_BlendSelected(u8 taskId)
+void AnimTask_BlendSelected(u8 taskId)  //equivalent of AnimTask_BlendBattleAnimPal
 {
     u32 selectedPalettes = UnpackSelectedBattleAnimPalettes(gBattleAnimArgs[0]);
     
@@ -72,7 +72,7 @@ void AnimTask_BlendSelected(u8 taskId)
 // 5: Blend all
 // 6: Neither bg nor attacker's partner
 // 7: Neither bg nor target's partner
-void AnimTask_BlendExcept(u8 taskId)
+void AnimTask_BlendExcept(u8 taskId)    //equivalet of AnimTask_BlendBattleAnimPalExclude from emerald
 {
     u8 battler;
     u32 selectedPalettes;
@@ -226,7 +226,7 @@ static void Task_WaitHardwarePaletteFade(u8 taskId)
         DestroyAnimVisualTask(taskId);
 }
 
-void AnimTask_CloneBattlerSpriteWithBlend(u8 taskId)
+void AnimTask_CloneBattlerSpriteWithBlend(u8 taskId) //equivalent of AnimTask_CloneBattlerSpriteWithBlend from emerald
 {
     struct Task *task = &gTasks[taskId];
 
@@ -395,6 +395,12 @@ void sub_80BB088(u8 taskId)
     for (i = 0; i < 8; ++i)
         sAnimStatsChangeData->data[i] = gBattleAnimArgs[i];
     gTasks[taskId].func = sub_80BB0D8;
+}
+
+void AnimTask_IsDoubleBattle(u8 taskId)
+{
+    gBattleAnimArgs[7] = (IsDoubleBattle() && !IsContest());
+    DestroyAnimVisualTask(taskId);
 }
 
 static void sub_80BB0D8(u8 taskId)
