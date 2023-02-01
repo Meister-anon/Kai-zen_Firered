@@ -117,39 +117,6 @@ const union AnimCmd *const gAnims_WaterBubbleProjectile[] =
     sAnim_WaterBubbleProjectile,
 };
 
-const struct SpriteTemplate gGrassPledgeSpriteTemplate =
-{
-    .tileTag = ANIM_TAG_LEAF,
-    .paletteTag = ANIM_TAG_LEAF,
-    .oam = &gOamData_AffineOff_ObjNormal_16x16,
-    .anims = gRazorLeafParticleAnimTable,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = AnimFlyUpTarget,
-};
-
-const struct SpriteTemplate gFirePledgeSpriteTemplate =
-{
-    .tileTag = ANIM_TAG_SMALL_EMBER,
-    .paletteTag = ANIM_TAG_SMALL_EMBER,
-    .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = gAnims_FlamethrowerFlame,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = AnimFlyUpTarget,
-};
-
-const struct SpriteTemplate gWaterPledgeOrbSpriteTemplate =
-{
-    .tileTag = ANIM_TAG_WATER_ORB,
-    .paletteTag = ANIM_TAG_WATER_ORB,
-    .oam = &gOamData_AffineOff_ObjBlend_16x16,
-    .anims = gAnims_WaterMudOrb,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = AnimFlyUpTarget,
-};
-
 const struct SpriteTemplate gWaterBubbleProjectileSpriteTemplate =
 {
     .tileTag = ANIM_TAG_BUBBLE,
@@ -227,6 +194,28 @@ const struct SpriteTemplate gHydroPumpOrbSpriteTemplate =
     .callback = AnimToTargetInSinWave,
 };
 
+const struct SpriteTemplate gGrassPledgeSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_LEAF,
+    .paletteTag = ANIM_TAG_LEAF,
+    .oam = &gOamData_AffineOff_ObjNormal_16x16,
+    .anims = gRazorLeafParticleAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimFlyUpTarget,
+};
+
+const struct SpriteTemplate gFirePledgeSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_SMALL_EMBER,
+    .paletteTag = ANIM_TAG_SMALL_EMBER,
+    .oam = &gOamData_AffineOff_ObjNormal_32x32,
+    .anims = gAnims_FlamethrowerFlame,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimFlyUpTarget,
+};
+
 const struct SpriteTemplate gWaterPledgeOrbSpriteTemplate =
 {
     .tileTag = ANIM_TAG_WATER_ORB,
@@ -293,17 +282,6 @@ const struct SpriteTemplate gFlamethrowerFlameSpriteTemplate =
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimToTargetInSinWave,
-};
-
-const struct SpriteTemplate gFirePledgeSpriteTemplate =
-{
-    .tileTag = ANIM_TAG_SMALL_EMBER,
-    .paletteTag = ANIM_TAG_SMALL_EMBER,
-    .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = gAnims_FlamethrowerFlame,
-    .images = NULL,
-    .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = AnimFlyUpTarget,
 };
 
 const struct SpriteTemplate gPsywaveRingSpriteTemplate =

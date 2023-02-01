@@ -1801,6 +1801,189 @@
 	various \battler, VARIOUS_TRY_ACTIVATE_GRIM_NEIGH
 	.endm
 
+	.macro consumeberry battler:req, restoreItem=FALSE
+	various \battler, VARIOUS_CONSUME_BERRY
+	.byte \restoreItem
+	.endm
+
+	.macro activateitemeffects battler:req
+	various \battler, VARIOUS_MOVEEND_ITEM_EFFECTS
+	.endm
+
+	.macro pickpocketsteal
+	various 0, VARIOUS_PICKPOCKET
+	.endm
+
+	.macro doterrainseed battler:req, ptr:req
+	various \battler, VARIOUS_TERRAIN_SEED
+	.4byte \ptr
+	.endm
+
+	.macro makeinvisible battler:req
+	various \battler, VARIOUS_MAKE_INVISIBLE
+	.endm
+
+	.macro tryroomservice battler:req, ptr:req
+	various \battler, VARIOUS_ROOM_SERVICE
+	.4byte \ptr
+	.endm
+
+	.macro jumpifterrainaffected battler:req, terrainFlags:req, ptr:req
+	various \battler, VARIOUS_JUMP_IF_TERRAIN_AFFECTED
+	.4byte \terrainFlags
+	.4byte \ptr
+	.endm
+
+	.macro jumpifpranksterblocked battler:req, ptr:req
+	various \battler, VARIOUS_JUMP_IF_PRANKSTER_BLOCKED
+	.4byte \ptr
+	.endm
+
+	.macro eeriespellppreduce ptr:req
+	various BS_TARGET, VARIOUS_EERIE_SPELL_PP_REDUCE
+	.4byte \ptr
+	.endm
+
+	.macro jumpifteamhealthy battler:req, ptr:req
+	various \battler, VARIOUS_JUMP_IF_TEAM_HEALTHY
+	.4byte \ptr
+	.endm
+
+	.macro tryhealquarterhealth battler:req, ptr:req
+	various \battler, VARIOUS_TRY_HEAL_QUARTER_HP
+	.4byte \ptr
+	.endm
+
+	.macro removeterrain
+	various BS_ATTACKER, VARIOUS_REMOVE_TERRAIN
+	.endm
+
+	.macro trytoclearprimalweather
+	various BS_ATTACKER, VARIOUS_TRY_TO_CLEAR_PRIMAL_WEATHER
+	.endm
+
+	.macro setattackertostickywebuser
+	various BS_TARGET, VARIOUS_SET_ATTACKER_STICKY_WEB_USER
+	.endm
+
+	.macro getrototillertargets ptr:req
+	various BS_ATTACKER, VARIOUS_GET_ROTOTILLER_TARGETS
+	.4byte \ptr
+	.endm
+
+	.macro jumpifnotrototilleraffected battler:req, ptr:req
+	various \battler, VARIOUS_JUMP_IF_NOT_ROTOTILLER_AFFECTED
+	.4byte \ptr
+	.endm
+
+	.macro tryactivatebattlebond battler:req
+	various \battler, VARIOUS_TRY_ACTIVATE_BATTLE_BOND
+	.endm
+
+	.macro jumpifcantreverttoprimal ptr:req
+	various BS_ATTACKER, VARIOUS_JUMP_IF_CANT_REVERT_TO_PRIMAL
+	.4byte \ptr
+	.endm
+
+	.macro applyplasmafists
+	various BS_ATTACKER, VARIOUS_APPLY_PLASMA_FISTS
+	.endm
+
+	.macro jumpifweatheraffected battler:req, weather:req, ptr:req
+	various \battler, VARIOUS_JUMP_IF_WEATHER_AFFECTED
+	.4byte \weather
+	.4byte \ptr
+	.endm
+
+	.macro jumpifspecies battler:req, species:req, ptr:req
+	various \battler, VARIOUS_JUMP_IF_SPECIES
+	.2byte \species
+	.4byte \ptr
+	.endm
+
+	.macro tryendneutralizinggas battler:req
+	various \battler, VARIOUS_TRY_END_NEUTRALIZING_GAS
+	.endm
+
+	.macro trytoapplymimicry battler:req, ptr:req
+	various \battler, VARIOUS_TRY_TO_APPLY_MIMICRY
+	.4byte \ptr
+	.endm
+
+	.macro trynoretreat battler:req, ptr:req
+	various \battler, VARIOUS_TRY_NO_RETREAT
+	.4byte \ptr
+	.endm
+
+	.macro trytarshot battler:req, ptr:req
+	various \battler, VARIOUS_TRY_TAR_SHOT
+	.4byte \ptr
+	.endm
+
+	.macro cantarshotwork battler:req, ptr:req
+	various \battler, VARIOUS_CAN_TAR_SHOT_WORK
+	.4byte \ptr
+	.endm
+
+	.macro checkpoltergeist battler:req, ptr:req
+	various \battler, VARIOUS_CHECK_POLTERGEIST
+	.4byte \ptr
+	.endm
+
+	.macro setoctolock battler:req, ptr:req
+	various \battler, VARIOUS_SET_OCTOLOCK
+	.4byte \ptr
+	.endm
+
+	.macro cutonethirdhpraisestats ptr:req
+	various BS_ATTACKER, VARIOUS_CUT_1_3_HP_RAISE_STATS
+	.4byte \ptr
+	.endm
+
+	.macro photongeysercheck
+	various BS_ATTACKER, VARIOUS_PHOTON_GEYSER_CHECK
+	.endm
+
+	.macro shellsidearmcheck
+	various BS_ATTACKER, VARIOUS_SHELL_SIDE_ARM_CHECK
+	.endm
+
+	.macro jumpifcantfling battler:req, ptr:req
+	various \battler, VARIOUS_JUMP_IF_CANT_FLING
+	.4byte \ptr
+	.endm
+
+	.macro curecertainstatuses battler:req
+	various \battler, VARIOUS_CURE_CERTAIN_STATUSES
+	.endm
+
+	.macro tryresetnegativestatstages battler:req
+	various \battler, VARIOUS_TRY_RESET_NEGATIVE_STAT_STAGES
+	.endm
+
+	.macro jumpiflastuseditemberry ptr:req
+	various BS_ATTACKER, VARIOUS_JUMP_IF_LAST_USED_ITEM_BERRY
+	.4byte \ptr
+	.endm
+
+	.macro jumpiflastuseditemholdeffect battler:req, holdEffect:req, ptr:req
+	various \battler, VARIOUS_JUMP_IF_LAST_USED_ITEM_HOLD_EFFECT
+	.byte \holdEffect
+	.4byte \ptr
+	.endm
+
+	.macro savebattleritem battler:req
+	various \battler, VARIOUS_SAVE_BATTLER_ITEM
+	.endm
+
+	.macro restorebattleritem battler:req
+	various \battler, VARIOUS_RESTORE_BATTLER_ITEM
+	.endm
+
+	.macro battleritemtolastuseditem battler:req
+	various \battler, VARIOUS_BATTLER_ITEM_TO_LAST_USED_ITEM
+	.endm
+
 
 
 @ helpful macros
@@ -1906,6 +2089,12 @@
 	1:
 	.endm
 
+	.macro jumpifflowerveilattacker jumpptr:req
+	jumpifnottype BS_ATTACKER, TYPE_GRASS, 1f
+	jumpifability BS_ATTACKER_SIDE, ABILITY_FLOWER_VEIL, \jumpptr
+	1:
+	.endm
+
 	.macro setallytonexttarget jumpptr:req
 	jumpifbyte CMP_GREATER_THAN, gBattlerTarget, 0x1, 1f
 	addbyte gBattlerTarget, 0x2
@@ -1913,6 +2102,11 @@
 	1:
 	subbyte gBattlerTarget, 0x2
 	goto \jumpptr
+	.endm
+
+	.macro jumpifleafguardprotected battler:req, jumpptr:req
+	various \battler, VARIOUS_JUMP_IF_LEAF_GUARD_PROTECTED
+	.4byte \jumpptr
 	.endm
 
 	.macro jumpifleafguard jumpptr:req
@@ -1925,4 +2119,27 @@
 	jumpifability BS_ATTACKER, ABILITY_INFILTRATOR, 1f
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, \jumpptr
 	1:
+	.endm
+
+	@ Will jump to script pointer if the target weighs less than 200 kg, or 441 lbs.
+	.macro jumpifunder200 battler:req, ptr:req
+	various \battler, VARIOUS_JUMP_IF_UNDER_200
+	.4byte \ptr
+	.endm
+
+	@ Sets the sky drop status and does all other necessary operations
+	.macro setskydrop
+	various 0, VARIOUS_SET_SKY_DROP
+	.endm
+
+	@ Clears the sky drop status and does all other necessary operations.
+	@ If the target fainted in before this script is called, it goes to the given script.
+	.macro clearskydrop ptr:req
+	various 0, VARIOUS_CLEAR_SKY_DROP
+	.4byte \ptr
+	.endm
+
+	@ Accounts for if the target of Sky Drop was in confuse_lock when the attacker falls asleep due to Yawn.
+	.macro skydropyawn
+	various 0, VARIOUS_SKY_DROP_YAWN
 	.endm

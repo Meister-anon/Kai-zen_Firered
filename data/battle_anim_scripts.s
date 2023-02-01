@@ -3,7 +3,6 @@
 #include "constants/rgb.h"
 #include "constants/items.h"
 #include "constants/songs.h"
-#include "constants/sound.h"
 #include "constants/moves.h"
 #include "constants/pokemon.h"
 	.include "asm/macros.inc"

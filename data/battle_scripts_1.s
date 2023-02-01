@@ -4,6 +4,7 @@
 #include "constants/battle_script_commands.h"
 #include "constants/battle_anim.h"
 #include "constants/items.h"
+#include "constants/hold_effects.h"
 #include "constants/abilities.h"
 #include "constants/species.h"
 #include "constants/pokemon.h"
@@ -235,149 +236,177 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectDragonDance
 	.4byte BattleScript_EffectCamouflage
 	@ new effects  @@@@@@@@@@
-	.4byte BattleScript_EffectPledge
-	.4byte BattleScript_EffectFling
-	.4byte BattleScript_EffectNaturalGift
-	.4byte BattleScript_EffectWakeUpSlap
-	.4byte BattleScript_EffectWringOut
-	.4byte BattleScript_EffectHex
-	.4byte BattleScript_EffectAssurance
-	.4byte BattleScript_EffectTrump_card
-	.4byte BattleScript_EffectAcrobatics
-	.4byte BattleScript_EffectHeatCrash
-	.4byte BattleScript_EffectPunishment
-	.4byte BattleScript_EffectStoredPower
-	.4byte BattleScript_EffectElectroBall
-	.4byte BattleScript_EffectGyroBall
-	.4byte BattleScript_EffectEchoedVoice
-	.4byte BattleScript_EffectPayback
-	.4byte BattleScript_EffectRound
-	.4byte BattleScript_EffectBrine
-	.4byte BattleScript_EffectVenoshock
-	.4byte BattleScript_EffectRetalitate
-	.4byte BattleScript_EffectBulldoze
-	.4byte BattleScript_EffectFoulPlay
-	.4byte BattleScript_EffectPsyshock
-	.4byte BattleScript_EffectRoost
-	.4byte BattleScript_EffectGravity
-	.4byte BattleScript_EffectMircleEye
-	.4byte BattleScript_EffectTailwind
-	.4byte BattleScript_EffectEmbargo
-	.4byte BattleScript_EffectAquaRing
-	.4byte BattleScript_EffectTrickRoom
-	.4byte BattleScript_EffectWonderRoom
-	.4byte BattleScript_EffectMagicRoom
-	.4byte BattleScript_EffectMagnetRise
-	.4byte BattleScript_EffectToxicSpikes
-	.4byte BattleScript_EffectGastroAcid
-	.4byte BattleScript_EffectStealthRock
-	.4byte BattleScript_EffectTelekinesis
-	.4byte BattleScript_EffectPowerSwap
-	.4byte BattleScript_EffectGuardSwap
-	.4byte BattleScript_EffectHeartSwap
-	.4byte BattleScript_EffectPowerSplit
-	.4byte BattleScript_EffectGuardSplit
-	.4byte BattleScript_EffectStickyWeb
-	.4byte BattleScript_EffectMetalBurst
-	.4byte BattleScript_EffectLuckyChant
-	.4byte BattleScript_EffectSuckerPunch
-	.4byte BattleScript_EffectSpecialDefenseDownHit2
-	.4byte BattleScript_EffectSimpleBeam
-	.4byte BattleScript_EffectEntrainment
-	.4byte BattleScript_EffectHealPulse
-	.4byte BattleScript_EffectQuash
-	.4byte BattleScript_EffectIonDeluge
-	.4byte BattleScript_EffectFreezeDry
-	.4byte BattleScript_EffectTopsyTurvy
-	.4byte BattleScript_EffectMistyTerrain
-	.4byte BattleScript_EffectGrassyTerrain
-	.4byte BattleScript_EffectElectricTerrain
-	.4byte BattleScript_EffectPsychicTerrain
-	.4byte BattleScript_EffectAttackAccUp
-	.4byte BattleScript_EffectAttackSpAttackUp
-	.4byte BattleScript_EffectHurricane
-	.4byte BattleScript_EffectTwoTypedMove
-	.4byte BattleScript_EffectMeFirst
-	.4byte BattleScript_EffectSpeedUpHit
-	.4byte BattleScript_EffectQuiverDance
-	.4byte BattleScript_EffectCoil
-	.4byte BattleScript_EffectElectrify
-	.4byte BattleScript_EffectScald
-	.4byte BattleScript_EffectReflectType
-	.4byte BattleScript_EffectSoak
-	.4byte BattleScript_EffectGrowth
-	.4byte BattleScript_EffectCloseCombat
-	.4byte BattleScript_EffectLastResort
-	.4byte BattleScript_EffectRecoil33WithStatus
-	.4byte BattleScript_EffectFlinchWithStatus
-	.4byte BattleScript_EffectRecoil50
-	.4byte BattleScript_EffectShellSmash
-	.4byte BattleScript_EffectShiftGear
-	.4byte BattleScript_EffectDefenseUp3
-	.4byte BattleScript_EffectNobleRoar
-	.4byte BattleScript_EffectVenomDrench
-	.4byte BattleScript_EffectToxicThread
-	.4byte BattleScript_EffectClearSmog
-	.4byte BattleScript_EffectHitSwitchTarget
-	.4byte BattleScript_EffectFinalGambit
-	.4byte BattleScript_EffectChangeTypeOnItem
-	.4byte BattleScript_EffectAutotomize
-	.4byte BattleScript_EffectCopycat
-	.4byte BattleScript_EffectDefog
-	.4byte BattleScript_EffectHitEnemyHealAlly
-	.4byte BattleScript_EffectSmackDown
-	.4byte BattleScript_EffectSynchronoise
-	.4byte BattleScript_EffectPsychoShift
-	.4byte BattleScript_EffectPowerTrick
-	.4byte BattleScript_EffectFlameBurst
-	.4byte BattleScript_EffectAfterYou
-	.4byte BattleScript_EffectBestow
-	.4byte BattleScript_EffectRototiller
-	.4byte BattleScript_EffectFlowerShield
-	.4byte BattleScript_EffectHitPreventEscape
-	.4byte BattleScript_EffectSpeedSwap
-	.4byte BattleScript_EffectDefenseUp2Hit
-	.4byte BattleScript_EffectRevelationDance
-	.4byte BattleScript_EffectAuroraVeil
-	.4byte BattleScript_EffectThirdType
-	.4byte BattleScript_EffectFeint
-	.4byte BattleScript_EffectSparklingAria
-	.4byte BattleScript_EffectAcupressure
-	.4byte BattleScript_EffectAromaticMist
-	.4byte BattleScript_EffectPowder
-	.4byte BattleScript_EffectSpAtkUpHit
-	.4byte BattleScript_EffectBelch
-	.4byte BattleScript_EffectPartingShot
-	.4byte BattleScript_EffectSpectralThief
-	.4byte BattleScript_EffectVCreate
-	.4byte BattleScript_EffectMatBlock
-	.4byte BattleScript_EffectStompingTantrum
-	.4byte BattleScript_EffectCoreEnforcer
-	.4byte BattleScript_EffectInstruct
-	.4byte BattleScript_EffectThroatChop
-	.4byte BattleScript_EffectLaserFocus
-	.4byte BattleScript_EffectMagneticFlux
-	.4byte BattleScript_EffectGearUp
-	.4byte BattleScript_EffectIncinerate
-	.4byte BattleScript_EffectBugBite
-	.4byte BattleScript_EffectStrengthSap
-	.4byte BattleScript_EffectMindBlown
-	.4byte BattleScript_EffectPurify
-	.4byte BattleScript_EffectBurnUp
-	.4byte BattleScript_EffectShoreUp
-	.4byte BattleScript_EffectGeomancy
-	.4byte BattleScript_EffectFairyLock
-	.4byte BattleScript_EffectAllySwitch
-	.4byte BattleScript_EffectSleepHit
-	.4byte BattleScript_EffectHitEscape
-	.4byte BattleScript_EffectWorrySeed
-	.4byte BattleScript_EffectFellStinger
-	.4byte BattleScript_EffectCaptivate
-	.4byte BattleScript_EffectAlwaysCrit
-	.4byte BattleScript_EffectHammerArm
-	.4byte BattleScript_EffectFusionCombo
-	.4byte BattleScript_EffectHealBlock
-	.4byte BattleScript_EffectSpecialAttackUp3
+	.4byte BattleScript_EffectHit                     @ EFFECT_PLEDGE
+	.4byte BattleScript_EffectFling                   @ EFFECT_FLING
+	.4byte BattleScript_EffectNaturalGift             @ EFFECT_NATURAL_GIFT
+	.4byte BattleScript_EffectWakeUpSlap              @ EFFECT_WAKE_UP_SLAP
+	.4byte BattleScript_EffectHit                     @ EFFECT_WRING_OUT
+	.4byte BattleScript_EffectHit                     @ EFFECT_HEX
+	.4byte BattleScript_EffectHit                     @ EFFECT_ASSURANCE
+	.4byte BattleScript_EffectHit                     @ EFFECT_TRUMP_CARD
+	.4byte BattleScript_EffectHit                     @ EFFECT_ACROBATICS
+	.4byte BattleScript_EffectHit                     @ EFFECT_HEAT_CRASH
+	.4byte BattleScript_EffectHit                     @ EFFECT_PUNISHMENT
+	.4byte BattleScript_EffectHit                     @ EFFECT_STORED_POWER
+	.4byte BattleScript_EffectHit                     @ EFFECT_ELECTRO_BALL
+	.4byte BattleScript_EffectHit                     @ EFFECT_GYRO_BALL
+	.4byte BattleScript_EffectHit                     @ EFFECT_ECHOED_VOICE
+	.4byte BattleScript_EffectHit                     @ EFFECT_PAYBACK
+	.4byte BattleScript_EffectHit                     @ EFFECT_ROUND
+	.4byte BattleScript_EffectHit                     @ EFFECT_BRINE
+	.4byte BattleScript_EffectHit                     @ EFFECT_VENOSHOCK
+	.4byte BattleScript_EffectHit                     @ EFFECT_RETALIATE
+	.4byte BattleScript_EffectBulldoze                @ EFFECT_BULLDOZE
+	.4byte BattleScript_EffectHit                     @ EFFECT_FOUL_PLAY
+	.4byte BattleScript_EffectHit                     @ EFFECT_PSYSHOCK
+	.4byte BattleScript_EffectRoost                   @ EFFECT_ROOST
+	.4byte BattleScript_EffectGravity                 @ EFFECT_GRAVITY
+	.4byte BattleScript_EffectMircleEye               @ EFFECT_MIRACLE_EYE
+	.4byte BattleScript_EffectTailwind                @ EFFECT_TAILWIND
+	.4byte BattleScript_EffectEmbargo                 @ EFFECT_EMBARGO
+	.4byte BattleScript_EffectAquaRing                @ EFFECT_AQUA_RING
+	.4byte BattleScript_EffectTrickRoom               @ EFFECT_TRICK_ROOM
+	.4byte BattleScript_EffectWonderRoom              @ EFFECT_WONDER_ROOM
+	.4byte BattleScript_EffectMagicRoom               @ EFFECT_MAGIC_ROOM
+	.4byte BattleScript_EffectMagnetRise              @ EFFECT_MAGNET_RISE
+	.4byte BattleScript_EffectToxicSpikes             @ EFFECT_TOXIC_SPIKES
+	.4byte BattleScript_EffectGastroAcid              @ EFFECT_GASTRO_ACID
+	.4byte BattleScript_EffectStealthRock             @ EFFECT_STEALTH_ROCK
+	.4byte BattleScript_EffectTelekinesis             @ EFFECT_TELEKINESIS
+	.4byte BattleScript_EffectPowerSwap               @ EFFECT_POWER_SWAP
+	.4byte BattleScript_EffectGuardSwap               @ EFFECT_GUARD_SWAP
+	.4byte BattleScript_EffectHeartSwap               @ EFFECT_HEART_SWAP
+	.4byte BattleScript_EffectPowerSplit              @ EFFECT_POWER_SPLIT
+	.4byte BattleScript_EffectGuardSplit              @ EFFECT_GUARD_SPLIT
+	.4byte BattleScript_EffectStickyWeb               @ EFFECT_STICKY_WEB
+	.4byte BattleScript_EffectMetalBurst              @ EFFECT_METAL_BURST
+	.4byte BattleScript_EffectLuckyChant              @ EFFECT_LUCKY_CHANT
+	.4byte BattleScript_EffectSuckerPunch             @ EFFECT_SUCKER_PUNCH
+	.4byte BattleScript_EffectSpecialDefenseDownHit2  @ EFFECT_SPECIAL_DEFENSE_DOWN_HIT_2
+	.4byte BattleScript_EffectSimpleBeam              @ EFFECT_SIMPLE_BEAM
+	.4byte BattleScript_EffectEntrainment             @ EFFECT_ENTRAINMENT
+	.4byte BattleScript_EffectHealPulse               @ EFFECT_HEAL_PULSE
+	.4byte BattleScript_EffectQuash                   @ EFFECT_QUASH
+	.4byte BattleScript_EffectIonDeluge               @ EFFECT_ION_DELUGE
+	.4byte BattleScript_EffectFreezeHit               @ EFFECT_FREEZE_DRY
+	.4byte BattleScript_EffectTopsyTurvy              @ EFFECT_TOPSY_TURVY
+	.4byte BattleScript_EffectMistyTerrain            @ EFFECT_MISTY_TERRAIN
+	.4byte BattleScript_EffectGrassyTerrain           @ EFFECT_GRASSY_TERRAIN
+	.4byte BattleScript_EffectElectricTerrain         @ EFFECT_ELECTRIC_TERRAIN
+	.4byte BattleScript_EffectPsychicTerrain          @ EFFECT_PSYCHIC_TERRAIN
+	.4byte BattleScript_EffectAttackAccUp             @ EFFECT_ATTACK_ACCURACY_UP
+	.4byte BattleScript_EffectAttackSpAttackUp        @ EFFECT_ATTACK_SPATK_UP
+	.4byte BattleScript_EffectHurricane               @ EFFECT_HURRICANE
+	.4byte BattleScript_EffectHit                     @ EFFECT_TWO_TYPED_MOVE
+	.4byte BattleScript_EffectMeFirst                 @ EFFECT_ME_FIRST
+	.4byte BattleScript_EffectSpeedUpHit              @ EFFECT_SPEED_UP_HIT
+	.4byte BattleScript_EffectQuiverDance             @ EFFECT_QUIVER_DANCE
+	.4byte BattleScript_EffectCoil                    @ EFFECT_COIL
+	.4byte BattleScript_EffectElectrify               @ EFFECT_ELECTRIFY
+	.4byte BattleScript_EffectBurnHit                 @ EFFECT_SCALD
+	.4byte BattleScript_EffectReflectType             @ EFFECT_REFLECT_TYPE
+	.4byte BattleScript_EffectSoak                    @ EFFECT_SOAK
+	.4byte BattleScript_EffectGrowth                  @ EFFECT_GROWTH
+	.4byte BattleScript_EffectCloseCombat             @ EFFECT_CLOSE_COMBAT
+	.4byte BattleScript_EffectLastResort              @ EFFECT_LAST_RESORT
+	.4byte BattleScript_EffectRecoil33Status          @ EFFECT_RECOIL_33_STATUS
+	.4byte BattleScript_EffectFlinchStatus            @ EFFECT_FLINCH_STATUS
+	.4byte BattleScript_EffectRecoil50                @ EFFECT_RECOIL_50
+	.4byte BattleScript_EffectShellSmash              @ EFFECT_SHELL_SMASH
+	.4byte BattleScript_EffectShiftGear               @ EFFECT_SHIFT_GEAR
+	.4byte BattleScript_EffectDefenseUp3              @ EFFECT_DEFENSE_UP_3
+	.4byte BattleScript_EffectNobleRoar               @ EFFECT_NOBLE_ROAR
+	.4byte BattleScript_EffectVenomDrench             @ EFFECT_VENOM_DRENCH
+	.4byte BattleScript_EffectToxicThread             @ EFFECT_TOXIC_THREAD
+	.4byte BattleScript_EffectClearSmog               @ EFFECT_CLEAR_SMOG
+	.4byte BattleScript_EffectHitSwitchTarget         @ EFFECT_HIT_SWITCH_TARGET
+	.4byte BattleScript_EffectFinalGambit             @ EFFECT_FINAL_GAMBIT
+	.4byte BattleScript_EffectHit                     @ EFFECT_CHANGE_TYPE_ON_ITEM
+	.4byte BattleScript_EffectAutotomize              @ EFFECT_AUTOTOMIZE
+	.4byte BattleScript_EffectCopycat                 @ EFFECT_COPYCAT
+	.4byte BattleScript_EffectDefog                   @ EFFECT_DEFOG
+	.4byte BattleScript_EffectHitEnemyHealAlly        @ EFFECT_HIT_ENEMY_HEAL_ALLY
+	.4byte BattleScript_EffectSmackDown               @ EFFECT_SMACK_DOWN
+	.4byte BattleScript_EffectSynchronoise            @ EFFECT_SYNCHRONOISE
+	.4byte BattleScript_EffectPsychoShift             @ EFFECT_PSYCHO_SHIFT
+	.4byte BattleScript_EffectPowerTrick              @ EFFECT_POWER_TRICK
+	.4byte BattleScript_EffectFlameBurst              @ EFFECT_FLAME_BURST
+	.4byte BattleScript_EffectAfterYou                @ EFFECT_AFTER_YOU
+	.4byte BattleScript_EffectBestow                  @ EFFECT_BESTOW
+	.4byte BattleScript_EffectRototiller              @ EFFECT_ROTOTILLER
+	.4byte BattleScript_EffectFlowerShield            @ EFFECT_FLOWER_SHIELD
+	.4byte BattleScript_EffectHitPreventEscape        @ EFFECT_HIT_PREVENT_ESCAPE
+	.4byte BattleScript_EffectSpeedSwap               @ EFFECT_SPEED_SWAP
+	.4byte BattleScript_EffectDefenseUp2Hit           @ EFFECT_DEFENSE_UP2_HIT
+	.4byte BattleScript_EffectHit                     @ EFFECT_REVELATION_DANCE
+	.4byte BattleScript_EffectAuroraVeil              @ EFFECT_AURORA_VEIL
+	.4byte BattleScript_EffectThirdType               @ EFFECT_THIRD_TYPE
+	.4byte BattleScript_EffectFeint                   @ EFFECT_FEINT
+	.4byte BattleScript_EffectSparklingAria           @ EFFECT_SPARKLING_ARIA
+	.4byte BattleScript_EffectAcupressure             @ EFFECT_ACUPRESSURE
+	.4byte BattleScript_EffectAromaticMist            @ EFFECT_AROMATIC_MIST
+	.4byte BattleScript_EffectPowder                  @ EFFECT_POWDER
+	.4byte BattleScript_EffectSpAtkUpHit              @ EFFECT_SP_ATTACK_UP_HIT
+	.4byte BattleScript_EffectHit                     @ EFFECT_BELCH
+	.4byte BattleScript_EffectPartingShot             @ EFFECT_PARTING_SHOT
+	.4byte BattleScript_EffectSpectralThief           @ EFFECT_SPECTRAL_THIEF
+	.4byte BattleScript_EffectVCreate                 @ EFFECT_V_CREATE
+	.4byte BattleScript_EffectMatBlock                @ EFFECT_MAT_BLOCK
+	.4byte BattleScript_EffectHit                     @ EFFECT_STOMPING_TANTRUM
+	.4byte BattleScript_EffectCoreEnforcer            @ EFFECT_CORE_ENFORCER
+	.4byte BattleScript_EffectInstruct                @ EFFECT_INSTRUCT
+	.4byte BattleScript_EffectThroatChop              @ EFFECT_THROAT_CHOP
+	.4byte BattleScript_EffectLaserFocus              @ EFFECT_LASER_FOCUS
+	.4byte BattleScript_EffectMagneticFlux            @ EFFECT_MAGNETIC_FLUX
+	.4byte BattleScript_EffectGearUp                  @ EFFECT_GEAR_UP
+	.4byte BattleScript_EffectIncinerate              @ EFFECT_INCINERATE
+	.4byte BattleScript_EffectBugBite                 @ EFFECT_BUG_BITE
+	.4byte BattleScript_EffectStrengthSap             @ EFFECT_STRENGTH_SAP
+	.4byte BattleScript_EffectMindBlown               @ EFFECT_MIND_BLOWN
+	.4byte BattleScript_EffectPurify                  @ EFFECT_PURIFY
+	.4byte BattleScript_EffectBurnUp                  @ EFFECT_BURN_UP
+	.4byte BattleScript_EffectShoreUp                 @ EFFECT_SHORE_UP
+	.4byte BattleScript_EffectGeomancy                @ EFFECT_GEOMANCY
+	.4byte BattleScript_EffectFairyLock               @ EFFECT_FAIRY_LOCK
+	.4byte BattleScript_EffectAllySwitch              @ EFFECT_ALLY_SWITCH
+	.4byte BattleScript_EffectRelicSong               @ EFFECT_RELIC_SONG
+	.4byte BattleScript_EffectAttackerDefenseDownHit  @ EFFECT_ATTACKER_DEFENSE_DOWN_HIT
+	.4byte BattleScript_EffectHit                     @ EFFECT_BODY_PRESS
+	.4byte BattleScript_EffectEerieSpell              @ EFFECT_EERIE_SPELL
+	.4byte BattleScript_EffectJungleHealing           @ EFFECT_JUNGLE_HEALING
+	.4byte BattleScript_EffectCoaching                @ EFFECT_COACHING
+	.4byte BattleScript_EffectHit                     @ EFFECT_LASH_OUT
+	.4byte BattleScript_EffectHit                     @ EFFECT_GRASSY_GLIDE
+	.4byte BattleScript_EffectRemoveTerrain           @ EFFECT_REMOVE_TERRAIN
+	.4byte BattleScript_EffectHit                     @ EFFECT_DYNAMAX_DOUBLE_DMG
+	.4byte BattleScript_EffectDecorate                @ EFFECT_DECORATE
+	.4byte BattleScript_EffectHit                     @ EFFECT_SNIPE_SHOT
+	.4byte BattleScript_EffectTripleHit               @ EFFECT_TRIPLE_HIT
+	.4byte BattleScript_EffectRecoilHP25              @ EFFECT_RECOIL_HP_25
+	.4byte BattleScript_EffectStuffCheeks             @ EFFECT_STUFF_CHEEKS
+	.4byte BattleScript_EffectDefenseDownHit          @ EFFECT_GRAV_APPLE
+	.4byte BattleScript_EffectEvasionUpHit            @ EFFECT_EVASION_UP_HIT
+	.4byte BattleScript_EffectDoubleIronBash          @ EFFECT_DOUBLE_IRON_BASH
+	.4byte BattleScript_EffectGlitzyGlow              @ EFFECT_GLITZY_GLOW
+	.4byte BattleScript_EffectBaddyBad                @ EFFECT_BADDY_BAD
+	.4byte BattleScript_EffectSappySeed               @ EFFECT_SAPPY_SEED
+	.4byte BattleScript_EffectFreezyFrost             @ EFFECT_FREEZY_FROST
+	.4byte BattleScript_EffectSparklySwirl            @ EFFECT_SPARKLY_SWIRL
+	.4byte BattleScript_EffectPlasmaFists             @ EFFECT_PLASMA_FISTS
+	.4byte BattleScript_EffectHyperspaceFury          @ EFFECT_HYPERSPACE_FURY
+	.4byte BattleScript_EffectAuraWheel               @ EFFECT_AURA_WHEEL
+	.4byte BattleScript_EffectPhotonGeyser            @ EFFECT_PHOTON_GEYSER
+	.4byte BattleScript_EffectShellSideArm            @ EFFECT_SHELL_SIDE_ARM
+	.4byte BattleScript_EffectHit                     @ EFFECT_TERRAIN_PULSE
+	.4byte BattleScript_EffectJawLock                 @ EFFECT_JAW_LOCK
+	.4byte BattleScript_EffectNoRetreat               @ EFFECT_NO_RETREAT
+	.4byte BattleScript_EffectTarShot                 @ EFFECT_TAR_SHOT
+	.4byte BattleScript_EffectPoltergeist             @ EFFECT_POLTERGEIST
+	.4byte BattleScript_EffectOctolock                @ EFFECT_OCTOLOCK
+	.4byte BattleScript_EffectClangorousSoul          @ EFFECT_CLANGOROUS_SOUL
+	.4byte BattleScript_EffectHit                     @ EFFECT_BOLT_BEAK
+	.4byte BattleScript_EffectSkyDrop                 @ EFFECT_SKY_DROP
+	@ custom effects  @@@@@@@@@@
 	.4byte BattleScript_EffectStrengthUpHit
 	.4byte BattleScript_EffectBodyPress
 	.4byte BattleScript_EffectAttackerDefenseDownHit
@@ -520,6 +549,150 @@ BattleScript_StrengthSapMustLower:
 	attackanimation
 	waitanimation
 	goto BattleScript_StrengthSapLower
+
+BattleScript_EffectSkyDrop:
+	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_SkyDropTurn2
+	attackcanceler
+	ppreduce
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	jumpifsubstituteblocks BattleScript_ButItFailed
+	jumpiftargetally BattleScript_ButItFailed
+	jumpifunder200 BS_TARGET, BattleScript_SkyDropWork
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_TARGETTOOHEAVY
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
+BattleScript_SkyDropWork:
+	setskydrop
+	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_SKY_DROP
+	setsemiinvulnerablebit
+	call BattleScriptFirstChargingTurnAfterAttackString
+	goto BattleScript_MoveEnd
+BattleScript_SkyDropTurn2:
+	attackcanceler
+	setmoveeffect MOVE_EFFECT_CHARGING
+	setbyte sB_ANIM_TURN, 0x1
+	clearstatusfromeffect BS_ATTACKER
+	orword gHitMarker, HITMARKER_NO_PPDEDUCT
+	argumenttomoveeffect
+	clearsemiinvulnerablebit
+	attackstring
+	clearskydrop BattleScript_SkyDropChangedTarget
+	jumpiftype BS_TARGET, TYPE_FLYING, BattleScript_SkyDropFlyingType
+	goto BattleScript_HitFromCritCalc
+BattleScript_SkyDropFlyingType:
+	makevisible BS_TARGET
+	printstring STRINGID_ITDOESNTAFFECT
+	waitmessage B_WAIT_TIME_LONG
+	makevisible BS_ATTACKER
+	jumpifstatus2 BS_TARGET, STATUS2_CONFUSION, BattleScript_SkyDropFlyingAlreadyConfused
+	jumpifstatus2 BS_TARGET, STATUS2_LOCK_CONFUSE, BattleScript_SkyDropFlyingConfuseLock
+	goto BattleScript_MoveEnd
+BattleScript_SkyDropChangedTarget:
+	pause B_WAIT_TIME_SHORT
+	orhalfword gMoveResultFlags, MOVE_RESULT_FAILED
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	makevisible BS_ATTACKER
+	goto BattleScript_MoveEnd
+
+BattleScript_SkyDropFlyingConfuseLock:
+	setmoveeffect MOVE_EFFECT_CONFUSION
+	seteffectprimary
+BattleScript_SkyDropFlyingAlreadyConfused:
+	setmoveeffect MOVE_EFFECT_THRASH
+	clearstatusfromeffect BS_TARGET
+	jumpifstatus2 BS_TARGET, STATUS2_CONFUSION, BattleScript_MoveEnd
+	setbyte BS_ATTACKER, BS_TARGET
+	goto BattleScript_ThrashConfuses
+
+BattleScript_EffectFling:
+	jumpifcantfling BS_ATTACKER, BattleScript_ButItFailedAtkStringPpReduce
+	jumpifstatus3 BS_ATTACKER, STATUS3_EMBARGO, BattleScript_ButItFailedAtkStringPpReduce
+	jumpifword CMP_COMMON_BITS, gFieldStatuses, STATUS_FIELD_MAGIC_ROOM, BattleScript_ButItFailedAtkStringPpReduce
+	setlastuseditem BS_ATTACKER
+	removeitem BS_ATTACKER
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_PKMNFLUNG
+	waitmessage B_WAIT_TIME_SHORT
+	ppreduce
+	critcalc
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_MED
+	resultmessage
+	waitmessage B_WAIT_TIME_MED
+	jumpiflastuseditemberry BattleScript_EffectFlingConsumeBerry
+	jumpiflastuseditemholdeffect BS_ATTACKER, HOLD_EFFECT_FLAME_ORB, BattleScript_FlingFlameOrb
+	jumpiflastuseditemholdeffect BS_ATTACKER, HOLD_EFFECT_FLINCH, BattleScript_FlingFlinch
+	jumpiflastuseditemholdeffect BS_ATTACKER, HOLD_EFFECT_LIGHT_BALL, BattleScript_FlingLightBall
+	jumpiflastuseditemholdeffect BS_ATTACKER, HOLD_EFFECT_MENTAL_HERB, BattleScript_FlingMentalHerb
+	jumpiflastuseditemholdeffect BS_ATTACKER, HOLD_EFFECT_POISON_POWER, BattleScript_FlingPoisonBarb
+	jumpiflastuseditemholdeffect BS_ATTACKER, HOLD_EFFECT_TOXIC_ORB, BattleScript_FlingToxicOrb
+	jumpiflastuseditemholdeffect BS_ATTACKER, HOLD_EFFECT_RESTORE_STATS, BattleScript_FlingWhiteHerb
+BattleScript_EffectFlingConsumeBerry:
+	savebattleritem BS_TARGET
+	battleritemtolastuseditem BS_TARGET
+	setbyte sBERRY_OVERRIDE, TRUE @ override the requirements for eating berries
+	orword gHitMarker, HITMARKER_NO_ANIMATIONS
+	consumeberry BS_TARGET
+	bicword gHitMarker, HITMARKER_NO_ANIMATIONS
+	setbyte sBERRY_OVERRIDE, FALSE
+	restorebattleritem BS_TARGET
+BattleScript_FlingEnd:
+	tryfaintmon BS_TARGET
+	goto BattleScript_MoveEnd
+
+BattleScript_FlingFlameOrb:
+	setmoveeffect MOVE_EFFECT_BURN
+	seteffectprimary
+	goto BattleScript_FlingEnd
+BattleScript_FlingFlinch:
+	setmoveeffect MOVE_EFFECT_FLINCH
+	seteffectprimary
+	goto BattleScript_FlingEnd
+BattleScript_FlingLightBall:
+	setmoveeffect MOVE_EFFECT_PARALYSIS
+	seteffectprimary
+	goto BattleScript_FlingEnd
+BattleScript_FlingMentalHerb:
+	curecertainstatuses BS_TARGET
+	savetarget
+	copybyte gBattlerAttacker, gBattlerTarget
+	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT, NULL
+	printfromtable gMentalHerbCureStringIds
+	waitmessage B_WAIT_TIME_LONG
+	updatestatusicon BS_ATTACKER
+	restoretarget
+	goto BattleScript_FlingEnd
+BattleScript_FlingPoisonBarb:
+	setmoveeffect MOVE_EFFECT_POISON
+	seteffectprimary
+	goto BattleScript_FlingEnd
+BattleScript_FlingToxicOrb:
+	setmoveeffect MOVE_EFFECT_TOXIC
+	seteffectprimary
+	goto BattleScript_FlingEnd
+BattleScript_FlingWhiteHerb:
+	tryresetnegativestatstages BS_TARGET
+	swapattackerwithtarget
+	printstring STRINGID_PKMNSTATUSNORMAL
+	waitmessage B_WAIT_TIME_MED
+	swapattackerwithtarget
+	goto BattleScript_FlingEnd
 
 BattleScript_EffectBugBite:
 	setmoveeffect MOVE_EFFECT_BUG_BITE | MOVE_EFFECT_CERTAIN
@@ -2078,7 +2251,7 @@ BattleScript_EffectHitEscape:
 	moveendfrom ATK49_TARGET_VISIBLE
 	jumpifbattleend BattleScript_HitEscapeEnd
 	jumpifbyte CMP_NOT_EQUAL gBattleOutcome 0, BattleScript_HitEscapeEnd
-	jumpifbattletype BATTLE_TYPE_ARENA, BattleScript_HitEscapeEnd
+	@jumpifbattletype BATTLE_TYPE_ARENA, BattleScript_HitEscapeEnd
 	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_HitEscapeEnd
 	openpartyscreen BS_ATTACKER, BattleScript_HitEscapeEnd
 	switchoutabilities BS_ATTACKER
@@ -3626,6 +3799,7 @@ BattleScript_EffectForesight::
 	attackstring
 	ppreduce
 	setforesight
+BattleScript_IdentifiedFoe:
 	attackanimation
 	waitanimation
 	printstring STRINGID_PKMNIDENTIFIED
@@ -3763,7 +3937,8 @@ BattleScript_EffectAttract::
 	tryinfatuating BattleScript_ButItFailed
 	attackanimation
 	waitanimation
-	setmoveeffect MOVE_EFFECT_FALLINLOVE
+	printstring STRINGID_PKMNFELLINLOVE
+	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectReturn::
@@ -6746,7 +6921,7 @@ BattleScript_SnowWarningActivates::
 	printstring STRINGID_SNOWWARNINGHAIL
 	waitstate
 	playanimation BS_BATTLER_0, B_ANIM_HAIL_CONTINUES, NULL
-	call BattleScript_WeatherFormChanges
+	call BattleScript_HandleWeatherFormChanges
 	end3
 
 BattleScript_ElectricSurgeActivates::
@@ -7091,12 +7266,12 @@ BattleScript_RockyHelmetActivatesDmg:
 	return
 
 BattleScript_HurtAttacker:
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_x100000
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_PKMNHURTSWITH
 	waitmessage 0x40
-	tryfaintmon BS_ATTACKER
+	tryfaintmon BS_ATTACKER, FALSE, NULL
 	return
 
 BattleScript_SpikyShieldEffect::
