@@ -505,7 +505,7 @@ static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] =
     ABILITY_GULP_MISSILE,
 };
 
-bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags)
+bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags) //need to add utility umbrella clause to weather effects
 {
     if (!WEATHER_HAS_EFFECT)
         return FALSE;

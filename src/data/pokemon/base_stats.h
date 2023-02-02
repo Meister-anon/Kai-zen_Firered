@@ -24391,8 +24391,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_WATER_3,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_WEAK_ARMOR, ABILITY_LEVITATE},
-            .abilityHidden = {ABILITY_PERISH_BODY, ABILITY_LIQUID_OOZE},
+            .abilities = {ABILITY_LIQUID_SOUL, ABILITY_LIQUID_OOZE},
+            .abilityHidden = {ABILITY_PERISH_BODY, ABILITY_OCEAN_MEMORY},
         #else
             .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
         #endif
@@ -27659,14 +27659,14 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_WATER_3,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_WEAK_ARMOR, ABILITY_LEVITATE},
-            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_LIQUID_OOZE},
+            .abilities = {ABILITY_LIQUID_SOUL, ABILITY_LIQUID_OOZE},
+            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_OCEAN_MEMORY},
         #else//courtesy of haven new ability Liquid Soul turns water moves into ghost moves
             .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
         #endif  //will replace levitate I think
         .bodyColor = BODY_COLOR_WHITE,//other idea Ocean Memory, reduced damage from water moves
         .noFlip = FALSE,    // for ancient pokemon or fosill mon that previoiusly dwelled in water
-        .flags = F_GALARIAN_FORM,
+        .flags = F_GALARIAN_FORM,//note swap liquid soul & ocean memory effects & make ocean memory keep rain boost so prob make a table to work on move name
     }, //gave this line liquid ooze to double up on absorb damage from ghost tweak :)
 
     [SPECIES_ZIGZAGOON_GALARIAN] =

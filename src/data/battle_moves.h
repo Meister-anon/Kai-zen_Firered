@@ -880,11 +880,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_HYDRO_PUMP] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_6
-            .power = 110,
-        #else
-            .power = 120,
-        #endif
+        
+        .power = 120,
         .effect = EFFECT_HIT,
         .type = TYPE_WATER,
         .accuracy = 80,
@@ -7900,7 +7897,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_SCALD,
         .power = 80,
         .type = TYPE_WATER,
-        .accuracy = 100,
+        .accuracy = 90,
         .pp = 15,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,

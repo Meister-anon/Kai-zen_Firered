@@ -3341,8 +3341,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         defense *= 2;
     if (attackerHoldEffect == HOLD_EFFECT_THICK_CLUB && (attacker->species == SPECIES_CUBONE || attacker->species == SPECIES_MAROWAK))
         attack *= 2;
-    if (defender->ability == ABILITY_THICK_FAT && (type == TYPE_FIRE || type == TYPE_ICE))
-        spAttack /= 2;
+    /*if (defender->ability == ABILITY_THICK_FAT && (type == TYPE_FIRE || type == TYPE_ICE))
+        spAttack /= 2;*/    //removed this version as it only blocked special moves not physical moves too
     if (attacker->ability == ABILITY_HUSTLE)
         attack = (150 * attack) / 100;
     if (attacker->ability == ABILITY_PLUS && ABILITY_ON_FIELD2(ABILITY_MINUS))
@@ -3581,6 +3581,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMoveDamage *= 2;
             //MulModifier(&modifier, UQ_4_12(2.0));
         break;
+    case ABILITY_THICK_FAT:
+       if (type == (TYPE_FIRE || TYPE_ICE))
+           gBattleMoveDamage /= 2;
+       break;
+    case ABILITY_LIQUID_SOUL:
+        if (type == TYPE_WATER)
+            gBattleMoveDamage /= 2;
+        break;
     }
 
 
@@ -3661,6 +3669,12 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             case TYPE_WATER:
                 damage = (15 * damage) / 10;
                 break;
+            }
+
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_OCEAN_MEMORY
+                && gBattleMoves[move].type; == TYPE_WATER)  //hopefully checks if move was orginally water and will boost damage in rain even when ghost type
+            {
+                damage = (15 * damage) / 10;
             }
         }
         //moved these here, because they don't have to do with physical or special damage alone anymore.  since I removed the type link
