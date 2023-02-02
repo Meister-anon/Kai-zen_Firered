@@ -370,8 +370,17 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectFairyLock               @ EFFECT_FAIRY_LOCK
 	.4byte BattleScript_EffectAllySwitch              @ EFFECT_ALLY_SWITCH
 	.4byte BattleScript_EffectRelicSong               @ EFFECT_RELIC_SONG
-	.4byte BattleScript_EffectAttackerDefenseDownHit  @ EFFECT_ATTACKER_DEFENSE_DOWN_HIT
-	.4byte BattleScript_EffectHit                     @ EFFECT_BODY_PRESS
+	.4byte BattleScript_EffectHitEscape
+	.4byte BattleScript_EffectWorrySeed
+	.4byte BattleScript_EffectFellStinger
+	.4byte BattleScript_EffectCaptivate
+	.4byte BattleScript_EffectAlwaysCrit
+	.4byte BattleScript_EffectHammerArm
+	.4byte BattleScript_EffectFusionCombo
+	.4byte BattleScript_EffectHealBlock
+	.4byte BattleScript_EffectSpecialAttackUp3
+	.4byte BattleScript_EffectStrengthUpHit
+	.4byte BattleScript_EffectBodyPress
 	.4byte BattleScript_EffectEerieSpell              @ EFFECT_EERIE_SPELL
 	.4byte BattleScript_EffectJungleHealing           @ EFFECT_JUNGLE_HEALING
 	.4byte BattleScript_EffectCoaching                @ EFFECT_COACHING
@@ -407,8 +416,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectHit                     @ EFFECT_BOLT_BEAK
 	.4byte BattleScript_EffectSkyDrop                 @ EFFECT_SKY_DROP
 	@ custom effects  @@@@@@@@@@
-	.4byte BattleScript_EffectStrengthUpHit
-	.4byte BattleScript_EffectBodyPress
+	
 	.4byte BattleScript_EffectAttackerDefenseDownHit
 	.4byte BattleScript_EffectMonotype
 	.4byte BattleScript_EffectSketchStatUp
@@ -1756,7 +1764,31 @@ BattleScript_EffectPsychicTerrain:
 	waitanimation
 	printfromtable gTerrainStringIds
 	waitmessage 0x40
+	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG
+	call BattleScript_TerrainSeedLoop
+	jumpifabilitypresent ABILITY_MIMICRY, BattleScript_ApplyMimicry
 	goto BattleScript_MoveEnd
+
+BattleScript_ApplyMimicry::
+	savetarget
+	setbyte gBattlerTarget, 0
+BattleScript_MimicryLoopIter:
+	copybyte sBATTLER, gBattlerTarget
+	trytoapplymimicry BS_TARGET, BattleScript_MimicryLoop_NextBattler
+	copybyte gBattlerAbility, sBATTLER
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_BATTLERTYPECHANGEDTO
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_MimicryLoop_NextBattler:
+	addbyte gBattlerTarget, 0x1
+	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_MimicryLoopIter
+	restoretarget
+	goto BattleScript_MoveEnd
+
+BattleScript_MimicryActivatesEnd3::
+	printstring STRINGID_BATTLERTYPECHANGEDTO
+	waitmessage 0x40
+	end3
 
 BattleScript_EffectTopsyTurvy:
 	attackcanceler
@@ -3139,6 +3171,10 @@ BattleScript_EffectSpecialAttackUp2::
 
 BattleScript_EffectSpecialDefenseUp2::
 	setstatchanger STAT_SPDEF, 2, FALSE
+	goto BattleScript_EffectStatUp
+
+BattleScript_EffectSpecialAttackUp3::
+	setstatchanger STAT_SPATK, 3, FALSE
 	goto BattleScript_EffectStatUp
 
 BattleScript_EffectTransform::

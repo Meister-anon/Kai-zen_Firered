@@ -42,8 +42,13 @@
 
 
 #define ITEMEFFECT_ON_SWITCH_IN                 0x0
+#define ITEMEFFECT_NORMAL                       0x1
 #define ITEMEFFECT_MOVE_END                     0x3
 #define ITEMEFFECT_KINGSROCK_SHELLBELL          0x4
+#define ITEMEFFECT_TARGET                       0x5
+#define ITEMEFFECT_ORBS                         0x6
+#define ITEMEFFECT_LIFEORB_SHELLBELL            0x7
+#define ITEMEFFECT_BATTLER_MOVE_END             0x8 // move end effects for just the battler, not whole field
 
 #define WEATHER_HAS_EFFECT ((!AbilityBattleEffects(ABILITYEFFECT_CHECK_ON_FIELD, 0, ABILITY_CLOUD_NINE, 0, 0) && !AbilityBattleEffects(ABILITYEFFECT_CHECK_ON_FIELD, 0, ABILITY_AIR_LOCK, 0, 0)))
 #define WEATHER_HAS_EFFECT2 ((!AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, ABILITY_CLOUD_NINE, 0, 0) && !AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, ABILITY_AIR_LOCK, 0, 0)))
@@ -133,6 +138,16 @@ bool32 IsWorrySeedBannedAbility(u16 ability);
 bool32 IsGastroAcidBannedAbility(u16 ability);
 bool32 IsEntrainmentBannedAbilityAttacker(u16 ability);
 bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability);
+bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
+bool32 CanBeConfused(u8 battlerId);
+bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget);
+bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind);
+bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags);
+bool32 TryRoomService(u8 battlerId);
+u8 TryHandleSeed(u8 battler, u32 terrainFlag, u8 statId, u16 itemId, bool32 execute);
+void TryToRevertMimicry(void);
+void TryToApplyMimicry(u8 battlerId, bool8 various);
+void RestoreBattlerOriginalTypes(u8 battlerId);
 void ResetFuryCutterCounter(u8 battlerId);
 
 #endif // GUARD_BATTLE_UTIL_H

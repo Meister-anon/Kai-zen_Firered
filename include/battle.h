@@ -175,14 +175,17 @@ struct DisableStruct
     /*0x18*/ u8 mimickedMoves : 4;
     /*0x19*/ u8 rechargeTimer;
              u8 autotomizeCount;
-            u8 slowStartTimer;
-            u8 embargoTimer;
-            u8 magnetRiseTimer;
-            u8 telekinesisTimer;
-            u8 healBlockTimer;
-            u8 laserFocusTimer;
-            u8 throatChopTimer;
-             u8 RoostTimer; // to set random % 4 effect after use roost
+             u8 noRetreat : 1;
+             u8 tarShot : 1;
+             u8 octolock : 1;
+             u8 slowStartTimer;
+             u8 embargoTimer;
+             u8 magnetRiseTimer;
+             u8 telekinesisTimer;
+             u8 healBlockTimer;
+             u8 laserFocusTimer;
+             u8 throatChopTimer;
+             u8 RoostTimer; // to set random % 4 effect after use roost setup iondelluge the same
              u8 usedMoves : 4;
              //u8 RoostTimerStartValue;  //remove for now until I get 
     /*0x1A*/ u8 unk1A[2];
@@ -230,8 +233,14 @@ struct ProtectStruct
     u32 usesBouncedMove : 1;
     u32 usedHealBlockedMove : 1;
     u32 usedGravityPreventedMove : 1;
-    u32 powderSelfDmg : 1;
+    u32 powderSelfDmg : 1;  //not sure why  I added this I'm not gonna use it? well for someone else I guess. 
     u32 usedThroatChopPreventedMove : 1;
+    u32 pranksterElevated : 1;
+    u32 quickDraw : 1;
+    u32 usedMicleBerry : 1;
+    u32 usedCustapBerry : 1;    // also quick claw
+    u32 touchedProtectLike : 1;
+    u32 disableEjectPack : 1;
     u16 fieldE;
 };
 
@@ -302,16 +311,13 @@ struct FieldTimer
     u8 wonderRoomTimer;
     u8 magicRoomTimer;
     u8 trickRoomTimer;
-    u8 grassyTerrainTimer;
-    u8 mistyTerrainTimer;
-    u8 electricTerrainTimer;
-    u8 psychicTerrainTimer;
+    u8 terrainTimer;
     u8 echoVoiceCounter;
     u8 gravityTimer;
     u8 fairyLockTimer;
     u8 IonDelugeTimer; // this & roost will be only ones that don't fail if used when timer isn't 0
 
-};
+};//check how I setup roost may not need iondelugetimer here
 
 struct WishFutureKnock
 {
@@ -326,6 +332,56 @@ struct WishFutureKnock
 };
 
 extern struct WishFutureKnock gWishFutureKnock;
+
+/*struct AI_SavedBattleMon
+{
+    u16 ability;
+    u16 moves[MAX_MON_MOVES];
+    u16 heldItem;
+    u16 species;
+};
+
+struct AiLogicData
+{
+    //attacker data
+    u16 atkAbility;
+    u16 atkItem;
+    u16 atkHoldEffect;
+    u8 atkParam;
+    u16 atkSpecies;
+    // target data
+    u16 defAbility;
+    u16 defItem;
+    u16 defHoldEffect;
+    u8 defParam;
+    u16 defSpecies;
+    // attacker partner data
+    u8 battlerAtkPartner;
+    u16 partnerMove;
+    u16 atkPartnerAbility;
+    u16 atkPartnerHoldEffect;
+    bool32 targetSameSide;
+    // target partner data
+    u8 battlerDefPartner;
+    u16 defPartnerAbility;
+    u16 defPartnerHoldEffect;
+};
+
+struct AI_ThinkingStruct
+{
+    struct AiLogicData data;
+    u8 aiState;
+    u8 movesetIndex;
+    u16 moveConsidered;
+    s8 score[MAX_MON_MOVES];
+    u32 funcResult;
+    u32 aiFlags;
+    u8 aiAction;
+    u8 aiLogicId;
+    s32 simulatedDmg[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // attacker, target, move
+    struct AI_SavedBattleMon saved[4];
+    bool8 switchMon; // Because all available moves have no/little effect.
+};*/
 
 struct AI_ThinkingStruct
 {
@@ -354,6 +410,8 @@ struct UsedMoves
     u16 unknown[MAX_BATTLERS_COUNT];
 };
 
+#define AI_MOVE_HISTORY_COUNT 3
+
 struct BattleHistory
 {
     /*0x00*/ u16 usedMoves[2][8]; // 0xFFFF means move not used (confuse self hit, etc)
@@ -361,6 +419,9 @@ struct BattleHistory
     /*0x24*/ u8 itemEffects[MAX_BATTLERS_COUNT / 2];
     /*0x26*/ u16 trainerItems[MAX_BATTLERS_COUNT];
     /*0x2E*/ u8 itemsNo;
+             u16 moveHistory[MAX_BATTLERS_COUNT][AI_MOVE_HISTORY_COUNT]; // 3 last used moves for each battler
+             u8 moveHistoryIndex[MAX_BATTLERS_COUNT];
+             u16 heldItems[MAX_BATTLERS_COUNT];
 };
 
 struct BattleScriptsStack
@@ -460,6 +521,12 @@ struct Illusion
     struct Pokemon* mon;
 };
 
+struct StolenItem
+{
+    u16 originalItem : 15;
+    u16 stolen : 1;
+};
+
 struct BattleStruct //fill in unused fields when porting
 {
     u8 turnEffectsTracker;
@@ -556,6 +623,12 @@ struct BattleStruct //fill in unused fields when porting
     u16 hpBefore[MAX_BATTLERS_COUNT]; // Hp of battlers before using a move. For Berserk
     bool8 spriteIgnore0Hp;
     u8 field_182;
+    struct StolenItem itemStolen[PARTY_SIZE];  // Player's team that had items stolen (two bytes per party member)
+    u8 blunderPolicy : 1; // should blunder policy activate
+    u8 ballSpriteIds[2];    // item gfx, window gfx
+    u8 stickyWebUser;
+    u8 appearedInBattle; // Bitfield to track which Pokemon appeared in battle. Used for Burmy's form change
+    u8 skyDropTargets[MAX_BATTLERS_COUNT]; // For Sky Drop, to account for if multiple Pokemon use Sky Drop in a double battle.
     // align 4
     union {
         struct LinkPartnerHeader linkPartnerHeader;
@@ -572,7 +645,7 @@ extern struct BattleStruct *gBattleStruct;
         typeArg = gBattleStruct->dynamicMoveType & 0x3F;    \
     else                                                    \
         typeArg = gBattleMoves[move].type;                  \
-}
+}//unsure how to sue dynamicMoveType
 
 //#define IS_TYPE_PHYSICAL(moveType)(moveType < TYPE_MYSTERY)
 //#define IS_TYPE_SPECIAL(moveType)(moveType > TYPE_MYSTERY)
@@ -611,11 +684,16 @@ struct BattleScripting
     u8 atk49_state;
     u8 battlerWithAbility;
     u8 multihitMoveEffect; //important, why do these need to go here
+    u16 savedMoveEffect; // For moves hitting multiple targets.
+    u16 moveEffect;
     u8 battler;
     u8 animTurn;
     u8 animTargetsHit;
+    u8 switchCase;  // Special switching conditions, eg. red card
+    u8 overrideBerryRequirements;
     u8 statChanger;
     bool8 statAnimPlayed;
+    bool8 monCaught;
     u8 atk23_state;
     u8 battleStyle;
     u8 atk6C_state;
@@ -807,6 +885,7 @@ extern u8 gMultiTask;
 extern struct BattleScripting gBattleScripting;
 extern u8 gBattlerFainted;
 extern u32 gStatuses3[MAX_BATTLERS_COUNT];
+extern u32 gStatuses4[MAX_BATTLERS_COUNT];
 extern u8 gSentPokesToOpponent[2];
 extern const u8 *gBattlescriptCurrInstr;
 extern const u8 *gSelectionBattleScripts[MAX_BATTLERS_COUNT];
@@ -828,6 +907,9 @@ extern u16 gDynamicBasePower;
 extern u32 gFieldStatuses;
 extern struct FieldTimer gFieldTimers; //both needed for things like gravity etc.
 extern bool8 gHasFetchedBall;
+extern u8 gLastUsedBall;
+extern u16 gLastThrownBall;
+extern bool8 gSwapDamageCategory; // Photon Geyser, Shell Side Arm, Light That Burns the Sky
 extern u16 gLastLandedMoves[MAX_BATTLERS_COUNT];
 extern u8 gLastHitBy[MAX_BATTLERS_COUNT];
 extern u8 gMultiUsePlayerCursor;

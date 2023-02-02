@@ -353,7 +353,8 @@ enum
 #define EVO_TRADE_SPECIFIC_MON   			0x0022 // Pokémon is traded for a specified Pokémon
 #define EVO_SPECIFIC_MAP   				    0x0023 // Pokémon levels up in a specific room of a specified map.
 #define EVO_MEGA_EVOLUTION					0x0024 // (change later)Not an actual evolution, used to temporarily mega evolve in battle.
-#define EVO_MOVE_MEGA_EVOLUTION		        0x0025 // Mega Evolution that checks for a move instead of held item.
+#define EVO_MOVE_MEGA_EVOLUTION		        0x0025 // Mega Evolution that checks for a move instead of held item
+#define EVO_PRIMAL_REVERSION                0x0026// Not an actual evolution, used to undergo primal reversion in battle.
 
 struct Evolution
 {

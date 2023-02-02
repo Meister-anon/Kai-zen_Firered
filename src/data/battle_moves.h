@@ -3520,7 +3520,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_CONFUSE_HIT,
         .power = 100,
         .type = TYPE_FIGHTING,
-        .accuracy = 50,
+        .accuracy = 70,
         .pp = 5,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
@@ -7294,16 +7294,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_MAGMA_STORM] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_6
-            .power = 100,
-            .accuracy = 75,
-        #elif B_UPDATED_MOVE_DATA == GEN_5
-            .power = 120,
-            .accuracy = 75,
-        #else
-            .power = 120,
-            .accuracy = 70,
-        #endif
+        .power = 110,
+        .accuracy = 75,
         .effect = EFFECT_TRAP,
         .type = TYPE_FIRE,
         .pp = 5,

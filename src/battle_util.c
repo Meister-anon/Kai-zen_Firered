@@ -505,6 +505,100 @@ static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] =
     ABILITY_GULP_MISSILE,
 };
 
+bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags)
+{
+    if (!WEATHER_HAS_EFFECT)
+        return FALSE;
+
+    if (gBattleWeather & weatherFlags)
+    {
+        // given weather is active -> check if its sun, rain against utility umbrella ( since only 1 weather can be active at once)
+        if (gBattleWeather & (B_WEATHER_SUN | B_WEATHER_RAIN) && GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_UTILITY_UMBRELLA)
+            return FALSE; // utility umbrella blocks sun, rain effects
+
+        return TRUE;
+    }
+    return FALSE;
+}
+
+// This function is the body of "jumpifstat", but can be used dynamically in a function
+bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind)
+{
+    bool8 ret = FALSE;
+    u8 statValue = gBattleMons[battlerId].statStages[statId];
+
+    // Because this command is used as a way of checking if a stat can be lowered/raised,
+    // we need to do some modification at run-time.
+    if (GetBattlerAbility(battlerId) == ABILITY_CONTRARY)
+    {
+        if (cmpKind == CMP_GREATER_THAN)
+            cmpKind = CMP_LESS_THAN;
+        else if (cmpKind == CMP_LESS_THAN)
+            cmpKind = CMP_GREATER_THAN;
+
+        if (cmpTo == MIN_STAT_STAGE)
+            cmpTo = MAX_STAT_STAGE;
+        else if (cmpTo == MAX_STAT_STAGE)
+            cmpTo = MIN_STAT_STAGE;
+    }
+
+    switch (cmpKind)
+    {
+    case CMP_EQUAL:
+        if (statValue == cmpTo)
+            ret = TRUE;
+        break;
+    case CMP_NOT_EQUAL:
+        if (statValue != cmpTo)
+            ret = TRUE;
+        break;
+    case CMP_GREATER_THAN:
+        if (statValue > cmpTo)
+            ret = TRUE;
+        break;
+    case CMP_LESS_THAN:
+        if (statValue < cmpTo)
+            ret = TRUE;
+        break;
+    case CMP_COMMON_BITS:
+        if (statValue & cmpTo)
+            ret = TRUE;
+        break;
+    case CMP_NO_COMMON_BITS:
+        if (!(statValue & cmpTo))
+            ret = TRUE;
+        break;
+    }
+
+    return ret;
+}
+
+
+bool32 CanBeConfused(u8 battlerId)
+{
+    if (GetBattlerAbility(gEffectBattler) == ABILITY_OWN_TEMPO
+        || gBattleMons[gEffectBattler].status2 & STATUS2_CONFUSION
+        || IsBattlerTerrainAffected(battlerId, STATUS_FIELD_MISTY_TERRAIN))
+        return FALSE;
+    return TRUE;
+}
+
+bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget)
+{
+    if (!gProtectStructs[battlerPrankster].pranksterElevated)
+        return FALSE;
+    if (GetBattlerSide(battlerPrankster) == GetBattlerSide(battlerDef))
+        return FALSE;
+    if (checkTarget && (gBattleMoves[move].target & (MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_DEPENDS)))
+        return FALSE;
+    if (!IS_BATTLER_OF_TYPE(battlerDef, TYPE_DARK))
+        return FALSE;
+    if (gStatuses3[battlerDef] & STATUS3_SEMI_INVULNERABLE)
+        return FALSE;
+
+    return FALSE;
+}
+
 void CancelMultiTurnMoves(u8 battler)
 {
     gBattleMons[battler].status2 &= ~(STATUS2_MULTIPLETURNS);
@@ -512,6 +606,76 @@ void CancelMultiTurnMoves(u8 battler)
     gBattleMons[battler].status2 &= ~(STATUS2_UPROAR);
     gBattleMons[battler].status2 &= ~(STATUS2_BIDE);
     gStatuses3[battler] &= ~(STATUS3_SEMI_INVULNERABLE);
+
+    // Clear battler's semi-invulnerable bits if they are not held by Sky Drop.
+    if (!(gStatuses3[battler] & STATUS3_SKY_DROPPED))
+        gStatuses3[battler] &= ~(STATUS3_SEMI_INVULNERABLE);
+    
+    // Check to see if this Pokemon was in the middle of using Sky Drop. If so, release the target.
+    if (gBattleStruct->skyDropTargets[battler] != 0xFF && !(gStatuses3[battler] & STATUS3_SKY_DROPPED))
+    {
+        // Get the target's battler id
+        u8 otherSkyDropper = gBattleStruct->skyDropTargets[battler];
+        
+        // Clears sky_dropped and on_air statuses
+        gStatuses3[otherSkyDropper] &= ~(STATUS3_SKY_DROPPED | STATUS3_ON_AIR);
+        
+        // Makes both attacker and target's sprites visible
+        gSprites[gBattlerSpriteIds[battler]].invisible = FALSE;
+        gSprites[gBattlerSpriteIds[otherSkyDropper]].invisible = FALSE;
+        
+        // If target was sky dropped in the middle of Outrage/Thrash/Petal Dance,
+        // confuse them upon release and display "confused by fatigue" message & animation.
+        // Don't do this if this CancelMultiTurnMoves is caused by falling asleep via Yawn.
+        if (gBattleMons[otherSkyDropper].status2 & STATUS2_LOCK_CONFUSE && gBattleStruct->turnEffectsTracker != 24)
+        {
+            gBattleMons[otherSkyDropper].status2 &= ~(STATUS2_LOCK_CONFUSE);
+
+            // If the target can be confused, confuse them.
+            // Don't use CanBeConfused, can cause issues in edge cases.
+            if (!(GetBattlerAbility(otherSkyDropper) == ABILITY_OWN_TEMPO
+                || gBattleMons[otherSkyDropper].status2 & STATUS2_CONFUSION
+                || IsBattlerTerrainAffected(otherSkyDropper, STATUS_FIELD_MISTY_TERRAIN)))
+            {
+                // Set confused status
+                gBattleMons[otherSkyDropper].status2 |= STATUS2_CONFUSION_TURN(((Random()) % 4) + 2);
+
+                // If this CancelMultiTurnMoves is occuring due to attackcanceller
+                if (gBattlescriptCurrInstr[0] == 0x0)
+                {
+                    gBattleStruct->skyDropTargets[battler] = 0xFE;
+                }
+                // If this CancelMultiTurnMoves is occuring due to VARIOUS_GRAVITY_ON_AIRBORNE_MONS
+                // Reapplying STATUS3_SKY_DROPPED allows for avoiding unecessary messages when Gravity is applied to the target.
+                else if (gBattlescriptCurrInstr[0] == 0x76 && gBattlescriptCurrInstr[2] == 76)
+                {
+                    gBattleStruct->skyDropTargets[battler] = 0xFE;
+                    gStatuses3[otherSkyDropper] |= STATUS3_SKY_DROPPED;
+                }
+                // If this CancelMultiTurnMoves is occuring due to cancelmultiturnmoves script
+                else if (gBattlescriptCurrInstr[0] == 0x76 && gBattlescriptCurrInstr[2] == 0)
+                {
+                    gBattlerAttacker = otherSkyDropper;
+                    gBattlescriptCurrInstr = BattleScript_ThrashConfuses - 3;
+                }
+                // If this CancelMultiTurnMoves is occuring due to receiving Sleep/Freeze status
+                else if (gBattleScripting.moveEffect <= PRIMARY_STATUS_MOVE_EFFECT)
+                {
+                    gBattlerAttacker = otherSkyDropper;
+                    BattleScriptPush(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = BattleScript_ThrashConfuses - 1;
+                }
+            }
+        }
+
+        // Clear skyDropTargets data, unless this CancelMultiTurnMoves is caused by Yawn, attackcanceler, or VARIOUS_GRAVITY_ON_AIRBORNE_MONS
+        if (!(gBattleMons[otherSkyDropper].status2 & STATUS2_LOCK_CONFUSE) && gBattleStruct->skyDropTargets[battler] < 4)
+        {
+            gBattleStruct->skyDropTargets[battler] = 0xFF;
+            gBattleStruct->skyDropTargets[otherSkyDropper] = 0xFF;
+        }
+    }
+
     gDisableStructs[battler].rolloutTimer = 0;
     gDisableStructs[battler].furyCutterCounter = 0;
 }
@@ -525,6 +689,10 @@ bool8 WasUnableToUseMove(u8 battler)
      || gProtectStructs[battler].usedDisabledMove
      || gProtectStructs[battler].usedTauntedMove
      || gProtectStructs[battler].flag2Unknown
+     || gProtectStructs[battler].usedGravityPreventedMove
+     || gProtectStructs[battler].usedHealBlockedMove
+     || gProtectStructs[battler].powderSelfDmg
+     || gProtectStructs[battler].usedThroatChopPreventedMove)
      || gProtectStructs[battler].flinchImmobility
      || gProtectStructs[battler].confusionSelfDmg) //prob need adjust this when done
         return TRUE; //actually no I'll keep that as is, but only have it trigger when using non-status move on self at bad oods
@@ -739,6 +907,57 @@ u8 GetImprisonedMovesCount(u8 battlerId, u16 move)
     ENDTURN_HAIL,
     ENDTURN_FIELD_COUNT,
 };*/
+
+void RestoreBattlerOriginalTypes(u8 battlerId)
+{
+    gBattleMons[battlerId].type1 = gBaseStats[gBattleMons[battlerId].species].type1;
+    gBattleMons[battlerId].type2 = gBaseStats[gBattleMons[battlerId].species].type2;
+}
+
+void TryToApplyMimicry(u8 battlerId, bool8 various)
+{
+    u32 moveType, move;
+
+    GET_MOVE_TYPE(move, moveType);
+    switch (gFieldStatuses)
+    {
+    case STATUS_FIELD_ELECTRIC_TERRAIN:
+        moveType = TYPE_ELECTRIC;
+        break;
+    case STATUS_FIELD_MISTY_TERRAIN:
+        moveType = TYPE_FAIRY;
+        break;
+    case STATUS_FIELD_GRASSY_TERRAIN:
+        moveType = TYPE_GRASS;
+        break;
+    case STATUS_FIELD_PSYCHIC_TERRAIN:
+        moveType = TYPE_PSYCHIC;
+        break;
+    default:
+        moveType = 0;
+        break;
+    }
+
+    if (moveType != 0 && !IS_BATTLER_OF_TYPE(battlerId, moveType))
+    {
+        SET_BATTLER_TYPE(battlerId, moveType);
+        PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, battlerId, gBattlerPartyIndexes[battlerId])
+        PREPARE_TYPE_BUFFER(gBattleTextBuff2, moveType);
+        if (!various)
+            BattleScriptPushCursorAndCallback(BattleScript_MimicryActivatesEnd3);
+    }
+}
+
+void TryToRevertMimicry(void)
+{
+    s32 i;
+
+    for (i = 0; i < MAX_BATTLERS_COUNT; i++)
+    {
+        if (GetBattlerAbility(i) == ABILITY_MIMICRY)
+            RestoreBattlerOriginalTypes(i);
+    }
+}
 
 enum
 {
@@ -1050,6 +1269,7 @@ enum
     ENDTURN_NIGHTMARES,
     ENDTURN_CURSE,
     ENDTURN_WRAP,
+    ENDTURN_OCTOLOCK,
     ENDTURN_UPROAR,
     ENDTURN_THRASH,
     ENDTURN_FLINCH,
@@ -1071,6 +1291,7 @@ enum
     ENDTURN_POWDER,
     ENDTURN_THROAT_CHOP,
     ENDTURN_SLOW_START,
+    ENDTURN_PLASMA_FISTS,
     ENDTURN_BATTLER_COUNT
 };
 
@@ -1295,6 +1516,21 @@ u8 DoBattlerEndTurnEffects(void)
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
+            case ENDTURN_OCTOLOCK:
+            {
+                u16 battlerAbility = GetBattlerAbility(gActiveBattler);
+                if (gDisableStructs[gActiveBattler].octolock
+                    && !(battlerAbility == ABILITY_CLEAR_BODY
+                        || battlerAbility == ABILITY_FULL_METAL_BODY
+                        || battlerAbility == ABILITY_WHITE_SMOKE))
+                {
+                    gBattlerTarget = gActiveBattler;
+                    BattleScriptExecute(BattleScript_OctolockEndTurn);
+                    effect++;
+                }
+                gBattleStruct->turnEffectsTracker++;
+            }
+            break;
             case ENDTURN_UPROAR:  // uproar
                 if (gBattleMons[gActiveBattler].status2 & STATUS2_UPROAR)
                 {
@@ -1460,6 +1696,25 @@ u8 DoBattlerEndTurnEffects(void)
                 }
                 gBattleStruct->turnEffectsTracker++;
                 break;
+            case ENDTURN_ELECTRIFY:
+            gStatuses4[gActiveBattler] &= ~STATUS4_ELECTRIFIED;
+            gBattleStruct->turnEffectsTracker++;
+            case ENDTURN_POWDER:
+            gBattleMons[gActiveBattler].status2 &= ~STATUS2_POWDER;
+            gBattleStruct->turnEffectsTracker++;
+            case ENDTURN_THROAT_CHOP:
+            if (gDisableStructs[gActiveBattler].throatChopTimer && --gDisableStructs[gActiveBattler].throatChopTimer == 0)
+            {
+                BattleScriptExecute(BattleScript_ThroatChopEndTurn);
+                effect++;
+            }
+            gBattleStruct->turnEffectsTracker++;
+            break;
+            case ENDTURN_PLASMA_FISTS:
+            for (i = 0; i < gBattlersCount; i++)
+                gStatuses4[i] &= ~STATUS4_PLASMA_FISTS;
+            gBattleStruct->turnEffectsTracker++;
+            break;
             case ENDTURN_BATTLER_COUNT:  // done
                 gBattleStruct->turnEffectsTracker = 0;
                 ++gBattleStruct->turnEffectsBattlerId;
@@ -4949,4 +5204,56 @@ static bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId)
         || IsAbilityOnOpposingSide(battlerId, ABILITY_AS_ONE_SHADOW_RIDER))
         return TRUE;
     return FALSE;
+}
+
+bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag)
+{
+    if (!(gFieldStatuses & terrainFlag))
+        return FALSE;
+    else if (gStatuses3[battlerId] & STATUS3_SEMI_INVULNERABLE)
+        return FALSE;
+
+    return IsBattlerGrounded(battlerId);
+}
+
+u8 TryHandleSeed(u8 battler, u32 terrainFlag, u8 statId, u16 itemId, bool32 execute)
+{
+    if (gFieldStatuses & terrainFlag && CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN))
+    {
+        BufferStatChange(battler, statId, STRINGID_STATROSE);
+        gLastUsedItem = itemId; // For surge abilities
+        gEffectBattler = gBattleScripting.battler = battler;
+        SET_STATCHANGER(statId, 1, FALSE);
+        gBattleScripting.animArg1 = 14 + statId;
+        gBattleScripting.animArg2 = 0;
+        if (execute)
+        {
+            BattleScriptExecute(BattleScript_BerryStatRaiseEnd2);
+        }
+        else
+        {
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_BerryStatRaiseRet;
+        }
+        return ITEM_STATS_CHANGE;
+    }
+    return 0;
+}
+
+bool32 TryRoomService(u8 battlerId)
+{
+    if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM && CompareStat(battlerId, STAT_SPEED, MIN_STAT_STAGE, CMP_GREATER_THAN))
+    {
+        BufferStatChange(battlerId, STAT_SPEED, STRINGID_STATFELL);
+        gEffectBattler = gBattleScripting.battler = battlerId;
+        SET_STATCHANGER(STAT_SPEED, 1, TRUE);
+        gBattleScripting.animArg1 = 14 + STAT_SPEED;
+        gBattleScripting.animArg2 = 0;
+        gLastUsedItem = gBattleMons[battlerId].item;
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
 }

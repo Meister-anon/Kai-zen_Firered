@@ -659,7 +659,7 @@ struct SaveBlock1 /* 0x02025734 */
     /*0x5B0*/ struct ItemSlot bagPocket_KeyItems[BAG_KEYITEMS_COUNT];
     /*0x600*/ struct ItemSlot bagPocket_PokeBalls[BAG_POKEBALLS_COUNT];
     /*0x640*/ struct ItemSlot bagPocket_TMHM[BAG_TMHM_COUNT];
-    /*0x740*/ struct ItemSlot bagPocket_Berries[BAG_BERRIES_COUNT];
+    /*0x740*/ struct ItemSlot bagPOCKET_BERRY_POUCH[BAG_BERRIES_COUNT];
     /*0x7F8*/ struct Pokeblock pokeblocks[POKEBLOCKS_COUNT];
     /*0x938*/ u8 dexSeen2[DEX_FLAGS_NO];
     /*0x96C*/ u16 berryBlenderRecords[3];

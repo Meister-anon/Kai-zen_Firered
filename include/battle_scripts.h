@@ -473,6 +473,8 @@ extern const u8 BattleScript_FlowerShieldIsAnyGrass[];
 extern const u8 BattleScript_EffectFlowerShield[];
 extern const u8 BattleScript_EffectDefenseUp2Hit[];
 extern const u8 BattleScript_EffectThirdType[];
+extern const u8 BattleScript_MimicryActivatesEnd3[];
+extern const u8 BattleScript_ApplyMimicry[];
 extern const u8 BattleScript_EffectFeint[];
 extern const u8 BattleScript_MoveEffectFeint[];
 extern const u8 BattleScript_EffectAcupressureTry[];

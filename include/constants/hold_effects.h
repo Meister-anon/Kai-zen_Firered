@@ -134,6 +134,7 @@
 #define HOLD_EFFECT_LUMINOUS_MOSS   142
 #define HOLD_EFFECT_SNOWBALL        143
 #define HOLD_EFFECT_WEAKNESS_POLICY 144
+#define HOLD_EFFECT_PRIMAL_ORB      145
 
 // Gen7 hold effects
 #define HOLD_EFFECT_PROTECTIVE_PADS  154
@@ -143,6 +144,8 @@
 #define HOLD_EFFECT_MEMORY           158
 #define HOLD_EFFECT_Z_CRYSTAL        159
 
+
+
 // Gen8 hold effects
 #define HOLD_EFFECT_UTILITY_UMBRELLA    169
 #define HOLD_EFFECT_EJECT_PACK          170
@@ -150,6 +153,12 @@
 #define HOLD_EFFECT_BLUNDER_POLICY      172
 #define HOLD_EFFECT_HEAVY_DUTY_BOOTS    173
 #define HOLD_EFFECT_THROAT_SPRAY        174
+
+// Terrain seed params
+#define HOLD_EFFECT_PARAM_ELECTRIC_TERRAIN  0
+#define HOLD_EFFECT_PARAM_GRASSY_TERRAIN    1
+#define HOLD_EFFECT_PARAM_MISTY_TERRAIN     2
+#define HOLD_EFFECT_PARAM_PSYCHIC_TERRAIN   3
 
 //personal
 #define HOLD_EFFECT_ULTIMA_BRACE   175 // block exp multiply ev gain *exp=0

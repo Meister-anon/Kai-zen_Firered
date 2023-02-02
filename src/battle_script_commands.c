@@ -6571,6 +6571,21 @@ static void PutLevelAndGenderOnLvlUpBox(void)
     CopyWindowToVram(13, COPYWIN_GFX);
 }
 
+static bool32 IsRototillerAffected(u32 battlerId)
+{
+    if (!IsBattlerAlive(battlerId))
+        return FALSE;
+    if (!IsBattlerGrounded(battlerId))
+        return FALSE;   // Only grounded battlers affected
+    if (!IS_BATTLER_OF_TYPE(battlerId, TYPE_GRASS))
+        return FALSE;   // Only grass types affected
+    if (gStatuses3[battlerId] & STATUS3_SEMI_INVULNERABLE)
+        return FALSE;   // Rototiller doesn't affected semi-invulnerable battlers
+    if (BlocksPrankster(MOVE_ROTOTILLER, gBattlerAttacker, battlerId, FALSE))
+        return FALSE;
+    return TRUE;
+}
+
 static bool8 sub_8026648(void)
 {
     if (gBattle_BG2_X == 0x1A0)
@@ -6847,19 +6862,19 @@ static void HandleTerrainMove(u32 moveEffect)
     switch (moveEffect)
     {
     case EFFECT_MISTY_TERRAIN:
-        statusFlag = STATUS_FIELD_MISTY_TERRAIN, timer = &gFieldTimers.mistyTerrainTimer;
+        statusFlag = STATUS_FIELD_MISTY_TERRAIN, timer = &gFieldTimers.terrainTimer;
         gBattleCommunication[MULTISTRING_CHOOSER] = 0;
         break;
     case EFFECT_GRASSY_TERRAIN:
-        statusFlag = STATUS_FIELD_GRASSY_TERRAIN, timer = &gFieldTimers.grassyTerrainTimer;
+        statusFlag = STATUS_FIELD_GRASSY_TERRAIN, timer = &gFieldTimers.terrainTimer;
         gBattleCommunication[MULTISTRING_CHOOSER] = 1;
         break;
     case EFFECT_ELECTRIC_TERRAIN:
-        statusFlag = STATUS_FIELD_ELECTRIC_TERRAIN, timer = &gFieldTimers.electricTerrainTimer;
+        statusFlag = STATUS_FIELD_ELECTRIC_TERRAIN, timer = &gFieldTimers.terrainTimer;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
         break;
     case EFFECT_PSYCHIC_TERRAIN:
-        statusFlag = STATUS_FIELD_PSYCHIC_TERRAIN, timer = &gFieldTimers.psychicTerrainTimer;
+        statusFlag = STATUS_FIELD_PSYCHIC_TERRAIN, timer = &gFieldTimers.terrainTimer;
         gBattleCommunication[MULTISTRING_CHOOSER] = 3;
         break;
     }
@@ -8241,7 +8256,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         return;
     case VARIOUS_REMOVE_TERRAIN:
         gFieldTimers.terrainTimer = 0;
-        switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
+        switch (gFieldStatuses & STATUS_TERRAIN_ANY)
         {
         case STATUS_FIELD_MISTY_TERRAIN:
             gBattleCommunication[MULTISTRING_CHOOSER] = 0;
@@ -8259,7 +8274,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattleCommunication[MULTISTRING_CHOOSER] = 4;  // failsafe
             break;
         }
-        gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;    // remove the terrain
+        gFieldStatuses &= ~STATUS_TERRAIN_ANY;    // remove the terrain
         TryToRevertMimicry(); // restore the types of Pokémon with Mimicry
         break;
     case VARIOUS_JUMP_IF_UNDER_200:
@@ -8321,7 +8336,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             {
                 gBattleMons[gEffectBattler].status2 &= ~(STATUS2_LOCK_CONFUSE);
                 gBattlerAttacker = gEffectBattler;
-                gBattleMons[gBattlerTarget].status2 |= STATUS2_CONFUSION_TURN(((Random()) % 4) + 2);
+                gBattleMons[gBattlerTarget].status2 |= STATUS2_CONFUSION; //edit of original value /important test
                 gBattlescriptCurrInstr = BattleScript_ThrashConfuses;
                 return;
             }
@@ -8349,32 +8364,23 @@ static void atk76_various(void) //will need to add all these emerald various com
         if (gBattleWeather & B_WEATHER_SUN_PRIMAL && !shouldNotClear)
         {
             gBattleWeather &= ~B_WEATHER_SUN_PRIMAL;
-            PrepareStringBattle(STRINGID_EXTREMESUNLIGHTFADED, gActiveBattler);
+            //PrepareStringBattle(STRINGID_EXTREMESUNLIGHTFADED, gActiveBattler);
             gBattleCommunication[MSG_DISPLAY] = 1;
         }
         else if (gBattleWeather & B_WEATHER_RAIN_PRIMAL && !shouldNotClear)
         {
             gBattleWeather &= ~B_WEATHER_RAIN_PRIMAL;
-            PrepareStringBattle(STRINGID_HEAVYRAINLIFTED, gActiveBattler);
+            //PrepareStringBattle(STRINGID_HEAVYRAINLIFTED, gActiveBattler);
             gBattleCommunication[MSG_DISPLAY] = 1;
         }
         else if (gBattleWeather & B_WEATHER_STRONG_WINDS && !shouldNotClear)
         {
             gBattleWeather &= ~B_WEATHER_STRONG_WINDS;
-            PrepareStringBattle(STRINGID_STRONGWINDSDISSIPATED, gActiveBattler);
+            //PrepareStringBattle(STRINGID_STRONGWINDSDISSIPATED, gActiveBattler);
             gBattleCommunication[MSG_DISPLAY] = 1;
         }
-        break;
+        break;  //add in 2nd round of string updates
     }
-    case VARIOUS_TRY_END_NEUTRALIZING_GAS:
-        if (gSpecialStatuses[gActiveBattler].neutralizingGasRemoved)
-        {
-            gSpecialStatuses[gActiveBattler].neutralizingGasRemoved = FALSE;
-            BattleScriptPush(gBattlescriptCurrInstr + 3);
-            gBattlescriptCurrInstr = BattleScript_NeutralizingGasExits;
-            return;
-        }
-        break;
     case VARIOUS_GET_ROTOTILLER_TARGETS:
         // Gets the battlers to be affected by rototiller. If there are none, print 'But it failed!'
         {
@@ -8702,7 +8708,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         gBattlescriptCurrInstr += 3;
         return;
     case VARIOUS_JUMP_IF_LAST_USED_ITEM_BERRY:
-        if (ItemId_GetPocket(gLastUsedItem) == POCKET_BERRIES)
+        if (ItemId_GetPocket(gLastUsedItem) == POCKET_BERRY_POUCH)
             gBattlescriptCurrInstr += 7;
         else
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);

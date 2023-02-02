@@ -66,6 +66,11 @@
 #define POCKET_TM_CASE      4
 #define POCKET_BERRY_POUCH  5
 
+#define ITEMS_POCKET       0
+#define BALLS_POCKET       1
+#define TMHM_POCKET        2
+#define BERRIES_POCKET     3
+#define KEYITEMS_POCKET    4
 #define NUM_BAG_POCKETS 5
 
 #define MAX_MON_MOVES 4

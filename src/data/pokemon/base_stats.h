@@ -14892,12 +14892,12 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP = 75,
         .baseAttack = 80,
-        .baseDefense = 55,
+        .baseDefense = 70,
         .baseSpeed = 35,
         .baseSpAttack = 25,
-        .baseSpDefense = 35,
+        .baseSpDefense = 45,
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_ROCK,
         .catchRate = 180,
         .expYield = 61,
         //.evYield_Attack = 1,
@@ -14921,12 +14921,12 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP = 85,
         .baseAttack = 105,
-        .baseDefense = 85,
+        .baseDefense = 95,
         .baseSpeed = 40,
         .baseSpAttack = 40,
-        .baseSpDefense = 50,
+        .baseSpDefense = 60,
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_ROCK,
         .catchRate = 90,
         .expYield = 142,
         //.evYield_Attack = 2,
@@ -14950,12 +14950,12 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP = 105,
         .baseAttack = 140,
-        .baseDefense = 95,
+        .baseDefense = 100,
         .baseSpeed = 45,
         .baseSpAttack = 55,
-        .baseSpDefense = 65,
+        .baseSpDefense = 75,
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_ROCK,
         .catchRate = 45,
         .expYield = 227,
         //.evYield_Attack = 3,
@@ -27661,11 +27661,11 @@ const struct BaseStats gBaseStats[] =
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WEAK_ARMOR, ABILITY_LEVITATE},
             .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_LIQUID_OOZE},
-        #else
+        #else//courtesy of haven new ability Liquid Soul turns water moves into ghost moves
             .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
-        #endif
-        .bodyColor = BODY_COLOR_WHITE,
-        .noFlip = FALSE,
+        #endif  //will replace levitate I think
+        .bodyColor = BODY_COLOR_WHITE,//other idea Ocean Memory, reduced damage from water moves
+        .noFlip = FALSE,    // for ancient pokemon or fosill mon that previoiusly dwelled in water
         .flags = F_GALARIAN_FORM,
     }, //gave this line liquid ooze to double up on absorb damage from ghost tweak :)
 

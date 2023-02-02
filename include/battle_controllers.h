@@ -68,6 +68,11 @@ enum
     REQUEST_TOUGH_RIBBON_BATTLE,
 };
 
+enum { // Values given to the emit functions to choose gBattleBufferA or gBattleBufferB
+    BUFFER_A,
+    BUFFER_B
+};
+
 #define RESET_ACTION_MOVE_SELECTION     0
 #define RESET_ACTION_SELECTION          1
 #define RESET_MOVE_SELECTION            2
