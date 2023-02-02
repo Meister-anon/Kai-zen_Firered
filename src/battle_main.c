@@ -999,7 +999,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
         gBattleStruct->dynamicMoveType = TYPE_WATER;// | F_DYNAMIC_TYPE_2;
     }
     else if (gBattleMoves[move].type == TYPE_WATER
-        && attackerAbility == ABILITY_OCEAN_MEMORY)
+        && attackerAbility == ABILITY_LIQUID_SOUL)
     {
         gBattleStruct->dynamicMoveType = TYPE_GHOST;// | F_DYNAMIC_TYPE_2;
     }
@@ -4259,15 +4259,20 @@ static void HandleAction_UseMove(void)
           && gSideTimers[side].followmeTimer == 0
           && (gBattleMoves[gCurrentMove].power != 0
              || gBattleMoves[gCurrentMove].target != MOVE_TARGET_USER)
-          && gBattleMons[*(gBattleStruct->moveTarget + gBattlerAttacker)].ability != ABILITY_LIGHTNING_ROD
-          && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC)
+          && ((GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_LIGHTNING_ROD && moveType == TYPE_ELECTRIC)
+            || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_STORM_DRAIN && moveType == TYPE_WATER)))
     {
         side = GetBattlerSide(gBattlerAttacker);
-        for (gActiveBattler = 0; gActiveBattler < gBattlersCount; ++gActiveBattler)
+        for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
+        {
             if (side != GetBattlerSide(gActiveBattler)
-             && *(gBattleStruct->moveTarget + gBattlerAttacker) != gActiveBattler
-             && gBattleMons[gActiveBattler].ability == ABILITY_LIGHTNING_ROD
-             && GetBattlerTurnOrderNum(gActiveBattler) < var)
+                && *(gBattleStruct->moveTarget + gBattlerAttacker) != gActiveBattler
+                && ((GetBattlerAbility(gActiveBattler) == ABILITY_LIGHTNING_ROD && moveType == TYPE_ELECTRIC)
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_STORM_DRAIN && moveType == TYPE_WATER))
+                && GetBattlerTurnOrderNum(gActiveBattler) < var
+                && gBattleMoves[gCurrentMove].effect != EFFECT_SNIPE_SHOT
+                && (GetBattlerAbility(gBattlerAttacker) != ABILITY_PROPELLER_TAIL
+                 || GetBattlerAbility(gBattlerAttacker) != ABILITY_STALWART))
                 var = GetBattlerTurnOrderNum(gActiveBattler);
         if (var == 4)
         {

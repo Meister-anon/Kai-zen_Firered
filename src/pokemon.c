@@ -3585,7 +3585,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
        if (type == (TYPE_FIRE || TYPE_ICE))
            gBattleMoveDamage /= 2;
        break;
-    case ABILITY_LIQUID_SOUL:
+    case ABILITY_OCEAN_MEMORY:
         if (type == TYPE_WATER)
             gBattleMoveDamage /= 2;
         break;
@@ -3671,7 +3671,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                 break;
             }
 
-            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_OCEAN_MEMORY
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_LIQUID_SOUL
                 && gBattleMoves[move].type; == TYPE_WATER)  //hopefully checks if move was orginally water and will boost damage in rain even when ghost type
             {
                 damage = (15 * damage) / 10;

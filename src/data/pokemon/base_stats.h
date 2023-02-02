@@ -24391,8 +24391,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_WATER_3,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_LIQUID_SOUL, ABILITY_LIQUID_OOZE},
-            .abilityHidden = {ABILITY_PERISH_BODY, ABILITY_OCEAN_MEMORY},
+            .abilities = {ABILITY_OCEAN_MEMORY, ABILITY_LIQUID_OOZE},
+            .abilityHidden = {ABILITY_PERISH_BODY, ABILITY_LIQUID_SOUL},
         #else
             .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
         #endif
@@ -27659,8 +27659,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_WATER_3,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_LIQUID_SOUL, ABILITY_LIQUID_OOZE},
-            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_OCEAN_MEMORY},
+            .abilities = {ABILITY_OCEAN_MEMORY, ABILITY_LIQUID_OOZE},
+            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_LIQUID_SOUL},
         #else//courtesy of haven new ability Liquid Soul turns water moves into ghost moves
             .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
         #endif  //will replace levitate I think
