@@ -3924,9 +3924,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_WATER_3,
-        .abilities = {ABILITY_SWIFT_SWIM, ABILITY_SHELL_ARMOR},
+        .abilities = {ABILITY_OCEAN_MEMORY, ABILITY_SHELL_ARMOR},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_SWIFT_SWIM},
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -3951,9 +3951,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_WATER_3,
-        .abilities = {ABILITY_SWIFT_SWIM, ABILITY_SHELL_ARMOR},
+        .abilities = {ABILITY_OCEAN_MEMORY, ABILITY_SHELL_ARMOR},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_SWIFT_SWIM},
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -3978,9 +3978,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_WATER_3,
-        .abilities = {ABILITY_SWIFT_SWIM, ABILITY_BATTLE_ARMOR},
+        .abilities = {ABILITY_OCEAN_MEMORY, ABILITY_BATTLE_ARMOR},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_SWIFT_SWIM},
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -4005,9 +4005,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_WATER_3,
-        .abilities = {ABILITY_SWIFT_SWIM, ABILITY_BATTLE_ARMOR},
+        .abilities = {ABILITY_OCEAN_MEMORY, ABILITY_BATTLE_ARMOR},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_SWIFT_SWIM},
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
