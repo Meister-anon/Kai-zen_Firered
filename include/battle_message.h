@@ -165,10 +165,10 @@
 {                                                               \
     textVar[0] = B_BUFF_PLACEHOLDER_BEGIN;                      \
     textVar[1] = B_BUFF_MOVE;                                   \
-    textVar[2] = move;                                          \
+    textVar[2] = (move & 0xFF);                                              \
     textVar[3] = (move & 0xFF00) >> 8;                          \
     textVar[4] = B_BUFF_EOS;                                    \
-}
+}//changed  textvar 2 from just move; w update of levelup move struct
 
 #define PREPARE_ITEM_BUFFER(textVar, item)                      \
 {                                                               \

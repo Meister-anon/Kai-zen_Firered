@@ -533,6 +533,7 @@ extern const u8 BattleScript_StrengthSapLower[];
 extern const u8 BattleScript_StrengthSapTryLower[];
 extern const u8 BattleScript_EffectStrengthSap[];
 extern const u8 BattleScript_EffectStrengthUpHit[];
+extern const u8 BattleScript_OctolockEndTurn[];
 extern const u8 BattleScript_PurifyWorks[];
 extern const u8 BattleScript_EffectPurify[];
 extern const u8 BattleScript_BurnUpWorks[];

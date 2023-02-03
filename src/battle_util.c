@@ -513,7 +513,7 @@ bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags) //need to add ut
     if (gBattleWeather & weatherFlags)
     {
         // given weather is active -> check if its sun, rain against utility umbrella ( since only 1 weather can be active at once)
-        if (gBattleWeather & (B_WEATHER_SUN | B_WEATHER_RAIN) && GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_UTILITY_UMBRELLA)
+        if (gBattleWeather & (WEATHER_SUN_ANY | WEATHER_RAIN_ANY) && GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_UTILITY_UMBRELLA)
             return FALSE; // utility umbrella blocks sun, rain effects
 
         return TRUE;
@@ -573,6 +573,30 @@ bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind)
     return ret;
 }
 
+void BufferStatChange(u8 battlerId, u8 statId, u8 stringId)
+{
+    bool8 hasContrary = (GetBattlerAbility(battlerId) == ABILITY_CONTRARY);
+
+    PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
+    if (stringId == STRINGID_STATFELL)
+    {
+        if (hasContrary)
+            PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_STATROSE)
+        else
+            PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_STATFELL)
+    }
+    else if (stringId == STRINGID_STATROSE)
+    {
+        if (hasContrary)
+            PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_STATFELL)
+        else
+            PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_STATROSE)
+    }
+    else
+    {
+        PREPARE_STRING_BUFFER(gBattleTextBuff2, stringId)
+    }
+}
 
 bool32 CanBeConfused(u8 battlerId)
 {
@@ -638,7 +662,7 @@ void CancelMultiTurnMoves(u8 battler)
                 || IsBattlerTerrainAffected(otherSkyDropper, STATUS_FIELD_MISTY_TERRAIN)))
             {
                 // Set confused status
-                gBattleMons[otherSkyDropper].status2 |= STATUS2_CONFUSION_TURN(((Random()) % 4) + 2);
+                gBattleMons[otherSkyDropper].status2 |= STATUS2_CONFUSION_TURN(((Random()) % 4) + 2);   //2-5 turn value for confusion
 
                 // If this CancelMultiTurnMoves is occuring due to attackcanceller
                 if (gBattlescriptCurrInstr[0] == 0x0)
@@ -692,7 +716,7 @@ bool8 WasUnableToUseMove(u8 battler)
      || gProtectStructs[battler].usedGravityPreventedMove
      || gProtectStructs[battler].usedHealBlockedMove
      || gProtectStructs[battler].powderSelfDmg
-     || gProtectStructs[battler].usedThroatChopPreventedMove)
+     || gProtectStructs[battler].usedThroatChopPreventedMove
      || gProtectStructs[battler].flinchImmobility
      || gProtectStructs[battler].confusionSelfDmg) //prob need adjust this when done
         return TRUE; //actually no I'll keep that as is, but only have it trigger when using non-status move on self at bad oods
@@ -1313,7 +1337,8 @@ s32 GetDrainedBigRootHp(u32 battler, s32 hp)
 
 u8 DoBattlerEndTurnEffects(void)
 {
-    u8 effect = 0;
+    //u32 ability;
+    u32 i, effect = 0;
 
     gHitMarker |= (HITMARKER_GRUDGE | HITMARKER_x20);
     while (gBattleStruct->turnEffectsBattlerId < gBattlersCount && gBattleStruct->turnEffectsTracker <= ENDTURN_BATTLER_COUNT)

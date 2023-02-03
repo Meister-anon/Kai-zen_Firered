@@ -118,6 +118,7 @@
 // Volatile status ailments
 // These are removed after exiting the battle or switching out
 #define STATUS2_CONFUSION             0x00000007
+#define STATUS2_CONFUSION_TURN(num)   ((num) << 0)	//ported, just used to label confusion function, always followed by ((Random()) % 4) + 2)
 #define STATUS2_FLINCHED              0x00000008
 #define STATUS2_UPROAR                0x00000070
 #define STATUS2_BIDE                  0x00000300  // two bits 0x100, 0x200
@@ -297,6 +298,7 @@
 #define MOVE_EFFECT_FREEZE              0x4
 #define MOVE_EFFECT_PARALYSIS           0x5
 #define MOVE_EFFECT_TOXIC               0x6
+#define PRIMARY_STATUS_MOVE_EFFECT      MOVE_EFFECT_TOXIC // All above move effects apply primary status
 //#define MOVE_EFFECT_SPIRIT_LOCK       0x6  //increase everything til v create by 1 use incrementer from discord for that
 #define MOVE_EFFECT_CONFUSION           0x7 //have to do it by hand since incrementer tool cant handle hexadecimal
 #define MOVE_EFFECT_FLINCH              0x8
@@ -392,6 +394,12 @@
 #define BATTLE_RUN_SUCCESS        0
 #define BATTLE_RUN_FORBIDDEN      1
 #define BATTLE_RUN_FAILURE        2
+
+//sub for wait time for battlescript
+#define B_WAIT_TIME_LONG     0x40
+#define B_WAIT_TIME_MED      0x30
+#define B_WAIT_TIME_SHORT    0x20
+#define B_WAIT_TIME_SHORTEST 0x10
 
 // Window Ids for sTextOnWindowsInfo_Normal
 #define B_WIN_MSG                 0
