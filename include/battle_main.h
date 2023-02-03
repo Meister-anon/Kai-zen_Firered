@@ -45,6 +45,15 @@ struct MultiBattlePokemonTx
 #define BOUNCE_MON          0x0
 #define BOUNCE_HEALTHBOX    0x1
 
+
+// for Natural Gift and Fling
+struct TypePower
+{
+    u8 type;
+    u8 power;
+    u16 effect;
+};
+
 extern const struct SpriteTemplate gUnknownDebugSprite;
 extern const struct OamData gOamData_BattlerOpponent;
 extern const struct OamData gOamData_BattlerPlayer;
@@ -61,6 +70,7 @@ extern const u8 gTypeEffectiveness[378]; //fairy addition
 extern const struct TrainerMoney gTrainerMoneyTable[];
 extern const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT];
 extern const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1];
+extern const struct TypePower gNaturalGiftTable[];
 
 void CB2_InitBattle(void);
 void BattleMainCB2(void);

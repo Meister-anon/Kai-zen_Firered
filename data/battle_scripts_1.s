@@ -680,7 +680,7 @@ BattleScript_FlingMentalHerb:
 	curecertainstatuses BS_TARGET
 	savetarget
 	copybyte gBattlerAttacker, gBattlerTarget
-	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT, NULL
+	playanimation BS_ATTACKER, B_ANIM_ITEM_EFFECT, NULL
 	printfromtable gMentalHerbCureStringIds
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_ATTACKER
@@ -7349,6 +7349,19 @@ BattleScript_CupidsArrowActivates::
 	waitmessage 0x40
 	return
 
+BattleScript_BattleBondActivatesOnMoveEndAttacker::
+	pause 5
+	copybyte gBattlerAbility, gBattlerAttacker
+	@call BattleScript_AbilityPopUp
+	printstring STRINGID_ATTACKERBECAMEFULLYCHARGED
+	handleformchange BS_ATTACKER, 0
+	handleformchange BS_ATTACKER, 1
+	playanimation BS_ATTACKER, B_ANIM_FORM_CHANGE
+	waitanimation
+	handleformchange BS_ATTACKER, 2
+	printstring STRINGID_ATTACKERBECAMEASHSPECIES
+	return
+
 BattleScript_DancerActivates::	
 	waitmessage 0x20
 	setbyte sB_ANIM_TURN, 0x0
@@ -7566,6 +7579,19 @@ BattleScript_BerryStatRaiseEnd2::
 	call BattleScript_StatUp
 	removeitem BS_ATTACKER
 	end2
+
+BattleScript_BerryStatRaiseRet::
+	@jumpifability BS_SCRIPTING, ABILITY_RIPEN, BattleScript_BerryStatRaiseRet_AbilityPopup
+	@goto BattleScript_BerryStatRaiseRet_Anim
+BattleScript_BerryStatRaiseRet_Anim:
+	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_BerryStatRaiseRet_End
+	setgraphicalstatchangevalues
+	playanimation BS_SCRIPTING, B_ANIM_ITEM_EFFECT, sB_ANIM_ARG1
+	setbyte cMULTISTRING_CHOOSER, B_MSG_STAT_ROSE_ITEM
+	call BattleScript_StatUp
+	removeitem BS_SCRIPTING
+BattleScript_BerryStatRaiseRet_End:
+	return
 
 BattleScript_BerryFocusEnergyEnd2::
 	playanimation BS_ATTACKER, B_ANIM_ITEM_EFFECT, NULL

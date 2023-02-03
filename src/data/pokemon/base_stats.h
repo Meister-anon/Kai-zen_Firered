@@ -9672,7 +9672,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_ERRATIC,
         .eggGroup1 = EGG_GROUP_WATER_3,
         .eggGroup2 = EGG_GROUP_WATER_3,
-        .abilities = {ABILITY_SUCTION_CUPS, ABILITY_NONE},
+        .abilities = {ABILITY_SUCTION_CUPS, ABILITY_OCEAN_MEMORY},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_STORM_DRAIN, ABILITY_SOLID_ROCK},
         #endif
@@ -9702,7 +9702,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_ERRATIC,
         .eggGroup1 = EGG_GROUP_WATER_3,
         .eggGroup2 = EGG_GROUP_WATER_3,
-        .abilities = {ABILITY_SUCTION_CUPS, ABILITY_NONE},
+        .abilities = {ABILITY_SUCTION_CUPS, ABILITY_OCEAN_MEMORY},
         #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_STORM_DRAIN, ABILITY_SOLID_ROCK},
         #endif
@@ -9729,11 +9729,11 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_ERRATIC,
         .eggGroup1 = EGG_GROUP_WATER_3,
         .eggGroup2 = EGG_GROUP_WATER_3,
-        .abilities = {ABILITY_BATTLE_ARMOR, ABILITY_NONE},
-        .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_NONE},
+        .abilities = {ABILITY_BATTLE_ARMOR, ABILITY_OCEAN_MEMORY},
+        .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_LIQUID_SOUL},//GAVE this based on ultra sun dex entry, use that dex for mon
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-    },
+    },  //also let it learn rain dance tm
 
     [SPECIES_ARMALDO] =
     {
@@ -9754,8 +9754,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_ERRATIC,
         .eggGroup1 = EGG_GROUP_WATER_3,
         .eggGroup2 = EGG_GROUP_WATER_3,
-        .abilities = {ABILITY_BATTLE_ARMOR, ABILITY_NONE},
-        .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_NONE},
+        .abilities = {ABILITY_BATTLE_ARMOR, ABILITY_OCEAN_MEMORY},
+        .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_LIQUID_SOUL},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -19608,7 +19608,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MONSTER,
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_REFRIGERATE, ABILITY_NONE},
-            .abilityHidden = {ABILITY_SNOW_WARNING, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SNOW_WARNING, ABILITY_SOLID_ROCK},
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
@@ -19637,7 +19637,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MONSTER,
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_REFRIGERATE, ABILITY_NONE},
-            .abilityHidden = {ABILITY_SNOW_WARNING, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SNOW_WARNING, ABILITY_SOLID_ROCK},
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif

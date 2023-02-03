@@ -1035,15 +1035,17 @@ static const u16 sMovesForbiddenToCopy[] =
     METRONOME_FORBIDDEN_END
 };
 
+//raising the left numbers higher, will let you do more damage from higher percent hp
 static const u8 sFlailHpScaleToPowerTable[] =
 {
-    1, 200,
-    4, 150,
-    9, 100,
-    16, 80,
+    4, 200,
+    12, 150,
+    19, 100,
+    25, 80,
     32, 40,
-    48, 20
+    68, 20
 };
+
 //these two arrays relate only to multi_task, could probably do with just 1, but just some extra redundancy
 static const u16 sMultiTaskExcludedEffects[] =
 { 
@@ -10432,10 +10434,10 @@ static void atkAB_trysetdestinybondtohappen(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atkAC_remaininghptopower(void)
+static void atkAC_remaininghptopower(void) //changed from 48 to 64 since apparently gen 2-4 used 64 multiplier
 {
-    s32 i;
-    s32 hpFraction = GetScaledHPFraction(gBattleMons[gBattlerAttacker].hp, gBattleMons[gBattlerAttacker].maxHP, 48);
+    s32 i;  //changed back since a lower multiplier gets you more damage at 64 50% health scales to 32 at 48 50% health scales ot 24
+    s32 hpFraction = GetScaledHPFraction(gBattleMons[gBattlerAttacker].hp, gBattleMons[gBattlerAttacker].maxHP, 36);
 
     for (i = 0; i < (s32)sizeof(sFlailHpScaleToPowerTable); i += 2)
     {

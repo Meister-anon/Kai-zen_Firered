@@ -262,7 +262,7 @@ static const u8 sSiroccoDescription[] = _("Kicks up a sandstorm on contact.");
 static const u8 sHipressureDescription[] = _("Sharply raises foe's PP usage.");
 static const u8 sCupidsArrowDescription[] = _("Infatuates a target when enters.");
 static const u8 sBattleMatronDescription[] = _("Powers up moves to protect young PKMN.");
-static const u8 sOceanMemoryDescription[] = _("Resists Damage from Water-type moves.");
+static const u8 sOceanMemoryDescription[] = _("Reduces Damage from Water-type moves.");
 static const u8 sLiquidSoulDescription[] = _("Transforms Water-type moves into Ghost-type.");  //swapped back
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =

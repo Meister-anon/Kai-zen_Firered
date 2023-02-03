@@ -17,6 +17,8 @@ extern const u8 BattleScript_RaiseStatOnFaintingTarget[];
 extern const u8 BattleScript_ScriptingAbilityStatRaise[];
 extern const u8 BattleScript_TotemVar[];
 extern const u8 BattleScript_TotemFlaredToLife[];
+extern const u8 BattleScript_BerryStatRaiseRet[];
+extern const u8 BattleScript_BattleBondActivatesOnMoveEndAttacker[];
 extern const u8 BattleScript_MoveEnd[];
 extern const u8 BattleScript_MakeMoveMissed[];
 extern const u8 BattleScript_PrintMoveMissed[];
