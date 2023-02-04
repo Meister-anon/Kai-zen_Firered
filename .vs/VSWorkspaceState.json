@@ -1,8 +1,14 @@
 {
   "ExpandedNodes": [
     "",
-    "\\include"
+    "\\asm",
+    "\\asm\\macros",
+    "\\common_syms",
+    "\\data",
+    "\\graphics",
+    "\\include",
+    "\\include\\constants"
   ],
-  "SelectedNode": "\\include\\global.fieldmap.h",
+  "SelectedNode": "\\include\\constants\\battle_anim.h",
   "PreviewInSolutionExplorer": false
 }

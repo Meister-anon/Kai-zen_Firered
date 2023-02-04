@@ -1182,14 +1182,14 @@ static void atk00_attackcanceler(void)
         return;
     if (AbilityBattleEffects(ABILITYEFFECT_MOVES_BLOCK, gBattlerTarget, 0, 0, 0))
         return;
-    if (!gBattleMons[gBattlerAttacker].pp[gCurrMovePos] && gCurrentMove != MOVE_STRUGGLE && !(gHitMarker & (HITMARKER_x800000 | HITMARKER_NO_ATTACKSTRING))
+    if (!gBattleMons[gBattlerAttacker].pp[gCurrMovePos] && gCurrentMove != MOVE_STRUGGLE && !(gHitMarker & (HITMARKER_ALLOW_NO_PP | HITMARKER_NO_ATTACKSTRING))
      && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))
     {
         gBattlescriptCurrInstr = BattleScript_NoPPForMove;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         return;
     }
-    gHitMarker &= ~(HITMARKER_x800000);
+    gHitMarker &= ~(HITMARKER_ALLOW_NO_PP);
     if (!(gHitMarker & HITMARKER_OBEYS) 
      && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))
     {
@@ -1374,20 +1374,29 @@ static bool8 IsBattlerProtected(u8 battlerId, u16 move)//IMPORTANT change to fal
    // also maybe I'll add a text string for this, but for now I'll do without.
 }*/
 
-static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accuracy ignore
-{
+static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accuracy ignore  //done
+{   //in emerald these are else ifs, rather than if, think will change to that so it checks through all instead of just 1st true
     if (gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS && gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker)
     {
         JumpIfMoveFailed(7, move);
         return TRUE;
     }
-    if (!(gHitMarker & HITMARKER_IGNORE_ON_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+
+    else if (gBattleMoves[move].effect == EFFECT_TOXIC
+        && IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_POISON))
+    {
+        JumpIfMoveFailed(7, move);
+        return TRUE;
+    }
+
+    /*if (!(gHitMarker & HITMARKER_IGNORE_ON_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         JumpIfMoveFailed(7, move);
         return TRUE;
     }
     gHitMarker &= ~HITMARKER_IGNORE_ON_AIR;
+
     if (!(gHitMarker & HITMARKER_IGNORE_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
@@ -1395,19 +1404,54 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
         return TRUE;
     }
     gHitMarker &= ~HITMARKER_IGNORE_UNDERGROUND;
+
     if (!(gHitMarker & HITMARKER_IGNORE_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         JumpIfMoveFailed(7, move);
         return TRUE;
     }
-    gHitMarker &= ~HITMARKER_IGNORE_UNDERWATER;
-    if ((WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_RAIN_ANY) && gBattleMoves[move].effect == EFFECT_THUNDER)
-     || (gBattleMoves[move].effect == EFFECT_ALWAYS_HIT || gBattleMoves[move].effect == EFFECT_VITAL_THROW))
+    gHitMarker &= ~HITMARKER_IGNORE_UNDERWATER;*/
+
+    // If the attacker has the ability No Guard and they aren't targeting a Pokemon involved in a Sky Drop with the move Sky Drop, move hits.
+    else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NO_GUARD && (move != MOVE_SKY_DROP || gBattleStruct->skyDropTargets[gBattlerTarget] == 0xFF))
     {
+        if (!JumpIfMoveFailed(7, move))
+            RecordAbilityBattle(gBattlerAttacker, ABILITY_NO_GUARD);
+        return TRUE;
+    }
+
+    // If the target has the ability No Guard and they aren't involved in a Sky Drop or the current move isn't Sky Drop, move hits.
+    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_NO_GUARD && (move != MOVE_SKY_DROP || gBattleStruct->skyDropTargets[gBattlerTarget] == 0xFF))
+    {
+        if (!JumpIfMoveFailed(7, move))
+            RecordAbilityBattle(gBattlerTarget, ABILITY_NO_GUARD);
+        return TRUE;
+    }
+
+    if ((gStatuses3[gBattlerTarget] & STATUS3_PHANTOM_FORCE)//i beleve this is the replacement for the hitmarker values for semi invul, just need to add flags to omve data
+        || (!(gBattleMoves[move].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR)) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+        || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
+        || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER))
+    {
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
         JumpIfMoveFailed(7, move);
         return TRUE;
     }
+
+    if ((WEATHER_HAS_EFFECT && 
+        (IsBattlerWeatherAffected(gBattlerTarget, WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
+        || ((gBattleWeather & WEATHER_HAIL_ANY) && move == MOVE_BLIZZARD))
+        || (gBattleMoves[move].effect == EFFECT_ALWAYS_HIT || gBattleMoves[move].effect == EFFECT_VITAL_THROW)
+        || (gBattleMoves[move].accuracy == 0)
+        || ((gStatuses3[gBattlerTarget] & STATUS3_MINIMIZED) && (gBattleMoves[move].flags & FLAG_DMG_MINIMIZE)))
+    {
+        JumpIfMoveFailed(7, move);
+        return TRUE;
+    }   //this will do weather buffs but double check think I added this elsewhere? plus I don't think I'd want it to be surehit but its fine i guess
+
+
+
     return FALSE;
 }
 
@@ -2315,9 +2359,9 @@ static void atk0C_datahpupdate(void)
                 }
                 else // hp goes down
                 {
-                    if (gHitMarker & HITMARKER_x20)
+                    if (gHitMarker & HITMARKER_SKIP_DMG_TRACK)
                     {
-                        gHitMarker &= ~(HITMARKER_x20);
+                        gHitMarker &= ~(HITMARKER_SKIP_DMG_TRACK);
                     }
                     else
                     {
@@ -2338,9 +2382,9 @@ static void atk0C_datahpupdate(void)
                         gHpDealt = gBattleMons[gActiveBattler].hp;
                         gBattleMons[gActiveBattler].hp = 0;
                     }
-                    if (!gSpecialStatuses[gActiveBattler].dmg && !(gHitMarker & HITMARKER_x100000))
+                    if (!gSpecialStatuses[gActiveBattler].dmg && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE))
                         gSpecialStatuses[gActiveBattler].dmg = gHpDealt;
-                    if (IS_MOVE_PHYSICAL(move) && !(gHitMarker & HITMARKER_x100000) && gCurrentMove != MOVE_PAIN_SPLIT)
+                    if (IS_MOVE_PHYSICAL(move) && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE) && gCurrentMove != MOVE_PAIN_SPLIT)
                     {
                         gProtectStructs[gActiveBattler].physicalDmg = gHpDealt;
                         gSpecialStatuses[gActiveBattler].physicalDmg = gHpDealt;
@@ -2355,7 +2399,7 @@ static void atk0C_datahpupdate(void)
                             gSpecialStatuses[gActiveBattler].physicalBattlerId = gBattlerTarget;
                         }
                     }
-                    else if (!IS_MOVE_PHYSICAL(move) && !(gHitMarker & HITMARKER_x100000)) //changed from special to not phsyical to account for status moves
+                    else if (!IS_MOVE_PHYSICAL(move) && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE)) //changed from special to not phsyical to account for status moves
                     {
                         gProtectStructs[gActiveBattler].specialDmg = gHpDealt;
                         gSpecialStatuses[gActiveBattler].specialDmg = gHpDealt;
@@ -2371,7 +2415,7 @@ static void atk0C_datahpupdate(void)
                         }
                     }
                 }
-                gHitMarker &= ~(HITMARKER_x100000);
+                gHitMarker &= ~(HITMARKER_PASSIVE_DAMAGE);
                 BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, 0, 2, &gBattleMons[gActiveBattler].hp);
                 MarkBattlerForControllerExec(gActiveBattler);
             }
@@ -11960,17 +12004,6 @@ static void atkE8_settypebasedhalvers(void) // water and mud sport
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 }
 
-bool16 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef) //sound bypass is dumb, guess now it works how I want
-{
-    if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE))
-        return FALSE;
-    //else if (gBattleMoves[move].flags & FLAG_SOUND)
-      //  return FALSE;
-    else if (GetBattlerAbility(battlerAtk) == ABILITY_INFILTRATOR)
-        return FALSE;
-    else
-        return TRUE;
-}
 
 static void atkE9_setweatherballtype(void)
 {
@@ -12790,6 +12823,31 @@ static void atk103_setstealthrock(void) {
         gBattlescriptCurrInstr += 5;
     }
 }
+
+bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef) //sound bypass is dumb, guess now it works how I want
+{
+    if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE))
+        return FALSE;
+    //else if (gBattleMoves[move].flags & FLAG_SOUND)
+      //  return FALSE;
+    else if (GetBattlerAbility(battlerAtk) == ABILITY_INFILTRATOR)
+        return FALSE;
+    else
+        return TRUE;
+}
+
+bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move)
+{
+    if (GetBattlerAbility(battlerDef) != ABILITY_DISGUISE
+        || gBattleMons[battlerDef].species != SPECIES_MIMIKYU
+        || gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED
+        || gBattleMoves[move].power == 0
+        || gHitMarker & HITMARKER_IGNORE_DISGUISE)
+        return FALSE;
+    else
+        return TRUE;
+}
+
 //may not need sub block? don't really need it but using will save time
 static void atk104_jumpifsubstituteblocks(void) {
     if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget))

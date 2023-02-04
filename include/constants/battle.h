@@ -184,8 +184,8 @@
 #define STATUS4_PLASMA_FISTS            (1 << 1)
 
 // Not really sure what a "hitmarker" is.
-#define HITMARKER_x10                   0x00000010
-#define HITMARKER_x20                   0x00000020
+#define HITMARKER_WAKE_UP_CLEAR         0x00000010	//// Cleared when waking up. Never set or checked.
+#define HITMARKER_SKIP_DMG_TRACK        0x00000020
 #define HITMARKER_DESTINYBOND           0x00000040
 #define HITMARKER_NO_ANIMATIONS         0x00000080
 #define HITMARKER_IGNORE_SUBSTITUTE     0x00000100
@@ -196,20 +196,21 @@
 #define HITMARKER_IGNORE_SAFEGUARD      0x00002000
 #define HITMARKER_SYNCHRONISE_EFFECT    0x00004000
 #define HITMARKER_RUN                   0x00008000
-#define HITMARKER_IGNORE_ON_AIR         0x00010000
+/*#define HITMARKER_IGNORE_ON_AIR         0x00010000
 #define HITMARKER_IGNORE_UNDERGROUND    0x00020000
-#define HITMARKER_IGNORE_UNDERWATER     0x00040000
-#define HITMARKER_UNABLE_TO_USE_MOVE    0x00080000
-#define HITMARKER_x100000               0x00100000
-#define HITMARKER_x200000               0x00200000
-#define HITMARKER_PLAYER_FAINTED        0x00400000
-#define HITMARKER_x800000               0x00800000
-#define HITMARKER_GRUDGE                0x01000000
-#define HITMARKER_OBEYS                 0x02000000
-#define HITMARKER_x4000000              0x04000000
-#define HITMARKER_CHARGING              0x08000000
+#define HITMARKER_IGNORE_UNDERWATER     0x00040000*/
+#define HITMARKER_UNABLE_TO_USE_MOVE    0x00010000
+#define HITMARKER_PASSIVE_DAMAGE        0x00020000
+#define HITMARKER_DISOBEDIENT_MOVE      0x00040000
+#define HITMARKER_PLAYER_FAINTED        0x00080000
+#define HITMARKER_ALLOW_NO_PP           0x00100000
+#define HITMARKER_GRUDGE                0x00200000
+#define HITMARKER_OBEYS                 0x00400000
+#define HITMARKER_NEVER_SET             0x00800000	// Cleared as part of a large group. Never set or checked
+#define HITMARKER_CHARGING              0x01000000
+#define HITMARKER_IGNORE_DISGUISE       0x02000000
 #define HITMARKER_FAINTED(battler)      (gBitTable[battler] << 0x1C)
-#define HITMARKER_FAINTED2(battler)     (0x10000000 << battler)
+#define HITMARKER_FAINTED2(battler)     (0x10000000 << battler)	//removed hitmarker semi invul underground etc. can't go up to fainted2 value
 
 // Per-side statuses that affect an entire party
 #define SIDE_STATUS_REFLECT					(1 << 0)
@@ -365,6 +366,9 @@
 #define MOVE_EFFECT_RECOIL_50	        0x45
 #define MOVE_EFFECT_RECOIL_33_STATUS	0x46
 #define MOVE_EFFECT_V_CREATE			0x47
+#define MOVE_EFFECT_RELIC_SONG          0x48
+#define MOVE_EFFECT_TRAP_BOTH           0x49
+#define MOVE_EFFECT_SKY_DROP            0x4a
 #define MOVE_EFFECT_AFFECTS_USER        0x50
 #define MOVE_EFFECT_CERTAIN             0x80
 
