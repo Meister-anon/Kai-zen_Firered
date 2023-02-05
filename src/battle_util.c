@@ -1934,6 +1934,9 @@ enum
     CANCELLER_END,
 };
 
+//learned defined need be on one line, this should be logic for thawing i.e remove frozen status
+#define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || ((gBattleMoves[gCurrentMove].type == TYPE_FIRE) && gBattleMoves[gCurrentMove].power >= 60 && gCurrentMove != MOVE_FIRE_FANG))
+
 u8 AtkCanceller_UnableToUseMove(void)
 {
     u8 effect = 0;
@@ -1994,8 +1997,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_FROZEN: // check being frozen
-            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE && !((gBattleMoves[gCurrentMove].type == TYPE_FIRE) && gBattleMoves[gCurrentMove].power >= 60)
-                && (sBattleMsgDataPtr->currentMove != MOVE_FIRE_FANG))
+            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE && !THAW_CONDITION)  //hope this works
             {
                 if (Random() % 5)//ok found freeze chance, so 1 in 5 chance of thawing out, on freeze.  pretty much  random % 5 if not 0 stays frozen.
                 {
@@ -2241,9 +2243,9 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_THAW: // move thawing
-            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE)
+            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE) //should be thaw if scald, or a fire type move above base 60 except fire fang
             {
-                if (gBattleMoves[gCurrentMove].effect == EFFECT_THAW_HIT)
+                if (THAW_CONDITION)  //need to put in logic so scald still thaws
                 {
                     gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_FREEZE);
                     BattleScriptPushCursor();
