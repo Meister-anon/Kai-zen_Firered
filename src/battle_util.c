@@ -1994,20 +1994,13 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_FROZEN: // check being frozen
-            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE)
+            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE && !((gBattleMoves[gCurrentMove].type == TYPE_FIRE) && gBattleMoves[gCurrentMove].power >= 60)
+                && (sBattleMsgDataPtr->currentMove != MOVE_FIRE_FANG))
             {
-                if (Random() % 5) //ok found freeze chance, so 1 in 5 chance of thawing out, on freeze.  pretty much  random % 5 if not 0 stays frozen.
+                if (Random() % 5)//ok found freeze chance, so 1 in 5 chance of thawing out, on freeze.  pretty much  random % 5 if not 0 stays frozen.
                 {
-                    if (gBattleMoves[gCurrentMove].effect != EFFECT_THAW_HIT) // unfreezing via a move effect happens in case 13
-                    {
-                        gBattlescriptCurrInstr = BattleScript_MoveUsedIsFrozen;
-                        gHitMarker |= HITMARKER_NO_ATTACKSTRING;
-                    }
-                    else
-                    {
-                        ++gBattleStruct->atkCancellerTracker;
-                        break;
-                    }
+                    gBattlescriptCurrInstr = BattleScript_MoveUsedIsFrozen;
+                    gHitMarker |= HITMARKER_NO_ATTACKSTRING;
                 }
                 else // unfreeze    //imortant if random % 5 is 0, pokemon  defrosts.
                 {
@@ -2016,9 +2009,9 @@ u8 AtkCanceller_UnableToUseMove(void)
                     gBattlescriptCurrInstr = BattleScript_MoveUsedUnfroze;
                     gBattleCommunication[MULTISTRING_CHOOSER] = 0;
                 }
-                effect = 2;
-            }
-            ++gBattleStruct->atkCancellerTracker;
+                effect = 2; //change thaw condition to fire move min 60 base power not fire fang
+            }   //done should no longer need thaw effects already replaced
+            gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_TRUANT: // truant
             if (gBattleMons[gBattlerAttacker].ability == ABILITY_TRUANT && gDisableStructs[gBattlerAttacker].truantCounter)

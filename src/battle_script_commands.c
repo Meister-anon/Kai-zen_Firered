@@ -1252,15 +1252,16 @@ static void atk00_attackcanceler(void)
     }
 }
 
-static void JumpIfMoveFailed(u8 adder, u16 move)
+static void JumpIfMoveFailed(u8 adder, u16 move) //updated to emerald standard
 {
-    const u8 *BS_ptr = gBattlescriptCurrInstr + adder;
+    //const u8 *BS_ptr = gBattlescriptCurrInstr + adder;
 
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
     {
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0;
-        BS_ptr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        return TRUE;
     }
     else
     {
@@ -1268,7 +1269,8 @@ static void JumpIfMoveFailed(u8 adder, u16 move)
         if (AbilityBattleEffects(ABILITYEFFECT_ABSORBING, gBattlerTarget, 0, 0, move))
             return;
     }
-    gBattlescriptCurrInstr = BS_ptr;
+    gBattlescriptCurrInstr += adder;
+    return FALSE;
 }
 
 static void atk40_jumpifaffectedbyprotect(void)
@@ -1440,8 +1442,8 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
     }
 
     if ((WEATHER_HAS_EFFECT && 
-        (IsBattlerWeatherAffected(gBattlerTarget, WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
-        || ((gBattleWeather & WEATHER_HAIL_ANY) && move == MOVE_BLIZZARD))
+        ((IsBattlerWeatherAffected(gBattlerTarget, WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
+        || ((gBattleWeather & WEATHER_HAIL_ANY) && move == MOVE_BLIZZARD)))
         || (gBattleMoves[move].effect == EFFECT_ALWAYS_HIT || gBattleMoves[move].effect == EFFECT_VITAL_THROW)
         || (gBattleMoves[move].accuracy == 0)
         || ((gStatuses3[gBattlerTarget] & STATUS3_MINIMIZED) && (gBattleMoves[move].flags & FLAG_DMG_MINIMIZE)))
