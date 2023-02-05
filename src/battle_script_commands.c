@@ -1665,7 +1665,8 @@ static void atk02_attackstring(void)
     }
 }
 
-static void atk04_critcalc(void)
+#define BENEFITS_FROM_LEEK(battler, holdEffect)((holdEffect == HOLD_EFFECT_LEEK) && (GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD || gBattleMons[battler].species == SPECIES_SIRFETCHD))
+static void atk04_critcalc(void)    //figure later
 {
     u8 holdEffect;
     u16 item, critChance;
@@ -1684,8 +1685,8 @@ static void atk04_critcalc(void)
                 + ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0)
                 + (holdEffect == HOLD_EFFECT_SCOPE_LENS)
                 + 2 * (holdEffect == HOLD_EFFECT_LUCKY_PUNCH && gBattleMons[gBattlerAttacker].species == SPECIES_CHANSEY)
-                + 2 * (holdEffect == HOLD_EFFECT_STICK && gBattleMons[gBattlerAttacker].species == SPECIES_FARFETCHD);
-                //+ (gBattleMons[gBattlerAttacker].ability == ABILITY_SUPER_LUCK);
+                + 2 * BENEFITS_FROM_LEEK(gPotentialItemEffectBattler, holdEffect)
+                + (gBattleMons[gBattlerAttacker].ability == ABILITY_SUPER_LUCK);
     if (critChance >= NELEMS(sCriticalHitChance))
         critChance = NELEMS(sCriticalHitChance) - 1;
     //while everything here is calculating crit damage, so need to add gCritMultiplier = 3; for that crit boosting ability

@@ -8986,7 +8986,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 0,
         .pp = 10,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_USER | MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_ALL_BATTLERS,
         .priority = 0,
         .flags = 0,
         .split = SPLIT_STATUS,
@@ -9000,7 +9000,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 0,
         .pp = 10,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_USER,
+        .target = MOVE_TARGET_ALL_BATTLERS,
         .priority = 0,
         .flags = 0,
         .split = SPLIT_STATUS,
@@ -9014,7 +9014,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 0,
         .pp = 10,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_USER,
+        .target = MOVE_TARGET_ALL_BATTLERS,
         .priority = 0,
         .flags = 0,
         .split = SPLIT_STATUS,
@@ -9348,7 +9348,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 0,
         .pp = 10,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_USER,
+        .target = MOVE_TARGET_ALL_BATTLERS,
         .priority = 0,
         .flags = 0,
         .split = SPLIT_STATUS,
@@ -9868,7 +9868,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 0,
         .pp = 10,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_USER,
+        .target = MOVE_TARGET_ALL_BATTLERS,
         .priority = 0,
         .flags = 0,
         .split = SPLIT_STATUS,
@@ -11142,7 +11142,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_SPLASH,   //TODO (EFFECT_MULTI_HIT + ABILITY_WEAK_ARMOR,
         .power = 25,
-        .type = TYPE_DRAGON,
+        .type = TYPE_DRAGON,    //me look at how double iron bash was done may be able to do these myself
         .accuracy = 90,
         .pp = 20,
         .secondaryEffectChance = 0,
@@ -11168,7 +11168,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_SHELL_SIDE_ARM] =
     {
-        .effect = EFFECT_SPLASH,   //TODO
+        .effect = EFFECT_SHELL_SIDE_ARM, 
         .power = 90,
         .type = TYPE_POISON,
         .accuracy = 100,
@@ -11182,7 +11182,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_MISTY_EXPLOSION] =
     {
-        .effect = EFFECT_SPLASH,   //TODO
+        .effect = EFFECT_EXPLOSION,  
         .power = 100,
         .type = TYPE_FAIRY,
         .accuracy = 100,
@@ -11196,7 +11196,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_GRASSY_GLIDE] =
     {
-        .effect = EFFECT_SPLASH,   //TODO
+        .effect = EFFECT_GRASSY_GLIDE,   //TODO
         .power = 70,
         .type = TYPE_GRASS,
         .accuracy = 100,
@@ -11224,7 +11224,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_TERRAIN_PULSE] =
     {
-        .effect = EFFECT_SPLASH,   //TODO
+        .effect = EFFECT_TERRAIN_PULSE,   //TODO
         .power = 50,
         .type = TYPE_NORMAL,
         .accuracy = 100,
@@ -11252,12 +11252,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_BURNING_JEALOUSY] =
     {
-        .effect = EFFECT_SPLASH,   //TODO
+        .effect = EFFECT_BURN_HIT,   //TODO
         .power = 70,
         .type = TYPE_FIRE,
         .accuracy = 100,
         .pp = 5,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 0, //check battlescript for //TODO values
         .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
@@ -11266,7 +11266,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_LASH_OUT] =
     {
-        .effect = EFFECT_SPLASH,   //TODO
+        .effect = EFFECT_LASH_OUT,   //TODO
         .power = 75,
         .type = TYPE_DARK,
         .accuracy = 100,
@@ -11280,7 +11280,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_POLTERGEIST] =
     {
-        .effect = EFFECT_SPLASH,   //TODO
+        .effect = EFFECT_POLTERGEIST,   //TODO
         .power = 110,
         .type = TYPE_GHOST,
         .accuracy = 90,
@@ -11308,7 +11308,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_COACHING] =
     {
-        .effect = EFFECT_SPLASH,   //TODO
+        .effect = EFFECT_COACHING,   //TODO
         .power = 0,
         .type = TYPE_FIGHTING,
         .accuracy = 0,
@@ -11341,7 +11341,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_ICE,
         .accuracy = 90,
         .pp = 10,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 0, //should work need test
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
@@ -11378,7 +11378,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_JUNGLE_HEALING] =
     {
-        .effect = EFFECT_SPLASH,   //TODO
+        .effect = EFFECT_JUNGLE_HEALING,   //TODO
         .power = 0,
         .type = TYPE_GRASS,
         .accuracy = 0,
@@ -11405,9 +11405,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_SURGING_STRIKES] =
     {
-        .effect = EFFECT_SPLASH,   //TODO (Multi hit + Always Crit)
+        .effect = EFFECT_TRIPLE_KICK,   //TODO (Multi hit + Always Crit)
         .power = 25,
-        .type = TYPE_WATER,
+        .type = TYPE_WATER, //figure out how to do always crit
         .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 0,
@@ -11517,9 +11517,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_EERIE_SPELL] =
     {
-        .effect = EFFECT_HIT, // To do. It's a copy of Spite that inflicts damage and reduced the target's last move's PP by 3 instead of 4.
+        .effect = EFFECT_EERIE_SPELL, // To do. It's a copy of Spite that inflicts damage and reduced the target's last move's PP by 3 instead of 4.
         .power = 80,
-        .type = TYPE_PSYCHIC,
+        .type = TYPE_PSYCHIC,   //test
         .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 0,

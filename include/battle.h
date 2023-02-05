@@ -60,7 +60,7 @@
 #define MSG_DISPLAY             0x7
 #define BATTLE_COMMUNICATION_ENTRIES_COUNT  0x8
 
-#define MOVE_TARGET_SELECTED          0x0
+/*#define MOVE_TARGET_SELECTED          0x0
 #define MOVE_TARGET_DEPENDS           0x1
 #define MOVE_TARGET_USER_OR_SELECTED  0x2
 #define MOVE_TARGET_RANDOM            0x4
@@ -68,8 +68,20 @@
 #define MOVE_TARGET_USER              0x10
 #define MOVE_TARGET_FOES_AND_ALLY     0x20
 #define MOVE_TARGET_OPPONENTS_FIELD   0x40
-#define MOVE_TARGET_USER_AND_ALL      0x80 //think added for confuse hit idea change    //ironically already exists in emerald
-#define MOVE_TARGET_ALLY              0x160
+//#define MOVE_TARGET_USER_AND_ALL      0x80 //think added for confuse hit idea change    //ironically already exists in emerald
+#define MOVE_TARGET_ALL_BATTLERS        ((1 << 8) | MOVE_TARGET_USER)
+#define MOVE_TARGET_ALLY              0x160*/
+
+#define MOVE_TARGET_SELECTED            0
+#define MOVE_TARGET_DEPENDS             (1 << 0)
+#define MOVE_TARGET_USER_OR_SELECTED    (1 << 1)
+#define MOVE_TARGET_RANDOM              (1 << 2)
+#define MOVE_TARGET_BOTH                (1 << 3)
+#define MOVE_TARGET_USER                (1 << 4)
+#define MOVE_TARGET_FOES_AND_ALLY       (1 << 5)
+#define MOVE_TARGET_OPPONENTS_FIELD     (1 << 6)
+#define MOVE_TARGET_ALLY                (1 << 7)
+#define MOVE_TARGET_ALL_BATTLERS        ((1 << 8) | MOVE_TARGET_USER)
 
 struct TrainerMonNoItemDefaultMoves //pull from 4-12 later
 {
@@ -506,10 +518,14 @@ struct MegaEvolutionData
     bool8 alreadyEvolved[4]; // Array id is used for mon position.
     u16 evolvedSpecies[MAX_BATTLERS_COUNT];
     u16 playerEvolvedSpecies;
+    u8 primalRevertedPartyIds[2]; // As flags using gBitTable;
+    u16 primalRevertedSpecies[MAX_BATTLERS_COUNT];
+    u16 playerPrimalRevertedSpecies;
     u8 battlerId;
     bool8 playerSelect;
     u8 triggerSpriteId;
     bool8 isWishMegaEvo;
+    bool8 isPrimalReversion;
 };
 
 struct Illusion

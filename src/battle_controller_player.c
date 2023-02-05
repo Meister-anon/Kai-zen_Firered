@@ -447,17 +447,114 @@ static void HandleInputChooseTarget(void)
     }
 }
 
-
-
-void HandleInputChooseMove(void)
+static void HideAllTargets(void)
 {
-    bool32 canSelectTarget = FALSE;
-    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
+    s32 i;
+    for (i = 0; i < MAX_BATTLERS_COUNT; i++)
+    {
+        if (IsBattlerAlive(i) && gBattleSpritesDataPtr->healthBoxesData[i].healthboxIsBouncing)
+        {
+            gSprites[gBattlerSpriteIds[i]].callback = SpriteCb_HideAsMoveTarget;
+            EndBounceEffect(i, BOUNCE_HEALTHBOX);
+        }
+    }
+}
 
-    PreviewDeterminativeMoveTargets();
+static void HideShownTargets(void)
+{
+    s32 i;
+    for (i = 0; i < MAX_BATTLERS_COUNT; i++)
+    {
+        if (IsBattlerAlive(i) && gBattleSpritesDataPtr->healthBoxesData[i].healthboxIsBouncing && i != gActiveBattler)
+        {
+            gSprites[gBattlerSpriteIds[i]].callback = SpriteCb_HideAsMoveTarget;
+            EndBounceEffect(i, BOUNCE_HEALTHBOX);
+        }
+    }
+}
+
+static void HandleInputShowEntireFieldTargets(void)
+{
+    if (JOY_HELD(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+        gPlayerDpadHoldFrames++;
+    else
+        gPlayerDpadHoldFrames = 0;
+
     if (JOY_NEW(A_BUTTON))
     {
-        u8 moveTarget;
+        PlaySE(SE_SELECT);
+        HideAllTargets();
+        if (gBattleStruct->mega.playerSelect)
+            BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | RET_MEGA_EVOLUTION | (gMultiUsePlayerCursor << 8));
+        else
+            BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
+        //HideMegaTriggerSprite();
+        PlayerBufferExecCompleted();
+    }
+    else if (gMain.newKeys & B_BUTTON || gPlayerDpadHoldFrames > 59)
+    {
+        PlaySE(SE_SELECT);
+        HideAllTargets();
+        gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
+        DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
+        DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
+    }
+}
+
+static void HandleInputShowTargets(void)
+{
+    if (JOY_HELD(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+        gPlayerDpadHoldFrames++;
+    else
+        gPlayerDpadHoldFrames = 0;
+
+    if (JOY_NEW(A_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        HideShownTargets();
+        if (gBattleStruct->mega.playerSelect)
+            BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | RET_MEGA_EVOLUTION | (gMultiUsePlayerCursor << 8));
+        else
+            BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
+        //HideMegaTriggerSprite();
+        //TryHideLastUsedBall();
+        PlayerBufferExecCompleted();
+    }
+    else if (gMain.newKeys & B_BUTTON || gPlayerDpadHoldFrames > 59)
+    {
+        PlaySE(SE_SELECT);
+        HideShownTargets();
+        gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
+        DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
+        DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
+    }
+}
+
+static void TryShowAsTarget(u32 battlerId)
+{
+    if (IsBattlerAlive(battlerId))
+    {
+        DoBounceEffect(battlerId, BOUNCE_HEALTHBOX, 15, 1);
+        gSprites[gBattlerSpriteIds[battlerId]].callback = SpriteCb_ShowAsMoveTarget;
+    }
+}
+
+
+void HandleInputChooseMove(void)    //test new targetting setup
+{
+    u16 moveTarget;
+    u32 canSelectTarget = 0;
+    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
+
+    if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+        gPlayerDpadHoldFrames++;
+    else
+        gPlayerDpadHoldFrames = 0;
+
+    PreviewDeterminativeMoveTargets();  //not in emerald may be redundent after upgrade test if any issues
+    if (JOY_NEW(A_BUTTON))  //noted this uses pallete fades while emerald doesnt appear to.
+    {
+        //u8 moveTarget;
 
         PlaySE(SE_SELECT);
         if (moveInfo->moves[gMoveSelectionCursor[gActiveBattler]] == MOVE_CURSE)
@@ -480,45 +577,84 @@ void HandleInputChooseMove(void)
         if (!gBattleBufferA[gActiveBattler][1]) // not a double battle
         {
             if (moveTarget & MOVE_TARGET_USER_OR_SELECTED && !gBattleBufferA[gActiveBattler][2])
-                ++canSelectTarget;
+                canSelectTarget = 1;
         }
         else // double battle
         {
             if (!(moveTarget & (MOVE_TARGET_RANDOM | MOVE_TARGET_BOTH | MOVE_TARGET_DEPENDS | MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_USER)))
-                ++canSelectTarget; // either selected or user
+                canSelectTarget = 1; // either selected or user
+            if (moveTarget == (MOVE_TARGET_USER | MOVE_TARGET_ALLY) && IsBattlerAlive(BATTLE_PARTNER(gActiveBattler)))
+                canSelectTarget = 1;
             if (moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]] == 0)
             {
-                canSelectTarget = FALSE;
+                canSelectTarget = 0;
             }
             else if (!(moveTarget & (MOVE_TARGET_USER | MOVE_TARGET_USER_OR_SELECTED)) && CountAliveMonsInBattle(BATTLE_ALIVE_EXCEPT_ACTIVE) <= 1)
             {
                 gMultiUsePlayerCursor = GetDefaultMoveTarget(gActiveBattler);
-                canSelectTarget = FALSE;
+                canSelectTarget = 0;
+            }
+
+            if ((moveTarget & MOVE_TARGET_ALL_BATTLERS) == MOVE_TARGET_ALL_BATTLERS)
+            {
+                u32 i = 0;
+                for (i = 0; i < gBattlersCount; i++)
+                    TryShowAsTarget(i);
+
+                canSelectTarget = 3;
+            }
+            else if (moveTarget & (MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
+            {
+                TryShowAsTarget(gMultiUsePlayerCursor);
+                TryShowAsTarget(BATTLE_PARTNER(gMultiUsePlayerCursor));
+                if (moveTarget & MOVE_TARGET_FOES_AND_ALLY)
+                    TryShowAsTarget(BATTLE_PARTNER(gActiveBattler));
+                canSelectTarget = 2;
             }
         }
         ResetPaletteFadeControl();
         BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
-        if (!canSelectTarget)
+
+
+
+        switch (canSelectTarget)
         {
-            BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
+        case 0:
+        default:
+            if (gBattleStruct->mega.playerSelect)
+                BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | RET_MEGA_EVOLUTION | (gMultiUsePlayerCursor << 8));
+            else
+                BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
+            HideMegaTriggerSprite();
+            TryHideLastUsedBall();
             PlayerBufferExecCompleted();
-        }
-        else
-        {
+            break;
+        case 1:
             gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseTarget;
+
             if (moveTarget & (MOVE_TARGET_USER | MOVE_TARGET_USER_OR_SELECTED))
                 gMultiUsePlayerCursor = gActiveBattler;
             else if (gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)])
                 gMultiUsePlayerCursor = GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
             else
                 gMultiUsePlayerCursor = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+
             gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCb_ShowAsMoveTarget;
+            break;
+        case 2:
+            gBattlerControllerFuncs[gActiveBattler] = HandleInputShowTargets;
+            break;
+        case 3: // Entire field
+            gBattlerControllerFuncs[gActiveBattler] = HandleInputShowEntireFieldTargets;
+            break;
         }
-    }
-    else if (JOY_NEW(B_BUTTON))
+    }    
+    else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
     {
         PlaySE(SE_SELECT);
-        BtlController_EmitTwoReturnValues(1, 10, 0xFFFF);
+        gBattleStruct->mega.playerSelect = FALSE;
+        BtlController_EmitTwoReturnValues(BUFFER_B, 10, 0xFFFF);
+        //HideMegaTriggerSprite();
         PlayerBufferExecCompleted();
         ResetPaletteFadeControl();
         BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);

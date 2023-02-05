@@ -3662,12 +3662,18 @@ BattleScript_TripleKickLoop::
 BattleScript_DoTripleKickAttack::
 	accuracycheck BattleScript_TripleKickNoMoreHits, ACC_CURR_MOVE
 	movevaluescleanup
-	addbyte sTRIPLE_KICK_POWER, 10
+	jumpifmove MOVE_SURGING_STRIKES, EffectTripleKick_DoDmgCalcs    @ no power boost each hit
+	jumpifmove MOVE_TRIPLE_AXEL, EffectTripleKick_TripleAxelBoost   @ triple axel gets +20 power
+	addbyte sTRIPLE_KICK_POWER, 10                                  @ triple kick gets +10 power
 	addbyte gBattleScripting + 12, 1
+	goto EffectTripleKick_DoDmgCalcs
+EffectTripleKick_TripleAxelBoost:
+	addbyte sTRIPLE_KICK_POWER, 20
+EffectTripleKick_DoDmgCalcs:
 	copyhword gDynamicBasePower, sTRIPLE_KICK_POWER
 	critcalc
-	damagecalc
 	typecalc
+	damagecalc
 	adjustnormaldamage
 	jumpifmovehadnoeffect BattleScript_TripleKickNoMoreHits
 	attackanimation

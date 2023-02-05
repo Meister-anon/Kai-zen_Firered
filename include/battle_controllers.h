@@ -91,6 +91,7 @@ enum { // Values given to the emit functions to choose gBattleBufferA or gBattle
 
 // Special return values in gBattleBufferB from Battle Controller functions.
 #define RET_VALUE_LEVELED_UP   11
+#define RET_MEGA_EVOLUTION 0x80
 
 struct UnusedControllerStruct
 {
