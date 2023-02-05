@@ -68,7 +68,7 @@
 #define MOVE_TARGET_USER              0x10
 #define MOVE_TARGET_FOES_AND_ALLY     0x20
 #define MOVE_TARGET_OPPONENTS_FIELD   0x40
-#define MOVE_TARGET_USER_AND_ALL      0x80 //think added for confuse hit idea change
+#define MOVE_TARGET_USER_AND_ALL      0x80 //think added for confuse hit idea change    //ironically already exists in emerald
 #define MOVE_TARGET_ALLY              0x160
 
 struct TrainerMonNoItemDefaultMoves //pull from 4-12 later

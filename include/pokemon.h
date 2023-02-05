@@ -243,6 +243,7 @@ struct BattleMove
     u8 split;
     u8 argument;//  still don't know what this does
 };//without u32 flags, type overflowed with added moves
+//argument is for extra effects other than secondary effect
 
 extern const struct BattleMove gBattleMoves[];
 /*
