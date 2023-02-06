@@ -755,5 +755,6 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("ASTRAL BARRAGE"),
     _("EERIE SPELL"),
     _("COCOON"),
-    _("MONOTYPE")
+    _("MONOTYPE"),
+    _("FLASH FREEZE")
 };//remember to remove comma from last entry //longest name is 17 chars

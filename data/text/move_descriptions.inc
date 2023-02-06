@@ -2208,3 +2208,6 @@ gMoveDescription_Cocoon:
 
 gMoveDescription_Monotype:
    .string "Not done yet.$"
+
+gMoveDescription_FlashFreeze:
+	.string "Instantly freezes\nthe foe with a\ngust of sub-zero wind.$"

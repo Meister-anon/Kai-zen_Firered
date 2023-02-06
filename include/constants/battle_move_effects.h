@@ -408,6 +408,7 @@
 #define EFFECT_ROCK_SMASH 396 //checked on fire red worked perfectly
 #define EFFECT_FLASH 397
 #define EFFECT_COCOON 398
+#define EFFECT_FLASH_FREEZE 399
 
 #endif  // GUARD_CONSTANTS_BATTLE_MOVE_EFFECTS_H
 // gBattleScriptsForMoveEffects found at top of battle_scripts_1.s

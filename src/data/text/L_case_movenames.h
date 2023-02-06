@@ -758,4 +758,5 @@ const u8 gLowerMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_EERIE_SPELL] = _("Eerie Spell"),
     [MOVE_COCOON] = _("Cocoon"),
     [MOVE_MONOTYPE] = _("Monotype"),
-};
+    [MOVE_FLASH_FREEZE] = _("Flash Freeze"),
+};//don't need remove comma from last value for this file, port of emerald

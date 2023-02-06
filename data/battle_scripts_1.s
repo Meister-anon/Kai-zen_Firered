@@ -425,6 +425,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectRockSmash
 	.4byte BattleScript_EffectFlash
 	.4byte BattleScript_EffectCocoon
+	.4byte BattleScript_EffectFlashFreeze
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -4591,6 +4592,27 @@ BattleScript_EffectWillOWisp::
 	seteffectprimary
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectFlashFreeze::	@nearly done  just need to make animation for...
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
+	jumpifstatus BS_TARGET, STATUS1_FREEZE, BattleScript_AlreadyFrozen
+	jumpiftype BS_TARGET, TYPE_ICE, BattleScript_NotAffected
+	@jumpifability BS_TARGET, ABILITY_WATER_VEIL, BattleScript_WaterVeilPrevents
+	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_LeafGuardProtects
+	@jumpifflowerveil BattleScript_FlowerVeilProtects
+	jumpifleafguard BattleScript_LeafGuardProtects
+	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
+	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
+	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
+	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	attackanimation		@still need make animation
+	waitanimation
+	setmoveeffect MOVE_EFFECT_FREEZE
+	seteffectprimary
+	goto BattleScript_MoveEnd
+
 BattleScript_WaterVeilPrevents::
 	copybyte gEffectBattler, gBattlerTarget
 	setbyte cMULTISTRING_CHOOSER, 0
@@ -4600,6 +4622,12 @@ BattleScript_WaterVeilPrevents::
 BattleScript_AlreadyBurned::
 	pause 0x20
 	printstring STRINGID_PKMNALREADYHASBURN
+	waitmessage 0x40
+	goto BattleScript_MoveEnd
+	
+BattleScript_AlreadyFrozen::
+	pause 0x20
+	printstring STRINGID_PKMNALREADYFROZEN
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
