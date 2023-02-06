@@ -3716,6 +3716,16 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage = (15 * damage) / 10;  //how does this work, do I need to move it, or does it auto boost all damage?
                                         //it boosts all because its not in physical or special formula 
 
+    if (gBattleMoves[move].flags & FLAG_DMG_MINIMIZE && gStatuses3[gBattlerTarget] & STATUS3_MINIMIZED)
+        gBattleMoveDamage *= 2;
+    if (gBattleMoves[move].flags & FLAG_DMG_UNDERGROUND && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
+        gBattleMoveDamage *= 2;
+    if (gBattleMoves[move].flags & FLAG_DMG_UNDERWATER && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER)
+        gBattleMoveDamage *= 2;
+    if (gBattleMoves[move].flags & FLAG_DMG_2X_IN_AIR && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+        gBattleMoveDamage *= 2;
+    //port from emerald simplify battlescript don't need jumps and damage bytes in the script
+
     if (IS_MOVE_SPECIAL(move))
     {
         if (gCritMultiplier > 1)

@@ -43,7 +43,7 @@
 #define EFFECT_RAZOR_WIND 39
 #define EFFECT_SUPER_FANG 40
 #define EFFECT_DRAGON_RAGE 41
-#define EFFECT_TRAP 42
+#define EFFECT_TRAP 42	//keep for bind & wrap, need separate whirlpool effects
 #define EFFECT_HIGH_CRITICAL 43
 #define EFFECT_DOUBLE_HIT 44
 #define EFFECT_RECOIL_IF_MISS 45
@@ -355,7 +355,7 @@
 #define EFFECT_GEOMANCY 344
 #define EFFECT_FAIRY_LOCK 345
 #define EFFECT_ALLY_SWITCH 346
-#define EFFECT_SLEEP_HIT 347 // Relic Song
+#define EFFECT_RELIC_SONG 347 // Relic Song
 #define EFFECT_HIT_ESCAPE 348
 #define EFFECT_WORRY_SEED 349
 #define EFFECT_FELL_STINGER 350
@@ -409,6 +409,21 @@
 #define EFFECT_FLASH 397
 #define EFFECT_COCOON 398
 #define EFFECT_FLASH_FREEZE 399
+#define EFFECT_FIRE_SPIN 400
+#define EFFECT_CLAMP 401
+#define EFFECT_WHIRLPOOL 402
+#define EFFECT_SAND_TOMB 403
+#define EFFECT_MAGMA_STORM 404
+#define EFFECT_INFESTATION 405
+#define EFFECT_SNAP_TRAP 406
+
+/*MOVE_FIRE_SPIN, //increases burn chance //serenge grace is effect *2 by requires no setup, I think I can get away w * 3 here actually do more to near guarantee 50-60%
+MOVE_CLAMP,     //no extra wrap effect,  but give flich chance on hit //changed mind you're staying clamped on them, so for duration statused target has chance to flinch when attacking
+MOVE_WHIRLPOOL, // lower speed of wrapped target 1 stage    //already does double damage to underwater target
+MOVE_SAND_TOMB, // decrease accuracy of wrapped target  //do double damage to underground target, use sandpit description from emerald
+MOVE_MAGMA_STORM,   //heatran specific, might buff to give guaranteed burn, don't need lower damage since its lowered from 120 already
+MOVE_INFESTATION,   //since bug infestations can cause structural integrity issues, think I'll make this lower def & sp def or just def
+MOVE_SNAP_TRAP,*/	//since physical will make only trap that doesn't go away on switch or faint, also changed from grass to steel type
 
 #endif  // GUARD_CONSTANTS_BATTLE_MOVE_EFFECTS_H
 // gBattleScriptsForMoveEffects found at top of battle_scripts_1.s

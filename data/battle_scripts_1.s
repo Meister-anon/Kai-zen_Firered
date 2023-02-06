@@ -426,6 +426,13 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectFlash
 	.4byte BattleScript_EffectCocoon
 	.4byte BattleScript_EffectFlashFreeze
+	.4byte BattleScript_EffectFireSpin	@copyof trap
+	.4byte BattleScript_EffectClamp
+	.4byte BattleScript_EffectWhirlpool
+	.4byte BattleScript_EffectSandTomb
+	.4byte BattleScript_EffectMagmaStorm
+	.4byte BattleScript_EffectInfestation
+	.4byte BattleScript_EffectSnapTrap
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -437,9 +444,9 @@ BattleScript_EffectChangeTypeOnItem:
 BattleScript_EffectRevelationDance:
 BattleScript_EffectStompingTantrum:
 
-BattleScript_EffectSleepHit:
-	setmoveeffect MOVE_EFFECT_SLEEP
-	goto BattleScript_EffectHit
+@BattleScript_EffectSleepHit:
+@	setmoveeffect MOVE_EFFECT_SLEEP
+@	goto BattleScript_EffectHit
 
 @check this make sure it works I dont see a command here	
 BattleScript_EffectAllySwitch:
@@ -3055,12 +3062,36 @@ BattleScript_EffectDragonRage::
 	goto BattleScript_HitFromAtkAnimation
 
 BattleScript_EffectTrap::
-	jumpifnotmove MOVE_WHIRLPOOL, BattleScript_DoWrapEffect
-	jumpifnostatus3 BS_TARGET, STATUS3_UNDERWATER, BattleScript_DoWrapEffect
-	orword gHitMarker, HITMARKER_IGNORE_UNDERWATER
-	setbyte sDMG_MULTIPLIER, 2
-BattleScript_DoWrapEffect::
-	setmoveeffect MOVE_EFFECT_WRAP
+	setmoveeffect MOVE_EFFECT_WRAP	@goes to BattleScript_MoveEffectWrap sets status & stringID
+	goto BattleScript_EffectHit
+
+@dont need fire burn protections since fire spin itself doesnt burn
+BattleScript_EffectFireSpin::
+	setmoveeffect MOVE_EFFECT_FIRE_SPIN	
+	goto BattleScript_EffectHit
+
+BattleScript_EffectClamp::
+	setmoveeffect MOVE_EFFECT_CLAMP	
+	goto BattleScript_EffectHit
+
+BattleScript_EffectWhirlpool::
+	setmoveeffect MOVE_EFFECT_WHIRLPOOL	
+	goto BattleScript_EffectHit
+
+BattleScript_EffectSandTomb::
+	setmoveeffect MOVE_EFFECT_SAND_TOMB	
+	goto BattleScript_EffectHit
+
+BattleScript_EffectMagmaStorm::
+	setmoveeffect MOVE_EFFECT_MAGMA_STORM	
+	goto BattleScript_EffectHit
+
+BattleScript_EffectInfestation::
+	setmoveeffect MOVE_EFFECT_INFESTATION	
+	goto BattleScript_EffectHit
+
+BattleScript_EffectSnapTrap::
+	setmoveeffect MOVE_EFFECT_SNAP_TRAP	
 	goto BattleScript_EffectHit
 
 BattleScript_EffectDoubleHit::
@@ -6667,6 +6698,41 @@ BattleScript_MoveEffectWrap::
 	waitmessage 0x40
 	return
 
+BattleScript_MoveEffectFireSpin::
+	printstring STRINGID_PKMNTRAPPEDINVORTEX
+	waitmessage 0x40
+	return
+
+BattleScript_MoveEffectClamp::
+	printstring STRINGID_PKMNCLAMPED
+	waitmessage 0x40
+	return
+
+BattleScript_MoveEffectWhirlpool::
+	printstring STRINGID_PKMNTRAPPEDINVORTEX
+	waitmessage 0x40
+	return
+
+BattleScript_MoveEffectSandTomb::
+	printstring STRINGID_PKMNTRAPPEDBYSANDTOMB
+	waitmessage 0x40
+	return
+
+BattleScript_MoveEffectMagmaStorm::
+	printstring STRINGID_TRAPPEDBYSWIRLINGMAGMA
+	waitmessage 0x40
+	return
+
+BattleScript_MoveEffectInfestation::
+	printstring STRINGID_INFESTATION
+	waitmessage 0x40
+	return
+
+BattleScript_MoveEffectSnapTrap::
+	printstring STRINGID_SNAPTRAP
+	waitmessage 0x40
+	return
+
 BattleScript_MoveEffectConfusion::
 	chosenstatusanimation BS_EFFECT_BATTLER, 1, STATUS2_CONFUSION
 	printstring STRINGID_PKMNWASCONFUSED
@@ -6685,7 +6751,7 @@ BattleScript_FlameOrb::
 	call BattleScript_MoveEffectBurn
 	end2
 
-
+@can prob use recoil effect for wonder gaurd hp swap
 BattleScript_MoveEffectRecoilWithStatus::
 	argumentstatuseffect
 	copyword gBattleMoveDamage, sSAVED_DMG

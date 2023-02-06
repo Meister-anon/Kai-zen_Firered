@@ -198,8 +198,12 @@ struct DisableStruct
              u8 laserFocusTimer;
              u8 throatChopTimer;
              u8 RoostTimer; // to set random % 4 effect after use roost setup iondelluge the same
-             u8 usedMoves : 4;
+             u8 usedMoves:4;
+             u8 wrapTurns;
              //u8 RoostTimerStartValue;  //remove for now until I get 
+             u8 noRetreat:1;
+             u8 tarShot:1;
+             u8 octolock:1;
     /*0x1A*/ u8 unk1A[2];
 }; //think I may not actually need roost start value, long as I have timer
 
@@ -549,8 +553,8 @@ struct BattleStruct //fill in unused fields when porting
     u8 turnEffectsBattlerId;
     u8 filler2; // unused
     u8 turnCountersTracker;
-    u8 wrappedMove[MAX_BATTLERS_COUNT * 2]; // Leftover from Ruby's ewram access.
-    u8 moveTarget[MAX_BATTLERS_COUNT];
+    u16 wrappedMove[MAX_BATTLERS_COUNT]; // Leftover from Ruby's ewram access.
+    u16 moveTarget[MAX_BATTLERS_COUNT];
     u8 expGetterMonId;
     u8 field_11; // unused
     u8 wildVictorySong;

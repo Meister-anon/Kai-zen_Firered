@@ -980,7 +980,7 @@ gMoveDescription_SkyUppercut:: @ 8487F76
 	.string "The user attacks\nwith an uppercut\nthrown skywards\nwith force.$"
 
 gMoveDescription_SandTomb:: @ 8487FB4
-	.string "The foe is trapped\ninside a painful\nsandstorm for two\nto five turns.$"
+	.string "The foe is trapped\ninside a whirling\nsandstorm for two\nto five turns.$"
 
 gMoveDescription_SheerCold:: @ 8487FF9
 	.string "The foe is attacked\nwith ultimate cold\nthat causes fainting\nif it hits.$"

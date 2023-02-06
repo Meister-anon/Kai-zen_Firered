@@ -642,7 +642,7 @@ static const struct StatFractions sAccuracyStageRatios[] =
 // The chance is 1/N for each stage.
 static const u16 sCriticalHitChance[] = { 16, 8, 4, 3, 2 };
 
-static const u32 sStatusFlagsForMoveEffects[] =
+/*static const u32 sStatusFlagsForMoveEffects[] =
 {
     0x00000000,
     STATUS1_SLEEP,
@@ -709,6 +709,33 @@ static const u32 sStatusFlagsForMoveEffects[] =
 //adding someting inbetween existing entries seemed to cause overlap and cause effects to get mixed up.
 //so if I want to add status (if its even possible) I'll have to figure out pattern and most likely add to end.
 //ok so it lines up with the array below,  all the 0x0000 are for entiries in the pointer list that don't correspond to a status
+*/
+
+static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
+{
+    [MOVE_EFFECT_SLEEP] = STATUS1_SLEEP,
+    [MOVE_EFFECT_POISON] = STATUS1_POISON,
+    [MOVE_EFFECT_BURN] = STATUS1_BURN,
+    [MOVE_EFFECT_FREEZE] = STATUS1_FREEZE,
+    [MOVE_EFFECT_PARALYSIS] = STATUS1_PARALYSIS,
+    [MOVE_EFFECT_TOXIC] = STATUS1_TOXIC_POISON,
+    [MOVE_EFFECT_CONFUSION] = STATUS2_CONFUSION,
+    [MOVE_EFFECT_FLINCH] = STATUS2_FLINCHED,
+    [MOVE_EFFECT_UPROAR] = STATUS2_UPROAR,
+    [MOVE_EFFECT_CHARGING] = STATUS2_MULTIPLETURNS,
+    [MOVE_EFFECT_WRAP] = STATUS2_WRAPPED,
+    [MOVE_EFFECT_RECHARGE] = STATUS2_RECHARGE,
+    [MOVE_EFFECT_PREVENT_ESCAPE] = STATUS2_ESCAPE_PREVENTION,
+    [MOVE_EFFECT_NIGHTMARE] = STATUS2_NIGHTMARE,
+    [MOVE_EFFECT_THRASH] = STATUS2_LOCK_CONFUSE,
+    [MOVE_EFFECT_FIRE_SPIN] = STATUS4_FIRE_SPIN,
+    [MOVE_EFFECT_CLAMP] = STATUS4_CLAMP,
+    [MOVE_EFFECT_WHIRLPOOL] = STATUS4_WHIRLPOOL,
+    [MOVE_EFFECT_SAND_TOMB] = STATUS4_SAND_TOMB,
+    [MOVE_EFFECT_MAGMA_STORM] = STATUS4_MAGMA_STORM,
+    [MOVE_EFFECT_INFESTATION] = STATUS4_INFESTATION,
+    [MOVE_EFFECT_SNAP_TRAP] = STATUS4_SNAP_TRAP,
+};//actually rather than making this u64 prob should try putting in different status field since it doesn't need to be all status2 Ian use status4
 
 static const u8 *const sMoveEffectBS_Ptrs[] =
 {
@@ -753,6 +780,13 @@ static const u8 *const sMoveEffectBS_Ptrs[] =
     [MOVE_EFFECT_ATK_DEF_DOWN] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_RECOIL_33] = BattleScript_MoveEffectRecoil,
     [MOVE_EFFECT_ATTRACT] = BattleScript_MoveEffectSleep,
+    [MOVE_EFFECT_FIRE_SPIN] = BattleScript_MoveEffectFireSpin,
+    [MOVE_EFFECT_CLAMP] = BattleScript_MoveEffectClamp,
+    [MOVE_EFFECT_WHIRLPOOL] = BattleScript_MoveEffectWhirlpool,
+    [MOVE_EFFECT_SAND_TOMB] = BattleScript_MoveEffectSandTomb,
+    [MOVE_EFFECT_MAGMA_STORM] = BattleScript_MoveEffectMagmaStorm,
+    [MOVE_EFFECT_INFESTATION] = BattleScript_MoveEffectInfestation,
+    [MOVE_EFFECT_SNAP_TRAP] = BattleScript_MoveEffectSnapTrap,
     //[MOVE_EFFECT_SPIRIT_LOCK] = BattleScript_MoveEffectSpiritLock,
 }; //don't know why a lot of these default to sleep, but I added attract to hopefully do something?
 
@@ -1526,7 +1560,11 @@ static void atk01_accuracycheck(void)
         } //hopefully THIS  will affect the accuracy. works , it loses 1/4 per hit. 
         //changed from 3/4 to 2/3 to drop 1/3 per hit.
 
+        if (gCurrentMove == MOVE_ROCK_THROW && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+            moveAcc = 80;
+
         // check Thunder on sunny weather / need add hail blizzard buff?
+        //don't rememeber why I used effect thunder instead of gcurrentmove
         if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY && gBattleMoves[move].effect == EFFECT_THUNDER)
             moveAcc = 50;
         if (moveAcc > 100)
@@ -1549,9 +1587,12 @@ static void atk01_accuracycheck(void)
         if (gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION) //thought instead of self attack, make confusion chance to change move target to random
          //   calc = (calc * 120) / 100; //that way they're still doing the same move, but they also have chance to hit attack themselves with it .
         eva = 5; // with that there should be as much benefit as danger in being confused, singled moves could hit everyone, etc. random & interesting..
-        if (gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
+        else if (gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
         //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
-        eva = 5;
+        eva = 3;
+        else if (gBattleMons[gBattlerTarget].status4 & ITS_A_TRAP_STATUS4)  //I hpoe this works
+        //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
+        eva = 3;
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP) { //.target = MOVE_TARGET_SELECTED, 
             if ((gBattleMons[gBattlerTarget].type1 || gBattleMons[gBattlerTarget].type2) == TYPE_PSYCHIC) //important chek this think have function for type checking
                 eva = 5; // to take advantage of these buffs I want to have a button to display real move accuracy in battle. maybe L
@@ -3100,20 +3141,27 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 if (gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
                 {
                     ++gBattlescriptCurrInstr;
-                }
+                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
                 else //need to understand what makes something use secondaryeffectchance for move effect
                 {
-                    gBattleMons[gEffectBattler].status2 |= ((Random() & 3) + 3) << 0xD;
-                    *(gBattleStruct->wrappedMove + gEffectBattler * 2 + 0) = gCurrentMove;
-                    *(gBattleStruct->wrappedMove + gEffectBattler * 2 + 1) = gCurrentMove >> 8;
-                    *(gBattleStruct->wrappedBy + gEffectBattler) = gBattlerAttacker;
+                    //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
+                    //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
+                    //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
+                    gBattleMons[gEffectBattler].status2 |= STATUS2_WRAPPED;
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) 
+                        gDisableStructs[gEffectBattler].wrapTurns = 7;
+                    else   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
+                        gDisableStructs[gEffectBattler].wrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
+
+                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
+                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
                     gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleCommunication[MOVE_EFFECT_BYTE]];
                     for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
                     {
                         if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
-                            break;
-                    }
+                            break;  //multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
+                    }//believe this is only for reading from the trapstring table can prob remove for other trap effects
                 }
                 break;
             case MOVE_EFFECT_RECOIL_25: // 25% recoil
@@ -3369,10 +3417,37 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
                 gBattlescriptCurrInstr = BattleScript_SAtkDown2;
                 break;
+            case MOVE_EFFECT_FIRE_SPIN:
+            case MOVE_EFFECT_CLAMP:
+            case MOVE_EFFECT_WHIRLPOOL:
+            case MOVE_EFFECT_SAND_TOMB:
+            case MOVE_EFFECT_MAGMA_STORM:
+            case MOVE_EFFECT_INFESTATION:
+            case MOVE_EFFECT_SNAP_TRAP: 
+                if (gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED) //want to use catchall define here  but need to make sure status4 runs like status2
+                {
+                    ++gBattlescriptCurrInstr;
+                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
+                else //need to understand what makes something use secondaryeffectchance for move effect
+                {
+                    gBattleMons[gEffectBattler].status2 |= ((Random() & 3) + 3) << 0xD;
+                    *(gBattleStruct->wrappedMove + gEffectBattler * 2 + 0) = gCurrentMove;
+                    *(gBattleStruct->wrappedMove + gEffectBattler * 2 + 1) = gCurrentMove >> 8;
+                    *(gBattleStruct->wrappedBy + gEffectBattler) = gBattlerAttacker;
+                    BattleScriptPush(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleCommunication[MOVE_EFFECT_BYTE]];
+                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
+                    {
+                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
+                            break;
+                    }
+                }
+                break;  //thought since I separated out status for traps there's potential to have multiple traps in effect at once
             }
         }
     }
 }
+
 
 static void atk15_seteffectwithchance(void) //occurs to me that fairy moves weren't meant with applying a status in mind, so all fairy moves would have other effects
 { //so I think I'll need to make some code specifically to apply the effect separate from fairy moves normal effect
@@ -3394,6 +3469,11 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
     else
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
+
+    if (gBattleMoves[gCurrentMove].effect == ITS_A_TRAP)   //if this works make a define for trap effects & separate effect & move effect & battlscript for each
+        SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //that way may not need to make a separate status,// seems to work no apparent bugs
+
+    //gBattleScripting.moveEffect = (MOVE_EFFECT_CONFUSION | MOVE_EFFECT_CERTAIN);
 
     if (gBattleCommunication[MOVE_EFFECT_BYTE] & MOVE_EFFECT_CERTAIN    //believe is like weather, just means its aplying that affect? so this makes it certain
      && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
@@ -4540,7 +4620,7 @@ static void atk46_playanimation2(void) // animation Id is stored in the first po
     }
 }
 
-static void atk47_setgraphicalstatchangevalues(void)
+static void atk47_setgraphicalstatchangevalues(void)    //may need change this too since stat buffs go up to +-3 in later gen
 {
     u8 value = 0;
 
@@ -4662,7 +4742,7 @@ static void atk48_playstatchangeanimation(void)
     }
 }
 
-static void atk49_moveend(void)
+static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend
 {
     s32 i;
     bool32 effect = FALSE;

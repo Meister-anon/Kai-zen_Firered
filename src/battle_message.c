@@ -695,6 +695,8 @@ static const u8 sText_ASandstormKickedUp[] = _("A sandstorm kicked up!");
 static const u8 sText_PkmnsWillPerishIn3Turns[] = _("Both Pokémon will perish\nin three turns!");
 static const u8 sText_AbilityRaisedStatDrastically[] = _("{B_DEF_ABILITY} raised {B_DEF_NAME_WITH_PREFIX}'s\n{B_BUFF1} drastically!");
 static const u8 sText_FellInLoveAtFirstSight[] = _("{B_DEF_NAME_WITH_PREFIX} fell in love at first sight!");
+static const u8 sText_SnapTrap[] = _("{B_DEF_NAME_WITH_PREFIX} was ensnared\nby {B_ATK_NAME_WITH_PREFIX}'s trap!");
+
 
 //extra stuff new
 static const u8 sText_Your1[] = _("Your");
@@ -1362,6 +1364,7 @@ const u8 *const gBattleStringsTable[] = {
         [STRINGID_PKMNTOOKTARGETHIGH - BATTLESTRINGS_TABLE_START] = sText_PkmnTookTargetHigh,        
     [STRINGID_CUPIDSARROWSTRUCK - BATTLESTRINGS_TABLE_START]             = sText_FellInLoveAtFirstSight,
     [STRINGID_PKMNALREADYFROZEN - BATTLESTRINGS_TABLE_START]             = sText_PkmnWasAlreadyFrozen,
+    [STRINGID_SNAPTRAP - BATTLESTRINGS_TABLE_START]                      = sText_SnapTrap,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
@@ -1528,15 +1531,22 @@ const u16 gFirstTurnOfTwoStringIds[] = {
     STRINGID_CLOAKEDINAFREEZINGLIGHT    // MOVE_FREEZE_SHOCK
 };
 
+//used in wrap battlescript which is from move effect wrap which makes status wrap
+//easiest way to make effects is to canibalize this and make a separate status & move effect & battlescript
+//and put the appropriate string in each one. also make catch all define for trap status like I hvae for the effects
+//use to make sure trap effects don't overlap  *actually I'll prob allow that since they're all separate now its functionally possible
+//don't forget trap effect exclusion for floating enemies, not including magmastorm
+//use grounded function rather than just floating species array, so it'll work when grounded
 const u16 gWrappedStringIds[] = {
-    STRINGID_PKMNSQUEEZEDBYBIND,
-    STRINGID_PKMNWRAPPEDBY,
-    STRINGID_PKMNTRAPPEDINVORTEX,
-    STRINGID_PKMNCLAMPED,
-    STRINGID_PKMNTRAPPEDINVORTEX,
-    STRINGID_PKMNTRAPPEDBYSANDTOMB,
-    STRINGID_INFESTATION
-};
+    STRINGID_PKMNSQUEEZEDBYBIND,    //bind
+    STRINGID_PKMNWRAPPEDBY,         //wrap
+    STRINGID_PKMNTRAPPEDINVORTEX,   //fire spin
+    STRINGID_PKMNCLAMPED,           //clamp
+    STRINGID_PKMNTRAPPEDINVORTEX,   //whirlpool
+    STRINGID_PKMNTRAPPEDBYSANDTOMB, //sandtomb
+    STRINGID_TRAPPEDBYSWIRLINGMAGMA //magma storm
+    STRINGID_INFESTATION            //infestation
+};//need to add snaptrap
 
 const u16 gMistUsedStringIds[] = {
     STRINGID_PKMNSHROUDEDINMIST,

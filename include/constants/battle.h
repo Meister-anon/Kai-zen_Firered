@@ -1,6 +1,8 @@
 #ifndef GUARD_CONSTANTS_BATTLE_H
 #define GUARD_CONSTANTS_BATTLE_H
 
+#include "battle_move_effects.h"
+
 /*
  * A battler may be in one of four positions on the field. The first bit determines
  * what side the battler is on, either the player's side or the opponent's side.
@@ -103,7 +105,7 @@
 
 // Non-volatile status conditions
 // These persist remain outside of battle and after switching out
-#define STATUS1_NONE             0x0
+/*#define STATUS1_NONE             0x0
 #define STATUS1_SLEEP            0x7
 #define STATUS1_POISON           0x8
 #define STATUS1_BURN             0x10
@@ -139,7 +141,55 @@
 #define STATUS2_CURSED                0x10000000
 #define STATUS2_FORESIGHT             0x20000000
 #define STATUS2_DEFENSE_CURL          0x40000000
-#define STATUS2_TORMENT               0x80000000
+#define STATUS2_TORMENT               0x80000000*/
+
+// Non-volatile status conditions
+// These persist remain outside of battle and after switching out
+#define STATUS1_NONE             0
+#define STATUS1_SLEEP            (1 << 0 | 1 << 1 | 1 << 2) // First 3 bits (Number of turns to sleep)
+#define STATUS1_SLEEP_TURN(num)  ((num) << 0) // Just for readability (or if rearranging statuses)
+#define STATUS1_POISON           (1 << 3)
+#define STATUS1_BURN             (1 << 4)
+#define STATUS1_FREEZE           (1 << 5)
+#define STATUS1_PARALYSIS        (1 << 6)
+#define STATUS1_SPIRIT_LOCK      (1 << 7)	//test if toxic still works fine
+#define STATUS1_TOXIC_POISON     (1 << 8)
+#define STATUS1_TOXIC_COUNTER    (1 << 9 | 1 << 10 | 1 << 11 | 1 << 12)
+#define STATUS1_TOXIC_TURN(num)  ((num) << 9)
+#define STATUS1_PSN_ANY          (STATUS1_POISON | STATUS1_TOXIC_POISON)
+#define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON)
+
+// Volatile status ailments
+// These are removed after exiting the battle or switching out
+#define STATUS2_CONFUSION             (1 << 0 | 1 << 1 | 1 << 2)
+#define STATUS2_CONFUSION_TURN(num)   ((num) << 0)
+#define STATUS2_FLINCHED              (1 << 3)
+#define STATUS2_UPROAR                (1 << 4 | 1 << 5 | 1 << 6)
+#define STATUS2_UPROAR_TURN(num)      ((num) << 4)
+#define STATUS2_UNUSED                (1 << 7)
+#define STATUS2_BIDE                  (1 << 8 | 1 << 9)
+#define STATUS2_BIDE_TURN(num)        (((num) << 8) & STATUS2_BIDE)
+#define STATUS2_LOCK_CONFUSE          (1 << 10 | 1 << 11) // e.g. Thrash
+#define STATUS2_LOCK_CONFUSE_TURN(num)((num) << 10)
+#define STATUS2_MULTIPLETURNS         (1 << 12) 
+#define STATUS2_WRAPPED               (1 << 13)	//make individual wrapped for each, but all use same wrap turn counter
+//#define STATUS2_WRAPPED_TURN(num)     ((num) << 13)	//left shift value is starting point of status wrapped
+#define STATUS2_INFATUATION           (1 << 16 | 1 << 17 | 1 << 18 | 1 << 19)  // 4 bits, one for every battler
+#define STATUS2_INFATUATED_WITH(battler) (gBitTable[battler] << 16)
+#define STATUS2_FOCUS_ENERGY          (1 << 20)
+#define STATUS2_TRANSFORMED           (1 << 21)
+#define STATUS2_RECHARGE              (1 << 22)
+#define STATUS2_RAGE                  (1 << 23)
+#define STATUS2_SUBSTITUTE            (1 << 24)
+#define STATUS2_DESTINY_BOND          (1 << 25)
+#define STATUS2_ESCAPE_PREVENTION     (1 << 26)
+#define STATUS2_NIGHTMARE             (1 << 27)
+#define STATUS2_CURSED                (1 << 28)
+#define STATUS2_FORESIGHT             (1 << 29)
+#define STATUS2_DEFENSE_CURL          (1 << 30)
+#define STATUS2_TORMENT               (1 << 31)	//ok updated from current firered thought would let me have more status
+//but realized its u32 so possibly may need to upgrade to u64? if even possible to hvae more status 2
+//haev 2 extra spaces now
 
 // Seems like per-battler statuses. Not quite sure how to categorize these
 #define STATUS3_SKY_DROPPED             0x1 // Target of Sky Drop
@@ -180,8 +230,36 @@
 #define STATUS3_ELECTRIFIED             (1 << 30)
 #define STATUS3_POWER_TRICK             (1 << 31)
 
-#define STATUS4_ELECTRIFIED             (1 << 0)
-#define STATUS4_PLASMA_FISTS            (1 << 1)
+#define STATUS4_ELECTRIFIED             (1 << 0)	//need to check how status4 is setup to make sure it runs on same conditions as status2
+#define STATUS4_PLASMA_FISTS            (1 << 1)	//if it works I can move wrap status and wrap counter up here so it all uses status4
+#define STATUS4_FIRE_SPIN				(1 << 2)
+#define STATUS4_CLAMP					(1 << 3)
+#define STATUS4_WHIRLPOOL				(1 << 4)
+#define STATUS4_SAND_TOMB				(1 << 5)
+#define STATUS4_MAGMA_STORM				(1 << 6)
+#define STATUS4_INFESTATION				(1 << 7)
+#define STATUS4_SNAP_TRAP				(1 << 8)
+//was able to save great amount of space with emerald upgrades
+//but now dont have separate counter for each status
+//I could make one without issue by adding to disable struct
+//but further thought it doesnt make sense for most of the status
+//to interact since they are environment based.
+//only ones that make sense are clamp, infestation & snaptrap
+
+//hmm keep that in mind for later,
+//2 types of traps environment vs physical, where physical has separate wrap timer & can stack
+
+//statuses for traps together forgot can't do this  since status2
+#define ITS_A_TRAP_STATUS (STATUS2_WRAPPED | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL | STATUS4_SAND_TOMB | STATUS4_MAGMA_STORM | STATUS4_INFESTATION | STATUS4_SNAP_TRAP)
+
+//trap statuses not immune to floating enemies
+#define ITS_A_TRAP_STATUS_2 (STATUS2_WRAPPED | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL | STATUS4_SAND_TOMB | STATUS4_INFESTATION | STATUS4_SNAP_TRAP)
+
+//temp just the status4 stuff		//OK so status4 not currently used in battle? its not in BattlePokemon struct need add and investigate
+#define ITS_A_TRAP_STATUS4 (STATUS4_FIRE_SPIN || STATUS4_CLAMP || STATUS4_WHIRLPOOL || STATUS4_SAND_TOMB || STATUS4_MAGMA_STORM || STATUS4_INFESTATION || STATUS4_SNAP_TRAP))
+
+//effects for traps together //move data used in battle_moves_effects.h  each needs own battlescript
+#define ITS_A_TRAP (EFFECT_TRAP || EFFECT_FIRE_SPIN || EFFECT_CLAMP || EFFECT_WHIRLPOOL || EFFECT_SAND_TOMB || EFFECT_MAGMA_STORM || EFFECT_INFESTATION || EFFECT_SNAP_TRAP)
 
 // Not really sure what a "hitmarker" is.
 #define HITMARKER_WAKE_UP_CLEAR         0x00000010	//// Cleared when waking up. Never set or checked.
@@ -368,9 +446,18 @@
 #define MOVE_EFFECT_V_CREATE			0x47
 #define MOVE_EFFECT_RELIC_SONG          0x48
 #define MOVE_EFFECT_TRAP_BOTH           0x49
-#define MOVE_EFFECT_SKY_DROP            0x4a
-#define MOVE_EFFECT_AFFECTS_USER        0x50
-#define MOVE_EFFECT_CERTAIN             0x80
+#define MOVE_EFFECT_SKY_DROP            0x4A	//add move_effects for other wrap moves
+#define MOVE_EFFECT_FIRE_SPIN			0x4B
+#define MOVE_EFFECT_CLAMP				0x4C
+#define MOVE_EFFECT_WHIRLPOOL			0x4D
+#define MOVE_EFFECT_SAND_TOMB			0x4E
+#define MOVE_EFFECT_MAGMA_STORM			0x4F
+#define MOVE_EFFECT_INFESTATION			0x50
+#define MOVE_EFFECT_SNAP_TRAP			0x51
+
+#define NUM_MOVE_EFFECTS                82
+#define MOVE_EFFECT_AFFECTS_USER        0x60
+#define MOVE_EFFECT_CERTAIN             0x90	//OK THIS SEEMS FINE its just a define doesn't need to be a specific value
 
 // Battle terrain defines for gBattleTerrain.
 #define BATTLE_TERRAIN_GRASS        0
