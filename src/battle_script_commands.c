@@ -1252,7 +1252,7 @@ static void atk00_attackcanceler(void)
     }
 }
 
-static void JumpIfMoveFailed(u8 adder, u16 move) //updated to emerald standard
+static bool32 JumpIfMoveFailed(u8 adder, u16 move) //updated to emerald standard
 {
     //const u8 *BS_ptr = gBattlescriptCurrInstr + adder;
 
@@ -1699,10 +1699,10 @@ static void atk04_critcalc(void)    //figure later
     // && !(gSideStatuses[battlerDef] & SIDE_STATUS_LUCKY_CHANT)
     {
         gCritMultiplier = 2;
-        /*else if (gBattleMons[gBattlerAttacker].ability == ABILITY_SNIPER)  //could possibly be if instead of else if
+        if (gBattleMons[gBattlerAttacker].ability == ABILITY_SNIPER)  //could possibly be if instead of else if
         {
             gCritMultiplier = 3;
-        }*/
+        }
 
     }
     else
@@ -3096,12 +3096,12 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 gProtectStructs[gEffectBattler].chargingTurn = 1;
                 ++gBattlescriptCurrInstr;
                 break;
-            case MOVE_EFFECT_WRAP:
-                if (gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)
+            case MOVE_EFFECT_WRAP:  //all traps use move effect wrap from battlescript
+                if (gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
                 {
                     ++gBattlescriptCurrInstr;
                 }
-                else
+                else //need to understand what makes something use secondaryeffectchance for move effect
                 {
                     gBattleMons[gEffectBattler].status2 |= ((Random() & 3) + 3) << 0xD;
                     *(gBattleStruct->wrappedMove + gEffectBattler * 2 + 0) = gCurrentMove;
@@ -3394,15 +3394,16 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
     else
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
-    if (gBattleCommunication[MOVE_EFFECT_BYTE] & MOVE_EFFECT_CERTAIN
+
+    if (gBattleCommunication[MOVE_EFFECT_BYTE] & MOVE_EFFECT_CERTAIN    //believe is like weather, just means its aplying that affect? so this makes it certain
      && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
     {
         gBattleCommunication[MOVE_EFFECT_BYTE] &= ~(MOVE_EFFECT_CERTAIN);
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
     }
     else if (Random() % 100 <= percentChance
-          && gBattleCommunication[MOVE_EFFECT_BYTE]
-          && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+          && gBattleCommunication[MOVE_EFFECT_BYTE]         //believe just means and has move effect?
+          && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))   //didn't miss
     {
         if (percentChance >= 100)
             SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
@@ -11280,9 +11281,9 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
 //instead of species base attack, give stab multiplier if attaking party member is type dark
 // as well as use the gen 5 base power calculation
 
-static void atkC5_setsemiinvulnerablebit(void)
+static void atkC5_setsemiinvulnerablebit(void)  //thsi command is why move effect doesn't use secondaryeffectchance its handled in battlescript
 {
-    switch (gCurrentMove)
+    switch (gCurrentMove)   //this sets the status but the logic  is handled in accuracyhelper function
     {
     case MOVE_FLY:
     case MOVE_BOUNCE:

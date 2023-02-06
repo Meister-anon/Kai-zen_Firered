@@ -3604,7 +3604,7 @@
       "english": "STICK",
       "itemId": "ITEM_STICK",
       "price": 200,
-      "holdEffect": "HOLD_EFFECT_STICK",
+      "holdEffect": "HOLD_EFFECT_LEEK",
       "holdEffectParam": 0,
       "description_english": "A stick of leek to be held by a\\nFARFETCH'D. It raises FARFETCH'D's\\ncritical-hit ratio.",
       "importance": 0,

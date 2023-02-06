@@ -1715,16 +1715,21 @@ const u16 gDoubleBattleRecallStrings[] = {
     STRINGID_TRAINER1MON1AND2COMEBACK
 };
 
+//for all traps I change lower stats by 2 stages
 const u16 gTrappingMoves[] = {
-    MOVE_BIND,
+    MOVE_BIND,      //same for wrap, lower speed of wrapped target 2 stages
     MOVE_WRAP,
-    MOVE_FIRE_SPIN,
-    MOVE_CLAMP,
-    MOVE_WHIRLPOOL,
-    MOVE_SAND_TOMB,
-    MOVE_INFESTATION,
-    0xFFFF
+    MOVE_FIRE_SPIN, //increases burn chance //serenge grace is effect *2 by requires no setup, I think I can get away w * 3 here actually do more to near guarantee 50-60%
+    MOVE_CLAMP,     //no extra wrap effect,  but give flich chance on hit //changed mind you're staying clamped on them, so for duration statused target has chance to flinch when attacking
+    MOVE_WHIRLPOOL, // lower speed of wrapped target 1 stage    //already does double damage to underwater target
+    MOVE_SAND_TOMB, // decrease accuracy of wrapped target  //do double damage to underground target, use sandpit description from emerald
+    MOVE_MAGMA_STORM,   //heatran specific, might buff to give guaranteed burn, don't need lower damage since its lowered from 120 already
+    MOVE_INFESTATION,   //since bug infestations can cause structural integrity issues, think I'll make this lower def & sp def or just def
+    MOVE_SNAP_TRAP,     //still to do, effect not made yet, since bear traps hurt more you move, I'll make it hurt attacker every time they use a move just use hurt atacker script
+    0xFFFF              //since its a physical trap I think I'll also make this the only affect that persists if user switches out/faints
 };
+//logic invaded once again, floating/flying mon should be immunte to trap moves, will exclude magma storm from that as its a legendary move
+//will make these buffs slightly situational but would do a lot for the overall strategy and nuance of the game
 
 //ported for updated battlescript
 const u16 gStatusConditionsStringIds[] =

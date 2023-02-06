@@ -237,7 +237,7 @@ struct BattleMove
     u8 accuracy;
     u8 pp;
     u8 secondaryEffectChance;
-    u8 target;
+    u16 target;
     s8 priority;
     u32 flags; // is u32 in emerald, might not need to do that, will ask //they use a lot of move flags will update
     u8 split;
