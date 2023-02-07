@@ -1292,7 +1292,11 @@ enum
     ENDTURN_FREEZE,
     ENDTURN_NIGHTMARES,
     ENDTURN_CURSE,
+    ENDTURN_ENVIRONMENT_TRAP,
     ENDTURN_WRAP,
+    ENDTURN_CLAMP,
+    ENDTURN_INFESTATION,
+    ENDTURN_SNAPTRAP,
     ENDTURN_OCTOLOCK,
     ENDTURN_UPROAR,
     ENDTURN_THRASH,
@@ -1517,7 +1521,43 @@ u8 DoBattlerEndTurnEffects(void)
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
-            case ENDTURN_WRAP:  // wrap
+            case ENDTURN_ENVIRONMENT_TRAP:  // may need add fallthrough?     //make environemnt trap end turn & then separate ones for each physical trap
+                if ((gBattleMons[gActiveBattler].status4 & STATUS4_ENVIRONMENT_TRAP) && gBattleMons[gActiveBattler].hp != 0)
+                {
+                    if (--gDisableStructs[gActiveBattler].environmentTrapTurns != 0)  // damaged by wrap
+                    {
+                        MAGIC_GUARD_CHECK;
+
+                        /*gBattleScripting.animArg1 = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
+                        gBattleScripting.animArg2 = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
+                        gBattleTextBuff1[0] = B_BUFF_PLACEHOLDER_BEGIN;
+                        gBattleTextBuff1[1] = B_BUFF_MOVE;
+                        gBattleTextBuff1[2] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
+                        gBattleTextBuff1[3] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
+                        gBattleTextBuff1[4] = EOS;*/
+                        gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler];
+                        gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
+                        if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
+                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
+                        else
+                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16; ///8  keep 16 for now since buffing effects
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                    }
+                    else  // broke free
+                    {
+                        gBattleMons[gActiveBattler].status4 &= ~STATUS4_ENVIRONMENT_TRAP;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        gBattlescriptCurrInstr = BattleScript_WrapEnds;
+                    }
+                    BattleScriptExecute(gBattlescriptCurrInstr);
+                    ++effect;
+                }
+                ++gBattleStruct->turnEffectsTracker;
+                break;
+            case ENDTURN_WRAP:  // wrap     //make environemnt trap end turn & then separate ones for each physical trap
                 if ((gBattleMons[gActiveBattler].status2 & STATUS2_WRAPPED) && gBattleMons[gActiveBattler].hp != 0)
                 {
                     if (--gDisableStructs[gActiveBattler].wrapTurns != 0)  // damaged by wrap
@@ -1553,6 +1593,114 @@ u8 DoBattlerEndTurnEffects(void)
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
+            case ENDTURN_CLAMP:  // may need add fallthrough?     //make environemnt trap end turn & then separate ones for each physical trap
+                if ((gBattleMons[gActiveBattler].status4 & STATUS4_CLAMP) && gBattleMons[gActiveBattler].hp != 0)
+                {
+                    if (--gDisableStructs[gActiveBattler].clampTurns != 0)  // damaged by wrap
+                    {
+                        MAGIC_GUARD_CHECK;
+
+                        /*gBattleScripting.animArg1 = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
+                        gBattleScripting.animArg2 = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
+                        gBattleTextBuff1[0] = B_BUFF_PLACEHOLDER_BEGIN;
+                        gBattleTextBuff1[1] = B_BUFF_MOVE;
+                        gBattleTextBuff1[2] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
+                        gBattleTextBuff1[3] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
+                        gBattleTextBuff1[4] = EOS;*/
+                        gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler];
+                        gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
+                        if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
+                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
+                        else
+                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16; ///8  keep 16 for now since buffing effects
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                    }
+                    else  // broke free
+                    {
+                        gBattleMons[gActiveBattler].status4 &= ~STATUS4_CLAMP;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        gBattlescriptCurrInstr = BattleScript_WrapEnds;
+                    }
+                    BattleScriptExecute(gBattlescriptCurrInstr);
+                    ++effect;
+                }
+                ++gBattleStruct->turnEffectsTracker;
+                break;
+            case ENDTURN_INFESTATION:  // may need add fallthrough?     //make environemnt trap end turn & then separate ones for each physical trap
+                if ((gBattleMons[gActiveBattler].status4 & STATUS4_INFESTATION) && gBattleMons[gActiveBattler].hp != 0)
+                {
+                    if (--gDisableStructs[gActiveBattler].infestationTurns != 0)  // damaged by wrap
+                    {
+                        MAGIC_GUARD_CHECK;
+
+                        /*gBattleScripting.animArg1 = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
+                        gBattleScripting.animArg2 = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
+                        gBattleTextBuff1[0] = B_BUFF_PLACEHOLDER_BEGIN;
+                        gBattleTextBuff1[1] = B_BUFF_MOVE;
+                        gBattleTextBuff1[2] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
+                        gBattleTextBuff1[3] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
+                        gBattleTextBuff1[4] = EOS;*/
+                        gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler];
+                        gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
+                        if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
+                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
+                        else
+                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16; ///8  keep 16 for now since buffing effects
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                    }
+                    else  // broke free
+                    {
+                        gBattleMons[gActiveBattler].status4 &= ~STATUS4_INFESTATION;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        gBattlescriptCurrInstr = BattleScript_WrapEnds;
+                    }
+                    BattleScriptExecute(gBattlescriptCurrInstr);
+                    ++effect;
+                }
+                ++gBattleStruct->turnEffectsTracker;
+                break;
+            case ENDTURN_SNAPTRAP:  // may need add fallthrough?     //make environemnt trap end turn & then separate ones for each physical trap
+                if ((gBattleMons[gActiveBattler].status4 & STATUS4_SNAP_TRAP) && gBattleMons[gActiveBattler].hp != 0)
+                {
+                    if (--gDisableStructs[gActiveBattler].snaptrapTurns != 0)  // damaged by wrap
+                    {
+                        MAGIC_GUARD_CHECK;
+
+                        /*gBattleScripting.animArg1 = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
+                        gBattleScripting.animArg2 = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
+                        gBattleTextBuff1[0] = B_BUFF_PLACEHOLDER_BEGIN;
+                        gBattleTextBuff1[1] = B_BUFF_MOVE;
+                        gBattleTextBuff1[2] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
+                        gBattleTextBuff1[3] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
+                        gBattleTextBuff1[4] = EOS;*/
+                        gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler];
+                        gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
+                        if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
+                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
+                        else
+                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16; ///8  keep 16 for now since buffing effects
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                    }
+                    else  // broke free
+                    {
+                        gBattleMons[gActiveBattler].status4 &= ~STATUS4_SNAP_TRAP;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        gBattlescriptCurrInstr = BattleScript_WrapEnds;
+                    }
+                    BattleScriptExecute(gBattlescriptCurrInstr);
+                    ++effect;
+                }
+                ++gBattleStruct->turnEffectsTracker;
+                break;  //added all extra effects hope it works well
             case ENDTURN_OCTOLOCK:
             {
                 u16 battlerAbility = GetBattlerAbility(gActiveBattler);

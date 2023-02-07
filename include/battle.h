@@ -199,7 +199,11 @@ struct DisableStruct
              u8 throatChopTimer;
              u8 RoostTimer; // to set random % 4 effect after use roost setup iondelluge the same
              u8 usedMoves:4;
-             u8 wrapTurns;
+             u8 wrapTurns;  //turn counter for wrap bind
+             u8 environmentTrapTurns;   //turn counter for environment traps fire spin whirlpool sandtomb magma storm
+             u8 clampTurns;
+             u8 infestationTurns;
+             u8 snaptrapTurns;
              //u8 RoostTimerStartValue;  //remove for now until I get 
              u8 noRetreat:1;
              u8 tarShot:1;
