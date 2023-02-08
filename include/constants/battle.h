@@ -153,11 +153,23 @@
 #define STATUS1_FREEZE           (1 << 5)
 #define STATUS1_PARALYSIS        (1 << 6)
 #define STATUS1_SPIRIT_LOCK      (1 << 7)	//test if toxic still works fine
-#define STATUS1_TOXIC_POISON     (1 << 8)
-#define STATUS1_TOXIC_COUNTER    (1 << 9 | 1 << 10 | 1 << 11 | 1 << 12)
-#define STATUS1_TOXIC_TURN(num)  ((num) << 9)
+#define STATUS1_SNAP_TRAP		 (1 << 8)	//check status 1 effect for permanent status clear	pretty sure defaults to <= 6
+#define STATUS1_FIRE_SPIN		 (1 << 9)
+#define STATUS1_CLAMP			 (1 << 10)
+#define STATUS1_WHIRLPOOL		 (1 << 11)
+#define STATUS1_SAND_TOMB		 (1 << 12)
+#define STATUS1_MAGMA_STORM		 (1 << 14)
+#define STATUS1_INFESTATION		 (1 << 14)
+#define STATUS1_WRAPPED			 (1 << 15)
+#define STATUS1_TOXIC_POISON     (1 << 16)
+#define STATUS1_TOXIC_COUNTER    (1 << 17 | 1 << 18 | 1 << 19 | 1 << 20)
+#define STATUS1_TOXIC_TURN(num)  ((num) << 17)
 #define STATUS1_PSN_ANY          (STATUS1_POISON | STATUS1_TOXIC_POISON)
 #define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON)
+
+#define STATUS1_ENVIRONMENT_TRAP (STATUS1_FIRE_SPIN || STATUS1_WHIRLPOOL || STATUS1_SAND_TOMB || STATUS1_MAGMA_STORM)
+
+#define ITS_A_TRAP_STATUS1 (STATUS1_SNAP_TRAP || STATUS1_FIRE_SPIN || STATUS1_CLAMP || STATUS1_WHIRLPOOL || STATUS1_SAND_TOMB || STATUS1_MAGMA_STORM || STATUS1_INFESTATION || STATUS1_WRAPPED)
 
 // Volatile status ailments
 // These are removed after exiting the battle or switching out
@@ -238,7 +250,7 @@
 #define STATUS4_SAND_TOMB				(1 << 5)
 #define STATUS4_MAGMA_STORM				(1 << 6)
 #define STATUS4_INFESTATION				(1 << 7)
-#define STATUS4_SNAP_TRAP				(1 << 8)
+
 //was able to save great amount of space with emerald upgrades
 //but now dont have separate counter for each status
 //I could make one without issue by adding to disable struct
@@ -249,21 +261,23 @@
 //hmm keep that in mind for later,
 //2 types of traps environment vs physical, where physical has separate wrap timer & can stack
 
-//statuses for traps together forgot can't do this  since status2
-#define ITS_A_TRAP_STATUS (STATUS2_WRAPPED | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL | STATUS4_SAND_TOMB | STATUS4_MAGMA_STORM | STATUS4_INFESTATION | STATUS4_SNAP_TRAP)
+//statuses for traps together forgot can't do this  since not all  .status2
+//#define ITS_A_TRAP_STATUS (STATUS2_WRAPPED | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL | STATUS4_SAND_TOMB | STATUS4_MAGMA_STORM | STATUS4_INFESTATION)
 
 #define STATUS4_ENVIRONMENT_TRAP (STATUS4_FIRE_SPIN || STATUS4_WHIRLPOOL || STATUS4_SAND_TOMB || STATUS4_MAGMA_STORM)
 
-#define STATUS4_PHYSICAL_TRAP (STATUS4_CLAMP || STATUS4_INFESTATION || STATUS4_SNAP_TRAP) //summary you get 1 environment trap and as many physical traps as you want
+#define STATUS4_PHYSICAL_TRAP (STATUS4_CLAMP || STATUS4_INFESTATION) //summary you get 1 environment trap and as many physical traps as you want
 
 //trap statuses not immune to floating enemies
-#define ITS_A_TRAP_STATUS_2 (STATUS2_WRAPPED | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL | STATUS4_SAND_TOMB | STATUS4_INFESTATION | STATUS4_SNAP_TRAP)
+#define ITS_A_TRAP_STATUS_2 (STATUS2_WRAPPED | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL | STATUS4_SAND_TOMB | STATUS4_INFESTATION)
 
 //temp just the status4 stuff		//OK so status4 not currently used in battle? its not in BattlePokemon struct need add and investigate
-#define ITS_A_TRAP_STATUS4 (STATUS4_FIRE_SPIN || STATUS4_CLAMP || STATUS4_WHIRLPOOL || STATUS4_SAND_TOMB || STATUS4_MAGMA_STORM || STATUS4_INFESTATION || STATUS4_SNAP_TRAP))
+#define ITS_A_TRAP_STATUS4 (STATUS4_FIRE_SPIN || STATUS4_CLAMP || STATUS4_WHIRLPOOL || STATUS4_SAND_TOMB || STATUS4_MAGMA_STORM || STATUS4_INFESTATION)
 
 //effects for traps together //move data used in battle_moves_effects.h  each needs own battlescript
 #define ITS_A_TRAP (EFFECT_TRAP || EFFECT_FIRE_SPIN || EFFECT_CLAMP || EFFECT_WHIRLPOOL || EFFECT_SAND_TOMB || EFFECT_MAGMA_STORM || EFFECT_INFESTATION || EFFECT_SNAP_TRAP)
+
+#define GROUND_TRAPS (EFFECT_TRAP || EFFECT_FIRE_SPIN || EFFECT_CLAMP || EFFECT_WHIRLPOOL || EFFECT_SAND_TOMB || EFFECT_INFESTATION || EFFECT_SNAP_TRAP)
 
 // Not really sure what a "hitmarker" is.
 #define HITMARKER_WAKE_UP_CLEAR         0x00000010	//// Cleared when waking up. Never set or checked.

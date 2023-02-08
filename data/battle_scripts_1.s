@@ -2352,6 +2352,7 @@ BattleScript_HitFromAtkAnimation::
 	resultmessage
 	waitmessage 0x40
 	seteffectwithchance
+	argumenttomoveeffect
 	tryfaintmon BS_TARGET, 0, NULL
 BattleScript_MoveEnd::
 	moveendall

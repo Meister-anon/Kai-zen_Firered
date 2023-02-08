@@ -734,7 +734,7 @@ static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
     [MOVE_EFFECT_SAND_TOMB] = STATUS4_SAND_TOMB,
     [MOVE_EFFECT_MAGMA_STORM] = STATUS4_MAGMA_STORM,
     [MOVE_EFFECT_INFESTATION] = STATUS4_INFESTATION,
-    [MOVE_EFFECT_SNAP_TRAP] = STATUS4_SNAP_TRAP,
+    [MOVE_EFFECT_SNAP_TRAP] = STATUS1_SNAP_TRAP,
 };//actually rather than making this u64 prob should try putting in different status field since it doesn't need to be all status2 Ian use status4
 
 static const u8 *const sMoveEffectBS_Ptrs[] =
@@ -1475,8 +1475,17 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
         return TRUE;
     }
 
+    if ((!IsBattlerGrounded(gBattlerTarget) || IS_BATTLER_OF_TYPE(gBattlerTarget,TYPE_GHOST)) && (gBattleMoves[move].effect == (GROUND_TRAPS)))
+    {
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        JumpIfMoveFailed(7, move);
+        return TRUE;
+    }//exclusions for traps that don't work on floating targets so if you're trap heavy you need a grounder
+    //note prob need more moves that do ground effects so its not just a rock & a psychic move
+    //may make custom text for this.
+
     if ((WEATHER_HAS_EFFECT && 
-        ((IsBattlerWeatherAffected(gBattlerTarget, WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
+        ((IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
         || ((gBattleWeather & WEATHER_HAIL_ANY) && move == MOVE_BLIZZARD)))
         || (gBattleMoves[move].effect == EFFECT_ALWAYS_HIT || gBattleMoves[move].effect == EFFECT_VITAL_THROW)
         || (gBattleMoves[move].accuracy == 0)
@@ -1524,24 +1533,31 @@ static void atk01_accuracycheck(void)
         u16 calc;
         u8 eva;
         s32 i;
+        u8 acc = gBattleMons[gBattlerAttacker].statStages[STAT_ACC];
 
         if (move == MOVE_NONE)
             move = gCurrentMove;
         GET_MOVE_TYPE(move, type);
         if (JumpIfMoveAffectedByProtect(move) || AccuracyCalcHelper(move))
             return;
-        if (gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+        if (gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)    //if used foresight against target they can't evade
         {
-            u8 acc = gBattleMons[gBattlerAttacker].statStages[STAT_ACC];
+            //u8 acc = gBattleMons[gBattlerAttacker].statStages[STAT_ACC];
 
             buff = acc;
         }
         else
         {
-            u8 acc = gBattleMons[gBattlerAttacker].statStages[STAT_ACC];
+            //u8 acc = gBattleMons[gBattlerAttacker].statStages[STAT_ACC];
 
             buff = acc + 6 - gBattleMons[gBattlerTarget].statStages[STAT_EVASION];
         }
+        //trap effects
+        if ((gBattleMons[gBattlerAttacker].status4 & STATUS4_SAND_TOMB) || (gBattleMons[gBattlerAttacker].status1 & STATUS1_SAND_TOMB))  //hope works should lower accruacy 2 stages if trapped by sandtomb
+        {
+            acc -= 2;
+        }
+
         if (buff < 0)
             buff = 0;
         if (buff > 0xC)
@@ -1593,6 +1609,10 @@ static void atk01_accuracycheck(void)
         else if (gBattleMons[gBattlerTarget].status4 & ITS_A_TRAP_STATUS4)  //I hpoe this works
         //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
         eva = 3;
+        if (gBattleMons[gBattlerTarget].status1 & ITS_A_TRAP_STATUS1)  //I hpoe this works
+        //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
+        eva = 3;
+
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP) { //.target = MOVE_TARGET_SELECTED, 
             if ((gBattleMons[gBattlerTarget].type1 || gBattleMons[gBattlerTarget].type2) == TYPE_PSYCHIC) //important chek this think have function for type checking
                 eva = 5; // to take advantage of these buffs I want to have a button to display real move accuracy in battle. maybe L
@@ -3136,9 +3156,9 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 gLockedMoves[gEffectBattler] = gCurrentMove;
                 gProtectStructs[gEffectBattler].chargingTurn = 1;
                 ++gBattlescriptCurrInstr;
-                break;//v IMPORTANT v
+                break;//v IMPORTANT v       //think I'll put traj extra effects in the pokemon.c "damage" formula since it handles concurrent stuff
             case MOVE_EFFECT_WRAP:  //make envionment trap status4 define update other trap moveeffcts below than add end turn effects in util.c
-                if (gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
+                if ((gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED) || (gBattleMons[gEffectBattler].status1 & STATUS1_WRAPPED))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
                 {
                     ++gBattlescriptCurrInstr;
                 } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
@@ -3147,12 +3167,14 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    gBattleMons[gEffectBattler].status2 |= STATUS2_WRAPPED;
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) 
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
                         gDisableStructs[gEffectBattler].wrapTurns = 7;
-                    else   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
+                        gBattleMons[gEffectBattler].status1 |= STATUS1_WRAPPED;
+                    }
+                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
                         gDisableStructs[gEffectBattler].wrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
-
+                        gBattleMons[gEffectBattler].status2 |= STATUS2_WRAPPED;
+                    }
                     gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
                     gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
@@ -3418,24 +3440,114 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 gBattlescriptCurrInstr = BattleScript_SAtkDown2;
                 break;
             case MOVE_EFFECT_FIRE_SPIN:
-            case MOVE_EFFECT_WHIRLPOOL:
-            case MOVE_EFFECT_SAND_TOMB:
-            case MOVE_EFFECT_MAGMA_STORM:             
-              //make envionment trap status4 define update other trap moveeffcts below than add end turn effects in util.c
-                if (gBattleMons[gEffectBattler].status4 & STATUS4_ENVIRONMENT_TRAP)  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
+                if ((gBattleMons[gEffectBattler].status4 & STATUS4_ENVIRONMENT_TRAP) || (gBattleMons[gEffectBattler].status1 & STATUS1_ENVIRONMENT_TRAP))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
                 {
-                    ++gBattlescriptCurrInstr;
+                    ++gBattlescriptCurrInstr;   //will need to make status1 clause for grip claw exclusion
                 } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
                 else //need to understand what makes something use secondaryeffectchance for move effect
                 {
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    gBattleMons[gEffectBattler].status4 |= STATUS4_ENVIRONMENT_TRAP;
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW)
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
                         gDisableStructs[gEffectBattler].environmentTrapTurns = 7;
-                    else   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
+                        gBattleMons[gEffectBattler].status1 |= STATUS1_FIRE_SPIN;
+                    }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
+                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
                         gDisableStructs[gEffectBattler].environmentTrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_FIRE_SPIN;
+                    }   //double check this applies correct status for each move but sStatusFlagsForMoveEffects should do that i think
+
+                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
+                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
+                    BattleScriptPush(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleCommunication[MOVE_EFFECT_BYTE]];
+                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
+                    {
+                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
+                            break;  //multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
+                    }//believe this is only for reading from the trapstring table can prob remove for other trap effects
+                }
+                break;
+            case MOVE_EFFECT_WHIRLPOOL:
+                if ((gBattleMons[gEffectBattler].status4 & STATUS4_ENVIRONMENT_TRAP) || (gBattleMons[gEffectBattler].status1 & STATUS1_ENVIRONMENT_TRAP))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
+                {
+                    ++gBattlescriptCurrInstr;   //will need to make status1 clause for grip claw exclusion
+                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
+                else //need to understand what makes something use secondaryeffectchance for move effect
+                {
+                    //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
+                    //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
+                    //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
+                        gDisableStructs[gEffectBattler].environmentTrapTurns = 7;
+                        gBattleMons[gEffectBattler].status1 |= STATUS1_WHIRLPOOL;
+                    }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
+                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
+                        gDisableStructs[gEffectBattler].environmentTrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_WHIRLPOOL;
+                    }   //double check this applies correct status for each move but sStatusFlagsForMoveEffects should do that i think
+
+                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
+                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
+                    BattleScriptPush(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleCommunication[MOVE_EFFECT_BYTE]];
+                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
+                    {
+                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
+                            break;  //multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
+                    }//believe this is only for reading from the trapstring table can prob remove for other trap effects
+                }
+                break;
+            case MOVE_EFFECT_SAND_TOMB:
+                if ((gBattleMons[gEffectBattler].status4 & STATUS4_ENVIRONMENT_TRAP) || (gBattleMons[gEffectBattler].status1 & STATUS1_ENVIRONMENT_TRAP))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
+                {
+                    ++gBattlescriptCurrInstr;   //will need to make status1 clause for grip claw exclusion
+                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
+                else //need to understand what makes something use secondaryeffectchance for move effect
+                {
+                    //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
+                    //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
+                    //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
+                        gDisableStructs[gEffectBattler].environmentTrapTurns = 7;
+                        gBattleMons[gEffectBattler].status1 |= STATUS1_SAND_TOMB;
+                    }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
+                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
+                        gDisableStructs[gEffectBattler].environmentTrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_SAND_TOMB;
+                    }   //double check this applies correct status for each move but sStatusFlagsForMoveEffects should do that i think
+
+                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
+                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
+                    BattleScriptPush(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleCommunication[MOVE_EFFECT_BYTE]];
+                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
+                    {
+                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
+                            break;  //multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
+                    }//believe this is only for reading from the trapstring table can prob remove for other trap effects
+                }
+                break;
+            case MOVE_EFFECT_MAGMA_STORM:             
+              //make envionment trap status4 define update other trap moveeffcts below than add end turn effects in util.c
+                if ((gBattleMons[gEffectBattler].status4 & STATUS4_ENVIRONMENT_TRAP) || (gBattleMons[gEffectBattler].status1 & STATUS1_ENVIRONMENT_TRAP))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
+                {
+                    ++gBattlescriptCurrInstr;   //will need to make status1 clause for grip claw exclusion
+                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
+                else //need to understand what makes something use secondaryeffectchance for move effect
+                {
+                    //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
+                    //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
+                    //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
+                        gDisableStructs[gEffectBattler].environmentTrapTurns = 7;
+                        gBattleMons[gEffectBattler].status1 |= STATUS1_MAGMA_STORM;
+                    }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
+                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
+                        gDisableStructs[gEffectBattler].environmentTrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_MAGMA_STORM;
+                    }   //double check this applies correct status for each move but sStatusFlagsForMoveEffects should do that i think
 
                     gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
                     gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
@@ -3450,7 +3562,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 break;
             case MOVE_EFFECT_CLAMP:
                 //make envionment trap status4 define update other trap moveeffcts below than add end turn effects in util.c
-                if (gBattleMons[gEffectBattler].status4 & STATUS4_CLAMP)  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
+                if ((gBattleMons[gEffectBattler].status4 & STATUS4_CLAMP) || (gBattleMons[gEffectBattler].status1 & STATUS1_CLAMP))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
                 {
                     ++gBattlescriptCurrInstr;
                 } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
@@ -3459,11 +3571,14 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    gBattleMons[gEffectBattler].status4 |= STATUS4_CLAMP;
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW)
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
                         gDisableStructs[gEffectBattler].clampTurns = 7;
-                    else   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
+                        gBattleMons[gEffectBattler].status1 |= STATUS1_CLAMP;
+                    }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
+                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
                         gDisableStructs[gEffectBattler].clampTurns = ((Random() % 5) + 2);   //will do 2-6 turns
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_CLAMP;
+                    }
 
                     gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
                     gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
@@ -3478,7 +3593,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 break;
             case MOVE_EFFECT_INFESTATION:
                 //make envionment trap status4 define update other trap moveeffcts below than add end turn effects in util.c
-                if (gBattleMons[gEffectBattler].status4 & STATUS4_INFESTATION)  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
+                if ((gBattleMons[gEffectBattler].status4 & STATUS4_INFESTATION) || (gBattleMons[gEffectBattler].status1 & STATUS1_INFESTATION))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
                 {
                     ++gBattlescriptCurrInstr;
                 } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
@@ -3487,11 +3602,14 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    gBattleMons[gEffectBattler].status4 |= STATUS4_INFESTATION;
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW)
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
                         gDisableStructs[gEffectBattler].infestationTurns = 7;
-                    else   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
+                        gBattleMons[gEffectBattler].status1 |= STATUS1_INFESTATION;
+                    }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
+                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
                         gDisableStructs[gEffectBattler].infestationTurns = ((Random() % 5) + 2);   //will do 2-6 turns
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_INFESTATION;
+                    }
 
                     gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
                     gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
@@ -3506,7 +3624,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 break;
             case MOVE_EFFECT_SNAP_TRAP:
                 //make envionment trap status4 define update other trap moveeffcts below than add end turn effects in util.c
-                if (gBattleMons[gEffectBattler].status4 & STATUS4_SNAP_TRAP)  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
+                if (gBattleMons[gEffectBattler].status1 & STATUS1_SNAP_TRAP)  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
                 {
                     ++gBattlescriptCurrInstr;
                 } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
@@ -3515,12 +3633,21 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    gBattleMons[gEffectBattler].status4 |= STATUS4_SNAP_TRAP;
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW)
+                    
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
                         gDisableStructs[gEffectBattler].snaptrapTurns = 7;
-                    else   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
+                        gBattleMons[gEffectBattler].status1 |= STATUS1_SNAP_TRAP;
+                    }
+                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
                         gDisableStructs[gEffectBattler].snaptrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
-
+                        gBattleMons[gEffectBattler].status1 |= STATUS1_SNAP_TRAP;
+                    }
+                    //for snap trap plan is to make permanent status, so will make a status 1 effect
+                    //then make grip claw do the same for other traps in addition to increasing duration
+                    //since pretty sure no one uses grip claw as no one uses traps
+                    //will hold off on doing snap trap effect though until I can build, as I'm unsure if status1 can hold both status at once.
+                    //as there is no exclusion like for other status effects
+                    //decided to add for now
                     gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
                     gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
@@ -3559,9 +3686,17 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     else
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
 
+    
+
     if (gBattleMoves[gCurrentMove].effect == ITS_A_TRAP)   //if this works make a define for trap effects & separate effect & move effect & battlscript for each
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //that way may not need to make a separate status,// seems to work no apparent bugs
 
+    //trap effects
+    if (((gBattleMons[gBattlerTarget].status4 == STATUS4_FIRE_SPIN) || (gBattleMons[gBattlerTarget].status1 == STATUS1_FIRE_SPIN))
+        && gBattleMoves[gCurrentMove].effect == (EFFECT_BURN_HIT || EFFECT_SCALD))
+    {
+        gBattleMoves[gCurrentMove].secondaryEffectChance *= 6;
+    }
     //gBattleScripting.moveEffect = (MOVE_EFFECT_CONFUSION | MOVE_EFFECT_CERTAIN);
 
     if (gBattleCommunication[MOVE_EFFECT_BYTE] & MOVE_EFFECT_CERTAIN    //believe is like weather, just means its aplying that affect? so this makes it certain

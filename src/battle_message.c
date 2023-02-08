@@ -1727,6 +1727,7 @@ const u16 gDoubleBattleRecallStrings[] = {
     STRINGID_TRAINER1MON1AND2COMEBACK
 };
 
+//SEARCH //trap effects  for functionality
 //for all traps I change lower stats by 2 stages
 const u16 gTrappingMoves[] = {
     MOVE_BIND,      //same for wrap, lower speed of wrapped target 2 stages

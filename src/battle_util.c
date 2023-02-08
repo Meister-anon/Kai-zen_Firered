@@ -1522,7 +1522,8 @@ u8 DoBattlerEndTurnEffects(void)
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_ENVIRONMENT_TRAP:  // may need add fallthrough?     //make environemnt trap end turn & then separate ones for each physical trap
-                if ((gBattleMons[gActiveBattler].status4 & STATUS4_ENVIRONMENT_TRAP) && gBattleMons[gActiveBattler].hp != 0)
+                if (((gBattleMons[gActiveBattler].status4 & STATUS4_ENVIRONMENT_TRAP) || (gBattleMons[gActiveBattler].status1 & STATUS1_ENVIRONMENT_TRAP))
+                    && gBattleMons[gActiveBattler].hp != 0)
                 {
                     if (--gDisableStructs[gActiveBattler].environmentTrapTurns != 0)  // damaged by wrap
                     {
@@ -1547,8 +1548,15 @@ u8 DoBattlerEndTurnEffects(void)
                             gBattleMoveDamage = 1;
                     }
                     else  // broke free
-                    {
-                        gBattleMons[gActiveBattler].status4 &= ~STATUS4_ENVIRONMENT_TRAP;
+                    {   //since first filter was a check for anything, I changed clear to a filter on everything
+                        gBattleMons[gActiveBattler].status4 &= ~STATUS4_FIRE_SPIN;
+                        gBattleMons[gActiveBattler].status4 &= ~STATUS4_WHIRLPOOL;
+                        gBattleMons[gActiveBattler].status4 &= ~STATUS4_SAND_TOMB;
+                        gBattleMons[gActiveBattler].status4 &= ~STATUS4_MAGMA_STORM;
+                        gBattleMons[gActiveBattler].status1 &= ~STATUS1_FIRE_SPIN;
+                        gBattleMons[gActiveBattler].status1 &= ~STATUS1_WHIRLPOOL;
+                        gBattleMons[gActiveBattler].status1 &= ~STATUS1_SAND_TOMB;
+                        gBattleMons[gActiveBattler].status1 &= ~STATUS1_MAGMA_STORM;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
                         gBattlescriptCurrInstr = BattleScript_WrapEnds;
                     }
@@ -1558,7 +1566,8 @@ u8 DoBattlerEndTurnEffects(void)
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_WRAP:  // wrap     //make environemnt trap end turn & then separate ones for each physical trap
-                if ((gBattleMons[gActiveBattler].status2 & STATUS2_WRAPPED) && gBattleMons[gActiveBattler].hp != 0)
+                if (((gBattleMons[gActiveBattler].status2 & STATUS2_WRAPPED) || (gBattleMons[gActiveBattler].status1 & STATUS1_WRAPPED))
+                    && gBattleMons[gActiveBattler].hp != 0)
                 {
                     if (--gDisableStructs[gActiveBattler].wrapTurns != 0)  // damaged by wrap
                     {
@@ -1585,6 +1594,7 @@ u8 DoBattlerEndTurnEffects(void)
                     else  // broke free
                     {
                         gBattleMons[gActiveBattler].status2 &= ~STATUS2_WRAPPED;
+                        gBattleMons[gActiveBattler].status1 &= ~STATUS1_WRAPPED;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
                         gBattlescriptCurrInstr = BattleScript_WrapEnds;
                     }
@@ -1594,7 +1604,8 @@ u8 DoBattlerEndTurnEffects(void)
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_CLAMP:  // may need add fallthrough?     //make environemnt trap end turn & then separate ones for each physical trap
-                if ((gBattleMons[gActiveBattler].status4 & STATUS4_CLAMP) && gBattleMons[gActiveBattler].hp != 0)
+                if (((gBattleMons[gActiveBattler].status4 & STATUS4_CLAMP) || (gBattleMons[gActiveBattler].status1 & STATUS1_CLAMP))
+                    && gBattleMons[gActiveBattler].hp != 0)
                 {
                     if (--gDisableStructs[gActiveBattler].clampTurns != 0)  // damaged by wrap
                     {
@@ -1621,6 +1632,7 @@ u8 DoBattlerEndTurnEffects(void)
                     else  // broke free
                     {
                         gBattleMons[gActiveBattler].status4 &= ~STATUS4_CLAMP;
+                        gBattleMons[gActiveBattler].status1 &= ~STATUS1_CLAMP;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
                         gBattlescriptCurrInstr = BattleScript_WrapEnds;
                     }
@@ -1630,7 +1642,8 @@ u8 DoBattlerEndTurnEffects(void)
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_INFESTATION:  // may need add fallthrough?     //make environemnt trap end turn & then separate ones for each physical trap
-                if ((gBattleMons[gActiveBattler].status4 & STATUS4_INFESTATION) && gBattleMons[gActiveBattler].hp != 0)
+                if (((gBattleMons[gActiveBattler].status4 & STATUS4_INFESTATION) || (gBattleMons[gActiveBattler].status1 & STATUS1_INFESTATION))
+                    && gBattleMons[gActiveBattler].hp != 0)
                 {
                     if (--gDisableStructs[gActiveBattler].infestationTurns != 0)  // damaged by wrap
                     {
@@ -1653,10 +1666,11 @@ u8 DoBattlerEndTurnEffects(void)
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16; ///8  keep 16 for now since buffing effects
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
-                    }
+                    }   //make sure new trap effects all have switch prevention still
                     else  // broke free
                     {
                         gBattleMons[gActiveBattler].status4 &= ~STATUS4_INFESTATION;
+                        gBattleMons[gActiveBattler].status1 &= ~STATUS1_INFESTATION;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
                         gBattlescriptCurrInstr = BattleScript_WrapEnds;
                     }
@@ -1666,7 +1680,7 @@ u8 DoBattlerEndTurnEffects(void)
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_SNAPTRAP:  // may need add fallthrough?     //make environemnt trap end turn & then separate ones for each physical trap
-                if ((gBattleMons[gActiveBattler].status4 & STATUS4_SNAP_TRAP) && gBattleMons[gActiveBattler].hp != 0)
+                if ((gBattleMons[gActiveBattler].status1 & STATUS1_SNAP_TRAP) && gBattleMons[gActiveBattler].hp != 0)
                 {
                     if (--gDisableStructs[gActiveBattler].snaptrapTurns != 0)  // damaged by wrap
                     {
@@ -1692,7 +1706,7 @@ u8 DoBattlerEndTurnEffects(void)
                     }
                     else  // broke free
                     {
-                        gBattleMons[gActiveBattler].status4 &= ~STATUS4_SNAP_TRAP;
+                        gBattleMons[gActiveBattler].status1 &= ~STATUS1_SNAP_TRAP;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
                         gBattlescriptCurrInstr = BattleScript_WrapEnds;
                     }
@@ -2078,6 +2092,7 @@ enum
     CANCELLER_FLAGS,
     CANCELLER_ASLEEP,
     CANCELLER_FROZEN,
+    CANCELLER_CLAMPED,
     CANCELLER_TRUANT,
     CANCELLER_RECHARGE,
     CANCELLER_FLINCH,
@@ -2164,7 +2179,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                     gBattlescriptCurrInstr = BattleScript_MoveUsedIsFrozen;
                     gHitMarker |= HITMARKER_NO_ATTACKSTRING;
                 }
-                else // unfreeze    //imortant if random % 5 is 0, pokemon  defrosts.
+                else // unfreeze    //imortant if random % 5 is 0, pokemon  defrosts.   //not actualy on a timer
                 {
                     gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_FREEZE);
                     BattleScriptPushCursor();
@@ -2174,6 +2189,18 @@ u8 AtkCanceller_UnableToUseMove(void)
                 effect = 2; //change thaw condition to fire move min 60 base power not fire fang
             }   //done should no longer need thaw effects already replaced
             gBattleStruct->atkCancellerTracker++;
+            break;
+        case CANCELLER_CLAMPED: // clamped      //hope works idea is 1 in 3 chance to set flinch status when clamped,
+            //should then default to canceller_flinched clause I think/hope     //actually let me put this above flinch to be safe
+            if (((gBattleMons[gBattlerAttacker].status4 & STATUS4_CLAMP) || (gBattleMons[gBattlerAttacker].status1 & STATUS1_CLAMP)) && (Random() % 3))
+            {
+                gBattleMons[gBattlerAttacker].status2 & STATUS2_FLINCHED;
+                //gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
+                //gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
+                //gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                effect = 1;
+            }
+            ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_TRUANT: // truant
             if (gBattleMons[gBattlerAttacker].ability == ABILITY_TRUANT && gDisableStructs[gBattlerAttacker].truantCounter)

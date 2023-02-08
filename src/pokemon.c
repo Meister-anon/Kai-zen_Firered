@@ -3258,6 +3258,13 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         defStage = gBattleMons[battlerIdDef].statStages[STAT_SPDEF];
         usesDefStat = FALSE; //ported from emerald, will use this later  this wasn't actually the problem can most likely safely bring back in.
     }
+    //trap effects
+    if ((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION))
+    {
+        gBattleMons[battlerIdDef].statStages[STAT_DEF] -= 2;    //should lower defense by 2 i.e 50% 
+        if (gBattleMons[gActiveBattler].statStages[STAT_DEF] < 0)
+            gBattleMons[gActiveBattler].statStages[STAT_DEF] = 0;
+    }
 
     if (attacker->item == ITEM_ENIGMA_BERRY)
     {

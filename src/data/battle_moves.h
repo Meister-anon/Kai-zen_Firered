@@ -303,15 +303,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BIND] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_5
-            .accuracy = 85,
+            .accuracy = 90,
         #else
             .accuracy = 75,
         #endif
         .effect = EFFECT_TRAP,
-        .power = 15,
+        .power = 25,
         .type = TYPE_NORMAL,
         .pp = 20,
-        .secondaryEffectChance = 100,
+        .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
@@ -546,15 +546,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_WRAP] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_5
-            .accuracy = 90,
-        #else
+            .accuracy = 90, //need decide if new wrapping moves (ones w base 15 power) should be base 85 or 90 accuracy
+        #else   //will make base 90 thse are setup moves really useless if they miss
             .accuracy = 85,
         #endif
         .effect = EFFECT_TRAP,
-        .power = 15,
+        .power = 25,
         .type = TYPE_NORMAL,
         .pp = 20,
-        .secondaryEffectChance = 100,
+        .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
@@ -1301,16 +1301,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_FIRE_SPIN] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_5
-            .power = 35,
-            .accuracy = 85,
+            .power = 25,
+            .accuracy = 90,
         #else
             .power = 15,
             .accuracy = 70,
         #endif
-        .effect = EFFECT_TRAP,
+        .effect = EFFECT_FIRE_SPIN,
         .type = TYPE_FIRE,
         .pp = 15,
-        .secondaryEffectChance = 100,
+        .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
@@ -1983,14 +1983,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_CLAMP] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_5
-            .accuracy = 85,
+            .accuracy = 90,
             .pp = 15,
         #else
             .accuracy = 75,
             .pp = 10,
         #endif
-        .effect = EFFECT_TRAP,
-        .power = 35,
+        .effect = EFFECT_CLAMP,
+        .power = 25,
         .type = TYPE_WATER,
         .secondaryEffectChance = 20,
         .target = MOVE_TARGET_SELECTED,
@@ -3946,9 +3946,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_WHIRLPOOL] =
     {
-        .power = 35,
-        .accuracy = 85,
-        .effect = EFFECT_TRAP,
+        .power = 25,
+        .accuracy = 90,
+        .effect = EFFECT_WHIRLPOOL,
         .type = TYPE_WATER,
         .pp = 15,
         .secondaryEffectChance = 100,
@@ -4065,11 +4065,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_HEAT_WAVE] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_6
-            .power = 95,
-        #else
-            .power = 100,
-        #endif
+
+        .power = 100,
         .effect = EFFECT_BURN_HIT,
         .type = TYPE_FIRE,
         .accuracy = 90,
@@ -5157,16 +5154,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SAND_TOMB] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_5
-            .power = 35,
-            .accuracy = 85,
+            .power = 25,
+            .accuracy = 90,
         #else
             .power = 15,
             .accuracy = 70,
         #endif
-        .effect = EFFECT_TRAP,  //all trap effects have 100 secondary chance want to change so can use effect chance for argument extra effect
+        .effect = EFFECT_SAND_TOMB,  //all trap effects have 100 secondary chance want to change so can use effect chance for argument extra effect
         .type = TYPE_GROUND,
         .pp = 15,
-        .secondaryEffectChance = 100,
+        .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED, //also rather than just buff damage for traps give each unique trap its own debuff style trap effect
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_DMG_UNDERGROUND,
@@ -7255,8 +7252,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_MAGMA_STORM] =
     {
         .power = 110,
-        .accuracy = 75,
-        .effect = EFFECT_TRAP,
+        .accuracy = 85,
+        .effect = EFFECT_MAGMA_STORM,   //no major buffs just accuracy buff w gauranteed burn which main game already added apparenlty
         .type = TYPE_FIRE,
         .pp = 5,
         .secondaryEffectChance = 100,
@@ -7264,6 +7261,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .argument = EFFECT_BURN_HIT,
     },
 
     [MOVE_DARK_VOID] =
@@ -9448,12 +9446,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_INFESTATION] =
     {
-        .effect = EFFECT_TRAP,
-        .power = 20,
+        .effect = EFFECT_INFESTATION,
+        .power = 25,
         .type = TYPE_BUG,
         .accuracy = 100,
         .pp = 20,
-        .secondaryEffectChance = 100,
+        .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
@@ -10875,16 +10873,17 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     will increase from 1 / 8 of the target's maximum HP to 1/6.*/
     [MOVE_SNAP_TRAP] =
     {
-        .effect = EFFECT_TRAP,  //TODO: add case/effect  think use random%2 +4 should make be between 0 & 1 the plus 4 will make it return 4 & 5
+        .effect = EFFECT_SNAP_TRAP,  //TODO: add case/effect  think use random%2 +4 should make be between 0 & 1 the plus 4 will make it return 4 & 5
         .power = 35,
         .type = TYPE_STEEL, //after that just need specific logic for grip claw     //also changing from grass to a steel move -_-
         .accuracy = 100,
         .pp = 15,
-        .secondaryEffectChance = 100,
+        .secondaryEffectChance = 25,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
+        .argument = EFFECT_FLINCH_HIT   //decided to add flinch chance t3o this like clamp but slightly stronger
     },
 
     [MOVE_PYRO_BALL] =

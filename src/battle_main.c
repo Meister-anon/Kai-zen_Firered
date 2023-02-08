@@ -3761,6 +3761,12 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         speedBattler1 /= 2;
     if (gBattleMons[battler1].status1 & STATUS1_PARALYSIS)
         speedBattler1 /= 4;
+    //trap effects
+    if ((gBattleMons[battler1].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battler1].status1 & STATUS1_WHIRLPOOL))  //should be good
+        speedBattler1 /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
+
+    if ((gBattleMons[battler1].status2 & STATUS2_WRAPPED) || (gBattleMons[battler1].status1 & STATUS1_WRAPPED))
+        speedBattler1 /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
     if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)
         speedBattler1 = UINT_MAX;
     // check second battlerId's speed
@@ -3786,6 +3792,13 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         speedBattler2 /= 2;
     if (gBattleMons[battler2].status1 & STATUS1_PARALYSIS)
         speedBattler2 /= 4;
+    //trap effects
+    if ((gBattleMons[battler2].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battler2].status1 & STATUS1_WHIRLPOOL))  //should be good
+        speedBattler2 /= 2;
+
+    if ((gBattleMons[battler2].status2 & STATUS2_WRAPPED) || (gBattleMons[battler2].status1 & STATUS1_WRAPPED))
+        speedBattler2 /= 2;
+
     if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)
         speedBattler2 = UINT_MAX;
     if (!ignoreChosenMoves)
