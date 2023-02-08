@@ -1349,7 +1349,7 @@ if (ability == ABILITY_MAGIC_GUARD) \
 
 u8 DoBattlerEndTurnEffects(void)
 {
-    //u32 ability;
+    u32 ability;    //ok added back realize its literally just for the magic gaurd check
     u32 i, effect = 0;
 
     gHitMarker |= (HITMARKER_GRUDGE | HITMARKER_SKIP_DMG_TRACK);

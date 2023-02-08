@@ -205,9 +205,6 @@ struct DisableStruct
              u8 infestationTurns;
              u8 snaptrapTurns;
              //u8 RoostTimerStartValue;  //remove for now until I get 
-             u8 noRetreat:1;
-             u8 tarShot:1;
-             u8 octolock:1;
     /*0x1A*/ u8 unk1A[2];
 }; //think I may not actually need roost start value, long as I have timer
 

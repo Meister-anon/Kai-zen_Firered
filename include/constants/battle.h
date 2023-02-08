@@ -186,6 +186,7 @@
 #define STATUS2_MULTIPLETURNS         (1 << 12) 
 #define STATUS2_WRAPPED               (1 << 13)	//make individual wrapped for each, but all use same wrap turn counter
 //#define STATUS2_WRAPPED_TURN(num)     ((num) << 13)	//left shift value is starting point of status wrapped
+#define STATUS2_POWDER                (1 << 14)
 #define STATUS2_INFATUATION           (1 << 16 | 1 << 17 | 1 << 18 | 1 << 19)  // 4 bits, one for every battler
 #define STATUS2_INFATUATED_WITH(battler) (gBitTable[battler] << 16)
 #define STATUS2_FOCUS_ENERGY          (1 << 20)

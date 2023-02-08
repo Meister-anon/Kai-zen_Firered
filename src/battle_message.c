@@ -1544,7 +1544,7 @@ const u16 gWrappedStringIds[] = {
     STRINGID_PKMNCLAMPED,           //clamp
     STRINGID_PKMNTRAPPEDINVORTEX,   //whirlpool
     STRINGID_PKMNTRAPPEDBYSANDTOMB, //sandtomb
-    STRINGID_TRAPPEDBYSWIRLINGMAGMA //magma storm
+    STRINGID_TRAPPEDBYSWIRLINGMAGMA, //magma storm
     STRINGID_INFESTATION            //infestation
 };//need to add snaptrap
 

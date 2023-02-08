@@ -12,7 +12,6 @@
 #include "task.h"
 #include "util.h"
 #include "battle.h"
-#include "src/battle_bg.c"
 #include "battle_anim.h"
 #include "battle_controllers.h"
 #include "battle_interface.h"
@@ -24,6 +23,7 @@
 #include "constants/moves.h"
 #include "constants/songs.h"
 #include "battle_scripts.h"
+//#include "src/battle_bg.c"    //forgot remove this sStandardBattleWindowTemplates defined in battle.h now for MOVE_NAME_2_X_VALUE cursor defines
 
 static void PlayerHandleGetMonData(void);
 static void PlayerHandleSetMonData(void);

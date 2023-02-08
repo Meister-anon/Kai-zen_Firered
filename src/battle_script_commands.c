@@ -3695,7 +3695,7 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     if (((gBattleMons[gBattlerTarget].status4 == STATUS4_FIRE_SPIN) || (gBattleMons[gBattlerTarget].status1 == STATUS1_FIRE_SPIN))
         && gBattleMoves[gCurrentMove].effect == (EFFECT_BURN_HIT || EFFECT_SCALD))
     {
-        gBattleMoves[gCurrentMove].secondaryEffectChance *= 6;
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 6;
     }
     //gBattleScripting.moveEffect = (MOVE_EFFECT_CONFUSION | MOVE_EFFECT_CERTAIN);
 
