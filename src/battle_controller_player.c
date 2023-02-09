@@ -475,10 +475,10 @@ static void HideShownTargets(void)
 
 static void HandleInputShowEntireFieldTargets(void)
 {
-    if (JOY_HELD(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+    /*if (JOY_HELD(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
         gPlayerDpadHoldFrames++;
     else
-        gPlayerDpadHoldFrames = 0;
+        gPlayerDpadHoldFrames = 0;*/
 
     if (JOY_NEW(A_BUTTON))
     {
@@ -491,7 +491,7 @@ static void HandleInputShowEntireFieldTargets(void)
         //HideMegaTriggerSprite();
         PlayerBufferExecCompleted();
     }
-    else if (gMain.newKeys & B_BUTTON || gPlayerDpadHoldFrames > 59)
+    else if (gMain.newKeys & B_BUTTON)// || gPlayerDpadHoldFrames > 59)
     {
         PlaySE(SE_SELECT);
         HideAllTargets();
@@ -503,10 +503,10 @@ static void HandleInputShowEntireFieldTargets(void)
 
 static void HandleInputShowTargets(void)
 {
-    if (JOY_HELD(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+    /*if (JOY_HELD(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
         gPlayerDpadHoldFrames++;
     else
-        gPlayerDpadHoldFrames = 0;
+        gPlayerDpadHoldFrames = 0;*/
 
     if (JOY_NEW(A_BUTTON))
     {
@@ -520,7 +520,7 @@ static void HandleInputShowTargets(void)
         //TryHideLastUsedBall();
         PlayerBufferExecCompleted();
     }
-    else if (gMain.newKeys & B_BUTTON || gPlayerDpadHoldFrames > 59)
+    else if (gMain.newKeys & B_BUTTON)// || gPlayerDpadHoldFrames > 59)
     {
         PlaySE(SE_SELECT);
         HideShownTargets();
@@ -546,10 +546,10 @@ void HandleInputChooseMove(void)    //test new targetting setup
     u32 canSelectTarget = 0;
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
 
-    if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+    /*if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
         gPlayerDpadHoldFrames++;
     else
-        gPlayerDpadHoldFrames = 0;
+        gPlayerDpadHoldFrames = 0;*/
 
     PreviewDeterminativeMoveTargets();  //not in emerald may be redundent after upgrade test if any issues
     if (JOY_NEW(A_BUTTON))  //noted this uses pallete fades while emerald doesnt appear to.
@@ -625,8 +625,8 @@ void HandleInputChooseMove(void)    //test new targetting setup
                 BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | RET_MEGA_EVOLUTION | (gMultiUsePlayerCursor << 8));
             else
                 BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
-            HideMegaTriggerSprite();
-            TryHideLastUsedBall();
+            //HideMegaTriggerSprite();
+            //TryHideLastUsedBall();
             PlayerBufferExecCompleted();
             break;
         case 1:
@@ -649,7 +649,7 @@ void HandleInputChooseMove(void)    //test new targetting setup
             break;
         }
     }    
-    else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
+    else if (JOY_NEW(B_BUTTON))// || gPlayerDpadHoldFrames > 59)
     {
         PlaySE(SE_SELECT);
         gBattleStruct->mega.playerSelect = FALSE;
@@ -3193,7 +3193,7 @@ static void PreviewDeterminativeMoveTargets(void) //determine who targetting
                      | gBitTable[GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT)]) << 16;
             startY = 8;
             break;
-        case MOVE_TARGET_USER_AND_ALL:
+        case MOVE_TARGET_ALL_BATTLERS:  // wwas MOVE_TARGET_USER_AND_ALL  questioning if this wasn't something I added?
             bitMask = (gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]
                      | gBitTable[GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)]
                      | gBitTable[GetBattlerAtPosition(GetBattlerPosition(gActiveBattler) ^ BIT_FLANK)] 

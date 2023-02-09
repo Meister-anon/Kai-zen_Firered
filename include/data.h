@@ -15,9 +15,9 @@ struct MonCoords
 };
 
 extern const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1];
-extern const u8 gMoveNames[][MOVE_NAME_LENGTH + 1];
-extern const u8 gLowerMoveNames[][MOVE_NAME_LENGTH + 1]; //if I use lowercase moves replace instances of above name w this one
-extern const u16 gUnknown_8251CB8[];
+extern const u8 gMoveNames[][17];   //had data file issues think can't use a define for this have to write out number for some reason
+extern const u8 gLowerMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1]; //if I use lowercase moves replace instances of above name w this one
+extern const u16 gUnknown_8251CB8[];    //lowercase move file is arranged differently so it can prob use array becuase of that
 extern const u16 gUnknown_8251FEE[];
 extern const u16 gUnknown_8252324[];
 extern const u16 gUnknown_82539D4[];

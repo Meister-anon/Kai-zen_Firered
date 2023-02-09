@@ -16,7 +16,7 @@ EWRAM_DATA struct BagPocket gBagPockets[NUM_BAG_POCKETS] = {};
 void SortAndCompactBagPocket(struct BagPocket * pocket);
 
 // Item descriptions and data
-#include "src/data/items.h"
+#include "data/items.h"
 // don't have this file right now, guess becuase I ran clean, and haven't built my items file yet.
 u16 GetBagItemQuantity(u16 * ptr)
 {
@@ -593,7 +593,6 @@ void TrySetObtainedItemQuestLogEvent(u16 itemId)
      || itemId == ITEM_TEACHY_TV
      || itemId == ITEM_RAINBOW_PASS
      || itemId == ITEM_TEA
-  // || itemId == ITEM_POWDER_JAR
      || itemId == ITEM_RUBY
      || itemId == ITEM_SAPPHIRE
     )
