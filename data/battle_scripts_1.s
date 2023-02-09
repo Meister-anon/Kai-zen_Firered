@@ -2322,9 +2322,9 @@ BattleScript_EffectPlaceholder:
 BattleScript_EffectHit::
 	jumpifmove MOVE_ROCK_SMASH, BattleScript_EffectRockSmash
 	jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler
-	jumpifnostatus3 BS_TARGET, STATUS3_UNDERWATER, BattleScript_HitFromAtkCanceler
-	orword gHitMarker, HITMARKER_IGNORE_UNDERWATER
-	setbyte sDMG_MULTIPLIER, 2
+	@jumpifnostatus3 BS_TARGET, STATUS3_UNDERWATER, BattleScript_HitFromAtkCanceler
+	@orword gHitMarker, HITMARKER_IGNORE_UNDERWATER
+	@setbyte sDMG_MULTIPLIER, 2
 BattleScript_HitFromAtkCanceler::
 	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	attackcanceler
@@ -4208,9 +4208,6 @@ BattleScript_SkullBashEnd::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectTwister::
-	jumpifnostatus3 BS_TARGET, STATUS3_ON_AIR, BattleScript_FlinchEffect
-	orword gHitMarker, HITMARKER_IGNORE_ON_AIR
-	setbyte sDMG_MULTIPLIER, 2
 BattleScript_FlinchEffect::
 	setmoveeffect MOVE_EFFECT_FLINCH
 	goto BattleScript_EffectHit
@@ -4222,14 +4219,13 @@ BattleScript_EffectEarthquake::
 	selectfirstvalidtarget
 BattleScript_HitsAllWithUndergroundBonusLoop::
 	movevaluescleanup
-	jumpifnostatus3 BS_TARGET, STATUS3_UNDERGROUND, BattleScript_HitsAllNoUndergroundBonus
-	orword gHitMarker, HITMARKER_IGNORE_UNDERGROUND
-	setbyte sDMG_MULTIPLIER, 2
-	goto BattleScript_DoHitAllWithUndergroundBonus
-
+	@jumpifnostatus3 BS_TARGET, STATUS3_UNDERGROUND, BattleScript_HitsAllNoUndergroundBonus
+	@orword gHitMarker, HITMARKER_IGNORE_UNDERGROUND
+	@setbyte sDMG_MULTIPLIER, 2
+	@goto BattleScript_DoHitAllWithUndergroundBonus
 BattleScript_HitsAllNoUndergroundBonus::
-	bicword gHitMarker, HITMARKER_IGNORE_UNDERGROUND
-	setbyte sDMG_MULTIPLIER, 1
+	@bicword gHitMarker, HITMARKER_IGNORE_UNDERGROUND
+	@setbyte sDMG_MULTIPLIER, 1
 BattleScript_DoHitAllWithUndergroundBonus::
 	accuracycheck BattleScript_HitAllWithUndergroundBonusMissed, ACC_CURR_MOVE
 	critcalc
@@ -4276,14 +4272,9 @@ BattleScript_EffectFutureSight::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectGust::
-	jumpifnostatus3 BS_TARGET, STATUS3_ON_AIR, BattleScript_EffectHit
-	orword gHitMarker, HITMARKER_IGNORE_ON_AIR
-	setbyte sDMG_MULTIPLIER, 2
 	goto BattleScript_EffectHit
 
 BattleScript_EffectFlinchMinimizeHit::
-	jumpifnostatus3 BS_TARGET, STATUS3_MINIMIZED, BattleScript_FlinchEffect
-	setbyte sDMG_MULTIPLIER, 2
 	goto BattleScript_FlinchEffect
 
 BattleScript_EffectSolarbeam::
@@ -4306,7 +4297,6 @@ BattleScript_SolarbeamOnFirstTurn::
 
 BattleScript_EffectThunder::
 	setmoveeffect MOVE_EFFECT_PARALYSIS
-	orword gHitMarker, HITMARKER_IGNORE_ON_AIR
 	goto BattleScript_EffectHit
 
 BattleScript_EffectTeleport::
@@ -5239,7 +5229,6 @@ BattleScript_CocoonEnd::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectSkyUppercut::
-	orword gHitMarker, HITMARKER_IGNORE_ON_AIR
 	goto BattleScript_EffectHit
 
 BattleScript_EffectBulkUp::
@@ -7512,7 +7501,7 @@ BattleScript_OctolockLowerDef:
 	playstatchangeanimation BS_ATTACKER, BIT_DEF | BIT_SPDEF, STAT_CHANGE_NEGATIVE
 	setbyte sSTAT_ANIM_PLAYED, TRUE
 	setstatchanger STAT_DEF, 1, TRUE
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_OctolockTryLowerSpDef
+	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_OctolockTryLowerSpDef
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_OctolockTryLowerSpDef
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
@@ -7521,7 +7510,7 @@ BattleScript_OctolockTryLowerSpDef:
 	playstatchangeanimation BS_ATTACKER, BIT_SPDEF, STAT_CHANGE_NEGATIVE
 BattleScript_OctolockSkipSpDefAnim:
 	setstatchanger STAT_SPDEF, 1, TRUE
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_OctolockEnd2
+	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_OctolockEnd2
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_OctolockEnd2
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
@@ -7547,7 +7536,7 @@ BattleScript_EffectTarShot:
 	setstatchanger STAT_SPEED, 1, TRUE
 	attackanimation
 	waitanimation
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_TryTarShot
+	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_TryTarShot
 	setgraphicalstatchangevalues
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printfromtable gStatDownStringIds
@@ -7795,7 +7784,7 @@ BattleScript_StuffCheeksEatBerry:
 	bicword gHitMarker, HITMARKER_NO_ANIMATIONS
 	setbyte sBERRY_OVERRIDE, FALSE
 	setstatchanger STAT_DEF, 2, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_StuffCheeksEnd
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_BS_PTR, BattleScript_StuffCheeksEnd
 	setgraphicalstatchangevalues
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_StuffCheeksEnd @ cant raise def
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
@@ -7818,13 +7807,13 @@ BattleScript_DecorateBoost:
 	setbyte sSTAT_ANIM_PLAYED, FALSE
 	playstatchangeanimation BS_TARGET, BIT_ATK | BIT_SPATK, 0x0
 	setstatchanger STAT_ATK, 2, FALSE
-	statbuffchange STAT_BUFF_ALLOW_PTR | STAT_BUFF_NOT_PROTECT_AFFECTED, BattleScript_DecorateBoostSpAtk
+	statbuffchange STAT_CHANGE_BS_PTR | STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_DecorateBoostSpAtk
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_DecorateBoostSpAtk
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_DecorateBoostSpAtk:
 	setstatchanger STAT_SPATK, 2, FALSE
-	statbuffchange STAT_BUFF_ALLOW_PTR | STAT_BUFF_NOT_PROTECT_AFFECTED, BattleScript_MoveEnd
+	statbuffchange STAT_CHANGE_BS_PTR | STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_MoveEnd
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_MoveEnd
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
@@ -7834,7 +7823,7 @@ BattleScript_EffectRemoveTerrain:
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifword CMP_NO_COMMON_BITS, gFieldStatuses, STATUS_FIELD_TERRAIN_ANY, BattleScript_ButItFailed
+	jumpifword CMP_NO_COMMON_BITS, gFieldStatuses, STATUS_TERRAIN_ANY, BattleScript_ButItFailed
 	critcalc
 	damagecalc
 	adjustnormaldamage
@@ -7875,13 +7864,13 @@ BattleScript_CoachingWorks:
 	setbyte sSTAT_ANIM_PLAYED, FALSE
 	playstatchangeanimation BS_TARGET, BIT_ATK | BIT_DEF, 0x0
 	setstatchanger STAT_ATK, 1, FALSE
-	statbuffchange STAT_BUFF_ALLOW_PTR | STAT_BUFF_NOT_PROTECT_AFFECTED, BattleScript_CoachingBoostDef
+	statbuffchange STAT_CHANGE_BS_PTR | STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_CoachingBoostDef
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_CoachingBoostDef
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_CoachingBoostDef:
 	setstatchanger STAT_DEF, 1, FALSE
-	statbuffchange STAT_BUFF_ALLOW_PTR | STAT_BUFF_NOT_PROTECT_AFFECTED, BattleScript_MoveEnd
+	statbuffchange STAT_CHANGE_BS_PTR | STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_MoveEnd
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_MoveEnd
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
@@ -8192,7 +8181,7 @@ BattleScript_BerryStatRaiseRet::
 	@jumpifability BS_SCRIPTING, ABILITY_RIPEN, BattleScript_BerryStatRaiseRet_AbilityPopup
 	@goto BattleScript_BerryStatRaiseRet_Anim
 BattleScript_BerryStatRaiseRet_Anim:
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_BerryStatRaiseRet_End
+	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_BerryStatRaiseRet_End
 	setgraphicalstatchangevalues
 	playanimation BS_SCRIPTING, B_ANIM_ITEM_EFFECT, sB_ANIM_ARG1
 	setbyte cMULTISTRING_CHOOSER, B_MSG_STAT_ROSE_ITEM

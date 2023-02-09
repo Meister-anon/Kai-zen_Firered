@@ -232,6 +232,7 @@
 #define ATK4F_DONT_CHECK_STATUSES   0x80
 
 //equivalent of STAT_BUFF_ALLOW_PTR  just has different name
+//& STAT_BUFF_NOT_PROTECT_AFFECTED
 
 // statchange defines
 #define STAT_CHANGE_BS_PTR                  0x1 // If set, allow use of jumpptr. Set in every use of statbuffchange

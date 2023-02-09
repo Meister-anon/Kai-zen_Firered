@@ -184,7 +184,7 @@ gUnknown_847AF8C::
 	.byte 255 @ friendship
 
 	.align 2
-	.2byte SPECIES_FARFETCHD, ITEM_STICK
+	.2byte SPECIES_FARFETCHD, ITEM_LEEK
 	.2byte MOVE_KNOCK_OFF, MOVE_SWORDS_DANCE, MOVE_FLY, MOVE_SAND_ATTACK
 	.byte 0, 0x00 @ level, ppBonuses
 	.byte 100, 100, 100, 100, 0, 110 @ EVs

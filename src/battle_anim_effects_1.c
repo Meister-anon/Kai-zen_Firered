@@ -607,6 +607,17 @@ const struct SpriteTemplate gLeechSeedSpriteTemplate =
     .callback = AnimLeechSeed,
 };
 
+const struct SpriteTemplate gPluckParticleSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_SEED_BROWN,
+    .paletteTag = ANIM_TAG_SEED_BROWN,
+    .oam = &gOamData_AffineOff_ObjNormal_16x16,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimPluck,
+};
+
 const union AnimCmd gSporeParticleAnimCmds1[] =
 {
     ANIMCMD_FRAME(0, 1),

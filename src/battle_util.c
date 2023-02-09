@@ -28,9 +28,11 @@
 #include "pokedex.h"
 #include "constants/battle_move_effects.h"
 #include "constants/battle_script_commands.h"
-#include "battle_script_commands.c"
+//#include "battle_script_commands.c"       //forgot can't include .c files
 
 static bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId);
+
+static void infatuationchecks(void);//cusotm effect used for cupidarrow
 
 static const u16 sSoundMovesTable[] =
 {
@@ -205,6 +207,32 @@ void PressurePPLoseOnUsingPerishSong(u8 attacker)
         gActiveBattler = attacker;
         BtlController_EmitSetMonData(0, REQUEST_PPMOVE1_BATTLE + perishSongPos, 0, 1, &gBattleMons[gActiveBattler].pp[perishSongPos]);
         MarkBattlerForControllerExec(gActiveBattler);
+    }
+}
+
+// use for cupid's arrow think can just call this function after my conditions are set
+//switch in if effect works string is "targtet name fell in love w attcaker name at first sight"
+//not sure it'll target correctly  so will make custom effect
+
+static void infatuationchecks(void)//cusotm effect used for cupidarrow
+{
+    if (gBattleMons[gBattlerTarget].ability == ABILITY_OBLIVIOUS)
+    {
+        gBattlescriptCurrInstr = BattleScript_ObliviousPreventsAttraction;
+        gLastUsedAbility = ABILITY_OBLIVIOUS;
+        RecordAbilityBattle(gBattlerTarget, ABILITY_OBLIVIOUS);
+    }
+    if (gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION)
+
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    else
+    {
+
+        gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
+        gBattlescriptCurrInstr += 5;
+
     }
 }
 
@@ -2110,7 +2138,7 @@ enum
 };
 
 //learned defined need be on one line, this should be logic for thawing i.e remove frozen status
-#define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || ((gBattleMoves[gCurrentMove].type == TYPE_FIRE) && gBattleMoves[gCurrentMove].power >= 60 && gCurrentMove != MOVE_FIRE_FANG))
+#define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || ((gBattleMoves[gCurrentMove].type == TYPE_FIRE) && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60) && gCurrentMove != MOVE_FIRE_FANG))
 
 u8 AtkCanceller_UnableToUseMove(void)
 {

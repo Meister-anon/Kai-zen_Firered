@@ -178,8 +178,9 @@ EWRAM_DATA u16 gLastLandedMoves[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gLastHitByType[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gLastResultingMoves[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gLockedMoves[MAX_BATTLERS_COUNT] = {0};
-EWRAM_DATA u8 gLastHitBy[MAX_BATTLERS_COUNT] = {0};
-EWRAM_DATA u16 gChosenMoveByBattler[MAX_BATTLERS_COUNT] = {0};
+//EWRAM_DATA u16 gLastUsedMove = 0; //still unsure if I need to add this or can just use gLastResultingMoves which seems to be equivalent
+EWRAM_DATA u8 gLastHitBy[MAX_BATTLERS_COUNT] = {0};//ran make with and without above line came to same conclusion so either works
+EWRAM_DATA u16 gChosenMoveByBattler[MAX_BATTLERS_COUNT] = {0};//rn I'll use existing value to save on ram
 EWRAM_DATA u8 gMoveResultFlags = 0;
 EWRAM_DATA u32 gHitMarker = 0;
 static EWRAM_DATA u8 gUnknown_2023DD4[MAX_BATTLERS_COUNT] = {0};
@@ -4865,8 +4866,8 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
         }
     }
     else */if (gBattleMons[battlerId].ability == ABILITY_NUISANCE
-        && gBattleMoves[move].power <= 60
-        && gDynamicBasePower <= 60) //added dynamic for moves like hidden power
+        && (gBattleMoves[move].power <= 60
+        || gDynamicBasePower <= 60)) //added dynamic for moves like hidden power
     {
         priority += 3;
     }
