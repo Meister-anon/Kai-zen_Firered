@@ -1,11 +1,12 @@
 #ifndef GUARD_CONSTANTS_BATTLE_SCRIPT_COMMANDS_H
 #define GUARD_CONSTANTS_BATTLE_SCRIPT_COMMANDS_H
 
+//ok this needs to match the Battlescripting struct in battle.h
 // Battle Scripting and BattleCommunication addresses
 #define sPAINSPLIT_HP gBattleScripting
 #define sBIDE_DMG gBattleScripting + 4
 #define sMULTIHIT_STRING gBattleScripting + 8
-#define sDMG_MULTIPLIER gBattleScripting + 0xE
+#define sDMG_MULTIPLIER gBattleScripting + 0xE	//don't use this anymore since put dmg shift into flag least for semi invul
 #define sTWOTURN_STRINGID gBattleScripting + 0xF
 #define sB_ANIM_ARG1 gBattleScripting + 0x10
 #define sB_ANIM_ARG2 gBattleScripting + 0x11
@@ -22,17 +23,24 @@
 #define sBATTLE_STYLE gBattleScripting + 0x1D
 #define sLVLBOX_STATE gBattleScripting + 0x1E
 #define sLEARNMOVE_STATE gBattleScripting + 0x1F
-#define sSAVED_BATTLER gBattleScripting + 0x20
+#define sFIELD20_PURSUIT_DOUBLE_DAMAGE gBattleScripting + 0x20
 #define sRESHOW_MAIN_STATE gBattleScripting + 0x21
 #define sRESHOW_HELPER_STATE gBattleScripting + 0x22
-#define sFIELD_23 gBattleScripting + 0x23
+//#define sSAVED_BATTLER               (gBattleScripting + 0x23) // savedBattler
+//#define sSAVED_STAT_CHANGER gBattleScripting + 0x24
+//#define sILLUSION_NICK_HACK gBattleScripting + 0x25
+//#define sFIXED_ABILITY_POPUP         (gBattleScripting + 0x26) // fixedPopup
+//#define sABILITY_OVERWRITE           (gBattleScripting + 0x27) // abilityPopupOverwrite
+//#define sSAVED_DMG gBattleScripting + 0x29
+//#define sSAVED_MOVE_EFFECT           (gBattleScripting + 0x2D) // savedMoveEffect
+//#define sMOVE_EFFECT                 (gBattleScripting + 0x2F) // moveEffect
+#define sSWITCH_CASE (gBattleScripting + 0x23)//   (gBattleScripting + 0x31) // switchCase  used for red card special swith condition
+#define sBERRY_OVERRIDE	(gBattleScripting + 0x24)// (gBattleScripting + 0x32) // overrideBerryRequirements
+//#define sMON_CAUGHT     (gBattleScripting + 0x33) // monCaught NOT NEEDED, only used in emerald for succesful captures to incremennt game stat capture
+#define sFIELD_23 gBattleScripting + 0x23	//nothing in struct below this think all used values must go above here
 #define sWINDOWS_TYPE gBattleScripting + 0x24
 #define sMULTIPLAYER_ID gBattleScripting + 0x25
 #define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x26
-#define sSAVED_STAT_CHANGER gBattleScripting + 0x27
-#define sSHIFT_SWITCHED gBattleScripting + 0x28
-#define sILLUSION_NICK_HACK gBattleScripting + 0x29
-#define sSAVED_DMG gBattleScripting + 0x2A
 
 
 #define cEFFECT_CHOOSER gBattleCommunication + 3

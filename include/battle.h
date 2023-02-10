@@ -279,6 +279,7 @@ struct SpecialStatus
     u8 instructedChosenTarget : 3;
     u8 gemBoost : 1;
     u8 gemParam;
+    u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute.
     u8 dancerUsedMove : 1;
     u8 dancerOriginalTarget : 3;
     u8 announceNeutralizingGas : 1;   // See Cmd_switchineffects
@@ -603,7 +604,7 @@ struct BattleStruct //fill in unused fields when porting
     u16 changedSpecies[PARTY_SIZE]; // For Zygarde or future forms when multiple mons can change into the same pokemon.
     u8 stringMoveType;
     u8 expGetterBattlerId;
-    bool8 ateBoost[MAX_BATTLERS_COUNT];
+    bool8 ateBoost[MAX_BATTLERS_COUNT];//says that but ateberry seems to only be used by dodriogame
     u8 ateBerry[2]; // array id determined by side, each party pokemon as bit
     u8 stolenStats[NUM_BATTLE_STATS]; // hp byte is used for which stats to raise, other inform about by how many stages
     //u8 field_90; // unused   //ok thank god these really are unused, I'll replace when I need to bing stuff from emerald
@@ -692,7 +693,7 @@ extern struct BattleStruct *gBattleStruct;
 
 #define SET_STATCHANGER(statId, stage, goesDown)(gBattleScripting.statChanger = (statId) + (stage << 4) + (goesDown << 7))
 
-struct BattleScripting
+struct BattleScripting  //remember expanding this costs ewram
 {
     s32 painSplitHp;
     s32 bideDmg;
@@ -702,28 +703,33 @@ struct BattleScripting
     u8 animArg1;
     u8 animArg2;
     u16 tripleKickPower; //important
-    u8 atk49_state;
+    u8 atk49_state; //move end
     u8 battlerWithAbility;
     u8 multihitMoveEffect; //important, why do these need to go here
-    u16 savedMoveEffect; // For moves hitting multiple targets.
-    u16 moveEffect;
     u8 battler;
     u8 animTurn;
     u8 animTargetsHit;
-    u8 switchCase;  // Special switching conditions, eg. red card
-    u8 overrideBerryRequirements;
     u8 statChanger;
     bool8 statAnimPlayed;
-    bool8 monCaught;
-    u8 atk23_state;
+    u8 atk23_getexpState;
     u8 battleStyle;
-    u8 atk6C_state;
+    u8 atk6C_drawlvlupboxState;
     u8 learnMoveState;
-    u8 field_20;
+    u8 field_20_pursuitDoublesAttacker; //pursuit damage
     u8 reshowMainState;
     u8 reshowHelperState;
-    u16 abilityPopupOverwrite;
-    u8 field_23;
+    /*u8 savedBattler;  //for now saveBattler not used just using normal sBattler
+    u8 savedStatChanger; // For further use, if attempting to change stat two times(ex. Moody)
+    u8 illusionNickHack; // To properly display nick in STRINGID_ENEMYABOUTTOSWITCHPKMN.
+    bool8 fixedPopup;   // Force ability popup to stick until manually called back
+    u16 abilityPopupOverwrite;  //UNCOMMENT if you want these features
+    s32 savedDmg;   //port feature leaving out for now
+    u16 savedMoveEffect; // For moves hitting multiple targets.
+    u16 moveEffect;*/
+    u8 switchCase;  // Special switching conditions, eg. red card
+    u8 overrideBerryRequirements;
+    //bool8 monCaught;  //believe most of these aren't needed, can be handled with battlescript
+    u8 field_23;    //they are just different ways of doing things, btu I prefer saving ram.
 };
 
 enum

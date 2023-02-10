@@ -2215,7 +2215,7 @@ static void atk07_adjustnormaldamage(void)
 {
     u8 holdEffect, param;
 
-    ApplyRandomDmgMultiplier();
+    ApplyRandomDmgMultiplier();//high low rolls
     if (gBattleMons[gBattlerTarget].item == ITEM_ENIGMA_BERRY)
     {
         holdEffect = gEnigmaBerries[gBattlerTarget].holdEffect;
@@ -2232,8 +2232,14 @@ static void atk07_adjustnormaldamage(void)
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gSpecialStatuses[gBattlerTarget].focusBanded = 1;
     }
-    if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
-     && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded)
+    else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && BATTLER_MAX_HP(gBattlerTarget))
+    {
+        RecordItemEffectBattle(gBattlerTarget, holdEffect);
+        gSpecialStatuses[gBattlerTarget].focusSashed = TRUE;
+    }
+    /*if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
+     && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded
+         || gSpecialStatuses[gBattlerTarget].focusSashed)
      && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage)
     {
         gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
@@ -2243,13 +2249,80 @@ static void atk07_adjustnormaldamage(void)
             gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED; //and don't forget sturdy
         }
         else if (gSpecialStatuses[gBattlerTarget].focusBanded
-            && gMultiHitCounter == 0)
+            && gMultiHitCounter == 0)   //it works pretty sure the logic its using is if not a multi hit move since only multihit uses the counter
         {
             gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
             gLastUsedItem = gBattleMons[gBattlerTarget].item;
         }
     }
-    ++gBattlescriptCurrInstr;
+    ++gBattlescriptCurrInstr;*/
+    if (gBattleMoves[gCurrentMove].effect != EFFECT_FALSE_SWIPE
+        && !gProtectStructs[gBattlerTarget].endured
+        && !gSpecialStatuses[gBattlerTarget].focusBanded
+        && !gSpecialStatuses[gBattlerTarget].focusSashed
+        && !gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
+        goto END;
+
+    // Handle reducing the dmg to 1 hp.
+    gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
+
+    if (gProtectStructs[gBattlerTarget].endured && gMultiHitCounter == 0)
+    {
+        gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED;
+    }
+    else if ((gSpecialStatuses[gBattlerTarget].focusBanded || gSpecialStatuses[gBattlerTarget].focusSashed)
+        && gMultiHitCounter == 0)
+    {
+        gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
+        gLastUsedItem = gBattleMons[gBattlerTarget].item;
+    }
+
+END:
+    gBattlescriptCurrInstr++;
+
+    if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && gBattleMoveDamage >= 1)
+        gSpecialStatuses[gBattlerAttacker].damagedMons |= gBitTable[gBattlerTarget];
+
+    // Check gems and damage reducing berries.
+    if (gSpecialStatuses[gBattlerTarget].berryReduced
+        && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        && gBattleMons[gBattlerTarget].item)
+    {
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_BerryReduceDmg;
+        gLastUsedItem = gBattleMons[gBattlerTarget].item;
+    }
+    if (gSpecialStatuses[gBattlerAttacker].gemBoost
+        && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        && gBattleMons[gBattlerAttacker].item)
+    {
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_GemActivates;
+        gLastUsedItem = gBattleMons[gBattlerAttacker].item;
+    }
+
+    // B_WEATHER_STRONG_WINDS prints a string when it's about to reduce the power
+    // of a move that is Super Effective against a Flying-type Pokémon.
+   /* if (gBattleWeather & B_WEATHER_STRONG_WINDS)
+    {
+        if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(2.0))
+         || (gBattleMons[gBattlerTarget].type2 == TYPE_FLYING
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(2.0))
+         || (gBattleMons[gBattlerTarget].type3 == TYPE_FLYING
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(2.0)))
+        {
+            gBattlerAbility = gBattlerTarget;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_AttackWeakenedByStrongWinds;
+        }
+    }*/
+    //need setup equivalent of gettypemodifier, think I can do by double looping through the type chart array
+    //in battlemain.c  gTypeEffectiveness
+    //first use i to loop entire array, use j to loop through attacking types
+    //set defense type to type flying
+    //finally use condition on return if [j][type_flying] == super effective do thing
+    //possibly need to adjust layout of array to be able to read value in atk type def type == effectiveness format
 }
 
 // The same as 0x7 except it doesn't check for false swipe move effect.
@@ -2274,22 +2347,78 @@ static void atk08_adjustnormaldamage2(void)
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gSpecialStatuses[gBattlerTarget].focusBanded = 1;
     }
-    if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
-     && (gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded)
-     && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage)
+    else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && BATTLER_MAX_HP(gBattlerTarget))
     {
-        gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
-        if (gProtectStructs[gBattlerTarget].endured)
-        {
-            gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED;
-        }
-        else if (gSpecialStatuses[gBattlerTarget].focusBanded)
-        {
-            gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
-            gLastUsedItem = gBattleMons[gBattlerTarget].item;
-        }
+        RecordItemEffectBattle(gBattlerTarget, holdEffect);
+        gSpecialStatuses[gBattlerTarget].focusSashed = TRUE;
     }
-    ++gBattlescriptCurrInstr;
+
+     if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)    //CORRECT way to start conditional with a negative
+        && !gProtectStructs[gBattlerTarget].endured
+        && !gSpecialStatuses[gBattlerTarget].focusBanded
+        && !gSpecialStatuses[gBattlerTarget].focusSashed)
+        goto END;
+
+    // Handle reducing the dmg to 1 hp.
+    gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
+
+    if (gProtectStructs[gBattlerTarget].endured && gMultiHitCounter == 0)
+    {
+        gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED;
+    }
+    else if ((gSpecialStatuses[gBattlerTarget].focusBanded || gSpecialStatuses[gBattlerTarget].focusSashed)
+        && gMultiHitCounter == 0)
+    {
+        gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
+        gLastUsedItem = gBattleMons[gBattlerTarget].item;
+    }
+
+END:
+    gBattlescriptCurrInstr++;
+
+    if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && gBattleMoveDamage >= 1)
+        gSpecialStatuses[gBattlerAttacker].damagedMons |= gBitTable[gBattlerTarget];
+
+    // Check gems and damage reducing berries.
+    if (gSpecialStatuses[gBattlerTarget].berryReduced
+        && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        && gBattleMons[gBattlerTarget].item)
+    {
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_BerryReduceDmg;
+        gLastUsedItem = gBattleMons[gBattlerTarget].item;
+    }
+    if (gSpecialStatuses[gBattlerAttacker].gemBoost
+        && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        && gBattleMons[gBattlerAttacker].item)
+    {
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_GemActivates;
+        gLastUsedItem = gBattleMons[gBattlerAttacker].item;
+    }
+
+    // B_WEATHER_STRONG_WINDS prints a string when it's about to reduce the power
+    // of a move that is Super Effective against a Flying-type Pokémon.
+   /* if (gBattleWeather & B_WEATHER_STRONG_WINDS)
+    {
+        if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(2.0))
+         || (gBattleMons[gBattlerTarget].type2 == TYPE_FLYING
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(2.0))
+         || (gBattleMons[gBattlerTarget].type3 == TYPE_FLYING
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(2.0)))
+        {
+            gBattlerAbility = gBattlerTarget;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_AttackWeakenedByStrongWinds;
+        }
+    }*/
+    //need setup equivalent of gettypemodifier, think I can do by double looping through the type chart array
+    //in battlemain.c  gTypeEffectiveness
+    //first use i to loop entire array, use j to loop through attacking types
+    //set defense type to type flying
+    //finally use condition on return if [j][type_flying] == super effective do thing
+    //possibly need to adjust layout of array to be able to read value in atk type def type == effectiveness format
 }
 
 static void atk09_attackanimation(void)
@@ -4066,7 +4195,7 @@ static void atk23_getexp(void)
 
     gBattlerFainted = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     sentIn = gSentPokesToOpponent[(gBattlerFainted & 2) >> 1];
-    switch (gBattleScripting.atk23_state)
+    switch (gBattleScripting.atk23_getexpState)
     {
     case 0: // check if should receive exp at all
         if (GetBattlerSide(gBattlerFainted) != B_SIDE_OPPONENT
@@ -4077,11 +4206,11 @@ static void atk23_getexp(void)
             | BATTLE_TYPE_SAFARI
             | BATTLE_TYPE_EREADER_TRAINER)))
         {
-            gBattleScripting.atk23_state = 6; // goto last case
+            gBattleScripting.atk23_getexpState = 6; // goto last case
         }
         else
         {
-            ++gBattleScripting.atk23_state;
+            ++gBattleScripting.atk23_getexpState;
             gBattleStruct->givenExpMons |= gBitTable[gBattlerPartyIndexes[gBattlerFainted]];
         }
         break;
@@ -4122,7 +4251,7 @@ static void atk23_getexp(void)
                     *exp = 0;
                 gExpShareExp = 0;
             }
-            ++gBattleScripting.atk23_state;
+            ++gBattleScripting.atk23_getexpState;
             gBattleStruct->expGetterMonId = 0;
             gBattleStruct->sentInPokes = sentIn;
         }
@@ -4138,13 +4267,13 @@ static void atk23_getexp(void)
             if (holdEffect != HOLD_EFFECT_EXP_SHARE && !(gBattleStruct->sentInPokes & 1))
             {
                 *(&gBattleStruct->sentInPokes) >>= 1;
-                gBattleScripting.atk23_state = 5;
+                gBattleScripting.atk23_getexpState = 5;
                 gBattleMoveDamage = 0; // used for exp
             }
             else if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) == MAX_LEVEL)
             {
                 *(&gBattleStruct->sentInPokes) >>= 1;
-                gBattleScripting.atk23_state = 3;  //commented out to remove the jump to case 5. should allow for ev gain at max level
+                gBattleScripting.atk23_getexpState = 3;  //commented out to remove the jump to case 5. should allow for ev gain at max level
                 gBattleMoveDamage = 0; // used for exp // confirmed from Lunos, apparently the case jump only happens after everything in the code block is run so he added the evgain function here and it ran even though it was below the case jump
                 MonGainEVs(&gPlayerParty[gBattleStruct->expGetterMonId], gBattleMons[gBattlerFainted].species);// his method works but not sure if stats will change since think that's in case 3,  so I'm removing the jump and putting ev gain to here.
             } //hopefully this works without issue
@@ -4208,7 +4337,7 @@ static void atk23_getexp(void)
                     MonGainEVs(&gPlayerParty[gBattleStruct->expGetterMonId], gBattleMons[gBattlerFainted].species);
                 }
                 gBattleStruct->sentInPokes >>= 1;
-                ++gBattleScripting.atk23_state;
+                ++gBattleScripting.atk23_getexpState;
             }
         }
         break;
@@ -4228,7 +4357,7 @@ static void atk23_getexp(void)
                 BtlController_EmitExpUpdate(0, gBattleStruct->expGetterMonId, gBattleMoveDamage);
                 MarkBattlerForControllerExec(gActiveBattler);
             }
-            ++gBattleScripting.atk23_state;
+            ++gBattleScripting.atk23_getexpState;
         }
         break;
     case 4: // lvl up if necessary
@@ -4277,27 +4406,27 @@ static void atk23_getexp(void)
                     //if (gStatuses3[battlerId] & STATUS3_POWER_TRICK)
                       //  SWAP(gBattleMons[battlerId].attack, gBattleMons[battlerId].defense, temp);
                 }
-                gBattleScripting.atk23_state = 5;
+                gBattleScripting.atk23_getexpState = 5;
             }
             else
             {
                 gBattleMoveDamage = 0;
-                gBattleScripting.atk23_state = 5;
+                gBattleScripting.atk23_getexpState = 5;
             }
         }
         break;
     case 5: // looper increment
         if (gBattleMoveDamage) // there is exp to give, goto case 3 that gives exp
         {
-            gBattleScripting.atk23_state = 3;
+            gBattleScripting.atk23_getexpState = 3;
         }
         else
         {
             ++gBattleStruct->expGetterMonId;
             if (gBattleStruct->expGetterMonId <= 5) // this isn't caseid, this is a mon id, so I believe this just says check every pokemon in party
-                gBattleScripting.atk23_state = 2; // loop again
+                gBattleScripting.atk23_getexpState = 2; // loop again
             else
-                gBattleScripting.atk23_state = 6; // we're done
+                gBattleScripting.atk23_getexpState = 6; // we're done
         }
         break;
     case 6: // increment instruction
@@ -6741,26 +6870,26 @@ static void atk6B_atknameinbuff1(void)
 
 static void atk6C_drawlvlupbox(void)
 {
-    if (gBattleScripting.atk6C_state == 0)
+    if (gBattleScripting.atk6C_drawlvlupboxState == 0)
     {
         if (IsMonGettingExpSentOut())
-            gBattleScripting.atk6C_state = 3;
+            gBattleScripting.atk6C_drawlvlupboxState = 3;
         else
-            gBattleScripting.atk6C_state = 1;
+            gBattleScripting.atk6C_drawlvlupboxState = 1;
     }
 
-    switch (gBattleScripting.atk6C_state)
+    switch (gBattleScripting.atk6C_drawlvlupboxState)
     {
     case 1:
         gBattle_BG2_Y = 0x60;
         SetBgAttribute(2, BG_ATTR_PRIORITY, 0);
         ShowBg(2);
         sub_8026480();
-        gBattleScripting.atk6C_state = 2;
+        gBattleScripting.atk6C_drawlvlupboxState = 2;
         break;
     case 2:
         if (!sub_80264D0())
-            gBattleScripting.atk6C_state = 3;
+            gBattleScripting.atk6C_drawlvlupboxState = 3;
         break;
     case 3:
         gBattle_BG1_X = 0;
@@ -6770,20 +6899,20 @@ static void atk6C_drawlvlupbox(void)
         ShowBg(0);
         ShowBg(1);
         HandleBattleWindow(18, 7, 0x1D, 0x13, WINDOW_x80);
-        gBattleScripting.atk6C_state = 4;
+        gBattleScripting.atk6C_drawlvlupboxState = 4;
         break;
     case 4:
         DrawLevelUpWindow1();
         PutWindowTilemap(12);
         CopyWindowToVram(12, COPYWIN_BOTH);
-        ++gBattleScripting.atk6C_state;
+        ++gBattleScripting.atk6C_drawlvlupboxState;
         break;
     case 5:
     case 7:
         if (!IsDma3ManagerBusyWithBgCopy())
         {
             gBattle_BG1_Y = 0;
-            ++gBattleScripting.atk6C_state;
+            ++gBattleScripting.atk6C_drawlvlupboxState;
         }
         break;
     case 6:
@@ -6792,7 +6921,7 @@ static void atk6C_drawlvlupbox(void)
             PlaySE(SE_SELECT);
             DrawLevelUpWindow2();
             CopyWindowToVram(12, COPYWIN_GFX);
-            ++gBattleScripting.atk6C_state;
+            ++gBattleScripting.atk6C_drawlvlupboxState;
         }
         break;
     case 8:
@@ -6800,7 +6929,7 @@ static void atk6C_drawlvlupbox(void)
         {
             PlaySE(SE_SELECT);
             HandleBattleWindow(18, 7, 0x1D, 0x13, WINDOW_x80 | WINDOW_CLEAR);
-            ++gBattleScripting.atk6C_state;
+            ++gBattleScripting.atk6C_drawlvlupboxState;
         }
         break;
     case 9:
@@ -6812,7 +6941,7 @@ static void atk6C_drawlvlupbox(void)
             CopyWindowToVram(12, COPYWIN_MAP);
             SetBgAttribute(2, BG_ATTR_PRIORITY, 2);
             ShowBg(2);
-            gBattleScripting.atk6C_state = 10;
+            gBattleScripting.atk6C_drawlvlupboxState = 10;
         }
         break;
     case 10:
@@ -12364,7 +12493,7 @@ static void atkEC_pursuitrelated(void)
         gCurrentMove = MOVE_PURSUIT;
         gBattlescriptCurrInstr += 5;
         gBattleScripting.animTurn = 1;
-        gBattleScripting.field_20 = gBattlerAttacker;
+        gBattleScripting.field_20_pursuitDoublesAttacker = gBattlerAttacker;
         gBattlerAttacker = gActiveBattler;
     }
     else

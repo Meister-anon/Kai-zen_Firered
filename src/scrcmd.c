@@ -2006,7 +2006,7 @@ bool8 ScrCmd_playslotmachine(struct ScriptContext * ctx)
     return TRUE;
 }
 
-bool8 ScrCmd_setberrytree(struct ScriptContext * ctx)
+bool8 ScrCmd_setberrytree(struct ScriptContext * ctx)   //vsonic plan to add back later
 {
 //    u8 treeId = ScriptReadByte(ctx);
 //    u8 berry = ScriptReadByte(ctx);

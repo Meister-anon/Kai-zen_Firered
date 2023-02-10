@@ -534,7 +534,7 @@ static void InitBerryPouchFromBattle(void)
 
 void FieldUseFunc_TeachyTv(u8 taskId) //zsonic
 {
-    ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, NULL, gSpecialVar_ItemId, 0xFFFF);
+    /*ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, NULL, gSpecialVar_ItemId, 0xFFFF);
     if (gTasks[taskId].data[3] == 0)
     {
        // ItemMenu_SetExitCallback(InitTeachyTvFromBag);
@@ -545,7 +545,7 @@ void FieldUseFunc_TeachyTv(u8 taskId) //zsonic
         StopPokemonLeagueLightingEffectTask();
         FadeScreen(FADE_TO_BLACK, 0);
        // gTasks[taskId].func = Task_InitTeachyTvFromField;
-    }
+    }*/
 }
 
 /*static void InitTeachyTvFromBag(void)

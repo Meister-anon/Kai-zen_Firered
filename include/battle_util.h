@@ -140,6 +140,7 @@ bool32 IsEntrainmentBannedAbilityAttacker(u16 ability);
 bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability);
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
 bool32 CanBeConfused(u8 battlerId);
+bool32 HasEnoughHpToEatBerry(u8 battlerId, u32 hpFraction, u16 itemId);
 bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget);
 bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind);
 bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags);

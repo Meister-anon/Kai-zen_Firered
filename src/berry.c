@@ -94,6 +94,7 @@ static const u8 sBerryDescriptionPart2_Starf[] = _("せかいの はてに す�
 static const u8 sBerryDescriptionPart1_Enigma[] = _("しょうたい ふめいの きのみ.");
 static const u8 sBerryDescriptionPart2_Enigma[] = _("ほしの ちからを もっている らしい.");
 
+//berry tree info
 const struct Berry gBerries[] = {
     [ITEM_CHERI_BERRY - FIRST_BERRY_INDEX] =
         {
