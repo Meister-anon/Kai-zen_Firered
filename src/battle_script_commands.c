@@ -5219,7 +5219,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend
                 ++gBattleScripting.atk49_state;
             break;
         case ATK49_KINGSROCK_SHELLBELL: // king's rock and shell bell
-            if (ItemBattleEffects(ITEMEFFECT_KINGSROCK_SHELLBELL, 0, FALSE))
+            if (ItemBattleEffects(ITEMEFFECT_KINGSROCK, 0, FALSE))  //with change to item effect to be just kingsrock look into if I need to change mov end
                 effect = TRUE;
             ++gBattleScripting.atk49_state;
             break;

@@ -5607,10 +5607,10 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
         switch (atkHoldEffect)
         {
         case HOLD_EFFECT_FLINCH:
-            #if B_SERENE_GRACE_BOOST >= GEN_5
-                if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
-                    atkHoldEffectParam *= 2;
-            #endif
+            
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
+                  atkHoldEffectParam *= 2;
+
             if (gBattleMoveDamage != 0  // Need to have done damage
                 && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                 && TARGET_TURN_DAMAGED
@@ -5634,7 +5634,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 gBattleScripting.statChanger = SET_STATCHANGER(STAT_SPEED, 2, FALSE);
                 effect = ITEM_STATS_CHANGE;
                 BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_AttackerItemStatRaise;
+                gBattlescriptCurrInstr = BattleScript_AttackerItemStatRaise;    //need add
             }
             break;
         }
@@ -5688,7 +5688,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 gBattleScripting.statChanger = SET_STATCHANGER(STAT_SPATK, 1, FALSE);
                 effect = ITEM_STATS_CHANGE;
                 BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_AttackerItemStatRaise;
+                gBattlescriptCurrInstr = BattleScript_AttackerItemStatRaise;    //need add
             }
             break;
         }
@@ -5704,7 +5704,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 {
                     effect = ITEM_EFFECT_OTHER;
                     BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_AirBaloonMsgPop;
+                    gBattlescriptCurrInstr = BattleScript_AirBaloonMsgPop;  //need add
                 }
                 break;
             case HOLD_EFFECT_ROCKY_HELMET:
@@ -5730,7 +5730,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 {
                     effect = ITEM_STATS_CHANGE;
                     BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_WeaknessPolicy;
+                    gBattlescriptCurrInstr = BattleScript_WeaknessPolicy;   //need add
                 }
                 break;
             case HOLD_EFFECT_SNOWBALL:
@@ -5751,7 +5751,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 {
                     effect = ITEM_STATS_CHANGE;
                     BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_TargetItemStatRaise;
+                    gBattlescriptCurrInstr = BattleScript_TargetItemStatRaise;  //need add
                     gBattleScripting.statChanger = SET_STATCHANGER(STAT_SPDEF, 1, FALSE);
                 }
                 break;
@@ -5762,7 +5762,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 {
                     effect = ITEM_STATS_CHANGE;
                     BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_TargetItemStatRaise;
+                    gBattlescriptCurrInstr = BattleScript_TargetItemStatRaise;  //need add
                     gBattleScripting.statChanger = SET_STATCHANGER(STAT_ATK, 1, FALSE);
                 }
                 break;
@@ -5773,7 +5773,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 {
                     effect = ITEM_STATS_CHANGE;
                     BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_TargetItemStatRaise;
+                    gBattlescriptCurrInstr = BattleScript_TargetItemStatRaise;  //need add
                     gBattleScripting.statChanger = SET_STATCHANGER(STAT_SPATK, 1, FALSE);
                 }
                 break;

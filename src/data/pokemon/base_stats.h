@@ -13971,7 +13971,9 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_THICK_FAT, ABILITY_RATTLED},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    },//could consider adding blaze back, flash fire lets ti sweep fire types, and is good in double batte
+    //but blaze would effectively give it 3 type stab  at low hp. which would be really unique, I could buff the hp threshold for 
+    //blaze stuff as well. make it less than 50%, plus it works since below 50 is when hp bar turns yellow
 
     [SPECIES_EMBOAR] =
     {

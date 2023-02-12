@@ -20,6 +20,7 @@ extern const u8 BattleScript_TotemFlaredToLife[];
 extern const u8 BattleScript_BerryStatRaiseRet[];
 extern const u8 BattleScript_MicleBerryActivateEnd2[];
 extern const u8 BattleScript_MicleBerryActivateRet[];
+extern const u8 BattleScript_JabocaRowapBerryActivates[];
 extern const u8 BattleScript_BattleBondActivatesOnMoveEndAttacker[];
 extern const u8 BattleScript_MoveEnd[];
 extern const u8 BattleScript_MakeMoveMissed[];
