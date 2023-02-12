@@ -17,6 +17,7 @@ void AI_CalcDmg(u8 attacker, u8 defender);
 bool32 IsMonGettingExpSentOut(void);
 void BattleCreateYesNoCursorAt(void);
 void BattleDestroyYesNoCursorAt(void);
+bool32 CanBattlerSwitch(u32 battlerId);
 void HandleBattleWindow(u8 xStart, u8 yStart, u8 xEnd, u8 yEnd, u8 flags);
 u8 GetBattlerTurnOrderNum(u8 battlerId);
 void BufferMoveToLearnIntoBattleTextBuff2(void);

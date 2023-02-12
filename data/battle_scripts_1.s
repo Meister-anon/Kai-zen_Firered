@@ -5853,6 +5853,61 @@ BattleScript_TrainerBattleForceOut::
 	switchineffects BS_TARGET
 	goto BattleScript_MoveEnd
 
+BattleScript_WeaknessPolicy::
+	copybyte sBATTLER, gBattlerTarget
+	jumpifstat BS_TARGET, CMP_LESS_THAN, STAT_ATK, MAX_STAT_STAGE, BattleScript_WeaknessPolicyAtk
+	jumpifstat BS_TARGET, CMP_EQUAL, STAT_SPATK, MAX_STAT_STAGE, BattleScript_WeaknessPolicyEnd
+BattleScript_WeaknessPolicyAtk:
+	playanimation BS_TARGET, B_ANIM_HELD_ITEM_EFFECT, NULL
+	waitanimation
+	setbyte sSTAT_ANIM_PLAYED, FALSE
+	playstatchangeanimation BS_TARGET, BIT_ATK | BIT_SPATK, STAT_CHANGE_BY_TWO
+	setstatchanger STAT_ATK, 2, FALSE
+	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_WeaknessPolicySpAtk
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_WeaknessPolicySpAtk
+	printstring STRINGID_USINGITEMSTATOFPKMNROSE
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_WeaknessPolicySpAtk:
+	setstatchanger STAT_SPATK, 2, FALSE
+	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_WeaknessPolicyRemoveItem
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_WeaknessPolicyRemoveItem
+	printstring STRINGID_USINGITEMSTATOFPKMNROSE
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_WeaknessPolicyRemoveItem:
+	removeitem BS_TARGET
+BattleScript_WeaknessPolicyEnd:
+	return
+
+BattleScript_TargetItemStatRaise::
+	copybyte sBATTLER, gBattlerTarget
+	statbuffchange 0, BattleScript_TargetItemStatRaiseRemoveItemRet
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_TargetItemStatRaiseRemoveItemRet
+	playanimation BS_TARGET, B_ANIM_HELD_ITEM_EFFECT, NULL
+	waitanimation
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	waitanimation
+	printstring STRINGID_USINGITEMSTATOFPKMNROSE
+	waitmessage B_WAIT_TIME_LONG
+	removeitem BS_TARGET
+BattleScript_TargetItemStatRaiseRemoveItemRet:
+	return
+
+BattleScript_AttackerItemStatRaise::
+	copybyte sBATTLER, gBattlerAttacker
+	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_AttackerItemStatRaiseRet
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_AttackerItemStatRaiseRet
+	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT, NULL
+	waitanimation
+	setgraphicalstatchangevalues
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	waitanimation
+	printstring STRINGID_USINGITEMSTATOFPKMNROSE
+	waitmessage B_WAIT_TIME_LONG
+	removeitem BS_ATTACKER
+BattleScript_AttackerItemStatRaiseRet:
+	return
+
 BattleScript_MistProtected::
 	pause 0x20
 	printstring STRINGID_PKMNPROTECTEDBYMIST
@@ -8179,6 +8234,19 @@ BattleScript_BerryCureChosenStatusRet::
 	removeitem BS_SCRIPTING
 	return
 
+BattleScript_MentalHerbCureRet::
+	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT
+	printfromtable gMentalHerbCureStringIds
+	waitmessage B_WAIT_TIME_LONG
+	updatestatusicon BS_SCRIPTING
+	removeitem BS_SCRIPTING
+	copybyte gBattlerAttacker, sSAVED_BATTLER   @ restore the original attacker just to be safe
+	return
+
+BattleScript_MentalHerbCureEnd2::
+	call BattleScript_MentalHerbCureRet
+	end2
+
 BattleScript_WhiteHerbEnd2::
 	call BattleScript_WhiteHerbRet
 	end2
@@ -8274,6 +8342,17 @@ BattleScript_ItemHurtEnd2::
 	call BattleScript_ItemHurtRet
 	end2
 
+BattleScript_AirBaloonMsgIn::
+	printstring STRINGID_AIRBALLOONFLOAT
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_AirBaloonMsgPop::
+	printstring STRINGID_AIRBALLOONPOP
+	waitmessage B_WAIT_TIME_LONG
+	removeitem BS_TARGET
+	return
+
 BattleScript_SelectingNotAllowedMoveChoiceItem::
 	printselectionstring STRINGID_ITEMALLOWSONLYYMOVE
 	endselectionscript
@@ -8333,3 +8412,39 @@ BattleScript_ActionSelectionItemsCantBeUsed::
 BattleScript_FlushMessageBox::
 	printstring STRINGID_EMPTYSTRING3
 	return
+
+BattleScript_EjectButtonActivates::
+	makevisible BS_ATTACKER
+	playanimation BS_SCRIPTING, B_ANIM_HELD_ITEM_EFFECT
+	printstring STRINGID_EJECTBUTTONACTIVATE
+	waitmessage B_WAIT_TIME_LONG
+	removeitem BS_SCRIPTING
+	makeinvisible BS_SCRIPTING
+	openpartyscreen BS_SCRIPTING, BattleScript_EjectButtonEnd
+	switchoutabilities BS_SCRIPTING
+	waitstate
+	switchhandleorder BS_SCRIPTING 0x2
+	returntoball BS_SCRIPTING
+	getswitchedmondata BS_SCRIPTING
+	switchindataupdate BS_SCRIPTING
+	hpthresholds BS_SCRIPTING
+	trytoclearprimalweather
+	printstring STRINGID_EMPTYSTRING3
+	waitmessage 1
+	printstring 0x3
+	switchinanim BS_SCRIPTING 0x1
+	waitstate
+	switchineffects BS_SCRIPTING
+BattleScript_EjectButtonEnd:
+	return
+
+BattleScript_EjectPackActivate_Ret::
+	goto BattleScript_EjectButtonActivates
+
+BattleScript_EjectPackActivate_End2::
+	call BattleScript_EjectPackActivate_Ret
+	end2
+
+BattleScript_EjectPackActivates::
+	jumpifcantswitch BS_SCRIPTING, BattleScript_EjectButtonEnd
+	goto BattleScript_EjectPackActivate_Ret

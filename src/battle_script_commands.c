@@ -1268,6 +1268,16 @@ static void atk00_attackcanceler(void)
         gBattlescriptCurrInstr = BattleScript_TookAttack;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }*/ //should be fine to remove this now, 
+
+    /*depending on how things go I may decide/need to make a new animation for absorb moves
+    actually better idea is to make the extra effect animation and just insert it as a conditional call
+    into the normal functions so it doesn't take up more space.
+    
+    best case I can slot it into animation after the visual effects but before the target recoil.
+    so the animation plays the target doesn't get knock back because the ability nulls it
+    and it plays the heal or stat buff visual & sound instead the new function should be called & end in a return or a end, 
+    vsonic IMPORTANT
+    */
     if (DEFENDER_IS_PROTECTED
           && (gCurrentMove != MOVE_CURSE || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST))
           && ((!IsTwoTurnsMove(gCurrentMove) || (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))))
@@ -5576,6 +5586,155 @@ static void atk4E_switchinanim(void)
         MarkBattlerForControllerExec(gActiveBattler);
         gBattlescriptCurrInstr += 3;
     }
+}
+
+bool32 CanBattlerSwitch(u32 battlerId)
+{
+    s32 i, lastMonId, battlerIn1, battlerIn2;
+    bool32 ret = FALSE;
+    struct Pokemon *party;
+
+    if (BATTLE_TWO_VS_ONE_OPPONENT && GetBattlerSide(battlerId) == B_SIDE_OPPONENT)
+    {
+        battlerIn1 = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+        battlerIn2 = GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
+        party = gEnemyParty;
+
+        for (i = 0; i < PARTY_SIZE; i++)
+        {
+            if (GetMonData(&party[i], MON_DATA_HP) != 0
+             && GetMonData(&party[i], MON_DATA_SPECIES) != SPECIES_NONE
+             && !GetMonData(&party[i], MON_DATA_IS_EGG)
+             && i != gBattlerPartyIndexes[battlerIn1] && i != gBattlerPartyIndexes[battlerIn2])
+                break;
+        }
+
+        ret = (i != PARTY_SIZE);
+    }
+    else if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER)
+    {
+        if (GetBattlerSide(battlerId) == B_SIDE_OPPONENT)
+            party = gEnemyParty;
+        else
+            party = gPlayerParty;
+
+        lastMonId = 0;
+        if (battlerId & 2)
+            lastMonId = MULTI_PARTY_SIZE;
+
+        for (i = lastMonId; i < lastMonId + MULTI_PARTY_SIZE; i++)
+        {
+            if (GetMonData(&party[i], MON_DATA_SPECIES) != SPECIES_NONE
+             && !GetMonData(&party[i], MON_DATA_IS_EGG)
+             && GetMonData(&party[i], MON_DATA_HP) != 0
+             && gBattlerPartyIndexes[battlerId] != i)
+                break;
+        }
+
+        ret = (i != lastMonId + MULTI_PARTY_SIZE);
+    }
+    else if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
+    {
+        if (gBattleTypeFlags & BATTLE_TYPE_TOWER_LINK_MULTI)
+        {
+            if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+            {
+                party = gPlayerParty;
+
+                lastMonId = 0;
+                if (GetLinkTrainerFlankId(GetBattlerMultiplayerId(battlerId)) == TRUE)
+                    lastMonId = MULTI_PARTY_SIZE;
+            }
+            else
+            {
+                party = gEnemyParty;
+
+                if (battlerId == 1)
+                    lastMonId = 0;
+                else
+                    lastMonId = MULTI_PARTY_SIZE;
+            }
+        }
+        else
+        {
+            if (GetBattlerSide(battlerId) == B_SIDE_OPPONENT)
+                party = gEnemyParty;
+            else
+                party = gPlayerParty;
+
+            lastMonId = 0;
+            if (GetLinkTrainerFlankId(GetBattlerMultiplayerId(battlerId)) == TRUE)
+                lastMonId = MULTI_PARTY_SIZE;
+        }
+
+        for (i = lastMonId; i < lastMonId + MULTI_PARTY_SIZE; i++)
+        {
+            if (GetMonData(&party[i], MON_DATA_SPECIES) != SPECIES_NONE
+             && !GetMonData(&party[i], MON_DATA_IS_EGG)
+             && GetMonData(&party[i], MON_DATA_HP) != 0
+             && gBattlerPartyIndexes[battlerId] != i)
+                break;
+        }
+
+        ret = (i != lastMonId + MULTI_PARTY_SIZE);
+    }
+    else if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS && GetBattlerSide(battlerId) == B_SIDE_OPPONENT)
+    {
+        party = gEnemyParty;
+
+        lastMonId = 0;
+        if (battlerId == B_POSITION_OPPONENT_RIGHT)
+            lastMonId = PARTY_SIZE / 2;
+
+        for (i = lastMonId; i < lastMonId + (PARTY_SIZE / 2); i++)
+        {
+            if (GetMonData(&party[i], MON_DATA_SPECIES) != SPECIES_NONE
+             && !GetMonData(&party[i], MON_DATA_IS_EGG)
+             && GetMonData(&party[i], MON_DATA_HP) != 0
+             && gBattlerPartyIndexes[battlerId] != i)
+                break;
+        }
+
+        ret = (i != lastMonId + (PARTY_SIZE / 2));
+    }
+    else
+    {
+        if (GetBattlerSide(battlerId) == B_SIDE_OPPONENT)
+        {
+            battlerIn1 = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+
+            if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+                battlerIn2 = GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
+            else
+                battlerIn2 = battlerIn1;
+
+            party = gEnemyParty;
+        }
+        else
+        {
+            // Check if attacker side has mon to switch into
+            battlerIn1 = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
+
+            if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+                battlerIn2 = GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT);
+            else
+                battlerIn2 = battlerIn1;
+
+            party = gPlayerParty;
+        }
+
+        for (i = 0; i < PARTY_SIZE; i++)
+        {
+            if (GetMonData(&party[i], MON_DATA_HP) != 0
+             && GetMonData(&party[i], MON_DATA_SPECIES) != SPECIES_NONE
+             && !GetMonData(&party[i], MON_DATA_IS_EGG)
+             && i != gBattlerPartyIndexes[battlerIn1] && i != gBattlerPartyIndexes[battlerIn2])
+                break;
+        }
+
+        ret = (i != PARTY_SIZE);
+    }
+    return ret;
 }
 
 static void atk4F_jumpifcantswitch(void)

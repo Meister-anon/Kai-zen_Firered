@@ -28,6 +28,13 @@
 #define TRAINER_LINK_OPPONENT       0x800
 //#define SECRET_BASE_OPPONENT        0x400
 
+// Used to exclude moves learned temporarily by Transform or Mimic
+#define MOVE_IS_PERMANENT(battler, moveSlot)                        \
+   (!(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)           \
+ && !(gDisableStructs[battler].mimickedMoves & gBitTable[moveSlot]))
+
+// Battle Actions
+// These determine what each battler will do in a turn
 #define B_ACTION_USE_MOVE                  0
 #define B_ACTION_USE_ITEM                  1
 #define B_ACTION_SWITCH                    2
@@ -279,9 +286,10 @@ struct SpecialStatus
     u8 berryReduced : 1;
     u8 rototillerAffected : 1;  // to be affected by rototiller
     u8 instructedChosenTarget : 3;
+    u8 switchInItemDone:1;
     u8 gemBoost : 1;
     u8 gemParam;
-    u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute.
+    u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute. //NOW THAT have added can prob use to update catchexp function/macro?
     u8 dancerUsedMove : 1;
     u8 dancerOriginalTarget : 3;
     u8 announceNeutralizingGas : 1;   // See Cmd_switchineffects

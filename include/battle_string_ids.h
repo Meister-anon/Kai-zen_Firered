@@ -55,6 +55,10 @@
 #define B_MSG_MENTALHERBCURE_HEALBLOCK         4
 #define B_MSG_MENTALHERBCURE_DISABLE           5
 
+// gBerryEffectStringIds
+#define B_MSG_CURED_PROBLEM     0
+#define B_MSG_NORMALIZED_STATUS 1
+
 // gTerrainPreventsStringIds
 #define B_MSG_TERRAINPREVENTS_MISTY     0
 #define B_MSG_TERRAINPREVENTS_ELECTRIC  1

@@ -4042,6 +4042,35 @@ bool32 HasEnoughHpToEatBerry(u8 battlerId, u32 hpFraction, u16 itemId)
     return FALSE;
 }
 
+static u8 ItemHealHp(u32 battlerId, u32 itemId, bool32 end2, bool32 percentHeal)
+{
+    if (HasEnoughHpToEatBerry(battlerId, 2, itemId)
+      && !(gBattleScripting.overrideBerryRequirements && gBattleMons[battlerId].hp == gBattleMons[battlerId].maxHP))
+    {
+        if (percentHeal)
+            gBattleMoveDamage = (gBattleMons[battlerId].maxHP * GetBattlerHoldEffectParam(battlerId) / 100) * -1;
+        else
+            gBattleMoveDamage = GetBattlerHoldEffectParam(battlerId) * -1;
+
+        // check ripen
+        if (ItemId_GetPocket(itemId) == POCKET_BERRY_POUCH && GetBattlerAbility(battlerId) == ABILITY_RIPEN)
+            gBattleMoveDamage *= 2;
+
+        gBattlerAbility = battlerId;    // in SWSH, berry juice shows ability pop up but has no effect. This is mimicked here
+        if (end2)
+        {
+            BattleScriptExecute(BattleScript_ItemHealHP_RemoveItem);
+        }
+        else
+        {
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_ItemHealHP_RemoveItemRet;
+        }
+        return ITEM_HP_CHANGE;
+    }
+    return 0;
+}
+
 static u8 HealConfuseBerry(u8 battlerId, u16 itemId, u8 flavorId, bool32 end2)
 {
     if (HasEnoughHpToEatBerry(battlerId, 2, itemId))
@@ -4926,10 +4955,13 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
             switch (battlerHoldEffect)
             {
             case HOLD_EFFECT_DOUBLE_PRIZE:
-                if (GetBattlerSide(battlerId) == B_SIDE_PLAYER && !gBattleStruct->moneyMultiplierItem)
+                if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)// && !gBattleStruct->moneyMultiplierItem)
                 {
-                    gBattleStruct->moneyMultiplier *= 2;
-                    gBattleStruct->moneyMultiplierItem = 1;
+                    gBattleStruct->moneyMultiplier = 2;
+                    /*gBattleStruct->moneyMultiplier *= 2;
+                    gBattleStruct->moneyMultiplierItem = 1;*/
+
+                    //don't know what moneymultiplier item is, don't see where its used.. returned to default
                 }
                 break;
             case HOLD_EFFECT_RESTORE_STATS:
@@ -4950,47 +4982,47 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 }
                 break;
             case HOLD_EFFECT_CONFUSE_SPICY:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SPICY, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_DRY:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_DRY, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_SWEET:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SWEET, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_BITTER:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_BITTER, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_SOUR:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SOUR, TRUE);
                 break;
             case HOLD_EFFECT_ATTACK_UP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = StatRaiseBerry(battlerId, gLastUsedItem, STAT_ATK, TRUE);
                 break;
             case HOLD_EFFECT_DEFENSE_UP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = StatRaiseBerry(battlerId, gLastUsedItem, STAT_DEF, TRUE);
                 break;
             case HOLD_EFFECT_SPEED_UP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = StatRaiseBerry(battlerId, gLastUsedItem, STAT_SPEED, TRUE);
                 break;
             case HOLD_EFFECT_SP_ATTACK_UP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = StatRaiseBerry(battlerId, gLastUsedItem, STAT_SPATK, TRUE);
                 break;
             case HOLD_EFFECT_SP_DEFENSE_UP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = StatRaiseBerry(battlerId, gLastUsedItem, STAT_SPDEF, TRUE);
                 break;
             case HOLD_EFFECT_CRITICAL_UP:
-                if (B_BERRIES_INSTANT >= GEN_4 && !(gBattleMons[battlerId].status2 & STATUS2_FOCUS_ENERGY) && HasEnoughHpToEatBerry(battlerId, GetBattlerHoldEffectParam(battlerId), gLastUsedItem))
+                if (!(gBattleMons[battlerId].status2 & STATUS2_FOCUS_ENERGY) && HasEnoughHpToEatBerry(battlerId, GetBattlerHoldEffectParam(battlerId), gLastUsedItem))
                 {
                     gBattleMons[battlerId].status2 |= STATUS2_FOCUS_ENERGY;
                     BattleScriptExecute(BattleScript_BerryFocusEnergyEnd2);
@@ -4998,11 +5030,11 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 }
                 break;
             case HOLD_EFFECT_RANDOM_STAT_UP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)   //adds gen 4 berry activation i.e b
                     effect = RandomStatRaiseBerry(battlerId, gLastUsedItem, TRUE);
                 break;
             case HOLD_EFFECT_CURE_PAR:
-                if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_PARALYSIS && !UnnerveOn(battlerId, gLastUsedItem))
+                if(gBattleMons[battlerId].status1 & STATUS1_PARALYSIS && !UnnerveOn(battlerId, gLastUsedItem))
                 {
                     gBattleMons[battlerId].status1 &= ~STATUS1_PARALYSIS;
                     BattleScriptExecute(BattleScript_BerryCurePrlzEnd2);
@@ -5010,7 +5042,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 }
                 break;
             case HOLD_EFFECT_CURE_PSN:
-                if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_PSN_ANY && !UnnerveOn(battlerId, gLastUsedItem))
+                if(gBattleMons[battlerId].status1 & STATUS1_PSN_ANY && !UnnerveOn(battlerId, gLastUsedItem))
                 {
                     gBattleMons[battlerId].status1 &= ~(STATUS1_PSN_ANY | STATUS1_TOXIC_COUNTER);
                     BattleScriptExecute(BattleScript_BerryCurePsnEnd2);
@@ -5018,7 +5050,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 }
                 break;
             case HOLD_EFFECT_CURE_BRN:
-                if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_BURN && !UnnerveOn(battlerId, gLastUsedItem))
+                if(gBattleMons[battlerId].status1 & STATUS1_BURN && !UnnerveOn(battlerId, gLastUsedItem))
                 {
                     gBattleMons[battlerId].status1 &= ~STATUS1_BURN;
                     BattleScriptExecute(BattleScript_BerryCureBrnEnd2);
@@ -5026,7 +5058,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 }
                 break;
             case HOLD_EFFECT_CURE_FRZ:
-                if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_FREEZE && !UnnerveOn(battlerId, gLastUsedItem))
+                if(gBattleMons[battlerId].status1 & STATUS1_FREEZE && !UnnerveOn(battlerId, gLastUsedItem))
                 {
                     gBattleMons[battlerId].status1 &= ~STATUS1_FREEZE;
                     BattleScriptExecute(BattleScript_BerryCureFrzEnd2);
@@ -5034,7 +5066,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 }
                 break;
             case HOLD_EFFECT_CURE_SLP:
-                if (B_BERRIES_INSTANT >= GEN_4 && gBattleMons[battlerId].status1 & STATUS1_SLEEP && !UnnerveOn(battlerId, gLastUsedItem))
+                if(gBattleMons[battlerId].status1 & STATUS1_SLEEP && !UnnerveOn(battlerId, gLastUsedItem))
                 {
                     gBattleMons[battlerId].status1 &= ~STATUS1_SLEEP;
                     gBattleMons[battlerId].status2 &= ~STATUS2_NIGHTMARE;
@@ -5043,7 +5075,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 }
                 break;
             case HOLD_EFFECT_CURE_STATUS:
-                if (B_BERRIES_INSTANT >= GEN_4 && (gBattleMons[battlerId].status1 & STATUS1_ANY || gBattleMons[battlerId].status2 & STATUS2_CONFUSION) && !UnnerveOn(battlerId, gLastUsedItem))
+                if((gBattleMons[battlerId].status1 & STATUS1_ANY || gBattleMons[battlerId].status2 & STATUS2_CONFUSION) && !UnnerveOn(battlerId, gLastUsedItem))
                 {
                     i = 0;
                     if (gBattleMons[battlerId].status1 & STATUS1_PSN_ANY)
@@ -5088,11 +5120,11 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 }
                 break;
             case HOLD_EFFECT_RESTORE_HP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE);
                 break;
             case HOLD_EFFECT_RESTORE_PCT_HP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, TRUE);
                 break;
             case HOLD_EFFECT_AIR_BALLOON:
@@ -5461,51 +5493,51 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                     effect = ItemHealHp(battlerId, gLastUsedItem, FALSE, FALSE);
                 break;
             case HOLD_EFFECT_RESTORE_PCT_HP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = ItemHealHp(battlerId, gLastUsedItem, FALSE, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_SPICY:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SPICY, FALSE);
                 break;
             case HOLD_EFFECT_CONFUSE_DRY:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_DRY, FALSE);
                 break;
             case HOLD_EFFECT_CONFUSE_SWEET:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SWEET, FALSE);
                 break;
             case HOLD_EFFECT_CONFUSE_BITTER:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_BITTER, FALSE);
                 break;
             case HOLD_EFFECT_CONFUSE_SOUR:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)   //check how these work, I don't want it stopping multi hit moves etc.
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SOUR, FALSE);
                 break;
             case HOLD_EFFECT_ATTACK_UP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = StatRaiseBerry(battlerId, gLastUsedItem, STAT_ATK, FALSE);
                 break;
             case HOLD_EFFECT_DEFENSE_UP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = StatRaiseBerry(battlerId, gLastUsedItem, STAT_DEF, FALSE);
                 break;
             case HOLD_EFFECT_SPEED_UP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = StatRaiseBerry(battlerId, gLastUsedItem, STAT_SPEED, FALSE);
                 break;
             case HOLD_EFFECT_SP_ATTACK_UP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = StatRaiseBerry(battlerId, gLastUsedItem, STAT_SPATK, FALSE);
                 break;
             case HOLD_EFFECT_SP_DEFENSE_UP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = StatRaiseBerry(battlerId, gLastUsedItem, STAT_SPDEF, FALSE);
                 break;
             case HOLD_EFFECT_RANDOM_STAT_UP:
-                if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4)
                     effect = RandomStatRaiseBerry(battlerId, gLastUsedItem, FALSE);
                 break;
             case HOLD_EFFECT_CURE_PAR:
@@ -6665,6 +6697,13 @@ bool32 CanFling(u8 battlerId)
         return FALSE;
 
     return TRUE;
+}
+
+static bool32 UnnerveOn(u32 battlerId, u32 itemId)
+{
+    if (ItemId_GetPocket(itemId) == POCKET_BERRY_POUCH && IsUnnerveAbilityOnOpposingSide(battlerId))
+        return TRUE;
+    return FALSE;
 }
 
 // ability checks
