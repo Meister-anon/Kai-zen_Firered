@@ -3399,56 +3399,65 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         case ABILITYEFFECT_ABSORBING: // 3
             if (moveArg)
             {
+                u8 statId;
                 switch (gLastUsedAbility)
                 {
                 case ABILITY_VOLT_ABSORB:
-                    if (moveType == TYPE_ELECTRIC && gBattleMoves[moveArg].power != 0)
-                    {
-                        if (gProtectStructs[gBattlerAttacker].notFirstStrike)
-                            gBattlescriptCurrInstr = BattleScript_MoveHPDrain;
-                        else
-                            gBattlescriptCurrInstr = BattleScript_MoveHPDrain_PPLoss;
+                    if (moveType == TYPE_ELECTRIC)
                         effect = 1;
-                    }
                     break;
                 case ABILITY_WATER_ABSORB:
-                    if (moveType == TYPE_WATER && gBattleMoves[moveArg].power != 0)
-                    {
-                        if (gProtectStructs[gBattlerAttacker].notFirstStrike)
-                            gBattlescriptCurrInstr = BattleScript_MoveHPDrain;
-                        else
-                            gBattlescriptCurrInstr = BattleScript_MoveHPDrain_PPLoss;
+                case ABILITY_DRY_SKIN:
+                    if (moveType == TYPE_WATER)
                         effect = 1;
-                    }
+                    break;
+                case ABILITY_MOTOR_DRIVE:
+                    if (moveType == TYPE_ELECTRIC)
+                        effect = 2, statId = STAT_SPEED;
+                    break;
+                case ABILITY_LIGHTNING_ROD:
+                    if (moveType == TYPE_ELECTRIC)
+                        effect = 2, statId = STAT_SPATK;
+                    break;
+                case ABILITY_STORM_DRAIN:
+                    if (moveType == TYPE_WATER)
+                        effect = 2, statId = STAT_SPATK;
+                    break;
+                case ABILITY_SAP_SIPPER:
+                    if (moveType == TYPE_GRASS)
+                        effect = 2, statId = STAT_ATK;
                     break;
                 case ABILITY_FLASH_FIRE:
-                    if (moveType == TYPE_FIRE && !(gBattleMons[battler].status1 & STATUS1_FREEZE))
+                    if (moveType == TYPE_FIRE && !((gBattleMons[battler].status1 & STATUS1_FREEZE)))// && B_FLASH_FIRE_FROZEN <= GEN_4))
                     {
                         if (!(gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
                         {
-                            gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_FLASH_FIRE_BOOST;
                             if (gProtectStructs[gBattlerAttacker].notFirstStrike)
                                 gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
                             else
                                 gBattlescriptCurrInstr = BattleScript_FlashFireBoost_PPLoss;
+
                             gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_FLASH_FIRE;
-                            effect = 2;
+                            effect = 3;
                         }
                         else
                         {
-                            gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_FLASH_FIRE_NO_BOOST;
                             if (gProtectStructs[gBattlerAttacker].notFirstStrike)
                                 gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
                             else
                                 gBattlescriptCurrInstr = BattleScript_FlashFireBoost_PPLoss;
-                            effect = 2;
+
+                            effect = 3;
                         }
                     }
-                    break;//checked and its standard still not sure what it refers too
+                    break;
                 }
-                if (effect == 1) //wait what is this??  check clean repo to compare
+
+                if (effect == 1) // Drain Hp ability.
                 {
-                    if (gBattleMons[battler].maxHP == gBattleMons[battler].hp)
+                    if (BATTLER_MAX_HP(battler) || gStatuses3[battler] & STATUS3_HEAL_BLOCK)
                     {
                         if ((gProtectStructs[gBattlerAttacker].notFirstStrike))
                             gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
@@ -3457,14 +3466,40 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                     else
                     {
+                        if (gProtectStructs[gBattlerAttacker].notFirstStrike)
+                            gBattlescriptCurrInstr = BattleScript_MoveHPDrain;
+                        else
+                            gBattlescriptCurrInstr = BattleScript_MoveHPDrain_PPLoss;
+
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 4;
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
                         gBattleMoveDamage *= -1;
                     }
                 }
+                else if (effect == 2) // Boost Stat ability;
+                {
+                    if (!CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN))
+                    {
+                        if ((gProtectStructs[gBattlerAttacker].notFirstStrike))
+                            gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
+                        else
+                            gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
+                    }
+                    else
+                    {
+                        if (gProtectStructs[gBattlerAttacker].notFirstStrike)
+                            gBattlescriptCurrInstr = BattleScript_MoveStatDrain;
+                        else
+                            gBattlescriptCurrInstr = BattleScript_MoveStatDrain_PPLoss;
+
+                        SET_STATCHANGER(statId, 1, FALSE);
+                        gBattleMons[battler].statStages[statId]++;
+                        PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
+                    }
+                }
             }
-            break;
+            break;// updated ability battle effects for drain abilities 
         case ABILITYEFFECT_MOVE_END: // Think contact abilities.
             switch (gLastUsedAbility)
             {
@@ -5943,9 +5978,25 @@ u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who ge
              && AbilityBattleEffects(ABILITYEFFECT_COUNT_OTHER_SIDE, gBattlerAttacker, ABILITY_LIGHTNING_ROD, 0, 0)
              && gBattleMons[targetBattler].ability != ABILITY_LIGHTNING_ROD)
             {
+                targetBattler ^= BIT_FLANK; //sets target
+                RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                //gSpecialStatuses[targetBattler].lightningRodRedirected = 1; //state to be used by attack canceler, takes ewram
+            }// can potentially remove this just zero out move damage in pokemon.c calcbasedamage save ewram    //done but need test
+            else if (gBattleMoves[move].type == TYPE_WATER
+                && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_STORM_DRAIN)   //still need to try add healing hp effect to drain move animation
+                && GetBattlerAbility(targetBattler) != ABILITY_STORM_DRAIN)
+            {
                 targetBattler ^= BIT_FLANK;
                 RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
-                gSpecialStatuses[targetBattler].lightningRodRedirected = 1;
+                //gSpecialStatuses[targetBattler].stormDrainRedirected = TRUE;
+            }
+            else if (gBattleMoves[move].type == TYPE_FIRE
+                && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_FLASH_FIRE)
+                && GetBattlerAbility(targetBattler) != ABILITY_FLASH_FIRE)
+            {
+                targetBattler ^= BIT_FLANK;
+                RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                //gSpecialStatuses[targetBattler].FlashFireRedirected = TRUE;
             }
         }
         break;

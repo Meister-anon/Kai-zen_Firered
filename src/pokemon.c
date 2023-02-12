@@ -3376,6 +3376,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (type == TYPE_BUG && attacker->ability == ABILITY_SWARM)// && attacker->hp < (attacker->maxHP / 3))
             gBattleMovePower = (150 * gBattleMovePower) / 100;
         //changing in a pinch to below 50%, rather than 30%, so should be soon as hp gets to yellow
+        //may make more in a pinch abilities for more types idea for electric overcharge
+        if (type == TYPE_ELECTRIC && attacker->ability == ABILITY_OVERCHARGE)
+            gBattleMovePower = (150 * gBattleMovePower) / 100;
     }
     /*if (type == TYPE_GRASS && attacker->ability == ABILITY_OVERGROW && attacker->hp < (attacker->maxHP / 3))
         gBattleMovePower = (150 * gBattleMovePower) / 100;
@@ -3573,8 +3576,20 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     // target's abilities
     //ability = GetBattlerAbility(gBattlerTarget);
-    switch (GetBattlerAbility(gBattlerTarget))
-    {
+    switch (GetBattlerAbility(gBattlerTarget))  //readjusted order of abilities to be numeric order in case I need switch case to flow low to high
+    {                          //after examining switches from emerald repo, appears value order of the switch case doesn't matter, can go anywhere
+    case ABILITY_FLASH_FIRE:
+        if (type == TYPE_FIRE)  //need to make sure these for hidden power type change, so dynamic type rather than just normal move power?
+            gBattleMoveDamage = 0;
+        break;
+    case ABILITY_LIGHTNING_ROD:
+        if (type == TYPE_ELECTRIC)  //should work type is move type or type override which I think accounts for things that change movetype
+            gBattleMoveDamage = 0;
+        break;
+    case ABILITY_THICK_FAT:
+        if (type == (TYPE_FIRE || TYPE_ICE))
+            gBattleMoveDamage /= 2;
+        break;
     case ABILITY_HEATPROOF:
     case ABILITY_WATER_BUBBLE:
         if (type == TYPE_FIRE)
@@ -3590,6 +3605,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMoveDamage = gBattleMoveDamage * 125 / 100;
             //MulModifier(&modifier, UQ_4_12(1.25));
         break;
+    case ABILITY_STORM_DRAIN:
+        if (type == TYPE_WATER)
+            gBattleMoveDamage = 0;
+        break;
     case ABILITY_FLUFFY:
         if (IsMoveMakingContact(move, gBattlerAttacker))
         {
@@ -3602,10 +3621,6 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMoveDamage *= 2;
             //MulModifier(&modifier, UQ_4_12(2.0));
         break;
-    case ABILITY_THICK_FAT:
-       if (type == (TYPE_FIRE || TYPE_ICE))
-           gBattleMoveDamage /= 2;
-       break;
     case ABILITY_OCEAN_MEMORY:
         if (type == TYPE_WATER)
             gBattleMoveDamage /= 2;

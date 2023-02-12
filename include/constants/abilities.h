@@ -288,6 +288,7 @@
 #define ABILITY_AS_ONE_ICE_RIDER 266
 #define ABILITY_AS_ONE_SHADOW_RIDER 267
 #define ABILITY_AIR_LOCK 268
+//CUSTOM ABILITIES
 #define ABILITY_DISPIRIT_GUARD 269
 #define ABILITY_NUISANCE 270
 #define ABILITY_MULTI_TASK 271
@@ -297,8 +298,8 @@
 #define ABILITY_BATTLE_MATRON 275
 #define ABILITY_LIQUID_SOUL 276
 #define ABILITY_OCEAN_MEMORY 277
-
-#define ABILITIES_COUNT 278 //note make perish body, only affect target, possibly 
+#define ABILITY_OVERCHARGE 278
+#define ABILITIES_COUNT 279 //note make perish body, only affect target, possibly 
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 

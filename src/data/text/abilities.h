@@ -264,6 +264,7 @@ static const u8 sCupidsArrowDescription[] = _("Infatuates a target when enters."
 static const u8 sBattleMatronDescription[] = _("Powers up moves to protect young PKMN.");
 static const u8 sOceanMemoryDescription[] = _("Reduces Damage from Water-type moves.");
 static const u8 sLiquidSoulDescription[] = _("Transforms Water-type moves into Ghost-type.");  //swapped back
+static const u8 sOverchargedescription[] = _("When in a pinch the PKMN charges up to the max!");
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
 {
@@ -545,6 +546,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_BATTLE_MATRON] = sBattleMatronDescription,
     [ABILITY_LIQUID_SOUL] = sLiquidSoulDescription,
     [ABILITY_OCEAN_MEMORY] = sOceanMemoryDescription,
+    [ABILITY_OVERCHARGE] = sOverchargeDescription,
 };
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
@@ -827,4 +829,5 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_BATTLE_MATRON] =_("Battle Matron"),
     [ABILITY_LIQUID_SOUL] =_("Liquid Soul"),
     [ABILITY_OCEAN_MEMORY] =_("Ocean Memory"),
+    [ABILITY_OVERCHARGE] =_("Overcharge")
 };

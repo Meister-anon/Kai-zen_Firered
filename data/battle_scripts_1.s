@@ -7114,6 +7114,7 @@ BattleScript_BadDreamsEnd:
 BattleScript_TookAttack::
 	attackstring
 	pause 0x20
+BattleScript_TookAttackFromString:
 	printstring STRINGID_PKMNSXTOOKATTACK
 	waitmessage 0x40
 	orword gHitMarker, HITMARKER_ATTACKSTRING_PRINTED

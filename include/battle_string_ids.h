@@ -10,6 +10,10 @@
 #define STRINGID_USEDMOVE   4
 #define STRINGID_BATTLEEND  5
 
+// gFlashFireStringIds
+#define B_MSG_FLASH_FIRE_BOOST    0
+#define B_MSG_FLASH_FIRE_NO_BOOST 1
+
 // gStatUpStringIds
 #define B_MSG_ATTACKER_STAT_ROSE 0
 #define B_MSG_DEFENDER_STAT_ROSE 1

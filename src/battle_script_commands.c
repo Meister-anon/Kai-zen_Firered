@@ -1260,15 +1260,15 @@ static void atk00_attackcanceler(void)
             return;
         }
     }
-    if (gSpecialStatuses[gBattlerTarget].lightningRodRedirected)
-    {
+    /*if (gSpecialStatuses[gBattlerTarget].lightningRodRedirected)    //THE special status are so these can go here and cancel the move animatoin
+    {   //I may change that save me some ewram and let the animation play, but change it so the target gets a heal animation play and then the stat boost & text
         gSpecialStatuses[gBattlerTarget].lightningRodRedirected = FALSE;
         gLastUsedAbility = ABILITY_LIGHTNING_ROD;
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_TookAttack;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
-    }
-    else if (DEFENDER_IS_PROTECTED
+    }*/ //should be fine to remove this now, 
+    if (DEFENDER_IS_PROTECTED
           && (gCurrentMove != MOVE_CURSE || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST))
           && ((!IsTwoTurnsMove(gCurrentMove) || (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))))
     {
@@ -11576,7 +11576,8 @@ static void atkC3_trysetfutureattack(void)
             gBattleCommunication[MULTISTRING_CHOOSER] = 0;
         gBattlescriptCurrInstr += 5;
     }
-}//made add a way to do a second future sight before timer is up for a bit of strategy
+    //vsonic IMPORTANT
+}//may add a way to do a second future sight before timer is up for a bit of strategy
 //should be simple as adding a 2nd futureSightCounter, with same effects
 //but make it default to counter2 if the first counter isn't 0.
 //then add the anti spam thing to the counter 2, so if both counters are being used
