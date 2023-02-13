@@ -322,9 +322,9 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_METAPOD] =
     {
-        .baseHP = 50,
+        .baseHP = 85,
         .baseAttack = 20,
-        .baseDefense = 55,
+        .baseDefense = 65,
         .baseSpeed = 30,
         .baseSpAttack = 25,
         .baseSpDefense = 25,
@@ -343,6 +343,7 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },//Lunos explained hidden ability is saved even if mid evo doesn't have  a hidden ability final evo will go back to hidden ability slot
+  //ok augment hp for late game effectiveness hopefully balanced by you encountering them at such low level bc the hp formula isn't fully effective
 
     [SPECIES_BUTTERFREE] =
     {
@@ -401,7 +402,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_KAKUNA] =
     {
-        .baseHP = 45,
+        .baseHP = 75,
         .baseAttack = 25,
         .baseDefense = 50,
         .baseSpeed = 35,
@@ -1238,7 +1239,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_GRASS,
         .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
-        .abilityHidden = {ABILITY_RUN_AWAY, ABILITY_NONE},
+        .abilityHidden = {ABILITY_RUN_AWAY, ABILITY_PRANKSTER},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -1266,7 +1267,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_GRASS,
         .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
-        .abilityHidden = {ABILITY_STENCH, ABILITY_NONE},
+        .abilityHidden = {ABILITY_STENCH, ABILITY_AFTERMATH},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -1294,7 +1295,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_GRASS,
         .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
-        .abilityHidden = {ABILITY_EFFECT_SPORE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_EFFECT_SPORE, ABILITY_EFFECT_SPORE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -1985,6 +1986,8 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },//pokemon like this w big evo change have signinficant stat dif so previous evo may be better in some ways do 4 others i find like this
+    //remember make 2nd pass at stats to leave room for high ev cap, but still be buffed, leave legends & psuedo where they are 
+    //can lower others as needed.
 
     [SPECIES_WEEPINBELL] =
     {
@@ -5120,7 +5123,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_GRASS,
         .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_HEALER, ABILITY_NONE},
+            .abilityHidden = {ABILITY_PHOTOSYNTHESIZE, ABILITY_HEALER},
         #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -5254,7 +5257,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_GRASS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_LEAF_GUARD},
-            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_LEAF_GUARD},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
         #endif
@@ -5264,12 +5267,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_SKIPLOOM] =
     {
-        .baseHP = 55,
+        .baseHP = 60,
         .baseAttack = 45,
-        .baseDefense = 50,
-        .baseSpeed = 94,
+        .baseDefense = 55,
+        .baseSpeed = 84,
         .baseSpAttack = 45,
-        .baseSpDefense = 65,
+        .baseSpDefense = 70,
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FLYING,
         .catchRate = 120,
@@ -5283,7 +5286,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_GRASS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_LEAF_GUARD},
-            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_FLUFFY},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
         #endif
@@ -5296,8 +5299,8 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 75,
         .baseAttack = 55,
         .baseDefense = 70,
-        .baseSpeed = 110,
-        .baseSpAttack = 55,
+        .baseSpeed = 118,
+        .baseSpAttack = 65,
         .baseSpDefense = 95,
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FLYING,
@@ -5312,7 +5315,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_GRASS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_LEAF_GUARD},
-            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_FLUFFY},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
         #endif
@@ -5400,7 +5403,7 @@ const struct BaseStats gBaseStats[] =
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
         #endif
-        .abilityHidden = {ABILITY_EARLY_BIRD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_PHOTOSYNTHESIZE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -9453,17 +9456,18 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_MINERAL,
         .eggGroup2 = EGG_GROUP_MINERAL,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilities = {ABILITY_SOLAR_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_SOLID_ROCK, ABILITY_PHOTOSYNTHESIZE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
 
     [SPECIES_SOLROCK] =
     {
-        .baseAttack = 105,
+        .baseAttack = 95,
         .baseDefense = 85,
         .baseSpeed = 70,
-        .baseSpAttack = 65,
+        .baseSpAttack = 85,
         .baseSpDefense = 65,
         .baseHP = 90,
         .type1 = TYPE_ROCK,
@@ -9479,7 +9483,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_MINERAL,
         .eggGroup2 = EGG_GROUP_MINERAL,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilities = {ABILITY_SOLAR_POWER, ABILITY_FLASH_FIRE},
+        .abilityHidden = {ABILITY_SOLID_ROCK, ABILITY_PHOTOSYNTHESIZE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -10249,7 +10254,7 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP = 35,
         .baseAttack = 64,
-        .baseDefense = 85,
+        .baseDefense = 125,
         .baseSpeed = 32,
         .baseSpAttack = 74,
         .baseSpDefense = 55,
@@ -10272,14 +10277,15 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-    },
+    },  //nother update for mon with very different evo form, so they serve a different purpose/ i.e are self-sufficient in base form 
+    //but then can evolve to suit a different purpose/niche
 
     [SPECIES_HUNTAIL] =
     {
         .baseHP = 55,
         .baseAttack = 104,
-        .baseDefense = 105,
-        .baseSpeed = 52,
+        .baseDefense = 95,
+        .baseSpeed = 72,
         .baseSpAttack = 94,
         .baseSpDefense = 75,
         .type1 = TYPE_WATER,
@@ -10305,10 +10311,10 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP = 55,
         .baseAttack = 84,
-        .baseDefense = 105,
-        .baseSpeed = 52,
+        .baseDefense = 75,
+        .baseSpeed = 72,
         .baseSpAttack = 114,
-        .baseSpDefense = 75,
+        .baseSpDefense = 95,
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 60,

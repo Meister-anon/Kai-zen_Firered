@@ -264,7 +264,8 @@ static const u8 sCupidsArrowDescription[] = _("Infatuates a target when enters."
 static const u8 sBattleMatronDescription[] = _("Powers up moves to protect young PKMN.");
 static const u8 sOceanMemoryDescription[] = _("Reduces Damage from Water-type moves.");
 static const u8 sLiquidSoulDescription[] = _("Transforms Water-type moves into Ghost-type.");  //swapped back
-static const u8 sOverchargedescription[] = _("When in a pinch the PKMN charges up to the max!");
+static const u8 sOverchargeDescription[] = _("When in a pinch the PKMN charges up to the max!");
+static const u8 sPhotosynthesizeDescription[] = _("Slight HP recovery in sun.");
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
 {
@@ -547,7 +548,8 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_LIQUID_SOUL] = sLiquidSoulDescription,
     [ABILITY_OCEAN_MEMORY] = sOceanMemoryDescription,
     [ABILITY_OVERCHARGE] = sOverchargeDescription,
-};
+    [ABILITY_PHOTOSYNTHESIZE] = sPhotosynthesizeDescription,
+};//last value can have comma
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -829,5 +831,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_BATTLE_MATRON] =_("Battle Matron"),
     [ABILITY_LIQUID_SOUL] =_("Liquid Soul"),
     [ABILITY_OCEAN_MEMORY] =_("Ocean Memory"),
-    [ABILITY_OVERCHARGE] =_("Overcharge")
-};
+    [ABILITY_OVERCHARGE] =_("Overcharge"),
+    [ABILITY_PHOTOSYNTHESIZE] =_("Photosynthesize")
+};//no comma for last value

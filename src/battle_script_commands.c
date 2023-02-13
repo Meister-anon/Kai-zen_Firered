@@ -1530,7 +1530,7 @@ static void atk01_accuracycheck(void)
     {
         if (gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS && move == NO_ACC_CALC_CHECK_LOCK_ON && gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker)
             gBattlescriptCurrInstr += 7;
-        else if (gStatuses3[gBattlerTarget] & (STATUS3_ON_AIR | STATUS3_UNDERGROUND | STATUS3_UNDERWATER))
+        else if (gStatuses3[gBattlerTarget] & (STATUS3_SEMI_INVULNERABLE)
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
         else if (!JumpIfMoveAffectedByProtect(0))
             gBattlescriptCurrInstr += 7;
@@ -1600,6 +1600,8 @@ static void atk01_accuracycheck(void)
             calc = (calc * 130) / 100; // 1.3 compound eyes boost
         if (WEATHER_HAS_EFFECT && gBattleMons[gBattlerTarget].ability == ABILITY_SAND_VEIL && gBattleWeather & WEATHER_SANDSTORM_ANY)
             calc = (calc * 80) / 100; // 1.2 sand veil loss
+        if (WEATHER_HAS_EFFECT && gBattleMons[gBattlerTarget].ability == ABILITY_SNOW_CLOAK && gBattleWeather & WEATHER_HAIL_ANY)
+            calc = (calc * 80) / 100; //
         if (gBattleMons[gBattlerAttacker].ability == ABILITY_HUSTLE && IS_MOVE_PHYSICAL(move)) //can put status based evasion/accuracy effects here
             calc = (calc * 80) / 100; // 1.2 hustle loss    since it uses accuract not evasion, I'll add an accuracy boost for different statuses.
         // I'll use calc,  to adjust the move accuracy, but to avoid break, will include check that if moveAcc > 100  would instead moveAcc = 100.
@@ -1609,13 +1611,18 @@ static void atk01_accuracycheck(void)
         if (gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATED_WITH(gBattlerAttacker)) //need to figure out how to lower evasion to go along with these accuracy boosts.
        //     calc = (calc * 160) / 100;
         eva = 3;
-        if (gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION) //thought instead of self attack, make confusion chance to change move target to random
+        if ((gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION) && gBattleMons[gBattlerTarget].ability != ABILITY_TANGLED_FEET) //thought instead of self attack, make confusion chance to change move target to random
          //   calc = (calc * 120) / 100; //that way they're still doing the same move, but they also have chance to hit attack themselves with it .
         eva = 5; // with that there should be as much benefit as danger in being confused, singled moves could hit everyone, etc. random & interesting..
-        else if (gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
+        
+        if ((gBattleMons[gBattlerTarget].ability == ABILITY_TANGLED_FEET) && gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION) 
+            eva = 9;//raises evasion double but evasion calcs different so thats +3 intead of +2
+        //12 stage base is 6 goes up to 12 & down to 0
+
+        if (gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
         //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
         eva = 3;
-        else if (gBattleMons[gBattlerTarget].status4 & ITS_A_TRAP_STATUS4)  //I hpoe this works
+        if (gBattleMons[gBattlerTarget].status4 & ITS_A_TRAP_STATUS4)  //I hpoe this works
         //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
         eva = 3;
         if (gBattleMons[gBattlerTarget].status1 & ITS_A_TRAP_STATUS1)  //I hpoe this works
@@ -10393,17 +10400,15 @@ static void atk96_weatherdamage(void)
     {
         if (gBattleWeather & WEATHER_SANDSTORM_ANY)
         {
-            if (gBattleMons[gBattlerAttacker].type1 != TYPE_ROCK
-             && gBattleMons[gBattlerAttacker].type1 != TYPE_STEEL
-             && gBattleMons[gBattlerAttacker].type1 != TYPE_GROUND
-             && gBattleMons[gBattlerAttacker].type2 != TYPE_ROCK
-             && gBattleMons[gBattlerAttacker].type2 != TYPE_STEEL
-             && gBattleMons[gBattlerAttacker].type2 != TYPE_GROUND
+            if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ROCK)
+             && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL)
+             && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)
              && gBattleMons[gBattlerAttacker].ability != ABILITY_SAND_VEIL
+             && gBattleMons[gBattlerAttacker].ability != ABILITY_SAND_FORCE
              && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERGROUND)
              && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER)
              && (gBattleMons[gBattlerAttacker].ability != ABILITY_FORECAST && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM))
-            {
+            {//doesn't really need the castform logic as it already turns into a type immune to said weather effect also it may be in other battlescript
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                 if (gBattleMoveDamage == 0)
                     gBattleMoveDamage = 1;
@@ -10415,7 +10420,9 @@ static void atk96_weatherdamage(void)
         }
         if (gBattleWeather & WEATHER_HAIL)
         {
-            if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ICE)
+            if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ICE) //add ice weather abilities
+             && gBattleMons[gBattlerAttacker].ability != ABILITY_SNOW_CLOAK
+             && gBattleMons[gBattlerAttacker].ability != ABILITY_ICE_BODY
              && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERGROUND)
              && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER))
             {
@@ -11198,18 +11205,34 @@ static void atkAE_healpartystatus(void)
 
 static void atkAF_cursetarget(void)
 {
-    if (gBattleMons[gBattlerTarget].status2 & STATUS2_CURSED)
+    if (gCurrentMove != MOVE_DRYADS_CURSE)
     {
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        if (gBattleMons[gBattlerTarget].status2 & STATUS2_CURSED)
+        {
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        }
+        else
+        {
+            gBattleMons[gBattlerTarget].status2 |= STATUS2_CURSED;
+            gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
+            if (gBattleMoveDamage == 0)
+                gBattleMoveDamage = 1;
+            gBattlescriptCurrInstr += 5;
+        }
     }
-    else
+    else  //kinda backwards but would work if dryads curse will curse targeet without the attacker health cut
     {
-        gBattleMons[gBattlerTarget].status2 |= STATUS2_CURSED;
-        gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
-        if (gBattleMoveDamage == 0)
-            gBattleMoveDamage = 1;
-        gBattlescriptCurrInstr += 5;
+        if (gBattleMons[gBattlerTarget].status2 & STATUS2_CURSED)
+        {
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        }
+        else
+        {
+            gBattleMons[gBattlerTarget].status2 |= STATUS2_CURSED;
+            gBattlescriptCurrInstr += 5;
+        }
     }
+    
 }
 
 static void atkB0_trysetspikes(void)
@@ -11333,7 +11356,7 @@ static void atkB5_furycuttercalc(void)
             //++gBattlescriptCurrInstr; // if done right power should double and accuracy should drop off by a fourth each hti
         }
     }
-    ++gBattlescriptCurrInstr;
+    ++gBattlescriptCurrInstr;// had to move to accuracy function battlescript was below the accuracy check if done here
 } //don't know if i'm just unlucky but it seeems to be hitting every time, so I'm still unsure
 //if the accuracy reduction on hit is working  ok did test, accuracy reduction or accuracy checks just aren't working at all.
 

@@ -227,7 +227,7 @@
 #define STATUS3_ROOTED_SHIFT (21)
 #define STATUS3_ROOTED_COUNTER (0xF << STATUS3_ROOTED_SHIFT)
 #define STATUS3_ROOTED_TURN(num) ((num) << STATUS3_ROOTED_SHIFT)
-#define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER)
+
 
 #define STATUS3_GASTRO_ACID             (1 << 16)
 #define STATUS3_EMBARGO                 (1 << 17)
@@ -242,6 +242,8 @@
 #define STATUS3_LASER_FOCUS             (1 << 29)
 #define STATUS3_ELECTRIFIED             (1 << 30)
 #define STATUS3_POWER_TRICK             (1 << 31)
+
+#define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER | STATUS3_PHANTOM_FORCE)
 
 #define STATUS4_ELECTRIFIED             (1 << 0)	//need to check how status4 is setup to make sure it runs on same conditions as status2
 #define STATUS4_PLASMA_FISTS            (1 << 1)	//if it works I can move wrap status and wrap counter up here so it all uses status4
@@ -474,8 +476,8 @@
 #define MOVE_EFFECT_INFESTATION			0x50
 #define MOVE_EFFECT_SNAP_TRAP			0x51
 
-#define NUM_MOVE_EFFECTS                82
-#define MOVE_EFFECT_AFFECTS_USER        0x60
+#define NUM_MOVE_EFFECTS                82	//ok think i got this right, battlescript are assigned based on battle_move_effects.h file
+#define MOVE_EFFECT_AFFECTS_USER        0x60//that has to line up with battle_scripts_1.s but don't need move effect unlesss new status made
 #define MOVE_EFFECT_CERTAIN             0x90	//OK THIS SEEMS FINE its just a define doesn't need to be a specific value
 
 // Battle terrain defines for gBattleTerrain.

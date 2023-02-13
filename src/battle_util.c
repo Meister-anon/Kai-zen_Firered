@@ -2442,16 +2442,31 @@ u8 AtkCanceller_UnableToUseMove(void)
                     if (gTakenDmg[gBattlerAttacker])
                     {
                         gCurrentMove = MOVE_BIDE;
-                        *bideDmg = gTakenDmg[gBattlerAttacker] * 2;
-                        gBattlerTarget = gTakenDmgByBattler[gBattlerAttacker];
+                        *bideDmg = gTakenDmg[gBattlerAttacker] * 2; //not sure how it loops rn, but I believe it copies to a separate variable
+                        gBattlerTarget = gTakenDmgByBattler[gBattlerAttacker];  //because taken damage etc. i.e g values get cleared at turn end?
                         if (gAbsentBattlerFlags & gBitTable[gBattlerTarget])
                             gBattlerTarget = GetMoveTarget(MOVE_BIDE, 1);
                         gBattlescriptCurrInstr = BattleScript_BideAttack;
-                    }
-                    else
+                    }   //wanted dryad curse to be normal priority and be able to curse basesd on last turn results
+                    else //so you don't have to sacrifice that turn to use it, but its fine/same result, will just make lowest priority move
                     {
                         gBattlescriptCurrInstr = BattleScript_BideNoEnergyToAttack;
                     }
+                }
+                effect = 1;
+            }//since similar just adding dryads curse logic here
+            if (gCurrentMove == MOVE_DRYADS_CURSE)  //changed from elses if, so both can run together
+            {
+                if (gTakenDmg[gBattlerAttacker])    //if took damage from enemy  (believe that turn)
+                {
+                    
+                    gBattlerTarget = gTakenDmgByBattler[gBattlerAttacker];
+                    if (gAbsentBattlerFlags & gBitTable[gBattlerTarget])
+                        gBattlerTarget = GetMoveTarget(MOVE_DRYADS_CURSE, 1);
+                }
+                else
+                {
+                    gBattlescriptCurrInstr = BattleScript_ButItFailedAtkStringPpReduce;
                 }
                 effect = 1;
             }
@@ -3057,7 +3072,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattleScripting.battler = battler;
                     ++effect;
                 }
-                break; //C |= 2 is same as C = C | 2
+                break;
+            case ABILITY_SNOW_WARNING:
+                if (!(gBattleWeather & WEATHER_HAIL_PERMANENT))
+                {
+                    gBattleWeather = WEATHER_HAIL_ANY;
+                    BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
+                    gBattleScripting.battler = battler;
+                    ++effect;
+                }
+                break;//C |= 2 is same as C = C | 2
                 // from GriffinR  But yes it's setting a specific status for that battler.
                 // But pokemon can have many of these statuses at once, so you want to set those bits in addition to what's already there
                 //writing gStatuses3[battler] = STATUS3_INTIMIDATE_POKES; would clear all status which isn't what I want
@@ -3248,7 +3272,20 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     {
                         gLastUsedAbility = ABILITY_RAIN_DISH; // why
                         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
-                        gBattleMoveDamage = gBattleMons[battler].maxHP / 16;
+                        gBattleMoveDamage = gBattleMons[battler].maxHP / 12;    //could buff?  did buff wass 16
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                        gBattleMoveDamage *= -1;
+                        ++effect;
+                    }
+                    break;
+                case ABILITY_PHOTOSYNTHESIZE:
+                    if (WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_SUN_ANY)
+                        && gBattleMons[battler].maxHP > gBattleMons[battler].hp)
+                    {
+                        gLastUsedAbility = ABILITY_RAIN_DISH; // why
+                        BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);  //can use same script
+                        gBattleMoveDamage = gBattleMons[battler].maxHP / 12;    //could buff?
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
                         gBattleMoveDamage *= -1;

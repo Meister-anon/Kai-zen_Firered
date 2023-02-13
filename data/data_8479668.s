@@ -778,3 +778,5 @@ gMoveDescriptionPointers:: @ 84886E8
     .4byte gEERIE_SPELLDescription
     .4byte gMoveDescription_Cocoon
     .4byte gMoveDescription_Monotype    
+    .4byte gMoveDescription_FlashFreeze    
+    .4byte gMoveDescription_DryadsCurse    

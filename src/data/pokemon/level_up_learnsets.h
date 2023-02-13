@@ -3903,8 +3903,9 @@ static const u16 sWurmpleLevelUpLearnset[] = {
 static const u16 sSilcoonLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_HARDEN),
     LEVEL_UP_MOVE(7, MOVE_HARDEN),
+    LEVEL_UP_MOVE(7, MOVE_BIDE),
     LEVEL_UP_END
-};
+};//silcoon ironically CAN move lol so can give this bide
 
 static const u16 sBeautiflyLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_ABSORB),
@@ -3922,9 +3923,11 @@ static const u16 sBeautiflyLevelUpLearnset[] = {
 
 static const u16 sCascoonLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_HARDEN),
-    LEVEL_UP_MOVE(7, MOVE_HARDEN),
-    LEVEL_UP_END
-};
+    LEVEL_UP_MOVE(7, MOVE_HARDEN),//WANT TO buff like metapod kakuna but dex entry explicitly states they never move but also never forget who hurt them while cacooned
+    LEVEL_UP_MOVE(7, MOVE_DRYADS_CURSE),
+    LEVEL_UP_END    //so nEW move idea, dryad's curse  effectively ghost curse, but instead of losing hp, its a multi stat drop
+};//i'm thinking offense defense stats all drop one stage to curse the last target to hit it.  look at copy cat logic for targetting. wll be self target
+//actually copy bide, it already works on last enemy to attack  //move will be fore grass bug & fairy
 
 static const u16 sDustoxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_CONFUSION),

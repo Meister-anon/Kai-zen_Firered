@@ -3619,8 +3619,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         }
         if (type == TYPE_FIRE)
             gBattleMoveDamage *= 2;
-            //MulModifier(&modifier, UQ_4_12(2.0));
-        break;
+            //MulModifier(&modifier, UQ_4_12(2.0)); //CHeck if need else if, fire contact moves should be 1
+        break;  //tested in w3 schools, checks out, it reads top to bottom with ifs, not like switch breaks, its all inclusive
+        //...actually following with else if is what makes it non inclusive...i.e not read the else if vsonic IMPORTANT
     case ABILITY_OCEAN_MEMORY:
         if (type == TYPE_WATER)
             gBattleMoveDamage /= 2;
@@ -3743,6 +3744,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
             case TYPE_ICE:
                 damage = (125 * damage) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
+                break;
             }
         }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
     }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing

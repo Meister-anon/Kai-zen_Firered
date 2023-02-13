@@ -1369,11 +1369,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_THUNDER] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_6
-            .power = 110,
-        #else
-            .power = 120,
-        #endif
+        .power = 120,
         .effect = EFFECT_THUNDER,
         .type = TYPE_ELECTRIC,
         .accuracy = 70,
@@ -11588,4 +11584,21 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_STATUS,
     },
-};
+    [MOVE_DRYADS_CURSE] =
+    {
+        #if B_UPDATED_MOVE_DATA >= GEN_5
+            .type = TYPE_GRASS,
+        #else
+            .type = TYPE_MYSTERY,
+        #endif
+        .effect = EFFECT_DRYADS_CURSE,
+        .power = 0,
+        .accuracy = 0,
+        .pp = 10,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .priority = 0,
+        .flags = 0,
+        .split = SPLIT_STATUS,
+    },
+};//give to bug fairy and grass types   def give sudowoodo

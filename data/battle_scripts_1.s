@@ -433,6 +433,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectMagmaStorm
 	.4byte BattleScript_EffectInfestation
 	.4byte BattleScript_EffectSnapTrap
+	.4byte BattleScript_EffectDryadsCurse
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -3847,6 +3848,23 @@ BattleScript_DoGhostCurse::
 	tryfaintmon BS_ATTACKER, 0, NULL
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectDryadsCurse::
+	attackcanceler	@will set correct target like bide, to last attacker to damage user
+	attackstring
+	ppreduce
+	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
+	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
+	cursetarget BattleScript_ButItFailed
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
+	setbyte sB_ANIM_TURN, 0
+	attackanimation
+	waitanimation
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	printstring STRINGID_PKMNLAIDCURSE
+	waitmessage 0x40
+	goto BattleScript_MoveEnd
+
 BattleScript_EffectMatBlock::
 	attackcanceler
 	jumpifnotfirstturn BattleScript_ButItFailedAtkStringPpReduce
@@ -5796,7 +5814,6 @@ BattleScript_LeechSeedTurnPrintAndUpdateHp::
 BattleScript_LeechSeedHealBlock:
 	setword gBattleMoveDamage, 0
 	goto BattleScript_LeechSeedTurnPrintAndUpdateHp
-
 
 BattleScript_BideStoringEnergy::
 	printstring STRINGID_PKMNSTORINGENERGY

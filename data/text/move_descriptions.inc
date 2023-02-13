@@ -2211,3 +2211,6 @@ gMoveDescription_Monotype:
 
 gMoveDescription_FlashFreeze:
 	.string "Instantly freezes\nthe foe with a\ngust of sub-zero wind.$"
+
+gMoveDescription_DryadsCurse:
+	.strong "Sacrifices stats\nto curse the last foe\nwho attacked the user.$"

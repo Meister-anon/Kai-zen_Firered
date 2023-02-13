@@ -74,6 +74,7 @@ extern const u8 BattleScript_LeechSeedTurnDrain[];
 extern const u8 BattleScript_BideStoringEnergy[];
 extern const u8 BattleScript_BideAttack[];
 extern const u8 BattleScript_BideNoEnergyToAttack[];
+extern const u8 BattleScript_ButItFailedAtkStringPpReduce[];
 extern const u8 BattleScript_SuccessForceOut[];
 extern const u8 BattleScript_WeaknessPolicy[];
 extern const u8 BattleScript_TargetItemStatRaise[];
