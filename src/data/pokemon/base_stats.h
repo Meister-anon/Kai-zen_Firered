@@ -13943,7 +13943,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_BLAZE, ABILITY_FLAME_BODY},
-        .abilityHidden = {ABILITY_THICK_FAT, ABILITY_RATTLED},
+        .abilityHidden = {ABILITY_THICK_FAT, ABILITY_GUTS},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },//add ground moves to learnset
@@ -13967,14 +13967,14 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_FLASH_FIRE, ABILITY_SAND_RUSH},
-        .abilityHidden = {ABILITY_THICK_FAT, ABILITY_RATTLED},
+        .abilities = {ABILITY_FLASH_FIRE, ABILITY_RATTLED},
+        .abilityHidden = {ABILITY_THICK_FAT, ABILITY_BLAZE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },//could consider adding blaze back, flash fire lets ti sweep fire types, and is good in double batte
     //but blaze would effectively give it 3 type stab  at low hp. which would be really unique, I could buff the hp threshold for 
     //blaze stuff as well. make it less than 50%, plus it works since below 50 is when hp bar turns yellow
-
+    //note could make fire type u turn for doubles to self proc flash fire...hmm
     [SPECIES_EMBOAR] =
     {
         .baseHP = 121,
@@ -13996,7 +13996,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_FLASH_FIRE, ABILITY_SAND_RUSH},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_THICK_FAT, ABILITY_ADAPTABILITY},
+            .abilityHidden = {ABILITY_THICK_FAT, ABILITY_BLAZE},// want to get triple stab so blaze may get rid of adaptability?
         #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
