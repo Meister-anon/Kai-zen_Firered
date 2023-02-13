@@ -5104,7 +5104,7 @@ static void atk48_playstatchangeanimation(void)
     }
 }
 
-static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend
+static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  //vsonic IMPORTANT
 {
     s32 i;
     bool32 effect = FALSE;
@@ -5230,7 +5230,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend
             break;
         case ATK49_KINGSROCK_SHELLBELL: // king's rock and shell bell
             if (ItemBattleEffects(ITEMEFFECT_KINGSROCK, 0, FALSE))  //with change to item effect to be just kingsrock look into if I need to change mov end
-                effect = TRUE;
+                effect = TRUE;  //yes change this to only kingsrock 
             ++gBattleScripting.atk49_state;
             break;
         case ATK49_ATTACKER_INVISIBLE: // make attacker sprite invisible

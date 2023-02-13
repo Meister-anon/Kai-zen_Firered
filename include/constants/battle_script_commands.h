@@ -279,6 +279,11 @@
 #define ATK49_PROTECT_LIKE_EFFECT				23
 #define ATK49_COUNT								24
 
+// switch cases - PORTED right now not used, adding red card only for now
+#define B_SWITCH_NORMAL     0
+#define B_SWITCH_HIT        1   // dragon tail, circle throw
+#define B_SWITCH_RED_CARD   2
+
 #define BIT_HP                      0x1
 #define BIT_ATK                     0x2
 #define BIT_DEF                     0x4
