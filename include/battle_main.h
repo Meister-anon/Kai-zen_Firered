@@ -26,6 +26,14 @@ struct MultiBattlePokemonTx
 #define TYPE_NAME_LENGTH 8
 #define ABILITY_NAME_LENGTH 14
 
+//I feel so stupid I literally never knew this was here... vsonic IMPORTANT
+//ok so each line in the table is broken up into 3 parts
+// i  should be line start, so i + 1, is the 2nd argument in the line i.e def type
+// and i + 2, I believe would be 3rd argument in the line
+
+//curious about hwo to use these defines to pull effectiveness,
+//and where rest of logic i.e how it knows to make things not in table neutral effectiveness??
+
 // defines for the u8 array gTypeEffectiveness
 #define TYPE_EFFECT_ATK_TYPE(i)((gTypeEffectiveness[i + 0]))
 #define TYPE_EFFECT_DEF_TYPE(i)((gTypeEffectiveness[i + 1]))
@@ -66,7 +74,7 @@ extern const u8 gStatusConditionString_IceJpn[8];
 extern const u8 gStatusConditionString_ConfusionJpn[8];
 extern const u8 gStatusConditionString_LoveJpn[8];
 extern const u8 *const gStatusConditionStringsTable[7][2];
-extern const u8 gTypeEffectiveness[378]; //fairy addition
+extern const u8 gTypeEffectiveness[381]; //fairy addition
 extern const struct TrainerMoney gTrainerMoneyTable[];
 extern const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT];
 extern const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1];

@@ -1853,7 +1853,7 @@ void AI_CalcDmg(u8 attacker, u8 defender)
         && gBattleMoves[attacker].split != SPLIT_STATUS)
         //&& gMultiHitCounter > 0) //setup a function that checks if move is multihit, or multiturn, with bool8 so it returns true or false, then use false here.
     {
-        gBattleMoveDamage = (gBattleMoveDamage / gMultiTask);
+        gBattleMoveDamage = (gBattleMoveDamage / gMultiTask);   //evenly splits damage between number of generated hits
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
     }
@@ -1870,7 +1870,9 @@ void ModulateDmgByType(u8 multiplier)
         gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
         gMoveResultFlags &= ~MOVE_RESULT_NOT_VERY_EFFECTIVE;
         gMoveResultFlags &= ~MOVE_RESULT_SUPER_EFFECTIVE;
-        break;
+        if (GetBattlerHoldEffect(gBattlerTarget, TRUE) == HOLD_EFFECT_RING_TARGET)
+            multiplier = TYPE_MUL_NORMAL;   //not 100 on if it would work but should turn no effect into normal effectiveness
+        break;  //still don't know why ANYONE would want this item unless you're swapping it , but that's a lot of effort and requires foreknowledge
     case TYPE_MUL_NOT_EFFECTIVE:
         if (gBattleMoves[gCurrentMove].power && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
         {
@@ -1896,6 +1898,7 @@ static void atk06_typecalc(void)
 {
     s32 i = 0;
     u8 moveType;
+    u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBaseStats[gBattlerTarget].type3;
 
     if (gCurrentMove == MOVE_STRUGGLE)
     {
@@ -1919,7 +1922,7 @@ static void atk06_typecalc(void)
         gBattleCommunication[6] = moveType;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }*/
-    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND) //need to add to ai, they can't understand this.
+    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND && !(gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING)) //need to add to ai, they can't understand this.
     {
         gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
         gLastLandedMoves[gBattlerTarget] = 0;
@@ -1934,6 +1937,7 @@ static void atk06_typecalc(void)
     }
     else
     {
+
         while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
         {
             if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
@@ -1943,16 +1947,24 @@ static void atk06_typecalc(void)
                 i += 3;
                 continue;
             }
-            else if (TYPE_EFFECT_ATK_TYPE(i) == moveType)
+            else if (TYPE_EFFECT_ATK_TYPE(i) == moveType)   //adjust w different define to update for type addition moves
             {
                 // check type1
-                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1)
+                if (TYPE_EFFECT_DEF_TYPE(i) == type1)
                     ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
                 // check type2
-                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2 &&
-                    gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2)
+                if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
+                    type1 != type2) //emerald update literally just adds a check for type 3
                     ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
-            }
+                //check type3
+                if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
+                    type3 != TYPE_MYSTERY &&
+                    type3 != type2 &&
+                    type3 != type1)
+                    ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));//ok this function is setting the multiplyer here
+                                                                //while calc2 is setting the effectiveness flag
+                //seems modulatedmgbytype  & modbytype2 may be the same as only 2 has a flag argument?
+            }//still need logic for dual type moves
             i += 3;
         }
     }
@@ -1978,16 +1990,27 @@ static void atk06_typecalc(void)
         gBattleCommunication[6] = 3;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
+    if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
+        && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2 && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
+    {
+        gLastUsedAbility = ABILITY_TELEPATHY;
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gLastLandedMoves[gBattlerTarget] = 0;
+        gLastHitByType[gBattlerTarget] = 0;
+        gBattleCommunication[6] = 3;
+        RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
+    }
     if (gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE)
         gProtectStructs[gBattlerAttacker].targetNotAffected = 1;
     ++gBattlescriptCurrInstr;
 }
 
-static void CheckWonderGuardAndLevitate(void)
+static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i need is in grouded function also included wherever this is called
 {
     u8 flags = 0;
     s32 i = 0;
     u8 moveType;
+    u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBaseStats[gBattlerTarget].type3;
 
     if (gCurrentMove == MOVE_STRUGGLE || !gBattleMoves[gCurrentMove].power)
         return;//if move is struggle or fixed damage ignores checks
@@ -2010,7 +2033,7 @@ static void CheckWonderGuardAndLevitate(void)
         }
         if (TYPE_EFFECT_ATK_TYPE(i) == moveType)
         {
-            // check no effect
+            // check no effect  //need add type 3 arguments to this
             if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1
                 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
             {
@@ -2024,19 +2047,37 @@ static void CheckWonderGuardAndLevitate(void)
                 gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
                 gProtectStructs[gBattlerAttacker].targetNotAffected = 1;
             }
+            if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
+                type3 != TYPE_MYSTERY &&
+                type3 != type2 &&
+                type3 != type1)
+            {
+                gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+                gProtectStructs[gBattlerAttacker].targetNotAffected = 1;
+            }
             // check super effective
-            if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1 && TYPE_EFFECT_MULTIPLIER(i) == 20)
+            if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
                 flags |= 1;
             if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2
              && gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2
              && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
                 flags |= 1;
+            if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
+                type3 != TYPE_MYSTERY &&
+                type3 != type2 &&
+                type3 != type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
+                flags |= 1;
             // check not very effective
-            if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1 && TYPE_EFFECT_MULTIPLIER(i) == 5)
+            if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
                 flags |= 2;
             if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2
              && gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2
              && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
+                flags |= 2;
+            if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
+                type3 != TYPE_MYSTERY &&
+                type3 != type2 &&
+                type3 != type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
                 flags |= 2;
         }
         i += 3;
@@ -2058,21 +2099,30 @@ static void CheckWonderGuardAndLevitate(void)
             gBattleCommunication[6] = 3;
             RecordAbilityBattle(gBattlerTarget, ABILITY_DISPIRIT_GUARD);
         }
-    } // the way this reads confuses me, I may just replace with cfru argument instead, but I just reversed whatever was in wonderguard function.
+    } // the way this reads confuses me, I may just replace with cfru argument instead, nvm I just reversed whatever was in wonderguard function.
+    else if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
+        && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2)
+    {
+        gLastUsedAbility = ABILITY_TELEPATHY;
+        gBattleCommunication[6] = 3;
+        RecordAbilityBattle(gBattlerTarget, ABILITY_TELEPATHY);
+    }   //vsonic IMPORTANT
 }
 
 // same as ModulateDmgByType except different arguments
-static void ModulateDmgByType2(u8 multiplier, u16 move, u8 *flags)
+static void ModulateDmgByType2(u8 multiplier, u16 move, u8 *flags)//maybe do dual type here?
 {
     gBattleMoveDamage = gBattleMoveDamage * multiplier / 10;
     if (gBattleMoveDamage == 0 && multiplier != 0)
         gBattleMoveDamage = 1;
-    switch (multiplier)
-    {
+    switch (multiplier) //ok difference is for some reason it uses a flag pointer argument rather than gmoveresultflags?
+    {                   //so the first one sets it, but this one only points to it?
     case TYPE_MUL_NO_EFFECT:
         *flags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
         *flags &= ~MOVE_RESULT_NOT_VERY_EFFECTIVE;
         *flags &= ~MOVE_RESULT_SUPER_EFFECTIVE;
+        if (GetBattlerHoldEffect(gBattlerTarget, TRUE) == HOLD_EFFECT_RING_TARGET)
+            multiplier = TYPE_MUL_NORMAL;   //not 100 on if it would work but should turn no effect into normal effectiveness
         break;
     case TYPE_MUL_NOT_EFFECTIVE:
         if (gBattleMoves[move].power && !(*flags & MOVE_RESULT_NO_EFFECT))
@@ -2100,6 +2150,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
     s32 i = 0;
     u8 flags = 0;
     u8 moveType;
+    u8 type1 = gBaseStats[defender].type1, type2 = gBaseStats[defender].type2, type3 = gBaseStats[defender].type3;
 
     if (move == MOVE_STRUGGLE)
         return 0;
@@ -2113,7 +2164,8 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
 
     //if (gBattleMons[defender].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     if (!IsBattlerGrounded(defender) //set without ! it means if function is TRUE aka non-zero
-        && moveType == TYPE_GROUND) //just realized grounded already has conditions for levitate so I just need that.
+        && moveType == TYPE_GROUND //just realized grounded already has conditions for levitate so I just need that.
+        && !(gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING))
     {
         flags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
     }
@@ -2132,11 +2184,17 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
             else if (TYPE_EFFECT_ATK_TYPE(i) == moveType)
             {
                 // check type1
-                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[defender].type1)
+                if (TYPE_EFFECT_DEF_TYPE(i) == type1)
                     ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
                 // check type2
-                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[defender].type2 &&
-                    gBattleMons[defender].type1 != gBattleMons[defender].type2)
+                if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
+                    type1 != type2)
+                    ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
+                //check type3
+                if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
+                    type3 != TYPE_MYSTERY &&
+                    type3 != type2 &&
+                    type3 != type1)
                     ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
             }
             i += 3;
@@ -2157,21 +2215,27 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
         && gBattleMoves[move].power)
         flags |= MOVE_RESULT_MISSED;
     return flags;
+
+    if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
+        && !(flags & MOVE_RESULT_MISSED)
+        && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2 && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
+        flags |= MOVE_RESULT_MISSED;
+    return flags;
 }
 
 u8 AI_TypeCalc(u16 move, u16 targetSpecies, u8 targetAbility)
 {
     s32 i = 0;
     u8 flags = 0;
-    u8 type1 = gBaseStats[targetSpecies].type1, type2 = gBaseStats[targetSpecies].type2;
+    u8 type1 = gBaseStats[targetSpecies].type1, type2 = gBaseStats[targetSpecies].type2, type3 = gBaseStats[targetSpecies].type3;
     u8 moveType;
 
     if (move == MOVE_STRUGGLE)
         return 0;
-    moveType = gBattleMoves[move].type;
+    moveType = gBattleMoves[move].type; //think don't need to change this since battle_main has function for type change
     //if (targetAbility == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     if (!IsBattlerGrounded(gBattlerTarget) //set without ! it means if function is TRUE aka non-zero
-        && moveType == TYPE_GROUND)
+        && moveType == TYPE_GROUND && !(gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING))
     {
         flags = MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE;
     }
@@ -2192,6 +2256,12 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u8 targetAbility)
                 // check type2
                 if (TYPE_EFFECT_DEF_TYPE(i) == type2 && type1 != type2)
                     ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
+                //check type3
+                if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
+                    type3 != TYPE_MYSTERY &&
+                    type3 != type2 &&
+                    type3 != type1)
+                    ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
             }
             i += 3;
         }
@@ -2205,6 +2275,11 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u8 targetAbility)
     if (targetAbility == ABILITY_DISPIRIT_GUARD
         && (!(flags & MOVE_RESULT_NOT_VERY_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
         && gBattleMoves[move].power)
+        flags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+    return flags;
+
+    if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
+        && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
         flags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
     return flags;
 }
@@ -5398,11 +5473,12 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
         gBattlescriptCurrInstr += 3;
 }
 
-static void atk4A_typecalc2(void)
+static void atk4A_typecalc2(void)   //think can do dual type stuff here? or do I put it in modulate?
 {
     u8 flags = 0;
     s32 i = 0;
     u8 moveType = gBattleMoves[gCurrentMove].type;
+    u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBaseStats[gBattlerTarget].type3;
 
     /*if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
    {
@@ -5412,7 +5488,8 @@ static void atk4A_typecalc2(void)
        gBattleCommunication[6] = moveType;
        RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
    }*/
-    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND)
+    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND
+        && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING))
     {
         gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
         gLastLandedMoves[gBattlerTarget] = 0;
@@ -5426,6 +5503,7 @@ static void atk4A_typecalc2(void)
     }
     else
     {
+
         while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
         {
             if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
@@ -5443,7 +5521,7 @@ static void atk4A_typecalc2(void)
             if (TYPE_EFFECT_ATK_TYPE(i) == moveType)
             {
                 // check type1
-                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1)
+                if (TYPE_EFFECT_DEF_TYPE(i) == type1)
                 {
                     if (TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
                     {
@@ -5452,7 +5530,7 @@ static void atk4A_typecalc2(void)
                     }
                     if (TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
                     {
-                        flags |= MOVE_RESULT_NOT_VERY_EFFECTIVE;
+                        flags |= MOVE_RESULT_NOT_VERY_EFFECTIVE;    //this code is weird why does it use gmoveresultflags and then swap variable?
                     }
                     if (TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
                     {
@@ -5460,27 +5538,48 @@ static void atk4A_typecalc2(void)
                     }
                 }
                 // check type2
-                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2)
+                if (TYPE_EFFECT_DEF_TYPE(i) == type2)
                 {
-                    if (gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2
+                    if (type1 != type2
                      && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
                     {
                         gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
                         break;
                     }
-                    if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2
-                     && gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type2    //weird code, bracket above already sets this
+                     && type1 != type2
                      && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
                     {
                         flags |= MOVE_RESULT_NOT_VERY_EFFECTIVE;
                     }
-                    if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2
-                     && gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type2
+                     && type1 != type2
                      && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
                     {
                         flags |= MOVE_RESULT_SUPER_EFFECTIVE;
                     }
                 }
+                //check type3
+                if (TYPE_EFFECT_DEF_TYPE(i) == type3 && type3 != TYPE_MYSTERY)
+                {
+                    if (type3 != type2 && type3 != type1 && 
+                        TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
+                    {
+                        gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+                        break;
+                    }
+                    if (type3 != type2 && type3 != type1 &&
+                        TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
+                    {
+                        flags |= MOVE_RESULT_NOT_VERY_EFFECTIVE;
+                    }
+                    if (type3 != type2 && type3 != type1 &&
+                        TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
+                    {
+                        flags |= MOVE_RESULT_SUPER_EFFECTIVE;
+                    }
+                }//if it works it works i guess idk
+                    
             }
             i += 3;
         }
@@ -5504,6 +5603,15 @@ static void atk4A_typecalc2(void)
         && gBattleMoves[gCurrentMove].power)
     {
         gLastUsedAbility = ABILITY_DISPIRIT_GUARD;
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gLastLandedMoves[gBattlerTarget] = 0;
+        gBattleCommunication[6] = 3;
+        RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
+    }
+    if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
+        && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2 && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
+    {
+        gLastUsedAbility = ABILITY_TELEPATHY;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gLastLandedMoves[gBattlerTarget] = 0;
         gBattleCommunication[6] = 3;
