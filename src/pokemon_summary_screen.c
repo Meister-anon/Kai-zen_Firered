@@ -181,11 +181,11 @@ struct PokemonSummaryScreenData
         u8 ALIGNED(4) movePowerStrBufs[5][5];
         u8 ALIGNED(4) moveAccuracyStrBufs[5][5];
 
-        u8 ALIGNED(4) expPointsStrBuf[9];
+        //u8 ALIGNED(4) expPointsStrBuf[9];   //planning to remove this, to make room for expanded ability descriptions
         u8 ALIGNED(4) expToNextLevelStrBuf[9];
 
         u8 ALIGNED(4) abilityNameStrBuf[13];
-        u8 ALIGNED(4) abilityDescStrBuf[52];
+        u8 ALIGNED(4) abilityDescStrBuf[104];//doubled descript buff
     } summary;
 
     u8 ALIGNED(4) isEgg; /* 0x3200 */
@@ -278,7 +278,7 @@ struct HpBarObjs
     u16 palTag; /* 0x3e */
 };
 
-struct MonPicBounceState
+struct MonPicBounceState    //want mon pic on known moves page when selecting move to bounce just much slower
 {
     u8 ALIGNED(4) animFrame; /* 0x00 */
     u8 ALIGNED(4) initDelay; /* 0x04 */
@@ -835,10 +835,10 @@ static const struct WindowTemplate sWindowTemplates_Skills[] =
         .tilemapLeft = 20,
         .tilemapTop = 2,
         .width = 10,
-        .height = 14,
+        .height = 13,
         .paletteNum = 6,
         .baseBlock = 0x0001
-    },
+    },//think this is stats down to nxt level data. attempt decrease height for removal of total exp field
     [POKESUM_WIN_SKILLS_4 - 3] = {
         .bg = 0,
         .tilemapLeft = 6,
@@ -847,16 +847,16 @@ static const struct WindowTemplate sWindowTemplates_Skills[] =
         .height = 4,
         .paletteNum = 6,
         .baseBlock = 0x008d
-    },
+    },//assuming is mon pic
     [POKESUM_WIN_SKILLS_5 - 3] = {
         .bg = 0,
         .tilemapLeft = 1,
-        .tilemapTop = 16,
+        .tilemapTop = 15,
         .width = 29,
-        .height = 4,
+        .height = 6,
         .paletteNum = 6,
         .baseBlock = 0x00c5
-    },
+    },//believe is ability data. //attempt increasing height and moving tilemapTop higher up, from removal of total exp field, and expansion of ability desc
     [POKESUM_WIN_SKILLS_6 - 3] = {
         .bg = 0,
         .tilemapLeft = 0,
@@ -865,8 +865,8 @@ static const struct WindowTemplate sWindowTemplates_Skills[] =
         .height = 0,
         .paletteNum = 0,
         .baseBlock = 0x0000
-    },
-};
+    },//not used equivalent of a dummy or buffer of some sort, since nothing here shouldn't need to shift baseblock for expansion of window 5
+};//shifted bg, windows & text data, still need to adjust exp bar y position
 
 //experiement see how this affects windows maybe is what i need
 static const struct WindowTemplate sWindowTemplates_Moves[] = 
@@ -2286,9 +2286,9 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
         sMonSkillsPrinterXpos->speStr = MACRO_8136350_1(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE]);
     }
 
-    exp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_EXP);
-    ConvertIntToDecimalStringN(sMonSummaryScreen->summary.expPointsStrBuf, exp, STR_CONV_MODE_LEFT_ALIGN, 7);
-    sMonSkillsPrinterXpos->expStr = MACRO_8136350_0(sMonSummaryScreen->summary.expPointsStrBuf);
+    exp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_EXP); //this is needed for level function so keep calc but dont write
+    //ConvertIntToDecimalStringN(sMonSummaryScreen->summary.expPointsStrBuf, exp, STR_CONV_MODE_LEFT_ALIGN, 7);
+    //sMonSkillsPrinterXpos->expStr = GetNumberRightAlign63(sMonSummaryScreen->summary.expPointsStrBuf);
 
     level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LEVEL);
     expToNextLevel = 0;
@@ -2568,7 +2568,7 @@ static void PrintInfoPage(void)
     }
 }
 
-static void PrintSkillsPage(void)
+static void PrintSkillsPage(void)//vsonic
 {
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 14 + sMonSkillsPrinterXpos->curHpStr, 4, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.curHpStrBuf);
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->atkStr, 22, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK]);
@@ -2576,9 +2576,9 @@ static void PrintSkillsPage(void)
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->spAStr, 48, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA]);
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->spDStr, 61, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD]);
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->speStr, 74, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE]);
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 15 + sMonSkillsPrinterXpos->expStr, 87, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.expPointsStrBuf);
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 15 + sMonSkillsPrinterXpos->toNextLevel, 100, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.expToNextLevelStrBuf);
-}
+    //AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 15 + sMonSkillsPrinterXpos->expStr, 87, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.expPointsStrBuf);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 15 + sMonSkillsPrinterXpos->toNextLevel, 87, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.expToNextLevelStrBuf);
+}   //ok since this is going on window 3, and I need to move up abilities which are on window 5 think need decrease height of 3 for skills menu
 
 #define GetMoveNamePrinterYpos(x) ((x) * 28 + 5)
 
@@ -2924,12 +2924,13 @@ static void PokeSum_PrintExpPoints_NextLv(void)
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
                                  26, 7,
                                  sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                 gText_PokeSum_ExpPoints);
+                                 gText_PokeSum_NextLv);  //remove this, actally put nextlevl in this place & decrease height to match
+                  
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[4], FONT_NORMAL,
+    /*AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
                                  26, 20,
                                  sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                 gText_PokeSum_NextLv);
+                                 gText_PokeSum_NextLv);*///this just window text need the actual stats too
 }
 
 static void PokeSum_PrintSelectedMoveStats(void)
@@ -2975,7 +2976,7 @@ static void PokeSum_PrintAbilityDataOrMoveTypes(void)
     PutWindowTilemap(sMonSummaryScreen->windowIds[5]);
 }
 
-static void PokeSum_PrintAbilityNameAndDesc(void)
+static void PokeSum_PrintAbilityNameAndDesc(void)   //need to increase height, ability name & description use same window believe 5 in skills template
 {
     FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
@@ -2983,10 +2984,10 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
                                  66, 1, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf);
 
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
-                                 2, 15, sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+                                 2, 12, sLevelNickTextColors[0], TEXT_SKIP_DRAW,
                                  sMonSummaryScreen->summary.abilityDescStrBuf);
 
-}
+}//forgot vsonic to increase the text y value here,  ability name uses 1 so can just adjust window and leave that, but need to adjust desc y value
 
 static void PokeSum_DrawMoveTypeIcons(void)
 {
@@ -4564,7 +4565,7 @@ static void UpdateHpBarObjs(void)
     if (maxHp / 5 >= curHp)
         hpBarPalOffset = 2;
     else if (maxHp / 2 >= curHp)
-        hpBarPalOffset = 1;
+        hpBarPalOffset = 1; //changes color of bar based on health ratio red below 20, yellow below 50
 
     switch (GetHPBarLevel(curHp, maxHp))
     {
