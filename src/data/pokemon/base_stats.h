@@ -18306,6 +18306,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     },//change signature move spike shield to apply field spikes as well as normal effect
     //also re arrange move learn order pain split belly drum possibly ingrain
+    //think what I'll do is split it into 2 effects, it'll scatter spikes when it gets hit
 
     [SPECIES_FENNEKIN] =
     {

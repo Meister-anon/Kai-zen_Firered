@@ -251,7 +251,7 @@ struct ProtectStruct
     u32 specialDmg;
     u8 physicalBattlerId;
     u8 specialBattlerId;
-    u32 spikyShielded : 1;
+    u32 spikyShielded : 1;  //consider renaming spike shield
     u32 kingsShielded : 1;
     u32 banefulBunkered : 1;
     u32 usesBouncedMove : 1;

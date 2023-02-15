@@ -2853,11 +2853,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_PROTECT] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_5
-            .priority = 4,
-        #else
-            .priority = 3,
-        #endif
+        .priority = 4,
         .effect = EFFECT_PROTECT,
         .power = 0,
         .type = TYPE_NORMAL,
@@ -3095,11 +3091,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_DETECT] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_5
-            .priority = 4,
-        #else
-            .priority = 3,
-        #endif
+        .priority = 4,
         .effect = EFFECT_PROTECT,
         .power = 0,
         .type = TYPE_FIGHTING,
@@ -3206,7 +3198,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
 
     [MOVE_ENDURE] =
-    {
+    {   //prefer keeping at priority 3
         #if B_UPDATED_MOVE_DATA >= GEN_5
             .priority = 4,
         #else
@@ -3850,7 +3842,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_EXTREME_SPEED] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_5
-            .priority = 2,
+            .priority = 3,
         #else
             .priority = 1,
         #endif
@@ -6121,11 +6113,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_SUCKER_PUNCH] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_7
-            .power = 70,
-        #else
-            .power = 80,
-        #endif
+
+        .power = 80,
         .effect = EFFECT_SUCKER_PUNCH,
         .type = TYPE_DARK,
         .accuracy = 100,
@@ -9230,13 +9219,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_SPECIAL,
     },
 
-    [MOVE_SPIKY_SHIELD] =
+    [MOVE_SPIKE_SHIELD] =
     {
         .effect = EFFECT_PROTECT,
         .power = 0,
         .type = TYPE_GRASS,
         .accuracy = 0,
-        .pp = 10,
+        .pp = 15,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_USER,
         .priority = 4,

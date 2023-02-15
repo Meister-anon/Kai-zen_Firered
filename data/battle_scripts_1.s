@@ -5391,6 +5391,60 @@ BattleScript_BallFetch::
 	waitmessage 0x40
 	end3
 
+BattleScript_AttackerFormChange::
+	pause 5
+	copybyte gBattlerAbility, gBattlerAttacker
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_EMPTYSTRING3
+	waitmessage 1
+BattleScript_AttackerFormChangeNoPopup::
+	handleformchange BS_ATTACKER, 0
+	handleformchange BS_ATTACKER, 1
+	playanimation BS_ATTACKER, B_ANIM_FORM_CHANGE
+	waitanimation
+	handleformchange BS_ATTACKER, 2
+	return
+
+BattleScript_AttackerFormChangeEnd3::
+	call BattleScript_AttackerFormChange
+	end3
+
+BattleScript_AttackerFormChangeEnd3NoPopup::
+	call BattleScript_AttackerFormChangeNoPopup
+
+BattleScript_AttackerFormChangeMoveEffect::
+	waitmessage 1
+	handleformchange BS_ATTACKER, 0
+	handleformchange BS_ATTACKER, 1
+	playanimation BS_ATTACKER, B_ANIM_FORM_CHANGE
+	waitanimation
+	copybyte sBATTLER, gBattlerAttacker
+	printstring STRINGID_PKMNTRANSFORMED
+	waitmessage B_WAIT_TIME_LONG
+	handleformchange BS_ATTACKER, 2
+	end3
+
+BattleScript_MagicCoatBounce::
+	attackstring
+	ppreduce
+	pause B_WAIT_TIME_SHORT
+	printfromtable gMagicCoatBounceStringIds
+	waitmessage B_WAIT_TIME_LONG
+	orword gHitMarker, HITMARKER_ATTACKSTRING_PRINTED | HITMARKER_NO_PPDEDUCT | HITMARKER_ALLOW_NO_PP
+	setmagiccoattarget BS_ATTACKER
+	return
+
+BattleScript_MagicCoatBouncePrankster::
+	attackstring
+	ppreduce
+	pause B_WAIT_TIME_SHORT
+	printfromtable gMagicCoatBounceStringIds
+	waitmessage B_WAIT_TIME_LONG
+	printstring STRINGID_ITDOESNTAFFECT
+	waitmessage B_WAIT_TIME_LONG
+	orhalfword gMoveResultFlags, MOVE_RESULT_NO_EFFECT
+	goto BattleScript_MoveEnd
+
 BattleScript_HandleFaintedMon::
 	atk24 BattleScript_LinkBattleHandleFaint
 	jumpifbyte CMP_NOT_EQUAL, gBattleOutcome, 0, BattleScript_FaintedMonEnd

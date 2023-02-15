@@ -14,6 +14,19 @@
 #define B_MSG_FLASH_FIRE_BOOST    0
 #define B_MSG_FLASH_FIRE_NO_BOOST 1
 
+// gMissStringIds					//need add logic
+#define B_MSG_MISSED       0
+#define B_MSG_PROTECTED    1
+#define B_MSG_AVOIDED_ATK  2
+#define B_MSG_AVOIDED_DMG  3
+#define B_MSG_GROUND_MISS  4
+
+// gProtectLikeUsedStringIds		//need add logic
+#define B_MSG_PROTECTED_ITSELF 0
+#define B_MSG_BRACED_ITSELF    1
+#define B_MSG_PROTECT_FAILED   2
+#define B_MSG_PROTECTED_TEAM   3
+
 // gStatUpStringIds
 #define B_MSG_ATTACKER_STAT_ROSE 0
 #define B_MSG_DEFENDER_STAT_ROSE 1
