@@ -2227,7 +2227,7 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
 {
     u8 tempStr[20];
     u8 level;
-    u16 type;
+    u16 abilitydata;
     u16 species;
     u16 hp;
     u16 statValue;
@@ -2304,9 +2304,9 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
     ConvertIntToDecimalStringN(sMonSummaryScreen->summary.expToNextLevelStrBuf, expToNextLevel, STR_CONV_MODE_LEFT_ALIGN, 7);
     sMonSkillsPrinterXpos->toNextLevel = MACRO_8136350_0(sMonSummaryScreen->summary.expToNextLevelStrBuf);
 
-    type = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
-    StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gAbilityNames[type]);
-    StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf, gAbilityDescriptionPointers[type]);
+    abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+    StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gAbilityNames[abilitydata]);
+    StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf, gAbilityDescriptionPointers[abilitydata]);
 
     sMonSummaryScreen->curMonStatusAilment = StatusToAilment(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_STATUS)); //important status screen, unk326c & this sub seem to be important for displaying status.
     if (sMonSummaryScreen->curMonStatusAilment == AILMENT_NONE)
