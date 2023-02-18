@@ -1686,7 +1686,9 @@ static void atk01_accuracycheck(void)
         eva = 3;
         if (gBattleMons[gBattlerTarget].status1 & ITS_A_TRAP_STATUS1)  //I hpoe this works
         //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
-        eva = 3;
+        eva = 3; //note need to add logic for trap effects for pokemon catching,
+        //don't use dodge pokeball effect when trapped, and add slight increase to catch chance, I think make it less than status chance but make it inclusive
+        //so they stack
 
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP) { //.target = MOVE_TARGET_SELECTED, 
             if ((gBattleMons[gBattlerTarget].type1 || gBattleMons[gBattlerTarget].type2) == TYPE_PSYCHIC) //important chek this think have function for type checking

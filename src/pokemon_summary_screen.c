@@ -184,7 +184,7 @@ struct PokemonSummaryScreenData
         //u8 ALIGNED(4) expPointsStrBuf[9];   //planning to remove this, to make room for expanded ability descriptions
         u8 ALIGNED(4) expToNextLevelStrBuf[9];
 
-        u8 ALIGNED(4) abilityNameStrBuf[13];
+        u8 ALIGNED(4) abilityNameStrBuf[ABILITY_NAME_LENGTH + 1];
         u8 ALIGNED(4) abilityDescStrBuf[104];//doubled descript buff
     } summary;
 
@@ -623,7 +623,9 @@ static const union AnimCmd * const sStarObjAnimTable[] =
 static const u16 sStarObjPal[] = INCBIN_U16( "graphics/interface/pokesummary_unk_8463B44.gbapal");
 static const u32 sStarObjTiles[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463B64.4bpp.lz");
 static const u32 sBgTilemap_MovesInfoPage[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463B88.bin.lz");
-static const u32 sBgTilemap_MovesPage[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463C80.bin.lz");
+//static const u32 sBgTilemap_MovesPage[] = INCBIN_U32( "graphics/interface/pokesummary_unk_8463C80.bin.lz"); //page name maybe wrong
+                        //pretty sure this file is the move info page i.e move selection.  /was able to confirm this is file that affects moveinfo page
+static const u32 sBgTilemap_MovesPage[] = INCBIN_U32("graphics/interface/pokesummary_unk_8463C80_replace.bin.lz");//test to see what color gets blinded
 
 #include "data/text/nature_names.h"
 
@@ -913,13 +915,14 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
     //moves the mon type icons that appear when moves are selected
     [POKESUM_WIN_MOVES_6 - 3] = {
         .bg = 0,
-        .tilemapLeft = 6,
-        .tilemapTop = 4,
-        .width = 9,
-        .height = 2,
+        .tilemapLeft = 11,
+        .tilemapTop = 2,
+        .width = 3,
+        .height = 5,
         .paletteNum = 6,
         .baseBlock = 0x0202
-    },
+    },//based on what jaizu said I'm guessing baseblock is actually memory/vram allocation/address? so need to increase all these below expanded window
+    //I tweaked it and it appears to be working?
     [POKESUM_WIN_MOVES_5_1 - 3] = {
         .bg = 0,
         .tilemapLeft = 15,
@@ -927,7 +930,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .width = 5,
         .height = 2,
         .paletteNum = 6,
-        .baseBlock = 0x0232
+        .baseBlock = 0x0242
     },
     [POKESUM_WIN_MOVES_5_2 - 3] = {
         .bg = 0,
@@ -936,7 +939,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .width = 5,
         .height = 3,
         .paletteNum = 6,
-        .baseBlock = 0x0242
+        .baseBlock = 0x0252
     },//changed tilemaptop to same as 5, proves the window isn't getting written/added at all
     //compared in tilemap studio and values for tilemap seem to match, and surprsingly my y position matches perfectly
     //the 3rd move window, isn't really even, its a bit high, so I set the height higher so I can have more room to lower it later
@@ -948,7 +951,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .width = 5,
         .height = 2,
         .paletteNum = 6,
-        .baseBlock = 0x0252
+        .baseBlock = 0x0262
     },
     [POKESUM_WIN_MOVES_5_4 - 3] = {
         .bg = 0,
@@ -957,7 +960,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .width = 5,
         .height = 2,
         .paletteNum = 6,
-        .baseBlock = 0x0262
+        .baseBlock = 0x0272
     },
 };
 
@@ -2493,22 +2496,27 @@ static void PokeSum_PrintControlsString(const u8 * str)
     PutWindowTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_CONTROLS]);
 }
 
-static void PrintMonLevelNickOnWindow2(const u8 * msg)
+static void PrintMonLevelNickOnWindow2(const u8 * str)
 {
     FillWindowPixelBuffer(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], 0);
 
-    if (!sMonSummaryScreen->isEgg)
+    if (!sMonSummaryScreen->isEgg)  //is not an egg
     {
-        if (sMonSummaryScreen->curPageIndex != PSS_PAGE_MOVES_INFO)
-            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], FONT_NORMAL, 4, 2, sLevelNickTextColors[1], 0xff, sMonSummaryScreen->summary.levelStrBuf);
+        if (sMonSummaryScreen->curPageIndex != PSS_PAGE_MOVES_INFO) //should remove gender symbol from move info page
+        {
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], 2, 4, 2, sLevelNickTextColors[1], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.levelStrBuf);
 
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], FONT_NORMAL, 40, 2, sLevelNickTextColors[1], 0xff, sMonSummaryScreen->summary.nicknameStrBuf);
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], FONT_NORMAL, 40, 2, sLevelNickTextColors[1], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.nicknameStrBuf);
 
-        if (GetMonGender(&sMonSummaryScreen->currentMon) == MON_FEMALE)
-            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], FONT_NORMAL, 105, 2, sLevelNickTextColors[3], 0, sMonSummaryScreen->summary.genderSymbolStrBuf);
-        else
-            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], FONT_NORMAL, 105, 2, sLevelNickTextColors[2], 0, sMonSummaryScreen->summary.genderSymbolStrBuf);
-    }
+        
+            if (GetMonGender(&sMonSummaryScreen->currentMon) == MON_FEMALE)
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], FONT_NORMAL, 105, 2, sLevelNickTextColors[3], 0, sMonSummaryScreen->summary.genderSymbolStrBuf);
+            else
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], FONT_NORMAL, 105, 2, sLevelNickTextColors[2], 0, sMonSummaryScreen->summary.genderSymbolStrBuf);
+        }
+        if (sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES_INFO) //change to move name over move info
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK], FONT_NORMAL, 4, 0, sLevelNickTextColors[1], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.nicknameStrBuf);
+    }   //can use sLevelNickTextColors  3 & 2 for the types that get buffed/debuffed by nature
 
     PutWindowTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_LVL_NICK]);
 }
@@ -2660,6 +2668,7 @@ static void PokeSum_PrintMoveName(u8 i)
 static void PokeSum_PrintBottomPaneText(void)
 {
     FillWindowPixelBuffer(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], 0);
+    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_6], 0);
 
     switch (sMonSummaryScreen->curPageIndex)
     {
@@ -2673,10 +2682,11 @@ static void PokeSum_PrintBottomPaneText(void)
         PokeSum_PrintSelectedMoveStats();
         break;
     case PSS_PAGE_MOVES:
-        break;
+        break;//doing something here may fix garbage data
     }
 
     PutWindowTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO]);
+    PutWindowTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_6]);
 }
 
 static void PokeSum_PrintTrainerMemo(void)
@@ -2940,13 +2950,13 @@ static void PokeSum_PrintSelectedMoveStats(void)
         if (sMonSummaryScreen->mode != PSS_MODE_SELECT_MOVE && sMoveSelectionCursorPos == 4)
             return;
 
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
-                                     57, 1,
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_6], FONT_NORMAL,
+                                     4, 8,
                                      sLevelNickTextColors[0], TEXT_SKIP_DRAW,
                                      sMonSummaryScreen->summary.movePowerStrBufs[sMoveSelectionCursorPos]);
 
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL,
-                                     57, 15,
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_6], FONT_NORMAL,
+                                     4, 20,
                                      sLevelNickTextColors[0], TEXT_SKIP_DRAW,
                                      sMonSummaryScreen->summary.moveAccuracyStrBufs[sMoveSelectionCursorPos]);
 
@@ -2981,10 +2991,10 @@ static void PokeSum_PrintAbilityNameAndDesc(void)   //need to increase height, a
     FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
-                                 66, 1, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf);
+                                 66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf);
 
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
-                                 2, 12, sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+                                 2, 9, sLevelNickTextColors[0], TEXT_SKIP_DRAW,
                                  sMonSummaryScreen->summary.abilityDescStrBuf);
 
 }//forgot vsonic to increase the text y value here,  ability name uses 1 so can just adjust window and leave that, but need to adjust desc y value
@@ -3454,14 +3464,14 @@ static void PokeSum_PrintMonTypeIcons(void)
         break;
     case PSS_PAGE_MOVES:
         break;
-    case PSS_PAGE_MOVES_INFO:
-        FillWindowPixelBuffer(sMonSummaryScreen->windowIds[6], 0);
-        BlitMoveInfoIcon(sMonSummaryScreen->windowIds[6], sMonSummaryScreen->monTypes[0] + 1, 0, 3);
+    case PSS_PAGE_MOVES_INFO:   //removed these it was blocking text from displaying
+        //FillWindowPixelBuffer(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_6], 0);
+        /*BlitMoveInfoIcon(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_6], sMonSummaryScreen->monTypes[0] + 1, 0, 3);
 
-        if (sMonSummaryScreen->monTypes[0] != sMonSummaryScreen->monTypes[1])
-            BlitMoveInfoIcon(sMonSummaryScreen->windowIds[6], sMonSummaryScreen->monTypes[1] + 1, 36, 3);
+        if (sMonSummaryScreen->monTypes[0] != sMonSummaryScreen->monTypes[1])   //if type 1 isn't type 2
+            BlitMoveInfoIcon(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_6], sMonSummaryScreen->monTypes[1] + 1, 36, 3);*/
 
-        PutWindowTilemap(sMonSummaryScreen->windowIds[6]);
+        //PutWindowTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_6]);
         break;
     }
 }
@@ -4232,7 +4242,7 @@ static void PokeSum_CreateMonIconSprite(void)
 
     SafeLoadMonIconPalette(species);
 
-    if (sMonSummaryScreen->savedCallback == CB2_ReturnToTradeMenuFromSummary)
+    if (sMonSummaryScreen->savedCallback == CB2_ReturnToTradeMenuFromSummary) //trade/link stuff
     {
         if (sMonSummaryScreen->isEnemyParty == TRUE)
             sMonSummaryScreen->monIconSpriteId = CreateMonIcon(species, SpriteCallbackDummy, 24, 32, 0, personality, 0);
@@ -4244,9 +4254,9 @@ static void PokeSum_CreateMonIconSprite(void)
         if (ShouldIgnoreDeoxysForm(DEOXYS_CHECK_TRADE_MAIN, sLastViewedMonIndex))
             sMonSummaryScreen->monIconSpriteId = CreateMonIcon(species, SpriteCallbackDummy, 24, 32, 0, personality, 0);
         else
-            sMonSummaryScreen->monIconSpriteId = CreateMonIcon(species, SpriteCallbackDummy, 24, 32, 0, personality, 1);
-    }
-
+            sMonSummaryScreen->monIconSpriteId = CreateMonIcon(species, SpriteCallbackDummy, 18, 36, 0, personality, 1);
+    }//last line is exactly what I need to move sprite coordinate
+    //vsonic IMPORTANT
     if (!IsPokeSpriteNotFlipped(species))
         gSprites[sMonSummaryScreen->monIconSpriteId].hFlip = TRUE;
     else
@@ -4672,9 +4682,9 @@ static void CreateExpBarObjs(u16 tileTag, u16 palTag)
             .callback = SpriteCallbackDummy,
         };
 
-        sExpBarObjs->xpos[i] = i * 8 + 156;
-        spriteId = CreateSprite(&template, sExpBarObjs->xpos[i], 132, 0);
-        sExpBarObjs->sprites[i] = &gSprites[spriteId];
+        sExpBarObjs->xpos[i] = i * 8 + 156; //could be the important for changes to trainer memo
+        spriteId = CreateSprite(&template, sExpBarObjs->xpos[i], 128, 0); //says is y coordinate see if all i need
+        sExpBarObjs->sprites[i] = &gSprites[spriteId];//yeah that's all I need to change
         sExpBarObjs->sprites[i]->oam.priority = 2;
         sExpBarObjs->tileTag = tileTag;
         sExpBarObjs->palTag = palTag;

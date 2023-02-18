@@ -5388,7 +5388,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 135,
         .baseSpDefense = 95,
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_FIRE,
         .catchRate = 120,
         .expYield = 149,
         //.evYield_SpAttack = 2,
@@ -5406,7 +5406,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_PHOTOSYNTHESIZE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    },//made fire match grand colloseum changes
 
     [SPECIES_YANMA] =
     {

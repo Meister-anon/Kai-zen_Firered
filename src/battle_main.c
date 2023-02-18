@@ -460,7 +460,7 @@ const u8 gTypeEffectiveness[381] = // 336 is number of entries x 3 i.e number of
 const u8 gTypeNames[][TYPE_NAME_LENGTH + 1] =
 {
     _("NORMAL"),
-    _("FIGHTING"),
+    _("FIGHT"),
     _("FLYING"),
     _("POISON"),
     _("GROUND"),
@@ -472,14 +472,15 @@ const u8 gTypeNames[][TYPE_NAME_LENGTH + 1] =
     _("FIRE"),
     _("WATER"),
     _("GRASS"),
-    _("ELECTRIC"),
-    _("PSYCHIC"),
+    _("ELECTR"),
+    _("PSYCHC"),
     _("ICE"),
     _("DRAGON"),
     _("DARK"),
     _("FAIRY"), //fairy addition
 }; //uses same type order as list_menu.c so this fairy is 12, but my actuall fairy type
 //was at 17. fixed now they are both 12.
+//had to retruncate type names to fit move name
 
 //also needed change value in type_constants.inc & pokemon.h
 
