@@ -2503,6 +2503,7 @@ u8 AtkCanceller_UnableToUseMove(void)
 //logic for this is non-flying type pokemon that are typically
 //floating or attack while in the air/ can fly
 //already checked to add all pokemon that have levitate as their ability
+//2nd pass add ghosts to grounded clause  with specific exclusions spirit tomb cursola galarian corsola etc object linked ghost, just like doduo
 const u16 sFloatingSpecies[] = {
     SPECIES_BEAUTIFLY,
     SPECIES_DUSTOX,
@@ -2564,11 +2565,9 @@ const u16 sFloatingSpecies[] = {
     SPECIES_EELEKTRIK,
     SPECIES_EELEKTROSS,
     SPECIES_VIKAVOLT,
-    SPECIES_CURSOLA,
     SPECIES_KOFFING,
     SPECIES_WEEZING,
     SPECIES_WEEZING_GALARIAN,
-    SPECIES_CORSOLA_GALARIAN,
     SPECIES_RAICHU_ALOLAN,
     SPECIES_UNOWN,
     SPECIES_UNOWN_B,
@@ -2643,6 +2642,8 @@ bool8 IsFloatingSpecies(u8 battlerId) {
         
 }
 
+#define GROUNDED_GHOSTMON ((SPECIES_SPIRITOMB || SPECIES_CORSOLA_GALARIAN || SPECIES_CURSOLA || SPECIES_SANDYGAST || SPECIES_PALOSSAND || SPECIES_GOLETT || SPECIES_TREVENANT || SPECIES_MARSHADOW || SPECIES_MIMIKYU || SPECIES_MIMIKYU_BUSTED || SPECIES_SABLEYE_MEGA))
+
 bool8 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
 //finihsed adding to type calc, so should be battle ready
 //set as type 8, instead of 32 for test build
@@ -2673,7 +2674,9 @@ bool8 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
     else if (gBattleMons[battlerId].ability == ABILITY_LEVITATE)
         return FALSE;
     else if (IsFloatingSpecies(battlerId))
-        return FALSE;//this alone might enough since if smacked down it counts as grounded
+        return FALSE;//this alone might be enough since if smacked down it counts as grounded
+    else if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && (gBattleMons[battlerId].species != (GROUNDED_GHOSTMON)))   //test GHOST exclusions
+        return FALSE;
     else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
         return FALSE;
 

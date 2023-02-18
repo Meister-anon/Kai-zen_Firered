@@ -53,7 +53,7 @@ struct ListMenuOverride
     bool8 enabled:1;
 };
 
-struct MoveMenuInfoIcon
+struct MoveMenuInfoIcon //use this format for how to read type effectiveness
 {
     u8 width;
     u8 height;
@@ -73,7 +73,7 @@ static void ListMenuCallSelectionChangedCallback(struct ListMenu *list, u8 onIni
 static u8 ListMenuAddCursorObject(struct ListMenu *list, u32 cursorKind);
 
 const struct MoveMenuInfoIcon gMoveMenuInfoIcons[] = //fairy addition this should be for coordinates. use HMA table to easily apply additions, just read the hex value @ bottom right
-{ //                                    anything above 0xFF need use reverse indian or little indian? so 00 01  should be 0x100
+{ //                             anything above 0xFF need use reverse indian or little indian? so 00 01  should be 0x100
     { 12, 12, 0x00 },       // Unused
     { 32, 12, 0x20 },       // Normal icon  -00
     { 32, 12, 0x64 },       // Fight icon   -01
@@ -104,6 +104,7 @@ const struct MoveMenuInfoIcon gMoveMenuInfoIcons[] = //fairy addition this shoul
 //which I need to make my dynamic starter text work, so I'll try rearranging the order of the icons
 //in the list,  note put any future type icons after type dark, that way the game will read it as next.
 //and avoid any issue.
+//note array reads 2 more than last value, because it starts at 0, and has unusued value (pretty sure used for pokeball symbol so can't remove)
 
 static void ListMenuDummyTask(u8 taskId)
 {
@@ -782,5 +783,7 @@ void ListMenuLoadStdPalAt(u8 palOffset, u8 palId)
 
 void BlitMoveInfoIcon(u8 windowId, u8 iconId, u16 x, u16 y)
 {
-    BlitBitmapRectToWindow(windowId, gFireRedMenuElements_Gfx + gMoveMenuInfoIcons[iconId].offset * 32, 0, 0, 128, 128, x, y, gMoveMenuInfoIcons[iconId].width, gMoveMenuInfoIcons[iconId].height);
-}
+    BlitBitmapRectToWindow(windowId, gFireRedMenuElements_Gfx + gMoveMenuInfoIcons[iconId].offset * 32, 0, 0, 128, 256, x, y, gMoveMenuInfoIcons[iconId].width, gMoveMenuInfoIcons[iconId].height);
+}//gFireRedMenuElements_Gfx is ex_caught_pokeball_and_pokemon_types file, default file dimmension is 128 x 128 which is source width height
+//so I think if my file is ever extended I just need change those values to be able to read it?
+//doubled checked in kai zen my file is extended to 256, lol apparently I added seraph type and just forgot, lol borderlands
