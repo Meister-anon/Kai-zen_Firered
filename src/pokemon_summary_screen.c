@@ -2976,15 +2976,28 @@ static void PokeSum_PrintAbilityDataOrMoveTypes(void)
         break;
     case PSS_PAGE_SKILLS:
         PokeSum_PrintAbilityNameAndDesc();
+        PutWindowTilemap(sMonSummaryScreen->windowIds[5]);
         break;
     case PSS_PAGE_MOVES:
     case PSS_PAGE_MOVES_INFO:
         PokeSum_DrawMoveTypeIcons();
+        PutWindowRectTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_5],0,0,5,2);  //...welp that worked o.0  just need to adjust y
+        PutWindowRectTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_5], 0, 3, 5, 2); //move 2   
+        PutWindowRectTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_5], 0, 7, 5, 2);  //move 3
+        PutWindowRectTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_5], 0, 10, 5, 2); //move 4
+        PutWindowRectTilemap(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_5], 0, 14, 5, 2); //move learn
+        
+        //moves 2 & 4 window position doesn't work, 2 is too high, 4 is too low
+        //think need to shift how it handles movement so I can make smaller incremental movement, 
+
         break;
     }
 
-    PutWindowTilemap(sMonSummaryScreen->windowIds[5]);
-}
+    //PutWindowTilemap(sMonSummaryScreen->windowIds[5]);//other option is use PutWindowRectTilemap function which I believe would
+    //only place a specific section of the tile map atspecific area rather than fill the entire window, could do that with original logic for window 5
+    //and original window 5 height
+}//best option use original window 5 height, the type icons are positioned perfectly I just need to split up the window
+
 
 static void PokeSum_PrintAbilityNameAndDesc(void)   //need to increase height, ability name & description use same window believe 5 in skills template
 {
@@ -2999,23 +3012,64 @@ static void PokeSum_PrintAbilityNameAndDesc(void)   //need to increase height, a
 
 }//forgot vsonic to increase the text y value here,  ability name uses 1 so can just adjust window and leave that, but need to adjust desc y value
 
-static void PokeSum_DrawMoveTypeIcons(void)
+//new define so I can shift type icon y position without messing with the window
+//since its not full screen height I may need to just make this x + 4
+//actually since screen length is 28? I think this is just saying move down 4 each time at the same x position?
+//since I'm already moving my windows down by 4 each time I think my y needs to be 0?
+
+//ok so before the type icons were all in one long window and was using the loop number to determine the y value i.e move "down" a row
+//but I'm creating my own individual window at the height I want so I need a constant value separate from the loop
+#define NewMoveTypeIconYpos(x) ((x) * 28 + 2)
+#define GetMoveTypeIconPrinterYpos(x) ((x) * 0 + 4)
+
+#define MOVE_1 0
+#define MOVE_2 1
+#define MOVE_3 2
+#define MOVE_4 3
+
+static void PokeSum_DrawMoveTypeIcons(void) //idea get icons to print on window 3 see if that works since its the same size as old window 5
 {
     u8 i;
 
-    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
+    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0x0FE);
+
+    //FillWindowPixelRect(sMonSummaryScreen->windowIds[5], 0x0, 0, 0, 5, 2);   //ok can't use this, it puts white space over graphics
+
+    //fills without the putwindowtilemap function appears to do nothing? yeah it does. which is good.
+    //PutWindowRectTilemap can use this instead so tilemap has selective position instead of covering the entire window and everything below it
+
+    //but putting tileamap without fill buffer for full  window still puts the icon, it just doesn't cover/remove whitespace?
 
     for (i = 0; i < 4; i++)
     {
         if (sMonSummaryScreen->moveIds[i] == MOVE_NONE)
             continue;
 
-        BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->moveTypes[i] + 1, 3, GetMoveNamePrinterYpos(i));
+        if (i == 0)
+
+        BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->moveTypes[i] + 1, 3, GetMoveTypeIconPrinterYpos(i));
+
+        else {
+            BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->moveTypes[i] + 1, 3, NewMoveTypeIconYpos(i));
+        }//so my understanding is blitmove, copies the icons onto specific area of the assigned window
+        //I believe PutWindowRectTilemap also puts a specific area of teh window on the bg,/screen so I should be able to
+        //I think I should be able to use those together to only display the window at the y position icons are printed
+        //to get the icons without the space between.  if so that would solve everything
+        //potential issue is if this and or PutWindowRectTilemap dont work how I expect and I have to make my own PutWindowRectTilemap 
+        //that works how I expect
+
     }//note printerypos is again using value 28 in its function, seems to be deriving y from x?
 
     if (sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE)
-        BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->moveTypes[4] + 1, 3, GetMoveNamePrinterYpos(4));
-}// movetype 4 is after all moves believe in this case it relates to when you have selected a move and hover over the cancel button
+        BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->moveTypes[4] + 1, 3, NewMoveTypeIconYpos(4));
+}// movetype 4 is the type icon for the 4th move, which is when you are learning a new move, and already have 4, its where the cancel button appears
+//attempted change, put window id to 3, instead of 5, and icon showed up, but pallete wwas wrong, think I can shift the type icons to window 3 though
+//need to go through the work flow and see how it prepares window 5 to display the icon, may just be a matter of shifting those to window 3
+//didn't work, going back to attempt to use the multiple windows
+//vsonic IMPORTANT
+
+//note need to update fire red move learn to emerald standard where it asks you to confirm you want to replace a move,
+//with a yes no box and takes you back to move learn so you don't accidentally replace/forget moves. IMPORTANT vsonic
 
 static void PokeSum_PrintPageHeaderText(u8 curPageIndex) //
 {
