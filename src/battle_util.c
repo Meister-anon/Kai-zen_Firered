@@ -648,7 +648,7 @@ bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 chec
     if (gStatuses3[battlerDef] & STATUS3_SEMI_INVULNERABLE)
         return FALSE;
 
-    return FALSE;
+    return TRUE;
 }
 
 void CancelMultiTurnMoves(u8 battler)

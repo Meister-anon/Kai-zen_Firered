@@ -657,13 +657,14 @@ void DisplayYesNoMenuDefaultNo(void)
     CreateYesNoMenu(&sYesNo_WindowTemplate, 2, 0, 2, STD_WINDOW_BASE_TILE_NUM, STD_WINDOW_PALETTE_NUM, 1);
 }
 
-u8 GetTextSpeedSetting(void)
+u8 GetTextSpeedSetting(void) //ok so apparently this is necessary and is just so teh game can force a slower speed for dramatic moments
 {
     u32 speed;
     if (gSaveBlock2Ptr->optionsTextSpeed > OPTIONS_TEXT_SPEED_FAST)
         gSaveBlock2Ptr->optionsTextSpeed = OPTIONS_TEXT_SPEED_MID;
     return gUnknown_841F428[gSaveBlock2Ptr->optionsTextSpeed];
-}
+}//or not idk, there doesn't exist a text speed greater than fast so this doesn't make sense
+//whatever when I make a faster speed I'll just replace fast in this function
 
 u8 CreateStartMenuWindow(u8 height)
 {

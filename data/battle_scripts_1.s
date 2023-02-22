@@ -3856,7 +3856,7 @@ BattleScript_EffectDryadsCurse::
 	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
 	cursetarget BattleScript_ButItFailed
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
-	setbyte sB_ANIM_TURN, 0
+	setbyte sB_ANIM_TURN, 0	@ still need to add all offense defense stat drop
 	attackanimation
 	waitanimation
 	healthbarupdate BS_ATTACKER

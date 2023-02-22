@@ -4092,9 +4092,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_REFRIGERATE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_SNOW_CLOAK, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SNOW_CLOAK, ABILITY_SNOW_WARNING},
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -4119,15 +4119,15 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
         #if P_UPDATED_ABILITIES >= GEN6
-            .abilityHidden = {ABILITY_STATIC, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    },//based on JPRPokeTrainer98 youtube vid replace pressure for most legendaries, keep for mewtwo 
 
     [SPECIES_MOLTRES] =
     {
@@ -4152,7 +4152,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_FLAME_BODY, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    },//new abilities based on JPRPokeTrainer98 youtube vid,  volcanic healing or pheonix or primal fire, fire type volt absorb but combine w flame body effect
+    //but with a higher chance to burn,  maybe call it primordial flame/fire  also works as a status cleanse/field cleanse
 
     [SPECIES_DRATINI] =
     {
@@ -4270,7 +4271,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 100,
         .baseSpeed = 100,
         .baseSpAttack = 100,
-        .baseSpDefense = 100,
+        .baseSpDefense = 160,
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 45,
@@ -4287,7 +4288,7 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_SYNCHRONIZE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-    },
+    },//buff to give realm of excellence as mewtwo is more offenseive whille mew was always about avoiding fights/damage
 
     [SPECIES_CHIKORITA] =
     {
@@ -6769,7 +6770,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 105,
         .baseSpeed = 100,
         .baseSpAttack = 40,
-        .baseSpDefense = 70,
+        .baseSpDefense = 80,
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 45,
@@ -6906,6 +6907,8 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     }, // Add some good ice hidden ability
     //either use this ability or snow cloak
+    //purifying aura, similar effect to healer, also mon removes all status effects on itself & allies at the end of turn
+    //in doubles heals status of ally on switchin as well.   replace pressure
 
     [SPECIES_LARVITAR] =
     {
@@ -10581,7 +10584,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_STURDY, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-    },
+    },//rock version of volt absorb, that also absorbs stealh rocks
 
     [SPECIES_REGICE] =
     {
@@ -10608,7 +10611,8 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-    },
+    }, //Glacial Ice negates fire damage also combine with ice-body effect to heal during hail and add low chance to freeze on contact
+    //make sure stacks with hail effect freeze chance boost
 
     [SPECIES_REGISTEEL] =
     {
@@ -10636,7 +10640,8 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-    },
+    },//ability liquid metal,  effects of light metal, but also reduces damage from contact moves, like fluffy does
+    //not sure if will do full 50% reduction or do a 33% reduction instead. prob the latter
 
     [SPECIES_LATIAS] =
     {
@@ -10660,7 +10665,9 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    },//delve into their ability to turn invisible
+    //start battle with +1 evasion so they are just harder to hit without needing a setup
+    //red spector blue spector?  or spectrum blend?
 
     [SPECIES_LATIOS] =
     {
@@ -13470,7 +13477,13 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    },//knowledge/ memoery mon  can seal a move when they attack. the enemy
+    //temporarily lose effect to use a move  think I'll make it only work on one move
+    //and have it read the enemy move pool and create logic to attempt to pick the most
+   //advantageous move of the enemies to seal. weight it to try doing that, (think there is ai logic that reads the most damaging move use that)
+   //but have an option to fail, and instead just pick a random move slot i.e random % 4 0-3
+   //can't reactivate ability on target is already under affect/thrall, (so use intimidate logic to save status to a variable i guess_
+   //if enemy mon has  move sealed by another effect and that move is the most dangerous, either loop again excluding that or just default to random
 
     [SPECIES_MESPRIT] =
     {
@@ -13496,7 +13509,8 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-    },
+    },//empath, emotion pokemon, give efffect of synchronize but also make attaker feel a portion of my pain
+    //so attacker takes a percent of damage dealt 20% 25% something like that or maybe 15%
 
     [SPECIES_AZELF] =
     {
@@ -13521,7 +13535,11 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-    },
+    },//iron will, will pokemon, paralysis effect, a chance to make opponent lose will to attack facing this mon.
+    //in double battles use trace targeetting logic, so it randomly affects one target rather than both as that would be broken
+    //well idk I could just link it to targeetting this mon with an attack, so even in doubles it'll just 
+    //have a chance to activate on both enemy mon but only should they be targetting me. 
+    //so its not just me being on the field would keep them from attacking
 
     [SPECIES_DIALGA] =
     {
@@ -13548,7 +13566,25 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-    },
+    },//time control two turn attacks skip the charge turn, but reduce power by 20%
+    //my change single turn moves hit twice, once normaly 2nd with reversed animation and a 50% damage cut ...maybe 70% cut that's still 130% dmg
+    //idea is move goes off, then animation reverses hit effect goes off again and its counted as one move
+    //like you attack reverse time and make them get hit again
+    //ok intead of making entire new animation what I can do is create a point within the normal animation I can jump back
+    //that'll appear like I'm reversing the attack?  check for ability time conrol at end of script, if not present just go to end
+    //if present call time control animation to do some special animation and return
+    //then jump back to set point in move animation and make sure it can't loop again, with some other variable decremented in time control anim
+   //play move animation as normal from there, don't loop and go to end.
+   //think will have it count as one attack, but just add a 30% damage buff idk which I'll do
+   //simplest would just be to make it attack again like with multi-task...yeah I'll just do that.
+   //but it'll be stronger since its not splitting the move damage so make all single turn moves
+   //hit twice full damage on first hit, but 30% damage on 2nd hit, most of the logic for this is already in multi-task command 
+   //so just use that.
+   //...ikd I could still do the animation thing, wouldn't be too too hard
+   //think time effect should use extreme speed/quick attack warp horizontal effects but make it grey or something
+   //maybe do speed warp, grey out the field and characters, return colors to normal and then do 2nd hit?
+
+   //god that really is going to be annnoying..  oh and add solar beam & future sight to its learnset skull bash too if it isn't already
 
     [SPECIES_PALKIA] =
     {
@@ -13575,7 +13611,9 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-    },
+    },//based on JPRPokeTrainer98 youtube vid ability space control, tweaked. 
+    //in doubles make all non contact attacks multi target target both in doubles, target all in triple/rotation
+    //in singles moves can't miss
 
     [SPECIES_HEATRAN] =
     {
@@ -13628,7 +13666,8 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-    },
+    },//reduce slow start to 2 turns, give damage reduction for duration of wind up, and after it ends make attacks immune to substitute/walls
+    //so attacks go through/break substitute and walls like safegaurd barrier etc.
 
     [SPECIES_GIRATINA] =
     {
@@ -13655,7 +13694,13 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-    },
+    },//idea inverse corruption being on the field forces inverse battle reversing all type interactions
+    //what is super effective becommes an immunity maybe only affects this mon, so it can be tossed against things it normally is weak too?
+    //yeah that works, would also make it immune to fairy and dragon  do something like how wonder gaurd works that shifts the applies effctiveness
+
+    //check ability if super effectie make it no effect, if not very effective make it super effective
+    //if normally effective make it  not very effective
+    //like wondergaurd will need to make special ai logic for
 
     [SPECIES_CRESSELIA] =
     {
@@ -13679,7 +13724,9 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    },//lunar spirit/aura/veil  prevents allies/self from falling asleep,  counter to darkai also reduces dark type damage by 50%
+    //removes that 4x dark weakness I gave it, sheesh
+    //like suicine ability heal should also work on switch in for anyone already asleep
 
     [SPECIES_PHIONE] =
     {
@@ -18145,7 +18192,7 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-    },
+    },//absolute zero, turns all water type attacks into ice type attacks field wide
 
     [SPECIES_KELDEO] =
     {
@@ -22593,7 +22640,8 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-    },
+    },//light devour(er) add on to prism armor, any light based move used by enemy is canceled and heals necrozma instead,also gets healing in harsh sunlight
+    //moves solar beam, synthesis, moonlight, morning sun, etc. sunny day too
 
     [SPECIES_MAGEARNA] =
     {

@@ -3174,6 +3174,16 @@ static const u16 sOctilleryLevelUpLearnset[] = {
 
 static const u16 sDelibirdLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_PRESENT),
+    LEVEL_UP_MOVE(1, MOVE_SAND_ATTACK),
+    LEVEL_UP_MOVE(1, MOVE_ICE_BALL),
+    LEVEL_UP_MOVE(11, MOVE_AURORA_BEAM),
+    LEVEL_UP_MOVE(16, MOVE_QUICK_ATTACK),
+    LEVEL_UP_MOVE(22, MOVE_FUTURE_SIGHT),
+    LEVEL_UP_MOVE(27, MOVE_DOUBLE_TEAM),
+    LEVEL_UP_MOVE(31, MOVE_DRILL_PECK),
+    LEVEL_UP_MOVE(37, MOVE_AURORA_VEIL),
+    LEVEL_UP_MOVE(42, MOVE_FLING),
+    LEVEL_UP_MOVE(42, MOVE_RECYCLE),
     LEVEL_UP_END
 };
 
@@ -3928,6 +3938,7 @@ static const u16 sCascoonLevelUpLearnset[] = {
     LEVEL_UP_END    //so nEW move idea, dryad's curse  effectively ghost curse, but instead of losing hp, its a multi stat drop
 };//i'm thinking offense defense stats all drop one stage to curse the last target to hit it.  look at copy cat logic for targetting. wll be self target
 //actually copy bide, it already works on last enemy to attack  //move will be fore grass bug & fairy
+//most of move is done just need to setup stat drop
 
 static const u16 sDustoxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_CONFUSION),

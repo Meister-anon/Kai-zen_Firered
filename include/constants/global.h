@@ -53,6 +53,13 @@
 #define OPTIONS_TEXT_SPEED_SLOW  0
 #define OPTIONS_TEXT_SPEED_MID   1
 #define OPTIONS_TEXT_SPEED_FAST  2 //new default
+//new idea replace slow no one uses that. speeds will be mid/fast/faster
+//according to luckytypholosion from pret instant text speed would be too fast and cause people to too easily skip text
+//he believes a text speed that is 2-3 characters per frame would be best,  the basic speed of fast is 1 char per frame.
+//I will attempt to make this new text speed and also include an instant option,
+//as I want to optimze game progression/movement so emulator speed up isn't necessary.
+//this includes a look at test speed, move speed, and animation speed, to bring the game up to a more modern standard.
+//while still giving people a comfortable experience, because pokemon is a comfort game it doesn't need to be light speed constantly.
 
 #define OPTIONS_SOUND_MONO    0
 #define OPTIONS_SOUND_STEREO  1

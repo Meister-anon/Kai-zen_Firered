@@ -326,7 +326,7 @@ static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 
 //each line adds 3 because there are 3 arguments in each line, atk type, def type, & effectiveness
 //DON'T FORGET every time I change below, need to update in the .h
 
-const u8 gTypeEffectiveness[381] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+const u8 gTypeEffectiveness[390] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -351,7 +351,8 @@ const u8 gTypeEffectiveness[381] = // 336 is number of entries x 3 i.e number of
     TYPE_ELECTRIC, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,   //new change mostly for cloyster but makes sense.
     TYPE_ELECTRIC, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,    //tentative change to make ice better defensively //there are several water ice & flying ice
     TYPE_ELECTRIC, TYPE_GRASS, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_ELECTRIC, TYPE_GROUND, TYPE_MUL_NO_EFFECT,
+    TYPE_ELECTRIC, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE, //made bug resist electric always made sense to me, they can chew threw electric cables
+    TYPE_ELECTRIC, TYPE_GROUND, TYPE_MUL_NO_EFFECT,  //plus bug is related to nature like grass, which already resist electric
     TYPE_ELECTRIC, TYPE_FLYING, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ELECTRIC, TYPE_DRAGON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GRASS, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
@@ -429,7 +430,8 @@ const u8 gTypeEffectiveness[381] = // 336 is number of entries x 3 i.e number of
     TYPE_DRAGON, TYPE_DRAGON, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_DRAGON, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_DARK, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_DARK, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_DARK, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,    //type change from wolveyvgc to buff bugs, its super to bugs, so resists it, and dark is evil while bugs are 
+    TYPE_DARK, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,  //also associated with evil  so makes sense
     TYPE_DARK, TYPE_GHOST, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_DARK, TYPE_DARK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_DARK, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -447,6 +449,7 @@ const u8 gTypeEffectiveness[381] = // 336 is number of entries x 3 i.e number of
     TYPE_FAIRY, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FAIRY, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FAIRY, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FAIRY, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_POISON, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_STEEL, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_DARK, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
@@ -456,6 +459,8 @@ const u8 gTypeEffectiveness[381] = // 336 is number of entries x 3 i.e number of
     TYPE_DRAGON, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_ENDTABLE, TYPE_ENDTABLE, TYPE_MUL_NO_EFFECT
 };
+    //consider makign bugs immune to confusion status, like wolfeyvgc said, he didn't explain but I gather logic is most bugs work by hivemind,
+//on top of having some type of extra sensory options with its feelers etc. will have to add dark type exception to prankster back i guess
 
 const u8 gTypeNames[][TYPE_NAME_LENGTH + 1] =
 {
@@ -2792,6 +2797,7 @@ void FaintClearSetData(void)
     gProtectStructs[gActiveBattler].flag2Unknown = FALSE;
     gProtectStructs[gActiveBattler].flinchImmobility = FALSE;
     gProtectStructs[gActiveBattler].notFirstStrike = FALSE;
+    gProtectStructs[gActiveBattler].pranksterElevated = FALSE;
     gDisableStructs[gActiveBattler].isFirstTurn = 2;
     gLastMoves[gActiveBattler] = MOVE_NONE;
     gLastLandedMoves[gActiveBattler] = MOVE_NONE;
@@ -3831,7 +3837,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         }
         else
             moveBattler2 = MOVE_NONE;
-    }*/
+    }*/  //think this was old firered stuff I replaced with more optimal emerald stuff
     
     // both move priorities are different than 0
     if (priority1 != 0 || priority2 != 0)
@@ -4825,7 +4831,7 @@ static void HandleAction_ActionFinished(void) //may be important for intimidate 
 s8 GetChosenMovePriority(u8 battlerId) //made u8 (in test build)
 {
     u16 move;
-
+    gProtectStructs[battlerId].pranksterElevated = 0;
     if (gProtectStructs[battlerId].noValidMoves)
         move = MOVE_STRUGGLE;
     else
@@ -4840,12 +4846,16 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
 
 
     priority = gBattleMoves[move].priority;
-    /*if (GetBattlerAbility(battlerId) == ABILITY_GALE_WINGS
+    if (GetBattlerAbility(battlerId) == ABILITY_GALE_WINGS
         && gBattleMoves[move].type == TYPE_FLYING)
     {
         priority++;
     }
     else if (GetBattlerAbility(battlerId) == ABILITY_PRANKSTER && IS_MOVE_STATUS(move))
+    {
+        priority++;
+    }
+    else if (gBattleMoves[move].effect == EFFECT_GRASSY_GLIDE && gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN && IsBattlerGrounded(battlerId))
     {
         priority++;
     }
@@ -4869,9 +4879,8 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
             break;
         }
     }
-    else */if (gBattleMons[battlerId].ability == ABILITY_NUISANCE
-        && (gBattleMoves[move].power <= 60
-        || gDynamicBasePower <= 60)) //added dynamic for moves like hidden power
+    else if (gBattleMons[battlerId].ability == ABILITY_NUISANCE
+        && (gBattleMoves[move].power <= 60 || gDynamicBasePower <= 60)) //added dynamic for moves like hidden power
     {
         priority += 3;
     }
