@@ -13484,7 +13484,7 @@ const struct BaseStats gBaseStats[] =
    //but have an option to fail, and instead just pick a random move slot i.e random % 4 0-3
    //can't reactivate ability on target is already under affect/thrall, (so use intimidate logic to save status to a variable i guess_
    //if enemy mon has  move sealed by another effect and that move is the most dangerous, either loop again excluding that or just default to random
-
+   //vsonic IMPORTANT
     [SPECIES_MESPRIT] =
     {
         .baseHP = 80,

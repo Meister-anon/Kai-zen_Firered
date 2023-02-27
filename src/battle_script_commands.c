@@ -1766,17 +1766,21 @@ static void atk02_attackstring(void)
     {
         if (!gSpecialStatuses[gBattlerAttacker].ppNotAffectedByPressure)
         {
-            switch (gBattleMoves[gCurrentMove].target)
+            switch (gBattleMoves[gCurrentMove].target)//realize needs to add here as well as the util.c to make hi pressure work?
             {
             case MOVE_TARGET_FOES_AND_ALLY:
                 ppToDeduct += AbilityBattleEffects(ABILITYEFFECT_COUNT_ON_FIELD, gBattlerAttacker, ABILITY_PRESSURE, 0, 0);
+                ppToDeduct += AbilityBattleEffects(ABILITYEFFECT_COUNT_ON_FIELD, gBattlerAttacker, ABILITY_HI_PRESSURE, 0, 0);
                 break;
             case MOVE_TARGET_BOTH:
             case MOVE_TARGET_OPPONENTS_FIELD:
                 ppToDeduct += AbilityBattleEffects(ABILITYEFFECT_COUNT_OTHER_SIDE, gBattlerAttacker, ABILITY_PRESSURE, 0, 0);
+                ppToDeduct += AbilityBattleEffects(ABILITYEFFECT_COUNT_OTHER_SIDE, gBattlerAttacker, ABILITY_HI_PRESSURE, 0, 0);
                 break;
-            default:
+            default:    //loks like normal battle, but with a check to make sure move isn't a self targetting move?
                 if (gBattlerAttacker != gBattlerTarget && gBattleMons[gBattlerTarget].ability == ABILITY_PRESSURE)
+                    ++ppToDeduct;
+                if (gBattlerAttacker != gBattlerTarget && gBattleMons[gBattlerTarget].ability == ABILITY_HI_PRESSURE)
                     ++ppToDeduct;
                 break;
             }
@@ -3223,7 +3227,10 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
             CancelMultiTurnMoves(gEffectBattler);
             statusChanged = TRUE;
             gDisableStructs[gActiveBattler].FrozenTurns = ((Random() % 3) + 2); //2-4 turns for frozn should work
-            break;
+            break;  //new note, made change to freeze, but don't want move to just be a switch as I'll lose the end turn, think I will adapt frostbite
+            //from arceus my plan, when freeze timer  reaches zero, apply frostbite, which will continue end turn damage but allow enemy to attack.
+            //freeze status cure effects would remove frostbite, after freeze, as well as if applied during freez.
+            //so frostbite would take efffect when frozen turn counter reaches zero and last item effect/battle effect wasn't freeze cure  vsonic IMPORTANT
         case STATUS1_PARALYSIS:
             if (gBattleMons[gEffectBattler].ability == ABILITY_LIMBER)
             {
@@ -3402,7 +3409,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 {
                     gBattleMons[gEffectBattler].status2 |= STATUS2_MULTIPLETURNS;
                     gLockedMoves[gEffectBattler] = gCurrentMove;
-                    gBattleMons[gEffectBattler].status2 |= ((Random() & 3) + 2) << 4;
+                    gBattleMons[gEffectBattler].status2 |= ((Random() & 3) + 2) << 4;   //believe means 2-5
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
                     gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleCommunication[MOVE_EFFECT_BYTE]];
                 }

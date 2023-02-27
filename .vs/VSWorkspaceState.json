@@ -1,14 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\asm",
-    "\\asm\\macros",
-    "\\common_syms",
-    "\\data",
     "\\graphics",
+    "\\graphics\\door_anims",
+    "\\graphics\\object_events",
+    "\\graphics\\object_events\\pics",
+    "\\graphics\\object_events\\pics\\people",
     "\\include",
-    "\\include\\constants"
+    "\\sound",
+    "\\sound\\songs",
+    "\\sound\\songs\\midi"
   ],
-  "SelectedNode": "\\include\\constants\\battle_anim.h",
+  "SelectedNode": "\\data",
   "PreviewInSolutionExplorer": false
 }
