@@ -4114,7 +4114,7 @@ static void atk19_tryfaintmon(void)
 
                 gBattleMons[gBattlerAttacker].pp[moveIndex] = 0;
                 BattleScriptPush(gBattlescriptCurrInstr);
-                gBattlescriptCurrInstr = BattleScript_GrudgeTakesPp;
+                gBattlescriptCurrInstr = BattleScript_GrudgeTakesPp; //is only a string, has no funcitonality 
                 gActiveBattler = gBattlerAttacker;
                 BtlController_EmitSetMonData(0, moveIndex + REQUEST_PPMOVE1_BATTLE, 0, 1, &gBattleMons[gActiveBattler].pp[moveIndex]);
                 MarkBattlerForControllerExec(gActiveBattler);
@@ -11365,18 +11365,18 @@ static void atkAD_tryspiteppreduce(void) //slight edit, added 10% chance for bad
     if (gLastMoves[gBattlerTarget] != MOVE_NONE && gLastMoves[gBattlerTarget] != 0xFFFF)
     {
         s32 i;
-        u16 luck = Random() % 10;
-        s32 ppToDeduct;
+        u16 luck = Random() % 10; //0-9 , 1-in-10 oddds, base 10 pp move, what odds do I want/need?
+        s32 ppToDeduct; //i want the effect to be rare, but the effect itself to still be worthwhile, but not broken.
 
-        for (i = 0; i < MAX_MON_MOVES; ++i)
-            if (gLastMoves[gBattlerTarget] == gBattleMons[gBattlerTarget].moves[i])
+        for (i = 0; i < MAX_MON_MOVES; ++i)//move only has base 10 pp buff bad luck odds, to be more feasible.
+            if (gLastMoves[gBattlerTarget] == gBattleMons[gBattlerTarget].moves[i]) //check after but think its 30% odds now, 0-9 if less than 4
                 break;
         if (i != MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] != 0)
         {
-            if (luck != 0)
-                ppToDeduct = (Random() & 3) + 2; //removes 2-5 pp
+            if (luck > 3) //if 4,5,6,7,8, or 9;  do normal effect  6 out of 10 60% odds  this shuold be perfect, still need test
+                ppToDeduct = (Random() % 4) + 2; //removes 2-5 pp   //normal effect
             else
-                ppToDeduct = 10;
+                ppToDeduct = 10;    //bad luck clause, when if false
 
             if (gBattleMons[gBattlerTarget].pp[i] < ppToDeduct)
                 ppToDeduct = gBattleMons[gBattlerTarget].pp[i];
