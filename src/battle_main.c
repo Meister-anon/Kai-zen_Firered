@@ -460,8 +460,16 @@ const u8 gTypeEffectiveness[393] = // 336 is number of entries x 3 i.e number of
     TYPE_DRAGON, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_ENDTABLE, TYPE_ENDTABLE, TYPE_MUL_NO_EFFECT
 };
+
+//questioned bug and ice resistance to electricity, but after research it made even more sense, than I initially thought.
+//initial basis was grass resists, bug is like nature so is similar, also bugs chew threw electrical cables,
+//and ice slowls electron flow, which can prevent electrical flow.
+//but later found, not only  does ice stop electrical flow, bugs and ice are capable of producing lightning/electricity mostly via friction
+//and as electric resists electric, that is another reason ice/bug resistance to electricity makes sense.
+
     //consider makign bugs immune to confusion status, like wolfeyvgc said, he didn't explain but I gather logic is most bugs work by hivemind,
 //on top of having some type of extra sensory options with its feelers etc. will have to add dark type exception to prankster back i guess
+//think this is done?
 
 const u8 gTypeNames[][TYPE_NAME_LENGTH + 1] =
 {

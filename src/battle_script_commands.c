@@ -5268,7 +5268,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
     u8 moveType = 0;
     u8 holdEffectAtk = 0;
     u16 *choicedMoveAtk = NULL;
-    u8 arg1, arg2;
+    u8 arg1, arg2; //equivalent endmove endstate
     u16 originallyUsedMove;
 
     if (gChosenMove == 0xFFFF)
@@ -5283,9 +5283,10 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
         holdEffectAtk = ItemId_GetHoldEffect(gBattleMons[gBattlerAttacker].item);
     choicedMoveAtk = &gBattleStruct->choicedMove[gBattlerAttacker];
     GET_MOVE_TYPE(gCurrentMove, moveType);
-    do
-    {
-        switch (gBattleScripting.atk49_state)
+    do //comb function, and check for any custom effecst
+    {// otherwise safe to completely replace with emerald function
+        //will require transfrerring bs_commands.h constants file move end values as well. 
+        switch (gBattleScripting.atk49_state) //order is mostly the same, just starts with protectlike effects instead of rage
         {
         case ATK49_RAGE: // rage check
             if (gBattleMons[gBattlerTarget].status2 & STATUS2_RAGE
@@ -11360,7 +11361,7 @@ static void atkAC_remaininghptopower(void) //changed from 48 to 64 since apparen
     ++gBattlescriptCurrInstr;
 }
 
-static void atkAD_tryspiteppreduce(void) //slight edit, added 10% chance for bad luck effect
+static void atkAD_tryspiteppreduce(void) //vsonic need test, for odds and if effect needs tweaking
 {
     if (gLastMoves[gBattlerTarget] != MOVE_NONE && gLastMoves[gBattlerTarget] != 0xFFFF)
     {
@@ -11374,16 +11375,18 @@ static void atkAD_tryspiteppreduce(void) //slight edit, added 10% chance for bad
         if (i != MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] != 0)
         {
             if (luck > 3) //if 4,5,6,7,8, or 9;  do normal effect  6 out of 10 60% odds  this shuold be perfect, still need test
-                ppToDeduct = (Random() % 4) + 2; //removes 2-5 pp   //normal effect
-            else
-                ppToDeduct = 10;    //bad luck clause, when if false
-
+                ppToDeduct = (Random() % 2) + 4; //removes 4-5 pp   //new more consistent effect, min 4 drop, on move just used so base 5 pp moves get removed
+            else if (luck > 0)  //might go down to + 3
+                ppToDeduct = 10;    //bad luck clause, since uses else if, should automatically exclude values above 3  shoudl be 1-3
+            if (luck == 0)
+                ppToDeduct = gBattleMons[gBattlerTarget].pp[i];//want to make text for extranormal effects, 1st is mon had bad luck, other is mon's luck ran out!
+            //these strings would run before the normal sprite text
             if (gBattleMons[gBattlerTarget].pp[i] < ppToDeduct)
                 ppToDeduct = gBattleMons[gBattlerTarget].pp[i];
             PREPARE_MOVE_BUFFER(gBattleTextBuff1, gLastMoves[gBattlerTarget])
                 ConvertIntToDecimalStringN(gBattleTextBuff2, ppToDeduct, 0, 1);
-            PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff2, 1, ppToDeduct)
-                gBattleMons[gBattlerTarget].pp[i] -= ppToDeduct;
+            PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff2, 1, ppToDeduct)//update make new define that will be text "all"
+                gBattleMons[gBattlerTarget].pp[i] -= ppToDeduct; //make a condition that if true will make gBattleTextBuff2, use that define for all rather than a number
             gActiveBattler = gBattlerTarget;
             if (!(gDisableStructs[gActiveBattler].mimickedMoves & gBitTable[i])
                 && !(gBattleMons[gActiveBattler].status2 & STATUS2_TRANSFORMED))

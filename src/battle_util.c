@@ -2308,7 +2308,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 u16 rando = Random() % 4;
                 u8 target = gBattleMoves[gCurrentMove].target;
                 --gBattleMons[gBattlerAttacker].status2;    //nvm couldn't put bug clause above this line, or confusion wouldn't decrement & be permanent
-                if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG)) //moved bug exclusion to here, so status decrements //NEED TEST
+                if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG)) //moved bug exclusion to here, so status decrements //NEED TEST //vsonic
                 {
                     if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION) //&& !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG))
                     {
