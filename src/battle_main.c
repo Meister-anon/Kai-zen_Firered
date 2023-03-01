@@ -326,7 +326,7 @@ static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 
 //each line adds 3 because there are 3 arguments in each line, atk type, def type, & effectiveness
 //DON'T FORGET every time I change below, need to update in the .h
 
-const u8 gTypeEffectiveness[396] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+const u8 gTypeEffectiveness[399] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -405,8 +405,9 @@ const u8 gTypeEffectiveness[396] = // 336 is number of entries x 3 i.e number of
     TYPE_FLYING, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_PSYCHIC, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_PSYCHIC, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_PSYCHIC, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_PSYCHIC, TYPE_DARK, TYPE_MUL_NO_EFFECT,
+    TYPE_PSYCHIC, TYPE_FLYING, TYPE_MUL_SUPER_EFFECTIVE,    //psychic power can stop a target cold, can keep them from flying,
+    TYPE_PSYCHIC, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,     //or confuse them which would make it impossible to fly, so makes sense,
+    TYPE_PSYCHIC, TYPE_DARK, TYPE_MUL_NO_EFFECT,        //mostly done to counter fairy resistance
     TYPE_PSYCHIC, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
