@@ -326,7 +326,7 @@ static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 
 //each line adds 3 because there are 3 arguments in each line, atk type, def type, & effectiveness
 //DON'T FORGET every time I change below, need to update in the .h
 
-const u8 gTypeEffectiveness[393] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+const u8 gTypeEffectiveness[390] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -413,8 +413,8 @@ const u8 gTypeEffectiveness[393] = // 336 is number of entries x 3 i.e number of
     TYPE_BUG, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_FLYING, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_BUG, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_BUG, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE,
+    //TYPE_BUG, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,   //removed this resistance by accident in my chart, but 
+    TYPE_BUG, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE, //was so good will add to my chart
     TYPE_BUG, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_ROCK, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ROCK, TYPE_ICE, TYPE_MUL_SUPER_EFFECTIVE,
