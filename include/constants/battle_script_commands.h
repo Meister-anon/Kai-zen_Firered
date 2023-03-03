@@ -26,8 +26,9 @@
 #define sFIELD20_PURSUIT_DOUBLE_DAMAGE gBattleScripting + 0x20
 #define sRESHOW_MAIN_STATE gBattleScripting + 0x21
 #define sRESHOW_HELPER_STATE gBattleScripting + 0x22
-//#define sSAVED_BATTLER               (gBattleScripting + 0x23) // savedBattler
-//#define sSAVED_STAT_CHANGER gBattleScripting + 0x24
+#define sSAVED_STAT_CHANGER gBattleScripting + 0x23  //for moody
+
+//#define sSAVED_BATTLER               (gBattleScripting + 0x24) // savedBattler
 //#define sILLUSION_NICK_HACK gBattleScripting + 0x25
 //#define sFIXED_ABILITY_POPUP         (gBattleScripting + 0x26) // fixedPopup
 //#define sABILITY_OVERWRITE           (gBattleScripting + 0x27) // abilityPopupOverwrite

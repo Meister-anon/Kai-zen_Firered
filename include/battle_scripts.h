@@ -397,6 +397,7 @@ extern const u8 BattleScript_QuiverDanceTrySpeed[];
 extern const u8 BattleScript_QuiverDanceTrySpDef[];
 extern const u8 BattleScript_QuiverDanceDoMoveAnim[];
 extern const u8 BattleScript_EffectQuiverDance[];
+extern const u8 BattlesScript_RoostEnds[];
 extern const u8 BattleScript_CoilEnd[];
 extern const u8 BattleScript_CoilTryAcc[];
 extern const u8 BattleScript_CoilTryDef[];

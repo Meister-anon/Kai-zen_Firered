@@ -1,5 +1,6 @@
 #include "global.h"
 #include "gflib.h"
+#include "battle.h"
 #include "item.h"
 #include "util.h"
 #include "random.h"
@@ -1965,7 +1966,7 @@ static void atk06_typecalc(void)
     u8 moveType;
     u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBaseStats[gBattlerTarget].type3;
 
-    if (gCurrentMove == MOVE_STRUGGLE)
+    if (gCurrentMove == (MOVE_STRUGGLE || MOVE_BIDE)) //should let hit ghost types
     {
         ++gBattlescriptCurrInstr;
         return;
@@ -6430,7 +6431,7 @@ bool32 NoAliveMonsForEitherParty(void)
     return (NoAliveMonsForPlayer() || NoAliveMonsForOpponent());
 }
 
-/*u32 IsAbilityPreventingEscape(u32 battlerId)
+/*u32 IsAbilityPreventingEscape(u32 battlerId)   copied here to understand how to make ability search funciton, escape prevention already implemented
 {
     u32 id;
     #if B_GHOSTS_ESCAPE >= GEN_6
@@ -6611,6 +6612,9 @@ static void atk52_switchineffects(void) //important, think can put ability reset
             gBattlescriptCurrInstr += 2;
         }
     }  //end of else, think I can put other logic for switchin below this
+
+    if (gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK)
+        gStatuses3[gBattlerTarget] |= STATUS3_HEAL_BLOCK; //vsonic hope works, should set status 3 heal block
 
     //believe the switch case and will put the id of the battle on variable i
     for (i = 0; i < gBattlersCount; ++i)
@@ -7666,6 +7670,7 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear)
             DEFOG_CLEAR(SIDE_STATUS_MIST, mistTimer, BattleScript_SideStatusWoreOffReturn, MOVE_MIST);
             DEFOG_CLEAR(SIDE_STATUS_AURORA_VEIL, auroraVeilTimer, BattleScript_SideStatusWoreOffReturn, MOVE_AURORA_VEIL);
             DEFOG_CLEAR(SIDE_STATUS_SAFEGUARD, safeguardTimer, BattleScript_SideStatusWoreOffReturn, MOVE_SAFEGUARD);
+            DEFOG_CLEAR(SIDE_STATUS_HEAL_BLOCK, healBlockTimer, BattleScript_SideStatusWoreOffReturn, MOVE_HEAL_BLOCK); //HOPE WORKS
         }
         DEFOG_CLEAR(SIDE_STATUS_SPIKES, spikesAmount, BattleScript_SpikesFree, 0);
         DEFOG_CLEAR(SIDE_STATUS_STEALTH_ROCK, stealthRockAmount, BattleScript_StealthRockFree, 0);
@@ -10679,6 +10684,8 @@ static void atk95_setsandstorm(void)
 
 static void atk96_weatherdamage(void)
 {
+    u32 ability = GetBattlerAbility(gBattlerAttacker);
+
     if (IS_BATTLE_TYPE_GHOST_WITHOUT_SCOPE(gBattleTypeFlags)
      && (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT))
     {
@@ -10686,18 +10693,21 @@ static void atk96_weatherdamage(void)
         ++gBattlescriptCurrInstr;
         return;
     }
-    if (WEATHER_HAS_EFFECT)
+    if (IsBattlerAlive(gBattlerAttacker) && WEATHER_HAS_EFFECT && ability != ABILITY_MAGIC_GUARD
+        && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERGROUND)
+        && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER)  //remove rendancy put here
+        && GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES)
     {
         if (gBattleWeather & WEATHER_SANDSTORM_ANY)
         {
             if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ROCK)
              && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL)
              && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)
+             && gBattleMons[gBattlerAttacker].ability != ABILITY_OVERCOAT
+             && gBattleMons[gBattlerAttacker].ability != ABILITY_SAND_RUSH
              && gBattleMons[gBattlerAttacker].ability != ABILITY_SAND_VEIL
-             && gBattleMons[gBattlerAttacker].ability != ABILITY_SAND_FORCE
-             && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERGROUND)
-             && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER)
-             && (gBattleMons[gBattlerAttacker].ability != ABILITY_FORECAST && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM))
+             && gBattleMons[gBattlerAttacker].ability != ABILITY_SAND_FORCE)
+             //&& (gBattleMons[gBattlerAttacker].ability != ABILITY_FORECAST && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM))
             {//doesn't really need the castform logic as it already turns into a type immune to said weather effect also it may be in other battlescript
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                 if (gBattleMoveDamage == 0)
@@ -10711,10 +10721,9 @@ static void atk96_weatherdamage(void)
         if (gBattleWeather & WEATHER_HAIL)
         {
             if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ICE) //add ice weather abilities
+             && gBattleMons[gBattlerAttacker].ability != ABILITY_OVERCOAT
              && gBattleMons[gBattlerAttacker].ability != ABILITY_SNOW_CLOAK
-             && gBattleMons[gBattlerAttacker].ability != ABILITY_ICE_BODY
-             && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERGROUND)
-             && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER))
+             && gBattleMons[gBattlerAttacker].ability != ABILITY_ICE_BODY)
             {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                 if (gBattleMoveDamage == 0)
@@ -12023,10 +12032,10 @@ static void atkC2_selectfirstvalidtarget(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atkC3_trysetfutureattack(void)
+static void atkC3_trysetfutureattack(void) //want to set 2, so make new counter and make it default to that if other != 0
 {
     if (gWishFutureKnock.futureSightCounter[gBattlerTarget] != 0) //prevents spamming each turn
-    {
+    {   //when set upgrade, change to if both counters do not equal 0
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
     else
@@ -13473,16 +13482,18 @@ static void atkF7_finishturn(void)
     gCurrentTurnActionNumber = gBattlersCount;
 }
 
+//vsonic need remember to add to ai decision tree
 static void atkF8_setroost(void) { //actually I don't like this type change idea so not gonna do it.
 
     u16 virtue = Random() % 4; //had to make start value timer and set equal so they use the same value without recalc
-    gDisableStructs[gBattlerAttacker].RoostTimer = 0;
+    gDisableStructs[gBattlerAttacker].RoostTimer = 4; //setting timer to 4, should give 3 full turns
     //gDisableStructs[gBattlerAttacker].RoostTimerStartValue = 0;
     //u8 timervalue = gDisableStructs[gBattlerAttacker].RoostTimer && gDisableStructs[gBattlerAttacker].RoostTimerStartValue;
 
     
    // gDisableStructs[gBattlerAttacker].RoostTimer = gDisableStructs[gBattlerAttacker].RoostTimerStartValue += virtue;
-    gDisableStructs[gBattlerAttacker].RoostTimer += virtue;
+    //gDisableStructs[gBattlerAttacker].RoostTimer += virtue;
+    //REMOVED random effect
     //ok made slight adjustment here, I think since its starts at zero, this should be enough that timer is always increased when setting roost
     //which shoud give a nice balance to repeatedly using the move.
 
@@ -13553,17 +13564,40 @@ static void atkF9_mondamaged(void) //edited based on recommendation from mcgriff
 }
 
 static void atkFA_sethealblock(void) {
-    if (gStatuses3[gBattlerTarget] & STATUS3_HEAL_BLOCK)
+    if (gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)] & SIDE_STATUS_HEAL_BLOCK)
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
     else
     {
-        gStatuses3[gBattlerTarget] |= STATUS3_HEAL_BLOCK;
-        gDisableStructs[gBattlerTarget].healBlockTimer = 5;
+        gStatuses3[gBattlerTarget] |= STATUS3_HEAL_BLOCK; // apply status to target and set side status
+        gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)] |= SIDE_STATUS_HEAL_BLOCK;
+        gSideTimers[GET_BATTLER_SIDE(gBattlerTarget)].healBlockTimer = 5;
+        gSideTimers[GET_BATTLER_SIDE(gBattlerTarget)].healBlockBattlerId = gBattlerTarget;
+
+        //gStatuses3[gBattlerTarget] |= STATUS3_HEAL_BLOCK;
+        //gDisableStructs[gBattlerTarget].healBlockTimer = 5;
         gBattlescriptCurrInstr += 5;
+    }//should work but need test, effect I want is a side status that blocks healing moves & items, but 
+}//with clense effects are able to clear the status from individual mon, without removing the entire side status
+//unless used defog
+//new idea, make side status heal block, apply status 3 heal block on switch in, long as timer isn't 0
+//this would let normal moves clear the status separately from the full side status
+//just need to set it up so side status timer running out would clear side status and 
+//staus 3 heal block from any mon on side.
+
+/*if (gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] & SIDE_STATUS_SAFEGUARD)
+    {
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 0;
     }
-}
+    else
+    {
+        gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] |= SIDE_STATUS_SAFEGUARD;
+        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].safeguardTimer = 5;
+        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].safeguardBattlerId = gBattlerAttacker;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 5;
+    }*/
 
 static void atkFB_setgravity(void) {
     if (gFieldStatuses & STATUS_FIELD_GRAVITY)
@@ -13682,7 +13716,7 @@ static void HandleRoomMove(u32 statusFlag, u8 *timer, u8 stringId)
 static void atk102_setroom(void) {
     switch (gBattleMoves[gCurrentMove].effect)
     {
-    /*case EFFECT_TRICK_ROOM:
+    case EFFECT_TRICK_ROOM:
         HandleRoomMove(STATUS_FIELD_TRICK_ROOM, &gFieldTimers.trickRoomTimer, 0);
         break;
     case EFFECT_WONDER_ROOM:
@@ -13690,7 +13724,7 @@ static void atk102_setroom(void) {
         break;
     case EFFECT_MAGIC_ROOM:
         HandleRoomMove(STATUS_FIELD_MAGIC_ROOM, &gFieldTimers.magicRoomTimer, 4);
-        break;*/
+        break;
     default:
         gBattleCommunication[MULTISTRING_CHOOSER] = 6;
         break;
@@ -13698,7 +13732,7 @@ static void atk102_setroom(void) {
     gBattlescriptCurrInstr++;
 }
 
-static void atk103_setstealthrock(void) {
+static void atk103_setstealthrock(void) { //check where rest of spikes handled
     u8 targetSide = GetBattlerSide(gBattlerTarget);
     if (gSideStatuses[targetSide] & SIDE_STATUS_STEALTH_ROCK)
     {

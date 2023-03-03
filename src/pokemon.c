@@ -5150,8 +5150,8 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
 
     if ((!IS_POKEMON_ITEM(item)) && !IS_POKEMON_ITEM2(item))
         return TRUE;
-    if (gItemEffectTable[item - ITEM_POTION] == NULL && item != ITEM_ENIGMA_BERRY)
-        return TRUE;
+    if (gItemEffectTable[item - ITEM_POTION] == NULL && item != ITEM_ENIGMA_BERRY)//will need to update this table for new gen stuff
+        return TRUE; //could prob add clause right below here, if status of mon is heal block return false
 
     if (item == ITEM_ENIGMA_BERRY)
     {

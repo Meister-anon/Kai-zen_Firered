@@ -4450,7 +4450,7 @@ static void GetMedicineItemEffectMessage(u16 item)
 
 static bool8 NotUsingHPEVItemOnShedinja(struct Pokemon *mon, u16 item, u16 ability)
 {
-    if (GetItemEffectType(item) == ITEM_EFFECT_HP_EV && GetMonData(mon, MON_DATA_SPECIES) == SPECIES_SHEDINJA && ability == ABILITY_WONDER_GUARD)
+    if (GetItemEffectType(item) == ITEM_EFFECT_HP_EV && (GetMonData(mon, MON_DATA_SPECIES) == SPECIES_SHEDINJA && ability == ABILITY_WONDER_GUARD))
         return TRUE;
     return TRUE;
 }
@@ -4477,12 +4477,17 @@ void ItemUseCB_Medicine(u8 taskId, TaskFunc func)
     u16 item = gSpecialVar_ItemId;
     bool8 canHeal;
     u16 ability;
+    
+    if (!(gStatuses3[gActiveBattler] & STATUS3_HEAL_BLOCK)) {
+        canHeal = TRUE; //add clause for if side status not heal_block, canheal is true
+    }
 
-    if (!NotUsingHPEVItemOnShedinja(mon, item, ability))
+    /*if (!NotUsingHPEVItemOnShedinja(mon, item, ability))
     {
         canHeal = TRUE;
     }
-    else
+    else*/
+    if (canHeal = TRUE)
     {
         if (IsHPRecoveryItem(item) == TRUE)
         {
@@ -4508,7 +4513,7 @@ void ItemUseCB_Medicine(u8 taskId, TaskFunc func)
     }
 }
 
-void ItemUseCB_MedicineStep(u8 taskId, TaskFunc func)
+void ItemUseCB_MedicineStep(u8 taskId, TaskFunc func) //believe this one is specifically used for in battle
 {
     u16 hp = 0;
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
@@ -4516,16 +4521,21 @@ void ItemUseCB_MedicineStep(u8 taskId, TaskFunc func)
     bool8 canHeal;
     u16 ability;
 
-    if (NotUsingHPEVItemOnShedinja(mon, item, ability))
-    {
-        canHeal = IsHPRecoveryItem(item);
-        if (canHeal == TRUE)
+    //if (NotUsingHPEVItemOnShedinja(mon, item, ability))
+    //{
+    if ((gSideStatuses[gActiveBattler] & SIDE_STATUS_HEAL_BLOCK) && (IsHPRecoveryItem(item) == TRUE))
+        canHeal = FALSE; //combined with bottom logic, should prevent item use, on mon in battle when heal block is up
+    //need to make logic  for held item berries that restore hp.
+
+        //canHeal = IsHPRecoveryItem(item);
+        if (IsHPRecoveryItem(item) == TRUE)
         {
             hp = GetMonData(mon, MON_DATA_HP);
+
             if (hp == GetMonData(mon, MON_DATA_MAX_HP))
-                canHeal = FALSE;
+                  canHeal = FALSE           
         }
-        if (ExecuteTableBasedItemEffect_(gPartyMenu.slotId, item, 0))
+        if ((ExecuteTableBasedItemEffect_(gPartyMenu.slotId, item, 0)) || canHeal == FALSE)
         {
         WONT_HAVE_EFFECT:
             gPartyMenuUseExitCallback = FALSE;
@@ -4535,11 +4545,11 @@ void ItemUseCB_MedicineStep(u8 taskId, TaskFunc func)
             gTasks[taskId].func = func;
             return;
         }
-    }
+    /*}
     else
     {
         goto WONT_HAVE_EFFECT; // even loop wrap won't work
-    }
+    }*/
     gPartyMenuUseExitCallback = TRUE;
     if (!IsItemFlute(item))
     {
@@ -4562,7 +4572,7 @@ void ItemUseCB_MedicineStep(u8 taskId, TaskFunc func)
         ResetHPTaskData(taskId, 0, hp);
         return;
     }
-    else
+    else  //assume to mean can't heal.
     {
         GetMonNickname(mon, gStringVar1);
         GetMedicineItemEffectMessage(item);
@@ -4570,7 +4580,7 @@ void ItemUseCB_MedicineStep(u8 taskId, TaskFunc func)
         ScheduleBgCopyTilemapToVram(2);
         gTasks[taskId].func = func;
     }
-}
+} //vsonic test but removed shedinja based clauses, believe they're irrelvant anyway cuz of pokemon.c hp function
 
 static void Task_DisplayHPRestoredMessage(u8 taskId)
 {
@@ -4602,10 +4612,11 @@ void Task_AbilityCapsule(u8 taskId) //important seemed easy enough so ported now
 {
     static const u8 askText[] = _("Would you like to change {STR_VAR_1}'s\nability to {STR_VAR_2}?");
     static const u8 doneText[] = _("{STR_VAR_1}'s ability became\n{STR_VAR_2}!{PAUSE_UNTIL_PRESS}");
-    s16* data = gTasks[taskId].data;
+    s16* data = gTasks[taskId].data;    //vsonic imporant this is how can define text without having to go to messages
 
-    switch (tState)
-    {
+    switch (tState)//change how works, let it change current ability to any other abilities it has 
+    {//make opena dialgoue displaying species abilities in order of slots and print to a box if not equal current ability
+    //so should print every possible ability excluding the one it currently has, populate selected ability to str_var_2
     case 0:
         // Can't use.
         if (gBaseStats[tSpecies].abilities[0] == gBaseStats[tSpecies].abilities[1] //if both ability slots have same ability
@@ -4674,17 +4685,17 @@ void Task_AbilityCapsule(u8 taskId) //important seemed easy enough so ported now
     }
 }
 
-void ItemUseCB_AbilityCapsule(u8 taskId, TaskFunc task)
+void ItemUseCB_AbilityCapsule(u8 taskId, TaskFunc task)//need to understand
 {
     s16* data = gTasks[taskId].data;
 
     tState = 0;
     tMonId = gPartyMenu.slotId;
     tSpecies = GetMonData(&gPlayerParty[tMonId], MON_DATA_SPECIES, NULL);
-    tAbilityNum = GetMonData(&gPlayerParty[tMonId], MON_DATA_ABILITY_NUM, NULL) ^ 1;
+    tAbilityNum = GetMonData(&gPlayerParty[tMonId], MON_DATA_ABILITY_NUM, NULL) ^ 1; //may need to remove this since its setting
     SetWordTaskArg(taskId, tOldFunc, (uintptr_t)(gTasks[taskId].func));
-    gTasks[taskId].func = Task_AbilityCapsule;
-}
+    gTasks[taskId].func = Task_AbilityCapsule; //prob instead handle abilityNum selection in this task
+}//
 
 #undef tState
 #undef tSpecies

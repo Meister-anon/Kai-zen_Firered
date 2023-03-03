@@ -237,11 +237,11 @@
 #define STATUS3_PHANTOM_FORCE           (1 << 24)
 #define STATUS3_MIRACLE_EYED            (1 << 25)
 #define STATUS3_MAGNET_RISE             (1 << 26)
-#define STATUS3_HEAL_BLOCK              (1 << 27)
-#define STATUS3_AQUA_RING               (1 << 28)
-#define STATUS3_LASER_FOCUS             (1 << 29)
-#define STATUS3_ELECTRIFIED             (1 << 30)
-#define STATUS3_POWER_TRICK             (1 << 31)
+#define STATUS3_AQUA_RING               (1 << 27)
+#define STATUS3_LASER_FOCUS             (1 << 28)
+#define STATUS3_ELECTRIFIED             (1 << 29)
+#define STATUS3_POWER_TRICK             (1 << 30)
+#define STATUS3_HEAL_BLOCK				(1 << 31) //will be side affecting, this just for first turn effects,  change move to target both to match intentions
 
 #define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER | STATUS3_PHANTOM_FORCE)
 
@@ -332,6 +332,7 @@
 #define SIDE_STATUS_WIDE_GUARD              (1 << 19)
 #define SIDE_STATUS_CRAFTY_SHIELD           (1 << 20)
 #define SIDE_STATUS_MAT_BLOCK               (1 << 21)
+#define SIDE_STATUS_HEAL_BLOCK              (1 << 22)
 
 // Field affecting statuses.
 #define STATUS_FIELD_MAGIC_ROOM         0x1
@@ -346,6 +347,7 @@
 #define STATUS_FIELD_PSYCHIC_TERRAIN    0x200
 #define STATUS_FIELD_ION_DELUGE         0x400
 #define STATUS_FIELD_FAIRY_LOCK         0x800
+#define STATUS_FIELD_TERRAIN_PERMANENT  0x1600 //(1 << 12)   // Overworld thunderstorm generates electric terrain //do more with this & nature power
 
 #define STATUS_TERRAIN_ANY              (STATUS_FIELD_GRASSY_TERRAIN | STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_PSYCHIC_TERRAIN)
 

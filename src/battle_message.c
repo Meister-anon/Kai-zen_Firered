@@ -65,6 +65,7 @@ static const u8 sText_AttackMissed[] = _("{B_ATK_NAME_WITH_PREFIX}'s\nattack mis
 static const u8 sText_PkmnProtectedItself[] = _("{B_DEF_NAME_WITH_PREFIX}\nprotected itself!");
 static const u8 sText_AvoidedDamage[] = _("{B_DEF_NAME_WITH_PREFIX} avoided\ndamage with {B_DEF_ABILITY}!");
 static const u8 sText_PkmnMakesGroundMiss[] = _("{B_DEF_NAME_WITH_PREFIX} took to the air!\nGROUND moves can't hit it!");
+static const u8 sText_PkmnRoostEnds[] = _("{B_DEF_NAME_WITH_PREFIX} stopped Roosting and took to the air!\nGROUND moves can no longer hit it!");
 static const u8 sText_PkmnAvoidedAttack[] = _("{B_DEF_NAME_WITH_PREFIX} avoided\nthe attack!");
 static const u8 sText_ItDoesntAffect[] = _("It doesn't affect\n{B_DEF_NAME_WITH_PREFIX}…");
 static const u8 sText_AttackerFainted[] = _("{B_ATK_NAME_WITH_PREFIX}\nfainted!\p");
@@ -1365,6 +1366,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_CUPIDSARROWSTRUCK - BATTLESTRINGS_TABLE_START]             = sText_FellInLoveAtFirstSight,
     [STRINGID_PKMNALREADYFROZEN - BATTLESTRINGS_TABLE_START]             = sText_PkmnWasAlreadyFrozen,
     [STRINGID_SNAPTRAP - BATTLESTRINGS_TABLE_START]                      = sText_SnapTrap,
+    [STRINGID_PKMNSTOPPEDROOSTING - BATTLESTRINGS_TABLE_START]           = sText_PkmnRoostEnds,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,

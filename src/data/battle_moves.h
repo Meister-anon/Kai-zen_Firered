@@ -1825,7 +1825,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_USER,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-    },
+    },// made typeless dmg, and buffed revenge damage priority & slight damage buff to account for loss of stab
 
     [MOVE_METRONOME] =
     {
@@ -4221,7 +4221,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = 0,
         .split = SPLIT_STATUS,
-    },
+    },//buffing add more powerful moves & make flying move condition side status tail wind to be mor accssible //vsonic
 
     [MOVE_CHARGE] =
     {
@@ -5940,10 +5940,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_SELECTED,
-        .priority = 0,
+        .target = MOVE_TARGET_BOTH, // if setup rotation/triple battles may need to change this to opponent field target
+        .priority = 1,  //added little priority to be able to pre-empt a heal.
         .split = SPLIT_STATUS,
-    },
+    }, //make heal block stop potions etc.e simple enough just add clause to itemuse function i think
+    //so healing items can't be used if target status is heal block
+    //make sure to set as team/side wide status
 
     [MOVE_WRING_OUT] =
     {
@@ -11586,7 +11588,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .priority = 0,
+        .priority = -6,  //lowest priority set unless I can figure a way to make it use dmg from previous turn for calc
         .flags = 0,
         .split = SPLIT_STATUS,
     },

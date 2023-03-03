@@ -6664,7 +6664,12 @@ BattleScript_YawnMakesAsleep::
 	makevisible BS_EFFECT_BATTLER
 	end2
 
-	BattleScript_EmbargoEndTurn::
+BattlesScript_RoostEnds::
+	printstring STRINGID_PKMNSTOPPEDROOSTING
+	waitmessage 0x40
+	end2
+
+BattleScript_EmbargoEndTurn::
 	printstring STRINGID_EMBARGOENDS
 	waitmessage 0x40
 	end2

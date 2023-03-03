@@ -201,11 +201,10 @@ struct DisableStruct
              u8 embargoTimer;
              u8 magnetRiseTimer;
              u8 telekinesisTimer;
-             u8 healBlockTimer;
              u8 laserFocusTimer;
              u8 throatChopTimer;
-             u8 RoostTimer; // to set random % 4 effect after use roost setup iondelluge the same
-             u8 usedMoves:4;
+             u8 RoostTimer; // to set random % 4 effect after use roost setup iondelluge the same remove random make constant
+             u8 usedMoves:4; //have iondelug in field timers already
              u8 wrapTurns;  //turn counter for wrap bind
              u8 environmentTrapTurns;   //turn counter for environment traps fire spin whirlpool sandtomb magma storm
              u8 clampTurns;
@@ -328,7 +327,10 @@ struct SideTimer
              u8 tailwindBattlerId;
              u8 luckyChantTimer;
              u8 luckyChantBattlerId;
-    /*0x0B*/ u8 fieldB;
+             u8 healBlockTimer; //added for side status effect
+             u8 healBlockBattlerId; //hopefully will be able to individual target clear status, but keep side status in effect for new switches
+             u8 retaliateTimer;  //vsonic need to implement
+             /*0x0B*/ u8 fieldB;
 };
 
 extern struct SideTimer gSideTimers[];
@@ -703,7 +705,10 @@ extern struct BattleStruct *gBattleStruct;
 #define SET_STAT_BUFF_VALUE(n)(((s8)(((s8)(n) << 4)) & 0xF0))
 
 #define SET_STATCHANGER(statId, stage, goesDown)(gBattleScripting.statChanger = (statId) + (stage << 4) + (goesDown << 7))
+#define SET_STATCHANGER2(dst, statId, stage, goesDown)(dst = (statId) + ((stage) << 4) + (goesDown << 7))
 
+// NOTE: The members of this struct have hard-coded offsets 
+//       in include/constants/battle_script_commands.h
 struct BattleScripting  //remember expanding this costs ewram
 {
     s32 painSplitHp;
@@ -729,8 +734,9 @@ struct BattleScripting  //remember expanding this costs ewram
     u8 field_20_pursuitDoublesAttacker; //pursuit damage
     u8 reshowMainState;
     u8 reshowHelperState;
+    u8 savedStatChanger; // For if attempting to change stat two times(ex. Moody)
     /*u8 savedBattler;  //for now saveBattler not used just using normal sBattler
-    u8 savedStatChanger; // For further use, if attempting to change stat two times(ex. Moody)
+    
     u8 illusionNickHack; // To properly display nick in STRINGID_ENEMYABOUTTOSWITCHPKMN.
     bool8 fixedPopup;   // Force ability popup to stick until manually called back
     u16 abilityPopupOverwrite;  //UNCOMMENT if you want these features
@@ -943,7 +949,7 @@ extern u8 gBattleControllerData[MAX_BATTLERS_COUNT];
 extern u8 gBattlerStatusSummaryTaskId[MAX_BATTLERS_COUNT];
 extern u16 gDynamicBasePower;
 extern u32 gFieldStatuses;
-extern struct FieldTimer gFieldTimers; //both needed for things like gravity etc.
+extern struct FieldTimer gFieldTimers; //both needed for things like gravity etc.  //can apparently hold more than one effect at once?
 extern bool8 gHasFetchedBall;
 extern u8 gLastUsedBall;
 extern u16 gLastThrownBall;
