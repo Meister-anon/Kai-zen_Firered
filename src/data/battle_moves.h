@@ -11591,5 +11591,5 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = -6,  //lowest priority set unless I can figure a way to make it use dmg from previous turn for calc
         .flags = 0,
         .split = SPLIT_STATUS,
-    },
+    },//DOES ghost curse effect to last damaged sacrificin stats instead of health
 };//give to bug fairy and grass types   def give sudowoodo

@@ -477,11 +477,12 @@
 #define MOVE_EFFECT_MAGMA_STORM			0x4F
 #define MOVE_EFFECT_INFESTATION			0x50
 #define MOVE_EFFECT_SNAP_TRAP			0x51
+#define MOVE_EFFECT_BIDE				0x52
 
-#define NUM_MOVE_EFFECTS                82	//ok think i got this right, battlescript are assigned based on battle_move_effects.h file
-#define MOVE_EFFECT_AFFECTS_USER        0x60//that has to line up with battle_scripts_1.s but don't need move effect unlesss new status made
+#define NUM_MOVE_EFFECTS                83	//ok think i got this right, battlescript are assigned based on battle_move_effects.h file
+#define MOVE_EFFECT_AFFECTS_USER        0x60//that has to line up with battle_scripts_1.s but don't need move effect unlesss new status made or other new effect
 #define MOVE_EFFECT_CERTAIN             0x90	//OK THIS SEEMS FINE its just a define doesn't need to be a specific value
-
+//dosn't actually need to line up with some othr file, move effect logic is in battle script commands.c setmoveeffect function then just had setmoveeffect to battlescripts
 // Battle terrain defines for gBattleTerrain.
 #define BATTLE_TERRAIN_GRASS        0
 #define BATTLE_TERRAIN_LONG_GRASS   1

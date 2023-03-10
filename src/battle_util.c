@@ -1534,6 +1534,7 @@ enum
     ENDTURN_THROAT_CHOP,
     ENDTURN_SLOW_START,
     ENDTURN_PLASMA_FISTS,
+    ENDTURN_BIDE,
     ENDTURN_BATTLER_COUNT
 };
 
@@ -2177,6 +2178,27 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_PLASMA_FISTS:
                 for (i = 0; i < gBattlersCount; i++)
                     gStatuses4[i] &= ~STATUS4_PLASMA_FISTS;
+                effect++;
+                ++gBattleStruct->turnEffectsTracker;
+                break;
+            case ENDTURN_BIDE:
+                //logic for if I want bide to have no drawback, with this it shouldn't consume a turn on unleaesh if you received no damage
+                /*if (--gDisableStructs[gActiveBattler].bideTimer == 1 && gTakenDmg[gActiveBattler] == 0) //should display no energy string, then let select move
+                { //should be decrement timer, if timer == 1 and taken no damage
+                    MarkBattlerForControllerExec(gActiveBattler);
+                    gEffectBattler = gActiveBattler;
+                    BattleScriptExecute(BattleScript_BideNoEnergyToAttack); //hopefully works right
+
+                }*/
+                if (gBattleMons[gActiveBattler].status2 & STATUS2_BIDE && gDisableStructs[gActiveBattler].bideTimer != 0)
+                {
+                    //--gDisableStructs[gEffectBattler].bideTimer;
+                    MarkBattlerForControllerExec(gActiveBattler);
+                    gEffectBattler = gActiveBattler;
+                    BattleScriptExecute(BattleScript_BideStoringEnergy);//hopefully don't need to change battlescript
+                    effect++;
+                }//ends turn  //may need to swap this to target, depending on who's turn this plays at?
+                ////from GriffinR, --timer meaens decreminet timer if timer != 0
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_BATTLER_COUNT:  // done
@@ -2489,7 +2511,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_RECHARGE: // recharge
-            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RECHARGE)
+            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RECHARGE) //add clause for new dialga ability
             {
                 gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_RECHARGE);
                 gDisableStructs[gBattlerAttacker].rechargeTimer = 0;
@@ -2705,31 +2727,66 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_BIDE: // bide
-            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_BIDE)
+            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_BIDE)//still need logic so can't use bide with status bide
             {
-                gBattleMons[gBattlerAttacker].status2 -= 0x100;
-                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_BIDE)
+                //gBattleMons[gBattlerAttacker].status2 -= STATUS2_BIDE_TURN(1);
+                --gDisableStructs[gBattlerAttacker].bideTimer;
+
+                /*if (((gBattleMoves[gCurrentMove].power == 0) || (gCurrentMove == MOVE_COUNTER || MOVE_MIRROR_COAT))
+                    && gDisableStructs[gBattlerAttacker].bideTimer) {
+                    effect = 1;
+
+                    //gBattleStruct->atkCancellerTracker++;
+                    //break;
+                }*/ //should move to checking other cancelr casese hopefully
+                //trying to skip move cancel, long as not bide attack turn or damaging moeve
+
+                if (gCurrentMove == MOVE_BIDE
+                    && gDisableStructs[gBattlerAttacker].bideTimer) //status is set after this, so firt use should never trigger fail.
                 {
-                    gBattlescriptCurrInstr = BattleScript_BideStoringEnergy;
+                    gBattlescriptCurrInstr = BattleScript_ButItFailedAtkStringPpReduce;
+                    effect = 1;
+                    break;
                 }
-                else
+
+                if (gDisableStructs[gBattlerAttacker].bideTimer && gBattleMoves[gCurrentMove].power != 0
+                    && gCurrentMove != (MOVE_COUNTER || MOVE_MIRROR_COAT))
                 {
-                    if (gTakenDmg[gBattlerAttacker])
+                    gBattleMons[gBattlerAttacker].status2 &= ~STATUS2_BIDE;
+                    //gDisableStructs[gBattlerAttacker].bideTimer = 0;
+                    //realized without setting timer to 0, using bide again, would proc this & remove status immediately
+                    //effect = 1;
+                   //gBattleStruct->atkCancellerTracker++;
+                    //break;
+        
+                    //gBattlescriptCurrInstr = BattleScript_BideStoringEnergy;//move to end turn w status bide end turn effect function
+                }//instead let you use a damaging attack but remove bide status and reset timer
+                if (gDisableStructs[gBattlerAttacker].bideTimer == 0)
+                    //&& gBattleMons[gBattlerAttacker].status2 & STATUS2_BIDE)
+                {
+                    // This is removed in FRLG and Emerald for some reason
+                    //gBattleMons[gBattlerAttacker].status2 &= ~STATUS2_MULTIPLETURNS;
+                   //gBattleMons[gBattlerAttacker].status2 &= ~STATUS2_BIDE; //to remove bide status  //removed had alrady setup in turnvaluecleanup in battle_main.c
+                    //and since atkcanceler is before setbide command better to remove status at endturn anyway
+                    if (gTakenDmg[gBattlerAttacker])  //if taken dmg not 0?
                     {
                         gCurrentMove = MOVE_BIDE;
                         gBattleMoves[gCurrentMove].priority = 3; //if works, second attack will go before most priority moves
-                        *bideDmg = gTakenDmg[gBattlerAttacker] * 23/10; //not sure how it loops rn, but I believe it copies to a separate variable
-                        gBattlerTarget = gTakenDmgByBattler[gBattlerAttacker];  //because taken damage etc. i.e g values get cleared at turn end?
-                        if (gAbsentBattlerFlags & gBitTable[gBattlerTarget])//added extra damage to bide, as I've removed it from type calc for stab
-                            gBattlerTarget = GetMoveTarget(MOVE_BIDE, 1);
+                        *bideDmg = gTakenDmg[gBattlerAttacker] * 23 / 10; //not sure how it loops rn, but I believe it copies to a separate variable
+                      //  *bideDmg = gTakenDmg[gBattlerAttacker] * 2;
+                        gBattlerTarget = gTakenDmgByBattler[gBattlerAttacker];
+                        if (gAbsentBattlerFlags & gBitTable[gBattlerTarget])
+                            gBattlerTarget = GetMoveTarget(MOVE_BIDE, MOVE_TARGET_SELECTED + 1);
                         gBattlescriptCurrInstr = BattleScript_BideAttack;
-                    }   //wanted dryad curse to be normal priority and be able to curse basesd on last turn results
-                    else //so you don't have to sacrifice that turn to use it, but its fine/same result, will just make lowest priority move
+                    }
+                    else
                     {
+                        gCurrentMove = MOVE_BIDE;
                         gBattlescriptCurrInstr = BattleScript_BideNoEnergyToAttack;
                     }
+                    effect = 1;
                 }
-                effect = 1;
+               
             }//since similar just adding dryads curse logic here
             if (gCurrentMove == MOVE_DRYADS_CURSE)  //changed from elses if, so both can run together
             {
@@ -2743,7 +2800,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 else
                 {
                     gBattlescriptCurrInstr = BattleScript_ButItFailedAtkStringPpReduce;
-                }
+                }//prob don't need to put here consider later  vsonic
                 effect = 1;
             }
             ++gBattleStruct->atkCancellerTracker;

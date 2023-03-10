@@ -3198,7 +3198,8 @@ static void TryDoEventsBeforeFirstTurn(void)
         }
         // Check neutralizing gas
         if (AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, 0, 0, 0, 0) != 0)
-            return;
+            return;//note removal of levitate will make flying types safer
+        //from poison/weezing, but countred by increasd smackdown learnset and roost change
 
         // Check all switch in abilities happening from the fastest mon to slowest.
         while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount) //change to work on switchin and when opponent switches pokemon.
@@ -3209,8 +3210,13 @@ static void TryDoEventsBeforeFirstTurn(void)
             if (effect)
                 return; //yeah checking mon in battle for if they have switchin abilities, and activates them if they do.
         } //check pursuit it may be the best way to do this, since it tells when a battler is switching and activates an effect
+        //plan to pattern after spikes instead as that effects side, and only on mon switching in
         if (AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE1, 0, 0, 0, 0) != 0) //this is battle start intimidate.
-            return;
+            return;//buff willl make strong so need a counter, make intimidate fail if status 1
+        // or if confused, if confusion success is same oddds as confusion success attack,
+        //set to do confusion battlescript on attacker, instead of  intimiate script if fails
+        //i.e play twirly birds over mon to indicate why intimidate didnt go off.
+        //edit intimidat logic for that instead of here.
         if (AbilityBattleEffects(ABILITYEFFECT_TRACE, 0, 0, 0, 0) != 0)
             return;
         // Check all switch in items having effect from the fastest mon to slowest.
@@ -3357,7 +3363,7 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
          && gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
          && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
          && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
-         && gBattleMons[i].ability == ABILITY_ARENA_TRAP)
+         && gBattleMons[i].ability == ABILITY_ARENA_TRAP) //add grounded check for flying
         {
             gBattleScripting.battler = i;
             gLastUsedAbility = gBattleMons[i].ability;
@@ -3372,8 +3378,11 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
         gLastUsedAbility = gBattleMons[i - 1].ability;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
         return BATTLE_RUN_FAILURE;
-    }
-    if (((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))
+    }//vsonic IMPORTANT do search, for status2_wrapped & wrappedby  implement new trap checks where it makes sense
+    //similar to as below
+    if (((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))//vsonic need add new trap status here
+     || (gBattlemons[gActiveBattler].status4 == ITS_A_TRAP_STATUS4)
+     || (gBattlemons[gActiveBattler].status1 == ITS_A_TRAP_STATUS1)
      || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
      || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK))
      && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)) //use paras ingraint to check I didn't break affect with this
@@ -3996,6 +4005,9 @@ static void TurnValuesCleanUp(bool8 var0)
                 if (gDisableStructs[gActiveBattler].rechargeTimer == 0)
                     gBattleMons[gActiveBattler].status2 &= ~(STATUS2_RECHARGE);
             }
+            if (gDisableStructs[gActiveBattler].bideTimer == 0)
+                gBattleMons[gActiveBattler].status2 &= ~(STATUS2_BIDE); //status remover
+            //makes sure status isn't removed until end turn
         }
 
         if (gDisableStructs[gActiveBattler].substituteHP == 0)
@@ -4896,6 +4908,12 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
         && (gBattleMoves[move].power <= 60 || gDynamicBasePower <= 60)) //added dynamic for moves like hidden power
     {
         priority += 3;
+    }
+
+    else if (gBattleMons[gActiveBattler].status2 & STATUS2_BIDE 
+        && gDisableStructs[gActiveBattler].bideTimer == 0)
+    {
+        priority = 3; //if works, second attack will go before most priority moves
     }
     return priority;
 }

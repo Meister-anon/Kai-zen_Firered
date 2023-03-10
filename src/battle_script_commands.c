@@ -1966,7 +1966,7 @@ static void atk06_typecalc(void)
     u8 moveType;
     u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBaseStats[gBattlerTarget].type3;
 
-    if (gCurrentMove == (MOVE_STRUGGLE || MOVE_BIDE)) //should let hit ghost types
+    if (gCurrentMove == (MOVE_STRUGGLE || MOVE_BIDE)) //should let hit ghost types could just remove typecalc bs from script instead...
     {
         ++gBattlescriptCurrInstr;
         return;
@@ -2218,7 +2218,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
     u8 moveType;
     u8 type1 = gBaseStats[defender].type1, type2 = gBaseStats[defender].type2, type3 = gBaseStats[defender].type3;
 
-    if (move == MOVE_STRUGGLE)
+    if (move == (MOVE_STRUGGLE || MOVE_BIDE))
         return 0;
     moveType = gBattleMoves[move].type;
     // check stab
@@ -2296,7 +2296,7 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u8 targetAbility)
     u8 type1 = gBaseStats[targetSpecies].type1, type2 = gBaseStats[targetSpecies].type2, type3 = gBaseStats[targetSpecies].type3;
     u8 moveType;
 
-    if (move == MOVE_STRUGGLE)
+    if (move == (MOVE_STRUGGLE || MOVE_BIDE))
         return 0;
     moveType = gBattleMoves[move].type; //think don't need to change this since battle_main has function for type change
     //if (targetAbility == ABILITY_LEVITATE && moveType == TYPE_GROUND)
@@ -7123,7 +7123,8 @@ static void atk64_statusanimation(void)//eventually figure update this for spiri
     }
 }
 
-static void atk65_status2animation(void)
+//vsonic
+static void atk65_status2animation(void) //use this for intimidate confuse effect make new battlescript with just this effect & a return
 {
     u32 wantedToAnimate;
 
@@ -10322,11 +10323,13 @@ static void atk8A_normalisebuffs(void) // haze
 
 static void atk8B_setbide(void)
 {
-    gBattleMons[gBattlerAttacker].status2 |= STATUS2_MULTIPLETURNS;
-    gLockedMoves[gBattlerAttacker] = gCurrentMove;
-    gTakenDmg[gBattlerAttacker] = 0;
-    gBattleMons[gBattlerAttacker].status2 |= (STATUS2_BIDE - 0x100); // 2 turns
-    ++gBattlescriptCurrInstr;
+    if (!(gBattleMons[gBattlerAttacker].status2 & STATUS2_BIDE))
+    {
+        gDisableStructs[gBattlerAttacker].bideTimer = 3;
+        gTakenDmg[gBattlerAttacker] = 0; //believe resetting damag to 0 so it doesn't count anything from previous turn?
+        gBattleMons[gBattlerAttacker].status2 |= STATUS2_BIDE;
+    }
+    gBattlescriptCurrInstr++;
 }
 
 static void atk8C_confuseifrepeatingattackends(void)
