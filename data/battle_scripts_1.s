@@ -2766,10 +2766,10 @@ BattleScript_EffectHaze::
 
 BattleScript_EffectBide::
 	attackcanceler
+	setbide
 	attackstring
 	ppreduce
-	setbide	@seems I can just do this on anything and make script default to failed?
-	attackanimation		@nah macro for command needs to have a param on it
+	attackanimation
 	waitanimation
 	orword gHitMarker, HITMARKER_CHARGING
 	goto BattleScript_MoveEnd
