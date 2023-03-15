@@ -18797,7 +18797,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-    },
+    },//add sunny day crunch extremespeed to learnet and have thunderbolt as tm move
     
     [SPECIES_FLABEBE] =
     {

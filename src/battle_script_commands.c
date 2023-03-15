@@ -1101,7 +1101,7 @@ static const u16 sMultiTaskExcludedEffects[] =
     EFFECT_LEVEL_DAMAGE, //same
     EFFECT_DRAGON_RAGE,
     EFFECT_BIDE,
-    EFFECT_PRESENT, //would be fun but difficult to manage battlescript
+    EFFECT_PRESENT, //would be fun but difficult to manage battlescript ...actually I can do it I think? maybe not
     EFFECT_MIRROR_COAT,
     EFFECT_BEAT_UP,
     EFFECT_TWINEEDLE,
@@ -1120,6 +1120,7 @@ static const u16 sMultiTaskExcludedEffects[] =
 /*static const u16 sBlockedMoves[] =
 {};*/
 
+//remember to change logic and buff the weak ones vsonic
 static const u16 sNaturePowerMoves[] =
 {
     MOVE_STUN_SPORE,
@@ -1185,6 +1186,7 @@ static const u8 sTerrainToType[] =
     TYPE_NORMAL, // plain
 };
 
+//if I add more balls may need to adjust this also see how it links to each ball
 static const u8 sBallCatchBonuses[] =
 {
     20, 15, 10, 15 // Ultra, Great, Poke, Safari
@@ -1325,6 +1327,8 @@ static void atk00_attackcanceler(void)
         gBattlescriptCurrInstr = BattleScript_TookAttack;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }*/ //should be fine to remove this now, 
+
+    //ok I don't even remembere what I did regarding this...
 
     /*depending on how things go I may decide/need to make a new animation for absorb moves
     actually better idea is to make the extra effect animation and just insert it as a conditional call
@@ -6763,15 +6767,17 @@ static void atk59_handlelearnnewmove(void)
 
 static void atk5A_yesnoboxlearnmove(void)
 {
-    gActiveBattler = 0;
+    u8 movePosition = GetMoveSlotToReplace(); //for some reason only works on top line
+    u16 moveId = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_MOVE1 + movePosition); //neeed to change 1 of these
+    gActiveBattler = 0;//Kurausukun & The Sylph is in  cleared it up for me, variables have to be declared first at the top of a code block above gactivebat in this case
 
     switch (gBattleScripting.learnMoveState)
     {
     case 0:
         HandleBattleWindow(0x17, 8, 0x1D, 0xD, 0);
         BattlePutTextOnWindow(gText_BattleYesNoChoice, 0xE);
-        ++gBattleScripting.learnMoveState;
-        gBattleCommunication[CURSOR_POSITION] = 0;
+        ++gBattleScripting.learnMoveState; //goes to next case
+        gBattleCommunication[CURSOR_POSITION] = 0;  //sets cursor default position
         BattleCreateYesNoCursorAt();
         break;
     case 1:
@@ -6796,20 +6802,20 @@ static void atk5A_yesnoboxlearnmove(void)
             {
                 HandleBattleWindow(0x17, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
                 BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
-                ++gBattleScripting.learnMoveState;
+                ++gBattleScripting.learnMoveState;  //case 2
             }
             else
             {
-                gBattleScripting.learnMoveState = 4;
+                gBattleScripting.learnMoveState = 7;
             }
         }
         else if (JOY_NEW(B_BUTTON))
         {
             PlaySE(SE_SELECT);
-            gBattleScripting.learnMoveState = 4;
+            gBattleScripting.learnMoveState = 7;
         }
         break;
-    case 2:
+    case 2: //should be selection for move to forget, continues after a move is chosen
         if (!gPaletteFade.active)
         {
             FreeAllWindowBuffers();
@@ -6817,59 +6823,119 @@ static void atk5A_yesnoboxlearnmove(void)
             ++gBattleScripting.learnMoveState;
         }
         break;
-    case 3:
+    case 3: //replaces move whne you answer yes, if it can be deleted
         if (!gPaletteFade.active && gMain.callback2 == BattleMainCB2)
         {
-            u8 movePosition = GetMoveSlotToReplace();
+            //u8 movePosition = GetMoveSlotToReplace();
+            PREPARE_MOVE_BUFFER(gBattleTextBuff2, moveId) //sets move forgotten to buffer2
 
-            if (movePosition == 4)
+            if (movePosition == 4) //I need to save this value to use in later case, so hope works the valeu of move selected and doesn't overwrite
             {
-                gBattleScripting.learnMoveState = 4;
+                gBattleScripting.learnMoveState = 8;
             }
             else
             {
-                u16 moveId = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_MOVE1 + movePosition);
-                
-                if (IsHMMove2(moveId)) // prevent hm move forget
-                {
-                    PrepareStringBattle(STRINGID_HMMOVESCANTBEFORGOTTEN, gActiveBattler);
-                    gBattleScripting.learnMoveState = 5;
-                }
-                else
-                {
-                    gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
-                    PREPARE_MOVE_BUFFER(gBattleTextBuff2, moveId)
-                    RemoveMonPPBonus(&gPlayerParty[gBattleStruct->expGetterMonId], movePosition);
-                    SetMonMoveSlot(&gPlayerParty[gBattleStruct->expGetterMonId], gMoveToLearn, movePosition);
-                    if (gBattlerPartyIndexes[0] == gBattleStruct->expGetterMonId
-                     && !(gBattleMons[0].status2 & STATUS2_TRANSFORMED)
-                     && !(gDisableStructs[0].mimickedMoves & gBitTable[movePosition]))
-                    {
-                        RemoveBattleMonPPBonus(&gBattleMons[0], movePosition);
-                        SetBattleMonMoveSlot(&gBattleMons[0], gMoveToLearn, movePosition);
-                    }
-                    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
-                     && gBattlerPartyIndexes[2] == gBattleStruct->expGetterMonId
-                     && !(gBattleMons[2].status2 & STATUS2_TRANSFORMED)
-                     && !(gDisableStructs[2].mimickedMoves & gBitTable[movePosition]))
-                    {
-                        RemoveBattleMonPPBonus(&gBattleMons[2], movePosition);
-                        SetBattleMonMoveSlot(&gBattleMons[2], gMoveToLearn, movePosition);
-                    }
-                }
+                ++gBattleScripting.learnMoveState;
             }
         }
         break;
     case 4:
-        HandleBattleWindow(0x17, 8, 0x1D, 0xD, WINDOW_CLEAR);
-        gBattlescriptCurrInstr += 5;
+        PrepareStringBattle(STRINGID_CONFIRMFORGETMOVE, gActiveBattler); //should print confirm text
+        ++gBattleScripting.learnMoveState;
         break;
     case 5:
+        HandleBattleWindow(0x17, 8, 0x1D, 0xD, 0);
+        BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO);
+        ++gBattleScripting.learnMoveState;
+        gBattleCommunication[CURSOR_POSITION] = 0;
+        BattleCreateYesNoCursorAt(0);
+        break;
+    case 6:
+        if (JOY_NEW(DPAD_UP) && gBattleCommunication[CURSOR_POSITION] != 0)//navigation of yes/no
+        {
+            PlaySE(SE_SELECT);
+            BattleDestroyYesNoCursorAt(gBattleCommunication[CURSOR_POSITION]);
+            gBattleCommunication[CURSOR_POSITION] = 0;
+            BattleCreateYesNoCursorAt(0);
+        }
+        if (JOY_NEW(DPAD_DOWN) && gBattleCommunication[CURSOR_POSITION] == 0)
+        {
+            PlaySE(SE_SELECT);
+            BattleDestroyYesNoCursorAt(gBattleCommunication[CURSOR_POSITION]);
+            gBattleCommunication[CURSOR_POSITION] = 1;
+            BattleCreateYesNoCursorAt(1);
+        }
+        if (JOY_NEW(A_BUTTON))//actual selection for do you want to forget move
+        {
+            PlaySE(SE_SELECT);
+
+            if (gBattleCommunication[1] != 0) //if select no
+            {
+                //gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1); //follow pointer
+                HandleBattleWindow(24, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
+                gBattlescriptCurrInstr += 5;// don't jump don't forget move progress to next script
+            }
+            else //move to next script if select yes
+                //gBattlescriptCurrInstr += 5;  won't to use pointer and learn move just need to continue in this case
+            {
+                HandleBattleWindow(0x17, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
+                gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1); //does jump to 123 poof
+                ++gBattleScripting.learnMoveState;
+                //want to continue to next state and do move replacement and jump  everything else just move to next script
+
+            }
+        }
+        else if (JOY_NEW(B_BUTTON))
+        {
+            PlaySE(SE_SELECT);
+            //gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1); //follow pointer
+            HandleBattleWindow(0x17, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
+            gBattlescriptCurrInstr += 5; // don't jump don't forget move progress to next script
+        }
+        break;
+    case 7: //put rest of move replace heree
+        if (!gPaletteFade.active && gMain.callback2 == BattleMainCB2)
+        {
+            //u8 movePosition = GetMoveSlotToReplace();
+
+            if (movePosition != 4)
+            {
+                //u16 moveId = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_MOVE1 + movePosition);
+
+                gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1); //does jump to 123 poof
+                //PREPARE_MOVE_BUFFER(gBattleTextBuff2, moveId) //sets move forgotten to buffer2
+                    RemoveMonPPBonus(&gPlayerParty[gBattleStruct->expGetterMonId], movePosition);
+                SetMonMoveSlot(&gPlayerParty[gBattleStruct->expGetterMonId], gMoveToLearn, movePosition);
+                if (gBattlerPartyIndexes[0] == gBattleStruct->expGetterMonId
+                    && !(gBattleMons[0].status2 & STATUS2_TRANSFORMED)
+                    && !(gDisableStructs[0].mimickedMoves & gBitTable[movePosition]))
+                {//believe condition specific to in  battle level up move learning
+                    RemoveBattleMonPPBonus(&gBattleMons[0], movePosition);
+                    SetBattleMonMoveSlot(&gBattleMons[0], gMoveToLearn, movePosition);
+                }
+                if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
+                    && gBattlerPartyIndexes[2] == gBattleStruct->expGetterMonId
+                    && !(gBattleMons[2].status2 & STATUS2_TRANSFORMED)
+                    && !(gDisableStructs[2].mimickedMoves & gBitTable[movePosition]))
+                {
+                    RemoveBattleMonPPBonus(&gBattleMons[2], movePosition);
+                    SetBattleMonMoveSlot(&gBattleMons[2], gMoveToLearn, movePosition);
+                }
+            }
+        }
+        break;
+    case 8:  //case 4
+        HandleBattleWindow(0x17, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
+        gBattlescriptCurrInstr += 5;  //skip jump ptr, move to next instruction
+        break;
+    case 9: //not used?
         if (!gBattleControllerExecFlags)
         {
+
             gBattleScripting.learnMoveState = 2;
         }
         break;
+    
     }
 }
 

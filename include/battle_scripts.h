@@ -306,6 +306,7 @@ extern const u8 BattleScript_FellStingerRaisesAtkEnd[];
 extern const u8 BattleScript_FriskMsgWithPopup[];
 extern const u8 BattleScript_FriskMsg[];
 extern const u8 BattleScript_FriskActivates[];
+extern const u8 BattleScript_ForgotAndLearnedNewMove[];
 extern const u8 BattleScript_ImposterActivates[];
 extern const u8 BattleScript_LeafGuardProtects[];
 extern const u8 BattleScript_LeafGuardProtectsRet[];

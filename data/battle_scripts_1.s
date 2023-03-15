@@ -5747,18 +5747,26 @@ BattleScript_AskToLearnMove::
 	buffermovetolearn
 	printstring STRINGID_TRYTOLEARNMOVE1
 	printstring STRINGID_TRYTOLEARNMOVE2
+BattleScript_AskToLearnMoveFast::
+	buffermovetolearn
 	printstring STRINGID_TRYTOLEARNMOVE3
 	waitstate
-	setbyte sLEARNMOVE_STATE, 0
-	yesnoboxlearnmove BattleScript_ForgotAndLearnedNewMove
+	setbyte sLEARNMOVE_STATE, 0 @needed to setup for yesnobox commands for learnn/stoplearn move
+	yesnoboxlearnmove BattleScript_ForgotAndLearnedNewMove @case 0-1 yes no logic jump is case 3,
+	buffermovetolearn
 	printstring STRINGID_STOPLEARNINGMOVE
 	waitstate
 	setbyte sLEARNMOVE_STATE, 0
-	yesnoboxstoplearningmove BattleScript_AskToLearnMove
+	@yesnoboxstoplearningmove BattleScript_AskToLearnMove
+	yesnoboxstoplearningmove BattleScript_AskToLearnMoveFast
 	printstring STRINGID_DIDNOTLEARNMOVE
 	goto BattleScript_LearnMoveLoop
 
 BattleScript_ForgotAndLearnedNewMove::
+	@printstring STRINGID_CONFIRMFORGETMOVE
+	@waitstate
+	@setbyte sLEARNMOVE_STATE, 0
+	@yesnoboxstoplearningmove BattleScript_AskToLearnMoveFast
 	printstring STRINGID_123POOF
 	printstring STRINGID_PKMNFORGOTMOVE
 	printstring STRINGID_ANDELLIPSIS

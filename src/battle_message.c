@@ -58,6 +58,7 @@ static const u8 sText_TryToLearnMove1[] = _("{B_BUFF1} is trying to\nlearn {B_BU
 static const u8 sText_TryToLearnMove2[] = _("But, {B_BUFF1} can't learn\nmore than four moves.\p");
 static const u8 sText_TryToLearnMove3[] = _("Delete a move to make\nroom for {B_BUFF2}?");
 static const u8 sText_PkmnForgotMove[] = _("{B_BUFF1} forgot\n{B_BUFF2}.\p");
+static const u8 sText_ConfirmForgetMove[] = _("{PAUSE 32}Are you sure you want to\nforget {B_BUFF2}?");
 static const u8 sText_StopLearningMove[] = _("{PAUSE 32}Stop learning\n{B_BUFF2}?");
 static const u8 sText_DidNotLearnMove[] = _("{B_BUFF1} did not learn\n{B_BUFF2}.\p");
 static const u8 sText_UseNextPkmn[] = _("Use next POKéMON?");
@@ -1367,6 +1368,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_PKMNALREADYFROZEN - BATTLESTRINGS_TABLE_START]             = sText_PkmnWasAlreadyFrozen,
     [STRINGID_SNAPTRAP - BATTLESTRINGS_TABLE_START]                      = sText_SnapTrap,
     [STRINGID_PKMNSTOPPEDROOSTING - BATTLESTRINGS_TABLE_START]           = sText_PkmnRoostEnds,
+    [STRINGID_CONFIRMFORGETMOVE - BATTLESTRINGS_TABLE_START]           = sText_ConfirmForgetMove,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,

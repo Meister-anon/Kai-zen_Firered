@@ -3363,7 +3363,7 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
          && gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
          && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
          && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
-         && gBattleMons[i].ability == ABILITY_ARENA_TRAP) //add grounded check for flying
+         && gBattleMons[i].ability == ABILITY_ARENA_TRAP) //need add grounded check for flying  vsonic
         {
             gBattleScripting.battler = i;
             gLastUsedAbility = gBattleMons[i].ability;
@@ -3385,7 +3385,8 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
      || (gBattlemons[gActiveBattler].status1 == ITS_A_TRAP_STATUS1)
      || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
      || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK))
-     && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)) //use paras ingraint to check I didn't break affect with this
+     || (!IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
+        && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING))) //use paras ingraint to check I didn't break affect with this
     {
         gBattleCommunication[MULTISTRING_CHOOSER] = 0;
         return BATTLE_RUN_FORBIDDEN;
