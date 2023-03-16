@@ -6848,22 +6848,22 @@ static void atk5A_yesnoboxlearnmove(void)
         BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO);
         ++gBattleScripting.learnMoveState;
         gBattleCommunication[CURSOR_POSITION] = 0;
-        BattleCreateYesNoCursorAt(0);
+        BattleCreateYesNoCursorAt();
         break;
     case 6:
         if (JOY_NEW(DPAD_UP) && gBattleCommunication[CURSOR_POSITION] != 0)//navigation of yes/no
         {
             PlaySE(SE_SELECT);
-            BattleDestroyYesNoCursorAt(gBattleCommunication[CURSOR_POSITION]);
+            BattleDestroyYesNoCursorAt();
             gBattleCommunication[CURSOR_POSITION] = 0;
-            BattleCreateYesNoCursorAt(0);
+            BattleCreateYesNoCursorAt();
         }
         if (JOY_NEW(DPAD_DOWN) && gBattleCommunication[CURSOR_POSITION] == 0)
         {
             PlaySE(SE_SELECT);
-            BattleDestroyYesNoCursorAt(gBattleCommunication[CURSOR_POSITION]);
+            BattleDestroyYesNoCursorAt();
             gBattleCommunication[CURSOR_POSITION] = 1;
-            BattleCreateYesNoCursorAt(1);
+            BattleCreateYesNoCursorAt();
         }
         if (JOY_NEW(A_BUTTON))//actual selection for do you want to forget move
         {
@@ -6879,7 +6879,7 @@ static void atk5A_yesnoboxlearnmove(void)
                 //gBattlescriptCurrInstr += 5;  won't to use pointer and learn move just need to continue in this case
             {
                 HandleBattleWindow(0x17, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
-                gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1); //does jump to 123 poof
+                //gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1); bruh this extra jump was literaly the problem!!
                 ++gBattleScripting.learnMoveState;
                 //want to continue to next state and do move replacement and jump  everything else just move to next script
 

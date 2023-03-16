@@ -913,7 +913,9 @@ static void Task_EvolutionScene(u8 taskId)
                 gTasks[taskId].tLearnMoveState++;
             }
             break;
-        case 6:
+        case 6: //part that actualy learns move, think will split into separate function
+            //so I can setup var & move value, then can just call that function here.
+            //can't copy other function since this dosn't use battlescript as evo is still after battle/separate
             if (!gPaletteFade.active && gMain.callback2 == CB2_EvolutionSceneUpdate)
             {
                 var = GetMoveSlotToReplace();
