@@ -48,6 +48,7 @@ void (*gCB2_AfterEvolution)(void);
 // this file's functions
 static void Task_EvolutionScene(u8 taskId);
 static void Task_TradeEvolutionScene(u8 taskId);
+static void EvolutionMoveLearn(void);
 static void CB2_EvolutionSceneUpdate(void);
 static void CB2_TradeEvolutionSceneUpdate(void);
 static void EvoDummyFunc(void);
@@ -152,8 +153,8 @@ static void CB2_BeginEvolutionScene(void)
 #define tBits               data[3]
 #define tLearnsFirstMove    data[4]
 #define tLearnMoveState     data[6]
-#define tData7              data[7]
-#define tData8              data[8]
+#define tLearnMoveYesState              data[7]
+#define tLearnMoveNoState              data[8]
 #define tEvoWasStopped      data[9]
 #define tPartyId            data[10]
 
@@ -585,7 +586,8 @@ static void Task_EvolutionScene(u8 taskId)
 {
     u32 var;
     struct Pokemon* mon = &gPlayerParty[gTasks[taskId].tPartyId];
-
+    u8 moveId = GetMoveSlotToReplace();
+    u16 move = GetMonData(mon, moveId + MON_DATA_MOVE1);
     // Automatically cancel if the Pokemon would evolve into a species you have not
     // yet unlocked, such as Crobat.  comment out below function to allow all evolutions without needing national dex.
 /*    if (!IsNationalPokedexEnabled()
@@ -849,18 +851,19 @@ static void Task_EvolutionScene(u8 taskId)
         case 2:
             if (!IsTextPrinterActive(0) && !IsSEPlaying())
             {
+                //BufferMoveToLearnIntoBattleTextBuff2();   //may not need this looks like evo learn is different doesn't go back to trytolearn string
                 BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_TRYTOLEARNMOVE3 - BATTLESTRINGS_ID_ADDER]);
                 BattlePutTextOnWindow(gDisplayedStringBattle, 0);
-                gTasks[taskId].tData7 = 5;
-                gTasks[taskId].tData8 = 10;
+                gTasks[taskId].tLearnMoveYesState = 5;
+                gTasks[taskId].tLearnMoveNoState = 14;
                 gTasks[taskId].tLearnMoveState++;
             }
-        case 3:
+        case 3: //yes no box, used for after try learn move, & for after stop learning move text
             if (!IsTextPrinterActive(0) && !IsSEPlaying())
             {
                 HandleBattleWindow(0x17, 8, 0x1D, 0xD, 0);
-                BattlePutTextOnWindow(gText_BattleYesNoChoice, 0xE);
-                gTasks[taskId].tLearnMoveState++;
+                BattlePutTextOnWindow(gText_BattleYesNoChoice, 0xE); //confirmation 0xE is correct for firered
+                gTasks[taskId].tLearnMoveState++; //emerald uses 0xD instead
                 sEvoCursorPos = 0;
                 BattleCreateYesNoCursorAt();
             }
@@ -880,19 +883,19 @@ static void Task_EvolutionScene(u8 taskId)
                 sEvoCursorPos = 1;
                 BattleCreateYesNoCursorAt();
             }
-            if (JOY_NEW(A_BUTTON))
+            if (JOY_NEW(A_BUTTON)) //handlse yes no box selection & window clear
             {
                 HandleBattleWindow(0x17, 8, 0x1D, 0xD, WINDOW_CLEAR);
                 PlaySE(SE_SELECT);
 
-                if (sEvoCursorPos != 0)
+                if (sEvoCursorPos != 0) //if no
                 {
-                    gTasks[taskId].tLearnMoveState = gTasks[taskId].tData8;
+                    gTasks[taskId].tLearnMoveState = gTasks[taskId].tLearnMoveNoState;
                 }
-                else
+                else //if yes
                 {
-                    gTasks[taskId].tLearnMoveState = gTasks[taskId].tData7;
-                    if (gTasks[taskId].tLearnMoveState == 5)
+                    gTasks[taskId].tLearnMoveState = gTasks[taskId].tLearnMoveYesState;//don't understand what these do,  think its passing another value
+                    if (gTasks[taskId].tLearnMoveState == 5)    //which based on this COULD become 5?
                         BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
                 }
             }
@@ -900,10 +903,10 @@ static void Task_EvolutionScene(u8 taskId)
             {
                 HandleBattleWindow(0x17, 8, 0x1D, 0xD, WINDOW_CLEAR);
                 PlaySE(SE_SELECT);
-                gTasks[taskId].tLearnMoveState = gTasks[taskId].tData8;
+                gTasks[taskId].tLearnMoveState = gTasks[taskId].tLearnMoveNoState;
             }
             break;
-        case 5:
+        case 5: //equivalent of case 2 in yesnoboxlearnmove
             if (!gPaletteFade.active)
             {
                 FreeAllWindowBuffers();
@@ -918,37 +921,96 @@ static void Task_EvolutionScene(u8 taskId)
             //can't copy other function since this dosn't use battlescript as evo is still after battle/separate
             if (!gPaletteFade.active && gMain.callback2 == CB2_EvolutionSceneUpdate)
             {
-                var = GetMoveSlotToReplace();
-                if (var == MAX_MON_MOVES)
+                //EvolutionMoveLearn(); //may have to use recursion to pass th current task value
+                if (moveId == MAX_MON_MOVES)
                 {
-                    gTasks[taskId].tLearnMoveState = 10;
-                }
+                    gTasks[taskId].tLearnMoveState = 14; //if select forget new move, go to stop learning loop
+                }//split case here
                 else
                 {
-                    u16 move = GetMonData(mon, var + MON_DATA_MOVE1);
-                    if (IsHMMove2(move)) //hm prevent move forget during evo
-                    {
-                        BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_HMMOVESCANTBEFORGOTTEN - BATTLESTRINGS_ID_ADDER]);
-                        BattlePutTextOnWindow(gDisplayedStringBattle, 0);
-                        gTasks[taskId].tLearnMoveState = 12;
-                    }
-                    else
-                    {
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff2, move)
-
-                        RemoveMonPPBonus(mon, var);
-                        SetMonMoveSlot(mon, gMoveToLearn, var);
-                        gTasks[taskId].tLearnMoveState++;
-                    }
+                    gTasks[taskId].tLearnMoveState++;
                 }
             }
-            break;
+            break;           
         case 7:
+            PREPARE_MOVE_BUFFER(gBattleTextBuff2, move) //need here for confirm text to properly load move to forget
+            BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_CONFIRMFORGETMOVE - BATTLESTRINGS_ID_ADDER]);
+            BattlePutTextOnWindow(gDisplayedStringBattle, 0);
+            gTasks[taskId].tLearnMoveState++;
+            break;
+        case 8: //yes no box, used for after try learn move, & for after stop learning move text
+            if (!IsTextPrinterActive(0) && !IsSEPlaying())
+            {
+                HandleBattleWindow(0x17, 8, 0x1D, 0xD, 0);
+                BattlePutTextOnWindow(gText_BattleYesNoChoice, 0xE);
+                gTasks[taskId].tLearnMoveState++;
+                sEvoCursorPos = 0;
+                BattleCreateYesNoCursorAt();
+            }
+            break;
+        case 9:
+            if (JOY_NEW(DPAD_UP) && sEvoCursorPos != 0)
+            {
+                PlaySE(SE_SELECT);
+                BattleDestroyYesNoCursorAt();
+                sEvoCursorPos = 0;
+                BattleCreateYesNoCursorAt();
+            }
+            if (JOY_NEW(DPAD_DOWN) && sEvoCursorPos == 0)
+            {
+                PlaySE(SE_SELECT);
+                BattleDestroyYesNoCursorAt();
+                sEvoCursorPos = 1;
+                BattleCreateYesNoCursorAt();
+            }
+            if (JOY_NEW(A_BUTTON)) //handlse yes no box selection & window clear
+            {
+                HandleBattleWindow(0x17, 8, 0x1D, 0xD, WINDOW_CLEAR);
+                PlaySE(SE_SELECT);
+
+                if (sEvoCursorPos != 0) //if no
+                {
+                    gTasks[taskId].tLearnMoveState = gTasks[taskId].tLearnMoveNoState;
+                    gTasks[taskId].tLearnMoveState = 14;
+                }
+                else //if yes
+                {
+                    //gTasks[taskId].tLearnMoveState = gTasks[taskId].tLearnMoveYesState;//don't understand what these do,  think its passing another value
+                    gTasks[taskId].tLearnMoveState++;
+
+                }
+            }
+            if (JOY_NEW(B_BUTTON))
+            {
+                HandleBattleWindow(0x17, 8, 0x1D, 0xD, WINDOW_CLEAR);
+                PlaySE(SE_SELECT);
+                gTasks[taskId].tLearnMoveState = gTasks[taskId].tLearnMoveNoState;
+                gTasks[taskId].tLearnMoveState = 14;
+            }
+            break;
+        case 10: //2nd half of case 6 move learn
+
+
+            /*if (IsHMMove2(move)) //hm prevent move forget during evo
+            {
+                BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_HMMOVESCANTBEFORGOTTEN - BATTLESTRINGS_ID_ADDER]);
+                BattlePutTextOnWindow(gDisplayedStringBattle, 0);
+                gTasks[taskId].tLearnMoveState = 12;
+            }*/
+
+            //PREPARE_MOVE_BUFFER(gBattleTextBuff2, move) //need to actually use this this time, since I don't have battlscript buffer.
+            //actually don't think need here, since I'll put it in the confirm text block
+
+                RemoveMonPPBonus(mon, moveId);
+            SetMonMoveSlot(mon, gMoveToLearn, moveId);
+            gTasks[taskId].tLearnMoveState++; //end keep this, need to incremenet movestat here!
+            break;        
+        case 11: //formerly 7   +4
             BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_123POOF - BATTLESTRINGS_ID_ADDER]);
             BattlePutTextOnWindow(gDisplayedStringBattle, 0);
             gTasks[taskId].tLearnMoveState++;
             break;
-        case 8:
+        case 12://formerly 8
             if (!IsTextPrinterActive(0) && !IsSEPlaying())
             {
                 BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_PKMNFORGOTMOVE - BATTLESTRINGS_ID_ADDER]);
@@ -956,7 +1018,7 @@ static void Task_EvolutionScene(u8 taskId)
                 gTasks[taskId].tLearnMoveState++;
             }
             break;
-        case 9:
+        case 13://formerly 9
             if (!IsTextPrinterActive(0) && !IsSEPlaying())
             {
                 BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_ANDELLIPSIS - BATTLESTRINGS_ID_ADDER]);
@@ -964,24 +1026,121 @@ static void Task_EvolutionScene(u8 taskId)
                 gTasks[taskId].tState = 20;
             }
             break;
-        case 10:
+        case 14://formerly 10 //display stop learning move? then go to 3 for yes no box
+            BufferMoveToLearnIntoBattleTextBuff2(); //forgot I need to put move to learn buffer back here, since i overwrite buff 2
             BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_STOPLEARNINGMOVE - BATTLESTRINGS_ID_ADDER]);
             BattlePutTextOnWindow(gDisplayedStringBattle, 0);
-            gTasks[taskId].tData7 = 11;
-            gTasks[taskId].tData8 = 0;
+            gTasks[taskId].tLearnMoveYesState = 15; //move box yes no state
+            gTasks[taskId].tLearnMoveNoState = 2; //should make it default to last string of delete a move to learn ne
             gTasks[taskId].tLearnMoveState = 3;
             break;
-        case 11:
+        case 15://formerly 11
             BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_DIDNOTLEARNMOVE - BATTLESTRINGS_ID_ADDER]);
             BattlePutTextOnWindow(gDisplayedStringBattle, 0);
             gTasks[taskId].tState = 15;
             break;
-        case 12:
+        case 16://formerly 12
             if (!IsTextPrinterActive(0) && !IsSEPlaying())
-                gTasks[taskId].tLearnMoveState = 5;
+                gTasks[taskId].tLearnMoveState = 5; //only need change values that use movestate above 6
             break;
         }
         break;
+    }
+}
+
+static void EvolutionMoveLearn(void) //separated move learn effect, will split up into multiple cases and call in main function
+{
+    u8 caseID = 0;
+    u8 taskId;
+    u8 var = GetMoveSlotToReplace();
+    struct Pokemon* mon = &gPlayerParty[gTasks[taskId].tPartyId];
+    u16 move = GetMonData(mon, var + MON_DATA_MOVE1);
+
+    switch (caseID)
+    {
+    case 0:
+
+        if (var == MAX_MON_MOVES)
+        {
+            gTasks[taskId].tLearnMoveState = 10; //if select forget new move, go to stop learning loop
+        }//split case here
+        else
+        {
+            gTasks[taskId].tLearnMoveState++;
+        }
+        break;
+    case 1:
+            BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_CONFIRMFORGETMOVE - BATTLESTRINGS_ID_ADDER]);
+            BattlePutTextOnWindow(gDisplayedStringBattle, 0);
+            gTasks[taskId].tLearnMoveState++;
+        break;
+    case 2: //yes no box, used for after try learn move, & for after stop learning move text
+        if (!IsTextPrinterActive(0) && !IsSEPlaying())
+        {
+            HandleBattleWindow(0x17, 8, 0x1D, 0xD, 0);
+            BattlePutTextOnWindow(gText_BattleYesNoChoice, 0xE);
+            gTasks[taskId].tLearnMoveState++;
+            sEvoCursorPos = 0;
+            BattleCreateYesNoCursorAt();
+        }
+        break;
+    case 3:
+        if (JOY_NEW(DPAD_UP) && sEvoCursorPos != 0)
+        {
+            PlaySE(SE_SELECT);
+            BattleDestroyYesNoCursorAt();
+            sEvoCursorPos = 0;
+            BattleCreateYesNoCursorAt();
+        }
+        if (JOY_NEW(DPAD_DOWN) && sEvoCursorPos == 0)
+        {
+            PlaySE(SE_SELECT);
+            BattleDestroyYesNoCursorAt();
+            sEvoCursorPos = 1;
+            BattleCreateYesNoCursorAt();
+        }
+        if (JOY_NEW(A_BUTTON)) //handlse yes no box selection & window clear
+        {
+            HandleBattleWindow(0x17, 8, 0x1D, 0xD, WINDOW_CLEAR);
+            PlaySE(SE_SELECT);
+
+            if (sEvoCursorPos != 0) //if no
+            {
+                gTasks[taskId].tLearnMoveState = gTasks[taskId].tLearnMoveNoState;
+                gTasks[taskId].tLearnMoveState = 10;
+            }
+            else //if yes
+            {
+               gTasks[taskId].tLearnMoveState = gTasks[taskId].tLearnMoveYesState;//don't understand what these do,  think its passing another value
+               gTasks[taskId].tLearnMoveState++;
+                
+            }
+        }
+        if (JOY_NEW(B_BUTTON))
+        {
+            HandleBattleWindow(0x17, 8, 0x1D, 0xD, WINDOW_CLEAR);
+            PlaySE(SE_SELECT);
+            gTasks[taskId].tLearnMoveState = gTasks[taskId].tLearnMoveNoState;
+            gTasks[taskId].tLearnMoveState = 10;
+        }
+        break;
+    case 4:     
+        
+          
+            /*if (IsHMMove2(move)) //hm prevent move forget during evo
+            {
+                BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_HMMOVESCANTBEFORGOTTEN - BATTLESTRINGS_ID_ADDER]);
+                BattlePutTextOnWindow(gDisplayedStringBattle, 0);
+                gTasks[taskId].tLearnMoveState = 12;
+            }*/
+
+                PREPARE_MOVE_BUFFER(gBattleTextBuff2, move) //need to actually use this this time, since I don't have battlscript buffer.
+
+                    RemoveMonPPBonus(mon, var);
+                SetMonMoveSlot(mon, gMoveToLearn, var);
+                gTasks[taskId].tLearnMoveState++; //end keep this, need to incremenet movestat here!
+                break;
+            
     }
 }
 
@@ -1218,8 +1377,8 @@ static void Task_TradeEvolutionScene(u8 taskId)
             {
                 BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_TRYTOLEARNMOVE3 - BATTLESTRINGS_ID_ADDER]);
                 DrawTextOnTradeWindow(0, gDisplayedStringBattle, 1);
-                gTasks[taskId].tData7 = 5;
-                gTasks[taskId].tData8 = 9;
+                gTasks[taskId].tLearnMoveYesState = 5;
+                gTasks[taskId].tLearnMoveNoState = 9;
                 gTasks[taskId].tLearnMoveState++;
             }
         case 3:
@@ -1239,7 +1398,7 @@ static void Task_TradeEvolutionScene(u8 taskId)
                 sEvoCursorPos = 0;
                 BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_EMPTYSTRING3 - BATTLESTRINGS_ID_ADDER]);
                 DrawTextOnTradeWindow(0, gDisplayedStringBattle, 1);
-                gTasks[taskId].tLearnMoveState = gTasks[taskId].tData7;
+                gTasks[taskId].tLearnMoveState = gTasks[taskId].tLearnMoveYesState;
                 if (gTasks[taskId].tLearnMoveState == 5)
                     BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
                 break;
@@ -1248,7 +1407,7 @@ static void Task_TradeEvolutionScene(u8 taskId)
                 sEvoCursorPos = 1;
                 BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_EMPTYSTRING3 - BATTLESTRINGS_ID_ADDER]);
                 DrawTextOnTradeWindow(0, gDisplayedStringBattle, 1);
-                gTasks[taskId].tLearnMoveState = gTasks[taskId].tData8;
+                gTasks[taskId].tLearnMoveState = gTasks[taskId].tLearnMoveNoState;
                 break;
             }
             break;
@@ -1318,8 +1477,8 @@ static void Task_TradeEvolutionScene(u8 taskId)
         case 9:
             BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_STOPLEARNINGMOVE - BATTLESTRINGS_ID_ADDER]);
             DrawTextOnTradeWindow(0, gDisplayedStringBattle, 1);
-            gTasks[taskId].tData7 = 10;
-            gTasks[taskId].tData8 = 0;
+            gTasks[taskId].tLearnMoveYesState = 10;
+            gTasks[taskId].tLearnMoveNoState = 0;
             gTasks[taskId].tLearnMoveState = 3;
             break;
         case 10:
