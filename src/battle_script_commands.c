@@ -2414,13 +2414,14 @@ static void atk07_adjustnormaldamage(void)
     }
 
     //will prob need to put in both adjustnormaldamage functions
+    //my dumb ass forgot the semi colons smh *facepalm
     if (gProtectStructs[gBattlerTarget].shieldBashed && gProtectStructs[gBattlerAttacker].touchedProtectLike) //most things done just need put in super effective logic
     { //here and in atk49 move end
         //shouldn't affect ohko moves will prob affect fixed damage moves but that's prob fine since its supposed to be a protect like, on level w endure etc.
         if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //get wonder guard logic to work here
-            ((gBattleMoveDamage *= 15) / 100) //should be 15% damage i.e 85% damage cut
+            ((gBattleMoveDamage *= 15) / 100); //should be 15% damage i.e 85% damage cut
         else if (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE))  //hopefully works for normal effect and doesn't break fixed damage & oh ko moves
-            ((gBattleMoveDamage *= 30)/100) //should be 30% damage i.e 70% damage cut
+            ((gBattleMoveDamage *= 30) / 100); //should be 30% damage i.e 70% damage cut
     }//move animation similar to spike shield use protect effect think combine with harden
 
     /*if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
@@ -2543,9 +2544,9 @@ static void atk08_adjustnormaldamage2(void)
     { //here and in atk49 move end
         //shouldn't affect ohko moves will prob affect fixed damage moves but that's prob fine since its supposed to be a protect like, on level w endure etc.
         if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //get wonder guard logic to work here
-            ((gBattleMoveDamage *= 15) / 100) //should be 15% damage i.e 85% damage cut
+            ((gBattleMoveDamage *= 15) / 100); //should be 15% damage i.e 85% damage cut
         else if (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE))  //hopefully works for normal effect and doesn't break fixed damage & oh ko moves
-            ((gBattleMoveDamage *= 30) / 100) //should be 30% damage i.e 70% damage cut
+            ((gBattleMoveDamage *= 30) / 100); //should be 30% damage i.e 70% damage cut
     }
 
      if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)    //CORRECT way to start conditional with a negative
@@ -5329,16 +5330,25 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
         case ATK49_PROTECT_LIKE_EFFECT:
             if (gProtectStructs[gBattlerAttacker].touchedProtectLike)
             {
-                if (gProtectStructs[gBattlerTarget].spikyShielded && GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
+                if (gProtectStructs[gBattlerTarget].spikyShielded)
                 {
                     gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
-                    gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
-                    if (gBattleMoveDamage == 0)
-                        gBattleMoveDamage = 1;
-                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SPIKE_SHIELD);
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_SpikyShieldEffect;//remembr want to also use this to setup spikes, need make new bs for it
-                    effect = 1; //attempted adding to above script as call, will see if works
+                    if (GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD) //dmg & spikes
+                    {
+                        gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SPIKE_SHIELD);//move change mostly works except spikes are set on wrong side with bs commad
+                        BattleScriptPushCursor(); //trysetspikes  need swap sides of argumen
+                        gBattlescriptCurrInstr = BattleScript_SpikyShieldEffect;
+                        effect = 1;
+                    }
+                    else //no dmg just spikes
+                    {
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_SetSpikesfromSpikyShield;
+                        effect = 1;
+                    }
                 }
                 else if (gProtectStructs[gBattlerTarget].shieldBashed && GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
                 {
@@ -11661,7 +11671,11 @@ static void atkAF_cursetarget(void)
 
 static void atkB0_trysetspikes(void)
 {
-    u8 targetSide = GetBattlerSide(gBattlerAttacker) ^ BIT_SIDE;
+    u8 targetSide = GetBattlerSide(gBattlerAttacker) ^ BIT_SIDE; //opposite attacker
+
+    if (gProtectStructs[gBattlerTarget].spikyShielded && gProtectStructs[gBattlerAttacker].touchedProtectLike)
+        targetSide = GetBattlerSide(gBattlerTarget) ^ BIT_SIDE; //hope works and fixes spiky shield issue
+
 
     if (gSideTimers[targetSide].spikesAmount == 3)
     {

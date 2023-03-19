@@ -810,10 +810,12 @@ gBattleAnims_Moves::
 	.4byte Move_GLACIAL_LANCE
 	.4byte Move_ASTRAL_BARRAGE
 	.4byte Move_EERIE_SPELL
+@@@@@@@@@@@@ CUSTOM  @@@@@@@@@@@@
 	.4byte Move_COCOON
 	.4byte Move_MONOTYPE
 	.4byte MOVE_FLASH_FREEZE
 	.4byte MOVE_DRYADS_CURSE
+	.4byte Move_SHIELD_BASH
 	.4byte Move_COUNT @ cannot be reached, because last move is Eerie Spell  important check move order moves.h
 
 gBattleAnims_StatusConditions::
@@ -23828,6 +23830,42 @@ MOVE_FLASH_FREEZE::
 
 MOVE_DRYADS_CURSE::
 	end @to do:
+
+Move_SHIELD_BASH::	@MOSTLY COPY spiky shield w parts of harden
+	loadspritegfx ANIM_TAG_PROTECT
+	loadspritegfx ANIM_TAG_GREEN_SPIKE
+	monbg ANIM_ATK_PARTNER
+	splitbgprio ANIM_ATTACKER
+	waitplaysewithpan SE_M_REFLECT, SOUND_PAN_ATTACKER, 0x10
+	launchtemplate gProtectSpriteTemplate 0x2 0x3 0x18 0x0 0x5a
+	delay 0xF
+	createvisualtask AnimTask_MetallicShine, 5, 0, 0, 0
+	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x0 0xFFE0 0x10
+	delay 0x2
+	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x16 0xFFEA 0x10
+	delay 0x2
+	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x1E 0x0 0x10
+	delay 0x2
+	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x14 0x14 0x10
+	delay 0x2
+	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x0 0x1C 0x10
+	delay 0x2
+	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0xFFED 0x13 0x10
+	delay 0x2
+	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0xFFE5 0x0 0x10
+	delay 0x2
+	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0xFFEE 0xFFEE 0x10
+	delay 0x2
+	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x0 0xFFE7 0x10
+	delay 0x2
+	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x11 0xFFEF 0x10
+	delay 0x2
+	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x17 0x0 0x10
+	delay 0x2
+	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x10 0x10 0x10
+	waitforvisualfinish
+	clearmonbg ANIM_ATK_PARTNER
+	end
 
 Move_COUNT:: @ 81D53D9
 	loadspritegfx ANIM_TAG_IMPACT
