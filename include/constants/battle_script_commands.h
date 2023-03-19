@@ -254,31 +254,39 @@
 #define ATK48_DONT_CHECK_LOWER      0x8	//think equivalent of stat_change_cant_prevent
 
 // atk49, moveend cases
-#define ATK49_RAGE                              0
-#define ATK49_DEFROST                           1
-#define ATK49_SYNCHRONIZE_TARGET                2
-#define ATK49_MOVE_END_ABILITIES                3
-#define ATK49_STATUS_IMMUNITY_ABILITIES         4
-#define ATK49_SYNCHRONIZE_ATTACKER              5
-#define ATK49_CHOICE_MOVE                       6
-#define ATK49_CHANGED_ITEMS                     7
-#define ATK49_ATTACKER_INVISIBLE                8
-#define ATK49_ATTACKER_VISIBLE                  9
-#define ATK49_TARGET_VISIBLE                    10
-#define ATK49_ITEM_EFFECTS_ALL                  11
-#define ATK49_KINGSROCK_SHELLBELL               12
-#define ATK49_SUBSTITUTE                        13
-#define ATK49_UPDATE_LAST_MOVES                 14
-#define ATK49_MIRROR_MOVE                       15
-#define ATK49_NEXT_TARGET                       16
-#define ATK49_MOVE_EFFECTS2						17         
-#define ATK49_ITEM_EFFECTS_TARGET				18
-#define ATK49_DANCER							19
-#define ATK49_EMERGENCY_EXIT					20          
-#define ATK49_CLEAR_BITS						21
-#define ATK49_ABILITIES_ATTACKER				22
-#define ATK49_PROTECT_LIKE_EFFECT				23
-#define ATK49_COUNT								24
+#define ATK49_PROTECT_LIKE_EFFECT				0
+#define ATK49_RAGE                              1
+#define ATK49_DEFROST                           2
+#define ATK49_SYNCHRONIZE_TARGET                3
+#define ATK49_MOVE_END_ABILITIES                4
+#define ATK49_ABILITIES_ATTACKER				5 //increment above 1
+#define ATK49_STATUS_IMMUNITY_ABILITIES         6
+#define ATK49_SYNCHRONIZE_ATTACKER              7
+#define ATK49_CHOICE_MOVE                       8
+#define ATK49_CHANGED_ITEMS                     9
+#define ATK49_ATTACKER_INVISIBLE                10
+#define ATK49_ATTACKER_VISIBLE                  11
+#define ATK49_TARGET_VISIBLE                    12
+#define ATK49_ITEM_EFFECTS_TARGET				13
+#define ATK49_MOVE_EFFECTS3						14      
+#define ATK49_ITEM_EFFECTS_ALL                  15
+#define ATK49_KINGSROCK						    16  //item effect need to be bfore kingsrock for things like rocky helm I guess
+#define ATK49_SUBSTITUTE                        17
+#define ATK49_SKY_DROP_CONFUSE					18
+#define ATK49_UPDATE_LAST_MOVES                 19
+#define ATK49_MIRROR_MOVE                       20
+#define ATK49_NEXT_TARGET                       21 //last fire red value below not implemented   
+
+#define ATK49_MAGICIAN                          22    // Occurs after final multi-hit strike, and after other items/abilities would activate
+#define ATK49_EJECT_BUTTON                      23
+#define ATK49_RED_CARD                          24
+#define ATK49_EJECT_PACK                        25
+#define ATK49_LIFEORB_SHELLBELL                 26    // Includes shell bell, throat spray, etc
+#define ATK49_PICKPOCKET                        27
+#define ATK49_DANCER							28
+#define ATK49_EMERGENCY_EXIT					29
+#define ATK49_CLEAR_BITS						30
+#define ATK49_COUNT								31
 
 // switch cases - PORTED right now not used, adding red card only for now
 #define B_SWITCH_NORMAL     0

@@ -434,6 +434,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectInfestation
 	.4byte BattleScript_EffectSnapTrap
 	.4byte BattleScript_EffectDryadsCurse
+	.4byte BattleScript_EffectProtect	@shield bash
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -7554,12 +7555,32 @@ BattleScript_HurtAttacker:
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	return
 
+BattleScript_SetSpikesfromSpikyShield::
+	trysetspikes BattleScript_LearnMoveReturn	@using this as an attempt to end script without text/effects should just return from call if failed
+	@attackanimation	@may swap to just playanimation 
+	playanimation BS_SCRIPTING, Move_SPIKES, NULL
+	waitanimation
+	printstring STRINGID_SPIKESSCATTERED
+	waitmessage 0x40 @yeah need to use playanimation using attackanimation just replays the enemies last useed move, but it does appear to work.
+	return
+
 BattleScript_SpikyShieldEffect::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	bichalfword gMoveResultFlags, MOVE_RESULT_NO_EFFECT
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_PKMNHURTSWITH
+	waitmessage 0x40
+	call BattleScript_SetSpikesfromSpikyShield @attempts to set spikes unsure if should put before or after tryfaintmon
+	tryfaintmon BS_ATTACKER, FALSE, NULL	@will keep above faintmon, since spike script needs target, it works without causing issue that way
+	return
+
+BattleScript_ShieldBash::
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
+	bichalfword gMoveResultFlags, MOVE_RESULT_NO_EFFECT
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	printstring STRINGID_PKMNHURTSWITH @make new string  "mon countered the blow!"
 	waitmessage 0x40
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	return
@@ -8368,7 +8389,7 @@ BattleScript_BerryCureChosenStatusRet::
 	return
 
 BattleScript_MentalHerbCureRet::
-	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT
+	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT, NULL
 	printfromtable gMentalHerbCureStringIds
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_SCRIPTING
@@ -8548,7 +8569,7 @@ BattleScript_FlushMessageBox::
 
 BattleScript_EjectButtonActivates::
 	makevisible BS_ATTACKER
-	playanimation BS_SCRIPTING, B_ANIM_HELD_ITEM_EFFECT
+	playanimation BS_SCRIPTING, B_ANIM_HELD_ITEM_EFFECT, NULL
 	printstring STRINGID_EJECTBUTTONACTIVATE
 	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_SCRIPTING

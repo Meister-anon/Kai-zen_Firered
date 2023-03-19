@@ -11592,4 +11592,39 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = 0,
         .split = SPLIT_STATUS,
     },//DOES ghost curse effect to last damaged sacrificin stats instead of health
-};//give to bug fairy and grass types   def give sudowoodo
+    //give to bug fairy and grass types   def give sudowoodo
+
+    [MOVE_SHIELD_BASH] =
+    {
+        .effect = EFFECT_SHIELD_BASH, //does protect script but doesn't cancel moves. should play endure brace script?
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 15,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_USER,
+        .priority = 4,
+        .flags = FLAG_PROTECTION_MOVE,
+        .split = SPLIT_PHYSICAL,
+    }, //vsonic when stable test new moves if work can then add new post gen3 learnsets in
+
+    /*so I'm thinking of putting it up to 70% since it's mostly as a scout like you said,
+and if the move is preparing to block their body with a shield before hand.
+the dr should be higher, and its to keep them from being taken out of the fight
+rom taking a special attack, since many w high def have low sp def*/
+
+/*shield bash -  signature move for shield mon,    mon with physical shields. and protect like moves king shield baneful bunker etc.
+[shieldon/bastiodon line, chesnaught, etc.  think will give to shieeldon line as an evolution move
+priority move mon blocks body with their shield, and counter attacks
+if hit with physical/contact move (like spike shield) damage is based on defense stat.
+defense/2 = base power or dynamicbasepower
+
+during turn mon gains 35%-70% damage reduction
+(will make special status, so can store effect & clear each turn.)*/
+
+ /* ok base 70 % dmg reduc, if against a super effecive move it goes up to 85 % ?
+but you lose counter attack 
+use wonder gaurd logic to determine its super effective
+*/
+
+};

@@ -317,6 +317,8 @@ extern const u8 BattleScript_SweetVeilProtectsRet[];
 extern const u8 BattleScript_FlowerVeilProtects[];
 extern const u8 BattleScript_FlowerVeilProtectsRet[];
 extern const u8 BattleScript_EffectPlaceholder[];
+extern const u8 BattleScript_ShieldBash[];
+extern const u8 BattleScript_SetSpikesfromSpikyShield[];
 extern const u8 BattleScript_EjectButtonActivates[];
 extern const u8 BattleScript_EjectPackActivate_Ret[];
 extern const u8 BattleScript_EjectPackActivate_End2[];

@@ -1357,6 +1357,19 @@ static void atk00_attackcanceler(void)
     {
         ++gBattlescriptCurrInstr;
     }
+
+    if (gProtectStructs[gBattlerTarget].shieldBashed && (gBattleMoves[gCurrentMove].flags & FLAG_PROTECT_AFFECTED))
+    {
+        if (IsMoveMakingContact(gCurrentMove, gBattlerAttacker))
+        {
+            gProtectStructs[gBattlerAttacker].touchedProtectLike = TRUE;
+            ++gBattlescriptCurrInstr;
+        }
+    }
+    else
+    {
+        ++gBattlescriptCurrInstr;
+    }
 }
 
 static bool32 JumpIfMoveFailed(u8 adder, u16 move) //updated to emerald standard
@@ -2399,6 +2412,17 @@ static void atk07_adjustnormaldamage(void)
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gSpecialStatuses[gBattlerTarget].focusSashed = TRUE;
     }
+
+    //will prob need to put in both adjustnormaldamage functions
+    if (gProtectStructs[gBattlerTarget].shieldBashed && gProtectStructs[gBattlerAttacker].touchedProtectLike) //most things done just need put in super effective logic
+    { //here and in atk49 move end
+        //shouldn't affect ohko moves will prob affect fixed damage moves but that's prob fine since its supposed to be a protect like, on level w endure etc.
+        if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //get wonder guard logic to work here
+            ((gBattleMoveDamage *= 15) / 100) //should be 15% damage i.e 85% damage cut
+        else if (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE))  //hopefully works for normal effect and doesn't break fixed damage & oh ko moves
+            ((gBattleMoveDamage *= 30)/100) //should be 30% damage i.e 70% damage cut
+    }//move animation similar to spike shield use protect effect think combine with harden
+
     /*if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
      && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded
          || gSpecialStatuses[gBattlerTarget].focusSashed)
@@ -2513,6 +2537,15 @@ static void atk08_adjustnormaldamage2(void)
     {
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gSpecialStatuses[gBattlerTarget].focusSashed = TRUE;
+    }
+
+    if (gProtectStructs[gBattlerTarget].shieldBashed && gProtectStructs[gBattlerAttacker].touchedProtectLike) //most things done just need put in super effective logic
+    { //here and in atk49 move end
+        //shouldn't affect ohko moves will prob affect fixed damage moves but that's prob fine since its supposed to be a protect like, on level w endure etc.
+        if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //get wonder guard logic to work here
+            ((gBattleMoveDamage *= 15) / 100) //should be 15% damage i.e 85% damage cut
+        else if (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE))  //hopefully works for normal effect and doesn't break fixed damage & oh ko moves
+            ((gBattleMoveDamage *= 30) / 100) //should be 30% damage i.e 70% damage cut
     }
 
      if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)    //CORRECT way to start conditional with a negative
@@ -5273,15 +5306,15 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
     u8 moveType = 0;
     u8 holdEffectAtk = 0;
     u16 *choicedMoveAtk = NULL;
-    u8 arg1, arg2; //equivalent endmove endstate
-    u16 originallyUsedMove;
+    u8 endMode, endState; //renamed for compatibility with emerald
+    u16 originallyUsedMove; //need reordere cases below
 
     if (gChosenMove == 0xFFFF)
         originallyUsedMove = MOVE_NONE;
     else
         originallyUsedMove = gChosenMove;
-    arg1 = gBattlescriptCurrInstr[1];
-    arg2 = gBattlescriptCurrInstr[2];
+    endMode = gBattlescriptCurrInstr[1];
+    endState = gBattlescriptCurrInstr[2];
     if (gBattleMons[gBattlerAttacker].item == ITEM_ENIGMA_BERRY)
         holdEffectAtk = gEnigmaBerries[gBattlerAttacker].holdEffect;
     else
@@ -5292,7 +5325,71 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
     {// otherwise safe to completely replace with emerald function
         //will require transfrerring bs_commands.h constants file move end values as well. 
         switch (gBattleScripting.atk49_state) //order is mostly the same, just starts with protectlike effects instead of rage
-        {
+        {   //realiz order does matter as this is the order effects will take place
+        case ATK49_PROTECT_LIKE_EFFECT:
+            if (gProtectStructs[gBattlerAttacker].touchedProtectLike)
+            {
+                if (gProtectStructs[gBattlerTarget].spikyShielded && GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
+                {
+                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
+                    if (gBattleMoveDamage == 0)
+                        gBattleMoveDamage = 1;
+                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SPIKE_SHIELD);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_SpikyShieldEffect;//remembr want to also use this to setup spikes, need make new bs for it
+                    effect = 1; //attempted adding to above script as call, will see if works
+                }
+                else if (gProtectStructs[gBattlerTarget].shieldBashed && GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
+                {
+                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    if (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)) //use wonder guard effect logic to help here pretty much long as not super effective do counter damage
+                    {
+                        gBattleMoveDamage = (gBattleMons[gBattlerTarget].defense / 2); //should be damgage is 1/2 target defense
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SHIELD_BASH);
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_ShieldBash;//
+                        effect = 1;
+                    }
+                    else if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //should do what i want
+                        ++gBattleScripting.atk49_state;
+                }
+                else if (gProtectStructs[gBattlerTarget].kingsShielded)
+                {
+                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    i = gBattlerAttacker;
+                    gBattlerAttacker = gBattlerTarget;
+                    gBattlerTarget = i; // gBattlerTarget and gBattlerAttacker are swapped in order to activate Defiant, if applicable
+                    gBattleScripting.moveEffect = MOVE_EFFECT_ATK_MINUS_1;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
+                    effect = 1;
+                }
+                else if (gProtectStructs[gBattlerTarget].banefulBunkered)
+                {
+                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_POISON | MOVE_EFFECT_AFFECTS_USER;
+                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_BANEFUL_BUNKER);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_BanefulBunkerEffect;
+                    effect = 1;
+                }
+                else if (gProtectStructs[gBattlerTarget].obstructed && gCurrentMove != MOVE_SUCKER_PUNCH)
+                {
+                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    i = gBattlerAttacker;
+                    gBattlerAttacker = gBattlerTarget;
+                    gBattlerTarget = i; // gBattlerTarget and gBattlerAttacker are swapped in order to activate Defiant, if applicable
+                    gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_2;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
+                    effect = 1;
+                }
+            }
+            ++gBattleScripting.atk49_state;
+            break;
         case ATK49_RAGE: // rage check
             if (gBattleMons[gBattlerTarget].status2 & STATUS2_RAGE
              && gBattleMons[gBattlerTarget].hp != 0
@@ -5318,7 +5415,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
              //&& gSpecialStatuses[gBattlerTarget].specialDmg  //important MIGHT need to remove this think this is a leftover from split based on type
              && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
              && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60)
-             && moveType == TYPE_FIRE)
+             && ((moveType == TYPE_FIRE) || gCurrentMove == MOVE_SCALD)
             {
                 gBattleMons[gBattlerTarget].status1 &= ~(STATUS1_FREEZE);
                 gActiveBattler = gBattlerTarget;
@@ -5386,17 +5483,6 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_ITEM_EFFECTS_ALL: // item effects for all battlers
-            if (ItemBattleEffects(ITEMEFFECT_MOVE_END, 0, FALSE))
-                effect = TRUE;
-            else
-                ++gBattleScripting.atk49_state;
-            break;
-        case ATK49_KINGSROCK_SHELLBELL: // king's rock and shell bell
-            if (ItemBattleEffects(ITEMEFFECT_KINGSROCK, 0, FALSE))  //with change to item effect to be just kingsrock look into if I need to change mov end
-                effect = TRUE;  //yes change this to only kingsrock 
-            ++gBattleScripting.atk49_state;
-            break;
         case ATK49_ATTACKER_INVISIBLE: // make attacker sprite invisible
             if (gStatuses3[gBattlerAttacker] & (STATUS3_SEMI_INVULNERABLE)
              && gHitMarker & HITMARKER_NO_ANIMATIONS)
@@ -5436,6 +5522,17 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                 ++gBattleScripting.atk49_state;
                 return;
             }
+            ++gBattleScripting.atk49_state;
+            break;
+        case ATK49_ITEM_EFFECTS_ALL: // item effects for all battlers
+            if (ItemBattleEffects(ITEMEFFECT_MOVE_END, 0, FALSE))
+                effect = TRUE;
+            else
+                ++gBattleScripting.atk49_state;
+            break;
+        case ATK49_KINGSROCK: // king's rock and shell bell
+            if (ItemBattleEffects(ITEMEFFECT_KINGSROCK, 0, FALSE))  //with change to item effect to be just kingsrock look into if I need to change mov end
+                effect = TRUE;  //yes change this to only kingsrock 
             ++gBattleScripting.atk49_state;
             break;
         case ATK49_SUBSTITUTE: // update substitute
@@ -5542,60 +5639,12 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_PROTECT_LIKE_EFFECT:
-            if (gProtectStructs[gBattlerAttacker].touchedProtectLike)
-            {
-                if (gProtectStructs[gBattlerTarget].spikyShielded && GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
-                {
-                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
-                    gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
-                    if (gBattleMoveDamage == 0)
-                        gBattleMoveDamage = 1;
-                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SPIKE_SHIELD);
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_SpikyShieldEffect;
-                    effect = 1;
-                }
-                else if (gProtectStructs[gBattlerTarget].kingsShielded)
-                {
-                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
-                    i = gBattlerAttacker;
-                    gBattlerAttacker = gBattlerTarget;
-                    gBattlerTarget = i; // gBattlerTarget and gBattlerAttacker are swapped in order to activate Defiant, if applicable
-                    gBattleScripting.moveEffect = MOVE_EFFECT_ATK_MINUS_1;
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
-                    effect = 1;
-                }
-                else if (gProtectStructs[gBattlerTarget].banefulBunkered)
-                {
-                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
-                    gBattleScripting.moveEffect = MOVE_EFFECT_POISON | MOVE_EFFECT_AFFECTS_USER;
-                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_BANEFUL_BUNKER);
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_BanefulBunkerEffect;
-                    effect = 1;
-                }
-                else if (gProtectStructs[gBattlerTarget].obstructed && gCurrentMove != MOVE_SUCKER_PUNCH)
-                {
-                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
-                    i = gBattlerAttacker;
-                    gBattlerAttacker = gBattlerTarget;
-                    gBattlerTarget = i; // gBattlerTarget and gBattlerAttacker are swapped in order to activate Defiant, if applicable
-                    gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_2;
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
-                    effect = 1;
-                }
-            }
-            ++gBattleScripting.atk49_state;
-            break;
         case ATK49_COUNT:
             break;
         }
-        if (arg1 == 1 && effect == FALSE)
+        if (endMode == 1 && effect == FALSE)
             gBattleScripting.atk49_state = ATK49_COUNT;
-        if (arg1 == 2 && arg2 == gBattleScripting.atk49_state)
+        if (endMode == 2 && endState == gBattleScripting.atk49_state)
             gBattleScripting.atk49_state = ATK49_COUNT;
     }
     while (gBattleScripting.atk49_state != ATK49_COUNT && effect == FALSE);
@@ -9710,6 +9759,11 @@ static void atk77_setprotectlike(void)
             {
                 gProtectStructs[gBattlerAttacker].protected = TRUE;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PROTECTED_ITSELF;
+            }
+            if (gBattleMoves[gCurrentMove].effect == EFFECT_SHIELD_BASH)
+            {
+                gProtectStructs[gBattlerAttacker].shieldBashed = TRUE;
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_BRACED_ITSELF;
             }
             if (gBattleMoves[gCurrentMove].effect == EFFECT_ENDURE)
             {

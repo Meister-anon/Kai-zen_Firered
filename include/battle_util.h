@@ -159,4 +159,6 @@ void TryToApplyMimicry(u8 battlerId, bool8 various);
 void RestoreBattlerOriginalTypes(u8 battlerId);
 void ResetFuryCutterCounter(u8 battlerId);
 
+#define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || ((gBattleMoves[gCurrentMove].type == TYPE_FIRE) && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60) && gCurrentMove != MOVE_FIRE_FANG))
+
 #endif // GUARD_BATTLE_UTIL_H
