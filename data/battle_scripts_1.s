@@ -7558,7 +7558,7 @@ BattleScript_HurtAttacker:
 BattleScript_SetSpikesfromSpikyShield::
 	trysetspikes BattleScript_LearnMoveReturn	@using this as an attempt to end script without text/effects should just return from call if failed
 	@attackanimation	@may swap to just playanimation 
-	playanimation BS_SCRIPTING, Move_SPIKES, NULL
+	playanimation BS_ATTACKER, B_ANIM_SPIKE_TOSS, NULL
 	waitanimation
 	printstring STRINGID_SPIKESSCATTERED
 	waitmessage 0x40 @yeah need to use playanimation using attackanimation just replays the enemies last useed move, but it does appear to work.
@@ -7578,6 +7578,7 @@ BattleScript_SpikyShieldEffect::
 BattleScript_ShieldBash::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	bichalfword gMoveResultFlags, MOVE_RESULT_NO_EFFECT
+	typecalc
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_PKMNHURTSWITH @make new string  "mon countered the blow!"

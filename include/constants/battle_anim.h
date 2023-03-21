@@ -493,7 +493,7 @@
 #define BG_DYNAMAX_CANNON                       76
 #define BG_AURA_SPHERE                          77
 
-// table ids for general animations	(gBattleAnims_General)
+// table ids for general animations	(gBattleAnims_General) //buffer for values from battle_anim_scripts.s
 #define B_ANIM_CASTFORM_CHANGE          0x0
 #define B_ANIM_STATS_CHANGE             0x1
 #define B_ANIM_SUBSTITUTE_FADE          0x2
@@ -522,16 +522,17 @@
 #define B_ANIM_SILPH_SCOPED             0x19
 #define B_ANIM_ROCK_THROW               0x1A
 #define B_ANIM_SAFARI_REACTION          0x1B // all above are ported from emerald
-#define B_ANIM_MEGA_EVOLUTION           0x1C // prob need to make animations
-#define B_ANIM_TERRAIN_MISTY            0x1D
-#define B_ANIM_TERRAIN_GRASSY           0x1E
-#define B_ANIM_TERRAIN_ELECTRIC         0x1F
-#define B_ANIM_TERRAIN_PSYCHIC          0x20
-#define B_ANIM_ILLUSION_OFF             0x21
-#define B_ANIM_FORM_CHANGE              0x22
-#define B_ANIM_SLIDE_OFFSCREEN          0x23 // for Emergency Exit
-#define B_ANIM_RESTORE_BG               0x24 // for Terrain Endings
-#define B_ANIM_TOTEM_FLARE              0x25 // Totem boosts aura flare
+#define B_ANIM_MEGA_EVOLUTION           0x1C
+#define B_ANIM_ILLUSION_OFF             0x1D
+#define B_ANIM_FORM_CHANGE              0x1E
+#define B_ANIM_SLIDE_OFFSCREEN          0x1F // for Emergency Exit
+#define B_ANIM_RESTORE_BG               0X20 // for Terrain Endings
+#define B_ANIM_TOTEM_FLARE              0X21 // Totem boosts aura flare
+#define B_ANIM_GULP_MISSILE             0X22
+#define B_ANIM_STRONG_WINDS             0X23
+#define B_ANIM_PRIMAL_REVERSION         0X24
+#define B_ANIM_AQUA_RING_HEAL           0X25
+#define B_ANIM_SPIKE_TOSS				0x26 // for spike shield spike set
 
 
 // special animations table

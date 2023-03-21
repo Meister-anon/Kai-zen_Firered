@@ -1339,7 +1339,15 @@ static void atk00_attackcanceler(void)
     and it plays the heal or stat buff visual & sound instead the new function should be called & end in a return or a end, 
     vsonic IMPORTANT
     */
-    if (IsBattlerProtected(gBattlerTarget, gCurrentMove)
+    if (gProtectStructs[gBattlerTarget].shieldBashed && (gBattleMoves[gCurrentMove].flags & FLAG_PROTECT_AFFECTED))
+    {
+        if (IsMoveMakingContact(gCurrentMove, gBattlerAttacker))
+        {
+            gProtectStructs[gBattlerAttacker].touchedProtectLike = TRUE;
+            
+        }
+    }
+    else if (IsBattlerProtected(gBattlerTarget, gCurrentMove)
         && (gCurrentMove != MOVE_CURSE || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST))
         && ((!IsTwoTurnsMove(gCurrentMove) || (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)))
         && gBattleMoves[gCurrentMove].effect != EFFECT_SUCKER_PUNCH)
@@ -1352,19 +1360,6 @@ static void atk00_attackcanceler(void)
         gLastHitByType[gBattlerTarget] = 0;
         gBattleCommunication[MISS_TYPE] = B_MSG_PROTECTED;
         ++gBattlescriptCurrInstr;
-    }
-    else
-    {
-        ++gBattlescriptCurrInstr;
-    }
-
-    if (gProtectStructs[gBattlerTarget].shieldBashed && (gBattleMoves[gCurrentMove].flags & FLAG_PROTECT_AFFECTED))
-    {
-        if (IsMoveMakingContact(gCurrentMove, gBattlerAttacker))
-        {
-            gProtectStructs[gBattlerAttacker].touchedProtectLike = TRUE;
-            ++gBattlescriptCurrInstr;
-        }
     }
     else
     {
@@ -2413,16 +2408,6 @@ static void atk07_adjustnormaldamage(void)
         gSpecialStatuses[gBattlerTarget].focusSashed = TRUE;
     }
 
-    //will prob need to put in both adjustnormaldamage functions
-    //my dumb ass forgot the semi colons smh *facepalm
-    if (gProtectStructs[gBattlerTarget].shieldBashed && gProtectStructs[gBattlerAttacker].touchedProtectLike) //most things done just need put in super effective logic
-    { //here and in atk49 move end
-        //shouldn't affect ohko moves will prob affect fixed damage moves but that's prob fine since its supposed to be a protect like, on level w endure etc.
-        if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //get wonder guard logic to work here
-            ((gBattleMoveDamage *= 15) / 100); //should be 15% damage i.e 85% damage cut
-        else if (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE))  //hopefully works for normal effect and doesn't break fixed damage & oh ko moves
-            ((gBattleMoveDamage *= 30) / 100); //should be 30% damage i.e 70% damage cut
-    }//move animation similar to spike shield use protect effect think combine with harden
 
     /*if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
      && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded
@@ -2538,15 +2523,6 @@ static void atk08_adjustnormaldamage2(void)
     {
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gSpecialStatuses[gBattlerTarget].focusSashed = TRUE;
-    }
-
-    if (gProtectStructs[gBattlerTarget].shieldBashed && gProtectStructs[gBattlerAttacker].touchedProtectLike) //most things done just need put in super effective logic
-    { //here and in atk49 move end
-        //shouldn't affect ohko moves will prob affect fixed damage moves but that's prob fine since its supposed to be a protect like, on level w endure etc.
-        if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //get wonder guard logic to work here
-            ((gBattleMoveDamage *= 15) / 100); //should be 15% damage i.e 85% damage cut
-        else if (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE))  //hopefully works for normal effect and doesn't break fixed damage & oh ko moves
-            ((gBattleMoveDamage *= 30) / 100); //should be 30% damage i.e 70% damage cut
     }
 
      if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)    //CORRECT way to start conditional with a negative
@@ -5332,7 +5308,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             {
                 if (gProtectStructs[gBattlerTarget].spikyShielded)
                 {
-                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    
                     if (GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD) //dmg & spikes
                     {
                         gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
@@ -5349,6 +5325,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                         gBattlescriptCurrInstr = BattleScript_SetSpikesfromSpikyShield;
                         effect = 1;
                     }
+                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE; //think need to put at end since set spikes requires this to be true
                 }
                 else if (gProtectStructs[gBattlerTarget].shieldBashed && GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
                 {
@@ -5360,11 +5337,14 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                             gBattleMoveDamage = 1;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SHIELD_BASH);
                         BattleScriptPushCursor();
-                        gBattlescriptCurrInstr = BattleScript_ShieldBash;//
+                        gBattlescriptCurrInstr = BattleScript_ShieldBash;//needs animation
                         effect = 1;
                     }
-                    else if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //should do what i want
-                        ++gBattleScripting.atk49_state;
+                    /*else if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //should do what i want
+                    {
+                        gBattleScripting.moveendState++;
+                        break;
+                    }*/  //having this broke things so removed, for some reason non damaging moves were being caught i.e growl
                 }
                 else if (gProtectStructs[gBattlerTarget].kingsShielded)
                 {
@@ -11671,10 +11651,11 @@ static void atkAF_cursetarget(void)
 
 static void atkB0_trysetspikes(void)
 {
-    u8 targetSide = GetBattlerSide(gBattlerAttacker) ^ BIT_SIDE; //opposite attacker
+    u8 targetSide = GetBattlerSide(gBattlerAttacker) ^ BIT_SIDE; //opposite attacker?
 
-    if (gProtectStructs[gBattlerTarget].spikyShielded && gProtectStructs[gBattlerAttacker].touchedProtectLike)
-        targetSide = GetBattlerSide(gBattlerTarget) ^ BIT_SIDE; //hope works and fixes spiky shield issue
+    if (gProtectStructs[gBattlerTarget].spikyShielded)  //doesn't need extra clause already has move end clause for touch protect like. 
+        targetSide = GetBattlerSide(gBattlerTarget) ^ BIT_SIDE; //hope works and fixes spiky shield issue WORKS!!!
+    //think the conditional was the problem
 
 
     if (gSideTimers[targetSide].spikesAmount == 3)

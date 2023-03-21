@@ -3628,6 +3628,25 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     }
 
+    //logic didn't work in adjustnormaldamage bs command function, put here bcause is equivalent to where aurora veil damage reducion is done 4 emerald
+    //I'm stupid I forgot this was meant to be flat damage reduction, not require contact
+    if (gProtectStructs[gBattlerTarget].shieldBashed) //most things done just need put in super effective logic
+    { //here and in atk49 move end
+        //shouldn't affect ohko moves will prob affect fixed damage moves but that's prob fine since its supposed to be a protect like, on level w endure etc.
+        if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //get wonder guard logic to work here
+        {
+            //((gBattleMoveDamage *= 15) / 100); //should be 15% damage i.e 85% damage cut
+            gBattleMoveDamage *= 15;
+            gBattleMoveDamage /= 100;
+        }
+        else if (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE))  //hopefully works for normal effect and doesn't break fixed damage & oh ko moves
+        {
+            //((gBattleMoveDamage *= 30) / 100); //should be 30% damage i.e 70% damage cut
+            gBattleMoveDamage *= 30;
+            gBattleMoveDamage /= 100;
+        }
+    }//move animation similar to spike shield use protect effect think combine with harden
+
 
     if (IS_MOVE_PHYSICAL(move))
     {

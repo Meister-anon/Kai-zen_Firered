@@ -4088,8 +4088,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
             }
             break;// updated ability battle effects for drain abilities 
-        case ABILITYEFFECT_MOVE_END: // Think contact abilities.
-            switch (gLastUsedAbility)
+        case ABILITYEFFECT_MOVE_END: // Think contact abilities. //logic is if target has ablity
+            switch (gLastUsedAbility)//double check if forget other abilities
             {
             case ABILITY_COLOR_CHANGE:
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
@@ -4222,6 +4222,114 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_CuteCharmActivates;
                     ++effect;
+                }
+                break;
+            }
+            break;
+        case ABILITYEFFECT_MOVE_END_ATTACKER: // Same as above, but for attacker
+            switch (gLastUsedAbility)
+            {
+            case ABILITY_POISON_TOUCH:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && gBattleMons[gBattlerTarget].hp != 0
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && CanBePoisoned(gBattlerAttacker, gBattlerTarget)
+                    && IsMoveMakingContact(move, gBattlerAttacker)
+                    && TARGET_TURN_DAMAGED // Need to actually hit the target
+                    && (Random() % 3) == 0)
+                {
+                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_POISON; //tesst later
+                    //gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
+                    //PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
+                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                    effect++;
+                }
+                break;
+            case ABILITY_STATIC:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && gBattleMons[gBattlerAttacker].hp != 0
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && IsMoveMakingContact(move, gBattlerAttacker) //not using other paralyze statemetn cuz think I already have my own logic
+                    && TARGET_TURN_DAMAGED
+                    && (Random() % 3) == 0)
+                {
+                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_PARALYSIS;
+                    //gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
+                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                    ++effect;
+                }
+                break;
+            case ABILITY_FLAME_BODY:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && gBattleMons[gBattlerAttacker].hp != 0
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT)
+                    && TARGET_TURN_DAMAGED
+                    && (Random() % 3) == 0)
+                {
+                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_BURN;
+                    //gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
+                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                    ++effect;
+                }
+                break;
+            case ABILITY_STENCH:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && gBattleMons[gBattlerTarget].hp != 0
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && (Random() % 10) == 0
+                    && !IS_MOVE_STATUS(move)
+                    && !sMovesNotAffectedByStench[gCurrentMove])
+                {
+                    gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
+                    BattleScriptPushCursor();
+                    SetMoveEffect(FALSE, 0);
+                    BattleScriptPop();
+                   ++effect;
+                }
+                break;
+            case ABILITY_GULP_MISSILE:
+                if (((gCurrentMove == MOVE_SURF && TARGET_TURN_DAMAGED) || gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER)
+                    && (effect = ShouldChangeFormHpBased(gBattlerAttacker)))
+                {
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_AttackerFormChange;
+                   ++effect;
+                }
+                break;
+            }
+            break;
+        case ABILITYEFFECT_MOVE_END_OTHER: // Abilities that activate on *another* battler's moveend: Dancer, Soul-Heart, Receiver, Symbiosis
+            switch (GetBattlerAbility(battler))
+            {
+            case ABILITY_DANCER:
+                if (IsBattlerAlive(battler)
+                    && (gBattleMoves[gCurrentMove].flags & FLAG_DANCE)
+                    && !gSpecialStatuses[battler].dancerUsedMove
+                    && gBattlerAttacker != battler)
+                {
+                    // Set bit and save Dancer mon's original target
+                    gSpecialStatuses[battler].dancerUsedMove = TRUE;
+                    gSpecialStatuses[battler].dancerOriginalTarget = *(gBattleStruct->moveTarget + battler) | 0x4;
+                    gBattleStruct->atkCancellerTracker = 0;
+                    gBattlerAttacker = gBattlerAbility = battler;
+                    gCalledMove = gCurrentMove;
+
+                    // Set the target to the original target of the mon that first used a Dance move
+                    gBattlerTarget = gBattleScripting.savedBattler & 0x3;
+
+                    // Make sure that the target isn't an ally - if it is, target the original user
+                    if (GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker))
+                        gBattlerTarget = (gBattleScripting.savedBattler & 0xF0) >> 4;
+                    gHitMarker &= ~HITMARKER_ATTACKSTRING_PRINTED;
+                    BattleScriptExecute(BattleScript_DancerActivates);
+                   ++effect;
                 }
                 break;
             }
