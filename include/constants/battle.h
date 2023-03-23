@@ -159,11 +159,11 @@
 #define STATUS1_WHIRLPOOL		 (1 << 11)
 #define STATUS1_SAND_TOMB		 (1 << 12)
 #define STATUS1_MAGMA_STORM		 (1 << 14)
-#define STATUS1_INFESTATION		 (1 << 14)
-#define STATUS1_WRAPPED			 (1 << 15)
-#define STATUS1_TOXIC_POISON     (1 << 16)
-#define STATUS1_TOXIC_COUNTER    (1 << 17 | 1 << 18 | 1 << 19 | 1 << 20)
-#define STATUS1_TOXIC_TURN(num)  ((num) << 17)
+#define STATUS1_INFESTATION		 (1 << 15)
+#define STATUS1_WRAPPED			 (1 << 16)
+#define STATUS1_TOXIC_POISON     (1 << 17)
+#define STATUS1_TOXIC_COUNTER    (1 << 18 | 1 << 19 | 1 << 20 | 1 << 21)
+#define STATUS1_TOXIC_TURN(num)  ((num) << 18)
 #define STATUS1_PSN_ANY          (STATUS1_POISON | STATUS1_TOXIC_POISON)
 #define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON)
 
@@ -183,7 +183,7 @@
 #define STATUS2_BIDE_TURN(num)        (((num) << 8) & STATUS2_BIDE)
 #define STATUS2_LOCK_CONFUSE          (1 << 10 | 1 << 11) // e.g. Thrash
 #define STATUS2_LOCK_CONFUSE_TURN(num)((num) << 10)
-#define STATUS2_MULTIPLETURNS         (1 << 12) 
+#define STATUS2_MULTIPLETURNS         (1 << 12) //wrapped is wrap & bide
 #define STATUS2_WRAPPED               (1 << 13)	//make individual wrapped for each, but all use same wrap turn counter
 //#define STATUS2_WRAPPED_TURN(num)     ((num) << 13)	//left shift value is starting point of status wrapped
 #define STATUS2_POWDER                (1 << 14)
@@ -272,7 +272,7 @@
 #define STATUS4_PHYSICAL_TRAP (STATUS4_CLAMP || STATUS4_INFESTATION) //summary you get 1 environment trap and as many physical traps as you want
 
 //trap statuses not immune to floating enemies
-#define ITS_A_TRAP_STATUS_2 (STATUS2_WRAPPED | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL | STATUS4_SAND_TOMB | STATUS4_INFESTATION)
+//#define ITS_A_TRAP_STATUS_2 (STATUS2_WRAPPED | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL | STATUS4_SAND_TOMB | STATUS4_INFESTATION)
 
 //temp just the status4 stuff		//OK so status4 not currently used in battle? its not in BattlePokemon struct need add and investigate
 #define ITS_A_TRAP_STATUS4 (STATUS4_FIRE_SPIN || STATUS4_CLAMP || STATUS4_WHIRLPOOL || STATUS4_SAND_TOMB || STATUS4_MAGMA_STORM || STATUS4_INFESTATION)

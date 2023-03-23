@@ -1563,7 +1563,7 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
         return TRUE;
     }//exclusions for traps that don't work on floating targets so if you're trap heavy you need a grounder
     //note prob need more moves that do ground effects so its not just a rock & a psychic move
-    //may make custom text for this.
+    //may make custom text for this.   //vsonic IMPORTANT
 
     if ((WEATHER_HAS_EFFECT && 
         ((IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
@@ -1631,8 +1631,12 @@ static void atk01_accuracycheck(void)
         {
             //u8 acc = gBattleMons[gBattlerAttacker].statStages[STAT_ACC];
 
-            buff = acc + 6 - gBattleMons[gBattlerTarget].statStages[STAT_EVASION];
-        }
+            buff = acc + DEFAULT_STAT_STAGE - gBattleMons[gBattlerTarget].statStages[STAT_EVASION];
+        } //this the line that links accuracy and evasion I believe
+
+        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNAWARE)
+            buff = acc;
+
         //trap effects
         if ((gBattleMons[gBattlerAttacker].status4 & STATUS4_SAND_TOMB) || (gBattleMons[gBattlerAttacker].status1 & STATUS1_SAND_TOMB))  //hope works should lower accruacy 2 stages if trapped by sandtomb
         {
@@ -1688,7 +1692,7 @@ static void atk01_accuracycheck(void)
         eva = 5; // with that there should be as much benefit as danger in being confused, singled moves could hit everyone, etc. random & interesting..
         
         if ((gBattleMons[gBattlerTarget].ability == ABILITY_TANGLED_FEET) && gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION) 
-            eva = 9;//raises evasion double but evasion calcs different so thats +3 intead of +2
+            eva *= 2;//raises evasion double but evasion calcs different so thats +3 intead of +2
         //12 stage base is 6 goes up to 12 & down to 0
 
         if (gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
@@ -1801,6 +1805,14 @@ static void atk02_attackstring(void)
         if (!(gHitMarker & (HITMARKER_NO_PPDEDUCT | HITMARKER_NO_ATTACKSTRING)) && gBattleMons[gBattlerAttacker].pp[gCurrMovePos])
         {
             gProtectStructs[gBattlerAttacker].notFirstStrike = 1;
+
+            // For item Metronome, echoed voice
+            if (gCurrentMove == gLastResultingMoves[gBattlerAttacker]
+                && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                && !WasUnableToUseMove(gBattlerAttacker))
+                gBattleStruct->sameMoveTurns[gBattlerAttacker]++;
+            else
+                gBattleStruct->sameMoveTurns[gBattlerAttacker] = 0;
 
             if (gBattleMons[gBattlerAttacker].pp[gCurrMovePos] > ppToDeduct)
                 gBattleMons[gBattlerAttacker].pp[gCurrMovePos] -= ppToDeduct;
@@ -1987,8 +1999,16 @@ static void atk06_typecalc(void)
     // check stab
     if (IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType))
     {
-        gBattleMoveDamage = gBattleMoveDamage * 15;
-        gBattleMoveDamage = gBattleMoveDamage / 10;
+        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_ADAPTABILITY) 
+        {
+            gBattleMoveDamage *= 2;
+        }
+        else
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 15;
+            gBattleMoveDamage = gBattleMoveDamage / 10;
+        }
+        
     }
 
     /*if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
@@ -2236,8 +2256,16 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
     // check stab
     if (IS_BATTLER_OF_TYPE(attacker, moveType))
     {
-        gBattleMoveDamage = gBattleMoveDamage * 15;
-        gBattleMoveDamage = gBattleMoveDamage / 10;
+        if (GetBattlerAbility(attacker) == ABILITY_ADAPTABILITY)
+        {
+            gBattleMoveDamage *= 2;
+        }
+        else
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 15;
+            gBattleMoveDamage = gBattleMoveDamage / 10;
+        }
+        
     }
 
     //if (gBattleMons[defender].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
@@ -5642,6 +5670,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
         gBattlescriptCurrInstr += 3;
 }
 
+//doesn't have stab check
 static void atk4A_typecalc2(void)   //think can do dual type stuff here? or do I put it in modulate?
 {
     u8 flags = 0;

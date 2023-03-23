@@ -193,7 +193,7 @@ struct BattlePokemon
     /*0x4C*/ u32 status1;   //stays on switch
     /*0x50*/ u32 status2;   //temp status lost on switch
     /*0x54*/ u32 status4;   //new addition  for new statuses mostly for new wrap effects, plan to make equivalent of status2
-    /*0x58*/ u32 otId;
+    /*0x58*/ u32 otId; //may not need status4 in struct status3 & 4 seem to work through gstatuses3 & gstatus4 the same as status 2 already?
 };
 
 struct BaseStats  // had to adjust struct order to match paste value from base_stats.h
@@ -247,6 +247,9 @@ struct BattleMove
 //argument is for extra effects other than secondary effect
 
 extern const struct BattleMove gBattleMoves[];
+
+#define IS_CRIT (gCritMultiplier > 1)
+
 /*
 #define FLAG_MAKES_CONTACT          0x1
 #define FLAG_PROTECT_AFFECTED       0x2
@@ -285,11 +288,12 @@ extern const struct BattleMove gBattleMoves[];
 #define FLAG_HIT_IN_SUBSTITUTE                    (1 << 26) // Hyperspace Fury
 #define FLAG_TWO_STRIKES                          (1 << 27) // A move with this flag will strike twice, and may apply its effect on each hit
 
+#define SPINDA_SPOT_HEIGHT 16
 
 struct SpindaSpot
 {
     u8 x, y;
-    u16 image[16];
+    u16 image[SPINDA_SPOT_HEIGHT];
 };
 
 struct LevelUpMove
@@ -367,6 +371,13 @@ struct Evolution
     u16 param;
     u16 targetSpecies;
 };
+
+struct FormChange {
+    u16 method;
+    u16 targetSpecies;
+    u16 param1;
+    u16 param2;
+}; //may change based on how I use forms
 
 #define EVOS_PER_MON 16 // set to 16 in case I need the shedinja byte change fix
 #define FORMS_PER_MON 5 //for breeding

@@ -831,6 +831,7 @@ gBattleAnims_StatusConditions::
 	@.4byte Status_Spiritlock
 
 	@value go in 
+
 gBattleAnims_General::
 	.4byte General_CastformChange
 	.4byte General_StatsChange

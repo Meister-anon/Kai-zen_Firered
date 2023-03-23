@@ -1038,7 +1038,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     u32 moveType, ateType, attackerAbility;
     u16 holdEffect = GetBattlerHoldEffect(battlerAtk, TRUE);
 
-    if (move == MOVE_STRUGGLE)
+    if (move == (MOVE_STRUGGLE || MOVE_BIDE)) 
         return;
 
     gBattleStruct->dynamicMoveType = 0;
@@ -2582,7 +2582,7 @@ static void BattleStartClearSetData(void)
         dataPtr = (u8 *)&gDisableStructs[i];
         for (j = 0; j < sizeof(struct DisableStruct); ++j)
             dataPtr[j] = 0;
-        gDisableStructs[i].isFirstTurn = 2;
+        gDisableStructs[i].isFirstTurn = 2; //beelieve is switching in? based on emerald comment
         gUnknown_2023DD4[i] = 0;
         gLastMoves[i] = MOVE_NONE;
         gLastLandedMoves[i] = MOVE_NONE;
@@ -2742,6 +2742,7 @@ void SwitchInClearSetData(void) //handles what gets reset on switchout
     gLastResultingMoves[gActiveBattler] = MOVE_NONE;
     gLastPrintedMoves[gActiveBattler] = MOVE_NONE;
     gLastHitBy[gActiveBattler] = 0xFF;
+    gBattleStruct->sameMoveTurns[gActiveBattler] = 0;
     *(gBattleStruct->lastTakenMove + gActiveBattler * 2 + 0) = MOVE_NONE;
     *(gBattleStruct->lastTakenMove + gActiveBattler * 2 + 1) = MOVE_NONE;
     *(0 * 2 + gActiveBattler * 8 + (u8 *)(gBattleStruct->lastTakenMoveFrom) + 0) = 0;
@@ -2818,6 +2819,7 @@ void FaintClearSetData(void)
     gLastResultingMoves[gActiveBattler] = MOVE_NONE;
     gLastPrintedMoves[gActiveBattler] = MOVE_NONE;
     gLastHitBy[gActiveBattler] = 0xFF;
+    gBattleStruct->sameMoveTurns[gActiveBattler] = 0; //hope works since others writ diff in fire red/emerald
     *((u8 *)(&gBattleStruct->choicedMove[gActiveBattler]) + 0) = MOVE_NONE;
     *((u8 *)(&gBattleStruct->choicedMove[gActiveBattler]) + 1) = MOVE_NONE;
     *(gBattleStruct->lastTakenMove + gActiveBattler * 2 + 0) = MOVE_NONE;
@@ -3536,7 +3538,10 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                     break;
                 case B_ACTION_SWITCH:
                     *(gBattleStruct->battlerPartyIndexes + gActiveBattler) = gBattlerPartyIndexes[gActiveBattler];
-                    if (gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION) || gStatuses3[gActiveBattler] & STATUS3_ROOTED)
+                    if (gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION) 
+                        || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
+                        || (gBattleMons[gActiveBattler].status1 & (ITS_A_TRAP_STATUS1)) 
+                        || (gStatuses4[gActiveBattler] & (ITS_A_TRAP_STATUS4))) //hope this works...
                     {
                         BtlController_EmitChoosePokemon(0, PARTY_ACTION_CANT_SWITCH, 6, ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
                     }
@@ -3550,7 +3555,7 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                     {
                         BtlController_EmitChoosePokemon(0, ((i - 1) << 4) | PARTY_ACTION_ABILITY_PREVENTS, 6, gLastUsedAbility, gBattleStruct->battlerPartyOrders[gActiveBattler]);
                     }
-                    else
+                    else //can switch
                     {
                         if (gActiveBattler == 2 && gChosenActionByBattler[0] == B_ACTION_SWITCH)
                             BtlController_EmitChoosePokemon(0, PARTY_ACTION_CHOOSE_MON, *(gBattleStruct->monToSwitchIntoId + 0), ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);

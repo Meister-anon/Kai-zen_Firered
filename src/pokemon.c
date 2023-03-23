@@ -3202,7 +3202,10 @@ static bool32 CanEvolve(u32 species) //default use for eviolite but will also us
 
     for (i = 0; i < EVOS_PER_MON; i++)
     {
-        if (gEvolutionTable[species][i].method && gEvolutionTable[species][i].method != EVO_MEGA_EVOLUTION)
+        if (gEvolutionTable[species][i].method
+         && gEvolutionTable[species][i].method != EVO_MEGA_EVOLUTION
+         && gEvolutionTable[species][i].method != EVO_MOVE_MEGA_EVOLUTION
+         && gEvolutionTable[species][i].method != EVO_PRIMAL_REVERSION)
             return TRUE;
     }
     return FALSE;
@@ -3219,17 +3222,20 @@ static bool32 CanEvolve(u32 species) //default use for eviolite but will also us
 s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *defender, u32 move, u16 sideStatus, u16 powerOverride, u8 typeOverride, u8 battlerIdAtk, u8 battlerIdDef)
 {
     u32 i;
+    u32 percentBoost;
     s32 damage = 0;
     s32 damageHelper;
     u8 type;
     bool8 usesDefStat;
     u8 defStage;
-    u16 attack, defense;
+    u16 attack, defense, speed;
     u16 spAttack, spDefense, defStat;
     u8 defenderHoldEffect;
     u8 defenderHoldEffectParam;
     u8 attackerHoldEffect;
     u8 attackerHoldEffectParam;
+    u32 abilityDef = GetBattlerAbility(battlerIdDef);
+    u16 itemDef = gBattleMons[battlerIdDef].item;
 
     if (!powerOverride)
         gBattleMovePower = gBattleMoves[move].power;
@@ -3245,6 +3251,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     defense = defender->defense;
     spAttack = attacker->spAttack;
     spDefense = defender->spDefense;
+    speed = attacker->speed;
 
     if (gBattleMoves[move].effect == EFFECT_PSYSHOCK || IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
     {
@@ -3348,10 +3355,54 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         defense *= 2;
     if (attackerHoldEffect == HOLD_EFFECT_THICK_CLUB && (attacker->species == SPECIES_CUBONE || attacker->species == SPECIES_MAROWAK))
         attack *= 2;
+    if (attackerHoldEffect == HOLD_EFFECT_METRONOME)
+    {
+        percentBoost = min((gBattleStruct->sameMoveTurns[gBattlerAttacker] * GetBattlerHoldEffectParam(gBattlerAttacker)), 100);
+        {
+            gBattleMovePower *= (100 + sPercentToModifier[percentBoost]);
+            gBattleMovePower /= 100;
+
+        } // I THINK?? this fits? mulmod is setup but think would need to change
+        //return to use applymodifier if I put in this function?
+        //MulModifier(&finalModifier, UQ_4_12(1.0) + sPercentToModifier[percentBoost]);
+    }
+    if (attackerHoldEffect == HOLD_EFFECT_EXPERT_BELT)
+    {
+        if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
+            //MulModifier(&finalModifier, UQ_4_12(1.2));
+    }
+    if (attackerHoldEffect == HOLD_EFFECT_LIFE_ORB) //hp drop already in util
+        gBattleMovePower = (gBattleMovePower * 130 / 100);
+
+    if (defenderHoldEffect == HOLD_EFFECT_RESIST_BERRY)
+    {
+        if (type == GetBattlerHoldEffectParam(gBattlerTarget)
+            && (type == TYPE_NORMAL || gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+            && !UnnerveOn(battlerIdDef, itemDef))
+        {
+            if (abilityDef == ABILITY_RIPEN)
+                //MulModifier(&finalModifier, UQ_4_12(0.25));
+            {
+                gBattleMoveDamage *= 25;
+                gBattleMoveDamage /= 100;
+            }
+
+            else
+                gBattleMoveDamage /= 2;
+                //MulModifier(&finalModifier, UQ_4_12(0.5));
+            //if (updateFlags)      //not sure what this does, it may change move result flag & sound effect to match?
+                gSpecialStatuses[battlerIdDef].berryReduced = TRUE;
+        }
+    }
+
     /*if (defender->ability == ABILITY_THICK_FAT && (type == TYPE_FIRE || type == TYPE_ICE))
-        spAttack /= 2;*/    //removed this version as it only blocked special moves not physical moves too
+        spAttack /= 2;*/    //removed this version as it only blocked special moves not physical moves too, more efficient
+    //stat change abilities/same effect as gbattlemovedamage change but just more complient
     if (attacker->ability == ABILITY_HUSTLE)
         attack = (150 * attack) / 100;
+    if (attacker->ability == ABILITY_SOLAR_POWER)
+        spAttack = (150 * spAttack) / 100;
     if (attacker->ability == ABILITY_PLUS && ABILITY_ON_FIELD2(ABILITY_MINUS))
         spAttack = (150 * spAttack) / 100;
     if (attacker->ability == ABILITY_MINUS && ABILITY_ON_FIELD2(ABILITY_PLUS))
@@ -3405,44 +3456,52 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     }
 
     //put abilities ported here
-    // attacker's abilities
-    switch (GetBattlerAbility(gBattlerAttacker))
+    // attacker's abilities  
+    switch (GetBattlerAbility(gBattlerAttacker)) //think should order by id, can't remember if need to
     {
+    /*case ABILITY_SNIPER:  //DONE IN bs commands
+        if (IS_CRIT)
+            MulModifier(&finalModifier, UQ_4_12(1.5));
+        break;*/
     case ABILITY_TECHNICIAN:
         if (gBattleMovePower <= 60)
             gBattleMovePower = (gBattleMovePower * 15 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.5));
+        //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_TINTED_LENS:
+        if (gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE) //think should work
+            gBattleMoveDamage *= 2;
         break;
     case ABILITY_FLARE_BOOST:
         if (gBattleMons[gBattlerAttacker].status1 & STATUS1_BURN && IS_MOVE_SPECIAL(move))
             gBattleMovePower = (gBattleMovePower * 15 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.5));
+        //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_TOXIC_BOOST:
         if (gBattleMons[gBattlerAttacker].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move))
             gBattleMovePower = (gBattleMovePower * 15 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.5));
+        //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_RECKLESS:
         if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
             gBattleMovePower = (gBattleMovePower * 12 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.2));
+        //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_IRON_FIST:
         if (gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST)
             gBattleMovePower = (gBattleMovePower * 12 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.2));
+        //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_SHEER_FORCE:
         if (gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST)
             gBattleMovePower = (gBattleMovePower * 13 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.3));
+        //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_SAND_FORCE:
         if ((type == TYPE_STEEL || type == TYPE_ROCK || type == TYPE_GROUND)
             && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY)
             gBattleMovePower = (gBattleMovePower * 13 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.3));
+        //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_RIVALRY:
         if (GetGenderFromSpeciesAndPersonality(gBattleMons[gBattlerAttacker].species, gBattleMons[gBattlerAttacker].personality) != MON_GENDERLESS
@@ -3451,94 +3510,115 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             if (GetGenderFromSpeciesAndPersonality(gBattleMons[gBattlerAttacker].species, gBattleMons[gBattlerAttacker].personality)
                 == GetGenderFromSpeciesAndPersonality(gBattleMons[gBattlerTarget].species, gBattleMons[gBattlerTarget].personality))
                 gBattleMovePower = (gBattleMovePower * 125 / 100);
-                //MulModifier(&modifier, UQ_4_12(1.25));
-            /*else
-                gBattleMovePower = (gBattleMovePower * 75 / 100);*/ 
-                //MulModifier(&modifier, UQ_4_12(0.75));  removed above section cause don't want negative effects of rivalry.
+            //MulModifier(&modifier, UQ_4_12(1.25));
+        /*else
+            gBattleMovePower = (gBattleMovePower * 75 / 100);*/
+            //MulModifier(&modifier, UQ_4_12(0.75));  removed above section cause don't want negative effects of rivalry.
         }
+        break; //nevermind will put entiere thing in util
+    /*case ABILITY_DEFEATIST: //plan change double speed stat. /done will need text for this, archen line ability
+        if (gBattleMons[gBattlerAttacker].hp <= (gBattleMons[gBattlerAttacker].maxHP / 2))
+        {
+            gBattleMoveDamage /= 2; //may actually move to stat area so can play with stat swap moves
+        }//change isn't that useful in trainer battle since its already faster than most
+        break;*/ //but would guarantee ability to run from battle, in that case need to also clear traps that prevent escape
+        //ok  remove escape prevention, if stuck in trap or by arena trap or maybe just trap
+        //break from of it at cost of 10% hp or something, like you just ran through it recklessly
+        //want the trap cleaer effect to work only once, at the time your hp fallse i.e once per sendin
+        //so I guess I'll need to add a special status like intimidate and have it set when hp drops
+        //and only cleared on switch out
+    case ABILITY_SLOW_START:
+        if (gDisableStructs[gBattlerAttacker].slowStartTimer != 0)
+            gBattleMoveDamage /= 2;
+    case ABILITY_NORMALIZE:
+        if (type == TYPE_NORMAL && gBattleStruct->ateBoost[gBattlerAttacker])
+            gBattleMovePower = (gBattleMovePower * 12 / 10);
+        //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_ANALYTIC:
         if (GetBattlerTurnOrderNum(gBattlerAttacker) == gBattlersCount - 1 && move != MOVE_FUTURE_SIGHT && move != MOVE_DOOM_DESIRE)
             gBattleMovePower = (gBattleMovePower * 13 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.3));
+        //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_TOUGH_CLAWS:
         if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
             gBattleMovePower = (gBattleMovePower * 13 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.3));
+        //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_STRONG_JAW:
         if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
             gBattleMovePower = (gBattleMovePower * 15 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.5));
+        //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_MEGA_LAUNCHER:
         if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
             gBattleMovePower = (gBattleMovePower * 15 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.5));
+        //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_WATER_BUBBLE:
         if (type == TYPE_WATER)
             gBattleMovePower = (gBattleMovePower * 20 / 10);
-            //MulModifier(&modifier, UQ_4_12(2.0));
+        //MulModifier(&modifier, UQ_4_12(2.0));
         break;
     case ABILITY_STEELWORKER:
         if (type == TYPE_STEEL)
             gBattleMovePower = (gBattleMovePower * 15 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.5));
+        //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_PIXILATE:
         if (type == TYPE_FAIRY && gBattleStruct->ateBoost[gBattlerAttacker])
             gBattleMovePower = (gBattleMovePower * 12 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.2));
-        break;
-    case ABILITY_GALVANIZE:
-        if (type == TYPE_ELECTRIC && gBattleStruct->ateBoost[gBattlerAttacker])
-            gBattleMovePower = (gBattleMovePower * 12 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.2));
+        //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_REFRIGERATE:
         if (type == TYPE_ICE && gBattleStruct->ateBoost[gBattlerAttacker])
             gBattleMovePower = (gBattleMovePower * 12 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.2));
+        //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_AERILATE:
         if (type == TYPE_FLYING && gBattleStruct->ateBoost[gBattlerAttacker])
             gBattleMovePower = (gBattleMovePower * 12 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.2));
+        //MulModifier(&modifier, UQ_4_12(1.2));
         break;
-    case ABILITY_NORMALIZE:
-        if (type == TYPE_NORMAL && gBattleStruct->ateBoost[gBattlerAttacker])
+    case ABILITY_GALVANIZE:
+        if (type == TYPE_ELECTRIC && gBattleStruct->ateBoost[gBattlerAttacker])
             gBattleMovePower = (gBattleMovePower * 12 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.2));
+        //MulModifier(&modifier, UQ_4_12(1.2));
+        break;
+    case ABILITY_NEUROFORCE:
+        if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+            gBattleMoveDamage = (gBattleMoveDamage * 125 / 100);
+            //MulModifier(&finalModifier, UQ_4_12(1.25));
         break;
     case ABILITY_PUNK_ROCK:
         if (gBattleMoves[move].flags & FLAG_SOUND)
             gBattleMovePower = (gBattleMovePower * 13 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.3));
+        //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_STEELY_SPIRIT:
         if (type == TYPE_STEEL)
             gBattleMovePower = (gBattleMovePower * 15 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.5));
+        //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_TRANSISTOR:
         if (type == TYPE_ELECTRIC)
             gBattleMovePower = (gBattleMovePower * 15 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.5));
+        //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_DRAGONS_MAW:
         if (type == TYPE_DRAGON)
             gBattleMovePower = (gBattleMovePower * 15 / 10);
-            //MulModifier(&modifier, UQ_4_12(1.5));
+        //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_BATTLE_MATRON:
         if (IsBattlerAlive(BATTLE_PARTNER(gBattlerAttacker)) && CanEvolve(gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].species))
             gBattleMovePower = (gBattleMovePower * 150 / 100);   //current preference
         break;
-            //if checks work and it pulls species of partner mon need to decide if I boost move power or total move damage
+        //if checks work and it pulls species of partner mon need to decide if I boost move power or total move damage
         //move power is less damage than gBattleMoveDamage
-    }//fix found from DoesSideHaveAbility function from util.c
+            //fix found from DoesSideHaveAbility function from util.c
+
+    }//put adaptability logic in typecalc in bs command becaus that's where stab is handled
 
     // field abilities
     if ((IsAbilityOnField(ABILITY_DARK_AURA) && type == TYPE_DARK)
@@ -3602,7 +3682,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_DRY_SKIN:
         if (type == TYPE_FIRE)
-            gBattleMoveDamage = gBattleMoveDamage * 125 / 100;
+            gBattleMoveDamage = (gBattleMoveDamage * 125 / 100);
             //MulModifier(&modifier, UQ_4_12(1.25));
         break;
     case ABILITY_STORM_DRAIN:
@@ -3622,15 +3702,40 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             //MulModifier(&modifier, UQ_4_12(2.0)); //CHeck if need else if, fire contact moves should be 1
         break;  //tested in w3 schools, checks out, it reads top to bottom with ifs, not like switch breaks, its all inclusive
         //...actually following with else if is what makes it non inclusive...i.e not read the else if vsonic IMPORTANT
+    case ABILITY_MULTISCALE:
+    case ABILITY_SHADOW_SHIELD:
+        if (BATTLER_MAX_HP(gBattlerTarget))
+            gBattleMoveDamage /= 2;
+        break;
+    case ABILITY_FILTER:
+    case ABILITY_SOLID_ROCK:
+    case ABILITY_PRISM_ARMOR:
+        if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+        {
+            gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
+        }  // MulModifier(&finalModifier, UQ_4_12(0.75));
+        break;    
     case ABILITY_OCEAN_MEMORY:
         if (type == TYPE_WATER)
             gBattleMoveDamage /= 2;
         break;
     }
 
+    // target's ally's abilities
+    if (IsBattlerAlive(BATTLE_PARTNER(gBattlerTarget)))
+    {
+        switch (GetBattlerAbility(BATTLE_PARTNER(gBattlerTarget)))
+        {
+        case ABILITY_FRIEND_GUARD:
+            gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
+            break;
+        }
+    }
+
     //logic didn't work in adjustnormaldamage bs command function, put here bcause is equivalent to where aurora veil damage reducion is done 4 emerald
     //I'm stupid I forgot this was meant to be flat damage reduction, not require contact
-    if (gProtectStructs[gBattlerTarget].shieldBashed) //most things done just need put in super effective logic
+    if (gProtectStructs[gBattlerTarget].shieldBashed
+        && !IS_CRIT) //most things done just need put in super effective logic
     { //here and in atk49 move end
         //shouldn't affect ohko moves will prob affect fixed damage moves but that's prob fine since its supposed to be a protect like, on level w endure etc.
         if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //get wonder guard logic to work here
@@ -3647,7 +3752,13 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         }
     }//move animation similar to spike shield use protect effect think combine with harden
 
+    if (((sideStatus & SIDE_STATUS_AURORA_VEIL) && gCritMultiplier == 1) //not a crit
+        && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR)
+    {
+        gBattleMoveDamage /= 2;
+    }
 
+    // critical hits ignore attack stat's stage drops
     if (IS_MOVE_PHYSICAL(move))
     {
         if (gCritMultiplier > 1)
@@ -3663,13 +3774,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage = damage * gBattleMovePower;
         damage *= (2 * attacker->level / 5 + 2); //if that 2 is crit damage I may replace with gCritMultiplier
         //so its more directly tied to the multiplying would make it easier to set up sniper
+        //its not crit, just normal damage formula for level scaled damage
 
-        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNAWARE)
-            damage = attack;
 
-        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
-            damage = attack;
-
+        // critical hits ignore def stat buffs
         if (gCritMultiplier > 1) //forgot about the else/ or effect of using >= since using else means, less than, or not equal, so changed to just use greater than 1 for crit
         {
             if (defender->statStages[STAT_DEF] < 6)
@@ -3680,19 +3788,38 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         else
             APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)
 
+        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNAWARE)
+        {
+            damage = attack;
+            damageHelper = defense;
+        }
+            
+
+        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
+            damage = attack;
+
+        if (GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE)
+        {
+            damage = attack;
+            damageHelper = defense;
+        }
+            
+
+        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
+            damageHelper = defense; //doubl check but think these need to go here
+        //to overwrite the typical damage calc?
+
         damage = damage / damageHelper;
         damage /= 50;
 
-        if (GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE)
-            damageHelper = defense;
+   
 
-        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
-            damageHelper = defense;
-
+        
         if ((attacker->status1 & STATUS1_BURN) && attacker->ability != ABILITY_GUTS) //nvm don't need is physical because its already in the bracket for that ^
             damage /= 2;
 
-        if ((sideStatus & SIDE_STATUS_REFLECT) && gCritMultiplier == 1)
+        if ((sideStatus & SIDE_STATUS_REFLECT) && gCritMultiplier == 1
+            && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR) //not a crit
         {
             if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
                // damage = 2 * (damage / 3); //believe what's happening here is it lowers the effectiveness of reflect for doubles 
@@ -3785,6 +3912,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     if (IS_MOVE_SPECIAL(move))
     {
+        // critical hits ignore attack stat's stage drops
         if (gCritMultiplier > 1)
         {
             if (attacker->statStages[STAT_SPATK] > 6)
@@ -3804,6 +3932,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
             damage = spAttack;
 
+        // critical hits ignore def stat buffs
         if (gCritMultiplier > 1)
         {
             if (defender->statStages[STAT_SPDEF] < 6)
@@ -3823,7 +3952,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
             damageHelper = spDefense;
 
-        if ((sideStatus & SIDE_STATUS_LIGHTSCREEN) && gCritMultiplier == 1)
+        if ((sideStatus & SIDE_STATUS_LIGHTSCREEN) && gCritMultiplier == 1
+            && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR)
         {
             if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
                 /*damage = 2 * (damage / 3);

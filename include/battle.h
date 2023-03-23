@@ -281,6 +281,7 @@ struct SpecialStatus
     u8 restoredBattlerSprite: 1;    // 0x4
     u8 intimidatedMon : 1;          // 0x8
     u8 traced : 1;                  // 0x10
+    u8 defeatistActivates : 1;      // 
     u8 ppNotAffectedByPressure : 1;
     u8 flag40 : 1;
     u8 focusBanded : 1;
@@ -662,6 +663,7 @@ struct BattleStruct //fill in unused fields when porting
     u8 field_182;
     struct StolenItem itemStolen[PARTY_SIZE];  // Player's team that had items stolen (two bytes per party member)
     u8 blunderPolicy : 1; // should blunder policy activate
+    u8 sameMoveTurns[MAX_BATTLERS_COUNT]; // For Metronome, number of times the same moves has been SUCCESFULLY used.
     u8 ballSpriteIds[2];    // item gfx, window gfx
     u8 stickyWebUser;
     u8 appearedInBattle; // Bitfield to track which Pokemon appeared in battle. Used for Burmy's form change

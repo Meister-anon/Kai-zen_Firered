@@ -3758,8 +3758,80 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         ++effect;
                     }
                     break;
+                    //process if hp reaches below half, check if defeatist has already activated,
+                    //if not, if speed is not at max stages double speed
+                    //also remove any escape prevention including traps for a cost of 1/20 max hp
+                    //make sure to not include normal statuses that don't effect switching
+                    //so will need a case by case clear but can't use switch statement
+                    //at end set special status that defeatist has been activated
+                case ABILITY_DEFEATIST:
+                    if (gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 2))
+                    {
+                        u16 speed = gBattleMons[battler].speed; 
+                        if (gSpecialStatuses[battler].defeatistActivates != 1)
+                        {
+                            
+                            if (gBattleMons[battler].statStages[STAT_ATK] > 0)
+                            {
+                                gBattleMons[battler].statStages[STAT_ATK] -= 2;    //should lower stat by 2 i.e 50% 
+                                if (gBattleMons[battler].statStages[STAT_ATK] < 0)
+                                    gBattleMons[battler].statStages[STAT_ATK] = 0;
+                                gBattleScripting.animArg1 = 0x11;
+                                gBattleScripting.animArg2 = 0;
+                                gBattleScripting.battler = battler;
+                            }
+                            if (gBattleMons[battler].statStages[STAT_SPATK] > 0)
+                            {
+                                gBattleMons[battler].statStages[STAT_SPATK] -= 2;    //should lower stat by 2 i.e 50% 
+                                if (gBattleMons[battler].statStages[STAT_SPATK] < 0)
+                                    gBattleMons[battler].statStages[STAT_SPATK] = 0;
+                                gBattleScripting.animArg1 = 0x11;
+                                gBattleScripting.animArg2 = 0;
+                                gBattleScripting.battler = battler;
+                            }                         
+                            speed *= 2; //should double effective speed without changing stat
+                            
+                            BattleScriptPushCursorAndCallback(BattleScript_SpeedBoostActivates);
+                            gBattleScripting.battler = battler; //something new for defeatist activation
+                            //buff lost the will to fight, and wants to run!
+
+
+                            /*if (gBattleMons[battler].statStages[STAT_SPEED] < 0xC) //can't do stat staege if swapping stats insted do lie hueg poewr
+                            {
+                                ++gBattleMons[battler].statStages[STAT_SPEED];
+                                ++gBattleMons[battler].statStages[STAT_SPEED];
+                                gBattleScripting.animArg1 = 0x11;
+                                gBattleScripting.animArg2 = 0;
+                                BattleScriptPushCursorAndCallback(BattleScript_SpeedBoostActivates);
+                                gBattleScripting.battler = battler; //something new for defeatist activation
+                            }*/
+                            if (cant escape)
+                            {
+                                //remove statuses that prevent escape
+                            }
+                            /*if (gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION) 
+                        || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
+                        || (gBattleMons[gActiveBattler].status1 & (ITS_A_TRAP_STATUS1)) 
+                        || (gStatuses4[gActiveBattler] & (ITS_A_TRAP_STATUS4))) //hope this works...
+                    {
+                        BtlController_EmitChoosePokemon(0, PARTY_ACTION_CANT_SWITCH, 6, ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
+                    }
+                    else if ((i = ABILITY_ON_OPPOSING_FIELD(gActiveBattler, ABILITY_SHADOW_TAG))
+                          &&  !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
+                          || ((i = ABILITY_ON_OPPOSING_FIELD(gActiveBattler, ABILITY_ARENA_TRAP))
+                              && IsBattlerGrounded(gActiveBattler))
+                          || ((i = AbilityBattleEffects(ABILITYEFFECT_CHECK_FIELD_EXCEPT_BATTLER, gActiveBattler, ABILITY_MAGNET_PULL, 0, 0))
+                              && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL)))
+                    {
+                        BtlController_EmitChoosePokemon(0, ((i - 1) << 4) | PARTY_ACTION_ABILITY_PREVENTS, 6, gLastUsedAbility, gBattleStruct->battlerPartyOrders[gActiveBattler]);
+                    }*/
+                            gSpecialStatuses[battler].defeatistActivates = 1;                            
+                            ++effect;
+                        }
+                    }
+                    break;
                 case ABILITY_MOODY:
-                if (gDisableStructs[battler].isFirstTurn != 2)
+                if (gDisableStructs[battler].isFirstTurn != 2) //doesn't activate on switch in
                 {
                     u32 validToRaise = 0, validToLower = 0;
                     u32 statsNum = NUM_BATTLE_STATS;
@@ -7302,6 +7374,14 @@ void UndoMegaEvolution(u32 monId)
     }
 }
 
+bool32 TestSheerForceFlag(u8 battler, u16 move)
+{
+    if (GetBattlerAbility(battler) == ABILITY_SHEER_FORCE && gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST)
+        return TRUE;
+    else
+        return FALSE;
+}
+
 void UndoFormChange(u32 monId, u32 side)
 {
     u32 i, currSpecies;
@@ -7332,6 +7412,18 @@ void UndoFormChange(u32 monId, u32 side)
         }
     }
 }
+
+//format for use is MulModifier(&modifier, UQ_4_12(2.0));   & is used to denote pointer here
+void MulModifier(u16 *modifier, u16 val) //portd tried to set globably hope works
+{
+    *modifier = UQ_4_12_TO_INT((*modifier * val) + UQ_4_12_ROUND);
+}
+
+u32 ApplyModifier(u16 modifier, u32 val)
+{
+    return UQ_4_12_TO_INT((modifier * val) + UQ_4_12_ROUND);
+}
+
 
 bool32 DoBattlersShareType(u32 battler1, u32 battler2)
 {
@@ -7395,7 +7487,7 @@ bool32 CanFling(u8 battlerId)
     return TRUE;
 }
 
-static bool32 UnnerveOn(u32 battlerId, u32 itemId)
+bool32 UnnerveOn(u32 battlerId, u32 itemId)
 {
     if (ItemId_GetPocket(itemId) == POCKET_BERRY_POUCH && IsUnnerveAbilityOnOpposingSide(battlerId))
         return TRUE;

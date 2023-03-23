@@ -155,12 +155,121 @@ bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 chec
 bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind);
 bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags);
 bool32 TryRoomService(u8 battlerId);
+bool32 TestSheerForceFlag(u8 battler, u16 move);
 u8 TryHandleSeed(u8 battler, u32 terrainFlag, u8 statId, u16 itemId, bool32 execute);
 void TryToRevertMimicry(void);
 void TryToApplyMimicry(u8 battlerId, bool8 various);
 void RestoreBattlerOriginalTypes(u8 battlerId);
 void ResetFuryCutterCounter(u8 battlerId);
-
+void MulModifier(u16 *modifier, u16 val);
+u32 ApplyModifier(u16 modifier, u32 val);
+bool32 UnnerveOn(u32 battlerId, u32 itemId);
 #define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || ((gBattleMoves[gCurrentMove].type == TYPE_FIRE) && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60) && gCurrentMove != MOVE_FIRE_FANG))
+
+// percent in UQ_4_12 format
+const u16 sPercentToModifier[] =
+{
+    UQ_4_12(0.00), // 0
+    UQ_4_12(0.01), // 1
+    UQ_4_12(0.02), // 2
+    UQ_4_12(0.03), // 3
+    UQ_4_12(0.04), // 4
+    UQ_4_12(0.05), // 5
+    UQ_4_12(0.06), // 6
+    UQ_4_12(0.07), // 7
+    UQ_4_12(0.08), // 8
+    UQ_4_12(0.09), // 9
+    UQ_4_12(0.10), // 10
+    UQ_4_12(0.11), // 11
+    UQ_4_12(0.12), // 12
+    UQ_4_12(0.13), // 13
+    UQ_4_12(0.14), // 14
+    UQ_4_12(0.15), // 15
+    UQ_4_12(0.16), // 16
+    UQ_4_12(0.17), // 17
+    UQ_4_12(0.18), // 18
+    UQ_4_12(0.19), // 19
+    UQ_4_12(0.20), // 20
+    UQ_4_12(0.21), // 21
+    UQ_4_12(0.22), // 22
+    UQ_4_12(0.23), // 23
+    UQ_4_12(0.24), // 24
+    UQ_4_12(0.25), // 25
+    UQ_4_12(0.26), // 26
+    UQ_4_12(0.27), // 27
+    UQ_4_12(0.28), // 28
+    UQ_4_12(0.29), // 29
+    UQ_4_12(0.30), // 30
+    UQ_4_12(0.31), // 31
+    UQ_4_12(0.32), // 32
+    UQ_4_12(0.33), // 33
+    UQ_4_12(0.34), // 34
+    UQ_4_12(0.35), // 35
+    UQ_4_12(0.36), // 36
+    UQ_4_12(0.37), // 37
+    UQ_4_12(0.38), // 38
+    UQ_4_12(0.39), // 39
+    UQ_4_12(0.40), // 40
+    UQ_4_12(0.41), // 41
+    UQ_4_12(0.42), // 42
+    UQ_4_12(0.43), // 43
+    UQ_4_12(0.44), // 44
+    UQ_4_12(0.45), // 45
+    UQ_4_12(0.46), // 46
+    UQ_4_12(0.47), // 47
+    UQ_4_12(0.48), // 48
+    UQ_4_12(0.49), // 49
+    UQ_4_12(0.50), // 50
+    UQ_4_12(0.51), // 51
+    UQ_4_12(0.52), // 52
+    UQ_4_12(0.53), // 53
+    UQ_4_12(0.54), // 54
+    UQ_4_12(0.55), // 55
+    UQ_4_12(0.56), // 56
+    UQ_4_12(0.57), // 57
+    UQ_4_12(0.58), // 58
+    UQ_4_12(0.59), // 59
+    UQ_4_12(0.60), // 60
+    UQ_4_12(0.61), // 61
+    UQ_4_12(0.62), // 62
+    UQ_4_12(0.63), // 63
+    UQ_4_12(0.64), // 64
+    UQ_4_12(0.65), // 65
+    UQ_4_12(0.66), // 66
+    UQ_4_12(0.67), // 67
+    UQ_4_12(0.68), // 68
+    UQ_4_12(0.69), // 69
+    UQ_4_12(0.70), // 70
+    UQ_4_12(0.71), // 71
+    UQ_4_12(0.72), // 72
+    UQ_4_12(0.73), // 73
+    UQ_4_12(0.74), // 74
+    UQ_4_12(0.75), // 75
+    UQ_4_12(0.76), // 76
+    UQ_4_12(0.77), // 77
+    UQ_4_12(0.78), // 78
+    UQ_4_12(0.79), // 79
+    UQ_4_12(0.80), // 80
+    UQ_4_12(0.81), // 81
+    UQ_4_12(0.82), // 82
+    UQ_4_12(0.83), // 83
+    UQ_4_12(0.84), // 84
+    UQ_4_12(0.85), // 85
+    UQ_4_12(0.86), // 86
+    UQ_4_12(0.87), // 87
+    UQ_4_12(0.88), // 88
+    UQ_4_12(0.89), // 89
+    UQ_4_12(0.90), // 90
+    UQ_4_12(0.91), // 91
+    UQ_4_12(0.92), // 92
+    UQ_4_12(0.93), // 93
+    UQ_4_12(0.94), // 94
+    UQ_4_12(0.95), // 95
+    UQ_4_12(0.96), // 96
+    UQ_4_12(0.97), // 97
+    UQ_4_12(0.98), // 98
+    UQ_4_12(0.99), // 99
+    UQ_4_12(1.00), // 100
+};
 
 #endif // GUARD_BATTLE_UTIL_H
