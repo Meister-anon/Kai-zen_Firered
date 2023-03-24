@@ -5433,7 +5433,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
              //&& gSpecialStatuses[gBattlerTarget].specialDmg  //important MIGHT need to remove this think this is a leftover from split based on type
              && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
              && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60)
-             && ((moveType == TYPE_FIRE) || gCurrentMove == MOVE_SCALD)
+             && ((moveType == TYPE_FIRE) || gCurrentMove == MOVE_SCALD))
             {
                 gBattleMons[gBattlerTarget].status1 &= ~(STATUS1_FREEZE);
                 gActiveBattler = gBattlerTarget;
@@ -5467,8 +5467,8 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             ++gBattleScripting.atk49_state;
             break;
         case ATK49_CHOICE_MOVE: // update choice band move
-            if (gHitMarker & HITMARKER_OBEYS
-             && holdEffectAtk == HOLD_EFFECT_CHOICE_BAND
+            if (gHitMarker & HITMARKER_OBEYS //need updat ai file prob replace with emerald expansion ai files
+             && (holdEffectAtk == HOLD_EFFECT_CHOICE_BAND || GetBattlerAbility(gBattlerAttacker) == ABILITY_GORILLA_TACTICS)
              && gChosenMove != MOVE_STRUGGLE 
              && (*choicedMoveAtk == 0 || *choicedMoveAtk == 0xFFFF))
             {

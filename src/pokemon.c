@@ -3259,7 +3259,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         defStage = gBattleMons[battlerIdDef].statStages[STAT_DEF];  //defined these now hopefully it works fine and doens't mess up normla damage calc
         usesDefStat = TRUE;
     }
-    else // is special
+    else if (IS_MOVE_SPECIAL(move)) // is special   //extra redundency for incase I make an effect/move that works the opposite i.e phys does special
     {
         defStat = spDefense;
         defStage = gBattleMons[battlerIdDef].statStages[STAT_SPDEF];
@@ -3330,7 +3330,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (attackerHoldEffect == sHoldEffectToType[i][0]
             && type == sHoldEffectToType[i][1])
         {
-            if (IS_MOVE_PHYSICAL(move))
+            if ((IS_MOVE_PHYSICAL(move)) || usesDefStat)
                 attack = (attack * (attackerHoldEffectParam + 100)) / 100;
             else
                 spAttack = (spAttack * (attackerHoldEffectParam + 100)) / 100;
@@ -3407,9 +3407,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         spAttack = (150 * spAttack) / 100;
     if (attacker->ability == ABILITY_MINUS && ABILITY_ON_FIELD2(ABILITY_PLUS))
         spAttack = (150 * spAttack) / 100;
-    if (attacker->ability == ABILITY_GUTS && attacker->status1)
+    if (attacker->ability == ABILITY_GUTS && attacker->status1 & STATUS1_ANY)
         attack = (150 * attack) / 100;
-    if (defender->ability == ABILITY_MARVEL_SCALE && defender->status1)
+    if (defender->ability == ABILITY_MARVEL_SCALE && defender->status1 & STATUS1_ANY)
         defense = (150 * defense) / 100;
     if (type == TYPE_ELECTRIC && AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, 0, ABILITYEFFECT_MUD_SPORT, 0))
         gBattleMovePower /= 2;
@@ -3457,7 +3457,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     //put abilities ported here
     // attacker's abilities  
-    switch (GetBattlerAbility(gBattlerAttacker)) //think should order by id, can't remember if need to
+    switch (GetBattlerAbility(gBattlerAttacker)) //checked emerald doeesn't appear to need to order by ability value, emerald doesn't do so.
     {
     /*case ABILITY_SNIPER:  //DONE IN bs commands
         if (IS_CRIT)
@@ -3465,7 +3465,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;*/
     case ABILITY_TECHNICIAN:
         if (gBattleMovePower <= 60)
-            gBattleMovePower = (gBattleMovePower * 15 / 10);
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_TINTED_LENS:
@@ -3473,34 +3473,34 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMoveDamage *= 2;
         break;
     case ABILITY_FLARE_BOOST:
-        if (gBattleMons[gBattlerAttacker].status1 & STATUS1_BURN && IS_MOVE_SPECIAL(move))
-            gBattleMovePower = (gBattleMovePower * 15 / 10);
+        if (gBattleMons[gBattlerAttacker].status1 & STATUS1_BURN && !usesDefStat) //IS_MOVE_SPECIAL(move))
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_TOXIC_BOOST:
-        if (gBattleMons[gBattlerAttacker].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move))
-            gBattleMovePower = (gBattleMovePower * 15 / 10);
+        if (gBattleMons[gBattlerAttacker].status1 & STATUS1_PSN_ANY && usesDefStat) //IS_MOVE_PHYSICAL(move))
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_RECKLESS:
         if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
-            gBattleMovePower = (gBattleMovePower * 12 / 10);
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
         //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_IRON_FIST:
         if (gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST)
-            gBattleMovePower = (gBattleMovePower * 12 / 10);
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
         //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_SHEER_FORCE:
         if (gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST)
-            gBattleMovePower = (gBattleMovePower * 13 / 10);
+            gBattleMovePower = (gBattleMovePower * 130 / 100);
         //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_SAND_FORCE:
         if ((type == TYPE_STEEL || type == TYPE_ROCK || type == TYPE_GROUND)
             && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY)
-            gBattleMovePower = (gBattleMovePower * 13 / 10);
+            gBattleMovePower = (gBattleMovePower * 130 / 100);
         //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_RIVALRY:
@@ -3532,57 +3532,61 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMoveDamage /= 2;
     case ABILITY_NORMALIZE:
         if (type == TYPE_NORMAL && gBattleStruct->ateBoost[gBattlerAttacker])
-            gBattleMovePower = (gBattleMovePower * 12 / 10);
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
         //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_ANALYTIC:
         if (GetBattlerTurnOrderNum(gBattlerAttacker) == gBattlersCount - 1 && move != MOVE_FUTURE_SIGHT && move != MOVE_DOOM_DESIRE)
-            gBattleMovePower = (gBattleMovePower * 13 / 10);
+            gBattleMovePower = (gBattleMovePower * 130 / 100);
         //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_TOUGH_CLAWS:
         if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-            gBattleMovePower = (gBattleMovePower * 13 / 10);
+            gBattleMovePower = (gBattleMovePower * 130 / 100);
         //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_STRONG_JAW:
         if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-            gBattleMovePower = (gBattleMovePower * 15 / 10);
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_STAKEOUT:
+        if (gDisableStructs[gBattlerTarget].isFirstTurn == 2) // just switched in
+            gBattleMoveDamage *= 2;
         break;
     case ABILITY_MEGA_LAUNCHER:
         if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
-            gBattleMovePower = (gBattleMovePower * 15 / 10);
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_WATER_BUBBLE:
         if (type == TYPE_WATER)
-            gBattleMovePower = (gBattleMovePower * 20 / 10);
+            gBattleMovePower *= 2;
         //MulModifier(&modifier, UQ_4_12(2.0));
         break;
     case ABILITY_STEELWORKER:
         if (type == TYPE_STEEL)
-            gBattleMovePower = (gBattleMovePower * 15 / 10);
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_PIXILATE:
         if (type == TYPE_FAIRY && gBattleStruct->ateBoost[gBattlerAttacker])
-            gBattleMovePower = (gBattleMovePower * 12 / 10);
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
         //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_REFRIGERATE:
         if (type == TYPE_ICE && gBattleStruct->ateBoost[gBattlerAttacker])
-            gBattleMovePower = (gBattleMovePower * 12 / 10);
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
         //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_AERILATE:
         if (type == TYPE_FLYING && gBattleStruct->ateBoost[gBattlerAttacker])
-            gBattleMovePower = (gBattleMovePower * 12 / 10);
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
         //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_GALVANIZE:
         if (type == TYPE_ELECTRIC && gBattleStruct->ateBoost[gBattlerAttacker])
-            gBattleMovePower = (gBattleMovePower * 12 / 10);
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
         //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_NEUROFORCE:
@@ -3592,23 +3596,32 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_PUNK_ROCK:
         if (gBattleMoves[move].flags & FLAG_SOUND)
-            gBattleMovePower = (gBattleMovePower * 13 / 10);
+            gBattleMovePower = (gBattleMovePower * 130 / 100);
         //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_STEELY_SPIRIT:
         if (type == TYPE_STEEL)
-            gBattleMovePower = (gBattleMovePower * 15 / 10);
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_TRANSISTOR:
         if (type == TYPE_ELECTRIC)
-            gBattleMovePower = (gBattleMovePower * 15 / 10);
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_DRAGONS_MAW:
         if (type == TYPE_DRAGON)
-            gBattleMovePower = (gBattleMovePower * 15 / 10);
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_GORILLA_TACTICS:
+        attack = (150 * attack) / 100;
+        break;
+    case ABILITY_FLOWER_GIFT:   //flower gift is supposd to be what makes cherrim transform along w sunlight
+        if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY)) //split ability bonus between different attack/target functions
+        {
+            attack = (150 * attack) / 100;
+        }
         break;
     case ABILITY_BATTLE_MATRON:
         if (IsBattlerAlive(BATTLE_PARTNER(gBattlerAttacker)) && CanEvolve(gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].species))
@@ -3625,7 +3638,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         || (IsAbilityOnField(ABILITY_FAIRY_AURA) && type == TYPE_FAIRY))
     {
         if (IsAbilityOnField(ABILITY_AURA_BREAK))
-            gBattleMovePower = (gBattleMovePower * 30 / 40);
+            gBattleMovePower = (gBattleMovePower * 75 / 100);
             //MulModifier(&modifier, UQ_4_12(0.75));
         else
             gBattleMovePower = (gBattleMovePower * 125 / 100);
@@ -3638,18 +3651,24 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         switch (GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)))
         {
         case ABILITY_BATTERY:
-            if (IS_MOVE_SPECIAL(move))
-                gBattleMovePower = (gBattleMovePower * 13 / 10);
+            if (!usesDefStat)//IS_MOVE_SPECIAL(move))
+                gBattleMovePower = (gBattleMovePower * 130 / 100);
                 //MulModifier(&modifier, UQ_4_12(1.3));
             break;
         case ABILITY_POWER_SPOT:
-            gBattleMovePower = (gBattleMovePower * 13 / 10);
+            gBattleMovePower = (gBattleMovePower * 130 / 100);
             //MulModifier(&modifier, UQ_4_12(1.3));
             break;
         case ABILITY_STEELY_SPIRIT:
             if (type == TYPE_STEEL)
-                gBattleMovePower = (gBattleMovePower * 15 / 10);
+                gBattleMovePower = (gBattleMovePower * 150 / 100);
                 //MulModifier(&modifier, UQ_4_12(1.5));
+            break;
+        case ABILITY_FLOWER_GIFT:
+            if (IsBattlerWeatherAffected(BATTLE_PARTNER(gBattlerAttacker), WEATHER_SUN_ANY))
+            {
+                attack = (150 * attack) / 100;
+            }
             break;
         }
     }
@@ -3715,6 +3734,32 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
         }  // MulModifier(&finalModifier, UQ_4_12(0.75));
         break;    
+    case ABILITY_FUR_COAT:
+        if (usesDefStat)//IS_MOVE_PHYSICAL(move))
+        {
+            gBattleMoveDamage /= 2;
+        }
+        break;
+    case ABILITY_ICE_SCALES:
+        if (!usesDefStat)//IS_MOVE_SPECIAL(move))
+            gBattleMoveDamage /= 2;
+        break;
+    
+    case ABILITY_GRASS_PELT:
+        if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN
+            && !gProtectStructs[gBattlerAttacker].confusionSelfDmg)
+        {
+            defense = (150 * defense) / 100;
+        }
+        break;
+    case ABILITY_FLOWER_GIFT:
+        if (IsBattlerWeatherAffected(gBattlerTarget, WEATHER_SUN_ANY))
+            spDefense = (150 * spDefense) / 100;
+        break;
+    case ABILITY_PUNK_ROCK:
+        if (gBattleMoves[move].flags & FLAG_SOUND)
+            gBattleMoveDamage /= 2;
+        break;
     case ABILITY_OCEAN_MEMORY:
         if (type == TYPE_WATER)
             gBattleMoveDamage /= 2;
@@ -3728,6 +3773,13 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         {
         case ABILITY_FRIEND_GUARD:
             gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
+            break;
+        case ABILITY_FLOWER_GIFT:
+            if (IsBattlerWeatherAffected(BATTLE_PARTNER(gBattlerTarget), WEATHER_SUN_ANY))
+            {
+                spDefense = (150 * spDefense) / 100;
+                
+            }
             break;
         }
     }
@@ -3752,14 +3804,15 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         }
     }//move animation similar to spike shield use protect effect think combine with harden
 
-    if (((sideStatus & SIDE_STATUS_AURORA_VEIL) && gCritMultiplier == 1) //not a crit
-        && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR)
+    if (((sideStatus & SIDE_STATUS_AURORA_VEIL) && !IS_CRIT) //not a crit
+        && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR
+        && !gProtectStructs[gBattlerAttacker].confusionSelfDmg)
     {
         gBattleMoveDamage /= 2;
     }
 
     // critical hits ignore attack stat's stage drops
-    if (IS_MOVE_PHYSICAL(move))
+    if (usesDefStat)//IS_MOVE_PHYSICAL(move))
     {
         if (gCritMultiplier > 1)
         {
@@ -3818,8 +3871,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if ((attacker->status1 & STATUS1_BURN) && attacker->ability != ABILITY_GUTS) //nvm don't need is physical because its already in the bracket for that ^
             damage /= 2;
 
-        if ((sideStatus & SIDE_STATUS_REFLECT) && gCritMultiplier == 1
-            && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR) //not a crit
+        if ((sideStatus & SIDE_STATUS_REFLECT) && !IS_CRIT
+            && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR
+            && !gProtectStructs[gBattlerAttacker].confusionSelfDmg) //not a crit
         {
             if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
                // damage = 2 * (damage / 3); //believe what's happening here is it lowers the effectiveness of reflect for doubles 
@@ -3910,7 +3964,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         gBattleMoveDamage *= 2;
     //port from emerald simplify battlescript don't need jumps and damage bytes in the script
 
-    if (IS_MOVE_SPECIAL(move))
+    if (!usesDefStat)//IS_MOVE_SPECIAL(move))
     {
         // critical hits ignore attack stat's stage drops
         if (gCritMultiplier > 1)
@@ -7047,7 +7101,7 @@ u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves)
          moves[numMoves++] = gLevelUpLearnsets[species][i] & 0x1FF;
 
      return numMoves;
-}
+} //checked adn emeeald has thee 20 listed as "max level up moves" so itis a limit
 
 u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
 {

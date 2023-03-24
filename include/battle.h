@@ -688,6 +688,7 @@ extern struct BattleStruct *gBattleStruct;
 
 //#define IS_TYPE_PHYSICAL(moveType)(moveType < TYPE_MYSTERY)
 //#define IS_TYPE_SPECIAL(moveType)(moveType > TYPE_MYSTERY)
+
 #define IS_MOVE_PHYSICAL(move)(GetBattleMoveSplit(move) == SPLIT_PHYSICAL)
 #define IS_MOVE_SPECIAL(move)(GetBattleMoveSplit(move) == SPLIT_SPECIAL)
 #define IS_MOVE_STATUS(move)(gBattleMoves[move].split == SPLIT_STATUS)

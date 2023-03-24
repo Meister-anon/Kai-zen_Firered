@@ -845,12 +845,47 @@ u8 TrySetCantSelectMoveBattleScript(void)
         gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveTaunt;
         ++limitations;
     }
+    if (gDisableStructs[gActiveBattler].throatChopTimer != 0 && gBattleMoves[move].flags & FLAG_SOUND)
+    {
+        gCurrentMove = move;
+        gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveThroatChop;
+        limitations++;
+    }
     if (GetImprisonedMovesCount(gActiveBattler, move))
     {
         gCurrentMove = move;
         gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingImprisonedMove;
         ++limitations;
     }
+    if (IsGravityPreventingMove(move))
+    {
+        gCurrentMove = move;
+        gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveGravity;
+        limitations++;
+    }
+
+    if (IsHealBlockPreventingMove(gActiveBattler, move))
+    {
+        gCurrentMove = move;
+        gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveHealBlock;
+        limitations++;
+    }
+
+    if (IsBelchPreventingMove(gActiveBattler, move))
+    {
+        gCurrentMove = move;
+        gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedBelch;
+        limitations++;
+    }
+
+    if (move == MOVE_STUFF_CHEEKS && ItemId_GetPocket(gBattleMons[gActiveBattler].item) != POCKET_BERRY_POUCH)
+    {
+        gCurrentMove = move;
+        gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedStuffCheeks;
+        limitations++;
+    }
+
+
     if (gBattleMons[gActiveBattler].item == ITEM_ENIGMA_BERRY)
         holdEffect = gEnigmaBerries[gActiveBattler].holdEffect;
     else
@@ -862,6 +897,21 @@ u8 TrySetCantSelectMoveBattleScript(void)
         gLastUsedItem = gBattleMons[gActiveBattler].item;
         gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveChoiceItem;
         ++limitations;
+    }
+    else if (holdEffect == HOLD_EFFECT_ASSAULT_VEST && gBattleMoves[move].power == 0 && move != MOVE_ME_FIRST)
+    {
+        gCurrentMove = move;
+        gLastUsedItem = gBattleMons[gActiveBattler].item;
+        gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveAssaultVest;
+        limitations++;
+    }
+    if ((GetBattlerAbility(gActiveBattler) == ABILITY_GORILLA_TACTICS) && *choicedMove != MOVE_NONE
+        && *choicedMove != 0xFFFF && *choicedMove != move)
+    {
+        gCurrentMove = *choicedMove;
+        gLastUsedItem = gBattleMons[gActiveBattler].item;
+        gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveGorillaTactics;
+        limitations++;
     }
     if (!gBattleMons[gActiveBattler].pp[gBattleBufferB[gActiveBattler][2]])
     {
@@ -900,6 +950,27 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
         if (gDisableStructs[battlerId].encoreTimer && gDisableStructs[battlerId].encoredMove != gBattleMons[battlerId].moves[i])
             unusableMoves |= gBitTable[i];
         if (holdEffect == HOLD_EFFECT_CHOICE_BAND && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
+            unusableMoves |= gBitTable[i];
+        // Assault Vest
+        if (holdEffect == HOLD_EFFECT_ASSAULT_VEST && gBattleMoves[gBattleMons[battlerId].moves[i]].power == 0 && gBattleMons[battlerId].moves[i] != MOVE_ME_FIRST)
+            unusableMoves |= gBitTable[i];
+        // Gravity
+        if (IsGravityPreventingMove(gBattleMons[battlerId].moves[i]))
+            unusableMoves |= gBitTable[i];
+        // Heal Block
+        if (IsHealBlockPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
+            unusableMoves |= gBitTable[i];
+        // Belch
+        if (IsBelchPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
+            unusableMoves |= gBitTable[i];
+        // Throat Chop
+        if (gDisableStructs[battlerId].throatChopTimer && gBattleMoves[gBattleMons[battlerId].moves[i]].flags & FLAG_SOUND)
+            unusableMoves |= gBitTable[i];
+        // Stuff Cheeks
+        if (gBattleMons[battlerId].moves[i] == MOVE_STUFF_CHEEKS && ItemId_GetPocket(gBattleMons[gActiveBattler].item) != POCKET_BERRY_POUCH)
+            unusableMoves |= gBitTable[i];
+        // Gorilla Tactics
+        if (GetBattlerAbility(battlerId) == ABILITY_GORILLA_TACTICS && *choicedMove != MOVE_NONE && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
             unusableMoves |= gBitTable[i];
     }
     return unusableMoves;
@@ -1021,7 +1092,7 @@ static bool32 IsGravityPreventingMove(u32 move)
     case MOVE_BOUNCE:
     case MOVE_FLY:
     case MOVE_FLYING_PRESS:
-    case MOVE_HIGH_JUMP_KICK:
+    case MOVE_HI_JUMP_KICK:
     case MOVE_JUMP_KICK:
     case MOVE_MAGNET_RISE:
     case MOVE_SKY_DROP:

@@ -165,6 +165,7 @@
 #define STATUS1_TOXIC_COUNTER    (1 << 18 | 1 << 19 | 1 << 20 | 1 << 21)
 #define STATUS1_TOXIC_TURN(num)  ((num) << 18)
 #define STATUS1_PSN_ANY          (STATUS1_POISON | STATUS1_TOXIC_POISON)
+//will need to go through and review all use of this variable since I've expanded status1
 #define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON)
 
 #define STATUS1_ENVIRONMENT_TRAP (STATUS1_FIRE_SPIN || STATUS1_WHIRLPOOL || STATUS1_SAND_TOMB || STATUS1_MAGMA_STORM)

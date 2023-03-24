@@ -6318,6 +6318,26 @@ BattleScript_SelectingNotAllowedMoveTaunt::
 	printselectionstring STRINGID_PKMNCANTUSEMOVETAUNT
 	endselectionscript
 
+BattleScript_SelectingNotAllowedMoveThroatChop::
+	printselectionstring STRINGID_PKMNCANTUSEMOVETHROATCHOP
+	endselectionscript
+
+BattleScript_SelectingNotAllowedMoveGravity::
+	printselectionstring STRINGID_GRAVITYPREVENTSUSAGE
+	endselectionscript
+
+BattleScript_SelectingNotAllowedStuffCheeks::
+	printselectionstring STRINGID_STUFFCHEEKSCANTSELECT
+	endselectionscript
+
+BattleScript_SelectingNotAllowedBelch::
+	printselectionstring STRINGID_BELCHCANTSELECT
+	endselectionscript
+
+BattleScript_SelectingNotAllowedMoveHealBlock::
+	printselectionstring STRINGID_HEALBLOCKPREVENTSUSAGE
+	endselectionscript
+
 BattleScript_MoveUsedIsTaunted::
 	printstring STRINGID_PKMNCANTUSEMOVETAUNT
 	waitmessage 0x40
@@ -8510,6 +8530,14 @@ BattleScript_AirBaloonMsgPop::
 
 BattleScript_SelectingNotAllowedMoveChoiceItem::
 	printselectionstring STRINGID_ITEMALLOWSONLYYMOVE
+	endselectionscript
+
+BattleScript_SelectingNotAllowedMoveGorillaTactics::
+	printselectionstring STRINGID_ABILITYALLOWSONLYMOVE
+	endselectionscript
+
+BattleScript_SelectingNotAllowedMoveAssaultVest::
+	printselectionstring STRINGID_ASSAULTVESTDOESNTALLOW
 	endselectionscript
 
 BattleScript_HangedOnMsg::
