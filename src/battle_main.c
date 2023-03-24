@@ -323,10 +323,10 @@ static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 
 // 05 is ×0.5 TYPE_MUL_NOT_EFFECTIVE
 // 00 is ×0.0 TYPE_MUL_NO_EFFECT
 
-//each line adds 3 because there are 3 arguments in each line, atk type, def type, & effectiveness
+//each line adds 3 because there are 3 arguments in each line, atk type, def type, & effectiveness  /so SUBTRACT 3 for any lines kept but commented out
 //DON'T FORGET every time I change below, need to update in the .h
 
-const u8 gTypeEffectiveness[399] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+const u8 gTypeEffectiveness[402] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -384,8 +384,9 @@ const u8 gTypeEffectiveness[399] = // 336 is number of entries x 3 i.e number of
     TYPE_FIGHTING, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_POISON, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_POISON, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_POISON, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_POISON, TYPE_POISON, TYPE_MUL_NO_EFFECT,
     TYPE_POISON, TYPE_GROUND, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_POISON, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,  //cold slows spread of poison
     TYPE_POISON, TYPE_ROCK, TYPE_MUL_NO_EFFECT,
     TYPE_POISON, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_POISON, TYPE_STEEL, TYPE_MUL_NO_EFFECT,
