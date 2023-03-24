@@ -9,6 +9,7 @@
 #define MOVE_LIMITATION_TORMENTED               (1 << 3)
 #define MOVE_LIMITATION_TAUNT                   (1 << 4)
 #define MOVE_LIMITATION_IMPRISON                (1 << 5)
+#define MOVE_LIMITATIONS_ALL                    0xFF
 
 #define ABILITYEFFECT_ON_SWITCHIN                0x0
 #define ABILITYEFFECT_ENDTURN                    0x1
@@ -34,8 +35,14 @@
 #define ABILITYEFFECT_NEUTRALIZINGGAS			 0x15  //swapped what was a nuisance ability test
 #define ABILITYEFFECT_MOVE_END_OTHER			 0x16
 //#define ABILITYEFFECT_CUPIDSARROW				 0x15  //1st attempted implementation realized goes in switchin don't need new effect
-#define ABILITYEFFECT_MUD_SPORT                  0xFD	//actually potentially does as trace and intimidate have them? look over implementation again
-#define ABILITYEFFECT_WATER_SPORT                0xFE
+#define ABILITYEFFECT_MUD_SPORT                  0xFC	//actually potentially does as trace and intimidate have them? look over implementation again
+#define ABILITYEFFECT_WATER_SPORT                0xFD
+//figure out what this does, adn check any limitations
+//I want to redo tererain graphic for something more subtle
+//instead of everything glowing display graphic template that's fitting
+//over/inside the mon circle, so will only be noticeable from enemy side
+//i.e sparks tags for electric terrain etc.
+#define ABILITYEFFECT_SWITCH_IN_TERRAIN          0xFE
 #define ABILITYEFFECT_SWITCH_IN_WEATHER          0xFF
 
 #define ABILITY_ON_OPPOSING_FIELD(battlerId, abilityId)(AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, battlerId, abilityId, 0, 0))

@@ -3395,6 +3395,13 @@ enum
     CASTFORM_TO_ICE,
 };
 
+enum
+{
+    CHERRIM_NO_CHANGE,
+    CHERRIM_OVERCAST,
+    CHEERRIM_SUNSHINE,
+};
+
 u8 CastformDataTypeChange(u8 battler)
 {
     u8 formChange = 0;
@@ -3433,20 +3440,20 @@ u8 CastformDataTypeChange(u8 battler)
     else if (gBattleMons[battler].species == SPECIES_CHERRIM)
     {
         if (gBattleMons[battler].ability != ABILITY_FLOWER_GIFT || gBattleMons[battler].hp == 0)
-            formChange = 0;
+            formChange = CHERRIM_NO_CHANGE;
         else if (gBattleMonForms[battler] == 0 && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY)
-            formChange = 2;
+            formChange = CHEERRIM_SUNSHINE;
         else if (gBattleMonForms[battler] != 0 && (!WEATHER_HAS_EFFECT || !(gBattleWeather & WEATHER_SUN_ANY)))
-            formChange = 1;
+            formChange = CHERRIM_OVERCAST;
     }
         return formChange;
     
 } //check to make sure cherrim form change works
 
+//order only matters as which activates first.
 u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 moveArg) //still to update
 {
     u8 effect = 0;
-    u8 effected = 0;
     struct Pokemon *pokeAtk;
     struct Pokemon *pokeDef;
     u16 speciesAtk;
@@ -3590,7 +3597,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 
                 //plan setup weather to check if first turn, else if all battlers have completed actions. ok is working on start now.
                 effect = CastformDataTypeChange(battler);// I think if I copy the function values to an else if using random chance to activate & turn ended it should work how I want
-                if (effect != 0)//i,e if (gCurrentTurnActionNumber >= gBattlersCount) && (gBattleMons[battler].hp != 0)  do value and random as before but a higher number and include
+                if (effect)//i,e if (gCurrentTurnActionNumber >= gBattlersCount) && (gBattleMons[battler].hp != 0)  do value and random as before but a higher number and include
                 {// value for setting weather timers to 0, prob should use if for each weather type, and link it with its respective timer.
                     BattleScriptPushCursorAndCallback(BattleScript_CastformChange);
                     gBattleScripting.battler = battler;
@@ -3638,6 +3645,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         //that will at least prevent the looping...I hope
                 }
                 break;
+            case ABILITY_FLOWER_GIFT:
+                effect = CastformDataTypeChange(battler);// I think if I copy the function values to an else if using random chance to activate & turn ended it should work how I want
+                if (effect)//i,e if (gCurrentTurnActionNumber >= gBattlersCount) && (gBattleMons[battler].hp != 0)  do value and random as before but a higher number and include
+                {// value for setting weather timers to 0, prob should use if for each weather type, and link it with its respective timer.
+                    BattleScriptPushCursorAndCallback(BattleScript_CastformChange);
+                    gBattleScripting.battler = battler;
+                    *(&gBattleStruct->formToChangeInto) = effect - 1;// sandstorm effect is continuing oddly, before I change "while" I'm trying line up
+                    // the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
+                }
             case ABILITY_TRACE:
                 if (!(gSpecialStatuses[battler].traced)) //this is needed to prevent infini loop because its not a "status"
                 {
@@ -3747,6 +3763,42 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 break;
             
             }
+            break;
+        case ABILITYEFFECT_SWITCH_IN_TERRAIN:   //set terrain from map conditions
+            if (VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY)
+            {
+                u16 terrainFlags = VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY;    // only works for status flag (1 << 15)
+                gFieldStatuses = terrainFlags | STATUS_FIELD_TERRAIN_PERMANENT; // terrain is permanent
+                switch (VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY)
+                {
+                case STATUS_FIELD_ELECTRIC_TERRAIN:
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+                    break;
+                case STATUS_FIELD_MISTY_TERRAIN:
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                    break;
+                case STATUS_FIELD_GRASSY_TERRAIN:
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                    break;
+                case STATUS_FIELD_PSYCHIC_TERRAIN:
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 3;
+                    break;
+                }
+
+                BattleScriptPushCursorAndCallback(BattleScript_OverworldTerrain);
+                effect++;
+            }
+            #if B_THUNDERSTORM_TERRAIN == TRUE
+            else if (GetCurrentWeather() == WEATHER_RAIN_THUNDERSTORM && !(gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
+            {//my note- plan to add in unused weather and emerald weather for realism
+                //integrate emeraald tv effect to track weather
+                // overworld weather started rain, so just do electric terrain anim
+                gFieldStatuses = (STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_TERRAIN_PERMANENT);
+                gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+                BattleScriptPushCursorAndCallback(BattleScript_OverworldTerrain);
+                effect++;
+            }
+            #endif
             break;
         case ABILITYEFFECT_ENDTURN: // 1
             if (gBattleMons[battler].hp != 0)
