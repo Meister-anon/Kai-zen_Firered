@@ -3151,6 +3151,8 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
                 break;
             if (gBattleMons[gEffectBattler].ability == ABILITY_INSOMNIA)
                 break;
+            /*if (GetBattlerAbility(gEffectBattler) == ABILITY_COMATOSE)
+                break;*/
             CancelMultiTurnMoves(gEffectBattler); //if it passes all checks cancel multi turn moves and appply sleep. I think
             statusChanged = TRUE;
             break;//NEED to better check swithch statements to see if break ends entire switch, or it just makes it continue checking for matches in other cases
@@ -3307,7 +3309,7 @@ void SetMoveEffect(bool8 primary, u8 certain) // when ready will redefine what p
 
                 gBattleCommunication[MULTISTRING_CHOOSER] = 2; // may need to setup a string for this
                 return;
-            }
+            }//vsonic IMPORTANT
             if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_ELECTRIC)
                 && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC) //while still allowing non electric moves like bodyslam to paralyze
                 break;
@@ -7906,7 +7908,7 @@ static void HandleTerrainMove(u32 moveEffect)
     }
     else
     {
-        gFieldStatuses &= ~STATUS_TERRAIN_ANY;
+        gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
         gFieldStatuses |= statusFlag;
         if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
             *timer = 8;
@@ -9161,11 +9163,11 @@ static void atk76_various(void) //will need to add all these emerald various com
         {
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         }
-        return;
-    case VARIOUS_TERRAIN_SEED:
+        return; //vsonic IMPORTANT consider planter or way to get more of these as they are single use
+    case VARIOUS_TERRAIN_SEED: //apparently are held items that activate on terrain and boost stats
         if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_SEEDS)
         {
-            u8 effect = 0;
+            u8 effect = 0; //swapped stat buff of grass & psychic
             u16 item = gBattleMons[gActiveBattler].item;
             switch (GetBattlerHoldEffectParam(gActiveBattler))
             {
@@ -9173,13 +9175,13 @@ static void atk76_various(void) //will need to add all these emerald various com
                 effect = TryHandleSeed(gActiveBattler, STATUS_FIELD_ELECTRIC_TERRAIN, STAT_DEF, item, FALSE);
                 break;
             case HOLD_EFFECT_PARAM_GRASSY_TERRAIN:
-                effect = TryHandleSeed(gActiveBattler, STATUS_FIELD_GRASSY_TERRAIN, STAT_DEF, item, FALSE);
+                effect = TryHandleSeed(gActiveBattler, STATUS_FIELD_GRASSY_TERRAIN, STAT_SPDEF, item, FALSE);
                 break;
             case HOLD_EFFECT_PARAM_MISTY_TERRAIN:
                 effect = TryHandleSeed(gActiveBattler, STATUS_FIELD_MISTY_TERRAIN, STAT_SPDEF, item, FALSE);
                 break;
             case HOLD_EFFECT_PARAM_PSYCHIC_TERRAIN:
-                effect = TryHandleSeed(gActiveBattler, STATUS_FIELD_PSYCHIC_TERRAIN, STAT_SPDEF, item, FALSE);
+                effect = TryHandleSeed(gActiveBattler, STATUS_FIELD_PSYCHIC_TERRAIN, STAT_DEF, item, FALSE);
                 break;
             }
 
@@ -9279,7 +9281,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         return;
     case VARIOUS_REMOVE_TERRAIN:
         gFieldTimers.terrainTimer = 0;
-        switch (gFieldStatuses & STATUS_TERRAIN_ANY)
+        switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
         {
         case STATUS_FIELD_MISTY_TERRAIN:
             gBattleCommunication[MULTISTRING_CHOOSER] = 0;
@@ -9297,7 +9299,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattleCommunication[MULTISTRING_CHOOSER] = 4;  // failsafe
             break;
         }
-        gFieldStatuses &= ~STATUS_TERRAIN_ANY;    // remove the terrain
+        gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;    // remove the terrain
         TryToRevertMimicry(); // restore the types of Pokémon with Mimicry
         break;
     case VARIOUS_JUMP_IF_UNDER_200:

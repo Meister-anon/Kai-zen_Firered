@@ -434,7 +434,7 @@
 #define ITEM_TM_CASE 364
 #define ITEM_BERRY_POUCH 365
 #define ITEM_TEACHY_TV 366
-#define ITEM_LINK_KEY 367 //NEW IDEA make key item call link key, trade evos can level up evolve long as yuo have this item
+#define ITEM_LINK_CABLE 367 //NEW IDEA make key item call link key, trade evos can level up evolve long as yuo have this item
 #define ITEM_TRI_PASS 368 //  AND they meet whatever other condition they have
 #define ITEM_RAINBOW_PASS 369
 #define ITEM_TEA 370
@@ -454,7 +454,7 @@
 #define ITEM_DUBIOUS_DISC 382
 #define ITEM_REAPER_CLOTH 383
 #define ITEM_METAL_COAT 384
-//#define ITEM_LINK_KEY 383 	
+//#define ITEM_LINK_CABLE 383 	
 /*#define ITEM_ABOMASITE 384	
 #define ITEM_ABOMASITE 385
 #define ITEM_ABSOLITE 386

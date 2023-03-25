@@ -3250,11 +3250,20 @@ static const u16 sSwitchAbilities[][10] =
 
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
 {
+    u16 battlerAbility = GetBattlerAbility(battler);
+
     if (viaAbility
         && !(gBattleWeather & sWeatherFlagsInfo[weatherEnumId][1]))
     {
         gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1]);
         return TRUE;
+    }
+    else if (gBattleWeather & B_WEATHER_PRIMAL_ANY
+        && battlerAbility != ABILITY_DESOLATE_LAND
+        && battlerAbility != ABILITY_PRIMORDIAL_SEA
+        && battlerAbility != ABILITY_DELTA_STREAM)
+    {
+        return FALSE;
     }
     else if (!(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))
     {
@@ -3269,7 +3278,7 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
 
     return FALSE;
 }
-
+//may set permanent terrain or make permanent terrain if only set form overworld, and ability)
 static bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer)
 {
     if (!(gFieldStatuses & statusFlag))
@@ -3576,20 +3585,31 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattleScripting.battler = battler;
                     ++effect;
                 }
-                break;//C |= 2 is same as C = C | 2
-                // from GriffinR  But yes it's setting a specific status for that battler.
-                // But pokemon can have many of these statuses at once, so you want to set those bits in addition to what's already there
-                //writing gStatuses3[battler] = STATUS3_INTIMIDATE_POKES; would clear all status which isn't what I want
-            case ABILITY_INTIMIDATE:
-                if (!(gSpecialStatuses[battler].intimidatedMon)) //if intimidated mon is 0 set intimidate pokes
-                { //further having this on a switch case ensures it only works for mon with the ability
-                    gStatuses3[battler] |= STATUS3_INTIMIDATE_POKES;
-                    gSpecialStatuses[battler].intimidatedMon = 1;           //not changing intimidateMon to 1 causes intimidate case to /the switchin case to loop
-                }//special status intimidated mon is set on mon with intimidate, it then applies status3 intimidate pokes to activate intimidate
-                //and changes intimdiatedmon to 1 so it can't reactivate/loop
-                // but intimidatedMon is reset by faintmon battlescript as well as the SpecialStatusClear function from battle_main.c
-                //that is called seemingly each turn and at battle start?  need to figure how this doesn't cause a loop issue.
-                //if intimidated mon is reset to 0 each turn  //doesn't loop because intimidate battle script is only called at battle start and switch in
+                break;
+            case ABILITY_DESOLATE_LAND:
+                if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
+                {
+                    BattleScriptPushCursorAndCallback(BattleScript_DesolateLandActivates);
+                    effect++;
+                }
+                break;//makes sense for groudon/kyogre abilities to set terrain will have terrain use 1.3 boost
+                //will also need to make one for fire since water has one...
+                //actually water doesn't havee terrain. huh
+                //think will also make fire terrain move for heatran, immunity to fire like flash fire
+                //vsonic
+            case ABILITY_PRIMORDIAL_SEA:
+                if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN_PRIMAL, TRUE))
+                {
+                    BattleScriptPushCursorAndCallback(BattleScript_PrimordialSeaActivates);
+                    effect++;
+                }
+                break;
+            case ABILITY_DELTA_STREAM:
+                if (TryChangeBattleWeather(battler, ENUM_WEATHER_STRONG_WINDS, TRUE))
+                {
+                    BattleScriptPushCursorAndCallback(BattleScript_DeltaStreamActivates);
+                    effect++;
+                }
                 break;
             case ABILITY_FORECAST: //think I figured out the switch problem, this case works on switch in,
                 //while the other is after all turns are done, by switching castform in mid battle.
@@ -3654,6 +3674,51 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     *(&gBattleStruct->formToChangeInto) = effect - 1;// sandstorm effect is continuing oddly, before I change "while" I'm trying line up
                     // the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
                 }
+                break;
+            case ABILITY_ELECTRIC_SURGE: //put here to occur after weather abilities
+                if (TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
+                {
+                    BattleScriptPushCursorAndCallback(BattleScript_ElectricSurgeActivates);
+                    effect++;
+                }
+                break;
+            case ABILITY_GRASSY_SURGE:
+                if (TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
+                {
+                    BattleScriptPushCursorAndCallback(BattleScript_GrassySurgeActivates);
+                    effect++;
+                }
+                break;
+            case ABILITY_MISTY_SURGE:
+                if (TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
+                {
+                    BattleScriptPushCursorAndCallback(BattleScript_MistySurgeActivates);
+                    effect++;
+                }
+                break;
+            case ABILITY_PSYCHIC_SURGE:
+                if (TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
+                {
+                    BattleScriptPushCursorAndCallback(BattleScript_PsychicSurgeActivates);
+                    effect++;
+                }
+                break;
+                //C |= 2 is same as C = C | 2
+                // from GriffinR  But yes it's setting a specific status for that battler.
+                // But pokemon can have many of these statuses at once, so you want to set those bits in addition to what's already there
+                //writing gStatuses3[battler] = STATUS3_INTIMIDATE_POKES; would clear all status which isn't what I want
+
+            case ABILITY_INTIMIDATE:    // moved down here, so weather effects acitvate before these
+                if (!(gSpecialStatuses[battler].intimidatedMon)) //if intimidated mon is 0 set intimidate pokes
+                { //further having this on a switch case ensures it only works for mon with the ability
+                    gStatuses3[battler] |= STATUS3_INTIMIDATE_POKES;
+                    gSpecialStatuses[battler].intimidatedMon = 1;           //not changing intimidateMon to 1 causes intimidate case to /the switchin case to loop
+                }//special status intimidated mon is set on mon with intimidate, it then applies status3 intimidate pokes to activate intimidate
+                //and changes intimdiatedmon to 1 so it can't reactivate/loop
+                // but intimidatedMon is reset by faintmon battlescript as well as the SpecialStatusClear function from battle_main.c
+                //that is called seemingly each turn and at battle start?  need to figure how this doesn't cause a loop issue.
+                //if intimidated mon is reset to 0 each turn  //doesn't loop because intimidate battle script is only called at battle start and switch in
+                break;
             case ABILITY_TRACE:
                 if (!(gSpecialStatuses[battler].traced)) //this is needed to prevent infini loop because its not a "status"
                 {
@@ -3761,10 +3826,270 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                 }
                 break;
-            
+            case ABILITY_IMPOSTER:
+            if (IsBattlerAlive(BATTLE_OPPOSITE(battler))
+                && !(gBattleMons[BATTLE_OPPOSITE(battler)].status2 & (STATUS2_TRANSFORMED | STATUS2_SUBSTITUTE))
+                && !(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+                && !(gBattleStruct->illusion[BATTLE_OPPOSITE(battler)].on)
+                && !(gStatuses3[BATTLE_OPPOSITE(battler)] & STATUS3_SEMI_INVULNERABLE))
+            {
+                gBattlerAttacker = battler;
+                gBattlerTarget = BATTLE_OPPOSITE(battler);
+                BattleScriptPushCursorAndCallback(BattleScript_ImposterActivates);
+                effect++;
             }
             break;
-        case ABILITYEFFECT_SWITCH_IN_TERRAIN:   //set terrain from map conditions
+        case ABILITY_MOLD_BREAKER:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_MOLDBREAKER;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;
+        case ABILITY_TERAVOLT:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_TERAVOLT;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;
+        case ABILITY_TURBOBLAZE:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_TURBOBLAZE;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;
+        case ABILITY_SLOW_START:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gDisableStructs[battler].slowStartTimer = 3;
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SLOWSTART;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;
+        /*case ABILITY_UNNERVE:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_UNNERVE;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;
+        case ABILITY_AS_ONE_ICE_RIDER:
+        case ABILITY_AS_ONE_SHADOW_RIDER:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_ASONE;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_ActivateAsOne);
+                effect++;
+            }
+            break;*/
+        case ABILITY_CURIOUS_MEDICINE:
+            if (!gSpecialStatuses[battler].switchInAbilityDone && IsDoubleBattle()
+              && IsBattlerAlive(BATTLE_PARTNER(battler)) && TryResetBattlerStatChanges(BATTLE_PARTNER(battler)))
+            {
+                u32 i;
+                gEffectBattler = BATTLE_PARTNER(battler);
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CURIOUS_MEDICINE;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;
+        case ABILITY_PASTEL_VEIL:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gBattlerTarget = battler;
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PASTEL_VEIL;
+                BattleScriptPushCursorAndCallback(BattleScript_PastelVeilActivates);
+                effect++;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+            }
+            break;
+        case ABILITY_COMATOSE:  //may remove, check how works and see if sleep status gets applied w icon vsonic
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;
+        case ABILITY_SCREEN_CLEANER:
+            if (!gSpecialStatuses[battler].switchInAbilityDone && TryRemoveScreens(battler))
+            {
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SCREENCLEANER;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;
+        case ABILITY_ANTICIPATION:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                u32 side = GetBattlerSide(battler);
+
+                for (i = 0; i < MAX_BATTLERS_COUNT; i++)
+                {
+                    if (IsBattlerAlive(i) && side != GetBattlerSide(i))
+                    {
+                        for (j = 0; j < MAX_MON_MOVES; j++)
+                        {
+                            move = gBattleMons[i].moves[j];
+                            GET_MOVE_TYPE(move, moveType);
+                            if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0))
+                            {
+                                effect++;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (effect)
+                {
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_ANTICIPATION;
+                    gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                }
+            }
+            break;
+        case ABILITY_FRISK:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_FriskActivates); // Try activate
+                effect++;
+            }
+            return effect; // Note: It returns effect as to not record the ability if Frisk does not activate.
+        case ABILITY_FOREWARN:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                ForewarnChooseMove(battler);
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FOREWARN;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;
+        case ABILITY_DOWNLOAD:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                u32 statId, opposingBattler;
+                u32 opposingDef = 0, opposingSpDef = 0;
+
+                opposingBattler = BATTLE_OPPOSITE(battler);
+                for (i = 0; i < 2; opposingBattler ^= BIT_FLANK, i++)
+                {
+                    if (IsBattlerAlive(opposingBattler))
+                    {
+                        opposingDef += gBattleMons[opposingBattler].defense
+                                    * gStatStageRatios[gBattleMons[opposingBattler].statStages[STAT_DEF]][0]
+                                    / gStatStageRatios[gBattleMons[opposingBattler].statStages[STAT_DEF]][1];
+                        opposingSpDef += gBattleMons[opposingBattler].spDefense
+                                      * gStatStageRatios[gBattleMons[opposingBattler].statStages[STAT_SPDEF]][0]
+                                      / gStatStageRatios[gBattleMons[opposingBattler].statStages[STAT_SPDEF]][1];
+                    }
+                }
+
+                if (opposingDef < opposingSpDef)
+                    statId = STAT_ATK;
+                else
+                    statId = STAT_SPATK;
+
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+
+                if (CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN))
+                {
+                    gBattleMons[battler].statStages[statId]++;
+                    SET_STATCHANGER(statId, 1, FALSE);
+                    gBattlerAttacker = battler;
+                    PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
+                    BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+                    effect++;
+                }
+            }
+            break;
+        case ABILITY_DARK_AURA:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_DARKAURA;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;
+        case ABILITY_FAIRY_AURA:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FAIRYAURA;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;//change logic so only actiavte if other aura skill is on other side
+        /*case ABILITY_AURA_BREAK:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_AURABREAK;
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;*/
+        case ABILITY_SCHOOLING:
+            if (gBattleMons[battler].level < 20)
+                break;
+        case ABILITY_SHIELDS_DOWN:
+            if (ShouldChangeFormHpBased(battler))
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+                effect++;
+            }
+            break;
+        case ABILITY_INTREPID_SWORD:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                SET_STATCHANGER(STAT_ATK, 1, FALSE);
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
+                effect++;
+            }
+            break;
+        case ABILITY_DAUNTLESS_SHIELD:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                SET_STATCHANGER(STAT_DEF, 1, FALSE);
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
+                effect++;
+            }
+            break;
+        case ABILITY_MIMICRY:
+            if (gBattleMons[battler].hp != 0 && gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
+            {
+                TryToApplyMimicry(battler, FALSE);
+                effect++;
+            }
+            break;
+        }
+        break;
+            
+        }
+        break;//because I plan to change terrain gonna comment this out for now
+            //will prob do in another place in the code instead.
+        /*case ABILITYEFFECT_SWITCH_IN_TERRAIN:   //set terrain from map conditions
             if (VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY)
             {
                 u16 terrainFlags = VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY;    // only works for status flag (1 << 15)
@@ -3799,7 +4124,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             #endif
-            break;
+            break;*/
         case ABILITYEFFECT_ENDTURN: // 1
             if (gBattleMons[battler].hp != 0)
             {

@@ -367,14 +367,20 @@
 #define MOVE_RESULT_NO_EFFECT          (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE | MOVE_RESULT_FAILED)
 
 // Battle Weather as enum
-#define ENUM_WEATHER_NONE           0
-#define ENUM_WEATHER_RAIN           1
-#define ENUM_WEATHER_SUN            2
-#define ENUM_WEATHER_SANDSTORM      3
-#define ENUM_WEATHER_HAIL           4
-#define REPEAT_SWITCH_IN            5 // Value added
+#define ENUM_WEATHER_NONE			      0
+#define ENUM_WEATHER_RAIN		          1
+#define ENUM_WEATHER_SUN	              2
+#define ENUM_WEATHER_SANDSTORM			  3
+#define ENUM_WEATHER_HAIL				  4
+#define ENUM_WEATHER_SUN_PRIMAL           5
+#define ENUM_WEATHER_RAIN_PRIMAL          6
+#define ENUM_WEATHER_STRONG_WINDS         7
+//vsonic since added special status switchin done prob don't need now?
+//think can just use that
+#define REPEAT_SWITCH_IN            8
 //hopefully to make macro for list of abilities
 //to repeat on opponent switch in/send out
+
 
 // Battle Weather flags
 #define WEATHER_RAIN_TEMPORARY			(1 << 0)

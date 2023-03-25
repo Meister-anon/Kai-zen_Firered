@@ -177,6 +177,7 @@
 #define VARIOUS_TOTEM_BOOST                     103
 #define VARIOUS_TRY_ACTIVATE_GRIM_NEIGH         104
 #define VARIOUS_MOVEEND_ITEM_EFFECTS                105
+//think will introduce character that will give seeds for berries
 #define VARIOUS_TERRAIN_SEED                        106
 #define VARIOUS_MAKE_INVISIBLE                      107
 #define VARIOUS_ROOM_SERVICE                        108
