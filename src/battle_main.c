@@ -326,7 +326,7 @@ static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 
 //each line adds 3 because there are 3 arguments in each line, atk type, def type, & effectiveness  /so SUBTRACT 3 for any lines kept but commented out
 //DON'T FORGET every time I change below, need to update in the .h
 
-const u8 gTypeEffectiveness[402] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+const u8 gTypeEffectiveness[408] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -335,6 +335,7 @@ const u8 gTypeEffectiveness[402] = // 336 is number of entries x 3 i.e number of
     TYPE_FIRE, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIRE, TYPE_ICE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIRE, TYPE_BUG, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_FIRE, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE, //ghost adjustment same logic as ice
     TYPE_FIRE, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIRE, TYPE_GROUND, TYPE_MUL_NOT_EFFECTIVE, //NEW effectiveness for snivy, may remove
     TYPE_FIRE, TYPE_DRAGON, TYPE_MUL_NOT_EFFECTIVE,
@@ -368,6 +369,7 @@ const u8 gTypeEffectiveness[402] = // 336 is number of entries x 3 i.e number of
     TYPE_ICE, TYPE_BUG, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ICE, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ICE, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_ICE, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,   //ghost adjustment, the dead aren't bothered by cold
     TYPE_ICE, TYPE_GROUND, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ICE, TYPE_FLYING, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ICE, TYPE_DRAGON, TYPE_MUL_SUPER_EFFECTIVE,
@@ -406,18 +408,16 @@ const u8 gTypeEffectiveness[402] = // 336 is number of entries x 3 i.e number of
     TYPE_FLYING, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FLYING, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_PSYCHIC, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_PSYCHIC, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,
-    //TYPE_PSYCHIC, TYPE_FLYING, TYPE_MUL_SUPER_EFFECTIVE,    //psychic power can stop a target cold, can keep them from flying,
+    TYPE_PSYCHIC, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,    //psychic power can stop a target cold, can keep them from flying,    
     TYPE_PSYCHIC, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,     //or confuse them which would make it impossible to fly, so makes sense,
     TYPE_PSYCHIC, TYPE_DARK, TYPE_MUL_NO_EFFECT,        //mostly done to counter fairy resistance
     TYPE_PSYCHIC, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,   //effect prob too strong, flying is weak defensively and psychic is strong offenseively
-    TYPE_BUG, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,    //plus fairy nerfed, will replace with reistance instad of super effectiveness
+    TYPE_BUG, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,    //plus fairy nerfed, will replace with resistancee instad of super effectiveness
     TYPE_BUG, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_BUG, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_FLYING, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_BUG, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,
-    //TYPE_BUG, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,   //removed this resistance by accident in my chart, but 
+    TYPE_BUG, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,//removed ghost resistance by accident in my chart, but 
     TYPE_BUG, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE, //was so good will add to my chart
     TYPE_BUG, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_ROCK, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
@@ -435,10 +435,10 @@ const u8 gTypeEffectiveness[402] = // 336 is number of entries x 3 i.e number of
     TYPE_DRAGON, TYPE_DRAGON, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_DRAGON, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_DARK, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_DARK, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,    //type change from wolveyvgc to buff bugs, its weak to bugs, so resists it, and dark is evil & bugs are 
-    TYPE_DARK, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,  //also associated with evil  so makes sense
-    TYPE_DARK, TYPE_GHOST, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_DARK, TYPE_DARK, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_DARK, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,    //type change from wolveyvgc to buff bugs, its weak to bugs, so resists it, and dark is evil & bugs are //also associated with evil  so makes sense
+    TYPE_DARK, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,  //-keeping psychic weakness to dark post ghost change as dark is living and able to do physical attacks while psychic is usually phsycially weak
+    TYPE_DARK, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,  //changed there's nothing significant bout dark, its more or less same as ghost but alive, and ghosts thrive in darkness
+    TYPE_DARK, TYPE_DARK, TYPE_MUL_NOT_EFFECTIVE,   //change essentially makes ghost inverse of normal type effect wise, where most things are neutral and it has 1 weakness
     TYPE_DARK, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_STEEL, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_STEEL, TYPE_WATER, TYPE_MUL_NOT_EFFECTIVE,

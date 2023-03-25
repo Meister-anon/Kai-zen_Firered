@@ -21,7 +21,7 @@
 #define asm_comment(x) asm volatile("@ -- " x " -- ")
 #define asm_unified(x) asm(".syntax unified\n" x "\n.syntax divided")
 
-#if defined (__APPLE__) || defined (__CYGWIN__) || defined(__CLION_IDE__)
+/*#if defined (__APPLE__) || defined (__CYGWIN__) || defined(__CLION_IDE__)
 // Get the IDE to stfu
 
 // We define it this way to fool preproc.
@@ -36,7 +36,27 @@
 #define __(x) (x)
 #endif // __APPLE__
 
-#define NELEMS(array) (sizeof(array) / sizeof((array)[0]))
+#define NELEMS(array) (sizeof(array) / sizeof((array)[0]))*/
+//Old IDE stuff archived for reference
+
+// IDE support
+#if defined(__APPLE__) || defined(__CYGWIN__) || defined(__INTELLISENSE__)
+// We define these when using certain IDEs to fool preproc
+#define _(x)        (x)
+#define __(x)       (x)
+#define INCBIN(...) {0}
+#define INCBIN_U8   INCBIN
+#define INCBIN_U16  INCBIN
+#define INCBIN_U32  INCBIN
+#define INCBIN_S8   INCBIN
+#define INCBIN_S16  INCBIN
+#define INCBIN_S32  INCBIN
+#endif // IDE support
+
+#define ARRAY_COUNT(array) (sizeof(array) / sizeof((array)[0]))
+
+// Alias of ARRAY_COUNT using GameFreak's name from AgbAssert calls.
+#define NELEMS(array) ARRAY_COUNT(array)
 
 #define SWAP(a, b, temp)    \
 {                           \

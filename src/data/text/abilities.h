@@ -266,6 +266,7 @@ static const u8 sOceanMemoryDescription[] = _("Reduces Damage from Water-type mo
 static const u8 sLiquidSoulDescription[] = _("Transforms Water-type moves into Ghost-type.");  //swapped back
 static const u8 sOverchargeDescription[] = _("When in a pinch the PKMN charges up to the max!");
 static const u8 sPhotosynthesizeDescription[] = _("Slight HP recovery in sun.");
+static const u8 sGlacialIceDescription[] = _("Having a body made from a Glacier.\nIt's immune to fire, and heals itself with ice.");
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
 {
@@ -549,6 +550,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_OCEAN_MEMORY] = sOceanMemoryDescription,
     [ABILITY_OVERCHARGE] = sOverchargeDescription,
     [ABILITY_PHOTOSYNTHESIZE] = sPhotosynthesizeDescription,
+    [ABILITY_GLACIAL_ICE] = sGlacialIceDescription,
 };//last value can have comma
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
@@ -832,5 +834,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_LIQUID_SOUL] =_("Liquid Soul"),
     [ABILITY_OCEAN_MEMORY] =_("Ocean Memory"),
     [ABILITY_OVERCHARGE] =_("Overcharge"),
-    [ABILITY_PHOTOSYNTHESIZE] =_("Photosynthesize")
+    [ABILITY_PHOTOSYNTHESIZE] =_("Photosynthesize"),
+    [ABILITY_GLACIAL_ICE] =_("Glacial Ice")
 };//no comma for last value

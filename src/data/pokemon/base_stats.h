@@ -10612,7 +10612,8 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     }, //Glacial Ice negates fire damage also combine with ice-body effect to heal during hail and add low chance to freeze on contact
-    //make sure stacks with hail effect freeze chance boost
+    //make sure stacks with hail effect freeze chance boost 
+    //think may also combine with volt absorb so ice attacks heal it, so its immune to fire & ice, but ice heals it
 
     [SPECIES_REGISTEEL] =
     {

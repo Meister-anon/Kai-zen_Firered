@@ -339,16 +339,23 @@
 #define STATUS_FIELD_MAGIC_ROOM         0x1
 #define STATUS_FIELD_TRICK_ROOM         0x2
 #define STATUS_FIELD_WONDER_ROOM        0x4
+#define STATUS_FIELD_GRAVITY            0x8
 //#define STATUS_FIELD_MUDSPORT           0x8  will try to keep these 2 in status3 because they didn't use a timer
 //#define STATUS_FIELD_WATERSPORT         0x10
-#define STATUS_FIELD_GRAVITY            0x20
+#define STATUS_FIELD_SCORCHED_TERRAIN   0x10	//make red version or new tile with scorched cracked earth appearane
+#define STATUS_FIELD_FLOODED_TERRAIN    0x20	//can use surf tile/ or edit a blue puddle into normal graphic
 #define STATUS_FIELD_GRASSY_TERRAIN     0x40	//longer grass
 #define STATUS_FIELD_MISTY_TERRAIN      0x80	//mist/haze/defog 
 #define STATUS_FIELD_ELECTRIC_TERRAIN   0x100	//sparks tag
 #define STATUS_FIELD_PSYCHIC_TERRAIN    0x200	//could surround field w hidden power orbs?
 #define STATUS_FIELD_ION_DELUGE         0x400
 #define STATUS_FIELD_FAIRY_LOCK         0x800
-#define STATUS_FIELD_TERRAIN_PERMANENT  0x1600 //(1 << 12)   // Overworld thunderstorm generates electric terrain //do more with this & nature power
+// Overworld thunderstorm generates electric terrain //do more with this & nature power
+//may do something with counters and advantage where certain overworld terrains can't be overwritten by certain terrain effects
+//i.e scorched can't overrwrite ocean teerrain but can cancle flooded since its the opposit they cancel out, will need a seecon dus to make terrain
+//also can't setup grass on desert or ocean terrain, but will work on flooded terrain  also will cancel scorched and need second use to work
+#define STATUS_FIELD_TERRAIN_PERMANENT  0x3200 //(1 << 12)   
+
 //look into how fild is generated i.e grass vs water when surfacing
 //specifically the circle mon stand on, want put terrain effects on that
 //simlest solution depending, may just be to edit the graphic for each,

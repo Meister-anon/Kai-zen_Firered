@@ -24,7 +24,7 @@ struct MultiBattlePokemonTx
 };
 
 #define TYPE_NAME_LENGTH 8
-#define ABILITY_NAME_LENGTH 14
+#define ABILITY_NAME_LENGTH 16 //is 16 in emerald may look into raising
 
 //I feel so stupid I literally never knew this was here... vsonic IMPORTANT
 //ok so each line in the table is broken up into 3 parts
@@ -74,7 +74,7 @@ extern const u8 gStatusConditionString_IceJpn[8];
 extern const u8 gStatusConditionString_ConfusionJpn[8];
 extern const u8 gStatusConditionString_LoveJpn[8];
 extern const u8 *const gStatusConditionStringsTable[7][2];
-extern const u8 gTypeEffectiveness[402]; //fairy addition
+extern const u8 gTypeEffectiveness[408]; //fairy addition
 extern const struct TrainerMoney gTrainerMoneyTable[];
 extern const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT];
 extern const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1];

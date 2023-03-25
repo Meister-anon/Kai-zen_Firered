@@ -300,7 +300,9 @@
 #define ABILITY_OCEAN_MEMORY 277
 #define ABILITY_OVERCHARGE 278
 #define ABILITY_PHOTOSYNTHESIZE 279
-#define ABILITIES_COUNT 280 //note make perish body, only affect target, possibly 
+#define ABILITY_GLACIAL_ICE 280
+
+#define ABILITIES_COUNT 281 //note make perish body, only affect target, possibly 
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 
