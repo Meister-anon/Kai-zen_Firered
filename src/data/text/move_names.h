@@ -1,4 +1,4 @@
-const u8 gMoveNames[][17] = {
+const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("-$$$$$$"),
     _("POUND"),
     _("KARATE CHOP"),

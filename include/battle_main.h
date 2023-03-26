@@ -25,6 +25,7 @@ struct MultiBattlePokemonTx
 
 #define TYPE_NAME_LENGTH 8
 #define ABILITY_NAME_LENGTH 16 //is 16 in emerald may look into raising
+#define ABILITY_DESCRIPTION_LENGTH 80
 
 //I feel so stupid I literally never knew this was here... vsonic IMPORTANT
 //ok so each line in the table is broken up into 3 parts

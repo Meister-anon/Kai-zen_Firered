@@ -185,7 +185,7 @@ struct PokemonSummaryScreenData
         u8 ALIGNED(4) expToNextLevelStrBuf[9];
 
         u8 ALIGNED(4) abilityNameStrBuf[ABILITY_NAME_LENGTH + 1];
-        u8 ALIGNED(4) abilityDescStrBuf[104];//doubled descript buff
+        u8 ALIGNED(4) abilityDescStrBuf[ABILITY_DESCRIPTION_LENGTH + 1]; //tested & works
     } summary;
 
     u8 ALIGNED(4) isEgg; /* 0x3200 */
@@ -443,7 +443,7 @@ static const union AnimCmd sStatusAilmentIconAnim_Blank[] =
 {
     ANIMCMD_FRAME(28, 20),
     ANIMCMD_JUMP(0),
-};
+};//not unused this is used when not statused
 
 //believe to make icons bounce with menu bounce
 static const union AnimCmd * const sStatusAilmentIconAnimTable[] =
@@ -456,7 +456,7 @@ static const union AnimCmd * const sStatusAilmentIconAnimTable[] =
     sStatusAilmentIconAnim_PKRS,
     sStatusAilmentIconAnim_FNT,
     sStatusAilmentIconAnim_Blank
-};
+};//vsonic
 
 static const struct OamData sHpOrExpBarOamData = {
     .y = 0,
