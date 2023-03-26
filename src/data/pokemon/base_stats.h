@@ -6853,6 +6853,8 @@ const struct BaseStats gBaseStats[] =
     //to protect its ally because it can't be hurt.
 
     //do same for flash fire motor drive & sap sipper
+    //counter balance by making it only work for partner if mon with ability isn't statused
+    //vsonic
    
 
     [SPECIES_ENTEI] =

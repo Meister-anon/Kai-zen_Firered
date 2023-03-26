@@ -3278,11 +3278,16 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
 
     return FALSE;
 }
+
+//since this just sets timer and terrain,  
+     //to make permanent need to set conditions on timer decrement
+    //or I could set a timer that would effectively never end
+    //when terrain changed by ability
 //may set permanent terrain or make permanent terrain if only set form overworld, and ability)
 static bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer)
 {
     if (!(gFieldStatuses & statusFlag))
-    {
+    {//think means clear any existing field terrain and set terrain
         gFieldStatuses &= ~(STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_GRASSY_TERRAIN | EFFECT_ELECTRIC_TERRAIN | EFFECT_PSYCHIC_TERRAIN);
         gFieldStatuses |= statusFlag;
 
@@ -4086,10 +4091,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
         break;
             
-        }
-        break;//because I plan to change terrain gonna comment this out for now
+        //because I plan to change terrain gonna comment this out for now
             //will prob do in another place in the code instead.
-        /*case ABILITYEFFECT_SWITCH_IN_TERRAIN:   //set terrain from map conditions
+        case ABILITYEFFECT_SWITCH_IN_TERRAIN:   //set terrain from map conditions
             if (VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY)
             {
                 u16 terrainFlags = VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY;    // only works for status flag (1 << 15)
@@ -4124,7 +4128,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             #endif
-            break;*/
+            break;
         case ABILITYEFFECT_ENDTURN: // 1
             if (gBattleMons[battler].hp != 0)
             {

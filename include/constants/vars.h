@@ -66,6 +66,7 @@
 // Determines which wild encounter set to use in the
 // Altering Cave. Incremented by Mystery Event.
 // Wraps around at 10.
+//vsonic note to increment weekly
 #define VAR_ALTERING_CAVE_WILD_SET          0x4024
 
 // Step counter set to 500 at game start. When you get
@@ -309,6 +310,7 @@
 #define VAR_RIVAL_EVO			   0x4101 //use rival starter Evolution
 #define VAR_PLAYER_STARTER		   0x4102 //use to hold player starter for rival branch evo check (pretty much just eevee)  not using right now
 #define VAR_DAYS				   0x4103
+#define VAR_TERRAIN				   0x4104
 
 //actually may not need since game already keeps track of player starter with the roamer check
 //so instead of really complex evo ai, I'll try to just block rival eevee from doing certain evolutions based on player starter group

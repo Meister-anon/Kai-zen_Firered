@@ -260,13 +260,14 @@ static const u8 sNuisanceDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("“Wea
 static const u8 sMultiTaskDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Damaging Attacks are multi-hit.");
 static const u8 sSiroccoDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Kicks up a sandstorm on contact.");
 static const u8 sHipressureDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Sharply raises foe's PP usage.");
-static const u8 sCupidsArrowDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Infatuates a target when enters.");
+static const u8 sCupidsArrowDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Infatuates a target upon switching in.");
 static const u8 sBattleMatronDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Powers up moves to protect young PKMN.");
 static const u8 sOceanMemoryDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Reduces Damage from Water-type moves.");
 static const u8 sLiquidSoulDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Transforms Water-type moves into Ghost-type.");  //swapped back
 static const u8 sOverchargeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("When in a pinch the PKMN charges up to the max!");
 static const u8 sPhotosynthesizeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Slight HP recovery in sun.");
 static const u8 sGlacialIceDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Is immune to fire,\nand turns ice and hail into hp.");
+static const u8 sLavaDistortionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Field becomes scorched.\nDraws in and powers up fire moves");
 //checked in fire red limit is 40 chars per line, changing description length to 80
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -552,6 +553,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_OVERCHARGE] = sOverchargeDescription,
     [ABILITY_PHOTOSYNTHESIZE] = sPhotosynthesizeDescription,
     [ABILITY_GLACIAL_ICE] = sGlacialIceDescription,
+    [ABILITY_LAVA_DISTORTION] = sLavaDistortionDescription,
 };//last value can have comma
 
 //now undrestand reason strings (strings are arrays) use that +1 value
@@ -840,5 +842,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_OCEAN_MEMORY] =_("Ocean Memory"),
     [ABILITY_OVERCHARGE] =_("Overcharge"),
     [ABILITY_PHOTOSYNTHESIZE] =_("Photosynthesize"),
-    [ABILITY_GLACIAL_ICE] =_("Glacial Ice")
+    [ABILITY_GLACIAL_ICE] =_("Glacial Ice"),
+    [ABILITY_LAVA_DISTORTION] =_("Lava Distortion")
 };//no comma for last value

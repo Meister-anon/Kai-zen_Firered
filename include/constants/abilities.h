@@ -301,8 +301,9 @@
 #define ABILITY_OVERCHARGE 278
 #define ABILITY_PHOTOSYNTHESIZE 279
 #define ABILITY_GLACIAL_ICE 280
+#define ABILITY_LAVA_DISTORTION 281 // pending heatran abilitye
 
-#define ABILITIES_COUNT 281 //note make perish body, only affect target, possibly 
+#define ABILITIES_COUNT 282 //note make perish body, only affect target, possibly 
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 
