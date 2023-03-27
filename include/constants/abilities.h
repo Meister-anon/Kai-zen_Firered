@@ -301,7 +301,14 @@
 #define ABILITY_OVERCHARGE 278
 #define ABILITY_PHOTOSYNTHESIZE 279
 #define ABILITY_GLACIAL_ICE 280
-#define ABILITY_LAVA_DISTORTION 281 // pending heatran abilitye
+#define ABILITY_LAVA_DISTORTION 281 // pending heatran ability
+
+//#define ABILITY_DARK_DEAL 282   //companion ability to nuisance, cuts dynamicbasepower of partner moves in half,
+//in exchange for serene grace style heightned effect chance INCLUDING heighteeend crit chance/odds.
+//possibly done by dirrectly moding critchance, or by setting high crit flag to moves if possible
+//the point of high crit is, it'd give a chance to overcome the negative, crit would double damage
+//so you do normal move damage. plan to use in doubles with nuisance, lets them use stronger moves
+//kind of a opposite to serene grace
 
 #define ABILITIES_COUNT 282 //note make perish body, only affect target, possibly 
 

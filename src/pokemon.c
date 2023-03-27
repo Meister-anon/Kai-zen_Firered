@@ -3677,8 +3677,11 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     //ability = GetBattlerAbility(gBattlerTarget);
     switch (GetBattlerAbility(gBattlerTarget))  //readjusted order of abilities to be numeric order in case I need switch case to flow low to high
     {                          //after examining switches from emerald repo, appears value order of the switch case doesn't matter, can go anywhere
+        //don't need put absorb abilities that heal here, as they use gbattlemovedamage todo heal and convert it in the util
+    case ABILITY_GLACIAL_ICE:
+    case ABILITY_LAVA_DISTORTION:
     case ABILITY_FLASH_FIRE:
-        if (type == TYPE_FIRE)  //need to make sure these for hidden power type change, so dynamic type rather than just normal move power?
+        if (type == TYPE_FIRE)  //need to make sure these for hidden power type change, so dynamic type rather than just normal move power? think alrady does
             gBattleMoveDamage = 0;
         break;
     case ABILITY_LIGHTNING_ROD:

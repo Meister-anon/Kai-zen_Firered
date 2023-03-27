@@ -637,7 +637,8 @@ struct BattleStruct //fill in unused fields when porting
     void (*savedCallback)(void);
     u8 synchronizeMoveEffect;
     u8 multiplayerId;
-    u8 overworldWeatherDone;
+    bool8 overworldWeatherDone;
+    bool8 terrainDone;
     u8 atkCancellerTracker;
     u16 usedHeldItems[MAX_BATTLERS_COUNT];
     u8 chosenItem[4]; // why is this an u8?
@@ -657,7 +658,6 @@ struct BattleStruct //fill in unused fields when porting
     u8 wishPerishSongBattlerId;
     u8 savedBattlerTarget;
     bool8 anyMonHasTransformed;
-    bool8 terrainDone;
     u16 tracedAbility[MAX_BATTLERS_COUNT]; //didn't really need to port, but prob can use it to show current ability in menu summary screen //important
     u16 hpBefore[MAX_BATTLERS_COUNT]; // Hp of battlers before using a move. For Berserk
     bool8 spriteIgnore0Hp;

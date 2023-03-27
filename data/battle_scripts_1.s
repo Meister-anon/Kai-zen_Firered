@@ -4349,7 +4349,7 @@ BattleScript_BeatUpLoop::
 	movevaluescleanup
 	jumpifhasnohp BS_TARGET, BattleScript_BeatUpEnd @ for some reaosn hda to add this, move continued after battler hp was 0
 	critcalc
-	trydobeatup BattleScript_BeatUpEnd, BattleScript_ButItFailed
+	trydobeatup BattleScript_BeatUpEnd, BattleScript_ButItFailed	@need to do full damagecalc here
 	printstring STRINGID_PKMNATTACK
 	@ jumpifbyte CMP_NOT_EQUAL, gCritMultiplier, 2, BattleScript_BeatUpAttack
 	@ manipulatedamage 2
@@ -5392,6 +5392,19 @@ BattleScript_BallFetch::
 	waitmessage 0x40
 	end3
 
+BattleScript_PrimalReversionRet::
+	printstring STRINGID_EMPTYSTRING3
+	waitmessage 1
+	setbyte gIsCriticalHit, 0
+	handleprimalreversion BS_ATTACKER, 0
+	handleprimalreversion BS_ATTACKER, 1
+	playanimation BS_ATTACKER, B_ANIM_PRIMAL_REVERSION
+	waitanimation
+	handleprimalreversion BS_ATTACKER, 2
+	printstring STRINGID_PKMNREVERTEDTOPRIMAL
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_AttackerFormChange::
 	pause 5
 	copybyte gBattlerAbility, gBattlerAttacker
@@ -5698,8 +5711,11 @@ BattleScript_DoSwitchOut::
 	hidepartystatussummary BS_ATTACKER
 	switchinanim BS_ATTACKER, 0
 	waitstate
+	jumpifcantreverttoprimal BattleScript_DoSwitchOut2
+	call BattleScript_PrimalReversionRet
 	switchineffects BS_ATTACKER @this should be where switch in works,
-	moveendcase 15
+	moveendcase ATK49_STATUS_IMMUNITY_ABILITIES
+	moveendcase ATK49_MIRROR_MOVE
 	end2
 
 BattleScript_PursuitDmgOnSwitchOut::
@@ -7325,6 +7341,14 @@ BattleScript_PsychicSurgeActivates::
 	call BattleScript_TerrainSeedLoop
 	end3
 
+BattleScript_LavaDistortionActivates::
+	pause 0x20	
+	printstring STRINGID_TERRAINBECOMESFIRE
+	waitstate
+	@playanimation BS_SCRIPTING, B_ANIM_TERRAIN_PSYCHIC, NULL    check this animation in emerald may not use for my hack
+	@call BattleScript_TerrainSeedLoop	@no seed for fire/water terrains as they also get weather
+	end3
+
 BattleScript_BadDreamsActivates::
 	setbyte gBattlerTarget, 0	
 BattleScript_BadDreamsLoop:
@@ -7376,6 +7400,21 @@ BattleScript_MoveHPDrain::
 	printstring STRINGID_PKMNRESTOREDHPUSING
 	waitmessage 0x40
 	orbyte gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE
+	goto BattleScript_MoveEnd
+
+BattleScript_MoveStatDrain_PPLoss::
+	ppreduce
+BattleScript_MoveStatDrain::
+	attackstring
+	pause B_WAIT_TIME_SHORT
+	call BattleScript_AbilityPopUp
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	waitanimation
+	printstring STRINGID_TARGETABILITYSTATRAISE
+	waitmessage B_WAIT_TIME_LONG
+	clearsemiinvulnerablebit
+	tryfaintmon BS_ATTACKER
 	goto BattleScript_MoveEnd
 
 BattleScript_MonMadeMoveUseless_PPLoss::

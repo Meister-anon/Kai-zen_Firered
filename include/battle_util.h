@@ -34,6 +34,8 @@
 #define ABILITYEFFECT_CHECK_ON_FIELD             0x14
 #define ABILITYEFFECT_NEUTRALIZINGGAS			 0x15  //swapped what was a nuisance ability test
 #define ABILITYEFFECT_MOVE_END_OTHER			 0x16
+#define ABILITYEFFECT_SWITCH_IN_ABILITIES		 0x17   //realized ability battle effects function doesn't really separate blocks well, so added more for better organization
+#define ABILITYEFFECT_SWITCH_IN_TERRAIN_ABILITY	 0x18   //nvm can't do more as new block would require new switch...and would break switch in effects i beleive
 //#define ABILITYEFFECT_CUPIDSARROW				 0x15  //1st attempted implementation realized goes in switchin don't need new effect
 #define ABILITYEFFECT_MUD_SPORT                  0xFC	//actually potentially does as trace and intimidate have them? look over implementation again
 #define ABILITYEFFECT_WATER_SPORT                0xFD
@@ -42,8 +44,8 @@
 //instead of everything glowing display graphic template that's fitting
 //over/inside the mon circle, so will only be noticeable from enemy side
 //i.e sparks tags for electric terrain etc.
-#define ABILITYEFFECT_SWITCH_IN_TERRAIN          0xFE
-#define ABILITYEFFECT_SWITCH_IN_WEATHER          0xFF
+#define ABILITYEFFECT_SWITCH_IN_TERRAIN          0xFF
+#define ABILITYEFFECT_SWITCH_IN_WEATHER          0xFE   //sets battle weather from map conditions, nothing to do with ability
 
 #define ABILITY_ON_OPPOSING_FIELD(battlerId, abilityId)(AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, battlerId, abilityId, 0, 0))
 #define ABILITY_ON_FIELD(abilityId)(AbilityBattleEffects(ABILITYEFFECT_CHECK_ON_FIELD, 0, abilityId, 0, 0))
@@ -171,6 +173,7 @@ void ResetFuryCutterCounter(u8 battlerId);
 void MulModifier(u16 *modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);
 bool32 UnnerveOn(u32 battlerId, u32 itemId);
+//learned defined need be on one line, this should be logic for thawing i.e remove frozen status
 #define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || ((gBattleMoves[gCurrentMove].type == TYPE_FIRE) && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60) && gCurrentMove != MOVE_FIRE_FANG))
 
 // percent in UQ_4_12 format

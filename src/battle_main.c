@@ -378,7 +378,7 @@ const u8 gTypeEffectiveness[408] = // 336 is number of entries x 3 i.e number of
     TYPE_FIGHTING, TYPE_NORMAL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIGHTING, TYPE_ICE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIGHTING, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FIGHTING, TYPE_FLYING, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FIGHTING, TYPE_FLYING, TYPE_MUL_NOT_EFFECTIVE, //when grounded fighting should do normal damage to flying
     TYPE_FIGHTING, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIGHTING, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIGHTING, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
@@ -400,8 +400,8 @@ const u8 gTypeEffectiveness[408] = // 336 is number of entries x 3 i.e number of
     TYPE_GROUND, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE, //set to no effect if not grounded
     TYPE_GROUND, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FLYING, TYPE_ELECTRIC, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FLYING, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_FLYING, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_FLYING, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,  //makes sense flying resists grass, birds make their home in trees,
+    TYPE_FLYING, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,   //also hurricanes/tornadoes uproot & destroy trees
     TYPE_FLYING, TYPE_BUG, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FLYING, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FLYING, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,
@@ -3199,6 +3199,36 @@ static void TryDoEventsBeforeFirstTurn(void)
             gBattleStruct->overworldWeatherDone = TRUE;
             return;
         }
+        if (!gBattleStruct->terrainDone && AbilityBattleEffects(0, 0, 0, ABILITYEFFECT_SWITCH_IN_TERRAIN, 0) != 0)
+        {
+            gBattleStruct->terrainDone = TRUE;
+            return;
+        }
+
+        // Totem boosts
+        for (i = 0; i < gBattlersCount; i++)
+        {
+            if (gTotemBoosts[i].stats != 0)
+            {
+                gBattlerAttacker = i;
+                BattleScriptExecute(BattleScript_TotemVar);
+                return;
+            }
+        }
+        memset(gTotemBoosts, 0, sizeof(gTotemBoosts));  // erase all totem boosts just to be safe
+
+        // Primal Reversion
+        for (i = 0; i < gBattlersCount; i++)
+        {
+            if (CanMegaEvolve(i)
+                && GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_PRIMAL_ORB)
+            {
+                gBattlerAttacker = i;
+                BattleScriptExecute(BattleScript_PrimalReversion);
+                return;
+            }
+        }
+
         // Check neutralizing gas
         if (AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, 0, 0, 0, 0) != 0)
             return;//note removal of levitate will make flying types safer

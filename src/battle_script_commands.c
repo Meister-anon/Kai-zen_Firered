@@ -1902,7 +1902,7 @@ static void atk05_damagecalc(void)
     if (gStatuses3[gBattlerAttacker] & STATUS3_CHARGED_UP && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC)
         gBattleMoveDamage *= 2;
     if (gProtectStructs[gBattlerAttacker].helpingHand)//below works, but because hit still jumps to multihit,  I need to add the below check to jumpifability 
-        gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
+        gBattleMoveDamage = gBattleMoveDamage * 15 / 10;    //works this is default
     if (gBattleMons[gBattlerAttacker].ability == ABILITY_MULTI_TASK
         && CanMultiTask(gCurrentMove) == TRUE
         && gBattleMoves[gCurrentMove].split != SPLIT_STATUS) // normal syntax (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE)
@@ -10868,6 +10868,7 @@ static void atk96_weatherdamage(void)
              && gBattleMons[gBattlerAttacker].ability != ABILITY_OVERCOAT
              && gBattleMons[gBattlerAttacker].ability != ABILITY_SNOW_CLOAK
              && gBattleMons[gBattlerAttacker].ability != ABILITY_ICE_BODY)
+             && gBattleMons[gBattlerAttacker].ability != ABILITY_GLACIAL_ICE)
             {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                 if (gBattleMoveDamage == 0)
@@ -12236,7 +12237,12 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
 
     // talked with GriffinR, gbattlemovedamage deals with the hp damage dealt,
     //but it still factors in enemy defenses in the final damage calculation
-    //because ofthe calculatebasedamage command.
+    //because ofthe calculatebasedamage function in damagecalc command
+
+    //since I'm not doing damagecalc because I'm taking damage from each mon in party
+    //I need to make this do everything damagecalc does to, get the to use
+    //enemy defenses in damage calc, so I need to adapt the calculatebasedamage function for this effect
+    //everything else is already done here.
 
     if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
         party = gPlayerParty;
@@ -12265,7 +12271,7 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             gBattlescriptCurrInstr += 9;
             //gBattleMoveDamage = gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].baseAttack;
             gBattleMoveDamage = ((GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)) / 10 + 5);
-            gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier; //should allow to crit without damagecalc
+            
             //gBattleMoveDamage = (gBattleMons[GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)].attack) / 10 + 5;
             //gBattleMons
             //I think using this, makes it do fixed damage, instead of use base power,
@@ -12284,8 +12290,8 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             //gBattleMoveDamage *= (GetMonData(&party[gBattleCommunication[0]], MON_DATA_LEVEL) * 2 / 5 + 2);
             //gBattleMoveDamage /= gBaseStats[gBattleMons[gBattlerTarget].species].baseDefense;
             //gBattleMoveDamage = (gBattleMoveDamage / 50) + 2; //this most likely will do nothing, and stat_atk is hhe problem but I'll try it.
-            if (gProtectStructs[gBattlerAttacker].helpingHand) //yup did jack shit... -_-
-                gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
+            if (gProtectStructs[&party[gBattleCommunication[0]]].helpingHand) //think will work should apply once to battler on field only
+                gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;
             //may adjst later to be like below, replace gbattleattacker
             //and make it only work on the attacking pokemon's hit.
             //or what I can do is, keep gbattleattacker, and run getMondata species & personality
@@ -12302,19 +12308,27 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             //step 2, compare with party loop,
             //step 3, another if statement, if equal increase battle damage for party loop[0]
 
-           else if (gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type1 == TYPE_DARK
-                || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK){
+           if (gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type1 == TYPE_DARK
+                || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK
+                || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type3 == TYPE_DARK)
+           {
                 //gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
-               gBattleMoveDamage = ((GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)) / 10 + 5) * 15 / 10;
+               gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;
                //gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier;
-               } //thikn that above line doubled crit damage again.
+           } //thikn that above line doubled crit damage again.
+
+           gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier; //should allow to crit without damagecalc
+
+           //   3/26/23 am unsure if this extra increment is necesary for loop should be incrementing already?
+           //checked - yes its necessary, for is looping for end condition/to break, this is a second loop
+           //that does the actual damage 
 
                 //gBattleMoveDamage = ((gBattleMons[GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)].attack) / 10 + 5) * 15 / 10;
             ++gBattleCommunication[0]; // THIS stab boost may not be right, get second opinion,
              // it may actually only boost total damage instead of individual hit
             //while I would like to use isbattlertype, this is looping the entire party, and that macro can only check battlers
         }
-        else if (beforeLoop != 0)
+        else if (beforeLoop != 0) //edited 3/26/23 think it should all work out now. ?
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
         else
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 5);
@@ -12674,7 +12688,7 @@ static void atkD8_setdamagetohealthdifference(void) //make case here for final g
 //will change the move to instead of faint attacker, reduce attaker hp to 1.
 //i.e all their energy is spent, plus it makes the move useful for power leveling.
 
-static void atkD9_scaledamagebyhealthratio(void)
+static void atkD9_scaledamagebyhealthratio(void)    //eruption
 {
     if (gDynamicBasePower == 0)
     {
@@ -14132,8 +14146,7 @@ static void atk111_rocksmashdamagecalc(void)
             || gBattleMons[gBattlerTarget].type2 != TYPE_FIGHTING)
             gDynamicBasePower = gBattleMoves[gCurrentMove].power;*/
 
-        if (gBattleMons[gBattlerTarget].type1 == TYPE_ROCK
-            || gBattleMons[gBattlerTarget].type2 == TYPE_ROCK)
+        if (IS_BATTLER_OF_TYPE(gBattlerTarget,TYPE_ROCK))
             gDynamicBasePower *= 2;
     }
     ++gBattlescriptCurrInstr;

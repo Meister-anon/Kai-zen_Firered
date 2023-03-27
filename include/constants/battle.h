@@ -166,6 +166,9 @@
 #define STATUS1_TOXIC_TURN(num)  ((num) << 18)
 #define STATUS1_PSN_ANY          (STATUS1_POISON | STATUS1_TOXIC_POISON)
 //will need to go through and review all use of this variable since I've expanded status1
+//laso cean up status definex
+
+//status1_any seeems tobe used to check all status1 but exclude toxic counter values & sleep counter
 #define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON)
 
 #define STATUS1_ENVIRONMENT_TRAP (STATUS1_FIRE_SPIN || STATUS1_WHIRLPOOL || STATUS1_SAND_TOMB || STATUS1_MAGMA_STORM)
@@ -344,12 +347,13 @@
 //#define STATUS_FIELD_WATERSPORT         0x10
 #define STATUS_FIELD_SCORCHED_TERRAIN   0x10	//make red version or new tile with scorched cracked earth appearane
 #define STATUS_FIELD_FLOODED_TERRAIN    0x20	//can use surf tile/ or edit a blue puddle into normal graphic
-#define STATUS_FIELD_GRASSY_TERRAIN     0x40	//longer grass
-#define STATUS_FIELD_MISTY_TERRAIN      0x80	//mist/haze/defog 
-#define STATUS_FIELD_ELECTRIC_TERRAIN   0x100	//sparks tag
-#define STATUS_FIELD_PSYCHIC_TERRAIN    0x200	//could surround field w hidden power orbs?
-#define STATUS_FIELD_ION_DELUGE         0x400
-#define STATUS_FIELD_FAIRY_LOCK         0x800
+#define STATUS_FIELD_OCEAN_TERRAIN      0x40	//for when surfing on ocean/deeper water /grass terrain & scorched terrain wouldn't work
+#define STATUS_FIELD_GRASSY_TERRAIN     0x80	//longer grass
+#define STATUS_FIELD_MISTY_TERRAIN      0x100	//mist/haze/defog 
+#define STATUS_FIELD_ELECTRIC_TERRAIN   0x200	//sparks tag
+#define STATUS_FIELD_PSYCHIC_TERRAIN    0x400	//could surround field w hidden power orbs?
+#define STATUS_FIELD_ION_DELUGE         0x800
+#define STATUS_FIELD_FAIRY_LOCK         0x1000
 // Overworld thunderstorm generates electric terrain //do more with this & nature power
 //may do something with counters and advantage where certain overworld terrains can't be overwritten by certain terrain effects
 //i.e scorched can't overrwrite ocean teerrain but can cancle flooded since its the opposit they cancel out, will need a seecon dus to make terrain

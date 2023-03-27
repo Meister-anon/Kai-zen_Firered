@@ -310,7 +310,7 @@
 #define VAR_RIVAL_EVO			   0x4101 //use rival starter Evolution
 #define VAR_PLAYER_STARTER		   0x4102 //use to hold player starter for rival branch evo check (pretty much just eevee)  not using right now
 #define VAR_DAYS				   0x4103
-#define VAR_TERRAIN				   0x4104
+#define VAR_TERRAIN				   0x4104	// If this var has a value, assigning a STATUS_FIELD_xx_TERRAIN to it before battle causes the battle to start with that terrain active
 
 //actually may not need since game already keeps track of player starter with the roamer check
 //so instead of really complex evo ai, I'll try to just block rival eevee from doing certain evolutions based on player starter group

@@ -2474,8 +2474,6 @@ enum
     CANCELLER_END2,
 };
 
-//learned defined need be on one line, this should be logic for thawing i.e remove frozen status
-#define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || ((gBattleMoves[gCurrentMove].type == TYPE_FIRE) && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60) && gCurrentMove != MOVE_FIRE_FANG))
 
 u8 AtkCanceller_UnableToUseMove(void)
 {
@@ -2844,7 +2842,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                         gCurrentMove = MOVE_BIDE;
                         gBattleMoves[gCurrentMove].priority = 3; //if works, second attack will go before most priority moves
                         *bideDmg = gTakenDmg[gBattlerAttacker] * 23 / 10; //not sure how it loops rn, but I believe it copies to a separate variable
-                      //  *bideDmg = gTakenDmg[gBattlerAttacker] * 2;
+                      //  *bideDmg = gTakenDmg[gBattlerAttacker] * 2;   //may go back to 2x if 2.3 is too much
                         gBattlerTarget = gTakenDmgByBattler[gBattlerAttacker];
                         if (gAbsentBattlerFlags & gBitTable[gBattlerTarget])
                             gBattlerTarget = GetMoveTarget(MOVE_BIDE, MOVE_TARGET_SELECTED + 1);
@@ -3129,7 +3127,11 @@ bool8 IsFloatingSpecies(u8 battlerId) {
 
 #define GROUNDED_GHOSTMON ((SPECIES_SPIRITOMB || SPECIES_CORSOLA_GALARIAN || SPECIES_CURSOLA || SPECIES_SANDYGAST || SPECIES_PALOSSAND || SPECIES_GOLETT || SPECIES_TREVENANT || SPECIES_MARSHADOW || SPECIES_MIMIKYU || SPECIES_MIMIKYU_BUSTED || SPECIES_SABLEYE_MEGA))
 
-bool8 IsBattlerGrounded(u8 battlerId) //important done for now, need test later
+//remember else if, makes it exclusive, it only goes to that if the if before it is false,
+//and it itself gets skipped over if its false, to the go to the next else if
+//need to comb over else if logic to make sure parses
+bool8 IsBattlerGrounded(u8 battlerId) 
+//important done for now, need test later
 //finihsed adding to type calc, so should be battle ready
 //set as type 8, instead of 32 for test build
 {
@@ -3465,6 +3467,9 @@ u8 CastformDataTypeChange(u8 battler)
 } //check to make sure cherrim form change works
 
 //order only matters as which activates first.
+//based on battle_main, function  loops through every battler
+//from fastest to slowest, checking for abilities in the order they appear here.
+//so for example  even if drought is after drizzle, if the drought mon was faster, drizzle would come after
 u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 moveArg) //still to update
 {
     u8 effect = 0;
@@ -3512,7 +3517,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         switch (caseID)
         {
         case ABILITYEFFECT_ON_SWITCHIN: // 0
-            if (gBattlerAttacker >= gBattlersCount)
+            if (gBattlerAttacker >= gBattlersCount)// this line makes it switch in I think?
                 gBattlerAttacker = battler;
             switch (gLastUsedAbility) //guessing but I think...that each abiltiy switch case is based off the ability getting logged in glastusedability 
             {
@@ -3554,7 +3559,45 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattleCommunication[MULTISTRING_CHOOSER] = GetCurrentWeather();
                     BattleScriptPushCursorAndCallback(BattleScript_OverworldWeatherStarts);
                 }
-                break;
+                break;//found logic that says order does matter it starst w FF to wrap around to 0 and thene count up. so put teerrain here
+            case ABILITYEFFECT_SWITCH_IN_TERRAIN:   //set battle terrain from map conditions/before battle
+            if (VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY)
+            {
+                u16 terrainFlags = VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY;    // only works for status flag (1 << 15)
+                gFieldStatuses = terrainFlags | STATUS_FIELD_TERRAIN_PERMANENT; // terrain is permanent
+                switch (VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY)
+                {
+                case STATUS_FIELD_ELECTRIC_TERRAIN: //set terrain for power plants
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+                    break;
+                case STATUS_FIELD_MISTY_TERRAIN:    //could set with fog, need to add fog weather, plan set certain time of day, near water
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                    break;
+                case STATUS_FIELD_GRASSY_TERRAIN:
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                    break;
+                case STATUS_FIELD_PSYCHIC_TERRAIN:
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 3;
+                    break;
+                }//for terrain auto set from world I think I don't want to have a text string letting ppl know
+                //instead it'll be something for the player to keep in mind, I'll have it explained at a
+                //trainer school or something
+
+                BattleScriptPushCursorAndCallback(BattleScript_OverworldTerrain);
+                effect++;
+            }
+            #if B_THUNDERSTORM_TERRAIN == TRUE
+            else if (GetCurrentWeather() == WEATHER_RAIN_THUNDERSTORM && !(gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
+            {//my note- plan to add in unused weather and emerald weather for realism
+                //integrate emeraald tv effect to track weather
+                // overworld weather started rain, so just do electric terrain anim
+                gFieldStatuses = (STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_TERRAIN_PERMANENT);
+                gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+                BattleScriptPushCursorAndCallback(BattleScript_OverworldTerrain);
+                effect++;
+            }
+            #endif
+            break;//hopefully can put terrain here without problems, start of weather abilities
             case ABILITY_DRIZZLE:
                 if (!(gBattleWeather & WEATHER_RAIN_PERMANENT))
                 {
@@ -3680,6 +3723,22 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     // the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
                 }
                 break;
+            case ABILITY_CLOUD_NINE:
+            case ABILITY_AIR_LOCK:
+            {
+                for (target1 = 0; target1 < gBattlersCount; ++target1)
+                {
+                    effect = CastformDataTypeChange(target1);
+                    if (effect != 0)
+                    {
+                        BattleScriptPushCursorAndCallback(BattleScript_CastformChange);
+                        gBattleScripting.battler = target1;
+                        *(&gBattleStruct->formToChangeInto) = effect - 1;
+                        break;
+                    }
+                }
+            }
+            break; //end of weather related abilities / start of terrain abilities
             case ABILITY_ELECTRIC_SURGE: //put here to occur after weather abilities
                 if (TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
                 {
@@ -3705,6 +3764,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_PsychicSurgeActivates);
+                    effect++;
+                }
+                break;
+            case ABILITY_LAVA_DISTORTION:
+                if (TryChangeBattleTerrain(battler, STATUS_FIELD_SCORCHED_TERRAIN, &gFieldTimers.terrainTimer))
+                {
+                    BattleScriptPushCursorAndCallback(BattleScript_LavaDistortionActivates);
                     effect++;
                 }
                 break;
@@ -3815,22 +3881,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                 }//now in the right place to actually activate on switch in
                 break;
-            case ABILITY_CLOUD_NINE:
-            case ABILITY_AIR_LOCK:
-                {
-                    for (target1 = 0; target1 < gBattlersCount; ++target1)
-                    {
-                        effect = CastformDataTypeChange(target1);
-                        if (effect != 0)
-                        {
-                            BattleScriptPushCursorAndCallback(BattleScript_CastformChange);
-                            gBattleScripting.battler = target1;
-                            *(&gBattleStruct->formToChangeInto) = effect - 1;
-                            break;
-                        }
-                    }
-                }
-                break;
             case ABILITY_IMPOSTER:
             if (IsBattlerAlive(BATTLE_OPPOSITE(battler))
                 && !(gBattleMons[BATTLE_OPPOSITE(battler)].status2 & (STATUS2_TRANSFORMED | STATUS2_SUBSTITUTE))
@@ -3844,7 +3894,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
-        case ABILITY_MOLD_BREAKER:
+            case ABILITY_MOLD_BREAKER:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_MOLDBREAKER;
@@ -3853,7 +3903,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
-        case ABILITY_TERAVOLT:
+            case ABILITY_TERAVOLT:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_TERAVOLT;
@@ -3862,7 +3912,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
-        case ABILITY_TURBOBLAZE:
+            case ABILITY_TURBOBLAZE:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_TURBOBLAZE;
@@ -3871,7 +3921,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
-        case ABILITY_SLOW_START:
+            case ABILITY_SLOW_START:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 gDisableStructs[battler].slowStartTimer = 3;
@@ -3900,7 +3950,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;*/
-        case ABILITY_CURIOUS_MEDICINE:
+            case ABILITY_CURIOUS_MEDICINE:
             if (!gSpecialStatuses[battler].switchInAbilityDone && IsDoubleBattle()
               && IsBattlerAlive(BATTLE_PARTNER(battler)) && TryResetBattlerStatChanges(BATTLE_PARTNER(battler)))
             {
@@ -3912,7 +3962,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
-        case ABILITY_PASTEL_VEIL:
+            case ABILITY_PASTEL_VEIL:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 gBattlerTarget = battler;
@@ -3922,7 +3972,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
             }
             break;
-        case ABILITY_COMATOSE:  //may remove, check how works and see if sleep status gets applied w icon vsonic
+            case ABILITY_COMATOSE:  //may remove, check how works and see if sleep status gets applied w icon vsonic
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
@@ -3931,7 +3981,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
-        case ABILITY_SCREEN_CLEANER:
+            case ABILITY_SCREEN_CLEANER:
             if (!gSpecialStatuses[battler].switchInAbilityDone && TryRemoveScreens(battler))
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SCREENCLEANER;
@@ -3940,7 +3990,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
-        case ABILITY_ANTICIPATION:
+            case ABILITY_ANTICIPATION:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 u32 side = GetBattlerSide(battler);
@@ -3970,7 +4020,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
             }
             break;
-        case ABILITY_FRISK:
+            case ABILITY_FRISK:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
@@ -3978,7 +4028,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             return effect; // Note: It returns effect as to not record the ability if Frisk does not activate.
-        case ABILITY_FOREWARN:
+            case ABILITY_FOREWARN:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 ForewarnChooseMove(battler);
@@ -3988,7 +4038,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
-        case ABILITY_DOWNLOAD:
+            case ABILITY_DOWNLOAD:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 u32 statId, opposingBattler;
@@ -4026,7 +4076,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
             }
             break;
-        case ABILITY_DARK_AURA:
+            case ABILITY_DARK_AURA:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_DARKAURA;
@@ -4035,7 +4085,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
-        case ABILITY_FAIRY_AURA:
+            case ABILITY_FAIRY_AURA:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FAIRYAURA;
@@ -4053,17 +4103,17 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;*/
-        case ABILITY_SCHOOLING:
+            case ABILITY_SCHOOLING:
             if (gBattleMons[battler].level < 20)
                 break;
-        case ABILITY_SHIELDS_DOWN:
+            case ABILITY_SHIELDS_DOWN:
             if (ShouldChangeFormHpBased(battler))
             {
                 BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
                 effect++;
             }
             break;
-        case ABILITY_INTREPID_SWORD:
+            case ABILITY_INTREPID_SWORD:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
@@ -4072,7 +4122,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
-        case ABILITY_DAUNTLESS_SHIELD:
+            case ABILITY_DAUNTLESS_SHIELD:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
@@ -4081,7 +4131,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
-        case ABILITY_MIMICRY:
+            case ABILITY_MIMICRY:
             if (gBattleMons[battler].hp != 0 && gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
             {
                 TryToApplyMimicry(battler, FALSE);
@@ -4089,46 +4139,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         }
-        break;
-            
-        //because I plan to change terrain gonna comment this out for now
-            //will prob do in another place in the code instead.
-        case ABILITYEFFECT_SWITCH_IN_TERRAIN:   //set terrain from map conditions
-            if (VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY)
-            {
-                u16 terrainFlags = VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY;    // only works for status flag (1 << 15)
-                gFieldStatuses = terrainFlags | STATUS_FIELD_TERRAIN_PERMANENT; // terrain is permanent
-                switch (VarGet(VAR_TERRAIN) & STATUS_FIELD_TERRAIN_ANY)
-                {
-                case STATUS_FIELD_ELECTRIC_TERRAIN:
-                    gBattleCommunication[MULTISTRING_CHOOSER] = 2;
-                    break;
-                case STATUS_FIELD_MISTY_TERRAIN:
-                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-                    break;
-                case STATUS_FIELD_GRASSY_TERRAIN:
-                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
-                    break;
-                case STATUS_FIELD_PSYCHIC_TERRAIN:
-                    gBattleCommunication[MULTISTRING_CHOOSER] = 3;
-                    break;
-                }
-
-                BattleScriptPushCursorAndCallback(BattleScript_OverworldTerrain);
-                effect++;
-            }
-            #if B_THUNDERSTORM_TERRAIN == TRUE
-            else if (GetCurrentWeather() == WEATHER_RAIN_THUNDERSTORM && !(gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
-            {//my note- plan to add in unused weather and emerald weather for realism
-                //integrate emeraald tv effect to track weather
-                // overworld weather started rain, so just do electric terrain anim
-                gFieldStatuses = (STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_TERRAIN_PERMANENT);
-                gBattleCommunication[MULTISTRING_CHOOSER] = 2;
-                BattleScriptPushCursorAndCallback(BattleScript_OverworldTerrain);
-                effect++;
-            }
-            #endif
-            break;
+        break;        
         case ABILITYEFFECT_ENDTURN: // 1
             if (gBattleMons[battler].hp != 0)
             {
@@ -4140,7 +4151,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                      && gBattleMons[battler].maxHP > gBattleMons[battler].hp
                         && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
                     {
-                        gLastUsedAbility = ABILITY_RAIN_DISH; // why
+                        //gLastUsedAbility = ABILITY_RAIN_DISH; // why -_-  ?chcked emerald and is correct this is unnecessary
                         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 12;    //could buff?  did buff wass 16
                         if (gBattleMoveDamage == 0)
@@ -4154,7 +4165,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         && gBattleMons[battler].maxHP > gBattleMons[battler].hp
                         && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
                     {
-                        gLastUsedAbility = ABILITY_PHOTOSYNTHESIZE; 
+                        //gLastUsedAbility = ABILITY_PHOTOSYNTHESIZE; 
                         BattleScriptPushCursorAndCallback(BattleScript_AbilityHpHeal);  //can use same script //but have another from updates
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 12; //buffed all weather abilities now heal 1/12
                         if (gBattleMoveDamage == 0)
@@ -4163,12 +4174,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         ++effect;
                     }
                     break;
+                case ABILITY_GLACIAL_ICE:
                 case ABILITY_ICE_BODY:
                     if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)
                         && gBattleMons[battler].maxHP > gBattleMons[battler].hp
                         && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
                     {
-                        gLastUsedAbility = ABILITY_ICE_BODY;
+                        //gLastUsedAbility = ABILITY_ICE_BODY; //without this line can use same block for multiple abilities
                         BattleScriptPushCursorAndCallback(BattleScript_AbilityHpHeal);  //can use same script //but have another from updates
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 12;  //buffed all weather abilities now heal 1/12
                         if (gBattleMoveDamage == 0)
@@ -4177,7 +4189,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         ++effect;
                     }
                     break;
-                case ABILITY_SHED_SKIN:
+                case ABILITY_SHED_SKIN: //don't need to make switch in effect, it activates before status dmg
                     if ((gBattleMons[battler].status1 & STATUS1_ANY) && (Random() % 3) == 0)
                     {
                         if (gBattleMons[battler].status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON))
@@ -4217,7 +4229,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     //so will need a case by case clear but can't use switch statement
                     //at end set special status that defeatist has been activated
                 case ABILITY_DEFEATIST:
-                    if (gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 2))
+                    if (gBattleMons[battler].hp < (gBattleMons[battler].maxHP / 2))
                     {
                         u16 speed = gBattleMons[battler].speed; 
                         if (gSpecialStatuses[battler].defeatistActivates != 1)
@@ -4508,8 +4520,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
             }
             break;
-        case ABILITYEFFECT_ABSORBING: // 3
-            if (moveArg)
+        case ABILITYEFFECT_ABSORBING: // 3  //make absorb moves, change target  to mon with absorbing ability
+            if (moveArg)    //if said mon isn't statused  if just use status1 can check for all status1 but status1 & staus1_any is stil used in most cases..
             {
                 u8 statId;
                 switch (gLastUsedAbility)
@@ -4523,6 +4535,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     if (moveType == TYPE_WATER)
                         effect = 1;
                     break;
+                case ABILITY_GLACIAL_ICE:
+                    if (moveType == TYPE_ICE)
+                        effect = 1;
                 case ABILITY_MOTOR_DRIVE:
                     if (moveType == TYPE_ELECTRIC)
                         effect = 2, statId = STAT_SPEED;
@@ -4539,6 +4554,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     if (moveType == TYPE_GRASS)
                         effect = 2, statId = STAT_ATK;
                     break;
+                case ABILITY_LAVA_DISTORTION:
                 case ABILITY_FLASH_FIRE:
                     if (moveType == TYPE_FIRE && !((gBattleMons[battler].status1 & STATUS1_FREEZE)))// && B_FLASH_FIRE_FROZEN <= GEN_4))
                     {
@@ -4565,7 +4581,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         }
                     }
                     break;
-                }
+                
+                } //end of abilities,  start of effect logic
 
                 if (effect == 1) // Drain Hp ability.
                 {
@@ -4598,7 +4615,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         else
                             gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
                     }
-                    else
+                    else //ok these are actually new, in gen 3 even though lightning-rod existed it didn't stat boost
                     {
                         if (gProtectStructs[gBattlerAttacker].notFirstStrike)
                             gBattlescriptCurrInstr = BattleScript_MoveStatDrain;
