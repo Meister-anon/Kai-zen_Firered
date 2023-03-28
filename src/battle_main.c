@@ -175,7 +175,7 @@ EWRAM_DATA const u8 *gSelectionBattleScripts[MAX_BATTLERS_COUNT] = {NULL};
 EWRAM_DATA u16 gLastPrintedMoves[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gLastMoves[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gLastLandedMoves[MAX_BATTLERS_COUNT] = {0};
-EWRAM_DATA u16 gLastHitByType[MAX_BATTLERS_COUNT] = {0};
+EWRAM_DATA u16 gLastHitByType[MAX_BATTLERS_COUNT] = {0};    //may need to add last hit by move for fly cancel?
 EWRAM_DATA u16 gLastResultingMoves[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gLockedMoves[MAX_BATTLERS_COUNT] = {0};
 //EWRAM_DATA u16 gLastUsedMove = 0; //still unsure if I need to add this or can just use gLastResultingMoves which seems to be equivalent
@@ -3379,6 +3379,9 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
      || gBattleMons[gActiveBattler].ability == ABILITY_RUN_AWAY
      || holdEffect == HOLD_EFFECT_SHED_SHELL)
         return BATTLE_RUN_SUCCESS;
+    else if (gBattleMons[gActiveBattler].ability == ABILITY_DEFEATIST
+        && gSpecialStatuses[gActiveBattler].defeatistActivated)    //set it so if ability has activated, and mon still has ability can run
+        return BATTLE_RUN_SUCCESS;
     side = GetBattlerSide(gActiveBattler);
     for (i = 0; i < gBattlersCount; ++i)
     {
@@ -4902,12 +4905,21 @@ s8 GetChosenMovePriority(u8 battlerId) //made u8 (in test build)
     return GetMovePriority(battlerId, move);
 }
 
+#define PRIORITY_EFFECTS
+
 s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing I needed to make nuisance work (facepalm)
 { //adjusted battlerId made u8,
     s8 priority;
 
 
     priority = gBattleMoves[move].priority;
+    //if gBattleMoves[move].flags == FLAG_DMG_2X_IN_AIR & target is STATUS3_ON_AIR increment priority (gStatuses3[battler] & STATUS3_SKY_DROPPED)
+    if (gBattleMoves[move].flags == FLAG_DMG_2X_IN_AIR
+        && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+    {
+        priority++;
+    }//that's good, just need to figure how to set grounded if by 2x flag move while in air
+
     if (GetBattlerAbility(battlerId) == ABILITY_GALE_WINGS
         && gBattleMoves[move].type == TYPE_FLYING)
     {

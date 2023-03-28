@@ -658,6 +658,7 @@ static const u8 sText_PowderExplodes[] = _("When the flame touched the powder\no
 static const u8 sText_BelchCantUse[] = _("Belch cannot be used!\p");
 static const u8 sText_SpectralThiefSteal[] = _("{B_ATK_NAME_WITH_PREFIX} stole the target's\nboosted stats!");
 static const u8 sText_GravityGrounding[] = _("{B_DEF_NAME_WITH_PREFIX} can't stay airborne\nbecause of gravity!");
+static const u8 sText_FlyingEnemyCrashedDown[] = _("{B_DEF_NAME_WITH_PREFIX} crashed\nto the ground!");
 static const u8 sText_MistyTerrainPreventsStatus[] = _("{B_DEF_NAME_WITH_PREFIX} surrounds itself\nwith a protective mist!");
 static const u8 sText_GrassyTerrainHeals[] = _("{B_ATK_NAME_WITH_PREFIX} is healed\nby the grassy terrain!");
 static const u8 sText_ElectricTerrainPreventsSleep[] = _("{B_DEF_NAME_WITH_PREFIX} surrounds itself\nwith electrified terrain!");
@@ -1375,6 +1376,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_TERRAINBECOMESFIRE - BATTLESTRINGS_TABLE_START]            = sText_TerrainBecomesScorched,
     [STRINGID_TERRAINBECOMESWATER - BATTLESTRINGS_TABLE_START]           = sText_TerrainBecomesFlooded,
     [STRINGID_TERRAINBECOMESDEEPWATER - BATTLESTRINGS_TABLE_START]       = sText_TerrainBecomesOceanic,
+    [STRINGID_CRASHEDTOTHEGROUND - BATTLESTRINGS_TABLE_START]           = sText_FlyingEnemyCrashedDown,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,

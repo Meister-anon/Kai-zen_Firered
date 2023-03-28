@@ -43,7 +43,7 @@
 #define EFFECT_RAZOR_WIND 39
 #define EFFECT_SUPER_FANG 40
 #define EFFECT_DRAGON_RAGE 41
-#define EFFECT_TRAP 42	//keep for bind & wrap, need separate whirlpool effects
+#define EFFECT_TRAP 42	//keep for bind & wrap, need separate whirlpool effects & check how i have effects implemented this also effects move_thunder_cage a regi eleki exclusive
 #define EFFECT_HIGH_CRITICAL 43
 #define EFFECT_DOUBLE_HIT 44
 #define EFFECT_RECOIL_IF_MISS 45

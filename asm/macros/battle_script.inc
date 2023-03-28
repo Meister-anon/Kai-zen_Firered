@@ -1684,6 +1684,10 @@
 	.macro bringdownairbornebattler battler:req
 	various \battler, VARIOUS_GRAVITY_ON_AIRBORNE_MONS
 	.endm
+	
+	.macro groundonairbattlerwithoutgravity battler:req
+	various \battler, VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG
+	.endm
 
 	.macro checkgrassyterrainheal battler:req, ptr:req
 	various \battler, VARIOUS_CHECK_IF_GRASSY_TERRAIN_HEALS

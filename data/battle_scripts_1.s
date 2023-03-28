@@ -2350,7 +2350,10 @@ BattleScript_HitFromAtkAnimation::
 	attackanimation
 	waitanimation
 	effectivenesssound
+	groundonairbattlerwithoutgravity BS_TARGET	@put here becuz should make target visible, shuold work for evrthing
 	hitanimation BS_TARGET
+	printstring STRINGID_CRASHEDTOTHEGROUND @crashed to the ground
+	waitmessage 0x20	@made shorter as Im adding extra text
 	waitstate
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET

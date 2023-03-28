@@ -223,6 +223,7 @@
 #define VARIOUS_SAVE_BATTLER_ITEM                   148
 #define VARIOUS_RESTORE_BATTLER_ITEM                149
 #define VARIOUS_BATTLER_ITEM_TO_LAST_USED_ITEM      150
+#define VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG      151	//new bs command  to ground flying targets if hit by my w flag 2xdmg on air
 
 // atk80, dmg manipulation
 #define ATK80_DMG_CHANGE_SIGN                               0

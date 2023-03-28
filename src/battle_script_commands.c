@@ -1554,7 +1554,7 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         JumpIfMoveFailed(7, move);
         return TRUE;
-    }
+    }//emereald doesn't include FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING in this
 
     if ((!IsBattlerGrounded(gBattlerTarget) || IS_BATTLER_OF_TYPE(gBattlerTarget,TYPE_GHOST)) && (gBattleMoves[move].effect == (GROUND_TRAPS)))
     {
@@ -7951,6 +7951,8 @@ static u32 GetHighestStatId(u32 battlerId)
     return highestId;
 }
 
+#define VARIOUS_BS_COMMANDS
+
 static void atk76_various(void) //will need to add all these emerald various commands to the inc...
 {                   //will also need to go through all the new stuff and make sure any
     //functions they relay on have already been ported. THen do the inc stuff.
@@ -9029,6 +9031,15 @@ static void atk76_various(void) //will need to add all these emerald various com
             CancelMultiTurnMoves(gActiveBattler);
 
         gStatuses3[gActiveBattler] &= ~(STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS | STATUS3_ON_AIR);
+        break;
+    case VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG:    //uses gactivebattler sets actually target in bs script
+        if (gBattleMons[gCurrentMove].flags == FLAG_DMG_2X_IN_AIR && gStatuses3[gActiveBattler] & STATUS3_ON_AIR)
+        {
+            CancelMultiTurnMoves(gActiveBattler);
+            gSprites[gBattlerSpriteIds[gActiveBattler]].invisible = FALSE;
+            //gStatuses3[gActiveBattler] &= ~(STATUS3_ON_AIR); // doesn't need this part handled in cancelmultiturn
+            gStatuses3[gActiveBattler] |= STATUS3_SMACKED_DOWN;
+        }//NEW bs for 
         break;
     /*case VARIOUS_HANDLE_TRAINER_SLIDE_MSG:
         if (gBattlescriptCurrInstr[3] == 0)
@@ -13949,10 +13960,43 @@ static void atk105_trainerslideout(void) {
     gBattlescriptCurrInstr += 2;
 }
 
+static const u16 sTelekinesisBanList[] =
+{
+    SPECIES_DIGLETT,
+    SPECIES_DUGTRIO,
+    SPECIES_DIGLETT_ALOLAN,
+    SPECIES_DUGTRIO_ALOLAN,
+    SPECIES_SANDYGAST,
+    SPECIES_PALOSSAND,
+    SPECIES_GENGAR_MEGA,
+};
+
+bool32 IsTelekinesisBannedSpecies(u16 species)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sTelekinesisBanList); i++)
+    {
+        if (species == sTelekinesisBanList[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+
 static void atk106_settelekinesis(void) {
-    if (gStatuses3[gBattlerTarget] & (STATUS3_TELEKINESIS | STATUS3_ROOTED | STATUS3_SMACKED_DOWN)
+
+    if (gStatuses3[gBattlerTarget] & (STATUS3_SMACKED_DOWN)
+        && !IsTelekinesisBannedSpecies(gBattleMons[gBattlerTarget].species))
+    {
+        gStatuses3[gBattlerTarget] &= ~(STATUS3_SMACKED_DOWN);
+        gStatuses3[gBattlerTarget] |= STATUS3_TELEKINESIS;
+        gDisableStructs[gBattlerTarget].telekinesisTimer = 3;
+        gBattlescriptCurrInstr += 5;
+    }
+
+    if (gStatuses3[gBattlerTarget] & (STATUS3_TELEKINESIS | STATUS3_ROOTED)
         || gFieldStatuses & STATUS_FIELD_GRAVITY
-        || (gBattleMons[gBattlerTarget].species == SPECIES_DIGLETT || gBattleMons[gBattlerTarget].species == SPECIES_DUGTRIO))
+        || IsTelekinesisBannedSpecies(gBattleMons[gBattlerTarget].species))
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }

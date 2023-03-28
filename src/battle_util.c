@@ -657,7 +657,7 @@ void CancelMultiTurnMoves(u8 battler)
     gBattleMons[battler].status2 &= ~(STATUS2_LOCK_CONFUSE);
     gBattleMons[battler].status2 &= ~(STATUS2_UPROAR);
     gBattleMons[battler].status2 &= ~(STATUS2_BIDE);
-    gStatuses3[battler] &= ~(STATUS3_SEMI_INVULNERABLE);
+    gStatuses3[battler] &= ~(STATUS3_SEMI_INVULNERABLE); //this will reemove on air status & fly
 
     // Clear battler's semi-invulnerable bits if they are not held by Sky Drop.
     if (!(gStatuses3[battler] & STATUS3_SKY_DROPPED))
@@ -671,9 +671,11 @@ void CancelMultiTurnMoves(u8 battler)
         
         // Clears sky_dropped and on_air statuses
         gStatuses3[otherSkyDropper] &= ~(STATUS3_SKY_DROPPED | STATUS3_ON_AIR);
+        //if status on air and last hit by move with flag 2x damage on air cancel on air status 
+        //to cancel fly and set grounded
         
         // Makes both attacker and target's sprites visible
-        gSprites[gBattlerSpriteIds[battler]].invisible = FALSE;
+        gSprites[gBattlerSpriteIds[battler]].invisible = FALSE; //addeed to grounded command in case its needed to cnacel fly
         gSprites[gBattlerSpriteIds[otherSkyDropper]].invisible = FALSE;
         
         // If target was sky dropped in the middle of Outrage/Thrash/Petal Dance,
@@ -2627,7 +2629,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
-        case CANCELLER_GRAVITY:
+        case CANCELLER_GRAVITY: //ok this is what I want for fly chaneg I think?
             if (gFieldStatuses & STATUS_FIELD_GRAVITY && IsGravityPreventingMove(gCurrentMove))
             {
                 gProtectStructs[gBattlerAttacker].usedGravityPreventedMove = TRUE;
@@ -4232,7 +4234,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     if (gBattleMons[battler].hp < (gBattleMons[battler].maxHP / 2))
                     {
                         u16 speed = gBattleMons[battler].speed; 
-                        if (gSpecialStatuses[battler].defeatistActivates != 1)
+                        if (gSpecialStatuses[battler].defeatistActivated != 1)
                         {
                             
                             if (gBattleMons[battler].statStages[STAT_ATK] > 0)
@@ -4272,6 +4274,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             if (cant escape)
                             {
                                 //remove statuses that prevent escape
+                                gStatuses3[gBattlerTarget] &= ~(STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS | STATUS3_ON_AIR);
+                                //template for status removal
+                                //rather than an conditional can just blanket remove every possible status that prevents escape
                             }
                             /*if (gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION) 
                         || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
@@ -4289,7 +4294,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     {
                         BtlController_EmitChoosePokemon(0, ((i - 1) << 4) | PARTY_ACTION_ABILITY_PREVENTS, 6, gLastUsedAbility, gBattleStruct->battlerPartyOrders[gActiveBattler]);
                     }*/
-                            gSpecialStatuses[battler].defeatistActivates = 1;                            
+                            gSpecialStatuses[battler].defeatistActivated = 1;                            
                             ++effect;
                         }
                     }
@@ -7922,6 +7927,9 @@ u32 GetBattleMoveSplit(u32 moveId)
 bool32 CanBattlerEscape(u32 battlerId) // no ability check
 {
     if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_SHED_SHELL)
+        return TRUE;
+    else if (gBattleMons[gActiveBattler].ability == ABILITY_DEFEATIST
+        && gSpecialStatuses[gActiveBattler].defeatistActivated)
         return TRUE;
     else if ((!IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && gBattleMons[battlerId].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))
         return FALSE;

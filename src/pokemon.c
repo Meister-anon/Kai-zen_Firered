@@ -3217,6 +3217,8 @@ static bool32 CanEvolve(u32 species) //default use for eviolite but will also us
     (var) /= (gStatStageRatios)[(mon)->statStages[(statIndex)]][1];                 \
 }
 
+#define STAT_AND_DAMAGE_ABILITIES_ETC
+
 // seems this is the equivalent of emerald's CalcDefenseStat function
 // actually can put calcmovebasepower aft mod in here too, to set up those abilities.
 s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *defender, u32 move, u16 sideStatus, u16 powerOverride, u8 typeOverride, u8 battlerIdAtk, u8 battlerIdDef)
@@ -3395,6 +3397,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                 gSpecialStatuses[battlerIdDef].berryReduced = TRUE;
         }
     }
+
 
     /*if (defender->ability == ABILITY_THICK_FAT && (type == TYPE_FIRE || type == TYPE_ICE))
         spAttack /= 2;*/    //removed this version as it only blocked special moves not physical moves too, more efficient
