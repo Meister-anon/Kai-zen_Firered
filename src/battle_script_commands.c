@@ -5862,6 +5862,7 @@ static void atk4D_switchindataupdate(void)  //important, think can use THIS to m
         }
         gBattleMons[gActiveBattler].type1 = gBaseStats[gBattleMons[gActiveBattler].species].type1;
         gBattleMons[gActiveBattler].type2 = gBaseStats[gBattleMons[gActiveBattler].species].type2;
+        gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
         gBattleMons[gActiveBattler].ability = GetAbilityBySpecies(gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].abilityNum);
         // check knocked off item
         i = GetBattlerSide(gActiveBattler);

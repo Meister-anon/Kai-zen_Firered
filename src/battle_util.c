@@ -4140,8 +4140,45 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
+            case ABILITY_DEFEATIST:
+                if (gBattleMons[battler].hp < (gBattleMons[battler].maxHP / 2))
+                {
+                    u16 speed = gBattleMons[battler].speed;
+                    if (gSpecialStatuses[battler].defeatistActivated != 1)
+                    {
+
+                        if (gBattleMons[battler].statStages[STAT_ATK] > 0)
+                        {
+                            gBattleMons[battler].statStages[STAT_ATK] -= 2;    //should lower stat by 2 i.e 50% 
+                            if (gBattleMons[battler].statStages[STAT_ATK] < 0)
+                                gBattleMons[battler].statStages[STAT_ATK] = 0;
+                            gBattleScripting.animArg1 = 0x11;
+                            gBattleScripting.animArg2 = 0;
+                            gBattleScripting.battler = battler;
+                        }
+                        if (gBattleMons[battler].statStages[STAT_SPATK] > 0)
+                        {
+                            gBattleMons[battler].statStages[STAT_SPATK] -= 2;    //should lower stat by 2 i.e 50% 
+                            if (gBattleMons[battler].statStages[STAT_SPATK] < 0)
+                                gBattleMons[battler].statStages[STAT_SPATK] = 0;
+                            gBattleScripting.animArg1 = 0x11;
+                            gBattleScripting.animArg2 = 0;
+                            gBattleScripting.battler = battler;
+                        }
+                        speed *= 2; //should double effective speed without changing stat
+
+                        BattleScriptPushCursorAndCallback(BattleScript_DefeatistActivates);
+                        gBattleScripting.battler = battler; //something new for defeatist activation
+                        //buff lost the will to fight, and is ready to run!
+
+
+                        gSpecialStatuses[battler].defeatistActivated = 1;
+                        ++effect;
+                    }
+                }
+                break;
         }
-        break;        
+        break;  //end of switch-in abilities
         case ABILITYEFFECT_ENDTURN: // 1
             if (gBattleMons[battler].hp != 0)
             {
@@ -4153,7 +4190,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                      && gBattleMons[battler].maxHP > gBattleMons[battler].hp
                         && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
                     {
-                        //gLastUsedAbility = ABILITY_RAIN_DISH; // why -_-  ?chcked emerald and is correct this is unnecessary
+                        //gLastUsedAbility = ABILITY_RAIN_DISH; // why -_-  ?chcked emerald, and was correct this is unnecessary
                         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 12;    //could buff?  did buff wass 16
                         if (gBattleMoveDamage == 0)
@@ -4230,7 +4267,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     //make sure to not include normal statuses that don't effect switching
                     //so will need a case by case clear but can't use switch statement
                     //at end set special status that defeatist has been activated
-                case ABILITY_DEFEATIST:
+                case ABILITY_DEFEATIST:     //end turn pasting in switch in above to complete ability
                     if (gBattleMons[battler].hp < (gBattleMons[battler].maxHP / 2))
                     {
                         u16 speed = gBattleMons[battler].speed; 
@@ -4257,43 +4294,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             }                         
                             speed *= 2; //should double effective speed without changing stat
                             
-                            BattleScriptPushCursorAndCallback(BattleScript_SpeedBoostActivates);
+                            BattleScriptPushCursorAndCallback(BattleScript_DefeatistActivates);
                             gBattleScripting.battler = battler; //something new for defeatist activation
-                            //buff lost the will to fight, and wants to run!
+                            //buff lost the will to fight, and is ready to run!
 
 
-                            /*if (gBattleMons[battler].statStages[STAT_SPEED] < 0xC) //can't do stat staege if swapping stats insted do lie hueg poewr
-                            {
-                                ++gBattleMons[battler].statStages[STAT_SPEED];
-                                ++gBattleMons[battler].statStages[STAT_SPEED];
-                                gBattleScripting.animArg1 = 0x11;
-                                gBattleScripting.animArg2 = 0;
-                                BattleScriptPushCursorAndCallback(BattleScript_SpeedBoostActivates);
-                                gBattleScripting.battler = battler; //something new for defeatist activation
-                            }*/
-                            if (cant escape)
-                            {
-                                //remove statuses that prevent escape
-                                gStatuses3[gBattlerTarget] &= ~(STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS | STATUS3_ON_AIR);
-                                //template for status removal
-                                //rather than an conditional can just blanket remove every possible status that prevents escape
-                            }
-                            /*if (gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION) 
-                        || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
-                        || (gBattleMons[gActiveBattler].status1 & (ITS_A_TRAP_STATUS1)) 
-                        || (gStatuses4[gActiveBattler] & (ITS_A_TRAP_STATUS4))) //hope this works...
-                    {
-                        BtlController_EmitChoosePokemon(0, PARTY_ACTION_CANT_SWITCH, 6, ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
-                    }
-                    else if ((i = ABILITY_ON_OPPOSING_FIELD(gActiveBattler, ABILITY_SHADOW_TAG))
-                          &&  !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
-                          || ((i = ABILITY_ON_OPPOSING_FIELD(gActiveBattler, ABILITY_ARENA_TRAP))
-                              && IsBattlerGrounded(gActiveBattler))
-                          || ((i = AbilityBattleEffects(ABILITYEFFECT_CHECK_FIELD_EXCEPT_BATTLER, gActiveBattler, ABILITY_MAGNET_PULL, 0, 0))
-                              && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL)))
-                    {
-                        BtlController_EmitChoosePokemon(0, ((i - 1) << 4) | PARTY_ACTION_ABILITY_PREVENTS, 6, gLastUsedAbility, gBattleStruct->battlerPartyOrders[gActiveBattler]);
-                    }*/
                             gSpecialStatuses[battler].defeatistActivated = 1;                            
                             ++effect;
                         }

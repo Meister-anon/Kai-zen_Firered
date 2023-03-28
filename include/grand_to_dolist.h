@@ -32,9 +32,11 @@ each thing should be checked off when done
 * then that would just leave trap effects to remove then do hp drop
 * realize I can bypass that by using emergency exit effect, as that gaurantees switch/does force switch
 * for simplicity sake will skip the hp drop I was planning to do if statused with traps or escape prevention
-* -escape prevention done need to setup guaranteed switch and add to switch in effects 
+* -escape prevention done need to setup guaranteed switch ALLOWANCE DONE and need add to switch in effects 
+* -Setup Done need test but done for now
 * 
-* set wild double battles, and allow catching both mon
+* 
+* Set wild double battles, and allow catching both mon
 * cleanest way is to store both mons data for the pokedex beforehand
 * and clear whoever dies.
 * Then at end of battle do pokedex entries for both, make it loop
@@ -42,6 +44,14 @@ each thing should be checked off when done
 * to value or var used for speciees data zero out value if mon dies
 * then have pokedex loop through functions baseed on var/value if they aren't 0
 * -Progress-
+*/
+
+goto EVOLUTION_LOGIC
+/*  want battle evolution for player and opponenet for enemy need to work out how to give them exp.
+* after they have exp need set function to make it feel real that they would level up i.e they aren't starting from 0.
+* for that make random function that would get their needed exp to level and then random divide that by either 2, 3, or 4 to increase their chance of lvl in battle.
+* player can use this and the above function to evolve, but enemy needs a specific one, that won't take out of battle, make it so if they can evolve they will. 
+* use CFRU mega evolve animation for opponent. -
 * 
 * Check if time works, add clocks to fire red setup hourly
 * daily, weekly, Monthly time based events.
@@ -84,5 +94,12 @@ goto GROUNDED_GHOSTMON //battle_util.c grounded logic, also right below floating
 * I think I want to also make it removed by fly and possibly several other flying moves
 * as well as using telekinesis again.
 */
+
+goto RUN_LOGIC_PT1 //battle_main.c 1st area that deals with running logic
+
+goto RUN_LOGIC_PT2 //last part for setting up run based effects battle_main.c
+
+goto TURN_ACTIONS_SWITCH_ETC // battle_main.c  HandleTurnActionSelectionState function deaels with logic  for turn actions i.e switching catching using moves etc.
+
 
 #endif //GUARD_GRAND_TO_DOLIST_H

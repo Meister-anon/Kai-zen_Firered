@@ -689,6 +689,7 @@ static const u8 sText_CloakedInAFreezingLight[] = _("{B_ATK_NAME_WITH_PREFIX} be
 static const u8 sText_StatWasNotLowered[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\nwas not lowered!");
 static const u8 sText_AuraFlaredToLife[] = _("{B_DEF_NAME_WITH_PREFIX}'s aura flared to life!");
 static const u8 sText_AirLockActivates[] = _("The effects of weather\ndisappeared.");
+static const u8 sText_DefeatistActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} lost the will to fight\nand is ready to run!");
 static const u8 sText_PressureActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is exerting its\npressure!");
 static const u8 sText_DarkAuraActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating\na dark aura!");
 static const u8 sText_FairyAuraActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating\na fairy aura!");
@@ -1377,6 +1378,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_TERRAINBECOMESWATER - BATTLESTRINGS_TABLE_START]           = sText_TerrainBecomesFlooded,
     [STRINGID_TERRAINBECOMESDEEPWATER - BATTLESTRINGS_TABLE_START]       = sText_TerrainBecomesOceanic,
     [STRINGID_CRASHEDTOTHEGROUND - BATTLESTRINGS_TABLE_START]           = sText_FlyingEnemyCrashedDown,
+    [STRINGID_DEFEATISTACTIVATED - BATTLESTRINGS_TABLE_START]           = sText_DefeatistActivates,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,

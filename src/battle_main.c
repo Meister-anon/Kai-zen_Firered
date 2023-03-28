@@ -3363,6 +3363,7 @@ void BattleTurnPassed(void)
     gRandomTurnNumber = Random();
 }
 
+#define RUN_LOGIC_PT1
 u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing escape  put logic in here.
 {
     u8 holdEffect;
@@ -3471,6 +3472,8 @@ enum
     STATE_WAIT_SET_BEFORE_ACTION,
 };
 
+#define TURN_ACTIONS_SWITCH_ETC
+
 static void HandleTurnActionSelectionState(void) //think need add case for my swith action
 {
     s32 i;
@@ -3577,6 +3580,17 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                         || (gBattleMons[gActiveBattler].status1 & (ITS_A_TRAP_STATUS1)) 
                         || (gStatuses4[gActiveBattler] & (ITS_A_TRAP_STATUS4))) //hope this works...
                     {
+                        if (gBattleMons[gActiveBattler].ability == ABILITY_DEFEATIST
+                            && gSpecialStatuses[gActiveBattler].defeatistActivated) //overwrite usual switch preveention from status & traps
+                        {
+                            if (gActiveBattler == 2 && gChosenActionByBattler[0] == B_ACTION_SWITCH)
+                                BtlController_EmitChoosePokemon(0, PARTY_ACTION_CHOOSE_MON, *(gBattleStruct->monToSwitchIntoId + 0), ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
+                            else if (gActiveBattler == 3 && gChosenActionByBattler[1] == B_ACTION_SWITCH)
+                                BtlController_EmitChoosePokemon(0, PARTY_ACTION_CHOOSE_MON, *(gBattleStruct->monToSwitchIntoId + 1), ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
+                            else
+                                BtlController_EmitChoosePokemon(0, PARTY_ACTION_CHOOSE_MON, 6, ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
+                        }
+                        else
                         BtlController_EmitChoosePokemon(0, PARTY_ACTION_CANT_SWITCH, 6, ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
                     }
                     else if ((i = ABILITY_ON_OPPOSING_FIELD(gActiveBattler, ABILITY_SHADOW_TAG))
@@ -3587,6 +3601,17 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                           || ((i = AbilityBattleEffects(ABILITYEFFECT_CHECK_FIELD_EXCEPT_BATTLER, gActiveBattler, ABILITY_MAGNET_PULL, 0, 0))
                               && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL)))
                     {
+                         if (gBattleMons[gActiveBattler].ability == ABILITY_DEFEATIST
+                            && gSpecialStatuses[gActiveBattler].defeatistActivated) //overwrite usual switch preveention from ability
+                         {
+                            if (gActiveBattler == 2 && gChosenActionByBattler[0] == B_ACTION_SWITCH)
+                                BtlController_EmitChoosePokemon(0, PARTY_ACTION_CHOOSE_MON, *(gBattleStruct->monToSwitchIntoId + 0), ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
+                            else if (gActiveBattler == 3 && gChosenActionByBattler[1] == B_ACTION_SWITCH)
+                                BtlController_EmitChoosePokemon(0, PARTY_ACTION_CHOOSE_MON, *(gBattleStruct->monToSwitchIntoId + 1), ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
+                            else
+                                BtlController_EmitChoosePokemon(0, PARTY_ACTION_CHOOSE_MON, 6, ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
+                         }
+                        else
                         BtlController_EmitChoosePokemon(0, ((i - 1) << 4) | PARTY_ACTION_ABILITY_PREVENTS, 6, gLastUsedAbility, gBattleStruct->battlerPartyOrders[gActiveBattler]);
                     }
                     else //can switch
@@ -4280,6 +4305,8 @@ static void FreeResetData_ReturnToOvOrDoEvolutions(void) //  this causes end bat
     }
 }
 
+#define EVOLUTION_LOGIC
+
 static void TryEvolvePokemon(void) //want battle evolution for player and opponenet for enemy need to work out how to give them exp.
 { //     after they have exp need set function to make it feel real that they would level up i.e they aren't starting from 0.
     s32 i; //  for that make random function that would get their needed exp to level and then random divide that by either 2, 3, or 4 to increase their chance of lvl in battle.
@@ -4644,6 +4671,7 @@ static void HandleAction_UseItem(void)
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 }
 
+#define RUN_LOGIC_PT2
 bool8 TryRunFromBattle(u8 battler)
 {
     bool8 effect = FALSE;
@@ -4664,6 +4692,13 @@ bool8 TryRunFromBattle(u8 battler)
     else if (gBattleMons[battler].ability == ABILITY_RUN_AWAY)
     {
         gLastUsedAbility = ABILITY_RUN_AWAY;
+        gProtectStructs[battler].fleeFlag = 2;
+        ++effect;
+    }
+    else if (gBattleMons[gActiveBattler].ability == ABILITY_DEFEATIST
+        && gSpecialStatuses[gActiveBattler].defeatistActivated)
+    {
+        gLastUsedAbility = ABILITY_DEFEATIST;
         gProtectStructs[battler].fleeFlag = 2;
         ++effect;
     }

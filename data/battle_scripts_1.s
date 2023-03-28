@@ -7007,6 +7007,12 @@ BattleScript_SpeedBoostActivates::
 	waitmessage 0x40
 	end3
 
+BattleScript_DefeatistActivates::	@CHECK may need to customizee buff anim that plays
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printstring STRINGID_DEFEATISTACTIVATED
+	waitmessage 0x40
+	end3
+
 @ Cant compare directly to a value, have to compare to value at pointer
 sZero:
 .byte 0
