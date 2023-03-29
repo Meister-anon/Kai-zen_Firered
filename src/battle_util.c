@@ -2842,7 +2842,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                     if (gTakenDmg[gBattlerAttacker])  //if taken dmg not 0?
                     {
                         gCurrentMove = MOVE_BIDE;
-                        gBattleMoves[gCurrentMove].priority = 3; //if works, second attack will go before most priority moves
+                        //gBattleMoves[gCurrentMove].priority = 3; //if works, second attack will go before most priority moves
                         *bideDmg = gTakenDmg[gBattlerAttacker] * 23 / 10; //not sure how it loops rn, but I believe it copies to a separate variable
                       //  *bideDmg = gTakenDmg[gBattlerAttacker] * 2;   //may go back to 2x if 2.3 is too much
                         gBattlerTarget = gTakenDmgByBattler[gBattlerAttacker];

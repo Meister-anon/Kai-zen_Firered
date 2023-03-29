@@ -2697,8 +2697,9 @@ static void PokeSum_PrintTrainerMemo(void)
         PokeSum_PrintTrainerMemo_Egg();
 }
 
+#define TRAINER_MEMO_SUMMARY
 static void PokeSum_PrintTrainerMemo_Mon_HeldByOT(void) // seems to relate to or be PSS_PAGE_INFO
-{
+{                   //pretty sure this is trainer memo screen used for your caught mon
     u8 nature;
     u8 level;
     u8 metLocation;
@@ -2771,7 +2772,7 @@ static void PokeSum_PrintTrainerMemo_Mon_HeldByOT(void) // seems to relate to or
     AddTextPrinterParameterized4(sMonSummaryScreen->windowIds[POKESUM_WIN_TRAINER_MEMO], FONT_NORMAL, 0, 3, 0, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, natureMetOrHatchedAtLevelStr);
 }
 
-static void PokeSum_PrintTrainerMemo_Mon_NotHeldByOT(void)
+static void PokeSum_PrintTrainerMemo_Mon_NotHeldByOT(void)  //believe this is traded/ not originally yours
 {
     u8 nature;
     u8 level;
@@ -2787,7 +2788,7 @@ static void PokeSum_PrintTrainerMemo_Mon_NotHeldByOT(void)
     level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL);
 
     if (level == 0)
-        level = 5;
+        level = 5;  //assume mostly for setting egg hatch level
 
     ConvertIntToDecimalStringN(levelStr, level, STR_CONV_MODE_LEFT_ALIGN, 3);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(1, levelStr);
@@ -2968,6 +2969,7 @@ static void PokeSum_PrintSelectedMoveStats(void)
     }
 }
 
+#define MOVEICON_ABILITYDESC
 static void PokeSum_PrintAbilityDataOrMoveTypes(void)
 {
     switch (sMonSummaryScreen->curPageIndex)

@@ -4994,8 +4994,9 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
         priority += 3;
     }
 
-    else if (gBattleMons[gActiveBattler].status2 & STATUS2_BIDE 
-        && gDisableStructs[gActiveBattler].bideTimer == 0)
+    else if (gBattleMons[gBattlerAttacker].status2 & STATUS2_BIDE
+        && gDisableStructs[gBattlerAttacker].bideTimer == 0
+        && gCurrentMove == MOVE_BIDE)
     {
         priority = 3; //if works, second attack will go before most priority moves
     }

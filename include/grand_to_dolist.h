@@ -33,8 +33,25 @@ each thing should be checked off when done
 * realize I can bypass that by using emergency exit effect, as that gaurantees switch/does force switch
 * for simplicity sake will skip the hp drop I was planning to do if statused with traps or escape prevention
 * -escape prevention done need to setup guaranteed switch ALLOWANCE DONE and need add to switch in effects 
-* -Setup Done need test but done for now
+* -Setup Done need test but DONE for now
 * 
+* General repo update compare to griff red modern fire red search #ifdef BUGFIX
+* and replace bad code with bugfixes don't know if it'll make a differnce or not though
+* 
+* Re-capitalize ability names, decapitalization doesn't look good in fire red menus - DONE
+*/ 
+goto CATCHING_LOGIC
+/*
+* Need to adjust ball multiplier logic for catch.
+* Add more pokeballs, add more status effect multipliers to augment catch odds.
+* and NEED to change the current status augment odds so they'r additive instead of multiplicative.
+* Current effect would be FAR too strong. 
+* I'm using IFs so they would all be inclusive
+* just need to chanege from *= to an +=  I believe odds = (odds * 15) / 10;
+* would become odds += ((odds * 15) / 10);
+* As the way it works is takes whatever value is on the right,  and applies
+* the operator to value on the left...actuallyy nvm that would actually be larger than if it was multiplicative
+* my mental math was wrong, leave the function as it is, just add more status 2 & trap effects
 * 
 * Set wild double battles, and allow catching both mon
 * cleanest way is to store both mons data for the pokedex beforehand
@@ -60,6 +77,32 @@ goto EVOLUTION_LOGIC
 * Treat entire map like a globe, with different climates so differeent areas experience different weather baseed on season
 * Then have different encounters based on season, mon migration if a climate shifts cold they move to a hotter area vice versa
 * -Progress-
+* 
+*/
+goto TRAINER_MEMO_SUMMARY	//pokemon_summary_screen.c, scroll down for trainer memo functions
+
+goto MOVEICON_ABILITYDESC	//function for displaying move icons & ability info in summ screen
+/* 
+* Upgrade UI menu for new mechanics. Expanded move description & ability description & move name fields
+* Adjusted summary screen menu for trainer memo, &\ move summary/info page.
+* Need to find a fix for move icons misalignment in moves pags
+* 
+* Also add new string/logic for trainer memo box, for nuzlocke idea
+* Where pokemon would die and be replaced by ashes when taken to pokemon center
+* Which can be placed at pokemon tower in lavender town after plot point 
+* for a chance to resurect your pokemon based on friendship -needs open slot to work
+* Otherwise it'll serve as a record of your lost mon.
+* if viewing dead mon in tower bring up the summary screen for them
+* Pokemon ashes should store all mon data, as if it was the mon itself.
+* with 3rd line of trainer memo, displaying where they died,
+* i.e "Lost in *location* at *lvl* to *cause of death-either mon to kill it, or status that killed it.
+* to severe burns, hypothermia, poison  burn poison & freezee/frostbite are status1s that do dot and can kill
+* if left uncured/healed for a number of steps after mon dies to or with them.
+*/
+
+/* 
+* 
+* 
 */
 
 
@@ -101,5 +144,6 @@ goto RUN_LOGIC_PT2 //last part for setting up run based effects battle_main.c
 
 goto TURN_ACTIONS_SWITCH_ETC // battle_main.c  HandleTurnActionSelectionState function deaels with logic  for turn actions i.e switching catching using moves etc.
 
-
+goto EXP_FUNCTION //battle_script_commands.c has exp & level up logic, can be used as example for mid battle evo 
+				//	and needed pokedex logic for double wilds check case 5
 #endif //GUARD_GRAND_TO_DOLIST_H

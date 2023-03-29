@@ -257,7 +257,9 @@ BattleScript_WildMonBallBlock::
 
 
 
-
+@how did I set this up I feel I made it effectively only work when taking damage? 
+@did I just set it to not work if first turn?
+@found it, used playMonwasdamaged in handleballthrow bs command
 BattleScript_ExpOnCatch:: @ can skip safari stusff, but need copy everything till caughtpokemondone
 	incrementgamestat GAME_STAT_POKEMON_CAPTURES
 	printstring STRINGID_GOTCHAPKMNCAUGHT
