@@ -3468,6 +3468,8 @@ u8 CastformDataTypeChange(u8 battler)
     
 } //check to make sure cherrim form change works
 
+#define ABILITYBATTLE_FUNCTION
+
 //order only matters as which activates first.
 //based on battle_main, function  loops through every battler
 //from fastest to slowest, checking for abilities in the order they appear here.
@@ -3823,15 +3825,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
                         {
-                            //end function if all genders are the same
-                            if (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) == (GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1) && GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2)))
+                            //end function if all genders are the same  //removed gender check
+                            /*if (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) == (GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1) && GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2)))
                             {
                                 break;
-                            }
+                            }*/
                             if (gBattleMons[target1].ability != 0 && gBattleMons[target1].hp != 0
-                                && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1))
+                                && (GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1) != MON_GENDERLESS)
                                 && gBattleMons[target2].ability != 0 && gBattleMons[target2].hp != 0
-                                && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2)))
+                                && (GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2) != MON_GENDERLESS))
                             {
                                 gBattlerTarget = GetBattlerAtPosition(((Random() & 1) * 2) | side); //select on target from enemy 
                                 gBattleScripting.battler = i;
@@ -3842,7 +3844,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                 ++effect;
                             }
                             else if (gBattleMons[target1].ability != 0 && gBattleMons[target1].hp != 0
-                                && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1)))
+                                && (GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1) != MON_GENDERLESS))
                             {
                                 gBattlerTarget = target1;
                                 gBattleScripting.battler = i;
@@ -3853,7 +3855,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                 ++effect;
                             }
                             else if (gBattleMons[target2].ability != 0 && gBattleMons[target2].hp != 0
-                                && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2)))
+                                && (GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2) != MON_GENDERLESS))
                             {
                                 gBattlerTarget = target2;
                                 gBattleScripting.battler = i;
@@ -3868,7 +3870,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         {
 
                             if (gBattleMons[target1].ability && gBattleMons[target1].hp
-                                && (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) != GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1)))
+                                && (GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1) != MON_GENDERLESS))
                             {
                                 gBattlerTarget = target1;
                                 gBattleScripting.battler = i;
@@ -4777,7 +4779,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 break;
             }
             break;
-        case ABILITYEFFECT_MOVE_END_ATTACKER: // Same as above, but for attacker
+        case ABILITYEFFECT_MOVE_END_ATTACKER: // Same as above, but for attacker hits enemy
             switch (gLastUsedAbility)
             {
             case ABILITY_POISON_TOUCH:
@@ -4818,7 +4820,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && gBattleMons[gBattlerAttacker].hp != 0
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
-                    && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT)
+                    && IsMoveMakingContact(move, gBattlerAttacker)
                     && TARGET_TURN_DAMAGED
                     && (Random() % 3) == 0)
                 {

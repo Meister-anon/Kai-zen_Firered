@@ -36,9 +36,44 @@ each thing should be checked off when done
 * -Setup Done need test but DONE for now
 * 
 * General repo update compare to griff red modern fire red search #ifdef BUGFIX
-* and replace bad code with bugfixes don't know if it'll make a differnce or not though
+* and replace bad code with bugfixes don't know if it'll make a differnce or not though -
 * 
 * Re-capitalize ability names, decapitalization doesn't look good in fire red menus - DONE
+* 
+* Buffed static & flame body to apply on hit and when attacking. DONE
+* 
+* Need setup mon with static w new in a pinch ability overcharge
+* 
+* Further buff cupid arrow for luvdisc make it ignore gender check, as its the love pokemon and something further to make it more unique. DONE
+* nother wave of buffs, delcatty buff, may need change its pokedex entry to fit, made part ghost, cats have 9 lives
+* may say delcatty is cat that died and came back intending to live its life to the fullest of its desire.
+* 
+* may consider buff plus/minus ability with same affect as overcharge, but only when the partner is in a pinch
+* can lead to an interesting plan where players ev build them for bulk
+* 
+* for wormadam line, buff anticipation ability with disguise effects,
+* it warns of a super effective or ohko move, and gets a chance once a battle to dodge one super effective move
+* allows for a chance to stay in rather than having to switch because you know a move is coming.
+* is part of switch in effects i'm trying to make reactive, so if you don't take a super-effective hit and beat enemy, move should check again
+* 
+* gDisableStructs[battler].isFirstTurn == 2  is logic for mon switchig in, can use for reactivation condition
+* 
+* fix delibird learnset oh already done
+* Give crabominable a better front sprite, its just ugly -
+* 
+* make cursola signature ability PERISH_BODY only activate for enemy mon
+* 
+* GIVE Turtonator more stab moves? or more early moves
+* 
+* GIVE shiinotic creepier more cursed front sprite -
+* and change type to grass ghost but give ability nymph spirit to give it triple stab, boosts fairy type moves think 
+* will roll in illuminate effect as replacement, nymphs usually draw in forest creatures so it would work. -This part is done
+* 
+* Need add more ghost moves to its learnset  also dryads curse
+* 
+* Finish setup for move Dryads Curse
+* 
+* 
 */ 
 goto CATCHING_LOGIC
 /*
@@ -108,6 +143,12 @@ goto MOVEICON_ABILITYDESC	//function for displaying move icons & ability info in
 
 goto STAT_AND_DAMAGE_ABILITIES_ETC // pokemon.c function for ability and item effects that affect damage calc
 
+goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability activation logic
+/*
+* Setting up new effeets for absorb abilities
+* make all work like lightnight rod and change targetting to draw in moves
+* counter balance is only does that if ability mon isn't statused 
+*/
 
 goto PRIORITY_EFFECTS	//battle_main.c all effects regarding priority changes go here.
 //working on setting up an effect for rock toss and the other effects that do double damage to on air targets

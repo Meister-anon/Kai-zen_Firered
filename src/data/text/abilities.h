@@ -268,6 +268,7 @@ static const u8 sOverchargeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups 
 static const u8 sPhotosynthesizeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Slight HP recovery in sun.");
 static const u8 sGlacialIceDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Is immune to fire,\nand turns ice and hail into hp.");
 static const u8 sLavaDistortionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Field becomes scorched.\nDraws in and powers up fire moves");
+static const u8 sToadstoolNymphDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups Fairy Damage. A blessing of the fae,\ngiven to a plant for devotion to nature");
 //checked in fire red limit is 40 chars per line, changing description length to 80
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -554,6 +555,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_PHOTOSYNTHESIZE] = sPhotosynthesizeDescription,
     [ABILITY_GLACIAL_ICE] = sGlacialIceDescription,
     [ABILITY_LAVA_DISTORTION] = sLavaDistortionDescription,
+    [ABILITY_TOADSTOOL_NYMPH] = sToadstoolNymphDescription,
 };//last value can have comma
 
 //now undrestand reason strings (strings are arrays) use that +1 value
@@ -843,5 +845,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_OVERCHARGE] = _("OVERCHARGE"),
     [ABILITY_PHOTOSYNTHESIZE] = _("PHOTOSYNTHESIZE"),
     [ABILITY_GLACIAL_ICE] = _("GLACIAL ICE"),
-    [ABILITY_LAVA_DISTORTION] = _("LAVA DISTORTION")
+    [ABILITY_LAVA_DISTORTION] = _("LAVA DISTORTION"),
+    [ABILITY_TOADSTOOL_NYMPH] = _("TOADSTOOL NYMPH")
 };//no comma for last value

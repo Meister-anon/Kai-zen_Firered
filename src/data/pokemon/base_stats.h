@@ -2714,7 +2714,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_DROWZEE] =
     {
-        .baseHP = 60,
+        .baseHP = 70,
         .baseAttack = 48,
         .baseDefense = 45,
         .baseSpeed = 42,
@@ -2743,7 +2743,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_HYPNO] =
     {
-        .baseHP = 85,
+        .baseHP = 105,
         .baseAttack = 73,
         .baseDefense = 70,
         .baseSpeed = 67,
@@ -2967,7 +2967,7 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 60,
         .baseAttack = 88,
         .baseDefense = 118,
-        .baseSpeed = 55,
+        .baseSpeed = 65,
         .baseSpAttack = 50,
         .baseSpDefense = 80,
         .type1 = TYPE_NORMAL,
@@ -6301,11 +6301,11 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_DELIBIRD] =
     {
-        .baseHP = 50,
+        .baseHP = 101,
         .baseAttack = 95,
         .baseDefense = 55,
-        .baseSpeed = 115,
-        .baseSpAttack = 95,
+        .baseSpeed = 95,
+        .baseSpAttack = 75,
         .baseSpDefense = 55,
         .type1 = TYPE_ICE,
         .type2 = TYPE_FLYING,
@@ -6318,7 +6318,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_VITAL_SPIRIT, ABILITY_HUSTLE},
+        .abilities = {ABILITY_ANTICIPATION, ABILITY_HUSTLE},
         .abilityHidden = {ABILITY_INSOMNIA, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -7477,9 +7477,9 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP = 60,
         .baseAttack = 70,
-        .baseDefense = 50,
-        .baseSpeed = 85,
-        .baseSpDefense = 50,
+        .baseDefense = 60,
+        .baseSpeed = 90,
+        .baseSpDefense = 60,
         .baseSpAttack = 105,
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
@@ -7534,10 +7534,10 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_DUSTOX] =
     {
         .baseHP = 60,
-        .baseAttack = 50,
+        .baseAttack = 60,
         .baseDefense = 70,
         .baseSpeed = 85,
-        .baseSpAttack = 50,
+        .baseSpAttack = 60,
         .baseSpDefense = 105,
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
@@ -8438,7 +8438,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpDefense = 55,
         .baseSpeed = 90,
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_GHOST,
         .catchRate = 60,
         .expYield = 140,
         //.evYield_HP = 1,
@@ -8459,7 +8459,8 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     }, //stopped making major stat buffs
     //started focusing on smaller tweaks and abilities
-
+    //new update made ghost type to cover its weaker stats, leans on the cats 9 lives thing
+    //its a live but techinically could have been dead.  prob need tweak its pokedex entry to fit
     [SPECIES_SABLEYE] =
     {
         .baseHP = 50,
@@ -8495,10 +8496,10 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_MAWILE] =
     {
-        .baseHP = 55,
+        .baseHP = 65,
         .baseAttack = 77,
         .baseDefense = 90,
-        .baseSpeed = 50,
+        .baseSpeed = 55,
         .baseSpAttack = 55,
         .baseSpDefense = 75,
         .type1 = TYPE_STEEL,
@@ -10370,11 +10371,11 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_LUVDISC] =
     {
         .baseHP = 43,
-        .baseAttack = 33,
-        .baseDefense = 75,
+        .baseAttack = 55,
+        .baseDefense = 71,
         .baseSpeed = 77,
-        .baseSpAttack = 44,
-        .baseSpDefense = 85,
+        .baseSpAttack = 55,
+        .baseSpDefense = 88,
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 225,
@@ -10389,12 +10390,12 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_2,
         .abilities = {ABILITY_CUPIDS_ARROW, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_HYDRATION, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,//changed to 100% make luv disc a stall/setup mon add moves as needed. give early game endure
     }, //NEW ability will be 33% or 50% chance to infatuate on switch in loop check for target that can infatuate if double use trace targetting
-
+    //stat ajustments made using numbers for love
     [SPECIES_BAGON] =
     {
         .baseHP = 45,
@@ -20851,7 +20852,7 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP = 97,
         .baseAttack = 132,
-        .baseDefense = 77,
+        .baseDefense = 117,
         .baseSpeed = 43,
         .baseSpAttack = 62,
         .baseSpDefense = 67,
@@ -21336,7 +21337,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 90,
         .baseSpDefense = 100,
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_FAIRY,
+        .type2 = TYPE_GHOST,
         .catchRate = 75,
         .expYield = 142,
         //.evYield_SpDefense = 2,
@@ -21348,7 +21349,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_ILLUMINATE, ABILITY_EFFECT_SPORE},
+        .abilities = {ABILITY_TOADSTOOL_NYMPH, ABILITY_EFFECT_SPORE},
         .abilityHidden = {ABILITY_RAIN_DISH, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -21917,8 +21918,8 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP = 60,
         .baseAttack = 78,
-        .baseDefense = 135,
-        .baseSpeed = 36,
+        .baseDefense = 165,
+        .baseSpeed = 47,
         .baseSpAttack = 91,
         .baseSpDefense = 85,
         .type1 = TYPE_FIRE,
@@ -21933,7 +21934,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_DRAGON,
-        .abilities = {ABILITY_SHELL_ARMOR, ABILITY_NONE},
+        .abilities = {ABILITY_SHELL_ARMOR, ABILITY_ROCK_HEAD},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -23407,9 +23408,9 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_THIEVUL] =
     {
         .baseHP = 70,
-        .baseAttack = 58,
+        .baseAttack = 78,
         .baseDefense = 58,
-        .baseSpeed = 90,
+        .baseSpeed = 112,
         .baseSpAttack = 87,
         .baseSpDefense = 92,
         .type1 = TYPE_DARK,
@@ -27310,11 +27311,11 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_MAROWAK_ALOLAN] =
     {
         .baseHP = 60,
-        .baseAttack = 80,
+        .baseAttack = 88,
         .baseDefense = 80,
-        .baseSpeed = 55,
-        .baseSpAttack = 50,
-        .baseSpDefense = 110,
+        .baseSpeed = 65,
+        .baseSpAttack = 66,
+        .baseSpDefense = 118,
         .type1 = TYPE_FIRE,
         .type2 = TYPE_GHOST,
         .catchRate = 75,

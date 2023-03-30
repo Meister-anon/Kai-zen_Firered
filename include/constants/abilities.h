@@ -302,6 +302,7 @@
 #define ABILITY_PHOTOSYNTHESIZE 279
 #define ABILITY_GLACIAL_ICE 280
 #define ABILITY_LAVA_DISTORTION 281 // pending heatran ability
+#define ABILITY_TOADSTOOL_NYMPH 282 // pending Shiinotic ability
 
 //#define ABILITY_DARK_DEAL 282   //companion ability to nuisance, cuts dynamicbasepower of partner moves in half,
 //in exchange for serene grace style heightned effect chance INCLUDING heighteeend crit chance/odds.
@@ -310,7 +311,7 @@
 //so you do normal move damage. plan to use in doubles with nuisance, lets them use stronger moves
 //kind of a opposite to serene grace
 
-#define ABILITIES_COUNT 282 //note make perish body, only affect target, possibly 
+#define ABILITIES_COUNT 283 //note make perish body, only affect target, possibly 
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 

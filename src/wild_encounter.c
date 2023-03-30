@@ -343,6 +343,22 @@ static u8 GetAbilityEncounterRateModType(void)
             sWildEncounterData.abilityEffect = 1;
         else if (ability == ABILITY_ILLUMINATE)
             sWildEncounterData.abilityEffect = 2;
+        else if (ability == ABILITY_TOADSTOOL_NYMPH)
+            sWildEncounterData.abilityEffect = 2;
+        else if (ability == ABILITY_WHITE_SMOKE)
+            sWildEncounterData.abilityEffect = 1;
+        else if (ability == ABILITY_ARENA_TRAP)
+            sWildEncounterData.abilityEffect = 2;
+        else if (ability == ABILITY_SAND_VEIL && gSaveBlock1Ptr->weather == WEATHER_SANDSTORM)
+            sWildEncounterData.abilityEffect = 1;
+        else if (ability == ABILITY_SNOW_CLOAK && gSaveBlock1Ptr->weather == WEATHER_SNOW)
+            sWildEncounterData.abilityEffect = 1;
+        else if (ability == ABILITY_QUICK_FEET)
+            sWildEncounterData.abilityEffect = 1;
+        else if (ability == ABILITY_INFILTRATOR)
+            sWildEncounterData.abilityEffect = 1;
+        else if (ability == ABILITY_NO_GUARD)
+            sWildEncounterData.abilityEffect = 2;
     }
     return sWildEncounterData.abilityEffect;
 }

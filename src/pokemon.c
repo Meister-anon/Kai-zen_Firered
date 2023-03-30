@@ -3572,6 +3572,13 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
         break;
+    case ABILITY_TOADSTOOL_NYMPH:
+        if (type == TYPE_FAIRY) //Fake stab
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 15;
+            gBattleMoveDamage = gBattleMoveDamage / 10;
+        }
+
     case ABILITY_PIXILATE:
         if (type == TYPE_FAIRY && gBattleStruct->ateBoost[gBattlerAttacker])
             gBattleMovePower = (gBattleMovePower * 120 / 100);
