@@ -1639,6 +1639,7 @@ static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
 //used StringCopyPadded to have 4 elements to use str_conv right aline it doens't actually right align, but correctly displayed movetype
 //no idea where to go from here.
 
+//since this uses right window should never need to adjust again, even after moving
 #define MOVE_NAME_2_X_VALUE (sStandardBattleWindowTemplates[B_WIN_MOVE_NAME_2].tilemapLeft - 2) //had put parenthesis to fix/make work
 #define MOVE_NAME_2_Y_VALUE sStandardBattleWindowTemplates[B_WIN_MOVE_NAME_2].tilemapTop
 

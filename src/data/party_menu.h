@@ -35,6 +35,7 @@ enum
     PARTY_BOX_RIGHT_COLUMN,
 };
 
+#define PARTYMENU_GRAPHICS
 static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
 {
     [PARTY_BOX_LEFT_COLUMN] = 
@@ -42,7 +43,7 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
         BlitBitmapToPartyWindow_LeftColumn, 
         {
             // The below are the x, y, width, and height for each of the following info
-            24, 11, 40, 13, // Nickname
+            20, 11, 40, 13, // Nickname
             32, 20, 32,  8, // Level
             64, 20,  8,  8, // Gender
             38, 36, 24,  8, // HP
@@ -56,7 +57,7 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
         BlitBitmapToPartyWindow_RightColumn, 
         {
              // The below are the x, y, width, and height for each of the following info
-             22,  3, 40, 13, // Nickname
+             18,  3, 40, 13, // Nickname
              32, 12, 32,  8, // Level
              64, 12,  8,  8, // Gender
             102, 12, 24,  8, // HP

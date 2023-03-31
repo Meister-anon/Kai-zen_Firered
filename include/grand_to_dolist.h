@@ -13,6 +13,47 @@ each thing should be checked off when done
 
 */
 
+/*
+* note from CompuMax in pret   fire red debug system not removed actually takese up ewram so going through removal process saves space.
+* 
+* Make the following change to include/config.h To get some space in the EWRAM and IWRAM
+// #define NDEBUG
+To
+#define NDEBUG
+
+And in common_syms/main.txt remove the following lines:
+sVcountAfterSound
+sVcountAtIntr
+sVcountBeforeSound
+ 
+Meister_anon — Today at 6:22 PM
+thank you very much,  what does the com_sym stuff do? so I know what I'm doing.
+CompuMax — Today at 6:24 PM
+The first change is defining that it does not include the DEBUG used during the development and testing of the game. Since they forgot to remove it before publishing the ROM. 
+And the second change removes the references in IWRAM from references used in the DEBUG
+Meister_anon — Today at 6:25 PM
+ok so its all part of the same removal?  for taking out the debug stuff?
+CompuMax — Today at 6:26 PM
+Exactly
+* 
+* [tested in pret and works so adapting for main repo, worked for expanding species name]
+* Explanation for why it works
+* 
+* 
+* did you inspect how much space you needed in iwram before moving stuff to ewram?
+CompuMax — 06/03/2021 10:23 AM
+No, but now that you mention it, it could be the IWRAM that is generating the problem for me.
+I am still installing the mixer in pokeemerald to rule out that the tutorial has overlooked something
+PikalaxALT — 06/03/2021 10:24 AM,<<<
+one thing you can do is set config.h to define NDEBUG
+that'd give you back 0xB4 bytes in IWRAM
+CompuMax — 06/03/2021 10:33 AM
+Oh! Thanks! I will do it
+Although I imagine that I am exceeding the IWRAM when compiling, it should show an error, right?
+PikalaxALT — 06/03/2021 10:35 AM<<<<
+it'll also give you back something like 0x754 bytes in EWRAM, which is huge
+*/
+
 //TODO:
 /*Add logic for when flying types are grounded they take neutral damage from fighting types
 * Look at how emerald handeled smack down and roost logic for ground type dmg -
@@ -22,6 +63,11 @@ each thing should be checked off when done
 * 
 * realized logic for damage on air targets was incomplete 
 * correcting setup -
+* 
+* 
+* anthroyd advice need to start keeping list of things I plan to use for the thread and what I plan
+* to introduce explicitly in-game I want my new type chart to mostly be discoveredd in game,
+* but just have them aware that things are diffeerent and some things will be a new experiencee
 * 
 * need double check trap effects, make sure effect_trap setup
 * works correctly for thunder_cage since I didn't even know
@@ -56,7 +102,7 @@ each thing should be checked off when done
 * allows for a chance to stay in rather than having to switch because you know a move is coming.
 * is part of switch in effects i'm trying to make reactive, so if you don't take a super-effective hit and beat enemy, move should check again
 * 
-* gDisableStructs[battler].isFirstTurn == 2  is logic for mon switchig in, can use for reactivation condition
+* gDisableStructs[battler].isFirstTurn == 2  is logic for mon switchig in, can use for switchin reactivation condition
 * 
 * fix delibird learnset oh already done
 * Give crabominable a better front sprite, its just ugly -
@@ -72,7 +118,18 @@ each thing should be checked off when done
 * Need add more ghost moves to its learnset  also dryads curse
 * 
 * Finish setup for move Dryads Curse
+*/
+goto PARTYMENU_GRAPHICS
+/* Found species names were being slightly truncated in some cases, comb through added mon ppost gen 3
+* all names fit current POKEMON_NAME_LENGTH  limit of 10 + 1, but some are shrunken to fit, 
+* so edited party graphics box & was able to add 1 additional space no more.  need to increase name length by 1 to match
 * 
+* still has issue finding in battle values to adjust, need to move over gender icon
+* found it ,its all in UpdateNickInHealthbox  -increased name length need to expand window and adjust other parameters that 
+* take mon name  i.e summary screen, & naming screen
+* 
+* also my need to re-capitalize species namees as well. it prob looks fine in emerald but for fire red looks a bit off
+* espcially on some of the wider characters like M
 * 
 */ 
 goto CATCHING_LOGIC
