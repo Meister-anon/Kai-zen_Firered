@@ -111,9 +111,10 @@ and since the enemy side ends in 7  that's why I need 7 * TILE_SIZE_4BPP
 * 
 * Buffed static & flame body to apply on hit and when attacking. DONE
 * 
-* Need setup mon with static w new in a pinch ability overcharge
+* Need setup mon with static w new in a pinch ability overcharge -
 * 
 * Further buff cupid arrow for luvdisc make it ignore gender check, as its the love pokemon and something further to make it more unique. DONE
+* 
 * nother wave of buffs, delcatty buff, may need change its pokedex entry to fit, made part ghost, cats have 9 lives
 * may say delcatty is cat that died and came back intending to live its life to the fullest of its desire.
 * 
@@ -156,7 +157,8 @@ and since the enemy side ends in 7  that's why I need 7 * TILE_SIZE_4BPP
 * check freeze implementation, if used a timer can set it so it plays defrost text turn timer hits 0,
 * [woudl need to check last used move and last hit by move, to check if timer reached zero as a result of
 * the thaw effect or not.]
-* and then display a 
+* and then display a different string for end turn if defrosted rather than thawed, would be hurt by frostbite
+* only remove status icon  if thawed, or ice cured or status cured w items
 * 
 * 
 * Make copy ability of tinted lens, for non bugs, call it protag powere or subversion or great expectations  tiger cub?
@@ -208,10 +210,12 @@ goto PARTYMENU_GRAPHICS
 * 
 * still has issue finding in battle values to adjust, need to move over gender icon
 * found it ,its all in UpdateNickInHealthbox  -increased name length need to expand window width and adjust other parameters that 
-* take mon name  i.e summary screen, & naming screen - playere health box works enemy can't figure out yet
+* take mon name  i.e summary screen, & naming screen - playere health box works enemy can't figure out yet  
+* - progress - fixed enemy health bar neeed to setup for the other places and test rest of party slots-
+* 
 * 
 * also my need to re-capitalize species namees as well. it prob looks fine in emerald but for fire red looks a bit off
-* espcially on some of the wider characters like M
+* espcially on some of the wider characters like M  -DONE  (unless I decide to go in and redo the font to look better myself that's it)
 * 
 */ 
 
