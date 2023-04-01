@@ -52,6 +52,25 @@ Oh! Thanks! I will do it
 Although I imagine that I am exceeding the IWRAM when compiling, it should show an error, right?
 PikalaxALT — 06/03/2021 10:35 AM<<<<
 it'll also give you back something like 0x754 bytes in EWRAM, which is huge
+
+
+
+Notes on health box
+I'm wondering why its using TextIntoHealthboxObject twice
+CompuMax — Today at 8:33 PM
+@Meister_anon Because the Healthboxes are too big, they are divided into 2 OBJs of 64x64
+What the first TextIntoHealthBox does is copy the first 6 tiles that make up the nickname to the first OBJ
+Then depending if you are in a double battle or not, determine where to copy the remaining 7 tiles into the next OBJ
+
+
+Meister_anon — Today at 12:46 PM
+ok I see it now, I luckily came close to the right solution,  32 x 4bpp is the same thing as I had before 0x400 etc.
+and is still half of the playersidee values so the relation is the same.
+
+but since the player first textintoHealth function ended in 6
+the 2nd function needs the value 6 * TILE_SIZE_4BPP
+
+and since the enemy side ends in 7  that's why I need 7 * TILE_SIZE_4BPP
 */
 
 //TODO:
@@ -81,8 +100,12 @@ it'll also give you back something like 0x754 bytes in EWRAM, which is huge
 * -escape prevention done need to setup guaranteed switch ALLOWANCE DONE and need add to switch in effects 
 * -Setup Done need test but DONE for now
 * 
+* buff in a pinch abilities, activate soon as hp hits yellow i.e 50% - DONE
+* 
 * General repo update compare to griff red modern fire red search #ifdef BUGFIX
-* and replace bad code with bugfixes don't know if it'll make a differnce or not though -
+* and replace bad code with bugfixes don't know if it'll make a differnce or not though - DONE ?
+* 
+* Update pokedex_screen.c and other pokedex files with new function renames -
 * 
 * Re-capitalize ability names, decapitalization doesn't look good in fire red menus - DONE
 * 
@@ -108,6 +131,8 @@ it'll also give you back something like 0x754 bytes in EWRAM, which is huge
 * Give crabominable a better front sprite, its just ugly -
 * 
 * make cursola signature ability PERISH_BODY only activate for enemy mon
+* watching JPR Poketrainer showed me how niche/bad it is, especially whene mon already has such low def stat
+* even without perish song on it if it gets hit by a physical move its not sticking around long
 * 
 * GIVE Turtonator more stab moves? or more early moves
 * 
@@ -117,34 +142,56 @@ it'll also give you back something like 0x754 bytes in EWRAM, which is huge
 * 
 * Need add more ghost moves to its learnset  also dryads curse
 * 
-* Finish setup for move Dryads Curse
+* Finish setup for move Dryads Curse  
+* animation idea, ingrain roots and wrap/bind constrict anim but with a black or darker color?
+* 
+* Setting up flash freeze to just use sheer cold animation for now- will prbo keep DONE
+* 
+* Further adjust freeze status effect, plan setup current gen frotstbite for after target defrosts
+* double check that I've already made freeze consistent and work like confusion/traps to last 2-5 turns
+* long as target defrosts normally i.e not via thaw or ice cure/status cure effect target will remain with status1_frostbite
+* would need to make sure it keeps the status1 freeze icon, so will need to change defrosting
+* to not just remove frozen but set frostbite, OR just not remove freeeze so you keep the turn damage & icon
+* 
+* check freeze implementation, if used a timer can set it so it plays defrost text turn timer hits 0,
+* [woudl need to check last used move and last hit by move, to check if timer reached zero as a result of
+* the thaw effect or not.]
+* and then display a 
+* 
+* 
+* Make copy ability of tinted lens, for non bugs, call it protag powere or subversion or great expectations  tiger cub?
+* anyway for mon that can setup  multiple type power/dmg buffs i.e terrain & weather or to be used with a terrain on on team.
+* 
+* Also consider tweaking how terrain switch works, make it stay as long as the ability surge mon is on the field
+* want to work like  weather switch which I think works off last in?  may work off speed?
+* make conditional where its supposed to decrement if they're on field timer equals "permanet" i.e timer = 5, if not on field decrement timer
+* that way even if they get one shot its still valuable to put out as a setup.-
+* 
+* Go over field control effects again, i.e traps status terrain weather  drain abilities make sure everything remains in balance
+* I don't want to turn things into a gimmick where the only thing ppl do is status or terrain I want them to be relatively equal options
+* -
+* 
+*  add and change for regi effects, instead of player needing to know brail, setup archologist npc, maybe in pewter town museum.
+* that will "translate" the text for you to read.   so when you initially find read it, a special flag will be set.
+* in the museum npc he'll chech for those flags from lowest to highest, and read the first he finds each time you talk to him.
+* have him be shocked excited then say let me translate  ... fades to black and returns
+* Ah I see, the text means (maybe highlight translation) "blah blah blah" clears the first set flag and then sets another
+* that'll change what happens when you click the wall, now that you know what it says, a box will come up asking if yuo want to do the thing
+* i.e "use cut on wall?" yes/no  then check party for a mon that can and do it if possible, or return no one is able to use cut.
 */
-goto PARTYMENU_GRAPHICS
-/* Found species names were being slightly truncated in some cases, comb through added mon ppost gen 3
-* all names fit current POKEMON_NAME_LENGTH  limit of 10 + 1, but some are shrunken to fit, 
-* so edited party graphics box & was able to add 1 additional space no more.  need to increase name length by 1 to match
-* 
-* still has issue finding in battle values to adjust, need to move over gender icon
-* found it ,its all in UpdateNickInHealthbox  -increased name length need to expand window and adjust other parameters that 
-* take mon name  i.e summary screen, & naming screen
-* 
-* also my need to re-capitalize species namees as well. it prob looks fine in emerald but for fire red looks a bit off
-* espcially on some of the wider characters like M
-* 
-*/ 
 goto CATCHING_LOGIC
 /*
 * Need to adjust ball multiplier logic for catch.
 * Add more pokeballs, add more status effect multipliers to augment catch odds.
 * and NEED to change the current status augment odds so they'r additive instead of multiplicative.
-* Current effect would be FAR too strong. 
+* Current effect would be FAR too strong.
 * I'm using IFs so they would all be inclusive
 * just need to chanege from *= to an +=  I believe odds = (odds * 15) / 10;
 * would become odds += ((odds * 15) / 10);
 * As the way it works is takes whatever value is on the right,  and applies
 * the operator to value on the left...actuallyy nvm that would actually be larger than if it was multiplicative
 * my mental math was wrong, leave the function as it is, just add more status 2 & trap effects
-* 
+*
 * Set wild double battles, and allow catching both mon
 * cleanest way is to store both mons data for the pokedex beforehand
 * and clear whoever dies.
@@ -154,13 +201,44 @@ goto CATCHING_LOGIC
 * then have pokedex loop through functions baseed on var/value if they aren't 0
 * -Progress-
 */
+goto PARTYMENU_GRAPHICS
+/* Found species names were being slightly truncated in some cases, comb through added mon ppost gen 3
+* all names fit current POKEMON_NAME_LENGTH  limit of 10 + 1, but some are shrunken to fit, 
+* so edited party graphics box & was able to add 1 additional space no more.  need to increase name length by 1 to match
+* 
+* still has issue finding in battle values to adjust, need to move over gender icon
+* found it ,its all in UpdateNickInHealthbox  -increased name length need to expand window width and adjust other parameters that 
+* take mon name  i.e summary screen, & naming screen - playere health box works enemy can't figure out yet
+* 
+* also my need to re-capitalize species namees as well. it prob looks fine in emerald but for fire red looks a bit off
+* espcially on some of the wider characters like M
+* 
+*/ 
 
+
+goto HEALTHBOX_LOGIC	//health box for battle, enemy values at bottom of function, need add exp bar/values to that section.
 goto EVOLUTION_LOGIC
 /*  want battle evolution for player and opponenet for enemy need to work out how to give them exp.
 * after they have exp need set function to make it feel real that they would level up i.e they aren't starting from 0.
 * for that make random function that would get their needed exp to level and then random divide that by either 2, 3, or 4 to increase their chance of lvl in battle.
 * player can use this and the above function to evolve, but enemy needs a specific one, that won't take out of battle, make it so if they can evolve they will. 
 * use CFRU mega evolve animation for opponent. -
+* 
+* For getting mon to level up at least visually use healthbox function.  to make random level up
+* decided use variation of exp function but insteead of using exp basd on their actual level generate a lower level.
+* so thy need far less exp than a full level to make it seem like they're almost leveled up.
+* (prob need to make exp bar linked to value returned by level function)
+* to make a false level I'll make a function that'll return a random value between 5 and I think half their actual level.
+* Random () % ((mon level/2) +5)    witha min exp for level 5, defeating practically anything in the game would be enough to level up.
+* [thought normaly this effect would go away could attempt to find someway to store and make permanent? do the whole reverse rogue light thing?
+* [enemy gets stronger...prob best to have it reset and not be permamnent...unless I want to make a fuck you hard mode]
+*
+* level = GetMonData(mon, MON_DATA_LEVEL);
+            exp = GetMonData(mon, MON_DATA_EXP);
+            currLevelExp = gExperienceTables[gBaseStats[species].growthRate][level];
+            currExpBarValue = exp - currLevelExp;
+            maxExpBarValue = gExperienceTables[gBaseStats[species].growthRate][level + 1] - currLevelExp;
+* 
 * 
 * Check if time works, add clocks to fire red setup hourly
 * daily, weekly, Monthly time based events.
@@ -169,6 +247,7 @@ goto EVOLUTION_LOGIC
 * Treat entire map like a globe, with different climates so differeent areas experience different weather baseed on season
 * Then have different encounters based on season, mon migration if a climate shifts cold they move to a hotter area vice versa
 * -Progress-
+* 
 * 
 */
 goto TRAINER_MEMO_SUMMARY	//pokemon_summary_screen.c, scroll down for trainer memo functions
@@ -243,5 +322,10 @@ goto RUN_LOGIC_PT2 //last part for setting up run based effects battle_main.c
 goto TURN_ACTIONS_SWITCH_ETC // battle_main.c  HandleTurnActionSelectionState function deaels with logic  for turn actions i.e switching catching using moves etc.
 
 goto EXP_FUNCTION //battle_script_commands.c has exp & level up logic, can be used as example for mid battle evo 
-				//	and needed pokedex logic for double wilds check case 5
+//	                and needed pokedex logic for double wilds check case 5
+
+goto ENCOUNTER_COUNT_DATA
+//data for encounter count i.e number of spaces for land/surf mon defines etc.
+
+
 #endif //GUARD_GRAND_TO_DOLIST_H

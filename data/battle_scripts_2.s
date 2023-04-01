@@ -263,7 +263,7 @@ BattleScript_WildMonBallBlock::
 BattleScript_ExpOnCatch:: @ can skip safari stusff, but need copy everything till caughtpokemondone
 	incrementgamestat GAME_STAT_POKEMON_CAPTURES
 	printstring STRINGID_GOTCHAPKMNCAUGHT
-	setbyte sGIVEEXP_STATE, 0x0			@ want to set only on damage, but making script is difficult
+	setbyte sGIVEEXP_STATE, 0x0			@ want to set only on damage, but making script is difficult -done
 	getexp BS_TARGET
 	trysetcaughtmondexflags BattleScript_CaughtPokemonSkipNewDex2  @ also couldnt repeat scripts like this one so changed name
 	printstring STRINGID_PKMNDATAADDEDTODEX

@@ -148,10 +148,10 @@ const u8 gFacilityClassToPicIndex[] =
     [FACILITY_CLASS_RUIN_MANIAC_2] = 145,
     [FACILITY_CLASS_LADY_2] = 146,
     [FACILITY_CLASS_PAINTER] = 147,
-    [FACILITY_CLASS_ELITE_FOUR_7] = 112,
-    [FACILITY_CLASS_ELITE_FOUR_8] = 113,
+    [FACILITY_CLASS_ELITE_FOUR_7] = 114,
+    [FACILITY_CLASS_ELITE_FOUR_8] = 115,
     [FACILITY_CLASS_CHAMPION_3] = 125,
-};
+};//bug fix done
 
 const u8 gFacilityClassToTrainerClass[] =
 {

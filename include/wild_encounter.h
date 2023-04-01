@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define ENCOUNTER_COUNT_DATA
+
 #define LAND_WILD_COUNT     12
 #define WATER_WILD_COUNT    5
 #define ROCK_WILD_COUNT     5

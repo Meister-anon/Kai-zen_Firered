@@ -9122,6 +9122,7 @@ SandTombSwirlingDirt:: @ 81D2DE3
 	delay 2
 	return
 
+MOVE_FLASH_FREEZE:	@hope works
 Move_SHEER_COLD:: @ 81D2E6E
 	fadetobg 15
 	waitbgfadeout
@@ -23839,8 +23840,8 @@ Move_COCOON:: @ animation didn''t work because I forgot to define it at top
 Move_MONOTYPE::
 	end @to do:
 
-MOVE_FLASH_FREEZE::
-	end @to do:
+
+@flash freeze put on sheercold
 
 MOVE_DRYADS_CURSE::
 	end @to do:

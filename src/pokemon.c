@@ -2976,7 +2976,14 @@ void CalculateMonStats(struct Pokemon *mon)
         if (currentHP == 0 && oldMaxHP == 0)
             currentHP = newMaxHP;
         else if (currentHP != 0 && newMaxHP >= oldMaxHP) //To prevent garbage data after Dynamax form change (from cfru hopefully will allow hp shift mid battle)
+        {
+            // BUG: currentHP is unintentionally able to become <= 0 after the instruction below.
             currentHP += newMaxHP - oldMaxHP;
+            #ifdef BUGFIX
+            if (currentHP <= 0)
+                currentHP = 1;
+            #endif
+        }
         else
             return;
     }
@@ -4991,7 +4998,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
     case MON_DATA_IVS:
     {
-#ifdef BUGFIX_SETMONIVS
+#ifdef BUGFIX
         u32 ivs = data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
 #else
         u32 ivs = *data; // Bug: Only the HP IV and the lower 3 bits of the Attack IV are read. The rest become 0.

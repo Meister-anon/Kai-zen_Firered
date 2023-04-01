@@ -2525,7 +2525,11 @@ static bool8 sub_81052D0(u8 a0)
         }
         else
         {
+#ifdef BUGFIX
+            sub_81051F0(0);
+#else
             sub_81051F0(gUnknown_203ACF0->field_02[0]);
+#endif
             BeginNormalPaletteFade(0x00007FFF, 0, 16, 16, r4);
             gUnknown_203ACF0->field_02[0]++;
         }

@@ -259,13 +259,20 @@ static s32 CountRoamerNests(u16 species, struct Subsprite * subsprites)
 
 static bool32 PokemonInAnyEncounterTableInMap(const struct WildPokemonHeader * data, s32 species)
 {
-    if (PokemonInEncounterTable(data->landMonsInfo, species, 12))
+    if (PokemonInEncounterTable(data->landMonsInfo, species, LAND_WILD_COUNT))
         return TRUE;
-    if (PokemonInEncounterTable(data->waterMonsInfo, species, 5))
+    if (PokemonInEncounterTable(data->waterMonsInfo, species, WATER_WILD_COUNT))
         return TRUE;
-    if (PokemonInEncounterTable(data->fishingMonsInfo, species, 12)) // 10
+    //if (PokemonInEncounterTable(data->fishingMonsInfo, species, 12)) // 10
+    // When searching the fishing encounters, this incorrectly uses the size of the land encounters.
+// As a result it's reading out of bounds of the fishing encounters tables.
+#ifdef BUGFIX
+    if (PokemonInEncounterTable(data->fishingMonsInfo, species, FISH_WILD_COUNT))
+#else
+    if (PokemonInEncounterTable(data->fishingMonsInfo, species, LAND_WILD_COUNT))
+#endif
         return TRUE;
-    if (PokemonInEncounterTable(data->rockSmashMonsInfo, species, 5))
+    if (PokemonInEncounterTable(data->rockSmashMonsInfo, species, ROCK_WILD_COUNT))
         return TRUE;
 
     return FALSE;

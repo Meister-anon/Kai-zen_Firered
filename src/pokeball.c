@@ -1107,11 +1107,11 @@ u8 CreateTradePokeballSprite(u8 a, u8 b, u8 x, u8 y, u8 oamPriority, u8 subPrior
 
 static void sub_804BC50(struct Sprite *sprite)
 {
-    if (sprite->data[1] == 0)
+    if (sprite->data[1] == 0)   //sDelay
     {
         u8 r6;
-        u8 r7 = sprite->data[0];
-        u8 r8 = sprite->data[2];
+        u8 r7 = sprite->data[0];    //monspriteID
+        u8 r8 = sprite->data[2];    //monPalNum
         u32 r5 = (u16)sprite->data[3] | ((u16)sprite->data[4] << 16);
 
         if (sprite->subpriority != 0)
@@ -1123,6 +1123,11 @@ static void sub_804BC50(struct Sprite *sprite)
         LaunchBallStarsTaskForPokeball(sprite->pos1.x, sprite->pos1.y - 5, sprite->oam.priority, r6);
         sprite->data[1] = LaunchBallFadeMonTaskForPokeball(1, r8, r5);
         sprite->callback = sub_804BCF8;
+#ifdef BUGFIX
+        // FIX: If this is used on a sprite that has previously had an affine animation, it will not
+        // play the shrink anim properly due to being paused.
+        gSprites[r7].affineAnimPaused = FALSE;
+#endif // BUGFIX
         StartSpriteAffineAnim(&gSprites[r7], 2);
         AnimateSprite(&gSprites[r7]);
         gSprites[r7].data[1] = 0;

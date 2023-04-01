@@ -881,7 +881,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 120,
         .effect = EFFECT_HIT,
         .type = TYPE_WATER,
-        .accuracy = 80,
+        .accuracy = 85,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
@@ -933,7 +933,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #endif
         .effect = EFFECT_FREEZE_HIT,
         .type = TYPE_ICE,
-        .accuracy = 70,
+        .accuracy = 80,
         .pp = 5,
         .secondaryEffectChance = 10,
         .target = MOVE_TARGET_BOTH,
@@ -11560,12 +11560,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_FLASH_FREEZE] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_6
-            .accuracy = 85,
-        #else
-            .accuracy = 75,
-        #endif
-        .effect = EFFECT_FLASH_FREEZE,   //make flash freeze effect
+        .accuracy = 75, //85 was way too high
+        .effect = EFFECT_FLASH_FREEZE,   //ice will o wisp - give to regice also need to make animation maybe just use sheer cold animation? done
         .power = 0,
         .type = TYPE_ICE,
         .pp = 15,

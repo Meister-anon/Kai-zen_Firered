@@ -425,7 +425,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectRockSmash
 	.4byte BattleScript_EffectFlash
 	.4byte BattleScript_EffectCocoon
-	.4byte BattleScript_EffectFlashFreeze
+	.4byte BattleScript_EffectFlashFreeze	@ice will o wisp
 	.4byte BattleScript_EffectFireSpin	@copyof trap
 	.4byte BattleScript_EffectClamp
 	.4byte BattleScript_EffectWhirlpool
@@ -6561,6 +6561,11 @@ BattleScript_BurnTurnDmg::
 
 BattleScript_FreezeTurnDmg::
 	printstring STRINGID_PKMNHURTBYFREEZE
+	waitmessage 0x40
+	goto BattleScript_DoStatusTurnDmg
+
+BattleScript_FrostbiteTurnDmg::
+	printstring STRINGID_PKMNHURTBYFROSTBITE
 	waitmessage 0x40
 	goto BattleScript_DoStatusTurnDmg
 

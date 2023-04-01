@@ -181,6 +181,7 @@ bool8 IsRoamerAt(u8 mapGroup, u8 mapNum)
 
 void CreateRoamerMonInstance(void)
 {
+    u32 status;
     struct Pokemon *mon;
     struct Roamer *roamer;
 
@@ -188,7 +189,14 @@ void CreateRoamerMonInstance(void)
     ZeroEnemyPartyMons();
     roamer = &saveRoamer;
     CreateMonWithIVsPersonality(mon, roamer->species, roamer->level, roamer->ivs, roamer->personality);
-    SetMonData(mon, MON_DATA_STATUS, &gSaveBlock1Ptr->roamer.status);
+    // The roamer's status field is u8, but SetMonData expects status to be u32, so will set the roamer's status
+// using the status field and the following 3 bytes (cool, beauty, and cute).
+#ifdef BUGFIX
+    status = roamer->status;
+    SetMonData(mon, MON_DATA_STATUS, &status);
+#else
+    SetMonData(mon, MON_DATA_STATUS, roamer->status);
+#endif
     SetMonData(mon, MON_DATA_HP, &gSaveBlock1Ptr->roamer.hp);
     SetMonData(mon, MON_DATA_COOL, &gSaveBlock1Ptr->roamer.cool);
     SetMonData(mon, MON_DATA_BEAUTY, &gSaveBlock1Ptr->roamer.beauty);

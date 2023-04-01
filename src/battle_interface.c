@@ -154,6 +154,23 @@ enum
     HEALTHBOX_GFX_117, //unknown_D1300C
 };
 
+// Because the healthbox is too large to fit into one sprite, it is divided
+// into two sprites. The left sprite is used as the 'main' healthbox sprite,
+// while the right sprite is the 'other' healthbox sprite.
+// There is also a third sprite for the healthbar, visible on the healthbox.
+
+// sprite data for main (left) healthbox sprite
+#define sHealthboxOtherSpriteId oam.affineParam
+#define sHealthBarSpriteId      data[5]
+#define sBattlerId              data[6]
+
+// sprite data for other (right) healthbox sprite
+#define sHealthboxSpriteId      data[5]
+
+// sprite data for healthbar sprite
+#define sHealthboxSpriteId      data[5]
+#define sHealthbarType          data[6]
+
 static void SpriteCB_HealthBoxOther(struct Sprite * sprite);
 static void SpriteCB_HealthBar(struct Sprite * sprite);
 static const u8 *GetHealthboxElementGfxPtr(u8 which);
@@ -1516,19 +1533,27 @@ void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
 
     spriteTileNum = gSprites[healthboxSpriteId].oam.tileNum * TILE_SIZE_4BPP;
 
-    if (GetBattlerSide(gSprites[healthboxSpriteId].data[6]) == B_SIDE_PLAYER)
+    if (GetBattlerSide(gSprites[healthboxSpriteId].sBattlerId) == B_SIDE_PLAYER)
     {
-        TextIntoHealthboxObject((void*)(OBJ_VRAM0 + 0x40 + spriteTileNum), windowTileData, 6);
+        TextIntoHealthboxObject((void *)(OBJ_VRAM0 + 2 * TILE_SIZE_4BPP + spriteTileNum), windowTileData, 6);//which is last value here
+        ptr = (void *)(OBJ_VRAM0);
+        if (!IsDoubleBattle())
+            ptr += spriteTileNum + 64 * TILE_SIZE_4BPP; //is 64 because first function uses 2 x TILE_SIZE_4BPP which is 32
+        else
+            ptr += spriteTileNum + 32 * TILE_SIZE_4BPP;
+
+        TextIntoHealthboxObject(ptr, windowTileData + 6 * TILE_SIZE_4BPP, 2); //changed from 1 to 2 seemed to fix.
+    }//value added to windowTileData uses 6 because 1st function ended in window width 6
+    else 
+    {
+        TextIntoHealthboxObject((void *)(OBJ_VRAM0 + TILE_SIZE_4BPP + spriteTileNum), windowTileData, 7);// & here
         ptr = (void*)(OBJ_VRAM0);
         if (!IsDoubleBattle())
-            ptr += spriteTileNum + 0x800;
+            ptr += spriteTileNum + 32 * TILE_SIZE_4BPP;
         else
-            ptr += spriteTileNum + 0x400;
-        TextIntoHealthboxObject(ptr, windowTileData + 0xC0, 2); //this seems to be width of window, last value changed from 1 to 2.
-    }
-    else    //enemy side needs a fix, gender symbol not showing don't know how to make calc for..
-    {
-        TextIntoHealthboxObject((void*)(OBJ_VRAM0 + 0x20 + spriteTileNum), windowTileData, 7);
+            ptr += spriteTileNum + 16 * TILE_SIZE_4BPP;
+
+        TextIntoHealthboxObject(ptr, windowTileData + 7 * TILE_SIZE_4BPP, 1); //works and since health box size wasnt changed I need 1 here as I have 7
     }
 
     RemoveWindowOnHealthbox(windowId);
@@ -1764,6 +1789,7 @@ static void UpdateLeftNoOfBallsTextOnHealthbox(u8 healthboxSpriteId)
     RemoveWindowOnHealthbox(windowId);
 }
 
+#define HEALTHBOX_LOGIC
 void UpdateHealthboxAttribute(u8 healthboxSpriteId, struct Pokemon *mon, u8 elementId)
 {
     s32 maxHp, currHp;
@@ -2155,13 +2181,13 @@ u8 GetHPBarLevel(s16 hp, s16 maxhp)
         u8 fraction = GetScaledHPFraction(hp, maxhp, B_HEALTHBAR_PIXELS);
         if (fraction > (B_HEALTHBAR_PIXELS * 50 / 100)) // more than 50 % hp
             result = HP_BAR_GREEN;
-        else if (fraction > (B_HEALTHBAR_PIXELS * 20 / 100)) // more than 20% hp
+        else if (fraction > (B_HEALTHBAR_PIXELS * 20 / 100)) // more than 20% hp; less than or equal 50 %
             result = HP_BAR_YELLOW;
-        else if (fraction > 0)
+        else if (fraction > 0)      //more than 0% less than or equal to 20%
             result = HP_BAR_RED;
         else
             result = HP_BAR_EMPTY;
-    }
+    }//so in a pinch makes sense, and will activate soon as hp is in yellow
 
     return result;
 }
