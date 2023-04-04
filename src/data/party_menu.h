@@ -65,7 +65,7 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
              88, 10, 48,  3  // HP bar
         }, 
         77, 4, 64, 16        // Description text
-    },
+    },//leaving alone
 };
 
 static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =

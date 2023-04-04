@@ -36,7 +36,7 @@
 #endif // ENGLISH
 
 #define BUGFIX
-
+#define SPECIES_NAME_EXPANSION
 // Crashes may occur due to section reordering in the modern build,
 // so we force BUGFIX here.
 #if MODERN

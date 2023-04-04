@@ -1601,30 +1601,30 @@ static void HandleDpadMovement(struct Task *task)
 #undef tKeyboardEvent
 #undef tKbFunctionKey
 
-static void PrintTitleFunction_NoMon(void)
+static void DrawNormalTextEntryBox(void)
 {
     FillWindowPixelBuffer(sNamingScreenData->windows[3], PIXEL_FILL(1));
     AddTextPrinterParameterized(sNamingScreenData->windows[3], 1, sNamingScreenData->template->title, 1, 1, 0, NULL);
     PutWindowTilemap(sNamingScreenData->windows[3]);
 }
 
-static void PrintTitleFunction_WithMon(void)
+static void DrawMonTextEntryBox(void)
 {
     u8 buffer[0x20];
 
     StringCopy(buffer, gSpeciesNames[sNamingScreenData->monSpecies]);
     StringAppendN(buffer, sNamingScreenData->template->title, 15);
     FillWindowPixelBuffer(sNamingScreenData->windows[3], PIXEL_FILL(1));
-    AddTextPrinterParameterized(sNamingScreenData->windows[3], 1, buffer, 1, 1, 0, NULL);
+    AddTextPrinterParameterized(sNamingScreenData->windows[3], 1, buffer, 0, 1, 0, NULL);
     PutWindowTilemap(sNamingScreenData->windows[3]);
 }
 
 static void (*const sPrintTitleFuncs[])(void) = {
-    [NAMING_SCREEN_PLAYER]     = PrintTitleFunction_NoMon,
-    [NAMING_SCREEN_BOX]        = PrintTitleFunction_NoMon,
-    [NAMING_SCREEN_CAUGHT_MON] = PrintTitleFunction_WithMon,
-    [NAMING_SCREEN_NAME_RATER] = PrintTitleFunction_WithMon,
-    [NAMING_SCREEN_RIVAL]      = PrintTitleFunction_NoMon
+    [NAMING_SCREEN_PLAYER]     = DrawNormalTextEntryBox,
+    [NAMING_SCREEN_BOX]        = DrawNormalTextEntryBox,
+    [NAMING_SCREEN_CAUGHT_MON] = DrawMonTextEntryBox,
+    [NAMING_SCREEN_NICKNAME]   = DrawMonTextEntryBox,
+    [NAMING_SCREEN_RIVAL]      = DrawNormalTextEntryBox
 };
 
 static void PrintTitle(void)
@@ -1962,7 +1962,7 @@ static void Debug_DoNamingScreen_CaughtMon(void)
 
 static void Debug_DoNamingScreen_NameRater(void)
 {
-    DoNamingScreen(NAMING_SCREEN_NAME_RATER, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, MON_MALE, 0, CB2_ReturnToFieldWithOpenMenu);
+    DoNamingScreen(NAMING_SCREEN_NICKNAME, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, MON_MALE, 0, CB2_ReturnToFieldWithOpenMenu);
 }
 
 static void Debug_DoNamingScreen_Rival(void)
