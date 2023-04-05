@@ -285,6 +285,7 @@ struct SpecialStatus
     u8 ppNotAffectedByPressure : 1;
     u8 flag40 : 1;
     u8 focusBanded : 1;
+    u8 focusSashed : 1;
     u8 field1[3];
     u8 berryReduced : 1;
     u8 rototillerAffected : 1;  // to be affected by rototiller

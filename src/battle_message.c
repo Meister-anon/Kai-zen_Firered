@@ -1396,13 +1396,14 @@ const u8 *const gBattleStringsTable[] = {
 };
 
 //may be able to use for wondeguard miss with multhit moves
+/*
 const u16 gMissStringIds[] = {
     STRINGID_ATTACKMISSED,
     STRINGID_PKMNPROTECTEDITSELF,
     STRINGID_PKMNAVOIDEDATTACK,
     STRINGID_AVOIDEDDAMAGE,
     STRINGID_PKMNMAKESGROUNDMISS
-};
+};*/
 
 //will keep this, and setup just a few special abilities to announce themselves
 //some of these are necessary as they announce activation not switchin
@@ -1478,11 +1479,12 @@ const u16 gRainContinuesStringIds[] = {
     STRINGID_RAINSTOPPED
 };
 
+/*
 const u16 gProtectLikeUsedStringIds[] = {
     STRINGID_PKMNPROTECTEDITSELF2,
     STRINGID_PKMNBRACEDITSELF,
     STRINGID_BUTITFAILED
-};
+};*/
 
 const u16 gReflectLightScreenSafeguardStringIds[] = {
     STRINGID_BUTITFAILED,

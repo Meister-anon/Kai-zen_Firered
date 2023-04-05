@@ -1602,7 +1602,7 @@ static void atk01_accuracycheck(void)
     {
         if (gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS && move == NO_ACC_CALC_CHECK_LOCK_ON && gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker)
             gBattlescriptCurrInstr += 7;
-        else if (gStatuses3[gBattlerTarget] & (STATUS3_SEMI_INVULNERABLE)
+        else if (gStatuses3[gBattlerTarget] & (STATUS3_SEMI_INVULNERABLE))
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
         else if (!JumpIfMoveAffectedByProtect(0))
             gBattlescriptCurrInstr += 7;
@@ -1988,7 +1988,7 @@ static void atk06_typecalc(void)
 {
     s32 i = 0;
     u8 moveType;
-    u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBaseStats[gBattlerTarget].type3;
+    u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBattleMons[gBattlerTarget].type3;
 
     if (gCurrentMove == (MOVE_STRUGGLE || MOVE_BIDE)) //should let hit ghost types could just remove typecalc bs from script instead...
     {
@@ -2108,7 +2108,7 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
     u8 flags = 0;
     s32 i = 0;
     u8 moveType;
-    u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBaseStats[gBattlerTarget].type3;
+    u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBattleMons[gBattlerTarget].type3;
 
     if (gCurrentMove == MOVE_STRUGGLE || !gBattleMoves[gCurrentMove].power)
         return;//if move is struggle or fixed damage ignores checks
@@ -2248,7 +2248,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
     s32 i = 0;
     u8 flags = 0;
     u8 moveType;
-    u8 type1 = gBaseStats[defender].type1, type2 = gBaseStats[defender].type2, type3 = gBaseStats[defender].type3;
+    u8 type1 = gBaseStats[defender].type1, type2 = gBaseStats[defender].type2, type3 = gBattleMons[defender].type3;
 
     if (move == (MOVE_STRUGGLE || MOVE_BIDE))
         return 0;
@@ -2333,7 +2333,7 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u8 targetAbility)
 {
     s32 i = 0;
     u8 flags = 0;
-    u8 type1 = gBaseStats[targetSpecies].type1, type2 = gBaseStats[targetSpecies].type2, type3 = gBaseStats[targetSpecies].type3;
+    u8 type1 = gBaseStats[targetSpecies].type1, type2 = gBaseStats[targetSpecies].type2, type3 = gBattleMons[targetSpecies].type3;
     u8 moveType;
 
     if (move == (MOVE_STRUGGLE || MOVE_BIDE))
@@ -5679,7 +5679,7 @@ static void atk4A_typecalc2(void)   //think can do dual type stuff here? or do I
     u8 flags = 0;
     s32 i = 0;
     u8 moveType = gBattleMoves[gCurrentMove].type;
-    u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBaseStats[gBattlerTarget].type3;
+    u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBattleMons[gBattlerTarget].type3;
 
     /*if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
    {
@@ -5952,7 +5952,7 @@ bool32 CanBattlerSwitch(u32 battlerId)
     }
     else if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
     {
-        if (gBattleTypeFlags & BATTLE_TYPE_TOWER_LINK_MULTI)
+        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_TOWER)
         {
             if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
             {
@@ -7374,8 +7374,13 @@ static void atk69_adjustsetdamage(void)
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gSpecialStatuses[gBattlerTarget].focusBanded = 1;
     }
+    else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && BATTLER_MAX_HP(gBattlerTarget))
+    {
+        RecordItemEffectBattle(gBattlerTarget, holdEffect);
+        gSpecialStatuses[gBattlerTarget].focusSashed = TRUE;
+    }
     if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
-     && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded)
+     && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded || && gSpecialStatuses[gBattlerTarget].focusSashed)
      && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage)
     {
         gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
@@ -7384,6 +7389,11 @@ static void atk69_adjustsetdamage(void)
             gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED;
         }
         else if (gSpecialStatuses[gBattlerTarget].focusBanded)
+        {
+            gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
+            gLastUsedItem = gBattleMons[gBattlerTarget].item;
+        }
+        else if (gSpecialStatuses[gBattlerTarget].focusSashed)
         {
             gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
             gLastUsedItem = gBattleMons[gBattlerTarget].item;
@@ -10749,7 +10759,13 @@ static void atk93_tryKO(void)
     if (holdEffect == HOLD_EFFECT_FOCUS_BAND && (Random() % 100) < param)
     {
         RecordItemEffectBattle(gBattlerTarget, HOLD_EFFECT_FOCUS_BAND);
-        gSpecialStatuses[gBattlerTarget].focusBanded = 1;
+        gSpecialStatuses[gBattlerTarget].focusBanded = TRUE;
+    }
+
+    if (holdEffect == HOLD_EFFECT_FOCUS_SASH && BATTLER_MAX_HP(gBattlerTarget))
+    {
+        RecordItemEffectBattle(gBattlerTarget, HOLD_EFFECT_FOCUS_SASH);
+        gSpecialStatuses[gBattlerTarget].focusSashed = TRUE;
     }
 
     if (gBattleMons[gBattlerTarget].ability == ABILITY_STURDY)
@@ -10792,6 +10808,12 @@ static void atk93_tryKO(void)
                 gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED;
             }
             else if (gSpecialStatuses[gBattlerTarget].focusBanded)
+            {
+                gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
+                gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
+                gLastUsedItem = gBattleMons[gBattlerTarget].item;
+            }
+            else if (gSpecialStatuses[gBattlerTarget].focusSashed)
             {
                 gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
                 gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
