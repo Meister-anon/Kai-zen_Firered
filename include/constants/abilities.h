@@ -301,7 +301,7 @@
 #define ABILITY_OVERCHARGE 278
 #define ABILITY_PHOTOSYNTHESIZE 279
 #define ABILITY_GLACIAL_ICE 280
-#define ABILITY_LAVA_DISTORTION 281 // pending heatran ability
+#define ABILITY_LAVA_FISSURE 281 // pending heatran ability
 #define ABILITY_TOADSTOOL_NYMPH 282 // pending Shiinotic ability
 
 //#define ABILITY_DARK_DEAL 282   //companion ability to nuisance, cuts dynamicbasepower of partner moves in half,

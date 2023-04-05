@@ -389,7 +389,7 @@ static const u16 sDexCategory_WatersEdgePkmn_Page13[] = {
 static const u16 sDexCategory_WatersEdgePkmn_Page14[] = {
     SPECIES_TOTODILE,
     SPECIES_CROCONAW,
-    SPECIES_FERALIGATR,
+    SPECIES_FERALIGATOR,
 };
 
 static const u16 sDexCategory_WatersEdgePkmn_Page15[] = {

@@ -2674,6 +2674,7 @@ static void BattleStartClearSetData(void)
     }
 }
 
+#define CLEARDATA_ON_SWITCH
 void SwitchInClearSetData(void) //handles what gets reset on switchout
 {
     struct DisableStruct disableStructCopy = gDisableStructs[gActiveBattler];
@@ -2687,7 +2688,7 @@ void SwitchInClearSetData(void) //handles what gets reset on switchout
         for (i = 0; i < gBattlersCount; ++i)
         {
             if ((gBattleMons[i].status2 & STATUS2_ESCAPE_PREVENTION) && gDisableStructs[i].battlerPreventingEscape == gActiveBattler)
-                gBattleMons[i].status2 &= ~STATUS2_ESCAPE_PREVENTION;
+                gBattleMons[i].status2 &= ~STATUS2_ESCAPE_PREVENTION; //if mon blocking escape switches, removes escape prevention status
             if ((gStatuses3[i] & STATUS3_ALWAYS_HITS) && gDisableStructs[i].battlerWithSureHit == gActiveBattler)
             {
                 gStatuses3[i] &= ~STATUS3_ALWAYS_HITS;
@@ -2770,6 +2771,7 @@ void SwitchInClearSetData(void) //handles what gets reset on switchout
     gCurrentMove = MOVE_NONE;
 }
 
+#define CLEARDATA_ON_FAINT
 void FaintClearSetData(void)
 {
     s32 i;
@@ -3418,8 +3420,8 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
     }//vsonic IMPORTANT do search, for status2_wrapped & wrappedby  implement new trap checks where it makes sense
     //similar to as below
     if (((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))//vsonic need add new trap status here
-     || (gBattlemons[gActiveBattler].status4 == ITS_A_TRAP_STATUS4)
-     || (gBattlemons[gActiveBattler].status1 == ITS_A_TRAP_STATUS1)
+     || (gBattleMons[gActiveBattler].status4 == ITS_A_TRAP_STATUS4)
+     || (gBattleMons[gActiveBattler].status1 == ITS_A_TRAP_STATUS1)
      || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
      || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK))
      || (!IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)

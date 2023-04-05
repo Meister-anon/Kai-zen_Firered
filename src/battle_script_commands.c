@@ -6054,6 +6054,7 @@ bool32 CanBattlerSwitch(u32 battlerId)
     return ret;
 }
 
+#define OTHER_SWITCH_EFFECTS_1
 static void atk4F_jumpifcantswitch(void)
 {
     s32 i;

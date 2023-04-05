@@ -800,7 +800,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x67,
         .y_offset = 5,
     },
-    [SPECIES_FERALIGATR] =
+    [SPECIES_FERALIGATOR] =
     {
         .size = 0x88,
         .y_offset = 1,
