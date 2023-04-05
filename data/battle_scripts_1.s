@@ -7151,6 +7151,18 @@ BattleScript_ShedSkinActivates::
 	updatestatusicon BS_ATTACKER
 	end3
 
+BattleScript_PurifyingAuraActivates::
+	printstring STRINGID_HEALERCURE
+	waitmessage 0x40
+	updatestatusicon BS_ATTACKER
+	end3
+
+BattleScript_PurifyingAuraActivatesForPartner::
+	printstring STRINGID_HEALERCURE
+	waitmessage 0x40
+	updatestatusicon BS_SCRIPTING
+	end3
+
 BattleScript_HandleWeatherFormChanges::
 	setbyte sBATTLER, 0
 BattleScript_WeatherFormChangesLoop::

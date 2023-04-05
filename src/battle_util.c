@@ -4142,6 +4142,35 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
+            case ABILITY_PURIFYING_AURA:
+                if (gBattleMons[battler].status2 != STATUS2_CONFUSION)  //switch in ver.
+                {
+                    if (gBattleMons[battler].status1 & STATUS1_ANY)
+                    {
+
+                        gBattleMons[battler].status1 = 0;
+                        gBattleMons[battler].status2 &= ~(STATUS2_NIGHTMARE);  // fix nightmare glitch
+                        gBattleScripting.battler = gActiveBattler = battler;
+                        BattleScriptPushCursorAndCallback(BattleScript_PurifyingAuraActivates);
+                        BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
+                        MarkBattlerForControllerExec(gActiveBattler);
+                        ++effect;
+                    }
+                    if (IsBattlerAlive(BATTLE_PARTNER(battler))) {
+                        if (gBattleMons[BATTLE_PARTNER(battler)].status1 & STATUS1_ANY)    //PARTNER status clear
+                        {
+
+                            gBattleMons[BATTLE_PARTNER(battler)].status1 = 0;
+                            gBattleMons[BATTLE_PARTNER(battler)].status2 &= ~(STATUS2_NIGHTMARE);  // fix nightmare glitch
+                            gBattleScripting.battler = gActiveBattler = BATTLE_PARTNER(battler);
+                            BattleScriptPushCursorAndCallback(BattleScript_PurifyingAuraActivatesForPartner);
+                            BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
+                            MarkBattlerForControllerExec(gActiveBattler);
+                            ++effect;
+                        }
+                    }
+                }
+                break;
             case ABILITY_DEFEATIST:
                 if (gBattleMons[battler].hp < (gBattleMons[battler].maxHP / 2))
                 {
@@ -4234,8 +4263,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     if ((gBattleMons[battler].status1 & STATUS1_ANY) && (Random() % 3) == 0)
                     {
                         if (gBattleMons[battler].status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON))
-                            StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
-                        if (gBattleMons[battler].status1 & STATUS1_SLEEP)
+                            StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn); //no idea why this is here? but its in emerald too
+                        if (gBattleMons[battler].status1 & STATUS1_SLEEP) //here because shedskin string uses buff1 to read status on mon
                             StringCopy(gBattleTextBuff1, gStatusConditionString_SleepJpn);
                         if (gBattleMons[battler].status1 & STATUS1_PARALYSIS)
                             StringCopy(gBattleTextBuff1, gStatusConditionString_ParalysisJpn);
@@ -4250,6 +4279,35 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
                         MarkBattlerForControllerExec(gActiveBattler);
                         ++effect;
+                    }
+                    break;
+                case ABILITY_PURIFYING_AURA:
+                    if (gBattleMons[battler].status2 != STATUS2_CONFUSION)  //end turn ver.
+                    {
+                        if (gBattleMons[battler].status1 & STATUS1_ANY)
+                        {
+
+                            gBattleMons[battler].status1 = 0;
+                            gBattleMons[battler].status2 &= ~(STATUS2_NIGHTMARE);  // fix nightmare glitch
+                            gBattleScripting.battler = gActiveBattler = battler;
+                            BattleScriptPushCursorAndCallback(BattleScript_PurifyingAuraActivates);
+                            BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
+                            MarkBattlerForControllerExec(gActiveBattler);
+                            ++effect;
+                        }
+                        if (IsBattlerAlive(BATTLE_PARTNER(battler))) {
+                            if (gBattleMons[BATTLE_PARTNER(battler)].status1 & STATUS1_ANY)    //PARTNER status clear
+                            {
+
+                                gBattleMons[BATTLE_PARTNER(battler)].status1 = 0;
+                                gBattleMons[BATTLE_PARTNER(battler)].status2 &= ~(STATUS2_NIGHTMARE);  // fix nightmare glitch
+                                gBattleScripting.battler = gActiveBattler = BATTLE_PARTNER(battler);
+                                BattleScriptPushCursorAndCallback(BattleScript_PurifyingAuraActivatesForPartner);
+                                BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
+                                MarkBattlerForControllerExec(gActiveBattler);
+                                ++effect;
+                            }
+                        }
                     }
                     break;
                 case ABILITY_SPEED_BOOST:

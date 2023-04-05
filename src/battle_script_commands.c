@@ -8778,7 +8778,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattlescriptCurrInstr += 7;
         }
         return;
-    case VARIOUS_CURE_STATUS: //if change status instea of flat 0, may need to have multiple conditional statement to remove specific status
+    case VARIOUS_CURE_STATUS: 
         gBattleMons[gActiveBattler].status1 = 0;
         BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
         MarkBattlerForControllerExec(gActiveBattler);

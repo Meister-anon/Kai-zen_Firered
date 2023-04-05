@@ -158,6 +158,9 @@ as well as the effect of increasing trap duration
 * 
 * GIVE Turtonator more stab moves? or more early moves
 * 
+* make revisions to add grass moves to sudowoodo line lvl up and tm learnsets   thinkin ingrain & bullet seed
+* think want to also add beatup if it doesn't have already
+* 
 * GIVE shiinotic creepier more cursed front sprite -
 * and change type to grass ghost but give ability nymph spirit to give it triple stab, boosts fairy type moves think 
 * will roll in illuminate effect as replacement, nymphs usually draw in forest creatures so it would work. -This part is done
@@ -180,6 +183,9 @@ as well as the effect of increasing trap duration
 * the thaw effect or not.]
 * and then display a different string for end turn if defrosted rather than thawed, would be hurt by frostbite
 * only remove status icon  if thawed, or ice cured or status cured w items
+* 
+* check shed skin ability, after changing define values to fit new straps, the bitwise may go wonky?
+* another reason to remove new status 1 traps for grip claw & implement with conditional logic instead
 * 
 * 
 * Make copy ability of tinted lens, for non bugs, call it protag powere or subversion or great expectations  tiger cub?
@@ -338,6 +344,17 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * Setting up new effeets for absorb abilities
 * make all work like lightnight rod and change targetting to draw in moves
 * counter balance is only does that if ability mon isn't statused 
+* 
+* New signature ability for suicune
+* purifying aura, similar effect to healer, also mon removes all status1 effects on itself & allies at the end of turn
+* shed skin but not random  in doubles heals status of ally on switchin as well.   replace pressure think can use plus minus ability effect
+* nvm plus/minus use field sport effect which is both sides of field I just want that prat to effect your side so partner on switch in
+* plan to make on all status exlcuuding traps, to make it a great team mon for abrorbing mon or intimidate mon who's abilities get canceled
+* with status 
+* 
+* tweak idea, to make bit less overpowered, will just do status1, leaving confusion and infatuation as viable options
+* rather than not having an out/counter - DONE  *need test though
+* 
 */
 
 goto PRIORITY_EFFECTS	//battle_main.c all effects regarding priority changes go here.
