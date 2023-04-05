@@ -131,6 +131,8 @@ as well as the effect of increasing trap duration
 * 
 * Further buff cupid arrow for luvdisc make it ignore gender check, as its the love pokemon and something further to make it more unique. DONE
 * 
+* BUFFED unown, learnset and new ability
+* 
 * nother wave of buffs, delcatty buff, will need change its pokedex entry to fit, made part ghost, cats have 9 lives
 * may say delcatty is cat that died and came back intending to live its life to the fullest of its desire.
 * 
