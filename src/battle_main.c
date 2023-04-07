@@ -418,7 +418,7 @@ const u8 gTypeEffectiveness[411] = // 336 is number of entries x 3 i.e number of
     TYPE_BUG, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_FLYING, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_BUG, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,//removed ghost resistance by accident in my chart, but 
+    TYPE_BUG, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,//removed ghost resistance to bug by accident in my chart, but 
     TYPE_BUG, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE, //was so good will add to my chart
     TYPE_BUG, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_ROCK, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,

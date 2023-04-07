@@ -1170,6 +1170,7 @@ enum
     ENDTURN_FIELD_COUNT,
 };
 
+#define FIELD_ENDTURN
 u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
 {
     u8 effect = 0;
@@ -1397,7 +1398,7 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
         case ENDTURN_SUN:
             if (gBattleWeather & WEATHER_SUN_ANY)
             {
-                if (!(gBattleWeather & WEATHER_SUN_PERMANENT) && --gWishFutureKnock.weatherDuration == 0)
+                if (!(gBattleWeather & WEATHER_SUN_PERMANENT) && --gWishFutureKnock.weatherDuration == 0)//weather decrement
                 {
                     gBattleWeather &= ~WEATHER_SUN_TEMPORARY;
                     gBattlescriptCurrInstr = BattleScript_SunlightFaded;
@@ -3262,7 +3263,7 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
         gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1]);
         return TRUE;
     }
-    else if (gBattleWeather & B_WEATHER_PRIMAL_ANY
+    else if (gBattleWeather & WEATHER_PRIMAL_ANY
         && battlerAbility != ABILITY_DESOLATE_LAND
         && battlerAbility != ABILITY_PRIMORDIAL_SEA
         && battlerAbility != ABILITY_DELTA_STREAM)
@@ -3611,12 +3612,23 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     ++effect;
                 }
                 break;
+            case ABILITY_SQUALL:
+                if (!(gBattleWeather & WEATHER_RAIN_PERMANENT))
+                {
+                    gBattleWeather = (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY);
+                    BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
+                    gBattleScripting.battler = battler;
+                    gBattleStruct->weathersetBy[battler] = battler;
+                    ++effect;
+                }
+                break;
             case ABILITY_SAND_STREAM:
                 if (!(gBattleWeather & WEATHER_SANDSTORM_PERMANENT))
                 {
                     gBattleWeather = (WEATHER_SANDSTORM_PERMANENT | WEATHER_SANDSTORM_TEMPORARY);
                     BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
                     gBattleScripting.battler = battler;
+                    gBattleStruct->weathersetBy[battler] = battler;
                     ++effect;
                 }
                 break;
@@ -3629,12 +3641,23 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     ++effect;
                 }
                 break;
+            case ABILITY_HIGH_NOON:
+                if (!(gBattleWeather & WEATHER_SUN_PERMANENT))
+                {
+                    gBattleWeather = (WEATHER_SUN_PERMANENT | WEATHER_SUN_TEMPORARY);
+                    BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
+                    gBattleScripting.battler = battler;
+                    gBattleStruct->weathersetBy[battler] = battler;
+                    ++effect;
+                }
+                break;
             case ABILITY_SNOW_WARNING:
                 if (!(gBattleWeather & WEATHER_HAIL_PERMANENT))
                 {
                     gBattleWeather = WEATHER_HAIL_ANY;
                     BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
                     gBattleScripting.battler = battler;
+                    gBattleStruct->weathersetBy[battler] = battler;
                     ++effect;
                 }
                 break;
@@ -4217,7 +4240,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 switch (gLastUsedAbility)
                 {
                 case ABILITY_RAIN_DISH:
-                    if (WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_RAIN_ANY)
+                    if (IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)
                      && gBattleMons[battler].maxHP > gBattleMons[battler].hp
                         && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
                     {
@@ -4246,8 +4269,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                 case ABILITY_GLACIAL_ICE:
                 case ABILITY_ICE_BODY:
-                    if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)
-                        && gBattleMons[battler].maxHP > gBattleMons[battler].hp
+                    if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY) //this function only matters for rain & sun otherwise can use
+                        && gBattleMons[battler].maxHP > gBattleMons[battler].hp //weather_has_effect
                         && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
                     {
                         //gLastUsedAbility = ABILITY_ICE_BODY; //without this line can use same block for multiple abilities
@@ -4571,7 +4594,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                     }
                     break;
-                }
+                }//end of end turn abilities
                 
             }
             break;

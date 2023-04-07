@@ -2126,10 +2126,15 @@ const u8 gSkittyPokedexText[] = _(
 
 const u8 gSkittyPokedexTextUnused[] = _("");
 
-const u8 gDelcattyPokedexText[] = _(
+/*const u8 gDelcattyPokedexText[] = _(
     "The favorite of trend-conscious\n"
     "female TRAINERS, they are used in\n"
-    "competition for their style and fur.");
+    "competition for their style and fur.");*/
+
+const u8 gDelcattyPokedexText[] = _(
+    "After it's first brush with death\n"
+    "it devoted itself to self-satisfaction.\n"
+    "It is both loved & envied by many.");
 
 const u8 gDelcattyPokedexTextUnused[] = _("");
 

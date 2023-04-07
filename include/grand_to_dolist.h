@@ -71,6 +71,11 @@ but since the player first textintoHealth function ended in 6
 the 2nd function needs the value 6 * TILE_SIZE_4BPP
 
 and since the enemy side ends in 7  that's why I need 7 * TILE_SIZE_4BPP
+
+
+Palachu — Today at 4:06 AM
+Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabominable and since Gen. 9 also Squawkabilly)
+
 */
 
 //TODO:
@@ -83,6 +88,7 @@ and since the enemy side ends in 7  that's why I need 7 * TILE_SIZE_4BPP
 * realized logic for damage on air targets was incomplete 
 * correcting setup -
 * 
+* need to update name length to 12 base, so will need to move health bar
 * 
 * anthroyd advice need to start keeping list of things I plan to use for the thread and what I plan
 * to introduce explicitly in-game I want my new type chart to mostly be discoveredd in game,
@@ -121,7 +127,9 @@ as well as the effect of increasing trap duration
 * General repo update compare to griff red modern fire red search #ifdef BUGFIX
 * and replace bad code with bugfixes don't know if it'll make a differnce or not though - DONE ?
 * 
-* Update pokedex_screen.c and other pokedex files with new function renames -
+* Update pokedex_screen.c and other pokedex files with new function renames - DONE
+* 
+* NEED upgrade pokedex entry graphic so can fit emerald style longer dex entries. -
 * 
 * Re-capitalize ability names, decapitalization doesn't look good in fire red menus - DONE
 * 
@@ -208,10 +216,29 @@ as well as the effect of increasing trap duration
 * make conditional where its supposed to decrement if they're on field timer equals "permanet" i.e timer = 5, if not on field decrement timer
 * that way even if they get one shot its still valuable to put out as a setup.-
 * 
+* Remove drizzle & drought from mon, and replace with new ability's instead of just giving everyone groudon and kyogre's abilities
+* Thinking Squal in place of drizzle  and I guess High Noon in place of drought
+* that way kyogre and groudon can stay special.
+* plan is other weather abilities will be temporary 5 turns like sunny day but better
+* as it resets the timer as long as the mon is still on the field.
+* think will need to make a new struct member for it, simialr to  wrapped by
+* where it'll track the battler who set the weather condition
+* check will be if current weather isn't permament, and matches the weather that would be set by the ability 
+* (as proof it wasn't overwritten by another weather ability) timer gets reset to 5 at end turn
+* if said battler is still on the field. 
+* make meber struct weathersetby  
+* just need to set when ability actiavates like so gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
+* do in ability battle effects just sub effectbattler for battler as ability function already uses battler as aits swithin fun stuff..-
+* 
+* primal weather also sets terrain,  for kyogre & groudon, mega rayquaza would only remove their weather condition
+* where otherwise primal weather can't be changed.  so strengths them a bit as they keep the terrain
+* 
 * Go over field control effects again, i.e traps status terrain weather  drain abilities make sure everything remains in balance
 * I don't want to turn things into a gimmick where the only thing ppl do is status or terrain I want them to be relatively equal options
 * -
-* 
+*/
+goto FIELD_ENDTURN  //battle_util.c  includes weather decrement
+/* 
 *  add and change for regi effects, instead of player needing to know brail, setup archologist npc, maybe in pewter town museum.
 * that will "translate" the text for you to read.   so when you initially find read it, a special flag will be set.
 * in the museum npc he'll chech for those flags from lowest to highest, and read the first he finds each time you talk to him.
@@ -221,7 +248,7 @@ as well as the effect of increasing trap duration
 * i.e "use cut on wall?" yes/no  then check party for a mon that can and do it if possible, or return no one is able to use cut.
 * 
 * 
-* Emerald expansion dropped new icons for legends arceus need update and add
+* Emerald expansion dropped new  mon icons for legends arceus need update and add
 * planning space time events for palkia dialga, so for post game
 * can use that as setup for hisuian mon appearing on the map.
 * scientist is studying  time distortion then space distorition with his tech/device
@@ -259,6 +286,9 @@ goto CATCHING_LOGIC
 * then have pokedex loop through functions baseed on var/value if they aren't 0
 * -Progress-
 */
+
+goto POKEDEX_PAGE_FUNCTIONS
+goto CREATE_POKEDEX_PAGE // all values for creating pokedex page  DexScreen_PrintMonFlavorText  is function for dexx entires
 goto PARTYMENU_GRAPHICS
 /* Found species names were being slightly truncated in some cases, comb through added mon ppost gen 3
 * all names fit current POKEMON_NAME_LENGTH  limit of 10 + 1, but some are shrunken to fit, 
@@ -267,12 +297,24 @@ goto PARTYMENU_GRAPHICS
 * still has issue finding in battle values to adjust, need to move over gender icon
 * found it ,its all in UpdateNickInHealthbox  -increased name length need to expand window width and adjust other parameters that 
 * take mon name  i.e summary screen, & naming screen - playere health box works enemy can't figure out yet  
-* - progress - fixed enemy health bar neeed to setup for the other places and test rest of party slots-
+* - progress - fixed enemy health bar neeed to setup for the other places and test rest of party slots- DONE
+* 
+* found curreent gen name limit is 12, so need add ANOTHER space and will need to figure out how to move health bar to work smh
 * 
 * 
 * also my need to re-capitalize species namees as well. it prob looks fine in emerald but for fire red looks a bit off
 * espcially on some of the wider characters like M  -DONE  (unless I decide to go in and redo the font to look better myself that's it)
 * 
+* 
+* redoing species name expansion
+* need adjust naming screen, parrty menu & pokedex fields again
+* new change add all 3 category page images I made, and make
+* each their own define and have game use species name length
+* to decide which to use, name length 11 use mid, name length 12 uses large
+* everything below 11 can use the original have different window dimmenssions for each
+* 
+* for party menu move left column mon pic up and left,
+* move name over 1 character,  same for right column 
 */ 
 
 
@@ -318,7 +360,7 @@ goto MOVEICON_ABILITYDESC	//function for displaying move icons & ability info in
 * Adjusted summary screen menu for trainer memo, &\ move summary/info page.
 * Need to find a fix for move icons misalignment in moves pags
 * 
-* Also add new string/logic for trainer memo box, for nuzlocke idea
+* Also plan to add new string/logic for trainer memo box, for nuzlocke idea
 * Where pokemon would die and be replaced by ashes when taken to pokemon center
 * Which can be placed at pokemon tower in lavender town after plot point 
 * for a chance to resurect your pokemon based on friendship -needs open slot to work
@@ -394,6 +436,8 @@ goto TURN_ACTIONS_SWITCH_ETC // battle_main.c  HandleTurnActionSelectionState fu
 
 goto EXP_FUNCTION //battle_script_commands.c has exp & level up logic, can be used as example for mid battle evo 
 //	                and needed pokedex logic for double wilds check case 5
+
+
 
 goto ENCOUNTER_COUNT_DATA
 //data for encounter count i.e number of spaces for land/surf mon defines etc.

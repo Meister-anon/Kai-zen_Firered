@@ -580,6 +580,7 @@ struct BattleStruct //fill in unused fields when porting
     u8 wildVictorySong;
     u8 dynamicMoveType;
     u8 wrappedBy[MAX_BATTLERS_COUNT];
+    u8 weathersetBy[MAX_BATTLERS_COUNT];    //new member for tracking who set new weather conditions
     u16 assistPossibleMoves[PARTY_SIZE * MAX_MON_MOVES]; // 6 mons, each of them knowing 4 moves
     u8 focusPunchBattlerId;
     u8 battlerPreventingSwitchout;

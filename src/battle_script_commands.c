@@ -2501,9 +2501,9 @@ END:
         gLastUsedItem = gBattleMons[gBattlerAttacker].item;
     }
 
-    // B_WEATHER_STRONG_WINDS prints a string when it's about to reduce the power
+    // WEATHER_STRONG_WINDS prints a string when it's about to reduce the power
     // of a move that is Super Effective against a Flying-type Pokémon.
-   /* if (gBattleWeather & B_WEATHER_STRONG_WINDS)
+   /* if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
          && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(2.0))
@@ -2597,9 +2597,9 @@ END:
         gLastUsedItem = gBattleMons[gBattlerAttacker].item;
     }
 
-    // B_WEATHER_STRONG_WINDS prints a string when it's about to reduce the power
+    // WEATHER_STRONG_WINDS prints a string when it's about to reduce the power
     // of a move that is Super Effective against a Flying-type Pokémon.
-   /* if (gBattleWeather & B_WEATHER_STRONG_WINDS)
+   /* if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
          && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(2.0))
@@ -9404,27 +9404,27 @@ static void atk76_various(void) //will need to add all these emerald various com
         for (i = 0; i < gBattlersCount; i++)
         {
             u32 ability = GetBattlerAbility(i);
-            if (((ability == ABILITY_DESOLATE_LAND && gBattleWeather & B_WEATHER_SUN_PRIMAL)
-             || (ability == ABILITY_PRIMORDIAL_SEA && gBattleWeather & B_WEATHER_RAIN_PRIMAL)
-             || (ability == ABILITY_DELTA_STREAM && gBattleWeather & B_WEATHER_STRONG_WINDS))
+            if (((ability == ABILITY_DESOLATE_LAND && gBattleWeather & WEATHER_PRIMAL_ANY)
+             || (ability == ABILITY_PRIMORDIAL_SEA && gBattleWeather & WEATHER_RAIN_PRIMAL)
+             || (ability == ABILITY_DELTA_STREAM && gBattleWeather & WEATHER_STRONG_WINDS))
              && IsBattlerAlive(i))
                 shouldNotClear = TRUE;
         }
-        if (gBattleWeather & B_WEATHER_SUN_PRIMAL && !shouldNotClear)
+        if (gBattleWeather & WEATHER_PRIMAL_ANY && !shouldNotClear)
         {
-            gBattleWeather &= ~B_WEATHER_SUN_PRIMAL;
+            gBattleWeather &= ~WEATHER_PRIMAL_ANY;
             //PrepareStringBattle(STRINGID_EXTREMESUNLIGHTFADED, gActiveBattler);
             gBattleCommunication[MSG_DISPLAY] = 1;
         }
-        else if (gBattleWeather & B_WEATHER_RAIN_PRIMAL && !shouldNotClear)
+        else if (gBattleWeather & WEATHER_RAIN_PRIMAL && !shouldNotClear)
         {
-            gBattleWeather &= ~B_WEATHER_RAIN_PRIMAL;
+            gBattleWeather &= ~WEATHER_RAIN_PRIMAL;
             //PrepareStringBattle(STRINGID_HEAVYRAINLIFTED, gActiveBattler);
             gBattleCommunication[MSG_DISPLAY] = 1;
         }
-        else if (gBattleWeather & B_WEATHER_STRONG_WINDS && !shouldNotClear)
+        else if (gBattleWeather & WEATHER_STRONG_WINDS && !shouldNotClear)
         {
-            gBattleWeather &= ~B_WEATHER_STRONG_WINDS;
+            gBattleWeather &= ~WEATHER_STRONG_WINDS;
             //PrepareStringBattle(STRINGID_STRONGWINDSDISSIPATED, gActiveBattler);
             gBattleCommunication[MSG_DISPLAY] = 1;
         }
@@ -9998,22 +9998,6 @@ static void atk7C_trymirrormove(void)
         gSpecialStatuses[gBattlerAttacker].ppNotAffectedByPressure = TRUE;
         ++gBattlescriptCurrInstr;
     }
-}
-
-static void atk7D_setrain(void)
-{
-    if (gBattleWeather & WEATHER_RAIN_ANY)
-    {
-        gMoveResultFlags |= MOVE_RESULT_MISSED;
-        gBattleCommunication[MULTISTRING_CHOOSER] = 2;
-    }
-    else
-    {
-        gBattleWeather = WEATHER_RAIN_TEMPORARY;
-        gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-        gWishFutureKnock.weatherDuration = 5;
-    }
-    ++gBattlescriptCurrInstr;
 }
 
 static void atk7E_setreflect(void)
@@ -12013,6 +11997,38 @@ static void atkBB_setsunny(void)
     ++gBattlescriptCurrInstr;
 }
 
+static void atk7D_setrain(void)
+{
+    if (gBattleWeather & WEATHER_RAIN_ANY)
+    {
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+    }
+    else
+    {
+        gBattleWeather = WEATHER_RAIN_TEMPORARY;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+        gWishFutureKnock.weatherDuration = 5;
+    }
+    ++gBattlescriptCurrInstr;
+}
+
+static void atkC8_sethail(void)
+{
+    if (gBattleWeather & WEATHER_HAIL_ANY)
+    {
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+    }
+    else
+    {
+        gBattleWeather = WEATHER_HAIL;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 5;
+        gWishFutureKnock.weatherDuration = 5;
+    }
+    ++gBattlescriptCurrInstr;
+}
+
 static void atkBC_maxattackhalvehp(void) // belly drum
 {
     u32 halfHp = gBattleMons[gBattlerAttacker].maxHP / 2;
@@ -12413,22 +12429,6 @@ static void atkC7_setminimize(void)
 {
     if (gHitMarker & HITMARKER_OBEYS)
         gStatuses3[gBattlerAttacker] |= STATUS3_MINIMIZED;
-    ++gBattlescriptCurrInstr;
-}
-
-static void atkC8_sethail(void)
-{
-    if (gBattleWeather & WEATHER_HAIL_ANY)
-    {
-        gMoveResultFlags |= MOVE_RESULT_MISSED;
-        gBattleCommunication[MULTISTRING_CHOOSER] = 2;
-    }
-    else
-    {
-        gBattleWeather = WEATHER_HAIL;
-        gBattleCommunication[MULTISTRING_CHOOSER] = 5;
-        gWishFutureKnock.weatherDuration = 5;
-    }
     ++gBattlescriptCurrInstr;
 }
 
