@@ -90,6 +90,10 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 * 
 * need to update name length to 12 base, so will need to move health bar
 * 
+* make early event script to set all mon as caught seen
+* loop through species and set all flags, and unlock national dex
+* may also give a few mon with script, this is to check pokedex entries fit
+* 
 * anthroyd advice need to start keeping list of things I plan to use for the thread and what I plan
 * to introduce explicitly in-game I want my new type chart to mostly be discoveredd in game,
 * but just have them aware that things are diffeerent and some things will be a new experiencee

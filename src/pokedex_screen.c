@@ -71,7 +71,7 @@ struct PokedexScreenData
     u8 field_60;
     u8 field_61;
     u16 field_62;
-    u8 field_64;
+    u8 unlockedSeviiAreas;
     u16 field_66;
     u16 field_68;
     u16 field_6A;
@@ -193,7 +193,7 @@ const u16 sTopMenuIconPals_Type[] = INCBIN_U16("graphics/pokedex/unk_84435A0.gba
 const u16 sTopMenuIconPals_Lightest[] = INCBIN_U16("graphics/pokedex/unk_84435C0.gbapal");
 const u16 sTopMenuIconPals_Smallest[] = INCBIN_U16("graphics/pokedex/unk_84435E0.gbapal");
 const u8 sDexScreen_CaughtIcon[] = INCBIN_U8("graphics/pokedex/unk_8443600.4bpp");
-const u32 gUnknown_8443620[] = INCBIN_U32("graphics/pokedex/unk_8443620.bin.lz");
+const u32 sTilemap_AreaMap_Kanto[] = INCBIN_U32("graphics/pokedex/unk_8443620.bin.lz");
 const u32 sTilemap_AreaMap_OneIsland[] = INCBIN_U32("graphics/pokedex/unk_8443910.bin.lz");
 const u32 sTilemap_AreaMap_TwoIsland[] = INCBIN_U32("graphics/pokedex/unk_8443988.bin.lz");
 const u32 sTilemap_AreaMap_ThreeIsland[] = INCBIN_U32("graphics/pokedex/unk_84439FC.bin.lz");
@@ -671,7 +671,7 @@ const struct WindowTemplate sWindowTemplate_AreaMap_SpeciesName = {
     .tilemapLeft = 5,
     .tilemapTop = 2,
     .width = 10,
-    .height = 3,
+    .height = 5,
     .paletteNum = 0,
     .baseBlock = 0x01b8
 };
@@ -699,7 +699,7 @@ const struct WindowTemplate sWindowTemplate_AreaMap_Area = {
 const struct WindowTemplate sWindowTemplate_AreaMap_MonTypes = {
     .bg = 2,
     .tilemapLeft = 5,
-    .tilemapTop = 5,
+    .tilemapTop = 6,
     .width = 8,
     .height = 2,
     .paletteNum = 11,
@@ -789,7 +789,7 @@ static const struct WindowTemplate sWindowTemplate_AreaMap_SevenIsland = {
 struct {
     const struct WindowTemplate * window;
     const u32 * tilemap;
-} const gUnknown_8452254[] = {
+} const sAreaMapStructs_SeviiIslands[] = {
     {&sWindowTemplate_AreaMap_OneIsland,    sTilemap_AreaMap_OneIsland},
     {&sWindowTemplate_AreaMap_TwoIsland,    sTilemap_AreaMap_TwoIsland},
     {&sWindowTemplate_AreaMap_ThreeIsland,  sTilemap_AreaMap_ThreeIsland},
@@ -2257,7 +2257,7 @@ static void sub_810491C(u8 windowId, u8 fontId, u16 num, u8 x, u8 y, u8 colorIdx
     DexScreen_AddTextPrinterParameterized(windowId, fontId, buff, x, y, colorIdx);
 }
 
-u32 sub_81049CC(int species)
+u32 DexScreen_GetDefaultPersonality(int species)
 {
     switch (species)
     {
@@ -2272,7 +2272,7 @@ u32 sub_81049CC(int species)
 
 void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOffset)
 {
-    LoadMonPicInWindow(species, 8, sub_81049CC(species), TRUE, paletteOffset >> 4, windowId);
+    LoadMonPicInWindow(species, 8, DexScreen_GetDefaultPersonality(species), TRUE, paletteOffset >> 4, windowId);
 }
 
 void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u8 y)
@@ -3038,102 +3038,111 @@ u8 RemoveDexPageWindows(void)
 u8 DexScreen_DrawMonAreaPage(void)
 {
     int i;
-    u8 v1, v2;
-    bool8 v3;
-    s16 v4, v5;
+    u8 width, height;
+    bool8 monIsCaught;
+    s16 left, top;
     u16 speciesId, species;
-    u16 v8;
+    u16 kantoMapVoff;
 
     species = sPokedexScreenData->dexSpecies;
     speciesId = SpeciesToNationalPokedexNum(species);
-    v3 = DexScreen_GetSetPokedexFlag(species, 1, 1);
-    v1 = 28;
-    v2 = 14;
-    v4 = 0;
-    v5 = 2;
+    monIsCaught = DexScreen_GetSetPokedexFlag(species, 1, 1);
+    width = 28;
+    height = 14;
+    left = 0;
+    top = 2;
 
-    FillBgTilemapBufferRect_Palette0(3, 4, v4, v5, 1, 1);
-    FillBgTilemapBufferRect_Palette0(3, 1028, v4 + 1 + v1, v5, 1, 1);
-    FillBgTilemapBufferRect_Palette0(3, 2052, v4, v5 + 1 + v2, 1, 1);
-    FillBgTilemapBufferRect_Palette0(3, 3076, v4 + 1 + v1, v5 + 1 + v2, 1, 1);
-    FillBgTilemapBufferRect_Palette0(3, 5, v4 + 1, v5, v1, 1);
-    FillBgTilemapBufferRect_Palette0(3, 2053, v4 + 1, v5 + 1 + v2, v1, 1);
-    FillBgTilemapBufferRect_Palette0(3, 6, v4, v5 + 1, 1, v2);
-    FillBgTilemapBufferRect_Palette0(3, 1030, v4 + 1 + v1, v5 + 1, 1, v2);
-    FillBgTilemapBufferRect_Palette0(3, 1, v4 + 1, v5 + 1, v1, v2);
+    FillBgTilemapBufferRect_Palette0(3, 4, left, top, 1, 1);
+    FillBgTilemapBufferRect_Palette0(3, BG_TILE_H_FLIP(4), left + 1 + width, top, 1, 1);
+    FillBgTilemapBufferRect_Palette0(3, BG_TILE_V_FLIP(4), left, top + 1 + height, 1, 1);
+    FillBgTilemapBufferRect_Palette0(3, BG_TILE_H_V_FLIP(4), left + 1 + width, top + 1 + height, 1, 1);
+    FillBgTilemapBufferRect_Palette0(3, 5, left + 1, top, width, 1);
+    FillBgTilemapBufferRect_Palette0(3, BG_TILE_V_FLIP(5), left + 1, top + 1 + height, width, 1);
+    FillBgTilemapBufferRect_Palette0(3, 6, left, top + 1, 1, height);
+    FillBgTilemapBufferRect_Palette0(3, BG_TILE_H_FLIP(6), left + 1 + width, top + 1, 1, height);
+    FillBgTilemapBufferRect_Palette0(3, 1, left + 1, top + 1, width, height);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 2, 30, 16);
 
-    v1 = 10;
-    v2 = 6;
-    v4 = 1;
-    v5 = 9;
+    width = 10;
+    height = 6;
+    left = 1;
+    top = 9;
 
-    FillBgTilemapBufferRect_Palette0(0, 29, v4, v5, 1, 1);
-    FillBgTilemapBufferRect_Palette0(0, 1053, v4 + 1 + v1, v5, 1, 1);
-    FillBgTilemapBufferRect_Palette0(0, 2077, v4, v5 + 1 + v2, 1, 1);
-    FillBgTilemapBufferRect_Palette0(0, 3101, v4 + 1 + v1, v5 + 1 + v2, 1, 1);
-    FillBgTilemapBufferRect_Palette0(0, 30, v4 + 1, v5, v1, 1);
-    FillBgTilemapBufferRect_Palette0(0, 2078, v4 + 1, v5 + 1 + v2, v1, 1);
-    FillBgTilemapBufferRect_Palette0(0, 31, v4, v5 + 1, 1, v2);
-    FillBgTilemapBufferRect_Palette0(0, 1055, v4 + 1 + v1, v5 + 1, 1, v2);
+    FillBgTilemapBufferRect_Palette0(0, 29, left, top, 1, 1);
+    FillBgTilemapBufferRect_Palette0(0, BG_TILE_H_FLIP(29), left + 1 + width, top, 1, 1);
+    FillBgTilemapBufferRect_Palette0(0, BG_TILE_V_FLIP(29), left, top + 1 + height, 1, 1);
+    FillBgTilemapBufferRect_Palette0(0, BG_TILE_H_V_FLIP(29), left + 1 + width, top + 1 + height, 1, 1);
+    FillBgTilemapBufferRect_Palette0(0, 30, left + 1, top, width, 1);
+    FillBgTilemapBufferRect_Palette0(0, BG_TILE_V_FLIP(30), left + 1, top + 1 + height, width, 1);
+    FillBgTilemapBufferRect_Palette0(0, 31, left, top + 1, 1, height);
+    FillBgTilemapBufferRect_Palette0(0, BG_TILE_H_FLIP(31), left + 1 + width, top + 1, 1, height);
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
 
-    sPokedexScreenData->field_64 = GetUnlockedSeviiAreas();
-    v8 = 4;
+    sPokedexScreenData->unlockedSeviiAreas = GetUnlockedSeviiAreas();
+    kantoMapVoff = 4;
     for (i = 3; i < 7; i++)
-        if ((sPokedexScreenData->field_64 >> i) & 1)
-            v8 = 0;
+        if ((sPokedexScreenData->unlockedSeviiAreas >> i) & 1)
+            kantoMapVoff = 0;
 
     sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_AreaMap_Kanto);
-    CopyToWindowPixelBuffer(sPokedexScreenData->windowIds[0], (void *)gUnknown_8443620, 0, 0);
-    SetWindowAttribute(sPokedexScreenData->windowIds[0], 2,
-                       GetWindowAttribute(sPokedexScreenData->windowIds[0], 2) + v8);
+    CopyToWindowPixelBuffer(sPokedexScreenData->windowIds[0], (void *)sTilemap_AreaMap_Kanto, 0, 0);
+    SetWindowAttribute(sPokedexScreenData->windowIds[0], WINDOW_TILEMAP_TOP,
+                       GetWindowAttribute(sPokedexScreenData->windowIds[0], WINDOW_TILEMAP_TOP) + kantoMapVoff);
     PutWindowTilemap(sPokedexScreenData->windowIds[0]);
     for (i = 0; i < 7; i++)
-        if ((sPokedexScreenData->field_64 >> i) & 1)
+        if ((sPokedexScreenData->unlockedSeviiAreas >> i) & 1)
         {
-            sPokedexScreenData->windowIds[i + 1] = AddWindow(gUnknown_8452254[i].window);
-            CopyToWindowPixelBuffer(sPokedexScreenData->windowIds[i + 1], gUnknown_8452254[i].tilemap, 0, 0);
-            SetWindowAttribute(sPokedexScreenData->windowIds[i + 1], 2, GetWindowAttribute(sPokedexScreenData->windowIds[i + 1], 2) + v8);
+            sPokedexScreenData->windowIds[i + 1] = AddWindow(sAreaMapStructs_SeviiIslands[i].window);
+            CopyToWindowPixelBuffer(sPokedexScreenData->windowIds[i + 1], sAreaMapStructs_SeviiIslands[i].tilemap, 0, 0);
+            SetWindowAttribute(sPokedexScreenData->windowIds[i + 1], WINDOW_TILEMAP_TOP, GetWindowAttribute(sPokedexScreenData->windowIds[i + 1], 2) + kantoMapVoff);
             PutWindowTilemap(sPokedexScreenData->windowIds[i + 1]);
-            CopyWindowToVram(sPokedexScreenData->windowIds[i + 1], 2);
+            CopyWindowToVram(sPokedexScreenData->windowIds[i + 1], COPYWIN_GFX);
         }
-    sPokedexScreenData->windowIds[8] = AddWindow(&sWindowTemplate_AreaMap_SpeciesName);
+    sPokedexScreenData->windowIds[8] = AddWindow(&sWindowTemplate_AreaMap_SpeciesName); //also dex number
     sPokedexScreenData->windowIds[9] = AddWindow(&sWindowTemplate_AreaMap_Size);
     sPokedexScreenData->windowIds[10] = AddWindow(&sWindowTemplate_AreaMap_Area);
     sPokedexScreenData->windowIds[11] = AddWindow(&sWindowTemplate_AreaMap_MonIcon);
     sPokedexScreenData->windowIds[12] = AddWindow(&sWindowTemplate_AreaMap_MonTypes);
-    FillWindowPixelBuffer(sPokedexScreenData->windowIds[11], 0);
-    sub_8107CD8(160, species);
-    sub_8107CF8(sPokedexScreenData->windowIds[11], species, sub_81049CC(species), 0, 0);
+    
+    // Draw the mon icon
+    FillWindowPixelBuffer(sPokedexScreenData->windowIds[11], PIXEL_FILL(0));
+    ListMenu_LoadMonIconPalette(160, species);
+    ListMenu_DrawMonIconGraphics(sPokedexScreenData->windowIds[11], species, DexScreen_GetDefaultPersonality(species), 0, 0);
     PutWindowTilemap(sPokedexScreenData->windowIds[11]);
-    CopyWindowToVram(sPokedexScreenData->windowIds[11], 2);
-    FillWindowPixelBuffer(sPokedexScreenData->windowIds[9], 0);
+    CopyWindowToVram(sPokedexScreenData->windowIds[11], COPYWIN_GFX);
+    
+    // Print "Size"
+    FillWindowPixelBuffer(sPokedexScreenData->windowIds[9], PIXEL_FILL(0));
     {
-        s32 width = GetStringWidth(0, gText_Size, 0);
+        s32 width = GetStringWidth(FONT_SMALL, gText_Size, 0);
         DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[9], 0, gText_Size, (sWindowTemplate_AreaMap_Size.width * 8 - width) / 2, 4, 0);
     }
     PutWindowTilemap(sPokedexScreenData->windowIds[9]);
-    CopyWindowToVram(sPokedexScreenData->windowIds[9], 2);
+    CopyWindowToVram(sPokedexScreenData->windowIds[9], COPYWIN_GFX);
 
-    FillWindowPixelBuffer(sPokedexScreenData->windowIds[10], 0);
+    // Print "Area"
+    FillWindowPixelBuffer(sPokedexScreenData->windowIds[10], PIXEL_FILL(0));
     {
-        s32 width = GetStringWidth(0, gText_Area, 0);
+        s32 width = GetStringWidth(FONT_SMALL, gText_Area, 0);
         DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[10], 0, gText_Area, (sWindowTemplate_AreaMap_Area.width * 8 - width) / 2, 4, 0);
     }
-    SetWindowAttribute(sPokedexScreenData->windowIds[10], 2, GetWindowAttribute(sPokedexScreenData->windowIds[10], 2) + v8);
+    SetWindowAttribute(sPokedexScreenData->windowIds[10], 2, GetWindowAttribute(sPokedexScreenData->windowIds[10], 2) + kantoMapVoff);
     PutWindowTilemap(sPokedexScreenData->windowIds[10]);
     CopyWindowToVram(sPokedexScreenData->windowIds[10], 2);
-    FillWindowPixelBuffer(sPokedexScreenData->windowIds[8], 0);
-    DexScreen_PrintMonDexNo(sPokedexScreenData->windowIds[8], 0, species, 0, 0);
-    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[8], 2, gSpeciesNames[species], 3, 12, 0);
+    
+    // Print species name
+    FillWindowPixelBuffer(sPokedexScreenData->windowIds[8], PIXEL_FILL(0));
+    DexScreen_PrintMonDexNo(sPokedexScreenData->windowIds[8], FONT_SMALL, species, 0, 4);
+    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[8], 2, gSpeciesNames[species], 3, 16, 0);
     PutWindowTilemap(sPokedexScreenData->windowIds[8]);
-    CopyWindowToVram(sPokedexScreenData->windowIds[8], 2);
-    FillWindowPixelBuffer(sPokedexScreenData->windowIds[12], 0);
+    CopyWindowToVram(sPokedexScreenData->windowIds[8], COPYWIN_GFX);
+    
+    // Type icons
+    FillWindowPixelBuffer(sPokedexScreenData->windowIds[12], PIXEL_FILL(0));
     ListMenuLoadStdPalAt(176, 1);
 
-    if (v3)
+    if (monIsCaught)
     {
         BlitMoveInfoIcon(sPokedexScreenData->windowIds[12], 1 + gBaseStats[species].type1, 0, 1);
         if (gBaseStats[species].type1 != gBaseStats[species].type2)
@@ -3144,9 +3153,9 @@ u8 DexScreen_DrawMonAreaPage(void)
     ResetAllPicSprites();
     LoadPalette(sPalette_Silhouette, 288, 32);
 
-    if (v3)
+    if (monIsCaught)
     {
-        sPokedexScreenData->windowIds[14] = CreateMonPicSprite_HandleDeoxys(species, 8, sub_81049CC(species), 1, 40, 104, 0, 65535);
+        sPokedexScreenData->windowIds[14] = CreateMonPicSprite_HandleDeoxys(species, 8, DexScreen_GetDefaultPersonality(species), 1, 40, 104, 0, 65535);
         gSprites[sPokedexScreenData->windowIds[14]].oam.paletteNum = 2;
         gSprites[sPokedexScreenData->windowIds[14]].oam.affineMode = 1;
         gSprites[sPokedexScreenData->windowIds[14]].oam.matrixNum = 2;
@@ -3167,7 +3176,7 @@ u8 DexScreen_DrawMonAreaPage(void)
         sPokedexScreenData->windowIds[15] = 0xff;
     }
     // Create the area markers
-    sPokedexScreenData->areaMarkersTaskId = sub_8134230(species, TAG_AREA_MARKERS, 3, v8 * 8);
+    sPokedexScreenData->areaMarkersTaskId = sub_8134230(species, TAG_AREA_MARKERS, 3, kantoMapVoff * 8);
     if (!(sub_81344E0(sPokedexScreenData->areaMarkersTaskId)))
     {
         // No markers, display "Area Unknown"
