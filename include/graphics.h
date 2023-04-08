@@ -9194,10 +9194,10 @@ extern const u32 gEasyChatSelectGroupHelp_Tiles[];
 extern const u32 gEasyChatModeIcons_Tiles[];
 
 // naming_screen
-extern const u32 gUnknown_8E982BC[];
-extern const u32 gUnknown_8E98458[];
-extern const u32 gUnknown_8E98398[];
-extern const u32 gUnknown_8E98518[];
+extern const u32 gNamingScreenBackground_Tilemap[];
+extern const u32 gNamingScreenKeyboardLower_Tilemap[];
+extern const u32 gNamingScreenKeyboardUpper_Tilemap[];
+extern const u32 gNamingScreenKeyboardSymbols_Tilemap[];
 extern const u32 gNamingScreenMenu_Gfx[];
 extern const u16 gUnknown_8E98004[];
 extern const u16 gUnknown_8E97FE4[];

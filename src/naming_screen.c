@@ -42,6 +42,16 @@ enum
     KBPAGE_COUNT,
 };
 
+enum 
+{
+    WIN_KB_PAGE_1, // Which of these two windows is in front is cycled as the player swaps
+    WIN_KB_PAGE_2, // Initially WIN_KB_PAGE_1 is in front, with WIN_KB_PAGE_2 on deck
+    WIN_TEXT_ENTRY,
+    WIN_TEXT_ENTRY_BOX,
+    WIN_BANNER,
+    WIN_COUNT,
+};
+
 enum
 {
     MAIN_STATE_BEGIN_FADE_IN,
@@ -270,8 +280,9 @@ static const struct BgTemplate gUnknown_83E2290[4] = {
     }
 };
 
-static const struct WindowTemplate gUnknown_83E22A0[6] = {
-    {
+static const struct WindowTemplate sWindowTemplates[WIN_COUNT + 1] = {
+{
+    [WIN_KB_PAGE_1] = {
         .bg = 1,
         .tilemapLeft = 3,
         .tilemapTop = 10,
@@ -279,7 +290,8 @@ static const struct WindowTemplate gUnknown_83E22A0[6] = {
         .height = 8,
         .paletteNum = 10,
         .baseBlock = 0x0030
-    }, {
+    },
+    [WIN_KB_PAGE_2] = {
         .bg = 2,
         .tilemapLeft = 3,
         .tilemapTop = 10,
@@ -287,31 +299,35 @@ static const struct WindowTemplate gUnknown_83E22A0[6] = {
         .height = 8,
         .paletteNum = 10,
         .baseBlock = 0x00c8
-    }, {
+    },
+    [WIN_TEXT_ENTRY] = {
         .bg = 3,
         .tilemapLeft = 8,
         .tilemapTop = 6,
-        .width = 14,
+        .width = 15,
         .height = 2,
         .paletteNum = 10,
         .baseBlock = 0x0030
-    }, {
+    },
+    [WIN_TEXT_ENTRY_BOX] = {
         .bg = 3,
-        .tilemapLeft = 9,
+        .tilemapLeft = 8,
         .tilemapTop = 4,
-        .width = 16,
+        .width = 17,
         .height = 2,
         .paletteNum = 10,
-        .baseBlock = 0x004c
-    }, {
+        .baseBlock = 0x0053
+    },
+    [WIN_BANNER] = {
         .bg = 0,
         .tilemapLeft = 0,
         .tilemapTop = 0,
         .width = 30,
         .height = 2,
         .paletteNum = 11,
-        .baseBlock = 0x006c
-    }, DUMMY_WIN_TEMPLATE
+        .baseBlock = 0x0070
+    },
+    DUMMY_WIN_TEMPLATE
 };
 
 static const u8 gUnknown_83E22D0[][4][8] = {
@@ -498,8 +514,8 @@ static void NamingScreen_InitBGs(void)
     InitStandardTextBoxWindows();
     ResetBg0();
 
-    for (i = 0; i < NELEMS(gUnknown_83E22A0) - 1; i++)
-        sNamingScreenData->windows[i] = AddWindow(&gUnknown_83E22A0[i]);
+    for (i = 0; i < NELEMS(sWindowTemplates) - 1; i++)
+        sNamingScreenData->windows[i] = AddWindow(&sWindowTemplates[i]);
 
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_1D_MAP | DISPCNT_OBJ_ON);
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_BG1 | BLDCNT_TGT2_BG2);
@@ -596,10 +612,10 @@ static u8 sub_809DE50(void)
 
 static bool8 MainState_BeginFadeIn(void)
 {
-    DecompressToBgTilemapBuffer(3, gUnknown_8E982BC);
+    DecompressToBgTilemapBuffer(3, gNamingScreenBackground_Tilemap);
     sNamingScreenData->currentPage = KBPAGE_LETTERS_UPPER;
-    DecompressToBgTilemapBuffer(2, gUnknown_8E98458);
-    DecompressToBgTilemapBuffer(1, gUnknown_8E98398);
+    DecompressToBgTilemapBuffer(2, gNamingScreenKeyboardLower_Tilemap);
+    DecompressToBgTilemapBuffer(1, gNamingScreenKeyboardUpper_Tilemap);
     sub_809F9E8(sNamingScreenData->windows[1], KBPAGE_LETTERS_LOWER);
     sub_809F9E8(sNamingScreenData->windows[0], KBPAGE_LETTERS_UPPER);
     PrintBufferCharactersOnScreen();
@@ -1319,7 +1335,7 @@ static void NamingScreen_CreateMonIcon(void)
     u8 spriteId;
 
     LoadMonIconPalettes();
-    spriteId = CreateMonIcon(sNamingScreenData->monSpecies, SpriteCallbackDummy, 0x38, 0x28, 0, sNamingScreenData->monPersonality, 1);
+    spriteId = CreateMonIcon(sNamingScreenData->monSpecies, SpriteCallbackDummy, 0x30, 0x28, 0, sNamingScreenData->monPersonality, 1);
     gSprites[spriteId].oam.priority = 3;
 }
 
@@ -1666,7 +1682,7 @@ static void AddGenderIconFunc_Yes(void)
             StringCopy(genderSymbol, gText_FemaleSymbol);
             gender = FEMALE;
         }
-        AddTextPrinterParameterized3(sNamingScreenData->windows[2], 2, 0x68, 1, sGenderColors[gender], TEXT_SKIP_DRAW, genderSymbol);
+        AddTextPrinterParameterized3(sNamingScreenData->windows[WIN_TEXT_ENTRY], FONT_NORMAL, 0x72, 1, sGenderColors[gender], TEXT_SKIP_DRAW, genderSymbol);
     }
 }
 
@@ -1847,9 +1863,9 @@ static void sub_809F9E8(u8 window, u8 page)
 }
 
 static const u32 *const gUnknown_83E244C[] = {
-    gUnknown_8E98398,
-    gUnknown_8E98458,
-    gUnknown_8E98518
+    gNamingScreenKeyboardUpper_Tilemap,
+    gNamingScreenKeyboardLower_Tilemap,
+    gNamingScreenKeyboardSymbols_Tilemap
 };
 
 static void sub_809FA60(void)
