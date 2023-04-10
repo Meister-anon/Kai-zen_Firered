@@ -1316,12 +1316,12 @@ static void NamingScreen_CreatePlayerIcon(void)
     u8 spriteId;
 
     rivalGfxId = GetRivalAvatarGraphicsIdByStateIdAndGender(0, sNamingScreenData->monSpecies);
-    spriteId = AddPseudoObjectEvent(rivalGfxId, SpriteCallbackDummy, 0x38, 0x25, 0);
+    spriteId = AddPseudoObjectEvent(rivalGfxId, SpriteCallbackDummy, 0x30, 0x25, 0);
     gSprites[spriteId].oam.priority = 3;
     StartSpriteAnim(&gSprites[spriteId], 4);
 }
 
-static void NamingScreen_CreatePCIcon(void)
+static void NamingScreen_CreatePCIcon(void) //do need change? or not
 {
     u8 spriteId;
 
@@ -1370,7 +1370,7 @@ static void NamingScreen_CreateRivalIcon(void)
     template.anims = gUnknown_83E23BC;
     LoadSpriteSheet(&sheet);
     LoadSpritePalette(&palette);
-    spriteId = CreateSprite(&template, 0x38, 0x25, 0);
+    spriteId = CreateSprite(&template, 0x30, 0x25, 0);
     gSprites[spriteId].oam.priority = 3;
 }
 

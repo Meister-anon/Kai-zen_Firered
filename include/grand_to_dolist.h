@@ -426,6 +426,16 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * tweak idea, to make bit less overpowered, will just do status1, leaving confusion and infatuation as viable options
 * rather than not having an out/counter - DONE  *need test though
 * 
+* smeargle changes new moves -
+* 
+* fix ditto make imposter its only ability (or just but  speed stat so it can transform easier)
+* change imposter to be more than just a free transform on switch.
+* instead make it transform into a random pokemon that resists the typeing of the target.
+* will be pretty complex, need to use emerald way to read type effectiveness 
+* loop through mon of type that resists, potentially need to put in list, but don't want to.
+* 
+* comtinue adding notes...
+* 
 */
 
 goto PRIORITY_EFFECTS	//battle_main.c all effects regarding priority changes go here.
