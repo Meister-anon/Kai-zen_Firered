@@ -12162,10 +12162,12 @@ static void atkC1_hiddenpowercalc(void)
         | ((gBattleMons[gBattlerAttacker].spAttackIV & 1) << 4)
         | ((gBattleMons[gBattlerAttacker].spDefenseIV & 1) << 5);
     gDynamicBasePower = (40 * powerBits) / 63 + 30;
-    gBattleStruct->dynamicMoveType = (16 * typeBits) / 63 + 1; //think changing from 15 to 16 adds one more type to options so now have fairy
+    //// Subtract 3 instead of 1 below because 2 types are excluded (TYPE_NORMAL and TYPE_MYSTERY)
+    gBattleStruct->dynamicMoveType = ((NUMBER_OF_MON_TYPES - 3) * typeBits) / 63 + 1; //think changing from 15 to 16 adds one more type to options so now have fairy
     if (gBattleStruct->dynamicMoveType == TYPE_MYSTERY)
         gBattleStruct->dynamicMoveType = TYPE_FAIRY; // or may need to increase it by 6 to get over other types to 21 since the +1 and ++ adds 2 tellign the last type added
-    gBattleStruct->dynamicMoveType |= 0xC0; // i.e 15 +2= 17 which is type dark 0x11 == 17
+    gBattleStruct->dynamicMoveType |= F_DYNAMIC_TYPE_1 | F_DYNAMIC_TYPE_2;
+   // gBattleStruct->dynamicMoveType |= 0xC0; // i.e 15 +2= 17 which is type dark 0x11 == 17
     
 
     // don't know if this workks still need to add 1.7 boost if lower than opponenent stat

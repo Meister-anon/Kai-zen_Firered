@@ -1194,8 +1194,12 @@ const u16 gUnknown_8E98084[] = INCBIN_U16("graphics/interface/naming_screen_8E98
 const u16 gUnknown_8E980A4[] = INCBIN_U16("graphics/interface/naming_screen_8E980A4.gbapal");
 const u16 gUnknown_8E980C4[] = INCBIN_U16("graphics/interface/naming_screen_8E980C4.gbapal");
 
+//naming screen
 const u32 gNamingScreenMenu_Gfx[] = INCBIN_U32("graphics/interface/naming_screen_menu.4bpp.lz");
-const u32 gNamingScreenBackground_Tilemap[] = INCBIN_U32("graphics/interface/naming_screen_menu.bin.lz");
+//const u32 gNamingScreenBackground_Tilemap[] = INCBIN_U32("graphics/interface/naming_screen_menu.bin.lz");
+const u32 gPlayerNamingScreenBackground_Tilemap[] = INCBIN_U32("graphics/interface/naming_screen_menu.bin.lz");
+const u32 gMonNamingScreenBackground_Tilemap[] = INCBIN_U32("graphics/interface/naming_screen_menu_Leftshift.bin.lz");
+const u32 gNamingScreenBackground_Tilemap[] = INCBIN_U32("graphics/interface/naming_screen_menu_Leftshift.bin.lz");
 const u32 gNamingScreenKeyboardUpper_Tilemap[] = INCBIN_U32("graphics/interface/naming_screen_E98398.bin.lz");
 const u32 gNamingScreenKeyboardLower_Tilemap[] = INCBIN_U32("graphics/interface/naming_screen_E98458.bin.lz");
 const u32 gNamingScreenKeyboardSymbols_Tilemap[] = INCBIN_U32("graphics/interface/naming_screen_E98518.bin.lz");

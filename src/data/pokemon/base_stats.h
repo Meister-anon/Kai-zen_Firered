@@ -9420,7 +9420,7 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 73,
         .baseAttack = 100,
         .baseDefense = 60,
-        .baseSpeed = 65,
+        .baseSpeed = 70,
         .baseSpAttack = 100,
         .baseSpDefense = 60,
         .type1 = TYPE_POISON,
@@ -21684,9 +21684,9 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_BUG,
         .eggGroup2 = EGG_GROUP_WATER_3,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_WIMP_OUT, ABILITY_NONE},
+            .abilities = {ABILITY_WIMP_OUT, ABILITY_WIMP_OUT},
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilities = {ABILITY_RATTLED, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -21697,7 +21697,7 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 115,
         .baseAttack = 125,
         .baseDefense = 140,
-        .baseSpeed = 75,
+        .baseSpeed = 55,
         .baseSpAttack = 60,
         .baseSpDefense = 90,
         .type1 = TYPE_BUG,
@@ -21712,9 +21712,9 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_BUG,
         .eggGroup2 = EGG_GROUP_WATER_3,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_EMERGENCY_EXIT, ABILITY_NONE},
+            .abilities = {ABILITY_EMERGENCY_EXIT, ABILITY_HI_PRESSURE},
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilities = {ABILITY_TOUGH_CLAWS, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,

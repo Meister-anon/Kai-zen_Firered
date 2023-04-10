@@ -1633,6 +1633,22 @@ static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
     *txtPtr++ = 6;
     *txtPtr++ = 1;*/ //based on results I think this somehow changed the base font from small to normal  normal font is value 1 so idk?
     txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceDynamicColors);
+    /*if (gMoveNames[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]] == MOVE_HIDDEN_POWER)
+    {
+        s32 typeBits = ((gBattleMons[gBattlerAttacker].hpIV & 1) << 0)
+            | ((gBattleMons[gBattlerAttacker].attackIV & 1) << 1)
+            | ((gBattleMons[gBattlerAttacker].defenseIV & 1) << 2)
+            | ((gBattleMons[gBattlerAttacker].speedIV & 1) << 3)
+            | ((gBattleMons[gBattlerAttacker].spAttackIV & 1) << 4)
+            | ((gBattleMons[gBattlerAttacker].spDefenseIV & 1) << 5);
+
+        u8 type = ((NUMBER_OF_MON_TYPES - 3) * typeBits) / 63 + 1; //think changing from 15 to 16 adds one more type to options so now have fairy
+        if (type == TYPE_MYSTERY)
+            type = TYPE_FAIRY; // or may need to increase it by 6 to get over other types to 21 since the +1 and ++ adds 2 tellign the last type added
+        type |= F_DYNAMIC_TYPE_1 | F_DYNAMIC_TYPE_2;
+        gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type = type;
+
+    }*/
     StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_TYPE);
 }//can't use convertIntToDecimalString to attempt make right align, text becomes garbalded numbers and still is left alingned...

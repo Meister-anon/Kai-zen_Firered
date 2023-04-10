@@ -9195,6 +9195,8 @@ extern const u32 gEasyChatModeIcons_Tiles[];
 
 // naming_screen
 extern const u32 gNamingScreenBackground_Tilemap[];
+extern const u32 gMonNamingScreenBackground_Tilemap[];
+extern const u32 gPlayerNamingScreenBackground_Tilemap[];
 extern const u32 gNamingScreenKeyboardLower_Tilemap[];
 extern const u32 gNamingScreenKeyboardUpper_Tilemap[];
 extern const u32 gNamingScreenKeyboardSymbols_Tilemap[];

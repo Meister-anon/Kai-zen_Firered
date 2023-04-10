@@ -720,7 +720,7 @@ static const struct BgTemplate sBgTempaltes[] =
 
 #define POKESUM_WIN_MOVES_3          3  //mon move names & pp window
 #define POKESUM_WIN_MOVES_4          4  //move selct descriptions & info
-#define POKESUM_WIN_MOVES_5          5  //Type Icon Move 1
+#define POKESUM_WIN_MOVES_5          5  //Type Icons
 #define POKESUM_WIN_MOVES_6          6  //Mon Type Icons
 #define POKESUM_WIN_MOVES_5_1        7  //Type Icon Move 2
 #define POKESUM_WIN_MOVES_5_2        8  //Type Icon Move 3
@@ -882,9 +882,9 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .tilemapLeft = 16,
         .tilemapTop = 2,
         .width = 13,
-        .height = 18,
+        .height = 19,
         .paletteNum = 8,
-        .baseBlock = 0x0001
+        .baseBlock = 0x0001 //needs to be 19 to fit values
     },//is the baseblock telling it what tile to use or is that the actual window so if I swap the base block can I get it to move the text values 
     //associated with the window to the position of the other stuff?   like make it make the window in a different place?
 
@@ -897,7 +897,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .width = 15,
         .height = 13,
         .paletteNum = 6,
-        .baseBlock = 0x00e5
+        .baseBlock = 0x00f5
     },
     //shifts the type icons for the moves on the right panel
     //apparently mon pic is on a different layer than the text
@@ -910,7 +910,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .width = 5,
         .height = 18,
         .paletteNum = 6,
-        .baseBlock = 0x01a8
+        .baseBlock = 0x01b8
     },
     //moves the mon type icons that appear when moves are selected
     [POKESUM_WIN_MOVES_6 - 3] = {
@@ -920,10 +920,10 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .width = 3,
         .height = 5,
         .paletteNum = 6,
-        .baseBlock = 0x0202
+        .baseBlock = 0x0212
     },//based on what jaizu said I'm guessing baseblock is actually memory/vram allocation/address? so need to increase all these below expanded window
     //I tweaked it and it appears to be working?
-    [POKESUM_WIN_MOVES_5_1 - 3] = {
+    /*[POKESUM_WIN_MOVES_5_1 - 3] = {
         .bg = 0,
         .tilemapLeft = 15,
         .tilemapTop = 6,
@@ -961,7 +961,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
         .height = 2,
         .paletteNum = 6,
         .baseBlock = 0x0272
-    },
+    },*/
 };
 
 static const struct WindowTemplate sWindowTemplates_Dummy[] = 
@@ -3046,6 +3046,23 @@ static void PokeSum_DrawMoveTypeIcons(void) //idea get icons to print on window 
     {
         if (sMonSummaryScreen->moveIds[i] == MOVE_NONE)
             continue;
+        /*if (sMonSummaryScreen->moveIds[i] == MOVE_HIDDEN_POWER)
+        {
+            s32 typeBits = ((gBattleMons[gBattlerAttacker].hpIV & 1) << 0)
+                | ((gBattleMons[gBattlerAttacker].attackIV & 1) << 1)
+                | ((gBattleMons[gBattlerAttacker].defenseIV & 1) << 2)
+                | ((gBattleMons[gBattlerAttacker].speedIV & 1) << 3)
+                | ((gBattleMons[gBattlerAttacker].spAttackIV & 1) << 4)
+                | ((gBattleMons[gBattlerAttacker].spDefenseIV & 1) << 5);
+
+            u8 type = ((NUMBER_OF_MON_TYPES - 3) * typeBits) / 63 + 1; //think changing from 15 to 16 adds one more type to options so now have fairy
+            if (type == TYPE_MYSTERY)
+                type = TYPE_FAIRY; // or may need to increase it by 6 to get over other types to 21 since the +1 and ++ adds 2 tellign the last type added
+            type |= F_DYNAMIC_TYPE_1 | F_DYNAMIC_TYPE_2;
+            sMonSummaryScreen->moveTypes[i] = type;
+        }*/ // if works right should set hidden power to display its type in summary screen
+        //was playing on keeping this unknown to test but realistic people won't want to use it 
+        //if they don't know what its doing
 
         if (i == 0)
 

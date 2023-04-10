@@ -508,7 +508,7 @@ static const struct WindowTemplate sWindowTemplate_OrderedListMenu = {
     .bg = 1,
     .tilemapLeft = 2,
     .tilemapTop = 2,
-    .width = 26,
+    .width = 27,
     .height = 16,
     .paletteNum = 0,
     .baseBlock = 0x0008
@@ -571,7 +571,7 @@ static const struct ListMenuWindowRect sListMenuRects_OrderedList[] = {
     [LIST_MENU_TYPE_ICONS] = {
         .x = 16,
         .y = 0,
-        .width = 8,
+        .width = 10,
         .height = 16,
         .palNum = 2,
     },
@@ -1622,9 +1622,9 @@ static void ItemPrintFunc_OrderedListMenu(u8 windowId, s32 itemId, u8 y)
     {
         BlitMoveInfoIcon(sPokedexScreenData->numericalOrderWindowId, 0, 0x28, y); //pokeball icon
         type1 = gBaseStats[species].type1;
-        BlitMoveInfoIcon(sPokedexScreenData->numericalOrderWindowId, type1 + 1, 0x80, y); //4bpp 32 width between these 2 type icons
+        BlitMoveInfoIcon(sPokedexScreenData->numericalOrderWindowId, type1 + 1, 0x84, y); //4bpp 32 width between these 2 type icons
         if (type1 != gBaseStats[species].type2)
-            BlitMoveInfoIcon(sPokedexScreenData->numericalOrderWindowId, gBaseStats[species].type2 + 1, 0xA0, y);
+            BlitMoveInfoIcon(sPokedexScreenData->numericalOrderWindowId, gBaseStats[species].type2 + 1, 0xA4, y);
     }
 }
 

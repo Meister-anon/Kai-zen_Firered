@@ -681,10 +681,15 @@ struct BattleStruct //fill in unused fields when porting
 
 extern struct BattleStruct *gBattleStruct;
 
+#define F_DYNAMIC_TYPE_1 (1 << 6)
+#define F_DYNAMIC_TYPE_2 (1 << 7)
+#define DYNAMIC_TYPE_MASK (F_DYNAMIC_TYPE_1 - 1)
+
 #define GET_MOVE_TYPE(move, typeArg)                        \
 {                                                           \
     if (gBattleStruct->dynamicMoveType)                     \
-        typeArg = gBattleStruct->dynamicMoveType & 0x3F;    \
+        typeArg = gBattleStruct->dynamicMoveType & DYNAMIC_TYPE_MASK;    \
+        /*typeArg = gBattleStruct->dynamicMoveType & 0x3F; */   \
     else                                                    \
         typeArg = gBattleMoves[move].type;                  \
 }//unsure how to sue dynamicMoveType

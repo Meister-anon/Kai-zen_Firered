@@ -237,6 +237,18 @@ as well as the effect of increasing trap duration
 * primal weather also sets terrain,  for kyogre & groudon, mega rayquaza would only remove their weather condition
 * where otherwise primal weather can't be changed.  so strengths them a bit as they keep the terrain
 * 
+* change mudsport and watersport to be terrain clears, will still do 
+* normal move effects but they will also clear terrain *idea from Sigel
+* 
+* new ability idea from anercomp,  high roller (name pending)  comeback king  (?)
+* ability that doubles in power whenever the mon misses (or move fails), a bit of move forgivenesss
+* will essentially let them make up for lost damage from the miss.
+* next attack becomes sure hit.   use same surehit logic  I did for traps
+* what can do is make a value/member in battlsruct set to zero,
+* and hvae it increment whenever the battler with the ability misses a move or fails to land an attack (put in accuracy calc/atk canceler))
+* and thn in damagecalc multiply that value by gbattlemovedamage like the critmultiplier
+* but use +1 since the value starts at 0.     if ability  gbattlemovedamage *=  (value + 1)
+* 
 * Go over field control effects again, i.e traps status terrain weather  drain abilities make sure everything remains in balance
 * I don't want to turn things into a gimmick where the only thing ppl do is status or terrain I want them to be relatively equal options
 * -
@@ -304,11 +316,15 @@ goto PARTYMENU_GRAPHICS
 * - progress - fixed enemy health bar neeed to setup for the other places and test rest of party slots- DONE
 * 
 * found curreent gen name limit is 12, so need add ANOTHER space and will need to figure out how to move health bar to work smh
-* 
+* plan to increase width of healthbox in battle to make names fit, potentiallly do same as category pokedex
+* and have it generate different size box based on pokemon name length, just so it fits/doesn't look too big
 * 
 * also my need to re-capitalize species namees as well. it prob looks fine in emerald but for fire red looks a bit off
 * espcially on some of the wider characters like M  -DONE  (unless I decide to go in and redo the font to look better myself that's it)
 * 
+* need search repo for values [10] & [11]  and replace with POKEMON_NAME_LENGTH & POKEMON_NAME_LENGTH + 1
+* as for some reason gamefreak used fixed values for a lot of the game rather than the constant value
+* need fix POKEMON_NAME_LENGTH expansion issue first, as it could just spread issue throughout even more areas
 * 
 * redoing species name expansion
 * need adjust naming screen, parrty menu & pokedex fields again
@@ -316,6 +332,12 @@ goto PARTYMENU_GRAPHICS
 * each their own define and have game use species name length
 * to decide which to use, name length 11 use mid, name length 12 uses large
 * everything below 11 can use the original have different window dimmenssions for each
+* 
+* found similar issue potentially with healthbox and naming screen.
+* adjusted naming screen for name length but now player is off.
+* need to make it swap bgs somehow for player vs mon naming screen some kind of callback or something
+* 
+* same thing forhealth box, want to make it adjust based on use,  so size of name length use different width healthbox
 * 
 * for party menu move left column mon pic up and left,
 * move name over 1 character,  same for right column 
@@ -362,7 +384,10 @@ goto MOVEICON_ABILITYDESC	//function for displaying move icons & ability info in
 /* 
 * Upgrade UI menu for new mechanics. Expanded move description & ability description & move name fields
 * Adjusted summary screen menu for trainer memo, &\ move summary/info page.
-* Need to find a fix for move icons misalignment in moves pags
+* Need to find a fix for move icons misalignment in moves pags 
+* rquires direct editing the tilemap to fit the icons/tiles
+* 
+* also move learn slot is not wide enough long moves in move learn slot get cut off
 * 
 * Also plan to add new string/logic for trainer memo box, for nuzlocke idea
 * Where pokemon would die and be replaced by ashes when taken to pokemon center
