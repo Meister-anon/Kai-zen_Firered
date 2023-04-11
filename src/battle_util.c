@@ -2464,6 +2464,7 @@ enum
     CANCELLER_IMPRISONED,
     CANCELLER_CONFUSED,
     CANCELLER_PARALYSED,
+    CANCELLER_PRESSURE,
     CANCELLER_SPIRIT_LOCKED,
     CANCELLER_GHOST,
     CANCELLER_IN_LOVE,
@@ -2749,6 +2750,16 @@ u8 AtkCanceller_UnableToUseMove(void)
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
+                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                effect = 1;
+            }
+            ++gBattleStruct->atkCancellerTracker;
+            break;
+        case CANCELLER_PRESSURE: // new pressure effect
+            if ((gBattleMons[gBattlerTarget].ability == (ABILITY_PRESSURE || ABILITY_HI_PRESSURE)) && (Random() % 4) == 1)
+            {
+                gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
+                gBattlescriptCurrInstr = BattleScript_MovePressureCanceler;
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 effect = 1;
             }

@@ -6594,6 +6594,12 @@ BattleScript_MoveUsedIsParalyzed::
 	cancelmultiturnmoves BS_ATTACKER
 	goto BattleScript_MoveEnd
 
+BattleScript_MovePressureCanceler::
+	printstring STRINGID_PRESSUREATKCANCEL
+	waitmessage 0x40
+	cancelmultiturnmoves BS_ATTACKER
+	goto BattleScript_MoveEnd
+
 BattleScript_MoveUsedFlinched::
 	printstring STRINGID_PKMNFLINCHED
 	waitmessage 0x40

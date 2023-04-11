@@ -170,6 +170,13 @@ as well as the effect of increasing trap duration
 * 
 * GIVE Turtonator more stab moves? or more early moves
 * 
+* fix sneasal-line give better moves to learnset
+* it hass great stats, but is usually only encuotnered late game,
+* and is hard to evolve.
+* but the biggest issue is prob, that it doesn't seem to get any moves above like 50 power.
+* 
+* make pressure & hi pressure work like paralysis chance to prevent  atk-
+* 
 * make revisions to add grass moves to sudowoodo line lvl up and tm learnsets   thinkin ingrain & bullet seed
 * think want to also add beatup if it doesn't have already
 * 
@@ -435,6 +442,30 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * loop through mon of type that resists, potentially need to put in list, but don't want to.
 * 
 * comtinue adding notes...
+* array won't end well if size doesn't match random value, so do just like, starter selection random % nelems 
+* but I'm making the list with the function logic,   so I cant do array nelms
+* so read target's type set that as attack type then loop through entire species and if they would result
+* in a not effective or no effect result.  I could add the species to list?  and then nelms the list and loop'
+* over that to decide what it transforms into?
+* need check if its possible to build an array from a function
+* EDIT--
+* try explaining agian, check target type, if target 2 matches target 1,
+*  make one list and set that as atk type, and loop through all the species that
+* have a defending type that  are not effective or no effect result.
+* 
+* Then randomly pick a species wihtin that list to transform into
+* 
+* If the type 2 doesn't match type 1, make two lists of the above guuidelines
+* select a random species, and then compare the species for each list,
+* if the species are identical transform into that species.
+* 
+* if the species returned is different, random % 2 to pick one of the two species to transform into
+* 
+* I may need to do all the logic within one function rather than being able to make an array from the function
+* as it looks like arrays have to be defined in size at build
+* 
+* So I think I need to create the list loop the list, and passive the species value to transform into
+* to a variable, all within the same function...
 * 
 */
 

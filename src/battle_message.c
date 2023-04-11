@@ -692,6 +692,8 @@ static const u8 sText_AuraFlaredToLife[] = _("{B_DEF_NAME_WITH_PREFIX}'s aura fl
 static const u8 sText_AirLockActivates[] = _("The effects of weather\ndisappeared.");
 static const u8 sText_DefeatistActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} lost the will to fight\nand is ready to run!");
 static const u8 sText_PressureActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is exerting its\npressure!");
+static const u8 sText_PressureAtkCancel[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_DEF_ABILITY}\nmade {B_SCR_ACTIVE_NAME_WITH_PREFIX} too afraid to attack!");
+//need fix the buffer make a function to prooperly buffer values and do cancel -done need test
 static const u8 sText_DarkAuraActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating\na dark aura!");
 static const u8 sText_FairyAuraActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating\na fairy aura!");
 static const u8 sText_AuraBreakActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} reversed all\nother POKéMON's auras!");
@@ -1381,6 +1383,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_TERRAINBECOMESDEEPWATER - BATTLESTRINGS_TABLE_START]       = sText_TerrainBecomesOceanic,
     [STRINGID_CRASHEDTOTHEGROUND - BATTLESTRINGS_TABLE_START]           = sText_FlyingEnemyCrashedDown,
     [STRINGID_DEFEATISTACTIVATED - BATTLESTRINGS_TABLE_START]           = sText_DefeatistActivates,
+    [STRINGID_PRESSUREATKCANCEL - BATTLESTRINGS_TABLE_START]           = sText_PressureAtkCancel,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,

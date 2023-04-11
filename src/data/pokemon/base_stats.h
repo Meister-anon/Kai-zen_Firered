@@ -6018,11 +6018,11 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_SNEASEL] =
     {
         .baseHP = 55,
-        .baseAttack = 95,
+        .baseAttack = 105,
         .baseDefense = 55,
         .baseSpeed = 115,
         .baseSpAttack = 35,
-        .baseSpDefense = 75,
+        .baseSpDefense = 80,
         .type1 = TYPE_DARK,
         .type2 = TYPE_ICE,
         .catchRate = 60,
@@ -6037,7 +6037,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_INNER_FOCUS, ABILITY_KEEN_EYE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_PICKPOCKET, ABILITY_NONE},
+            .abilityHidden = {ABILITY_PICKPOCKET, ABILITY_PRESSURE},
         #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -10289,7 +10289,7 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },  //nother update for mon with very different evo form, so they serve a different purpose/ i.e are self-sufficient in base form 
-    //but then can evolve to suit a different purpose/niche
+    //but then can evolve to suit a different purpose/niche  keep an eye on this balance wise
 
     [SPECIES_HUNTAIL] =
     {
@@ -12929,7 +12929,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_PICKPOCKET, ABILITY_NONE},
+            .abilityHidden = {ABILITY_PICKPOCKET, ABILITY_HI_PRESSURE},
         #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
