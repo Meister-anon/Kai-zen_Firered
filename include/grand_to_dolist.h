@@ -373,6 +373,18 @@ goto PARTYMENU_GRAPHICS
 * move name over 1 character,  same for right column 
 * 
 * considre swap placemnt of type icon and pp in summary.
+* did still has issue, only solution I see is put type icons on separate windows
+* buffer all of them to each window, and just use if conditional
+* to tell which window window to display  or just buffer the same thing to all windows
+* to all windows and then just in the funciton that puts the window up
+* I just swap the window for each instead of using move window 5.
+* 
+* what I'll have to do is put pp value in the middle and
+* alternate the type icon from left to right for each move.
+* then edit the bin to move up the window for the 3rd move data
+* 
+* it'll look a little off, but it'll work practically
+* make a mockup compare with current and throw up on peer review
 */ 
 
 

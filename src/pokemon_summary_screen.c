@@ -905,7 +905,7 @@ static const struct WindowTemplate sWindowTemplates_Moves[] =
     //but behind the mon pic hmm
     [POKESUM_WIN_MOVES_5 - 3] = {
         .bg = 0,
-        .tilemapLeft = 26,
+        .tilemapLeft = 15,
         .tilemapTop = 2,
         .width = 5,
         .height = 18,
@@ -2653,15 +2653,15 @@ static void PokeSum_PrintMoveName(u8 i)
             colorIdx = 2;
         else if (curPP <= (maxPP / 2))
             colorIdx = 1;
-    }
+    }                                                           //gap valus 10,12, 6
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 10, GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_PokeSum_PP);
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 20 + sMonSkillsPrinterXpos->curPp[i], GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 64, GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_PokeSum_PP);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 74 + sMonSkillsPrinterXpos->curPp[i], GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
 
     if (sMonSummaryScreen->moveIds[i] != MOVE_NONE)
     {
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 32, GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 38 + sMonSkillsPrinterXpos->maxPp[i], GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 86, GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 92 + sMonSkillsPrinterXpos->maxPp[i], GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
     }
 }//AddTextPrinter functions above put the pp symbol back slash and current & max pp values in menu
 
@@ -3033,7 +3033,7 @@ static void PokeSum_DrawMoveTypeIcons(void) //idea get icons to print on window 
 {
     u8 i;
 
-    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0x0);
+    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0x0FE);
 
     //FillWindowPixelRect(sMonSummaryScreen->windowIds[5], 0x0, 0, 0, 5, 2);   //ok can't use this, it puts white space over graphics
 
@@ -3066,10 +3066,10 @@ static void PokeSum_DrawMoveTypeIcons(void) //idea get icons to print on window 
 
         if (i == 0)
 
-        BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->moveTypes[i] + 1, 1, GetMoveTypeIconPrinterYpos(i));
+        BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->moveTypes[i] + 1, 3, GetMoveTypeIconPrinterYpos(i));
 
         else {
-            BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->moveTypes[i] + 1, 1, NewMoveTypeIconYpos(i));
+            BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->moveTypes[i] + 1, 3, NewMoveTypeIconYpos(i));
         }//so my understanding is blitmove, copies the icons onto specific area of the assigned window
         //I believe PutWindowRectTilemap also puts a specific area of teh window on the bg,/screen so I should be able to
         //I think I should be able to use those together to only display the window at the y position icons are printed
@@ -3080,7 +3080,7 @@ static void PokeSum_DrawMoveTypeIcons(void) //idea get icons to print on window 
     }//note printerypos is again using value 28 in its function, seems to be deriving y from x?
 
     if (sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE)
-        BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->moveTypes[4] + 1, 1, NewMoveTypeIconYpos(4));
+        BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->moveTypes[4] + 1, 3, NewMoveTypeIconYpos(4));
 }// movetype 4 is the type icon for the 4th move, which is when you are learning a new move, and already have 4, its where the cancel button appears
 //attempted change, put window id to 3, instead of 5, and icon showed up, but pallete wwas wrong, think I can shift the type icons to window 3 though
 //need to go through the work flow and see how it prepares window 5 to display the icon, may just be a matter of shifting those to window 3
