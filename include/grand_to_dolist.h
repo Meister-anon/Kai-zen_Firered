@@ -346,6 +346,9 @@ goto PARTYMENU_GRAPHICS
 * plan to increase width of healthbox in battle to make names fit, potentiallly do same as category pokedex
 * and have it generate different size box based on pokemon name length, just so it fits/doesn't look too big
 * 
+* name limit 12 is cutoff in pc, and I can't make the graphic bigger as
+* there is no more space so instead I need to make the font smaller.
+* 
 * also my need to re-capitalize species namees as well. it prob looks fine in emerald but for fire red looks a bit off
 * espcially on some of the wider characters like M  -DONE  (unless I decide to go in and redo the font to look better myself that's it)
 * 
@@ -368,6 +371,8 @@ goto PARTYMENU_GRAPHICS
 * 
 * for party menu move left column mon pic up and left,
 * move name over 1 character,  same for right column 
+* 
+* considre swap placemnt of type icon and pp in summary.
 */ 
 
 
