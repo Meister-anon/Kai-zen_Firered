@@ -94,6 +94,19 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 * loop through species and set all flags, and unlock national dex
 * may also give a few mon with script, this is to check pokedex entries fit
 * 
+*  THOUGHT attempt change item use, allow for using multiple of the same item at once.
+* from outside of battle. i.e use 5 oran berries,  to equal 1 super potion.
+* the item use image would play 1 time, but it would apply the effects of the item 
+* all at once. check how it works, if it shows exact hp recorvered or just displays text for hp recovered.
+* would only be for hp recovery level up, stat items, and pp ups.
+* 
+* pick item, add quanity argument do it like in mart buying an item,
+* hopefully can shift total quantity as you move amount you plan to use. may not need to/have any benefit in doing it that way
+* other than preference.
+* after confirm to use that quantity, only then go to party menu.
+* think just loop through portion that actually uses item n number of times, where n is quantity - 1
+* i.e if you use 3 rare candies will use item and then loop 2 times
+* 
 * anthroyd advice need to start keeping list of things I plan to use for the thread and what I plan
 * to introduce explicitly in-game I want my new type chart to mostly be discoveredd in game,
 * but just have them aware that things are diffeerent and some things will be a new experiencee
@@ -143,13 +156,17 @@ as well as the effect of increasing trap duration
 * 
 * Further buff cupid arrow for luvdisc make it ignore gender check, as its the love pokemon and something further to make it more unique. DONE
 * 
-* BUFFED unown, learnset and new ability
+* BUFFED unown, learnset and new ability - DONE
 * 
 * nother wave of buffs, delcatty buff, will need change its pokedex entry to fit, made part ghost, cats have 9 lives
-* may say delcatty is cat that died and came back intending to live its life to the fullest of its desire.
+* may say delcatty is cat that died and came back intending to live its life to the fullest of its desire. - DONE
 * 
 * may consider buff plus/minus ability with same affect as overcharge, but only when the partner is in a pinch -
 * can lead to an interesting plan where players ev build them for bulk
+* yeah that works as the ability activates when a mon with plus/minus is on the field, but 
+* if I make that action only be for if using the opposite ability as your partner its a different synergy
+* 
+* fix typhlosion line learnset curve, bring in line with charizard
 * 
 * NEED double check trap logic, may not need to make them status 1, to keep from being reset when mon switches
 * occured to me its not a status1 thing becuse confusion persists if mon switches, so its prob just somehting in trap logic?-
@@ -175,7 +192,7 @@ as well as the effect of increasing trap duration
 * and is hard to evolve.
 * but the biggest issue is prob, that it doesn't seem to get any moves above like 50 power.
 * 
-* make pressure & hi pressure work like paralysis chance to prevent  atk-
+* make pressure & hi pressure work like paralysis chance to prevent  atk- DONE need test
 * 
 * make revisions to add grass moves to sudowoodo line lvl up and tm learnsets   thinkin ingrain & bullet seed
 * think want to also add beatup if it doesn't have already
@@ -205,6 +222,9 @@ as well as the effect of increasing trap duration
 * 
 * check shed skin ability, after changing define values to fit new straps, the bitwise may go wonky?
 * another reason to remove new status 1 traps for grip claw & implement with conditional logic instead
+* so can set values back to normal
+* 
+* note* potentially  remove badge stat boosts? since I will have higher ev cap stuff idk.
 * 
 * 
 * Make copy ability of tinted lens, for non bugs, call it protag powere or subversion or great expectations  tiger cub?
