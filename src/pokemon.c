@@ -5231,7 +5231,7 @@ void GetSpeciesName(u8 *name, u16 species)
     s32 i;
 
     // Hmm? FRLG has < while Ruby/Emerald has <=
-    for (i = 0; i <= POKEMON_NAME_LENGTH; i++)
+    for (i = 0; i < POKEMON_NAME_LENGTH; i++)
     {
         if (species > NUM_SPECIES)
             name[i] = gSpeciesNames[0][i];

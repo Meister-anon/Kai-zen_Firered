@@ -1352,11 +1352,14 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
             {
                 if (!(gBattleWeather & WEATHER_RAIN_PERMANENT))
                 {
-                    if (--gWishFutureKnock.weatherDuration == 0)
+                    if (!(ABILITY_ON_FIELD2(ABILITY_SQUALL)))
                     {
-                        gBattleWeather &= ~WEATHER_RAIN_TEMPORARY;
-                        gBattleWeather &= ~WEATHER_RAIN_DOWNPOUR;
-                        gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+                        if (--gWishFutureKnock.weatherDuration == 0) //decremennts weather, and does removes weather if equals 0 after decrement
+                        {
+                            gBattleWeather &= ~WEATHER_RAIN_TEMPORARY;
+                            gBattleWeather &= ~WEATHER_RAIN_DOWNPOUR;
+                            gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+                        }
                     }
                     else if (gBattleWeather & WEATHER_RAIN_DOWNPOUR)
                         gBattleCommunication[MULTISTRING_CHOOSER] = 1;
@@ -1379,10 +1382,16 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
         case ENDTURN_SANDSTORM:
             if (gBattleWeather & WEATHER_SANDSTORM_ANY)
             {
-                if (!(gBattleWeather & WEATHER_SANDSTORM_PERMANENT) && --gWishFutureKnock.weatherDuration == 0)
+                if (!(gBattleWeather & WEATHER_SANDSTORM_PERMANENT))
                 {
-                    gBattleWeather &= ~WEATHER_SANDSTORM_TEMPORARY;
-                    gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
+                    if (!(ABILITY_ON_FIELD2(ABILITY_SAND_STREAM)))
+                    {
+                        if (--gWishFutureKnock.weatherDuration == 0)  //weather decrement
+                        {
+                            gBattleWeather &= ~WEATHER_SANDSTORM_TEMPORARY;
+                            gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
+                        }
+                    }
                 }
                 else
                 {
@@ -1398,10 +1407,16 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
         case ENDTURN_SUN:
             if (gBattleWeather & WEATHER_SUN_ANY)
             {
-                if (!(gBattleWeather & WEATHER_SUN_PERMANENT) && --gWishFutureKnock.weatherDuration == 0)//weather decrement
+                if (!(gBattleWeather & WEATHER_SUN_PERMANENT))
                 {
-                    gBattleWeather &= ~WEATHER_SUN_TEMPORARY;
-                    gBattlescriptCurrInstr = BattleScript_SunlightFaded;
+                    if (!(ABILITY_ON_FIELD2(ABILITY_SUN_DISK)))
+                    {
+                        if (--gWishFutureKnock.weatherDuration == 0) //weathr decrement
+                        {
+                            gBattleWeather &= ~WEATHER_SUN_TEMPORARY;
+                            gBattlescriptCurrInstr = BattleScript_SunlightFaded;
+                        }
+                    }
                 }
                 else
                 {
@@ -1415,10 +1430,16 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
         case ENDTURN_HAIL:
             if (gBattleWeather & WEATHER_HAIL_ANY)
             {
-                if (--gWishFutureKnock.weatherDuration == 0)
+                if (!(gBattleWeather & WEATHER_HAIL_PERMANENT))
                 {
-                    gBattleWeather &= ~WEATHER_HAIL;
-                    gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
+                    if (!(ABILITY_ON_FIELD2(ABILITY_SNOW_WARNING)))
+                    {
+                        if (--gWishFutureKnock.weatherDuration == 0)    //weather decrement
+                        {
+                            gBattleWeather &= ~WEATHER_HAIL;
+                            gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
+                        }
+                    }
                 }
                 else
                 {
@@ -3250,11 +3271,22 @@ bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2)
 
 static const u16 sWeatherFlagsInfo[][3] =
 {
+    [ENUM_WEATHER_RAIN_PRIMAL] = {WEATHER_RAIN_PRIMAL, WEATHER_RAIN_PRIMAL, HOLD_EFFECT_DAMP_ROCK},
     [ENUM_WEATHER_RAIN] = {WEATHER_RAIN_TEMPORARY, WEATHER_RAIN_PERMANENT, HOLD_EFFECT_DAMP_ROCK},
+    [ENUM_WEATHER_SUN_PRIMAL] = {WEATHER_SUN_PRIMAL, WEATHER_SUN_PRIMAL, HOLD_EFFECT_HEAT_ROCK},
     [ENUM_WEATHER_SUN] = {WEATHER_SUN_TEMPORARY, WEATHER_SUN_PERMANENT, HOLD_EFFECT_HEAT_ROCK},
     [ENUM_WEATHER_SANDSTORM] = {WEATHER_SANDSTORM_TEMPORARY, WEATHER_SANDSTORM_PERMANENT, HOLD_EFFECT_SMOOTH_ROCK},
-    [ENUM_WEATHER_HAIL] = {WEATHER_HAIL, HOLD_EFFECT_ICY_ROCK, WEATHER_HAIL_PERMANENT},
+    [ENUM_WEATHER_HAIL] = {WEATHER_HAIL, WEATHER_HAIL_PERMANENT, HOLD_EFFECT_ICY_ROCK},
+    [ENUM_WEATHER_STRONG_WINDS] = {WEATHER_STRONG_WINDS, WEATHER_STRONG_WINDS, HOLD_EFFECT_NONE},
 };
+
+//abilities that don't use timer
+static const u16 sPermanentWeatherAbilities[] = {
+    ABILITY_DROUGHT,
+    ABILITY_DRIZZLE,
+    ABILITY_DESOLATE_LAND,
+    ABILITY_PRIMORDIAL_SEA,
+}
 
 //first bracket number of rows in array, (auto defined)
 //second bracket number of members in array, each line willl have that many arguments
@@ -3264,35 +3296,62 @@ static const u16 sSwitchAbilities[][10] =
 };
 //ok set it up correctly so now it doesn't break connections
 
+#define WEATHER_AND_TERRAIN_EFFECTS
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
 {
     u16 battlerAbility = GetBattlerAbility(battler);
+    u32 i;
 
-    if (viaAbility
-        && !(gBattleWeather & sWeatherFlagsInfo[weatherEnumId][1]))
+    for (i = 0; i < NELEMS(sPermanentWeatherAbilities); i++;)
     {
-        gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1]);
-        return TRUE;
-    }
-    else if (gBattleWeather & WEATHER_PRIMAL_ANY
-        && battlerAbility != ABILITY_DESOLATE_LAND
-        && battlerAbility != ABILITY_PRIMORDIAL_SEA
-        && battlerAbility != ABILITY_DELTA_STREAM)
-    {
+
+        if (gBattleWeather & WEATHER_PRIMAL_ANY
+            && battlerAbility != ABILITY_DESOLATE_LAND
+            && battlerAbility != ABILITY_PRIMORDIAL_SEA
+            && battlerAbility != ABILITY_DELTA_STREAM)
+        {
+            return FALSE;
+        }
+
+
+
+        else if (viaAbility && !(gBattleWeather & WEATHER_PRIMAL_ANY)   ////can change if not primal means it can change permanant set weather I think
+            && battlerAbility == sPermanentWeatherAbilities[i])
+        {
+            gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1]);   //1 is permanent weather,0 is temp
+            return TRUE;
+        }
+
+        else if (viaAbility && !(gBattleWeather & sWeatherFlagsInfo[weatherEnumId][1]) // says change weather if not permanent weather? need test
+            && battlerAbility != sPermanentWeatherAbilities[i]
+            && (!((ABILITY_ON_FIELD2(ABILITY_DROUGHT)) || (ABILITY_ON_FIELD2(ABILITY_DRIZZLE)))))  
+        {
+            gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]);
+            if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2]) //2 is weather extending hold effect
+                gWishFutureKnock.weatherDuration = 8;
+            else
+                gWishFutureKnock.weatherDuration = 5;
+
+            return TRUE;
+        }
+
+        //move based weather change
+        else if ((!(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))  //CHECK specific weather isn't alraedy set
+            && (!((ABILITY_ON_FIELD2(ABILITY_DROUGHT)) || (ABILITY_ON_FIELD2(ABILITY_DRIZZLE))))) //need test if prevents weather change while kyogre/groudon on field
+        {
+            gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]);
+            if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2]) //2 is weather extending hold effect
+                gWishFutureKnock.weatherDuration = 8;
+            else
+                gWishFutureKnock.weatherDuration = 5;
+
+            return TRUE;
+        }
+
+
         return FALSE;
     }
-    else if (!(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))
-    {
-        gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]);
-        if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2])
-            gWishFutureKnock.weatherDuration = 8;
-        else
-            gWishFutureKnock.weatherDuration = 5;
 
-        return TRUE;
-    }
-
-    return FALSE;
 }
 
 //since this just sets timer and terrain,  
@@ -3303,7 +3362,7 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
 static bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer)
 {
     if (!(gFieldStatuses & statusFlag))
-    {//think means clear any existing field terrain and set terrain
+    {//think means clear any existing field terrain and set terrain / oh this also clears mud/water sport
         gFieldStatuses &= ~(STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_GRASSY_TERRAIN | EFFECT_ELECTRIC_TERRAIN | EFFECT_PSYCHIC_TERRAIN);
         gFieldStatuses |= statusFlag;
 
@@ -3615,18 +3674,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             #endif
             break;//hopefully can put terrain here without problems, start of weather abilities
             case ABILITY_DRIZZLE:
-                if (!(gBattleWeather & WEATHER_RAIN_PERMANENT))
+                if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE))
                 {
-                    gBattleWeather = (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY);
+                    //gBattleWeather = (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY);
                     BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
                     gBattleScripting.battler = battler;
                     ++effect;
                 }
                 break;
             case ABILITY_SQUALL:
-                if (!(gBattleWeather & WEATHER_RAIN_PERMANENT))
+                if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE))
                 {
-                    gBattleWeather = (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY);
+                    //gBattleWeather = (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY);
                     BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
                     gBattleScripting.battler = battler;
                     gBattleStruct->weathersetBy[battler] = battler;
@@ -3634,9 +3693,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             case ABILITY_SAND_STREAM:
-                if (!(gBattleWeather & WEATHER_SANDSTORM_PERMANENT))
+                if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE))
                 {
-                    gBattleWeather = (WEATHER_SANDSTORM_PERMANENT | WEATHER_SANDSTORM_TEMPORARY);
+                    //gBattleWeather = (WEATHER_SANDSTORM_PERMANENT | WEATHER_SANDSTORM_TEMPORARY);
                     BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
                     gBattleScripting.battler = battler;
                     gBattleStruct->weathersetBy[battler] = battler;
@@ -3644,18 +3703,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             case ABILITY_DROUGHT:
-                if (!(gBattleWeather & WEATHER_SUN_PERMANENT))
+                if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE))
                 {
-                    gBattleWeather = (WEATHER_SUN_PERMANENT | WEATHER_SUN_TEMPORARY);
+                    //gBattleWeather = (WEATHER_SUN_PERMANENT | WEATHER_SUN_TEMPORARY);
                     BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
                     gBattleScripting.battler = battler;
                     ++effect;
                 }
                 break;
-            case ABILITY_HIGH_NOON:
-                if (!(gBattleWeather & WEATHER_SUN_PERMANENT))
+            case ABILITY_SUN_DISK:
+                if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE))
                 {
-                    gBattleWeather = (WEATHER_SUN_PERMANENT | WEATHER_SUN_TEMPORARY);
+                    //gBattleWeather = (WEATHER_SUN_PERMANENT | WEATHER_SUN_TEMPORARY);
                     BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
                     gBattleScripting.battler = battler;
                     gBattleStruct->weathersetBy[battler] = battler;
@@ -3663,9 +3722,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             case ABILITY_SNOW_WARNING:
-                if (!(gBattleWeather & WEATHER_HAIL_PERMANENT))
+                if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE))
                 {
-                    gBattleWeather = WEATHER_HAIL_ANY;
+                    //gBattleWeather = WEATHER_HAIL_ANY;
                     BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
                     gBattleScripting.battler = battler;
                     gBattleStruct->weathersetBy[battler] = battler;

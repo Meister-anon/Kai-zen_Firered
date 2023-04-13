@@ -6979,14 +6979,6 @@ BattleScript_ItemSteal::
 	waitmessage 0x40
 	return
 
-BattleScript_DrizzleActivates::
-	pause 0x20
-	printstring STRINGID_PKMNMADEITRAIN
-	waitstate
-	playanimation BS_BATTLER_0, B_ANIM_RAIN_CONTINUES, NULL
-	call BattleScript_HandleWeatherFormChanges
-	end3
-
 BattleScript_HailActivates::
 	pause 0x20
 	printstring STRINGID_PKMNSXCALLEDDOWNHAIL
@@ -7261,6 +7253,14 @@ BattleScript_IntimidateAbilityFail::
 	printstring STRINGID_PREVENTEDFROMWORKING
 	waitmessage 0x40
 	goto BattleScript_IntimidateFail
+
+BattleScript_DrizzleActivates::
+	pause 0x20
+	printstring STRINGID_PKMNMADEITRAIN
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_RAIN_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	end3
 
 BattleScript_DroughtActivates::
 	pause 0x20

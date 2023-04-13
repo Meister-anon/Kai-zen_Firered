@@ -230,6 +230,8 @@ as well as the effect of increasing trap duration
 * Make copy ability of tinted lens, for non bugs, call it protag powere or subversion or great expectations  tiger cub?
 * anyway for mon that can setup  multiple type power/dmg buffs i.e terrain & weather or to be used with a terrain on on team.
 * 
+* made grass buffs, make grass version of u-turn aka up root can be taken advantage of by chlorophyl mons -
+* 
 * Remember setup ability Dark Deal companion ability to nuisance
 *
 *
@@ -240,7 +242,11 @@ as well as the effect of increasing trap duration
 *
 * Look at changes to early gen mon, consider bringing back stats from gen 1 & 2
 * where special atk & sp def were all one stat  see how it changes mon
-* and if it makes sense for balance
+* and if it makes sense for balance - DONE this was only for gen 1, it was changed in gen 2 and most gen1 mon were balanced with that in mind
+* 
+* with buffs and planned addition of more mon early on, consider tweak to leveling function that will weight stat growth to later
+* so you can have stronger mon in early areas without them being super op at low levels ( may not need ot its possible current function already balances that)
+* if early levels aren't greatly different stat wise would make easier to balance mon for late game.
 * 
 * Also consider tweaking how terrain switch works, make it stay as long as the ability surge mon is on the field
 * want to work like  weather switch which I think works off last in?  may work off speed?
@@ -248,7 +254,8 @@ as well as the effect of increasing trap duration
 * that way even if they get one shot its still valuable to put out as a setup.-
 * 
 * Remove drizzle & drought from mon, and replace with new ability's instead of just giving everyone groudon and kyogre's abilities
-* Thinking Squal in place of drizzle  and I guess High Noon in place of drought
+* Thinking Squal in place of drizzle  and I guess High Noon in place of drought - DONE
+* 
 * that way kyogre and groudon can stay special.
 * plan is other weather abilities will be temporary 5 turns like sunny day but better
 * as it resets the timer as long as the mon is still on the field.
@@ -259,13 +266,27 @@ as well as the effect of increasing trap duration
 * if said battler is still on the field. 
 * make meber struct weathersetby  
 * just need to set when ability actiavates like so gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
-* do in ability battle effects just sub effectbattler for battler as ability function already uses battler as aits swithin fun stuff..-
+* do in ability battle effects just sub effectbattler for battler as ability function already uses battler as aits swithin fun stuff..
+* 
+* - think done, don't need weather wrapped by,  permanent weather doesn't use timer. so dont need special stuct
+* just need to use plusle minum ability on field check, linked with the weather condition its supposed to set,
+* if weather is current just keep timer from going down - DONE
+* 
+* TryChangeBattleWeather  need replace  LOGIC for all weather abilities with that function - DONE
 * 
 * primal weather also sets terrain,  for kyogre & groudon, mega rayquaza would only remove their weather condition
 * where otherwise primal weather can't be changed.  so strengths them a bit as they keep the terrain
 * 
 * change mudsport and watersport to be terrain clears, will still do 
-* normal move effects but they will also clear terrain *idea from Sigel
+* normal move effects but they will also clear terrain *idea from Sigel - 
+* 
+* change terrain function elements TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer)
+* to work like changeweather function replace timer pointer with true false for viaAbility
+* so I can setup logic for terrain surge abilities  potentially make certain side wide type moves terrain clears as well
+* i.e earthquake surf etc. - 
+*/
+goto WEATHER_AND_TERRAIN_EFFECTS
+/* 
 * 
 * new ability idea from anercomp,  high roller (name pending)  comeback king  (?)
 * ability that doubles in power whenever the mon misses (or move fails), a bit of move forgivenesss

@@ -306,7 +306,7 @@
 #define ABILTY_UNKNOWN_POWER 283	//unown specific ability similar to plus minus but if partner is unown
 #define ABILITY_PURIFYING_AURA 284 //Suicune ability  mix of healer & shedskin but gauranteed
 #define ABILITY_SQUALL 285
-#define ABILITY_HIGH_NOON 286
+#define ABILITY_SUN_DISK 286
 #define ABILITY_TOUGH_SPINES 287
 
 //#define ABILITY_DARK_DEAL 282   //companion ability to nuisance, cuts dynamicbasepower of partner moves in half,

@@ -271,6 +271,8 @@ static const u8 sLavaFissureDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Fie
 static const u8 sToadstoolNymphDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups Fairy Damage. A blessing of the fae,\ngiven to a plant for devotion to nature");
 static const u8 sUnknownPowerDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("A mysterious ability from the unown\ndimension, it doubles power when with unown");
 static const u8 sPurifyingAuraDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Status heal.The POKéMON flares its aura\npurifying anything within reach.");
+static const u8 sSquallDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Summons a rain shower,\nthat temporarily drenches the field.");
+static const u8 sSundiskDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("The PKMN gives thanks to the sun.\nTemporarily boosting sunlight in battle.");
 static const u8 sToughSpinesDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Stabs the foe with cactus-like spines on contact.");
 //checked in fire red limit is 40 chars per line, changing description length to 80
 
@@ -561,6 +563,8 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TOADSTOOL_NYMPH] = sToadstoolNymphDescription,
     [ABILTY_UNKNOWN_POWER] = sUnknownPowerDescription,
     [ABILITY_PURIFYING_AURA] = sPurifyingAuraDescription,
+    [ABILITY_SQUALL] = sSquallDescription,
+    [ABILITY_SUN_DISK] = sSundiskDescription,
     [ABILITY_TOUGH_SPINES] = sToughSpinesDescription,
 };//last value can have comma
 
@@ -855,5 +859,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TOADSTOOL_NYMPH] = _("TOADSTOOL NYMPH"),
     [ABILTY_UNKNOWN_POWER] =_("UNKNOWN POWER"),
     [ABILITY_PURIFYING_AURA] =_("PURIFYING AURA"),
+    [ABILITY_SQUALL] =_("SQUALL"),
+    [ABILITY_SUN_DISK] =_("SUN DISK"),
     [ABILITY_TOUGH_SPINES] =_("TOUGH SPINES")
 };//no comma for last value
