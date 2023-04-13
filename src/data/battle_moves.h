@@ -1111,7 +1111,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .pp = 20,
         #endif
         .effect = EFFECT_ABSORB,
-        .power = 20,
+        .power = 30,
         .type = TYPE_GRASS,
         .accuracy = 100,
         .secondaryEffectChance = 0,
@@ -1129,7 +1129,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .pp = 10,
         #endif
         .effect = EFFECT_ABSORB,
-        .power = 40,
+        .power = 70,
         .type = TYPE_GRASS,
         .accuracy = 100,
         .secondaryEffectChance = 0,
@@ -1174,7 +1174,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_RAZOR_LEAF] =
     {
         .effect = EFFECT_HIT,
-        .power = 55,
+        .power = 70,
         .type = TYPE_GRASS,
         .accuracy = 95,
         .pp = 25,
@@ -1490,7 +1490,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_SLEEP,
         .power = 0,
         .type = TYPE_PSYCHIC,
-        .accuracy = 60,
+        .accuracy = 65,
         .pp = 20,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
@@ -3175,7 +3175,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_GIGA_DRAIN] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_5
-            .power = 75,
+            .power = 90,
             .pp = 10,
         #elif B_UPDATED_MOVE_DATA == GEN_4
             .power = 60,
@@ -3196,11 +3196,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_ENDURE] =
     {   //prefer keeping at priority 3
-        #if B_UPDATED_MOVE_DATA >= GEN_5
+        /*#if B_UPDATED_MOVE_DATA >= GEN_5
             .priority = 4,
-        #else
+        #else*/
             .priority = 3,
-        #endif
+        //#endif
         .effect = EFFECT_ENDURE,
         .power = 0,
         .type = TYPE_NORMAL,
@@ -4739,7 +4739,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_MINIMIZE,
         .effect = EFFECT_FLINCH_HIT,
-        .power = 60,
+        .power = 80,
         .type = TYPE_GRASS,
         .accuracy = 100,
         .pp = 15,
@@ -4747,7 +4747,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .split = SPLIT_PHYSICAL,
-    },
+    }, //equivalent to punching moves/ mega punch
 
     [MOVE_SLACK_OFF] =
     {
@@ -4891,7 +4891,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 0,
         .type = TYPE_GRASS,
         .accuracy = 0,
-        .pp = 5,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_USER,
         .priority = 0,
@@ -5028,14 +5028,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_SLEEP,
         .power = 0,
         .type = TYPE_GRASS,
-        .accuracy = 55,
+        .accuracy = 75,
         .pp = 15,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SOUND,
         .split = SPLIT_STATUS,
-    },
+    }, //equal acc to sleep powder
 
     [MOVE_TICKLE] =
     {
@@ -5466,7 +5466,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_HIT,
         .type = TYPE_GRASS,
         .accuracy = 100,
-        .pp = 15,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
@@ -6865,13 +6865,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 120,
         .type = TYPE_GRASS,
         .accuracy = 85,
-        .pp = 10,
+        .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-    },
+    }, //add to tangela learnset
 
     [MOVE_ROCK_WRECKER] =
     {
@@ -7001,11 +7001,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_GRASS,
         .accuracy = 100,
         .pp = 20,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 15,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .argument = EFFECT_FLINCH_HIT
     },
 
     [MOVE_CHATTER] =
@@ -8270,7 +8271,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_HORN_LEECH] =
     {
         .effect = EFFECT_ABSORB,
-        .power = 75,
+        .power = 85,
         .type = TYPE_GRASS,
         .accuracy = 100,
         .pp = 10,
@@ -10947,11 +10948,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_GRASS,
         .accuracy = 100,
         .pp = 40,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 20,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
+        .argument = EFFECT_FLINCH_HIT
     },
 
     [MOVE_OVERDRIVE] =

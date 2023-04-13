@@ -306,6 +306,25 @@ goto FIELD_ENDTURN  //battle_util.c  includes weather decrement
 * to .c & .h file to use functions and arrays
 * to decide what table to pull from.
 * 
+* also plan to add more encounters to each area on top of changing how tiles work, so grass not on the road, and rock not on sand can spawn encounters
+* but hopefully can set separate encounter rate for said tiles so its a bit lower.
+* 
+* also setup special event for new game, where there is a random chance for the game to set a extra flag
+* that would trigger a traveling fishermin event script at the south side of pallet by the lake.
+* rather than a battle he will give you the old rod, after a speel about teaching the youth/next generation the joy of fishing.
+* 
+* add more than magikarp to old rod, things like lotad feebass etc.
+* 
+* add on to normal old rod event script if the flag for the traveling fisherman is set (actually just make it the same fisherman)
+* he'll remark its good to see you again, ask if you've been using the rod.
+* 
+* and then give you a water pokemon around lvl 10 with a relatively low stat total.
+* i.e need make function that will check type and then total all the stat fields.
+* 
+* could also use that for new game plus, were you would alrady have all the rods.
+* 
+* so instad each fisherman gives you a progressively better water pokemon instead of a better fishing rod
+* 
 */
 goto CATCHING_LOGIC
 /*
