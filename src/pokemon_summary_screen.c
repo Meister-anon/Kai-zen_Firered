@@ -2588,7 +2588,9 @@ static void PrintSkillsPage(void)//vsonic
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 15 + sMonSkillsPrinterXpos->toNextLevel, 87, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.expToNextLevelStrBuf);
 }   //ok since this is going on window 3, and I need to move up abilities which are on window 5 think need decrease height of 3 for skills menu
 
-#define GetMoveNamePrinterYpos(x) ((x) * 28 + 5)
+#define GetOtherMoveNamePrinterYpos(x) ((x) * 28 + 2)    //used for pp of move box 0 & 2, subtracted 3 to match hopefuly
+#define GetMoveNamePrinterYpos(x) ((x) * 28 + 5)    //used for pp
+#define GetOtherMovePpPinterYpos(x) ((x) * 28 + 13) //used for moveename
 
 ////this is the function I need for changing move name position
 //need to shift y position formula then move x after, as it uses x to determine why
@@ -2606,7 +2608,7 @@ static void PrintMovesPage(void)
             PokeSum_PrintMoveName(4);
         else
             AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL,
-                                         33, GetMoveNamePrinterYpos(4),
+                                         32, GetMoveNamePrinterYpos(4),
                                          sPrintMoveTextColors[0], TEXT_SKIP_DRAW, gFameCheckerText_Cancel);
     }
 }//ok this function doenst' matter its just for displaying the cancel button when you select a move, and for telling the main funtion below how to loop
@@ -2626,11 +2628,34 @@ static void PokeSum_PrintMoveName(u8 i)
 
     //this line prints the move names in the windows I got it to move how I want by swapping all GetMoveNamePrinterYpos & GetMovePpPrinterYpos in this funtion
     //I have the y value I just need to move this further to the left now
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 1, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
+    
+    
+   // AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 1, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
     //making x value after font 0 did move it over without shifting the y value but not nearly enough, it was like the text instead of moving the window..
     //actually I think that is what it does, its like battle_message.c its only moving text within the window not the window itself hmm
     //tried a negative number onfirmed can go below zero to move text left, also confirm the x y values are only for text need to move window itslef some how
     //I think it may be a matter of changing windowIds,  think window ID has a fixed coordinate?
+
+    if (i == 0)
+    {
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 1, GetOtherMovePpPinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
+    }
+    if (i == 1)
+    {
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 1, GetMovePpPrinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
+    }
+    if (i == 2)
+    {
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 1, GetOtherMovePpPinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
+    }
+    if (i == 3)
+    {
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 1, GetMovePpPrinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
+    }
+    if (i == 4)
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 1, GetMovePpPrinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
+
+
     if (sMonSummaryScreen->moveIds[i] == 0 || (curPP == maxPP))//
         colorIdx = 0;
     else if (curPP == 0)
@@ -2653,16 +2678,74 @@ static void PokeSum_PrintMoveName(u8 i)
             colorIdx = 2;
         else if (curPP <= (maxPP / 2))
             colorIdx = 1;
-    }                                                           //gap valus 10,12, 6
+    }                                           //gap valus 10,12, 6
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 64, GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_PokeSum_PP);
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 74 + sMonSkillsPrinterXpos->curPp[i], GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
+
+    if (i == 0) //gap valus 10,12, 6
+    {
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 64, GetOtherMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW,
+            gText_PokeSum_PP);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 74 + sMonSkillsPrinterXpos->curPp[i], GetOtherMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
+        if (sMonSummaryScreen->moveIds[i] != MOVE_NONE)
+        {
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 86, GetOtherMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 92 + sMonSkillsPrinterXpos->maxPp[i], GetOtherMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
+        }
+    }
+    if (i == 1)
+    {
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 64, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW,
+            gText_PokeSum_PP);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 74 + sMonSkillsPrinterXpos->curPp[i], GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
+        if (sMonSummaryScreen->moveIds[i] != MOVE_NONE)
+        {
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 86, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 92 + sMonSkillsPrinterXpos->maxPp[i], GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
+        }
+    }
+    if (i == 2)
+    {
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 64, GetOtherMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW,
+            gText_PokeSum_PP);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 74 + sMonSkillsPrinterXpos->curPp[i], GetOtherMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
+        if (sMonSummaryScreen->moveIds[i] != MOVE_NONE)
+        {
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 86, GetOtherMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 92 + sMonSkillsPrinterXpos->maxPp[i], GetOtherMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
+        }
+    }
+    if (i == 3)
+    {
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 64, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW,
+            gText_PokeSum_PP);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 74 + sMonSkillsPrinterXpos->curPp[i], GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
+        if (sMonSummaryScreen->moveIds[i] != MOVE_NONE)
+        {
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 86, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 92 + sMonSkillsPrinterXpos->maxPp[i], GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
+        }
+    }
+    if (i == 4)
+    {
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 64, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW,
+            gText_PokeSum_PP);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 74 + sMonSkillsPrinterXpos->curPp[i], GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
+        if (sMonSummaryScreen->moveIds[i] != MOVE_NONE)
+        {
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 86, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 92 + sMonSkillsPrinterXpos->maxPp[i], GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
+        }
+    }
+
+    /*AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 64, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW,
+        gText_PokeSum_PP);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 74 + sMonSkillsPrinterXpos->curPp[i], GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
 
     if (sMonSummaryScreen->moveIds[i] != MOVE_NONE)
     {
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 86, GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 92 + sMonSkillsPrinterXpos->maxPp[i], GetMovePpPrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
-    }
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 86, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 92 + sMonSkillsPrinterXpos->maxPp[i], GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
+    }*/
 }//AddTextPrinter functions above put the pp symbol back slash and current & max pp values in menu
 
 static void PokeSum_PrintBottomPaneText(void)
@@ -3022,7 +3105,7 @@ static void PokeSum_PrintAbilityNameAndDesc(void)   //need to increase height, a
 //ok so before the type icons were all in one long window and was using the loop number to determine the y value i.e move "down" a row
 //but I'm creating my own individual window at the height I want so I need a constant value separate from the loop
 #define NewMoveTypeIconYpos(x) ((x) * 28 + 0)
-#define GetMoveTypeIconPrinterYpos(x) ((x) * 0 + 4)
+#define GetMoveTypeIconPrinterYpos(x) ((x) * 0 + 3)  //type icon just for first move
 
 #define MOVE_1 0
 #define MOVE_2 1
