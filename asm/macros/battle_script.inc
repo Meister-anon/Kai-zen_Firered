@@ -1382,7 +1382,7 @@
 	.4byte \ptr
 	.endm
 
-	.macro rocksmashdamagecalc
+	.macro typebaseddmgboost
 	.2byte 0x111
 	.endm
 

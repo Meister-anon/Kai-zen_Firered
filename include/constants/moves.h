@@ -784,6 +784,8 @@
 #define MOVE_FLASH_FREEZE 757
 #define MOVE_DRYADS_CURSE 758
 #define MOVE_SHIELD_BASH 759
+#define MOVE_UP_ROOT 760
+#define MOVE_DIVE_BOMB 761
 
 //#define MOVES_COUNT_GEN8 757
 
@@ -792,7 +794,7 @@
 //for completion new moves have to be defined in:  move_descriptions.inc,  move_names.h, battle_anim_scripts.s & data_8479668.s
 // also need actual move data in battle_moves.h
 
-#define LAST_MOVE_INDEX     MOVE_SHIELD_BASH
+#define LAST_MOVE_INDEX     MOVE_DIVE_BOMB
 
 #define MOVES_COUNT_GEN8 (LAST_MOVE_INDEX + 1) //changed so define auto updates
 

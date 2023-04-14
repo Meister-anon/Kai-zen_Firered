@@ -336,7 +336,7 @@ static void atk10D_setattackerstatus3(void);
 static void atk10E_setmultihitcounter2(void);
 static void atk10F_setiondeluge(void);
 static void atk110_setuserstatus3(void);
-static void atk111_rocksmashdamagecalc(void);
+static void atk111_typebaseddmgboost(void);
 
 void (* const gBattleScriptingCommandsTable[])(void) =
 {
@@ -613,7 +613,7 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atk10E_setmultihitcounter2,
     atk10F_setiondeluge,
     atk110_setuserstatus3,
-    atk111_rocksmashdamagecalc,
+    atk111_typebaseddmgboost,
 };
 
 struct StatFractions
@@ -14209,7 +14209,7 @@ static void atk110_setuserstatus3(void)
 
 }
 
-static void atk111_rocksmashdamagecalc(void)
+static void atk111_typebaseddmgboost(void)
 {
     if (gCurrentMove == MOVE_ROCK_SMASH)
     {
@@ -14221,6 +14221,13 @@ static void atk111_rocksmashdamagecalc(void)
 
         if (IS_BATTLER_OF_TYPE(gBattlerTarget,TYPE_ROCK))
             gDynamicBasePower *= 2;
+    }
+    else if (gCurrentMove == MOVE_CUT)
+    {
+        gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+
+        if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS))
+            gDynamicBasePower *= 3;
     }
     ++gBattlescriptCurrInstr;
 }

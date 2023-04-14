@@ -3816,7 +3816,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         {
             //((gBattleMoveDamage *= 15) / 100); //should be 15% damage i.e 85% damage cut
             gBattleMoveDamage *= 15;
-            gBattleMoveDamage /= 100;
+            gBattleMoveDamage /= 100; //just realized this effectively makes super effective do same damage as normal which since its through a shield guess this is fine
         }
         else if (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE))  //hopefully works for normal effect and doesn't break fixed damage & oh ko moves
         {

@@ -41,7 +41,7 @@ gMoveDescription_SwordsDance:: @ 8482B94
 	.string "A frenetic dance of\nfighting. It sharply\nraises the ATTACK\nstat.$"
 
 gMoveDescription_Cut:: @ 8482BD5
-	.string "A basic attack.\nIt can be used to\ncut down thin trees\nand grass.$"
+	.string "A basic attack.\nIt can be used to\ncut down thin trees\nand grass.\nIts power increases\nagainst grass types.$"
 
 gMoveDescription_Gust:: @ 8482C16
 	.string "Strikes the foe\nwith a gust of wind\nwhipped up by\nwings.$"
@@ -1101,6 +1101,7 @@ gACUPRESSUREDescription:
 
 gMETAL_BURSTDescription:
    .string "Retaliates any hit with\ngreater power.$"
+
 
 gU_TURNDescription:
    .string "Does damage then switches\nout the user.$"
@@ -2216,4 +2217,10 @@ gMoveDescription_DryadsCurse:
 	.string "Sacrifices stats\nto curse the last foe\nwho attacked the user.$"
 
 gMoveDescription_ShieldBash:
-	.string "The user blocks its body\nwith a shield, and counter attacks\nif hit with physical move\ndamage is based on its DEF stat"
+	.string "The user blocks its body\nwith a shield, and counter attacks\nif hit with physical move\ndamage is based on its DEF stat.$"
+
+gUP_ROOTDescription:
+   .string "Does damage then switches\nout the user.$"
+
+gDIVE_BOMBDescription:	@can add on to thesee 2
+   .string "Does damage then switches\nout the user.$"

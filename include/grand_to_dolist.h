@@ -281,9 +281,12 @@ as well as the effect of increasing trap duration
 * normal move effects but they will also clear terrain *idea from Sigel - 
 * 
 * change terrain function elements TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer)
-* to work like changeweather function replace timer pointer with true false for viaAbility
+* to work like changeweather function replace timer pointer with true false for viaAbility - NULL doesn't need doing just adjust end turn terrain for abilities
+* 
 * so I can setup logic for terrain surge abilities  potentially make certain side wide type moves terrain clears as well
-* i.e earthquake surf etc. - 
+* i.e earthquake surf etc. -  NULL changed mind, makes terrain too accessible and thus overbearing.
+* well that was dumb, was tired and literally crossed my wires,  I had an idea of them setting terrain as well,
+* so they can clear terrain but not set and thats fine
 */
 
 goto WEATHER_AND_TERRAIN_EFFECTS
@@ -322,6 +325,12 @@ goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement
 //may cut back on this so terrain isn't too overbearing/important  just check balance 
 //should be fine just don't add flash fire
 * 
+* further plans setup snowy terrain for mountains, and winter season.
+* in addition to same effect as weather buffs, hail in this case for ice types.
+* Since terrain is the mon being in their natural element, I will check and activate certain abilities 
+* central to the element that make sense for each terrain.
+*  snowy terrain would set snow cloak etc.
+* 
 * //look into how fild is generated i.e grass vs water when surfacing
 //specifically the circle mon stand on, want put terrain effects on that
 //simlest solution depending, may just be to edit the graphic for each,
@@ -358,6 +367,12 @@ goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement
 * also plan to add more encounters to each area on top of changing how tiles work, so grass not on the road, and rock not on sand can spawn encounters
 * but hopefully can set separate encounter rate for said tiles so its a bit lower.
 * 
+* good way to add more encounters to maps without needing a lot of graphic work, 
+* if I can do that, then patches of grass can be used as "tall grass" and have separate encounters and 
+* higher chance for double wild encounters.   
+* 
+* Will need to fix and add double wild encounters, as its in the game but not fixed/properly coded
+* 
 * also setup special event for new game, where there is a random chance for the game to set a extra flag
 * that would trigger a traveling fishermin event script at the south side of pallet by the lake.
 * rather than a battle he will give you the old rod, after a speel about teaching the youth/next generation the joy of fishing.
@@ -389,7 +404,7 @@ goto CATCHING_LOGIC
 * my mental math was wrong, leave the function as it is, just add more status 2 & trap effects
 *
 * Set wild double battles, and allow catching both mon
-* cleanest way is to store both mons data for the pokedex beforehand
+* cleanest way is to store both mons data for the pokedex beforehand  (based on battlerId)
 * and clear whoever dies.
 * Then at end of battle do pokedex entries for both, make it loop
 * just like other functions do, so have create function buffer mon

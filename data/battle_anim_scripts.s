@@ -10873,6 +10873,7 @@ Move_METAL_BURST:
 	waitforvisualfinish
 	end
 
+MOVE_UP_ROOT:
 Move_U_TURN:
 	loadspritegfx ANIM_TAG_ROUND_SHADOW
 	loadspritegfx ANIM_TAG_IMPACT
@@ -10901,6 +10902,31 @@ UTurnLast:
 UTurnVisible:
 	createsprite gFlyBallAttackSpriteTemplate, ANIM_ATTACKER, 2, 20, FALSE
 	goto UTurnContinue
+
+MOVE_DIVE_BOMB::
+	loadspritegfx ANIM_TAG_IMPACT
+	loadspritegfx ANIM_TAG_BIRD
+	call SetSkyBg
+	monbg ANIM_ATTACKER
+	createvisualtask AnimTask_BlendSelected, 10, 2, 0, 0, 16, RGB_WHITE
+	delay 4
+	createvisualtask AnimTask_AttackerFadeToInvisible, 5, 0
+	waitforvisualfinish
+	createvisualtask SoundTask_PlaySE2WithPanning, 5, 231, -64
+	createsprite gSkyAttackBirdSpriteTemplate, ANIM_TARGET, 2
+	delay 14
+	createvisualtask AnimTask_ShakeMon2, 2, 1, 10, 0, 18, 1
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, 63
+	delay 20
+	createvisualtask AnimTask_AttackerFadeFromInvisible, 5, 1
+	delay 2
+	createvisualtask AnimTask_BlendSelected, 10, 2, 0, 15, 0, RGB_WHITE
+	waitforvisualfinish
+	clearmonbg ANIM_ATTACKER
+	call UnsetSkyBg
+	createvisualtask AnimTask_CanBattlerSwitch, 1, ANIM_ATTACKER
+	jumpretfalse SkyAttackEnd
+	@goto SkyAttackEnd
 
 Move_CLOSE_COMBAT:
 	loadspritegfx ANIM_TAG_IMPACT

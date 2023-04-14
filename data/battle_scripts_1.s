@@ -422,7 +422,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	@ custom effects  @@@@@@@@@@
 	.4byte BattleScript_EffectMonotype
 	.4byte BattleScript_EffectSketchStatUp
-	.4byte BattleScript_EffectRockSmash
+	.4byte BattleScript_EffectRockSmash		@doesn''t even need special effect as I added teh jump to effect hit..-_-
 	.4byte BattleScript_EffectFlash
 	.4byte BattleScript_EffectCocoon
 	.4byte BattleScript_EffectFlashFreeze	@ice will o wisp
@@ -2328,6 +2328,7 @@ BattleScript_EffectPlaceholder:
 
 BattleScript_EffectHit::
 	jumpifmove MOVE_ROCK_SMASH, BattleScript_EffectRockSmash
+	jumpifmove MOVE_CUT, BattleScript_EffectCut
 	jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler
 	@jumpifnostatus3 BS_TARGET, STATUS3_UNDERWATER, BattleScript_HitFromAtkCanceler
 	@orword gHitMarker, HITMARKER_IGNORE_UNDERWATER
@@ -4054,7 +4055,13 @@ BattleScript_EffectReturn::
 BattleScript_EffectRockSmash::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	rocksmashdamagecalc
+	typebaseddmgboost
+	goto BattleScript_HitFromAtkString
+
+BattleScript_EffectCut::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	typebaseddmgboost
 	goto BattleScript_HitFromAtkString
 
 BattleScript_EffectPresent::
