@@ -285,6 +285,7 @@ as well as the effect of increasing trap duration
 * so I can setup logic for terrain surge abilities  potentially make certain side wide type moves terrain clears as well
 * i.e earthquake surf etc. - 
 */
+
 goto WEATHER_AND_TERRAIN_EFFECTS
 /* 
 * 
@@ -301,7 +302,34 @@ goto WEATHER_AND_TERRAIN_EFFECTS
 * I don't want to turn things into a gimmick where the only thing ppl do is status or terrain I want them to be relatively equal options
 * -
 */
-goto FIELD_ENDTURN  //battle_util.c  includes weather decrement
+goto TERRAIN_DEFINES
+goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement
+/*
+* New terrain notes
+* 
+* Overworld thunderstorm generates electric terrain //do more with this & nature power
+* changing terrain can change nature power move? 
+* 
+//may do something with counters and advantage where certain overworld terrains can't be overwritten by certain terrain effects
+//i.e scorched can't overrwrite ocean teerrain but can cancle flooded since its the opposit they cancel out, will need a seecon dus to make terrain
+//also can't setup grass on desert or ocean terrain, but will work on flooded terrain  also will cancel scorched and need second use to work
+//think have flood & ocean terrain have same effects but ocean is just harder to remove/permanent and only when surfing
+//strengthen water as if in rain, and activate rain based abilities? 100% activating swift swim in ocean terrain 
+//checked includes swift swim & hydration, exclude rain dish  but include dry skin
+//think can make scorched activate abilities involving being burned or involving heat
+//includes thermal exchange, guts, steam engine, well baked body, flare boost
+//negative side activates dry skin
+//may cut back on this so terrain isn't too overbearing/important  just check balance 
+//should be fine just don't add flash fire
+* 
+* //look into how fild is generated i.e grass vs water when surfacing
+//specifically the circle mon stand on, want put terrain effects on that
+//simlest solution depending, may just be to edit the graphic for each,
+//and have it white out, and reload the circle during fade
+* 
+*/
+
+
 /* 
 *  add and change for regi effects, instead of player needing to know brail, setup archologist npc, maybe in pewter town museum.
 * that will "translate" the text for you to read.   so when you initially find read it, a special flag will be set.

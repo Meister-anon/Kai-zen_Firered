@@ -339,32 +339,26 @@
 #define SIDE_STATUS_HEAL_BLOCK              (1 << 22)
 
 // Field affecting statuses.
-#define STATUS_FIELD_MAGIC_ROOM         0x1
-#define STATUS_FIELD_TRICK_ROOM         0x2
-#define STATUS_FIELD_WONDER_ROOM        0x4
-#define STATUS_FIELD_GRAVITY            0x8
+#define STATUS_FIELD_MAGIC_ROOM         (1 << 0)
+#define STATUS_FIELD_TRICK_ROOM        (1 << 1)
+#define STATUS_FIELD_WONDER_ROOM        (1 << 2)
+#define STATUS_FIELD_GRAVITY            (1 << 3)
 //#define STATUS_FIELD_MUDSPORT           0x8  will try to keep these 2 in status3 because they didn't use a timer
 //#define STATUS_FIELD_WATERSPORT         0x10
-#define STATUS_FIELD_SCORCHED_TERRAIN   0x10	//make red version or new tile with scorched cracked earth appearane
-#define STATUS_FIELD_FLOODED_TERRAIN    0x20	//can use surf tile/ or edit a blue puddle into normal graphic
-#define STATUS_FIELD_OCEAN_TERRAIN      0x40	//for when surfing on ocean/deeper water /grass terrain & scorched terrain wouldn't work
-#define STATUS_FIELD_GRASSY_TERRAIN     0x80	//longer grass
-#define STATUS_FIELD_MISTY_TERRAIN      0x100	//mist/haze/defog 
-#define STATUS_FIELD_ELECTRIC_TERRAIN   0x200	//sparks tag
-#define STATUS_FIELD_PSYCHIC_TERRAIN    0x400	//could surround field w hidden power orbs?
-#define STATUS_FIELD_ION_DELUGE         0x800
-#define STATUS_FIELD_FAIRY_LOCK         0x1000
-// Overworld thunderstorm generates electric terrain //do more with this & nature power
-//may do something with counters and advantage where certain overworld terrains can't be overwritten by certain terrain effects
-//i.e scorched can't overrwrite ocean teerrain but can cancle flooded since its the opposit they cancel out, will need a seecon dus to make terrain
-//also can't setup grass on desert or ocean terrain, but will work on flooded terrain  also will cancel scorched and need second use to work
-#define STATUS_FIELD_TERRAIN_PERMANENT  0x3200 //(1 << 12)   
+#define STATUS_FIELD_SCORCHED_TERRAIN   (1 << 4)	//make red version or new tile with scorched cracked earth appearane
+#define STATUS_FIELD_FLOODED_TERRAIN    (1 << 5)	//can use surf tile/ or edit a blue puddle into normal graphic
+#define STATUS_FIELD_OCEAN_TERRAIN      (1 << 6)	//for when surfing on ocean/deeper water /grass terrain & scorched terrain wouldn't work
+#define STATUS_FIELD_GRASSY_TERRAIN     (1 << 7)	//longer grass
+#define STATUS_FIELD_MISTY_TERRAIN      (1 << 8)	//mist/haze/defog 
+#define STATUS_FIELD_ELECTRIC_TERRAIN   (1 << 9)	//sparks tag
+#define STATUS_FIELD_PSYCHIC_TERRAIN    (1 << 10)	//could surround field w hidden power orbs?
+#define STATUS_FIELD_TERRAIN_PERMANENT  (1 << 11)		//last terrain effect so putting here //(1 << 12)   
+#define STATUS_FIELD_ION_DELUGE         (1 << 12)
+#define STATUS_FIELD_FAIRY_LOCK         (1 << 13)
 
-//look into how fild is generated i.e grass vs water when surfacing
-//specifically the circle mon stand on, want put terrain effects on that
-//simlest solution depending, may just be to edit the graphic for each,
-//and have it white out, and reload the circle during fade
-#define STATUS_FIELD_TERRAIN_ANY              (STATUS_FIELD_GRASSY_TERRAIN | STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_PSYCHIC_TERRAIN)
+#define TERRAIN_DEFINES
+
+#define STATUS_FIELD_TERRAIN_ANY              (STATUS_FIELD_SCORCHED_TERRAIN | STATUS_FIELD_FLOODED_TERRAIN | STATUS_FIELD_OCEAN_TERRAIN | STATUS_FIELD_GRASSY_TERRAIN | STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_PSYCHIC_TERRAIN)
 
 // Flags describing move's result
 #define MOVE_RESULT_MISSED             (1 << 0)
