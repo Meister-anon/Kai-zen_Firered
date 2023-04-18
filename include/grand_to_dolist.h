@@ -146,7 +146,7 @@ as well as the effect of increasing trap duration
 * 
 * Update pokedex_screen.c and other pokedex files with new function renames - DONE
 * 
-* NEED upgrade pokedex entry graphic so can fit emerald style longer dex entries. -
+* NEED upgrade pokedex entry graphic so can fit emerald style longer dex entries. - DONE
 * 
 * Re-capitalize ability names, decapitalization doesn't look good in fire red menus - DONE
 * 
@@ -166,7 +166,20 @@ as well as the effect of increasing trap duration
 * yeah that works as the ability activates when a mon with plus/minus is on the field, but 
 * if I make that action only be for if using the opposite ability as your partner its a different synergy
 * 
-* fix typhlosion line learnset curve, bring in line with charizard
+* companion ability to nuisance, cuts dynamicbasepower of partner moves in half,
+* in exchange for serene grace style heightned effect chance INCLUDING heighteeend crit chance/odds.
+* possibly done by dirrectly moding critchance, or by setting high crit flag to moves if possible
+* the point of high crit is, it'd give a chance to overcome the negative, crit would double damage
+* so you do normal move damage. plan to use in doubles with nuisance, lets them use stronger moves
+* kind of a opposite to serene grace, think can do like this  
+* if (!(gBattleMoves[move].flags & FLAG_HIGH_CRIT))
+* gBattleMoves[move].flags |= FLAG_HIGH_CRIT
+* 
+* 
+* made one hit kos a bit more usable/workable
+* 
+* 
+* fix typhlosion line learnset curve, bring in line with charizard - DONE
 * 
 * NEED double check trap logic, may not need to make them status 1, to keep from being reset when mon switches
 * occured to me its not a status1 thing becuse confusion persists if mon switches, so its prob just somehting in trap logic?-
@@ -227,10 +240,13 @@ as well as the effect of increasing trap duration
 * note* potentially  remove badge stat boosts? since I will have higher ev cap stuff idk.
 * 
 * 
-* Make copy ability of tinted lens, for non bugs, call it protag powere or subversion or great expectations  tiger cub?
+* Make copy ability of tinted lens, for non bugs, call it protag powere or subversion or great expectations  tiger cub? -
+* 
 * anyway for mon that can setup  multiple type power/dmg buffs i.e terrain & weather or to be used with a terrain on on team.
 * 
-* made grass buffs, make grass version of u-turn aka up root can be taken advantage of by chlorophyl mons -
+* made grass buffs, make grass version of u-turn aka up root can be taken advantage of by chlorophyl mons - DONE
+* also added uturn variant for flyig types  need test animations later-
+* 
 * 
 * Remember setup ability Dark Deal companion ability to nuisance
 *
@@ -252,6 +268,9 @@ as well as the effect of increasing trap duration
 * want to work like  weather switch which I think works off last in?  may work off speed?
 * make conditional where its supposed to decrement if they're on field timer equals "permanet" i.e timer = 5, if not on field decrement timer
 * that way even if they get one shot its still valuable to put out as a setup.-
+* 
+* Do I want to make all terrain last until removed?
+* then make ocean permanent terrain that can't be changed set by environment
 * 
 * Remove drizzle & drought from mon, and replace with new ability's instead of just giving everyone groudon and kyogre's abilities
 * Thinking Squal in place of drizzle  and I guess High Noon in place of drought - DONE
@@ -436,8 +455,13 @@ goto PARTYMENU_GRAPHICS
 * espcially on some of the wider characters like M  -DONE  (unless I decide to go in and redo the font to look better myself that's it)
 * 
 * need search repo for values [10] & [11]  and replace with POKEMON_NAME_LENGTH & POKEMON_NAME_LENGTH + 1
-* as for some reason gamefreak used fixed values for a lot of the game rather than the constant value
-* need fix POKEMON_NAME_LENGTH expansion issue first, as it could just spread issue throughout even more areas
+* as for some reason gamefreak used fixed values for a lot of the game rather than the constant  - DONE
+* need fix POKEMON_NAME_LENGTH expansion issue first, as it could just spread issue throughout even more areas 
+* found new issue, pokemon names are using full buffer space even when name is shorter (or I made window too big?)
+* need test later to fix forgot how window value works, I thought name & lvl were in same window
+* so a shorter name should move lvl values over but maybe not,  consider change to append, so it'll add on to whateveer
+* the name string is instead... -
+* 
 * 
 * redoing species name expansion
 * need adjust naming screen, parrty menu & pokedex fields again
@@ -534,10 +558,22 @@ goto MOVEICON_ABILITYDESC	//function for displaying move icons & ability info in
 * 
 */
 
+goto TYPE_AND_STAB_CHECK //battle_script_commands.c  type calc also where s.t.a.b is handled
+/*
+* plan buff normal types, their gimmick, is being highly adaptable for their lack of weaknessand resisted damage
+* but power creep(and new move restrictions) has made them lose their place, make sure pure normal always has very diverse move pool to chose from
+* also as they lack stab, instead of trying to give them all insane stats to counter will instead make new jack - of - all - trades gimmick / effect
+* for normal types   rather than the specialing of same - type - attack - bonus by being a normal type you have adaptability to do everything,
+* so will come up with a smaller power bonus exclusively for normal types that applies to whatever type of moving they are using (excluding normal moves)
+* that would stack with stab should they be a dual type
+* inspiration from wolfeyvgc
+*/ 
+
+
 
 goto STAT_AND_DAMAGE_ABILITIES_ETC // pokemon.c function for ability and item effects that affect damage calc
 
-goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability activation logic
+goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability activation logic.  STIL need to update
 /*
 * Setting up new effeets for absorb abilities
 * make all work like lightnight rod and change targetting to draw in moves
@@ -552,6 +588,10 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * 
 * tweak idea, to make bit less overpowered, will just do status1, leaving confusion and infatuation as viable options
 * rather than not having an out/counter - DONE  *need test though
+* 
+* for setting up rattled to activate on intimidate add check for gSpecialStatuses[battler].intimidatedMon = 1;  if true i.e == 1 
+* activate rattled
+* note- also found all I needd to reactivate switch in ability is to call the battlescript again
 * 
 * smeargle changes new moves -
 * 

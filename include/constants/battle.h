@@ -352,9 +352,10 @@
 #define STATUS_FIELD_MISTY_TERRAIN      (1 << 8)	//mist/haze/defog 
 #define STATUS_FIELD_ELECTRIC_TERRAIN   (1 << 9)	//sparks tag
 #define STATUS_FIELD_PSYCHIC_TERRAIN    (1 << 10)	//could surround field w hidden power orbs?
-#define STATUS_FIELD_TERRAIN_PERMANENT  (1 << 11)		//last terrain effect so putting here //(1 << 12)   
-#define STATUS_FIELD_ION_DELUGE         (1 << 12)
-#define STATUS_FIELD_FAIRY_LOCK         (1 << 13)
+#define STATUS_FIELD_SNOWY_TERRAIN		(1 << 11)	//for snow area
+#define STATUS_FIELD_TERRAIN_PERMANENT  (1 << 12)		//last terrain effect so putting here //(1 << 12)   
+#define STATUS_FIELD_ION_DELUGE         (1 << 13)
+#define STATUS_FIELD_FAIRY_LOCK         (1 << 14)
 
 #define TERRAIN_DEFINES
 

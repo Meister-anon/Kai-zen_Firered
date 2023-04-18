@@ -307,16 +307,11 @@
 #define ABILITY_PURIFYING_AURA 284 //Suicune ability  mix of healer & shedskin but gauranteed
 #define ABILITY_SQUALL 285
 #define ABILITY_SUN_DISK 286
-#define ABILITY_TOUGH_SPINES 287
+#define ABILITY_TOUGH_SPINES 287	//rough skin for grass types
 
-//#define ABILITY_DARK_DEAL 282   //companion ability to nuisance, cuts dynamicbasepower of partner moves in half,
-//in exchange for serene grace style heightned effect chance INCLUDING heighteeend crit chance/odds.
-//possibly done by dirrectly moding critchance, or by setting high crit flag to moves if possible
-//the point of high crit is, it'd give a chance to overcome the negative, crit would double damage
-//so you do normal move damage. plan to use in doubles with nuisance, lets them use stronger moves
-//kind of a opposite to serene grace
+//#define ABILITY_DARK_DEAL 282   
 
-#define ABILITIES_COUNT 288 //note make perish body, only affect target, possibly 
+#define ABILITIES_COUNT 288 //note make perish body, only affect target, 
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 

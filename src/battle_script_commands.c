@@ -1984,6 +1984,7 @@ void ModulateDmgByType(u8 multiplier)
     }
 }
 
+#define TYPE_AND_STAB_CHECK
 static void atk06_typecalc(void)
 {
     s32 i = 0;
@@ -2009,6 +2010,13 @@ static void atk06_typecalc(void)
             gBattleMoveDamage = gBattleMoveDamage / 10;
         }
         
+    }
+    //joat check jack of all trades  inclusive normal type dmg buff 
+    //stacks w stab long as not normal move, and gives reason to want normal as secondary type
+    if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL) && moveType != TYPE_NORMAL)
+    {
+        gBattleMoveDamage = gBattleMoveDamage * 125;
+        gBattleMoveDamage = gBattleMoveDamage / 100;
     }
 
     /*if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
@@ -5240,6 +5248,7 @@ static void atk48_playstatchangeanimation(void)
                 }
                 else if (!gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer
                         && gBattleMons[gActiveBattler].ability != ABILITY_CLEAR_BODY
+                        && gBattleMons[gActiveBattler].ability != ABILITY_FULL_METAL_BODY
                         && gBattleMons[gActiveBattler].ability != ABILITY_WHITE_SMOKE
                         && !(gBattleMons[gActiveBattler].ability == ABILITY_KEEN_EYE && currStat == STAT_ACC)
                         && !(gBattleMons[gActiveBattler].ability == ABILITY_HYPER_CUTTER && currStat == STAT_ATK))
@@ -10779,7 +10788,7 @@ static void atk93_tryKO(void)
         else
         {
             chance = gBattleMoves[gCurrentMove].accuracy + (gBattleMons[gBattlerAttacker].level - gBattleMons[gBattlerTarget].level);
-            if (Random() % 100 + 1 < chance && gBattleMons[gBattlerAttacker].level >= gBattleMons[gBattlerTarget].level)
+            if (Random() % 100 + 1 < chance && gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 7))
                 chance = TRUE;
             else
                 chance = FALSE;

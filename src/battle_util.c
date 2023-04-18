@@ -2064,9 +2064,9 @@ u8 DoBattlerEndTurnEffects(void)
             {
                 u16 battlerAbility = GetBattlerAbility(gActiveBattler);
                 if (gDisableStructs[gActiveBattler].octolock
-                    && !(battlerAbility == ABILITY_CLEAR_BODY
+                    && (!(battlerAbility == ABILITY_CLEAR_BODY
                         || battlerAbility == ABILITY_FULL_METAL_BODY
-                        || battlerAbility == ABILITY_WHITE_SMOKE))
+                        || battlerAbility == ABILITY_WHITE_SMOKE)))
                 {
                     gBattlerTarget = gActiveBattler;
                     BattleScriptExecute(BattleScript_OctolockEndTurn);
@@ -2777,7 +2777,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_PRESSURE: // new pressure effect
-            if ((gBattleMons[gBattlerTarget].ability == (ABILITY_PRESSURE || ABILITY_HI_PRESSURE)) && (Random() % 4) == 1)
+            if ((gBattleMons[gBattlerTarget].ability == (ABILITY_PRESSURE || ABILITY_HI_PRESSURE)) && (Random() % 4) == 1) //how would this work with switching?
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MovePressureCanceler;
@@ -3877,7 +3877,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 //writing gStatuses3[battler] = STATUS3_INTIMIDATE_POKES; would clear all status which isn't what I want
 
             case ABILITY_INTIMIDATE:    // moved down here, so weather effects acitvate before these
-                if (!(gSpecialStatuses[battler].intimidatedMon)) //if intimidated mon is 0 set intimidate pokes
+                if (!(gSpecialStatuses[battler].intimidatedMon)) //if intimidated mon is 0 set intimidate pokes i.e if noto already intimidated
                 { //further having this on a switch case ensures it only works for mon with the ability
                     gStatuses3[battler] |= STATUS3_INTIMIDATE_POKES;
                     gSpecialStatuses[battler].intimidatedMon = 1;           //not changing intimidateMon to 1 causes intimidate case to /the switchin case to loop
@@ -3886,7 +3886,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 // but intimidatedMon is reset by faintmon battlescript as well as the SpecialStatusClear function from battle_main.c
                 //that is called seemingly each turn and at battle start?  need to figure how this doesn't cause a loop issue.
                 //if intimidated mon is reset to 0 each turn  //doesn't loop because intimidate battle script is only called at battle start and switch in
-                break;
+                break; //to reactivate just needs to call battlescript again based on condition
             case ABILITY_TRACE:
                 if (!(gSpecialStatuses[battler].traced)) //this is needed to prevent infini loop because its not a "status"
                 {
