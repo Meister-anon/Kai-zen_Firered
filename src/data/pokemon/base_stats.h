@@ -10651,6 +10651,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     },//ability liquid metal,  effects of light metal, but also reduces damage from contact moves, like fluffy does
     //not sure if will do full 50% reduction or do a 33% reduction instead. prob the latter
+    //could make it a metal absorb ability?
 
     [SPECIES_LATIAS] =
     {

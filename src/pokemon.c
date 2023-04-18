@@ -3464,8 +3464,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_HAIL_ANY)// && !usesDefStat)
     {
         spDefense = (125 * spDefense) / 100;
-        defense = (125 * defense) / 100;
-    }
+        defense = (140 * defense) / 100;
+    }//think safe to make this 50% or at least highre  since 50% is the same as plus 1 stat stage and using harden once, doen't really do much
+    
 
     //put abilities ported here
     // attacker's abilities  

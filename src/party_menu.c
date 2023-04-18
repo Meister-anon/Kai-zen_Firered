@@ -2993,6 +2993,7 @@ static void SetPartyMonSelectionActions(struct Pokemon *mons, u8 slotId, u8 acti
     }
 }
 
+#define FIELDMOVE_LISTMENU
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
     u8 i, j;
@@ -3933,6 +3934,7 @@ static void CursorCB_Trade1(u8 taskId) //oh thse are both for union room, I cna 
 {
 }*/
 
+#define CURSORSELECTION_FIELDMOVES
 static void CursorCB_FieldMove(u8 taskId)
 {
     u8 fieldMove = sPartyMenuInternal->actions[Menu_GetCursorPos()] - MENU_FIELD_MOVES;
@@ -4608,6 +4610,8 @@ static void Task_ClosePartyMenuAfterText(u8 taskId)
 #define tMonId      data[3]
 #define tOldFunc    4
 
+#define ABILITY_CAPSULE_DATA
+
 void Task_AbilityCapsule(u8 taskId) //important seemed easy enough so ported now, also ftw you can defnie text anywhere FP,
 {
     static const u8 askText[] = _("Would you like to change {STR_VAR_1}'s\nability to {STR_VAR_2}?");
@@ -4692,7 +4696,7 @@ void ItemUseCB_AbilityCapsule(u8 taskId, TaskFunc task)//need to understand
     tState = 0;
     tMonId = gPartyMenu.slotId;
     tSpecies = GetMonData(&gPlayerParty[tMonId], MON_DATA_SPECIES, NULL);
-    tAbilityNum = GetMonData(&gPlayerParty[tMonId], MON_DATA_ABILITY_NUM, NULL) ^ 1; //may need to remove this since its setting
+    tAbilityNum = GetMonData(&gPlayerParty[tMonId], MON_DATA_ABILITY_NUM, NULL) ^ 1; //may need to remove this since its setting to one ability
     SetWordTaskArg(taskId, tOldFunc, (uintptr_t)(gTasks[taskId].func));
     gTasks[taskId].func = Task_AbilityCapsule; //prob instead handle abilityNum selection in this task
 }//

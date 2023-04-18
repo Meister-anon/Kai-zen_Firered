@@ -2012,7 +2012,7 @@ static void atk06_typecalc(void)
         
     }
     //joat check jack of all trades  inclusive normal type dmg buff 
-    //stacks w stab long as not normal move, and gives reason to want normal as secondary type
+    //joat stacks w stab long as not normal move,
     if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL) && moveType != TYPE_NORMAL)
     {
         gBattleMoveDamage = gBattleMoveDamage * 125;

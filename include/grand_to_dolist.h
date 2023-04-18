@@ -78,6 +78,11 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 
 */
 
+//I've decided I'm not making 2 things rather than a rom base at emerald expansion standard, and my own game with all the features I like
+//I'm making one project Kai-zen Red  will be everything I want, my vision for what pokemon should be.
+//It will have everything, and be THE rom base for fire red projects going forward!! -4/18/2023  11:12am  MEISTER!!
+
+
 //TODO:
 /*Add logic for when flying types are grounded they take neutral damage from fighting types
 * Look at how emerald handeled smack down and roost logic for ground type dmg -
@@ -87,6 +92,40 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 * 
 * realized logic for damage on air targets was incomplete 
 * correcting setup -
+* 
+* played OPAL effing amazing, incorporate the great qol stuff frome there, flame charge buff to raise speed,
+* try to get meowth forms, setup exp share with icon on summary screen.
+* plus item use text on summary, to take to bag menu/medicine  bag select how many to use from there
+* make stat boosting faster, also copy some of their item cost changes.
+* low cost of ev boost items.  1k or 2k per rebalance other things I like that cost economy balance
+* get incubator so can hatch eggs easily while on the go, would greatly speed up breeding as well
+* include flame body/fire ability in party boosts speed of all  
+* rename mon and relearn moves from a npc/attendant in every pokemon center -
+* 
+* ok remembered I also wanted to setup move learn better, a lot of time you see a move 
+* and it looks cool but you don't remember your mons stats, so you can't make a full informed decision
+* so change the move learn screen where you can move left and right to slide out
+* and it'll slide you to the main summary page that shows your mon info/ i.e stats & ability data etc.
+* (believe need to add this in normal summary screen and evolution file?
+* same as how had setup movelearn confirmation text)
+* 
+* ok for starter fight, add oak text in menu for when you level up and learn your first move,
+* telling the player about the menu change.
+* 
+* hmm could possibly do with a flag check? first move learn flag, 
+* on summary screen state of move learn if flag isn't already set,
+* run the oak script just like when in battle for first time
+* "OAK:What's this?!\n  {pokemon name} is learning a new move?\pSpectacular! Now if at any time during move selection\n
+* "you want some help making with your decision. \pPress Left on the d-pad to see your stat info/data.\nAnd simple press Right to return here."
+* and then set the flag
+* 
+* done that way it'll always get seen, regardless of if you win the rival fight or for some reason don't level your starter first
+* check battle_controller_oak for text
+* 
+* or can just have a scripp to run, similar to how oak works in overworld
+* so soon as your starter is leveling up and learning a move for the first time.
+* oak text would pop up to inform you of the menu/dialogue changes
+* 
 * 
 * need to update name length to 12 base, so will need to move health bar
 * 
@@ -233,7 +272,7 @@ as well as the effect of increasing trap duration
 * and then display a different string for end turn if defrosted rather than thawed, would be hurt by frostbite
 * only remove status icon  if thawed, or ice cured or status cured w items
 * 
-* check shed skin ability, after changing define values to fit new straps, the bitwise may go wonky?
+* check shed skin ability, after changing define values to fit new traps, the bitwise may go wonky?
 * another reason to remove new status 1 traps for grip claw & implement with conditional logic instead
 * so can set values back to normal
 * 
@@ -245,10 +284,16 @@ as well as the effect of increasing trap duration
 * anyway for mon that can setup  multiple type power/dmg buffs i.e terrain & weather or to be used with a terrain on on team.
 * 
 * made grass buffs, make grass version of u-turn aka up root can be taken advantage of by chlorophyl mons - DONE
+* make up root remove ingrain status to ensure you can get out if you want to/really need to
+* 
 * also added uturn variant for flyig types  need test animations later-
 * 
+* changed hail ice buff,  most ice types have higher sp def than def, and main weaknesses are 
+* typically physical made 50% defense and 1/3rd sp def incrase
+* make sure to test later  tweaked as realized not much raeson to pick sandstorm for rock ice types
 * 
 * Remember setup ability Dark Deal companion ability to nuisance
+* Also need to add other abilties listed in base stats comments/port over comments/notes
 *
 *
 * Also comb over stats again, to attempt to address power creep?
@@ -306,6 +351,11 @@ as well as the effect of increasing trap duration
 * i.e earthquake surf etc. -  NULL changed mind, makes terrain too accessible and thus overbearing.
 * well that was dumb, was tired and literally crossed my wires,  I had an idea of them setting terrain as well,
 * so they can clear terrain but not set and thats fine
+* 
+* don't know if need snow terrain, since I have weather condition,
+* and places where I'd set hail there's no need for snow terrain effect
+* unless I make it exclusive to seasons/places where it only is snowy on the season, and hail for just places where its 
+* winter/icy year round.? could work i guess
 */
 
 goto WEATHER_AND_TERRAIN_EFFECTS
@@ -359,6 +409,7 @@ goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement
 
 
 /* 
+* NOTES PT 2.
 *  add and change for regi effects, instead of player needing to know brail, setup archologist npc, maybe in pewter town museum.
 * that will "translate" the text for you to read.   so when you initially find read it, a special flag will be set.
 * in the museum npc he'll chech for those flags from lowest to highest, and read the first he finds each time you talk to him.
@@ -409,6 +460,25 @@ goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement
 * so instad each fisherman gives you a progressively better water pokemon instead of a better fishing rod
 * 
 */
+goto FIELDMOVE_LISTMENU
+goto CURSORSELECTION_FIELDMOVES
+goto ABILITY_CAPSULE_DATA
+/*
+* change how ability capsule works, let it change current ability to any other abilities it has 
+* make opena dialgoue displaying species abilities in order of slots and print to a box if not equal current ability
+* so should print every possible ability excluding the one it currently has, populate selected ability to str_var_2
+* 
+* as it works now, it takes current ability to hidden ability 1 and fails to work if current ability is hidden ability
+* my version will work no matter what your ability is and allow you to select any ability it can have.
+* 
+* similar logic to field moves loop options add to list if not ability none, and don't match the previous
+* added abilities
+* 
+* make sure to exclude from new use logic I plan to make
+*/
+
+
+
 goto CATCHING_LOGIC
 /*
 * Need to adjust ball multiplier logic for catch.
@@ -565,8 +635,9 @@ goto TYPE_AND_STAB_CHECK //battle_script_commands.c  type calc also where s.t.a.
 * also as they lack stab, instead of trying to give them all insane stats to counter will instead make new jack - of - all - trades gimmick / effect
 * for normal types   rather than the specialing of same - type - attack - bonus by being a normal type you have adaptability to do everything,
 * so will come up with a smaller power bonus exclusively for normal types that applies to whatever type of moving they are using (excluding normal moves)
-* that would stack with stab should they be a dual type
+* that would stack with stab should they be a dual type - DONE
 * inspiration from wolfeyvgc
+* new effect calling it, jack of all trades  and gives reason to want normal as secondary type
 */ 
 
 
