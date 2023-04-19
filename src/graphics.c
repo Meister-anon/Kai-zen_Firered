@@ -1232,8 +1232,11 @@ const u16 gUnknown_8E99F24[] = INCBIN_U16("graphics/link_rfu/unk_8E9A168.gbapal"
 const u32 gEasyChatSelectGroupHelp_Tiles[] = INCBIN_U32("graphics/link_rfu/unk_8E99F44.4bpp.lz");
 const u32 gEasyChatModeIcons_Tiles[] = INCBIN_U32("graphics/link_rfu/unk_8E9A168.4bpp.lz");
 
+#define SUMMARY_GRAPHICS
+//summary screen grapics
 //const u32 gPokeSumBgTiles[] = INCBIN_U32("graphics/interface/trainer_memo.4bpp.lz"); //says trainer memo but its all the tiles for the summary screen
-const u32 gPokeSumBgTiles[] = INCBIN_U32("graphics/interface/trainer_memo_phase3.4bpp.lz"); //my edit
+//const u32 gPokeSumBgTiles[] = INCBIN_U32("graphics/interface/trainer_memo_phase3.4bpp.lz"); //my edit
+const u32 gPokeSumBgTiles[] = INCBIN_U32("graphics/interface/trainer_memo_phase4.4bpp.lz"); //new edit for summary screen moves
 const u32 gTrainerMemoPal1[] = INCBIN_U32("graphics/interface/trainer_memo_pal1.gbapal"); //tileset seems only used for sum screen
 const u32 gUnknown_8E9B3B0[] = INCBIN_U32("graphics/interface/trainer_memo_pal2.gbapal");//so can safely edit set without causing issues elsewhere
 const u32 gUnknown_8E9B3D0[] = INCBIN_U32("graphics/interface/trainer_memo_pal3.gbapal");

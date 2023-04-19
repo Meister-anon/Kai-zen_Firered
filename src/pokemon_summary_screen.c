@@ -3105,7 +3105,7 @@ static void PokeSum_PrintAbilityNameAndDesc(void)   //need to increase height, a
 //ok so before the type icons were all in one long window and was using the loop number to determine the y value i.e move "down" a row
 //but I'm creating my own individual window at the height I want so I need a constant value separate from the loop
 #define NewMoveTypeIconYpos(x) ((x) * 28 + 0)
-#define GetMoveTypeIconPrinterYpos(x) ((x) * 0 + 3)  //type icon just for first move
+#define GetMoveTypeIconPrinterYpos(x) ((x) * 0 + 1)  //type icon just for first move
 
 #define MOVE_1 0
 #define MOVE_2 1
@@ -3116,7 +3116,7 @@ static void PokeSum_DrawMoveTypeIcons(void) //idea get icons to print on window 
 {
     u8 i;
 
-    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0x0FE);
+    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0x0);
 
     //FillWindowPixelRect(sMonSummaryScreen->windowIds[5], 0x0, 0, 0, 5, 2);   //ok can't use this, it puts white space over graphics
 

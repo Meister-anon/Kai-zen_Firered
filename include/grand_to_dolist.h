@@ -93,8 +93,33 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 * realized logic for damage on air targets was incomplete 
 * correcting setup -
 * 
+* redo disobedience mechanics to work on player mon, just for the sake of new game plus, as the point is to  make the game like new again
+* and allow you to go through the trials with a different team.
+* since I don't want to ruin player choice/fun, I will only make this apply in new game plus mode
+* so use newgame+ flag to check if mon should be disobediant 
+* 
+* find plans for new game + mode I think plan was you'd be sent back with all your items money, etc.
+* but mon in your party would be reset to lvl 1. (keeping evs ivs moves friendship etc
+* think change encounter data to lvl 1 met fateful encounter text)
+* also reevaluate benefit of new game + as original idea as makign the game new again and having a way to get other starters...
+* 
 * played OPAL effing amazing, incorporate the great qol stuff frome there, flame charge buff to raise speed,
 * try to get meowth forms, setup exp share with icon on summary screen.
+* 
+* -ALL THE ASSETS ARE INCLUDED WITH THE GAME ALL ICONS AND SPRITES SFAFWJAGRGARAGNSNIODNVNVDHFB
+* 
+* -ok found mon data for opal I can put in learnsets  variant forms data etc in but for things like meowth
+* where it has multiple variants only one data set is listed, so I hope/ assume stats are all the same but I don't have a learnset
+* will assume identical moveset and just substitute in the type based move where you get it
+* 
+* [want to include opal forms/mon as an official region, far as my game is conscerned that is gen 9 its better than anything]
+* [I'm treating that as its official] - like red is in the game anyway and it mentions kanto and oak and the pokedex
+* -its only right to tie it all back in even if the story of opal takes place many decades after gen1, can can consider 
+* professor ebon/ebono to be a genenration or 2 younger than red, maybe can say something like he took 
+* a pilgrimage in his youth as a young professor to kanto and worked with professor oak
+* then again black don't crack, and he calls himself grandfatherly, so could possibly have him be around the same age
+* maybe make a cameo of someone touring to learn to be a professor and furthr his knowledge of pokemon rather than a league champion]
+* 
 * plus item use text on summary, to take to bag menu/medicine  bag select how many to use from there
 * make stat boosting faster, also copy some of their item cost changes.
 * low cost of ev boost items.  1k or 2k per rebalance other things I like that cost economy balance
@@ -291,6 +316,12 @@ as well as the effect of increasing trap duration
 * changed hail ice buff,  most ice types have higher sp def than def, and main weaknesses are 
 * typically physical made 50% defense and 1/3rd sp def incrase
 * make sure to test later  tweaked as realized not much raeson to pick sandstorm for rock ice types
+* 
+* reworking poison type add normal type to pure poison that is poison as a function of animal attributes
+* leave the more amorphous mon as pure poison - DONE
+* 
+* potentially change arceus and silvaly forms to only change secondary typing, would potentially expose to fighting
+* but add more damage.. hmm
 * 
 * Remember setup ability Dark Deal companion ability to nuisance
 * Also need to add other abilties listed in base stats comments/port over comments/notes
@@ -500,6 +531,14 @@ goto CATCHING_LOGIC
 * to value or var used for speciees data zero out value if mon dies
 * then have pokedex loop through functions baseed on var/value if they aren't 0
 * -Progress-
+* 
+* plan to be able to catch every legendary one way or another, initial idea was they'd randomly show up in cerulean cave after mewtwo
+* but that would be boring to always just go back through the same cave so instead.
+* 
+* have multiple different options for finding legendaries, cerulean cave, another hidden cave, 
+* port mirage island but with better mechanics, i.e will appear once a month at midnight for one hour with an npc telling you if its available
+* or when its coming each with their own set of legends to spawn. the rarest would go to mirage island the mystics i guess
+* things like guzzlord could go to cerulean cave the dark or bad ones
 */
 
 goto POKEDEX_PAGE_FUNCTIONS
@@ -556,12 +595,14 @@ goto PARTYMENU_GRAPHICS
 * to all windows and then just in the funciton that puts the window up
 * I just swap the window for each instead of using move window 5.
 * 
-* what I'll have to do is put pp value in the middle and
-* alternate the type icon from left to right for each move.
-* then edit the bin to move up the window for the 3rd move data
+* found just enough room, to fit move names with type icons, but need to adjust bin file for graphics.
+* as needed to raise pp values with new move name placement for moves 1 & 3.
+* was able to confirm I need to raise those spaces up 3 pixels to fit pp values.
+* after that will need to make the space from the bottom smaller to make move name not floating.
+* appears to be double the space for pp value? will balance out since moving in opposite direction so won't look too off.
+* will add 3 pixels of white space to top of window, then will start with removing 6 pixels of white space from bottom of window
+* tested its 3 & 3 perfect equal add 3 whitespace to top, and remove 3 from bottom.
 * 
-* it'll look a little off, but it'll work practically
-* make a mockup compare with current and throw up on peer review
 */ 
 
 
@@ -580,7 +621,7 @@ goto EVOLUTION_LOGIC
 * to make a false level I'll make a function that'll return a random value between 5 and I think half their actual level.
 * Random () % ((mon level/2) +5)    witha min exp for level 5, defeating practically anything in the game would be enough to level up.
 * [thought normaly this effect would go away could attempt to find someway to store and make permanent? do the whole reverse rogue light thing?
-* [enemy gets stronger...prob best to have it reset and not be permamnent...unless I want to make a fuck you hard mode]
+* [enemy gets stronger...prob best to have it reset and not be permamnent...unless I want to make a fuck you hard mode] lol make hardmode flag XD
 *
 * level = GetMonData(mon, MON_DATA_LEVEL);
             exp = GetMonData(mon, MON_DATA_EXP);
@@ -597,9 +638,32 @@ goto EVOLUTION_LOGIC
 * Then have different encounters based on season, mon migration if a climate shifts cold they move to a hotter area vice versa
 * -Progress-
 * 
+* want to setup mega marowak themed after ancholysauras
+* thick armor plating stronger bones
+* new ability idea, is um damage reduction  I think 20%?
+* 2nd ability turns every special move into a physical contact move as marowak learns moves like flamethrower but has trash sp atk 
+* also good for machamp, inspired by Mashle believe will call elemental muscle
+* 
+* new megas won't have +100bst but instead will take a stat average value that is strong
+* like say 615 or 630/635.  and will either reallocate or add to existing stats to get there.
+* 
+* most legendaries have base 600, and then others go up to 680  psuedo legends are also 600
+* 
+* mega marowak should have higher defenses (sp def too  since its armor can take most things) atk & bulk
+* 
+* rework existing megas stats by this standard -
+* 
+* also remember plan for new version of megas, instead of a temp buff, it'll be a special difficult to acvhive but permanent evolution
+* you can have more than one mega on your team but it'll just be much harder to get them to mega evolve,
+* and also you'll only be able to have a single mon of that species to mega evolve,  thing of it like ash greninja
+* a mon you have a very deep bond with you go through trials with to be able to evolve stronger.
+* 
+* So you have to decide which mon you will go through the mega trials with, even breeding specifically for that in mind
+* if you want the best possible outcome.
 * 
 */
 goto TRAINER_MEMO_SUMMARY	//pokemon_summary_screen.c, scroll down for trainer memo functions
+goto SUMMARY_GRAPHICS //graphics.c all graphic files, but this spot is for summary screen
 
 goto MOVEICON_ABILITYDESC	//function for displaying move icons & ability info in summ screen
 /* 
