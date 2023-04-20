@@ -120,7 +120,7 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 * then again black don't crack, and he calls himself grandfatherly, so could possibly have him be around the same age
 * maybe make a cameo of someone touring to learn to be a professor and furthr his knowledge of pokemon rather than a league champion]
 * 
-* plus item use text on summary, to take to bag menu/medicine  bag select how many to use from there
+* plus item use text on summary, to take to bag menu/medicine  bag select how many to use from there (only for bag)
 * make stat boosting faster, also copy some of their item cost changes.
 * low cost of ev boost items.  1k or 2k per rebalance other things I like that cost economy balance
 * get incubator so can hatch eggs easily while on the go, would greatly speed up breeding as well

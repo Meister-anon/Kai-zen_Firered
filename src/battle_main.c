@@ -326,7 +326,7 @@ static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 
 //each line adds 3 because there are 3 arguments in each line, atk type, def type, & effectiveness  /so SUBTRACT 3 for any lines kept but commented out
 //DON'T FORGET every time I change below, need to update in the .h
 
-const u8 gTypeEffectiveness[414] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+const u8 gTypeEffectiveness[417] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -348,6 +348,7 @@ const u8 gTypeEffectiveness[414] = // 336 is number of entries x 3 i.e number of
     TYPE_WATER, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_DRAGON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_ELECTRIC, TYPE_WATER, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_ELECTRIC, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ELECTRIC, TYPE_ELECTRIC, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_ELECTRIC, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,   //new change mostly for cloyster but makes sense.
     TYPE_ELECTRIC, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,    //tentative change to make ice better defensively //there are several water ice & flying ice
