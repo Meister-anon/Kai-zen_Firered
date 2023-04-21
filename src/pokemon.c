@@ -2923,7 +2923,7 @@ void CalculateMonStats(struct Pokemon *mon)
     
   if (ability == ABILITY_DISPIRIT_GUARD)
   {
-       s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 120) / 100);
+       s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 160) / 100) + ((hpIV * 80) / 100);
        newMaxHP = (((n + hpEV / 4) * level) / 100) + level;
   }  //not sure but may need to change else to else if, excluding these 2 abilities to ensure the hp functions are separate.
 
@@ -2943,7 +2943,7 @@ void CalculateMonStats(struct Pokemon *mon)
        }
        while (ability != ABILITY_WONDER_GUARD && ability != ABILITY_DISPIRIT_GUARD) //ok changing this to shedinja but not wonderguard somehow made dispirit guard shedinja invincible, which is fine for castform testing I guess.
        { // changed above from or to and
-           s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 120) / 100);
+           s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 160) / 100) + ((hpIV * 80) / 100);
           newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
           currentHP = newMaxHP; // if done right this shoud allow shedinja hp to grow after swapping off ability. still working on hp drop
        } // actually its probn ^ this equalizing that causes it.   //this also works if neutralizing gas is on field wait..
@@ -2954,7 +2954,7 @@ void CalculateMonStats(struct Pokemon *mon)
 
    else
    {
-        s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 120) / 100);
+        s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 160) / 100) + ((hpIV * 80) / 100);
         newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
    } //may change this statement to a while so it tracks mid battle if it doesn't already, also realized what I'm doing is essentially dynamax
    //  an event that triggers a growth or loss in max hp.  So I should check cfru function to see how that's done.

@@ -1600,7 +1600,7 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP = 48,
         .baseAttack = 80,
-        .baseDefense = 45,
+        .baseDefense = 50,
         .baseSpeed = 77,
         .baseSpAttack = 35,
         .baseSpDefense = 45,
@@ -1967,7 +1967,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 36,
         .baseSpeed = 89,
         .baseSpAttack = 70,
-        .baseSpDefense = 46,
+        .baseSpDefense = 56,
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
         .catchRate = 255,
@@ -4946,13 +4946,13 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 40,
         .baseSpAttack = 80,
         .baseSpDefense = 115,
-        #if P_UPDATED_TYPES >= GEN_6
+        /*#if P_UPDATED_TYPES >= GEN_6
             .type1 = TYPE_FAIRY,
             .type2 = TYPE_FLYING,
-        #ifdef BATTLE_ENGINE
+        #ifdef BATTLE_ENGINE*/
             .type1 = TYPE_NORMAL,
             .type2 = TYPE_FAIRY,
-        #endif
+        //#endif
         .catchRate = 75,
         .expYield = 142,
         //.evYield_SpDefense = 2,
@@ -15302,7 +15302,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 99,
         .baseSpeed = 97,
         .baseSpAttack = 40,
-        .baseSpDefense = 99,
+        .baseSpDefense = 89,
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
         .catchRate = 120,

@@ -113,7 +113,7 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 * since iv allocation is random, I think I can leave ev cap where it is.
 * decided won't actually make item to increase ivs,
 * based on matsuda perspective, of it just being natural potentiall
-* and that my increased ev cap was meant to fill in the gap left in customization. anyway - DONE, cut buff in half for hp stat calc
+* and that my increased ev cap was meant to fill in the gap left in customization. anyway - TESTED | DONE, lower buff  for hp stat calc
 * 
 * setup pokenav, show potential area encounters but want mon to be greyed out until you've seen them.
 * so just see a silloette-
