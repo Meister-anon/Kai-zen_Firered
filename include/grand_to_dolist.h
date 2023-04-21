@@ -93,6 +93,45 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 * realized logic for damage on air targets was incomplete 
 * correcting setup -
 * 
+* Forgot to replace all instances of Levitate in basestats -
+* 
+* increase quick claw success odds -
+* 
+* idea meister fight similar to fights but with all my favorite mon  i.e mon with favorite changes
+* think team will have sudowoodo shiinotic heatran etc.  
+* will be full custom move and ability fight, but think won't use items
+* will appear randomly on mirage island, same as legendaries can appear
+* will setup like oaks lab, where soon as you walk up to a certain point, I'll come down from the stairs
+* same as oak shtick, will have black version of rival sprite,  and use some of character I'm impersonating lines,
+* play rival music this should be after the oak impersonation where I tell the player about new game plus
+* like rival fight, should the player lose it shouldn't trigger whiteout, instead I'll heal their pokemon
+* (since its already hard enough to get to mirage island dont want it to just be gone) 
+* and give em the " better luck next time, smell ya later" and walk away actually no make it the teleport animation lol so I just spin away
+* me appearing is not mutually exclusive to a legendary appearing so if I show up there can still be a legendary.
+* 
+* change iv formula, to give ivs more expression  will increase by 2.4 
+* since iv allocation is random, I think I can leave ev cap where it is.
+* decided won't actually make item to increase ivs,
+* based on matsuda perspective, of it just being natural potentiall
+* and that my increased ev cap was meant to fill in the gap left in customization. anyway - DONE, cut buff in half for hp stat calc
+* 
+* setup pokenav, show potential area encounters but want mon to be greyed out until you've seen them.
+* so just see a silloette-
+* 
+* bad onion b.o trainer repellent figure logic think it would temporarily set trainer view of every trainer on
+* current map/map section to 0, so its talk to fight,  like repel long as timer isn't 0-
+* 
+* tweak field moves, since adding item use selection to summary menu.
+* will keep cut and fly as field moves, and softboiled review list and think to remove others.
+* as they work with metatile anyway.  and change sweet scent to an keyitem.
+* that way can set to select and do quick encounters. -
+* 
+* make game run smoother, i.e faster base text, move animations, battle text
+* movement speed as well, want to move twice as far, without needing to 
+* change the actual walking animation. and make running slightly faster
+* pretty much optimizing things so speed up isnt so necessary,
+* but not so fast the game loses the chill vibe -
+* 
 * redo disobedience mechanics to work on player mon, just for the sake of new game plus, as the point is to  make the game like new again
 * and allow you to go through the trials with a different team.
 * since I don't want to ruin player choice/fun, I will only make this apply in new game plus mode
@@ -107,6 +146,8 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 * try to get meowth forms, setup exp share with icon on summary screen.
 * 
 * -ALL THE ASSETS ARE INCLUDED WITH THE GAME ALL ICONS AND SPRITES SFAFWJAGRGARAGNSNIODNVNVDHFB
+* 
+* Ok another thing to add from opal, ae capsules, items that boost IV's, rather than other stat items that boost evs- =SCRAPPED
 * 
 * -ok found mon data for opal I can put in learnsets  variant forms data etc in but for things like meowth
 * where it has multiple variants only one data set is listed, so I hope/ assume stats are all the same but I don't have a learnset
@@ -251,7 +292,15 @@ as well as the effect of increasing trap duration
 * for wormadam line, buff anticipation ability with disguise effects,
 * it warns of a super effective or ohko move, and gets a chance once a battle to dodge one super effective move
 * allows for a chance to stay in rather than having to switch because you know a move is coming.
-* is part of switch in effects i'm trying to make reactive, so if you don't take a super-effective hit and beat enemy, move should check again
+* is part of switch in effects i'm trying to make reactive, so if you don't take a super-effective hit and beat enemy, move should check again-
+* 
+* do similar for ability forwarn, since it checks the enemy for a move, set it so if they are targetted with said move
+* it will miss, something like their psychic powers let them avoid damage, 
+* think of it like them predicting an attack specifically from that move -
+* 
+* think it may be too powerful for these abilities to reactivate when new enemy switches in
+* idk maybe not psychic type is usually pretty frail so this gives them slightly safer switch in, 
+* and more longevity
 * 
 * gDisableStructs[battler].isFirstTurn == 2  is logic for mon switchig in, can use for switchin reactivation condition
 * 
@@ -303,13 +352,27 @@ as well as the effect of increasing trap duration
 * 
 * note* potentially  remove badge stat boosts? since I will have higher ev cap stuff idk.
 * 
+* maybe offer de-evolution option? since I'm buffing some pre evos to be alternate ways to use a mon
+* as it may be better at times to use the pre evo, based on what you want.
+* if I do, i think will setup on cinibar island in the fosil restoration lab,
+* something like "in the course of our research on fossil revitilization we discovered a method for reversing
+* pokemon evolution, a "de-evolution" process if you will" -
+* 
 * 
 * Make copy ability of tinted lens, for non bugs, call it protag powere or subversion or great expectations  tiger cub? -
 * 
 * anyway for mon that can setup  multiple type power/dmg buffs i.e terrain & weather or to be used with a terrain on on team.
 * 
 * made grass buffs, make grass version of u-turn aka up root can be taken advantage of by chlorophyl mons - DONE
-* make up root remove ingrain status to ensure you can get out if you want to/really need to
+* make up root remove ingrain status to ensure you can get out if you want to/really need to -
+* 
+* make sure mon types have their own niche where needed, i.e bugs imune to confusion because of hive mind
+* grass immune to powder, ease of access to status moves to take advantage of multi status and higher than average vitatliy as part of nature
+* fire can't be burned, poison can be poisoned etc. 
+* 
+* need buff poison i think
+* for poison think can just give sp def boosts, as poison specialists poison themselves to build up immunity to poison
+* giving them a stronger than normal internal constitution.
 * 
 * also added uturn variant for flyig types  need test animations later-
 * 
@@ -701,7 +764,7 @@ goto TYPE_AND_STAB_CHECK //battle_script_commands.c  type calc also where s.t.a.
 * so will come up with a smaller power bonus exclusively for normal types that applies to whatever type of moving they are using (excluding normal moves)
 * that would stack with stab should they be a dual type - DONE
 * inspiration from wolfeyvgc
-* new effect calling it, jack of all trades  and gives reason to want normal as secondary type
+* new effect calling it, jack of all trades  and gives reason to want normal as secondary type  25% non normal type damage buff
 */ 
 
 
