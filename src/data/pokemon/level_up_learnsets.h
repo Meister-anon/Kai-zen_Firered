@@ -8419,7 +8419,7 @@ static const struct LevelUpMove sUnfezantLevelUpLearnset[] = {
     LEVEL_UP_MOVE(60, MOVE_TAILWIND),
     LEVEL_UP_MOVE(66, MOVE_SKY_ATTACK),
     LEVEL_UP_END
-};
+};//consider separate moveset for gender forms
 
 static const struct LevelUpMove sBlitzleLevelUpLearnset[] = {
     LEVEL_UP_MOVE( 1, MOVE_QUICK_ATTACK),
@@ -11517,7 +11517,7 @@ static const struct LevelUpMove sPyroarLevelUpLearnset[] = {
     LEVEL_UP_MOVE(51, MOVE_INCINERATE),
     LEVEL_UP_MOVE(57, MOVE_OVERHEAT),
     LEVEL_UP_END
-};
+};//think I do want to make different learnsets for these gender specific versions
 
 static const struct LevelUpMove sFlabebeLevelUpLearnset[] = {
     LEVEL_UP_MOVE( 1, MOVE_TACKLE),

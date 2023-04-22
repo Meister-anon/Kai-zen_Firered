@@ -115,6 +115,37 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 * based on matsuda perspective, of it just being natural potentiall
 * and that my increased ev cap was meant to fill in the gap left in customization. anyway - TESTED | DONE, lower buff  for hp stat calc
 * 
+* 
+* more efficient player pc actions, be able to close pc while holding mon,
+* make it put mon back where you had it then press again to close pc
+* logic when picking up mon to move have it save current position before moving,  for both cursor and the mon
+* when pressing B while holding mon, set cursor to original position, do put down animation and return mon to original position.
+* 
+* When using the move pokemon dialogue allow for depositing all your mon, as you can still withdraw mon before returning to overworld.
+* instead of bringing up last mon text make "you have no mon left" if you hit cancel before putting mon back in team.
+* pretty much jsut a safety to make sure you don't accidentally go out with no mon, which I think would break the game.
+* 
+* Add Hold A option for the orange cursor, to withdraw and deposit mon menus plan is let you deposit/withdraw multiple mon at once.
+* right now when using selection cursor(orange one) it goes straight to box selection with a multi select option.
+* you'd still need to order your mon properlu before you used new drag/drop option but that woudl stil be far better.
+* 
+* want it to auto detect free spots within the box you want to deposit mon into and just slot them into those positions
+* automatically based on order of first mon selected and first free space encounterd top to bottom.
+* 
+* make new text for functioality, if not enough slots for selected mon in box,  bring up yes no dialogue
+* "Not enough space in box, deposit anyway?"
+* If you sselect yes, it'll do the loop depositing mon into the box until its full, it'll then
+* loop through the next boxes until it finds free slots and deposit the remainder there.
+* 
+* And if the box is full, don't bring up a dialogue just say "Box is full"  and make you select a different one.
+* 
+* Use that new logic for when on the move pokemomn menu and you have mon selected and are trying to place them as well.
+* Rather than the stupid thing of it holding them in a straight line and you only able to place them in a space of a flat line.
+* 
+* So if you have a group of mon selected, but there are filled slots preventing you from putting them down in a line.
+* Use that same looping logic for placing htem within the box, just make it look for n number of free slots
+* and auto place them, with the cursor going to the position of the last placed mon, so you know where they are.
+* 
 * setup pokenav, show potential area encounters but want mon to be greyed out until you've seen them.
 * so just see a silloette-
 * 
@@ -163,10 +194,21 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 * 
 * plus item use text on summary, to take to bag menu/medicine  bag select how many to use from there (only for bag)
 * make stat boosting faster, also copy some of their item cost changes.
+* copy logic from tossing items, calls same box.
+* just change to "use how many?"
+* make item use work with a loop, (keep in mind item use graphic need to make sure that only triggers once, per "use"
+* change item use logic to use a loop,  value for "used" and quantity is "quantity selected"
+* "used = 0, increment long as used is less than quantity selected"
+* then need to filter use items that can be used in multi use
+* i.e only healing and stat boosting items and pp ups.  not status cure items
+* 
+* 
 * low cost of ev boost items.  1k or 2k per rebalance other things I like that cost economy balance
 * get incubator so can hatch eggs easily while on the go, would greatly speed up breeding as well
 * include flame body/fire ability in party boosts speed of all  
-* rename mon and relearn moves from a npc/attendant in every pokemon center -
+* rename mon and relearn moves from a npc/attendant in every pokemon center
+* plan to put 2nd nurse attendant in front of counter by left corner (but not directly infront of flower)
+*  to serve this purpose -
 * 
 * ok remembered I also wanted to setup move learn better, a lot of time you see a move 
 * and it looks cool but you don't remember your mons stats, so you can't make a full informed decision
@@ -552,6 +594,30 @@ goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement
 * could also use that for new game plus, were you would alrady have all the rods.
 * 
 * so instad each fisherman gives you a progressively better water pokemon instead of a better fishing rod
+* 
+* 
+* 
+* species based  ai?? like archtyps for the type of battllere based on species data  i.e tricksters, more patient mon, harsh attackers, healers etc.
+* had an old idea based around nature based learnsets, so wild mon would perform differently when you encounter them
+* based on their nature
+* 
+* but learnset array like all arrays are static, (least in c) so I can't just filter the array
+* but instead think can do by changing wild mon move learn, would potentially apply to wild mon and trainers without custom movesets
+* can possibly apply filter for trainer struct  like  TrainerMonNoItemDefaultMoves
+* 
+* GiveBoxMonInitialMoveset is the function that deals with wild learnsets..I think, also includes function i think is for deleting 
+* the first move it learned when learning a new move  tpye of FiFO process.
+* so if add a lot more moves to base learnset, and the using functions to filter the array for what it decides to learn,
+* or skip, to essentially make the mon move learning look more like the player decision making
+* and once you catch it, what it has wouldn't matter as we have move relearners in the poke centers.
+* 
+* Learn more about learnset limit, and how to increase?
+* Being able to add much more moves would be greatly impactful/helpful.
+* would get rid of the long gap of not learning anything, and need to attempt to space things out
+* the same way its done in base game.
+* 
+* we're learning all the time, and can say mon learn faster, so argument its more natural.
+* more options would allow for better/easier customization of style of play.
 * 
 */
 goto FIELDMOVE_LISTMENU

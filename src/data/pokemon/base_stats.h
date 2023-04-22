@@ -11384,7 +11384,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_ROSERADE] =
     {
-        .baseHP = 85,
+        .baseHP = 80,
         .baseAttack = 70,
         .baseSpeed = 90,
         .baseSpAttack = 125,
