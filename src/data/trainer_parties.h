@@ -4405,7 +4405,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22EarlyC
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalCeruleanSquirtle[] = {
+static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanSquirtle[] = {
     {
         .iv = 50,
         .lvl = 17,
@@ -4432,7 +4432,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalCeruleanSquir
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalCeruleanBulbasaur[] = {
+static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanBulbasaur[] = {
     {
         .iv = 50,
         .lvl = 17,
@@ -4459,7 +4459,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalCeruleanBulba
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalCeruleanCharmander[] = {
+static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanCharmander[] = {
     {
         .iv = 50,
         .lvl = 17,
@@ -6665,7 +6665,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalSilphCharmand
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22LateSquirtle[] = {
+static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalRoute22LateSquirtle[] = {
     {
         .iv = 150,
         .lvl = 47,
@@ -6704,7 +6704,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22LateSq
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22LateBulbasaur[] = {
+static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalRoute22LateBulbasaur[] = {
     {
         .iv = 150,
         .lvl = 47,
@@ -6743,7 +6743,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22LateBu
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22LateCharmander[] = {
+static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalRoute22LateCharmander[] = {
     {
         .iv = 150,
         .lvl = 47,
@@ -6782,7 +6782,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22LateCh
     },
 };
 
-static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionFirstSquirtle[] = {
+static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionFirstSquirtle[] = {
     {
         .iv = 255,
         .lvl = 59,
@@ -6827,7 +6827,7 @@ static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionFirstSquirtl
     },
 };
 
-static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionFirstBulbasaur[] = {
+static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionFirstBulbasaur[] = {
     {
         .iv = 255,
         .lvl = 59,
@@ -6872,7 +6872,7 @@ static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionFirstBulbasa
     },
 };
 
-static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionFirstCharmander[] = {
+static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionFirstCharmander[] = {
     {
         .iv = 255,
         .lvl = 59,
@@ -11413,7 +11413,7 @@ static const struct TrainerMonItemCustomMoves sTrainerMons_EliteFourLance2[] = {
     },
 };
 
-static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionRematchSquirtle[] = {
+static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionRematchSquirtle[] = {
     {
         .iv = 255,
         .lvl = 72,
@@ -11458,7 +11458,7 @@ static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionRematchSquir
     },
 };
 
-static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionRematchBulbasaur[] = {
+static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionRematchBulbasaur[] = {
     {
         .iv = 255,
         .lvl = 72,
@@ -11503,7 +11503,7 @@ static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionRematchBulba
     },
 };
 
-static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionRematchCharmander[] = {
+static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionRematchCharmander[] = {
     {
         .iv = 255,
         .lvl = 72,

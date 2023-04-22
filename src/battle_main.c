@@ -1894,7 +1894,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 //but if I set it to random, but refight trainers, does it keep the iv distribution or generate a new one..?
                 //I'm gonna guess it regenerates, based on how the roamers are handled, where it specifically saves all their data
                 //ok setting random but attempt to treat rival starter like roamer so it keeps iv distribution
-                CreateMon(&party[i], species, partyData[i].lvl, USE_RANDOM_IVS, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                if (fixedIV < 30)
+                    fixedIV = USE_RANDOM_IVS;
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 break; //&party[i] checks mon slot.   next one checks species for that slot
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET: //could probably get custom moves working with same trick as above but going to a different array
@@ -1950,12 +1952,16 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], species, partyData[i].lvl, USE_RANDOM_IVS, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                if (fixedIV < 30)
+                    fixedIV = USE_RANDOM_IVS;
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 for (j = 0; j < MAX_MON_MOVES; ++j)
-                    if (partyData[i].moves[j] != MOVE_NONE) //hopefully this'll do what I want. set to default moves, if mon has none set
                 {
                     SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]); //actually I need custom moves, otherwise its not a good base
                     SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp); //so I need a way to change how this works
+
+                    if (partyData[i].moves[j] == MOVE_NONE) //hopefully this'll do what I want. set to default moves, if mon has none set
+                        GiveMonInitialMoveset(&party[i]);
                 }
                 break; //like custom moves for some, but if its blank just give them default moves.  I think it defaults to 0, if nothing is there.
                 //so making it break if move is move_none should let it default to normal learnset.?
@@ -2015,7 +2021,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], species, partyData[i].lvl, USE_RANDOM_IVS, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                if (fixedIV < 30)
+                    fixedIV = USE_RANDOM_IVS;
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
                 break;
@@ -2073,17 +2081,21 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], species, partyData[i].lvl, USE_RANDOM_IVS, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                if (fixedIV < 30)
+                    fixedIV = USE_RANDOM_IVS;
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
                 for (j = 0; j < MAX_MON_MOVES; ++j)
-                    if (partyData[i].moves[j] != MOVE_NONE)
                 {
                     SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
                     SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp);
+
+                    if (partyData[i].moves[j] == MOVE_NONE) //hopefully this'll do what I want. set to default moves, if mon has none set
+                        GiveMonInitialMoveset(&party[i]);   //it works!!
                 }
                 break;
             }
-            }
+            }   //end of switch case
         }
         gBattleTypeFlags |= gTrainers[trainerNum].doubleBattle;
     }

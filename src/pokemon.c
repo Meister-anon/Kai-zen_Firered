@@ -91,11 +91,11 @@ static bool8 IsPokemonStorageFull(void);
 static u8 SendMonToPC(struct Pokemon* mon);
 static void EncryptBoxMon(struct BoxPokemon *boxMon);
 static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
-static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon);
+//static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon);
 static u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
 static u8 GetLevelFromMonExp(struct Pokemon *mon);
 static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon);
-static u16 AbilitybasedStatChanges(u16 species);
+static u16 AbilitybasedStatChanges(u16 species);    //what even is this? I forgot
 
 #include "data/battle_moves.h"
 
@@ -2639,13 +2639,17 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     //just realized because I don't have this in a filter this will also possibly affect trainer pokemon, will need to test,
     //fight bug catcher at end of viridian forest see if his shedinja ever doesn't have wonder guard.
 
+    //Removed odds, from function for hidden ability, now understands it does nothing, the chance of selection is all in thebitwise value
+    //using random odds, value would just make it even harder to get the ability...or was that the purpose?
+    //need to check odds
+
     //from what I can see 2nd hidden ability  seems to be the rarest even before adding random boost.   may boost higher
-    if (gBaseStats[species].abilityHidden[1] && odds == 1) //will have if at highest i.e = abilityNum, meaniing all all slots are filled, with else ifs below decreasing by 1.
+    if (gBaseStats[species].abilityHidden[1]) //will have if at highest i.e = abilityNum, meaniing all all slots are filled, with else ifs below decreasing by 1.
     {
         value = personality & 3; //setup just to have something in here, but this relies on bit math,  think it means if personality value ends in 3,
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);// so I'd need to check odds, and if it actually works.
     }
-    else if (gBaseStats[species].abilityHidden[0] && odds == 0) //ok I haven't tested but these should work, previously there was no way for pokemon to have hidden ability in wild
+    else if (gBaseStats[species].abilityHidden[0]) //ok I haven't tested but these should work, previously there was no way for pokemon to have hidden ability in wild
     {
         value = personality & 2; //to make it sufficiently rare, I think I may have to add a random () % n value to the hidden ability clauses, maybe % 10 == 0
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
@@ -3080,12 +3084,12 @@ void SetBattleMonMoveSlot(struct BattlePokemon *mon, u16 move, u8 slot)
     mon->pp[slot] = gBattleMoves[move].pp;
 }
 
-static void GiveMonInitialMoveset(struct Pokemon *mon)
+void GiveMonInitialMoveset(struct Pokemon *mon)
 {
     GiveBoxMonInitialMoveset(&mon->box);
 }
 
-static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //important can use this to set up my nature based moveset ranking system
+void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //important can use this to set up my nature based moveset ranking system
 {
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     s32 level = GetLevelFromBoxMonExp(boxMon);

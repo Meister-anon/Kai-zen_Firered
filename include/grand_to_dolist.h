@@ -87,6 +87,34 @@ Meister_anon — Yesterday at 10:52 PM
 awesome glad I understand that now
 
 
+
+Meister_anon — Yesterday at 11:33 PM
+I don't understand bit wise so I'm just gonna have to ask this.
+since trainer mon personality is also fixed and based on trainer name and mon species name.
+
+does that mean rematching the rival, or other enemies you face multiple times, with different teams,
+
+is it possible their mon could have completely different abilities when they evolve?
+As personality determines the ability slot.
+GriffinR — Yesterday at 11:36 PM
+No, because the way they're generated will never set the first bit of the personality. NPC trainer pokemon will never use the alternate ability
+Other things like their natures would change, though
+Meister_anon — Today at 12:15 AM
+hmm I see, so if I want them to be able to, I need to make it use non fixed personality, or set it up to be able to set the ability from trainer party
+
+GriffinR — Today at 12:26 AM
+This is where the first byte of each pokemon's personality is set (none of these values have the first bit set).
+You could calculate this byte any way you like, including setting the first bit
+
+if (gTrainers[trainerNum].doubleBattle == TRUE)
+                personalityValue = 0x80;
+            else if (gTrainers[trainerNum].encounterMusic_gender & F_TRAINER_FEMALE)
+                personalityValue = 0x78; // Use personality more likely to result in a female Pokémon
+            else
+                personalityValue = 0x88; // Use personality more likely to result in a male Pokémon
+
+                apparently ecounter music field uses/has a gender value
+
 */
 
 //I've decided I'm not making 2 things rather than a rom base at emerald expansion standard, and my own game with all the features I like
@@ -101,13 +129,42 @@ awesome glad I understand that now
 * Setup moves with flag 2x dmg on air to remove on air status and ground target when they hit flying target
 * -done
 * 
-* changing trainer ivs to be random, as most are just set to 0, 
+* Changed OHKO moves, so they have a chance to land when below level. -DONE
+* (since its luck, set it to work when attacker up to 7 levels below the target
+* if (Random() % 100 + 1 < chance && gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 7))
+* 
+* test hidden ability selection odds again, when able to build
+* 
+* changing trainer ivs to be random, as most are just set to 0, -DONE
+* (change works I actually lost starter fight after this,for now will leave monitemcustommove as fixed, as I think those use max value
+* and making random would actually make things easier) 
+* 
+* forgot, set rival to devault moves, as custom move works weird where when you remove move argument
+* from mon, instead of defaulting to normal move learn it defaults to no moves and mon can only struggle.
+* need to redo custom move logic so if no move arguemnt use normal setinitial mon learnset function?
+* GiveMonInitialMoveset
+* 
+* had to do that because I setup randomized starter, either I make a look up table that,
+* can check starter actual species and then make custom moveset for EACH starter option
+* 
+* or set it to use initial mon moveset if exlcuding move argument (prefer the latter but the former would be useful too) - DONE!!!
+* (tweaked setup, now rather than just replacing fixediv with randomiv constant in createmon function,
+* it'll default to that itself if fixediv less than 30, and a value of 30 and above is only used for elite four)
+* 
+* the struggle is ENDED! now if a mon in custom moves template doesn't have a move argument listed it'll default to normal learnset  
+* just need to set rival trainer matches back to customs and remove comments - DONE
+* 
+* need to comb over custom moves compared to learnset in some(possibly many) cases it seems custom moves
+* actually are just to make things easier -
+* 
 * as note above says  trainer ivs are set the same for all stats, and require a value of 255 to equate to 31 max ivs
 * going to setup so random trainers noitem default move, use random ivs, will actually make things more difficult/interesting/balanced
 * then can set it up so gyms/custom move trainers use actual iv distributions
 * 
 * or could keep all ivs random,(as that also matches matsuda intentions)  and instead
-* setup custom fields to set nature, and evs.
+* setup custom fields to set nature, and evs. and perhaps abilitynum
+* 
+* think I will treat rival starter same as roamer, where the iv data is intentionally saved
 * 
 * mon personality is also fixed for trainers, but I think I would like to keep that constant,
 * so for rematches trainers would atleast have the same ability,
