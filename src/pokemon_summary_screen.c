@@ -2589,6 +2589,7 @@ static void PrintSkillsPage(void)//vsonic
 }   //ok since this is going on window 3, and I need to move up abilities which are on window 5 think need decrease height of 3 for skills menu
 
 #define GetOtherMoveNamePrinterYpos(x) ((x) * 28 + 2)    //used for pp of move box 0 & 2, subtracted 3 to match hopefuly
+#define SpecialMove1NamePrinterYpos(x) ((x) * 28 + 3)   //specic for id 1 move slot 2
 #define GetMoveNamePrinterYpos(x) ((x) * 28 + 5)    //used for pp
 #define GetOtherMovePpPinterYpos(x) ((x) * 28 + 13) //used for moveename
 
@@ -2642,7 +2643,7 @@ static void PokeSum_PrintMoveName(u8 i)
     }
     if (i == 1)
     {
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 1, GetMovePpPrinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 1, GetOtherMovePpPinterYpos(i), sPrintMoveTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveNameStrBufs[i]);
     }
     if (i == 2)
     {
@@ -2694,13 +2695,13 @@ static void PokeSum_PrintMoveName(u8 i)
     }
     if (i == 1)
     {
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 64, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW,
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 64, SpecialMove1NamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW,
             gText_PokeSum_PP);
-        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 74 + sMonSkillsPrinterXpos->curPp[i], GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 74 + sMonSkillsPrinterXpos->curPp[i], SpecialMove1NamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
         if (sMonSummaryScreen->moveIds[i] != MOVE_NONE)
         {
-            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 86, GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
-            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 92 + sMonSkillsPrinterXpos->maxPp[i], GetMoveNamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 86, SpecialMove1NamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, gText_Slash);
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_MOVES_3], FONT_NORMAL, 92 + sMonSkillsPrinterXpos->maxPp[i], SpecialMove1NamePrinterYpos(i), sPrintMoveTextColors[colorIdx], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
         }
     }
     if (i == 2)
