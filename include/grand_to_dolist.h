@@ -76,6 +76,17 @@ and since the enemy side ends in 7  that's why I need 7 * TILE_SIZE_4BPP
 Palachu — Today at 4:06 AM
 Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabominable and since Gen. 9 also Squawkabilly)
 
+Stat calc Iv allocation note
+
+Meister_anon — Yesterday at 10:29 PM
+ok so apparently trainer mon have ivs and are used the same way, but unlike wild mon, they aren't set randomly,  it uses fix values to generate the same ivs for each stat?
+but most have 0?
+GriffinR — Yesterday at 10:33 PM
+That's correct
+Meister_anon — Yesterday at 10:52 PM
+awesome glad I understand that now
+
+
 */
 
 //I've decided I'm not making 2 things rather than a rom base at emerald expansion standard, and my own game with all the features I like
@@ -89,6 +100,18 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 * 
 * Setup moves with flag 2x dmg on air to remove on air status and ground target when they hit flying target
 * -done
+* 
+* changing trainer ivs to be random, as most are just set to 0, 
+* as note above says  trainer ivs are set the same for all stats, and require a value of 255 to equate to 31 max ivs
+* going to setup so random trainers noitem default move, use random ivs, will actually make things more difficult/interesting/balanced
+* then can set it up so gyms/custom move trainers use actual iv distributions
+* 
+* or could keep all ivs random,(as that also matches matsuda intentions)  and instead
+* setup custom fields to set nature, and evs.
+* 
+* mon personality is also fixed for trainers, but I think I would like to keep that constant,
+* so for rematches trainers would atleast have the same ability,
+* the personality value is derived from a combination of the trainer name, and mon species name.
 * 
 * realized logic for damage on air targets was incomplete 
 * correcting setup -
@@ -201,8 +224,9 @@ Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabo
 * "used = 0, increment long as used is less than quantity selected"
 * then need to filter use items that can be used in multi use
 * i.e only healing and stat boosting items and pp ups.  not status cure items
-* 
-* 
+*/ 
+ goto ITEM_USE
+/* 
 * low cost of ev boost items.  1k or 2k per rebalance other things I like that cost economy balance
 * get incubator so can hatch eggs easily while on the go, would greatly speed up breeding as well
 * include flame body/fire ability in party boosts speed of all  
@@ -615,6 +639,9 @@ goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement
 * Being able to add much more moves would be greatly impactful/helpful.
 * would get rid of the long gap of not learning anything, and need to attempt to space things out
 * the same way its done in base game.
+* 
+* move relearner
+* max level iup moves
 * 
 * we're learning all the time, and can say mon learn faster, so argument its more natural.
 * more options would allow for better/easier customization of style of play.

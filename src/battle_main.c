@@ -1890,33 +1890,57 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 for (j = 0; gSpeciesNames[species][j] != EOS; ++j) //starting from 0, loops through all the species names until it matches for each slot in party
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
-                fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                fixedIV = partyData[i].iv * 31 / 255;   //I think actually is Ivs, uses weird logic to make fixed iv, think will set to random
+                //but if I set it to random, but refight trainers, does it keep the iv distribution or generate a new one..?
+                //I'm gonna guess it regenerates, based on how the roamers are handled, where it specifically saves all their data
+                //ok setting random but attempt to treat rival starter like roamer so it keeps iv distribution
+                CreateMon(&party[i], species, partyData[i].lvl, USE_RANDOM_IVS, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 break; //&party[i] checks mon slot.   next one checks species for that slot
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET: //could probably get custom moves working with same trick as above but going to a different array
             { //but that can probably better be solved by getting my smart learnsets up and running
                 const struct TrainerMonNoItemCustomMoves *partyData = gTrainers[trainerNum].party.NoItemCustomMoves;
-                if (IsRivalBattle(trainerNum))
+                if (IsRivalBattle(trainerNum)) 
                 {
                     if (partyData[i].species == SPECIES_BULBASAUR
                         || partyData[i].species == SPECIES_SQUIRTLE
                         || partyData[i].species == SPECIES_CHARMANDER)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
+                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter
+                        VarSet(VAR_RIVAL_EVO, 0);
                     }
                    else if (partyData[i].species == SPECIES_IVYSAUR
                         || partyData[i].species == SPECIES_WARTORTLE
                         || partyData[i].species == SPECIES_CHARMELEON)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //check first evo 
-                        //if evolution branches preferrably pick the one with type advantage to player starter
+                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO)) 
+                        {
+                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, targetSpecies);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
+                            
+                        }
+                        //check first evo 
+                        
                     }
                    else if (partyData[i].species == SPECIES_VENUSAUR
                         || partyData[i].species == SPECIES_BLASTOISE
                         || partyData[i].species == SPECIES_CHARIZARD)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //check 2nd evo
+                        if (VarGet(VAR_RIVAL_STARTER) == VarGet(VAR_RIVAL_EVO))
+                        {
+                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, 0);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
+                        }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
                     }
                 }
                 else
@@ -1926,7 +1950,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                CreateMon(&party[i], species, partyData[i].lvl, USE_RANDOM_IVS, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 for (j = 0; j < MAX_MON_MOVES; ++j)
                     if (partyData[i].moves[j] != MOVE_NONE) //hopefully this'll do what I want. set to default moves, if mon has none set
                 {
@@ -1941,26 +1965,47 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case F_TRAINER_PARTY_HELD_ITEM: //make choose ai flags for individual pokemon, instead of party/trainer
             { //also add pp bonus setting to custom moves,for more strategy/control //important
                 const struct TrainerMonItemDefaultMoves *partyData = gTrainers[trainerNum].party.ItemDefaultMoves;
-                if (IsRivalBattle(trainerNum))
+                if (IsRivalBattle(trainerNum)) 
                 {
                     if (partyData[i].species == SPECIES_BULBASAUR
                         || partyData[i].species == SPECIES_SQUIRTLE
                         || partyData[i].species == SPECIES_CHARMANDER)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
+                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter
+                        VarSet(VAR_RIVAL_EVO, 0);
                     }
                    else if (partyData[i].species == SPECIES_IVYSAUR
                         || partyData[i].species == SPECIES_WARTORTLE
                         || partyData[i].species == SPECIES_CHARMELEON)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //check first evo 
-                        //if evolution branches preferrably pick the one with type advantage to player starter
+                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO)) 
+                        {
+                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, targetSpecies);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
+                            
+                        }
+                        //check first evo 
+                        
                     }
                    else if (partyData[i].species == SPECIES_VENUSAUR
                         || partyData[i].species == SPECIES_BLASTOISE
                         || partyData[i].species == SPECIES_CHARIZARD)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //check 2nd evo
+                        if (VarGet(VAR_RIVAL_STARTER) == VarGet(VAR_RIVAL_EVO))
+                        {
+                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, 0);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
+                        }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
                     }
                 }
                 else
@@ -1970,7 +2015,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                CreateMon(&party[i], species, partyData[i].lvl, USE_RANDOM_IVS, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
                 break;
@@ -1978,26 +2023,47 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
             {
                 const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerNum].party.ItemCustomMoves;
-                if (IsRivalBattle(trainerNum))
+                if (IsRivalBattle(trainerNum)) 
                 {
                     if (partyData[i].species == SPECIES_BULBASAUR
                         || partyData[i].species == SPECIES_SQUIRTLE
                         || partyData[i].species == SPECIES_CHARMANDER)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //VAR_RIVAL_STARTER
+                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter
+                        VarSet(VAR_RIVAL_EVO, 0);
                     }
                    else if (partyData[i].species == SPECIES_IVYSAUR
                         || partyData[i].species == SPECIES_WARTORTLE
                         || partyData[i].species == SPECIES_CHARMELEON)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //check first evo 
-                        //if evolution branches preferrably pick the one with type advantage to player starter
+                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO)) 
+                        {
+                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, targetSpecies);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
+                            
+                        }
+                        //check first evo 
+                        
                     }
                    else if (partyData[i].species == SPECIES_VENUSAUR
                         || partyData[i].species == SPECIES_BLASTOISE
                         || partyData[i].species == SPECIES_CHARIZARD)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //check 2nd evo
+                        if (VarGet(VAR_RIVAL_STARTER) == VarGet(VAR_RIVAL_EVO))
+                        {
+                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, 0);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
+                        }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
                     }
                 }
                 else
@@ -2007,7 +2073,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                CreateMon(&party[i], species, partyData[i].lvl, USE_RANDOM_IVS, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
                 for (j = 0; j < MAX_MON_MOVES; ++j)
                     if (partyData[i].moves[j] != MOVE_NONE)

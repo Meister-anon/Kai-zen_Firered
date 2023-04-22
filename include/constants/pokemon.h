@@ -189,7 +189,6 @@
 #define PLAYER_HAS_ONE_MON                      0x1
 #define PLAYER_HAS_ONE_USABLE_MON               0x2
 
-#define MAX_LEVEL 100
 
 #define OT_ID_RANDOM_NO_SHINY 2
 #define OT_ID_PRESET 1
@@ -213,10 +212,19 @@
 #define FRIENDSHIP_EVENT_FAINT_OUTSIDE_BATTLE 0x7
 #define FRIENDSHIP_EVENT_FAINT_LARGE          0x8
 
+
+#define MAX_PER_STAT_IVS 31
+#define MAX_IV_MASK 31
+#define USE_RANDOM_IVS (MAX_PER_STAT_IVS + 1)	//makes createmon function use random data for ivs, just like wild mon	can override fixed value for trainer party
+#define MAX_PER_STAT_EVS 564	//prviously 255
+#define MAX_TOTAL_EVS 788	//previosly 510
+#define EV_ITEM_BOOSTER_LIMIT 200	//how many evs can be gained from ev boost items  each one apparently ads 10 evs?
+
 #define PARTY_SIZE 6
-#define MAX_TOTAL_EVS 788
 #define UNOWN_FORM_COUNT 28
 #define BOX_NAME_LENGTH 8
+#define MAX_LEVEL_UP_MOVES 20
+#define MAX_LEVEL 100
 
 #define EVO_MODE_NORMAL     0
 #define EVO_MODE_TRADE      1

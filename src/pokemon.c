@@ -5324,6 +5324,7 @@ bool8 ExecuteTableBasedItemEffect(struct Pokemon *mon, u16 item, u8 partyIndex, 
     return PokemonUseItemEffects(mon, item, partyIndex, moveIndex, 0);
 }
 
+#define ITEM_USE
 bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 moveIndex, u8 e) //this "e" isn't wrong
 {
     u32 data;
@@ -5464,7 +5465,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                 retVal = FALSE;
             }
             if ((itemEffect[cmdIndex] & ITEM3_LEVEL_UP)  // raise level
-             && GetMonData(mon, MON_DATA_LEVEL, NULL) != 100)
+             && GetMonData(mon, MON_DATA_LEVEL, NULL) != MAX_LEVEL)
             {
                 data = gExperienceTables[gBaseStats[GetMonData(mon, MON_DATA_SPECIES, NULL)].growthRate][GetMonData(mon, MON_DATA_LEVEL, NULL) + 1];
                 SetMonData(mon, MON_DATA_EXP, &data);
@@ -5527,11 +5528,11 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                         evCount = GetMonEVCount(mon);
                         if (evCount >= MAX_TOTAL_EVS)
                             return TRUE;
-                        data = GetMonData(mon, sGetMonDataEVConstants[i], NULL);
-                        if (data < 200)
+                        data = GetMonData(mon, sGetMonDataEVConstants[i], NULL); //data is amount of evs for each stat
+                        if (data < EV_ITEM_BOOSTER_LIMIT)
                         {
-                            if (data + itemEffect[idx] > 200)
-                                evDelta = 200 - (data + itemEffect[idx]) + itemEffect[idx];
+                            if (data + itemEffect[idx] > EV_ITEM_BOOSTER_LIMIT)
+                                evDelta = EV_ITEM_BOOSTER_LIMIT - (data + itemEffect[idx]) + itemEffect[idx];
                             else
                                 evDelta = itemEffect[idx];
                             if (evCount + evDelta > MAX_TOTAL_EVS)
@@ -5712,10 +5713,10 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                         if (evCount >= MAX_TOTAL_EVS)
                             return TRUE;
                         data = GetMonData(mon, sGetMonDataEVConstants[i + 2], NULL);
-                        if (data < 200)
+                        if (data < EV_ITEM_BOOSTER_LIMIT)
                         {
-                            if (data + itemEffect[idx] > 200)
-                                evDelta = 200 - (data + itemEffect[idx]) + itemEffect[idx];
+                            if (data + itemEffect[idx] > EV_ITEM_BOOSTER_LIMIT)
+                                evDelta = EV_ITEM_BOOSTER_LIMIT - (data + itemEffect[idx]) + itemEffect[idx];
                             else
                                 evDelta = itemEffect[idx];
                             if (evCount + evDelta > MAX_TOTAL_EVS)
@@ -5950,7 +5951,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
              && gSideTimers[GetBattlerSide(gActiveBattler)].mistTimer == 0)
                 retVal = FALSE;
             if ((itemEffect[cmdIndex] & ITEM3_LEVEL_UP)  // raise level
-             && GetMonData(mon, MON_DATA_LEVEL, NULL) != 100)
+             && GetMonData(mon, MON_DATA_LEVEL, NULL) != MAX_LEVEL)
                 retVal = FALSE;
             if ((itemEffect[cmdIndex] & ITEM3_SLEEP)
              && PartyMonHasStatus(mon, partyIndex, STATUS1_SLEEP, battlerId))
@@ -5990,7 +5991,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
                         if (GetMonEVCount(mon) >= MAX_TOTAL_EVS)
                             return TRUE;
                         data = GetMonData(mon, sGetMonDataEVConstants[i], NULL);
-                        if (data < 200) // not 100% sure about this
+                        if (data < EV_ITEM_BOOSTER_LIMIT) // not 100% sure about this  assuming vitamin limit
                         {
                             idx++;
                             retVal = FALSE;
@@ -6067,7 +6068,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
                         if (GetMonEVCount(mon) >= MAX_TOTAL_EVS)
                             return TRUE;
                         data = GetMonData(mon, sGetMonDataEVConstants[i + 2], NULL);
-                        if (data < 200)
+                        if (data < EV_ITEM_BOOSTER_LIMIT)
                         {
                             retVal = FALSE;
                             idx++;
@@ -6752,7 +6753,7 @@ u8 GetTrainerEncounterMusicId(u16 trainer)
 
 static u16 ModifyStatByNature(u8 nature, u16 n, u8 statIndex)
 {
-    if (statIndex < 1 || statIndex > 5)
+    if (statIndex < 1 || statIndex > 5) //I think this is to exclude hp and battle stats i.e accuracy & evasion
     {
         // should just be "return n", but it wouldn't match without this
         u16 retVal = n;
@@ -6908,12 +6909,16 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
         if (holdEffect == HOLD_EFFECT_MACHO_BRACE) //need to figure to re add power items, and effect plus gen 6 exp share
             evIncrease *= 2;
 
+        u8 hasHadPokerus = CheckPartyHasHadPokerus(mon, 0);
+        if (hasHadPokerus)
+            evIncrease *= 2;    //attempt at reinstating pokerus logic
+
         if (totalEVs + (s16)evIncrease > MAX_TOTAL_EVS)
             evIncrease = ((s16)evIncrease + MAX_TOTAL_EVS) - (totalEVs + evIncrease);
 
-        if (evs[i] + (s16)evIncrease > 564) //ev cap
+        if (evs[i] + (s16)evIncrease > MAX_PER_STAT_EVS) //ev cap
         {
-            int val1 = (s16)evIncrease + 564;
+            int val1 = (s16)evIncrease + MAX_PER_STAT_EVS;
             int val2 = evs[i] + evIncrease;
             evIncrease = val1 - val2;
         }
