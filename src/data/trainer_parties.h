@@ -6225,7 +6225,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderBrock[] = {
         .iv = 0,
         .lvl = 12,
         .species = SPECIES_GEODUDE,
-        .moves = {MOVE_TACKLE, MOVE_DEFENSE_CURL, MOVE_NONE, MOVE_NONE},
+        //.moves = {MOVE_TACKLE, MOVE_DEFENSE_CURL, MOVE_NONE, MOVE_NONE},
     },
     {
         .iv = 0,
@@ -6240,7 +6240,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderMisty[] = {
         .iv = 0,
         .lvl = 18,
         .species = SPECIES_STARYU,
-        .moves = {MOVE_TACKLE, MOVE_HARDEN, MOVE_RECOVER, MOVE_WATER_PULSE},
+        .moves = {MOVE_CAMOUFLAGE, MOVE_RAIN_DANCE, MOVE_RECOVER, MOVE_WATER_PULSE},
     },
     {
         .iv = 0,
@@ -6276,7 +6276,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderErika[] = {
         .iv = 0,
         .lvl = 29,
         .species = SPECIES_VICTREEBEL,
-        .moves = {MOVE_STUN_SPORE, MOVE_ACID, MOVE_POISON_POWDER, MOVE_GIGA_DRAIN},
+        .moves = {MOVE_STUN_SPORE, MOVE_UP_ROOT, MOVE_POISON_POWDER, MOVE_GIGA_DRAIN},
     },
     {
         .iv = 0,
@@ -6288,7 +6288,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderErika[] = {
         .iv = 0,
         .lvl = 29,
         .species = SPECIES_VILEPLUME,
-        .moves = {MOVE_SLEEP_POWDER, MOVE_ACID, MOVE_STUN_SPORE, MOVE_GIGA_DRAIN},
+        .moves = {MOVE_SLEEP_POWDER, MOVE_SLUDGE, MOVE_STUN_SPORE, MOVE_GIGA_DRAIN},
     },
 };
 
@@ -6342,7 +6342,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderBlaine[] = {
         .iv = 0,
         .lvl = 47,
         .species = SPECIES_ARCANINE,
-        .moves = {MOVE_BITE, MOVE_ROAR, MOVE_TAKE_DOWN, MOVE_FIRE_BLAST},
+        .moves = {MOVE_BITE, MOVE_FLAME_CHARGE, MOVE_TAKE_DOWN, MOVE_FIRE_BLAST},
     },
 };
 

@@ -3500,7 +3500,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_BUG,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWARM, ABILITY_TECHNICIAN},
-            .abilityHidden = {ABILITY_STEADFAST, ABILITY_NONE},
+            .abilityHidden = {ABILITY_STEADFAST, ABILITY_MOXIE},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWARM, ABILITY_NONE},
         #endif
@@ -5948,9 +5948,9 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_BUG,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWARM, ABILITY_TECHNICIAN},
-            .abilityHidden = {ABILITY_LIGHT_METAL, ABILITY_NONE},
+            .abilityHidden = {ABILITY_LIGHT_METAL, ABILITY_DEFEATIST},
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_SWARM, ABILITY_NONE},
+            .abilities = {ABILITY_SWARM, ABILITY_NONE},//MAY CHANGE TO DEFIANT
         #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,

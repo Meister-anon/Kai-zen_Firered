@@ -5056,6 +5056,7 @@ u8 GiveMonToPlayer(struct Pokemon *mon)
     return MON_GIVEN_TO_PARTY;
 }
 
+#define DEPOSIT_TO_PCLOGIC
 static u8 SendMonToPC(struct Pokemon* mon)
 {
     s32 boxNo, boxPos;

@@ -225,7 +225,9 @@ if (gTrainers[trainerNum].doubleBattle == TRUE)
 * So if you have a group of mon selected, but there are filled slots preventing you from putting them down in a line.
 * Use that same looping logic for placing htem within the box, just make it look for n number of free slots
 * and auto place them, with the cursor going to the position of the last placed mon, so you know where they are.
-* 
+*/
+goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads space in the box
+/* 
 * setup pokenav, show potential area encounters but want mon to be greyed out until you've seen them.
 * so just see a silloette-
 * 
