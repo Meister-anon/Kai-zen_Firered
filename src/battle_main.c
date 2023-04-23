@@ -1960,7 +1960,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]); //actually I need custom moves, otherwise its not a good base
                     SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp); //so I need a way to change how this works
 
-                    if (partyData[i].moves[j] == MOVE_NONE) //hopefully this'll do what I want. set to default moves, if mon has none set
+                    if (partyData[i].moves[0] == MOVE_NONE) //hopefully this'll do what I want. set to default moves, if mon has none set
                         GiveMonInitialMoveset(&party[i]);
                 }
                 break; //like custom moves for some, but if its blank just give them default moves.  I think it defaults to 0, if nothing is there.
@@ -2090,9 +2090,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
                     SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp);
 
-                    if (partyData[i].moves[j] == MOVE_NONE) //hopefully this'll do what I want. set to default moves, if mon has none set
+                    if (partyData[i].moves[0] == MOVE_NONE) //hopefully this'll do what I want. set to default moves, if mon has none set
                         GiveMonInitialMoveset(&party[i]);   //it works!!
-                }
+                }//works but had to change, to only if moveslot 1 is no move, otherwise it replaced custom setting that has slots set to move_none
                 break;
             }
             }   //end of switch case

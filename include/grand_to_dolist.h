@@ -193,7 +193,7 @@ if (gTrainers[trainerNum].doubleBattle == TRUE)
 * since iv allocation is random, I think I can leave ev cap where it is.
 * decided won't actually make item to increase ivs,
 * based on matsuda perspective, of it just being natural potentiall
-* and that my increased ev cap was meant to fill in the gap left in customization. anyway - TESTED | DONE, lower buff  for hp stat calc
+* and that my increased ev cap was meant to fill in the gap left in customization. anyway - TESTED | DONE,
 * 
 * 
 * more efficient player pc actions, be able to close pc while holding mon,
@@ -250,12 +250,14 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * since I don't want to ruin player choice/fun, I will only make this apply in new game plus mode
 * so use newgame+ flag to check if mon should be disobediant 
 * 
+* [keep track of  flags not to be reset by newgame+
+* 
 * find plans for new game + mode I think plan was you'd be sent back with all your items money, etc.
 * but mon in your party would be reset to lvl 1. (keeping evs ivs moves friendship etc
 * think change encounter data to lvl 1 met fateful encounter text)
 * also reevaluate benefit of new game + as original idea as makign the game new again and having a way to get other starters...
 * 
-* played OPAL effing amazing, incorporate the great qol stuff frome there, flame charge buff to raise speed,
+* played OPAL effing amazing, incorporate the great qol stuff frome there, flame charge buff to raise speed, (oh it already does that lol)
 * try to get meowth forms, setup exp share with icon on summary screen.
 * 
 * -ALL THE ASSETS ARE INCLUDED WITH THE GAME ALL ICONS AND SPRITES SFAFWJAGRGARAGNSNIODNVNVDHFB
