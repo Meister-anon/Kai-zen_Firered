@@ -69,8 +69,8 @@ enum
 };
 
 enum { // Values given to the emit functions to choose gBattleBufferA or gBattleBufferB
-    BUFFER_A,
-    BUFFER_B
+    BUFFER_A,   //Values given to the emit functions to choose gBattleBufferA or gBattleBufferB
+    BUFFER_B    //Values given to the emit functions to choose gBattleBufferA or gBattleBufferB
 };
 
 #define RESET_ACTION_MOVE_SELECTION     0

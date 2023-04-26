@@ -96,6 +96,7 @@ does that mean rematching the rival, or other enemies you face multiple times, w
 
 is it possible their mon could have completely different abilities when they evolve?
 As personality determines the ability slot.
+
 GriffinR — Yesterday at 11:36 PM
 No, because the way they're generated will never set the first bit of the personality. NPC trainer pokemon will never use the alternate ability
 Other things like their natures would change, though
@@ -114,6 +115,58 @@ if (gTrainers[trainerNum].doubleBattle == TRUE)
                 personalityValue = 0x88; // Use personality more likely to result in a male Pokémon
 
                 apparently ecounter music field uses/has a gender value
+
+[I don't udnerstanad what he meant about the bit/bytes but I can add an abilit num field to party data
+and make it select the abiliity that way  il.e abilitynum 1 = ability slot x and so and so
+also consider better way of assigning personality and adding nature selection to custom fields as well.
+They used 2, relatively static fields here to attempt uniformity for rematches.
+
+as it stands personality would change if mon evolves, which would change nature, but not ability,
+but because of the attempt at tying mon gender to player gender, trainer mon would never naturally
+have anything besides their default ability.
+
+I can add an extra check to get around the personality shift. I think.
+pretty much use the name hash to chcek for multiple instances of that trainer occuring.
+
+from their loop through their partry find the personality value as normal,
+for other appearances check each party slot for a mon of that evo line, if its in the evo line,
+but the species value isn't the same,  compare personality values and have the personality value 
+set at the first encounter overwrite the current value.
+
+slightly complex but would ensure consistent nature and abiility
+
+plan:
+set direction selection for ability num & nature for custom trainer data
+
+but for default making this change so fighting the same trainer again when they have stronger/evolved mon
+would result in the same nature and abilty as first time encountering them, (would require setting it so ability can be different)
+
+checked trainername (which is used for personalityvalue  /namehash, never changes,
+so can ues that reliably, 
+
+incase names are reused filter for trainer class as well.
+only time trainerclass is every changed is for rival.
+and can easily filter for him only with "isrivalbattle" function.   
+(thankfully rival name "Terry" is not reused its only for rival
+so check is rival battle, make loop just trainername ignore class)
+
+logic is to loop gTrainers until you find the first instance of a trainer name(and class) that matches
+the current gTrainer trainer num  trainer name
+once you find that loop through that party for a mon in the evo line as the mon in the current trainer party
+if you don't find a like evo line species  move to next mon in party and break out back to continue main loop
+at next instance of matching trainer name.
+
+If you do find a matching evo line speices, check if the actual species name matches the current trainer species name,
+if it does match  break and continue checking the rest of party if all match do nothing, as there is no cause for a different personality value
+
+if the evo line matches, but the species names don't match, we found our criteria, overwrite namehash of current species with that of original instance
+that way even when the mon is evolved it will keep identical personality i.e identical nature
+
+use u32 values for i, to make move faster/more efficiently
+also attempt to do all this with new function rather than in createnpctrainerparty function
+as this is a massive implementation and I'd rather not make the function look any uglier
+
+would call personalityvaluechecksum or sometihng
 
 */
 
@@ -706,6 +759,18 @@ goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement
 * 
 * we're learning all the time, and can say mon learn faster, so argument its more natural.
 * more options would allow for better/easier customization of style of play.
+* 
+* 
+* idea for ev boosting gym do with safron city fighting gym  could give ev boost items there -
+* 
+* think will remove need for badges to use overworld hms, makes more logical sense.
+* instead balance progression bby availability of mon with those abilities.
+* 
+* only need mon that can learn the move to do hms.
+* for fly set it upp that you need a mon of a certain size.
+* 
+* 
+* //shifting 8 is the same as using 100, left shift << is multiplying,,  >> right shift is dividing
 * 
 */
 goto FIELDMOVE_LISTMENU

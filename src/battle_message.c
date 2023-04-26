@@ -2990,7 +2990,7 @@ static void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst)
 {
     u32 srcId = 1;
     u32 value = 0;
-    u8 text[12];
+    u8 text[20];    //used to copy these values to that use b_buff_1/2/3  needs to be large enough to hold all  the length constants. name length is 12, but move name & ability name are longers so make 20
     u16 hword;
 
     *dst = EOS;
