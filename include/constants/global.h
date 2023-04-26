@@ -2,7 +2,7 @@
 #define GUARD_CONSTANTS_GLOBAL_H
 
 #define ITEM_NAME_LENGTH 18
-#define POKEMON_NAME_LENGTH 11
+#define POKEMON_NAME_LENGTH 12
 #define OT_NAME_LENGTH 7
 #define MOVE_NAME_LENGTH 17 //longest move name is 17 
 

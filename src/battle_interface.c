@@ -1545,14 +1545,14 @@ void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
     else 
     {
         TextIntoHealthboxObject((void *)(OBJ_VRAM0 + TILE_SIZE_4BPP + spriteTileNum), windowTileData, 7);// & here
-        ptr = (void*)(OBJ_VRAM0);
+        /*ptr = (void*)(OBJ_VRAM0);
         if (!IsDoubleBattle())
             ptr += spriteTileNum + 32 * TILE_SIZE_4BPP;
         else
             ptr += spriteTileNum + 16 * TILE_SIZE_4BPP;
 
-        TextIntoHealthboxObject(ptr, windowTileData + 7 * TILE_SIZE_4BPP, 1); //works and since health box size wasnt changed I need 1 here as I have 7
-    }
+        TextIntoHealthboxObject(ptr, windowTileData + 7 * TILE_SIZE_4BPP, 1);*/ //works and since health box size wasnt changed I need 1 here as I have 7
+    }   //removed, it caused issue for double battle enemy health bar
 
     RemoveWindowOnHealthbox(windowId);
 }
