@@ -924,7 +924,16 @@ goto EVOLUTION_LOGIC
 * thick armor plating stronger bones
 * new ability idea, is um damage reduction  I think 20%?
 * 2nd ability turns every special move into a physical contact move as marowak learns moves like flamethrower but has trash sp atk 
-* also good for machamp, inspired by Mashle believe will call elemental muscle
+* also good for machamp, inspired by Mashle believe will call elemental muscle -
+* hmm may actually be able to do a special animation for it,  like fire punch, can add the fist animation to the end of moves if ability is e.m ?
+* would need to setup new macro
+* 
+* consider make leech seed work like anime, where it wraps up the target
+* meaning it would be a trap, preventing the enemy from switching, and a good buff to grass types
+* as only they learn it, and only theye are immune to it. -
+* 
+* adjust enemy battler placement for double battles, seems doubles aren't well optimized in fire red...for some reason
+*  health boxes cover the enemy, need to move them higher, and move field they stand on by same amount
 * 
 * new megas won't have +100bst but instead will take a stat average value that is strong
 * like say 615 or 630/635.  and will either reallocate or add to existing stats to get there.

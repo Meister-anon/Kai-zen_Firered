@@ -1542,17 +1542,18 @@ void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
 
         TextIntoHealthboxObject(ptr, windowTileData + 6 * TILE_SIZE_4BPP, 2); //changed from 1 to 2 seemed to fix.
     }//value added to windowTileData uses 6 because 1st function ended in window width 6
-    else 
+    //end width 1 is default, 2 works 
+    else
     {
-        TextIntoHealthboxObject((void *)(OBJ_VRAM0 + TILE_SIZE_4BPP + spriteTileNum), windowTileData, 7);// & here
-        /*ptr = (void*)(OBJ_VRAM0);
-        if (!IsDoubleBattle())
+        TextIntoHealthboxObject((void *)(OBJ_VRAM0 + TILE_SIZE_4BPP + spriteTileNum), windowTileData, 7);// & here  original line
+        ptr = (void *)(OBJ_VRAM0);
+        /*if (!IsDoubleBattle())
             ptr += spriteTileNum + 32 * TILE_SIZE_4BPP;
-        else
-            ptr += spriteTileNum + 16 * TILE_SIZE_4BPP;
+        else*/
+            ptr += spriteTileNum + 32 * TILE_SIZE_4BPP; //if right and this is for change in size of healthbox for doubles, then enemy side doesn't need it
 
-        TextIntoHealthboxObject(ptr, windowTileData + 7 * TILE_SIZE_4BPP, 1);*/ //works and since health box size wasnt changed I need 1 here as I have 7
-    }   //removed, it caused issue for double battle enemy health bar
+        TextIntoHealthboxObject(ptr, windowTileData + 7 * TILE_SIZE_4BPP, 0); //7 sems right    
+    }//since using 7 rathre than end width 1, need base to be 0, and when having longer name use window width 1, that way it is equal to if I use width 2, on 6 for playre side
 
     RemoveWindowOnHealthbox(windowId);
 }
