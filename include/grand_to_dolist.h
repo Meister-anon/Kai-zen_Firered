@@ -931,11 +931,31 @@ goto EVOLUTION_LOGIC
 * consider make leech seed work like anime, where it wraps up the target
 * meaning it would be a trap, preventing the enemy from switching, and a good buff to grass types
 * as only they learn it, and only theye are immune to it. -
-* 
-* adjust enemy battler placement for double battles, seems doubles aren't well optimized in fire red...for some reason
+*/
+
+
+/* adjust enemy battler placement for double battles, seems doubles aren't well optimized in fire red...for some reason
 *  health boxes cover the enemy, need to move them higher, and move field they stand on by same amount
 * 
-* new megas won't have +100bst but instead will take a stat average value that is strong
+* moving sprite placement is a combination of gEnemyMonElevation  which is additionnal floating position for mon that fly/levitate and
+* gMonFrontPicCoords  which is the coordinate for every mon, and can go into negative values to raise higher
+* for non floating mon believe a tentative value of yoffset - 8 should put them where I need/want them.
+* flying mon will be harder,   but will need to specifically filter the change for doubles only,
+* which can do with IsDoubleBattle  function  this is from battle_anim_mons.c may actually be able to do all changes from there?
+* while gmonfrontpick coords is the source it seems to be mainly accessed through GetBattlerYDelta,  and can make changes there and have 
+* it populate everything else rather than messing with src data, for extra protection
+* 
+* need find differene betwen GetBattlerSpriteCoord & GetBattlerSpriteCoord2   they both go to GetBattlerYDelta
+* but the first doesn't immediately go there, and allso handles some X values not just y
+* also it uses this  "sBattlerCoords" before the other function does.
+* not yet sure how to read it, but it seesms to prove/show that singles and doubles use separate values.
+* also it SEEMS like position x y is determind by taking an average of the values in sBattlerCoords ?
+*/
+goto SPRITE_COORDINATE_AND_ELEVATION_LOGIC
+goto FRONT_PIC_TABLE    //table for front pic use rules to standardize mon brought in from expansion
+goto MON_ELEVATION_TABLE    //SAME BUT for elevation
+
+/* new megas won't have +100bst but instead will take a stat average value that is strong
 * like say 615 or 630/635.  and will either reallocate or add to existing stats to get there.
 * 
 * most legendaries have base 600, and then others go up to 680  psuedo legends are also 600

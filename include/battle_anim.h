@@ -6,6 +6,8 @@
 #include "task.h"
 #include "constants/battle_anim.h"
 
+u8 GetBattlerYDelta(u8 battlerId, u16 species);
+
 enum
 {
     BG_ANIM_SCREEN_SIZE,

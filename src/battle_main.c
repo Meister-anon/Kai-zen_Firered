@@ -2415,7 +2415,8 @@ void SpriteCB_FaintOpponentMon(struct Sprite *sprite)
     else
         species = sprite->sSpeciesId;
     GetMonData(&gEnemyParty[gBattlerPartyIndexes[battler]], MON_DATA_PERSONALITY);  // Unused return value.
-    if (species == SPECIES_UNOWN)
+
+    /*if (species == SPECIES_UNOWN)
     {
         u32 personalityValue = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battler]], MON_DATA_PERSONALITY);
         u16 unownForm = ((((personalityValue & 0x3000000) >> 18) | ((personalityValue & 0x30000) >> 12) | ((personalityValue & 0x300) >> 6) | (personalityValue & 3)) % 0x1C);
@@ -2438,7 +2439,9 @@ void SpriteCB_FaintOpponentMon(struct Sprite *sprite)
     else
     {
         yOffset = gMonFrontPicCoords[species].y_offset;
-    }
+    }*/
+    yOffset = GetBattlerYDelta(battler, species);
+
     sprite->data[3] = 8 - yOffset / 8;
     sprite->data[4] = 1;
     sprite->callback = SpriteCB_AnimFaintOpponent;

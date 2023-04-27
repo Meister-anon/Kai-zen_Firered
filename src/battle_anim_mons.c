@@ -148,7 +148,8 @@ u8 GetBattlerSpriteCoord(u8 battlerId, u8 coordType)
     return retVal;
 }
 
-static u8 GetBattlerYDelta(u8 battlerId, u16 species)
+#define  SPRITE_COORDINATE_AND_ELEVATION_LOGIC
+u8 GetBattlerYDelta(u8 battlerId, u16 species)
 {
     u16 letter;
     u32 personality;
@@ -1711,6 +1712,7 @@ static u16 GetBattlerYDeltaFromSpriteId(u8 spriteId)
     struct BattleSpriteInfo *spriteInfo;
     u8 battlerId = gSprites[spriteId].data[0];
     u16 species;
+    u8 yOffset = GetBattlerYDelta(battlerId, species);
     u16 i;
 
     for (i = 0; i < MAX_BATTLERS_COUNT; ++i)
@@ -1724,7 +1726,7 @@ static u16 GetBattlerYDeltaFromSpriteId(u8 spriteId)
                     species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[i]], MON_DATA_SPECIES);
                 else
                     species = spriteInfo[battlerId].transformSpecies;
-                return gMonBackPicCoords[species].y_offset;
+                return yOffset; //gMonBackPicCoords[species].y_offset;
             }
             else
             {
@@ -1733,11 +1735,11 @@ static u16 GetBattlerYDeltaFromSpriteId(u8 spriteId)
                     species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[i]], MON_DATA_SPECIES);
                 else
                     species = spriteInfo[battlerId].transformSpecies;
-                return gMonFrontPicCoords[species].y_offset;
+                return yOffset; //gMonFrontPicCoords[species].y_offset;
             }
         }
     }
-    return 64;
+    return MON_PIC_HEIGHT;
 }
 
 void StorePointerInVars(s16 *lo, s16 *hi, const void *ptr)

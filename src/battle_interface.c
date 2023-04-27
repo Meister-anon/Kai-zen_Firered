@@ -1550,10 +1550,8 @@ void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
     {
         TextIntoHealthboxObject((void *)(OBJ_VRAM0 + TILE_SIZE_4BPP + spriteTileNum), windowTileData, 7);// & here  original line
         ptr = (void *)(OBJ_VRAM0);
-        /*if (!IsDoubleBattle())
-            ptr += spriteTileNum + 32 * TILE_SIZE_4BPP;
-        else*/
-            ptr += spriteTileNum + 32 * TILE_SIZE_4BPP; //if right and this is for change in size of healthbox for doubles, then enemy side doesn't need it
+        
+        ptr += spriteTileNum + 32 * TILE_SIZE_4BPP; //if right and this is for change in size of healthbox for doubles, then enemy side doesn't need it
 
         TextIntoHealthboxObject(ptr, windowTileData + 7 * TILE_SIZE_4BPP, 0); //7 sems right    
     }//since using 7 rathre than end width 1, need base to be 0, and when having longer name use window width 1, that way it is equal to if I use width 2, on 6 for playre side
