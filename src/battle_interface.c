@@ -1531,12 +1531,15 @@ void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
 
     spriteTileNum = gSprites[healthboxSpriteId].oam.tileNum * TILE_SIZE_4BPP;
 
+    //ok player uses 2 different healthbox sizes for single & double battles
+    //enemy uses the same healthbox for both, they use the small one that player uses for doubles
+    //based on function is 32 * tile size 4bpp
     if (GetBattlerSide(gSprites[healthboxSpriteId].sBattlerId) == B_SIDE_PLAYER)
     {
         TextIntoHealthboxObject((void *)(OBJ_VRAM0 + 2 * TILE_SIZE_4BPP + spriteTileNum), windowTileData, 6);//which is last value here
         ptr = (void *)(OBJ_VRAM0);
         if (!IsDoubleBattle())
-            ptr += spriteTileNum + 64 * TILE_SIZE_4BPP; //is 64 because first function uses 2 x TILE_SIZE_4BPP which is 32
+            ptr += spriteTileNum + 64 * TILE_SIZE_4BPP; //is 64 because first function uses 2 x TILE_SIZE_4BPP which is 64, this because player has doubl size healthbox
         else
             ptr += spriteTileNum + 32 * TILE_SIZE_4BPP;
 
