@@ -449,6 +449,7 @@ static void CB2_EndMarowakBattle(void)
     }
 }
 
+#define BATTLE_SETUP_TERRAIN//sets battle terrain from metatile/environment
 u8 BattleSetup_GetTerrainId(void)
 {
     u16 tileBehavior;

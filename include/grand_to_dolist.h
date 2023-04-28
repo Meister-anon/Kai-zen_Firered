@@ -650,6 +650,8 @@ goto WEATHER_AND_TERRAIN_EFFECTS
 */
 goto TERRAIN_DEFINES
 goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement
+goto BATTLE_TERRAIN //Battle Terrain, NOT TERRAIN effect, is the entire battle field, including part battler sits on
+goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 /*
 * New terrain notes
 * 

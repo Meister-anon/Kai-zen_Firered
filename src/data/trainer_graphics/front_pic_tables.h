@@ -1,3 +1,8 @@
+//relation betweeen battle assets
+//background needs to go up 4 pixels,   //its a bin file so moving graphic one tile is 8 pixels
+//mon sprites go up 8 values
+//trainer sprites need go up 2
+//so mon sprites are double the change, while trainer sprites are half
 const struct MonCoords gTrainerFrontPicCoords[] =
 {
     [TRAINER_PIC_AQUA_LEADER_ARCHIE]    = {.size = 8, .y_offset = 1},
