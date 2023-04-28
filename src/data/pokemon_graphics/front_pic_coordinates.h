@@ -38,6 +38,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     //variance following the same rule as above, where larger size correspones to lower y value, and smaller size is higher y value
     //unless mon has a unique sprite positioning i.e like metapod
     //also of note, water mon that are "swimming" also have large variance  some use large mon catgory, others  have used small mon y value
+    //nothr note, seems size doesn't affect pic size, I think its used for pokedex comparison?
     [SPECIES_NONE] =
     {
         .size = 0x88,
@@ -785,7 +786,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     },
     [SPECIES_DRAGONITE] =
     {
-        .size = 0x88,
+        .size = 0x87,
         .y_offset = 0,
     },
     [SPECIES_MEWTWO] =
@@ -1951,12 +1952,12 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_LATIAS] =
     {
         .size = 0x88,
-        .y_offset = 8,
+        .y_offset = 1,
     },
     [SPECIES_LATIOS] =
     {
         .size = 0x88,
-        .y_offset = 0,
+        .y_offset = 2,
     },
     [SPECIES_JIRACHI] =
     {
@@ -1971,7 +1972,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_CHIMECHO] =
     {
         .size = 0x37,
-        .y_offset = 11,
+        .y_offset = 6,
     },
     [SPECIES_TURTWIG] =
     {
