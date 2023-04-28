@@ -1120,6 +1120,12 @@ static void DoSwitchOutAnimation(void)
 static void OpponentHandleDrawTrainerPic(void)
 {
     u32 trainerPicId;
+    u8 trainercoordinate;
+
+    if (!IsDoubleBattle())
+        trainercoordinate = gTrainerFrontPicCoords[trainerPicId].size;
+    else
+        trainercoordinate = (gTrainerFrontPicCoords[trainerPicId].size + 2);
 
     /*if (gTrainerBattleOpponent_A == 0x400)
         trainerPicId = GetSecretBaseTrainerPicIndex();
@@ -1135,7 +1141,7 @@ static void OpponentHandleDrawTrainerPic(void)
     SetMultiuseSpriteTemplateToTrainerBack(trainerPicId, GetBattlerPosition(gActiveBattler));
     gBattlerSpriteIds[gActiveBattler] = CreateSprite(&gMultiuseSpriteTemplate,
                                                      176,
-                                                     (8 - gTrainerFrontPicCoords[trainerPicId].size) * 4 + 40,
+                                                     (8 - trainercoordinate) * 4 + 40,
                                                      GetBattlerSpriteSubpriority(gActiveBattler));
     gSprites[gBattlerSpriteIds[gActiveBattler]].pos2.x = -240;
     gSprites[gBattlerSpriteIds[gActiveBattler]].data[0] = 2;
@@ -1150,6 +1156,12 @@ static void OpponentHandleDrawTrainerPic(void)
 static void OpponentHandleTrainerSlide(void)
 {
     u32 trainerPicId;
+    u8 trainercoordinate;
+
+    if (!IsDoubleBattle())
+        trainercoordinate = gTrainerFrontPicCoords[trainerPicId].size;
+    else
+        trainercoordinate = (gTrainerFrontPicCoords[trainerPicId].size + 2);
 
     /*if (gTrainerBattleOpponent_A == 0x400)
         trainerPicId = GetSecretBaseTrainerPicIndex();
@@ -1165,7 +1177,7 @@ static void OpponentHandleTrainerSlide(void)
     SetMultiuseSpriteTemplateToTrainerBack(trainerPicId, GetBattlerPosition(gActiveBattler));
     gBattlerSpriteIds[gActiveBattler] = CreateSprite(&gMultiuseSpriteTemplate,
                                                      176,
-                                                     (8 - gTrainerFrontPicCoords[trainerPicId].size) * 4 + 40,
+                                                     (8 - trainercoordinate) * 4 + 40,
                                                      30);
     gSprites[gBattlerSpriteIds[gActiveBattler]].pos2.x = 96;
     gSprites[gBattlerSpriteIds[gActiveBattler]].pos1.x += 32;
