@@ -186,7 +186,7 @@ u8 GetBattlerYDelta(u8 battlerId, u16 species)
             ret = gMonBackPicCoords[species].y_offset;
         }
     }
-    else
+    else     //enemy side sprites
     {
         if (species == SPECIES_UNOWN)
         {
@@ -200,19 +200,25 @@ u8 GetBattlerYDelta(u8 battlerId, u16 species)
                 coordSpecies = species;
             else
                 coordSpecies = letter + SPECIES_UNOWN_B - 1;
-            ret = gMonFrontPicCoords[coordSpecies].y_offset;
+            if (IsDoubleBattle())
+                ret = (gMonFrontPicCoords[coordSpecies].y_offset - 8);
+            else
+                ret = gMonFrontPicCoords[coordSpecies].y_offset;
         }
-        else if (species == SPECIES_CASTFORM)
+        else if (species == SPECIES_CASTFORM)   //don't need to change
         {
             ret = gCastformFrontSpriteCoords[gBattleMonForms[battlerId]].y_offset;
         }
         else if (species > NUM_SPECIES)
         {
-            ret = gMonFrontPicCoords[0].y_offset;
+            ret = gMonFrontPicCoords[0].y_offset;   //QUESTION MARK 
         }
         else
         {
-            ret = gMonFrontPicCoords[species].y_offset;
+            if (IsDoubleBattle() && gEnemyMonElevation[species] == 0)
+                ret = (gMonFrontPicCoords[species].y_offset - 8);
+            else
+                ret = gMonFrontPicCoords[species].y_offset;
         }
     }
     return ret;

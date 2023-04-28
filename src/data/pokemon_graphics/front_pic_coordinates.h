@@ -10,6 +10,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     //tested -8 seems to work as a standard for all the values/mon that actually need to be raised up.
     //ok step 1, go through floating mon first attempt to make them work with elevation,
     //if that works then can exclude them from the y offseet boost
+
     //basing that on castform position, but its possible its just exeedingly high and should just come down, and would look strange in single
     //it could be an outlier as several others seem to get cut off, in doubles regardless of being floating
     //if I don't need to exclude them and bring down any outiers it would give everything a better uniformity instad
@@ -20,6 +21,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     //so think can easily organize things into y groups based on their size.
     //if the y value for mon in the same evolution tree for example is only different by 1 or 2 values, can safely 
     //bring together into 1 value   with some exceptions for mon with unique floating or unique shaped/direction facing sprites
+
     //larger mon have higher y value, I guess placed higher, with their larger size in mind
     //while smaller mon have lower y, placing them lower
 
