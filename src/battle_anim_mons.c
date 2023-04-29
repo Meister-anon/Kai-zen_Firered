@@ -60,9 +60,9 @@ static const struct UCoords8 sBattlerCoords[][4] =
     [ENEMY_DOUBLES] =
     { // Double battle
        [B_POSITION_PLAYER_LEFT] = { 32, 80 },
-       [B_POSITION_OPPONENT_LEFT] = { 200, 38 },
+       [B_POSITION_OPPONENT_LEFT] = { 200, 37 },
        [B_POSITION_PLAYER_RIGHT] = { 90, 88 },
-       [B_POSITION_OPPONENT_RIGHT] = { 152, 38 },   //y value a bit was 32, put somewhere in between 40 & 32, sits perfect now
+       [B_POSITION_OPPONENT_RIGHT] = { 152, 37 },   //y value a bit was 32, put somewhere in between 40 & 32, sits perfect now
     },
 };
 
