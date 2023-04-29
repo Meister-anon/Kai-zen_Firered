@@ -29,9 +29,9 @@
 
 //battler positions for gbattlerpostions
 #define B_POSITION_PLAYER_LEFT        0
-#define B_POSITION_OPPONENT_LEFT      1
+#define B_POSITION_OPPONENT_LEFT      1	//read from back of enemy, oponent left is right from player view
 #define B_POSITION_PLAYER_RIGHT       2
-#define B_POSITION_OPPONENT_RIGHT     3
+#define B_POSITION_OPPONENT_RIGHT     3	//read from back of enemy, oponent right is left from player view
 
 // These macros can be used with either battler ID or positions to get the partner or the opposite mon
 #define BATTLE_OPPOSITE(id) ((id) ^ 1)

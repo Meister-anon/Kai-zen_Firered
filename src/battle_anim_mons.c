@@ -62,7 +62,7 @@ static const struct UCoords8 sBattlerCoords[][4] =
        [B_POSITION_PLAYER_LEFT] = { 32, 80 },
        [B_POSITION_OPPONENT_LEFT] = { 200, 40 },
        [B_POSITION_PLAYER_RIGHT] = { 90, 88 },
-       [B_POSITION_OPPONENT_RIGHT] = { 152, 40 },   //need raise y value a bit was 32, put somewhere in between
+       [B_POSITION_OPPONENT_RIGHT] = { 152, 36 },   //y value a bit was 32, put somewhere in between 40 & 32, sits perfect now
     },
 };
 
