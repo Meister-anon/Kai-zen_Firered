@@ -2,6 +2,7 @@
 #include "gflib.h"
 #include "battle.h"
 #include "battle_bg.h"
+#include "battle_anim.h"
 #include "battle_message.h"
 #include "decompress.h"
 #include "graphics.h"
@@ -683,7 +684,10 @@ static void LoadBattleTerrainGfx(u16 terrain)
         terrain = 9;
     // Copy to bg3
     LZDecompressVram(sBattleTerrainTable[terrain].tileset, (void *)BG_CHAR_ADDR(2));
-    LZDecompressVram(sBattleTerrainTable[terrain].tilemap, (void *)BG_SCREEN_ADDR(26));
+    if (IsDoubleBattle())
+        LZDecompressVram(sBattleTerrainTable[terrain].tilemap2, (void*)BG_SCREEN_ADDR(26));
+    else
+        LZDecompressVram(sBattleTerrainTable[terrain].tilemap, (void *)BG_SCREEN_ADDR(26));
     LoadCompressedPalette(sBattleTerrainTable[terrain].palette, 0x20, 0x60);
 }
 
