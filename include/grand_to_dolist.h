@@ -648,9 +648,31 @@ goto WEATHER_AND_TERRAIN_EFFECTS
 * I don't want to turn things into a gimmick where the only thing ppl do is status or terrain I want them to be relatively equal options
 * -
 */
+
+/* adjust enemy battler placement for double battles, seems doubles aren't well optimized in fire red...for some reason
+*  health boxes cover the enemy, need to move them higher, and move field they stand on by same amount
+*
+* moving sprite placement is a combination of gEnemyMonElevation  which is additionnal floating position for mon that fly/levitate and
+* gMonFrontPicCoords  which is the coordinate for every mon, and can go into negative values to raise higher
+* for non floating mon believe a tentative value of yoffset - 8 should put them where I need/want them.
+* flying mon will be harder,   but will need to specifically filter the change for doubles only,
+* which can do with IsDoubleBattle  function  this is from battle_anim_mons.c may actually be able to do all changes from there?
+* while gmonfrontpick coords is the source it seems to be mainly accessed through GetBattlerYDelta,  and can make changes there and have
+* it populate everything else rather than messing with src data, for extra protection
+*
+* need find differene betwen GetBattlerSpriteCoord & GetBattlerSpriteCoord2   they both go to GetBattlerYDelta
+* but the first doesn't immediately go there, and allso handles some X values not just y
+* also it uses this  "sBattlerCoords" before the other function does.
+* not yet sure how to read it, but it seesms to prove/show that singles and doubles use separate values.
+* also it SEEMS like position x y is determind by taking an average of the values in sBattlerCoords ?
+*/
+goto SPRITE_COORDINATE_AND_ELEVATION_LOGIC
+goto FRONT_PIC_TABLE    //table for front pic use rules to standardize mon brought in from expansion
+goto MON_ELEVATION_TABLE    //SAME BUT for elevation
+
 goto TERRAIN_DEFINES
 goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement
-goto BATTLE_TERRAIN //Battle Terrain, NOT TERRAIN effect, is the entire battle field, including part battler sits on
+goto BATTLE_TERRAIN //Battle Terrain, NOT TERRAIN effect, is the entire battle field, including part battler sits on, can use to make terrain effect
 goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 /*
 * New terrain notes
@@ -669,6 +691,7 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 //negative side activates dry skin
 //may cut back on this so terrain isn't too overbearing/important  just check balance 
 //should be fine just don't add flash fire
+//plan setup misty with ocean terrain in gym as introduction to effect
 * 
 * further plans setup snowy terrain for mountains, and winter season.
 * in addition to same effect as weather buffs, hail in this case for ice types.
@@ -935,27 +958,6 @@ goto EVOLUTION_LOGIC
 * as only they learn it, and only theye are immune to it. -
 */
 
-
-/* adjust enemy battler placement for double battles, seems doubles aren't well optimized in fire red...for some reason
-*  health boxes cover the enemy, need to move them higher, and move field they stand on by same amount
-* 
-* moving sprite placement is a combination of gEnemyMonElevation  which is additionnal floating position for mon that fly/levitate and
-* gMonFrontPicCoords  which is the coordinate for every mon, and can go into negative values to raise higher
-* for non floating mon believe a tentative value of yoffset - 8 should put them where I need/want them.
-* flying mon will be harder,   but will need to specifically filter the change for doubles only,
-* which can do with IsDoubleBattle  function  this is from battle_anim_mons.c may actually be able to do all changes from there?
-* while gmonfrontpick coords is the source it seems to be mainly accessed through GetBattlerYDelta,  and can make changes there and have 
-* it populate everything else rather than messing with src data, for extra protection
-* 
-* need find differene betwen GetBattlerSpriteCoord & GetBattlerSpriteCoord2   they both go to GetBattlerYDelta
-* but the first doesn't immediately go there, and allso handles some X values not just y
-* also it uses this  "sBattlerCoords" before the other function does.
-* not yet sure how to read it, but it seesms to prove/show that singles and doubles use separate values.
-* also it SEEMS like position x y is determind by taking an average of the values in sBattlerCoords ?
-*/
-goto SPRITE_COORDINATE_AND_ELEVATION_LOGIC
-goto FRONT_PIC_TABLE    //table for front pic use rules to standardize mon brought in from expansion
-goto MON_ELEVATION_TABLE    //SAME BUT for elevation
 
 /* new megas won't have +100bst but instead will take a stat average value that is strong
 * like say 615 or 630/635.  and will either reallocate or add to existing stats to get there.

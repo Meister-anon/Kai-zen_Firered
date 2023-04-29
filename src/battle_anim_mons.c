@@ -35,19 +35,34 @@ static void AnimWeatherBallUp_Step(struct Sprite *sprite);
 static EWRAM_DATA union AffineAnimCmd *sAnimTaskAffineAnim = NULL;
 static EWRAM_DATA u32 gUnknown_2037F2C = 0; // not used
 
+enum {
+    SINGLE_BATTLE,
+    DOUBLE_BATTLE,
+    ENEMY_DOUBLES,
+};
+
 static const struct UCoords8 sBattlerCoords[][4] =
 {
-    {
-        { 72, 80 },
-        { 176, 40 },
-        { 48, 40 },
-        { 112, 80 },
+    [SINGLE_BATTLE] =
+    { // Single battle
+       [B_POSITION_PLAYER_LEFT] = { 72, 80 },
+       [B_POSITION_OPPONENT_LEFT] = { 176, 40 },
+       [B_POSITION_PLAYER_RIGHT] = { 48, 40 },
+       [B_POSITION_OPPONENT_RIGHT] = { 112, 80 },
     },
-    {
-        { 32, 80 },
-        { 200, 40 },
-        { 90, 88 },
-        { 152, 32 },
+    [DOUBLE_BATTLE] =
+    { // Double battle
+       [B_POSITION_PLAYER_LEFT] = { 32, 80 },
+       [B_POSITION_OPPONENT_LEFT] = { 200, 40 },
+       [B_POSITION_PLAYER_RIGHT] = { 90, 88 },
+       [B_POSITION_OPPONENT_RIGHT] = { 152, 32 },
+    },
+    [ENEMY_DOUBLES] =
+    { // Double battle
+       [B_POSITION_PLAYER_LEFT] = { 32, 80 },
+       [B_POSITION_OPPONENT_LEFT] = { 200, 40 },
+       [B_POSITION_PLAYER_RIGHT] = { 90, 88 },
+       [B_POSITION_OPPONENT_RIGHT] = { 152, 40 },   //need raise y value a bit was 32, put somewhere in between
     },
 };
 
@@ -118,7 +133,20 @@ u8 GetBattlerSpriteCoord(u8 battlerId, u8 coordType)
         retVal = sBattlerCoords[IS_DOUBLE_BATTLE()][GetBattlerPosition(battlerId)].x;
         break;
     case BATTLER_COORD_Y:
-        retVal = sBattlerCoords[IS_DOUBLE_BATTLE()][GetBattlerPosition(battlerId)].y;
+        if (!IsDoubleBattle())
+            retVal = sBattlerCoords[IS_DOUBLE_BATTLE()][GetBattlerPosition(battlerId)].y;   //ok this seems to make it chose battlers height, the double battle cheeck makes it return 0 false or 1 true, if double battle which alligns with the 2 mmember array
+             //if (GetBattlerSide(battlerId) != B_SIDE_PLAYER) oponent right uses y valye of 32, and if works like yoffet, (which Im moslty sure of, a lower number means a higher sprite
+            //so instead I want it to use  a consistent value fo 40, same elevation for both sides
+            //so will need to make a 3rd array element and make it use y value 40 for both
+            //will need ot filter her to make it select correctly as before it used doubls true false
+            //my last value will be value "2" for sBattleCoord
+            //first filter if not double battle, use base, 
+            //2nd filter if double and not side opponent
+            //3rd filter could prob use else, but to be specific set if double battle and not side player use coord 2
+        else if (IsDoubleBattle() && GetBattlerSide(battlerId) != B_SIDE_OPPONENT)
+            retVal = sBattlerCoords[IS_DOUBLE_BATTLE()][GetBattlerPosition(battlerId)].y;
+        else if (IsDoubleBattle() && GetBattlerSide(battlerId) != B_SIDE_PLAYER)
+            retVal = sBattlerCoords[ENEMY_DOUBLES][GetBattlerPosition(battlerId)].y;
         break;
     case BATTLER_COORD_Y_PIC_OFFSET:
     case BATTLER_COORD_Y_PIC_OFFSET_DEFAULT:
@@ -254,7 +282,15 @@ static u8 GetBattlerSpriteFinal_Y(u8 battlerId, u16 species, bool8 a3)
         offset = GetBattlerYDelta(battlerId, species);
         offset -= GetBattlerElevation(battlerId, species);
     }
-    y = offset + sBattlerCoords[IS_DOUBLE_BATTLE()][GetBattlerPosition(battlerId)].y;
+
+    if (!IsDoubleBattle())
+        y = offset + sBattlerCoords[IS_DOUBLE_BATTLE()][GetBattlerPosition(battlerId)].y;
+
+    else if (IsDoubleBattle() && GetBattlerSide(battlerId) != B_SIDE_OPPONENT)
+        y = offset + sBattlerCoords[IS_DOUBLE_BATTLE()][GetBattlerPosition(battlerId)].y;
+    else if (IsDoubleBattle() && GetBattlerSide(battlerId) != B_SIDE_PLAYER)
+        y = offset + sBattlerCoords[ENEMY_DOUBLES][GetBattlerPosition(battlerId)].y;
+
     if (a3)
     {
         if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
