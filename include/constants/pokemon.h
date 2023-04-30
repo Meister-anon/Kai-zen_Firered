@@ -223,7 +223,7 @@
 #define PARTY_SIZE 6
 #define UNOWN_FORM_COUNT 28
 #define BOX_NAME_LENGTH 8
-#define MAX_LEVEL_UP_MOVES 20	//attempt raisae to 35?
+#define MAX_LEVEL_UP_MOVES 35	//attempt raisae to 35?
 #define MAX_LEVEL 100
 
 #define EVO_MODE_NORMAL     0

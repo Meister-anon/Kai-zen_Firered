@@ -3180,7 +3180,10 @@ void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move) // this impo
     SetMonData(mon, MON_DATA_PP_BONUSES, &ppBonuses);
 }
 
-static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move) // this may be used for daycare and wild mon level up laernset, prob need 2 change.
+// this may be used for daycare and wild mon level up laernset, prob need 2 change.
+//if usedin daycare make it not forget moves that are not in level up learnset or tm learnset, instead delete next slot move
+//that way irreplacable moves aren't lost
+static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move) 
 {
     s32 i;
     u16 moves[4];
