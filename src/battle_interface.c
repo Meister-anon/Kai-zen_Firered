@@ -1543,9 +1543,15 @@ void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         else
             ptr += spriteTileNum + 32 * TILE_SIZE_4BPP;
 
-        TextIntoHealthboxObject(ptr, windowTileData + 6 * TILE_SIZE_4BPP, 2); //changed from 1 to 2 seemed to fix.
+
+        if ((StringLength(nickname)) > 11)
+        {
+            TextIntoHealthboxObject(ptr, windowTileData + 6 * TILE_SIZE_4BPP, 2); //changed from 1 to 2 seemed to fix. for expanded spec names
+        }
+        if ((StringLength(nickname)) < 11)
+            TextIntoHealthboxObject(ptr, windowTileData + 6 * TILE_SIZE_4BPP, 1);
     }//value added to windowTileData uses 6 because 1st function ended in window width 6
-    //end width 1 is default, 2 works 
+    //end width 1 is default, 2 works   //fix so health box updates with name length
     else
     {
         TextIntoHealthboxObject((void *)(OBJ_VRAM0 + TILE_SIZE_4BPP + spriteTileNum), windowTileData, 7);// & here  original line
@@ -1553,7 +1559,12 @@ void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         
         ptr += spriteTileNum + 32 * TILE_SIZE_4BPP; //if right and this is for change in size of healthbox for doubles, then enemy side doesn't need it
 
-        TextIntoHealthboxObject(ptr, windowTileData + 7 * TILE_SIZE_4BPP, 0); //7 sems right    
+        if ((StringLength(nickname)) > 11)  //value 11 here is for original species name length limit
+        {
+            TextIntoHealthboxObject(ptr, windowTileData + 7 * TILE_SIZE_4BPP, 1);
+        }
+        if ((StringLength(nickname)) < 11) //think using nickname alone will work, as if you dont nickname belive it defaults to same as species name
+            TextIntoHealthboxObject(ptr, windowTileData + 7 * TILE_SIZE_4BPP, 0); //7 sems right    
     }//since using 7 rathre than end width 1, need base to be 0, and when having longer name use window width 1, that way it is equal to if I use width 2, on 6 for playre side
 
     RemoveWindowOnHealthbox(windowId);
