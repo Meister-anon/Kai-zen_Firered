@@ -1,5 +1,7 @@
 #define LEVEL_UP_MOVE(lvl, move) ((lvl << 9) | move)
-#define LEVEL_UP_END 0xFFFF //will need to comb learnsets below chimecho for updates later
+#define LEVEL_UP_MOVE_ID   0x01FF
+#define LEVEL_UP_MOVE_LV   0xFE00
+#define LEVEL_UP_END       0xFFFF //will need to comb learnsets below chimecho for updates later
 
 static const u16 sBulbasaurLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
