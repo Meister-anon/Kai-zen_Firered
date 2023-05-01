@@ -490,9 +490,13 @@ as well as the effect of increasing trap duration
 * fix delibird learnset oh already done
 * Give crabominable a better front sprite, its just ugly -
 * 
+* Fix Pyroar F sprite front & back , guys in pret won't do it, so I'll have to. its potentially worse than crabominable I can't even look at it.
+* 
 * make cursola signature ability PERISH_BODY only activate for enemy mon
 * watching JPR Poketrainer showed me how niche/bad it is, especially whene mon already has such low def stat
 * even without perish song on it if it gets hit by a physical move its not sticking around long
+* 
+* Also give cursola better, more cursed sprite, based on image found
 * 
 * GIVE Turtonator more stab moves? or more early moves
 * 
@@ -508,12 +512,16 @@ as well as the effect of increasing trap duration
 * 
 * GIVE shiinotic creepier more cursed front sprite -
 * and change type to grass ghost but give ability nymph spirit to give it triple stab, boosts fairy type moves think 
-* will roll in illuminate effect as replacement, nymphs usually draw in forest creatures so it would work. -This part is done
+* will roll in illuminate effect aswell  as replacement, nymphs usually draw in forest creatures so it would work. -This part is done
+* Ability name toadstool nymp
 * 
 * Need add more ghost moves to its learnset  also dryads curse
+* will be its signature move, unsure of what stat to drop.  ok think I've decided to drop atk stat 1 stage,
+* sudowoodo would also get the ability but since shiinotic is a sp atker w low physical atk, it'd be able to take best advantage of the move.
 * 
-* Finish setup for move Dryads Curse  
+* Finish setup for move Dryads Curse effect need do stat drop & animation -  think Stat drop done
 * animation idea, ingrain roots and wrap/bind constrict anim but with a black or darker color?
+* or ingrain with mon shake but without the orbs  -animation done, need test combined, ingrain and ghost curse
 * 
 * Setting up flash freeze to just use sheer cold animation for now- will prbo keep DONE
 * 
@@ -1018,13 +1026,27 @@ goto EVOLUTION_LOGIC
 * 
 * Rock Collctor (name pending) for regi rock //rock version of volt absorb, that also absorbs stealh rocks
 * think will have it also heal if absorb stealth rocks
+* Anthroyd came up with name "Erosion"  will use that.  wearing down rocks to use for healing minerals
 * 
 * purifying aura, Suicune Ability similar effect to healer, also mon removes all status effects on itself & allies at the end of turn
 * in doubles heals status of ally on switchin as well. -DONE need test
 * 
+* BUFF for Golisopod Emergency Exit, rather than it being the same as wimp out,
+* keep main effect but tweak it to be more offensive instead of force switch on hp threshold.
+* make it so you do a hit and run attack on your next turn.
+* Upon reaching switch threshold, your next move gets boosted priority  (possibly make new status for it? like focus energy?)
+* to guarantee goes first, similar to pursuit but lower, and then you switch out after attacking.
+* 
+* This gives multiple new avenus of use, can better plan your switch, have a chance to knock out the enemy,
+* giving you a free switch, and just overall allows you to actually get some value out of the ability
+* 
+* Concept is hurt and decide to run, but you full force steal off on the enemy to get the last lick in.
+* Think, may raise attack one stage as well? can do like strength should work fine.
+* 
 * consider make leech seed work like anime, where it wraps up the target
 * meaning it would be a trap, preventing the enemy from switching, and a good buff to grass types
 * as only they learn it, and only theye are immune to it. -
+* 
 */
 
 

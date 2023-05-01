@@ -5195,7 +5195,7 @@ static void atk46_playanimation2(void) // animation Id is stored in the first po
 
 static void atk47_setgraphicalstatchangevalues(void)    //may need change this too since stat buffs go up to +-3 in later gen
 {
-    u8 value = 0;
+    u8 value = 0;   //vsonic IMPORTANT  
 
     switch (GET_STAT_BUFF_VALUE2(gBattleScripting.statChanger))
     {
@@ -10441,7 +10441,7 @@ static u8 ChangeStatBuffs(s8 statValue, u8 statId, u8 flags, const u8 *BS_ptr)
 //or switch out the mon after it takes the attack if it calculates it can survive it.
 //to the high defense mon.
 
-static void atk89_statbuffchange(void)
+static void atk89_statbuffchange(void) //alternate logic for if stat change fails,
 {
     const u8 *ptrBefore = gBattlescriptCurrInstr;
     const u8 *jumpPtr = T1_READ_PTR(gBattlescriptCurrInstr + 2);

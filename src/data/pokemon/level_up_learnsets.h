@@ -2635,6 +2635,7 @@ static const u16 sSudowoodoLevelUpLearnset[] = {
     LEVEL_UP_MOVE(9, MOVE_FLAIL),
     LEVEL_UP_MOVE(17, MOVE_LOW_KICK),
     LEVEL_UP_MOVE(25, MOVE_ROCK_SLIDE),
+    LEVEL_UP_MOVE(30, MOVE_DRYADS_CURSE),
     LEVEL_UP_MOVE(33, MOVE_BLOCK),
     LEVEL_UP_MOVE(41, MOVE_FAINT_ATTACK),
     LEVEL_UP_MOVE(49, MOVE_SLAM),
@@ -13328,6 +13329,7 @@ static const struct LevelUpMove sMorelullLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sShiinoticLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 0, MOVE_DRYADS_CURSE),
     LEVEL_UP_MOVE( 1, MOVE_ABSORB),
     LEVEL_UP_MOVE( 1, MOVE_ASTONISH),
     LEVEL_UP_MOVE( 1, MOVE_INGRAIN),

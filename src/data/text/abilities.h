@@ -274,6 +274,7 @@ static const u8 sPurifyingAuraDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("S
 static const u8 sSquallDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Summons a rain shower,\nthat temporarily drenches the field.");
 static const u8 sSundiskDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("The PKMN gives thanks to the sun.\nTemporarily boosting sunlight in battle.");
 static const u8 sToughSpinesDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Stabs the foe with cactus-like spines on contact.");
+static const u8 sErosionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Breaks down incoming Rock-type attacks,\nand uses the minerals to heal itself.");
 //checked in fire red limit is 40 chars per line, changing description length to 80
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -566,6 +567,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SQUALL] = sSquallDescription,
     [ABILITY_SUN_DISK] = sSundiskDescription,
     [ABILITY_TOUGH_SPINES] = sToughSpinesDescription,
+    [ABILITY_EROSION] = sErosionDescription,
 };//last value can have comma
 
 //now undrestand reason strings (strings are arrays) use that +1 value
@@ -861,5 +863,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_PURIFYING_AURA] =_("PURIFYING AURA"),
     [ABILITY_SQUALL] =_("SQUALL"),
     [ABILITY_SUN_DISK] =_("SUN DISK"),
-    [ABILITY_TOUGH_SPINES] =_("TOUGH SPINES")
+    [ABILITY_TOUGH_SPINES] =_("TOUGH SPINES"),
+    [ABILITY_EROSION] =_("EROSION")
 };//no comma for last value

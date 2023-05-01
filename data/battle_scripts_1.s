@@ -3859,14 +3859,21 @@ BattleScript_EffectDryadsCurse::
 	ppreduce
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
+	jumpifstat BS_TARGET, CMP_EQUAL, STAT_ATK, 0x0, BattleScript_CantLowerMultipleStats @fail without cursing if can""t lower stat
 	cursetarget BattleScript_ButItFailed
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
-	setbyte sB_ANIM_TURN, 0	@ still need to add all offense defense stat drop
+	setbyte sB_ANIM_TURN, 0	@ 
 	attackanimation
 	waitanimation
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER
 	printstring STRINGID_PKMNLAIDCURSE
+	waitmessage 0x40
+	setbyte sSTAT_ANIM_PLAYED, 0
+	playstatchangeanimation BS_ATTACKER, BIT_ATK, ATK48_STAT_NEGATIVE
+	setstatchanger STAT_ATK, 1, TRUE
+	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_MoveEnd	@ as already have fail if cant lower stat this will never jump
+	printfromtable gStatDownStringIds
+	@healthbarupdate BS_ATTACKER  not doing health sacrifice, put stat drops here instead
+	@datahpupdate BS_ATTACKER
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
@@ -6222,6 +6229,11 @@ BattleScript_StickyWebFree::
 
 BattleScript_StealthRockFree::
 	printstring STRINGID_PKMNBLEWAWAYSTEALTHROCK
+	waitmessage 0x40
+	return
+
+BattleScript_StealthRockAbsorb::
+	printstring STRINGID_STEALTHROCKABROSBED
 	waitmessage 0x40
 	return
 

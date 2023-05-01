@@ -308,6 +308,7 @@
 #define ABILITY_SQUALL 285
 #define ABILITY_SUN_DISK 286
 #define ABILITY_TOUGH_SPINES 287	//rough skin for grass types
+#define ABILITY_EROSION 287	//regirock ability, rock absorb also absorbs stealth rocks on switchin
 
 //#define ABILITY_DARK_DEAL 282   
 

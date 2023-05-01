@@ -4104,7 +4104,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         {
                             move = gBattleMons[i].moves[j];
                             GET_MOVE_TYPE(move, moveType);
-                            if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0))
+                            if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0))//vsonic
                             {
                                 effect++;
                                 break;
@@ -4305,6 +4305,23 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                 }
                 break;
+            case ABILITY_EROSION:
+                if (gSideStatuses[battler] & SIDE_STATUS_STEALTH_ROCK)
+                {
+                    gSideStatuses[battler] &= ~(SIDE_STATUS_STEALTH_ROCK);
+                    gSideTimers[battler].stealthRockAmount = 0;
+
+                    gBattleMoveDamage = gBattleMons[battler].maxHP / 4;
+                    if (gBattleMoveDamage == 0)
+                        gBattleMoveDamage = 1;
+                    gBattleMoveDamage *= -1;
+
+                    BattleScriptPushCursorAndCallback(BattleScript_StealthRockAbsorb);
+                    gBattleScripting.battler = battler;
+                    ++effect;
+                }
+                break;
+                
         }
         break;  //end of switch-in abilities
         case ABILITYEFFECT_ENDTURN: // 1
@@ -4704,6 +4721,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                 case ABILITY_GLACIAL_ICE:
                     if (moveType == TYPE_ICE)
+                        effect = 1;
+                case ABILITY_EROSION:
+                    if (moveType == TYPE_ROCK)
                         effect = 1;
                 case ABILITY_MOTOR_DRIVE:
                     if (moveType == TYPE_ELECTRIC)

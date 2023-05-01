@@ -11587,7 +11587,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = 0,
         .split = SPLIT_STATUS,
     },//DOES ghost curse effect to last damaged sacrificin stats instead of health
-    //give to bug fairy and grass types   def give sudowoodo
+    //give to bug fairy and grass types   def give shiinotic, maybe sudowoodo
 
     [MOVE_SHIELD_BASH] =
     {

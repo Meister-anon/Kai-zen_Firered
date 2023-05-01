@@ -23871,7 +23871,33 @@ Move_MONOTYPE::
 
 @flash freeze put on sheercold
 
-MOVE_DRYADS_CURSE::
+MOVE_DRYADS_CURSE::		@Need to ttest
+	loadspritegfx ANIM_TAG_ROOTS
+	loadspritegfx ANIM_TAG_GHOSTLY_SPIRIT
+	createvisualtask AnimTask_SwayMon, 5, 0, 10, 1536, 3, 0
+	waitforvisualfinish
+	createsprite gIngrainRootSpriteTemplate, ANIM_ATTACKER, 2, 16, 26, -1, 2, 150
+	playsewithpan SE_M_SCRATCH, 192
+	delay 10
+	createsprite gIngrainRootSpriteTemplate, ANIM_ATTACKER, 2, -32, 20, 1, 1, 140
+	playsewithpan SE_M_SCRATCH, 192
+	delay 10
+	createsprite gIngrainRootSpriteTemplate, ANIM_ATTACKER, 2, 32, 22, 1, 0, 130
+	playsewithpan SE_M_SCRATCH, 192
+	delay 10
+	createsprite gIngrainRootSpriteTemplate, ANIM_ATTACKER, 2, -16, 25, -1, 3, 120
+	playsewithpan SE_M_SCRATCH, 192
+	delay 40
+	clearmonbg ANIM_ATK_PARTNER
+	delay 1
+	monbg ANIM_DEF_PARTNER
+	playsewithpan SE_M_NIGHTMARE, 63
+	createsprite gCurseGhostSpriteTemplate, ANIM_TARGET, 2
+	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 14, 1
+	waitforvisualfinish
+	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 1, 16, 0, 0
+	waitforvisualfinish
+	clearmonbg ANIM_DEF_PARTNER
 	end @to do:
 
 Move_SHIELD_BASH::	@MOSTLY COPY spiky shield w parts of harden
