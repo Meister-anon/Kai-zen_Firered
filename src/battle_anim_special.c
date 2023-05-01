@@ -411,7 +411,18 @@ const struct SpriteTemplate gSafariRockTemplate =
 };
 
 // Functions
-UNUSED void AnimTask_UnusedLevelUpHealthBox(u8 taskId)
+
+//sourced from emerald unused halth box animation for when mon reaches evolution level/condition
+//would be annoying if played everytime a mon could evolve after you denied evolution
+//so along with using evo method for showing when it should pop up, do something where maybe it won't show again
+//after the first time
+//don't think can just use a flag as that wouldn't be mon specific
+//think can just set to have different activation conditions based on evo method
+//for things  like level evo, you want it to only show at the specific first level you can evolv at,
+//it wouldn't show for stones, but for friendship and location based evos you're unlikely to reject
+//evolution so can prob leave as is.  give further thought
+//activation logic is now in, battle_controller_player
+void AnimTask_UnusedLevelUpHealthBox(u8 taskId) 
 {
     struct BattleAnimBgData animBgData;
     u8 healthBoxSpriteId;

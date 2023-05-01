@@ -137,7 +137,7 @@ struct LearnMoveGfxResources
     u8 unk_1E;
     struct ListMenuItem listMenuItems[25];
     u16 learnableMoves[25];
-    u8 listMenuStrbufs[25][13];
+    u8 listMenuStrbufs[25][MOVE_NAME_LENGTH + 1];
     bool8 scheduleMoveInfoUpdate;
     u8 selectedPartyMember;
     u8 selectedMoveSlot;
@@ -707,7 +707,7 @@ static void InitMoveRelearnerStateVariables(void)
     sMoveRelearner->unk_1D = 0;
     sMoveRelearner->unk_1E = 0;
     sMoveRelearner->scheduleMoveInfoUpdate = FALSE;
-    for (i = 0; i < 20; i++)
+    for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)
         sMoveRelearner->learnableMoves[i] = MOVE_NONE;
 }
 

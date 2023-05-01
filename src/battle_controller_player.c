@@ -1210,7 +1210,7 @@ static void Task_GiveExpToMon(u8 taskId)//important note for later will need to 
         u32 currExp = GetMonData(mon, MON_DATA_EXP);
         u32 nextLvlExp = gExperienceTables[gBaseStats[species].growthRate][level + 1];
 
-        if (currExp + gainedExp >= nextLvlExp)
+        if (currExp + gainedExp >= nextLvlExp)  //lvl up
         {
             u8 savedActiveBattler;
 
@@ -1318,7 +1318,12 @@ static void Task_LaunchLvlUpAnim(u8 taskId)
 
     if (IsDoubleBattle() == TRUE && monIndex == gBattlerPartyIndexes[battlerId ^ BIT_FLANK])
         battlerId ^= BIT_FLANK;
-    InitAndLaunchSpecialAnimation(battlerId, battlerId, battlerId, B_ANIM_LVL_UP);
+    //add more conditions make work for more evo methods could change to use pokmeon.c main evo function, or canevolve function
+    //will flash blue if meets condition,but connsider make flash red for mega evo condition.
+    if (GetEvolutionTargetSpecies(&gPlayerParty[monIndex], EVO_MODE_NORMAL, 0) != SPECIES_NONE)
+        InitAndLaunchSpecialAnimation(battlerId, battlerId, battlerId, B_ANIM_LVL_UP_EVOLVE);
+    else
+        InitAndLaunchSpecialAnimation(battlerId, battlerId, battlerId, B_ANIM_LVL_UP);
     gTasks[taskId].func = Task_UpdateLvlInHealthbox;
 }
 

@@ -1,7 +1,11 @@
 //ported dex entries kinda suck
 //may check pokemondb for something better.
+//also ported entries don't fit dex screen -_- 3 line max, for firered  fixed
 
-//also ported entries don't fit dex screen -_- 3 line max, for firered
+//since putting all mon in one game, and not doing version exclusives will remove 
+//leaf green dex entries in pokedex_text_lg file  to save mor space.
+
+
 const u8 gDummyPokedexText[] = _(
     "This is a newly discovered POKéMON. It is\n"
     "currently under investigation. No detailed\n"
@@ -3286,11 +3290,19 @@ const u8 gFroslassPokedexText[] = _(
     "chilly den, where they become its\n"
     "decorations.");
 
-const u8 gRotomPokedexText[] = _(
+/*const u8 gRotomPokedexText[] = _(
     "Research continues on this Pokémon.\n"
     "Its electric-like body can enter some\n"
     "kinds of machines and take control,\n"
-    "in order to make mischief.");
+    "in order to make mischief.");*/
+
+const u8 gRotomPokedexText[] = _(
+    "This bizarre Pokémon appears to be\n"
+    "a will-o’-the-wisp powered by electricity.\n"
+    "Be wary, as Rotom is both smart and mischievous.\n"
+    "Its electricity-like body can enter some\n"
+    "kinds of machines and take control of them.");
+      
 
 const u8 gUxiePokedexText[] = _(
     "Known as ”The Being of Knowledge,”\n"

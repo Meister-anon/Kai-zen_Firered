@@ -1,6 +1,14 @@
 const struct PokedexEntry gPokedexEntries[] =
 {   //need to make additions here and then think just add to species file but not pokedex orders so they only show the main pookemon entry
     //but if I'm filtering by type and have found the pokemon variant I want it to show up in types
+    //pretty much make entires for forms, and variants, but don't put entry here as I want them to be visible from the main mon dex page
+    //rather than be  a bunch of numbers down. see how it works already forms like unown already default to 
+    //this value even though each is technically a different form
+    //will need to update pokemon scale and offset for post gen 3 mon.
+    //smaller scale number means a bigger pokemon, 256 is equal to trainer/human height
+    //higher scale number means smaller pokemon
+    //offset appars to be a y vaue, mon at scale 256 or lower seem to use offset 0
+    //offset should decrease as scale decreases. i.e as mon gets bigger scale gets lower
 
     [NATIONAL_DEX_NONE] =
     {

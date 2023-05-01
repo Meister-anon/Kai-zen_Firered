@@ -874,13 +874,15 @@ gBattleAnims_General::
 	.4byte Move_SPIKES						@ B_ANIM_SPIKE_TOSS
 
 gBattleAnims_Special::
-	.4byte Special_LevelUp
-	.4byte Special_SwitchOutPlayerMon
-	.4byte Special_SwitchOutOpponentMon
-	.4byte Special_BallThrow
-	.4byte Special_SafariBallThrow
-	.4byte Special_SubstituteToMon
-	.4byte Special_MonToSubstitute
+	.4byte Special_LevelUp					@ B_ANIM_LVL_UP
+	.4byte Special_SwitchOutPlayerMon		@ B_ANIM_SWITCH_OUT_PLAYER_MON
+	.4byte Special_SwitchOutOpponentMon		@ B_ANIM_SWITCH_OUT_OPPONENT_MON
+	.4byte Special_BallThrow				@ B_ANIM_BALL_THROW
+	.4byte Special_SafariBallThrow			@ B_ANIM_SAFARI_BALL_THROW
+	.4byte Special_SubstituteToMon			@ B_ANIM_SUBSTITUTE_TO_MON
+	.4byte Special_MonToSubstitute			@ B_ANIM_MON_TO_SUBSTITUTE
+	.4byte Special_LevelUpEvolve            @ B_ANIM_LVL_UP_EVOLVE
+	.4byte Special_CriticalCaptureBallThrow @ B_ANIM_CRITICAL_CAPTURE_THROW
 
 Move_NONE:: @ 81C6F34
 Move_POUND:: @ 81C6F34
@@ -25001,11 +25003,37 @@ SnatchMoveSwapMonForSubstitute:: @ 81D64A7
 	waitforvisualfinish
 	goto SnatchMoveTrySwapToSubstituteEnd
 
+@ported from emerald make sure values match
+Special_CriticalCaptureBallThrow:
+	createvisualtask AnimTask_LoadBallGfx, 2
+	delay 0
+	playsewithpan SE_FALL, 0
+	createvisualtask AnimTask_ThrowBall, 2
+	createvisualtask AnimTask_IsBallBlockedByTrainer, 2
+	jumpreteq -1, BallThrowTrainerBlock
+	goto BallThrowEnd
+
 Special_LevelUp:: @ 81D64B6
 	playsewithpan SE_EXP_MAX, 0
 	createvisualtask AnimTask_LoadHealthboxPalsForLevelUp, 2
 	delay 0
 	createvisualtask AnimTask_FlashHealthboxOnLevelUp, 5, 0, 0
+	waitforvisualfinish
+	createvisualtask AnimTask_FreeHealthboxPalsForLevelUp, 2
+	end
+
+@ Healthbox blue flash effect on level up
+@ Extra effect played on an evolution level
+Special_LevelUpEvolve:
+	playsewithpan SE_EXP_MAX, 0
+	createvisualtask AnimTask_LoadHealthboxPalsForLevelUp, 2
+	delay 0
+	createvisualtask AnimTask_FlashHealthboxOnLevelUp, 5, 0, 0
+	waitforvisualfinish
+	delay 1 @ Wait for the exp noise to end so the charge can actually play.
+	playsewithpan SE_M_MEGA_KICK, 0
+	createvisualtask AnimTask_FlashHealthboxOnLevelUp, 5, 1, 5
+	createvisualtask AnimTask_UnusedLevelUpHealthBox, 5, 0
 	waitforvisualfinish
 	createvisualtask AnimTask_FreeHealthboxPalsForLevelUp, 2
 	end

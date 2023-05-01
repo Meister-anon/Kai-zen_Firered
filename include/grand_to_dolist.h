@@ -199,8 +199,8 @@ would call personalityvaluechecksum or sometihng
 * 
 * had to do that because I setup randomized starter, either I make a look up table that,
 * can check starter actual species and then make custom moveset for EACH starter option
-* 
 * or set it to use initial mon moveset if exlcuding move argument (prefer the latter but the former would be useful too) - DONE!!!
+* 
 * (tweaked setup, now rather than just replacing fixediv with randomiv constant in createmon function,
 * it'll default to that itself if fixediv less than 30, and a value of 30 and above is only used for elite four)
 * 
@@ -311,7 +311,7 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * also reevaluate benefit of new game + as original idea as makign the game new again and having a way to get other starters...
 * 
 * played OPAL effing amazing, incorporate the great qol stuff frome there, flame charge buff to raise speed, (oh it already does that lol)
-* try to get meowth forms, setup exp share with icon on summary screen.
+* try to get meowth forms, setup exp share with icon on summary screen. [would make Cefireon ghost flying in my game]
 * 
 * -ALL THE ASSETS ARE INCLUDED WITH THE GAME ALL ICONS AND SPRITES SFAFWJAGRGARAGNSNIODNVNVDHFB
 * 
@@ -323,13 +323,13 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * 
 * [want to include opal forms/mon as an official region, far as my game is conscerned that is gen 9 its better than anything]
 * [I'm treating that as its official] - like red is in the game anyway and it mentions kanto and oak and the pokedex
-* -its only right to tie it all back in even if the story of opal takes place many decades after gen1, can can consider 
+* -its only right to tie it all back in even if the story of opal takes place many decades after gen1, can consider 
 * professor ebon/ebono to be a genenration or 2 younger than red, maybe can say something like he took 
 * a pilgrimage in his youth as a young professor to kanto and worked with professor oak
 * then again black don't crack, and he calls himself grandfatherly, so could possibly have him be around the same age
-* maybe make a cameo of someone touring to learn to be a professor and furthr his knowledge of pokemon rather than a league champion]
+* maybe make a cameo as someone touring to learn to be a professor and furthr his knowledge of pokemon rather than a league champion]
 * 
-* plus item use text on summary, to take to bag menu/medicine  bag select how many to use from there (only for bag)
+* plus item use text on summary rather than just give/take, to goto bag menu/medicine  bag select how many to use from there
 * make stat boosting faster, also copy some of their item cost changes.
 * copy logic from tossing items, calls same box.
 * just change to "use how many?"
@@ -378,6 +378,8 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * make early event script to set all mon as caught seen
 * loop through species and set all flags, and unlock national dex
 * may also give a few mon with script, this is to check pokedex entries fit
+* 
+* test rotom, gave custom dex entry based on legends dex -
 * 
 *  THOUGHT attempt change item use, allow for using multiple of the same item at once.
 * from outside of battle. i.e use 5 oran berries,  to equal 1 super potion.
@@ -461,13 +463,14 @@ as well as the effect of increasing trap duration
 * gBattleMoves[move].flags |= FLAG_HIGH_CRIT
 * 
 * 
-* made one hit kos a bit more usable/workable
+* made one hit kos a bit more usable/workable works when up to 7 levels below target- DONE
 * 
 * 
 * fix typhlosion line learnset curve, bring in line with charizard - DONE
 * 
 * NEED double check trap logic, may not need to make them status 1, to keep from being reset when mon switches
-* occured to me its not a status1 thing becuse confusion persists if mon switches, so its prob just somehting in trap logic?-
+* occured to me its not a status1 thing becuse confusion persists if mon switches, so its prob just somehting in trap logic?
+* either way, reset status stuff so status1 doesn't move-
 * 
 * for wormadam line, buff anticipation ability with disguise effects,
 * it warns of a super effective or ohko move, and gets a chance once a battle to dodge one super effective move
@@ -665,6 +668,10 @@ goto WEATHER_AND_TERRAIN_EFFECTS
 * also it uses this  "sBattlerCoords" before the other function does.
 * not yet sure how to read it, but it seesms to prove/show that singles and doubles use separate values.
 * also it SEEMS like position x y is determind by taking an average of the values in sBattlerCoords ?
+* 
+* near done, needed to move trainer pic as well also adjusted default battler position height for doubles
+* battler right sat higher for some reason made more even, so height boost won't be uneven.
+* still need to move terrain, updated defins but requires 4 pixel graphic edit to raise.
 */
 goto SPRITE_COORDINATE_AND_ELEVATION_LOGIC
 goto FRONT_PIC_TABLE    //table for front pic use rules to standardize mon brought in from expansion
@@ -783,7 +790,52 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 * max level iup moves
 * 
 * we're learning all the time, and can say mon learn faster, so argument its more natural.
-* more options would allow for better/easier customization of style of play.
+* more options would allow for better/easier customization of style of play. - DONE
+* -raised to 35, appears to work without issue, also had to raise move relearner/move tutor as it seems to use same thing
+* 
+* next goal setup better move relearner logic, so mon like stone evos don't just have no moves if you evolve early.
+* make it so when you select a mon for move relearn you have the choice to choose from that mon's moveset
+* or any of the pre evos move set, up to the level you're currently at.
+* that way its more balanced and you don't just evolve and get all the moves, like the cases where pre-evos are 
+* just all the same moves but ata lower level. 
+* 
+* So instead of looping pre evo moveset to lelarnset end just go up to current level.
+* put move relearned in pokemon center, select mon, like normal, but then it opens a dialogue
+* which moveset do you want to choose from?
+* "Ninetales's Moveset"
+* "Vulpix's Moveset"
+* start with current species, and going down the evo line
+* when you select here then it would open the moveset w moves learned by that mon up to your current level
+* for some mon this would be unncessrary as learnset is the same, but for stone evos etc would be a major upgrade.
+* 
+* can setup list by reading evo logic in reverse
+* use  GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
+* targetSpecies = gEvolutionTable[species][i].targetSpecies;
+* 
+* 
+* that way you can return the pre evo
+* start list as first value if can evolve returs 0, just return mon i.e species. -doesn't work either, would break for mid evos
+* 
+* and have it append to list.
+* given that logic and the exaample given,...that wouldn't work, ok if I did it that way it'd
+* only find the evo given the pre evo which is the oppoite of what I'm trying to do.
+* 
+* So instead return species of mon first, append that to list.
+* and then read evo table in reverse from there.and include level compnonent
+* that way ninetales would be added to lsit firt then it would look for pre evo and find vulpix
+* and add it to list next, would then just need to break if can't find another pre evo
+* 
+* ok not technically possible to read in reverse, as it works by reading a given species value,
+* than loops through evo methods reads parameteres and finds a target evo species from that.
+* 
+* without the x value you cant get to y, you can't read backwards.
+* 
+* 
+* Instead load current species to separate target species value. Loop entire species list rather than using a given species
+* stop when you find a species whos target species equals saved species value
+* and return that species value as the pre evo and add to list
+* 
+* will need to make a function for this  find pre evo -
 * 
 * 
 * idea for ev boosting gym do with safron city fighting gym  could give ev boost items there -
@@ -945,13 +997,30 @@ goto EVOLUTION_LOGIC
 * Then have different encounters based on season, mon migration if a climate shifts cold they move to a hotter area vice versa
 * -Progress-
 * 
+* ABILITY IDEAS -
+* 
 * want to setup mega marowak themed after ancholysauras
 * thick armor plating stronger bones
 * new ability idea, is um damage reduction  I think 20%?
 * 2nd ability turns every special move into a physical contact move as marowak learns moves like flamethrower but has trash sp atk 
 * also good for machamp, inspired by Mashle believe will call elemental muscle -
 * hmm may actually be able to do a special animation for it,  like fire punch, can add the fist animation to the end of moves if ability is e.m ?
-* would need to setup new macro
+* would need to setup new macro?
+* 
+* ability liquid metal, for regi-steel effects of light metal, but also reduces damage from contact moves, like fluffy does
+* not sure if will do full 50% reduction or do a 33% reduction instead. prob the latter
+* could make it a metal absorb ability?  idk if I'll do this, would be interesting as it doesn't exist
+* but not necissarly good as steel is so good as a defensive option not an offensive one. -
+* 
+* //Glacial Ice for regi-ice negates fire damage also combine with ice-body effect to heal during hail and add low chance to freeze on contact
+    //make sure stacks with hail effect freeze chance boost 
+    //think may also combine with volt absorb so ice attacks heal it, so its immune to fire & ice, but ice heals it - DONE
+* 
+* Rock Collctor (name pending) for regi rock //rock version of volt absorb, that also absorbs stealh rocks
+* think will have it also heal if absorb stealth rocks
+* 
+* purifying aura, Suicune Ability similar effect to healer, also mon removes all status effects on itself & allies at the end of turn
+* in doubles heals status of ally on switchin as well. -DONE need test
 * 
 * consider make leech seed work like anime, where it wraps up the target
 * meaning it would be a trap, preventing the enemy from switching, and a good buff to grass types
@@ -985,9 +1054,9 @@ goto MOVEICON_ABILITYDESC	//function for displaying move icons & ability info in
 * Upgrade UI menu for new mechanics. Expanded move description & ability description & move name fields
 * Adjusted summary screen menu for trainer memo, &\ move summary/info page.
 * Need to find a fix for move icons misalignment in moves pags 
-* rquires direct editing the tilemap to fit the icons/tiles
+* rquires direct editing the tilemap to fit the icons/tiles - DONE
 * 
-* also move learn slot is not wide enough long moves in move learn slot get cut off
+* also move learn slot is not wide enough long moves in move learn slot get cut off - DONE
 * 
 * Also plan to add new string/logic for trainer memo box, for nuzlocke idea
 * Where pokemon would die and be replaced by ashes when taken to pokemon center

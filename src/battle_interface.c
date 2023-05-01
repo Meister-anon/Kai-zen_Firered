@@ -284,6 +284,14 @@ static const struct SpriteTemplate gUnknown_82602F8[] = {
     }
 };
 
+/*   v-- Origin
+[0   +         ][1     ]
+[              ][      ]
+[              ][      ]
+[______________][______]   96x40
+[2     ][3     ][4     ]
+*/
+
 static const struct Subsprite gUnknown_8260358[] = {
     { 240, 0, SPRITE_SHAPE(64x32), SPRITE_SIZE(64x32), 0x0000, 1 },
     { 48, 0, SPRITE_SHAPE(32x32), SPRITE_SIZE(32x32), 0x0020, 1 },

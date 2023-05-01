@@ -6324,7 +6324,7 @@ static u8 GetNatureFromPersonality(u32 personality)
 u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
 {
     int i, j;
-    u16 targetSpecies = 0; //need figure out weird problem with summary screen ps5 page  search keyword move info
+    u16 targetSpecies = 0; 
     u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
     u16 heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
