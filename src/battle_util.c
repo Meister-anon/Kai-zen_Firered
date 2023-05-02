@@ -2136,7 +2136,7 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleMons[gActiveBattler].status2 &= ~(STATUS2_MULTIPLETURNS);
                         if (!(gBattleMons[gActiveBattler].status2 & STATUS2_CONFUSION))
                         {
-                            gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_CONFUSION | MOVE_EFFECT_AFFECTS_USER;
+                            gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION | MOVE_EFFECT_AFFECTS_USER;
                             SetMoveEffect(1, 0);
                             if (gBattleMons[gActiveBattler].status2 & STATUS2_CONFUSION)
                                 BattleScriptExecute(BattleScript_ThrashConfuses);
@@ -2598,13 +2598,20 @@ u8 AtkCanceller_UnableToUseMove(void)
                 CancelMultiTurnMoves(gBattlerAttacker);
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-                gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-                if (gBattleMoveDamage == 0)
-                    gBattleMoveDamage = 1;
-                gBattleMoveDamage *= -1;
-                gBattlescriptCurrInstr = BattleScript_MoveUsedLoafingAround;
-                gMoveResultFlags |= MOVE_RESULT_MISSED;
-                effect = 1;
+                //gBattlescriptCurrInstr = BattleScript_MoveUsedLoafingAround;
+                BattleScriptPushCursorAndCallback(BattleScript_MoveUsedLoafingAround);
+                if (gBattleMons[gBattlerAttacker].maxHP > gBattleMons[gBattlerAttacker].hp
+                    && !(gStatuses3[gBattlerAttacker] & STATUS3_HEAL_BLOCK))
+                {
+                    gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 6;
+                    if (gBattleMoveDamage == 0)
+                        gBattleMoveDamage = 1;
+                    gBattleMoveDamage *= -1;
+                }
+                gBattlescriptCurrInstr = BattleScript_HealWithoutMessage;
+                //BattleScriptPushCursorAndCallback(BattleScript_HealWithoutMessage);
+                gMoveResultFlags |= MOVE_RESULT_MISSED; //this could be a problem to prevent healing? idk leave for now test later
+                effect = 1; //nope healing just doesn't work here in general, 1st attempting to put in endturn effects
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
@@ -3434,7 +3441,7 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
     // Put all moves
     for (count = 0, i = 0; i < MAX_BATTLERS_COUNT; i++)
     {
-        if (IsBattlerAlive(i) && GetBattlerSide(i) != GetBattlerSide(battler))
+        if (IsBattlerAlive(i) && GetBattlerSide(i) != GetBattlerSide(battler))  //battler is me, i is opponent
         {
             for (j = 0; j < MAX_MON_MOVES; j++)
             {
@@ -3442,16 +3449,25 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
                     continue;
                 data[count].moveId = gBattleMons[i].moves[j];
                 data[count].battlerId = i;
-                switch (gBattleMoves[data[count].moveId].effect)
-                {
+                switch (gBattleMoves[data[count].moveId].effect)    //add more conditions for move effect for smarter move choice
+                {//i.e for archetypes mon with highest stat being speed, or defense etc. high speed mon worrying about paralysis etc.
+                    //high phys atk worrying about burn etc.
                 case EFFECT_OHKO:
-                    data[count].power = 150;
+                    if (gBattleMons[i].level >= (gBattleMons[battler].level - 7))
+                        data[count].power = 150;
+                    else
+                        data[count].power = 0;
                     break;
                 case EFFECT_COUNTER:
                 case EFFECT_MIRROR_COAT:
                 case EFFECT_METAL_BURST:
                     data[count].power = 120;
-                    break;
+                    break;//add EFFECT_ENDEAVOR logic  for based on enemy hp  115 if below or equal 25% max hp, 100 if 50%
+                case EFFECT_ENDEAVOR:
+                    if (gBattleMons[count].hp <= (gBattleMons[count].maxHP / 4))
+                        data[count].power = 110;
+                    else if (gBattleMons[count].hp <= (gBattleMons[count].maxHP / 2))
+                        data[count].power = 100;
                 default:
                     if (gBattleMoves[data[count].moveId].power == 1)
                         data[count].power = 80;
@@ -3474,7 +3490,7 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
 
     gBattlerTarget = data[bestId].battlerId;
     PREPARE_MOVE_BUFFER(gBattleTextBuff1, data[bestId].moveId)
-        RecordKnownMove(gBattlerTarget, data[bestId].moveId);
+        RecordKnownMove(gBattlerTarget, data[bestId].moveId);   //I think this may just be for ai?
 
     free(data);
 }
@@ -4316,6 +4332,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gBattleMoveDamage = 1;
                     gBattleMoveDamage *= -1;
 
+                    if (gBattleMons[battler].hp > gBattleMons[battler].maxHP)
+                        gBattleMons[battler].hp = gBattleMons[battler].maxHP
+
                     BattleScriptPushCursorAndCallback(BattleScript_StealthRockAbsorb);
                     gBattleScripting.battler = battler;
                     ++effect;
@@ -4373,6 +4392,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         ++effect;
                     }
                     break;
+                case ABILITY_COMATOSE:
+                    if (gBattleMons[battler].maxHP > gBattleMons[battler].hp
+                        && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
+                    {
+                        BattleScriptPushCursorAndCallback(BattleScript_AbilityHpHeal);  //can use same script //but have another from updates
+                        gBattleMoveDamage = gBattleMons[battler].maxHP / 8; //substitute for not being able to use rest, but that in mind woudl be broken with substitute hmm
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                        gBattleMoveDamage *= -1;
+                        ++effect;
+                    }
+                    break;
+
                 case ABILITY_SHED_SKIN: //don't need to make switch in effect, it activates before status dmg
                     if ((gBattleMons[battler].status1 & STATUS1_ANY) && (Random() % 3) == 0)
                     {
@@ -4872,16 +4904,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && (Random() % 2) == 0)
                 {
                     do
-                        gBattleCommunication[MOVE_EFFECT_BYTE] = Random() % 5;
-                    while (gBattleCommunication[MOVE_EFFECT_BYTE] == 0);
+                        gBattleScripting.moveEffect = Random() % 5;
+                    while (gBattleScripting.moveEffect == 0);
 
-                    if (gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_BURN)
-                        gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_PARALYSIS;
+                    if (gBattleScripting.moveEffect == MOVE_EFFECT_BURN)
+                        gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
 
 
-                    if (gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_FREEZE)
-                        gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_CONFUSION;
-                    gBattleCommunication[MOVE_EFFECT_BYTE] += MOVE_EFFECT_AFFECTS_USER;
+                    if (gBattleScripting.moveEffect == MOVE_EFFECT_FREEZE)
+                        gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION;
+                    gBattleScripting.moveEffect += MOVE_EFFECT_AFFECTS_USER;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
@@ -4896,7 +4928,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT)
                  && (Random() % 3) == 0)
                 {
-                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_POISON;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_POISON;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
@@ -4911,7 +4943,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT)
                  && (Random() % 3) == 0)
                 {
-                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_PARALYSIS;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_PARALYSIS;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
@@ -4926,7 +4958,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && TARGET_TURN_DAMAGED
                  && (Random() % 3) == 0)
                 {
-                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BURN;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BURN;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
@@ -4967,7 +4999,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && TARGET_TURN_DAMAGED // Need to actually hit the target
                     && (Random() % 3) == 0)
                 {
-                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_POISON; //tesst later
+                    gBattleScripting.moveEffect = MOVE_EFFECT_POISON; //tesst later
                     //gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
                     //PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
                     BattleScriptPushCursor();
@@ -4984,7 +5016,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && TARGET_TURN_DAMAGED
                     && (Random() % 3) == 0)
                 {
-                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_PARALYSIS;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
                     //gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
@@ -5000,7 +5032,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && TARGET_TURN_DAMAGED
                     && (Random() % 3) == 0)
                 {
-                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_BURN;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
                     //gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
@@ -5170,7 +5202,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                 if (gBattleStruct->synchronizeMoveEffect == MOVE_EFFECT_TOXIC)
                     gBattleStruct->synchronizeMoveEffect = MOVE_EFFECT_TOXIC; //changed so it transfers bad poison
-                gBattleCommunication[MOVE_EFFECT_BYTE] = gBattleStruct->synchronizeMoveEffect + MOVE_EFFECT_AFFECTS_USER; //need to understand this
+                gBattleScripting.moveEffect = gBattleStruct->synchronizeMoveEffect + MOVE_EFFECT_AFFECTS_USER; //need to understand this
                 gBattleScripting.battler = gBattlerTarget;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_SynchronizeActivates;
@@ -5185,7 +5217,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                 if (gBattleStruct->synchronizeMoveEffect == MOVE_EFFECT_TOXIC)
                     gBattleStruct->synchronizeMoveEffect = MOVE_EFFECT_TOXIC;
-                gBattleCommunication[MOVE_EFFECT_BYTE] = gBattleStruct->synchronizeMoveEffect;
+                gBattleScripting.moveEffect = gBattleStruct->synchronizeMoveEffect;
                 gBattleScripting.battler = gBattlerAttacker; //shows that changing battler for gBattlecripting is enough to shift who script affects
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_SynchronizeActivates;
@@ -6322,7 +6354,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                  && gBattleMoves[gCurrentMove].flags & FLAG_KINGS_ROCK_AFFECTED
                  && gBattleMons[gBattlerTarget].hp)
                 {
-                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_FLINCH;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
                     BattleScriptPushCursor();
                     SetMoveEffect(0, 0);
                     BattleScriptPop();

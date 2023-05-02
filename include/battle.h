@@ -710,15 +710,15 @@ extern struct BattleStruct *gBattleStruct;
     gBattleMons[battlerId].type3 = TYPE_MYSTERY;    \
 }
 
-#define GET_STAT_BUFF_ID(n)((n & 0xF))              // first four bits 0x1, 0x2, 0x4, 0x8
-#define GET_STAT_BUFF_VALUE2(n)((n & 0xF0))
-#define GET_STAT_BUFF_VALUE(n)(((n >> 4) & 7))      // 0x10, 0x20, 0x40
+#define GET_STAT_BUFF_ID(n)((n & 7))              // first three bits 0x1, 0x2, 0x4
+#define GET_STAT_BUFF_VALUE_WITH_SIGN(n)((n & 0xF8))
+#define GET_STAT_BUFF_VALUE(n)(((n >> 3) & 0xF))      // 0x8, 0x10, 0x20, 0x40
 #define STAT_BUFF_NEGATIVE 0x80                     // 0x80, the sign bit
 
-#define SET_STAT_BUFF_VALUE(n)(((s8)(((s8)(n) << 4)) & 0xF0))
+#define SET_STAT_BUFF_VALUE(n)((((n) << 3) & 0xF8))
 
-#define SET_STATCHANGER(statId, stage, goesDown)(gBattleScripting.statChanger = (statId) + (stage << 4) + (goesDown << 7))
-#define SET_STATCHANGER2(dst, statId, stage, goesDown)(dst = (statId) + ((stage) << 4) + (goesDown << 7))
+#define SET_STATCHANGER(statId, stage, goesDown)(gBattleScripting.statChanger = (statId) + ((stage) << 3) + (goesDown << 7))
+#define SET_STATCHANGER2(dst, statId, stage, goesDown)(dst = (statId) + ((stage) << 3) + (goesDown << 7))
 
 // NOTE: The members of this struct have hard-coded offsets 
 //       in include/constants/battle_script_commands.h
@@ -734,7 +734,10 @@ struct BattleScripting  //remember expanding this costs ewram
     u16 tripleKickPower; //important
     u8 atk49_state; //move end
     u8 battlerWithAbility;
-    u8 multihitMoveEffect; //important, why do these need to go here
+    //u8 multihitMoveEffect; //important, why do these need to go here   [they make up the table, if not properly orded bs effets won't work correctly
+    u16 multihitMoveEffect;
+    u16 savedMoveEffect; // For moves hitting multiple targets.
+    u16 moveEffect; //don't change capitalization won't be able to just copy from emerald easily
     u8 battler;
     u8 animTurn;
     u8 animTargetsHit;
@@ -744,7 +747,7 @@ struct BattleScripting  //remember expanding this costs ewram
     u8 battleStyle;
     u8 atk6C_drawlvlupboxState;
     u8 learnMoveState;
-    u8 field_20_pursuitDoublesAttacker; //pursuit damage
+    u8 field_25_pursuitDoublesAttacker; //pursuit damage
     u8 reshowMainState;
     u8 reshowHelperState;
     u8 savedStatChanger; // For if attempting to change stat two times(ex. Moody)

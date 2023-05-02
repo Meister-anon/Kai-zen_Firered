@@ -2489,7 +2489,7 @@ BattleScript_EffectAbsorb::  @need setup multi task also make ghost with liquid 
 	waitmessage 0x40
 	resultmessage
 	waitmessage 0x40
-	negativedamage	@ without this, damgae to attacker is doubleed
+	sethpdrain	@ without this, damgae to attacker is doubleed
  	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
  	jumpifability BS_TARGET, ABILITY_LIQUID_OOZE, BattleScript_AbsorbLiquidOoze
 	setbyte cMULTISTRING_CHOOSER, 0
@@ -2600,7 +2600,7 @@ BattleScript_DreamEaterWorked::
 	waitmessage 0x40
 	resultmessage
 	waitmessage 0x40
-	negativedamage
+	sethpdrain
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
@@ -7115,6 +7115,7 @@ BattleScript_AbilityHpHeal:
 BattleScript_RainDishActivates::
 	printstring STRINGID_PKMNSXRESTOREDHPALITTLE2
 	waitmessage 0x40
+BattleScript_HealWithoutMessage::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER

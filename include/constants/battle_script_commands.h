@@ -1,7 +1,10 @@
 #ifndef GUARD_CONSTANTS_BATTLE_SCRIPT_COMMANDS_H
 #define GUARD_CONSTANTS_BATTLE_SCRIPT_COMMANDS_H
 
-//ok this needs to match the Battlescripting struct in battle.h
+//ok this needs to match the Battlescripting struct in include/battle.h
+// + 1 if u8,   +2 if u16,   +4 if u32,  if bracket multiply value in bracket by type
+//ex  u8 multihitString[6];    6 x  +1  = +6
+//go up from previous value based on your found number and that's next values starting point
 // Battle Scripting and BattleCommunication addresses
 #define sPAINSPLIT_HP gBattleScripting
 #define sBIDE_DMG gBattleScripting + 4
@@ -13,35 +16,36 @@
 #define sTRIPLE_KICK_POWER gBattleScripting + 0x12
 #define sMOVEEND_STATE gBattleScripting + 0x14
 #define sBATTLER_WITH_ABILITY gBattleScripting + 0x15
-#define sMULTIHIT_EFFECT gBattleScripting + 0x16
-#define sBATTLER gBattleScripting + 0x17
-#define sB_ANIM_TURN gBattleScripting + 0x18
-#define sB_ANIM_TARGETS_HIT gBattleScripting + 0x19
-#define sSTATCHANGER gBattleScripting + 0x1A
-#define sSTAT_ANIM_PLAYED gBattleScripting + 0x1B
-#define sGIVEEXP_STATE gBattleScripting + 0x1C
-#define sBATTLE_STYLE gBattleScripting + 0x1D
-#define sLVLBOX_STATE gBattleScripting + 0x1E
-#define sLEARNMOVE_STATE gBattleScripting + 0x1F
-#define sFIELD20_PURSUIT_DOUBLE_DAMAGE gBattleScripting + 0x20
-#define sRESHOW_MAIN_STATE gBattleScripting + 0x21
-#define sRESHOW_HELPER_STATE gBattleScripting + 0x22
-#define sSAVED_STAT_CHANGER gBattleScripting + 0x23  //for moody
+#define sMULTIHIT_EFFECT gBattleScripting + 0x16			 //multihitMoveEffect
+#define sSAVED_MOVE_EFFECT gBattleScripting + 0x18           // savedMoveEffect
+#define sMOVE_EFFECT gBattleScripting + 0x1A                 // moveEffect
+#define sBATTLER gBattleScripting + 0x1C
+#define sB_ANIM_TURN gBattleScripting + 0x1D
+#define sB_ANIM_TARGETS_HIT gBattleScripting + 0x1E
+#define sSTATCHANGER gBattleScripting + 0x1F
+#define sSTAT_ANIM_PLAYED gBattleScripting + 0x20
+#define sGIVEEXP_STATE gBattleScripting + 0x21
+#define sBATTLE_STYLE gBattleScripting + 0x22
+#define sLVLBOX_STATE gBattleScripting + 0x23
+#define sLEARNMOVE_STATE gBattleScripting + 0x24
+#define sFIELD25_PURSUIT_DOUBLE_DAMAGE gBattleScripting + 0x25
+#define sRESHOW_MAIN_STATE gBattleScripting + 0x26
+#define sRESHOW_HELPER_STATE gBattleScripting + 0x27
+#define sSAVED_STAT_CHANGER gBattleScripting + 0x28  //for moody
 
 //#define sSAVED_BATTLER               (gBattleScripting + 0x24) // savedBattler
 //#define sILLUSION_NICK_HACK gBattleScripting + 0x25
 //#define sFIXED_ABILITY_POPUP         (gBattleScripting + 0x26) // fixedPopup
 //#define sABILITY_OVERWRITE           (gBattleScripting + 0x27) // abilityPopupOverwrite
 //#define sSAVED_DMG gBattleScripting + 0x29
-//#define sSAVED_MOVE_EFFECT           (gBattleScripting + 0x2D) // savedMoveEffect
-//#define sMOVE_EFFECT                 (gBattleScripting + 0x2F) // moveEffect
-#define sSWITCH_CASE (gBattleScripting + 0x23)//   (gBattleScripting + 0x31) // switchCase  used for red card special swith condition
-#define sBERRY_OVERRIDE	(gBattleScripting + 0x24)// (gBattleScripting + 0x32) // overrideBerryRequirements
+
+#define sSWITCH_CASE (gBattleScripting + 0x29)//   (gBattleScripting + 0x31) // switchCase  used for red card special swith condition	//FORCED SWITCH?
+#define sBERRY_OVERRIDE	(gBattleScripting + 0x2A)// (gBattleScripting + 0x32) // overrideBerryRequirements
 //#define sMON_CAUGHT     (gBattleScripting + 0x33) // monCaught NOT NEEDED, only used in emerald for succesful captures to incremennt game stat capture
-#define sFIELD_23 gBattleScripting + 0x23	//nothing in struct below this think all used values must go above here
-#define sWINDOWS_TYPE gBattleScripting + 0x24
-#define sMULTIPLAYER_ID gBattleScripting + 0x25
-#define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x26
+#define sFIELD_23 gBattleScripting + 0x2B	//nothing in struct below this think all used values must go above here
+#define sWINDOWS_TYPE gBattleScripting + 0x2C
+#define sMULTIPLAYER_ID gBattleScripting + 0x2D
+#define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x2E
 
 
 #define cEFFECT_CHOOSER gBattleCommunication + 3

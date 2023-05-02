@@ -742,7 +742,7 @@ static void AnimBentSpoon(struct Sprite *sprite)
 // Used by Amnesia
 static void AnimQuestionMark(struct Sprite *sprite)
 {
-    s16 x = GetBattlerSpriteCoordAttr(gBattleAnimAttacker, BATTLER_COORD_ATTR_WIDTH) /  2;
+    s16 x = GetBattlerSpriteCoordAttr(gBattleAnimAttacker, BATTLER_COORD_ATTR_WIDTH) / 2;
     s16 y = GetBattlerSpriteCoordAttr(gBattleAnimAttacker, BATTLER_COORD_ATTR_HEIGHT) / -2;
 
     if (GetBattlerSide(gBattleAnimAttacker) == B_SIDE_OPPONENT)

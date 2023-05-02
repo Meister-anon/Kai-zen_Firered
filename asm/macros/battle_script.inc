@@ -752,14 +752,14 @@
 	.4byte \param0
 	.endm
 
-	.macro negativedamage
+	.macro sethpdrain
 	.byte 0x88
 	.endm
 
-	.macro statbuffchange param0:req, param1:req
+	.macro statbuffchange flags:req, jumpptr:req
 	.byte 0x89
-	.byte \param0
-	.4byte \param1
+	.2byte \flags
+	.4byte \jumpptr
 	.endm
 
 	.macro normalisebuffs
@@ -1992,11 +1992,12 @@
 
 @ helpful macros
 	.macro setstatchanger stat:req, stages:req, down:req
-	setbyte sSTATCHANGER \stat | \stages << 4 | \down << 7
+	setbyte sSTATCHANGER \stat | \stages << 3 | \down << 7
 	.endm
 
 	.macro setmoveeffect effect:req
-	setbyte cEFFECT_CHOOSER \effect
+	sethword sMOVE_EFFECT \effect
+	sethword sSAVED_MOVE_EFFECT \effect
 	.endm
 
 	.macro chosenstatus1animation battler:req, status:req

@@ -1790,7 +1790,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_ABRA] =
     {
-        .baseHP = 25,
+        .baseHP = 55,
         .baseAttack = 20,
         .baseDefense = 15,
         .baseSpeed = 90,
@@ -1814,7 +1814,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-    },//add rest to abras moveset.
+    },//buffed hp as perma sleep,  buffing comatose w healing as mon can't rest think will attempt to set to have sleep status icon, no reason not to
 
     [SPECIES_KADABRA] =
     {
@@ -4260,7 +4260,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_UNNERVE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -4287,7 +4287,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_SYNCHRONIZE, ABILITY_NONE},
+        .abilities = {ABILITY_FOREWARN, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },//buff to give realm of excellence as mewtwo is more offenseive whille mew was always about avoiding fights/damage

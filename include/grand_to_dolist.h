@@ -168,6 +168,17 @@ as this is a massive implementation and I'd rather not make the function look an
 
 would call personalityvaluechecksum or sometihng
 
+//function value set & value comparison logic
+
+Meister_anon — Today at 10:10 AM
+Does a function have to return a  value, for it to be used as a value comparison?
+like does it only make sense to use logic x == function
+
+if that function is built to return a value?
+Kurausukun — Today at 10:20 AM
+I don't see how else it would work
+Otherwise you're comparing with whatever garbage is in the register
+
 */
 
 //I've decided I'm not making 2 things rather than a rom base at emerald expansion standard, and my own game with all the features I like
@@ -227,6 +238,9 @@ would call personalityvaluechecksum or sometihng
 * correcting setup -
 * 
 * Forgot to replace all instances of Levitate in basestats -
+* 
+* need replace gBattleMons[gActiveBattler].ability with GetBattlerAbility(gActiveBattler)  for ability check, so suppresants work
+* compare to emerald 
 * 
 * increase quick claw success odds -
 * 
@@ -480,6 +494,7 @@ as well as the effect of increasing trap duration
 * do similar for ability forwarn, since it checks the enemy for a move, set it so if they are targetted with said move
 * it will miss, something like their psychic powers let them avoid damage, 
 * think of it like them predicting an attack specifically from that move -
+* ( can use telepathy logic  for these effects, its essentially telepathy but single use)
 * 
 * think it may be too powerful for these abilities to reactivate when new enemy switches in
 * idk maybe not psychic type is usually pretty frail so this gives them slightly safer switch in, 
@@ -521,9 +536,35 @@ as well as the effect of increasing trap duration
 * 
 * Finish setup for move Dryads Curse effect need do stat drop & animation -  think Stat drop done
 * animation idea, ingrain roots and wrap/bind constrict anim but with a black or darker color?
-* or ingrain with mon shake but without the orbs  -animation done, need test combined, ingrain and ghost curse
+* or ingrain with mon shake but without the orbs  -DONE, need test combined, ingrain and ghost curse
 * 
 * Setting up flash freeze to just use sheer cold animation for now- will prbo keep DONE
+* 
+* abra buff, gave comatose, slightly buffed health to help give a chance of staying as abra to keep status immunity
+* buffing to give comatose end turn healing 1/8th max health  as it takes double damgae from hex etc.
+* and guarantees sleep based damage without having to get hit by low accuracy sleep move.
+* Also keep in mind plan to allow being damaged by multiple status 1s at once, which would mean removing
+* volatile status immunity from comatose, so consider this balancing for a future nerf  - DONE consider give substitute to comatose mon if needed
+* 
+* ...many moves were tms in gen 1 were replaced with move tutors or just lost from learnsets, of those
+* abra was indeed able to learn substitute in original red blue yellow... o.o
+* 
+* will reinstate gen 1 & 2 tms that were removed from tms  full list below -
+Body Slam	 Normal   TM08
+Counter	    Fighting  TM18
+Double-Edge	 Normal   TM10
+Dream Eater	 Psychic  TM42
+Explosion	 Normal   TM47
+Mega Kick	 Normal	  TM05
+Mega Punch	 Normal	  TM01
+Metronome	 Normal   TM35
+Mimic	     Normal   TM31
+Rock Slide	 Rock     TM48
+Seismic Toss Fighting TM19
+Softboiled	 Normal   TM41
+Substitute	 Normal   TM50
+Swords Dance Normal   TM03
+Thunder Wave Electric TM45
 * 
 * Further adjust freeze status effect, plan setup current gen frotstbite for after target defrosts
 * double check that I've already made freeze consistent and work like confusion/traps to last 2-5 turns
@@ -555,7 +596,7 @@ as well as the effect of increasing trap duration
 * anyway for mon that can setup  multiple type power/dmg buffs i.e terrain & weather or to be used with a terrain on on team.
 * 
 * made grass buffs, make grass version of u-turn aka up root can be taken advantage of by chlorophyl mons - DONE
-* make up root remove ingrain status to ensure you can get out if you want to/really need to -
+* make up-root remove ingrain status to ensure you can get out if you want to/really need to -
 * 
 * make sure mon types have their own niche where needed, i.e bugs imune to confusion because of hive mind
 * grass immune to powder, ease of access to status moves to take advantage of multi status and higher than average vitatliy as part of nature
@@ -563,9 +604,9 @@ as well as the effect of increasing trap duration
 * 
 * need buff poison i think
 * for poison think can just give sp def boosts, as poison specialists poison themselves to build up immunity to poison
-* giving them a stronger than normal internal constitution.
+* giving them a stronger than normal internal constitution. - DONE
 * 
-* also added uturn variant for flyig types  need test animations later-
+* also added uturn variant for flyig types - DONE  need test animations later
 * 
 * changed hail ice buff,  most ice types have higher sp def than def, and main weaknesses are 
 * typically physical made 50% defense and 1/3rd sp def incrase
@@ -592,7 +633,7 @@ as well as the effect of increasing trap duration
 * 
 * with buffs and planned addition of more mon early on, consider tweak to leveling function that will weight stat growth to later
 * so you can have stronger mon in early areas without them being super op at low levels ( may not need ot its possible current function already balances that)
-* if early levels aren't greatly different stat wise would make easier to balance mon for late game.
+* if early levels aren't greatly different stat wise would make easier to balance mon for late game. -tested, not needed
 * 
 * Also consider tweaking how terrain switch works, make it stay as long as the ability surge mon is on the field
 * want to work like  weather switch which I think works off last in?  may work off speed?
@@ -600,7 +641,7 @@ as well as the effect of increasing trap duration
 * that way even if they get one shot its still valuable to put out as a setup.-
 * 
 * Do I want to make all terrain last until removed?
-* then make ocean permanent terrain that can't be changed set by environment
+* then make ocean permanent terrain that can't be changed, is set by environment
 * 
 * Remove drizzle & drought from mon, and replace with new ability's instead of just giving everyone groudon and kyogre's abilities
 * Thinking Squal in place of drizzle  and I guess High Noon in place of drought - DONE
