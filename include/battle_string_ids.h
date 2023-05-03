@@ -10,6 +10,14 @@
 #define STRINGID_USEDMOVE   4
 #define STRINGID_BATTLEEND  5
 
+// gInobedientStringIds
+#define B_MSG_LOAFING            0
+#define B_MSG_WONT_OBEY          1
+#define B_MSG_TURNED_AWAY        2
+#define B_MSG_PRETEND_NOT_NOTICE 3
+#define NUM_DISOBEY_STRINGS         4 // For randomly selecting a disobey string
+
+
 // gFlashFireStringIds
 #define B_MSG_FLASH_FIRE_BOOST    0
 #define B_MSG_FLASH_FIRE_NO_BOOST 1

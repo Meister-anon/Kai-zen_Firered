@@ -179,6 +179,30 @@ Kurausukun — Today at 10:20 AM
 I don't see how else it would work
 Otherwise you're comparing with whatever garbage is in the register
 
+
+
+Meister_anon — Today at 2:09 PM
+what does it mean when this value is used?   " \ "
+I see that in the repo in some places,  its not the division one
+
+I'm assuming it does something similar to commenting?
+GriffinR — Today at 2:44 PM
+No, this wouldn't be a comment. It's a backslash, its meaning depends on the context. For example in a string n is just the character n, but \n is a newline
+In general it's used as an indicator to treat what follows in a different way
+
+Kurausukun — Today at 5:00 PM
+It's called an escape sequence
+If you Google it you will find more info
+
+Meister_anon — Today at 5:24 PM
+ok looked into it, but the way its used wasn't mentioned in the resource i found.
+the escape was used at the end of a line, where a constant was being defined.
+
+I'm guessing using the escape that way lets you extend the values for a define for
+further than a single line?
+GriffinR — Today at 5:35 PM
+Yes, that'd be to carry the definition onto the next line
+
 */
 
 //I've decided I'm not making 2 things rather than a rom base at emerald expansion standard, and my own game with all the features I like

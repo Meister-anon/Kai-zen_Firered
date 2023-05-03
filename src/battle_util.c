@@ -2597,9 +2597,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             {
                 CancelMultiTurnMoves(gBattlerAttacker);
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-                //gBattlescriptCurrInstr = BattleScript_MoveUsedLoafingAround;
-                BattleScriptPushCursorAndCallback(BattleScript_MoveUsedLoafingAround);
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LOAFING;
                 if (gBattleMons[gBattlerAttacker].maxHP > gBattleMons[gBattlerAttacker].hp
                     && !(gStatuses3[gBattlerAttacker] & STATUS3_HEAL_BLOCK))
                 {
@@ -2608,10 +2606,11 @@ u8 AtkCanceller_UnableToUseMove(void)
                         gBattleMoveDamage = 1;
                     gBattleMoveDamage *= -1;
                 }
-                gBattlescriptCurrInstr = BattleScript_HealWithoutMessage;
+                gBattlescriptCurrInstr = BattleScript_MoveUsedLoafingAround;
                 //BattleScriptPushCursorAndCallback(BattleScript_HealWithoutMessage);
-                gMoveResultFlags |= MOVE_RESULT_MISSED; //this could be a problem to prevent healing? idk leave for now test later
-                effect = 1; //nope healing just doesn't work here in general, 1st attempting to put in endturn effects
+                //gMoveResultFlags |= MOVE_RESULT_MISSED; //this could be a problem to prevent healing? idk leave for now test later
+                effect = 1; //apears to be a stopgap? will make moves miss if the truant somehow fails to stop attack
+                //also yup that move result missed line was the last issue, making move miss got rid of damage
             }
             ++gBattleStruct->atkCancellerTracker;
             break;

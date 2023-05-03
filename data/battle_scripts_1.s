@@ -2549,7 +2549,7 @@ BattleScript_ExplosionLoop::
 	resultmessage
 	waitmessage 0x40
 	tryfaintmon BS_TARGET, 0, NULL
-	moveendto 16
+	moveendto ATK49_NEXT_TARGET
 	jumpifnexttargetvalid BattleScript_ExplosionLoop
 	tryfaintmon BS_ATTACKER, 0, NULL
 	end
@@ -2558,7 +2558,7 @@ BattleScript_ExplosionMissed::
 	effectivenesssound
 	resultmessage
 	waitmessage 0x40
-	moveendto 16
+	moveendto ATK49_NEXT_TARGET
 	jumpifnexttargetvalid BattleScript_ExplosionLoop
 	tryfaintmon BS_ATTACKER, 0, NULL
 	end
@@ -2836,7 +2836,7 @@ BattleScript_DoMultiHit::
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
 	addbyte gBattleScripting + 12, 1
-	moveendto 16
+	moveendto ATK49_NEXT_TARGET
 	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_FOE_ENDURED, BattleScript_MultiHitPrintStrings
 	decrementmultihit BattleScript_MultiHitLoop
 	goto BattleScript_MultiHitPrintStrings
@@ -3731,7 +3731,7 @@ EffectTripleKick_DoDmgCalcs:
 	waitmessage 0x40
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
-	moveendto 16
+	moveendto ATK49_NEXT_TARGET
 	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_FOE_ENDURED, BattleScript_TripleKickPrintStrings
 	decrementmultihit BattleScript_TripleKickLoop
 	goto BattleScript_TripleKickPrintStrings
@@ -4019,7 +4019,7 @@ BattleScript_EffectFuryCutter::
 @	waitmessage 0x40
 @	printstring STRINGID_EMPTYSTRING3
 @	waitmessage 1
-@	moveendto 16
+@	moveendto ATK49_NEXT_TARGET
 @	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_FOE_ENDURED, BattleScript_FuryCutterPrintStrings
 @	decrementmultihit BattleScript_FuryCutterLoop
 @	goto BattleScript_FuryCutterPrintStrings
@@ -4287,7 +4287,7 @@ BattleScript_DoHitAllWithUndergroundBonus::
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
 	tryfaintmon BS_TARGET, 0, NULL
-	moveendto 16
+	moveendto ATK49_NEXT_TARGET
 	jumpifnexttargetvalid BattleScript_HitsAllWithUndergroundBonusLoop
 	end
 
@@ -4297,7 +4297,7 @@ BattleScript_HitAllWithUndergroundBonusMissed::
 	effectivenesssound
 	resultmessage
 	waitmessage 0x40
-	moveendto 16
+	moveendto ATK49_NEXT_TARGET
 	jumpifnexttargetvalid BattleScript_HitsAllWithUndergroundBonusLoop
 	end
 
@@ -4384,7 +4384,7 @@ BattleScript_BeatUpAttack::
 	resultmessage
 	waitmessage 0x40
 	tryfaintmon BS_TARGET, 0, NULL
-	moveendto 16
+	moveendto ATK49_NEXT_TARGET
 	goto BattleScript_BeatUpLoop
 
 BattleScript_BeatUpEnd::
@@ -5126,7 +5126,7 @@ BattleScript_TeeterDanceLoop::
 	resultmessage
 	waitmessage 0x40
 BattleScript_TeeterDanceLoopIncrement::
-	moveendto 16
+	moveendto ATK49_NEXT_TARGET
 	addbyte gBattlerTarget, 1
 	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_TeeterDanceLoop
 	end
@@ -8498,7 +8498,7 @@ BattleScript_AbilityCuredStatus::
 BattleScript_IgnoresWhileAsleep::
 	printstring STRINGID_PKMNIGNORESASLEEP
 	waitmessage 0x40
-	moveendto 16
+	moveendto ATK49_NEXT_TARGET
 	end
 
 BattleScript_IgnoresAndUsesRandomMove::
@@ -8508,7 +8508,10 @@ BattleScript_IgnoresAndUsesRandomMove::
 BattleScript_MoveUsedLoafingAround::
 	printfromtable gInobedientStringIds
 	waitmessage 0x40
-	moveendto 16
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE	@putting this here would otherwise do nothing, but since trunt has health change it would heal
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	moveendto ATK49_NEXT_TARGET
 	end
 
 BattleScript_IgnoresAndFallsAsleep::
@@ -8516,7 +8519,7 @@ BattleScript_IgnoresAndFallsAsleep::
 	waitmessage 0x40
 	setmoveeffect MOVE_EFFECT_SLEEP | MOVE_EFFECT_AFFECTS_USER
 	seteffectprimary
-	moveendto 16
+	moveendto ATK49_NEXT_TARGET
 	end
 
 BattleScript_IgnoresAndHitsItself::
