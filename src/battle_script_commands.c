@@ -8976,6 +8976,12 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         else
             gBattlescriptCurrInstr += 7;
+        break;
+    case VARIOUS_JUMP_IF_NOT_FULL_HP:
+        if (!(BATTLER_MAX_HP(gActiveBattler)))
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
+        else
+            gBattlescriptCurrInstr += 7;
         return;
     case VARIOUS_TRY_FRISK:
         while (gBattleStruct->friskedBattler < gBattlersCount)

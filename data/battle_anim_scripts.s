@@ -832,7 +832,7 @@ gBattleAnims_StatusConditions::
 
 	@value go in 
 
-gBattleAnims_General::
+gBattleAnims_General::		@aligns with constants/battle_anim.h
 	.4byte General_CastformChange
 	.4byte General_StatsChange
 	.4byte General_SubstituteFade
@@ -872,6 +872,7 @@ gBattleAnims_General::
 	.4byte General_PrimalReversion          @ B_ANIM_PRIMAL_REVERSION
 	.4byte General_AquaRingHeal             @ B_ANIM_AQUA_RING_HEAL
 	.4byte Move_SPIKES						@ B_ANIM_SPIKE_TOSS
+	.4byte General_Heal_Animation			@ B_ANIM_BASIC_HEAL
 
 gBattleAnims_Special::
 	.4byte Special_LevelUp					@ B_ANIM_LVL_UP
@@ -4624,6 +4625,12 @@ Move_SLACK_OFF:: @ 81CC6C3
 	createvisualtask AnimTask_SlackOffSquish, 2, 0
 	playsewithpan SE_M_YAWN, 192
 	waitforvisualfinish
+	call HealingEffect
+	waitforvisualfinish
+	end
+
+General_Heal_Animation::
+	loadspritegfx ANIM_TAG_BLUE_STAR
 	call HealingEffect
 	waitforvisualfinish
 	end

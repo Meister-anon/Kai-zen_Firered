@@ -1736,6 +1736,11 @@
 	.4byte \ptr
 	.endm
 
+	.macro jumpifnotfullhp battler:req, ptr:req
+	various \battler, VARIOUS_JUMP_IF_NOT_FULL_HP
+	.4byte \ptr
+	.endm
+
 	.macro losetype battler:req, type:req
 	various \battler, VARIOUS_LOSE_TYPE
 	.byte \type

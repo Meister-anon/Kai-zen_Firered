@@ -533,6 +533,7 @@
 #define B_ANIM_PRIMAL_REVERSION         0X24
 #define B_ANIM_AQUA_RING_HEAL           0X25
 #define B_ANIM_SPIKE_TOSS				0x26 // for spike shield spike set
+#define B_ANIM_BASIC_HEAL				0x27 // general healing effect separate from moves animation, done for loafing off heal use for comatose too? other absorb healing?
 
 
 // special animations table

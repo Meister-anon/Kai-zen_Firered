@@ -8503,16 +8503,31 @@ BattleScript_IgnoresWhileAsleep::
 
 BattleScript_IgnoresAndUsesRandomMove::
 	printstring STRINGID_PKMNIGNOREDORDERS
-	waitmessage 0x40
+	waitmessage B_WAIT_TIME_LONG
 	jumptocalledmove 0
+	printfromtable gInobedientStringIds
+	waitmessage B_WAIT_TIME_LONG
+	moveendto MOVEEND_NEXT_TARGET
+	end
+
 BattleScript_MoveUsedLoafingAround::
 	printfromtable gInobedientStringIds
-	waitmessage 0x40
+	waitmessage B_WAIT_TIME_LONG
+	jumpifnotfullhp	BS_ATTACKER, BattleScript_Healing
+BattleScript_TruantHealing::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE	@putting this here would otherwise do nothing, but since trunt has health change it would heal
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
-	moveendto ATK49_NEXT_TARGET
+	moveendto MOVEEND_NEXT_TARGET
 	end
+
+BattleScript_HealAnimation::
+	playanimation BS_ATTACKER, B_ANIM_BASIC_HEAL
+	return
+
+BattleScript_Healing::
+	playanimation BS_ATTACKER, B_ANIM_BASIC_HEAL
+	goto BattleScript_TruantHealing
 
 BattleScript_IgnoresAndFallsAsleep::
 	printstring STRINGID_PKMNBEGANTONAP
