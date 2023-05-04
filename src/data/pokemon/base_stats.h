@@ -8436,10 +8436,10 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_DELCATTY] =
     {
         .baseHP = 80,
-        .baseAttack = 65,
+        .baseAttack = 75,
         .baseDefense = 65,
-        .baseSpAttack = 65,
-        .baseSpDefense = 55,
+        .baseSpAttack = 75,
+        .baseSpDefense = 65,
         .baseSpeed = 90,
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GHOST,

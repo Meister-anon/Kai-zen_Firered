@@ -203,7 +203,33 @@ further than a single line?
 GriffinR — Today at 5:35 PM
 Yes, that'd be to carry the definition onto the next line
 
+
+Meister_anon — Today at 12:18 PM
+Can someone give me a heads up on why this text causes issue in pokedex entries?
+
+"will-o’-the-wisp"
+
+from what I can tell all the characters individually are used in other dex entries.
+
+GriffinR — Today at 12:21 PM
+’ is not the same as '
+Meister_anon — Today at 12:21 PM
+ok got it,
+alright easy fix to make then
+you can prob tell yes, I copy pasted from online
+GriffinR — Today at 12:23 PM
+You can also add it to the charmap by putting a '’' = B4 in charmap.txt. It was added to pokeemerald's, it just hasn't been added to pokefirered's yet.
+This would treat it the same way as '
+Meister_anon — Today at 12:24 PM
+good to know,  
+oh wait,
+you're saying it would default to the same character oh ok cool.
+ok I prob will do that then.
+
 */
+
+//Single extra note, for battle script,  I think when I use a call, it has to end in a return
+//but I can't use a return when jumping I instead have to use a goto
 
 //I've decided I'm not making 2 things rather than a rom base at emerald expansion standard, and my own game with all the features I like
 //I'm making one project Kai-zen Red  will be everything I want, my vision for what pokemon should be.
@@ -216,6 +242,11 @@ Yes, that'd be to carry the definition onto the next line
 * 
 * Setup moves with flag 2x dmg on air to remove on air status and ground target when they hit flying target
 * -done
+* 
+* comb pokedex_text_fr.h  remove unused dex entries save a little more space, also look over dex entries
+* that are boring see if entries can be improved from parts of pokemondb entries
+* 
+* adjust charmap based on emerald update, for other style apostrophe - DONE thanks to griffinR
 * 
 * Changed OHKO moves, so they have a chance to land when below level. -DONE
 * (since its luck, set it to work when attacker up to 7 levels below the target
@@ -251,6 +282,10 @@ Yes, that'd be to carry the definition onto the next line
 * 
 * or could keep all ivs random,(as that also matches matsuda intentions)  and instead
 * setup custom fields to set nature, and evs. and perhaps abilitynum
+
+* -will treat ivs as hidden stat for player side as matsuda wanted, ivs won't be adjustable with an item.-
+* -you can change nature, change ability, but ivs will be hard locked to the individual mon.-
+* -with my ev change you'll be able to overcome bad ivs anyway, and ivs are stronger to make more of a difference as well.-
 * 
 * think I will treat rival starter same as roamer, where the iv data is intentionally saved
 * 
@@ -463,11 +498,12 @@ as well as the effect of increasing trap duration
 * for simplicity sake will skip the hp drop I was planning to do if statused with traps or escape prevention
 * -escape prevention done need to setup guaranteed switch ALLOWANCE DONE and need add to switch in effects 
 * -Setup Done need test but DONE for now
+* - think I may bring trap escape hp drop back, will just need to fix my implementation of  new trap effects
 * 
 * buff in a pinch abilities, activate soon as hp hits yellow i.e 50% - DONE
 * 
 * General repo update compare to griff red modern fire red search #ifdef BUGFIX
-* and replace bad code with bugfixes don't know if it'll make a differnce or not though - DONE ?
+* and replace bad code with bugfixes don't know if it'll make a differnce or not though - DONE ?  yeah done
 * 
 * Update pokedex_screen.c and other pokedex files with new function renames - DONE
 * 
@@ -569,6 +605,13 @@ as well as the effect of increasing trap duration
 * and guarantees sleep based damage without having to get hit by low accuracy sleep move.
 * Also keep in mind plan to allow being damaged by multiple status 1s at once, which would mean removing
 * volatile status immunity from comatose, so consider this balancing for a future nerf  - DONE consider give substitute to comatose mon if needed
+* 
+* STATUS NOTES-
+* could put in exceptions for statuses but it wouldn't be for every ability as for others unchanged
+* itd be a nerf, and it might not make sense to do for some and not every in the category, even if it makes sense.
+* hmm ok I think I can make it work actually, it'd be the ones that don't require setting up weather or some other effect to work.
+* i.e rain dish wouldn't need it. but again each thing is balanced with an intended draw back so prob best to just not do that for these.
+* just for intimidate trace and the draw in attack abilities
 * 
 * ...many moves were tms in gen 1 were replaced with move tutors or just lost from learnsets, of those
 * abra was indeed able to learn substitute in original red blue yellow... o.o
@@ -908,7 +951,14 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 * stop when you find a species whos target species equals saved species value
 * and return that species value as the pre evo and add to list
 * 
-* will need to make a function for this  find pre evo -
+* do repeat until you reach species list end (NUM_SPECIES or FORMS_START), that way you know you've found all the pre evos
+* and no existing mon evolves into the one in question
+* 
+* want to exclude evolution method mega evolution
+* 
+* will need to make a function from this to find pre evo -
+* 
+* -will also use for de-evolution logic, will make functionality for others, but not use myself as there isn't a need in normal pokemon
 * 
 * 
 * idea for ev boosting gym do with safron city fighting gym  could give ev boost items there -

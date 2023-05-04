@@ -5,11 +5,14 @@
 //since putting all mon in one game, and not doing version exclusives will remove 
 //leaf green dex entries in pokedex_text_lg file  to save mor space.
 
-
+//new max entry space given dex screen expansion
+//want to see if can make display string size same as ability descriptions do. would help greatly for setting up further dex entries
 const u8 gDummyPokedexText[] = _(
     "This is a newly discovered POKéMON. It is\n"
     "currently under investigation. No detailed\n"
-    "information is available at this time.");
+    "tall grass and so on, foraging for fooding\n"
+    "information is available at this time yet.");
+
 
 const u8 gDummyPokedexTextUnused[] = _("");
 
@@ -3297,11 +3300,10 @@ const u8 gFroslassPokedexText[] = _(
     "in order to make mischief.");*/
 
 const u8 gRotomPokedexText[] = _(
-    "This bizarre Pokémon appears to be\n"
-    "a will-o’-the-wisp powered by electricity.\n"
-    "Be wary, as Rotom is both smart and mischievous.\n"
-    "Its electricity-like body can enter some\n"
-    "kinds of machines and take control of them.");
+    "This bizarre Pokémon appears to be a\n"
+    "will-o’-the-wisp powered by electricity.\n"
+    "Be wary, as Rotom is both smart and\n"
+    "mischievous.");
       
 
 const u8 gUxiePokedexText[] = _(

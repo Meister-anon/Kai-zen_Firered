@@ -7107,6 +7107,7 @@ BattleScript_ReceiverActivates::
 BattleScript_AbilityHpHeal:	
 	printstring STRINGID_PKMNSXRESTOREDHPALITTLE2
 	waitmessage 0x40
+	call BattleScript_HealAnimation
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
@@ -7116,6 +7117,7 @@ BattleScript_RainDishActivates::
 	printstring STRINGID_PKMNSXRESTOREDHPALITTLE2
 	waitmessage 0x40
 BattleScript_HealWithoutMessage::
+	call BattleScript_HealAnimation
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
