@@ -7,6 +7,11 @@ const struct PokedexEntry gPokedexEntries[] =
     //will need to update pokemon scale and offset for post gen 3 mon.
     //smaller scale number means a bigger pokemon, 256 is equal to trainer/human height
     //higher scale number means smaller pokemon
+
+    //note excessively large pokemon are denotd by shifting the trainer scale value up to make them appear smaller
+    //base trainer scale is 256, but mon with height at or above 15 appear to be about where it begins to shift
+    //set that as standard shift mon at height 15 , that don't change trainer scale, down in height to below that value
+
     //offset appars to be a y vaue, mon at scale 256 or lower seem to use offset 0
     //offset should decrease as scale decreases. i.e as mon gets bigger scale gets lower
 

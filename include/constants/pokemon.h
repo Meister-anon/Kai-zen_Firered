@@ -218,7 +218,14 @@
 #define USE_RANDOM_IVS (MAX_PER_STAT_IVS + 1)	//makes createmon function use random data for ivs, just like wild mon	can override fixed value for trainer party
 #define MAX_PER_STAT_EVS 564	//prviously 255
 #define MAX_TOTAL_EVS 788	//previosly 510
-#define EV_ITEM_BOOSTER_LIMIT 200	//how many evs can be gained from ev boost items  each one apparently ads 10 evs?
+#define EV_ITEM_BOOSTER_LIMIT 250	//how many evs can be gained from ev boost items, previously 100  each one apparently ads 10 evs? every 4 is 1 stat point
+
+#define HpEV 0
+#define AttackEV 1
+#define DefenseEV 2
+#define SpeedEV 3
+#define SpAttackEV 4
+#define SpDefenseEV 5
 
 #define PARTY_SIZE 6
 #define UNOWN_FORM_COUNT 28

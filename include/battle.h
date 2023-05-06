@@ -93,6 +93,7 @@
 struct TrainerMonNoItemDefaultMoves //pull from 4-12 later
 {
     u16 iv;
+    u16 evs[6];
     u8 lvl;
     u16 species;
 };
@@ -100,6 +101,7 @@ struct TrainerMonNoItemDefaultMoves //pull from 4-12 later
 struct TrainerMonItemDefaultMoves
 {
     u16 iv;
+    u16 evs[6];
     u8 lvl;
     u16 species;
     u16 heldItem;
@@ -108,6 +110,7 @@ struct TrainerMonItemDefaultMoves
 struct TrainerMonNoItemCustomMoves
 {
     u16 iv;
+    u16 evs[6];
     u8 lvl;
     u16 species;
     u16 moves[4];
@@ -116,6 +119,7 @@ struct TrainerMonNoItemCustomMoves
 struct TrainerMonItemCustomMoves
 {
     u16 iv;
+    u16 evs[6];
     u8 lvl;
     u16 species;
     u16 heldItem;

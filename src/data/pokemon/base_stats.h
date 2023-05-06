@@ -7327,7 +7327,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RUN_AWAY, ABILITY_QUICK_FEET},
-            .abilityHidden = {ABILITY_RATTLED, ABILITY_NONE},
+            .abilityHidden = {ABILITY_RATTLED, ABILITY_STRONG_JAW},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RUN_AWAY, ABILITY_NONE},
         #endif
@@ -7356,7 +7356,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_INTIMIDATE, ABILITY_QUICK_FEET},
-            .abilityHidden = {ABILITY_MOXIE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_MOXIE, ABILITY_STRONG_JAW},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_INTIMIDATE, ABILITY_NONE},
         #endif
@@ -11325,7 +11325,7 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 80,
         .baseAttack = 120,
         .baseDefense = 79,
-        .baseSpeed = 82,
+        .baseSpeed = 72,
         .baseSpAttack = 95,
         .baseSpDefense = 79,
         .type1 = TYPE_ELECTRIC,

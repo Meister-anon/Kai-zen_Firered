@@ -2660,8 +2660,8 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
     } //note, since pokemon will have the same ability slot when they evolve based on their ability num, I may need to ensure
     //a pokemon's evolved form also alway has a 2nd hiddden ability slot, so it doesn't just become ability_none.
-    GiveBoxMonInitialMoveset(boxMon);
-}// found out if mon evos into form without slot the original ability num is saved for when it evos again
+    GiveBoxMonInitialMoveset(boxMon);// found out if mon evos into form without slot the original ability num is saved for when it evos again
+}
 
 void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 nature)
 {
@@ -6859,7 +6859,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
 
     for (i = 0; i < NUM_STATS; i++)
     {
-        evs[i] = GetMonData(mon, MON_DATA_HP_EV + i, 0);
+        evs[i] = GetMonData(mon, MON_DATA_HP_EV + i, NULL);
         totalEVs += evs[i];
     }
 
@@ -6900,7 +6900,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
             break;
         }*/
 
-        heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
+        heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
 
         if (heldItem == ITEM_ENIGMA_BERRY)
         {
@@ -6951,7 +6951,7 @@ u16 GetMonEVCount(struct Pokemon *mon)
     u16 count = 0;
 
     for (i = 0; i < NUM_STATS; i++)
-        count += GetMonData(mon, MON_DATA_HP_EV + i, 0);
+        count += GetMonData(mon, MON_DATA_HP_EV + i, NULL);
 
     return count;
 }

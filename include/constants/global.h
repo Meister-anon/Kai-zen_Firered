@@ -81,6 +81,7 @@
 #define NUM_BAG_POCKETS 5
 
 #define MAX_MON_MOVES 4
+#define NUM_EV_STATS 6
 
 #define TRAINER_ID_LENGTH 4
 #define PARTY_SIZE 6

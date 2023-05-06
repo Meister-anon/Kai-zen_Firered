@@ -388,6 +388,14 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * 
 * -ALL THE ASSETS ARE INCLUDED WITH THE GAME ALL ICONS AND SPRITES SFAFWJAGRGARAGNSNIODNVNVDHFB
 * 
+* -checked can't use backgrounds as they're too large,  about 100x the size of typical gen 3 backgrounds/terrains
+* -also their mon pics use 160 x 160 where base game uses 64 x 64, so would need to resize
+* -64 is thankfully a flat percentage of 160, so percent based resize will make it fit perfectly. (hard part would prob be pallete conversion)
+* 64 is 40% of 160.  so 160 reduce to 40% of full size and it'll fit perfectly
+* 
+* -base game terrain png is 64 x 88   opal terrain uses 512 x 288, hmm ok if I can resize potentially useful
+* but I think I'll just take and resize mon pics only
+* 
 * Ok another thing to add from opal, ae capsules, items that boost IV's, rather than other stat items that boost evs- =SCRAPPED
 * 
 * -ok found mon data for opal I can put in learnsets  variant forms data etc in but for things like meowth
@@ -667,7 +675,7 @@ Thunder Wave Electric TM45
 * 
 * make sure mon types have their own niche where needed, i.e bugs imune to confusion because of hive mind
 * grass immune to powder, ease of access to status moves to take advantage of multi status and higher than average vitatliy as part of nature
-* fire can't be burned, poison can be poisoned etc. 
+* fire can't be burned, poison can't be poisoned etc. 
 * 
 * need buff poison i think
 * for poison think can just give sp def boosts, as poison specialists poison themselves to build up immunity to poison
@@ -696,7 +704,7 @@ Thunder Wave Electric TM45
 *
 * Look at changes to early gen mon, consider bringing back stats from gen 1 & 2
 * where special atk & sp def were all one stat  see how it changes mon
-* and if it makes sense for balance - DONE this was only for gen 1, it was changed in gen 2 and most gen1 mon were balanced with that in mind
+* and if it makes sense for balance - DONE this was only for gen 1, it was changed in gen 2 and most gen1 mon were balanced with that in mind already
 * 
 * with buffs and planned addition of more mon early on, consider tweak to leveling function that will weight stat growth to later
 * so you can have stronger mon in early areas without them being super op at low levels ( may not need ot its possible current function already balances that)
@@ -827,6 +835,23 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 //simlest solution depending, may just be to edit the graphic for each,
 //and have it white out, and reload the circle during fade
 * 
+* 
+* the circle is attached to the backgrond presently so setting up different terrain would require every battle terrain have 5 or so variations
+* just so I can change the circle. on top of needing 2 different sets for each because of needing to move the circle for single and doubles etc.
+* 
+* rather than that I'd prefer separating the circle graphic from the normal background base (look at opal grpahics think it does that)\
+* if possible I'd like to use it as an object, similar to health box etc. is handled where I can just load it onto the background
+* only question is if the pokemon would still sit correctly on that, or would they be under it, as an object would have a highr
+* "priority"  if I can separate it, that would solve everything,  it would stil build from the tileset,
+* but I can move the object dynamically with code, /a window rather than needing to make multiple variations
+* 
+* yeah opal has the battle background and then the png for the base to sit on separately
+* base pokemon has it all tied up together  hopefully can separat without coming up on some gba limit
+* 
+* terrain would need to load in and slide in, like trainer sprites
+* incidentally strainer sprite proves its possible to separate the sprite and have it sit on the background
+* as the trainer sprite is also a png and does exactly that.
+* 
 */
 
 
@@ -840,8 +865,16 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 * that'll change what happens when you click the wall, now that you know what it says, a box will come up asking if yuo want to do the thing
 * i.e "use cut on wall?" yes/no  then check party for a mon that can and do it if possible, or return no one is able to use cut.
 * 
+* believe I've sstup rtc need to see if it works, further ssetup day night graphics (the good ones with proper night lighting)
+* daily weekly monthly & seasonal events to make the world feel real.
+* and time and season based encounter data
+* would also need tile changes for areas that would get snow in winter
+* deserts and tundras would remain unhanges year round
 * 
-* Emerald expansion dropped new  mon icons for legends arceus need update and add
+* Emerald expansion dropped new  mon icons for legends arceus need update and add 
+* - added stat data, need setup pokedex data and acual sprites/graphics and cry data, think will just use base mon cry rathr than new ones for space -
+* 
+* 
 * planning space time events for palkia dialga, so for post game
 * can use that as setup for hisuian mon appearing on the map.
 * scientist is studying  time distortion then space distorition with his tech/device
@@ -960,15 +993,33 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 * 
 * -will also use for de-evolution logic, will make functionality for others, but not use myself as there isn't a need in normal pokemon
 * 
+* thanks to emiyasora have a starting point for reference, forgot that breeding/daycare logic essentialy reads back through evolution.
+* that may be what i need.
+* GetEggSpecies
+* 
 * 
 * idea for ev boosting gym do with safron city fighting gym  could give ev boost items there -
 * 
 * think will remove need for badges to use overworld hms, makes more logical sense.
-* instead balance progression bby availability of mon with those abilities.
+* instead balance progression by availability of mon with those abilities.
 * 
 * only need mon that can learn the move to do hms.
-* for fly set it upp that you need a mon of a certain size.
+* for fly/surf set it upp that you need a mon of a certain size.
+* can do by comparing pokedex value, pokemon scale with trainer scale
+* long as trainer scale is greater than pokemon scale, mon is bigger than player
+* to give some wiggle room, will do if ((pokemoonscale - 30) is < trainerscale)
 * 
+* may do away with, if it ain't broke dont fix it type of situation,  doing this would create a forced list of mon
+* you'd need to keep in your party, while its realistic, this is still a game, and the average player won't want to deal with that.
+* 
+* while technically I could do this without a problem, as I'm planning to  add the legends arceus holder that lets
+* you carry extra pokemon outside of the party, and let you swap their place  on commmand.
+*  that would essentially bring up a similar issue to hm slaves, but it just wouldn't be inconvenint, or as inconvenient.
+* 
+* Reconider later, still haven't even attempted adding the carry case.
+* would be 6 (or less) extra slots of mon that would be held in a pc type thing
+* simplest thing would be making 1 extra pc box, with fixed title only accessible via this item.
+* no need for new logic, or graphic
 * 
 * //shifting 8 is the same as using 100, left shift << is multiplying,,  >> right shift is dividing
 * 
@@ -1182,6 +1233,20 @@ goto EVOLUTION_LOGIC
 * So you have to decide which mon you will go through the mega trials with, even breeding specifically for that in mind
 * if you want the best possible outcome.
 * 
+* Don't forget plans to revamp breeding mechanics, using as a menes to get alternate forms
+* people don't often use it anyway so may potentially get rid of egg groups, if skitty wailord works it can't make too much logic.
+* will make breeding easier and remove some of the need to use ditto exclusively
+* 
+* other idea, be able to access pc from breeder desk selection, to remove need to go to pc and put
+* mon in your party JUST to put them in the daycare. major time saver and convience feature
+*  
+* Consider increasing day care from 2 mons to 6, i.e 3 pairs of mon can be put in at a time.
+* do some menu work and logic work so there are 3 plots/sections of the day care
+* each plot/slot is treated separately and can house 2 mon that would be a breeding pair.
+* 
+* that way you can generate 3 eggs at a time. 
+* and with inclusion of the opal egg incubator,  egg management would be FAR more efficient
+* 
 */
 goto TRAINER_MEMO_SUMMARY	//pokemon_summary_screen.c, scroll down for trainer memo functions
 goto SUMMARY_GRAPHICS //graphics.c all graphic files, but this spot is for summary screen
@@ -1291,7 +1356,7 @@ goto PRIORITY_EFFECTS	//battle_main.c all effects regarding priority changes go 
 //to cancel fly
 //and set  grounded / smack down status if hit while in the air status.
 //hmm ok just found there's a bs for that, various gravity on in air targets from emerald
-//so guess I'll edit that
+//so guess I'll edit that       -look over and reconsider this
 
 //ok checkd bs_scripts.inc the various command translates to bringdownairbornebattler
 //the command doesn't have any logic secific to gravity instead its associated because
