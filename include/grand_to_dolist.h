@@ -995,7 +995,9 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 * 
 * thanks to emiyasora have a starting point for reference, forgot that breeding/daycare logic essentialy reads back through evolution.
 * that may be what i need.
-* GetEggSpecies
+* GetEggSpecies     yup that works perfetctly,  it loops through species until it finds no mon that can evolve into that mon.
+* 
+* List apend logic can be taken from fieldmove append list
 * 
 * 
 * idea for ev boosting gym do with safron city fighting gym  could give ev boost items there -

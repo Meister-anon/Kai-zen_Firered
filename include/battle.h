@@ -116,6 +116,10 @@ struct TrainerMonNoItemCustomMoves
     u16 moves[4];
 };
 
+/*there isn't really much reason to have more structs than just this, since I've fixed the move error
+only values needed in selction are lvl and species, everything else can be left empty without
+and can safely default to zero.
+Check definition of struct to find base values*/
 struct TrainerMonItemCustomMoves
 {
     u16 iv;
