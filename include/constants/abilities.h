@@ -309,10 +309,12 @@
 #define ABILITY_SUN_DISK 286
 #define ABILITY_TOUGH_SPINES 287	//rough skin for grass types
 #define ABILITY_EROSION 287	//regirock ability, rock absorb also absorbs stealth rocks on switchin
+#define ABILITY_LIQUID_METAL 288
+#define ABILITY_ELEMENTAL_MUSCLE 289
 
 //#define ABILITY_DARK_DEAL 282   
 
-#define ABILITIES_COUNT 288 //note make perish body, only affect target, 
+#define ABILITIES_COUNT 290 //note make perish body, only affect target, 
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 

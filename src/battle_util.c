@@ -272,6 +272,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[] =
 {
     [ABILITY_BATTLE_ARMOR] = 1,
     [ABILITY_CLEAR_BODY] = 1,
+    [ABILITY_LIQUID_METAL] = 1,
     [ABILITY_DAMP] = 1,
     [ABILITY_DRY_SKIN] = 1,
     [ABILITY_FILTER] = 1,
@@ -2066,7 +2067,8 @@ u8 DoBattlerEndTurnEffects(void)
                 if (gDisableStructs[gActiveBattler].octolock
                     && (!(battlerAbility == ABILITY_CLEAR_BODY
                         || battlerAbility == ABILITY_FULL_METAL_BODY
-                        || battlerAbility == ABILITY_WHITE_SMOKE)))
+                        || battlerAbility == ABILITY_WHITE_SMOKE
+                        || battlerAbility == ABILITY_LIQUID_METAL)))
                 {
                     gBattlerTarget = gActiveBattler;
                     BattleScriptExecute(BattleScript_OctolockEndTurn);
@@ -3593,7 +3595,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
     pidDef = GetMonData(pokeDef, MON_DATA_PERSONALITY);
     if (!(gBattleTypeFlags & BATTLE_TYPE_SAFARI)) // Why isn't that check done at the beginning?
     {
-        u8 moveType;
+        u8 moveType, move;
         s32 i;
         u8 side;
         u8 target1;
@@ -4871,7 +4873,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && gBattleMons[gBattlerAttacker].hp != 0
                  && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                  && TARGET_TURN_DAMAGED
-                 && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT))
+                 && (IsMoveMakingContact(move, gBattlerAttacker)))
                 {
                     gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                     if (gBattleMoveDamage == 0)
@@ -4886,7 +4888,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && gBattleMons[gBattlerAttacker].hp != 0
                  && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                  && TARGET_TURN_DAMAGED
-                 && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT))
+                 && (IsMoveMakingContact(move, gBattlerAttacker)))
                 {
                     gBattleWeather = (WEATHER_SANDSTORM_TEMPORARY);
                     BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
@@ -4899,7 +4901,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && gBattleMons[gBattlerAttacker].hp != 0
                  && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                  && TARGET_TURN_DAMAGED
-                 && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT)
+                 && (IsMoveMakingContact(move, gBattlerAttacker))
                  && (Random() % 2) == 0)
                 {
                     do
@@ -4924,7 +4926,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && gBattleMons[gBattlerAttacker].hp != 0
                  && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                  && TARGET_TURN_DAMAGED
-                 && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT)
+                 && (IsMoveMakingContact(move, gBattlerAttacker))
                  && (Random() % 3) == 0)
                 {
                     gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_POISON;
@@ -4939,7 +4941,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && gBattleMons[gBattlerAttacker].hp != 0
                  && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                  && TARGET_TURN_DAMAGED
-                 && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT)
+                 && (IsMoveMakingContact(move, gBattlerAttacker))
                  && (Random() % 3) == 0)
                 {
                     gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_PARALYSIS;
@@ -4953,7 +4955,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                  && gBattleMons[gBattlerAttacker].hp != 0
                  && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
-                 && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT)
+                 && (IsMoveMakingContact(move, gBattlerAttacker))
                  && TARGET_TURN_DAMAGED
                  && (Random() % 3) == 0)
                 {
@@ -4968,7 +4970,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                  && gBattleMons[gBattlerAttacker].hp != 0
                  && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
-                 && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT)
+                 && (IsMoveMakingContact(move, gBattlerAttacker))
                  && TARGET_TURN_DAMAGED
                  && gBattleMons[gBattlerTarget].hp != 0
                  && (Random() % 3) == 0
@@ -5052,6 +5054,28 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     SetMoveEffect(FALSE, 0);
                     BattleScriptPop();
                    ++effect;
+                }
+                break;
+            case ABILITY_PERISH_BODY:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && TARGET_TURN_DAMAGED
+                    && IsBattlerAlive(battler)
+                    && IsMoveMakingContact(move, gBattlerAttacker)
+                    && !(gStatuses3[gBattlerAttacker] & STATUS3_PERISH_SONG))
+                {
+                    /*if (!(gStatuses3[battler] & STATUS3_PERISH_SONG))
+                    {
+                        gStatuses3[battler] |= STATUS3_PERISH_SONG;
+                        gDisableStructs[battler].perishSongTimer = 3;
+                        gDisableStructs[battler].perishSongTimerStartValue = 3;
+                    }*/
+                    gStatuses3[gBattlerAttacker] |= STATUS3_PERISH_SONG;
+                    gDisableStructs[gBattlerAttacker].perishSongTimer = 3;
+                    gDisableStructs[gBattlerAttacker].perishSongTimerStartValue = 3;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_PerishBodyActivates;
+                    effect++;
                 }
                 break;
             case ABILITY_GULP_MISSILE:
@@ -7304,7 +7328,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
                 if (IsBattlerAlive(battlerId)
                  && TARGET_TURN_DAMAGED
                  && !DoesSubstituteBlockMove(gBattlerAttacker, battlerId, gCurrentMove)
-                 && IS_MOVE_PHYSICAL(gCurrentMove)
+                 && (IS_MOVE_PHYSICAL(gCurrentMove) || (IS_MOVE_SPECIAL(gCurrentMove) && GetBattlerAbility(gBattlerAttacker) == ABILITY_ELEMENTAL_MUSCLE))
                  && GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
                 {
                     gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
@@ -7567,6 +7591,8 @@ bool8 IsMoveMakingContact(u16 move, u8 battlerAtk)
         return FALSE;
     else if (GetBattlerAbility(battlerAtk) == ABILITY_LONG_REACH)
         return FALSE;
+    else if (GetBattlerAbility(battlerAtk) == ABILITY_ELEMENTAL_MUSCLE)
+        return TRUE;
     else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PROTECTIVE_PADS)
         return FALSE;
     else
@@ -7918,7 +7944,7 @@ u32 GetBattlerWeight(u8 battlerId) //use ethis for calculating  seismic toss dam
 
     if (ability == ABILITY_HEAVY_METAL)
         weight *= 2;
-    else if (ability == ABILITY_LIGHT_METAL)
+    else if (ability == (ABILITY_LIGHT_METAL || ABILITY_LIQUID_METAL))
         weight /= 2;
 
     if (holdEffect == HOLD_EFFECT_FLOAT_STONE)

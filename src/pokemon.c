@@ -3242,7 +3242,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     s32 damage = 0;
     s32 damageHelper;
     u8 type;
-    bool8 usesDefStat;
+    bool8 usesDefStat;  //determines split, 
     u8 defStage;
     u16 attack, defense, speed;
     u16 spAttack, spDefense, defStat;
@@ -3269,7 +3269,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     spDefense = defender->spDefense;
     speed = attacker->speed;
 
-    if (gBattleMoves[move].effect == EFFECT_PSYSHOCK || IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
+    if (gBattleMoves[move].effect == EFFECT_PSYSHOCK || gBattleMons[battlerIdAtk].ability == ABILITY_ELEMENTAL_MUSCLE || IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
     {
         defStat = defense;
         defStage = gBattleMons[battlerIdDef].statStages[STAT_DEF];  //defined these now hopefully it works fine and doens't mess up normla damage calc
@@ -3351,7 +3351,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             else
                 spAttack = (spAttack * (attackerHoldEffectParam + 100)) / 100;
             break;
-        }
+        }//don't understand this
     }
 
 
@@ -3422,7 +3422,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         spAttack = (150 * spAttack) / 100;
     if (attacker->ability == ABILITY_PLUS && ABILITY_ON_FIELD2(ABILITY_MINUS))
         spAttack = (150 * spAttack) / 100;
-    if (attacker->ability == ABILTY_UNKNOWN_POWER && GetMonData(BATTLE_PARTNER(gBattlerAttacker, MON_DATA_SPECIES) == SPECIES_UNOWN)
+    if (attacker->ability == ABILTY_UNKNOWN_POWER && GetMonData(BATTLE_PARTNER(gBattlerAttacker, MON_DATA_SPECIES) == SPECIES_UNOWN))
         gBattleMoveDamage *= 2;
     if (attacker->ability == ABILITY_MINUS && ABILITY_ON_FIELD2(ABILITY_PLUS))
         spAttack = (150 * spAttack) / 100;
@@ -3561,7 +3561,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_TOUGH_CLAWS:
-        if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+        if (IsMoveMakingContact(move, gBattlerAttacker))
             gBattleMovePower = (gBattleMovePower * 130 / 100);
         //MulModifier(&modifier, UQ_4_12(1.3));
         break;
@@ -3720,6 +3720,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMoveDamage /= 2;
         break;
     case ABILITY_HEATPROOF:
+    case ABILITY_DAMP:
     case ABILITY_WATER_BUBBLE:
         if (type == TYPE_FIRE)
         {
@@ -3751,6 +3752,13 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             //MulModifier(&modifier, UQ_4_12(2.0)); //CHeck if need else if, fire contact moves should be 1
         break;  //tested in w3 schools, checks out, it reads top to bottom with ifs, not like switch breaks, its all inclusive
         //...actually following with else if is what makes it non inclusive...i.e not read the else if vsonic IMPORTANT
+    case ABILITY_LIQUID_METAL:
+        if (IsMoveMakingContact(move, gBattlerAttacker))
+        {
+            gBattleMoveDamage = (gBattleMoveDamage * 67 / 100);
+            
+        }
+        break;
     case ABILITY_MULTISCALE:
     case ABILITY_SHADOW_SHIELD:
         if (BATTLER_MAX_HP(gBattlerTarget))

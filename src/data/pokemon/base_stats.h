@@ -1269,7 +1269,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_GRASS,
         .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
-        .abilityHidden = {ABILITY_STENCH, ABILITY_AFTERMATH},
+        .abilityHidden = {ABILITY_AFTERMATH, ABILITY_PRANKSTER},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -1297,7 +1297,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_GRASS,
         .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
-        .abilityHidden = {ABILITY_EFFECT_SPORE, ABILITY_EFFECT_SPORE},
+        .abilityHidden = {ABILITY_EFFECT_SPORE, ABILITY_PRANKSTER},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -10640,9 +10640,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_CLEAR_BODY, ABILITY_NONE},
+        .abilities = {ABILITY_LIQUID_METAL, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_LIGHT_METAL, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -20738,7 +20738,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-    },
+    },//give first impressions as evo move & facade
 
     [SPECIES_GRUBBIN] =
     {

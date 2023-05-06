@@ -527,6 +527,8 @@ as well as the effect of increasing trap duration
 * 
 * BUFFED unown, learnset and new ability - DONE
 * 
+* give gumshoos move first impressions and facade as evo moves, leaning into trump pokemon idea
+* 
 * nother wave of buffs, delcatty buff, will need change its pokedex entry to fit, made part ghost, cats have 9 lives
 * may say delcatty is cat that died and came back intending to live its life to the fullest of its desire. - DONE
 * 
@@ -1179,14 +1181,19 @@ goto EVOLUTION_LOGIC
 * thick armor plating stronger bones
 * new ability idea, is um damage reduction  I think 20%?
 * 2nd ability turns every special move into a physical contact move as marowak learns moves like flamethrower but has trash sp atk 
-* also good for machamp, inspired by Mashle believe will call elemental muscle -
+* also good for machamp, inspired by Mashle believe will call elemental muscle - DONE
 * hmm may actually be able to do a special animation for it,  like fire punch, can add the fist animation to the end of moves if ability is e.m ?
 * would need to setup new macro?
+* think can do same thing I did for truant and make new bs that will play an animation I want.
+* think can do punch/foot animation and have it play the punch animation during or after the normal move animtion
+* would need to setup like I did for multihit, do ability check and then play animation
+* idk if I can gete timing perfect, but hopefully would work
 * 
 * ability liquid metal, for regi-steel effects of light metal, but also reduces damage from contact moves, like fluffy does
 * not sure if will do full 50% reduction or do a 33% reduction instead. prob the latter
 * could make it a metal absorb ability?  idk if I'll do this, would be interesting as it doesn't exist
-* but not necissarly good as steel is so good as a defensive option not an offensive one. -
+* but not necissarly good as steel is so good as a defensive option not an offensive one.
+* instead decide to mix in clear body effect - DONE
 * 
 * //Glacial Ice for regi-ice negates fire damage also combine with ice-body effect to heal during hail and add low chance to freeze on contact
     //make sure stacks with hail effect freeze chance boost 
@@ -1194,7 +1201,7 @@ goto EVOLUTION_LOGIC
 * 
 * Rock Collctor (name pending) for regi rock //rock version of volt absorb, that also absorbs stealh rocks
 * think will have it also heal if absorb stealth rocks
-* Anthroyd came up with name "Erosion"  will use that.  wearing down rocks to use for healing minerals
+* Anthroyd came up with name "Erosion"  will use that.  wearing down rocks to use for healing minerals- DONE
 * 
 * purifying aura, Suicune Ability similar effect to healer, also mon removes all status effects on itself & allies at the end of turn
 * in doubles heals status of ally on switchin as well. -DONE need test

@@ -1672,7 +1672,7 @@ static void atk01_accuracycheck(void)
             moveAcc = 100; // to prevent possible broken values.
         calc = sAccuracyStageRatios[buff].dividend * moveAcc;
         calc /= sAccuracyStageRatios[buff].divisor;
-        if (gBattleMons[gBattlerAttacker].ability == ABILITY_COMPOUND_EYES)
+        if (gBattleMons[gBattlerAttacker].ability == (ABILITY_COMPOUND_EYES || ABILITY_ILLUMINATE))
             calc = (calc * 130) / 100; // 1.3 compound eyes boost
         if (WEATHER_HAS_EFFECT && gBattleMons[gBattlerTarget].ability == ABILITY_SAND_VEIL && gBattleWeather & WEATHER_SANDSTORM_ANY)
             calc = (calc * 80) / 100; // 1.2 sand veil loss
@@ -2784,7 +2784,8 @@ static void atk0C_datahpupdate(void)
                     }
                     if (!gSpecialStatuses[gActiveBattler].dmg && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE))
                         gSpecialStatuses[gActiveBattler].dmg = gHpDealt;
-                    if (IS_MOVE_PHYSICAL(move) && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE) && gCurrentMove != MOVE_PAIN_SPLIT)
+                    if ((IS_MOVE_PHYSICAL(move) || (IS_MOVE_SPECIAL(move) && GetBattlerAbility(gActiveBattler) == ABILITY_ELEMENTAL_MUSCLE))
+                        && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE) && gCurrentMove != MOVE_PAIN_SPLIT)
                     {
                         gProtectStructs[gActiveBattler].physicalDmg = gHpDealt;
                         gSpecialStatuses[gActiveBattler].physicalDmg = gHpDealt;
@@ -5250,7 +5251,9 @@ static void atk48_playstatchangeanimation(void)
                         && gBattleMons[gActiveBattler].ability != ABILITY_CLEAR_BODY
                         && gBattleMons[gActiveBattler].ability != ABILITY_FULL_METAL_BODY
                         && gBattleMons[gActiveBattler].ability != ABILITY_WHITE_SMOKE
+                        && gBattleMons[gActiveBattler].ability != ABILITY_LIQUID_METAL
                         && !(gBattleMons[gActiveBattler].ability == ABILITY_KEEN_EYE && currStat == STAT_ACC)
+                        && !(gBattleMons[gActiveBattler].ability == ABILITY_TANGLED_FEET && currStat == STAT_SPEED)
                         && !(gBattleMons[gActiveBattler].ability == ABILITY_HYPER_CUTTER && currStat == STAT_ATK))
                 {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > 0)
@@ -10331,7 +10334,9 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
             return STAT_CHANGE_DIDNT_WORK;
         }
         else if ((gBattleMons[gActiveBattler].ability == ABILITY_CLEAR_BODY
-                  || gBattleMons[gActiveBattler].ability == ABILITY_WHITE_SMOKE)
+                  || gBattleMons[gActiveBattler].ability == ABILITY_WHITE_SMOKE
+                  || gBattleMons[gActiveBattler].ability == ABILITY_FULL_METAL_BODY
+                  || gBattleMons[gActiveBattler].ability == ABILITY_LIQUID_METAL)
               && !certain
               && gCurrentMove != MOVE_CURSE)
         {
@@ -10355,6 +10360,19 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
         }
         else if (gBattleMons[gActiveBattler].ability == ABILITY_KEEN_EYE
                  && !certain && statId == STAT_ACC)
+        {
+            if (flags == STAT_CHANGE_BS_PTR)
+            {
+                BattleScriptPush(BS_ptr);
+                gBattleScripting.battler = gActiveBattler;
+                gBattlescriptCurrInstr = BattleScript_AbilityNoSpecificStatLoss;
+                gLastUsedAbility = gBattleMons[gActiveBattler].ability;
+                RecordAbilityBattle(gActiveBattler, gLastUsedAbility);
+            }
+            return STAT_CHANGE_DIDNT_WORK;
+        }
+        else if (gBattleMons[gActiveBattler].ability == ABILITY_TANGLED_FEET
+            && !certain && statId == STAT_SPEED)
         {
             if (flags == STAT_CHANGE_BS_PTR)
             {

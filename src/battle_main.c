@@ -4398,7 +4398,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         speedBattler1 = (speedBattler1 * 110) / 100;
     if (holdEffect == HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE)
         speedBattler1 /= 2;
-    if (gBattleMons[battler1].status1 & STATUS1_PARALYSIS)
+    if ((gBattleMons[battler1].status1 & STATUS1_PARALYSIS) && gBattleMons[battler1].ability != ABILITY_TANGLED_FEET)
         speedBattler1 /= 4;
     //trap effects
     if ((gBattleMons[battler1].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battler1].status1 & STATUS1_WHIRLPOOL))  //should be good
@@ -4429,7 +4429,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         speedBattler2 = (speedBattler2 * 110) / 100;
     if (holdEffect == HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE)
         speedBattler2 /= 2;
-    if (gBattleMons[battler2].status1 & STATUS1_PARALYSIS)
+    if ((gBattleMons[battler2].status1 & STATUS1_PARALYSIS) && gBattleMons[battler2].ability != ABILITY_TANGLED_FEET)
         speedBattler2 /= 4;
     //trap effects
     if ((gBattleMons[battler2].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battler2].status1 & STATUS1_WHIRLPOOL))  //should be good
