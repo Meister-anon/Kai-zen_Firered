@@ -13083,7 +13083,8 @@ static void atkE4_getsecretpowereffect(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atkE5_pickup(void)
+#define PICKUP_LOGIC
+static void atkE5_pickup(void) //why is this a bs command when the ability has no in battle effect?
 {
     s32 i;
     u32 j;
@@ -13095,16 +13096,18 @@ static void atkE5_pickup(void)
         species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
         heldItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
         if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) != ABILITY_NONE) //important need change this
-            ability = gBaseStats[species].abilities[1];
+            ability = gBaseStats[species].abilities[1]; //well no mon have pipckup as hidden ability so this prob fine
         else
             ability = gBaseStats[species].abilities[0];
-        if (ability == ABILITY_PICKUP && species != SPECIES_NONE && species != SPECIES_EGG && heldItem == ITEM_NONE && !(Random() % 10))
+        if (ability == ABILITY_PICKUP && /*species != SPECIES_NONE && species != SPECIES_EGG &&*/ heldItem == ITEM_NONE 
+            && !(Random() % 6))    //random %10 is odds, its saying will trigger on a 10% chance when random returns 0
         {
-            s32 random = Random() % 100;
+            s32 random = Random() % 100; //then anothr set of rng, return a value betwen 0-99l and loops through pickup array until reach 
+            //and odds value greater than your percent chance
 
-            for (j = 0; j < 15; ++j)
-                if (sPickupItems[j].chance > random)
-                    break;
+            for (j = 0; j < ARRAY_COUNT(sPickupItems); ++j) //may add on to this, add better items
+                if (sPickupItems[j].chance > random)    //effect isn't really random, so want to change?, may make pick a value between 15 rathre than loop it
+                    break;//and exclusively for the tm return, I want to make it reset the itemid, so it returns a random tm/hm to get more use out of it
             SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &sPickupItems[j]);
         }
     }

@@ -3940,6 +3940,13 @@ BattleScript_PerishSongNotAffected::
 	waitmessage 0x40
 	goto BattleScript_PerishSongLoopIncrement
 
+BattleScript_PerishBodyActivates::
+	@call BattleScript_AbilityPopUp
+	printstring STRINGID_FAINTINTHREE
+	waitmessage 0x40
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_x100000
+	return
+
 BattleScript_EffectSandstorm::
 	attackcanceler
 	attackstring

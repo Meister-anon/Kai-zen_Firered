@@ -610,11 +610,19 @@ as well as the effect of increasing trap duration
 * 
 * Setting up flash freeze to just use sheer cold animation for now- will prbo keep DONE
 * 
+* For different forms, i.e hisuan alolan galarain cefirian, setup icon similar to pokerus in summary screen
+* that will show a pokemon has the relevant flag set, and will evolve into its alternate form
+* perhaps can demonstrate to player, with one of the in-game trades?
+* just want to put a little letter in the bottom right of summarys screen box where mon pic is
+* A C G H hopefully of different color for each  thinking seafoam/light green for ceferia  orange or red for alola
+* purple for Hisuian? maybe dark gold for galar idk
+* 
 * abra buff, gave comatose, slightly buffed health to help give a chance of staying as abra to keep status immunity
 * buffing to give comatose end turn healing 1/8th max health  as it takes double damgae from hex etc.
 * and guarantees sleep based damage without having to get hit by low accuracy sleep move.
 * Also keep in mind plan to allow being damaged by multiple status 1s at once, which would mean removing
 * volatile status immunity from comatose, so consider this balancing for a future nerf  - DONE consider give substitute to comatose mon if needed
+* (prob just for abra, as it learns sub byb tm gen 1
 * 
 * STATUS NOTES-
 * could put in exceptions for statuses but it wouldn't be for every ability as for others unchanged
@@ -1300,7 +1308,7 @@ goto TYPE_AND_STAB_CHECK //battle_script_commands.c  type calc also where s.t.a.
 */ 
 
 
-
+goto PICKUP_LOGIC
 goto STAT_AND_DAMAGE_ABILITIES_ETC // pokemon.c function for ability and item effects that affect damage calc
 
 goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability activation logic.  STIL need to update
@@ -1324,6 +1332,10 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * note- also found all I needd to reactivate switch in ability is to call the battlescript again
 * 
 * smeargle changes new moves -
+* 
+* buff to make magma armor unique, rather than just naother flame body (specially since I gave flame body freeze immunity
+* first idea is give it incinerate effect, where it destroys enemy held item on contact
+* othre idea is sp def damage reduction from being surrounded in magma shield
 * 
 * fix ditto make imposter its only ability (or just but  speed stat so it can transform easier)
 * change imposter to be more than just a free transform on switch.

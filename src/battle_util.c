@@ -4966,6 +4966,38 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     ++effect;
                 }
                 break;
+            case ABILITY_MAGMA_ARMOR:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && TARGET_TURN_DAMAGED
+                    && IsBattlerAlive(battler)
+                    && IsMoveMakingContact(move, gBattlerAttacker))
+                {
+                    if (gBattleMons[gBattlerAttacker].ability == ABILITY_STICKY_HOLD)
+                    {
+                        if (gBattleMons[gBattlerAttacker].item != ITEM_NONE)
+                        {
+                            gLastUsedAbility = ABILITY_STICKY_HOLD;
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_StickyHoldActivates;
+                            RecordAbilityBattle(gBattlerAttacker, ABILITY_STICKY_HOLD);
+                        }
+                        break;
+                    }
+                    else if (gBattleMons[gBattlerAttacker].item)
+                    {
+                        side = GetBattlerSide(gBattlerAttacker);
+                        gLastUsedItem = gBattleMons[gBattlerAttacker].item;
+                        gBattleMons[gBattlerAttacker].item = ITEM_NONE;
+                        gWishFutureKnock.knockedOffMons[side] |= gBitTable[gBattlerPartyIndexes[gBattlerAttacker]];
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_MoveEffectIncinerate;   //changed to new magma armor script
+                        *(u8*)((u8*)(&gBattleStruct->choicedMove[gBattlerAttacker]) + 0) = 0;   //necessary line
+                        *(u8*)((u8*)(&gBattleStruct->choicedMove[gBattlerAttacker]) + 1) = 0;
+                        ++effect;
+                    }
+                }
+                break;
             case ABILITY_CUTE_CHARM:
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                  && gBattleMons[gBattlerAttacker].hp != 0
@@ -4984,76 +5016,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_CuteCharmActivates;
                     ++effect;
-                }
-                break;
-            }
-            break;
-        case ABILITYEFFECT_MOVE_END_ATTACKER: // Same as above, but for attacker hits enemy
-            switch (gLastUsedAbility)
-            {
-            case ABILITY_POISON_TOUCH:
-                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                    && gBattleMons[gBattlerTarget].hp != 0
-                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
-                    && CanBePoisoned(gBattlerAttacker, gBattlerTarget)
-                    && IsMoveMakingContact(move, gBattlerAttacker)
-                    && TARGET_TURN_DAMAGED // Need to actually hit the target
-                    && (Random() % 3) == 0)
-                {
-                    gBattleScripting.moveEffect = MOVE_EFFECT_POISON; //tesst later
-                    //gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
-                    //PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
-                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    effect++;
-                }
-                break;
-            case ABILITY_STATIC:
-                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                    && gBattleMons[gBattlerAttacker].hp != 0
-                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
-                    && IsMoveMakingContact(move, gBattlerAttacker) //not using other paralyze statemetn cuz think I already have my own logic
-                    && TARGET_TURN_DAMAGED
-                    && (Random() % 3) == 0)
-                {
-                    gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
-                    //gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
-                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    ++effect;
-                }
-                break;
-            case ABILITY_FLAME_BODY:
-                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                    && gBattleMons[gBattlerAttacker].hp != 0
-                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
-                    && IsMoveMakingContact(move, gBattlerAttacker)
-                    && TARGET_TURN_DAMAGED
-                    && (Random() % 3) == 0)
-                {
-                    gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
-                    //gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
-                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    ++effect;
-                }
-                break;
-            case ABILITY_STENCH:
-                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                    && gBattleMons[gBattlerTarget].hp != 0
-                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
-                    && (Random() % 10) == 0
-                    && !IS_MOVE_STATUS(move)
-                    && !sMovesNotAffectedByStench[gCurrentMove])
-                {
-                    gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
-                    BattleScriptPushCursor();
-                    SetMoveEffect(FALSE, 0);
-                    BattleScriptPop();
-                   ++effect;
                 }
                 break;
             case ABILITY_PERISH_BODY:
@@ -5076,6 +5038,109 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_PerishBodyActivates;
                     effect++;
+                }
+                break;
+            }
+            break;
+        case ABILITYEFFECT_MOVE_END_ATTACKER: // Same as above, but for attacker with ability hits enemy
+            switch (gLastUsedAbility)
+            {
+            case ABILITY_POISON_TOUCH:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && gBattleMons[gBattlerTarget].hp != 0
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && CanBePoisoned(gBattlerAttacker, gBattlerTarget)
+                    && IsMoveMakingContact(move, gBattlerAttacker)
+                    && TARGET_TURN_DAMAGED // Need to actually hit the target
+                    && (Random() % 3) == 0)
+                {
+                    gBattleScripting.moveEffect = MOVE_EFFECT_POISON; //tesst later
+                    //gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
+                    //PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
+                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                    effect++;
+                }
+                break;
+            case ABILITY_STATIC:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && gBattleMons[gBattlerTarget].hp != 0
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && IsMoveMakingContact(move, gBattlerAttacker) //not using other paralyze statemetn cuz think I already have my own logic
+                    && TARGET_TURN_DAMAGED
+                    && (Random() % 3) == 0)
+                {
+                    gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+                    //gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
+                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                    ++effect;
+                }
+                break;
+            case ABILITY_FLAME_BODY:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && gBattleMons[gBattlerTarget].hp != 0
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && IsMoveMakingContact(move, gBattlerAttacker)
+                    && TARGET_TURN_DAMAGED
+                    && (Random() % 3) == 0)
+                {
+                    gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
+                    //gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
+                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                    ++effect;
+                }
+                break;
+            case ABILITY_MAGMA_ARMOR:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && gBattleMons[gBattlerTarget].hp != 0  
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && TARGET_TURN_DAMAGED
+                    && IsBattlerAlive(battler)
+                    && IsMoveMakingContact(move, gBattlerAttacker))
+                {
+                    if (gBattleMons[gBattlerTarget].ability == ABILITY_STICKY_HOLD)
+                    {
+                        if (gBattleMons[gBattlerTarget].item != ITEM_NONE)
+                        {
+                            gLastUsedAbility = ABILITY_STICKY_HOLD;
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_StickyHoldActivates;
+                            RecordAbilityBattle(gBattlerTarget, ABILITY_STICKY_HOLD);
+                        }
+                        break;
+                    }
+                    else if (gBattleMons[gBattlerTarget].item)
+                    {
+                        side = GetBattlerSide(gBattlerTarget);
+                        gLastUsedItem = gBattleMons[gBattlerTarget].item;
+                        gBattleMons[gBattlerTarget].item = ITEM_NONE;
+                        gWishFutureKnock.knockedOffMons[side] |= gBitTable[gBattlerPartyIndexes[gBattlerTarget]];
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_MoveEffectIncinerate;
+                        *(u8*)((u8*)(&gBattleStruct->choicedMove[gBattlerTarget]) + 0) = 0; //necessary line
+                        *(u8*)((u8*)(&gBattleStruct->choicedMove[gBattlerTarget]) + 1) = 0;
+                        ++effect;
+                    }
+                }
+                break;
+            case ABILITY_STENCH:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && gBattleMons[gBattlerTarget].hp != 0
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && (Random() % 10) == 0
+                    && !IS_MOVE_STATUS(move)
+                    && !sMovesNotAffectedByStench[gCurrentMove])
+                {
+                    gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
+                    BattleScriptPushCursor();
+                    SetMoveEffect(FALSE, 0);
+                    BattleScriptPop();
+                   ++effect;
                 }
                 break;
             case ABILITY_GULP_MISSILE:
@@ -5161,6 +5226,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         effect = 1;
                     }
                     break;
+                case ABILITY_FLAME_BODY:
                 case ABILITY_MAGMA_ARMOR:
                     if (gBattleMons[battler].status1 & STATUS1_FREEZE)
                     {
@@ -5182,7 +5248,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         //maybe I can change intimidate and synchronize to a switch case to do the swtich in actiation I want?
                     {
                     case 1: // status cleared
-                        gBattleMons[battler].status1 = 0; //if I'm able to apply multiple status may have to change this
+                        gBattleMons[battler].status1 = 0; //if I'm able to apply multiple status may have to change this to like the others and clear specific status
                         break;
                     case 2: // get rid of confusion
                         gBattleMons[battler].status2 &= ~(STATUS2_CONFUSION);
@@ -8376,6 +8442,7 @@ bool32 CanBeFrozen(u8 battlerId)
       || IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY)
       || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_SAFEGUARD
       || ability == ABILITY_MAGMA_ARMOR
+      || ability == ABILITY_FLAME_BODY
       || ability == ABILITY_COMATOSE
       || gBattleMons[battlerId].status1 & STATUS1_ANY
       || IsAbilityStatusProtected(battlerId)

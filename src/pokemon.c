@@ -3753,7 +3753,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;  //tested in w3 schools, checks out, it reads top to bottom with ifs, not like switch breaks, its all inclusive
         //...actually following with else if is what makes it non inclusive...i.e not read the else if vsonic IMPORTANT
     case ABILITY_LIQUID_METAL:
-        if (IsMoveMakingContact(move, gBattlerAttacker))
+        if ((IsMoveMakingContact(move, gBattlerAttacker)) || usesDefStat)
         {
             gBattleMoveDamage = (gBattleMoveDamage * 67 / 100);
             
@@ -3778,6 +3778,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMoveDamage /= 2;
         }
         break;
+    case ABILITY_MAGMA_ARMOR:
     case ABILITY_ICE_SCALES:
         if (!usesDefStat)//IS_MOVE_SPECIAL(move))
             gBattleMoveDamage /= 2;

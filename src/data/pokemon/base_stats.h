@@ -1894,7 +1894,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_NO_GUARD},
-            .abilityHidden = {ABILITY_STEADFAST, ABILITY_LIMBER},
+            .abilityHidden = {ABILITY_ELEMENTAL_MUSCLE, ABILITY_LIMBER},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_NONE},
         #endif
@@ -1924,7 +1924,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_NO_GUARD},
-            .abilityHidden = {ABILITY_STEADFAST, ABILITY_LIMBER},
+            .abilityHidden = {ABILITY_ELEMENTAL_MUSCLE, ABILITY_LIMBER},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_NONE},
         #endif
@@ -1954,7 +1954,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_NO_GUARD},
-            .abilityHidden = {ABILITY_STEADFAST, ABILITY_MULTI_TASK},
+            .abilityHidden = {ABILITY_ELEMENTAL_MUSCLE, ABILITY_MULTI_TASK},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_NONE},
         #endif
@@ -6124,7 +6124,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_MAGMA_ARMOR, ABILITY_FLAME_BODY},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_GOOEY},
         #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -6132,7 +6132,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_MAGCARGO] =
     {
-        .baseSpDefense = 115,
+        .baseSpDefense = 90,
         .baseAttack = 50,
         .baseDefense = 120,
         .baseSpeed = 30,
@@ -6149,9 +6149,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_STEAM_ENGINE, ABILITY_FLAME_BODY},
+        .abilities = {ABILITY_MAGMA_ARMOR, ABILITY_FLAME_BODY},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_STEAM_ENGINE},
         #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,

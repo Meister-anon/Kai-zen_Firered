@@ -1172,6 +1172,8 @@ static bool8 TryProduceOrHatchEgg(struct DayCare *daycare)
                 continue;
 
             steps = GetMonData(&gPlayerParty[i], MON_DATA_FRIENDSHIP);
+            //put logic for ability decreasing step count here, ABILITY_STEAM_ENGINE ABILITY
+            //ABILITY_FLAME_BODY  & ABILITY_MAGMA_ARMOR
             if (steps != 0)
             {
                 steps -= 1;
