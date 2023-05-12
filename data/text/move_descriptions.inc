@@ -443,7 +443,7 @@ gMoveDescription_Flash:: @ 8484F20
 	.string "A blast of light\nthat cuts the foe's\naccuracy. It also\nmay cause flinch.$"
 
 gMoveDescription_Psywave:: @ 8484F6A
-	.string "The foe is attacked\nwith an odd, hot\nenergy wave that\nvaries in intensity.$"
+	.string "The foe is attacked\nwith an odd, hot\nenergy wave that\nvaries greatly in intensity.$"
 
 gMoveDescription_Splash:: @ 8484FB5
 	.string "The user just flops\nand splashes around\nwithout having any\neffect.$"

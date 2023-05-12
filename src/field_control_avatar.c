@@ -777,7 +777,7 @@ static void UpdatePickupCounter(void)
     
 
     (*ptr)++;       //increment counter
-    (*ptr) %= 25;   //wrap around at 25
+    (*ptr) %= 250;   //wrap around at 250
 
         for (i = 0; i < PARTY_SIZE; ++i)
         {
@@ -789,7 +789,7 @@ static void UpdatePickupCounter(void)
         if (*ptr == 0)  //can use pointer without ability check, as ability check is already in call for this function
         {
             s32 random = Random() % 101;
-            for (j = 0; j < ARRAY_COUNT(sPickupItems) - 1; ++j) //minus 1 is to keep it from incrementing passed array limit.
+            for (j = 0; j < ARRAY_COUNT(sPickupItems); ++j) //minus 1 was specific for this array, as it wasn't made to go to last value, I changed it.
             {
                 if (sPickupItems[j].chance > random)
                     break;

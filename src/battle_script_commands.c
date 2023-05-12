@@ -11224,10 +11224,14 @@ static void atk9F_dmgtolevel(void)
 static void atkA0_psywavedamageeffect(void)
 {
     s32 randDamage;
+    u8 scaler = 50;
 
-    while ((randDamage = (Random() & 0xF)) > 10);
-    randDamage *= 10;
-    gBattleMoveDamage = gBattleMons[gBattlerAttacker].level * (randDamage + 50) / 100;
+    if (Random() % 19 > 15)  //returns 20 values, double scale value if above 15, slightly greater than 1 in 4 odds.
+        scaler *= 2;
+
+    randDamage = (Random() % 11); //VALUe between 0 & 10
+    randDamage *= 10;   //becomes a value between 0 & 100
+    gBattleMoveDamage = gBattleMons[gBattlerAttacker].level * (randDamage + scaler) / 100;
     ++gBattlescriptCurrInstr;
 }
 

@@ -1309,7 +1309,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 77,
         .baseSpeed = 55,
         .baseSpAttack = 45,
-        .baseSpDefense = 65,
+        .baseSpDefense = 75,
         .type1 = TYPE_BUG,
         .type2 = TYPE_GRASS,
         .catchRate = 190,
@@ -1326,24 +1326,24 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_EFFECT_SPORE, ABILITY_DRY_SKIN},
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_EFFECT_SPORE, ABILITY_NONE},
+            .abilities = {ABILITY_EFFECT_SPORE, ABILITY_IMMUNITY},
         #endif
         .safariZoneFleeRate = 50,
-        .abilityHidden = {ABILITY_DAMP, ABILITY_NONE},
+        .abilityHidden = {ABILITY_DAMP, ABILITY_IMMUNITY},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
 
     [SPECIES_PARASECT] =
     {
-        .baseHP = 108,
+        .baseHP = 88,
         .baseAttack = 95,
         .baseDefense = 115,
         .baseSpeed = 30,
         .baseSpAttack = 60,
         .baseSpDefense = 88,
         .type1 = TYPE_BUG,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_GHOST,
         .catchRate = 75,
         .expYield = 142,
         //.evYield_Attack = 2,
@@ -1362,7 +1362,7 @@ const struct BaseStats gBaseStats[] =
             .abilities = {ABILITY_EFFECT_SPORE, ABILITY_NONE},
         #endif
         .safariZoneFleeRate = 75,
-        .abilityHidden = {ABILITY_DAMP, ABILITY_NONE},
+        .abilityHidden = {ABILITY_DAMP, ABILITY_IMMUNITY},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -1549,14 +1549,14 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_PSYDUCK] =
     {
-        .baseHP = 50,
+        .baseHP = 40,
         .baseAttack = 56,
-        .baseDefense = 48,
+        .baseDefense = 58,
         .baseSpeed = 55,
-        .baseSpAttack = 65,
-        .baseSpDefense = 60,
+        .baseSpAttack = 85,
+        .baseSpDefense = 65,
         .type1 = TYPE_WATER,
-        .type2 = TYPE_WATER,
+        .type2 = TYPE_PSYCHIC,
         .catchRate = 190,
         .expYield = 64,
         //.evYield_SpAttack = 1,
@@ -1576,7 +1576,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_GOLDUCK] =
     {
         .baseHP = 90,
-        .baseAttack = 83,
+        .baseAttack = 95,
         .baseDefense = 78,
         .baseSpeed = 85,
         .baseSpAttack = 95,

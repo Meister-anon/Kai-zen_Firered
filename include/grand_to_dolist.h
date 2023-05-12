@@ -590,6 +590,15 @@ as well as the effect of increasing trap duration
 * and is hard to evolve.
 * but the biggest issue is prob, that it doesn't seem to get any moves above like 50 power.
 * 
+* added more buffs to paras line with ideas from youtubeer Zen Mode also leans
+* into what I want of giving a good reason to use mon indivdually from their evolution
+* if they change greatly between evos.
+* so parasect gets ghost type, bring up sp def for eviolite on paras
+* give parasect ghost moves  evolving to ghost will make FAR more defensive, but
+* get less use out of effect spore with normal fighting immunity
+* give parasct nightmare in learnset  potentially added ultra sun dex entry
+* Also give it pain split  & shadow punch  and dream eater and destiny bond
+* 
 * make pressure & hi pressure work like paralysis chance to prevent  atk- DONE need test
 * 
 * make revisions to add grass moves to sudowoodo line lvl up and tm learnsets   thinkin ingrain & bullet seed
