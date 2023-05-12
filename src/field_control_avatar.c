@@ -110,7 +110,7 @@ static const struct PickupItem sPickupItems[] =
     { ITEM_PAMTRE_BERRY, 97 },
     { ITEM_WATMEL_BERRY, 98 },
     { ITEM_DURIN_BERRY, 99 },
-    { ITEM_BELUE_BERRY, 1 },
+    { ITEM_LUXURY_BALL, 100 },
 };
 
 struct FieldInput gInputToStoreInQuestLogMaybe;
@@ -692,8 +692,7 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
 {
     u8 i;
     bool8 found = FALSE;
-    u16 species;
-    u32 ability;
+
 
     /*if (InUnionRoom() == TRUE)
         return FALSE;*/
@@ -704,21 +703,13 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
 
     for (i = 0; i < PARTY_SIZE; ++i)
     {
-        species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
 
-        if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) == 0)
-            ability = gBaseStats[species].abilities[0];
-        else if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) == 1)
-            ability = gBaseStats[species].abilities[1];
-        else if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) == 2)
-            ability = gBaseStats[species].abilityHidden[0];
-        else
-            ability = gBaseStats[species].abilityHidden[1];
-
-        if (ability == ABILITY_PICKUP) //if a mon with pickkup is in party, counter will go up, 
+        if (GetMonAbility(&gPlayerParty[i]) == ABILITY_PICKUP)
         {
             found = TRUE;
+
         }
+    }
 
         if (found == TRUE)
             UpdatePickupCounter();
@@ -727,7 +718,7 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
         {
             VarSet(VAR_PICKUP_COUNTER, 0);
         }
-    }
+    
 
     if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_FISHING) && !MetatileBehavior_IsForcedMovementTile(metatileBehavior))
     {
@@ -781,8 +772,6 @@ static void UpdatePickupCounter(void)
     u16 *ptr = GetVarPointer(VAR_PICKUP_COUNTER);
     s32 i;
     u32 j;
-    u16 species;
-    u32 ability;
     s32 randomTM = Random() % NUM_TECHNICAL_MACHINES;   //using will make function automatically scale
     u16 arrayItem = sPickupItems[j].itemId;
     
@@ -790,22 +779,16 @@ static void UpdatePickupCounter(void)
     (*ptr)++;       //increment counter
     (*ptr) %= 25;   //wrap around at 25
 
-    for (i = 0; i < PARTY_SIZE; ++i)
-    {
-        species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
-
-        if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) == 0)
-            ability = gBaseStats[species].abilities[0];
-        else if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) == 1)
-            ability = gBaseStats[species].abilities[1];
-        else if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) == 2)
-            ability = gBaseStats[species].abilityHidden[0];
-        else
-            ability = gBaseStats[species].abilityHidden[1];
-
-        if (ability == ABILITY_PICKUP && *ptr == 0)
+        for (i = 0; i < PARTY_SIZE; ++i)
         {
-            s32 random = Random() % 100;
+            if (GetMonAbility(&gPlayerParty[i]) == ABILITY_PICKUP)
+                break;
+        }
+
+
+        if (*ptr == 0)  //can use pointer without ability check, as ability check is already in call for this function
+        {
+            s32 random = Random() % 101;
             for (j = 0; j < ARRAY_COUNT(sPickupItems) - 1; ++j) //minus 1 is to keep it from incrementing passed array limit.
             {
                 if (sPickupItems[j].chance > random)
@@ -831,7 +814,7 @@ static void UpdatePickupCounter(void)
             }
 
         }
-    }
+    
 }
 
 void ClearPoisonStepCounter(void)
