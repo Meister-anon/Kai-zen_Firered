@@ -1163,15 +1163,35 @@ static bool8 TryProduceOrHatchEgg(struct DayCare *daycare)
     if (++daycare->stepCounter == 255)
     {
         u32 steps;
+        u32 ability;
+        
 
         for (i = 0; i < gPlayerPartyCount; i++)
         {
+            u32 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
+
+            if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) == ABILITY_NONE)
+                ability = gBaseStats[species].abilities[0];
+            else if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) == 1)
+                ability = gBaseStats[species].abilities[1];
+            else if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) == 2)
+                ability = gBaseStats[species].abilityHidden[0];
+            else
+                ability = gBaseStats[species].abilityHidden[1];
+
             if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG))
                 continue;
             if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_BAD_EGG))
                 continue;
 
             steps = GetMonData(&gPlayerParty[i], MON_DATA_FRIENDSHIP);
+
+            if (ability == ABILITY_FLAME_BODY)//think this works and hopefully doesn't repeat for multiple flamebody mon?
+                steps /= 2;
+            if (ability == ABILITY_MAGMA_ARMOR)
+                steps /= 2;
+            if (ability == ABILITY_STEAM_ENGINE)
+                steps /= 2;
             //put logic for ability decreasing step count here, ABILITY_STEAM_ENGINE ABILITY
             //ABILITY_FLAME_BODY  & ABILITY_MAGMA_ARMOR
             if (steps != 0)
@@ -1764,7 +1784,7 @@ static void VBlankCB_EggHatch(void)
 
 void EggHatch(void)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     CreateTask(Task_EggHatch, 10);
     BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, 0);
     //HelpSystem_Disable();

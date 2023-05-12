@@ -2353,7 +2353,7 @@ BattleScript_HitFromAtkAnimation::
 	effectivenesssound
 	groundonairbattlerwithoutgravity BS_TARGET	@put here becuz should make target visible, shuold work for evrthing
 	hitanimation BS_TARGET
-	printstring STRINGID_CRASHEDTOTHEGROUND @crashed to the ground
+	printstring STRINGID_CRASHEDTOTHEGROUND @crashed to the ground	ok neeed change this command to a ump and goto/return back to here, idk what I was thinking putting htis heere
 	waitmessage 0x20	@made shorter as Im adding extra text
 	waitstate
 	healthbarupdate BS_TARGET
@@ -2872,7 +2872,7 @@ BattleScript_EffectFlinchHit::
 	setmoveeffect MOVE_EFFECT_FLINCH
 	goto BattleScript_EffectHit
 
-@test if works
+@test if works		cant remember wht this for	pretty sure not using, using argumenttomoveeffect  instead if this was for traps
 BattleScript_EffectFlinchWithStatus:
 	setmoveeffect MOVE_EFFECT_FLINCH
 	attackcanceler
@@ -4894,12 +4894,12 @@ BattleScript_EffectIngrain::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectSuperpower::
-	setmoveeffect MOVE_EFFECT_ATK_DEF_DOWN | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
-	goto BattleScript_EffectHit
+BattleScript_EffectSuperpower::	@needtest
+	setmoveeffect MOVE_EFFECT_ATK_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+	goto BattleScript_EffectRecoil
 
-BattleScript_EffectCloseCombat::
-	setmoveeffect MOVE_EFFECT_DEF_SPDEF_DOWN | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+BattleScript_EffectCloseCombat::	@removed sp def drop, was going to make recoil but decided against it
+	setmoveeffect MOVE_EFFECT_DEF_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
 	goto BattleScript_EffectHit
 
 BattleScript_EffectMagicCoat::
@@ -5187,7 +5187,7 @@ BattleScript_EffectWeatherBall::
 	goto BattleScript_EffectHit
 
 BattleScript_EffectOverheat::
-	setmoveeffect MOVE_EFFECT_SP_ATK_TWO_DOWN | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+	setmoveeffect MOVE_EFFECT_RECOIL_33 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
 	goto BattleScript_EffectHit
 
 BattleScript_EffectTickle::
@@ -6975,7 +6975,7 @@ BattleScript_FlameOrb::
 	call BattleScript_MoveEffectBurn
 	end2
 
-@can prob use recoil effect for wonder gaurd hp swap   actually have a better plan, bs command.c atk cancler function false swipe endure effect problem was putting in wrong funciton put in pokemon.c calcdamage function
+
 BattleScript_MoveEffectRecoilWithStatus::
 	argumentstatuseffect
 	copyword gBattleMoveDamage, sSAVED_DMG

@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+
 #define STAT_CHANGE_WORKED      0
 #define STAT_CHANGE_DIDNT_WORK  1
 

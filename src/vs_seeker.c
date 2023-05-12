@@ -843,7 +843,7 @@ static void Task_VsSeeker_3(u8 taskId)
                 StartAllRespondantIdleMovements();
             ClearDialogWindowAndFrame(0, TRUE);
             ClearPlayerHeldMovementAndUnfreezeObjectEvents();
-            ScriptContext2_Disable();
+            UnlockPlayerFieldControls();
             DestroyTask(taskId);
         }
         Free(sVsSeeker);

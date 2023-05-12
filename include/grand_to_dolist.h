@@ -899,6 +899,8 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 * to .c & .h file to use functions and arrays
 * to decide what table to pull from.
 * 
+* -removed famechecker for space, have rival give dexnav in cerulean instead of famechecker
+* 
 * also plan to add more encounters to each area on top of changing how tiles work, so grass not on the road, and rock not on sand can spawn encounters
 * but hopefully can set separate encounter rate for said tiles so its a bit lower.
 * 
@@ -1309,6 +1311,7 @@ goto TYPE_AND_STAB_CHECK //battle_script_commands.c  type calc also where s.t.a.
 
 
 goto PICKUP_LOGIC
+goto SPECIAL_TRAP_EFFECTCHANCE
 goto STAT_AND_DAMAGE_ABILITIES_ETC // pokemon.c function for ability and item effects that affect damage calc
 
 goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability activation logic.  STIL need to update
@@ -1336,6 +1339,7 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * buff to make magma armor unique, rather than just naother flame body (specially since I gave flame body freeze immunity
 * first idea is give it incinerate effect, where it destroys enemy held item on contact
 * othre idea is sp def damage reduction from being surrounded in magma shield
+* based on bulbapdia reading make function for if item can be removed/stolen
 * 
 * fix ditto make imposter its only ability (or just but  speed stat so it can transform easier)
 * change imposter to be more than just a free transform on switch.

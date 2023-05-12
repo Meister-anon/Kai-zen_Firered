@@ -3783,7 +3783,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (!usesDefStat)//IS_MOVE_SPECIAL(move))
             gBattleMoveDamage /= 2;
         break;
-    
+    case ABILITY_SLOW_START:
+        if (gDisableStructs[gBattlerTarget].slowStartTimer != 0)    //was gonna add crit excluion clause but it seems abilities don't have that, only the moves
+            gBattleMoveDamage /= 4; //so that's an extra bonus of having damage reduction via ability     may do 4 turn timer with 75% damage reduction instead of 50% @ 2 turns
+        break;//yeah like that idea a lot more
     case ABILITY_GRASS_PELT:
         if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN
             && !gProtectStructs[gBattlerAttacker].confusionSelfDmg)
@@ -5152,7 +5155,7 @@ u8 GetMonsStateToDoubles(void)
     return (aliveCount > 1) ? PLAYER_HAS_TWO_USABLE_MONS : PLAYER_HAS_ONE_USABLE_MON;//need to understand this line
 }
 
-u16 GetAbilityBySpecies(u16 species, bool8 abilityNum) //important tells game abilitynum2 is hidden ability  think I'm going to make a second hidden ability field,
+u16 GetAbilityBySpecies(u16 species, u8 abilityNum) //important tells game abilitynum2 is hidden ability  think I'm going to make a second hidden ability field,
 {
     if (abilityNum == 3)
         gLastUsedAbility = gBaseStats[species].abilityHidden[1];
@@ -5160,10 +5163,10 @@ u16 GetAbilityBySpecies(u16 species, bool8 abilityNum) //important tells game ab
         gLastUsedAbility = gBaseStats[species].abilityHidden[0];
     else if (abilityNum == 1)
         gLastUsedAbility = gBaseStats[species].abilities[1];
-    else
+    else if (abilityNum == 0)
         gLastUsedAbility = gBaseStats[species].abilities[0];
 
-    return gLastUsedAbility;
+    return gLastUsedAbility;//actually prettu sure bool is only 2 states, so should prob change to u8?
 } //so 4 ability optionns total, would like to set hidden ability chance like shiny odds, just much better odds, then have gauranteed hidden ability with dexnav
 
 u16 GetMonAbility(struct Pokemon *mon)
@@ -5481,8 +5484,8 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                 gSideTimers[GetBattlerSide(gActiveBattler)].mistTimer = 5;
                 retVal = FALSE;
             }
-            if ((itemEffect[cmdIndex] & ITEM3_LEVEL_UP)  // raise level
-             && GetMonData(mon, MON_DATA_LEVEL, NULL) != MAX_LEVEL)
+            if ((itemEffect[cmdIndex] & ITEM3_LEVEL_UP)  // raise level /rare candy
+             && GetMonData(mon, MON_DATA_LEVEL, NULL) != MAX_LEVEL) //+1 is level up replace with n, where n is quantity of itemused
             {
                 data = gExperienceTables[gBaseStats[GetMonData(mon, MON_DATA_SPECIES, NULL)].growthRate][GetMonData(mon, MON_DATA_LEVEL, NULL) + 1];
                 SetMonData(mon, MON_DATA_EXP, &data);

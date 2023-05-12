@@ -2603,7 +2603,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 if (gBattleMons[gBattlerAttacker].maxHP > gBattleMons[gBattlerAttacker].hp
                     && !(gStatuses3[gBattlerAttacker] & STATUS3_HEAL_BLOCK))
                 {
-                    gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 6;
+                    gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 5;
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
                     gBattleMoveDamage *= -1;
@@ -4042,8 +4042,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             case ABILITY_SLOW_START:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
-                gDisableStructs[battler].slowStartTimer = 3;
-                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SLOWSTART;
+                gDisableStructs[battler].slowStartTimer = 4;    //keeping at 2, so won't be able to just freely setup on this mon
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SLOWSTART;   // nvm boosted dmg reduction, keep timer
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                 effect++;
@@ -4090,15 +4090,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
             }
             break;
-            case ABILITY_COMATOSE:  //may remove, check how works and see if sleep status gets applied w icon vsonic
+            /*case ABILITY_COMATOSE:  //may remove, check how works and see if sleep status gets applied w icon vsonic
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                 effect++;
-            }
-            break;
+            }it'll list ability name at endd turn when it heals
+            break;*/
             case ABILITY_SCREEN_CLEANER:
             if (!gSpecialStatuses[battler].switchInAbilityDone && TryRemoveScreens(battler))
             {
@@ -4393,12 +4393,33 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         ++effect;
                     }
                     break;
+                case ABILITY_DRY_SKIN:
+                    if (IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)
+                        && gBattleMons[battler].maxHP > gBattleMons[battler].hp
+                        && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
+                    {
+                        BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
+                        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;   
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                        gBattleMoveDamage *= -1;
+                        ++effect;
+                    }
+                    else if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
+                    {
+                        BattleScriptPushCursorAndCallback(BattleScript_SolarPowerActivates);
+                        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                        effect++;
+                    }
+                    break;
                 case ABILITY_COMATOSE:
                     if (gBattleMons[battler].maxHP > gBattleMons[battler].hp
                         && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
                     {
                         BattleScriptPushCursorAndCallback(BattleScript_AbilityHpHeal);  //can use same script //but have another from updates
-                        gBattleMoveDamage = gBattleMons[battler].maxHP / 8; //substitute for not being able to use rest, but that in mind woudl be broken with substitute hmm
+                        gBattleMoveDamage = gBattleMons[battler].maxHP / 6; //substitute for not being able to use rest, but that in mind woudl be broken with substitute hmm
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
                         gBattleMoveDamage *= -1;
@@ -4981,6 +5002,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_StickyHoldActivates;
                             RecordAbilityBattle(gBattlerAttacker, ABILITY_STICKY_HOLD);
+                            ++effect;
                         }
                         break;
                     }
@@ -5111,6 +5133,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_StickyHoldActivates;
                             RecordAbilityBattle(gBattlerTarget, ABILITY_STICKY_HOLD);
+                            ++effect;
                         }
                         break;
                     }

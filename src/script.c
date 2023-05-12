@@ -2,6 +2,7 @@
 #include "script.h"
 #include "event_data.h"
 #include "quest_log.h"
+#include "event_object_movement.h"
 
 #define RAM_SCRIPT_MAGIC 51
 #define SCRIPT_STACK_SIZE 20
@@ -27,7 +28,7 @@ static u32 sUnusedVariable1;
 static struct ScriptContext sScriptContext1;
 static u32 sUnusedVariable2;
 static struct ScriptContext sScriptContext2;
-static bool8 sScriptContext2Enabled;
+static bool8 sLockFieldControls;
 static u8 sMsgBoxWalkawayDisabled;
 static u8 sMsgBoxIsCancelable;
 static u8 sQuestLogInput;
@@ -187,19 +188,19 @@ u32 ScriptReadWord(struct ScriptContext *ctx)
     return (((((value3 << 8) + value2) << 8) + value1) << 8) + value0;
 }
 
-void ScriptContext2_Enable(void)
+void LockPlayerFieldControls(void)
 {
-    sScriptContext2Enabled = TRUE;
+    sLockFieldControls = TRUE;
 }
 
-void ScriptContext2_Disable(void)
+void UnlockPlayerFieldControls(void)
 {
-    sScriptContext2Enabled = FALSE;
+    sLockFieldControls = FALSE;
 }
 
-bool8 ScriptContext2_IsEnabled(void)
+bool8 ArePlayerFieldControlsLocked(void)
 {
-    return sScriptContext2Enabled;
+    return sLockFieldControls;
 }
 
 void SetQuestLogInputIsDpadFlag(void)
@@ -315,16 +316,22 @@ bool8 ScriptContext2_RunScript(void)
     if (sScriptContext1Status == 1)
         return 0;
 
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
 
     if (!RunScriptCommand(&sScriptContext1))
     {
         sScriptContext1Status = 2;
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         return 0;
     }
 
     return 1;
+}
+
+void LockForFieldEffect(void)
+{
+    FreezeObjectEvents();   //think this locks npcs too?
+    LockPlayerFieldControls();
 }
 
 void ScriptContext1_SetupScript(const u8 *ptr)
@@ -334,7 +341,7 @@ void ScriptContext1_SetupScript(const u8 *ptr)
     ClearQuestLogInputIsDpadFlag();
     InitScriptContext(&sScriptContext1, gScriptCmdTable, gScriptCmdTableEnd);
     SetupBytecodeScript(&sScriptContext1, ptr);
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     sScriptContext1Status = 0;
 }
 
@@ -346,7 +353,7 @@ void ScriptContext1_Stop(void)
 void EnableBothScriptContexts(void)
 {
     sScriptContext1Status = 0;
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
 }
 
 void ScriptContext2_RunNewScript(const u8 *ptr)

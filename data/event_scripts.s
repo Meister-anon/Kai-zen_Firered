@@ -1166,6 +1166,12 @@ EventScript_CancelMessageBox:: @ 81A7ADB
 	release
 	end
 
+EventScript_DelayedCancelMessageBox::
+	waitmessage
+	special DoPicboxCancel
+	releaseall
+	end
+
 EventScript_ReleaseEnd:: @ 81A7AE0
 	release
 	end

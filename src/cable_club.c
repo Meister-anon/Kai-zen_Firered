@@ -826,7 +826,7 @@ static void Task_StartWiredCableClubTrade(u8 taskId)
     switch (task->data[0])
     {
     case 0:
-        ScriptContext2_Enable();
+        LockPlayerFieldControls();
         FadeScreen(FADE_TO_BLACK, 0);
         ClearLinkCallback_2();
         task->data[0]++;
@@ -858,7 +858,7 @@ static void Task_StartWirelessCableClubTrade(u8 taskId)
     switch (data[0])
     {
     case 0:
-        ScriptContext2_Enable();
+        LockPlayerFieldControls();
         FadeScreen(FADE_TO_BLACK, 0);
         Rfu_set_zero();
         data[0]++;

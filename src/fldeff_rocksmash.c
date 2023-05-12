@@ -46,7 +46,7 @@ static void Task_FieldEffectShowMon_Init(u8 taskId)
 {
     u8 mapObjId;
 
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     gPlayerAvatar.preventStep = TRUE;
     mapObjId = gPlayerAvatar.objectEventId;
     if (!ObjectEventIsMovementOverridden(&gObjectEvents[mapObjId])

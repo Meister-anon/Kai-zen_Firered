@@ -79,7 +79,7 @@ static void sub_8150530(void)
     if (gQuestLogPlaybackState == 1 || gQuestLogPlaybackState == 3)
     {
         u8 taskId;
-        ScriptContext2_Enable();
+        LockPlayerFieldControls();
         gPlayerAvatar.preventStep = TRUE;
         taskId = CreateTask(sub_81505C4, 0xFF);
         gTasks[taskId].data[0] = 0;
@@ -128,7 +128,7 @@ static void sub_81505C4(u8 taskId)
                 ObjectEventTurn(objectEvent, objectEvent->movementDirection);
                 sprite->pos2.x = 0;
                 sprite->pos2.y = 0;
-                ScriptContext2_Disable();
+                UnlockPlayerFieldControls();
                 DestroyTask(taskId);
             }
             break;
@@ -165,7 +165,7 @@ static void sub_8150794(u8 taskId)
     if (!FieldEffectActiveListContains(FLDEFF_USE_VS_SEEKER))
     {
         UnfreezeObjectEvents();
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         DestroyTask(taskId);
     }
 }

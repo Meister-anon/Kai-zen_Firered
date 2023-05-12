@@ -1112,7 +1112,7 @@ static void Task_ShowBerryCrushRankings(u8 taskId)
         RemoveWindow(data[1]);
         DestroyTask(taskId);
         EnableBothScriptContexts();
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         data[0] = 0;
         return;
     }
@@ -1123,7 +1123,7 @@ void ShowBerryCrushRankings(void)
 {
     u8 taskId;
 
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     taskId = CreateTask(Task_ShowBerryCrushRankings, 0);
     gTasks[taskId].data[2] = gSaveBlock2Ptr->berryCrush.berryCrushResults[0];
     gTasks[taskId].data[3] = gSaveBlock2Ptr->berryCrush.berryCrushResults[1];

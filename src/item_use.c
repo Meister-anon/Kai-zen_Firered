@@ -198,7 +198,7 @@ static void Task_ItemUse_CloseMessageBoxAndReturnToField(u8 taskId)
     ClearDialogWindowAndFrame(0, 1);
     DestroyTask(taskId);
     ClearPlayerHeldMovementAndUnfreezeObjectEvents();
-    ScriptContext2_Disable();
+    UnlockPlayerFieldControls();
 }
 
 u8 CheckIfItemIsTMHMOrEvolutionStone(u16 itemId)
@@ -219,7 +219,7 @@ static void sub_80A1184(void)
 static bool8 sub_80A1194(void)
 {
     FreezeObjectEvents();
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FadeInFromBlack();
     CreateTask(sub_80A11C0, 10);
     gUnknown_2031DE0 = 0;
@@ -231,7 +231,7 @@ static void sub_80A11C0(u8 taskId)
     if (IsWeatherNotFadingIn() == TRUE)
     {
         UnfreezeObjectEvents();
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         DestroyTask(taskId);
     }
 }
@@ -283,7 +283,7 @@ static void ItemUseOnFieldCB_Bicycle(u8 taskId)// I like the idea of being able 
         PlaySE(SE_BIKE_BELL);
     StartTransitionToFlipBikeState(PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE);
     ClearPlayerHeldMovementAndUnfreezeObjectEvents();//oh wait seems like its alrady doing that here?
-    ScriptContext2_Disable(); //can't really tell maybe not
+    UnlockPlayerFieldControls(); //can't really tell maybe not
     DestroyTask(taskId); //also acro bike was always too slow, doesn't match pro bikers that speed through 
     // on their bike doing tricks, if I can I'll bump teh speed up, to slighly below mach back.
     //maybe give mach bike a 2nd mode that can go even faster? 

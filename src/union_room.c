@@ -2003,7 +2003,7 @@ static void Task_StartActivity(u8 taskId)
 
         DestroyTask(taskId);
         gSpecialVar_Result = 1;
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
     };
 
 static void Task_RunScriptAndFadeToActivity(u8 taskId)
@@ -2776,7 +2776,7 @@ static void Task_RunUnionRoom(u8 taskId)
                 gSpecialVar_Result = 0;
             }
         }
-        else if (ScriptContext2_IsEnabled() != TRUE)
+        else if (ArePlayerFieldControlsLocked() != TRUE)
         {
             if (JOY_NEW(A_BUTTON))
             {
@@ -4650,7 +4650,7 @@ static u32 GetPartyPositionOfRegisteredMon(struct UnionRoomTrade * trade, u8 mul
 static void HandleCancelTrade(bool32 unlockObjs)
 {
     UR_BlankBg0();
-    ScriptContext2_Disable();
+    UnlockPlayerFieldControls();
     UnionRoom_UnlockPlayerAndChatPartner();
     sPlayerCurrActivity = 0;
     if (unlockObjs)
@@ -4662,7 +4662,7 @@ static void HandleCancelTrade(bool32 unlockObjs)
 
 static void UR_EnableScriptContext2AndFreezeObjectEvents(void)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     ScriptFreezeObjectEvents();
 }
 

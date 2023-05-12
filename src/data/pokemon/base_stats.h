@@ -587,7 +587,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_RUN_AWAY, ABILITY_GUTS},
-        .abilityHidden = {ABILITY_HUSTLE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_HUSTLE, ABILITY_PICKUP},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -1790,9 +1790,9 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_ABRA] =
     {
-        .baseHP = 55,
+        .baseHP = 85,
         .baseAttack = 20,
-        .baseDefense = 15,
+        .baseDefense = 25,
         .baseSpeed = 90,
         .baseSpAttack = 105,
         .baseSpDefense = 55,
@@ -7000,8 +7000,8 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 110,
         .baseSpAttack = 90,
         .baseSpDefense = 154,
-        .type1 = TYPE_PSYCHIC,
-        .type2 = TYPE_FLYING,
+        .type1 = TYPE_DRAGON,
+        .type2 = TYPE_PSYCHIC,  //dragon to resist 3 birds, and dragons have dominion over air and sea, psychic because it has bariers and is able to "talk"
         .catchRate = 3,
         .expYield = 306,
         //.evYield_SpDefense = 3,
@@ -7011,7 +7011,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_PRESSURE, ABILITY_MULTISCALE},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_MULTISCALE, ABILITY_NONE},
         #endif
@@ -7617,7 +7617,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_LUDICOLO] =
     {
-        .baseHP = 100,
+        .baseHP = 92,
         .baseAttack = 70,
         .baseDefense = 70,
         .baseSpeed = 70,
@@ -7975,7 +7975,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 90,
         .baseSpAttack = 100,
         .type1 = TYPE_BUG,
-        .type2 = TYPE_FLYING,
+        .type2 = TYPE_WATER,
         .catchRate = 75,
         .expYield = 200,
         //.evYield_SpAttack = 1,
@@ -10008,7 +10008,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 83,
         .baseSpeed = 51,
         .baseSpAttack = 72,
-        .baseSpDefense = 90,
+        .baseSpDefense = 95,
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FLYING,
         .catchRate = 200,
@@ -13654,7 +13654,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 80,
         .baseSpDefense = 110,
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_MYSTERY,  //just because its cool, its not in type chart so will just make everythinig neutral so as if its not even there
         .catchRate = 3,
         .expYield = 302,
         //.evYield_Attack = 3,
@@ -13671,8 +13671,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-    },//reduce slow start to 2 turns, give damage reduction for duration of wind up, and after it ends make attacks immune to substitute/walls
-    //so attacks go through/break substitute and walls like safegaurd barrier etc.
+    },
 
     [SPECIES_GIRATINA] =
     {
@@ -24108,7 +24107,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
-        .abilities = {ABILITY_LIMBER, ABILITY_NONE},
+        .abilities = {ABILITY_DRY_SKIN, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_TECHNICIAN, ABILITY_NONE},
         #endif
@@ -24135,7 +24134,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
-        .abilities = {ABILITY_LIMBER, ABILITY_NONE},
+        .abilities = {ABILITY_DRY_SKIN, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_TECHNICIAN, ABILITY_NONE},
         #endif

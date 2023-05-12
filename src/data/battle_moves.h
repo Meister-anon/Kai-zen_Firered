@@ -1330,11 +1330,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_THUNDERBOLT] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_6
-            .power = 90,
-        #else
-            .power = 95,
-        #endif
+
+        .power = 95,
         .effect = EFFECT_PARALYZE_HIT,
         .type = TYPE_ELECTRIC,
         .accuracy = 100,
@@ -1369,7 +1366,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 120,
         .effect = EFFECT_THUNDER,
         .type = TYPE_ELECTRIC,
-        .accuracy = 70,
+        .accuracy = 85,
         .pp = 10,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
@@ -2722,11 +2719,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_CURSE] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_5
-            .type = TYPE_GHOST,
-        #else
-            .type = TYPE_MYSTERY,
-        #endif
+
+        .type = TYPE_MYSTERY,
         .effect = EFFECT_CURSE,
         .power = 0,
         .accuracy = 0,
@@ -3007,14 +3001,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ZAP_CANNON] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_4
-            .power = 120,
+            .power = 85,
         #else
             .power = 100,
         #endif
         .effect = EFFECT_PARALYZE_HIT,
         .type = TYPE_ELECTRIC,
-        .accuracy = 50,
-        .pp = 5,
+        .accuracy = 90,
+        .pp = 15,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
@@ -3138,16 +3132,10 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_OUTRAGE] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_5
-            .power = 120,
-            .pp = 10,
-        #elif B_UPDATED_MOVE_DATA == GEN_4
-            .power = 120,
-            .pp = 15,
-        #else
-            .power = 90,
-            .pp = 15,
-        #endif
+
+
+        .power = 120,
+        .pp = 15,
         .effect = EFFECT_RAMPAGE,
         .type = TYPE_DRAGON,
         .accuracy = 100,
@@ -3506,12 +3494,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_MEGAHORN] =
     {
-        .effect = EFFECT_HIT,
+        .effect = EFFECT_FLINCH_HIT,
         .power = 120,
         .type = TYPE_BUG,
         .accuracy = 85,
         .pp = 10,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 20,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
@@ -3890,7 +3878,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_6 //actually Ill use this since there are no 120 power psychic moves
             .power = 120,
-            .accuracy = 95,
+            .accuracy = 100,
             .pp = 10,
         #elif B_UPDATED_MOVE_DATA == GEN_5 //may lower accuracy to 95
             .power = 100,
@@ -4943,7 +4931,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .power = 140,
             .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         #endif
-        .effect = EFFECT_OVERHEAT,
+        .effect = EFFECT_OVERHEAT,  //MOVE_EFFECT_RECOIL_33
         .type = TYPE_FIRE,
         .accuracy = 90,
         .pp = 5,
@@ -6467,7 +6455,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_SPECIAL_DEFENSE_DOWN_HIT,
         .power = 120,
         .type = TYPE_FIGHTING,
-        .accuracy = 70,
+        .accuracy = 85,
         .pp = 5,
         .secondaryEffectChance = 10,
         .target = MOVE_TARGET_SELECTED,
@@ -6904,7 +6892,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_GUNK_SHOT] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_6
-            .accuracy = 80,
+            .accuracy = 85,
         #else
             .accuracy = 70,
         #endif
@@ -8418,14 +8406,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_HURRICANE] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_6
-            .power = 110,
-        #else
+
             .power = 120,
         #endif
         .effect = EFFECT_HURRICANE,
         .type = TYPE_FLYING,
-        .accuracy = 70,
+        .accuracy = 80,
         .pp = 10,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,

@@ -1660,7 +1660,7 @@ static u8 TryTakeMonItem(struct Pokemon *mon)
 
     if (item == ITEM_NONE)
         return 0;
-    if (AddBagItem(item, 1) == FALSE)
+    if (AddBagItem(item, 1) == FALSE)//vsonic don't understand      apparently means bag slot is full can't add item?
         return 1;
     item = ITEM_NONE;
     SetMonData(mon, MON_DATA_HELD_ITEM, &item);
@@ -6495,7 +6495,7 @@ static void Task_PartyMenuWaitForFade(u8 taskId)
     if (IsWeatherNotFadingIn())
     {
         DestroyTask(taskId);
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         EnableBothScriptContexts();
     }
 }

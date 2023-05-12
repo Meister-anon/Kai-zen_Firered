@@ -1145,32 +1145,6 @@ static const u16 sWeightToDamageTable[] =
     0xFFFF, 0xFFFF
 };
 
-struct PickupItem
-{
-    u16 itemId;
-    u8 chance;
-};
-
-static const struct PickupItem sPickupItems[] =
-{
-    { ITEM_ORAN_BERRY, 15 },
-    { ITEM_CHERI_BERRY, 25 },
-    { ITEM_CHESTO_BERRY, 35 },
-    { ITEM_PECHA_BERRY, 45 },
-    { ITEM_RAWST_BERRY, 55 },
-    { ITEM_ASPEAR_BERRY, 65 },
-    { ITEM_PERSIM_BERRY, 75 },
-    { ITEM_TM10, 80 },
-    { ITEM_PP_UP, 85 },
-    { ITEM_RARE_CANDY, 90 },
-    { ITEM_NUGGET, 95 },
-    { ITEM_SPELON_BERRY, 96 },
-    { ITEM_PAMTRE_BERRY, 97 },
-    { ITEM_WATMEL_BERRY, 98 },
-    { ITEM_DURIN_BERRY, 99 },
-    { ITEM_BELUE_BERRY, 1 },
-
-};
 
 static const u8 sTerrainToType[] =
 {
@@ -3724,7 +3698,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                     gBattlescriptCurrInstr = BattleScript_TargetPRLZHeal;
                 }
                 break;
-            case MOVE_EFFECT_ATK_DEF_DOWN: // SuperPower
+            case MOVE_EFFECT_ATK_DEF_DOWN: // SuperPower    //use same trick did for trap effects make stat drop certain put 25% recoil in augment or vice versa, just do atk drop 
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
                 gBattlescriptCurrInstr = BattleScript_AtkDefDown;
                 break;
@@ -3778,7 +3752,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                     ++gBattlescriptCurrInstr;
                 }
                 break;
-            case MOVE_EFFECT_SP_ATK_TWO_DOWN: // Overheat
+            case MOVE_EFFECT_SP_ATK_TWO_DOWN: // Overheat - based on emerald kaizo, changing overheat to recoil move
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
                 gBattlescriptCurrInstr = BattleScript_SAtkDown2;
                 break;
@@ -4007,7 +3981,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
     }
 }
 
-
+#define SPECIAL_TRAP_EFFECTCHANCE
 static void atk15_seteffectwithchance(void) //occurs to me that fairy moves weren't meant with applying a status in mind, so all fairy moves would have other effects
 { //so I think I'll need to make some code specifically to apply the effect separate from fairy moves normal effect
     //right now I'm thinking if move is fairy and does damage, that's a good starting point, and I may exclude certain other moves as well,
@@ -4030,7 +4004,7 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
 
     
-
+    
     if (gBattleMoves[gCurrentMove].effect == ITS_A_TRAP)   //if this works make a define for trap effects & separate effect & move effect & battlscript for each
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //that way may not need to make a separate status,// seems to work no apparent bugs
 
@@ -8569,7 +8543,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         else
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         return;
-    case VARIOUS_ARGUMENT_STATUS_EFFECT:
+    case VARIOUS_ARGUMENT_STATUS_EFFECT:    //use argumenttomoveeffect  for non status 
         switch (gBattleMoves[gCurrentMove].argument)
         {
         case STATUS1_BURN:
@@ -8593,7 +8567,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         if (gBattleScripting.moveEffect != 0)
         {
-            BattleScriptPush(gBattlescriptCurrInstr + 3);
+            BattleScriptPush(gBattlescriptCurrInstr + 3);//???
             gBattlescriptCurrInstr = BattleScript_EffectWithChance;
             return;
         }
@@ -8866,7 +8840,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattlescriptCurrInstr += 7;
         }
         return;
-    case VARIOUS_ARGUMENT_TO_MOVE_EFFECT:
+    case VARIOUS_ARGUMENT_TO_MOVE_EFFECT:   //works with seconaryeffectchance can prob also do like move effect set certain or effect user
         gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument;
         break;
     case VARIOUS_SPECTRAL_THIEF:
@@ -13083,10 +13057,20 @@ static void atkE4_getsecretpowereffect(void)
     ++gBattlescriptCurrInstr;
 }
 
+#include "field_message_box.h"
+
 #define PICKUP_LOGIC
 static void atkE5_pickup(void) //why is this a bs command when the ability has no in battle effect?
-{
-    s32 i;
+{//ok all this was almost a waste pick up doesn't work how I thought it did. -_- it doesn't have an effect on battle
+    //but its effect is trigger by battle. I'm removing this and changing to a overworld/field effect function.
+    //putting here makes macro to be called at end of battle, it then sets an item from the list to your mons held item slot
+    //which would only apply if mon wasnt holding anything -_-
+
+    //will add end turn effect to battle_util.c to pick up random use item if not holding anything.
+    //and if succeeds anounce the picked up item and set to held item slot, like default function
+    //SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &sPickupItems[j]); 
+
+    /*s32 i;
     u32 j;
     u16 species, heldItem;
     u32 ability;
@@ -13095,22 +13079,42 @@ static void atkE5_pickup(void) //why is this a bs command when the ability has n
     {
         species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
         heldItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
-        if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) != ABILITY_NONE) //important need change this
+        /*if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) != ABILITY_NONE) //important need change this
             ability = gBaseStats[species].abilities[1]; //well no mon have pipckup as hidden ability so this prob fine
         else
             ability = gBaseStats[species].abilities[0];
-        if (ability == ABILITY_PICKUP && /*species != SPECIES_NONE && species != SPECIES_EGG &&*/ heldItem == ITEM_NONE 
+        if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) == ABILITY_NONE)
+            ability = gBaseStats[species].abilities[0];
+        else if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) == 1)
+            ability = gBaseStats[species].abilities[1];
+        else if (GetMonData(&gPlayerParty[i], MON_DATA_ABILITY_NUM) == 2)
+            ability = gBaseStats[species].abilityHidden[0];
+        else
+            ability = gBaseStats[species].abilityHidden[1];
+
+        if (ability == ABILITY_PICKUP //&& /*species != SPECIES_NONE && species != SPECIES_EGG && //heldItem == ITEM_NONE //remove this later
             && !(Random() % 6))    //random %10 is odds, its saying will trigger on a 10% chance when random returns 0
         {
-            s32 random = Random() % 100; //then anothr set of rng, return a value betwen 0-99l and loops through pickup array until reach 
+            s32 random = Random() % 100; //then anothr set of rng, return a value betwen 0-99 and loops through pickup array until reach 
             //and odds value greater than your percent chance
 
             for (j = 0; j < ARRAY_COUNT(sPickupItems); ++j) //may add on to this, add better items
                 if (sPickupItems[j].chance > random)    //effect isn't really random, so want to change?, may make pick a value between 15 rathre than loop it
                     break;//and exclusively for the tm return, I want to make it reset the itemid, so it returns a random tm/hm to get more use out of it
-            SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &sPickupItems[j]);
-        }
-    }
+            //SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &sPickupItems[j]); 
+            if (AddBagItem(&sPickupItems[j], 1) == TRUE) 
+            {
+                //AddBagItem(&sPickupItems[j], 1);  think don't need this, believe its doing the add, and then filtering for success condition
+                GetMonNickname(&gPlayerParty[i], gStringVar2);
+                CopyItemName(&sPickupItems[j]), gStringVar1);
+                StringExpandPlaceholders(gStringVar4, gText_MonPickedUpItem);//most parts done, just need overworld textbox notification
+                ShowFieldAutoScrollMessage(gStringVar4);
+                
+            }
+            
+        }//change this line to a script that will stop player, bufer found item to auto close window, and use AddBagItem, so it goes to bag.
+        //this will allow actually running a held item on pickup mon, getting more use out of them
+    }*/
     ++gBattlescriptCurrInstr;
 }
 
