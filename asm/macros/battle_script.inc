@@ -1177,7 +1177,7 @@
 	.byte 0xe4
 	.endm
 
-	.macro pickup
+	.macro pickup	@no longer used, free space to replace
 	.byte 0xe5
 	.endm
 

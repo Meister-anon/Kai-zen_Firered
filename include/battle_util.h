@@ -76,6 +76,7 @@
 #define BS_GET_OPPONENT2                14
 
 u8 GetBattlerForBattleScript(u8 caseId);
+
 void PressurePPLose(u8 target, u8 attacker, u16 move);
 void PressurePPLoseOnUsingImprison(u8 attacker);
 void PressurePPLoseOnUsingPerishSong(u8 attacker);
@@ -84,6 +85,7 @@ void MarkBattlerForControllerExec(u8 battlerId);
 void sub_8017298(u8 arg0);
 void CancelMultiTurnMoves(u8 battler);
 bool8 WasUnableToUseMove(u8 battler);
+u16 HeldItemSearch(void);
 void PrepareStringBattle(u16 stringId, u8 battler);
 void ResetSentPokesToOpponentValue(void);
 void sub_8017434(u8 battler);

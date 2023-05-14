@@ -5580,7 +5580,7 @@ BattleScript_LocalTrainerBattleWon::
 	waitmessage 0x40
 BattleScript_PayDayMoneyAndPickUpItems::
 	givepaydaymoney
-	pickup
+	@pickup
 	end2
 
 BattleScript_LocalBattleLost::
@@ -5658,7 +5658,7 @@ BattleScript_BattleTowerTrainerBattleWon::
 	jumpifnotbattletype BATTLE_TYPE_DOUBLE, BattleScript_BattleTowerEtcTrainerBattleWonSkipText
 	printstring STRINGID_TRAINER2CLASS
 BattleScript_BattleTowerEtcTrainerBattleWonSkipText::
-	pickup
+	@pickup
 	end2
 
 BattleScript_SmokeBallEscape::
@@ -8744,6 +8744,11 @@ BattleScript_BerryPPHealEnd2::
 BattleScript_ItemHealHP_End2::
 	call BattleScript_ItemHealHP_Ret
 	end2
+
+BattleScript_InBattlePickup::
+	printstring STRINGID_PICKUP_ITEM
+	waitmessage 0x40
+	end
 
 BattleScript_ItemHealHP_Ret::
 	playanimation BS_ATTACKER, B_ANIM_ITEM_EFFECT, NULL

@@ -181,6 +181,7 @@ extern const u8 BattleScript_EffectRecoil33WithStatus[];
 extern const u8 BattleScript_EffectRecoil50[];
 extern const u8 BattleScript_MoveEffectFallInLove[]; //new move effect for synchronize infatuation
 extern const u8 BattleScript_ItemSteal[];
+extern const u8 BattleScript_InBattlePickup[];	//new in battle effect for ability pickup, 1 in 3 chance pickup held item and end of turn
 extern const u8 BattleScript_DrizzleActivates[];
 extern const u8 BattleScript_SpeedBoostActivates[];
 extern const u8 BattleScript_DefeatistActivates[];

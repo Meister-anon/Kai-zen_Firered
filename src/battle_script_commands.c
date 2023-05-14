@@ -292,7 +292,7 @@ static void atkE1_trygetintimidatetarget(void);
 static void atkE2_switchoutabilities(void);
 static void atkE3_jumpifhasnohp(void);
 static void atkE4_getsecretpowereffect(void);
-static void atkE5_pickup(void);
+static void atkE5_pickup(void);             //unused can replace
 static void atkE6_docastformchangeanimation(void);
 static void atkE7_trycastformdatachange(void);
 static void atkE8_settypebasedhalvers(void);
@@ -569,7 +569,7 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atkE2_switchoutabilities,
     atkE3_jumpifhasnohp,
     atkE4_getsecretpowereffect,
-    atkE5_pickup,
+    atkE5_pickup,   //unused
     atkE6_docastformchangeanimation,
     atkE7_trycastformdatachange,
     atkE8_settypebasedhalvers,
@@ -13061,10 +13061,11 @@ static void atkE4_getsecretpowereffect(void)
     ++gBattlescriptCurrInstr;
 }
 
-#include "field_message_box.h"
+
 
 #define PICKUP_LOGIC
-static void atkE5_pickup(void) //why is this a bs command when the ability has no in battle effect?
+static void atkE5_pickup(void) //effect will go in battle_util.c end turn ability clause, this will be kept here to prevent need to reordder bs macros
+//why is this a bs command when the ability has no in battle effect?
 {//ok all this was almost a waste pick up doesn't work how I thought it did. -_- it doesn't have an effect on battle
     //but its effect is trigger by battle. I'm removing this and changing to a overworld/field effect function.
     //putting here makes macro to be called at end of battle, it then sets an item from the list to your mons held item slot

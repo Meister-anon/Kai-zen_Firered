@@ -684,6 +684,8 @@ Thunder Wave Electric TM45
 * something like "in the course of our research on fossil revitilization we discovered a method for reversing
 * pokemon evolution, a "de-evolution" process if you will" -
 * 
+* update level up learnsets from emerald gen 8 files, and then adjust learnsets as I chose 
+* based on my learnset expansion, since I can fit more moves now
 * 
 * Make copy ability of tinted lens, for non bugs, call it protag powere or subversion or great expectations  tiger cub? -
 * 
@@ -1319,7 +1321,7 @@ goto TYPE_AND_STAB_CHECK //battle_script_commands.c  type calc also where s.t.a.
 */ 
 
 
-goto PICKUP_LOGIC
+goto PICKUP_LOGIC   //out of battle buffs done, moving to bs command buffs
 goto SPECIAL_TRAP_EFFECTCHANCE
 goto STAT_AND_DAMAGE_ABILITIES_ETC // pokemon.c function for ability and item effects that affect damage calc
 
@@ -1344,11 +1346,32 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * note- also found all I needd to reactivate switch in ability is to call the battlescript again
 * 
 * smeargle changes new moves -
+* stat boosts, and change sketch to temporary move copy
+* similar to ditto's transform, move is replaced for duration of battle, and pp is updated after
+* moved copycat original effect to new move monotype
+* change sketch to raise all stats 2 levels or all but speed stat?
+* this way it can overcome the disadvantage of using another mons move with worse stats, and without type advanage.
+* that way smeargle is turned from a failed artist, into a type of sevant that can improve on the original.
+* increased priority of sketch, so I'll not increase speed stat
+* 
+* //since I'm changing sketches effect to be temporary
+    //and the current move has outside battle uses.
+    //I think what I'll do is copy the current effect
+    //and move it to another move I'll call
+    //"hard copy" or something.
+
+    //that move can be relearnabe to pick a moveset
+    //and keep the 1pp thing.
+
+    //ok I've decided I'll call it "Monotype" from the one-time art
+    //print process 
 * 
 * buff to make magma armor unique, rather than just naother flame body (specially since I gave flame body freeze immunity
 * first idea is give it incinerate effect, where it destroys enemy held item on contact
 * othre idea is sp def damage reduction from being surrounded in magma shield
 * based on bulbapdia reading make function for if item can be removed/stolen
+* 
+* buff pidgey line, according to Zen Mode YT changes, give u-turn and my move dive bomb
 * 
 * fix ditto make imposter its only ability (or just but  speed stat so it can transform easier)
 * change imposter to be more than just a free transform on switch.

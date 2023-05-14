@@ -11515,6 +11515,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_SPECIAL,
     },
 
+    //Custom Moves 
+
     [MOVE_COCOON] =
     {
         .effect = EFFECT_COCOON,

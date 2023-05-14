@@ -3496,6 +3496,22 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
     free(data);
 }
 
+u16 HeldItemSearch(void)
+{
+    u16 j;
+    u16 NumFoundItems = 0;
+    for (j = 0; j < ITEMS_COUNT; j++)
+    {
+        if (ItemId_GetHoldEffect(j) != HOLD_EFFECT_NONE) //for searching out list of items, with held effects
+        {
+
+            ++NumFoundItems;    //use to determine size of array, will search out and count & return all the values I want to add to function.
+        }
+
+    }
+    return NumFoundItems;
+}
+
 enum
 {
     CASTFORM_NO_CHANGE,
@@ -3596,9 +3612,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
     if (!(gBattleTypeFlags & BATTLE_TYPE_SAFARI)) // Why isn't that check done at the beginning?
     {
         u8 moveType, move;
-        s32 i;
+        s32 i,j;
         u8 side;
         u8 target1;
+
+        //Pickup variables needed put above switch start
+        u16 heldItem = gBattleMons[battler].item;
+        
+        u16 sPickupBattleArray[ITEMS_COUNT] = {0}; //tips from anercomp should create array with num elements found from function, and set all array values to 0
+        //u16 sPickupBattleArray[HeldItemSearch()] = {0};
+        //this fills the array, and makes it usable I can then use a loop to populate it and replace the 0s.
+            //use a function to set to number helditems i.e items in gitems without helditem none
+        u16 NumPickupItems = HeldItemSearch();
+        u32 randomItem = Random() % NumPickupItems;   //return random item from pickup battle itme list
 
         if (special)
             gLastUsedAbility = special;
@@ -4476,6 +4502,33 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                 ++effect;
                             }
                         }
+                    }
+                    break;
+                case ABILITY_PICKUP:
+                   
+                    for (j = 0; j < ITEMS_COUNT; j++)
+                    {
+                        if (ItemId_GetHoldEffect(j) != HOLD_EFFECT_NONE) //for searching list of items, want to  set item id to j to my array
+                        {
+
+                            for (i = 0; i < ARRAY_COUNT(sPickupBattleArray); i++) //I have size of array, now need to loop each element and replace value with fonud itemid
+                            {
+                                sPickupBattleArray[i] = j;  //passes itemId
+                            }
+                        }
+
+                    }
+                    //for in battle look items for hold effect != none and randomly set to held item slot end of each turn at 1/3 odds 
+                    if (heldItem == ITEM_NONE && (Random() % 3))
+                    {
+                        u16 *changedItem = &gBattleStruct->changedItems[battler];
+                        gLastUsedItem = *changedItem = sPickupBattleArray[randomItem];
+                        PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem)
+                            gBattleMons[battler].item = gLastUsedItem;
+                        BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, battler, sizeof(gLastUsedItem), &gLastUsedItem);
+                        MarkBattlerForControllerExec(battler);
+                        BattleScriptExecute(BattleScript_InBattlePickup);
+                        effect++;
                     }
                     break;
                 case ABILITY_SPEED_BOOST:

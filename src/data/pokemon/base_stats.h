@@ -460,7 +460,7 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 40,
         .baseAttack = 45,
         .baseDefense = 40,
-        .baseSpeed = 56,
+        .baseSpeed = 67,
         .baseSpAttack = 35,
         .baseSpDefense = 35,
         .type1 = TYPE_NORMAL,
@@ -489,7 +489,7 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 63,
         .baseAttack = 60,
         .baseDefense = 55,
-        .baseSpeed = 71,
+        .baseSpeed = 91,
         .baseSpAttack = 50,
         .baseSpDefense = 50,
         .type1 = TYPE_NORMAL,
@@ -520,7 +520,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 85,
         .baseSpAttack = 70,
         .baseSpDefense = 80,
-        .baseSpeed = 101,
+        .baseSpeed = 121,
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -3197,7 +3197,7 @@ const struct BaseStats gBaseStats[] =
         .baseAttack = 15,
         .baseDefense = 10,
         .baseSpeed = 50,
-        .baseSpAttack = 35,
+        .baseSpAttack = 45,
         .baseSpDefense = 105,
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -6578,19 +6578,7 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
-    //since I'm changing sketches effect to be temporary
-    //and the current move has outside battle uses.
-    //I think what I'll do is copy the current effect
-    //and move it to another move I'll call
-    //"hard copy" or something.
-
-    //that move can be relearnabe to pick a moveset
-    //and keep the 1pp thing.
-
-    //ok I've decided I'll call it "Monotype" from the one-time art
-    //print process   
-
-    //increased priority of sketch, so I'll not increase speed stat
+      
 
     [SPECIES_SMEARGLE] =
     {
@@ -6619,13 +6607,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-    }, //change sketch to raise all stats 2 levels  //or all but speed stat?
-    //this way it can overcome the disadvantage
-    //of using another mons move with worse stats,
-    //and without type advanage.
-    //that way smeargle is turned from a failed artist
-    //into a type of sevant that can improve on
-    //the original.
+    }, 
     //also slight increase in speed to help chose the right move
     [SPECIES_TYROGUE] =
     {
@@ -12309,7 +12291,7 @@ const struct BaseStats gBaseStats[] =
         .baseAttack = 5,
         .baseDefense = 5,
         .baseSpeed = 30,
-        .baseSpAttack = 15,
+        .baseSpAttack = 35,
         .baseSpDefense = 65,
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
