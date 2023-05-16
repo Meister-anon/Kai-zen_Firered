@@ -3309,7 +3309,7 @@ static const u16 sSwitchAbilities[][10] =
 //ok set it up correctly so now it doesn't break connections
 
 #define WEATHER_AND_TERRAIN_EFFECTS
-bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
+bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) //need check where this is used, in emerald its used in sunny day stuff etc.
 {
     u16 battlerAbility = GetBattlerAbility(battler);
     u32 i;
@@ -3331,7 +3331,7 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
             && battlerAbility == sPermanentWeatherAbilities[i])
         {
             gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1]);   //1 is permanent weather,0 is temp
-            return TRUE;
+            return TRUE; //I think this sets permanent weather?
         }
 
         else if (viaAbility && !(gBattleWeather & sWeatherFlagsInfo[weatherEnumId][1]) // says change weather if not permanent weather? need test
@@ -3351,7 +3351,7 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
         else if ((!(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))  //CHECK specific weather isn't alraedy set
             && (!((ABILITY_ON_FIELD2(ABILITY_DROUGHT)) || (ABILITY_ON_FIELD2(ABILITY_DRIZZLE))))) //need test if prevents weather change while kyogre/groudon on field
         {
-            gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]);
+            gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]); //set temp weather if meet conditions
             if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2]) //2 is weather extending hold effect
                 gWishFutureKnock.weatherDuration = 8;
             else
@@ -3624,7 +3624,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         //this fills the array, and makes it usable I can then use a loop to populate it and replace the 0s.
             //use a function to set to number helditems i.e items in gitems without helditem none
         u16 NumPickupItems = HeldItemSearch();
-        u32 randomItem = Random() % NumPickupItems;   //return random item from pickup battle itme list
+        u32 randomItem = Random() % NumPickupItems;   //return random item from pickup battle itme list, array compiles and is able to set item, but random item selection isn't working
 
         if (special)
             gLastUsedAbility = special;
@@ -4506,14 +4506,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                 case ABILITY_PICKUP:
                    
-                    for (j = 0; j < ITEMS_COUNT; j++)
+                    for (j = 0; j < ITEMS_COUNT; ++j)   //variable needs to come after increment as its being set to the same variable, otherwise it can't increment
                     {
                         if (ItemId_GetHoldEffect(j) != HOLD_EFFECT_NONE) //for searching list of items, want to  set item id to j to my array
                         {
 
-                            for (i = 0; i < ARRAY_COUNT(sPickupBattleArray); i++) //I have size of array, now need to loop each element and replace value with fonud itemid
+                            for (i = 0; i < ARRAY_COUNT(sPickupBattleArray); ++i) //I have size of array, now need to loop each element and replace value with fonud itemid
                             {
-                                sPickupBattleArray[i] = j;  //passes itemId
+                                sPickupBattleArray[i] = itemid_get_number(j);  //passes itemId and populates array
                             }
                         }
 
@@ -7699,7 +7699,7 @@ u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who ge
 
 u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating)
 {
-    if (checkNegating)
+    if (checkNegating)  //if equals 0, I think?
     {
         if (gStatuses3[battlerId] & STATUS3_EMBARGO)
             return HOLD_EFFECT_NONE;

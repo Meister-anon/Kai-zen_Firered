@@ -252,6 +252,11 @@ ok I prob will do that then.
 * (since its luck, set it to work when attacker up to 7 levels below the target
 * if (Random() % 100 + 1 < chance && gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 7))
 * 
+* go over summary screen again, on mon skills page to give ability description more room.
+* go back and see if I can't raise the ability name box, (not the Ability LABEL)  and possibly exp bar too.
+* then recapitalize all type names in ability descriptions like "Ups GRASS moves" rather than  "Ups Grass moves"
+* it just looks nice, and fits the fire red style more
+* 
 * test hidden ability selection odds again, when able to build
 * 
 * changing trainer ivs to be random, as most are just set to 0, -DONE
@@ -294,14 +299,14 @@ ok I prob will do that then.
 * the personality value is derived from a combination of the trainer name, and mon species name.
 * 
 * realized logic for damage on air targets was incomplete 
-* correcting setup -
+* correcting setup - DONE
 * 
 * Forgot to replace all instances of Levitate in basestats -
 * 
 * need replace gBattleMons[gActiveBattler].ability with GetBattlerAbility(gActiveBattler)  for ability check, so suppresants work
-* compare to emerald 
+* compare to emerald for which valus should change
 * 
-* increase quick claw success odds -
+* increase quick claw success odds - DONE doubled to 40%
 * 
 * idea meister fight similar to fights but with all my favorite mon  i.e mon with favorite changes
 * think team will have sudowoodo shiinotic heatran etc.  
@@ -601,6 +606,11 @@ as well as the effect of increasing trap duration
 * 
 * make pressure & hi pressure work like paralysis chance to prevent  atk- DONE need test
 * 
+* made custom paralysis effect, electric types can be paralyzed, but only by non electric paralysis moves - DONE
+* 
+* buff for suction cups, give it built in grip claw, using a trap move with suction cups will extend its duration
+* in addition to normal force switch prevention effects
+* 
 * make revisions to add grass moves to sudowoodo line lvl up and tm learnsets   thinkin ingrain & bullet seed
 * think want to also add beatup if it doesn't have already
 * 
@@ -638,7 +648,7 @@ as well as the effect of increasing trap duration
 * itd be a nerf, and it might not make sense to do for some and not every in the category, even if it makes sense.
 * hmm ok I think I can make it work actually, it'd be the ones that don't require setting up weather or some other effect to work.
 * i.e rain dish wouldn't need it. but again each thing is balanced with an intended draw back so prob best to just not do that for these.
-* just for intimidate trace and the draw in attack abilities
+* just for intimidate trace and the draw in attack abilities should be fine
 * 
 * ...many moves were tms in gen 1 were replaced with move tutors or just lost from learnsets, of those
 * abra was indeed able to learn substitute in original red blue yellow... o.o
@@ -648,11 +658,13 @@ Body Slam	 Normal   TM08
 Counter	    Fighting  TM18
 Double-Edge	 Normal   TM10
 Dream Eater	 Psychic  TM42
+Psywave      Psychic  TM46
 Explosion	 Normal   TM47
 Mega Kick	 Normal	  TM05
 Mega Punch	 Normal	  TM01
 Metronome	 Normal   TM35
 Mimic	     Normal   TM31
+Egg Bomb     Normal   TM37
 Rock Slide	 Rock     TM48
 Seismic Toss Fighting TM19
 Softboiled	 Normal   TM41
@@ -687,7 +699,26 @@ Thunder Wave Electric TM45
 * update level up learnsets from emerald gen 8 files, and then adjust learnsets as I chose 
 * based on my learnset expansion, since I can fit more moves now
 * 
-* Make copy ability of tinted lens, for non bugs, call it protag powere or subversion or great expectations  tiger cub? -
+* Make copy ability of tinted lens, for non bugs, call it protag powere or subversion of great expectations  tiger cub? -
+* litleo  other vrsino  tigr mom o.0 will lower target defense on switch specific for female variant evo -
+* 
+* *note*  Nidoqueen line intentionally can't be breed, something to do with comprison to real life rhinos not being breedable in captivity.
+* so just make sure nidoqueen are available to catch in places, put them in safari zone I guess...well no that'd be even worse.
+* make them wild somewhere in mid game/late game  put in desert area I guess.
+* 
+* adjusted multihit bs messages, check fury cutter see if is satisfactory - 
+* 
+* go over move chart, adjusting for low accuracy moves, bring up everything below 75
+* meta is revolves around 1 shot or 2 shot, so low accuracy moves would never be worth the risk and just never get used
+* especially if it doesn't have some other effect besides damage -
+* 
+* check moves that rely on enemy using a move first, make sure they use last used move, so they don't 
+* just fail if they are faster than the target - think mostly done, need check mirror move and setup sketch monotype changes
+* 
+* fix focus punch move will NEVER work as is, instead make into a one turn move with recharge effect will also add high flinch chance - DONE
+* another thing that will need ai adjustment later
+* 
+* add rock throw to more fighting types (or make tm), only for muscled bulky arch types
 * 
 * anyway for mon that can setup  multiple type power/dmg buffs i.e terrain & weather or to be used with a terrain on on team.
 * 
@@ -740,14 +771,18 @@ Thunder Wave Electric TM45
 * then make ocean permanent terrain that can't be changed, is set by environment
 * 
 * Remove drizzle & drought from mon, and replace with new ability's instead of just giving everyone groudon and kyogre's abilities
-* Thinking Squal in place of drizzle  and I guess High Noon in place of drought - DONE
+* Thinking Squal in place of drizzle  and I guess High Noon in place of drought - DONE  test
+* 
+* setup weather moves, to increase duration of weather effect if used again
+* if you count you don't need that, now question is, with being able to do that does that balance the low pp use?
+* I think so, ok all weather moves will have pp 5, but be extendable if used again.
 * 
 * that way kyogre and groudon can stay special.
 * plan is other weather abilities will be temporary 5 turns like sunny day but better
-* as it resets the timer as long as the mon is still on the field.
+* as it resets the timer at turn end as long as the mon is still on the field.
 * think will need to make a new struct member for it, simialr to  wrapped by
 * where it'll track the battler who set the weather condition
-* check will be if current weather isn't permament, and matches the weather that would be set by the ability 
+* check will be if current weather isn't permament/primal, and matches the weather that would be set by the ability 
 * (as proof it wasn't overwritten by another weather ability) timer gets reset to 5 at end turn
 * if said battler is still on the field. 
 * make meber struct weathersetby  
@@ -1069,6 +1104,7 @@ goto ABILITY_CAPSULE_DATA
 
 
 goto CATCHING_LOGIC
+//notes for gameplayloop below
 /*
 * Need to adjust ball multiplier logic for catch.
 * Add more pokeballs, add more status effect multipliers to augment catch odds.
@@ -1089,6 +1125,38 @@ goto CATCHING_LOGIC
 * to value or var used for speciees data zero out value if mon dies
 * then have pokedex loop through functions baseed on var/value if they aren't 0
 * -Progress-
+* 
+* game loop improvements, game is old, people are used to games being faster now,
+* I want to fix that, on top of addressing the issue, of not having reason to grind.
+* it needs better time/reward investment
+* with my changes you'll spend more time catching the same mon, (or some people will)
+* so I want to add arceus style improvements where you receive items for releasing mon.
+* chose from multiple fields to add, at their own odds ev items, the items the mon gives/has a chance to hold (make sure every mon has some held item item1 & item2)
+* and other random odds ends to sell,  but keep in mind also plan to eventually setup timed events with nuggets other item give aways for economy management.
+* as well as plan to make all trainers rematchable which would make it easy to get more money from grinding battles.
+* plan to do via time or a stepp counter, when condition is met, reset trainer flags of all npc on map.
+* this would also give rise to need to use b.o  trainer repellet from pewter, further setting the realistic world economy, etc.
+* 
+* potential idea need recharge gems with element stones instead of removing item, after gem is used up in battle,
+* add item to bag, that is a grey gem,  spent gem something,   late game wont need evo stones so this will be new use for them,
+* Add Lore Gems captured power of the elements, from crystalizing/forming in environments near evo stones
+* which is why they are able to boost the elements,  will make require two evo stones,  so elements
+* that don't have a specific stone evo, can use combinations  i.e dusk/water for poison maybe
+* fire gem  2 fire stones  stuff like that.     Gem collector that does this also place to buy gems at highish cost
+* to make this sytem worth while   
+* able to farm gems and fossils from underground  or just inside different caves, prob inside caves,
+* save map space, simpler and gives reason to back track
+* 
+* other thing adjust play speed without needing speed up, so music doesn't get changed.
+* make options menu flag for increasing movement speed. can reset to default from options menu like text.
+* best case can move further without changing animation so it still has that laid back feel.
+* have to ensure you still move actually occupy the space/x position or would cause object clipping.
+* 
+*  Also adjust move animation speed.  could potentially shift animation by a multipple so they all change equally?
+* file battle_anim_scripts.s  look at commands for battle anims as well
+* change move speed, text speed, and animation speed,
+* make new faster but not instant text speed, already have how to, in screenshots
+* 
 * 
 * plan to be able to catch every legendary one way or another, initial idea was they'd randomly show up in cerulean cave after mewtwo
 * but that would be boring to always just go back through the same cave so instead.
@@ -1344,6 +1412,12 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * for setting up rattled to activate on intimidate add check for gSpecialStatuses[battler].intimidatedMon = 1;  if true i.e == 1 
 * activate rattled
 * note- also found all I needd to reactivate switch in ability is to call the battlescript again
+* 
+* fix moves mirror move, copycat etc. sketch monotype to use lasthitby  value, rather than enemy or last used move for target, so it doesnt fail
+* if used first. -_-
+* gBattleResults.lastUsedMoveOpponent       gLastMoves[gBattlerTarget] instead 
+* adjusted copycat, sketch seems to already work optimally, mirror move is very complex for some reason will need to take time to study
+* also note monotype will take sketch place,   sketch will essentially be mirror move +
 * 
 * smeargle changes new moves -
 * stat boosts, and change sketch to temporary move copy

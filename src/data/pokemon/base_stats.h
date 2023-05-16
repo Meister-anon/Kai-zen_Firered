@@ -838,7 +838,7 @@ const struct BaseStats gBaseStats[] =
             .abilities = {ABILITY_POISON_POINT, ABILITY_NONE},
         #endif
         .safariZoneFleeRate = 50,
-        .abilityHidden = {ABILITY_HUSTLE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_HUSTLE, ABILITY_BIG_PECKS},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -863,12 +863,12 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_POISON_POINT, ABILITY_RIVALRY},
+            .abilities = {ABILITY_POISON_POINT, ABILITY_GLUTTONY},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POISON_POINT, ABILITY_NONE},
         #endif
         .safariZoneFleeRate = 75,
-        .abilityHidden = {ABILITY_HUSTLE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_HUSTLE, ABILITY_FRIEND_GUARD},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -893,7 +893,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_POISON_POINT, ABILITY_RIVALRY},
+            .abilities = {ABILITY_POISON_POINT, ABILITY_THICK_FAT},
             .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_BATTLE_MATRON},//new idea ability Battle Matron, damage increase if paired w unevolved mon
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POISON_POINT, ABILITY_NONE},// so same condition for eviolite if mon can evolve increase dmg by 1.2 or smth
@@ -927,7 +927,7 @@ const struct BaseStats gBaseStats[] =
             .abilities = {ABILITY_POISON_POINT, ABILITY_NONE},
         #endif
         .safariZoneFleeRate = 50,
-        .abilityHidden = {ABILITY_HUSTLE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_HUSTLE, ABILITY_GUTS},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -935,7 +935,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_NIDORINO] =
     {
         .baseHP = 61,
-        .baseAttack = 72,
+        .baseAttack = 77,
         .baseDefense = 57,
         .baseSpeed = 65,
         .baseSpAttack = 55,
@@ -957,7 +957,7 @@ const struct BaseStats gBaseStats[] =
             .abilities = {ABILITY_POISON_POINT, ABILITY_NONE},
         #endif
         .safariZoneFleeRate = 75,
-        .abilityHidden = {ABILITY_HUSTLE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_HUSTLE, ABILITY_GUTS},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -983,7 +983,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POISON_POINT, ABILITY_RIVALRY},
-            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_COMPETITIVE},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POISON_POINT, ABILITY_NONE},
         #endif
@@ -2793,7 +2793,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         .abilities = {ABILITY_HYPER_CUTTER, ABILITY_SHELL_ARMOR},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_IRON_FIST},
         #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -2820,7 +2820,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         .abilities = {ABILITY_HYPER_CUTTER, ABILITY_SHELL_ARMOR},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_IRON_FIST},
         #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -3890,7 +3890,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 85,
         .baseSpDefense = 75,
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_ELECTRIC,
         .catchRate = 45,
         .expYield = 79,
         //.evYield_SpAttack = 1,
@@ -5774,9 +5774,9 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 70,
         .baseSpeed = 45,
         .baseSpAttack = 65,
-        .baseSpDefense = 70,
+        .baseSpDefense = 87,
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_POISON,
         .catchRate = 190,
         .expYield = 145,
         //.evYield_HP = 1,
@@ -6530,7 +6530,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 105,
         .baseSpDefense = 95,
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_ELECTRIC,
         .catchRate = 45,
         .expYield = 180,
         //.evYield_SpAttack = 2,
@@ -8194,11 +8194,11 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_WHISMUR] =
     {
         .baseHP = 64,
-        .baseAttack = 51,
-        .baseDefense = 23,
+        .baseAttack = 56,
+        .baseDefense = 36,
         .baseSpeed = 28,
         .baseSpAttack = 51,
-        .baseSpDefense = 23,
+        .baseSpDefense = 36,
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 190,
@@ -8221,10 +8221,10 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_LOUDRED] =
     {
         .baseHP = 84,
-        .baseAttack = 71,
+        .baseAttack = 80,
         .baseDefense = 43,
         .baseSpeed = 48,
-        .baseSpAttack = 71,
+        .baseSpAttack = 80,
         .baseSpDefense = 43,
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -9373,11 +9373,11 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 73,
         .baseAttack = 115,
         .baseDefense = 60,
-        .baseSpeed = 90,
+        .baseSpeed = 100,
         .baseSpAttack = 60,
         .baseSpDefense = 60,
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_DARK, //WOULD now be 4x  to fighting and fairy, but its fast enough to overcome that idea from Lockstin & Gnoggin
         .catchRate = 90,
         .expYield = 160,
         //.evYield_Attack = 2,
@@ -12654,7 +12654,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_CROAGUNK] =
     {
-        .baseHP = 48,
+        .baseHP = 52,
         .baseAttack = 61,
         .baseDefense = 40,
         .baseSpeed = 50,
@@ -12676,7 +12676,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_ANTICIPATION, ABILITY_DRY_SKIN},
-            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_ROUGH_SKIN},
+            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_IRON_FIST},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
@@ -12708,7 +12708,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_ANTICIPATION, ABILITY_DRY_SKIN},
-            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_ROUGH_SKIN},
+            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_IRON_FIST},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
@@ -13275,7 +13275,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 135,
         .baseSpDefense = 75,
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_ELECTRIC,
         .catchRate = 30,
         .expYield = 241,
         //.evYield_SpAttack = 3,
@@ -13834,7 +13834,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 120,
         .baseSpDefense = 120,
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_MYSTERY,
         .catchRate = 3,
         .expYield = 324,
         //.evYield_HP = 3,

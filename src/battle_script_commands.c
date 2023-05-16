@@ -1520,7 +1520,7 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
         return TRUE;
     }
 
-    if ((gStatuses3[gBattlerTarget] & STATUS3_PHANTOM_FORCE)//i beleve this is the replacement for the hitmarker values for semi invul, just need to add flags to omve data
+    if ((gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE)//i beleve this is the replacement for the hitmarker values for semi invul, just need to add flags to omve data
         || (!(gBattleMoves[move].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR)) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
         || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
         || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER))
@@ -1630,13 +1630,14 @@ static void atk01_accuracycheck(void)
                 for (i = 1; i < gDisableStructs[gBattlerAttacker].furyCutterCounter; ++i) {
                     moveAcc = (moveAcc * 2) / 3; //so far is working to stop the move,
                     //but isn't displaying the miss message...    apparently that's normal
+                    //should be able to change by putting "result message" before hit x times string?
                 }
             //}
         } //hopefully THIS  will affect the accuracy. works , it loses 1/4 per hit. 
         //changed from 3/4 to 2/3 to drop 1/3 per hit.
 
         if (gCurrentMove == MOVE_ROCK_THROW && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
-            moveAcc = 80;
+            moveAcc = 85; // reduced accuracy drop, move is very specific use case, is just more accessible version of smackdown
 
         // check Thunder on sunny weather / need add hail blizzard buff?
         //don't rememeber why I used effect thunder instead of gcurrentmove
@@ -3290,7 +3291,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
                 gBattlescriptCurrInstr = BattleScript_PRLZPrevention;
 
-                gBattleCommunication[MULTISTRING_CHOOSER] = 2; // may need to setup a string for this
+                gBattleCommunication[MULTISTRING_CHOOSER] = 2; // may need to setup a string for this, it uses gPRLZPreventionStringIds string exists, so works
                 return;
             }//vsonic IMPORTANT
             if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_ELECTRIC)
@@ -3484,7 +3485,9 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
+                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
+                    {
                         gDisableStructs[gEffectBattler].wrapTurns = 7;
                         gBattleMons[gEffectBattler].status1 |= STATUS1_WRAPPED;
                     }
@@ -3766,7 +3769,9 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
+                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
+                    {
                         gDisableStructs[gEffectBattler].environmentTrapTurns = 7;
                         gBattleMons[gEffectBattler].status1 |= STATUS1_FIRE_SPIN;
                     }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
@@ -3796,7 +3801,9 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
+                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
+                    {
                         gDisableStructs[gEffectBattler].environmentTrapTurns = 7;
                         gBattleMons[gEffectBattler].status1 |= STATUS1_WHIRLPOOL;
                     }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
@@ -3826,7 +3833,9 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
+                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
+                    {
                         gDisableStructs[gEffectBattler].environmentTrapTurns = 7;
                         gBattleMons[gEffectBattler].status1 |= STATUS1_SAND_TOMB;
                     }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
@@ -3857,7 +3866,9 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
+                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
+                    {
                         gDisableStructs[gEffectBattler].environmentTrapTurns = 7;
                         gBattleMons[gEffectBattler].status1 |= STATUS1_MAGMA_STORM;
                     }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
@@ -3888,7 +3899,9 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
+                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
+                    {
                         gDisableStructs[gEffectBattler].clampTurns = 7;
                         gBattleMons[gEffectBattler].status1 |= STATUS1_CLAMP;
                     }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
@@ -3919,7 +3932,9 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
+                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
+                    {
                         gDisableStructs[gEffectBattler].infestationTurns = 7;
                         gBattleMons[gEffectBattler].status1 |= STATUS1_INFESTATION;
                     }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
@@ -3951,7 +3966,9 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
                     
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW) {
+                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
+                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
+                    {
                         gDisableStructs[gEffectBattler].snaptrapTurns = 7;
                         gBattleMons[gEffectBattler].status1 |= STATUS1_SNAP_TRAP;
                     }
@@ -4001,12 +4018,18 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     if (gBattleMons[gBattlerAttacker].ability == ABILITY_SERENE_GRACE)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
     else
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance; 
 
     
     
     if (gBattleMoves[gCurrentMove].effect == ITS_A_TRAP)   //if this works make a define for trap effects & separate effect & move effect & battlscript for each
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //that way may not need to make a separate status,// seems to work no apparent bugs
+
+    /*if (gBattleMoves[gCurrentMove].effect == EFFECT_RECHARGE) 
+        SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  may not need as recharge alrady works with 0 effect chance - actually it works because the battlescript already sets it to certain
+        yeah don't need because the move effect sets a status and the status is what prevents attack,
+        so can safely set dynamic ppunch to recharge and add current effect as augment
+        oh wait its focus punch*/
 
     //trap effects
     if (((gBattleMons[gBattlerTarget].status4 == STATUS4_FIRE_SPIN) || (gBattleMons[gBattlerTarget].status1 == STATUS1_FIRE_SPIN))
@@ -4018,6 +4041,7 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
         {
             percentChance *= 2;
         } //should make burn guaranteed if also have sun set
+        //and yes this is what i had in mind, over sun boosting burn odds globally
            
     }
     //gBattleScripting.moveEffect = (MOVE_EFFECT_CONFUSION | MOVE_EFFECT_CERTAIN);
@@ -5611,7 +5635,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                 u8 target, attacker;
 
                 *(gBattleStruct->lastTakenMove + gBattlerTarget * 2 + 0) = gChosenMove;
-                *(gBattleStruct->lastTakenMove + gBattlerTarget * 2 + 1) = gChosenMove >> 8;
+                *(gBattleStruct->lastTakenMove + gBattlerTarget * 2 + 1) = gChosenMove >> 8;    //look into change to gBattleResults.lastUsedMoveOpponent
                 target = gBattlerTarget;
                 attacker = gBattlerAttacker;
                 *(attacker * 2 + target * 8 + (gBattleStruct->lastTakenMoveFrom) + 0) = gChosenMove;
@@ -7962,7 +7986,9 @@ static void atk76_various(void) //will need to add all these emerald various com
     u32 monToCheck, status;
     u16 species;
     u8 abilityNum;
-    u16 lastMove = gLastResultingMoves[gBattlerAttacker];
+    u16 lastMove = gLastMoves[gBattlerTarget];
+    //u16 lastMove = gLastResultingMoves[gBattlerAttacker]; //why did I need to use this, when this "gLastMoves[gbattlertargt]" existed?
+    
 
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
@@ -9037,14 +9063,18 @@ static void atk76_various(void) //will need to add all these emerald various com
 
         gStatuses3[gActiveBattler] &= ~(STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS | STATUS3_ON_AIR);
         break;
-    case VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG:    //uses gactivebattler sets actually target in bs script
-        if (gBattleMons[gCurrentMove].flags == FLAG_DMG_2X_IN_AIR && gStatuses3[gActiveBattler] & STATUS3_ON_AIR)
+    case VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG:    //uses gactivebattler sets actually target in bs script  groundonairbattlerwithoutgravity
+        if (gBattleMons[gCurrentMove].flags == FLAG_DMG_2X_IN_AIR && gStatuses3[gActiveBattler] & STATUS3_ON_AIR)   //using fly
         {
             CancelMultiTurnMoves(gActiveBattler);
             gSprites[gBattlerSpriteIds[gActiveBattler]].invisible = FALSE;
             //gStatuses3[gActiveBattler] &= ~(STATUS3_ON_AIR); // doesn't need this part handled in cancelmultiturn
             gStatuses3[gActiveBattler] |= STATUS3_SMACKED_DOWN;
+            gBattleMoveDamage *= 2; //can't believe I forgot this...
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3); //do effect then jump
         }//NEW bs for 
+        else
+            gBattlescriptCurrInstr = gBattlescriptCurrInstr += 7;   //else skip pointer and go to next script
         break;
     /*case VARIOUS_HANDLE_TRAINER_SLIDE_MSG:
         if (gBattlescriptCurrInstr[3] == 0)
@@ -9402,9 +9432,9 @@ static void atk76_various(void) //will need to add all these emerald various com
              && IsBattlerAlive(i))
                 shouldNotClear = TRUE;
         }
-        if (gBattleWeather & WEATHER_PRIMAL_ANY && !shouldNotClear)
+        if (gBattleWeather & WEATHER_SUN_PRIMAL && !shouldNotClear)
         {
-            gBattleWeather &= ~WEATHER_PRIMAL_ANY;
+            gBattleWeather &= ~WEATHER_SUN_PRIMAL;
             //PrepareStringBattle(STRINGID_EXTREMESUNLIGHTFADED, gActiveBattler);
             gBattleCommunication[MSG_DISPLAY] = 1;
         }
@@ -9782,7 +9812,7 @@ static void atk76_various(void) //will need to add all these emerald various com
 static void atk77_setprotectlike(void)
 {
     bool8 notLastTurn = TRUE;
-    u16 lastMove = gLastResultingMoves[gBattlerAttacker];
+    u16 lastMove = gLastResultingMoves[gBattlerAttacker];   //??? did I remove this, its not used here
 
     if (!(gBattleMoves[gLastResultingMoves[gBattlerAttacker]].flags & FLAG_PROTECTION_MOVE))
         gDisableStructs[gBattlerAttacker].protectUses = 0;
@@ -9963,7 +9993,7 @@ static void atk7C_trymirrormove(void)
 
         if (i != gBattlerAttacker)
         {
-            move = T1_READ_16(i * 2 + gBattlerAttacker * 8 + gBattleStruct->lastTakenMoveFrom);
+            move = T1_READ_16(i * 2 + gBattlerAttacker * 8 + gBattleStruct->lastTakenMoveFrom);//change to gLastMoves[gBattlerTarget]
             if (move != MOVE_NONE && move != 0xFFFF)
                 movesArray[validMovesCount++] = move;
         }
@@ -10800,19 +10830,24 @@ static void atk93_tryKO(void)
         if (!(gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS))
         {
             chance = gBattleMoves[gCurrentMove].accuracy + (gBattleMons[gBattlerAttacker].level - gBattleMons[gBattlerTarget].level);
-            if (Random() % 100 + 1 < chance && gBattleMons[gBattlerAttacker].level >= gBattleMons[gBattlerTarget].level)
-                chance = TRUE;
+
+            if (chance < gBattleMoves[gCurrentMove].accuracy)   //prevent further acc drop, now that its possible for move to hit from lower level
+                chance = gBattleMoves[gCurrentMove].accuracy;
+            if (Random() % 100 + 1 < chance && gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 7))
+                chance = TRUE;  //only works if random returns a value less than chance ie accuracy is actual odds
             else
                 chance = FALSE;
         }
         else if (gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker
-                 && gBattleMons[gBattlerAttacker].level >= gBattleMons[gBattlerTarget].level)
+                 && gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 7))
         {
             chance = TRUE;
         }
         else
         {
             chance = gBattleMoves[gCurrentMove].accuracy + (gBattleMons[gBattlerAttacker].level - gBattleMons[gBattlerTarget].level);
+            if (chance < gBattleMoves[gCurrentMove].accuracy)   //prevent further acc drop, now that its possible for move to hit from lower level
+                chance = gBattleMoves[gCurrentMove].accuracy;
             if (Random() % 100 + 1 < chance && gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 7))
                 chance = TRUE;
             else
@@ -10864,21 +10899,6 @@ static void atk94_damagetohalftargethp(void) // super fang
     ++gBattlescriptCurrInstr;
 }
 
-static void atk95_setsandstorm(void)
-{
-    if (gBattleWeather & WEATHER_SANDSTORM_ANY)
-    {
-        gMoveResultFlags |= MOVE_RESULT_MISSED;
-        gBattleCommunication[MULTISTRING_CHOOSER] = 2;
-    }
-    else
-    {
-        gBattleWeather = WEATHER_SANDSTORM_TEMPORARY;
-        gBattleCommunication[MULTISTRING_CHOOSER] = 3;
-        gWishFutureKnock.weatherDuration = 5;
-    }
-    ++gBattlescriptCurrInstr;
-}
 
 static void atk96_weatherdamage(void)
 {
@@ -10944,7 +10964,7 @@ static void atk96_weatherdamage(void)
 }
 
 
-static void atk97_tryinfatuating(void)
+static void atk97_tryinfatuating(void)  
 {
     struct Pokemon *monAttacker, *monTarget;
     u16 speciesAttacker, speciesTarget;
@@ -11426,7 +11446,8 @@ static void atkA8_copymovepermanently(void) // sketch
      && gLastPrintedMoves[gBattlerTarget] != MOVE_STRUGGLE
      && gLastPrintedMoves[gBattlerTarget] != 0
      && gLastPrintedMoves[gBattlerTarget] != 0xFFFF
-     && gLastPrintedMoves[gBattlerTarget] != MOVE_SKETCH)
+     && gLastPrintedMoves[gBattlerTarget] != MOVE_SKETCH
+     && gLastPrintedMoves[gBattlerTarget] != MOVE_MONOTYPE)
     {
         s32 i;
 
@@ -12021,7 +12042,14 @@ static void atkBA_jumpifnopursuitswitchdmg(void)
 
 static void atkBB_setsunny(void)
 {
-    if (gBattleWeather & WEATHER_SUN_ANY)
+    if (gBattleWeather & WEATHER_SUN_TEMPORARY)
+    {
+        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_HEAT_ROCK)
+            gWishFutureKnock.weatherDuration += 8;
+        else
+            gWishFutureKnock.weatherDuration += 5;
+    }
+    else if (gBattleWeather & WEATHER_SUN_NON_TEMP)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
@@ -12030,14 +12058,24 @@ static void atkBB_setsunny(void)
     {
         gBattleWeather = WEATHER_SUN_TEMPORARY;
         gBattleCommunication[MULTISTRING_CHOOSER] = 4;
-        gWishFutureKnock.weatherDuration = 5;
+        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_HEAT_ROCK)
+            gWishFutureKnock.weatherDuration = 8;
+        else
+            gWishFutureKnock.weatherDuration = 5;
     }
     ++gBattlescriptCurrInstr;
 }
 
 static void atk7D_setrain(void)
 {
-    if (gBattleWeather & WEATHER_RAIN_ANY)
+    if (gBattleWeather & WEATHER_RAIN_TEMPORARY)
+    {
+        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_DAMP_ROCK)
+            gWishFutureKnock.weatherDuration += 8;
+        else
+            gWishFutureKnock.weatherDuration += 5;
+    }
+    else if (gBattleWeather & WEATHER_RAIN_NON_TEMP)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
@@ -12046,14 +12084,24 @@ static void atk7D_setrain(void)
     {
         gBattleWeather = WEATHER_RAIN_TEMPORARY;
         gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-        gWishFutureKnock.weatherDuration = 5;
+        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_DAMP_ROCK)
+            gWishFutureKnock.weatherDuration = 8;
+        else
+            gWishFutureKnock.weatherDuration = 5;
     }
     ++gBattlescriptCurrInstr;
 }
 
 static void atkC8_sethail(void)
 {
-    if (gBattleWeather & WEATHER_HAIL_ANY)
+    if (gBattleWeather & WEATHER_HAIL)
+    {
+        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_ICY_ROCK)
+            gWishFutureKnock.weatherDuration += 8;
+        else
+            gWishFutureKnock.weatherDuration += 5;
+    }
+    else if (gBattleWeather & WEATHER_HAIL_NON_TEMP)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
@@ -12062,7 +12110,36 @@ static void atkC8_sethail(void)
     {
         gBattleWeather = WEATHER_HAIL;
         gBattleCommunication[MULTISTRING_CHOOSER] = 5;
-        gWishFutureKnock.weatherDuration = 5;
+        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_ICY_ROCK)
+            gWishFutureKnock.weatherDuration = 8;
+        else
+            gWishFutureKnock.weatherDuration = 5;
+    }
+    ++gBattlescriptCurrInstr;
+}
+
+static void atk95_setsandstorm(void)
+{
+    if (gBattleWeather & WEATHER_SANDSTORM_TEMPORARY)
+    {
+        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_SMOOTH_ROCK)
+            gWishFutureKnock.weatherDuration += 8;
+        else
+            gWishFutureKnock.weatherDuration += 5;
+    }
+    else if (gBattleWeather & WEATHER_SANDSTORM_NON_TEMP)
+    {
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+    }
+    else
+    {
+        gBattleWeather = WEATHER_SANDSTORM_TEMPORARY;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 3;
+        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_SMOOTH_ROCK)
+            gWishFutureKnock.weatherDuration = 8;
+        else
+            gWishFutureKnock.weatherDuration = 5;
     }
     ++gBattlescriptCurrInstr;
 }

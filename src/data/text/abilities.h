@@ -19,7 +19,7 @@ static const u8 sImmunityDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Preven
 static const u8 sFlashFireDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Draws in and powers up fire moves");
 static const u8 sShieldDustDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents added effects.");
 static const u8 sOwnTempoDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents confusion.");
-static const u8 sSuctionCupsDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Firmly anchors the body.");
+static const u8 sSuctionCupsDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Firmly anchors itself, stops force switch\nAnd increases duration of binding moves.");
 static const u8 sIntimidateDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Lowers the foe's ATTACK.");
 static const u8 sShadowTagDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents the foe from escaping.");
 static const u8 sRoughSkinDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Hurts to make contact.");
@@ -264,7 +264,7 @@ static const u8 sCupidsArrowDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Inf
 static const u8 sBattleMatronDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Powers up moves to protect young PKMN.");
 static const u8 sOceanMemoryDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Reduces Damage from Water-type moves.");
 static const u8 sLiquidSoulDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Transforms Water-type moves into Ghost-type.");  //swapped back
-static const u8 sOverchargeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups Electric moves in a pinch.\nThe POKéMON charges up to the max!");
+static const u8 sOverchargeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups ELECTRIC moves in a pinch.\nThe POKéMON charges up to the max!");
 static const u8 sPhotosynthesizeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Slight HP recovery in sun.");
 static const u8 sGlacialIceDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Is immune to fire,\nand turns ice and hail into hp.");
 static const u8 sLavaFissureDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Field becomes scorched.\nDraws in and powers up fire moves");
@@ -278,6 +278,7 @@ static const u8 sErosionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Breaks 
 static const u8 sLiquidmetalDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("A strange light-weight body, immune to\nstat reduction. That resists physical dmg");
 static const u8 sElementalmuscleDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Special moves become physical.\nControl the elements with pure Muscle!");
 //checked in fire red limit is 40 chars per line, changing description length to 80
+//based on suction cups I kinda have more space?  so more like 42 per line?
 //template - top line: literal effect\n bottom line: flavor text
 //if you can't cleanly do a mix of both. over the full space
 

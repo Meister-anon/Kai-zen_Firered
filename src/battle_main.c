@@ -3124,7 +3124,7 @@ static void BattleStartClearSetData(void)
         dataPtr = (u8 *)&gDisableStructs[i];
         for (j = 0; j < sizeof(struct DisableStruct); ++j)
             dataPtr[j] = 0;
-        gDisableStructs[i].isFirstTurn = 2; //beelieve is switching in? based on emerald comment
+        gDisableStructs[i].isFirstTurn = 2; //beelieve is switching in? based on emerald comment    //vsonic
         gUnknown_2023DD4[i] = 0;
         gLastMoves[i] = MOVE_NONE;
         gLastLandedMoves[i] = MOVE_NONE;
@@ -4406,7 +4406,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
 
     if ((gBattleMons[battler1].status2 & STATUS2_WRAPPED) || (gBattleMons[battler1].status1 & STATUS1_WRAPPED))
         speedBattler1 /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
-    if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)
+    if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)   //buffed param to 40% rathre than 20
         speedBattler1 = UINT_MAX;
     // check second battlerId's speed
     speedBattler2 = (gBattleMons[battler2].speed * speedMultiplierBattler2)
@@ -4438,7 +4438,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     if ((gBattleMons[battler2].status2 & STATUS2_WRAPPED) || (gBattleMons[battler2].status1 & STATUS1_WRAPPED))
         speedBattler2 /= 2;
 
-    if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)
+    if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)   //buffed to 40 % odds rather than 20
         speedBattler2 = UINT_MAX;
     if (!ignoreChosenMoves)
     {
@@ -5493,10 +5493,10 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
     priority = gBattleMoves[move].priority;
     //if gBattleMoves[move].flags == FLAG_DMG_2X_IN_AIR & target is STATUS3_ON_AIR increment priority (gStatuses3[battler] & STATUS3_SKY_DROPPED)
     if (gBattleMoves[move].flags == FLAG_DMG_2X_IN_AIR
-        && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+        && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR) //done because flying mon are fast, and most mon with this move are slow, so would never land otherwise
     {
         priority++;
-    }//that's good, just need to figure how to set grounded if by 2x flag move while in air
+    }//that's good, just need to figure how to set grounded if by 2x flag move while in air - done in bs command
 
     if (GetBattlerAbility(battlerId) == ABILITY_GALE_WINGS
         && gBattleMoves[move].type == TYPE_FLYING)

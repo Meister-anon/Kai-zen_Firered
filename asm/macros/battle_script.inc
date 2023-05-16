@@ -1685,8 +1685,9 @@
 	various \battler, VARIOUS_GRAVITY_ON_AIRBORNE_MONS
 	.endm
 	
-	.macro groundonairbattlerwithoutgravity battler:req
+	.macro groundonairbattlerwithoutgravity battler:req, ptr:req	@made jump effect
 	various \battler, VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG
+	.4byte \ptr
 	.endm
 
 	.macro checkgrassyterrainheal battler:req, ptr:req

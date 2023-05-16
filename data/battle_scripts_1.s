@@ -2351,10 +2351,9 @@ BattleScript_HitFromAtkAnimation::
 	attackanimation
 	waitanimation
 	effectivenesssound
-	groundonairbattlerwithoutgravity BS_TARGET	@put here becuz should make target visible, shuold work for evrthing
+	groundonairbattlerwithoutgravity BS_TARGET, BattleScript_GroundFlyingEnemywithoutGravity	@Need to change this and make a jump put here becuz should make target visible, shuold work for evrthing
 	hitanimation BS_TARGET
-	printstring STRINGID_CRASHEDTOTHEGROUND @crashed to the ground	ok neeed change this command to a ump and goto/return back to here, idk what I was thinking putting htis heere
-	waitmessage 0x20	@made shorter as Im adding extra text
+BattleScript_HitFromHpUpdate::
 	waitstate
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
@@ -2368,6 +2367,12 @@ BattleScript_HitFromAtkAnimation::
 BattleScript_MoveEnd::
 	moveendall
 	end
+
+BattleScript_GroundFlyingEnemywithoutGravity::
+	hitanimation BS_TARGET
+	printstring STRINGID_CRASHEDTOTHEGROUND
+	waitmessage 0x20	
+	goto BattleScript_HitFromHpUpdate
 
 BattleScript_MakeMoveMissed::
 	orbyte gMoveResultFlags, MOVE_RESULT_MISSED
@@ -2815,7 +2820,7 @@ BattleScript_MultiHitLoop::
 	jumpifhalfword CMP_EQUAL, gChosenMove, MOVE_SLEEP_TALK, BattleScript_DoMultiHit
 	jumpifstatus BS_ATTACKER, STATUS1_SLEEP, BattleScript_MultiHitPrintStrings
 BattleScript_DoMultiHit::
-	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
+	accuracycheck BattleScript_MultiHitMiss, ACC_CURR_MOVE	@this is what I need to change, for miss message not below
 	movevaluescleanup
 	copybyte cEFFECT_CHOOSER, sMULTIHIT_EFFECT
 	furycuttercalc
@@ -2842,11 +2847,11 @@ BattleScript_DoMultiHit::
 	goto BattleScript_MultiHitPrintStrings
 
 BattleScript_MultiHitNoMoreHits:: @@MAKE multihit miss script specifically for fury cutter to print miss & number hits
-	pause 0x20
+	pause 0x20						@instead want to make all multi hit work that way
 BattleScript_MultiHitPrintStrings::
 	resultmessage
 	waitmessage 0x40
-	jumpifmovehadnoeffect BattleScript_MultiHitEnd
+	jumpifmovehadnoeffect BattleScript_MultiHitEnd		@this includes type not effect need something specifically for missing
 	copyarray gBattleTextBuff1, sMULTIHIT_STRING, 6
 	printstring STRINGID_HITXTIMES
 	waitmessage 0x40
@@ -2856,6 +2861,16 @@ BattleScript_MultiHitEnd::
 	moveendcase 2
 	moveendfrom 4
 	end
+
+BattleScript_MultiHitMiss::
+	pause 0x20
+	effectivenesssound
+	resultmessage
+	waitmessage 0x2c
+	copyarray gBattleTextBuff1, sMULTIHIT_STRING, 6
+	printstring STRINGID_HITXTIMES
+	waitmessage 0x32
+	goto BattleScript_MultiHitEnd
 
 BattleScript_EffectConversion::
 	attackcanceler
@@ -6623,6 +6638,7 @@ BattleScript_MoveUsedIsParalyzed::
 BattleScript_MovePressureCanceler::
 	printstring STRINGID_PRESSUREATKCANCEL
 	waitmessage 0x40
+	playanimation BS_ATTACKER, B_ANIM_MON_SCARED, NULL
 	cancelmultiturnmoves BS_ATTACKER
 	goto BattleScript_MoveEnd
 
@@ -8621,8 +8637,8 @@ BattleScript_GemActivates::
 	waitanimation
 	printstring STRINGID_GEMACTIVATES
 	waitmessage B_WAIT_TIME_LONG
-	removeitem BS_ATTACKER	@potential idea need recharge gems with element stones instead of removing item
-	return	@nvm thats a lot of effort & would prob cost me ewram plus not enough stones so just be able to buy them for something later game plus mining
+	removeitem BS_ATTACKER
+	return
 
 BattleScript_BerryReduceDmg::
 	playanimation BS_TARGET, B_ANIM_HELD_ITEM_EFFECT, NULL
