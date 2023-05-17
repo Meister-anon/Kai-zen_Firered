@@ -3375,6 +3375,7 @@ BattleScript_EffectSkyAttack::
 	call BattleScriptFirstChargingTurn
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectHurricane:
 BattleScript_EffectConfuseHit::
 	setmoveeffect MOVE_EFFECT_CONFUSION
 	goto BattleScript_EffectHit

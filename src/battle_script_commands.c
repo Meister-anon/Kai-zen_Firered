@@ -1474,7 +1474,7 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
     }
 
     else if (gBattleMoves[move].effect == EFFECT_TOXIC
-        && IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_POISON))
+        && IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_POISON))   //ironically with type chart change I don't need this
     {
         JumpIfMoveFailed(7, move);
         return TRUE;
@@ -1639,14 +1639,16 @@ static void atk01_accuracycheck(void)
         if (gCurrentMove == MOVE_ROCK_THROW && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
             moveAcc = 85; // reduced accuracy drop, move is very specific use case, is just more accessible version of smackdown
 
-        // check Thunder on sunny weather / need add hail blizzard buff?
+        // check Thunder on sunny weather / need add hail blizzard buff?(IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY)
         //don't rememeber why I used effect thunder instead of gcurrentmove
-        if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY && gBattleMoves[move].effect == EFFECT_THUNDER)
+        if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
             moveAcc = 50;
         if (moveAcc > 100)
             moveAcc = 100; // to prevent possible broken values.
+
         calc = sAccuracyStageRatios[buff].dividend * moveAcc;
         calc /= sAccuracyStageRatios[buff].divisor;
+
         if (gBattleMons[gBattlerAttacker].ability == (ABILITY_COMPOUND_EYES || ABILITY_ILLUMINATE))
             calc = (calc * 130) / 100; // 1.3 compound eyes boost
         if (WEATHER_HAS_EFFECT && gBattleMons[gBattlerTarget].ability == ABILITY_SAND_VEIL && gBattleWeather & WEATHER_SANDSTORM_ANY)
@@ -1722,8 +1724,12 @@ static void atk01_accuracycheck(void)
         if (holdEffect == HOLD_EFFECT_EVASION_UP)
             calc = (calc * (100 - param)) / 100;
         // final calculation
-        if ((Random() % 100 + 1) > calc)
-        {
+        if ((Random() % 100 + 1) > calc)    //turns accuracy value into a percent by comparing on a base 100 scale, by lowering random num I can effectively raise acc of all moves
+        {   //but it would be shifting the scale, and actually only really benefit high accuracy moves i.e if I shifted to random 95, 95 accuracy would then be 100
+            //now if I added a check that filtered for moveacc below a certain value with filters to exclude certain effects that have their acc changed by conditions i.e thunder
+            //I could boost all moves accuracy without having to go through entire move list...
+            //hmm would work but not as targetted as if I did it myself, and I find other things along the way so I'll continue as I am..
+
             gMoveResultFlags |= MOVE_RESULT_MISSED;
             if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
                 && (gBattleMoves[move].target == MOVE_TARGET_BOTH || gBattleMoves[move].target == MOVE_TARGET_FOES_AND_ALLY))
@@ -1992,6 +1998,13 @@ static void atk06_typecalc(void)
     {
         gBattleMoveDamage = gBattleMoveDamage * 125;
         gBattleMoveDamage = gBattleMoveDamage / 100;
+    }
+
+    //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
+    if (gBattleMons[gBattlerAttacker].species == SPECIES_ARCEUS)
+    {
+        gBattleMoveDamage = gBattleMoveDamage * 15;
+        gBattleMoveDamage = gBattleMoveDamage / 10;
     }
 
     /*if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)

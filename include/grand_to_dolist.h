@@ -710,7 +710,9 @@ Thunder Wave Electric TM45
 * 
 * go over move chart, adjusting for low accuracy moves, bring up everything below 75
 * meta is revolves around 1 shot or 2 shot, so low accuracy moves would never be worth the risk and just never get used
-* especially if it doesn't have some other effect besides damage -
+* especially if it doesn't have some other effect besides damage - DONE
+* 
+* buffed arceus, gave global stab, and changed to mystery type
 * 
 * check moves that rely on enemy using a move first, make sure they use last used move, so they don't 
 * just fail if they are faster than the target - think mostly done, need check mirror move and setup sketch monotype changes
