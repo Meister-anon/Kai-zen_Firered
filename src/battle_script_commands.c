@@ -8033,6 +8033,7 @@ static void atk76_various(void) //will need to add all these emerald various com
     case VARIOUS_RESET_INTIMIDATE_TRACE_BITS:
         gSpecialStatuses[gActiveBattler].intimidatedMon = 0;//pairs with battle_util.c
         gSpecialStatuses[gActiveBattler].traced = 0; //BattleScript_IntimidateActivates
+        gSpecialStatuses[gActiveBattler].TigerMomAttacked = 0; //new special status, but uses BattleScript_IntimidateActivates
         break; // & trygetintimidatetarget command in this file
     case VARIOUS_UPDATE_CHOICE_MOVE_ON_LVL_UP:
         if (gBattlerPartyIndexes[0] == gBattleStruct->expGetterMonId || gBattlerPartyIndexes[2] == gBattleStruct->expGetterMonId)
@@ -8168,7 +8169,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         gBattlescriptCurrInstr += 3;
         AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gActiveBattler, 0, 0, 0);
-        AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, gActiveBattler, 0, 0, 0);
+        AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, gActiveBattler, 0, 0, 0);//hope can use for tiger mom
         AbilityBattleEffects(ABILITYEFFECT_TRACE, gActiveBattler, 0, 0, 0);
         return; //not sure what this does  its only used in mega evo and trace in gen 8 emerald expansion
     case VARIOUS_SAVE_TARGET:
@@ -8582,8 +8583,8 @@ static void atk76_various(void) //will need to add all these emerald various com
         else
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         return;
-    case VARIOUS_ARGUMENT_STATUS_EFFECT:    //use argumenttomoveeffect  for non status 
-        switch (gBattleMoves[gCurrentMove].argument)
+    case VARIOUS_ARGUMENT_STATUS_EFFECT:    // argumentstatuseffect 
+        switch (gBattleMoves[gCurrentMove].argument)//can add more status to this, flinch confusion etc.
         {
         case STATUS1_BURN:
             gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
@@ -8879,7 +8880,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattlescriptCurrInstr += 7;
         }
         return;
-    case VARIOUS_ARGUMENT_TO_MOVE_EFFECT:   //works with seconaryeffectchance can prob also do like move effect set certain or effect user
+    case VARIOUS_ARGUMENT_TO_MOVE_EFFECT:   //argumenttomoveeffect works with seconaryeffectchance can prob also do like move effect set certain or effect user
         gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument;
         break;
     case VARIOUS_SPECTRAL_THIEF:
@@ -13032,6 +13033,7 @@ static void atkE0_trysetsnatch(void) // snatch
     }
 }
 
+//setting up new copy ability think can just use all same values?
 static void atkE1_trygetintimidatetarget(void) //I'd like to be able to get it ot target based on the case id abilityeffect in the util.c
 //ABILITYEFFECT_INTIMIDATE2 is the one  for switchin  so changing the targetting for just that should make it work how I want
 //maybe do it like trace and have the targetting built into the activation function
@@ -13039,6 +13041,7 @@ static void atkE1_trygetintimidatetarget(void) //I'd like to be able to get it o
     u8 side; //if use of gbattletarget messes up switchin use, I can take notes from synchronize ability scrpit
     //and add different activation to the function based on if its attacker or target  IMPORTANT
 
+    //will prob need to put below line in condition for ability intimidate vs tiger mom, possibly can use same line
     gBattleScripting.battler = gBattleStruct->intimidateBattler;//linked with intimidate in util.c, it finds mon with intimidate/condition and sets that battler to the battlescript battler
     side = GetBattlerSide(gBattleScripting.battler); //
     PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gBattleMons[gBattleScripting.battler].ability) //sets mon ability to string buffer for activation text i believe

@@ -5082,7 +5082,7 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 90,
         .baseAttack = 75,
         .baseSpeed = 55,
-        .baseSpAttack = 125,
+        .baseSpAttack = 115,
         .baseSpDefense = 90,
         .baseDefense = 85,
         .type1 = TYPE_ELECTRIC,
@@ -18747,7 +18747,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_RIVALRY, ABILITY_UNNERVE},
+            .abilities = {ABILITY_RIVALRY, ABILITY_TIGER_CUB},//ABILITY_TIGER_CUB
             .abilityHidden = {ABILITY_MOXIE, ABILITY_NONE},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NONE, ABILITY_NONE},
@@ -18758,7 +18758,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_PYROAR] =
     {
-        .baseHP = 86,
+        .baseHP = 106,
         .baseAttack = 78,
         .baseDefense = 87,
         .baseSpeed = 106,
@@ -18776,7 +18776,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_RIVALRY, ABILITY_UNNERVE},
+            .abilities = {ABILITY_RIVALRY, ABILITY_FLAME_BODY},
             .abilityHidden = {ABILITY_MOXIE, ABILITY_NONE},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NONE, ABILITY_NONE},
@@ -31738,8 +31738,8 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_PYROAR_F] =
     {
-        .baseHP = 101,
-        .baseAttack = 68,
+        .baseHP = 89,
+        .baseAttack = 98,
         .baseDefense = 72,
         .baseSpeed = 116,
         .baseSpAttack = 109,
@@ -31756,7 +31756,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_RIVALRY, ABILITY_BATTLE_MATRON},
+            .abilities = {ABILITY_RIVALRY, ABILITY_TIGER_MOM},//CHANGE give own ability TIGER_MOM/Apex Predator
             .abilityHidden = {ABILITY_MOXIE, ABILITY_NONE},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NONE, ABILITY_NONE},

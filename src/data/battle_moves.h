@@ -4759,15 +4759,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_SPECIAL,
     },
 
-    [MOVE_POISON_FANG] =
+    [MOVE_TOXIC_FANG] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_6
             .secondaryEffectChance = 50,
         #else
             .secondaryEffectChance = 30,
         #endif
-        .effect = EFFECT_POISON_FANG,
-        .power = 50,
+        .effect = EFFECT_TOXIC_FANG,
+        .power = 65,
         .type = TYPE_POISON,
         .accuracy = 100,
         .pp = 15,
@@ -5909,7 +5909,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_HEAL_BLOCK] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_5
-            .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+            .flags = FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         #else
             .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         #endif
@@ -5919,7 +5919,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_BOTH, // if setup rotation/triple battles may need to change this to opponent field target
+        .target = MOVE_TARGET_OPPONENTS_FIELD, // if setup rotation/triple battles may need to change this to opponent field target
         .priority = 1,  //added little priority to be able to pre-empt a heal.
         .split = SPLIT_STATUS,
     }, //make heal block stop potions etc.e simple enough just add clause to itemuse function i think
@@ -6610,7 +6610,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_ELECTRIC,
         .accuracy = 95,
         .pp = 15,
-        .secondaryEffectChance = 10,
+        .secondaryEffectChance = 15,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .split = SPLIT_PHYSICAL,
@@ -6625,7 +6625,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_ICE,
         .accuracy = 95,
         .pp = 15,
-        .secondaryEffectChance = 10,
+        .secondaryEffectChance = 15,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .split = SPLIT_PHYSICAL,
@@ -6640,7 +6640,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_FIRE,
         .accuracy = 95,
         .pp = 15,
-        .secondaryEffectChance = 10,
+        .secondaryEffectChance = 15,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .split = SPLIT_PHYSICAL,
@@ -10100,12 +10100,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
         .pp = 15,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_STRONG_JAW_BOOST,
         .split = SPLIT_PHYSICAL,
-    },
+        .argument = EFFECT_FLINCH_STATUS,
+    },// kept at power 75, added flinch and effect chance boosted to level of bite
 
     [MOVE_STOMPING_TANTRUM] =
     {

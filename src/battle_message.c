@@ -279,6 +279,7 @@ static const u8 sText_PkmnPreventsConfusionWith[] = _("{B_DEF_NAME_WITH_PREFIX}'
 static const u8 sText_PkmnRaisedFirePowerWith[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_DEF_ABILITY}\nraised its FIRE power!");
 static const u8 sText_PkmnAnchorsItselfWith[] = _("{B_DEF_NAME_WITH_PREFIX} anchors\nitself with {B_DEF_ABILITY}!");
 static const u8 sText_PkmnCutsAttackWith[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\ncuts {B_DEF_NAME_WITH_PREFIX}'s ATTACK!");
+static const u8 sText_TigerMomActivation[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\ncowed {B_DEF_NAME_WITH_PREFIX} into submission!");
 static const u8 sText_PkmnPreventsStatLossWith[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nprevents stat loss!");
 static const u8 sText_PkmnHurtsWith[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_DEF_ABILITY}\nhurt {B_ATK_NAME_WITH_PREFIX}!");
 static const u8 sText_PkmnTraced[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} TRACED\n{B_BUFF1}'s {B_BUFF2}!");
@@ -1388,6 +1389,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_PRESSUREATKCANCEL - BATTLESTRINGS_TABLE_START]             = sText_PressureAtkCancel,
     [STRINGID_STEALTHROCKABROSBED - BATTLESTRINGS_TABLE_START]           = sText_StealthRockAbsorbed,
     [STRINGID_PICKUP_ITEM - BATTLESTRINGS_TABLE_START]                   = sText_Battle_Pickup
+    [STRINGID_TIGER_MOM_ACTIVATION - BATTLESTRINGS_TABLE_START]          = sText_TigerMomActivation
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,

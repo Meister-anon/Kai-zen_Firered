@@ -4974,6 +4974,7 @@ BattleScript_BrickBreakDoHit::
 	resultmessage
 	waitmessage 0x40
 	seteffectwithchance
+	argumenttomoveeffect	@added for psychic fangs to add flinch effect, should do nothing for normal brickbreak
 	tryfaintmon BS_TARGET, 0, NULL
 	goto BattleScript_MoveEnd
 
@@ -7269,6 +7270,7 @@ BattleScript_ReactivateIntimidate::
 BattleScript_DoIntimidateActivationAnim::
 	pause 0x20
 BattleScript_IntimidateActivates::
+	jumpifability BS_ATTACKER, ABILITY_TIGER_MOM, BattleScript_TigerMomActivates	@JUMPS attack drop and does def drop instead then goes to loop
 	setbyte gBattlerTarget, 0
 	setstatchanger STAT_ATK, 1, TRUE
 BattleScript_IntimidateActivationAnimLoop::
@@ -7286,6 +7288,7 @@ BattleScript_IntimidateActivationAnimLoop::
 	jumpifbyte CMP_GREATER_THAN, cMULTISTRING_CHOOSER, 1, BattleScript_IntimidateFail
 	setgraphicalstatchangevalues
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	jumpifability BS_ATTACKER, ABILITY_TIGER_MOM, BattleScript_TigerMomBattleMessage
 	printstring STRINGID_PKMNCUTSATTACKWITH
 	waitmessage 0x40
 BattleScript_IntimidateFail::
@@ -7298,6 +7301,16 @@ BattleScript_IntimidateEnd::
 BattleScript_IntimidateAbilityFail::
 	pause 0x20
 	printstring STRINGID_PREVENTEDFROMWORKING
+	waitmessage 0x40
+	goto BattleScript_IntimidateFail
+
+BattleScript_TigerMomActivates::
+	setbyte gBattlerTarget, 0
+	setstatchanger STAT_DEF, 1, TRUE
+	goto BattleScript_IntimidateActivationAnimLoop
+
+BattleScript_TigerMomBattleMessage::
+	printstring STRINGID_TIGER_MOM_ACTIVATION
 	waitmessage 0x40
 	goto BattleScript_IntimidateFail
 

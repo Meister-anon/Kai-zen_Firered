@@ -3634,8 +3634,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             moveArg = gCurrentMove;
         GET_MOVE_TYPE(moveArg, moveType);
         if (IS_BATTLE_TYPE_GHOST_WITHOUT_SCOPE(gBattleTypeFlags)
-         && (gLastUsedAbility == ABILITY_INTIMIDATE || gLastUsedAbility == ABILITY_TRACE))
-            return effect;
+         && (gLastUsedAbility == ABILITY_INTIMIDATE || gLastUsedAbility == ABILITY_TRACE || gLastUsedAbility == ABILITY_TIGER_MOM))
+            return effect;//added copy abiliety just incase
         switch (caseID)
         {
         case ABILITYEFFECT_ON_SWITCHIN: // 0
@@ -3939,6 +3939,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     gStatuses3[battler] |= STATUS3_TRACE;
                     gSpecialStatuses[battler].traced = 1;
+                }
+                break;
+            case ABILITY_TIGER_MOM: //TEST
+                if (!(gSpecialStatuses[battler].tigerMomAttacked)) //this is needed to prevent infini loop because its not a "status"
+                {
+                    gStatuses3[battler] |= STATUS3_TIGER_MOM_ATTACKS;
+                    gSpecialStatuses[battler].tigerMomAttacked = 1;
                 }
                 break;
             case ABILITY_CUPIDS_ARROW: // 
@@ -5402,6 +5409,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     ++effect;
                     break; //this version is for battle start, because its is called in TryDoEventsBeforeFirstTurn function
                 }
+                else if (gBattleMons[i].ability == ABILITY_TIGER_MOM && gStatuses3[i] & STATUS3_TIGER_MOM_ATTACKS)
+                {
+                    gLastUsedAbility = ABILITY_TIGER_MOM;
+                    gStatuses3[i] &= ~(STATUS3_TIGER_MOM_ATTACKS); //need test this may prevent ativation loop
+                    BattleScriptPushCursorAndCallback(BattleScript_IntimidateActivatesEnd3); //intimidate script with extra pause beforehand
+                    gBattleStruct->intimidateBattler = i;   //tentatively think I can use this, as think its just setting target?
+                    ++effect;
+                    break; //this version is for battle start, because its is called in TryDoEventsBeforeFirstTurn function
+                }
             }
             break;
         case ABILITYEFFECT_TRACE: // 11
@@ -5475,6 +5491,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     ++effect;//so this intimidate has the same activation conditon as other one,  but without the pause
                     break; //I'm assumig one is for battle start and one is for switch in... confirmed
                 }//this version is for switch in, so I only need to change this one to make my switch in ability change
+
+                else if (gBattleMons[i].ability == ABILITY_TIGER_MOM && (gStatuses3[i] & STATUS3_TIGER_MOM_ATTACKS)
+                    && (IsBattlerAlive(BATTLE_OPPOSITE(i)) || IsBattlerAlive(BATTLE_PARTNER(BATTLE_OPPOSITE(i))))) // At least one opposing mon has to be alive.)
+                { //change above keeps switch in intimidate from activating on KO'd pokemon
+                    gLastUsedAbility = ABILITY_TIGER_MOM;
+                    gStatuses3[i] &= ~(STATUS3_TIGER_MOM_ATTACKS);  
+                    BattleScriptPushCursor(); //so it does'nt reactivate
+                    gBattlescriptCurrInstr = BattleScript_IntimidateActivates;
+                    gBattleStruct->intimidateBattler = i;
+                    ++effect;//so this intimidate has the same activation conditon as other one,  but without the pause
+                    break; //I'm assumig one is for battle start and one is for switch in... confirmed
+                }
             }
             break;
         case ABILITYEFFECT_NEUTRALIZINGGAS:

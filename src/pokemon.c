@@ -3488,6 +3488,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
         break;
+    case ABILITY_TIGER_CUB:
     case ABILITY_TINTED_LENS:
         if (gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE) //think should work
             gBattleMoveDamage *= 2;
@@ -3535,18 +3536,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMovePower = (gBattleMovePower * 75 / 100);*/
             //MulModifier(&modifier, UQ_4_12(0.75));  removed above section cause don't want negative effects of rivalry.
         }
-        break; //nevermind will put entiere thing in util
-    /*case ABILITY_DEFEATIST: //plan change double speed stat. /done will need text for this, archen line ability
-        if (gBattleMons[gBattlerAttacker].hp <= (gBattleMons[gBattlerAttacker].maxHP / 2))
-        {
-            gBattleMoveDamage /= 2; //may actually move to stat area so can play with stat swap moves
-        }//change isn't that useful in trainer battle since its already faster than most
-        break;*/ //but would guarantee ability to run from battle, in that case need to also clear traps that prevent escape
-        //ok  remove escape prevention, if stuck in trap or by arena trap or maybe just trap
-        //break from of it at cost of 10% hp or something, like you just ran through it recklessly
-        //want the trap cleaer effect to work only once, at the time your hp fallse i.e once per sendin
-        //so I guess I'll need to add a special status like intimidate and have it set when hp drops
-        //and only cleared on switch out
+        break;
     case ABILITY_SLOW_START:
         if (gDisableStructs[gBattlerAttacker].slowStartTimer != 0)
             gBattleMoveDamage /= 2;

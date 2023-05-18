@@ -210,7 +210,7 @@
 //haev 2 extra spaces now
 
 // Seems like per-battler statuses. Not quite sure how to categorize these
-#define STATUS3_SKY_DROPPED             0x1 // Target of Sky Drop
+//#define STATUS3_SKY_DROPPED             0x1 // Target of Sky Drop
 #define STATUS3_LEECHSEED_BATTLER       0x3
 #define STATUS3_LEECHSEED               0x4
 #define STATUS3_ALWAYS_HITS             0x18    // two bits
@@ -223,30 +223,31 @@
 #define STATUS3_YAWN                    0x1800  // two bits
 #define STATUS3_IMPRISONED_OTHERS       0x2000
 #define STATUS3_GRUDGE                  0x4000
-#define STATUS3_CANT_SCORE_A_CRIT       0x8000
-#define STATUS3_MUDSPORT                0x10000
-#define STATUS3_WATERSPORT              0x20000
-#define STATUS3_UNDERWATER              0x40000
-#define STATUS3_INTIMIDATE_POKES        0x80000
-#define STATUS3_TRACE                   0x100000
+#define STATUS3_CANT_SCORE_A_CRIT       0x8000	//(1 << 15)
+//#define STATUS3_MUDSPORT                0x10000	//(1 << 16)	//can move these 2 to side status?
+//#define STATUS3_WATERSPORT              0x20000	//(1 << 17)
+#define STATUS3_UNDERWATER              0x40000	//(1 << 18)
+#define STATUS3_INTIMIDATE_POKES        0x80000	//(1 << 19)
+#define STATUS3_TRACE                   0x100000	//(1 << 20)
 #define STATUS3_ROOTED_SHIFT (21)
 #define STATUS3_ROOTED_COUNTER (0xF << STATUS3_ROOTED_SHIFT)
 #define STATUS3_ROOTED_TURN(num) ((num) << STATUS3_ROOTED_SHIFT)
 
 
-#define STATUS3_GASTRO_ACID             (1 << 16)
-#define STATUS3_EMBARGO                 (1 << 17)
-#define STATUS3_SMACKED_DOWN            (1 << 21)
-#define STATUS3_ME_FIRST                (1 << 22)
+#define STATUS3_GASTRO_ACID             (1 << 16)	//is there any reaso this needs to be status3 rather than a status 2?
+//#define STATUS3_EMBARGO                 (1 << 17)	//move to side status to make room
+#define STATUS3_SMACKED_DOWN            (1 << 17)
+#define STATUS3_ME_FIRST                (1 << 22)//check make sure this doesn't cause issues with ingrain
 #define STATUS3_TELEKINESIS             (1 << 23)
 #define STATUS3_PHANTOM_FORCE           (1 << 24)
 #define STATUS3_MIRACLE_EYED            (1 << 25)
 #define STATUS3_MAGNET_RISE             (1 << 26)
 #define STATUS3_AQUA_RING               (1 << 27)
 #define STATUS3_LASER_FOCUS             (1 << 28)
-#define STATUS3_ELECTRIFIED             (1 << 29)
+#define STATUS3_TIGER_MOM_ATTACKS       (1 << 29)
 #define STATUS3_POWER_TRICK             (1 << 30)
-#define STATUS3_HEAL_BLOCK				(1 << 31) //will be side affecting, this just for first turn effects,  change move to target both to match intentions
+#define STATUS3_SKY_DROPPED				(1 << 31) //will be side affecting, this just for first turn effects,  change move to target both to match intentions
+//#define STATUS3_HEAL_BLOCK				(1 << 31) //will be side affecting, this just for first turn effects,  change move to target both to match intentions
 
 #define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER | STATUS3_PHANTOM_FORCE)
 
@@ -337,14 +338,15 @@
 #define SIDE_STATUS_WIDE_GUARD              (1 << 19)
 #define SIDE_STATUS_CRAFTY_SHIELD           (1 << 20)
 #define SIDE_STATUS_MAT_BLOCK               (1 << 21)
-#define SIDE_STATUS_HEAL_BLOCK              (1 << 22)
+#define SIDE_STATUS_HEAL_BLOCK              (1 << 22)//need setup this & embargo
+#define SIDE_STATUS_EMBARGO					(1 << 23)
 
 // Field affecting statuses.
 #define STATUS_FIELD_MAGIC_ROOM         (1 << 0)
 #define STATUS_FIELD_TRICK_ROOM        (1 << 1)
 #define STATUS_FIELD_WONDER_ROOM        (1 << 2)
 #define STATUS_FIELD_GRAVITY            (1 << 3)
-//#define STATUS_FIELD_MUDSPORT           0x8  will try to keep these 2 in status3 because they didn't use a timer
+//#define STATUS_FIELD_MUDSPORT           0x8  will try to keep these 2 in status3 because they didn't use a timer I can put them here and have them not use a timer as well.
 //#define STATUS_FIELD_WATERSPORT         0x10
 #define STATUS_FIELD_SCORCHED_TERRAIN   (1 << 4)	//make red version or new tile with scorched cracked earth appearane
 #define STATUS_FIELD_FLOODED_TERRAIN    (1 << 5)	//can use surf tile/ or edit a blue puddle into normal graphic
@@ -357,6 +359,8 @@
 #define STATUS_FIELD_TERRAIN_PERMANENT  (1 << 12)		//last terrain effect so putting here //(1 << 12)   
 #define STATUS_FIELD_ION_DELUGE         (1 << 13)
 #define STATUS_FIELD_FAIRY_LOCK         (1 << 14)
+#define STATUS_FIELD_MUDSPORT			(1 << 15)
+#define STATUS_FIELD_WATERSPORT         (1 << 16)
 
 #define TERRAIN_DEFINES
 

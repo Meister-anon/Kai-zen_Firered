@@ -6325,7 +6325,7 @@ static const struct TrainerMonItemCustomMoves sTrainerMons_EliteFourAgatha[] = {
         .lvl = 54,
         .species = SPECIES_GOLBAT,
         .heldItem = ITEM_NONE,
-        .moves = {MOVE_CONFUSE_RAY, MOVE_POISON_FANG, MOVE_AIR_CUTTER, MOVE_BITE},
+        .moves = {MOVE_CONFUSE_RAY, MOVE_TOXIC_FANG, MOVE_AIR_CUTTER, MOVE_BITE},
     },
     {
         .iv = 250,

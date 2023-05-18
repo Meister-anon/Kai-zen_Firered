@@ -1425,7 +1425,7 @@ const struct BattleTowerPokemonTemplate gBattleTowerLevel100Mons[] =
 			MOVE_CRUNCH,
 			MOVE_IRON_DEFENSE,
 			MOVE_FAKE_TEARS,
-			MOVE_POISON_FANG
+			MOVE_TOXIC_FANG
 		},
 		.evSpread = F_EV_SPREAD_SP_ATTACK | F_EV_SPREAD_ATTACK,
 		.nature = NATURE_NAIVE,

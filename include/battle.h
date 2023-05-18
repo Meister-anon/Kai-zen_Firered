@@ -283,9 +283,9 @@ extern struct ProtectStruct gProtectStructs[MAX_BATTLERS_COUNT];
 struct SpecialStatus
 {
     u8 statLowered : 1;             // 0x1
-    //u8 lightningRodRedirected : 1;  // 0x2    //removed to save ew ram 
+    //u8 lightningRodRedirected : 1;  // 0x2    //removed to save ew ram  just do in the code
     //u8 stormDrainRedirected : 1;  // 0x2
-    //u8 FlashFireRedirected : 1;  // 0x2 //need to add redirects here for lightning rod/storm drain esque abilities unless I code it different
+    u8 tigerMomAttacked : 1;  // 0x2 //need to add redirects here for lightning rod/storm drain esque abilities unless I code it different
     u8 restoredBattlerSprite: 1;    // 0x4
     u8 intimidatedMon : 1;          // 0x8
     u8 traced : 1;                  // 0x10

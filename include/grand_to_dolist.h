@@ -699,8 +699,10 @@ Thunder Wave Electric TM45
 * update level up learnsets from emerald gen 8 files, and then adjust learnsets as I chose 
 * based on my learnset expansion, since I can fit more moves now
 * 
-* Make copy ability of tinted lens, for non bugs, call it protag powere or subversion of great expectations  tiger cub? -
-* litleo  other vrsino  tigr mom o.0 will lower target defense on switch specific for female variant evo -
+* Make copy ability of tinted lens, for non bugs, call it protag powere or subversion of great expectations  tiger cub? -   DONE ubt need test
+* litleo  other vrsino  tigr mom o.0 will lower target defense on switch specific for female variant evo -  setup need test
+* text for tiger mom,  "blank cowed the enemy\ into submission"
+*cowed - to cause (someone) to submit to one's wishes by intimidation.
 * 
 * *note*  Nidoqueen line intentionally can't be breed, something to do with comprison to real life rhinos not being breedable in captivity.
 * so just make sure nidoqueen are available to catch in places, put them in safari zone I guess...well no that'd be even worse.
@@ -711,6 +713,12 @@ Thunder Wave Electric TM45
 * go over move chart, adjusting for low accuracy moves, bring up everything below 75
 * meta is revolves around 1 shot or 2 shot, so low accuracy moves would never be worth the risk and just never get used
 * especially if it doesn't have some other effect besides damage - DONE
+* 
+* made changes to psychic fangs, need test -
+* 
+* last thing I could do before break, is adjust the summary info box for ability description
+* actually simpler than I thought, all I need to do is move up the text and fill the bottom of the window, with the```
+* description pixels - may not be able to move window?
 * 
 * buffed arceus, gave global stab, and changed to mystery type
 * 

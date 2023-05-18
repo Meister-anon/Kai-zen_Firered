@@ -3093,8 +3093,8 @@ static void PokeSum_PrintAbilityNameAndDesc(void)   //need to increase height, a
                                  66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf);
 
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
-                                 2, 9, sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                 sMonSummaryScreen->summary.abilityDescStrBuf);
+                                 2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW,
+                                 sMonSummaryScreen->summary.abilityDescStrBuf); //lowered rom 9 to 10, will shift bin file to make more space below
 
 }//forgot vsonic to increase the text y value here,  ability name uses 1 so can just adjust window and leave that, but need to adjust desc y value
 
