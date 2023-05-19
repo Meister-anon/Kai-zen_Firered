@@ -786,6 +786,7 @@
 #define MOVE_SHIELD_BASH 759
 #define MOVE_UP_ROOT 760
 #define MOVE_DIVE_BOMB 761
+#define MOVE_NETTLE_VINE 762	//Will be grass move that can apply burn	//MOVE_NETTLE_VINE	MOVE_BURNING_VINE    MOVE_NETTLE_WHIP
 
 //#define MOVES_COUNT_GEN8 757
 
@@ -794,7 +795,7 @@
 //for completion new moves have to be defined in:  move_descriptions.inc,  move_names.h, battle_anim_scripts.s & data_8479668.s
 // also need actual move data in battle_moves.h
 
-#define LAST_MOVE_INDEX     MOVE_DIVE_BOMB
+#define LAST_MOVE_INDEX     MOVE_NETTLE_VINE
 
 #define MOVES_COUNT_GEN8 (LAST_MOVE_INDEX + 1) //changed so define auto updates
 

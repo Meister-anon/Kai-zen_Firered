@@ -277,6 +277,7 @@ static const u8 sToughSpinesDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Sta
 static const u8 sErosionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Breaks down incoming Rock-type attacks,\nand uses the minerals to heal itself.");
 static const u8 sLiquidmetalDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("A strange light-weight body, immune to\nstat reduction. That resists physical dmg");
 static const u8 sElementalmuscleDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Special moves become physical.\nControl the elements with pure Muscle!");
+static const u8 sTigercubDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("To rise to the high expectations\nof the pride. Ups “not very effective” dmg ");
 //checked in fire red limit is 40 chars per line, changing description length to 80
 //based on suction cups I kinda have more space?  so more like 42 per line?
 //template - top line: literal effect\n bottom line: flavor text

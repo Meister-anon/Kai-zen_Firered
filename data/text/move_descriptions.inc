@@ -2217,10 +2217,16 @@ gMoveDescription_DryadsCurse:
 	.string "Sacrifices stats\nto curse the last foe\nwho attacked the user.$"
 
 gMoveDescription_ShieldBash:
-	.string "The user blocks its body\nwith a shield, and counter attacks\nif hit with physical move\ndamage is based on its DEF stat.$"
+	.string "The user blocks its body\nwith a shield, and\ncounters if hit with\na physical move\ndamage is based on DEF.$"
 
 gUP_ROOTDescription:
    .string "Does damage then switches\nout the user.$"
 
 gDIVE_BOMBDescription:	@can add on to thesee 2
    .string "Does damage then switches\nout the user.$"
+
+gNETTLE_VINEDescription:  @name tbd
+	.string "Attacks the target\nwith a vine covered\nin Nettle bristles.\nIf not a GRASS type,\nIt may leave the\nfoe with a burn.$"
+
+@can hold 5 line breaks given current space post expansion! at approx 20 chars per line@ 
+@would like to port to a .h file like abilities  actually updated red repo uses .c for this and works perfect will update to that soon

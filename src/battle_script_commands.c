@@ -639,7 +639,7 @@ static const struct StatFractions sAccuracyStageRatios[] =
     {   3,   1 }, // +6
 };
 
-// The chance is 1/N for each stage.
+// The chance is 1/N for each stage. 0 - +4
 static const u16 sCriticalHitChance[] = { 16, 8, 4, 3, 2 };
 
 /*static const u32 sStatusFlagsForMoveEffects[] =
@@ -1826,10 +1826,10 @@ static void atk04_critcalc(void)    //figure later
         holdEffect = ItemId_GetHoldEffect(item); //find out if all these all these +'s affect the total effect chance?
     gPotentialItemEffectBattler = gBattlerAttacker; //realized these don't increase total crit chance but are all the things that raise crit odds,
     critChance  = 2 * ((gBattleMons[gBattlerAttacker].status2 & STATUS2_FOCUS_ENERGY) != 0)
-                + (gBattleMoves[gCurrentMove].effect == EFFECT_HIGH_CRITICAL) // gen3 use this but pokeemerald uses high_crit flag.
+                /*+ (gBattleMoves[gCurrentMove].effect == EFFECT_HIGH_CRITICAL) // gen3 use this but pokeemerald uses high_crit flag.
                 + (gBattleMoves[gCurrentMove].effect == EFFECT_SKY_ATTACK)
                 + (gBattleMoves[gCurrentMove].effect == EFFECT_BLAZE_KICK)
-                + (gBattleMoves[gCurrentMove].effect == EFFECT_POISON_TAIL)
+                + (gBattleMoves[gCurrentMove].effect == EFFECT_POISON_TAIL)*/
                 + ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0)
                 + (holdEffect == HOLD_EFFECT_SCOPE_LENS)
                 + 2 * (holdEffect == HOLD_EFFECT_LUCKY_PUNCH && gBattleMons[gBattlerAttacker].species == SPECIES_CHANSEY)

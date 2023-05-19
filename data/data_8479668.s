@@ -16,7 +16,8 @@
 
 	@ 847ABAC
 .align 2
-	.include "data/trainer_tower/trainers.inc"
+	.include "data/trainer_tower/trainers.inc"  @before can finish update move description to C, need to move this to C, simply follow 2 commits from pret on process
+    @delete move description.inc
 
 	.include "data/text/move_descriptions.inc"
 

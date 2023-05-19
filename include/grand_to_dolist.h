@@ -703,6 +703,7 @@ Thunder Wave Electric TM45
 * litleo  other vrsino  tigr mom o.0 will lower target defense on switch specific for female variant evo -  setup need test
 * text for tiger mom,  "blank cowed the enemy\ into submission"
 *cowed - to cause (someone) to submit to one's wishes by intimidation.
+* need update constants/battle.h status 3 defines tweak setup or move some things to status 4 and change fieldsports embargo heal block to work as side status-s
 * 
 * *note*  Nidoqueen line intentionally can't be breed, something to do with comprison to real life rhinos not being breedable in captivity.
 * so just make sure nidoqueen are available to catch in places, put them in safari zone I guess...well no that'd be even worse.
@@ -752,11 +753,25 @@ Thunder Wave Electric TM45
 * reworking poison type add normal type to pure poison that is poison as a function of animal attributes
 * leave the more amorphous mon as pure poison - DONE
 * 
-* potentially change arceus and silvaly forms to only change secondary typing, would potentially expose to fighting
-* but add more damage.. hmm
 * 
 * Remember setup ability Dark Deal companion ability to nuisance
 * Also need to add other abilties listed in base stats comments/port over comments/notes
+* 
+* Dark deal effect
+* companion ability to nuisance, most effect is on partner, 
+* give user devils luck i.e increased crit rate or double effect chance random % 2 if move power greater than 1
+* usr gets increased secondary effct chance OR crit, the partner gets both, but in exchange all moves above base power 70 get their power cut in half
+* 
+* sounds like a nerf but is meant to work together with nuisance which increass priority of moves if they are weak,
+* essentially expanding the move pool that the ability can pick from.
+* think can do effect with edits to set effect chance bs command/function and a flag set to add high crit flag to move?
+* potentially do like focus energy where it raises crit ratio instead, so its more easiy controlled, i.e can better control the crit
+* 
+* think will give this ability to murkrow line, since they're mob boss potentially obstigoon as well.
+* 
+* //then finish new grass move nettel something
+* got set deciding to setup move descriptions in.c file remember can just add file, as remember I added updates from  pret
+* to simplify adding files.
 *
 *
 * Also comb over stats again, to attempt to address power creep?
