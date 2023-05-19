@@ -313,7 +313,7 @@
 #define ABILITY_ELEMENTAL_MUSCLE 289
 #define ABILITY_TIGER_CUB 290	//tinted lens copy
 #define ABILITY_TIGER_MOM 291	//alt version intimidate, drops defense instead of atk
-#define ABILITY_DARK_DEAL 292   //companion ability to nuisance, most effect is on partner, give user devils luck i.e increased crit rate
+#define ABILITY_DARK_DEAL 292   //
 
 #define ABILITIES_COUNT 290 //note make perish body, only affect target, 
 
