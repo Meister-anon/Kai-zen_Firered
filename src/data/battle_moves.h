@@ -2589,7 +2589,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_TRIPLE_KICK] =
     {
-        .effect = EFFECT_TRIPLE_KICK,
+        .effect = EFFECT_TRIPLE_KICK,   //changing triple kick effect, handling like gen 2 with dmg multiple, will be done in dmg calc command, 
         .power = 15,
         .type = TYPE_FIGHTING,
         .accuracy = 90,
@@ -11318,7 +11318,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_ICE,
         .accuracy = 90,
         .pp = 10,
-        .secondaryEffectChance = 0, //should work need test
+        .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
@@ -11392,6 +11392,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_IRON_FIST_BOOST,
         .split = SPLIT_PHYSICAL,
+        .argument = EFFECT_ALWAYS_CRIT,
     },
 
     [MOVE_THUNDER_CAGE] =
@@ -11629,7 +11630,7 @@ use wonder gaurd logic to determine its super effective
         .split = SPLIT_PHYSICAL,
     },
 
-    [MOVE_NETTLE_VINE] =
+    [MOVE_NETTLE_WHIP] =
     {
         .effect = EFFECT_BURN_HIT,
         .power = 85,

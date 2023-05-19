@@ -816,6 +816,9 @@ gBattleAnims_Moves::
 	.4byte MOVE_FLASH_FREEZE
 	.4byte MOVE_DRYADS_CURSE
 	.4byte Move_SHIELD_BASH
+	.4byte Move_UP_ROOT
+	.4byte Move_DIVE_BOMB
+	.4byte Move_NETTLE_WHIP
 	.4byte Move_COUNT @ cannot be reached, because last move is Eerie Spell  important check move order moves.h
 
 gBattleAnims_StatusConditions::
@@ -2001,6 +2004,7 @@ Move_SLAM:: @ 81C8AA9
 	blendoff
 	end
 
+Move_NETTLE_WHIP:
 Move_VINE_WHIP:: @ 81C8B31
 	loadspritegfx ANIM_TAG_WHIP_HIT
 	playsewithpan SE_M_JUMP_KICK, 192

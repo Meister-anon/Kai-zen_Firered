@@ -1521,7 +1521,7 @@ gSPARKLY_SWIRLDescription :
     gDIVE_BOMBDescription : //can add on to thesee 2
     .string "Does damage then switches\nout the user.$"
 
-    gNETTLE_VINEDescription:  //name tbd
+    gNETTLE_WHIPDescription:  //name tbd
     .string "Attacks the target\nwith a vine covered\nin Nettle bristles.\nIf not a GRASS type,\nIt may leave the\nfoe with a burn.$"
 
     //Description can hold 5 line breaks given current space post expansion!  at approx 20 chars per line//
@@ -2271,27 +2271,27 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [ MOVE_CORROSIVE_GAS ] = gMoveDescription_Pound,
     [ MOVE_COACHING ] = gMoveDescription_Pound,
     [ MOVE_FLIP_TURN ] = gMoveDescription_Pound,
-    [ MOVE_TRIPLE_AXEL ] = gMoveDescription_Pound,
-    [ MOVE_DUAL_WINGBEAT ] = gMoveDescription_Pound,
-    [ MOVE_SCORCHING_SANDS ] = gMoveDescription_Pound,
-    [ MOVE_JUNGLE_HEALING ] = gMoveDescription_Pound,
-    [ MOVE_WICKED_BLOW ] = gMoveDescription_Pound,
-    [ MOVE_SURGING_STRIKES ] = gMoveDescription_Pound,
-    [ MOVE_THUNDER_CAGE ] = gMoveDescription_Pound,
-    [ MOVE_DRAGON_ENERGY ] = gMoveDescription_Pound,
-    [ MOVE_FREEZING_GLARE ] = gMoveDescription_Pound,
-    [ MOVE_FIERY_WRATH ] = gMoveDescription_Pound,
-    [ MOVE_THUNDEROUS_KICK ] = gMoveDescription_Pound,
-    [ MOVE_GLACIAL_LANCE ] = gMoveDescription_Pound,
-    [ MOVE_ASTRAL_BARRAGE ] = gMoveDescription_Pound,
-    [ MOVE_EERIE_SPELL ] = gMoveDescription_Pound,
+    [ MOVE_TRIPLE_AXEL ] = gTRIPLE_AXELDescription,
+    [ MOVE_DUAL_WINGBEAT ] = gDUAL_WINGBEATDescription,
+    [ MOVE_SCORCHING_SANDS ] = gSCORCHING_SANDSDescription,
+    [ MOVE_JUNGLE_HEALING ] = gJUNGLE_HEALINGDescription,
+    [ MOVE_WICKED_BLOW ] = gWICKED_BLOWDescription,
+    [ MOVE_SURGING_STRIKES ] = gSURGING_STRIKESDescription,
+    [ MOVE_THUNDER_CAGE ] = gTHUNDER_CAGEDescription,
+    [ MOVE_DRAGON_ENERGY ] = gDRAGON_ENERGYDescription,
+    [ MOVE_FREEZING_GLARE ] = gFREEZING_GLAREDescription,
+    [ MOVE_FIERY_WRATH ] = gFIERY_WRATHDescription,
+    [ MOVE_THUNDEROUS_KICK ] = gTHUNDEROUS_KICKDescription,
+    [ MOVE_GLACIAL_LANCE ] = gGLACIAL_LANCEDescription,
+    [ MOVE_ASTRAL_BARRAGE ] = gASTRAL_BARRAGEDescription,
+    [ MOVE_EERIE_SPELL ] = gEERIE_SPELLDescription,
 
-    [ MOVE_COCOON ] = gMoveDescription_Pound,
-    [ MOVE_MONOTYPE ] = gMoveDescription_Pound,
-    [ MOVE_FLASH_FREEZE ] = gMoveDescription_Pound,
-    [ MOVE_DRYADS_CURSE ] = gMoveDescription_Pound,
-    [ MOVE_SHIELD_BASH ] = gMoveDescription_Pound,
-    [ MOVE_UP_ROOT ] = gMoveDescription_Pound,
-    [ MOVE_DIVE_BOMB ] = gMoveDescription_Pound,
-    [ MOVE_NETTLE_VINE ] = gMoveDescription_Pound,
+    [ MOVE_COCOON ] = gMoveDescription_Cocoon,
+    [ MOVE_MONOTYPE ] = gMoveDescription_Monotype,
+    [ MOVE_FLASH_FREEZE ] = gMoveDescription_FlashFreeze,
+    [ MOVE_DRYADS_CURSE ] = gMoveDescription_DryadsCurse,
+    [ MOVE_SHIELD_BASH ] = gMoveDescription_ShieldBash,
+    [ MOVE_UP_ROOT ] = gUP_ROOTDescription,
+    [ MOVE_DIVE_BOMB ] = gDIVE_BOMBDescription,
+    [ MOVE_NETTLE_WHIP ] = gNETTLE_WHIPDescription,
 };

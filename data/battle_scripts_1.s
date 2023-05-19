@@ -3710,8 +3710,8 @@ BattleScript_EffectTripleKick::
 	attackcanceler
 	attackstring
 	ppreduce
-	setbyte sTRIPLE_KICK_POWER, 0
-	setbyte gBattleScripting + 19, 0
+	@setbyte sTRIPLE_KICK_POWER, 0	@wont need this when done
+	@setbyte gBattleScripting + 19, 0	@pretty sure is triple_kick_power in scripting battlestruct, so also remove?
 	initmultihitstring
 	setmultihit 3
 BattleScript_TripleKickLoop::
@@ -3722,16 +3722,16 @@ BattleScript_TripleKickLoop::
 BattleScript_DoTripleKickAttack::
 	accuracycheck BattleScript_TripleKickNoMoreHits, ACC_CURR_MOVE
 	movevaluescleanup
-	jumpifmove MOVE_SURGING_STRIKES, EffectTripleKick_DoDmgCalcs    @ no power boost each hit
-	jumpifmove MOVE_TRIPLE_AXEL, EffectTripleKick_TripleAxelBoost   @ triple axel gets +20 power
-	addbyte sTRIPLE_KICK_POWER, 10                                  @ triple kick gets +10 power
-	addbyte gBattleScripting + 12, 1
+	@jumpifmove MOVE_SURGING_STRIKES, EffectTripleKick_DoDmgCalcs    @ no power boost each hit
+	@jumpifmove MOVE_TRIPLE_AXEL, EffectTripleKick_TripleAxelBoost   @ triple axel gets +20 power
+	@addbyte sTRIPLE_KICK_POWER, 10                                  @ triple kick gets +10 power
+	addbyte gBattleScripting + 12, 1		@leaving this, think its a multi hit string?
 	goto EffectTripleKick_DoDmgCalcs
 EffectTripleKick_TripleAxelBoost:
-	addbyte sTRIPLE_KICK_POWER, 20
+	@addbyte sTRIPLE_KICK_POWER, 20
 EffectTripleKick_DoDmgCalcs:
-	copyhword gDynamicBasePower, sTRIPLE_KICK_POWER
-	critcalc
+	@copyhword gDynamicBasePower, sTRIPLE_KICK_POWER
+	critcalc		@added alwayscrit logic to critcalc, should make surgingstrikes work
 	typecalc
 	damagecalc
 	adjustnormaldamage

@@ -1834,7 +1834,7 @@ static void atk04_critcalc(void)    //figure later
                 + (holdEffect == HOLD_EFFECT_SCOPE_LENS)
                 + 2 * (holdEffect == HOLD_EFFECT_LUCKY_PUNCH && gBattleMons[gBattlerAttacker].species == SPECIES_CHANSEY)
                 + 2 * BENEFITS_FROM_LEEK(gPotentialItemEffectBattler, holdEffect)
-                + (gBattleMons[gBattlerAttacker].ability == ABILITY_SUPER_LUCK);
+                + (gBattleMons[gBattlerAttacker].ability == ABILITY_SUPER_LUCK); //what does this do?? I guess it raiss 1 stage? if ability super luck?
     if (critChance >= NELEMS(sCriticalHitChance))
         critChance = NELEMS(sCriticalHitChance) - 1;
     //while everything here is calculating crit damage, so need to add gCritMultiplier = 3; for that crit boosting ability
@@ -1843,8 +1843,8 @@ static void atk04_critcalc(void)    //figure later
      && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
      && !(Random() % sCriticalHitChance[critChance])
      && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))
-     && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE))
-    // && !(gSideStatuses[battlerDef] & SIDE_STATUS_LUCKY_CHANT)
+     && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE)
+     && !(gSideStatuses[gBattlerTarget] & SIDE_STATUS_LUCKY_CHANT))
     {
         gCritMultiplier = 2;
         if (gBattleMons[gBattlerAttacker].ability == ABILITY_SNIPER)  //could possibly be if instead of else if
@@ -1853,6 +1853,21 @@ static void atk04_critcalc(void)    //figure later
         }
 
     }
+    else if ((gBattleMons[gBattlerTarget].ability != ABILITY_BATTLE_ARMOR && gBattleMons[gBattlerTarget].ability != ABILITY_SHELL_ARMOR)
+        && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
+        && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
+        && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))
+        && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE)
+        && ((gBattleMoves[gCurrentMove].effect == EFFECT_ALWAYS_CRIT) || (gBattleMoves[gCurrentMove].argument == EFFECT_ALWAYS_CRIT))
+         && !(gSideStatuses[gBattlerTarget] & SIDE_STATUS_LUCKY_CHANT)) //may run as regular if, but should set crit effect without regarding chance
+    {
+        gCritMultiplier = 2;
+        if (gBattleMons[gBattlerAttacker].ability == ABILITY_SNIPER)  //could possibly be if instead of else if, but should be fine
+        {
+            gCritMultiplier = 3;
+        }
+    } 
+    
     else
         gCritMultiplier = 1;
     ++gBattlescriptCurrInstr;
@@ -1870,6 +1885,20 @@ static void atk05_damagecalc(void)
 {
     u16 sideStatus = gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)];
     //gMultiTask = 0; //don't know if i actually need to set equal to zero.  think I don't actually, will do anyway for now..
+
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_TRIPLE_KICK
+        && gCurrentMove != MOVE_SURGING_STRIKES)    //could put in separate dmg bscommand, but if works for multitask this should also work
+    {
+        gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+
+        if (gMultiHitCounter == 2)//to shift triple kick effect from bs command adding 10 i.e fixed value back to a multiplier like in gen 2/origin.
+            gDynamicBasePower *= 2;
+
+        if (gMultiHitCounter == 1)
+            gDynamicBasePower *= 3;
+        /*else if (gCurrentMove == MOVE_SURGING_STRIKES)    handled in crit calc
+        */
+    }   //this has to go here, multitask worked below cause it was using gBattleMoveDamage
 
     gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker],
                                             &gBattleMons[gBattlerTarget],
@@ -1893,12 +1922,9 @@ static void atk05_damagecalc(void)
        if (gBattleMoveDamage == 0) //need to add move exclusions for multi hit & multi turn moves before its compolete.
             gBattleMoveDamage = 1;  //(gCurrentMove == MOVE_BLIZZARD) //need to block effects & certain move names, like twinneedle that are multihit without the effect
     }
-           //depending on how this works,
-    ++gBattlescriptCurrInstr; //may need to put in its own command, depends on multihitcounter & decrement string
-} //yup working as I feared, when multi hit gets decrimented the damage gets increased.
-//think what i need is to somehow copy the initial value to another field,
-//and have that be what my damage is based on.
-//but even that doesn't solve the issue of decrement lowering the value.
+    
+    ++gBattlescriptCurrInstr;
+}
 
 void AI_CalcDmg(u8 attacker, u8 defender)
 {
@@ -10566,7 +10592,7 @@ static void atk8C_confuseifrepeatingattackends(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atk8D_setmultihitcounter(void)
+static void atk8D_setmultihitcounter(void)  //setmultihit
 {
    // gMultiTask = gMultiHitCounter;  //not sure if doing this way will work, but I'll try it
     //multihitcounter is outside of the loop and only run once, so if it copies the value from here
@@ -10577,9 +10603,9 @@ static void atk8D_setmultihitcounter(void)
     }
     else
     {
-        gMultiHitCounter = Random() & 3; //return a number between 0 & 3
+        gMultiHitCounter = Random() % 4; //return a number between 0 & 3
         if (gMultiHitCounter > 1) 
-            gMultiHitCounter = (Random() & 3) + 2; // if non 0, multihit is between 2-5 htis
+            gMultiHitCounter = (Random() % 4) + 2; // if non 0, multihit is between 2-5 htis
         else // value 0 or 1
             gMultiHitCounter += 2; //else add 2 to multi counter, returning a multihit of 2 or 3.
     }
@@ -11919,7 +11945,7 @@ static void atkB7_presentdamagecalculation(void)
 
     if (rand < 102)
     {
-        gDynamicBasePower = 40;
+        gDynamicBasePower = 60;
     }
     else if (rand < 178)
     {

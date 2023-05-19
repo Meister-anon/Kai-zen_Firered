@@ -772,6 +772,13 @@ Thunder Wave Electric TM45
 * //then finish new grass move nettel something
 * got set deciding to setup move descriptions in.c file remember can just add file, as remember I added updates from  pret
 * to simplify adding files.
+* 
+* updated move descriptions and trainer tower fils to C files,  following pret commit history, double check later if there were any issues
+* all that's left is setup animation for Nettle Whip/vine   - for now fill with generic vine whip animation
+* 
+* I think use vine whip animation, smack target 3 times, and then do astonish effect on target, where thy get the exclamation point thing. -
+* 
+* late gens restricted toxic, so only poison mon can learn it, that's too restrictive imo, I'll limit it to grass bug, poison and dark. -
 *
 *
 * Also comb over stats again, to attempt to address power creep?
