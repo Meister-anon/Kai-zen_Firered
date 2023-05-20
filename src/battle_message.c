@@ -519,7 +519,7 @@ static const u8 sText_PokemonBlockedBall[] = _("The Wild {B_OPPONENT_MON1_NAME}\
 static const u8 sText_NeutralizingGasEnters[] = _("Neutralizing Gas filled the area!");
 static const u8 sText_NeutralizingGasOver[] = _("The effects of Neutralizing\nGas wore off!");
 
-//issued caused by undefined buffers  "B_ATK_TRAINER_NAME B_ATK_TEAM1 B_ATK_TEAM2 B_DEF_TEAM2 B_ATK_TRAINER_CLASS
+//issued caused by undefined buffers  "B_ATK_TRAINER_NAME B_ATK_TEAM1 B_ATK_TEAM2 B_DEF_TEAM2 B_ATK_TRAINER_CLASS   //FIXED
 
 // New battle strings.
 static const u8 sText_Infestation[] = _("{B_DEF_NAME_WITH_PREFIX} has been afflicted\nwith an infestation by {B_ATK_NAME_WITH_PREFIX}!");
@@ -755,7 +755,8 @@ static const u8 sText_AbilityAllowsOnlyMove[] = _("{B_ATK_ABILITY} allows the\nu
 static const u8 sText_SwappedAbilities[] = _("{B_DEF_NAME_WITH_PREFIX} swapped Abilities\nwith its target!");
 static const u8 sText_PastelVeilProtected[] = _("{B_DEF_NAME_WITH_PREFIX} is protected\nby a pastel veil!");
 static const u8 sText_PastelVeilEnters[] = _("{B_DEF_NAME_WITH_PREFIX} was cured\nof its poisoning!");
-static const u8 sText_CorruptionActivates[] = _("{B_BUFF1}'s {B_LAST_ABILITY}\nprevents healing!\p");
+static const u8 sText_CorruptionActivates[] = _("{B_BUFF1}'s {B_ATK_ABILITY}\nprevents healing!\p");
+static const u8 sText_BanditActivates[] = _("{The {B_ATK_ABILITY} is on the scene!\n{B_DEF_NAME_WITH_PREFIX} can't use items!\p");
 static const u8 sText_BattlerTypeChangedTo[] = _("{B_BUFF1}'s type\nchanged to {B_BUFF2}!");
 static const u8 sText_BothCanNoLongerEscape[] = _("Neither Pokémon can run away!");
 static const u8 sText_CantEscapeDueToUsedMove[] = _("{B_ATK_NAME_WITH_PREFIX} can no longer escape\nbecause it used {B_CURRENT_MOVE}!");
@@ -1394,6 +1395,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_TIGER_MOM_ACTIVATION - BATTLESTRINGS_TABLE_START]          = sText_TigerMomActivation,
     [STRINGID_DEFROST_POKEMON - BATTLESTRINGS_TABLE_START]               = sText_PkmnDefrosted,
     [STRINGID_CORRUPTIONENTERS - BATTLESTRINGS_TABLE_START]              = sText_CorruptionActivates,
+    [STRINGID_BANDITENTERS - BATTLESTRINGS_TABLE_START]                  = sText_BanditActivates,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
@@ -1452,7 +1454,9 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_ASONE] = STRINGID_ASONEENTERS,
     [B_MSG_SWITCHIN_CURIOUS_MEDICINE] = STRINGID_CURIOUSMEDICINEENTERS,
     [B_MSG_SWITCHIN_PASTEL_VEIL] = STRINGID_PASTELVEILENTERS,*/
-    [B_MSG_SWITCHIN_NEUTRALIZING_GAS] = STRINGID_NEUTRALIZINGGASENTERS
+    [B_MSG_SWITCHIN_NEUTRALIZING_GAS] = STRINGID_NEUTRALIZINGGASENTERS,
+    [B_MSG_SWITCHIN_BANDIT] = STRINGID_BANDITENTERS
+
 };
 
 const u16 gNoEscapeStringIds[] = {

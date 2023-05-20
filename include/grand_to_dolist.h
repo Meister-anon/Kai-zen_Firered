@@ -779,6 +779,17 @@ Thunder Wave Electric TM45
 * I think use vine whip animation, smack target 3 times, and then do astonish effect on target, where thy get the exclamation point thing. -
 * 
 * late gens restricted toxic, so only poison mon can learn it, that's too restrictive imo, I'll limit it to grass bug, poison and dark. -
+* 
+* think fixed setup for heal block as side status,  should work for blocking all items as well,  made new heal block switch in anti heal ability
+* plan to give to guzzlord, try find other mon as well. -
+* 
+* because of embargo and heal block changes, need to setup new bs command jumpifsidestatus to replace use of jumpifstatus3 for them
+* 
+* also setting up embargo as side status ability, will give to theif mon, liepard  theival etc. also give them pickup if they don't have it. - DONE
+* 
+* nother idea true anti heal, gbattlemovedamage *-1  if attempts to heal re-reverses damage formula, so it causes you to take damage instead.
+* giratina origin  etc.  imagine uses rest and just dies off rip 0.o
+* can give to darkrai too, since you die in sleep when you're trying to rest use same move effect list as IsHealBlockPreventingMove
 *
 *
 * Also comb over stats again, to attempt to address power creep?

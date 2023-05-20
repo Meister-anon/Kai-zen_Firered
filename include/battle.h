@@ -206,7 +206,7 @@ struct DisableStruct
              u8 tarShot : 1;
              u8 octolock : 1;
              u8 slowStartTimer;
-             u8 embargoTimer;
+             //u8 embargoTimer; moved to gsidetimers
              u8 magnetRiseTimer;
              u8 telekinesisTimer;
              u8 laserFocusTimer;
@@ -342,6 +342,8 @@ struct SideTimer
              u8 luckyChantBattlerId;
              u8 healBlockTimer; //added for side status effect
              u8 healBlockBattlerId; //hopefully will be able to individual target clear status, but keep side status in effect for new switches
+             u8 embargoBattlerId; 
+             u8 embargoTimer; 
              u8 retaliateTimer;  //vsonic need to implement
              /*0x0B*/ u8 fieldB;
 };

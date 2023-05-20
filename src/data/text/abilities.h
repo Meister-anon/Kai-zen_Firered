@@ -281,6 +281,7 @@ static const u8 sTigercubDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("To ris
 static const u8 sTigerMomDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("");
 static const u8 sDarkDealDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("");
 static const u8 sCorruptionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("The user's corrupted influence spreads\ndecay. Prevents the foe from healing.");
+static const u8 sBanditDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("This POKéMON posesses a covetous nature.\nIt won't let its foes use items.");
 //checked in fire red limit is 40 chars per line, changing description length to 80
 //based on suction cups I kinda have more space?  so more like 42 per line?
 //template - top line: literal effect\n bottom line: flavor text
@@ -583,6 +584,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TIGER_MOM] = sTigerMomDescription,
     [ABILITY_DARK_DEAL] = sDarkDealDescription,
     [ABILITY_CORRUPTION] = sCorruptionDescription,
+    [ABILITY_BANDIT] = sBanditDescription,
 };//last value can have comma
 
 //now undrestand reason strings (strings are arrays) use that +1 value
@@ -885,5 +887,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TIGER_CUB] =_("TIGER-CUB"),
     [ABILITY_TIGER_MOM] =_("TIGER MOM"),
     [ABILITY_DARK_DEAL] =_("DARK DEAL"),
-    [ABILITY_CORRUPTION] =_("CORRUPTION")
+    [ABILITY_CORRUPTION] =_("CORRUPTION"),
+    [ABILITY_BANDIT] =_("BANDIT")
 };//no comma for last value

@@ -315,8 +315,9 @@
 #define ABILITY_TIGER_MOM 291	//alt version intimidate, drops defense instead of atk
 #define ABILITY_DARK_DEAL 292   //
 #define ABILITY_CORRUPTION 293   //anti heal switch in ability,  users corrupted influence spreads decay, preventing foe from healing, giving to guzzlord etc.
+#define ABILITY_BANDIT 294   
 
-#define ABILITIES_COUNT 294 //note make perish body, only affect target, 
+#define ABILITIES_COUNT 295 //note make perish body, only affect target, 
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 

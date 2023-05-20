@@ -1150,6 +1150,7 @@ enum
     ENDTURN_LUCKY_CHANT,
     ENDTURN_SAFEGUARD,
     ENDTURN_HEALBLOCK,
+    ENDTURN_EMBARGO,
     ENDTURN_TAILWIND,
     ENDTURN_WISH,
     ENDTURN_RAIN,
@@ -1331,6 +1332,35 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
                     gBattleStruct->turnSideTracker = 0;
                 }
                 break;
+        case ENDTURN_EMBARGO:
+            while (gBattleStruct->turnSideTracker < 2)
+            {
+                side = gBattleStruct->turnSideTracker;
+                gActiveBattler = gBattlerTarget = gSideTimers[side].embargoBattlerId;
+                if (gSideStatuses[side] & SIDE_STATUS_EMBARGO)//checking if finished heal block effect item & move heal cancel..E
+                {
+                    //gStatuses3[gBattlerTarget] |= STATUS3_HEAL_BLOCK; //set status for mid turn switch ins..actually could just put in switchin function
+
+                    if (--gSideTimers[side].embargoTimer == 0)//setup different message for if ability is on field or not, when timer is 0, potentially
+                    {
+                        gSideStatuses[side] &= ~SIDE_STATUS_EMBARGO; //clears side status
+                        //gStatuses3[gActiveBattler] &= ~STATUS3_HEAL_BLOCK;  //clears battler status   //think dont need this?
+                        BattleScriptExecute(BattleScript_BufferEndTurn); //unsure if this message will print for both parties to see
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_EMBARGO); //need to make sure player is aware heal block ends if its used by or against them
+                        ++effect;
+                    }//belive I have healing moves, & healing items blocked by need to make logic for held berries/items  /just check hold effect for healing done, 
+                    //added !(gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] & SIDE_STATUS_HEAL_BLOCK)  to itembattleeffects function, should cover everything now??
+                }
+                ++gBattleStruct->turnSideTracker;
+                if (effect)
+                    break;
+            }
+            if (!effect)
+            {
+                ++gBattleStruct->turnCountersTracker;
+                gBattleStruct->turnSideTracker = 0;
+            }
+            break;
         case ENDTURN_WISH:
             while (gBattleStruct->turnSideTracker < gBattlersCount)
             {
@@ -4144,6 +4174,31 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
+            case ABILITY_BANDIT:
+                if (!gSpecialStatuses[battler].switchInAbilityDone && !(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_EMBARGO))
+                {
+
+                    gSideStatuses[GET_BATTLER_SIDE(battler)] |= SIDE_STATUS_EMBARGO;
+                    gSideTimers[GET_BATTLER_SIDE(battler)].embargoTimer = 5;  //hope works, need test
+                    gSideTimers[GET_BATTLER_SIDE(battler)].embargoBattlerId = battler;
+
+
+                    gBattlerTarget = battler;
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_BANDIT;
+                    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                    gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                    effect++;
+                }
+                else if (!gSpecialStatuses[battler].switchInAbilityDone && gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_EMBARGO)
+                {
+                    gSideTimers[GET_BATTLER_SIDE(battler)].embargoTimer += 5; //adds on to existing timer on switchin
+                    gBattlerTarget = battler;
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_BANDIT;
+                    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                    gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                    effect++;
+                }
+                break;
             case ABILITY_PASTEL_VEIL:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
@@ -7778,7 +7833,8 @@ u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating)
 {
     if (checkNegating)  //if equals 0, I think?
     {
-        if (gStatuses3[battlerId] & STATUS3_EMBARGO)
+        
+        if (gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_EMBARGO)
             return HOLD_EFFECT_NONE;
         if (gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)
             return HOLD_EFFECT_NONE;

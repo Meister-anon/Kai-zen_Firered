@@ -14060,7 +14060,7 @@ static void atkFE_setembargo(void) {
     else
     {
         gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)] |= SIDE_STATUS_EMBARGO;
-        gDisableStructs[gBattlerTarget].embargoTimer = 5;
+        gSideTimers[GET_BATTLER_SIDE(gBattlerTarget)].embargoTimer = 5;
         gBattlescriptCurrInstr += 5;
     }
 }
