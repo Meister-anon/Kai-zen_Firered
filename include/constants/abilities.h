@@ -300,7 +300,7 @@
 #define ABILITY_OCEAN_MEMORY 277
 #define ABILITY_OVERCHARGE 278
 #define ABILITY_PHOTOSYNTHESIZE 279
-#define ABILITY_GLACIAL_ICE 280	//fire immunity + ice body effect
+#define ABILITY_GLACIAL_ICE 280	//fire immunity + ice body effect	REGICE ability
 #define ABILITY_LAVA_FISSURE 281 // pending heatran ability
 #define ABILITY_TOADSTOOL_NYMPH 282 // pending Shiinotic ability
 #define ABILTY_UNKNOWN_POWER 283	//unown specific ability similar to plus minus but if partner is unown

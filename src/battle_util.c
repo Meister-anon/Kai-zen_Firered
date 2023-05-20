@@ -4445,16 +4445,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             case ABILITY_EROSION:
                 if (gSideStatuses[battler] & SIDE_STATUS_STEALTH_ROCK)
                 {
-                    gSideStatuses[battler] &= ~(SIDE_STATUS_STEALTH_ROCK);
+                    gSideStatuses[battler] &= ~(SIDE_STATUS_STEALTH_ROCK);  //absorb stealth rock
                     gSideTimers[battler].stealthRockAmount = 0;
+                    if (!(gSideStatuses[[GET_BATTLER_SIDE(battler)]] & SIDE_STATUS_HEAL_BLOCK))    //health block check
+                    {
+                        gBattleMoveDamage = gBattleMons[battler].maxHP / 4;
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                        gBattleMoveDamage *= -1;
 
-                    gBattleMoveDamage = gBattleMons[battler].maxHP / 4;
-                    if (gBattleMoveDamage == 0)
-                        gBattleMoveDamage = 1;
-                    gBattleMoveDamage *= -1;
-
-                    if (gBattleMons[battler].hp > gBattleMons[battler].maxHP)
-                        gBattleMons[battler].hp = gBattleMons[battler].maxHP
+                        if (gBattleMons[battler].hp > gBattleMons[battler].maxHP)
+                            gBattleMons[battler].hp = gBattleMons[battler].maxHP
+                    }
 
                     BattleScriptPushCursorAndCallback(BattleScript_StealthRockAbsorb);
                     gBattleScripting.battler = battler;

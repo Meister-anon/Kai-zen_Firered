@@ -640,7 +640,12 @@ static const struct StatFractions sAccuracyStageRatios[] =
 };
 
 // The chance is 1/N for each stage. 0 - +4
-static const u16 sCriticalHitChance[] = { 16, 8, 4, 3, 2 };
+// value  1 would be 100% crit late gen has stage 3 & u as 100%, I could do that? would have   good dark deal synergy...
+//making my own version of crit stages, gen 2 high crit moves were +2 so 1/4, rather than making +2, I'll raise the value for stage 1
+//and keep stage 2 where it is, would make things mostly balance out since people use high crit w scope lens so it'll still be the same
+//its just not so bad without the scope boost,  just unsure if want to use value of 5 or 6
+//decied to use 6, way it balances out each stat would be about a 10% crit increase until stage 4
+static const u16 sCriticalHitChance[] = { 16, 6, 4, 3, 1 };
 
 /*static const u32 sStatusFlagsForMoveEffects[] =
 {
@@ -1825,16 +1830,18 @@ static void atk04_critcalc(void)    //figure later
     else
         holdEffect = ItemId_GetHoldEffect(item); //find out if all these all these +'s affect the total effect chance?
     gPotentialItemEffectBattler = gBattlerAttacker; //realized these don't increase total crit chance but are all the things that raise crit odds,
-    critChance  = 2 * ((gBattleMons[gBattlerAttacker].status2 & STATUS2_FOCUS_ENERGY) != 0)
-                /*+ (gBattleMoves[gCurrentMove].effect == EFFECT_HIGH_CRITICAL) // gen3 use this but pokeemerald uses high_crit flag.
-                + (gBattleMoves[gCurrentMove].effect == EFFECT_SKY_ATTACK)
-                + (gBattleMoves[gCurrentMove].effect == EFFECT_BLAZE_KICK)
-                + (gBattleMoves[gCurrentMove].effect == EFFECT_POISON_TAIL)*/
-                + ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0)
-                + (holdEffect == HOLD_EFFECT_SCOPE_LENS)
-                + 2 * (holdEffect == HOLD_EFFECT_LUCKY_PUNCH && gBattleMons[gBattlerAttacker].species == SPECIES_CHANSEY)
-                + 2 * BENEFITS_FROM_LEEK(gPotentialItemEffectBattler, holdEffect)
-                + (gBattleMons[gBattlerAttacker].ability == ABILITY_SUPER_LUCK); //what does this do?? I guess it raiss 1 stage? if ability super luck?
+    critChance = 2 * ((gBattleMons[gBattlerAttacker].status2 & STATUS2_FOCUS_ENERGY) != 0)
+        /*+ (gBattleMoves[gCurrentMove].effect == EFFECT_HIGH_CRITICAL) // gen3 use this but pokeemerald uses high_crit flag.
+        + (gBattleMoves[gCurrentMove].effect == EFFECT_SKY_ATTACK)
+        + (gBattleMoves[gCurrentMove].effect == EFFECT_BLAZE_KICK)
+        + (gBattleMoves[gCurrentMove].effect == EFFECT_POISON_TAIL)*/
+        +((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0)
+        + (holdEffect == HOLD_EFFECT_SCOPE_LENS)   
+        + 2 * (holdEffect == HOLD_EFFECT_LUCKY_PUNCH && gBattleMons[gBattlerAttacker].species == SPECIES_CHANSEY)
+        + 2 * BENEFITS_FROM_LEEK(gPotentialItemEffectBattler, holdEffect)
+        + (gBattleMons[gBattlerAttacker].ability == ABILITY_SUPER_LUCK) //what does this do?? I guess it raiss 1 stage? if ability super luck?
+        + (gBattleMons[gBattlerAttacker].ability == ABILITY_DARK_DEAL)
+        + 2 * (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].ability == ABILITY_DARK_DEAL);    //HOPE works for raising crit chanc 2 stages if partner ability is dark deal
     if (critChance >= NELEMS(sCriticalHitChance))
         critChance = NELEMS(sCriticalHitChance) - 1;
     //while everything here is calculating crit damage, so need to add gCritMultiplier = 3; for that crit boosting ability
@@ -1853,20 +1860,20 @@ static void atk04_critcalc(void)    //figure later
         }
 
     }
-    else if ((gBattleMons[gBattlerTarget].ability != ABILITY_BATTLE_ARMOR && gBattleMons[gBattlerTarget].ability != ABILITY_SHELL_ARMOR)
+   else if ((gBattleMons[gBattlerTarget].ability != ABILITY_BATTLE_ARMOR && gBattleMons[gBattlerTarget].ability != ABILITY_SHELL_ARMOR)
         && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
         && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
         && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))
         && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE)
         && ((gBattleMoves[gCurrentMove].effect == EFFECT_ALWAYS_CRIT) || (gBattleMoves[gCurrentMove].argument == EFFECT_ALWAYS_CRIT))
          && !(gSideStatuses[gBattlerTarget] & SIDE_STATUS_LUCKY_CHANT)) //may run as regular if, but should set crit effect without regarding chance
-    {
-        gCritMultiplier = 2;
-        if (gBattleMons[gBattlerAttacker].ability == ABILITY_SNIPER)  //could possibly be if instead of else if, but should be fine
         {
-            gCritMultiplier = 3;
-        }
-    } 
+            gCritMultiplier = 2;
+            if (gBattleMons[gBattlerAttacker].ability == ABILITY_SNIPER)  //could possibly be if instead of else if, but should be fine
+            {
+                gCritMultiplier = 3;
+            }
+        } 
     
     else
         gCritMultiplier = 1;
@@ -4051,13 +4058,17 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     if ((gBattleWeather & WEATHER_HAIL_ANY)
         && gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;  //its good, happened 2 out of 5 hits. decided to make it 1/16
-    else //15 isn't bad, may try 17, nah I'll leave it there.
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
+
 
     if (gBattleMons[gBattlerAttacker].ability == ABILITY_SERENE_GRACE)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
+    else if (gBattleMons[gBattlerAttacker].ability == ABILITY_DARK_DEAL)
+        percentChance = (gBattleMoves[gCurrentMove].secondaryEffectChance * 150) / 100;
     else
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance; 
+
+    if (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].ability == ABILITY_DARK_DEAL)
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
 
     
     

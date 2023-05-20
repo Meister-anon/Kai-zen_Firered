@@ -908,7 +908,9 @@
 #define SPECIES_OVERQWIL 904
 #define SPECIES_ENAMORUS 905	//Pokemon Opal has some original mon so can add after this as gen 10, like Cefireon and unknown legendar
 
-#define FORMS_START SPECIES_ENAMORUS
+#define SPECIES_CEFIREON 906
+
+#define FORMS_START SPECIES_CEFIREON
 
 // Megas
 #define SPECIES_VENUSAUR_MEGA                FORMS_START + 1
@@ -2708,5 +2710,6 @@
 #define F_GALARIAN_FORM (1 << 2)
 #define F_HISUIAN_FORM  (1 << 3)
 #define F_CEFIRIAN_FORM (1 << 4)	//For pokemon opal Cefira region forms
+#define SPECIES_FLAG_GENDER_DIFFERENCE (1 << 5)	//only for basculegion
 
 #endif  // GUARD_CONSTANTS_SPECIES_H

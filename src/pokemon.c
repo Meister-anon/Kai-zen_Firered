@@ -3687,6 +3687,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                 attack = (150 * attack) / 100;
             }
             break;
+        case ABILITY_DARK_DEAL:
+            if (gBattleMoves[move].power > 80 || gDynamicBasePower > 80)
+                gBattleMovePower /= 2;
+            break;
         }
     }
 
@@ -3728,6 +3732,12 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     case ABILITY_STORM_DRAIN:
         if (type == TYPE_WATER)
             gBattleMoveDamage = 0;
+        break;
+    case ABILITY_PICKPOCKET:
+        if (IsMoveMakingContact(move, gBattlerAttacker)) //small common sense damage reduction as most mon with this have shit defense,
+        {
+            gBattleMoveDamage = (gBattleMoveDamage * 200) / 300;    //makes sense cuz of common pickpocket tacket of bump/run they prepare and intentionally take a hit
+        }
         break;
     case ABILITY_FLUFFY:
         if (IsMoveMakingContact(move, gBattlerAttacker))

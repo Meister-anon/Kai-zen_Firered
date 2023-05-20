@@ -570,17 +570,27 @@ as well as the effect of increasing trap duration
 * it will miss, something like their psychic powers let them avoid damage, 
 * think of it like them predicting an attack specifically from that move -
 * ( can use telepathy logic  for these effects, its essentially telepathy but single use)
+* can attempt include type component to check which move woulda actually do most damage to me, more than just power based
 * 
 * think it may be too powerful for these abilities to reactivate when new enemy switches in
 * idk maybe not psychic type is usually pretty frail so this gives them slightly safer switch in, 
 * and more longevity
+* - or could just make it on use for the invul, but next turn it will still inform of the most damaging move
+* just do a check similar to intimidate where it changes a variables value when the effect triggers
+* 
 * 
 * gDisableStructs[battler].isFirstTurn == 2  is logic for mon switchig in, can use for switchin reactivation condition
 * 
 * fix delibird learnset oh already done
-* Give crabominable a better front sprite, its just ugly -
+* Give crabominable a better front sprite, its just ugly 
+* -progress
+* takng inspiration from wendigo lore mixed with abominable snowman - lore actually works too 
+* since its a selfish mon that desires to conquer and be the best, so put it like its desires went ary.
 * 
 * Fix Pyroar F sprite front & back , guys in pret won't do it, so I'll have to. its potentially worse than crabominable I can't even look at it.
+* 
+* remake SPECIES_GOTHITELLE line sprites, to something more in line with gothic lolita, not ugly may take inspiration from Ori for final evo,
+* black/white bob/bangs instead of the weird spike spider hair
 * 
 * make cursola signature ability PERISH_BODY only activate for enemy mon
 * watching JPR Poketrainer showed me how niche/bad it is, especially whene mon already has such low def stat
@@ -705,6 +715,10 @@ Thunder Wave Electric TM45
 *cowed - to cause (someone) to submit to one's wishes by intimidation.
 * need update constants/battle.h status 3 defines tweak setup or move some things to status 4 and change fieldsports embargo heal block to work as side status-s
 * 
+* BUFFED pickpockeet to have slight contact based damage reduction
+* 
+* buffed illuminate added compound eyes accuracy boost
+* 
 * *note*  Nidoqueen line intentionally can't be breed, something to do with comprison to real life rhinos not being breedable in captivity.
 * so just make sure nidoqueen are available to catch in places, put them in safari zone I guess...well no that'd be even worse.
 * make them wild somewhere in mid game/late game  put in desert area I guess.
@@ -766,6 +780,14 @@ Thunder Wave Electric TM45
 * essentially expanding the move pool that the ability can pick from.
 * think can do effect with edits to set effect chance bs command/function and a flag set to add high crit flag to move?
 * potentially do like focus energy where it raises crit ratio instead, so its more easiy controlled, i.e can better control the crit
+* can use critcalc  function for partner boost, use + 2 * partner ability dark deal
+* then do other part in seteffectchance function
+* for mon with dark deal, get either or crit boost or seconaryr effect boost each turn, flip with random % 2.  between 0 or 1  choose crit booost, vs effect boost
+* changed mind,   since it doesn't have negative effect just gave both effects at lower values than the partner.
+* still need to write ability description but effects are complete -
+* 
+* Also buffed/adjusted crit stag ratios, a mix of late gen higher crit odds, with lower ones.
+* approx 10% crit increase per stage up to stage 4 which is guaranteed crit
 * 
 * think will give this ability to murkrow line, since they're mob boss potentially obstigoon as well.
 * 
@@ -790,7 +812,7 @@ Thunder Wave Electric TM45
 * nother idea true anti heal, gbattlemovedamage *-1  if attempts to heal re-reverses damage formula, so it causes you to take damage instead.
 * giratina origin  etc.  imagine uses rest and just dies off rip 0.o
 * can give to darkrai too, since you die in sleep when you're trying to rest use same move effect list as IsHealBlockPreventingMove
-*
+*ABILITY_DESPAIR  and look at itembattleeffects etc. setup like healblock has 5 turn timer or no timer, if permanent do if ability on opposing side
 *
 * Also comb over stats again, to attempt to address power creep?
 * not sure if it would matter, higher is still higher even if I bring things closer
@@ -1208,6 +1230,7 @@ goto CATCHING_LOGIC
 * port mirage island but with better mechanics, i.e will appear once a month at midnight for one hour with an npc telling you if its available
 * or when its coming each with their own set of legends to spawn. the rarest would go to mirage island the mystics i guess
 * things like guzzlord could go to cerulean cave the dark or bad ones
+* -could also put mirage island alerrt in space time upgrade for dexnav from time events
 */
 
 goto POKEDEX_PAGE_FUNCTIONS
