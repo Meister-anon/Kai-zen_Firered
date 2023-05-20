@@ -6630,6 +6630,11 @@ BattleScript_DefrostedViaFireMove::
 	updatestatusicon BS_TARGET
 	return
 
+BattleScript_DefrostBattler_KeepStatus::
+	printstring STRINGID_DEFROST_POKEMON
+	waitmessage 0x40
+	return
+
 BattleScript_MoveUsedIsParalyzed::
 	printstring STRINGID_PKMNISPARALYZED
 	waitmessage 0x40

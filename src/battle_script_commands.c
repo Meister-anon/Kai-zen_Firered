@@ -3290,11 +3290,11 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 break;
             if (noSunCanFreeze == 0)
                 break;
-            if (gBattleMons[gEffectBattler].ability == ABILITY_MAGMA_ARMOR)
+            if (gBattleMons[gEffectBattler].ability == (ABILITY_MAGMA_ARMOR || ABILITY_FLAME_BODY || ABILITY_LAVA_FISSURE))
                 break;
             CancelMultiTurnMoves(gEffectBattler);
             statusChanged = TRUE;
-            gDisableStructs[gActiveBattler].FrozenTurns = ((Random() % 3) + 2); //2-4 turns for frozn should work
+            gDisableStructs[gActiveBattler].FrozenTurns = 3; //2-4 turns for frozn should work  - nvm using value of 3, can have 2 full turns of freeze, decrement in end turn
             break;  //new note, made change to freeze, but don't want move to just be a switch as I'll lose the end turn, think I will adapt frostbite
             //from arceus my plan, when freeze timer  reaches zero, apply frostbite, which will continue end turn damage but allow enemy to attack.
             //freeze status cure effects would remove frostbite, after freeze, as well as if applied during freez.
@@ -5477,7 +5477,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_DEFROST: // defrosting check
+        case ATK49_DEFROST: // defrosting/thaw check //for target 
             if (gBattleMons[gBattlerTarget].status1 & STATUS1_FREEZE
              && gBattleMons[gBattlerTarget].hp != 0
              && gBattleMoveDamage != 0 // test to see if this works right. should be all damaging fire moves above 60 power can defrost.
@@ -12058,7 +12058,8 @@ static void atkBA_jumpifnopursuitswitchdmg(void)
     }
     if (gChosenActionByBattler[gBattlerTarget] == B_ACTION_USE_MOVE
      && gBattlerAttacker == *(gBattleStruct->moveTarget + gBattlerTarget)
-     && !(gBattleMons[gBattlerTarget].status1 & (STATUS1_SLEEP | STATUS1_FREEZE))
+     && !(gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP)// | STATUS1_FREEZE))
+     && (gDisableStructs[gBattlerTarget].FrozenTurns == 0)    //new freeze check    /means not frozen
      && gBattleMons[gBattlerAttacker].hp
      && !gDisableStructs[gBattlerTarget].truantCounter
      && gChosenMoveByBattler[gBattlerTarget] == MOVE_PURSUIT)
@@ -13504,15 +13505,29 @@ static void atkEF_handleballthrow(void) //important changed
 
             else
                 ballMultiplier = sBallCatchBonuses[gLastUsedItem - 2];
-            odds = (catchRate * ballMultiplier / 10)
-                * (gBattleMons[gBattlerTarget].maxHP * 3 - gBattleMons[gBattlerTarget].hp * 2)
-                / (3 * gBattleMons[gBattlerTarget].maxHP);
-            if (gBattleMons[gBattlerTarget].status1 & (STATUS1_SLEEP | STATUS1_FREEZE)) //juset realiszed I could stack statsus bonsu by including status 2, since right now rules exclude status 1 overlap
+            odds = (catchRate * ballMultiplier / 10) * (gBattleMons[gBattlerTarget].maxHP * 3 - gBattleMons[gBattlerTarget].hp * 2) / (3 * gBattleMons[gBattlerTarget].maxHP);
+            if ((gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || gDisableStructs[gBattlerTarget].FrozenTurns != 0)) //juset realiszed I could stack statsus bonsu by including status 2, since right now rules exclude status 1 overlap
                 odds *= 2;
             if (gBattleMons[gBattlerTarget].status1 & (STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_SPIRIT_LOCK | STATUS1_TOXIC_POISON))
                 odds = (odds * 15) / 10;
-            if (gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION)
-                odds = (odds * 11) / 10;  //TO increase catch chance by 10%, also getting deja vu from this??
+            if (gBattleMons[gBattlerTarget].status1 & STATUS1_FREEZE && gDisableStructs[gBattlerTarget].FrozenTurns == 0)
+                odds = (odds * 15) / 10;
+
+            if (gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION)    //add ifs for status 2 to stack on top of status 1 liek here //include recharge, infatuation, nightmare, curse, & escape prevention & wrap etc
+                odds += (odds / 10);  //TO increase catch chance by 10%,
+            if (gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
+                odds += (odds / 5);
+            if (gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION)
+                odds += (odds / 2);
+            if (gBattleMons[gBattlerTarget].status2 & STATUS2_NIGHTMARE)
+                odds += (odds / 8);
+            if (gBattleMons[gBattlerTarget].status2 & STATUS2_CURSED)
+                odds += (odds / 10);
+            if (gBattleMons[gBattlerTarget].status2 & STATUS2_ESCAPE_PREVENTION)
+                odds += (odds / 10);
+            if (gBattleMons[gBattlerTarget].status2 & STATUS2_RECHARGE)
+                odds += (odds / 4);
+
             if (gLastUsedItem != ITEM_SAFARI_BALL)
             {
                 if (gLastUsedItem == ITEM_MASTER_BALL)

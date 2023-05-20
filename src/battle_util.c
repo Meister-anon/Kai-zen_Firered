@@ -714,11 +714,12 @@ void CancelMultiTurnMoves(u8 battler)
                     gBattlescriptCurrInstr = BattleScript_ThrashConfuses - 3;
                 }
                 // If this CancelMultiTurnMoves is occuring due to receiving Sleep/Freeze status
-                else if (gBattleScripting.moveEffect <= PRIMARY_STATUS_MOVE_EFFECT)
+                else if ((gBattleMons[otherSkyDropper].status1 & STATUS1_SLEEP)// | STATUS1_FREEZE))
+                    || (gDisableStructs[otherSkyDropper].FrozenTurns != 0))//(gBattleScripting.moveEffect <= PRIMARY_STATUS_MOVE_EFFECT)
                 {
                     gBattlerAttacker = otherSkyDropper;
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
-                    gBattlescriptCurrInstr = BattleScript_ThrashConfuses - 1;
+                    gBattlescriptCurrInstr = BattleScript_ThrashConfuses - 1;//HOPE this still works right  vsonic
                 }
             }
         }
@@ -1801,8 +1802,8 @@ u8 DoBattlerEndTurnEffects(void)
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
                         if ((gBattleMons[gActiveBattler].status1 & 0xF00) != 0xF00) // not 16 turns
-                            gBattleMons[gActiveBattler].status1 += 0x100;
-                        gBattleMoveDamage *= (gBattleMons[gActiveBattler].status1 & 0xF00) >> 8;
+                            gBattleMons[gActiveBattler].status1 += 0x100;   //increments by 100 up to F00 , assume starting from 000, which is why 16 turns
+                        gBattleMoveDamage *= (gBattleMons[gActiveBattler].status1 & 0xF00) >> 8;    //part adding dmg increase, want to change from 1/16 turn 1, but prob cause an issue
                         BattleScriptExecute(BattleScript_PoisonTurnDmg);
                         ++effect;
                     }
@@ -1830,7 +1831,16 @@ u8 DoBattlerEndTurnEffects(void)
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16; //changed to same as others, combined with hail will do  .186 kills in about 5 turns by itself
                     if (gBattleMoveDamage == 0) //balanced by being a temporary status and needing the hail setup to have a good chance of being applied.
                         gBattleMoveDamage = 1;
-                    BattleScriptExecute(BattleScript_FreezeTurnDmg); //changed back to 1/16, when hail is active it'll be 1/8 so equal to all others.
+                    
+                    if (gDisableStructs[gActiveBattler].FrozenTurns != 0) //timer starts at 3, will decrement giving 2 full turns of freeze
+                        BattleScriptExecute(BattleScript_FreezeTurnDmg); //changed back to 1/16, when hail is active it'll be 1/8 so equal to all others. 
+                    if (--gDisableStructs[gActiveBattler].FrozenTurns == 0) //actual decrement with conditional  
+                    {
+                        BattleScriptPushCursor();   //used for value ending with return
+                        gBattlescriptCurrInstr = BattleScript_DefrostBattler_KeepStatus;
+                    }
+                    if (gDisableStructs[gActiveBattler].FrozenTurns == 0)
+                        BattleScriptExecute(BattleScript_FrostbiteTurnDmg);
                     ++effect;
                 }
                 ++gBattleStruct->turnEffectsTracker;
@@ -2562,23 +2572,16 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_FROZEN: // check being frozen
-            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE && !THAW_CONDITION)  //hope this works
+            if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE) && gDisableStructs[gBattlerAttacker].FrozenTurns != 0) //frozen solid
             {
                 //if (Random() % 5)//ok found freeze chance, so 1 in 5 chance of thawing out, on freeze.  pretty much  random % 5 if not 0 stays frozen.
-                if (--gDisableStructs[gActiveBattler].FrozenTurns != 0) //attempt at frozn timr  //put hr to dcrmnt at atk/turn start rathr than nd
+                if (gDisableStructs[gBattlerAttacker].FrozenTurns != 0 && !THAW_CONDITION) //attempt at frozn timr   actuallg best to put timer decrement at endturn, that way can have consistent freze duration
                 {
                     //--gDisableStructs[gActiveBattler].FrozenTurns != 0
                     gBattlescriptCurrInstr = BattleScript_MoveUsedIsFrozen;
                     gHitMarker |= HITMARKER_NO_ATTACKSTRING;
                 }
-                else // unfreeze    //imortant if random % 5 is 0, pokemon  defrosts.   //not actualy on a timer
-                {//plan to set timer 2-4 turns, you'd get min 1 full turn free from attacks, random % 3 + 2
-                    gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_FREEZE);
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_MoveUsedUnfroze;
-                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-                }
-                effect = 2; //change thaw condition to fire move min 60 base power not fire fang
+                effect = 2; //changed thaw condition to fire move min 60 base power not fire fang
             }   //done should no longer need thaw effects already replaced
             ++gBattleStruct->atkCancellerTracker;
             break;
@@ -2922,7 +2925,8 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_THAW: // move thawing
-            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE) //should be thaw if scald, or a fire type move above base 60 except fire fang
+            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE
+                && gDisableStructs[gBattlerAttacker].FrozenTurns != 0) //should be thaw if scald, or a fire type move above base 60 except fire fang
             {
                 if (THAW_CONDITION)
                 {
@@ -5309,6 +5313,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         effect = 1;
                     }
                     break;
+                case ABILITY_LAVA_FISSURE:
                 case ABILITY_FLAME_BODY:
                 case ABILITY_MAGMA_ARMOR:
                     if (gBattleMons[battler].status1 & STATUS1_FREEZE)
