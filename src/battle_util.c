@@ -1111,7 +1111,7 @@ static bool32 IsGravityPreventingMove(u32 move)
 
 bool32 IsHealBlockPreventingMove(u32 battler, u32 move)
 {
-    if (!(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
+    if (!(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK))
         return FALSE;
 
     switch (gBattleMoves[move].effect)
@@ -1314,11 +1314,12 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
                         if (--gSideTimers[side].healBlockTimer == 0) //believe this is the decrement
                         {
                             gSideStatuses[side] &= ~SIDE_STATUS_HEAL_BLOCK; //clears side status
-                            gStatuses3[gActiveBattler] &= ~STATUS3_HEAL_BLOCK;  //clears battler status
+                            //gStatuses3[gActiveBattler] &= ~STATUS3_HEAL_BLOCK;  //clears battler status   //think dont need this?
                             BattleScriptExecute(BattleScript_BufferEndTurn); //unsure if this message will print for both parties to see
                             PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_HEAL_BLOCK); //need to make sure player is aware heal block ends if its used by or against them
                             ++effect;
-                        }//belive I have healing moves, & healing items blocked by need to make logic for held berries/items
+                        }//belive I have healing moves, & healing items blocked by need to make logic for held berries/items  /just check hold effect for healing done, 
+                        //added !(gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] & SIDE_STATUS_HEAL_BLOCK)  to itembattleeffects function, should cover everything now??
                     }
                     ++gBattleStruct->turnSideTracker;
                     if (effect)
@@ -1679,7 +1680,7 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_INGRAIN:  // ingrain
                 if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED) //IT FUCKING WORKS!!!   prob need lower limit from 15 to llike 7
                     && !BATTLER_MAX_HP(gActiveBattler)
-                    && !(gStatuses3[gActiveBattler] & STATUS3_HEAL_BLOCK)
+                    && !(gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK)
                     && gBattleMons[gActiveBattler].hp != 0) //function changes & new rooted defines courtesy of phoenix_bound
                 {
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
@@ -1699,7 +1700,7 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_AQUA_RING:  // aqua ring
                 if ((gStatuses3[gActiveBattler] & STATUS3_AQUA_RING) //hopefully allows to just reuse counter here for aqua ring to duplicate effect
                     && !BATTLER_MAX_HP(gActiveBattler)
-                    && !(gStatuses3[gActiveBattler] & STATUS3_HEAL_BLOCK)
+                    && !(gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK)
                     && gBattleMons[gActiveBattler].hp != 0) //function changes & new rooted defines courtesy of phoenix_bound
                 {
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
@@ -1758,7 +1759,7 @@ u8 DoBattlerEndTurnEffects(void)
 
                     if (ability == ABILITY_POISON_HEAL)
                     {
-                        if (!BATTLER_MAX_HP(gActiveBattler) && !(gStatuses3[gActiveBattler] & STATUS3_HEAL_BLOCK))
+                        if (!BATTLER_MAX_HP(gActiveBattler) && !(gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK))
                         {
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
                             if (gBattleMoveDamage == 0)
@@ -1786,7 +1787,7 @@ u8 DoBattlerEndTurnEffects(void)
 
                     if (ability == ABILITY_POISON_HEAL)
                     {
-                        if (!BATTLER_MAX_HP(gActiveBattler) && !(gStatuses3[gActiveBattler] & STATUS3_HEAL_BLOCK))
+                        if (!BATTLER_MAX_HP(gActiveBattler) && !(gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK))
                         {
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
                             if (gBattleMoveDamage == 0)
@@ -2604,7 +2605,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LOAFING;
                 if (gBattleMons[gBattlerAttacker].maxHP > gBattleMons[gBattlerAttacker].hp
-                    && !(gStatuses3[gBattlerAttacker] & STATUS3_HEAL_BLOCK))
+                    && !(gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK))
                 {
                     gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 5;
                     if (gBattleMoveDamage == 0)
@@ -2656,11 +2657,11 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_HEAL_BLOCKED:
-            if (gStatuses3[gBattlerAttacker] & STATUS3_HEAL_BLOCK && IsHealBlockPreventingMove(gBattlerAttacker, gCurrentMove))
+            if (gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] & SIDE_STATUS_HEAL_BLOCK && IsHealBlockPreventingMove(gBattlerAttacker, gCurrentMove))
             {
                 gProtectStructs[gBattlerAttacker].usedHealBlockedMove = TRUE;
                 gBattleScripting.battler = gBattlerAttacker;
-                CancelMultiTurnMoves(gBattlerAttacker);
+                CancelMultiTurnMoves(gBattlerAttacker); //vsonic need look into this, may cause issues
                 gBattlescriptCurrInstr = BattleScript_MoveUsedHealBlockPrevents;
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 effect = 1;
@@ -4109,11 +4110,37 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             if (!gSpecialStatuses[battler].switchInAbilityDone && IsDoubleBattle()
               && IsBattlerAlive(BATTLE_PARTNER(battler)) && TryResetBattlerStatChanges(BATTLE_PARTNER(battler)))
             {
-                u32 i;
+                //u32 i;  unneeded?
                 gEffectBattler = BATTLE_PARTNER(battler);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CURIOUS_MEDICINE;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+            break;
+            case ABILITY_CORRUPTION:
+            if (!gSpecialStatuses[battler].switchInAbilityDone && !(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK))
+            {
+               //gStatuses3[gBattlerTarget] |= STATUS3_HEAL_BLOCK; // apply status to target and set side status   //don't think i need this
+                gSideStatuses[GET_BATTLER_SIDE(battler)] |= SIDE_STATUS_HEAL_BLOCK;
+                gSideTimers[GET_BATTLER_SIDE(battler)].healBlockTimer = 5;  //would want to make permanent but 5 turns is enough to last for the mon's life
+                gSideTimers[GET_BATTLER_SIDE(battler)].healBlockBattlerId = battler;
+
+                //gStatuses3[gBattlerTarget] |= STATUS3_HEAL_BLOCK;
+                //gDisableStructs[gBattlerTarget].healBlockTimer = 5;
+                gBattlerTarget = battler;
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CORRUPTION;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                effect++;
+            }  
+            else if (!gSpecialStatuses[battler].switchInAbilityDone && gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK)
+            {
+                gSideTimers[GET_BATTLER_SIDE(battler)].healBlockTimer += 5; //adds on to existing timer on switchin
+                gBattlerTarget = battler;
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CORRUPTION;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 effect++;
             }
             break;
@@ -4122,7 +4149,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             {
                 gBattlerTarget = battler;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PASTEL_VEIL;
-                BattleScriptPushCursorAndCallback(BattleScript_PastelVeilActivates);
+                //BattleScriptPushCursorAndCallback(BattleScript_PastelVeilActivates);
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                 effect++;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
             }
@@ -4145,7 +4173,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             break;
-            case ABILITY_ANTICIPATION:
+            case ABILITY_ANTICIPATION:  //working on change
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
                 u32 side = GetBattlerSide(battler);
@@ -4358,7 +4386,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         ++effect;
                     }
                 }
-                break;
+                break; 
             case ABILITY_EROSION:
                 if (gSideStatuses[battler] & SIDE_STATUS_STEALTH_ROCK)
                 {
@@ -4390,7 +4418,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 case ABILITY_RAIN_DISH:
                     if (IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)
                      && gBattleMons[battler].maxHP > gBattleMons[battler].hp
-                        && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
+                     && !(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK))
                     {
                         //gLastUsedAbility = ABILITY_RAIN_DISH; // why -_-  ?chcked emerald, and was correct this is unnecessary
                         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
@@ -4404,7 +4432,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 case ABILITY_PHOTOSYNTHESIZE:
                     if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)
                         && gBattleMons[battler].maxHP > gBattleMons[battler].hp
-                        && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
+                        && !(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK))
                     {
                         //gLastUsedAbility = ABILITY_PHOTOSYNTHESIZE; 
                         BattleScriptPushCursorAndCallback(BattleScript_AbilityHpHeal);  //can use same script //but have another from updates
@@ -4419,7 +4447,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 case ABILITY_ICE_BODY:
                     if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY) //this function only matters for rain & sun otherwise can use
                         && gBattleMons[battler].maxHP > gBattleMons[battler].hp //weather_has_effect
-                        && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
+                        && !(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK))
                     {
                         //gLastUsedAbility = ABILITY_ICE_BODY; //without this line can use same block for multiple abilities
                         BattleScriptPushCursorAndCallback(BattleScript_AbilityHpHeal);  //can use same script //but have another from updates
@@ -4433,7 +4461,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 case ABILITY_DRY_SKIN:
                     if (IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)
                         && gBattleMons[battler].maxHP > gBattleMons[battler].hp
-                        && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
+                        && !(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK))
                     {
                         BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 8;   
@@ -4453,7 +4481,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                 case ABILITY_COMATOSE:
                     if (gBattleMons[battler].maxHP > gBattleMons[battler].hp
-                        && !(gStatuses3[battler] & STATUS3_HEAL_BLOCK))
+                        && !(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK))
                     {
                         BattleScriptPushCursorAndCallback(BattleScript_AbilityHpHeal);  //can use same script //but have another from updates
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 6; //substitute for not being able to use rest, but that in mind woudl be broken with substitute hmm
@@ -4891,7 +4919,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                 if (effect == 1) // Drain Hp ability.
                 {
-                    if (BATTLER_MAX_HP(battler) || gStatuses3[battler] & STATUS3_HEAL_BLOCK)
+                    if (BATTLER_MAX_HP(battler) || gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK)
                     {
                         if ((gProtectStructs[gBattlerAttacker].notFirstStrike))
                             gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
@@ -6638,22 +6666,27 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
                 break;
             case HOLD_EFFECT_CONFUSE_SPICY:
                 //if (B_BERRIES_INSTANT >= GEN_4)
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SPICY, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_DRY:
                 //if (B_BERRIES_INSTANT >= GEN_4)
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_DRY, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_SWEET:
                 //if (B_BERRIES_INSTANT >= GEN_4)
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SWEET, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_BITTER:
                 //if (B_BERRIES_INSTANT >= GEN_4)
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_BITTER, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_SOUR:
                 //if (B_BERRIES_INSTANT >= GEN_4)
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SOUR, TRUE);
                 break;
             case HOLD_EFFECT_ATTACK_UP:
@@ -6776,10 +6809,12 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
                 break;
             case HOLD_EFFECT_RESTORE_HP:
                 //if (B_BERRIES_INSTANT >= GEN_4)
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE);
                 break;
             case HOLD_EFFECT_RESTORE_PCT_HP:
-                //if (B_BERRIES_INSTANT >= GEN_4)
+                //if (B_BERRIES_INSTANT >= GEN_4
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, TRUE);
                 break;
             case HOLD_EFFECT_AIR_BALLOON:
@@ -6857,11 +6892,11 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
             switch (battlerHoldEffect)
             {
             case HOLD_EFFECT_RESTORE_HP:
-                if (!moveTurn)
+                if (!moveTurn && !(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE);
                 break;
             case HOLD_EFFECT_RESTORE_PCT_HP:
-                if (!moveTurn)
+                if (!moveTurn && !(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, TRUE);
                 break;
             case HOLD_EFFECT_RESTORE_PP:
@@ -6939,7 +6974,8 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
                 break;
             case HOLD_EFFECT_LEFTOVERS:
             LEFTOVERS:
-                if (gBattleMons[battlerId].hp < gBattleMons[battlerId].maxHP && !moveTurn)
+                if (gBattleMons[battlerId].hp < gBattleMons[battlerId].maxHP && !moveTurn
+                    && !(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                 {
                     gBattleMoveDamage = gBattleMons[battlerId].maxHP / 16;
                     if (gBattleMoveDamage == 0)
@@ -6951,23 +6987,23 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
                 }
                 break;
             case HOLD_EFFECT_CONFUSE_SPICY:
-                if (!moveTurn)
+                if (!moveTurn && !(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SPICY, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_DRY:
-                if (!moveTurn)
+                if (!moveTurn && !(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_DRY, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_SWEET:
-                if (!moveTurn)
+                if (!moveTurn && !(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SWEET, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_BITTER:
-                if (!moveTurn)
+                if (!moveTurn && !(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_BITTER, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_SOUR:
-                if (!moveTurn)
+                if (!moveTurn && !(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SOUR, TRUE);
                 break;
             case HOLD_EFFECT_ATTACK_UP:
@@ -7145,30 +7181,37 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
                 break;
             case HOLD_EFFECT_RESTORE_HP:
                 //if (B_HP_BERRIES >= GEN_4)
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = ItemHealHp(battlerId, gLastUsedItem, FALSE, FALSE);
                 break;
             case HOLD_EFFECT_RESTORE_PCT_HP:
                 //if (B_BERRIES_INSTANT >= GEN_4)
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = ItemHealHp(battlerId, gLastUsedItem, FALSE, TRUE);
                 break;
             case HOLD_EFFECT_CONFUSE_SPICY:
                 //if (B_BERRIES_INSTANT >= GEN_4)
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SPICY, FALSE);
                 break;
             case HOLD_EFFECT_CONFUSE_DRY:
                 //if (B_BERRIES_INSTANT >= GEN_4)
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_DRY, FALSE);
                 break;
             case HOLD_EFFECT_CONFUSE_SWEET:
                 //if (B_BERRIES_INSTANT >= GEN_4)
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SWEET, FALSE);
                 break;
             case HOLD_EFFECT_CONFUSE_BITTER:
                 //if (B_BERRIES_INSTANT >= GEN_4)
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_BITTER, FALSE);
                 break;
             case HOLD_EFFECT_CONFUSE_SOUR:
                 //if (B_BERRIES_INSTANT >= GEN_4)   //check how these work, I don't want it stopping multi hit moves etc.
+                if (!(gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_HEAL_BLOCK))
                     effect = HealConfuseBerry(battlerId, gLastUsedItem, FLAVOR_SOUR, FALSE);
                 break;
             case HOLD_EFFECT_ATTACK_UP:
@@ -7369,7 +7412,8 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
             if (gSpecialStatuses[gBattlerAttacker].damagedMons  // Need to have done damage
                 && gBattlerAttacker != gBattlerTarget
                 && gBattleMons[gBattlerAttacker].hp != gBattleMons[gBattlerAttacker].maxHP
-                && gBattleMons[gBattlerAttacker].hp != 0)
+                && gBattleMons[gBattlerAttacker].hp != 0
+                && !(gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] & SIDE_STATUS_HEAL_BLOCK))
             {
                 gLastUsedItem = atkItem;
                 gPotentialItemEffectBattler = gBattlerAttacker;
@@ -7503,7 +7547,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
                 if (IsBattlerAlive(battlerId)
                  && TARGET_TURN_DAMAGED
                  && !DoesSubstituteBlockMove(gBattlerAttacker, battlerId, gCurrentMove)
-                 && (IS_MOVE_PHYSICAL(gCurrentMove) || (IS_MOVE_SPECIAL(gCurrentMove) && GetBattlerAbility(gBattlerAttacker) == ABILITY_ELEMENTAL_MUSCLE))
+                 && (IS_MOVE_PHYSICAL(gCurrentMove) || (IS_MOVE_SPECIAL(gCurrentMove) && GetBattlerAbility(gBattlerAttacker) == ABILITY_MUSCLE_MAGIC))
                  && GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
                 {
                     gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
@@ -7766,7 +7810,7 @@ bool8 IsMoveMakingContact(u16 move, u8 battlerAtk)
         return FALSE;
     else if (GetBattlerAbility(battlerAtk) == ABILITY_LONG_REACH)
         return FALSE;
-    else if (GetBattlerAbility(battlerAtk) == ABILITY_ELEMENTAL_MUSCLE)
+    else if (GetBattlerAbility(battlerAtk) == ABILITY_MUSCLE_MAGIC)
         return TRUE;
     else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PROTECTIVE_PADS)
         return FALSE;

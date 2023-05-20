@@ -1894,7 +1894,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_NO_GUARD},
-            .abilityHidden = {ABILITY_ELEMENTAL_MUSCLE, ABILITY_LIMBER},
+            .abilityHidden = {ABILITY_MUSCLE_MAGIC, ABILITY_LIMBER},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_NONE},
         #endif
@@ -1924,7 +1924,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_NO_GUARD},
-            .abilityHidden = {ABILITY_ELEMENTAL_MUSCLE, ABILITY_LIMBER},
+            .abilityHidden = {ABILITY_MUSCLE_MAGIC, ABILITY_LIMBER},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_NONE},
         #endif
@@ -1954,7 +1954,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_NO_GUARD},
-            .abilityHidden = {ABILITY_ELEMENTAL_MUSCLE, ABILITY_MULTI_TASK},
+            .abilityHidden = {ABILITY_MUSCLE_MAGIC, ABILITY_MULTI_TASK},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_NONE},
         #endif

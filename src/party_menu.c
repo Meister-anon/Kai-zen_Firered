@@ -4478,9 +4478,9 @@ void ItemUseCB_Medicine(u8 taskId, TaskFunc func)
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     u16 item = gSpecialVar_ItemId;
     bool8 canHeal;
-    u16 ability;
+    u16 ability; 
     
-    if (!(gStatuses3[gActiveBattler] & STATUS3_HEAL_BLOCK)) {
+    if (!(gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK)) {
         canHeal = TRUE; //add clause for if side status not heal_block, canheal is true
     }
 

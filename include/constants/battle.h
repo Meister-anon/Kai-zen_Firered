@@ -338,7 +338,7 @@
 #define SIDE_STATUS_WIDE_GUARD              (1 << 19)
 #define SIDE_STATUS_CRAFTY_SHIELD           (1 << 20)
 #define SIDE_STATUS_MAT_BLOCK               (1 << 21)
-#define SIDE_STATUS_HEAL_BLOCK              (1 << 22)//need setup this & embargo
+#define SIDE_STATUS_HEAL_BLOCK              (1 << 22)//need setup this & embargo  heal block side status is already setup I jusut forgot...
 #define SIDE_STATUS_EMBARGO					(1 << 23)
 
 // Field affecting statuses.

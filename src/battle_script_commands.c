@@ -2798,7 +2798,7 @@ static void atk0C_datahpupdate(void)
                     }
                     if (!gSpecialStatuses[gActiveBattler].dmg && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE))
                         gSpecialStatuses[gActiveBattler].dmg = gHpDealt;
-                    if ((IS_MOVE_PHYSICAL(move) || (IS_MOVE_SPECIAL(move) && GetBattlerAbility(gActiveBattler) == ABILITY_ELEMENTAL_MUSCLE))
+                    if ((IS_MOVE_PHYSICAL(move) || (IS_MOVE_SPECIAL(move) && GetBattlerAbility(gActiveBattler) == ABILITY_MUSCLE_MAGIC))
                         && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE) && gCurrentMove != MOVE_PAIN_SPLIT)
                     {
                         gProtectStructs[gActiveBattler].physicalDmg = gHpDealt;
@@ -6739,8 +6739,11 @@ static void atk52_switchineffects(void) //important, think can put ability reset
         }
     }  //end of else, think I can put other logic for switchin below this
 
-    if (gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK)
-        gStatuses3[gBattlerTarget] |= STATUS3_HEAL_BLOCK; //vsonic hope works, should set status 3 heal block
+    /*if (gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK)   //i don't remember why this is here but switch in anti-heal would be amazing
+        //gStatuses3[gBattlerTarget] |= STATUS3_HEAL_BLOCK; //vsonic        //think setup heal block switch in ability
+    {
+        break;
+    }*/
 
     //believe the switch case and will put the id of the battle on variable i
     for (i = 0; i < gBattlersCount; ++i)
@@ -9795,12 +9798,6 @@ static void atk76_various(void) //will need to add all these emerald various com
         {
             gBattleMons[gActiveBattler].status2 &= ~(STATUS2_TORMENT);
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_MENTALHERBCURE_TORMENT;
-        }
-        // Check heal block
-        if (gStatuses3[gActiveBattler] & STATUS3_HEAL_BLOCK)
-        {
-            gStatuses3[gActiveBattler] &= ~(STATUS3_HEAL_BLOCK);
-            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_MENTALHERBCURE_HEALBLOCK;
         }
         // Check disable
         if (gDisableStructs[gActiveBattler].disableTimer != 0)
@@ -13979,7 +13976,7 @@ static void atkFA_sethealblock(void) {
     }
     else
     {
-        gStatuses3[gBattlerTarget] |= STATUS3_HEAL_BLOCK; // apply status to target and set side status
+        //gStatuses3[gBattlerTarget] |= STATUS3_HEAL_BLOCK; // apply status to target and set side status   //don't think i need this
         gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)] |= SIDE_STATUS_HEAL_BLOCK;
         gSideTimers[GET_BATTLER_SIDE(gBattlerTarget)].healBlockTimer = 5;
         gSideTimers[GET_BATTLER_SIDE(gBattlerTarget)].healBlockBattlerId = gBattlerTarget;
@@ -14049,14 +14046,20 @@ static void atkFD_settailwind(void) {
     }
 }
 
+/*gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)] |= SIDE_STATUS_HEAL_BLOCK;
+        gSideTimers[GET_BATTLER_SIDE(gBattlerTarget)].healBlockTimer = 5;
+        gSideTimers[GET_BATTLER_SIDE(gBattlerTarget)].healBlockBattlerId = gBattlerTarget;
+        
+        STATUS3_EMBARGO*/
+
 static void atkFE_setembargo(void) {
-    if (gStatuses3[gBattlerTarget] & STATUS3_EMBARGO)
+    if (gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)] & SIDE_STATUS_EMBARGO)
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
     else
     {
-        gStatuses3[gBattlerTarget] |= STATUS3_EMBARGO;
+        gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)] |= SIDE_STATUS_EMBARGO;
         gDisableStructs[gBattlerTarget].embargoTimer = 5;
         gBattlescriptCurrInstr += 5;
     }

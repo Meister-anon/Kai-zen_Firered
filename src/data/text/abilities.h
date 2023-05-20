@@ -276,8 +276,11 @@ static const u8 sSundiskDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("The PKM
 static const u8 sToughSpinesDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Stabs the foe with cactus-like spines\non contact.");
 static const u8 sErosionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Breaks down incoming Rock-type attacks,\nand uses the minerals to heal itself.");
 static const u8 sLiquidmetalDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("A strange light-weight body, immune to\nstat reduction. That resists physical dmg");
-static const u8 sElementalmuscleDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Special moves become physical.\nControl the elements with pure Muscle!");
-static const u8 sTigercubDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("To rise to the high expectations\nof the pride. Ups “not very effective” dmg ");
+static const u8 sMusclemagicDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Special moves become physical.\nControl the elements with pure Muscle!");
+static const u8 sTigercubDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("To rise to the high expectations\nof the pride. Ups “not very effective” dmg.");
+static const u8 sTigerMomDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("");
+static const u8 sDarkDealDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("");
+static const u8 sCorruptionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("The user's corrupted influence spreads\ndecay. Prevents the foe from healing.");
 //checked in fire red limit is 40 chars per line, changing description length to 80
 //based on suction cups I kinda have more space?  so more like 42 per line?
 //template - top line: literal effect\n bottom line: flavor text
@@ -575,7 +578,11 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TOUGH_SPINES] = sToughSpinesDescription,
     [ABILITY_EROSION] = sErosionDescription,
     [ABILITY_LIQUID_METAL] = sLiquidmetalDescription,
-    [ABILITY_ELEMENTAL_MUSCLE] = sElementalmuscleDescription,
+    [ABILITY_MUSCLE_MAGIC] = sMusclemagicDescription,
+    [ABILITY_TIGER_CUB] = sTigercubDescription,
+    [ABILITY_TIGER_MOM] = sTigerMomDescription,
+    [ABILITY_DARK_DEAL] = sDarkDealDescription,
+    [ABILITY_CORRUPTION] = sCorruptionDescription,
 };//last value can have comma
 
 //now undrestand reason strings (strings are arrays) use that +1 value
@@ -874,5 +881,9 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TOUGH_SPINES] =_("TOUGH SPINES"),
     [ABILITY_EROSION] =_("EROSION"),
     [ABILITY_LIQUID_METAL] =_("LIQUID METAL"),
-    [ABILITY_ELEMENTAL_MUSCLE] =_("ELEMENTAL MUSCLE")
+    [ABILITY_MUSCLE_MAGIC] =_("MUSCLE MAGIC"),
+    [ABILITY_TIGER_CUB] =_("TIGER-CUB"),
+    [ABILITY_TIGER_MOM] =_("TIGER MOM"),
+    [ABILITY_DARK_DEAL] =_("DARK DEAL"),
+    [ABILITY_CORRUPTION] =_("CORRUPTION")
 };//no comma for last value

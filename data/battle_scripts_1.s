@@ -5922,7 +5922,7 @@ BattleScript_LeechSeedTurnDrain::
 	copyword gBattleMoveDamage, gHpDealt
 	jumpifability BS_ATTACKER, ABILITY_LIQUID_OOZE, BattleScript_LeechSeedTurnPrintLiquidOoze
 	setbyte cMULTISTRING_CHOOSER, 0x3
-	jumpifstatus3 BS_TARGET, STATUS3_HEAL_BLOCK, BattleScript_LeechSeedHealBlock
+	jumpifstatus3 BS_TARGET, STATUS3_HEAL_BLOCK, BattleScript_LeechSeedHealBlock	@since moved healblock to sidestatus will need setup jump for sidestatus, possibly do with various
 	manipulatedamage DMG_BIG_ROOT
 	goto BattleScript_LeechSeedTurnPrintAndUpdateHp
 BattleScript_LeechSeedTurnPrintLiquidOoze::

@@ -3269,7 +3269,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     spDefense = defender->spDefense;
     speed = attacker->speed;
 
-    if (gBattleMoves[move].effect == EFFECT_PSYSHOCK || gBattleMons[battlerIdAtk].ability == ABILITY_ELEMENTAL_MUSCLE || IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
+    if (gBattleMoves[move].effect == EFFECT_PSYSHOCK || gBattleMons[battlerIdAtk].ability == ABILITY_MUSCLE_MAGIC || IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
     {
         defStat = defense;
         defStage = gBattleMons[battlerIdDef].statStages[STAT_DEF];  //defined these now hopefully it works fine and doens't mess up normla damage calc
