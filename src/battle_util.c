@@ -4689,7 +4689,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                     for (i = STAT_ATK; i < statsNum; i++)
                     {
-                        if (CompareStat(battler, i, MIN_STAT_STAGE, CMP_GREATER_THAN))
+                        if (CompareStat(battler, i, MIN_STAT_STAGE, CMP_GREATER_THAN))  //if battler's chosen stat to change, is greater than min stage, can lower
                             validToLower |= gBitTable[i];
                         if (CompareStat(battler, i, MAX_STAT_STAGE, CMP_LESS_THAN))
                             validToRaise |= gBitTable[i];
@@ -4952,7 +4952,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         {
                             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_FLASH_FIRE_BOOST;
                             if (gProtectStructs[gBattlerAttacker].notFirstStrike)
-                                gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
+                                gBattlescriptCurrInstr = BattleScript_FlashFireBoost;   // think cna put atk canceler text here, or below in effect1 effect2 stuff
                             else
                                 gBattlescriptCurrInstr = BattleScript_FlashFireBoost_PPLoss;
 
@@ -7757,35 +7757,105 @@ u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who ge
             targetBattler = gSideTimers[side].followmeTarget;
         else
         {
-            side = GetBattlerSide(gBattlerAttacker);
+            side = GetBattlerSide(gBattlerAttacker);//since this makes it use target, guess I can just use atk cancler for that but with these conitions?
             do
             {
-                targetBattler = Random() % gBattlersCount;
+                targetBattler = Random() % gBattlersCount;  //think that would just make the battle string work, I still need to set status check her to prevent target swap
             } while (targetBattler == gBattlerAttacker || side == GetBattlerSide(targetBattler) || gAbsentBattlerFlags & gBitTable[targetBattler]);
-            if (gBattleMoves[move].type == TYPE_ELECTRIC
-             && AbilityBattleEffects(ABILITYEFFECT_COUNT_OTHER_SIDE, gBattlerAttacker, ABILITY_LIGHTNING_ROD, 0, 0)
-             && gBattleMons[targetBattler].ability != ABILITY_LIGHTNING_ROD)
+
+            if (gBattleMoves[move].type == TYPE_ELECTRIC)   //if multiple absorb abilities think would trigger in order of top to bottom
             {
-                targetBattler ^= BIT_FLANK; //sets target
-                RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
-                //gSpecialStatuses[targetBattler].lightningRodRedirected = 1; //state to be used by attack canceler, takes ewram
-            }// can potentially remove this just zero out move damage in pokemon.c calcbasedamage save ewram    //done but need test
-            else if (gBattleMoves[move].type == TYPE_WATER
-                && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_STORM_DRAIN)   //still need to try add healing hp effect to drain move animation
-                && GetBattlerAbility(targetBattler) != ABILITY_STORM_DRAIN)
-            {
-                targetBattler ^= BIT_FLANK;
-                RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
-                //gSpecialStatuses[targetBattler].stormDrainRedirected = TRUE;
+                
+                if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_LIGHTNING_ROD) //checks for ability, returns battlerId, think can use as battlreid to check if mon is statused?
+                    && gBattleMons[targetBattler].ability != ABILITY_LIGHTNING_ROD)
+                {
+                    targetBattler ^= BIT_FLANK; //sets target
+                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                }
+                else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_VOLT_ABSORB) //checks for ability, returns battlerId, think can use as battlreid to check if mon is statused?
+                    && gBattleMons[targetBattler].ability != ABILITY_VOLT_ABSORB)
+                {
+                    targetBattler ^= BIT_FLANK; //sets target
+                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                }
+                else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_MOTOR_DRIVE) //checks for ability, returns battlerId, think can use as battlreid to check if mon is statused?
+                    && gBattleMons[targetBattler].ability != ABILITY_MOTOR_DRIVE)
+                {
+                    targetBattler ^= BIT_FLANK; //sets target
+                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                }
+                
             }
-            else if (gBattleMoves[move].type == TYPE_FIRE
-                && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_FLASH_FIRE)
-                && GetBattlerAbility(targetBattler) != ABILITY_FLASH_FIRE)
+            if (gBattleMoves[move].type == TYPE_WATER)
             {
-                targetBattler ^= BIT_FLANK;
-                RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
-                //gSpecialStatuses[targetBattler].FlashFireRedirected = TRUE;
+                
+                if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_STORM_DRAIN) //checks for ability, returns battlerId, think can use as battlreid to check if mon is statused?
+                    && gBattleMons[targetBattler].ability != ABILITY_STORM_DRAIN)//if the selected target not an absorb ability, shift target to partner with said ability
+                {
+                    targetBattler ^= BIT_FLANK; //sets target
+                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                }
+                else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_WATER_ABSORB)
+                    && gBattleMons[targetBattler].ability != ABILITY_WATER_ABSORB) //I THINK way this works, if I target absorb battler it'll trigger on them rather than swapping target
+                {
+                    targetBattler ^= BIT_FLANK; //sets target
+                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                }
+                else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_DRY_SKIN)
+                    && gBattleMons[targetBattler].ability != ABILITY_DRY_SKIN)
+                {
+                    targetBattler ^= BIT_FLANK; //sets target
+                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                }
             }
+            if (gBattleMoves[move].type == TYPE_FIRE)
+            {
+                
+                if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_FLASH_FIRE)
+                    && gBattleMons[targetBattler].ability != ABILITY_FLASH_FIRE)
+                {
+                    targetBattler ^= BIT_FLANK; //sets target
+                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                }
+                else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_LAVA_FISSURE)
+                    && gBattleMons[targetBattler].ability != ABILITY_LAVA_FISSURE)
+                {
+                    targetBattler ^= BIT_FLANK; //sets target
+                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                }
+
+            }
+            if (gBattleMoves[move].type == TYPE_ROCK)
+            {
+                if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_EROSION)
+                    && gBattleMons[targetBattler].ability != ABILITY_EROSION)
+                {
+                    targetBattler ^= BIT_FLANK; //sets target
+                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                }
+
+            }
+            if (gBattleMoves[move].type == TYPE_GRASS)
+            {
+                if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_SAP_SIPPER)
+                    && gBattleMons[targetBattler].ability != ABILITY_SAP_SIPPER)
+                {
+                    targetBattler ^= BIT_FLANK; //sets target
+                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                }
+
+            }
+            if (gBattleMoves[move].type == TYPE_ICE)
+            {
+                if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_GLACIAL_ICE)
+                    && gBattleMons[targetBattler].ability != ABILITY_GLACIAL_ICE)
+                {
+                    targetBattler ^= BIT_FLANK; //sets target
+                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                }
+
+            }
+
         }
         break;
     case MOVE_TARGET_DEPENDS: //since realized I can set mullti targets using | 

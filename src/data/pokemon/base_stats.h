@@ -4431,11 +4431,11 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 88,
         .baseAttack = 84,
         .baseDefense = 78,
-        .baseSpeed = 115,
+        .baseSpeed = 100,
         .baseSpAttack = 109,
         .baseSpDefense = 95,
         .type1 = TYPE_FIRE,
-        .type2 = TYPE_FIRE,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 240,
         //.evYield_SpAttack = 3,
@@ -4472,7 +4472,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_1,
         .abilities = {ABILITY_TORRENT, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_STRONG_JAW},
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -4500,7 +4500,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_1,
         .abilities = {ABILITY_TORRENT, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_STRONG_JAW},
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -4528,7 +4528,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_1,
         .abilities = {ABILITY_TORRENT, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_STRONG_JAW},
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -13900,9 +13900,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_OVERGROW, ABILITY_OVERGROW},
+        .abilities = {ABILITY_OVERGROW, ABILITY_CONTRARY},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_CONTRARY, ABILITY_PRANKSTER},
+            .abilityHidden = {ABILITY_SAND_RUSH, ABILITY_PRANKSTER},
         #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -13927,9 +13927,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_CONTRARY, ABILITY_SAND_RUSH},
+        .abilities = {ABILITY_OVERGROW, ABILITY_CONTRARY},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_PRANKSTER, ABILITY_PRANKSTER},
+            .abilityHidden = {ABILITY_SAND_RUSH, ABILITY_PRANKSTER},
         #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -13954,10 +13954,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_CONTRARY, ABILITY_SAND_RUSH},
+        .abilities = {ABILITY_OVERGROW, ABILITY_CONTRARY},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_PRANKSTER, ABILITY_PRANKSTER},
-        #endif
+            .abilityHidden = {ABILITY_SAND_RUSH, ABILITY_PRANKSTER},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -14006,8 +14005,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_FLASH_FIRE, ABILITY_RATTLED},
-        .abilityHidden = {ABILITY_THICK_FAT, ABILITY_BLAZE},
+        .abilities = {ABILITY_BLAZE, ABILITY_RATTLED},
+        .abilityHidden = {ABILITY_THICK_FAT, ABILITY_SAND_RUSH},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },//could consider adding blaze back, flash fire lets ti sweep fire types, and is good in double batte
@@ -14033,9 +14032,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_FLASH_FIRE, ABILITY_SAND_RUSH},
+        .abilities = {ABILITY_BLAZE, ABILITY_RATTLED},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_THICK_FAT, ABILITY_BLAZE},// want to get triple stab so blaze may get rid of adaptability?
+            .abilityHidden = {ABILITY_THICK_FAT, ABILITY_SAND_RUSH},// want to get triple stab so blaze may get rid of adaptability?
         #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,

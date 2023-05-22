@@ -484,6 +484,16 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * to introduce explicitly in-game I want my new type chart to mostly be discoveredd in game,
 * but just have them aware that things are diffeerent and some things will be a new experiencee
 * 
+* [note use trainer school for majority of introduction to changes, expand the inside map add more npcs 
+* [with more school book reading events to get more information, setup event scrippt at the door, character well get exclamation mark over head
+* [and walk over to greet player. "Oh! hey Welcome, to the narative exposition school of Trainer Knowledge
+* [I bet you're surpised by the size of this place, there's been a lot of changes in the region recently
+* [and we've had to make some expansions to keep up.  The teacher's giving a quiz today so everyone is reviewing their notes
+* [but if you have question feel free to ask, talking about the subjects will help them ingrain the material.]
+* 
+* npc stops and walks back to their corner, releases player. if you talk to them again, before quiz they repeat, if you can pass the quiz the teacher my just give you a prize
+* I think prize should be 10 rare candies?   can be done at any time, so could make the quiz harder to not make it so easy to trivialize early game?
+* 
 * need double check trap effects, make sure effect_trap setup
 * works correctly for thunder_cage since I didn't even know
 * that was part of the effect -
@@ -719,6 +729,13 @@ Thunder Wave Electric TM45
 * 
 * buffed illuminate added compound eyes accuracy boost
 * 
+* rework competitive, so it raises sp atk, when opononnt's stat increases and when attacker gets statuss1 i.e guts -
+* -statsed sp atk boost done, need to setup tracker for enemy stat change and effect that would let me raise sp atk stage, in response
+* take some ques from moody, which raises stats. -
+* 
+* make sure frisk ability has gen 6 effect where it reads all opponents items, make reactivate
+* 
+* 
 * *note*  Nidoqueen line intentionally can't be breed, something to do with comprison to real life rhinos not being breedable in captivity.
 * so just make sure nidoqueen are available to catch in places, put them in safari zone I guess...well no that'd be even worse.
 * make them wild somewhere in mid game/late game  put in desert area I guess.
@@ -733,7 +750,9 @@ Thunder Wave Electric TM45
 * 
 * last thing I could do before break, is adjust the summary info box for ability description
 * actually simpler than I thought, all I need to do is move up the text and fill the bottom of the window, with the```
-* description pixels - may not be able to move window?
+* description pixels - may not be able to move window? - DONE
+* 
+* noticed with ability names at 16 instead of 12,, will need to expand ability name graphic space in summary screen, 
 * 
 * buffed arceus, gave global stab, and changed to mystery type
 * 
@@ -872,7 +891,8 @@ Thunder Wave Electric TM45
 * so I can setup logic for terrain surge abilities  potentially make certain side wide type moves terrain clears as well
 * i.e earthquake surf etc. -  NULL changed mind, makes terrain too accessible and thus overbearing.
 * well that was dumb, was tired and literally crossed my wires,  I had an idea of them setting terrain as well,
-* so they can clear terrain but not set and thats fine
+* so they can clear terrain but not set and thats fine actually nvm, as terrain affects both sides, it would just be annoying to try to set terrain then destroy it
+* with your own attack, when you were trying to do damage.  mud sport water sport as terrain clears are fine though
 * 
 * don't know if need snow terrain, since I have weather condition,
 * and places where I'd set hail there's no need for snow terrain effect
@@ -1462,8 +1482,10 @@ goto STAT_AND_DAMAGE_ABILITIES_ETC // pokemon.c function for ability and item ef
 goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability activation logic.  STIL need to update
 /*
 * Setting up new effeets for absorb abilities
-* make all work like lightnight rod and change targetting to draw in moves
-* counter balance is only does that if ability mon isn't statused 
+* make all work like lightnight rod and change targetting to draw in moves  -effect Done, working on messags and status effect
+* counter balance is only does that if ability mon isn't statused //including status 2 cofusion & infations -
+* 
+* need to add to mold breaker and other ability exclussion lists
 * 
 * New signature ability for suicune
 * purifying aura, similar effect to healer, also mon removes all status1 effects on itself & allies at the end of turn

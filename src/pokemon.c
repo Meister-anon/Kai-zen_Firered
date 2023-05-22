@@ -3420,6 +3420,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         attack = (150 * attack) / 100;
     if (attacker->ability == ABILITY_SOLAR_POWER)
         spAttack = (150 * spAttack) / 100;
+    if (attacker->ability == ABILITY_COMPETITIVE && attacker->status1 & STATUS1_ANY)
+        spAttack = (150 * spAttack) / 100;  //CUT Back to 130,when I get the stat stage raise working
     if (attacker->ability == ABILITY_PLUS && ABILITY_ON_FIELD2(ABILITY_MINUS))
         spAttack = (150 * spAttack) / 100;
     if (attacker->ability == ABILTY_UNKNOWN_POWER && GetMonData(BATTLE_PARTNER(gBattlerAttacker, MON_DATA_SPECIES) == SPECIES_UNOWN))
@@ -3731,6 +3733,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_STORM_DRAIN:
         if (type == TYPE_WATER)
+            gBattleMoveDamage = 0;
+        break;
+    case ABILITY_EROSION:
+        if (type == TYPE_ROCK)
             gBattleMoveDamage = 0;
         break;
     case ABILITY_PICKPOCKET:
