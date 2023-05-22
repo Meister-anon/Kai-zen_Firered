@@ -435,6 +435,8 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectSnapTrap
 	.4byte BattleScript_EffectDryadsCurse
 	.4byte BattleScript_EffectProtect	@shield bash
+	.4byte BattleScript_EffectAttractHit	@use move_effect_attract
+	.4byte BattleScript_EffectHit		@Expanding Force fill effect  is gen 9, just putting here to fill space, is not setup
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -4076,6 +4078,15 @@ BattleScript_EffectAttract::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectAttractHit::
+	attackcanceler
+	attackstring
+	ppreduce
+	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
+	tryinfatuating BattleScript_HitFromAtkAnimation
+	setmoveeffect MOVE_EFFECT_ATTRACT
+	goto BattleScript_HitFromAtkAnimation
+
 BattleScript_EffectReturn::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
@@ -6847,6 +6858,12 @@ BattleScript_GravityEnds::
 	waitmessage 0x40
 	end2
 
+BattleScript_MoveEffectAttract::
+	statusanimation BS_EFFECT_BATTLER
+	printstring STRINGID_PKMNFELLINLOVE
+	waitmessage 0x40
+	return
+
 BattleScript_MoveEffectPoison::
 	statusanimation BS_EFFECT_BATTLER
 	printfromtable gGotPoisonedStringIds
@@ -7013,14 +7030,7 @@ BattleScript_DoRecoil::
 	waitmessage 0x40
 	tryfaintmon BS_ATTACKER, 0, NULL
 BattleScript_RecoilEnd::
-	return
-
-
-BattleScript_MoveEffectFallInLove::
-	chosenstatusanimation BS_EFFECT_BATTLER, 1, STATUS2_INFATUATION
-	waitanimation
-	printstring STRINGID_PKMNFELLINLOVE
-	waitmessage 0x40
+	return	
 
 BattleScript_ItemSteal::
 	playanimation BS_TARGET, B_ANIM_ITEM_STEAL, NULL

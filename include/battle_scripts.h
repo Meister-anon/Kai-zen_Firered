@@ -159,6 +159,7 @@ extern const u8 BattleScript_NightmareTurnDmg[];
 extern const u8 BattleScript_CurseTurnDmg[];
 extern const u8 BattleScript_TargetPRLZHeal[];
 extern const u8 BattleScript_MoveEffectSleep[];
+extern const u8 BattleScript_MoveEffectAttract[]; //don't know  if work right
 extern const u8 BattleScript_YawnMakesAsleep[];
 extern const u8 BattleScript_MoveEffectPoison[];
 extern const u8 BattleScript_MoveEffectBurn[];
@@ -176,12 +177,11 @@ extern const u8 BattleScript_MoveEffectMagmaStorm[];
 extern const u8 BattleScript_MoveEffectInfestation[];
 extern const u8 BattleScript_MoveEffectSnapTrap[];
 extern const u8 BattleScript_MoveEffectConfusion[];
-extern const u8 BattleScript_MoveEffectRecoil33[];
-extern const u8 BattleScript_DoRecoil33[];
-extern const u8 BattleScript_Recoil33End[];
+extern const u8 BattleScript_MoveEffectRecoil[];
+extern const u8 BattleScript_DoRecoil[];
+extern const u8 BattleScript_RecoilEnd[];
 extern const u8 BattleScript_EffectRecoil33WithStatus[];
 extern const u8 BattleScript_EffectRecoil50[];
-extern const u8 BattleScript_MoveEffectFallInLove[]; //new move effect for synchronize infatuation
 extern const u8 BattleScript_ItemSteal[];
 extern const u8 BattleScript_InBattlePickup[];	//new in battle effect for ability pickup, 1 in 3 chance pickup held item and end of turn
 extern const u8 BattleScript_DrizzleActivates[];

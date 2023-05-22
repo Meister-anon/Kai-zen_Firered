@@ -1139,6 +1139,12 @@ static bool32 IsBelchPreventingMove(u32 battler, u32 move)
     return !(gBattleStruct->ateBerry[battler & BIT_SIDE] & gBitTable[gBattlerPartyIndexes[battler]]);
 }
 
+bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget)  //somehow works...
+{
+    return ((GetBattlerAbility(battlerAttacker) == ABILITY_CORROSION && gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
+        || !(IS_BATTLER_OF_TYPE(battlerTarget, TYPE_POISON) || IS_BATTLER_OF_TYPE(battlerTarget, TYPE_STEEL)));
+}
+
 //side status
 enum
 {
@@ -3063,6 +3069,20 @@ u8 AtkCanceller_UnableToUseMove2(void)
     } while (gBattleStruct->atkCancellerTracker != CANCELLER_END2 && effect == 0);
 
     return effect;
+}
+
+void TrySaveExchangedItem(u8 battlerId, u16 stolenItem)
+{
+    // Because BtlController_EmitSetMonData does SetMonData, we need to save the stolen item only if it matches the battler's original
+    // So, if the player steals an item during battle and has it stolen from it, it will not end the battle with it (naturally)
+
+    // If regular trainer battle and mon's original item matches what is being stolen, save it to be restored at end of battle
+    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER
+        //&& !(gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
+        && GetBattlerSide(battlerId) == B_SIDE_PLAYER
+        && stolenItem == gBattleStruct->itemStolen[gBattlerPartyIndexes[battlerId]].originalItem)
+        gBattleStruct->itemStolen[gBattlerPartyIndexes[battlerId]].stolen = TRUE;
+
 }
 
 //logic for this is non-flying type pokemon that are typically
@@ -5075,7 +5095,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && (Random() % 2) == 0)
                 {
                     do
-                        gBattleScripting.moveEffect = Random() % 5;
+                        gBattleScripting.moveEffect = Random() % 5; //0-4
                     while (gBattleScripting.moveEffect == 0);
 
                     if (gBattleScripting.moveEffect == MOVE_EFFECT_BURN)
@@ -5086,7 +5106,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION;
                     gBattleScripting.moveEffect += MOVE_EFFECT_AFFECTS_USER;
                     BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
+                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect; //was gonna do infatuation, but there's no way to make it work that would make sense
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                     ++effect;
                 }
@@ -5140,7 +5160,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED
-                    && IsBattlerAlive(battler)
+                    //&& IsBattlerAlive(battler) remove this part, so affect activates even if I faint
                     && IsMoveMakingContact(move, gBattlerAttacker))
                 {
                     if (gBattleMons[gBattlerAttacker].ability == ABILITY_STICKY_HOLD)
@@ -5259,7 +5279,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && (Random() % 3) == 0)
                 {
                     gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
-                    //gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
@@ -5745,6 +5764,27 @@ void BattleScriptPushCursorAndCallback(const u8 *BS_ptr)
     gBattlescriptCurrInstr = BS_ptr;
     gBattleResources->battleCallbackStack->function[gBattleResources->battleCallbackStack->size++] = gBattleMainFunc;
     gBattleMainFunc = RunBattleScriptCommands;
+}
+
+// Possible return values are defined in battle.h following MOVE_TARGET_SELECTED
+u32 GetBattlerMoveTargetType(u8 battlerId, u16 move)
+{
+    u32 target;
+
+    if (gBattleMoves[move].effect == EFFECT_EXPANDING_FORCE
+        && IsBattlerTerrainAffected(battlerId, STATUS_FIELD_PSYCHIC_TERRAIN))
+        return MOVE_TARGET_BOTH;
+    else
+        return gBattleMoves[move].target;
+}
+
+bool32 CanTargetBattler(u8 battlerAtk, u8 battlerDef, u16 move)
+{
+    if (gBattleMoves[move].effect == EFFECT_HIT_ENEMY_HEAL_ALLY
+        && GetBattlerSide(battlerAtk) == GetBattlerSide(battlerDef)
+        && gSideStatuses[GET_BATTLER_SIDE(battlerAtk)] & SIDE_STATUS_HEAL_BLOCK)
+        return FALSE;   // Pokémon affected by Heal Block cannot target allies with Pollen Puff
+    return TRUE;
 }
 
 enum
@@ -7652,7 +7692,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
                   && IsMoveMakingContact(gCurrentMove, gBattlerAttacker)
                   && !DoesSubstituteBlockMove(gBattlerAttacker, battlerId, gCurrentMove)
                   && IsBattlerAlive(gBattlerAttacker)
-                  && CanStealItem(gBattlerAttacker, gBattlerTarget, gBattleMons[gBattlerTarget].item)
+                  //&& CanStealItem(gBattlerAttacker, gBattlerTarget, gBattleMons[gBattlerTarget].item) make it work on any item
                   && gBattleMons[gBattlerAttacker].item == ITEM_NONE)
                 {
                     // No sticky hold checks.
@@ -7692,13 +7732,13 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
         case HOLD_EFFECT_STICKY_BARB:   // Not an orb per se, but similar effect, and needs to NOT activate with pickpocket
             if (battlerAbility != ABILITY_MAGIC_GUARD)
             {
-                gBattleMoveDamage = gBattleMons[battlerId].maxHP / 8;
-                if (gBattleMoveDamage == 0)
+                gBattleMoveDamage = gBattleMons[battlerId].maxHP / 8;   //according to bulbapedia stickybarb is not excluded from pickpocket, <it just activates after the barb exchagne
+                if (gBattleMoveDamage == 0) //essentially taking it back.
                     gBattleMoveDamage = 1;
                 BattleScriptExecute(BattleScript_ItemHurtEnd2);
                 effect = ITEM_HP_CHANGE;
                 RecordItemEffectBattle(battlerId, battlerHoldEffect);
-                PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem);
+                PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem);//need test to ensure it triggers before abilty effect pickpocket
             }
             break;
         }
@@ -7767,19 +7807,25 @@ u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who ge
             {
                 
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_LIGHTNING_ROD) //checks for ability, returns battlerId, think can use as battlreid to check if mon is statused?
-                    && gBattleMons[targetBattler].ability != ABILITY_LIGHTNING_ROD)
+                    && gBattleMons[targetBattler].ability != ABILITY_LIGHTNING_ROD
+                    && gBattleMons[targetBattler].status1 == 0
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
                     RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
                 }
                 else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_VOLT_ABSORB) //checks for ability, returns battlerId, think can use as battlreid to check if mon is statused?
-                    && gBattleMons[targetBattler].ability != ABILITY_VOLT_ABSORB)
+                    && gBattleMons[targetBattler].ability != ABILITY_VOLT_ABSORB
+                    && gBattleMons[targetBattler].status1 == 0
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
                     RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
                 }
                 else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_MOTOR_DRIVE) //checks for ability, returns battlerId, think can use as battlreid to check if mon is statused?
-                    && gBattleMons[targetBattler].ability != ABILITY_MOTOR_DRIVE)
+                    && gBattleMons[targetBattler].ability != ABILITY_MOTOR_DRIVE
+                    && gBattleMons[targetBattler].status1 == 0
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
                     RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
@@ -7790,19 +7836,25 @@ u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who ge
             {
                 
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_STORM_DRAIN) //checks for ability, returns battlerId, think can use as battlreid to check if mon is statused?
-                    && gBattleMons[targetBattler].ability != ABILITY_STORM_DRAIN)//if the selected target not an absorb ability, shift target to partner with said ability
+                    && gBattleMons[targetBattler].ability != ABILITY_STORM_DRAIN    //if the selected target not an absorb ability, shift target to partner with said ability
+                    && gBattleMons[targetBattler].status1 == 0
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
                     RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
                 }
-                else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_WATER_ABSORB)
-                    && gBattleMons[targetBattler].ability != ABILITY_WATER_ABSORB) //I THINK way this works, if I target absorb battler it'll trigger on them rather than swapping target
+                else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_WATER_ABSORB)//I THINK way this works, if I target absorb battler it'll trigger on them rather than swapping target
+                    && gBattleMons[targetBattler].ability != ABILITY_WATER_ABSORB
+                    && gBattleMons[targetBattler].status1 == 0
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
                     RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
                 }
                 else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_DRY_SKIN)
-                    && gBattleMons[targetBattler].ability != ABILITY_DRY_SKIN)
+                    && gBattleMons[targetBattler].ability != ABILITY_DRY_SKIN
+                    && gBattleMons[targetBattler].status1 == 0
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
                     RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
@@ -7812,13 +7864,17 @@ u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who ge
             {
                 
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_FLASH_FIRE)
-                    && gBattleMons[targetBattler].ability != ABILITY_FLASH_FIRE)
+                    && gBattleMons[targetBattler].ability != ABILITY_FLASH_FIRE
+                    && gBattleMons[targetBattler].status1 == 0
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
                     RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
                 }
                 else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_LAVA_FISSURE)
-                    && gBattleMons[targetBattler].ability != ABILITY_LAVA_FISSURE)
+                    && gBattleMons[targetBattler].ability != ABILITY_LAVA_FISSURE
+                    && gBattleMons[targetBattler].status1 == 0
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
                     RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
@@ -7828,7 +7884,9 @@ u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who ge
             if (gBattleMoves[move].type == TYPE_ROCK)
             {
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_EROSION)
-                    && gBattleMons[targetBattler].ability != ABILITY_EROSION)
+                    && gBattleMons[targetBattler].ability != ABILITY_EROSION
+                    && gBattleMons[targetBattler].status1 == 0
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
                     RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
@@ -7838,7 +7896,9 @@ u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who ge
             if (gBattleMoves[move].type == TYPE_GRASS)
             {
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_SAP_SIPPER)
-                    && gBattleMons[targetBattler].ability != ABILITY_SAP_SIPPER)
+                    && gBattleMons[targetBattler].ability != ABILITY_SAP_SIPPER
+                    && gBattleMons[targetBattler].status1 == 0
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
                     RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
@@ -7848,7 +7908,9 @@ u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who ge
             if (gBattleMoves[move].type == TYPE_ICE)
             {
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_GLACIAL_ICE)
-                    && gBattleMons[targetBattler].ability != ABILITY_GLACIAL_ICE)
+                    && gBattleMons[targetBattler].ability != ABILITY_GLACIAL_ICE
+                    && gBattleMons[targetBattler].status1 == 0
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
                     RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
@@ -8515,9 +8577,6 @@ bool32 CanBattlerEscape(u32 battlerId) // no ability check
 {
     if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_SHED_SHELL)
         return TRUE;
-    else if (gBattleMons[gActiveBattler].ability == ABILITY_DEFEATIST
-        && gSpecialStatuses[gActiveBattler].defeatistActivated)
-        return TRUE;
     else if ((!IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && gBattleMons[battlerId].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))
         return FALSE;
     else if (gStatuses3[battlerId] & STATUS3_ROOTED)
@@ -8526,7 +8585,7 @@ bool32 CanBattlerEscape(u32 battlerId) // no ability check
         return FALSE;
     else
         return TRUE;
-}
+}//dont need defeatist here, that dealt with in battle_main
 
 //Make sure the input bank is any bank on the specific mon's side
 bool32 CanFling(u8 battlerId)
@@ -8537,10 +8596,10 @@ bool32 CanFling(u8 battlerId)
     if (item == ITEM_NONE
         || GetBattlerAbility(battlerId) == ABILITY_KLUTZ
         || gFieldStatuses & STATUS_FIELD_MAGIC_ROOM
-        || gDisableStructs[battlerId].embargoTimer != 0
+        || gSideTimers[GET_BATTLER_SIDE(battlerId)].embargoTimer != 0
         || !CanBattlerGetOrLoseItem(battlerId, item)
         //|| itemEffect == HOLD_EFFECT_PRIMAL_ORB       //this isnt wrong, its commented out even in emerald
-        || itemEffect == HOLD_EFFECT_GEMS
+        || itemEffect == HOLD_EFFECT_GEMS   //want to change this, let fling gem change move type 
 #ifdef ITEM_ABILITY_CAPSULE
         || item == ITEM_ABILITY_CAPSULE
 #endif

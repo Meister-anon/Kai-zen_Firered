@@ -32,6 +32,7 @@ bool32 IsShieldsDownProtected(u32 battler);
 u32 IsAbilityStatusProtected(u32 battler);
 bool32 TryResetBattlerStatChanges(u8 battler);
 bool32 CanCamouflage(u8 battlerId);
+void StealTargetItem(u8 battlerStealer, u8 battlerItem);
 
 extern void (* const gBattleScriptingCommandsTable[])(void);
 

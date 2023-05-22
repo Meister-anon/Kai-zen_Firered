@@ -4932,9 +4932,12 @@ void RunBattleScriptCommands(void)
         gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
 }
 
+#define CAN_ABILITY_ABSORB (gBattleMons[gActiveBattler].status1 == 0 && !(gBattleMons[gActiveBattler].status2 & STATUS2_CONFUSION))
+
 static void HandleAction_UseMove(void)
 {
     u32 i, side, moveType, var = 4;
+    u16 moveTarget;
 
     gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     if (*(&gBattleStruct->absentBattlerFlags) & gBitTable[gBattlerAttacker])
@@ -4999,6 +5002,8 @@ static void HandleAction_UseMove(void)
     SetTypeBeforeUsingMove(gChosenMove, gBattlerAttacker);
     GET_MOVE_TYPE(gChosenMove, moveType);
 
+    moveTarget = GetBattlerMoveTargetType(gBattlerAttacker, gCurrentMove);
+
     // choose target
     side = GetBattlerSide(gBattlerAttacker) ^ BIT_SIDE;
     if (gSideTimers[side].followmeTimer != 0
@@ -5011,18 +5016,34 @@ static void HandleAction_UseMove(void)
     else if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
           && gSideTimers[side].followmeTimer == 0
           && (gBattleMoves[gCurrentMove].power != 0
-             || gBattleMoves[gCurrentMove].target != MOVE_TARGET_USER)
+              || (moveTarget != MOVE_TARGET_USER && moveTarget != MOVE_TARGET_ALL_BATTLERS))
           && ((GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_LIGHTNING_ROD && moveType == TYPE_ELECTRIC)
+            || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_VOLT_ABSORB && moveType == TYPE_ELECTRIC)
+            || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_MOTOR_DRIVE && moveType == TYPE_ELECTRIC)
             || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_STORM_DRAIN && moveType == TYPE_WATER)
+            || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_WATER_ABSORB && moveType == TYPE_WATER)
+            || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_DRY_SKIN && moveType == TYPE_WATER)
+            || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_EROSION && moveType == TYPE_ROCK)
+            || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_SAP_SIPPER && moveType == TYPE_GRASS)
+            || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_GLACIAL_ICE && moveType == TYPE_ICE)
+            || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_LAVA_FISSURE && moveType == TYPE_FIRE)
             || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_FLASH_FIRE && moveType == TYPE_FIRE)))
     {
         side = GetBattlerSide(gBattlerAttacker);
         for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
-             if (side != GetBattlerSide(gActiveBattler)
+             if (side != GetBattlerSide(gActiveBattler) //I think I need to add status clause to below linses?
                 && *(gBattleStruct->moveTarget + gBattlerAttacker) != gActiveBattler
-                && ((GetBattlerAbility(gActiveBattler) == ABILITY_LIGHTNING_ROD && moveType == TYPE_ELECTRIC)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_STORM_DRAIN && moveType == TYPE_WATER)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_FLASH_FIRE && moveType == TYPE_FIRE))
+                && ((GetBattlerAbility(gActiveBattler) == ABILITY_LIGHTNING_ROD && moveType == TYPE_ELECTRIC && CAN_ABILITY_ABSORB)
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_VOLT_ABSORB && moveType == TYPE_ELECTRIC && CAN_ABILITY_ABSORB)
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_MOTOR_DRIVE && moveType == TYPE_ELECTRIC && CAN_ABILITY_ABSORB)
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_STORM_DRAIN && moveType == TYPE_WATER && CAN_ABILITY_ABSORB)
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_WATER_ABSORB && moveType == TYPE_WATER && CAN_ABILITY_ABSORB)
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_DRY_SKIN && moveType == TYPE_WATER && CAN_ABILITY_ABSORB)
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_EROSION && moveType == TYPE_ROCK && CAN_ABILITY_ABSORB)
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_SAP_SIPPER && moveType == TYPE_GRASS && CAN_ABILITY_ABSORB)
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_GLACIAL_ICE && moveType == TYPE_ICE && CAN_ABILITY_ABSORB)
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_LAVA_FISSURE && moveType == TYPE_FIRE && CAN_ABILITY_ABSORB)
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_FLASH_FIRE && moveType == TYPE_FIRE && CAN_ABILITY_ABSORB))
                 && GetBattlerTurnOrderNum(gActiveBattler) < var
                 && gBattleMoves[gCurrentMove].effect != EFFECT_SNIPE_SHOT
                 && (GetBattlerAbility(gBattlerAttacker) != ABILITY_PROPELLER_TAIL
@@ -5069,7 +5090,7 @@ static void HandleAction_UseMove(void)
         {
             gActiveBattler = gBattlerByTurnOrder[var];
             RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);
-            //gSpecialStatuses[gActiveBattler].lightningRodRedirected = 1;
+            //gSpecialStatuses[gActiveBattler].lightningRodRedirected = 1;  //idk why this sets this here, if its also set by getmovetarget in battle_util.c?
             gBattlerTarget = gActiveBattler;
         }
     }

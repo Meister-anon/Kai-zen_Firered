@@ -733,6 +733,7 @@ static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
     [MOVE_EFFECT_PREVENT_ESCAPE] = STATUS2_ESCAPE_PREVENTION,
     [MOVE_EFFECT_NIGHTMARE] = STATUS2_NIGHTMARE,
     [MOVE_EFFECT_THRASH] = STATUS2_LOCK_CONFUSE,
+    [MOVE_EFFECT_ATTRACT] = STATUS2_INFATUATED_WITH(gBattlerAttacker),    //I think this will work now?
     [MOVE_EFFECT_FIRE_SPIN] = STATUS4_FIRE_SPIN,
     [MOVE_EFFECT_CLAMP] = STATUS4_CLAMP,
     [MOVE_EFFECT_WHIRLPOOL] = STATUS4_WHIRLPOOL,
@@ -782,9 +783,9 @@ static const u8 *const sMoveEffectBS_Ptrs[] =
     [MOVE_EFFECT_ALL_STATS_UP] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_RAPIDSPIN] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_REMOVE_PARALYSIS] = BattleScript_MoveEffectSleep,
-    [MOVE_EFFECT_ATK_DEF_DOWN] = BattleScript_MoveEffectSleep,
+    [MOVE_EFFECT_ATK_DEF_DOWN] = BattleScript_MoveEffectSleep,//BattleScript_MoveEffectFallInLove
     [MOVE_EFFECT_RECOIL_33] = BattleScript_MoveEffectRecoil,
-    [MOVE_EFFECT_ATTRACT] = BattleScript_MoveEffectSleep,
+    [MOVE_EFFECT_ATTRACT] = BattleScript_MoveEffectAttract,   //see if it works as is, or I need actuall battlescript for this
     [MOVE_EFFECT_FIRE_SPIN] = BattleScript_MoveEffectFireSpin,
     [MOVE_EFFECT_CLAMP] = BattleScript_MoveEffectClamp,
     [MOVE_EFFECT_WHIRLPOOL] = BattleScript_MoveEffectWhirlpool,
@@ -3085,6 +3086,32 @@ static void CheckSetUnburden(u8 battlerId)
         gBattleResources->flags->flags[battlerId] |= RESOURCE_FLAG_UNBURDEN;
         RecordAbilityBattle(battlerId, ABILITY_UNBURDEN);
     }
+}
+
+// battlerStealer steals the item of battlerItem
+void StealTargetItem(u8 battlerStealer, u8 battlerItem)
+{
+    gLastUsedItem = gBattleMons[battlerItem].item;
+    gBattleMons[battlerItem].item = 0;
+
+    RecordItemEffectBattle(battlerItem, 0);
+    RecordItemEffectBattle(battlerStealer, ItemId_GetHoldEffect(gLastUsedItem));
+    gBattleMons[battlerStealer].item = gLastUsedItem;
+
+    CheckSetUnburden(battlerItem);
+    gBattleResources->flags->flags[battlerStealer] &= ~RESOURCE_FLAG_UNBURDEN;
+
+    gActiveBattler = battlerStealer;
+    BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gLastUsedItem), &gLastUsedItem); // set attacker item
+    MarkBattlerForControllerExec(battlerStealer);
+
+    gActiveBattler = battlerItem;
+    BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[gBattlerTarget].item), &gBattleMons[battlerItem].item);  // remove target item
+    MarkBattlerForControllerExec(battlerItem);
+
+    gBattleStruct->choicedMove[battlerItem] = 0;
+
+    TrySaveExchangedItem(battlerItem, gLastUsedItem);
 }
 
 #define INCREMENT_RESET_RETURN                  \
@@ -11043,12 +11070,16 @@ static void atk97_tryinfatuating(void)
          || GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) == MON_GENDERLESS
          || GetGenderFromSpeciesAndPersonality(speciesTarget, personalityTarget) == MON_GENDERLESS)
         {
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);   //jump to fail condition
+        }
+        else if (gBattleMoves[gCurrentMove].power >= 1) //if not a status move, and meets success condition to attract
+        {
+            gBattlescriptCurrInstr += 5;
         }
         else
         {
-            gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
-            gBattlescriptCurrInstr += 5;
+            gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);//can make attract hit battle script idk if would be unbalanced ?
+            gBattlescriptCurrInstr += 5;        //would just need to replace the move end and but it failed jumps, with jumps to the hit battlescript
         }
     }
 }

@@ -91,7 +91,7 @@
 #define ITEM_MAX_REPEL 84
 #define ITEM_ESCAPE_ROPE 85
 #define ITEM_REPEL 86
-#define ITEM_ABILITY_CAPSULE 87
+#define ITEM_ABILITY_CAPSULE 87	//remmbeber need change logic of this, so lets me select the slot to change to
 #define ITEM_058 88
 #define ITEM_059 89
 #define ITEM_05A 90

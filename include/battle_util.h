@@ -156,7 +156,8 @@ bool32 IsEntrainmentBannedAbilityAttacker(u16 ability);
 bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability);
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
 bool32 CanSleep(u8 battlerId);
-bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget);
+bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget);
+bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget); //actually needs to be different
 bool32 CanBeBurned(u8 battlerId);
 bool32 CanBeParalyzed(u8 battlerId);
 bool32 CanBeFrozen(u8 battlerId);
@@ -175,6 +176,9 @@ void ResetFuryCutterCounter(u8 battlerId);
 void MulModifier(u16 *modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);
 bool32 UnnerveOn(u32 battlerId, u32 itemId);
+void TrySaveExchangedItem(u8 battlerId, u16 stolenItem);
+u32 GetBattlerMoveTargetType(u8 battlerId, u16 move); //need port these two fully
+bool32 CanTargetBattler(u8 battlerAtk, u8 battlerDef, u16 move);
 //learned defined need be on one line, this should be logic for thawing i.e remove frozen status
 #define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || ((gBattleMoves[gCurrentMove].type == TYPE_FIRE) && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60) && gCurrentMove != MOVE_FIRE_FANG))
 
