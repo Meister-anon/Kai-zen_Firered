@@ -1483,7 +1483,7 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 /*
 * Setting up new effeets for absorb abilities
 * make all work like lightnight rod and change targetting to draw in moves  -effect Done, working on messags and status effect
-* counter balance is only does that if ability mon isn't statused //including status 2 cofusion & infations -
+* counter balance is only does that if ability mon isn't statused //including status 2 cofusion & infations - think Done, did only confusion not infatuation
 * 
 * need to add to mold breaker and other ability exclussion lists
 * 
@@ -1530,10 +1530,11 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * 
 * buff to make magma armor unique, rather than just naother flame body (specially since I gave flame body freeze immunity
 * first idea is give it incinerate effect, where it destroys enemy held item on contact
-* othre idea is sp def damage reduction from being surrounded in magma shield
+* othre idea is sp def damage reduction from being surrounded in magma shield //think i did both? yeah
 * based on bulbapdia reading make function for if item can be removed/stolen
 * 
 * buff pidgey line, according to Zen Mode YT changes, give u-turn and my move dive bomb
+* gave scrappy, think setup correctly so scrappy should work? need test
 * 
 * fix ditto make imposter its only ability (or just but  speed stat so it can transform easier)
 * change imposter to be more than just a free transform on switch.

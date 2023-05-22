@@ -482,8 +482,8 @@
 #define MOVE_EFFECT_SP_ATK_TWO_DOWN     0x3B
 #define MOVE_EFFECT_FEINT				0x3C
 #define MOVE_EFFECT_SPECTRAL_THIEF      0x3D
-#define MOVE_EFFECT_ATTRACT				0x3E	//just need to set this to the effect attract?
-#define MOVE_EFFECT_SPIRIT_LOCK			0x3F  
+#define MOVE_EFFECT_ATTRACT				0x3E	//just need to set this to the effect attract?	//setstatus in bscommands, this infatuates w target should work for effect spore
+#define MOVE_EFFECT_SPIRIT_LOCK			0x3F  //but if
 #define MOVE_EFFECT_HAPPY_HOUR          0x40
 #define MOVE_EFFECT_CORE_ENFORCER       0x41
 #define MOVE_EFFECT_THROAT_CHOP         0x42

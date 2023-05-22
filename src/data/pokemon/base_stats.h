@@ -504,7 +504,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_KEEN_EYE, ABILITY_TANGLED_FEET},
+            .abilities = {ABILITY_KEEN_EYE, ABILITY_SCRAPPY},
             .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_NONE},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
@@ -533,7 +533,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_KEEN_EYE, ABILITY_TANGLED_FEET},
+            .abilities = {ABILITY_KEEN_EYE, ABILITY_SCRAPPY},
             .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_NONE},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
