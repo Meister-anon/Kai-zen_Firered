@@ -462,7 +462,7 @@ struct BattleHistory
 {
     /*0x00*/ u16 usedMoves[2][8]; // 0xFFFF means move not used (confuse self hit, etc)
     /*0x20*/ u16 abilities[MAX_BATTLERS_COUNT / 2];
-    /*0x24*/ u8 itemEffects[MAX_BATTLERS_COUNT / 2];
+    /*0x24*/ u8 itemEffects[MAX_BATTLERS_COUNT / 2];//did these values use 2, because it assumed single battles? think there's only 1 or 2 doubles in the game
     /*0x26*/ u16 trainerItems[MAX_BATTLERS_COUNT];
     /*0x2E*/ u8 itemsNo;
              u16 moveHistory[MAX_BATTLERS_COUNT][AI_MOVE_HISTORY_COUNT]; // 3 last used moves for each battler

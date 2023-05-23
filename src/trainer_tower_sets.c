@@ -2640,7 +2640,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_2 = {
 				{
 					.species = SPECIES_YANMA,
 					.heldItem = ITEM_BRIGHT_POWDER,
-					.moves = {MOVE_HYPNOSIS, MOVE_SONIC_BOOM, MOVE_QUICK_ATTACK, MOVE_AERIAL_ACE},
+					.moves = {MOVE_HYPNOSIS, MOVE_SONIC_SCREECH, MOVE_QUICK_ATTACK, MOVE_AERIAL_ACE},
 					.hpEV = 255,
 					.attackEV = 0,
 					.defenseEV = 0,
@@ -7659,7 +7659,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Double_7 = {
 				{
 					.species = SPECIES_MAGNETON,
 					.heldItem = ITEM_PETAYA_BERRY,
-					.moves = {MOVE_THUNDER, MOVE_SONIC_BOOM, MOVE_METAL_SOUND, MOVE_REFLECT},
+					.moves = {MOVE_THUNDER, MOVE_SONIC_SCREECH, MOVE_METAL_SOUND, MOVE_REFLECT},
 					.hpEV = 0,
 					.attackEV = 0,
 					.defenseEV = 155,

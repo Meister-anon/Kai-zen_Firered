@@ -99,7 +99,7 @@ gBattleAnims_Moves::
 	.4byte Move_ROAR
 	.4byte Move_SING
 	.4byte Move_SUPERSONIC
-	.4byte Move_SONIC_BOOM
+	.4byte Move_SONIC_SCREECH
 	.4byte Move_DISABLE
 	.4byte Move_ACID
 	.4byte Move_EMBER
@@ -819,6 +819,7 @@ gBattleAnims_Moves::
 	.4byte Move_UP_ROOT
 	.4byte Move_DIVE_BOMB
 	.4byte Move_NETTLE_WHIP
+	.4byte MOVE_SONIC_BOOM
 	.4byte Move_COUNT @ cannot be reached, because last move is Eerie Spell  important check move order moves.h
 
 gBattleAnims_StatusConditions::
@@ -1505,29 +1506,29 @@ CometPunchRight:: @ 81C7EB6
 	createsprite gFistFootSpriteTemplate, ANIM_ATTACKER, 3, 8, 0, 8, 1, 0
 	goto CometPunchContinue
 
-Move_SONIC_BOOM:: @ 81C7EDB
+Move_SONIC_SCREECH:: @ 81C7EDB
 	loadspritegfx ANIM_TAG_AIR_WAVE
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg ANIM_DEF_PARTNER
 	monbgprio_28 1
 	setalpha 12, 8
-	call SonicBoomProjectile
-	call SonicBoomProjectile
-	call SonicBoomProjectile
+	call SonicScreechProjectile
+	call SonicScreechProjectile
+	call SonicScreechProjectile
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 10, 1
-	call SonicBoomHit
+	call SonicScreechHit
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
 	end
 
-SonicBoomProjectile:: @ 81C7F12
+SonicScreechProjectile:: @ 81C7F12
 	playsewithpan SE_M_RAZOR_WIND2, 192
-	createsprite gSonicBoomSpriteTemplate, ANIM_TARGET, 2, 16, 0, 0, 0, 15
+	createsprite gSonicScreechSpriteTemplate, ANIM_TARGET, 2, 16, 0, 0, 0, 15
 	delay 4
 	return
 
-SonicBoomHit:: @ 81C7F2A
+SonicScreechHit:: @ 81C7F2A
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 2
 	delay 4
 	return
@@ -3233,6 +3234,66 @@ Move_AGILITY:: @ 81CA97A
 	clearmonbg ANIM_ATK_PARTNER
 	blendoff
 	delay 1
+	end
+
+MOVE_SONIC_BOOM::
+	loadspritegfx ANIM_TAG_GUST
+	loadspritegfx ANIM_TAG_IMPACT
+	monbg ANIM_DEF_PARTNER
+	monbgprio_28 1
+	setalpha 12, 8
+	createvisualtask AnimTask_TranslateMonEllipticalRespectSide, 2, 0, 24, 6, 4, 4
+	createvisualtask AnimTask_CloneBattlerSpriteWithBlend, 2, 0, 4, 7, 10
+	playsewithpan SE_M_DOUBLE_TEAM, 192
+	delay 12
+	playsewithpan SE_M_DOUBLE_TEAM, 192
+	delay 12
+	playsewithpan SE_M_DOUBLE_TEAM, 192
+	delay 12
+	playsewithpan SE_M_DOUBLE_TEAM, 192
+	delay 12
+	playsewithpan SE_M_DOUBLE_TEAM, 192
+	delay 12
+	loopsewithpan SE_M_WING_ATTACK, 192, 20, 2
+	createvisualtask AnimTask_AnimateGustTornadoPalette, 5, 1, 70
+	createsprite gGustToTargetSpriteTemplate, ANIM_ATTACKER, 2, -25, 0, 0, 0, 20
+	createsprite gGustToTargetSpriteTemplate, ANIM_ATTACKER, 2, 25, 0, 0, 0, 20
+	delay 24
+	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 0, 24, 0, 0, 9
+	delay 17
+	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 16, 0, 1, 1
+	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -16, 0, 1, 1
+	loopsewithpan SE_M_DOUBLE_SLAP, 63, 5, 2
+	waitforvisualfinish
+	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 11
+	waitforvisualfinish
+	clearmonbg ANIM_DEF_PARTNER
+	blendoff
+	delay 1
+	end
+
+Move_WING_ATTACK:: @ 81CF699
+	loadspritegfx ANIM_TAG_GUST
+	loadspritegfx ANIM_TAG_IMPACT
+	monbg ANIM_DEF_PARTNER
+	monbgprio_28 1
+	setalpha 12, 8
+	loopsewithpan SE_M_WING_ATTACK, 192, 20, 2
+	createvisualtask AnimTask_TranslateMonElliptical, 2, 0, 12, 4, 1, 4
+	createvisualtask AnimTask_AnimateGustTornadoPalette, 5, 1, 70
+	createsprite gGustToTargetSpriteTemplate, ANIM_ATTACKER, 2, -25, 0, 0, 0, 20
+	createsprite gGustToTargetSpriteTemplate, ANIM_ATTACKER, 2, 25, 0, 0, 0, 20
+	delay 24
+	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 0, 24, 0, 0, 9
+	delay 17
+	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 16, 0, 1, 1
+	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -16, 0, 1, 1
+	loopsewithpan SE_M_DOUBLE_SLAP, 63, 5, 2
+	waitforvisualfinish
+	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 11
+	waitforvisualfinish
+	clearmonbg ANIM_DEF_PARTNER
+	blendoff
 	end
 
 Move_QUICK_ATTACK:: @ 81CA9C4
@@ -6724,30 +6785,6 @@ Move_GUST:: @ 81CF648
 	createvisualtask AnimTask_ShakeMon2, 5, 1, 1, 0, 7, 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
 	playsewithpan SE_M_GUST2, 63
-	waitforvisualfinish
-	clearmonbg ANIM_DEF_PARTNER
-	blendoff
-	end
-
-Move_WING_ATTACK:: @ 81CF699
-	loadspritegfx ANIM_TAG_GUST
-	loadspritegfx ANIM_TAG_IMPACT
-	monbg ANIM_DEF_PARTNER
-	monbgprio_28 1
-	setalpha 12, 8
-	loopsewithpan SE_M_WING_ATTACK, 192, 20, 2
-	createvisualtask AnimTask_TranslateMonElliptical, 2, 0, 12, 4, 1, 4
-	createvisualtask AnimTask_AnimateGustTornadoPalette, 5, 1, 70
-	createsprite gGustToTargetSpriteTemplate, ANIM_ATTACKER, 2, -25, 0, 0, 0, 20
-	createsprite gGustToTargetSpriteTemplate, ANIM_ATTACKER, 2, 25, 0, 0, 0, 20
-	delay 24
-	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 0, 24, 0, 0, 9
-	delay 17
-	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 16, 0, 1, 1
-	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -16, 0, 1, 1
-	loopsewithpan SE_M_DOUBLE_SLAP, 63, 5, 2
-	waitforvisualfinish
-	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 11
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -21065,7 +21102,7 @@ Move_SPEED_SWAP::
 
 Move_SMART_STRIKE::
 	loadspritegfx ANIM_TAG_POWER_GEM @gem
-	loadspritegfx ANIM_TAG_AIR_WAVE @sonicboom
+	loadspritegfx ANIM_TAG_AIR_WAVE @sonicscreech
 	loadspritegfx ANIM_TAG_IMPACT @hit
 	loadspritegfx ANIM_TAG_FLASH_CANNON_BALL @ball
 	loadspritegfx ANIM_TAG_LOCK_ON
@@ -21080,7 +21117,7 @@ Move_SMART_STRIKE::
 	monbg ANIM_DEF_PARTNER
 	monbgprio_28 ANIM_TARGET
 	setalpha 12, 8
-	call SonicBoomProjectile
+	call SonicScreechProjectile
 	launchtask AnimTask_ShakeMon 0x2 0x5 0x1 0x3 0x0 0xa 0x1
 	loadspritegfx ANIM_TAG_FLASH_CANNON_BALL
 	launchtemplate gSmartStrikeImpactTemplate 0x84 0x5 0x0 0x0 0x8 0x1 0x0
@@ -21134,7 +21171,7 @@ Move_REVELATION_DANCE::
 	loadspritegfx ANIM_TAG_ORBS @circles
 	loadspritegfx ANIM_TAG_FLOWER @particles
 	loadspritegfx ANIM_TAG_JAGGED_MUSIC_NOTE @another yellow
-	loadspritegfx ANIM_TAG_AIR_WAVE @sonicboom
+	loadspritegfx ANIM_TAG_AIR_WAVE @sonicscreech
 	loadspritegfx ANIM_TAG_THIN_RING @ring
 	monbg ANIM_TARGET
 	launchtask AnimTask_BlendSelected 0xa 0x5 ANIM_PAL_BG 0x1 0x0 0xF 0x0

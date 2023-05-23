@@ -1536,6 +1536,16 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * buff pidgey line, according to Zen Mode YT changes, give u-turn and my move dive bomb
 * gave scrappy, think setup correctly so scrappy should work? need test
 * 
+* attempt make //mirror move use battlehistory to make it turn into any move already used in battle, that it doesn't already know?
+* want to make it work like copycat, where the mirrormove turns into that move, either for the remainder of battle, or until switch out (in case you get a bad option)
+* that said it would doubley suck if you got a good copy, switched out and lost it. so think will make it last for battle duration
+* 
+* rename sonic boom sonic screech, and make new move sonicboom, which will be special flying move think also do speed boost, so equivalent to flamecharge
+* combine animations of agility, and wing attack, for new animation - DONE  need add to more mon, flying types high flying speed
+* meant to be a little competition for fly
+* 
+* since sonic boom is something usually done while flying fast, but the move sonic boom, isn't learned by flying types, and has more to do with sound than speed
+* 
 * fix ditto make imposter its only ability (or just but  speed stat so it can transform easier)
 * change imposter to be more than just a free transform on switch.
 * instead make it transform into a random pokemon that resists the typeing of the target.

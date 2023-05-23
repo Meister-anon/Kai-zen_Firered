@@ -1102,7 +1102,7 @@ static const u16 sMultiTaskExcludedEffects[] =
     EFFECT_TRIPLE_KICK,
     EFFECT_SUPER_FANG,
     EFFECT_ENDEAVOR,
-    EFFECT_SONICBOOM,
+    EFFECT_SONIC_SCREECH,
     EFFECT_COUNTER, //because can't crit
     EFFECT_LEVEL_DAMAGE, //same
     EFFECT_DRAGON_RAGE,

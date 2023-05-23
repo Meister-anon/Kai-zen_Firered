@@ -126,7 +126,7 @@ static const u16 sEasyChatGroup_Move1[] = {
     MOVE_SMOKESCREEN,
     MOVE_SNORE,
     MOVE_SOLAR_BEAM,
-    MOVE_SONIC_BOOM,
+    MOVE_SONIC_SCREECH,
     MOVE_SPARK,
     MOVE_SPIDER_WEB,
     MOVE_SPITE,

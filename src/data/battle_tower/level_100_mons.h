@@ -525,7 +525,7 @@ const struct BattleTowerPokemonTemplate gBattleTowerLevel100Mons[] =
 		.heldItem = BATTLE_TOWER_ITEM_FOCUS_BAND,
 		.teamFlags = 0x03,
 		.moves = {
-			MOVE_SONIC_BOOM,
+			MOVE_SONIC_SCREECH,
 			MOVE_SCREECH,
 			MOVE_SPARK,
 			MOVE_SELF_DESTRUCT

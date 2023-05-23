@@ -1870,7 +1870,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_SuperNerdAidan[] = 
         .iv = 0,
         .lvl = 20,
         .species = SPECIES_VOLTORB,
-        .moves = {MOVE_SONIC_BOOM, MOVE_SCREECH, MOVE_TACKLE, MOVE_CHARGE},
+        .moves = {MOVE_SONIC_SCREECH, MOVE_SCREECH, MOVE_TACKLE, MOVE_CHARGE},
     },
     {
         .iv = 0,
@@ -1882,13 +1882,13 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_SuperNerdAidan[] = 
         .iv = 0,
         .lvl = 20,
         .species = SPECIES_VOLTORB,
-        .moves = {MOVE_SONIC_BOOM, MOVE_SCREECH, MOVE_TACKLE, MOVE_CHARGE},
+        .moves = {MOVE_SONIC_SCREECH, MOVE_SCREECH, MOVE_TACKLE, MOVE_CHARGE},
     },
     {
         .iv = 0,
         .lvl = 20,
         .species = SPECIES_MAGNEMITE,
-        .moves = {MOVE_SONIC_BOOM, MOVE_SUPERSONIC, MOVE_THUNDER_SHOCK, MOVE_TACKLE},
+        .moves = {MOVE_SONIC_SCREECH, MOVE_SUPERSONIC, MOVE_THUNDER_SHOCK, MOVE_TACKLE},
     },
 };
 
@@ -2412,13 +2412,13 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_BikerNikolas[] = {
         .iv = 0,
         .lvl = 29,
         .species = SPECIES_VOLTORB,
-        .moves = {MOVE_SPARK, MOVE_SONIC_BOOM, MOVE_SCREECH, MOVE_CHARGE},
+        .moves = {MOVE_SPARK, MOVE_SONIC_SCREECH, MOVE_SCREECH, MOVE_CHARGE},
     },
     {
         .iv = 0,
         .lvl = 29,
         .species = SPECIES_VOLTORB,
-        .moves = {MOVE_SPARK, MOVE_SONIC_BOOM, MOVE_SCREECH, MOVE_CHARGE},
+        .moves = {MOVE_SPARK, MOVE_SONIC_SCREECH, MOVE_SCREECH, MOVE_CHARGE},
     },
 };
 
@@ -3762,19 +3762,19 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_JugglerEdward[] = {
         .iv = 0,
         .lvl = 46,
         .species = SPECIES_VOLTORB,
-        .moves = {MOVE_SWIFT, MOVE_LIGHT_SCREEN, MOVE_SPARK, MOVE_SONIC_BOOM},
+        .moves = {MOVE_SWIFT, MOVE_LIGHT_SCREEN, MOVE_SPARK, MOVE_SONIC_SCREECH},
     },
     {
         .iv = 0,
         .lvl = 46,
         .species = SPECIES_VOLTORB,
-        .moves = {MOVE_SWIFT, MOVE_LIGHT_SCREEN, MOVE_SPARK, MOVE_SONIC_BOOM},
+        .moves = {MOVE_SWIFT, MOVE_LIGHT_SCREEN, MOVE_SPARK, MOVE_SONIC_SCREECH},
     },
     {
         .iv = 0,
         .lvl = 47,
         .species = SPECIES_ELECTRODE,
-        .moves = {MOVE_SWIFT, MOVE_SPARK, MOVE_SELF_DESTRUCT, MOVE_SONIC_BOOM},
+        .moves = {MOVE_SWIFT, MOVE_SPARK, MOVE_SELF_DESTRUCT, MOVE_SONIC_SCREECH},
     },
     {
         .iv = 0,
@@ -4717,7 +4717,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_ScientistJose[] = {
         .iv = 0,
         .lvl = 29,
         .species = SPECIES_ELECTRODE,
-        .moves = {MOVE_SPARK, MOVE_SONIC_BOOM, MOVE_SCREECH, MOVE_TACKLE},
+        .moves = {MOVE_SPARK, MOVE_SONIC_SCREECH, MOVE_SCREECH, MOVE_TACKLE},
     },
     {
         .iv = 0,
@@ -4740,7 +4740,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_ScientistBeau[] = {
         .iv = 0,
         .lvl = 26,
         .species = SPECIES_MAGNETON,
-        .moves = {MOVE_SPARK, MOVE_THUNDER_WAVE, MOVE_SONIC_BOOM, MOVE_SUPERSONIC},
+        .moves = {MOVE_SPARK, MOVE_THUNDER_WAVE, MOVE_SONIC_SCREECH, MOVE_SUPERSONIC},
     },
     {
         .iv = 0,
@@ -4758,7 +4758,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_ScientistBeau[] = {
         .iv = 0,
         .lvl = 26,
         .species = SPECIES_MAGNEMITE,
-        .moves = {MOVE_SPARK, MOVE_THUNDER_WAVE, MOVE_SONIC_BOOM, MOVE_SUPERSONIC},
+        .moves = {MOVE_SPARK, MOVE_THUNDER_WAVE, MOVE_SONIC_SCREECH, MOVE_SUPERSONIC},
     },
 };
 
@@ -4767,7 +4767,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_ScientistTaylor[] =
         .iv = 0,
         .lvl = 25,
         .species = SPECIES_VOLTORB,
-        .moves = {MOVE_SPARK, MOVE_SONIC_BOOM, MOVE_SCREECH, MOVE_TACKLE},
+        .moves = {MOVE_SPARK, MOVE_SONIC_SCREECH, MOVE_SCREECH, MOVE_TACKLE},
     },
     {
         .iv = 0,
@@ -4779,13 +4779,13 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_ScientistTaylor[] =
         .iv = 0,
         .lvl = 25,
         .species = SPECIES_MAGNETON,
-        .moves = {MOVE_THUNDER_WAVE, MOVE_SONIC_BOOM, MOVE_SUPERSONIC, MOVE_THUNDER_SHOCK},
+        .moves = {MOVE_THUNDER_WAVE, MOVE_SONIC_SCREECH, MOVE_SUPERSONIC, MOVE_THUNDER_SHOCK},
     },
     {
         .iv = 0,
         .lvl = 25,
         .species = SPECIES_MAGNEMITE,
-        .moves = {MOVE_THUNDER_WAVE, MOVE_SONIC_BOOM, MOVE_SUPERSONIC, MOVE_THUNDER_SHOCK},
+        .moves = {MOVE_THUNDER_WAVE, MOVE_SONIC_SCREECH, MOVE_SUPERSONIC, MOVE_THUNDER_SHOCK},
     },
     {
         .iv = 0,
@@ -4826,7 +4826,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_ScientistEd[] = {
         .iv = 0,
         .lvl = 28,
         .species = SPECIES_VOLTORB,
-        .moves = {MOVE_SPARK, MOVE_SONIC_BOOM, MOVE_SCREECH, MOVE_TACKLE},
+        .moves = {MOVE_SPARK, MOVE_SONIC_SCREECH, MOVE_SCREECH, MOVE_TACKLE},
     },
     {
         .iv = 0,
@@ -4838,7 +4838,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_ScientistEd[] = {
         .iv = 0,
         .lvl = 28,
         .species = SPECIES_MAGNETON,
-        .moves = {MOVE_SPARK, MOVE_THUNDER_WAVE, MOVE_SONIC_BOOM, MOVE_SUPERSONIC},
+        .moves = {MOVE_SPARK, MOVE_THUNDER_WAVE, MOVE_SONIC_SCREECH, MOVE_SUPERSONIC},
     },
 };
 
@@ -5698,7 +5698,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_CooltrainerGeorge[]
         .iv = 100,
         .lvl = 42,
         .species = SPECIES_ELECTRODE,
-        .moves = {MOVE_SPARK, MOVE_SONIC_BOOM, MOVE_SCREECH, MOVE_LIGHT_SCREEN},
+        .moves = {MOVE_SPARK, MOVE_SONIC_SCREECH, MOVE_SCREECH, MOVE_LIGHT_SCREEN},
     },
     {
         .iv = 100,
@@ -6423,7 +6423,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderLtSurge[] = {
         .iv = 0,
         .lvl = 21,
         .species = SPECIES_VOLTORB,
-        .moves = {MOVE_SONIC_BOOM, MOVE_TACKLE, MOVE_SCREECH, MOVE_SHOCK_WAVE},
+        .moves = {MOVE_SONIC_SCREECH, MOVE_TACKLE, MOVE_SCREECH, MOVE_SHOCK_WAVE},
     },
     {
         .iv = 0,
@@ -8458,13 +8458,13 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_ScientistGideon[] =
         .iv = 0,
         .lvl = 46,
         .species = SPECIES_VOLTORB,
-        .moves = {MOVE_SWIFT, MOVE_SCREECH, MOVE_SPARK, MOVE_SONIC_BOOM},
+        .moves = {MOVE_SWIFT, MOVE_SCREECH, MOVE_SPARK, MOVE_SONIC_SCREECH},
     },
     {
         .iv = 0,
         .lvl = 46,
         .species = SPECIES_ELECTRODE,
-        .moves = {MOVE_SPARK, MOVE_SONIC_BOOM, MOVE_SCREECH, MOVE_CHARGE},
+        .moves = {MOVE_SPARK, MOVE_SONIC_SCREECH, MOVE_SCREECH, MOVE_CHARGE},
     },
     {
         .iv = 0,
@@ -8476,7 +8476,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_ScientistGideon[] =
         .iv = 0,
         .lvl = 46,
         .species = SPECIES_MAGNETON,
-        .moves = {MOVE_TRI_ATTACK, MOVE_SPARK, MOVE_THUNDER_WAVE, MOVE_SONIC_BOOM},
+        .moves = {MOVE_TRI_ATTACK, MOVE_SPARK, MOVE_THUNDER_WAVE, MOVE_SONIC_SCREECH},
     },
     {
         .iv = 0,
@@ -9122,7 +9122,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_JugglerMason[] = {
         .iv = 0,
         .lvl = 47,
         .species = SPECIES_VOLTORB,
-        .moves = {MOVE_SWIFT, MOVE_LIGHT_SCREEN, MOVE_SPARK, MOVE_SONIC_BOOM},
+        .moves = {MOVE_SWIFT, MOVE_LIGHT_SCREEN, MOVE_SPARK, MOVE_SONIC_SCREECH},
     },
     {
         .iv = 0,
@@ -9134,7 +9134,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_JugglerMason[] = {
         .iv = 0,
         .lvl = 47,
         .species = SPECIES_VOLTORB,
-        .moves = {MOVE_SWIFT, MOVE_LIGHT_SCREEN, MOVE_SPARK, MOVE_SONIC_BOOM},
+        .moves = {MOVE_SWIFT, MOVE_LIGHT_SCREEN, MOVE_SPARK, MOVE_SONIC_SCREECH},
     },
     {
         .iv = 0,

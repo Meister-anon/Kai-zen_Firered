@@ -553,7 +553,7 @@ const u16 gEggMoves[] = {
     egg_moves(SPINARAK,
               MOVE_PSYBEAM,
               MOVE_DISABLE,
-              MOVE_SONIC_BOOM,
+              MOVE_SONIC_SCREECH,
               MOVE_BATON_PASS,
               MOVE_PURSUIT,
               MOVE_SIGNAL_BEAM),

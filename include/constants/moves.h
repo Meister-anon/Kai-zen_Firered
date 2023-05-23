@@ -50,7 +50,7 @@
 #define MOVE_ROAR 46
 #define MOVE_SING 47
 #define MOVE_SUPERSONIC 48
-#define MOVE_SONIC_BOOM 49
+#define MOVE_SONIC_SCREECH 49
 #define MOVE_DISABLE 50
 #define MOVE_ACID 51
 #define MOVE_EMBER 52
@@ -120,7 +120,7 @@
 #define MOVE_FOCUS_ENERGY 116
 #define MOVE_BIDE 117
 #define MOVE_METRONOME 118
-#define MOVE_MIRROR_MOVE 119
+#define MOVE_MIRROR_MOVE 119	//mirror move is meant to be a parrot like ability to copy, maybe can use battlehistory to make it turn into any move already used it doesn't already know?
 #define MOVE_SELF_DESTRUCT 120
 #define MOVE_EGG_BOMB 121
 #define MOVE_AURORA_VEIL 122	//MOVE_AURORA_VEIL swaped for Lick, to make cleardefoghazarad work
@@ -787,6 +787,7 @@
 #define MOVE_UP_ROOT 760
 #define MOVE_DIVE_BOMB 761
 #define MOVE_NETTLE_WHIP 762	//Will be grass move that can apply burn	//MOVE_NETTLE_WHIP	MOVE_BURNING_VINE    MOVE_NETTLE_WHIP
+#define MOVE_SONIC_BOOM 763	//new move
 
 //#define MOVES_COUNT_GEN8 757
 
@@ -795,7 +796,7 @@
 //for completion new moves have to be defined in:  move_descriptions.inc,  move_names.h, battle_anim_scripts.s & data_8479668.s
 // also need actual move data in battle_moves.h
 
-#define LAST_MOVE_INDEX     MOVE_NETTLE_WHIP
+#define LAST_MOVE_INDEX     MOVE_SONIC_BOOM
 
 #define MOVES_COUNT_GEN8 (LAST_MOVE_INDEX + 1) //changed so define auto updates
 

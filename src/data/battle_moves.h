@@ -761,9 +761,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_STATUS,
     },
 
-    [MOVE_SONIC_BOOM] =
+    [MOVE_SONIC_SCREECH] =
     {
-        .effect = EFFECT_SONICBOOM,
+        .effect = EFFECT_SONIC_SCREECH,
         .power = 1,
         .type = TYPE_NORMAL,
         .accuracy = 90,
@@ -773,7 +773,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED| FLAG_SOUND,
         .split = SPLIT_SPECIAL,
-    },
+    },//sonic screech 
 
     [MOVE_DISABLE] =
     {
@@ -3717,13 +3717,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_TWISTER] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_5
-            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_2X_IN_AIR,
-        #else
-            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_2X_IN_AIR,
-        #endif
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_2X_IN_AIR,
         .effect = EFFECT_TWISTER,
-        .power = 40,
+        .power = 55,
         .type = TYPE_DRAGON,
         .accuracy = 100,
         .pp = 20,
@@ -11644,5 +11640,18 @@ use wonder gaurd logic to determine its super effective
         .split = SPLIT_PHYSICAL,
     },//GRASS types will be immune to this status condition, potentially make its own effect, then can do grass status exclusion with bs command
 
+    [MOVE_SONIC_BOOM] =
+        {
+            .effect = EFFECT_SPEED_UP_HIT,
+            .power = 70,
+            .type = TYPE_FLYING,
+            .accuracy = 100,
+            .pp = 20,
+            .secondaryEffectChance = 100,
+            .target = MOVE_TARGET_SELECTED,
+            .priority = 0,
+            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+            .split = SPLIT_SPECIAL,
+        },
 
 };

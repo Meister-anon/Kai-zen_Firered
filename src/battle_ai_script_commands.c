@@ -478,7 +478,7 @@ static void ClearBattlerMoveHistory(u8 battlerId)
         BATTLE_HISTORY->usedMoves[battlerId / 2][i] = MOVE_NONE;
 }
 
-void RecordKnownMove(u8 battlerId, u32 move)
+void RecordKnownMove(u8 battlerId, u32 move)    //file equals battle_ai_util.c in emerald
 {
     s32 i;
     for (i = 0; i < MAX_MON_MOVES; i++)
