@@ -1499,7 +1499,7 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * 
 * for setting up rattled to activate on intimidate add check for gSpecialStatuses[battler].intimidatedMon = 1;  if true i.e == 1 
 * activate rattled
-* note- also found all I needd to reactivate switch in ability is to call the battlescript again
+* note- 
 * 
 * fix moves mirror move, copycat etc. sketch monotype to use lasthitby  value, rather than enemy or last used move for target, so it doesnt fail
 * if used first. -_-
