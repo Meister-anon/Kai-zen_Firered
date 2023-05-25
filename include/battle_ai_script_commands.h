@@ -18,5 +18,6 @@ void ClearBankAbilityHistory(u8 bank);
 void RecordItemEffectBattle(u8 bank, u8 itemEffect);
 void ClearBankItemEffectHistory(u8 bank);
 u8 BattleAI_ChooseMoveOrAction(void);
+s32 CountUsablePartyMons(u8 battlerId); //ported from emerald, only used in emergency exit rn.
 
 #endif // GUARD_BATTLE_AI_SCRIPT_COMMANDS_H

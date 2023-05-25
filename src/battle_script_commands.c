@@ -1255,6 +1255,7 @@ static void atk00_attackcanceler(void)
         }
     }
     gHitMarker |= HITMARKER_OBEYS;
+
     if (gProtectStructs[gBattlerTarget].bounceMove
         && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED
         && !gProtectStructs[gBattlerAttacker].usesBouncedMove)
@@ -1277,8 +1278,8 @@ static void atk00_attackcanceler(void)
         return;
     }
     else if (GetBattlerAbility(gBattlerTarget) == ABILITY_MAGIC_BOUNCE
-             && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED
-             && !gProtectStructs[gBattlerAttacker].usesBouncedMove)
+        && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED
+        && !gProtectStructs[gBattlerAttacker].usesBouncedMove)
     {
         RecordAbilityBattle(gBattlerTarget, ABILITY_MAGIC_BOUNCE);
         gProtectStructs[gBattlerTarget].usesBouncedMove = TRUE;
@@ -1287,6 +1288,32 @@ static void atk00_attackcanceler(void)
         gBattlescriptCurrInstr = BattleScript_MagicCoatBounce;
         return;
     }
+
+    //need to fill in condition more - DONE 
+    //effects are done, need test but should work, what's missing is the reactivation condition, for if it wasn't triggered on previous battler
+    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_FOREWARN
+        && (gCurrentMove == gSpecialStatuses[gBattlerTarget].forewarnedMove)
+        && !gSpecialStatuses[gBattlerTarget].forewarnDone)
+    {
+        gSpecialStatuses[gBattlerTarget].forewarnDone = TRUE;
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gLastLandedMoves[gBattlerTarget] = 0;
+        gLastHitByType[gBattlerTarget] = 0;
+        gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG;
+        ++gBattlescriptCurrInstr;
+    }
+    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_ANTICIPATION
+        && (gCurrentMove == gSpecialStatuses[gBattlerTarget].anticipatedMove)
+        && !gSpecialStatuses[gBattlerTarget].anticipationDone)
+    {
+        gSpecialStatuses[gBattlerTarget].anticipationDone = TRUE;
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gLastLandedMoves[gBattlerTarget] = 0;
+        gLastHitByType[gBattlerTarget] = 0;
+        gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG;
+        ++gBattlescriptCurrInstr;
+    }
+
     for (i = 0; i < gBattlersCount; ++i)
     {
         if ((gProtectStructs[gBattlerByTurnOrder[i]].stealMove) && gBattleMoves[gCurrentMove].flags & FLAG_SNATCH_AFFECTED)
@@ -2027,8 +2054,8 @@ static void atk06_typecalc(void)
         
     }
     //joat check jack of all trades  inclusive normal type dmg buff 
-    //joat stacks w stab long as not normal move,
-    if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL) && moveType != TYPE_NORMAL)
+    //joat stacks w stab long as not normal move, added mystrey type exclusion for normalize change
+    if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL) && moveType != (TYPE_NORMAL || TYPE_MYSTERY))
     {
         gBattleMoveDamage = gBattleMoveDamage * 125;
         gBattleMoveDamage = gBattleMoveDamage / 100;
@@ -2144,7 +2171,7 @@ static void atk06_typecalc(void)
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
     if (gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE)
-        gProtectStructs[gBattlerAttacker].targetNotAffected = 1;
+        gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
     ++gBattlescriptCurrInstr;
 }
 
@@ -2181,14 +2208,14 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
                 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
             {
                 gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
-                gProtectStructs[gBattlerAttacker].targetNotAffected = 1;
+                gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
             }
             if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2 &&
                 gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2 &&
                 TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
             {
                 gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
-                gProtectStructs[gBattlerAttacker].targetNotAffected = 1;
+                gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
             }
             if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
                 type3 != TYPE_MYSTERY &&
@@ -2196,7 +2223,7 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
                 type3 != type1)
             {
                 gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
-                gProtectStructs[gBattlerAttacker].targetNotAffected = 1;
+                gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
             }
             // check super effective
             if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
@@ -2315,7 +2342,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
 
     //joat check jack of all trades  inclusive normal type dmg buff 
     //joat stacks w stab long as not normal move,
-    if (IS_BATTLER_OF_TYPE(attacker, TYPE_NORMAL) && moveType != TYPE_NORMAL)
+    if (IS_BATTLER_OF_TYPE(attacker, TYPE_NORMAL) && moveType != (TYPE_NORMAL || TYPE_MYSTERY))
     {
         gBattleMoveDamage = gBattleMoveDamage * 125;
         gBattleMoveDamage = gBattleMoveDamage / 100;
@@ -4162,6 +4189,10 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     if (gBattleMoves[gCurrentMove].effect == ITS_A_TRAP)   //if this works make a define for trap effects & separate effect & move effect & battlscript for each
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //that way may not need to make a separate status,// seems to work no apparent bugs
 
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
+        SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
+    
+
     /*if (gBattleMoves[gCurrentMove].effect == EFFECT_RECHARGE) 
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  may not need as recharge alrady works with 0 effect chance - actually it works because the battlescript already sets it to certain
         yeah don't need because the move effect sets a status and the status is what prevents attack,
@@ -5389,6 +5420,8 @@ static void atk48_playstatchangeanimation(void)
                         && gBattleMons[gActiveBattler].ability != ABILITY_LIQUID_METAL
                         && !(gBattleMons[gActiveBattler].ability == ABILITY_KEEN_EYE && currStat == STAT_ACC)
                         && !(gBattleMons[gActiveBattler].ability == ABILITY_TANGLED_FEET && currStat == STAT_SPEED)
+                        && !(gBattleMons[gActiveBattler].ability == ABILITY_AVIATOR && currStat == STAT_SPEED)
+                        && !(gBattleMons[gActiveBattler].ability == ABILITY_RUN_AWAY && currStat == STAT_SPEED)
                         && !(gBattleMons[gActiveBattler].ability == ABILITY_HYPER_CUTTER && currStat == STAT_ATK))
                 {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > 0)
@@ -5454,6 +5487,30 @@ static void atk48_playstatchangeanimation(void)
     }
 }
 
+#define SYMBIOSIS_CHECK(battler, ally)                                                                                               \
+    GetBattlerAbility(ally) == ABILITY_SYMBIOSIS                   \
+    && gBattleMons[battler].item == ITEM_NONE                      \
+    && gBattleMons[ally].item != ITEM_NONE                         \
+    && CanBattlerGetOrLoseItem(battler, gBattleMons[ally].item)    \
+    && CanBattlerGetOrLoseItem(ally, gBattleMons[ally].item)       \
+    && gBattleMons[battler].hp != 0                                \
+    && gBattleMons[ally].hp != 0
+
+static u32 GetNextTarget(u32 moveTarget)
+{
+    u32 i;
+    for (i = 0; i < MAX_BATTLERS_COUNT; i++)
+    {
+        if (i != gBattlerAttacker
+            && IsBattlerAlive(i)
+            && !(gBattleStruct->targetsDone[gBattlerAttacker] & gBitTable[i])
+            && (GetBattlerSide(i) != GetBattlerSide(gBattlerAttacker) || moveTarget == MOVE_TARGET_FOES_AND_ALLY))
+            break;
+    }
+    return i;
+}
+
+#define ATK_49_MOVEEND
 static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  //vsonic IMPORTANT
 {
     s32 i;
@@ -5493,7 +5550,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SPIKE_SHIELD);//move change mostly works except spikes are set on wrong side with bs commad
-                        BattleScriptPushCursor(); //trysetspikes  need swap sides of argumen
+                        BattleScriptPushCursor(); //trysetspikes  need swap sides of argumen    //think done?, tested and worked in emerald
                         gBattlescriptCurrInstr = BattleScript_SpikyShieldEffect;
                         effect = 1;
                     }
@@ -5515,12 +5572,12 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                             gBattleMoveDamage = 1;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SHIELD_BASH);
                         BattleScriptPushCursor();
-                        gBattlescriptCurrInstr = BattleScript_ShieldBash;//needs animation
+                        gBattlescriptCurrInstr = BattleScript_ShieldBash;//needs animation  //done
                         effect = 1;
                     }
                     /*else if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //should do what i want
                     {
-                        gBattleScripting.moveendState++;
+                        ++gBattleScripting.atk49_state;
                         break;
                     }*/  //having this broke things so removed, for some reason non damaging moves were being caught i.e growl
                 }
@@ -5782,7 +5839,30 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_NEXT_TARGET: // For moves hitting two opposing Pokemon.
+        /*case ATK49_MAGICIAN:    //this and pickpocket should go in abilityeffects function instead, this should only be for   actual move effect only, think wil move the item stuff recently ported from emerald out too
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_MAGICIAN
+                && gCurrentMove != MOVE_FLING && gCurrentMove != MOVE_NATURAL_GIFT
+                && gBattleMons[gBattlerAttacker].item == ITEM_NONE
+                && gBattleMons[gBattlerTarget].item != ITEM_NONE
+                && IsBattlerAlive(gBattlerAttacker)
+                && TARGET_TURN_DAMAGED
+                //&& CanStealItem(gBattlerAttacker, gBattlerTarget, gBattleMons[gBattlerTarget].item)
+                && !gSpecialStatuses[gBattlerAttacker].gemBoost   // In base game, gems are consumed after magician would activate.
+                && !(gWishFutureKnock.knockedOffMons[GetBattlerSide(gBattlerTarget)] & gBitTable[gBattlerPartyIndexes[gBattlerTarget]])
+                && !DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove)
+                && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                && (GetBattlerAbility(gBattlerTarget) != ABILITY_STICKY_HOLD || !IsBattlerAlive(gBattlerTarget)))
+            {
+                StealTargetItem(gBattlerAttacker, gBattlerTarget);
+                gBattleScripting.battler = gBattlerAbility = gBattlerAttacker;
+                gEffectBattler = gBattlerTarget;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_MagicianActivates;
+                effect = TRUE;
+            }
+            ++gBattleScripting.atk49_state;
+            break;*/
+        /*case ATK49_NEXT_TARGET: // For moves hitting two opposing Pokemon.
             if (!(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
              && gBattleTypeFlags & BATTLE_TYPE_DOUBLE
              && !gProtectStructs[gBattlerAttacker].chargingTurn
@@ -5806,7 +5886,367 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                 }
             }
             ++gBattleScripting.atk49_state;
+            break;*/
+        case ATK49_NEXT_TARGET: // For moves hitting two opposing Pokemon.
+        {
+            u16 moveTarget = GetBattlerMoveTargetType(gBattlerAttacker, gCurrentMove);
+            // Set a flag if move hits either target (for throat spray that can't check damage)
+            if (!(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
+             && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+                gProtectStructs[gBattlerAttacker].targetNotAffected = FALSE;
+
+            gBattleStruct->targetsDone[gBattlerAttacker] |= gBitTable[gBattlerTarget];
+            if (!(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
+                && gBattleTypeFlags & BATTLE_TYPE_DOUBLE
+                && !gProtectStructs[gBattlerAttacker].chargingTurn
+                && (moveTarget == MOVE_TARGET_BOTH
+                    || moveTarget == MOVE_TARGET_FOES_AND_ALLY)
+                && !(gHitMarker & HITMARKER_NO_ATTACKSTRING))
+            {
+                u32 nextTarget = GetNextTarget(moveTarget);
+                gHitMarker |= HITMARKER_NO_PPDEDUCT;
+
+                if (nextTarget != MAX_BATTLERS_COUNT)
+                {
+                    gBattleStruct->moveTarget[gBattlerAttacker] = gBattlerTarget = nextTarget; // Fix for moxie spread moves
+                    gBattleScripting.moveendState = 0;
+                    MoveValuesCleanUp();
+                    gBattleScripting.moveEffect = gBattleScripting.savedMoveEffect;
+                    BattleScriptPush(gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect]);
+                    gBattlescriptCurrInstr = BattleScript_FlushMessageBox;
+                    return;
+                }
+                // Check if the move used was actually a bounced move. If so, we need to go back to the original attacker and make sure, its move hits all 2 or 3 pokemon.
+                else if (gProtectStructs[gBattlerAttacker].usesBouncedMove)
+                {
+                    u8 originalBounceTarget = gBattlerAttacker;
+                    gBattlerAttacker = gBattleStruct->attackerBeforeBounce;
+                    gBattleStruct->targetsDone[gBattlerAttacker] |= gBitTable[originalBounceTarget];
+                    gBattleStruct->targetsDone[originalBounceTarget] = 0;
+
+                    nextTarget = GetNextTarget(moveTarget);
+                    if (nextTarget != MAX_BATTLERS_COUNT)
+                    {
+                        // We found another target for the original move user.
+                        gBattleStruct->moveTarget[gBattlerAttacker] = gBattlerTarget = nextTarget;
+                        gBattleScripting.moveendState = 0;
+                        gBattleScripting.animTurn = 0;
+                        gBattleScripting.animTargetsHit = 0;
+                        MoveValuesCleanUp();
+                        BattleScriptPush(gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect]);
+                        gBattlescriptCurrInstr = BattleScript_FlushMessageBox;
+                        return;
+                    }
+                }
+
+                gHitMarker |= HITMARKER_NO_ATTACKSTRING;
+                gHitMarker &= ~HITMARKER_NO_PPDEDUCT;
+            }
+            RecordLastUsedMoveBy(gBattlerAttacker, gCurrentMove);
+            ++gBattleScripting.atk49_state;
             break;
+        }
+        case ATK49_MULTIHIT_MOVE:
+        {
+            if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+            && !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
+            && gMultiHitCounter
+            && !(gCurrentMove == MOVE_PRESENT && gBattleStruct->presentBasePower == 0)) // Silly edge case
+            {
+                gBattleScripting.multihitString[4]++;
+                if (--gMultiHitCounter == 0)
+                {
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_MultiHitPrintStrings;
+                    effect = TRUE;
+                }
+                else
+                {
+                    if (gCurrentMove == MOVE_DRAGON_DARTS)
+                    {
+                        // TODO
+                    }
+
+                    if (gBattleMons[gBattlerAttacker].hp
+                    && gBattleMons[gBattlerTarget].hp
+                    && (gChosenMove == MOVE_SLEEP_TALK || !(gBattleMons[gBattlerAttacker].status1 & STATUS1_SLEEP))
+                    && !(gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE))
+                    {
+                        if (gSpecialStatuses[gBattlerAttacker].parentalBondState)
+                            gSpecialStatuses[gBattlerAttacker].parentalBondState--;
+
+                        gHitMarker |= (HITMARKER_NO_PPDEDUCT | HITMARKER_NO_ATTACKSTRING);
+                        gBattleScripting.animTargetsHit = 0;
+                        gBattleScripting.moveendState = 0;
+                        gSpecialStatuses[gBattlerTarget].sturdied = 0;
+                        gSpecialStatuses[gBattlerTarget].focusBanded = 0; // Delete this line to make Focus Band last for the duration of the whole move turn.
+                        gSpecialStatuses[gBattlerTarget].focusSashed = 0; // Delete this line to make Focus Sash last for the duration of the whole move turn.
+                        gSpecialStatuses[gBattlerAttacker].multiHitOn = TRUE;
+                        MoveValuesCleanUp();
+                        BattleScriptPush(gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect]);
+                        gBattlescriptCurrInstr = BattleScript_FlushMessageBox;
+                        return;
+                    }
+                    else
+                    {
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_MultiHitPrintStrings;
+                        effect = TRUE;
+                    }
+                }
+            }
+            gMultiHitCounter = 0;
+            gSpecialStatuses[gBattlerAttacker].parentalBondState = PARENTAL_BOND_OFF;
+            gSpecialStatuses[gBattlerAttacker].multiHitOn = 0;
+            ++gBattleScripting.atk49_state;
+            break;
+        }
+        case ATK49_EJECT_BUTTON:    //think move to itemeffects function
+            if (gBattleMoves[gCurrentMove].effect != EFFECT_HIT_SWITCH_TARGET
+              && IsBattlerAlive(gBattlerAttacker)
+              //&& !TestSheerForceFlag(gBattlerAttacker, gCurrentMove)
+              && (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER || (gBattleTypeFlags & BATTLE_TYPE_TRAINER)))
+            {
+                // Since we check if battler was damaged, we don't need to check move result.
+                // In fact, doing so actually prevents multi-target moves from activating eject button properly
+                u8 battlers[4] = {0, 1, 2, 3};
+                SortBattlersBySpeed(battlers, FALSE);
+                for (i = 0; i < gBattlersCount; i++)
+                {
+                    u8 battler = battlers[i];
+                    // Attacker is the damage-dealer, battler is mon to be switched out
+                    if (IsBattlerAlive(battler)
+                      && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_BUTTON
+                      && !DoesSubstituteBlockMove(gBattlerAttacker, battler, gCurrentMove)
+                      && (gSpecialStatuses[battler].physicalDmg != 0 || gSpecialStatuses[battler].specialDmg != 0)
+                      && CountUsablePartyMons(battler) > 0)  // Has mon to switch into
+                    {
+                        gActiveBattler = gBattleScripting.battler = battler;
+                        gLastUsedItem = gBattleMons[battler].item;
+                        if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
+                            gBattlescriptCurrInstr = BattleScript_MoveEnd;  // Prevent user switch-in selection
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_EjectButtonActivates;
+                        effect = TRUE;
+                        break; // Only the fastest Eject Button activates
+                    }
+                }
+            }
+            ++gBattleScripting.atk49_state;
+            break;
+        case ATK49_RED_CARD:    //think move to itemeffects function
+            if (gBattleMoves[gCurrentMove].effect != EFFECT_HIT_SWITCH_TARGET
+              && IsBattlerAlive(gBattlerAttacker)
+              //&& !TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
+              //&& GetBattlerAbility(gBattlerAttacker) != ABILITY_GUARD_DOG)
+            {
+                // Since we check if battler was damaged, we don't need to check move result.
+                // In fact, doing so actually prevents multi-target moves from activating red card properly
+                u8 battlers[4] = {0, 1, 2, 3};
+                SortBattlersBySpeed(battlers, FALSE);
+                for (i = 0; i < gBattlersCount; i++)
+                {
+                    u8 battler = battlers[i];
+                    // Search for fastest hit pokemon with a red card
+                    // Attacker is the one to be switched out, battler is one with red card
+                    if (battler != gBattlerAttacker
+                      && IsBattlerAlive(battler)
+                      && !DoesSubstituteBlockMove(gBattlerAttacker, battler, gCurrentMove)
+                      && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_RED_CARD
+                      && (gSpecialStatuses[battler].physicalDmg != 0 || gSpecialStatuses[battler].specialDmg != 0)
+                      && CanBattlerSwitch(gBattlerAttacker))
+                    {
+                        gLastUsedItem = gBattleMons[battler].item;
+                        gActiveBattler = gBattleStruct->savedBattlerTarget = gBattleScripting.battler = battler;  // Battler with red card
+                        gEffectBattler = gBattlerAttacker;
+                        if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
+                            gBattlescriptCurrInstr = BattleScript_MoveEnd;  // Prevent user switch-in selection
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_RedCardActivates;
+                        effect = TRUE;
+                        break;  // Only fastest red card activates
+                    }
+                }
+            }
+            ++gBattleScripting.atk49_state;
+            break;
+        case ATK49_EJECT_PACK:  //think move to item effects function
+            {
+                u8 battlers[4] = {0, 1, 2, 3};
+                SortBattlersBySpeed(battlers, FALSE);
+                for (i = 0; i < gBattlersCount; i++)
+                {
+                    u8 battler = battlers[i];
+                    if (IsBattlerAlive(battler)
+                     && gProtectStructs[battler].statFell
+                     && gProtectStructs[battler].disableEjectPack == 0
+                     && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_PACK
+                     && !(gCurrentMove == MOVE_PARTING_SHOT && CanBattlerSwitch(gBattlerAttacker))  // Does not activate if attacker used Parting Shot and can switch out
+                     && CountUsablePartyMons(battler) > 0)  // Has mon to switch into
+                    {
+                        gProtectStructs[battler].statFell = FALSE;
+                        gActiveBattler = gBattleScripting.battler = battler;
+                        gLastUsedItem = gBattleMons[battler].item;
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_EjectPackActivates;
+                        effect = TRUE;
+                        break;  // Only fastest eject pack activates
+                    }
+                }
+            }
+            ++gBattleScripting.atk49_state;
+            break;
+        case ATK49_LIFEORB_SHELLBELL:
+            if (ItemBattleEffects(ITEMEFFECT_LIFEORB_SHELLBELL, 0, FALSE))
+                effect = TRUE;
+            ++gBattleScripting.atk49_state;
+            break;/*
+        case ATK49_PICKPOCKET:  //looks clunky, think they had troble setting up will attempt to do it better
+            if (IsBattlerAlive(gBattlerAttacker)
+              && gBattleMons[gBattlerAttacker].item != ITEM_NONE        // Attacker must be holding an item
+              && !(gWishFutureKnock.knockedOffMons[GetBattlerSide(gBattlerAttacker)] & gBitTable[gBattlerPartyIndexes[gBattlerAttacker]])   // But not knocked off
+              && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))  // Pickpocket doesn't activate for sheer force
+              && IsMoveMakingContact(gCurrentMove, gBattlerAttacker)    // Pickpocket requires contact
+              && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))           // Obviously attack needs to have worked
+            {
+                u8 battlers[4] = {0, 1, 2, 3};
+                SortBattlersBySpeed(battlers, FALSE); //If multiple Pokémon with this Ability are hit by the same move that made contact,
+                for (i = 0; i < gBattlersCount; i++)//Pickpocket will activate for the fastest one that does not already have an item.
+                {
+                    u8 battler = battlers[i];
+                    // Attacker is mon who made contact, battler is mon with pickpocket
+                    if (battler != gBattlerAttacker                                                     // Cannot pickpocket yourself
+                      && GetBattlerAbility(battler) == ABILITY_PICKPOCKET                               // Target must have pickpocket ability
+                      && TARGET_TURN_DAMAGED                                                       // Target needs to have been damaged
+                      && !DoesSubstituteBlockMove(gBattlerAttacker, battler, gCurrentMove)              // Subsitute unaffected
+                      && IsBattlerAlive(battler)                                                        // Battler must be alive to pickpocket
+                      && gBattleMons[battler].item == ITEM_NONE                                         // Pickpocketer can't have an item already
+                      //&& CanStealItem(battler, gBattlerAttacker, gBattleMons[gBattlerAttacker].item))   // Cannot steal plates, mega stones, etc
+                    {
+                        gBattlerTarget = gBattlerAbility = battler;
+                        // Battle scripting is super brittle so we shall do the item exchange now (if possible)
+                        if (GetBattlerAbility(gBattlerAttacker) != ABILITY_STICKY_HOLD)
+                            StealTargetItem(gBattlerTarget, gBattlerAttacker);  // Target takes attacker's item
+
+                        gEffectBattler = gBattlerAttacker;
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_Pickpocket;   // Includes sticky hold check to print separate string
+                        effect = TRUE;
+                        break; // Pickpocket activates on fastest mon, so exit loop.
+                    }
+                }
+            }
+            ++gBattleScripting.atk49_state;
+            break;*/
+        case ATK49_DANCER: // Special case because it's so annoying     //think this stays here, in emerald its actually in util.c & here??  very strange effect
+            if (gBattleMoves[gCurrentMove].flags & FLAG_DANCE)
+            {
+                u8 battler, nextDancer = 0;
+
+                if (!(gBattleStruct->lastMoveFailed & gBitTable[gBattlerAttacker]
+                    || (!gSpecialStatuses[gBattlerAttacker].dancerUsedMove
+                        && gProtectStructs[gBattlerAttacker].usesBouncedMove)))
+                {   // Dance move succeeds
+                    // Set target for other Dancer mons; set bit so that mon cannot activate Dancer off of its own move
+                    if (!gSpecialStatuses[gBattlerAttacker].dancerUsedMove)
+                    {
+                        gBattleScripting.savedBattler = gBattlerTarget | 0x4;
+                        gBattleScripting.savedBattler |= (gBattlerAttacker << 4);
+                        gSpecialStatuses[gBattlerAttacker].dancerUsedMove = TRUE;
+                    }
+                    for (battler = 0; battler < MAX_BATTLERS_COUNT; battler++)
+                    {
+                        if (GetBattlerAbility(battler) == ABILITY_DANCER && !gSpecialStatuses[battler].dancerUsedMove)
+                        {
+                            if (!nextDancer || (gBattleMons[battler].speed < gBattleMons[nextDancer & 0x3].speed))
+                                nextDancer = battler | 0x4;
+                        }
+                    }
+                    if (nextDancer && AbilityBattleEffects(ABILITYEFFECT_MOVE_END_OTHER, nextDancer & 0x3, 0, 0, 0))
+                        effect = TRUE;
+                }
+            }
+            ++gBattleScripting.atk49_state;
+            break;
+        case ATK49_EMERGENCY_EXIT: // Special case, because moves hitting multiple opponents stop after switching out
+            for (i = 0; i < gBattlersCount; i++)
+            {
+                if (gBattleResources->flags->flags[i] & RESOURCE_FLAG_EMERGENCY_EXIT)   //vsonic DOUBLE check this, may not need here, or may adapt.
+                {
+                    gBattleResources->flags->flags[i] &= ~RESOURCE_FLAG_EMERGENCY_EXIT;
+                    gSpecialStatuses[i].emergencyExited = TRUE;
+                    gBattlerTarget = gBattlerAbility = i;
+                    BattleScriptPushCursor();
+                    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER || GetBattlerSide(i) == B_SIDE_PLAYER)
+                    {
+                    #if B_ABILITY_POP_UP == TRUE
+                        gBattlescriptCurrInstr = BattleScript_EmergencyExit;
+                    #else
+                        gBattlescriptCurrInstr = BattleScript_EmergencyExitNoPopUp;
+                    #endif
+                    }
+                    else
+                    {
+                    #if B_ABILITY_POP_UP == TRUE
+                        gBattlescriptCurrInstr = BattleScript_EmergencyExitWild;
+                    #else
+                        gBattlescriptCurrInstr = BattleScript_EmergencyExitWildNoPopUp;
+                    #endif
+                    }
+                    return;
+                }
+            }
+            ++gBattleScripting.atk49_state;
+            break;
+        case ATK49_SYMBIOSIS:
+            for (i = 0; i < gBattlersCount; i++)
+            {
+                if ((gSpecialStatuses[i].berryReduced
+                #if B_SYMBIOSIS_GEMS >= GEN_7
+                    || gSpecialStatuses[i].gemBoost
+                #endif
+                    ) && SYMBIOSIS_CHECK(i, BATTLE_PARTNER(i)))
+                {
+                    BestowItem(BATTLE_PARTNER(i), i);
+                    gLastUsedAbility = gBattleMons[BATTLE_PARTNER(i)].ability;
+                    gBattleScripting.battler = gBattlerAbility = BATTLE_PARTNER(i);
+                    gBattlerAttacker = i;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_SymbiosisActivates;
+                    effect = TRUE;
+                }
+            }
+            ++gBattleScripting.atk49_state;
+            break;
+        case ATK49_CLEAR_BITS: // Clear/Set bits for things like using a move for all targets and all hits.
+            if (gSpecialStatuses[gBattlerAttacker].instructedChosenTarget)
+                *(gBattleStruct->moveTarget + gBattlerAttacker) = gSpecialStatuses[gBattlerAttacker].instructedChosenTarget & 0x3;
+            if (gSpecialStatuses[gBattlerAttacker].dancerOriginalTarget)
+                *(gBattleStruct->moveTarget + gBattlerAttacker) = gSpecialStatuses[gBattlerAttacker].dancerOriginalTarget & 0x3;
+
+        /*#if B_RAMPAGE_CANCELLING >= GEN_5
+            if (gBattleMoves[gCurrentMove].effect == EFFECT_RAMPAGE // If we're rampaging
+              && (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)         // And it is unusable
+              && (gBattleMons[gBattlerAttacker].status2 & STATUS2_LOCK_CONFUSE) != STATUS2_LOCK_CONFUSE_TURN(1))  // And won't end this turn
+                CancelMultiTurnMoves(gBattlerAttacker); // Cancel it
+        #endif*/
+
+            gBattleStruct->targetsDone[gBattlerAttacker] = 0;
+            gProtectStructs[gBattlerAttacker].usesBouncedMove = FALSE;
+            gProtectStructs[gBattlerAttacker].targetAffected = FALSE;
+            gBattleStruct->ateBoost[gBattlerAttacker] = 0;
+            gStatuses3[gBattlerAttacker] &= ~STATUS3_ME_FIRST;
+            gSpecialStatuses[gBattlerAttacker].gemBoost = FALSE;
+            gSpecialStatuses[gBattlerAttacker].damagedMons = 0;
+            gSpecialStatuses[gBattlerTarget].berryReduced = FALSE;
+            gBattleScripting.moveEffect = 0;
+            // clear attacker z move data
+            gBattleStruct->zmove.active = FALSE;
+            gBattleStruct->zmove.toBeUsed[gBattlerAttacker] = MOVE_NONE;
+            gBattleStruct->zmove.effect = EFFECT_HIT;
+            ++gBattleScripting.atk49_state;
+            break;
+
         case ATK49_COUNT:
             break;
         }
@@ -5975,7 +6415,7 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
     if (gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE)
-        gProtectStructs[gBattlerAttacker].targetNotAffected = 1;
+        gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
     ++gBattlescriptCurrInstr;
 }
 
@@ -6852,10 +7292,12 @@ static void atk52_switchineffects(void) //important, think can put ability reset
         break;
     }*/
 
+    //start of extra code, 1st attempt at reactivating switch in abilities,  think just delete at start over  in battle_util.c as new abilityeffect
     //believe the switch case and will put the id of the battle on variable i
-    for (i = 0; i < gBattlersCount; ++i)
+    /*for (i = 0; i < gBattlersCount; ++i)
     {//will need to put "gBattleScripting.battler = i - 1;" in top of every switch case
         //syntax was wrong before made an adjustment so hopefully this works/or at least copmiles
+        
         if (IsAbilityOnOpposingSide(gActiveBattler, gBattleMons[i].ability)) {
 
             switch (gBattleMons[i].ability) //I don't understand what a switch is actually doing apparently
@@ -6905,7 +7347,7 @@ static void atk52_switchineffects(void) //important, think can put ability reset
                 break;
             }
         }
-    }    
+    } */   
 }
 
 
@@ -7559,6 +8001,49 @@ static void atk69_adjustsetdamage(void)
         }
     }
     ++gBattlescriptCurrInstr;
+}
+
+// Used by Bestow and Symbiosis to take an item from one battler and give to another.
+static void BestowItem(u32 battlerAtk, u32 battlerDef)
+{
+    gLastUsedItem = gBattleMons[battlerAtk].item;
+
+    gActiveBattler = battlerAtk;
+    gBattleMons[battlerAtk].item = ITEM_NONE;
+    BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[battlerAtk].item), &gBattleMons[battlerAtk].item);
+    MarkBattlerForControllerExec(battlerAtk);
+    CheckSetUnburden(battlerAtk);
+
+    gActiveBattler = battlerDef;
+    gBattleMons[battlerDef].item = gLastUsedItem;
+    BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[battlerDef].item), &gBattleMons[battlerDef].item);
+    MarkBattlerForControllerExec(battlerDef);
+    gBattleResources->flags->flags[battlerDef] &= ~RESOURCE_FLAG_UNBURDEN;
+}
+
+// Called by Cmd_removeitem. itemId represents the item that was removed, not being given.
+static bool32 TrySymbiosis(u32 battler, u32 itemId)
+{
+    if (!gBattleStruct->itemStolen[gBattlerPartyIndexes[battler]].stolen
+        && gBattleStruct->changedItems[battler] == ITEM_NONE
+        && GetBattlerHoldEffect(battler, TRUE) != HOLD_EFFECT_EJECT_BUTTON
+        && GetBattlerHoldEffect(battler, TRUE) != HOLD_EFFECT_EJECT_PACK
+#if B_SYMBIOSIS_GEMS >= GEN_7
+        && !(gSpecialStatuses[battler].gemBoost)
+#endif
+        && gCurrentMove != MOVE_FLING //Fling and damage-reducing berries are handled separately.
+        && !gSpecialStatuses[battler].berryReduced
+        && SYMBIOSIS_CHECK(battler, BATTLE_PARTNER(battler)))
+    {
+        BestowItem(BATTLE_PARTNER(battler), battler);
+        gLastUsedAbility = gBattleMons[BATTLE_PARTNER(battler)].ability;
+        gBattleScripting.battler = gBattlerAbility = BATTLE_PARTNER(battler);
+        gBattlerAttacker = battler;
+        BattleScriptPush(gBattlescriptCurrInstr + 2);
+        gBattlescriptCurrInstr = BattleScript_SymbiosisActivates;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 static void atk6A_removeitem(void)
@@ -9018,7 +9503,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         return;
     case VARIOUS_ARGUMENT_TO_MOVE_EFFECT:   //argumenttomoveeffect works with seconaryeffectchance can prob also do like move effect set certain or effect user
         gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument;
-        break;
+        break;  //I think what this does is, pass the argument to move effect? and then it gets read by seteffectwithchance function?
     case VARIOUS_SPECTRAL_THIEF:
         // Raise stats
         for (i = STAT_ATK; i < NUM_BATTLE_STATS; i++)

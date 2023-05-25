@@ -16874,7 +16874,7 @@ index 35328d6c..367deb64 100644
 +        RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
 +    }
      if (gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE)
-         gProtectStructs[gBattlerAttacker].targetNotAffected = 1;
+         gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
      ++gBattlescriptCurrInstr;
 @@ -1428,6 +1439,15 @@ static void CheckWonderGuardAndLevitate(void)
              RecordAbilityBattle(gBattlerTarget, ABILITY_WONDER_GUARD);
@@ -16971,7 +16971,7 @@ index 35328d6c..367deb64 100644
 +        RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
 +    }
      if (gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE)
-         gProtectStructs[gBattlerAttacker].targetNotAffected = 1;
+         gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
      ++gBattlescriptCurrInstr;
 @@ -7671,7 +7717,7 @@ static void atkAE_healpartystatus(void)
  

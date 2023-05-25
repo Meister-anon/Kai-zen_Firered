@@ -41,11 +41,12 @@
 
 #define sSWITCH_CASE (gBattleScripting + 0x29)//   (gBattleScripting + 0x31) // switchCase  used for red card special swith condition	//FORCED SWITCH?
 #define sBERRY_OVERRIDE	(gBattleScripting + 0x2A)// (gBattleScripting + 0x32) // overrideBerryRequirements
+#define sSTICKY_WEB_STAT_DROP	(gBattleScripting + 0x2B)// (gBattleScripting + 0x32) // overrideBerryRequirements
 //#define sMON_CAUGHT     (gBattleScripting + 0x33) // monCaught NOT NEEDED, only used in emerald for succesful captures to incremennt game stat capture
-#define sFIELD_23 gBattleScripting + 0x2B	//nothing in struct below this think all used values must go above here
-#define sWINDOWS_TYPE gBattleScripting + 0x2C
-#define sMULTIPLAYER_ID gBattleScripting + 0x2D
-#define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x2E
+#define sFIELD_23 gBattleScripting + 0x2C	//nothing in struct below this think all used values must go above here
+#define sWINDOWS_TYPE gBattleScripting + 0x2D
+#define sMULTIPLAYER_ID gBattleScripting + 0x2E
+#define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x2F
 
 
 #define cEFFECT_CHOOSER gBattleCommunication + 3
@@ -284,16 +285,18 @@
 #define ATK49_MIRROR_MOVE                       20
 #define ATK49_NEXT_TARGET                       21 //last fire red value below not implemented   
 
-#define ATK49_MAGICIAN                          22    // Occurs after final multi-hit strike, and after other items/abilities would activate
-#define ATK49_EJECT_BUTTON                      23
-#define ATK49_RED_CARD                          24
-#define ATK49_EJECT_PACK                        25
-#define ATK49_LIFEORB_SHELLBELL                 26    // Includes shell bell, throat spray, etc
-#define ATK49_PICKPOCKET                        27
-#define ATK49_DANCER							28
-#define ATK49_EMERGENCY_EXIT					29
-#define ATK49_CLEAR_BITS						30
-#define ATK49_COUNT								31
+#define ATK49_MULTIHIT_MOVE						22
+#define ATK49_MAGICIAN                          23    // Occurs after final multi-hit strike, and after other items/abilities would activate
+#define ATK49_EJECT_BUTTON                      24
+#define ATK49_RED_CARD                          25
+#define ATK49_EJECT_PACK                        26
+#define ATK49_LIFEORB_SHELLBELL                 27    // Includes shell bell, throat spray, etc
+#define ATK49_PICKPOCKET                        28
+#define ATK49_DANCER							29
+#define ATK49_EMERGENCY_EXIT					30
+#define ATK49_SYMBIOSIS							31
+#define ATK49_CLEAR_BITS						32
+#define ATK49_COUNT								33
 
 // switch cases - PORTED right now not used, adding red card only for now
 #define B_SWITCH_NORMAL     0

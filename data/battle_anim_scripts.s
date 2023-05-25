@@ -3397,7 +3397,7 @@ SkullBashEnd:: @ 81CAB38
 
 SkullBashSetUp:: @ 81CAB39
 	call SkullBashSetUpHeadDown
-	call SkullBashSetUpHeadDown
+	@call SkullBashSetUpHeadDown		calling this twice is just unnecesarily  & slow
 	waitforvisualfinish
 	goto SkullBashEnd
 
@@ -23948,41 +23948,12 @@ MOVE_DRYADS_CURSE::		@Need to ttest
 	clearmonbg ANIM_DEF_PARTNER
 	end @to do:
 
-Move_SHIELD_BASH::	@MOSTLY COPY spiky shield w parts of harden
-	loadspritegfx ANIM_TAG_PROTECT
-	loadspritegfx ANIM_TAG_GREEN_SPIKE
-	monbg ANIM_ATK_PARTNER
-	splitbgprio ANIM_ATTACKER
-	waitplaysewithpan SE_M_REFLECT, SOUND_PAN_ATTACKER, 0x10
-	launchtemplate gProtectSpriteTemplate 0x2 0x3 0x18 0x0 0x5a
-	delay 0xF
+Move_SHIELD_BASH::	@will copy first half of skullbash then go into harden
+	call SkullBashSetUpHeadDown
+	waitforvisualfinish
+	loopsewithpan SE_M_HARDEN, 192, 28, 2
 	createvisualtask AnimTask_MetallicShine, 5, 0, 0, 0
 	waitforvisualfinish
-	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x0 0xFFE0 0x10
-	delay 0x2
-	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x16 0xFFEA 0x10
-	delay 0x2
-	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x1E 0x0 0x10
-	delay 0x2
-	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x14 0x14 0x10
-	delay 0x2
-	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x0 0x1C 0x10
-	delay 0x2
-	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0xFFED 0x13 0x10
-	delay 0x2
-	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0xFFE5 0x0 0x10
-	delay 0x2
-	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0xFFEE 0xFFEE 0x10
-	delay 0x2
-	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x0 0xFFE7 0x10
-	delay 0x2
-	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x11 0xFFEF 0x10
-	delay 0x2
-	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x17 0x0 0x10
-	delay 0x2
-	launchtemplate gNeedleArmSpikeSpriteTemplate 0x82 0x5 0x0 0x1 0x10 0x10 0x10
-	waitforvisualfinish
-	clearmonbg ANIM_ATK_PARTNER
 	end
 
 Move_COUNT:: @ 81D53D9

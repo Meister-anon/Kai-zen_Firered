@@ -162,7 +162,7 @@ struct ResourceFlags
 #define RESOURCE_FLAG_FLASH_FIRE     1
 #define RESOURCE_FLAG_ROOST          2
 #define RESOURCE_FLAG_UNBURDEN       4
-#define RESOURCE_FLAG_EMERGENCY_EXIT 8
+#define RESOURCE_FLAG_EMERGENCY_EXIT 8  //check how this used will prob do it differently for my implementation
 #define RESOURCE_FLAG_NEUTRALIZING_GAS 16 //works by doubling previous
 
 struct DisableStruct
@@ -238,10 +238,10 @@ struct ProtectStruct
     u32 flag0Unknown:1;
     u32 prlzImmobility:1;
     /* field_1 */
-    u32 confusionSelfDmg:1;  //will instead change ot make random target,
-    u32 targetNotAffected:1; //and within that if move is non-damaging do normal confusion hit, or use move against self
+    u32 confusionSelfDmg:1;  //will instead change ot make random target, and within that if move is non-damaging do normal confusion hit, or use move against self
+    u32 targetNotAffected:1; //
     u32 chargingTurn:1;
-    u32 fleeFlag:2; // for RunAway and Smoke Ball
+    u32 fleeFlag:2; // for RunAway Defeatist and Smoke Ball
     u32 usedImprisonedMove:1;
     u32 loveImmobility:1;
     u32 usedDisabledMove:1;
@@ -280,7 +280,7 @@ struct ProtectStruct
 
 extern struct ProtectStruct gProtectStructs[MAX_BATTLERS_COUNT];
 
-struct SpecialStatus
+struct SpecialStatus    //pretty sure all values
 {
     u8 statLowered : 1;             // 0x1
     //u8 lightningRodRedirected : 1;  // 0x2    //removed to save ew ram  just do in the code
@@ -310,10 +310,16 @@ struct SpecialStatus
     s32 dmg;
     s32 physicalDmg;
     s32 specialDmg;
+    u8 EmergencyExit:1; //want to be status that can exist in either 0 or 1, set to 1e then decrement to 0 at move end, activate switchout if 0.
     u8 physicalBattlerId;
     u8 specialBattlerId;
+    u8 changedStatsBattlerId; // Battler that was responsible for the latest stat change. Can be self.
+    u16 forewarnedMove; //for storing move from forewarn ability
+    u8 forewarnDone:1;  //to be set TRUE if predicted move was used by opponent, if not and enemy faints or switches, reactivate forewarn for next opponent 
+    u16 anticipatedMove;    //for storing move from anticipation ability
+    u8 anticipationDone:1;// same as forwarn clause //also considering moveend & moveendtarget can prob do swithin repeat, by swapping battler and side w new abilityeffet clause?
     u8 field12;
-    u8 field13;
+    u8 field13;//check moody case for switchin line something something = 2
 };
 
 extern struct SpecialStatus gSpecialStatuses[MAX_BATTLERS_COUNT];
@@ -330,10 +336,12 @@ struct SideTimer
     /*0x07*/ u8 safeguardBattlerId;
     /*0x08*/ u8 followmeTimer;
     /*0x09*/ u8 followmeTarget;
-    /*0x0A*/ u8 spikesAmount;
+    /*0x0A*/ u8 followmePowder;
+             u8 spikesAmount;
              u8 toxicSpikesAmount;
              u8 stealthRockAmount;
              u8 stickyWebAmount;
+             u8 stickyWebBattlerSide; // Used for Court Change
              u8 auroraVeilTimer;
              u8 auroraVeilBattlerId;
              u8 tailwindTimer;
@@ -720,6 +728,12 @@ extern struct BattleStruct *gBattleStruct;
     gBattleMons[battlerId].type3 = TYPE_MYSTERY;    \
 }
 
+#define SET_BATTLER_TYPE2(battlerId, type)           \
+{                                                   \
+    gBattleMons[battlerId].type2 = type;            \
+    gBattleMons[battlerId].type3 = TYPE_MYSTERY;    \
+}
+
 #define GET_STAT_BUFF_ID(n)((n & 7))              // first three bits 0x1, 0x2, 0x4
 #define GET_STAT_BUFF_VALUE_WITH_SIGN(n)((n & 0xF8))
 #define GET_STAT_BUFF_VALUE(n)(((n >> 3) & 0xF))      // 0x8, 0x10, 0x20, 0x40
@@ -771,6 +785,7 @@ struct BattleScripting  //remember expanding this costs ewram
     u16 moveEffect;*/
     u8 switchCase;  // Special switching conditions, eg. red card
     u8 overrideBerryRequirements;
+    u8 stickyWebStatDrop; // To prevent Defiant activating on a Court Change'd Sticky Web
     //bool8 monCaught;  //believe most of these aren't needed, can be handled with battlescript
     u8 field_23;    //they are just different ways of doing things, btu I prefer saving ram.
 };

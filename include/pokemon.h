@@ -583,5 +583,6 @@ void *OakSpeechNidoranFGetBuffer(u8 bufferId);
 u16 GetFormSpeciesId(u16 speciesId, u8 formId);
 u8 GetFormIdFromFormSpeciesId(u16 formSpeciesId);
 
+#define HOLD_EFFECT_POWERITEM    (HOLD_EFFECT_POWER_WEIGHT || HOLD_EFFECT_POWER_BRACER || HOLD_EFFECT_POWER_BELT || HOLD_EFFECT_POWER_ANKLET || HOLD_EFFECT_POWER_LENS || HOLD_EFFECT_POWER_BAND)
 
 #endif // GUARD_POKEMON_H

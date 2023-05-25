@@ -1112,7 +1112,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
              && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
              && attackerAbility == ABILITY_NORMALIZE)
     {
-        gBattleStruct->dynamicMoveType = TYPE_NORMAL;// | F_DYNAMIC_TYPE_2;
+        gBattleStruct->dynamicMoveType = TYPE_MYSTERY;// | F_DYNAMIC_TYPE_2;    //WILL MAke moves do neutral damage to everything, need exclude from joat.
         gBattleStruct->ateBoost[battlerAtk] = 1;
     }
     else if (gBattleMoves[move].flags & FLAG_SOUND
@@ -1806,6 +1806,8 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
     u32 nameHash = 0;
     u32 personalityValue; //personality now uses name hash, which is trainer name
     u8 fixedIV; //figure how to set personality for individual pokemon, or at least set their ability
+    u16 totalEVs = 0;
+    u16 evs[NUM_EV_STATS];
     u16 species;
     s32 i, j;
     int l = 0;
@@ -1901,9 +1903,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     fixedIV = USE_RANDOM_IVS;
                 
 
-                //Set Evs
-                u16 totalEVs = 0;
-                u16 evs[NUM_EV_STATS];
+                //Set Evs               
                 for (j = 0; j < NUM_EV_STATS; ++j)
                 {
                     evs[j] = GetMonData(&party[i], partyData[i].evs[j], NULL);
@@ -2074,8 +2074,6 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 
 
                 //Set Evs
-                u16 totalEVs = 0;
-                u16 evs[NUM_EV_STATS];
                 for (j = 0; j < NUM_EV_STATS; ++j)
                 {
                     evs[j] = GetMonData(&party[i], partyData[i].evs[j], NULL);
@@ -2257,8 +2255,6 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 
 
                 //Set Evs
-                u16 totalEVs = 0;
-                u16 evs[NUM_EV_STATS];
                 for (j = 0; j < NUM_EV_STATS; ++j)
                 {
                     evs[j] = GetMonData(&party[i], partyData[i].evs[j], NULL);
@@ -2430,8 +2426,6 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     fixedIV = USE_RANDOM_IVS;
 
                 //Set Evs
-                u16 totalEVs = 0;
-                u16 evs[NUM_EV_STATS];
                 for (j = 0; j < NUM_EV_STATS; ++j)
                 {
                     evs[j] = GetMonData(&party[i], partyData[i].evs[j], NULL);
@@ -3724,9 +3718,7 @@ static void TryDoEventsBeforeFirstTurn(void)
 
     if (!gBattleControllerExecFlags)
     {
-        /*if (gBattleMons[battler].hp != 1 | 0)
-            while (ability == ABILITY_WONDER_GUARD)
-            gBattleMons[battler].hp = 1; *///hopefully makes wonder guard hp drop happen before everything else
+        
         if (gBattleStruct->switchInAbilitiesCounter == 0)
         {
             for (i = 0; i < gBattlersCount; ++i)
@@ -3736,18 +3728,17 @@ static void TryDoEventsBeforeFirstTurn(void)
                     if (GetWhoStrikesFirst(gBattlerByTurnOrder[i], gBattlerByTurnOrder[j], TRUE) != 0)
                         SwapTurnOrder(i, j);
         }
-        if (!gBattleStruct->overworldWeatherDone
-            && AbilityBattleEffects(0, 0, 0, ABILITYEFFECT_SWITCH_IN_WEATHER, 0) != 0)
-        {
-            gBattleStruct->overworldWeatherDone = TRUE;
-            return;
-        }
+        
         if (!gBattleStruct->terrainDone && AbilityBattleEffects(0, 0, 0, ABILITYEFFECT_SWITCH_IN_TERRAIN, 0) != 0)
         {
             gBattleStruct->terrainDone = TRUE;
             return;
         }
-
+        if (!gBattleStruct->overworldWeatherDone && AbilityBattleEffects(0, 0, 0, ABILITYEFFECT_SWITCH_IN_WEATHER, 0) != 0)
+        {
+            gBattleStruct->overworldWeatherDone = TRUE; //move here cuz I want terrain to trigger first
+            return;
+        }
         // Totem boosts
         for (i = 0; i < gBattlersCount; i++)
         {
@@ -3921,11 +3912,12 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
     if (holdEffect == HOLD_EFFECT_CAN_ALWAYS_RUN
      || (gBattleTypeFlags & BATTLE_TYPE_LINK)
      || gBattleMons[gActiveBattler].ability == ABILITY_RUN_AWAY
+     || gBattleMons[gActiveBattler].ability == ABILITY_AVIATOR
+     || (gBattleMons[gActiveBattler].ability == ABILITY_DEFEATIST
+         && gSpecialStatuses[gActiveBattler].defeatistActivated)
      || holdEffect == HOLD_EFFECT_SHED_SHELL)
         return BATTLE_RUN_SUCCESS;
-    else if (gBattleMons[gActiveBattler].ability == ABILITY_DEFEATIST
-        && gSpecialStatuses[gActiveBattler].defeatistActivated)    //set it so if ability has activated, and mon still has ability can run
-        return BATTLE_RUN_SUCCESS;
+    
     side = GetBattlerSide(gActiveBattler);
     for (i = 0; i < gBattlersCount; ++i)
     {
@@ -3940,9 +3932,10 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
             return BATTLE_RUN_FAILURE;
         }
         if (side != GetBattlerSide(i)
-         && gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
+         /*&& gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
          && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
-         && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
+         && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)*/
+         && IsBattlerGrounded(gActiveBattler)
          && gBattleMons[i].ability == ABILITY_ARENA_TRAP) //need add grounded check for flying  vsonic
         {
             gBattleScripting.battler = i;
@@ -3960,13 +3953,14 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
         return BATTLE_RUN_FAILURE;
     }//vsonic IMPORTANT do search, for status2_wrapped & wrappedby  implement new trap checks where it makes sense
     //similar to as below
-    if (((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))//vsonic need add new trap status here
+    if ((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))//vsonic need add new trap status here
      || (gBattleMons[gActiveBattler].status4 == ITS_A_TRAP_STATUS4)
      || (gBattleMons[gActiveBattler].status1 == ITS_A_TRAP_STATUS1)
      || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
-     || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK))
-     || (!IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
-        && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING))) //use paras ingraint to check I didn't break affect with this
+     || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK)
+     /*|| (!IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
+        && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING))*/
+     || (IsBattlerGrounded(gActiveBattler))) //use paras ingraint to check I didn't break affect with this
     {
         gBattleCommunication[MULTISTRING_CHOOSER] = 0;
         return BATTLE_RUN_FORBIDDEN;
@@ -4396,9 +4390,10 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
      && FlagGet(FLAG_BADGE03_GET)
      && GetBattlerSide(battler1) == B_SIDE_PLAYER)
         speedBattler1 = (speedBattler1 * 110) / 100;
-    if (holdEffect == HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE)
+    if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE || HOLD_EFFECT_POWERITEM) 
+        && gBattleMons[battler2].ability != (ABILITY_TANGLED_FEET || ABILITY_AVIATOR || ABILITY_RUN_AWAY))
         speedBattler1 /= 2;
-    if ((gBattleMons[battler1].status1 & STATUS1_PARALYSIS) && gBattleMons[battler1].ability != ABILITY_TANGLED_FEET)
+    if ((gBattleMons[battler1].status1 & STATUS1_PARALYSIS) && gBattleMons[battler1].ability != (ABILITY_TANGLED_FEET || ABILITY_AVIATOR || ABILITY_RUN_AWAY))
         speedBattler1 /= 4;
     //trap effects
     if ((gBattleMons[battler1].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battler1].status1 & STATUS1_WHIRLPOOL))  //should be good
@@ -4427,9 +4422,10 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
      && FlagGet(FLAG_BADGE03_GET)
      && GetBattlerSide(battler2) == B_SIDE_PLAYER)
         speedBattler2 = (speedBattler2 * 110) / 100;
-    if (holdEffect == HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE)
+    if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE || HOLD_EFFECT_POWERITEM) 
+        && gBattleMons[battler2].ability != (ABILITY_TANGLED_FEET || ABILITY_AVIATOR || ABILITY_RUN_AWAY))
         speedBattler2 /= 2;
-    if ((gBattleMons[battler2].status1 & STATUS1_PARALYSIS) && gBattleMons[battler2].ability != ABILITY_TANGLED_FEET)
+    if ((gBattleMons[battler2].status1 & STATUS1_PARALYSIS) && gBattleMons[battler2].ability != (ABILITY_TANGLED_FEET || ABILITY_AVIATOR || ABILITY_RUN_AWAY))
         speedBattler2 /= 4;
     //trap effects
     if ((gBattleMons[battler2].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battler2].status1 & STATUS1_WHIRLPOOL))  //should be good
@@ -5263,6 +5259,12 @@ bool8 TryRunFromBattle(u8 battler)
         && gSpecialStatuses[gActiveBattler].defeatistActivated)
     {
         gLastUsedAbility = ABILITY_DEFEATIST;
+        gProtectStructs[battler].fleeFlag = 2;
+        ++effect;
+    }
+    else if (gBattleMons[gActiveBattler].ability == ABILITY_AVIATOR)
+    {
+        gLastUsedAbility = ABILITY_AVIATOR;
         gProtectStructs[battler].fleeFlag = 2;
         ++effect;
     }

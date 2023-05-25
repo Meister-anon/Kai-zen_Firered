@@ -308,16 +308,17 @@
 #define ABILITY_SQUALL 285
 #define ABILITY_SUN_DISK 286
 #define ABILITY_TOUGH_SPINES 287	//rough skin for grass types
-#define ABILITY_EROSION 287	//regirock ability, rock absorb also absorbs stealth rocks on switchin
-#define ABILITY_LIQUID_METAL 288
-#define ABILITY_MUSCLE_MAGIC 289
-#define ABILITY_TIGER_CUB 290	//tinted lens copy
-#define ABILITY_TIGER_MOM 291	//alt version intimidate, drops defense instead of atk
-#define ABILITY_DARK_DEAL 292   //
-#define ABILITY_CORRUPTION 293   //anti heal switch in ability,  users corrupted influence spreads decay, preventing foe from healing, giving to guzzlord etc.
-#define ABILITY_BANDIT 294   //embargo on switch in
+#define ABILITY_EROSION 288	//regirock ability, rock absorb also absorbs stealth rocks on switchin
+#define ABILITY_LIQUID_METAL 289
+#define ABILITY_MUSCLE_MAGIC 290
+#define ABILITY_TIGER_CUB 291	//tinted lens copy
+#define ABILITY_TIGER_MOM 292	//alt version intimidate, drops defense instead of atk
+#define ABILITY_DARK_DEAL 293   //
+#define ABILITY_CORRUPTION 294   //anti heal switch in ability,  users corrupted influence spreads decay, preventing foe from healing, giving to guzzlord etc.
+#define ABILITY_BANDIT 295   //embargo on switch in
+#define ABILITY_AVIATOR 296   //Usually flying type, an experienced flyer who's speed can't be lowered  flying version of run away
 
-#define ABILITIES_COUNT 295 //note make perish body, only affect target, 
+#define ABILITIES_COUNT 297 //
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 

@@ -979,7 +979,7 @@ BattleScript_EffectAcupressureTry:
 	setgraphicalstatchangevalues
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	statbuffchange MOVE_EFFECT_CERTAIN, BattleScript_MoveEnd
-	printstring STRINGID_PKMNSSTATCHANGED2
+	printstring STRINGID_DEFENDERSSTATROSE
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
@@ -2318,6 +2318,22 @@ BattleScript_EffectHitEscape:
 	switchineffects BS_ATTACKER
 BattleScript_HitEscapeEnd:
 	end
+
+BattleScript_MoveEndEscape::		@for emergency exit
+	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_HitEscapeEnd
+	openpartyscreen BS_ATTACKER, BattleScript_HitEscapeEnd
+	switchoutabilities BS_ATTACKER
+	waitstate
+	switchhandleorder BS_ATTACKER, 0x2
+	returntoball BS_ATTACKER
+	getswitchedmondata BS_ATTACKER
+	switchindataupdate BS_ATTACKER
+	hpthresholds BS_ATTACKER
+	printstring STRINGID_SWITCHINMON
+	switchinanim BS_ATTACKER, TRUE
+	waitstate
+	switchineffects BS_ATTACKER
+	goto BattleScript_HitEscapeEnd
 
 BattleScript_EffectPlaceholder:
 	attackcanceler
@@ -7022,6 +7038,7 @@ BattleScript_MoveEffectRecoilWithStatus::
 BattleScript_MoveEffectRecoil::
 	jumpifmove MOVE_STRUGGLE, BattleScript_DoRecoil
 	jumpifability BS_ATTACKER, ABILITY_ROCK_HEAD, BattleScript_RecoilEnd
+	jumpifability BS_ATTACKER, ABILITY_KLUTZ, BattleScript_RecoilEnd
 BattleScript_DoRecoil::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	healthbarupdate BS_ATTACKER
@@ -7048,12 +7065,12 @@ BattleScript_HailActivates::
 	call BattleScript_HandleWeatherFormChanges
 	end3
 
-BattleScript_DefiantActivates::
+BattleScript_AbilityRaisesDefenderStat::
 	pause 0x20	
 	statbuffchange 0, NULL
 	setgraphicalstatchangevalues
 	playanimation BS_ABILITY_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printstring STRINGID_PKMNSSTATCHANGED2
+	printstring STRINGID_DEFENDERSSTATROSE
 	waitmessage 0x40
 	return
 

@@ -3421,7 +3421,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (attacker->ability == ABILITY_SOLAR_POWER)
         spAttack = (150 * spAttack) / 100;
     if (attacker->ability == ABILITY_COMPETITIVE && attacker->status1 & STATUS1_ANY)
-        spAttack = (150 * spAttack) / 100;  //CUT Back to 130,when I get the stat stage raise working
+        spAttack = (130 * spAttack) / 100;  //CUT Back to 130, because it already has stat raise component
     if (attacker->ability == ABILITY_PLUS && ABILITY_ON_FIELD2(ABILITY_MINUS))
         spAttack = (150 * spAttack) / 100;
     if (attacker->ability == ABILTY_UNKNOWN_POWER && GetMonData(BATTLE_PARTNER(gBattlerAttacker, MON_DATA_SPECIES) == SPECIES_UNOWN))
@@ -3452,17 +3452,12 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (type == TYPE_ELECTRIC && attacker->ability == ABILITY_OVERCHARGE)
             gBattleMovePower = (150 * gBattleMovePower) / 100;
     }
-    /*if (type == TYPE_GRASS && attacker->ability == ABILITY_OVERGROW && attacker->hp < (attacker->maxHP / 3))
-        gBattleMovePower = (150 * gBattleMovePower) / 100;
-    if (type == TYPE_FIRE && attacker->ability == ABILITY_BLAZE && attacker->hp < (attacker->maxHP / 3))
-        gBattleMovePower = (150 * gBattleMovePower) / 100;
-    if (type == TYPE_WATER && attacker->ability == ABILITY_TORRENT && attacker->hp < (attacker->maxHP / 3))
-        gBattleMovePower = (150 * gBattleMovePower) / 100;
-    if (type == TYPE_BUG && attacker->ability == ABILITY_SWARM && attacker->hp < (attacker->maxHP / 3))
-        gBattleMovePower = (150 * gBattleMovePower) / 100;*/
-    //changing in a pinch to below 50%, rather than 30%, so should be soon as hp gets to yellow
+    //MOVE EFFECTS
     if (gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)
         defense /= 2;
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_ASSURANCE
+        && (gProtectStructs[battlerIdDef].physicalDmg != 0 || gProtectStructs[battlerIdDef].specialDmg != 0 || gProtectStructs[battlerIdDef].confusionSelfDmg))
+        gBattleMovePower *= 2;
     // sandstorm sp.def boost for rock types  // decided to add this for ground types as well,
     if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK) || (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)))
         && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY)// && !usesDefStat)
@@ -3543,8 +3538,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (gDisableStructs[gBattlerAttacker].slowStartTimer != 0)
             gBattleMoveDamage /= 2;
     case ABILITY_NORMALIZE:
-        if (type == TYPE_NORMAL && gBattleStruct->ateBoost[gBattlerAttacker])
-            gBattleMovePower = (gBattleMovePower * 120 / 100);
+        if (gBattleStruct->ateBoost[gBattlerAttacker])//    if receives altl type damage boost?
+            gBattleMovePower = (gBattleMovePower * 130 / 100);  //will do neutral to everything, but keeping this line, as also won't get stab, buffed to 130 from 120
         //MulModifier(&modifier, UQ_4_12(1.2));
         break;
     case ABILITY_ANALYTIC:
@@ -3701,13 +3696,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     switch (GetBattlerAbility(gBattlerTarget))  //readjusted order of abilities to be numeric order in case I need switch case to flow low to high
     {                          //after examining switches from emerald repo, appears value order of the switch case doesn't matter, can go anywhere
         //don't need put absorb abilities that heal here, as they use gbattlemovedamage todo heal and convert it in the util
-    case ABILITY_GLACIAL_ICE:
     case ABILITY_LAVA_FISSURE:
     case ABILITY_FLASH_FIRE:
         if (type == TYPE_FIRE)  //need to make sure these for hidden power type change, so dynamic type rather than just normal move power? think alrady does
-            gBattleMoveDamage = 0;
+            gBattleMoveDamage = 0;  //idk if this is needed, THINK It might be, since before the move was canceled, not actually used.
         break;
+    case ABILITY_VOLT_ABSORB:
     case ABILITY_LIGHTNING_ROD:
+    case ABILITY_MOTOR_DRIVE:
         if (type == TYPE_ELECTRIC)  //should work type is move type or type override which I think accounts for things that change movetype
             gBattleMoveDamage = 0;
         break;
@@ -3726,11 +3722,22 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
               //  RecordAbilityBattle(gBattlerTarget, ability);
         }
         break;
+    case ABILITY_GLACIAL_ICE:
+        if (type == (TYPE_FIRE || TYPE_ICE))
+            gBattleMoveDamage = 0;
+        break;
+    case ABILITY_SAP_SIPPER:
+        if (type == TYPE_GRASS)
+            gBattleMoveDamage = 0;
+        break;
     case ABILITY_DRY_SKIN:
         if (type == TYPE_FIRE)
             gBattleMoveDamage = (gBattleMoveDamage * 125 / 100);
             //MulModifier(&modifier, UQ_4_12(1.25));
+        if (type == TYPE_WATER)
+            gBattleMoveDamage = 0;
         break;
+    case ABILITY_WATER_ABSORB:
     case ABILITY_STORM_DRAIN:
         if (type == TYPE_WATER)
             gBattleMoveDamage = 0;
@@ -3782,6 +3789,12 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (usesDefStat)//IS_MOVE_PHYSICAL(move))
         {
             gBattleMoveDamage /= 2;
+        }
+        break;
+    case ABILITY_KLUTZ:
+        if (usesDefStat)//IS_MOVE_PHYSICAL(move))   //klutz used to falling over has higher pain tollereance
+        {
+            gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
         }
         break;
     case ABILITY_MAGMA_ARMOR:
@@ -6861,85 +6874,93 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
     }
 }
 
+enum
+{
+    HP,
+    ATTACK,
+    DEFENSE,
+    SPEED,
+    SP_ATTACK,
+    SP_DEFENSE,    
+};
 
 //removed battle evs just need to add power items and custom item changes
 //for the new system will need to change ultima brace to work like exp share idea
 //where it registers a pokemon, and activates on top of any held items
 
+
+#define EV_GAIN //Made edits, if works, ev changes are done
 void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function doesn't use exp, it proves ev gain is separate from exp gain.
-{ //                                            this means making an item to 0 out exp gain wouldn't break exp gain.
-    u16 evs[NUM_STATS]; //per stat evs                That means I can still hvae my item that blocks exp, and one that blocks ev but not exp.
+{ //                                            this means making an item to 0 out exp gain wouldn't break ev gain.
+    u16 evs[NUM_STATS]; //per stat evs                
     u16 evIncrease = 0;
     u16 totalEVs = 0;
+    u8 MinEv_GAIN = 4;  //adjust this to change how many evs gained by macho brace, trainer items etc.  base multipliers rely on
     u16 heldItem;
     u8 holdEffect;
+    u8 hasHadPokerus;
+    int multiplier = 1; //base multiplier, but with how it used, best to think of it more as an exponent, as changing this will shift others exponentially
     int i;
 
-    for (i = 0; i < NUM_STATS; i++)
+    for (i = 0; i < NUM_STATS; i++)//totalling stats
     {
         evs[i] = GetMonData(mon, MON_DATA_HP_EV + i, NULL);
         totalEVs += evs[i];
     }
 
-    for (i = 0; i < NUM_STATS; i++)
+    heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
+
+    if (heldItem == ITEM_ENIGMA_BERRY)
     {
-        u8 hasHadPokerus;
-        int multiplier;
-
-        if (totalEVs >= MAX_TOTAL_EVS) //ok figured out how to block ev gain, when the item is in effect make max total evs = totalEVs. for the hold effect
-            break; // it needs to specifically be that, Max total == totalEVS, the other way around would increase pokemons evs.
-
-        hasHadPokerus = CheckPartyHasHadPokerus(mon, 0);
-
-        if (hasHadPokerus)
-            multiplier = 2;
+        if (gMain.inBattle)
+            holdEffect = gEnigmaBerries[0].holdEffect;
         else
-            multiplier = 1;
+            holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
+    }
+    else
+    {
+        holdEffect = ItemId_GetHoldEffect(heldItem);
+    }
+    //for entire function, 
+    hasHadPokerus = CheckPartyHasHadPokerus(mon, 0);
 
-        /*switch (i)
+    //made multipliers inclusively stacking, more logical
+    if (hasHadPokerus)
+        multiplier *= 2;
+    if (holdEffect == HOLD_EFFECT_ULTIMA_BRACE)
+        multiplier *= 3;
+    if (holdEffect == HOLD_EFFECT_POWERITEM)
+        multiplier *= 2;
+    
+    //if holdeffect is a power item, i for switch case equals helditem secondary item  ItemId_GetSecondaryId
+
+    if (holdEffect == HOLD_EFFECT_POWERITEM)    //should be ev gain separate from macho brace loop, so I can safely increase a single stat 
+    {
+        i = ItemId_GetSecondaryId(heldItem);    //held item guaranteed to be, one of power items, this filters specific one, also used as discriminator for which ev to raise
+
+        switch (i)
         {
-        case 0:
-            evIncrease = gBaseStats[defeatedSpecies].evYield_HP * multiplier;
+        case HP:
+            evIncrease = MinEv_GAIN * multiplier;
             break;
-        case 1:
-            evIncrease = gBaseStats[defeatedSpecies].evYield_Attack * multiplier;
+        case ATTACK:
+            evIncrease = MinEv_GAIN * multiplier;
             break;
-        case 2:
-            evIncrease = gBaseStats[defeatedSpecies].evYield_Defense * multiplier;
+        case DEFENSE:
+            evIncrease = MinEv_GAIN * multiplier;
             break;
-        case 3:
-            evIncrease = gBaseStats[defeatedSpecies].evYield_Speed * multiplier;
+        case SPEED:
+            evIncrease = MinEv_GAIN * multiplier;
             break;
-        case 4:
-            evIncrease = gBaseStats[defeatedSpecies].evYield_SpAttack * multiplier;
+        case SP_ATTACK:
+            evIncrease = MinEv_GAIN * multiplier;
             break;
-        case 5:
-            evIncrease = gBaseStats[defeatedSpecies].evYield_SpDefense * multiplier;
+        case SP_DEFENSE:
+            evIncrease = MinEv_GAIN * multiplier;
             break;
-        }*/
-
-        heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
-
-        if (heldItem == ITEM_ENIGMA_BERRY)
-        {
-            if (gMain.inBattle)
-                holdEffect = gEnigmaBerries[0].holdEffect;
-            else
-                holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
         }
-        else
-        {
-            holdEffect = ItemId_GetHoldEffect(heldItem);
-        }
 
-        if (holdEffect == HOLD_EFFECT_MACHO_BRACE) //need to figure to re add power items, and effect plus gen 6 exp share
-            evIncrease *= 2;
-
-        u8 hasHadPokerus = CheckPartyHasHadPokerus(mon, 0);
-        if (hasHadPokerus)
-            evIncrease *= 2;    //attempt at reinstating pokerus logic
-
-        if (totalEVs + (s16)evIncrease > MAX_TOTAL_EVS)
+        if (totalEVs + (s16)evIncrease > MAX_TOTAL_EVS) //total ev cap
             evIncrease = ((s16)evIncrease + MAX_TOTAL_EVS) - (totalEVs + evIncrease);
 
         if (evs[i] + (s16)evIncrease > MAX_PER_STAT_EVS) //ev cap
@@ -6953,11 +6974,62 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
         totalEVs += evIncrease;
         SetMonData(mon, MON_DATA_HP_EV + i, &evs[i]);
 
-        if (holdEffect == HOLD_EFFECT_EV_SHACKLES)
-            MAX_TOTAL_EVS == totalEVs;
+    }
 
-        if (holdEffect == HOLD_EFFECT_ULTIMA_BRACE)
-            evIncrease *= 5;
+    for (i = 0; i < NUM_STATS; i++) //adding stats
+    {
+        
+
+        if (totalEVs >= MAX_TOTAL_EVS) //ok figured out how to block ev gain, when the item is in effect make max total evs = totalEVs. for the hold effect
+            break; // it needs to specifically be that, Max total == totalEVS, the other way around would increase pokemons evs.
+
+        
+
+        if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE))    //should loop each stat and add evs for every stat
+        {
+            switch (i)
+            {
+            case HP:
+                evIncrease = MinEv_GAIN * multiplier;
+                break;
+            case ATTACK:
+                evIncrease = MinEv_GAIN * multiplier;
+                break;
+            case DEFENSE:
+                evIncrease = MinEv_GAIN * multiplier;
+                break;
+            case SPEED:
+                evIncrease = MinEv_GAIN * multiplier;
+                break;
+            case SP_ATTACK:
+                evIncrease = MinEv_GAIN * multiplier;
+                break;
+            case SP_DEFENSE:
+                evIncrease = MinEv_GAIN * multiplier;
+                break;
+            }
+        }
+        
+
+        //if (holdEffect == HOLD_EFFECT_MACHO_BRACE) //need to figure to re add power items, and effect plus gen 6 exp share
+          //  evIncrease *= 2;    //this is for calculating number of evs, not for the gain itself
+
+
+
+        if (totalEVs + (s16)evIncrease > MAX_TOTAL_EVS) //total ev cap
+            evIncrease = ((s16)evIncrease + MAX_TOTAL_EVS) - (totalEVs + evIncrease);
+
+        if (evs[i] + (s16)evIncrease > MAX_PER_STAT_EVS) //ev cap
+        {
+            int val1 = (s16)evIncrease + MAX_PER_STAT_EVS;
+            int val2 = evs[i] + evIncrease;
+            evIncrease = val1 - val2;
+        }
+
+        evs[i] += evIncrease;
+        totalEVs += evIncrease;
+        SetMonData(mon, MON_DATA_HP_EV + i, &evs[i]);
+
     }
     //ev shackles and ultima brace will no longer work with 
     //current change to ev gain, so will have to adjust somehow  maybe make like gen 1 exp share, make it a key item that switches on off

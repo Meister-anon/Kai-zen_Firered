@@ -319,6 +319,9 @@ static const u8 sText_PkmnsStatChanged3[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUF
 static const u8 sText_PkmnsStatChanged4[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\n{B_BUFF2}");
 static const u8 sText_StatsWontIncrease2[] = _("{B_ATK_NAME_WITH_PREFIX}'s stats won't\ngo any higher!");
 static const u8 sText_StatsWontDecrease2[] = _("{B_DEF_NAME_WITH_PREFIX}'s stats won't\ngo any lower!");
+static const u8 sText_AnticipateExplosion[] = _("an Explosive");
+static const u8 sText_AnticipateOHKO[] = _("a one-hit KO");
+static const u8 sText_AnticipateDefault[] = _("a Dangerous");
 static const u8 sText_CriticalHit[] = _("A critical hit!");
 static const u8 sText_OneHitKO[] = _("It's a one-hit KO!");
 static const u8 sText_123Poof[] = _("{PAUSE 32}1, {PAUSE 15}2, and{PAUSE 15}… {PAUSE 15}… {PAUSE 15}… {PAUSE 15}{PLAY_SE SE_BALL_BOUNCE_1}Poof!\p");
@@ -605,7 +608,7 @@ static const u8 sText_SlowStartEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is\
 static const u8 sText_SlowStartEnd[] = _("{B_ATK_NAME_WITH_PREFIX}'s power has\nreturned to its zenith!");
 static const u8 sText_SolarPowerHpDrop[] = _("The {B_ATK_NAME_WITH_PREFIX}'s {B_ATK_ABILITY}\ntook its toll!");
 static const u8 sText_AftermathDmg[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt!");
-static const u8 sText_AnticipationActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} shuddered\nin anticipation!");
+static const u8 sText_AnticipationActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} sensed {B_BUFF1} move\nand shuddered in anticipation!");
 static const u8 sText_ForewarnActivates[] = _("{B_SCR_ACTIVE_ABILITY} alerted {B_SCR_ACTIVE_NAME_WITH_PREFIX}\nto the {B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}!");
 static const u8 sText_IceBodyHpGain[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_ATK_ABILITY}\nhealed it a little bit!");
 static const u8 sText_SnowWarningHail[] = _("It started to hail!");
@@ -984,10 +987,10 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_STATROSE - BATTLESTRINGS_TABLE_START]                      = gBattleText_Rose,
     [STRINGID_STATHARSHLY - BATTLESTRINGS_TABLE_START]                   = sText_StatHarshly,
     [STRINGID_STATFELL - BATTLESTRINGS_TABLE_START]                      = sText_StatFell,
-    [STRINGID_PKMNSSTATCHANGED - BATTLESTRINGS_TABLE_START]              = sText_PkmnsStatChanged,
-    [STRINGID_PKMNSSTATCHANGED2 - BATTLESTRINGS_TABLE_START]             = gText_PkmnsStatChanged2,
-    [STRINGID_PKMNSSTATCHANGED3 - BATTLESTRINGS_TABLE_START]             = sText_PkmnsStatChanged3,
-    [STRINGID_PKMNSSTATCHANGED4 - BATTLESTRINGS_TABLE_START]             = sText_PkmnsStatChanged4,
+    [STRINGID_ATTACKERSSTATROSE - BATTLESTRINGS_TABLE_START]              = sText_PkmnsStatChanged,
+    [STRINGID_DEFENDERSSTATROSE - BATTLESTRINGS_TABLE_START]             = gText_PkmnsStatChanged2,
+    [STRINGID_ATTACKERSSTATFELL - BATTLESTRINGS_TABLE_START]             = sText_PkmnsStatChanged3,
+    [STRINGID_DEFENDERSSTATFELL - BATTLESTRINGS_TABLE_START]             = sText_PkmnsStatChanged4,
     [STRINGID_CRITICALHIT - BATTLESTRINGS_TABLE_START]                   = sText_CriticalHit,
     [STRINGID_ONEHITKO - BATTLESTRINGS_TABLE_START]                      = sText_OneHitKO,
     [STRINGID_123POOF - BATTLESTRINGS_TABLE_START]                       = sText_123Poof,
@@ -1396,6 +1399,9 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_DEFROST_POKEMON - BATTLESTRINGS_TABLE_START]               = sText_PkmnDefrosted,
     [STRINGID_CORRUPTIONENTERS - BATTLESTRINGS_TABLE_START]              = sText_CorruptionActivates,
     [STRINGID_BANDITENTERS - BATTLESTRINGS_TABLE_START]                  = sText_BanditActivates,
+    [STRINGID_ANTICIPATE_EXPLOSION - BATTLESTRINGS_TABLE_START]          = sText_AnticipateExplosion,
+    [STRINGID_ANTICIPATE_OHKO - BATTLESTRINGS_TABLE_START]               = sText_AnticipateOHKO,
+    [STRINGID_ANTICIPATE_DEFAULT - BATTLESTRINGS_TABLE_START]            = sText_AnticipateDefault,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
@@ -1553,17 +1559,17 @@ const u16 gUproarAwakeStringIds[] = {
 };
 
 const u16 gStatUpStringIds[] = {
-    STRINGID_PKMNSSTATCHANGED,
-    STRINGID_PKMNSSTATCHANGED2,
-    STRINGID_STATSWONTINCREASE,
-    STRINGID_EMPTYSTRING3,
-    STRINGID_USINGXTHEYOFZN,
-    STRINGID_PKMNUSEDXTOGETPUMPED
+    [B_MSG_ATTACKER_STAT_ROSE] = STRINGID_ATTACKERSSTATROSE,
+    [B_MSG_DEFENDER_STAT_ROSE] = STRINGID_DEFENDERSSTATROSE,
+    [B_MSG_STAT_WONT_INCREASE] = STRINGID_STATSWONTINCREASE,
+    [B_MSG_STAT_ROSE_EMPTY] = STRINGID_EMPTYSTRING3,
+    [B_MSG_STAT_ROSE_ITEM] = STRINGID_USINGXTHEYOFZN,
+    [B_MSG_USED_DIRE_HIT] = STRINGID_PKMNUSEDXTOGETPUMPED,
 };
 
 const u16 gStatDownStringIds[] = {
-    [B_MSG_ATTACKER_STAT_FELL] = STRINGID_PKMNSSTATCHANGED3,
-    [B_MSG_DEFENDER_STAT_FELL] = STRINGID_PKMNSSTATCHANGED4,
+    [B_MSG_ATTACKER_STAT_FELL] = STRINGID_ATTACKERSSTATFELL,
+    [B_MSG_DEFENDER_STAT_FELL] = STRINGID_DEFENDERSSTATFELL,
     [B_MSG_STAT_WONT_DECREASE] = STRINGID_STATSWONTDECREASE,
     [B_MSG_STAT_FELL_EMPTY] = STRINGID_EMPTYSTRING3
 };

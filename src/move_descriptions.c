@@ -49,7 +49,7 @@ const u8 gMoveDescription_Growl[] = _("The user growls in\na cute way, making\nt
 const u8 gMoveDescription_Roar[] = _("The foe is made to\nswitch out with an\nally. In the wild,\nthe battle ends.");
 const u8 gMoveDescription_Sing[] = _("A soothing song\nin a calming voice\nlulls the foe into\na deep slumber.");
 const u8 gMoveDescription_Supersonic[] = _("The user generates\nodd sound waves.\nIt may confuse the\nfoe.");
-const u8 gMoveDescription_SonicBoom[] = _("The foe is hit with\na shock wave that\nalways inflicts 20-\nHP damage.");
+const u8 gMoveDescription_SonicScreech[] = _("The foe is hit with\na shock wave that\nalways inflicts 20-\nHP damage.");
 const u8 gMoveDescription_Disable[] = _("For a few turns,\nit prevents the foe\nfrom using the move\nit last used.");
 const u8 gMoveDescription_Acid[] = _("The foe is sprayed\nwith a harsh, hide-\nmelting acid that\nmay lower DEFENSE.");
 const u8 gMoveDescription_Ember[] = _("The foe is attacked\nwith small flames.\nThe foe may suffer\na burn.");
@@ -223,7 +223,7 @@ const u8 gMoveDescription_Safeguard[] = _("It protects the\nuser's party from\na
 const u8 gMoveDescription_PainSplit[] = _("The user adds its\nHP to the foe's HP,\nthen equally shares\nthe total HP.");
 const u8 gMoveDescription_SacredFire[] = _("A mystical and\npowerful fire\nattack that may\ninflict a burn.");
 const u8 gMoveDescription_Magnitude[] = _("A ground-shaking\nattack against all\nstanding POKéMON.\nIts power varies.");
-const u8 gMoveDescription_DynamicPunch[] = _("The foe is punched\nwith the user's full\npower. It confuses\nthe foe if it hits.");
+const u8 gMoveDescription_DynamicPunch[] = _("The foe is punched\nwith the user's full\npower. It may confuse\nthe foe if it hits.");
 const u8 gMoveDescription_Megahorn[] = _("A brutal ramming\nattack delivered\nwith a tough and\nimpressive horn.");
 const u8 gMoveDescription_DragonBreath[] = _("The foe is hit with\nan incredible blast\nof breath that may\nalso paralyze.");
 const u8 gMoveDescription_BatonPass[] = _("The user switches\nout, passing along\nany stat changes\nto the new battler.");
@@ -356,57 +356,25 @@ const u8 gMoveDescription_WaterPulse[] = _("An attack with a\npulsing blast of\n
 const u8 gMoveDescription_DoomDesire[] = _("A move that attacks\nthe foe with a\nblast of light two\nturns after use.");
 const u8 gMoveDescription_PsychoBoost[] = _("An intense attack\nthat also sharply\nreduces the user's\nSP. ATK stat.");
 
-gROOSTDescription:
-.string "Restores the user's HP by\nhalf of its max HP.$"
-
-gGRAVITYDescription :
-    .string "Gravity is intensified\nnegating levitation.$"
-
-    gMIRACLE_EYEDescription :
-    .string "Makes GHOSTS and evasive\nfoes easier to hit.$"
-
-    gWAKE_UP_SLAPDescription :
-    .string "Powerful against sleeping\nfoes, but also heals them.$"
-
-    gHAMMER_ARMDescription :
-    .string "A swinging fist attack\nthat also lowers Speed.$"
-
-    gGYRO_BALLDescription :
-    .string "A high-speed spin that does\nmore damage to faster foes.$"
-
-    gHEALING_WISHDescription :
-    .string "The user faints to heal up\nthe recipient.$"
-
-    gBRINEDescription :
-    .string "Does double damage to foes\nwith half HP.$"
-
-    gNATURAL_GIFTDescription :
-    .string "The effectiveness varies\nwith the held Berry.$"
-
-    gFEINTDescription :
-    .string "An attack that hits foes\nusing moves like Protect.$"
-
-    gPLUCKDescription :
-    .string "Eats the foe's held Berry\ngaining its effect.$"
-
-    gTAILWINDDescription :
-    .string "Whips up a turbulent breeze\nthat raises Speed.$"
-
-    gACUPRESSUREDescription :
-    .string "The user sharply raises\none of its stats.$"
-
-    gMETAL_BURSTDescription :
-    .string "Retaliates any hit with\ngreater power.$"
-
-
-    gU_TURNDescription :
-    .string "Does damage then switches\nout the user.$"
-
-    gCLOSE_COMBATDescription :
-    .string "A strong attack but lowers\nthe defensive stats.$"
-
-    gPAYBACKDescription :
-    .string "An attack that gains power\nif the user moves last.$"
+//NEW values
+const u8 gMoveDescription_Roost[] = _("Restores the user's HP by\nhalf of its max HP.");
+const u8 gMoveDescription_Gravity[] = _("Gravity is intensified\ngrounds floating PKMN.\nMoves that involve\nflying can’t be used.");
+const u8 gMoveDescription_MiracleEye[] = _("Makes GHOSTS and\nevasive foes easier\nto hit.");
+const u8 gMoveDescription_WakeupSlap[] = _("Doubles dmg against\nsleeping foes, but\nalso awakens them.");
+const u8 gMoveDescription_HammerArm[] = _("Swings down with\na heavy fist\nthat lowers Speed.");
+const u8 gMoveDescription_GyroBall[] = _("A high-speed spin\nthat does more damage\nto faster foes.");
+const u8 gMoveDescription_HealingWish[] = _("The user faints\nto heal up the\nnext battler.");
+const u8 gMoveDescription_Brine[] = _("Deals double damage to\nfoes below half HP.");
+const u8 gMoveDescription_NaturalGift[] = _("The effectiveness varies\nwith the held Berry.");
+const u8 gMoveDescription_Feint[] = _("An attack that\nhits foes using\nmoves like Protect.");
+const u8 gMoveDescription_Pluck[] = _("Eats the foe's\nheld Berry,\ngaining its effect.");
+const u8 gMoveDescription_Tailwind[] = _("Whips up a turbulent\gale behind the user\nRaises party Speed.");
+const u8 gMoveDescription_Acupressure[] = _("The user sharply raises\na random stat.");
+const u8 gMoveDescription_MetalBurst[] = _("After taking a hit\nretaliates with\ngreater power.");
+const u8 gMoveDescription_U_turn[] = _("Does damage then switches\nout the user.");
+const u8 gMoveDescription_CloseCombat[] = _("A strong attack\nbut lowers defense.");
+const u8 gMoveDescription_Payback[] = _("An attack that\ngains power if\nthe user moves\nafter the target.");
+const u8 gMoveDescription_Assurance[] = _("An attack that\ngains power if\nthe user moves\nafter the target.");
 
     gASSURANCEDescription :
     .string "An attack that gains power\nif the foe has been hurt.$"
@@ -1524,6 +1492,9 @@ gSPARKLY_SWIRLDescription :
     gNETTLE_WHIPDescription:  //name tbd
     .string "Attacks the target\nwith a vine covered\nin Nettle bristles.\nIf not a GRASS type,\nIt may leave the\nfoe with a burn.$"
 
+        gMoveDescription_SonicBoom:
+        "The target is struck\nby high-force winds,\nas the user\naccelerates passed\nthe sound barrier.\nRaises Speed.$"
+
     //Description can hold 5 line breaks given current space post expansion!  at approx 20 chars per line//
 
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
@@ -1576,7 +1547,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [MOVE_ROAR         ] = gMoveDescription_Roar,
     [MOVE_SING         ] = gMoveDescription_Sing,
     [MOVE_SUPERSONIC   ] = gMoveDescription_Supersonic,
-    [MOVE_SONIC_SCREECH   ] = gMoveDescription_SonicBoom,
+    [MOVE_SONIC_SCREECH] = gMoveDescription_SonicScreech,
     [MOVE_DISABLE      ] = gMoveDescription_Disable,
     [MOVE_ACID         ] = gMoveDescription_Acid,
     [MOVE_EMBER        ] = gMoveDescription_Ember,
@@ -2294,4 +2265,5 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [ MOVE_UP_ROOT ] = gUP_ROOTDescription,
     [ MOVE_DIVE_BOMB ] = gDIVE_BOMBDescription,
     [ MOVE_NETTLE_WHIP ] = gNETTLE_WHIPDescription,
-};
+    [ MOVE_SONIC_BOOM ] = gMoveDescription_SonicBoom,
+};//last value can have comma

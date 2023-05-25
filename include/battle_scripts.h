@@ -280,7 +280,7 @@ extern const u8 BattleScript_SwitchInAbilityMsgRet[];
 extern const u8 BattleScript_ToxicSpikesPoisoned[];
 extern const u8 BattleScript_ToxicSpikesAbsorbed[];
 extern const u8 BattleScript_StickyWebOnSwitchIn[];
-extern const u8 BattleScript_DefiantActivates[];
+extern const u8 BattleScript_AbilityRaisesDefenderStat[];
 extern const u8 BattleScript_AbilityPopUp[];
 extern const u8 BattleScript_MoodyActivates[];
 extern const u8 BattleScript_MoodyLower[];

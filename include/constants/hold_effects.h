@@ -25,11 +25,11 @@
 #define HOLD_EFFECT_RANDOM_STAT_UP 21
 #define HOLD_EFFECT_EVASION_UP     22
 #define HOLD_EFFECT_RESTORE_STATS  23
-#define HOLD_EFFECT_MACHO_BRACE    24
+#define HOLD_EFFECT_MACHO_BRACE    24  //post ev change, make general training tool, will add to every stat rather than being targetted ads about +30 bst to all.
 #define HOLD_EFFECT_EXP_SHARE      25
 #define HOLD_EFFECT_QUICK_CLAW     26
 #define HOLD_EFFECT_HAPPINESS_UP   27
-#define HOLD_EFFECT_MENTAL_HERB   28
+#define HOLD_EFFECT_MENTAL_HERB    28
 #define HOLD_EFFECT_CHOICE_BAND    29
 #define HOLD_EFFECT_FLINCH         30
 #define HOLD_EFFECT_BUG_POWER      31
@@ -153,6 +153,13 @@
 #define HOLD_EFFECT_BLUNDER_POLICY      172
 #define HOLD_EFFECT_HEAVY_DUTY_BOOTS    173
 #define HOLD_EFFECT_THROAT_SPRAY        174
+#define HOLD_EFFECT_ULTIMA_BRACE		175 // block exp multiply ev gain *exp=0		I guess could just be stronger version of my new macho brace effect?
+#define HOLD_EFFECT_POWER_WEIGHT		176
+#define HOLD_EFFECT_POWER_BRACER		177
+#define HOLD_EFFECT_POWER_BELT			178
+#define HOLD_EFFECT_POWER_ANKLET		179
+#define HOLD_EFFECT_POWER_LENS			180
+#define HOLD_EFFECT_POWER_BAND			181
 
 // Terrain seed params
 #define HOLD_EFFECT_PARAM_ELECTRIC_TERRAIN  0
@@ -160,9 +167,8 @@
 #define HOLD_EFFECT_PARAM_MISTY_TERRAIN     2
 #define HOLD_EFFECT_PARAM_PSYCHIC_TERRAIN   3
 
-//personal
-#define HOLD_EFFECT_ULTIMA_BRACE   175 // block exp multiply ev gain *exp=0
-#define HOLD_EFFECT_EV_SHACKLES	   176 // block ev gain, either just that with 0 drawback or double exp gain.
+
+//#define HOLD_EFFECT_EV_SHACKLES	   176 // block ev gain, either just that with 0 drawback or double exp gain.
 
 
 #define HOLD_EFFECT_CHOICE(holdEffect)((holdEffect == HOLD_EFFECT_CHOICE_BAND || holdEffect == HOLD_EFFECT_CHOICE_SCARF || holdEffect == HOLD_EFFECT_CHOICE_SPECS))

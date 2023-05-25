@@ -235,6 +235,15 @@ ok I prob will do that then.
 //I'm making one project Kai-zen Red  will be everything I want, my vision for what pokemon should be.
 //It will have everything, and be THE rom base for fire red projects going forward!! -4/18/2023  11:12am  MEISTER!!
 
+/*
+* Streamer mode,  set flag option for new game start only not in game STREAMER MODE/CREATOR MODE  for streamers/content creators, 
+* gives every mon pokerus, make pokerus increase exp gain x 12, set ev gain multiplier to 4 in MonGainEVs,
+* global exp share on by default, gym leader based lvl cap, trainer lvl scaling to average party/highest mon,
+* give all ev items, macho brace, ultima brace, and power items.
+* That way won't need rare candies just for streamers.
+* 
+* Have it as a message setup before the oak intro, or the last line before player spawns
+*/
 
 //TODO:
 /*Add logic for when flying types are grounded they take neutral damage from fighting types
@@ -943,7 +952,7 @@ goto FRONT_PIC_TABLE    //table for front pic use rules to standardize mon broug
 goto MON_ELEVATION_TABLE    //SAME BUT for elevation
 
 goto TERRAIN_DEFINES
-goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement
+goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement //still to do     vsonic
 goto BATTLE_TERRAIN //Battle Terrain, NOT TERRAIN effect, is the entire battle field, including part battler sits on, can use to make terrain effect
 goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 /*
@@ -1041,9 +1050,11 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 * 
 * Will need to fix and add double wild encounters, as its in the game but not fixed/properly coded
 * 
-* also setup special event for new game, where there is a random chance for the game to set a extra flag
+* also setup special event for new game, where there is a random chance for the game to set a extra flag        1/30 or 1/50 odds
 * that would trigger a traveling fishermin event script at the south side of pallet by the lake.
 * rather than a battle he will give you the old rod, after a speel about teaching the youth/next generation the joy of fishing.
+* 
+* Fisherman, will be there at game start,  and disappear after you give oak the parcel.
 * 
 * add more than magikarp to old rod, things like lotad feebass etc.
 * 
@@ -1052,6 +1063,9 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 * 
 * and then give you a water pokemon around lvl 10 with a relatively low stat total.
 * i.e need make function that will check type and then total all the stat fields.
+* 
+* or more simply use breeding check for first evolution species, and have him give a first evo water mon
+* at level 10,  excluding legendary mon and manaphy etc.
 * 
 * could also use that for new game plus, were you would alrady have all the rods.
 * 
@@ -1187,7 +1201,7 @@ goto ABILITY_CAPSULE_DATA
 */
 
 
-
+goto EV_GAIN
 goto CATCHING_LOGIC
 //notes for gameplayloop below
 /*
@@ -1391,11 +1405,26 @@ goto EVOLUTION_LOGIC
 * giving you a free switch, and just overall allows you to actually get some value out of the ability
 * 
 * Concept is hurt and decide to run, but you full force steal off on the enemy to get the last lick in.
-* Think, may raise attack one stage as well? can do like strength should work fine.
+* Think, may raise attack one stage as well? can do like strength should work fine. (think would also addd full status clense)
+* [could do a whole false bravado thing, will play its growl when hit hp threshold maybe do flash red, then atk up animation and clear status*if statused*
+* some kind of text message, (takes place in end turn, that hp fell.) then set emergency exit status, in same place as nuisance add priority boost for status
+* last thing is figuring how to make it wait till end of next move to switch out, maybe set argument of next move to hit escape?
+*  also since I want this to be an attack thing, think may setup like taunt where can't select a non damaging move during status.gDisableStructs[gBattlerTarget].tauntTimer = 2
+* 
+* [total effect, if atk less than stage 6 set to 6, (same logic from crit effect), growl,  raise attack stat, set status1 0 to clear, remove confusion infatuation
+* set emergency exit status]
+* 
+* hitescape uses effect 100,  will set up like traps where the effect will be certain, that way i can set hit escape without needing to worry about
+* secondaryeffectchance of the move -  ok did that , but realized I can't use that for emergeny exit, it'd overwerite the effect of moves
+* that have their own arguments  maybe do a flag check, set emergencyexit value to 1, and then have it decrement from move end 
+* and auto switch out when its at 0.?  can set up switchout battlescript, using hitescape
 * 
 * consider make leech seed work like anime, where it wraps up the target
 * meaning it would be a trap, preventing the enemy from switching, and a good buff to grass types
 * as only they learn it, and only theye are immune to it. -
+* 
+* could do it but also may be too much, since switching is a big part of the game, but eh I'm just making traps actually viable
+* nah I think I will do it, won't much change how players play the game (since enemy doesn't switch), and will just make grass better
 * 
 */
 
@@ -1479,13 +1508,17 @@ goto PICKUP_LOGIC   //out of battle buffs done, moving to in battle buffs - need
 goto SPECIAL_TRAP_EFFECTCHANCE
 goto STAT_AND_DAMAGE_ABILITIES_ETC // pokemon.c function for ability and item effects that affect damage calc
 
-goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability activation logic.  STIL need to update
+goto ENDTURN_EFFECTS    //battle_util.c   affects that take place after all battler turns
+
+goto ATK_49_MOVEEND //battle_script_commands.c  move end  still to do   vsonic
+
+goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability activation logic.  STILL need to update   vsonic
 /*
 * Setting up new effeets for absorb abilities
 * make all work like lightnight rod and change targetting to draw in moves  -effect Done, working on messags and status effect
 * counter balance is only does that if ability mon isn't statused //including status 2 cofusion & infations - think Done, did only confusion not infatuation
 * 
-* need to add to mold breaker and other ability exclussion lists
+* need to add new abilities to mold breaker and other ability exclussion lists
 * 
 * New signature ability for suicune
 * purifying aura, similar effect to healer, also mon removes all status1 effects on itself & allies at the end of turn
@@ -1532,6 +1565,8 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * first idea is give it incinerate effect, where it destroys enemy held item on contact
 * othre idea is sp def damage reduction from being surrounded in magma shield //think i did both? yeah
 * based on bulbapdia reading make function for if item can be removed/stolen
+* 
+* finish ability competitive buff, gave weaker version of guts to go with normal effects since stat drop is very situational
 * 
 * buff pidgey line, according to Zen Mode YT changes, give u-turn and my move dive bomb
 * gave scrappy, think setup correctly so scrappy should work? need test

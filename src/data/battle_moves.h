@@ -3476,9 +3476,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_CONFUSE_HIT,
         .power = 95,
         .type = TYPE_FIGHTING,
-        .accuracy = 90,
+        .accuracy = 95,
         .pp = 10,
-        .secondaryEffectChance = 100,
+        .secondaryEffectChance = 70,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_IRON_FIST_BOOST | FLAG_SHEER_FORCE_BOOST,
@@ -4138,7 +4138,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 150,
         .type = TYPE_FIGHTING,
         .accuracy = 100,
-        .pp = 20,
+        .pp = 15,
         .secondaryEffectChance = 80,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
@@ -5537,7 +5537,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_PSYCHO_BOOST] =
     {
-        .effect = EFFECT_OVERHEAT,
+        .effect = EFFECT_OVERHEAT,  //changed to MOVE_EFFECT_RECOIL_33
         .power = 140,
         .type = TYPE_PSYCHIC,
         .accuracy = 90,
@@ -6780,7 +6780,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #else
             .power = 140,
         #endif
-        .effect = EFFECT_OVERHEAT,
+        .effect = EFFECT_OVERHEAT,  //changed to MOVE_EFFECT_RECOIL_33
         .type = TYPE_DRAGON,
         .accuracy = 90,
         .pp = 5,
@@ -6826,7 +6826,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #else
             .power = 140,
         #endif
-        .effect = EFFECT_OVERHEAT,
+        .effect = EFFECT_OVERHEAT,  //changed to MOVE_EFFECT_RECOIL_33
         .type = TYPE_GRASS,
         .accuracy = 90,
         .pp = 5,
@@ -10077,7 +10077,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_FLEUR_CANNON] =
     {
-        .effect = EFFECT_OVERHEAT,
+        .effect = EFFECT_OVERHEAT,  //changed to MOVE_EFFECT_RECOIL_33
         .power = 130,
         .type = TYPE_FAIRY,
         .accuracy = 90,

@@ -476,7 +476,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_TANGLED_FEET},
-            .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_NONE},
+            .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_EARLY_BIRD},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
         #endif
@@ -505,7 +505,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_SCRAPPY},
-            .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_NONE},
+            .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_AVIATOR},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
         #endif
@@ -534,7 +534,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_SCRAPPY},
-            .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_NONE},
+            .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_AVIATOR},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
         #endif
@@ -1185,7 +1185,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         .abilities = {ABILITY_NUISANCE, ABILITY_NUISANCE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_INSOMNIA},
         #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -1212,7 +1212,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         .abilities = {ABILITY_INNER_FOCUS, ABILITY_NUISANCE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_INSOMNIA},
         #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -3011,7 +3011,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_LIMBER, ABILITY_RECKLESS},
-            .abilityHidden = {ABILITY_UNBURDEN, ABILITY_NONE},
+            .abilityHidden = {ABILITY_UNBURDEN, ABILITY_MUSCLE_MAGIC},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_LIMBER, ABILITY_NONE},
         #endif
@@ -3043,7 +3043,7 @@ const struct BaseStats gBaseStats[] =
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
         #endif
-        .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_NONE},
+        .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_MUSCLE_MAGIC},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -4037,7 +4037,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_ROCK_HEAD, ABILITY_ARENA_TRAP},
+        .abilities = {ABILITY_ROCK_HEAD, ABILITY_PRESSURE},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_UNNERVE, ABILITY_RIVALRY},
         #endif
@@ -4231,7 +4231,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_DRAGON,
-        .abilities = {ABILITY_INNER_FOCUS, ABILITY_NONE},
+        .abilities = {ABILITY_INNER_FOCUS, ABILITY_AVIATOR},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_MULTISCALE, ABILITY_NONE},
         #endif
@@ -4771,7 +4771,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         .abilities = {ABILITY_INNER_FOCUS, ABILITY_NUISANCE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_AVIATOR},
         #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -5355,14 +5355,14 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_SUNKERN] =
     {
-        .baseHP = 30,
+        .baseHP = 45,
         .baseAttack = 30,
         .baseDefense = 30,
         .baseSpeed = 30,
-        .baseSpAttack = 40,
+        .baseSpAttack = 55,
         .baseSpDefense = 30,
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_FIRE,
         .catchRate = 235,
         .expYield = 36,
         //.evYield_SpAttack = 1,
@@ -5377,7 +5377,7 @@ const struct BaseStats gBaseStats[] =
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
         #endif
-        .abilityHidden = {ABILITY_EARLY_BIRD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_OVERGROW, ABILITY_BLAZE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -5406,7 +5406,7 @@ const struct BaseStats gBaseStats[] =
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
         #endif
-        .abilityHidden = {ABILITY_PHOTOSYNTHESIZE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_PHOTOSYNTHESIZE, ABILITY_SUN_DISK},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },//made fire match grand colloseum changes
@@ -6387,7 +6387,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_HOUNDOUR] =
     {
         .baseHP = 45,
-        .baseAttack = 75,
+        .baseAttack = 85,
         .baseDefense = 30,
         .baseSpeed = 65,
         .baseSpAttack = 70,
@@ -6414,7 +6414,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_HOUNDOOM] =
     {
         .baseHP = 75,
-        .baseAttack = 100,
+        .baseAttack = 110,
         .baseDefense = 50,
         .baseSpeed = 95,
         .baseSpAttack = 95,
@@ -6622,7 +6622,7 @@ const struct BaseStats gBaseStats[] =
         .catchRate = 65,
         .expYield = 42,
         //.evYield_Attack = 1,
-        .genderRatio = PERCENT_FEMALE(25),
+        .genderRatio = PERCENT_FEMALE(35),
         .eggCycles = 25,
         .friendship = 70,
         .growthRate = GROWTH_MEDIUM_FAST,
@@ -8407,7 +8407,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FAIRY,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CUTE_CHARM, ABILITY_NORMALIZE},
-            .abilityHidden = {ABILITY_WONDER_SKIN, ABILITY_NONE},
+            .abilityHidden = {ABILITY_WONDER_SKIN, ABILITY_RATTLED},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CUTE_CHARM, ABILITY_NONE},
         #endif
@@ -8437,7 +8437,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FAIRY,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CUTE_CHARM, ABILITY_NORMALIZE},
-            .abilityHidden = {ABILITY_WONDER_SKIN, ABILITY_NONE},
+            .abilityHidden = {ABILITY_WONDER_SKIN, ABILITY_RATTLED},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CUTE_CHARM, ABILITY_NONE},
         #endif
@@ -10404,7 +10404,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         .abilities = {ABILITY_ROCK_HEAD, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_DEFIANT},
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -10432,7 +10432,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         .abilities = {ABILITY_ROCK_HEAD, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_OVERCOAT, ABILITY_NONE},
+            .abilityHidden = {ABILITY_OVERCOAT, ABILITY_SHELL_ARMOR},
         #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -10460,7 +10460,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         .abilities = {ABILITY_INTIMIDATE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_MOXIE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_MOXIE, ABILITY_AVIATOR},
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -11068,7 +11068,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_RECKLESS, ABILITY_NONE},
+            .abilityHidden = {ABILITY_RECKLESS, ABILITY_EARLY_BIRD},
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -11095,7 +11095,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         .abilities = {ABILITY_INTIMIDATE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_RECKLESS, ABILITY_NONE},
+            .abilityHidden = {ABILITY_RECKLESS, ABILITY_AVIATOR},
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -11122,7 +11122,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         .abilities = {ABILITY_INTIMIDATE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_RECKLESS, ABILITY_NONE},
+            .abilityHidden = {ABILITY_RECKLESS, ABILITY_AVIATOR},
         #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -11149,7 +11149,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SIMPLE, ABILITY_UNAWARE},
-            .abilityHidden = {ABILITY_MOODY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_MOODY, ABILITY_NORMALIZE},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
@@ -11178,7 +11178,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SIMPLE, ABILITY_UNAWARE},
-            .abilityHidden = {ABILITY_MOODY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_MOODY, ABILITY_MOLD_BREAKER},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
@@ -11940,10 +11940,11 @@ const struct BaseStats gBaseStats[] =
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RUN_AWAY, ABILITY_MULTI_TASK},// and doesn't attack as hard, or they open themselves up to attack
         #endif
-        .abilityHidden = {ABILITY_LIMBER, ABILITY_NONE}, //ABILITY_KLUTZ  no instead I'll fix the ability
+        .abilityHidden = {ABILITY_LIMBER, ABILITY_MULTI_TASK}, //ABILITY_KLUTZ  no instead I'll fix the ability
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,//so either klutz will be unable to hold items, but instead either take 75% damage or do 25% more damage I like the former, 
-    },//like you're used to stumbling and falling so are able to shrug off blows
+    },//like you're used to stumbling and falling so are able to shrug off blows...OK forgot i even made that note, came up with different idea will combine
+    //klutz take 75% dmg and no damage from recoil effects i.e rockhead with dmg reduction DONE
 
     [SPECIES_LOPUNNY] =
     {
@@ -11969,7 +11970,7 @@ const struct BaseStats gBaseStats[] =
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CUTE_CHARM, ABILITY_MULTI_TASK},
         #endif
-        .abilityHidden = {ABILITY_LIMBER, ABILITY_NONE}, //ABILITY_KLUTZ
+        .abilityHidden = {ABILITY_LIMBER, ABILITY_MULTI_TASK}, //ABILITY_KLUTZ
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -23298,7 +23299,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_DOTTLER] =
     {
-        .baseHP = 50,
+        .baseHP = 60,
         .baseAttack = 35,
         .baseDefense = 80,
         .baseSpeed = 30,
@@ -23328,7 +23329,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_ORBEETLE] =
     {
-        .baseHP = 60,
+        .baseHP = 63,
         .baseAttack = 45,
         .baseDefense = 110,
         .baseSpeed = 117,
