@@ -304,7 +304,7 @@ const u8 gMoveDescription_MudSport[] = _("Weakens ELECTRIC-\ntype attacks while\
 const u8 gMoveDescription_IceBall[] = _("A 5-turn rolling\nattack that becomes\nstronger each time\nit rolls.");
 const u8 gMoveDescription_NeedleArm[] = _("An attack using\nthorny arms.\nIt may make the\nfoe flinch.");
 const u8 gMoveDescription_SlackOff[] = _("The user slacks off\nand restores its HP\nby half its full\nHP.");
-const u8 gMoveDescription_HyperVoice[] = _("The user lets loose\na horribly loud\nshout with the\npower to damage.");
+const u8 gMoveDescription_HyperVoice[] = _("The user looses a\nhorribly loud shout\nthat does damage\nand disorients.\nIt may also confuse.");
 const u8 gMoveDescription_ToxicFang[] = _("The foe is bitten\nwith toxic fangs.\nIt may also badly\npoison the foe.");
 const u8 gMoveDescription_CrushClaw[] = _("The foe is attacked\nwith sharp claws.\nIt may also lower\nthe foe's DEFENSE.");
 const u8 gMoveDescription_BlastBurn[] = _("The foe is hit with\na huge explosion.\nThe user can't move\non the next turn.");
@@ -557,7 +557,7 @@ const u8 gMoveDescription_Assurance[] = _("An attack that\ngains power if\nthe u
     .string "Casts comets onto the foe.\nHarshly lowers the Sp. Atk.$"
 
     gDISCHARGEDescription :
-    .string "Zaps the foes with electri-\ncity.\nMay paralyze them.$"
+    .string "The user strikes\neverything around it\nby letting loose\n a flare of electricity.\nThis may also\ncause paralysis.$"
 
     gPOWER_WHIPDescription :
     .string "Violently lashes the foe\nwith vines or tentacles.$"
@@ -1061,7 +1061,7 @@ const u8 gMoveDescription_Assurance[] = _("An attack that\ngains power if\nthe u
     .string "Fearsome blades of stone\nattack both foes.$"
 
     gLAVA_PLUMEDescription :
-    .string "Scarlet flames torch\neverything around the user.$"
+    .string "The user torches\neverything around\nit in an inferno of\n scarlet flames.\nThis may also leave\nfoes with a burn.$"
 
     gLEAF_STORMDescription :
     .string "Whips up a storm of leaves.\nHarshly lowers the Sp. Atk.$"
@@ -2173,7 +2173,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [ MOVE_NATURES_MADNESS ] = gMoveDescription_Pound,
     [ MOVE_MULTI_ATTACK ] = gMoveDescription_Pound,
     [ MOVE_MIND_BLOWN ] = gMoveDescription_Pound,
-    [ MOVE_PLASMA_FISTS ] = gMoveDescription_Pound,
+    [ MOVE_PLASMA_FIST ] = gMoveDescription_Pound,
     [ MOVE_PHOTON_GEYSER ] = gMoveDescription_Pound,
 
     [ MOVE_ZIPPY_ZAP ] = gMoveDescription_Pound,

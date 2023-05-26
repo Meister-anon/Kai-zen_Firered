@@ -768,11 +768,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_NORMAL,
         .accuracy = 90,
         .pp = 20,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 10,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED| FLAG_SOUND,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_CONFUSION,
     },//previously sonic boom
 
     [MOVE_DISABLE] =
@@ -892,7 +893,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         
         
         .power = 95,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_BOTH,
         .effect = EFFECT_HIT,
         .type = TYPE_WATER,
         .accuracy = 100,
@@ -1394,11 +1395,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_DMG_UNDERGROUND,
         .split = SPLIT_PHYSICAL,
-    },
+    },//remove target foes adn ally, from most things as it doesn't make sense, keep for explosion etc.
 
     [MOVE_FISSURE] =
     {
@@ -3465,7 +3466,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 30,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_DMG_UNDERGROUND,
         .split = SPLIT_PHYSICAL,
@@ -4743,12 +4744,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_HYPER_VOICE] =
     {
-        .effect = EFFECT_HIT,
+        .effect = EFFECT_CONFUSE_HIT,
         .power = 90,
         .type = TYPE_NORMAL,
         .accuracy = 100,
         .pp = 10,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 20,
         .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SOUND,
@@ -6354,6 +6355,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SOUND | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
+        //.argument = MOVE_EFFECT_CONFUSION,        decide later vsonic
     },
 
     [MOVE_DRAGON_PULSE] =
@@ -6799,7 +6801,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 30,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_FOES_AND_ALLY,    //keep for this, as is actually an indiscriminate attack
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
@@ -6813,7 +6815,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 30,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_FOES_AND_ALLY,    //same logic as above 
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
@@ -6992,7 +6994,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #if B_UPDATED_MOVE_DATA >= GEN_6
             .power = 65,
             .secondaryEffectChance = 100,
-            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SOUND | FLAG_SHEER_FORCE_BOOST,
+            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
         #elif B_UPDATED_MOVE_DATA == GEN_5
             .power = 60,
             .secondaryEffectChance = 10,
@@ -7505,7 +7507,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 10,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
@@ -7593,7 +7595,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_FIRE,
         .accuracy = 100,
         .pp = 20,
-        .secondaryEffectChance = 100,
+        .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
@@ -7723,11 +7725,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_NORMAL,
         .accuracy = 100,
         .pp = 15,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 10,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_CONFUSION,
     },
 
     [MOVE_CHIP_AWAY] =
@@ -8121,7 +8124,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 20,
         .secondaryEffectChance = 100,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
@@ -8442,7 +8445,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 30,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_FOES_AND_ALLY,    //is similar to lava plume so keep
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_BALLISTIC | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
@@ -8708,7 +8711,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 0,
         .pp = 10,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_USER,
+        .target = MOVE_TARGET_ALL_BATTLERS,
         .priority = 0,
         .flags = 0,
         .split = SPLIT_STATUS,
@@ -8816,11 +8819,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 20,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
-    },
+    },//heliolisk signature potentially spread around
 
     [MOVE_FORESTS_CURSE] =
     {
@@ -8845,7 +8848,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
@@ -8872,11 +8875,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_FAIRY,
         .accuracy = 0,
         .pp = 15,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 10,
         .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_CONFUSION,
     },
 
     [MOVE_PARTING_SHOT] =
@@ -9042,15 +9046,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BOOMBURST] =
     {
         .effect = EFFECT_HIT,
-        .power = 140,
+        .power = 110,
         .type = TYPE_NORMAL,
         .accuracy = 100,
         .pp = 10,
-        .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .secondaryEffectChance = 0, //realized for balance sake, shouldn't add confuse chance
+        .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_CONFUSION,
     },
 
     [MOVE_FAIRY_LOCK] =
@@ -10007,16 +10012,17 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_CLANGING_SCALES] =
     {
-        .effect = EFFECT_ATTACKER_DEFENSE_DOWN_HIT,
+        .effect = EFFECT_ATTACKER_DEFENSE_DOWN_HIT, //already uses certain effect in battle script
         .power = 110,
         .type = TYPE_DRAGON,
         .accuracy = 100,
         .pp = 5,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_CONFUSION,
     },
 
     [MOVE_DRAGON_HAMMER] =
@@ -10035,17 +10041,17 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_BRUTAL_SWING] =
     {
-        .effect = EFFECT_HIT,
-        .power = 60,
+        .effect = EFFECT_FLINCH_HIT,
+        .power = 80,
         .type = TYPE_DARK,
         .accuracy = 100,
         .pp = 20,
-        .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .secondaryEffectChance = 30,
+        .target = MOVE_TARGET_FOES_AND_ALLY,    //keeeping this, is indiscriminate attack, buffed dmg make in line with other similar moves, same logic gave secondary effect to balance
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-    },
+    },//vsonic adjust move description
 
     [MOVE_AURORA_VEIL] =
     {
@@ -10285,35 +10291,35 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_FOES_AND_ALLY,    //is explosion
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
     },
 
-    [MOVE_PLASMA_FISTS] =
+    [MOVE_PLASMA_FIST] =
     {
-        .effect = EFFECT_PLASMA_FISTS, // Needs a custom move effect
-        .power = 100,
+        .effect = EFFECT_PLASMA_FISTS, // Needs a custom move effect    //sets ion deluge single turn
+        .power = 130,
         .type = TYPE_ELECTRIC,
-        .accuracy = 100,
+        .accuracy = 0,
         .pp = 15,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_RANDOM,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_IRON_FIST_BOOST,
         .split = SPLIT_PHYSICAL,
-    },
+    },//want anim to be trailing blue lightning effect, like wing attack does for tornado  rebalanced, inspired by zera unite move, raw plasma will seek out a target 
 
     [MOVE_PHOTON_GEYSER] =
     {
-        .effect = EFFECT_PHOTON_GEYSER, // Needs a custom move effect
+        .effect = EFFECT_PHOTON_GEYSER, // Needs a custom move effect //similar to my hidden power effect, it changes split, based on user offense stat, 
         .power = 100,
-        .type = TYPE_PSYCHIC,
-        .accuracy = 100,
+        .type = TYPE_PSYCHIC,       //this is meant to lean into the specialties of the different forms, so intead of stat will make split species based
+        .accuracy = 100,            //and then for ultra necrozma, make it based on enemies highest def stat, so you always attack their weakness
         .pp = 5,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_BOTH,    //changed from ally and foe target,may make single target
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
@@ -10768,7 +10774,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_CLANGOROUS_SOUL] =
     {
-        .effect = EFFECT_CLANGOROUS_SOUL,   //TODO
+        .effect = EFFECT_CLANGOROUS_SOUL,   //TODO  can make bs command for it, use setstatchanger and loop the battle stats until all stats are boosted
         .power = 0,
         .type = TYPE_DRAGON,
         .accuracy = 100,
@@ -10936,11 +10942,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_ELECTRIC,
         .accuracy = 100,
         .pp = 10,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 10,
         .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_CONFUSION,
     },
 
     [MOVE_APPLE_ACID] =
@@ -11267,13 +11274,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_CORROSIVE_GAS] =
     {
-        .effect = EFFECT_SPLASH,   //TODO
+        .effect = EFFECT_KNOCK_OFF,   //TODO   is essentially knock off why was this not done?
         .power = 0,
         .type = TYPE_POISON,
         .accuracy = 100,
         .pp = 40,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_FOES_AND_ALLY,
+        .target = MOVE_TARGET_BOTH, //changed to make more useful.
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_STATUS,
@@ -11491,17 +11498,17 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_EERIE_SPELL] =
     {
-        .effect = EFFECT_EERIE_SPELL, // To do. It's a copy of Spite that inflicts damage and reduced the target's last move's PP by 3 instead of 4.
+        .effect = EFFECT_EERIE_SPELL, // Done. It's a copy of Spite that inflicts damage and reduced the target's last move's PP by 3 instead of 4.
         .power = 80,
-        .type = TYPE_PSYCHIC,   //test
+        .type = TYPE_PSYCHIC,   //test  //since its a 5 pp move, I think I'll just give it the normal spite effect I made, rather than limiting it to reduce 3 pp.
         .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
-    },
+    },//ok checked double checked japanese translation and there's no reason for this move to be a sound move. its just a dark magic spell
 
     //Custom Moves 
 
@@ -11647,11 +11654,12 @@ use wonder gaurd logic to determine its super effective
             .type = TYPE_FLYING,
             .accuracy = 100,
             .pp = 20,
-            .secondaryEffectChance = 100,
+            .secondaryEffectChance = 10,
             .target = MOVE_TARGET_SELECTED,
             .priority = 0,
-            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
             .split = SPLIT_SPECIAL,
+            .argument = MOVE_EFFECT_CONFUSION,
         },
 
 };

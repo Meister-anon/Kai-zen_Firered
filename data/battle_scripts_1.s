@@ -151,7 +151,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectBatonPass
 	.4byte BattleScript_EffectHit
 	.4byte BattleScript_EffectRapidSpin
-	.4byte BattleScript_EffectSonicboom
+	.4byte BattleScript_EffectSonicscreech
 	.4byte BattleScript_EffectTwoTurnsAttack
 	.4byte BattleScript_EffectMorningSun
 	.4byte BattleScript_EffectMorningSun
@@ -3701,6 +3701,34 @@ BattleScript_EffectSpite::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectEerieSpell::	@excluded from multitask
+	attackcanceler
+	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
+	tryspiteppreduce BattleScript_HitFromAtkString	@jumps if fails to reduce pp, would activate multitask, but is fine since it wont reduce pp.
+	attackstring
+	ppreduce
+	critcalc
+	damagecalc
+	typecalc
+	adjustnormaldamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage 0x40
+	resultmessage
+	waitmessage 0x40
+	printstring STRINGID_PKMNREDUCEDPP
+	waitmessage 0x40
+	seteffectwithchance
+	argumenttomoveeffect
+	tryfaintmon BS_TARGET, 0, NULL
+	goto BattleScript_MoveEnd
+
 BattleScript_EffectHealBell::
 	attackcanceler
 	attackstring
@@ -4188,7 +4216,7 @@ BattleScript_EffectRapidSpin::
 	setmoveeffect MOVE_EFFECT_RAPIDSPIN | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
 	goto BattleScript_EffectHit
 
-BattleScript_EffectSonicboom::
+BattleScript_EffectSonicscreech::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring

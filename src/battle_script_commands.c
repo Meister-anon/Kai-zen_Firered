@@ -957,7 +957,7 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_PHANTOM_FORCE] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK,
     [MOVE_PHOTON_GEYSER] = FORBIDDEN_METRONOME,
     [MOVE_PIKA_PAPOW] = FORBIDDEN_METRONOME,
-    [MOVE_PLASMA_FISTS] = FORBIDDEN_METRONOME,
+    [MOVE_PLASMA_FIST] = FORBIDDEN_METRONOME,
     [MOVE_PRECIPICE_BLADES] = FORBIDDEN_METRONOME,
     [MOVE_PROTECT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_PYRO_BALL] = FORBIDDEN_METRONOME,
@@ -1561,7 +1561,7 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         JumpIfMoveFailed(7, move);
         return TRUE;
-    }//emereald doesn't include FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING in this
+    }
 
     if ((!IsBattlerGrounded(gBattlerTarget) || IS_BATTLER_OF_TYPE(gBattlerTarget,TYPE_GHOST)) && (gBattleMoves[move].effect == (GROUND_TRAPS)))
     {
@@ -4190,6 +4190,9 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //that way may not need to make a separate status,// seems to work no apparent bugs
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
+        SetMoveEffect(0, MOVE_EFFECT_CERTAIN); 
+
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_SPEED_UP_HIT)       //go over 100%  effects, see which I can put here to just make certain, may be able to do all.
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
     
 
@@ -8785,7 +8788,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         {
             gBattleOutcome = B_OUTCOME_MON_TELEPORTED;
         }
-        break;//abilities isnt in base firered so switch in stuff is handled elsewhere typically
+        break;//this isnt in base firered so switch in stuff is handled elsewhere typically
     case VARIOUS_SWITCHIN_ABILITIES:
         gBattlescriptCurrInstr += 3;
         AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, gActiveBattler, 0, 0, 0);
@@ -12238,15 +12241,23 @@ static void atkAD_tryspiteppreduce(void) //vsonic need test, for odds and if eff
         for (i = 0; i < MAX_MON_MOVES; ++i)//move only has base 10 pp buff bad luck odds, to be more feasible.
             if (gLastMoves[gBattlerTarget] == gBattleMons[gBattlerTarget].moves[i]) //check after but think its 30% odds now, 0-9 if less than 4
                 break;
-        if (i != MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] != 0)
-        {
-            if (luck > 3) //if 4,5,6,7,8, or 9;  do normal effect  6 out of 10 60% odds  this shuold be perfect, still need test
+        if (i != MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] != 0
+            && (gCurrentMove != MOVE_EERIE_SPELL && !TestSheerForceFlag(gBattlerAttacker, gCurrentMove)))       //test think should work? 
+        {//if works would fail to do pp drop if eerie spell used on a sheer force mon, and instead jump to damage phase and boost damage.
+            if (luck > 3) { //if 4,5,6,7,8, or 9;  do normal effect  6 out of 10 60% odds  this shuold be perfect, still need test
                 ppToDeduct = (Random() % 2) + 4; //removes 4-5 pp   //new more consistent effect, min 4 drop, on move just used so base 5 pp moves get removed
-            else if (luck > 0)  //might go down to + 3
+                PREPARE_STRING_BUFFER(gBattleTextBuff3, gText_EmptySpace);
+            }
+            else if (luck > 0) {  //might go down to + 3      (should be 3 & below not 0)  3 2 1
                 ppToDeduct = 10;    //bad luck clause, since uses else if, should automatically exclude values above 3  shoudl be 1-3
-            if (luck == 0)
-                ppToDeduct = gBattleMons[gBattlerTarget].pp[i];//want to make text for extranormal effects, 1st is mon had bad luck, other is mon's luck ran out!
+                PREPARE_STRING_BUFFER(gBattleTextBuff3, STRINGID_SPITE_BADLUCK);
+            }
+            if (luck == 0) {
+                ppToDeduct = gBattleMons[gBattlerTarget].pp[i];//want to make text for extranormal effects, 1st is mon "had bad luck", other is mon's "luck ran out!"
+                PREPARE_STRING_BUFFER(gBattleTextBuff3, STRINGID_SPITE_TOTAL_LOSS);
+            }
             //these strings would run before the normal sprite text
+
             if (gBattleMons[gBattlerTarget].pp[i] < ppToDeduct)
                 ppToDeduct = gBattleMons[gBattlerTarget].pp[i];
             PREPARE_MOVE_BUFFER(gBattleTextBuff1, gLastMoves[gBattlerTarget])

@@ -3769,21 +3769,19 @@ static void TryDoEventsBeforeFirstTurn(void)
         //from poison/weezing, but countred by increasd smackdown learnset and roost change
 
         // Check all switch in abilities happening from the fastest mon to slowest.
-        while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount) //change to work on switchin and when opponent switches pokemon.
+        while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount) //want to change to work on switchin and when opponent switches pokemon.
         {
             if (AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter], 0, 0, 0) != 0)
                 ++effect; //believe this is looping through only switch in abilities, I think long as ability isn't none?
             ++gBattleStruct->switchInAbilitiesCounter; //intimidate2 isn't referenced anywhere, so I assume its just baked into normal switchin
-            if (effect)
+            //if I want another category of switchin abilities, pretty sure all I need to do is add it in here above the counter? unless this is all really battle 1st turn
+            //and not firstturn for mon in which case it wouldn't work for my needs..
+            if (effect)//think if effect increments counts as activated so returns and checks next battler?
                 return; //yeah checking mon in battle for if they have switchin abilities, and activates them if they do.
         } //check pursuit it may be the best way to do this, since it tells when a battler is switching and activates an effect
         //plan to pattern after spikes instead as that effects side, and only on mon switching in
         if (AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE1, 0, 0, 0, 0) != 0) //this is battle start intimidate.
-            return;//buff willl make strong so need a counter, make intimidate fail if status 1
-        // or if confused, if confusion success is same oddds as confusion success attack,
-        //set to do confusion battlescript on attacker, instead of  intimiate script if fails
-        //i.e play twirly birds over mon to indicate why intimidate didnt go off.
-        //edit intimidat logic for that instead of here.
+            return;
         if (AbilityBattleEffects(ABILITYEFFECT_TRACE, 0, 0, 0, 0) != 0)
             return;
         // Check all switch in items having effect from the fastest mon to slowest.

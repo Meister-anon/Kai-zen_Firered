@@ -590,6 +590,9 @@ as well as the effect of increasing trap duration
 * think of it like them predicting an attack specifically from that move -
 * ( can use telepathy logic  for these effects, its essentially telepathy but single use)
 * can attempt include type component to check which move woulda actually do most damage to me, more than just power based
+* yeah I think that's a necessity, otherwise could check a move that would have no effect on my type or I resist it.
+* all I would need to do is check type and decrease/increase power by the multiplier  and if immune read power as 0
+* put that as bottom line for the mov the last augmentation / actually no would have to go inside each case
 * 
 * think it may be too powerful for these abilities to reactivate when new enemy switches in
 * idk maybe not psychic type is usually pretty frail so this gives them slightly safer switch in, 
@@ -599,6 +602,16 @@ as well as the effect of increasing trap duration
 * 
 * 
 * gDisableStructs[battler].isFirstTurn == 2  is logic for mon switchig in, can use for switchin reactivation condition
+* 
+* //buff willl make strong so need a counter, make intimidate*switchin* fail if status 1
+        // or if confused, if confusion success is same oddds as confusion success attack,
+        //set to do confusion battlescript on attacker, instead of  intimiate script if fails
+        //i.e play twirly birds over mon (use play status animation do for all abilities canceled by status) to indicate why intimidate didnt go off.
+        //edit intimidat logic for that instead of here.    *would get annoying so make instant text, and short animation
+        //can make function that checks if ability can be activated due to status, return true false, than can just use an else statement, to make 
+        //the ability clause jump to bs script for fail condition play status animation look for confusion first, then loop through status1 volatile status
+        //in order to choose which one to display, (mostly done for  later plan to be able to multi status a targt)
+        //"name with prefix, couldn't activate B_Buff1" where buffer is ability name
 * 
 * fix delibird learnset oh already done
 * Give crabominable a better front sprite, its just ugly 
@@ -838,13 +851,70 @@ Thunder Wave Electric TM45
 * also setting up embargo as side status ability, will give to theif mon, liepard  theival etc. also give them pickup if they don't have it. - DONE
 * 
 * nother idea true anti heal, gbattlemovedamage *-1  if attempts to heal re-reverses damage formula, so it causes you to take damage instead.
-* giratina origin  etc.  imagine uses rest and just dies off rip 0.o
+* imagine uses rest and just dies off rip 0.o
 * can give to darkrai too, since you die in sleep when you're trying to rest use same move effect list as IsHealBlockPreventingMove
 *ABILITY_DESPAIR  and look at itembattleeffects etc. setup like healblock has 5 turn timer or no timer, if permanent do if ability on opposing side
 *
+* 
+* Give giratina new ability a combination of competitive and defiant, known as ursurper 
+* 
+* ability for giratina origin
+* //idea inverse world being on the field forces inverse battle interaction reversing all type interactions for this mon,
+    //what is super effective becommes an immunity,  so it can be tossed against things it normally is weak too?
+    //yeah that works, would also make it immune to fairy and dragon  do something like how wonder gaurd works that shifts the applies effctiveness
+
+    //check ability if super effectie make it no effect, if not very effective or no effect make it super effective
+    //if normally effective make it  not very effective
+
+    //attacks it does that would normally be not very effective to target become super effective
+    //like wondergaurd will need to make special ai logic for
+* 
+* note from bulbapedia -  Telepathy is the most common Ability to have as a Hidden Ability. 
+* - Telepathy Anticipates an ally's attack and dodges it.  -
+* ok telepathy seems to be another levitate sitaution, it was only introduced to deal with a  mechanic change.
+* i.e multi target moves, being able to hit everyone  i.e surf earthquake now hitting your teammate too.
+* 
+* in gen 3 that mechanic doesn't exist and I doubt I'll add it back, its pretty dumb, the idea is the pokemon is able to control the elements,
+* and focus/target its attacks, so it makes no sense  they can avoid hitting their own teammates,
+* or you'd have to expect you as a trainr was so bad, they would intenionally use a wide aoe move while your own pokemon was standing right in front of you.
+* 
+* it doesn't make sense, for anything other than explosion, which is clearly an indiscriminate massive uncontrolled blast.
+* which is obviously the nature of an explosion
+* 
+* without that mechanic change telepathy doesnt really do anything, other than prevent you from targetting your allies with moves, which sometimes you want to do.
+* It would become useful if I get my new confusion effect going which, would make characters attack others at random when the roll fails,
+* rather than only hurting itself.
+* 
+* but confusion isnt everywhere so still rare uses case, 
+* idk, could  change to have effect similar to how anticipation and forewarn now work?
+* need check who all has ability
+* nvm dont want to just copy effect as this already goes on psychic mon, which would have forewarn
+* 
+* yeah was right, its just like levitate, post gen 5 it was just slapped on everything for no reason, 
+* or to help mon who's kit would be hurt by that dumb change.
+* 
+* for psychic mon, excluding woboffet line who actually would benefit from the effect, replace with forewarn, for legendaries just remove it
+* 
+* in attempting to remove telepathy, made sound ability for noibat/other bats,sonar, decided to add confuse chance, to all(most) damaging sound based moves
+* as loud noises disorient and super sonic is the og sound move.
+* 
+* make new type sound type, treat like mystery, used for move but not for pokemon,  will make all normal sound moves type normal
+* offensively neutral to everything (just don't add to type chart
+* ...well nvm I'll add it, just so people know its there, type sound will be immune to type sound just so ppl know its there
+* delay implementation for now, would need edit to icon sheet, for new icon, 
+* as well as all places where types are used
+* 
+* NOTE - still need to finish set message for spite changes, can do just like I did anticipation ability messages
+* -DONE   also made eerie spell use the new spite effect rather than only taking 3 pp. //NEED test errie spell test if still works aftr sheer force logic added
+* 
+* tweaked moves that were target ally & foes, changed to more appropriate targetting, need adjust move descriptions to match
+* 
 * Also comb over stats again, to attempt to address power creep?
 * not sure if it would matter, higher is still higher even if I bring things closer
 * on the offensive side i.e atk sp atk speed  and my ev cap increase is technically already made to address this
+* 
+* //go over 100%  effects, see which I can make certain in bs commands.c seteffectwithchance function, I think I can do all,
+* that way I free room for arguments if I chose to add then.
 * 
 *
 * Look at changes to early gen mon, consider bringing back stats from gen 1 & 2

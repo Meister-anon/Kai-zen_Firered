@@ -3420,6 +3420,13 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         attack = (150 * attack) / 100;
     if (attacker->ability == ABILITY_SOLAR_POWER)
         spAttack = (150 * spAttack) / 100;
+    if (attacker->ability == ABILITY_URSURPER && attacker->status1 & STATUS1_ANY)
+    {
+        attack = (125 * attack) / 100;
+        spAttack = (125 * spAttack) / 100;        
+    }
+    if (attacker->ability == ABILITY_DEFIANT && attacker->status1 & STATUS1_ANY)
+        attack = (130 * attack) / 100;
     if (attacker->ability == ABILITY_COMPETITIVE && attacker->status1 & STATUS1_ANY)
         spAttack = (130 * spAttack) / 100;  //CUT Back to 130, because it already has stat raise component
     if (attacker->ability == ABILITY_PLUS && ABILITY_ON_FIELD2(ABILITY_MINUS))
@@ -3487,7 +3494,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_TIGER_CUB:
     case ABILITY_TINTED_LENS:
-        if (gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE) //think should work
+        if (gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE) //think should work,  it might not work, if move result is foud after damage stepp
             gBattleMoveDamage *= 2;
         break;
     case ABILITY_FLARE_BOOST:
@@ -3611,6 +3618,11 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     case ABILITY_PUNK_ROCK:
         if (gBattleMoves[move].flags & FLAG_SOUND)
             gBattleMovePower = (gBattleMovePower * 130 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.3));
+        break;
+    case ABILITY_SONAR:
+        if (gBattleMoves[move].flags & FLAG_SOUND)
+            gBattleMoveDamage *= 2;
         //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_STEELY_SPIRIT:
@@ -3766,20 +3778,20 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;  //tested in w3 schools, checks out, it reads top to bottom with ifs, not like switch breaks, its all inclusive
         //...actually following with else if is what makes it non inclusive...i.e not read the else if vsonic IMPORTANT
     case ABILITY_LIQUID_METAL:
-        if ((IsMoveMakingContact(move, gBattlerAttacker)) || usesDefStat)
+        if ((IsMoveMakingContact(move, gBattlerAttacker)) || usesDefStat)   //regi steel exclusive
         {
             gBattleMoveDamage = (gBattleMoveDamage * 67 / 100);
             
         }
         break;
     case ABILITY_MULTISCALE:
-    case ABILITY_SHADOW_SHIELD:
+    case ABILITY_SHADOW_SHIELD: //lunala exclusive
         if (BATTLER_MAX_HP(gBattlerTarget))
             gBattleMoveDamage /= 2;
         break;
     case ABILITY_FILTER:
     case ABILITY_SOLID_ROCK:
-    case ABILITY_PRISM_ARMOR:
+    case ABILITY_PRISM_ARMOR:   //necrozma exclusive
         if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
         {
             gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);

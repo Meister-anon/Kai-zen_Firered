@@ -317,8 +317,11 @@
 #define ABILITY_CORRUPTION 294   //anti heal switch in ability,  users corrupted influence spreads decay, preventing foe from healing, giving to guzzlord etc.
 #define ABILITY_BANDIT 295   //embargo on switch in
 #define ABILITY_AVIATOR 296   //Usually flying type, an experienced flyer who's speed can't be lowered  flying version of run away
+#define ABILITY_URSURPER 297	//NEW giratina base ability
+#define ABILITY_INVERSE_WORLD 298	//NEW giratina origin ability
+#define ABILITY_SONAR 299	//sound move boost for bat pokemon,  double move damage, mostly to make sonic boom do dragon breath damage, and be strong early HA only
 
-#define ABILITIES_COUNT 297 //
+#define ABILITIES_COUNT 300 //
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 

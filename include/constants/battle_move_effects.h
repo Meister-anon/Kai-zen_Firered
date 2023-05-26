@@ -285,7 +285,7 @@
 #define EFFECT_HURRICANE 274
 #define EFFECT_TWO_TYPED_MOVE 275
 #define EFFECT_ME_FIRST 276
-#define EFFECT_SPEED_UP_HIT 277
+#define EFFECT_SPEED_UP_HIT 277	//made certain in bs_commands.c so effect should still work without needing to be 100
 #define EFFECT_QUIVER_DANCE 278
 #define EFFECT_COIL 279
 #define EFFECT_ELECTRIFY 280

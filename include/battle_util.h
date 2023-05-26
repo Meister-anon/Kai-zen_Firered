@@ -28,14 +28,14 @@
 #define ABILITYEFFECT_CHECK_BATTLER_SIDE         0xE
 #define ABILITYEFFECT_FIELD_SPORT                0xF
 #define ABILITYEFFECT_CHECK_FIELD_EXCEPT_BATTLER 0x10 // TODO: Is it correct? 
-#define ABILITYEFFECT_COUNT_OTHER_SIDE           0x11
+#define ABILITYEFFECT_COUNT_OTHER_SIDE           0x11   //check what this  does, may rename
 #define ABILITYEFFECT_COUNT_BATTLER_SIDE         0x12
 #define ABILITYEFFECT_COUNT_ON_FIELD             0x13
 #define ABILITYEFFECT_CHECK_ON_FIELD             0x14
 #define ABILITYEFFECT_NEUTRALIZINGGAS			 0x15  //swapped what was a nuisance ability test
 #define ABILITYEFFECT_MOVE_END_OTHER			 0x16
 #define ABILITYEFFECT_SWITCH_IN_ABILITIES		 0x17   //realized ability battle effects function doesn't really separate blocks well, so added more for better organization
-#define ABILITYEFFECT_SWITCH_IN_TERRAIN_ABILITY	 0x18   //nvm can't do more as new block would require new switch...and would break switch in effects i beleive
+#define ABILITYEFFECT_SWITCH_IN_TERRAIN_ABILITY	 0x18   //nvm can't do more as new block would require new switch...and would break switch in effects i beleive //could just put in same plac as switcin think in bs commands
 //#define ABILITYEFFECT_CUPIDSARROW				 0x15  //1st attempted implementation realized goes in switchin don't need new effect
 #define ABILITYEFFECT_MUD_SPORT                  0xFC	//actually potentially does as trace and intimidate have them? look over implementation again
 #define ABILITYEFFECT_WATER_SPORT                0xFD

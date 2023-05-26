@@ -777,7 +777,9 @@ void PrepareStringBattle(u16 stringId, u8 battler)
     // Check Defiant and Competitive stat raise whenever a stat is lowered.
     else if (stringId == STRINGID_DEFENDERSSTATFELL
         && ((targetAbility == ABILITY_DEFIANT && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
-            || (targetAbility == ABILITY_COMPETITIVE && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)))
+            || (targetAbility == ABILITY_COMPETITIVE && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
+            || (targetAbility == ABILITY_URSURPER && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)
+                && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)))
         && gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget)
         && ((gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != gBattlerTarget) || gBattleScripting.stickyWebStatDrop == 1)
         && !(gBattleScripting.stickyWebStatDrop == 1 && gSideTimers[targetSide].stickyWebBattlerSide == targetSide)) // Sticky Web must have been set by the foe
@@ -788,14 +790,21 @@ void PrepareStringBattle(u16 stringId, u8 battler)
         gBattlescriptCurrInstr = BattleScript_AbilityRaisesDefenderStat;
         if (targetAbility == ABILITY_DEFIANT)
             SET_STATCHANGER(STAT_ATK, 1, FALSE);    //since have extra to effect, lowered these 2 to a single stat stage for each stat drop.
-        else
+        else if (targetAbility == ABILITY_COMPETITIVE)
             SET_STATCHANGER(STAT_SPATK, 1, FALSE);
+        else if (targetAbility == ABILITY_URSURPER)
+        {
+            SET_STATCHANGER(STAT_ATK, 1, FALSE);
+            SET_STATCHANGER2(STAT_SPATK, 1, FALSE);
+        }
     }
 
     //specific case just for intimidate, uses normal effect
     else if (stringId == STRINGID_PKMNCUTSATTACKWITH
         && ((targetAbility == ABILITY_DEFIANT && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
-            || (targetAbility == ABILITY_COMPETITIVE && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)))
+            || (targetAbility == ABILITY_COMPETITIVE && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
+            || (targetAbility == ABILITY_URSURPER && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)
+                && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)))
         && gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget)
         && ((gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != gBattlerTarget) || gBattleScripting.stickyWebStatDrop == 1)
         && !(gBattleScripting.stickyWebStatDrop == 1 && gSideTimers[targetSide].stickyWebBattlerSide == targetSide))
@@ -806,8 +815,13 @@ void PrepareStringBattle(u16 stringId, u8 battler)
         gBattlescriptCurrInstr = BattleScript_AbilityRaisesDefenderStat;
         if (targetAbility == ABILITY_DEFIANT)
             SET_STATCHANGER(STAT_ATK, 3, FALSE);    //since intimidate is explicitly an 2 stage atk drop, boosting defiant, so you don't just negate
-        else
+        else if (targetAbility == ABILITY_COMPETITIVE)
             SET_STATCHANGER(STAT_SPATK, 2, FALSE);
+        else if (targetAbility == ABILITY_URSURPER)
+        {
+            SET_STATCHANGER(STAT_ATK, 4, FALSE);    //to counteract intimidate and keep pace with sp atk, and for even daring attempting to intimidate it
+            SET_STATCHANGER2(STAT_SPATK, 2, FALSE); //check if I need to update stat changer for 4 stage stat boost.
+        }
     }
 
     else if (stringId == STRINGID_PKMNCUTSATTACKWITH && targetAbility == ABILITY_RATTLED
@@ -3578,7 +3592,7 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
                         data[count].power = 0;
                     break;
                 case EFFECT_EXPLOSION:
-                    if (!(IS_BATTLER_OF_TYPE(battler, TYPE_GHOST)))
+                    if (!(IS_BATTLER_OF_TYPE(battler, TYPE_GHOST))) //remove this later gen has explosion moves that are none normal
                         data[count].power = 200;
                     else
                         data[count].power = 0;
@@ -9057,7 +9071,8 @@ void UndoFormChange(u32 monId, u32 side)
 }
 
 //format for use is MulModifier(&modifier, UQ_4_12(2.0));   & is used to denote pointer here
-void MulModifier(u16 *modifier, u16 val) //portd tried to set globably hope works
+//all functions that use modifier start with u16 modifier = UQ_4_12(1.0); so it defaults to 1, and is modulated from there
+void MulModifier(u16 *modifier, u16 val) //portd tried to set globably hope works   //can use decimal values
 {
     *modifier = UQ_4_12_TO_INT((*modifier * val) + UQ_4_12_ROUND);
 }
@@ -9065,6 +9080,31 @@ void MulModifier(u16 *modifier, u16 val) //portd tried to set globably hope work
 u32 ApplyModifier(u16 modifier, u32 val)
 {
     return UQ_4_12_TO_INT((modifier * val) + UQ_4_12_ROUND);
+}
+
+static u16 GetInverseTypeMultiplier(u16 multiplier)
+{
+    switch (multiplier)
+    {
+    case UQ_4_12(0.0):
+    case UQ_4_12(0.5):
+        return UQ_4_12(2.0);
+    case UQ_4_12(2.0):
+        return UQ_4_12(0.5);
+    case UQ_4_12(1.0):
+    default:
+        return UQ_4_12(1.0);
+    }
+}
+
+u16 GetTypeModifier(u8 atkType, u8 defType)
+{
+#if B_FLAG_INVERSE_BATTLE != 0
+    if (FlagGet(B_FLAG_INVERSE_BATTLE))
+        return GetInverseTypeMultiplier(sTypeEffectivenessTable[atkType][defType]);
+
+    return sTypeEffectivenessTable[atkType][defType];
+#endif
 }
 
 

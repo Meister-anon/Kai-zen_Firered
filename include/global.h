@@ -84,7 +84,7 @@
 #define Q_4_12_TO_INT(n)  ((int)((n) / 4096))
 #define UQ_4_12_TO_INT(n)  ((int)((n) / 4096))
 //ported uq & everything below as well as percent value modifier
-//could this let me use perecent values instead of having to use fraction work around?
+//could this let me use decimal values instead of having to use fraction work around?
 
 // Converts a Q24.8 fixed-point format number to a regular integer
 #define Q_24_8_TO_INT(n) ((int)((n) >> 8))

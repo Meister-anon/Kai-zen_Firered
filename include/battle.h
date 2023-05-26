@@ -88,7 +88,8 @@
 #define MOVE_TARGET_FOES_AND_ALLY       (1 << 5)
 #define MOVE_TARGET_OPPONENTS_FIELD     (1 << 6)
 #define MOVE_TARGET_ALLY                (1 << 7)
-#define MOVE_TARGET_ALL_BATTLERS        ((1 << 8) | MOVE_TARGET_USER)
+#define MOVE_TARGET_ALL_BATTLERS        (MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_USER)  //use untl setup like emerald, taken from MOVE_ROTOTILLER
+//#define MOVE_TARGET_ALL_BATTLERS        ((1 << 8) | MOVE_TARGET_USER)  can use when setup correctly
 
 struct TrainerMonNoItemDefaultMoves //pull from 4-12 later
 {
