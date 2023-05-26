@@ -9082,7 +9082,8 @@ u32 ApplyModifier(u16 modifier, u32 val)
     return UQ_4_12_TO_INT((modifier * val) + UQ_4_12_ROUND);
 }
 
-static u16 GetInverseTypeMultiplier(u16 multiplier)
+//attempt porting type multipliers from emerald to more easily add type check to forewarn & anticipate also 
+static u16 GetInverseTypeMultiplier(u16 multiplier) //could use total damgae calc function from emerald ported below, but type multiplier check * power should be enough
 {
     switch (multiplier)
     {
@@ -9105,6 +9106,50 @@ u16 GetTypeModifier(u8 atkType, u8 defType)
 
     return sTypeEffectivenessTable[atkType][defType];
 #endif
+}
+
+// for AI - get move damage and effectiveness with one function call
+s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u16* typeEffectivenessModifier)
+{
+    *typeEffectivenessModifier = CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, FALSE);
+    return DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, FALSE, FALSE, FALSE, *typeEffectivenessModifier);
+}
+
+static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower,
+    bool32 isCrit, bool32 randomFactor, bool32 updateFlags, u16 typeEffectivenessModifier)
+{
+    s32 dmg;
+
+    // Don't calculate damage if the move has no effect on target.
+    if (typeEffectivenessModifier == UQ_4_12(0))
+        return 0;
+
+    if (fixedBasePower)
+        gBattleMovePower = fixedBasePower;
+    else
+        gBattleMovePower = CalcMoveBasePowerAfterModifiers(move, battlerAtk, battlerDef, moveType, updateFlags);
+
+    // long dmg basic formula
+    dmg = ((gBattleMons[battlerAtk].level * 2) / 5) + 2;
+    dmg *= gBattleMovePower;
+    dmg *= CalcAttackStat(move, battlerAtk, battlerDef, moveType, isCrit, updateFlags);
+    dmg /= CalcDefenseStat(move, battlerAtk, battlerDef, moveType, isCrit, updateFlags);
+    dmg = (dmg / 50) + 2;
+
+    // Calculate final modifiers.
+    dmg = CalcFinalDmg(dmg, move, battlerAtk, battlerDef, moveType, typeEffectivenessModifier, isCrit, updateFlags);
+
+    // Add a random factor.
+    if (randomFactor)
+    {
+        dmg *= 100 - (Random() % 16);
+        dmg /= 100;
+    }
+
+    if (dmg == 0)
+        dmg = 1;
+
+    return dmg;
 }
 
 

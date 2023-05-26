@@ -3494,8 +3494,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_TIGER_CUB:
     case ABILITY_TINTED_LENS:
-        if (gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE) //think should work,  it might not work, if move result is foud after damage stepp
-            gBattleMoveDamage *= 2;
+        if (gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE) //think should work,  it might not work, if move result is foud after damage stepp, it should work 
+            gBattleMoveDamage *= 2; //is right syntax, and type calc always goes before dmg calc
         break;
     case ABILITY_FLARE_BOOST:
         if (gBattleMons[gBattlerAttacker].status1 & STATUS1_BURN && !usesDefStat) //IS_MOVE_SPECIAL(move))
@@ -3963,8 +3963,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             damage = 1;
     }
 
-    if (type == TYPE_MYSTERY)
+    /*if (type == TYPE_MYSTERY)
         damage = 0; // is ??? type. does 0 damage.
+    */
+    //removed for normalize buff to work
 
     // are effects of weather negated with cloud nine or air lock
     if (WEATHER_HAS_EFFECT2)

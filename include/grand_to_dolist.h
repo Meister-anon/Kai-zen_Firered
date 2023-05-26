@@ -893,7 +893,7 @@ Thunder Wave Electric TM45
 * yeah was right, its just like levitate, post gen 5 it was just slapped on everything for no reason, 
 * or to help mon who's kit would be hurt by that dumb change.
 * 
-* for psychic mon, excluding woboffet line who actually would benefit from the effect, replace with forewarn, for legendaries just remove it
+* for psychic mon, excluding woboffet line who actually would benefit from the effect, replace with forewarn, for legendaries just remove it -
 * 
 * in attempting to remove telepathy, made sound ability for noibat/other bats,sonar, decided to add confuse chance, to all(most) damaging sound based moves
 * as loud noises disorient and super sonic is the og sound move.
@@ -907,7 +907,7 @@ Thunder Wave Electric TM45
 * NOTE - still need to finish set message for spite changes, can do just like I did anticipation ability messages
 * -DONE   also made eerie spell use the new spite effect rather than only taking 3 pp. //NEED test errie spell test if still works aftr sheer force logic added
 * 
-* tweaked moves that were target ally & foes, changed to more appropriate targetting, need adjust move descriptions to match
+* tweaked moves that were target ally & foes, changed to more appropriate targetting, need adjust move descriptions to match -
 * 
 * Also comb over stats again, to attempt to address power creep?
 * not sure if it would matter, higher is still higher even if I bring things closer
@@ -1560,7 +1560,8 @@ goto MOVEICON_ABILITYDESC	//function for displaying move icons & ability info in
 * 
 * 
 */
-
+goto LOGIC_FOR_MOVETYPE_CHANGE  //battle_main.c things like ion deluge pixelate etc.
+goto TYPE_DMG_MODULATER //battle_script_commands.c sets the multiplier based on type,, and handles effectiveness sound/move result
 goto TYPE_AND_STAB_CHECK //battle_script_commands.c  type calc also where s.t.a.b is handled
 /*
 * plan buff normal types, their gimmick, is being highly adaptable for their lack of weaknessand resisted damage
@@ -1723,7 +1724,11 @@ goto TURN_ACTIONS_SWITCH_ETC // battle_main.c  HandleTurnActionSelectionState fu
 goto EXP_FUNCTION //battle_script_commands.c has exp & level up logic, can be used as example for mid battle evo 
 //	                and needed pokedex logic for double wilds check case 5
 
-
+goto MOVE_LEARN_PROCESS 
+/*
+* changed this and evolution move learn process, to add stop gap to prevent accidentally deleting a move, like modern games.
+* update the process chart at the top, for future users
+*/
 
 goto ENCOUNTER_COUNT_DATA
 //data for encounter count i.e number of spaces for land/surf mon defines etc.

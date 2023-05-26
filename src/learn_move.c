@@ -17,6 +17,8 @@
 #include "constants/songs.h"
 #include "constants/moves.h"
 
+#define MOVE_LEARN_PROCESS
+//since I changed order edit this for future users
 /*
  * Move relearner state machine
  * ------------------------

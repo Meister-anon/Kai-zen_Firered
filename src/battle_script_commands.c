@@ -1991,25 +1991,55 @@ void AI_CalcDmg(u8 attacker, u8 defender)
     }
 }
 
-void ModulateDmgByType(u8 multiplier)
+#define TYPE_DMG_MODULATER
+//can use this to setup inverse world ability for giratina origin
+//realized should put multiplier conditionals OUTSIDE of the switch, so they can be processed properly inside it.
+//Differnt from emerald function as it sets multiplier and move result flags togther, which is why it needs the swich
+//separating it out makes it easier to shift multiplier  with conditionals, but can still just do it at the top here.
+//The only effect types I need to handle with this function, rather than just the type calc functions, are those that effect multiple types
+//rather than just requiring a single line edit, like scrappy, freeze dry etc.  
+void ModulateDmgByType(u8 multiplier)   //Put all ability effects above ring target.
 {
-    gBattleMoveDamage = gBattleMoveDamage * multiplier / 10;
-    if (gBattleMoveDamage == 0 && multiplier)
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_INVERSE_WORLD
+        && multiplier == TYPE_MUL_NOT_EFFECTIVE)
+        multiplier = TYPE_MUL_SUPER_EFFECTIVE;
+
+    if (GetBattlerAbility(gBattlerTarget) == ABILITY_INVERSE_WORLD)//neutral = no effect,  not effective = super,  super = not effective
+    {
+        //if ; else if conditional for multiplier shift
+        if (multiplier == TYPE_MUL_NOT_EFFECTIVE)
+            multiplier = TYPE_MUL_SUPER_EFFECTIVE; 
+
+        else if (multiplier == TYPE_MUL_SUPER_EFFECTIVE)
+            multiplier = TYPE_MUL_NOT_EFFECTIVE;
+
+        else if (multiplier == TYPE_MUL_NO_EFFECT)
+            multiplier = TYPE_MUL_NORMAL;
+
+        else if (multiplier == TYPE_MUL_NORMAL)
+            multiplier = TYPE_MUL_NO_EFFECT;
+    }
+
+    if (GetBattlerHoldEffect(gBattlerTarget, TRUE) == HOLD_EFFECT_RING_TARGET
+        && multiplier == TYPE_MUL_NO_EFFECT)
+        multiplier = TYPE_MUL_NORMAL;   //not 100 on if it would work but should turn no effect into normal effectiveness
+
+    gBattleMoveDamage = gBattleMoveDamage * multiplier / 10;    //sets dmg from multiplier
+    if (gBattleMoveDamage == 0 && multiplier)   //doesn't need to be below switch, just below multiplier augments
         gBattleMoveDamage = 1;
-    switch (multiplier)
+    
+    switch (multiplier) //typecalc adjusts multiplier passed 2x or .5,  this uses multiplier to set flag, which decides effectiveness sound
     {
     case TYPE_MUL_NO_EFFECT:
         gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
         gMoveResultFlags &= ~MOVE_RESULT_NOT_VERY_EFFECTIVE;
         gMoveResultFlags &= ~MOVE_RESULT_SUPER_EFFECTIVE;
-        if (GetBattlerHoldEffect(gBattlerTarget, TRUE) == HOLD_EFFECT_RING_TARGET)
-            multiplier = TYPE_MUL_NORMAL;   //not 100 on if it would work but should turn no effect into normal effectiveness
-        break;  //still don't know why ANYONE would want this item unless you're swapping it , but that's a lot of effort and requires foreknowledge
+        break;  
     case TYPE_MUL_NOT_EFFECTIVE:
         if (gBattleMoves[gCurrentMove].power && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
         {
-            if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
-                gMoveResultFlags &= ~MOVE_RESULT_SUPER_EFFECTIVE;
+            if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //since it sets result flag for each type, I think what this means is remove super flag 
+                gMoveResultFlags &= ~MOVE_RESULT_SUPER_EFFECTIVE; // if next multiplier is not very effective, effect becomes neutral.
             else
                 gMoveResultFlags |= MOVE_RESULT_NOT_VERY_EFFECTIVE;
         }
@@ -2023,7 +2053,19 @@ void ModulateDmgByType(u8 multiplier)
                 gMoveResultFlags |= MOVE_RESULT_SUPER_EFFECTIVE;
         }
         break;
-    }
+    case TYPE_MUL_NORMAL:
+        if (gBattleMoves[gCurrentMove].power && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+            && !(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+            && !(gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE))
+        {
+            gMoveResultFlags &= ~MOVE_RESULT_NOT_VERY_EFFECTIVE;
+            gMoveResultFlags &= ~MOVE_RESULT_SUPER_EFFECTIVE;
+            gMoveResultFlags &= ~MOVE_RESULT_DOESNT_AFFECT_FOE;
+        }
+        break;
+    }//case normal isn't shown here, because its the absence of any of the flags, so moving through the case and skipping each block, would auto set normal effctiveness
+    //and base game had no need to explicitly set something as normal
+
 }
 
 #define TYPE_AND_STAB_CHECK
@@ -2055,7 +2097,9 @@ static void atk06_typecalc(void)
     }
     //joat check jack of all trades  inclusive normal type dmg buff 
     //joat stacks w stab long as not normal move, added mystrey type exclusion for normalize change
-    if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL) && moveType != (TYPE_NORMAL || TYPE_MYSTERY))
+    //forgot calculatebasedamage in pokemon.c, has it set so mystery type does 0 damage will need to remove that. 
+    //why does it even do that? there are no mystery moves, is it an extra failsafe for hidden power?
+    if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL) && moveType != (TYPE_NORMAL || TYPE_MYSTERY)) //added mystery line to prevent triggering joat, on normalize
     {
         gBattleMoveDamage = gBattleMoveDamage * 125;
         gBattleMoveDamage = gBattleMoveDamage / 100;
@@ -2099,18 +2143,18 @@ static void atk06_typecalc(void)
             {
                 if (gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
                     break;
-                i += 3;
-                continue;
-            }
-            else if (TYPE_EFFECT_ATK_TYPE(i) == moveType)   //adjust w different define to update for type addition moves
+                i += 3; //don't undeerstand what this is doing.     //ok now I get it, starts at i+0 2 more arguments in row, using +3 moves to the next row
+                continue;//its a while lloop, instead of a for loop, but this is essentially the ++i part, its the increment that changes type, which is why its also at the bottom
+            }//logic is while atk type isnt endtable i.e last row of type chart, do stuff inside, then at bottom increment to next row and start again.
+            else if (TYPE_EFFECT_ATK_TYPE(i) == moveType)//loops through entire type chart
             {
                 // check type1
-                if (TYPE_EFFECT_DEF_TYPE(i) == type1)
+                if (TYPE_EFFECT_DEF_TYPE(i) == type1)//this define checks the type chart, chart is broken into 3 fields per row, i reads the row
                 {
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
-                        ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL));
+                        ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL)); //can set multiplier with this, and mudluatedmg will set the move result based on that
                     else
-                        ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
+                        ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));   //which will translate to correct effectiveness sound message etc.
                 }
                 // check type2
                 if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
@@ -2140,8 +2184,8 @@ static void atk06_typecalc(void)
     }
     if (gBattleMons[gBattlerTarget].ability == ABILITY_WONDER_GUARD && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2
      && (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) || ((gMoveResultFlags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
-     && gBattleMoves[gCurrentMove].power)
-    {
+     && gBattleMoves[gCurrentMove].power)   //I know understand this and why it works, its saying if not super effective, and then, 
+    {                           //uses both super effective and not very effective bit flags, which balance out to normal effectiveness with or, so only super effective can dmg
         gLastUsedAbility = ABILITY_WONDER_GUARD;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gLastLandedMoves[gBattlerTarget] = 0;
@@ -5661,7 +5705,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             ++gBattleScripting.atk49_state;
             break;
         case ATK49_MOVE_END_ABILITIES: // Such as abilities activating on contact(Poison Spore, Rough Skin, etc.).
-            if (AbilityBattleEffects(ABILITYEFFECT_MOVE_END, gBattlerTarget, 0, 0, 0))
+            if (AbilityBattleEffects(ABILITYEFFECT_MOVE_END, gBattlerTarget, 0, 0, 0))// "calls" function, which checks if things can activate, and returns effect+ making it true
                 effect = TRUE;
             ++gBattleScripting.atk49_state;
             break;

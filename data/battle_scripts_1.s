@@ -5873,7 +5873,7 @@ BattleScript_AskToLearnMoveFast::
 	@yesnoboxstoplearningmove BattleScript_AskToLearnMove
 	yesnoboxstoplearningmove BattleScript_AskToLearnMoveFast
 	printstring STRINGID_DIDNOTLEARNMOVE
-	goto BattleScript_LearnMoveLoop
+	goto BattleScript_LearnMoveLoop	@check if can learn another move
 
 BattleScript_ForgotAndLearnedNewMove::
 	@printstring STRINGID_CONFIRMFORGETMOVE

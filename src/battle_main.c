@@ -1038,6 +1038,7 @@ static void HandleAction_WaitTurnEnd(void) {
     }
 }
 
+#define LOGIC_FOR_MOVETYPE_CHANGE
 void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
 {
     u32 moveType, ateType, attackerAbility;
