@@ -320,7 +320,10 @@ AI_CBM_EvasionDown:: @ 81DA0BD
 CheckIfAbilityBlocksStatChange:: @ 81DA0C5
 	get_ability AI_TARGET
 	if_equal ABILITY_CLEAR_BODY, Score_Minus10
+	if_equal ABILITY_LEAF_GUARD, Score_Minus10
 	if_equal ABILITY_WHITE_SMOKE, Score_Minus10
+	if_equal ABILITY_FULL_METAL_BODY, Score_Minus10
+	if_equal ABILITY_LIQUID_METAL, Score_Minus10
 	end
 
 AI_CBM_Haze:: @ 81DA0D4

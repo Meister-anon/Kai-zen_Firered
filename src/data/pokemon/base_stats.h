@@ -5259,7 +5259,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FAIRY,
         .eggGroup2 = EGG_GROUP_GRASS,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_CHLOROPHYLL, ABILITY_LEAF_GUARD},
+            .abilities = {ABILITY_CHLOROPHYLL, ABILITY_PRANKSTER},
             .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_PHOTOSYNTHESIZE},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
@@ -5288,7 +5288,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FAIRY,
         .eggGroup2 = EGG_GROUP_GRASS,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_CHLOROPHYLL, ABILITY_LEAF_GUARD},
+            .abilities = {ABILITY_CHLOROPHYLL, ABILITY_PRANKSTER},
             .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_FLUFFY},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
@@ -5317,7 +5317,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FAIRY,
         .eggGroup2 = EGG_GROUP_GRASS,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_PHOTOSYNTHESIZE, ABILITY_LEAF_GUARD},
+            .abilities = {ABILITY_PHOTOSYNTHESIZE, ABILITY_PRANKSTER},
             .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_FLUFFY},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
@@ -8388,7 +8388,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_SKITTY] =
     {
-        .baseHP = 70,
+        .baseHP = 65,
         .baseAttack = 45,
         .baseDefense = 45,
         .baseSpeed = 50,

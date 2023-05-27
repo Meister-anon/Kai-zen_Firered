@@ -613,6 +613,13 @@ as well as the effect of increasing trap duration
         //in order to choose which one to display, (mostly done for  later plan to be able to multi status a targt)
         //"name with prefix, couldn't activate B_Buff1" where buffer is ability name
 * 
+* realize ability leaf gaurd sucks, but have no idea how to fix it, I cant make sense of what it does other than pontentially 
+* the mon taking shelter from the sun behind its leaves,/in a cocoon of leaves?
+* if its hiding in leaves potentially more safe? or comfortable, so maybe prevent stat drops, at base, and then keep the base effect for in sun?
+* I think splitting it up and giving it an effect outside of sun, would help improve it without having to do anything crazy. hmm
+* so essentially grass type clear body, with extra effects for sun, that are debatable from a practical side..   ok I like this.
+* 
+* 
 * fix delibird learnset oh already done
 * Give crabominable a better front sprite, its just ugly 
 * -progress

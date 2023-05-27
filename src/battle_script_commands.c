@@ -5478,6 +5478,7 @@ static void atk48_playstatchangeanimation(void)
                 }
                 else if (!gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer
                         && gBattleMons[gActiveBattler].ability != ABILITY_CLEAR_BODY
+                        && gBattleMons[gActiveBattler].ability != ABILITY_LEAF_GUARD
                         && gBattleMons[gActiveBattler].ability != ABILITY_FULL_METAL_BODY
                         && gBattleMons[gActiveBattler].ability != ABILITY_WHITE_SMOKE
                         && gBattleMons[gActiveBattler].ability != ABILITY_LIQUID_METAL
@@ -11030,6 +11031,7 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
             return STAT_CHANGE_DIDNT_WORK;
         }
         else if ((gBattleMons[gActiveBattler].ability == ABILITY_CLEAR_BODY
+                  || gBattleMons[gActiveBattler].ability == ABILITY_LEAF_GUARD
                   || gBattleMons[gActiveBattler].ability == ABILITY_WHITE_SMOKE
                   || gBattleMons[gActiveBattler].ability == ABILITY_FULL_METAL_BODY
                   || gBattleMons[gActiveBattler].ability == ABILITY_LIQUID_METAL)

@@ -89,7 +89,7 @@ const u8 gMoveDescription_Thunderbolt[] = _("A strong electrical\nattack that ma
 const u8 gMoveDescription_ThunderWave[] = _("A weak electric\nshock that is sure\nto cause paralysis\nif it hits.");
 const u8 gMoveDescription_Thunder[] = _("A brutal lightning\nattack that may\nalso leave the foe\nparalyzed.");
 const u8 gMoveDescription_RockThrow[] = _("The foe is attacked\nwith a shower of\nsmall, easily\nthrown rocks.");
-const u8 gMoveDescription_Earthquake[] = _("An earthquake that\nstrikes all POKéMON\nin battle excluding\nthe user.");
+const u8 gMoveDescription_Earthquake[] = _("An earthquake that\nstrikes all POKéMON\non the opposite\nfield to the user.");
 const u8 gMoveDescription_Fissure[] = _("The foe is dropped\ninto a fissure.\nThe foe faints if it\nhits.");
 const u8 gMoveDescription_Dig[] = _("An attack that hits\non the 2nd turn.\nCan also be used\nto exit dungeons.");
 const u8 gMoveDescription_Toxic[] = _("A move that badly\npoisons the foe.\nIts poison damage\nworsens every turn.");
@@ -965,7 +965,7 @@ const u8 gMoveDescription_Assurance[] = _("An attack that\ngains power if\nthe u
     .string "Attacks with the power of\nthe moon\nMay lower Sp. Atk.$"
 
     gBOOMBURSTDescription :
-    .string "Attacks everything with a\ndestructive sound wave.$"
+    .string "Attacks its foes with a\ndestructive sound wave.$"
 
     gFAIRY_LOCKDescription :
     .string "Locks down the battlefield\npreventing escape next turn.$"

@@ -4278,7 +4278,7 @@ static const u16 sWailordLevelUpLearnset[] = {
 };
 
 static const u16 sSkittyLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_SING),
+    //LEVEL_UP_MOVE(1, MOVE_SING),  //going off of zenmodeyt changes, may add back, but yawn makes more sense
     LEVEL_UP_MOVE(1, MOVE_TICKLE),
     LEVEL_UP_MOVE(1, MOVE_SWIFT),
     LEVEL_UP_MOVE(3, MOVE_TAIL_WHIP),
@@ -4301,8 +4301,9 @@ static const u16 sSkittyLevelUpLearnset[] = {
 static const u16 sDelcattyLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_GROWL),
     LEVEL_UP_MOVE(1, MOVE_ATTRACT),
-    LEVEL_UP_MOVE(1, MOVE_SING),
-    LEVEL_UP_MOVE(1, MOVE_DOUBLE_SLAP),
+    LEVEL_UP_MOVE(1, MOVE_YAWN),
+    LEVEL_UP_MOVE(1, MOVE_ASSIST),
+    LEVEL_UP_MOVE(1, MOVE_COSMIC_POWER),
     LEVEL_UP_END
 };
 

@@ -2190,6 +2190,7 @@ u8 DoBattlerEndTurnEffects(void)
                 u16 battlerAbility = GetBattlerAbility(gActiveBattler);
                 if (gDisableStructs[gActiveBattler].octolock
                     && (!(battlerAbility == ABILITY_CLEAR_BODY
+                        || battlerAbility == ABILITY_LEAF_GUARD
                         || battlerAbility == ABILITY_FULL_METAL_BODY
                         || battlerAbility == ABILITY_WHITE_SMOKE
                         || battlerAbility == ABILITY_LIQUID_METAL)))
