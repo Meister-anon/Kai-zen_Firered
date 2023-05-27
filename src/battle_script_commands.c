@@ -1576,18 +1576,28 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
         ((IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
         || ((gBattleWeather & WEATHER_HAIL_ANY) && move == MOVE_BLIZZARD)))
         || (gBattleMoves[move].effect == EFFECT_ALWAYS_HIT || gBattleMoves[move].effect == EFFECT_VITAL_THROW)
-        || (gBattleMoves[move].accuracy == 0)
         || ((gStatuses3[gBattlerTarget] & STATUS3_MINIMIZED) && (gBattleMoves[move].flags & FLAG_DMG_MINIMIZE)))
     {
         JumpIfMoveFailed(7, move);
         return TRUE;
     }   //this will do weather buffs but double check think I added this elsewhere? plus I don't think I'd want it to be surehit but its fine i guess
 
-
+    if (gBattleMoves[move].accuracy == 0)   //MOVED OUT HERE for wonderskin buff? yeah affect isn't in base wonderskin   
+    {
+        if (IS_MOVE_STATUS(move) && GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_SKIN)
+            return FALSE;
+        else
+        {
+            JumpIfMoveFailed(7, move);
+            return TRUE;
+        }
+    }
+    
 
     return FALSE;
 }
 
+#define ACCURACY_BASED_ABILITIES
 static void atk01_accuracycheck(void)
 {
     u16 move = T2_READ_16(gBattlescriptCurrInstr + 5);
@@ -1676,6 +1686,11 @@ static void atk01_accuracycheck(void)
         //don't rememeber why I used effect thunder instead of gcurrentmove
         if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
             moveAcc = 50;
+        // Check Wonder Skin.
+        if (GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_SKIN 
+            && IS_MOVE_STATUS(move) && moveAcc != 50)   //changed so can include 0 accuracy status moves.
+            moveAcc = 50;       //as many status moves were changed later gen and would be excluded from wonder skin    
+
         if (moveAcc > 100)
             moveAcc = 100; // to prevent possible broken values.
 

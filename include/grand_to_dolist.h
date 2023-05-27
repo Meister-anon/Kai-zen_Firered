@@ -1570,7 +1570,7 @@ goto MOVEICON_ABILITYDESC	//function for displaying move icons & ability info in
 * 
 */
 goto LOGIC_FOR_MOVETYPE_CHANGE  //battle_main.c things like ion deluge pixelate etc.
-goto TYPE_DMG_MODULATER //battle_script_commands.c sets the multiplier based on type,, and handles effectiveness sound/move result
+goto TYPE_DMG_MODULATER //(inverse world ability logic/ sets the multiplier based on type, and handles effectiveness sound/move result
 goto TYPE_AND_STAB_CHECK //battle_script_commands.c  type calc also where s.t.a.b is handled
 /*
 * plan buff normal types, their gimmick, is being highly adaptable for their lack of weakness and resisted damage
@@ -1592,6 +1592,7 @@ goto ENDTURN_EFFECTS    //battle_util.c   affects that take place after all batt
 
 goto ATK_49_MOVEEND //battle_script_commands.c  move end  still to do   vsonic
 
+goto ACCURACY_BASED_ABILITIES   //other ability logic exists outside battle_util.c  make sure to go over all ability effects
 goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability activation logic.  STILL need to update   vsonic
 /*
 * Setting up new effeets for absorb abilities

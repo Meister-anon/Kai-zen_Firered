@@ -73,7 +73,7 @@
 // used for openpartyscreen
 #define OPEN_PARTY_ALLOW_CANCEL     0x80
 
-// atk 01, accuracy calc
+// atk01_accuracycheck
 #define NO_ACC_CALC 0xFFFE
 #define NO_ACC_CALC_CHECK_LOCK_ON 0xFFFF
 #define ACC_CURR_MOVE 0

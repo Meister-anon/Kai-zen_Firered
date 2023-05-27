@@ -4966,8 +4966,8 @@ BattleScript_EffectIngrain::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectSuperpower::	@needtest
-	setmoveeffect MOVE_EFFECT_ATK_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
-	goto BattleScript_EffectRecoil
+	setmoveeffect MOVE_EFFECT_ATK_DEF_DOWN | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+	goto BattleScript_EffectHit	@REMOVED REcoil
 
 BattleScript_EffectCloseCombat::	@removed sp def drop, was going to make recoil but decided against it
 	setmoveeffect MOVE_EFFECT_DEF_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN

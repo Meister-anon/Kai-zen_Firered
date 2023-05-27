@@ -3465,6 +3465,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (gBattleMoves[gCurrentMove].effect == EFFECT_ASSURANCE
         && (gProtectStructs[battlerIdDef].physicalDmg != 0 || gProtectStructs[battlerIdDef].specialDmg != 0 || gProtectStructs[battlerIdDef].confusionSelfDmg))
         gBattleMovePower *= 2;
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_KNOCK_OFF && gBattleMons[gBattlerTarget].item != 0)
+        gBattleMovePower = (130 * gBattleMovePower) / 100; //CHANGed modern boost 1.3 rathr than 1.5
+
     // sandstorm sp.def boost for rock types  // decided to add this for ground types as well,
     if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK) || (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)))
         && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY)// && !usesDefStat)
@@ -3968,7 +3971,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     /*if (type == TYPE_MYSTERY)
         damage = 0; // is ??? type. does 0 damage.
-    */
+    *///this existed as an extra fail safe, before physical special split, where split &dmg was based on type
     //removed for normalize buff to work
 
     // are effects of weather negated with cloud nine or air lock

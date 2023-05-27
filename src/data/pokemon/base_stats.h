@@ -4258,9 +4258,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_HI_PRESSURE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -8388,7 +8388,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_SKITTY] =
     {
-        .baseHP = 50,
+        .baseHP = 70,
         .baseAttack = 45,
         .baseDefense = 45,
         .baseSpeed = 50,
@@ -8413,16 +8413,16 @@ const struct BaseStats gBaseStats[] =
         #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-    },
+    },//higher hp isn't meant to denote bulk, but a high vitality/zest for life/energy
 
     [SPECIES_DELCATTY] =
     {
-        .baseHP = 80,
+        .baseHP = 85,
         .baseAttack = 75,
         .baseDefense = 65,
         .baseSpAttack = 75,
         .baseSpDefense = 65,
-        .baseSpeed = 90,
+        .baseSpeed = 81,
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GHOST,
         .catchRate = 60,
