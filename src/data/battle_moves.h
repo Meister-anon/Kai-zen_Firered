@@ -701,7 +701,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_ATTACK_DOWN,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 100,
         .pp = 40,
         .secondaryEffectChance = 0,
@@ -725,7 +725,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #endif
         .effect = EFFECT_ROAR,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .pp = 20,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
@@ -737,7 +737,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_SLEEP,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 85,
         .pp = 15,
         .secondaryEffectChance = 0,
@@ -751,7 +751,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_CONFUSE,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 75,
         .pp = 20,
         .secondaryEffectChance = 0,
@@ -765,7 +765,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_SONIC_SCREECH,
         .power = 1,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 90,
         .pp = 20,
         .secondaryEffectChance = 10,
@@ -1595,7 +1595,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_DEFENSE_DOWN_2,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 95,
         .pp = 40,
         .secondaryEffectChance = 0,
@@ -2692,7 +2692,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SNORE] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_6
-            .power = 50,
+            .power = 75,
             .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
         #elif B_UPDATED_MOVE_DATA == GEN_5
             .power = 40,
@@ -2702,7 +2702,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
         #endif
         .effect = EFFECT_SNORE,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 30,
@@ -3050,7 +3050,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_PERISH_SONG,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 0,
         .pp = 5,
         .secondaryEffectChance = 0,
@@ -3364,7 +3364,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_HEAL_BELL,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 0,
         .pp = 5,
         .secondaryEffectChance = 0,
@@ -3966,7 +3966,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .power = 50,
         #endif
         .effect = EFFECT_UPROAR,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 100,
@@ -4746,7 +4746,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_CONFUSE_HIT,
         .power = 90,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 20,
@@ -5251,7 +5251,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_ATTACK_UP,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 0,
         .pp = 40,
         .secondaryEffectChance = 0,
@@ -6992,7 +6992,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_CHATTER] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_6
-            .power = 65,
+            .power = 85,
             .secondaryEffectChance = 100,
             .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
         #elif B_UPDATED_MOVE_DATA == GEN_5
@@ -7005,7 +7005,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .flags = FLAG_PROTECT_AFFECTED | FLAG_SOUND | FLAG_SHEER_FORCE_BOOST,
         #endif
         .effect = EFFECT_CONFUSE_HIT,
-        .type = TYPE_FLYING,
+        .type = TYPE_SOUND,
         .accuracy = 100,
         .pp = 20,
         .target = MOVE_TARGET_SELECTED,
@@ -7722,7 +7722,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_ECHOED_VOICE,
         .power = 40,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 10,
@@ -8473,8 +8473,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_RELIC_SONG] =
     {
         .effect = EFFECT_RELIC_SONG,
-        .power = 75,
-        .type = TYPE_NORMAL,
+        .power = 85,
+        .type = TYPE_SOUND,
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 10,
@@ -8783,7 +8783,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_NOBLE_ROAR,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 100,
         .pp = 30,
         .secondaryEffectChance = 0,
@@ -9047,7 +9047,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_HIT,
         .power = 110,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 0, //realized for balance sake, shouldn't add confuse chance
@@ -11648,18 +11648,18 @@ use wonder gaurd logic to determine its super effective
     },//GRASS types will be immune to this status condition, potentially make its own effect, then can do grass status exclusion with bs command
 
     [MOVE_SONIC_BOOM] =
-        {
-            .effect = EFFECT_SPEED_UP_HIT,
-            .power = 70,
-            .type = TYPE_FLYING,
-            .accuracy = 100,
-            .pp = 20,
-            .secondaryEffectChance = 10,
-            .target = MOVE_TARGET_SELECTED,
-            .priority = 0,
-            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
-            .split = SPLIT_SPECIAL,
-            .argument = MOVE_EFFECT_CONFUSION,
-        },
+    {
+        .effect = EFFECT_SPEED_UP_HIT,
+        .power = 70,
+        .type = TYPE_FLYING,
+        .accuracy = 100,
+        .pp = 20,
+        .secondaryEffectChance = 10,
+        .target = MOVE_TARGET_SELECTED,
+        .priority = 0,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
+        .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_CONFUSION,
+    },
 
 };

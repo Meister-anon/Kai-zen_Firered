@@ -53,7 +53,7 @@ static const u8 sKeenEyeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevent
 static const u8 sHyperCutterDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents ATTACK reduction.");
 static const u8 sPickupDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("May pick up items.");
 static const u8 sTruantDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Moves only every two turns.\nBut heals while at rest.");
-static const u8 sHustleDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Trades accuracy for power.");
+static const u8 sHustleDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Trades a small accuracy drop for power.\n5% accuracy drop for 50% power boost.");
 static const u8 sCuteCharmDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Infatuates on contact.");
 static const u8 sPlusDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Powers up with MINUS.");
 static const u8 sMinusDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Powers up with PLUS.");
@@ -94,7 +94,7 @@ static const u8 sSkillLinkDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Multi
 static const u8 sHydrationDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Cures status in rain.");
 static const u8 sSolarPowerDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Powers up in sunshine.\nBut is hurt by its uncontrollable power");
 static const u8 sQuickFeetDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups Speed if suffering from status.");
-static const u8 sNormalizeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("The PKMN exudes a completely average aura\nAll moves do neutral damage.");
+static const u8 sNormalizeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("The PKMN exudes a completely average aura\nAll moves do True Normal damage.");
 static const u8 sSniperDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Boosts critical hits.");
 static const u8 sMagicGuardDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Only damaged by attacks.");
 static const u8 sNoGuardDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ensures that all moves hit.");
@@ -283,9 +283,12 @@ static const u8 sDarkDealDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Increa
 static const u8 sCorruptionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("The user's corrupted influence spreads\ndecay. Preventing the foe from healing.");
 static const u8 sBanditDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("This POKéMON posesses a covetous nature.\nIt won't let its foes use items.");
 static const u8 sAviatorDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("An uncontested ace that always escapes.\nPrevents loss of speed except from traps.");
-//checked in fire red limit is 40 chars per line, changing description length to 80
+static const u8 sUrsurperDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups Atk and Sp. Atk. if stats lowered.\And if suffering from status.");
+static const u8 sInverseWorldDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Inverts incoming damage,\nand “Not very effective” hits.");
+static const u8 sSonarDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Emits infrasonic sound with each attack.\nDoubles damage of sound based moves.");
+//checked in fire red limit is 40 chars per line, changing description length to 80/    changed to 82 max
 //based on suction cups I kinda have more space?  so more like 42 per line?
-//template - top line: literal effect\n bottom line: flavor text
+//template - top line: literal effect\n bottom line: flavor text    -flipped usually put flavor text on top, effect on bottom
 //if you can't cleanly do a mix of both. over the full space
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -587,6 +590,9 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_CORRUPTION] = sCorruptionDescription,
     [ABILITY_BANDIT] = sBanditDescription,
     [ABILITY_AVIATOR] = sAviatorDescription, 
+    [ABILITY_URSURPER] = sUrsurperDescription,
+    [ABILITY_INVERSE_WORLD] = sInverseWorldDescription,
+    [ABILITY_SONAR] = sSonarDescription,
 };//last value can have comma
 
 //now undrestand reason strings (strings are arrays) use that +1 value

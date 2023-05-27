@@ -900,11 +900,20 @@ Thunder Wave Electric TM45
 * 
 * make new type sound type, treat like mystery, used for move but not for pokemon,  will make all normal sound moves type normal
 * offensively neutral to everything (just don't add to type chart
-* ...well nvm I'll add it, just so people know its there, type sound will be immune to type sound just so ppl know its there
-* delay implementation for now, would need edit to icon sheet, for new icon, 
-* as well as all places where types are used
+* ...well nvm I'll add it, just so people know its there, type sound will be immune to type sound just so ppl know its there)
+* delay implementation for now, would need edit to icon sheet, for new icon, -wanted to make icon white, but would blend in on summary screen
+* as well as all places where types are used - icon added, to sheet, need to define new type in relevant areas, 
+* and make sure it can read the location correctly for the new icon placement.
 * 
-* NOTE - still need to finish set message for spite changes, can do just like I did anticipation ability messages
+* making sound type, but still keep flag check on moves for flag sound, still using that for soundproof.
+* putting areas needed for new type addition below
+*/  
+goto TYPE_CHART
+goto TYPE_NAMES
+goto TYPE_DEFINES
+goto TYPE_ICON_DATA
+
+/* NOTE - still need to finish set message for spite changes, can do just like I did anticipation ability messages
 * -DONE   also made eerie spell use the new spite effect rather than only taking 3 pp. //NEED test errie spell test if still works aftr sheer force logic added
 * 
 * tweaked moves that were target ally & foes, changed to more appropriate targetting, need adjust move descriptions to match -
@@ -1564,7 +1573,7 @@ goto LOGIC_FOR_MOVETYPE_CHANGE  //battle_main.c things like ion deluge pixelate 
 goto TYPE_DMG_MODULATER //battle_script_commands.c sets the multiplier based on type,, and handles effectiveness sound/move result
 goto TYPE_AND_STAB_CHECK //battle_script_commands.c  type calc also where s.t.a.b is handled
 /*
-* plan buff normal types, their gimmick, is being highly adaptable for their lack of weaknessand resisted damage
+* plan buff normal types, their gimmick, is being highly adaptable for their lack of weakness and resisted damage
 * but power creep(and new move restrictions) has made them lose their place, make sure pure normal always has very diverse move pool to chose from
 * also as they lack stab, instead of trying to give them all insane stats to counter will instead make new jack - of - all - trades gimmick / effect
 * for normal types   rather than the specialing of same - type - attack - bonus by being a normal type you have adaptability to do everything,

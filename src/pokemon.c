@@ -3723,7 +3723,6 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (type == (TYPE_FIRE || TYPE_ICE))
             gBattleMoveDamage /= 2;
         break;
-    case ABILITY_HEATPROOF:
     case ABILITY_DAMP:
     case ABILITY_WATER_BUBBLE:
         if (type == TYPE_FIRE)
@@ -3733,6 +3732,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             //if (updateFlags)
               //  RecordAbilityBattle(gBattlerTarget, ability);
         }
+        break;
+    case ABILITY_HEATPROOF:
+        if (type == TYPE_FIRE)
+            gBattleMoveDamage /= 4;
         break;
     case ABILITY_GLACIAL_ICE:
         if (type == (TYPE_FIRE || TYPE_ICE))

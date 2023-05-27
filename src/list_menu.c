@@ -72,8 +72,13 @@ static void ListMenuDrawCursor(struct ListMenu *list);
 static void ListMenuCallSelectionChangedCallback(struct ListMenu *list, u8 onInit);
 static u8 ListMenuAddCursorObject(struct ListMenu *list, u32 cursorKind);
 
+///struct values written as width, height, offset (offset is location on chart)
+//use chart as refernce, each row is 4 icons across, width is 32, divide that by 8 and its 4.
+//so from each icon to the next (one column) is +-0x04 , and the each column is +4 icons, (since 4 is an entire row)
+//that makes +-0x20 for each row.  starting with 00.
+#define TYPE_ICON_DATA
 const struct MoveMenuInfoIcon gMoveMenuInfoIcons[] = //fairy addition this should be for coordinates. use HMA table to easily apply additions, just read the hex value @ bottom right
-{ //                             anything above 0xFF need use reverse indian or little indian? so 00 01  should be 0x100
+{ //                             anything above 0xFF 255 need use reverse indian or little indian? so 00 01  should be 0x100, actually that's just for binary, I can just write 0x100 here I think
     { 12, 12, 0x00 },       // Unused
     { 32, 12, 0x20 },       // Normal icon  -00
     { 32, 12, 0x64 },       // Fight icon   -01
@@ -94,9 +99,10 @@ const struct MoveMenuInfoIcon gMoveMenuInfoIcons[] = //fairy addition this shoul
     { 32, 12, 0xA0 },       // Dragon icon  -10
     { 32, 12, 0x8C },       // Dark icon    -11
     { 40, 12, 0x08 },       // Fairy Icon   -12    //fixed was 17 realized I could put here.
-    { 40, 12, 0xA8 },       // -Type- icon  -13  This is why setting fairy to 0x12 put up type icon instead of fairy.
-    { 40, 12, 0xC0 },       // -Power- icon -14
-    { 40, 12, 0xC8 },       // -Accuracy- icon
+    { 32, 12, 0x104 },      // Sound Icon   -13
+    { 40, 12, 0xA8 },       // -Type- icon  -14  This is why setting fairy to 0x12 put up type icon instead of fairy.
+    { 40, 12, 0xC0 },       // -Power- icon -15
+    { 40, 12, 0xC8 },       // -Accuracy- icon 
     { 40, 12, 0xE0 },       // -PP- icon    -16
     { 40, 12, 0xE8 },       // -Effect- icon 17    
 }; // use this comment order for any additional types

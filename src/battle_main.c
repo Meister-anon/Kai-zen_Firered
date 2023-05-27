@@ -325,8 +325,9 @@ static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 
 
 //each line adds 3 because there are 3 arguments in each line, atk type, def type, & effectiveness  /so SUBTRACT 3 for any lines kept but commented out
 //DON'T FORGET every time I change below, need to update in the .h
+#define TYPE_CHART
 
-const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+const u8 gTypeEffectiveness[423] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -467,6 +468,7 @@ const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of
     TYPE_GHOST, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_PSYCHIC, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_DRAGON, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_SOUND, TYPE_SOUND, TYPE_MUL_NO_EFFECT,
     TYPE_ENDTABLE, TYPE_ENDTABLE, TYPE_MUL_NO_EFFECT
 };
 
@@ -480,6 +482,7 @@ const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of
 //on top of having some type of extra sensory options with its feelers etc. will have to add dark type exception to prankster back i guess
 //think this is done?
 
+#define TYPE_NAMES
 const u8 gTypeNames[][TYPE_NAME_LENGTH + 1] =
 {
     _("NORMAL"),
@@ -501,11 +504,12 @@ const u8 gTypeNames[][TYPE_NAME_LENGTH + 1] =
     _("DRAGON"),
     _("DARK"),
     _("FAIRY"), //fairy addition
+    _("SOUND"),
 }; //uses same type order as list_menu.c so this fairy is 12, but my actuall fairy type
 //was at 17. fixed now they are both 12.
 //had to retruncate type names to fit move name
 
-//also needed change value in type_constants.inc & pokemon.h
+//also needed change value in & pokemon.h
 
 // This is a factor in how much money you get for beating a trainer.
 const struct TrainerMoney gTrainerMoneyTable[] =

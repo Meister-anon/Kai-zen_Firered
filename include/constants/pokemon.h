@@ -92,6 +92,8 @@
 #define MON_DATA_SPATK2            87
 #define MON_DATA_SPDEF2            88
 
+#define TYPE_DEFINES
+
 // Pokemon types	type order found in list_menu.c
 #define TYPE_NORMAL   0x00
 #define TYPE_FIGHTING 0x01
@@ -112,7 +114,8 @@
 #define TYPE_DRAGON   0x10
 #define TYPE_DARK     0x11
 #define TYPE_FAIRY	  0x12 //fairy addition
-#define NUMBER_OF_MON_TYPES     0x13
+#define TYPE_SOUND	  0x13 //for normal type sound moves
+#define NUMBER_OF_MON_TYPES     0x14
 
 // Pokemon egg groups
 #define EGG_GROUP_NONE 0

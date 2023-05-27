@@ -17796,7 +17796,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_HUSTLE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-    },//GAVE HEATPROOF cuz apparently steel armor was to protect against main predator a fire type
+    },//GAVE HEATPROOF cuz apparently steel armor was to protect against main predator a fire type, buffing heatproof to be /4 damage since this is 4x weak
+    //and just being neutral isn't exactly "heat proof"
 
     [SPECIES_DEINO] =
     {
