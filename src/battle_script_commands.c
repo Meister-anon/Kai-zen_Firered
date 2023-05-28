@@ -5449,11 +5449,13 @@ static void atk47_setgraphicalstatchangevalues(void)    //may need change this t
 
 static void atk48_playstatchangeanimation(void)
 {
+    u32 ability;
     u32 currStat = 0;
     u16 statAnimId = 0;
     s32 changeableStatsCount = 0;
     u8 statsToCheck = 0;
 
+    ability = GetBattlerAbility(gActiveBattler);
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     statsToCheck = gBattlescriptCurrInstr[2];
     if (gBattlescriptCurrInstr[3] & ATK48_STAT_NEGATIVE) // goes down
@@ -5477,16 +5479,17 @@ static void atk48_playstatchangeanimation(void)
                     }
                 }
                 else if (!gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer
-                        && gBattleMons[gActiveBattler].ability != ABILITY_CLEAR_BODY
-                        && gBattleMons[gActiveBattler].ability != ABILITY_LEAF_GUARD
-                        && gBattleMons[gActiveBattler].ability != ABILITY_FULL_METAL_BODY
-                        && gBattleMons[gActiveBattler].ability != ABILITY_WHITE_SMOKE
-                        && gBattleMons[gActiveBattler].ability != ABILITY_LIQUID_METAL
-                        && !(gBattleMons[gActiveBattler].ability == ABILITY_KEEN_EYE && currStat == STAT_ACC)
-                        && !(gBattleMons[gActiveBattler].ability == ABILITY_TANGLED_FEET && currStat == STAT_SPEED)
-                        && !(gBattleMons[gActiveBattler].ability == ABILITY_AVIATOR && currStat == STAT_SPEED)
-                        && !(gBattleMons[gActiveBattler].ability == ABILITY_RUN_AWAY && currStat == STAT_SPEED)
-                        && !(gBattleMons[gActiveBattler].ability == ABILITY_HYPER_CUTTER && currStat == STAT_ATK))
+                        && ability != ABILITY_CLEAR_BODY
+                        && ability != ABILITY_LEAF_GUARD
+                        && ability != ABILITY_FULL_METAL_BODY
+                        && ability != ABILITY_WHITE_SMOKE
+                        && ability != ABILITY_LIQUID_METAL
+                        && !(ability == ABILITY_KEEN_EYE && currStat == STAT_ACC)
+                        && !(ability == ABILITY_TANGLED_FEET && currStat == STAT_SPEED)
+                        && !(ability == ABILITY_AVIATOR && currStat == STAT_SPEED)
+                        && !(ability == ABILITY_RUN_AWAY && currStat == STAT_SPEED)
+                        && !(ability == ABILITY_HYPER_CUTTER && currStat == STAT_ATK)
+                        && !(ability == ABILITY_BIG_PECKS && currStat == STAT_DEF))
                 {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > 0)
                     {
@@ -11005,7 +11008,8 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
     if (statValue <= -1) // Stat decrease.
     {
         if (gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer
-            && !certain && gCurrentMove != MOVE_CURSE)
+            && !certain && gCurrentMove != MOVE_CURSE
+            && !(gActiveBattler == gBattlerTarget && GetBattlerAbility(gBattlerAttacker) == ABILITY_INFILTRATOR))
         {
             if (flags == STAT_CHANGE_BS_PTR)
             {

@@ -7335,17 +7335,19 @@ BattleScript_IntimidateActivates::
 	setstatchanger STAT_ATK, 1, TRUE
 BattleScript_IntimidateActivationAnimLoop::
 	trygetintimidatetarget BattleScript_IntimidateEnd @updated intimidate to current gen standard
-	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_IntimidateFail
-	jumpifability BS_TARGET, ABILITY_CLEAR_BODY, BattleScript_IntimidateAbilityFail
+	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_IntimidateFail		@forgot tiger mom has different ability exclusion need rearrange abilities here
+	jumpifability BS_TARGET, ABILITY_CLEAR_BODY, BattleScript_IntimidateAbilityFail		@and then jump out, before atk stat specific exclusions
 	jumpifability BS_TARGET, ABILITY_LEAF_GUARD, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_FULL_METAL_BODY, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_LIQUID_METAL, BattleScript_IntimidateAbilityFail
-	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_WHITE_SMOKE, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_INNER_FOCUS, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_SCRAPPY, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_IntimidateAbilityFail
+	jumpifability BS_ATTACKER, ABILITY_TIGER_MOM, BattleScipt_TigerMom_DefenseDropExclusions	@jump for tigermom to skip atk specific stat drop exclusions
+	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_IntimidateAbilityFail
+BattleScript_IntimidateStatDrop::	
 	statbuffchange STAT_CHANGE_BS_PTR | STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_IntimidateFail
 	jumpifbyte CMP_GREATER_THAN, cMULTISTRING_CHOOSER, 1, BattleScript_IntimidateFail
 	setgraphicalstatchangevalues
@@ -7375,6 +7377,10 @@ BattleScript_TigerMomBattleMessage::
 	printstring STRINGID_TIGER_MOM_ACTIVATION
 	waitmessage 0x40
 	goto BattleScript_IntimidateFail
+
+BattleScipt_TigerMom_DefenseDropExclusions::
+	jumpifability BS_TARGET, ABILITY_BIG_PECKS, BattleScript_IntimidateAbilityFail
+	goto BattleScript_IntimidateStatDrop
 
 BattleScript_DrizzleActivates::
 	pause 0x20

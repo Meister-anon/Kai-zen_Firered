@@ -617,7 +617,7 @@ as well as the effect of increasing trap duration
 * the mon taking shelter from the sun behind its leaves,/in a cocoon of leaves?
 * if its hiding in leaves potentially more safe? or comfortable, so maybe prevent stat drops, at base, and then keep the base effect for in sun?
 * I think splitting it up and giving it an effect outside of sun, would help improve it without having to do anything crazy. hmm
-* so essentially grass type clear body, with extra effects for sun, that are debatable from a practical side..   ok I like this.
+* so essentially grass type clear body, with extra effects for sun, that are debatable from a practical side..   ok I like this. - DONE
 * 
 * 
 * fix delibird learnset oh already done
@@ -886,7 +886,7 @@ Thunder Wave Electric TM45
 * or you'd have to expect you as a trainr was so bad, they would intenionally use a wide aoe move while your own pokemon was standing right in front of you.
 * 
 * it doesn't make sense, for anything other than explosion, which is clearly an indiscriminate massive uncontrolled blast.
-* which is obviously the nature of an explosion
+* which is obviously the nature of an explosion - combed through moves adjustesd and removed moves that targetted allies too that didn't make sense
 * 
 * without that mechanic change telepathy doesnt really do anything, other than prevent you from targetting your allies with moves, which sometimes you want to do.
 * It would become useful if I get my new confusion effect going which, would make characters attack others at random when the roll fails,
@@ -930,7 +930,7 @@ goto TYPE_ICON_DATA
 * on the offensive side i.e atk sp atk speed  and my ev cap increase is technically already made to address this
 * 
 * //go over 100%  effects, see which I can make certain in bs commands.c seteffectwithchance function, I think I can do all,
-* that way I free room for arguments if I chose to add then.
+* that way I free room for arguments if I chose to add then. -
 * 
 *
 * Look at changes to early gen mon, consider bringing back stats from gen 1 & 2
