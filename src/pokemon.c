@@ -4087,19 +4087,19 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
             damageHelper = spDefense;
 
-        if ((sideStatus & SIDE_STATUS_LIGHTSCREEN) && gCritMultiplier == 1
+        if ((sideStatus & SIDE_STATUS_LIGHTSCREEN) && !IS_CRIT
             && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR)
         {
             if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
-                /*damage = 2 * (damage / 3);
-            else*/
+                /*damage = 2 * (damage / 3);    //looks strange, but screens blocked less damage instead of more for doubles, 
+            else*/          //because there was already logic that cut dmg for moves that hit multiple targets
                 damage /= 2;
         }
 
         if (attacker->status1 & STATUS1_SPIRIT_LOCK) //function that gives spirit_lock special atk cut
             damage /= 2;
 
-        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == 8 && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
+        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == MOVE_TARGET_BOTH && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
             damage /= 1; //special verision double battle damage change
 
         

@@ -5425,7 +5425,7 @@ static void atk46_playanimation2(void) // animation Id is stored in the first po
 
 static void atk47_setgraphicalstatchangevalues(void)    //may need change this too since stat buffs go up to +-3 in later gen
 {
-    u8 value = 0;   //vsonic IMPORTANT  
+    u8 value = 0;   //vsonic IMPORTANT          don't know if need default from emerald or not
 
     switch (GET_STAT_BUFF_VALUE2(gBattleScripting.statChanger))
     {
@@ -5435,10 +5435,16 @@ static void atk47_setgraphicalstatchangevalues(void)    //may need change this t
     case SET_STAT_BUFF_VALUE(2): // +2
         value = STAT_ANIM_PLUS2;
         break;
+    case SET_STAT_BUFF_VALUE(3): // +3
+        value = STAT_ANIM_PLUS2;
+        break;
     case SET_STAT_BUFF_VALUE(1) | STAT_BUFF_NEGATIVE: // -1
         value = STAT_ANIM_MINUS1;
         break;
     case SET_STAT_BUFF_VALUE(2) | STAT_BUFF_NEGATIVE: // -2
+        value = STAT_ANIM_MINUS2;
+        break;
+    case SET_STAT_BUFF_VALUE(3) | STAT_BUFF_NEGATIVE: // -3
         value = STAT_ANIM_MINUS2;
         break;
     }
@@ -5458,6 +5464,13 @@ static void atk48_playstatchangeanimation(void)
     ability = GetBattlerAbility(gActiveBattler);
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     statsToCheck = gBattlescriptCurrInstr[2];
+
+    // Handle Contrary and Simple
+    if (ability == ABILITY_CONTRARY)
+        gBattlescriptCurrInstr[3] ^= STAT_ANIM_MINUS1;
+    else if (ability == ABILITY_SIMPLE)
+        gBattlescriptCurrInstr[3] |= ATK48_STAT_BY_TWO;
+
     if (gBattlescriptCurrInstr[3] & ATK48_STAT_NEGATIVE) // goes down
     {
         s16 startingStatAnimId;
