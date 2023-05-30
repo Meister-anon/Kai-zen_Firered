@@ -3629,7 +3629,7 @@ const struct PokedexEntry gPokedexEntries[] =
 
     [NATIONAL_DEX_DELCATTY] =
     {
-        .categoryName = _("Prim"),
+        .categoryName = _("Cherish"),
         .height = 11,
         .weight = 326,
         .description = gDelcattyPokedexText,

@@ -1823,19 +1823,23 @@ const u8 gNosepassPokedexText[] = _(
 
 const u8 gSkittyPokedexText[] = _(
     "It is said to be difficult to earn its\n"
-    "trust. However, it is extremely popular\n"
+    "trust. However, it will do anything for\n"
+    "those that do. It is extremely popular\n"
     "for its cute looks and behavior.");
-
 
 /*const u8 gDelcattyPokedexText[] = _(
     "The favorite of trend-conscious\n"
     "female TRAINERS, they are used in\n"
     "competition for their style and fur.");*/
 
+/*"to make the trainer who went through so much to gain their love and trust happy, this pokemon denied death
+* and ressurected itself into a new form, it will refuse to die as long as their loved one lives"*/
+
 const u8 gDelcattyPokedexText[] = _(
-    "After it's first brush with death\n"
-    "it devoted itself to self-satisfaction.\n"
-    "It is both loved & envied by many.");
+    "To keep its loved one happy, it denied\n"
+    "death. Resurrecting itself into a new form\n"
+    "It will continue resisting death itself,\n"
+    "for as long as their loved one lives.");
 
 
 const u8 gSableyePokedexText[] = _(
@@ -2360,6 +2364,10 @@ const u8 gGrotlePokedexText[] = _(
     "It carries fellow Pokémon there on \n"
     "its back.");
 
+//this entry makes no sense, there's on water on its back
+//and its not big enough in itself for that either
+//now if it had a massive spirit turtle esque mega form. THAT would make sense
+//grass rock water type mega
 const u8 gTorterraPokedexText[] = _(
     "Some Pokémon are born on a Torterra's\n"
     "back and spend their entire life there.\n"
@@ -4446,14 +4454,15 @@ const u8 gToucannonPokedexText[] = _(
 const u8 gYungoosPokedexText[] = _(
     "With its sharp fangs, it will bite anything.\n"
     "It wanders around in a never-ending\n"
-    "search for food. At dusk, it collapses\n"
+    "search for prey. At dusk, it collapses\n"
     "and falls asleep on the spot.");
 
 const u8 gGumshoosPokedexText[] = _(
     "When it finds a trace of its prey, it\n"
-    "patiently stakes out the location...\n"
+    "relentlessly hounds them until they tire.\n"
     "but as it's diurnal, it's always snoozing\n"
     "by nightfall.");
+
 
 const u8 gGrubbinPokedexText[] = _(
     "They often gather near places frequented\n"

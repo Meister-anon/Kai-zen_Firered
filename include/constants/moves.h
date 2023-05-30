@@ -660,7 +660,7 @@
 #define MOVE_LUNGE 642
 #define MOVE_FIRE_LASH 643
 #define MOVE_POWER_TRIP 644
-#define MOVE_BURN_UP 645
+#define MOVE_BURN_OUT 645
 #define MOVE_SPEED_SWAP 646
 #define MOVE_SMART_STRIKE 647
 #define MOVE_PURIFY 648
@@ -788,15 +788,19 @@
 #define MOVE_DIVE_BOMB 761
 #define MOVE_NETTLE_WHIP 762	//Will be grass move that can apply burn	//MOVE_NETTLE_WHIP	MOVE_BURNING_VINE    MOVE_NETTLE_WHIP
 #define MOVE_SONIC_BOOM 763	//new move
+#define MOVE_OVER_MAX_POWER 763	//PSYCHIC BURN OUT	
+#define MOVE_SHIMON 764	//FIGHTING BURN OUT	
+#define MOVE_FINAL_FLIGHT 765	//FLYING BURN OUT	
+#define MOVE_PLASMA_RAILGUN 766	//ELECTRIC BURN OUT	
 
 //#define MOVES_COUNT_GEN8 757
 
 //#define MOVES_COUNT MOVES_COUNT_GEN8
 
-//for completion new moves have to be defined in:  move_descriptions.inc,  move_names.h, battle_anim_scripts.s & data_8479668.s
+//for completion new moves have to be defined in:  move_descriptions.inc,  move_names.h, & battle_anim_scripts.s
 // also need actual move data in battle_moves.h
 
-#define LAST_MOVE_INDEX     MOVE_SONIC_BOOM
+#define LAST_MOVE_INDEX     MOVE_PLASMA_RAILGUN
 
 #define MOVES_COUNT_GEN8 (LAST_MOVE_INDEX + 1) //changed so define auto updates
 

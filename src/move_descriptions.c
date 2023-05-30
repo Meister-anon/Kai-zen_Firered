@@ -180,7 +180,7 @@ const u8 gMoveDescription_Conversion2[] = _("The user changes\ntype to make itse
 const u8 gMoveDescription_Aeroblast[] = _("A vortex of air is\nshot at the foe.\nIt has a high\ncritical-hit ratio.");
 const u8 gMoveDescription_CottonSpore[] = _("Cotton-like spores\ncling to the foe,\nsharply reducing\nits SPEED stat.");
 const u8 gMoveDescription_Reversal[] = _("An all-out attack\nthat becomes more\npowerful the less\nHP the user has.");
-const u8 gMoveDescription_Spite[] = _("A move that cuts\n2 to 5 PP from the\nmove last used by\nthe foe.");
+const u8 gMoveDescription_Spite[] = _("A move that cuts\nvarying PP from the\nmove last used by\nthe foe.");
 const u8 gMoveDescription_PowderSnow[] = _("Blasts the foe with\na snowy gust.\nIt may cause\nfreezing.");
 const u8 gMoveDescription_Protect[] = _("Enables the user to\nevade all attacks.\nIt may fail if used\nin succession.");
 const u8 gMoveDescription_MachPunch[] = _("A punch thrown at\nblinding speed.\nIt is certain to\nstrike first.");
@@ -356,73 +356,41 @@ const u8 gMoveDescription_WaterPulse[] = _("An attack with a\npulsing blast of\n
 const u8 gMoveDescription_DoomDesire[] = _("A move that attacks\nthe foe with a\nblast of light two\nturns after use.");
 const u8 gMoveDescription_PsychoBoost[] = _("An intense attack\nthat also sharply\nreduces the user's\nSP. ATK stat.");
 
-//NEW values
+//NEW values    -   rules for reading space, 20 chars per line,  5 line breaks. read number letters per word, n # of words, then add number of spaces which is n - 1
 const u8 gMoveDescription_Roost[] = _("Restores the user's HP by\nhalf of its max HP.");
-const u8 gMoveDescription_Gravity[] = _("Gravity is intensified\ngrounds floating PKMN.\nMoves that involve\nflying can’t be used.");
+const u8 gMoveDescription_Gravity[] = _("Gravity intensifies\ngrounds floating\nPKMN.\nMoves that involve\nflying can’t be used.");
 const u8 gMoveDescription_MiracleEye[] = _("Makes GHOSTS and\nevasive foes easier\nto hit.");
 const u8 gMoveDescription_WakeupSlap[] = _("Doubles dmg against\nsleeping foes, but\nalso awakens them.");
 const u8 gMoveDescription_HammerArm[] = _("Swings down with\na heavy fist\nthat lowers Speed.");
 const u8 gMoveDescription_GyroBall[] = _("A high-speed spin\nthat does more damage\nto faster foes.");
 const u8 gMoveDescription_HealingWish[] = _("The user faints\nto heal up the\nnext battler.");
-const u8 gMoveDescription_Brine[] = _("Deals double damage to\nfoes below half HP.");
-const u8 gMoveDescription_NaturalGift[] = _("The effectiveness varies\nwith the held Berry.");
+const u8 gMoveDescription_Brine[] = _("Deals double damage\nto foes below\nhalf HP.");
+const u8 gMoveDescription_NaturalGift[] = _("The effectiveness\nand damage varies\nwith the held Berry.");
 const u8 gMoveDescription_Feint[] = _("An attack that\nhits foes using\nmoves like Protect.");
 const u8 gMoveDescription_Pluck[] = _("Eats the foe's\nheld Berry,\ngaining its effect.");
-const u8 gMoveDescription_Tailwind[] = _("Whips up a turbulent\gale behind the user\nRaises party Speed.");
-const u8 gMoveDescription_Acupressure[] = _("The user sharply raises\na random stat.");
+const u8 gMoveDescription_Tailwind[] = _("Whips up a\nturbulent gale\nbehind the user.\nRaises party Speed.");
+const u8 gMoveDescription_Acupressure[] = _("The user sharply\nraises a\nrandom stat.");
 const u8 gMoveDescription_MetalBurst[] = _("After taking a hit\nretaliates with\ngreater power.");
-const u8 gMoveDescription_U_turn[] = _("Does damage then switches\nout the user.");
+const u8 gMoveDescription_U_turn[] = _("Does damage then\nswitches out the user.");
 const u8 gMoveDescription_CloseCombat[] = _("A strong attack\nbut lowers defense.");
 const u8 gMoveDescription_Payback[] = _("An attack that\ngains power if\nthe user moves\nafter the target.");
-const u8 gMoveDescription_Assurance[] = _("An attack that\ngains power if\nthe user moves\nafter the target.");
+const u8 gMoveDescription_Assurance[] = _("An attack that\doubles power if\nthe target has\nalready taken damage.");
+const u8 gMoveDescription_Embargo[] = _("Blocks the foes from\nusing any items.");
+const u8 gMoveDescription_Fling[] = _("The effectiveness\nand damage varies\nwith the held item.");
+const u8 gMoveDescription_PsychoShift[] = _("Transfers status\nonto the foe.");
+const u8 gMoveDescription_TrumpCard[] = _("The less PP the\nmove has the\nmore damage it does.");
+const u8 gMoveDescription_HealBlock[] = _("Prevents foes from\nrecovering HP.");
+const u8 gMoveDescription_WringOut[] = _("The higher the\nfoe's HP the more\ndamage caused.");
+const u8 gMoveDescription_PowerTrick[] = _("The user swaps\nits Attack and\nDefense stats.");
+const u8 gMoveDescription_Gastro_Acid[] = _("Stomach acid\nsuppresses the\nfoe's ability.");
+const u8 gMoveDescription_LuckyChant[] = _("Prevents foes from\nlanding critical hits.");
+const u8 gMoveDescription_Me_First[] = _("Executes the foe's\nattack with\ngreater power.");
+const u8 gMoveDescription_Copycat[] = _("The user mimics\nthe last move\n used by a foe.");
+const u8 gMoveDescription_Power_Swap[] = _("Swaps changes to\nAttack and\nSp. Atk with\nthe foe.");
+const u8 gMoveDescription_Guard_Swap[] = _("Swaps changes to\nDefense and\nSp. Def with\nthe foe.");
+const u8 gMoveDescription_Punishment[] = _("Does more damage if the\nfoe has powered up.");
+const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmove by the user has\nalready been used.");
 
-    gASSURANCEDescription :
-    .string "An attack that gains power\nif the foe has been hurt.$"
-
-    gEMBARGODescription :
-    .string "Prevents the foe from\nusing any items.$"
-
-    gFLINGDescription :
-    .string "The effectiveness varies\nwith the held item.$"
-
-    gPSYCHO_SHIFTDescription :
-    .string "Transfers status problems\nto the foe.$"
-
-    gTRUMP_CARDDescription :
-    .string "The less PP the move has\nthe more damage it does.$"
-
-    gHEAL_BLOCKDescription :
-    .string "Prevents the foe from\nrecovering any HP.$"
-
-    gWRING_OUTDescription :
-    .string "The higher the foe's HP\nthe more damage caused.$"
-
-    gPOWER_TRICKDescription :
-    .string "The user swaps its Attack\nand Defense stats.$"
-
-    gGASTRO_ACIDDescription :
-    .string "Stomach acid suppresses\nthe foe's ability.$"
-
-    gLUCKY_CHANTDescription :
-    .string "Prevents the foe from\nlanding critical hits.$"
-
-    gME_FIRSTDescription :
-    .string "Executes the foe's attack\nwith greater power.$"
-
-    gCOPYCATDescription :
-    .string "The user mimics the last\nmove used by a foe.$"
-
-    gPOWER_SWAPDescription :
-    .string "Swaps changes to Attack\nand Sp. Atk with the foe.$"
-
-    gGUARD_SWAPDescription :
-    .string "Swaps changes to Defense\nand Sp. Def with the foe.$"
-
-    gPUNISHMENTDescription :
-    .string "Does more damage if the\nfoe has powered up.$"
-
-    gLAST_RESORTDescription :
-    .string "Can only be used if every\nother move has been used.$"
 
     gWORRY_SEEDDescription :
     .string "Plants a seed on the foe\ngiving it Insomnia.$"
@@ -1013,7 +981,7 @@ const u8 gMoveDescription_Assurance[] = _("An attack that\ngains power if\nthe u
     .string "Raises Sp. Atk, Sp. Def and\nSpeed on the 2nd turn.$"
 
     gMAGNETIC_FLUXDescription :
-    .string "Boosts the defenses of\nthose with Plus or Minus.$"
+    .string "The user manipulates\nmagnetic fields\nto raise the\nDefense and Sp. Def.\nof itself and allies\nwith Electric type.$"
 
     gHAPPY_HOURDescription :
     .string "Doubles the amount of\nPrize Money received.$"
@@ -1112,361 +1080,365 @@ const u8 gMoveDescription_Assurance[] = _("An attack that\ngains power if\nthe u
     .string "Guarantees the next move\nwill be a critical hit.$"
 
     gGEAR_UPDescription :
-    .string "Boosts the attacks of\nthose with Plus or Minus.$"
+    .string "The user engages its\ngears to create a\nstatic field raising\nthe Atk. and Sp. Atk\nof itself and allies\nwith Electric type.$"
 
     gTHROAT_CHOPDescription :
-    .string "Chops the throat to disable\nsound moves for a while.$"
+    .string "The user delivers\na debilitating chop\nto the foe's throat\nthat disables sound\nmoves for a while.$"
 
     gPOLLEN_PUFFDescription :
-    .string "Explodes on foes, but\nrestores ally's HP.$"
+    .string "The user attacks\nthe enemy with a\npollen puff bomb.\nIt restores ally HP\nIf they are\nthe target.$"
 
     gANCHOR_SHOTDescription :
-    .string "Strangles the foe with a\nchain. The foe can't flinch.$"
+    .string "Strangles the foe\nwith a chain.\nThe foe can't flee.$"
 
     gPSYCHIC_TERRAINDescription :
-    .string "The ground turns weird for\n5 turns. Blocks priority.$"
+    .string "The ground turns\nweird for 5 turns.\nBlocks priority.$"
 
     gLUNGEDescription :
-    .string "Lunges at the foe to lower\nits Attack stat.$"
+    .string "Lunges at the foe to\nlower its Attack.$"
 
     gFIRE_LASHDescription :
-    .string "Whips the foe with fire\nlowering its Defense.$"
+    .string "Whips the foe with\na stream of fire\nlowering its Defense.$"
 
     gPOWER_TRIPDescription :
-    .string "It hits harder the more\nstat boosts the user has.$"
+    .string "It hits harder\nthe more stat boosts\nthe user has.$"
 
-    gBURN_UPDescription :
-    .string "Burns out the user fully\nremoving the Fire type.$"
+    gBURN_OUTDescription :
+    .string "To inflict massive\ndamage, the PKMN\nburns itself out.\nAfter using this\nmove, the user loses\nits Fire type.$"
 
     gSPEED_SWAPDescription :
-    .string "Swaps user's Speed with\nthe target's.$"
+    .string "Swaps user's\nSpeed with\nthe target's.$"
 
     gSMART_STRIKEDescription :
-    .string "Hits with an accurate\nhorn that never misses.$"
+    .string "The user hits\nwith an sharp horn\nthat never misses.$"
 
     gPURIFYDescription :
-    .string "Cures the foe's status\nto restore HP.$"
+    .string "Cures the foe's\nstatus to\nrestore HP.$"
 
     gREVELATION_DANCEDescription :
-    .string "Dances with mystical power.\nMatches user's first type.$"
+    .string "Dances with\nmystical power.\nMatches user's\nprimary type.$"
 
     gCORE_ENFORCERDescription :
-    .string "Hits with a ray that\nnullifies the foe's ability.$"
+    .string "Hits with a\nray that\nnullifies the foe's\nability.$"
 
     gTROP_KICKDescription :
-    .string "An intense kick from the\ntropics. Lowers Attack.$"
+    .string "An intense kick\nfrom the tropics.\nLowers Attack.$"
 
     gINSTRUCTDescription :
-    .string "Orders the target to use\nits last move again.$"
+    .string "Orders the target\n to use its\nlast move again.$"
 
     gBEAK_BLASTDescription :
-    .string "Heats up beak to attack.\nBurns foe on contact.$"
+    .string "Heats up beak\nto attack.\nBurns the foe\non contact.$"
 
     gCLANGING_SCALESDescription :
-    .string "Makes a big noise with\nits scales. Drops Defense.$"
+    .string "Makes a big\nnoise with\nits scales.\nDrops Defense.$"
 
     gDRAGON_HAMMERDescription :
-    .string "Swings its whole body\nlike a hammer to damage.$"
+    .string "Swings its body\nlike a hammer.$"
 
     gBRUTAL_SWINGDescription :
-    .string "Violently swings around\nto hurt everyone nearby.$"
+    .string "Violently swings\blindly to hurt\neveryone nearby.$"
 
     gAURORA_VEILDescription :
-    .string "Weakens all attacks, but\nonly usable with hail.$"
+    .string "Weakens all\nattacks, but\nonly usable with hail.$"
 
     gSHELL_TRAPDescription :
-    .string "Sets a shell trap that\ndamages on contact.$"
+    .string "Sets a shell\ntrap that\ndamages on contact.$"
 
     gFLEUR_CANNONDescription :
-    .string "A strong ray that harshly\nlowers Sp. Attack.$"
+    .string "A strong ray\nthat harshly\nlowers Sp. Attack.$"
 
     gPSYCHIC_FANGSDescription :
-    .string "Chomps with psychic fangs.\nDestroys any barriers.$"
+    .string "Chomps with\npsychic fangs.\nDestroys any\nbarriers.$"
 
     gSTOMPING_TANTRUMDescription :
-    .string "Stomps around angrily.\nStronger after a failure.$"
+    .string "Stomps around\nangrily. If the\nprevious move failed\nthe power of\nthis move doubles.$"
 
     gSHADOW_BONEDescription :
-    .string "Strikes with a haunted\nbone. Might drop Defense.$"
+    .string "Strikes with\na haunted bone.\nMight drop Defense.$"
 
     gACCELEROCKDescription :
-    .string "Hits with a high-speed\nrock that always goes first.$"
+    .string "Hits the foe\nwith a high-speed\nrock that always\ngoes first.$"
 
     gLIQUIDATIONDescription :
-    .string "Slams the foe with water.\nCan lower Defense.$"
+    .string "Slams the foe\nwith water.\nCan lower Defense.$"
 
     gPRISMATIC_LASERDescription :
-    .string "A high power laser that\nforces recharge next turn.$"
+    .string "A high power\nlaser that forces\nrecharge next turn.$"
 
     gSPECTRAL_THIEFDescription :
-    .string "Steals the target's stat\nboosts, then attacks.$"
+    .string "Steals the\ntarget's stat\nboosts, then attacks.$"
 
     gSUNSTEEL_STRIKEDescription :
-    .string "A sun-fueled strike that\nignores abilities.$"
+    .string "A sun-fueled\nstrike that\nignores abilities.$"
 
     gMOONGEIST_BEAMDescription :
-    .string "A moon-powered beam that\nignores abilities.$"
+    .string "A moon-powered\nbeam that\nignores abilities.$"
 
     gTEARFUL_LOOKDescription :
-    .string "The user tears up, dropping\nAttack and Sp. Attack.$"
+    .string "The user tears up,\ndropping the foe's\nAttack and Sp. Attack.$"
 
     gZING_ZAPDescription :
-    .string "An electrified impact that\ncan cause flinching.$"
+    .string "An electrified\nimpact that\ncan cause flinching.$"
 
     gNATURES_MADNESSDescription :
-    .string "Halves the foe's HP with\nthe power of nature.$"
+    .string "Halves the foe's HP\nwith the power of\nnature.$"
 
     gMULTI_ATTACKDescription :
-    .string "An attack that changes\nwith Memories.$"
+    .string "An attack that\nchanges type with\nthe held Memories.$"
 
     gMIND_BLOWNDescription :
-    .string "It explodes the user's head\nto damage everything around.$"
+    .string "The user turns\nits head into a bomb\nto destroy\neverything around.$"
 
     gPLASMA_FISTSDescription :
-    .string "Hits with electrical fists.\nNormal moves become Electric.$"
+    .string "Hits with electrical fists.\nDuring the turn Normal\nmoves become\nElectrified.\nIt never misses.$"
 
     gPHOTON_GEYSERDescription :
-    .string "User's highest attack stat\ndetermines its category.$"
+    .string "Necrozma's signature\nphoton attack.\nA strange beam that\ntargets a different\ndefense stat based\non Necrozma's form.$"
 
+        //Lets Go P/E
     gZIPPY_ZAPDescription :
-    .string "Electric bursts always go\nfirst and land a critical hit.$"
+    .string "An Electric burst\nthat is very quick\nand always lands\na critical hit.$"
 
     gSPLISHY_SPLASHDescription :
-    .string "A huge electrified wave that\nmay paralyze the foe.$"
+    .string "A huge electrified\nwave that may\nparalyze everyone.$"
 
     gFLOATY_FALLDescription :
-    .string "Floats in air and dives at\nangle.\nMay cause flinching.$"
+    .string "Floats in air\nand dives at\nangle.\nMay cause flinching.$"
 
     gPIKA_PAPOWDescription :
-    .string "Pikachu's love increases its\npower. It never misses.$"
+    .string "Pikachu's love\nboosts its power.\nIt never misses.$"
 
     gBOUNCY_BUBBLEDescription :
-    .string "An attack that absorbs\nall the damage inflicted.$"
-
+    .string "An attack that\nabsorbs all the\ndamage it inflicts.$"
 
     gBUZZY_BUZZDescription :
-    .string "Shoots a jolt of electricity\nthat always paralyzes.$"
+    .string "Shoots a jolt of\nelectricity that\nHas a high chance\nto leave the foe\nparalyzed.$"
 
+        //will attempt to slightly rebalance Lets go moves, since they're meant to be OP by design.
     gSIZZLY_SLIDEDescription :
-    .string "User cloaked in fire charges.\nLeaves the foe with a burn.$"
+    .string "User charges while\ncloaked in fire.\nHas a high chance\nto leave the foe\nwith a burn.$"
 
     gGLITZY_GLOWDescription :
-    .string "Telekinetic force that sets\nwall, lowering Sp. Atk damage.$"
+    .string "A telekinetic force\nthat sets\na light screen, wall\nRaising Sp. Def.$"
 
+        //want to change name, bad behavior or bratty behavior?
     gBADDY_BADDescription :
-    .string "Acting badly, attacks. Sets\nwall, lowering Attack damage.$"
+    .string "Throws a tantrum,\nand lashes out.\nThen puts a reflect\nwall, between them\nand the opponent.\nRaising Defense.$"
 
     gSAPPY_SEEDDescription :
-    .string "Giant stalk scatters seeds\nthat drain HP every turn.$"
+    .string "Giant stalk scatters\nseeds that drain\n HP every turn.$"
 
     //change to potentially also have 30 % freeze chance but lower pp
     gFREEZY_FROSTDescription :
-.string "Crystal from cold haze hits.\nEliminates all stat changes.$"
+.string "Crystal from cold\nhaze hits.\nEliminates all\nstat changes.$"
 
 gSPARKLY_SWIRLDescription :
-    .string "Wrap foe with whirlwind of\nscent. Heals party's status.$"
+    .string "Wrap foe with\na whirlwind of\nscent.\nHeals party's status$"
 
     gVEEVEE_VOLLEYDescription :
-    .string "Eevee's love increases its\npower. It never misses.$"
+    .string "Eevee's love boosts\nits power.\nIt never misses.$"
 
     gDOUBLE_IRON_BASHDescription :
-    .string "The user spins and hits with\nits arms.\nMay cause flinch.$"
+    .string "The user spins\nand hits with\nits arms.\nMay cause flinch.$"
 
     // GEN 8
     gDYNAMAX_CANNONDescription :
-    .string "Fires a strong beam. Deals\n2x damage to Dynamaxed foes.$"
+    .string "Fires a strong beam.\nDeals 2x damage\nto Dynamaxed foes.\nBut not Eternamaxed.$"
 
     gSNIPE_SHOTDescription :
-    .string "The user ignores effects\nthat draw in moves.$"
+    .string "The user ignores\neffects that draw\nin moves.$"
 
     gJAW_LOCKDescription :
-    .string "Prevents the user and\nthe target from escaping.$"
+    .string "Prevents the user\nand the target\nfrom escaping.$"
 
     gSTUFF_CHEEKSDescription :
-    .string "Consumes the user's Berry,\nthen sharply raises Def.$"
+    .string "Consumes the user's\nBerry, then sharply\nraises Defense.$"
 
     gNO_RETREATDescription :
-    .string "Raises all of the user's\nstats but prevents escape.$"
+    .string "Raises all of\nthe user's stats\nbut prevents escape.$"
 
     gTAR_SHOTDescription :
-    .string "Lowers the foe's Speed and\nmakes it weak to Fire.$"
+    .string "Lowers the foe's\nSpeed and makes it\nweak to Fire.$"
 
     gMAGIC_POWDERDescription :
-    .string "Magic powder changes the\ntarget into a Psychic-type.$"
+    .string "Magic powder\nchanges the target\ninto a Psychic-type.$"
 
     gDRAGON_DARTSDescription :
-    .string "The user attacks twice. Two\ntargets are hit once each.$"
+    .string "The user attacks\ntwice.\nTwo targets are\nhit once each.$"
 
     gTEATIMEDescription :
-    .string "All Pokémon have teatime\nand eat their Berries.$"
+    .string "All Pokémon have\nteatime and eat\ntheir Berries.$"
 
     gOCTOLOCKDescription :
-    .string "Traps the foe to lower Def\nand Sp. Def fall each turn.$"
+    .string "Traps the foe in\na tight hold.\nTheir Defense and Sp. Def\nfall each turn.$"
 
     gBOLT_BEAKDescription :
-    .string "Double power if the user\nmoves before the target.$"
+    .string "Deals 2x damage\nif the user moves\nbefore the target.$"
 
     gFISHIOUS_RENDDescription :
-    .string "Double power if the user\nmoves before the target.$"
+    .string "Deals 2x damage\nif the user moves\nbefore the target.$"
 
     gCOURT_CHANGEDescription :
-    .string "The user swaps effects on\neither side of the field.$"
+    .string "The user swaps\neffects on either\nside of the field.$"
 
     gCLANGOROUS_SOULDescription :
-    .string "The user uses some of its\nHP to raise all its stats.$"
+    .string "The user uses some\nof its HP to\nraise all its stats.$"
 
     gBODY_PRESSDescription :
-    .string "Does more damage the\nhigher the user's Def.$"
+    .string "Does more damage\nthe higher\nthe user's Defense.$"
 
     gDECORATEDescription :
-    .string "The user sharply raises\nthe target's Atk and Sp.Atk$"
+    .string "The user sharply\nraises the target's\nAttack and Sp.Atk$"
 
     gDRUM_BEATINGDescription :
-    .string "Plays a drum to attack.\nThe foe's Speed is lowered.$"
+    .string "Plays a drum\nto attack the foe.\nThen foe's Speed\nis lowered.$"
 
+        //fill end with new effect
     gSNAP_TRAPDescription :
-    .string "Snares the target in a snap\ntrap for four to five turns.$"
+    .string "Snares the target\nin a snap trap\nfor 4 to 5 turns.\n$"
 
     gPYRO_BALLDescription :
-    .string "Launches a fiery ball at the\ntarget. It may cause a burn.$"
+    .string "Launches a fiery\nball at the target.\nIt may cause a burn.$"
 
     gBEHEMOTH_BLADEDescription :
-    .string "Strikes as a sword. It deals\n2x damage to Dynamaxed foes.$"
+    .string "The user becomes a\ngigantic sword and\ncuts the target.\nDeals 2x damage to\nDynamaxed foes.\nBut not Eternamaxed.$"
 
     gBEHEMOTH_BASHDescription :
-    .string "Attacks as a sheild. Deals\n2x damage to Dynamaxed foes.$"
+    .string "The user becomes a\ngigantic shield and\nslams into the target.\nDeals 2x damage to\nDynamaxed foes.\nBut not Eternamaxed.$"
 
     gAURA_WHEELDescription :
-    .string "Raises Speed to attack. The\nType is based on its form.$"
+    .string "Raises Speed to attack.\nThe Type is\nbased on its form.$"
 
     gBREAKING_SWIPEDescription :
-    .string "Swings its tail to attack.\nLowers the Atk of those hit.$"
+    .string "Swings its tail\nto attack all foes.\nLowers the attack\nof those hit.$"
 
     gBRANCH_POKEDescription :
-    .string "The user pokes the target\nwith a pointed branch.$"
+    .string "The user pokes\nthe target with\na pointed branch.$"
 
     gOVERDRIVEDescription :
-    .string "The user twangs its guitar,\ncausing strong vibrations.$"
+    .string "The user twangs\nits guitar, causing\nstrong vibrations.\nIt may confuse\nthe foe.$"
 
     gAPPLE_ACIDDescription :
-    .string "Attacks with tart apple acid\nto lower the foe's Sp. Def.$"
+    .string "Attacks with tart\napple acid\nLowers Sp. Def.$"
 
     gGRAV_APPLEDescription :
-    .string "Drops an apple from above.\nLowers the foe's Defense.$"
+    .string "Drops an apple\nfrom above.\nLowers Defense.$"
 
     gSPIRIT_BREAKDescription :
-    .string "Attacks with spirit-breaking\nforce. Lowers Sp. Atk.$"
+    .string "An Attack with\nspirit-breaking\nforce.\nLowers Sp. Atk.$"
 
     gSTRANGE_STEAMDescription :
-    .string "Emits a strange steam to\npotentially confuse the foe.$"
+    .string "Emits a strange\nsteam that may\nconfuse the foe.$"
 
     gLIFE_DEWDescription :
-    .string "Scatters water to restore\nthe HP of itself and allies.$"
+    .string "Scatters water to\nrestore the HP of\nitself and allies.$"
 
     gOBSTRUCTDescription :
-    .string "Protects itself, harshly\nlowering Def on contact.$"
+    .string "Protects itself,\nharshly lowers\nenemy Def on contact$"
 
+        //grim snarl surrender
     gFALSE_SURRENDERDescription :
-    .string "Bows to stab the foe\nwith hair. It never misses.$"
+    .string "Bows to stab the foe\nwith hair.\nIt never misses.$"
 
     gMETEOR_ASSAULTDescription :
-    .string "Attacks with a thick leek.\nThe user must then rest.$"
+    .string "The user attacks\nwildly with its\nthick leek. The user\ncan't move\non the next turn."
 
     gETERNABEAMDescription :
-    .string "Eternatus' strongest move.\nThe user rests next turn.$"
+    .string "Eternatus' strongest\nmove.\nThe user rests next turn.$"
 
     gSTEEL_BEAMDescription :
-    .string "Fires a beam of steel from\nits body. It hurts the user.$"
+    .string "Fires a beam\nof steel from\nits body.\nThe user takes half\nHP as recoil,\neven if it misses.$"
 
     gEXPANDING_FORCEDescription :
-    .string "Power goes up and damages\nall foes on Psychic Terrain.$"
+    .string "Power and target\nrange goes up\non Psychic Terrain.$"
 
     gSTEEL_ROLLERDescription :
-    .string "Destroys terrain. Fails if\nground isn't terrain.$"
+    .string "Destroys terrain.\nFails if no\nterrain is set.$"
 
     gSCALE_SHOTDescription :
-    .string "Shoots scales 2 to 5 times.\nUps Speed, lowers defense.$"
+    .string "Shoots scales 2 to 5\ntimes.\nUps Speed,\nlowers defense.$"
 
     gMETEOR_BEAMDescription :
-    .string "A 2-turn move that raises\nSp. Attack before attacking.$"
+    .string "A 2-turn move\nthat raises Sp. Atk.\nbefore attacking.$"
 
     gSHELL_SIDE_ARMDescription :
-    .string "Uses higher of physical and\nspecial damage\nMay poison.$"
+    .string "Uses higher of\nphysical and\nspecial damage\nMay poison.$"
 
     gMISTY_EXPLOSIONDescription :
-    .string "Hit everything and faint.\nPowers up on Misty Terrain.$"
+    .string "The user explodes\ndamaging everything\nand then fainting.\nPowers up\non Misty Terrain.$"
 
     gGRASSY_GLIDEDescription :
-    .string "Gliding on ground, hits. Goes\nfirst on Grassy Terrain.$"
+    .string "Hits the foe while\ngliding on the ground.\nGoes first\non Grassy Terrain.$"
 
     gRISING_VOLTAGEDescription :
-    .string "This move's power doubles\nwhen on Electric Terrain.$"
+    .string "This move's power\ndoubles when on\nElectric Terrain.$"
 
     gTERRAIN_PULSEDescription :
     .string "Type and power changes\ndepending on the terrain.$"
 
     gSKITTER_SMACKDescription :
-    .string "User skitters behind foe to\nattack. Lowers foe's Sp. Atk.$"
+    .string "User skitters behind\nthe foe to attack.\nLowers foe's Sp. Atk.$"
 
     gBURNING_JEALOUSYDescription :
-    .string "Foes that have stats upped\nduring the turn get burned.$"
+    .string "Foes that have\nstats upped during\nthe turn get burned.$"
 
     gLASH_OUTDescription :
-    .string "If stats lowered during this\nturn, power is doubled.$"
+    .string "If stats lowered\nduring turn,\npower is doubled.$"
 
     gPOLTERGEISTDescription :
-    .string "Control foe's item to attack.\nFails if foe has no item.$"
+    .string "Control foe's item\nto attack.\nIt fails if the\nfoe has no item.$"
 
     gCORROSIVE_GASDescription :
-    .string "Highly acidic gas melts items\nheld by surrounding Pokémon.$"
+    .string "Highly acidic gas\nmelts items held by\nsurrounding Pokémon.$"
 
     gCOACHINGDescription :
-    .string "Properly coaches allies to\nup their Attack and Defense.$"
+    .string "Properly coaches\nallies to up their\nAttack and Defense.$"
 
     gFLIP_TURNDescription :
-    .string "Attacks and rushes back to\nswitch with a party Pokémon.$"
+    .string "Attacks then rushes\nback to switch\nwith a party Pokémon.$"
 
     gTRIPLE_AXELDescription :
-    .string "A 3-kick attack that gets\nmore powerful with each hit.$"
+    .string "A 3-kick attack\nthat gets more\npowerful each hit.$"
 
     gDUAL_WINGBEATDescription :
-    .string "User slams the target with\nwings and hits twice in a row.$"
+    .string "Slams the target\nwith wings and\nhits twice in a row.$"
 
     gSCORCHING_SANDSDescription :
-    .string "Throws scorching sand at\nthe target\nMay leave a burn.$"
+    .string "Throws scorching sand\nat the target.\nMay leave a burn.$"
 
     gJUNGLE_HEALINGDescription :
-    .string "Heals HP and status of\nitself and allies in battle.$"
+    .string "Heals HP and status\nof itself and\nallies in battle.$"
 
     gWICKED_BLOWDescription :
-    .string "Mastering the Dark style,\nstrikes with a critical hit.$"
+    .string "The Final technique\nof the Dark style.\nAlways strikes\na critical hit.$"
 
     gSURGING_STRIKESDescription :
-    .string "Mastering the Water style,\nstrikes with 3 critical hits.$"
+    .string "The Final technique\nof the Water style.\nFluidly strikes\n3 critical hits.$"
 
     gTHUNDER_CAGEDescription :
-    .string "Traps the foe in a cage of\nelectricity for 2 to 5 turns.$"
+    .string "Traps the foe\nin a cage of\nelectricity.\nFor 2 to 5 turns.$"
 
     gDRAGON_ENERGYDescription :
-    .string "The higher the user's HP\nthe more damage caused.$"
+    .string "The higher the\nuser's HP the more\ndamage caused.$"
 
     gFREEZING_GLAREDescription :
-    .string "Shoots psychic power from\nthe eyes\nMay freeze the foe.$"
+    .string "Shoots psychic power\nfrom the eyes.\nMay freeze the foe.$"
 
     gFIERY_WRATHDescription :
-    .string "An attack fueled by your\nwrath.\nMay cause flinching.$"
+    .string "An attack fueled\nby great wrath.\nMay cause flinching.$"
 
     gTHUNDEROUS_KICKDescription :
-    .string "Uses a lightning-like kick\nto hit. Lowers foe's Defense.$"
+    .string "A lightning-like kick\nstrikes with force.\nLowers foe's Defense.$"
 
     gGLACIAL_LANCEDescription :
-    .string "Strikes by hurling a blizzard-\ncloaked icicle lance at a foe.$"
+    .string "Strikes by hurling\na blizzard-cloaked\nicicle lance\nat a foe.$"
 
     gASTRAL_BARRAGEDescription :
     .string "Strikes by sending a frightful\namount of ghosts at a foe.$"
 
     gEERIE_SPELLDescription :
-    .string "Attacks with psychic power.\nFoe's last move has 3 PP cut.$"
+    .string "Attacks with psychic\npower.\nFoe's last move has\na varying amount\nof PP cut.$"
 
     gMoveDescription_Cocoon :
     .string "Not done yet.$"
@@ -1481,19 +1453,14 @@ gSPARKLY_SWIRLDescription :
     .string "Sacrifices stats\nto curse the last foe\nwho attacked the user.$"
 
     gMoveDescription_ShieldBash :
-    .string "The user blocks its body\nwith a shield, and\ncounters if hit with\na physical move\ndamage is based on DEF.$"
+    .string "The user blocks\nwith a shield, and\ncounters if hit with\na physical move.\nDmg is based on DEFENSE.$"
 
-    gUP_ROOTDescription :
-    .string "Does damage then switches\nout the user.$"
 
-    gDIVE_BOMBDescription : //can add on to thesee 2
-    .string "Does damage then switches\nout the user.$"
-
-    gNETTLE_WHIPDescription:  //name tbd
-    .string "Attacks the target\nwith a vine covered\nin Nettle bristles.\nIf not a GRASS type,\nIt may leave the\nfoe with a burn.$"
-
-        gMoveDescription_SonicBoom:
-        "The target is struck\nby high-force winds,\nas the user\naccelerates passed\nthe sound barrier.\nRaises Speed.$"
+const u8 gMoveDescription_UpRoot[] = _("Does damage then switches\nout the user.");
+const u8 gMoveDescription_DiveBomb[] = _("Does damage then switches\nout the user.");
+    //name tbd
+const u8 gMoveDescription_Nettle_Whip[] = _("Attacks the target\nwith a vine covered\nin Nettle bristles.\nIf not a GRASS type,\nIt may leave the\nfoe with a burn.");
+const u8 gMoveDescription_SonicBoom[] = _("The target is struck\nby high-force winds,\nas the user\naccelerates passed\nthe sound barrier.\nRaises Speed.");
 
     //Description can hold 5 line breaks given current space post expansion!  at approx 20 chars per line//
 
@@ -2144,7 +2111,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [ MOVE_LUNGE ] = gMoveDescription_Pound,
     [ MOVE_FIRE_LASH ] = gMoveDescription_Pound,
     [ MOVE_POWER_TRIP ] = gMoveDescription_Pound,
-    [ MOVE_BURN_UP ] = gMoveDescription_Pound,
+    [ MOVE_BURN_OUT ] = gMoveDescription_Pound,
     [ MOVE_SPEED_SWAP ] = gMoveDescription_Pound,
     [ MOVE_SMART_STRIKE ] = gMoveDescription_Pound,
     [ MOVE_PURIFY ] = gMoveDescription_Pound,

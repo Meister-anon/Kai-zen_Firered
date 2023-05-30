@@ -1261,9 +1261,9 @@
 #define SPECIES_XERNEAS_ACTIVE               FORMS_START + 260
 
 // Zygarde
-#define SPECIES_ZYGARDE_12                   FORMS_START + 261
-#define SPECIES_ZYGARDE_12_POWER_CONSTRUCT   FORMS_START + 262
-#define SPECIES_ZYGARDE_52_POWER_CONSTRUCT   FORMS_START + 263
+#define SPECIES_ZYGARDE_10                   FORMS_START + 261
+#define SPECIES_ZYGARDE_10_POWER_CONSTRUCT   FORMS_START + 262
+#define SPECIES_ZYGARDE_50_POWER_CONSTRUCT   FORMS_START + 263
 #define SPECIES_ZYGARDE_COMPLETE             FORMS_START + 264
 
 // Hoopa
@@ -1380,7 +1380,11 @@
 #define SPECIES_CALYREX_ICE_RIDER            FORMS_START + 329
 #define SPECIES_CALYREX_SHADOW_RIDER         FORMS_START + 330
 
-#define SPECIES_EGG SPECIES_CALYREX_SHADOW_RIDER + 1
+//New Mega Forms
+
+#define SPECIES_TORTERRA_MEGA				FORMS_START + 331
+
+#define SPECIES_EGG SPECIES_TORTERRA_MEGA + 1
 #define NUM_SPECIES SPECIES_EGG	//Num species determins number dex entries now instead of pokemon slots
 
 // National Dex Index Defines
@@ -2711,5 +2715,6 @@
 #define F_HISUIAN_FORM  (1 << 3)
 #define F_CEFIRIAN_FORM (1 << 4)	//For pokemon opal Cefira region forms
 #define SPECIES_FLAG_GENDER_DIFFERENCE (1 << 5)	//only for basculegion
+#define F_MEGA_FORM (1 << 6)	//to denote mega? may not need, idk
 
 #endif  // GUARD_CONSTANTS_SPECIES_H

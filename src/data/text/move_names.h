@@ -48,7 +48,7 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("ROAR"),
     _("SING"),
     _("SUPERSONIC"),
-    _("SONICBOOM"),
+    _("SONIC SCREECH"),
     _("DISABLE"),
     _("ACID"),
     _("EMBER"),
@@ -644,7 +644,7 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("LUNGE"),
     _("FIRE LASH"),
     _("POWER TRIP"),
-    _("BURN UP"),
+    _("BURNOUT"),
     _("SPEED SWAP"),
     _("SMART STRIKE"),
     _("PURIFY"),
@@ -673,7 +673,7 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("NATURES MADNESS"),
     _("MULTI ATTACK"),
     _("MIND BLOWN"),
-    _("PLASMA FISTS"),
+    _("PLASMA FIST"),
     _("PHOTON GEYSER"),
     _("ZIPPY ZAP"),
     _("SPLISHY SPLASH"),
@@ -758,7 +758,13 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("MONOTYPE"),
     _("FLASH FREEZE"),
     _("DRYADS CURSE"),
-    _("SHIELDBASH"),
+    _("SHIELD BASH"),
     _("UPROOT"),
-    _("DIVE BOMB")
+    _("DIVE BOMB"),
+    _("NETTLE WHIP"),
+    _("SONICBOOM"),
+    _("???% POWER"), //Hopefully this works, couldn't define name using theese characters
+    _("SHIMON"),
+    _("FINAL FLIGHT"),
+    _("PLASMA RAILGUN") 
 };//remember to remove comma from last entry //longest name is 17 chars

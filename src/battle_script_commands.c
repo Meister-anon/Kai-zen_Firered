@@ -129,7 +129,7 @@ static void atk3E_end2(void);
 static void atk3F_end3(void);
 static void atk40_jumpifaffectedbyprotect(void);
 static void atk41_call(void);
-static void atk42_jumpiftype2(void);
+static void atk42_jumpiftype2(void);    //no longer needed, can replace
 static void atk43_jumpifabilitypresent(void);
 static void atk44_endselectionscript(void);
 static void atk45_playanimation(void);
@@ -2169,6 +2169,8 @@ static void atk06_typecalc(void)
                 {
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
                         ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL)); //can set multiplier with this, and mudluatedmg will set the move result based on that
+                    else if (moveType == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
+                        ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL));
                     else
                         ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));   //which will translate to correct effectiveness sound message etc.
                 }
@@ -2177,6 +2179,8 @@ static void atk06_typecalc(void)
                     type1 != type2) //emerald update literally just adds a check for type 3
                 {
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                        ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL));
+                    else if (moveType == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
                         ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL));
                     else
                         ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
@@ -2188,6 +2192,8 @@ static void atk06_typecalc(void)
                     type3 != type1)
                 {
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                        ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL));
+                    else if (moveType == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
                         ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL));
                     else
                         ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
@@ -2441,6 +2447,8 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                 {
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                    else if (moveType == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
+                        ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
                     else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
                 }
@@ -2449,6 +2457,8 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                     type1 != type2)
                 {
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
+                        ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                    else if (moveType == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
                     else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -2460,6 +2470,8 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                     type3 != type1)
                 {
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
+                        ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                    else if (moveType == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
                     else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -2523,6 +2535,8 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                 {
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                    else if (moveType == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
+                        ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
                     else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
                 }
@@ -2530,6 +2544,8 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                 if (TYPE_EFFECT_DEF_TYPE(i) == type2 && type1 != type2)
                 {
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                        ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                    else if (moveType == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
                     else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -2541,6 +2557,8 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                     type3 != type1)
                 {
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                        ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                    else if (moveType == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
                     else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -4252,6 +4270,9 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN); 
 
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_ALWAYS_CRIT)
+        SetMoveEffect(0, MOVE_EFFECT_CERTAIN); 
+
     if (gBattleMoves[gCurrentMove].effect == EFFECT_SPEED_UP_HIT)       //go over 100%  effects, see which I can put here to just make certain, may be able to do all.
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
     
@@ -4617,7 +4638,7 @@ static void atk22_jumpbasedontype(void)  //may need to adjust currinstr values
     const u8* jumpPtr = T2_READ_PTR(gBattlescriptCurrInstr + 4);
 
     // jumpiftype
-    if (gBattlescriptCurrInstr[3])
+    if (gBattlescriptCurrInstr[3])  //TRUE
     {
         if (IS_BATTLER_OF_TYPE(battlerId, type))
             gBattlescriptCurrInstr = jumpPtr;
@@ -4625,7 +4646,7 @@ static void atk22_jumpbasedontype(void)  //may need to adjust currinstr values
             gBattlescriptCurrInstr += 8;
     }
     // jumpifnottype
-    else
+    else       //FALSE
     {
         if (!IS_BATTLER_OF_TYPE(battlerId, type))
             gBattlescriptCurrInstr = jumpPtr;
@@ -5318,14 +5339,15 @@ static void atk41_call(void)
     gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 }
 
-static void atk42_jumpiftype2(void)
+static void atk42_jumpiftype2(void) //can be replaced no longer needed, with new jumpiftype check
 {
-    u8 battlerId = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+    /*u8 battlerId = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
     if (gBattlescriptCurrInstr[2] == gBattleMons[battlerId].type1 || gBattlescriptCurrInstr[2] == gBattleMons[battlerId].type2)
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
     else
-        gBattlescriptCurrInstr += 7;
+        gBattlescriptCurrInstr += 7;*/
+        ++gBattlescriptCurrInstr;
 }
 
 static void atk43_jumpifabilitypresent(void)
@@ -6394,6 +6416,9 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
                         TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL;    //I guess this works? since it passes through
 
+                    if (moveType == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
+                        TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL;
+
                     if (TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
                     {
                         gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
@@ -6412,6 +6437,9 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
                 if (TYPE_EFFECT_DEF_TYPE(i) == type2)
                 {
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                        TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL;
+
+                    if (moveType == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
                         TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL;
 
                     if (type1 != type2
@@ -6437,6 +6465,9 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
                 if (TYPE_EFFECT_DEF_TYPE(i) == type3 && type3 != TYPE_MYSTERY)
                 {
                     if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                        TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL;
+
+                    if (moveType == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
                         TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL;
 
                     if (type3 != type2 && type3 != type1 && 
@@ -9419,10 +9450,21 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattlescriptCurrInstr += 7;
         return;
     case VARIOUS_LOSE_TYPE:
-        for (i = 0; i < 3; i++)
-        {
-            if (*(u8*)(&gBattleMons[gActiveBattler].type1 + i) == gBattlescriptCurrInstr[3])
-                *(u8*)(&gBattleMons[gActiveBattler].type1 + i) = TYPE_MYSTERY;
+        for (i = 0; i < 3; i++) //TEST, since there's only 3 types shouldn't this only need to increment up to 2 not 3?
+        {   //nah it should be 3, way for loops work, it'll not execute when the value is 3., it checks the value before executing the block.
+            if (gBattleMons[gActiveBattler].type1 != gBattleMons[gActiveBattler].type2)
+            {
+                if (*(u8*)(&gBattleMons[gActiveBattler].type1 + i) == gBattlescriptCurrInstr[3])    //believe +i is checking each battler
+                    *(u8*)(&gBattleMons[gActiveBattler].type1 + i) = TYPE_MYSTERY;  //nvm its checking the different types type 1 typ2 & type 3 since its not using 4 hmm
+                PREPARE_TYPE_BUFFER(gBattleTextBuff3, gTypeNames[gBattlescriptCurrInstr[3]]);
+            }
+            else if (gBattleMons[gActiveBattler].type1 == gBattleMons[gActiveBattler].type2 
+                && gBattleMons[gActiveBattler].type3 != gBattlescriptCurrInstr[3])
+            {
+                if (*(u8*)(&gBattleMons[gActiveBattler].type1 + i) == gBattlescriptCurrInstr[3])
+                    *(u8*)(&gBattleMons[gActiveBattler].type1 + i) = TYPE_NORMAL;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff3, gTypeNames[gBattlescriptCurrInstr[3]]);   //hopefullly works, would buffer type lost, to loss string
+            }
         }
         gBattlescriptCurrInstr += 4;
         return;

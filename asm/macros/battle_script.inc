@@ -187,11 +187,11 @@
 	.endm
 
 	.macro jumpiftype battler:req, type:req, ptr:req
-	jumpbasedontype \battler, \type, 1, \ptr
+	jumpbasedontype \battler, \type, TRUE, \ptr
 	.endm
 
 	.macro jumpifnottype battler:req, type:req, ptr:req
-	jumpbasedontype \battler, \type, 0, \ptr
+	jumpbasedontype \battler, \type, FALSE, \ptr
 	.endm
 
 	.macro getexp battler:req
@@ -372,11 +372,8 @@
 	.4byte \ptr
 	.endm
 
-	.macro jumpiftype2 battler:req, type:req, ptr:req
+	.macro jumpiftype2	@pretty sure this shouldnt be used anymore new jumpiftype does all type checks
 	.byte 0x42
-	.byte \battler
-	.byte \type
-	.4byte \ptr
 	.endm
 
 	.macro jumpifabilitypresent ability:req, ptr:req

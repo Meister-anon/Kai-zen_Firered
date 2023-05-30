@@ -12963,6 +12963,9 @@ static const struct LevelUpMove sYungoosLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sGumshoosLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 0, MOVE_FIRST_IMPRESSION),
+    LEVEL_UP_MOVE( 0, MOVE_FACADE),
+    LEVEL_UP_MOVE( 0, MOVE_TOXIC_SPIKES),
     LEVEL_UP_MOVE( 1, MOVE_TACKLE),
     LEVEL_UP_MOVE( 1, MOVE_LEER),
     LEVEL_UP_MOVE( 1, MOVE_PURSUIT),
@@ -14916,7 +14919,7 @@ static const struct LevelUpMove sCarkolLevelUpLearnset[] = {
     LEVEL_UP_MOVE(35, MOVE_STEALTH_ROCK),
     LEVEL_UP_MOVE(41, MOVE_HEAT_CRASH),
     LEVEL_UP_MOVE(48, MOVE_ROCK_BLAST),
-    LEVEL_UP_MOVE(55, MOVE_BURN_UP),
+    LEVEL_UP_MOVE(55, MOVE_BURN_OUT),
     LEVEL_UP_END
 };
 
@@ -14934,7 +14937,7 @@ static const struct LevelUpMove sCoalossalLevelUpLearnset[] = {
     LEVEL_UP_MOVE(37, MOVE_STEALTH_ROCK),
     LEVEL_UP_MOVE(45, MOVE_HEAT_CRASH),
     LEVEL_UP_MOVE(54, MOVE_ROCK_BLAST),
-    LEVEL_UP_MOVE(63, MOVE_BURN_UP),
+    LEVEL_UP_MOVE(63, MOVE_BURN_OUT),
     LEVEL_UP_END
 };
 
@@ -15120,7 +15123,7 @@ static const struct LevelUpMove sSizzlipedeLevelUpLearnset[] = {
     LEVEL_UP_MOVE(40, MOVE_CRUNCH),
     LEVEL_UP_MOVE(45, MOVE_FIRE_LASH),
     LEVEL_UP_MOVE(50, MOVE_LUNGE),
-    LEVEL_UP_MOVE(55, MOVE_BURN_UP),
+    LEVEL_UP_MOVE(55, MOVE_BURN_OUT),
     LEVEL_UP_END
 };
 
@@ -15138,7 +15141,7 @@ static const struct LevelUpMove sCentiskorchLevelUpLearnset[] = {
     LEVEL_UP_MOVE(46, MOVE_CRUNCH),
     LEVEL_UP_MOVE(53, MOVE_FIRE_LASH),
     LEVEL_UP_MOVE(60, MOVE_LUNGE),
-    LEVEL_UP_MOVE(67, MOVE_BURN_UP),
+    LEVEL_UP_MOVE(67, MOVE_BURN_OUT),
     LEVEL_UP_END
 };
 

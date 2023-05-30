@@ -9886,10 +9886,10 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
     },
 
-    [MOVE_BURN_UP] =
+    [MOVE_BURN_OUT] =
     {
-        .effect = EFFECT_BURN_UP,
-        .power = 130,
+        .effect = EFFECT_LOSETYPE_HIT,
+        .power = 150,
         .type = TYPE_FIRE,
         .accuracy = 100,
         .pp = 5,
@@ -10143,16 +10143,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ACCELEROCK] =
     {
         .effect = EFFECT_HIT,
-        .power = 40,
+        .power = 55,
         .type = TYPE_ROCK,
         .accuracy = 100,
         .pp = 20,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .priority = 1,
+        .priority = 2,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-    },
+    },//made equivalent of extreme speed rather than quick attack, es is base 80,but most mon that learn it aren't normal, so this equivalent dmg w stab in mind
 
     [MOVE_LIQUIDATION] =
     {
@@ -10321,7 +10321,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,            //and then for ultra necrozma, make it based on enemies highest def stat, so you always attack their weakness
         .pp = 5,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_BOTH,    //changed from ally and foe target,may make single target
+        .target = MOVE_TARGET_BOTH,    //changed from ally and foe target,may make single target    //but mon is a bit of a glass cannon
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
@@ -10329,22 +10329,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_ZIPPY_ZAP] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_8
-            .power = 80,
-            .effect = EFFECT_EVASION_UP_HIT, // TODO: EFFECT_EVASION_UP_HIT
-            .pp = 10,
-            .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
-        #else
-            .effect = EFFECT_ALWAYS_CRIT,
-            .power = 50,
-            .pp = 15,
-            .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
-        #endif
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+        .effect = EFFECT_ALWAYS_CRIT,
+        .power = 50,
+        .pp = 15,
         .type = TYPE_ELECTRIC,
         .accuracy = 100,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
-        .priority = 2,
+        .priority = 1,
         .split = SPLIT_PHYSICAL,
     },
 
@@ -10355,15 +10348,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #else
             .flags = FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         #endif
-        .effect = EFFECT_PARALYZE_HIT,
-        .power = 90,
+        .effect = EFFECT_PARALYZE_HIT,      //EFFECT_TWO_TYPED_MOVE //WILL need to make custom effect then, a dual typed move with paralyze chance. lol im making it more op than ever
+        .power = 90,        //something between discharge and surf, discharge is base 80,  surf is base 95
         .type = TYPE_WATER,
         .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 30,
-        .target = MOVE_TARGET_BOTH,
+        .target = MOVE_TARGET_FOES_AND_ALLY,    //lol its a giant electrified surf, that is gonna have to hit everyone, you can't avoid that XD
         .priority = 0,
-        .split = SPLIT_SPECIAL,
+        .split = SPLIT_SPECIAL, //I think I'd also like to make this a dual type move, water/electric 
+        .argument = TYPE_ELECTRIC,
     },
 
     [MOVE_FLOATY_FALL] =
@@ -10417,19 +10411,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_BUZZY_BUZZ] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_8
-            .power = 60,
-            .pp = 20,
-            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
-        #else
-            .power = 90,
-            .pp = 15,
-            .flags = FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
-        #endif
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .power = 80,
+        .pp = 15,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .effect = EFFECT_PARALYZE_HIT,
         .type = TYPE_ELECTRIC,
         .accuracy = 100,
-        .secondaryEffectChance = 100,
+        .secondaryEffectChance = 50,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .split = SPLIT_SPECIAL,
@@ -10437,19 +10426,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_SIZZLY_SLIDE] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_8
-            .power = 60,
-            .pp = 20,
-            .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
-        #else
-            .power = 90,
-            .pp = 15,
-            .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
-        #endif
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .power = 80,
+        .pp = 15,
         .effect = EFFECT_BURN_HIT,
         .type = TYPE_FIRE,
         .accuracy = 100,
-        .secondaryEffectChance = 100,
+        .secondaryEffectChance = 50,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .split = SPLIT_PHYSICAL,
@@ -10677,7 +10660,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_MAGIC_POWDER] =
     {
-        .effect = EFFECT_SOAK,
+        .effect = EFFECT_SOAK,  //believe this is type change to psychic, similar to soak is type change to water
         .power = 0,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
@@ -10692,7 +10675,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_DRAGON_DARTS] =
     {
-        .effect = EFFECT_MULTI_HIT, //TODO
+        .effect = EFFECT_MULTI_HIT, //TODO   //weird effect, rather than double target, is a single target move that moves on to the next target after landing, think can use intimidate logic
         .power = 50,
         .type = TYPE_DRAGON,
         .accuracy = 100,
@@ -10706,7 +10689,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_TEATIME] =
     {
-        .effect = EFFECT_SPLASH,   //TODO
+        .effect = EFFECT_SPLASH,   //TODO   //looks like forces evryone to eat their berries, bypasses unnerve & magic guard, fails if no one has berries
         .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 0,
@@ -11662,6 +11645,63 @@ use wonder gaurd logic to determine its super effective
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
         .argument = MOVE_EFFECT_CONFUSION,
+    },
+
+    [MOVE_OVER_MAX_POWER] =
+    {
+        .effect = EFFECT_LOSETYPE_HIT,
+        .power = 150,
+        .type = TYPE_PSYCHIC,
+        .accuracy = 100,
+        .pp = 5,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .priority = 0,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
+    },
+    
+    [MOVE_SHIMON] =
+    {
+        .effect = EFFECT_LOSETYPE_HIT,
+        .power = 150,
+        .type = TYPE_FIGHTING,
+        .accuracy = 100,
+        .pp = 5,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .priority = 0,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+
+    [MOVE_FINAL_FLIGHT] =
+    {
+        .effect = EFFECT_LOSETYPE_HIT,
+        .power = 150,
+        .type = TYPE_FLYING,
+        .accuracy = 100,
+        .pp = 5,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .priority = 0,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
+    },//Check flying type average stats, see if need to make this physical
+    //idea is user pushes themselves to the limit, and gives everything they have to perform an acrobatic feat
+    
+    [MOVE_PLASMA_RAILGUN] =
+    {
+        .effect = EFFECT_LOSETYPE_HIT,
+        .power = 150,
+        .type = TYPE_ELECTRIC,
+        .accuracy = 100,
+        .pp = 5,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .priority = 0,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
     },
 
 };

@@ -286,6 +286,7 @@ static const u8 sAviatorDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("An unco
 static const u8 sUrsurperDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups Atk and Sp. Atk. if stats lowered.\And if suffering from status.");
 static const u8 sInverseWorldDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Inverts incoming damage,\nand “Not very effective” hits.");
 static const u8 sSonarDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Emits infrasonic sound with each attack.\nDoubles damage of sound based moves.");
+static const u8 sEcosystemDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Resists Ice damage.\nSets third type to water.");
 //checked in fire red limit is 40 chars per line, changing description length to 80/    changed to 82 max
 //based on suction cups I kinda have more space?  so more like 42 per line?
 //template - top line: literal effect\n bottom line: flavor text    -flipped usually put flavor text on top, effect on bottom
@@ -593,6 +594,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_URSURPER] = sUrsurperDescription,
     [ABILITY_INVERSE_WORLD] = sInverseWorldDescription,
     [ABILITY_SONAR] = sSonarDescription,
+    [ABILITY_ECOSYSTEM] = sEcosystemDescription,
 };//last value can have comma
 
 //now undrestand reason strings (strings are arrays) use that +1 value
@@ -900,5 +902,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_AVIATOR] =_("AVIATOR"),
     [ABILITY_URSURPER] =_("URSURPER"),
     [ABILITY_INVERSE_WORLD] =_("INVERSE WORLD"),
-    [ABILITY_SONAR] =_("SONAR")
+    [ABILITY_SONAR] =_("SONAR"),
+    [ABILITY_ECOSYSTEM] =_("ECOSYSTEM")
 };//no comma for last value

@@ -1277,5 +1277,8 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_ZARUDE_DADA] = _("Zarude"),
     // Calyrex
     [SPECIES_CALYREX_ICE_RIDER] = _("Calyrex"),
-    [SPECIES_CALYREX_SHADOW_RIDER] = _("Calyrex"),
+    [SPECIES_CALYREX_SHADOW_RIDER] = _("Calyrex"), 
+
+    //New megas
+    [SPECIES_TORTERRA_MEGA] = _("Torterra"), 
 };

@@ -3431,10 +3431,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         spAttack = (130 * spAttack) / 100;  //CUT Back to 130, because it already has stat raise component
     if (attacker->ability == ABILITY_PLUS && ABILITY_ON_FIELD2(ABILITY_MINUS))
         spAttack = (150 * spAttack) / 100;
-    if (attacker->ability == ABILTY_UNKNOWN_POWER && GetMonData(BATTLE_PARTNER(gBattlerAttacker, MON_DATA_SPECIES) == SPECIES_UNOWN))
-        gBattleMoveDamage *= 2;
     if (attacker->ability == ABILITY_MINUS && ABILITY_ON_FIELD2(ABILITY_PLUS))
         spAttack = (150 * spAttack) / 100;
+    if (attacker->ability == ABILTY_UNKNOWN_POWER && GetMonData(BATTLE_PARTNER(gBattlerAttacker, MON_DATA_SPECIES) == SPECIES_UNOWN))
+        gBattleMoveDamage *= 2;
     if (attacker->ability == ABILITY_GUTS && attacker->status1 & STATUS1_ANY)
         attack = (150 * attack) / 100;
     if (defender->ability == ABILITY_MARVEL_SCALE && defender->status1 & STATUS1_ANY)
@@ -3443,6 +3443,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         gBattleMovePower /= 2;
     if (type == TYPE_FIRE && AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, 0, ABILITYEFFECT_WATER_SPORT, 0))
         gBattleMovePower /= 2;
+
     //in a pinch abilities
     if (attacker->hp < (attacker->maxHP / 2))
     {
@@ -3459,6 +3460,17 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (type == TYPE_ELECTRIC && attacker->ability == ABILITY_OVERCHARGE)
             gBattleMovePower = (150 * gBattleMovePower) / 100;
     }
+
+    //Special case - Partner in a pinch -need test
+    if (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].hp < (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].maxHP / 2))
+    {
+        if (type == TYPE_ELECTRIC && attacker->ability == ABILITY_PLUS && GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_MINUS)
+            gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;
+
+        if (type == TYPE_ELECTRIC && attacker->ability == ABILITY_MINUS && GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_PLUS)
+            gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;    //used gbattlemovedamage, to stack with on field plus/minus effects
+    }
+
     //MOVE EFFECTS
     if (gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)
         defense /= 2;

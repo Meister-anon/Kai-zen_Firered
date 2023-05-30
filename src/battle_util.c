@@ -1571,7 +1571,7 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
             {
                 gFieldStatuses &= ~STATUS_FIELD_TRICK_ROOM;
                 BattleScriptExecute(BattleScript_TrickRoomEnds);
-                effect++;
+                ++effect;
             }
             gBattleStruct->turnCountersTracker++;
             break;
@@ -1580,7 +1580,7 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
             {
                 gFieldStatuses &= ~STATUS_FIELD_WONDER_ROOM;
                 BattleScriptExecute(BattleScript_WonderRoomEnds);
-                effect++;
+                ++effect;
             }
             gBattleStruct->turnCountersTracker++;
             break;
@@ -1589,7 +1589,7 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
             {
                 gFieldStatuses &= ~STATUS_FIELD_MAGIC_ROOM;
                 BattleScriptExecute(BattleScript_MagicRoomEnds);
-                effect++;
+                ++effect;
             }
             gBattleStruct->turnCountersTracker++;
             break;
@@ -1600,7 +1600,7 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
                 gFieldStatuses &= ~(STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_TERRAIN_PERMANENT);
                 TryToRevertMimicry();
                 BattleScriptExecute(BattleScript_ElectricTerrainEnds);
-                effect++;
+                ++effect;
             }
             gBattleStruct->turnCountersTracker++;
             break;
@@ -1611,7 +1611,7 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
                 gFieldStatuses &= ~STATUS_FIELD_MISTY_TERRAIN;
                 TryToRevertMimicry();
                 BattleScriptExecute(BattleScript_MistyTerrainEnds);
-                effect++;
+                ++effect;
             }
             gBattleStruct->turnCountersTracker++;
             break;
@@ -1625,7 +1625,7 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
                     TryToRevertMimicry();
                 }
                 BattleScriptExecute(BattleScript_GrassyTerrainHeals);
-                effect++;
+                ++effect;
             }
             gBattleStruct->turnCountersTracker++;
             break;
@@ -1636,7 +1636,7 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
                 gFieldStatuses &= ~STATUS_FIELD_PSYCHIC_TERRAIN;
                 TryToRevertMimicry();
                 BattleScriptExecute(BattleScript_PsychicTerrainEnds);
-                effect++;
+                ++effect;
             }
             gBattleStruct->turnCountersTracker++;
             break;
@@ -1645,7 +1645,7 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
             {
                 gFieldStatuses &= ~STATUS_FIELD_GRAVITY;
                 BattleScriptExecute(BattleScript_GravityEnds);
-                effect++;
+                ++effect;
             }
             gBattleStruct->turnCountersTracker++;
             break;
@@ -2197,7 +2197,7 @@ u8 DoBattlerEndTurnEffects(void)
                 {
                     gBattlerTarget = gActiveBattler;
                     BattleScriptExecute(BattleScript_OctolockEndTurn);
-                    effect++;
+                    ++effect;
                 }
                 ++gBattleStruct->turnEffectsTracker;
             }
@@ -2383,7 +2383,7 @@ u8 DoBattlerEndTurnEffects(void)
                 if (gDisableStructs[gActiveBattler].throatChopTimer && --gDisableStructs[gActiveBattler].throatChopTimer == 0)
                 {
                     BattleScriptExecute(BattleScript_ThroatChopEndTurn);
-                    effect++;
+                    ++effect;
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
@@ -2393,14 +2393,14 @@ u8 DoBattlerEndTurnEffects(void)
                     && ability == ABILITY_SLOW_START)
                 {
                     BattleScriptExecute(BattleScript_SlowStartEnds);
-                    effect++;
+                    ++effect;
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_PLASMA_FISTS:
                 for (i = 0; i < gBattlersCount; i++)
                     gStatuses4[i] &= ~STATUS4_PLASMA_FISTS;
-                effect++;
+                ++effect;
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_BIDE:
@@ -2418,7 +2418,7 @@ u8 DoBattlerEndTurnEffects(void)
                     MarkBattlerForControllerExec(gActiveBattler);
                     gEffectBattler = gActiveBattler;
                     BattleScriptExecute(BattleScript_BideStoringEnergy);//hopefully don't need to change battlescript
-                    effect++;
+                    ++effect;
                 }//ends turn  //may need to swap this to target, depending on who's turn this plays at?
                 ////from GriffinR, --timer meaens decreminet timer if timer != 0
                 ++gBattleStruct->turnEffectsTracker;
@@ -3846,7 +3846,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 //trainer school or something
 
                 BattleScriptPushCursorAndCallback(BattleScript_OverworldTerrain);
-                effect++;
+                ++effect;
             }
             #if B_THUNDERSTORM_TERRAIN == TRUE
             else if (GetCurrentWeather() == WEATHER_RAIN_THUNDERSTORM && !(gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
@@ -3856,7 +3856,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gFieldStatuses = (STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_TERRAIN_PERMANENT);
                 gBattleCommunication[MULTISTRING_CHOOSER] = 2;
                 BattleScriptPushCursorAndCallback(BattleScript_OverworldTerrain);
-                effect++;
+                ++effect;
             }
             #endif
             break;//hopefully can put terrain here without problems, start of weather abilities
@@ -3922,7 +3922,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_DesolateLandActivates);
-                    effect++;
+                    ++effect;
                 }
                 break;//makes sense for groudon/kyogre abilities to set terrain will have terrain use 1.3 boost
                 //will also need to make one for fire since water has one...
@@ -3933,14 +3933,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN_PRIMAL, TRUE))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_PrimordialSeaActivates);
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_DELTA_STREAM:
                 if (TryChangeBattleWeather(battler, ENUM_WEATHER_STRONG_WINDS, TRUE))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_DeltaStreamActivates);
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_FORECAST: //think I figured out the switch problem, this case works on switch in,
@@ -4027,35 +4027,35 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_ElectricSurgeActivates);
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_GRASSY_SURGE:
                 if (TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_GrassySurgeActivates);
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_MISTY_SURGE:
                 if (TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_MistySurgeActivates);
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_PSYCHIC_SURGE:
                 if (TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_PsychicSurgeActivates);
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_LAVA_FISSURE:
                 if (TryChangeBattleTerrain(battler, STATUS_FIELD_SCORCHED_TERRAIN, &gFieldTimers.terrainTimer))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_LavaDistortionActivates);
-                    effect++;
+                    ++effect;
                 }
                 break;
                 //C |= 2 is same as C = C | 2
@@ -4182,7 +4182,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattlerAttacker = battler;
                 gBattlerTarget = BATTLE_OPPOSITE(battler);
                 BattleScriptPushCursorAndCallback(BattleScript_ImposterActivates);
-                effect++;
+                ++effect;
             }
             break;
             case ABILITY_MOLD_BREAKER:
@@ -4191,7 +4191,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_MOLDBREAKER;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
             }
             break;
             case ABILITY_TERAVOLT:
@@ -4200,7 +4200,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_TERAVOLT;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
             }
             break;
             case ABILITY_TURBOBLAZE:
@@ -4209,7 +4209,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_TURBOBLAZE;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
             }
             break;
             case ABILITY_SLOW_START:
@@ -4219,7 +4219,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SLOWSTART;   // nvm boosted dmg reduction, keep timer
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
             }
             break;
         /*case ABILITY_UNNERVE:
@@ -4228,7 +4228,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_UNNERVE;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
             }
             break;
         case ABILITY_AS_ONE_ICE_RIDER:
@@ -4238,7 +4238,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_ASONE;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_ActivateAsOne);
-                effect++;
+                ++effect;
             }
             break;*/
             case ABILITY_CURIOUS_MEDICINE:
@@ -4250,7 +4250,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CURIOUS_MEDICINE;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
             }
             break;
             case ABILITY_CORRUPTION:
@@ -4267,7 +4267,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CORRUPTION;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
-                effect++;
+                ++effect;
             }  
             else if (!gSpecialStatuses[battler].switchInAbilityDone && gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK)
             {
@@ -4276,10 +4276,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CORRUPTION;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
-                effect++;
+                ++effect;
             }
             break;
-            case ABILITY_BANDIT:
+            case ABILITY_BANDIT_KING:
                 if (!gSpecialStatuses[battler].switchInAbilityDone && !(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_EMBARGO))
                 {
 
@@ -4292,7 +4292,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_BANDIT;
                     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                     gSpecialStatuses[battler].switchInAbilityDone = TRUE;
-                    effect++;
+                    ++effect;
                 }
                 else if (!gSpecialStatuses[battler].switchInAbilityDone && gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_EMBARGO)
                 {
@@ -4301,7 +4301,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_BANDIT;
                     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                     gSpecialStatuses[battler].switchInAbilityDone = TRUE;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_PASTEL_VEIL:
@@ -4311,7 +4311,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PASTEL_VEIL;
                 //BattleScriptPushCursorAndCallback(BattleScript_PastelVeilActivates);
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
             }
             break;
@@ -4321,7 +4321,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
             }it'll list ability name at endd turn when it heals
             break;*/
             case ABILITY_SCREEN_CLEANER:
@@ -4330,7 +4330,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SCREENCLEANER;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
             }
             break;
             case ABILITY_FRISK:
@@ -4338,7 +4338,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             {
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_FriskActivates); // Try activate
-                effect++;
+                ++effect;
             }
             return effect; // Note: It returns effect as to not record the ability if Frisk does not activate.
             case ABILITY_FOREWARN:
@@ -4348,7 +4348,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FOREWARN;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
             }
             break;
             case ABILITY_ANTICIPATION:  //working on change
@@ -4367,19 +4367,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                 if (gBattleMoves[move].effect == EFFECT_EXPLOSION && !IS_BATTLER_OF_TYPE(battler, TYPE_GHOST))
                                 {
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_EXPLOSION);
-                                    effect++;//1    want setup different message for each, nickname w prefix sensed an X move and shuddered
+                                    ++effect;//1    want setup different message for each, nickname w prefix sensed an X move and shuddered
                                     break;  //depending on value  or have different value copied to gBattleTextBuff1 for each
                                 }
                                 else if (gBattleMoves[move].effect == EFFECT_OHKO && (gBattleMons[i].level >= (gBattleMons[battler].level - 7)))
                                 {
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_OHKO);
-                                    effect++;//2
+                                    ++effect;//2
                                     break;
                                 }
                                 else if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0))//vsonic        //THINK CAN use typecalc fort this?
                                 {
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_DEFAULT);
-                                    effect++;//0
+                                    ++effect;//0
                                     break;
                                 }//if find super effectivemove, increment effect and break for loop, to lock in move/
                             }//can only return one value, so will need to do an if else based on priority
@@ -4429,7 +4429,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattlerAttacker = battler;
                     PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
                     BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
-                    effect++;
+                    ++effect;
                 }
             }
             break;
@@ -4439,7 +4439,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_DARKAURA;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
             }
             break;
             case ABILITY_FAIRY_AURA:
@@ -4448,7 +4448,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FAIRYAURA;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
             }
             break;//change logic so only actiavte if other aura skill is on other side
         /*case ABILITY_AURA_BREAK:
@@ -4457,7 +4457,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_AURABREAK;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                effect++;
+                ++effect;
             }
             break;*/
             case ABILITY_SCHOOLING:
@@ -4467,7 +4467,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             if (ShouldChangeFormHpBased(battler))
             {
                 BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
-                effect++;
+                ++effect;
             }
             break;
             case ABILITY_INTREPID_SWORD:
@@ -4476,7 +4476,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 SET_STATCHANGER(STAT_ATK, 1, FALSE);
                 BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-                effect++;
+                ++effect;
             }
             break;
             case ABILITY_DAUNTLESS_SHIELD:
@@ -4485,14 +4485,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 SET_STATCHANGER(STAT_DEF, 1, FALSE);
                 BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-                effect++;
+                ++effect;
             }
             break;
             case ABILITY_MIMICRY:
             if (gBattleMons[battler].hp != 0 && gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
             {
                 TryToApplyMimicry(battler, FALSE);
-                effect++;
+                ++effect;
             }
             break;
             case ABILITY_PURIFYING_AURA:
@@ -4582,9 +4582,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     ++effect;
                 }
                 break;
+            case ABILITY_ECOSYSTEM:
+                SET_BATTLER_TYPE3(battler, TYPE_WATER);
+                ++effect;
+                break;
                 
         }
-        break;  //end of switch-in abilities
+        break;  //end of switch-in abilities   switch in
         case ABILITYEFFECT_ENDTURN: // 1
             if (gBattleMons[battler].hp != 0)
             {
@@ -4652,7 +4656,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
-                        effect++;
+                        ++effect;
                     }
                     break;
                 case ABILITY_COMATOSE:
@@ -4743,7 +4747,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, battler, sizeof(gLastUsedItem), &gLastUsedItem);
                         MarkBattlerForControllerExec(battler);
                         BattleScriptExecute(BattleScript_InBattlePickup);
-                        effect++;
+                        ++effect;
                     }
                     break;
                 case ABILITY_SPEED_BOOST:
@@ -4792,7 +4796,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             SET_STATCHANGER2(gBattleScripting.savedStatChanger, i, 1, TRUE);
                         }
                         BattleScriptPushCursorAndCallback(BattleScript_MoodyActivates);
-                        effect++;
+                        ++effect;
                     }
                 }
                 break;
@@ -4803,7 +4807,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         || GetBattlerAbility(BATTLE_OPPOSITE(battler)) == ABILITY_COMATOSE)
                     {
                         BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
-                        effect++;
+                        ++effect;
                     }
                     break;
                 SOLAR_POWER_HP_DROP:
@@ -4814,7 +4818,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
-                        effect++;
+                        ++effect;
                     }
                     break;
                 case ABILITY_HEALER:
@@ -4824,7 +4828,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         && (Random() % 100) < 30)
                     {
                         BattleScriptPushCursorAndCallback(BattleScript_HealerActivates);
-                        effect++;
+                        ++effect;
                     }
                     break;
                 case ABILITY_SCHOOLING:
@@ -4842,7 +4846,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
                         gBattleMons[battler].species = SPECIES_ZYGARDE_COMPLETE;
                         BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
-                        effect++;
+                        ++effect;
                     }
                     break;
                 case ABILITY_BALL_FETCH:
@@ -4856,7 +4860,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gHasFetchedBall = TRUE;
                         gLastUsedItem = gLastUsedBall;
                         BattleScriptPushCursorAndCallback(BattleScript_BallFetch);
-                        effect++;
+                        ++effect;
                     }
                     break;
                 case ABILITY_HUNGER_SWITCH:
@@ -4872,7 +4876,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             gBattleMons[battler].species = SPECIES_MORPEKO;
                             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
                         }
-                        effect++;
+                        ++effect;
                     }
                     break;
                 case ABILITY_TRUANT:
@@ -5333,7 +5337,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gDisableStructs[gBattlerAttacker].perishSongTimerStartValue = 3;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_PerishBodyActivates;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_JUSTIFIED:
@@ -5347,7 +5351,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     SET_STATCHANGER(STAT_ATK, 1, FALSE);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseRet;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_RATTLED:
@@ -5361,7 +5365,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     SET_STATCHANGER(STAT_SPEED, 1, FALSE);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseRet;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_WATER_COMPACTION:
@@ -5375,7 +5379,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     SET_STATCHANGER(STAT_DEF, 2, FALSE);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseRet;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_STAMINA:
@@ -5388,7 +5392,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     SET_STATCHANGER(STAT_DEF, 1, FALSE);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseRet;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_BERSERK:
@@ -5406,7 +5410,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     SET_STATCHANGER(STAT_SPATK, 1, FALSE);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseRet;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_WIMP_OUT:
@@ -5424,7 +5428,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && !(gStatuses3[battler] & STATUS3_SKY_DROPPED))
                 {
                     gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_EMERGENCY_EXIT;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_EMERGENCY_EXIT:    //separate since plan to treat emergency exit differently
@@ -5442,7 +5446,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && !(gStatuses3[battler] & STATUS3_SKY_DROPPED))
                 {
                     gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_EMERGENCY_EXIT;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_WEAK_ARMOR:
@@ -5458,7 +5462,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_WeakArmorActivates;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_PICKPOCKET:  //looks clunky, think they had troble setting up will attempt to do it better
@@ -5512,7 +5516,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_CursedBodyActivates;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_MUMMY:
@@ -5545,7 +5549,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gLastUsedAbility = gBattleMons[gBattlerAttacker].ability = gBattleStruct->overwrittenAbilities[gBattlerAttacker] = gBattleMons[gBattlerTarget].ability;
                         BattleScriptPushCursor();
                         gBattlescriptCurrInstr = BattleScript_MummyActivates;
-                        effect++;
+                        ++effect;
                         break;
                     }
                 }
@@ -5584,7 +5588,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gBattleMons[gBattlerTarget].ability = gBattleStruct->overwrittenAbilities[gBattlerTarget] = gLastUsedAbility;
                         BattleScriptPushCursor();
                         gBattlescriptCurrInstr = BattleScript_WanderingSpiritActivates;
-                        effect++;
+                        ++effect;
                         break;
                     }
                 }
@@ -5599,7 +5603,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     SET_STATCHANGER(STAT_ATK, MAX_STAT_STAGE - gBattleMons[battler].statStages[STAT_ATK], FALSE);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_TargetsStatWasMaxedOut;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_GOOEY:
@@ -5617,7 +5621,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_GooeyActivates;
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_AFTERMATH:
@@ -5641,7 +5645,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         BattleScriptPushCursor();
                         gBattlescriptCurrInstr = BattleScript_AftermathDmg;
                     }
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_INNARDS_OUT:
@@ -5652,7 +5656,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattleMoveDamage = gSpecialStatuses[gBattlerTarget].dmg;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_AftermathDmg;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_ILLUSION:
@@ -5660,7 +5664,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_IllusionOff;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_COTTON_DOWN:
@@ -5672,7 +5676,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gEffectBattler = gBattlerTarget;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_CottonDownActivates;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_STEAM_ENGINE:
@@ -5686,7 +5690,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     SET_STATCHANGER(STAT_SPEED, 6, FALSE);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseRet;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_SAND_SPIT:
@@ -5699,14 +5703,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     {
                         BattleScriptPushCursor();
                         gBattlescriptCurrInstr = BattleScript_BlockedByPrimalWeatherRet;
-                        effect++;
+                        ++effect;
                     }
                     else if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE))
                     {
                         gBattleScripting.battler = gActiveBattler = battler;
                         BattleScriptPushCursor();
                         gBattlescriptCurrInstr = BattleScript_SandSpitActivates;
-                        effect++;
+                        ++effect;
                     }
                 }
                 break;
@@ -5728,7 +5732,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         }
                         BattleScriptPushCursor();
                         gBattlescriptCurrInstr = BattleScript_GulpMissileGorging;
-                        effect++;
+                        ++effect;
                     }
                     else if (gBattleMons[gBattlerTarget].species == SPECIES_CRAMORANT_GULPING)
                     {
@@ -5742,7 +5746,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         }
                         BattleScriptPushCursor();
                         gBattlescriptCurrInstr = BattleScript_GulpMissileGulping;
-                        effect++;
+                        ++effect;
                     }
                 }
                 break;
@@ -5766,7 +5770,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    effect++;
+                    ++effect;
                 }
                 break;
             case ABILITY_STATIC:
@@ -6159,7 +6163,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattlerAbility = i;
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_NEUTRALIZING_GAS;
                     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                    effect++;
+                    ++effect;
                 }
 
                 if (effect)

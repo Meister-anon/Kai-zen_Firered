@@ -364,7 +364,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectStrengthSap             @ EFFECT_STRENGTH_SAP
 	.4byte BattleScript_EffectMindBlown               @ EFFECT_MIND_BLOWN
 	.4byte BattleScript_EffectPurify                  @ EFFECT_PURIFY
-	.4byte BattleScript_EffectBurnUp                  @ EFFECT_BURN_UP
+	.4byte BattleScript_EffectLoseTypeHit             @ EFFECT_LOSETYPE_HIT - previously EFFECT_BURN_UP
 	.4byte BattleScript_EffectShoreUp                 @ EFFECT_SHORE_UP
 	.4byte BattleScript_EffectGeomancy                @ EFFECT_GEOMANCY
 	.4byte BattleScript_EffectFairyLock               @ EFFECT_FAIRY_LOCK
@@ -480,13 +480,40 @@ BattleScript_EffectFairyLock:
 	printstring STRINGID_NOONEWILLBEABLETORUNAWAY
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
+
+BattleScript_BurnUpFireTypeCheck:
+	jumpiftype BS_ATTACKER, TYPE_FIRE, BattleScript_BurnUpWorks
+	goto BattleScript_ButItFailed
+
+BattleScript_BurnUpPsychicTypeCheck:
+	jumpiftype BS_ATTACKER, TYPE_PSYCHIC, BattleScript_BurnUpWorks
+	goto BattleScript_ButItFailed
+
+BattleScript_BurnUpFightingTypeCheck:
+	jumpiftype BS_ATTACKER, TYPE_FIGHTING, BattleScript_BurnUpWorks
+	goto BattleScript_ButItFailed
+
+BattleScript_BurnUpFlyingTypeCheck:
+	jumpiftype BS_ATTACKER, TYPE_FLYING, BattleScript_BurnUpWorks
+	goto BattleScript_ButItFailed
+
+BattleScript_BurnUpElectricTypeCheck:
+	jumpiftype BS_ATTACKER, TYPE_ELECTRIC, BattleScript_BurnUpWorks
+	goto BattleScript_ButItFailed
 	
-BattleScript_EffectBurnUp:
+@can make its own move category, just need to add a jump for move name check that would go to the type check & buffer type name in losetype command
+@and after result/wait message make another jump for movename to do type loss and print loss message, then a goto, to come back for fainting
+@have idea for psychic version inspired by mob psycho, 110% power
+@done will add more types later, also plan to make lose type for entire battle.
+BattleScript_EffectLoseTypeHit: 
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpiftype BS_ATTACKER, TYPE_FIRE, BattleScript_BurnUpWorks
-	goto BattleScript_ButItFailed
+	jumpifmove MOVE_BURN_OUT, BattleScript_BurnUpFireTypeCheck
+	jumpifmove MOVE_OVER_MAX_POWER, BattleScript_BurnUpPsychicTypeCheck
+	jumpifmove MOVE_SHIMON, BattleScript_BurnUpFightingTypeCheck
+	jumpifmove MOVE_FINAL_FLIGHT, BattleScript_BurnUpFlyingTypeCheck
+	jumpifmove MOVE_PLASMA_RAILGUN, BattleScript_BurnUpElectricTypeCheck
 BattleScript_BurnUpWorks:
 	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
 	critcalc
@@ -503,11 +530,45 @@ BattleScript_BurnUpWorks:
 	waitmessage 0x40
 	resultmessage
 	waitmessage 0x40
-	losetype BS_ATTACKER, TYPE_FIRE
-	printstring STRINGID_ATTACKERLOSTFIRETYPE
-	waitmessage 0x40
+	jumpifmove MOVE_BURN_OUT, BattleScript_BurnUpLoseFireType
+	jumpifmove MOVE_OVER_MAX_POWER, BattleScript_BurnUpLosePsychicType
+	jumpifmove MOVE_SHIMON, BattleScript_BurnUpLoseFightingType
+	jumpifmove MOVE_FINAL_FLIGHT, BattleScript_BurnUpLoseFlyingType
+	jumpifmove MOVE_PLASMA_RAILGUN, BattleScript_BurnUpLoseElectricType
+BattleScript_BurnUpEnd:
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
+
+BattleScript_BurnUpLoseFireType:
+	losetype BS_ATTACKER, TYPE_FIRE
+	printstring STRINGID_ATTACKERLOSTTYPE
+	waitmessage 0x40
+	goto BattleScript_BurnUpEnd
+
+BattleScript_BurnUpLosePsychicType:
+	losetype BS_ATTACKER, TYPE_PSYCHIC
+	printstring STRINGID_ATTACKERLOSTTYPE
+	waitmessage 0x40
+	goto BattleScript_BurnUpEnd
+
+BattleScript_BurnUpLoseFightingType:
+	losetype BS_ATTACKER, TYPE_FIGHTING
+	printstring STRINGID_ATTACKERLOSTTYPE
+	waitmessage 0x40
+	goto BattleScript_BurnUpEnd
+
+BattleScript_BurnUpLoseFlyingType:
+	losetype BS_ATTACKER, TYPE_FLYING
+	printstring STRINGID_ATTACKERLOSTTYPE
+	waitmessage 0x40
+	goto BattleScript_BurnUpEnd
+
+BattleScript_BurnUpLoseElectricType:
+	losetype BS_ATTACKER, TYPE_ELECTRIC
+	printstring STRINGID_ATTACKERLOSTTYPE
+	waitmessage 0x40
+	goto BattleScript_BurnUpEnd
+
 	
 BattleScript_EffectPurify:
 	attackcanceler
@@ -894,8 +955,7 @@ BattleScript_EffectMagneticFlux::
 	ppreduce
 	setbyte gBattleCommunication, 0x0
 BattleScript_EffectMagneticFluxStart:
-	jumpifability BS_TARGET, ABILITY_MINUS, BattleScript_EffectMagneticFluxCheckStats
-	jumpifability BS_TARGET, ABILITY_PLUS, BattleScript_EffectMagneticFluxCheckStats
+	jumpiftype BS_TARGET, TYPE_ELECTRIC, BattleScript_EffectMagneticFluxCheckStats
 	goto BattleScript_EffectMagneticFluxLoop
 BattleScript_EffectMagneticFluxCheckStats:
 	jumpifstat BS_TARGET, CMP_LESS_THAN, STAT_DEF, 0xC, BattleScript_EffectMagneticFluxTryDef
@@ -933,8 +993,7 @@ BattleScript_EffectGearUp::
 	ppreduce
 	setbyte gBattleCommunication, 0x0
 BattleScript_EffectGearUpStart:
-	jumpifability BS_TARGET, ABILITY_MINUS, BattleScript_EffectGearUpCheckStats
-	jumpifability BS_TARGET, ABILITY_PLUS, BattleScript_EffectGearUpCheckStats
+	jumpiftype BS_TARGET, TYPE_ELECTRIC, BattleScript_EffectGearUpCheckStats
 	goto BattleScript_EffectGearUpLoop
 BattleScript_EffectGearUpCheckStats:
 	jumpifstat BS_TARGET, CMP_LESS_THAN, STAT_ATK, 0xC, BattleScript_EffectGearUpTryAtk
@@ -3865,7 +3924,7 @@ BattleScript_EffectMinimize::
 	goto BattleScript_EffectStatUpAfterAtkCanceler
 
 BattleScript_EffectCurse::	@
-	jumpiftype2 BS_ATTACKER, TYPE_GHOST, BattleScript_GhostCurse
+	jumpiftype BS_ATTACKER, TYPE_GHOST, BattleScript_GhostCurse
 	attackcanceler
 	attackstring
 	ppreduce

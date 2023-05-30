@@ -551,15 +551,31 @@ as well as the effect of increasing trap duration
 * 
 * BUFFED unown, learnset and new ability - DONE
 * 
-* give gumshoos move first impressions and facade as evo moves, leaning into trump pokemon idea
+* give gumshoos move first impressions and facade as evo moves, leaning into trump pokemon idea - DONE
 * 
 * nother wave of buffs, delcatty buff, will need change its pokedex entry to fit, made part ghost, cats have 9 lives
-* may say delcatty is cat that died and came back intending to live its life to the fullest of its desire. - DONE
+* may say delcatty is cat that died and came back intending to live its life to the fullest of its desire. - STILL WORKING on
+* maybe something like, "to make the trainer who went through so much to gain their love and trust happy, this pokemon denied death
+* and ressurected itself into a new form, it will refuse to die as long as their loved one lives" - DONE
+* .there we go that would lend itself to why it doesn't need to be a delcatty to breed.
+* 
+* while looking at entires saw torterra entry doesn't make sense, came up with idea for MEGA torterra that would make it make sense.
+* give unique ability that makes it a 3 type mon. since its supposed to be an entire ecosystem 
+* it should have all the elements necessary to sustain life.  grass rock and water
+* 
+* make its base type  grass/rock
+* and its ability will set its type 3 to type water
+* 
+*would naturally make it very strong both offensively and defensively, hmm but with change to ice type chart
+* water no longer resists ice, leaving it 4x, so will need to make ability also reist ice
+* Ability Name Ideas-Pangea, Ecosystem - DONE also i madee it rock not ground, so its only 2x to ice, ability leaves it neutral
+* NOTE-| add mega pokemon to dex entries  mega torterra will be the "Continent" pokemon
 * 
 * may consider buff plus/minus ability with same affect as overcharge, but only when the partner is in a pinch -
 * can lead to an interesting plan where players ev build them for bulk
 * yeah that works as the ability activates when a mon with plus/minus is on the field, but 
-* if I make that action only be for if using the opposite ability as your partner its a different synergy
+* if I make that action only be for if using the opposite ability as your partner its a different synergy - DONE need test
+* 
 * 
 * companion ability to nuisance, cuts dynamicbasepower of partner moves in half,
 * in exchange for serene grace style heightned effect chance INCLUDING heighteeend crit chance/odds.
@@ -569,6 +585,7 @@ as well as the effect of increasing trap duration
 * kind of a opposite to serene grace, think can do like this  
 * if (!(gBattleMoves[move].flags & FLAG_HIGH_CRIT))
 * gBattleMoves[move].flags |= FLAG_HIGH_CRIT
+* - DONE
 * 
 * 
 * made one hit kos a bit more usable/workable works when up to 7 levels below target- DONE
@@ -886,7 +903,7 @@ Thunder Wave Electric TM45
 * or you'd have to expect you as a trainr was so bad, they would intenionally use a wide aoe move while your own pokemon was standing right in front of you.
 * 
 * it doesn't make sense, for anything other than explosion, which is clearly an indiscriminate massive uncontrolled blast.
-* which is obviously the nature of an explosion - combed through moves adjustesd and removed moves that targetted allies too that didn't make sense
+* which is obviously the nature of an explosion - combed through moves adjustesd and removed moves that targetted allies too that didn't make sense - DONE
 * 
 * without that mechanic change telepathy doesnt really do anything, other than prevent you from targetting your allies with moves, which sometimes you want to do.
 * It would become useful if I get my new confusion effect going which, would make characters attack others at random when the roll fails,
@@ -910,10 +927,38 @@ Thunder Wave Electric TM45
 * ...well nvm I'll add it, just so people know its there, type sound will be immune to type sound just so ppl know its there)
 * delay implementation for now, would need edit to icon sheet, for new icon, -wanted to make icon white, but would blend in on summary screen
 * as well as all places where types are used - icon added, to sheet, need to define new type in relevant areas, 
-* and make sure it can read the location correctly for the new icon placement.
+* and make sure it can read the location correctly for the new icon placement. - DONE
 * 
-* making sound type, but still keep flag check on moves for flag sound, still using that for soundproof.
+* making sound type, but still keep flag check on moves for flag sound, still using that for soundproof. - DONE
 * putting areas needed for new type addition below
+* 
+* check gearup make sure it works and does stat raise for user/in singles
+* 
+* change burn up/burnout effect, since I want mystery type to be special, will instead replace fire type with normal type
+* they get the benefit of joat that way instead, of the typeless benefit.
+* if they have 2 types, than type removal can just make it mystery, but if they are just one type and I'd have a type removal effect
+* they should become normal rather than pure typeless. - DONE need test
+* 
+* in process, made burn up its own category of effect, will treat like hyper beam make base 150
+* but instead of recharging like starteres do the mon will lose its type for the battle. the ENTIRE battle, it won't just come back if they switch
+* made psychic variant already and planning an electric variant.
+* 
+* For logic the type must be an element produced as a secondary effect of their normal function.
+* i.e psychic powers, breathing fire, generating electricity
+* all effects that can be exhausted.
+* 
+* a leap in logic but can potentially do fighting type and flying type,
+* if think of it as they are too exhausted to maintain proper fighting technic, or become too exhausted to fly properly 
+* Fighting version called  Shimon, after the final 8th gate in naruto
+* 
+* Final Flight for flying type
+* 
+* don't know name for electric variant yet, but it'll be a railgun type deal, focuses all their electrical energy into a codensed beam of energy
+* 
+* plasma railgun
+* NEED write move descriptions 
+* 
+* RENAME move_descriptions to .h when done
 */  
 goto TYPE_CHART
 goto TYPE_NAMES
@@ -923,7 +968,28 @@ goto TYPE_ICON_DATA
 /* NOTE - still need to finish set message for spite changes, can do just like I did anticipation ability messages
 * -DONE   also made eerie spell use the new spite effect rather than only taking 3 pp. //NEED test errie spell test if still works aftr sheer force logic added
 * 
-* tweaked moves that were target ally & foes, changed to more appropriate targetting, need adjust move descriptions to match -
+* tweaked moves that were target ally & foes, changed to more appropriate targetting, need adjust move descriptions to match - DONE
+* 
+* plan to setup special move tutor, for the lets go eevee and pikachu movs, like the starter tutors,
+* pokemon must be max friendship, but this will be reusable.
+* The stipulation is only ONE special move can be learned at a time, meaning if you want to get a different special move.
+* You need to replace the existing one.
+* 
+* And yes they have to specifically be a pikachu, or eevee at the time not one of the evo forms.
+* Use cinnibar de evolution for this, think would like this tutor to be mid/late game, but descoved before de-evo is possible?
+* idk may not be necessary, just point is player fnids this when they've most likey evolved mon, and then realize OH this is a use for the
+* de-evolution mechnaic!
+* 
+* event will be a pokemniac that loves pikachu and eevee, "blah blah I love pikachu and eevee, their wonderful, don't you agree?"
+* "excited response, followed by no one knows these two better than me, let me show you just whats so special about them"
+* open move tutor menu.
+* "after closing, these moves are special and can only be learned by pikachu and eevee, before they evolve"
+* "If you come back I'll teach your pikachu or eevee a special move any time!"
+* 
+* tutor will be free,  because thye like you, but also the deevolution will cost instead, 
+* cinnibar island scientist:
+* "we're not running a charity here we need all the funding we can get to continue our research
+* Grant money isnt easy to come by!"
 * 
 * Also comb over stats again, to attempt to address power creep?
 * not sure if it would matter, higher is still higher even if I bring things closer
@@ -931,6 +997,16 @@ goto TYPE_ICON_DATA
 * 
 * //go over 100%  effects, see which I can make certain in bs commands.c seteffectwithchance function, I think I can do all,
 * that way I free room for arguments if I chose to add then. -
+* 
+* Progression idea, mega evolution, planned for megas to be a special permanent evo only, but perhaps, 
+* could actually include mega rings, as a temporary means of letting a pokemon reach the height of their power.
+* 
+* While the true form could be acheived through rigorous trile that lets someone be a mega permanently. to truly mega evolve.
+* This would bypass the typical one mega evo per battle.
+* Doing the normal mega thing would let people play that way as they want,
+* but still let my preferred mega mechanic exist, as an extra thing to grind for.
+* 
+* Remember plan is make megas a way to turn normal mon into psuedo legendaries, rather than just adding +100 bst.
 * 
 *
 * Look at changes to early gen mon, consider bringing back stats from gen 1 & 2
@@ -1674,6 +1750,10 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * instead make it transform into a random pokemon that resists the typeing of the target.
 * will be pretty complex, need to use emerald way to read type effectiveness 
 * loop through mon of type that resists, potentially need to put in list, but don't want to.
+* /note found conversion2 battlescript alredy does that  atkA6_settypetorandomresistance
+* so would need to run that, and then transfer type set to that of to mon to look for from loop of all species.
+* its a void function so it doesn't return anything, so what I can do is, use the command to change dittos' type
+* on entrance, and then use a command to check battler type, and then loop the imposter function/command to use that type
 * 
 * comtinue adding notes...
 * array won't end well if size doesn't match random value, so do just like, starter selection random % nelems 
