@@ -634,7 +634,7 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("SOLAR BLADE"),
     _("LEAFAGE"),
     _("SPOTLIGHT"),
-    _("TOXIC THREAD"),
+    _("POISON THREAD"),
     _("LASER FOCUS"),
     _("GEAR UP"),
     _("THROAT CHOP"),

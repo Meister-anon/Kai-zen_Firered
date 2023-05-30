@@ -716,6 +716,7 @@ static const u8 sText_PkmnsWillPerishIn3Turns[] = _("Both Pokémon will perish\n
 static const u8 sText_AbilityRaisedStatDrastically[] = _("{B_DEF_ABILITY} raised {B_DEF_NAME_WITH_PREFIX}'s\n{B_BUFF1} drastically!");
 static const u8 sText_FellInLoveAtFirstSight[] = _("{B_DEF_NAME_WITH_PREFIX} fell in love at first sight!");
 static const u8 sText_SnapTrap[] = _("{B_DEF_NAME_WITH_PREFIX} was ensnared\nby {B_ATK_NAME_WITH_PREFIX}'s trap!");
+static const u8 sText_PkmnsPoisonWorsened[] = _("{B_DEF_NAME_WITH_PREFIX}'s poisoning got worse!");
 
 
 //extra stuff new
@@ -1407,6 +1408,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_ANTICIPATE_DEFAULT - BATTLESTRINGS_TABLE_START]            = sText_AnticipateDefault,
     [STRINGID_SPITE_BADLUCK - BATTLESTRINGS_TABLE_START]                 = sText_SpiteBadLuck,
     [STRINGID_SPITE_TOTAL_LOSS - BATTLESTRINGS_TABLE_START]              = sText_SpiteTotalLoss,
+    [STRINGID_PKMNSPOISONWORSENED - BATTLESTRINGS_TABLE_START]           = sText_PkmnsPoisonWorsened,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
@@ -1827,7 +1829,7 @@ const u16 gTrappingMoves[] = {
 const u16 gStatusConditionsStringIds[] =
 {
     STRINGID_PKMNWASPOISONED, STRINGID_PKMNBADLYPOISONED, STRINGID_PKMNWASBURNED, STRINGID_PKMNWASPARALYZED, STRINGID_PKMNFELLASLEEP
-};
+};//why is there no freeze here?
 
 const u16 gRoomsStringIds[] =
 {

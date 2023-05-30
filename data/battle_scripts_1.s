@@ -2548,7 +2548,11 @@ BattleScript_CantMakeAsleep::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectPoisonHit::
+	jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_DoPoison
+	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_SkipToDmgPhase	@this jump would make it work as normal,but with function hange shoudnt need jump test without this line
+BattleScript_DoPoison:
 	setmoveeffect MOVE_EFFECT_POISON
+BattleScript_SkipToDmgPhase:
 	goto BattleScript_EffectHit
 
 BattleScript_EffectAbsorb::  @need setup multi task also make ghost with liquid ooze for extra troll...CURSOLA!
@@ -3015,11 +3019,13 @@ BattleScript_EffectToxic::
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
-	jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_AlreadyPoisoned
-	jumpifstatus BS_TARGET, STATUS1_TOXIC_POISON, BattleScript_AlreadyPoisoned
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	jumpiftype BS_TARGET, TYPE_POISON, BattleScript_NotAffected
 	jumpiftype BS_TARGET, TYPE_STEEL, BattleScript_NotAffected
+	@jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_AlreadyPoisoned
+	jumpifstatus BS_TARGET, STATUS1_TOXIC_POISON, BattleScript_AlreadyPoisoned
+	jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_ToxicAccuracyCheck
+	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
+BattleScript_ToxicAccuracyCheck:
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
 	attackanimation
@@ -3033,6 +3039,28 @@ BattleScript_EffectToxic::
 BattleScript_AlreadyPoisoned::
 	pause 0x40
 	printstring STRINGID_PKMNALREADYPOISONED
+	waitmessage 0x40
+	goto BattleScript_MoveEnd
+
+@setmoveeffect function is the basis for all move effects, the seteffectwithchance command & augments as well.
+@so for this poinsoning mechanc I need to properly set it up through setmoveeffect, and then have proper checks in bs command, like above 
+@to skip STATUS1_ANY check.
+@@edited, did work in main setmoveeffect dont think ill be usin this script at all. string will only be used on toxic.
+BattleScript_PoisonWorsened::
+	printstring STRINGID_PKMNSPOISONWORSENED
+	waitmessage 0x40
+	return
+
+BattleScript_PoisonBecameToxic::
+	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
+	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	attackanimation
+	waitanimation
+	printstring STRINGID_PKMNSPOISONWORSENED
+	waitmessage 0x40
+	setmoveeffect MOVE_EFFECT_TOXIC
+	seteffectprimary
+	resultmessage
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 

@@ -733,7 +733,7 @@ static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
     [MOVE_EFFECT_PREVENT_ESCAPE] = STATUS2_ESCAPE_PREVENTION,
     [MOVE_EFFECT_NIGHTMARE] = STATUS2_NIGHTMARE,
     [MOVE_EFFECT_THRASH] = STATUS2_LOCK_CONFUSE,
-    [MOVE_EFFECT_ATTRACT] = STATUS2_INFATUATED_WITH(gBattlerAttacker),    //I think this will work now?
+    [MOVE_EFFECT_ATTRACT] = STATUS2_INFATUATED_WITH(gActiveBattler),    //I think this will work now? //changed from attackrre to activebattler to attempt work for ynchronize too
     [MOVE_EFFECT_FIRE_SPIN] = STATUS4_FIRE_SPIN,
     [MOVE_EFFECT_CLAMP] = STATUS4_CLAMP,
     [MOVE_EFFECT_WHIRLPOOL] = STATUS4_WHIRLPOOL,
@@ -742,6 +742,7 @@ static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
     [MOVE_EFFECT_INFESTATION] = STATUS4_INFESTATION,
     [MOVE_EFFECT_SNAP_TRAP] = STATUS1_SNAP_TRAP,
 };//actually rather than making this u64 prob should try putting in different status field since it doesn't need to be all status2 Ian use status4
+//mof don't think the gba can parse u64, it can only go up to 3 mbs?
 
 static const u8 *const sMoveEffectBS_Ptrs[] =
 {
@@ -3411,10 +3412,21 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 break;
             if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_STEEL))
                 break;
-            if (gBattleMons[gEffectBattler].status1)
-                break;
             if (gBattleMons[gEffectBattler].ability == ABILITY_IMMUNITY)
                 break;
+            /*if (gBattleMons[gEffectBattler].status1)
+                break;*/    //removed this line, has check in battlescript, think will just not do text string, there's no way to do it simply?
+            //instead can just do jump in commands to set move effect toxic,  just need to remove poison with this function
+            //
+            if (gBattleMons[gEffectBattler].status1 & STATUS1_POISON)
+            {
+                gBattleMons[gEffectBattler].status1 &= ~(STATUS1_POISON);
+                sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] = STATUS1_TOXIC_POISON
+            } //OK THIS hopefully works.?
+
+            else if (gBattleMons[gEffectBattler].status1)   //realized i could keep this, if i use else if,  since thsi should mean if status1 not 0?
+                break;
+
             statusChanged = TRUE;
             break;
         case STATUS1_SPIRIT_LOCK:
@@ -3493,7 +3505,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 break;
             CancelMultiTurnMoves(gEffectBattler);
             statusChanged = TRUE;
-            gDisableStructs[gActiveBattler].FrozenTurns = 3; //2-4 turns for frozn should work  - nvm using value of 3, can have 2 full turns of freeze, decrement in end turn
+            //moved freeze timer below w sleep //2-4 turns for frozn should work  - nvm using value of 3, can have 2 full turns of freeze, decrement in end turn
             break;  //new note, made change to freeze, but don't want move to just be a switch as I'll lose the end turn, think I will adapt frostbite
             //from arceus my plan, when freeze timer  reaches zero, apply frostbite, which will continue end turn damage but allow enemy to attack.
             //freeze status cure effects would remove frostbite, after freeze, as well as if applied during freez.
@@ -3569,15 +3581,18 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 gBattleCommunication[MULTISTRING_CHOOSER] = 2;
                 return;
             }
-            if (gBattleMons[gEffectBattler].status1)
-                break;
+            /*if (gBattleMons[gEffectBattler].status1)    //for poison worsend need change this to status1 != poison break, will let it set toxic if normal poison
+                break;*/
+            //attempting to just remove, as status checks etc. are already part of battlescript
+            //need to better understand what setmoveeffect is doing
+
             if (!IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_POISON) && !IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_STEEL))
             {
                 if (gBattleMons[gEffectBattler].ability == ABILITY_IMMUNITY)
                     break;
                 // It's redundant, because at this point we know the status1 value is 0.
-                gBattleMons[gEffectBattler].status1 &= ~(STATUS1_TOXIC_POISON);
-                gBattleMons[gEffectBattler].status1 &= ~(STATUS1_POISON);
+                gBattleMons[gEffectBattler].status1 &= ~(STATUS1_TOXIC_POISON); //^not my notes
+                gBattleMons[gEffectBattler].status1 &= ~(STATUS1_POISON);//don't understand these 2 lines. as it should be syntax for  status removal.
                 statusChanged = TRUE;
                 break;
             }
@@ -3592,6 +3607,10 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
             BattleScriptPush(gBattlescriptCurrInstr + 1);
             if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_SLEEP)
                 gBattleMons[gEffectBattler].status1 |= ((Random() % 4) + 2); //think this is the duration of sleep, and its 2-5 here.
+            else if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_FREEZE)
+            {
+                gDisableStructs[gEffectBattler].FrozenTurns = 3;
+            } 
             else
                 gBattleMons[gEffectBattler].status1 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
             gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
@@ -3611,20 +3630,22 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
             if (gBattleScripting.moveEffect == MOVE_EFFECT_POISON
              || gBattleScripting.moveEffect == MOVE_EFFECT_TOXIC
              || gBattleScripting.moveEffect == MOVE_EFFECT_PARALYSIS
+             || (gBattleScripting.moveEffect == MOVE_EFFECT_FREEZE && gDisableStructs[gEffectBattler].FrozenTurns == 0)
              || gBattleScripting.moveEffect == MOVE_EFFECT_ATTRACT // doestn' yet exist, I'm trying to add
-             || gBattleScripting.moveEffect == MOVE_EFFECT_BURN) //figure out how infatuation works
+             || gBattleScripting.moveEffect == MOVE_EFFECT_BURN) //figure out how infatuation works 
              {
                 u8 *synchronizeEffect = &gBattleStruct->synchronizeMoveEffect;
                 *synchronizeEffect = gBattleScripting.moveEffect; //believe I'll need to 
                 gHitMarker |= HITMARKER_SYNCHRONISE_EFFECT;
-             }
+             }//since freeze not applied on turn status is set would need to handle in battle_util.c, let synchronize  push the effect after it thaws out/timer is 0.
+            //idk maybe that was right?
         }
         else if (statusChanged == FALSE)
         {
             ++gBattlescriptCurrInstr;
         }
         return;
-    }
+    }   //end case move effects less than 6 i.e toxic and below, ok this is potentially what it means by primary, its all status1 stuff
     else
     {
         if (gBattleMons[gEffectBattler].status2 & sStatusFlagsForMoveEffects[gBattleScripting.moveEffect])
@@ -4244,14 +4265,17 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
 
     //I can probably put it here, since the secondary effect chance field isn't completely necessary I think.
     //just need to make percentChance = 10, under the conditions I already listed above.  and to specifcially be for settign spirit lock
+
+    //hey old me, that ish is all wrong, without secondary chance, effects won't apply, and that's dealt with in battle_moves file
+    //
     u32 percentChance;
-    //hail based freeze boost, right not works all but hail, for testing,
-    //remove !  once I find the percentage I like.
+    //hail based freeze boost, 
     if ((gBattleWeather & WEATHER_HAIL_ANY)
         && gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;  //its good, happened 2 out of 5 hits. decided to make it 1/16
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;  //its good, happened 2 out of 5 hits. decided to make it 1/16 dmg
 
-
+    if (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].ability == ABILITY_DARK_DEAL)
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
     if (gBattleMons[gBattlerAttacker].ability == ABILITY_SERENE_GRACE)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
     else if (gBattleMons[gBattlerAttacker].ability == ABILITY_DARK_DEAL)
@@ -4259,8 +4283,7 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     else
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance; 
 
-    if (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].ability == ABILITY_DARK_DEAL)
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
+    
 
     
     
@@ -4304,9 +4327,9 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
         gBattleScripting.moveEffect &= ~(MOVE_EFFECT_CERTAIN);
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
     }
-    else if (Random() % 100 <= percentChance
-          && gBattleScripting.moveEffect         //believe just means and has move effect?
-          && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))   //didn't miss
+    else if (Random() % 100 <= percentChance    //random % here, is a chance to fail, higher percent chance less chance to fail, if random higher than moveefect chance doesn't set
+          && gBattleScripting.moveEffect         //believe just means and has move effect?  i.e moveeffect not 0
+          && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))   //didn't miss && enemy isn't immune
     {
         if (percentChance >= 100)
             SetMoveEffect(0, MOVE_EFFECT_CERTAIN);

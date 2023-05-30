@@ -1073,11 +1073,11 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     gSPOTLIGHTDescription :
     .string "Makes the foe attack the\nspotlighted POKéMON.$"
 
-    gTOXIC_THREADDescription :
-    .string "Attacks with a thread that\npoisons and drops Speed.$"
+    gPOISON_THREADDescription :
+    .string "Attacks with a\nthread that poisons\nand drops Speed.$"
 
     gLASER_FOCUSDescription :
-    .string "Guarantees the next move\nwill be a critical hit.$"
+    .string "Guarantees the next\nmove will be\na critical hit.$"
 
     gGEAR_UPDescription :
     .string "The user engages its\ngears to create a\nstatic field raising\nthe Atk. and Sp. Atk\nof itself and allies\nwith Electric type.$"
