@@ -467,14 +467,32 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * so soon as your starter is leveling up and learning a move for the first time.
 * oak text would pop up to inform you of the menu/dialogue changes
 * 
+* -further note, since I have so many moves, I will actually need to know the move split, would be hard to keep track of,
+* on top of my changes. so add dialogue/functionality where when you have a move selected to display its description.
+* Pressing Ctrl, would clear the move description and instead display the move split...
+* Split: Physical.    
+* Split: Special.
+* Split: Status.
 * 
-* need to update name length to 12 base, so will need to move health bar
+* If you press Ctrl again, it should  go back to displayig move descriptions
+* You should be able to move up and down from within the Move-Split page so it'll populate the split for each move as you go.
+* 
+* Pressing B, from there should close it as normal, and clear state, so when you press A on move again it displays the move description.
+* 
+* need to update name length to 12 base, so will need to move health bar - why do I need to move the halthbar?
+* - can just move up sprite and shift name and lvl in summary scrn   
+* -current plan put mon sprite, on pokeball, move species name to place of lvl, down and flush to the left.
+* keep gender symbol where it is, or right align it, then move lvl symbol to top corner.
+* 
+* looks like I don't even have to move all of them, only need to move the 1st slot mon,
+* and the 2nd for the doubles battle screen as well.
+* Also the rest of the party mon icons already sit on the pokeball so it wouldnt look strange.
 * 
 * make early event script to set all mon as caught seen
 * loop through species and set all flags, and unlock national dex
 * may also give a few mon with script, this is to check pokedex entries fit
 * 
-* test rotom, gave custom dex entry based on legends dex -
+* test rotom, gave custom dex entry based on legends dex - actually all I need to do is set rotom entry to starter.
 * 
 *  THOUGHT attempt change item use, allow for using multiple of the same item at once.
 * from outside of battle. i.e use 5 oran berries,  to equal 1 super potion.
@@ -708,6 +726,9 @@ as well as the effect of increasing trap duration
 * Also keep in mind plan to allow being damaged by multiple status 1s at once, which would mean removing
 * volatile status immunity from comatose, so consider this balancing for a future nerf  - DONE consider give substitute to comatose mon if needed
 * (prob just for abra, as it learns sub byb tm gen 1
+* 
+* want  to set status icon when ability is comatose since they are effectively asleep, can do that, just need the interface thing that sets the icon.
+* only want it in battle, think would not put in summary screen to avoid confusion, with mon actually asleep.
 * 
 * STATUS NOTES-
 * could put in exceptions for statuses but it wouldn't be for every ability as for others unchanged
@@ -956,6 +977,10 @@ Thunder Wave Electric TM45
 * don't know name for electric variant yet, but it'll be a railgun type deal, focuses all their electrical energy into a codensed beam of energy
 * 
 * plasma railgun
+* 
+* can do poison to, see if ccan find name form marriage toxin
+* user controls and condenses all their stored toxins/poison into a single attack
+* 
 * NEED write move descriptions 
 * 
 * RENAME move_descriptions to .h when done
@@ -1696,7 +1721,7 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * 
 * for setting up rattled to activate on intimidate add check for gSpecialStatuses[battler].intimidatedMon = 1;  if true i.e == 1 
 * activate rattled
-* note- 
+* note- think done
 * 
 * fix moves mirror move, copycat etc. sketch monotype to use lasthitby  value, rather than enemy or last used move for target, so it doesnt fail
 * if used first. -_-

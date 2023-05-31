@@ -3374,8 +3374,8 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 break;
             if (gBattleMons[gEffectBattler].ability == ABILITY_INSOMNIA)
                 break;
-            /*if (GetBattlerAbility(gEffectBattler) == ABILITY_COMATOSE)
-                break;*/
+            if (GetBattlerAbility(gEffectBattler) == ABILITY_COMATOSE)
+                break;
             CancelMultiTurnMoves(gEffectBattler); //if it passes all checks cancel multi turn moves and appply sleep. I think
             statusChanged = TRUE;
             break;//NEED to better check swithch statements to see if break ends entire switch, or it just makes it continue checking for matches in other cases
@@ -3606,11 +3606,11 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
         {
             BattleScriptPush(gBattlescriptCurrInstr + 1);
             if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_SLEEP)
-                gBattleMons[gEffectBattler].status1 |= ((Random() % 4) + 2); //think this is the duration of sleep, and its 2-5 here.
+                gBattleMons[gEffectBattler].status1 |= ((Random() % 4) + 2); //think this is the duration of sleep, and its 2-5 here.   //confirmed
             else if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_FREEZE)
             {
                 gDisableStructs[gEffectBattler].FrozenTurns = 3;
-            } 
+            } //moved here for clarity
             else
                 gBattleMons[gEffectBattler].status1 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
             gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];

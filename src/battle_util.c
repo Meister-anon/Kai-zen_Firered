@@ -1946,15 +1946,16 @@ u8 DoBattlerEndTurnEffects(void)
                     if (gBattleMoveDamage == 0) //balanced by being a temporary status and needing the hail setup to have a good chance of being applied.
                         gBattleMoveDamage = 1;
                     
-                    if (gDisableStructs[gActiveBattler].FrozenTurns != 0) //timer starts at 3, will decrement giving 2 full turns of freeze
+                    if (gDisableStructs[gActiveBattler].FrozenTurns) //timer starts at 3, will decrement giving 2 full turns of freeze
                         BattleScriptExecute(BattleScript_FreezeTurnDmg); //changed back to 1/16, when hail is active it'll be 1/8 so equal to all others. 
+                    else
+                        BattleScriptExecute(BattleScript_FrostbiteTurnDmg);
+
                     if (--gDisableStructs[gActiveBattler].FrozenTurns == 0) //actual decrement with conditional  
                     {
                         BattleScriptPushCursor();   //used for value ending with return
                         gBattlescriptCurrInstr = BattleScript_DefrostBattler_KeepStatus;
-                    }
-                    if (gDisableStructs[gActiveBattler].FrozenTurns == 0)
-                        BattleScriptExecute(BattleScript_FrostbiteTurnDmg);
+                    }                        
                     ++effect;
                 }
                 ++gBattleStruct->turnEffectsTracker;

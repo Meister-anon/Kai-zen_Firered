@@ -1461,8 +1461,12 @@ const u8 gMoveDescription_DiveBomb[] = _("Does damage then switches\nout the use
     //name tbd
 const u8 gMoveDescription_Nettle_Whip[] = _("Attacks the target\nwith a vine covered\nin Nettle bristles.\nIf not a GRASS type,\nIt may leave the\nfoe with a burn.");
 const u8 gMoveDescription_SonicBoom[] = _("The target is struck\nby high-force winds,\nas the user\naccelerates passed\nthe sound barrier.\nRaises Speed.");
+const u8 gMoveDescription_OverMaxPower[] = _("");
+const u8 gMoveDescription_Shimon[] = _("");
+const u8 gMoveDescription_FinalFlight[] = _("");
+const u8 gMoveDescription_PlasmaRailgun[] = _("");
 
-    //Description can hold 5 line breaks given current space post expansion!  at approx 20 chars per line//
+    //Description can hold 5 line breaks (so 6 lines total) given current space post expansion!  at approx 20 chars per line// so 120 max
 
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [MOVE_NONE         ] = gMoveDescription_Pound,
@@ -2229,8 +2233,12 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [ MOVE_FLASH_FREEZE ] = gMoveDescription_FlashFreeze,
     [ MOVE_DRYADS_CURSE ] = gMoveDescription_DryadsCurse,
     [ MOVE_SHIELD_BASH ] = gMoveDescription_ShieldBash,
-    [ MOVE_UP_ROOT ] = gUP_ROOTDescription,
-    [ MOVE_DIVE_BOMB ] = gDIVE_BOMBDescription,
-    [ MOVE_NETTLE_WHIP ] = gNETTLE_WHIPDescription,
+    [ MOVE_UP_ROOT ] = gMoveDescription_UpRoot,
+    [ MOVE_DIVE_BOMB ] = gMoveDescription_DiveBomb,
+    [ MOVE_NETTLE_WHIP ] = gMoveDescription_Nettle_Whip,
     [ MOVE_SONIC_BOOM ] = gMoveDescription_SonicBoom,
+    [MOVE_OVER_MAX_POWER] = gMoveDescription_OverMaxPower,
+    [MOVE_SHIMON] = gMoveDescription_Shimon,
+    [MOVE_FINAL_FLIGHT] = gMoveDescription_FinalFlight,
+    [MOVE_PLASMA_RAILGUN] = gMoveDescription_PlasmaRailgun,
 };//last value can have comma

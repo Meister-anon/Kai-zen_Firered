@@ -7033,11 +7033,11 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_CELEBI] =
     {
         .baseHP = 120,
-        .baseAttack = 100,
-        .baseDefense = 100,
-        .baseSpeed = 100,
-        .baseSpAttack = 100,
-        .baseSpDefense = 100,
+        .baseAttack = 50,
+        .baseDefense = 110,
+        .baseSpeed = 110,
+        .baseSpAttack = 130,
+        .baseSpDefense = 110,
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_GRASS,
         .catchRate = 45,
