@@ -488,6 +488,23 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * and the 2nd for the doubles battle screen as well.
 * Also the rest of the party mon icons already sit on the pokeball so it wouldnt look strange.
 * 
+* worked out have new party menu layout, everything fits, without moving hp bar
+* idea widen status icon field  or add multiple status coord figures  to array
+* should be able to fit multiple icons for multi status setup,
+* just need to reduce total num possible concurrent status
+* make some mutually exclusive(?)  like freeze and burn  relation
+* including my custom fairy status spirit lock  (which should be mix of para & burn)
+* theres 7 effects but with exclusivity only  5 would be  active at once
+* slp para burn psn/toxic & sprt   
+* thats still a bit much so i plan to link sleep & spirit lock
+* like freeze &  burn are linked.  as sp lk is meant to be a mental impairment
+* attempting to put to sleep makes sense as a curative
+* so you'd get one turn to avoid sleep if you had spirit lock
+* and spirit lock attempting to be st would disturb the sleep
+* and wake them up.
+* 
+* that leavs with the more manageable 4 status to display on party menu.
+* 
 * make early event script to set all mon as caught seen
 * loop through species and set all flags, and unlock national dex
 * may also give a few mon with script, this is to check pokedex entries fit
