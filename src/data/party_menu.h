@@ -80,6 +80,7 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
 
 //array break up, 4 groups, 6 slots in party, & coords split into 4 pairs of 2
 //status icon did -4 x position
+//pokemon icon  & held item -10 y position
 static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
 {
     [PARTY_LAYOUT_SINGLE] = 
@@ -118,13 +119,13 @@ static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
     [PARTY_LAYOUT_DOUBLE] = 
     {
        
-       [SLOT_1] = { 16,  24,    // pokemon coords,
-                    20,  34,    // held item coords,
+       [SLOT_1] = { 16,  14,    // pokemon coords,
+                    20,  24,    // held item coords,
                     56,  36,    // status coords,
                     16,  18},   // pokeball coords
 
-       [SLOT_2] = {16,  80,    // pokemon coords,
-                   20,  90,    // held item coords,
+       [SLOT_2] = {16,  70,    // pokemon coords,
+                   20,  80,    // held item coords,
                    56,  92,    // status coords,
                    16,  74},   // pokeball coords
 
@@ -151,15 +152,15 @@ static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
     [PARTY_LAYOUT_MULTI] = 
     {
 
-       [SLOT_1] = { 16,  24,    // pokemon coords,
-                    20,  34,    // held item coords,
+       [SLOT_1] = { 16,  14,    // pokemon coords,
+                    20,  24,    // held item coords,
                     56,  36,    // status coords,
                     16,  18},   // pokeball coords
 
-       [SLOT_2] = {104,  80,    // pokemon coords,
-                    20,  90,    // held item coords,
-                   140,  92,    // status coords,
-                   102,  74},   // pokeball coords
+       [SLOT_2] = { 16,  70,    // pokemon coords,
+                    20,  80,    // held item coords,
+                    56,  92,    // status coords,
+                    16,  74},   // pokeball coords
 
        [SLOT_3] = {104,  26,    // pokemon coords,
                    106,  36,    // held item coords,
