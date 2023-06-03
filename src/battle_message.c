@@ -525,6 +525,9 @@ static const u8 sText_PokemonBlockedBall[] = _("The Wild {B_OPPONENT_MON1_NAME}\
 static const u8 sText_NeutralizingGasEnters[] = _("Neutralizing Gas filled the area!");
 static const u8 sText_NeutralizingGasOver[] = _("The effects of Neutralizing\nGas wore off!");
 
+static const u8 sText_StenchEnters[] = _("A foul stench is in the air!");
+static const u8 sText_StenchExits[] = _("The foul odor has cleared!");  //setup in place with neutralizing gas
+
 //issued caused by undefined buffers  "B_ATK_TRAINER_NAME B_ATK_TEAM1 B_ATK_TEAM2 B_DEF_TEAM2 B_ATK_TRAINER_CLASS   //FIXED
 
 // New battle strings.
@@ -1410,6 +1413,8 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_SPITE_BADLUCK - BATTLESTRINGS_TABLE_START]                 = sText_SpiteBadLuck,
     [STRINGID_SPITE_TOTAL_LOSS - BATTLESTRINGS_TABLE_START]              = sText_SpiteTotalLoss,
     [STRINGID_PKMNSPOISONWORSENED - BATTLESTRINGS_TABLE_START]           = sText_PkmnsPoisonWorsened,
+    [STRINGID_STENCHENTERS - BATTLESTRINGS_TABLE_START]                  = sText_StenchEnters,
+    [STRINGID_STENCHENDS - BATTLESTRINGS_TABLE_START]                    = sText_StenchExits,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
@@ -1452,6 +1457,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_SCREENCLEANER] = STRINGID_SCREENCLEANERENTERS,
     [B_MSG_SWITCHIN_COMATOSE] = STRINGID_COMATOSEENTERS,
     [B_MSG_SWITCHIN_CORRUPTION] = STRINGID_CORRUPTIONENTERS,
+    [B_MSG_SWITCHIN_STENCH] = STRINGID_STENCHENTERS,
     /*[B_MSG_SWITCHIN_MOLDBREAKER] = STRINGID_MOLDBREAKERENTERS,
     [B_MSG_SWITCHIN_TERAVOLT] = STRINGID_TERAVOLTENTERS,
     [B_MSG_SWITCHIN_TURBOBLAZE] = STRINGID_TURBOBLAZEENTERS,

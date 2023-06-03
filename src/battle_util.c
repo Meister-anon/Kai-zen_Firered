@@ -366,7 +366,8 @@ static const u8 sAbilitiesNotTraced[ABILITIES_COUNT] =
 };
 
 //come back to this when doing move expansion
-static const u8 sMovesNotAffectedByStench[] =
+//changing stench so no longer applicable.
+/*static const u8 sMovesNotAffectedByStench[] =
 {
     [MOVE_AIR_SLASH] = 1,
     [MOVE_ASTONISH] = 1,
@@ -401,7 +402,7 @@ static const u8 sMovesNotAffectedByStench[] =
     [MOVE_WATERFALL] = 1,
     [MOVE_ZEN_HEADBUTT] = 1,
     [MOVE_ZING_ZAP] = 1,
-};
+};*/
 
 static const u16 sSkillSwapBannedAbilities[] =
 {
@@ -1925,9 +1926,10 @@ u8 DoBattlerEndTurnEffects(void)
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_BURN:  // burn
-                if ((gBattleMons[gActiveBattler].status1 & STATUS1_BURN) && gBattleMons[gActiveBattler].hp != 0)
+                if ((gBattleMons[gActiveBattler].status1 & STATUS1_BURN) && gBattleMons[gActiveBattler].hp != 0
+                    && GetBattlerAbility(gActiveBattler) != ABILITY_FLARE_BOOST)
                 {
-                    if (gBattleMons[gActiveBattler].ability == ABILITY_HEATPROOF) {
+                    if (GetBattlerAbility(gActiveBattler) == ABILITY_HEATPROOF) {
                         gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
                     }
                     else
@@ -2612,7 +2614,7 @@ enum
     CANCELLER_TAUNTED,
     CANCELLER_IMPRISONED,
     CANCELLER_CONFUSED,
-    CANCELLER_PARALYSED,
+    CANCELLER_PARALYZED,
     CANCELLER_PRESSURE,
     CANCELLER_SPIRIT_LOCKED,
     CANCELLER_GHOST,
@@ -2632,6 +2634,20 @@ u8 AtkCanceller_UnableToUseMove(void)
 {
     u8 effect = 0;
     s32 *bideDmg = &gBattleScripting.bideDmg;
+
+    if ((IsStenchOnField) 
+        && (GetBattlerAbility(gBattlerAttacker) != ABILITY_STENCH
+        || GetBattlerAbility(gBattlerAttacker) != ABILITY_INNER_FOCUS
+        || GetBattlerAbility(gBattlerAttacker) != ABILITY_OBLIVIOUS
+        || GetBattlerAbility(gBattlerAttacker) != ABILITY_LEAF_GUARD
+        || GetBattlerAbility(gBattlerAttacker) != ABILITY_SWEET_VEIL
+        || GetBattlerAbility(gBattlerAttacker) != ABILITY_AROMA_VEIL
+        || GetBattlerAbility(gBattlerAttacker) != ABILITY_FLOWER_VEIL
+        )
+        && Random() % 5 == 0)   //should be 20% chance to set status to battler
+    {
+        gBattleMons[gBattlerAttacker].status2 |= STATUS2_FLINCHED;  //set status
+    }
 
     do
     {
@@ -2705,7 +2721,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             //should then default to canceller_flinched clause I think/hope     //actually let me put this above flinch to be safe
             if (((gBattleMons[gBattlerAttacker].status4 & STATUS4_CLAMP) || (gBattleMons[gBattlerAttacker].status1 & STATUS1_CLAMP)) && ((Random() % 3) == 0))
             {
-                gBattleMons[gBattlerAttacker].status2 & STATUS2_FLINCHED;
+                gBattleMons[gBattlerAttacker].status2 |= STATUS2_FLINCHED;
                 //gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 //gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
                 //gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
@@ -2897,7 +2913,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
-        case CANCELLER_PARALYSED: // paralysis
+        case CANCELLER_PARALYZED: // paralysis
             if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && (Random() % 4) == 0)
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
@@ -2908,7 +2924,8 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_PRESSURE: // new pressure effect
-            if ((gBattleMons[gBattlerTarget].ability == (ABILITY_PRESSURE || ABILITY_HI_PRESSURE)) && (Random() % 4) == 1) //how would this work with switching?
+            if ((GetBattlerAbility(gBattlerTarget) == ABILITY_PRESSURE 
+                || GetBattlerAbility(gBattlerTarget) == ABILITY_HI_PRESSURE) && (Random() % 4) == 1)
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MovePressureCanceler;
@@ -3168,6 +3185,8 @@ void TrySaveExchangedItem(u8 battlerId, u16 stolenItem)
 //floating or attack while in the air/ can fly
 //already checked to add all pokemon that have levitate as their ability
 //2nd pass add ghosts to grounded clause  with specific exclusions spirit tomb cursola galarian corsola etc object linked ghost, just like doduo
+//looked over and realized still mising some pokemon that float, but aren't flying types, and also just don't get levitate
+//i.e porygon and magnemite line, may be others
 const u16 sFloatingSpecies[] = {
     SPECIES_BEAUTIFLY,
     SPECIES_DUSTOX,
@@ -3195,6 +3214,9 @@ const u16 sFloatingSpecies[] = {
     SPECIES_MISMAGIUS,
     SPECIES_BALTOY,
     SPECIES_CLAYDOL,
+    SPECIES_PORYGON,
+    SPECIES_PORYGON2,
+    SPECIES_PORYGON_Z,
     SPECIES_BELDUM,
     SPECIES_METANG,
     SPECIES_METAGROSS,
@@ -3202,6 +3224,9 @@ const u16 sFloatingSpecies[] = {
     SPECIES_LATIOS,
     SPECIES_BRONZOR,
     SPECIES_BRONZONG,
+    SPECIES_MAGNEMITE,
+    SPECIES_MAGNETON,
+    SPECIES_MAGNEZONE,
     SPECIES_CHATOT,
     SPECIES_CARNIVINE,
     SPECIES_ROTOM,
@@ -4325,6 +4350,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 ++effect;
             }it'll list ability name at endd turn when it heals
             break;*/
+            case ABILITY_STENCH:
+                if (!gSpecialStatuses[battler].switchInAbilityDone)
+                {
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_STENCH;
+                    gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                    ++effect;
+                }
             case ABILITY_SCREEN_CLEANER:
             if (!gSpecialStatuses[battler].switchInAbilityDone && TryRemoveScreens(battler))
             {
@@ -5606,6 +5639,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattlescriptCurrInstr = BattleScript_TargetsStatWasMaxedOut;
                     ++effect;
                 }
+                else if ((gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+                    && TARGET_TURN_DAMAGED
+                    && IsBattlerAlive(battler)
+                    && CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
+                {
+                    SET_STATCHANGER(STAT_ATK, MAX_STAT_STAGE - gBattleMons[battler].statStages[STAT_ATK], FALSE);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_TargetsStatWasMaxedOut;
+                    ++effect;
+                }                
                 break;
             case ABILITY_GOOEY:
             case ABILITY_TANGLING_HAIR:
@@ -5839,7 +5882,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                 }
                 break;
-            case ABILITY_STENCH:
+            /*case ABILITY_STENCH:
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && gBattleMons[gBattlerTarget].hp != 0
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
@@ -5853,7 +5896,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     BattleScriptPop();
                    ++effect;
                 }
-                break;
+                break;*/
             case ABILITY_GULP_MISSILE:
                 if (((gCurrentMove == MOVE_SURF && TARGET_TURN_DAMAGED) || gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER)
                     && (effect = ShouldChangeFormHpBased(gBattlerAttacker)))
@@ -8759,11 +8802,9 @@ bool32 IsNeutralizingGasBannedAbility(u32 ability)
 } //abilities excluded  from neutralizing gas, as they are intrinsic to the pokemon biology/unique to themselves/involves changing their body.
 
 
-bool32 IsNeutralizingGasOnField(void)
+bool32 IsNeutralizingGasOnField(void)   //not used anymore, but still here if want to use default implementation //is not global as only used here.
 {
     u32 i;
-    u8 side;
-    side = GetBattlerSide(gActiveBattler);
 
     for (i = 0; i < gBattlersCount; i++)
     {
@@ -8773,6 +8814,18 @@ bool32 IsNeutralizingGasOnField(void)
             return TRUE;
     } //added side statement, should make it only remove ability if neutralzing gas is on other side,
     //change how the ability is used a bit ,but I'm fixing bad abilities anyway so it shouldn't be used to remove bad abiliites.
+    return FALSE;
+}
+
+bool32 IsStenchOnField(void)
+{
+    u32 i;
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (IsBattlerAlive(i) && gBattleMons[i].ability == ABILITY_STENCH && !(gStatuses3[i] & STATUS3_GASTRO_ACID))
+            return TRUE;
+    }
     return FALSE;
 }
 
@@ -8823,13 +8876,13 @@ u32 IsAbilityOnSide(u32 battlerId, u32 ability)
 
 u32 DoesSideHaveAbility(u32 battlerId, u32 ability) //adapted ability search function that doesn't use getbattlerability
 {
-    if (IsBattlerAlive(battlerId) && gBattleMons[battlerId].ability == ability)
+    if (IsBattlerAlive(battlerId) && gBattleMons[battlerId].ability == ability && !(gStatuses3[battlerId] & STATUS3_GASTRO_ACID))
         return battlerId + 1;
-    else if (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && gBattleMons[BATTLE_PARTNER(battlerId)].ability == ability)
+    else if (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && gBattleMons[BATTLE_PARTNER(battlerId)].ability == ability && !(gStatuses3[BATTLE_PARTNER(battlerId)] & STATUS3_GASTRO_ACID))
         return BATTLE_PARTNER(battlerId) + 1;
     else
         return 0;
-}
+}//realized needed to add back in gastro acid check
 
 u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability) // use for intimidate on enemy team
 {
@@ -8893,7 +8946,8 @@ u32 GetBattlerWeight(u8 battlerId) //use ethis for calculating  seismic toss dam
 
     if (ability == ABILITY_HEAVY_METAL)
         weight *= 2;
-    else if (ability == (ABILITY_LIGHT_METAL || ABILITY_LIQUID_METAL))
+    else if (ability == ABILITY_LIGHT_METAL 
+        || ability == ABILITY_LIQUID_METAL)
         weight /= 2;
 
     if (holdEffect == HOLD_EFFECT_FLOAT_STONE)

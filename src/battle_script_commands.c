@@ -1292,6 +1292,8 @@ static void atk00_attackcanceler(void)
 
     //need to fill in condition more - DONE 
     //effects are done, need test but should work, what's missing is the reactivation condition, for if it wasn't triggered on previous battler
+    //oh wait I think I can do that like intimidate, like the reset intimmidate stuff in the faintmon battlescript
+    //just need to make it only do that if forwarn/anticipate not done. check targetting but I think should be simple.
     else if (GetBattlerAbility(gBattlerTarget) == ABILITY_FOREWARN
         && (gCurrentMove == gSpecialStatuses[gBattlerTarget].forewarnedMove)
         && !gSpecialStatuses[gBattlerTarget].forewarnDone)
@@ -1698,7 +1700,8 @@ static void atk01_accuracycheck(void)
         calc = sAccuracyStageRatios[buff].dividend * moveAcc;
         calc /= sAccuracyStageRatios[buff].divisor;
 
-        if (gBattleMons[gBattlerAttacker].ability == (ABILITY_COMPOUND_EYES || ABILITY_ILLUMINATE))
+        if (gBattleMons[gBattlerAttacker].ability == ABILITY_COMPOUND_EYES
+            || gBattleMons[gBattlerAttacker].ability == ABILITY_ILLUMINATE)
             calc = (calc * 130) / 100; // 1.3 compound eyes boost
         if (WEATHER_HAS_EFFECT && gBattleMons[gBattlerTarget].ability == ABILITY_SAND_VEIL && gBattleWeather & WEATHER_SANDSTORM_ANY)
             calc = (calc * 80) / 100; // 1.2 sand veil loss
@@ -3437,7 +3440,8 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
             statusChanged = TRUE;
             break;
         case STATUS1_BURN:
-            if ((gBattleMons[gEffectBattler].ability == ABILITY_WATER_VEIL || ABILITY_WATER_BUBBLE)
+            if ((GetBattlerAbility(gEffectBattler) == ABILITY_WATER_VEIL 
+                || GetBattlerAbility(gEffectBattler) == ABILITY_WATER_BUBBLE)
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             {
                 gLastUsedAbility = gBattleMons[gEffectBattler].ability;
@@ -3501,7 +3505,9 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 break;
             if (noSunCanFreeze == 0)
                 break;
-            if (gBattleMons[gEffectBattler].ability == (ABILITY_MAGMA_ARMOR || ABILITY_FLAME_BODY || ABILITY_LAVA_FISSURE))
+            if (GetBattlerAbility(gEffectBattler) == ABILITY_MAGMA_ARMOR
+                || GetBattlerAbility(gEffectBattler) == ABILITY_FLAME_BODY
+                || GetBattlerAbility(gEffectBattler) == ABILITY_LAVA_FISSURE)
                 break;
             CancelMultiTurnMoves(gEffectBattler);
             statusChanged = TRUE;
@@ -9538,7 +9544,8 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         else if (gBattleMons[gBattlerAttacker].status1 & STATUS1_BURN)
         {
-            if (GetBattlerAbility(gBattlerTarget) == ABILITY_WATER_VEIL || ABILITY_WATER_BUBBLE)
+            if (GetBattlerAbility(gBattlerTarget) == ABILITY_WATER_VEIL 
+                || GetBattlerAbility(gBattlerTarget) == ABILITY_WATER_BUBBLE)
             {
                 gBattlerAbility = gBattlerTarget;
                 BattleScriptPush(T1_READ_PTR(gBattlescriptCurrInstr + 3));
@@ -9922,6 +9929,15 @@ static void atk76_various(void) //will need to add all these emerald various com
             gSpecialStatuses[gActiveBattler].neutralizingGasRemoved = FALSE;
             BattleScriptPush(gBattlescriptCurrInstr + 3);
             gBattlescriptCurrInstr = BattleScript_NeutralizingGasExits;
+            return;
+        }
+        break;
+    case VARIOUS_TRY_END_STENCH:
+        if (gSpecialStatuses[gActiveBattler].stenchRemoved)
+        {
+            gSpecialStatuses[gActiveBattler].stenchRemoved = FALSE;
+            BattleScriptPush(gBattlescriptCurrInstr + 3);
+            gBattlescriptCurrInstr = BattleScript_StenchExits;
             return;
         }
         break;
@@ -13853,7 +13869,7 @@ static void atkE1_trygetintimidatetarget(void) //I'd like to be able to get it o
 static void atkE2_switchoutabilities(void)
 {
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
-    if (gBattleMons[gActiveBattler].ability == ABILITY_NEUTRALIZING_GAS)
+    if (gBattleMons[gActiveBattler].ability == ABILITY_NEUTRALIZING_GAS)    //looks like put here so it goes first just like in switch-in
     {
         gBattleMons[gActiveBattler].ability = ABILITY_NONE;
         BattleScriptPush(gBattlescriptCurrInstr);
@@ -13875,6 +13891,10 @@ static void atkE2_switchoutabilities(void)
                 gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP;
             BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[*(gBattleStruct->battlerPartyIndexes + gActiveBattler)], 2, &gBattleMoveDamage);
             MarkBattlerForControllerExec(gActiveBattler);
+            break;
+        case ABILITY_STENCH:
+            BattleScriptPush(gBattlescriptCurrInstr);
+            gBattlescriptCurrInstr = BattleScript_StenchExits;
             break;
         }
 
@@ -14844,7 +14864,7 @@ static void atk100_settoxicspikes(void) {
     }
 }
 
-static void atk101_setgastroacid(void) 
+static void atk101_setgastroacid(void)
 {
     if (IsGastroAcidBannedAbility(gBattleMons[gBattlerTarget].ability))
     {
@@ -14854,6 +14874,9 @@ static void atk101_setgastroacid(void)
     {
         if (gBattleMons[gBattlerTarget].ability == ABILITY_NEUTRALIZING_GAS)
             gSpecialStatuses[gBattlerTarget].neutralizingGasRemoved = TRUE;
+
+        else if (gBattleMons[gBattlerTarget].ability == ABILITY_STENCH)
+            gSpecialStatuses[gBattlerTarget].stenchRemoved = TRUE;
 
         gStatuses3[gBattlerTarget] |= STATUS3_GASTRO_ACID;
         gBattlescriptCurrInstr += 5;

@@ -4393,9 +4393,16 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
      && GetBattlerSide(battler1) == B_SIDE_PLAYER)
         speedBattler1 = (speedBattler1 * 110) / 100;
     if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE || HOLD_EFFECT_POWERITEM) 
-        && gBattleMons[battler2].ability != (ABILITY_TANGLED_FEET || ABILITY_AVIATOR || ABILITY_RUN_AWAY))
+        && (GetBattlerAbility(battler2) != ABILITY_TANGLED_FEET
+            || GetBattlerAbility(battler2) != ABILITY_AVIATOR
+            || GetBattlerAbility(battler2) != ABILITY_RUN_AWAY
+            ))
         speedBattler1 /= 2;
-    if ((gBattleMons[battler1].status1 & STATUS1_PARALYSIS) && gBattleMons[battler1].ability != (ABILITY_TANGLED_FEET || ABILITY_AVIATOR || ABILITY_RUN_AWAY))
+    if ((gBattleMons[battler1].status1 & STATUS1_PARALYSIS)
+        && (GetBattlerAbility(battler1) != ABILITY_TANGLED_FEET
+            || GetBattlerAbility(battler1) != ABILITY_AVIATOR
+            || GetBattlerAbility(battler1) != ABILITY_RUN_AWAY
+            ))
         speedBattler1 /= 4;
     //trap effects
     if ((gBattleMons[battler1].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battler1].status1 & STATUS1_WHIRLPOOL))  //should be good
@@ -4425,9 +4432,16 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
      && GetBattlerSide(battler2) == B_SIDE_PLAYER)
         speedBattler2 = (speedBattler2 * 110) / 100;
     if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE || HOLD_EFFECT_POWERITEM) 
-        && gBattleMons[battler2].ability != (ABILITY_TANGLED_FEET || ABILITY_AVIATOR || ABILITY_RUN_AWAY))
+        && (GetBattlerAbility(battler2) != ABILITY_TANGLED_FEET
+            || GetBattlerAbility(battler2) != ABILITY_AVIATOR
+            || GetBattlerAbility(battler2) != ABILITY_RUN_AWAY
+            ))
         speedBattler2 /= 2;
-    if ((gBattleMons[battler2].status1 & STATUS1_PARALYSIS) && gBattleMons[battler2].ability != (ABILITY_TANGLED_FEET || ABILITY_AVIATOR || ABILITY_RUN_AWAY))
+    if ((gBattleMons[battler2].status1 & STATUS1_PARALYSIS)
+        && (GetBattlerAbility(battler2) != ABILITY_TANGLED_FEET
+            || GetBattlerAbility(battler2) != ABILITY_AVIATOR
+            || GetBattlerAbility(battler2) != ABILITY_RUN_AWAY
+            ))
         speedBattler2 /= 4;
     //trap effects
     if ((gBattleMons[battler2].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battler2].status1 & STATUS1_WHIRLPOOL))  //should be good

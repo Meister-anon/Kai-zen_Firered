@@ -67,8 +67,9 @@
 #define B_MSG_SWITCHIN_CURIOUS_MEDICINE 14
 #define B_MSG_SWITCHIN_PASTEL_VEIL      15
 #define B_MSG_SWITCHIN_CORRUPTION       16
-#define B_MSG_SWITCHIN_NEUTRALIZING_GAS 17
-#define B_MSG_SWITCHIN_BANDIT			18
+#define B_MSG_SWITCHIN_STENCH			17
+#define B_MSG_SWITCHIN_NEUTRALIZING_GAS 18
+#define B_MSG_SWITCHIN_BANDIT			19
 
 // gMentalHerbCureStringIds
 #define B_MSG_MENTALHERBCURE_INFATUATION       0
@@ -708,6 +709,8 @@
 #define STRINGID_SPITE_BADLUCK 628
 #define STRINGID_SPITE_TOTAL_LOSS 629
 #define STRINGID_PKMNSPOISONWORSENED 630		//reapply mechanic, its meant to change poison to toxic poison when target already poisened.
+#define STRINGID_STENCHENTERS 631		
+#define STRINGID_STENCHENDS 632	
 
 #define STRINGID_TRAINER2CLASS BATTLESTRINGS_COUNT + 1 // cutoff point. was able to confirm this does properly define
 #define STRINGID_TRAINER2NAME BATTLESTRINGS_COUNT + 2

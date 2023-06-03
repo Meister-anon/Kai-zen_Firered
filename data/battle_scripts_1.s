@@ -7390,6 +7390,19 @@ BattleScript_NeutralizingGasExitsLoop:
 	restoretarget
 	return
 
+BattleScript_StenchExits::
+	savetarget
+	pause 0x20
+	printstring STRINGID_STENCHENDS
+	waitmessage 0x40
+	setbyte gBattlerTarget, 0
+BattleScript_StenchExitsLoop:
+	switchinabilities BS_TARGET
+	addbyte gBattlerTarget, 1
+	jumpifbytenotequal gBattlerTarget, sByteFour, BattleScript_NeutralizingGasExitsLoop	@ SOMEHOW, comparing to gBattlersCount is problematic.
+	restoretarget
+	return
+
 BattleScript_TryAdrenalineOrb:
 	jumpifnoholdeffect BS_TARGET, HOLD_EFFECT_ADRENALINE_ORB, BattleScript_TryAdrenalineOrbRet
 	jumpifstat BS_TARGET, CMP_EQUAL, STAT_SPEED, 12, BattleScript_TryAdrenalineOrbRet

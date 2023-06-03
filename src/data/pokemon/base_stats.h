@@ -2507,7 +2507,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_STENCH, ABILITY_STICKY_HOLD},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_NONE},
+            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_REGENERATOR},
         #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -2538,7 +2538,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_STENCH, ABILITY_STICKY_HOLD},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_NONE},
+            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_REGENERATOR},
         #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -17797,7 +17797,7 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },//GAVE HEATPROOF cuz apparently steel armor was to protect against main predator a fire type, buffing heatproof to be /4 damage since this is 4x weak
-    //and just being neutral isn't exactly "heat proof"
+    //and just being neutral for mon with normal weakness isn't exactly "heat proof"
 
     [SPECIES_DEINO] =
     {
@@ -20817,7 +20817,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HYPER_CUTTER, ABILITY_IRON_FIST},
-            .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_NONE},
+            .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_REGENERATOR},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HYPER_CUTTER, ABILITY_NONE},
         #endif
@@ -20847,7 +20847,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HYPER_CUTTER, ABILITY_IRON_FIST},
-            .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_NONE},
+            .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_REFRIGERATE},    //thought to remove something to keep regeneraor & refrigerate but type still not good to switch with
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HYPER_CUTTER, ABILITY_NONE},
         #endif

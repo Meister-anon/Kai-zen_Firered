@@ -307,6 +307,7 @@ struct SpecialStatus    //pretty sure all values
     u8 dancerOriginalTarget : 3;
     u8 announceNeutralizingGas : 1;   // See Cmd_switchineffects
     u8 neutralizingGasRemoved : 1;    // See VARIOUS_TRY_END_NEUTRALIZING_GAS
+    u8 stenchRemoved : 1;    // Set as VARIOUS_TRY_END_STENCH  both exclusive to gastro acid?
     u8 switchInAbilityDone:1;
     s32 dmg;
     s32 physicalDmg;

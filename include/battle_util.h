@@ -122,6 +122,7 @@ void HandleAction_RunBattleScript(void);
 u8 GetMoveTarget(u16 move, u8 setTarget);
 u8 IsMonDisobedient(void);
 bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
+bool32 IsStenchOnField(void);
 u32 GetBattleMoveSplit(u32 moveId);
 bool8 IsBattlerAlive(u8 battlerId);
 u32 GetBattlerAbility(u8 battlerId);

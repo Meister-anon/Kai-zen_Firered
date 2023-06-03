@@ -7,6 +7,7 @@ extern const u8 BattleScript_HitFromCritCalc[]; //only defined because its refer
 extern const u8 BattleScript_EffectWithChance[]; //putting more emerald ports below this
 extern const u8 BattleScript_SideStatusWoreOff[];
 extern const u8 BattleScript_NeutralizingGasExits[];
+extern const u8 BattleScript_StenchExits[];
 extern const u8 BattleScript_ToxicSpikesFree[];
 extern const u8 BattleScript_StickyWebFree[];
 extern const u8 BattleScript_StealthRockFree[];

@@ -504,6 +504,38 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * and wake them up.
 * 
 * that leavs with the more manageable 4 status to display on party menu.
+* may not be able to do/fit, could instad atteampt same thing as status in battle idea,
+* make it loop through the status set and just change the icon each time the mon bounces twice?
+* potentially use  release oon animation? so it transitino clean.
+* 
+* Give shuckle better moves, it stats are fine, it just learn horrible moves.
+* 
+* buff anger point, activate on super effective move result as well as crit. as both are 2x dmg.    - DONE
+* most mon that get it aren't likely to survive either way, so gives it some play.  since crits are so rare anyway.
+* 
+* buff stench, its a bad ability, purely because every mon that has it, is too slow to every activate it.
+* either change its effect, to something like a 1/3rd chance for extra damgae proc via, enemy can't stand the smell. 1/8th max hp.
+* or I setup a new status/functionality for stench where the flinch status isn't removed, because usually flinch status gets set by move effect
+* and is cleared at move end.   would have to set it to a timer i.e timer to 1, so  they attack have a chance to set flinch,
+* and the status isn't cleared until timer hits 0, which would be at end of next turn, so the target will flinch next turn.
+* -or, dont make it linked to using a contact move at all, and just make it work like old neutralizing gas.
+* just being on the field can cause flinch chance, but also for your teammate.  i.e "a foul stench is in the air"
+* would be a much better actually potentially boost flinch chance from 10% as it has negative side now too?
+* 
+* way it would work, if stench ability on field and ability not stench, random % chance to set status flinch to battler
+* code is simple, just a matter of finding where to put it to work, atk canceler doesn't seem to be the right place.
+* atk canceler has clause for flinch status, I just need a place to set it, ok atk canceler unable to use move
+* may be the right place, I just need to put it at the top?
+* and set stench as a switch in 
+* 
+* want to sets up as a status, as there should be moves/abiities you can partner with that could remove the negative aspects for your side etc.
+* -note doesn't need to be a status, I could do function based exclusions, again like neutralizing gas.
+* 
+* abilities that will block the flinch, effect will be oblivious, inner focus, and leaf gaurd (potentially more if they involve, flinch protection, or good smells)
+* -sweet veil & aroma veil & flower veil
+* -DONE just need double check ability exclusions work correctly.  ok yeah it was wrong, and I've definitly used that  logic in multiple places
+* need to search != (ability     and || ability  to fix all instances I"m able to find. -DONE all ability instances corrected
+* 
 * 
 * make early event script to set all mon as caught seen
 * loop through species and set all flags, and unlock national dex
