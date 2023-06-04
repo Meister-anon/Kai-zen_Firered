@@ -3002,7 +3002,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 }
 
                 if (gDisableStructs[gBattlerAttacker].bideTimer && gBattleMoves[gCurrentMove].power != 0
-                    && gCurrentMove != (MOVE_COUNTER || MOVE_MIRROR_COAT))
+                    && (gCurrentMove != MOVE_COUNTER || gCurrentMove != MOVE_MIRROR_COAT))
                 {
                     gBattleMons[gBattlerAttacker].status2 &= ~STATUS2_BIDE;
                     //gDisableStructs[gBattlerAttacker].bideTimer = 0;
@@ -3343,36 +3343,44 @@ bool8 IsBattlerGrounded(u8 battlerId)
 {
     s32 i;
 
-    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
-        return TRUE;
-    else if (gFieldStatuses & STATUS_FIELD_GRAVITY)
-        return TRUE;
-    else if (gStatuses3[battlerId] & STATUS3_ROOTED)
-        return TRUE;
-    else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
-        return TRUE; //important roost change  ..[unsure if want to make random % but no one would gamble it anyway...
+    
+    
    
-    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
         return TRUE; //hope this set up right/works
     //according to Mcgriffin needed make flying & roost flag true statement
     //as else at bottom just means not flyign or has roost flag, TRUE
-    else if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
+    
+
+    
+    if (IsFloatingSpecies(battlerId))//used if as breakline, as else if only reads if everything above it is false
+        return FALSE;
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
+        return FALSE;
+    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
+        return FALSE;
+
+    if (gBattleMons[battlerId].species == (SPECIES_DODUO || SPECIES_DODRIO))   //test may need to add *&& hold effect nto air balloon?
+        return TRUE;//edit because flightless bird ; moved lower so exceptions could apply 
+    else if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && (gBattleMons[battlerId].species == (GROUNDED_GHOSTMON)))   //test GHOST exclusions
+        return TRUE;
+
+    else if (gBattleMons[battlerId].ability == ABILITY_LEVITATE)
+        return FALSE;
+    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
+        return TRUE;
+    if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)    
         return FALSE;
     else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
         return FALSE;
     else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
         return FALSE;
-    else if (gBattleMons[battlerId].species == (SPECIES_DODUO || SPECIES_DODRIO))   //test may need to add *&& hold effect nto air balloon?
-        return TRUE;//edit because flightless bird ; moved lower so exceptions could apply 
-    else if (gBattleMons[battlerId].ability == ABILITY_LEVITATE)
-        return FALSE;
-    else if (IsFloatingSpecies(battlerId))
-        return FALSE;//this alone might be enough since if smacked down it counts as grounded
-    else if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && (gBattleMons[battlerId].species != (GROUNDED_GHOSTMON)))   //test GHOST exclusions
-        return FALSE;
-    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
-        return FALSE;
-
+    if (gFieldStatuses & STATUS_FIELD_GRAVITY)
+        return TRUE;
+    else if (gStatuses3[battlerId] & STATUS3_ROOTED)
+        return TRUE;
+    else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
+        return TRUE; //important roost change  ..[unsure if want to make random % but no one would gamble it anyway...
     else
         return TRUE;
 }
@@ -9168,24 +9176,173 @@ static u16 GetInverseTypeMultiplier(u16 multiplier) //could use total damgae cal
     switch (multiplier)
     {
     case UQ_4_12(0.0):
+        return UQ_4_12(1.0);
     case UQ_4_12(0.5):
         return UQ_4_12(2.0);
     case UQ_4_12(2.0):
         return UQ_4_12(0.5);
     case UQ_4_12(1.0):
     default:
-        return UQ_4_12(1.0);
+        return UQ_4_12(0.0);
     }
+}
+
+static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities)
+{
+    u16 mod = GetTypeModifier(moveType, defType);
+
+    if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET)//why would anyone want this?
+    {
+        mod = UQ_4_12(1.0);
+        /*if (recordAbilities)
+            RecordItemEffectBattle(battlerDef, HOLD_EFFECT_RING_TARGET);*/
+}
+    else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT && mod == UQ_4_12(0.0))
+    {
+        mod = UQ_4_12(1.0);
+    }
+    else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && GetBattlerAbility(battlerAtk) == ABILITY_SCRAPPY && mod == UQ_4_12(0.0))
+    {
+        mod = UQ_4_12(1.0);
+        /*if (recordAbilities)
+            RecordAbilityBattle(battlerAtk, ABILITY_SCRAPPY);*/
+    }
+
+    if (moveType == TYPE_PSYCHIC && defType == TYPE_DARK && gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED && mod == UQ_4_12(0.0))
+        mod = UQ_4_12(1.0);
+    if (gBattleMoves[move].effect == EFFECT_FREEZE_DRY && defType == TYPE_WATER)
+        mod = UQ_4_12(2.0);
+    if (moveType == TYPE_GROUND && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(0.0))
+        mod = UQ_4_12(1.0);
+    if (moveType == TYPE_FIRE && gDisableStructs[battlerDef].tarShot)
+        mod = UQ_4_12(2.0);
+
+    // B_WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pokémon
+    if (gBattleWeather & WEATHER_STRONG_WINDS && WEATHER_HAS_EFFECT)
+    {
+        if (defType == TYPE_FLYING && mod >= UQ_4_12(2.0))
+            mod = UQ_4_12(1.0);
+    }
+
+    MulModifier(modifier, mod);
 }
 
 u16 GetTypeModifier(u8 atkType, u8 defType)
 {
-#if B_FLAG_INVERSE_BATTLE != 0
-    if (FlagGet(B_FLAG_INVERSE_BATTLE))
+
+    if (FlagGet(FLAG_INVERSE_BATTLE))
         return GetInverseTypeMultiplier(sTypeEffectivenessTable[atkType][defType]);
 
     return sTypeEffectivenessTable[atkType][defType];
-#endif
+
+}
+
+u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities)
+{
+    u16 modifier = UQ_4_12(1.0);
+
+    if (move != MOVE_STRUGGLE && moveType != TYPE_MYSTERY)
+    {
+        modifier = CalcTypeEffectivenessMultiplierInternal(move, moveType, battlerAtk, battlerDef, recordAbilities, modifier);
+        if (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE)
+            modifier = CalcTypeEffectivenessMultiplierInternal(move, gBattleMoves[move].argument, battlerAtk, battlerDef, recordAbilities, modifier);
+    }
+
+    /*if (recordAbilities)
+        UpdateMoveResultFlags(modifier);*/  //removed as this is just for checking type, not actually using to read result.
+    return modifier;
+}
+
+static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities, u16 modifier)
+{
+    u16 defAbility = GetBattlerAbility(battlerDef);
+
+    MulByTypeEffectiveness(&modifier, move, moveType, battlerDef, gBattleMons[battlerDef].type1, battlerAtk, recordAbilities);
+    if (gBattleMons[battlerDef].type2 != gBattleMons[battlerDef].type1)
+        MulByTypeEffectiveness(&modifier, move, moveType, battlerDef, gBattleMons[battlerDef].type2, battlerAtk, recordAbilities);
+    if (gBattleMons[battlerDef].type3 != TYPE_MYSTERY && gBattleMons[battlerDef].type3 != gBattleMons[battlerDef].type2
+        && gBattleMons[battlerDef].type3 != gBattleMons[battlerDef].type1)
+        MulByTypeEffectiveness(&modifier, move, moveType, battlerDef, gBattleMons[battlerDef].type3, battlerAtk, recordAbilities);
+
+    if (gBattleMoves[move].split == SPLIT_STATUS && move != MOVE_THUNDER_WAVE)
+    {
+        modifier = UQ_4_12(1.0);
+
+        if (move == MOVE_GLARE && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST))
+        {
+            modifier = UQ_4_12(0.0);
+        }
+
+    }
+    /*else if (moveType == TYPE_GROUND && !IsBattlerGrounded2(battlerDef, TRUE) && !(gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING))
+    {
+        modifier = UQ_4_12(0.0);
+        if (recordAbilities && defAbility == ABILITY_LEVITATE)
+        {
+            gLastUsedAbility = ABILITY_LEVITATE;
+            gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
+            gLastLandedMoves[battlerDef] = 0;
+            gBattleCommunication[MISS_TYPE] = B_MSG_GROUND_MISS;
+            RecordAbilityBattle(battlerDef, ABILITY_LEVITATE);
+        }   //potentially add back later.
+    }*/
+
+    else if (move == MOVE_SHEER_COLD && IS_BATTLER_OF_TYPE(battlerDef, TYPE_ICE))
+    {
+        modifier = UQ_4_12(0.0);
+    }
+
+
+    // Thousand Arrows ignores type modifiers for flying mons
+    if (!IsBattlerGrounded(battlerDef) && (gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING)
+        && (gBattleMons[battlerDef].type1 == TYPE_FLYING || gBattleMons[battlerDef].type2 == TYPE_FLYING || gBattleMons[battlerDef].type3 == TYPE_FLYING))
+    {
+        modifier = UQ_4_12(1.0);
+    }
+
+    if (((defAbility == ABILITY_WONDER_GUARD && modifier <= UQ_4_12(1.0))
+        || (defAbility == ABILITY_TELEPATHY && battlerDef == BATTLE_PARTNER(battlerAtk)))
+        && gBattleMoves[move].power)
+    {
+        modifier = UQ_4_12(0.0);
+        /*if (recordAbilities)
+        {
+            gLastUsedAbility = gBattleMons[battlerDef].ability;
+            gMoveResultFlags |= MOVE_RESULT_MISSED;
+            gLastLandedMoves[battlerDef] = 0;
+            gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG;
+            RecordAbilityBattle(battlerDef, gBattleMons[battlerDef].ability);
+        }*/
+    }
+
+    if ((defAbility == ABILITY_DISPIRIT_GUARD && modifier >= UQ_4_12(1.0))
+        && gBattleMoves[move].power)
+    {
+        modifier = UQ_4_12(0.0);
+    }
+
+    return modifier;
+}
+
+u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef)
+{
+    u16 modifier = UQ_4_12(1.0);
+    u8 moveType = gBattleMoves[move].type;
+
+    if (move != MOVE_STRUGGLE && moveType != TYPE_MYSTERY)
+    {
+        MulByTypeEffectiveness(&modifier, move, moveType, 0, gSpeciesInfo[speciesDef].types[0], 0, FALSE);
+        if (gSpeciesInfo[speciesDef].types[1] != gSpeciesInfo[speciesDef].types[0])
+            MulByTypeEffectiveness(&modifier, move, moveType, 0, gSpeciesInfo[speciesDef].types[1], 0, FALSE);
+
+        if (moveType == TYPE_GROUND && abilityDef == ABILITY_LEVITATE && !(gFieldStatuses & STATUS_FIELD_GRAVITY))
+            modifier = UQ_4_12(0.0);
+        if (abilityDef == ABILITY_WONDER_GUARD && modifier <= UQ_4_12(1.0) && gBattleMoves[move].power)
+            modifier = UQ_4_12(0.0);
+    }
+
+    //UpdateMoveResultFlags(modifier);
+    return modifier;
 }
 
 // for AI - get move damage and effectiveness with one function call

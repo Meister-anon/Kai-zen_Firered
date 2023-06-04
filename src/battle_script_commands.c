@@ -2092,7 +2092,7 @@ void ModulateDmgByType(u8 multiplier)   //Put all ability effects above ring tar
 static void atk06_typecalc(void)
 {
     s32 i = 0;
-    u8 moveType;
+    u8 moveType, argument;
     u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBattleMons[gBattlerTarget].type3;
 
     if (gCurrentMove == (MOVE_STRUGGLE || MOVE_BIDE)) //should let hit ghost types could just remove typecalc bs from script instead...
@@ -2100,9 +2100,12 @@ static void atk06_typecalc(void)
         ++gBattlescriptCurrInstr;
         return;
     }
+    argument = gBattleMoves[gCurrentMove].argument;
     GET_MOVE_TYPE(gCurrentMove, moveType);
     // check stab
-    if (IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType))
+    if (IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType)
+        || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
+            && IS_BATTLER_OF_TYPE(gBattlerAttacker, argument)))
     {
         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_ADAPTABILITY) 
         {
@@ -2119,10 +2122,15 @@ static void atk06_typecalc(void)
     //joat stacks w stab long as not normal move, added mystrey type exclusion for normalize change
     //forgot calculatebasedamage in pokemon.c, has it set so mystery type does 0 damage will need to remove that. 
     //why does it even do that? there are no mystery moves, is it an extra failsafe for hidden power?
-    if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL) && moveType != (TYPE_NORMAL || TYPE_MYSTERY)) //added mystery line to prevent triggering joat, on normalize
+    if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL)) //added mystery line to prevent triggering joat, on normalize
     {
-        gBattleMoveDamage = gBattleMoveDamage * 125;
-        gBattleMoveDamage = gBattleMoveDamage / 100;
+        if ((moveType != TYPE_NORMAL || moveType != TYPE_MYSTERY)
+            || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
+                && (argument != TYPE_NORMAL || argument != TYPE_MYSTERY)))
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 125;
+            gBattleMoveDamage = gBattleMoveDamage / 100;
+        }
     }
 
     //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
@@ -2166,7 +2174,7 @@ static void atk06_typecalc(void)
                 i += 3; //don't undeerstand what this is doing.     //ok now I get it, starts at i+0 2 more arguments in row, using +3 moves to the next row
                 continue;//its a while lloop, instead of a for loop, but this is essentially the ++i part, its the increment that changes type, which is why its also at the bottom
             }//logic is while atk type isnt endtable i.e last row of type chart, do stuff inside, then at bottom increment to next row and start again.
-            else if (TYPE_EFFECT_ATK_TYPE(i) == moveType)//loops through entire type chart
+            if (TYPE_EFFECT_ATK_TYPE(i) == moveType)//loops through entire type chart
             {
                 // check type1
                 if (TYPE_EFFECT_DEF_TYPE(i) == type1)//this define checks the type chart, chart is broken into 3 fields per row, i reads the row
@@ -2204,7 +2212,49 @@ static void atk06_typecalc(void)
                 }                                              //ok this function is setting the multiplyer here
                                                                 //while calc2 is setting the effectiveness flag
                 //seems modulatedmgbytype  & modbytype2 may be the same as only 2 has a flag argument?
-            }//still need logic for dual type moves
+            }
+            if (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE) //will need to add or for any special custom dual types, like splishy splash 
+            {
+                if (TYPE_EFFECT_ATK_TYPE(i) == argument)//loops through entire type chart
+                {
+                    // check type1
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type1)//this define checks the type chart, chart is broken into 3 fields per row, i reads the row
+                    {
+                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                            ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL)); //can set multiplier with this, and mudluatedmg will set the move result based on that
+                        else if (argument == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
+                            ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL));
+                        else
+                            ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));   //which will translate to correct effectiveness sound message etc.
+                    }
+                    // check type2
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
+                        type1 != type2) //emerald update literally just adds a check for type 3
+                    {
+                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                            ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL));
+                        else if (argument == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
+                            ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL));
+                        else
+                            ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
+                    }
+                    //check type3
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
+                        type3 != TYPE_MYSTERY &&
+                        type3 != type2 &&
+                        type3 != type1)
+                    {
+                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                            ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL));
+                        else if (argument == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
+                            ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL));
+                        else
+                            ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
+                    }                                              //ok this function is setting the multiplyer here
+                                                                    //while calc2 is setting the effectiveness flag
+                    //seems modulatedmgbytype  & modbytype2 may be the same as only 2 has a flag argument?
+                }
+            }//attempt at setting up dual type moves
             i += 3;
         }
     }
@@ -2249,11 +2299,12 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
 {
     u8 flags = 0;
     s32 i = 0;
-    u8 moveType;
+    u8 moveType,argument;
     u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBattleMons[gBattlerTarget].type3;
 
     if (gCurrentMove == MOVE_STRUGGLE || !gBattleMoves[gCurrentMove].power)
         return;//if move is struggle or fixed damage ignores checks
+    argument = gBattleMoves[gCurrentMove].argument;
     GET_MOVE_TYPE(gCurrentMove, moveType);
     if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     {
@@ -2320,6 +2371,58 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
                 type3 != type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
                 flags |= 2;
         }
+        if (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE) //will need to add or for any special custom dual types, like splishy splash 
+        {
+            if (TYPE_EFFECT_ATK_TYPE(i) == argument)
+            {
+                // check no effect  //need add type 3 arguments to this
+                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1
+                    && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
+                {
+                    gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+                    gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
+                }
+                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2 &&
+                    gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2 &&
+                    TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
+                {
+                    gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+                    gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
+                }
+                if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
+                    type3 != TYPE_MYSTERY &&
+                    type3 != type2 &&
+                    type3 != type1)
+                {
+                    gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+                    gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
+                }
+                // check super effective
+                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
+                    flags |= 1;
+                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2
+                    && gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2
+                    && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
+                    flags |= 1;
+                if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
+                    type3 != TYPE_MYSTERY &&
+                    type3 != type2 &&
+                    type3 != type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
+                    flags |= 1;
+                // check not very effective
+                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
+                    flags |= 2;
+                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2
+                    && gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2
+                    && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
+                    flags |= 2;
+                if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
+                    type3 != TYPE_MYSTERY &&
+                    type3 != type2 &&
+                    type3 != type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
+                    flags |= 2;
+            }
+        }   //attempt at setup dual type moves
         i += 3;
     }
     if (gBattleMons[gBattlerTarget].ability == ABILITY_WONDER_GUARD && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2)
@@ -2389,14 +2492,17 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
 {
     s32 i = 0;
     u8 flags = 0;
-    u8 moveType;
+    u8 moveType,argument;
     u8 type1 = gBaseStats[defender].type1, type2 = gBaseStats[defender].type2, type3 = gBattleMons[defender].type3;
 
     if (move == (MOVE_STRUGGLE || MOVE_BIDE))
         return 0;
     moveType = gBattleMoves[move].type;
+    argument = gBattleMoves[move].argument;
     // check stab
-    if (IS_BATTLER_OF_TYPE(attacker, moveType))
+    if (IS_BATTLER_OF_TYPE(attacker, moveType)
+        || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
+            && IS_BATTLER_OF_TYPE(attacker, argument)))
     {
         if (GetBattlerAbility(attacker) == ABILITY_ADAPTABILITY)
         {
@@ -2407,15 +2513,20 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
             gBattleMoveDamage = gBattleMoveDamage * 15;
             gBattleMoveDamage = gBattleMoveDamage / 10;
         }
-        
-    }//need to add joat and arceus buffs here
+
+    }
 
     //joat check jack of all trades  inclusive normal type dmg buff 
     //joat stacks w stab long as not normal move,
-    if (IS_BATTLER_OF_TYPE(attacker, TYPE_NORMAL) && moveType != (TYPE_NORMAL || TYPE_MYSTERY))
+    if (IS_BATTLER_OF_TYPE(attacker, TYPE_NORMAL)) //added mystery line to prevent triggering joat, on normalize
     {
-        gBattleMoveDamage = gBattleMoveDamage * 125;
-        gBattleMoveDamage = gBattleMoveDamage / 100;
+        if ((moveType != TYPE_NORMAL || moveType != TYPE_MYSTERY)
+            || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
+                && (argument != TYPE_NORMAL || argument != TYPE_MYSTERY)))
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 125;
+            gBattleMoveDamage = gBattleMoveDamage / 100;
+        }
     }
 
     //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
@@ -2444,7 +2555,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                 continue;
             }
 
-            else if (TYPE_EFFECT_ATK_TYPE(i) == moveType)
+            if (TYPE_EFFECT_ATK_TYPE(i) == moveType)
             {
                 // check type1
                 if (TYPE_EFFECT_DEF_TYPE(i) == type1)
@@ -2481,6 +2592,46 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
                 }
             }
+            if (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE) //will need to add or for any special custom dual types, like splishy splash 
+            {
+                if (TYPE_EFFECT_ATK_TYPE(i) == argument)
+                {
+                    // check type1
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type1)
+                    {
+                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                        else if (argument == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                        else
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
+                    }
+                    // check type2
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
+                        type1 != type2)
+                    {
+                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                        else if (argument == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                        else
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
+                    }
+                    //check type3
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
+                        type3 != TYPE_MYSTERY &&
+                        type3 != type2 &&
+                        type3 != type1)
+                    {
+                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                        else if (argument == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                        else
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
+                    }
+                }
+            }//attempt at setting dual type moves
             i += 3;
         }
     }
@@ -2512,10 +2663,11 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
     s32 i = 0;
     u8 flags = 0;
     u8 type1 = gBaseStats[targetSpecies].type1, type2 = gBaseStats[targetSpecies].type2, type3 = gBattleMons[targetSpecies].type3;
-    u8 moveType;
+    u8 moveType,argument;
 
     if (move == (MOVE_STRUGGLE || MOVE_BIDE))
         return 0;
+    argument = gBattleMoves[move].argument;
     moveType = gBattleMoves[move].type; //think don't need to change this since battle_main has function for type change
     //if (targetAbility == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     if (!IsBattlerGrounded(gBattlerTarget) //set without ! it means if function is TRUE aka non-zero
@@ -2568,6 +2720,45 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
                 }
             }
+            if (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE) //will need to add or for any special custom dual types, like splishy splash 
+            {
+                if (TYPE_EFFECT_ATK_TYPE(i) == argument)
+                {
+                    // check type1
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type1)
+                    {
+                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                        else if (argument == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                        else
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
+                    }
+                    // check type2
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type2 && type1 != type2)
+                    {
+                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                        else if (argument == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                        else
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
+                    }
+                    //check type3
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
+                        type3 != TYPE_MYSTERY &&
+                        type3 != type2 &&
+                        type3 != type1)
+                    {
+                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                        else if (argument == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(TYPE_MUL_NORMAL), move, &flags);
+                        else
+                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
+                    }
+                }
+            }   //attempt at 2 type move setup
             i += 3;
         }
     }
@@ -4301,6 +4492,9 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_ALWAYS_CRIT)
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN); 
+
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE) //mostly so I can add para chance to splishy splash
+        SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_SPEED_UP_HIT)       //go over 100%  effects, see which I can put here to just make certain, may be able to do all.
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
@@ -6149,24 +6343,25 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             break;
         }
         case ATK49_EJECT_BUTTON:    //think move to itemeffects function
+        {
             if (gBattleMoves[gCurrentMove].effect != EFFECT_HIT_SWITCH_TARGET
-              && IsBattlerAlive(gBattlerAttacker)
-              //&& !TestSheerForceFlag(gBattlerAttacker, gCurrentMove)
-              && (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER || (gBattleTypeFlags & BATTLE_TYPE_TRAINER)))
+                && IsBattlerAlive(gBattlerAttacker)
+                //&& !TestSheerForceFlag(gBattlerAttacker, gCurrentMove)
+                && (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER || (gBattleTypeFlags & BATTLE_TYPE_TRAINER)))
             {
                 // Since we check if battler was damaged, we don't need to check move result.
                 // In fact, doing so actually prevents multi-target moves from activating eject button properly
-                u8 battlers[4] = {0, 1, 2, 3};
+                u8 battlers[4] = { 0, 1, 2, 3 };
                 SortBattlersBySpeed(battlers, FALSE);
                 for (i = 0; i < gBattlersCount; i++)
                 {
                     u8 battler = battlers[i];
                     // Attacker is the damage-dealer, battler is mon to be switched out
                     if (IsBattlerAlive(battler)
-                      && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_BUTTON
-                      && !DoesSubstituteBlockMove(gBattlerAttacker, battler, gCurrentMove)
-                      && (gSpecialStatuses[battler].physicalDmg != 0 || gSpecialStatuses[battler].specialDmg != 0)
-                      && CountUsablePartyMons(battler) > 0)  // Has mon to switch into
+                        && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_BUTTON
+                        && !DoesSubstituteBlockMove(gBattlerAttacker, battler, gCurrentMove)
+                        && (gSpecialStatuses[battler].physicalDmg != 0 || gSpecialStatuses[battler].specialDmg != 0)
+                        && CountUsablePartyMons(battler) > 0)  // Has mon to switch into
                     {
                         gActiveBattler = gBattleScripting.battler = battler;
                         gLastUsedItem = gBattleMons[battler].item;
@@ -6181,42 +6376,45 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
+        }
         case ATK49_RED_CARD:    //think move to itemeffects function
+        {
             if (gBattleMoves[gCurrentMove].effect != EFFECT_HIT_SWITCH_TARGET
-              && IsBattlerAlive(gBattlerAttacker)
-              //&& !TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
-              //&& GetBattlerAbility(gBattlerAttacker) != ABILITY_GUARD_DOG)
+                && IsBattlerAlive(gBattlerAttacker))
+                //&& !TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
+                //&& GetBattlerAbility(gBattlerAttacker) != ABILITY_GUARD_DOG)
             {
                 // Since we check if battler was damaged, we don't need to check move result.
                 // In fact, doing so actually prevents multi-target moves from activating red card properly
-                u8 battlers[4] = {0, 1, 2, 3};
-                SortBattlersBySpeed(battlers, FALSE);
-                for (i = 0; i < gBattlersCount; i++)
-                {
-                    u8 battler = battlers[i];
-                    // Search for fastest hit pokemon with a red card
-                    // Attacker is the one to be switched out, battler is one with red card
-                    if (battler != gBattlerAttacker
-                      && IsBattlerAlive(battler)
-                      && !DoesSubstituteBlockMove(gBattlerAttacker, battler, gCurrentMove)
-                      && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_RED_CARD
-                      && (gSpecialStatuses[battler].physicalDmg != 0 || gSpecialStatuses[battler].specialDmg != 0)
-                      && CanBattlerSwitch(gBattlerAttacker))
+                u8 battlers[4] = { 0, 1, 2, 3 };
+                    SortBattlersBySpeed(battlers, FALSE);
+                    for (i = 0; i < gBattlersCount; i++)
                     {
-                        gLastUsedItem = gBattleMons[battler].item;
-                        gActiveBattler = gBattleStruct->savedBattlerTarget = gBattleScripting.battler = battler;  // Battler with red card
-                        gEffectBattler = gBattlerAttacker;
-                        if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
-                            gBattlescriptCurrInstr = BattleScript_MoveEnd;  // Prevent user switch-in selection
-                        BattleScriptPushCursor();
-                        gBattlescriptCurrInstr = BattleScript_RedCardActivates;
-                        effect = TRUE;
-                        break;  // Only fastest red card activates
+                        u8 battler = battlers[i];
+                        // Search for fastest hit pokemon with a red card
+                        // Attacker is the one to be switched out, battler is one with red card
+                        if (battler != gBattlerAttacker
+                            && IsBattlerAlive(battler)
+                            && !DoesSubstituteBlockMove(gBattlerAttacker, battler, gCurrentMove)
+                            && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_RED_CARD
+                            && (gSpecialStatuses[battler].physicalDmg != 0 || gSpecialStatuses[battler].specialDmg != 0)
+                            && CanBattlerSwitch(gBattlerAttacker))
+                        {
+                            gLastUsedItem = gBattleMons[battler].item;
+                            gActiveBattler = gBattleStruct->savedBattlerTarget = gBattleScripting.battler = battler;  // Battler with red card
+                            gEffectBattler = gBattlerAttacker;
+                            if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
+                                gBattlescriptCurrInstr = BattleScript_MoveEnd;  // Prevent user switch-in selection
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_RedCardActivates;
+                            effect = TRUE;
+                            break;  // Only fastest red card activates
+                        }
                     }
-                }
             }
             ++gBattleScripting.atk49_state;
             break;
+        }
         case ATK49_EJECT_PACK:  //think move to item effects function
             {
                 u8 battlers[4] = {0, 1, 2, 3};
@@ -6413,6 +6611,7 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
     u8 flags = 0;
     s32 i = 0;
     u8 moveType = gBattleMoves[gCurrentMove].type;
+    u8 argument = gBattleMoves[gCurrentMove].argument;
     u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBattleMons[gBattlerTarget].type3;
 
     /*if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
@@ -6533,6 +6732,90 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
                     }
                 }//if it works it works i guess idk
                     
+            }
+            if (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE) //will need to add or for any special custom dual types, like splishy splash 
+            {
+                if (TYPE_EFFECT_ATK_TYPE(i) == argument)
+                {
+                    // check type1
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type1)
+                    {
+                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                            TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL;    //I guess this works? since it passes through
+
+                        if (argument == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
+                            TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL;
+
+                        if (TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
+                        {
+                            gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+                            break;
+                        }
+                        if (TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
+                        {
+                            flags |= MOVE_RESULT_NOT_VERY_EFFECTIVE;    //this code is weird why does it use gmoveresultflags and then swap variable?
+                        }
+                        if (TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
+                        {
+                            flags |= MOVE_RESULT_SUPER_EFFECTIVE;
+                        }
+                    }
+                    // check type2
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type2)
+                    {
+                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                            TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL;
+
+                        if (argument == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
+                            TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL;
+
+                        if (type1 != type2
+                            && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
+                        {
+                            gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+                            break;
+                        }
+                        if (TYPE_EFFECT_DEF_TYPE(i) == type2    //weird code, bracket above already sets this
+                            && type1 != type2
+                            && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
+                        {
+                            flags |= MOVE_RESULT_NOT_VERY_EFFECTIVE;
+                        }
+                        if (TYPE_EFFECT_DEF_TYPE(i) == type2
+                            && type1 != type2
+                            && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
+                        {
+                            flags |= MOVE_RESULT_SUPER_EFFECTIVE;
+                        }
+                    }
+                    //check type3
+                    if (TYPE_EFFECT_DEF_TYPE(i) == type3 && type3 != TYPE_MYSTERY)
+                    {
+                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerAttacker].ability == ABILITY_SCRAPPY)
+                            TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL;
+
+                        if (argument == TYPE_ICE && gBattleMons[gBattlerTarget].ability == ABILITY_ECOSYSTEM)
+                            TYPE_EFFECT_MULTIPLIER(i) = TYPE_MUL_NORMAL;
+
+                        if (type3 != type2 && type3 != type1 &&
+                            TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
+                        {
+                            gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+                            break;
+                        }
+                        if (type3 != type2 && type3 != type1 &&
+                            TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
+                        {
+                            flags |= MOVE_RESULT_NOT_VERY_EFFECTIVE;
+                        }
+                        if (type3 != type2 && type3 != type1 &&
+                            TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
+                        {
+                            flags |= MOVE_RESULT_SUPER_EFFECTIVE;
+                        }
+                    }//attempt at setting up 2 type moves, should be equivalent of emerald, it just means run type checks again based on type listed in argument field.
+
+                }
             }
             i += 3;
         }

@@ -1322,7 +1322,7 @@
 #define FLAG_SYS_BLACK_FLUTE_ACTIVE                                 (SYS_FLAGS + 0x4)
 #define FLAG_SYS_USE_STRENGTH                                       (SYS_FLAGS + 0x5)
 #define FLAG_SYS_FLASH_ACTIVE                                       (SYS_FLAGS + 0x6)
-#define FLAG_SYS_SPECIAL_WILD_BATTLE                                (SYS_FLAGS + 0x7)
+#define FLAG_SYS_SPECIAL_WILD_BATTLE                                (SYS_FLAGS + 0x7)	//Don't know what is, potentially use for double wilds?
 
 #define FLAG_0x808                                                  (SYS_FLAGS + 0x8)
 #define FLAG_0x809                                                  (SYS_FLAGS + 0x9)
@@ -1348,9 +1348,10 @@
 #define FLAG_0x81D                                                  (SYS_FLAGS + 0x1D)
 #define FLAG_0x81E                                                  (SYS_FLAGS + 0x1E)
 #define FLAG_0x81F                                                  (SYS_FLAGS + 0x1F)
+#define FLAG_INVERSE_BATTLE                                         (SYS_FLAGS + 0x20)	//ported not yet used
 
 // Permanent system flags
-#define PERMA_SYS_FLAGS_START                                       (FLAG_0x81F + 1)
+#define PERMA_SYS_FLAGS_START                                       (FLAG_INVERSE_BATTLE + 1)
 
 #define FLAG_BADGE01_GET                                            (SYS_FLAGS + 0x20)
 #define FLAG_BADGE02_GET                                            (SYS_FLAGS + 0x21)
@@ -1398,11 +1399,11 @@
 #define FLAG_SYS_UNLOCKED_TANOBY_RUINS                              (SYS_FLAGS + 0x49)
 #define FLAG_ENABLE_SHIP_NAVEL_ROCK                                 (SYS_FLAGS + 0x4A)
 #define FLAG_ENABLE_SHIP_BIRTH_ISLAND                               (SYS_FLAGS + 0x4B)
-#define	FLAG_SYS_CLOCK_SET											(SYS_FLAGS + 0x4C)
+#define	FLAG_SYS_CLOCK_SET											(SYS_FLAGS + 0x4C)	//76
 
 
 // World Map Flags
-#define FLAG_WORLD_MAP_PALLET_TOWN                                  (SYS_FLAGS + 0x90)
+#define FLAG_WORLD_MAP_PALLET_TOWN                                  (SYS_FLAGS + 0x90)	//144
 #define FLAG_WORLD_MAP_VIRIDIAN_CITY                                (SYS_FLAGS + 0x91)
 #define FLAG_WORLD_MAP_PEWTER_CITY                                  (SYS_FLAGS + 0x92)
 #define FLAG_WORLD_MAP_CERULEAN_CITY                                (SYS_FLAGS + 0x93)

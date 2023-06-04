@@ -2406,7 +2406,8 @@ BattleScript_EffectPlaceholder:
 BattleScript_EffectHit::
 	jumpifmove MOVE_ROCK_SMASH, BattleScript_EffectRockSmash
 	jumpifmove MOVE_CUT, BattleScript_EffectCut
-	jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler
+	jumpifmove MOVE_SPLISHY_SPLASH, BattleScript_EffectParalyzeHit
+	jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler	@hmm double check how logic is handled now, potentially remove this
 	@jumpifnostatus3 BS_TARGET, STATUS3_UNDERWATER, BattleScript_HitFromAtkCanceler
 	@orword gHitMarker, HITMARKER_IGNORE_UNDERWATER
 	@setbyte sDMG_MULTIPLIER, 2
@@ -2602,6 +2603,7 @@ BattleScript_EffectScald:
 
 BattleScript_EffectParalyzeHit::
 	setmoveeffect MOVE_EFFECT_PARALYSIS
+	jumpifmove MOVE_SPLISHY_SPLASH, BattleScript_HitFromAtkCanceler
 	goto BattleScript_EffectHit
 
 BattleScript_EffectExplosion::

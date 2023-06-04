@@ -9284,7 +9284,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         .abilities = {ABILITY_SAND_VEIL, ABILITY_TOUGH_SPINES},
-        .abilityHidden = {ABILITY_WATER_ABSORB, ABILITY_NONE},
+        .abilityHidden = {ABILITY_WATER_ABSORB, ABILITY_HEATPROOF},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     }, //give crass equivalent of rough skin  tough spines 
@@ -9313,7 +9313,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         .abilities = {ABILITY_SAND_VEIL, ABILITY_TOUGH_SPINES},
-        .abilityHidden = {ABILITY_WATER_ABSORB, ABILITY_NONE},
+        .abilityHidden = {ABILITY_WATER_ABSORB, ABILITY_HEATPROOF},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },

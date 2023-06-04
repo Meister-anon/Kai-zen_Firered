@@ -536,6 +536,20 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * -DONE just need double check ability exclusions work correctly.  ok yeah it was wrong, and I've definitly used that  logic in multiple places
 * need to search != (ability     and || ability  to fix all instances I"m able to find. -DONE all ability instances corrected
 * 
+* attempted setting up two type move effects, tyepcalc logic done, need make custom twotype effect for splishysplash, as want to add paralyze chance to it.
+* believe will add twotypeeffect to list of certain effects so the effect chance will be exclusively for whatever move effect I set.
+* I think adding the para chance is simple as just making a new effect and having its battlescript start with setmoveeffect paralysis 
+* then when done with logic can just go to battlescript hit.
+* 
+* ok two_typed_move effect just uses normal hit battlescript by default, giving it its own effect, is just for logic in typecalc
+* so it reads the type from both move and argument.
+* 
+* so now that I set twotye as a certain effect, in setmoveeffectchance all I need to do to add effects to those,
+* is set the chance & filter by move in the hit battlescript, to jump to the battlescript that sets moveeffect 
+* i.e I can use BattleScript_EffectParalyzeHit for splishysplash as it auto jumps back to hit...
+* ok use two jumps, one jump in bs_hit, and then a second jump in the destination script, that will jump to
+* hit from atk cancelor or something so I can skip the first jump! ok that should work.
+* -DONE need test
 * 
 * make early event script to set all mon as caught seen
 * loop through species and set all flags, and unlock national dex
