@@ -4377,9 +4377,7 @@ static void atk19_tryfaintmon(void)
 {
     const u8 *BS_ptr;
 
-    if (gBattlescriptCurrInstr[2] != 0) //0 corresponses to BS_Target so this I think is for fainting
-        //anyone but the target attacked that turn   
-        //idk maybe not?
+    if (gBattlescriptCurrInstr[2] != 0) //looks like this is spikes
     {
         gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
         if (gHitMarker & HITMARKER_FAINTED(gActiveBattler))  //believe this is for self-faint
@@ -4394,7 +4392,7 @@ static void atk19_tryfaintmon(void)
             gBattlescriptCurrInstr += 7;
         }
     }
-    else  
+    else  //not spikes?  basing off emerald 
     {
         u8 battlerId;
 
@@ -4404,31 +4402,49 @@ static void atk19_tryfaintmon(void)
             battlerId = gBattlerTarget;
             BS_ptr = BattleScript_FaintAttacker;
         }
-        else
+        else //if bs not bs attacker 
         {
             gActiveBattler = gBattlerTarget;
             battlerId = gBattlerAttacker;
             BS_ptr = BattleScript_FaintTarget;
         }
         if (!(gAbsentBattlerFlags & gBitTable[gActiveBattler])
-         && gBattleMons[gActiveBattler].hp == 0)
+         && gBattleMons[gActiveBattler].hp == 0)    //if mon is fainted i.e 0 hp
         {
             gHitMarker |= HITMARKER_FAINTED(gActiveBattler);
             BattleScriptPush(gBattlescriptCurrInstr + 7);
             gBattlescriptCurrInstr = BS_ptr;
-            if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+            if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)// player mon faint
             {
                 gHitMarker |= HITMARKER_PLAYER_FAINTED;
                 if (gBattleResults.playerFaintCounter < 0xFF)
                     ++gBattleResults.playerFaintCounter;
                 AdjustFriendshipOnBattleFaint(gActiveBattler);
             }
-            else
+            else //enemy side faint
             {
                 if (gBattleResults.opponentFaintCounter < 0xFF)
                     ++gBattleResults.opponentFaintCounter;
                 gBattleResults.lastOpponentSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
                 *(u8 *)(&gBattleStruct->field_182) = gBattlerAttacker;
+            }
+            //ok think I should put anticipate/forewarn logic here actually
+                //that way I can read the battler id of the target fainted, if it matches reset forewarn anticipate
+
+                //just need to store battler id of main functions, and ensure gbattlretarger, matches stored battlerid
+            if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_FOREWARN) && gSpecialStatuses[gBattlerAttacker].switchInAbilityDone
+                && !gSpecialStatuses[gBattlerAttacker].forewarnDone
+                && gBattlerTarget == gForewarnedBattler)    //if fainted mon is same as forewarn target
+            {
+                gSpecialStatuses[gBattlerAttacker].forewarnedMove = 0;    //clears stored move, and allows switchin to reactivate
+                gSpecialStatuses[gBattlerAttacker].switchInAbilityDone = FALSE;
+            }
+            if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_ANTICIPATION) && gSpecialStatuses[gBattlerAttacker].switchInAbilityDone
+                && !gSpecialStatuses[gBattlerAttacker].anticipationDone
+                && gBattlerTarget == gAnticipatedBattler)
+            {
+                gSpecialStatuses[gBattlerAttacker].anticipatedMove = 0;   //clears stored move, and allows switchin to reactivate
+                gSpecialStatuses[gBattlerAttacker].switchInAbilityDone = FALSE;
             }
             if ((gHitMarker & HITMARKER_DESTINYBOND) && gBattleMons[gBattlerAttacker].hp != 0)
             {
@@ -8791,7 +8807,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         else
             gBattleCommunication[0] = 0;
         break;
-    case VARIOUS_RESET_INTIMIDATE_TRACE_BITS:
+    case VARIOUS_RESET_INTIMIDATE_TRACE_BITS:   //RESETS the switchin effect, that is the trigger for the abillity activation
         gSpecialStatuses[gActiveBattler].intimidatedMon = 0;//pairs with battle_util.c
         gSpecialStatuses[gActiveBattler].traced = 0; //BattleScript_IntimidateActivates
         gSpecialStatuses[gActiveBattler].TigerMomAttacked = 0; //new special status, but uses BattleScript_IntimidateActivates

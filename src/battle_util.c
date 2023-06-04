@@ -3619,7 +3619,12 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
                         data[count].power = 0;
                     break;
                 case EFFECT_EXPLOSION:
-                    if (!(IS_BATTLER_OF_TYPE(battler, TYPE_GHOST))) //remove this later gen has explosion moves that are none normal
+                    if (gCurrentMove == MOVE_SELF_DESTRUCT  
+                        || gCurrentMove == MOVE_EXPLOSION
+                    && (!(IS_BATTLER_OF_TYPE(battler, TYPE_GHOST))))
+                        data[count].power = 200;
+                    else if (gCurrentMove == MOVE_MISTY_EXPLOSION
+                        && (!(IS_BATTLER_OF_TYPE(battler, TYPE_GRASS))))
                         data[count].power = 200;
                     else
                         data[count].power = 0;
@@ -3637,7 +3642,7 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
                     if (gBattleMoves[data[count].moveId].power == 1)
                         data[count].power = 80;
                     else
-                        data[count].power = gBattleMoves[data[count].moveId].power; //default to actual move power
+                        data[count].power = gBattleMoves[data[count].moveId].power; //default to actual move power, final thing need setup type check, to alter power
                     break;
                 }
                 count++;    //check next battler 
@@ -3653,7 +3658,8 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
             bestId = i;
     }
 
-    gBattlerTarget = data[bestId].battlerId;
+    gBattlerTarget = data[bestId].battlerId;    //sets target based on which battler has most dangerous move.
+    gForewarnedBattler = data[bestId].battlerId;    //
     PREPARE_MOVE_BUFFER(gBattleTextBuff1, data[bestId].moveId)
         RecordKnownMove(gBattlerTarget, data[bestId].moveId);   //I think this may just be for ai?
 
@@ -4093,7 +4099,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gSpecialStatuses[battler].intimidatedMon)) //if intimidated mon is 0 set intimidate pokes i.e if noto already intimidated
                 { //further having this on a switch case ensures it only works for mon with the ability
                     gStatuses3[battler] |= STATUS3_INTIMIDATE_POKES;
-                    gSpecialStatuses[battler].intimidatedMon = 1;           //not changing intimidateMon to 1 causes intimidate case to /the switchin case to loop
+                    gSpecialStatuses[battler].intimidatedMon = TRUE;           //not changing intimidateMon to 1 causes intimidate case to /the switchin case to loop
                 }//special status intimidated mon is set on mon with intimidate, it then applies status3 intimidate pokes to activate intimidate
                 //and changes intimdiatedmon to 1 so it can't reactivate/loop
                 // but intimidatedMon is reset by faintmon battlescript as well as the SpecialStatusClear function from battle_main.c
@@ -4104,14 +4110,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gSpecialStatuses[battler].traced)) //this is needed to prevent infini loop because its not a "status"
                 {
                     gStatuses3[battler] |= STATUS3_TRACE;
-                    gSpecialStatuses[battler].traced = 1;
+                    gSpecialStatuses[battler].traced = TRUE;
                 }
                 break;
             case ABILITY_TIGER_MOM: //TEST
-                if (!(gSpecialStatuses[battler].tigerMomAttacked)) //this is needed to prevent infini loop because its not a "status"
+                if (!(gSpecialStatuses[battler].tigerMomAttacked)) //ok I see what emerald did now, this is same as gSpecialStatuses[battler].switchInAbilityDone, just unique name
                 {
                     gStatuses3[battler] |= STATUS3_TIGER_MOM_ATTACKS;
-                    gSpecialStatuses[battler].tigerMomAttacked = 1;
+                    gSpecialStatuses[battler].tigerMomAttacked = TRUE;
                 }
                 break;
             case ABILITY_CUPIDS_ARROW: // 
@@ -4398,22 +4404,36 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             {
                                 move = gBattleMons[i].moves[j];
                                 GET_MOVE_TYPE(move, moveType);
-                                if (gBattleMoves[move].effect == EFFECT_EXPLOSION && !IS_BATTLER_OF_TYPE(battler, TYPE_GHOST))
+                                if (gBattleMoves[move].effect == EFFECT_EXPLOSION)
                                 {
-                                    PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_EXPLOSION);
-                                    ++effect;//1    want setup different message for each, nickname w prefix sensed an X move and shuddered
-                                    break;  //depending on value  or have different value copied to gBattleTextBuff1 for each
+                                    if ((gCurrentMove == MOVE_SELF_DESTRUCT
+                                        || gCurrentMove == MOVE_EXPLOSION)
+                                        && !IS_BATTLER_OF_TYPE(battler, TYPE_GHOST))
+                                    {
+                                        PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_EXPLOSION);
+                                        ++effect;
+                                    }
+                                        
+                                    else if ((gCurrentMove == MOVE_MISTY_EXPLOSION)
+                                        && !(IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)))
+                                    {
+                                        PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_EXPLOSION);
+                                        ++effect;
+                                    } 
+                                    break;
+                                    //    want setup different message for each, nickname w prefix sensed an X move and shuddered
+                                      //depending on value  or have different value copied to gBattleTextBuff1 for each
                                 }
                                 else if (gBattleMoves[move].effect == EFFECT_OHKO && (gBattleMons[i].level >= (gBattleMons[battler].level - 7)))
                                 {
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_OHKO);
-                                    ++effect;//2
+                                    ++effect;//
                                     break;
                                 }
-                                else if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0))//vsonic        //THINK CAN use typecalc fort this?
+                                else// if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0))//vsonic  //THINK CAN use typecalc fort this?
                                 {
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_DEFAULT);
-                                    ++effect;//0
+                                    ++effect;//
                                     break;
                                 }//if find super effectivemove, increment effect and break for loop, to lock in move/
                             }//can only return one value, so will need to do an if else based on priority
@@ -4423,6 +4443,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     if (effect)//if ability activates  i.e effect not 0
                     {
                         gSpecialStatuses[battler].anticipatedMove = move;
+                        gAnticipatedBattler = i; //hopeworks.
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_ANTICIPATION;
                         gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                         BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
@@ -6172,9 +6193,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         case ABILITYEFFECT_INTIMIDATE2: // 10
             for (i = 0; i < gBattlersCount; ++i) //any battler
             {//with intimidate and status 3 intimidate pokes
-                if (gBattleMons[i].ability == ABILITY_INTIMIDATE && (gStatuses3[i] & STATUS3_INTIMIDATE_POKES)
-                    && (IsBattlerAlive(BATTLE_OPPOSITE(i)) || IsBattlerAlive(BATTLE_PARTNER(BATTLE_OPPOSITE(i))))) // At least one opposing mon has to be alive.)
-                { //change above keeps switch in intimidate from activating on KO'd pokemon
+                if (gBattleMons[i].ability == ABILITY_INTIMIDATE && (gStatuses3[i] & STATUS3_INTIMIDATE_POKES))
+                    //&& (IsBattlerAlive(BATTLE_OPPOSITE(i)) || IsBattlerAlive(BATTLE_PARTNER(BATTLE_OPPOSITE(i))))) // At least one opposing mon has to be alive.)
+                { //change above keeps switch in intimidate from activating on KO'd pokemon - that was because of a previous change i made, default doesn't need that line
                     gLastUsedAbility = ABILITY_INTIMIDATE;
                     gStatuses3[i] &= ~(STATUS3_INTIMIDATE_POKES);// I "think" this removes the status
                     BattleScriptPushCursor(); //so it does'nt reactivate
@@ -6184,9 +6205,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break; //I'm assumig one is for battle start and one is for switch in... confirmed
                 }//this version is for switch in, so I only need to change this one to make my switch in ability change
 
-                else if (gBattleMons[i].ability == ABILITY_TIGER_MOM && (gStatuses3[i] & STATUS3_TIGER_MOM_ATTACKS)
-                    && (IsBattlerAlive(BATTLE_OPPOSITE(i)) || IsBattlerAlive(BATTLE_PARTNER(BATTLE_OPPOSITE(i))))) // At least one opposing mon has to be alive.)
-                { //change above keeps switch in intimidate from activating on KO'd pokemon
+                else if (gBattleMons[i].ability == ABILITY_TIGER_MOM && (gStatuses3[i] & STATUS3_TIGER_MOM_ATTACKS))
+                {
                     gLastUsedAbility = ABILITY_TIGER_MOM;
                     gStatuses3[i] &= ~(STATUS3_TIGER_MOM_ATTACKS);  
                     BattleScriptPushCursor(); //so it does'nt reactivate

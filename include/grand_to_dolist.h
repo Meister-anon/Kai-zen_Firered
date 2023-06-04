@@ -671,7 +671,9 @@ as well as the effect of increasing trap duration
 * 
 * do similar for ability forwarn, since it checks the enemy for a move, set it so if they are targetted with said move
 * it will miss, something like their psychic powers let them avoid damage, 
-* think of it like them predicting an attack specifically from that move -
+* think of it like them predicting an attack specifically from that move -  effct done, working on special case logic (think can just reset switchindone, to make reactivate
+* - just  reset gSpecialStatuses[battler].switchInAbilityDone to false - think that's done
+* 
 * ( can use telepathy logic  for these effects, its essentially telepathy but single use)
 * can attempt include type component to check which move woulda actually do most damage to me, more than just power based
 * yeah I think that's a necessity, otherwise could check a move that would have no effect on my type or I resist it.
@@ -991,6 +993,9 @@ Thunder Wave Electric TM45
 * 
 * in attempting to remove telepathy, made sound ability for noibat/other bats,sonar, decided to add confuse chance, to all(most) damaging sound based moves
 * as loud noises disorient and super sonic is the og sound move.
+* 
+* -keeping telepathy on few mon, it has to be on a psychic type but is only really good for mon that are already strong
+* so wouldn't feel the lack of ability, think will keep onlny for bulky psychic types? like the orangutan.
 * 
 * make new type sound type, treat like mystery, used for move but not for pokemon,  will make all normal sound moves type normal
 * offensively neutral to everything (just don't add to type chart

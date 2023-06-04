@@ -231,6 +231,7 @@
 #define VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG      151	//new bs command  to ground flying targets if hit by my w flag 2xdmg on air
 #define VARIOUS_JUMP_IF_NOT_FULL_HP					152	
 #define VARIOUS_TRY_END_STENCH						153	
+#define VARIOUS_RESET_FOREWARN_ANTICIPATION_BITS	154	
 
 // atk80, dmg manipulation
 #define ATK80_DMG_CHANGE_SIGN                               0

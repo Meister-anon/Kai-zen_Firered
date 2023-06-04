@@ -971,6 +971,8 @@ extern void (*gBattleMainFunc)(void);
 extern u8 gMoveSelectionCursor[MAX_BATTLERS_COUNT];
 extern u32 gUnknown_2022B54;
 extern u8 gUnknown_2023DDC;
+extern u8 gAnticipatedBattler;  //for storing battlerId of anticipation target
+extern u8 gForewarnedBattler;   //for storing battlerId of forewarn target
 extern u8 gBattlerAttacker;
 extern u8 gEffectBattler;
 extern u8 gMultiHitCounter;
