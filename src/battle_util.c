@@ -2897,7 +2897,7 @@ u8 AtkCanceller_UnableToUseMove(void)
 
                                 if (gBattleMovePower == 0) //if status move does default confusion hit 
                                 {
-                                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                                    gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
                                     //gBattlerTarget = gBattlerAttacker;    this line not needed already handled above
                                     gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, 40, 0, gBattlerAttacker, gBattlerAttacker);
                                     gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
