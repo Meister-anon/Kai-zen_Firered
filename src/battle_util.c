@@ -3571,6 +3571,7 @@ static bool32 ShouldChangeFormHpBased(u32 battler)
         {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_VIOLET, SPECIES_MINIOR_CORE_VIOLET, 2},
         {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_YELLOW, SPECIES_MINIOR_CORE_YELLOW, 2},
         {ABILITY_SCHOOLING, SPECIES_WISHIWASHI_SCHOOL, SPECIES_WISHIWASHI, 4},
+        {ABILITY_ZEN_MODE, SPECIES_DARMANITAN_ZEN_MODE_GALARIAN, SPECIES_DARMANITAN_GALARIAN, 4},   //realized with this function, I can set different logic for same ability
     };
     u32 i;
 
@@ -4520,12 +4521,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_AURABREAK;
                 gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                ++effect;
+                ++effect;   //commented out to not display ability message
             }
             break;*/
             case ABILITY_SCHOOLING:
-            if (gBattleMons[battler].level < 20)
+            if (gBattleMons[battler].level < 20)//fall through if above lvl, so would do form change.
                 break;
+            case ABILITY_ZEN_MODE:  //putting here would let zenmode trigger at battle start
             case ABILITY_SHIELDS_DOWN:
             if (ShouldChangeFormHpBased(battler))
             {
@@ -4899,8 +4901,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         break;
                 case ABILITY_ZEN_MODE:
                 case ABILITY_SHIELDS_DOWN:
-                    if ((effect = ShouldChangeFormHpBased(battler)))
-                        BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+                    if ((effect = ShouldChangeFormHpBased(battler)))    //if true do formchange, and set effect to value. 
+                        BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3); //so has same effect as incrementing effect
                     break;
                 case ABILITY_POWER_CONSTRUCT:
                     if ((gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)

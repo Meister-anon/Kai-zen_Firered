@@ -506,7 +506,9 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * that leavs with the more manageable 4 status to display on party menu.
 * may not be able to do/fit, could instad atteampt same thing as status in battle idea,
 * make it loop through the status set and just change the icon each time the mon bounces twice?
-* potentially use  release oon animation? so it transitino clean.
+* potentially use  release Mon animation? so it transitino clean.
+* 
+* Last thing before break is setup battle health box, need finish species name expansion, w pokedex box outline
 * 
 * Give shuckle better moves, it stats are fine, it just learn horrible moves.
 * 
@@ -533,7 +535,8 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * 
 * abilities that will block the flinch, effect will be oblivious, inner focus, and leaf gaurd (potentially more if they involve, flinch protection, or good smells)
 * -sweet veil & aroma veil & flower veil
-* -DONE just need double check ability exclusions work correctly.  ok yeah it was wrong, and I've definitly used that  logic in multiple places
+* -DONE just need double check ability exclusions work correctly. 
+*  ok yeah it was wrong, and I've definitly used that  logic in multiple places
 * need to search != (ability     and || ability  to fix all instances I"m able to find. -DONE all ability instances corrected
 * 
 * attempted setting up two type move effects, tyepcalc logic done, need make custom twotype effect for splishysplash, as want to add paralyze chance to it.
@@ -550,6 +553,8 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * ok use two jumps, one jump in bs_hit, and then a second jump in the destination script, that will jump to
 * hit from atk cancelor or something so I can skip the first jump! ok that should work.
 * -DONE need test
+* 
+* lATS
 * 
 * make early event script to set all mon as caught seen
 * loop through species and set all flags, and unlock national dex

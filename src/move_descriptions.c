@@ -858,7 +858,7 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     .string "Summons a thunderbolt.\nWorks well with a fireball.$"
 
     gFLYING_PRESSDescription :
-    .string "This attack does Fighting\nand Flying-type damage.$"
+    .string "The user dives down\nonto the target from\nthe sky.\nAlso deals flying\ndamage.$"
 
     gMAT_BLOCKDescription :
     .string "Evades damaging moves\nfor one turn.$"
@@ -1201,7 +1201,7 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     .string "An Electric burst\nthat is very quick\nand always lands\na critical hit.$"
 
     gSPLISHY_SPLASHDescription :
-    .string "A huge electrified\nwave that may\nparalyze everyone.$"
+    .string "A huge electrified\nwave that may\nparalyze everyone.\nAlso deals electric\ndamage.$"
 
     gFLOATY_FALLDescription :
     .string "Floats in air\nand dives at\nangle.\nMay cause flinching.$"

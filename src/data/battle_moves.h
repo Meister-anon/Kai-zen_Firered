@@ -10348,7 +10348,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #else
             .flags = FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         #endif
-        .effect = EFFECT_PARALYZE_HIT,      //EFFECT_TWO_TYPED_MOVE //WILL need to make custom effect then, a dual typed move with paralyze chance. lol im making it more op than ever
+        .effect = EFFECT_TWO_TYPED_MOVE,      //changed two a dual typed move with paralyze chance. lol i made it more op than ever
         .power = 90,        //something between discharge and surf, discharge is base 80,  surf is base 95
         .type = TYPE_WATER,
         .accuracy = 100,
@@ -10356,7 +10356,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_FOES_AND_ALLY,    //lol its a giant electrified surf, that is gonna have to hit everyone, you can't avoid that XD
         .priority = 0,
-        .split = SPLIT_SPECIAL, //I think I'd also like to make this a dual type move, water/electric 
+        .split = SPLIT_SPECIAL,
         .argument = TYPE_ELECTRIC,
     },
 
@@ -11702,6 +11702,25 @@ use wonder gaurd logic to determine its super effective
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+    },
+
+    [MOVE_BOLTBEAM] =
+    {
+        #if B_UPDATED_MOVE_DATA >= GEN_8
+            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        #else
+            .flags = FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+        #endif
+        .effect = EFFECT_TWO_TYPED_MOVE,
+        .power = 90,        
+        .type = TYPE_ICE,
+        .accuracy = 100,
+        .pp = 10,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,    
+        .priority = 0,
+        .split = SPLIT_SPECIAL,
+        .argument = TYPE_ELECTRIC,
     },
 
 };

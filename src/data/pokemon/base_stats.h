@@ -15566,7 +15566,7 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 70,
         .baseAttack = 90,
         .baseDefense = 45,
-        .baseSpeed = 50,
+        .baseSpeed = 60,
         .baseSpAttack = 15,
         .baseSpDefense = 45,
         .type1 = TYPE_FIRE,
@@ -15588,10 +15588,10 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_DARMANITAN] =
     {
-        .baseHP = 105,
+        .baseHP = 155,
         .baseAttack = 140,
         .baseDefense = 55,
-        .baseSpeed = 95,
+        .baseSpeed = 75,
         .baseSpAttack = 30,
         .baseSpDefense = 55,
         .type1 = TYPE_FIRE,
@@ -21581,7 +21581,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_ORANGURU] =
     {
         .baseHP = 90,
-        .baseAttack = 60,
+        .baseAttack = 75,
         .baseDefense = 80,
         .baseSpeed = 60,
         .baseSpAttack = 90,
@@ -21598,7 +21598,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_INNER_FOCUS, ABILITY_TELEPATHY},
+            .abilities = {ABILITY_GORILLA_TACTICS, ABILITY_TELEPATHY},  //removd inner focus, prevents intimidate but its a special attacker
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_FOREWARN},//forewarn here
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_INNER_FOCUS, ABILITY_NONE},
@@ -30607,7 +30607,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_DARMANITAN_ZEN_MODE] =
     {
-        .baseHP = 105,
+        .baseHP = 155,
         .baseAttack = 30,
         .baseDefense = 105,
         .baseSpeed = 55,
@@ -30625,7 +30625,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_SHEER_FORCE, ABILITY_NONE},
+            .abilities = {ABILITY_SHEER_FORCE, ABILITY_IRON_FIST},
             .abilityHidden = {ABILITY_ZEN_MODE, ABILITY_NONE},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NONE, ABILITY_NONE},

@@ -16719,8 +16719,9 @@ static const struct LevelUpMove sDarumakaGalarianLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sDarmanitanGalarianLevelUpLearnset[] = {
-    LEVEL_UP_MOVE( 0, MOVE_ICICLE_CRASH),
+    LEVEL_UP_MOVE( 0, MOVE_ICE_HAMMER),
     LEVEL_UP_MOVE( 1, MOVE_ICICLE_CRASH),
+    LEVEL_UP_MOVE( 1, MOVE_ICE_HAMMER),
     LEVEL_UP_MOVE( 1, MOVE_POWDER_SNOW),
     LEVEL_UP_MOVE( 1, MOVE_TACKLE),
     LEVEL_UP_MOVE( 1, MOVE_TAUNT),
@@ -16731,6 +16732,7 @@ static const struct LevelUpMove sDarmanitanGalarianLevelUpLearnset[] = {
     LEVEL_UP_MOVE(24, MOVE_HEADBUTT),
     LEVEL_UP_MOVE(28, MOVE_ICE_PUNCH),
     LEVEL_UP_MOVE(32, MOVE_UPROAR),
+    LEVEL_UP_MOVE(37, MOVE_ICICLE_CRASH),
     LEVEL_UP_MOVE(38, MOVE_BELLY_DRUM),
     LEVEL_UP_MOVE(44, MOVE_BLIZZARD),
     LEVEL_UP_MOVE(50, MOVE_THRASH),

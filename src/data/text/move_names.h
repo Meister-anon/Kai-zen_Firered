@@ -766,5 +766,6 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("???% POWER"), //Hopefully this works, couldn't define name using theese characters
     _("SHIMON"),
     _("FINAL FLIGHT"),
-    _("PLASMA RAILGUN") 
+    _("PLASMA RAILGUN"), 
+    _("BOLT BEAM") 
 };//remember to remove comma from last entry //longest name is 17 chars

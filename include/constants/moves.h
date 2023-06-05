@@ -792,6 +792,7 @@
 #define MOVE_SHIMON 764	//FIGHTING BURN OUT	
 #define MOVE_FINAL_FLIGHT 765	//FLYING BURN OUT	
 #define MOVE_PLASMA_RAILGUN 766	//ELECTRIC BURN OUT	
+#define MOVE_BOLTBEAM 767	//joke idea taken from CammyMeeleTea video on icetypes
 
 //#define MOVES_COUNT_GEN8 757
 
@@ -800,7 +801,7 @@
 //for completion new moves have to be defined in:  move_descriptions.inc,  move_names.h, & battle_anim_scripts.s
 // also need actual move data in battle_moves.h
 
-#define LAST_MOVE_INDEX     MOVE_PLASMA_RAILGUN
+#define LAST_MOVE_INDEX     MOVE_BOLTBEAM
 
 #define MOVES_COUNT_GEN8 (LAST_MOVE_INDEX + 1) //changed so define auto updates
 
