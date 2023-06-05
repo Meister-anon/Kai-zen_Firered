@@ -2839,67 +2839,79 @@ u8 AtkCanceller_UnableToUseMove(void)
                 u16 rando = Random() % 4;
                 u8 target = gBattleMoves[gCurrentMove].target;
                 --gBattleMons[gBattlerAttacker].status2;    //nvm couldn't put bug clause above this line, or confusion wouldn't decrement & be permanent
-                if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG)) //moved bug exclusion to here, so status decrements //NEED TEST //vsonic
-                {
+                
                     if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION) //&& !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG))
                     {
-                        if ((Random() % 2) == 0) //chance confused but used move anyway   think 50% may equal random % 2 not 0
+                        if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG)) //moved bug exclusion to here, so status decrements //NEED TEST //vsonic
                         {
-                            if ((Random() % 3) != 0) {   //2/3 chance succesful attack     (doesn't mean not 0,its just returning any value between 0-2)
-                                gBattleCommunication[MULTISTRING_CHOOSER] = 0;  //need to say != 0 or something, to make it a 2/3rd conditional
-                                BattleScriptPushCursor();
+                            if ((Random() % 2) == 0) //chance confused but used move anyway   think 50% may equal random % 2 not 0
+                            {
+                                if ((Random() % 3) != 0) {   //2/3 chance succesful attack     (doesn't mean not 0,its just returning any value between 0-2)
+                                    // The MULTISTRING_CHOOSER is used here as a bool to signal
+                                    // to BattleScript_MoveUsedIsConfused whether or not damage was taken
+                                    gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;  //need to say != 0 or something, to make it a 2/3rd conditional
+                                    BattleScriptPushCursor();
+                                }
+                                else { // 1/3 odds target gets randomly changed
+                                    if (rando == 0) {
+                                        target = MOVE_TARGET_RANDOM;
+                                        gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
+                                        BattleScriptPushCursor();
+                                    }
+                                    if (rando == 1) {
+                                        target = MOVE_TARGET_BOTH;
+                                        gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
+                                        BattleScriptPushCursor();
+                                    }
+                                    if (rando == 2) {
+                                        target = MOVE_TARGET_FOES_AND_ALLY;
+                                        gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
+                                        BattleScriptPushCursor();
+                                    }
+                                    if (rando == 3) //hits everyone
+                                    {
+                                        target = MOVE_TARGET_USER | MOVE_TARGET_FOES_AND_ALLY;
+                                        gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                                        gProtectStructs[gBattlerAttacker].confusionSelfDmg = TRUE;
+                                        BattleScriptPushCursor(); //not sure what this is doing
+                                    } //if it works  may still add just target ally
+
+
+                                }
+                                //gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                                //BattleScriptPushCursor();
                             }
-                            else { // 1/3 odds target gets randomly changed
-                                if (rando == 0) {
-                                    target = MOVE_TARGET_RANDOM;
-                                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-                                    BattleScriptPushCursor();
-                                }
-                                if (rando == 1) {
-                                    target = MOVE_TARGET_BOTH;
-                                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-                                    BattleScriptPushCursor();
-                                }
-                                if (rando == 2) {
-                                    target = MOVE_TARGET_FOES_AND_ALLY;
-                                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-                                    BattleScriptPushCursor();
-                                }
-                                if (rando == 3) //hits everyone
-                                {
-                                    target = MOVE_TARGET_USER | MOVE_TARGET_FOES_AND_ALLY;
-                                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
-                                    gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
-                                    BattleScriptPushCursor(); //not sure what this is doing
-                                } //if it works  may still add just target ally
-
-
-                            }
-                            //gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-                            //BattleScriptPushCursor();
-                        }
-                        else // confusion dmg  //yup oddds are 50%  this is the other side where they attack themselves
-                        { //ok I want to keep the sucess condition the same, but split the failure condition.
-                            //into different effects,
-                            //1 attack a random target
-                            //ok understand what I did, I have to separte activation conditions for if its a status move
-                            //or not and make sure the move does at least 1/16 health damage, 
-                            //if its a status it'll do normal confusion self damage I didn't remove that.
-                            gBattlerTarget = gBattlerAttacker;
-                            gBattleMoveDamage /= 2; //should use move against self at half normal power
-                            if (gBattleMoveDamage < gBattleMons[gBattlerTarget].maxHP / 16
-                                && gBattleMovePower > 0)
-                                gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 16; //minimum dmg clause
-                            gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
-
-                            if (gBattleMovePower == 0) {
-                                gBattleCommunication[MULTISTRING_CHOOSER] = 1;
-                                //gBattlerTarget = gBattlerAttacker;    this line not needed already handled above
-                                gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, 40, 0, gBattlerAttacker, gBattlerAttacker);
+                            else // confusion dmg  //yup oddds are 50%  this is the other side where they attack themselves
+                            { //ok I want to keep the sucess condition the same, but split the failure condition.
+                                //into different effects,
+                                //1 attack a random target
+                                //ok understand what I did, I have to separte activation conditions for if its a status move
+                                //or not and make sure the move does at least 1/16 health damage, 
+                                //if its a status it'll do normal confusion self damage I didn't remove that.
+                                gBattlerTarget = gBattlerAttacker;  //Handles target swap
+                                gBattleMoveDamage /= 2; //should use move against self at half normal power
+                                if (gBattleMoveDamage < gBattleMons[gBattlerTarget].maxHP / 16
+                                    && gBattleMovePower > 0)
+                                    gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 16; //minimum dmg clause
                                 gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
-                                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                            }//consider make this status moves (i.e 0 power) & moves without flag makes contact use normal confusion dmg formula 
-                            //for self damage   so only contact moves would go off and damage the attacker
+
+                                if (gBattleMovePower == 0) //if status move does default confusion hit 
+                                {
+                                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                                    //gBattlerTarget = gBattlerAttacker;    this line not needed already handled above
+                                    gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, 40, 0, gBattlerAttacker, gBattlerAttacker);
+                                    gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
+                                    gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                                }//consider make this status moves (i.e 0 power) & moves without flag makes contact use normal confusion dmg formula 
+                                //for self damage   so only contact moves would go off and damage the attacker
+                            }
+                        }
+                        else //should be if bug type, should make bug always use move regardless of being confused
+                        {
+                            // The MULTISTRING_CHOOSER is used here as a bool to signal
+                            // to BattleScript_MoveUsedIsConfused whether or not damage was taken
+                            gBattleCommunication[MULTISTRING_CHOOSER] = FALSE; 
+                            BattleScriptPushCursor();
                         }
                         gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused; //want to make sure still takes confusion damage 
                     } //even for status move or 0 power move, it makes sense they attempt ot attack but fail and hurt themselves.
@@ -2909,7 +2921,6 @@ u8 AtkCanceller_UnableToUseMove(void)
                         gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfusedNoMore;
                     }
                     effect = 1;
-                }
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
