@@ -336,7 +336,7 @@ static const u16 sTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPE
 
         /*rock*/ {X(1.0), X(0.5), X(2.0), X(1.0), X(0.5), X(1.0), X(2.0), X(1.0), X(0.5), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0)}, // rock
 
-         /*bug*/ {X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(2.0), X(1.0), X(2.0), X(0.5), X(1.0), X(2.0), X(0.5), X(1.0)}, // bug
+         /*bug*/ {X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(2.0), X(1.0), X(2.0), X(0.5), X(1.0), X(2.0), X(1.0), X(1.0)}, // bug
 
        /*ghost*/ {X(0.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(1.0)}, // ghost
 
@@ -350,15 +350,15 @@ static const u16 sTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPE
 
        /*grass*/ {X(1.0), X(1.0), X(0.5), X(0.5), X(2.0), X(2.0), X(0.5), X(1.0), X(0.5), X(1.0), X(0.5), X(2.0), X(0.5), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0)}, // grass
 
-    /*electric*/ {X(1.0), X(1.0), X(2.0), X(1.0), X(0.0), X(0.5), X(0.5), X(1.0), X(2.0), X(1.0), X(1.0), X(2.0), X(0.5), X(0.5), X(1.0), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0)}, // electric
+    /*electric*/ {X(1.0), X(1.0), X(2.0), X(1.0), X(0.0), X(0.5), X(0.5), X(1.0), X(2.0), X(1.0), X(1.0), X(2.0), X(1.0), X(0.5), X(1.0), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0)}, // electric
 
      /*psychic*/ {X(1.0), X(2.0), X(1.0), X(2.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(0.0), X(0.5), X(1.0)}, // psychic
 
-         /*ice*/ {X(1.0), X(1.0), X(2.0), X(1.0), X(2.0), X(1.0), X(2.0), X(0.5), X(0.5), X(1.0), X(0.5), X(0.5), X(2.0), X(1.0), X(1.0), X(0.5), X(2.0), X(1.0), X(1.0), X(1.0)}, // ice
+         /*ice*/ {X(1.0), X(1.0), X(2.0), X(1.0), X(2.0), X(1.0), X(2.0), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(2.0), X(1.0), X(1.0), X(0.5), X(2.0), X(1.0), X(1.0), X(1.0)}, // ice
 
       /*dragon*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(0.5), X(1.0)}, // dragon
 
-        /*dark*/ {X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(0.5), X(2.0), X(1.0)}, // dark
+        /*dark*/ {X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(2.0), X(2.0), X(1.0)}, // dark
 
        /*fairy*/ {X(2.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(0.5), X(1.0), X(0.5), X(1.0), X(0.5), X(1.0), X(0.0), X(1.0), X(1.0), X(1.0), X(2.0), X(2.0), X(1.0), X(1.0)}, // fairy
 
@@ -377,10 +377,10 @@ static const u16 sTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPE
 // 00 is ×0.0 TYPE_MUL_NO_EFFECT
 
 //each line adds 3 because there are 3 arguments in each line, atk type, def type, & effectiveness  /so SUBTRACT 3 for any lines kept but commented out
-//DON'T FORGET every time I change below, need to update in the .h
+//DON'T FORGET every time I change below, need to update in the .h / also need to update table above, so ai, and other pre-damage type calcs are accurate
 #define TYPE_CHART
 
-const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+const u8 gTypeEffectiveness[417] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -472,9 +472,8 @@ const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of
     TYPE_BUG, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_FLYING, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_BUG, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,//removed ghost resistance to bug by accident in my chart, but 
-    TYPE_BUG, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE, //was so good will add to my chart
-    TYPE_BUG, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_BUG, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,//removed ghost resistance to bug by accident in my chart, but was so good will add to my chart
+    TYPE_BUG, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE, //removed still resist to bug, apparently many insect types are known to destroy/consume light metals, would be great for the type
     TYPE_ROCK, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ROCK, TYPE_ICE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ROCK, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
@@ -493,9 +492,9 @@ const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of
     TYPE_DARK, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,    //type change from wolveyvgc to buff bugs, its weak to bugs, so resists it, and dark is evil & bugs are //also associated with evil  so makes sense
     TYPE_DARK, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,  //-keeping psychic weakness to dark post ghost change as dark is living and able to do physical attacks while psychic is usually phsycially weak
     TYPE_DARK, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,  //changed there's nothing significant bout dark, its more or less same as ghost but alive, and ghosts thrive in darkness
-    TYPE_DARK, TYPE_DARK, TYPE_MUL_NOT_EFFECTIVE,   //change essentially makes ghost inverse of normal type effect wise, where most things are neutral and it has 1 weakness
-    TYPE_DARK, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_STEEL, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_DARK, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,   //change essentially makes ghost inverse of normal type effect wise, where most things are neutral and it has 1 weakness
+    TYPE_DARK, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_STEEL, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,//NEW type relation for dark types, showed positively for offense capability and makes sense sneaky backstabbers bad guys take each other out often.
     TYPE_STEEL, TYPE_WATER, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_STEEL, TYPE_ELECTRIC, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_STEEL, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,

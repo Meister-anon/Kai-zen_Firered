@@ -508,9 +508,33 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * make it loop through the status set and just change the icon each time the mon bounces twice?
 * potentially use  release Mon animation? so it transitino clean.
 * 
-* Last thing before break is setup battle health box, need finish species name expansion, w pokedex box outline
+* Last thing before break is setup battle health box, need finish species name expansion, w pokedex box outline-
+* 
+* need give all dark type mon sucker punch in learnset, if a mon evolves into a dark type,  make sucker punch an evo move
+* would be a problem for fairy if these moves are too far spread so backstab will be dark exclusive
+* sucker punch will only be for dark fighting and ghost types.
 * 
 * Give shuckle better moves, it stats are fine, it just learn horrible moves.
+* 
+* still need to add zen mode type moves to normal learnset for darmanitan forms
+* 
+* Also need buff darmanitan, its type changes with zen mode, but it doesn't naturally learn any moves of that type -_-
+* on top of that its main offensive stat swaps from physical to special, so when it goes into zen mode, all of its native moves
+* just do no damgage how did they fuck this up so badly??
+* ok this is mostly a problem for base darmanitan, the galaraian form at least stays a physical attacker
+* 
+* fix by splitting zenmode for the two forms into different abilities, keep zenmode for base.
+* make galarian darmanitan zen awakening   make zen awakening work like schooling, where change into form on switchin,
+* long as hp above 25%
+* 
+* for zenmode, make it swap when hp drops below 50%  also buff hp to synergize.
+* as it gets a major defense boost when transformed. - DONE 
+* -didn't need to split abilities, formchange let me change  hp threshold, also made switchin-
+* 
+* 
+* buffed ABILITY_GORILLA_TACTICS  buffs both offense stats - DONE
+* 
+* still working on updating move descriptions
 * 
 * buff anger point, activate on super effective move result as well as crit. as both are 2x dmg.    - DONE
 * most mon that get it aren't likely to survive either way, so gives it some play.  since crits are so rare anyway.

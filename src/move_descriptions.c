@@ -398,6 +398,9 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     gSUCKER_PUNCHDescription :
     .string "Strikes first if the foe\nis preparing an attack.$"
 
+    gMoveDescription_BackStab:
+    .string "Sneakily strikes at\nthe foe's weak point\nwhen least expected.\nIt always hits first.\nIt has a high\ncritical-hit ratio.$"
+
     gTOXIC_SPIKESDescription :
     .string "Sets spikes that poison a\nfoe switching in.$"
 
@@ -429,7 +432,7 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     .string "Attacks with a horrible\naura.\nMay cause flinching.$"
 
     gNIGHT_SLASHDescription :
-    .string "Hits as soon as possible.\nHigh critical-hit ratio.$"
+    .string "The user slashes the\ntarget the instant\nit lowers its guard.\nIt has a high\ncritical-hit ratio.$"
 
     gAQUA_TAILDescription :
     .string "The user swings its tail\nlike a wave to attack.$"
@@ -441,7 +444,7 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     .string "Attacks with a blade of\nair.\nMay cause flinching.$"
 
     gX_SCISSORDescription :
-    .string "Slashes the foe with crossed\nscythes, claws, etc.$"
+    .string "Slashes at the foe\nwith crossed\nscythes, claws, etc.\nIt has a high\ncritical-hit ratio.$"
 
     gBUG_BUZZDescription :
     .string "A damaging sound wave that\nmay lower Sp. Def.$"
@@ -483,7 +486,7 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     .string "Hurls a chunk of ice that\nalways strike first.$"
 
     gSHADOW_CLAWDescription :
-    .string "Strikes with a shadow claw.\nHigh critical-hit ratio.$"
+    .string "Strikes with\na sinister claw\nwreathed in shadow.\nIt has a high\ncritical-hit ratio.$"
 
     gTHUNDER_FANGDescription :
     .string "May cause flinching or\nleave the foe paralyzed.$"
@@ -501,7 +504,7 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     .string "Throws a blob of mud to\ndamage and cut accuracy.$"
 
     gPSYCHO_CUTDescription :
-    .string "Tears with psychic blades.\nHigh critical-hit ratio.$"
+    .string "Tears into the\ntarget with psychic\nblades.\nIt has a high\ncritical-hit ratio.$"
 
     gZEN_HEADBUTTDescription :
     .string "Hits with a strong head-\nbutt.\nMay cause flinching.$"
@@ -531,7 +534,7 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     .string "Violently lashes the foe\nwith vines or tentacles.$"
 
     gCROSS_POISONDescription :
-    .string "A slash that may poison a\nfoe and do critical damage.$"
+    .string "Poison tipped slash\nthat may leave a\nfoe poisoned.\nHigh critical-hit ratio.$"
 
     gGUNK_SHOTDescription :
     .string "Shoots filthy garbage at\nthe foe.\nMay also poison.$"
@@ -543,7 +546,7 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     .string "Launches a magnet that\nstrikes without fail.$"
 
     gSTONE_EDGEDescription :
-    .string "Stabs the foe with stones.\nHigh critical-hit ratio.$"
+    .string "Stabs the foe with\nsharp-spiked stones.\nIt has a high\ncritical-hit ratio.$"
 
     gCAPTIVATEDescription :
     .string "Makes the opposite gender\nsharply reduce its Sp. Atk.$"
@@ -570,7 +573,7 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     .string "Strikes first by dashing\nat the foe at a high speed.$"
 
     gATTACK_ORDERDescription :
-    .string "Underlings pummel the foe.\nHigh critical-hit ratio.$"
+    .string "Underlings pummel\nthe foe at the\nbehest of the Queen.\nIt has a high\ncritical-hit ratio.$"
 
     gDEFEND_ORDERDescription :
     .string "Raises Defense and Sp. Def\nwith a living shield.$"
@@ -588,7 +591,7 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     .string "Powerful, but leaves the\nuser immobile the next turn.$"
 
     gSPACIAL_RENDDescription :
-    .string "Tears the foe, and space.\nHigh critical-hit ratio.$"
+    .string "Distorts space to\nslash the foe.\nIt has a high\ncritical-hit ratio.$"
 
     gMAGMA_STORMDescription :
     .string "Traps the foe in a vortex\nof fire for 2 to 5 turns.$"
@@ -780,7 +783,7 @@ const u8 gMoveDescription_LastResort[] = _("Can only be used\nif every other\nmo
     .string "An electrical tackle that\nalso hurts the user.$"
 
     gDRILL_RUNDescription :
-    .string "Spins its body like a drill.\nHigh critical-hit ratio.$"
+    .string "The user spins\nits body like\na drill then crashes\ninto the foe.\nIt has a high\ncritical-hit ratio.$"
 
     gDUAL_CHOPDescription :
     .string "Attacks with brutal hits\nthat strike twice.$"

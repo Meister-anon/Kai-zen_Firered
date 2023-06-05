@@ -766,7 +766,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_SONIC_SCREECH,
         .power = 1,
         .type = TYPE_SOUND,
-        .accuracy = 90,
+        .accuracy = 95,
         .pp = 20,
         .secondaryEffectChance = 10,
         .target = MOVE_TARGET_SELECTED,
@@ -6094,11 +6094,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SUCKER_PUNCH] =
     {
 
-        .power = 80,
+        .power = 75,    //LOWEred power by 5 to counter pp increase, making it harder to stall out, test and consider
         .effect = EFFECT_SUCKER_PUNCH,
         .type = TYPE_DARK,
         .accuracy = 100,
-        .pp = 5,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 1,
@@ -11722,5 +11722,20 @@ use wonder gaurd logic to determine its super effective
         .split = SPLIT_SPECIAL,
         .argument = TYPE_ELECTRIC,
     },
+
+    [MOVE_BACK_STAB] =
+    {
+
+        .power = 100,
+        .effect = EFFECT_HIT,
+        .type = TYPE_DARK,
+        .accuracy = 90, //feel like i need to make this base 90?    //should be good moves like hyper beam are base 90 and still good.
+        .pp = 5,    //should be a TM move, exclusive to dark types
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .priority = 2,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT,
+        .split = SPLIT_PHYSICAL,
+    },  //point of move isn't necessarily to replace sucker punch, but instead to be an option for slower dark types to take advantage of new dark type change
 
 };
