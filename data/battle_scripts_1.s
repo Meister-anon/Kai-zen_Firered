@@ -5339,6 +5339,16 @@ BattleScript_EffectMudSport::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
+BattleScript_MudSportEnds::
+	printstring STRINGID_MUDSPORTENDS
+	waitmessage 0x40
+	end2
+
+BattleScript_WaterSportEnds::
+	printstring STRINGID_WATERSPORTENDS
+	waitmessage 0x40
+	end2
+
 BattleScript_EffectPoisonFang::
 	setmoveeffect MOVE_EFFECT_TOXIC
 	goto BattleScript_EffectHit

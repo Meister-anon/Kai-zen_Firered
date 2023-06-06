@@ -535,6 +535,9 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * buffed ABILITY_GORILLA_TACTICS  buffs both offense stats - DONE
 * 
 * still working on updating move descriptions
+* -was able to use replace to define all move descriptions need to put in table to assign to moves
+* all that's left after that is combing over again for proper spacing.   place "\n"  every 3 words would do it
+* remember can place 5 per description
 * 
 * buff anger point, activate on super effective move result as well as crit. as both are 2x dmg.    - DONE
 * most mon that get it aren't likely to survive either way, so gives it some play.  since crits are so rare anyway.
@@ -930,9 +933,27 @@ Thunder Wave Electric TM45
 * made grass buffs, make grass version of u-turn aka up root can be taken advantage of by chlorophyl mons - DONE
 * make up-root remove ingrain status to ensure you can get out if you want to/really need to -
 * 
+* new idea, supplement bug buff immunity to confusion,
+* make bug archetype all about self buffs/getting stronger, as bugs ususally go through evolution/chrysalis to become better/stronger
+* that way they can keep their parallel to grass types, which are all about debuffing enemy.
+* give bug types accupressure and in doubles can assist setup with ally targetted swagger.
+* consider ai strats with a flying tailwind, accupressure on a bug protect and swagger, but something bulky like whirlepede
+* actually masquirene can have tailwind!!
+* 
+* ...there's no bug type gym in kanto...
+* ...fuck it I'm making a "cool trainer" with  a bug team using that strat SOMEWHERE
+* 
 * make sure mon types have their own niche where needed, i.e bugs imune to confusion because of hive mind
 * grass immune to powder, ease of access to status moves to take advantage of multi status and higher than average vitatliy as part of nature
 * fire can't be burned, poison can't be poisoned etc. 
+* 
+* note realized multi status is going to be easy to setup, its not actually any different code wise to status2, which already allows that.
+* only "difficult" part is going to be the qol/setting it up properly i.e the graphic stuff that make it look good/natural and professional.
+* 
+* need set water mud sport effect as side status, effect not setup as of now. setup  think done need test
+* 
+* was able to use ctrl h replacement, to quick define all move descriptions just need to slot into table.
+* and would owr, then can fix naming convention later
 * 
 * need buff poison i think
 * for poison think can just give sp def boosts, as poison specialists poison themselves to build up immunity to poison
@@ -1834,6 +1855,14 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * this way it can overcome the disadvantage of using another mons move with worse stats, and without type advanage.
 * that way smeargle is turned from a failed artist, into a type of sevant that can improve on the original.
 * increased priority of sketch, so I'll not increase speed stat
+* 
+* for the stat buff, think I will do like the high crit flags,
+* rather than putting stat boost in battle script, could make ability just for smeargle,
+* and have it work based on flag, check, for an "artistic move"  either sketch or monotype
+* if either is used and stats aren't max, max out stats  (could be just offense stats) -similar to competitive & defiant
+* 
+* that way has a chance to actually do damgae with copied moves.
+* for extra versatility can add assist to learnset to for more options.
 * 
 * //since I'm changing sketches effect to be temporary
     //and the current move has outside battle uses.

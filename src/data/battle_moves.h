@@ -11725,7 +11725,6 @@ use wonder gaurd logic to determine its super effective
 
     [MOVE_BACK_STAB] =
     {
-
         .power = 100,
         .effect = EFFECT_HIT,
         .type = TYPE_DARK,

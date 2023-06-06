@@ -14336,21 +14336,23 @@ static void atkE7_trycastformdatachange(void)
 static void atkE8_settypebasedhalvers(void) // water and mud sport
 {
     bool8 worked = FALSE;
-
+    
     if (gBattleMoves[gCurrentMove].effect == EFFECT_MUD_SPORT)
     {
-        if (!(gStatuses3[gBattlerAttacker] & STATUS3_MUDSPORT))
+        if (!(gSideStatuses[gBattlerAttacker] & SIDE_STATUS_MUDSPORT))
         {
-            gStatuses3[gBattlerAttacker] |= STATUS3_MUDSPORT;
+            gSideStatuses[gBattlerAttacker] |= SIDE_STATUS_MUDSPORT;
+            gSideTimers[gBattlerAttacker].mudSportTimer = 5;
             gBattleCommunication[MULTISTRING_CHOOSER] = 0;
             worked = TRUE;
         }
     }
     else // water sport
     {
-        if (!(gStatuses3[gBattlerAttacker] & STATUS3_WATERSPORT))
+        if (!(gSideStatuses[gBattlerAttacker] & SIDE_STATUS_WATERSPORT))
         {
-            gStatuses3[gBattlerAttacker] |= STATUS3_WATERSPORT;
+            gSideStatuses[gBattlerAttacker] |= SIDE_STATUS_WATERSPORT;
+            gSideTimers[gBattlerAttacker].waterSportTimer = 5;
             gBattleCommunication[MULTISTRING_CHOOSER] = 1;
             worked = TRUE;
         }

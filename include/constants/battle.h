@@ -342,6 +342,8 @@
 #define SIDE_STATUS_MAT_BLOCK               (1 << 21)
 #define SIDE_STATUS_HEAL_BLOCK              (1 << 22)//need setup this & embargo  heal block side status is already setup I jusut forgot...
 #define SIDE_STATUS_EMBARGO					(1 << 23)
+#define SIDE_STATUS_MUDSPORT				(1 << 24)
+#define SIDE_STATUS_WATERSPORT				(1 << 25)
 
 // Field affecting statuses.
 #define STATUS_FIELD_MAGIC_ROOM         (1 << 0)
@@ -361,8 +363,8 @@
 #define STATUS_FIELD_TERRAIN_PERMANENT  (1 << 12)		//last terrain effect so putting here //(1 << 12)   
 #define STATUS_FIELD_ION_DELUGE         (1 << 13)
 #define STATUS_FIELD_FAIRY_LOCK         (1 << 14)
-#define STATUS_FIELD_MUDSPORT			(1 << 15)
-#define STATUS_FIELD_WATERSPORT         (1 << 16)
+//#define STATUS_FIELD_MUDSPORT			(1 << 15) gonna put these in side status instead
+//#define STATUS_FIELD_WATERSPORT         (1 << 16)
 
 #define TERRAIN_DEFINES
 

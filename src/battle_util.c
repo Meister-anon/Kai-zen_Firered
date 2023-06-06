@@ -1240,8 +1240,6 @@ enum
     ENDTURN_SUN,
     ENDTURN_HAIL,
     ENDTURN_GRAVITY,
-    //ENDTURN_WATER_SPORT,
-    //ENDTURN_MUD_SPORT,
     ENDTURN_TRICK_ROOM,
     ENDTURN_WONDER_ROOM,
     ENDTURN_MAGIC_ROOM,
@@ -1249,6 +1247,8 @@ enum
     ENDTURN_MISTY_TERRAIN,
     ENDTURN_GRASSY_TERRAIN,
     ENDTURN_PSYCHIC_TERRAIN,
+    ENDTURN_WATER_SPORT,
+    ENDTURN_MUD_SPORT,
     ENDTURN_ION_DELUGE,
     ENDTURN_FAIRY_LOCK,
     ENDTURN_RETALIATE,
@@ -1372,6 +1372,54 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_SAFEGUARD;
                         BattleScriptExecute(BattleScript_SafeguardEnds);
+                        ++effect;
+                    }
+                }
+                ++gBattleStruct->turnSideTracker;
+                if (effect)
+                    break;
+            }
+            if (!effect)
+            {
+                ++gBattleStruct->turnCountersTracker;
+                gBattleStruct->turnSideTracker = 0;
+            }
+            break;
+        case ENDTURN_WATER_SPORT:
+            while (gBattleStruct->turnSideTracker < 2)
+            {
+                side = gBattleStruct->turnSideTracker;
+                gActiveBattler = gBattlerAttacker = gSideTimers[side].waterSportBattlerId;
+                if (gSideStatuses[side] & SIDE_STATUS_WATERSPORT)
+                {
+                    if (--gSideTimers[side].waterSportTimer == 0)
+                    {
+                        gSideStatuses[side] &= ~SIDE_STATUS_WATERSPORT;
+                        BattleScriptExecute(BattleScript_WaterSportEnds);
+                        ++effect;
+                    }
+                }
+                ++gBattleStruct->turnSideTracker;
+                if (effect)
+                    break;
+            }
+            if (!effect)
+            {
+                ++gBattleStruct->turnCountersTracker;
+                gBattleStruct->turnSideTracker = 0;
+            }
+            break;
+        case ENDTURN_MUD_SPORT:
+            while (gBattleStruct->turnSideTracker < 2)
+            {
+                side = gBattleStruct->turnSideTracker;
+                gActiveBattler = gBattlerAttacker = gSideTimers[side].mudSportBattlerId;
+                if (gSideStatuses[side] & SIDE_STATUS_MUDSPORT)
+                {
+                    if (--gSideTimers[side].mudSportTimer == 0)
+                    {
+                        gSideStatuses[side] &= ~SIDE_STATUS_MUDSPORT;
+                        BattleScriptExecute(BattleScript_MudSportEnds);
                         ++effect;
                     }
                 }
@@ -6277,17 +6325,17 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
             }
             break;
-        case ABILITYEFFECT_FIELD_SPORT: // 14
+        /* ABILITYEFFECT_FIELD_SPORT: // 14   can remove when timer setup done
             switch (gLastUsedAbility)
             {
             case 0xFD:
                 for (i = 0; i < gBattlersCount; ++i)
-                    if (gStatuses3[i] & STATUS3_MUDSPORT)
+                    if (gSideStatuses[i] & SIDE_STATUS_MUDSPORT)
                         effect = i + 1;
                 break;
             case 0xFE:
                 for (i = 0; i < gBattlersCount; ++i)
-                    if (gStatuses3[i] & STATUS3_WATERSPORT)
+                    if (gSideStatuses[i] & SIDE_STATUS_WATERSPORT)
                         effect = i + 1;
                 break;
             default:
@@ -6301,7 +6349,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             }
-            break;
+            break;*/
         case ABILITYEFFECT_CHECK_ON_FIELD: // 19
             for (i = 0; i < gBattlersCount; ++i)
             {

@@ -354,6 +354,10 @@ struct SideTimer
              u8 healBlockBattlerId; //hopefully will be able to individual target clear status, but keep side status in effect for new switches
              u8 embargoBattlerId; 
              u8 embargoTimer; 
+             u8 mudSportBattlerId;
+             u8 mudSportTimer;     //put these back, gen 3 effect didn' work how I thought. effect only lasts long as user stays in, and only for user who set it.
+             u8 waterSportTimer;  //forgot to remove these earlier, since I'm using gen 3 effects for them
+             u8 waterSportBattlerId;
              u8 retaliateTimer;  //vsonic need to implement
              /*0x0B*/ u8 fieldB;
 };
@@ -362,8 +366,7 @@ extern struct SideTimer gSideTimers[];
 
 struct FieldTimer
 {
-    //u8 mudSportTimer;
-    //u8 waterSportTimer;  //forgot to remove these earlier, since I'm using gen 3 effects for them
+    
     u8 wonderRoomTimer;
     u8 magicRoomTimer;
     u8 trickRoomTimer;
