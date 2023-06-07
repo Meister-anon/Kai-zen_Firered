@@ -1387,15 +1387,15 @@ BattleScript_AutotomizeWeightLoss::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectFinalGambit:
+BattleScript_EffectFinalGambit:		@CHANGED effect to do more dmg based on missing health
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
+	missinghealthtoDmg
 	critcalc
+	damagecalc
 	typecalc
-	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
-	dmgtocurrattackerhp
 	adjustnormaldamage
 	attackanimation
 	waitanimation
@@ -1406,7 +1406,7 @@ BattleScript_EffectFinalGambit:
 	datahpupdate BS_TARGET
 	resultmessage
 	waitmessage 0x40
-	dmgtocurrattackerhp
+	setatkhptozero
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	seteffectwithchance

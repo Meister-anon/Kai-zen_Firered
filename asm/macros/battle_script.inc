@@ -372,7 +372,7 @@
 	.4byte \ptr
 	.endm
 
-	.macro jumpiftype2	@pretty sure this shouldnt be used anymore new jumpiftype does all type checks
+	.macro missinghealthtoDmg	@was jumpiftype2 replaced using for custom final gambit effect
 	.byte 0x42
 	.endm
 

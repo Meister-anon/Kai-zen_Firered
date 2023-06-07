@@ -9746,7 +9746,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_STATUS,
     },
 
-    [MOVE_POISON_THREAD] =
+    [MOVE_TOXIC_THREAD] =
     {
         .effect = EFFECT_TOXIC_THREAD,
         .power = 0,
