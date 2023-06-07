@@ -245,6 +245,8 @@ ok I prob will do that then.
 * Have it as a message setup before the oak intro, or the last line before player spawns
 */
 
+//realized text buffers used in battle_message.c allign with values in charmap.txt, the names used are those, and the value is from battle_message.h
+
 //TODO:
 /*Add logic for when flying types are grounded they take neutral damage from fighting types
 * Look at how emerald handeled smack down and roost logic for ground type dmg -

@@ -355,6 +355,7 @@ ATTACKING_MON = FD 0C
 DEFENDING_MON = FD 0D
 
 @ battle string placeholders
+@for buffer values in battle_message.c strings, names used here line up with values in battle_message.h, but name used here is name used in buffer
 
 B_BUFF1 = FD 00
 B_BUFF2 = FD 01

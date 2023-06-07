@@ -103,7 +103,7 @@ static const u8 sText_PkmnFrozenBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_S
 static const u8 sText_PkmnIsFrozen[] = _("{B_ATK_NAME_WITH_PREFIX} is\nfrozen solid!");
 static const u8 sText_PkmnWasAlreadyFrozen[] = _("{B_DEF_NAME_WITH_PREFIX} is already\nfrozen solid.");
 static const u8 sText_PkmnWasDefrosted[] = _("{B_DEF_NAME_WITH_PREFIX} was\ndefrosted!");
-static const u8 sText_PkmnDefrosted[] = _("{B_TXT_ATK_TEAM1} {B_SCR_ACTIVE_NAME_WITH_PREFIX} was\ndefrosted!");
+static const u8 sText_PkmnDefrosted[] = _("{B_ATK_TEAM1} {B_SCR_ACTIVE_NAME_WITH_PREFIX} was\ndefrosted!");
 static const u8 sText_PkmnWasDefrosted2[] = _("{B_ATK_NAME_WITH_PREFIX} was\ndefrosted!");
 static const u8 sText_PkmnWasDefrostedBy[] = _("{B_ATK_NAME_WITH_PREFIX} was\ndefrosted by {B_CURRENT_MOVE}!");
 static const u8 sText_PkmnWasParalyzed[] = _("{B_EFF_NAME_WITH_PREFIX} is paralyzed!\nIt may be unable to move!");
@@ -487,13 +487,13 @@ static const u8 sText_ItAppearedCaught[] = _("Aww!\nIt appeared to be caught!");
 static const u8 sText_AarghAlmostHadIt[] = _("Aargh!\nAlmost had it!");
 static const u8 sText_ShootSoClose[] = _("Shoot!\nIt was so close, too!");
 const u8 gUnknown_83FD78A[] = _("よけられた!\nこいつは つかまりそうにないぞ!");
-static const u8 sText_GotchaPkmnCaught[] = _("Gotcha!\n{B_OPPONENT_MON1_NAME} was caught!{WAIT_SE}{PLAY_BGM MUS_CAUGHT}\p");
-static const u8 sText_GotchaPkmnCaught2[] = _("Gotcha!\n{B_OPPONENT_MON1_NAME} was caught!{WAIT_SE}{PLAY_BGM MUS_CAUGHT}{PAUSE 127}");
+static const u8 sText_GotchaPkmnCaught[] = _("Gotcha!\n{B_DEF_NAME} was caught!{WAIT_SE}{PLAY_BGM MUS_CAUGHT}\p");
+static const u8 sText_GotchaPkmnCaught2[] = _("Gotcha!\n{B_DEF_NAME} was caught!{WAIT_SE}{PLAY_BGM MUS_CAUGHT}{PAUSE 127}");
 static const u8 sText_GiveNicknameCaptured[] = _("Give a nickname to the\ncaptured {B_OPPONENT_MON1_NAME}?");
-static const u8 sText_PkmnSentToPC[] = _("{B_OPPONENT_MON1_NAME} was sent to\n{B_PC_CREATOR_NAME} PC.");
+static const u8 sText_PkmnSentToPC[] = _("{B_DEF_NAME} was sent to\n{B_PC_CREATOR_NAME} PC.");
 static const u8 sText_Someones[] = _("someone's");
 static const u8 sText_Bills[] = _("BILL's");
-static const u8 sText_PkmnDataAddedToDex[] = _("{B_OPPONENT_MON1_NAME}'s data was\nadded to the POKéDEX.\p");
+static const u8 sText_PkmnDataAddedToDex[] = _("{B_DEF_NAME}'s data was\nadded to the POKéDEX.\p");
 static const u8 sText_ItIsRaining[] = _("It is raining."); // used only in RSE when a battle starts in a rainy area
 static const u8 sText_SandstormIsRaging[] = _("A sandstorm is raging.");
 static const u8 sText_BoxIsFull[] = _("The BOX is full!\nYou can't catch any more!\p");
@@ -520,7 +520,7 @@ static const u8 sText_PlayedFluteCatchyTune[] = _("{B_PLAYER_NAME} played the {B
 static const u8 sText_PlayedThe[] = _("{B_PLAYER_NAME} played the\n{B_LAST_ITEM}.");
 static const u8 sText_PkmnHearingFluteAwoke[] = _("The POKéMON hearing the FLUTE\nawoke!");
 static const u8 sText_PkmnsXCalledDownHail[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\ncalled down hail!");
-static const u8 sText_PokemonBlockedBall[] = _("The Wild {B_OPPONENT_MON1_NAME}\nblocked the BALL!");
+static const u8 sText_PokemonBlockedBall[] = _("The Wild {B_DEF_NAME}\nblocked the BALL!");
 //
 static const u8 sText_NeutralizingGasEnters[] = _("Neutralizing Gas filled the area!");
 static const u8 sText_NeutralizingGasOver[] = _("The effects of Neutralizing\nGas wore off!");
@@ -625,9 +625,9 @@ static const u8 sText_MoxieAtkRise[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_ATK_ABIL
 static const u8 sText_MagicBounceActivates[] = _("The {B_DEF_NAME_WITH_PREFIX} bounced the\n{B_ATK_NAME_WITH_PREFIX} back!");
 static const u8 sText_ProteanTypeChange[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_ATK_ABILITY} transformed\nit into the {B_BUFF1} type!");
 static const u8 sText_SymbiosisItemPass[] = _("{B_ATK_NAME_WITH_PREFIX} passed its {B_LAST_ITEM}\nto {B_SCR_ACTIVE_NAME_WITH_PREFIX} through {B_ATK_ABILITY}!");
-static const u8 sText_StealthRockAbsorbed[] = _("Pointed stones disappeared\nfrom around {B_TXT_ATK_TEAM2} team's feet!");
+static const u8 sText_StealthRockAbsorbed[] = _("Pointed stones disappeared\nfrom around {B_ATK_TEAM2} team's feet!");
 static const u8 sText_StealthRockDmg[] = _("Pointed stones dug into\n{B_SCR_ACTIVE_NAME_WITH_PREFIX}!");
-static const u8 sText_ToxicSpikesAbsorbed[] = _("The poison spikes disappeared\nfrom around {B_TXT_ATK_TEAM2} team's feet!");
+static const u8 sText_ToxicSpikesAbsorbed[] = _("The poison spikes disappeared\nfrom around {B_ATK_TEAM2} team's feet!");
 static const u8 sText_ToxicSpikesPoisoned[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} was poisoned!");
 static const u8 sText_StickyWebSwitchIn[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} was\ncaught in a Sticky Web!");
 static const u8 sText_HealingWishCameTrue[] = _("The healing wish came true\nfor {B_ATK_NAME_WITH_PREFIX}!");
@@ -767,7 +767,7 @@ static const u8 sText_SwappedAbilities[] = _("{B_DEF_NAME_WITH_PREFIX} swapped A
 static const u8 sText_PastelVeilProtected[] = _("{B_DEF_NAME_WITH_PREFIX} is protected\nby a pastel veil!");
 static const u8 sText_PastelVeilEnters[] = _("{B_DEF_NAME_WITH_PREFIX} was cured\nof its poisoning!");
 static const u8 sText_CorruptionActivates[] = _("{B_BUFF1}'s {B_ATK_ABILITY}\nprevents healing!\p");
-static const u8 sText_BanditActivates[] = _("{The {B_ATK_ABILITY} is on the scene!\n{B_DEF_NAME_WITH_PREFIX} can't use items!\p");
+static const u8 sText_BanditActivates[] = _("The {B_ATK_ABILITY} is on the scene!\n{B_DEF_TEAM1} team can't use items!\p");
 static const u8 sText_BattlerTypeChangedTo[] = _("{B_BUFF1}'s type\nchanged to {B_BUFF2}!");
 static const u8 sText_BothCanNoLongerEscape[] = _("Neither Pokémon can run away!");
 static const u8 sText_CantEscapeDueToUsedMove[] = _("{B_ATK_NAME_WITH_PREFIX} can no longer escape\nbecause it used {B_CURRENT_MOVE}!");
@@ -2559,6 +2559,22 @@ static const u8* TryGetStatusString(u8 *src) //important
     return NULL;
 }
 
+static void GetBattlerNick(u32 battlerId, u8 *dst)
+{
+    struct Pokemon *mon, *illusionMon;
+
+    if (GET_BATTLER_SIDE(battlerId) == B_SIDE_PLAYER)
+        mon = &gPlayerParty[gBattlerPartyIndexes[battlerId]];
+    else
+        mon = &gEnemyParty[gBattlerPartyIndexes[battlerId]];
+
+    illusionMon = GetIllusionMonPtr(battlerId);
+    if (illusionMon != NULL)
+        mon = illusionMon;
+    GetMonData(mon, MON_DATA_NICKNAME, dst);
+    StringGet_Nickname(dst);
+}
+
 #define HANDLE_NICKNAME_STRING_CASE(battlerId, monIndex)                \
     if (GetBattlerSide(battlerId) != B_SIDE_PLAYER)                     \
     {                                                                   \
@@ -2582,7 +2598,7 @@ static const u8* TryGetStatusString(u8 *src) //important
     toCpy = text;
 
 u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers thought had to match charmap.txt but apparently not
-{
+{                                                               //ok so,  the charmap matches the buffer value, not the name for some reason -__-
     u32 dstId = 0; // if they used dstId, why not use srcId as well?
     const u8 *toCpy = NULL;
     u8 text[30];
@@ -2593,12 +2609,12 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
 
     while (*src != EOS)
     {
-        if (*src == PLACEHOLDER_BEGIN)
-        {
+        if (*src == PLACEHOLDER_BEGIN)  //comb over this and battle messages, check difference in buffers used, between this and emerald expansion. 
+        {   //for stuff that could work better
             src++;
             switch (*src)
             {
-            case B_TXT_BUFF1:
+            case B_BUFF1:   //B_BUFF1
                 if (gBattleTextBuff1[0] == B_BUFF_PLACEHOLDER_BEGIN)
                 {
                     ExpandBattleTextBuffPlaceholders(gBattleTextBuff1, gStringVar1);
@@ -2611,7 +2627,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                         toCpy = gBattleTextBuff1;
                 }
                 break;
-            case B_TXT_BUFF2:
+            case B_BUFF2:   //B_BUFF2
                 if (gBattleTextBuff2[0] == B_BUFF_PLACEHOLDER_BEGIN)
                 {
                     ExpandBattleTextBuffPlaceholders(gBattleTextBuff2, gStringVar2);
@@ -2620,7 +2636,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                 else
                     toCpy = gBattleTextBuff2;
                 break;
-            case B_TXT_BUFF3:
+            case B_BUFF3:   //B_BUFF3
                 if (gBattleTextBuff3[0] == B_BUFF_PLACEHOLDER_BEGIN)
                 {
                     ExpandBattleTextBuffPlaceholders(gBattleTextBuff3, gStringVar3);
@@ -2629,68 +2645,68 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                 else
                     toCpy = gBattleTextBuff3;
                 break;
-            case B_TXT_COPY_VAR_1:
+            case B_COPY_VAR_1:  //B_COPY_VAR_1
                 toCpy = gStringVar1;
                 break;
-            case B_TXT_COPY_VAR_2:
+            case B_COPY_VAR_2:  //B_COPY_VAR_2
                 toCpy = gStringVar2;
                 break;
-            case B_TXT_COPY_VAR_3:
+            case B_COPY_VAR_3:  //B_COPY_VAR_3
                 toCpy = gStringVar3;
                 break;
-            case B_TXT_PLAYER_MON1_NAME: // first player poke name
+            case B_PLAYER_MON1_NAME: // B_PLAYER_MON1_NAME  first player poke name
                 GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]],
                            MON_DATA_NICKNAME, text);
                 StringGetEnd10(text);
                 toCpy = text;
                 break;
-            case B_TXT_OPPONENT_MON1_NAME: // first enemy poke name
+            case B_OPPONENT_MON1_NAME: //B_OPPONENT_MON1_NAME   first enemy poke name
                 GetMonData(&gEnemyParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)]],
                            MON_DATA_NICKNAME, text);
                 StringGetEnd10(text);
                 toCpy = text;
                 break;
-            case B_TXT_PLAYER_MON2_NAME: // second player poke name
+            case B_PLAYER_MON2_NAME: //B_PLAYER_MON2_NAME   second player poke name
                 GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)]],
                            MON_DATA_NICKNAME, text);
                 StringGetEnd10(text);
                 toCpy = text;
                 break;
-            case B_TXT_OPPONENT_MON2_NAME: // second enemy poke name
+            case B_OPPONENT_MON2_NAME: //B_OPPONENT_MON2_NAME   second enemy poke name
                 GetMonData(&gEnemyParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT)]],
                            MON_DATA_NICKNAME, text);
                 StringGetEnd10(text);
                 toCpy = text;
                 break;
-            case B_TXT_LINK_PLAYER_MON1_NAME: // link first player poke name
+            case B_LINK_PLAYER_MON1_NAME: //B_LINK_PLAYER_MON1_NAME     link first player poke name
                 GetMonData(&gPlayerParty[gBattlerPartyIndexes[gLinkPlayers[multiplayerId].id]],
                            MON_DATA_NICKNAME, text);
                 StringGetEnd10(text);
                 toCpy = text;
                 break;
-            case B_TXT_LINK_OPPONENT_MON1_NAME: // link first opponent poke name
+            case B_LINK_OPPONENT_MON1_NAME: //B_LINK_OPPONENT_MON1_NAME   link first opponent poke name
                 GetMonData(&gEnemyParty[gBattlerPartyIndexes[gLinkPlayers[multiplayerId].id ^ 1]],
                            MON_DATA_NICKNAME, text);
                 StringGetEnd10(text);
                 toCpy = text;
                 break;
-            case B_TXT_LINK_PLAYER_MON2_NAME: // link second player poke name
+            case B_LINK_PLAYER_MON2_NAME: //B_LINK_PLAYER_MON2_NAME     link second player poke name
                 GetMonData(&gPlayerParty[gBattlerPartyIndexes[gLinkPlayers[multiplayerId].id ^ 2]],
                            MON_DATA_NICKNAME, text);
                 StringGetEnd10(text);
                 toCpy = text;
                 break;
-            case B_TXT_LINK_OPPONENT_MON2_NAME: // link second opponent poke name
+            case B_LINK_OPPONENT_MON2_NAME: //B_LINK_OPPONENT_MON2_NAME     link second opponent poke name
                 GetMonData(&gEnemyParty[gBattlerPartyIndexes[gLinkPlayers[multiplayerId].id ^ 3]],
                            MON_DATA_NICKNAME, text);
                 StringGetEnd10(text);
                 toCpy = text;
                 break;
-            case B_TXT_ATK_NAME_WITH_PREFIX_MON1: // attacker name with prefix, only battlerId 0/1
+            case B_ATK_NAME_WITH_PREFIX_MON1: //B_ATK_NAME_WITH_PREFIX_MON1  only battlerId 0/1
                 HANDLE_NICKNAME_STRING_CASE(gBattlerAttacker,
                                             gBattlerPartyIndexes[GetBattlerAtPosition(GET_BATTLER_SIDE(gBattlerAttacker))])
                 break;
-            case B_TXT_ATK_PARTNER_NAME: // attacker partner name
+            case B_ATK_PARTNER_NAME: //B_ATK_PARTNER_NAME
                 if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
                     GetMonData(
                         &gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(GET_BATTLER_SIDE(gBattlerAttacker)) +
@@ -2703,34 +2719,46 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                 StringGetEnd10(text);
                 toCpy = text;
                 break;
-            case B_TXT_ATK_NAME_WITH_PREFIX: // attacker name with prefix
+            case B_ATK_NAME_WITH_PREFIX: //B_ATK_NAME_WITH_PREFIX
                 HANDLE_NICKNAME_STRING_CASE(gBattlerAttacker, gBattlerPartyIndexes[gBattlerAttacker])
                 break;
-            case B_TXT_DEF_NAME_WITH_PREFIX: // target name with prefix
+            case B_DEF_NAME_WITH_PREFIX: //B_DEF_NAME_WITH_PREFIX
                 HANDLE_NICKNAME_STRING_CASE(gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
                 break;
-            case B_TXT_EFF_NAME_WITH_PREFIX: // effect battlerId name with prefix
+            case B_ACTIVE_NAME: //B_ACTIVE_NAME
+                GetBattlerNick(gActiveBattler, text);
+                toCpy = text;
+                break;
+            case B_ACTIVE_NAME2: //B_ACTIVE_NAME2   active battlerId name with prefix, no illusion check
+                if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+                    GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_NICKNAME, text);
+                else
+                    GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_NICKNAME, text);
+                StringGet_Nickname(text);
+                toCpy = text;
+                break;
+            case B_EFF_NAME_WITH_PREFIX: //B_EFF_NAME_WITH_PREFIX
                 HANDLE_NICKNAME_STRING_CASE(gEffectBattler, gBattlerPartyIndexes[gEffectBattler])
                 break;
-            case B_TXT_ACTIVE_NAME_WITH_PREFIX: // active battlerId name with prefix
+            case B_ACTIVE_NAME_WITH_PREFIX: //B_ACTIVE_NAME_WITH_PREFIX
                 HANDLE_NICKNAME_STRING_CASE(gActiveBattler, gBattlerPartyIndexes[gActiveBattler])
                 break;
-            case B_TXT_SCR_ACTIVE_NAME_WITH_PREFIX: // scripting active battlerId name with prefix
+            case B_SCR_ACTIVE_NAME_WITH_PREFIX: //B_SCR_ACTIVE_NAME_WITH_PREFIX  scripting active battlerId name with prefix
                 HANDLE_NICKNAME_STRING_CASE(gBattleScripting.battler, gBattlerPartyIndexes[gBattleScripting.battler])
                 break;
-            case B_TXT_CURRENT_MOVE: // current move name
+            case B_CURRENT_MOVE: //B_CURRENT_MOVE
                 if (sBattleMsgDataPtr->currentMove >= MOVES_COUNT)
                     toCpy = (const u8 *)&sATypeMove_Table[gBattleStruct->stringMoveType];
                 else
                     toCpy = gMoveNames[sBattleMsgDataPtr->currentMove];
                 break;
-            case B_TXT_LAST_MOVE: // originally used move name
+            case B_LAST_MOVE: //B_LAST_MOVE  originally used move name
                 if (sBattleMsgDataPtr->originallyUsedMove >= MOVES_COUNT)
                     toCpy = (const u8 *)&sATypeMove_Table[gBattleStruct->stringMoveType];
                 else
                     toCpy = gMoveNames[sBattleMsgDataPtr->originallyUsedMove];
                 break;
-            case B_TXT_LAST_ITEM: // last used item
+            case B_LAST_ITEM: //B_LAST_ITEM  last used item
                 if (gBattleTypeFlags & BATTLE_TYPE_LINK)
                 {
                     if (gLastUsedItem == ITEM_ENIGMA_BERRY)
@@ -2773,22 +2801,22 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                     toCpy = text;
                 }
                 break;
-            case B_TXT_LAST_ABILITY: // last used ability
+            case B_LAST_ABILITY: //B_LAST_ABILITY    last used ability
                 toCpy = gAbilityNames[gLastUsedAbility];
                 break;
-            case B_TXT_ATK_ABILITY: // attacker ability
+            case B_ATK_ABILITY: //B_ATK_ABILITY
                 toCpy = gAbilityNames[sBattlerAbilities[gBattlerAttacker]];
                 break;
-            case B_TXT_DEF_ABILITY: // target ability
+            case B_DEF_ABILITY: //B_DEF_ABILITY
                 toCpy = gAbilityNames[sBattlerAbilities[gBattlerTarget]];
                 break;
-            case B_TXT_SCR_ACTIVE_ABILITY: // scripting active ability
+            case B_SCR_ACTIVE_ABILITY: //B_SCR_ACTIVE_ABILITY  scripting active ability
                 toCpy = gAbilityNames[sBattlerAbilities[gBattleScripting.battler]];
                 break;
-            case B_TXT_EFF_ABILITY: // effect battlerId ability
+            case B_EFF_ABILITY: //B_EFF_ABILITY  effect battlerId ability
                 toCpy = gAbilityNames[sBattlerAbilities[gEffectBattler]];
                 break;
-            case B_TXT_TRAINER1_CLASS: // trainer class name
+            case B_TRAINER1_CLASS: //B_TRAINER1_CLASS   trainer class name
                 /*if (gTrainerBattleOpponent_A == SECRET_BASE_OPPONENT)
                     toCpy = gTrainerClassNames[GetSecretBaseTrainerNameIndex()];
                 else */if (gTrainerBattleOpponent_A == TRAINER_OPPONENT_C00)
@@ -2802,7 +2830,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                 else
                     toCpy = gTrainerClassNames[gTrainers[gTrainerBattleOpponent_A].trainerClass];
                 break;
-            case B_TXT_TRAINER1_NAME: // trainer1 name
+            case B_TRAINER1_NAME: //B_TRAINER1_NAME  trainer1 name
                 /*if (gTrainerBattleOpponent_A == SECRET_BASE_OPPONENT)
                 {
                     for (i = 0; i < (s32)NELEMS(gBattleResources->secretBase->trainerName); i++)
@@ -2838,26 +2866,26 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                         toCpy = gTrainers[gTrainerBattleOpponent_A].trainerName;// can prob use this to save value for custom mon
                 }//i.e the custom starter unlelss its already working  save value pull value type thing
                 break;
-            case B_TXT_LINK_PLAYER_NAME: // link player name
+            case B_LINK_PLAYER_NAME: //B_LINK_PLAYER_NAME
                 toCpy = gLinkPlayers[multiplayerId].name;
                 break;
-            case B_TXT_LINK_PARTNER_NAME: // link partner name
+            case B_LINK_PARTNER_NAME: //B_LINK_PARTNER_NAME
                 toCpy = gLinkPlayers[GetBattlerMultiplayerId(BATTLE_PARTNER(gLinkPlayers[multiplayerId].id))].name;
                 break;
-            case B_TXT_LINK_OPPONENT1_NAME: // link opponent 1 name
+            case B_LINK_OPPONENT1_NAME: //B_LINK_OPPONENT1_NAME
                 toCpy = gLinkPlayers[GetBattlerMultiplayerId(BATTLE_OPPOSITE(gLinkPlayers[multiplayerId].id))].name;
                 break;
-            case B_TXT_LINK_OPPONENT2_NAME: // link opponent 2 name
+            case B_LINK_OPPONENT2_NAME: //B_LINK_OPPONENT2_NAME
                 toCpy = gLinkPlayers[GetBattlerMultiplayerId(
                     BATTLE_PARTNER(BATTLE_OPPOSITE(gLinkPlayers[multiplayerId].id)))].name;
                 break;
-            case B_TXT_LINK_SCR_TRAINER_NAME: // link scripting active name
+            case B_LINK_SCR_TRAINER_NAME: //B_LINK_SCR_TRAINER_NAME  link scripting active name
                 toCpy = gLinkPlayers[GetBattlerMultiplayerId(gBattleScripting.battler)].name;
                 break;
-            case B_TXT_PLAYER_NAME: // player name
+            case B_PLAYER_NAME: //B_PLAYER_NAME
                 toCpy = gSaveBlock2Ptr->playerName;
                 break;
-            case B_TXT_TRAINER1_LOSE_TEXT: // trainerA lose text
+            case B_TRAINER1_LOSE_TEXT: //B_TRAINER1_LOSE_TEXT
                 if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_TOWER)
                 {
                     GetTrainerTowerOpponentLoseText(gStringVar4, 0);
@@ -2868,7 +2896,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                     toCpy = GetTrainerALoseText();
                 }
                 break;
-            case B_TXT_TRAINER1_WIN_TEXT: // trainerA win text
+            case B_TRAINER1_WIN_TEXT: //B_TRAINER1_WIN_TEXT
                 if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_TOWER)
                 {
                     GetTrainerTowerOpponentWinText(gStringVar4, 0);
@@ -2879,75 +2907,75 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                     toCpy = GetTrainerWonSpeech();
                 }
                 break;
-            case B_TXT_TRAINER2_LOSE_TEXT:
+            case B_TRAINER2_LOSE_TEXT:  //B_TRAINER2_LOSE_TEXT
                 GetTrainerTowerOpponentLoseText(gStringVar4, 1);
                 toCpy = gStringVar4;
                 break;
-            case B_TXT_TRAINER2_WIN_TEXT:
+            case B_TRAINER2_WIN_TEXT:   //B_TRAINER2_WIN_TEXT
                 GetTrainerTowerOpponentWinText(gStringVar4, 1);
                 toCpy = gStringVar4;
                 break;
-            case B_TXT_26: // ?
+            case B_26: //B_26   don't know what for?
                 HANDLE_NICKNAME_STRING_CASE(gBattleScripting.battler, *(&gBattleStruct->scriptPartyIdx))
                 break;
-            case B_TXT_PC_CREATOR_NAME: // lanette pc
+            case B_PC_CREATOR_NAME: //B_PC_CREATOR_NAME lanette pc
                 if (FlagGet(FLAG_SYS_NOT_SOMEONES_PC))
                     toCpy = sText_Bills;
                 else
                     toCpy = sText_Someones;
                 break;
-            case B_TXT_ATK_PREFIX2:
-                if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
-                    toCpy = sText_AllyPkmnPrefix2;
-                else
-                    toCpy = sText_FoePkmnPrefix3;
-                break;
-            case B_TXT_DEF_PREFIX2:
-                if (GetBattlerSide(gBattlerTarget) == B_SIDE_PLAYER)
-                    toCpy = sText_AllyPkmnPrefix2;
-                else
-                    toCpy = sText_FoePkmnPrefix3;
-                break;
-            case B_TXT_ATK_PREFIX1:
+            case B_ATK_PREFIX1: //B_ATK_PREFIX1
                 if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
                     toCpy = sText_AllyPkmnPrefix;
                 else
                     toCpy = sText_FoePkmnPrefix2;
                 break;
-            case B_TXT_DEF_PREFIX1:
+            case B_DEF_PREFIX1: //B_DEF_PREFIX1
                 if (GetBattlerSide(gBattlerTarget) == B_SIDE_PLAYER)
                     toCpy = sText_AllyPkmnPrefix;
                 else
                     toCpy = sText_FoePkmnPrefix2;
                 break;
-            case B_TXT_ATK_PREFIX3:
+            case B_ATK_PREFIX2: //B_ATK_PREFIX2
+                if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
+                    toCpy = sText_AllyPkmnPrefix2;
+                else
+                    toCpy = sText_FoePkmnPrefix3;
+                break;
+            case B_DEF_PREFIX2: //B_DEF_PREFIX2
+                if (GetBattlerSide(gBattlerTarget) == B_SIDE_PLAYER)
+                    toCpy = sText_AllyPkmnPrefix2;
+                else
+                    toCpy = sText_FoePkmnPrefix3;
+                break;
+            case B_ATK_PREFIX3: //B_ATK_PREFIX3
                 if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
                     toCpy = sText_AllyPkmnPrefix3;
                 else
                     toCpy = sText_FoePkmnPrefix4;
                 break;
-            case B_TXT_DEF_PREFIX3:
+            case B_DEF_PREFIX3: //B_DEF_PREFIX3
                 if (GetBattlerSide(gBattlerTarget) == B_SIDE_PLAYER)
                     toCpy = sText_AllyPkmnPrefix3;
                 else
                     toCpy = sText_FoePkmnPrefix4;
-                break; //ported fucnctionis don't exist adjust
-            case B_TXT_TRAINER2_CLASS:
+                break; 
+            case B_TRAINER2_CLASS:  //B_TRAINER2_CLASS
                 toCpy = BattleStringGetOpponentClassByTrainerId(gTrainerBattleOpponent_B);
                 break;
-            case B_TXT_TRAINER2_NAME:
+            case B_TRAINER2_NAME:   //B_TRAINER2_NAME
                 toCpy = BattleStringGetOpponentNameByTrainerId(gTrainerBattleOpponent_B, text, multiplayerId, GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT));
                 break;
-            case B_TXT_PARTNER_CLASS:
+            case B_PARTNER_CLASS:   //B_PARTNER_CLASS
                 //toCpy = gTrainerClassNames[GetFrontierOpponentClass(gPartnerTrainerId)];
-                break;
-            case B_TXT_PARTNER_NAME://prob need to add back when I get around to adding fronteir stuff but no partners in base game
+                break;//prob need to add back when I get around to adding fronteir stuff but no partners in base game
+            case B_PARTNER_NAME:    //B_PARTNER_NAME
                 toCpy = BattleStringGetPlayerName(text, GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT));
                 break;
-            case B_TXT_ATK_TRAINER_NAME:
+            case B_ATK_TRAINER_NAME:    //B_ATK_TRAINER_NAME
                 toCpy = BattleStringGetTrainerName(text, multiplayerId, gBattlerAttacker);
                 break;
-            case B_TXT_ATK_TRAINER_CLASS:
+            case B_ATK_TRAINER_CLASS:   //B_ATK_TRAINER_CLASS
                 switch (GetBattlerPosition(gBattlerAttacker))
                 {
                 case B_POSITION_PLAYER_RIGHT:
@@ -2965,25 +2993,29 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                     break;
                 }
                 break;
-            case B_TXT_ATK_TEAM1:
+            case B_ATK_TEAM1:   //B_ATK_TEAM1
                 if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
                     toCpy = sText_Your1;
                 else
                     toCpy = sText_Opposing1;
                 break;
-            case B_TXT_ATK_TEAM2:
+            case B_ATK_TEAM2:   //B_ATK_TEAM2
                 if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
                     toCpy = sText_Your2;
                 else
                     toCpy = sText_Opposing2;
                 break;
-            case B_TXT_DEF_TEAM1:
+            case B_DEF_NAME: // B_DEF_NAME  target name kinda replacement for B_OPPONENT_MON1_NAME  that can just read the target, over just 1 battler
+                GetBattlerNick(gBattlerTarget, text);     //which if I setup corrctly I think could be used to more easily adapt mon caught for wild doubles need test
+                toCpy = text;
+                break;
+            case B_DEF_TEAM1:   //B_DEF_TEAM1
                 if (GetBattlerSide(gBattlerTarget) == B_SIDE_PLAYER)
                     toCpy = sText_Your1;
                 else
                     toCpy = sText_Opposing1;
                 break;
-            case B_TXT_DEF_TEAM2:
+            case B_DEF_TEAM2:   //B_DEF_TEAM2
                 if (GetBattlerSide(gBattlerTarget) == B_SIDE_PLAYER)
                     toCpy = sText_Your2;
                 else
@@ -2998,8 +3030,8 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst) //logic for buffers t
                 dstId++;
                 toCpy++;
             }
-            if (*src == B_TXT_TRAINER1_LOSE_TEXT || *src == B_TXT_TRAINER1_WIN_TEXT
-             || *src == B_TXT_TRAINER2_LOSE_TEXT || *src == B_TXT_TRAINER2_WIN_TEXT)
+            if (*src == B_TRAINER1_LOSE_TEXT || *src == B_TRAINER1_WIN_TEXT
+             || *src == B_TRAINER2_LOSE_TEXT || *src == B_TRAINER2_WIN_TEXT)
             {
                 dst[dstId] = EXT_CTRL_CODE_BEGIN;
                 dstId++;

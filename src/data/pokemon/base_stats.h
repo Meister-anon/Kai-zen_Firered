@@ -21598,8 +21598,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_GORILLA_TACTICS, ABILITY_TELEPATHY},  //removd inner focus, prevents intimidate but its a special attacker
-            .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_FOREWARN},//forewarn here
+            .abilities = {ABILITY_TELEPATHY, ABILITY_FOREWARN},  //removd inner focus, prevents intimidate but its a special attacker
+            .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_GORILLA_TACTICS},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_INNER_FOCUS, ABILITY_NONE},
         #endif

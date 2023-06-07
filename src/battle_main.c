@@ -672,7 +672,6 @@ const struct TrainerMoney gTrainerMoneyTable[] =
     { 0xFF, 5 },
 };
 
-#include "data/text/abilities.h"
 
 static void (*const sTurnActionsFuncsTable[])(void) =
 {
@@ -1979,7 +1978,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);;
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -1995,7 +1994,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);;
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2011,7 +2010,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);;
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2027,7 +2026,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);;
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2043,7 +2042,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);;
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2059,7 +2058,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)//did basic test I THINK this shouldn't break first condition logic, should always be less
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);;//did basic test I THINK this shouldn't break first condition logic, should always be less
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2149,7 +2148,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2165,7 +2164,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2181,7 +2180,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2197,7 +2196,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2213,7 +2212,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2229,7 +2228,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)//did basic test I THINK this shouldn't break first condition logic, should always be less
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);//did basic test I THINK this shouldn't break first condition logic, should always be less
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2330,7 +2329,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2346,7 +2345,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2362,7 +2361,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2378,7 +2377,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2394,7 +2393,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2410,7 +2409,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)//did basic test I THINK this shouldn't break first condition logic, should always be less
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);//did basic test I THINK this shouldn't break first condition logic, should always be less
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2501,7 +2500,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2517,7 +2516,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2533,7 +2532,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2549,7 +2548,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2565,7 +2564,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2581,7 +2580,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs)//did basic test I THINK this shouldn't break first condition logic, should always be less
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);//did basic test I THINK this shouldn't break first condition logic, should always be less
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs

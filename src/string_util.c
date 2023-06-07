@@ -129,6 +129,19 @@ u8 *StringAppendN(u8 *dest, const u8 *src, u8 n)
     return StringCopyN(dest, src, n);
 }
 
+u8 *StringGet_Nickname(u8 *str)
+{
+    u8 i;
+    u32 limit = POKEMON_NAME_LENGTH;
+
+    for (i = 0; i < limit; i++)
+        if (str[i] == EOS)
+            return &str[i];
+
+    str[i] = EOS;
+    return &str[i];
+}
+
 u16 StringLength(const u8 *str)
 {
     u16 length = 0;
