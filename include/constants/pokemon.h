@@ -217,7 +217,7 @@
 
 
 #define MAX_PER_STAT_IVS 31
-#define MAX_IV_MASK 31
+#define MIN_FIXED_IVS 20	//minimum value I plan to use for trainer assignment, is used for gym leaders  [replaced IV Mask]
 #define USE_RANDOM_IVS (MAX_PER_STAT_IVS + 1)	//makes createmon function use random data for ivs, just like wild mon	can override fixed value for trainer party
 #define MAX_PER_STAT_EVS 564	//prviously 255
 #define MAX_TOTAL_EVS 788	//previosly 510

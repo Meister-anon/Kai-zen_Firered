@@ -1956,9 +1956,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 //but if I set it to random, but refight trainers, does it keep the iv distribution or generate a new one..?
                 //I'm gonna guess it regenerates, based on how the roamers are handled, where it specifically saves all their data
                 //ok setting random but attempt to treat rival starter like roamer so it keeps iv distribution
-                if (fixedIV > 31)
-                    fixedIV = 31;
-                if (fixedIV < 30)   //iv value less than 250
+                if (fixedIV > MAX_PER_STAT_IVS)
+                    fixedIV = MAX_PER_STAT_IVS;
+                if (fixedIV < MIN_FIXED_IVS)
                     fixedIV = USE_RANDOM_IVS;
                 
                 //as ability and ev are not part of CreateMon arguments may need to put these two below createmon function to have them take effect. hm,
@@ -2144,9 +2144,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv;
-                if (fixedIV > 31)
-                    fixedIV = 31;
-                if (fixedIV < 30)
+                if (fixedIV > MAX_PER_STAT_IVS)
+                    fixedIV = MAX_PER_STAT_IVS;
+                if (fixedIV < MIN_FIXED_IVS)
                     fixedIV = USE_RANDOM_IVS;
                 
                /* //Set ability slot
@@ -2341,9 +2341,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv;
-                if (fixedIV > 31)
-                    fixedIV = 31;
-                if (fixedIV < 30)
+                if (fixedIV > MAX_PER_STAT_IVS)
+                    fixedIV = MAX_PER_STAT_IVS;
+                if (fixedIV < MIN_FIXED_IVS)
                     fixedIV = USE_RANDOM_IVS;
                 
                 /*//Set ability slot
@@ -2528,9 +2528,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
                 fixedIV = partyData[i].iv;
-                if (fixedIV > 31)
-                    fixedIV = 31;
-                if (fixedIV < 30)
+                if (fixedIV > MAX_PER_STAT_IVS)
+                    fixedIV = MAX_PER_STAT_IVS;
+                if (fixedIV < MIN_FIXED_IVS)
                     fixedIV = USE_RANDOM_IVS;
 
                 /*//Set ability slot
