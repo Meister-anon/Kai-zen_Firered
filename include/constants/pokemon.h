@@ -222,13 +222,25 @@
 #define MAX_PER_STAT_EVS 564	//prviously 255
 #define MAX_TOTAL_EVS 788	//previosly 510
 #define EV_ITEM_BOOSTER_LIMIT 250	//how many evs can be gained from ev boost items, previously 100  each one apparently ads 10 evs? every 4 is 1 stat point
+//consider raising to new per stat cap, don't want to make it to easy to get the boosted evs, I want people to actually train their mon.
 
+//Stat EV Ids- believe was mostly for power items logic
 #define HpEV 0
 #define AttackEV 1
 #define DefenseEV 2
 #define SpeedEV 3
 #define SpAttackEV 4
 #define SpDefenseEV 5
+
+//changed define values from 0-3 to 1-4, to make it default to random if 0.
+//ABILITY NUM DEFINES
+#define RANDOM_ABILITY		0
+#define ABILITY_1			1
+#define ABILITY_2			2
+#define HIDDEN_ABILITY		3
+#define HIDDEN_ABILITY_2	4
+
+
 
 #define PARTY_SIZE 6
 #define UNOWN_FORM_COUNT 28

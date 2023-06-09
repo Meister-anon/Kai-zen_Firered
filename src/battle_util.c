@@ -1964,13 +1964,13 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
-                        if ((gBattleMons[gActiveBattler].status1 & 0xF00) != 0xF00) // not 16 turns
-                            gBattleMons[gActiveBattler].status1 += 0x100;   //increments by 100 up to F00 , assume starting from 000, which is why 16 turns
-                        gBattleMoveDamage *= (gBattleMons[gActiveBattler].status1 & 0xF00) >> 8;    //part adding dmg increase, want to change from 1/16 turn 1, but prob cause an issue
-                        BattleScriptExecute(BattleScript_PoisonTurnDmg);
-                        ++effect;
-                    }
-                }
+                        if ((gBattleMons[gActiveBattler].status1 & STATUS1_TOXIC_COUNTER) != STATUS1_TOXIC_TURN(15)) // not 16 turns
+                            gBattleMons[gActiveBattler].status1 += STATUS1_TOXIC_TURN(1);   //increments by 100 up to F00 , assume starting from 000, which is why 16 turns
+                        gBattleMoveDamage *= (gBattleMons[gActiveBattler].status1 & STATUS1_TOXIC_COUNTER) >> 8;    //part adding dmg increase, want to change from 1/16 turn 1, but prob cause an issue
+                        BattleScriptExecute(BattleScript_PoisonTurnDmg); //dmg is based on counter value, each turn turn number value is added to counter
+                        ++effect;   //was 0x100 previously it gets shifted using right shift 8 which turns it back into turn nummber
+                    }//and it multiplies gbattledmg with that, so each turn you do 1 more portion of 1/16 dmg . turn 1, 1/16 turn 2 2/16 turn 3 3/16
+                }   //if I want toxic to start at base poison damage, (which is 1/8) then I need to set toxic, and set to equal toxic turn 2
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_BURN:  // burn

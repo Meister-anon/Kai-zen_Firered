@@ -153,18 +153,19 @@
 #define STATUS1_BURN             (1 << 4)
 #define STATUS1_FREEZE           (1 << 5)
 #define STATUS1_PARALYSIS        (1 << 6)
-#define STATUS1_SPIRIT_LOCK      (1 << 7)	//test if toxic still works fine
-#define STATUS1_SNAP_TRAP		 (1 << 8)	//check status 1 effect for permanent status clear	pretty sure defaults to <= 6
-#define STATUS1_FIRE_SPIN		 (1 << 9)
-#define STATUS1_CLAMP			 (1 << 10)
-#define STATUS1_WHIRLPOOL		 (1 << 11)
-#define STATUS1_SAND_TOMB		 (1 << 12)
-#define STATUS1_MAGMA_STORM		 (1 << 14)
-#define STATUS1_INFESTATION		 (1 << 15)
-#define STATUS1_WRAPPED			 (1 << 16)
-#define STATUS1_TOXIC_POISON     (1 << 17)
-#define STATUS1_TOXIC_COUNTER    (1 << 18 | 1 << 19 | 1 << 20 | 1 << 21)
-#define STATUS1_TOXIC_TURN(num)  ((num) << 18)
+#define STATUS1_TOXIC_POISON     (1 << 7)
+#define STATUS1_TOXIC_COUNTER    (1 << 8 | 1 << 9 | 1 << 10 | 1 << 11)
+#define STATUS1_TOXIC_TURN(num)  ((num) << 8)
+#define STATUS1_SPIRIT_LOCK      (1 << 12)	//redid toxic, put at original value, moved others
+#define STATUS1_SNAP_TRAP		 (1 << 13)	//check status 1 effect for permanent status clear	pretty sure defaults to <= 6
+#define STATUS1_FIRE_SPIN		 (1 << 14)
+#define STATUS1_CLAMP			 (1 << 15)
+#define STATUS1_WHIRLPOOL		 (1 << 16)
+#define STATUS1_SAND_TOMB		 (1 << 17)
+#define STATUS1_MAGMA_STORM		 (1 << 18)
+#define STATUS1_INFESTATION		 (1 << 19)
+#define STATUS1_WRAPPED			 (1 << 20)
+
 #define STATUS1_PSN_ANY          (STATUS1_POISON | STATUS1_TOXIC_POISON)
 //will need to go through and review all use of this variable since I've expanded status1
 //laso cean up status definex

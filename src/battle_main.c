@@ -1859,8 +1859,10 @@ bool8 IsRivalBattle(u16 trainerNum)
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 {
     u32 nameHash = 0;
+    //u32 RandomAbility = Random() % 4;    //to put in setmondata dataarg to hopefully set random ability slot 0-3
     u32 personalityValue; //personality now uses name hash, which is trainer name
     u8 fixedIV; //figure how to set personality for individual pokemon, or at least set their ability
+    u8 abilityNum;  //should let set ability slot for mon
     u16 totalEVs = 0;
     u16 evs[NUM_EV_STATS];
     u16 species;
@@ -1950,13 +1952,25 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 for (j = 0; gSpeciesNames[species][j] != EOS; ++j) //starting from 0, loops through all the species names until it matches for each slot in party
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
-                fixedIV = partyData[i].iv * MAX_IV_MASK / 255;   //I think actually is Ivs, uses weird logic to make fixed iv, think will set to random
+                fixedIV = partyData[i].iv;   //I think actually is Ivs, uses weird logic to make fixed iv, think will set to random
                 //but if I set it to random, but refight trainers, does it keep the iv distribution or generate a new one..?
                 //I'm gonna guess it regenerates, based on how the roamers are handled, where it specifically saves all their data
                 //ok setting random but attempt to treat rival starter like roamer so it keeps iv distribution
-                if (fixedIV < 30)
+                if (fixedIV > 31)
+                    fixedIV = 31;
+                if (fixedIV < 30)   //iv value less than 250
                     fixedIV = USE_RANDOM_IVS;
                 
+                //as ability and ev are not part of CreateMon arguments may need to put these two below createmon function to have them take effect. hm,
+                //checked against custom move set  and move assignment logic is BELOW createmon so that confirms I need to move createmon up to here.
+                //double checked again, and Ivs and Evs need to go BEFORE cretemon as function uses those to do calcstats
+                //so for now will leave these where they are I "think" it will work. or just move ability data to below function...
+                /*//Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));*/
 
                 //Set Evs               
                 for (j = 0; j < NUM_EV_STATS; ++j)
@@ -1978,7 +1992,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs);;
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -1994,7 +2008,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs);;
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2010,7 +2024,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs);;
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2026,7 +2040,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs);;
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2042,7 +2056,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs);;
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2058,7 +2072,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         }
                         else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
                         {
-                            evs[j] = (MAX_TOTAL_EVS - totalEVs);;//did basic test I THINK this shouldn't break first condition logic, should always be less
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);//did basic test I THINK this shouldn't break first condition logic, should always be less
                         }
                         SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
                         totalEVs += evs[j]; //increment totalEvs
@@ -2067,6 +2081,12 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 
                 }
                 CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                //Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));//changed from passing value from a constant as I need the value to not be constant, 
+                else                                                              //but instead random every time.
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));
                 break; //&party[i] checks mon slot.   next one checks species for that slot
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET: //could probably get custom moves working with same trick as above but going to a different array
@@ -2123,10 +2143,18 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
-                fixedIV = partyData[i].iv * MAX_IV_MASK / 255;
+                fixedIV = partyData[i].iv;
+                if (fixedIV > 31)
+                    fixedIV = 31;
                 if (fixedIV < 30)
                     fixedIV = USE_RANDOM_IVS;
                 
+               /* //Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));*/
 
                 //Set Evs
                 for (j = 0; j < NUM_EV_STATS; ++j)
@@ -2237,6 +2265,14 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 
                 }
                 CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+
+                //Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));
+
                 for (j = 0; j < MAX_MON_MOVES; ++j) //max moves is 4, .moves field is size 4, so loop is to loop through all possible moves
                 {
                     SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]); //actually I need custom moves, otherwise its not a good base
@@ -2304,10 +2340,18 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
-                fixedIV = partyData[i].iv * MAX_IV_MASK / 255;
+                fixedIV = partyData[i].iv;
+                if (fixedIV > 31)
+                    fixedIV = 31;
                 if (fixedIV < 30)
                     fixedIV = USE_RANDOM_IVS;
                 
+                /*//Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));*/
 
                 //Set Evs
                 for (j = 0; j < NUM_EV_STATS; ++j)
@@ -2419,6 +2463,13 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 }
                 CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
+                //Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));
+
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
                 break;
             }
@@ -2476,9 +2527,18 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
                     nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
-                fixedIV = partyData[i].iv * MAX_IV_MASK / 255;
+                fixedIV = partyData[i].iv;
+                if (fixedIV > 31)
+                    fixedIV = 31;
                 if (fixedIV < 30)
                     fixedIV = USE_RANDOM_IVS;
+
+                /*//Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));*/
 
                 //Set Evs
                 for (j = 0; j < NUM_EV_STATS; ++j)
@@ -2591,6 +2651,14 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 //iv ev lvl species Helditem moves
                 CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
+
+                //Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));
+
                 for (j = 0; j < MAX_MON_MOVES; ++j)
                 {
                     SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);

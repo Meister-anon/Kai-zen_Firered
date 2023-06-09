@@ -7445,6 +7445,8 @@ BattleScript_IntimidateActivates::
 	jumpifability BS_ATTACKER, ABILITY_TIGER_MOM, BattleScript_TigerMomActivates	@JUMPS attack drop and does def drop instead then goes to loop
 	setbyte gBattlerTarget, 0
 	setstatchanger STAT_ATK, 1, TRUE
+		@Think Ill cut this down by making a new command to do ability check, and fail jump that way can do all checks in 1 line.
+		@specific stat abilities like hypercutter would need to be kept out, to still do tiger mom, so make it general stat drop/intimidate exclusions not stat specific stuff.
 BattleScript_IntimidateActivationAnimLoop::
 	trygetintimidatetarget BattleScript_IntimidateEnd @updated intimidate to current gen standard
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_IntimidateFail		@forgot tiger mom has different ability exclusion need rearrange abilities here
@@ -7457,6 +7459,7 @@ BattleScript_IntimidateActivationAnimLoop::
 	jumpifability BS_TARGET, ABILITY_SCRAPPY, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_IntimidateAbilityFail
+	jumpifability BS_TARGET, ABILITY_UNAWARE, BattleScript_IntimidateAbilityFail
 	jumpifability BS_ATTACKER, ABILITY_TIGER_MOM, BattleScipt_TigerMom_DefenseDropExclusions	@jump for tigermom to skip atk specific stat drop exclusions
 	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_IntimidateAbilityFail
 BattleScript_IntimidateStatDrop::	

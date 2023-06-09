@@ -309,6 +309,48 @@ ok I prob will do that then.
 * so for rematches trainers would atleast have the same ability,
 * the personality value is derived from a combination of the trainer name, and mon species name.
 * 
+* Not doing nature tweak, can overcome nature stat loss with Evs anyway, now that can set Evs,
+* Ivs have been reorganized so it maxes at 31 without needing the mask.
+* 
+* Last change is adding the ability filter, will allow for consistent ability selection, also adding logic to random ability for trainers
+* which is an improvement as apparently trainers would only ever have the 1st slot ability.
+* 
+* also plan to consolidate trainer party structs to only do TrainerMonItemCustomMoves would make editing trainers much easier.
+* 
+* there isn't really much reason to have more structs than just TrainerMonItemCustomMoves, since I've fixed the move error
+only values needed in selction are lvl and species, everything else can be left empty and can safely default to zero.
+Check definition of struct to find base/default values.
+
+Still need to add u8 abilityNum field so ability can track w repeated trainers,
+but setup like iv field, so if left blank can just set a random value
+Using multiple structs was to save memory, it wouldn't cost me too too much to consolidate
+but to attempt to compensate change iv, to u8 field. its only u16 for the weird masking they do.
+would require combing all trainer fields and translating from mask back to max 31
+change in code would just be fixedIV = partyData[i].iv  removing the mask and 255 divisor
+would only save me 1 byte for every trainer party, which would balance by adding the abilityNum field
+but still a net positive
+
+put abilityNum field below lvl, make constant defines so don't have to just use 0-3
+
+since I want leaving blank to be set random ability, I can't use value 0 as set mon ability num
+so i will need to make a function to do it, "i" value of 0 will default to setting randomly
+then if not 0,  use setmondata ability num i-1    so  i value of 1, will be abilitynum 0 etc.
+
+simple logic for this, adjusted my abilityNum defines to start at 1, for first slot rather than 0.
+With that I can use GetMondata ability num, if 0 set a random abilityNum between 0-3
+ 
+ if not 0, use setmondata abilityNum [abilityNum - 1]  then it'll set the correct ability based on the define name.
+
+ since this is so simple I don't actually need a new function for this, should be able to do with like 4 lines of code
+
+ do u8 abillityNum = partyData[i].abilityNum;  to pull abilityNum from list  (would default to 0 if leftblank
+ then do if else
+ if abilityNum 0  setmondata MON_DATA_ABILITY_NUM random % 4
+ else setmondata MON_DATA_ABILITY_NUM  abilityNum-1
+
+* DONE!!  need test, should set ability, think I'm worried about is the random ability part.
+* 
+* 
 * realized logic for damage on air targets was incomplete 
 * correcting setup - DONE
 * 
@@ -540,6 +582,12 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 * -was able to use replace to define all move descriptions need to put in table to assign to moves
 * all that's left after that is combing over again for proper spacing.   place "\n"  every 3 words would do it
 * remember can place 5 per description
+* 
+* need tests if toxic works, and if poison worsened works
+* 
+* make command for general intimidate ability checks, to clean up  the intimidate bs script
+* will work for target only, check general stat drop prevention abilities, substitute, and other abilities that were buffed to ignore intimdidate
+* will not include specific stat ability prevention i.e  hyper cutter  big pecks  stuff like that
 * 
 * buff anger point, activate on super effective move result as well as crit. as both are 2x dmg.    - DONE
 * most mon that get it aren't likely to survive either way, so gives it some play.  since crits are so rare anyway.

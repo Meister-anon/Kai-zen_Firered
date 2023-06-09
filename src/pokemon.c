@@ -7469,7 +7469,7 @@ void MonRestorePP(struct Pokemon *mon)
     BoxMonRestorePP(&mon->box);
 }
 
-void BoxMonRestorePP(struct BoxPokemon *boxMon) //useful for dead pokemon pc fix.  also need check function for boxmon health restore
+void BoxMonRestorePP(struct BoxPokemon *boxMon) //useful for dead pokemon pc fix.  also need check function for boxmon health restore  VSONIC
 {
     int i;
 

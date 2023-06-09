@@ -93,39 +93,64 @@
 
 struct TrainerMonNoItemDefaultMoves //pull from 4-12 later
 {
-    u16 iv;
+    u8 iv;
     u16 evs[6];
     u8 lvl;
+    u8 abilityNum;
     u16 species;
 };
 
 struct TrainerMonItemDefaultMoves
 {
-    u16 iv;
+    u8 iv;
     u16 evs[6];
     u8 lvl;
+    u8 abilityNum;
     u16 species;
     u16 heldItem;
 };
 
 struct TrainerMonNoItemCustomMoves
 {
-    u16 iv;
+    u8 iv;
     u16 evs[6];
     u8 lvl;
+    u8 abilityNum;
     u16 species;
     u16 moves[4];
 };
 
-/*there isn't really much reason to have more structs than just this, since I've fixed the move error
-only values needed in selction are lvl and species, everything else can be left empty without
-and can safely default to zero.
-Check definition of struct to find base values*/
+/*there isn't really much reason to have more structs than just TrainerMonItemCustomMoves, since I've fixed the move error
+only values needed in selction are lvl and species, everything else can be left empty and can safely default to zero.
+Check definition of struct to find base/default values.
+
+Still need to add u8 abilityNum field so ability can track w repeated trainers,
+but setup like iv field, so if left blank can just set a random value
+Using multiple structs was to save memory, it wouldn't cost me too too much to consolidate
+but to attempt to compensate change iv, to u8 field. its only u16 for the weird masking they do.
+would require combing all trainer fields and translating from mask back to max 31
+change in code would just be fixedIV = partyData[i].iv  removing the mask and 255 divisor
+would only save me 1 byte for every trainer party, which would balance by adding the abilityNum field
+but still a net positive
+
+put abilityNum field below lvl, make constant defines so don't have to just use 0-3
+
+since I want leaving blank to be set random ability, I can't use value 0 as set mon ability num
+so i will need to make a function to do it, "i" value of 0 will default to setting randomly
+then if not 0,  use setmondata ability num i-1    so  i value of 1, will be abilitynum 0 etc.
+
+Replacing iv values will be easier than thought, as most entries are blank,
+the only used values: 20 30 40 50 60 80 90
+    100 110 120 130 150 160 170 180 or 200 220 250 & 255
+so simple as running a ctrl h for  .iv = existing value,
+then just multiply by 31 and divide by 255, to find the replace value
+*/
 struct TrainerMonItemCustomMoves
 {
-    u16 iv;
+    u8 iv;
     u16 evs[6];
     u8 lvl;
+    u8 abilityNum;
     u16 species;
     u16 heldItem;
     u16 moves[4];
@@ -599,7 +624,7 @@ struct BattleStruct //fill in unused fields when porting
     u16 wrappedMove[MAX_BATTLERS_COUNT]; // Leftover from Ruby's ewram access.
     u16 moveTarget[MAX_BATTLERS_COUNT];
     u8 expGetterMonId;
-    u8 field_11; // unused
+    u8 targetsDone[MAX_BATTLERS_COUNT]; // Each battler as a bit.
     u8 wildVictorySong;
     u8 dynamicMoveType;
     u8 wrappedBy[MAX_BATTLERS_COUNT];

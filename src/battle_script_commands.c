@@ -733,7 +733,7 @@ static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
     [MOVE_EFFECT_PREVENT_ESCAPE] = STATUS2_ESCAPE_PREVENTION,
     [MOVE_EFFECT_NIGHTMARE] = STATUS2_NIGHTMARE,
     [MOVE_EFFECT_THRASH] = STATUS2_LOCK_CONFUSE,
-    [MOVE_EFFECT_ATTRACT] = STATUS2_INFATUATED_WITH(gActiveBattler),    //I think this will work now? //changed from attackrre to activebattler to attempt work for ynchronize too
+    [MOVE_EFFECT_ATTRACT] = STATUS2_INFATUATION,    //didn't work couldn't use infatuatedwith
     [MOVE_EFFECT_FIRE_SPIN] = STATUS4_FIRE_SPIN,
     [MOVE_EFFECT_CLAMP] = STATUS4_CLAMP,
     [MOVE_EFFECT_WHIRLPOOL] = STATUS4_WHIRLPOOL,
@@ -2149,7 +2149,7 @@ static void atk06_typecalc(void)
         gBattleCommunication[6] = moveType;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }*/
-    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND && !(gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING)) //need to add to ai, they can't understand this.
+    if (!IsBattlerGrounded(gBattlerTarget) && moveType == TYPE_GROUND && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING)) //need to add to ai, they can't understand this.
     {
         gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
         gLastLandedMoves[gBattlerTarget] = 0;
@@ -3615,12 +3615,13 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
             if (gBattleMons[gEffectBattler].status1 & STATUS1_POISON)
             {
                 gBattleMons[gEffectBattler].status1 &= ~(STATUS1_POISON);
-                sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] = STATUS1_TOXIC_POISON
-            } //OK THIS hopefully works.?
+                gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_POISON;
+                gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start at normal poison base dmg
+            } //OK THIS hopefully works.?   //should remove poison and set toxic, the missing part is setting toxic counter value
+            //dont know if works as I want but it compiles
 
             else if (gBattleMons[gEffectBattler].status1)   //realized i could keep this, if i use else if,  since thsi should mean if status1 not 0?
                 break;
-
             statusChanged = TRUE;
             break;
         case STATUS1_SPIRIT_LOCK:
@@ -3790,6 +3791,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 // It's redundant, because at this point we know the status1 value is 0.
                 gBattleMons[gEffectBattler].status1 &= ~(STATUS1_TOXIC_POISON); //^not my notes
                 gBattleMons[gEffectBattler].status1 &= ~(STATUS1_POISON);//don't understand these 2 lines. as it should be syntax for  status removal.
+                gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start at normal poison base dmg
                 statusChanged = TRUE;
                 break;
             }
@@ -3844,7 +3846,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
         return;
     }   //end case move effects less than 6 i.e toxic and below, ok this is potentially what it means by primary, its all status1 stuff
     else
-    {
+    {       //think this means if status set is the same as the one being attempted to be set, skip to next battle string. i.e can't confuse if already confused?
         if (gBattleMons[gEffectBattler].status2 & sStatusFlagsForMoveEffects[gBattleScripting.moveEffect])
         {
             ++gBattlescriptCurrInstr;
@@ -5688,7 +5690,7 @@ static void atk47_setgraphicalstatchangevalues(void)    //may need change this t
 {
     u8 value = 0;   //vsonic IMPORTANT          don't know if need default from emerald or not
 
-    switch (GET_STAT_BUFF_VALUE2(gBattleScripting.statChanger))
+    switch (GET_STAT_BUFF_VALUE_WITH_SIGN(gBattleScripting.statChanger))
     {
     case SET_STAT_BUFF_VALUE(1): // +1
         value = STAT_ANIM_PLUS1;
@@ -5721,21 +5723,23 @@ static void atk48_playstatchangeanimation(void)
     u16 statAnimId = 0;
     s32 changeableStatsCount = 0;
     u8 statsToCheck = 0;
+    u8 flags;
 
     ability = GetBattlerAbility(gActiveBattler);
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     statsToCheck = gBattlescriptCurrInstr[2];
+    flags = gBattlescriptCurrInstr[3];
 
     // Handle Contrary and Simple
     if (ability == ABILITY_CONTRARY)
-        gBattlescriptCurrInstr[3] ^= STAT_ANIM_MINUS1;
+        flags ^= STAT_ANIM_MINUS1;
     else if (ability == ABILITY_SIMPLE)
-        gBattlescriptCurrInstr[3] |= ATK48_STAT_BY_TWO;
+        flags |= ATK48_STAT_BY_TWO;
 
-    if (gBattlescriptCurrInstr[3] & ATK48_STAT_NEGATIVE) // goes down
+    if (flags & ATK48_STAT_NEGATIVE) // goes down
     {
         s16 startingStatAnimId;
-        if (gBattlescriptCurrInstr[3] & ATK48_STAT_BY_TWO)
+        if (flags & ATK48_STAT_BY_TWO)
             startingStatAnimId = STAT_ANIM_MINUS2 - 1;
         else
             startingStatAnimId = STAT_ANIM_MINUS1 - 1;
@@ -5744,7 +5748,7 @@ static void atk48_playstatchangeanimation(void)
         {
             if (statsToCheck & 1)
             {
-                if (gBattlescriptCurrInstr[3] & ATK48_DONT_CHECK_LOWER)
+                if (flags & ATK48_DONT_CHECK_LOWER)
                 {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > 0)
                     {
@@ -5778,7 +5782,7 @@ static void atk48_playstatchangeanimation(void)
 
         if (changeableStatsCount > 1) // more than one stat, so the color is gray
         {
-            if (gBattlescriptCurrInstr[3] & ATK48_STAT_BY_TWO)
+            if (flags & ATK48_STAT_BY_TWO)
                 statAnimId = STAT_ANIM_MULTIPLE_MINUS2;
             else
                 statAnimId = STAT_ANIM_MULTIPLE_MINUS1;
@@ -5787,7 +5791,7 @@ static void atk48_playstatchangeanimation(void)
     else // goes up
     {
         s16 startingStatAnimId;
-        if (gBattlescriptCurrInstr[3] & ATK48_STAT_BY_TWO)
+        if (flags & ATK48_STAT_BY_TWO)
             startingStatAnimId = STAT_ANIM_PLUS2 - 1;
         else
             startingStatAnimId = STAT_ANIM_PLUS1 - 1;
@@ -5804,13 +5808,13 @@ static void atk48_playstatchangeanimation(void)
         }
         if (changeableStatsCount > 1) // more than one stat, so the color is gray
         {
-            if (gBattlescriptCurrInstr[3] & ATK48_STAT_BY_TWO)
+            if (flags & ATK48_STAT_BY_TWO)
                 statAnimId = STAT_ANIM_MULTIPLE_PLUS2;
             else
                 statAnimId = STAT_ANIM_MULTIPLE_PLUS1;
         }
     }
-    if (gBattlescriptCurrInstr[3] & ATK48_ONLY_MULTIPLE && changeableStatsCount < 2)
+    if (flags & ATK48_ONLY_MULTIPLE && changeableStatsCount < 2)
     {
         gBattlescriptCurrInstr += 4;
     }
@@ -5818,7 +5822,7 @@ static void atk48_playstatchangeanimation(void)
     {
         BtlController_EmitBattleAnimation(0, B_ANIM_STATS_CHANGE, statAnimId);
         MarkBattlerForControllerExec(gActiveBattler);
-        if (gBattlescriptCurrInstr[3] & ATK48_ONLY_MULTIPLE && changeableStatsCount > 1)
+        if (flags & ATK48_ONLY_MULTIPLE && changeableStatsCount > 1)
             gBattleScripting.statAnimPlayed = TRUE;
         gBattlescriptCurrInstr += 4;
     }
@@ -9963,7 +9967,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             {
                 gBattleStruct->stolenStats[0] &= ~(gBitTable[i]);
                 SET_STATCHANGER(i, gBattleStruct->stolenStats[i], FALSE);
-                if (ChangeStatBuffs(GET_STAT_BUFF_VALUE2(gBattleScripting.statChanger), i, MOVE_EFFECT_CERTAIN | MOVE_EFFECT_AFFECTS_USER, NULL) == STAT_CHANGE_WORKED)
+                if (ChangeStatBuffs(GET_STAT_BUFF_VALUE_WITH_SIGN(gBattleScripting.statChanger), i, MOVE_EFFECT_CERTAIN | MOVE_EFFECT_AFFECTS_USER, NULL) == STAT_CHANGE_WORKED)
                 {
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_StatUpMsg;

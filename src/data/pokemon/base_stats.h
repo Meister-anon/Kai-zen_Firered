@@ -6475,7 +6475,7 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 90,
         .baseAttack = 60,
         .baseDefense = 60,
-        .baseSpeed = 40,
+        .baseSpeed = 46,
         .baseSpAttack = 40,
         .baseSpDefense = 40,
         .type1 = TYPE_GROUND,
@@ -6490,7 +6490,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_PICKUP, ABILITY_NONE},
-        .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_NONE},
+        .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_SAND_RUSH},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -6500,9 +6500,9 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 90,
         .baseAttack = 120,
         .baseDefense = 120,
-        .baseSpeed = 50,
+        .baseSpeed = 65,
         .baseSpAttack = 60,
-        .baseSpDefense = 60,
+        .baseSpDefense = 65,
         .type1 = TYPE_GROUND,
         .type2 = TYPE_NORMAL,
         .catchRate = 60,
@@ -6516,10 +6516,10 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_STURDY, ABILITY_NONE},
-        .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_NONE},
+        .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_SAND_RUSH},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-    },
+    },//I guess keep low speed for use in trick room?
 
     [SPECIES_PORYGON2] =
     {
