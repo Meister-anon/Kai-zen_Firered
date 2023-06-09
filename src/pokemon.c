@@ -3479,6 +3479,18 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         gBattleMovePower *= 2;
     if (gBattleMoves[gCurrentMove].effect == EFFECT_KNOCK_OFF && gBattleMons[gBattlerTarget].item != 0)
         gBattleMovePower = (130 * gBattleMovePower) / 100; //CHANGed modern boost 1.3 rathr than 1.5
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_WAKE_UP_SLAP)
+    {
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || GetBattlerAbility(gBattlerTarget) == ABILITY_COMATOSE)
+            gBattleMovePower *= 2;
+    }
+
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_SMELLINGSALT)
+    {
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_PARALYSIS)
+            gBattleMovePower *= 2;
+    }
+
 
     // sandstorm sp.def boost for rock types  // decided to add this for ground types as well,
     if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK) || (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)))

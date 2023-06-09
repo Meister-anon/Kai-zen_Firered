@@ -38,7 +38,7 @@
 #include "item.h"
 #include "battle_script_commands.h"
 #include "strings.h"
-#include "constants\items.h"    //for NUM_TECHNICAL_MACHINES constant
+#include "constants/items.h"    //for NUM_TECHNICAL_MACHINES constant
 
 
 #define SIGNPOST_POKECENTER 0

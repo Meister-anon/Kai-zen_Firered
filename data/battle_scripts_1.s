@@ -4933,13 +4933,8 @@ BattleScript_EffectFocusPunch::
 BattleScript_EffectSmellingsalt::
 BattleScript_EffectWakeUpSlap:
 BattleScript_EffectSparklingAria:
-	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_EffectHit
-	setmoveeffect MOVE_EFFECT_REMOVE_PARALYSIS | MOVE_EFFECT_CERTAIN
-	jumpifstatus BS_TARGET, STATUS1_PARALYSIS, BattleScript_SmellingSaltBuff
-	goto BattleScript_EffectHit
-
-BattleScript_SmellingSaltBuff::
-	setbyte sDMG_MULTIPLIER, 2
+	jumpifsubstituteblocks BattleScript_EffectHit
+	setmoveeffect MOVE_EFFECT_REMOVE_STATUS | MOVE_EFFECT_CERTAIN
 	goto BattleScript_EffectHit
 
 BattleScript_EffectFollowMe::
@@ -6889,6 +6884,18 @@ BattleScript_CurseTurnDmg::
 
 BattleScript_TargetPRLZHeal::
 	printstring STRINGID_PKMNHEALEDPARALYSIS
+	waitmessage 0x40
+	updatestatusicon BS_TARGET
+	return
+
+BattleScript_TargetWokeUp::
+	printstring STRINGID_TARGETWOKEUP
+	waitmessage 0x40
+	updatestatusicon BS_TARGET
+	return
+
+BattleScript_TargetBurnHeal::
+	printstring STRINGID_PKMNBURNHEALED
 	waitmessage 0x40
 	updatestatusicon BS_TARGET
 	return

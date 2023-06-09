@@ -1866,6 +1866,8 @@ goto STAT_AND_DAMAGE_ABILITIES_ETC // pokemon.c function for ability and item ef
 
 goto ENDTURN_EFFECTS    //battle_util.c   affects that take place after all battler turns
 
+goto MOVE_EEFFCTS  //setmoveeffects move logic in battle_script_commands.c need todo
+
 goto ATK_49_MOVEEND //battle_script_commands.c  move end  still to do   vsonic
 
 goto ACCURACY_BASED_ABILITIES   //other ability logic exists outside battle_util.c  make sure to go over all ability effects

@@ -1859,7 +1859,7 @@ bool8 IsRivalBattle(u16 trainerNum)
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 {
     u32 nameHash = 0;
-    //u32 RandomAbility = Random() % 4;    //to put in setmondata dataarg to hopefully set random ability slot 0-3
+    u8 RandomAbility = Random() % 4;    //to put in setmondata dataarg to hopefully set random ability slot 0-3
     u32 personalityValue; //personality now uses name hash, which is trainer name
     u8 fixedIV; //figure how to set personality for individual pokemon, or at least set their ability
     u8 abilityNum;  //should let set ability slot for mon
@@ -2084,9 +2084,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 //Set ability slot
                 abilityNum = partyData[i].abilityNum;
                 if (abilityNum == 0)
-                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));//changed from passing value from a constant as I need the value to not be constant, 
-                else                                                              //but instead random every time.
-                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &RandomAbility); //for some reason only worked with u8??
+                else                                                              
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &abilityNum - 1);
                 break; //&party[i] checks mon slot.   next one checks species for that slot
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET: //could probably get custom moves working with same trick as above but going to a different array
@@ -2269,9 +2269,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 //Set ability slot
                 abilityNum = partyData[i].abilityNum;
                 if (abilityNum == 0)
-                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &RandomAbility);
                 else
-                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &abilityNum - 1);
 
                 for (j = 0; j < MAX_MON_MOVES; ++j) //max moves is 4, .moves field is size 4, so loop is to loop through all possible moves
                 {
@@ -2466,9 +2466,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 //Set ability slot
                 abilityNum = partyData[i].abilityNum;
                 if (abilityNum == 0)
-                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &RandomAbility);
                 else
-                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &abilityNum - 1);
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
                 break;
@@ -2530,8 +2530,8 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 fixedIV = partyData[i].iv;
                 if (fixedIV > MAX_PER_STAT_IVS)
                     fixedIV = MAX_PER_STAT_IVS;
-                if (fixedIV < MIN_FIXED_IVS)
-                    fixedIV = USE_RANDOM_IVS;
+                if (fixedIV < MIN_FIXED_IVS)    //for new game plus do flag check and set fixed ivs to max per stat, would require you ev train 
+                    fixedIV = USE_RANDOM_IVS;   //mon instead of needing perfect ivs, and ideally you should alraedy have trained mon, and easy access to fast training items.
 
                 /*//Set ability slot
                 abilityNum = partyData[i].abilityNum;
@@ -2655,9 +2655,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 //Set ability slot
                 abilityNum = partyData[i].abilityNum;
                 if (abilityNum == 0)
-                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &RandomAbility);
                 else
-                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &abilityNum - 1);
 
                 for (j = 0; j < MAX_MON_MOVES; ++j)
                 {
@@ -3457,6 +3457,9 @@ void FaintClearSetData(void)
     gProtectStructs[gActiveBattler].endured = FALSE;
     gProtectStructs[gActiveBattler].noValidMoves = FALSE;
     gProtectStructs[gActiveBattler].helpingHand = FALSE;
+    gProtectStructs[gActiveBattler].spikyShielded = FALSE;
+    gProtectStructs[gActiveBattler].kingsShielded = FALSE;
+    gProtectStructs[gActiveBattler].banefulBunkered = FALSE;
     gProtectStructs[gActiveBattler].bounceMove = FALSE;
     gProtectStructs[gActiveBattler].stealMove = FALSE;
     gProtectStructs[gActiveBattler].flag0Unknown = FALSE;
@@ -3467,12 +3470,17 @@ void FaintClearSetData(void)
     gProtectStructs[gActiveBattler].fleeFlag = 0;
     gProtectStructs[gActiveBattler].usedImprisonedMove = FALSE;
     gProtectStructs[gActiveBattler].loveImmobility = FALSE;
+    gProtectStructs[gActiveBattler].obstructed = FALSE;
     gProtectStructs[gActiveBattler].usedDisabledMove = FALSE;
     gProtectStructs[gActiveBattler].usedTauntedMove = FALSE;
     gProtectStructs[gActiveBattler].flag2Unknown = FALSE;
     gProtectStructs[gActiveBattler].flinchImmobility = FALSE;
     gProtectStructs[gActiveBattler].notFirstStrike = FALSE;
     gProtectStructs[gActiveBattler].pranksterElevated = FALSE;
+    gProtectStructs[gActiveBattler].usedHealBlockedMove = FALSE;
+    gProtectStructs[gActiveBattler].usesBouncedMove = FALSE;
+    gProtectStructs[gActiveBattler].usedGravityPreventedMove = FALSE;
+    gProtectStructs[gActiveBattler].usedThroatChopPreventedMove = FALSE;
     gDisableStructs[gActiveBattler].isFirstTurn = 2;
     gLastMoves[gActiveBattler] = MOVE_NONE;
     gLastLandedMoves[gActiveBattler] = MOVE_NONE;
@@ -4947,6 +4955,7 @@ static void HandleEndTurn_FinishBattle(void)
             }
         }
         TrySetQuestLogBattleEvent();
+        TryRestoreStolenItems();    //missing part of knock off, that restorees item.
         //if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)  //GriffinR helped apparently leaving if statement made battle fade exclusive to trainer only fights
             //ClearRematchStateByTrainerId();   //vsonic what does this do again?
         BeginFastPaletteFade(3);

@@ -216,7 +216,7 @@ void PressurePPLoseOnUsingPerishSong(u8 attacker)
 
 static void infatuationchecks(void)//cusotm effect used for cupidarrow
 {
-    if (gBattleMons[gBattlerTarget].ability == ABILITY_OBLIVIOUS)
+    if (GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS)
     {
         gBattlescriptCurrInstr = BattleScript_ObliviousPreventsAttraction;
         gLastUsedAbility = ABILITY_OBLIVIOUS;
@@ -2259,7 +2259,7 @@ u8 DoBattlerEndTurnEffects(void)
                     for (gBattlerAttacker = 0; gBattlerAttacker < gBattlersCount; ++gBattlerAttacker)
                     {
                         if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_SLEEP)
-                            && gBattleMons[gBattlerAttacker].ability != ABILITY_SOUNDPROOF)
+                            && GetBattlerAbility(gBattlerAttacker) != ABILITY_SOUNDPROOF)
                         {
                             gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_SLEEP);
                             gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_NIGHTMARE);
@@ -2722,7 +2722,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 {
                     u8 toSub;
 
-                    if (gBattleMons[gBattlerAttacker].ability == ABILITY_EARLY_BIRD)
+                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_EARLY_BIRD)
                         toSub = 2;
                     else
                         toSub = 1;
@@ -2778,7 +2778,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_TRUANT: // truant
-            if (gBattleMons[gBattlerAttacker].ability == ABILITY_TRUANT && gDisableStructs[gBattlerAttacker].truantCounter)
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_TRUANT && gDisableStructs[gBattlerAttacker].truantCounter)
             {
                 CancelMultiTurnMoves(gBattlerAttacker);
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
@@ -3224,20 +3224,6 @@ u8 AtkCanceller_UnableToUseMove2(void)
     } while (gBattleStruct->atkCancellerTracker != CANCELLER_END2 && effect == 0);
 
     return effect;
-}
-
-void TrySaveExchangedItem(u8 battlerId, u16 stolenItem)
-{
-    // Because BtlController_EmitSetMonData does SetMonData, we need to save the stolen item only if it matches the battler's original
-    // So, if the player steals an item during battle and has it stolen from it, it will not end the battle with it (naturally)
-
-    // If regular trainer battle and mon's original item matches what is being stolen, save it to be restored at end of battle
-    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER
-        //&& !(gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
-        && GetBattlerSide(battlerId) == B_SIDE_PLAYER
-        && stolenItem == gBattleStruct->itemStolen[gBattlerPartyIndexes[battlerId]].originalItem)
-        gBattleStruct->itemStolen[gBattlerPartyIndexes[battlerId]].stolen = TRUE;
-
 }
 
 //logic for this is non-flying type pokemon that are typically
@@ -5396,7 +5382,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     //&& IsBattlerAlive(battler) remove this part, so affect activates even if I faint
                     && IsMoveMakingContact(move, gBattlerAttacker))
                 {
-                    if (gBattleMons[gBattlerAttacker].ability == ABILITY_STICKY_HOLD)
+                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_STICKY_HOLD)
                     {
                         if (gBattleMons[gBattlerAttacker].item != ITEM_NONE)
                         {
@@ -5430,7 +5416,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && TARGET_TURN_DAMAGED
                  && gBattleMons[gBattlerTarget].hp != 0
                  && (Random() % 3) == 0
-                 && gBattleMons[gBattlerAttacker].ability != ABILITY_OBLIVIOUS
+                 && GetBattlerAbility(gBattlerAttacker) != ABILITY_OBLIVIOUS
                  && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != GetGenderFromSpeciesAndPersonality(speciesDef, pidDef)
                  && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION)
                  && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != MON_GENDERLESS
@@ -5946,7 +5932,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && IsBattlerAlive(battler)
                     && IsMoveMakingContact(move, gBattlerAttacker))
                 {
-                    if (gBattleMons[gBattlerTarget].ability == ABILITY_STICKY_HOLD)
+                    if (GetBattlerAbility(gBattlerTarget) == ABILITY_STICKY_HOLD)
                     {
                         if (gBattleMons[gBattlerTarget].item != ITEM_NONE)
                         {
@@ -8680,7 +8666,12 @@ bool8 IsMoveMakingContact(u16 move, u8 battlerAtk)
         return TRUE;
 }
 
-bool8 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId)
+//understand why thsi is here now, later gen knock off fully remove the item held
+//for effects that take advantage of the user not having an item.
+//oh...nvm the item is restored at battle end...
+//pretty sure I haven't set that up yet...
+//if it does restore Item then I'd prob 
+bool8 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId)//changed logic will only block knock off for items that patently change mons stats/form. logic being somethin that is consumed not something just on them
 {
     u16 species = gBattleMons[battlerId].species;
 
@@ -8694,12 +8685,12 @@ bool8 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId)
     else if (ItemId_GetHoldEffect(itemId) == HOLD_EFFECT_MEGA_STONE)
         //&& ((GetMegaEvolutionSpecies(species, itemId) != SPECIES_NONE) || gBattleStruct->mega.evolvedPartyIds[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]]))
         return FALSE;
-    //else if (species == SPECIES_GIRATINA && itemId == ITEM_GRISEOUS_ORB)
-      //  return FALSE;
+    /*else if (species == SPECIES_GIRATINA && itemId == ITEM_GRISEOUS_ORB)
+        return FALSE;*/
     else if (species == SPECIES_GENESECT && GetBattlerHoldEffect(battlerId, FALSE) == HOLD_EFFECT_DRIVE)
-        return FALSE;
+        return TRUE;
     else if (species == SPECIES_SILVALLY && GetBattlerHoldEffect(battlerId, FALSE) == HOLD_EFFECT_MEMORY)
-        return FALSE;
+        return TRUE;
     else
         return TRUE;
 }
@@ -8835,7 +8826,7 @@ u8 IsMonDisobedient(void)
     {
         obedienceLevel = gBattleMons[gBattlerAttacker].level - obedienceLevel;
         calc = (Random() & 255);
-        if (calc < obedienceLevel && !(gBattleMons[gBattlerAttacker].status1 & STATUS1_ANY) && gBattleMons[gBattlerAttacker].ability != ABILITY_VITAL_SPIRIT && gBattleMons[gBattlerAttacker].ability != ABILITY_INSOMNIA)
+        if (calc < obedienceLevel && !(gBattleMons[gBattlerAttacker].status1 & STATUS1_ANY) && GetBattlerAbility(gBattlerAttacker) != ABILITY_VITAL_SPIRIT && GetBattlerAbility(gBattlerAttacker) != ABILITY_INSOMNIA)
         {
             // try putting asleep
             int i;

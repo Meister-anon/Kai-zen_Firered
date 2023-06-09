@@ -278,7 +278,7 @@
 #define ATK49_ATTACKER_VISIBLE                  11
 #define ATK49_TARGET_VISIBLE                    12
 #define ATK49_ITEM_EFFECTS_TARGET				13
-#define ATK49_MOVE_EFFECTS3						14      
+#define ATK49_MOVE_EFFECTS2						14      
 #define ATK49_ITEM_EFFECTS_ALL                  15
 #define ATK49_KINGSROCK						    16  //item effect need to be bfore kingsrock for things like rocky helm I guess
 #define ATK49_SUBSTITUTE                        17

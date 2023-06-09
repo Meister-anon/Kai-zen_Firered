@@ -16862,7 +16862,7 @@ index 35328d6c..367deb64 100644
          gBattleCommunication[6] = 3;
          RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
      }
-+    if (gBattleMons[gBattlerTarget].ability == ABILITY_DISPIRIT_GUARD && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2
++    if (GetBattlerAbility(gBattlerTarget) == ABILITY_DISPIRIT_GUARD && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2
 +        && (!(gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE) || ((gMoveResultFlags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
 +        && gBattleMoves[gCurrentMove].power)
 +    {
@@ -16880,7 +16880,7 @@ index 35328d6c..367deb64 100644
              RecordAbilityBattle(gBattlerTarget, ABILITY_WONDER_GUARD);
          }
      }
-+    else if (gBattleMons[gBattlerTarget].ability == ABILITY_DISPIRIT_GUARD && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2)
++    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_DISPIRIT_GUARD && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2)
 +    {
 +        if (((flags & 1) || !(flags & 2)) && gBattleMoves[gCurrentMove].power) //think reversing was right. 
 +        { //    I believe it says if super effectie, or not Not effective, do same as wonder guard.
@@ -16958,7 +16958,7 @@ index 35328d6c..367deb64 100644
          gBattleCommunication[6] = 3;
          RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
      }
-+    if (gBattleMons[gBattlerTarget].ability == ABILITY_DISPIRIT_GUARD
++    if (GetBattlerAbility(gBattlerTarget) == ABILITY_DISPIRIT_GUARD
 +        && !(flags & MOVE_RESULT_NO_EFFECT)
 +        && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2
 +        && (!(flags & MOVE_RESULT_NOT_VERY_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
@@ -16981,16 +16981,16 @@ index 35328d6c..367deb64 100644
 +                u16 ability;
  
                  if (gBattlerPartyIndexes[gBattlerAttacker] == i)
-                     ability = gBattleMons[gBattlerAttacker].ability;
+                     ability = GetBattlerAbility(gBattlerAttacker);
 @@ -8445,7 +8491,7 @@ static void atkD2_tryswapitems(void) // trick
  
  static void atkD3_trycopyability(void) // role play
  {
--    if (gBattleMons[gBattlerTarget].ability != ABILITY_NONE && gBattleMons[gBattlerTarget].ability != ABILITY_WONDER_GUARD)
-+    if (gBattleMons[gBattlerTarget].ability != ABILITY_NONE) //changed to remove excluding abilities like wonderguard
+-    if (GetBattlerAbility(gBattlerTarget) != ABILITY_NONE && GetBattlerAbility(gBattlerTarget) != ABILITY_WONDER_GUARD)
++    if (GetBattlerAbility(gBattlerTarget) != ABILITY_NONE) //changed to remove excluding abilities like wonderguard
      {
-         gBattleMons[gBattlerAttacker].ability = gBattleMons[gBattlerTarget].ability;
-         gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
+         GetBattlerAbility(gBattlerAttacker) = GetBattlerAbility(gBattlerTarget);
+         gLastUsedAbility = GetBattlerAbility(gBattlerTarget);
 @@ -8552,19 +8598,17 @@ static void atkD9_scaledamagebyhealthratio(void)
      ++gBattlescriptCurrInstr;
  }
@@ -16998,10 +16998,10 @@ index 35328d6c..367deb64 100644
 -static void atkDA_tryswapabilities(void) // skill swap
 +static void atkDA_tryswapabilities(void) // skill swap . //remember need to remove wonderguard from all abiility swap functions,. because game freak
  {
-     if ((gBattleMons[gBattlerAttacker].ability == 0
-         && gBattleMons[gBattlerTarget].ability == 0)
--     || gBattleMons[gBattlerAttacker].ability == ABILITY_WONDER_GUARD
--     || gBattleMons[gBattlerTarget].ability == ABILITY_WONDER_GUARD
+     if ((GetBattlerAbility(gBattlerAttacker) == 0
+         && GetBattlerAbility(gBattlerTarget) == 0)
+-     || GetBattlerAbility(gBattlerAttacker) == ABILITY_WONDER_GUARD
+-     || GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_GUARD
 -     || gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
 +     || gMoveResultFlags & MOVE_RESULT_NO_EFFECT) //not sure if nor effect clause would still prevent working on wonderguard.
       {
@@ -17009,11 +17009,11 @@ index 35328d6c..367deb64 100644
       }
      else
      {
--        u8 abilityAtk = gBattleMons[gBattlerAttacker].ability;
-+        u16 abilityAtk = gBattleMons[gBattlerAttacker].ability;
+-        u8 abilityAtk = GetBattlerAbility(gBattlerAttacker);
++        u16 abilityAtk = GetBattlerAbility(gBattlerAttacker);
          
-         gBattleMons[gBattlerAttacker].ability = gBattleMons[gBattlerTarget].ability;
-         gBattleMons[gBattlerTarget].ability = abilityAtk;
+         GetBattlerAbility(gBattlerAttacker) = GetBattlerAbility(gBattlerTarget);
+         GetBattlerAbility(gBattlerTarget) = abilityAtk;
 @@ -8626,8 +8670,8 @@ static void atkDC_trysetgrudge(void)
      else
      {

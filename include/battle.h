@@ -300,6 +300,7 @@ struct ProtectStruct
     u32 usedMicleBerry : 1;
     u32 usedCustapBerry : 1;    // also quick claw
     u32 touchedProtectLike : 1;
+    u32 obstructed : 1;
     u32 disableEjectPack : 1;
     u16 fieldE;
 };
@@ -715,6 +716,7 @@ struct BattleStruct //fill in unused fields when porting
     struct StolenItem itemStolen[PARTY_SIZE];  // Player's team that had items stolen (two bytes per party member)
     u8 blunderPolicy : 1; // should blunder policy activate
     u8 sameMoveTurns[MAX_BATTLERS_COUNT]; // For Metronome, number of times the same moves has been SUCCESFULLY used.
+    u16 moveEffect2; // For Knock Off smack down and removestatus moves i.e smelling salts wakeupslap & sparklin aria   -PORTED
     u8 ballSpriteIds[2];    // item gfx, window gfx
     u8 stickyWebUser;
     u8 appearedInBattle; // Bitfield to track which Pokemon appeared in battle. Used for Burmy's form change
