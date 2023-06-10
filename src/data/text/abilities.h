@@ -1,5 +1,5 @@
 static const u8 sNoneDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("No special ability.");
-static const u8 sStenchDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Helps repel wild POKéMON.");
+static const u8 sStenchDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Helps repel wild POKéMON.\nAll battlers have a chance to flinch.");
 static const u8 sDrizzleDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Summons rain in battle.");
 static const u8 sSpeedBoostDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Gradually boosts SPEED.");
 static const u8 sBattleArmorDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Blocks critical hits.");
@@ -241,8 +241,8 @@ static const u8 sScreenCleanerDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("R
 static const u8 sSteelySpiritDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Boosts user's and ally's Steel moves.");
 static const u8 sPerishBodyDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Foe faints in 3 turns if hit.");
 static const u8 sWanderingSpiritDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Trade abilities on contact.");
-static const u8 sGorillaTacticsDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups Attack and locks move.");
-static const u8 sNeutralizingGasDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("All Abilities are nullified.");
+static const u8 sGorillaTacticsDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups Attack and Sp.Attack but locks moves");
+static const u8 sNeutralizingGasDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Opponent Abilities are nullified.");
 static const u8 sPastelVeilDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Protects team from poison.");
 static const u8 sHungerSwitchDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Changes form each turn.");;
 static const u8 sQuickDrawDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Moves first occasionally.");

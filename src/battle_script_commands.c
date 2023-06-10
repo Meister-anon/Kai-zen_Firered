@@ -3645,7 +3645,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
     if (battlerAbility == ABILITY_SHIELD_DUST 
      && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
      && !primary
-     && gBattleScripting.moveEffect <= 9)
+     && gBattleScripting.moveEffect <= MOVE_EFFECT_TRI_ATTACK)  //skip script command if in threshold
     {
         ++gBattlescriptCurrInstr;
         return;
@@ -3653,7 +3653,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
     if (gSideStatuses[GET_BATTLER_SIDE(gEffectBattler)] & SIDE_STATUS_SAFEGUARD
      && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
      && !primary
-     && gBattleScripting.moveEffect <= 7)
+     && gBattleScripting.moveEffect <= MOVE_EFFECT_CONFUSION)   //skip script command if in threshold
     {
         ++gBattlescriptCurrInstr;
         return;
@@ -3691,7 +3691,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 break;
             if (battlerAbility == ABILITY_INSOMNIA)
                 break;
-            if (GetBattlerAbility(gEffectBattler) == ABILITY_COMATOSE)
+            if (battlerAbility == ABILITY_COMATOSE)
                 break;
             CancelMultiTurnMoves(gEffectBattler); //if it passes all checks cancel multi turn moves and appply sleep. I think
             statusChanged = TRUE;
@@ -3755,8 +3755,8 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
             statusChanged = TRUE;
             break;
         case STATUS1_BURN:
-            if ((GetBattlerAbility(gEffectBattler) == ABILITY_WATER_VEIL 
-                || GetBattlerAbility(gEffectBattler) == ABILITY_WATER_BUBBLE)
+            if ((battlerAbility == ABILITY_WATER_VEIL
+                || battlerAbility == ABILITY_WATER_BUBBLE)
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             {
                 gLastUsedAbility = battlerAbility;
@@ -3820,9 +3820,9 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 break;
             if (noSunCanFreeze == 0)
                 break;
-            if (GetBattlerAbility(gEffectBattler) == ABILITY_MAGMA_ARMOR
-                || GetBattlerAbility(gEffectBattler) == ABILITY_FLAME_BODY
-                || GetBattlerAbility(gEffectBattler) == ABILITY_LAVA_FISSURE)
+            if (battlerAbility == ABILITY_MAGMA_ARMOR
+                || battlerAbility == ABILITY_FLAME_BODY
+                || battlerAbility == ABILITY_LAVA_FISSURE)
                 break;
             CancelMultiTurnMoves(gEffectBattler);
             statusChanged = TRUE;
@@ -3870,8 +3870,8 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 break;
             if (gBattleMons[gEffectBattler].status1)
                 break;
-            if (GetBattlerAbility(gEffectBattler) == ABILITY_COMATOSE
-                || GetBattlerAbility(gEffectBattler) == ABILITY_LIMBER)
+            if (battlerAbility == ABILITY_COMATOSE
+                || battlerAbility == ABILITY_LIMBER)
                 break;
             statusChanged = TRUE;
             break;

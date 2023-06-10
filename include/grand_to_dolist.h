@@ -411,12 +411,16 @@ With that I can use GetMondata ability num, if 0 set a random abilityNum between
 * and auto place them, with the cursor going to the position of the last placed mon, so you know where they are.
 */
 goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads space in the box
+goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repellent, also use for stench ability
 /* 
 * setup pokenav, show potential area encounters but want mon to be greyed out until you've seen them.
 * so just see a silloette-
 * 
 * bad onion b.o trainer repellent figure logic think it would temporarily set trainer view of every trainer on
 * current map/map section to 0, so its talk to fight,  like repel long as timer isn't 0-
+* 
+* ok was actually really easy to setup, mostly done, also added to stench, the only thing left to do is setup
+* the eventscripts for it, i.e the text, for reapplying the trainer repellent.   in UpdateBadOnionCounter
 * 
 * tweak field moves, since adding item use selection to summary menu.
 * will keep cut and fly as field moves, and softboiled review list and think to remove others.
@@ -616,12 +620,19 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 *  ok yeah it was wrong, and I've definitly used that  logic in multiple places
 * need to search != (ability     and || ability  to fix all instances I"m able to find. -DONE all ability instances corrected
 * 
+* idea, plan to have Bad Onion, economy for avoiding trainer, but thought could also have stench mon have that effct if front of party as well.
+* doesn't need to be a thing, but would be in line with wild repel logic, 
+* remember bad onion idea is set trainer view to 0, so you could walk right in front of a trainer and they wouldn't battle you.
+* You'd have to directly talk to them to trigger battle.
+* 
+* Ironically its the change they made in gen 9, but my version is better as its linked to player choice rather than a global thing.
+* 
 * attempted setting up two type move effects, tyepcalc logic done, need make custom twotype effect for splishysplash, as want to add paralyze chance to it.
 * believe will add twotypeeffect to list of certain effects so the effect chance will be exclusively for whatever move effect I set.
 * I think adding the para chance is simple as just making a new effect and having its battlescript start with setmoveeffect paralysis 
 * then when done with logic can just go to battlescript hit.
 * 
-* ok two_typed_move effect just uses normal hit battlescript by default, giving it its own effect, is just for logic in typecalc
+* ok two_typed_move effect just uses normal hit battlescript by default, giving it its own effect, was just for logic in typecalc
 * so it reads the type from both move and argument.
 * 
 * so now that I set twotye as a certain effect, in setmoveeffectchance all I need to do to add effects to those,
@@ -1589,7 +1600,7 @@ goto CATCHING_LOGIC
 * and other random odds ends to sell,  but keep in mind also plan to eventually setup timed events with nuggets other item give aways for economy management.
 * as well as plan to make all trainers rematchable which would make it easy to get more money from grinding battles.
 * plan to do via time or a stepp counter, when condition is met, reset trainer flags of all npc on map.
-* this would also give rise to need to use b.o  trainer repellet from pewter, further setting the realistic world economy, etc.
+* this would also give rise to need to use b.o  trainer repellent from pewter, further setting the realistic world economy, etc.
 * 
 * potential idea need recharge gems with element stones instead of removing item, after gem is used up in battle,
 * add item to bag, that is a grey gem,  spent gem something,   late game wont need evo stones so this will be new use for them,

@@ -1192,6 +1192,7 @@ extern const u8 EventScript_PC[];
 
 extern const u8 EventScript_RepelWoreOff[];
 extern const u8 EventScript_BwRepelWoreOff[];
+extern const u8 EventScript_BwTrainerRepelWoreOff[];
 extern const u8 EventScript_AnotherRepel[];
 extern const u8 EventScript_UseAnotherRepel[];
 extern const u8 EventScript_UseAnotherSuperRepel[];

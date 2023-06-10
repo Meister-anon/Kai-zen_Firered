@@ -24,6 +24,7 @@ void FieldUseFunc_BerryPouch(u8 taskId);
 void BattleUseFunc_BerryPouch(u8 taskId);
 void FieldUseFunc_TeachyTv(u8 taskId);
 void FieldUseFunc_SuperRepel(u8 taskId);
+void FieldUseFunc_BadOnion(u8 taskId);
 void FieldUseFunc_BlackFlute(u8 taskId);
 void FieldUseFunc_TownMap(u8 taskId);
 void FieldUseFunc_FameChecker(u8 taskId);

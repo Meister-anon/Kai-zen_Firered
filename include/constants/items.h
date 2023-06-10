@@ -594,7 +594,8 @@
 #define ITEM_GRASSY_SEED 312*/
 // Incenses
 #define ITEM_SEA_INCENSE 385
-#define ITEM_LAX_INCENSE 386 /*  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
+#define ITEM_LAX_INCENSE 386 
+#define ITEM_BAD_ONION 387 /*  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
 #define ITEM_ODD_INCENSE 386
 #define ITEM_ROCK_INCENSE 387
 #define ITEM_FULL_INCENSE 388
@@ -672,7 +673,7 @@
 #define ITEM_ADAMANT_ORB
 #define ITEM_LUSTROUS_ORB
 #define ITEM_GRISEOUS_ORB */
-#define ITEM_N_A 387 // keep this as last item value,   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
+#define ITEM_N_A 388 // keep this as last item value,   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
 #define ITEMS_COUNT ITEM_N_A +1
 #define ITEM_FIELD_ARROW ITEM_N_A//field arrow isn't defined as an item, it just end of item_menu_icons.c list
 // Emerald   BUT based on list from vanilla its actually ID was equal to items N_A, circumventing that equation.

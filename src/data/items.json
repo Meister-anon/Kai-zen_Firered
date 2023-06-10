@@ -6249,6 +6249,22 @@
       "battleUsage": 0,
       "battleUseFunc": "NULL",
       "secondaryId": 0
+    },
+    {
+      "english": "BAD ONION",
+      "itemId": "ITEM_BAD_ONION",
+      "price": 350,
+      "holdEffect": "HOLD_EFFECT_NONE",
+      "holdEffectParam": 100,
+      "description_english": "Prevents trainers from\\napproaching for 100 steps.",
+      "importance": 0,
+      "exitsBagOnUse": 0,
+      "pocket": "POCKET_ITEMS",
+      "type": 4,
+      "fieldUseFunc": "FieldUseFunc_BadOnion",
+      "battleUsage": 0,
+      "battleUseFunc": "NULL",
+      "secondaryId": 0
     }
   ]
 }

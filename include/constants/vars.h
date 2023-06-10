@@ -325,6 +325,9 @@
 //10% chance to attempt searching for an item
 #define VAR_PICKUP_COUNTER		   0x4108
 
+// If nonzero, counts down by one every step.
+// When it hits zero, repel's effect wears off.
+#define VAR_TRAINER_REPEL_STEP_COUNT                0x4109
 
 #define VARS_END                   VAR_PICKUP_COUNTER
 #define VARS_COUNT                 (VARS_END - VARS_START + 1)
