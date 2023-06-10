@@ -1,5 +1,5 @@
 static const u8 sNoneDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("No special ability.");
-static const u8 sStenchDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Helps repel wild POKéMON.\nAll battlers have a chance to flinch.");
+static const u8 sStenchDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Helps repel wild POKéMON and trainers.\nAll battlers have a chance to flinch.");
 static const u8 sDrizzleDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Summons rain in battle.");
 static const u8 sSpeedBoostDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Gradually boosts SPEED.");
 static const u8 sBattleArmorDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Blocks critical hits.");

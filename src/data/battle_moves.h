@@ -4171,11 +4171,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_FOLLOW_ME] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_6
-            .priority = 2,
-        #else
-            .priority = 3,
-        #endif
+
+        .priority = 3,
         .effect = EFFECT_FOLLOW_ME,
         .power = 0,
         .type = TYPE_NORMAL,

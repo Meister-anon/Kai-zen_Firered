@@ -414,7 +414,11 @@ goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads spa
 goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repellent, also use for stench ability
 /* 
 * setup pokenav, show potential area encounters but want mon to be greyed out until you've seen them.
-* so just see a silloette-
+* so just see a silloette- I just don't like the existing effects that show you exactly what are in the area,
+* so people decide from the getgo to just skip certain encounters, my way you can tell if you've found all the encounters
+* and finding out who's around is more incentive to continue searching/exploring.
+* could either use mon sillhoute or a non specific pokemon identifier i.e an icon to denote a pokemon
+* that doesn't represent any specific one. potentially the old gen 1 pngs?
 * 
 * bad onion b.o trainer repellent figure logic think it would temporarily set trainer view of every trainer on
 * current map/map section to 0, so its talk to fight,  like repel long as timer isn't 0-
@@ -560,7 +564,14 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * 
 * need give all dark type mon sucker punch in learnset, if a mon evolves into a dark type,  make sucker punch an evo move
 * would be a problem for fairy if these moves are too far spread so backstab will be dark exclusive
-* sucker punch will only be for dark fighting and ghost types.
+* sucker punch will only be for dark fighting and (maybe) ghost types.
+* can also readjust night slash think make dark ghost only? - check who learns it
+* 
+* Ok night slash is VERY spread out, proliferated I can bring that in to just dark normal maybe, (since fairy beats normal and normal is flexible)
+* potentially ghost type as well, (but they also have shadow claw) but I don't want ghost to be for dark, what  water types were for ice...
+* 
+* That way this allows dark types avoid that issue,  that ice types had of irrelevance as other mon got ethe same access to the best moves of said type
+* without having to deal/engage with the weaknesses.
 * 
 * Give shuckle better moves, it stats are fine, it just learn horrible moves.
 * 

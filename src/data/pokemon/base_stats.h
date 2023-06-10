@@ -8212,7 +8212,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_SOUNDPROOF, ABILITY_RATTLED},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_RATTLED, ABILITY_OBLIVIOUS},
+            .abilityHidden = {ABILITY_OBLIVIOUS, ABILITY_UNAWARE},
         #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
@@ -8239,7 +8239,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_SOUNDPROOF, ABILITY_SCRAPPY},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_UNAWARE, ABILITY_NO_GUARD},
+            .abilityHidden = {ABILITY_NO_GUARD, ABILITY_SONAR},
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -8266,12 +8266,11 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_SOUNDPROOF, ABILITY_SCRAPPY},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_UNAWARE, ABILITY_NO_GUARD},
+            .abilityHidden = {ABILITY_NO_GUARD, ABILITY_SONAR},
         #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-    }, //buff unaware to also prevent your stat changes
-    //not just the target pokemon
+    },
 
     [SPECIES_MAKUHITA] =
     {
@@ -20127,7 +20126,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FRISK, ABILITY_INFILTRATOR},
-            .abilityHidden = {ABILITY_SONAR, ABILITY_NONE}, //not psychic makes no sense to have telepathy, its a sound based mon
+            .abilityHidden = {ABILITY_ANTICIPATION, ABILITY_SONAR}, //not psychic makes no sense to have telepathy, its a sound based mon
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
@@ -20160,7 +20159,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FRISK, ABILITY_INFILTRATOR},
-            .abilityHidden = {ABILITY_SONAR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_ANTICIPATION, ABILITY_SONAR},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif

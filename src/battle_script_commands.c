@@ -9948,20 +9948,25 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattlescriptCurrInstr += 7;
         return;
     case VARIOUS_LOSE_TYPE:
+        u8 lost_type = gBattlescriptCurrInstr[3];
         for (i = 0; i < 3; i++) //TEST, since there's only 3 types shouldn't this only need to increment up to 2 not 3?
         {   //nah it should be 3, way for loops work, it'll not execute when the value is 3., it checks the value before executing the block.
-            if (gBattleMons[gActiveBattler].type1 != gBattleMons[gActiveBattler].type2)
+            if (gBattleMons[gActiveBattler].type1 != gBattleMons[gActiveBattler].type2) //if multitype mon
             {
-                if (*(u8*)(&gBattleMons[gActiveBattler].type1 + i) == gBattlescriptCurrInstr[3])    //believe +i is checking each battler
+                if (*(u8*)(&gBattleMons[gActiveBattler].type1 + i) == lost_type)    //believe +i is checking each battler
                     *(u8*)(&gBattleMons[gActiveBattler].type1 + i) = TYPE_MYSTERY;  //nvm its checking the different types type 1 typ2 & type 3 since its not using 4 hmm
-                PREPARE_TYPE_BUFFER(gBattleTextBuff3, gTypeNames[gBattlescriptCurrInstr[3]]);
+                PREPARE_TYPE_BUFFER(gBattleTextBuff3, gTypeNames[lost_type]);
             }
-            else if (gBattleMons[gActiveBattler].type1 == gBattleMons[gActiveBattler].type2 
-                && gBattleMons[gActiveBattler].type3 != gBattlescriptCurrInstr[3])
+            else if (gBattleMons[gActiveBattler].type1 == gBattleMons[gActiveBattler].type2)//actually since this would be for entire battle not just switchin, type 3 is irrelevant
             {
-                if (*(u8*)(&gBattleMons[gActiveBattler].type1 + i) == gBattlescriptCurrInstr[3])
-                    *(u8*)(&gBattleMons[gActiveBattler].type1 + i) = TYPE_NORMAL;
-                PREPARE_TYPE_BUFFER(gBattleTextBuff3, gTypeNames[gBattlescriptCurrInstr[3]]);   //hopefullly works, would buffer type lost, to loss string
+               //type3 defaults to mystery logic was wrong here, point was to avoid mon becoming typeless
+               //type3 defaults to mystery logic was wrong here, point was to avoid mon becoming typeless
+               // {
+                    if (*(u8*)(&gBattleMons[gActiveBattler].type1 + i) == lost_type)
+                        *(u8*)(&gBattleMons[gActiveBattler].type1 + i) = TYPE_NORMAL;
+                //}//it should default to normal long as mon is monotype even if a 3rd type has been set that is not equal to type being lost or mystery.
+                            //as type 3 is lost on switch I believe.
+                PREPARE_TYPE_BUFFER(gBattleTextBuff3, gTypeNames[lost_type]);   //hopefullly works, would buffer type lost, to loss string
             }
         }
         gBattlescriptCurrInstr += 4;
