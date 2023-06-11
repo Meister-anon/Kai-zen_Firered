@@ -233,6 +233,7 @@ static void sub_808C2D8(u16 *dest, u16 dest_left, u16 dest_top, u16 width, u16 h
         Dma3FillLarge16_(0, dest, width);
 }
 
+#define MORE_PCLOGIC
 static void Task_PokemonStorageSystemPC(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
@@ -275,27 +276,33 @@ static void Task_PokemonStorageSystemPC(u8 taskId)
             }
             break;
         case MENU_B_PRESSED:
+            if (CountPartyMons() == 0) //
+            {
+                FillWindowPixelBuffer(0, PIXEL_FILL(1));
+                AddTextPrinterParameterized2(0, 2, gText_NoPkmnInParty, 0, NULL, TEXT_COLOR_DARK_GREY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GREY);
+                task->data[0] = 3;
+            }//no break because I want fallthrough
         case  4:
             ClearStdWindowAndFrame(0, TRUE);
             ClearStdWindowAndFrame(task->data[15], TRUE);
-            UnlockPlayerFieldControls();
-            EnableBothScriptContexts();
-            DestroyTask(taskId);
+            UnlockPlayerFieldControls();    //unlocks me
+            EnableBothScriptContexts();     //...locks me again
+            DestroyTask(taskId);//believe thsi is end of task, or one of them, so from here would end pss and go back to main pc menu
             break;
-        default:
-            if (task->data[2] == 0 && CountPartyMons() == PARTY_SIZE)
+        default:    //these trigger on outside of pc menu,  think this is what I was looking for but this is for pressing A I want pressing B.
+            if (task->data[2] == BOX_OPTION_WITHDRAW && CountPartyMons() == PARTY_SIZE) //I think numbers are for menu list, 0 is top, withdraw
             {
                 FillWindowPixelBuffer(0, PIXEL_FILL(1));
                 AddTextPrinterParameterized2(0, 2, gText_PartyFull, 0, NULL, TEXT_COLOR_DARK_GREY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GREY);
                 task->data[0] = 3;
             }
-            else if (task->data[2] == 1 && CountPartyMons() == 1)
+            else if (task->data[2] == BOX_OPTION_DEPOSIT && CountPartyMons() == 1)   //1 is middle deposit //hmm but this also works for move    prevents putting away last mon, remove this
             {
                 FillWindowPixelBuffer(0, PIXEL_FILL(1));
                 AddTextPrinterParameterized2(0, 2, gText_JustOnePkmn, 0, NULL, TEXT_COLOR_DARK_GREY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GREY);
                 task->data[0] = 3;
-            }
-            else
+            } //removing allows for depositing full party, still has issues to work out, code otherwhere,  that create a default question mark icon that doesn't track
+            else //success condition access box
             {
                 FadeScreen(FADE_TO_BLACK, 0);
                 task->data[0] = 4;
@@ -304,7 +311,7 @@ static void Task_PokemonStorageSystemPC(u8 taskId)
         }
         break;
     case 3:
-        if (JOY_NEW(A_BUTTON | B_BUTTON))
+        if (JOY_NEW(A_BUTTON | B_BUTTON))   //pressign A or B, after can't access box messages redisplays menu cursor options and goes back to case 2
         {
             FillWindowPixelBuffer(0, PIXEL_FILL(1));
             AddTextPrinterParameterized2(0, 2, sUnknown_83CDA20[task->data[1]].desc, 0, NULL, TEXT_COLOR_DARK_GREY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GREY);
@@ -356,12 +363,12 @@ static void FieldCb_ReturnToPcMenu(void)
     MainCallback vblankCb = gMain.vblankCallback;
 
     SetVBlankCallback(NULL);
-    taskId = CreateTask(Task_PokemonStorageSystemPC, 80);
+    taskId = CreateTask(Task_PokemonStorageSystemPC, 80);   //reloads pss menu
     gTasks[taskId].data[0] = 0;
-    gTasks[taskId].data[1] = sPreviousBoxOption;
+    gTasks[taskId].data[1] = sPreviousBoxOption;    //returns cursor to box option initially clicked
     Task_PokemonStorageSystemPC(taskId);
     SetVBlankCallback(vblankCb);
-    FadeInFromBlack();
+    FadeInFromBlack();      //removes black screen, so everything is visible
 }
 
 static const struct WindowTemplate sUnknown_83CDA48 = {
@@ -385,7 +392,7 @@ static void PSS_CreatePCMenu(u8 whichMenu, s16 *windowIdPtr)
     *windowIdPtr = windowId;
 }
 
-void Cb2_ExitPSS(void)
+void Cb2_ExitPSS(void)  //exit box to return to pss menu
 {
     sPreviousBoxOption = GetCurrentBoxOption();
     gFieldCallback = FieldCb_ReturnToPcMenu;

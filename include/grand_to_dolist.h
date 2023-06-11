@@ -410,7 +410,81 @@ With that I can use GetMondata ability num, if 0 set a random abilityNum between
 * Use that same looping logic for placing htem within the box, just make it look for n number of free slots
 * and auto place them, with the cursor going to the position of the last placed mon, so you know where they are.
 */
+
+
+
+goto TOTAL_BOXES_COUNT  //values to consider
+/*I think min I need is 36, so not quite triple, keep in mind adding cefirian forms as well, as few gen 9 mon
+
+// I think if I can get that cfru thing, where you carry a secondary storage on you that may solve it, you can keep the important pokemon on you, and just swap from the pc.
+// allowing me to cut down on the needed number of boxes.
+
+//but I'd need to set the thing able to carry about 200 or 300 pokemon and able to register it, to change the after/catch action,
+//so when it's registered caught pokemon go directly to this closer storage instead of the pc.
+
+//that way pressing the register button would swap the default location new pokemon go, so if you have a pokemon you want to use, right away, just hit register before you catch.
+//this still requiers save expansion, but its just a more efficient interface.
+
+/*ok NOW I rememberw where I was going with this,  I'd need like 40 boxes to hold everyone, and thats only for catching 1 of everything,
+* so rather than having to scroll through 40 boxes, it'd be better to have 2 holding places, to split the load in half.
+* It would still be a pain, hmm unless I added some extra automated sorting features?
+* hmmm. intersting very interesting
+* Curruent box format has no sorting feature/no basic format, its essentially pure LIFO last mon caught is first in box/slot
+* But if instead I made it auto filter by typing even if I had many many boxes, it'd make it easier to find things
+* because they would be limited options.   as its grouped rather than essentially random.
+*
+* Ok this can only work based on type 1 there are 19 types in the game (including mystery, not including sound)
+* 19 x 2 is 38, so that may work, can give every type (excluding mystery) 2 boxes
+* Organize boxes in the order of the type chart i.e normal fighting flying etc.
+* Which each pair of boxes together, before moving to the next type
+* Naming convention:  Normal  Normal 2,  Fighting Fighting 2 Flying etc.
+*
+* All boxes aren't available from game start, typically the game checks caught count/pokedex and adds more boxes with time.
+* ok maybe not, game opened with 14 boxes. hm ok so I kinda prefer it adding more boxes as you go. need to see where that is
+* and why I assumed it worked that way, it must work that way somewhere.
+*
+* If I can get that, I'll start the game with no boxes, but add them based on type 1 of the mon caught
+* can just use the 1 island pc is offline at this time script if player tries to use viridian pc for pokemon storage.
+* before getting the pokedex.
+*
+* Now making 2 of every box makes sense from a bases template idea, but it may not be the most efficient.
+* for the actual data/mon. Also if people add more or change things having it based on the actual total
+* would future proof things.
+*
+* since number of mon in each type isn't equal as well.
+* So the other idea is intead of 2 of every type, at game launch read through species data
+*  reading & counting the type 1 of every mon, until you get to species end,
+* then take the value for each type value and divide by 30, for the number of mon you can fit in a box
+* to then determine how many boxes you need for that type.
+*
+* would have a variable for each type  would use u8 normaltype, fighttype, flyingtype, poisontype, fairy dark etc = 0;
+* use switch case for type1
+* use actual type values for case TYPE_NORMAL etc.
+* and in the code block increment the type constants i madde
+*
+* i.e
+* case TYPE_NORMAL
+* ++normaltype;
+*
+* at bottom after switch, loop through  type variables, divide by in_box_count (30)
+* and then use the final values to determine box count for each type
+*
+* (oh forgot there's macros for roundig I can use the round down so I get whole values from this)
+*
+* if <= 1  box count = 1 ;  if == 2 box count = 2;   if == 3 box count = 3;
+*
+* take some total and make that new value of total_boxes_count
+* that would need to run before/at compile and do the whole malloc thing I think?
+* Since its determining/changing a constant
+*
+*/
+
+goto MORE_PCLOGIC   // note change effect from ctrl selecting mon leave withdrawal normal, make deposit do deposit all. loop party read type and auto deposit in type box
+/*Issue left to work out, removing all mon from party, puts corrupted mon in slot, based on original first slot mon species
+also puts grey question mark in 1st slot party menu when no mon there*/
+
 goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads space in the box
+goto OTHER_BOX_LOGIC    //deals with moving mon and moving item logic
 goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repellent, also use for stench ability
 /* 
 * setup pokenav, show potential area encounters but want mon to be greyed out until you've seen them.
@@ -1014,6 +1088,20 @@ Thunder Wave Electric TM45
 * 
 * ...there's no bug type gym in kanto...
 * ...fuck it I'm making a "cool trainer" with  a bug team using that strat SOMEWHERE
+* 
+* OK came up with an idea!! in celadon we have the grass gym with erika, I can do the saffron city thing, 
+* where we have a defunct gym/leader he can be bug type.  can also be like the fighting gym in saffron where for beating him
+* he'll give a rare bug type.   but since its strong to grass, it can be lower level.
+* 
+* Use alternate story from saffron as this trainer would have type advantage so it can't be that he was bullied into giving up his gym/leader dreams.
+* rathrer story will be, he dreamd of opening a bug gym, but then Erika (and her ilk/crew/team/group) came along and ruined everything!!
+* ...well not really, it was hard managing the place with just me, so when they came along we decided to work something out. //in battle end text
+* I had to give up my dream but I'm not too hurt about it, I can still show off the amazing poweer of bugs here instead
+*  plus they were pretty nice about it.   pretty and nice. hehe. //post battle text
+* 
+* I can't give you a gym badge but for conquering my magnificent bugs, take your pick of of the 2 mon behind me.(steps to the side)
+* use starter logic, to make random loop trigger and set a random bug  based on a yet to be made bug species list.
+* the special thing is it'll be a perfect 31 IV mon.
 * 
 * make sure mon types have their own niche where needed, i.e bugs imune to confusion because of hive mind
 * grass immune to powder, ease of access to status moves to take advantage of multi status and higher than average vitatliy as part of nature

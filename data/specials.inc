@@ -374,7 +374,7 @@ gSpecials:: @ 815FD60
 	def_special EnableNationalPokedex
 	def_special SetWalkingIntoSignVars
 	def_special DisableMsgBoxWalkaway
-	def_special VsSeekerFreezeObjectsAfterChargeComplete
+@	def_special VsSeekerFreezeObjectsAfterChargeComplete
 @	def_special SetFlavorTextFlagFromSpecialVars
 @	def_special UpdatePickStateFromSpecialVar8005
 	def_special OverworldWhiteOutGetMoneyLoss

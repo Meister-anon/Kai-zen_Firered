@@ -31,7 +31,7 @@ EventScript_ChoosePCMenu:: @ 81A69A8
 	case 2, EventScript_AccessProfOaksPC
 	case 3, EventScript_AccessHallOfFame
 	case 4, EventScript_TurnOffPC
-	case SCR_MENU_CANCEL, EventScript_TurnOffPC
+	case SCR_MENU_CANCEL, EventScript_TurnOffPC	@ I believe	SCR_MENU_CANCEL is pressign B on menu
 	end
 
 EventScript_AccessPlayersPC:: @ 81A69F0
@@ -47,11 +47,11 @@ EventScript_AccessPokemonStorage:: @ 81A6A05
 	call_if_unset FLAG_SYS_NOT_SOMEONES_PC, EventScript_AccessSomeonesPC
 	call_if_set FLAG_SYS_NOT_SOMEONES_PC, EventScript_AccessBillsPC
 	msgbox Text_OpenedPkmnStorage
-	special ShowPokemonStorageSystemPC
-	waitstate
+	special ShowPokemonStorageSystemPC	@launches pss task function waitstate seems to be waiting for it to end
+	waitstate								@ok now it shouldnt be going to main menu, as it stays on pc screen until close, I think the waitstate is essentially a pause
 	setvar VAR_0x8004, HELPCONTEXT_PC
-	goto EventScript_PCMainMenu
-	end
+	goto EventScript_PCMainMenu		@so rather than a close command or moving to another script, this script is just paused until task is done then moves to the main menu again.
+	end								@so somehow I need to get my partycheck in before wait state?  ok can just edit menu b pressed in task function i think
 
 EventScript_AccessSomeonesPC:: @ 81A6A34
 	msgbox Text_AccessedSomeonesPC

@@ -243,6 +243,7 @@ static const struct StorageAction sPCStorageActionTexts[] = {
     [PC_TEXT_MARK_POKE] = {gText_MarkYourPkmn, PC_TEXT_FMT_NORMAL},
     [PC_TEXT_LAST_POKE] = {gText_ThatsYourLastPkmn, PC_TEXT_FMT_NORMAL},
     [PC_TEXT_PARTY_FULL] = {gText_YourPartysFull, PC_TEXT_FMT_NORMAL},
+    [PC_TEXT_PARTY_EMPTY] = {gText_YourPartysEmpty, PC_TEXT_FMT_NORMAL},
     [PC_TEXT_HOLDING_POKE] = {gText_YoureHoldingAPkmn, PC_TEXT_FMT_NORMAL},
     [PC_TEXT_WHICH_ONE_WILL_TAKE] = {gText_WhichOneWillYouTake, PC_TEXT_FMT_NORMAL},
     [PC_TEXT_CANT_RELEASE_EGG] = {gText_YouCantReleaseAnEgg, PC_TEXT_FMT_NORMAL},
@@ -678,7 +679,7 @@ static void Cb_MainPSS(u8 taskId)
             }
             break;
         case 11:
-            if (!CanMovePartyMon())
+            if (!CanMovePartyMon()) //false is can move
             {
                 if (ItemIsMail(gPSSData->cursorMonItem))
                 {
@@ -812,7 +813,7 @@ static void Cb_MainPSS(u8 taskId)
             gPSSData->state = 0;
         }
         break;
-    case 4:
+    case 4: //change in system_2 file keeps this from triggering, but the on mon still blocks.
         PlaySE(SE_FAILURE);
         PrintStorageActionText(PC_TEXT_LAST_POKE);
         gPSSData->state = 6;
@@ -927,12 +928,12 @@ static void Cb_OnSelectedMon(u8 taskId)
     case 2:
         switch (sub_8094F94())
         {
-        case -1:
-        case  0:
+        case MENU_B_PRESSED:
+        case  PC_TEXT_CANCEL:
             ClearBottomWindow();
             SetPSSCallback(Cb_MainPSS);
             break;
-        case 3:
+        case PC_TEXT_MOVE:
             if (CanMovePartyMon())
             {
                 gPSSData->state = 3;
@@ -944,12 +945,12 @@ static void Cb_OnSelectedMon(u8 taskId)
                 SetPSSCallback(Cb_MoveMon);
             }
             break;
-        case 5:
+        case PC_TEXT_PLACE:
             PlaySE(SE_SELECT);
             ClearBottomWindow();
             SetPSSCallback(Cb_PlaceMon);
             break;
-        case 4:
+        case PC_TEXT_SHIFT: //only fo rmail, and I removed mail
             if (!CanShiftMon())
             {
                 gPSSData->state = 3;
@@ -961,12 +962,12 @@ static void Cb_OnSelectedMon(u8 taskId)
                 SetPSSCallback(Cb_ShiftMon);
             }
             break;
-        case 2:
+        case PC_TEXT_WITHDRAW:
             PlaySE(SE_SELECT);
             ClearBottomWindow();
             SetPSSCallback(Cb_WithdrawMon);
             break;
-        case 1:
+        case PC_TEXT_STORE:
             if (CanMovePartyMon())
             {
                 gPSSData->state = 3;
@@ -982,7 +983,7 @@ static void Cb_OnSelectedMon(u8 taskId)
                 SetPSSCallback(Cb_DepositMenu);
             }
             break;
-        case 7:
+        case PC_TEXT_RELEASE:
             if (CanMovePartyMon())
             {
                 gPSSData->state = 3;
@@ -1001,7 +1002,7 @@ static void Cb_OnSelectedMon(u8 taskId)
                 SetPSSCallback(Cb_ReleaseMon);
             }
             break;
-        case 6:
+        case PC_TEXT_SUMMARY:
             PlaySE(SE_SELECT);
             SetPSSCallback(Cb_ShowMonSummary);
             break;
@@ -1009,24 +1010,24 @@ static void Cb_OnSelectedMon(u8 taskId)
             PlaySE(SE_SELECT);
             SetPSSCallback(Cb_ShowMarkMenu);
             break;*/
-        case 12:
+        case PC_TEXT_TAKE_ITEM:
             PlaySE(SE_SELECT);
             SetPSSCallback(Cb_TakeItemForMoving);
             break;
-        case 13:
+        case PC_TEXT_GIVE_ITEM:
             PlaySE(SE_SELECT);
             SetPSSCallback(Cb_GiveMovingItemToMon);
             break;
-        case 16:
+        case PC_TEXT_BAG:
             SetPSSCallback(Cb_ItemToBag);
             break;
-        case 15:
+        case PC_TEXT_SWITCH_ITEM:
             SetPSSCallback(Cb_SwitchSelectedItem);
             break;
-        case 14:
+        case PC_TEXT_GIVE_ITEM2:
             SetPSSCallback(Cb_GiveItemFromBag);
             break;
-        case 17:
+        case PC_TEXT_ITEM_INFO:
             SetPSSCallback(Cb_ShowItemInfo);
             break;
         }
@@ -1913,12 +1914,13 @@ static void Cb_GiveItemFromBag(u8 taskId)
     }
 }
 
-static void Cb_OnCloseBoxPressed(u8 taskId)
+#define OTHER_BOX_LOGIC
+static void Cb_OnCloseBoxPressed(u8 taskId) //not what I thought, this isn't closing bills pc, this is the closepc button inside the box.
 {
     switch (gPSSData->state)
     {
     case 0:
-        if (IsMonBeingMoved())
+        if (IsMonBeingMoved())//change this to auto return to origina spot if holding, rather than playing a dumb message
         {
             PlaySE(SE_FAILURE);
             PrintStorageActionText(PC_TEXT_HOLDING_POKE);
@@ -1926,7 +1928,7 @@ static void Cb_OnCloseBoxPressed(u8 taskId)
         }
         else if (IsActiveItemMoving())
         {
-            SetPSSCallback(Cb_CloseBoxWhileHoldingItem);
+            SetPSSCallback(Cb_CloseBoxWhileHoldingItem);    //change logic for this, to put item back on mon picked up from.
         }
         else
         {
@@ -1974,20 +1976,26 @@ static void Cb_OnCloseBoxPressed(u8 taskId)
     }
 }
 
-static void Cb_OnBPressed(u8 taskId)
+static void Cb_OnBPressed(u8 taskId)    //pressing B, while inside box.
 {
-    switch (gPSSData->state)
+    switch (gPSSData->state)    
     {
     case 0:
-        if (IsMonBeingMoved())
+        if (IsMonBeingMoved())  //change this to auto return to origina spot if holding, rather than playing a dumb message
         {
             PlaySE(SE_FAILURE);
             PrintStorageActionText(PC_TEXT_HOLDING_POKE);
             gPSSData->state = 1;
         }
-        else if (IsActiveItemMoving())
+        else if (IsActiveItemMoving())  //change logic for this, to put item back on mon picked up from.
         {
             SetPSSCallback(Cb_CloseBoxWhileHoldingItem);
+        }
+        else if (CountPartyMons() == 0)    //add to hopefully display when trying to close box with no mon in party
+        {
+            PlaySE(SE_FAILURE);
+            PrintStorageActionText(PC_TEXT_PARTY_EMPTY);
+            gPSSData->state = 1;
         }
         else
         {
