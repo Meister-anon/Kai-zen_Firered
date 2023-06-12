@@ -750,6 +750,10 @@ extern const u16 gMovesWithQuietBGM[];
 extern const u8 *const gBattleAnims_Moves[];
 
 // battle_anim_new.c
-void CoreEnforcerLoadBeamTarget(struct Sprite* sprite);
+void AnimTask_SquishTarget(u8 taskId);
+void CoreEnforcerLoadBeamTarget(struct Sprite *sprite);
+void AnimTask_CreateBestowItem(u8 taskId);
+void AnimTask_PurpleFlamesOnTarget(u8 taskId);
+void AnimTask_TechnoBlast(u8 taskId);
 
 #endif // GUARD_BATTLE_ANIM_H

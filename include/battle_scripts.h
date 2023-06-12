@@ -132,6 +132,7 @@ extern const u8 BattleScript_MagicCoatBounce[];
 extern const u8 BattleScript_SnatchedMove[];
 extern const u8 BattleScript_EnduredMsg[];
 extern const u8 BattleScript_OneHitKOMsg[];
+extern const u8 BattleScript_SturdiedMsg[];
 extern const u8 BattleScript_SAtkDown2[];
 extern const u8 BattleScript_FocusPunchSetUp[];
 extern const u8 BattleScript_MoveUsedIsAsleep[];
@@ -167,6 +168,7 @@ extern const u8 BattleScript_TargetBurnHeal[];
 extern const u8 BattleScript_MoveEffectSleep[];
 extern const u8 BattleScript_MoveEffectAttract[]; //don't know  if work right
 extern const u8 BattleScript_YawnMakesAsleep[];
+extern const u8 BattleScript_SleepHealing[];
 extern const u8 BattleScript_MoveEffectPoison[];
 extern const u8 BattleScript_MoveEffectBurn[];
 extern const u8 BattleScript_MoveEffectFreeze[];
@@ -314,6 +316,8 @@ extern const u8 BattleScript_BadDreamsLoop[];
 extern const u8 BattleScript_BadDreamsIncrement[];
 extern const u8 BattleScript_BadDreamsEnd[];
 extern const u8 BattleScript_DazzlingProtected[];
+extern const u8 BattleScript_IceFaceNullsDamage[];
+extern const u8 BattleScript_DarkTypePreventsPrankster[];
 extern const u8 BattleScript_MoveUsedPsychicTerrainPrevents[];
 extern const u8 BattleScript_GrassyTerrainHeals[];
 extern const u8 BattleScript_GrassyTerrainLoop[];
@@ -668,7 +672,8 @@ extern const u8 BattleScript_ReactivateIntimidate[];
 extern const u8 BattleScript_HailActivates[]; //wondering if it matters where I put battlescript ehre, poisonworsened was only one put at end, adn thats when problem started.
 extern const u8 BattleScript_IgnoresWhileAsleep[]; //need remember to add effect to change poison to toxic poison
 extern const u8 BattleScript_IgnoresAndHitsItself[];// and set toxic timer to 3 so it does more damage than normal poison
-extern const u8 BattleScript_MoveEffectRecoil[];
+//extern const u8 BattleScript_MoveEffectRecoil[];
+extern const u8 BattleScript_MultiHitPrintStrings[];
 extern const u8 BattleScript_FlushMessageBox[];//i think the issue was because I put it in the wrong place in battle_scripts_1.s
 extern const u8 BattleScript_SpikesOnFaintedBattler[]; //order here shouldn't matter
 extern const u8 BattleScript_WildMonBallBlock[];

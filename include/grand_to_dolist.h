@@ -303,7 +303,8 @@ ok I prob will do that then.
 * -you can change nature, change ability, but ivs will be hard locked to the individual mon.-
 * -with my ev change you'll be able to overcome bad ivs anyway, and ivs are stronger to make more of a difference as well.-
 * 
-* think I will treat rival starter same as roamer, where the iv data is intentionally saved
+* think I will treat rival starter same as roamer, where the iv data is intentionally 
+* -also need roll back the gen 3 change where roaming mon can run away while asleep gonna assume that's a bug in the code
 * 
 * mon personality is also fixed for trainers, but I think I would like to keep that constant,
 * so for rematches trainers would atleast have the same ability,
@@ -350,14 +351,18 @@ With that I can use GetMondata ability num, if 0 set a random abilityNum between
 
 * DONE!!  need test, should set ability, think I'm worried about is the random ability part.
 * 
-* 
-* realized logic for damage on air targets was incomplete 
+*/
+goto TRAINER_PARTY_DATA
+goto TRAINER_DATA_STRUCTS
+
+
+/* realized logic for damage on air targets was incomplete 
 * correcting setup - DONE
 * 
 * Forgot to replace all instances of Levitate in basestats -
 * 
 * need replace gBattleMons[gActiveBattler].ability with GetBattlerAbility(gActiveBattler)  for ability check, so suppresants work
-* compare to emerald for which valus should change
+* compare to emerald for which valus should change - DONE
 * 
 * increase quick claw success odds - DONE doubled to 40%
 * 
@@ -495,7 +500,7 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * that doesn't represent any specific one. potentially the old gen 1 pngs?
 * 
 * bad onion b.o trainer repellent figure logic think it would temporarily set trainer view of every trainer on
-* current map/map section to 0, so its talk to fight,  like repel long as timer isn't 0-
+* current map/map section to 0, so its talk to fight,  like repel long as timer isn't 0- DONE
 * 
 * ok was actually really easy to setup, mostly done, also added to stench, the only thing left to do is setup
 * the eventscripts for it, i.e the text, for reapplying the trainer repellent.   in UpdateBadOnionCounter
@@ -619,6 +624,10 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * should be able to fit multiple icons for multi status setup,
 * just need to reduce total num possible concurrent status
 * make some mutually exclusive(?)  like freeze and burn  relation
+* (would stop using status1 any, I think instead I can use conditional (!(gBattleMons[gEffectBattler].status1)) || status1 != opposing status
+* woul be in set move effect, rathr than setting status in that case it would just remove the opposing status
+* plan to put in CanBeStatused functions already done for CanBePoisoned)
+* 
 * including my custom fairy status spirit lock  (which should be mix of para & burn)
 * theres 7 effects but with exclusivity only  5 would be  active at once
 * slp para burn psn/toxic & sprt   
@@ -633,6 +642,7 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * may not be able to do/fit, could instad atteampt same thing as status in battle idea,
 * make it loop through the status set and just change the icon each time the mon bounces twice?
 * potentially use  release Mon animation? so it transitino clean.
+* //end turn name scripts need to use b_atk_name,  src_active name or anything else causes issues
 * 
 * Last thing before break is setup battle health box, need finish species name expansion, w pokedex box outline-
 * 

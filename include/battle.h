@@ -164,6 +164,8 @@ union TrainerMonPtr
     const struct TrainerMonItemCustomMoves *ItemCustomMoves;
 };
 
+#define TRAINER_DATA_STRUCTS
+
 struct Trainer
 {
     /*0x00*/ u8 partyFlags;
@@ -223,6 +225,7 @@ struct DisableStruct
     /*0x16*/ u8 isFirstTurn;
     /*0x17*/ u8 unk17;
     /*0x18*/ u8 truantCounter : 1;
+    /*0x18*/ u8 sleepCounter : 1;
     /*0x18*/ u8 truantSwitchInHack : 1; // unused? 
     /*0x18*/ u8 unk18_a_2 : 2;
     /*0x18*/ u8 mimickedMoves : 4;
@@ -321,6 +324,7 @@ struct SpecialStatus    //pretty sure all values
     u8 flag40 : 1;
     u8 focusBanded : 1;
     u8 focusSashed : 1;
+    u8 sturdied : 1;
     u8 field1[3];
     u8 berryReduced : 1;
     u8 rototillerAffected : 1;  // to be affected by rototiller
@@ -346,6 +350,7 @@ struct SpecialStatus    //pretty sure all values
     u8 forewarnDone:1;  //to be set TRUE if predicted move was used by opponent, if not and enemy faints or switches, reactivate forewarn for next opponent 
     u16 anticipatedMove;    //for storing move from anticipation ability
     u8 anticipationDone:1;// same as forwarn clause //also considering moveend & moveendtarget can prob do swithin repeat, by swapping battler and side w new abilityeffet clause?
+    u8 parentalBondState : 2;
     u8 field12;
     u8 field13;//check moody case for switchin line something something = 2
 };
@@ -721,6 +726,9 @@ struct BattleStruct //fill in unused fields when porting
     u8 stickyWebUser;
     u8 appearedInBattle; // Bitfield to track which Pokemon appeared in battle. Used for Burmy's form change
     u8 skyDropTargets[MAX_BATTLERS_COUNT]; // For Sky Drop, to account for if multiple Pokemon use Sky Drop in a double battle.
+    // When using a move which hits multiple opponents which is then bounced by a target, we need to make sure, the move hits both opponents, the one with bounce, and the one without.
+    u8 attackerBeforeBounce : 2;
+    u8 presentBasePower;
     // align 4
     union {
         struct LinkPartnerHeader linkPartnerHeader;

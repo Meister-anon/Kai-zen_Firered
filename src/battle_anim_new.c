@@ -4966,7 +4966,7 @@ void AnimTask_SquishTarget(u8 taskId)
     task->func = AnimTask_WaitAffineAnim;
 }
 
-void CoreEnforcerLoadBeamTarget(struct Sprite* sprite)
+void CoreEnforcerLoadBeamTarget(struct Sprite *sprite)
 {
     sprite->data[0] = gBattleAnimArgs[2];
     sprite->data[1] = sprite->pos1.x;
@@ -4978,9 +4978,9 @@ void CoreEnforcerLoadBeamTarget(struct Sprite* sprite)
 }
 
 //important figure later
-/*void AnimTask_CreateBestowItem(u8 taskId)
+void AnimTask_CreateBestowItem(u8 taskId)//vsonic need test, think found equivalent function in firered
 {
-    u8 iconSpriteId = AddItemIconSprite(ANIM_TAG_ITEM_BAG, ANIM_TAG_ITEM_BAG, gLastUsedItem);
+    u8 iconSpriteId = AddItemIconObject(ANIM_TAG_ITEM_BAG, ANIM_TAG_ITEM_BAG, gLastUsedItem);
 
     if (iconSpriteId != MAX_SPRITES)
     {
@@ -4989,7 +4989,7 @@ void CoreEnforcerLoadBeamTarget(struct Sprite* sprite)
         ++gAnimVisualTaskCount;
     }
     DestroyAnimVisualTask(taskId);
-}*/
+}
 
 //Creates purple flames that surround the target.
 //No args.

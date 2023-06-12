@@ -1856,6 +1856,7 @@ bool8 IsRivalBattle(u16 trainerNum)
         return FALSE;
 }
 
+#define TRAINER_PARTY_DATA
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 {
     u32 nameHash = 0;

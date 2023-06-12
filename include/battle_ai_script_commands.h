@@ -13,6 +13,7 @@ void BattleAI_SetupAIData(void);
 u8 BattleAI_ChooseMoveOrAction(void);
 void ClearBankMoveHistory(u8 bank);
 void RecordKnownMove(u8 battlerId, u32 move);
+void RecordLastUsedMoveBy(u32 battlerId, u32 move);
 void RecordAbilityBattle(u8 bank, u16 abilityId);
 void ClearBankAbilityHistory(u8 bank);
 void RecordItemEffectBattle(u8 bank, u8 itemEffect);

@@ -182,7 +182,8 @@ void TrySaveExchangedItem(u8 battlerId, u16 stolenItem);
 u32 GetBattlerMoveTargetType(u8 battlerId, u16 move); //need port these two fully
 bool32 CanTargetBattler(u8 battlerAtk, u8 battlerDef, u16 move);
 //learned defined need be on one line, this should be logic for thawing i.e remove frozen status
-#define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || ((gBattleMoves[gCurrentMove].type == TYPE_FIRE) && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60) && gCurrentMove != MOVE_FIRE_FANG))
+//removed fire fang restriction, any heat transafer is good enough
+#define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || (((gBattleMoves[gCurrentMove].type == TYPE_FIRE) || (gBattleMoves[gCurrentMove].argument == TYPE_FIRE)) && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60)))
 
 // percent in UQ_4_12 format
 const u16 sPercentToModifier[] =

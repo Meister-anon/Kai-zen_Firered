@@ -4657,11 +4657,27 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanCharma
 static const struct TrainerMonNoItemDefaultMoves sTrainerMons_ScientistTed[] = {
     {
         .iv = 0,
+        .evs = {
+                [HpEV] = {0},
+                [AttackEV] = {0},
+                [DefenseEV] = {0},
+                [SpeedEV] = {0},
+                [SpAttackEV] = {0},
+                [SpDefenseEV] = {0}
+                },
         .lvl = 29,
         .species = SPECIES_ELECTRODE,
     },
     {
         .iv = 0,
+        .evs = {
+                [HpEV] = {0},
+                [AttackEV] = {0},
+                [DefenseEV] = {0},
+                [SpeedEV] = {0},
+                [SpAttackEV] = {0},
+                [SpDefenseEV] = {0}
+                },
         .lvl = 29,
         .species = SPECIES_WEEZING,
     },

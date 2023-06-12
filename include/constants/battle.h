@@ -380,6 +380,7 @@
 #define MOVE_RESULT_FAILED             (1 << 5)
 #define MOVE_RESULT_FOE_ENDURED        (1 << 6)
 #define MOVE_RESULT_FOE_HUNG_ON        (1 << 7)
+#define MOVE_RESULT_STURDIED		   (1 << 8)
 #define MOVE_RESULT_NO_EFFECT          (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE | MOVE_RESULT_FAILED)
 
 // Battle Weather as enum
@@ -481,32 +482,34 @@
 #define MOVE_EFFECT_THRASH              0x35
 #define MOVE_EFFECT_KNOCK_OFF           0x36
 #define MOVE_EFFECT_CLEAR_SMOG          0x37
-#define MOVE_EFFECT_SMACK_DOWN          0x38
-#define MOVE_EFFECT_FLAME_BURST         0x39
-#define MOVE_EFFECT_DEF_SPDEF_DOWN      0x3A
-#define MOVE_EFFECT_SP_ATK_TWO_DOWN     0x3B
-#define MOVE_EFFECT_FEINT				0x3C
-#define MOVE_EFFECT_SPECTRAL_THIEF      0x3D
-#define MOVE_EFFECT_ATTRACT				0x3E	//just need to set this to the effect attract?	//setstatus in bscommands, this infatuates w target should work for effect spore
-#define MOVE_EFFECT_SPIRIT_LOCK			0x3F  //but if
-#define MOVE_EFFECT_HAPPY_HOUR          0x40
-#define MOVE_EFFECT_CORE_ENFORCER       0x41
-#define MOVE_EFFECT_THROAT_CHOP         0x42
-#define MOVE_EFFECT_INCINERATE          0x43
-#define MOVE_EFFECT_BUG_BITE	        0x44
-#define MOVE_EFFECT_RECOIL_50	        0x45
-#define MOVE_EFFECT_RECOIL_33_STATUS	0x46
-#define MOVE_EFFECT_V_CREATE			0x47
-#define MOVE_EFFECT_RELIC_SONG          0x48
-#define MOVE_EFFECT_TRAP_BOTH           0x49
-#define MOVE_EFFECT_SKY_DROP            0x4A	//add move_effects for other wrap moves
-#define MOVE_EFFECT_FIRE_SPIN			0x4B
-#define MOVE_EFFECT_CLAMP				0x4C
-#define MOVE_EFFECT_WHIRLPOOL			0x4D
-#define MOVE_EFFECT_SAND_TOMB			0x4E
-#define MOVE_EFFECT_MAGMA_STORM			0x4F
-#define MOVE_EFFECT_INFESTATION			0x50
-#define MOVE_EFFECT_SNAP_TRAP			0x51
+#define MOVE_EFFECT_DEF_SPDEF_DOWN      0x38
+#define MOVE_EFFECT_SP_ATK_TWO_DOWN     0x39
+#define MOVE_EFFECT_RECOIL_50	        0x3A
+#define MOVE_EFFECT_RECOIL_33_STATUS	0x3B
+#define MOVE_EFFECT_FIRE_SPIN			0x3C
+#define MOVE_EFFECT_CLAMP				0x3D
+#define MOVE_EFFECT_WHIRLPOOL			0x3E
+#define MOVE_EFFECT_SAND_TOMB			0x3F
+#define MOVE_EFFECT_MAGMA_STORM			0x40
+#define MOVE_EFFECT_INFESTATION			0x41
+#define MOVE_EFFECT_SNAP_TRAP			0x42
+#define MOVE_EFFECT_SMACK_DOWN          0x43	//reordered move effects for shield dust logic
+#define MOVE_EFFECT_FLAME_BURST         0x44
+#define MOVE_EFFECT_FEINT				0x45
+#define MOVE_EFFECT_SPECTRAL_THIEF      0x46
+#define MOVE_EFFECT_ATTRACT				0x47	//just need to set this to the effect attract?	//setstatus in bscommands, this infatuates w target should work for effect spore
+#define MOVE_EFFECT_SPIRIT_LOCK			0x48  //but if
+#define MOVE_EFFECT_HAPPY_HOUR          0x49
+#define MOVE_EFFECT_CORE_ENFORCER       0x4A
+#define MOVE_EFFECT_THROAT_CHOP         0x4B
+#define MOVE_EFFECT_INCINERATE          0x4C
+#define MOVE_EFFECT_BUG_BITE	        0x4D
+
+#define MOVE_EFFECT_V_CREATE			0x4E
+#define MOVE_EFFECT_RELIC_SONG          0x4F
+#define MOVE_EFFECT_TRAP_BOTH           0x50
+#define MOVE_EFFECT_SKY_DROP            0x51	//add move_effects for other wrap moves
+
 
 #define NUM_MOVE_EFFECTS                82	//ok think i got this right, battlescript are assigned based on battle_move_effects.h file
 #define MOVE_EFFECT_AFFECTS_USER        0x60//that has to line up with battle_scripts_1.s but don't need move effect unlesss new status made or other new effect

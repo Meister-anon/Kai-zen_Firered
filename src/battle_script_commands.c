@@ -129,7 +129,7 @@ static void atk3E_end2(void);
 static void atk3F_end3(void);
 static void atk40_jumpifaffectedbyprotect(void);
 static void atk41_call(void);
-static void atk42_missingHealthtoDmg(void);    //no longer needed, can replace
+static void atk42_missinghealthtoDmg(void);    //replaced was jumpiftype2
 static void atk43_jumpifabilitypresent(void);
 static void atk44_endselectionscript(void);
 static void atk45_playanimation(void);
@@ -406,7 +406,7 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atk3F_end3,
     atk40_jumpifaffectedbyprotect,
     atk41_call,
-    atk42_missingHealthtoDmg,
+    atk42_missinghealthtoDmg,
     atk43_jumpifabilitypresent,
     atk44_endselectionscript,
     atk45_playanimation,
@@ -2825,7 +2825,11 @@ static void atk07_adjustnormaldamage(void)
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gSpecialStatuses[gBattlerTarget].focusSashed = TRUE;
     }
-
+    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_STURDY && BATTLER_MAX_HP(gBattlerTarget)) //gen 5 sturdy
+    {
+        RecordAbilityBattle(gBattlerTarget, ABILITY_STURDY);
+        gSpecialStatuses[gBattlerTarget].sturdied = TRUE;
+    }
 
     /*if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
      && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded
@@ -2850,6 +2854,7 @@ static void atk07_adjustnormaldamage(void)
         && !gProtectStructs[gBattlerTarget].endured
         && !gSpecialStatuses[gBattlerTarget].focusBanded
         && !gSpecialStatuses[gBattlerTarget].focusSashed
+        && !gSpecialStatuses[gBattlerTarget].sturdied
         && !gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
         goto END;
 
@@ -2865,6 +2870,11 @@ static void atk07_adjustnormaldamage(void)
     {
         gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
         gLastUsedItem = gBattleMons[gBattlerTarget].item;
+    }
+    else if (gSpecialStatuses[gBattlerTarget].sturdied)
+    {
+        gMoveResultFlags |= MOVE_RESULT_STURDIED;
+        gLastUsedAbility = ABILITY_STURDY;
     }
 
 END:
@@ -2942,10 +2952,16 @@ static void atk08_adjustnormaldamage2(void)
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gSpecialStatuses[gBattlerTarget].focusSashed = TRUE;
     }
+    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_STURDY && BATTLER_MAX_HP(gBattlerTarget)) //gen 5 sturdy
+    {
+        RecordAbilityBattle(gBattlerTarget, ABILITY_STURDY);
+        gSpecialStatuses[gBattlerTarget].sturdied = TRUE;
+    }
 
      if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)    //CORRECT way to start conditional with a negative
         && !gProtectStructs[gBattlerTarget].endured
         && !gSpecialStatuses[gBattlerTarget].focusBanded
+        && !gSpecialStatuses[gBattlerTarget].sturdied
         && !gSpecialStatuses[gBattlerTarget].focusSashed)
         goto END;
 
@@ -2961,6 +2977,11 @@ static void atk08_adjustnormaldamage2(void)
     {
         gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
         gLastUsedItem = gBattleMons[gBattlerTarget].item;
+    }
+    else if (gSpecialStatuses[gBattlerTarget].sturdied)
+    {
+        gMoveResultFlags |= MOVE_RESULT_STURDIED;
+        gLastUsedAbility = ABILITY_STURDY;
     }
 
 END:
@@ -3328,6 +3349,14 @@ static void atk0F_resultmessage(void) //covers the battle message displayed afte
                     gBattlescriptCurrInstr = BattleScript_OneHitKOMsg;
                     return;
                 }
+                else if (gMoveResultFlags & MOVE_RESULT_STURDIED)
+                {
+                    gMoveResultFlags &= ~(MOVE_RESULT_STURDIED | MOVE_RESULT_FOE_ENDURED | MOVE_RESULT_FOE_HUNG_ON);
+                    gSpecialStatuses[gBattlerTarget].sturdied = FALSE;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_SturdiedMsg;
+                    return;
+                }
                 else if (gMoveResultFlags & MOVE_RESULT_FOE_ENDURED)
                 {
                     gMoveResultFlags &= ~(MOVE_RESULT_FOE_ENDURED | MOVE_RESULT_FOE_HUNG_ON);
@@ -3465,7 +3494,7 @@ void TryRestoreStolenItems(void)
                 if (heldItem == ITEM_NONE)
                     SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &stolenItem);  // Restore stolen non-berry items
                 else
-                    AddBagItem(&stolenItem, 1); //ok that oughta do it.  with this I should be able to le
+                    AddBagItem(stolenItem, 1); //ok that oughta do it.  with this I should be able to le
             }
         }
     }
@@ -3642,11 +3671,16 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
     }
     battlerAbility = GetBattlerAbility(gEffectBattler); //port
 
+    // Just in case this flag is still set
+    gBattleScripting.moveEffect &= ~MOVE_EFFECT_CERTAIN;
+
     if (battlerAbility == ABILITY_SHIELD_DUST 
      && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
      && !primary
-     && gBattleScripting.moveEffect <= MOVE_EFFECT_TRI_ATTACK)  //skip script command if in threshold
+     && (gBattleScripting.moveEffect <= MOVE_EFFECT_TRI_ATTACK || gBattleScripting.moveEffect >= MOVE_EFFECT_SMACK_DOWN)) // Exclude stat lowering effects)  //skip script command if in threshold
     {
+        if (battlerAbility == ABILITY_SHIELD_DUST)
+            RecordAbilityBattle(gEffectBattler, battlerAbility);
         ++gBattlescriptCurrInstr;
         return;
     }
@@ -3658,20 +3692,23 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
         ++gBattlescriptCurrInstr;
         return;
     }
+
+    if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove) && affectsUser != MOVE_EFFECT_AFFECTS_USER)
+        INCREMENT_RESET_RETURN
+
     if (gBattleMons[gEffectBattler].hp == 0
      && gBattleScripting.moveEffect != MOVE_EFFECT_PAYDAY
+     && gBattleScripting.moveEffect != MOVE_EFFECT_BUG_BITE
      && gBattleScripting.moveEffect != MOVE_EFFECT_STEAL_ITEM)
     {
         ++gBattlescriptCurrInstr;
         return;
     }
-    if (gBattleMons[gEffectBattler].status2 & STATUS2_SUBSTITUTE
-     && affectsUser != MOVE_EFFECT_AFFECTS_USER)
-    {
-        ++gBattlescriptCurrInstr;
-        return;
-    }
-    if (gBattleScripting.moveEffect <= 6) // status change
+
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler, gCurrentMove) && affectsUser != MOVE_EFFECT_AFFECTS_USER)
+        INCREMENT_RESET_RETURN
+
+    if (gBattleScripting.moveEffect <= PRIMARY_STATUS_MOVE_EFFECT) // status change
     {
         switch (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect])  //find out what this exactly is
         {//for switch to work, parenthesis value in "switch" most be a single value,  value in case must also be a single value
@@ -3687,22 +3724,18 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 break;
             if (gActiveBattler != gBattlersCount)
                 break;
-            if (battlerAbility == ABILITY_VITAL_SPIRIT)
-                break;
-            if (battlerAbility == ABILITY_INSOMNIA)
-                break;
-            if (battlerAbility == ABILITY_COMATOSE)
+            if (!CanSleep(gEffectBattler))
                 break;
             CancelMultiTurnMoves(gEffectBattler); //if it passes all checks cancel multi turn moves and appply sleep. I think
             statusChanged = TRUE;
             break;//NEED to better check swithch statements to see if break ends entire switch, or it just makes it continue checking for matches in other cases
         case STATUS1_POISON: //checked break ends entire switch function, but they have fallthrough, w/o breaks it would continue to next case
-            if (battlerAbility == ABILITY_IMMUNITY// so when multi status is set will need to remove breaks
+            if ((battlerAbility == ABILITY_IMMUNITY || battlerAbility == ABILITY_PASTEL_VEIL)// so when multi status is set will need to remove breaks
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))//and reorganize statements so it follows alternate paths rather than just going down
             {   //so make it if   and else using multiple or operands to group up the thinigs that break status and status changd will equal false
                 // then an else that will do the normal things that go along with status being applied. and then keeps going without a break
-                gLastUsedAbility = ABILITY_IMMUNITY;
-                RecordAbilityBattle(gEffectBattler, ABILITY_IMMUNITY);
+                gLastUsedAbility = battlerAbility;
+                RecordAbilityBattle(gEffectBattler, battlerAbility);
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
                 gBattlescriptCurrInstr = BattleScript_PSNPrevention;
                 if (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
@@ -3716,7 +3749,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 }
                 return;
             }
-            if ((IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_POISON) || IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_STEEL))
+            if (!CanPoisonType(gBattleScripting.battler, gEffectBattler)
              && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             {
@@ -3725,11 +3758,13 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 gBattleCommunication[MULTISTRING_CHOOSER] = 2;
                 return;
             }
-            if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_POISON))
+            
+
+            /*if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_POISON))
                 break;
             if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_STEEL))
-                break;
-            if (battlerAbility == ABILITY_IMMUNITY)
+                break;  */
+            if (!CanBePoisoned(gBattleScripting.battler, gEffectBattler))
                 break;
             /*if (gBattleMons[gEffectBattler].status1)
                 break;*/    //removed this line, has check in battlescript, think will just not do text string, there's no way to do it simply?
@@ -3743,8 +3778,8 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
             } //OK THIS hopefully works.?   //should remove poison and set toxic, the missing part is setting toxic counter value
             //dont know if works as I want but it compiles
 
-            else if (gBattleMons[gEffectBattler].status1)   //realized i could keep this, if i use else if,  since thsi should mean if status1 not 0?
-                break;
+           /* else if (gBattleMons[gEffectBattler].status1)   //realized i could keep this, if i use else if,  since thsi should mean if status1 not 0?
+                break;*/ //removed put comparative logic in ported function
             statusChanged = TRUE;
             break;
         case STATUS1_SPIRIT_LOCK:
@@ -3876,7 +3911,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
             statusChanged = TRUE;
             break;
         case STATUS1_TOXIC_POISON:
-            if (battlerAbility == ABILITY_IMMUNITY && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
+            if ((battlerAbility == ABILITY_IMMUNITY || battlerAbility == ABILITY_PASTEL_VEIL) && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             {
                 gLastUsedAbility = ABILITY_IMMUNITY;
                 RecordAbilityBattle(gEffectBattler, ABILITY_IMMUNITY);
@@ -3893,7 +3928,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 }
                 return;
             }
-            if ((IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_POISON) || IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_STEEL))
+            if (!CanPoisonType(gBattleScripting.battler, gEffectBattler)
              && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             {
@@ -3907,14 +3942,16 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
             //attempting to just remove, as status checks etc. are already part of battlescript
             //need to better understand what setmoveeffect is doing
 
-            if (!IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_POISON) && !IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_STEEL))
+            if (CanBePoisoned(gBattleScripting.battler, gEffectBattler))
             {
-                if (battlerAbility == ABILITY_IMMUNITY)
-                    break;
+                
                 // It's redundant, because at this point we know the status1 value is 0.
                 gBattleMons[gEffectBattler].status1 &= ~(STATUS1_TOXIC_POISON); //^not my notes
                 gBattleMons[gEffectBattler].status1 &= ~(STATUS1_POISON);//don't understand these 2 lines. as it should be syntax for  status removal.
-                gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start at normal poison base dmg
+                if (gBattleMons[gEffectBattler].status1 & STATUS1_POISON)//now i understand the note,
+                {   //the two lins are removing the status even though, the prior logic ensured that no status was set, ironically necessary for my changes
+                    gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start above normal poison base dmg
+                }                
                 statusChanged = TRUE;
                 break;
             }
@@ -3926,9 +3963,11 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
         }
         if (statusChanged == TRUE)
         {
-            BattleScriptPush(gBattlescriptCurrInstr + 1);
-            if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_SLEEP)
-                gBattleMons[gEffectBattler].status1 |= ((Random() % 4) + 2); //think this is the duration of sleep, and its 2-5 here.   //confirmed
+            BattleScriptPush(gBattlescriptCurrInstr + 1);//hmm or what I could do is keep full sleep turns but counter by letting heal, so you get free dmg but you may need to expend more to kill
+                //yeah I like that a lot better, ok set it up like traunt, but end turn, that way you still get 2 chances to catch a wild mon before it starts to heal
+            //makes rest better, which is fine but should be no issues, just test and tweak heal value
+            if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_SLEEP)//actually way this is counted it decrements before effect takes palce 
+                gBattleMons[gEffectBattler].status1 |= ((Random() % 3) + 3); //duration of sleep, and its 2-5 here. /changed to 2-4 /guarantees 1 free turn unless earlybird  //confirmed
             else if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_FREEZE)
             {
                 gDisableStructs[gEffectBattler].FrozenTurns = 3;
@@ -4235,15 +4274,14 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                     else //success condition
                     {
                         StealTargetItem(gBattlerAttacker, gBattlerTarget);
-                        u16 *changedItem = &gBattleStruct->changedItems[gBattlerAttacker];
-                        gLastUsedItem = *changedItem = gBattleMons[gBattlerTarget].item;
-                        gBattleMons[gBattlerTarget].item = ITEM_NONE;
+                        gBattleMons[gBattlerAttacker].item = ITEM_NONE; // Item assigned later on with thief (see MOVEEND_CHANGED_ITEMS)
+                        gBattleStruct->changedItems[gBattlerAttacker] = gLastUsedItem; // Stolen item to be assigned later
                         
                         BattleScriptPush(gBattlescriptCurrInstr + 1);
                         gBattlescriptCurrInstr = BattleScript_ItemSteal;
                         //*(u8 *)((u8 *)(&gBattleStruct->choicedMove[gBattlerTarget]) + 0) = 0;
                         //*(u8 *)((u8 *)(&gBattleStruct->choicedMove[gBattlerTarget]) + 1) = 0;
-                    }
+                    }//NEED test hopefullyu works, original code used gbattlertarget, emerald stuff used attacker
                 }
                 break;
             case MOVE_EFFECT_PREVENT_ESCAPE:
@@ -4593,7 +4631,7 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
         && gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;  //its good, happened 2 out of 5 hits. decided to make it 1/16 dmg
     
-    if (GetBattlerAbility[BATTLE_PARTNER(gBattlerAttacker)] == ABILITY_DARK_DEAL)
+    if (GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_DARK_DEAL)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
@@ -6420,7 +6458,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                 if (nextTarget != MAX_BATTLERS_COUNT)
                 {
                     gBattleStruct->moveTarget[gBattlerAttacker] = gBattlerTarget = nextTarget; // Fix for moxie spread moves
-                    gBattleScripting.moveendState = 0;
+                    gBattleScripting.atk49_state = 0;
                     MoveValuesCleanUp();
                     gBattleScripting.moveEffect = gBattleScripting.savedMoveEffect;
                     BattleScriptPush(gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect]);
@@ -6440,7 +6478,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                     {
                         // We found another target for the original move user.
                         gBattleStruct->moveTarget[gBattlerAttacker] = gBattlerTarget = nextTarget;
-                        gBattleScripting.moveendState = 0;
+                        gBattleScripting.atk49_state = 0;
                         gBattleScripting.animTurn = 0;
                         gBattleScripting.animTargetsHit = 0;
                         MoveValuesCleanUp();
@@ -6473,7 +6511,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                 }
                 else
                 {
-                    if (gCurrentMove == MOVE_DRAGON_DARTS)
+                    if (gCurrentMove == MOVE_DRAGON_DARTS)  //vsonic
                     {
                         // TODO
                     }
@@ -6488,8 +6526,8 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
 
                         gHitMarker |= (HITMARKER_NO_PPDEDUCT | HITMARKER_NO_ATTACKSTRING);
                         gBattleScripting.animTargetsHit = 0;
-                        gBattleScripting.moveendState = 0;
-                        gSpecialStatuses[gBattlerTarget].sturdied = 0;
+                        gBattleScripting.atk49_state = 0;
+                        gSpecialStatuses[gBattlerTarget].sturdied = 0;  //forgto this wasn't a gen3 affect, it didn't do this til gen 5 o.0
                         gSpecialStatuses[gBattlerTarget].focusBanded = 0; // Delete this line to make Focus Band last for the duration of the whole move turn.
                         gSpecialStatuses[gBattlerTarget].focusSashed = 0; // Delete this line to make Focus Sash last for the duration of the whole move turn.
                         gSpecialStatuses[gBattlerAttacker].multiHitOn = TRUE;
@@ -8582,15 +8620,20 @@ static void atk69_adjustsetdamage(void)
     if (holdEffect == HOLD_EFFECT_FOCUS_BAND && (Random() % 100) < param)
     {
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
-        gSpecialStatuses[gBattlerTarget].focusBanded = 1;
+        gSpecialStatuses[gBattlerTarget].focusBanded = TRUE;
     }
     else if (holdEffect == HOLD_EFFECT_FOCUS_SASH && BATTLER_MAX_HP(gBattlerTarget))
     {
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gSpecialStatuses[gBattlerTarget].focusSashed = TRUE;
     }
+    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_STURDY && BATTLER_MAX_HP(gBattlerTarget)) //gen 5 sturdy
+    {
+        RecordAbilityBattle(gBattlerTarget, ABILITY_STURDY);
+        gSpecialStatuses[gBattlerTarget].sturdied = TRUE;
+    }
     if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
-     && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded || && gSpecialStatuses[gBattlerTarget].focusSashed)
+     && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded || gSpecialStatuses[gBattlerTarget].focusSashed || gSpecialStatuses[gBattlerTarget].sturdied)
      && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage)
     {
         gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
@@ -8607,6 +8650,11 @@ static void atk69_adjustsetdamage(void)
         {
             gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
             gLastUsedItem = gBattleMons[gBattlerTarget].item;
+        }
+        else if (gSpecialStatuses[gBattlerTarget].sturdied)
+        {
+            gMoveResultFlags |= MOVE_RESULT_STURDIED;
+            gLastUsedAbility = ABILITY_STURDY;
         }
     }
     ++gBattlescriptCurrInstr;
@@ -12138,6 +12186,12 @@ static void atk93_tryKO(void)
                 gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
                 gLastUsedItem = gBattleMons[gBattlerTarget].item;
             }
+            else if (gSpecialStatuses[gBattlerTarget].sturdied)
+            {
+                gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
+                gMoveResultFlags |= MOVE_RESULT_STURDIED;
+                gLastUsedAbility = ABILITY_STURDY;
+            }
             else
             {
                 gBattleMoveDamage = gBattleMons[gBattlerTarget].hp;
@@ -13757,8 +13811,7 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             //step 3, another if statement, if equal increase battle damage for party loop[0]
 
            if (gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type1 == TYPE_DARK
-                || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK
-                || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type3 == TYPE_DARK)
+                || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK)
            {
                 //gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
                gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;
@@ -15438,7 +15491,7 @@ bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move)
 
 //may not need sub block? don't really need it but using will save time
 static void atk104_jumpifsubstituteblocks(void) {
-    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget))
+    if (DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove))
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     else
         gBattlescriptCurrInstr += 5;

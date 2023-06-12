@@ -6690,6 +6690,13 @@ BattleScript_OneHitKOMsg::
 	waitmessage 0x40
 	return
 
+BattleScript_SturdiedMsg::
+	pause B_WAIT_TIME_SHORTEST
+	@call BattleScript_AbilityPopUpTarget
+	printstring STRINGID_ENDUREDSTURDY
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_SAtkDown2::
 	setbyte sSTAT_ANIM_PLAYED, 0
 	playstatchangeanimation BS_ATTACKER, BIT_SPATK, ATK48_STAT_NEGATIVE | ATK48_STAT_BY_TWO | ATK48_DONT_CHECK_LOWER
@@ -7782,6 +7789,39 @@ BattleScript_DazzlingProtected::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
+BattleScript_IceFaceNullsDamage::
+	attackstring
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	call BattleScript_TargetFormChangeWithString
+	goto BattleScript_MoveEnd
+
+BattleScript_DarkTypePreventsPrankster::
+	attackstring
+	ppreduce
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_ITDOESNTAFFECT
+	waitmessage B_WAIT_TIME_LONG
+	orhalfword gMoveResultFlags, MOVE_RESULT_NO_EFFECT
+	goto BattleScript_MoveEnd
+
+BattleScript_TargetFormChangeWithString::
+	@pause 5
+	@call BattleScript_AbilityPopUpTarget
+	printstring STRINGID_EMPTYSTRING3
+	waitmessage 1
+	handleformchange BS_TARGET, 0
+	handleformchange BS_TARGET, 1
+	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, NULL
+	waitanimation
+	handleformchange BS_TARGET, 2
+	printstring STRINGID_PKMNTRANSFORMED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_MoveUsedPsychicTerrainPrevents::
 	printstring STRINGID_POKEMONCANNOTUSEMOVE
 	waitmessage 0x40
@@ -8757,6 +8797,15 @@ BattleScript_HealAnimation::
 BattleScript_Healing::
 	playanimation BS_ATTACKER, B_ANIM_BASIC_HEAL
 	goto BattleScript_TruantHealing
+
+BattleScript_SleepHealing:
+	printstring STRINGID_WELLRESTED
+	waitmessage 0x40
+	playanimation BS_ATTACKER, B_ANIM_BASIC_HEAL
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	end2
 
 BattleScript_IgnoresAndFallsAsleep::
 	printstring STRINGID_PKMNBEGANTONAP

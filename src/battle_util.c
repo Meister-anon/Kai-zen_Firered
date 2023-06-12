@@ -1784,6 +1784,7 @@ enum
     ENDTURN_LASER_FOCUS,
     ENDTURN_TAUNT,
     ENDTURN_YAWN,
+    ENDTURN_SLEEP,
     ENDTURN_ITEMS2,
     ENDTURN_ORBS,
     ENDTURN_ROOST,
@@ -2401,6 +2402,22 @@ u8 DoBattlerEndTurnEffects(void)
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
+            case ENDTURN_SLEEP:
+                if (gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP && gDisableStructs[gActiveBattler].sleepCounter)    //if works right should heal every 2 turns
+                {
+                    if (gBattleMons[gBattlerAttacker].maxHP > gBattleMons[gBattlerAttacker].hp
+                        && !(gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK))
+                    {
+                        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 5;
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                        gBattleMoveDamage *= -1;
+                    }
+                    BattleScriptExecute(BattleScript_SleepHealing);
+                    ++effect;
+                }
+                ++gBattleStruct->turnEffectsTracker;
+                break;
             case ENDTURN_ROOST: // Return flying type.
                 //may change sounds like its only lost for duration of move i.e 1 turn
                 //which is dumb -_- that could only be taken advantage of in double battle
@@ -2720,16 +2737,27 @@ u8 AtkCanceller_UnableToUseMove(void)
                 }
                 else // ok need to figure how this works, but seems to be sleep chance
                 {
+
                     u8 toSub;
 
-                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_EARLY_BIRD)
-                        toSub = 2;
+                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_EARLY_BIRD)  //ok I think what happens is with ability early bird, you get 2 turns off your sleep timr
+                        toSub = 2;  //each turn rather than 1, so still useful
                     else
                         toSub = 1;
                     if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_SLEEP) < toSub)
                         gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_SLEEP);
+                    else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_EARLY_BIRD
+                        && Random() % 4 == 0)
+                    {
+                        gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_SLEEP);
+                    }
                     else
+                    {
                         gBattleMons[gBattlerAttacker].status1 -= toSub;
+                        gDisableStructs[gBattlerAttacker].sleepCounter ^= 1;    //equivalent of truant, sleeper heals every other turn at end of turn
+                    }                        
+
+
                     if (gBattleMons[gBattlerAttacker].status1 & STATUS1_SLEEP)
                     {
                         if (gCurrentMove != MOVE_SNORE && gCurrentMove != MOVE_SLEEP_TALK)
@@ -5083,19 +5111,47 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_MOVES_BLOCK: // 2
-            if (gLastUsedAbility == ABILITY_SOUNDPROOF)
+
+            u16 moveTarget = GetBattlerMoveTargetType(battler, move);
+            u16 battlerAbility = GetBattlerAbility(battler);
+            u16 targetAbility = GetBattlerAbility(gBattlerTarget);
+
+            if ((gLastUsedAbility == ABILITY_SOUNDPROOF && gBattleMoves[move].flags & FLAG_SOUND && !(moveTarget & MOVE_TARGET_USER))
+                || (gLastUsedAbility == ABILITY_BULLETPROOF && gBattleMoves[move].flags & FLAG_BALLISTIC))
             {
-                for (i = 0; sSoundMovesTable[i] != 0xFFFF; ++i)
-                    if (sSoundMovesTable[i] == moveArg)
-                        break;
-                if (sSoundMovesTable[i] != 0xFFFF)
-                {
-                    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)
-                        gHitMarker |= HITMARKER_NO_PPDEDUCT;
-                    gBattlescriptCurrInstr = BattleScript_SoundproofProtected;
-                    effect = 1;
-                }
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)
+                    gHitMarker |= HITMARKER_NO_PPDEDUCT;
+                gBattlescriptCurrInstr = BattleScript_SoundproofProtected;
+                effect = 1;
             }
+            else if ((gLastUsedAbility == ABILITY_DAZZLING || gLastUsedAbility == ABILITY_QUEENLY_MAJESTY || IsBattlerAlive(battler ^= BIT_FLANK))
+                && (battlerAbility == ABILITY_DAZZLING || battlerAbility == ABILITY_QUEENLY_MAJESTY)
+                && GetChosenMovePriority(gBattlerAttacker) > 0
+                && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
+            {
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)
+                    gHitMarker |= HITMARKER_NO_PPDEDUCT;
+                gBattlescriptCurrInstr = BattleScript_DazzlingProtected;
+                effect = 1;
+            }
+            else if (BlocksPrankster(move, gBattlerAttacker, gBattlerTarget, TRUE) && !(IS_MOVE_STATUS(move) && targetAbility == ABILITY_MAGIC_BOUNCE))
+            {
+                if (!(gBattleTypeFlags & BATTLE_TYPE_DOUBLE) || !(moveTarget & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY)))
+                    CancelMultiTurnMoves(gBattlerAttacker); // Don't cancel moves that can hit two targets bc one target might not be protected
+                gBattleScripting.battler = gBattlerAbility = gBattlerTarget;
+                gBattlescriptCurrInstr = BattleScript_DarkTypePreventsPrankster;
+                effect = 1;
+            }
+            else if (gLastUsedAbility == ABILITY_ICE_FACE && IS_MOVE_PHYSICAL(move) && gBattleMons[gBattlerTarget].species == SPECIES_EISCUE)
+            {
+                gBattleMons[gBattlerTarget].species = SPECIES_EISCUE_NOICE_FACE;
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)
+                    gHitMarker |= HITMARKER_NO_PPDEDUCT;
+                gBattleScripting.battler = gBattlerTarget; // For STRINGID_PKMNTRANSFORMED
+                gBattlescriptCurrInstr = BattleScript_IceFaceNullsDamage;
+                effect = 1;
+            }
+            break;
             break;
         case ABILITYEFFECT_ABSORBING: // 3  //make absorb moves, change target  to mon with absorbing ability
             if (moveArg)    //if said mon isn't statused  if just use status1 can check for all status1 but status1 & staus1_any is stil used in most cases..
@@ -5879,7 +5935,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && gBattleMons[gBattlerTarget].hp != 0
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
-                    && CanBePoisoned(gBattlerAttacker, gBattlerTarget)
+                    && CanBePoisoned(gBattlerAttacker, gBattlerTarget)  //need test change
                     && IsMoveMakingContact(move, gBattlerAttacker)
                     && TARGET_TURN_DAMAGED // Need to actually hit the target
                     && (Random() % 3) == 0)
@@ -9629,13 +9685,12 @@ bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget)
 
     if (!(CanPoisonType(battlerAttacker, battlerTarget))
      || gSideStatuses[GetBattlerSide(battlerTarget)] & SIDE_STATUS_SAFEGUARD
-     || gBattleMons[battlerTarget].status1 & STATUS1_ANY
      || ability == ABILITY_IMMUNITY
      || ability == ABILITY_COMATOSE
      || IsAbilityOnSide(battlerTarget, ABILITY_PASTEL_VEIL)
-     || gBattleMons[battlerTarget].status1 & STATUS1_ANY
      || IsAbilityStatusProtected(battlerTarget)
-     || IsBattlerTerrainAffected(battlerTarget, STATUS_FIELD_MISTY_TERRAIN))
+     || IsBattlerTerrainAffected(battlerTarget, STATUS_FIELD_MISTY_TERRAIN)
+     || ((gBattleMons[battlerTarget].status1) && gBattleMons[battlerTarget].status1 != STATUS1_POISON)) //if works should exclude status none, and poison
         return FALSE;
     return TRUE;
 }

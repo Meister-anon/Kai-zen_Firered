@@ -499,6 +499,15 @@ void RecordAbilityBattle(u8 battlerId, u16 abilityId)
         BATTLE_HISTORY->abilities[GET_BATTLER_SIDE(battlerId)] = abilityId;
 }
 
+void RecordLastUsedMoveBy(u32 battlerId, u32 move)
+{
+    u8* index = &BATTLE_HISTORY->moveHistoryIndex[battlerId];
+
+    if (++(*index) >= AI_MOVE_HISTORY_COUNT)
+        *index = 0;
+    BATTLE_HISTORY->moveHistory[battlerId][*index] = move;
+}
+
 void RecordItemEffectBattle(u8 battlerId, u8 itemEffect)
 {
     if (GetBattlerSide(battlerId) == 0)
