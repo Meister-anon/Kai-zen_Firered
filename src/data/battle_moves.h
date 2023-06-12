@@ -9895,6 +9895,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .argument = TYPE_FIRE,
     },
 
     [MOVE_SPEED_SWAP] =
@@ -11656,6 +11657,7 @@ use wonder gaurd logic to determine its super effective
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .argument = TYPE_PSYCHIC,
     },
     
     [MOVE_SHIMON] =
@@ -11670,6 +11672,7 @@ use wonder gaurd logic to determine its super effective
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
+        .argument = TYPE_FIGHTING,
     },
 
     [MOVE_FINAL_FLIGHT] =
@@ -11684,6 +11687,7 @@ use wonder gaurd logic to determine its super effective
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .argument = TYPE_FLYING,
     },//Check flying type average stats, see if need to make this physical
     //idea is user pushes themselves to the limit, and gives everything they have to perform an acrobatic feat
     
@@ -11699,6 +11703,7 @@ use wonder gaurd logic to determine its super effective
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .argument = TYPE_ELECTRIC,
     },
 
     [MOVE_BOLTBEAM] =
@@ -11734,4 +11739,19 @@ use wonder gaurd logic to determine its super effective
         .split = SPLIT_PHYSICAL,
     },  //point of move isn't necessarily to replace sucker punch, but instead to be an option for slower dark types to take advantage of new dark type change
 
+    [MOVE_DOUBLE_SHOCK] =
+    {
+            .effect = EFFECT_LOSETYPE_HIT,
+            .power = 120,
+            .type = TYPE_ELECTRIC,
+            .accuracy = 100,
+            .pp = 5,
+            .secondaryEffectChance = 0,
+            .target = MOVE_TARGET_SELECTED,
+            .priority = 0,
+            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+            .split = SPLIT_PHYSICAL,
+            //.zMovePower = 190,
+            //.zMoveEffect = Z_EFFECT_NONE
+    },
 };

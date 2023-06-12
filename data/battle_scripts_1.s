@@ -514,6 +514,7 @@ BattleScript_EffectLoseTypeHit:
 	jumpifmove MOVE_SHIMON, BattleScript_BurnUpFightingTypeCheck
 	jumpifmove MOVE_FINAL_FLIGHT, BattleScript_BurnUpFlyingTypeCheck
 	jumpifmove MOVE_PLASMA_RAILGUN, BattleScript_BurnUpElectricTypeCheck
+	jumpifmove MOVE_DOUBLE_SHOCK, BattleScript_BurnUpElectricTypeCheck
 BattleScript_BurnUpWorks:
 	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
 	critcalc
@@ -530,44 +531,18 @@ BattleScript_BurnUpWorks:
 	waitmessage 0x40
 	resultmessage
 	waitmessage 0x40
-	jumpifmove MOVE_BURN_OUT, BattleScript_BurnUpLoseFireType
-	jumpifmove MOVE_OVER_MAX_POWER, BattleScript_BurnUpLosePsychicType
-	jumpifmove MOVE_SHIMON, BattleScript_BurnUpLoseFightingType
-	jumpifmove MOVE_FINAL_FLIGHT, BattleScript_BurnUpLoseFlyingType
-	jumpifmove MOVE_PLASMA_RAILGUN, BattleScript_BurnUpLoseElectricType
-BattleScript_BurnUpEnd:
+	losetype BS_ATTACKER
+	printstring STRINGID_ATTACKERLOSTTYPE
+	waitmessage 0x40
+BattleScript_BurnUpEnd:			@leaving for now, in case I make losetype bs_targt
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
 
-BattleScript_BurnUpLoseFireType:
-	losetype BS_ATTACKER, TYPE_FIRE
+BattleScript_AttackerRemoveType::	@apparently just for parental bond
+	losetype BS_ATTACKER
 	printstring STRINGID_ATTACKERLOSTTYPE
 	waitmessage 0x40
-	goto BattleScript_BurnUpEnd
-
-BattleScript_BurnUpLosePsychicType:
-	losetype BS_ATTACKER, TYPE_PSYCHIC
-	printstring STRINGID_ATTACKERLOSTTYPE
-	waitmessage 0x40
-	goto BattleScript_BurnUpEnd
-
-BattleScript_BurnUpLoseFightingType:
-	losetype BS_ATTACKER, TYPE_FIGHTING
-	printstring STRINGID_ATTACKERLOSTTYPE
-	waitmessage 0x40
-	goto BattleScript_BurnUpEnd
-
-BattleScript_BurnUpLoseFlyingType:
-	losetype BS_ATTACKER, TYPE_FLYING
-	printstring STRINGID_ATTACKERLOSTTYPE
-	waitmessage 0x40
-	goto BattleScript_BurnUpEnd
-
-BattleScript_BurnUpLoseElectricType:
-	losetype BS_ATTACKER, TYPE_ELECTRIC
-	printstring STRINGID_ATTACKERLOSTTYPE
-	waitmessage 0x40
-	goto BattleScript_BurnUpEnd
+	return
 
 	
 BattleScript_EffectPurify:
@@ -6637,6 +6612,26 @@ BattleScript_DefSpDefDownTrySpDef::
 	printfromtable gStatDownStringIds
 	waitmessage 0x40
 BattleScript_DefSpDefDownRet::
+	return
+
+BattleScript_DefDownSpeedUp::
+	jumpifstat BS_ATTACKER, CMP_GREATER_THAN, STAT_DEF, MIN_STAT_STAGE, BattleScript_DefDownSpeedUpTryDef
+	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPEED, MAX_STAT_STAGE, BattleScript_DefDownSpeedUpRet
+BattleScript_DefDownSpeedUpTryDef::
+	playstatchangeanimation BS_ATTACKER, BIT_DEF, STAT_CHANGE_NEGATIVE | STAT_CHANGE_CANT_PREVENT
+	setstatchanger STAT_DEF, 1, TRUE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR | MOVE_EFFECT_CERTAIN, BattleScript_DefDownSpeedUpTrySpeed
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_DefDownSpeedUpTrySpeed
+	printfromtable gStatDownStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_DefDownSpeedUpTrySpeed:
+	playstatchangeanimation BS_ATTACKER, BIT_SPEED, 0
+	setstatchanger STAT_SPEED, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR | MOVE_EFFECT_CERTAIN, BattleScript_DefDownSpeedUpRet
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_DefDownSpeedUpRet
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_DefDownSpeedUpRet::
 	return
 
 BattleScript_KnockedOff::

@@ -509,11 +509,13 @@
 #define MOVE_EFFECT_RELIC_SONG          0x4F
 #define MOVE_EFFECT_TRAP_BOTH           0x50
 #define MOVE_EFFECT_SKY_DROP            0x51	//add move_effects for other wrap moves
+#define MOVE_EFFECT_SCALE_SHOT			0x52
+#define MOVE_EFFECT_LOSE_TYPE			0x53
+#define MOVE_EFFECT_ROUND				0x54
 
-
-#define NUM_MOVE_EFFECTS                82	//ok think i got this right, battlescript are assigned based on battle_move_effects.h file
-#define MOVE_EFFECT_AFFECTS_USER        0x60//that has to line up with battle_scripts_1.s but don't need move effect unlesss new status made or other new effect
-#define MOVE_EFFECT_CERTAIN             0x90	//OK THIS SEEMS FINE its just a define doesn't need to be a specific value
+#define NUM_MOVE_EFFECTS                85	//ok think i got this right, battlescript are assigned based on battle_move_effects.h file
+#define MOVE_EFFECT_AFFECTS_USER        0x4000//that has to line up with battle_scripts_1.s but don't need move effect unlesss new status made or other new effect
+#define MOVE_EFFECT_CERTAIN             0x8000	//OK THIS SEEMS FINE its just a define doesn't need to be a specific value
 //dosn't actually need to line up with some othr file, move effect logic is in battle script commands.c setmoveeffect function then just had setmoveeffect to battlescripts
 
 // Battle terrain defines for gBattleTerrain.

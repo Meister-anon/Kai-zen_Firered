@@ -643,6 +643,7 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * make it loop through the status set and just change the icon each time the mon bounces twice?
 * potentially use  release Mon animation? so it transitino clean.
 * //end turn name scripts need to use b_atk_name,  src_active name or anything else causes issues
+* //buffed sleep, kept long sleep duration, balanced by giving off turn healing
 * 
 * Last thing before break is setup battle health box, need finish species name expansion, w pokedex box outline-
 * 

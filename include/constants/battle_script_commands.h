@@ -255,7 +255,9 @@
 
 // statchange defines
 #define STAT_CHANGE_BS_PTR                  0x1 // If set, allow use of jumpptr. Set in every use of statbuffchange
+#define STAT_CHANGE_MIRROR_ARMOR			0x2	// Stat change redirection caused by Mirror Armor ability.
 #define STAT_CHANGE_NOT_PROTECT_AFFECTED    0x20
+#define STAT_CHANGE_UPDATE_MOVE_EFFECT		0x64	//still don't know what does
 
 // atk48
 #define ATK48_STAT_NEGATIVE         0x1
