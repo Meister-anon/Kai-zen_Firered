@@ -224,7 +224,7 @@ extern const u8 BattleScript_AbilityNoStatLoss[];
 extern const u8 BattleScript_BRNPrevention[];
 extern const u8 BattleScript_PRLZPrevention[];
 extern const u8 BattleScript_PSNPrevention[];
-extern const u8 BattleScript_ObliviousPreventsAttraction[];
+extern const u8 BattleScript_AbilityPreventsMoodShift[];
 extern const u8 BattleScript_FlinchPrevention[];
 extern const u8 BattleScript_OwnTempoPrevents[];
 extern const u8 BattleScript_SoundproofProtected[];

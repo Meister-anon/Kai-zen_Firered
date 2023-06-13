@@ -1342,11 +1342,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_THUNDER_WAVE] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_7
-            .accuracy = 90,
-        #else
-            .accuracy = 100,
-        #endif
+
+        .accuracy = 100,
         .effect = EFFECT_PARALYZE,
         .power = 0,
         .type = TYPE_ELECTRIC,

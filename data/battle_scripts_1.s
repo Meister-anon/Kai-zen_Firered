@@ -2286,6 +2286,9 @@ BattleScript_EffectCaptivate:
 	setstatchanger STAT_SPATK, 2, TRUE
 	attackcanceler
 	jumpifsubstituteblocks BattleScript_ButItFailedAtkStringPpReduce
+	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_ButItFailedAtkStringPpReduce
+	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_ButItFailedAtkStringPpReduce
+	jumpifability BS_TARGET, ABILITY_UNAWARE, BattleScript_ButItFailedAtkStringPpReduce
 	jumpifoppositegenders BattleScript_CaptivateCheckAcc
 	goto BattleScript_ButItFailedAtkStringPpReduce
 BattleScript_CaptivateCheckAcc:
@@ -4109,6 +4112,8 @@ BattleScript_EffectSwagger::
 	waitmessage 0x40
 BattleScript_SwaggerTryConfuse::
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_OwnTempoPrevents
+	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_AbilityPreventsMoodShift
+	jumpifability BS_TARGET, ABILITY_UNAWARE, BattleScript_AbilityPreventsMoodShift
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
 	setmoveeffect MOVE_EFFECT_CONFUSION
 	seteffectprimary
@@ -4769,7 +4774,7 @@ BattleScript_EffectFlatter::
 	jumpifconfusedandstatmaxed 4, BattleScript_ButItFailed
 	attackanimation
 	waitanimation
-	setstatchanger STAT_SPATK, 1, FALSE
+	setstatchanger STAT_SPATK, 2, FALSE
 	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_FlatterTryConfuse
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 2, BattleScript_FlatterTryConfuse
 	setgraphicalstatchangevalues
@@ -4778,6 +4783,8 @@ BattleScript_EffectFlatter::
 	waitmessage 0x40
 BattleScript_FlatterTryConfuse::
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_OwnTempoPrevents
+	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_AbilityPreventsMoodShift
+	jumpifability BS_TARGET, ABILITY_UNAWARE, BattleScript_AbilityPreventsMoodShift
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
 	setmoveeffect MOVE_EFFECT_CONFUSION
 	seteffectprimary
@@ -7750,9 +7757,10 @@ BattleScript_PSNPrevention::
 	waitmessage 0x40
 	return
 
-BattleScript_ObliviousPreventsAttraction::
+@use for oblivious & unaware extra effect prevention  was oblivious attraction prevention
+BattleScript_AbilityPreventsMoodShift::
 	pause 0x20
-	printstring STRINGID_PKMNPREVENTSROMANCEWITH
+	printstring STRINGID_PKMNIGNOREDADVANCESWITH
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 

@@ -12509,7 +12509,7 @@ static void atk97_tryinfatuating(void)
     personalityTarget = GetMonData(monTarget, MON_DATA_PERSONALITY);
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS)
     {
-        gBattlescriptCurrInstr = BattleScript_ObliviousPreventsAttraction;
+        gBattlescriptCurrInstr = BattleScript_AbilityPreventsMoodShift;
         gLastUsedAbility = ABILITY_OBLIVIOUS;
         RecordAbilityBattle(gBattlerTarget, ABILITY_OBLIVIOUS);
     }
@@ -13025,9 +13025,18 @@ static bool8 IsTwoTurnsMove(u16 move) //prob need to add on to this
         return FALSE;
 }
 
-static bool8 IsInvalidForSleepTalkOrAssist(u16 move)
+static bool8 IsInvalidForSleepTalk(u16 move)
 {
     if (move == MOVE_NONE || move == MOVE_SLEEP_TALK || move == MOVE_ASSIST
+     || move == MOVE_MIRROR_MOVE || move == MOVE_METRONOME || MOVE_REST)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+static bool8 IsInvalidForAssist(u16 move)
+{
+    if (move == MOVE_NONE || move == MOVE_ASSIST
      || move == MOVE_MIRROR_MOVE || move == MOVE_METRONOME)
         return TRUE;
     else
@@ -13058,7 +13067,7 @@ static void atkA9_trychoosesleeptalkmove(void)
 
     for (i = 0; i < MAX_MON_MOVES; ++i)
     {
-        if (IsInvalidForSleepTalkOrAssist(gBattleMons[gBattlerAttacker].moves[i])
+        if (IsInvalidForSleepTalk(gBattleMons[gBattlerAttacker].moves[i])
          || gBattleMons[gBattlerAttacker].moves[i] == MOVE_FOCUS_PUNCH
          || gBattleMons[gBattlerAttacker].moves[i] == MOVE_UPROAR
          || IsTwoTurnsMove(gBattleMons[gBattlerAttacker].moves[i]))
@@ -14146,7 +14155,10 @@ static void atkCD_cureifburnedparalysedorpoisoned(void) // refresh
 
 static void atkCE_settorment(void)
 {
-    if (gBattleMons[gBattlerTarget].status2 & STATUS2_TORMENT)
+    if (gBattleMons[gBattlerTarget].status2 & STATUS2_TORMENT
+        || GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE
+        || GetBattlerAbility(gBattlerTarget) == ABILITY_OWN_TEMPO
+        || GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS)
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
@@ -14165,18 +14177,23 @@ static void atkCF_jumpifnodamage(void)
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 }
 
-static void atkD0_settaunt(void)
+static void atkD0_settaunt(void)    //adjusted setup to be more in line with torment
 {
-    if (gDisableStructs[gBattlerTarget].tauntTimer == 0)
+    
+    if ((gDisableStructs[gBattlerTarget].tauntTimer != 0)
+        || GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE
+        || GetBattlerAbility(gBattlerTarget) == ABILITY_OWN_TEMPO
+        || GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS)
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    else
     {
         gDisableStructs[gBattlerTarget].tauntTimer = 2;
         gDisableStructs[gBattlerTarget].tauntTimer2 = 2;
         gBattlescriptCurrInstr += 5;
     }
-    else
-    {
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
-    }
+    
 }
 
 static void atkD1_trysethelpinghand(void)
@@ -14507,7 +14524,7 @@ static void atkDE_assistattackselect(void)
             s32 i = 0;
             u16 move = GetMonData(&party[monId], MON_DATA_MOVE1 + moveId);
 
-            if (IsInvalidForSleepTalkOrAssist(move))
+            if (IsInvalidForAssist(move))
                 continue;
             for (; sMovesForbiddenToCopy[i] != ASSIST_FORBIDDEN_END && move != sMovesForbiddenToCopy[i]; ++i);
             if (sMovesForbiddenToCopy[i] != ASSIST_FORBIDDEN_END || move == MOVE_NONE)
