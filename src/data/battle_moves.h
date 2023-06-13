@@ -7587,7 +7587,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_FLAME_CHARGE] =
     {
         .effect = EFFECT_SPEED_UP_HIT,
-        .power = 50,
+        .power = 60,
         .type = TYPE_FIRE,
         .accuracy = 100,
         .pp = 20,
@@ -11738,17 +11738,31 @@ use wonder gaurd logic to determine its super effective
 
     [MOVE_DOUBLE_SHOCK] =
     {
-            .effect = EFFECT_LOSETYPE_HIT,
-            .power = 120,
-            .type = TYPE_ELECTRIC,
-            .accuracy = 100,
-            .pp = 5,
-            .secondaryEffectChance = 0,
-            .target = MOVE_TARGET_SELECTED,
-            .priority = 0,
-            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
-            .split = SPLIT_PHYSICAL,
-            //.zMovePower = 190,
-            //.zMoveEffect = Z_EFFECT_NONE
+        .effect = EFFECT_LOSETYPE_HIT,
+        .power = 120,
+        .type = TYPE_ELECTRIC,
+        .accuracy = 100,
+        .pp = 5,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .priority = 0,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_PHYSICAL,
+        //.zMovePower = 190,
+        //.zMoveEffect = Z_EFFECT_NONE
     },
+
+    [MOVE_POUNCE] =
+    {
+        .effect = EFFECT_SPEED_UP_HIT,
+        .power = 60,
+        .type = TYPE_NORMAL,
+        .accuracy = 100,
+        .pp = 20,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .priority = 0,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+        .split = SPLIT_PHYSICAL,
+    },//normal or dark type  thought up with luxray line in mind and zenmodeYT  
 };

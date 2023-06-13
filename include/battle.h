@@ -300,6 +300,8 @@ struct ProtectStruct
     u32 usedThroatChopPreventedMove : 1;
     u32 pranksterElevated : 1;
     u32 quickDraw : 1;
+    u16 quash : 1;
+    u16 beakBlastCharge : 1;
     u32 usedMicleBerry : 1;
     u32 usedCustapBerry : 1;    // also quick claw
     u32 touchedProtectLike : 1;
@@ -639,6 +641,7 @@ struct BattleStruct //fill in unused fields when porting
     u8 focusPunchBattlerId;
     u8 battlerPreventingSwitchout;
     u8 moneyMultiplier;
+    u8 moneyMultiplierMove : 1;
     u8 savedTurnActionNumber;
     u8 switchInAbilitiesCounter;
     u8 faintedActionsState;
@@ -821,9 +824,9 @@ struct BattleScripting  //remember expanding this costs ewram
     u8 reshowMainState;
     u8 reshowHelperState;
     u8 savedStatChanger; // For if attempting to change stat two times(ex. Moody)
-    /*u8 savedBattler;  //for now saveBattler not used just using normal sBattler
+    u8 savedBattler;  //for now saveBattler not used just using normal sBattler
     
-    u8 illusionNickHack; // To properly display nick in STRINGID_ENEMYABOUTTOSWITCHPKMN.
+   /* u8 illusionNickHack; // To properly display nick in STRINGID_ENEMYABOUTTOSWITCHPKMN.
     bool8 fixedPopup;   // Force ability popup to stick until manually called back
     u16 abilityPopupOverwrite;  //UNCOMMENT if you want these features
     s32 savedDmg;   //port feature leaving out for now

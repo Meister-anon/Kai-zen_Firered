@@ -1928,6 +1928,53 @@ static void atk04_critcalc(void)    //figure later
     ++gBattlescriptCurrInstr;
 }
 
+static void TryUpdateRoundTurnOrder(void)
+{
+    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)//POTENTIALY Add on for rotation etc.
+    {
+        u32 i;
+        u32 j = 0;
+        u32 k = 0;
+        u32 currRounder;
+        u8 roundUsers[3] = { 0xFF, 0xFF, 0xFF };
+        u8 nonRoundUsers[3] = { 0xFF, 0xFF, 0xFF };
+        for (i = 0; i < gBattlersCount; i++)
+        {
+            if (gBattlerByTurnOrder[i] == gBattlerAttacker)
+            {
+                currRounder = i + 1; // Current battler going after attacker
+                break;
+            }
+        }
+
+        // Get battlers after us using round
+        for (i = currRounder; i < gBattlersCount; i++)
+        {
+            if (gChosenMoveByBattler[gBattlerByTurnOrder[i]] == MOVE_ROUND)
+                roundUsers[j++] = gBattlerByTurnOrder[i];
+            else
+                nonRoundUsers[k++] = gBattlerByTurnOrder[i];
+        }
+
+        // update turn order for round users
+        for (i = 0; roundUsers[i] != 0xFF && i < 3; i++)
+        {
+            gBattlerByTurnOrder[currRounder] = roundUsers[i];
+            gActionsByTurnOrder[currRounder] = gActionsByTurnOrder[roundUsers[i]];
+            gProtectStructs[roundUsers[i]].quash = TRUE; // Make it so their turn order can't be changed again
+            currRounder++;
+        }
+
+        // Update turn order for non-round users
+        for (i = 0; nonRoundUsers[i] != 0xFF && i < 3; i++)
+        {
+            gBattlerByTurnOrder[currRounder] = nonRoundUsers[i];
+            gActionsByTurnOrder[currRounder] = gActionsByTurnOrder[nonRoundUsers[i]];
+            currRounder++;
+        }
+    }
+}
+
 static bool8 CanMultiTask(u16 move) //works, but now I need to negate the jump, because it will still attack multiple times otherwise  done!
 {
     u16 i;
@@ -4094,7 +4141,7 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 if (GET_BATTLER_SIDE(gBattlerAttacker) == B_SIDE_PLAYER && !gBattleStruct->moneyMultiplierMove)
                 {
                     gBattleStruct->moneyMultiplier *= 2;
-                    gBattleStruct->moneyMultiplierMove = 1;
+                    gBattleStruct->moneyMultiplierMove = TRUE;
                 }
                 gBattlescriptCurrInstr++;
                 break;
@@ -4917,6 +4964,56 @@ static void atk16_seteffectprimary(void)
 static void atk17_seteffectsecondary(void)
 {
     SetMoveEffect(FALSE, 0);
+}
+
+// Used by Bestow and Symbiosis to take an item from one battler and give to another.
+static void BestowItem(u32 battlerAtk, u32 battlerDef)
+{
+    gLastUsedItem = gBattleMons[battlerAtk].item;
+
+    gActiveBattler = battlerAtk;
+    gBattleMons[battlerAtk].item = ITEM_NONE;
+    BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[battlerAtk].item), &gBattleMons[battlerAtk].item);
+    MarkBattlerForControllerExec(battlerAtk);
+    CheckSetUnburden(battlerAtk);
+
+    gActiveBattler = battlerDef;
+    gBattleMons[battlerDef].item = gLastUsedItem;
+    BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[battlerDef].item), &gBattleMons[battlerDef].item);
+    MarkBattlerForControllerExec(battlerDef);
+    gBattleResources->flags->flags[battlerDef] &= ~RESOURCE_FLAG_UNBURDEN;
+}
+
+#define SYMBIOSIS_CHECK(battler, ally)                                                                                               \
+    GetBattlerAbility(ally) == ABILITY_SYMBIOSIS                   \
+    && gBattleMons[battler].item == ITEM_NONE                      \
+    && gBattleMons[ally].item != ITEM_NONE                         \
+    && CanBattlerGetOrLoseItem(battler, gBattleMons[ally].item)    \
+    && CanBattlerGetOrLoseItem(ally, gBattleMons[ally].item)       \
+    && gBattleMons[battler].hp != 0                                \
+    && gBattleMons[ally].hp != 0
+
+// Called by Cmd_removeitem. itemId represents the item that was removed, not being given.
+static bool32 TrySymbiosis(u32 battler, u32 itemId)
+{
+    if (!gBattleStruct->itemStolen[gBattlerPartyIndexes[battler]].stolen
+        && gBattleStruct->changedItems[battler] == ITEM_NONE
+        && GetBattlerHoldEffect(battler, TRUE) != HOLD_EFFECT_EJECT_BUTTON
+        && GetBattlerHoldEffect(battler, TRUE) != HOLD_EFFECT_EJECT_PACK
+        && !(gSpecialStatuses[battler].gemBoost)
+        && gCurrentMove != MOVE_FLING //Fling and damage-reducing berries are handled separately.
+        && !gSpecialStatuses[battler].berryReduced
+        && SYMBIOSIS_CHECK(battler, BATTLE_PARTNER(battler)))
+    {
+        BestowItem(BATTLE_PARTNER(battler), battler);
+        gLastUsedAbility = gBattleMons[BATTLE_PARTNER(battler)].ability;
+        gBattleScripting.battler = gBattlerAbility = BATTLE_PARTNER(battler);
+        gBattlerAttacker = battler;
+        BattleScriptPush(gBattlescriptCurrInstr + 2);
+        gBattlescriptCurrInstr = BattleScript_SymbiosisActivates;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 static void atk18_clearstatusfromeffect(void)
@@ -6195,14 +6292,6 @@ static void atk48_playstatchangeanimation(void)
     }
 }
 
-#define SYMBIOSIS_CHECK(battler, ally)                                                                                               \
-    GetBattlerAbility(ally) == ABILITY_SYMBIOSIS                   \
-    && gBattleMons[battler].item == ITEM_NONE                      \
-    && gBattleMons[ally].item != ITEM_NONE                         \
-    && CanBattlerGetOrLoseItem(battler, gBattleMons[ally].item)    \
-    && CanBattlerGetOrLoseItem(ally, gBattleMons[ally].item)       \
-    && gBattleMons[battler].hp != 0                                \
-    && gBattleMons[ally].hp != 0
 
 static u32 GetNextTarget(u32 moveTarget)
 {
@@ -6999,10 +7088,10 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             gSpecialStatuses[gBattlerTarget].berryReduced = FALSE;
             gBattleScripting.moveEffect = 0;
             // clear attacker z move data
-            gBattleStruct->zmove.active = FALSE;
+            /*gBattleStruct->zmove.active = FALSE;
             gBattleStruct->zmove.toBeUsed[gBattlerAttacker] = MOVE_NONE;
-            gBattleStruct->zmove.effect = EFFECT_HIT;
-            ++gBattleScripting.atk49_state;
+            gBattleStruct->zmove.effect = EFFECT_HIT;*/
+            ++gBattleScripting.atk49_state; //vsonic
             break;
 
         case ATK49_COUNT:
@@ -8865,48 +8954,6 @@ static void atk69_adjustsetdamage(void)
     ++gBattlescriptCurrInstr;
 }
 
-// Used by Bestow and Symbiosis to take an item from one battler and give to another.
-static void BestowItem(u32 battlerAtk, u32 battlerDef)
-{
-    gLastUsedItem = gBattleMons[battlerAtk].item;
-
-    gActiveBattler = battlerAtk;
-    gBattleMons[battlerAtk].item = ITEM_NONE;
-    BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[battlerAtk].item), &gBattleMons[battlerAtk].item);
-    MarkBattlerForControllerExec(battlerAtk);
-    CheckSetUnburden(battlerAtk);
-
-    gActiveBattler = battlerDef;
-    gBattleMons[battlerDef].item = gLastUsedItem;
-    BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[battlerDef].item), &gBattleMons[battlerDef].item);
-    MarkBattlerForControllerExec(battlerDef);
-    gBattleResources->flags->flags[battlerDef] &= ~RESOURCE_FLAG_UNBURDEN;
-}
-
-// Called by Cmd_removeitem. itemId represents the item that was removed, not being given.
-static bool32 TrySymbiosis(u32 battler, u32 itemId)
-{
-    if (!gBattleStruct->itemStolen[gBattlerPartyIndexes[battler]].stolen
-        && gBattleStruct->changedItems[battler] == ITEM_NONE
-        && GetBattlerHoldEffect(battler, TRUE) != HOLD_EFFECT_EJECT_BUTTON
-        && GetBattlerHoldEffect(battler, TRUE) != HOLD_EFFECT_EJECT_PACK
-#if B_SYMBIOSIS_GEMS >= GEN_7
-        && !(gSpecialStatuses[battler].gemBoost)
-#endif
-        && gCurrentMove != MOVE_FLING //Fling and damage-reducing berries are handled separately.
-        && !gSpecialStatuses[battler].berryReduced
-        && SYMBIOSIS_CHECK(battler, BATTLE_PARTNER(battler)))
-    {
-        BestowItem(BATTLE_PARTNER(battler), battler);
-        gLastUsedAbility = gBattleMons[BATTLE_PARTNER(battler)].ability;
-        gBattleScripting.battler = gBattlerAbility = BATTLE_PARTNER(battler);
-        gBattlerAttacker = battler;
-        BattleScriptPush(gBattlescriptCurrInstr + 2);
-        gBattlescriptCurrInstr = BattleScript_SymbiosisActivates;
-        return TRUE;
-    }
-    return FALSE;
-}
 
 static void atk6A_removeitem(void)
 {
@@ -9483,6 +9530,7 @@ static void atk76_various(void) //will need to add all these emerald various com
     u16 species;
     u8 abilityNum;
     u16 lastMove = gLastMoves[gBattlerTarget];
+    u8 lost_type = gBattleMoves[gCurrentMove].argument;
     //u16 lastMove = gLastResultingMoves[gBattlerAttacker]; //why did I need to use this, when this "gLastMoves[gbattlertargt]" existed?
     
 
@@ -9516,7 +9564,7 @@ static void atk76_various(void) //will need to add all these emerald various com
     case VARIOUS_RESET_INTIMIDATE_TRACE_BITS:   //RESETS the switchin effect, that is the trigger for the abillity activation
         gSpecialStatuses[gActiveBattler].intimidatedMon = 0;//pairs with battle_util.c
         gSpecialStatuses[gActiveBattler].traced = 0; //BattleScript_IntimidateActivates
-        gSpecialStatuses[gActiveBattler].TigerMomAttacked = 0; //new special status, but uses BattleScript_IntimidateActivates
+        gSpecialStatuses[gActiveBattler].tigerMomAttacked = 0; //new special status, but uses BattleScript_IntimidateActivates
         break; // & trygetintimidatetarget command in this file
     case VARIOUS_UPDATE_CHOICE_MOVE_ON_LVL_UP:
         if (gBattlerPartyIndexes[0] == gBattleStruct->expGetterMonId || gBattlerPartyIndexes[2] == gBattleStruct->expGetterMonId)
@@ -9945,7 +9993,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         else
         {
-            gStatuses3[gBattlerTarget] |= STATUS3_ELECTRIFIED;
+            gStatuses4[gBattlerTarget] |= STATUS4_ELECTRIFIED;
             gBattlescriptCurrInstr += 7;
         }
         return;
@@ -10201,7 +10249,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattlescriptCurrInstr += 7;
         return;
     case VARIOUS_LOSE_TYPE:
-        u8 lost_type = gBattleMoves[gCurrentMove].argument; //changed to use move argument, rather than having to read script ptr, that way leaves room for removing enemy type with moves of a different type than type being lost
+         //changed to use move argument, rather than having to read script ptr, that way leaves room for removing enemy type with moves of a different type than type being lost
         for (i = 0; i < 3; i++) //TEST, since there's only 3 types shouldn't this only need to increment up to 2 not 3?
         {   //nah it should be 3, way for loops work, it'll not execute when the value is 3., it checks the value before executing the block.
             if (gBattleMons[gActiveBattler].type1 != gBattleMons[gActiveBattler].type2) //if multitype mon
@@ -10578,7 +10626,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         gStatuses3[gActiveBattler] &= ~(STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS | STATUS3_ON_AIR);
         break;
     case VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG:    //uses gactivebattler sets actually target in bs script  groundonairbattlerwithoutgravity
-        if (gBattleMons[gCurrentMove].flags == FLAG_DMG_2X_IN_AIR && gStatuses3[gActiveBattler] & STATUS3_ON_AIR)   //using fly
+        if (gBattleMoves[gCurrentMove].flags == FLAG_DMG_2X_IN_AIR && gStatuses3[gActiveBattler] & STATUS3_ON_AIR)   //using fly
         {
             CancelMultiTurnMoves(gActiveBattler);
             gSprites[gBattlerSpriteIds[gActiveBattler]].invisible = FALSE;
@@ -12466,7 +12514,7 @@ static void atk96_weatherdamage(void)
             if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ICE) //add ice weather abilities
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_OVERCOAT
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_SNOW_CLOAK
-             && GetBattlerAbility(gBattlerAttacker) != ABILITY_ICE_BODY)
+             && GetBattlerAbility(gBattlerAttacker) != ABILITY_ICE_BODY
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_GLACIAL_ICE)
             {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
@@ -14762,52 +14810,6 @@ static void atkE5_pickup(void) //effect will go in battle_util.c end turn abilit
     ++gBattlescriptCurrInstr;
 }
 
-static void TryUpdateRoundTurnOrder(void)
-{
-    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)//POTENTIALY Add on for rotation etc.
-    {
-        u32 i;
-        u32 j = 0;
-        u32 k = 0;
-        u32 currRounder;
-        u8 roundUsers[3] = { 0xFF, 0xFF, 0xFF };
-        u8 nonRoundUsers[3] = { 0xFF, 0xFF, 0xFF };
-        for (i = 0; i < gBattlersCount; i++)
-        {
-            if (gBattlerByTurnOrder[i] == gBattlerAttacker)
-            {
-                currRounder = i + 1; // Current battler going after attacker
-                break;
-            }
-        }
-
-        // Get battlers after us using round
-        for (i = currRounder; i < gBattlersCount; i++)
-        {
-            if (gChosenMoveByBattler[gBattlerByTurnOrder[i]] == MOVE_ROUND)
-                roundUsers[j++] = gBattlerByTurnOrder[i];
-            else
-                nonRoundUsers[k++] = gBattlerByTurnOrder[i];
-        }
-
-        // update turn order for round users
-        for (i = 0; roundUsers[i] != 0xFF && i < 3; i++)
-        {
-            gBattlerByTurnOrder[currRounder] = roundUsers[i];
-            gActionsByTurnOrder[currRounder] = gActionsByTurnOrder[roundUsers[i]];
-            gProtectStructs[roundUsers[i]].quash = TRUE; // Make it so their turn order can't be changed again
-            currRounder++;
-        }
-
-        // Update turn order for non-round users
-        for (i = 0; nonRoundUsers[i] != 0xFF && i < 3; i++)
-        {
-            gBattlerByTurnOrder[currRounder] = nonRoundUsers[i];
-            gActionsByTurnOrder[currRounder] = gActionsByTurnOrder[nonRoundUsers[i]];
-            currRounder++;
-        }
-    }
-}
 
 static void atkE6_docastformchangeanimation(void)
 {

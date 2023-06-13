@@ -795,6 +795,7 @@
 #define MOVE_BOLTBEAM 767	//joke idea taken from CammyMeeleTea video on icetypes
 #define MOVE_BACK_STAB 768	//new dark exclusive, give every dark type sucker punch and backstab  potentially make a tm, but keep sucker punch as learn move?
 #define MOVE_DOUBLE_SHOCK 769
+#define MOVE_POUNCE 770
 
 //#define MOVES_COUNT_GEN8 757
 
@@ -803,7 +804,7 @@
 //for completion new moves have to be defined in:  move_descriptions.inc,  move_names.h, & battle_anim_scripts.s
 // also need actual move data in battle_moves.h
 
-#define LAST_MOVE_INDEX     MOVE_DOUBLE_SHOCK
+#define LAST_MOVE_INDEX     MOVE_POUNCE
 
 #define MOVES_COUNT_GEN8 (LAST_MOVE_INDEX + 1) //changed so define auto updates
 

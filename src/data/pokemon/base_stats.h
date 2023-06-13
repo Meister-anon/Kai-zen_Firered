@@ -11263,11 +11263,11 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_RIVALRY, ABILITY_INTIMIDATE},
+            .abilities = {ABILITY_INTIMIDATE, ABILITY_GUTS},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_INTIMIDATE},
         #endif
-        .abilityHidden = {ABILITY_STRONG_JAW, ABILITY_NONE},
+        .abilityHidden = {ABILITY_STRONG_JAW, ABILITY_RIVALRY},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -11292,11 +11292,11 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_RIVALRY, ABILITY_INTIMIDATE},
+            .abilities = {ABILITY_INTIMIDATE, ABILITY_GUTS},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_INTIMIDATE},
         #endif
-        .abilityHidden = {ABILITY_STRONG_JAW, ABILITY_NONE},
+        .abilityHidden = {ABILITY_STRONG_JAW, ABILITY_RIVALRY},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -11310,7 +11310,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 95,
         .baseSpDefense = 79,
         .type1 = TYPE_ELECTRIC,
-        .type2 = TYPE_ELECTRIC,
+        .type2 = TYPE_DARK,
         .catchRate = 45,
         .expYield = 235,
         //.evYield_Attack = 3,
@@ -11321,11 +11321,11 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_RIVALRY, ABILITY_INTIMIDATE},
+            .abilities = {ABILITY_INTIMIDATE, ABILITY_GUTS},
         #ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NONE, ABILITY_INTIMIDATE},
         #endif
-        .abilityHidden = {ABILITY_STRONG_JAW, ABILITY_NONE},
+        .abilityHidden = {ABILITY_STRONG_JAW, ABILITY_SHADOW_TAG},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },

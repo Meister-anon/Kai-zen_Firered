@@ -208,7 +208,7 @@
     textVar[4] = B_BUFF_EOS;                                    \
 }
 
-#define TEXT_BUFF_ARRAY_COUNT   16
+#define TEXT_BUFF_ARRAY_COUNT   17
 
 struct BattleMsgData
 {

@@ -295,5 +295,5 @@ const union AnimCmd *const gSpriteAnimTable_82349BC[] =
 #include "data/text/trainer_class_names.h"
 #include "data/trainers.h"
 #include "data/text/species_names.h"
-#include "data/text/move_names.h"
-#include "data/text/L_case_movenames.h" //important believe swap comment on this pair if I decide to switch to lower case move names
+#include "data/text/move_info.h"    //may change to data //consolidation of move data is names & descriptions
+//#include "data/text/L_case_movenames.h" //important believe swap comment on this pair if I decide to switch to lower case move names

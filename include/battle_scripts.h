@@ -461,6 +461,7 @@ extern const u8 BattleScript_BerryReduceDmg[];
 extern const u8 BattleScript_GemActivates[];
 extern const u8 BattleScript_RedCardActivates[];
 extern const u8 BattleScript_StickyBarbTransfer[];
+extern const u8 BattleScript_BothCanNoLongerEscape[];
 extern const u8 BattleScript_PickpocketPrevented[];
 extern const u8 BattleScript_Pickpocket[];
 extern const u8 BattleScript_GrowthEnd[];
