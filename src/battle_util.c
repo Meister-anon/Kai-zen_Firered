@@ -218,7 +218,7 @@ static void infatuationchecks(void)//cusotm effect used for cupidarrow
 {
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS)
     {
-        gBattlescriptCurrInstr = BattleScript_ObliviousPreventsAttraction;
+        gBattlescriptCurrInstr = BattleScript_AbilityPreventsMoodShift;
         gLastUsedAbility = ABILITY_OBLIVIOUS;
         RecordAbilityBattle(gBattlerTarget, ABILITY_OBLIVIOUS);
     }
