@@ -9357,7 +9357,7 @@ u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 bat
     }
 
     /*if (recordAbilities)
-        UpdateMoveResultFlags(modifier);*/  //removed as this is just for checking type, not actually using to read result.
+        UpdateMoveResultFlags(modifier);*/  //removed as this is just for checking type, i'M not actually using to read result.
     return modifier;
 }
 
@@ -9447,6 +9447,8 @@ u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilit
             modifier = UQ_4_12(0.0);
         if (abilityDef == ABILITY_WONDER_GUARD && modifier <= UQ_4_12(1.0) && gBattleMoves[move].power)
             modifier = UQ_4_12(0.0);
+        if (abilityDef == ABILITY_DISPIRIT_GUARD && modifier >= UQ_4_12(1.0) && gBattleMoves[move].power)
+            modifier = UQ_4_12(0.0);
     }
 
     //UpdateMoveResultFlags(modifier);
@@ -9471,7 +9473,7 @@ static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType,
 
     if (fixedBasePower)
         gBattleMovePower = fixedBasePower;
-    else
+    /*else
         gBattleMovePower = CalcMoveBasePowerAfterModifiers(move, battlerAtk, battlerDef, moveType, updateFlags);
 
     // long dmg basic formula
@@ -9482,7 +9484,7 @@ static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType,
     dmg = (dmg / 50) + 2;
 
     // Calculate final modifiers.
-    dmg = CalcFinalDmg(dmg, move, battlerAtk, battlerDef, moveType, typeEffectivenessModifier, isCrit, updateFlags);
+    dmg = CalcFinalDmg(dmg, move, battlerAtk, battlerDef, moveType, typeEffectivenessModifier, isCrit, updateFlags);*/
 
     // Add a random factor.
     if (randomFactor)

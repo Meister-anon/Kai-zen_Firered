@@ -46,7 +46,7 @@ extern const u8 *const gBattleScriptsForMoveEffects[];
 static bool8 IsTwoTurnsMove(u16 move);
 static void TrySetDestinyBondToHappen(void);
 static u8 AttacksThisTurn(u8 battlerId, u16 move); // Note: returns 1 if it's a charging turn, otherwise 2.
-static void CheckWonderGuardAndLevitate(void);//attempted replace, not currently using, attempt using emerald equivalent
+static void CheckWonderGuardAndLevitate(void);//attempted replace, not currently using, attempt using emerald equivalent CalcTypeEffectivenessMultiplier need test,then can remove funtion
 static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr);
 static void sub_8026480(void);
 static bool8 sub_80264D0(void);
@@ -7266,6 +7266,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
 //emerald doesn't use this, removed from brick break and rollout, leaving for moves that 
 //don't do type damage. will remove changes keep basic
 //its completely pointless I think?  yeah emerald doesn't have this and replaced it with healblock
+//edit no longer used - need test but think can replace
 static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coat, rollout, & brick break?
 {
     u8 flags = 0;

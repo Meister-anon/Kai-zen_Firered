@@ -3008,6 +3008,20 @@ const u8 gLowerMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_COCOON] = _("Cocoon"),
     [MOVE_MONOTYPE] = _("Monotype"),
     [MOVE_FLASH_FREEZE] = _("Flash Freeze"),
+    [MOVE_DRYADS_CURSE] = _("Dryads Curse"),
+    [MOVE_SHIELD_BASH] = _("Shield Bash"),
+    [MOVE_UP_ROOT] = _("Uproot"),
+    [MOVE_DIVE_BOMB] = _("Dive Bomb"),
+    [MOVE_NETTLE_WHIP] = _("Nettle Whip"),
+    [MOVE_SONIC_BOOM] = _("Sonicboom"),
+    [MOVE_OVER_MAX_POWER] = _("???% Power"),
+    [MOVE_SHIMON] = _("Shimon"),
+    [MOVE_FINAL_FLIGHT] = _("Final Flight"),
+    [MOVE_PLASMA_RAILGUN] = _("Plasma Railgun"),
+    [MOVE_BOLTBEAM] = _("Bolt Beam"),
+    [MOVE_BACK_STAB] = _("Backstab"),
+    [MOVE_DOUBLE_SHOCK] = _("Double Shock"),
+    [MOVE_POUNCE] = _("Pounce"),
 };//don't need remove comma from last value for this file, port of emerald
 
 //default move names 
