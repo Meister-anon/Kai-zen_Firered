@@ -4090,7 +4090,7 @@ BattleScript_EffectRollout::
 	ppreduce
 BattleScript_RolloutHit::
 	accuracycheck .+6, ACC_CURR_MOVE
-	typecalc2
+	typecalc
 	rolloutdamagecalculation
 	goto BattleScript_HitFromCritCalc
 
@@ -5073,7 +5073,6 @@ BattleScript_EffectBrickBreak::
 	removelightscreenreflect
 	critcalc
 	damagecalc
-	typecalc
 	adjustnormaldamage
 	jumpifbyte CMP_EQUAL, sB_ANIM_TURN, 0, BattleScript_BrickBreakAnim
 	bicbyte gMoveResultFlags, MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE
@@ -5084,7 +5083,7 @@ BattleScript_BrickBreakAnim::
 	printstring STRINGID_THEWALLSHATTERED
 	waitmessage 0x40
 BattleScript_BrickBreakDoHit::
-	typecalc2
+	typecalc
 	effectivenesssound
 	hitanimation BS_TARGET
 	waitstate

@@ -226,6 +226,41 @@ oh wait,
 you're saying it would default to the same character oh ok cool.
 ok I prob will do that then.
 
+Meister_anon — Today at 9:08 PM
+
+can someone explain how foresight works for me?
+i know its supposed to get passed the no effect multiplier for typing but I'm not understanding how.
+
+ is it changing the move type so it hits neutral, but while TYPE_FORESIGHT
+is in the table, its not listed under type names.
+Kurausukun — Today at 9:10 PM
+It's a massive hack
+It's just in the type effectiveness chart
+Meister_anon — Today at 9:11 PM
+is the i+3 making it go to type_endtable and somehow skipping typeset so it does neutral or something?
+Kurausukun — Today at 9:12 PM
+I forget exactly how it works, but I remember it being stupid
+Meister_anon — Today at 9:13 PM
+sigh I can imagine.
+The Sylph is In — Today at 9:13 PM
+If the defender has the foresight status, it breaks out and stops checking the type effectiveness table (and ghost’s normal/fighting immunities conveniently are located after type_foresight)
+Kurausukun — Today at 9:14 PM
+Also you're reading that wrong, the break keeps it from going to +3
+Yeah, what they said
+Meister_anon — Today at 9:14 PM
+yup that'd do it.
+and it defaults to normal multiplier which is why it does neutral (I think)
+Kurausukun — Today at 9:15 PM
+Yes
+Meister_anon — Today at 9:16 PM
+ok just needed to understand that so I could setup scrappy logic.
+just need to double check I didn't move those type checks.
+
+if not I should be able to just have it use the same logic to make that work.
+Thanks to both of you. 
+Kurausukun — Today at 9:17 PM
+Yeah that should work
+
 */
 
 //Single extra note, for battle script,  I think when I use a call, it has to end in a return
