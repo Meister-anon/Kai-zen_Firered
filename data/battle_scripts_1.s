@@ -3613,7 +3613,7 @@ BattleScript_EffectCounter::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	typecalc2
+	typecalc
 	adjustsetdamage
 	goto BattleScript_HitFromAtkAnimation
 
@@ -4376,7 +4376,7 @@ BattleScript_EffectMirrorCoat::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	typecalc2
+	typecalc
 	adjustsetdamage
 	goto BattleScript_HitFromAtkAnimation
 
@@ -8048,7 +8048,7 @@ BattleScript_RoughSkinActivates::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
-	printstring STRINGID_PKMNHURTSWITH
+	printstring STRINGID_PKMNHURTSWITHABILITY
 	waitmessage 0x40
 	tryfaintmon BS_ATTACKER, 0, NULL
 	return
@@ -8066,7 +8066,7 @@ BattleScript_HurtAttacker:
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
-	printstring STRINGID_PKMNHURTSWITH
+	printstring STRINGID_PKMNHURTSWITH2
 	waitmessage 0x40
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	return
@@ -8085,7 +8085,7 @@ BattleScript_SpikyShieldEffect::
 	bichalfword gMoveResultFlags, MOVE_RESULT_NO_EFFECT
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
-	printstring STRINGID_PKMNHURTSWITH
+	printstring STRINGID_PKMNHURTSWITH2
 	waitmessage 0x40
 	call BattleScript_SetSpikesfromSpikyShield @attempts to set spikes unsure if should put before or after tryfaintmon
 	tryfaintmon BS_ATTACKER, FALSE, NULL	@will keep above faintmon, since spike script needs target, it works without causing issue that way
@@ -8097,7 +8097,7 @@ BattleScript_ShieldBash::
 	typecalc
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
-	printstring STRINGID_PKMNHURTSWITH @make new string  "mon countered the blow!"
+	printstring STRINGID_PKMNHURTSWITH2 @make new string  "mon countered the blow!"
 	waitmessage 0x40
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	return

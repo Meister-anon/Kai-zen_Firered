@@ -179,6 +179,7 @@ u32 ApplyModifier(u16 modifier, u32 val);
 bool32 UnnerveOn(u32 battlerId, u32 itemId);
 void TryRestoreStolenItems(void);
 void TrySaveExchangedItem(u8 battlerId, u16 stolenItem);
+u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
 u32 GetBattlerMoveTargetType(u8 battlerId, u16 move); //need port these two fully
 bool32 CanTargetBattler(u8 battlerAtk, u8 battlerDef, u16 move);
 //learned defined need be on one line, this should be logic for thawing i.e remove frozen status

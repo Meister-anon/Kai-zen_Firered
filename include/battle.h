@@ -352,7 +352,7 @@ struct SpecialStatus    //pretty sure all values
     u8 forewarnDone:1;  //to be set TRUE if predicted move was used by opponent, if not and enemy faints or switches, reactivate forewarn for next opponent 
     u16 anticipatedMove;    //for storing move from anticipation ability
     u8 anticipationDone:1;// same as forwarn clause //also considering moveend & moveendtarget can prob do swithin repeat, by swapping battler and side w new abilityeffet clause?
-    u8 parentalBondState : 2;
+    u8 parentalBondState : 2; // 0/1/2
     u8 field12;
     u8 field13;//check moody case for switchin line something something = 2
 };

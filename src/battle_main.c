@@ -321,6 +321,7 @@ static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 
 #define X UQ_4_12
 //rows are attacking type
 //columns are defending type 
+//still confused about static vs const but pretty sure static can be called outside of file, just not directly
 static const u16 sTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] =
 {
  //               normal  fight   flying  poison  ground   rock    bug    ghost   steel   mystery  fire   water   grass  electric  psychic  ice   dragon   dark   fairy    sound
@@ -528,6 +529,9 @@ const u8 gTypeEffectiveness[417] = // 336 is number of entries x 3 i.e number of
 //and ice slowls electron flow, which can prevent electrical flow.
 //but later found, not only  does ice stop electrical flow, bugs and ice are capable of producing lightning/electricity mostly via friction
 //and as electric resists electric, that is another reason ice/bug resistance to electricity makes sense.
+
+//logic for dark beating dark is similar to dragon, bad guys/evil are most likely to backstab/take each other out
+//same as dragons fight and defeat other dragons
 
     //consider makign bugs immune to confusion status, like wolfeyvgc said, he didn't explain but I gather logic is most bugs work by hivemind,
 //on top of having some type of extra sensory options with its feelers etc. will have to add dark type exception to prankster back i guess

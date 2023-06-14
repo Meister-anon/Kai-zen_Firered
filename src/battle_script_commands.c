@@ -46,7 +46,7 @@ extern const u8 *const gBattleScriptsForMoveEffects[];
 static bool8 IsTwoTurnsMove(u16 move);
 static void TrySetDestinyBondToHappen(void);
 static u8 AttacksThisTurn(u8 battlerId, u16 move); // Note: returns 1 if it's a charging turn, otherwise 2.
-static void CheckWonderGuardAndLevitate(void);
+static void CheckWonderGuardAndLevitate(void);//attempted replace, not currently using, attempt using emerald equivalent
 static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr);
 static void sub_8026480(void);
 static bool8 sub_80264D0(void);
@@ -857,11 +857,13 @@ static const u16 sProtectSuccessRates[] =
     USHRT_MAX / 8
 };
 
-#define FORBIDDEN_MIMIC         0x1
-#define FORBIDDEN_METRONOME     0x2
-#define FORBIDDEN_ASSIST        0x4
-#define FORBIDDEN_COPYCAT       0x8
-#define FORBIDDEN_SLEEP_TALK    0x10
+#define FORBIDDEN_MIMIC         (1 << 0)
+#define FORBIDDEN_METRONOME     (1 << 1)
+#define FORBIDDEN_ASSIST        (1 << 2)
+#define FORBIDDEN_COPYCAT       (1 << 3)
+#define FORBIDDEN_SLEEP_TALK    (1 << 4)
+#define FORBIDDEN_INSTRUCT      (1 << 5)
+#define FORBIDDEN_PARENTAL_BOND (1 << 6)
 
 
 #define MIMIC_FORBIDDEN_END             0xFFFE
@@ -877,28 +879,36 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_STRUGGLE] = 0xFF, // Neither Struggle
     [MOVE_AFTER_YOU] = FORBIDDEN_METRONOME,
     [MOVE_APPLE_ACID] = FORBIDDEN_METRONOME,
-    [MOVE_ASSIST] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
+    [MOVE_ARM_THRUST] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_ASSIST] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
     [MOVE_ASTRAL_BARRAGE] = FORBIDDEN_METRONOME,
     [MOVE_AURA_WHEEL] = FORBIDDEN_METRONOME,
     [MOVE_BADDY_BAD] = FORBIDDEN_METRONOME,
     [MOVE_BANEFUL_BUNKER] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
-    [MOVE_BEAK_BLAST] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
-    [MOVE_BEHEMOTH_BASH] = FORBIDDEN_METRONOME | FORBIDDEN_COPYCAT,
-    [MOVE_BEHEMOTH_BLADE] = FORBIDDEN_METRONOME | FORBIDDEN_COPYCAT,
-    [MOVE_BELCH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
+    [MOVE_BARRAGE] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_BEAK_BLAST] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
+    [MOVE_BEAT_UP] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_BEHEMOTH_BASH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
+    [MOVE_BEHEMOTH_BLADE] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
+    [MOVE_BELCH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
     [MOVE_BESTOW] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
-    [MOVE_BIDE] = FORBIDDEN_SLEEP_TALK,
+    [MOVE_BIDE] = FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND, // Note: Bide should work with Parental Bond. This will be addressed in future.
+    [MOVE_BLAST_BURN] = FORBIDDEN_INSTRUCT,
     [MOVE_BODY_PRESS] = FORBIDDEN_METRONOME,
-    [MOVE_BOUNCE] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK,
+    [MOVE_BONE_RUSH] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_BONEMERANG] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_BOUNCE] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
     [MOVE_BOUNCY_BUBBLE] = FORBIDDEN_METRONOME,
     [MOVE_BRANCH_POKE] = FORBIDDEN_METRONOME,
     [MOVE_BREAKING_SWIPE] = FORBIDDEN_METRONOME,
+    [MOVE_BULLET_SEED] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_BUZZY_BUZZ] = FORBIDDEN_METRONOME,
-    [MOVE_CELEBRATE] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
-    [MOVE_CHATTER] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_MIMIC | FORBIDDEN_SLEEP_TALK,
+    [MOVE_CELEBRATE] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
+    [MOVE_CHATTER] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_MIMIC | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
     [MOVE_CIRCLE_THROW] = FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_CLANGOROUS_SOUL] = FORBIDDEN_METRONOME,
-    [MOVE_COPYCAT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
+    [MOVE_COMET_PUNCH] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_COPYCAT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
     [MOVE_COUNTER] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_COVET] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_CRAFTY_SHIELD] = FORBIDDEN_METRONOME,
@@ -906,86 +916,116 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_DESTINY_BOND] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_DETECT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_DIAMOND_STORM] = FORBIDDEN_METRONOME,
-    [MOVE_DIG] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK,
-    [MOVE_DIVE] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK,
-    [MOVE_DOUBLE_IRON_BASH] = FORBIDDEN_METRONOME,
+    [MOVE_DIG] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_DIVE] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_DOUBLE_IRON_BASH] = FORBIDDEN_METRONOME | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_DOUBLE_HIT] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_DOUBLE_KICK] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_DOUBLE_SLAP] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_DRAGON_ASCENT] = FORBIDDEN_METRONOME,
     [MOVE_DRAGON_ENERGY] = FORBIDDEN_METRONOME,
+    [MOVE_DRAGON_DARTS] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_DRAGON_TAIL] = FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_DRUM_BEATING] = FORBIDDEN_METRONOME,
-    [MOVE_DYNAMAX_CANNON] = FORBIDDEN_METRONOME | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
+    [MOVE_DUAL_CHOP] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_DUAL_WINGBEAT] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_DYNAMAX_CANNON] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
+    [MOVE_ENDEAVOR] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_ENDURE] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
-    [MOVE_ETERNABEAM] = FORBIDDEN_METRONOME,
+    [MOVE_ETERNABEAM] = FORBIDDEN_METRONOME | FORBIDDEN_INSTRUCT,
+    [MOVE_EXPLOSION] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_FALSE_SURRENDER] = FORBIDDEN_METRONOME,
     [MOVE_FEINT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_FIERY_WRATH] = FORBIDDEN_METRONOME,
+    [MOVE_FINAL_GAMBIT] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_FISSURE] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_FLEUR_CANNON] = FORBIDDEN_METRONOME,
+    [MOVE_FLING] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_FLOATY_FALL] = FORBIDDEN_METRONOME,
-    [MOVE_FLY] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK,
-    [MOVE_FOCUS_PUNCH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
+    [MOVE_FLY] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_FOCUS_PUNCH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
     [MOVE_FOLLOW_ME] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
-    [MOVE_FREEZE_SHOCK] = FORBIDDEN_METRONOME | FORBIDDEN_SLEEP_TALK,
+    [MOVE_FREEZE_SHOCK] = FORBIDDEN_METRONOME | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
     [MOVE_FREEZING_GLARE] = FORBIDDEN_METRONOME,
     [MOVE_FREEZY_FROST] = FORBIDDEN_METRONOME,
-    [MOVE_GEOMANCY] = FORBIDDEN_SLEEP_TALK,
+    [MOVE_FURY_ATTACK] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_FURY_SWIPES] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_GEAR_GRIND] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_GEOMANCY] = FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_GIGA_IMPACT] = FORBIDDEN_INSTRUCT,
     [MOVE_GLACIAL_LANCE] = FORBIDDEN_METRONOME,
     [MOVE_GLITZY_GLOW] = FORBIDDEN_METRONOME,
     [MOVE_GRAV_APPLE] = FORBIDDEN_METRONOME,
+    [MOVE_GUILLOTINE] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_HELPING_HAND] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
-    [MOVE_HOLD_HANDS] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
+    [MOVE_HOLD_HANDS] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
+    [MOVE_HORN_DRILL] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_HYDRO_CANNON] = FORBIDDEN_INSTRUCT,
+    [MOVE_HYPER_BEAM] = FORBIDDEN_INSTRUCT,
     [MOVE_HYPERSPACE_FURY] = FORBIDDEN_METRONOME,
     [MOVE_HYPERSPACE_HOLE] = FORBIDDEN_METRONOME,
-    [MOVE_ICE_BURN] = FORBIDDEN_METRONOME | FORBIDDEN_SLEEP_TALK,
-    [MOVE_INSTRUCT] = FORBIDDEN_METRONOME,
+    [MOVE_ICE_BALL] = FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_ICE_BURN] = FORBIDDEN_METRONOME | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_ICICLE_SPEAR] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_INSTRUCT] = FORBIDDEN_METRONOME | FORBIDDEN_INSTRUCT,
     [MOVE_JUNGLE_HEALING] = FORBIDDEN_METRONOME,
-    [MOVE_KINGS_SHIELD] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
+    [MOVE_KINGS_SHIELD] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_INSTRUCT,
     [MOVE_LIFE_DEW] = FORBIDDEN_METRONOME,
     [MOVE_LIGHT_OF_RUIN] = FORBIDDEN_METRONOME,
     [MOVE_MAT_BLOCK] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
-    [MOVE_ME_FIRST] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
-    [MOVE_METEOR_ASSAULT] = FORBIDDEN_METRONOME,
-    [MOVE_METRONOME] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
-    [MOVE_MIMIC] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_MIMIC | FORBIDDEN_SLEEP_TALK,
+    [MOVE_ME_FIRST] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
+    [MOVE_METEOR_ASSAULT] = FORBIDDEN_METRONOME | FORBIDDEN_INSTRUCT,
+    [MOVE_METEOR_BEAM] = FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_METRONOME] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
+    [MOVE_MIMIC] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_MIMIC | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
     [MOVE_MIND_BLOWN] = FORBIDDEN_METRONOME,
     [MOVE_MIRROR_COAT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
-    [MOVE_MIRROR_MOVE] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
+    [MOVE_MIRROR_MOVE] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
+    [MOVE_MISTY_EXPLOSION] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_MOONGEIST_BEAM] = FORBIDDEN_METRONOME,
-    [MOVE_NATURE_POWER] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
+    [MOVE_NATURE_POWER] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
     [MOVE_NATURES_MADNESS] = FORBIDDEN_METRONOME,
-    [MOVE_OBSTRUCT] = FORBIDDEN_METRONOME | FORBIDDEN_COPYCAT,
+    [MOVE_OBSTRUCT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_INSTRUCT,
     [MOVE_ORIGIN_PULSE] = FORBIDDEN_METRONOME,
+    [MOVE_OUTRAGE] = FORBIDDEN_INSTRUCT,
     [MOVE_OVERDRIVE] = FORBIDDEN_METRONOME,
-    [MOVE_PHANTOM_FORCE] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK,
+    [MOVE_PHANTOM_FORCE] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
     [MOVE_PHOTON_GEYSER] = FORBIDDEN_METRONOME,
-    [MOVE_PIKA_PAPOW] = FORBIDDEN_METRONOME,
-    [MOVE_PLASMA_FIST] = FORBIDDEN_METRONOME,
-    [MOVE_PRECIPICE_BLADES] = FORBIDDEN_METRONOME,
+    [MOVE_PRISMATIC_LASER] = FORBIDDEN_INSTRUCT,
     [MOVE_PROTECT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_PYRO_BALL] = FORBIDDEN_METRONOME,
     [MOVE_QUASH] = FORBIDDEN_METRONOME,
     [MOVE_QUICK_GUARD] = FORBIDDEN_METRONOME,
     [MOVE_RAGE_POWDER] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
-    [MOVE_RAZOR_WIND] = FORBIDDEN_SLEEP_TALK,
+    [MOVE_RAZOR_WIND] = FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
     [MOVE_RELIC_SONG] = FORBIDDEN_METRONOME,
     [MOVE_ROAR] = FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
+    [MOVE_ROAR_OF_TIME] = FORBIDDEN_INSTRUCT,
+    [MOVE_ROCK_BLAST] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_ROCK_WRECKER] = FORBIDDEN_INSTRUCT,
+    [MOVE_ROLLOUT] = FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
     [MOVE_SAPPY_SEED] = FORBIDDEN_METRONOME,
+    [MOVE_SCALE_SHOT] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_SECRET_SWORD] = FORBIDDEN_METRONOME,
-    [MOVE_SHADOW_FORCE] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK,
-    [MOVE_SHELL_TRAP] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
+    [MOVE_SELF_DESTRUCT] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_SHADOW_FORCE] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_SHEER_COLD] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_SHELL_TRAP] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
     [MOVE_SIZZLY_SLIDE] = FORBIDDEN_METRONOME,
-    [MOVE_SKETCH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_MIMIC | FORBIDDEN_SLEEP_TALK,
-    [MOVE_SKULL_BASH] = FORBIDDEN_SLEEP_TALK,
-    [MOVE_SKY_ATTACK] = FORBIDDEN_SLEEP_TALK,
-    [MOVE_SKY_DROP] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK,
-    [MOVE_SLEEP_TALK] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
+    [MOVE_SKETCH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_MIMIC | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
+    [MOVE_SKULL_BASH] = FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_SKY_ATTACK] = FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_SKY_DROP] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_SLEEP_TALK] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT,
     [MOVE_SNAP_TRAP] = FORBIDDEN_METRONOME,
     [MOVE_SNARL] = FORBIDDEN_METRONOME,
-    [MOVE_SNATCH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
+    [MOVE_SNATCH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_INSTRUCT,
     [MOVE_SNORE] = FORBIDDEN_METRONOME,
-    [MOVE_SOLAR_BEAM] = FORBIDDEN_SLEEP_TALK,
-    [MOVE_SOLAR_BLADE] = FORBIDDEN_SLEEP_TALK,
+    [MOVE_SOLAR_BEAM] = FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
+    [MOVE_SOLAR_BLADE] = FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
     [MOVE_SPARKLY_SWIRL] = FORBIDDEN_METRONOME,
     [MOVE_SPECTRAL_THIEF] = FORBIDDEN_METRONOME,
+    [MOVE_SPIKE_CANNON] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_SPIKE_SHIELD] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_SPIRIT_BREAK] = FORBIDDEN_METRONOME,
     [MOVE_SPLISHY_SPLASH] = FORBIDDEN_METRONOME,
@@ -994,19 +1034,25 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_STEEL_BEAM] = FORBIDDEN_METRONOME,
     [MOVE_STRANGE_STEAM] = FORBIDDEN_METRONOME,
     [MOVE_SUNSTEEL_STRIKE] = FORBIDDEN_METRONOME,
-    [MOVE_SURGING_STRIKES] = FORBIDDEN_METRONOME,
+    [MOVE_SURGING_STRIKES] = FORBIDDEN_METRONOME | FORBIDDEN_PARENTAL_BOND,
     [MOVE_SWITCHEROO] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
+    [MOVE_TAIL_SLAP] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_TECHNO_BLAST] = FORBIDDEN_METRONOME,
     [MOVE_THIEF] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_THOUSAND_ARROWS] = FORBIDDEN_METRONOME,
     [MOVE_THOUSAND_WAVES] = FORBIDDEN_METRONOME,
+    [MOVE_THRASH] = FORBIDDEN_INSTRUCT,
     [MOVE_THUNDER_CAGE] = FORBIDDEN_METRONOME,
     [MOVE_THUNDEROUS_KICK] = FORBIDDEN_METRONOME,
-    [MOVE_TRANSFORM] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_MIMIC,
+    [MOVE_TRANSFORM] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_MIMIC | FORBIDDEN_INSTRUCT,
     [MOVE_TRICK] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
-    [MOVE_UPROAR] = FORBIDDEN_SLEEP_TALK,
+    [MOVE_TRIPLE_AXEL] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_TRIPLE_KICK] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_TWINEEDLE] = FORBIDDEN_PARENTAL_BOND,
+    [MOVE_UPROAR] = FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
     [MOVE_V_CREATE] = FORBIDDEN_METRONOME,
     [MOVE_VEEVEE_VOLLEY] = FORBIDDEN_METRONOME,
+    [MOVE_WATER_SHURIKEN] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_WHIRLWIND] = FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_WICKED_BLOW] = FORBIDDEN_METRONOME,
     [MOVE_WIDE_GUARD] = FORBIDDEN_METRONOME,
@@ -1784,12 +1830,22 @@ static void atk01_accuracycheck(void)
             //hmm would work but not as targetted as if I did it myself, and I find other things along the way so I'll continue as I am..
 
             gMoveResultFlags |= MOVE_RESULT_MISSED;
+            if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_BLUNDER_POLICY)
+                gBattleStruct->blunderPolicy = TRUE;    // Only activates from missing through acc/evasion checks
+
             if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
                 && (gBattleMoves[move].target == MOVE_TARGET_BOTH || gBattleMoves[move].target == MOVE_TARGET_FOES_AND_ALLY))
-                gBattleCommunication[6] = 2;
+                gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_ATK;
             else
-                gBattleCommunication[6] = 0;
-            CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
+                gBattleCommunication[MISS_TYPE] = B_MSG_MISSED;
+
+            if (gBattleMoves[move].power)
+                CalcTypeEffectivenessMultiplier(move, type, gBattlerAttacker, gBattlerTarget, TRUE);
+            //removing this as it has foresight logic, emerald uses typecalc? hopefully
+            //can do that without doubling the multiplier.
+            //nvm not using typecalc, forgot I ported emerald's CalcTypeEffectivenessMultiplier function, 
+            //that's what's used in emerald think can just copy it straight over
+            //CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
         }
         JumpIfMoveFailed(7, move);
     }
@@ -2141,6 +2197,7 @@ static void atk06_typecalc(void)
     s32 i = 0;
     u8 moveType, argument;
     u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBattleMons[gBattlerTarget].type3;
+    u16 effect = gBattleMoves[gCurrentMove].effect;
 
     if (gCurrentMove == (MOVE_STRUGGLE || MOVE_BIDE)) //should let hit ghost types could just remove typecalc bs from script instead...
     {
@@ -2150,43 +2207,45 @@ static void atk06_typecalc(void)
     argument = gBattleMoves[gCurrentMove].argument;
     GET_MOVE_TYPE(gCurrentMove, moveType);
     // check stab
-    if (IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType)
-        || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
-            && IS_BATTLER_OF_TYPE(gBattlerAttacker, argument)))
+    if (effect != EFFECT_COUNTER && effect != EFFECT_MIRROR_COAT)   //skip stab-likes for mirror coat & counter
     {
-        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_ADAPTABILITY) 
+        if (IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType)
+            || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
+                && IS_BATTLER_OF_TYPE(gBattlerAttacker, argument)))
         {
-            gBattleMoveDamage *= 2;
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_ADAPTABILITY)
+            {
+                gBattleMoveDamage *= 2;
+            }
+            else
+            {
+                gBattleMoveDamage = gBattleMoveDamage * 15;
+                gBattleMoveDamage = gBattleMoveDamage / 10;
+            }
+
         }
-        else
+        //joat check jack of all trades  inclusive normal type dmg buff 
+        //joat stacks w stab long as not normal move, added mystrey type exclusion for normalize change
+        //forgot calculatebasedamage in pokemon.c, has it set so mystery type does 0 damage will need to remove that. 
+        //why does it even do that? there are no mystery moves, is it an extra failsafe for hidden power?
+        if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL)) //added mystery line to prevent triggering joat, on normalize
+        {
+            if ((moveType != TYPE_NORMAL || moveType != TYPE_MYSTERY)
+                || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
+                    && (argument != TYPE_NORMAL || argument != TYPE_MYSTERY)))
+            {
+                gBattleMoveDamage = gBattleMoveDamage * 125;
+                gBattleMoveDamage = gBattleMoveDamage / 100;
+            }
+        }
+
+        //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
+        if (gBattleMons[gBattlerAttacker].species == SPECIES_ARCEUS)
         {
             gBattleMoveDamage = gBattleMoveDamage * 15;
             gBattleMoveDamage = gBattleMoveDamage / 10;
         }
-        
     }
-    //joat check jack of all trades  inclusive normal type dmg buff 
-    //joat stacks w stab long as not normal move, added mystrey type exclusion for normalize change
-    //forgot calculatebasedamage in pokemon.c, has it set so mystery type does 0 damage will need to remove that. 
-    //why does it even do that? there are no mystery moves, is it an extra failsafe for hidden power?
-    if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL)) //added mystery line to prevent triggering joat, on normalize
-    {
-        if ((moveType != TYPE_NORMAL || moveType != TYPE_MYSTERY)
-            || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
-                && (argument != TYPE_NORMAL || argument != TYPE_MYSTERY)))
-        {
-            gBattleMoveDamage = gBattleMoveDamage * 125;
-            gBattleMoveDamage = gBattleMoveDamage / 100;
-        }
-    }
-
-    //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
-    if (gBattleMons[gBattlerAttacker].species == SPECIES_ARCEUS)
-    {
-        gBattleMoveDamage = gBattleMoveDamage * 15;
-        gBattleMoveDamage = gBattleMoveDamage / 10;
-    }
-
     /*if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     {
         gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
@@ -2214,7 +2273,7 @@ static void atk06_typecalc(void)
 
         while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
         {
-            if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
+            /*if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)  //replacing to remove type chart break.
             {
                 if (gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
                     break;//
@@ -2222,13 +2281,15 @@ static void atk06_typecalc(void)
                 //I think my current setup would work though.
                 i += 3; //don't undeerstand what this is doing.     //ok now I get it, starts at i+0 2 more arguments in row, using +3 moves to the next row
                 continue;//its a while lloop, instead of a for loop, but this is essentially the ++i part, its the increment that changes type, which is why its also at the bottom
-            }//logic is while atk type isnt endtable i.e last row of type chart, do stuff inside, then at bottom increment to next row and start again.
+            }//logic is while atk type isnt endtable i.e last row of type chart, do stuff inside, then at bottom increment to next row and start again. */
             if (TYPE_EFFECT_ATK_TYPE(i) == moveType)//loops through entire type chart
             {
                 // check type1
                 if (TYPE_EFFECT_DEF_TYPE(i) == type1)//this define checks the type chart, chart is broken into 3 fields per row, i reads the row
                 {
-                    if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                        ModulateDmgByType(TYPE_MUL_NORMAL);
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
                         ModulateDmgByType(TYPE_MUL_NORMAL); //can set multiplier with this, and mudluatedmg will set the move result based on that
                     else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
@@ -2239,7 +2300,9 @@ static void atk06_typecalc(void)
                 if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
                     type1 != type2) //emerald update literally just adds a check for type 3
                 {
-                    if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                        ModulateDmgByType(TYPE_MUL_NORMAL);
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
                     else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
@@ -2252,7 +2315,9 @@ static void atk06_typecalc(void)
                     type3 != type2 &&
                     type3 != type1)
                 {
-                    if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                        ModulateDmgByType(TYPE_MUL_NORMAL);
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
                     else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
@@ -2269,7 +2334,9 @@ static void atk06_typecalc(void)
                     // check type1
                     if (TYPE_EFFECT_DEF_TYPE(i) == type1)//this define checks the type chart, chart is broken into 3 fields per row, i reads the row
                     {
-                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                            ModulateDmgByType(TYPE_MUL_NORMAL);
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
                             ModulateDmgByType(TYPE_MUL_NORMAL); //can set multiplier with this, and mudluatedmg will set the move result based on that
                         else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
@@ -2280,7 +2347,9 @@ static void atk06_typecalc(void)
                     if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
                         type1 != type2) //emerald update literally just adds a check for type 3
                     {
-                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                            ModulateDmgByType(TYPE_MUL_NORMAL);
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
                         else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
@@ -2293,7 +2362,9 @@ static void atk06_typecalc(void)
                         type3 != type2 &&
                         type3 != type1)
                     {
-                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                            ModulateDmgByType(TYPE_MUL_NORMAL);
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
                         else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
@@ -2344,7 +2415,7 @@ static void atk06_typecalc(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i need is in grouded function also included wherever this is called
+static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i need is in grouded function also included wherever this is called.  think can remove
 {
     u8 flags = 0;
     s32 i = 0;
@@ -2559,52 +2630,57 @@ static void ModulateDmgByType2(u8 multiplier, u16 move, u8 *flags)//maybe do dua
     }
 }
 
+//appears to be used for ai logic?
 u8 TypeCalc(u16 move, u8 attacker, u8 defender)
 {
     s32 i = 0;
     u8 flags = 0;
     u8 moveType,argument;
     u8 type1 = gBaseStats[defender].type1, type2 = gBaseStats[defender].type2, type3 = gBattleMons[defender].type3;
+    u16 effect = gBattleMoves[gCurrentMove].effect;
 
     if (move == (MOVE_STRUGGLE || MOVE_BIDE))
         return 0;
     moveType = gBattleMoves[move].type;
     argument = gBattleMoves[move].argument;
     // check stab
-    if (IS_BATTLER_OF_TYPE(attacker, moveType)
-        || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
-            && IS_BATTLER_OF_TYPE(attacker, argument)))
+    if (effect != EFFECT_COUNTER && effect != EFFECT_MIRROR_COAT)   //skip stab-likes for mirror coat & counter
     {
-        if (GetBattlerAbility(attacker) == ABILITY_ADAPTABILITY)
+        if (IS_BATTLER_OF_TYPE(attacker, moveType)
+            || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
+                && IS_BATTLER_OF_TYPE(attacker, argument)))
         {
-            gBattleMoveDamage *= 2;
+            if (GetBattlerAbility(attacker) == ABILITY_ADAPTABILITY)
+            {
+                gBattleMoveDamage *= 2;
+            }
+            else
+            {
+                gBattleMoveDamage = gBattleMoveDamage * 15;
+                gBattleMoveDamage = gBattleMoveDamage / 10;
+            }
+
         }
-        else
+
+        //joat check jack of all trades  inclusive normal type dmg buff 
+        //joat stacks w stab long as not normal move,
+        if (IS_BATTLER_OF_TYPE(attacker, TYPE_NORMAL)) //added mystery line to prevent triggering joat, on normalize
+        {
+            if ((moveType != TYPE_NORMAL || moveType != TYPE_MYSTERY)
+                || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
+                    && (argument != TYPE_NORMAL || argument != TYPE_MYSTERY)))
+            {
+                gBattleMoveDamage = gBattleMoveDamage * 125;
+                gBattleMoveDamage = gBattleMoveDamage / 100;
+            }
+        }
+
+        //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
+        if (gBattleMons[attacker].species == SPECIES_ARCEUS)
         {
             gBattleMoveDamage = gBattleMoveDamage * 15;
             gBattleMoveDamage = gBattleMoveDamage / 10;
         }
-
-    }
-
-    //joat check jack of all trades  inclusive normal type dmg buff 
-    //joat stacks w stab long as not normal move,
-    if (IS_BATTLER_OF_TYPE(attacker, TYPE_NORMAL)) //added mystery line to prevent triggering joat, on normalize
-    {
-        if ((moveType != TYPE_NORMAL || moveType != TYPE_MYSTERY)
-            || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
-                && (argument != TYPE_NORMAL || argument != TYPE_MYSTERY)))
-        {
-            gBattleMoveDamage = gBattleMoveDamage * 125;
-            gBattleMoveDamage = gBattleMoveDamage / 100;
-        }
-    }
-
-    //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
-    if (gBattleMons[attacker].species == SPECIES_ARCEUS)
-    {
-        gBattleMoveDamage = gBattleMoveDamage * 15;
-        gBattleMoveDamage = gBattleMoveDamage / 10;
     }
 
     //if (gBattleMons[defender].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
@@ -2618,20 +2694,22 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
     {
         while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
         {
-            if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
+            /*if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
             {
                 if (gBattleMons[defender].status2 & STATUS2_FORESIGHT)
                     break;
                 i += 3;
                 continue;
-            }
+            }*/
 
             if (TYPE_EFFECT_ATK_TYPE(i) == moveType)
             {
                 // check type1
                 if (TYPE_EFFECT_DEF_TYPE(i) == type1)
                 {
-                    if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                     else if (moveType == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
@@ -2642,7 +2720,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                 if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
                     type1 != type2)
                 {
-                    if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                     else if (moveType == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
@@ -2655,7 +2735,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                     type3 != type2 &&
                     type3 != type1)
                 {
-                    if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                     else if (moveType == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
@@ -2670,7 +2752,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                     // check type1
                     if (TYPE_EFFECT_DEF_TYPE(i) == type1)
                     {
-                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                         else if (argument == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
@@ -2681,7 +2765,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                     if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
                         type1 != type2)
                     {
-                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                         else if (argument == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
@@ -2694,7 +2780,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                         type3 != type2 &&
                         type3 != type1)
                     {
-                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                         else if (argument == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
@@ -2750,17 +2838,19 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
     {
         while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
         {
-            if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
+            /*if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
             {
                 i += 3;
                 continue;
-            }
+            }*/
             if (TYPE_EFFECT_ATK_TYPE(i) == moveType)
             {
                 // check type1
                 if (TYPE_EFFECT_DEF_TYPE(i) == type1)
                 {
-                    if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                     else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
@@ -2770,7 +2860,9 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                 // check type2
                 if (TYPE_EFFECT_DEF_TYPE(i) == type2 && type1 != type2)
                 {
-                    if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                     else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
@@ -2783,7 +2875,9 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                     type3 != type2 &&
                     type3 != type1)
                 {
-                    if ((moveType == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
+                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                     else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
@@ -2798,7 +2892,9 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                     // check type1
                     if (TYPE_EFFECT_DEF_TYPE(i) == type1)
                     {
-                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                         else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
@@ -2808,7 +2904,9 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                     // check type2
                     if (TYPE_EFFECT_DEF_TYPE(i) == type2 && type1 != type2)
                     {
-                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                         else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
@@ -2821,7 +2919,9 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                         type3 != type2 &&
                         type3 != type1)
                     {
-                        if ((argument == (TYPE_NORMAL || TYPE_FIGHTING)) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
+                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                         else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
@@ -3670,6 +3770,34 @@ static const u16 sFinalStrikeOnlyEffects[] =
     EFFECT_HIT_SWITCH_TARGET,
 };
 
+bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId)
+{
+    if (gBattleMoves[move].split != SPLIT_STATUS
+        && !(sForbiddenMoves[move] & FORBIDDEN_PARENTAL_BOND))
+    {
+        if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+        {
+            switch (GetBattlerMoveTargetType(battlerId, move))
+            {
+                // Both foes are alive, spread move strikes once
+            case MOVE_TARGET_BOTH:
+                if (CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) >= 2)
+                    return FALSE;
+                break;
+                // Either both foes or one foe and its ally are alive; spread move strikes once
+            case MOVE_TARGET_FOES_AND_ALLY:
+                if (CountAliveMonsInBattle(BATTLE_ALIVE_EXCEPT_ATTACKER) >= 2)
+                    return FALSE;
+                break;
+            default:
+                break;
+            }
+        }
+        return TRUE;
+    }
+    return FALSE;
+}
+
 static bool8 IsFinalStrikeEffect(u16 move)
 {
     u32 i;
@@ -4151,7 +4279,8 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                 }
                 break;
             case MOVE_EFFECT_PAYDAY:
-                if (GET_BATTLER_SIDE(gBattlerAttacker) == B_SIDE_PLAYER)
+                // Don't scatter coins on the second hit of Parental Bond
+                if (GET_BATTLER_SIDE(gBattlerAttacker) == B_SIDE_PLAYER && gSpecialStatuses[gBattlerAttacker].parentalBondState != PARENTAL_BOND_2ND_HIT)
                 {
                     u16 PayDay = gPaydayMoney;
                     gPaydayMoney += (gBattleMons[gBattlerAttacker].level * 5);
@@ -4217,10 +4346,12 @@ void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what
                     }//believe this is only for reading from the trapstring table can prob remove for other trap effects
                 }
                 break;
-            case MOVE_EFFECT_RECOIL_25: // 25% recoil
+            case MOVE_EFFECT_RECOIL_25: // 25% recoil   also struggle
                 gBattleMoveDamage = (gHpDealt) / 4;
                 if (gBattleMoveDamage == 0)
                     gBattleMoveDamage = 1;
+                if (GetBattlerAbility(gEffectBattler) == ABILITY_PARENTAL_BOND)
+                    gBattleMoveDamage *= 2;
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
                 gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
                 break;
@@ -7134,7 +7265,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
 //doesn't have stab check
 //emerald doesn't use this, removed from brick break and rollout, leaving for moves that 
 //don't do type damage. will remove changes keep basic
-//its completely pointless I think?
+//its completely pointless I think?  yeah emerald doesn't have this and replaced it with healblock
 static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coat, rollout, & brick break?
 {
     u8 flags = 0;
@@ -13189,7 +13320,7 @@ static void atkAD_tryspiteppreduce(void) //vsonic need test, for odds and if eff
             if (gLastMoves[gBattlerTarget] == gBattleMons[gBattlerTarget].moves[i]) //check after but think its 30% odds now, 0-9 if less than 4
                 break;
         if (i != MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] != 0
-            && (gCurrentMove != MOVE_EERIE_SPELL && !TestSheerForceFlag(gBattlerAttacker, gCurrentMove)))       //test think should work? 
+            && (!TestSheerForceFlag(gBattlerAttacker, gCurrentMove)))       //test think should work? 
         {//if works would fail to do pp drop if eerie spell used on a sheer force mon, and instead jump to damage phase and boost damage.
             if (luck > 3) { //if 4,5,6,7,8, or 9;  do normal effect  6 out of 10 60% odds  this shuold be perfect, still need test
                 ppToDeduct = (Random() % 2) + 4; //removes 4-5 pp   //new more consistent effect, min 4 drop, on move just used so base 5 pp moves get removed
@@ -13494,24 +13625,33 @@ static void atkB7_presentdamagecalculation(void)
 {
     s32 rand = Random() & 0xFF;
 
-    if (rand < 102)
+    /* Don't reroll present effect/power for the second hit of Parental Bond.
+     * Not sure if this is the correct behaviour, but bulbapedia states
+     * that if present heals the foe, it doesn't strike twice, and if it deals
+     * damage, the second strike will always deal damage too. This is a simple way
+     * to replicate that effect.
+     */
+    if (gSpecialStatuses[gBattlerAttacker].parentalBondState != PARENTAL_BOND_2ND_HIT)
     {
-        gDynamicBasePower = 60;
-    }
-    else if (rand < 178)
-    {
-        gDynamicBasePower = 80;
-    }
-    else if (rand < 204)
-    {
-        gDynamicBasePower = 120;
-    }
-    else
-    {
-        gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 4;
-        if (gBattleMoveDamage == 0)
-            gBattleMoveDamage = 1;
-        gBattleMoveDamage *= -1;
+        if (rand < 102)
+        {
+            gDynamicBasePower = 60;
+        }
+        else if (rand < 178)
+        {
+            gDynamicBasePower = 80;
+        }
+        else if (rand < 204)
+        {
+            gDynamicBasePower = 120;
+        }
+        else
+        {
+            gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 4;
+            if (gBattleMoveDamage == 0)
+                gBattleMoveDamage = 1;
+            gBattleMoveDamage *= -1;
+        }
     }
     if (rand < 204)
     {
@@ -14051,7 +14191,7 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             //gBattleMoveDamage *= (GetMonData(&party[gBattleCommunication[0]], MON_DATA_LEVEL) * 2 / 5 + 2);
             //gBattleMoveDamage /= gBaseStats[gBattleMons[gBattlerTarget].species].baseDefense;
             //gBattleMoveDamage = (gBattleMoveDamage / 50) + 2; //this most likely will do nothing, and stat_atk is hhe problem but I'll try it.
-            if (gProtectStructs[&party[gBattleCommunication[0]]].helpingHand) //think will work should apply once to battler on field only
+            if (gProtectStructs(&party[gBattleCommunication[0]]).helpingHand) //think will work should apply once to battler on field only
                 gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;
             //may adjst later to be like below, replace gbattleattacker
             //and make it only work on the attacking pokemon's hit.
