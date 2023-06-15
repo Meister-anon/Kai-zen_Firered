@@ -2026,6 +2026,8 @@ goto MOVE_EEFFCTS  //setmoveeffects move logic in battle_script_commands.c need 
 
 goto ATK_49_MOVEEND //battle_script_commands.c  move end  still to do   vsonic
 
+goto STAT_ANIM_W_ABILITIES
+goto STAT_CHANGE_ABILITIES
 goto ACCURACY_BASED_ABILITIES   //other ability logic exists outside battle_util.c  make sure to go over all ability effects
 goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability activation logic.  STILL need to update   vsonic
 /*

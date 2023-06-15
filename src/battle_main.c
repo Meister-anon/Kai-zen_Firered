@@ -4525,12 +4525,13 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
 
     // item effects
     if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE || HOLD_EFFECT_POWERITEM)
-        && (GetBattlerAbility(battlerId) != ABILITY_TANGLED_FEET
-            || GetBattlerAbility(battlerId) != ABILITY_AVIATOR
-            || GetBattlerAbility(battlerId) != ABILITY_RUN_AWAY
-            || GetBattlerAbility(battlerId) != ABILITY_QUICK_FEET
+        && (ability != ABILITY_TANGLED_FEET
+            || ability != ABILITY_AVIATOR
+            || ability != ABILITY_RUN_AWAY
+            || ability != ABILITY_QUICK_FEET
             ))
         speed /= 2;
+
     else if (holdEffect == HOLD_EFFECT_IRON_BALL)
         speed /= 2;
     else if (holdEffect == HOLD_EFFECT_CHOICE_SCARF)
@@ -4547,16 +4548,16 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
     // paralysis drop
     if ((gBattleMons[battlerId].status1 & STATUS1_PARALYSIS)
         && ability != ABILITY_QUICK_FEET
-        || (GetBattlerAbility(battlerId) != ABILITY_TANGLED_FEET
-            || GetBattlerAbility(battlerId) != ABILITY_AVIATOR
-            || GetBattlerAbility(battlerId) != ABILITY_RUN_AWAY
+            || (ability != ABILITY_TANGLED_FEET
+            || ability != ABILITY_AVIATOR
+            || ability != ABILITY_RUN_AWAY
             ))
         speed /= 4;
 
     //trap effects
-    if ((gBattleMons[battler1].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battler1].status1 & STATUS1_WHIRLPOOL))  //should be good
+    if ((gBattleMons[battlerId].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battlerId].status1 & STATUS1_WHIRLPOOL))  //should be good
         speed /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
-    if ((gBattleMons[battler1].status2 & STATUS2_WRAPPED) || (gBattleMons[battler1].status1 & STATUS1_WRAPPED))
+    if ((gBattleMons[battlerId].status2 & STATUS2_WRAPPED) || (gBattleMons[battlerId].status1 & STATUS1_WRAPPED))
         speed /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
 
     return speed;

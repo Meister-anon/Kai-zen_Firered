@@ -6333,6 +6333,7 @@ static void atk47_setgraphicalstatchangevalues(void)    //may need change this t
     ++gBattlescriptCurrInstr;
 }
 
+#define STAT_ANIM_W_ABILITIES
 static void atk48_playstatchangeanimation(void)
 {
     u32 ability;
@@ -6381,6 +6382,7 @@ static void atk48_playstatchangeanimation(void)
                         && ability != ABILITY_LIQUID_METAL
                         && !(ability == ABILITY_KEEN_EYE && currStat == STAT_ACC)
                         && !(ability == ABILITY_TANGLED_FEET && currStat == STAT_SPEED)
+                        && !(ability == ABILITY_QUICK_FEET && currStat == STAT_SPEED)
                         && !(ability == ABILITY_AVIATOR && currStat == STAT_SPEED)
                         && !(ability == ABILITY_RUN_AWAY && currStat == STAT_SPEED)
                         && !(ability == ABILITY_HYPER_CUTTER && currStat == STAT_ATK)
@@ -6393,7 +6395,7 @@ static void atk48_playstatchangeanimation(void)
                     }
                 }
             }
-            statsToCheck >>= 1;
+            statsToCheck >>= 1; //this is correct
             ++currStat;
         }
 
@@ -11987,6 +11989,7 @@ static void atk88_sethpdrain(void) //need to make absorbing life from ghosts dam
 #define STAT_CHANGE_WORKED      0
 #define STAT_CHANGE_DIDNT_WORK  1
 
+#define STAT_CHANGE_ABILITIES
 static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr)
 {
     bool32 certain = FALSE;
@@ -12073,7 +12076,10 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
             }
             return STAT_CHANGE_DIDNT_WORK;
         }
-        else if (gBattleMons[gActiveBattler].ability == ABILITY_TANGLED_FEET
+        else if ((gBattleMons[gActiveBattler].ability == ABILITY_TANGLED_FEET
+            || gBattleMons[gActiveBattler].ability == ABILITY_QUICK_FEET
+            || gBattleMons[gActiveBattler].ability == ABILITY_RUN_AWAY
+            || gBattleMons[gActiveBattler].ability == ABILITY_AVIATOR)
             && !certain && statId == STAT_SPEED)
         {
             if (flags == STAT_CHANGE_BS_PTR)
@@ -12088,6 +12094,20 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
         }
         else if (gBattleMons[gActiveBattler].ability == ABILITY_HYPER_CUTTER
                  && !certain && statId == STAT_ATK)
+        {
+            if (flags == STAT_CHANGE_BS_PTR)
+            {
+                BattleScriptPush(BS_ptr);
+                gBattleScripting.battler = gActiveBattler;
+                gBattlescriptCurrInstr = BattleScript_AbilityNoSpecificStatLoss;
+                gLastUsedAbility = gBattleMons[gActiveBattler].ability;
+                RecordAbilityBattle(gActiveBattler, gLastUsedAbility);
+            }
+            return STAT_CHANGE_DIDNT_WORK;
+        }
+
+        else if (gBattleMons[gActiveBattler].ability == ABILITY_BIG_PECKS
+            && !certain && statId == STAT_DEF)
         {
             if (flags == STAT_CHANGE_BS_PTR)
             {
