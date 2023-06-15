@@ -114,6 +114,8 @@ u8 IsRunningFromBattleImpossible(void);
 void UpdatePartyOwnerOnSwitch_NonMulti(u8 battler);
 void SwapTurnOrder(u8 id1, u8 id2);
 u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves);
+void SortBattlersBySpeed(u8 *battlers, bool8 slowToFast);
+u32 GetBattlerTotalSpeedStat(u8 battlerId);
 void RunBattleScriptCommands_PopCallbacksStack(void);
 void RunBattleScriptCommands(void);
 bool8 TryRunFromBattle(u8 battler);

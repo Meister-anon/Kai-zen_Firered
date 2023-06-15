@@ -34,6 +34,7 @@ bool32 TryResetBattlerStatChanges(u8 battler);
 bool32 CanCamouflage(u8 battlerId);
 void StealTargetItem(u8 battlerStealer, u8 battlerItem);
 bool32 CanStealItem(u8 battlerStealing, u8 battlerItem, u16 item);
+u32 GetHighestStatId(u32 battlerId);
 
 extern void (* const gBattleScriptingCommandsTable[])(void);
 

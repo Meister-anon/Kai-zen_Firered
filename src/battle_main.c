@@ -4478,112 +4478,177 @@ void SwapTurnOrder(u8 id1, u8 id2)
     SWAP(gBattlerByTurnOrder[id1], gBattlerByTurnOrder[id2], temp);
 }
 
-u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
+u32 GetBattlerTotalSpeedStat(u8 battlerId)
 {
-    u8 strikesFirst = 0;
-    u8 speedMultiplierBattler1 = 0, speedMultiplierBattler2 = 0;
-    u32 speedBattler1 = 0, speedBattler2 = 0;
-    u8 holdEffect = 0;
-    u8 holdEffectParam = 0;
-    //u16 moveBattler1 = 0, moveBattler2 = 0;
-    s8 priority1 = 0, priority2 = 0;
+    u32 speed = gBattleMons[battlerId].speed;
+    u32 ability = GetBattlerAbility(battlerId);
+    u32 holdEffect = GetBattlerHoldEffect(battlerId, TRUE);
+    u32 highestStat = GetHighestStatId(battlerId);  //3was for protosynthesis will use for ultranerozma move instead i think
 
+    // weather abilities
     if (WEATHER_HAS_EFFECT)
     {
-        if ((gBattleMons[battler1].ability == ABILITY_SWIFT_SWIM && gBattleWeather & WEATHER_RAIN_ANY)
-         || (gBattleMons[battler1].ability == ABILITY_CHLOROPHYLL && gBattleWeather & WEATHER_SUN_ANY))
-            speedMultiplierBattler1 = 2;
-        else
-            speedMultiplierBattler1 = 1;
-        if ((gBattleMons[battler2].ability == ABILITY_SWIFT_SWIM && gBattleWeather & WEATHER_RAIN_ANY)
-         || (gBattleMons[battler2].ability == ABILITY_CHLOROPHYLL && gBattleWeather & WEATHER_SUN_ANY))
-            speedMultiplierBattler2 = 2;
-        else
-            speedMultiplierBattler2 = 1;
+        if (ability == ABILITY_SWIFT_SWIM && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & WEATHER_RAIN_ANY)
+            speed *= 2;
+        else if (ability == ABILITY_CHLOROPHYLL && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & WEATHER_SUN_ANY)
+            speed *= 2;
+        else if (ability == ABILITY_SAND_RUSH && gBattleWeather & WEATHER_SANDSTORM_ANY)
+            speed *= 2;
+        else if (ability == ABILITY_SLUSH_RUSH && gBattleWeather & WEATHER_HAIL)
+            speed *= 2;
     }
-    else
-    {
-        speedMultiplierBattler1 = 1;
-        speedMultiplierBattler2 = 1;
-    }
-    speedBattler1 = (gBattleMons[battler1].speed * speedMultiplierBattler1)
-                    * (gStatStageRatios[gBattleMons[battler1].statStages[STAT_SPEED]][0])
-                    / (gStatStageRatios[gBattleMons[battler1].statStages[STAT_SPEED]][1]);
-    if (gBattleMons[battler1].item == ITEM_ENIGMA_BERRY)
-    {
-        holdEffect = gEnigmaBerries[battler1].holdEffect;
-        holdEffectParam = gEnigmaBerries[battler1].holdEffectParam;
-    }
-    else
-    {
-        holdEffect = ItemId_GetHoldEffect(gBattleMons[battler1].item);
-        holdEffectParam = ItemId_GetHoldEffectParam(gBattleMons[battler1].item);
-    }
-    // badge boost
+
+    // other abilities
+    if (ability == ABILITY_QUICK_FEET && gBattleMons[battlerId].status1 & STATUS1_ANY)
+        speed = (speed * 150) / 100;
+    else if (ability == ABILITY_SURGE_SURFER && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+        speed *= 2;
+    else if (ability == ABILITY_SLOW_START && gDisableStructs[battlerId].slowStartTimer != 0)
+        speed /= 2; //so I ironically complete missed adding this...
+    //gen 9
+    /*else if (ability == ABILITY_PROTOSYNTHESIS && gBattleWeather & B_WEATHER_SUN && highestStat == STAT_SPEED)
+        speed = (speed * 150) / 100;
+    else if (ability == ABILITY_QUARK_DRIVE && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN && highestStat == STAT_SPEED)
+        speed = (speed * 150) / 100;*/
+
+        // stat stages
+    speed *= gStatStageRatios[gBattleMons[battlerId].statStages[STAT_SPEED]][0];
+    speed /= gStatStageRatios[gBattleMons[battlerId].statStages[STAT_SPEED]][1];
+
+    // player's badge boost
     if (!(gBattleTypeFlags & BATTLE_TYPE_LINK)
-     && FlagGet(FLAG_BADGE03_GET)
-     && GetBattlerSide(battler1) == B_SIDE_PLAYER)
-        speedBattler1 = (speedBattler1 * 110) / 100;
-    if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE || HOLD_EFFECT_POWERITEM) 
-        && (GetBattlerAbility(battler2) != ABILITY_TANGLED_FEET
-            || GetBattlerAbility(battler2) != ABILITY_AVIATOR
-            || GetBattlerAbility(battler2) != ABILITY_RUN_AWAY
+        && FlagGet(FLAG_BADGE03_GET)
+        && GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+    {
+        speed = (speed * 110) / 100;
+    }
+
+    // item effects
+    if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE || HOLD_EFFECT_POWERITEM)
+        && (GetBattlerAbility(battlerId) != ABILITY_TANGLED_FEET
+            || GetBattlerAbility(battlerId) != ABILITY_AVIATOR
+            || GetBattlerAbility(battlerId) != ABILITY_RUN_AWAY
+            || GetBattlerAbility(battlerId) != ABILITY_QUICK_FEET
             ))
-        speedBattler1 /= 2;
-    if ((gBattleMons[battler1].status1 & STATUS1_PARALYSIS)
-        && (GetBattlerAbility(battler1) != ABILITY_TANGLED_FEET
-            || GetBattlerAbility(battler1) != ABILITY_AVIATOR
-            || GetBattlerAbility(battler1) != ABILITY_RUN_AWAY
+        speed /= 2;
+    else if (holdEffect == HOLD_EFFECT_IRON_BALL)
+        speed /= 2;
+    else if (holdEffect == HOLD_EFFECT_CHOICE_SCARF)
+        speed = (speed * 150) / 100;
+    else if (holdEffect == HOLD_EFFECT_QUICK_POWDER && gBattleMons[battlerId].species == SPECIES_DITTO && !(gBattleMons[battlerId].status2 & STATUS2_TRANSFORMED))
+        speed *= 2;
+
+    // various effects
+    if (gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_TAILWIND)
+        speed *= 2;
+    if (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_UNBURDEN)
+        speed *= 2;
+
+    // paralysis drop
+    if ((gBattleMons[battlerId].status1 & STATUS1_PARALYSIS)
+        && ability != ABILITY_QUICK_FEET
+        || (GetBattlerAbility(battlerId) != ABILITY_TANGLED_FEET
+            || GetBattlerAbility(battlerId) != ABILITY_AVIATOR
+            || GetBattlerAbility(battlerId) != ABILITY_RUN_AWAY
             ))
-        speedBattler1 /= 4;
+        speed /= 4;
+
     //trap effects
     if ((gBattleMons[battler1].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battler1].status1 & STATUS1_WHIRLPOOL))  //should be good
-        speedBattler1 /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
-
+        speed /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
     if ((gBattleMons[battler1].status2 & STATUS2_WRAPPED) || (gBattleMons[battler1].status1 & STATUS1_WRAPPED))
-        speedBattler1 /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
-    if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)   //buffed param to 40% rathre than 20
-        speedBattler1 = UINT_MAX;
+        speed /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
+
+    return speed;
+}
+
+// Sort an array of battlers by speed
+// Useful for effects like pickpocket, eject button, red card, dancer
+//-personal note, need update getbattlertotalspeedstat  from getwhostriksfirst, or just use that
+//these loop all battlers, getwhotrikesfirst only uses 2, so prob need to adapat that function to use just 1 battler
+//argument and loop gbattlerscount
+void SortBattlersBySpeed(u8 *battlers, bool8 slowToFast)
+{
+    int i, j, currSpeed, currBattler;
+    u16 speeds[4] = {0};
+
+    for (i = 0; i < gBattlersCount; i++)
+        speeds[i] = GetBattlerTotalSpeedStat(battlers[i]);
+
+    for (i = 1; i < gBattlersCount; i++)
+    {
+        currBattler = battlers[i];
+        currSpeed = speeds[i];
+        j = i - 1;
+
+        if (slowToFast)
+        {
+            while (j >= 0 && speeds[j] > currSpeed)
+            {
+                battlers[j + 1] = battlers[j];
+                speeds[j + 1] = speeds[j];
+                j = j - 1;
+            }
+        }
+        else
+        {
+            while (j >= 0 && speeds[j] < currSpeed)
+            {
+                battlers[j + 1] = battlers[j];
+                speeds[j + 1] = speeds[j];
+                j = j - 1;
+            }
+        }
+
+        battlers[j + 1] = currBattler;
+        speeds[j + 1] = currSpeed;
+    }
+}
+
+//updating to emerald standard, remove speed checks to getbattlertotalspeed intead
+//remove badge boosts, ability checks other than quick draw, and status effects
+//done, also //realized it only holds 2 battlers, so how does it work for doubles?
+//could be reads one side ata time, need check 
+u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves) 
+{
+    u8 strikesFirst = 0;
+    u32 speedBattler1 = 0, speedBattler2 = 0;
+    u32 holdEffectBattler1 = 0, holdEffectBattler2 = 0;
+    u8 holdEffectParam1 = 0,holdEffectParam2 = 0;
+
+    s8 priority1 = 0, priority2 = 0;
+    u16 ability1 = GetBattlerAbility(battler1), ability2 = GetBattlerAbility(battler2);
+
+    
+    // Battler 1
+    speedBattler1 = GetBattlerTotalSpeedStat(battler1);
+    holdEffectBattler1 = GetBattlerHoldEffect(battler1, TRUE);
+    holdEffectParam1 = ItemId_GetHoldEffectParam(gBattleMons[battler1].item);
+  
+    
+    //Quick Claw
+    if ((holdEffectBattler1 == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam1) / 100)   //buffed param to 40% rathre than 20
+        || (holdEffectBattler1 == HOLD_EFFECT_CUSTAP_BERRY && HasEnoughHpToEatBerry(battler1, 4, gBattleMons[battler1].item)))
+        gProtectStructs[battler1].usedCustapBerry = TRUE;
+    // Quick Draw
+    if (!ignoreChosenMoves && ability1 == ABILITY_QUICK_DRAW && !IS_MOVE_STATUS(gChosenMoveByBattler[battler1]) && Random() % 100 < 30)
+        gProtectStructs[battler1].quickDraw = TRUE;   //pretty sure can use this rather than needing take memory for struc
+        //gProtectStructs[battler1].quickDraw = TRUE;
+
     // check second battlerId's speed
-    speedBattler2 = (gBattleMons[battler2].speed * speedMultiplierBattler2)
-                    * (gStatStageRatios[gBattleMons[battler2].statStages[STAT_SPEED]][0])
-                    / (gStatStageRatios[gBattleMons[battler2].statStages[STAT_SPEED]][1]);
-    if (gBattleMons[battler2].item == ITEM_ENIGMA_BERRY)
-    {
-        holdEffect = gEnigmaBerries[battler2].holdEffect;
-        holdEffectParam = gEnigmaBerries[battler2].holdEffectParam;
-    }
-    else
-    {
-        holdEffect = ItemId_GetHoldEffect(gBattleMons[battler2].item);
-        holdEffectParam = ItemId_GetHoldEffectParam(gBattleMons[battler2].item);
-    }
-    // badge boost
-    if (!(gBattleTypeFlags & BATTLE_TYPE_LINK)
-     && FlagGet(FLAG_BADGE03_GET)
-     && GetBattlerSide(battler2) == B_SIDE_PLAYER)
-        speedBattler2 = (speedBattler2 * 110) / 100;
-    if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE || HOLD_EFFECT_POWERITEM) 
-        && (GetBattlerAbility(battler2) != ABILITY_TANGLED_FEET
-            || GetBattlerAbility(battler2) != ABILITY_AVIATOR
-            || GetBattlerAbility(battler2) != ABILITY_RUN_AWAY
-            ))
-        speedBattler2 /= 2;
-    if ((gBattleMons[battler2].status1 & STATUS1_PARALYSIS)
-        && (GetBattlerAbility(battler2) != ABILITY_TANGLED_FEET
-            || GetBattlerAbility(battler2) != ABILITY_AVIATOR
-            || GetBattlerAbility(battler2) != ABILITY_RUN_AWAY
-            ))
-        speedBattler2 /= 4;
-    //trap effects
-    if ((gBattleMons[battler2].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battler2].status1 & STATUS1_WHIRLPOOL))  //should be good
-        speedBattler2 /= 2;
+    // Battler 2
+    speedBattler2 = GetBattlerTotalSpeedStat(battler2);
+    holdEffectBattler2 = GetBattlerHoldEffect(battler2, TRUE);
+    holdEffectParam2 = ItemId_GetHoldEffectParam(gBattleMons[battler2].item);
+    
+    // Quick Claw
+    if ((holdEffectBattler1 == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam1) / 100)   //buffed param to 40% rathre than 20
+        || (holdEffectBattler1 == HOLD_EFFECT_CUSTAP_BERRY && HasEnoughHpToEatBerry(battler2, 4, gBattleMons[battler2].item)))
+        gProtectStructs[battler2].usedCustapBerry = TRUE;
+    // Quick Draw
+    if (!ignoreChosenMoves && ability1 == ABILITY_QUICK_DRAW && !IS_MOVE_STATUS(gChosenMoveByBattler[battler2]) && Random() % 100 < 30)
+        gProtectStructs[battler2].quickDraw = TRUE;
 
-    if ((gBattleMons[battler2].status2 & STATUS2_WRAPPED) || (gBattleMons[battler2].status1 & STATUS1_WRAPPED))
-        speedBattler2 /= 2;
-
-    if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)   //buffed to 40 % odds rather than 20
-        speedBattler2 = UINT_MAX;
     if (!ignoreChosenMoves)
     {
         if (gChosenActionByBattler[battler1] == B_ACTION_USE_MOVE)
@@ -4591,53 +4656,59 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         if (gChosenActionByBattler[battler2] == B_ACTION_USE_MOVE)
             priority2 = GetChosenMovePriority(battler2);
     }
-    /*else
-    {
-        if (gChosenActionByBattler[battler1] == B_ACTION_USE_MOVE)
-        {
-            if (gProtectStructs[battler1].noValidMoves)
-                moveBattler1 = MOVE_STRUGGLE;
-            else
-                gBattleMoves[moveBattler1].priority = GetChosenMovePriority;
-        }
-        else
-            moveBattler1 = MOVE_NONE;
-        if (gChosenActionByBattler[battler2] == B_ACTION_USE_MOVE)
-        {
-            if (gProtectStructs[battler2].noValidMoves)
-                moveBattler2 = MOVE_STRUGGLE;
-            else
-                moveBattler2 = GetChosenMovePriority;
-        }
-        else
-            moveBattler2 = MOVE_NONE;
-    }*/  //think this was old firered stuff I replaced with more optimal emerald stuff
     
     // both move priorities are different than 0
-    if (priority1 != 0 || priority2 != 0)
+    if (priority1 == priority2)
     {
         // both priorities are the same
-        if (priority1 == priority2)
+
+        
+                // QUICK CLAW / CUSTAP - always first
+                // LAGGING TAIL - always last
+                // STALL - always last
+        if (gProtectStructs[battler1].quickDraw && !gProtectStructs[battler2].quickDraw)
+            strikesFirst = 0;
+        else if (!gProtectStructs[battler1].quickDraw && gProtectStructs[battler2].quickDraw)
+            strikesFirst = 1;
+        else if (gProtectStructs[battler1].usedCustapBerry && !gProtectStructs[battler2].usedCustapBerry)
+            strikesFirst = 0;
+        else if (gProtectStructs[battler2].usedCustapBerry && !gProtectStructs[battler1].usedCustapBerry)
+            strikesFirst = 1;
+        else if (holdEffectBattler1 == HOLD_EFFECT_LAGGING_TAIL && holdEffectBattler2 != HOLD_EFFECT_LAGGING_TAIL)
+            strikesFirst = 1;
+        else if (holdEffectBattler2 == HOLD_EFFECT_LAGGING_TAIL && holdEffectBattler1 != HOLD_EFFECT_LAGGING_TAIL)
+            strikesFirst = 0;
+        else if (ability1 == ABILITY_STALL && ability2 != ABILITY_STALL)
+            strikesFirst = 1;
+        else if (ability2 == ABILITY_STALL && ability1 != ABILITY_STALL)
+            strikesFirst = 0;
+        else
         {
             if (speedBattler1 == speedBattler2 && Random() & 1)
                 strikesFirst = 2; // same speeds, same priorities
             else if (speedBattler1 < speedBattler2)
-                strikesFirst = 1; // battler2 has more speed
-            // else battler1 has more speed
+            {
+                // battler2 has more speed
+                if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
+                    strikesFirst = 0;
+                else
+                    strikesFirst = 1;
+            }
+            else
+            {
+                // battler1 has more speed
+                if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
+                    strikesFirst = 1;
+                else
+                    strikesFirst = 0;
+            }
         }
-        else if (priority1 < priority2)
-            strikesFirst = 1; // battler2's move has greater priority
-        // else battler1's move has greater priority
     }
-    // both priorities are equal to 0
+    else if (priority1 < priority2)
+        strikesFirst = 1; // battler2's move has greater priority
     else
-    {
-        if (speedBattler1 == speedBattler2 && Random() & 1)
-            strikesFirst = 2; // same speeds, same priorities
-        else if (speedBattler1 < speedBattler2)
-            strikesFirst = 1; // battler2 has more speed
-        // else battler1 has more speed
-    }
+        strikesFirst = 0; // battler1's move has greater priority
+    
     return strikesFirst;
 }
 
@@ -4687,8 +4758,8 @@ static void SetActionsAndBattlersTurnOrder(void)
                     ++turnOrderId;
                 }
             }
-            gBattleMainFunc = CheckFocusPunch_ClearVarsBeforeTurnStarts;
-            gBattleStruct->focusPunchBattlerId = 0;
+            gBattleMainFunc = CheckFocusPunch_ClearVarsBeforeTurnStarts;    //keep also used for rage etc.
+            //gBattleStruct->focusPunchBattlerId = 0;
             return;
         }
         else
@@ -4729,7 +4800,7 @@ static void SetActionsAndBattlersTurnOrder(void)
         }
     }
     gBattleMainFunc = CheckFocusPunch_ClearVarsBeforeTurnStarts;
-    gBattleStruct->focusPunchBattlerId = 0;
+    //gBattleStruct->focusPunchBattlerId = 0;
 }
 
 static void TurnValuesCleanUp(bool8 var0)
@@ -4785,7 +4856,7 @@ static void CheckFocusPunch_ClearVarsBeforeTurnStarts(void)
 {
     if (!(gHitMarker & HITMARKER_RUN))
     {
-        while (gBattleStruct->focusPunchBattlerId < gBattlersCount)
+        /*while (gBattleStruct->focusPunchBattlerId < gBattlersCount)
         {
             gActiveBattler = gBattlerAttacker = gBattleStruct->focusPunchBattlerId;
             ++gBattleStruct->focusPunchBattlerId;
@@ -4797,7 +4868,7 @@ static void CheckFocusPunch_ClearVarsBeforeTurnStarts(void)
                 BattleScriptExecute(BattleScript_FocusPunchSetUp);
                 return;
             }
-        }
+        }*/
     }
     TryClearRageStatuses();
     gCurrentTurnActionNumber = 0;

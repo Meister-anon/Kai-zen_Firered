@@ -3831,7 +3831,9 @@ static bool8 IsFinalStrikeEffect(u16 move)
 }
 
 #define MOVE_EEFFCTS 
-void SetMoveEffect(bool32 primary, u32 certain) // when ready will redefine what prevents applying status here, don't forget setyawn  after that grfx for status animation next
+// when ready will redefine what prevents applying status here, don't forget setyawn  after that grfx for status animation next
+//function update complete, remaining is multi status update, will do later
+void SetMoveEffect(bool32 primary, u32 certain) 
 {
     bool32 statusChanged = FALSE;
     u32 flags = 0;
@@ -6999,17 +7001,17 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             ++gBattleScripting.atk49_state;
             break;
         }
-        case ATK49_EJECT_BUTTON:    //think move to itemeffects function
+        case ATK49_EJECT_BUTTON:    //think move to itemeffects function, no this is how it is seteup in emerald too
         {
             if (gBattleMoves[gCurrentMove].effect != EFFECT_HIT_SWITCH_TARGET
                 && IsBattlerAlive(gBattlerAttacker)
-                //&& !TestSheerForceFlag(gBattlerAttacker, gCurrentMove)
+                //&& !TestSheerForceFlag(gBattlerAttacker, gCurrentMove)    removed sheerforce logic as I'm convinced that's just anothr bug
                 && (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER || (gBattleTypeFlags & BATTLE_TYPE_TRAINER)))
             {
                 // Since we check if battler was damaged, we don't need to check move result.
                 // In fact, doing so actually prevents multi-target moves from activating eject button properly
                 u8 battlers[4] = { 0, 1, 2, 3 };
-                SortBattlersBySpeed(battlers, FALSE);
+                SortBattlersBySpeed(battlers, FALSE);   //look into replacing with getwhostrikesfirst
                 for (i = 0; i < gBattlersCount; i++)
                 {
                     u8 battler = battlers[i];
@@ -9630,13 +9632,13 @@ static void RecalcBattlerStats(u32 battler, struct Pokemon* mon)
     gBattleMons[battler].type2 = gBaseStats[gBattleMons[battler].species].type2;
 }
 
-static u32 GetHighestStatId(u32 battlerId)
+u32 GetHighestStatId(u32 battlerId)
 {
     u32 i, highestId = STAT_ATK, highestStat = gBattleMons[battlerId].attack;
 
     for (i = STAT_DEF; i < NUM_STATS; i++)
     {
-        u16* statVal = &gBattleMons[battlerId].attack + (i - 1);
+        u16 *statVal = &gBattleMons[battlerId].attack + (i - 1);
         if (*statVal > highestStat)
         {
             highestStat = *statVal;
@@ -10385,7 +10387,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             {
                 if (*(u8*)(&gBattleMons[gActiveBattler].type1 + i) == lost_type)    //believe +i is checking each battler
                     *(u8*)(&gBattleMons[gActiveBattler].type1 + i) = TYPE_MYSTERY;  //nvm its checking the different types type 1 typ2 & type 3 since its not using 4 hmm
-                PREPARE_TYPE_BUFFER(gBattleTextBuff3, gTypeNames[lost_type]);
+                PREPARE_TYPE_BUFFER(gBattleTextBuff3, lost_type);
             }
             else if (gBattleMons[gActiveBattler].type1 == gBattleMons[gActiveBattler].type2)//actually since this would be for entire battle not just switchin, type 3 is irrelevant
             {
@@ -10396,7 +10398,7 @@ static void atk76_various(void) //will need to add all these emerald various com
                         *(u8*)(&gBattleMons[gActiveBattler].type1 + i) = TYPE_NORMAL;
                 //}//it should default to normal long as mon is monotype even if a 3rd type has been set that is not equal to type being lost or mystery.
                             //as type 3 is lost on switch I believe.
-                PREPARE_TYPE_BUFFER(gBattleTextBuff3, gTypeNames[lost_type]);   //hopefullly works, would buffer type lost, to loss string
+                PREPARE_TYPE_BUFFER(gBattleTextBuff3, lost_type);   //hopefullly works, would buffer type lost, to loss string
             }
         }
         gBattlescriptCurrInstr += 4;    //post change unsure bout this part
@@ -14192,8 +14194,10 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             //gBattleMoveDamage *= (GetMonData(&party[gBattleCommunication[0]], MON_DATA_LEVEL) * 2 / 5 + 2);
             //gBattleMoveDamage /= gBaseStats[gBattleMons[gBattlerTarget].species].baseDefense;
             //gBattleMoveDamage = (gBattleMoveDamage / 50) + 2; //this most likely will do nothing, and stat_atk is hhe problem but I'll try it.
-            if (gProtectStructs(&party[gBattleCommunication[0]]).helpingHand) //think will work should apply once to battler on field only
-                gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;
+            
+            //didn't work think will just exclude from helping hand boost
+            /*if (gProtectStructs[&party[gBattleCommunication[0]]].helpingHand) //think will work should apply once to battler on field only
+                gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;*/
             //may adjst later to be like below, replace gbattleattacker
             //and make it only work on the attacking pokemon's hit.
             //or what I can do is, keep gbattleattacker, and run getMondata species & personality
