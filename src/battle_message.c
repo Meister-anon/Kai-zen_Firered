@@ -517,7 +517,6 @@ static const u8 sText_PkmnsItemRestoredHPALittle[] = _("{B_SCR_ACTIVE_NAME_WITH_
 static const u8 sText_ItemAllowsOnlyYMove[] = _("{B_LAST_ITEM}'s effect allows only\n{B_CURRENT_MOVE} to be used!\p");
 static const u8 sText_PkmnHungOnWithX[] = _("{B_DEF_NAME_WITH_PREFIX} hung on\nusing its {B_LAST_ITEM}!");
 const u8 gText_EmptyString3[] = _("");
-const u8 gText_EmptySpace[] = _(" ");
 static const u8 sText_PlayedFluteCatchyTune[] = _("{B_PLAYER_NAME} played the {B_LAST_ITEM}.\pNow, that's a catchy tune!");
 static const u8 sText_PlayedThe[] = _("{B_PLAYER_NAME} played the\n{B_LAST_ITEM}.");
 static const u8 sText_PkmnHearingFluteAwoke[] = _("The POKéMON hearing the FLUTE\nawoke!");
@@ -1418,7 +1417,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_STENCHENTERS - BATTLESTRINGS_TABLE_START]                  = sText_StenchEnters,
     [STRINGID_STENCHENDS - BATTLESTRINGS_TABLE_START]                    = sText_StenchExits,
     [STRINGID_WELLRESTED - BATTLESTRINGS_TABLE_START]                    = sText_PkmnWellRested,
-    [STRINGID_PKMNHURTSWITH2 - BATTLESTRINGS_TABLE_START]                 = sText_PkmnHurtsWith2,
+    [STRINGID_PKMNHURTSWITH2 - BATTLESTRINGS_TABLE_START]                = sText_PkmnHurtsWith2,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,

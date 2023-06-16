@@ -182,6 +182,9 @@ void TrySaveExchangedItem(u8 battlerId, u16 stolenItem);
 u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
 u32 GetBattlerMoveTargetType(u8 battlerId, u16 move); //need port these two fully
 bool32 CanTargetBattler(u8 battlerAtk, u8 battlerDef, u16 move);
+u16 GetTypeModifier(u8 atkType, u8 defType);
+//u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef);  ported in case, but pretty sure I have no use for this, as these are just for reading battlre data and running dmg calc predictions
+s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u16 *typeEffectivenessModifier);
 //learned defined need be on one line, this should be logic for thawing i.e remove frozen status
 //removed fire fang restriction, any heat transafer is good enough
 #define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || (((gBattleMoves[gCurrentMove].type == TYPE_FIRE) || (gBattleMoves[gCurrentMove].argument == TYPE_FIRE)) && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60)))

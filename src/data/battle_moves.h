@@ -9253,14 +9253,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_POWDER,
         .power = 0,
         .type = TYPE_BUG,
-        .accuracy = 100,
-        .pp = 20,
+        .accuracy = 95,
+        .pp = 15,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 1,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_POWDER,
         .split = SPLIT_STATUS,
-    },
+    },//this move is crazy its a fire type counter, spread to more mon, but make it make sense dustox vespiqueen etc
 
     [MOVE_GEOMANCY] =
     {

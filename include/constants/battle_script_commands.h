@@ -33,20 +33,20 @@
 #define sRESHOW_HELPER_STATE gBattleScripting + 0x27
 #define sSAVED_STAT_CHANGER gBattleScripting + 0x28  //for moody
 
-//#define sSAVED_BATTLER               (gBattleScripting + 0x24) // savedBattler
+#define sSAVED_BATTLER               (gBattleScripting + 0x29) // savedBattler
 //#define sILLUSION_NICK_HACK gBattleScripting + 0x25
 //#define sFIXED_ABILITY_POPUP         (gBattleScripting + 0x26) // fixedPopup
 //#define sABILITY_OVERWRITE           (gBattleScripting + 0x27) // abilityPopupOverwrite
 //#define sSAVED_DMG gBattleScripting + 0x29
 
-#define sSWITCH_CASE (gBattleScripting + 0x29)//   (gBattleScripting + 0x31) // switchCase  used for red card special swith condition	//FORCED SWITCH?
-#define sBERRY_OVERRIDE	(gBattleScripting + 0x2A)// (gBattleScripting + 0x32) // overrideBerryRequirements
-#define sSTICKY_WEB_STAT_DROP	(gBattleScripting + 0x2B)// (gBattleScripting + 0x32) // overrideBerryRequirements
+#define sSWITCH_CASE (gBattleScripting + 0x2A)//   (gBattleScripting + 0x31) // switchCase  used for red card special swith condition	//FORCED SWITCH?
+#define sBERRY_OVERRIDE	(gBattleScripting + 0x2B)// (gBattleScripting + 0x32) // overrideBerryRequirements
+#define sSTICKY_WEB_STAT_DROP	(gBattleScripting + 0x2C)// (gBattleScripting + 0x32) // overrideBerryRequirements
 //#define sMON_CAUGHT     (gBattleScripting + 0x33) // monCaught NOT NEEDED, only used in emerald for succesful captures to incremennt game stat capture
-#define sFIELD_23 gBattleScripting + 0x2C	//nothing in struct below this think all used values must go above here
-#define sWINDOWS_TYPE gBattleScripting + 0x2D
-#define sMULTIPLAYER_ID gBattleScripting + 0x2E
-#define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x2F
+#define sFIELD_23 gBattleScripting + 0x2D	//nothing in struct below this think all used values must go above here
+#define sWINDOWS_TYPE gBattleScripting + 0x2E
+#define sMULTIPLAYER_ID gBattleScripting + 0x2F
+#define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x30
 
 
 #define cEFFECT_CHOOSER gBattleCommunication + 3
@@ -231,7 +231,8 @@
 #define VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG      151	//new bs command  to ground flying targets if hit by my w flag 2xdmg on air
 #define VARIOUS_JUMP_IF_NOT_FULL_HP					152	
 #define VARIOUS_TRY_END_STENCH						153	
-#define VARIOUS_RESET_FOREWARN_ANTICIPATION_BITS	154	
+//#define VARIOUS_RESET_FOREWARN_ANTICIPATION_BITS	154		pretty sure don't need doing different way.
+#define VARIOUS_JUMP_IF_EMERGENCY_EXITED			154		//default implement, plan to just use for wimp out
 
 // atk80, dmg manipulation
 #define ATK80_DMG_CHANGE_SIGN                               0

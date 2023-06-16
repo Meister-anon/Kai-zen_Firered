@@ -1926,6 +1926,11 @@ BattleScript_EffectSimpleBeam:
 	waitanimation
 	printstring STRINGID_PKMNACQUIREDSIMPLE
 	waitmessage 0x40
+	trytoclearprimalweather
+	printstring STRINGID_EMPTYSTRING3
+	waitmessage 0x1
+	tryendneutralizinggas BS_TARGET
+	tryendstench BS_TARGET
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectSuckerPunch:
@@ -2139,6 +2144,11 @@ BattleScript_EffectGastroAcid:
 	waitanimation
 	printstring STRINGID_PKMNSABILITYSUPPRESSED
 	waitmessage 0x40
+	trytoclearprimalweather
+	printstring STRINGID_EMPTYSTRING3
+	waitmessage 0x1
+	tryendneutralizinggas BS_TARGET
+	tryendstench BS_TARGET
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectToxicSpikes:
@@ -2341,6 +2351,7 @@ BattleScript_EffectHitEscape:
 	jumpifbyte CMP_NOT_EQUAL gBattleOutcome 0, BattleScript_HitEscapeEnd
 	@jumpifbattletype BATTLE_TYPE_ARENA, BattleScript_HitEscapeEnd
 	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_HitEscapeEnd
+	jumpifemergencyexited BS_TARGET, BattleScript_HitEscapeEnd
 	openpartyscreen BS_ATTACKER, BattleScript_HitEscapeEnd
 	switchoutabilities BS_ATTACKER
 	waitstate
@@ -4104,6 +4115,77 @@ BattleScript_PerishBodyActivates::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_x100000
 	return
 
+BattleScript_GulpMissileGorging::
+	@call BattleScript_AbilityPopUp
+	playanimation BS_ATTACKER, B_ANIM_GULP_MISSILE
+	waitanimation
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
+	effectivenesssound
+	hitanimation BS_ATTACKER
+	waitstate
+	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD, BattleScript_GulpMissileNoDmgGorging
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	tryfaintmon BS_ATTACKER
+	getbattlerfainted BS_ATTACKER
+	jumpifbyte CMP_EQUAL, gBattleCommunication, TRUE, BattleScript_GulpMissileNoSecondEffectGorging
+BattleScript_GulpMissileNoDmgGorging:
+	handleformchange BS_TARGET, 0
+	playanimation BS_TARGET, B_ANIM_FORM_CHANGE
+	waitanimation
+	swapattackerwithtarget
+	setmoveeffect MOVE_EFFECT_PARALYSIS
+	seteffectprimary
+	swapattackerwithtarget
+	return
+BattleScript_GulpMissileNoSecondEffectGorging:
+	handleformchange BS_TARGET, 0
+	playanimation BS_TARGET, B_ANIM_FORM_CHANGE
+	waitanimation
+	return
+
+BattleScript_GulpMissileGulping::
+	@call BattleScript_AbilityPopUp
+	playanimation BS_ATTACKER, B_ANIM_GULP_MISSILE
+	waitanimation
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
+	effectivenesssound
+	hitanimation BS_ATTACKER
+	waitstate
+	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD, BattleScript_GulpMissileNoDmgGulping
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	tryfaintmon BS_ATTACKER
+	getbattlerfainted BS_ATTACKER
+	jumpifbyte CMP_EQUAL, gBattleCommunication, TRUE, BattleScript_GulpMissileNoSecondEffectGulping
+	jumpifability BS_ATTACKER, ABILITY_CLEAR_BODY, BattleScript_GulpMissileNoSecondEffectGulping
+	jumpifability BS_ATTACKER, ABILITY_FULL_METAL_BODY, BattleScript_GulpMissileNoSecondEffectGulping
+	jumpifability BS_ATTACKER, ABILITY_WHITE_SMOKE, BattleScript_GulpMissileNoSecondEffectGulping
+	jumpifability BS_ATTACKER, ABILITY_LIQUID_METAL, BattleScript_GulpMissileNoSecondEffectGulping
+	jumpifflowerveilattacker BattleScript_GulpMissileNoSecondEffectGulping
+BattleScript_GulpMissileNoDmgGulping:
+	handleformchange BS_TARGET, 0
+	playanimation BS_TARGET, B_ANIM_FORM_CHANGE
+	waitanimation
+	swapattackerwithtarget @ to make gStatDownStringIds down below print the right battler
+	setstatchanger STAT_DEF, 1, TRUE
+	statbuffchange STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_GulpMissileGorgingTargetDefenseCantGoLower
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatDownStringIds
+	waitmessage B_WAIT_TIME_LONG
+	swapattackerwithtarget @ restore the battlers, just in case
+	return
+BattleScript_GulpMissileNoSecondEffectGulping:
+	handleformchange BS_TARGET, 0
+	playanimation BS_TARGET, B_ANIM_FORM_CHANGE
+	waitanimation
+	return
+BattleScript_GulpMissileGorgingTargetDefenseCantGoLower:
+	printstring STRINGID_STATSWONTDECREASE
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_EffectSandstorm::
 	attackcanceler
 	attackstring
@@ -4356,6 +4438,20 @@ BattleScript_EffectSunnyDay::
 	ppreduce
 	setsunny
 	goto BattleScript_MoveWeatherChange
+
+BattleScript_BlockedByPrimalWeatherEnd3::
+	@call BattleScript_AbilityPopUp
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_SUN_PRIMAL, BattleScript_ExtremelyHarshSunlightWasNotLessenedEnd3
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_RAIN_PRIMAL, BattleScript_NoReliefFromHeavyRainEnd3
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_STRONG_WINDS, BattleScript_MysteriousAirCurrentBlowsOnEnd3
+	end3
+
+BattleScript_BlockedByPrimalWeatherRet::
+	@call BattleScript_AbilityPopUp
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_SUN_PRIMAL, BattleScript_ExtremelyHarshSunlightWasNotLessenedRet
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_RAIN_PRIMAL, BattleScript_NoReliefFromHeavyRainRet
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_STRONG_WINDS, BattleScript_MysteriousAirCurrentBlowsOnRet
+	return
 
 BattleScript_EffectDefenseUpHit::
 	setmoveeffect MOVE_EFFECT_DEF_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
@@ -7087,6 +7183,16 @@ BattleScript_AftermathDmg::
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	return
 
+BattleScript_DampPreventsAftermath::
+	pause B_WAIT_TIME_SHORT
+	@call BattleScript_AbilityPopUp
+	pause 40
+	copybyte gBattlerAbility, sBATTLER
+	@call BattleScript_AbilityPopUp
+	printstring STRINGID_PKMNSABILITYPREVENTSABILITY
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_AnticipationActivates::
 	pause 0x5
 	printstring STRINGID_ANTICIPATIONACTIVATES
@@ -7456,6 +7562,27 @@ BattleScript_StenchExitsLoop:
 	addbyte gBattlerTarget, 1
 	jumpifbytenotequal gBattlerTarget, sByteFour, BattleScript_NeutralizingGasExitsLoop	@ SOMEHOW, comparing to gBattlersCount is problematic.
 	restoretarget
+	return
+
+BattleScript_MagicianActivates::
+	@call BattleScript_AbilityPopUp
+	call BattleScript_ItemSteal
+	return
+
+BattleScript_SymbiosisActivates::
+	@call BattleScript_AbilityPopUp
+	printstring STRINGID_SYMBIOSISITEMPASS
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_TargetAbilityStatRaiseRet::
+	copybyte gBattlerAbility, gEffectBattler
+	copybyte gBattlerAttacker, gBattlerTarget
+	@call BattleScript_AbilityPopUp
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN, BattleScript_TargetAbilityStatRaiseRet_End
+	setgraphicalstatchangevalues
+	call BattleScript_StatUp
+BattleScript_TargetAbilityStatRaiseRet_End:
 	return
 
 BattleScript_TryAdrenalineOrb:
@@ -8033,6 +8160,10 @@ BattleScript_AttackerAbilityStatRaise::
 	printstring STRINGID_ATTACKERABILITYSTATRAISE
 	waitmessage 0x40
 	return
+
+BattleScript_AttackerAbilityStatRaiseEnd3::
+	call BattleScript_AttackerAbilityStatRaise
+	end3
 
 BattleScript_TotemFlaredToLife::
 	playanimation BS_ATTACKER, B_ANIM_TOTEM_FLARE, NULL
@@ -8677,6 +8808,13 @@ BattleScript_CupidsArrowActivates::
 	status2animation BS_TARGET, STATUS2_INFATUATION
 	printstring STRINGID_CUPIDSARROWSTRUCK
 	waitmessage 0x40
+	return
+
+BattleScript_GooeyActivates::
+	waitstate
+	@call BattleScript_AbilityPopUp
+	swapattackerwithtarget  @ for defiant, mirror armor
+	seteffectsecondary
 	return
 
 BattleScript_BattleBondActivatesOnMoveEndAttacker::

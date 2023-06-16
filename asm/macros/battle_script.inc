@@ -1383,6 +1383,7 @@
 	.2byte 0x111
 	.endm
 
+@actually pretty sure order doesnt matter what matters is the macro is alligned with the correct various command
 @ various command changed to more readable macros		various \battler, is like byte goes in sequence
 	.macro cancelmultiturnmoves battler:req
 	various \battler, VARIOUS_CANCEL_MULTI_TURN_MOVES		@this is 0
@@ -1911,6 +1912,10 @@
 	various \battler, VARIOUS_TRY_END_NEUTRALIZING_GAS
 	.endm
 
+	.macro tryendstench battler:req
+	various \battler, VARIOUS_TRY_END_STENCH
+	.endm
+
 	.macro trytoapplymimicry battler:req, ptr:req
 	various \battler, VARIOUS_TRY_TO_APPLY_MIMICRY
 	.4byte \ptr
@@ -1988,6 +1993,11 @@
 
 	.macro battleritemtolastuseditem battler:req
 	various \battler, VARIOUS_BATTLER_ITEM_TO_LAST_USED_ITEM
+	.endm
+
+	.macro jumpifemergencyexited battler:req, jumpInstr:req
+	various \battler, VARIOUS_JUMP_IF_EMERGENCY_EXITED
+	.4byte \jumpInstr
 	.endm
 
 

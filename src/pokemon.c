@@ -3491,6 +3491,11 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMovePower *= 2;
     }
 
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_STOMPING_TANTRUM)
+    {
+        if (gBattleStruct->lastMoveFailed & gBitTable[battlerIdAtk])
+            gBattleMovePower *= 2;
+    }
 
     // sandstorm sp.def boost for rock types  // decided to add this for ground types as well,
     if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK) || (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)))

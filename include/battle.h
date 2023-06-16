@@ -158,10 +158,10 @@ struct TrainerMonItemCustomMoves
 
 union TrainerMonPtr
 {
-    const struct TrainerMonNoItemDefaultMoves *NoItemDefaultMoves;
-    const struct TrainerMonNoItemCustomMoves *NoItemCustomMoves;
-    const struct TrainerMonItemDefaultMoves *ItemDefaultMoves;
-    const struct TrainerMonItemCustomMoves *ItemCustomMoves;
+    const struct TrainerMonNoItemDefaultMoves* NoItemDefaultMoves;
+    const struct TrainerMonNoItemCustomMoves* NoItemCustomMoves;
+    const struct TrainerMonItemDefaultMoves* ItemDefaultMoves;
+    const struct TrainerMonItemCustomMoves* ItemCustomMoves;
 };
 
 #define TRAINER_DATA_STRUCTS
@@ -200,10 +200,10 @@ struct DisableStruct
     /*0x06*/ u16 encoredMove;
     /*0x08*/ u8 protectUses;
     /*0x09*/ u8 stockpileCounter;
-             s8 stockpileDef;
-             s8 stockpileSpDef;
-             s8 stockpileBeforeDef;
-             s8 stockpileBeforeSpDef;
+    s8 stockpileDef;
+    s8 stockpileSpDef;
+    s8 stockpileBeforeDef;
+    s8 stockpileBeforeSpDef;
     /*0x0A*/ u8 substituteHP;
     /*0x0B*/ u8 disableTimer : 4;
     /*0x0B*/ u8 disableTimerStartValue : 4;
@@ -218,8 +218,8 @@ struct DisableStruct
     /*0x11*/ u8 rolloutTimerStartValue : 4;
     /*0x12*/ u8 chargeTimer : 4;
     /*0x12*/ u8 chargeTimerStartValue : 4;
-    /*0x13*/ u8 tauntTimer:4;
-    /*0x13*/ u8 tauntTimer2:4;
+    /*0x13*/ u8 tauntTimer : 4;
+    /*0x13*/ u8 tauntTimer2 : 4;
     /*0x14*/ u8 battlerPreventingEscape;
     /*0x15*/ u8 battlerWithSureHit;
     /*0x16*/ u8 isFirstTurn;
@@ -230,26 +230,26 @@ struct DisableStruct
     /*0x18*/ u8 unk18_a_2 : 2;
     /*0x18*/ u8 mimickedMoves : 4;
     /*0x19*/ u8 rechargeTimer;
-             u8 autotomizeCount;
-             u8 noRetreat : 1;
-             u8 tarShot : 1;
-             u8 octolock : 1;
-             u8 slowStartTimer;
-             //u8 embargoTimer; moved to gsidetimers
-             u8 magnetRiseTimer;
-             u8 telekinesisTimer;
-             u8 laserFocusTimer;
-             u8 throatChopTimer;
-             u8 RoostTimer; // to set random % 4 effect after use roost setup iondelluge the same remove random make constant
-             u8 usedMoves:4; //have iondelug in field timers already
-             u8 wrapTurns;  //turn counter for wrap bind
-             u8 environmentTrapTurns;   //turn counter for environment traps fire spin whirlpool sandtomb magma storm
-             u8 clampTurns;
-             u8 infestationTurns;
-             u8 snaptrapTurns;
-             u8 FrozenTurns;
-             u8 bideTimer;
-             //u8 RoostTimerStartValue;  //remove for now until I get 
+    u8 autotomizeCount;
+    u8 noRetreat : 1;
+    u8 tarShot : 1;
+    u8 octolock : 1;
+    u8 slowStartTimer;
+    //u8 embargoTimer; moved to gsidetimers
+    u8 magnetRiseTimer;
+    u8 telekinesisTimer;
+    u8 laserFocusTimer;
+    u8 throatChopTimer;
+    u8 RoostTimer; // to set random % 4 effect after use roost setup iondelluge the same remove random make constant
+    u8 usedMoves : 4; //have iondelug in field timers already
+    u8 wrapTurns;  //turn counter for wrap bind
+    u8 environmentTrapTurns;   //turn counter for environment traps fire spin whirlpool sandtomb magma storm
+    u8 clampTurns;
+    u8 infestationTurns;
+    u8 snaptrapTurns;
+    u8 FrozenTurns;
+    u8 bideTimer;
+    //u8 RoostTimerStartValue;  //remove for now until I get 
     /*0x1A*/ u8 unk1A[2];
 }; //think I may not actually need roost start value, long as I have timer
 
@@ -258,56 +258,56 @@ extern struct DisableStruct gDisableStructs[MAX_BATTLERS_COUNT];
 struct ProtectStruct
 {
     /* field_0 */
-    u32 protected:1;
-    u32 endured:1;
-    u32 noValidMoves:1;
-    u32 helpingHand:1;
-    u32 bounceMove:1;
-    u32 stealMove:1;
-    u32 flag0Unknown:1;
-    u32 prlzImmobility:1;
-    /* field_1 */
-    u32 confusionSelfDmg:1;  //will instead change ot make random target, and within that if move is non-damaging do normal confusion hit, or use move against self
-    u32 targetNotAffected:1; //
-    u32 chargingTurn:1;
-    u32 fleeFlag:2; // for RunAway Defeatist and Smoke Ball
-    u32 usedImprisonedMove:1;
-    u32 loveImmobility:1;
-    u32 usedDisabledMove:1;
-    /* field_2 */
-    u32 usedTauntedMove:1;      // 0x1
-    u32 flag2Unknown:1;         // 0x2
-    u32 flinchImmobility:1;     // 0x4
-    u32 notFirstStrike:1;       // 0x8
-    u32 flag_x10 : 1;           // 0x10
-    u32 flag_x20 : 1;           // 0x20
-    u32 flag_x40 : 1;           // 0x40
-    u32 flag_x80 : 1;           // 0x80
-    u32 field3 : 8;
+u32 protected:1;
+             u32 endured : 1;
+             u32 noValidMoves : 1;
+             u32 helpingHand : 1;
+             u32 bounceMove : 1;
+             u32 stealMove : 1;
+             u32 flag0Unknown : 1;
+             u32 prlzImmobility : 1;
+             /* field_1 */
+             u32 confusionSelfDmg : 1;  //will instead change ot make random target, and within that if move is non-damaging do normal confusion hit, or use move against self
+             u32 targetNotAffected : 1; //opposite equivalent of targetAffected
+             u32 chargingTurn : 1;
+             u32 fleeFlag : 2; // for RunAway Defeatist and Smoke Ball
+             u32 usedImprisonedMove : 1;
+             u32 loveImmobility : 1;
+             u32 usedDisabledMove : 1;
+             /* field_2 */
+             u32 usedTauntedMove : 1;      // 0x1
+             u32 flag2Unknown : 1;         // 0x2
+             u32 flinchImmobility : 1;     // 0x4
+             u32 notFirstStrike : 1;       // 0x8
+             u32 flag_x10 : 1;           // 0x10
+             u32 flag_x20 : 1;           // 0x20
+             u32 flag_x40 : 1;           // 0x40
+             u32 flag_x80 : 1;           // 0x80
+             u32 field3 : 8;
 
-    u32 physicalDmg;
-    u32 specialDmg;
-    u8 physicalBattlerId;
-    u8 specialBattlerId;
-    u32 spikyShielded : 1;  //consider renaming spike shield
-    u32 kingsShielded : 1;
-    u32 banefulBunkered : 1;
-    u32 shieldBashed : 1;
-    u32 usesBouncedMove : 1;
-    u32 usedHealBlockedMove : 1;
-    u32 usedGravityPreventedMove : 1;
-    u32 powderSelfDmg : 1;  //not sure why  I added this I'm not gonna use it? well for someone else I guess. 
-    u32 usedThroatChopPreventedMove : 1;
-    u32 pranksterElevated : 1;
-    u32 quickDraw : 1;
-    u16 quash : 1;
-    u16 beakBlastCharge : 1;
-    u32 usedMicleBerry : 1;
-    u32 usedCustapBerry : 1;    // also quick claw
-    u32 touchedProtectLike : 1;
-    u32 obstructed : 1;
-    u32 disableEjectPack : 1;
-    u16 fieldE;
+             u32 physicalDmg;
+             u32 specialDmg;
+             u8 physicalBattlerId;
+             u8 specialBattlerId;
+             u32 spikyShielded : 1;  //consider renaming spike shield
+             u32 kingsShielded : 1;
+             u32 banefulBunkered : 1;
+             u32 shieldBashed : 1;
+             u32 usesBouncedMove : 1;
+             u32 usedHealBlockedMove : 1;
+             u32 usedGravityPreventedMove : 1;
+             u32 powderSelfDmg : 1;  //not sure why  I added this I'm not gonna use it? well for someone else I guess. 
+             u32 usedThroatChopPreventedMove : 1;
+             u32 pranksterElevated : 1;
+             u32 quickDraw : 1;
+             u16 quash : 1;
+             u16 beakBlastCharge : 1;
+             u32 usedMicleBerry : 1;
+             u32 usedCustapBerry : 1;    // also quick claw
+             u32 touchedProtectLike : 1;
+             u32 obstructed : 1;
+             u32 disableEjectPack : 1;
+             u16 fieldE;
 };
 
 extern struct ProtectStruct gProtectStructs[MAX_BATTLERS_COUNT];
@@ -318,7 +318,7 @@ struct SpecialStatus    //pretty sure all values
     //u8 lightningRodRedirected : 1;  // 0x2    //removed to save ew ram  just do in the code
     //u8 stormDrainRedirected : 1;  // 0x2
     u8 tigerMomAttacked : 1;  // 0x2 //need to add redirects here for lightning rod/storm drain esque abilities unless I code it different
-    u8 restoredBattlerSprite: 1;    // 0x4
+    u8 restoredBattlerSprite : 1;    // 0x4
     u8 intimidatedMon : 1;          // 0x8
     u8 traced : 1;                  // 0x10
     u8 defeatistActivated : 1;      // 
@@ -331,28 +331,29 @@ struct SpecialStatus    //pretty sure all values
     u8 berryReduced : 1;
     u8 rototillerAffected : 1;  // to be affected by rototiller
     u8 instructedChosenTarget : 3;
-    u8 switchInItemDone:1;
+    u8 switchInItemDone : 1;
     u8 gemBoost : 1;
     u8 gemParam;
-    u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute. //NOW THAT have added can prob use to update catchexp function/macro?
+    u8 damagedMons : 4; // Mons that have been damaged directly by using a move, includes substitute. //NOW THAT have added can prob use to update catchexp function/macro?
     u8 dancerUsedMove : 1;
     u8 dancerOriginalTarget : 3;
     u8 announceNeutralizingGas : 1;   // See Cmd_switchineffects
     u8 neutralizingGasRemoved : 1;    // See VARIOUS_TRY_END_NEUTRALIZING_GAS
     u8 stenchRemoved : 1;    // Set as VARIOUS_TRY_END_STENCH  both exclusive to gastro acid?
-    u8 switchInAbilityDone:1;
+    u8 switchInAbilityDone : 1;
     s32 dmg;
     s32 physicalDmg;
     s32 specialDmg;
-    u8 EmergencyExit:1; //want to be status that can exist in either 0 or 1, set to 1e then decrement to 0 at move end, activate switchout if 0.
+    u8 EmergencyExit : 1; //logic mix truant pursuit/escape hit, setup like truant trigger on end turn that hp met theshold,raise attack then make attack first & set moveeffect escape hit so it leaves after attacking. WILL USE for both wimpout and Emergency exit just use ability check for logic change
     u8 physicalBattlerId;
     u8 specialBattlerId;
     u8 changedStatsBattlerId; // Battler that was responsible for the latest stat change. Can be self.
     u16 forewarnedMove; //for storing move from forewarn ability
-    u8 forewarnDone:1;  //to be set TRUE if predicted move was used by opponent, if not and enemy faints or switches, reactivate forewarn for next opponent 
+    u8 forewarnDone : 1;  //to be set TRUE if predicted move was used by opponent, if not and enemy faints or switches, reactivate forewarn for next opponent 
     u16 anticipatedMove;    //for storing move from anticipation ability
-    u8 anticipationDone:1;// same as forwarn clause //also considering moveend & moveendtarget can prob do swithin repeat, by swapping battler and side w new abilityeffet clause?
+    u8 anticipationDone : 1;// same as forwarn clause //also considering moveend & moveendtarget can prob do swithin repeat, by swapping battler and side w new abilityeffet clause?
     u8 parentalBondState : 2; // 0/1/2
+    u8 multiHitOn : 1; //think is a state chech, seems most used with parental bond
     u8 field12;
     u8 field13;//check moody case for switchin line something something = 2
 };
@@ -372,34 +373,34 @@ struct SideTimer
     /*0x08*/ u8 followmeTimer;
     /*0x09*/ u8 followmeTarget;
     /*0x0A*/ u8 followmePowder;
-             u8 spikesAmount;
-             u8 toxicSpikesAmount;
-             u8 stealthRockAmount;
-             u8 stickyWebAmount;
-             u8 stickyWebBattlerSide; // Used for Court Change
-             u8 auroraVeilTimer;
-             u8 auroraVeilBattlerId;
-             u8 tailwindTimer;
-             u8 tailwindBattlerId;
-             u8 luckyChantTimer;
-             u8 luckyChantBattlerId;
-             u8 healBlockTimer; //added for side status effect
-             u8 healBlockBattlerId; //hopefully will be able to individual target clear status, but keep side status in effect for new switches
-             u8 embargoBattlerId; 
-             u8 embargoTimer; 
-             u8 mudSportBattlerId;
-             u8 mudSportTimer;     //put these back, gen 3 effect didn' work how I thought. effect only lasts long as user stays in, and only for user who set it.
-             u8 waterSportTimer;  //forgot to remove these earlier, since I'm using gen 3 effects for them
-             u8 waterSportBattlerId;
-             u8 retaliateTimer;  //vsonic need to implement
-             /*0x0B*/ u8 fieldB;
+    u8 spikesAmount;
+    u8 toxicSpikesAmount;
+    u8 stealthRockAmount;
+    u8 stickyWebAmount;
+    u8 stickyWebBattlerSide; // Used for Court Change
+    u8 auroraVeilTimer;
+    u8 auroraVeilBattlerId;
+    u8 tailwindTimer;
+    u8 tailwindBattlerId;
+    u8 luckyChantTimer;
+    u8 luckyChantBattlerId;
+    u8 healBlockTimer; //added for side status effect
+    u8 healBlockBattlerId; //hopefully will be able to individual target clear status, but keep side status in effect for new switches
+    u8 embargoBattlerId;
+    u8 embargoTimer;
+    u8 mudSportBattlerId;
+    u8 mudSportTimer;     //put these back, gen 3 effect didn' work how I thought. effect only lasts long as user stays in, and only for user who set it.
+    u8 waterSportTimer;  //forgot to remove these earlier, since I'm using gen 3 effects for them
+    u8 waterSportBattlerId;
+    u8 retaliateTimer;  //vsonic need to implement
+    /*0x0B*/ u8 fieldB;
 };
 
 extern struct SideTimer gSideTimers[];
 
 struct FieldTimer
 {
-    
+
     u8 wonderRoomTimer;
     u8 magicRoomTimer;
     u8 trickRoomTimer;
@@ -511,14 +512,14 @@ struct BattleHistory
     /*0x24*/ u8 itemEffects[MAX_BATTLERS_COUNT / 2];//did these values use 2, because it assumed single battles? think there's only 1 or 2 doubles in the game
     /*0x26*/ u16 trainerItems[MAX_BATTLERS_COUNT];
     /*0x2E*/ u8 itemsNo;
-             u16 moveHistory[MAX_BATTLERS_COUNT][AI_MOVE_HISTORY_COUNT]; // 3 last used moves for each battler
-             u8 moveHistoryIndex[MAX_BATTLERS_COUNT];
-             u16 heldItems[MAX_BATTLERS_COUNT];
+    u16 moveHistory[MAX_BATTLERS_COUNT][AI_MOVE_HISTORY_COUNT]; // 3 last used moves for each battler
+    u8 moveHistoryIndex[MAX_BATTLERS_COUNT];
+    u16 heldItems[MAX_BATTLERS_COUNT];
 };
 
 struct BattleScriptsStack
 {
-    const u8 *ptr[8];
+    const u8* ptr[8];
     u8 size;
 };
 
@@ -535,14 +536,14 @@ struct StatsArray
 
 struct BattleResources
 {
-   // struct SecretBaseRecord *secretBase; //prob remove this,
-    struct ResourceFlags *flags;
-    struct BattleScriptsStack *battleScriptsStack;
-    struct BattleCallbacksStack *battleCallbackStack;
-    struct StatsArray *beforeLvlUp;
-    struct AI_ThinkingStruct *ai;
-    struct BattleHistory *battleHistory;
-    struct BattleScriptsStack *AI_ScriptsStack;
+    // struct SecretBaseRecord *secretBase; //prob remove this,
+    struct ResourceFlags* flags;
+    struct BattleScriptsStack* battleScriptsStack;
+    struct BattleCallbacksStack* battleCallbackStack;
+    struct StatsArray* beforeLvlUp;
+    struct AI_ThinkingStruct* ai;
+    struct BattleHistory* battleHistory;
+    struct BattleScriptsStack* AI_ScriptsStack;
     u8 bufferA[MAX_BATTLERS_COUNT][0x200];
     u8 bufferB[MAX_BATTLERS_COUNT][0x200];
 };
@@ -551,7 +552,7 @@ struct BattleResources
 #define AI_DATA ((struct AiLogicData *)(&gBattleResources->ai->data))
 //#define BATTLE_HISTORY ((struct BattleHistory *)(gBattleResources->battleHistory))
 
-extern struct BattleResources *gBattleResources;
+extern struct BattleResources* gBattleResources;
 
 struct BattleResults
 {
@@ -560,11 +561,11 @@ struct BattleResults
     u8 playerSwitchesCounter; // 0x2
     u8 numHealingItemsUsed;   // 0x3
     u8 numRevivesUsed;        // 0x4
-    u8 playerMonWasDamaged:1; // 0x5
-    u8 usedMasterBall:1;      // 0x5
-    u8 caughtMonBall:4;       // 0x5
-    u8 shinyWildMon:1;        // 0x5
-    u8 unk5_7:1;              // 0x5
+    u8 playerMonWasDamaged : 1; // 0x5
+    u8 usedMasterBall : 1;      // 0x5
+    u8 caughtMonBall : 4;       // 0x5
+    u8 shinyWildMon : 1;        // 0x5
+    u8 unk5_7 : 1;              // 0x5
     u16 playerMon1Species;    // 0x6
     u8 playerMon1Name[11];    // 0x8
     u8 battleTurnCounter;     // 0x13
@@ -688,6 +689,7 @@ struct BattleStruct //fill in unused fields when porting
     u8 AI_monToSwitchIntoId[2];
     u8 simulatedInputState[4];  // used by Oak/Old Man/Pokedude controllers
     u8 lastTakenMove[MAX_BATTLERS_COUNT * 2 * 2]; // ask gamefreak why they declared it that way
+    u8 lastMoveFailed; // as bits for each battler, for the sake of Stomping Tantrum
     u8 lastMoveTarget[MAX_BATTLERS_COUNT]; // The last target on which each mon used a move, for the sake of Instruct
     u16 hpOnSwitchout[2];
     u16 abilityPreventingSwitchout; //could probably use lastTakenMove with ai, to keep a count of a party mons moveset.
@@ -709,7 +711,7 @@ struct BattleStruct //fill in unused fields when porting
     u8 switchInItemsCounter;
     u8 field_DA; // battle tower related
     u8 turnSideTracker;
-    u8 fillerDC[0xDF-0xDC];
+    u8 fillerDC[0xDF - 0xDC];
     u8 givenExpMons;
     u8 lastTakenMoveFrom[MAX_BATTLERS_COUNT * MAX_BATTLERS_COUNT * 2];
     u16 castformPalette[MAX_BATTLERS_COUNT][16]; //important, may be how they fixed alcremie?
@@ -731,6 +733,8 @@ struct BattleStruct //fill in unused fields when porting
     u8 skyDropTargets[MAX_BATTLERS_COUNT]; // For Sky Drop, to account for if multiple Pokemon use Sky Drop in a double battle.
     // When using a move which hits multiple opponents which is then bounced by a target, we need to make sure, the move hits both opponents, the one with bounce, and the one without.
     u8 attackerBeforeBounce : 2;
+    u16 overwrittenAbilities[MAX_BATTLERS_COUNT];    // abilities overwritten during battle (keep separate from battle history in case of switching)
+    u8 battleBondTransformed[NUM_BATTLE_SIDES]; // Bitfield for each party.
     u8 presentBasePower;
     // align 4
     union {
@@ -740,7 +744,7 @@ struct BattleStruct //fill in unused fields when porting
     u8 padding_1E4[0x1C];
 }; // size == 0x200 bytes
 
-extern struct BattleStruct *gBattleStruct;
+extern struct BattleStruct* gBattleStruct;
 
 #define F_DYNAMIC_TYPE_1 (1 << 6)
 #define F_DYNAMIC_TYPE_2 (1 << 7)
@@ -824,8 +828,8 @@ struct BattleScripting  //remember expanding this costs ewram
     u8 reshowMainState;
     u8 reshowHelperState;
     u8 savedStatChanger; // For if attempting to change stat two times(ex. Moody)
-    u8 savedBattler;  //for now saveBattler not used just using normal sBattler
-    
+    u8 savedBattler;  //for now saveBattler not used just using normal sBattler - ported just in case there's issue
+
    /* u8 illusionNickHack; // To properly display nick in STRINGID_ENEMYABOUTTOSWITCHPKMN.
     bool8 fixedPopup;   // Force ability popup to stick until manually called back
     u16 abilityPopupOverwrite;  //UNCOMMENT if you want these features
@@ -852,10 +856,10 @@ enum
 struct BattleSpriteInfo
 {
     /*0x0*/ u16 invisible : 1; // 0x1
-            u16 lowHpSong : 1; // 0x2
-            u16 behindSubstitute : 1; // 0x4
-            u16 flag_x8 : 1; // 0x8
-            u16 hpNumbersNoBars : 1; // 0x10
+    u16 lowHpSong : 1; // 0x2
+    u16 behindSubstitute : 1; // 0x4
+    u16 flag_x8 : 1; // 0x8
+    u16 hpNumbersNoBars : 1; // 0x10
     /*0x2*/ u16 transformSpecies;
 };
 
@@ -915,13 +919,13 @@ struct BattleBarInfo
 
 struct BattleSpriteData
 {
-    struct BattleSpriteInfo *battlerData;
-    struct BattleHealthboxInfo *healthBoxesData;
-    struct BattleAnimationInfo *animationData;
-    struct BattleBarInfo *battleBars;
+    struct BattleSpriteInfo* battlerData;
+    struct BattleHealthboxInfo* healthBoxesData;
+    struct BattleAnimationInfo* animationData;
+    struct BattleBarInfo* battleBars;
 };
 
-extern struct BattleSpriteData *gBattleSpritesDataPtr;
+extern struct BattleSpriteData* gBattleSpritesDataPtr;
 
 
 
@@ -936,9 +940,9 @@ struct MonSpritesGfx
     struct SpriteTemplate templates[MAX_BATTLERS_COUNT];
     struct SpriteFrameImage images[MAX_BATTLERS_COUNT][4];
     u8 field_F4[0x80]; // unused
-    u8 *barFontGfx;
-    void *field_178; // freed but never allocated
-    u16 *multiUseBuffer;
+    u8* barFontGfx;
+    void* field_178; // freed but never allocated
+    u16* multiUseBuffer;
 };
 
 struct PokedudeBattlerState
@@ -971,11 +975,11 @@ extern u16 gBattle_WIN0H;
 extern u16 gBattle_WIN0V;
 extern u16 gBattle_WIN1H;
 extern u16 gBattle_WIN1V;
-extern struct BattleSpritesGfx *gMonSpritesGfx;
+extern struct BattleSpritesGfx* gMonSpritesGfx;
 extern u8 gBattleOutcome;
 extern u16 gLastUsedItem;
 extern u32 gBattleTypeFlags;
-extern struct MonSpritesGfx *gMonSpritesGfxPtr;
+extern struct MonSpritesGfx* gMonSpritesGfxPtr;
 extern u16 gTrainerBattleOpponent_A;
 extern u16 gTrainerBattleOpponent_B;
 extern u16 gMoveToLearn;
@@ -1005,9 +1009,9 @@ extern u8 gBattleBufferB[MAX_BATTLERS_COUNT][0x200];
 extern u8 gActionSelectionCursor[MAX_BATTLERS_COUNT];
 extern void (*gPreBattleCallback1)(void);
 extern bool8 gDoingBattleAnim;
-extern struct PokedudeBattlerState *gPokedudeBattlerStates[MAX_BATTLERS_COUNT];
-extern u8 *gBattleAnimMons_BgTilesBuffer;
-extern u8 *gBattleAnimMons_BgTilemapBuffer;
+extern struct PokedudeBattlerState* gPokedudeBattlerStates[MAX_BATTLERS_COUNT];
+extern u8* gBattleAnimMons_BgTilesBuffer;
+extern u8* gBattleAnimMons_BgTilemapBuffer;
 extern void (*gBattleMainFunc)(void);
 extern u8 gMoveSelectionCursor[MAX_BATTLERS_COUNT];
 extern u32 gUnknown_2022B54;
@@ -1023,8 +1027,8 @@ extern u8 gBattlerFainted;
 extern u32 gStatuses3[MAX_BATTLERS_COUNT];
 extern u32 gStatuses4[MAX_BATTLERS_COUNT];
 extern u8 gSentPokesToOpponent[2];
-extern const u8 *gBattlescriptCurrInstr;
-extern const u8 *gSelectionBattleScripts[MAX_BATTLERS_COUNT];
+extern const u8* gBattlescriptCurrInstr;
+extern const u8* gSelectionBattleScripts[MAX_BATTLERS_COUNT];
 extern u16 gLastMoves[MAX_BATTLERS_COUNT];
 extern u8 gBattlerByTurnOrder[MAX_BATTLERS_COUNT];
 extern u8 gBattleCommunication[BATTLE_COMMUNICATION_ENTRIES_COUNT];

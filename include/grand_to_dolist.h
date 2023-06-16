@@ -1132,6 +1132,10 @@ Thunder Wave Electric TM45
 * consider ai strats with a flying tailwind, accupressure on a bug protect and swagger, but something bulky like whirlepede
 * actually masquirene can have tailwind!!
 * 
+* found out about move "powder" a priority move that makes fire type attacks explode on attacker consuming the attack -_- 
+* INSANE its signature move of vivilion spread around to other mon it makes sense for,  dustox vespiqueen beedrill butterfree etc.
+* I guess flying bugs that could have to do with flowers? but not crawling bugs?  I'll come back to this later
+* 
 * ...there's no bug type gym in kanto...
 * ...fuck it I'm making a "cool trainer" with  a bug team using that strat SOMEWHERE
 * 
@@ -2022,7 +2026,8 @@ goto STAT_AND_DAMAGE_ABILITIES_ETC // pokemon.c function for ability and item ef
 
 goto ENDTURN_EFFECTS    //battle_util.c   affects that take place after all battler turns
 
-goto MOVE_EEFFCTS  //setmoveeffects move logic in battle_script_commands.c need todo
+goto MOVE_EEFFCTS  //setmoveeffects move logic in battle_script_commands.c DONE   need update canbestatused functions in battle_util.c with my custom logic to be used here
+//ex. CanBeParalyzed  will just make things easir to look at
 
 goto ATK_49_MOVEEND //battle_script_commands.c  move end  still to do   vsonic
 

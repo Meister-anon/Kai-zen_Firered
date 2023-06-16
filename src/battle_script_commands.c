@@ -1414,7 +1414,20 @@ static void atk00_attackcanceler(void)
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0;
+
+        if (gSpecialStatuses[gBattlerAttacker].parentalBondState == PARENTAL_BOND_1ST_HIT)
+        {
+            gSpecialStatuses[gBattlerAttacker].parentalBondState = PARENTAL_BOND_OFF; // No second hit if first hit was blocked
+            gSpecialStatuses[gBattlerAttacker].multiHitOn = 0;
+            gMultiHitCounter = 0;
+        }
+
         gBattleCommunication[MISS_TYPE] = B_MSG_PROTECTED;
+        ++gBattlescriptCurrInstr;
+    }
+    else if (gProtectStructs[gBattlerTarget].beakBlastCharge && IsMoveMakingContact(gCurrentMove, gBattlerAttacker))
+    {
+        gProtectStructs[gBattlerAttacker].touchedProtectLike = TRUE;
         ++gBattlescriptCurrInstr;
     }
     else
@@ -1672,6 +1685,13 @@ static void atk01_accuracycheck(void)
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
         else if (!JumpIfMoveAffectedByProtect(0))
             gBattlescriptCurrInstr += 7;
+    }
+    else if (gSpecialStatuses[gBattlerAttacker].parentalBondState == PARENTAL_BOND_2ND_HIT
+            || (gSpecialStatuses[gBattlerAttacker].multiHitOn && (gBattleMoves[move].effect != EFFECT_TRIPLE_KICK
+            || GetBattlerAbility(gBattlerAttacker) == ABILITY_SKILL_LINK)))
+    {
+        // No acc checks for second hit of Parental Bond or multi hit moves, except Triple Kick/Triple Axel
+        gBattlescriptCurrInstr += 7;
     }
     else
     {
@@ -5243,14 +5263,15 @@ static void atk19_tryfaintmon(void)
             }
             //ok think I should put anticipate/forewarn logic here actually
                 //that way I can read the battler id of the target fainted, if it matches reset forewarn anticipate
+            //--doing this way don't need macro for resetforewarnanticipationbits, - could be what i need to make intimidate/etc. work how I want
 
                 //just need to store battler id of main functions, and ensure gbattlretarger, matches stored battlerid
             if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_FOREWARN) && gSpecialStatuses[gBattlerAttacker].switchInAbilityDone
                 && !gSpecialStatuses[gBattlerAttacker].forewarnDone
                 && gBattlerTarget == gForewarnedBattler)    //if fainted mon is same as forewarn target
             {
-                gSpecialStatuses[gBattlerAttacker].forewarnedMove = 0;    //clears stored move, and allows switchin to reactivate
-                gSpecialStatuses[gBattlerAttacker].switchInAbilityDone = FALSE;
+                gSpecialStatuses[gBattlerAttacker].forewarnedMove = 0;    //clears stored move, 
+                gSpecialStatuses[gBattlerAttacker].switchInAbilityDone = FALSE; //and allows switchin to reactivate
             }
             if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_ANTICIPATION) && gSpecialStatuses[gBattlerAttacker].switchInAbilityDone
                 && !gSpecialStatuses[gBattlerAttacker].anticipationDone
@@ -6771,6 +6792,11 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             ++gBattleScripting.atk49_state;
             break;
         case ATK49_UPDATE_LAST_MOVES:
+            if (gMoveResultFlags & (MOVE_RESULT_FAILED | MOVE_RESULT_DOESNT_AFFECT_FOE))
+                gBattleStruct->lastMoveFailed |= gBitTable[gBattlerAttacker];
+            else
+                gBattleStruct->lastMoveFailed &= ~(gBitTable[gBattlerAttacker]);
+
             if (gHitMarker & HITMARKER_SWAP_ATTACKER_TARGET)
             {
                 gActiveBattler = gBattlerAttacker;
@@ -6778,12 +6804,20 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                 gBattlerTarget = gActiveBattler;
                 gHitMarker &= ~(HITMARKER_SWAP_ATTACKER_TARGET);
             }
-            if (gHitMarker & HITMARKER_ATTACKSTRING_PRINTED)
+            if (!gSpecialStatuses[gBattlerAttacker].dancerUsedMove)//ported need check
             {
-                gLastPrintedMoves[gBattlerAttacker] = gChosenMove;
+                gDisableStructs[gBattlerAttacker].usedMoves |= gBitTable[gCurrMovePos];
+                gBattleStruct->lastMoveTarget[gBattlerAttacker] = gBattlerTarget;
+                if (gHitMarker & HITMARKER_ATTACKSTRING_PRINTED)
+                {
+                    gLastPrintedMoves[gBattlerAttacker] = gChosenMove;
+                    gLastUsedMove = gCurrentMove;
+                }
             }
+
             if (!(gAbsentBattlerFlags & gBitTable[gBattlerAttacker])
              && !(gBattleStruct->absentBattlerFlags & gBitTable[gBattlerAttacker])
+             && gBattleMoves[originallyUsedMove].effect != EFFECT_HEALING_WISH
              && gBattleMoves[originallyUsedMove].effect != EFFECT_BATON_PASS)
             {
                 if (gHitMarker & HITMARKER_OBEYS)
@@ -7084,13 +7118,13 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                 {
                     u8 battler = battlers[i];
                     if (IsBattlerAlive(battler)
-                     && gProtectStructs[battler].statFell
+                     //&& gProtectStructs[battler].statFell     Vsonic  potentially replace w gSpecialStatuses[battler].statLowered
                      && gProtectStructs[battler].disableEjectPack == 0
                      && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_EJECT_PACK
                      && !(gCurrentMove == MOVE_PARTING_SHOT && CanBattlerSwitch(gBattlerAttacker))  // Does not activate if attacker used Parting Shot and can switch out
                      && CountUsablePartyMons(battler) > 0)  // Has mon to switch into
                     {
-                        gProtectStructs[battler].statFell = FALSE;
+                        //gProtectStructs[battler].statFell = FALSE;
                         gActiveBattler = gBattleScripting.battler = battler;
                         gLastUsedItem = gBattleMons[battler].item;
                         BattleScriptPushCursor();
@@ -7180,24 +7214,24 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                 if (gBattleResources->flags->flags[i] & RESOURCE_FLAG_EMERGENCY_EXIT)   //vsonic DOUBLE check this, may not need here, or may adapt.
                 {
                     gBattleResources->flags->flags[i] &= ~RESOURCE_FLAG_EMERGENCY_EXIT;
-                    gSpecialStatuses[i].emergencyExited = TRUE;
+                    gSpecialStatuses[i].EmergencyExit = TRUE;   //still unsure about this, but use my special status, to set to 1, incase need that for truant thing to work
                     gBattlerTarget = gBattlerAbility = i;
                     BattleScriptPushCursor();
                     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER || GetBattlerSide(i) == B_SIDE_PLAYER)
                     {
-                    #if B_ABILITY_POP_UP == TRUE
+                    /*#if B_ABILITY_POP_UP == TRUE
                         gBattlescriptCurrInstr = BattleScript_EmergencyExit;
-                    #else
+                    #else*/
                         gBattlescriptCurrInstr = BattleScript_EmergencyExitNoPopUp;
-                    #endif
+                    //#endif
                     }
                     else
                     {
-                    #if B_ABILITY_POP_UP == TRUE
+                    /*#if B_ABILITY_POP_UP == TRUE
                         gBattlescriptCurrInstr = BattleScript_EmergencyExitWild;
-                    #else
+                    #else*/
                         gBattlescriptCurrInstr = BattleScript_EmergencyExitWildNoPopUp;
-                    #endif
+                    //#endif
                     }
                     return;
                 }
@@ -7208,9 +7242,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             for (i = 0; i < gBattlersCount; i++)
             {
                 if ((gSpecialStatuses[i].berryReduced
-                #if B_SYMBIOSIS_GEMS >= GEN_7
                     || gSpecialStatuses[i].gemBoost
-                #endif
                     ) && SYMBIOSIS_CHECK(i, BATTLE_PARTNER(i)))
                 {
                     BestowItem(BATTLE_PARTNER(i), i);
@@ -7239,7 +7271,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
 
             gBattleStruct->targetsDone[gBattlerAttacker] = 0;
             gProtectStructs[gBattlerAttacker].usesBouncedMove = FALSE;
-            gProtectStructs[gBattlerAttacker].targetAffected = FALSE;
+            //gProtectStructs[gBattlerAttacker].targetAffected = FALSE; think dont need
             gBattleStruct->ateBoost[gBattlerAttacker] = 0;
             gStatuses3[gBattlerAttacker] &= ~STATUS3_ME_FIRST;
             gSpecialStatuses[gBattlerAttacker].gemBoost = FALSE;
@@ -11138,20 +11170,20 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         if (gBattleWeather & WEATHER_SUN_PRIMAL && !shouldNotClear)
         {
-            gBattleWeather &= ~WEATHER_SUN_PRIMAL;
-            //PrepareStringBattle(STRINGID_EXTREMESUNLIGHTFADED, gActiveBattler);
+            gBattleWeather &= ~WEATHER_SUN_PRIMAL;  //can't remembr why removed these, but all strings are defined now so...
+            PrepareStringBattle(STRINGID_EXTREMESUNLIGHTFADED, gActiveBattler);
             gBattleCommunication[MSG_DISPLAY] = 1;
         }
         else if (gBattleWeather & WEATHER_RAIN_PRIMAL && !shouldNotClear)
         {
             gBattleWeather &= ~WEATHER_RAIN_PRIMAL;
-            //PrepareStringBattle(STRINGID_HEAVYRAINLIFTED, gActiveBattler);
+            PrepareStringBattle(STRINGID_HEAVYRAINLIFTED, gActiveBattler);
             gBattleCommunication[MSG_DISPLAY] = 1;
         }
         else if (gBattleWeather & WEATHER_STRONG_WINDS && !shouldNotClear)
         {
             gBattleWeather &= ~WEATHER_STRONG_WINDS;
-            //PrepareStringBattle(STRINGID_STRONGWINDSDISSIPATED, gActiveBattler);
+            PrepareStringBattle(STRINGID_STRONGWINDSDISSIPATED, gActiveBattler);
             gBattleCommunication[MSG_DISPLAY] = 1;
         }
         break;  //add in 2nd round of string updates
@@ -11501,6 +11533,15 @@ static void atk76_various(void) //will need to add all these emerald various com
     case VARIOUS_BATTLER_ITEM_TO_LAST_USED_ITEM:
         gBattleMons[gActiveBattler].item = gLastUsedItem;
         break;
+    case VARIOUS_JUMP_IF_EMERGENCY_EXITED:
+    {
+        //VARIOUS_ARGS(const u8 * jumpInstr);
+        if (gSpecialStatuses[gActiveBattler].EmergencyExit)   //if true
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);   //think shoudl work
+        else
+            gBattlescriptCurrInstr += 7;
+        return;
+    }
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;
@@ -13466,19 +13507,21 @@ static void atkAD_tryspiteppreduce(void) //vsonic need test, for odds and if eff
         if (i != MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] != 0
             && (!TestSheerForceFlag(gBattlerAttacker, gCurrentMove)))       //test think should work? 
         {//if works would fail to do pp drop if eerie spell used on a sheer force mon, and instead jump to damage phase and boost damage.
-            if (luck > 3) { //if 4,5,6,7,8, or 9;  do normal effect  6 out of 10 60% odds  this shuold be perfect, still need test
-                ppToDeduct = (Random() % 2) + 4; //removes 4-5 pp   //new more consistent effect, min 4 drop, on move just used so base 5 pp moves get removed
-                PREPARE_STRING_BUFFER(gBattleTextBuff3, gText_EmptySpace);
-            }
-            else if (luck > 0) {  //might go down to + 3      (should be 3 & below not 0)  3 2 1
-                ppToDeduct = 10;    //bad luck clause, since uses else if, should automatically exclude values above 3  shoudl be 1-3
-                PREPARE_STRING_BUFFER(gBattleTextBuff3, STRINGID_SPITE_BADLUCK);
-            }
+            
             if (luck == 0) {
                 ppToDeduct = gBattleMons[gBattlerTarget].pp[i];//want to make text for extranormal effects, 1st is mon "had bad luck", other is mon's "luck ran out!"
                 PREPARE_STRING_BUFFER(gBattleTextBuff3, STRINGID_SPITE_TOTAL_LOSS);
             }
             //these strings would run before the normal sprite text
+            else if (luck > 3) { //if 4,5,6,7,8, or 9;  do normal effect  6 out of 10 60% odds  this shuold be perfect, still need test
+                ppToDeduct = (Random() % 2) + 4; //removes 4-5 pp   //new more consistent effect, min 4 drop, on move just used so base 5 pp moves get removed
+                PREPARE_STRING_BUFFER(gBattleTextBuff3, STRINGID_EMPTYSTRING3);
+            }
+            else if (luck > 0) {  //might go down to + 3      (should be 3 & below not 0)  3 2 1
+                ppToDeduct = 10;    //bad luck clause, since uses else if, should automatically exclude values above 3  shoudl be 1-3
+                PREPARE_STRING_BUFFER(gBattleTextBuff3, STRINGID_SPITE_BADLUCK);
+            }
+            
 
             if (gBattleMons[gBattlerTarget].pp[i] < ppToDeduct)
                 ppToDeduct = gBattleMons[gBattlerTarget].pp[i];

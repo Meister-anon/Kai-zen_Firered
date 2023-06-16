@@ -158,16 +158,16 @@
 {                                                               \
     textVar[0] = B_BUFF_PLACEHOLDER_BEGIN;                      \
     textVar[1] = B_BUFF_STRING;                                 \
-    textVar[2] = stringId;                                      \
+    textVar[2] = stringId & 0xFF;                               \
     textVar[3] = (stringId & 0xFF00) >> 8;                      \
     textVar[4] = B_BUFF_EOS;                                    \
-}
+}//ok way this works, can't have comments or spaces after  or between backslash stuff
 
 #define PREPARE_MOVE_BUFFER(textVar, move)                      \
 {                                                               \
     textVar[0] = B_BUFF_PLACEHOLDER_BEGIN;                      \
     textVar[1] = B_BUFF_MOVE;                                   \
-    textVar[2] = (move & 0xFF);                                              \
+    textVar[2] = (move & 0xFF);                                 \
     textVar[3] = (move & 0xFF00) >> 8;                          \
     textVar[4] = B_BUFF_EOS;                                    \
 }//changed  textvar 2 from just move; w update of levelup move struct

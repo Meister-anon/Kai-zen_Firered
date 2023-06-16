@@ -110,6 +110,7 @@ static void FreeResetData_ReturnToOvOrDoEvolutions(void);
 static void ReturnFromBattleToOverworld(void);
 static void TryEvolvePokemon(void);
 static void WaitForEvoSceneToFinish(void);
+static const u16 sTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES]
 
 EWRAM_DATA u16 gBattle_BG0_X = 0;
 EWRAM_DATA u16 gBattle_BG0_Y = 0;
@@ -3417,7 +3418,12 @@ void SwitchInClearSetData(void) //handles what gets reset on switchout
     *(2 * 2 + gActiveBattler * 8 + (u8 *)(gBattleStruct->lastTakenMoveFrom) + 0) = 0;
     *(2 * 2 + gActiveBattler * 8 + (u8 *)(gBattleStruct->lastTakenMoveFrom) + 1) = 0;
     *(3 * 2 + gActiveBattler * 8 + (u8 *)(gBattleStruct->lastTakenMoveFrom) + 0) = 0;
-    *(3 * 2 + gActiveBattler * 8 + (u8 *)(gBattleStruct->lastTakenMoveFrom) + 1) = 0;
+    *(3 * 2 + gActiveBattler * 8 + (u8 *)(gBattleStruct->lastTakenMoveFrom) + 1) = 0;    
+    gBattleStruct->lastMoveFailed &= ~(gBitTable[gActiveBattler]);
+
+    if (gActiveBattler == gBattleStruct->stickyWebUser)
+        gBattleStruct->stickyWebUser = 0xFF;    // Switched into sticky web user slot so reset it
+    
     for (i = 0; i < gBattlersCount; ++i)
     {
         if (i != gActiveBattler)
@@ -4608,7 +4614,8 @@ void SortBattlersBySpeed(u8 *battlers, bool8 slowToFast)
 
 //updating to emerald standard, remove speed checks to getbattlertotalspeed intead
 //remove badge boosts, ability checks other than quick draw, and status effects
-//done, also //realized it only holds 2 battlers, so how does it work for doubles?
+//DONE, 
+//also //realized it only holds 2 battlers, so how does it work for doubles?
 //could be reads one side ata time, need check 
 u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves) 
 {
