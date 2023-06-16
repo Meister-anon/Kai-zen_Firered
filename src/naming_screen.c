@@ -280,7 +280,7 @@ static const struct BgTemplate gUnknown_83E2290[4] = {
     }
 };
 
-static const struct WindowTemplate sWindowTemplates[WIN_COUNT + 1] = {
+static const struct WindowTemplate sWindowTemplates[WIN_COUNT][7] = {
 {
     [WIN_KB_PAGE_1] = {
         .bg = 1,
@@ -330,7 +330,7 @@ static const struct WindowTemplate sWindowTemplates[WIN_COUNT + 1] = {
     DUMMY_WIN_TEMPLATE
 };
 
-static const u8 gUnknown_83E22D0[][4][8] = {
+static const u8 sKeyboardChars[KBPAGE_COUNT][4][8] = {
     [KBPAGE_LETTERS_LOWER] = {
         __("abcdef ."),
         __("ghijkl ,"),
@@ -1688,7 +1688,7 @@ static void AddGenderIconFunc_Yes(void)
 
 static u8 GetCharAtKeyboardPos(s16 x, s16 y)
 {
-    return gUnknown_83E22D0[sub_809DE50()][y][x];
+    return sKeyboardChars[sub_809DE50()][y][x];
 }
 
 static u8 GetTextCaretPosition(void)

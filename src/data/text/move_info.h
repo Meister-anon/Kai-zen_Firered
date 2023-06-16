@@ -374,7 +374,7 @@ const u8 gMoveDescription_MetalBurst[] = _("After taking a hit\nretaliates with\
 const u8 gMoveDescription_U_turn[] = _("Does damage then\nswitches out the user.");
 const u8 gMoveDescription_CloseCombat[] = _("A strong attack\nbut lowers defense.");
 const u8 gMoveDescription_Payback[] = _("An attack that\ngains power if\nthe user moves\nafter the target.");
-const u8 gMoveDescription_Assurance[] = _("An attack that\doubles power if\nthe target has\nalready taken damage.");
+const u8 gMoveDescription_Assurance[] = _("An attack that\ndoubles power if\nthe target has\nalready taken damage.");
 const u8 gMoveDescription_Embargo[] = _("Blocks the foes from\nusing any items.");
 const u8 gMoveDescription_Fling[] = _("The effectiveness\nand damage varies\nwith the held item.");
 const u8 gMoveDescription_PsychoShift[] = _("Transfers status\nonto the foe.");
@@ -1133,7 +1133,7 @@ const u8 gDRAGON_HAMMERDescription
     [] = _("Swings its body\nlike a hammer.");
 
 const u8 gBRUTAL_SWINGDescription 
-    [] = _("Violently swings\blindly to hurt\neveryone nearby.");
+    [] = _("Violently swings\nblindly to hurt\neveryone nearby.");
 
 const u8 gAURORA_VEILDescription 
     [] = _("Weakens all\nattacks, but\nonly usable with hail.");
@@ -2008,7 +2008,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [ MOVE_STEAMROLLER ] = gSTEAMROLLERDescription,
     [ MOVE_COTTON_GUARD ] = gCOTTON_GUARDDescription,
     [ MOVE_NIGHT_DAZE ] = gNIGHT_DAZEDescription,
-    [ MOVE_PSYSTRIKE ] = sPsyshockDescription,
+    [ MOVE_PSYSTRIKE ] = gPSYSHOCKDescription,
     [ MOVE_TAIL_SLAP ] = gTAIL_SLAPDescription,
     [ MOVE_HURRICANE ] = gHURRICANEDescription,
     [ MOVE_HEAD_CHARGE ] = gHEAD_CHARGEDescription,

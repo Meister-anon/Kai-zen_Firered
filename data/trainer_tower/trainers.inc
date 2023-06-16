@@ -2729,7 +2729,7 @@ gUnknown_847F16C::
 	trainerid 0, 4096 @ OT ID
 	ivs 15, 15, 15, 15, 15, 15, 0 @ IVs, ability
 	.4byte 0x00000032 @ personality
-	.string "FERALIGATR$", 11
+	.string "FERALIGATOR$", 11
 	.byte 255 @ friendship
 
 	.align 2

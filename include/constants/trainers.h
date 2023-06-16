@@ -124,7 +124,7 @@
 #define TRAINER_PIC_TAMER                 103
 #define TRAINER_PIC_BIRD_KEEPER           104
 #define TRAINER_PIC_BLACK_BELT            105
-#define TRAINER_PIC_RIVAL_1               106
+#define TRAINER_PIC_RIVAL_EARLY           106
 #define TRAINER_PIC_SCIENTIST             107
 #define TRAINER_PIC_LEADER_GIOVANNI       108
 #define TRAINER_PIC_ROCKET_GRUNT_M        109
@@ -142,7 +142,7 @@
 #define TRAINER_PIC_LEADER_BLAINE         121
 #define TRAINER_PIC_LEADER_SABRINA        122
 #define TRAINER_PIC_GENTLEMAN             123
-#define TRAINER_PIC_RIVAL_2               124
+#define TRAINER_PIC_RIVAL_LATE            124
 #define TRAINER_PIC_CHAMPION_RIVAL        125
 #define TRAINER_PIC_CHANNELER             126
 #define TRAINER_PIC_TWINS                 127

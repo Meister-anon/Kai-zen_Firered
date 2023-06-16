@@ -4340,12 +4340,12 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalOaksLabSquirt
     {
         .iv = 0,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 5,
         .species = SPECIES_SQUIRTLE,
@@ -4356,12 +4356,12 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalOaksLabBulbas
     {
         .iv = 0,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 5,
         .species = SPECIES_BULBASAUR,
@@ -4372,12 +4372,12 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalOaksLabCharma
     {
         .iv = 0,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 5,
         .species = SPECIES_CHARMANDER,
@@ -4388,12 +4388,12 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22EarlyS
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 9,
         .species = SPECIES_PIDGEY,
@@ -4402,12 +4402,12 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22EarlyS
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 9,
         .species = SPECIES_SQUIRTLE,
@@ -4419,12 +4419,12 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22EarlyB
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 9,
         .species = SPECIES_PIDGEY,
@@ -4433,12 +4433,12 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22EarlyB
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 9,
         .species = SPECIES_BULBASAUR,
@@ -4450,12 +4450,12 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22EarlyC
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 9,
         .species = SPECIES_PIDGEY,
@@ -4464,12 +4464,12 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22EarlyC
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 9,
         .species = SPECIES_CHARMANDER,
@@ -4477,16 +4477,16 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22EarlyC
     },
 };
 
-static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanSquirtle[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalCeruleanSquirtle[] = {
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 17,
         .species = SPECIES_PIDGEOTTO,
@@ -4495,12 +4495,12 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanSquirt
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 16,
         .species = SPECIES_ABRA,
@@ -4509,12 +4509,12 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanSquirt
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 15,
         .species = SPECIES_RATTATA,
@@ -4523,12 +4523,12 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanSquirt
     {
         .iv = 12,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 18,
         .species = SPECIES_SQUIRTLE,
@@ -4536,16 +4536,16 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanSquirt
     },
 };
 
-static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanBulbasaur[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalCeruleanBulbasaur[] = {
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 17,
         .species = SPECIES_PIDGEOTTO,
@@ -4554,12 +4554,12 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanBulbas
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 16,
         .species = SPECIES_ABRA,
@@ -4568,12 +4568,12 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanBulbas
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 15,
         .species = SPECIES_RATTATA,
@@ -4582,12 +4582,12 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanBulbas
     {
         .iv = 12,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 18,
         .species = SPECIES_BULBASAUR,
@@ -4595,16 +4595,16 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanBulbas
     },
 };
 
-static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanCharmander[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalCeruleanCharmander[] = {
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 17,
         .species = SPECIES_PIDGEOTTO,
@@ -4613,12 +4613,12 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanCharma
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 16,
         .species = SPECIES_ABRA,
@@ -4627,12 +4627,12 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanCharma
     {
         .iv = 6,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 15,
         .species = SPECIES_RATTATA,
@@ -4641,12 +4641,12 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalCeruleanCharma
     {
         .iv = 12,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 18,
         .species = SPECIES_CHARMANDER,
@@ -4658,12 +4658,12 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_ScientistTed[] = {
     {
         .iv = 0,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 29,
         .species = SPECIES_ELECTRODE,
@@ -4671,12 +4671,12 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_ScientistTed[] = {
     {
         .iv = 0,
         .evs = {
-                [HpEV] = {0},
-                [AttackEV] = {0},
-                [DefenseEV] = {0},
-                [SpeedEV] = {0},
-                [SpAttackEV] = {0},
-                [SpDefenseEV] = {0}
+                [HpEV] = 0,
+                [AttackEV] = 0,
+                [DefenseEV] = 0,
+                [SpeedEV] = 0,
+                [SpAttackEV] = 0,
+                [SpDefenseEV] = 0
                 },
         .lvl = 29,
         .species = SPECIES_WEEZING,
@@ -6849,7 +6849,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalSilphCharmand
     },
 };
 
-static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalRoute22LateSquirtle[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22LateSquirtle[] = {
     {
         .iv = 18,
         .lvl = 47,
@@ -6888,7 +6888,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalRoute22LateSqu
     },
 };
 
-static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalRoute22LateBulbasaur[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22LateBulbasaur[] = {
     {
         .iv = 18,
         .lvl = 47,
@@ -6927,7 +6927,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalRoute22LateBul
     },
 };
 
-static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalRoute22LateCharmander[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22LateCharmander[] = {
     {
         .iv = 18,
         .lvl = 47,
@@ -6966,7 +6966,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_RivalRoute22LateCha
     },
 };
 
-static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionFirstSquirtle[] = {
+static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionFirstSquirtle[] = {
     {
         .iv = 31,
         .lvl = 59,
@@ -7011,7 +7011,7 @@ static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionFirstSquirtle
     },
 };
 
-static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionFirstBulbasaur[] = {
+static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionFirstBulbasaur[] = {
     {
         .iv = 31,
         .lvl = 59,
@@ -7056,7 +7056,7 @@ static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionFirstBulbasau
     },
 };
 
-static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionFirstCharmander[] = {
+static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionFirstCharmander[] = {
     {
         .iv = 31,
         .lvl = 59,
@@ -11597,7 +11597,7 @@ static const struct TrainerMonItemCustomMoves sTrainerMons_EliteFourLance2[] = {
     },
 };
 
-static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionRematchSquirtle[] = {
+static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionRematchSquirtle[] = {
     {
         .iv = 31,
         .lvl = 72,
@@ -11642,7 +11642,7 @@ static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionRematchSquirt
     },
 };
 
-static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionRematchBulbasaur[] = {
+static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionRematchBulbasaur[] = {
     {
         .iv = 31,
         .lvl = 72,
@@ -11687,7 +11687,7 @@ static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionRematchBulbas
     },
 };
 
-static const struct TrainerMonItemCustomMoves sTrainerMons_ChampionRematchCharmander[] = {
+static const struct TrainerMonItemDefaultMoves sTrainerMons_ChampionRematchCharmander[] = {
     {
         .iv = 31,
         .lvl = 72,

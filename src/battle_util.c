@@ -9396,9 +9396,9 @@ u16 GetTypeModifier(u8 atkType, u8 defType)
 {
 
     if (FlagGet(FLAG_INVERSE_BATTLE))
-        return GetInverseTypeMultiplier(sTypeEffectivenessTable[atkType][defType]);
+        return GetInverseTypeMultiplier(gTypeEffectivenessTable[atkType][defType]);
 
-    return sTypeEffectivenessTable[atkType][defType];
+    return gTypeEffectivenessTable[atkType][defType];
 
 }
 
@@ -9489,7 +9489,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     return modifier;
 }
 
-u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef)
+/*u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef)     //removed pretty sure not needed at all.
 {
     u16 modifier = UQ_4_12(1.0);
     u8 moveType = gBattleMoves[move].type;
@@ -9510,7 +9510,7 @@ u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilit
 
     //UpdateMoveResultFlags(modifier);
     return modifier;
-}
+}*/
 
 // for AI - get move damage and effectiveness with one function call
 s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u16 *typeEffectivenessModifier)

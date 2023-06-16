@@ -4824,7 +4824,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_1 = {
 					.spDefenseIV = 15,
 					.abilityNum = 0,
 					.personality = 0x32, // MALE HARDY
-					.nickname = _("FERALIGATR"),
+					.nickname = _("FERALIGATOR"),
 					.friendship = 255
 				},
 				{
