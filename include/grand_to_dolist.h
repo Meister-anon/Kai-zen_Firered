@@ -1782,6 +1782,7 @@ goto CATCHING_LOGIC
 * -could also put mirage island alerrt in space time upgrade for dexnav from time events
 */
 
+goto POKEDEX_CATEGORY_CURSOR_DATA  //for setting up category page in pokedex and fixing outline issue
 goto POKEDEX_PAGE_FUNCTIONS
 goto CREATE_POKEDEX_PAGE // all values for creating pokedex page  DexScreen_PrintMonFlavorText  is function for dexx entires
 goto PARTYMENU_GRAPHICS
