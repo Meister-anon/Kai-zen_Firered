@@ -4489,8 +4489,7 @@ void ItemUseCB_Medicine(u8 taskId, TaskFunc func)
         canHeal = TRUE;
     }
     else*/
-    if (canHeal = TRUE)
-    {
+
         if (IsHPRecoveryItem(item) == TRUE)
         {
             hp = GetMonData(mon, MON_DATA_HP);
@@ -4498,7 +4497,7 @@ void ItemUseCB_Medicine(u8 taskId, TaskFunc func)
                 canHeal = FALSE;
         }
         canHeal = PokemonItemUseNoEffect(mon, item, gPartyMenu.slotId, 0);
-    }
+
     PlaySE(SE_SELECT);
     if (canHeal)
     {
@@ -4535,53 +4534,56 @@ void ItemUseCB_MedicineStep(u8 taskId, TaskFunc func) //believe this one is spec
             hp = GetMonData(mon, MON_DATA_HP);
 
             if (hp == GetMonData(mon, MON_DATA_MAX_HP))
-                  canHeal = FALSE           
+                canHeal = FALSE;
         }
         if ((ExecuteTableBasedItemEffect_(gPartyMenu.slotId, item, 0)) || canHeal == FALSE)
         {
-        WONT_HAVE_EFFECT:
+       // WONT_HAVE_EFFECT:
             gPartyMenuUseExitCallback = FALSE;
             PlaySE(SE_SELECT);
             DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
             ScheduleBgCopyTilemapToVram(2);
             gTasks[taskId].func = func;
-            return;
+            //return;
         }
     /*}
     else
     {
         goto WONT_HAVE_EFFECT; // even loop wrap won't work
     }*/
-    gPartyMenuUseExitCallback = TRUE;
-    if (!IsItemFlute(item))
-    {
-        PlaySE(SE_USE_ITEM);
-        if (gPartyMenu.action != PARTY_ACTION_REUSABLE_ITEM)
-            RemoveBagItem(item, 1);
-    }
-    else
-    {
-        PlaySE(SE_GLASS_FLUTE);
-    }
-    SetPartyMonAilmentGfx(mon, &sPartyMenuBoxes[gPartyMenu.slotId]);
-    if (gSprites[sPartyMenuBoxes[gPartyMenu.slotId].statusSpriteId].invisible)
-        DisplayPartyPokemonLevelCheck(mon, &sPartyMenuBoxes[gPartyMenu.slotId], 1);
-    if (canHeal == TRUE)
-    {
-        if (hp == 0)
-            AnimatePartySlot(gPartyMenu.slotId, 1);
-        PartyMenuModifyHP(taskId, gPartyMenu.slotId, 1, GetMonData(mon, MON_DATA_HP) - hp, Task_DisplayHPRestoredMessage);
-        ResetHPTaskData(taskId, 0, hp);
-        return;
-    }
-    else  //assume to mean can't heal.
-    {
-        GetMonNickname(mon, gStringVar1);
-        GetMedicineItemEffectMessage(item);
-        DisplayPartyMenuMessage(gStringVar4, TRUE);
-        ScheduleBgCopyTilemapToVram(2);
-        gTasks[taskId].func = func;
-    }
+        else  //can use item?
+        {
+            gPartyMenuUseExitCallback = TRUE;
+            if (!IsItemFlute(item))
+            {
+                PlaySE(SE_USE_ITEM);
+                if (gPartyMenu.action != PARTY_ACTION_REUSABLE_ITEM)
+                    RemoveBagItem(item, 1);
+            }
+            else
+            {
+                PlaySE(SE_GLASS_FLUTE);
+            }
+            SetPartyMonAilmentGfx(mon, &sPartyMenuBoxes[gPartyMenu.slotId]);
+            if (gSprites[sPartyMenuBoxes[gPartyMenu.slotId].statusSpriteId].invisible)
+                DisplayPartyPokemonLevelCheck(mon, &sPartyMenuBoxes[gPartyMenu.slotId], 1);
+            if (canHeal == TRUE)
+            {
+                if (hp == 0)
+                    AnimatePartySlot(gPartyMenu.slotId, 1);
+                PartyMenuModifyHP(taskId, gPartyMenu.slotId, 1, GetMonData(mon, MON_DATA_HP) - hp, Task_DisplayHPRestoredMessage);
+                ResetHPTaskData(taskId, 0, hp);
+                //return;
+            }
+            else  //assume to mean can't heal.
+            {
+                GetMonNickname(mon, gStringVar1);
+                GetMedicineItemEffectMessage(item);
+                DisplayPartyMenuMessage(gStringVar4, TRUE);
+                ScheduleBgCopyTilemapToVram(2);
+                gTasks[taskId].func = func;
+            }
+        }
 } //vsonic test but removed shedinja based clauses, believe they're irrelvant anyway cuz of pokemon.c hp function
 
 static void Task_DisplayHPRestoredMessage(u8 taskId)
@@ -4606,7 +4608,7 @@ static void Task_ClosePartyMenuAfterText(u8 taskId)
 
 #define tState      data[0]
 #define tSpecies    data[1]
-#define tAbilityNum data[2]
+#define tAbilityNum data[2] //now return current ability will need to use task, to select new ability/abilitynum
 #define tMonId      data[3]
 #define tOldFunc    4
 
@@ -4622,10 +4624,11 @@ void Task_AbilityCapsule(u8 taskId) //important seemed easy enough so ported now
     {//make opena dialgoue displaying species abilities in order of slots and print to a box if not equal current ability
     //so should print every possible ability excluding the one it currently has, populate selected ability to str_var_2
     case 0:
-        // Can't use.
-        if (gBaseStats[tSpecies].abilities[0] == gBaseStats[tSpecies].abilities[1] //if both ability slots have same ability
-            || gBaseStats[tSpecies].abilities[1] == 0 // if the other slot is ability none
-            || tAbilityNum > 1 // if current ability, is hidden ability
+        // Can't use.   -  made new conditional
+        if ((gBaseStats[tSpecies].abilities[0] == gBaseStats[tSpecies].abilities[1] //if both ability slots have same ability
+            //|| gBaseStats[tSpecies].abilities[1] == 0 // if the other slot is ability none
+            && ((gBaseStats[tSpecies].abilityHidden[0] == 0) && (gBaseStats[tSpecies].abilityHidden[1] == 0))) //and no hidden ability
+            //|| tAbilityNum > 1 // if current ability, is hidden ability
             || !tSpecies) //if species is 0
         {
             gPartyMenuUseExitCallback = FALSE;
@@ -4696,7 +4699,7 @@ void ItemUseCB_AbilityCapsule(u8 taskId, TaskFunc task)//need to understand
     tState = 0;
     tMonId = gPartyMenu.slotId;
     tSpecies = GetMonData(&gPlayerParty[tMonId], MON_DATA_SPECIES, NULL);
-    tAbilityNum = GetMonData(&gPlayerParty[tMonId], MON_DATA_ABILITY_NUM, NULL) ^ 1; //may need to remove this since its setting to one ability
+    tAbilityNum = GetMonData(&gPlayerParty[tMonId], MON_DATA_ABILITY_NUM, NULL); //may need to remove this since its setting to one ability
     SetWordTaskArg(taskId, tOldFunc, (uintptr_t)(gTasks[taskId].func));
     gTasks[taskId].func = Task_AbilityCapsule; //prob instead handle abilityNum selection in this task
 }//
@@ -5174,7 +5177,7 @@ static void Task_TryLearningNextMoveAfterText(u8 taskId)
         Task_TryLearningNextMove(taskId);
 }
 
-void ItemUseCB_RareCandy(u8 taskId, TaskFunc func)
+void ItemUseCB_RareCandy(u8 taskId, TaskFunc func)//for streamer mode setup reusable rare candies, must go along with lvl cap
 {
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     u16 item = gSpecialVar_ItemId;

@@ -33,6 +33,7 @@
 #define KBEVENT_PRESSED_START 9
 
 #define KBROW_COUNT 4
+#define KBCOL_COUNT 8
 
 enum
 {
@@ -230,12 +231,12 @@ static const struct SpriteTemplate gUnknown_83E2634;
 
 static const u8 *const sNamingScreenKeyboardText[][KBROW_COUNT];
 
-static const struct SpriteSheet gUnknown_83E267C[];
-static const struct SpritePalette gUnknown_83E26E4[];
+static const struct SpriteSheet sSpriteSheets[];
+static const struct SpritePalette sSpritePalettes[];
 
-static const u16 gUnknown_83E1800[] = INCBIN_U16("graphics/interface/naming_screen_83E1800.4bpp");
-static const u16 gUnknown_83E18C0[] = INCBIN_U16("graphics/interface/naming_screen_83E18C0.4bpp");
-static const u16 gUnknown_83E1980[] = INCBIN_U16("graphics/interface/naming_screen_83E1980.4bpp");
+static const u16 sPCIconOff_Gfx[] = INCBIN_U16("graphics/interface/naming_screen_83E1800.4bpp");
+static const u16 sPCIconOn_Gfx[] = INCBIN_U16("graphics/interface/naming_screen_83E18C0.4bpp");
+static const u16 sRival_Gfx[] = INCBIN_U16("graphics/interface/naming_screen_83E1980.4bpp");
 
 static const u8 *const sTransferredToPCMessages[] = {
     Text_MonSentToBoxInSomeonesPC,
@@ -278,10 +279,11 @@ static const struct BgTemplate gUnknown_83E2290[4] = {
         .priority = 3,
         .baseTile = 0x000
     }
-};
+};//ok so apparently several of the memebers here do nothing and aren't even read?
+//only bg, charbaseindex, mapbaseindex, & priority have meaningful values
 
-static const struct WindowTemplate sWindowTemplates[WIN_COUNT][7] = {
-{
+static const struct WindowTemplate sWindowTemplates[WIN_COUNT + 1] = {
+
     [WIN_KB_PAGE_1] = {
         .bg = 1,
         .tilemapLeft = 3,
@@ -330,7 +332,7 @@ static const struct WindowTemplate sWindowTemplates[WIN_COUNT][7] = {
     DUMMY_WIN_TEMPLATE
 };
 
-static const u8 sKeyboardChars[KBPAGE_COUNT][4][8] = {
+static const u8 sKeyboardChars[KBPAGE_COUNT][KBROW_COUNT][KBCOL_COUNT] = {
     [KBPAGE_LETTERS_LOWER] = {
         __("abcdef ."),
         __("ghijkl ,"),
@@ -1354,7 +1356,7 @@ static const union AnimCmd *const gUnknown_83E23BC[] = {
 static void NamingScreen_CreateRivalIcon(void)
 {
     const struct SpriteSheet sheet = {
-        gUnknown_83E1980, 0x900, 255
+        sRival_Gfx, 0x900, 255
     };
     const struct SpritePalette palette = {
         gUnknown_8E98004, 255
@@ -1777,8 +1779,8 @@ static void choose_name_or_words_screen_load_bg_tile_patterns(void)
     LoadBgTiles(1, sNamingScreenData->tileBuffer, 0x600, 0);
     LoadBgTiles(2, sNamingScreenData->tileBuffer, 0x600, 0);
     LoadBgTiles(3, sNamingScreenData->tileBuffer, 0x600, 0);
-    LoadSpriteSheets(gUnknown_83E267C);
-    LoadSpritePalettes(gUnknown_83E26E4);
+    LoadSpriteSheets(sSpriteSheets);
+    LoadSpritePalettes(sSpritePalettes);
 }
 
 static void sub_809F8C0(void)
@@ -2241,8 +2243,8 @@ static const struct SubspriteTable gUnknown_83E252C[] = {
 };
 
 static const struct SpriteFrameImage gUnknown_0858C080[] = {
-    {gUnknown_83E1800, sizeof(gUnknown_83E1800)},
-    {gUnknown_83E18C0, sizeof(gUnknown_83E18C0)},
+    {sPCIconOff_Gfx, sizeof(sPCIconOff_Gfx)},
+    {sPCIconOn_Gfx, sizeof(sPCIconOn_Gfx)},
 };
 
 static const union AnimCmd gSpriteAnim_858C090[] = {
@@ -2387,7 +2389,7 @@ static const u8 *const sNamingScreenKeyboardText[KBPAGE_COUNT][KBROW_COUNT] = {
 };
 
 // FIXME: Sync with Emerald
-static const struct SpriteSheet gUnknown_83E267C[] = {
+static const struct SpriteSheet sSpriteSheets[] = {
     {gUnknown_8E98858, 0x1E0,  0x0000},
     {gUnknown_8E98A38, 0x1E0,  0x0001},
     {gUnknown_8E985D8, 0x280,  0x0002},
@@ -2403,7 +2405,7 @@ static const struct SpriteSheet gUnknown_83E267C[] = {
     {} // terminator
 };
 
-static const struct SpritePalette gUnknown_83E26E4[] = {
+static const struct SpritePalette sSpritePalettes[] = {
     {gNamingScreenMenu_Pal,         0x0000},
     {gNamingScreenMenu_Pal + 0x10,  0x0001},
     {gNamingScreenMenu_Pal + 0x20,  0x0002},

@@ -21,6 +21,8 @@
 #define DEX_ORDER_SMALLEST           4
 #define DEX_ORDER_NUMERICAL_NATIONAL 5
 
+#define DEX_MODE(name) (DEX_CATEGORY_COUNT + DEX_ORDER_##name)
+
 #include "pokedex.h"
 
 extern const struct PokedexEntry gPokedexEntries[];
