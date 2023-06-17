@@ -9117,7 +9117,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_IMMUNITY, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_TOXIC_BOOST, ABILITY_NONE},
+            .abilityHidden = {ABILITY_TOXIC_BOOST, ABILITY_DEFIANT},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -9148,7 +9148,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         .abilities = {ABILITY_SHED_SKIN, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_COMPETITIVE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -19249,17 +19249,9 @@ const struct BaseStats gBaseStats[] =
         .friendship = 70,
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
-        #if P_UPDATED_EGG_GROUPS >= GEN_8
             .eggGroup2 = EGG_GROUP_DRAGON,
-       // #ifdef BATTLE_ENGINE
-            .eggGroup2 = EGG_GROUP_FLYING,
-        // #endif
-        //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FRISK, ABILITY_INFILTRATOR},
             .abilityHidden = {ABILITY_ANTICIPATION, ABILITY_SONAR}, //not psychic makes no sense to have telepathy, its a sound based mon
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -19282,17 +19274,9 @@ const struct BaseStats gBaseStats[] =
         .friendship = 70,
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
-        #if P_UPDATED_EGG_GROUPS >= GEN_8
             .eggGroup2 = EGG_GROUP_DRAGON,
-       // #ifdef BATTLE_ENGINE
-            .eggGroup2 = EGG_GROUP_FLYING,
-        // #endif
-        //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FRISK, ABILITY_INFILTRATOR},
             .abilityHidden = {ABILITY_ANTICIPATION, ABILITY_SONAR},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -19319,7 +19303,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FAIRY_AURA, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -19347,7 +19331,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DARK_AURA, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -19375,7 +19359,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_AURA_BREAK, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -19402,6 +19386,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_CLEAR_BODY, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -19427,9 +19412,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MAGICIAN, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -19454,6 +19437,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_WATER_ABSORB, ABILITY_NONE},
+        .abilityHidden = {ABILITY_STEAM_ENGINE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -19478,9 +19462,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
         .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
-        //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_LONG_REACH, ABILITY_NONE},
-        // #endif
+        .abilityHidden = {ABILITY_LONG_REACH, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -19505,9 +19487,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
         .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
-        //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_LONG_REACH, ABILITY_NONE},
-        // #endif
+        .abilityHidden = {ABILITY_LONG_REACH, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -19532,9 +19512,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
         .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
-        //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_LONG_REACH, ABILITY_NONE},
-        // #endif
+        .abilityHidden = {ABILITY_LONG_REACH, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },

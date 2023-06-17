@@ -386,6 +386,11 @@ With that I can use GetMondata ability num, if 0 set a random abilityNum between
 
 * DONE!!  need test, should set ability, think I'm worried about is the random ability part.
 * 
+* ok confirmed firered & emerald use different font, which explains why lowercase firered font is so ugly
+* port I guess the lowercase charmap from emerald expansion, that way lowercase stuff can look better
+* or maybe just port a few select ones, the ones that look bad are the curved ones,  n m r etc. I think c as well?
+* 
+* General Notes end:
 */
 goto TRAINER_PARTY_DATA
 goto TRAINER_DATA_STRUCTS
@@ -2149,6 +2154,17 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * 
 * So I think I need to create the list loop the list, and passive the species value to transform into
 * to a variable, all within the same function...
+* 
+* USE type chart somehow
+* new logic, like trace/intimidate pick a random target on enemy side,  if type 1 & 2 are the same use that
+* otherwise loop one type then the other, and look for  a type that overlaps, that would result in a not very effective result
+* if it finds a match for both use that, otherwise randomly chose from the combined typings and make mon mono type that
+* 
+* that would be new conversion effect,   conversion 2 would look for immunities and if found set as type 2, allowing mon to maintain stab.
+* after fixing that, set conversion effct as logic for imposter, and then add a species check as well.
+* 
+* nother idea from jrppoketraier98  make move magiccoat work like a screen, where it lasts 3 turns etc.
+*  after doing add to screencleaner, and list of effects brick break can shatter
 * 
 */
 

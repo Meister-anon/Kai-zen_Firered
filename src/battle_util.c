@@ -3417,48 +3417,48 @@ bool8 IsBattlerGrounded(u8 battlerId)
 //finihsed adding to type calc, so should be battle ready
 //set as type 8, instead of 32 for test build
 {
-    s32 i;
-
+    u32 species = gBattleMons[battlerId].species;
+    bool8 grounded = TRUE; //changed so goes through all checks  //not using else, so need to make it default TRUE
 
 
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
-        return TRUE; //hope this set up right/works
+        grounded = TRUE; //hope this set up right/works
     //according to Mcgriffin needed make flying & roost flag true statement
     //as else at bottom just means not flyign or has roost flag, TRUE
+    if (gFieldStatuses & STATUS_FIELD_GRAVITY)
+        grounded = TRUE;
+    if (gStatuses3[battlerId] & STATUS3_ROOTED)
+        grounded = TRUE;
+    if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
+        grounded = TRUE;
+    if (species == (SPECIES_DODUO || SPECIES_DODRIO))
+        grounded = TRUE;//edit because flightless bird
+    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
+        grounded = TRUE;
+    if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && (species == (GROUNDED_GHOSTMON)))   //test GHOST exclusions
+        grounded = TRUE;
 
-
+    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
+        grounded = FALSE;
 
     if (IsFloatingSpecies(battlerId))//used if as breakline, as else if only reads if everything above it is false
-        return FALSE;
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
-        return FALSE;
-    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
-        return FALSE;
+        grounded = FALSE;
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (species != SPECIES_DODUO && species != SPECIES_DODRIO)
+        && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
+        grounded = FALSE;  
 
-    if (gBattleMons[battlerId].species == (SPECIES_DODUO || SPECIES_DODRIO))   //test may need to add *&& hold effect nto air balloon?
-        return TRUE;//edit because flightless bird ; moved lower so exceptions could apply 
-    else if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && (gBattleMons[battlerId].species == (GROUNDED_GHOSTMON)))   //test GHOST exclusions
-        return TRUE;
-
-    else if (gBattleMons[battlerId].ability == ABILITY_LEVITATE)
-        return FALSE;
-    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
-        return TRUE;
+    if (gBattleMons[battlerId].ability == ABILITY_LEVITATE) //remove after removing all instances of levitate on mon
+        grounded = FALSE;    
     if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
-        return FALSE;
-    else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
-        return FALSE;
-    else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
-        return FALSE;
-    if (gFieldStatuses & STATUS_FIELD_GRAVITY)
-        return TRUE;
-    else if (gStatuses3[battlerId] & STATUS3_ROOTED)
-        return TRUE;
-    else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
-        return TRUE; //important roost change  ..[unsure if want to make random % but no one would gamble it anyway...
-    else
-        return TRUE;
+        grounded = FALSE;
+    if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
+        grounded = FALSE;
+    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
+        grounded = FALSE;
+    
+    
+        return grounded;
 }
 
 bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2)
