@@ -2022,6 +2022,8 @@ goto TYPE_AND_STAB_CHECK //battle_script_commands.c  type calc also where s.t.a.
 
 
 goto PICKUP_LOGIC   //out of battle buffs done, moving to in battle buffs - need fix sets item but isn't random currently only setting stick?
+//Changing pickup to not require empty item slot, do same for pickpocket, just put item in bag think done, should work for all Stealing moves
+
 goto SPECIAL_TRAP_EFFECTCHANCE
 goto STAT_AND_DAMAGE_ABILITIES_ETC // pokemon.c function for ability and item effects that affect damage calc
 

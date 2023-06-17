@@ -263,7 +263,7 @@ static const u8 sHipressureDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Shar
 static const u8 sCupidsArrowDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Infatuates a target upon switching in.");
 static const u8 sBattleMatronDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Powers up moves to protect young PKMN.");
 static const u8 sOceanMemoryDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Reduces Damage from Water-type moves.");
-static const u8 sLiquidSoulDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Transforms Water-type moves into Ghost-type.");  //swapped back
+static const u8 sLiquidSoulDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Transforms Water moves into Ghost moves.");  //swapped back
 static const u8 sOverchargeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups ELECTRIC moves in a pinch.\nThe POKéMON charges up to the max!");
 static const u8 sPhotosynthesizeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Slight HP recovery in sun.");
 static const u8 sGlacialIceDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Is immune to fire,\nand turns ice and hail into hp.");
@@ -287,6 +287,7 @@ static const u8 sUrsurperDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups At
 static const u8 sInverseWorldDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Inverts incoming damage,\nand “Not very effective” hits.");
 static const u8 sSonarDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Emits infrasonic sound with each attack.\nDoubles damage of sound based moves.");
 static const u8 sEcosystemDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Resists Ice damage.\nSets third type to water.");
+static const u8 sAbsolutezeroDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Resists Ice damage.\nFreezes all Water-type moves.");
 //checked in fire red limit is 40 chars per line, changing description length to 80/    changed to 82 max
 //based on suction cups I kinda have more space?  so more like 42 per line?
 //template - top line: literal effect\n bottom line: flavor text    -flipped usually put flavor text on top, effect on bottom
@@ -595,6 +596,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_INVERSE_WORLD] = sInverseWorldDescription,
     [ABILITY_SONAR] = sSonarDescription,
     [ABILITY_ECOSYSTEM] = sEcosystemDescription,
+    [ABILITY_ABSOLUTE_ZERO] = sAbsolutezeroDescription,
 };//last value can have comma
 
 //now undrestand reason strings (strings are arrays) use that +1 value
@@ -903,5 +905,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_URSURPER] =_("URSURPER"),
     [ABILITY_INVERSE_WORLD] =_("INVERSE WORLD"),
     [ABILITY_SONAR] =_("SONAR"),
-    [ABILITY_ECOSYSTEM] =_("ECOSYSTEM")
+    [ABILITY_ECOSYSTEM] =_("ECOSYSTEM"),
+    [ABILITY_ABSOLUTE_ZERO] =_("ABSOLUTE ZERO")
 };//no comma for last value

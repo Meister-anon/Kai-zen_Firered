@@ -1149,10 +1149,14 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
 
     attackerAbility = GetBattlerAbility(battlerAtk);
     GET_MOVE_TYPE(move, moveType);
-    if ((gFieldStatuses & STATUS_FIELD_ION_DELUGE && moveType == TYPE_NORMAL)
+    if ((gFieldStatuses & STATUS_FIELD_ION_DELUGE && moveType == TYPE_NORMAL)//add absolute zero, check if ability on field, like stench then do water chance to ice
         || gStatuses4[battlerAtk] & STATUS4_ELECTRIFIED)
     {
         gBattleStruct->dynamicMoveType = TYPE_ELECTRIC;// | F_DYNAMIC_TYPE_2;   //need test if these work without this extra value
+    }
+    else if (IsAbilityOnField(ABILITY_ABSOLUTE_ZERO) && moveType == TYPE_WATER)
+    {
+        gBattleStruct->dynamicMoveType = TYPE_ICE;
     }
     else if (gBattleMoves[move].type == TYPE_NORMAL
              && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
@@ -1172,8 +1176,8 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
              && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
              && attackerAbility == ABILITY_NORMALIZE)   //thought to remove normal exclusion, but would just result in them getting much weaker
     {                                                   //without stab, so not worth
-        gBattleStruct->dynamicMoveType = TYPE_MYSTERY;// | F_DYNAMIC_TYPE_2;    //WILL MAke moves do neutral damage to everything, need exclude from joat.
-        gBattleStruct->ateBoost[battlerAtk] = 1;
+        gBattleStruct->dynamicMoveType = TYPE_NORMAL;// | F_DYNAMIC_TYPE_2;    //WILL MAke moves do neutral damage to everything, need exclude from joat.
+        gBattleStruct->ateBoost[battlerAtk] = 1;    //actually I can do this with typecalc function and they can keep stab.
     }
     else if (gBattleMoves[move].flags & FLAG_SOUND
              && attackerAbility == ABILITY_LIQUID_VOICE)

@@ -122,7 +122,6 @@ void HandleAction_RunBattleScript(void);
 u8 GetMoveTarget(u16 move, u8 setTarget);
 u8 IsMonDisobedient(void);
 bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
-bool32 IsStenchOnField(void);
 u32 GetBattleMoveSplit(u32 moveId);
 bool8 IsBattlerAlive(u8 battlerId);
 u32 GetBattlerAbility(u8 battlerId);
@@ -136,7 +135,7 @@ bool32 DoBattlersShareType(u32 battler1, u32 battler2);
 bool32 CanBattlerEscape(u32 battlerId);
 u32 IsAbilityPreventingEscape(u32 battlerId);
 u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability);
-u32 IsAbilityOnField(u32 ability);
+u32 IsAbilityOnField(u32 ability); 
 u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating);
 u32 GetBattlerHoldEffectParam(u8 battlerId);
 bool8 IsMoveMakingContact(u16 move, u8 battlerAtk); //made bool8 since its just a true false return

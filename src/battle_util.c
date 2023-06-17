@@ -2703,7 +2703,7 @@ u8 AtkCanceller_UnableToUseMove(void)
     u8 effect = 0;
     s32* bideDmg = &gBattleScripting.bideDmg;
 
-    if ((IsStenchOnField)
+    if ((IsAbilityOnField(ABILITY_STENCH))
         && (GetBattlerAbility(gBattlerAttacker) != ABILITY_STENCH
             || GetBattlerAbility(gBattlerAttacker) != ABILITY_INNER_FOCUS
             || GetBattlerAbility(gBattlerAttacker) != ABILITY_OBLIVIOUS
@@ -5655,8 +5655,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                                                                    // Target needs to have been damaged
                             && !DoesSubstituteBlockMove(gBattlerAttacker, battler, gCurrentMove)              // Subsitute unaffected
                             && IsBattlerAlive(battler)                                                        // Battler must be alive to pickpocket
-                            && gBattleMons[battler].item == ITEM_NONE)                                      // Pickpocketer can't have an item already
-                            //&& CanStealItem(battler, gBattlerAttacker, gBattleMons[gBattlerAttacker].item))   // Cannot steal plates, mega stones, etc
+                            //&& gBattleMons[battler].item == ITEM_NONE)                                      // Pickpocketer can't have an item already  - removed
+                            && CanStealItem(battler, gBattlerAttacker, gBattleMons[gBattlerAttacker].item))   // Cannot steal plates, mega stones, etc
                         {
                                 gBattlerTarget = gBattlerAbility = battler;
                                 // Battle scripting is super brittle so we shall do the item exchange now (if possible)
@@ -9010,18 +9010,6 @@ bool32 IsNeutralizingGasOnField(void)   //not used anymore, but still here if wa
     return FALSE;
 }
 
-bool32 IsStenchOnField(void)
-{
-    u32 i;
-
-    for (i = 0; i < gBattlersCount; i++)
-    {
-        if (IsBattlerAlive(i) && gBattleMons[i].ability == ABILITY_STENCH && !(gStatuses3[i] & STATUS3_GASTRO_ACID))
-            return TRUE;
-    }
-    return FALSE;
-}
-
 u32 GetBattlerAbility(u8 battlerId)  //Deokishishu in pret mentioned there is a practice of making things that could
  // be type u8 either s32 or u32, because it has an positive effect on speed, ussually done for things 
  //constantly refernced or looped.
@@ -9082,7 +9070,8 @@ u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability) // use for intimidate on
     return IsAbilityOnSide(BATTLE_OPPOSITE(battlerId), ability);
 }
 
-
+//can be used as true false, but also can be used to return battler with ability in question
+//todo that use battler = function - 1;  as seen with damp in abilitybattleeffects
 u32 IsAbilityOnField(u32 ability)
 {
     u32 i;

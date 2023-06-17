@@ -3578,8 +3578,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMoveDamage /= 2;
     case ABILITY_NORMALIZE:
         if (gBattleStruct->ateBoost[gBattlerAttacker])//    if receives altl type damage boost?
-            gBattleMovePower = (gBattleMovePower * 130 / 100);  //will do neutral to everything, but keeping this line, as also won't get stab, buffed to 130 from 120
-        //MulModifier(&modifier, UQ_4_12(1.2));
+            gBattleMovePower = (gBattleMovePower * 120 / 100);  //will do neutral to everything, but keeping this line, as also won't get stab, buffed to 130 from 120
+        //MulModifier(&modifier, UQ_4_12(1.2));                                 //DROPPED back to 120 as realized way to make neutral while still getting stab
         break;
     case ABILITY_ANALYTIC:
         if (GetBattlerTurnOrderNum(gBattlerAttacker) == gBattlersCount - 1 && move != MOVE_FUTURE_SIGHT && move != MOVE_DOOM_DESIRE)

@@ -321,8 +321,9 @@
 #define ABILITY_INVERSE_WORLD 298	//NEW giratina origin ability
 #define ABILITY_SONAR 299	//sound move boost for bat pokemon,  double move damage, mostly to make sonic boom do dragon breath damage, and be strong early HA only
 #define ABILITY_ECOSYSTEM 300		//MEGA torterra excluive
+#define ABILITY_ABSOLUTE_ZERO 301		//kyurem excluive
 
-#define ABILITIES_COUNT 301 //
+#define ABILITIES_COUNT 302 //
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 
