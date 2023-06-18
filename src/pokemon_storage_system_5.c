@@ -1251,11 +1251,11 @@ static u8 InBoxInput_Normal(void)
                     return 14;
                 case PC_TEXT_PLACE:
                     return 15;
-                case PC_TEXT_TAKE:
+                case PC_TEXT_TAKE_ITEM:
                     return 16;
-                case PC_TEXT_GIVE:
+                case PC_TEXT_GIVE_ITEM:
                     return 17;
-                case PC_TEXT_SWITCH:
+                case PC_TEXT_SWITCH_ITEM:
                     return 18;
                 }
             }
@@ -1531,11 +1531,11 @@ static u8 HandleInput_InParty(void)
                     return 14;
                 case PC_TEXT_PLACE:
                     return 15;
-                case PC_TEXT_TAKE:
+                case PC_TEXT_TAKE_ITEM:
                     return 16;
-                case PC_TEXT_GIVE:
+                case PC_TEXT_GIVE_ITEM:
                     return 17;
-                case PC_TEXT_SWITCH:
+                case PC_TEXT_SWITCH_ITEM:
                     return 18;
                 }
             }
@@ -1826,16 +1826,16 @@ static bool8 sub_8094A0C(void)
             if (gPSSData->cursorMonSpecies == SPECIES_NONE)
                 return FALSE;
 
-            SetMenuText(PC_TEXT_GIVE2);
+            SetMenuText(PC_TEXT_GIVE_ITEM2);
         }
         else
         {
             if (!ItemIsMail(gPSSData->cursorMonItem))
             {
-                SetMenuText(PC_TEXT_TAKE);
+                SetMenuText(PC_TEXT_TAKE_ITEM);
                 SetMenuText(PC_TEXT_BAG);
             }
-            SetMenuText(PC_TEXT_INFO);
+            SetMenuText(PC_TEXT_ITEM_INFO);
         }
     }
     else
@@ -1845,14 +1845,14 @@ static bool8 sub_8094A0C(void)
             if (gPSSData->cursorMonSpecies == SPECIES_NONE)
                 return FALSE;
 
-            SetMenuText(PC_TEXT_GIVE);
+            SetMenuText(PC_TEXT_GIVE_ITEM);
         }
         else
         {
             if (ItemIsMail(gPSSData->cursorMonItem) == TRUE)
                 return FALSE;
 
-            SetMenuText(PC_TEXT_SWITCH);
+            SetMenuText(PC_TEXT_SWITCH_ITEM);
         }
     }
 

@@ -2177,6 +2177,13 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * when on the main one. do setup for mon variants as well. - IMPORTANT
 * pokedex listings are on pokemon.c   close to sSpeciesToHoennPokedexNum
 * 
+* check trainer_tower_sets.c   trainer tower sets have personality value, that seems to set personality
+* for mon.  see if could use for setting nature in trainer stuff.
+* 
+* // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is 
+//       only space for 25 additional trainers before trainer flag space overflows.
+//       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
+* 
 */
 
 goto PRIORITY_EFFECTS	//battle_main.c all effects regarding priority changes go here.
