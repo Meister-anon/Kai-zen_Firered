@@ -3107,15 +3107,15 @@ void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //important can use thi
         u16 moveLevel;
         u16 move;
 
-        moveLevel = (gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_LV);
+        moveLevel = (gLevelUpLearnsets[species][i].level);
 
         if (moveLevel == 0)
             continue; //ok this line means after evo move learning code changes are in, still need test if works
 
-        if (moveLevel > (level << 9)) // prevents learnign moves above level
+        if (moveLevel > level) // prevents learnign moves above level
             break;
 
-        move = (gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_ID);
+        move = (gLevelUpLearnsets[species][i].move);
 
         if (GiveMoveToBoxMon(boxMon, move) == LEVEL_UP_END) // this may be the move learn function I need.
             DeleteFirstMoveAndGiveMoveToBoxMon(boxMon, move); //important since I know boxmon works for enemy npc & i think wild as well.
@@ -3136,18 +3136,18 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try 
     {
         sLearningMoveTableID = 0;
 
-        while ((gLevelUpLearnsets[species][sLearningMoveTableID] & LEVEL_UP_MOVE_LV) != (level << 9))// || (gLevelUpLearnsets[species][sLearningMoveTableID] & LEVEL_UP_MOVE_LV) != 0)
+        while ((gLevelUpLearnsets[species][sLearningMoveTableID].level) != level)// || (gLevelUpLearnsets[species][sLearningMoveTableID].level) != 0)
         {
             sLearningMoveTableID++;
-            if (gLevelUpLearnsets[species][sLearningMoveTableID] == LEVEL_UP_END
-            && gLevelUpLearnsets[species][sLearningMoveTableID] == 0)
+            if (gLevelUpLearnsets[species][sLearningMoveTableID].move == LEVEL_UP_END
+            && gLevelUpLearnsets[species][sLearningMoveTableID].move == 0)
                 return 0;
         }
     }//need test lvl 0 evo move learn
 
-    if ((gLevelUpLearnsets[species][sLearningMoveTableID] & LEVEL_UP_MOVE_LV) == (level << 9) || (gLevelUpLearnsets[species][sLearningMoveTableID] & LEVEL_UP_MOVE_LV) == 0)
+    if ((gLevelUpLearnsets[species][sLearningMoveTableID].level) == level || (gLevelUpLearnsets[species][sLearningMoveTableID].level) == 0)
     {
-        gMoveToLearn = (gLevelUpLearnsets[species][sLearningMoveTableID] & LEVEL_UP_MOVE_ID);
+        gMoveToLearn = (gLevelUpLearnsets[species][sLearningMoveTableID].move);
         sLearningMoveTableID++;
         retVal = GiveMoveToMon(mon, gMoveToLearn);
     }
@@ -7253,23 +7253,23 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
     {
         u16 moveLevel;
 
-        if (gLevelUpLearnsets[species][i] == LEVEL_UP_END)
+        if (gLevelUpLearnsets[species][i].move == LEVEL_UP_END)
             break;
 
-        moveLevel = gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_LV;
+        moveLevel = gLevelUpLearnsets[species][i].level;
 
-        if (moveLevel <= (level << 9))
+        if (moveLevel <= level)
         {
-            for (j = 0; j < MAX_MON_MOVES && learnedMoves[j] != (gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_ID); j++)
+            for (j = 0; j < MAX_MON_MOVES && learnedMoves[j] != (gLevelUpLearnsets[species][i].move); j++)
                 ;
 
             if (j == MAX_MON_MOVES)
             {
-                for (k = 0; k < numMoves && moves[k] != (gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_ID); k++)
+                for (k = 0; k < numMoves && moves[k] != (gLevelUpLearnsets[species][i].move); k++)
                     ;
 
                 if (k == numMoves)
-                    moves[numMoves++] = gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_ID;
+                    moves[numMoves++] = gLevelUpLearnsets[species][i].move;
             }
         }
     }
@@ -7282,8 +7282,8 @@ u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves)
     u8 numMoves = 0;
     int i;
 
-    for (i = 0; i < MAX_LEVEL_UP_MOVES && gLevelUpLearnsets[species][i] != LEVEL_UP_END; i++) //20 again, 
-         moves[numMoves++] = gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_ID;
+    for (i = 0; i < MAX_LEVEL_UP_MOVES && gLevelUpLearnsets[species][i].move != LEVEL_UP_END; i++) //20 again, 
+         moves[numMoves++] = gLevelUpLearnsets[species][i].move;
 
      return numMoves;
 } //checked adn emeeald has thee 20 listed as "max level up moves" so itis a limit
@@ -7307,23 +7307,23 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
     {
         u16 moveLevel;
 
-        if (gLevelUpLearnsets[species][i] == LEVEL_UP_END)
+        if (gLevelUpLearnsets[species][i].move == LEVEL_UP_END)
             break;
 
-        moveLevel = gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_LV;
+        moveLevel = gLevelUpLearnsets[species][i].level;
 
-        if (moveLevel <= (level << 9))
+        if (moveLevel <= level)
         {
-            for (j = 0; j < MAX_MON_MOVES && learnedMoves[j] != (gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_ID); j++)
+            for (j = 0; j < MAX_MON_MOVES && learnedMoves[j] != (gLevelUpLearnsets[species][i].move); j++)
                 ;
 
             if (j == MAX_MON_MOVES)
             {
-                for (k = 0; k < numMoves && moves[k] != (gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_ID); k++)
+                for (k = 0; k < numMoves && moves[k] != (gLevelUpLearnsets[species][i].move); k++)
                     ;
 
                 if (k == numMoves)
-                    moves[numMoves++] = gLevelUpLearnsets[species][i] & LEVEL_UP_MOVE_ID;
+                    moves[numMoves++] = gLevelUpLearnsets[species][i].move;
             }
         }
     }

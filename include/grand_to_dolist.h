@@ -2169,11 +2169,13 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * tweaked costume pikachu based on radical red, where each is a different type.
 * plan for distribution is, in mongeneration function for wild battles if species would be species pikachu, have 5% chance to swap and generate
 * a costume pikachu (not one of the hats)
+* //since changed to radicla red standard will need to update learnsets, consider radical red showdown for learnets
 * 
 * removed item1 item2 from base stat data to add back later when item expansion done
 * also gender based forms, I moved to new species etc. won't show up in pokedex as of yet.
 * only the male/base form is displayed need to setup logic, for pokedex to move between the forms
 * when on the main one. do setup for mon variants as well. - IMPORTANT
+* pokedex listings are on pokemon.c   close to sSpeciesToHoennPokedexNum
 * 
 */
 

@@ -912,7 +912,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
         [SPECIES_GLASTRIER] = sGlastrierLevelUpLearnset,
         [SPECIES_SPECTRIER] = sSpectrierLevelUpLearnset,
         [SPECIES_CALYREX] = sCalyrexLevelUpLearnset,
-#ifdef LEGENDS_ARCEUS
+
         [SPECIES_WYRDEER] = sWyrdeerLevelUpLearnset,
         [SPECIES_KLEAVOR] = sKleavorLevelUpLearnset,
         [SPECIES_URSALUNA] = sUrsalunaLevelUpLearnset,
@@ -920,7 +920,9 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
         [SPECIES_SNEASLER] = sSneaslerLevelUpLearnset,
         [SPECIES_OVERQWIL] = sOverqwilLevelUpLearnset,
         [SPECIES_ENAMORUS] = sEnamorusLevelUpLearnset,
-#endif
+
+        [SPECIES_CEFIREON] = sCefireonLevelUpLearnset,
+
         // Megas
         [SPECIES_VENUSAUR_MEGA] = sVenusaurLevelUpLearnset,
         [SPECIES_CHARIZARD_MEGA_X] = sCharizardLevelUpLearnset,
@@ -1020,7 +1022,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
         [SPECIES_YAMASK_GALARIAN] = sYamaskGalarianLevelUpLearnset,
         [SPECIES_STUNFISK_GALARIAN] = sStunfiskGalarianLevelUpLearnset,
 //#endif
-#ifdef LEGENDS_ARCEUS
+//#ifdef LEGENDS_ARCEUS
         // Hisuian Forms
         [SPECIES_GROWLITHE_HISUIAN] = sGrowlitheHisuianLevelUpLearnset,
         [SPECIES_ARCANINE_HISUIAN] = sArcanineHisuianLevelUpLearnset,
@@ -1043,9 +1045,9 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
 //#endif
 //#if P_GEN_7_POKEMON == TRUE
         [SPECIES_DECIDUEYE_HISUIAN] = sDecidueyeHisuianLevelUpLearnset,
-#endif
+//#endif
         // Misc Forms
-        // Cosplay Pikachu
+        // Cosplay Pikachu  //since changed to radicla red standard will need to update learnsets, consider radical red showdown for learnets
         [SPECIES_PIKACHU_COSPLAY] = sPikachuLevelUpLearnset,
         [SPECIES_PIKACHU_ROCK_STAR] = sPikachuLevelUpLearnset,
         [SPECIES_PIKACHU_BELLE] = sPikachuLevelUpLearnset,
@@ -1340,4 +1342,6 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
         // Calyrex
         [SPECIES_CALYREX_ICE_RIDER] = sCalyrexIceRiderLevelUpLearnset,
         [SPECIES_CALYREX_SHADOW_RIDER] = sCalyrexShadowRiderLevelUpLearnset,
+        // Enamorus
+        [SPECIES_ENAMORUS_THERIAN] = sEnamorusLevelUpLearnset,
 };
