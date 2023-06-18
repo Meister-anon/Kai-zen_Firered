@@ -114,8 +114,10 @@ static const struct CombinedMove sCombinedMoves[2] =
     {0xFFFF, 0xFFFF, 0xFFFF}
 };
 
-static const u16 sSpeciesToHoennPokedexNum[] = // Assigns all species to the Hoenn Dex Index (Summary No. for Hoenn Dex)
-{ // if I want truly acacurate to files, I should add the missing names for later evolutions like rhyperior & magnezone, but it'll work as is. (I think)
+// Assigns all species to the Hoenn Dex Index (Summary No. for Hoenn Dex)
+// if I want truly acacurate to files, I should add the missing names for later evolutions like rhyperior & magnezone, but it'll work as is. (I think)
+static const u16 sSpeciesToHoennPokedexNum[] = 
+{
     SPECIES_TO_HOENN(BULBASAUR),
     SPECIES_TO_HOENN(IVYSAUR),
     SPECIES_TO_HOENN(VENUSAUR),
@@ -505,7 +507,8 @@ static const u16 sSpeciesToHoennPokedexNum[] = // Assigns all species to the Hoe
     SPECIES_TO_HOENN(CHIMECHO),
 };
 
-static const u16 sSpeciesToNationalPokedexNum[] = // Assigns all species to the National Dex Index (Summary No. for National Dex)
+// Assigns all species to the National Dex Index (Summary No. for National Dex)
+static const u16 sSpeciesToNationalPokedexNum[] = 
 {
     SPECIES_TO_NATIONAL(BULBASAUR),
     SPECIES_TO_NATIONAL(IVYSAUR),
@@ -3433,7 +3436,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         spAttack = (150 * spAttack) / 100;
     if (attacker->ability == ABILITY_MINUS && ABILITY_ON_FIELD2(ABILITY_PLUS))
         spAttack = (150 * spAttack) / 100;
-    if (attacker->ability == ABILTY_UNKNOWN_POWER && GetMonData(BATTLE_PARTNER(gBattlerAttacker), MON_DATA_SPECIES, NULL) == SPECIES_UNOWN))
+    if (attacker->ability == ABILTY_UNKNOWN_POWER && (BATTLE_PARTNER(attacker->species) == SPECIES_UNOWN))
         gBattleMoveDamage *= 2;
     if (attacker->ability == ABILITY_GUTS && attacker->status1 & STATUS1_ANY)
         attack = (150 * attack) / 100;

@@ -1935,7 +1935,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FERALIGATR] =
+    [NATIONAL_DEX_FERALIGATOR] =
     {
         .categoryName = _("Big Jaw"),
         .height = 23,

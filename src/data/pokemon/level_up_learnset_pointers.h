@@ -1,4 +1,4 @@
-const u16 *const gLevelUpLearnsets[NUM_SPECIES] =
+const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
 { //since I want mega evos  to be permanent remember to add pointers 
     //for mega evos to normal mon learnsets and add on to this file
     [SPECIES_NONE] = sBulbasaurLevelUpLearnset,

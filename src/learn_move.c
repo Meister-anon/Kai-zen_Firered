@@ -137,9 +137,9 @@ struct LearnMoveGfxResources
     u8 unk_1C;
     u8 unk_1D;
     u8 unk_1E;
-    struct ListMenuItem listMenuItems[25];
-    u16 learnableMoves[25];
-    u8 listMenuStrbufs[25][MOVE_NAME_LENGTH + 1];
+    struct ListMenuItem listMenuItems[MAX_LEVEL_UP_MOVES + 1];
+    u16 learnableMoves[MAX_LEVEL_UP_MOVES + 1]; //ok looking at emerald at looks like possible max move relearner moves, as that's 25? don't know why higher than lvl up moves
+    u8 listMenuStrbufs[MAX_LEVEL_UP_MOVES + 1][MOVE_NAME_LENGTH + 1];//replace 25 with max move learn +1, way code is used think need it to be at min 1 greater
     bool8 scheduleMoveInfoUpdate;
     u8 selectedPartyMember;
     u8 selectedMoveSlot;

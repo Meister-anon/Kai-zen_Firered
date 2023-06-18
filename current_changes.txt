@@ -2703,7 +2703,7 @@ index 89da836f..06d841fd 100644
 -#define HOENN_DEX_TYPHLOSION    312
 -#define HOENN_DEX_TOTODILE      313
 -#define HOENN_DEX_CROCONAW      314
--#define HOENN_DEX_FERALIGATR    315
+-#define HOENN_DEX_FERALIGATOR    315
 -#define HOENN_DEX_SENTRET       316
 -#define HOENN_DEX_FURRET        317
 -#define HOENN_DEX_HOOTHOOT      318
@@ -28688,7 +28688,7 @@ index 2dbde148..2752058c 100644
 +        .noFlip = FALSE,
      },
 +
-     [SPECIES_FERALIGATR] =
+     [SPECIES_FERALIGATOR] =
      {
          .baseHP = 85,
 @@ -4977,26 +4535,23 @@ const struct BaseStats gBaseStats[] =
@@ -61812,7 +61812,7 @@ index c9b0cf71..24ee5a65 100644
 -    [SPECIES_CYNDAQUIL]  = {{EVO_LEVEL, 14, SPECIES_QUILAVA}},
 -    [SPECIES_QUILAVA]    = {{EVO_LEVEL, 36, SPECIES_TYPHLOSION}},
 -    [SPECIES_TOTODILE]   = {{EVO_LEVEL, 18, SPECIES_CROCONAW}},
--    [SPECIES_CROCONAW]   = {{EVO_LEVEL, 30, SPECIES_FERALIGATR}},
+-    [SPECIES_CROCONAW]   = {{EVO_LEVEL, 30, SPECIES_FERALIGATOR}},
 -    [SPECIES_SENTRET]    = {{EVO_LEVEL, 15, SPECIES_FURRET}},
 -    [SPECIES_HOOTHOOT]   = {{EVO_LEVEL, 20, SPECIES_NOCTOWL}},
 -    [SPECIES_LEDYBA]     = {{EVO_LEVEL, 18, SPECIES_LEDIAN}},
@@ -61975,7 +61975,7 @@ index c9b0cf71..24ee5a65 100644
 +    [SPECIES_CYNDAQUIL] = {{EVO_LEVEL, 14, SPECIES_QUILAVA}},
 +    [SPECIES_QUILAVA] = {{EVO_LEVEL, 36, SPECIES_TYPHLOSION}},
 +    [SPECIES_TOTODILE] = {{EVO_LEVEL, 18, SPECIES_CROCONAW}},
-+    [SPECIES_CROCONAW] = {{EVO_LEVEL, 30, SPECIES_FERALIGATR}},
++    [SPECIES_CROCONAW] = {{EVO_LEVEL, 30, SPECIES_FERALIGATOR}},
 +    [SPECIES_SENTRET] = {{EVO_LEVEL, 15, SPECIES_FURRET}},
 +    [SPECIES_HOOTHOOT] = {{EVO_LEVEL, 20, SPECIES_NOCTOWL}},
 +    [SPECIES_LEDYBA] = {{EVO_LEVEL, 18, SPECIES_LEDIAN}},
@@ -65117,7 +65117,7 @@ index 1f388e05..6ceff22e 100644
 +        .trainerOffset = 0,
      },
  
-     [NATIONAL_DEX_FERALIGATR] =
+     [NATIONAL_DEX_FERALIGATOR] =
      {
 -        .categoryName = _("BIG JAW"),
 +        .categoryName = _("Big Jaw"),
@@ -75171,7 +75171,7 @@ index a8cfa220..15288f71 100644
      NATIONAL_DEX_FEAROW,
      NATIONAL_DEX_FEEBAS,
 +    NATIONAL_DEX_FENNEKIN,
-     NATIONAL_DEX_FERALIGATR,
+     NATIONAL_DEX_FERALIGATOR,
 +    NATIONAL_DEX_FERROSEED,
 +    NATIONAL_DEX_FERROTHORN,
 +    NATIONAL_DEX_FINNEON,
@@ -76732,7 +76732,7 @@ index a8cfa220..15288f71 100644
      NATIONAL_DEX_SEALEO,
      NATIONAL_DEX_TAUROS,
 -    NATIONAL_DEX_SHARPEDO,
-     NATIONAL_DEX_FERALIGATR,
+     NATIONAL_DEX_FERALIGATOR,
 +    NATIONAL_DEX_SHARPEDO,
 +    NATIONAL_DEX_EISCUE,
      NATIONAL_DEX_SEEL,
@@ -78165,7 +78165,7 @@ index a8cfa220..15288f71 100644
 +    NATIONAL_DEX_SILICOBRA,
 +    NATIONAL_DEX_GLASTRIER,
 +    //NATIONAL_DEX_MEWTWO, // Mega X
-     NATIONAL_DEX_FERALIGATR,
+     NATIONAL_DEX_FERALIGATOR,
 +    NATIONAL_DEX_HARIYAMA,
 +    //NATIONAL_DEX_LATIOS, // Mega
 +    NATIONAL_DEX_SILVALLY,
@@ -86906,7 +86906,7 @@ index b8a96feb..67f519d0 100644
 +        .size = 0x78,
 +        .y_offset = 2,
      },
-     [SPECIES_FERALIGATR] =
+     [SPECIES_FERALIGATOR] =
      {
 -        .size = 0x88,
 -        .y_offset = 0x01,
@@ -95098,7 +95098,7 @@ index 1bb67f1f..5cbce5f2 100644
 -        .y_offset = 0x06,
 +        .y_offset = 5,
      },
-     [SPECIES_FERALIGATR] =
+     [SPECIES_FERALIGATOR] =
      {
          .size = 0x88,
 -        .y_offset = 0x00,
@@ -104224,7 +104224,7 @@ index f30fe296..9d5c3ebd 100644
 +    [SPECIES_TYPHLOSION] = _("Typhlosion"),
 +    [SPECIES_TOTODILE] = _("Totodile"),
 +    [SPECIES_CROCONAW] = _("Croconaw"),
-+    [SPECIES_FERALIGATR] = _("Feraligatr"),
++    [SPECIES_FERALIGATOR] = _("Feraligatr"),
 +    [SPECIES_SENTRET] = _("Sentret"),
 +    [SPECIES_FURRET] = _("Furret"),
 +    [SPECIES_HOOTHOOT] = _("Hoothoot"),
@@ -107336,7 +107336,7 @@ index 2ca312ae..470a4378 100644
 -    [SPECIES_TYPHLOSION]  = gMonIcon_Typhlosion,
 -    [SPECIES_TOTODILE]    = gMonIcon_Totodile,
 -    [SPECIES_CROCONAW]    = gMonIcon_Croconaw,
--    [SPECIES_FERALIGATR]  = gMonIcon_Feraligatr,
+-    [SPECIES_FERALIGATOR]  = gMonIcon_Feraligatr,
 -    [SPECIES_SENTRET]     = gMonIcon_Sentret,
 -    [SPECIES_FURRET]      = gMonIcon_Furret,
 -    [SPECIES_HOOTHOOT]    = gMonIcon_Hoothoot,
@@ -107777,7 +107777,7 @@ index 2ca312ae..470a4378 100644
 +    [SPECIES_TYPHLOSION] = gMonIcon_Typhlosion,
 +    [SPECIES_TOTODILE] = gMonIcon_Totodile,
 +    [SPECIES_CROCONAW] = gMonIcon_Croconaw,
-+    [SPECIES_FERALIGATR] = gMonIcon_Feraligatr,
++    [SPECIES_FERALIGATOR] = gMonIcon_Feraligatr,
 +    [SPECIES_SENTRET] = gMonIcon_Sentret,
 +    [SPECIES_FURRET] = gMonIcon_Furret,
 +    [SPECIES_HOOTHOOT] = gMonIcon_Hoothoot,
@@ -108990,7 +108990,7 @@ index 2ca312ae..470a4378 100644
 -    [SPECIES_TYPHLOSION]  = 1,
 -    [SPECIES_TOTODILE]    = 2,
 -    [SPECIES_CROCONAW]    = 2,
--    [SPECIES_FERALIGATR]  = 2,
+-    [SPECIES_FERALIGATOR]  = 2,
 -    [SPECIES_SENTRET]     = 2,
 -    [SPECIES_FURRET]      = 2,
 -    [SPECIES_HOOTHOOT]    = 2,
@@ -109428,7 +109428,7 @@ index 2ca312ae..470a4378 100644
 +    [SPECIES_TYPHLOSION] = 1,
 +    [SPECIES_TOTODILE] = 2,
 +    [SPECIES_CROCONAW] = 2,
-+    [SPECIES_FERALIGATR] = 2,
++    [SPECIES_FERALIGATOR] = 2,
 +    [SPECIES_SENTRET] = 2,
 +    [SPECIES_FURRET] = 2,
 +    [SPECIES_HOOTHOOT] = 2,

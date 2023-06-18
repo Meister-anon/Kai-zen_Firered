@@ -11889,10 +11889,6 @@ const struct BaseStats gBaseStats[] =
         //#if P_UPDATED_TYPES >= GEN_6
             .type1 = TYPE_PSYCHIC,
             .type2 = TYPE_FAIRY,
-       // #ifdef BATTLE_ENGINE
-            .type1 = TYPE_PSYCHIC,
-            .type2 = TYPE_PSYCHIC,
-        // #endif
         .catchRate = 145,
         .expYield = 62,
         //.evYield_SpDefense = 1,
@@ -12680,10 +12676,6 @@ const struct BaseStats gBaseStats[] =
         //#if P_UPDATED_TYPES >= GEN_6
             .type1 = TYPE_FAIRY,
             .type2 = TYPE_FLYING,
-       // #ifdef BATTLE_ENGINE
-            .type1 = TYPE_NORMAL,
-            .type2 = TYPE_FAIRY,
-        // #endif
         .catchRate = 30,
         .expYield = 245,
         //.evYield_SpAttack = 2,
@@ -31323,9 +31315,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PICKUP, ABILITY_FRISK},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_PICKUP, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_INSOMNIA, ABILITY_PICKPOCKET},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,

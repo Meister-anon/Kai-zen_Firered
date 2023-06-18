@@ -2170,6 +2170,11 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * plan for distribution is, in mongeneration function for wild battles if species would be species pikachu, have 5% chance to swap and generate
 * a costume pikachu (not one of the hats)
 * 
+* removed item1 item2 from base stat data to add back later when item expansion done
+* also gender based forms, I moved to new species etc. won't show up in pokedex as of yet.
+* only the male/base form is displayed need to setup logic, for pokedex to move between the forms
+* when on the main one. do setup for mon variants as well. - IMPORTANT
+* 
 */
 
 goto PRIORITY_EFFECTS	//battle_main.c all effects regarding priority changes go here.
