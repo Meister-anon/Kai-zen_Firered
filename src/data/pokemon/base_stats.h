@@ -5887,7 +5887,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PICKUP, ABILITY_QUICK_FEET},
-            .abilityHidden = {ABILITY_HONEY_GATHER, ABILITY_NONE},
+            .abilityHidden = {ABILITY_HONEY_GATHER, ABILITY_CUTE_CHARM},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -5913,7 +5913,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_QUICK_FEET},
-            .abilityHidden = {ABILITY_UNNERVE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_UNNERVE, ABILITY_GORILLA_TACTICS},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -10341,6 +10341,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },//delve into their ability to turn invisible
@@ -10367,6 +10368,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -10391,6 +10393,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_DRIZZLE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -10415,6 +10418,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_DROUGHT, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -10440,6 +10444,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_AIR_LOCK, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -10466,6 +10471,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_SERENE_GRACE, ABILITY_MAGIC_BOUNCE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -10492,6 +10498,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -11429,7 +11436,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_GIFT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = TRUE,
@@ -17451,6 +17458,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_ABSOLUTE_ZERO, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },//absolute zero, turns all water type attacks into ice type attacks field wide, think also change type effect like ecosystem eto resist ice - DONE
@@ -17475,6 +17483,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_JUSTIFIED, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -17503,6 +17512,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_SERENE_GRACE, ABILITY_MAGIC_GUARD},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -17529,6 +17539,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_DOWNLOAD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -19461,7 +19472,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
+        .abilities = {ABILITY_OVERGROW, ABILITY_OVERGROW},
         .abilityHidden = {ABILITY_LONG_REACH, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -19486,7 +19497,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
+        .abilities = {ABILITY_OVERGROW, ABILITY_OVERGROW},
         .abilityHidden = {ABILITY_LONG_REACH, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -19511,7 +19522,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
+        .abilities = {ABILITY_OVERGROW, ABILITY_OVERGROW},
         .abilityHidden = {ABILITY_LONG_REACH, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -19695,9 +19706,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_SKILL_LINK},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_PICKUP, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -19725,9 +19733,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_SKILL_LINK},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_PICKUP, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -19756,9 +19761,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_SKILL_LINK},
             .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -19786,9 +19788,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STAKEOUT, ABILITY_STRONG_JAW},
             .abilityHidden = {ABILITY_ADAPTABILITY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -19816,9 +19815,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STAKEOUT, ABILITY_STRONG_JAW},
             .abilityHidden = {ABILITY_ADAPTABILITY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },//give first impressions as evo move & facade
@@ -19843,6 +19839,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_BUG,
         .eggGroup2 = EGG_GROUP_BUG,
         .abilities = {ABILITY_SWARM, ABILITY_ANTICIPATION},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -19871,9 +19868,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_BUG,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BATTERY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -19898,6 +19893,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_BUG,
         .eggGroup2 = EGG_GROUP_BUG,
         .abilities = {ABILITY_GALVANIZE, ABILITY_MOTOR_DRIVE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -19925,9 +19921,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HYPER_CUTTER, ABILITY_IRON_FIST},
             .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_REGENERATOR},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_HYPER_CUTTER, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -19955,9 +19948,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HYPER_CUTTER, ABILITY_IRON_FIST},
             .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_REFRIGERATE},    //thought to remove something to keep regeneraor & refrigerate but type still not good to switch with
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_HYPER_CUTTER, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -19986,8 +19976,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DANCER, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -20018,9 +20007,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HONEY_GATHER, ABILITY_SHIELD_DUST},
             .abilityHidden = {ABILITY_SWEET_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_SHIELD_DUST},
-        // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -20050,9 +20036,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HONEY_GATHER, ABILITY_SHIELD_DUST},
             .abilityHidden = {ABILITY_SWEET_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_SHIELD_DUST},
-        // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -20106,9 +20089,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_SAND_RUSH},
             .abilityHidden = {ABILITY_STEADFAST, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -20135,7 +20115,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SCHOOLING, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -20164,9 +20144,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MERCILESS, ABILITY_LIMBER},
             .abilityHidden = {ABILITY_REGENERATOR, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_LIMBER},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -20194,9 +20171,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MERCILESS, ABILITY_LIMBER},
             .abilityHidden = {ABILITY_REGENERATOR, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_LIMBER},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -20215,7 +20189,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 77,
         //.evYield_Attack = 1,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_LIGHT_CLAY,
+           // .item2 = ITEM_LIGHT_CLAY, Vsonic
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,
@@ -20225,9 +20199,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_OWN_TEMPO, ABILITY_STAMINA},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_OWN_TEMPO, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -20247,7 +20218,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 175,
         //.evYield_Attack = 2,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_LIGHT_CLAY,
+            //.item2 = ITEM_LIGHT_CLAY,  vsonic
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,
@@ -20257,9 +20228,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_OWN_TEMPO, ABILITY_STAMINA},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_OWN_TEMPO, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -20287,9 +20255,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_BUG,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WATER_BUBBLE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_WATER_BUBBLE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_WATER_ABSORB, ABILITY_ANTICIPATION},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -20317,10 +20282,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_BUG,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WATER_BUBBLE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_WATER_BUBBLE, ABILITY_NONE},
-        // #endif
-        .abilityHidden = {ABILITY_LIQUID_VOICE, ABILITY_DAMP},
+        .abilityHidden = {ABILITY_WATER_ABSORB, ABILITY_DAMP},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -20348,9 +20310,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_LEAF_GUARD, ABILITY_NONE},
             .abilityHidden = {ABILITY_CONTRARY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -20378,9 +20337,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_LEAF_GUARD, ABILITY_NONE},
             .abilityHidden = {ABILITY_CONTRARY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -20461,9 +20417,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CORROSION, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_OBLIVIOUS, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -20491,9 +20444,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CORROSION, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_OBLIVIOUS, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -20520,9 +20470,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLUFFY, ABILITY_KLUTZ},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_CUTE_CHARM, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
@@ -20550,9 +20497,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLUFFY, ABILITY_KLUTZ},
             .abilityHidden = {ABILITY_UNNERVE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -20571,7 +20515,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 42,
         //.evYield_HP = 1,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_GRASSY_SEED,
+          //  .item2 = ITEM_GRASSY_SEED,  VSONIC
         // #endif
         .genderRatio = MON_FEMALE,
         .eggCycles = 20,
@@ -20582,9 +20526,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_LEAF_GUARD, ABILITY_OBLIVIOUS},
             .abilityHidden = {ABILITY_SWEET_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_OBLIVIOUS},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -20603,7 +20544,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 102,
         //.evYield_Speed = 2,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_GRASSY_SEED,
+          //  .item2 = ITEM_GRASSY_SEED,  VSONIC
         // #endif
         .genderRatio = MON_FEMALE,
         .eggCycles = 20,
@@ -20614,9 +20555,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_LEAF_GUARD, ABILITY_OBLIVIOUS},
             .abilityHidden = {ABILITY_SWEET_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_OBLIVIOUS},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -20635,7 +20573,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 230,
         //.evYield_Attack = 3,
        // #ifdef ITEM_EXPANSION
-            .item1 = ITEM_GRASSY_SEED,
+            //.item1 = ITEM_GRASSY_SEED,  VSONIC
         // #endif
         .genderRatio = MON_FEMALE,
         .eggCycles = 20,
@@ -20646,9 +20584,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_LEAF_GUARD, ABILITY_QUEENLY_MAJESTY},
             .abilityHidden = {ABILITY_SWEET_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -20667,7 +20602,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 170,
         //.evYield_SpDefense = 2,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_MISTY_SEED,
+           // .item2 = ITEM_MISTY_SEED, VSONIC
         // #endif
         .genderRatio = PERCENT_FEMALE(75),
         .eggCycles = 20,
@@ -20677,9 +20612,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_GRASS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_TRIAGE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_NATURAL_CURE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -20706,10 +20638,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_TELEPATHY, ABILITY_FOREWARN},  //removd inner focus, prevents intimidate but its a special attacker
-            .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_GORILLA_TACTICS},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_INNER_FOCUS, ABILITY_NONE},
-        // #endif
+            .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_INNER_FOCUS}, //ok I like gorilla tactics but it just doesn't mesh with the theme of the mon. its too violent
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -20736,9 +20665,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RECEIVER, ABILITY_NONE},
             .abilityHidden = {ABILITY_DEFIANT, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -20817,9 +20743,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WATER_COMPACTION, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -20847,9 +20770,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WATER_COMPACTION, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -20877,10 +20797,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_INNARDS_OUT, ABILITY_NONE},
             .abilityHidden = {ABILITY_UNAWARE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
-        .bodyColor = BODY_COLOR_BLACK,  //give trick room
+        .bodyColor = BODY_COLOR_BLACK,  //give trick room   VSONIC
         .noFlip = FALSE,
     },
 
@@ -20904,6 +20821,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_BATTLE_ARMOR, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -20930,7 +20848,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -20960,7 +20878,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -20988,7 +20906,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_COMATOSE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -21015,6 +20933,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_DRAGON,
         .abilities = {ABILITY_SHELL_ARMOR, ABILITY_ROCK_HEAD},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -21033,7 +20952,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 152,
         //.evYield_Attack = 2,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_ELECTRIC_SEED,
+           // .item2 = ITEM_ELECTRIC_SEED,  VSONINC
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 10,
@@ -21043,9 +20962,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FAIRY,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_IRON_BARBS, ABILITY_LIGHTNING_ROD},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_LIGHTNING_ROD},
-        // #endif
         .abilityHidden = {ABILITY_STURDY, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -21074,7 +20990,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DISGUISE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -21094,7 +21010,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 166,
         //.evYield_Attack = 2,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_RAZOR_FANG,
+          //  .item2 = ITEM_RAZOR_FANG,  vsonic
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 15,
@@ -21105,9 +21021,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DAZZLING, ABILITY_STRONG_JAW},
             .abilityHidden = {ABILITY_WONDER_SKIN, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -21134,9 +21047,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BERSERK, ABILITY_SAP_SIPPER},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_CLOUD_NINE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -21164,7 +21074,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STEELWORKER, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -21195,9 +21105,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BULLETPROOF, ABILITY_SOUNDPROOF},
             .abilityHidden = {ABILITY_OVERCOAT, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_SOUNDPROOF},
-        // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -21227,9 +21134,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BULLETPROOF, ABILITY_SOUNDPROOF},
             .abilityHidden = {ABILITY_OVERCOAT, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_SOUNDPROOF},
-        // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -21259,9 +21163,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BULLETPROOF, ABILITY_SOUNDPROOF},
             .abilityHidden = {ABILITY_OVERCOAT, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_SOUNDPROOF},
-        // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -21288,9 +21189,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_ELECTRIC_SURGE, ABILITY_NONE},
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -21317,9 +21215,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PSYCHIC_SURGE, ABILITY_NONE},
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -21346,9 +21241,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GRASSY_SURGE, ABILITY_NONE},
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -21375,9 +21267,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MISTY_SURGE, ABILITY_NONE},
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -21404,7 +21293,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_UNAWARE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -21431,6 +21320,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_STURDY, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -21457,7 +21347,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FULL_METAL_BODY, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -21485,7 +21375,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHADOW_SHIELD, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -21513,7 +21403,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BEAST_BOOST, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -21543,7 +21433,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BEAST_BOOST, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -21572,7 +21462,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BEAST_BOOST, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -21601,7 +21491,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BEAST_BOOST, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -21632,7 +21522,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BEAST_BOOST, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -21661,7 +21551,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BEAST_BOOST, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -21690,9 +21580,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CORRUPTION, ABILITY_NONE },
             .abilityHidden = {ABILITY_BEAST_BOOST, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
         .flags = F_ULTRA_BEAST,
@@ -21721,12 +21608,12 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PRISM_ARMOR, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },//light devour(er) add on to prism armor, any light based move used by enemy is canceled and heals necrozma instead,also gets healing in harsh sunlight
-    //moves solar beam, synthesis, moonlight, morning sun, etc. sunny day too
+    //moves solar beam, synthesis, moonlight, morning sun, etc. sunny day too.  Do like sound just setup a flag for it
 
     [SPECIES_MAGEARNA] =
     {
@@ -21750,7 +21637,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SOUL_HEART, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -21779,7 +21666,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_TECHNICIAN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -21805,9 +21692,9 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_BEAST_BOOST, ABILITY_NONE},
+            .abilities = {ABILITY_POISONED_LEGACY, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_BEAST_BOOST, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -21834,9 +21721,9 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_BEAST_BOOST, ABILITY_NONE},
+            .abilities = {ABILITY_POISONED_LEGACY, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_BEAST_BOOST, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -21864,8 +21751,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BEAST_BOOST, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -21894,7 +21780,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BEAST_BOOST, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -21921,6 +21807,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_VOLT_ABSORB, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -21945,6 +21832,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_MAGNET_PULL, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -21971,7 +21859,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_IRON_FIST, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -22244,9 +22132,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHEEK_POUCH, ABILITY_NONE},
             .abilityHidden = {ABILITY_GLUTTONY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -22274,9 +22159,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHEEK_POUCH, ABILITY_NONE},
             .abilityHidden = {ABILITY_GLUTTONY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -22303,9 +22185,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_UNNERVE},
             .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -22332,9 +22211,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_UNNERVE},
             .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -22361,9 +22237,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PRESSURE, ABILITY_UNNERVE},
             .abilityHidden = {ABILITY_MIRROR_ARMOR, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -22409,7 +22282,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 117,
         //.evYield_SpDefense = 2,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_PSYCHIC_SEED,
+            //.item2 = ITEM_PSYCHIC_SEED,  vsonic
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 15,
@@ -22439,7 +22312,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 253,
         //.evYield_SpDefense = 3,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_PSYCHIC_SEED,
+            //.item2 = ITEM_PSYCHIC_SEED,  vsonic
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 15,
@@ -22450,9 +22323,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWARM, ABILITY_FRISK},
             .abilityHidden = {ABILITY_FOREWARN, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_SWARM, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -22479,9 +22349,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RUN_AWAY, ABILITY_UNBURDEN},
             .abilityHidden = {ABILITY_STAKEOUT, ABILITY_PICKUP},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_RUN_AWAY, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -22508,9 +22375,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RUN_AWAY, ABILITY_BANDIT_KING},
             .abilityHidden = {ABILITY_STAKEOUT, ABILITY_MAGICIAN},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_RUN_AWAY, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -22536,9 +22400,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_GRASS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_COTTON_DOWN, ABILITY_REGENERATOR},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_EFFECT_SPORE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -22565,9 +22426,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_GRASS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_COTTON_DOWN, ABILITY_REGENERATOR},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_EFFECT_SPORE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -22594,10 +22452,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLUFFY, ABILITY_RUN_AWAY},
-            .abilityHidden = {ABILITY_BULLETPROOF, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_RUN_AWAY},
-        // #endif
+            .abilityHidden = {ABILITY_BULLETPROOF, ABILITY_SAP_SIPPER},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -22623,10 +22478,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLUFFY, ABILITY_STEADFAST},
-            .abilityHidden = {ABILITY_BULLETPROOF, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
+            .abilityHidden = {ABILITY_BULLETPROOF, ABILITY_SAP_SIPPER},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -22652,9 +22504,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_1,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STRONG_JAW, ABILITY_SHELL_ARMOR},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_SHELL_ARMOR},
-        // #endif
         .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -22681,9 +22530,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_1,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STRONG_JAW, ABILITY_SHELL_ARMOR},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_SHELL_ARMOR},
-        // #endif
         .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -22711,9 +22557,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BALL_FETCH, ABILITY_NONE},
             .abilityHidden = {ABILITY_RATTLED, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -22740,9 +22583,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STRONG_JAW, ABILITY_NONE},
             .abilityHidden = {ABILITY_COMPETITIVE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -22768,9 +22608,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MINERAL,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STEAM_ENGINE, ABILITY_HEATPROOF},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_FLASH_FIRE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -22797,9 +22634,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MINERAL,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STEAM_ENGINE, ABILITY_FLAME_BODY},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_FLAME_BODY},
-        // #endif
         .abilityHidden = {ABILITY_FLASH_FIRE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -22826,9 +22660,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MINERAL,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STEAM_ENGINE, ABILITY_FLAME_BODY},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_FLAME_BODY},
-        // #endif
         .abilityHidden = {ABILITY_FLASH_FIRE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -22856,9 +22687,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RIPEN, ABILITY_GLUTTONY},
             .abilityHidden = {ABILITY_BULLETPROOF, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -22884,9 +22712,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RIPEN, ABILITY_GLUTTONY},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_HUSTLE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -22913,9 +22738,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RIPEN, ABILITY_GLUTTONY},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_THICK_FAT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -22942,9 +22764,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SAND_SPIT, ABILITY_SHED_SKIN},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_SHED_SKIN},
-        // #endif
         .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -22971,9 +22790,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SAND_SPIT, ABILITY_SHED_SKIN},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_SHED_SKIN},
-        // #endif
         .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -23001,7 +22817,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GULP_MISSILE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -23084,7 +22900,6 @@ const struct BaseStats gBaseStats[] =
             .abilities = {ABILITY_RATTLED, ABILITY_STATIC},
             .abilityHidden = {ABILITY_KLUTZ, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_STATIC},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -23112,9 +22927,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PUNK_ROCK, ABILITY_PLUS},
             .abilityHidden = {ABILITY_TECHNICIAN, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_PLUS},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -23245,9 +23057,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WEAK_ARMOR, ABILITY_NONE},
             .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -23274,9 +23083,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WEAK_ARMOR, ABILITY_NONE},
             .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -23303,9 +23109,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HEALER, ABILITY_ANTICIPATION},
             .abilityHidden = {ABILITY_MAGIC_BOUNCE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -23332,9 +23135,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HEALER, ABILITY_ANTICIPATION},
             .abilityHidden = {ABILITY_MAGIC_BOUNCE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -23361,9 +23161,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HEALER, ABILITY_ANTICIPATION},
             .abilityHidden = {ABILITY_MAGIC_BOUNCE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -23390,9 +23187,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PRANKSTER, ABILITY_FRISK},
             .abilityHidden = {ABILITY_PICKPOCKET, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -23419,9 +23213,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PRANKSTER, ABILITY_FRISK},
             .abilityHidden = {ABILITY_PICKPOCKET, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -23448,9 +23239,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PRANKSTER, ABILITY_FRISK},
             .abilityHidden = {ABILITY_PICKPOCKET, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -23477,9 +23265,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RECKLESS, ABILITY_GUTS},
             .abilityHidden = {ABILITY_DEFIANT, ABILITY_DARK_DEAL},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_GUTS},
-        // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -23506,9 +23291,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BATTLE_ARMOR, ABILITY_TOUGH_CLAWS},
             .abilityHidden = {ABILITY_STEELY_SPIRIT, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_BATTLE_ARMOR, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -23535,9 +23317,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_OCEAN_MEMORY, ABILITY_LIQUID_OOZE},
             .abilityHidden = {ABILITY_PERISH_BODY, ABILITY_LIQUID_SOUL},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -23565,9 +23344,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STEADFAST, ABILITY_NONE},
             .abilityHidden = {ABILITY_SCRAPPY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -23594,9 +23370,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_TANGLED_FEET, ABILITY_SCREEN_CLEANER},
             .abilityHidden = {ABILITY_ICE_BODY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -23623,7 +23396,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WANDERING_SPIRIT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -23651,9 +23424,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWEET_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -23680,9 +23450,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWEET_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -23708,9 +23475,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FAIRY,
         .eggGroup2 = EGG_GROUP_MINERAL,
         .abilities = {ABILITY_BATTLE_ARMOR, ABILITY_NONE},
-        //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_DEFIANT, ABILITY_NONE},
-        // #endif
+        .abilityHidden = {ABILITY_DEFIANT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -23756,7 +23521,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 37,
         //.evYield_SpAttack = 1,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_SNOWBALL,
+           // .item2 = ITEM_SNOWBALL,  VSONIC
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,
@@ -23821,7 +23586,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POWER_SPOT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -23849,7 +23614,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_ICE_FACE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -23904,7 +23669,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HUNGER_SWITCH, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -23924,7 +23689,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 66,
         //.evYield_Attack = 1,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_LAGGING_TAIL,
+          //  .item2 = ITEM_LAGGING_TAIL, vsonic  hold effect is done, but item not defined to make sure hold effects are in right place
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 25,
@@ -23935,9 +23700,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHEER_FORCE, ABILITY_NONE},
             .abilityHidden = {ABILITY_HEAVY_METAL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -23956,7 +23718,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 175,
         //.evYield_Attack = 2,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_LAGGING_TAIL,
+         //   .item2 = ITEM_LAGGING_TAIL,   vsonic
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 25,
@@ -23967,9 +23729,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHEER_FORCE, ABILITY_NONE},
             .abilityHidden = {ABILITY_HEAVY_METAL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -24050,9 +23809,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WATER_ABSORB, ABILITY_STRONG_JAW},
             .abilityHidden = {ABILITY_SAND_RUSH, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_WATER_ABSORB, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -24079,9 +23835,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WATER_ABSORB, ABILITY_ICE_BODY},
             .abilityHidden = {ABILITY_SLUSH_RUSH, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_WATER_ABSORB, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -24108,9 +23861,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_LIGHT_METAL, ABILITY_HEAVY_METAL},
             .abilityHidden = {ABILITY_STALWART, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -24137,9 +23887,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CLEAR_BODY, ABILITY_INFILTRATOR},
             .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_CLEAR_BODY, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -24166,9 +23913,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CLEAR_BODY, ABILITY_INFILTRATOR},
             .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_CLEAR_BODY, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -24195,9 +23939,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CLEAR_BODY, ABILITY_INFILTRATOR},
             .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_CLEAR_BODY, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -24223,9 +23964,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_INTREPID_SWORD, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -24251,9 +23989,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DAUNTLESS_SHIELD, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -24278,7 +24013,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
-        .bodyColor = BODY_COLOR_PURPLE,
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},  //vsonic would like make own unique ability no idea what shold be, but it does steal light? 
+        .bodyColor = BODY_COLOR_PURPLE,         //but don't want to just copy necrozma, it absorbs energy, can possibly affect space time
         .noFlip = FALSE,
     },
 
@@ -24302,6 +24038,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_INNER_FOCUS, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -24325,10 +24062,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_UNSEEN_FIST, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+        .abilities = {ABILITY_UNSEEN_FIST, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -24353,11 +24088,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_LEAF_GUARD, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
+        .abilities = {ABILITY_LEAF_GUARD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -24381,11 +24113,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_TRANSISTOR, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
+        .abilities = {ABILITY_TRANSISTOR, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -24409,11 +24138,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DRAGONS_MAW, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -24439,8 +24165,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHILLING_NEIGH, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -24468,7 +24193,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GRIM_NEIGH, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -24496,7 +24221,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_UNNERVE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -24572,7 +24297,7 @@ const struct BaseStats gBaseStats[] =
             .eggGroup1 = EGG_GROUP_FIELD,
             .eggGroup2 = EGG_GROUP_FIELD,
             .abilities = {ABILITY_GUTS, ABILITY_BULLETPROOF},
-            .abilityHidden = {ABILITY_UNNERVE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_UNNERVE, ABILITY_GORILLA_TACTICS},
             .bodyColor = BODY_COLOR_BROWN,
             .noFlip = FALSE,
         },
@@ -24728,6 +24453,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_GRASS,
         .abilities = {ABILITY_THICK_FAT, ABILITY_THICK_FAT},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -24754,7 +24480,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_TOUGH_CLAWS, ABILITY_TOUGH_CLAWS},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -24780,6 +24506,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_DRAGON,
         .abilities = {ABILITY_SUN_DISK, ABILITY_SUN_DISK},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -24806,7 +24533,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MEGA_LAUNCHER, ABILITY_MEGA_LAUNCHER},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -24836,7 +24563,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_ADAPTABILITY, ABILITY_ADAPTABILITY},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -24864,7 +24591,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NO_GUARD, ABILITY_NO_GUARD},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -24879,9 +24606,6 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 175,
         #if P_UPDATED_STATS >= GEN_7
         .baseSpDefense = 105,
-       // #ifdef BATTLE_ENGINE
-        .baseSpDefense = 95,
-        // #endif
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 50,
@@ -24895,6 +24619,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         .abilities = {ABILITY_TRACE, ABILITY_TRACE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -24920,6 +24645,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_WATER_1,
         .abilities = {ABILITY_SHELL_ARMOR, ABILITY_SHELL_ARMOR},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -24944,6 +24670,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_SHADOW_TAG, ABILITY_SHADOW_TAG},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -24970,7 +24697,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PARENTAL_BOND, ABILITY_PARENTAL_BOND},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -24998,7 +24725,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_AERILATE, ABILITY_AERILATE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -25026,7 +24753,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MOLD_BREAKER, ABILITY_MOLD_BREAKER},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -25054,7 +24781,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_TOUGH_CLAWS, ABILITY_TOUGH_CLAWS},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -25082,7 +24809,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STEADFAST, ABILITY_STEADFAST},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -25108,6 +24835,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_INSOMNIA, ABILITY_INSOMNIA},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -25134,7 +24862,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MOLD_BREAKER, ABILITY_MOLD_BREAKER},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -25163,7 +24891,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SAND_FORCE, ABILITY_SAND_FORCE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -25191,7 +24919,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_TECHNICIAN, ABILITY_TECHNICIAN},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -25219,7 +24947,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SKILL_LINK, ABILITY_SKILL_LINK},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -25247,7 +24975,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SOLAR_POWER, ABILITY_SOLAR_POWER},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -25273,6 +25001,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_MONSTER,
         .abilities = {ABILITY_SAND_STREAM, ABILITY_SAND_STREAM},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -25297,6 +25026,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_DRAGON,
         .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_LIGHTNING_ROD},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -25321,6 +25051,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_SPEED_BOOST, ABILITY_SPEED_BOOST},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -25345,6 +25076,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_WATER_1,
         .abilities = {ABILITY_SWIFT_SWIM, ABILITY_SWIFT_SWIM},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -25371,7 +25103,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PIXILATE, ABILITY_PIXILATE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -25400,7 +25132,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MAGIC_BOUNCE, ABILITY_MAGIC_BOUNCE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -25427,6 +25159,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FAIRY,
         .abilities = {ABILITY_HUGE_POWER, ABILITY_HUGE_POWER},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -25454,7 +25187,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FILTER, ABILITY_FILTER},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -25480,6 +25213,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         .abilities = {ABILITY_PURE_POWER, ABILITY_PURE_POWER},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -25504,6 +25238,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_INTIMIDATE, ABILITY_INTIMIDATE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -25531,7 +25266,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STRONG_JAW, ABILITY_STRONG_JAW},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -25560,7 +25295,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHEER_FORCE, ABILITY_SHEER_FORCE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -25588,7 +25323,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PIXILATE, ABILITY_PIXILATE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -25617,7 +25352,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PRANKSTER, ABILITY_PRANKSTER},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -25645,7 +25380,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MAGIC_BOUNCE, ABILITY_MAGIC_BOUNCE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -25672,6 +25407,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MINERAL,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_REFRIGERATE, ABILITY_REFRIGERATE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -25699,7 +25435,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_AERILATE, ABILITY_AERILATE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -25728,7 +25464,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_TOUGH_CLAWS, ABILITY_TOUGH_CLAWS},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -25753,7 +25489,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_LEVITATE, ABILITY_LEVITATE},
+        .abilities = {ABILITY_LEVITATE, ABILITY_LEVITATE},  //vsonic NEED replace for this
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -25778,6 +25515,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_LEVITATE, ABILITY_LEVITATE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -25804,7 +25542,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SCRAPPY, ABILITY_SCRAPPY},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -25832,7 +25570,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SAND_FORCE, ABILITY_SAND_FORCE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -25861,7 +25599,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_ADAPTABILITY, ABILITY_ADAPTABILITY},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -25891,7 +25629,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SNOW_WARNING, ABILITY_SNOW_WARNING},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -25917,6 +25655,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_INNER_FOCUS, ABILITY_INNER_FOCUS},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -25945,7 +25684,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HEALER, ABILITY_HEALER},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -25974,7 +25713,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MAGIC_BOUNCE, ABILITY_MAGIC_BOUNCE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
@@ -26003,7 +25742,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DELTA_STREAM, ABILITY_DELTA_STREAM},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -26031,7 +25770,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PRIMORDIAL_SEA, ABILITY_PRIMORDIAL_SEA},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -26059,7 +25798,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DESOLATE_LAND, ABILITY_DESOLATE_LAND},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -26087,9 +25826,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GLUTTONY, ABILITY_HUSTLE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_GLUTTONY, ABILITY_HUSTLE},
-        // #endif
         .abilityHidden = {ABILITY_THICK_FAT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -26118,9 +25854,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GLUTTONY, ABILITY_HUSTLE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_GLUTTONY, ABILITY_HUSTLE},
-        // #endif
         .abilityHidden = {ABILITY_THICK_FAT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -26149,7 +25882,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SURGE_SURFER, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -26170,7 +25903,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 60,
         //.evYield_Defense = 1,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_GRIP_CLAW,
+          //  .item2 = ITEM_GRIP_CLAW,  vsonic
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,
@@ -26181,9 +25914,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SNOW_CLOAK, ABILITY_NONE},
             .abilityHidden = {ABILITY_SLUSH_RUSH, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26211,9 +25941,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SNOW_CLOAK, ABILITY_NONE},
             .abilityHidden = {ABILITY_SLUSH_RUSH, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26233,7 +25960,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 60,
         //.evYield_Speed = 1,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_SNOWBALL,
+          //  .item2 = ITEM_SNOWBALL,  vsonic
         // #endif
         .genderRatio = PERCENT_FEMALE(75),
         .eggCycles = 20,
@@ -26244,9 +25971,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SNOW_CLOAK, ABILITY_MULTI_TASK},
             .abilityHidden = {ABILITY_SNOW_WARNING, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_OBLIVIOUS, ABILITY_MULTI_TASK}, //temp ability so I can use skill swap
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26275,9 +25999,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SNOW_CLOAK, ABILITY_MULTI_TASK},
             .abilityHidden = {ABILITY_SNOW_WARNING, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26306,9 +26027,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SAND_VEIL, ABILITY_TANGLING_HAIR},
             .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_SAND_VEIL, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26337,9 +26055,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SAND_VEIL, ABILITY_TANGLING_HAIR},
             .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_SAND_VEIL, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26368,9 +26083,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PICKUP, ABILITY_TECHNICIAN},
             .abilityHidden = {ABILITY_RATTLED, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_PICKUP, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26399,9 +26111,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FUR_COAT, ABILITY_TECHNICIAN},
             .abilityHidden = {ABILITY_RATTLED, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26421,7 +26130,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 60,
         //.evYield_Defense = 1,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_CELL_BATTERY,
+          //  .item2 = ITEM_CELL_BATTERY, vsonic
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 15,
@@ -26452,7 +26161,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 137,
         //.evYield_Defense = 2,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_CELL_BATTERY,
+         //   .item2 = ITEM_CELL_BATTERY,  vsonic
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 15,
@@ -26511,7 +26220,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 65,
         //.evYield_HP = 1,
        // #ifdef ITEM_EXPANSION
-            .item2 = ITEM_BLACK_SLUDGE,
+         //   .item2 = ITEM_BLACK_SLUDGE,  vsonic
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,
@@ -26522,9 +26231,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POISON_TOUCH, ABILITY_GLUTTONY},
             .abilityHidden = {ABILITY_POWER_OF_ALCHEMY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26553,9 +26259,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POISON_TOUCH, ABILITY_GLUTTONY},
             .abilityHidden = {ABILITY_POWER_OF_ALCHEMY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26583,9 +26286,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FRISK, ABILITY_LONG_REACH},
             .abilityHidden = {ABILITY_HARVEST, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26612,9 +26312,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MONSTER,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CURSED_BODY, ABILITY_LIGHTNING_ROD},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_LIGHTNING_ROD},
-        // #endif
         .abilityHidden = {ABILITY_ROCK_HEAD, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -26643,9 +26340,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PICKUP, ABILITY_TOUGH_CLAWS},
             .abilityHidden = {ABILITY_UNNERVE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_PICKUP, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -26673,9 +26367,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RUN_AWAY, ABILITY_PASTEL_VEIL},
             .abilityHidden = {ABILITY_ANTICIPATION, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_RUN_AWAY, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -26703,9 +26394,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RUN_AWAY, ABILITY_PASTEL_VEIL},
             .abilityHidden = {ABILITY_ANTICIPATION, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_RUN_AWAY, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -26733,9 +26421,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GLUTTONY, ABILITY_OWN_TEMPO},
             .abilityHidden = {ABILITY_REGENERATOR, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_OWN_TEMPO},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -26764,9 +26449,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_QUICK_DRAW, ABILITY_OWN_TEMPO},
             .abilityHidden = {ABILITY_REGENERATOR, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_OWN_TEMPO},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -26795,9 +26477,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STEADFAST, ABILITY_NONE},
             .abilityHidden = {ABILITY_SCRAPPY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -26828,9 +26507,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POISON_POINT, ABILITY_NEUTRALIZING_GAS},
             .abilityHidden = {ABILITY_MISTY_SURGE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -26858,9 +26534,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_VITAL_SPIRIT, ABILITY_SCREEN_CLEANER},
             .abilityHidden = {ABILITY_ICE_BODY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_VITAL_SPIRIT, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -26888,7 +26561,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_COMPETITIVE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -26917,7 +26590,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DEFIANT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -26946,7 +26619,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BERSERK, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -26975,9 +26648,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CURIOUS_MEDICINE, ABILITY_OWN_TEMPO},
             .abilityHidden = {ABILITY_REGENERATOR, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_OWN_TEMPO},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -27006,11 +26676,9 @@ const struct BaseStats gBaseStats[] =
             .abilities = {ABILITY_OCEAN_MEMORY, ABILITY_LIQUID_OOZE},
             .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_LIQUID_SOUL},
        // #ifdef BATTLE_ENGINE//courtesy of haven new ability Liquid Soul turns water moves into ghost moves
-            .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
-        // #endif  //will replace levitate I think
         .bodyColor = BODY_COLOR_WHITE,//other idea Ocean Memory, reduced damage from water moves
         .noFlip = FALSE,    // for ancient pokemon or fosill mon that previoiusly dwelled in water
-        .flags = F_GALARIAN_FORM,//note swap liquid soul & ocean memory effects & make ocean memory keep rain boost so prob make a table to work on move name
+        .flags = F_GALARIAN_FORM,
     }, //gave this line liquid ooze to double up on absorb damage from ghost tweak :)
 
     [SPECIES_ZIGZAGOON_GALARIAN] =
@@ -27035,9 +26703,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PICKUP, ABILITY_GLUTTONY},
             .abilityHidden = {ABILITY_QUICK_FEET, ABILITY_DARK_DEAL},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_PICKUP, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -27065,9 +26730,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PICKUP, ABILITY_GLUTTONY},
             .abilityHidden = {ABILITY_QUICK_FEET, ABILITY_DARK_DEAL},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_PICKUP, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -27121,9 +26783,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GORILLA_TACTICS, ABILITY_NONE},
             .abilityHidden = {ABILITY_ZEN_MODE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -27151,7 +26810,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WANDERING_SPIRIT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -27180,7 +26839,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MIMICRY, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -27588,7 +27247,7 @@ const struct BaseStats gBaseStats[] =
 //#if P_GEN_7_POKEMON == TRUE
         [SPECIES_DECIDUEYE_HISUIAN] =
         {
-            .baseHP = 88,
+            .baseHP = 98,
             .baseAttack = 112,
             .baseDefense = 80,
             .baseSpeed = 60,
@@ -27605,8 +27264,8 @@ const struct BaseStats gBaseStats[] =
             .growthRate = GROWTH_MEDIUM_SLOW,
             .eggGroup1 = EGG_GROUP_FLYING,
             .eggGroup2 = EGG_GROUP_FLYING,
-            .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
-            .abilityHidden = {ABILITY_LONG_REACH, ABILITY_NONE},
+            .abilities = {ABILITY_OVERGROW, ABILITY_SCRAPPY},
+            .abilityHidden = {ABILITY_FEATHER_JACKET, ABILITY_NONE},
             .bodyColor = BODY_COLOR_BROWN,
             .noFlip = FALSE,
             .flags = F_HISUIAN_FORM,
@@ -27647,7 +27306,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 40,
         .baseSpDefense = 50,
         .type1 = TYPE_ELECTRIC,
-        .type2 = TYPE_ELECTRIC,
+        .type2 = TYPE_STEEL,
         .catchRate = 190,
         .expYield = 112,
         //.evYield_Speed = 2,
@@ -27673,7 +27332,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 40,
         .baseSpDefense = 50,
         .type1 = TYPE_ELECTRIC,
-        .type2 = TYPE_ELECTRIC,
+        .type2 = TYPE_GRASS,    //lol cottage core
         .catchRate = 190,
         .expYield = 112,
         //.evYield_Speed = 2,
@@ -27699,7 +27358,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 40,
         .baseSpDefense = 50,
         .type1 = TYPE_ELECTRIC,
-        .type2 = TYPE_ELECTRIC,
+        .type2 = TYPE_FAIRY,
         .catchRate = 190,
         .expYield = 112,
         //.evYield_Speed = 2,
@@ -27725,7 +27384,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 40,
         .baseSpDefense = 50,
         .type1 = TYPE_ELECTRIC,
-        .type2 = TYPE_ELECTRIC,
+        .type2 = TYPE_PSYCHIC,
         .catchRate = 190,
         .expYield = 112,
         //.evYield_Speed = 2,
@@ -27751,7 +27410,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 40,
         .baseSpDefense = 50,
         .type1 = TYPE_ELECTRIC,
-        .type2 = TYPE_ELECTRIC,
+        .type2 = TYPE_FIGHTING,
         .catchRate = 190,
         .expYield = 112,
         //.evYield_Speed = 2,
@@ -28022,6 +27681,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28047,6 +27707,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28072,6 +27733,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28122,6 +27784,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28147,6 +27810,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28172,6 +27836,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28197,6 +27862,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28222,6 +27888,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28247,6 +27914,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28272,6 +27940,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28297,6 +27966,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28322,6 +27992,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28347,6 +28018,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28372,6 +28044,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28397,6 +28070,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28422,6 +28096,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28447,6 +28122,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28472,6 +28148,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28497,6 +28174,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28522,6 +28200,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28547,6 +28226,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28572,6 +28252,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28597,6 +28278,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28622,6 +28304,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28647,6 +28330,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28672,6 +28356,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28775,6 +28460,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -28800,6 +28486,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -28824,6 +28511,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -28903,9 +28591,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_ANTICIPATION, ABILITY_ROUGH_SKIN},
             .abilityHidden = {ABILITY_OVERCOAT, ABILITY_IMMUNITY},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -28934,9 +28619,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_ANTICIPATION, ABILITY_IRON_BARBS},
             .abilityHidden = {ABILITY_OVERCOAT, ABILITY_STURDY},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -28962,10 +28644,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FAIRY,
         .eggGroup2 = EGG_GROUP_GRASS,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_FLOWER_GIFT, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
+            .abilities = {ABILITY_FLOWER_GIFT, ABILITY_NONE},//can't have different ability/hidden ability,  as this form is linked to ability
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = TRUE,
     },
@@ -28992,9 +28671,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STICKY_HOLD, ABILITY_STORM_DRAIN},
             .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_STICKY_HOLD, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -29021,9 +28697,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STICKY_HOLD, ABILITY_STORM_DRAIN},
             .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_STICKY_HOLD, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -29049,6 +28722,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -29074,6 +28748,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -29099,6 +28774,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -29124,6 +28800,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -29149,6 +28826,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -29173,6 +28851,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_INVERSE_WORLD, ABILITY_NONE}, //LOGIC not done yet
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -29199,6 +28878,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_SERENE_GRACE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -29225,7 +28905,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29253,7 +28933,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29281,7 +28961,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29309,7 +28989,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29337,7 +29017,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29365,7 +29045,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29393,7 +29073,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29421,7 +29101,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29449,7 +29129,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29477,7 +29157,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29505,7 +29185,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29533,7 +29213,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29561,7 +29241,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29589,7 +29269,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29617,7 +29297,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29645,7 +29325,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29673,7 +29353,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MULTITYPE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -29702,9 +29382,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_ROCK_HEAD, ABILITY_ADAPTABILITY},
             .abilityHidden = {ABILITY_MOLD_BREAKER, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_ROCK_HEAD, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -29731,9 +29408,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHEER_FORCE, ABILITY_IRON_FIST},
             .abilityHidden = {ABILITY_ZEN_MODE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -29760,9 +29434,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GORILLA_TACTICS, ABILITY_NONE},
             .abilityHidden = {ABILITY_ZEN_MODE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
@@ -29789,9 +29460,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_SAP_SIPPER},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_SERENE_GRACE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -29818,9 +29486,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_SAP_SIPPER},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_SERENE_GRACE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -29847,9 +29512,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_SAP_SIPPER},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_SERENE_GRACE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -29876,9 +29538,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_SAP_SIPPER},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_SERENE_GRACE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -29905,9 +29564,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_SAP_SIPPER},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_SERENE_GRACE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -29934,9 +29590,6 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CHLOROPHYLL, ABILITY_SAP_SIPPER},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
-        // #endif
         .abilityHidden = {ABILITY_SERENE_GRACE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -29964,7 +29617,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_REGENERATOR, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -29990,6 +29643,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_VOLT_ABSORB, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -30040,7 +29694,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_TURBOBLAZE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -30068,7 +29722,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_TERAVOLT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -30096,7 +29750,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_JUSTIFIED, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -30125,7 +29779,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_SERENE_GRACE, ABILITY_NONE},
+        .abilities = {ABILITY_SERENE_GRACE, ABILITY_MAGIC_GUARD},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -30154,7 +29809,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DOWNLOAD, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -30184,7 +29839,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DOWNLOAD, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -30214,7 +29869,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DOWNLOAD, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -30244,7 +29899,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DOWNLOAD, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -30272,7 +29927,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BATTLE_BOND, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -30300,7 +29955,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BATTLE_BOND, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},  //JUST like cherrim can't have another ability as its trigger for this form
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -30931,9 +30586,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -30960,9 +30612,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -30989,9 +30638,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -31018,9 +30664,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -31047,9 +30690,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -31076,9 +30716,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -31105,9 +30742,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -31134,9 +30768,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -31163,12 +30794,9 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-    },
+    },//special az version
 
     [SPECIES_FLORGES_YELLOW_FLOWER] =
     {
@@ -31192,9 +30820,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -31221,9 +30846,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -31250,9 +30872,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -31279,9 +30898,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FLOWER_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_SYMBIOSIS, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -31308,7 +30924,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FUR_COAT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -31336,7 +30952,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FUR_COAT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -31364,7 +30980,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FUR_COAT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -31392,7 +31008,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FUR_COAT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -31420,7 +31036,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FUR_COAT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -31448,7 +31064,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FUR_COAT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -31476,7 +31092,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FUR_COAT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -31504,7 +31120,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FUR_COAT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -31532,7 +31148,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FUR_COAT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -31560,9 +31176,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_INFILTRATOR},
             .abilityHidden = {ABILITY_COMPETITIVE, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -31572,10 +31185,6 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 60,
         .baseDefense = 50,
         .baseSpeed = 60,
-        #if P_UPDATED_STATS >= GEN_8
-        .baseAttack = 140,
-        .baseSpAttack = 140,
-       // #ifdef BATTLE_ENGINE
         .baseAttack = 150,
         .baseSpAttack = 150,
         // #endif
@@ -31595,7 +31204,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STANCE_CHANGE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -31782,7 +31391,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FAIRY_AURA, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -31810,7 +31419,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_AURA_BREAK, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -31838,7 +31447,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POWER_CONSTRUCT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -31866,7 +31475,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POWER_CONSTRUCT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -31894,7 +31503,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POWER_CONSTRUCT, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -31922,7 +31531,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MAGICIAN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -31953,7 +31562,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DANCER, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -31984,7 +31593,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DANCER, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
@@ -32015,7 +31624,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DANCER, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -32041,6 +31650,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_OWN_TEMPO, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -32094,7 +31704,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_TOUGH_CLAWS, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -32122,7 +31732,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SCHOOLING, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -32150,7 +31760,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32178,7 +31788,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32206,7 +31816,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32234,7 +31844,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32262,7 +31872,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32290,7 +31900,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32318,7 +31928,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32346,7 +31956,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32374,7 +31984,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32402,7 +32012,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32430,7 +32040,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32458,7 +32068,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32486,7 +32096,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32514,7 +32124,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32542,7 +32152,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32570,7 +32180,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32598,7 +32208,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RKS_SYSTEM, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -32628,7 +32238,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -32658,7 +32268,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -32688,7 +32298,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -32718,7 +32328,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -32748,7 +32358,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -32778,7 +32388,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -32808,7 +32418,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -32838,7 +32448,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -32868,7 +32478,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -32898,7 +32508,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -32928,7 +32538,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -32958,7 +32568,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -32988,7 +32598,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHIELDS_DOWN, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -33016,7 +32626,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DISGUISE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -33044,7 +32654,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PRISM_ARMOR, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -33072,7 +32682,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PRISM_ARMOR, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -33102,7 +32712,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_NEUROFORCE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -33130,7 +32740,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SOUL_HEART, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -33158,7 +32768,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GULP_MISSILE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -33186,7 +32796,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GULP_MISSILE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -33214,9 +32824,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PUNK_ROCK, ABILITY_MINUS},
             .abilityHidden = {ABILITY_TECHNICIAN, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_MINUS},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -33243,9 +32850,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WEAK_ARMOR, ABILITY_NONE},
             .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -33272,9 +32876,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_WEAK_ARMOR, ABILITY_NONE},
             .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -33301,9 +32902,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWEET_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -33330,9 +32928,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWEET_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -33359,9 +32954,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWEET_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -33388,9 +32980,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWEET_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -33417,9 +33006,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWEET_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -33446,9 +33032,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWEET_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -33475,9 +33058,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWEET_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -33504,9 +33084,6 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SWEET_VEIL, ABILITY_NONE},
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -33533,7 +33110,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_ICE_FACE, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -33588,7 +33165,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HUNGER_SWITCH, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -33616,7 +33193,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_INTREPID_SWORD, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -33644,7 +33221,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_DAUNTLESS_SHIELD, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -33670,6 +33247,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -33696,7 +33274,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_UNSEEN_FIST, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -33724,7 +33302,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_LEAF_GUARD, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -33752,7 +33330,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_AS_ONE_ICE_RIDER, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -33780,7 +33358,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_AS_ONE_SHADOW_RIDER, ABILITY_NONE},
        // #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,

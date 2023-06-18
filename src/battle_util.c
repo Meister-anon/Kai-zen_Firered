@@ -5757,7 +5757,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             case ABILITY_ANGER_POINT:
-                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) //if take a crit hit
                     && IS_CRIT
                     && TARGET_TURN_DAMAGED
                     && IsBattlerAlive(battler)
@@ -5768,7 +5768,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattlescriptCurrInstr = BattleScript_TargetsStatWasMaxedOut;
                     ++effect;
                 }
-                else if ((gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+                else if ((gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)   //if take a super effective hit
                     && TARGET_TURN_DAMAGED
                     && IsBattlerAlive(battler)
                     && CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))

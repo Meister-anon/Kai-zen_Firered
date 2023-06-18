@@ -305,11 +305,11 @@
 #define ABILITY_TOADSTOOL_NYMPH 282 // pending Shiinotic ability
 #define ABILTY_UNKNOWN_POWER 283	//unown specific ability similar to plus minus but if partner is unown
 #define ABILITY_PURIFYING_AURA 284 //Suicune ability  mix of healer & shedskin but gauranteed
-#define ABILITY_SQUALL 285
+#define ABILITY_SQUALL 285	//temp versions of drizzle/drought
 #define ABILITY_SUN_DISK 286
 #define ABILITY_TOUGH_SPINES 287	//rough skin for grass types
 #define ABILITY_EROSION 288	//regirock ability, rock absorb also absorbs stealth rocks on switchin
-#define ABILITY_LIQUID_METAL 289
+#define ABILITY_LIQUID_METAL 289	//Registeel exclusive 
 #define ABILITY_MUSCLE_MAGIC 290
 #define ABILITY_TIGER_CUB 291	//tinted lens copy
 #define ABILITY_TIGER_MOM 292	//alt version intimidate, drops defense instead of atk
@@ -322,8 +322,10 @@
 #define ABILITY_SONAR 299	//sound move boost for bat pokemon,  double move damage, mostly to make sonic boom do dragon breath damage, and be strong early HA only
 #define ABILITY_ECOSYSTEM 300		//MEGA torterra excluive
 #define ABILITY_ABSOLUTE_ZERO 301		//kyurem excluive
+#define ABILITY_FEATHER_JACKET 302	//hisuian decidueye inspired by dex entry and smisonian arcticle cold climate birds have "thicker feather jacket" to insulate them from cold
+#define ABILITY_POISONED_LEGACY 303 // poison pinch ability, for poipoile as its technically a starter,  inspired by marriagetoxin manga, boost poison in a pinch and if poison target will be bad poison consider set to turn 2 so it does full dmg 1st turn
 
-#define ABILITIES_COUNT 302 //
+#define ABILITIES_COUNT 304 //
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 

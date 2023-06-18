@@ -3459,6 +3459,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         //may make more in a pinch abilities for more types idea for electric overcharge
         if (type == TYPE_ELECTRIC && attacker->ability == ABILITY_OVERCHARGE)
             gBattleMovePower = (150 * gBattleMovePower) / 100;
+        if (type == TYPE_POISON && attacker->ability == ABILITY_POISONED_LEGACY)
+            gBattleMovePower = (150 * gBattleMovePower) / 100;
     }
 
     //Special case - Partner in a pinch -need test
@@ -3754,6 +3756,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_THICK_FAT:
         if (type == (TYPE_FIRE || TYPE_ICE))
+            gBattleMoveDamage /= 2;
+        break;
+    case ABILITY_FEATHER_JACKET:
+        if (type == (TYPE_ICE)
             gBattleMoveDamage /= 2;
         break;
     case ABILITY_DAMP:

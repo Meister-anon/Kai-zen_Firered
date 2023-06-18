@@ -2166,6 +2166,10 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * nother idea from jrppoketraier98  make move magiccoat work like a screen, where it lasts 3 turns etc.
 *  after doing add to screencleaner, and list of effects brick break can shatter
 * 
+* tweaked costume pikachu based on radical red, where each is a different type.
+* plan for distribution is, in mongeneration function for wild battles if species would be species pikachu, have 5% chance to swap and generate
+* a costume pikachu (not one of the hats)
+* 
 */
 
 goto PRIORITY_EFFECTS	//battle_main.c all effects regarding priority changes go here.

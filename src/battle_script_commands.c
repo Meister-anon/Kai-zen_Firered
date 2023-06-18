@@ -3970,7 +3970,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
         ++gBattlescriptCurrInstr;
         return;
     }
-    battlerAbility = GetBattlerAbility(gEffectBattler); //port
+    battlerAbility = GetBattlerAbility(gEffectBattler); //port      is for target ability
 
     // Just in case this flag is still set
     gBattleScripting.moveEffect &= ~MOVE_EFFECT_CERTAIN;
@@ -4075,10 +4075,16 @@ void SetMoveEffect(bool32 primary, u32 certain)
             {
                 gBattleMons[gEffectBattler].status1 &= ~(STATUS1_POISON);
                 gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_POISON;
-                gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start at normal poison base dmg
+                gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start above normal poison base dmg
             } //OK THIS hopefully works.?   //should remove poison and set toxic, the missing part is setting toxic counter value
             //dont know if works as I want but it compiles
-
+            else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_POISONED_LEGACY
+                && (gBattleMons[gBattlerAttacker].hp < (gBattleMons[gBattlerAttacker].maxHP / 2)))
+            {
+                gBattleMons[gEffectBattler].status1 &= ~(STATUS1_POISON);
+                gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_POISON;
+                gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(1);//attempting set toxic counter, to start at normal poison base dmg
+            }
            /* else if (gBattleMons[gEffectBattler].status1)   //realized i could keep this, if i use else if,  since thsi should mean if status1 not 0?
                 break;*/ //removed put comparative logic in ported function
             statusChanged = TRUE;
@@ -4251,8 +4257,13 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattleMons[gEffectBattler].status1 &= ~(STATUS1_POISON);//don't understand these 2 lines. as it should be syntax for  status removal.
                 if (gBattleMons[gEffectBattler].status1 & STATUS1_POISON)//now i understand the note,
                 {   //the two lins are removing the status even though, the prior logic ensured that no status was set, ironically necessary for my changes
-                    gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start above normal poison base dmg
-                }                
+                    gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start above normal poison base dmg //will o 3/16
+                }     
+                else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_POISONED_LEGACY
+                    && (gBattleMons[gBattlerAttacker].hp < (gBattleMons[gBattlerAttacker].maxHP / 2)))
+                {
+                    gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start above normal poison base dmg //will do 3/16
+                }
                 statusChanged = TRUE;
                 break;
             }
@@ -5135,12 +5146,12 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
         && gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;  //its good, happened 2 out of 5 hits. decided to make it 1/16 dmg
     
-    if (GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_DARK_DEAL)
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_DARK_DEAL)
+        percentChance = (gBattleMoves[gCurrentMove].secondaryEffectChance * 150) / 100;    
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
-    else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_DARK_DEAL)
-        percentChance = (gBattleMoves[gCurrentMove].secondaryEffectChance * 150) / 100;
+    else if (GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_DARK_DEAL)
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
     else
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance; 
 
@@ -5166,6 +5177,12 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     if (gBattleMoves[gCurrentMove].effect == EFFECT_SPEED_UP_HIT)       //go over 100%  effects, see which I can put here to just make certain, may be able to do all.
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
     
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_POISONED_LEGACY
+        && (gBattleMons[gBattlerAttacker].hp < (gBattleMons[gBattlerAttacker].maxHP / 2))) //make sure effects only activate when in a pinch
+    {
+        if (gBattleMoves[gCurrentMove].effect == EFFECT_POISON_HIT || gBattleMoves[gCurrentMove].effect == EFFECT_TOXIC_FANG)
+            SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //gauranteed poison
+    }
 
     /*if (gBattleMoves[gCurrentMove].effect == EFFECT_RECHARGE) 
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  may not need as recharge alrady works with 0 effect chance - actually it works because the battlescript already sets it to certain

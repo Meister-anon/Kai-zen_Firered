@@ -454,7 +454,7 @@ const u8 gTypeEffectiveness[417] = // 336 is number of entries x 3 i.e number of
     TYPE_GROUND, TYPE_GRASS, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GROUND, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,// delete ground to flying so its set to normal effective
     TYPE_GROUND, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE, //then create condition where its set to no effect if not grounded
-    TYPE_GROUND, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE, //made ground steel neutral, as its better rock, and materiel comes from the earth
+    TYPE_GROUND, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE, //made ground steel neutral, as its better rock, and materiel for steel comes from the earth
     TYPE_FLYING, TYPE_ELECTRIC, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FLYING, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,  //makes sense flying resists grass, birds make their home in trees,
     TYPE_FLYING, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,   //also hurricanes/tornadoes uproot & destroy trees
