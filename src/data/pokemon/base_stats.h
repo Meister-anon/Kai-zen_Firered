@@ -33356,7 +33356,6 @@ const struct BaseStats gBaseStats[] =
         .genderRatio = PERCENT_FEMALE(12.5),
         .eggCycles = 20,
         .friendship = 70,
-        .growthRate = GROWTH_MEDIUM_FAST,
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_GRASS,

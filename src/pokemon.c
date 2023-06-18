@@ -3102,7 +3102,7 @@ void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //important can use thi
 
     nature = GetNatureFromPersonality(personality); //put this somewhere
 
-    for (i = 0; gLevelUpLearnsets[species][i] != LEVEL_UP_END; i++)
+    for (i = 0; gLevelUpLearnsets[species][i].move != LEVEL_UP_END; i++)
     {
         u16 moveLevel;
         u16 move;
