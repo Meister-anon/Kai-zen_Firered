@@ -420,7 +420,12 @@
 #define EFFECT_SHIELD_BASH 408
 #define EFFECT_ATTRACT_HIT 409	//NEED test
 #define EFFECT_EXPANDING_FORCE 410	//Just to fill space
-#define EFFECT_TRIPLE_ARROWS 411	//triple arrow change\
+#define EFFECT_TRIPLE_ARROWS 411	//triple arrow change
+#define EFFECT_SPECIAL_ATTACK_UP_HIT 412
+#define EFFECT_VICTORY_DANCE                413
+#define EFFECT_TEATIME                      414
+#define EFFECT_ATTACK_UP_USER_ALLY          415 // Howl 8th Gen ver.
+
 
 
 /*MOVE_FIRE_SPIN, //increases burn chance //serenge grace is effect *2 by requires no setup, I think I can get away w * 3 here actually do more to near guarantee 50-60%

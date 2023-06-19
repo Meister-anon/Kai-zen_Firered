@@ -438,6 +438,10 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectAttractHit	@use move_effect_attract
 	.4byte BattleScript_EffectHit		@Expanding Force fill effect  is gen 9, just putting here to fill space, is not setup
 	.4byte BattleScript_EffectTripleArrows @ EFFECT_TRIPLE_ARROWS
+	.4byte BattleScript_EffectSpecialAttackUpHit	@EFFECT_SPECIAL_ATTACK_UP_HIT
+	.4byte BattleScript_EffectVictoryDance            @ EFFECT_VICTORY_DANCE
+	.4byte BattleScript_EffectTeatime                 @ EFFECT_TEATIME
+	.4byte BattleScript_EffectAttackUpUserAlly        @ EFFECT_ATTACK_UP_USER_ALLY
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -1222,6 +1226,139 @@ BattleScript_EffectPsychoShiftCanWork:
 	printstring STRINGID_PKMNSTATUSNORMAL
 	waitmessage 0x40
 	updatestatusicon BS_ATTACKER
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectAttackUpUserAlly:
+	jumpifnoally BS_ATTACKER, BattleScript_EffectAttackUp
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifstat BS_ATTACKER, CMP_NOT_EQUAL, STAT_ATK, MAX_STAT_STAGE, BattleScript_EffectAttackUpUserAlly_Works
+	jumpifstat BS_ATTACKER_PARTNER, CMP_EQUAL, STAT_ATK, MAX_STAT_STAGE, BattleScript_ButItFailed
+BattleScript_EffectAttackUpUserAlly_Works:
+	attackanimation
+	waitanimation
+	setstatchanger STAT_ATK, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR, BattleScript_EffectAttackUpUserAlly_TryAlly
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_EffectAttackUpUserAllyUser_PrintString
+	setgraphicalstatchangevalues
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+BattleScript_EffectAttackUpUserAllyUser_PrintString:
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_EffectAttackUpUserAlly_TryAlly:
+	setallytonexttarget BattleScript_EffectAttackUpUserAlly_TryAlly_
+BattleScript_EffectAttackUpUserAlly_End:
+	goto BattleScript_MoveEnd
+BattleScript_EffectAttackUpUserAlly_TryAlly_:
+	setstatchanger STAT_ATK, 1, FALSE
+	statbuffchange STAT_CHANGE_ALLOW_PTR, BattleScript_EffectAttackUpUserAlly_End
+	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_EffectAttackUpUserAlly_AllyAnim
+	pause B_WAIT_TIME_SHORTEST
+	printstring STRINGID_TARGETSTATWONTGOHIGHER
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_EffectAttackUpUserAlly_End
+BattleScript_EffectAttackUpUserAlly_AllyAnim:
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_EffectAttackUpUserAlly_End
+
+BattleScript_EffectTeatime::
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifteanoberry BattleScript_ButItFailed
+@ at least one battler is affected 
+	attackanimation
+	waitanimation
+BattleScript_TeatimeLoop:
+	jumpifteainvulnerable BS_TARGET, BattleScript_Teatimevul
+	jumpifrodaffected BS_TARGET, BattleScript_Teatimerod
+	jumpifabsorbaffected BS_TARGET, BattleScript_Teatimesorb
+	jumpifmotoraffected BS_TARGET, BattleScript_Teatimemotor
+	orword gHitMarker, HITMARKER_NO_ANIMATIONS | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE
+	setbyte sBERRY_OVERRIDE, TRUE   @ override the requirements for eating berries
+	consumeberry BS_TARGET, TRUE  @ consume the berry, then restore the item from changedItems
+	bicword gHitMarker, HITMARKER_NO_ANIMATIONS | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE
+	setbyte sBERRY_OVERRIDE, FALSE
+	removeitem BS_TARGET
+	moveendto MOVEEND_NEXT_TARGET
+	jumpifnexttargetvalid BattleScript_TeatimeLoop
+	moveendcase MOVEEND_CLEAR_BITS
+	goto BattleScript_MoveEnd
+BattleScript_Teatimevul:
+	moveendto MOVEEND_NEXT_TARGET
+	jumpifnexttargetvalid BattleScript_TeatimeLoop
+	moveendcase MOVEEND_CLEAR_BITS
+	goto BattleScript_MoveEnd
+BattleScript_Teatimesorb:
+	call BattleScript_AbilityPopUpTarget
+	moveendto MOVEEND_NEXT_TARGET
+	jumpifnexttargetvalid BattleScript_TeatimeLoop
+	moveendcase MOVEEND_CLEAR_BITS
+	goto BattleScript_MoveEnd
+BattleScript_Teatimerod:
+	call BattleScript_AbilityPopUpTarget
+	playstatchangeanimation BS_TARGET, BIT_SPATK, STAT_CHANGE_BY_TWO
+	setstatchanger STAT_SPATK, 1, FALSE
+	statbuffchange STAT_CHANGE_ALLOW_PTR, BattleScript_TeatimeBuffer
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_TeatimeBuffer
+	printfromtable gStatUpStringIds
+	waitmessage 0x40
+	moveendto MOVEEND_NEXT_TARGET
+	jumpifnexttargetvalid BattleScript_TeatimeLoop
+	moveendcase MOVEEND_CLEAR_BITS
+	goto BattleScript_MoveEnd
+BattleScript_Teatimemotor:
+	call BattleScript_AbilityPopUpTarget
+	playstatchangeanimation BS_TARGET, BIT_SPEED, STAT_CHANGE_BY_TWO
+	setstatchanger STAT_SPEED, 1, FALSE
+	statbuffchange STAT_CHANGE_ALLOW_PTR, BattleScript_TeatimeBuffer
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_TeatimeBuffer
+	printfromtable gStatUpStringIds
+	waitmessage 0x40
+	moveendto MOVEEND_NEXT_TARGET
+	jumpifnexttargetvalid BattleScript_TeatimeLoop
+	moveendcase MOVEEND_CLEAR_BITS
+	goto BattleScript_MoveEnd
+BattleScript_TeatimeBuffer:
+	moveendto MOVEEND_NEXT_TARGET
+	jumpifnexttargetvalid BattleScript_TeatimeLoop
+	moveendcase MOVEEND_CLEAR_BITS
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectVictoryDance:
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_ATK, MAX_STAT_STAGE, BattleScript_VictoryDanceDoMoveAnim
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_DEF, MAX_STAT_STAGE, BattleScript_VictoryDanceDoMoveAnim
+	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPEED, MAX_STAT_STAGE, BattleScript_CantRaiseMultipleStats
+BattleScript_VictoryDanceDoMoveAnim::
+	attackanimation
+	waitanimation
+	setbyte sSTAT_ANIM_PLAYED, FALSE
+	playstatchangeanimation BS_ATTACKER, BIT_ATK | BIT_DEF | BIT_SPEED, 0
+	setstatchanger STAT_ATK, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR, BattleScript_VictoryDanceTryDef
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_VictoryDanceTryDef
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_VictoryDanceTryDef::
+	setstatchanger STAT_DEF, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR, BattleScript_VictoryDanceTrySpeed
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_VictoryDanceTrySpeed
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_VictoryDanceTrySpeed::
+	setstatchanger STAT_SPEED, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR, BattleScript_VictoryDanceEnd
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_VictoryDanceEnd
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_VictoryDanceEnd::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectSynchronoise:
@@ -3516,6 +3653,7 @@ BattleScript_EffectSpecialAttackDownHit::
 	setmoveeffect MOVE_EFFECT_SP_ATK_MINUS_1
 	goto BattleScript_EffectHit
 
+
 BattleScript_EffectSpecialDefenseDownHit::
 	setmoveeffect MOVE_EFFECT_SP_DEF_MINUS_1
 	goto BattleScript_EffectHit
@@ -4491,6 +4629,10 @@ BattleScript_EffectDefenseUpHit::
 
 BattleScript_EffectAttackUpHit::
 	setmoveeffect MOVE_EFFECT_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
+	goto BattleScript_EffectHit
+
+BattleScript_EffectSpecialAttackUpHit::
+	setmoveeffect MOVE_EFFECT_SP_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
 	goto BattleScript_EffectHit
 
 BattleScript_EffectAttackerDefenseDownHit:
