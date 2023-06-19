@@ -2646,6 +2646,55 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     //using random odds, value would just make it even harder to get the ability...or was that the purpose?
     //need to check odds
 
+    //Looking at this again I think i want to decouple from personality
+    //as that would make it so certain ability slots are restricted to certain iv and nature sets only
+    //it uses value to set so I could shift the value of variable outside of the personality
+    /*if ((Random() % 100) + 1 <= ABILITY_2_CHANCE)
+        value = 1;
+        
+        THINK that may work ability_2 is abiilityNum1 i.e second ability slot
+        ABILITY_2_CHANCE would have its own constant value which would be its odds of occurring, 
+        (Random() % 100) + 1 would be replaced with its own constant [ABILITY_ODDS], so its run a single time at start of function call
+        and value just gets compared to chance
+        think want ability slot 1 & 2 to be equal odds, while the hidden abilities have decreasing odds
+        #define ABILITY_1_CHANCE 70
+        #define ABILITY_2_CHANCE 70
+        actually chaged mind, use 50 % for ability 1 and 2
+        hidden abilities will be a sub section within that range
+        if odds <= 50 set ability1
+        inside that function put if odds <= 15 set hiddenability1
+        
+        then use,
+        else if odds > 50 set ability 2
+        and inside that put if odds >= 75 set hiddenabiity2
+        
+        kinda poetic as that way the other abilitis are literally hidden within the normal abilitiies*/
+    u8 abilityodds = (Random() % 101);
+    u8 Normal_AbilityChance = 50;   //checkd and base game hidden abilities are only found by chance at low to increasing odds using pokenav/dexnav in gen 6
+    u8 HiddenAbility1_Chance = 7;  //and with pokerader in gen 8 its only 3% odds, so I think this (1/3) is too high, l dropping to 7 & 93 respectively for about 15% odds
+    u8 HiddenAbility2_Chance = 93; //especially since I plan to add dexnav to be able to search specific mon and get higher hidden ability chance
+
+    if ((abilityodds) <= Normal_AbilityChance)
+    {
+        value = 0;
+        SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);    //since I'm not using bitwise I think I may need to remove :3 from definition of AbilityNum?
+        if ((abilityodds) <= HiddenAbility1_Chance)   //should be if odds & hiddenability 1 isn't 0, don't need check if ability is none, logic for that is in GetAbilityBySpecies
+        {
+            value = 2;
+            SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
+        }
+    }
+    else if ((abilityodds) > Normal_AbilityChance)  //not perfect as not every mon has 2nd slot ability, but usually has hidden abilities in both consult emerald setup
+    {
+        value = 1;
+        SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
+        if ((abilityodds) >= HiddenAbility2_Chance)   //should be if odds & hiddenability 2 isn't 0
+        {
+            value = 3;
+            SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
+        }
+    }
+
     //from what I can see 2nd hidden ability  seems to be the rarest even before adding random boost.   may boost higher
     if (gBaseStats[species].abilityHidden[1]) //will have if at highest i.e = abilityNum, meaniing all all slots are filled, with else ifs below decreasing by 1.
     {
@@ -2659,7 +2708,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     }
     else if (gBaseStats[species].abilities[1]) //important if ability slot 1, & is not ability_none, is saying if pokemon has 2 abilities
     {
-        value = personality & 1;
+        value = personality & 1;    //think this is supposed to be a 0 or 1?
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
     } //note, since pokemon will have the same ability slot when they evolve based on their ability num, I may need to ensure
     //a pokemon's evolved form also alway has a 2nd hiddden ability slot, so it doesn't just become ability_none.
@@ -2674,7 +2723,7 @@ void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV,
     {
         personality = Random32();
     }
-    while (nature != GetNatureFromPersonality(personality));
+    while (nature != GetNatureFromPersonality(personality));    //keep generating random values until a mon with the requested nature is made
 
     CreateMon(mon, species, level, fixedIV, 1, personality, OT_ID_PLAYER_ID, 0);
 }
@@ -5233,19 +5282,54 @@ u8 GetMonsStateToDoubles(void)
     return (aliveCount > 1) ? PLAYER_HAS_TWO_USABLE_MONS : PLAYER_HAS_ONE_USABLE_MON;//need to understand this line
 }
 
-u16 GetAbilityBySpecies(u16 species, u8 abilityNum) //important tells game abilitynum2 is hidden ability  think I'm going to make a second hidden ability field,
+//abilitynum assigned by createboxmon this function translates that number into ability slot selection logic
+u16 GetAbilityBySpecies(u16 species, u8 abilityNum) 
 {
-    if (abilityNum == 3)
-        gLastUsedAbility = gBaseStats[species].abilityHidden[1];
-    else if (abilityNum == 2)
-        gLastUsedAbility = gBaseStats[species].abilityHidden[0];
-    else if (abilityNum == 1)
-        gLastUsedAbility = gBaseStats[species].abilities[1];
-    else if (abilityNum == 0)
-        gLastUsedAbility = gBaseStats[species].abilities[0];
 
-    return gLastUsedAbility;//actually prettu sure bool is only 2 states, so should prob change to u8?
+        int i;
+
+        if (abilityNum < NUM_ABILITY_SLOTS)
+            gLastUsedAbility = gBaseStats[species].abilities[abilityNum]; //sets lastusedability to mon ability
+        else
+            gLastUsedAbility = ABILITY_NONE;
+
+        do
+        {
+            if (abilityNum >= ABILITYNUM_HIDDEN_ABILITY_START) // if abilityNum is empty hidden ability, look for other hidden abilities
+            {
+                for (i = 0; i < HIDDEN_ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)
+                {
+                    gLastUsedAbility = gBaseStats[species].abilities[i];
+                }
+            }
+
+            if (abilityNum >= ABILITYNUM_NORMAL_ABILITY_START) // if abilityNum is empty normal ability, look for other normal abilities
+            {
+                for (i = 0; i < ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)
+                {
+                    gLastUsedAbility = gBaseStats[species].abilities[i];
+                }
+            }
+
+            for (i = 0; i < ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)  //final check if mon doesn't have any hidden ability but abilityNum above 2
+            {
+                gLastUsedAbility = gBaseStats[species].abilities[i];
+            }
+            //if I understand it correctly the while should make it stop as soon as the condition is no longer true, if it succeeds with a hidden ability it won't set to normal ability
+        } while (gLastUsedAbility == ABILITY_NONE);
+
+        
+
+
+        /*for (i = 0; i < NUM_ABILITY_SLOTS && gLastUsedAbility == ABILITY_NONE; i++) // look for any non-empty ability
+        {
+            gLastUsedAbility = gBaseStats[species].abilities[i];//since I kept my abilities and hidden abilities separate can't use this
+        }*/
+
+        return gLastUsedAbility;
 } //so 4 ability optionns total, would like to set hidden ability chance like shiny odds, just much better odds, then have gauranteed hidden ability with dexnav
+
+
 
 u16 GetMonAbility(struct Pokemon *mon)
 {

@@ -6,6 +6,7 @@
 #include "roamer.h"
 #include "field_player_avatar.h"
 #include "battle_setup.h"
+#include "safari_zone.h"
 #include "overworld.h"
 #include "metatile_behavior.h"
 #include "event_scripts.h"
@@ -770,6 +771,23 @@ static bool8 HandleWildEncounterCooldown(u32 currMetatileBehavior)
     sWildEncounterData.stepsSinceLastEncounter++;
     if ((Random() % 100) < encRate)
         return TRUE;
+    return FALSE;
+}
+
+#define B_DOUBLE_WILD_CHANCE 7
+
+bool8 TryDoDoubleWildBattle(void)
+{
+    if (GetSafariZoneFlag() || GetMonsStateToDoubles() != PLAYER_HAS_TWO_USABLE_MONS)
+        return FALSE;
+#if B_FLAG_FORCE_DOUBLE_WILD != 0
+    else if (FlagGet(B_FLAG_FORCE_DOUBLE_WILD))
+        return TRUE;
+#endif
+#if B_DOUBLE_WILD_CHANCE != 0
+    else if ((Random() % 100) + 1 <= B_DOUBLE_WILD_CHANCE)
+        return TRUE;
+#endif
     return FALSE;
 }
 

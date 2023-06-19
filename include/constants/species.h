@@ -2718,5 +2718,5 @@
 #define F_CEFIRIAN_FORM (1 << 4)	//For pokemon opal Cefira region forms
 #define SPECIES_FLAG_GENDER_DIFFERENCE (1 << 5)	//only for basculegion
 #define F_MEGA_FORM (1 << 6)	//to denote mega? may not need, idk
-
+#define SPECIES_FLAG_ALL_PERFECT_IVS    (1 << 7) //use for giving special mon bug psuedo gym etc.
 #endif  // GUARD_CONSTANTS_SPECIES_H

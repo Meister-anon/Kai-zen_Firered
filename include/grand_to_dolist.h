@@ -1562,6 +1562,28 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 * 
 * -removed famechecker for space, have rival give dexnav in cerulean instead of famechecker
 * 
+* -new plan for dexnav integration/synergy with hidden ability,
+* with planned gameplay loop adjustments for catching i.e releasing mon to get items as you're expected to be catching multiple of the same mon
+* to find ability nautre ivs etc.
+* I need to adjust dexnav, before dexnav is how you get mon with hidden abilities and allows searching for specific mon
+* Add on to this, that  you can use dexnav to find your perfect pokemon the dexnav search feature should populate
+* as you have discovered more about the species.
+* I.e raise its search level, and catch one with every possible ability.
+* Once you've maxed that you unlock perfect search, which lets you essentially generate the perfect mon
+* you set the mon species, set the ability, and can even set the nature! 
+* 
+* think may not include search level as its already difficult to break through odds to find all abilieties
+* if you get lucky and find them all quickly, don't want to hamstring the player by forcing them to keep searching
+* if they get lucky they should be able to get the benefit of that.  keeps things fun and feels like a reward
+* 
+* Ivs won't be included as I'm going with matsuda idea that ivs should be hidden thing that you don't change.
+* plus I've boosted evs so you can overcome any bad iv luck, with honest work, as it should be.
+* 
+* (make menu, in dexnav, you select the mon icon, that  takes you to a page that shows its mon pic
+* info about how many you've caught/seen  places for the ability slots filled in with the ability name for each slot
+* if the ability is none for that slot, just don't bring up relevant icons for it.
+* othrewise just put a question mark in the fields if the mon has an ability but we have yet to descover it.)
+* 
 * also plan to add more encounters to each area on top of changing how tiles work, so grass not on the road, and rock not on sand can spawn encounters
 * but hopefully can set separate encounter rate for said tiles so its a bit lower.
 * 
