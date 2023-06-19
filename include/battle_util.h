@@ -126,6 +126,7 @@ u32 GetBattleMoveSplit(u32 moveId);
 bool8 IsBattlerAlive(u8 battlerId);
 u32 GetBattlerAbility(u8 battlerId);
 u32 GetBattlerWeight(u8 battlerId);
+u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId);
 u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId);
 u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16 moveId3, u16 moveId4);
 bool32 CanMegaEvolve(u8 battlerId);

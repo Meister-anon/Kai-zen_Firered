@@ -2184,6 +2184,9 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 //       only space for 25 additional trainers before trainer flag space overflows.
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
 * 
+* 
+* to build had to define parts of mega implementation, did not add completely need to properly setup mega evolution etc.
+* includes sprit defines values in battle_interface adn graphic files --removed piece of mega kept defines as caused errors add later
 */
 
 goto PRIORITY_EFFECTS	//battle_main.c all effects regarding priority changes go here.

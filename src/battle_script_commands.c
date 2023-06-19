@@ -9816,11 +9816,11 @@ static void atk76_various(void) //will need to add all these emerald various com
     case VARIOUS_GET_MOVE_TARGET:
         gBattlerTarget = GetMoveTarget(gCurrentMove, 0);
         break;
-    case VARIOUS_CASE_4:
+    case VARIOUS_GET_BATTLER_FAINTED:
         if (gHitMarker & HITMARKER_FAINTED(gActiveBattler))
-            gBattleCommunication[0] = 1;
+            gBattleCommunication[0] = TRUE;
         else
-            gBattleCommunication[0] = 0;
+            gBattleCommunication[0] = FALSE;
         break;
     case VARIOUS_RESET_INTIMIDATE_TRACE_BITS:   //RESETS the switchin effect, that is the trigger for the abillity activation
         gSpecialStatuses[gActiveBattler].intimidatedMon = 0;//pairs with battle_util.c
@@ -9846,7 +9846,7 @@ static void atk76_various(void) //will need to add all these emerald various com
                 *choicedMove = MOVE_NONE;
         }
         break;
-    case VARIOUS_RESET_PLAYER_FAINTED_FLAG:
+    case VARIOUS_RESET_PLAYER_FAINTED:
         if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_DOUBLE))
          && gBattleTypeFlags & BATTLE_TYPE_TRAINER
          && gBattleMons[0].hp != 0
@@ -10381,7 +10381,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         else
         {
             UpdateHealthboxAttribute(gHealthboxSpriteIds[gActiveBattler], mon, HEALTHBOX_ALL);
-            CreateMegaIndicatorSprite(gActiveBattler, 0);
+            //CreateMegaIndicatorSprite(gActiveBattler, 0);
             if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT)
                 SetBattlerShadowSpriteCallback(gActiveBattler, gBattleMons[gActiveBattler].species);
         }
