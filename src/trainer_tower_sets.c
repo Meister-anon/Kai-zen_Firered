@@ -273,7 +273,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Single_7 = {
 				},
 				{
 					.species = SPECIES_FARFETCHD,
-					.heldItem = ITEM_STICK,
+					.heldItem = ITEM_LEEK,
 					.moves = {MOVE_KNOCK_OFF, MOVE_SWORDS_DANCE, MOVE_FLY, MOVE_SAND_ATTACK},
 					.hpEV = 100,
 					.attackEV = 100,
@@ -3555,7 +3555,7 @@ static const struct TrainerTowerFloor sTrainerTowerFloor_Double_4 = {
 				{
 					.species = SPECIES_CROBAT,
 					.heldItem = ITEM_KINGS_ROCK,
-					.moves = {MOVE_GIGA_DRAIN, MOVE_POISON_FANG, MOVE_FLY, MOVE_STEEL_WING},
+					.moves = {MOVE_GIGA_DRAIN, MOVE_TOXIC_FANG, MOVE_FLY, MOVE_STEEL_WING},
 					.hpEV = 0,
 					.attackEV = 0,
 					.defenseEV = 0,

@@ -778,24 +778,49 @@
 #define MOVE_GLACIAL_LANCE 752
 #define MOVE_ASTRAL_BARRAGE 753
 #define MOVE_EERIE_SPELL 754
+// Legends: Arceus Moves
+#define MOVE_DIRE_CLAW 755
+#define MOVE_PSYSHIELD_BASH 756
+#define MOVE_POWER_SHIFT 757
+#define MOVE_STONE_AXE 758
+#define MOVE_SPRINGTIDE_STORM 759
+#define MOVE_MYSTICAL_POWER 760
+#define MOVE_RAGING_FURY 761
+#define MOVE_WAVE_CRASH 762
+#define MOVE_CHLOROBLAST 763
+#define MOVE_MOUNTAIN_GALE 764
+#define MOVE_VICTORY_DANCE 765
+#define MOVE_HEADLONG_RUSH 766
+#define MOVE_BARB_BARRAGE 767
+#define MOVE_ESPER_WING 768
+#define MOVE_BITTER_MALICE 769
+#define MOVE_SHELTER 770
+#define MOVE_TRIPLE_ARROWS 771
+#define MOVE_INFERNAL_PARADE 772
+#define MOVE_CEASELESS_EDGE 773
+#define MOVE_BLEAKWIND_STORM 774
+#define MOVE_WILDBOLT_STORM 775
+#define MOVE_SANDSEAR_STORM 776
+#define MOVE_LUNAR_BLESSING 777
+#define MOVE_TAKE_HEART 778
 // New Custom Additions
-#define MOVE_COCOON 755	//ONLY one that has animation, but is just a copy of cosmic power
-#define MOVE_MONOTYPE 756
-#define MOVE_FLASH_FREEZE 757
-#define MOVE_DRYADS_CURSE 758
-#define MOVE_SHIELD_BASH 759
-#define MOVE_UP_ROOT 760
-#define MOVE_DIVE_BOMB 761
-#define MOVE_NETTLE_WHIP 762	//Will be grass move that can apply burn	//MOVE_NETTLE_WHIP	MOVE_BURNING_VINE    MOVE_NETTLE_WHIP
-#define MOVE_SONIC_BOOM 763	//new move
-#define MOVE_OVER_MAX_POWER 764	//PSYCHIC BURN OUT	
-#define MOVE_SHIMON 765	//FIGHTING BURN OUT	
-#define MOVE_FINAL_FLIGHT 766	//FLYING BURN OUT	
-#define MOVE_PLASMA_RAILGUN 767	//ELECTRIC BURN OUT	
-#define MOVE_BOLTBEAM 768	//joke idea taken from CammyMeeleTea video on icetypes
-#define MOVE_BACK_STAB 769	//new dark exclusive, give every dark type sucker punch and backstab  potentially make a tm, but keep sucker punch as learn move?
-#define MOVE_DOUBLE_SHOCK 770
-#define MOVE_POUNCE 771
+#define MOVE_COCOON 779	//ONLY one that has animation, but is just a copy of cosmic power
+#define MOVE_MONOTYPE 780
+#define MOVE_FLASH_FREEZE 781
+#define MOVE_DRYADS_CURSE 782
+#define MOVE_SHIELD_BASH 783
+#define MOVE_UP_ROOT 784
+#define MOVE_DIVE_BOMB 785
+#define MOVE_NETTLE_WHIP 786	//Will be grass move that can apply burn	//MOVE_NETTLE_WHIP	MOVE_BURNING_VINE    MOVE_NETTLE_WHIP
+#define MOVE_SONIC_BOOM 787	//new move
+#define MOVE_OVER_MAX_POWER 788	//PSYCHIC BURN OUT	
+#define MOVE_SHIMON 789	//FIGHTING BURN OUT	
+#define MOVE_FINAL_FLIGHT 790	//FLYING BURN OUT	
+#define MOVE_PLASMA_RAILGUN 791	//ELECTRIC BURN OUT	
+#define MOVE_BOLTBEAM 792	//joke idea taken from CammyMeeleTea video on icetypes
+#define MOVE_BACK_STAB 793	//new dark exclusive, give every dark type sucker punch and backstab  potentially make a tm, but keep sucker punch as learn move?
+#define MOVE_DOUBLE_SHOCK 794
+#define MOVE_POUNCE 795
 
 //#define MOVES_COUNT_GEN8 757
 

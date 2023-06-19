@@ -731,7 +731,7 @@ struct SaveBlock1 /* 0x02025734 */
 
 extern struct SaveBlock1 gSaveBlock1;
 
-struct Time
+struct Time //think should add months as well to setup season
 {
     /*0x00*/ s16 days;
     /*0x02*/ s8 hours;

@@ -2065,7 +2065,8 @@ static void atk05_damagecalc(void)
     //gMultiTask = 0; //don't know if i actually need to set equal to zero.  think I don't actually, will do anyway for now..
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_TRIPLE_KICK
-        && gCurrentMove != MOVE_SURGING_STRIKES)    //could put in separate dmg bscommand, but if works for multitask this should also work
+        && gCurrentMove != MOVE_SURGING_STRIKES    //could put in separate dmg bscommand, but if works for multitask this should also work
+        && gCurrentMove != MOVE_TRIPLE_ARROWS)   //only boosts damage if triple kick or triple axel
     {
         gDynamicBasePower = gBattleMoves[gCurrentMove].power;
 

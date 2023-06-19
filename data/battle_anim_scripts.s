@@ -42,7 +42,7 @@
 	.section script_data, "aw", %progbits
 
 	.align 2
-gMovesWithQuietBGM:: @ 81C68EC
+gMovesWithQuietBGM:: @ 81C68EC   this is capital to refer to the move not the script
 	.2byte MOVE_SING
 	.2byte MOVE_PERISH_SONG
 	.2byte MOVE_GRASS_WHISTLE
@@ -810,16 +810,43 @@ gBattleAnims_Moves::
 	.4byte Move_GLACIAL_LANCE
 	.4byte Move_ASTRAL_BARRAGE
 	.4byte Move_EERIE_SPELL
+@@@@LA MOVES	@@@@@@@@@@@
+	.4byte Move_DIRE_CLAW
+	.4byte Move_PSYSHIELD_BASH
+	.4byte Move_POWER_SHIFT
+	.4byte Move_STONE_AXE
+	.4byte Move_SPRINGTIDE_STORM
+	.4byte Move_MYSTICAL_POWER
+	.4byte Move_RAGING_FURY
+	.4byte Move_WAVE_CRASH
+	.4byte Move_CHLOROBLAST
+	.4byte Move_MOUNTAIN_GALE
+	.4byte Move_VICTORY_DANCE
+	.4byte Move_HEADLONG_RUSH
+	.4byte Move_BARB_BARRAGE
+	.4byte Move_ESPER_WING
+	.4byte Move_BITTER_MALICE
+	.4byte Move_SHELTER
+	.4byte Move_TRIPLE_ARROWS
+	.4byte Move_INFERNAL_PARADE
+	.4byte Move_CEASELESS_EDGE
+	.4byte Move_BLEAKWIND_STORM
+	.4byte Move_WILDBOLT_STORM
+	.4byte Move_SANDSEAR_STORM
+	.4byte Move_LUNAR_BLESSING
+	.4byte Move_TAKE_HEART
+@@@@@SELECTIVE GEN 9 MOVES @@@@@@@@@
+	.4byte Move_RAGE_FIST
 @@@@@@@@@@@@ CUSTOM  @@@@@@@@@@@@
 	.4byte Move_COCOON
 	.4byte Move_MONOTYPE
-	.4byte MOVE_FLASH_FREEZE
-	.4byte MOVE_DRYADS_CURSE
+	.4byte Move_FLASH_FREEZE
+	.4byte Move_DRYADS_CURSE
 	.4byte Move_SHIELD_BASH
 	.4byte Move_UP_ROOT
 	.4byte Move_DIVE_BOMB
 	.4byte Move_NETTLE_WHIP
-	.4byte MOVE_SONIC_BOOM
+	.4byte Move_SONIC_BOOM
 	.4byte Move_COUNT @ cannot be reached, because last move is Eerie Spell  important check move order moves.h
 
 gBattleAnims_StatusConditions::
@@ -3236,7 +3263,7 @@ Move_AGILITY:: @ 81CA97A
 	delay 1
 	end
 
-MOVE_SONIC_BOOM::
+Move_SONIC_BOOM::
 	loadspritegfx ANIM_TAG_GUST
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg ANIM_DEF_PARTNER
@@ -9172,7 +9199,7 @@ SandTombSwirlingDirt:: @ 81D2DE3
 	delay 2
 	return
 
-MOVE_FLASH_FREEZE:	@hope works
+Move_FLASH_FREEZE:	@hope works
 Move_SHEER_COLD:: @ 81D2E6E
 	fadetobg 15
 	waitbgfadeout
@@ -10923,7 +10950,7 @@ Move_METAL_BURST:
 	waitforvisualfinish
 	end
 
-MOVE_UP_ROOT:
+Move_UP_ROOT:
 Move_U_TURN:
 	loadspritegfx ANIM_TAG_ROUND_SHADOW
 	loadspritegfx ANIM_TAG_IMPACT
@@ -10953,7 +10980,7 @@ UTurnVisible:
 	createsprite gFlyBallAttackSpriteTemplate, ANIM_ATTACKER, 2, 20, FALSE
 	goto UTurnContinue
 
-MOVE_DIVE_BOMB::
+Move_DIVE_BOMB::
 	loadspritegfx ANIM_TAG_IMPACT
 	loadspritegfx ANIM_TAG_BIRD
 	call SetSkyBg
@@ -23839,19 +23866,134 @@ Move_RISING_VOLTAGE::
 	end @to do:
 
 Move_TERRAIN_PULSE::
-	end @to do:
+	loadspritegfx ANIM_TAG_DRAGON_PULSE
+	monbg ANIM_TARGET
+	setalpha 12, 8
+	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 1, 0, 7, RGB_BLACK
+	launchtask AnimTask_TerrainPulse 0x5 0x0
+	jumpargeq 0x0, TYPE_ELECTRIC, TerrainPulseElectric
+	jumpargeq 0x0, TYPE_GRASS, TerrainPulseGrass
+	jumpargeq 0x0, TYPE_FAIRY, TerrainPulseFairy
+	jumpargeq 0x0, TYPE_PSYCHIC, TerrainPulsePsychic
+TerrainPulseNormal:
+	createvisualtask AnimTask_BlendParticle, 5, ANIM_TAG_DRAGON_PULSE, 0, 12, 12, RGB_WHITE
+	waitforvisualfinish
+	playsewithpan SE_M_PSYBEAM, SOUND_PAN_ATTACKER
+	createsoundtask SoundTask_LoopSEAdjustPanning, SE_M_PSYBEAM2, SOUND_PAN_ATTACKER, SOUND_PAN_TARGET, 3, 4, 0, 15
+	call DragonPulseParticle
+	call DragonPulseParticle
+	createvisualtask AnimTask_SwayMon, 5, 0, 2, 51200, 24, ANIM_TARGET
+	createvisualtask AnimTask_BlendColorCycle, 2, 4, 2, 2, 0, 12, RGB_WHITE
+	goto TerrainPulseEnd
+
+TerrainPulseElectric:
+	createvisualtask AnimTask_BlendParticle, 5, ANIM_TAG_DRAGON_PULSE, 0, 12, 12, RGB(27, 27, 0)
+	waitforvisualfinish
+	playsewithpan SE_M_PSYBEAM, SOUND_PAN_ATTACKER
+	createsoundtask SoundTask_LoopSEAdjustPanning, SE_M_PSYBEAM2, SOUND_PAN_ATTACKER, SOUND_PAN_TARGET, 3, 4, 0, 15
+	call DragonPulseParticle
+	call DragonPulseParticle
+	createvisualtask AnimTask_SwayMon, 5, 0, 4, 51200, 24, ANIM_TARGET
+	createvisualtask AnimTask_BlendColorCycle, 2, 4, 2, 2, 0, 12, RGB(27, 27, 0)
+	goto TerrainPulseEnd
+
+TerrainPulseGrass:
+	createvisualtask AnimTask_BlendParticle, 5, ANIM_TAG_DRAGON_PULSE, 0, 12, 12, RGB(11, 26, 11)
+	waitforvisualfinish
+	playsewithpan SE_M_PSYBEAM, SOUND_PAN_ATTACKER
+	createsoundtask SoundTask_LoopSEAdjustPanning, SE_M_PSYBEAM2, SOUND_PAN_ATTACKER, SOUND_PAN_TARGET, 3, 4, 0, 15
+	call DragonPulseParticle
+	call DragonPulseParticle
+	createvisualtask AnimTask_SwayMon, 5, 0, 4, 51200, 24, ANIM_TARGET
+	createvisualtask AnimTask_BlendColorCycle, 2, 4, 2, 2, 0, 12, RGB(11, 26, 11)
+	goto TerrainPulseEnd
+
+TerrainPulseFairy:
+	createvisualtask AnimTask_BlendParticle, 5, ANIM_TAG_DRAGON_PULSE, 0, 12, 12, RGB(31, 24, 31)
+	waitforvisualfinish
+	playsewithpan SE_M_PSYBEAM, SOUND_PAN_ATTACKER
+	createsoundtask SoundTask_LoopSEAdjustPanning, SE_M_PSYBEAM2, SOUND_PAN_ATTACKER, SOUND_PAN_TARGET, 3, 4, 0, 15
+	call DragonPulseParticle
+	call DragonPulseParticle
+	createvisualtask AnimTask_SwayMon, 5, 0, 4, 51200, 24, ANIM_TARGET
+	createvisualtask AnimTask_BlendColorCycle, 2, 4, 2, 2, 0, 12, RGB(31, 24, 31)
+	goto TerrainPulseEnd
+
+TerrainPulsePsychic:
+	createvisualtask AnimTask_BlendParticle, 5, ANIM_TAG_DRAGON_PULSE, 0, 12, 12, RGB(27, 0, 13)
+	waitforvisualfinish
+	playsewithpan SE_M_PSYBEAM, SOUND_PAN_ATTACKER
+	createsoundtask SoundTask_LoopSEAdjustPanning, SE_M_PSYBEAM2, SOUND_PAN_ATTACKER, SOUND_PAN_TARGET, 3, 4, 0, 15
+	call DragonPulseParticle
+	call DragonPulseParticle
+	createvisualtask AnimTask_SwayMon, 5, 0, 4, 51200, 24, ANIM_TARGET
+	createvisualtask AnimTask_BlendColorCycle, 2, 4, 2, 2, 0, 12, RGB(27, 0, 13)
+	goto TerrainPulseEnd
+
+TerrainPulseEnd:
+	call DragonPulseParticle
+	call DragonPulseParticle
+	call DragonPulseParticle
+	call DragonPulseParticle
+	call DragonPulseParticle
+	call DragonPulseParticle
+	call DragonPulseParticle
+	call DragonPulseParticle
+	call DragonPulseParticle
+	waitforvisualfinish
+	delay 1
+	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 1, 7, 0, RGB_BLACK
+	waitforvisualfinish
+	blendoff
+	clearmonbg ANIM_TARGET
+	end
 
 Move_SKITTER_SMACK::
 	end @to do:
 
 Move_BURNING_JEALOUSY::
-	end @to do:
+	goto Move_OVERHEAT
 
 Move_LASH_OUT::
 	end @to do:
 
 Move_POLTERGEIST::
-	end @to do:
+	loadspritegfx ANIM_TAG_EYE_SPARKLE
+	loadspritegfx ANIM_TAG_WHITE_SHADOW @Destiny Bond
+	loadspritegfx ANIM_TAG_QUICK_GUARD_HAND @Black Colour
+	loadspritegfx ANIM_TAG_IMPACT
+	loadspritegfx ANIM_TAG_POLTERGEIST
+	fadetobg BG_NIGHTMARE
+	waitbgfadein
+	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 2, 0, 0, 16, RGB_BLACK
+	waitforvisualfinish
+	createsprite gEyeSparkleSpriteTemplate, ANIM_ATTACKER, 0, -16, -8
+	createsprite gEyeSparkleSpriteTemplate, ANIM_ATTACKER, 0, 16, -8
+	playsewithpan SE_M_DETECT, SOUND_PAN_ATTACKER
+	waitforvisualfinish
+	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 2, 0, 16, 0, RGB_BLACK
+	playsewithpan SE_M_FAINT_ATTACK, SOUND_PAN_ATTACKER
+	delay 0x1
+	launchtask AnimTask_DestinyBondWhiteShadow 0x5 0x2 0x0 0x24
+	delay 0x30
+	playsewithpan SE_M_SAND_ATTACK, SOUND_PAN_TARGET
+	createvisualtask AnimTask_PoltergeistItem, 2
+	waitforvisualfinish
+	setalpha 12, 8
+	launchtemplate gBasicHitSplatSpriteTemplate 0x2 0x4 0x0 0x0 0x1 0x1
+	launchtask AnimTask_ShakeMon 0x5 0x5 0x1 0x0 0x5 0x5 0x1
+	launchtemplate gComplexPaletteBlendSpriteTemplate 0x2 0x7 0x7 0x5 0x1 0x0 0xa 0x0 0x0
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
+	waitforvisualfinish
+	launchtask AnimTask_NightmareClone 0x2 0x0
+	launchtask AnimTask_ShakeMon 0x2 0x5 0x1 0x3 0x0 0x28 0x1
+	playsewithpan SE_M_NIGHTMARE, SOUND_PAN_TARGET
+	waitforvisualfinish
+	restorebg
+	waitbgfadein
+	clearmonbg 0x3
+	blendoff
+	end
 
 Move_CORROSIVE_GAS::
 	end @to do:
@@ -23872,7 +24014,7 @@ Move_SCORCHING_SANDS::
 	end @to do:
 
 Move_JUNGLE_HEALING::
-	end @to do:
+	goto Move_AROMATHERAPY
 
 Move_WICKED_BLOW::
 	end @to do:
@@ -23904,8 +24046,83 @@ Move_ASTRAL_BARRAGE::
 Move_EERIE_SPELL::
 	end @to do:
 
-@Custom moves here
+@Legends Arceus moves
+Move_DIRE_CLAW::
+	end @to do:
 
+Move_PSYSHIELD_BASH::
+	end @to do:
+
+Move_POWER_SHIFT::
+	end @to do:
+Move_STONE_AXE::
+	end @to do:
+
+Move_SPRINGTIDE_STORM::
+	end @to do:
+
+Move_MYSTICAL_POWER::
+	end @to do:
+
+Move_RAGING_FURY::
+	end @to do:
+
+Move_WAVE_CRASH::
+	end @to do:
+
+Move_CHLOROBLAST::
+	end @to do:
+
+Move_MOUNTAIN_GALE::
+	end @to do:
+
+Move_VICTORY_DANCE::
+	end @to do:
+
+Move_HEADLONG_RUSH::
+	end @to do:
+
+Move_BARB_BARRAGE::
+	end @to do:
+
+Move_ESPER_WING::
+	end @to do:
+
+Move_BITTER_MALICE::
+	end @to do:
+
+Move_SHELTER::
+	end @to do:
+
+Move_TRIPLE_ARROWS::
+	end @to do:
+
+Move_INFERNAL_PARADE::
+	end @to do:
+
+Move_CEASELESS_EDGE::
+	end @to do:
+
+Move_BLEAKWIND_STORM::
+	end @to do:
+
+Move_WILDBOLT_STORM::
+	end @to do:
+
+Move_SANDSEAR_STORM::
+	end @to do:
+
+Move_LUNAR_BLESSING::
+	end @to do:
+
+Move_TAKE_HEART::
+	end @to do:
+
+@some gen9 moves for mon I actually want
+Move_RAGE_FIST::
+	end @to do:
+
+@Custom moves here
 Move_COCOON:: @ animation didn''t work because I forgot to define it at top
 	loopsewithpan SE_M_HARDEN, 192, 28, 2
 	createvisualtask AnimTask_MusicNotesRainbowBlend, 2,
@@ -23919,7 +24136,7 @@ Move_MONOTYPE::
 
 @flash freeze put on sheercold
 
-MOVE_DRYADS_CURSE::		@Need to ttest
+Move_DRYADS_CURSE::		@Need to ttest
 	loadspritegfx ANIM_TAG_ROOTS
 	loadspritegfx ANIM_TAG_GHOSTLY_SPIRIT
 	createvisualtask AnimTask_SwayMon, 5, 0, 10, 1536, 3, 0

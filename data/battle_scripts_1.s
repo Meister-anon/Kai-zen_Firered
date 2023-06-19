@@ -437,6 +437,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectProtect	@shield bash
 	.4byte BattleScript_EffectAttractHit	@use move_effect_attract
 	.4byte BattleScript_EffectHit		@Expanding Force fill effect  is gen 9, just putting here to fill space, is not setup
+	.4byte BattleScript_EffectTripleArrows @ EFFECT_TRIPLE_ARROWS
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -3304,6 +3305,37 @@ BattleScript_EffectFocusEnergy::
 	printfromtable gFocusEnergyUsedStringIds
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
+
+BattleScript_EffectTripleArrows::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	attackanimation
+	waitanimation
+	critcalc
+	damagecalc
+	typecalc
+	adjustnormaldamage
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage 0x40
+	resultmessage
+	waitmessage 0x40
+	seteffectwithchance
+	argumenttomoveeffect
+	jumpifstatus2 BS_ATTACKER, STATUS2_FOCUS_ENERGY, BattleScript_TripleArrowsMoveEnd
+	setfocusenergy
+	printfromtable gFocusEnergyUsedStringIds
+	waitmessage 0x40
+BattleScript_TripleArrowsMoveEnd:
+	tryfaintmon BS_TARGET, 0, NULL
+	moveendall
+	end
 
 BattleScript_EffectRecoil::
 	setmoveeffect MOVE_EFFECT_RECOIL_25 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
@@ -7620,6 +7652,7 @@ BattleScript_IntimidateActivates::
 BattleScript_IntimidateActivationAnimLoop::
 	trygetintimidatetarget BattleScript_IntimidateEnd @updated intimidate to current gen standard
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_IntimidateFail		@forgot tiger mom has different ability exclusion need rearrange abilities here
+	jumpiftype BS_TARGET, TYPE_DARK, BattleScript_IntimidateFail					@DARK Buff after changes, immune to intimidation
 	jumpifability BS_TARGET, ABILITY_CLEAR_BODY, BattleScript_IntimidateAbilityFail		@and then jump out, before atk stat specific exclusions
 	jumpifability BS_TARGET, ABILITY_LEAF_GUARD, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_FULL_METAL_BODY, BattleScript_IntimidateAbilityFail
