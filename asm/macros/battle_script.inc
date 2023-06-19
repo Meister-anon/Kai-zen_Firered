@@ -1573,6 +1573,11 @@
 	.byte \case
 	.endm
 
+	.macro handleprimalreversion battler:req, case:req
+	various \battler, VARIOUS_HANDLE_PRIMAL_REVERSION
+	.byte \case
+	.endm
+
 	.macro handleformchange battler:req, case:req
 	various \battler, VARIOUS_HANDLE_FORM_CHANGE
 	.byte \case

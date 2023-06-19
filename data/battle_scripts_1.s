@@ -1239,7 +1239,7 @@ BattleScript_EffectAttackUpUserAlly_Works:
 	attackanimation
 	waitanimation
 	setstatchanger STAT_ATK, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR, BattleScript_EffectAttackUpUserAlly_TryAlly
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_BS_PTR, BattleScript_EffectAttackUpUserAlly_TryAlly
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_EffectAttackUpUserAllyUser_PrintString
 	setgraphicalstatchangevalues
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
@@ -1252,7 +1252,7 @@ BattleScript_EffectAttackUpUserAlly_End:
 	goto BattleScript_MoveEnd
 BattleScript_EffectAttackUpUserAlly_TryAlly_:
 	setstatchanger STAT_ATK, 1, FALSE
-	statbuffchange STAT_CHANGE_ALLOW_PTR, BattleScript_EffectAttackUpUserAlly_End
+	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_EffectAttackUpUserAlly_End
 	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_EffectAttackUpUserAlly_AllyAnim
 	pause B_WAIT_TIME_SHORTEST
 	printstring STRINGID_TARGETSTATWONTGOHIGHER
@@ -1269,15 +1269,15 @@ BattleScript_EffectTeatime::
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifteanoberry BattleScript_ButItFailed
+	@jumpifteanoberry BattleScript_ButItFailed  neeed to add commands vsonic
 @ at least one battler is affected 
 	attackanimation
 	waitanimation
 BattleScript_TeatimeLoop:
-	jumpifteainvulnerable BS_TARGET, BattleScript_Teatimevul
-	jumpifrodaffected BS_TARGET, BattleScript_Teatimerod
-	jumpifabsorbaffected BS_TARGET, BattleScript_Teatimesorb
-	jumpifmotoraffected BS_TARGET, BattleScript_Teatimemotor
+	@jumpifteainvulnerable BS_TARGET, BattleScript_Teatimevul
+	@jumpifrodaffected BS_TARGET, BattleScript_Teatimerod
+	@jumpifabsorbaffected BS_TARGET, BattleScript_Teatimesorb
+	@jumpifmotoraffected BS_TARGET, BattleScript_Teatimemotor
 	orword gHitMarker, HITMARKER_NO_ANIMATIONS | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE
 	setbyte sBERRY_OVERRIDE, TRUE   @ override the requirements for eating berries
 	consumeberry BS_TARGET, TRUE  @ consume the berry, then restore the item from changedItems
@@ -1303,7 +1303,7 @@ BattleScript_Teatimerod:
 	call BattleScript_AbilityPopUpTarget
 	playstatchangeanimation BS_TARGET, BIT_SPATK, STAT_CHANGE_BY_TWO
 	setstatchanger STAT_SPATK, 1, FALSE
-	statbuffchange STAT_CHANGE_ALLOW_PTR, BattleScript_TeatimeBuffer
+	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_TeatimeBuffer
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_TeatimeBuffer
 	printfromtable gStatUpStringIds
 	waitmessage 0x40
@@ -1315,7 +1315,7 @@ BattleScript_Teatimemotor:
 	call BattleScript_AbilityPopUpTarget
 	playstatchangeanimation BS_TARGET, BIT_SPEED, STAT_CHANGE_BY_TWO
 	setstatchanger STAT_SPEED, 1, FALSE
-	statbuffchange STAT_CHANGE_ALLOW_PTR, BattleScript_TeatimeBuffer
+	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_TeatimeBuffer
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_TeatimeBuffer
 	printfromtable gStatUpStringIds
 	waitmessage 0x40
@@ -1342,19 +1342,19 @@ BattleScript_VictoryDanceDoMoveAnim::
 	setbyte sSTAT_ANIM_PLAYED, FALSE
 	playstatchangeanimation BS_ATTACKER, BIT_ATK | BIT_DEF | BIT_SPEED, 0
 	setstatchanger STAT_ATK, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR, BattleScript_VictoryDanceTryDef
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_BS_PTR, BattleScript_VictoryDanceTryDef
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_VictoryDanceTryDef
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_VictoryDanceTryDef::
 	setstatchanger STAT_DEF, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR, BattleScript_VictoryDanceTrySpeed
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_BS_PTR, BattleScript_VictoryDanceTrySpeed
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_VictoryDanceTrySpeed
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_VictoryDanceTrySpeed::
 	setstatchanger STAT_SPEED, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR, BattleScript_VictoryDanceEnd
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_BS_PTR, BattleScript_VictoryDanceEnd
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_VictoryDanceEnd
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
@@ -2978,7 +2978,7 @@ BattleScript_MirrorArmorReflect::
 	@call BattleScript_AbilityPopUp
 	jumpifsubstituteblocks BattleScript_AbilityNoSpecificStatLoss
 BattleScript_MirrorArmorReflectStatLoss:
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_MirrorArmorReflectEnd
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_BS_PTR, BattleScript_MirrorArmorReflectEnd
 	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_MirrorArmorReflectAnim
 	goto BattleScript_MirrorArmorReflectWontFall
 BattleScript_MirrorArmorReflectAnim:
@@ -4287,7 +4287,7 @@ BattleScript_PerishBodyActivates::
 
 BattleScript_GulpMissileGorging::
 	@call BattleScript_AbilityPopUp
-	playanimation BS_ATTACKER, B_ANIM_GULP_MISSILE
+	playanimation BS_ATTACKER, B_ANIM_GULP_MISSILE, sB_ANIM_ARG1
 	waitanimation
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	effectivenesssound
@@ -4296,12 +4296,12 @@ BattleScript_GulpMissileGorging::
 	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD, BattleScript_GulpMissileNoDmgGorging
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
-	tryfaintmon BS_ATTACKER
+	tryfaintmon BS_ATTACKER, FALSE, NULL
 	getbattlerfainted BS_ATTACKER
 	jumpifbyte CMP_EQUAL, gBattleCommunication, TRUE, BattleScript_GulpMissileNoSecondEffectGorging
 BattleScript_GulpMissileNoDmgGorging:
 	handleformchange BS_TARGET, 0
-	playanimation BS_TARGET, B_ANIM_FORM_CHANGE
+	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, sB_ANIM_ARG1
 	waitanimation
 	swapattackerwithtarget
 	setmoveeffect MOVE_EFFECT_PARALYSIS
@@ -4310,13 +4310,13 @@ BattleScript_GulpMissileNoDmgGorging:
 	return
 BattleScript_GulpMissileNoSecondEffectGorging:
 	handleformchange BS_TARGET, 0
-	playanimation BS_TARGET, B_ANIM_FORM_CHANGE
+	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, sB_ANIM_ARG1
 	waitanimation
 	return
 
 BattleScript_GulpMissileGulping::
 	@call BattleScript_AbilityPopUp
-	playanimation BS_ATTACKER, B_ANIM_GULP_MISSILE
+	playanimation BS_ATTACKER, B_ANIM_GULP_MISSILE, sB_ANIM_ARG1
 	waitanimation
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	effectivenesssound
@@ -4325,7 +4325,7 @@ BattleScript_GulpMissileGulping::
 	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD, BattleScript_GulpMissileNoDmgGulping
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
-	tryfaintmon BS_ATTACKER
+	tryfaintmon BS_ATTACKER, FALSE, NULL
 	getbattlerfainted BS_ATTACKER
 	jumpifbyte CMP_EQUAL, gBattleCommunication, TRUE, BattleScript_GulpMissileNoSecondEffectGulping
 	jumpifability BS_ATTACKER, ABILITY_CLEAR_BODY, BattleScript_GulpMissileNoSecondEffectGulping
@@ -4335,7 +4335,7 @@ BattleScript_GulpMissileGulping::
 	jumpifflowerveilattacker BattleScript_GulpMissileNoSecondEffectGulping
 BattleScript_GulpMissileNoDmgGulping:
 	handleformchange BS_TARGET, 0
-	playanimation BS_TARGET, B_ANIM_FORM_CHANGE
+	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, sB_ANIM_ARG1
 	waitanimation
 	swapattackerwithtarget @ to make gStatDownStringIds down below print the right battler
 	setstatchanger STAT_DEF, 1, TRUE
@@ -4348,7 +4348,7 @@ BattleScript_GulpMissileNoDmgGulping:
 	return
 BattleScript_GulpMissileNoSecondEffectGulping:
 	handleformchange BS_TARGET, 0
-	playanimation BS_TARGET, B_ANIM_FORM_CHANGE
+	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, sB_ANIM_ARG1
 	waitanimation
 	return
 BattleScript_GulpMissileGorgingTargetDefenseCantGoLower:
@@ -5867,7 +5867,7 @@ BattleScript_PrimalReversionRet::
 	setbyte gIsCriticalHit, 0
 	handleprimalreversion BS_ATTACKER, 0
 	handleprimalreversion BS_ATTACKER, 1
-	playanimation BS_ATTACKER, B_ANIM_PRIMAL_REVERSION
+	playanimation BS_ATTACKER, B_ANIM_PRIMAL_REVERSION, sB_ANIM_ARG1
 	waitanimation
 	handleprimalreversion BS_ATTACKER, 2
 	printstring STRINGID_PKMNREVERTEDTOPRIMAL
@@ -5883,7 +5883,7 @@ BattleScript_AttackerFormChange::
 BattleScript_AttackerFormChangeNoPopup::
 	handleformchange BS_ATTACKER, 0
 	handleformchange BS_ATTACKER, 1
-	playanimation BS_ATTACKER, B_ANIM_FORM_CHANGE
+	playanimation BS_ATTACKER, B_ANIM_FORM_CHANGE, sB_ANIM_ARG1
 	waitanimation
 	handleformchange BS_ATTACKER, 2
 	return
@@ -5899,23 +5899,13 @@ BattleScript_AttackerFormChangeMoveEffect::
 	waitmessage 1
 	handleformchange BS_ATTACKER, 0
 	handleformchange BS_ATTACKER, 1
-	playanimation BS_ATTACKER, B_ANIM_FORM_CHANGE
+	playanimation BS_ATTACKER, B_ANIM_FORM_CHANGE, sB_ANIM_ARG1
 	waitanimation
 	copybyte sBATTLER, gBattlerAttacker
 	printstring STRINGID_PKMNTRANSFORMED
 	waitmessage B_WAIT_TIME_LONG
 	handleformchange BS_ATTACKER, 2
 	end3
-
-BattleScript_MagicCoatBounce::
-	attackstring
-	ppreduce
-	pause B_WAIT_TIME_SHORT
-	printfromtable gMagicCoatBounceStringIds
-	waitmessage B_WAIT_TIME_LONG
-	orword gHitMarker, HITMARKER_ATTACKSTRING_PRINTED | HITMARKER_NO_PPDEDUCT | HITMARKER_ALLOW_NO_PP
-	setmagiccoattarget BS_ATTACKER
-	return
 
 BattleScript_MagicCoatBouncePrankster::
 	attackstring
@@ -6924,14 +6914,14 @@ BattleScript_DefDownSpeedUp::
 BattleScript_DefDownSpeedUpTryDef::
 	playstatchangeanimation BS_ATTACKER, BIT_DEF, STAT_CHANGE_NEGATIVE | STAT_CHANGE_CANT_PREVENT
 	setstatchanger STAT_DEF, 1, TRUE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR | MOVE_EFFECT_CERTAIN, BattleScript_DefDownSpeedUpTrySpeed
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_BS_PTR | MOVE_EFFECT_CERTAIN, BattleScript_DefDownSpeedUpTrySpeed
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_DefDownSpeedUpTrySpeed
 	printfromtable gStatDownStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_DefDownSpeedUpTrySpeed:
 	playstatchangeanimation BS_ATTACKER, BIT_SPEED, 0
 	setstatchanger STAT_SPEED, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR | MOVE_EFFECT_CERTAIN, BattleScript_DefDownSpeedUpRet
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_BS_PTR | MOVE_EFFECT_CERTAIN, BattleScript_DefDownSpeedUpRet
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_DefDownSpeedUpRet
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
@@ -7863,7 +7853,7 @@ BattleScript_DesolateLandActivates::
 	@ call BattleScript_AbilityPopUp
 	printstring STRINGID_EXTREMELYHARSHSUNLIGHT
 	waitstate
-	playanimation BS_BATTLER_0, B_ANIM_SUN_CONTINUES
+	playanimation BS_BATTLER_0, B_ANIM_SUN_CONTINUES, NULL
 	call BattleScript_WeatherFormChanges
 	end3
 
@@ -7881,7 +7871,7 @@ BattleScript_PrimordialSeaActivates::
 	@@ call BattleScript_AbilityPopUp
 	printstring STRINGID_HEAVYRAIN
 	waitstate
-	playanimation BS_BATTLER_0, B_ANIM_RAIN_CONTINUES
+	playanimation BS_BATTLER_0, B_ANIM_RAIN_CONTINUES, NULL
 	call BattleScript_WeatherFormChanges
 	end3
 
@@ -7899,7 +7889,7 @@ BattleScript_DeltaStreamActivates::
 	@ call BattleScript_AbilityPopUp
 	printstring STRINGID_MYSTERIOUSAIRCURRENT
 	waitstate
-	playanimation BS_ATTACKER, B_ANIM_STRONG_WINDS
+	playanimation BS_ATTACKER, B_ANIM_STRONG_WINDS, NULL
 	end3
 
 BattleScript_AttackWeakenedByStrongWinds::
@@ -8034,7 +8024,7 @@ BattleScript_MoveStatDrain::
 	printstring STRINGID_TARGETABILITYSTATRAISE
 	waitmessage B_WAIT_TIME_LONG
 	clearsemiinvulnerablebit
-	tryfaintmon BS_ATTACKER
+	tryfaintmon BS_ATTACKER, FALSE, NULL
 	goto BattleScript_MoveEnd
 
 BattleScript_MonMadeMoveUseless_PPLoss::
@@ -9134,17 +9124,17 @@ BattleScript_TruantHealing::
 	end
 
 BattleScript_HealAnimation::
-	playanimation BS_ATTACKER, B_ANIM_BASIC_HEAL
+	playanimation BS_ATTACKER, B_ANIM_BASIC_HEAL, NULL
 	return
 
 BattleScript_Healing::
-	playanimation BS_ATTACKER, B_ANIM_BASIC_HEAL
+	playanimation BS_ATTACKER, B_ANIM_BASIC_HEAL, NULL
 	goto BattleScript_TruantHealing
 
 BattleScript_SleepHealing:
 	printstring STRINGID_WELLRESTED
 	waitmessage 0x40
-	playanimation BS_ATTACKER, B_ANIM_BASIC_HEAL
+	playanimation BS_ATTACKER, B_ANIM_BASIC_HEAL, NULL
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
@@ -9377,11 +9367,11 @@ BattleScript_ItemHurtRet::
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_HURTBYITEM
 	waitmessage B_WAIT_TIME_LONG
-	tryfaintmon BS_ATTACKER
+	tryfaintmon BS_ATTACKER, FALSE, NULL
 	return
 
 BattleScript_ItemHurtEnd2::
-	playanimation BS_ATTACKER, B_ANIM_MON_HIT
+	playanimation BS_ATTACKER, B_ANIM_MON_HIT, NULL
 	waitanimation
 	call BattleScript_ItemHurtRet
 	end2
