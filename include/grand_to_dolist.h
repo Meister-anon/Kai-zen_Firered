@@ -395,6 +395,7 @@ With that I can use GetMondata ability num, if 0 set a random abilityNum between
 goto TRAINER_PARTY_DATA
 goto TRAINER_DATA_STRUCTS
 
+goto B_ANIM_CONSTANTS //for porting animation, need set constant for recognition in battlescript
 
 /* realized logic for damage on air targets was incomplete 
 * correcting setup - DONE
@@ -932,7 +933,7 @@ as well as the effect of increasing trap duration
 * 
 * gDisableStructs[battler].isFirstTurn == 2  is logic for mon switchig in, can use for switchin reactivation condition
 * 
-* //buff willl make strong so need a counter, make intimidate*switchin* fail if status 1
+* //buff willl make strong so need a counter, make intimidate*switchin* fail if status 1    -also added dark exclusion and a couple other ability exclusions as buffs for those i.e oblivious unaware etc.
         // or if confused, if confusion success is same oddds as confusion success attack,
         //set to do confusion battlescript on attacker, instead of  intimiate script if fails
         //i.e play twirly birds over mon (use play status animation do for all abilities canceled by status) to indicate why intimidate didnt go off.
@@ -1469,7 +1470,7 @@ goto WEATHER_AND_TERRAIN_EFFECTS
 */
 goto SPRITE_COORDINATE_AND_ELEVATION_LOGIC
 goto FRONT_PIC_TABLE    //table for front pic use rules to standardize mon brought in from expansion
-goto MON_ELEVATION_TABLE    //SAME BUT for elevation
+goto MON_ELEVATION_TABLE    //SAME BUT for elevation    /some mon for pokedex need raising see if these are relevant-
 
 goto TERRAIN_DEFINES
 goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement //still to do     vsonic

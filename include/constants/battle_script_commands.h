@@ -4,7 +4,10 @@
 //ok this needs to match the Battlescripting struct in include/battle.h
 // + 1 if u8,   +2 if u16,   +4 if u32,  if bracket multiply value in bracket by type
 //ex  u8 multihitString[6];    6 x  +1  = +6
-//go up from previous value based on your found number and that's next values starting point
+//go up from previous value, not inclusive, so not counting that last value based on your found number and that's next values starting point
+//ex last value 24  it is u16 so you go Up 2 from 24, - 25, 26, your next value is 26
+//emerald also goes over 32, so that dosen't seem to be a hard limit this is fine
+
 // Battle Scripting and BattleCommunication addresses
 #define sPAINSPLIT_HP gBattleScripting
 #define sBIDE_DMG gBattleScripting + 4
@@ -37,16 +40,17 @@
 //#define sILLUSION_NICK_HACK gBattleScripting + 0x25
 //#define sFIXED_ABILITY_POPUP         (gBattleScripting + 0x26) // fixedPopup
 //#define sABILITY_OVERWRITE           (gBattleScripting + 0x27) // abilityPopupOverwrite
-//#define sSAVED_DMG gBattleScripting + 0x29
+
 
 #define sSWITCH_CASE (gBattleScripting + 0x2A)//   (gBattleScripting + 0x31) // switchCase  used for red card special swith condition	//FORCED SWITCH?
 #define sBERRY_OVERRIDE	(gBattleScripting + 0x2B)// (gBattleScripting + 0x32) // overrideBerryRequirements
 #define sSTICKY_WEB_STAT_DROP	(gBattleScripting + 0x2C)// (gBattleScripting + 0x32) // overrideBerryRequirements
+#define sSAVED_DMG gBattleScripting + 0x2D
 //#define sMON_CAUGHT     (gBattleScripting + 0x33) // monCaught NOT NEEDED, only used in emerald for succesful captures to incremennt game stat capture
-#define sFIELD_23 gBattleScripting + 0x2D	//nothing in struct below this think all used values must go above here
-#define sWINDOWS_TYPE gBattleScripting + 0x2E
-#define sMULTIPLAYER_ID gBattleScripting + 0x2F
-#define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x30
+#define sFIELD_23 gBattleScripting + 0x31	//nothing in struct below this think all used values must go above here
+#define sWINDOWS_TYPE gBattleScripting + 0x32
+#define sMULTIPLAYER_ID gBattleScripting + 0x33
+#define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x34
 
 
 #define cEFFECT_CHOOSER gBattleCommunication + 3
@@ -255,53 +259,53 @@
 //& STAT_BUFF_NOT_PROTECT_AFFECTED
 
 // statchange defines
-#define STAT_CHANGE_BS_PTR                  0x1 // If set, allow use of jumpptr. Set in every use of statbuffchange
+#define STAT_CHANGE_BS_PTR                  0x1 // If set, allow use of jumpptr. Set in every use of statbuffchange		//equivalent stat_change_allow_ptr
 #define STAT_CHANGE_MIRROR_ARMOR			0x2	// Stat change redirection caused by Mirror Armor ability.
 #define STAT_CHANGE_NOT_PROTECT_AFFECTED    0x20
 #define STAT_CHANGE_UPDATE_MOVE_EFFECT		0x64	//still don't know what does
 
 // atk48
-#define ATK48_STAT_NEGATIVE         0x1
-#define ATK48_STAT_BY_TWO           0x2
-#define ATK48_ONLY_MULTIPLE         0x4
-#define ATK48_DONT_CHECK_LOWER      0x8	//think equivalent of stat_change_cant_prevent
+#define STAT_CHANGE_STAT_NEGATIVE         0x1
+#define STAT_CHANGE_STAT_BY_TWO           0x2
+#define STAT_CHANGE_ONLY_MULTIPLE         0x4
+#define STAT_CHANGE_DONT_CHECK_LOWER      0x8	//think equivalent of stat_change_cant_prevent
 
 // atk49, moveend cases
-#define ATK49_PROTECT_LIKE_EFFECT				0
-#define ATK49_RAGE                              1
-#define ATK49_DEFROST                           2
-#define ATK49_SYNCHRONIZE_TARGET                3
-#define ATK49_MOVE_END_ABILITIES                4
-#define ATK49_ABILITIES_ATTACKER				5 //increment above 1
-#define ATK49_STATUS_IMMUNITY_ABILITIES         6
-#define ATK49_SYNCHRONIZE_ATTACKER              7
-#define ATK49_CHOICE_MOVE                       8
-#define ATK49_CHANGED_ITEMS                     9
-#define ATK49_ATTACKER_INVISIBLE                10
-#define ATK49_ATTACKER_VISIBLE                  11
-#define ATK49_TARGET_VISIBLE                    12
-#define ATK49_ITEM_EFFECTS_TARGET				13
-#define ATK49_MOVE_EFFECTS2						14      
-#define ATK49_ITEM_EFFECTS_ALL                  15
-#define ATK49_KINGSROCK						    16  //item effect need to be bfore kingsrock for things like rocky helm I guess
-#define ATK49_SUBSTITUTE                        17
-#define ATK49_SKY_DROP_CONFUSE					18
-#define ATK49_UPDATE_LAST_MOVES                 19
-#define ATK49_MIRROR_MOVE                       20
-#define ATK49_NEXT_TARGET                       21 //last fire red value below not implemented   
+#define MOVE_END_PROTECT_LIKE_EFFECT			   0
+#define MOVE_END_RAGE                              1
+#define MOVE_END_DEFROST                           2
+#define MOVE_END_SYNCHRONIZE_TARGET                3
+#define MOVE_END_MOVE_END_ABILITIES                4
+#define MOVE_END_ABILITIES_ATTACKER				   5 //increment above 1
+#define MOVE_END_STATUS_IMMUNITY_ABILITIES         6
+#define MOVE_END_SYNCHRONIZE_ATTACKER              7
+#define MOVE_END_CHOICE_MOVE                       8
+#define MOVE_END_CHANGED_ITEMS                     9
+#define MOVE_END_ATTACKER_INVISIBLE                10
+#define MOVE_END_ATTACKER_VISIBLE                  11
+#define MOVE_END_TARGET_VISIBLE                    12
+#define MOVE_END_ITEM_EFFECTS_TARGET			   13
+#define MOVE_END_MOVE_EFFECTS2					   14      
+#define MOVE_END_ITEM_EFFECTS_ALL                  15
+#define MOVE_END_KINGSROCK						   16  //item effect need to be bfore kingsrock for things like rocky helm I guess
+#define MOVE_END_SUBSTITUTE                        17
+#define MOVE_END_SKY_DROP_CONFUSE				   18
+#define MOVE_END_UPDATE_LAST_MOVES                 19
+#define MOVE_END_MIRROR_MOVE                       20
+#define MOVE_END_NEXT_TARGET                       21 //last fire red value below not implemented   
 
-#define ATK49_MULTIHIT_MOVE						22
-#define ATK49_MAGICIAN                          23    // Occurs after final multi-hit strike, and after other items/abilities would activate
-#define ATK49_EJECT_BUTTON                      24
-#define ATK49_RED_CARD                          25
-#define ATK49_EJECT_PACK                        26
-#define ATK49_LIFEORB_SHELLBELL                 27    // Includes shell bell, throat spray, etc
-#define ATK49_PICKPOCKET                        28
-#define ATK49_DANCER							29
-#define ATK49_EMERGENCY_EXIT					30
-#define ATK49_SYMBIOSIS							31
-#define ATK49_CLEAR_BITS						32
-#define ATK49_COUNT								33
+#define MOVE_END_MULTIHIT_MOVE					   22
+#define MOVE_END_MAGICIAN                          23    // Occurs after final multi-hit strike, and after other items/abilities would activate
+#define MOVE_END_EJECT_BUTTON                      24
+#define MOVE_END_RED_CARD                          25
+#define MOVE_END_EJECT_PACK                        26
+#define MOVE_END_LIFEORB_SHELLBELL                 27    // Includes shell bell, throat spray, etc
+#define MOVE_END_PICKPOCKET                        28
+#define MOVE_END_DANCER							   29
+#define MOVE_END_EMERGENCY_EXIT					   30
+#define MOVE_END_SYMBIOSIS						   31
+#define MOVE_END_CLEAR_BITS						   32
+#define MOVE_END_COUNT							   33
 
 // switch cases - PORTED right now not used, adding red card only for now
 #define B_SWITCH_NORMAL     0

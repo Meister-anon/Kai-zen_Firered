@@ -459,7 +459,7 @@
 #define BG_POISON                               42
 #define BG_AEROBLAST                            43
 #define BG_HIGH_SPEED                           44  //hurricane, close combat
-#define BG_ELECTRIC_TERRAIN                     45
+#define BG_ELECTRIC_TERRAIN                     45	//ugly don't plan to use these
 #define BG_GRASSY_TERRAIN                       46
 #define BG_MISTY_TERRAIN                        47
 #define BG_PSYCHIC_TERRAIN                      48
@@ -493,6 +493,7 @@
 #define BG_DYNAMAX_CANNON                       76
 #define BG_AURA_SPHERE                          77
 
+#define B_ANIM_CONSTANTS
 // table ids for general animations	(gBattleAnims_General) //buffer for values from battle_anim_scripts.s
 #define B_ANIM_CASTFORM_CHANGE          0x0
 #define B_ANIM_STATS_CHANGE             0x1

@@ -833,12 +833,12 @@ struct BattleScripting  //remember expanding this costs ewram
    /* u8 illusionNickHack; // To properly display nick in STRINGID_ENEMYABOUTTOSWITCHPKMN.
     bool8 fixedPopup;   // Force ability popup to stick until manually called back
     u16 abilityPopupOverwrite;  //UNCOMMENT if you want these features
-    s32 savedDmg;   //port feature leaving out for now
     u16 savedMoveEffect; // For moves hitting multiple targets.
     u16 moveEffect;*/
     u8 switchCase;  // Special switching conditions, eg. red card
     u8 overrideBerryRequirements;
     u8 stickyWebStatDrop; // To prevent Defiant activating on a Court Change'd Sticky Web
+    s32 savedDmg;   //port feature leaving out for now - added as needed for bs somehow
     //bool8 monCaught;  //believe most of these aren't needed, can be handled with battlescript
     u8 field_23;    //they are just different ways of doing things, btu I prefer saving ram.
 };

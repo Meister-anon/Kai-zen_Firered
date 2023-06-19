@@ -6469,12 +6469,12 @@ static void atk48_playstatchangeanimation(void)
     if (ability == ABILITY_CONTRARY)
         flags ^= STAT_ANIM_MINUS1;
     else if (ability == ABILITY_SIMPLE)
-        flags |= ATK48_STAT_BY_TWO;
+        flags |= STAT_CHANGE_STAT_BY_TWO;
 
-    if (flags & ATK48_STAT_NEGATIVE) // goes down
+    if (flags & STAT_CHANGE_STAT_NEGATIVE) // goes down
     {
         s16 startingStatAnimId;
-        if (flags & ATK48_STAT_BY_TWO)
+        if (flags & STAT_CHANGE_STAT_BY_TWO)
             startingStatAnimId = STAT_ANIM_MINUS2 - 1;
         else
             startingStatAnimId = STAT_ANIM_MINUS1 - 1;
@@ -6483,7 +6483,7 @@ static void atk48_playstatchangeanimation(void)
         {
             if (statsToCheck & 1)
             {
-                if (flags & ATK48_DONT_CHECK_LOWER)
+                if (flags & STAT_CHANGE_DONT_CHECK_LOWER)
                 {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > 0)
                     {
@@ -6518,7 +6518,7 @@ static void atk48_playstatchangeanimation(void)
 
         if (changeableStatsCount > 1) // more than one stat, so the color is gray
         {
-            if (flags & ATK48_STAT_BY_TWO)
+            if (flags & STAT_CHANGE_STAT_BY_TWO)
                 statAnimId = STAT_ANIM_MULTIPLE_MINUS2;
             else
                 statAnimId = STAT_ANIM_MULTIPLE_MINUS1;
@@ -6527,7 +6527,7 @@ static void atk48_playstatchangeanimation(void)
     else // goes up
     {
         s16 startingStatAnimId;
-        if (flags & ATK48_STAT_BY_TWO)
+        if (flags & STAT_CHANGE_STAT_BY_TWO)
             startingStatAnimId = STAT_ANIM_PLUS2 - 1;
         else
             startingStatAnimId = STAT_ANIM_PLUS1 - 1;
@@ -6544,13 +6544,13 @@ static void atk48_playstatchangeanimation(void)
         }
         if (changeableStatsCount > 1) // more than one stat, so the color is gray
         {
-            if (flags & ATK48_STAT_BY_TWO)
+            if (flags & STAT_CHANGE_STAT_BY_TWO)
                 statAnimId = STAT_ANIM_MULTIPLE_PLUS2;
             else
                 statAnimId = STAT_ANIM_MULTIPLE_PLUS1;
         }
     }
-    if (flags & ATK48_ONLY_MULTIPLE && changeableStatsCount < 2)
+    if (flags & STAT_CHANGE_ONLY_MULTIPLE && changeableStatsCount < 2)
     {
         gBattlescriptCurrInstr += 4;
     }
@@ -6558,7 +6558,7 @@ static void atk48_playstatchangeanimation(void)
     {
         BtlController_EmitBattleAnimation(0, B_ANIM_STATS_CHANGE, statAnimId);
         MarkBattlerForControllerExec(gActiveBattler);
-        if (flags & ATK48_ONLY_MULTIPLE && changeableStatsCount > 1)
+        if (flags & STAT_CHANGE_ONLY_MULTIPLE && changeableStatsCount > 1)
             gBattleScripting.statAnimPlayed = TRUE;
         gBattlescriptCurrInstr += 4;
     }
@@ -6611,7 +6611,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
         //will require transfrerring bs_commands.h constants file move end values as well. 
         switch (gBattleScripting.atk49_state) //order is mostly the same, just starts with protectlike effects instead of rage
         {   //realiz order does matter as this is the order effects will take place
-        case ATK49_PROTECT_LIKE_EFFECT:
+        case MOVE_END_PROTECT_LIKE_EFFECT:
             if (gProtectStructs[gBattlerAttacker].touchedProtectLike)
             {
                 if (gProtectStructs[gBattlerTarget].spikyShielded)
@@ -6688,7 +6688,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_RAGE: // rage check
+        case MOVE_END_RAGE: // rage check
             if (gBattleMons[gBattlerTarget].status2 & STATUS2_RAGE
              && gBattleMons[gBattlerTarget].hp != 0
              && gBattlerAttacker != gBattlerTarget
@@ -6705,7 +6705,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_DEFROST: // defrosting/thaw check //for target 
+        case MOVE_END_DEFROST: // defrosting/thaw check //for target 
             if (gBattleMons[gBattlerTarget].status1 & STATUS1_FREEZE
              && gBattleMons[gBattlerTarget].hp != 0
              && gBattleMoveDamage != 0 // test to see if this works right. should be all damaging fire moves above 60 power can defrost.
@@ -6725,28 +6725,28 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_SYNCHRONIZE_TARGET: // target synchronize
+        case MOVE_END_SYNCHRONIZE_TARGET: // target synchronize
             if (AbilityBattleEffects(ABILITYEFFECT_SYNCHRONIZE, gBattlerTarget, 0, 0, 0))
                 effect = TRUE;
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_MOVE_END_ABILITIES: // Such as abilities activating on contact(Poison Spore, Rough Skin, etc.).
+        case MOVE_END_MOVE_END_ABILITIES: // Such as abilities activating on contact(Poison Spore, Rough Skin, etc.).
             if (AbilityBattleEffects(ABILITYEFFECT_MOVE_END, gBattlerTarget, 0, 0, 0))// "calls" function, which checks if things can activate, and returns effect+ making it true
                 effect = TRUE;
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_STATUS_IMMUNITY_ABILITIES: // status immunities
+        case MOVE_END_STATUS_IMMUNITY_ABILITIES: // status immunities
             if (AbilityBattleEffects(ABILITYEFFECT_IMMUNITY, 0, 0, 0, 0))
                 effect = TRUE; // it loops through all battlers, so we increment after its done with all battlers
             else
                 ++gBattleScripting.atk49_state;
             break;
-        case ATK49_SYNCHRONIZE_ATTACKER: // attacker synchronize
+        case MOVE_END_SYNCHRONIZE_ATTACKER: // attacker synchronize
             if (AbilityBattleEffects(ABILITYEFFECT_ATK_SYNCHRONIZE, gBattlerAttacker, 0, 0, 0))
                 effect = TRUE;
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_CHOICE_MOVE: // update choice band move
+        case MOVE_END_CHOICE_MOVE: // update choice band move
             if (gHitMarker & HITMARKER_OBEYS //need updat ai file prob replace with emerald expansion ai files
              && (holdEffectAtk == HOLD_EFFECT_CHOICE_BAND || GetBattlerAbility(gBattlerAttacker) == ABILITY_GORILLA_TACTICS)
              && gChosenMove != MOVE_STRUGGLE 
@@ -6768,7 +6768,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                 *choicedMoveAtk = 0;
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_CHANGED_ITEMS: // changed held items
+        case MOVE_END_CHANGED_ITEMS: // changed held items
             for (i = 0; i < gBattlersCount; ++i)
             {
                 u16 *changedItem = &gBattleStruct->changedItems[i];
@@ -6781,7 +6781,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_ATTACKER_INVISIBLE: // make attacker sprite invisible
+        case MOVE_END_ATTACKER_INVISIBLE: // make attacker sprite invisible
             if (gStatuses3[gBattlerAttacker] & (STATUS3_SEMI_INVULNERABLE)
              && gHitMarker & HITMARKER_NO_ANIMATIONS)
             {
@@ -6793,7 +6793,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_ATTACKER_VISIBLE: // make attacker sprite visible
+        case MOVE_END_ATTACKER_VISIBLE: // make attacker sprite visible
             if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT
              || !(gStatuses3[gBattlerAttacker] & (STATUS3_SEMI_INVULNERABLE))
              || WasUnableToUseMove(gBattlerAttacker))
@@ -6808,7 +6808,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_TARGET_VISIBLE: // make target sprite visible
+        case MOVE_END_TARGET_VISIBLE: // make target sprite visible
             if (!gSpecialStatuses[gBattlerTarget].restoredBattlerSprite
              && gBattlerTarget < gBattlersCount
              && !(gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE))
@@ -6822,7 +6822,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_MOVE_EFFECTS2: // For effects which should happen after target items, for example Knock Off after damage from Rocky Helmet.
+        case MOVE_END_MOVE_EFFECTS2: // For effects which should happen after target items, for example Knock Off after damage from Rocky Helmet.
         {
             switch (gBattleStruct->moveEffect2)
             {
@@ -6868,18 +6868,18 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             ++gBattleScripting.atk49_state;
             break; // MOVEEND_MOVE_EFFECTS2
         }
-        case ATK49_ITEM_EFFECTS_ALL: // item effects for all battlers
+        case MOVE_END_ITEM_EFFECTS_ALL: // item effects for all battlers
             if (ItemBattleEffects(ITEMEFFECT_MOVE_END, 0, FALSE))
                 effect = TRUE;
             else
                 ++gBattleScripting.atk49_state;
             break;
-        case ATK49_KINGSROCK: // king's rock and shell bell
+        case MOVE_END_KINGSROCK: // king's rock and shell bell
             if (ItemBattleEffects(ITEMEFFECT_KINGSROCK, 0, FALSE))  //with change to item effect to be just kingsrock look into if I need to change mov end
                 effect = TRUE;  //yes change this to only kingsrock 
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_SUBSTITUTE: // update substitute
+        case MOVE_END_SUBSTITUTE: // update substitute
             for (i = 0; i < gBattlersCount; ++i)
             {
                 if (gDisableStructs[i].substituteHP == 0)
@@ -6887,7 +6887,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_UPDATE_LAST_MOVES:
+        case MOVE_END_UPDATE_LAST_MOVES:
             if (gMoveResultFlags & (MOVE_RESULT_FAILED | MOVE_RESULT_DOESNT_AFFECT_FOE))
                 gBattleStruct->lastMoveFailed |= gBitTable[gBattlerAttacker];
             else
@@ -6949,7 +6949,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_MIRROR_MOVE: // mirror move
+        case MOVE_END_MIRROR_MOVE: // mirror move
             if (!(gAbsentBattlerFlags & gBitTable[gBattlerAttacker])
              && !(gBattleStruct->absentBattlerFlags & gBitTable[gBattlerAttacker])
              && gBattleMoves[originallyUsedMove].flags & FLAG_MIRROR_MOVE_AFFECTED
@@ -6971,7 +6971,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        /*case ATK49_MAGICIAN:    //this and pickpocket should go in abilityeffects function instead, this should only be for   actual move effect only, think wil move the item stuff recently ported from emerald out too
+        /*case MOVE_END_MAGICIAN:    //this and pickpocket should go in abilityeffects function instead, this should only be for   actual move effect only, think wil move the item stuff recently ported from emerald out too
             if (GetBattlerAbility(gBattlerAttacker) == ABILITY_MAGICIAN
                 && gCurrentMove != MOVE_FLING && gCurrentMove != MOVE_NATURAL_GIFT
                 && gBattleMons[gBattlerAttacker].item == ITEM_NONE
@@ -6994,7 +6994,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;*/
-        /*case ATK49_NEXT_TARGET: // For moves hitting two opposing Pokemon.
+        /*case MOVE_END_NEXT_TARGET: // For moves hitting two opposing Pokemon.
             if (!(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
              && gBattleTypeFlags & BATTLE_TYPE_DOUBLE
              && !gProtectStructs[gBattlerAttacker].chargingTurn
@@ -7019,7 +7019,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;*/
-        case ATK49_NEXT_TARGET: // For moves hitting two opposing Pokemon.
+        case MOVE_END_NEXT_TARGET: // For moves hitting two opposing Pokemon.
         {
             u16 moveTarget = GetBattlerMoveTargetType(gBattlerAttacker, gCurrentMove);
             // Set a flag if move hits either target (for throat spray that can't check damage)
@@ -7078,7 +7078,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             ++gBattleScripting.atk49_state;
             break;
         }
-        case ATK49_MULTIHIT_MOVE:
+        case MOVE_END_MULTIHIT_MOVE:
         {
             if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
             && !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
@@ -7133,7 +7133,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             ++gBattleScripting.atk49_state;
             break;
         }
-        case ATK49_EJECT_BUTTON:    //think move to itemeffects function, no this is how it is seteup in emerald too
+        case MOVE_END_EJECT_BUTTON:    //think move to itemeffects function, no this is how it is seteup in emerald too
         {
             if (gBattleMoves[gCurrentMove].effect != EFFECT_HIT_SWITCH_TARGET
                 && IsBattlerAlive(gBattlerAttacker)
@@ -7168,7 +7168,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             ++gBattleScripting.atk49_state;
             break;
         }
-        case ATK49_RED_CARD:    //think move to itemeffects function
+        case MOVE_END_RED_CARD:    //think move to itemeffects function
         {
             if (gBattleMoves[gCurrentMove].effect != EFFECT_HIT_SWITCH_TARGET
                 && IsBattlerAlive(gBattlerAttacker))
@@ -7206,7 +7206,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             ++gBattleScripting.atk49_state;
             break;
         }
-        case ATK49_EJECT_PACK:  //think move to item effects function
+        case MOVE_END_EJECT_PACK:  //think move to item effects function
             {
                 u8 battlers[4] = {0, 1, 2, 3};
                 SortBattlersBySpeed(battlers, FALSE);
@@ -7232,12 +7232,12 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_LIFEORB_SHELLBELL:
+        case MOVE_END_LIFEORB_SHELLBELL:
             if (ItemBattleEffects(ITEMEFFECT_LIFEORB_SHELLBELL, 0, FALSE))
                 effect = TRUE;
             ++gBattleScripting.atk49_state;
             break;/*
-        case ATK49_PICKPOCKET:  //looks clunky, think they had troble setting up will attempt to do it better
+        case MOVE_END_PICKPOCKET:  //looks clunky, think they had troble setting up will attempt to do it better
             if (IsBattlerAlive(gBattlerAttacker)
               && gBattleMons[gBattlerAttacker].item != ITEM_NONE        // Attacker must be holding an item
               && !(gWishFutureKnock.knockedOffMons[GetBattlerSide(gBattlerAttacker)] & gBitTable[gBattlerPartyIndexes[gBattlerAttacker]])   // But not knocked off
@@ -7274,7 +7274,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;*/
-        case ATK49_DANCER: // Special case because it's so annoying     //think this stays here, in emerald its actually in util.c & here??  very strange effect
+        case MOVE_END_DANCER: // Special case because it's so annoying     //think this stays here, in emerald its actually in util.c & here??  very strange effect
             if (gBattleMoves[gCurrentMove].flags & FLAG_DANCE)
             {
                 u8 battler, nextDancer = 0;
@@ -7304,7 +7304,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_EMERGENCY_EXIT: // Special case, because moves hitting multiple opponents stop after switching out
+        case MOVE_END_EMERGENCY_EXIT: // Special case, because moves hitting multiple opponents stop after switching out
             for (i = 0; i < gBattlersCount; i++)
             {
                 if (gBattleResources->flags->flags[i] & RESOURCE_FLAG_EMERGENCY_EXIT)   //vsonic DOUBLE check this, may not need here, or may adapt.
@@ -7334,7 +7334,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_SYMBIOSIS:
+        case MOVE_END_SYMBIOSIS:
             for (i = 0; i < gBattlersCount; i++)
             {
                 if ((gSpecialStatuses[i].berryReduced
@@ -7352,7 +7352,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case ATK49_CLEAR_BITS: // Clear/Set bits for things like using a move for all targets and all hits.
+        case MOVE_END_CLEAR_BITS: // Clear/Set bits for things like using a move for all targets and all hits.
             if (gSpecialStatuses[gBattlerAttacker].instructedChosenTarget)
                 *(gBattleStruct->moveTarget + gBattlerAttacker) = gSpecialStatuses[gBattlerAttacker].instructedChosenTarget & 0x3;
             if (gSpecialStatuses[gBattlerAttacker].dancerOriginalTarget)
@@ -7381,16 +7381,16 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             ++gBattleScripting.atk49_state; //vsonic
             break;
 
-        case ATK49_COUNT:
+        case MOVE_END_COUNT:
             break;
         }
         if (endMode == 1 && effect == FALSE)
-            gBattleScripting.atk49_state = ATK49_COUNT;
+            gBattleScripting.atk49_state = MOVE_END_COUNT;
         if (endMode == 2 && endState == gBattleScripting.atk49_state)
-            gBattleScripting.atk49_state = ATK49_COUNT;
+            gBattleScripting.atk49_state = MOVE_END_COUNT;
     }
-    while (gBattleScripting.atk49_state != ATK49_COUNT && effect == FALSE);
-    if (gBattleScripting.atk49_state == ATK49_COUNT && effect == FALSE)
+    while (gBattleScripting.atk49_state != MOVE_END_COUNT && effect == FALSE);
+    if (gBattleScripting.atk49_state == MOVE_END_COUNT && effect == FALSE)
         gBattlescriptCurrInstr += 3;
 }
 
