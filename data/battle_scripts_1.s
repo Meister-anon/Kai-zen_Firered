@@ -7782,8 +7782,11 @@ BattleScript_IntimidateActivates::
 		@specific stat abilities like hypercutter would need to be kept out, to still do tiger mom, so make it general stat drop/intimidate exclusions not stat specific stuff.
 BattleScript_IntimidateActivationAnimLoop::
 	trygetintimidatetarget BattleScript_IntimidateEnd @updated intimidate to current gen standard
-	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_IntimidateFail		@forgot tiger mom has different ability exclusion need rearrange abilities here
-	jumpiftype BS_TARGET, TYPE_DARK, BattleScript_IntimidateFail					@DARK Buff after changes, immune to intimidation
+	jumpiftype BS_ATTACKER, TYPE_DARK, BattleScript_IntimidateFailChecks	@if attkaer dark avoids intimidate failing on dark mon	@DARK Buff after changes, immune to intimidation
+BattleScript_IntimidateDarkCheck:
+	jumpiftype BS_TARGET, TYPE_DARK, BattleScript_IntimidateFail	
+BattleScript_IntimidateFailChecks:
+	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_IntimidateFail		@forgot tiger mom had to different ability exclusion need rearrange abilities here
 	jumpifability BS_TARGET, ABILITY_CLEAR_BODY, BattleScript_IntimidateAbilityFail		@and then jump out, before atk stat specific exclusions
 	jumpifability BS_TARGET, ABILITY_LEAF_GUARD, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_FULL_METAL_BODY, BattleScript_IntimidateAbilityFail
