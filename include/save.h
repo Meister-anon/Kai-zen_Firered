@@ -29,7 +29,7 @@ struct SaveBlockChunk
 
 struct SaveSection
 {
-    u8 data[0xFF4];
+    u8 data[0xFF4]; //save block expansion done here already
     u16 id;
     u16 checksum;
     u32 signature;

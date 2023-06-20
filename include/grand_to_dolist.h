@@ -390,6 +390,8 @@ With that I can use GetMondata ability num, if 0 set a random abilityNum between
 * port I guess the lowercase charmap from emerald expansion, that way lowercase stuff can look better
 * or maybe just port a few select ones, the ones that look bad are the curved ones,  n m r etc. I think c as well?
 * 
+* note make more space can remove "recorded"  battletowererecord stuff etcc as its for recordmixign mechanic
+* 
 * General Notes end:
 */
 goto TRAINER_PARTY_DATA

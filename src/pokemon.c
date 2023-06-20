@@ -2556,7 +2556,17 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     u32 personality;
     u32 value;
     u16 checksum;
-    u16 odds = Random() % 4;
+
+    s8 abilityodds = ((Random() % 111) - 10); //to hopefully weight things so I can get first slot abilities more often, doesn't change high odds.  perfect
+    u8 Normal_AbilityChance = 54;       //random function isn't truly random so setting at 50% split isn't really even, values seem to trend high rather than low, so need higher 
+    u8 HiddenAbility1_Chance = 7;  //value to ensure ability 1 comes up more often than ability 2
+    u8 HiddenAbility2_Chance = 93;
+
+    if (abilityodds < 0) { abilityodds = 0; };//prevent negative values
+
+    //checkd and base game hidden abilities are only found by chance at low to increasing odds using pokenav/dexnav in gen 6
+    //and with pokerader in gen 8 its only 3% odds, so I think this (1/3) is too high, l dropping to 7 & 93 respectively for about 15% odds
+    //especially since I plan to add dexnav to be able to search specific mon and get higher hidden ability chance
 
     ZeroBoxMonData(boxMon);
 
@@ -2669,10 +2679,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         and inside that put if odds >= 75 set hiddenabiity2
         
         kinda poetic as that way the other abilitis are literally hidden within the normal abilitiies*/
-    u8 abilityodds = (Random() % 101);
-    u8 Normal_AbilityChance = 50;   //checkd and base game hidden abilities are only found by chance at low to increasing odds using pokenav/dexnav in gen 6
-    u8 HiddenAbility1_Chance = 7;  //and with pokerader in gen 8 its only 3% odds, so I think this (1/3) is too high, l dropping to 7 & 93 respectively for about 15% odds
-    u8 HiddenAbility2_Chance = 93; //especially since I plan to add dexnav to be able to search specific mon and get higher hidden ability chance
+    
 
     if ((abilityodds) <= Normal_AbilityChance)
     {
@@ -2696,7 +2703,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     }
 
     //from what I can see 2nd hidden ability  seems to be the rarest even before adding random boost.   may boost higher
-    if (gBaseStats[species].abilityHidden[1]) //will have if at highest i.e = abilityNum, meaniing all all slots are filled, with else ifs below decreasing by 1.
+    /*if (gBaseStats[species].abilityHidden[1]) //will have if at highest i.e = abilityNum, meaniing all all slots are filled, with else ifs below decreasing by 1.
     {
         value = personality & 3; //setup just to have something in here, but this relies on bit math,  think it means if personality value ends in 3,
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);// so I'd need to check odds, and if it actually works.
@@ -2710,7 +2717,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     {
         value = personality & 1;    //think this is supposed to be a 0 or 1?
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
-    } //note, since pokemon will have the same ability slot when they evolve based on their ability num, I may need to ensure
+    }*/ //note, since pokemon will have the same ability slot when they evolve based on their ability num, I may need to ensure
     //a pokemon's evolved form also alway has a 2nd hiddden ability slot, so it doesn't just become ability_none.
     GiveBoxMonInitialMoveset(boxMon);// found out if mon evos into form without slot the original ability num is saved for when it evos again
 }
@@ -5283,10 +5290,11 @@ u8 GetMonsStateToDoubles(void)
 }
 
 //abilitynum assigned by createboxmon this function translates that number into ability slot selection logic
-u16 GetAbilityBySpecies(u16 species, u8 abilityNum) 
+//had to assign s8 to compile to get around always true error becuase of constant values
+u16 GetAbilityBySpecies(u16 species, s8 abilityNum) 
 {
 
-        int i;
+        s8 i;
 
         if (abilityNum < NUM_ABILITY_SLOTS)
             gLastUsedAbility = gBaseStats[species].abilities[abilityNum]; //sets lastusedability to mon ability
@@ -5299,7 +5307,7 @@ u16 GetAbilityBySpecies(u16 species, u8 abilityNum)
             {
                 for (i = 0; i < HIDDEN_ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)
                 {
-                    gLastUsedAbility = gBaseStats[species].abilities[i];
+                    gLastUsedAbility = gBaseStats[species].abilityHidden[i];
                 }
             }
 
