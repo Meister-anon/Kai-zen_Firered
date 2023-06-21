@@ -5301,17 +5301,17 @@ u16 GetAbilityBySpecies(u16 species, u8 abilityNum)
     u8 i;
 
 
-    if (abilityNum < 2) // if abilityNum is empty normal ability, look for other normal abilities
+    if (abilityNum < ABILITYNUM_HIDDEN_ABILITY_START) // if abilityNum is empty normal ability, look for other normal abilities
     {
-        for (i = 0; i < 1 && gLastUsedAbility == ABILITY_NONE; i++)
+        for (i = 0; i < ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)
         {
             gLastUsedAbility = gBaseStats[species].abilities[i];
         }
     }
 
-    else if (abilityNum >= 2) // if abilityNum is empty hidden ability, look for other hidden abilities
+    else if (abilityNum >= ABILITYNUM_HIDDEN_ABILITY_START) // if abilityNum is empty hidden ability, look for other hidden abilities
     {
-        for (i = 0; i < 1 && gLastUsedAbility == ABILITY_NONE; i++)
+        for (i = 0; i < HIDDEN_ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)
         {
             gLastUsedAbility = gBaseStats[species].abilityHidden[i];
         }
@@ -5319,7 +5319,7 @@ u16 GetAbilityBySpecies(u16 species, u8 abilityNum)
 
     if (gLastUsedAbility == ABILITY_NONE) // if failed to find hidden ability to set, set normal ability
     {
-        for (i = 0; i < 1 && gLastUsedAbility == ABILITY_NONE; i++)
+        for (i = 0; i < ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)
         {
             gLastUsedAbility = gBaseStats[species].abilities[i];
         }
