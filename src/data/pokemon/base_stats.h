@@ -5510,7 +5510,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_SHADOW_TAG, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_TELEPATHY, ABILITY_NONE},//usesful to prevent target switch for counter moves etc.
+            .abilityHidden = {ABILITY_TELEPATHY, ABILITY_BATTLE_ARMOR},//usesful to prevent target switch for counter moves etc.
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,

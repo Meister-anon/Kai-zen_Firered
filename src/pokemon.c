@@ -3934,6 +3934,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (gBattleMoves[move].flags & FLAG_SOUND)
             gBattleMoveDamage /= 2;
         break;
+    case ABILITY_WATER_COMPACTION:
+        if (type == TYPE_WATER)
+            gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
+        break;
     case ABILITY_OCEAN_MEMORY:
         if (type == TYPE_WATER)
             gBattleMoveDamage /= 2;
