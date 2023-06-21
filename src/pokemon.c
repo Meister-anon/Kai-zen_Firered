@@ -2558,8 +2558,8 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     u16 checksum;
 
     s8 abilityodds = ((Random() % 111) - 10); //to hopefully weight things so I can get first slot abilities more often, doesn't change high odds.  perfect
-    u8 Normal_AbilityChance = 54;       //random function isn't truly random so setting at 50% split isn't really even, values seem to trend high rather than low, so need higher 
-    u8 HiddenAbility1_Chance = 7;  //value to ensure ability 1 comes up more often than ability 2
+    u8 Normal_AbilityChance = 44;       //random function isn't truly random so setting at 50% split isn't really even, values seem to trend high rather than low, so need higher 
+    u8 HiddenAbility1_Chance = 0;  //value to ensure ability 1 comes up more often than ability 2 -forgot -10 artificially boosted hidden1 chance everything from 10 is this odds
     u8 HiddenAbility2_Chance = 93;
 
     if (abilityodds < 0) { abilityodds = 0; };//prevent negative values
@@ -5300,10 +5300,25 @@ u16 GetAbilityBySpecies(u16 species, u8 abilityNum)
 
     u8 i;
 
-
-    if (abilityNum < ABILITYNUM_HIDDEN_ABILITY_START) // if abilityNum is empty normal ability, look for other normal abilities
+    switch (abilityNum)
     {
-        for (i = 0; i < ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)
+    case 0:
+        gLastUsedAbility = gBaseStats[species].abilities[ABILITY_SLOT_1];
+        break;
+    case 1:
+        gLastUsedAbility = gBaseStats[species].abilities[ABILITY_SLOT_2];
+        break;
+    case 2:
+        gLastUsedAbility = gBaseStats[species].abilityHidden[HIDDEN_ABILITY_SLOT_1];
+        break;
+    case 3:
+        gLastUsedAbility = gBaseStats[species].abilityHidden[HIDDEN_ABILITY_SLOT_2];
+        break;
+    }
+
+    if (abilityNum < NUM_NORMAL_ABILITY_SLOTS) // if abilityNum is empty normal ability, look for other normal abilities
+    {
+        for (i = 0; i < NUM_NORMAL_ABILITY_SLOTS && gLastUsedAbility == ABILITY_NONE; i++)
         {
             gLastUsedAbility = gBaseStats[species].abilities[i];
         }
@@ -5311,7 +5326,7 @@ u16 GetAbilityBySpecies(u16 species, u8 abilityNum)
 
     else if (abilityNum >= ABILITYNUM_HIDDEN_ABILITY_START) // if abilityNum is empty hidden ability, look for other hidden abilities
     {
-        for (i = 0; i < HIDDEN_ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)
+        for (i = 0; i < NUM_HIDDEN_ABILITY_SLOTS && gLastUsedAbility == ABILITY_NONE; i++)
         {
             gLastUsedAbility = gBaseStats[species].abilityHidden[i];
         }
@@ -5319,7 +5334,7 @@ u16 GetAbilityBySpecies(u16 species, u8 abilityNum)
 
     if (gLastUsedAbility == ABILITY_NONE) // if failed to find hidden ability to set, set normal ability
     {
-        for (i = 0; i < ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)
+        for (i = 0; i < NUM_NORMAL_ABILITY_SLOTS && gLastUsedAbility == ABILITY_NONE; i++)
         {
             gLastUsedAbility = gBaseStats[species].abilities[i];
         }
