@@ -5647,7 +5647,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_IMMUNITY, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-    },
+    },//from zenmodeyt give fly - done
 
     [SPECIES_STEELIX] =
     {

@@ -5295,48 +5295,35 @@ u8 GetMonsStateToDoubles(void)
 
 //abilitynum assigned by createboxmon this function translates that number into ability slot selection logic
 //had to assign s8 to compile to get around always true error becuase of constant values
-u16 GetAbilityBySpecies(u16 species, s8 abilityNum) 
+u16 GetAbilityBySpecies(u16 species, u8 abilityNum) 
 {
 
-        s8 i;
+    u8 i;
 
-        if (abilityNum < NUM_ABILITY_SLOTS)
-            gLastUsedAbility = gBaseStats[species].abilities[abilityNum]; //sets lastusedability to mon ability
-        else
-            gLastUsedAbility = ABILITY_NONE;
 
-        do
+    if (abilityNum < 2) // if abilityNum is empty normal ability, look for other normal abilities
+    {
+        for (i = 0; i < 1 && gLastUsedAbility == ABILITY_NONE; i++)
         {
-            if (abilityNum >= ABILITYNUM_HIDDEN_ABILITY_START) // if abilityNum is empty hidden ability, look for other hidden abilities
-            {
-                for (i = 0; i < HIDDEN_ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)
-                {
-                    gLastUsedAbility = gBaseStats[species].abilityHidden[i];
-                }
-            }
+            gLastUsedAbility = gBaseStats[species].abilities[i];
+        }
+    }
 
-            if (abilityNum >= ABILITYNUM_NORMAL_ABILITY_START) // if abilityNum is empty normal ability, look for other normal abilities
-            {
-                for (i = 0; i < ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)
-                {
-                    gLastUsedAbility = gBaseStats[species].abilities[i];
-                }
-            }
-
-            for (i = 0; i < ABILITY_SLOT_2 && gLastUsedAbility == ABILITY_NONE; i++)  //final check if mon doesn't have any hidden ability but abilityNum above 2
-            {
-                gLastUsedAbility = gBaseStats[species].abilities[i];
-            }
-            //if I understand it correctly the while should make it stop as soon as the condition is no longer true, if it succeeds with a hidden ability it won't set to normal ability
-        } while (gLastUsedAbility == ABILITY_NONE);
-
-        
-
-
-        /*for (i = 0; i < NUM_ABILITY_SLOTS && gLastUsedAbility == ABILITY_NONE; i++) // look for any non-empty ability
+    else if (abilityNum >= 2) // if abilityNum is empty hidden ability, look for other hidden abilities
+    {
+        for (i = 0; i < 1 && gLastUsedAbility == ABILITY_NONE; i++)
         {
-            gLastUsedAbility = gBaseStats[species].abilities[i];//since I kept my abilities and hidden abilities separate can't use this
-        }*/
+            gLastUsedAbility = gBaseStats[species].abilityHidden[i];
+        }
+    }
+
+    if (gLastUsedAbility == ABILITY_NONE) // if failed to find hidden ability to set, set normal ability
+    {
+        for (i = 0; i < 1 && gLastUsedAbility == ABILITY_NONE; i++)
+        {
+            gLastUsedAbility = gBaseStats[species].abilities[i];
+        }
+    }
 
         return gLastUsedAbility;
 } //so 4 ability optionns total, would like to set hidden ability chance like shiny odds, just much better odds, then have gauranteed hidden ability with dexnav

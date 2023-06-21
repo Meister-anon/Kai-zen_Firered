@@ -4945,6 +4945,7 @@ static const u32 sTMHMLearnsets[][2] =
                                         | TMHM(TM46_THIEF)
                                         | TMHM(TM47_STEEL_WING)
                                         | TMHM(HM01_CUT)
+                                        | TMHM(HM02_FLY)
                                         | TMHM(HM04_STRENGTH)
                                         | TMHM(HM06_ROCK_SMASH)),
 
