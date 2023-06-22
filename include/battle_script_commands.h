@@ -35,6 +35,9 @@ bool32 CanCamouflage(u8 battlerId);
 void StealTargetItem(u8 battlerStealer, u8 battlerItem);
 bool32 CanStealItem(u8 battlerStealing, u8 battlerItem, u16 item);
 u32 GetHighestStatId(u32 battlerId);
+s32 AICalcCritChance(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbility);
+
+const u16 gCriticalHitChance[] = { 16, 6, 4, 3, 1 };	//made global, so can run in ai file
 
 extern void (* const gBattleScriptingCommandsTable[])(void);
 

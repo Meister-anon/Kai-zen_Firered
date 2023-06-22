@@ -3992,7 +3992,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     // critical hits ignore attack stat's stage drops
     if (usesDefStat)//IS_MOVE_PHYSICAL(move))
     {
-        if (gCritMultiplier > 1)
+        if (IS_CRIT)
         {
             if (attacker->statStages[STAT_ATK] > 6)
                 APPLY_STAT_MOD(damage, attacker, attack, STAT_ATK)
@@ -4009,7 +4009,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
 
         // critical hits ignore def stat buffs
-        if (gCritMultiplier > 1) //forgot about the else/ or effect of using >= since using else means, less than, or not equal, so changed to just use greater than 1 for crit
+        if (IS_CRIT) //forgot about the else/ or effect of using >= since using else means, less than, or not equal, so changed to just use greater than 1 for crit
         {
             if (defender->statStages[STAT_DEF] < 6)
                 APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)
@@ -4147,7 +4147,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (!usesDefStat)//IS_MOVE_SPECIAL(move))
     {
         // critical hits ignore attack stat's stage drops
-        if (gCritMultiplier > 1)
+        if (IS_CRIT)
         {
             if (attacker->statStages[STAT_SPATK] > 6)
                 APPLY_STAT_MOD(damage, attacker, spAttack, STAT_SPATK)
@@ -4167,7 +4167,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             damage = spAttack;
 
         // critical hits ignore def stat buffs
-        if (gCritMultiplier > 1)
+        if (IS_CRIT)
         {
             if (defender->statStages[STAT_SPDEF] < 6)
                 APPLY_STAT_MOD(damageHelper, defender, spDefense, STAT_SPDEF)

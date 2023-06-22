@@ -645,7 +645,52 @@ static const struct StatFractions sAccuracyStageRatios[] =
 //and keep stage 2 where it is, would make things mostly balance out since people use high crit w scope lens so it'll still be the same
 //its just not so bad without the scope boost,  just unsure if want to use value of 5 or 6
 //decied to use 6, way it balances out each stat would be about a 10% crit increase until stage 4
-static const u16 sCriticalHitChance[] = { 16, 6, 4, 3, 1 };
+//static const u16 sCriticalHitChance[] = { 16, 6, 4, 3, 1 };   values used for referenced, but moved to .h to make global use for ai file
+
+#define BENEFITS_FROM_LEEK(battler, holdEffect)((holdEffect == HOLD_EFFECT_LEEK) && (GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD || gBattleMons[battler].species == SPECIES_SIRFETCHD))
+s32 AICalcCritChance(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbility)
+{
+    s32 critChance = 0;
+    u32 abilityAtk = GetBattlerAbility(gBattlerAttacker);
+    u32 abilityDef = GetBattlerAbility(gBattlerTarget);
+    u32 holdEffectAtk = GetBattlerHoldEffect(battlerAtk, TRUE);
+
+    if (gSideStatuses[battlerDef] & SIDE_STATUS_LUCKY_CHANT
+        || gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
+    {
+        critChance = -1;
+    }
+    else if (abilityDef == ABILITY_BATTLE_ARMOR || abilityDef == ABILITY_SHELL_ARMOR)
+    {
+        if (recordAbility)
+            RecordAbilityBattle(battlerDef, abilityDef);
+        critChance = -1;    //never crit
+    }
+    else if (gStatuses3[battlerAtk] & STATUS3_LASER_FOCUS
+        || gBattleMoves[move].effect == EFFECT_ALWAYS_CRIT
+        || gBattleMoves[move].argument == EFFECT_ALWAYS_CRIT
+        || (abilityAtk == ABILITY_MERCILESS && gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY))
+        //|| move == MOVE_SURGING_STRIKES)
+         {
+        critChance = -2;    //always crit
+         }
+    else
+    {
+        critChance = 2 * ((gBattleMons[gBattlerAttacker].status2 & STATUS2_FOCUS_ENERGY) != 0)
+            + ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0)
+            + (holdEffectAtk == HOLD_EFFECT_SCOPE_LENS)
+            + 2 * (holdEffectAtk == HOLD_EFFECT_LUCKY_PUNCH && gBattleMons[gBattlerAttacker].species == SPECIES_CHANSEY)
+            + 2 * BENEFITS_FROM_LEEK(battlerAtk, holdEffectAtk)
+            + 2 * ((GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_DARK_DEAL) && abilityAtk != ABILITY_DARK_DEAL)
+            + (abilityAtk == ABILITY_SUPER_LUCK)
+            + (abilityAtk == ABILITY_DARK_DEAL);
+
+        if (critChance >= ARRAY_COUNT(gCriticalHitChance))
+            critChance = ARRAY_COUNT(gCriticalHitChance) - 1;   //because array starts at 0
+    }
+
+    return critChance;
+}
 
 /*static const u32 sStatusFlagsForMoveEffects[] =
 {
@@ -1942,7 +1987,7 @@ static void atk02_attackstring(void)
     }
 }
 
-#define BENEFITS_FROM_LEEK(battler, holdEffect)((holdEffect == HOLD_EFFECT_LEEK) && (GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD || gBattleMons[battler].species == SPECIES_SIRFETCHD))
+
 static void atk04_critcalc(void)    //figure later
 {
     u8 holdEffect;
@@ -1954,27 +1999,32 @@ static void atk04_critcalc(void)    //figure later
     else
         holdEffect = ItemId_GetHoldEffect(item); //find out if all these all these +'s affect the total effect chance?
     gPotentialItemEffectBattler = gBattlerAttacker; //realized these don't increase total crit chance but are all the things that raise crit odds,
+    //+'s raise crit ratio by 1 stage, 2x raises two stages etc.
     critChance = 2 * ((gBattleMons[gBattlerAttacker].status2 & STATUS2_FOCUS_ENERGY) != 0)
-        /*+ (gBattleMoves[gCurrentMove].effect == EFFECT_HIGH_CRITICAL) // gen3 use this but pokeemerald uses high_crit flag.
-        + (gBattleMoves[gCurrentMove].effect == EFFECT_SKY_ATTACK)
-        + (gBattleMoves[gCurrentMove].effect == EFFECT_BLAZE_KICK)
-        + (gBattleMoves[gCurrentMove].effect == EFFECT_POISON_TAIL)*/
         +((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0)
         + (holdEffect == HOLD_EFFECT_SCOPE_LENS)   
         + 2 * (holdEffect == HOLD_EFFECT_LUCKY_PUNCH && gBattleMons[gBattlerAttacker].species == SPECIES_CHANSEY)
         + 2 * BENEFITS_FROM_LEEK(gPotentialItemEffectBattler, holdEffect)
         + (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUPER_LUCK) //what does this do?? I guess it raiss 1 stage? if ability super luck?
         + (GetBattlerAbility(gBattlerAttacker) == ABILITY_DARK_DEAL)
-        + 2 * (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].ability == ABILITY_DARK_DEAL);    //HOPE works for raising crit chanc 2 stages if partner ability is dark deal
-    if (critChance >= NELEMS(sCriticalHitChance))
-        critChance = NELEMS(sCriticalHitChance) - 1;
+        + 2 * ((GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_DARK_DEAL) && GetBattlerAbility(gBattlerAttacker) != ABILITY_DARK_DEAL);    
+    //HOPE works for raising crit chanc 2 stages if partner ability is dark deal
+    //should make mutually exclusive, i.e can't get dark deal user buff & partner buff
+
+    if (critChance >= NELEMS(gCriticalHitChance))
+        critChance = NELEMS(gCriticalHitChance) - 1; // minus 1 because arrays start at 0
+
     //while everything here is calculating crit damage, so need to add gCritMultiplier = 3; for that crit boosting ability
     if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR)
      && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
      && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
-     && !(Random() % sCriticalHitChance[critChance])
+     && (Random() % gCriticalHitChance[critChance] == 0) //sets crit odds by array and crit ratio, random % selects crit odds based on stat stage i.e if 0, uses 1st value in array i.e random 16 == 0 for 1 in 16 crit chance
      && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))
      && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE)
+     && !(gBattleMoves[gCurrentMove].effect == EFFECT_ALWAYS_CRIT)
+     && !(gBattleMoves[gCurrentMove].argument == EFFECT_ALWAYS_CRIT)
+     && !(gStatuses3[gBattlerAttacker] & STATUS3_LASER_FOCUS)
+     && !((GetBattlerAbility(gBattlerAttacker) == ABILITY_MERCILESS) && gBattleMons[gBattlerTarget].status1 & STATUS1_PSN_ANY)
      && !(gSideStatuses[gBattlerTarget] & SIDE_STATUS_LUCKY_CHANT))
     {
         gCritMultiplier = 2;
@@ -1983,13 +2033,16 @@ static void atk04_critcalc(void)    //figure later
             gCritMultiplier = 3;
         }
 
-    }
+    }//...why did I make this an else if I have no idea, and see no reason for doing it...
+    //ok now I see I set it for always crit effects
    else if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR)
         && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
         && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
         && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))
         && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE)
-        && ((gBattleMoves[gCurrentMove].effect == EFFECT_ALWAYS_CRIT) || (gBattleMoves[gCurrentMove].argument == EFFECT_ALWAYS_CRIT))
+        && ((gBattleMoves[gCurrentMove].effect == EFFECT_ALWAYS_CRIT) || (gBattleMoves[gCurrentMove].argument == EFFECT_ALWAYS_CRIT)
+            || ((GetBattlerAbility(gBattlerAttacker) == ABILITY_MERCILESS) && gBattleMons[gBattlerTarget].status1 & STATUS1_PSN_ANY)
+            || gStatuses3[gBattlerAttacker] & STATUS3_LASER_FOCUS)
          && !(gSideStatuses[gBattlerTarget] & SIDE_STATUS_LUCKY_CHANT)) //may run as regular if, but should set crit effect without regarding chance
         {
             gCritMultiplier = 2;

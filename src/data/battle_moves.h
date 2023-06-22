@@ -11366,7 +11366,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_TRIPLE_KICK,   //TODO (Multi hit + Always Crit)
         .power = 25,
-        .type = TYPE_WATER, //figure out how to do always crit
+        .type = TYPE_WATER,
         .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 0,
@@ -11374,7 +11374,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_IRON_FIST_BOOST,
         .split = SPLIT_PHYSICAL,
-        .argument = EFFECT_ALWAYS_CRIT,
+        .argument = EFFECT_ALWAYS_CRIT, //need test potentially move argument effect inside loop to make sure each hit crits
     },
 
     [MOVE_THUNDER_CAGE] =

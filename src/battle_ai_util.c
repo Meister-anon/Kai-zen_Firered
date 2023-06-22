@@ -14,6 +14,7 @@
 #include "random.h"
 //#include "recorded_battle.h"
 #include "util.h"
+#include "battle_script_commands.h"
 #include "constants/abilities.h"
 #include "constants/battle_ai.h"
 #include "constants/battle_move_effects.h"
@@ -690,36 +691,38 @@ bool32 MovesWithSplitUnusable(u32 attacker, u32 target, u32 split)
     return (usable == 0);
 }
 
+
+
 //tweak this to mix emerald standard, requires reworking crit bs command
 //or just let this run that function, make non-static it may work.
 static bool32 AI_GetIfCrit(u32 move, u8 battlerAtk, u8 battlerDef)
 {
     bool32 isCrit;
+    s32 critstage = AICalcCritChance(battlerAtk, battlerDef, move, FALSE);
+    //should return the same value as the case its in, therefore being actual crit odds
+    //not an approximation of default odds,  but what's actually set
+    //should update auto shuold the array ever be changed as well.
 
-    switch (CalcCritChanceStage(battlerAtk, battlerDef, move, FALSE))
+    //case represents crit stage, random is meant to represent the odds at that stage,
+    //but not accurate as there are multiple versions of crit ratio
+    //we have ratios using new modifiers so idk why  thye didn't just use that
+    //simple as doing divisor by value of gCriticalHitChance, which is what the case is...
+    switch (AICalcCritChance(battlerAtk, battlerDef, move, FALSE))
     {
     case -1:
-    case 0:
-    default:
         isCrit = FALSE;
         break;
+    case 0:
     case 1:
-        if (gBattleMoves[move].flags & FLAG_HIGH_CRIT && (Random() % 5 == 0))
-            isCrit = TRUE;
-        else
-            isCrit = FALSE;
-        break;
     case 2:
-        if (gBattleMoves[move].flags & FLAG_HIGH_CRIT && (Random() % 2 == 0))
-            isCrit = TRUE;
-        else if (!(gBattleMoves[move].flags & FLAG_HIGH_CRIT) && (Random() % 4) == 0)
+    case 3:
+    case 4: //using my ratio 4 will always be true, but it doesn't ignore critcalc like -2 so putting here for future proof/proper logic
+        if (Random() % gCriticalHitChance[critstage] == 0)
             isCrit = TRUE;
         else
             isCrit = FALSE;
         break;
     case -2:
-    case 3:
-    case 4:
         isCrit = TRUE;
         break;
     }
