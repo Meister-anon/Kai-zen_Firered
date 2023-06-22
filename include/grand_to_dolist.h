@@ -730,7 +730,8 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * 
 * make command for general intimidate ability checks, to clean up  the intimidate bs script
 * will work for target only, check general stat drop prevention abilities, substitute, and other abilities that were buffed to ignore intimdidate
-* will not include specific stat ability prevention i.e  hyper cutter  big pecks  stuff like that
+* will not include specific stat ability prevention i.e  hyper cutter  big pecks  stuff like that - 
+* -actualy I could put the checks, in a function too.
 * 
 * buff anger point, activate on super effective move result as well as crit. as both are 2x dmg.    - DONE
 * most mon that get it aren't likely to survive either way, so gives it some play.  since crits are so rare anyway.

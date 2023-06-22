@@ -53,7 +53,7 @@ endif
 
 SHELL := /bin/bash -o pipefail
 
-ROM := poke$(BUILD_NAME).gba
+ROM := Kai-zen_$(BUILD_NAME).gba
 OBJ_DIR := build/$(BUILD_NAME)
 
 ELF = $(ROM:.gba=.elf)

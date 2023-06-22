@@ -24,6 +24,8 @@
 static u32 AI_GetEffectiveness(u16 multiplier);
 
 // Const Data
+//will need to understand how this works and potentially adjust for the ones I've buffed
+//and add abilities I made
 static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
 {
     [ABILITY_ADAPTABILITY] = 8,
@@ -257,6 +259,7 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_WHITE_SMOKE] = 4,
     [ABILITY_WIMP_OUT] = 3,
     [ABILITY_WONDER_GUARD] = 10,
+    [ABILITY_DISPIRIT_GUARD] = 10,
     [ABILITY_WONDER_SKIN] = 4,
     [ABILITY_ZEN_MODE] = -1,
     [ABILITY_INTREPID_SWORD] = 3,
@@ -304,7 +307,7 @@ static const u16 sEncouragedEncoreEffects[] =
     EFFECT_POISON,
     EFFECT_PARALYZE,
     EFFECT_LEECH_SEED,
-    EFFECT_DO_NOTHING,
+    EFFECT_SPLASH,
     EFFECT_ATTACK_UP_2,
     EFFECT_ENCORE,
     EFFECT_CONVERSION_2,
@@ -360,9 +363,9 @@ static const u16 sIgnoredPowerfulMoveEffects[] =
     EFFECT_DREAM_EATER,
     EFFECT_RECHARGE,
     EFFECT_SKULL_BASH,
-    EFFECT_SOLAR_BEAM,
+    EFFECT_SOLARBEAM,
     EFFECT_SPIT_UP,
-    EFFECT_FOCUS_PUNCH,
+ //   EFFECT_FOCUS_PUNCH,
     EFFECT_SUPERPOWER,
     EFFECT_ERUPTION,
     EFFECT_OVERHEAT,
@@ -375,9 +378,9 @@ static const u16 sIgnoreMoldBreakerMoves[] =
     MOVE_MOONGEIST_BEAM,
     MOVE_SUNSTEEL_STRIKE,
     MOVE_PHOTON_GEYSER,
-    MOVE_LIGHT_THAT_BURNS_THE_SKY,
+   /*MOVE_LIGHT_THAT_BURNS_THE_SKY,
     MOVE_MENACING_MOONRAZE_MAELSTROM,
-    MOVE_SEARING_SUNRAZE_SMASH,
+    MOVE_SEARING_SUNRAZE_SMASH,*/
 };
 
 static const u16 sInstructBannedMoves[] =
@@ -412,6 +415,7 @@ static const u16 sInstructBannedMoves[] =
 static const u16 sRechargeMoves[] =
 {
     MOVE_HYPER_BEAM,
+    MOVE_FOCUS_PUNCH,
     MOVE_BLAST_BURN,
     MOVE_HYDRO_CANNON,
     MOVE_FRENZY_PLANT,
@@ -552,9 +556,9 @@ void SetBattlerData(u8 battlerId)
         if (BATTLE_HISTORY->abilities[battlerId] != ABILITY_NONE)
             gBattleMons[battlerId].ability = BATTLE_HISTORY->abilities[battlerId];
         // Check if mon can only have one ability.
-        else if (gSpeciesInfo[gBattleMons[battlerId].species].abilities[1] == ABILITY_NONE
-                 || gSpeciesInfo[gBattleMons[battlerId].species].abilities[1] == gSpeciesInfo[gBattleMons[battlerId].species].abilities[0])
-            gBattleMons[battlerId].ability = gSpeciesInfo[gBattleMons[battlerId].species].abilities[0];
+        else if (gBaseStats[gBattleMons[battlerId].species].abilities[1] == ABILITY_NONE
+                 || gBaseStats[gBattleMons[battlerId].species].abilities[1] == gBaseStats[gBattleMons[battlerId].species].abilities[0])
+            gBattleMons[battlerId].ability = gBaseStats[gBattleMons[battlerId].species].abilities[0];
         // The ability is unknown.
         else
             gBattleMons[battlerId].ability = ABILITY_NONE;
@@ -600,14 +604,13 @@ bool32 AtMaxHp(u8 battlerId)
     return FALSE;
 }
 
+//need add other/new trap statuses
 bool32 IsBattlerTrapped(u8 battler, bool8 checkSwitch)
 {
     u8 holdEffect = AI_DATA->holdEffects[battler];
 
-#if B_GHOSTS_ESCAPE >= GEN_6
     if (IS_BATTLER_OF_TYPE(battler, TYPE_GHOST))
         return FALSE;
-#endif
     if (checkSwitch && holdEffect == HOLD_EFFECT_SHED_SHELL)
         return FALSE;
     else if (!checkSwitch && GetBattlerAbility(battler) == ABILITY_RUN_AWAY)
@@ -628,12 +631,12 @@ bool32 IsBattlerTrapped(u8 battler, bool8 checkSwitch)
 
 u32 GetTotalBaseStat(u32 species)
 {
-    return gSpeciesInfo[species].baseHP
-        + gSpeciesInfo[species].baseAttack
-        + gSpeciesInfo[species].baseDefense
-        + gSpeciesInfo[species].baseSpeed
-        + gSpeciesInfo[species].baseSpAttack
-        + gSpeciesInfo[species].baseSpDefense;
+    return gBaseStats[species].baseHP
+        + gBaseStats[species].baseAttack
+        + gBaseStats[species].baseDefense
+        + gBaseStats[species].baseSpeed
+        + gBaseStats[species].baseSpAttack
+        + gBaseStats[species].baseSpDefense;
 }
 
 bool32 IsTruantMonVulnerable(u32 battlerAI, u32 opposingBattler)
@@ -655,9 +658,7 @@ bool32 IsTruantMonVulnerable(u32 battlerAI, u32 opposingBattler)
 bool32 IsAffectedByPowder(u8 battler, u16 ability, u16 holdEffect)
 {
     if (ability == ABILITY_OVERCOAT
-    #if B_POWDER_GRASS >= GEN_6
         || IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)
-    #endif
         || holdEffect == HOLD_EFFECT_SAFETY_GOGGLES)
         return FALSE;
     return TRUE;
@@ -689,6 +690,8 @@ bool32 MovesWithSplitUnusable(u32 attacker, u32 target, u32 split)
     return (usable == 0);
 }
 
+//tweak this to mix emerald standard, requires reworking crit bs command
+//or just let this run that function, make non-static it may work.
 static bool32 AI_GetIfCrit(u32 move, u8 battlerAtk, u8 battlerDef)
 {
     bool32 isCrit;
@@ -1188,12 +1191,12 @@ s32 AI_GetAbility(u32 battlerId)
         return knownAbility;
 
     // Else, guess the ability
-    if (gSpeciesInfo[gBattleMons[battlerId].species].abilities[0] != ABILITY_NONE)
+    if (gBaseStats[gBattleMons[battlerId].species].abilities[0] != ABILITY_NONE)
     {
         u16 abilityGuess = ABILITY_NONE;
         while (abilityGuess == ABILITY_NONE)
         {
-            abilityGuess = gSpeciesInfo[gBattleMons[battlerId].species].abilities[Random() % NUM_ABILITY_SLOTS];
+            abilityGuess = gBaseStats[gBattleMons[battlerId].species].abilities[Random() % NUM_ABILITY_SLOTS];
         }
 
         return abilityGuess;
@@ -2446,8 +2449,8 @@ static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler)
     u16 species = GetMonData(mon, MON_DATA_SPECIES);
     u32 flags = gSideStatuses[GetBattlerSide(currBattler)] & (SIDE_STATUS_SPIKES | SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_STICKY_WEB | SIDE_STATUS_TOXIC_SPIKES);
     s32 hazardDamage = 0;
-    u8 type1 = gSpeciesInfo[species].types[0];
-    u8 type2 = gSpeciesInfo[species].types[1];
+    u8 type1 = gBaseStats[species].types[0];
+    u8 type2 = gBaseStats[species].types[1];
     u32 maxHp = GetMonData(mon, MON_DATA_MAX_HP);
 
     if (flags == 0)

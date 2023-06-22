@@ -9398,7 +9398,7 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
 u16 GetTypeModifier(u8 atkType, u8 defType)
 {
 
-    if (FlagGet(FLAG_INVERSE_BATTLE))
+    if (FlagGet(FLAG_INVERSE_BATTLE)) //or target mon has invers world ability i.e giratina origin
         return GetInverseTypeMultiplier(gTypeEffectivenessTable[atkType][defType]);
 
     return gTypeEffectivenessTable[atkType][defType];
@@ -9499,9 +9499,9 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
 
     if (move != MOVE_STRUGGLE && moveType != TYPE_MYSTERY)
     {
-        MulByTypeEffectiveness(&modifier, move, moveType, 0, gSpeciesInfo[speciesDef].types[0], 0, FALSE);
-        if (gSpeciesInfo[speciesDef].types[1] != gSpeciesInfo[speciesDef].types[0])
-            MulByTypeEffectiveness(&modifier, move, moveType, 0, gSpeciesInfo[speciesDef].types[1], 0, FALSE);
+        MulByTypeEffectiveness(&modifier, move, moveType, 0, gBaseStats[speciesDef].types[0], 0, FALSE);
+        if (gBaseStats[speciesDef].types[1] != gBaseStats[speciesDef].types[0])
+            MulByTypeEffectiveness(&modifier, move, moveType, 0, gBaseStats[speciesDef].types[1], 0, FALSE);
 
         if (moveType == TYPE_GROUND && abilityDef == ABILITY_LEVITATE && !(gFieldStatuses & STATUS_FIELD_GRAVITY))
             modifier = UQ_4_12(0.0);
