@@ -1144,7 +1144,7 @@
 	.4byte \param0
 	.endm
 
-	.macro trysetmagiccoat param0:req
+	.macro setmagiccoat param0:req
 	.byte 0xdf
 	.4byte \param0
 	.endm

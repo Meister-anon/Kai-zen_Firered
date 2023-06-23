@@ -1500,7 +1500,7 @@ BattleScript_AutotomizeWeightLoss::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectFinalGambit:		@CHANGED effect to do more dmg based on missing health
+BattleScript_EffectFinalGambit:		@CHANGED effect to do dmg based on missing health, instead of currenthalth
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
@@ -2130,7 +2130,7 @@ BattleScript_EffectHealingWishNewMon:
 	playanimation BS_ATTACKER, B_ANIM_WISH_HEAL, NULL
 	waitanimation
 	dmgtomaxattackerhp
-	manipulatedamage ATK80_DMG_CHANGE_SIGN
+	manipulatedamage NEGATIVE_DMG
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	clearstatus BS_ATTACKER
@@ -2710,7 +2710,7 @@ BattleScript_EffectAbsorb::  @need setup multi task also make ghost with liquid 
 	goto BattleScript_AbsorbUpdateHp @went one by one, the problem was jumpifability from when I expanded abilities 
 
 BattleScript_AbsorbLiquidOoze::
-  	manipulatedamage 0
+  	manipulatedamage NEGATIVE_DMG
 	setbyte cMULTISTRING_CHOOSER, 1
 BattleScript_AbsorbUpdateHp::
 	healthbarupdate BS_ATTACKER
@@ -3394,7 +3394,9 @@ BattleScript_EffectDoubleHit::
 
 BattleScript_EffectRecoilIfMiss::
 	attackcanceler
-	accuracycheck BattleScript_MoveMissedDoDamage, ACC_CURR_MOVE
+	typecalc	@put higher to aply for both jumps
+	accuracycheck BattleScript_MoveMissedDoDamage, ACC_CURR_MOVE	
+	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE, BattleScript_MoveMissedDoDamage
 	goto BattleScript_HitFromAtkString
 
 BattleScript_MoveMissedDoDamage::
@@ -3404,19 +3406,34 @@ BattleScript_MoveMissedDoDamage::
 	pause 0x40
 	resultmessage
 	waitmessage 0x40
-	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE, BattleScript_MoveEnd
+	@typecalc remove cuz worry about double calc, even if not an issue
+	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE, BattleScript_RecoilTargetImmuneDoDamage
 	printstring STRINGID_PKMNCRASHED
 	waitmessage 0x40
 	damagecalc
-	typecalc
 	adjustnormaldamage
-	manipulatedamage 1
+	manipulatedamage RECOIL_MISS_DMG
 	bicbyte gMoveResultFlags, MOVE_RESULT_MISSED
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	tryfaintmon BS_ATTACKER, 0, NULL
 	orbyte gMoveResultFlags, MOVE_RESULT_MISSED
+	goto BattleScript_MoveEnd
+
+BattleScript_RecoilTargetImmuneDoDamage::
+	printstring STRINGID_PKMNCRASHED
+	waitmessage 0x40
+	damagecalc
+	typecalc
+	adjustnormaldamage
+	manipulatedamage RECOIL_MISS_DMG
+	bicbyte gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	tryfaintmon BS_ATTACKER, 0, NULL
+	orbyte gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectMist::
@@ -5338,7 +5355,7 @@ BattleScript_EffectCloseCombat::	@removed sp def drop, was going to make recoil 
 
 BattleScript_EffectMagicCoat::
 	attackcanceler
-	trysetmagiccoat BattleScript_ButItFailedAtkStringPpReduce
+	setmagiccoat
 	attackstring
 	ppreduce
 	attackanimation
@@ -5719,7 +5736,7 @@ BattleScript_CocoonTrySpDef::
 	printfromtable gStatUpStringIds
 	waitmessage 0x40
 BattleScript_CocoonTrySpeed::
-	setstatchanger STAT_SPEED, 2, TRUE
+	setstatchanger STAT_SPEED, 1, TRUE		@used on bug mid evos really slow ealready so doesnt effect them, unsure if change to lower 1, yeah changed to 1.
 	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_CocoonEnd
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 2, BattleScript_CocoonEnd
 	printfromtable gStatDownStringIds

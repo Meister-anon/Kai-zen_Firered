@@ -408,7 +408,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .power = 70,
             .pp = 25,
         #endif
-        .effect = EFFECT_RECOIL_IF_MISS,
+        .effect = EFFECT_RECOIL_IF_MISS,    //BattleScript_EffectRecoilIfMiss
         .type = TYPE_FIGHTING,
         .accuracy = 95,
         .secondaryEffectChance = 0,
@@ -4343,11 +4343,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_DEPENDS,
-        .priority = 4,
-        .flags = 0,
+        .target = MOVE_TARGET_USER,
+        .priority = 2,  //added 1 priority back, so can contest with prankster status, not a full block would rely on speed, nvm most prankster mon are fastr than mon that get this
+        .flags = 0, //not affected by snatch
         .split = SPLIT_STATUS,
-    },
+    },//removed priority move becomes 3 turn effect
 
     [MOVE_RECYCLE] =
     {
@@ -11926,7 +11926,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_COCOON] =
     {
-        .effect = EFFECT_COCOON,
+        .effect = EFFECT_COCOON,    //made its own effect because it also lowers speed
         .power = 0,
         .type = TYPE_BUG,
         .accuracy = 0,
@@ -12171,7 +12171,7 @@ use wonder gaurd logic to determine its super effective
     [MOVE_DOUBLE_SHOCK] =
     {
         .effect = EFFECT_LOSETYPE_HIT,
-        .power = 120,
+        .power = 150,
         .type = TYPE_ELECTRIC,
         .accuracy = 100,
         .pp = 5,
@@ -12182,7 +12182,7 @@ use wonder gaurd logic to determine its super effective
         .split = SPLIT_PHYSICAL,
         ////.zMovePower = 190,
         ////.zMoveEffect = Z_EFFECT_NONE
-    },
+    },//making all losetype 150 because changing effect to last entire battle not just until switch out, also keeping move as my version was special
 
     [MOVE_POUNCE] =
     {

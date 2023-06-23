@@ -4517,7 +4517,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
     else if (ability == ABILITY_SLOW_START && gDisableStructs[battlerId].slowStartTimer != 0)
         speed /= 2; //so I ironically complete missed adding this...
     //gen 9
-    /*else if (ability == ABILITY_PROTOSYNTHESIS && gBattleWeather & B_WEATHER_SUN && highestStat == STAT_SPEED)
+    /*else if (ability == ABILITY_PROTOSYNTHESIS && gBattleWeather & WEATHER_SUN_ANY && highestStat == STAT_SPEED)
         speed = (speed * 150) / 100;
     else if (ability == ABILITY_QUARK_DRIVE && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN && highestStat == STAT_SPEED)
         speed = (speed * 150) / 100;*/

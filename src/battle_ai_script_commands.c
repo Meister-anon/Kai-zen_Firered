@@ -1020,7 +1020,7 @@ static void Cmd_get_how_powerful_move_is(void)
                 && gBattleMoves[gBattleMons[gBattlerAttacker].moves[checkedMove]].power > 1)
             {
                 gCurrentMove = gBattleMons[gBattlerAttacker].moves[checkedMove];
-                AI_CalcDmg(gBattlerAttacker, gBattlerTarget);
+                AI_CalcDmgFormula(gBattlerAttacker, gBattlerTarget);
                 TypeCalc(gCurrentMove, gBattlerAttacker, gBattlerTarget);
                 moveDmgs[checkedMove] = gBattleMoveDamage * AI_THINKING_STRUCT->simulatedRNG[checkedMove] / 100;
                 if (moveDmgs[checkedMove] == 0)
@@ -1541,7 +1541,7 @@ static void Cmd_if_can_faint(void)
     gMoveResultFlags = 0;
     gCritMultiplier = 1;
     gCurrentMove = AI_THINKING_STRUCT->moveConsidered;
-    AI_CalcDmg(gBattlerAttacker, gBattlerTarget);
+    AI_CalcDmgFormula(gBattlerAttacker, gBattlerTarget);
     TypeCalc(gCurrentMove, gBattlerAttacker, gBattlerTarget);
 
     gBattleMoveDamage = gBattleMoveDamage * AI_THINKING_STRUCT->simulatedRNG[AI_THINKING_STRUCT->movesetIndex] / 100;
@@ -1570,7 +1570,7 @@ static void Cmd_if_cant_faint(void)
     gMoveResultFlags = 0;
     gCritMultiplier = 1;
     gCurrentMove = AI_THINKING_STRUCT->moveConsidered;
-    AI_CalcDmg(gBattlerAttacker, gBattlerTarget);
+    AI_CalcDmgFormula(gBattlerAttacker, gBattlerTarget);
     TypeCalc(gCurrentMove, gBattlerAttacker, gBattlerTarget);
 
     gBattleMoveDamage = gBattleMoveDamage * AI_THINKING_STRUCT->simulatedRNG[AI_THINKING_STRUCT->movesetIndex] / 100;

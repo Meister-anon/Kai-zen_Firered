@@ -263,6 +263,10 @@ Yeah that should work
 
 */
 
+//Learned from Kurausukun can see ewram and memory use by checking pokefire.map file I have 0x5800 or so ewram left
+//a pretty solid amount, potentially after things are settled can setup table or something to store trainer party data,
+//so values are the same when fighting them again. not a necessity but would be realistic and nice to do if I have the space too...
+
 //Single extra note, for battle script,  I think when I use a call, it has to end in a return
 //but I can't use a return when jumping I instead have to use a goto
 
@@ -391,6 +395,8 @@ With that I can use GetMondata ability num, if 0 set a random abilityNum between
 * or maybe just port a few select ones, the ones that look bad are the curved ones,  n m r etc. I think c as well?
 * 
 * note make more space can remove "recorded"  battletowererecord stuff etcc as its for recordmixign mechanic
+* 
+* don't forget redo z-move stuff i.e implement it, people like them so put in game, worried about breaking balance since I'm already making all mon good.
 * 
 * General Notes end:
 */
@@ -731,7 +737,7 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * make command for general intimidate ability checks, to clean up  the intimidate bs script
 * will work for target only, check general stat drop prevention abilities, substitute, and other abilities that were buffed to ignore intimdidate
 * will not include specific stat ability prevention i.e  hyper cutter  big pecks  stuff like that - 
-* -actualy I could put the checks, in a function too.
+* -actualy I could put those checks, in a function too.  since its not erestrictd like battlescript is
 * 
 * buff anger point, activate on super effective move result as well as crit. as both are 2x dmg.    - DONE
 * most mon that get it aren't likely to survive either way, so gives it some play.  since crits are so rare anyway.
@@ -884,6 +890,15 @@ as well as the effect of increasing trap duration
 * water no longer resists ice, leaving it 4x, so will need to make ability also reist ice
 * Ability Name Ideas-Pangea, Ecosystem - DONE also i madee it rock not ground, so its only 2x to ice, ability leaves it neutral
 * NOTE-| add mega pokemon to dex entries  mega torterra will be the "Continent" pokemon
+* 
+* idea for mega snorlax, (form is that of laughing buddha) floating in meditation zen mon,  normal psychic
+* evolved to psychic powers when it realized how much opportunity for gluttony it lost out on by being unable to eat while asleep
+* it can use its psychic powers to control itself even when sleeping its also no longer slowed by its mass due to its emense psychic power
+* it removes itself from the shackles of gravity by instead pushing its weight onto its surrounding area instead.
+* abiltity gravity bomb/pressure spiritual pressure ro something, it sets gravity on opponents or maybe everyone
+* and doubles their weight as well.
+* 
+* signature move gravity pulse or something an attack that deals damage based on snorlax's weight
 * 
 * may consider buff plus/minus ability with same affect as overcharge, but only when the partner is in a pinch -
 * can lead to an interesting plan where players ev build them for bulk
@@ -1183,6 +1198,15 @@ Thunder Wave Electric TM45
 * changed hail ice buff,  most ice types have higher sp def than def, and main weaknesses are 
 * typically physical made 50% defense and 1/3rd sp def incrase
 * make sure to test later  tweaked as realized not much raeson to pick sandstorm for rock ice types
+* 
+*   In order for a fire to start, your tinderand firewood must reach a combustible temperature.
+    Fires in the summer, even after a summer rain, can be easier to start
+    because the wood will be closer to a combustible temperature than even dry wood in the winter.
+    You will need more heat to get your fire started in the cold. //logic for why fire dmg cut in hail
+
+* change fire dmg cut by 66% in hail,  Ice dmg cut by 66% in strong sun
+* this functions as an ice buff, as well as a grass buff, great boost for sunflora who is grass/fire
+* and can set sun on switch in.
 * 
 * reworking poison type add normal type to pure poison that is poison as a function of animal attributes
 * leave the more amorphous mon as pure poison - DONE

@@ -732,16 +732,18 @@ static bool32 AI_GetIfCrit(u32 move, u8 battlerAtk, u8 battlerDef)
 
 s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness, bool32 considerZPower)
 {
-    s32 dmg, moveType, critDmg, normalDmg;
+    s32 dmg, moveType, critMultiplier, normalDmg;
     s8 critChance;
     u16 effectivenessMultiplier;
+    u16 typeMod = CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, FALSE); 
+    u16 sideStatus = gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)];
 
-    if (considerZPower && IsViableZMove(battlerAtk, move))
+   /* if (considerZPower && IsViableZMove(battlerAtk, move))
     {
         //temporarily enable z moves for damage calcs
-        gBattleStruct->zmove.baseMoves[battlerAtk] = move;
-        gBattleStruct->zmove.active = TRUE;
-    }
+        //gBattleStruct->zmove.baseMoves[battlerAtk] = move;
+        //gBattleStruct->zmove.active = TRUE;
+    }*/
 
     SaveBattlerData(battlerAtk);
     SaveBattlerData(battlerDef);
@@ -760,25 +762,33 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness,
     if (gBattleMoves[move].power)
     {
         critChance = GetInverseCritChance(battlerAtk, battlerDef, move);
-        normalDmg = CalculateMoveDamageAndEffectiveness(move, battlerAtk, battlerDef, moveType, &effectivenessMultiplier);
-        critDmg = CalculateMoveDamage(move, battlerAtk, battlerDef, moveType, 0, TRUE, FALSE, FALSE);
+        normalDmg = AI_CalcDmgFormula(battlerAtk, battlerDef);
+        //ok replaced this, luckily that ai formula I ported a while back came in handy, just made it return dmg
 
-        if (critChance == -1)
-            dmg = normalDmg;
+        if (GetBattlerAbility(battlerAtk) != ABILITY_SNIPER)
+            critMultiplier = 2;
         else
-            dmg = (critDmg + normalDmg * (critChance - 1)) / critChance;
+            critMultiplier = 3;
+
+        if ((critChance == -1) || Random() % critChance != 0)//change to use chance, as well if !critcchance  think using AND is correct here, nvm not both negative think can use OR
+            dmg = normalDmg * typeMod;
+        else //normal dmg * critmultiplier
+            dmg = (critMultiplier * normalDmg) * typeMod; //confuses me, critchance returns crit ratio so don't understand why they would set it up like this
+        //if i use crit ratio found from function, it would be a chance it wouldn't perfectly line up the crit odds as its not using the same finction call.
+        //it would be an approximation of the chance to land a crit, which imo may actually be better it causes a realistic flaw,
+        //where it thinks it can crit, as it has the chance but its not guaranteed. same as we may gamble on a crit.
 
         // Handle dynamic move damage
-        switch (gBattleMoves[move].effect)
+        switch (gBattleMoves[move].effect) //since I'm using a formula that uses dynamicbasepower etc. I feel I may not need these at all. which is good as its pretty stiff?
         {
         case EFFECT_LEVEL_DAMAGE:
-        case EFFECT_PSYWAVE:
+        case EFFECT_PSYWAVE: //I changed how psywave works see if this is still relevant
             dmg = gBattleMons[battlerAtk].level * (AI_DATA->abilities[battlerAtk] == ABILITY_PARENTAL_BOND ? 2 : 1);
             break;
         case EFFECT_DRAGON_RAGE:
             dmg = 40 * (AI_DATA->abilities[battlerAtk] == ABILITY_PARENTAL_BOND ? 2 : 1);
             break;
-        case EFFECT_SONICBOOM:
+        case EFFECT_SONIC_SCREECH:
             dmg = 20 * (AI_DATA->abilities[battlerAtk] == ABILITY_PARENTAL_BOND ? 2 : 1);
             break;
         case EFFECT_MULTI_HIT:
@@ -797,7 +807,7 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness,
                 : max(1, gBattleMons[battlerDef].hp / 2));
             break;
         case EFFECT_FINAL_GAMBIT:
-            dmg = gBattleMons[battlerAtk].hp;
+            dmg = (gBattleMons[battlerAtk].maxHP - gBattleMons[battlerAtk].hp);
             break;
         }
 
@@ -810,9 +820,10 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness,
         if (dmg == 0)
             dmg = 1;
     }
-    else
+    else //status moves
     {
-        effectivenessMultiplier = CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, FALSE);
+        //effectivenessMultiplier = CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, FALSE);  not sure what this is for
+        effectivenessMultiplier = typeMod;
         dmg = 0;
     }
 
@@ -822,8 +833,8 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness,
     // convert multiper to AI_EFFECTIVENESS_xX
     *typeEffectiveness = AI_GetEffectiveness(effectivenessMultiplier);
 
-    gBattleStruct->zmove.active = FALSE;
-    gBattleStruct->zmove.baseMoves[battlerAtk] = MOVE_NONE;
+    //gBattleStruct->zmove.active = FALSE;
+    //gBattleStruct->zmove.baseMoves[battlerAtk] = MOVE_NONE;
     return dmg;
 }
 
@@ -831,42 +842,46 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness,
 static u32 WhichMoveBetter(u32 move1, u32 move2)
 {
     s32 defAbility = AI_DATA->abilities[gBattlerTarget];
+    s32 atkAbility = AI_DATA->abilities[gBattlerAttacker];
 
     // Check if physical moves hurt.
-    if (AI_DATA->holdEffects[sBattler_AI] != HOLD_EFFECT_PROTECTIVE_PADS
+    if ((AI_DATA->holdEffects[sBattler_AI] != HOLD_EFFECT_PROTECTIVE_PADS
+        && atkAbility != ABILITY_MUSCLE_MAGIC)
         && (BATTLE_HISTORY->itemEffects[gBattlerTarget] == HOLD_EFFECT_ROCKY_HELMET
-        || defAbility == ABILITY_IRON_BARBS || defAbility == ABILITY_ROUGH_SKIN))
+        || defAbility == ABILITY_IRON_BARBS || defAbility == ABILITY_ROUGH_SKIN
+        || defAbility == ABILITY_TOUGH_SPINES))
     {
         if (IS_MOVE_PHYSICAL(move1) && !IS_MOVE_PHYSICAL(move2))
             return 1;
-        if (IS_MOVE_PHYSICAL(move2) && !IS_MOVE_PHYSICAL(move1))
+        if (IS_MOVE_PHYSICAL(move2) && !IS_MOVE_PHYSICAL(move1))//Logic seems to be, return 0 is move 1 is better, return 1 if move 2
             return 0;
     }
     // Check recoil
-    if (GetBattlerAbility(sBattler_AI) != ABILITY_ROCK_HEAD)
+    if (GetBattlerAbility(sBattler_AI) != ABILITY_ROCK_HEAD
+        && GetBattlerAbility(sBattler_AI) != ABILITY_KLUTZ)
     {
-        if (((gBattleMoves[move1].effect == EFFECT_RECOIL_25
-                || gBattleMoves[move1].effect == EFFECT_RECOIL_IF_MISS
+        if (((gBattleMoves[move1].effect == EFFECT_RECOIL
+                //|| gBattleMoves[move1].effect == EFFECT_RECOIL_IF_MISS
                 || gBattleMoves[move1].effect == EFFECT_RECOIL_50
-                || gBattleMoves[move1].effect == EFFECT_RECOIL_33
+                || gBattleMoves[move1].effect == EFFECT_DOUBLE_EDGE
                 || gBattleMoves[move1].effect == EFFECT_RECOIL_33_STATUS)
-            && (gBattleMoves[move2].effect != EFFECT_RECOIL_25
-                 && gBattleMoves[move2].effect != EFFECT_RECOIL_IF_MISS
+            && (gBattleMoves[move2].effect != EFFECT_RECOIL
+                 //&& gBattleMoves[move2].effect != EFFECT_RECOIL_IF_MISS   removed as these move effects aren't actually blocked by rock head
                  && gBattleMoves[move2].effect != EFFECT_RECOIL_50
-                 && gBattleMoves[move2].effect != EFFECT_RECOIL_33
+                 && gBattleMoves[move2].effect != EFFECT_DOUBLE_EDGE
                  && gBattleMoves[move2].effect != EFFECT_RECOIL_33_STATUS
                  && gBattleMoves[move2].effect != EFFECT_RECHARGE)))
             return 1;
 
-        if (((gBattleMoves[move2].effect == EFFECT_RECOIL_25
+        if (((gBattleMoves[move2].effect == EFFECT_RECOIL
                 || gBattleMoves[move2].effect == EFFECT_RECOIL_IF_MISS
                 || gBattleMoves[move2].effect == EFFECT_RECOIL_50
-                || gBattleMoves[move2].effect == EFFECT_RECOIL_33
+                || gBattleMoves[move2].effect == EFFECT_DOUBLE_EDGE
                 || gBattleMoves[move2].effect == EFFECT_RECOIL_33_STATUS)
-            && (gBattleMoves[move1].effect != EFFECT_RECOIL_25
+            && (gBattleMoves[move1].effect != EFFECT_RECOIL
                  && gBattleMoves[move1].effect != EFFECT_RECOIL_IF_MISS
                  && gBattleMoves[move1].effect != EFFECT_RECOIL_50
-                 && gBattleMoves[move1].effect != EFFECT_RECOIL_33
+                 && gBattleMoves[move1].effect != EFFECT_DOUBLE_EDGE
                  && gBattleMoves[move1].effect != EFFECT_RECOIL_33_STATUS
                  && gBattleMoves[move1].effect != EFFECT_RECHARGE)))
             return 0;
@@ -1405,11 +1420,11 @@ bool32 IsMoveRedirectionPrevented(u16 move, u16 atkAbility)
     return FALSE;
 }
 
-u32 AI_GetMoveAccuracy(u8 battlerAtk, u8 battlerDef, u16 move)
+u32 AI_GetMoveAccuracy(u8 battlerAtk, u8 battlerDef, u16 move)//vsonic setup copying values from  atk01_accuracycheck  same as how I did for calcbasedmg will copy logic
 {
     return GetTotalAccuracy(battlerAtk, battlerDef, move, AI_DATA->abilities[battlerAtk], AI_DATA->abilities[battlerDef],
                             AI_DATA->holdEffects[battlerAtk], AI_DATA->holdEffects[battlerDef]);
-}
+}//mak gettotalaccuracy ein thsi file
 
 bool32 IsSemiInvulnerable(u8 battlerDef, u16 move)
 {
@@ -1445,18 +1460,16 @@ bool32 IsMoveEncouragedToHit(u8 battlerAtk, u8 battlerDef, u16 move)
 #endif
 
     // discouraged from hitting
-    if (AI_WeatherHasEffect() && (gBattleWeather & B_WEATHER_SUN)
+    if (AI_WeatherHasEffect() && (gBattleWeather & WEATHER_SUN_ANY)
       && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
         return FALSE;
 
     // increased accuracy but don't always hit
     if ((AI_WeatherHasEffect() &&
-            (((gBattleWeather & B_WEATHER_RAIN) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
-            || (((gBattleWeather & B_WEATHER_HAIL) && move == MOVE_BLIZZARD))))
+            (((gBattleWeather & WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
+            || (((gBattleWeather & WEATHER_HAIL) && move == MOVE_BLIZZARD))))
         || (gBattleMoves[move].effect == EFFECT_VITAL_THROW)
-    #if B_MINIMIZE_DMG_ACC >= GEN_6
         || ((gStatuses3[battlerDef] & STATUS3_MINIMIZED) && (gBattleMoves[move].flags & FLAG_DMG_MINIMIZE))
-    #endif
         || (gBattleMoves[move].accuracy == 0))
     {
         return TRUE;
@@ -1479,21 +1492,20 @@ bool32 ShouldTryOHKO(u8 battlerAtk, u8 battlerDef, u16 atkAbility, u16 defAbilit
     if (!DoesBattlerIgnoreAbilityChecks(atkAbility, move) && defAbility == ABILITY_STURDY)
         return FALSE;
 
+    if (move == MOVE_SHEER_COLD && IS_BATTLER_OF_TYPE(battlerDef, TYPE_ICE))//adjust this later so well, its a high level move so low level trainers shouhldn't have it 
+        return FALSE;   //was gonna add random factor for low level trainers but guess not necessary
+
     if ((((gStatuses3[battlerDef] & STATUS3_ALWAYS_HITS)
         && gDisableStructs[battlerDef].battlerWithSureHit == battlerAtk)
         || atkAbility == ABILITY_NO_GUARD || defAbility == ABILITY_NO_GUARD)
-        && gBattleMons[battlerAtk].level >= gBattleMons[battlerDef].level)
+        && gBattleMons[battlerAtk].level >= (gBattleMons[battlerDef].level - 7))
     {
         return TRUE;
     }
-    else    // test the odds
+    else  // test the odds - not my note, but added my ohko change, logic matches function, odds are perfect, its a gamble not an exact translation of the in game calculation
     {
         u16 odds = accuracy + (gBattleMons[battlerAtk].level - gBattleMons[battlerDef].level);
-    #if B_SHEER_COLD_ACC >= GEN_7
-        if (gCurrentMove == MOVE_SHEER_COLD && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ICE))
-            odds -= 10;
-    #endif
-        if (Random() % 100 + 1 < odds && gBattleMons[battlerAtk].level >= gBattleMons[battlerDef].level)
+        if (Random() % 100 + 1 < odds && gBattleMons[battlerAtk].level >= (gBattleMons[battlerDef].level - 7))
             return TRUE;
     }
     return FALSE;
@@ -1503,7 +1515,7 @@ bool32 ShouldSetSandstorm(u8 battler, u16 ability, u16 holdEffect)
 {
     if (!AI_WeatherHasEffect())
         return FALSE;
-    else if (gBattleWeather & B_WEATHER_SANDSTORM)
+    else if (gBattleWeather & WEATHER_SANDSTORM_ANY)
         return FALSE;
 
     if (ability == ABILITY_SAND_VEIL
@@ -1527,7 +1539,7 @@ bool32 ShouldSetHail(u8 battler, u16 ability, u16 holdEffect)
 {
     if (!AI_WeatherHasEffect())
         return FALSE;
-    else if (gBattleWeather & B_WEATHER_HAIL)
+    else if (gBattleWeather & WEATHER_HAIL)
         return FALSE;
 
     if (ability == ABILITY_SNOW_CLOAK
@@ -1551,7 +1563,7 @@ bool32 ShouldSetRain(u8 battlerAtk, u16 atkAbility, u16 holdEffect)
 {
     if (!AI_WeatherHasEffect())
         return FALSE;
-    else if (gBattleWeather & B_WEATHER_RAIN)
+    else if (gBattleWeather & WEATHER_RAIN_ANY)
         return FALSE;
 
     if (holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA
@@ -1574,7 +1586,7 @@ bool32 ShouldSetSun(u8 battlerAtk, u16 atkAbility, u16 holdEffect)
 {
     if (!AI_WeatherHasEffect())
         return FALSE;
-    else if (gBattleWeather & B_WEATHER_SUN)
+    else if (gBattleWeather & WEATHER_SUN_ANY)
         return FALSE;
 
     if (holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA
@@ -2348,7 +2360,7 @@ static u32 GetWeatherDamage(u8 battlerId)
     if (!AI_WeatherHasEffect())
         return 0;
 
-    if (gBattleWeather & B_WEATHER_SANDSTORM)
+    if (gBattleWeather & WEATHER_SANDSTORM_ANY)
     {
         if (BattlerAffectedBySandstorm(battlerId, ability)
           && !(gStatuses3[battlerId] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER))
@@ -2359,7 +2371,7 @@ static u32 GetWeatherDamage(u8 battlerId)
                 damage = 1;
         }
     }
-    if ((gBattleWeather & B_WEATHER_HAIL) && ability != ABILITY_ICE_BODY)
+    if ((gBattleWeather & WEATHER_HAIL) && ability != ABILITY_ICE_BODY)
     {
         if (BattlerAffectedByHail(battlerId, ability)
           && !(gStatuses3[battlerId] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER))
@@ -3013,7 +3025,7 @@ bool32 ShouldAbsorb(u8 battlerAtk, u8 battlerDef, u16 move, s32 damage)
         u8 healPercent = (gBattleMoves[move].argument == 0) ? 50 : gBattleMoves[move].argument;
         s32 healDmg = (healPercent * damage) / 100;
 
-        if (gStatuses3[battlerAtk] & STATUS3_HEAL_BLOCK)
+        if (gSideStatuses[battlerAtk] & SIDE_STATUS_HEAL_BLOCK)
             healDmg = 0;
 
         if (CanTargetFaintAi(battlerDef, battlerAtk)
@@ -3039,7 +3051,7 @@ bool32 ShouldRecover(u8 battlerAtk, u8 battlerDef, u16 move, u8 healPercent)
         // using item or user going first
         s32 damage = AI_DATA->simulatedDmg[battlerAtk][battlerDef][AI_THINKING_STRUCT->movesetIndex];
         s32 healAmount = (healPercent * damage) / 100;
-        if (gStatuses3[battlerAtk] & STATUS3_HEAL_BLOCK)
+        if (gSideStatuses[battlerAtk] & SIDE_STATUS_HEAL_BLOCK)
             healAmount = 0;
 
         if (CanTargetFaintAi(battlerDef, battlerAtk)
@@ -3058,7 +3070,7 @@ bool32 ShouldSetScreen(u8 battlerAtk, u8 battlerDef, u16 moveEffect)
     {
     case EFFECT_AURORA_VEIL:
         // Use only in Hail and only if AI doesn't already have Reflect, Light Screen or Aurora Veil itself active.
-        if (gBattleWeather & B_WEATHER_HAIL
+        if (gBattleWeather & WEATHER_HAIL
             && !(gSideStatuses[atkSide] & (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL)))
             return TRUE;
         break;
@@ -3680,7 +3692,7 @@ bool32 ShouldUseZMove(u8 battlerAtk, u8 battlerDef, u16 chosenMove)
     // simple logic. just upgrades chosen move to z move if possible, unless regular move would kill opponent
     if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && battlerDef == BATTLE_PARTNER(battlerAtk))
         return FALSE; //don't use z move on partner
-    if (gBattleStruct->zmove.used[battlerAtk])
+    if (//gBattleStruct->zmove.used[battlerAtk])
         return FALSE;   //cant use z move twice
 
     if (IsViableZMove(battlerAtk, chosenMove))
@@ -3692,9 +3704,9 @@ bool32 ShouldUseZMove(u8 battlerAtk, u8 battlerDef, u16 chosenMove)
         if (gBattleMons[battlerDef].ability == ABILITY_ICE_FACE && gBattleMons[battlerDef].species == SPECIES_EISCUE && IS_MOVE_PHYSICAL(chosenMove))
             return FALSE; // Don't waste a Z-Move busting Ice Face
 
-        if (IS_MOVE_STATUS(chosenMove) && !IS_MOVE_STATUS(gBattleStruct->zmove.chosenZMove))
+        if (IS_MOVE_STATUS(chosenMove) && !IS_MOVE_STATUS(//gBattleStruct->zmove.chosenZMove))
             return FALSE;
-        else if (!IS_MOVE_STATUS(chosenMove) && IS_MOVE_STATUS(gBattleStruct->zmove.chosenZMove))
+        else if (!IS_MOVE_STATUS(chosenMove) && IS_MOVE_STATUS(//gBattleStruct->zmove.chosenZMove))
             return FALSE;
 
         if (!IS_MOVE_STATUS(chosenMove) && AI_CalcDamage(chosenMove, battlerAtk, battlerDef, &effectiveness, FALSE) >= gBattleMons[battlerDef].hp)

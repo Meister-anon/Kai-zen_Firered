@@ -14,7 +14,7 @@ void SetMoveEffect(bool32 primary, u32 certain);
 bool8 UproarWakeUpCheck(u8 battlerId);
 u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility);	//return value is u8 so function can stay u8, even if all elements aren't
 u8 TypeCalc(u16 move, u8 attacker, u8 defender);
-void AI_CalcDmg(u8 attacker, u8 defender);
+s32 AI_CalcDmgFormula(u8 attacker, u8 defender);
 bool32 IsMonGettingExpSentOut(void);
 void BattleCreateYesNoCursorAt(void);
 void BattleDestroyYesNoCursorAt(void);
@@ -36,6 +36,10 @@ void StealTargetItem(u8 battlerStealer, u8 battlerItem);
 bool32 CanStealItem(u8 battlerStealing, u8 battlerItem, u16 item);
 u32 GetHighestStatId(u32 battlerId);
 s32 AICalcCritChance(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbility);
+u16 GetNaturePowerMove(void);
+s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, u32 move);
+
+s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags);
 
 const u16 gCriticalHitChance[] = { 16, 6, 4, 3, 1 };	//made global, so can run in ai file
 

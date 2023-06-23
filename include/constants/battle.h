@@ -346,6 +346,10 @@
 #define SIDE_STATUS_EMBARGO					(1 << 23)
 #define SIDE_STATUS_MUDSPORT				(1 << 24)
 #define SIDE_STATUS_WATERSPORT				(1 << 25)
+#define SIDE_STATUS_MAGIC_COAT				(1 << 26)	//for magic coat buff make 3 turn, similar in effect to a screen, but 3 instead of 5 turns as it nullifies
+
+#define SIDE_STATUS_HAZARDS_ANY    (SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_STEALTH_ROCK)
+#define SIDE_STATUS_SCREEN_ANY     (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL)
 
 // Field affecting statuses.
 #define STATUS_FIELD_MAGIC_ROOM         (1 << 0)

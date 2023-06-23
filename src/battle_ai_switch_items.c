@@ -530,7 +530,7 @@ u8 GetMostSuitableMonToSwitchInto(void)
             gBattleMoveDamage = 0;
             if (move != MOVE_NONE && gBattleMoves[move].power != 1)
             {
-                AI_CalcDmg(gActiveBattler, opposingBattler);
+                AI_CalcDmgFormula(gActiveBattler, opposingBattler);
                 TypeCalc(move, gActiveBattler, opposingBattler);
             }
             if (bestDmg < gBattleMoveDamage)

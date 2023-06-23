@@ -134,6 +134,7 @@ void UndoMegaEvolution(u32 monId);
 void UndoFormChange(u32 monId, u32 side);
 bool32 DoBattlersShareType(u32 battler1, u32 battler2);
 bool32 CanBattlerEscape(u32 battlerId);
+bool32 IsHealBlockPreventingMove(u32 battler, u32 move);
 u32 IsAbilityPreventingEscape(u32 battlerId);
 u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability);
 u32 IsAbilityOnField(u32 ability); 
@@ -164,7 +165,7 @@ bool32 CanBeParalyzed(u8 battlerId);
 bool32 CanBeFrozen(u8 battlerId);
 bool32 CanBeConfused(u8 battlerId);
 bool32 HasEnoughHpToEatBerry(u8 battlerId, u32 hpFraction, u16 itemId);
-bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget);
+bool32 DoesPranksterBlockMove(u16 move, u8 battlerwithPrankster, u8 battlerDef, bool32 checkTarget);
 bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind);
 bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags);
 bool32 TryRoomService(u8 battlerId);
@@ -187,6 +188,12 @@ u16 GetTypeModifier(u8 atkType, u8 defType);
 s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u16 *typeEffectivenessModifier);
 //learned defined need be on one line, this should be logic for thawing i.e remove frozen status
 //removed fire fang restriction, any heat transafer is good enough
+
+bool32 TestMoveFlags(u16 move, u32 flag);
+
+s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower,
+    bool32 isCrit, bool32 randomFactor, bool32 updateFlags, u16 typeEffectivenessModifier);
+
 #define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || (((gBattleMoves[gCurrentMove].type == TYPE_FIRE) || (gBattleMoves[gCurrentMove].argument == TYPE_FIRE)) && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60)))
 
 // percent in UQ_4_12 format

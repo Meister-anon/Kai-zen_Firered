@@ -99,7 +99,7 @@
 #define VARIOUS_GET_BATTLER_FAINTED                          4
 #define VARIOUS_RESET_INTIMIDATE_TRACE_BITS     5
 #define VARIOUS_UPDATE_CHOICE_MOVE_ON_LVL_UP    6
-#define VARIOUS_RESET_PLAYER_FAINTED       7
+#define VARIOUS_RESET_PLAYER_FAINTED			7
 #define VARIOUS_CASE_8                          8
 #define VARIOUS_RETURN_OPPONENT_MON1            9
 #define VARIOUS_RETURN_OPPONENT_MON2            10
@@ -239,15 +239,15 @@
 #define VARIOUS_JUMP_IF_EMERGENCY_EXITED			154		//default implement, plan to just use for wimp out
 
 // atk80, dmg manipulation
-#define ATK80_DMG_CHANGE_SIGN                               0
-#define ATK80_DMG_HALF_BY_TWO_NOT_MORE_THAN_HALF_MAX_HP     1
-#define ATK80_DMG_DOUBLED                                   2
-#define DMG_1_8_TARGET_HP          3
-#define DMG_FULL_ATTACKER_HP       4
-#define DMG_CURR_ATTACKER_HP       5
-#define DMG_BIG_ROOT               6
-#define DMG_1_2_ATTACKER_HP        7
-#define DMG_RECOIL_FROM_IMMUNE     8 // Used to calculate recoil for the Gen 4 version of Jump Kick
+#define NEGATIVE_DMG					0
+#define RECOIL_MISS_DMG					1	//udated this should do miss & immunity
+#define DOUBLE_DMG						2
+#define DMG_1_8_TARGET_HP				3
+#define DMG_FULL_ATTACKER_HP			4
+#define DMG_CURR_ATTACKER_HP			5
+#define DMG_BIG_ROOT					6
+#define DMG_1_2_ATTACKER_HP				7
+#define DMG_RECOIL_FROM_IMMUNE		    8 // Used to calculate recoil for the Gen 4 version of Jump Kick, will tweak and instead consolidate in case 1
 
 // Cmd_jumpifcantswitch
 #define SWITCH_IGNORE_ESCAPE_PREVENTION   (1 << 7)

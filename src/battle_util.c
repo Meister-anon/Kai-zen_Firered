@@ -29,12 +29,11 @@
 #include "pokedex.h"
 #include "constants/battle_move_effects.h"
 #include "constants/battle_script_commands.h"
-//#include "battle_script_commands.c"       //forgot can't include .c files
+#include "battle_script_commands.h"       
 
 //static declarations
 static bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId);
 static bool32 IsGravityPreventingMove(u32 move);
-static bool32 IsHealBlockPreventingMove(u32 battler, u32 move);
 static bool32 IsBelchPreventingMove(u32 battler, u32 move);
 static bool32 TryRemoveScreens(u8 battler);
 static bool32 GetMentalHerbEffect(u8 battlerId);
@@ -643,11 +642,11 @@ void BufferStatChange(u8 battlerId, u8 statId, u8 stringId)
     }
 }
 
-bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget)
+bool32 DoesPranksterBlockMove(u16 move, u8 battlerwithPrankster, u8 battlerDef, bool32 checkTarget)
 {
-    if (!gProtectStructs[battlerPrankster].pranksterElevated)
+    if (!gProtectStructs[battlerwithPrankster].pranksterElevated)   //if  not boosted by prankster?
         return FALSE;
-    if (GetBattlerSide(battlerPrankster) == GetBattlerSide(battlerDef))
+    if (GetBattlerSide(battlerwithPrankster) == GetBattlerSide(battlerDef)) //if prankster mon & target are on same side, doesn't block move
         return FALSE;
     if (checkTarget && (gBattleMoves[move].target & (MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_DEPENDS)))
         return FALSE;
@@ -1191,7 +1190,7 @@ static bool32 IsGravityPreventingMove(u32 move)
     }
 }
 
-static bool32 IsHealBlockPreventingMove(u32 battler, u32 move)
+bool32 IsHealBlockPreventingMove(u32 battler, u32 move)
 {
     if (!(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK))
         return FALSE;
@@ -1233,6 +1232,7 @@ enum
     ENDTURN_ORDER,
     ENDTURN_REFLECT,
     ENDTURN_LIGHT_SCREEN,
+    ENDTURN_MAGIC_COAT,
     ENDTURN_AURORA_VEIL,
     ENDTURN_MIST,
     ENDTURN_LUCKY_CHANT,
@@ -1331,6 +1331,33 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
                         BattleScriptExecute(BattleScript_SideStatusWoreOff);
                         gBattleCommunication[MULTISTRING_CHOOSER] = side;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_LIGHT_SCREEN);
+                        ++effect;
+                    }
+                }
+                ++gBattleStruct->turnSideTracker;
+                if (effect)
+                    break;
+            }
+            if (!effect)
+            {
+                ++gBattleStruct->turnCountersTracker;
+                gBattleStruct->turnSideTracker = 0;
+            }
+            break;
+        case ENDTURN_MAGIC_COAT:
+            while (gBattleStruct->turnSideTracker < 2)
+            {
+                side = gBattleStruct->turnSideTracker;
+                gActiveBattler = gBattlerAttacker = gSideTimers[side].MagicBattlerId;
+                if (gSideStatuses[side] & SIDE_STATUS_MAGIC_COAT)
+                {
+                    if (--gSideTimers[side].MagicTimer == 0)
+                    {
+                        gSideStatuses[side] &= ~SIDE_STATUS_MAGIC_COAT;
+                        gProtectStructs[gBattlerAttacker].bounceMove = FALSE; //think this is proper way to do this
+                        BattleScriptExecute(BattleScript_SideStatusWoreOff);
+                        gBattleCommunication[MULTISTRING_CHOOSER] = side;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_MAGIC_COAT);
                         ++effect;
                     }
                 }
@@ -3876,14 +3903,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
         //Pickup variables needed put above switch start
         u16 heldItem = gBattleMons[battler].item;
+        u16 rand = Random();
 
         u16 sPickupBattleArray[ITEMS_COUNT] = { 0 }; //tips from anercomp should create array with num elements found from function, and set all array values to 0
         //u16 sPickupBattleArray[HeldItemSearch()] = {0};
         //this fills the array, and makes it usable I can then use a loop to populate it and replace the 0s.
             //use a function to set to number helditems i.e items in gitems without helditem none
         u16 NumPickupItems = HeldItemSearch();
-        u32 randomItem = Random() % NumPickupItems;   //return random item from pickup battle itme list, array compiles and is able to set item, but random item selection isn't working
-
+        u32 randomItem = rand % NumPickupItems;   //return random item from pickup battle itme list, array compiles and is able to set item, but random item selection isn't working
+        u16 *changedItem = &gBattleStruct->changedItems[battler];
         if (special)
             gLastUsedAbility = special;
         else
@@ -4869,20 +4897,21 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                     for (j = 0; j < ITEMS_COUNT; ++j)   //variable needs to come after increment as its being set to the same variable, otherwise it can't increment
                     {
-                        if (ItemId_GetHoldEffect(j) != HOLD_EFFECT_NONE) //for searching list of items, want to  set item id to j to my array
+                        if (ItemId_GetHoldEffect(j) != HOLD_EFFECT_NONE) //for searching list of items, don't loop i, unless j, has hold effect
                         {
 
                             for (i = 0; i < ARRAY_COUNT(sPickupBattleArray); ++i) //I have size of array, now need to loop each element and replace value with fonud itemid
                             {
+                                //if (ItemId_GetHoldEffect(j) != HOLD_EFFECT_NONE)
                                 sPickupBattleArray[i] = itemid_get_number(j);  //passes itemId and populates array
                             }
                         }
 
                     }
                     //for in battle look items for hold effect != none and randomly set to held item slot end of each turn at 1/3 odds 
-                    if (heldItem == ITEM_NONE && (Random() % 3))
+                    if (heldItem == ITEM_NONE && (Random() % 3 == 0))
                     {
-                        u16* changedItem = &gBattleStruct->changedItems[battler];
+                        
                         gLastUsedItem = *changedItem = sPickupBattleArray[randomItem];
                         PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem)
                             gBattleMons[battler].item = gLastUsedItem;
@@ -5138,7 +5167,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattlescriptCurrInstr = BattleScript_DazzlingProtected;
                 effect = 1;
             }
-            else if (BlocksPrankster(move, gBattlerAttacker, gBattlerTarget, TRUE) && !(IS_MOVE_STATUS(move) && targetAbility == ABILITY_MAGIC_BOUNCE))
+            else if (DoesPranksterBlockMove(move, gBattlerAttacker, gBattlerTarget, TRUE) && !(IS_MOVE_STATUS(move) && targetAbility == ABILITY_MAGIC_BOUNCE))
             {
                 if (!(gBattleTypeFlags & BATTLE_TYPE_DOUBLE) || !(moveTarget & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY)))
                     CancelMultiTurnMoves(gBattlerAttacker); // Don't cancel moves that can hit two targets bc one target might not be protected
@@ -9398,7 +9427,7 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
 u16 GetTypeModifier(u8 atkType, u8 defType)
 {
 
-    if (FlagGet(FLAG_INVERSE_BATTLE)) //or target mon has invers world ability i.e giratina origin
+    if (FlagGet(FLAG_INVERSE_BATTLE) || GetBattlerAbility(gBattlerTarget) == ABILITY_INVERSE_WORLD) //or target mon has invers world ability i.e giratina origin
         return GetInverseTypeMultiplier(gTypeEffectivenessTable[atkType][defType]);
 
     return gTypeEffectivenessTable[atkType][defType];
@@ -9522,7 +9551,7 @@ s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, 
     return DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, FALSE, FALSE, FALSE, *typeEffectivenessModifier);
 }
 
-static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower,
+s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower,
     bool32 isCrit, bool32 randomFactor, bool32 updateFlags, u16 typeEffectivenessModifier)
 {
     s32 dmg;
@@ -9532,7 +9561,7 @@ static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType,
         return 0;
 
     if (fixedBasePower)
-        gBattleMovePower = fixedBasePower;
+        gBattleMovePower = fixedBasePower;// don't want to but will need to fill this out, effectively copy all the dmg modifier stuff from CalculateBaseDamage but just for use here
     /*else
         gBattleMovePower = CalcMoveBasePowerAfterModifiers(move, battlerAtk, battlerDef, moveType, updateFlags);
 
@@ -9752,6 +9781,13 @@ bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag)
         return FALSE;
 
     return IsBattlerGrounded(battlerId);
+}
+
+bool32 TestMoveFlags(u16 move, u32 flag)
+{
+    if (gBattleMoves[move].flags & flag)
+        return TRUE;
+    return FALSE;
 }
 
 bool32 CanSleep(u8 battlerId)

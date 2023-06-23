@@ -4084,14 +4084,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                 damage /= 2;
                 break;
             case TYPE_WATER:
-                damage = (15 * damage) / 10;
+                damage = (damage * 15) / 10;
                 break;
             }
 
             if (GetBattlerAbility(gBattlerAttacker) == ABILITY_LIQUID_SOUL
                 && gBattleMoves[move].type == TYPE_WATER)  //hopefully checks if move was orginally water and will boost damage in rain even when ghost type
             {
-                damage = (15 * damage) / 10;
+                damage = (damage * 15) / 10;
             }
         }
         //moved these here, because they don't have to do with physical or special damage alone anymore.  since I removed the type link
@@ -4105,10 +4105,13 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             switch (type)
             {
             case TYPE_FIRE:
-                damage = (15 * damage) / 10;  //50% damage increase
+                damage = (damage * 15) / 10;  //50% damage increase
                 break;
             case TYPE_WATER:
                 damage /= 2;            //50% damage cut
+                break;
+            case TYPE_ICE:
+                damage = (damage * 10) / 30; //66% dmg cut  this is a grass type buff, especially so for sunflora who is now grass/fire
                 break;
             }
         }
@@ -4119,19 +4122,24 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             switch (type)
             {
             case TYPE_FIRE:
-                damage = (20 * damage) / 30;  //33% damage cut, so less of a cut than in rain
-                break;
+                damage = (damage * 10) / 30;  //33% damage cut, so less of a cut than in rain, edit- actually fires are harder to start in cold so makes sense to have higher drop than rain
+                break;  //changed to 66% cut,  so for mon weak to fire they take slightly less than neutral dmg
 
             case TYPE_ICE:
-                damage = (125 * damage) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
+                damage = (damage * 125) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
                 break;
             }
         }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
     }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing
 
+    /*In order for a fire to start, your tinderand firewood must reach a combustible temperature.
+    Fires in the summer, even after a summer rain, can be easier to start
+    because the wood will be closer to a combustible temperature than even dry wood in the winter.
+    You will need more heat to get your fire started in the cold.*/  //logic for why fire dmg cut in hail/
+
     // flash fire triggered
     if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
-        damage = (15 * damage) / 10;  //how does this work, do I need to move it, or does it auto boost all damage?
+        damage = (damage * 15) / 10;  //how does this work, do I need to move it, or does it auto boost all damage?
                                         //it boosts all because its not in physical or special formula 
 
     if (gBattleMoves[move].flags & FLAG_DMG_MINIMIZE && gStatuses3[gBattlerTarget] & STATUS3_MINIMIZED)

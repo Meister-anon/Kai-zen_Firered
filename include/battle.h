@@ -393,6 +393,8 @@ struct SideTimer
     u8 waterSportTimer;  //forgot to remove these earlier, since I'm using gen 3 effects for them
     u8 waterSportBattlerId;
     u8 retaliateTimer;  //vsonic need to implement
+    u8 MagicTimer;
+    u8 MagicBattlerId; //magic coat defines changed from one turn to screen like side status
     /*0x0B*/ u8 fieldB;
 };
 
@@ -486,8 +488,52 @@ struct AI_ThinkingStruct
     u32 aiFlags;
     u8 aiAction;
     u8 aiLogicId;
-    u8 filler12[6];
+    struct AI_SavedBattleMon saved[4];
     u8 simulatedRNG[4];
+    //bool8 switchMon; // Because all available moves have no/little effect. -NOT DEFAULT
+};
+
+struct AI_SavedBattleMon
+{
+    u16 ability;
+    u16 moves[MAX_MON_MOVES];
+    u16 heldItem;
+    u16 species;
+};
+
+struct AiLogicData
+{
+    u16 abilities[MAX_BATTLERS_COUNT];
+    u16 items[MAX_BATTLERS_COUNT];
+    u16 holdEffects[MAX_BATTLERS_COUNT];
+    u8 holdEffectParams[MAX_BATTLERS_COUNT];
+    u16 predictedMoves[MAX_BATTLERS_COUNT];
+    u8 hpPercents[MAX_BATTLERS_COUNT];
+    u16 partnerMove;
+    s32 simulatedDmg[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // attacker, target, moveIndex
+    u8 effectiveness[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // attacker, target, moveIndex
+    u8 moveLimitations[MAX_BATTLERS_COUNT];
+};
+
+struct AiPartyMon
+{
+    u16 species;
+    u16 item;
+    u16 heldEffect;
+    u16 ability;
+    u16 gender;
+    u16 level;
+    u16 moves[MAX_MON_MOVES];
+    u32 status;
+    bool8 isFainted;
+    bool8 wasSentInBattle;
+    u8 switchInCount; // Counts how many times this Pokemon has been sent out or switched into in a battle.
+};
+
+struct AIPartyData // Opposing battlers - party mons.
+{
+    struct AiPartyMon mons[2][PARTY_SIZE]; // 2 parties(player, opponent). Used to save information on opposing party.
+    u8 count[2];
 };
 
 extern u8 gActiveBattler;
@@ -517,6 +563,18 @@ struct BattleHistory
     u16 heldItems[MAX_BATTLERS_COUNT];
 };
 
+/*struct BattleHistory
+{
+    u16 abilities[MAX_BATTLERS_COUNT];
+    u8 itemEffects[MAX_BATTLERS_COUNT];
+    u16 usedMoves[MAX_BATTLERS_COUNT][MAX_MON_MOVES];
+    u16 moveHistory[MAX_BATTLERS_COUNT][AI_MOVE_HISTORY_COUNT]; // 3 last used moves for each battler
+    u8 moveHistoryIndex[MAX_BATTLERS_COUNT];
+    u16 trainerItems[MAX_BATTLERS_COUNT];
+    u8 itemsNo;
+    u16 heldItems[MAX_BATTLERS_COUNT];
+};*/
+
 struct BattleScriptsStack
 {
     const u8* ptr[8];
@@ -537,13 +595,15 @@ struct StatsArray
 struct BattleResources
 {
     // struct SecretBaseRecord *secretBase; //prob remove this,
-    struct ResourceFlags* flags;
-    struct BattleScriptsStack* battleScriptsStack;
+    struct ResourceFlags *flags;
+    struct BattleScriptsStack* battleScriptsStack;  //this is still ni emerald though
     struct BattleCallbacksStack* battleCallbackStack;
     struct StatsArray* beforeLvlUp;
-    struct AI_ThinkingStruct* ai;
+    struct AI_ThinkingStruct *ai;
+    struct AiLogicData *aiData;
+    struct AIPartyData *aiParty;
     struct BattleHistory* battleHistory;
-    struct BattleScriptsStack* AI_ScriptsStack;
+    struct BattleScriptsStack* AI_ScriptsStack; //may be irrelevant as no longer using scripts
     u8 bufferA[MAX_BATTLERS_COUNT][0x200];
     u8 bufferB[MAX_BATTLERS_COUNT][0x200];
 };

@@ -286,7 +286,7 @@ static void atkDB_tryimprison(void);
 static void atkDC_trysetgrudge(void);
 static void atkDD_weightdamagecalculation(void);
 static void atkDE_assistattackselect(void);
-static void atkDF_trysetmagiccoat(void);
+static void atkDF_setmagiccoat(void);
 static void atkE0_trysetsnatch(void);
 static void atkE1_trygetintimidatetarget(void);
 static void atkE2_switchoutabilities(void);
@@ -563,7 +563,7 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atkDC_trysetgrudge,
     atkDD_weightdamagecalculation,
     atkDE_assistattackselect,
-    atkDF_trysetmagiccoat,
+    atkDF_setmagiccoat,
     atkE0_trysetsnatch,
     atkE1_trygetintimidatetarget,
     atkE2_switchoutabilities,
@@ -647,6 +647,16 @@ static const struct StatFractions sAccuracyStageRatios[] =
 //decied to use 6, way it balances out each stat would be about a 10% crit increase until stage 4
 //static const u16 sCriticalHitChance[] = { 16, 6, 4, 3, 1 };   values used for referenced, but moved to .h to make global use for ai file
 
+s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, u32 move)//stil don't know what for
+{
+    s32 critChanceIndex = AICalcCritChance(battlerAtk, battlerDef, move, FALSE);
+    if (critChanceIndex < 0)
+        return -1;
+    else
+        return gCriticalHitChance[critChanceIndex]; //seems potentialy show crit ratio?
+}
+
+
 #define BENEFITS_FROM_LEEK(battler, holdEffect)((holdEffect == HOLD_EFFECT_LEEK) && (GET_BASE_SPECIES_ID(gBattleMons[battler].species) == SPECIES_FARFETCHD || gBattleMons[battler].species == SPECIES_SIRFETCHD))
 s32 AICalcCritChance(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbility)
 {
@@ -690,6 +700,12 @@ s32 AICalcCritChance(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbilit
     }
 
     return critChance;
+}
+
+s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags)
+{
+    return DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, fixedBasePower, isCrit, randomFactor,
+        updateFlags, CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, updateFlags));
 }
 
 /*static const u32 sStatusFlagsForMoveEffects[] =
@@ -1218,6 +1234,21 @@ static const u16 sMultiTaskExcludedEffects[] =
 /*static const u16 sBlockedMoves[] =
 {};*/
 
+u16 GetNaturePowerMove(void)
+{
+    if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)
+        return MOVE_MOONBLAST;
+    else if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+        return MOVE_THUNDERBOLT;
+    else if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
+        return MOVE_ENERGY_BALL;
+    else if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN)
+        return MOVE_PSYCHIC;
+    else if (sNaturePowerMoves == MOVE_NONE)
+        return MOVE_TRI_ATTACK;
+    return sNaturePowerMoves[gBattleTerrain];
+}
+
 //remember to change logic and buff the weak ones vsonic
 static const u16 sNaturePowerMoves[] =
 {
@@ -1348,19 +1379,19 @@ static void atk00_attackcanceler(void)
     }
     gHitMarker |= HITMARKER_OBEYS;
 
-    if (gProtectStructs[gBattlerTarget].bounceMove
+    if (gProtectStructs[gBattlerTarget].bounceMove  //target has magic coat effect
         && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED
-        && !gProtectStructs[gBattlerAttacker].usesBouncedMove)
+        && !gProtectStructs[gBattlerAttacker].usesBouncedMove) //move attacker is using is not one already bounced
     {
         PressurePPLose(gBattlerAttacker, gBattlerTarget, MOVE_MAGIC_COAT);
-        gProtectStructs[gBattlerTarget].bounceMove = FALSE;
+        //gProtectStructs[gBattlerTarget].bounceMove = FALSE; //removes magic coat effect from target after activating, (removing this line as I made multi turn
         gProtectStructs[gBattlerTarget].usesBouncedMove = TRUE;
         gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-        if (BlocksPrankster(gCurrentMove, gBattlerTarget, gBattlerAttacker, TRUE))
+        if (DoesPranksterBlockMove(gCurrentMove, gBattlerTarget, gBattlerAttacker, TRUE))
         {
             // Opponent used a prankster'd magic coat -> reflected status move should fail against a dark-type attacker
             gBattlerTarget = gBattlerAttacker;
-            gBattlescriptCurrInstr = BattleScript_MagicCoatBouncePrankster;
+            gBattlescriptCurrInstr = BattleScript_MagicCoatBouncePrankster;//effect is accurate, its saying target using magic coat also has prankster, so it should fail against a dark type
         }
         else
         {
@@ -1678,6 +1709,13 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
     }//exclusions for traps that don't work on floating targets so if you're trap heavy you need a grounder
     //note prob need more moves that do ground effects so its not just a rock & a psychic move
     //may make custom text for this.   //vsonic IMPORTANT
+
+    if (move == MOVE_SHEER_COLD && IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ICE))
+    {
+        gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+        JumpIfMoveFailed(7, move);
+        return TRUE;
+    }
 
     if ((WEATHER_HAS_EFFECT && 
         ((IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
@@ -2118,9 +2156,8 @@ static void atk05_damagecalc(void)
     //gMultiTask = 0; //don't know if i actually need to set equal to zero.  think I don't actually, will do anyway for now..
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_TRIPLE_KICK
-        && gCurrentMove != MOVE_SURGING_STRIKES    //could put in separate dmg bscommand, but if works for multitask this should also work
-        && gCurrentMove != MOVE_TRIPLE_ARROWS)   //only boosts damage if triple kick or triple axel
-    {
+        && gCurrentMove != MOVE_SURGING_STRIKES)    //could put in separate dmg bscommand, but if works for multitask this should also work
+    {//only boosts damage if triple kick or triple axel
         gDynamicBasePower = gBattleMoves[gCurrentMove].power;
 
         if (gMultiHitCounter == 2)//to shift triple kick effect from bs command adding 10 i.e fixed value back to a multiplier like in gen 2/origin.
@@ -2158,9 +2195,21 @@ static void atk05_damagecalc(void)
     ++gBattlescriptCurrInstr;
 }
 
-void AI_CalcDmg(u8 attacker, u8 defender)
+s32 AI_CalcDmgFormula(u8 attacker, u8 defender)
 {
     u16 sideStatus = gSideStatuses[GET_BATTLER_SIDE(defender)];
+
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_TRIPLE_KICK
+        && gCurrentMove != MOVE_SURGING_STRIKES)    //could put in separate dmg bscommand, but if works for multitask this should also work
+    {//only boosts damage if triple kick or triple axel
+        gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+
+        if (gMultiHitCounter == 2)//to shift triple kick effect from bs command adding 10 i.e fixed value back to a multiplier like in gen 2/origin.
+            gDynamicBasePower *= 2;
+
+        if (gMultiHitCounter == 1)
+            gDynamicBasePower *= 3;
+    }
 
     gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[attacker],
                                             &gBattleMons[defender],
@@ -2171,7 +2220,6 @@ void AI_CalcDmg(u8 attacker, u8 defender)
                                             attacker,
                                             defender);
     //gMultiTask = 0;
-    gDynamicBasePower = 0;
     gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier;
     if (gStatuses3[attacker] & STATUS3_CHARGED_UP && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC)
         gBattleMoveDamage *= 2;
@@ -2180,12 +2228,13 @@ void AI_CalcDmg(u8 attacker, u8 defender)
     if (gBattleMons[attacker].ability == ABILITY_MULTI_TASK
         && CanMultiTask(gCurrentMove) == TRUE
         && gBattleMoves[attacker].split != SPLIT_STATUS)
-        //&& gMultiHitCounter > 0) //setup a function that checks if move is multihit, or multiturn, with bool8 so it returns true or false, then use false here.
     {
         gBattleMoveDamage = (gBattleMoveDamage / gMultiTask);   //evenly splits damage between number of generated hits
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
     }
+
+    return gBattleMoveDamage;
 }
 
 #define TYPE_DMG_MODULATER
@@ -6372,6 +6421,7 @@ static void atk42_missinghealthtoDmg(void) //replaced was no longer needed, was 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_FINAL_GAMBIT)   //decided to use move power for this, can use move damage for else if/others
     { 
         gBattleMovePower = (gBattleMons[gBattlerAttacker].maxHP - gBattleMons[gBattlerAttacker].hp);
+        gBattleMovePower = (gBattleMovePower * 120) /100;   //since not using movedamage, and faint as result give extra boost
             ++gBattlescriptCurrInstr;
     }
     else
@@ -7428,9 +7478,9 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             gSpecialStatuses[gBattlerTarget].berryReduced = FALSE;
             gBattleScripting.moveEffect = 0;
             // clear attacker z move data
-            /*gBattleStruct->zmove.active = FALSE;
-            gBattleStruct->zmove.toBeUsed[gBattlerAttacker] = MOVE_NONE;
-            gBattleStruct->zmove.effect = EFFECT_HIT;*/
+            /*//gBattleStruct->zmove.active = FALSE;
+            //gBattleStruct->zmove.toBeUsed[gBattlerAttacker] = MOVE_NONE;
+            //gBattleStruct->zmove.effect = EFFECT_HIT;*/
             ++gBattleScripting.atk49_state; //vsonic
             break;
 
@@ -9483,7 +9533,7 @@ static bool32 IsRototillerAffected(u32 battlerId)
         return FALSE;   // Only grass types affected
     if (gStatuses3[battlerId] & STATUS3_SEMI_INVULNERABLE)
         return FALSE;   // Rototiller doesn't affected semi-invulnerable battlers
-    if (BlocksPrankster(MOVE_ROTOTILLER, gBattlerAttacker, battlerId, FALSE))
+    if (DoesPranksterBlockMove(MOVE_ROTOTILLER, gBattlerAttacker, battlerId, FALSE))
         return FALSE;
     return TRUE;
 }
@@ -11342,8 +11392,8 @@ static void atk76_various(void) //will need to add all these emerald various com
             }
         }
         break;
-    case VARIOUS_JUMP_IF_PRANKSTER_BLOCKED:
-        if (BlocksPrankster(gCurrentMove, gBattlerAttacker, gActiveBattler, TRUE))
+    case VARIOUS_JUMP_IF_PRANKSTER_BLOCKED: //for some reason not currently used?
+        if (DoesPranksterBlockMove(gCurrentMove, gBattlerAttacker, gActiveBattler, TRUE))
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         else
             gBattlescriptCurrInstr += 7;
@@ -12001,17 +12051,21 @@ static void atk80_manipulatedamage(void)
 {
     switch (gBattlescriptCurrInstr[1])
     {
-    case ATK80_DMG_CHANGE_SIGN:
+    case NEGATIVE_DMG:
         gBattleMoveDamage *= -1;
         break;
-    case ATK80_DMG_HALF_BY_TWO_NOT_MORE_THAN_HALF_MAX_HP:
-        gBattleMoveDamage /= 2;
+    case RECOIL_MISS_DMG:
+        gBattleMoveDamage /= 3; //double edge damage
+        
+       /* if ((gBattleMons[gBattlerTarget].maxHP / 3) < gBattleMoveDamage)
+            gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 3;*/  //removed doesn't make sense even if helpful, plus gen4 removed it anyway
+        if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+            gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;    //dmg for immunity rolled into one command
+
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
-        if ((gBattleMons[gBattlerTarget].maxHP / 2) < gBattleMoveDamage)
-            gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 2;
-        break;
-    case ATK80_DMG_DOUBLED:
+        break;  //only used for recoil miss, make define so can use name properly, oh I already did
+    case DOUBLE_DMG:
         gBattleMoveDamage *= 2;
         break;
     case DMG_1_8_TARGET_HP:
@@ -12032,7 +12086,7 @@ static void atk80_manipulatedamage(void)
         gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
         break;
     case DMG_RECOIL_FROM_IMMUNE:
-        gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 2;
+        gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
         break;
     
     }
@@ -15113,19 +15167,31 @@ static void atkDE_assistattackselect(void)
     }
 }
 
-static void atkDF_trysetmagiccoat(void)
+static void atkDF_setmagiccoat(void)
 {
-    gBattlerTarget = gBattlerAttacker;
-    gSpecialStatuses[gBattlerAttacker].ppNotAffectedByPressure = 1;
-    if (gCurrentTurnActionNumber == gBattlersCount - 1) // moves last turn
+
+    gSpecialStatuses[gBattlerAttacker].ppNotAffectedByPressure = TRUE;
+    
+    if (gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] & SIDE_STATUS_MAGIC_COAT)
     {
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 0;
     }
     else
     {
-        gProtectStructs[gBattlerAttacker].bounceMove = 1;
-        gBattlescriptCurrInstr += 5;
+        gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] |= SIDE_STATUS_MAGIC_COAT;
+        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].MagicTimer = 3;
+        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].MagicBattlerId = gBattlerAttacker;
+
+        if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && CountAliveMonsInBattle(BATTLE_ALIVE_ATK_SIDE) == 2)
+            gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+        else
+            gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+
+        gProtectStructs[gBattlerAttacker].bounceMove = TRUE; //setup done, bounce effect removed along with status in battle_util.c
     }
+    ++gBattlescriptCurrInstr;
+}
 }
 
 static void atkE0_trysetsnatch(void) // snatch
