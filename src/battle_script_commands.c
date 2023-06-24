@@ -622,7 +622,7 @@ struct StatFractions
     u8 divisor;
 };
 
-static const struct StatFractions sAccuracyStageRatios[] =
+const struct StatFractions gAccuracyStageRatios[] =
 {
     {  33, 100 }, // -6
     {  36, 100 }, // -5
@@ -1781,7 +1781,7 @@ static void atk01_accuracycheck(void)
         u8 type, moveAcc, holdEffect, param;
         s8 buff;
         u16 calc;
-        u8 eva;
+        u8 evasionStage = gBattleMons[gBattlerTarget].statStages[STAT_EVASION];
         s32 i;
         u8 acc = gBattleMons[gBattlerAttacker].statStages[STAT_ACC];
 
@@ -1790,7 +1790,15 @@ static void atk01_accuracycheck(void)
         GET_MOVE_TYPE(move, type);
         if (JumpIfMoveAffectedByProtect(move) || AccuracyCalcHelper(move))
             return;
-        if (gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)    //if used foresight against target they can't evade
+
+        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNAWARE || GetBattlerAbility(gBattlerAttacker) == ABILITY_KEEN_EYE)
+            evasionStage = DEFAULT_STAT_STAGE;
+        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
+            evasionStage = DEFAULT_STAT_STAGE;
+        if (GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE)
+            acc = DEFAULT_STAT_STAGE;
+
+        if (gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT || gStatuses3[gBattlerTarget] & STATUS3_MIRACLE_EYED)    //if used foresight against target they can't evade
         {
             //u8 acc = gBattleMons[gBattlerAttacker].statStages[STAT_ACC];
 
@@ -1800,7 +1808,7 @@ static void atk01_accuracycheck(void)
         {
             //u8 acc = gBattleMons[gBattlerAttacker].statStages[STAT_ACC];
 
-            buff = acc + DEFAULT_STAT_STAGE - gBattleMons[gBattlerTarget].statStages[STAT_EVASION];
+            buff = acc + DEFAULT_STAT_STAGE - evasionStage;
         } //this the line that links accuracy and evasion I believe
 
         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNAWARE)
@@ -1812,10 +1820,10 @@ static void atk01_accuracycheck(void)
             acc -= 2;
         }
 
-        if (buff < 0)
-            buff = 0;
-        if (buff > 0xC)
-            buff = 0xC;
+        if (buff < MIN_STAT_STAGE)
+            buff = MIN_STAT_STAGE;
+        if (buff > MAX_STAT_STAGE)
+            buff = MAX_STAT_STAGE;
         moveAcc = gBattleMoves[move].accuracy;
 
         if (gCurrentMove == MOVE_FURY_CUTTER) { //still not quite right, doesn't display right message for things like wonderguard
@@ -1862,54 +1870,54 @@ static void atk01_accuracycheck(void)
         // I'll use calc,  to adjust the move accuracy, but to avoid break, will include check that if moveAcc > 100  would instead moveAcc = 100.
         //remember I plan to do this for more than just status 1.
         // need a way to make sure I'm not raising evasiveness when appplying status, in case enemy evasion is lower than the level I would lower it beforehand.
-        eva = gBattleMons[gBattlerTarget].statStages[STAT_EVASION]; //think I just need nest if, and have my default value in an else
+         //think I just need nest if, and have my default value in an else
         if (gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATED_WITH(gBattlerAttacker)) //need to figure out how to lower evasion to go along with these accuracy boosts.
        //     calc = (calc * 160) / 100;
-        eva = 3;
+            calc = (calc * 140) / 100;
         if ((gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION) && GetBattlerAbility(gBattlerTarget) != ABILITY_TANGLED_FEET) //thought instead of self attack, make confusion chance to change move target to random
          //   calc = (calc * 120) / 100; //that way they're still doing the same move, but they also have chance to hit attack themselves with it .
-        eva = 5; // with that there should be as much benefit as danger in being confused, singled moves could hit everyone, etc. random & interesting..
+            calc = (calc * 120) / 100; // with that there should be as much benefit as danger in being confused, singled moves could hit everyone, etc. random & interesting..
         
         if ((GetBattlerAbility(gBattlerTarget) == ABILITY_TANGLED_FEET) && gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION) 
-            eva *= 2;//raises evasion double but evasion calcs different so thats +3 intead of +2
+            calc = (calc * 50) / 100;//raises evasion double but evasion calcs different so thats +3 intead of +2
         //12 stage base is 6 goes up to 12 & down to 0
 
         if (gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
         //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
-        eva = 3;
+            calc = (calc * 115) / 100;
         if (gBattleMons[gBattlerTarget].status4 & ITS_A_TRAP_STATUS4)  //I hpoe this works
         //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
-        eva = 3;
+            calc = (calc * 115) / 100;
         if (gBattleMons[gBattlerTarget].status1 & ITS_A_TRAP_STATUS1)  //I hpoe this works
         //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
-        eva = 3; //note need to add logic for trap effects for pokemon catching,
+            calc = (calc * 115) / 100; //note need to add logic for trap effects for pokemon catching,
         //don't use dodge pokeball effect when trapped, and add slight increase to catch chance, I think make it less than status chance but make it inclusive
         //so they stack
 
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP) { //.target = MOVE_TARGET_SELECTED, 
-            if ((gBattleMons[gBattlerTarget].type1 || gBattleMons[gBattlerTarget].type2) == TYPE_PSYCHIC) //important chek this think have function for type checking
-                eva = 5; // to take advantage of these buffs I want to have a button to display real move accuracy in battle. maybe L
+            if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_PSYCHIC)) //important chek this think have function for type checking
+                calc = (calc * 105) / 100; // to take advantage of these buffs I want to have a button to display real move accuracy in battle. maybe L
             else
                 //     calc = (calc * 260) / 100; // gBattleMoves[gCurrentMove].target that's the comamnd I need, then just set the target I want
-                eva = 1;//if I set it random % I can do more with it, I can make it use the normal confused hit itself, text command if it lands on target user.
+                calc = (calc * 160) / 100;//if I set it random % I can do more with it, I can make it use the normal confused hit itself, text command if it lands on target user.
         }
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_BURN)
-     //       calc = (calc * 120) / 100;
-        eva = 4;
+            calc = (calc * 110) / 100;
+        
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_SPIRIT_LOCK)
-           eva = 4;
+            calc = (calc * 110) / 100;
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_POISON) // I think I may remove the accuracy buff and just keep evasion drop, or make it more severe.
        //     calc = (calc * 115) / 100; //depends on how evasion works, if lowered evasion alone increases chance of move hitting, then I don't need accuracy buff.
-        eva = 4;
+            calc = (calc * 110) / 100;
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_FREEZE)
-        //    calc = (calc * 260) / 100;
+            calc = (calc * 160) / 100;
         eva = 1;
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_PARALYSIS) //ok evasion and accuracy stages are put together, so I'll just use evasion.
-        //    calc = (calc * 130) / 100;
-        eva = 3;
+            calc = (calc * 130) / 100;
+        
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_TOXIC_POISON)
         //    calc = (calc * 156) / 100;
-        eva = 3;
+            calc = (calc * 115) / 100;
 
         if (gBattleMons[gBattlerTarget].item == ITEM_ENIGMA_BERRY)
         {
@@ -1925,6 +1933,23 @@ static void atk01_accuracycheck(void)
 
         if (holdEffect == HOLD_EFFECT_EVASION_UP)
             calc = (calc * (100 - param)) / 100;
+        if (ItemId_GetHoldEffect(gBattleMons[gBattlerAttacker].item) == HOLD_EFFECT_WIDE_LENS)
+            calc = (calc * (100 + ItemId_GetHoldEffectParam(gBattleMons[gBattlerAttacker].item))) / 100;
+        else if (ItemId_GetHoldEffect(gBattleMons[gBattlerAttacker].item) == HOLD_EFFECT_ZOOM_LENS && GetBattlerTurnOrderNum(gBattlerAttacker) > GetBattlerTurnOrderNum(gBattlerTarget))
+            calc = (calc * (100 + ItemId_GetHoldEffectParam(gBattleMons[gBattlerAttacker].item))) / 100;
+        
+        if (gProtectStructs[gBattlerAttacker].usedMicleBerry)
+        {
+            gProtectStructs[battlerAtk].usedMicleBerry = FALSE;
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_RIPEN)
+                calc = (calc * 140) / 100;  // ripen gives 40% acc boost
+            else
+                calc = (calc * 120) / 100;  // 20% acc boost
+        }
+
+        if (gFieldStatuses & STATUS_FIELD_GRAVITY)
+            calc = (calc * 5) / 3; // 1.66 Gravity acc boost
+        
         // final calculation
         if ((Random() % 100 + 1) > calc)    //turns accuracy value into a percent by comparing on a base 100 scale, by lowering random num I can effectively raise acc of all moves
         {   //but it would be shifting the scale, and actually only really benefit high accuracy moves i.e if I shifted to random 95, 95 accuracy would then be 100
