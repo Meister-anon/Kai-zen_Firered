@@ -4211,7 +4211,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             {
                 gBattleMons[gEffectBattler].status1 &= ~(STATUS1_POISON);
                 gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_POISON;
-                gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(1);//attempting set toxic counter, to start at normal poison base dmg
+                gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start above normal poison base dmg
             }
            /* else if (gBattleMons[gEffectBattler].status1)   //realized i could keep this, if i use else if,  since thsi should mean if status1 not 0?
                 break;*/ //removed put comparative logic in ported function
@@ -14233,14 +14233,7 @@ static void atkBA_jumpifnopursuitswitchdmg(void)
 
 static void atkBB_setsunny(void)
 {
-    if (gBattleWeather & WEATHER_SUN_TEMPORARY)
-    {
-        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_HEAT_ROCK)
-            gWishFutureKnock.weatherDuration += 8;
-        else
-            gWishFutureKnock.weatherDuration += 5;
-    }
-    else if (gBattleWeather & WEATHER_SUN_NON_TEMP)
+    if (gBattleWeather & WEATHER_SUN_ANY)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
@@ -14259,14 +14252,7 @@ static void atkBB_setsunny(void)
 
 static void atk7D_setrain(void)
 {
-    if (gBattleWeather & WEATHER_RAIN_TEMPORARY)
-    {
-        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_DAMP_ROCK)
-            gWishFutureKnock.weatherDuration += 8;
-        else
-            gWishFutureKnock.weatherDuration += 5;
-    }
-    else if (gBattleWeather & WEATHER_RAIN_NON_TEMP)
+    if (gBattleWeather & WEATHER_RAIN_ANY)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
@@ -14285,14 +14271,7 @@ static void atk7D_setrain(void)
 
 static void atkC8_sethail(void)
 {
-    if (gBattleWeather & WEATHER_HAIL)
-    {
-        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_ICY_ROCK)
-            gWishFutureKnock.weatherDuration += 8;
-        else
-            gWishFutureKnock.weatherDuration += 5;
-    }
-    else if (gBattleWeather & WEATHER_HAIL_NON_TEMP)
+    if (gBattleWeather & WEATHER_HAIL_ANY)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
@@ -14311,14 +14290,7 @@ static void atkC8_sethail(void)
 
 static void atk95_setsandstorm(void)
 {
-    if (gBattleWeather & WEATHER_SANDSTORM_TEMPORARY)
-    {
-        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_SMOOTH_ROCK)
-            gWishFutureKnock.weatherDuration += 8;
-        else
-            gWishFutureKnock.weatherDuration += 5;
-    }
-    else if (gBattleWeather & WEATHER_SANDSTORM_NON_TEMP)
+    if (gBattleWeather & WEATHER_SANDSTORM_ANY)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;

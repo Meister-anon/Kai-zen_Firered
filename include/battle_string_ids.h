@@ -88,6 +88,11 @@
 #define B_MSG_TERRAINPREVENTS_ELECTRIC  1
 #define B_MSG_TERRAINPREVENTS_PSYCHIC   2
 
+// gRainContinuesStringIds
+#define B_MSG_RAIN_CONTINUES     0
+#define B_MSG_DOWNPOUR_CONTINUES 1
+#define B_MSG_RAIN_STOPPED       2
+
 // todo: make some of those names less vague: attacker/target vs pkmn, etc.
 #define STRINGID_TRAINER1LOSETEXT 12
 #define STRINGID_PKMNGAINEDEXP 13

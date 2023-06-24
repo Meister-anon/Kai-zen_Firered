@@ -1605,10 +1605,10 @@ bool32 IsMoveEncouragedToHit(u8 battlerAtk, u8 battlerDef, u16 move)
     if (AI_DATA->abilities[battlerDef] == ABILITY_NO_GUARD || AI_DATA->abilities[battlerAtk] == ABILITY_NO_GUARD)
         return TRUE;
 
-#if B_TOXIC_NEVER_MISS >= GEN_6
+
     if (gBattleMoves[move].effect == EFFECT_TOXIC && IS_BATTLER_OF_TYPE(battlerAtk, TYPE_POISON))
         return TRUE;
-#endif
+
 
     // discouraged from hitting
     if (AI_WeatherHasEffect() && (gBattleWeather & WEATHER_SUN_ANY)
@@ -1747,7 +1747,7 @@ bool32 ShouldSetSun(u8 battlerAtk, u16 atkAbility, u16 holdEffect)
       || atkAbility == ABILITY_LEAF_GUARD
       || atkAbility == ABILITY_SOLAR_POWER
       || atkAbility == ABILITY_HARVEST
-      || HasMoveEffect(battlerAtk, EFFECT_SOLAR_BEAM)
+      || HasMoveEffect(battlerAtk, EFFECT_SOLARBEAM)
       || HasMoveEffect(battlerAtk, EFFECT_MORNING_SUN)
       || HasMoveEffect(battlerAtk, EFFECT_SYNTHESIS)
       || HasMoveEffect(battlerAtk, EFFECT_MOONLIGHT)

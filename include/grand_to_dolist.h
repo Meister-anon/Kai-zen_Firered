@@ -867,6 +867,11 @@ as well as the effect of increasing trap duration
 * 
 * Need setup mon with static w new in a pinch ability overcharge -
 * 
+* setup poison in a pinch ability based on mc from marriage toxin ABILITY_POISONED_LEGACY
+* boosts poison dmg, and if would poison sets toxic instead, and starts damage at turn 3 damage i.e will do 3/16 rather than 1/16 or 1/8(normal poison) on first turn
+* also if move has a chance to poison it guarantees the poison 
+* right now is only on poipole/naganadel line as those are elseworld starters, and in a pinch is usually starter only
+* 
 * Further buff cupid arrow for luvdisc make it ignore gender check, as its the love pokemon and something further to make it more unique. DONE
 * 
 * BUFFED unown, learnset and new ability - DONE
@@ -1211,6 +1216,7 @@ Thunder Wave Electric TM45
 * reworking poison type add normal type to pure poison that is poison as a function of animal attributes
 * leave the more amorphous mon as pure poison - DONE
 * 
+* NOTE toss gastro acid on some prankster mon, mostly as kyogre groudon counters but still good to have
 * 
 * Remember setup ability Dark Deal companion ability to nuisance
 * Also need to add other abilties listed in base stats comments/port over comments/notes
@@ -1416,7 +1422,7 @@ goto TYPE_ICON_DATA
 * 
 * setup weather moves, to increase duration of weather effect if used again
 * if you count you don't need that, now question is, with being able to do that does that balance the low pp use?
-* I think so, ok all weather moves will have pp 5, but be extendable if used again.
+* I think so, ok all weather moves will have pp 5, but be extendable if used again. - changed mind
 * 
 * that way kyogre and groudon can stay special.
 * plan is other weather abilities will be temporary 5 turns like sunny day but better
@@ -1432,12 +1438,25 @@ goto TYPE_ICON_DATA
 * 
 * - think done, don't need weather wrapped by,  permanent weather doesn't use timer. so dont need special stuct
 * just need to use plusle minum ability on field check, linked with the weather condition its supposed to set,
-* if weather is current just keep timer from going down - DONE
+* if weather is current just keep timer from going down - DONE  -revamped
+* = - Changed effect from TryChangeBattleWeather for weather,   
+* All switch in weather abilities ignore decrement while they are on field,  but none of them are permanent,
+* and Groudon or Kyogre's abilities being on the field  prevent weather switch in  so they remain special.
+* 
+* No temp weather ability is able to overwrite primal weather abilities, except other primals,
+* hierarchy is primal weather, groudon/kyogre weather, normal ability weather, move set weather
+* 
+* similar to original effect, but also gives more reason to use weather crystals, would make weather set last 8 turns from when ko'd/switch out
+* so effectively permaent weather if enemy team doesn't have weather setter.
+* without outright requiring yuo use the crystals.
+* The longer effect is balanced by being modern and having things like neutralizing gas, gastro acid etc,
+* 
 * 
 * TryChangeBattleWeather  need replace  LOGIC for all weather abilities with that function - DONE
 * 
 * primal weather also sets terrain,  for kyogre & groudon, mega rayquaza would only remove their weather condition
 * where otherwise primal weather can't be changed.  so strengths them a bit as they keep the terrain
+* 
 * 
 * change mudsport and watersport to be terrain clears, will still do 
 * normal move effects but they will also clear terrain *idea from Sigel - 
@@ -2218,9 +2237,10 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * 
 * tweaked costume pikachu based on radical red, where each is a different type.
 * plan for distribution is, in mongeneration function for wild battles if species would be species pikachu, have 5% chance to swap and generate
+* (do same thing for rotom, let it spawn in one of different forms as well as have item that can make it swap forms to use on it)
 * a costume pikachu (not one of the hats)
-* //since changed to radicla red standard will need to update learnsets, consider radical red showdown for learnets
-* 
+* //since changed to radicla red standard will need to update learnsets, consider radical red showdown for learnets (will need to make diff learnset for each rotom form)
+* -(also made base rotom have posesion rotom stats in base/lightbulb form)
 * removed item1 item2 from base stat data to add back later when item expansion done
 * also gender based forms, I moved to new species etc. won't show up in pokedex as of yet.
 * only the male/base form is displayed need to setup logic, for pokedex to move between the forms
