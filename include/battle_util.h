@@ -180,6 +180,7 @@ u32 ApplyModifier(u16 modifier, u32 val);
 bool32 UnnerveOn(u32 battlerId, u32 itemId);
 void TryRestoreStolenItems(void);
 void TrySaveExchangedItem(u8 battlerId, u16 stolenItem);
+bool32 TryActivateBattlePoisonHeal(void);   //replaced normal poisonheal checks, allows use for poison types
 u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
 u32 GetBattlerMoveTargetType(u8 battlerId, u16 move); //need port these two fully
 bool32 CanTargetBattler(u8 battlerAtk, u8 battlerDef, u16 move);
@@ -194,7 +195,7 @@ bool32 TestMoveFlags(u16 move, u32 flag);
 s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower,
     bool32 isCrit, bool32 randomFactor, bool32 updateFlags, u16 typeEffectivenessModifier);
 
-#define THAW_CONDITION ((gCurrentMove == MOVE_SCALD) || (((gBattleMoves[gCurrentMove].type == TYPE_FIRE) || (gBattleMoves[gCurrentMove].argument == TYPE_FIRE)) && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60)))
+#define THAW_CONDITION(move) ((move == MOVE_SCALD) || (((gBattleMoves[move].type == TYPE_FIRE) || (gBattleMoves[move].argument == TYPE_FIRE)) && (gBattleMoves[move].power >= 60 || gDynamicBasePower >= 60)))
 
 // percent in UQ_4_12 format
 const u16 sPercentToModifier[] =

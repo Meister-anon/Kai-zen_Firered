@@ -5275,20 +5275,21 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
 
     //hey old me, that ish is all wrong, without secondary chance, effects won't apply, and that's dealt with in battle_moves file
     //
-    u32 percentChance;
+    u32 percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
     //hail based freeze boost, 
     if ((gBattleWeather & WEATHER_HAIL_ANY)
         && gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;  //its good, happened 2 out of 5 hits. decided to make it 1/16 dmg
     
-    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_DARK_DEAL)
-        percentChance = (gBattleMoves[gCurrentMove].secondaryEffectChance * 150) / 100;    
+      
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
-    else if (GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_DARK_DEAL)
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
-    else
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance; 
+        percentChance *= 2;
+    if (GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_DARK_DEAL) //hopefully stacks
+        percentChance *= 2;
+    else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_DARK_DEAL) //is excluded
+        percentChance = (gBattleMoves[gCurrentMove].secondaryEffectChance * 150) / 100;
+
+        
 
     
 

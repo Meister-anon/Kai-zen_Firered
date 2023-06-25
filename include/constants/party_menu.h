@@ -9,7 +9,7 @@
 #define AILMENT_BRN   5
 #define AILMENT_PKRS  6
 #define AILMENT_FNT   7
-#define AILMENT_SPRT 8   //for spirit lock, but seems letters here somewhat determine what's displayed on hp menu, so kept to 4.
+#define AILMENT_SPRT  8   //for spirit lock, but seems letters here somewhat determine what's displayed on hp menu, so kept to 4.
 
 #define TUTOR_MOVE_MEGA_PUNCH      0
 #define TUTOR_MOVE_SWORDS_DANCE    1

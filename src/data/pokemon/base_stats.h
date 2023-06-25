@@ -2419,7 +2419,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 65,
         //.evYield_HP = 1,
        // #ifdef ITEM_EXPANSION
-            //.item2 = ITEM_BLACK_SLUDGE,
+            .item2 = ITEM_BLACK_SLUDGE,
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,
@@ -2429,7 +2429,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_STENCH, ABILITY_STICKY_HOLD},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_REGENERATOR},
+            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_POISON_HEAL},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -2450,7 +2450,7 @@ const struct BaseStats gBaseStats[] =
         //.evYield_HP = 1,
         //.evYield_Attack = 1,
        // #ifdef ITEM_EXPANSION
-            //.item1 = ITEM_BLACK_SLUDGE,
+            .item1 = ITEM_BLACK_SLUDGE,
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,
@@ -2460,7 +2460,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_STENCH, ABILITY_STICKY_HOLD},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_REGENERATOR},
+            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_POISON_HEAL},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -12271,7 +12271,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 60,
         //.evYield_Attack = 1,
        // #ifdef ITEM_EXPANSION
-            //.item2 = ITEM_BLACK_SLUDGE,
+            .item2 = ITEM_BLACK_SLUDGE,
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 10,
@@ -12281,10 +12281,10 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_ANTICIPATION, ABILITY_DRY_SKIN},
-            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_IRON_FIST},
+            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_POISON_HEAL}, //poison touch does stack w  poison odds
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-    },
+    }, //needs more fighting moves barely learns any
 
     [SPECIES_TOXICROAK] =
     {
@@ -12300,7 +12300,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 172,
         //.evYield_Attack = 2,
        // #ifdef ITEM_EXPANSION
-            //.item2 = ITEM_BLACK_SLUDGE,
+            .item2 = ITEM_BLACK_SLUDGE,
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,
@@ -12310,7 +12310,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_ANTICIPATION, ABILITY_DRY_SKIN},
-            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_IRON_FIST},
+            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_POISON_HEAL},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -15390,7 +15390,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MINERAL,
         .abilities = {ABILITY_STENCH, ABILITY_AFTERMATH},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_EFFECT_SPORE, ABILITY_STICKY_HOLD},
+            .abilityHidden = {ABILITY_STICKY_HOLD, ABILITY_POISON_TOUCH},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -15411,7 +15411,7 @@ const struct BaseStats gBaseStats[] =
         //.evYield_Attack = 2,
         //.item1 = ITEM_SILK_SCARF,
        // #ifdef ITEM_EXPANSION
-            //.item2 = ITEM_BLACK_SLUDGE,
+            .item2 = ITEM_BLACK_SLUDGE,
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,
@@ -15421,7 +15421,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MINERAL,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STENCH, ABILITY_AFTERMATH},
-            .abilityHidden = {ABILITY_IRON_BARBS, ABILITY_CORROSION},
+            .abilityHidden = {ABILITY_STICKY_HOLD, ABILITY_CORROSION},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -19900,7 +19900,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HYPER_CUTTER, ABILITY_IRON_FIST},
-            .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_REGENERATOR},
+            .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_REGENERATOR}, //regernnerator here is like a prize fighter taking a rest between rounds
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -19928,7 +19928,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HYPER_CUTTER, ABILITY_IRON_FIST},
             .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_REFRIGERATE},    //thought to remove something to keep regeneraor & refrigerate but type still not good to switch with
-        .bodyColor = BODY_COLOR_WHITE,
+        .bodyColor = BODY_COLOR_WHITE, //want regenrator for healing monster lore, but refrigerate gets ice stab return, dizzy punch & giga impact, too good to give up
         .noFlip = FALSE,
     },
 
@@ -26200,7 +26200,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 65,
         //.evYield_HP = 1,
        // #ifdef ITEM_EXPANSION
-         //   //.item2 = ITEM_BLACK_SLUDGE,  vsonic
+         .item2 = ITEM_BLACK_SLUDGE, 
         // #endif
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,
@@ -26210,7 +26210,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POISON_TOUCH, ABILITY_GLUTTONY},
-            .abilityHidden = {ABILITY_POWER_OF_ALCHEMY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_POWER_OF_ALCHEMY, ABILITY_POISON_HEAL},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26238,7 +26238,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_POISON_TOUCH, ABILITY_GLUTTONY},
-            .abilityHidden = {ABILITY_POWER_OF_ALCHEMY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_POWER_OF_ALCHEMY, ABILITY_POISON_HEAL},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,

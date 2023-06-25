@@ -2203,7 +2203,7 @@ bool32 HasThawingMove(u8 battlerId)
 
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
-        if (moves[i] != MOVE_NONE && moves[i] != 0xFFFF && TestMoveFlags(moves[i], FLAG_THAW_USER))
+        if (moves[i] != MOVE_NONE && moves[i] != 0xFFFF && THAW_CONDITION(moves[i]))
             return TRUE;
     }
 
@@ -2913,7 +2913,7 @@ bool32 IsBattlerIncapacitated(u8 battler, u16 ability)
 {
     if ((gBattleMons[battler].status1 & STATUS1_FREEZE) 
         && (gDisableStructs[battler].FrozenTurns) //freeze timer does not equal zero
-        && !HasThawingMove(battler)) //replace with my thaw logic vsonic
+        && !HasThawingMove(battler)) //replace with my thaw logic vsonic - done
         return TRUE;    // if battler has thawing move we assume they will definitely use it, and thus being frozen should be neglected
 
     if (gBattleMons[battler].status1 & STATUS1_SLEEP)

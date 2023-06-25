@@ -876,6 +876,18 @@ as well as the effect of increasing trap duration
 * 
 * BUFFED unown, learnset and new ability - DONE
 * 
+* new ability idea, ash blossoms yugioh name inspired, single turn switchin effect for a bug type maybe volcarona
+* sets up STATUS2_POWDER  on enemy side, use flag check, if flag present at end turn remove status
+* make sure its a different status but with same effect, so if mon used move powder, it doesn't remove that as well.
+* or could just do a logic test if battler status not STATUS2_POWDER  set powder and ability flag, that way it can't remove an existing instence of the status
+* purpose is give free switch in on fire types, for type usually weak to them - 
+* powder was original signature move of vivillion   -giving to accelgor as its like a ninja (also try to change front sprite remove stupid puckered lip thing)
+* 
+* while looking at buffing poison heal, for poison types came up with buff for muk etc. sticky hold
+* rather than just make a copy of gooey and lowering speed on contact. 
+* Set so may steal/destroy enemy's held item on contact with sticky hold mon instead i.e battler absorbed the enemy's stuck item
+* do for give to garbador as well, who for some reason doesn't have when its a literal collection of absorbed trash-
+* 
 * give gumshoos move first impressions and facade as evo moves, leaning into trump pokemon idea - DONE
 * 
 * nother wave of buffs, delcatty buff, will need change its pokedex entry to fit, made part ghost, cats have 9 lives
@@ -1185,6 +1197,18 @@ Thunder Wave Electric TM45
 * make sure mon types have their own niche where needed, i.e bugs imune to confusion because of hive mind
 * grass immune to powder, ease of access to status moves to take advantage of multi status and higher than average vitatliy as part of nature
 * fire can't be burned, poison can't be poisoned etc. 
+* 
+* note -A badly poisoned Pokémon will remain badly poisoned even if switched out or the battle ends, although the counter is reset. *bulbapedia
+* didn't realize this is how it worked, thought I would have to set it that way myself nice
+* 
+* poison types can't be poisoned, meaning if they are given poison_heal as an ability they can never activate it,
+* but!! black sludge if held by a non poison type deals poison damage! so I think I would use that as a way for 
+* a poison type to activate poison_heal   
+* 
+* Think would give sparingly to special poison types, i.e stuff like grimer muk, which are literally poison, so giving more poison would just make them stronger
+* 
+* -all I need to do is setup new function for poison heal activation bool, true false  then I can just put it 
+* everywhere poison heal activates and the new logic would work.
 * 
 * note realized multi status is going to be easy to setup, its not actually any different code wise to status2, which already allows that.
 * only "difficult" part is going to be the qol/setting it up properly i.e the graphic stuff that make it look good/natural and professional.

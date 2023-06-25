@@ -592,10 +592,12 @@
 #define ITEM_PSYCHIC_SEED 310
 #define ITEM_MISTY_SEED 311
 #define ITEM_GRASSY_SEED 312*/
+//END of 2nd set of Use items
 // Incenses
-#define ITEM_SEA_INCENSE 385
-#define ITEM_LAX_INCENSE 386 
-#define ITEM_BAD_ONION 387 /*  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
+#define ITEM_SEA_INCENSE 385 
+#define ITEM_LAX_INCENSE 386
+#define ITEM_BLACK_SLUDGE 387
+#define ITEM_BAD_ONION 388 /*  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
 #define ITEM_ODD_INCENSE 386
 #define ITEM_ROCK_INCENSE 387
 #define ITEM_FULL_INCENSE 388
@@ -688,7 +690,7 @@
 
 // Check if the item is one that can be used on a Pokemon.
 #define IS_POKEMON_ITEM(item) ((item) > ITEM_PREMIER_BALL && (item) < ITEM_PROTECTOR)
-#define IS_POKEMON_ITEM2(item) ((item) > ITEM_EV_SHACKLES && (item) < ITEM_LAX_INCENSE)
+#define IS_POKEMON_ITEM2(item) ((item) > ITEM_EV_SHACKLES && (item) < ITEM_SEA_INCENSE)
 //BECAUSE of this need to add mega stones in somewhere before to cutoff.
 // or copy function for define and create a new range, for IS_POKEMON_ITEM2
 //that way I can just add on to end. but before N_A

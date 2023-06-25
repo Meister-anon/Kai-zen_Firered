@@ -513,6 +513,7 @@ u8 CalculateEnemyPartyCount(void);
 u8 GetMonsStateToDoubles(void);
 u16 GetAbilityBySpecies(u16 species, u8 abilityNum);    //since abilityNum can go to 4, removed bool for u
 u16 GetMonAbility(struct Pokemon *mon);
+bool32 IsMonType(struct Pokemon *mon, u8 type); //uses get mondata species to check mon type from base stats, not battle type,  used for field poison
 u8 GetSecretBaseTrainerPicIndex(void);
 u8 GetSecretBaseTrainerNameIndex(void);
 bool8 IsPlayerPartyAndPokemonStorageFull(void);

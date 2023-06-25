@@ -6251,6 +6251,23 @@
       "secondaryId": 0
     },
     {
+      "english": "BLACK SLUDGE",
+      "itemId": "ITEM_BLACK_SLUDGE",
+      "price": 4000,
+      "holdEffect": "HOLD_EFFECT_BLACK_SLUDGE",
+      "holdEffectParam": 0,
+      "description_english": "Gradually restores\\nHP of Poison-types.\\nBut Damages others.",
+      "importance": 0,
+      "exitsBagOnUse": 0,
+      "pocket": "POCKET_ITEMS",
+      "type": 4,
+      "fieldUseFunc": "FieldUseFunc_OakStopsYou",
+      "battleUsage": 0,
+      "battleUseFunc": "NULL",
+      "secondaryId": 0,
+      ".flingPower": 30
+    },
+    {
       "english": "BAD ONION",
       "itemId": "ITEM_BAD_ONION",
       "price": 350,

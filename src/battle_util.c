@@ -30,6 +30,7 @@
 #include "constants/battle_move_effects.h"
 #include "constants/battle_script_commands.h"
 #include "battle_script_commands.h"       
+#include "party_menu.h"
 
 //static declarations
 static bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId);
@@ -1871,6 +1872,7 @@ u8 DoBattlerEndTurnEffects(void)
         }
         else
         {
+            ability = GetBattlerAbility(gActiveBattler);
             switch (gBattleStruct->turnEffectsTracker) //adjusting to 8 instead of 15 to limit amount of healing
             {
             case ENDTURN_INGRAIN:  // ingrain
@@ -1953,7 +1955,7 @@ u8 DoBattlerEndTurnEffects(void)
                 {
                     MAGIC_GUARD_CHECK;
 
-                    if (ability == ABILITY_POISON_HEAL)
+                    if (TryActivateBattlePoisonHeal())
                     {
                         if (!BATTLER_MAX_HP(gActiveBattler) && !(gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK))
                         {
@@ -1981,7 +1983,7 @@ u8 DoBattlerEndTurnEffects(void)
                 {
                     MAGIC_GUARD_CHECK;
 
-                    if (ability == ABILITY_POISON_HEAL)
+                    if (TryActivateBattlePoisonHeal())
                     {
                         if (!BATTLER_MAX_HP(gActiveBattler) && !(gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK))
                         {
@@ -2816,7 +2818,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE) && gDisableStructs[gBattlerAttacker].FrozenTurns != 0) //frozen solid
             {
                 //if (Random() % 5)//ok found freeze chance, so 1 in 5 chance of thawing out, on freeze.  pretty much  random % 5 if not 0 stays frozen.
-                if (gDisableStructs[gBattlerAttacker].FrozenTurns != 0 && !THAW_CONDITION) //attempt at frozn timr   actuallg best to put timer decrement at endturn, that way can have consistent freze duration
+                if (gDisableStructs[gBattlerAttacker].FrozenTurns != 0 && !THAW_CONDITION(gCurrentMove)) //attempt at frozn timr   actuallg best to put timer decrement at endturn, that way can have consistent freze duration
                 {
                     //--gDisableStructs[gActiveBattler].FrozenTurns != 0
                     gBattlescriptCurrInstr = BattleScript_MoveUsedIsFrozen;
@@ -3179,9 +3181,9 @@ u8 AtkCanceller_UnableToUseMove(void)
             break;
         case CANCELLER_THAW: // move thawing
             if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE
-                && gDisableStructs[gBattlerAttacker].FrozenTurns != 0) //should be thaw if scald, or a fire type move above base 60 except fire fang
+                && gDisableStructs[gBattlerAttacker].FrozenTurns != 0) //should be thaw if scald, or a fire type move above base 60
             {
-                if (THAW_CONDITION)
+                if (THAW_CONDITION(gCurrentMove))
                 {
                     gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_FREEZE);
                     BattleScriptPushCursor();
@@ -3213,7 +3215,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
-        case CANCELLER_POWDER_STATUS:
+        case CANCELLER_POWDER_STATUS:   //doesn't make sense for grass type to be immune to this but will keep anyway
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_POWDER)
             {
                 u32 moveType;
@@ -5463,6 +5465,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     ++effect;
                 }
                 break;
+            case ABILITY_STICKY_HOLD:
             case ABILITY_MAGMA_ARMOR:
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
@@ -5485,11 +5488,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     else if (gBattleMons[gBattlerAttacker].item)
                     {
                         side = GetBattlerSide(gBattlerAttacker);
-                        gLastUsedItem = gBattleMons[gBattlerAttacker].item;
+                        gLastUsedItem = gBattleMons[gBattlerAttacker].item; //need to make sure these work so player can recover item after check theif/knock off function in bs commands vsonic
                         gBattleMons[gBattlerAttacker].item = ITEM_NONE;
                         gWishFutureKnock.knockedOffMons[side] |= gBitTable[gBattlerPartyIndexes[gBattlerAttacker]];
                         BattleScriptPushCursor();
+                        if (GetBattlerAbility(battler) == ABILITY_MAGMA_ARMOR)
                         gBattlescriptCurrInstr = BattleScript_MoveEffectIncinerate;   //changed to new magma armor script
+                        else if (GetBattlerAbility(battler) == ABILITY_STICKY_HOLD)
+                        gBattlescriptCurrInstr = BattleScript_StickyHoldKnockoff;   //if sticky hold
                         *(u8*)((u8*)(&gBattleStruct->choicedMove[gBattlerAttacker]) + 0) = 0;   //necessary line
                         *(u8*)((u8*)(&gBattleStruct->choicedMove[gBattlerAttacker]) + 1) = 0;
                         ++effect;
@@ -9916,5 +9922,25 @@ bool32 CanBeConfused(u8 battlerId)
         || IsBattlerTerrainAffected(battlerId, STATUS_FIELD_MISTY_TERRAIN))
         return FALSE;
     return TRUE;
+}
+
+bool32 TryActivateBattlePoisonHeal(void)  //change mind better to do 2 functions, rather than do 2 different effects with one.
+{
+
+
+    if ((GetBattlerAbility(gActiveBattler) == ABILITY_POISON_HEAL) && gBattleMons[gActiveBattler].hp != 0
+        && (gBattleMons[gActiveBattler].status1 & STATUS1_POISON || gBattleMons[gActiveBattler].status1 & STATUS1_TOXIC_POISON))
+    {
+        return TRUE;
+    }
+    else if ((GetBattlerAbility(gActiveBattler) == ABILITY_POISON_HEAL) && gBattleMons[gActiveBattler].hp != 0
+        && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_POISON) && (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_BLACK_SLUDGE))
+    {
+        return TRUE;
+    }
+    else
+        return FALSE;
+
+    
 }
 

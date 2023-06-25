@@ -769,6 +769,11 @@ BattleScript_MoveEffectIncinerate::
 	printstring STRINGID_INCINERATEBURN
 	waitmessage 0x40
 	return
+	
+BattleScript_StickyHoldKnockoff::
+	printstring STRINGID_STICKYHOLDABSORBEDITEM
+	waitmessage 0x40
+	return
 
 BattleScript_MoveEffectBugBite::
 	printstring STRINGID_BUGBITE
