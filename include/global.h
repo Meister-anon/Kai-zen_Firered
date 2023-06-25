@@ -855,7 +855,7 @@ struct SaveBlock1
     /*0x03b8*/ struct ItemSlot bagPocket_KeyItems[BAG_KEYITEMS_COUNT];
     /*0x0430*/ struct ItemSlot bagPocket_PokeBalls[BAG_POKEBALLS_COUNT];
     /*0x0464*/ struct ItemSlot bagPocket_TMHM[BAG_TMHM_COUNT];
-    /*0x054c*/ struct ItemSlot bagPocket_Berries[BAG_BERRIES_COUNT];
+    /*0x054c*/ struct ItemSlot bagPOCKET_BERRY_POUCH[BAG_BERRIES_COUNT];
     /*0x05F8*/ u8 seen1[DEX_FLAGS_NO];
     /*0x062C*/ //u16 berryBlenderRecords[3]; // unused   //zsonic
     /*0x0632*/ u8 field_632[6]; // unused?   //only referenced here.

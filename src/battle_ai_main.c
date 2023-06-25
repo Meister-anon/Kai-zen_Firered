@@ -2164,7 +2164,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score -= 10;
             break;
         case EFFECT_BELCH:
-            if (ItemId_GetPocket(GetUsedHeldItem(battlerAtk)) != POCKET_BERRIES)
+            if (ItemId_GetPocket(GetUsedHeldItem(battlerAtk)) != POCKET_BERRY_POUCH)
                 score -= 10; // attacker has not consumed a berry
             break;
         case EFFECT_YAWN:
@@ -2310,7 +2310,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         case EFFECT_NATURAL_GIFT:
             if (AI_DATA->abilities[battlerAtk] == ABILITY_KLUTZ
               || gFieldStatuses & STATUS_FIELD_MAGIC_ROOM
-              || GetPocketByItemId(gBattleMons[battlerAtk].item) != POCKET_BERRIES)
+              || GetPocketByItemId(gBattleMons[battlerAtk].item) != POCKET_BERRY_POUCH)
                 score -= 10;
             break;
         case EFFECT_GRASSY_TERRAIN:
@@ -2470,7 +2470,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         case EFFECT_HIT_ENEMY_HEAL_ALLY:    // pollen puff
             if (IsTargetingPartner(battlerAtk, battlerDef))
             {
-                if (gStatuses3[battlerDef] & STATUS3_HEAL_BLOCK)
+                if (gSideStatuses[battlerDef] & SIDE_STATUS_HEAL_BLOCK)
                     return 0;
                 if (AtMaxHp(battlerDef))
                     score -= 10;
@@ -3154,9 +3154,10 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         score++;
 
     // check thawing moves
-    if ((gBattleMons[battlerAtk].status1 & STATUS1_FREEZE) && TestMoveFlags(move, FLAG_THAW_USER))
+    if ((gBattleMons[battlerAtk].status1 & STATUS1_FREEZE) && (gDisableStructs[battlerAtk].FrozenTurns)//freeze turn timer not 0, still frozen solid
+        && THAW_CONDITION(move))
         score += (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) ? 20 : 10;
-
+    
     // check burn
     if (gBattleMons[battlerAtk].status1 & STATUS1_BURN)
     {
@@ -3643,7 +3644,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         if (!HasDamagingMove(battlerDef) || IsBattlerTrapped(battlerDef, FALSE))
             score += 2;
         break;
-    case EFFECT_DO_NOTHING:
+    case EFFECT_SPLASH:
         //todo - check z splash, z celebrate, z happy hour (lol)
         break;
     case EFFECT_TELEPORT:
@@ -3683,9 +3684,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         break;
     case EFFECT_DISABLE:
         if (gDisableStructs[battlerDef].disableTimer == 0
-        #if B_MENTAL_HERB >= GEN_5
             && AI_DATA->holdEffects[battlerDef] != HOLD_EFFECT_MENTAL_HERB    // mental herb
-        #endif
         )
         {
             if (AI_WhoStrikesFirst(battlerAtk, battlerDef, move) == AI_IS_FASTER) // AI goes first
@@ -3708,9 +3707,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         break;
     case EFFECT_ENCORE:
         if (gDisableStructs[battlerDef].encoreTimer == 0
-        #if B_MENTAL_HERB >= GEN_5
             && AI_DATA->holdEffects[battlerDef] != HOLD_EFFECT_MENTAL_HERB    // mental herb
-        #endif
         )
         {
             if (IsEncoreEncouragedEffect(gBattleMoves[gLastMoves[battlerDef]].effect))
@@ -3758,7 +3755,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         break;
     case EFFECT_THIEF:
         {
-            bool32 canSteal = TRUE;
+            bool32 canSteal = TRUE; //CHANGED to default true since trainrs can knock off in my game
 
            /* #if B_TRAINERS_KNOCK_OFF_ITEMS == TRUE
                 canSteal = TRUE;
@@ -3800,7 +3797,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     break;
                 case HOLD_EFFECT_LAGGING_TAIL:
                 case HOLD_EFFECT_STICKY_BARB:
-                    break;
+                    break; //still to do maybe? idk maybe this what its supposed to be
                 default:
                     score++;
                     break;
@@ -4266,7 +4263,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     if (gBattleWeather & WEATHER_SUN_ANY)
                         score += 3; // Slow 'em down
                     break;
-                }
+                }//what is this even supposed to do, I can't change opponents hold effect??
             }
             break;
         case HOLD_EFFECT_EJECT_BUTTON:
@@ -4323,7 +4320,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         break;
     case EFFECT_SUPERPOWER:
     case EFFECT_OVERHEAT:
-        if (AI_DATA->abilities[battlerAtk] == ABILITY_CONTRARY)
+        if (AI_DATA->abilities[battlerAtk] == ABILITY_CONTRARY) //double check but chaanged both to recoil I think?
             score += 10;
         break;
     case EFFECT_MAGIC_COAT:
@@ -4543,13 +4540,13 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_BUG_BITE:   // And pluck
         if (gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE || AI_DATA->abilities[battlerDef] == ABILITY_STICKY_HOLD)
             break;
-        else if (ItemId_GetPocket(AI_DATA->items[battlerDef]) == POCKET_BERRIES)
+        else if (ItemId_GetPocket(AI_DATA->items[battlerDef]) == POCKET_BERRY_POUCH)
             score += 3;
         break;
     case EFFECT_INCINERATE:
         if (gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE || AI_DATA->abilities[battlerDef] == ABILITY_STICKY_HOLD)
             break;
-        else if (ItemId_GetPocket(AI_DATA->items[battlerDef]) == POCKET_BERRIES || AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_GEMS)
+        else if (ItemId_GetPocket(AI_DATA->items[battlerDef]) == POCKET_BERRY_POUCH || AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_GEMS)
             score += 3;
         break;
     case EFFECT_SMACK_DOWN:
@@ -5079,7 +5076,7 @@ static s16 AI_HPAware(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
          || (moveType == TYPE_ELECTRIC && AI_DATA->abilities[BATTLE_PARTNER(battlerAtk)] == ABILITY_VOLT_ABSORB)
          || (moveType == TYPE_WATER && (AI_DATA->abilities[BATTLE_PARTNER(battlerAtk)] == ABILITY_DRY_SKIN || AI_DATA->abilities[BATTLE_PARTNER(battlerAtk)] == ABILITY_WATER_ABSORB)))
         {
-            if (gStatuses3[battlerDef] & STATUS3_HEAL_BLOCK)
+            if (gSideStatuses[battlerDef] & SIDE_STATUS_HEAL_BLOCK)
                 return 0;
 
             if (CanTargetFaintAi(FOE(battlerAtk), BATTLE_PARTNER(battlerAtk))
