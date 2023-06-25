@@ -548,7 +548,7 @@ void SaveBattlerData(u8 battlerId)
 
 void SetBattlerData(u8 battlerId)
 {
-    if (!IsBattlerAIControlled(battlerId))
+    if (!IsBattlerAIControlled(battlerId)) //changed ability logic hope works  vsonic
     {
         struct Pokemon *illusionMon;
         u32 i;
@@ -557,8 +557,10 @@ void SetBattlerData(u8 battlerId)
         if (BATTLE_HISTORY->abilities[battlerId] != ABILITY_NONE)
             gBattleMons[battlerId].ability = BATTLE_HISTORY->abilities[battlerId];
         // Check if mon can only have one ability.
-        else if (gBaseStats[gBattleMons[battlerId].species].abilities[1] == ABILITY_NONE
+        else if ((gBaseStats[gBattleMons[battlerId].species].abilities[1] == ABILITY_NONE
                  || gBaseStats[gBattleMons[battlerId].species].abilities[1] == gBaseStats[gBattleMons[battlerId].species].abilities[0])
+                && ((gBaseStats[gBattleMons[battlerId].species].abilityHidden[0] == ABILITY_NONE)
+                    && gBaseStats[gBattleMons[battlerId].species].abilityHidden[1] == gBaseStats[gBattleMons[battlerId].species].abilityHidden[0]))
             gBattleMons[battlerId].ability = gBaseStats[gBattleMons[battlerId].species].abilities[0];
         // The ability is unknown.
         else
@@ -1363,9 +1365,13 @@ s32 AI_GetAbility(u32 battlerId)
     if (gBaseStats[gBattleMons[battlerId].species].abilities[0] != ABILITY_NONE)
     {
         u16 abilityGuess = ABILITY_NONE;
+        bool8 abilityType = Random() % 2;
         while (abilityGuess == ABILITY_NONE)
         {
-            abilityGuess = gBaseStats[gBattleMons[battlerId].species].abilities[Random() % NUM_ABILITY_SLOTS];
+            if (abilityType == 0)
+                abilityGuess = gBaseStats[gBattleMons[battlerId].species].abilities[Random() % NUM_NORMAL_ABILITY_SLOTS];
+            else if (abilityType == 1)
+                abilityGuess = gBaseStats[gBattleMons[battlerId].species].abilities[Random() % NUM_HIDDEN_ABILITY_SLOTS];
         }
 
         return abilityGuess;
@@ -1386,7 +1392,7 @@ u16 AI_GetHoldEffect(u32 battlerId)
     if (AI_THINKING_STRUCT->aiFlags & AI_FLAG_NEGATE_UNAWARE)
         return holdEffect;
 
-    if (gStatuses3[battlerId] & STATUS3_EMBARGO)
+    if (gSideStatuses[battlerId] & SIDE_STATUS_EMBARGO)
         return HOLD_EFFECT_NONE;
     if (gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)
         return HOLD_EFFECT_NONE;
@@ -2671,8 +2677,8 @@ static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler)
     u16 species = GetMonData(mon, MON_DATA_SPECIES);
     u32 flags = gSideStatuses[GetBattlerSide(currBattler)] & (SIDE_STATUS_SPIKES | SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_STICKY_WEB | SIDE_STATUS_TOXIC_SPIKES);
     s32 hazardDamage = 0;
-    u8 type1 = gBaseStats[species].types[0];
-    u8 type2 = gBaseStats[species].types[1];
+    u8 type1 = gBaseStats[species].type1;
+    u8 type2 = gBaseStats[species].type2;
     u32 maxHp = GetMonData(mon, MON_DATA_MAX_HP);
 
     if (flags == 0)

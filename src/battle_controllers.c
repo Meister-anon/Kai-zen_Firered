@@ -61,7 +61,8 @@ void SetUpBattleVars(void)
     gBattleControllerExecFlags = 0;
     ClearBattleAnimationVars();
     ClearBattleMonForms();
-    BattleAI_HandleItemUseBeforeAISetup();
+    BattleAI_SetupItems();
+    BattleAI_SetupFlags();
     gUnknown_2022B54 = 0;
     gUnknown_2023DDC = 0;
 }

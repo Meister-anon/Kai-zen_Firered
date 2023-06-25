@@ -45,7 +45,7 @@ static void BattleAI_DoAIProcessing(void);
 static bool32 IsPinchBerryItemEffect(u16 holdEffect);
 
 // ewram
-EWRAM_DATA const u8 *gAIScriptPtr = NULL;   // Still used in contests
+EWRAM_DATA const u8 *sAIScriptPtr = NULL;   // Still used in contests
 EWRAM_DATA u8 sBattler_AI = 0;
 
 // const rom data
@@ -108,7 +108,7 @@ void BattleAI_SetupItems(void)
         data[i] = 0;
 
     // Items are allowed to use in ONLY trainer battles.
-    if ((gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+    if ((gBattleTypeFlags & BATTLE_TYPE_TRAINER)    //checked is same in fire red
         && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_SAFARI | BATTLE_TYPE_BATTLE_TOWER
                                | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_SECRET_BASE// | BATTLE_TYPE_FRONTIER
                                | BATTLE_TYPE_INGAME_PARTNER)// | BATTLE_TYPE_RECORDED_LINK)
@@ -448,7 +448,7 @@ static u8 ChooseMoveOrAction_Singles(void)
         if (GetBattlerAbility(sBattler_AI) == ABILITY_TRUANT
             && IsTruantMonVulnerable(sBattler_AI, gBattlerTarget)
             && gDisableStructs[sBattler_AI].truantCounter
-            && gBattleMons[sBattler_AI].hp >= gBattleMons[sBattler_AI].maxHP / 2)
+            && gBattleMons[sBattler_AI].hp <= gBattleMons[sBattler_AI].maxHP / 2) //change to if hp is half or less to make more forgiving for player
         {
             if (GetMostSuitableMonToSwitchInto() != PARTY_SIZE)
             {

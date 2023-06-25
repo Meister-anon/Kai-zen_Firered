@@ -841,6 +841,8 @@ just need make wrapppedby work with new trap statuses adn then set that if holdi
 as well as the effect of increasing trap duration
 */
 
+//updated battle_ai from script to .c file based on emerald expansion, everythinig should be defined but still needs tweaking
+//files are battle_ai_util & battle_ai_main
 
 /* 
 * Finish Ability_Defeatist setup need to finish setting up

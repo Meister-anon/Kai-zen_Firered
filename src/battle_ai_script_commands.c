@@ -4,11 +4,14 @@
 #include "util.h"
 #include "item.h"
 #include "random.h"
-#include "battle_ai_script_commands.h"
+#include "battle_ai_main.h"
+#include "battle_ai_util.h"
 #include "constants/abilities.h"
 #include "constants/battle_ai.h"
 #include "constants/battle_move_effects.h"
 #include "constants/moves.h"
+
+//keeping this file just for comparison of ai logic to default fire red
 
 #define AI_ACTION_DONE          0x0001
 #define AI_ACTION_FLEE          0x0002
@@ -35,12 +38,12 @@ enum
 sAIScriptPtr is a pointer to the next battle AI cmd command to read.
 when a command finishes processing, sAIScriptPtr is incremented by
 the number of bytes that the current command had reserved for arguments
-in order to read the next command correctly. refer to battle_ai_scripts.s for the
+in order to read the next command correctly. refer to battle_AI_FLAGs.s for the
 AI scripts.
 */
 
-static EWRAM_DATA const u8 *sAIScriptPtr = NULL;
-extern u8 *gBattleAI_ScriptsTable[];
+/*static EWRAM_DATA const u8 *sAIScriptPtr = NULL;
+extern u8 *gBattleAI_FLAGsTable[];*/
 
 static void Cmd_if_random_less_than(void);
 static void Cmd_if_random_greater_than(void);
@@ -310,7 +313,7 @@ void BattleAI_SetupAIData(void)
         AI_THINKING_STRUCT->simulatedRNG[i] = 100 - (Random() % 16);
     }
 
-    gBattleResources->AI_ScriptsStack->size = 0;
+    gBattleResources->AI_FLAGsStack->size = 0;
     gBattlerAttacker = gActiveBattler;
 
     // Decide a random target battlerId in doubles.
@@ -331,30 +334,30 @@ void BattleAI_SetupAIData(void)
     // Fire Red, why all the returns?!?
     if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
     {
-        AI_THINKING_STRUCT->aiFlags = AI_SCRIPT_SAFARI;
+        AI_THINKING_STRUCT->aiFlags = AI_FLAG_SAFARI;
         return;
     }
     else if (gBattleTypeFlags & BATTLE_TYPE_ROAMER)
     {
-        AI_THINKING_STRUCT->aiFlags = AI_SCRIPT_ROAMING;
+        AI_THINKING_STRUCT->aiFlags = AI_FLAG_ROAMING;
         return;
     }
     else if (!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER_TOWER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_BATTLE_TOWER)))
     {
         if (gBattleTypeFlags & BATTLE_TYPE_WILD_SCRIPTED)
         {
-            AI_THINKING_STRUCT->aiFlags = AI_SCRIPT_CHECK_BAD_MOVE;
+            AI_THINKING_STRUCT->aiFlags = AI_FLAG_CHECK_BAD_MOVE;
             return;
         }
         else if (gBattleTypeFlags & BATTLE_TYPE_LEGENDARY_FRLG)
         {
-            AI_THINKING_STRUCT->aiFlags = (AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY);
+            AI_THINKING_STRUCT->aiFlags = (AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY);
             return;
         }
     }
     else
     {
-        AI_THINKING_STRUCT->aiFlags = (AI_SCRIPT_CHECK_BAD_MOVE | AI_SCRIPT_TRY_TO_FAINT | AI_SCRIPT_CHECK_VIABILITY);
+        AI_THINKING_STRUCT->aiFlags = (AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY);
         return;
     }
     AI_THINKING_STRUCT->aiFlags = gTrainers[gTrainerBattleOpponent_A].aiFlags;
@@ -417,7 +420,7 @@ static void BattleAI_DoAIProcessing(void)
         case AIState_DoNotProcess: // Needed to match.
             break;
         case AIState_SettingUp:
-            sAIScriptPtr = gBattleAI_ScriptsTable[AI_THINKING_STRUCT->aiLogicId];
+            sAIScriptPtr = gBattleAI_FLAGsTable[AI_THINKING_STRUCT->aiLogicId];
 
             if (gBattleMons[gBattlerAttacker].pp[AI_THINKING_STRUCT->movesetIndex] == 0)
             {
@@ -2003,21 +2006,21 @@ static void Cmd_if_target_not_taunted(void)
 
 static void AIStackPushVar(const u8 *var)
 {
-    gBattleResources->AI_ScriptsStack->ptr[gBattleResources->AI_ScriptsStack->size++] = var;
+    gBattleResources->AI_FLAGsStack->ptr[gBattleResources->AI_FLAGsStack->size++] = var;
 }
 
 // unused
 static void AIStackPushVar_cursor(void)
 {
-    gBattleResources->AI_ScriptsStack->ptr[gBattleResources->AI_ScriptsStack->size++] = sAIScriptPtr;
+    gBattleResources->AI_FLAGsStack->ptr[gBattleResources->AI_FLAGsStack->size++] = sAIScriptPtr;
 }
 
 static bool8 AIStackPop(void)
 {
-    if (gBattleResources->AI_ScriptsStack->size != 0)
+    if (gBattleResources->AI_FLAGsStack->size != 0)
     {
-        --gBattleResources->AI_ScriptsStack->size;
-        sAIScriptPtr = gBattleResources->AI_ScriptsStack->ptr[gBattleResources->AI_ScriptsStack->size];
+        --gBattleResources->AI_FLAGsStack->size;
+        sAIScriptPtr = gBattleResources->AI_FLAGsStack->ptr[gBattleResources->AI_FLAGsStack->size];
         return TRUE;
     }
     else
