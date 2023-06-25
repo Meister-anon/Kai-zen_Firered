@@ -702,6 +702,7 @@ s32 AICalcCritChance(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbilit
     return critChance;
 }
 
+//not used
 s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags)
 {
     return DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, fixedBasePower, isCrit, randomFactor,
@@ -1968,7 +1969,7 @@ static void atk01_accuracycheck(void)
                 gBattleCommunication[MISS_TYPE] = B_MSG_MISSED;
 
             if (gBattleMoves[move].power)
-                CalcTypeEffectivenessMultiplier(move, type, gBattlerAttacker, gBattlerTarget, TRUE);
+                CalcTypeEffectivenessMultiplier(move, type, gBattlerAttacker, gBattlerTarget, TRUE);    //this is only instance where uses TRUE, without that it doesn't change effectiveness
             //removing this as it has foresight logic, emerald uses typecalc? hopefully
             //can do that without doubling the multiplier.
             //nvm not using typecalc, forgot I ported emerald's CalcTypeEffectivenessMultiplier function, 
@@ -2271,9 +2272,14 @@ s32 AI_CalcDmgFormula(u8 attacker, u8 defender)
 //rather than just requiring a single line edit, like scrappy, freeze dry etc.  
 void ModulateDmgByType(u8 multiplier)   //Put all ability effects above ring target.
 {
-    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_INVERSE_WORLD
-        && multiplier == TYPE_MUL_NOT_EFFECTIVE)
-        multiplier = TYPE_MUL_SUPER_EFFECTIVE;
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_INVERSE_WORLD)
+    {
+        if (multiplier == TYPE_MUL_NOT_EFFECTIVE)
+            multiplier = TYPE_MUL_SUPER_EFFECTIVE;
+
+        else if (multiplier == TYPE_MUL_NO_EFFECT)
+            multiplier = TYPE_MUL_NORMAL;
+    }
 
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_INVERSE_WORLD)//neutral = no effect,  not effective = super,  super = not effective
     {
@@ -2441,9 +2447,9 @@ static void atk06_typecalc(void)
                         ModulateDmgByType(TYPE_MUL_NORMAL); //can set multiplier with this, and mudluatedmg will set the move result based on that
                     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
-                    else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
-                    else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)    //HOPEFULLY this doesn't turn into a 4x resist since duel type,
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)    //HOPEFULLY this doesn't turn into a 4x resist since duel type,
                         ModulateDmgByType(TYPE_MUL_NOT_EFFECTIVE);  //would still be fine I guess if it did
                     else
                         ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));   //which will translate to correct effectiveness sound message etc.
@@ -2458,9 +2464,9 @@ static void atk06_typecalc(void)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
                     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
-                    else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
-                    else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)    //HOPEFULLY this doesn't turn into a 4x resist since duel type,
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)    //HOPEFULLY this doesn't turn into a 4x resist since duel type,
                         ModulateDmgByType(TYPE_MUL_NOT_EFFECTIVE);  //would still be fine I guess if it did
                     else
                         ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
@@ -2477,9 +2483,9 @@ static void atk06_typecalc(void)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
                     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
-                    else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                         ModulateDmgByType(TYPE_MUL_NORMAL);
-                    else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)    //HOPEFULLY this doesn't turn into a 4x resist since duel type,
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)    //HOPEFULLY this doesn't turn into a 4x resist since duel type,
                         ModulateDmgByType(TYPE_MUL_NOT_EFFECTIVE);  //would still be fine I guess if it did
                     else
                         ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
@@ -2500,9 +2506,9 @@ static void atk06_typecalc(void)
                             ModulateDmgByType(TYPE_MUL_NORMAL); //can set multiplier with this, and mudluatedmg will set the move result based on that
                         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
-                        else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
-                        else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
                             ModulateDmgByType(TYPE_MUL_NOT_EFFECTIVE);
                         else
                             ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));   //which will translate to correct effectiveness sound message etc.
@@ -2517,9 +2523,9 @@ static void atk06_typecalc(void)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
                         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
-                        else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
-                        else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
                             ModulateDmgByType(TYPE_MUL_NOT_EFFECTIVE);
                         else
                             ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
@@ -2536,9 +2542,9 @@ static void atk06_typecalc(void)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
                         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
-                        else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                             ModulateDmgByType(TYPE_MUL_NORMAL);
-                        else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
                             ModulateDmgByType(TYPE_MUL_NOT_EFFECTIVE);
                         else
                             ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
@@ -2598,6 +2604,7 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
         return;//if move is struggle or fixed damage ignores checks
     argument = gBattleMoves[gCurrentMove].argument;
     GET_MOVE_TYPE(gCurrentMove, moveType);
+    //&& !IsBattlerGrounded(battlerDef)
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     {
         gLastUsedAbility = ABILITY_LEVITATE;
@@ -2609,7 +2616,7 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
     {
         if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
         {
-            if (gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
+            if (gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)//normal ghost is still after foresight need to change later but can still u
                 break;
             i += 3;
             continue;
@@ -2885,9 +2892,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
                         ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
                     else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -2902,9 +2909,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
                         ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
                     else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -2921,9 +2928,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
                         ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
                     else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -2942,9 +2949,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
                             ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
                         else
                             ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -2959,9 +2966,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
                             ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
                         else
                             ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -2978,9 +2985,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
                             ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
                         else
                             ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -3050,9 +3057,9 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
                         ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
                     else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -3066,9 +3073,9 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
                         ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
                     else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -3085,9 +3092,9 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                         ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
+                    else if (moveType == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
                         ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
                     else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -3106,9 +3113,9 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
                             ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
                         else
                             ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -3122,9 +3129,9 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
                             ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
                         else
                             ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
@@ -3141,9 +3148,9 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
                         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
                             ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
+                        else if (argument == TYPE_ICE && TYPE_EFFECT_DEF_TYPE(i) == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
                             ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
                         else
                             ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
