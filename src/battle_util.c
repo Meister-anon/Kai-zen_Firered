@@ -4751,7 +4751,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             case ABILITY_ECOSYSTEM:
-                SET_BATTLER_TYPE3(battler, TYPE_WATER);
+                SET_BATTLER_TYPE3(battler, TYPE_WATER); //essentially makes it a 3 type mon,
                 ++effect;
                 break;
 

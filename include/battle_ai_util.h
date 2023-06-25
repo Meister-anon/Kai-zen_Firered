@@ -22,6 +22,8 @@ void SetBattlerData(u8 battlerId);
 void RestoreBattlerData(u8 battlerId);
 u16 GetAIChosenMove(u8 battlerId);
 
+struct Pokemon *GetBattlerPartyData(u8 battlerId);
+
 bool32 WillAIStrikeFirst(void);
 u32 GetTotalBaseStat(u32 species);
 bool32 IsTruantMonVulnerable(u32 battlerAI, u32 opposingBattler);
@@ -126,6 +128,9 @@ bool32 IsStatRaisingEffect(u16 effect);
 bool32 IsAttackBoostMoveEffect(u16 effect);
 bool32 IsUngroundingEffect(u16 effect);
 bool32 IsSemiInvulnerable(u8 battlerDef, u16 move);
+
+s32 GetStealthHazardDamage(u8 hazardType, u8 battlerId);
+s32 GetStealthHazardDamageByTypesAndHP(u8 hazardType, u8 type1, u8 type2, u32 maxHp);
 
 // status checks
 bool32 AI_CanBeBurned(u8 battler, u16 ability);

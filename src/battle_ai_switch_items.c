@@ -299,7 +299,7 @@ static bool8 FindMonWithFlagsAndSuperEffective(u8 flags, u8 moduloPercent)
     return FALSE;
 }
 
-static bool8 ShouldSwitch(void)
+bool32 ShouldSwitch(void)
 {
     u8 battlerIn1, battlerIn2;
     s32 i;
@@ -541,6 +541,25 @@ u8 GetMostSuitableMonToSwitchInto(void)
         }
     }
     return bestMonId;
+}
+
+void GetAIPartyIndexes(u32 battlerId, s32 *firstId, s32 *lastId)
+{
+    if (BATTLE_TWO_VS_ONE_OPPONENT && (battlerId & BIT_SIDE) == B_SIDE_OPPONENT)
+    {
+        *firstId = 0, *lastId = PARTY_SIZE;
+    }
+    else if (gBattleTypeFlags & (BATTLE_TYPE_TWO_OPPONENTS | BATTLE_TYPE_INGAME_PARTNER))
+    {
+        if ((battlerId & BIT_FLANK) == B_FLANK_LEFT)
+            *firstId = 0, *lastId = PARTY_SIZE / 2;
+        else
+            *firstId = PARTY_SIZE / 2, *lastId = PARTY_SIZE;
+    }
+    else
+    {
+        *firstId = 0, *lastId = PARTY_SIZE;
+    }
 }
 
 static u8 GetAI_ItemType(u8 itemId, const u8 *itemEffect) // NOTE: should take u16 as item Id argument

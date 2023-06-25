@@ -13100,6 +13100,7 @@ static void atk96_weatherdamage(void)
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_OVERCOAT
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_SNOW_CLOAK
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_ICE_BODY
+             && GetBattlerAbility(gBattlerAttacker) != ABILITY_ABSOLUTE_ZERO
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_GLACIAL_ICE)
             {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
