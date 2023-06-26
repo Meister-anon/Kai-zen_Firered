@@ -43,7 +43,7 @@ extern const struct StatFractions gAccuracyStageRatios[];
 
 s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags);
 
-const u16 gCriticalHitChance[] = { 16, 6, 4, 3, 1 };	//made global, so can run in ai file
+extern const u16 gCriticalHitChance[];	//made global, so can run in ai file
 
 extern void (* const gBattleScriptingCommandsTable[])(void);
 

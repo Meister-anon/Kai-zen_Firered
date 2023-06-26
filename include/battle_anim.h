@@ -348,7 +348,7 @@ void AnimForesightMagnifyingGlass(struct Sprite *);
 void AnimMeteorMashStar(struct Sprite *);
 void AnimBlockX(struct Sprite *);
 void sub_80E3E84(struct Sprite *);
-void AnimParticuleBurst(struct Sprite *);
+//void AnimParticuleBurst(struct Sprite *);
 void AnimKnockOffStrike(struct Sprite *);
 void AnimRecycle(struct Sprite *);
 

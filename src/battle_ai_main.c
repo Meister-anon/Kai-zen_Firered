@@ -45,8 +45,9 @@ static void BattleAI_DoAIProcessing(void);
 static bool32 IsPinchBerryItemEffect(u16 holdEffect);
 
 // ewram
-EWRAM_DATA const u8 *sAIScriptPtr = NULL;   // Still used in contests
-EWRAM_DATA u8 sBattler_AI = 0;
+//EWRAM_DATA const u8 *gAIScriptPtr = NULL;   // Still used in contests  not presently used for anything i my repo, maybe this was problem?
+EWRAM_DATA u8 sBattler_AI = 0; //^everything else was defined but since I don't have contest file that didn't have a extern definition
+
 
 // const rom data
 static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score);
@@ -231,7 +232,7 @@ u8 BattleAI_ChooseMoveOrAction(void)
     return ret;
 }
 
-// damages/other info computed in GetAIDataAndCalcDmg
+// damages &/other info computed in GetAIDataAndCalcDmg
 u8 ComputeBattleAiScores(u8 battler)
 {
     sBattler_AI = battler;

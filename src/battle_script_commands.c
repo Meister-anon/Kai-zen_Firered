@@ -647,6 +647,7 @@ const struct StatFractions gAccuracyStageRatios[] =
 //its just not so bad without the scope boost,  just unsure if want to use value of 5 or 6
 //decied to use 6, way it balances out each stat would be about a 10% crit increase until stage 4
 //static const u16 sCriticalHitChance[] = { 16, 6, 4, 3, 1 };   values used for referenced, but moved to .h to make global use for ai file
+const u16 gCriticalHitChance[] = { 16, 6, 4, 3, 1 };
 
 s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, u32 move)//stil don't know what for
 {

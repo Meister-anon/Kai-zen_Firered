@@ -124,7 +124,7 @@ bool32 ShouldFakeOut(u8 battlerAtk, u8 battlerDef, u16 move);
 bool32 HasThawingMove(u8 battlerId);
 bool32 IsStatRaisingEffect(u16 effect);
 bool32 IsStatLoweringEffect(u16 effect);
-bool32 IsStatRaisingEffect(u16 effect);
+//bool32 IsStatRaisingEffect(u16 effect); this is direct from emerald no idea why they have this issue
 bool32 IsAttackBoostMoveEffect(u16 effect);
 bool32 IsUngroundingEffect(u16 effect);
 bool32 IsSemiInvulnerable(u8 battlerDef, u16 move);

@@ -613,7 +613,8 @@ struct BattleResources
     u8 bufferA[MAX_BATTLERS_COUNT][0x200];
     u8 bufferB[MAX_BATTLERS_COUNT][0x200];
 };
-extern struct BattleResources *gBattleResources;
+
+
 
 #define AI_THINKING_STRUCT ((struct AI_ThinkingStruct *)(gBattleResources->ai))
 #define AI_DATA ((struct AiLogicData *)(gBattleResources->aiData))
@@ -1071,7 +1072,7 @@ extern u16 gIntroSlideFlags;
 extern u32 gTransformedPersonalities[MAX_BATTLERS_COUNT];
 extern u8 gBattlerPositions[MAX_BATTLERS_COUNT];
 extern u8 gHealthboxSpriteIds[MAX_BATTLERS_COUNT];
-extern u8 gBattleOutcome;
+//extern u8 gBattleOutcome;
 extern u8 gBattleMonForms[MAX_BATTLERS_COUNT];
 extern void (*gBattlerControllerFuncs[MAX_BATTLERS_COUNT])(void);
 extern u32 gBattleControllerExecFlags;
@@ -1133,6 +1134,7 @@ extern u16 gPaydayMoney;
 extern u16 gLockedMoves[MAX_BATTLERS_COUNT];
 extern u16 gLastUsedMove;
 extern u8 gCurrentTurnActionNumber;
+extern struct BattleResources *gBattleResources;
 extern u16 gExpShareExp;
 extern u8 gLeveledUpInBattle;
 extern u16 gLastResultingMoves[MAX_BATTLERS_COUNT];

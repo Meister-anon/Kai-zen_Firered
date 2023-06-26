@@ -16,11 +16,11 @@ struct Item
     u8 importance;
     u8 exitsBagOnUse;
     u8 pocket;
-    u8 type;
+    u8 type;    // unused for balls
     ItemUseFunc fieldUseFunc;
     u8 battleUsage;
     ItemUseFunc battleUseFunc;
-    u8 secondaryId;
+    u8 secondaryId; // only used for fishing rods
     u8 flingPower;
 };
 
@@ -30,9 +30,20 @@ struct BagPocket
     u8 capacity;
 };
 
+//port from updated fire red, don't have mail so see if cna remove later, 
+//may not use
+// Item type IDs (used to determine the exit callback)
+enum {
+    ITEM_TYPE_MAIL,
+    ITEM_TYPE_PARTY_MENU,
+    ITEM_TYPE_FIELD,
+    ITEM_TYPE_UNUSED, // Used for Pokeblock case in RSE
+    ITEM_TYPE_BAG_MENU, // No exit callback, stays in bag menu
+};
+
 extern struct BagPocket gBagPockets[];
 
-void GetBerryCountString(u8* dst, const u8* berryName, u32 quantity);
+void GetBerryCountString(u8 *dst, const u8 *berryName, u32 quantity);
 void CopyItemName(u16 itemId, u8 *string);
 void CopyItemNameHandlePlural(u16 itemId, u8 *string, u32 quantity);
 bool8 IsBagPocketNonEmpty(u8 pocket);

@@ -23,6 +23,8 @@ extern u16 gSpecialVar_MonBoxPos;
 extern u16 gSpecialVar_TextColor;
 extern u16 gSpecialVar_PrevTextColor;
 
+//file is the same in base fire red, and other repo still builds so think can ignore
+
 void InitEventData(void);
 void ClearTempFieldEventData(void);
 void ClearUpperFlags(void);
