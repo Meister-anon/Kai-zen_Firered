@@ -91,6 +91,9 @@
 #define MOVE_TARGET_ALL_BATTLERS        (MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_USER)  //use untl setup like emerald, taken from MOVE_ROTOTILLER
 //#define MOVE_TARGET_ALL_BATTLERS        ((1 << 8) | MOVE_TARGET_USER)  can use when setup correctly
 
+// For the second argument of GetMoveTarget, when no target override is needed
+#define NO_TARGET_OVERRIDE 0
+
 struct TrainerMonNoItemDefaultMoves //pull from 4-12 later
 {
     u8 iv;
@@ -158,10 +161,10 @@ struct TrainerMonItemCustomMoves
 
 union TrainerMonPtr
 {
-    const struct TrainerMonNoItemDefaultMoves* NoItemDefaultMoves;
-    const struct TrainerMonNoItemCustomMoves* NoItemCustomMoves;
-    const struct TrainerMonItemDefaultMoves* ItemDefaultMoves;
-    const struct TrainerMonItemCustomMoves* ItemCustomMoves;
+    const struct TrainerMonNoItemDefaultMoves *NoItemDefaultMoves;
+    const struct TrainerMonNoItemCustomMoves *NoItemCustomMoves;
+    const struct TrainerMonItemDefaultMoves *ItemDefaultMoves;
+    const struct TrainerMonItemCustomMoves *ItemCustomMoves;
 };
 
 #define TRAINER_DATA_STRUCTS
@@ -320,6 +323,7 @@ struct SpecialStatus    //pretty sure all values
     u8 tigerMomAttacked : 1;  // 0x2 //need to add redirects here for lightning rod/storm drain esque abilities unless I code it different
     u8 restoredBattlerSprite : 1;    // 0x4
     u8 intimidatedMon : 1;          // 0x8
+    u8 tigeredMon : 1;          // 0x8  extra set incase using intimidatedmon prevents using both at once
     u8 traced : 1;                  // 0x10
     u8 defeatistActivated : 1;      // 
     u8 ppNotAffectedByPressure : 1;
@@ -478,6 +482,14 @@ struct AI_ThinkingStruct
     bool8 switchMon; // Because all available moves have no/little effect.
 };*/
 
+struct AI_SavedBattleMon
+{
+    u16 ability;
+    u16 moves[MAX_MON_MOVES];
+    u16 heldItem;
+    u16 species;
+};
+
 struct AI_ThinkingStruct
 {
     u8 aiState;
@@ -488,18 +500,12 @@ struct AI_ThinkingStruct
     u32 aiFlags;
     u8 aiAction;
     u8 aiLogicId;
-    struct AI_SavedBattleMon saved[4];
+    struct AI_SavedBattleMon saved[4];  //had incomplete type error but all defined think issue is it tried to refer to struct that was below it, so moved savedbattlemon above it
     u8 simulatedRNG[4];
-    //bool8 switchMon; // Because all available moves have no/little effect. -NOT DEFAULT
+    bool8 switchMon; // Because all available moves have no/little effect. -NOT DEFAULT
 };
 
-struct AI_SavedBattleMon
-{
-    u16 ability;
-    u16 moves[MAX_MON_MOVES];
-    u16 heldItem;
-    u16 species;
-};
+
 
 struct AiLogicData
 {
@@ -577,7 +583,7 @@ struct BattleHistory
 
 struct BattleScriptsStack
 {
-    const u8* ptr[8];
+    const u8 *ptr[8];
     u8 size;
 };
 
@@ -596,17 +602,18 @@ struct BattleResources
 {
     // struct SecretBaseRecord *secretBase; //prob remove this,
     struct ResourceFlags *flags;
-    struct BattleScriptsStack* battleScriptsStack;  //this is still ni emerald though
-    struct BattleCallbacksStack* battleCallbackStack;
-    struct StatsArray* beforeLvlUp;
+    struct BattleScriptsStack *battleScriptsStack;  //this is still ni emerald though
+    struct BattleCallbacksStack *battleCallbackStack;
+    struct StatsArray *beforeLvlUp;
     struct AI_ThinkingStruct *ai;
     struct AiLogicData *aiData;
     struct AIPartyData *aiParty;
-    struct BattleHistory* battleHistory;
-    struct BattleScriptsStack* AI_ScriptsStack; //may be irrelevant as no longer using scripts
+    struct BattleHistory *battleHistory;
+    struct BattleScriptsStack *AI_ScriptsStack; //may be irrelevant as no longer using scripts
     u8 bufferA[MAX_BATTLERS_COUNT][0x200];
     u8 bufferB[MAX_BATTLERS_COUNT][0x200];
 };
+extern struct BattleResources *gBattleResources;
 
 #define AI_THINKING_STRUCT ((struct AI_ThinkingStruct *)(gBattleResources->ai))
 #define AI_DATA ((struct AiLogicData *)(gBattleResources->aiData))
@@ -614,7 +621,7 @@ struct BattleResources
 #define BATTLE_HISTORY ((struct BattleHistory *)(gBattleResources->battleHistory))
 
 
-extern struct BattleResources* gBattleResources;
+
 
 struct BattleResults
 {
@@ -677,7 +684,7 @@ struct Illusion
     u8 set;
     u8 broken;
     u8 partyId;
-    struct Pokemon* mon;
+    struct Pokemon *mon;
 };
 
 struct StolenItem
@@ -737,6 +744,9 @@ struct BattleStruct //fill in unused fields when porting
     u8 playerPartyIdx;
     //u8 field_8C; // unused
     //u8 field_8D; // unused
+    s8 aiFinalScore[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // AI, target, moves to make debugging easier
+    u8 aiMoveOrAction[MAX_BATTLERS_COUNT];
+    u8 aiChosenTarget[MAX_BATTLERS_COUNT]; //ported these 3 hope ot a problem
     u8 soulheartBattlerId;  //Magearna ability
     u8 friskedBattler; // Frisk needs to identify 2 battlers in double battles.
     bool8 friskedAbility; // If identifies two mons, show the ability pop-up only once.
@@ -806,7 +816,7 @@ struct BattleStruct //fill in unused fields when porting
     u8 padding_1E4[0x1C];
 }; // size == 0x200 bytes
 
-extern struct BattleStruct* gBattleStruct;
+extern struct BattleStruct *gBattleStruct;
 
 #define F_DYNAMIC_TYPE_1 (1 << 6)
 #define F_DYNAMIC_TYPE_2 (1 << 7)
@@ -816,7 +826,6 @@ extern struct BattleStruct* gBattleStruct;
 {                                                           \
     if (gBattleStruct->dynamicMoveType)                     \
         typeArg = gBattleStruct->dynamicMoveType & DYNAMIC_TYPE_MASK;    \
-        /*typeArg = gBattleStruct->dynamicMoveType & 0x3F; */   \
     else                                                    \
         typeArg = gBattleMoves[move].type;                  \
 }//unsure how to sue dynamicMoveType
@@ -981,13 +990,13 @@ struct BattleBarInfo
 
 struct BattleSpriteData
 {
-    struct BattleSpriteInfo* battlerData;
-    struct BattleHealthboxInfo* healthBoxesData;
-    struct BattleAnimationInfo* animationData;
-    struct BattleBarInfo* battleBars;
+    struct BattleSpriteInfo *battlerData;
+    struct BattleHealthboxInfo *healthBoxesData;
+    struct BattleAnimationInfo *animationData;
+    struct BattleBarInfo *battleBars;
 };
 
-extern struct BattleSpriteData* gBattleSpritesDataPtr;
+extern struct BattleSpriteData *gBattleSpritesDataPtr;
 
 
 
@@ -997,14 +1006,14 @@ extern struct BattleSpriteData* gBattleSpritesDataPtr;
 
 struct MonSpritesGfx
 {
-    void* firstDecompressed; // ptr to the decompressed sprite of the first pokemon
-    void* sprites[MAX_BATTLERS_COUNT];
+    void *firstDecompressed; // ptr to the decompressed sprite of the first pokemon
+    void *sprites[MAX_BATTLERS_COUNT];
     struct SpriteTemplate templates[MAX_BATTLERS_COUNT];
     struct SpriteFrameImage images[MAX_BATTLERS_COUNT][4];
     u8 field_F4[0x80]; // unused
-    u8* barFontGfx;
-    void* field_178; // freed but never allocated
-    u16* multiUseBuffer;
+    u8 *barFontGfx;
+    void *field_178; // freed but never allocated
+    u16 *multiUseBuffer;
 };
 
 struct PokedudeBattlerState
@@ -1037,11 +1046,11 @@ extern u16 gBattle_WIN0H;
 extern u16 gBattle_WIN0V;
 extern u16 gBattle_WIN1H;
 extern u16 gBattle_WIN1V;
-extern struct BattleSpritesGfx* gMonSpritesGfx;
+extern struct BattleSpritesGfx *gMonSpritesGfx;
 extern u8 gBattleOutcome;
 extern u16 gLastUsedItem;
 extern u32 gBattleTypeFlags;
-extern struct MonSpritesGfx* gMonSpritesGfxPtr;
+extern struct MonSpritesGfx *gMonSpritesGfxPtr;
 extern u16 gTrainerBattleOpponent_A;
 extern u16 gTrainerBattleOpponent_B;
 extern u16 gMoveToLearn;
@@ -1071,9 +1080,9 @@ extern u8 gBattleBufferB[MAX_BATTLERS_COUNT][0x200];
 extern u8 gActionSelectionCursor[MAX_BATTLERS_COUNT];
 extern void (*gPreBattleCallback1)(void);
 extern bool8 gDoingBattleAnim;
-extern struct PokedudeBattlerState* gPokedudeBattlerStates[MAX_BATTLERS_COUNT];
-extern u8* gBattleAnimMons_BgTilesBuffer;
-extern u8* gBattleAnimMons_BgTilemapBuffer;
+extern struct PokedudeBattlerState *gPokedudeBattlerStates[MAX_BATTLERS_COUNT];
+extern u8 *gBattleAnimMons_BgTilesBuffer;
+extern u8 *gBattleAnimMons_BgTilemapBuffer;
 extern void (*gBattleMainFunc)(void);
 extern u8 gMoveSelectionCursor[MAX_BATTLERS_COUNT];
 extern u32 gUnknown_2022B54;
@@ -1089,8 +1098,8 @@ extern u8 gBattlerFainted;
 extern u32 gStatuses3[MAX_BATTLERS_COUNT];
 extern u32 gStatuses4[MAX_BATTLERS_COUNT];
 extern u8 gSentPokesToOpponent[2];
-extern const u8* gBattlescriptCurrInstr;
-extern const u8* gSelectionBattleScripts[MAX_BATTLERS_COUNT];
+extern const u8 *gBattlescriptCurrInstr;
+extern const u8 *gSelectionBattleScripts[MAX_BATTLERS_COUNT];
 extern u16 gLastMoves[MAX_BATTLERS_COUNT];
 extern u8 gBattlerByTurnOrder[MAX_BATTLERS_COUNT];
 extern u8 gBattleCommunication[BATTLE_COMMUNICATION_ENTRIES_COUNT];

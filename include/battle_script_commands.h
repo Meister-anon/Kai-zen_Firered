@@ -26,6 +26,7 @@ bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move);
 bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move);
 bool32 NoAliveMonsForEitherParty(void);
 bool32 CanUseLastResort(u8 battlerId);
+bool32 IsTelekinesisBannedSpecies(u16 species);
 u32 IsFlowerVeilProtected(u32 battler);
 u32 IsLeafGuardProtected(u32 battler);
 bool32 IsShieldsDownProtected(u32 battler);

@@ -119,7 +119,9 @@ void BattleScriptPushCursorAndCallback(const u8 *BS_ptr);
 u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn);
 void ClearFuryCutterDestinyBondGrudge(u8 battlerId);
 void HandleAction_RunBattleScript(void);
-u8 GetMoveTarget(u16 move, u8 setTarget);
+u8 GetMoveTarget(u16 move, u8 setTarget)
+u32 SetRandomTarget(u32 battlerId);
+bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move);
 u8 IsMonDisobedient(void);
 bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
 u32 GetBattleMoveSplit(u32 moveId);
@@ -168,6 +170,7 @@ bool32 HasEnoughHpToEatBerry(u8 battlerId, u32 hpFraction, u16 itemId);
 bool32 DoesPranksterBlockMove(u16 move, u8 battlerwithPrankster, u8 battlerDef, bool32 checkTarget);
 bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind);
 bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags);
+u16 GetUsedHeldItem(u8 battler);
 bool32 TryRoomService(u8 battlerId);
 bool32 TestSheerForceFlag(u8 battler, u16 move);
 u8 TryHandleSeed(u8 battler, u32 terrainFlag, u8 statId, u16 itemId, bool32 execute);

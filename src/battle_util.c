@@ -551,6 +551,11 @@ static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] =
     ABILITY_LAVA_FISSURE,
 };
 
+u16 GetUsedHeldItem(u8 battler)
+{
+    return gBattleStruct->usedHeldItems[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)];
+}
+
 bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags) //need to add utility umbrella clause to weather effects
 {
     if (!WEATHER_HAS_EFFECT)
@@ -8584,6 +8589,46 @@ void HandleAction_RunBattleScript(void) // identical to RunBattleScriptCommands
         gBattleScriptingCommandsTable[*gBattlescriptCurrInstr]();
 }
 
+bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move)
+{
+    u32 ability = GetBattlerAbility(battlerAtk);
+
+    if (gSideTimers[defSide].followmeTimer == 0
+        || gBattleMons[gSideTimers[defSide].followmeTarget].hp == 0
+        || gBattleMoves[move].effect == EFFECT_SNIPE_SHOT
+        || gBattleMoves[move].effect == EFFECT_SKY_DROP
+        || ability == ABILITY_PROPELLER_TAIL || ability == ABILITY_STALWART)
+        return FALSE;
+
+    if (gSideTimers[defSide].followmePowder && !IsAffectedByPowder(battlerAtk, ability, GetBattlerHoldEffect(battlerAtk, TRUE)))
+        return FALSE;
+
+    return TRUE;
+}
+
+u32 SetRandomTarget(u32 battlerId)
+{
+    u32 target;
+    static const u8 targets[2][2] =
+    {
+        [B_SIDE_PLAYER] = {B_POSITION_OPPONENT_LEFT, B_POSITION_OPPONENT_RIGHT},
+        [B_SIDE_OPPONENT] = {B_POSITION_PLAYER_LEFT, B_POSITION_PLAYER_RIGHT},
+    };
+
+    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+    {
+        target = GetBattlerAtPosition(targets[GetBattlerSide(battlerId)][Random() % 2]);
+        if (!IsBattlerAlive(target))
+            target ^= BIT_FLANK;
+    }
+    else
+    {
+        target = GetBattlerAtPosition(targets[GetBattlerSide(battlerId)][0]);
+    }
+
+    return target;
+}
+
 
 u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who gets attacked?
 {
@@ -8591,135 +8636,143 @@ u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who ge
     u8 moveTarget;
     u8 side;
 
-    if (setTarget)
+    if (setTarget != NO_TARGET_OVERRIDE)
         moveTarget = setTarget - 1;
     else
-        moveTarget = gBattleMoves[move].target;
+        moveTarget = GetBattlerMoveTargetType(gBattlerAttacker, move);
+
+    // Special cases
+    if (move == MOVE_CURSE && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST))
+        moveTarget = MOVE_TARGET_USER;
     switch (moveTarget)
     {
     case MOVE_TARGET_SELECTED:
-        side = GetBattlerSide(gBattlerAttacker) ^ BIT_SIDE;
-        if (gSideTimers[side].followmeTimer && gBattleMons[gSideTimers[side].followmeTarget].hp)
+        side = BATTLE_OPPOSITE(GetBattlerSide(gBattlerAttacker));
+        if (IsAffectedByFollowMe(gBattlerAttacker, side, move))
+        {
             targetBattler = gSideTimers[side].followmeTarget;
+        }
         else
         {
-            side = GetBattlerSide(gBattlerAttacker);//since this makes it use target, guess I can just use atk cancler for that but with these conitions?
+            /*side = GetBattlerSide(gBattlerAttacker);//since this makes it use target, guess I can just use atk cancler for that but with these conitions?
             do
             {
                 targetBattler = Random() % gBattlersCount;  //think that would just make the battle string work, I still need to set status check her to prevent target swap
-            } while (targetBattler == gBattlerAttacker || side == GetBattlerSide(targetBattler) || gAbsentBattlerFlags & gBitTable[targetBattler]);
+            } while (targetBattler == gBattlerAttacker || side == GetBattlerSide(targetBattler) || gAbsentBattlerFlags & gBitTable[targetBattler]);*/
 
-            if (gBattleMoves[move].type == TYPE_ELECTRIC)   //if multiple absorb abilities think would trigger in order of top to bottom
+            targetBattler = SetRandomTarget(gBattlerAttacker); //CHANGEd match emerald need test
+
+            if (gBattleMoves[move].type == TYPE_ELECTRIC || gBattleMoves[move].argument == TYPE_ELECTRIC)   //if multiple absorb abilities think would trigger in order of top to bottom
             {
 
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_LIGHTNING_ROD) //checks for ability, returns battlerId, think can use as battlreid to check if mon is statused?
-                    && gBattleMons[targetBattler].ability != ABILITY_LIGHTNING_ROD
-                    && gBattleMons[targetBattler].status1 == 0
+                    && GetBattlerAbility(targetBattler) != ABILITY_LIGHTNING_ROD
+                    && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
                     && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
-                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                    RecordAbilityBattle(targetBattler, GetBattlerAbility(targetBattler));
                 }
                 else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_VOLT_ABSORB) //checks for ability, returns battlerId, think can use as battlreid to check if mon is statused?
-                    && gBattleMons[targetBattler].ability != ABILITY_VOLT_ABSORB
-                    && gBattleMons[targetBattler].status1 == 0
+                    && GetBattlerAbility(targetBattler) != ABILITY_VOLT_ABSORB
+                    && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
                     && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
-                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                    RecordAbilityBattle(targetBattler, GetBattlerAbility(targetBattler));
                 }
                 else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_MOTOR_DRIVE) //checks for ability, returns battlerId, think can use as battlreid to check if mon is statused?
-                    && gBattleMons[targetBattler].ability != ABILITY_MOTOR_DRIVE
-                    && gBattleMons[targetBattler].status1 == 0
-                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
+                    && GetBattlerAbility(targetBattler) != ABILITY_MOTOR_DRIVE
+                    && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION)) //should be not status 1 and not confused
                 {
                     targetBattler ^= BIT_FLANK; //sets target
-                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                    RecordAbilityBattle(targetBattler, GetBattlerAbility(targetBattler));
                 }
 
             }
-            if (gBattleMoves[move].type == TYPE_WATER)
+            if (gBattleMoves[move].type == TYPE_WATER || gBattleMoves[move].argument == TYPE_WATER)
             {
 
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_STORM_DRAIN) //checks for ability, returns battlerId, think can use as battlreid to check if mon is statused?
-                    && gBattleMons[targetBattler].ability != ABILITY_STORM_DRAIN    //if the selected target not an absorb ability, shift target to partner with said ability
-                    && gBattleMons[targetBattler].status1 == 0
+                    && GetBattlerAbility(targetBattler) != ABILITY_STORM_DRAIN    //if the selected target not an absorb ability, shift target to partner with said ability
+                    && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
                     && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
-                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                    RecordAbilityBattle(targetBattler, GetBattlerAbility(targetBattler));
                 }
                 else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_WATER_ABSORB)//I THINK way this works, if I target absorb battler it'll trigger on them rather than swapping target
-                    && gBattleMons[targetBattler].ability != ABILITY_WATER_ABSORB
-                    && gBattleMons[targetBattler].status1 == 0
+                    && GetBattlerAbility(targetBattler) != ABILITY_WATER_ABSORB
+                    && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
                     && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
-                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                    RecordAbilityBattle(targetBattler, GetBattlerAbility(targetBattler));
                 }
                 else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_DRY_SKIN)
-                    && gBattleMons[targetBattler].ability != ABILITY_DRY_SKIN
-                    && gBattleMons[targetBattler].status1 == 0
+                    && GetBattlerAbility(targetBattler) != ABILITY_DRY_SKIN
+                    && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
                     && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
-                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                    RecordAbilityBattle(targetBattler, GetBattlerAbility(targetBattler));
                 }
             }
-            if (gBattleMoves[move].type == TYPE_FIRE)
+            if (gBattleMoves[move].type == TYPE_FIRE || gBattleMoves[move].argument == TYPE_FIRE)
             {
 
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_FLASH_FIRE)
-                    && gBattleMons[targetBattler].ability != ABILITY_FLASH_FIRE
-                    && gBattleMons[targetBattler].status1 == 0
+                    && GetBattlerAbility(targetBattler) != ABILITY_FLASH_FIRE
+                    && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
                     && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
-                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                    RecordAbilityBattle(targetBattler, GetBattlerAbility(targetBattler));
                 }
                 else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_LAVA_FISSURE)
-                    && gBattleMons[targetBattler].ability != ABILITY_LAVA_FISSURE
-                    && gBattleMons[targetBattler].status1 == 0
+                    && GetBattlerAbility(targetBattler) != ABILITY_LAVA_FISSURE
+                    && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
                     && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
-                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                    RecordAbilityBattle(targetBattler, GetBattlerAbility(targetBattler));
                 }
 
             }
-            if (gBattleMoves[move].type == TYPE_ROCK)
+            if (gBattleMoves[move].type == TYPE_ROCK || gBattleMoves[move].argument == TYPE_ROCK)
             {
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_EROSION)
-                    && gBattleMons[targetBattler].ability != ABILITY_EROSION
-                    && gBattleMons[targetBattler].status1 == 0
+                    && GetBattlerAbility(targetBattler) != ABILITY_EROSION
+                    && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
                     && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
-                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                    RecordAbilityBattle(targetBattler, GetBattlerAbility(targetBattler));
                 }
 
             }
-            if (gBattleMoves[move].type == TYPE_GRASS)
+            if (gBattleMoves[move].type == TYPE_GRASS || gBattleMoves[move].argument == TYPE_GRASS)
             {
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_SAP_SIPPER)
-                    && gBattleMons[targetBattler].ability != ABILITY_SAP_SIPPER
-                    && gBattleMons[targetBattler].status1 == 0
+                    && GetBattlerAbility(targetBattler) != ABILITY_SAP_SIPPER
+                    && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
                     && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
-                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                    RecordAbilityBattle(targetBattler, GetBattlerAbility(targetBattler));
                 }
 
             }
-            if (gBattleMoves[move].type == TYPE_ICE)
+            if (gBattleMoves[move].type == TYPE_ICE || gBattleMoves[move].argument == TYPE_ICE)
             {
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_GLACIAL_ICE)
-                    && gBattleMons[targetBattler].ability != ABILITY_GLACIAL_ICE
-                    && gBattleMons[targetBattler].status1 == 0
+                    && GetBattlerAbility(targetBattler) != ABILITY_GLACIAL_ICE
+                    && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
                     && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {
                     targetBattler ^= BIT_FLANK; //sets target
-                    RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
+                    RecordAbilityBattle(targetBattler, GetBattlerAbility(targetBattler));
                 }
 
             }

@@ -4,6 +4,7 @@
 #include "battle_anim.h"
 #include "battle_ai_util.h"
 #include "battle_ai_main.h"
+#include "random.h"
 //#include "battle_factory.h"
 #include "battle_setup.h"
 //#include "battle_z_move.h"
@@ -11,7 +12,6 @@
 #include "event_data.h"
 #include "item.h"
 #include "pokemon.h"
-#include "random.h"
 //#include "recorded_battle.h"
 #include "util.h"
 #include "constants/abilities.h"
@@ -204,7 +204,7 @@ void BattleAI_SetupAIData(u8 defaultScoreMoves)
     // Ignore moves that aren't possible to use.
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
-        if (gBitTable[i] & moveLimitations)
+        if (gBitTable[i] & moveLimitations) //vsonic compare to normal fire red see if was true
             AI_THINKING_STRUCT->score[i] = 0;
     }
 
@@ -422,7 +422,6 @@ static u8 ChooseMoveOrAction_Singles(void)
         && !IsAbilityPreventingEscape(sBattler_AI)
         && !(gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION))
         && !(gStatuses3[gActiveBattler] & STATUS3_ROOTED)
-        && !(gBattleTypeFlags & (BATTLE_TYPE_ARENA | BATTLE_TYPE_PALACE))
         && AI_THINKING_STRUCT->aiFlags & (AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_PREFER_BATON_PASS))
     {
         // Consider switching if all moves are worthless to use.
@@ -505,9 +504,7 @@ static u8 ChooseMoveOrAction_Doubles(void)
         }
         else
         {
-            if (gBattleTypeFlags & BATTLE_TYPE_PALACE)
-                BattleAI_SetupAIData(gBattleStruct->palaceFlags >> 4);
-            else
+
                 BattleAI_SetupAIData(0xF);
 
             gBattlerTarget = i;
@@ -1322,7 +1319,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         case EFFECT_RETURN:
         case EFFECT_PRESENT:
         case EFFECT_FRUSTRATION:
-        case EFFECT_SONICBOOM:
+        case EFFECT_SONIC_SCREECH:
         //case EFFECT_MIRROR_COAT:
         case EFFECT_SKULL_BASH:
         case EFFECT_FOCUS_PUNCH:
@@ -1405,10 +1402,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score -= 8;
             else if (AI_DATA->hpPercents[battlerAtk] <= 25)
                 score -= 10;
-        #if B_SOUND_SUBSTITUTE >= GEN_6
-            else if (TestMoveFlagsInMoveset(battlerDef, FLAG_SOUND))
-                score -= 8;
-        #endif
             break;
         case EFFECT_LEECH_SEED:
             if (gStatuses3[battlerDef] & STATUS3_LEECHSEED
@@ -1738,15 +1731,11 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score -= 10;    // attacker has no status to transmit
             break;
         case EFFECT_MUD_SPORT:
-            if (gFieldStatuses & STATUS_FIELD_MUDSPORT
-              || gStatuses4[battlerAtk] & STATUS4_MUD_SPORT
-              || PartnerHasSameMoveEffectWithoutTarget(BATTLE_PARTNER(battlerAtk), move, AI_DATA->partnerMove))
+            if (PartnerHasSameMoveEffectWithoutTarget(BATTLE_PARTNER(battlerAtk), move, AI_DATA->partnerMove))
                 score -= 10;
             break;
         case EFFECT_WATER_SPORT:
-            if (gFieldStatuses & STATUS_FIELD_WATERSPORT
-              || gStatuses4[battlerAtk] & STATUS4_WATER_SPORT
-              || PartnerHasSameMoveEffectWithoutTarget(BATTLE_PARTNER(battlerAtk), move, AI_DATA->partnerMove))
+            if (PartnerHasSameMoveEffectWithoutTarget(BATTLE_PARTNER(battlerAtk), move, AI_DATA->partnerMove))
                 score -= 10;
             break;
         case EFFECT_ABSORB:
@@ -2175,14 +2164,12 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             break;
         case EFFECT_SKILL_SWAP:
             if (AI_DATA->abilities[battlerAtk] == ABILITY_NONE || AI_DATA->abilities[battlerDef] == ABILITY_NONE
-              || IsSkillSwapBannedAbility(AI_DATA->abilities[battlerAtk]) || IsSkillSwapBannedAbility(AI_DATA->abilities[battlerDef])
-              || AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_ABILITY_SHIELD)
+              || IsSkillSwapBannedAbility(AI_DATA->abilities[battlerAtk]) || IsSkillSwapBannedAbility(AI_DATA->abilities[battlerDef]))
                 score -= 10;
             break;
         case EFFECT_WORRY_SEED:
             if (AI_DATA->abilities[battlerDef] == ABILITY_INSOMNIA
-              || IsWorrySeedBannedAbility(AI_DATA->abilities[battlerDef])
-              || AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_ABILITY_SHIELD)
+              || IsWorrySeedBannedAbility(AI_DATA->abilities[battlerDef]))
                 score -= 10;
             break;
         case EFFECT_GASTRO_ACID:
@@ -2193,16 +2180,14 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         case EFFECT_ENTRAINMENT:
             if (AI_DATA->abilities[battlerAtk] == ABILITY_NONE
               || IsEntrainmentBannedAbilityAttacker(AI_DATA->abilities[battlerAtk])
-              || IsEntrainmentTargetOrSimpleBeamBannedAbility(AI_DATA->abilities[battlerDef])
-              || AI_DATA->holdEffects[battlerAtk] == HOLD_EFFECT_ABILITY_SHIELD)
+              || IsEntrainmentTargetOrSimpleBeamBannedAbility(AI_DATA->abilities[battlerDef]))
                 score -= 10;
             break;
         case EFFECT_CORE_ENFORCER:
             break;
         case EFFECT_SIMPLE_BEAM:
             if (AI_DATA->abilities[battlerDef] == ABILITY_SIMPLE
-              || IsEntrainmentTargetOrSimpleBeamBannedAbility(AI_DATA->abilities[battlerDef])
-              || AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_ABILITY_SHIELD)
+              || IsEntrainmentTargetOrSimpleBeamBannedAbility(AI_DATA->abilities[battlerDef]))
                 score -= 10;
             break;
         case EFFECT_SNATCH:
@@ -2416,7 +2401,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         case EFFECT_EMBARGO:
             if (AI_DATA->abilities[battlerDef] == ABILITY_KLUTZ
               || gFieldStatuses & STATUS_FIELD_MAGIC_ROOM
-              || gDisableStructs[battlerDef].embargoTimer != 0
+              || gSideTimers[battlerDef].embargoTimer != 0
               || PartnerMoveIsSameAsAttacker(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))
                 score -= 10;
             break;
@@ -2436,7 +2421,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         case EFFECT_THROAT_CHOP:
             break;
         case EFFECT_HEAL_BLOCK:
-            if (gDisableStructs[battlerDef].healBlockTimer != 0
+            if (gSideTimers[battlerDef].healBlockTimer != 0
               || PartnerMoveIsSameAsAttacker(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))
                 score -= 10;
             break;
@@ -2502,7 +2487,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             if ((gFieldStatuses & STATUS_FIELD_FAIRY_LOCK) || PartnerMoveIsSameNoTarget(BATTLE_PARTNER(battlerAtk), move, AI_DATA->partnerMove))
                 score -= 10;
             break;
-        case EFFECT_DO_NOTHING:
+        case EFFECT_SPLASH:
             score -= 10;
             break;
         case EFFECT_INSTRUCT:
@@ -2517,7 +2502,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                   || IsInstructBannedMove(instructedMove)
                   || MoveRequiresRecharging(instructedMove)
                   || MoveCallsOtherMove(instructedMove)
-                  || IsZMove(instructedMove)
+                  //|| IsZMove(instructedMove)
                   || (gLockedMoves[battlerDef] != 0 && gLockedMoves[battlerDef] != 0xFFFF)
                   || gBattleMons[battlerDef].status2 & STATUS2_MULTIPLETURNS
                   || PartnerMoveIsSameAsAttacker(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))
@@ -2643,8 +2628,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             if (gBattleMons[battlerAtk].hp <= gBattleMons[battlerAtk].maxHP / 3)
                 score -= 10;
             break;*/
-        case EFFECT_PLACEHOLDER:
-            return 0;   // cannot even select
+
     } // move effect checks
 
     if (score < 0)
