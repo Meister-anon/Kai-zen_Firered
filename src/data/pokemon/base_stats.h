@@ -58,6 +58,13 @@ if it would otherwise be 0/NONE except in the case of ability.
 
 //check rotom etc. to ensure I''ve replaced every instance of levitate
 
+//note researching abilities on bulb/db I've come to conclusion ability slots follow a pattern
+//slot 1 is a natural capability/ability of the mon i.e intimidatation strong jaws a cute charm etc.
+//slot 2 offers some form of boost or synergy
+//while the hidden ability slot is meant to be something special/unique that allows it to fit into a different niche or a niche.
+
+//consider comb over ability allocation to make sure correctly follows this logic
+
 const struct BaseStats gBaseStats[] =
 {
     [SPECIES_NONE] = {0},
@@ -8191,7 +8198,7 @@ const struct BaseStats gBaseStats[] =
     //its a live but techinically could have been dead.  prob need tweak its pokedex entry to fit
     [SPECIES_SABLEYE] =
     {
-        .baseHP = 50,
+        .baseHP = 60,
         .baseAttack = 75,
         .baseDefense = 75,
         .baseSpeed = 47,
@@ -8213,8 +8220,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_INFILTRATOR, ABILITY_ANALYTIC},
-            .abilityHidden = {ABILITY_NUISANCE, ABILITY_JEWEL_METABOLISM},
+            .abilities = {ABILITY_JEWEL_METABOLISM, ABILITY_ANALYTIC},
+            .abilityHidden = {ABILITY_NUISANCE, ABILITY_INFILTRATOR},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },//plan boosting attack, potentially boost hp, but keep in line with small sneaky mon

@@ -11930,9 +11930,18 @@ static void atk78_faintifabilitynotdamp(void)
         if (gBattlerTarget == gBattlersCount)
         {
             gActiveBattler = gBattlerAttacker;
-            gBattleMoveDamage = gBattleMons[gActiveBattler].hp;
-            BtlController_EmitHealthBarUpdate(0, INSTANT_HP_BAR_DROP);
+            if (GetBattlerAbility(gActiveBattler) == ABILITY_STURDY
+                && gBattleMons[gActiveBattler].hp != 1) //lol glad I caught that, almost reintroduced  sturdy bug
+                gBattleMoveDamage = (gBattleMons[gActiveBattler].hp - 1);
+            else
+                gBattleMoveDamage = gBattleMons[gActiveBattler].hp;
+            BtlController_EmitHealthBarUpdate(0, INSTANT_HP_BAR_DROP);   //moves hp bar, not actually doing damage, that's in setatkhptozero
             MarkBattlerForControllerExec(gActiveBattler);
+            if (GetBattlerAbility(gActiveBattler) == ABILITY_STURDY)
+            {
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_SturdiedMsg; //hopefully this works how I want, should explode be on 1 hp play sturdy message then continue as normal
+            }
             ++gBattlescriptCurrInstr;
 
             for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; ++gBattlerTarget)
@@ -11953,7 +11962,12 @@ static void atk79_setatkhptozero(void)
     if (!gBattleControllerExecFlags)
     {
         gActiveBattler = gBattlerAttacker;
-        gBattleMons[gActiveBattler].hp = 0;
+        if (GetBattlerAbility(gActiveBattler) == ABILITY_STURDY
+            && gBattleMons[gActiveBattler].hp != 1
+            && gBattleMoves[gCurrentMove].effect != EFFECT_HEALING_WISH)
+            gBattleMons[gActiveBattler].hp = 1;
+        else
+            gBattleMons[gActiveBattler].hp = 0;
         BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, 0, 2, &gBattleMons[gActiveBattler].hp);
         MarkBattlerForControllerExec(gActiveBattler);
         ++gBattlescriptCurrInstr;

@@ -307,11 +307,17 @@ Yeah that should work
 * then recapitalize all type names in ability descriptions like "Ups GRASS moves" rather than  "Ups Grass moves"
 * it just looks nice, and fits the fire red style more
 * 
-* test hidden ability selection odds again, when able to build
+* test hidden ability selection odds again, when able to build - DONE
 * 
 * changing trainer ivs to be random, as most are just set to 0, -DONE
 * (change works I actually lost starter fight after this,for now will leave monitemcustommove as fixed, as I think those use max value
 * and making random would actually make things easier) 
+* 
+* note researching abilities on bulb/db I've come to conclusion ability slots follow a pattern
+* slot 1 is a natural capability/ability of the mon i.e intimidatation strong jaws a cute charm etc.
+* slot 2 offers some form of boost or synergy
+* while the hidden ability slot is meant to be something special/unique that allows it to fit into a different niche or a niche.
+* consider comb over ability allocation to make sure correctly follows this logic
 * 
 * forgot, set rival to devault moves, as custom move works weird where when you remove move argument
 * from mon, instead of defaulting to normal move learn it defaults to no moves and mon can only struggle.
@@ -885,9 +891,13 @@ as well as the effect of increasing trap duration
 * purpose is give free switch in on fire types, for type usually weak to them - 
 * powder was original signature move of vivillion   -giving to accelgor as its like a ninja (also try to change front sprite remove stupid puckered lip thing)
 * 
+* ...*Looks left & right* ... should I buff sturdy so it lets exploding mon survive on 1hp o.0
+* yup I'm DOIN it!!!
+* - I DID THE THING!!!!!!!!!!
+* 
 * while looking at buffing poison heal, for poison types came up with buff for muk etc. sticky hold
 * rather than just make a copy of gooey and lowering speed on contact. 
-* Set so may steal/destroy enemy's held item on contact with sticky hold mon instead i.e battler absorbed the enemy's stuck item
+* Set so may steal/destroy enemy's held item on contact with sticky hold mon instead i.e battler absorbed the enemy's stuck item - DONE
 * do for give to garbador as well, who for some reason doesn't have when its a literal collection of absorbed trash-
 * 
 * give gumshoos move first impressions and facade as evo moves, leaning into trump pokemon idea - DONE
