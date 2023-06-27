@@ -1,4 +1,5 @@
-#include "global.h"
+#include "battle_ai_scripts_s.h"
+/*#include "global.h"
 #include "battle.h"
 #include "battle_anim.h"
 #include "util.h"
@@ -12,6 +13,7 @@
 #include "constants/moves.h"
 
 //keeping this file just for comparison of ai logic to default fire red
+
 
 #define AI_ACTION_DONE          0x0001
 #define AI_ACTION_FLEE          0x0002
@@ -41,7 +43,7 @@ the number of bytes that the current command had reserved for arguments
 in order to read the next command correctly. refer to battle_AI_FLAGs.s for the
 AI scripts.
 */
-
+/*
 static EWRAM_DATA const u8 *sAIScriptPtr = NULL;
 extern u8 *gBattleAI_FLAGsTable[];
 
@@ -1378,7 +1380,7 @@ static void Cmd_if_status_in_party(void)
     party = (GetBattlerSide(battlerId) == B_SIDE_PLAYER) ? gPlayerParty : gEnemyParty;
     */
 
-    statusToCompareTo = T1_READ_32(sAIScriptPtr + 2);
+  /*  statusToCompareTo = T1_READ_32(sAIScriptPtr + 2);
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
@@ -2025,4 +2027,4 @@ static bool8 AIStackPop(void)
     }
     else
         return FALSE;
-}
+}*/

@@ -47,4 +47,10 @@ extern const u16 gCriticalHitChance[];	//made global, so can run in ai file
 
 extern void (* const gBattleScriptingCommandsTable[])(void);
 
+struct StatFractions
+{
+    u8 dividend;
+    u8 divisor;
+};
+
 #endif // GUARD_BATTLE_SCRIPT_COMMANDS_H

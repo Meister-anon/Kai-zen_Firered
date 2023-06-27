@@ -789,7 +789,7 @@ bool8 TryDoDoubleWildBattle(void)
         return TRUE;
 #endif
     return FALSE;
-}
+}//remember plan to put double wilds on certain tiles, the grass tiles,but all tiles except city/road can spawn enconters
 
 bool8 TryStandardWildEncounter(u32 currMetatileBehavior)
 {

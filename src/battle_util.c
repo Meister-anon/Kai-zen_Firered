@@ -41,10 +41,7 @@ static bool32 GetMentalHerbEffect(u8 battlerId);
 static u16 GetInverseTypeMultiplier(u16 multiplier);
 static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities);
 static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities, u16 modifier);
-static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower,
-    bool32 isCrit, bool32 randomFactor, bool32 updateFlags, u16 typeEffectivenessModifier); //is this accurate/useful
 static void UpdateMoveResultFlags(u16 modifier); //only used for accuracycheck command
-
 static void infatuationchecks(void);//cusotm effect used for cupidarrow
 
 static const u16 sSoundMovesTable[] =
@@ -53,7 +50,7 @@ static const u16 sSoundMovesTable[] =
     MOVE_UPROAR, MOVE_METAL_SOUND, MOVE_GRASS_WHISTLE, MOVE_HYPER_VOICE, 0xFFFF
 };
 
-const u16 gPercentToModifier[] =
+const u16 gPercentToModifier[101] =
 {
     UQ_4_12(0.00), // 0
     UQ_4_12(0.01), // 1
@@ -656,7 +653,7 @@ static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] =
     ABILITY_LAVA_FISSURE,
 };
 
-u16 GetUsedHeldItem(u8 battler)
+u16 GetUsedHeldItem(u8 battler) //vsonic
 {
     return gBattleStruct->usedHeldItems[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)];
 }
@@ -3405,7 +3402,7 @@ u8 AtkCanceller_UnableToUseMove2(void)
 //2nd pass add ghosts to grounded clause  with specific exclusions spirit tomb cursola galarian corsola etc object linked ghost, just like doduo
 //looked over and realized still mising some pokemon that float, but aren't flying types, and also just don't get levitate
 //i.e porygon and magnemite line, may be others
-const u16 sFloatingSpecies[] = {
+const u16 gFloatingSpecies[128] = {
     SPECIES_BEAUTIFLY,
     SPECIES_DUSTOX,
     SPECIES_NINJASK,
@@ -3540,17 +3537,17 @@ bool8 IsFloatingSpecies(u8 battlerId) {
     s32 i;
 
 
-    for (i = 0; i < NELEMS(sFloatingSpecies); i++)
+    for (i = 0; i < NELEMS(gFloatingSpecies); i++)
     {
-        if (gBattleMons[battlerId].species == sFloatingSpecies[i])
+        if (gBattleMons[battlerId].species == gFloatingSpecies[i])
             return TRUE;
     }
     return FALSE;
 
 }
 
-#define GROUNDED_GHOSTMON ((SPECIES_SPIRITOMB || SPECIES_CORSOLA_GALARIAN || SPECIES_CURSOLA || SPECIES_SANDYGAST || SPECIES_PALOSSAND || SPECIES_GOLETT || SPECIES_TREVENANT || SPECIES_MARSHADOW || SPECIES_MIMIKYU || SPECIES_MIMIKYU_BUSTED || SPECIES_SABLEYE_MEGA))
 
+#define GROUNDED_FUNCTION
 //remember else if, makes it exclusive, it only goes to that if the if before it is false,
 //and it itself gets skipped over if its false, to the go to the next else if
 //need to comb over else if logic to make sure parses
@@ -9291,22 +9288,35 @@ u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability)
     return 0;
 }
 
-/*u32 IsAbilityPreventingEscape(u32 battlerId) //move to battle main.c is runnign from battle impossible /done
+u32 IsAbilityPreventingEscape(u32 battlerId) //ported for ai, equivalent logic in battle main.c is runnign from battle impossible, /-had to retool function logic it gave me compiler issues
 {
-    u32 id;
+    u32 id = 0; //note for ghost escape make ghosts escape traps, and arena trap but not most other abilities, the whole heirarchy thing they beat moves, but not abilities
+    //they only beat arena trap because levitate beats that, and most ghosts would have levitate
 
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
-        return 0;
+    if ((GetBattlerAbility(battlerId) == ABILITY_DEFEATIST
+        && gSpecialStatuses[battlerId].defeatistActivated) //overwrite usual switch preveention from status & traps
+        || (GetBattlerAbility(battlerId) == ABILITY_RUN_AWAY)
+        || (GetBattlerAbility(battlerId) == ABILITY_AVIATOR))
+        return FALSE;
 
-    if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_SHADOW_TAG)) && gBattleMons[battlerId].ability != ABILITY_SHADOW_TAG)
+    if (IsBattlerGrounded(battlerId))
+        id = IsAbilityOnOpposingSide(battlerId, ABILITY_ARENA_TRAP);
+
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_STEEL))
+        id = IsAbilityOnOpposingSide(battlerId, ABILITY_MAGNET_PULL);
+
+    if (IsBattlerAlive(BATTLE_OPPOSITE(battlerId)))
+        id = IsAbilityOnOpposingSide(battlerId, ABILITY_SHADOW_TAG);
+
+    /*if (id = IsAbilityOnOpposingSide(battlerId, ABILITY_SHADOW_TAG))
         return id;
     if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_ARENA_TRAP)) && IsBattlerGrounded(battlerId))
         return id;
     if ((id = IsAbilityOnOpposingSide(battlerId, ABILITY_MAGNET_PULL)) && IS_BATTLER_OF_TYPE(battlerId, TYPE_STEEL))
-        return id;
+        return id;*/
 
-    return 0;
-}*/  //implemented in battle_main
+    return id;
+}
 
 u32 GetBattlerWeight(u8 battlerId) //use ethis for calculating  seismic toss damage change
 { //since way I plan to make damage formula may make it strong at early levels

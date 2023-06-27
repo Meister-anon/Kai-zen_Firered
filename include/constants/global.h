@@ -3,7 +3,7 @@
 
 #define ITEM_NAME_LENGTH 18
 #define POKEMON_NAME_LENGTH 12
-#define OT_NAME_LENGTH 7
+#define OT_NAME_LENGTH 7    //player name length
 #define MOVE_NAME_LENGTH 17 //longest move name is 17 
 
 #define VERSION_SAPPHIRE    1

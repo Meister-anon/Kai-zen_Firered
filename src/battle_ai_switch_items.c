@@ -350,7 +350,7 @@ bool32 ShouldSwitch(void)
      || AreStatsRaised())
         return FALSE;
     if (FindMonWithFlagsAndSuperEffective(MOVE_RESULT_DOESNT_AFFECT_FOE, 2)
-     || FindMonWithFlagsAndSuperEffective(MOVE_RESULT_NOT_VERY_EFFECTIVE, 3))
+     || FindMonWithFlagsAndSuperEffective(MOVE_RESULT_NOT_VERY_EFFECTIVE, 3)) //vsonic could potentially adapt to setup conversion/new ditto ability just need loop all mon instead of party
         return TRUE;
     return FALSE;
 }

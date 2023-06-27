@@ -2302,7 +2302,7 @@ goto PRIORITY_EFFECTS	//battle_main.c all effects regarding priority changes go 
 goto VARIOUS_BS_COMMANDS	//long function for easily setting up new bs commands. and not need a new function
 //macro is made in battle_script.inc
 
-goto GROUNDED_GHOSTMON //battle_util.c grounded logic, also right below floating mon list
+goto GROUNDED_FUNCTION //battle_util.c grounded logic, also right below floating mon list
 /*
 * Relevant Notes:
 * Raised Pokémon are not affected by Ground type moves, Spikes, Toxic Spikes nor Arena Trap.

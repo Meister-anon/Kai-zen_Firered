@@ -635,7 +635,7 @@ bool32 IsBattlerTrapped(u8 battler, bool8 checkSwitch)
 u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, u32 atkAbility, u32 defAbility, u32 atkHoldEffect, u32 defHoldEffect)
 {
         
-        s8 buff, accStage, evasionStage;
+        s8 buff, evasionStage;
         u32 calc, moveAcc;
         u8 accStage = gBattleMons[battlerAtk].statStages[STAT_ACC];
         u8 atkParam = GetBattlerHoldEffectParam(battlerAtk);
@@ -1412,7 +1412,7 @@ bool32 AI_IsTerrainAffected(u8 battlerId, u32 flags)
 }
 
 // different from IsBattlerGrounded in that we don't always know battler's hold effect or ability
-bool32 AI_IsBattlerGrounded(u8 battlerId)
+bool32 AI_IsBattlerGrounded(u8 battlerId)//vsonic adjust with my version in mind
 {
     u32 holdEffect = AI_DATA->holdEffects[battlerId];
 
@@ -2406,6 +2406,61 @@ bool32 TestMoveFlagsInMoveset(u8 battler, u32 flags)
     return FALSE;
 }
 
+bool8 IsMonFloatingSpecies(struct Pokemon *mon) 
+{
+    s32 i;
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+
+    for (i = 0; i < NELEMS(gFloatingSpecies); i++)
+    {
+        if (species == gFloatingSpecies[i])
+            return TRUE;
+    }
+    return FALSE;
+
+}
+
+bool8 AI_Hazard_Grounded(struct Pokemon *mon) //used for PartyBattlerShouldAvoidHazards function  removed battler statuses, and hold effects as they could be done by main funnction
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    bool8 grounded = TRUE; //changed so goes through all checks  //not using else, so need to make it default TRUE
+
+
+
+    if (IsMonType(mon, TYPE_FLYING) && (species == (SPECIES_DODUO || SPECIES_DODRIO)))
+        grounded = TRUE; //hope this set up right/works
+    if (gFieldStatuses & STATUS_FIELD_GRAVITY)
+        grounded = TRUE;
+    /*if (gStatuses3[battlerId] & STATUS3_ROOTED)
+        grounded = TRUE;
+    if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
+        grounded = TRUE;*/
+    /*if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
+        grounded = TRUE;*/
+    if ((IsMonType(mon, TYPE_GHOST)) && (species == (GROUNDED_GHOSTMON)))   //test GHOST exclusions
+        grounded = TRUE;
+
+    else if (IsMonType(mon, TYPE_GHOST))
+        grounded = FALSE;
+    
+    if (IsMonFloatingSpecies(mon))//used if as breakline, as else if only reads if everything above it is false
+        grounded = FALSE;
+    if (IsMonType(mon, TYPE_FLYING) && (species != SPECIES_DODUO && species != SPECIES_DODRIO))
+        grounded = FALSE;
+
+    /*if (gBattleMons[battlerId].ability == ABILITY_LEVITATE) //remove after removing all instances of levitate on mon
+        grounded = FALSE;
+    if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
+        grounded = FALSE;
+    if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
+        grounded = FALSE;
+    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
+        grounded = FALSE;*/
+
+
+    return grounded;
+}
+
 static u32 GetLeechSeedDamage(u8 battlerId)
 {
     u32 damage = 0;
@@ -2700,7 +2755,9 @@ static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler)
             hazardDamage = 0;   //since its not looping and appears to insead be doing a per battler/one battler at a time check this should work vsonic I think
     }
 
-    if (flags & SIDE_STATUS_SPIKES && (IsBattlerGrounded(&mon))) //hopefully works, it does for ability         
+    if ((flags & SIDE_STATUS_SPIKES) && (AI_Hazard_Grounded(mon) //vsonic clean up later, all should work
+        && ((holdEffect != HOLD_EFFECT_AIR_BALLOON)
+        || (holdEffect == HOLD_EFFECT_IRON_BALL)))) //hopefully works, it does for ability     //wrong elemnt mine uses battlerid but this uss mon data, I could copy and make one specifc for this but...    
     {
         u8 spikesDmg = maxHp / ((5 - gSideTimers[GetBattlerSide(currBattler)].spikesAmount) * 2);
         if (spikesDmg == 0)
@@ -3518,7 +3575,7 @@ s32 AI_CalcPartyMonDamage(u16 move, u8 battlerAtk, u8 battlerDef, struct Pokemon
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
         battleMons[i] = gBattleMons[i];
 
-    PokemonToBattleMon(mon, &gBattleMons[battlerAtk]); //vsonic
+    PokemonToBattleMon(mon, &gBattleMons[battlerAtk]); 
     dmg = AI_CalcDamage(move, battlerAtk, battlerDef, &effectiveness, FALSE);
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
@@ -3601,7 +3658,7 @@ struct Pokemon *GetBattlerPartyData(u8 battlerId)
 bool32 PartyHasMoveSplit(u8 battlerId, u8 split)
 {
     u8 firstId, lastId;
-    struct Pokemon* party = GetBattlerPartyData(battlerId); //vsonic
+    struct Pokemon* party = GetBattlerPartyData(battlerId);
     u32 i, j;
 
     for (i = 0; i < PARTY_SIZE; i++)

@@ -3308,13 +3308,19 @@ static void BattleStartClearSetData(void)
     for (i = 0; i < 8; ++i)
     {
         *((u8 *)gBattleStruct->lastTakenMove + i) = MOVE_NONE;
-        *((u8 *)gBattleStruct->usedHeldItems + i) = ITEM_NONE;
+        //*((u8 *)gBattleStruct->usedHeldItems + i) = ITEM_NONE;
         *((u8 *)gBattleStruct->choicedMove + i) = MOVE_NONE;
         *((u8 *)gBattleStruct->changedItems + i) = ITEM_NONE;
         *(i + 0 * 8 + (u8 *)(gBattleStruct->lastTakenMoveFrom) + 0) = 0;
         *(i + 1 * 8 + (u8 *)(gBattleStruct->lastTakenMoveFrom) + 0) = 0;
         *(i + 2 * 8 + (u8 *)(gBattleStruct->lastTakenMoveFrom) + 0) = 0;
         *(i + 3 * 8 + (u8 *)(gBattleStruct->lastTakenMoveFrom) + 0) = 0;
+    }
+    for (i = 0; i < PARTY_SIZE; i++) //had to move after change define for usedHeldItem hope works... vsonic
+    {
+        gBattleStruct->usedHeldItems[i][B_SIDE_PLAYER] = FALSE;
+        gBattleStruct->usedHeldItems[i][B_SIDE_OPPONENT] = FALSE;
+        gBattleStruct->itemStolen[i].originalItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
     }
     *(gBattleStruct->AI_monToSwitchIntoId + 0) = PARTY_SIZE;
     *(gBattleStruct->AI_monToSwitchIntoId + 1) = PARTY_SIZE;
@@ -3341,6 +3347,7 @@ static void BattleStartClearSetData(void)
         gBattleResults.playerMon2Name[i] = 0;
         gBattleResults.caughtMonNick[i] = 0;
     }
+    
 }
 
 #define CLEARDATA_ON_SWITCH
@@ -4042,7 +4049,7 @@ void BattleTurnPassed(void)
     gRandomTurnNumber = Random();
 }
 
-#define RUN_LOGIC_PT1
+#define RUN_LOGIC_PT1 //realized this isn't same as being able to switch need set that up
 u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing escape  put logic in here.
 {
     u8 holdEffect;
@@ -4056,9 +4063,9 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
     gPotentialItemEffectBattler = gActiveBattler;
     if (holdEffect == HOLD_EFFECT_CAN_ALWAYS_RUN
      || (gBattleTypeFlags & BATTLE_TYPE_LINK)
-     || gBattleMons[gActiveBattler].ability == ABILITY_RUN_AWAY
-     || gBattleMons[gActiveBattler].ability == ABILITY_AVIATOR
-     || (gBattleMons[gActiveBattler].ability == ABILITY_DEFEATIST
+     || (GetBattlerAbility(gActiveBattler) == ABILITY_RUN_AWAY)
+     || (GetBattlerAbility(gActiveBattler) == ABILITY_AVIATOR)
+     || (GetBattlerAbility(gActiveBattler) == ABILITY_DEFEATIST
          && gSpecialStatuses[gActiveBattler].defeatistActivated)
      || holdEffect == HOLD_EFFECT_SHED_SHELL)
         return BATTLE_RUN_SUCCESS;
@@ -4255,15 +4262,17 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                         MarkBattlerForControllerExec(gActiveBattler);
                     }
                     break;
-                case B_ACTION_SWITCH:
+                case B_ACTION_SWITCH:   //vsonic this is part that allows switch, looks like I already setup
                     *(gBattleStruct->battlerPartyIndexes + gActiveBattler) = gBattlerPartyIndexes[gActiveBattler];
                     if (gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION) 
                         || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
                         || (gBattleMons[gActiveBattler].status1 & (ITS_A_TRAP_STATUS1)) 
                         || (gStatuses4[gActiveBattler] & (ITS_A_TRAP_STATUS4))) //hope this works...
                     {
-                        if (gBattleMons[gActiveBattler].ability == ABILITY_DEFEATIST
+                        if ((GetBattlerAbility(gActiveBattler) == ABILITY_DEFEATIST
                             && gSpecialStatuses[gActiveBattler].defeatistActivated) //overwrite usual switch preveention from status & traps
+                            || (GetBattlerAbility(gActiveBattler) == ABILITY_RUN_AWAY)
+                            || (GetBattlerAbility(gActiveBattler) == ABILITY_AVIATOR)) //can escape field traps whenever want, need put ability message furthr note below vsonic
                         {
                             if (gActiveBattler == 2 && gChosenActionByBattler[0] == B_ACTION_SWITCH)
                                 BtlController_EmitChoosePokemon(0, PARTY_ACTION_CHOOSE_MON, *(gBattleStruct->monToSwitchIntoId + 0), ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
@@ -4275,16 +4284,18 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                         else
                         BtlController_EmitChoosePokemon(0, PARTY_ACTION_CANT_SWITCH, 6, ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
                     }
-                    else if ((i = ABILITY_ON_OPPOSING_FIELD(gActiveBattler, ABILITY_SHADOW_TAG))
-                          || ((i = ABILITY_ON_OPPOSING_FIELD(gActiveBattler, ABILITY_ARENA_TRAP))
-                              && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
-                              //&& gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
-                              && !IsBattlerGrounded(gActiveBattler))
-                          || ((i = AbilityBattleEffects(ABILITYEFFECT_CHECK_FIELD_EXCEPT_BATTLER, gActiveBattler, ABILITY_MAGNET_PULL, 0, 0))
-                              && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL)))
+                    else if ((IsAbilityOnOpposingSide(gActiveBattler, ABILITY_SHADOW_TAG))
+                        || ((IsAbilityOnOpposingSide(gActiveBattler, ABILITY_ARENA_TRAP))
+                            // && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
+                             //&& gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
+                            && !IsBattlerGrounded(gActiveBattler))
+                        || (IsAbilityOnOpposingSide(gActiveBattler, ABILITY_MAGNET_PULL)
+                            && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL)))
                     {
-                         if (gBattleMons[gActiveBattler].ability == ABILITY_DEFEATIST
-                            && gSpecialStatuses[gActiveBattler].defeatistActivated) //overwrite usual switch preveention from ability
+                         if ((GetBattlerAbility(gActiveBattler) == ABILITY_DEFEATIST
+                             && gSpecialStatuses[gActiveBattler].defeatistActivated) //overwrite usual switch preveention from status & traps
+                             || (GetBattlerAbility(gActiveBattler) == ABILITY_RUN_AWAY)
+                             || (GetBattlerAbility(gActiveBattler) == ABILITY_AVIATOR)) //can escape trap abilities //need display ability message, mon broke free with ability or mon used ability and broke free!
                          {
                             if (gActiveBattler == 2 && gChosenActionByBattler[0] == B_ACTION_SWITCH)
                                 BtlController_EmitChoosePokemon(0, PARTY_ACTION_CHOOSE_MON, *(gBattleStruct->monToSwitchIntoId + 0), ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
@@ -5804,9 +5815,9 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
 
 bool32 IsWildMonSmart(void)
 {
-    if(B_SMART_WILD_AI_FLAG == 0)
+    /*if(B_SMART_WILD_AI_FLAG == 0)
         return (FlagGet(B_SMART_WILD_AI_FLAG));
-    else
+    else*/
         return FALSE;
 
 }

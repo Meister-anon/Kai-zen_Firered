@@ -2197,7 +2197,7 @@ static u8 GetNicknameStringWidthByPartyAndMonIdx(u8 *dest, u8 whichParty, u8 par
         GetMonData(&gPlayerParty[partyIdx], MON_DATA_NICKNAME, nickname);
     else
         GetMonData(&gEnemyParty[partyIdx], MON_DATA_NICKNAME, nickname);
-    StringCopy10(dest, nickname);
+    StringCopy_Nickname(dest, nickname);
     return GetStringWidth(0, dest, GetFontAttribute(0, FONTATTR_LETTER_SPACING));
 }
 
@@ -2260,7 +2260,7 @@ static void PrintPartyNicknames(u8 whichParty)
     for (i = 0; i < sTradeMenuResourcesPtr->partyCounts[whichParty]; i++)
     {
         GetMonData(&party[i], MON_DATA_NICKNAME, buff);
-        StringCopy10(nickname, buff);
+        StringCopy_Nickname(nickname, buff);
         PrintPartyMonNickname(whichParty, i, nickname);
     }
 }

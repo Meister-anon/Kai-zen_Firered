@@ -43,10 +43,10 @@ extern u8 gExpandedPlaceholder_Groudon[];
 extern u8 gExpandedPlaceholder_Red[];
 extern u8 gExpandedPlaceholder_Green[];
 
-u8 *StringCopy10(u8 *dest, const u8 *src)
+u8 *StringCopy_Nickname(u8 *dest, const u8 *src) //seems to be equivalent nickname copy, yup checked reference its always used for nickname
 {
     u8 i;
-    u32 limit = 10;
+    u32 limit = POKEMON_NAME_LENGTH;
 
     for (i = 0; i < limit; i++)
     {
@@ -60,10 +60,10 @@ u8 *StringCopy10(u8 *dest, const u8 *src)
     return &dest[i];
 }
 
-u8 *StringGetEnd10(u8 *str)
+u8 *StringGet_Nickname(u8 *str) //sems ot be a companion function to nickname?
 {
     u8 i;
-    u32 limit = 10;
+    u32 limit = POKEMON_NAME_LENGTH;
 
     for (i = 0; i < limit; i++)
         if (str[i] == EOS)
@@ -73,10 +73,10 @@ u8 *StringGetEnd10(u8 *str)
     return &str[i];
 }
 
-u8 *StringCopy7(u8 *dest, const u8 *src)
+u8 *StringCopy_PlayerName(u8 *dest, const u8 *src) //used to copy player name it seems
 {
     s32 i;
-    s32 limit = 7;
+    s32 limit = OT_NAME_LENGTH;
 
     for (i = 0; i < limit; i++)
     {
@@ -127,19 +127,6 @@ u8 *StringAppendN(u8 *dest, const u8 *src, u8 n)
         dest++;
 
     return StringCopyN(dest, src, n);
-}
-
-u8 *StringGet_Nickname(u8 *str)
-{
-    u8 i;
-    u32 limit = POKEMON_NAME_LENGTH;
-
-    for (i = 0; i < limit; i++)
-        if (str[i] == EOS)
-            return &str[i];
-
-    str[i] = EOS;
-    return &str[i];
 }
 
 u16 StringLength(const u8 *str)

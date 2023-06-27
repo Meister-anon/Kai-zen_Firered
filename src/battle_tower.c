@@ -1116,7 +1116,7 @@ static void SetPlayerBattleTowerRecord(void)
     playerRecord->trainerClass = trainerClass;
 
     CopyTrainerId(playerRecord->trainerId, gSaveBlock2Ptr->playerTrainerId);
-    StringCopy7(playerRecord->name, gSaveBlock2Ptr->playerName);
+    StringCopy_PlayerName(playerRecord->name, gSaveBlock2Ptr->playerName);
 
     playerRecord->winStreak = GetCurrentBattleTowerWinStreak(battleTowerLevelType);
 
@@ -1307,7 +1307,7 @@ static void Debug_FillEReaderTrainerWithPlayerData(void)
     }
 
     CopyTrainerId(ereaderTrainer->trainerId, gSaveBlock2Ptr->playerTrainerId);
-    StringCopy7(ereaderTrainer->name, gSaveBlock2Ptr->playerName);
+    StringCopy_PlayerName(ereaderTrainer->name, gSaveBlock2Ptr->playerName);
 
     ereaderTrainer->winStreak = 1;
 

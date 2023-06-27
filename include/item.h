@@ -41,6 +41,7 @@ enum {
     ITEM_TYPE_BAG_MENU, // No exit callback, stays in bag menu
 };
 
+extern const struct Item gItems[]; //port
 extern struct BagPocket gBagPockets[];
 
 void GetBerryCountString(u8 *dst, const u8 *berryName, u32 quantity);

@@ -617,11 +617,11 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atk111_typebaseddmgboost,
 };
 
-struct StatFractions
+/*struct StatFractions
 {
     u8 dividend;
     u8 divisor;
-};
+};*/
 
 const struct StatFractions gAccuracyStageRatios[] =
 {
@@ -1237,6 +1237,21 @@ static const u16 sMultiTaskExcludedEffects[] =
 /*static const u16 sBlockedMoves[] =
 {};*/
 
+//remember to change logic and buff the weak ones vsonic
+static const u16 sNaturePowerMoves[] =
+{
+    [BATTLE_TERRAIN_GRASS] = MOVE_STUN_SPORE,
+    [BATTLE_TERRAIN_LONG_GRASS] = MOVE_RAZOR_LEAF,
+    [BATTLE_TERRAIN_SAND] = MOVE_EARTHQUAKE,
+    [BATTLE_TERRAIN_UNDERWATER] = MOVE_HYDRO_PUMP,
+    [BATTLE_TERRAIN_WATER] = MOVE_SURF,
+    [BATTLE_TERRAIN_POND] = MOVE_BUBBLE_BEAM,
+    [BATTLE_TERRAIN_MOUNTAIN] = MOVE_ROCK_SLIDE,
+    [BATTLE_TERRAIN_CAVE] = MOVE_SHADOW_BALL,
+    [BATTLE_TERRAIN_BUILDING] = MOVE_SWIFT,
+    [BATTLE_TERRAIN_PLAIN] = MOVE_SWIFT
+};
+
 u16 GetNaturePowerMove(void)
 {
     if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)
@@ -1251,21 +1266,6 @@ u16 GetNaturePowerMove(void)
         return MOVE_TRI_ATTACK;
     return sNaturePowerMoves[gBattleTerrain];
 }
-
-//remember to change logic and buff the weak ones vsonic
-static const u16 sNaturePowerMoves[] =
-{
-    MOVE_STUN_SPORE,
-    MOVE_RAZOR_LEAF,
-    MOVE_EARTHQUAKE,
-    MOVE_HYDRO_PUMP,
-    MOVE_SURF,
-    MOVE_BUBBLE_BEAM,
-    MOVE_ROCK_SLIDE,
-    MOVE_SHADOW_BALL,
-    MOVE_SWIFT,
-    MOVE_SWIFT
-};
 
 static const u16 sWeightToDamageTable[] =
 {
@@ -1857,8 +1857,8 @@ static void atk01_accuracycheck(void)
         if (moveAcc > 100)
             moveAcc = 100; // to prevent possible broken values.
 
-        calc = sAccuracyStageRatios[buff].dividend * moveAcc;
-        calc /= sAccuracyStageRatios[buff].divisor;
+        calc = gAccuracyStageRatios[buff].dividend * moveAcc;
+        calc /= gAccuracyStageRatios[buff].divisor;
 
         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_COMPOUND_EYES
             || GetBattlerAbility(gBattlerAttacker) == ABILITY_ILLUMINATE)
@@ -1898,7 +1898,7 @@ static void atk01_accuracycheck(void)
         //so they stack
 
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP) { //.target = MOVE_TARGET_SELECTED, 
-            if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_PSYCHIC)) //important chek this think have function for type checking
+            if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_PSYCHIC)) //important chek this think have function for type checking
                 calc = (calc * 105) / 100; // to take advantage of these buffs I want to have a button to display real move accuracy in battle. maybe L
             else
                 //     calc = (calc * 260) / 100; // gBattleMoves[gCurrentMove].target that's the comamnd I need, then just set the target I want
@@ -1914,7 +1914,7 @@ static void atk01_accuracycheck(void)
             calc = (calc * 110) / 100;
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_FREEZE)
             calc = (calc * 160) / 100;
-        eva = 1;
+            //evasionStage = 1;
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_PARALYSIS) //ok evasion and accuracy stages are put together, so I'll just use evasion.
             calc = (calc * 130) / 100;
         
@@ -1943,7 +1943,7 @@ static void atk01_accuracycheck(void)
         
         if (gProtectStructs[gBattlerAttacker].usedMicleBerry)
         {
-            gProtectStructs[battlerAtk].usedMicleBerry = FALSE;
+            gProtectStructs[gBattlerAttacker].usedMicleBerry = FALSE;
             if (GetBattlerAbility(gBattlerAttacker) == ABILITY_RIPEN)
                 calc = (calc * 140) / 100;  // ripen gives 40% acc boost
             else
@@ -9354,12 +9354,12 @@ static void atk69_adjustsetdamage(void)
 }
 
 
-static void atk6A_removeitem(void)
+static void atk6A_removeitem(void) //vsonic
 {
     u16 *usedHeldItem;
 
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
-    usedHeldItem = &gBattleStruct->usedHeldItems[gActiveBattler];
+    usedHeldItem = &gBattleStruct->usedHeldItems[gBattlerPartyIndexes[gActiveBattler]][GetBattlerSide(gActiveBattler)];
     *usedHeldItem = gBattleMons[gActiveBattler].item;
     gBattleMons[gActiveBattler].item = ITEM_NONE;
     BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
@@ -15200,7 +15200,7 @@ static void atkDF_setmagiccoat(void)
     }
     ++gBattlescriptCurrInstr;
 }
-}
+
 
 static void atkE0_trysetsnatch(void) // snatch
 {
@@ -15478,12 +15478,12 @@ static void atkE9_setweatherballtype(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atkEA_tryrecycleitem(void)
+static void atkEA_tryrecycleitem(void) //vsonic need to update check
 {
     u16 *usedHeldItem;
 
     gActiveBattler = gBattlerAttacker;
-    usedHeldItem = &gBattleStruct->usedHeldItems[gActiveBattler];
+    usedHeldItem = &gBattleStruct->usedHeldItems[gBattlerPartyIndexes[gActiveBattler]][GetBattlerSide(gActiveBattler)];
     if (*usedHeldItem != ITEM_NONE && gBattleMons[gActiveBattler].item == ITEM_NONE)
     {
         gLastUsedItem = *usedHeldItem;

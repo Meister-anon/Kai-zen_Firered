@@ -137,6 +137,7 @@ void UndoFormChange(u32 monId, u32 side);
 bool32 DoBattlersShareType(u32 battler1, u32 battler2);
 bool32 CanBattlerEscape(u32 battlerId);
 bool32 IsHealBlockPreventingMove(u32 battler, u32 move);
+u32 IsAbilityPreventingEscape(u32 battlerId);
 u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability);
 u32 IsAbilityOnField(u32 ability); 
 u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating);
@@ -197,9 +198,13 @@ bool32 TestMoveFlags(u16 move, u32 flag);
 s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower,
     bool32 isCrit, bool32 randomFactor, bool32 updateFlags, u16 typeEffectivenessModifier);
 
+#define GROUNDED_GHOSTMON ((SPECIES_SPIRITOMB || SPECIES_CORSOLA_GALARIAN || SPECIES_CURSOLA || SPECIES_SANDYGAST || SPECIES_PALOSSAND || SPECIES_GOLETT || SPECIES_TREVENANT || SPECIES_MARSHADOW || SPECIES_MIMIKYU || SPECIES_MIMIKYU_BUSTED || SPECIES_SABLEYE_MEGA))
+
 #define THAW_CONDITION(move) ((move == MOVE_SCALD) || (((gBattleMoves[move].type == TYPE_FIRE) || (gBattleMoves[move].argument == TYPE_FIRE)) && (gBattleMoves[move].power >= 60 || gDynamicBasePower >= 60)))
 
 // percent in UQ_4_12 format
-extern const u16 gPercentToModifier[];
+extern const u16 gPercentToModifier[101];
+
+extern const u16 gFloatingSpecies[128];
 
 #endif // GUARD_BATTLE_UTIL_H
