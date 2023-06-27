@@ -103,7 +103,7 @@
 #define ABILITY_SNIPER 97
 #define ABILITY_MAGIC_GUARD 98
 #define ABILITY_NO_GUARD 99
-#define ABILITY_STALL 100
+#define ABILITY_STALL 100	//made specifically and only for sableye, doesnt synergize with trick room potentially worst abilityin the game... vsonic
 #define ABILITY_TECHNICIAN 101
 #define ABILITY_LEAF_GUARD 102
 #define ABILITY_KLUTZ 103
@@ -290,7 +290,7 @@
 #define ABILITY_AIR_LOCK 268
 //CUSTOM ABILITIES
 #define ABILITY_DISPIRIT_GUARD 269
-#define ABILITY_NUISANCE 270
+#define ABILITY_NUISANCE 270		//can't remember original plan for this, but I effectively made better prankster..
 #define ABILITY_MULTI_TASK 271
 #define ABILITY_SIROCCO 272
 #define ABILITY_HI_PRESSURE 273
@@ -322,10 +322,11 @@
 #define ABILITY_SONAR 299	//sound move boost for bat pokemon,  double move damage, mostly to make sonic boom do dragon breath damage, and be strong early HA only
 #define ABILITY_ECOSYSTEM 300		//MEGA torterra excluive
 #define ABILITY_ABSOLUTE_ZERO 301		//kyurem excluive
-#define ABILITY_FEATHER_JACKET 302	//hisuian decidueye inspired by dex entry and smisonian arcticle cold climate birds have "thicker feather jacket" to insulate them from cold
+#define ABILITY_FEATHER_JACKET 302	//hisuian decidueye inspired by dex entry and smisonian arcticle cold climate birds have "They had fluffier jackets" to insulate them from cold
 #define ABILITY_POISONED_LEGACY 303 // poison pinch ability, for poipoile as its technically a starter,  inspired by marriagetoxin manga, boost poison in a pinch and if poison target will be bad poison consider set to turn 2 so it does full dmg 1st turn
+#define ABILITY_JEWEL_METABOLISM 304 //can't think of a name right now, this is just a sableye rock absorb based on dex entry, hmm maybe do more boost damage to rock types? ok, instead of raising hp, boosts def as eaten rocks form more crystals ok i like that
 
-#define ABILITIES_COUNT 304 //
+#define ABILITIES_COUNT 305 //
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
 

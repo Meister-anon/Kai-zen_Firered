@@ -3229,7 +3229,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 55,
         .baseSpDefense = 50,
         .type1 = TYPE_WATER,
-        .type2 = TYPE_WATER,
+        .type2 = TYPE_NORMAL,
         .catchRate = 225,
         .expYield = 64,
         //.evYield_Attack = 1,
@@ -3256,7 +3256,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 65,
         .baseSpDefense = 80,
         .type1 = TYPE_WATER,
-        .type2 = TYPE_WATER,
+        .type2 = TYPE_NORMAL,
         .catchRate = 60,
         .expYield = 158,
         //.evYield_Attack = 2,
@@ -3272,7 +3272,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },//replaced abilities since they suck, and goldeen usually doesns't learn physical water moves
+    },//replaced abilities since they suck, and goldeen usually doesns't learn physical water moves, VSONIC
 
     [SPECIES_STARYU] =
     {
@@ -7858,7 +7858,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_TRUANT, ABILITY_NONE},
-        .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_NONE},
+        .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_SLOW_START},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -8194,7 +8194,7 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 50,
         .baseAttack = 75,
         .baseDefense = 75,
-        .baseSpeed = 50,
+        .baseSpeed = 47,
         .baseSpAttack = 65,
         .baseSpDefense = 65,
         .type1 = TYPE_DARK,
@@ -8213,8 +8213,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_PRANKSTER, ABILITY_ANALYTIC},
-            .abilityHidden = {ABILITY_NUISANCE, ABILITY_INFILTRATOR},
+            .abilities = {ABILITY_INFILTRATOR, ABILITY_ANALYTIC},
+            .abilityHidden = {ABILITY_NUISANCE, ABILITY_JEWEL_METABOLISM}, //need to figure out something solid for this think a rock absorb?
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },

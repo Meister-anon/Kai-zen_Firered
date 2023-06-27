@@ -62,8 +62,8 @@
 #define BS_EFFECT_BATTLER           2
 #define BS_FAINTED                  3
 #define BS_ATTACKER_WITH_PARTNER    4 // for atk98_updatestatusicon
-#define BS_UNKNOWN_5                5 // for openpartyscreen
-#define BS_UNKNOWN_6                6 // for openpartyscreen
+#define BS_FAINTED_LINK_MULTIPLE_1  5 // for openpartyscreen
+#define BS_FAINTED_LINK_MULTIPLE_2  6 // for openpartyscreen
 #define BS_BATTLER_0                7
 #define BS_ATTACKER_SIDE            8 // for atk1E_jumpifability
 #define BS_TARGET_SIDE				9 // for atk1E_jumpifability
@@ -73,6 +73,7 @@
 #define BS_PLAYER2                  13 // for atk98_updatestatusicon  /?? i don't remember tis
 #define BS_OPPONENT2                14
 #define BS_ABILITY_BATTLER          15	//port from emerald
+#define BS_ATTACKER_PARTNER         16
 
 // used for openpartyscreen
 #define OPEN_PARTY_ALLOW_CANCEL     0x80

@@ -5533,7 +5533,7 @@ void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst)
     dst->status2 = 0;
 }
 
-static void CopyPlayerPartyMonToBattleData(u8 battlerId, u8 partyIndex //function brokeninto several smaller functions in emerald
+static void CopyPlayerPartyMonToBattleData(u8 battlerId, u8 partyIndex) //function brokeninto several smaller functions in emerald
 {
     u16 *hpSwitchout;
     s32 i;

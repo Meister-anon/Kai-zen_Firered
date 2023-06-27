@@ -1306,7 +1306,7 @@ BattleScript_Teatimesorb:
 	goto BattleScript_MoveEnd
 BattleScript_Teatimerod:
 	call BattleScript_AbilityPopUpTarget
-	playstatchangeanimation BS_TARGET, BIT_SPATK, STAT_CHANGE_BY_TWO
+	playstatchangeanimation BS_TARGET, BIT_SPATK, STAT_CHANGE_STAT_BY_TWO
 	setstatchanger STAT_SPATK, 1, FALSE
 	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_TeatimeBuffer
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_TeatimeBuffer
@@ -1318,7 +1318,7 @@ BattleScript_Teatimerod:
 	goto BattleScript_MoveEnd
 BattleScript_Teatimemotor:
 	call BattleScript_AbilityPopUpTarget
-	playstatchangeanimation BS_TARGET, BIT_SPEED, STAT_CHANGE_BY_TWO
+	playstatchangeanimation BS_TARGET, BIT_SPEED, STAT_CHANGE_STAT_BY_TWO
 	setstatchanger STAT_SPEED, 1, FALSE
 	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_TeatimeBuffer
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_TeatimeBuffer
@@ -4381,6 +4381,9 @@ BattleScript_EffectSandstorm::
 	attackcanceler
 	attackstring
 	ppreduce
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_SUN_PRIMAL, BattleScript_ExtremelyHarshSunlightWasNotLessened
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_RAIN_PRIMAL, BattleScript_NoReliefFromHeavyRain
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_STRONG_WINDS, BattleScript_MysteriousAirCurrentBlowsOn
 	setsandstorm
 	goto BattleScript_MoveWeatherChange
 
@@ -4614,6 +4617,9 @@ BattleScript_EffectRainDance::
 	attackcanceler
 	attackstring
 	ppreduce
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_SUN_PRIMAL, BattleScript_ExtremelyHarshSunlightWasNotLessened
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_RAIN_PRIMAL, BattleScript_NoReliefFromHeavyRain
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_STRONG_WINDS, BattleScript_MysteriousAirCurrentBlowsOn
 	setrain
 BattleScript_MoveWeatherChange::
 	attackanimation
@@ -4627,8 +4633,65 @@ BattleScript_EffectSunnyDay::
 	attackcanceler
 	attackstring
 	ppreduce
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_SUN_PRIMAL, BattleScript_ExtremelyHarshSunlightWasNotLessened
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_RAIN_PRIMAL, BattleScript_NoReliefFromHeavyRain
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_STRONG_WINDS, BattleScript_MysteriousAirCurrentBlowsOn
 	setsunny
 	goto BattleScript_MoveWeatherChange
+
+BattleScript_ExtremelyHarshSunlightWasNotLessened:
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_EXTREMELYHARSHSUNLIGHTWASNOTLESSENED
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
+BattleScript_ExtremelyHarshSunlightWasNotLessenedEnd3:
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_EXTREMELYHARSHSUNLIGHTWASNOTLESSENED
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_ExtremelyHarshSunlightWasNotLessenedRet:
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_EXTREMELYHARSHSUNLIGHTWASNOTLESSENED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_NoReliefFromHeavyRain:
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_NORELIEFROMHEAVYRAIN
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
+BattleScript_NoReliefFromHeavyRainEnd3:
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_NORELIEFROMHEAVYRAIN
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_NoReliefFromHeavyRainRet:
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_NORELIEFROMHEAVYRAIN
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_MysteriousAirCurrentBlowsOn:
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_MYSTERIOUSAIRCURRENTBLOWSON
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
+BattleScript_MysteriousAirCurrentBlowsOnEnd3:
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_MYSTERIOUSAIRCURRENTBLOWSON
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_MysteriousAirCurrentBlowsOnRet:
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_MYSTERIOUSAIRCURRENTBLOWSON
+	waitmessage B_WAIT_TIME_LONG
+	return
 
 BattleScript_BlockedByPrimalWeatherEnd3::
 	@call BattleScript_AbilityPopUp
@@ -5069,6 +5132,9 @@ BattleScript_EffectHail::
 	attackcanceler
 	attackstring
 	ppreduce
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_SUN_PRIMAL, BattleScript_ExtremelyHarshSunlightWasNotLessened
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_RAIN_PRIMAL, BattleScript_NoReliefFromHeavyRain
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_STRONG_WINDS, BattleScript_MysteriousAirCurrentBlowsOn
 	sethail
 	goto BattleScript_MoveWeatherChange
 
@@ -5885,7 +5951,7 @@ BattleScript_BallFetch::
 BattleScript_PrimalReversionRet::
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
-	setbyte gIsCriticalHit, 0
+	@setbyte gIsCriticalHit, 0	dont remember what thsi is for?
 	handleprimalreversion BS_ATTACKER, 0
 	handleprimalreversion BS_ATTACKER, 1
 	playanimation BS_ATTACKER, B_ANIM_PRIMAL_REVERSION, sB_ANIM_ARG1
@@ -6193,6 +6259,7 @@ BattleScript_DoSwitchOut::
 	waitstate
 	jumpifcantreverttoprimal BattleScript_DoSwitchOut2
 	call BattleScript_PrimalReversionRet
+BattleScript_DoSwitchOut2:
 	switchineffects BS_ATTACKER @this should be where switch in works,
 	moveendcase MOVE_END_STATUS_IMMUNITY_ABILITIES
 	moveendcase MOVE_END_MIRROR_MOVE
@@ -6443,7 +6510,7 @@ BattleScript_WeaknessPolicyAtk:
 	playanimation BS_TARGET, B_ANIM_ITEM_EFFECT, NULL
 	waitanimation
 	setbyte sSTAT_ANIM_PLAYED, FALSE
-	playstatchangeanimation BS_TARGET, BIT_ATK | BIT_SPATK, STAT_CHANGE_BY_TWO
+	playstatchangeanimation BS_TARGET, BIT_ATK | BIT_SPATK, STAT_CHANGE_STAT_BY_TWO
 	setstatchanger STAT_ATK, 2, FALSE
 	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_WeaknessPolicySpAtk
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_WeaknessPolicySpAtk
@@ -7958,7 +8025,7 @@ BattleScript_ElectricSurgeActivates::
 	pause 0x20	
 	printstring STRINGID_TERRAINBECOMESELECTRIC
 	waitstate
-	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG
+	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
 	@call BattleScript_ActivateTerrainAbilities
 	call BattleScript_TerrainSeedLoop
 	end3
@@ -7967,7 +8034,7 @@ BattleScript_MistySurgeActivates::
 	pause 0x20	
 	printstring STRINGID_TERRAINBECOMESMISTY
 	waitstate
-	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG
+	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
 	@call BattleScript_ActivateTerrainAbilities
 	call BattleScript_TerrainSeedLoop
 	end3
@@ -7976,7 +8043,7 @@ BattleScript_GrassySurgeActivates::
 	pause 0x20	
 	printstring STRINGID_TERRAINBECOMESGRASSY
 	waitstate
-	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG
+	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
 	@call BattleScript_ActivateTerrainAbilities
 	call BattleScript_TerrainSeedLoop
 	end3
@@ -7985,7 +8052,7 @@ BattleScript_PsychicSurgeActivates::
 	pause 0x20	
 	printstring STRINGID_TERRAINBECOMESPSYCHIC
 	waitstate
-	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG
+	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
 	@call BattleScript_ActivateTerrainAbilities
 	call BattleScript_TerrainSeedLoop
 	end3
@@ -7994,7 +8061,7 @@ BattleScript_LavaDistortionActivates::
 	pause 0x20	
 	printstring STRINGID_TERRAINBECOMESFIRE
 	waitstate
-	@playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG
+	@playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
 	@@call BattleScript_ActivateTerrainAbilities
 	@call BattleScript_TerrainSeedLoop	@no seed for fire/water terrains as they also get weather would need to make
 	end3

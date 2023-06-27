@@ -167,6 +167,9 @@ u8 GetBattlerForBattleScript(u8 caseId)
     case BS_ATTACKER:
         ret = gBattlerAttacker;
         break;
+    case BS_ATTACKER_PARTNER:
+        ret = BATTLE_PARTNER(gBattlerAttacker);
+        break;
     case BS_EFFECT_BATTLER:
         ret = gEffectBattler;
         break;
@@ -179,7 +182,7 @@ u8 GetBattlerForBattleScript(u8 caseId)
     case BS_FAINTED:
         ret = gBattlerFainted;
         break;
-    case 5:
+    case BS_FAINTED_LINK_MULTIPLE_1:
         ret = gBattlerFainted;
         break;
     case BS_PLAYER1:
@@ -946,6 +949,14 @@ void PrepareStringBattle(u16 stringId, u8 battler)
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_AbilityRaisesDefenderStat;
         SET_STATCHANGER(STAT_SPEED, 2, FALSE);  //buffed to 2 stage stat boost
+    }
+    else if (stringId == STRINGID_PKMNCUTSATTACKWITH && targetAbility == ABILITY_ANGER_POINT && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)) //For the trolls  :)
+    {
+        gBattlerAbility = gBattlerTarget;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_TargetsStatWasMaxedOut;
+        SET_STATCHANGER(STAT_ATK, MAX_STAT_STAGE - gBattleMons[gBattlerTarget].statStages[STAT_ATK], FALSE);
+
     }
 
     gActiveBattler = battler;
@@ -5315,6 +5326,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 case ABILITY_EROSION:
                     if (moveType == TYPE_ROCK)
                         effect = 1;
+                case ABILITY_JEWEL_METABOLISM:
+                    if (moveType == TYPE_ROCK)
+                        effect = 2, statId = STAT_DEF;
                 case ABILITY_MOTOR_DRIVE:
                     if (moveType == TYPE_ELECTRIC)
                         effect = 2, statId = STAT_SPEED;
@@ -8846,6 +8860,14 @@ u8 GetMoveTarget(u16 move, u8 setTarget) //maybe this is actually setting who ge
             {
                 if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_EROSION)
                     && GetBattlerAbility(targetBattler) != ABILITY_EROSION
+                    && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
+                    && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
+                {
+                    targetBattler ^= BIT_FLANK; //sets target
+                    RecordAbilityBattle(targetBattler, GetBattlerAbility(targetBattler));
+                }
+                else if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_JEWEL_METABOLISM)
+                    && GetBattlerAbility(targetBattler) != ABILITY_JEWEL_METABOLISM
                     && !(gBattleMons[targetBattler].status1 & STATUS1_ANY)
                     && !(gBattleMons[targetBattler].status2 & STATUS2_CONFUSION))
                 {

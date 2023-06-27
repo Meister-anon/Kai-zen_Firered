@@ -5245,7 +5245,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_HOWL] =
     {
-        .effect = EFFECT_ATTACK_UP,
+        .effect = EFFECT_ATTACK_UP_USER_ALLY, //gen 8 boosts attkck for whole side, nice.   //try put in double wilds should be funny
         .power = 0,
         .type = TYPE_SOUND,
         .accuracy = 0,
