@@ -4289,7 +4289,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_TYPHLOSION] =
     {
-        .baseHP = 88,
+        .baseHP = 78,
         .baseAttack = 84,
         .baseDefense = 78,
         .baseSpeed = 100,
@@ -8198,8 +8198,8 @@ const struct BaseStats gBaseStats[] =
     //its a live but techinically could have been dead.  prob need tweak its pokedex entry to fit
     [SPECIES_SABLEYE] =
     {
-        .baseHP = 60,
-        .baseAttack = 75,
+        .baseHP = 68,
+        .baseAttack = 85,
         .baseDefense = 75,
         .baseSpeed = 47,
         .baseSpAttack = 65,
@@ -8225,7 +8225,10 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },//plan boosting attack, potentially boost hp, but keep in line with small sneaky mon
-
+    //atk isn't too bad in itself thought to raise to close to gabite, since its mentioned as a competiter in its dex gabite is atk 90
+    //only reason its attack is mentioned is more because of its bad moves (lost payback in late gen) and relative frailty with low speed
+    //gabite has similar similar def/spdef but 20 more hp, 20 more atk and double speed...
+    //think will boost hp, keep atk where it is, there's no reason for to be so low hp, its not a pre evo
     [SPECIES_MAWILE] =
     {
         .baseHP = 65,
@@ -25098,7 +25101,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_SABLEYE_MEGA] =
     {
-        .baseHP = 50,
+        .baseHP = 60,
         .baseAttack = 85,
         .baseDefense = 125,
         .baseSpeed = 20,
