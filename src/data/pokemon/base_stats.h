@@ -8214,10 +8214,10 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_INFILTRATOR, ABILITY_ANALYTIC},
-            .abilityHidden = {ABILITY_NUISANCE, ABILITY_JEWEL_METABOLISM}, //need to figure out something solid for this think a rock absorb?
+            .abilityHidden = {ABILITY_NUISANCE, ABILITY_JEWEL_METABOLISM},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-    },
+    },//plan boosting attack, potentially boost hp, but keep in line with small sneaky mon
 
     [SPECIES_MAWILE] =
     {
