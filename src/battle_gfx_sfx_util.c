@@ -22,6 +22,7 @@ static void Task_ClearBitWhenBattleTableAnimDone(u8 taskId);
 static void Task_ClearBitWhenSpecialAnimDone(u8 taskId);
 static void ClearSpritesBattlerHealthboxAnimData(void);
 
+#define BATTLE_HEALTHBOX_DATA
 static const struct CompressedSpriteSheet sSpriteSheet_SinglesPlayerHealthbox =
 {
     .data = gHealthboxSinglesPlayerGfx,
@@ -853,6 +854,7 @@ static u8 GetMonHPBarLevel(struct Pokemon *mon)
     return GetHPBarLevel(hp, maxHP);
 }
 
+#define LOWHP_MUSIC_FUNCTION
 void HandleBattleLowHpMusicChange(void)
 {
     if (gMain.inBattle)

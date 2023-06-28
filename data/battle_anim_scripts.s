@@ -25265,14 +25265,14 @@ SnatchMoveSwapMonForSubstitute:: @ 81D64A7
 	waitforvisualfinish
 	goto SnatchMoveTrySwapToSubstituteEnd
 
-@ported from emerald make sure values match
+@ported from emerald make sure values match		vsonic??
 Special_CriticalCaptureBallThrow:
 	createvisualtask AnimTask_LoadBallGfx, 2
 	delay 0
 	playsewithpan SE_FALL, 0
 	createvisualtask AnimTask_ThrowBall, 2
-	createvisualtask AnimTask_IsBallBlockedByTrainer, 2
-	jumpreteq -1, BallThrowTrainerBlock
+	createvisualtask AnimTask_IsBallBlockedByTrainerOrDodged, 2
+	jumpargeq 7, -1, BallThrowTrainerBlock
 	goto BallThrowEnd
 
 Special_LevelUp:: @ 81D64B6

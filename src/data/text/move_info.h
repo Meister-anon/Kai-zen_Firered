@@ -1,5 +1,4 @@
 #include "global.h"
-#include "constants/moves.h"
 
 const u8 gMoveDescription_Pound[] = _("A physical attack\ndelivered with a\nlong tail or a\nforeleg, etc.");
 const u8 gMoveDescription_KarateChop[] = _("The foe is attacked\nwith a sharp chop.\nIt has a high\ncritical-hit ratio.");
@@ -2247,6 +2246,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
 
 
     //for implementing lower case move names
+//Checked noticed num moves in this array and uppercase array don't match,
 const u8 gLowerMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
 {
     [MOVE_NONE] = _("-"),

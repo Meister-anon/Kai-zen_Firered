@@ -1,10 +1,15 @@
 #ifndef GUARD_CONSTANTS_GLOBAL_H
 #define GUARD_CONSTANTS_GLOBAL_H
 
+
 #define ITEM_NAME_LENGTH 18
 #define POKEMON_NAME_LENGTH 12
 #define OT_NAME_LENGTH 7    //player name length
-#define MOVE_NAME_LENGTH 17 //longest move name is 17 
+#define MOVE_NAME_LENGTH 16 //longest move name is 16 
+
+#define TYPE_NAME_LENGTH 8
+#define ABILITY_NAME_LENGTH 16 //is 16 in emerald may look into raising - DONE
+#define ABILITY_DESCRIPTION_LENGTH 82   //two lines 41 chars per line
 
 #define VERSION_SAPPHIRE    1
 #define VERSION_RUBY        2

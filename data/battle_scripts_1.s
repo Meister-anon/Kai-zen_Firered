@@ -1299,13 +1299,13 @@ BattleScript_Teatimevul:
 	moveendcase MOVE_END_CLEAR_BITS
 	goto BattleScript_MoveEnd
 BattleScript_Teatimesorb:
-	call BattleScript_AbilityPopUpTarget
+	@ call BattleScript_AbilityPopUpTarget
 	moveendto MOVE_END_NEXT_TARGET
 	jumpifnexttargetvalid BattleScript_TeatimeLoop
 	moveendcase MOVE_END_CLEAR_BITS
 	goto BattleScript_MoveEnd
 BattleScript_Teatimerod:
-	call BattleScript_AbilityPopUpTarget
+	@ call BattleScript_AbilityPopUpTarget
 	playstatchangeanimation BS_TARGET, BIT_SPATK, STAT_CHANGE_STAT_BY_TWO
 	setstatchanger STAT_SPATK, 1, FALSE
 	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_TeatimeBuffer
@@ -1317,7 +1317,7 @@ BattleScript_Teatimerod:
 	moveendcase MOVE_END_CLEAR_BITS
 	goto BattleScript_MoveEnd
 BattleScript_Teatimemotor:
-	call BattleScript_AbilityPopUpTarget
+	@ call BattleScript_AbilityPopUpTarget
 	playstatchangeanimation BS_TARGET, BIT_SPEED, STAT_CHANGE_STAT_BY_TWO
 	setstatchanger STAT_SPEED, 1, FALSE
 	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_TeatimeBuffer
@@ -6073,9 +6073,9 @@ BattleScript_FaintedMonEnd::
 	end2
 
 BattleScript_LinkBattleHandleFaint::
-	openpartyscreen BS_UNKNOWN_5, .+4
+	openpartyscreen BS_FAINTED_LINK_MULTIPLE_1, .+4
 	switchhandleorder BS_FAINTED, 0
-	openpartyscreen BS_UNKNOWN_6, BattleScript_LinkBattleFaintedMonEnd
+	openpartyscreen BS_FAINTED_LINK_MULTIPLE_2, BattleScript_LinkBattleFaintedMonEnd
 	switchhandleorder BS_FAINTED, 0
 BattleScript_LinkBattleFaintedMonLoop::
 	switchhandleorder BS_FAINTED, 2
@@ -6514,13 +6514,13 @@ BattleScript_WeaknessPolicyAtk:
 	setstatchanger STAT_ATK, 2, FALSE
 	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_WeaknessPolicySpAtk
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_WeaknessPolicySpAtk
-	printstring STRINGID_USINGITEMSTATOFPKMNROSE
+	printstring STRINGID_USINGXTHEYOFZN
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_WeaknessPolicySpAtk:
 	setstatchanger STAT_SPATK, 2, FALSE
 	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_WeaknessPolicyRemoveItem
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_WeaknessPolicyRemoveItem
-	printstring STRINGID_USINGITEMSTATOFPKMNROSE
+	printstring STRINGID_USINGXTHEYOFZN
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_WeaknessPolicyRemoveItem:
 	removeitem BS_TARGET
@@ -6536,7 +6536,7 @@ BattleScript_TargetItemStatRaise::
 	setgraphicalstatchangevalues
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	waitanimation
-	printstring STRINGID_USINGITEMSTATOFPKMNROSE
+	printstring STRINGID_USINGXTHEYOFZN
 	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_TARGET
 BattleScript_TargetItemStatRaiseRemoveItemRet:
@@ -6551,7 +6551,7 @@ BattleScript_AttackerItemStatRaise::
 	setgraphicalstatchangevalues
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	waitanimation
-	printstring STRINGID_USINGITEMSTATOFPKMNROSE
+	printstring STRINGID_USINGXTHEYOFZN
 	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_ATTACKER
 BattleScript_AttackerItemStatRaiseRet:
@@ -7069,7 +7069,7 @@ BattleScript_OneHitKOMsg::
 
 BattleScript_SturdiedMsg::
 	pause B_WAIT_TIME_SHORTEST
-	@call BattleScript_AbilityPopUpTarget
+	@ call BattleScript_AbilityPopUpTarget
 	printstring STRINGID_ENDUREDSTURDY
 	waitmessage B_WAIT_TIME_LONG
 	return
@@ -8239,7 +8239,7 @@ BattleScript_DarkTypePreventsPrankster::
 
 BattleScript_TargetFormChangeWithString::
 	@pause 5
-	@call BattleScript_AbilityPopUpTarget
+	@ call BattleScript_AbilityPopUpTarget
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
 	handleformchange BS_TARGET, 0

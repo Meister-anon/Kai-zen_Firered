@@ -1,12 +1,21 @@
 #ifndef GUARD_BATTLE_MAIN_H
 #define GUARD_BATTLE_MAIN_H
 
-#include "constants/abilities.h"
+#include "global.h"
+
 
 struct TrainerMoney
 {
     u8 classId;
     u8 value;
+};
+
+// for Natural Gift and Fling
+struct TypePower
+{
+    u8 type;
+    u8 power;
+    u16 effect;
 };
 
 struct MultiBattlePokemonTx
@@ -22,10 +31,6 @@ struct MultiBattlePokemonTx
     /*0x1C*/ u8 gender;
     /*0x1D*/ u8 language;
 };
-
-#define TYPE_NAME_LENGTH 8
-#define ABILITY_NAME_LENGTH 16 //is 16 in emerald may look into raising - DONE
-#define ABILITY_DESCRIPTION_LENGTH 82   //two lines 41 chars per line
 
 //I feel so stupid I literally never knew this was here... vsonic IMPORTANT
 //ok so each line in the table is broken up into 3 parts
@@ -51,21 +56,13 @@ struct MultiBattlePokemonTx
 #define TYPE_MUL_SUPER_EFFECTIVE    20
 
 // special type table Ids
-#define TYPE_FORESIGHT  0xFE
+#define TYPE_FORESIGHT  0xFE    //dumb setup to make foresight work, replace with type_mul change, in type calc
 #define TYPE_ENDTABLE   0xFF
 
 // defines for the 'DoBounceEffect' function
 #define BOUNCE_MON          0x0
 #define BOUNCE_HEALTHBOX    0x1
 
-
-// for Natural Gift and Fling
-struct TypePower
-{
-    u8 type;
-    u8 power;
-    u16 effect;
-};
 
 extern const struct SpriteTemplate gUnknownDebugSprite;
 extern const struct OamData gOamData_BattlerOpponent;
@@ -80,10 +77,8 @@ extern const u8 gStatusConditionString_ConfusionJpn[8];
 extern const u8 gStatusConditionString_LoveJpn[8];
 extern const u8 *const gStatusConditionStringsTable[7][2];
 extern const u16 gTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES];
-extern const u8 gTypeEffectiveness[417]; //fairy addition
+extern const u8 gTypeEffectiveness[417]; //normal type array
 extern const struct TrainerMoney gTrainerMoneyTable[];
-extern const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT];
-extern const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1];
 extern const struct TypePower gNaturalGiftTable[];
 
 void CB2_InitBattle(void);

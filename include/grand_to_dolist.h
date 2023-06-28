@@ -411,6 +411,7 @@ goto TRAINER_DATA_STRUCTS
 
 goto B_ANIM_CONSTANTS //for porting animation, need set constant for recognition in battlescript
 
+goto SRC_DATA_FILES //IMPORTANT all .h files in src/data folder MUST be included in data.c here or can't be found
 /* realized logic for damage on air targets was incomplete 
 * correcting setup - DONE
 * 
@@ -1957,7 +1958,9 @@ goto PARTYMENU_GRAPHICS
 * 
 */ 
 
+goto LOWHP_MUSIC_FUNCTION
 
+goto BATTLE_HEALTHBOX_DATA  //seem to be true source of grahpics
 goto HEALTHBOX_LOGIC	//health box for battle, enemy values at bottom of function, need add exp bar/values to that section.
 goto EVOLUTION_LOGIC
 /*  want battle evolution for player and opponenet for enemy need to work out how to give them exp.

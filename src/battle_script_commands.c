@@ -1384,6 +1384,7 @@ static void atk00_attackcanceler(void)
 
     if (gProtectStructs[gBattlerTarget].bounceMove  //target has magic coat effect
         && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED
+        && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR   //since this is a screen-like, needed add infiltrator bypass
         && !gProtectStructs[gBattlerAttacker].usesBouncedMove) //move attacker is using is not one already bounced
     {
         PressurePPLose(gBattlerAttacker, gBattlerTarget, MOVE_MAGIC_COAT);

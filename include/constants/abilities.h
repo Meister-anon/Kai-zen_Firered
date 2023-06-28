@@ -326,7 +326,6 @@
 #define ABILITY_POISONED_LEGACY 303 // poison pinch ability, for poipoile as its technically a starter,  inspired by marriagetoxin manga, boost poison in a pinch and if poison target will be bad poison consider set to turn 2 so it does full dmg 1st turn
 #define ABILITY_JEWEL_METABOLISM 304 //can't think of a name right now, this is just a sableye rock absorb based on dex entry, hmm maybe do more boost damage to rock types? ok, instead of raising hp, boosts def as eaten rocks form more crystals ok i like that
 
-#define ABILITIES_COUNT 305 //
+#define ABILITIES_COUNT 305 //   ability count is last ability number + 1 since we have to count ability 0
 
-#endif  // GUARD_CONSTANTS_ABILITIES_H  ability count is last ability number + 1 since we have to count ability 0
-
+#endif  // GUARD_CONSTANTS_ABILITIES_H

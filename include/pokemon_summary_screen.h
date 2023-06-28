@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-extern const u8 *const gMoveDescriptionPointers[];  //DOESTN' display/link with move description file yet, assuming just because ide hasn't caught up yet
+extern const u8 *const gMoveDescriptionPointers[];
 extern const u8 *const gNatureNamePointers[];
 
 void ShowSelectMovePokemonSummaryScreen(struct Pokemon *, u8, u8, MainCallback, u16);

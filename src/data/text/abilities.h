@@ -1,3 +1,5 @@
+#include "global.h"
+
 static const u8 sNoneDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("No special ability.");
 static const u8 sStenchDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Helps repel wild POKéMON and trainers.\nAll battlers have a chance to flinch.");
 static const u8 sDrizzleDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Summons rain in battle.");
@@ -14,7 +16,7 @@ static const u8 sObliviousDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Preve
 static const u8 sCloudNineDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Negates weather effects.");
 static const u8 sCompoundEyesDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Raises accuracy.");
 static const u8 sInsomniaDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents sleep.");
-static const u8 sColorChangeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Changes secondary type\n to match last move hit by.");
+static const u8 sColorChangeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Changes secondary type\nto match last move hit by.");
 static const u8 sImmunityDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents poisoning.");
 static const u8 sFlashFireDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Draws in and powers up fire moves");
 static const u8 sShieldDustDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents added effects.");
@@ -292,7 +294,7 @@ static const u8 sFeatherJacketDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("P
 static const u8 sPoisonedLegacyDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups POISON moves in a pinch.\nGuarantees bad poison if move can poison.");
 static const u8 sJewelMetabolismDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Consumes Rock-type moves.\nAlso raises Defense one stage.");
 //checked in fire red limit is 40 chars per line, changing description length to 80/    changed to 82 max
-//based on suction cups I kinda have more space?  so more like 42 per line?
+//based on suction cups I kinda have more space?  so more like 41 per line?
 //template - top line: literal effect\n bottom line: flavor text    -flipped usually put flavor text on top, effect on bottom
 //if you can't cleanly do a mix of both. over the full space
 
@@ -904,7 +906,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_EROSION] =_("EROSION"),
     [ABILITY_LIQUID_METAL] =_("LIQUID METAL"),
     [ABILITY_MUSCLE_MAGIC] =_("MUSCLE MAGIC"),
-    [ABILITY_TIGER_CUB] =_("TIGER-CUB"),
+    [ABILITY_TIGER_CUB] =_("TIGER CUB"),
     [ABILITY_TIGER_MOM] =_("TIGER MOM"),
     [ABILITY_DARK_DEAL] =_("DARK DEAL"),
     [ABILITY_CORRUPTION] =_("CORRUPTION"),

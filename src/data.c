@@ -7,6 +7,7 @@
 #include "constants/moves.h"
 #include "constants/battle_ai.h"
 #include "constants/trainer_classes.h"
+//#include "constants/trainers.h"  //used in place of trainer class in updated pret
 
 const struct SpriteFrameImage gSpriteImages_BattlerPlayerLeft[] =
 {
@@ -277,6 +278,8 @@ const union AnimCmd *const gSpriteAnimTable_82349BC[] =
 #define TRAINER_SPRITE(trainerPic, sprite, size) [TRAINER_PIC_##trainerPic] = {sprite, size, TRAINER_PIC_##trainerPic}
 #define TRAINER_PAL(trainerPic, pal) [TRAINER_PIC_##trainerPic] = {pal, TRAINER_PIC_##trainerPic}
 
+#define SRC_DATA_FILES
+
 #include "data/pokemon_graphics/front_pic_coordinates.h"
 #include "data/pokemon_graphics/front_pic_table.h"
 #include "data/pokemon_graphics/back_pic_coordinates.h"
@@ -296,4 +299,4 @@ const union AnimCmd *const gSpriteAnimTable_82349BC[] =
 #include "data/trainers.h"
 #include "data/text/species_names.h"
 #include "data/text/move_info.h"    //may change to data //consolidation of move data is names & descriptions
-//#include "data/text/L_case_movenames.h" //important believe swap comment on this pair if I decide to switch to lower case move names
+#include "data/text/abilities.h"  //so stupid this was the problem AGAIN

@@ -4,11 +4,12 @@
 #include "config.h"
 #include "gba/gba.h"
 #include <string.h>
-#include "constants/global.h"
+#include "constants/global.h"   //used to link most/many constants
 #include "constants/flags.h"
 #include "constants/vars.h"
 #include "constants/species.h"
 #include "constants/moves.h"
+#include "constants/abilities.h"
 #include "field_specials.h"
 
 /*code added in this commit was to upgrade ld_script to sync wild cards
@@ -100,6 +101,14 @@
 #define abs(x) (((x) < 0) ? -(x) : (x))
 #endif
 
+// Used in cases where division by 0 can occur in the retail version.
+// Avoids invalid opcodes on some emulators, and the otherwise UB.
+#ifdef UBFIX
+#define SAFE_DIV(a, b) ((b) ? (a) / (b) : 0)
+#else
+#define SAFE_DIV(a, b) ((a) / (b))
+#endif
+
 // There are many quirks in the source code which have overarching behavioral differences from
 // a number of other files. For example, diploma.c seems to declare rodata before each use while
 // other files declare out of order and must be at the beginning. There are also a number of
@@ -148,7 +157,7 @@ extern u8 gStringVar4[];
 #define NARG_8_(_, a, b, c, d, e, f, g, h, N, ...) N
 
 #define CAT(a, b) CAT_(a, b)
-#define CAT_(a, b) a ## b*/
+#define CAT_(a, b) a ## b*/  //logic for prete emeralds new cmd argms stuff its confusing to read so i dont like it
 
 // This produces an error at compile-time if expr is zero.
 // It looks like file.c:line: size of array `id' is negative
@@ -194,7 +203,7 @@ struct UCoords32
     u32 y;
 };
 
-struct Time
+struct Time //want month seasons potentialy add here
 {
     /*0x00*/ s16 days;
     /*0x02*/ s8 hours;
