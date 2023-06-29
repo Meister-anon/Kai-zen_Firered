@@ -238,6 +238,7 @@
 #define VARIOUS_TRY_END_STENCH						153	
 //#define VARIOUS_RESET_FOREWARN_ANTICIPATION_BITS	154		pretty sure don't need doing different way.
 #define VARIOUS_JUMP_IF_EMERGENCY_EXITED			154		//default implement, plan to just use for wimp out
+#define VARIOUS_CHECK_PARENTAL_BOND_COUNTER			155
 
 // atk80, dmg manipulation
 #define NEGATIVE_DMG					0

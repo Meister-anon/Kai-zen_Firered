@@ -147,10 +147,11 @@
 	.4byte \ptr
 	.endm
 
+	@FIXED think needed to make 4byte instead of 2
 	.macro jumpifsideaffecting battler:req, sidestatus:req, ptr:req
 	.byte 0x1f
 	.byte \battler
-	.2byte \sidestatus
+	.4byte \sidestatus
 	.4byte \ptr
 	.endm
 
@@ -1700,6 +1701,12 @@
 	.macro jumpifnotberry battler:req, ptr:req
 	various \battler, VARIOUS_JUMP_IF_NOT_BERRY
 	.4byte \ptr
+	.endm
+
+	.macro checkparentalbondcounter counter:req, jumpInstr:req
+	various BS_ATTACKER, VARIOUS_CHECK_PARENTAL_BOND_COUNTER
+	.byte \counter
+	.4byte \jumpInstr
 	.endm
 
 	.macro jumpifroarfails ptr:req

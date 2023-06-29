@@ -5652,7 +5652,7 @@ static void atk1E_jumpifability(void)
 static void atk1F_jumpifsideaffecting(void)
 {
     u8 side;
-    u16 flags;
+    u32 flags;
     const u8 *jumpPtr;
 
     if (gBattlescriptCurrInstr[1] == BS_ATTACKER)
@@ -11822,6 +11822,18 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);   //think shoudl work
         else
             gBattlescriptCurrInstr += 7;
+        return;
+    }
+    case VARIOUS_CHECK_PARENTAL_BOND_COUNTER:  //vsonic
+    {
+        //VARIOUS_ARGS(u8 counter, const u8 * jumpInstr);
+        // Some effects should only happen on the first or second strike of Parental Bond,
+        // so a way to check this in battle scripts is useful
+        u8 counter = gBattlescriptCurrInstr[1]; //might work idk
+        if (gSpecialStatuses[gBattlerAttacker].parentalBondState == counter && gBattleMons[gBattlerTarget].hp != 0)
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
+        else
+            gBattlescriptCurrInstr += 7; //idk if right hate these various args stuff
         return;
     }
     } // End of switch (gBattlescriptCurrInstr[2])
