@@ -1,7 +1,7 @@
 #ifndef GUARD_BATTLE_H
 #define GUARD_BATTLE_H
 
-#include <limits.h>
+#include <limits.h>     //this is normal
 #include "global.h"
 #include "constants/battle.h"
 #include "battle_util.h"

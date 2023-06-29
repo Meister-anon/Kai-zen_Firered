@@ -199,9 +199,9 @@
 	.byte \battler
 	.endm
 
-	.macro atk24 ptr:req
+	.macro confirmlosingteam jumpInstr:req
 	.byte 0x24
-	.4byte \ptr
+	.4byte \jumpInstr
 	.endm
 
 	.macro movevaluescleanup
@@ -386,18 +386,18 @@
 	.byte 0x44
 	.endm
 
-	.macro playanimation battler:req, param1:req, param2:req
+	.macro playanimation battler:req, animType:req, arg=NULL
 	.byte 0x45
 	.byte \battler
-	.byte \param1
-	.4byte \param2
+	.byte \animType
+	.4byte \arg
 	.endm
 
-	.macro playanimation2 battler:req, param1:req, param2:req
+	.macro playanimation2 battler:req, animType:req, arg=NULL
 	.byte 0x46
 	.byte \battler
-	.4byte \param1
-	.4byte \param2
+	.4byte \animType
+	.4byte \arg
 	.endm
 
 	.macro setgraphicalstatchangevalues
@@ -2139,6 +2139,16 @@
 	.macro jumpifsafeguard jumpptr:req
 	jumpifability BS_ATTACKER, ABILITY_INFILTRATOR, 1f
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, \jumpptr
+	1:
+	.endm
+
+	.macro jumpifhealblock jumpptr:req
+	jumpifsideaffecting BS_TARGET, SIDE_STATUS_HEAL_BLOCK, \jumpptr
+	1:
+	.endm
+
+	.macro jumpifembargo jumpptr:req
+	jumpifsideaffecting BS_ATTACKER, SIDE_STATUS_EMBARGO, \jumpptr
 	1:
 	.endm
 

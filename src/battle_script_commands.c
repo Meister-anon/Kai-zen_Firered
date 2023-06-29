@@ -100,7 +100,7 @@ static void atk20_jumpifstat(void);
 static void atk21_jumpifstatus3condition(void);
 static void atk22_jumpbasedontype(void);
 static void atk23_getexp(void);
-static void atk24(void);
+static void atk24_confirmlosingteam(void);
 static void atk25_movevaluescleanup(void);
 static void atk26_setmultihit(void);
 static void atk27_decrementmultihit(void);
@@ -377,7 +377,7 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atk21_jumpifstatus3condition,
     atk22_jumpbasedontype,
     atk23_getexp,
-    atk24,
+    atk24_confirmlosingteam,
     atk25_movevaluescleanup,
     atk26_setmultihit,
     atk27_decrementmultihit,
@@ -5708,7 +5708,7 @@ static void atk20_jumpifstat(void)
         gBattlescriptCurrInstr += 9;
 }
 
-static void atk21_jumpifstatus3condition(void)
+static void atk21_jumpifstatus3condition(void) //breaks into jumpif, and jump if not
 {
     u32 flags;
     const u8 *jumpPtr;
@@ -6026,7 +6026,10 @@ static void atk23_getexp(void)
     }
 }
 
-static void atk24(void)
+// For battles that aren't BATTLE_TYPE_LINK or BATTLE_TYPE_RECORDED_LINK, the only thing this
+// command does is check whether the player has won/lost by totaling each team's HP. 
+//It then sets gBattleOutcome accordingly, if necessary.
+static void atk24_confirmlosingteam(void)
 {
     u16 HP_count = 0;
     s32 i;

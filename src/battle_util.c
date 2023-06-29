@@ -2081,6 +2081,7 @@ u8 DoBattlerEndTurnEffects(void)
                             if (gBattleMoveDamage == 0)
                                 gBattleMoveDamage = 1;
                             gBattleMoveDamage *= -1;
+                            RecordAbilityBattle(gBattlerAttacker, ABILITY_POISON_HEAL);
                             BattleScriptExecute(BattleScript_PoisonHealActivates);
                             ++effect;
                         }
@@ -2109,6 +2110,7 @@ u8 DoBattlerEndTurnEffects(void)
                             if (gBattleMoveDamage == 0)
                                 gBattleMoveDamage = 1;
                             gBattleMoveDamage *= -1;
+                            RecordAbilityBattle(gBattlerAttacker, ABILITY_POISON_HEAL);
                             BattleScriptExecute(BattleScript_PoisonHealActivates);
                             ++effect;
                         }
