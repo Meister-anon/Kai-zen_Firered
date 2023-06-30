@@ -404,6 +404,8 @@ With that I can use GetMondata ability num, if 0 set a random abilityNum between
 * 
 * don't forget redo z-move stuff i.e implement it, people like them so put in game, worried about breaking balance since I'm already making all mon good.
 * 
+* learned pp ups effect on moves is limited to increasing basae pp by 60%  5-8  1.6 boost 15 to 24 1.6 boost  10 to 16 1.6 boost.
+* 
 * General Notes end:
 */
 goto TRAINER_PARTY_DATA

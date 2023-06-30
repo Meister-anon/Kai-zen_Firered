@@ -184,12 +184,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_RAZOR_WIND] =
     {
-        #if B_UPDATED_MOVE_DATA >= GEN_4
-            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT,
-        #else
-            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
-        #endif
-        .effect = EFFECT_TWO_TURNS_ATTACK,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT,
+        .effect = EFFECT_TWO_TYPED_MOVE,
         .power = 80,
         .type = TYPE_NORMAL,
         .accuracy = 100,
@@ -198,6 +194,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .split = SPLIT_SPECIAL,
+        .argument = TYPE_FLYING,
     },
 
     [MOVE_SWORDS_DANCE] =
@@ -2218,17 +2215,18 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
 
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT | FLAG_SHEER_FORCE_BOOST,
-        .effect = EFFECT_TWO_TURNS_ATTACK,
+        .effect = EFFECT_SKY_ATTACK,
         .power = 140,
         .type = TYPE_FLYING,
         .accuracy = 90,
-        .pp = 5,
+        .pp = 10,
         .secondaryEffectChance = 30,
-        .target = MOVE_TARGET_SELECTED,
+        .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .split = SPLIT_PHYSICAL,
         .argument = MOVE_EFFECT_FLINCH,
-    },
+    }, //DO SOMething with this, thinking raise evasiveness one or two stages, may lower power since hitting both
+    //it stil needs to be strongest flying move though and brave bird is base 120 no charge
 
     [MOVE_TRANSFORM] =
     {
@@ -3890,7 +3888,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ROCK_SMASH] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_4
-            .power = 55,
+            .power = 50,
         #else
             .power = 20,
         #endif
@@ -8553,7 +8551,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_FREEZE_SHOCK] =
     {
-        .effect = EFFECT_TWO_TURNS_ATTACK,
+        .effect = EFFECT_TWO_TYPED_MOVE,
         .power = 140,
         .type = TYPE_ICE,
         .accuracy = 90,
@@ -8563,12 +8561,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
-        .argument = MOVE_EFFECT_PARALYSIS,
-    },
+        .argument = TYPE_ELECTRIC,
+    },//maintained paralysis chance
 
     [MOVE_ICE_BURN] =
     {
-        .effect = EFFECT_TWO_TURNS_ATTACK,
+        .effect = EFFECT_TWO_TYPED_MOVE,
         .power = 140,
         .type = TYPE_ICE,
         .accuracy = 90,
@@ -8578,8 +8576,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
-        .argument = MOVE_EFFECT_BURN,
-    },
+        .argument = TYPE_FIRE,
+    },//will still burn
 
     [MOVE_SNARL] =
     {

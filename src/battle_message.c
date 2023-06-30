@@ -779,6 +779,8 @@ static const u8 sText_PkmnAboutToBeAttackedByItsItem[] = _("{B_DEF_NAME_WITH_PRE
 static const u8 sText_CantEscapeBecauseOfCurrentMove[] = _("{B_DEF_NAME_WITH_PREFIX} can no longer escape\nbecause of {B_CURRENT_MOVE}!");
 static const u8 sText_PkmnTookTargetHigh[] = _("{B_ATK_NAME_WITH_PREFIX} took {B_DEF_NAME_WITH_PREFIX}\ninto the air!");
 static const u8 sText_TargetTooHeavy[] = _("But the target\nwas too heavy!");
+static const u8 sText_MeteorBeamCharging[] = _("{B_ATK_NAME_WITH_PREFIX} is overflowing\nwith space energy!");
+static const u8 sText_HeatingUpBeak[] = _("{B_ATK_NAME_WITH_PREFIX} started\nheating up its beak!");
 
 //default values
 static const u8 sText_YouThrowABallNowRight[] = _("You throw a BALL now, right?\nI… I'll do my best!");
@@ -1422,6 +1424,8 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_PKMNHURTSWITH2 - BATTLESTRINGS_TABLE_START]                = sText_PkmnHurtsWith2,
     [STRINGID_PKMNSABILITYPREVENTSABILITY - BATTLESTRINGS_TABLE_START]   = sText_PkmnsAbilityPreventsAbility,
     [STRINGID_STICKYHOLDABSORBEDITEM - BATTLESTRINGS_TABLE_START]        = sText_StickyHoldAbsorb,
+    [STRINGID_METEORBEAMCHARGING - BATTLESTRINGS_TABLE_START]            = sText_MeteorBeamCharging,
+    [STRINGID_HEATUPBEAK - BATTLESTRINGS_TABLE_START]                    = sText_HeatingUpBeak,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
@@ -1596,17 +1600,20 @@ const u16 gStatDownStringIds[] = {
 };
 
 const u16 gFirstTurnOfTwoStringIds[] = {
-    STRINGID_PKMNWHIPPEDWHIRLWIND,      // MOVE_RAZOR_WIND
-    STRINGID_PKMNTOOKSUNLIGHT,          // MOVE_SOLAR_BEAM
-    STRINGID_PKMNLOWEREDHEAD,           // MOVE_SKULL_BASH
-    STRINGID_PKMNISGLOWING,             // MOVE_SKY_ATTACK
-    STRINGID_PKMNFLEWHIGH,              // MOVE_FLY
-    STRINGID_PKMNDUGHOLE,               // MOVE_DIG
-    STRINGID_PKMNHIDUNDERWATER,         // MOVE_DIVE
-    STRINGID_PKMNSPRANGUP,              // MOVE_BOUNCE
-    STRINGID_VANISHEDINSTANTLY,         // MOVE_PHANTOM_FORCE
-    STRINGID_PKNMABSORBINGPOWER,        // MOVE_GEOMANCY
-    STRINGID_CLOAKEDINAFREEZINGLIGHT    // MOVE_FREEZE_SHOCK
+
+    [B_MSG_TURN1_RAZOR_WIND]    = STRINGID_PKMNWHIPPEDWHIRLWIND,     // MOVE_RAZOR_WIND
+    [B_MSG_TURN1_SOLAR_BEAM]    = STRINGID_PKMNTOOKSUNLIGHT,         // MOVE_SOLAR_BEAM
+    [B_MSG_TURN1_SKULL_BASH]    = STRINGID_PKMNLOWEREDHEAD,          // MOVE_SKULL_BASH
+    [B_MSG_TURN1_SKY_ATTACK]    = STRINGID_PKMNISGLOWING,            // MOVE_SKY_ATTACK
+    [B_MSG_TURN1_FLY]           = STRINGID_PKMNFLEWHIGH,             // MOVE_FLY
+    [B_MSG_TURN1_DIG]           = STRINGID_PKMNDUGHOLE,              // MOVE_DIG
+    [B_MSG_TURN1_DIVE]          = STRINGID_PKMNHIDUNDERWATER,        // MOVE_DIVE
+    [B_MSG_TURN1_BOUNCE]        = STRINGID_PKMNSPRANGUP,             // MOVE_BOUNCE
+    [B_MSG_TURN1_PHANTOM_FORCE] = STRINGID_VANISHEDINSTANTLY,        // MOVE_PHANTOM_FORCE
+    [B_MSG_TURN1_GEOMANCY]      = STRINGID_PKNMABSORBINGPOWER,       // MOVE_GEOMANCY
+    [B_MSG_TURN1_FREEZE_SHOCK]  = STRINGID_CLOAKEDINAFREEZINGLIGHT,  // MOVE_FREEZE_SHOCK
+    [B_MSG_TURN1_SKY_DROP]      = STRINGID_PKMNTOOKTARGETHIGH,       // MOVE_SKY_DROP
+    [B_MSG_TURN1_METEOR_BEAM]   = STRINGID_METEORBEAMCHARGING,       // MOVE_METEOR_BEAM
 };
 
 //used in wrap battlescript which is from move effect wrap which makes status wrap

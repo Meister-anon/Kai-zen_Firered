@@ -16630,13 +16630,13 @@ static void atk111_typebaseddmgboost(void)
             gDynamicBasePower = gBattleMoves[gCurrentMove].power;*/
 
         if (IS_BATTLER_OF_TYPE(gBattlerTarget,TYPE_ROCK))
-            gDynamicBasePower *= 2;
+            gDynamicBasePower = (gDynamicBasePower * 150) / 100;    //changed from 2x to 1.5 boost as forgot to factor in increased move power, would have been over 200 dmg
     }
     else if (gCurrentMove == MOVE_CUT)
     {
         gDynamicBasePower = gBattleMoves[gCurrentMove].power;
 
-        if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS))
+        if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS)) //effectively a 1.5x boost
             gDynamicBasePower *= 3;
     }
     ++gBattlescriptCurrInstr;
