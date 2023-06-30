@@ -859,6 +859,7 @@ gBattleAnims_StatusConditions::
 	.4byte Status_Freeze
 	.4byte Status_Curse
 	.4byte Status_Nightmare
+	.4byte Status_Powder
 	@.4byte Status_Spiritlock
 
 	@value go in 
@@ -18981,6 +18982,7 @@ AcidDrench:
 	delay 0x2
 	return
 
+@vsonic see how anim logic works, color than graphic?
 Move_POWDER::
 	loadspritegfx ANIM_TAG_HANDS_AND_FEET @black color
 	loadspritegfx ANIM_TAG_SPORE @powder
@@ -24552,6 +24554,10 @@ Status_Nightmare:: @ 81D5B63
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 14, 1
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
+	end
+
+	@defined not done, prob use spore effect from move
+Status_Powder:
 	end
 
 General_CastformChange:: @ 81D5B88

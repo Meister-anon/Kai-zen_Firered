@@ -2552,7 +2552,7 @@ BattleScript_HitFromAccCheck::
 BattleScript_HitFromAtkString::
 	ppreduce
 	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_MultiHitFromAtkString
-BattleScript_SkyDropHitFromAtkString
+BattleScript_SkyDropHitFromAtkString::
 	attackstring	
 BattleScript_HitFromCritCalc::
 	critcalc
@@ -7352,6 +7352,25 @@ BattleScript_DoSelfConfusionDmg::
 BattleScript_MoveUsedIsConfusedRet::
 	return
 
+BattleScript_MoveUsedPowder::
+	bicword gHitMarker, HITMARKER_NO_ATTACKSTRING | HITMARKER_ATTACKSTRING_PRINTED
+	attackstring
+	ppreduce
+	pause B_WAIT_TIME_SHORT
+	cancelmultiturnmoves BS_ATTACKER
+	status2animation BS_ATTACKER, STATUS2_POWDER
+	waitanimation
+	effectivenesssound
+	hitanimation BS_ATTACKER
+	waitstate
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	printstring STRINGID_POWDEREXPLODES
+	waitmessage B_WAIT_TIME_LONG
+	tryfaintmon BS_ATTACKER
+	goto BattleScript_MoveEnd
+
 BattleScript_MoveUsedIsConfusedNoMore::
 	printstring STRINGID_PKMNHEALEDCONFUSION
 	waitmessage 0x40
@@ -7820,7 +7839,7 @@ BattleScript_ReceiverActivates::
 	settracedability BS_ABILITY_BATTLER
 	return
 	
-BattleScript_AbilityHpHeal:	
+BattleScript_AbilityHpHeal::	
 	printstring STRINGID_PKMNSXRESTOREDHPALITTLE2
 	waitmessage 0x40
 	call BattleScript_HealAnimation
@@ -9370,7 +9389,7 @@ BattleScript_Healing::
 	playanimation BS_ATTACKER, B_ANIM_BASIC_HEAL, NULL
 	goto BattleScript_TruantHealing
 
-BattleScript_SleepHealing:
+BattleScript_SleepHealing::
 	printstring STRINGID_WELLRESTED
 	waitmessage 0x40
 	playanimation BS_ATTACKER, B_ANIM_BASIC_HEAL, NULL
