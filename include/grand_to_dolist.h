@@ -2231,7 +2231,7 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * 
 * since sonic boom is something usually done while flying fast, but the move sonic boom, isn't learned by flying types, and has more to do with sound than speed
 * 
-* fix ditto make imposter its only ability (or just but  speed stat so it can transform easier)
+* fix ditto make imposter its only ability (or just but  speed stat so it can transform easier) - change, with buffs to keep iv/ev make this its own ability counter-form 
 * change imposter to be more than just a free transform on switch.
 * instead make it transform into a random pokemon that resists the typeing of the target.
 * will be pretty complex, need to use emerald way to read type effectiveness 
@@ -2240,6 +2240,13 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * so would need to run that, and then transfer type set to that of to mon to look for from loop of all species.
 * its a void function so it doesn't return anything, so what I can do is, use the command to change dittos' type
 * on entrance, and then use a command to check battler type, and then loop the imposter function/command to use that type
+* 
+* The copied stats (Attack, Defense, Special Attack, Special Defense, Speed) include the final values (as seen on the summary screen)
+*  as well as the target's base stats, individual values, and effort values. (change this 
+* -so it copies all the enemies stats  but keeps its normal hp stat ( so 9/10 its just an inferior version)
+* also copies the enemies ivs and evs when most have 0, that seems horrible...  so change that so it keeps the users ivs and evs. - DONE? need test
+* 
+* will finish logic after pickup, as its essentially the same functionality, loop array of values and pick/assign one based on logic
 * 
 * comtinue adding notes...
 * array won't end well if size doesn't match random value, so do just like, starter selection random % nelems 

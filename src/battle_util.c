@@ -234,9 +234,12 @@ void PressurePPLose(u8 target, u8 attacker, u16 move)
         for (i = 0; i < MAX_MON_MOVES && gBattleMons[attacker].moves[i] != move; ++i);
         if (i != MAX_MON_MOVES)
         {
-            if (gBattleMons[attacker].pp[i])
+            if (gBattleMons[attacker].pp[i]) //current pp not 0
+            {
                 --gBattleMons[attacker].pp[i];
-            --gBattleMons[attacker].pp[i];
+                --gBattleMons[attacker].pp[i];
+            }
+                
             if (!(gBattleMons[attacker].status2 & STATUS2_TRANSFORMED)
                 && !(gDisableStructs[attacker].mimickedMoves & gBitTable[i]))
             {
@@ -4448,7 +4451,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     gBattlerAttacker = battler;
                     gBattlerTarget = BATTLE_OPPOSITE(battler);
-                    BattleScriptPushCursorAndCallback(BattleScript_ImposterActivates);
+                    BattleScriptPushCursorAndCallback(BattleScript_ImposterActivates); //uses transform bs command
                     ++effect;
                 }
                 break;

@@ -9888,7 +9888,7 @@ static void HandleTerrainMove(u32 moveEffect)
 }
 
 
-static void RecalcBattlerStats(u32 battler, struct Pokemon* mon)
+static void RecalcBattlerStats(u32 battler, struct Pokemon *mon)
 {
     CalculateMonStats(mon);
     gBattleMons[battler].level = GetMonData(mon, MON_DATA_LEVEL);
@@ -9902,6 +9902,23 @@ static void RecalcBattlerStats(u32 battler, struct Pokemon* mon)
     gBattleMons[battler].ability = GetMonAbility(mon);
     gBattleMons[battler].type1 = gBaseStats[gBattleMons[battler].species].type1;
     gBattleMons[battler].type2 = gBaseStats[gBattleMons[battler].species].type2;
+}
+
+static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon)
+{
+    CalculateMonStats(mon);
+    gBattleMons[battler].level = GetMonData(mon, MON_DATA_LEVEL);
+    gBattleMons[battler].hp = GetMonData(mon, MON_DATA_HP);
+    gBattleMons[battler].maxHP = GetMonData(mon, MON_DATA_MAX_HP);
+    gBattleMons[battler].attack = GetMonData(mon, MON_DATA_ATK);
+    gBattleMons[battler].defense = GetMonData(mon, MON_DATA_DEF);
+    gBattleMons[battler].speed = GetMonData(mon, MON_DATA_SPEED);
+    gBattleMons[battler].spAttack = GetMonData(mon, MON_DATA_SPATK);
+    gBattleMons[battler].spDefense = GetMonData(mon, MON_DATA_SPDEF);
+    //gBattleMons[battler].ability = GetMonAbility(mon);  //put directly in funtion using target
+    gBattleMons[battler].type1 = gBaseStats[gBattleMons[battler].species].type1;
+    gBattleMons[battler].type2 = gBaseStats[gBattleMons[battler].species].type2;
+    //set type 3 in function after this  function is used
 }
 
 u32 GetHighestStatId(u32 battlerId)
@@ -10440,7 +10457,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         return;
     case VARIOUS_HANDLE_MEGA_EVO:
-        if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT)
+        if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT) //vsonic need test
             mon = &gEnemyParty[gBattlerPartyIndexes[gActiveBattler]];
         else
             mon = &gPlayerParty[gBattlerPartyIndexes[gActiveBattler]];
@@ -13286,7 +13303,7 @@ static void atk9A_setfocusenergy(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atk9B_transformdataexecution(void)
+static void atk9B_transformdataexecution(void) //add ability check logic, make new ability counter_form, with different transform logic, to change to opposing type mon
 {
     gChosenMove = 0xFFFF;
     ++gBattlescriptCurrInstr;
@@ -13296,28 +13313,59 @@ static void atk9B_transformdataexecution(void)
         gMoveResultFlags |= MOVE_RESULT_FAILED;
         gBattleCommunication[MULTISTRING_CHOOSER] = 1;
     }
-    else
-    {
+    else //do transform  used for move transform and imposter,  need find portion that makes transform take ivs and evs of target, as well as explicitly only take base stats
+    {   //excluding hp
         s32 i;
         u8 *battleMonAttacker, *battleMonTarget;
+        struct Pokemon *mon;
+        u16 original_ability = GetBattlerAbility(gBattlerAttacker); //store transformer ability for differeing logic
 
         gBattleMons[gBattlerAttacker].status2 |= STATUS2_TRANSFORMED;
         gDisableStructs[gBattlerAttacker].disabledMove = MOVE_NONE;
         gDisableStructs[gBattlerAttacker].disableTimer = 0;
-        gDisableStructs[gBattlerAttacker].transformedMonPersonality = gBattleMons[gBattlerTarget].personality;
+        gDisableStructs[gBattlerAttacker].transformedMonPersonality = gBattleMons[gBattlerAttacker].personality; //changed I want to keep my own personality
         gDisableStructs[gBattlerAttacker].mimickedMoves = 0;
-        PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerTarget].species)
-        battleMonAttacker = (u8 *)(&gBattleMons[gBattlerAttacker]);
-        battleMonTarget = (u8 *)(&gBattleMons[gBattlerTarget]);
-        for (i = 0; i < offsetof(struct BattlePokemon, pp); ++i)
-            battleMonAttacker[i] = battleMonTarget[i];
-        for (i = 0; i < MAX_MON_MOVES; ++i)
+        //put new ditto hidden ability species search  here, set to target species
+        PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerTarget].species)//for counter-form search species to use and assign to this value so it will be target species
+            if (gCurrentMove == MOVE_TRANSFORM || original_ability == ABILITY_IMPOSTER)
+            {
+                battleMonAttacker = (u8*)(&gBattleMons[gBattlerAttacker]);
+                battleMonTarget = (u8*)(&gBattleMons[gBattlerTarget]); //v changed should make only copy move data
+                for (i = 0xC; i < offsetof(struct BattlePokemon, hpIV); ++i) //ok THIS is what tells it to explicitly take values excluding hp. it loops and copies values from struct down to hp.
+                    battleMonAttacker[i] = battleMonTarget[i]; //to get this to work would need change value from struct higher htan pp, and replace i = 0 with accurate byte value of starting value
+            }//NEEDED to separate as counter_form wouldn't be using battler data to find species/moves it would only be able to asign moves by levelup use trainerparty move selector function for that
+
+        if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT) //use this instead taken from mega logic
+            mon = &gEnemyParty[gBattlerPartyIndexes[gActiveBattler]];
+        else
+            mon = &gPlayerParty[gBattlerPartyIndexes[gActiveBattler]];
+
+        // Change species.
+        gBattleMons[gActiveBattler].species = gBattleMons[gBattlerTarget].species;
+
+        BtlController_EmitSetMonData(BUFFER_A, REQUEST_SPECIES_BATTLE, gBitTable[gBattlerPartyIndexes[gActiveBattler]], sizeof(gBattleMons[gActiveBattler].species), &gBattleMons[gActiveBattler].species);
+        MarkBattlerForControllerExec(gActiveBattler); //?? unsure if can use multiple emit sets here and it work correctly need check
+
+        // Change stats.
+        TransformRecalcBattlerStats(gActiveBattler, mon);
+
+        //do type 3 and ability slot set based on target
+        gBattleMons[gActiveBattler].type3 = gBattleMons[gBattlerTarget].type3;
+        gBattleMons[gActiveBattler].abilty =  GetBattlerAbility(gBattlerTarget);
+        
+        //put new hidden ability counter form move logic here
+        //if (original_ability == ABILITY_COUNTER_FORM)  // 
+        //GiveMonInitialMoveset(mon);
+
+
+        gBattleStruct->overwrittenAbilities[gBattlerAttacker] = GetBattlerAbility(gBattlerTarget);
+        for (i = 0; i < MAX_MON_MOVES; ++i) //logic for pp
         {
-            if (gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].pp < 5)
-                gBattleMons[gBattlerAttacker].pp[i] = gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].pp;
+            if (gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].pp < 5) //if low pp take pp from target - changed since its already copying moves 
+                gBattleMons[gBattlerAttacker].pp[i] = gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].pp; //to make use max pp I would prob just need to remove pp logic here all together?
             else
-                gBattleMons[gBattlerAttacker].pp[i] = 5;
-        }
+                gBattleMons[gBattlerAttacker].pp[i] = gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].pp;// 5; //pretty sure this is just to avoid issues as min pp is 5  vsonic
+        } //else sets all pp to 5,  wants to set as max pp
         gActiveBattler = gBattlerAttacker;
         BtlController_EmitResetActionMoveSelection(0, RESET_MOVE_SELECTION);
         MarkBattlerForControllerExec(gActiveBattler);

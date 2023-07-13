@@ -7368,7 +7368,7 @@ BattleScript_MoveUsedPowder::
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_POWDEREXPLODES
 	waitmessage B_WAIT_TIME_LONG
-	tryfaintmon BS_ATTACKER
+	tryfaintmon BS_ATTACKER, 0, NULL
 	goto BattleScript_MoveEnd
 
 BattleScript_MoveUsedIsConfusedNoMore::

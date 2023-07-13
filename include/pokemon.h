@@ -173,7 +173,7 @@ struct BattlePokemon
     /*0x16*/ u32 spAttackIV:5;
     /*0x17*/ u32 spDefenseIV:5;
     /*0x17*/ u32 isEgg:1;
-    /*0x17*/ u32 abilityNum:3; //need to check bit math make sure it goes up to 2, since hidden ability is num 2.  ok cant find equation I'll just make it 2.
+    /*0x17*/ u32 abilityNum:3;
     /*0x18*/ s8 statStages[BATTLE_STATS_NO];
     /*0x20*/ u16 ability;
     /*0x21*/ u8 type1;
