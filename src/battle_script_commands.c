@@ -56,6 +56,10 @@ static void DrawLevelUpWindow2(void);
 static bool8 sub_8026648(void);
 static void PutMonIconOnLvlUpBox(void);
 static void PutLevelAndGenderOnLvlUpBox(void);
+static bool32 HasAttackerFaintedTarget(void);
+static void HandleTerrainMove(u32 moveEffect);
+static void RecalcBattlerStats(u32 battler, struct Pokemon *mon);
+static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon);
 s16 atk_diff(void);
 s16 spatk_diff(void); //hopefully this works, and I don't actually need to define these in the .h,
 //since its not static
@@ -9907,7 +9911,7 @@ static void RecalcBattlerStats(u32 battler, struct Pokemon *mon)
 static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon)
 {
     CalculateMonStats(mon);
-    gBattleMons[battler].level = GetMonData(mon, MON_DATA_LEVEL);
+    //gBattleMons[battler].level = GetMonData(mon, MON_DATA_LEVEL); //since don't want to change level may remove this 
     gBattleMons[battler].hp = GetMonData(mon, MON_DATA_HP);
     gBattleMons[battler].maxHP = GetMonData(mon, MON_DATA_MAX_HP);
     gBattleMons[battler].attack = GetMonData(mon, MON_DATA_ATK);
