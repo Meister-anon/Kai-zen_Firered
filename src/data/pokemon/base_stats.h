@@ -3622,12 +3622,12 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 99,
         .baseSpDefense = 99,
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_GHOST,
+        .type2 = TYPE_GHOST, //the ghost type was a joke but eh guess I'll give it night shade
         .catchRate = 35,
         .expYield = 101,
         //.evYield_HP = 1,
        // #ifdef ITEM_EXPANSION
-           // //.item1 = ITEM_QUICK_POWDER,  vsoonic
+           // //.item1 = ITEM_QUICK_POWDER,  vsoonic  , is actually useless, with imposter, even more useless with my joke speed boost
         // #endif
         //.item2 = ITEM_METAL_POWDER,
         .genderRatio = MON_GENDERLESS,
@@ -3636,9 +3636,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_DITTO,
         .eggGroup2 = EGG_GROUP_DITTO,
-        .abilities = {ABILITY_LIMBER, ABILITY_NONE},
+        .abilities = {ABILITY_IMPOSTER, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_IMPOSTER, ABILITY_NONE},
+            .abilityHidden = {ABILITY_INVERSION, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,

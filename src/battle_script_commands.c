@@ -13330,14 +13330,18 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
         gDisableStructs[gBattlerAttacker].transformedMonPersonality = gBattleMons[gBattlerAttacker].personality; //changed I want to keep my own personality
         gDisableStructs[gBattlerAttacker].mimickedMoves = 0;
         //put new ditto hidden ability species search  here, set to target species
+        //if (original_ability == ABILITY_INVERSION)
+        //do species search
+        //gBattleMons[gBattlerTarget].species = found species
         PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerTarget].species)//for counter-form search species to use and assign to this value so it will be target species
             if (gCurrentMove == MOVE_TRANSFORM || original_ability == ABILITY_IMPOSTER)
             {
-                battleMonAttacker = (u8*)(&gBattleMons[gBattlerAttacker]);
-                battleMonTarget = (u8*)(&gBattleMons[gBattlerTarget]); //v changed should make only copy move data
-                for (i = 0xC; i < offsetof(struct BattlePokemon, hpIV); ++i) //ok THIS is what tells it to explicitly take values excluding hp. it loops and copies values from struct down to hp.
+                battleMonAttacker = (u8*)(&gBattleMons[gBattlerAttacker].moves);
+                battleMonTarget = (u8*)(&gBattleMons[gBattlerTarget].moves); //v changed should make only copy move data
+                for (i = offsetof(struct BattlePokemon, moves[0]); i < offsetof(struct BattlePokemon, moves[4]); ++i) //ok THIS is what tells it to explicitly take values excluding hp. it loops and copies values from struct down to hp.
                     battleMonAttacker[i] = battleMonTarget[i]; //to get this to work would need change value from struct higher htan pp, and replace i = 0 with accurate byte value of starting value
             }//NEEDED to separate as counter_form wouldn't be using battler data to find species/moves it would only be able to asign moves by levelup use trainerparty move selector function for that
+                //works sets moves correctly
 
         if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT) //use this instead taken from mega logic
             mon = &gEnemyParty[gBattlerPartyIndexes[gActiveBattler]];
@@ -13347,9 +13351,6 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
         // Change species.
         gBattleMons[gActiveBattler].species = gBattleMons[gBattlerTarget].species;
 
-        BtlController_EmitSetMonData(BUFFER_A, REQUEST_SPECIES_BATTLE, gBitTable[gBattlerPartyIndexes[gActiveBattler]], sizeof(gBattleMons[gActiveBattler].species), &gBattleMons[gActiveBattler].species);
-        MarkBattlerForControllerExec(gActiveBattler); //?? unsure if can use multiple emit sets here and it work correctly need check
-
         // Change stats.
         TransformRecalcBattlerStats(gActiveBattler, mon);
 
@@ -13358,17 +13359,14 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
         gBattleMons[gActiveBattler].abilty =  GetBattlerAbility(gBattlerTarget);
         
         //put new hidden ability counter form move logic here
-        //if (original_ability == ABILITY_COUNTER_FORM)  // 
-        //GiveMonInitialMoveset(mon);
+        if (original_ability == ABILITY_INVERSION) 
+            GiveMonInitialMoveset(mon);
 
 
         gBattleStruct->overwrittenAbilities[gBattlerAttacker] = GetBattlerAbility(gBattlerTarget);
         for (i = 0; i < MAX_MON_MOVES; ++i) //logic for pp
         {
-            if (gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].pp < 5) //if low pp take pp from target - changed since its already copying moves 
-                gBattleMons[gBattlerAttacker].pp[i] = gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].pp; //to make use max pp I would prob just need to remove pp logic here all together?
-            else
-                gBattleMons[gBattlerAttacker].pp[i] = gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].pp;// 5; //pretty sure this is just to avoid issues as min pp is 5  vsonic
+            gBattleMons[gBattlerAttacker].pp[i] = gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].pp;// 5; //pretty sure this is just to avoid issues as min pp is 5  vsonic
         } //else sets all pp to 5,  wants to set as max pp
         gActiveBattler = gBattlerAttacker;
         BtlController_EmitResetActionMoveSelection(0, RESET_MOVE_SELECTION);

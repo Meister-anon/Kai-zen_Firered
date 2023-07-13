@@ -2246,6 +2246,8 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * -so it copies all the enemies stats  but keeps its normal hp stat ( so 9/10 its just an inferior version)
 * also copies the enemies ivs and evs when most have 0, that seems horrible...  so change that so it keeps the users ivs and evs. - DONE? need test
 * 
+* better idea for ability name thanks to Anercomp,  rathr than counterorm ability name will be "Inversion"  pairs well with imposter
+* 
 * will finish logic after pickup, as its essentially the same functionality, loop array of values and pick/assign one based on logic
 * 
 * comtinue adding notes...

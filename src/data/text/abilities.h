@@ -293,6 +293,7 @@ static const u8 sAbsolutezeroDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Re
 static const u8 sFeatherJacketDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Protected from the cold\nby a jacket of downy feathers.");
 static const u8 sPoisonedLegacyDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups POISON moves in a pinch.\nGuarantees bad poison if move can poison.");
 static const u8 sJewelMetabolismDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Consumes Rock-type moves.\nAlso raises Defense one stage.");
+static const u8 sInversionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Transforms into a copy\nthe opposing type of the foe.");
 //checked in fire red limit is 40 chars per line, changing description length to 80/    changed to 82 max
 //based on suction cups I kinda have more space?  so more like 41 per line?
 //template - top line: literal effect\n bottom line: flavor text    -flipped usually put flavor text on top, effect on bottom
@@ -605,6 +606,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_FEATHER_JACKET] = sFeatherJacketDescription,
     [ABILITY_POISONED_LEGACY] = sPoisonedLegacyDescription,
     [ABILITY_JEWEL_METABOLISM] = sJewelMetabolismDescription,
+    [ABILITY_INVERSION] = sInversionDescription,
 };//last value can have comma
   //FOREWARN should work how I want,for ai make ability check to not use fakeout if have said ability,still need setup reactivation
 
@@ -919,5 +921,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ABSOLUTE_ZERO] =_("ABSOLUTE ZERO"),
     [ABILITY_FEATHER_JACKET] =_("FEATHER JACKET"),
     [ABILITY_POISONED_LEGACY] =_("POISONED LEGACY"),
-    [ABILITY_JEWEL_METABOLISM] =_("JEWEL METABOLISM")
+    [ABILITY_JEWEL_METABOLISM] =_("JEWEL METABOLISM"),
+    [ABILITY_INVERSION] =_("INVERSION")
 };//no comma for last value
