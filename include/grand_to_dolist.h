@@ -2245,10 +2245,35 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 *  as well as the target's base stats, individual values, and effort values. (change this 
 * -so it copies all the enemies stats  but keeps its normal hp stat ( so 9/10 its just an inferior version)
 * also copies the enemies ivs and evs when most have 0, that seems horrible...  so change that so it keeps the users ivs and evs. - DONE? need test
+* -appears wasn't working, not properly copying species/stats was just doing moves, didn't get target ability etc.
+* working on retooling function having pointer errors
 * 
 * better idea for ability name thanks to Anercomp,  rathr than counterorm ability name will be "Inversion"  pairs well with imposter
 * 
 * will finish logic after pickup, as its essentially the same functionality, loop array of values and pick/assign one based on logic
+* 
+* rock head buff like iron fist boost power head based moves  headbutt skull bash etc.
+* moves list: head charge, head smash, headbutt, headlong rush, iron head, zen headbutt, skull bash
+* 
+* //revampt skull  bash along with other "moves w charging turns" they're outdated
+* charging moves to change (that I haven't already)
+* geomancy- signature of xerneas, make single turn move, but give fail chance if used repeatedly like protect likes, but higher odds
+* 
+* meteor beam- do sp atk boost before atk, like I did  strength boost, then make work like hyperbeam you need to recharge after so 1 turn move
+* 
+* skull bash- defense boost into recoil move potentially raise def 2 stages, need check how recoil dmg is calculated see if it bypasses defense
+* recoil uses gbattlemovedamage and seems to bypass defense checks/damgage formula dmg vs defense
+* is done in dmg calc bs command specifically with the calculatebasedamage function from the pokemon.c
+* 
+* if would need to setup new recoiol effect that takes that percentage of dmg done
+* and lets it run through the calcbasedmg or some equivalent of the defense side of it.
+* with itself as the targeet, as runnign through same thing twice would just reaplly dmg buffs,
+* rather than do drop defense based drop off of the original dmg.
+* 
+* ok looks like need to make offshoot function put into setmoveeffet in recoil arguments
+* to take the calculated dmg and run it through defense checks, note 
+* should be typeless dmg that makes contact.  i.e if user has fluffy and did recoil 
+* as its a contact move recoil dmg taken would be reduced.  stuff like that
 * 
 * comtinue adding notes...
 * array won't end well if size doesn't match random value, so do just like, starter selection random % nelems 

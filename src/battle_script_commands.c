@@ -9910,7 +9910,13 @@ static void RecalcBattlerStats(u32 battler, struct Pokemon *mon)
 
 static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon)
 {
-    CalculateMonStats(mon);
+    u16 target; //mon is mon being transformed, 
+    if (GetBattlerSide(gBattlerTarget) == B_SIDE_OPPONENT)
+        target = &gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
+    else
+        target = &gPlayerParty[gBattlerPartyIndexes[gBattlerTarget]];
+
+    TransformedMonStats(mon);
     //gBattleMons[battler].level = GetMonData(mon, MON_DATA_LEVEL); //since don't want to change level may remove this 
     gBattleMons[battler].hp = GetMonData(mon, MON_DATA_HP);
     gBattleMons[battler].maxHP = GetMonData(mon, MON_DATA_MAX_HP);
@@ -9919,9 +9925,9 @@ static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon)
     gBattleMons[battler].speed = GetMonData(mon, MON_DATA_SPEED);
     gBattleMons[battler].spAttack = GetMonData(mon, MON_DATA_SPATK);
     gBattleMons[battler].spDefense = GetMonData(mon, MON_DATA_SPDEF);
-    //gBattleMons[battler].ability = GetMonAbility(mon);  //put directly in funtion using target
-    gBattleMons[battler].type1 = gBaseStats[gBattleMons[battler].species].type1;
-    gBattleMons[battler].type2 = gBaseStats[gBattleMons[battler].species].type2;
+    gBattleMons[battler].ability = GetMonAbility(target);  //think work?
+    gBattleMons[battler].type1 = gBaseStats[gBattleMons[gBattlerTarget].species].type1;
+    gBattleMons[battler].type2 = gBaseStats[gBattleMons[gBattlerTarget].species].type2;
     //set type 3 in function after this  function is used
 }
 
@@ -13344,7 +13350,7 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
                 //works sets moves correctly
 
         if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT) //use this instead taken from mega logic
-            mon = &gEnemyParty[gBattlerPartyIndexes[gActiveBattler]];
+            mon = &gEnemyParty[gBattlerPartyIndexes[gActiveBattler]];   //mon being transformed
         else
             mon = &gPlayerParty[gBattlerPartyIndexes[gActiveBattler]];
 
@@ -13356,7 +13362,7 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
 
         //do type 3 and ability slot set based on target
         gBattleMons[gActiveBattler].type3 = gBattleMons[gBattlerTarget].type3;
-        gBattleMons[gActiveBattler].abilty =  GetBattlerAbility(gBattlerTarget);
+        //gBattleMons[gActiveBattler].abilty =  GetBattlerAbility(gBattlerTarget);
         
         //put new hidden ability counter form move logic here
         if (original_ability == ABILITY_INVERSION) 
