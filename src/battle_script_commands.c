@@ -9912,12 +9912,13 @@ static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon)
 {
     u16 target; //mon is mon being transformed, 
     if (GetBattlerSide(gBattlerTarget) == B_SIDE_OPPONENT)
-        target = &gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
+        target = GetMonAbility(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]]);
     else
-        target = &gPlayerParty[gBattlerPartyIndexes[gBattlerTarget]];
+        target = GetMonAbility(&gPlayerParty[gBattlerPartyIndexes[gBattlerTarget]]);
 
-    TransformedMonStats(mon);
+    TransformedMonStats(mon);  ///set stat based on species, dbl check it sets mondata, below assigns it for battle
     //gBattleMons[battler].level = GetMonData(mon, MON_DATA_LEVEL); //since don't want to change level may remove this 
+    //thinking set values to what I want in above function do I even need these?  possibly ressting stat, remove or put inside other function
     gBattleMons[battler].hp = GetMonData(mon, MON_DATA_HP);
     gBattleMons[battler].maxHP = GetMonData(mon, MON_DATA_MAX_HP);
     gBattleMons[battler].attack = GetMonData(mon, MON_DATA_ATK);
@@ -9925,7 +9926,7 @@ static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon)
     gBattleMons[battler].speed = GetMonData(mon, MON_DATA_SPEED);
     gBattleMons[battler].spAttack = GetMonData(mon, MON_DATA_SPATK);
     gBattleMons[battler].spDefense = GetMonData(mon, MON_DATA_SPDEF);
-    gBattleMons[battler].ability = GetMonAbility(target);  //think work?
+    gBattleMons[battler].ability = target;  //think work? yup works
     gBattleMons[battler].type1 = gBaseStats[gBattleMons[gBattlerTarget].species].type1;
     gBattleMons[battler].type2 = gBaseStats[gBattleMons[gBattlerTarget].species].type2;
     //set type 3 in function after this  function is used
@@ -13349,24 +13350,22 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
             }//NEEDED to separate as counter_form wouldn't be using battler data to find species/moves it would only be able to asign moves by levelup use trainerparty move selector function for that
                 //works sets moves correctly
 
-        if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT) //use this instead taken from mega logic
-            mon = &gEnemyParty[gBattlerPartyIndexes[gActiveBattler]];   //mon being transformed
+        if (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT) //use this instead taken from mega logic
+            mon = &gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker]];  //mon being transformed
         else
-            mon = &gPlayerParty[gBattlerPartyIndexes[gActiveBattler]];
+            mon = &gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]];
 
-        // Change species.
-        gBattleMons[gActiveBattler].species = gBattleMons[gBattlerTarget].species;
 
-        // Change stats.
-        TransformRecalcBattlerStats(gActiveBattler, mon);
+        // Change stats & species
+        TransformRecalcBattlerStats(gBattlerAttacker, mon); //hp and stat changs are working need to take healthbox/hp update from mega evo logic and put belowo
 
         //do type 3 and ability slot set based on target
-        gBattleMons[gActiveBattler].type3 = gBattleMons[gBattlerTarget].type3;
+        gBattleMons[gBattlerAttacker].type3 = gBattleMons[gBattlerTarget].type3;
         //gBattleMons[gActiveBattler].abilty =  GetBattlerAbility(gBattlerTarget);
         
         //put new hidden ability counter form move logic here
         if (original_ability == ABILITY_INVERSION) 
-            GiveMonInitialMoveset(mon);
+            GiveMonInitialMoveset(mon);  //already changed species of mon so this alone may be enough?
 
 
         gBattleStruct->overwrittenAbilities[gBattlerAttacker] = GetBattlerAbility(gBattlerTarget);

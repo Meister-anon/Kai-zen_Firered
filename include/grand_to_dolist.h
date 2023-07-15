@@ -348,6 +348,10 @@ Yeah that should work
 * -you can change nature, change ability, but ivs will be hard locked to the individual mon.-
 * -with my ev change you'll be able to overcome bad ivs anyway, and ivs are stronger to make more of a difference as well.-
 * 
+* -(checked my iv change compared to base game evs, effect in the stat formula. 
+* -(base game evs add 63 per stat for 2, my iv change gives ivs potential for higher stat
+* -(increase than fully ev training mon, so you can get really cool stuff now tryign to iv hunt)
+* 
 * think I will treat rival starter same as roamer, where the iv data is intentionally 
 * -also need roll back the gen 3 change where roaming mon can run away while asleep gonna assume that's a bug in the code
 * 

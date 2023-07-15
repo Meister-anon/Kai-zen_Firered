@@ -3071,11 +3071,7 @@ void BoxMonToMon(struct BoxPokemon *src, struct Pokemon *dest)
 void TransformedMonStats(struct Pokemon *mon)
 {
     u16 targetSpecies; //mon is mon being transformed, 
-    if (GetBattlerSide(gBattlerTarget) == B_SIDE_OPPONENT)
-        targetSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SPECIES);
-    else
-        targetSpecies = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SPECIES);
-
+    
     s32 oldMaxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
     s32 currentHP = GetMonData(mon, MON_DATA_HP, NULL);
     s32 hpIV = GetMonData(mon, MON_DATA_HP_IV, NULL);
@@ -3093,6 +3089,13 @@ void TransformedMonStats(struct Pokemon *mon)
     u16 species = targetSpecies;
     s32 level = GetLevelFromMonExp(mon);
     s32 newMaxHP;
+
+    if (GetBattlerSide(gBattlerTarget) == B_SIDE_OPPONENT)
+        targetSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SPECIES, NULL);
+    else
+        targetSpecies = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SPECIES, NULL);
+
+    species = targetSpecies;
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
 
