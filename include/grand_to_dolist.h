@@ -261,6 +261,22 @@ Thanks to both of you.
 Kurausukun — Today at 9:17 PM
 Yeah that should work
 
+
+Meister_anon — Yesterday at 8:55 PM
+yo archie think you can help me with something,
+I'm workign on an effect and I think I'm misunderstanding a line, it seems to be used elsewhere about exactly how I have it, and I think I've already fixed any pointer issus I had
+&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
+
+
+does this mean the target is the enemy, or does it mean the mon the enemy is targetting?
+Archie — Yesterday at 9:17 PM
+This code seems like it should only be running when you are targeting an enemy mon
+gBattlerTarget is the mon currently being targeted by a move
+Indexing that in gBattlerPartyIndexes pulls out the position in the party that Pokemon is in
+Then it's indexed in gEnemyParty which is the array holding all the structs of the enemy mons
+So it's just pulling out the enemy mon struct for the mon that is being targeted
+But it's only for enemy mons, to do the same with the player you would just swap with gPlayerParty
+
 */
 
 //Learned from Kurausukun can see ewram and memory use by checking pokefire.map file I have 0x5800 or so ewram left
@@ -2253,6 +2269,22 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * working on retooling function having pointer errors
 * 
 * better idea for ability name thanks to Anercomp,  rathr than counterorm ability name will be "Inversion"  pairs well with imposter
+*  base transform/imposoter logic seems to work, needs update hp box to show changed hp
+*  also using setmondata seems to cause an issue where stat changes from transforming persist post battle
+* I think the fix would be to make new "calcstat" define for my transform function and rather than
+* doing a setmondata, I use getmondata and assign it the calc value  
+* so new  calcstat ends with getmondata blah blah atk stat) = n
+* 
+* doing that I think I'd need to move the battler stat assingment into same function actually can just directy set battler stat with calcstat function
+* should be much simpler
+* 
+* but doing setmondata makes the values show up in summaryscreen which I like, so I may just
+* put a recalc in battle_main for battle end/switch out and or faint to reset stat valus for transformed mon, well can just do general stat recalc
+* for most it would result in a net 0 change/do nothing, but for transformed mon etc. it would revert back to normal stats
+* see about doing ability same way so it shows up in summary screen.
+* 
+* may also do for trace and other ability swap effects, since doing set data to ability rather than just swapping battleer ability seems to make it
+* visible in summary screen would be great qol.
 * 
 * will finish logic after pickup, as its essentially the same functionality, loop array of values and pick/assign one based on logic
 * 
