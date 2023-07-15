@@ -13356,8 +13356,12 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
             mon = &gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]];
 
 
-        // Change stats & species
-        TransformRecalcBattlerStats(gBattlerAttacker, mon); //hp and stat changs are working need to take healthbox/hp update from mega evo logic and put belowo
+        // Change stats //stats based on target species but not actually changing my species, visual is handled already in another file, makes stat reversion easier w another calcstat
+        TransformRecalcBattlerStats(gBattlerAttacker, mon); //rather than using this to change species to populate sum screen with transferrd abilitynum,
+        //just go to summary screen and change line to read the targets abilitynum if current move transform or ability imposter/inversion
+        //need find way for one time change that resets on faint/switch/battle end, and that won't just keep changing every turn long as status2 is transformed/trace etc.
+
+        UpdateHealthboxAttribute(gHealthboxSpriteIds[gBattlerAttacker], mon, HEALTHBOX_ALL); //should update hp values in healthox
 
         //do type 3 and ability slot set based on target
         gBattleMons[gBattlerAttacker].type3 = gBattleMons[gBattlerTarget].type3;

@@ -2304,6 +2304,7 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
     ConvertIntToDecimalStringN(sMonSummaryScreen->summary.expToNextLevelStrBuf, expToNextLevel, STR_CONV_MODE_LEFT_ALIGN, 7);
     sMonSkillsPrinterXpos->toNextLevel = MACRO_8136350_0(sMonSummaryScreen->summary.expToNextLevelStrBuf);
 
+    //need set abilitydata values for transformation and for ability swap effects like trace  skillswap
     abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
     StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gAbilityNames[abilitydata]);
     StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf, gAbilityDescriptionPointers[abilitydata]);

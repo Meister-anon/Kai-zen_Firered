@@ -2985,11 +2985,7 @@ void CalculateMonStats(struct Pokemon *mon)
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
     
-  if (ability == ABILITY_DISPIRIT_GUARD)
-  {
-      s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 160) / 100) + (((hpIV * 200) - 36) / 100);
-       newMaxHP = (((n + hpEV / 4) * level) / 100) + level;
-  }  //not sure but may need to change else to else if, excluding these 2 abilities to ensure the hp functions are separate.
+    //not sure but may need to change else to else if, excluding these 2 abilities to ensure the hp functions are separate.
 
  // if (!((ability == ABILITY_WONDER_GUARD && species == SPECIES_SHEDINJA) | (ability == ABILITY_DISPIRIT_GUARD && species == SPECIES_SHEDINJA))) // changed to line up with other if(!(   statements
   //face palm the reason hp drop doesn't work is because I only have  that hp formula linked to shedinja w wonder guard...maybe /2022 end note
@@ -2999,22 +2995,16 @@ void CalculateMonStats(struct Pokemon *mon)
   //hopefully that's not an end turn trick
 
 
-   if (species == SPECIES_SHEDINJA) // thinnk I may need to change this since I don't want pokemon to look like they have max hp, I went them to look almost dead,
-   {    
-       if (ability == ABILITY_WONDER_GUARD) {
-           currentHP = 1;
-           newMaxHP = 1;
-       }
-       while (ability != ABILITY_WONDER_GUARD && ability != ABILITY_DISPIRIT_GUARD) //ok changing this to shedinja but not wonderguard somehow made dispirit guard shedinja invincible, which is fine for castform testing I guess.
-       { // changed above from or to and
-           s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 160) / 100) + (((hpIV * 200) - 36) / 100);
-          newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
-          currentHP = newMaxHP; // if done right this shoud allow shedinja hp to grow after swapping off ability. still working on hp drop
-       } // actually its probn ^ this equalizing that causes it.   //this also works if neutralizing gas is on field wait..
-       //ok nvm I can just use gastro acid in a teamfight wait nvm, that means it wouldn't be immune to damage...
-   }
-       //if correct, this should set wonder shedinja to maxhp 1,max hp will grow when he loses ability, and any other pokemon with wonder guard,
-    // will have max hp stay same, while current hp should drop to 1.
+    if (ability == ABILITY_WONDER_GUARD) {
+        currentHP = 1;
+        newMaxHP = 1;
+    }
+    
+    else if (ability == ABILITY_DISPIRIT_GUARD)
+    {
+        s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 160) / 100) + (((hpIV * 200) - 36) / 100);
+        newMaxHP = (((n + hpEV / 4) * level) / 100) + level;
+    }
 
    else
    {
@@ -3071,6 +3061,7 @@ void BoxMonToMon(struct BoxPokemon *src, struct Pokemon *dest)
 void TransformedMonStats(struct Pokemon *mon)
 {
     u16 targetSpecies; //mon is mon being transformed, 
+    struct Pokemon *party;
     
     s32 oldMaxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
     s32 currentHP = GetMonData(mon, MON_DATA_HP, NULL);
@@ -3089,6 +3080,7 @@ void TransformedMonStats(struct Pokemon *mon)
     u16 species = targetSpecies;
     s32 level = GetLevelFromMonExp(mon);
     s32 newMaxHP;
+    u16 ability = GetMonAbility(mon);
 
     if (GetBattlerSide(gBattlerTarget) == B_SIDE_OPPONENT)
         targetSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SPECIES, NULL);
@@ -3097,12 +3089,32 @@ void TransformedMonStats(struct Pokemon *mon)
 
     species = targetSpecies;
 
+    if (GetBattlerSide(gBattlerTarget) == B_SIDE_OPPONENT)
+        party = &gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
+    else
+        party = &gPlayerParty[gBattlerPartyIndexes[gBattlerTarget]];
+
+    hpIV = GetMonData(party, MON_DATA_HP_IV, NULL);
+    attackIV = GetMonData(party, MON_DATA_ATK_IV, NULL);
+    defenseIV = GetMonData(party, MON_DATA_DEF_IV, NULL);
+    speedIV = GetMonData(party, MON_DATA_SPEED_IV, NULL);
+    spAttackIV = GetMonData(party, MON_DATA_SPATK_IV, NULL);
+    spDefenseIV = GetMonData(party, MON_DATA_SPDEF_IV, NULL);
+    //change for transform to take target ivs, for iv checking wild mon
+
     SetMonData(mon, MON_DATA_LEVEL, &level);
 
-    if (species == SPECIES_SHEDINJA)
-    {
+    if (ability == ABILITY_WONDER_GUARD) {
+        currentHP = 1;
         newMaxHP = 1;
     }
+
+    else if (ability == ABILITY_DISPIRIT_GUARD)
+    {
+        s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 160) / 100) + (((hpIV * 200) - 36) / 100);
+        newMaxHP = (((n + hpEV / 4) * level) / 100) + level;
+    }
+
     else
     {
         s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 160) / 100) + (((hpIV * 200) - 36) / 100);
@@ -3121,7 +3133,7 @@ void TransformedMonStats(struct Pokemon *mon)
         CALC_STAT(baseSpAttack, spAttackIV, spAttackEV, STAT_SPATK, MON_DATA_SPATK)
         CALC_STAT(baseSpDefense, spDefenseIV, spDefenseEV, STAT_SPDEF, MON_DATA_SPDEF)
 
-        if (species == SPECIES_SHEDINJA)
+        if (ability == ABILITY_WONDER_GUARD)
         {
             if (currentHP != 0 || oldMaxHP == 0)
                 currentHP = 1;

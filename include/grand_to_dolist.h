@@ -2286,6 +2286,16 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * may also do for trace and other ability swap effects, since doing set data to ability rather than just swapping battleer ability seems to make it
 * visible in summary screen would be great qol.
 * 
+* keep some ability for ditto other than imposter and inversion, so I can actually target my transform ability for strategy.
+* since I'm fast...don't need to be fast could just make transform a priority move facepalm.  its no longer  a liability
+* 
+* just realized with these planned changed I've actually given ditto an entirely  different niche, 
+* it can be the perfect mon for nuzlockes/catch testing, you can confirm the opponent ability just by transforming
+* and honestly it'd prob be even more valuable if rather than your ivs,
+* it displayed took the enemy ivs for stats, that way if you know the mons stat distribution
+* not only could it be an ability checker it'd also be an iv checker.  (but it'd take some skill/knowledge which is just the type of thing i like)
+* would make ev training ditto that much more important but higher benefit, think I'll make ditto an early game mon, 
+* 
 * will finish logic after pickup, as its essentially the same functionality, loop array of values and pick/assign one based on logic
 * 
 * rock head buff like iron fist boost power head based moves  headbutt skull bash etc.

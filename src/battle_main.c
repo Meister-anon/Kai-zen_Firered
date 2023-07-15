@@ -3457,6 +3457,7 @@ void FaintClearSetData(void)
 {
     s32 i;
     u8 *ptr;
+    struct Pokemon *party;
 
     for (i = 0; i < NUM_BATTLE_STATS; ++i)
         gBattleMons[gActiveBattler].statStages[i] = 6;
@@ -3537,6 +3538,20 @@ void FaintClearSetData(void)
     gBattleResources->flags->flags[gActiveBattler] = 0;
     gBattleMons[gActiveBattler].type1 = gBaseStats[gBattleMons[gActiveBattler].species].type1;
     gBattleMons[gActiveBattler].type2 = gBaseStats[gBattleMons[gActiveBattler].species].type2;
+    gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
+
+    Ai_UpdateFaintData(gActiveBattler);
+    UndoFormChange(gBattlerPartyIndexes[gActiveBattler], GET_BATTLER_SIDE(gActiveBattler), FALSE); //vsonic some logic still to do
+    if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+        UndoMegaEvolution(gBattlerPartyIndexes[gActiveBattler]);
+
+    if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT) //use this instead taken from mega logic
+        party = &gEnemyParty[gBattlerPartyIndexes[gActiveBattler]];  //mon being transformed
+    else
+        party = &gPlayerParty[gBattlerPartyIndexes[gActiveBattler]];
+
+    if (gBattleMons[gActiveBattler].status2 & STATUS2_TRANSFORMED)
+        CalculateMonStats(party);
 }
 
 static void BattleIntroGetMonsData(void)
@@ -5033,6 +5048,8 @@ static void HandleEndTurn_MonFled(void)
 
 static void HandleEndTurn_FinishBattle(void)
 {
+    u32 i;
+
     if (gCurrentActionFuncId == B_ACTION_TRY_FINISH || gCurrentActionFuncId == B_ACTION_FINISHED)
     {
         if (!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER_TOWER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_OLD_MAN_TUTORIAL | BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_SAFARI | BATTLE_TYPE_FIRST_BATTLE | BATTLE_TYPE_LINK)))
@@ -5060,6 +5077,26 @@ static void HandleEndTurn_FinishBattle(void)
             //ClearRematchStateByTrainerId();   //vsonic what does this do again?
         BeginFastPaletteFade(3);
         FadeOutMapMusic(5);
+
+        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+            TryRestoreStolenItems();
+
+        for (i = 0; i < PARTY_SIZE; i++)
+        {
+            UndoMegaEvolution(i);
+            UndoFormChange(i, B_SIDE_PLAYER, FALSE);
+            //DoBurmyFormChange(i); don't know why this is here, form change didn't change to my knowledge so not doing that
+        }
+
+        for (i = 0; i < PARTY_SIZE; i++) //erecalc stat after battle
+        {
+            if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2) != SPECIES_NONE
+                && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2) != SPECIES_EGG)
+            {
+                CalculateMonStats(&gPlayerParty[i]);
+            }
+        }
+
         gBattleMainFunc = FreeResetData_ReturnToOvOrDoEvolutions;
         gCB2_AfterEvolution = BattleMainCB2;
     }
@@ -5385,6 +5422,8 @@ static void HandleAction_UseMove(void)
 
 static void HandleAction_Switch(void) //actual switch code
 {
+    struct Pokemon *party;
+
     gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 0;
@@ -5396,6 +5435,16 @@ static void HandleAction_Switch(void) //actual switch code
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
     if (gBattleResults.playerSwitchesCounter < 255)
         ++gBattleResults.playerSwitchesCounter;
+
+    UndoFormChange(gBattlerPartyIndexes[gBattlerAttacker], GetBattlerSide(gBattlerAttacker), TRUE);
+
+    if (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT) //use this instead taken from mega logic
+        party = &gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker]];  //mon being transformed
+    else
+        party = &gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]];
+
+    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED)
+        CalculateMonStats(party);
 }
 
 static void HandleAction_UseItem(void)

@@ -3638,7 +3638,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DITTO,
         .abilities = {ABILITY_IMPOSTER, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_INVERSION, ABILITY_NONE},
+            .abilityHidden = {ABILITY_INVERSION, ABILITY_IMMUNITY},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
