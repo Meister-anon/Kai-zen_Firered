@@ -2376,7 +2376,8 @@ static void atk06_typecalc(void)
         {
             if (GetBattlerAbility(gBattlerAttacker) == ABILITY_ADAPTABILITY)
             {
-                gBattleMoveDamage *= 2;
+                gBattleMoveDamage = gBattleMoveDamage * 175;
+                gBattleMoveDamage = gBattleMoveDamage / 100;
             }
             else
             {
@@ -2838,7 +2839,8 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
         {
             if (GetBattlerAbility(attacker) == ABILITY_ADAPTABILITY)
             {
-                gBattleMoveDamage *= 2;
+                gBattleMoveDamage = gBattleMoveDamage * 175;
+                gBattleMoveDamage = gBattleMoveDamage / 100;
             }
             else
             {
@@ -3311,11 +3313,11 @@ END:
    /* if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(2.0))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(1.5))
          || (gBattleMons[gBattlerTarget].type2 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(2.0))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(1.5))
          || (gBattleMons[gBattlerTarget].type3 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(2.0)))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(1.5)))
         {
             gBattlerAbility = gBattlerTarget;
             BattleScriptPushCursor();
@@ -3418,11 +3420,11 @@ END:
    /* if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(2.0))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(1.5))
          || (gBattleMons[gBattlerTarget].type2 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(2.0))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(1.5))
          || (gBattleMons[gBattlerTarget].type3 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(2.0)))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(1.5)))
         {
             gBattlerAbility = gBattlerTarget;
             BattleScriptPushCursor();

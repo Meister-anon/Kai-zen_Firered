@@ -750,7 +750,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     RETURN_SCORE_MINUS(20);
                 break;
             case ABILITY_WONDER_GUARD:
-                if (effectiveness < AI_EFFECTIVENESS_x2)
+                if (effectiveness < AI_EFFECTIVENESS_x1_5)
                     return 0;
                 break;
             case ABILITY_DISPIRIT_GUARD:
@@ -1328,7 +1328,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         //case EFFECT_ENDEAVOR:
         case EFFECT_LOW_KICK:
             // AI_CBM_HighRiskForDamage
-            if (AI_DATA->abilities[battlerDef] == ABILITY_WONDER_GUARD && effectiveness < AI_EFFECTIVENESS_x2)
+            if (AI_DATA->abilities[battlerDef] == ABILITY_WONDER_GUARD && effectiveness < AI_EFFECTIVENESS_x1_5)
                 score -= 10;
             break;
         case EFFECT_COUNTER:
@@ -1874,7 +1874,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score -= 6;
             break;
         case EFFECT_RECHARGE:
-            if (AI_DATA->abilities[battlerDef] == ABILITY_WONDER_GUARD && effectiveness < AI_EFFECTIVENESS_x2)
+            if (AI_DATA->abilities[battlerDef] == ABILITY_WONDER_GUARD && effectiveness < AI_EFFECTIVENESS_x1_5)
                 score -= 10;
             else if (AI_DATA->abilities[battlerAtk] != ABILITY_TRUANT
               && !CanIndexMoveFaintTarget(battlerAtk, battlerDef, AI_THINKING_STRUCT->movesetIndex, 0))
@@ -2665,19 +2665,19 @@ static s16 AI_TryToFaint(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
 
         switch (AI_DATA->effectiveness[battlerAtk][battlerDef][AI_THINKING_STRUCT->movesetIndex])
         {
-        case AI_EFFECTIVENESS_x8:
-            score += 8;
+        case AI_EFFECTIVENESS_x3_375:
+            score += 3;
             break;
-        case AI_EFFECTIVENESS_x4:
-            score += 4;
+        case AI_EFFECTIVENESS_x2_25:
+            score += 2;
             break;
-        case AI_EFFECTIVENESS_x2:
+        case AI_EFFECTIVENESS_x1_5:
             if (AI_RandLessThan(176))
                 score += 2;
             else
-                score++;
+                score++; //eelse increase by 1
             break;
-        }
+        }//changed from 2,4,8  as number here seemed to be in line with multiplier,
     }
 
     //AI_TryToFaint_CheckIfDanger
@@ -3090,7 +3090,7 @@ static bool32 IsPinchBerryItemEffect(u16 holdEffect)
 }
 
 // AI_FLAG_CHECK_VIABILITY - a weird mix of increasing and decreasing scores
-static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
+static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) //note will have to add  dark deal to this vsonic
 {
     // move data
     u16 moveEffect = gBattleMoves[move].effect;
@@ -3116,7 +3116,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     }
 
     // check high crit
-    if (TestMoveFlags(move, FLAG_HIGH_CRIT) && effectiveness >= AI_EFFECTIVENESS_x2 && AI_RandLessThan(128))
+    if (TestMoveFlags(move, FLAG_HIGH_CRIT) && effectiveness >= AI_EFFECTIVENESS_x1_5 && AI_RandLessThan(128))
         score++;
 
     // check already dead

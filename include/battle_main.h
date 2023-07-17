@@ -53,7 +53,7 @@ struct MultiBattlePokemonTx
 #define TYPE_MUL_NO_EFFECT          0
 #define TYPE_MUL_NOT_EFFECTIVE      5
 #define TYPE_MUL_NORMAL             10
-#define TYPE_MUL_SUPER_EFFECTIVE    20
+#define TYPE_MUL_SUPER_EFFECTIVE    15//20  
 
 // special type table Ids
 #define TYPE_FORESIGHT  0xFE    //dumb setup to make foresight work, replace with type_mul change, in type calc

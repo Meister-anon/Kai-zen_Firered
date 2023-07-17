@@ -86,7 +86,7 @@ CheckIfFlashFireCancelsFire:: @ 81D9CC0
 	goto AI_CheckBadMove_CheckSoundproof
 
 CheckIfWonderGuardCancelsMove:: @ 81D9CCD
-	if_type_effectiveness AI_EFFECTIVENESS_x2, AI_CheckBadMove_CheckSoundproof
+	if_type_effectiveness AI_EFFECTIVENESS_x1_5, AI_CheckBadMove_CheckSoundproof
 	goto Score_Minus10
 
 CheckIfDispiritGuardCancelsMove::
@@ -385,7 +385,7 @@ AI_CBM_HighRiskForDamage:: @ 81DA1B2
 	if_type_effectiveness AI_EFFECTIVENESS_x0, Score_Minus10
 	get_ability AI_TARGET
 	if_not_equal ABILITY_WONDER_GUARD, AI_CBM_HighRiskForDamage_End
-	if_type_effectiveness AI_EFFECTIVENESS_x2, AI_CBM_HighRiskForDamage_End
+	if_type_effectiveness AI_EFFECTIVENESS_x1_5, AI_CBM_HighRiskForDamage_End
 	goto Score_Minus10
 
 AI_CBM_HighRiskForDamage_End:: @ 81DA1CB
@@ -1547,8 +1547,8 @@ AI_CV_Trap_End:: @ 81DAEEA
 AI_CV_HighCrit:: @ 81DAEEB
 	if_type_effectiveness AI_EFFECTIVENESS_x0_25, AI_CV_HighCrit_End
 	if_type_effectiveness AI_EFFECTIVENESS_x0_5, AI_CV_HighCrit_End
-	if_type_effectiveness AI_EFFECTIVENESS_x2, AI_CV_HighCrit2
-	if_type_effectiveness AI_EFFECTIVENESS_x4, AI_CV_HighCrit2
+	if_type_effectiveness AI_EFFECTIVENESS_x1_5, AI_CV_HighCrit2
+	if_type_effectiveness AI_EFFECTIVENESS_x2_25, AI_CV_HighCrit2
 	if_random_less_than 128, AI_CV_HighCrit_End
 
 AI_CV_HighCrit2:: @ 81DAF09
@@ -2786,7 +2786,7 @@ AI_TryToFaint:: @ 81DBA6F
 	if_can_faint AI_TryToFaint_TryToEncourageQuickAttack
 	get_how_powerful_move_is
 	if_equal MOVE_NOT_MOST_POWERFUL, Score_Minus1
-@	if_type_effectiveness AI_EFFECTIVENESS_x4, AI_TryToFaint_DoubleSuperEffective  @ Improvement in Emerald
+@	if_type_effectiveness AI_EFFECTIVENESS_x2_25, AI_TryToFaint_DoubleSuperEffective  @ Improvement in Emerald
 	end
 
 @ Improvement in Emerald

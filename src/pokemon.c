@@ -3761,7 +3761,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     case ABILITY_WATER_BUBBLE:
         if (type == TYPE_WATER)
             gBattleMovePower *= 2;
-        //MulModifier(&modifier, UQ_4_12(2.0));
+        //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_STEELWORKER:
         if (type == TYPE_STEEL)
@@ -3807,7 +3807,11 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_SONAR:
         if (gBattleMoves[move].flags & FLAG_SOUND)
-            gBattleMoveDamage *= 2;
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 15;
+            gBattleMoveDamage = gBattleMoveDamage / 10;
+        }
+            //gBattleMoveDamage *= 2; //somce using total dmg 2x may be too much, 1.5 boost on sonic_screech would still be good.
         //MulModifier(&modifier, UQ_4_12(1.3));
         break;
     case ABILITY_STEELY_SPIRIT:
@@ -3965,9 +3969,12 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             //if (updateFlags)
                 //RecordAbilityBattle(gBattlerTarget, ability);//test if I need this line.
         }
-        if (type == TYPE_FIRE)
-            gBattleMoveDamage *= 2;
-            //MulModifier(&modifier, UQ_4_12(2.0)); //CHeck if need else if, fire contact moves should be 1
+        if (type == TYPE_FIRE) //changed with super effective rework in mind
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 15;
+            gBattleMoveDamage = gBattleMoveDamage / 10;
+        }
+            //MulModifier(&modifier, UQ_4_12(1.5)); //CHeck if need else if, fire contact moves should be 1
         break;  //tested in w3 schools, checks out, it reads top to bottom with ifs, not like switch breaks, its all inclusive
         //...actually following with else if is what makes it non inclusive...i.e not read the else if vsonic IMPORTANT
     case ABILITY_LIQUID_METAL:

@@ -4643,7 +4643,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             {
                                 move = gBattleMons[i].moves[j];
                                 GET_MOVE_TYPE(move, moveType);
-                                if (gBattleMoves[move].effect == EFFECT_EXPLOSION)
+                                if (gBattleMoves[move].effect == EFFECT_EXPLOSION) //setup multiplier calc think can just use multipier check here.
                                 {
                                     if ((gCurrentMove == MOVE_SELF_DESTRUCT
                                         || gCurrentMove == MOVE_EXPLOSION)
@@ -4669,7 +4669,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                     ++effect;//
                                     break;
                                 }
-                                else// if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0))//vsonic  //THINK CAN use typecalc fort this?
+                                else// if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(1.5))//vsonic  //THINK CAN use typecalc fort this?
                                 {
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_DEFAULT);
                                     ++effect;//
@@ -9623,7 +9623,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
     }
 }*/
 
-//format for use is MulModifier(&modifier, UQ_4_12(2.0));   & is used to denote pointer here
+//format for use is MulModifier(&modifier, UQ_4_12(1.5));   & is used to denote pointer here
 //all functions that use modifier start with u16 modifier = UQ_4_12(1.0); so it defaults to 1, and is modulated from there
 void MulModifier(u16 *modifier, u16 val) //portd tried to set globably hope works   //can use decimal values
 {
@@ -9643,8 +9643,8 @@ static u16 GetInverseTypeMultiplier(u16 multiplier) //could use total damgae cal
     case UQ_4_12(0.0):
         return UQ_4_12(1.0);
     case UQ_4_12(0.5):
-        return UQ_4_12(2.0);
-    case UQ_4_12(2.0):
+        return UQ_4_12(1.5);
+    case UQ_4_12(1.5):
         return UQ_4_12(0.5);
     case UQ_4_12(1.0):
     default:
@@ -9682,13 +9682,13 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
             mod = UQ_4_12(1.0);
 
         else if (mod == UQ_4_12(0.5))
-            mod == UQ_4_12(2.0);
+            mod == UQ_4_12(1.5);
     }
-    else if ((moveType == TYPE_ICE) && GetBattlerAbility(battlerDef) == ABILITY_ECOSYSTEM && defType == TYPE_GRASS && mod == UQ_4_12(2.0))
+    else if ((moveType == TYPE_ICE) && GetBattlerAbility(battlerDef) == ABILITY_ECOSYSTEM && defType == TYPE_GRASS && mod == UQ_4_12(1.5))
     {
         mod = UQ_4_12(1.0); //for purose of this being only on mega torterra deftype would be grass
     }
-    else if ((moveType == TYPE_ICE) && GetBattlerAbility(battlerDef) == ABILITY_ABSOLUTE_ZERO && defType == TYPE_DRAGON && mod == UQ_4_12(2.0))
+    else if ((moveType == TYPE_ICE) && GetBattlerAbility(battlerDef) == ABILITY_ABSOLUTE_ZERO && defType == TYPE_DRAGON && mod == UQ_4_12(1.5))
     {
         mod = UQ_4_12(0.5); //Because only on kyurem deftype would be dragon
     }
@@ -9696,16 +9696,16 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
     if (moveType == TYPE_PSYCHIC && defType == TYPE_DARK && gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
     if (gBattleMoves[move].effect == EFFECT_FREEZE_DRY && defType == TYPE_WATER)
-        mod = UQ_4_12(2.0);
+        mod = UQ_4_12(1.5);
     if (moveType == TYPE_GROUND && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
     if (moveType == TYPE_FIRE && gDisableStructs[battlerDef].tarShot)
-        mod = UQ_4_12(2.0);
+        mod = UQ_4_12(1.5);
 
     // B_WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pokémon
     if (gBattleWeather & WEATHER_STRONG_WINDS && WEATHER_HAS_EFFECT)
     {
-        if (defType == TYPE_FLYING && mod >= UQ_4_12(2.0))
+        if (defType == TYPE_FLYING && mod >= UQ_4_12(1.5))
             mod = UQ_4_12(1.0);
     }
 

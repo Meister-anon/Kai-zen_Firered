@@ -1184,12 +1184,12 @@ static u32 AI_GetEffectiveness(u16 multiplier)
     case UQ_4_12(1.0):
     default:
         return AI_EFFECTIVENESS_x1;
-    case UQ_4_12(2.0):
-        return AI_EFFECTIVENESS_x2;
-    case UQ_4_12(4.0):
-        return AI_EFFECTIVENESS_x4;
-    case UQ_4_12(8.0):
-        return AI_EFFECTIVENESS_x8;
+    case UQ_4_12(1.5):
+        return AI_EFFECTIVENESS_x1_5;
+    case UQ_4_12(2.25):
+        return AI_EFFECTIVENESS_x2_25;
+    case UQ_4_12(3.375):
+        return AI_EFFECTIVENESS_x3_375;
     }
 }
 
@@ -2690,12 +2690,12 @@ s32 GetStealthHazardDamageByTypesAndHP(u8 hazardType, u8 type1, u8 type2, u32 ma
         if (dmg == 0)
             dmg = 1;
         break;
-    case UQ_4_12(2.0):
+    case UQ_4_12(1.5):
         dmg = maxHp / 4;
         if (dmg == 0)
             dmg = 1;
         break;
-    case UQ_4_12(4.0):
+    case UQ_4_12(2.25):
         dmg = maxHp / 2;
         if (dmg == 0)
             dmg = 1;

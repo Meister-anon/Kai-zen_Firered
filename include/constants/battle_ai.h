@@ -15,9 +15,9 @@
 #define AI_TYPE_MOVE 4
 
 // type effectiveness
-#define AI_EFFECTIVENESS_x8     7
-#define AI_EFFECTIVENESS_x4     6
-#define AI_EFFECTIVENESS_x2     5
+#define AI_EFFECTIVENESS_x3_375 7	//triple super which would happen I guess because of type 3 would be 3.375  rather than 8x
+#define AI_EFFECTIVENESS_x2_25  6
+#define AI_EFFECTIVENESS_x1_5   5 //need change this and above for tweak to super effective, rn super 1.5 double super would hit for 2.2x rather than 4
 #define AI_EFFECTIVENESS_x1     4
 #define AI_EFFECTIVENESS_x0_5   3
 #define AI_EFFECTIVENESS_x0_25  2
