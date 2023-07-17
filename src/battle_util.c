@@ -3418,7 +3418,7 @@ u8 AtkCanceller_UnableToUseMove2(void)
 //2nd pass add ghosts to grounded clause  with specific exclusions spirit tomb cursola galarian corsola etc object linked ghost, just like doduo
 //looked over and realized still mising some pokemon that float, but aren't flying types, and also just don't get levitate
 //i.e porygon and magnemite line, may be others
-const u16 gFloatingSpecies[128] = {
+const u16 gFloatingSpecies[] = {
     SPECIES_BEAUTIFLY,
     SPECIES_DUSTOX,
     SPECIES_NINJASK,
@@ -3430,6 +3430,7 @@ const u16 gFloatingSpecies[128] = {
     SPECIES_GASTLY,
     SPECIES_HAUNTER,
     SPECIES_GENGAR,
+    SPECIES_DUNSPARCE,
     SPECIES_MEW,
     SPECIES_MEWTWO,
     SPECIES_MEWTWO_MEGA_X,
@@ -4359,7 +4360,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             case ABILITY_CUPIDS_ARROW: // 
-                for (i = 0; i < gBattlersCount; ++i) //handles ability targetting
+                for (i = 0; i < gBattlersCount; ++i) //handles ability targetting  /think should also stop reactivate? need test
                 {
                     u16 speciesAttacker, speciesTarget1, speciesTarget2;
                     u32 personalityAttacker, personalityTarget1, personalityTarget2;

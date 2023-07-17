@@ -10900,7 +10900,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BRANCH_POKE] =
     {
         .effect = EFFECT_HIT,
-        .power = 40,
+        .power = 55,
         .type = TYPE_GRASS,
         .accuracy = 100,
         .pp = 40,

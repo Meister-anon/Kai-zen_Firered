@@ -363,7 +363,7 @@ const u16 gTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] =
 
         /*dark*/ {X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(2.0), X(1.0), X(1.0), X(2.0), X(2.0), X(1.0)}, // dark
 
-       /*fairy*/ {X(2.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(0.5), X(1.0), X(0.5), X(1.0), X(0.5), X(1.0), X(0.0), X(1.0), X(1.0), X(1.0), X(2.0), X(2.0), X(1.0), X(1.0)}, // fairy
+       /*fairy*/ {X(2.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(0.0), X(1.0), X(1.0), X(1.0), X(2.0), X(2.0), X(1.0), X(1.0)}, // fairy
 
        /*sound*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)}, // sound
 };//              normal  fight   flying  poison  ground   rock    bug    ghost   steel   mystery  fire   water   grass  electric  psychic  ice   dragon    dark   fairy   sound
@@ -383,7 +383,7 @@ const u16 gTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] =
 //DON'T FORGET every time I change below, need to update in the .h / also need to update table above, so ai, and other pre-damage type calcs are accurate
 #define TYPE_CHART
 
-const u8 gTypeEffectiveness[417] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line first entry is on from line closing bracket is on  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -511,6 +511,7 @@ const u8 gTypeEffectiveness[417] = // 336 is number of entries x 3 i.e number of
     TYPE_FAIRY, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FAIRY, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FAIRY, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FAIRY, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FAIRY, TYPE_GRASS, TYPE_MUL_NO_EFFECT,     //grass buff, and based on idea fairy are nature spirits i.e can't hurt nature as they can't exist without it
     TYPE_POISON, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_STEEL, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,

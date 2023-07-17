@@ -301,6 +301,7 @@ But it's only for enemy mons, to do the same with the player you would just swap
 */
 
 //realized text buffers used in battle_message.c allign with values in charmap.txt, the names used are those, and the value is from battle_message.h
+ 
 
 //TODO:
 /*Add logic for when flying types are grounded they take neutral damage from fighting types
@@ -844,8 +845,8 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * to introduce explicitly in-game I want my new type chart to mostly be discoveredd in game,
 * but just have them aware that things are diffeerent and some things will be a new experiencee
 * 
-* [note use trainer school for majority of introduction to changes, expand the inside map add more npcs 
-* [with more school book reading events to get more information, setup event scrippt at the door, character well get exclamation mark over head
+* [note use trainer school for majority of introduction to changes, expand the inside area add more npcs 
+* [with more school book reading events to get more information, setup event script at the door, character well get exclamation mark over head
 * [and walk over to greet player. "Oh! hey Welcome, to the narative exposition school of Trainer Knowledge
 * [I bet you're surpised by the size of this place, there's been a lot of changes in the region recently
 * [and we've had to make some expansions to keep up.  The teacher's giving a quiz today so everyone is reviewing their notes
@@ -853,6 +854,12 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * 
 * npc stops and walks back to their corner, releases player. if you talk to them again, before quiz they repeat, if you can pass the quiz the teacher my just give you a prize
 * I think prize should be 10 rare candies?   can be done at any time, so could make the quiz harder to not make it so easy to trivialize early game?
+* 
+* //decided to bring back the help menu for this too but just for reading the type chart that should be the only thing which would still save on space
+//as it wouldn't have to store a million different contexts.
+//make empty "o" circle symbol be the symbol for neutral to all.  which would be curse and sound type
+//so open help menu should only be able to select "Type Matchup List
+//and on the list for "Using the Type Matachup List" just add the text for pure neutral
 * 
 * need double check trap effects, make sure effect_trap setup
 * works correctly for thunder_cage since I didn't even know
@@ -1021,12 +1028,15 @@ as well as the effect of increasing trap duration
 * I think splitting it up and giving it an effect outside of sun, would help improve it without having to do anything crazy. hmm
 * so essentially grass type clear body, with extra effects for sun, that are debatable from a practical side..   ok I like this. - DONE
 * 
-* 
+* fix acelgor sprite change lips
 * fix delibird learnset oh already done
 * Give crabominable a better front sprite, its just ugly 
 * -progress
 * takng inspiration from wendigo lore mixed with abominable snowman - lore actually works too 
 * since its a selfish mon that desires to conquer and be the best, so put it like its desires went ary.
+* 
+* potentially add dunsparce evo and make better evo, think take inspiration from Fafnir boss from FF 16
+* plan make it ground flying,  more defensive higher atk and hp than dunsparce
 * 
 * Fix Pyroar F sprite front & back , guys in pret won't do it, so I'll have to. its potentially worse than crabominable I can't even look at it.
 * 
@@ -2283,6 +2293,37 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * for most it would result in a net 0 change/do nothing, but for transformed mon etc. it would revert back to normal stats
 * see about doing ability same way so it shows up in summary screen.
 * 
+* ok idea think I'll need to setup a "flag check" so for imposter etc. use if switchinability not done
+* and then thing I'll need to add an extra check for transformed put at end of  transform bs.
+* that way it won't repeat/recalculate everytime I attack
+* 
+* so full logic normal summar scren implementation then conditionals
+* if ability that changes ability and switchin ability not done)  use target for ability check
+* 
+* transform abilities all use transform bs command which sets status trace also sets status
+* if I link the sumemary to status it will auto revert when switch or faint as status2 is cleared.
+* 
+* check may potentially need to while,  actually no, if set data auto updates summary it should auto swap as is
+* would just need skill swap status
+* 
+* there's al lot more moves/abilities that change ability I'd have to set
+* but duoble checkd summary screen and all I need to do is change the ability value assinged to abilitydata
+* 
+* so just make a function that tells it what ability to return and assign it to abilitydata
+* do conditional logic for moves should be simple as lastusedmove that landed succesfully/lastlandedmove
+* as switch case,  and in each case just set return ability that move changes too.
+* 
+* ...or is it as simple as just doing abilitydata = gbattlemons[gactivebattler].ability... o.0 yup
+* 
+* else if (prob put this first actually) status 2 & status2_transform and not transformation done) use target for ability check
+* 
+* else normal abilitydata set
+* 
+* oh wait I can just use glastusedability since when they activate it goes there...
+* 
+* note switchInAbilityDone replaces intimidate special status in emerald, saves room and is easier than jus tmakign a bunch of status
+* 
+* 
 * may also do for trace and other ability swap effects, since doing set data to ability rather than just swapping battleer ability seems to make it
 * visible in summary screen would be great qol.
 * 
@@ -2295,6 +2336,12 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * it displayed took the enemy ivs for stats, that way if you know the mons stat distribution
 * not only could it be an ability checker it'd also be an iv checker.  (but it'd take some skill/knowledge which is just the type of thing i like)
 * would make ev training ditto that much more important but higher benefit, think I'll make ditto an early game mon, 
+* 
+* note checked many mon learn grass knot for no apparent reason steel types fairy types  physical attackers etc.
+* so think for physical attackers replace grass knot with branch poke or bullet seed, leaning more toward the former.
+* 
+* oh wait it gets those as a tm so guess I'd need to make branch poke a tm 
+* //buffed low kick & other weight based movs so base 40 power kicks in faster, at 5kg rather than 10
 * 
 * will finish logic after pickup, as its essentially the same functionality, loop array of values and pick/assign one based on logic
 * 

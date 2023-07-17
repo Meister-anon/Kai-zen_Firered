@@ -335,6 +335,7 @@ struct SpecialStatus    //pretty sure all values
     u8 intimidatedMon : 1;          // 0x8
     u8 tigeredMon : 1;          // 0x8  extra set incase using intimidatedmon prevents using both at once
     u8 traced : 1;                  // 0x10
+    u8 transformationdone : 1;  //for transformation summary screen ability display
     u8 defeatistActivated : 1;      // 
     u8 ppNotAffectedByPressure : 1;
     u8 flag40 : 1;

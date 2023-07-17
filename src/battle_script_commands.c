@@ -1273,7 +1273,7 @@ u16 GetNaturePowerMove(void)
 
 static const u16 sWeightToDamageTable[] =
 {
-    100, 20,
+    50, 20,
     250, 40,
     500, 60,
     1000, 80,
@@ -13378,6 +13378,7 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
             gBattleMons[gBattlerAttacker].pp[i] = gBattleMoves[gBattleMons[gBattlerAttacker].moves[i]].pp;// 5; //pretty sure this is just to avoid issues as min pp is 5  vsonic
         } //else sets all pp to 5,  wants to set as max pp
         gActiveBattler = gBattlerAttacker;
+        gSpecialStatuses[gActiveBattler].transformationdone = 1;
         BtlController_EmitResetActionMoveSelection(0, RESET_MOVE_SELECTION);
         MarkBattlerForControllerExec(gActiveBattler);
         gBattleCommunication[MULTISTRING_CHOOSER] = 0;
@@ -15145,7 +15146,7 @@ static void atkDA_tryswapabilities(void) // skill swap . //remember need to remo
 
             gBattlescriptCurrInstr += 5;
     }
-}
+}//make skill swap status and apply to both mon  vsonic
 
 static void atkDB_tryimprison(void)
 {

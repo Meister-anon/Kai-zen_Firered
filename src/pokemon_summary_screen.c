@@ -2305,7 +2305,36 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
     sMonSkillsPrinterXpos->toNextLevel = MACRO_8136350_0(sMonSummaryScreen->summary.expToNextLevelStrBuf);
 
     //need set abilitydata values for transformation and for ability swap effects like trace  skillswap
-    abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+    if (gBattleTypeFlags != 0) //should mean if in a battle?
+    {
+        if (!(gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && !gBattleTypeFlags & BATTLE_TYPE_ROTATION)
+        {
+            if (GetPartyIdFromBattlePartyId(gPartyMenu.slotId) == 0)
+                abilitydata = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability; //think can check for battle position/side and use this, else use normal
+            else
+                abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+        }
+        else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+        {
+            if (GetPartyIdFromBattlePartyId(gPartyMenu.slotId) == 0)
+                abilitydata = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability;
+
+            else if (GetPartyIdFromBattlePartyId(gPartyMenu.slotId) == 1)
+                abilitydata = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].ability;
+            else
+                abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+        }
+        else if (gBattleTypeFlags & BATTLE_TYPE_ROTATION)
+        {
+            //still to do, only one mon on field at atime technically so same layout as singles, but would need to store data for all mon for ai and battle logic
+            //idea show icons in triangle, show relative health by speed of bounce, make icon flash red for mon in red health,
+            //play low hp music if a mon "on field" has low hp, not just mon out as that would just constantly change
+            //abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+        }
+    }//would be potentially complex for rotation battles but just need to make sure party slot doesn't change when rotating battle position
+    else //and then think assign the 3 slots of the mon in battle to specific fields and don't change field just swap which oone is in front when rotating. i.e b1 b2 b3 = slot 0, 1 2
+    //check battle type, single vs double check party slot to determine if in battle, than get battler by position on field think should work
+        abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
     StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gAbilityNames[abilitydata]);
     StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf, gAbilityDescriptionPointers[abilitydata]);
 

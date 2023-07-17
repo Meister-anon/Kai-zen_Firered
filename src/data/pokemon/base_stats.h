@@ -560,7 +560,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_RUN_AWAY, ABILITY_GUTS},
-        .abilityHidden = {ABILITY_HUSTLE, ABILITY_PICKUP},
+        .abilityHidden = {ABILITY_HUSTLE, ABILITY_STRONG_JAW},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -585,7 +585,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_RUN_AWAY, ABILITY_GUTS},
-        .abilityHidden = {ABILITY_HUSTLE, ABILITY_PICKUP},
+        .abilityHidden = {ABILITY_HUSTLE, ABILITY_STRONG_JAW},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -5606,7 +5606,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_DUNSPARCE] =
     {
-        .baseHP = 144,
+        .baseHP = 100,
         .baseAttack = 70,
         .baseDefense = 70,
         .baseSpeed = 45,
@@ -5625,11 +5625,13 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_SERENE_GRACE, ABILITY_RUN_AWAY},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_RATTLED, ABILITY_NONE},
+            .abilityHidden = {ABILITY_RATTLED, ABILITY_DARK_DEAL},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    }, //debuffed hp as plannin to actually add evo, just remodel sprite
+    //waffling between leaving pure normal but making float, or normal poison and floating, giving it just a psychic weakness,
+    //think I will do that actually, that removes its fighting weakness too. 
 
     [SPECIES_GLIGAR] =
     {
@@ -25816,7 +25818,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GLUTTONY, ABILITY_HUSTLE},
-        .abilityHidden = {ABILITY_THICK_FAT, ABILITY_NONE},
+        .abilityHidden = {ABILITY_THICK_FAT, ABILITY_STRONG_JAW},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -25844,7 +25846,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GLUTTONY, ABILITY_HUSTLE},
-        .abilityHidden = {ABILITY_THICK_FAT, ABILITY_NONE},
+        .abilityHidden = {ABILITY_THICK_FAT, ABILITY_STRONG_JAW},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,

@@ -5991,7 +5991,7 @@ static u8 GetPartyLayoutFromBattleType(void)
     return PARTY_LAYOUT_DOUBLE;
 }
 
-void OpenPartyMenuInTutorialBattle(u8 partyAction)
+void OpenPartyMenuInTutorialBattle(u8 partyAction)//vsonic use as template for oak text for level up move change
 {
     if (!BtlCtrl_OakOldMan_TestState2Flag(FIRST_BATTLE_MSG_FLAG_PARTY_MENU) && (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE))
     {
@@ -6337,7 +6337,7 @@ u8 GetPartyIdFromBattlePartyId(u8 battlePartyId)
 {
     u8 i, j;
 
-    for (j = i = 0; i < (s32)NELEMS(gBattlePartyCurrentOrder); ++j, ++i)
+    for (j = i = 0; i < (s32)NELEMS(gBattlePartyCurrentOrder); ++j, ++i) //gBattlePartyCurrentOrder reads btis that align with party slots so at end should be last slot?
     {
         if ((gBattlePartyCurrentOrder[i] >> 4) != battlePartyId)
         {

@@ -77,7 +77,7 @@ extern const u8 gStatusConditionString_ConfusionJpn[8];
 extern const u8 gStatusConditionString_LoveJpn[8];
 extern const u8 *const gStatusConditionStringsTable[7][2];
 extern const u16 gTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES];
-extern const u8 gTypeEffectiveness[417]; //normal type array
+extern const u8 gTypeEffectiveness[420]; //normal type array
 extern const struct TrainerMoney gTrainerMoneyTable[];
 extern const struct TypePower gNaturalGiftTable[];
 
