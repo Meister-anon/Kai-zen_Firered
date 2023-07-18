@@ -2055,6 +2055,19 @@ goto EVOLUTION_LOGIC
 * think will have it also heal if absorb stealth rocks
 * Anthroyd came up with name "Erosion"  will use that.  wearing down rocks to use for healing minerals- DONE
 * 
+* note change stealth rock damage scaling, above neutral damage rather than 1/4 on weak and 1/2 on dual weak
+* change to 1/6 on weak and 1/5 on dual weak. - done
+* 
+* for switch logic want to keep battle system as close to base fire red as possible,
+* so mon almost never switch, but I want them to work logically with abilities
+* so they should switch if they have an ability that works off of switching out like regenrator.
+* 
+* if opponent can kill them that turn switch, -(yuo can't kill them and/or they are faster
+* otherwise stay in and try to kill, if after kill is at or below 50% hp.
+* switch, basic regenerator/switch ability logic
+* 
+* -check adjust send out logic see if can filter for mon with a switch in ability that would be viable
+* 
 * purifying aura, Suicune Ability similar effect to healer, also mon removes all status effects on itself & allies at the end of turn
 * in doubles heals status of ally on switchin as well. -DONE need test
 * 
@@ -2260,6 +2273,12 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * meant to be a little competition for fly
 * 
 * since sonic boom is something usually done while flying fast, but the move sonic boom, isn't learned by flying types, and has more to do with sound than speed
+* 
+* ideas from kip kebab new moves.  Forge (metal) change own rock type into steel, + 1 defense  - great for golemn-line /onix especially with my steel effectiveness change
+* same with type loss effects make type last for battle duration so you have to think about using it. as single use, potentially change to +2 def boost
+* yeah makes more sense as a single use move that in case of pure rock would change both types to steel, rather than just one. as making you rock steel would usually just be worse
+* 
+* Shrapnel Salvo (steel) 35 dmg, low acc, hit 2-5 times  - use spikes animation 
 * 
 * fix ditto make imposter its only ability (or just but  speed stat so it can transform easier) - change, with buffs to keep iv/ev make this its own ability counter-form 
 * change imposter to be more than just a free transform on switch.

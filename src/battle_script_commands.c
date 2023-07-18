@@ -60,6 +60,7 @@ static bool32 HasAttackerFaintedTarget(void);
 static void HandleTerrainMove(u32 moveEffect);
 static void RecalcBattlerStats(u32 battler, struct Pokemon *mon);
 static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon);
+static void SetDmgHazardsBattlescript(u8 battlerId, u8 multistringId);
 s16 atk_diff(void);
 s16 spatk_diff(void); //hopefully this works, and I don't actually need to define these in the .h,
 //since its not static
@@ -8454,6 +8455,22 @@ bool32 NoAliveMonsForEitherParty(void)
     return (NoAliveMonsForPlayer() || NoAliveMonsForOpponent());
 }
 
+static void SetDmgHazardsBattlescript(u8 battlerId, u8 multistringId)
+{
+    gBattleMons[battlerId].status2 &= ~STATUS2_DESTINY_BOND;
+    gHitMarker &= ~HITMARKER_DESTINYBOND;
+    gBattleScripting.battler = battlerId;
+    gBattleCommunication[MULTISTRING_CHOOSER] = multistringId;
+
+    BattleScriptPushCursor();
+    if (gBattlescriptCurrInstr[1] == BS_TARGET)
+        gBattlescriptCurrInstr = BattleScript_DmgHazardsOnTarget;
+    else if (gBattlescriptCurrInstr[1] == BS_ATTACKER)
+        gBattlescriptCurrInstr = BattleScript_DmgHazardsOnAttacker;
+    else
+        gBattlescriptCurrInstr = BattleScript_DmgHazardsOnFaintedBattler;
+}
+
 /*u32 IsAbilityPreventingEscape(u32 battlerId)   copied here to understand how to make ability search funciton, escape prevention already implemented
 {
     u32 id;
@@ -8575,8 +8592,8 @@ static void atk52_switchineffects(void) //important, think can put ability reset
         gBattlescriptCurrInstr = BattleScript_SwitchInAbilityMsgRet;
     }
      
-
-    else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES_DAMAGED)
+    //base fire red spike/hazard logic
+    /*if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES_DAMAGED)
      && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
      && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
      && gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
@@ -8597,7 +8614,79 @@ static void atk52_switchineffects(void) //important, think can put ability reset
             gBattlescriptCurrInstr = BattleScript_SpikesOnAttacker;
         else
             gBattlescriptCurrInstr = BattleScript_SpikesOnFaintedBattler;//spike logic and damamge formula
+    }*/
+    if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES_DAMAGED)
+        && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
+        && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD
+        && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
+        && IsBattlerGrounded(gActiveBattler))
+    {
+        u8 spikesDmg = (5 - gSideTimers[GetBattlerSide(gActiveBattler)].spikesAmount) * 2;
+        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / (spikesDmg);
+        if (gBattleMoveDamage == 0)
+            gBattleMoveDamage = 1;
+
+        gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_SPIKES_DAMAGED;
+        SetDmgHazardsBattlescript(gActiveBattler, 0);
     }
+    else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK_DAMAGED)
+        && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK)
+        && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
+        && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD)
+    {
+        gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STEALTH_ROCK_DAMAGED;
+        gBattleMoveDamage = GetStealthHazardDamage(gBattleMoves[MOVE_STEALTH_ROCK].type, gActiveBattler);
+
+        if (gBattleMoveDamage != 0)
+            SetDmgHazardsBattlescript(gActiveBattler, 1);
+    }
+    else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_TOXIC_SPIKES_DAMAGED)
+        && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_TOXIC_SPIKES)
+        && IsBattlerGrounded(gActiveBattler))
+    {
+        gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_TOXIC_SPIKES_DAMAGED;
+        if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_POISON)) // Absorb the toxic spikes.
+        {
+            gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~SIDE_STATUS_TOXIC_SPIKES;
+            gSideTimers[GetBattlerSide(gActiveBattler)].toxicSpikesAmount = 0;
+            gBattleScripting.battler = gActiveBattler;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_ToxicSpikesAbsorbed;
+        }
+        else if (IsBattlerAffectedByHazards(gActiveBattler, TRUE))
+        {
+            if (!(gBattleMons[gActiveBattler].status1 & STATUS1_ANY)
+                && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL)
+                && GetBattlerAbility(gActiveBattler) != ABILITY_IMMUNITY
+                && !IsAbilityOnSide(gActiveBattler, ABILITY_PASTEL_VEIL)
+                && !(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SAFEGUARD)
+                && !(gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN))
+            {
+                if (gSideTimers[GetBattlerSide(gActiveBattler)].toxicSpikesAmount >= 2)
+                    gBattleMons[gActiveBattler].status1 |= STATUS1_TOXIC_POISON;
+                else
+                    gBattleMons[gActiveBattler].status1 |= STATUS1_POISON;
+
+                BtlController_EmitSetMonData(BUFFER_A, REQUEST_STATUS_BATTLE, 0, sizeof(gBattleMons[gActiveBattler].status1), &gBattleMons[gActiveBattler].status1);
+                MarkBattlerForControllerExec(gActiveBattler);
+                gBattleScripting.battler = gActiveBattler;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_ToxicSpikesPoisoned;
+            }
+        }
+    }
+    else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STICKY_WEB_DAMAGED)
+        && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STICKY_WEB)
+        && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
+        && IsBattlerGrounded(gActiveBattler))
+    {
+        gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STICKY_WEB_DAMAGED;
+        gBattleScripting.battler = gActiveBattler;
+        SET_STATCHANGER(STAT_SPEED, 2, TRUE);
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_StickyWebOnSwitchIn;
+    }
+    //end of hazard
     else
     {
         if (gBattleMons[gActiveBattler].ability == ABILITY_TRUANT)
@@ -15368,6 +15457,7 @@ static void atkE2_switchoutabilities(void)
             BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, gBitTable[*(gBattleStruct->battlerPartyIndexes + gActiveBattler)], 4, &gBattleMons[gActiveBattler].status1);
             MarkBattlerForControllerExec(gActiveBattler);
             break;
+        case ABILITY_WETIKO:
         case ABILITY_REGENERATOR: //just added
             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 3;
             gBattleMoveDamage += gBattleMons[gActiveBattler].hp;

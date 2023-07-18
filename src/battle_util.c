@@ -9517,6 +9517,23 @@ void UndoMegaEvolution(u32 monId)
     }
 }
 
+bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 toxicSpikes)
+{
+    bool32 ret = TRUE;
+    u32 holdEffect = GetBattlerHoldEffect(gActiveBattler, TRUE);
+    if (toxicSpikes && holdEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS && !IS_BATTLER_OF_TYPE(battlerId, TYPE_POISON))
+    {
+        ret = FALSE;
+        RecordItemEffectBattle(battlerId, holdEffect);
+    }
+    else if (holdEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS)
+    {
+        ret = FALSE;
+        RecordItemEffectBattle(battlerId, holdEffect);
+    }
+    return ret;
+}
+
 bool32 TestSheerForceFlag(u8 battler, u16 move)
 {
     if (GetBattlerAbility(battler) == ABILITY_SHEER_FORCE && gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST)

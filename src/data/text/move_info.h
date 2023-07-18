@@ -1453,7 +1453,7 @@ const u8 gMoveDescription_ShieldBash
 
 const u8 gMoveDescription_UpRoot[] = _("Does damage then switches\nout the user.");
 const u8 gMoveDescription_DiveBomb[] = _("Does damage then switches\nout the user.");
-    //name tbd
+    //name tbd - done
 const u8 gMoveDescription_Nettle_Whip[] = _("Attacks the target\nwith a vine covered\nin Nettle bristles.\nIf not a GRASS type,\nIt may leave the\nfoe with a burn.");
 const u8 gMoveDescription_SonicBoom[] = _("The target is struck\nby high-force winds,\nas the user\naccelerates passed\nthe sound barrier.\nRaises Speed.");
 const u8 gMoveDescription_OverMaxPower[] = _("");
@@ -1462,6 +1462,7 @@ const u8 gMoveDescription_FinalFlight[] = _("");
 const u8 gMoveDescription_PlasmaRailgun[] = _("");
 const u8 gMoveDescription_Boltbeam[] = _("");
 const u8 gMoveDescription_Pounce[] = _("");
+const u8 gMoveDescription_CheapShot[] = _("The user throws\nan unexpected\ndelayed punch\nand then retreats.");
 
     //Description can hold 5 line breaks (so 6 lines total) given current space post expansion!  at approx 20 chars per line// so 120 max
 
@@ -2242,6 +2243,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [MOVE_BOLTBEAM] = gMoveDescription_Boltbeam,
     [MOVE_BACK_STAB] = gMoveDescription_BackStab,
     [MOVE_POUNCE] = gMoveDescription_Pounce,
+    [MOVE_CHEAP_SHOT] = gMoveDescription_CheapShot,
 };//last value can have comma
 
 
@@ -3022,6 +3024,7 @@ const u8 gLowerMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_BACK_STAB] = _("Backstab"),
     [MOVE_DOUBLE_SHOCK] = _("Double Shock"),
     [MOVE_POUNCE] = _("Pounce"),
+    [MOVE_CHEAP_SHOT] = _("Cheap Shot"),
 };//don't need remove comma from last value for this file, port of emerald
 
 //default move names 
@@ -3790,12 +3793,13 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("DIVE BOMB"),
     _("NETTLE WHIP"),
     _("SONICBOOM"),
-    _("???% POWER"), //Hopefully this works, couldn't define name using theese characters
+    _("???% POWER"), //Hopefully this works, couldn't define name using theese characters as constant can't use spcial chars
     _("SHIMON"),
     _("FINAL FLIGHT"),
     _("PLASMA RAILGUN"),
     _("BOLT BEAM"),
     _("BACKSTAB"),
     _("DOUBLE SHOCK"),
-    _("POUNCE")
+    _("POUNCE"),
+    _("CHEAP SHOT")
 };//remember to remove comma from last entry //longest name is 17 chars

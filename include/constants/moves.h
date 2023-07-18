@@ -821,6 +821,7 @@
 #define MOVE_BACK_STAB 793	//new dark exclusive, give every dark type sucker punch and backstab  potentially make a tm, but keep sucker punch as learn move?
 #define MOVE_DOUBLE_SHOCK 794
 #define MOVE_POUNCE 795
+#define MOVE_CHEAP_SHOT 796 //low prio fighting uturn
 
 //#define MOVES_COUNT_GEN8 757
 
@@ -828,8 +829,9 @@
 
 //for completion new moves have to be defined in:  move_descriptions.inc,  move_names.h, & battle_anim_scripts.s
 // also need actual move data in battle_moves.h
+//* consolidated move name & move description files into move_info.h
 
-#define LAST_MOVE_INDEX     MOVE_POUNCE
+#define LAST_MOVE_INDEX     MOVE_CHEAP_SHOT
 
 #define MOVES_COUNT_GEN8 (LAST_MOVE_INDEX + 1) //changed so define auto updates
 

@@ -2607,7 +2607,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_ONIX] =
     {
         .baseHP = 35,
-        .baseAttack = 45,
+        .baseAttack = 65,
         .baseDefense = 160,
         .baseSpeed = 70,
         .baseSpAttack = 30,
@@ -6821,13 +6821,13 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_CELEBI] =
     {
         .baseHP = 120,
-        .baseAttack = 50,
+        .baseAttack = 35,
         .baseDefense = 110,
         .baseSpeed = 110,
         .baseSpAttack = 130,
-        .baseSpDefense = 110,
-        .type1 = TYPE_PSYCHIC,
-        .type2 = TYPE_GRASS,
+        .baseSpDefense = 120,
+        .type1 = TYPE_GRASS,
+        .type2 = TYPE_FAIRY,
         .catchRate = 45,
         .expYield = 270,
         //.evYield_HP = 3,
@@ -6842,7 +6842,7 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_NATURAL_CURE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-    },
+    }, //Can make fairy type now that dual weakness is not so punishing
 
     [SPECIES_TREECKO] =
     {
@@ -19939,10 +19939,14 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_HYPER_CUTTER, ABILITY_IRON_FIST},
-            .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_REFRIGERATE},    //thought to remove something to keep regeneraor & refrigerate but type still not good to switch with
+            .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_WETIKO},    //thought to remove something to keep regeneraor & refrigerate but type still not good to switch with
         .bodyColor = BODY_COLOR_WHITE, //want regenrator for healing monster lore, but refrigerate gets ice stab return, dizzy punch & giga impact, too good to give up
         .noFlip = FALSE,
-    },
+    },//make new fighting move to take advantage of regenerator "cheap shot" idea is a hit after bell, will be low priority u-turn like
+    //The user throws delayed punch when the foe doesn't expect it then retreats
+    //THINK USE astonish "!" on user  then do something like mega punch
+    //...just gonna make new ability for it that is combination of regrigerate and regenerator aka "Wetiko"
+    //which is algonuin for wendigo i.e original word
 
     [SPECIES_ORICORIO] =
     {
