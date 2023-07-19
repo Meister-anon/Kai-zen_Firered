@@ -3432,13 +3432,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         defStage = gBattleMons[battlerIdDef].statStages[STAT_SPDEF];
         usesDefStat = FALSE; //ported from emerald, will use this later  this wasn't actually the problem can most likely safely bring back in.
     }
-    //trap effects
-    if ((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION))
-    {
-        gBattleMons[battlerIdDef].statStages[STAT_DEF] -= 2;    //should lower defense by 2 i.e 50% 
-        if (gBattleMons[gActiveBattler].statStages[STAT_DEF] < 0)
-            gBattleMons[gActiveBattler].statStages[STAT_DEF] = 0;
-    }
+    
 
     if (attacker->item == ITEM_ENIGMA_BERRY)
     {
@@ -4102,9 +4096,16 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             APPLY_STAT_MOD(damage, attacker, attack, STAT_ATK)
 
         damage = damage * gBattleMovePower;
-        damage *= (2 * attacker->level / 5 + 2); //if that 2 is crit damage I may replace with gCritMultiplier
-        //so its more directly tied to the multiplying would make it easier to set up sniper
-        //its not crit, just normal damage formula for level scaled damage
+        damage *= (2 * attacker->level / 5 + 2); //offense side of damage formula for level scaled damage
+
+        //trap effects
+        if ((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION))
+        {
+            //gBattleMons[battlerIdDef].statStages[STAT_DEF] -= 2;    //should lower defense by 2 i.e 50% 
+            if (gBattleMons[gActiveBattler].statStages[STAT_DEF] < 0)
+                gBattleMons[gActiveBattler].statStages[STAT_DEF] = 0;
+            APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)
+        }//need fix setup for this, think  stat drop isn't right as well, plan to only drop once during status duration look at how burn atk drop works //vsonic
 
 
         // critical hits ignore def stat buffs
@@ -4116,7 +4117,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                 damageHelper = defense;
         }
         else
-            APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)
+            APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF) //apply stat mod actually sets damgageHelper to value of stat stage
 
         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNAWARE)
         {
@@ -4140,8 +4141,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         //to overwrite the typical damage calc?
 
         damage = damage / damageHelper;
-        damage /= 50;
-
+        damage /= 50; 
+        //defense side of dmg formula
    
 
         

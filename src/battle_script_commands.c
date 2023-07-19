@@ -11759,7 +11759,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         // For Mirror Armor: "If the Pokémon with this Ability is affected by Sticky Web, the effect is reflected back to the Pokémon which set it up.
         //  If Pokémon which set up Sticky Web is not on the field, no Pokémon have their Speed lowered."
         gBattlerAttacker = gBattlerTarget;  // Initialize 'fail' condition
-        SET_STATCHANGER(STAT_SPEED, 1, TRUE);
+        SET_STATCHANGER(STAT_SPEED, 2, TRUE);
         if (gBattleStruct->stickyWebUser != 0xFF)
             gBattlerAttacker = gBattleStruct->stickyWebUser;
         break;
@@ -12270,7 +12270,7 @@ static void atk80_manipulatedamage(void)
         gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
         break;
     case DMG_RECOIL_FROM_IMMUNE:
-        gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
+        gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4; //think no longer need can just use top recoil effect
         break;
     
     }

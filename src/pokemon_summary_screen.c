@@ -184,8 +184,8 @@ struct PokemonSummaryScreenData
         //u8 ALIGNED(4) expPointsStrBuf[9];   //planning to remove this, to make room for expanded ability descriptions
         u8 ALIGNED(4) expToNextLevelStrBuf[9];
 
-        u8 ALIGNED(4) abilityNameStrBuf[ABILITY_NAME_LENGTH + 1];
-        u8 ALIGNED(4) abilityDescStrBuf[ABILITY_DESCRIPTION_LENGTH + 1]; //tested & works
+        u8 ALIGNED(4) abilityNameStrBuf[4][ABILITY_NAME_LENGTH + 1]; //made 4 string values eventually make constants for each, slot 1 slot 2 slot 3(rotatoin) and party
+        u8 ALIGNED(4) abilityDescStrBuf[4][ABILITY_DESCRIPTION_LENGTH + 1]; //tested & works
     } summary;
 
     u8 ALIGNED(4) isEgg; /* 0x3200 */
@@ -2227,7 +2227,7 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
 {
     u8 tempStr[20];
     u8 level;
-    u16 abilitydata;
+    u16 abilitydatabattler, abilitydatabattler2, abilitydatabattler3, abilitydataparty;
     u16 species;
     u16 hp;
     u16 statValue;
@@ -2305,24 +2305,50 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
     sMonSkillsPrinterXpos->toNextLevel = MACRO_8136350_0(sMonSummaryScreen->summary.expToNextLevelStrBuf);
 
     //need set abilitydata values for transformation and for ability swap effects like trace  skillswap
-    if (gBattleTypeFlags != 0) //should mean if in a battle?
+    //if (gBattleTypeFlags != 0) //should mean if in a battle? - works
+    if (gMain.inBattle) // use this for battles, using gbattletypeflags not 0, excludes wilds as those use value 0 accordign to GriffinR
     {
+        u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
+        curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
+        slot1_personality = GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY);
+        slot2_personality = GetMonData(&gPlayerParty[1], MON_DATA_PERSONALITY);
+        slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY);
+
         if (!(gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && !gBattleTypeFlags & BATTLE_TYPE_ROTATION)
         {
-            if (GetPartyIdFromBattlePartyId(gPartyMenu.slotId) == 0)
-                abilitydata = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability; //think can check for battle position/side and use this, else use normal
-            else
-                abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+            if (curr_personality == slot1_personality)//....default meant if address of party slot x does not equal 0
+            {
+                abilitydatabattler = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability;
+                StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[0], gAbilityNames[abilitydatabattler]);
+                StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[0], gAbilityDescriptionPointers[abilitydatabattler]);
+            }
+            else //party
+            {
+                abilitydataparty = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+                StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[3], gAbilityNames[abilitydataparty]);
+                StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[3], gAbilityDescriptionPointers[abilitydataparty]);
+            }
         }
         else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
         {
-            if (GetPartyIdFromBattlePartyId(gPartyMenu.slotId) == 0)
-                abilitydata = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability;
-
-            else if (GetPartyIdFromBattlePartyId(gPartyMenu.slotId) == 1)
-                abilitydata = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].ability;
-            else
-                abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+            if (curr_personality == slot1_personality)//slot 1
+            {
+                abilitydatabattler = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability;
+                StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[0], gAbilityNames[abilitydatabattler]);
+                StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[0], gAbilityDescriptionPointers[abilitydatabattler]);
+            }
+            else if (curr_personality == slot2_personality) //slot 2
+            {
+                abilitydatabattler2 = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].ability;
+                StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[1], gAbilityNames[abilitydataparty]);
+                StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[1], gAbilityDescriptionPointers[abilitydataparty]);
+            }
+            else //party
+            {
+                abilitydataparty = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+                StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[3], gAbilityNames[abilitydataparty]);
+                StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[3], gAbilityDescriptionPointers[abilitydataparty]);
+            }
         }
         else if (gBattleTypeFlags & BATTLE_TYPE_ROTATION)
         {
@@ -2330,13 +2356,45 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
             //idea show icons in triangle, show relative health by speed of bounce, make icon flash red for mon in red health,
             //play low hp music if a mon "on field" has low hp, not just mon out as that would just constantly change
             //abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+            if (curr_personality == slot1_personality)//....default meant if address of party slot x does not equal 0
+            {
+                abilitydatabattler = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability;
+                StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[0], gAbilityNames[abilitydatabattler]);
+                StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[0], gAbilityDescriptionPointers[abilitydatabattler]);
+            }
+            else if (curr_personality == slot2_personality) //slot 2
+            {
+                abilitydatabattler2 = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].ability;
+                StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[1], gAbilityNames[abilitydataparty]);
+                StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[1], gAbilityDescriptionPointers[abilitydataparty]);
+            }
+            else if (curr_personality == slot3_personality) //...slot 3
+            {
+                //will need change this and when I setup triple battler/rotation battle extra battler positions
+                //could make display of all mon in battle with their icons, then based on turn order could load/deload sprites
+                //i.e 3 on battlers for triple/rotation, rather than having 3 on field load/deload leftmost and right most battler
+                //and have middle battler swap betwen position left and position right, based on if its left mons turn or right mons turn. hmm   vsonic
+                abilitydatabattler3 = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+                StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[2], gAbilityNames[abilitydataparty]);
+                StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[2], gAbilityDescriptionPointers[abilitydataparty]);
+            }
+            else //party
+            {
+                abilitydataparty = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+                StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[3], gAbilityNames[abilitydataparty]);
+                StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[3], gAbilityDescriptionPointers[abilitydataparty]);
+            }
         }
     }//would be potentially complex for rotation battles but just need to make sure party slot doesn't change when rotating battle position
-    else //and then think assign the 3 slots of the mon in battle to specific fields and don't change field just swap which oone is in front when rotating. i.e b1 b2 b3 = slot 0, 1 2
-    //check battle type, single vs double check party slot to determine if in battle, than get battler by position on field think should work
-        abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
-    StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gAbilityNames[abilitydata]);
-    StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf, gAbilityDescriptionPointers[abilitydata]);
+    else
+    {
+
+        abilitydataparty = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+
+        StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[3], gAbilityNames[abilitydataparty]);
+        StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[3], gAbilityDescriptionPointers[abilitydataparty]);
+
+    }
 
     sMonSummaryScreen->curMonStatusAilment = StatusToAilment(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_STATUS)); //important status screen, unk326c & this sub seem to be important for displaying status.
     if (sMonSummaryScreen->curMonStatusAilment == AILMENT_NONE)
@@ -3115,18 +3173,131 @@ static void PokeSum_PrintAbilityDataOrMoveTypes(void)
 }//best option use original window 5 height, the type icons are positioned perfectly I just need to split up the window
 
 
-static void PokeSum_PrintAbilityNameAndDesc(void)   //need to increase height, ability name & description use same window believe 5 in skills template
+static void PokeSum_PrintAbilityNameAndDesc(void)
 {
-    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
-                                 66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf);
+    u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
+    curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
+    slot1_personality = GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY);
+    slot2_personality = GetMonData(&gPlayerParty[1], MON_DATA_PERSONALITY);
+    slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY); //eventually for triple/ rotation battles
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
-                                 2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                 sMonSummaryScreen->summary.abilityDescStrBuf); //lowered rom 9 to 10, will shift bin file to make more space below
+    if (!gMain.inBattle)
+    {
+        FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);//checked window fills entire graphic
 
-}//forgot vsonic to increase the text y value here,  ability name uses 1 so can just adjust window and leave that, but need to adjust desc y value
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+            66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf[3]);
+
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+            2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[3]);
+    }
+
+    //for in battle
+    if (gMain.inBattle)
+    {
+        if (!(IsDoubleBattle())) //problem appears to be function always returns 0, I think I need to loop
+        {
+            if (curr_personality == slot1_personality)//....default meant if address of party slot x does not equal 0
+            {
+                FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0); //I think this is clearing window ? so extra safety
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf[0]);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[0]);
+            }
+            else //party
+            {
+                FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf[3]);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[3]);
+            }
+        }
+        else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+        {
+            if (curr_personality == slot1_personality)
+            {
+                FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf[0]);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[0]);
+            }
+            else if (curr_personality == slot2_personality)
+            {
+                FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf[1]);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[1]);
+            }
+            else //party
+            {
+                FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf[3]);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[3]);
+            }
+        }
+        else if (gBattleTypeFlags & BATTLE_TYPE_ROTATION)
+        {
+            if (curr_personality == slot1_personality)
+            {
+                FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf[0]);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[0]);
+            }
+            else if (curr_personality == slot2_personality)
+            {
+                FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf[1]);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[1]);
+            }
+            else if (curr_personality == slot3_personality)
+            {
+                FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf[2]);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[2]);
+            }
+            else //party
+            {
+                FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    66, 0, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityNameStrBuf[3]);
+
+                AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
+                    2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[3]);
+            }
+        }
+    }
+     //ok I can't loop? or have empty data as it prints garbage if the field is empty, so I need it to keep it from printing if the field is empty and just increment instead
+}
 
 //new define so I can shift type icon y position without messing with the window
 //since its not full screen height I may need to just make this x + 4

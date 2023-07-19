@@ -2102,6 +2102,11 @@ goto EVOLUTION_LOGIC
 * could do it but also may be too much, since switching is a big part of the game, but eh I'm just making traps actually viable
 * nah I think I will do it, won't much change how players play the game (since enemy doesn't switch), and will just make grass better
 * 
+* revampt setup for new traps put infestation in CalculateBaseDamage by damagehelper
+* will need to set like intimidate, so they need be statused AND not already aflicted by status i.e setup flag just like intimidatemon or switchindone
+    //drop stat if flag not set, then when status is over need reset stat value so if not statused and status flag set, raise stat and remove status flag.
+    //specialstatusInfested //will need for all trap status that affect stat stages
+* 
 */
 
 
@@ -2377,6 +2382,7 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * recoil uses gbattlemovedamage and seems to bypass defense checks/damgage formula dmg vs defense
 * is done in dmg calc bs command specifically with the calculatebasedamage function from the pokemon.c
 * 
+* 
 * if would need to setup new recoiol effect that takes that percentage of dmg done
 * and lets it run through the calcbasedmg or some equivalent of the defense side of it.
 * with itself as the targeet, as runnign through same thing twice would just reaplly dmg buffs,
@@ -2386,6 +2392,8 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * to take the calculated dmg and run it through defense checks, note 
 * should be typeless dmg that makes contact.  i.e if user has fluffy and did recoil 
 * as its a contact move recoil dmg taken would be reduced.  stuff like that
+* 
+* nots on defense setup for rrecoil, pass gbattlemovedamage into a version of defense side of CalculateBaseDamage function -     
 * 
 * comtinue adding notes...
 * array won't end well if size doesn't match random value, so do just like, starter selection random % nelems 

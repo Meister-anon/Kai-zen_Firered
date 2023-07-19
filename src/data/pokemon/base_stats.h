@@ -4846,9 +4846,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_SYNCHRONIZE, ABILITY_EARLY_BIRD},
+        .abilities = {ABILITY_TRACE, ABILITY_EARLY_BIRD},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_MAGIC_BOUNCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_MAGIC_BOUNCE, ABILITY_TELEPATHY},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -4874,9 +4874,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_SYNCHRONIZE, ABILITY_EARLY_BIRD},
+        .abilities = {ABILITY_TRACE, ABILITY_EARLY_BIRD},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_MAGIC_BOUNCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_MAGIC_BOUNCE, ABILITY_TELEPATHY},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
