@@ -456,6 +456,11 @@ static const u8 sAbilitiesAffectedByMoldBreaker[] =
     [ABILITY_FLUFFY] = 1,
     [ABILITY_QUEENLY_MAJESTY] = 1,
     [ABILITY_WATER_BUBBLE] = 1,
+    [ABILITY_MIRROR_ARMOR] = 1,
+    [ABILITY_PUNK_ROCK] = 1,
+    [ABILITY_ICE_SCALES] = 1,
+    [ABILITY_ICE_FACE] = 1,
+    [ABILITY_PASTEL_VEIL] = 1,
 };
 
 static const u8 sAbilitiesNotTraced[ABILITIES_COUNT] =
@@ -890,13 +895,18 @@ void PrepareStringBattle(u16 stringId, u8 battler)
     else if (stringId == STRINGID_STATSWONTINCREASE && gBattleScripting.statChanger & STAT_BUFF_NEGATIVE)
         stringId = STRINGID_STATSWONTDECREASE;
 
-    else if (stringId == STRINGID_STATSWONTDECREASE2 && battlerAbility == ABILITY_CONTRARY)
+    else if (stringId == STRINGID_STATSWONTDECREASE2 && battlerAbility == ABILITY_CONTRARY) //Shouldn't this be target ability?
         stringId = STRINGID_STATSWONTINCREASE2;
     else if (stringId == STRINGID_STATSWONTINCREASE2 && battlerAbility == ABILITY_CONTRARY)
         stringId = STRINGID_STATSWONTDECREASE2;
 
+    if (stringId == STRINGID_DEFENDERSSTATFELL && targetAbility == ABILITY_SYNCHRONIZE
+        && gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget)
+        && ((gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != gBattlerTarget) || gBattleScripting.stickyWebStatDrop == 1)
+        && !(gBattleScripting.stickyWebStatDrop == 1 && gSideTimers[targetSide].stickyWebBattlerSide == targetSide))
+
     // Check Defiant and Competitive stat raise whenever a stat is lowered.
-    else if (stringId == STRINGID_DEFENDERSSTATFELL
+    if (stringId == STRINGID_DEFENDERSSTATFELL
         && ((targetAbility == ABILITY_DEFIANT && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
             || (targetAbility == ABILITY_COMPETITIVE && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
             || (targetAbility == ABILITY_URSURPER && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)
@@ -927,7 +937,7 @@ void PrepareStringBattle(u16 stringId, u8 battler)
             || (targetAbility == ABILITY_URSURPER && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)
                 && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)))
         && gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget)
-        && ((gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != gBattlerTarget) || gBattleScripting.stickyWebStatDrop == 1)
+        && ((gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != gBattlerTarget) || gBattleScripting.stickyWebStatDrop == 1) //stats weren't dropped byitslf or teammate
         && !(gBattleScripting.stickyWebStatDrop == 1 && gSideTimers[targetSide].stickyWebBattlerSide == targetSide))
     {
         gBattleScripting.stickyWebStatDrop = 0;
@@ -5945,7 +5955,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             case ABILITY_TANGLING_HAIR:
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && gBattleMons[gBattlerAttacker].hp != 0
-                    && (CompareStat(gBattlerAttacker, STAT_SPEED, MIN_STAT_STAGE, CMP_GREATER_THAN) || GetBattlerAbility(gBattlerAttacker) == ABILITY_MIRROR_ARMOR)
+                    && (CompareStat(gBattlerAttacker, STAT_SPEED, MIN_STAT_STAGE, CMP_GREATER_THAN) 
+                        || GetBattlerAbility(gBattlerAttacker) == ABILITY_MIRROR_ARMOR
+                        || GetBattlerAbility(gBattlerAttacker) == ABILITY_SYNCHRONIZE)
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED
                     && IsMoveMakingContact(move, gBattlerAttacker))
@@ -6351,9 +6363,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_SYNCHRONIZE: // 7
-            if (gLastUsedAbility == ABILITY_SYNCHRONIZE && (gHitMarker & HITMARKER_SYNCHRONISE_EFFECT))
+            if (gLastUsedAbility == ABILITY_SYNCHRONIZE && (gHitMarker & HITMARKER_SYNCHRONIZE_EFFECT))
             {
-                gHitMarker &= ~(HITMARKER_SYNCHRONISE_EFFECT);
+                gHitMarker &= ~(HITMARKER_SYNCHRONIZE_EFFECT);
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                 if (gBattleStruct->synchronizeMoveEffect == MOVE_EFFECT_TOXIC)
                     gBattleStruct->synchronizeMoveEffect = MOVE_EFFECT_TOXIC; //changed so it transfers bad poison
@@ -6362,13 +6374,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_SynchronizeActivates;
                 gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                ++effect;
+                ++effect; //This part is just for poison part of logic
             }
             break;
         case ABILITYEFFECT_ATK_SYNCHRONIZE: // 8
-            if (gLastUsedAbility == ABILITY_SYNCHRONIZE && (gHitMarker & HITMARKER_SYNCHRONISE_EFFECT))
+            if (gLastUsedAbility == ABILITY_SYNCHRONIZE && (gHitMarker & HITMARKER_SYNCHRONIZE_EFFECT))
             {
-                gHitMarker &= ~(HITMARKER_SYNCHRONISE_EFFECT);
+                gHitMarker &= ~(HITMARKER_SYNCHRONIZE_EFFECT);
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                 if (gBattleStruct->synchronizeMoveEffect == MOVE_EFFECT_TOXIC)
                     gBattleStruct->synchronizeMoveEffect = MOVE_EFFECT_TOXIC;

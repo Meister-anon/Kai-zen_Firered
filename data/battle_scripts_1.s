@@ -2322,6 +2322,7 @@ BattleScript_StickyWebOnSwitchIn::
 	copybyte gBattlerTarget, sBATTLER
 	printstring STRINGID_STICKYWEBSWITCHIN
 	waitmessage 0x40
+	jumpifability BS_TARGET, ABILITY_MIRROR_ARMOR, BattleScript_MirrorArmorReflectStickyWeb
 	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_StickyWebOnSwitchInEnd
 	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_StickyWebOnSwitchInStatAnim
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_FELL_EMPTY, BattleScript_StickyWebOnSwitchInEnd

@@ -2611,7 +2611,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 160,
         .baseSpeed = 70,
         .baseSpAttack = 30,
-        .baseSpDefense = 65,
+        .baseSpDefense = 55,
         .type1 = TYPE_ROCK,
         .type2 = TYPE_GROUND,
         .catchRate = 45,
@@ -4846,7 +4846,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_TRACE, ABILITY_EARLY_BIRD},
+        .abilities = {ABILITY_SYNCHRONIZE, ABILITY_EARLY_BIRD}, //buffing synchronize think will put back in place of trace
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_MAGIC_BOUNCE, ABILITY_TELEPATHY},
         // #endif
@@ -4979,10 +4979,10 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
+        .abilities = {ABILITY_CHLOROPHYLL, ABILITY_PHOTOSYNTHESIZE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_PHOTOSYNTHESIZE, ABILITY_HEALER},
-        // #endif
+            .abilityHidden = {ABILITY_FLOWER_VEIL, ABILITY_HEALER},
+        // #endif 
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -13059,7 +13059,8 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },//empath, emotion pokemon, give efffect of synchronize but also make attaker feel a portion of my pain
-    //so attacker takes a percent of damage dealt 20% 25% something like that or maybe 15%
+    //so attacker takes a percent of damage dealt 20% 25% something like that or maybe 15% //change call this empathic curse
+    //as plan to make new synchronize buff its own ability & call that empath as realized its a mirror armor/corvinight copy/hybrid and I DON'T want that going on umbreon ...
 
     [SPECIES_AZELF] =
     {
@@ -13526,7 +13527,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_THICK_FAT, ABILITY_GUTS},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },//add ground moves to learnset
+    },//add ground moves to learnset  check add back adaptability? drayano style
 
     [SPECIES_PIGNITE] =
     {
