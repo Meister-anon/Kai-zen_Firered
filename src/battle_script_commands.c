@@ -5918,6 +5918,17 @@ static void atk23_getexp(void)
                 }
                 if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP))
                 {
+                    //should be able to do streamer/creator mode exp boost here
+                    //would be total exp  * multiplier /size of party,
+                    //or maybe multiplier will be a switch case determined by party size
+                    //that way you boost consistently regardless of team size
+                    //again need implement level cap in creator mode
+                    //*don't want normal players acceessing this so won't put in options
+                    //if they want to play normally in their downtime have interacting with
+                    //house gamestation bring up option to toggle creator mode off/on
+                    //use flag check created at time of game creation
+                    //so even after turning it off,  it can still tell it was a game
+                    //created with creator mode in mind
                     if (gBattleStruct->sentInPokes & 1)
                         gBattleMoveDamage = *exp;
                     else

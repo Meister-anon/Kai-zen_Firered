@@ -2493,6 +2493,27 @@ goto TURN_ACTIONS_SWITCH_ETC // battle_main.c  HandleTurnActionSelectionState fu
 
 goto EXP_FUNCTION //battle_script_commands.c has exp & level up logic, can be used as example for mid battle evo 
 //	                and needed pokedex logic for double wilds check case 5
+//should be able to do streamer/creator mode exp boost here
+                    //would be total exp  * multiplier /size of party,
+                    //or maybe multiplier will be a switch case determined by party size
+                    //that way you boost consistently regardless of team size
+                    //again need implement level cap in creator mode
+                    //*don't want normal players acceessing this so won't put in options
+                    //if they want to play normally in their downtime have interacting with
+                    //house gamestation bring up option to toggle creator mode off/on
+                    //use flag check created at time of game creation
+                    //so even after turning it off,  it can still tell it was a game
+                    //created with creator mode in mind
+    //lil troll if they select creator mode a game creation
+    //add a string to that says to "make sure to check your pc before you start your adventure"
+    //will have potion and item that says "not a rarecandy"
+    //it can't be used on a pokemon but sells for 90k or something - remember sell price is half of list price
+    //item description will say "what were you expecting infiite rare candies?
+    //thats pretty cringe bro."  XD
+    //so they'll get mad thinking it was a troll, then see the exp boost is on
+    //try to sell the item when they realize can't use it on a mon
+    //and see its worth a fuckton and then see it was a double fake out!
+    //the troll is THERE WAS NO troll!!!
 
 goto MOVE_LEARN_PROCESS 
 /*

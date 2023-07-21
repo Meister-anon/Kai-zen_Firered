@@ -4347,6 +4347,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             case ABILITY_INTIMIDATE:    // moved down here, so weather effects acitvate before these
                 if (!(gSpecialStatuses[battler].intimidatedMon)) //if intimidated mon is 0 set intimidate pokes i.e if noto already intimidated
                 { //further having this on a switch case ensures it only works for mon with the ability
+                    gBattlerAttacker = battler; //for mirror armor & empath battler that sets intimidate
                     gStatuses3[battler] |= STATUS3_INTIMIDATE_POKES;
                     gSpecialStatuses[battler].intimidatedMon = TRUE;           //not changing intimidateMon to 1 causes intimidate case to /the switchin case to loop
                 }//special status intimidated mon is set on mon with intimidate, it then applies status3 intimidate pokes to activate intimidate
