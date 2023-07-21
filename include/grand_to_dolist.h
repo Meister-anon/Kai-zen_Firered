@@ -762,7 +762,7 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * still working on updating move descriptions
 * -was able to use replace to define all move descriptions need to put in table to assign to moves
 * all that's left after that is combing over again for proper spacing.   place "\n"  every 3 words would do it
-* remember can place 5 per description
+* remember can place 5 per description - DONE!
 * 
 * need tests if toxic works, and if poison worsened works
 * 
@@ -2129,7 +2129,7 @@ goto EVOLUTION_LOGIC
 * 
 * Don't forget plans to revamp breeding mechanics, using as a menes to get alternate forms
 * people don't often use it anyway so may potentially get rid of egg groups, if skitty wailord works it can't make too much logic.
-* will make breeding easier and remove some of the need to use ditto exclusively
+* will make breeding easier and remove some of the need to use ditto exclusively - note keep nidoqueen in cna't breed group for lore/makes sense
 * 
 * other idea, be able to access pc from breeder desk selection, to remove need to go to pc and put
 * mon in your party JUST to put them in the daycare. major time saver and convience feature
@@ -2284,6 +2284,9 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * yeah makes more sense as a single use move that in case of pure rock would change both types to steel, rather than just one. as making you rock steel would usually just be worse
 * 
 * Shrapnel Salvo (steel) 35 dmg, low acc, hit 2-5 times  - use spikes animation 
+* 
+* synchronize revamp keep normal bility for umbreon but otherwise replace with "empath" copies stat1 of synchronize but also copies stat drops to enemy.
+* need look at mirror armor bs and moody bs, think secret will be using 2 statbuffchange commands - 
 * 
 * fix ditto make imposter its only ability (or just but  speed stat so it can transform easier) - change, with buffs to keep iv/ev make this its own ability counter-form 
 * change imposter to be more than just a free transform on switch.
