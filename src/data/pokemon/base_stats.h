@@ -13033,6 +13033,9 @@ const struct BaseStats gBaseStats[] =
    //but have an option to fail, and instead just pick a random move slot i.e random % 4 0-3
    //can't reactivate ability on target is already under affect/thrall, (so use intimidate logic to save status to a variable i guess_
    //if enemy mon has  move sealed by another effect and that move is the most dangerous, either loop again excluding that or just default to random
+   //ok anticipation logic, use that function to find move but then lock the move for long as I'm on field
+   //works as switch in I guess //think of using psychic powers to read their most effective tactic and seal it away
+   //will need exit message
    //vsonic IMPORTANT
     [SPECIES_MESPRIT] =
     {
@@ -13090,6 +13093,12 @@ const struct BaseStats gBaseStats[] =
     //well idk I could just link it to targeetting this mon with an attack, so even in doubles it'll just 
     //have a chance to activate on both enemy mon but only should they be targetting me. 
     //so its not just me being on the field would keep them from attacking
+    //but I gave that effect to pressure so idk how it'd work? //perhaps make attack self or ally? 
+    //or could put a  stat drop with it as they don't have the will to fully commit to the attack?
+    //instead something like if break through paralysis has chance to drop gbattlemovedmg by 20% or so
+    //yeah low chance (10%) to paralyze if breaks through paralyze chance has chance (25%)
+    // to reduce dmg by a percentage, I think 20% dmg reduction
+    //actually to make more noticeable think need raise dmg reduction chance maybe 40%
 
     [SPECIES_DIALGA] =
     {

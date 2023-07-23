@@ -327,7 +327,11 @@
 #define ABILITY_JEWEL_METABOLISM 304 //can't think of a name right now, this is just a sableye rock absorb based on dex entry, hmm maybe do more boost damage to rock types? ok, instead of raising hp, boosts def as eaten rocks form more crystals ok i like that
 #define ABILITY_INVERSION 305
 #define ABILITY_WETIKO 306 // for my version crabominable mix of refrigerate & regenerator
+#define ABILITY_EMPATH 307 // upgraded synchronize, not for umbreon psychic only
+#define ABILITY_EMPATHIC_CURSE 308 //ability for Mespirit - synchronize with pain split
+#define ABILITY_THRALL 309 //ability for Uxie - anticipation except it seals the move so it can't be used/selected
+#define ABILITY_IRON_WILL 310 //abillity for Azelf - mix of pressure where it can paralyze the attacker, but lower odds, as thye also have to break will pressure odds that lower dmg done
 
-#define ABILITIES_COUNT 307 //   ability count is last ability number + 1 since we have to count ability 0
+#define ABILITIES_COUNT 311 //   ability count is last ability number + 1 since we have to count ability 0
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H
