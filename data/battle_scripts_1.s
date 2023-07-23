@@ -3049,8 +3049,8 @@ BattleScript_SecondEmpathAnimation:
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printfromtable gStatDownStringIds
 	waitmessage 0x40
-BattleScript_EmpathEnd:		@may need to be a return
-	end3
+BattleScript_EmpathEnd:		@may need to be a return...yup needed to be a return -_-
+	return
 
 BattleScript_MirrorArmorAttackAnimation::
 	attackanimation
