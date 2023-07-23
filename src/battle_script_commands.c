@@ -12788,20 +12788,19 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
         }
         else if (activeBattlerAbility == ABILITY_EMPATH && !affectsUser && !mirrorArmored && gBattlerAttacker != gBattlerTarget && gActiveBattler == gBattlerTarget)
         {
-        if (flags == STAT_CHANGE_BS_PTR) //think not necessary other than being able to set a return at end/outside base logic
-        {
-            SET_STATCHANGER(statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
-            //SET_STATCHANGER2(gBattleScripting.savedStatChanger, statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
-            BattleScriptPush(BS_ptr); //used to end original script goes to return, 
-            //gBattleScripting.battler = gActiveBattler; //sets battler executing the script
-            //gLastUsedAbility = gBattleMons[gActiveBattler].ability;
-            //gBattlerAbility = gActiveBattler;
-            gBattlescriptCurrInstr = BattleScript_EmpathAttackAnimation;
+            if (flags == STAT_CHANGE_BS_PTR) //think not necessary other than being able to set a return at end/outside base logic
+            {
+                SET_STATCHANGER(statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
+                //SET_STATCHANGER2(gBattleScripting.savedStatChanger, statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
+                BattleScriptPush(BS_ptr); //used to end original script goes to return, 
+                //gBattleScripting.battler = gActiveBattler; //sets battler executing the script
+                //gLastUsedAbility = gBattleMons[gActiveBattler].ability;
+                //gBattlerAbility = gActiveBattler;
+                gBattlescriptCurrInstr = BattleScript_EmpathAttackAnimation;
 
-            RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);//removed affects user, set mirror armor flag instead to avoid loop
-        }//WORKS!!
-        return STAT_CHANGE_DIDNT_WORK;
-            return STAT_CHANGE_DIDNT_WORK;  //not sure how thsi and mirror armor avoid looping as they call functions that execute stateebuffchange/this function again.
+                RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);//removed affects user, set mirror armor flag instead to avoid loop
+            }//WORKS!!
+                return STAT_CHANGE_DIDNT_WORK;  //not sure how thsi and mirror armor avoid looping as they call functions that execute stateebuffchange/this function again.
             //understand now, the bs for mirrr armor sets affectUser, so soon as it starts the battlescript it can't retrigger the logic here
             //so I need to set affectuser  to avoid loop, then I need set battler to gactivebattler so changes apply to correct target
             //since I'm doing changes for different batlres I need to change value of sbattler from within bs which I did.
