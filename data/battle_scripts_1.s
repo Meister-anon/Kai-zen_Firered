@@ -7844,6 +7844,31 @@ BattleScript_MoodyLower:
 	waitmessage 0x40
 BattleScript_MoodyEnd:
 	end3
+
+BattleScript_EmpathActivates::	
+	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_AbilityNoSpecificStatLoss
+	jumpifbyteequal sSTATCHANGER, sZero, BattleScript_EmpathSecondLower
+	statbuffchange STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_EmpathSecondLower
+	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_EmpathSecondLower
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatDownStringIds
+	waitmessage 0x40
+BattleScript_EmpathSecondLower:
+	@copybyte gActiveBattler, gBattlerAttacker
+	copybyte sBATTLER, gBattlerTarget
+	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_AbilityNoSpecificStatLoss
+	@jumpifbyteequal sSAVED_STAT_CHANGER, sZero, BattleScript_EmpathEnd
+	jumpifbyteequal sSTATCHANGER, sZero, BattleScript_EmpathEnd
+	@copybyte sSTATCHANGER, sSAVED_STAT_CHANGER
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_EmpathEnd
+	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_EmpathEnd
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatDownStringIds
+	waitmessage 0x40
+BattleScript_EmpathEnd:
+	end3
 	
 BattleScript_EmergencyExit::
 	pause 0x5	

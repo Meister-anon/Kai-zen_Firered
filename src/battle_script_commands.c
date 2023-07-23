@@ -12751,6 +12751,18 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
         }
         else // try to decrease
         {
+        if (activeBattlerAbility == ABILITY_EMPATH && !affectsUser && !mirrorArmored && gBattlerAttacker != gBattlerTarget && gActiveBattler == gBattlerTarget)
+        {
+
+            SET_STATCHANGER(statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
+            SET_STATCHANGER2(gBattleScripting.savedStatChanger, statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
+            BattleScriptPush(BS_ptr);
+            gBattleScripting.battler = gActiveBattler;
+            //gBattlerAbility = gActiveBattler;
+            gBattlescriptCurrInstr = BattleScript_EmpathActivates;
+            RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);
+        }
+
             statValue = -GET_STAT_BUFF_VALUE(statValue);
             if (gBattleMons[gActiveBattler].statStages[statId] == 1)
                 statValue = -1;
