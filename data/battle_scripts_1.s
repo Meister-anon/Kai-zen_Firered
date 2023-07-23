@@ -3025,14 +3025,12 @@ BattleScript_StatDown::
 	return
 
 @theres some weird logic here if a bs is defined and referred to in the C code it NEEDS to use the double colon :: single doesnt work  vsonic
-@as of now doesn't work'
 BattleScript_EmpathAttackAnimation::
 	attackanimation
 	waitanimation
 BattleScript_EmpathActivates::	
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_AbilityNoSpecificStatLoss
-	@jumpifbyteequal sSTATCHANGER, sZero, BattleScript_EmpathSecondLower
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_EmpathEnd	@end if fail stat change
+	statbuffchange STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_EmpathEnd	@end if fail stat change
 	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_EmpathAnimation	@if able to lower go to animation
 	goto BattleScript_MirrorArmorReflectPrintString	@else display stat cant fall message
 BattleScript_EmpathAnimation:
@@ -3043,9 +3041,6 @@ BattleScript_EmpathAnimation:
 BattleScript_EmpathSecondLower:
 	copybyte sBATTLER, gBattlerAttacker
 	jumpifstatus2 BS_ATTACKER, STATUS2_SUBSTITUTE, BattleScript_AbilityNoSpecificStatLoss
-	@jumpifbyteequal sSAVED_STAT_CHANGER, sZero, BattleScript_EmpathEnd
-	@jumpifbyteequal sSTATCHANGER, sZero, BattleScript_EmpathEnd
-	@copybyte sSTATCHANGER, sSAVED_STAT_CHANGER
 	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_EmpathEnd
 	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_SecondEmpathAnimation
 	goto BattleScript_MirrorArmorReflectPrintString
