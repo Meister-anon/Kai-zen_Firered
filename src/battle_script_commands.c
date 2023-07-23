@@ -3503,12 +3503,12 @@ static void atk09_attackanimation(void)
                     gBattlescriptCurrInstr++;
                     gBattlescriptCurrInstr++;
                 }//Only matters for empath and mirror armor, should make skip atk animation and wait animation
-                else //needed else now works
+                else //needed else now works (causing graphic  gltich with empath, possibly need add filter/conditions
                 {
                     BtlController_EmitMoveAnimation(BUFFER_A, gCurrentMove, gBattleScripting.animTurn, gBattleMovePower, gBattleMoveDamage, gBattleMons[gBattlerAttacker].friendship, &gDisableStructs[gBattlerAttacker]);
-                    gBattleScripting.animTurn++;
+                    gBattleScripting.animTurn++;    //I guess for this 
                     gBattleScripting.animTargetsHit++;
-                    MarkBattlerForControllerExec(gBattlerAttacker);
+                    MarkBattlerForControllerExec(gBattlerAttacker); //or this
                     gBattlescriptCurrInstr++;
                 }
                 
@@ -12799,7 +12799,8 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
                 gBattlescriptCurrInstr = BattleScript_EmpathAttackAnimation;
 
                 RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);//removed affects user, set mirror armor flag instead to avoid loop
-            }//WORKS!!
+            }//WORKS!!  ...effect works but causes graphic glitch when try to attack after, but only with move, doesn't do for ability stat drops...
+            //potentially means issue is to do with my  attack animation fix so check that //tested nope that wasn't it...
                 return STAT_CHANGE_DIDNT_WORK;  //not sure how thsi and mirror armor avoid looping as they call functions that execute stateebuffchange/this function again.
             //understand now, the bs for mirrr armor sets affectUser, so soon as it starts the battlescript it can't retrigger the logic here
             //so I need to set affectuser  to avoid loop, then I need set battler to gactivebattler so changes apply to correct target
