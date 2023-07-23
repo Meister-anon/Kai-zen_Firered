@@ -3497,21 +3497,11 @@ static void atk09_attackanimation(void)
             if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
             {
                 gActiveBattler = gBattlerAttacker;
-
-                if (gCurrentMove == MOVE_NONE)
-                {
-                    gBattlescriptCurrInstr++;
-                    gBattlescriptCurrInstr++;
-                }//Only matters for empath and mirror armor, should make skip atk animation and wait animation
-                else //needed else now works (causing graphic  gltich with empath, possibly need add filter/conditions
-                {
-                    BtlController_EmitMoveAnimation(BUFFER_A, gCurrentMove, gBattleScripting.animTurn, gBattleMovePower, gBattleMoveDamage, gBattleMons[gBattlerAttacker].friendship, &gDisableStructs[gBattlerAttacker]);
-                    gBattleScripting.animTurn++;    //I guess for this 
-                    gBattleScripting.animTargetsHit++;
-                    MarkBattlerForControllerExec(gBattlerAttacker); //or this
-                    gBattlescriptCurrInstr++;
-                }
-                
+                BtlController_EmitMoveAnimation(BUFFER_A, gCurrentMove, gBattleScripting.animTurn, gBattleMovePower, gBattleMoveDamage, gBattleMons[gBattlerAttacker].friendship, &gDisableStructs[gBattlerAttacker]);
+                gBattleScripting.animTurn++;    
+                gBattleScripting.animTargetsHit++;
+                MarkBattlerForControllerExec(gBattlerAttacker); 
+                gBattlescriptCurrInstr++;            
             }
             else
             {
@@ -12781,7 +12771,10 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
                 BattleScriptPush(BS_ptr);
                 gBattleScripting.battler = gActiveBattler;
                 gBattlerAbility = gActiveBattler;
-                gBattlescriptCurrInstr = BattleScript_MirrorArmorAttackAnimation;
+                if (gCurrentMove == MOVE_NONE)
+                    gBattlescriptCurrInstr = BattleScript_MirrorArmorReflect; //skip animation for abilities that stat drop
+                else
+                    gBattlescriptCurrInstr = BattleScript_MirrorArmorAttackAnimation;
                 RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);
             }
             return STAT_CHANGE_DIDNT_WORK;
@@ -12796,7 +12789,10 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
                 //gBattleScripting.battler = gActiveBattler; //sets battler executing the script
                 //gLastUsedAbility = gBattleMons[gActiveBattler].ability;
                 //gBattlerAbility = gActiveBattler;
-                gBattlescriptCurrInstr = BattleScript_EmpathAttackAnimation;
+                if (gCurrentMove == MOVE_NONE)
+                    gBattlescriptCurrInstr = BattleScript_EmpathActivates; //skip animation for abilities that stat drop
+                else
+                    gBattlescriptCurrInstr = BattleScript_EmpathAttackAnimation;
 
                 RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);//removed affects user, set mirror armor flag instead to avoid loop
             }//WORKS!!  ...effect works but causes graphic glitch when try to attack after, but only with move, doesn't do for ability stat drops...
