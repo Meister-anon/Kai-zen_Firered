@@ -3497,11 +3497,21 @@ static void atk09_attackanimation(void)
             if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
             {
                 gActiveBattler = gBattlerAttacker;
-                BtlController_EmitMoveAnimation(0, gCurrentMove, gBattleScripting.animTurn, gBattleMovePower, gBattleMoveDamage, gBattleMons[gBattlerAttacker].friendship, &gDisableStructs[gBattlerAttacker]);
-                ++gBattleScripting.animTurn;
-                ++gBattleScripting.animTargetsHit;
-                MarkBattlerForControllerExec(gBattlerAttacker);
-                ++gBattlescriptCurrInstr;
+
+                if (gCurrentMove == MOVE_NONE)
+                {
+                    gBattlescriptCurrInstr++;
+                    gBattlescriptCurrInstr++;
+                }//Only matters for empath and mirror armor, should make skip atk animation and wait animation
+                else //needed else now works
+                {
+                    BtlController_EmitMoveAnimation(BUFFER_A, gCurrentMove, gBattleScripting.animTurn, gBattleMovePower, gBattleMoveDamage, gBattleMons[gBattlerAttacker].friendship, &gDisableStructs[gBattlerAttacker]);
+                    gBattleScripting.animTurn++;
+                    gBattleScripting.animTargetsHit++;
+                    MarkBattlerForControllerExec(gBattlerAttacker);
+                    gBattlescriptCurrInstr++;
+                }
+                
             }
             else
             {
@@ -6881,6 +6891,33 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                     gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
                     effect = 1;
                 }
+                else if (gProtectStructs[gBattlerTarget].silkTrapped)
+                {
+                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    i = gBattlerAttacker;
+                    gBattlerAttacker = gBattlerTarget;
+                    gBattlerTarget = i; // gBattlerTarget and gBattlerAttacker are swapped in order to activate Defiant, if applicable
+                    gBattleScripting.moveEffect = MOVE_EFFECT_SPD_MINUS_1;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
+                    effect = 1;
+                }
+                // Not strictly a protect effect, but works the same way
+                else if (gProtectStructs[gBattlerTarget].beakBlastCharge
+                    && CanBeBurned(gBattlerAttacker)
+                    && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+                {
+                    gProtectStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    gBattleMons[gBattlerAttacker].status1 = STATUS1_BURN;
+                    gActiveBattler = gBattlerAttacker;
+                    BtlController_EmitSetMonData(BUFFER_A, REQUEST_STATUS_BATTLE, 0, sizeof(gBattleMons[gActiveBattler].status1), &gBattleMons[gActiveBattler].status1);
+                    MarkBattlerForControllerExec(gActiveBattler);
+                    BattleScriptPushCursor();
+                   // gBattlescriptCurrInstr = BattleScript_BeakBlastBurn;  vsonic
+                    effect = 1;
+                }
+            }
+            gBattle
             }
             ++gBattleScripting.atk49_state;
             break;
@@ -12574,6 +12611,10 @@ static u16 ReverseStatChangeMoveEffect(u16 moveEffect)
 #define STAT_CHANGE_WORKED      0
 #define STAT_CHANGE_DIDNT_WORK  1
 
+//all stat changes go through this function, if from a move effect sets statId in setmoveeffect than calls this function.
+//if from ability uses setstatchanger for Id & stat stage, and has a statbuffchange comamnd in their bs, that calls this function using value from setstatchanger
+//flag mirror armor prevents stat change from being reflected by mirror armor?
+//flag move affects user should make stat apply on attacker rather than target -I think
 #define STAT_CHANGE_ABILITIES
 static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr)
 {
@@ -12740,10 +12781,37 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
                 BattleScriptPush(BS_ptr);
                 gBattleScripting.battler = gActiveBattler;
                 gBattlerAbility = gActiveBattler;
-                gBattlescriptCurrInstr = BattleScript_MirrorArmorReflect;
+                gBattlescriptCurrInstr = BattleScript_MirrorArmorAttackAnimation;
                 RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);
             }
             return STAT_CHANGE_DIDNT_WORK;
+        }
+        else if (activeBattlerAbility == ABILITY_EMPATH && !affectsUser && !mirrorArmored && gBattlerAttacker != gBattlerTarget && gActiveBattler == gBattlerTarget)
+        {
+            if (flags == STAT_CHANGE_BS_PTR) //think not necessary other than being able to set a return at end/outside base logic
+            {
+                SET_STATCHANGER(statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
+                //SET_STATCHANGER2(gBattleScripting.savedStatChanger, statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
+                BattleScriptPush(BS_ptr); //used to end original script goes to return,
+                gBattleScripting.battler = gActiveBattler; //sets battler executing the script
+                //gBattlerAbility = gActiveBattler;
+                gBattlescriptCurrInstr = BattleScript_EmpathAttackAnimation;
+
+                RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);
+            }
+            return STAT_CHANGE_DIDNT_WORK;  //not sure how thsi and mirror armor avoid looping as they call functions that execute stateebuffchange/this function again.
+            //understand now, the bs for mirrr armor sets affectUser, so soon as it starts the battlescript it can't retrigger the logic here
+            //so I need to set affectuser  to avoid loop, then I need set battler to gactivebattler so changes apply to correct target
+            //since I'm doing changes for different batlres I need to change value of sbattler from within bs which I did.
+            //my script ends in ends mirror armor ends in return,  meaning it goes back to original attacker script
+            //reason for that is this stupid game puts the stat effects BEFORE the animation, so for moves you have to return to main function
+            //for the move to play out correctly.
+            //my script can't do that as I'm playing the animation from within my script
+            //this isn't a problem for abilities that drop stat as they don't use a move effect
+            //but for moves that drop stat its a problem as it prevents the animation from playing.
+            //think I can do a check for if gbattlescipting.moveeffect == 0,
+            //above the part that change gbattlescriptCurrInstr and just make a separate script
+            //above the main one that just does attackanimation & waitanimation
         }
         else if (GetBattlerAbility(gActiveBattler) == ABILITY_SHIELD_DUST && !flags)
         {
@@ -12751,17 +12819,7 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
         }
         else // try to decrease
         {
-        if (activeBattlerAbility == ABILITY_EMPATH && !affectsUser && !mirrorArmored && gBattlerAttacker != gBattlerTarget && gActiveBattler == gBattlerTarget)
-        {
-
-            SET_STATCHANGER(statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
-            SET_STATCHANGER2(gBattleScripting.savedStatChanger, statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
-            BattleScriptPush(BS_ptr);
-            gBattleScripting.battler = gActiveBattler;
-            //gBattlerAbility = gActiveBattler;
-            gBattlescriptCurrInstr = BattleScript_EmpathActivates;
-            RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);
-        }
+        
 
             statValue = -GET_STAT_BUFF_VALUE(statValue);
             if (gBattleMons[gActiveBattler].statStages[statId] == 1)

@@ -305,6 +305,7 @@ u32 protected:1;
              u32 spikyShielded : 1;  //consider renaming spike shield
              u32 kingsShielded : 1;
              u32 banefulBunkered : 1;
+             u16 silkTrapped : 1;
              u32 shieldBashed : 1;
              u32 usesBouncedMove : 1;
              u32 usedHealBlockedMove : 1;

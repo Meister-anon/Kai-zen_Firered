@@ -900,10 +900,6 @@ void PrepareStringBattle(u16 stringId, u8 battler)
     else if (stringId == STRINGID_STATSWONTINCREASE2 && battlerAbility == ABILITY_CONTRARY)
         stringId = STRINGID_STATSWONTDECREASE2;
 
-    if (stringId == STRINGID_DEFENDERSSTATFELL && targetAbility == ABILITY_SYNCHRONIZE
-        && gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget)
-        && ((gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != gBattlerTarget) || gBattleScripting.stickyWebStatDrop == 1)
-        && !(gBattleScripting.stickyWebStatDrop == 1 && gSideTimers[targetSide].stickyWebBattlerSide == targetSide))
 
     // Check Defiant and Competitive stat raise whenever a stat is lowered.
     if (stringId == STRINGID_DEFENDERSSTATFELL

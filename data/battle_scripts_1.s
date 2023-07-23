@@ -3024,12 +3024,48 @@ BattleScript_StatDown::
 	waitmessage 0x40
 	return
 
+@theres some weird logic here if a bs is defined and referred to in the C code it NEEDS to use the double colon :: single doesnt work  vsonic
+@as of now doesn't work'
+BattleScript_EmpathAttackAnimation::
+	attackanimation
+	waitanimation
+BattleScript_EmpathActivates::	
+	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_AbilityNoSpecificStatLoss
+	@jumpifbyteequal sSTATCHANGER, sZero, BattleScript_EmpathSecondLower
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_EmpathEnd	@end if fail stat change
+	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_EmpathAnimation	@if able to lower go to animation
+	goto BattleScript_MirrorArmorReflectPrintString	@else display stat cant fall message
+BattleScript_EmpathAnimation:
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatDownStringIds
+	waitmessage 0x40
+BattleScript_EmpathSecondLower:
+	copybyte sBATTLER, gBattlerAttacker
+	jumpifstatus2 BS_ATTACKER, STATUS2_SUBSTITUTE, BattleScript_AbilityNoSpecificStatLoss
+	@jumpifbyteequal sSAVED_STAT_CHANGER, sZero, BattleScript_EmpathEnd
+	@jumpifbyteequal sSTATCHANGER, sZero, BattleScript_EmpathEnd
+	@copybyte sSTATCHANGER, sSAVED_STAT_CHANGER
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_EmpathEnd
+	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_SecondEmpathAnimation
+	goto BattleScript_MirrorArmorReflectPrintString
+BattleScript_SecondEmpathAnimation:
+	setgraphicalstatchangevalues
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatDownStringIds
+	waitmessage 0x40
+BattleScript_EmpathEnd:		@may need to be a return
+	end3
+
+BattleScript_MirrorArmorAttackAnimation::
+	attackanimation
+	waitanimation
 BattleScript_MirrorArmorReflect::
 	pause B_WAIT_TIME_SHORT
 	@call BattleScript_AbilityPopUp
-	jumpifsubstituteblocks BattleScript_AbilityNoSpecificStatLoss
+	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_AbilityNoSpecificStatLoss
 BattleScript_MirrorArmorReflectStatLoss:
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_BS_PTR, BattleScript_MirrorArmorReflectEnd
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_MirrorArmorReflectEnd
 	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_MirrorArmorReflectAnim
 	goto BattleScript_MirrorArmorReflectWontFall
 BattleScript_MirrorArmorReflectAnim:
@@ -7843,31 +7879,6 @@ BattleScript_MoodyLower:
 	printfromtable gStatDownStringIds
 	waitmessage 0x40
 BattleScript_MoodyEnd:
-	end3
-
-BattleScript_EmpathActivates::	
-	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_AbilityNoSpecificStatLoss
-	jumpifbyteequal sSTATCHANGER, sZero, BattleScript_EmpathSecondLower
-	statbuffchange STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_EmpathSecondLower
-	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_EmpathSecondLower
-	setgraphicalstatchangevalues
-	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printfromtable gStatDownStringIds
-	waitmessage 0x40
-BattleScript_EmpathSecondLower:
-	@copybyte gActiveBattler, gBattlerAttacker
-	copybyte sBATTLER, gBattlerTarget
-	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_AbilityNoSpecificStatLoss
-	@jumpifbyteequal sSAVED_STAT_CHANGER, sZero, BattleScript_EmpathEnd
-	jumpifbyteequal sSTATCHANGER, sZero, BattleScript_EmpathEnd
-	@copybyte sSTATCHANGER, sSAVED_STAT_CHANGER
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_EmpathEnd
-	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_EmpathEnd
-	setgraphicalstatchangevalues
-	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printfromtable gStatDownStringIds
-	waitmessage 0x40
-BattleScript_EmpathEnd:
 	end3
 	
 BattleScript_EmergencyExit::
