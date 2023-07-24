@@ -10,6 +10,7 @@
 #include "constants/species.h"
 #include "constants/moves.h"
 #include "constants/abilities.h"
+#include "constants/items.h"
 #include "field_specials.h"
 
 /*code added in this commit was to upgrade ld_script to sync wild cards

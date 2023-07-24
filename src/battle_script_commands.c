@@ -4118,7 +4118,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
     bool32 statusChanged = FALSE;
     s32 affectsUser, byTwo, i = 0; // 0x40 otherwise
     bool32 noSunCanFreeze = TRUE;
-    bool32 mirrorArmorReflected = ((GetBattlerAbility(gBattlerTarget) == ABILITY_MIRROR_ARMOR) || (GetBattlerAbility(gBattlerTarget) == ABILITY_SYNCHRONIZE));
+    bool32 mirrorArmorReflected = ((GetBattlerAbility(gBattlerTarget) == ABILITY_MIRROR_ARMOR) || (GetBattlerAbility(gBattlerTarget) == ABILITY_EMPATH));
     
 
     switch (gBattleScripting.moveEffect) // Set move effects which happen later on
@@ -4479,7 +4479,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = 0;
             }
-            // for synchronize
+            // for synchronize / empath 
             if (gBattleScripting.moveEffect == MOVE_EFFECT_POISON
              || gBattleScripting.moveEffect == MOVE_EFFECT_TOXIC
              || gBattleScripting.moveEffect == MOVE_EFFECT_PARALYSIS
@@ -12507,7 +12507,7 @@ static void atk87_stockpiletohpheal(void)
     }
 }
 
-static void atk88_sethpdrain(void) //need to make absorbing life from ghosts damaging- DONE
+static void atk88_sethpdrain(void) //need to make absorbing life from ghosts damaging- DONE  vsonic
 {
     if (gBattleMoves[gCurrentMove].effect == EFFECT_ABSORB
         && IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST)

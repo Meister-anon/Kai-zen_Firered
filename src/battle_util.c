@@ -5954,7 +5954,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && gBattleMons[gBattlerAttacker].hp != 0
                     && (CompareStat(gBattlerAttacker, STAT_SPEED, MIN_STAT_STAGE, CMP_GREATER_THAN) 
                         || GetBattlerAbility(gBattlerAttacker) == ABILITY_MIRROR_ARMOR
-                        || GetBattlerAbility(gBattlerAttacker) == ABILITY_SYNCHRONIZE)
+                        || GetBattlerAbility(gBattlerAttacker) == ABILITY_EMPATH)
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED
                     && IsMoveMakingContact(move, gBattlerAttacker))
@@ -6360,7 +6360,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_SYNCHRONIZE: // 7
-            if (gLastUsedAbility == ABILITY_SYNCHRONIZE && (gHitMarker & HITMARKER_SYNCHRONIZE_EFFECT))
+            if ((gLastUsedAbility == ABILITY_SYNCHRONIZE || gLastUsedAbility == ABILITY_EMPATH) && (gHitMarker & HITMARKER_SYNCHRONIZE_EFFECT))
             {
                 gHitMarker &= ~(HITMARKER_SYNCHRONIZE_EFFECT);
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
@@ -6375,7 +6375,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_ATK_SYNCHRONIZE: // 8
-            if (gLastUsedAbility == ABILITY_SYNCHRONIZE && (gHitMarker & HITMARKER_SYNCHRONIZE_EFFECT))
+            if ((gLastUsedAbility == ABILITY_SYNCHRONIZE || gLastUsedAbility == ABILITY_EMPATH) && (gHitMarker & HITMARKER_SYNCHRONIZE_EFFECT))
             {
                 gHitMarker &= ~(HITMARKER_SYNCHRONIZE_EFFECT);
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);

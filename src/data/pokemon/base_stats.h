@@ -1780,7 +1780,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
-        .abilities = {ABILITY_SYNCHRONIZE, ABILITY_ANTICIPATION},
+        .abilities = {ABILITY_EMPATH, ABILITY_ANTICIPATION},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_MAGIC_GUARD, ABILITY_NONE},
         // #endif
@@ -1808,7 +1808,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
-        .abilities = {ABILITY_SYNCHRONIZE, ABILITY_ANTICIPATION},
+        .abilities = {ABILITY_EMPATH, ABILITY_ANTICIPATION},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_MAGIC_GUARD, ABILITY_NONE},
         // #endif
@@ -4846,7 +4846,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_SYNCHRONIZE, ABILITY_EARLY_BIRD}, //buffing synchronize think will put back in place of trace
+        .abilities = {ABILITY_EMPATH, ABILITY_EARLY_BIRD}, //buffing synchronize think will put back in place of trace
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_MAGIC_BOUNCE, ABILITY_TELEPATHY},
         // #endif
@@ -4874,7 +4874,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_TRACE, ABILITY_EARLY_BIRD},
+        .abilities = {ABILITY_EMPATH, ABILITY_EARLY_BIRD},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_MAGIC_BOUNCE, ABILITY_TELEPATHY},
         // #endif
@@ -5354,7 +5354,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_SYNCHRONIZE, ABILITY_SYNCHRONIZE},
+        .abilities = {ABILITY_EMPATH, ABILITY_EMPATH},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_MAGIC_BOUNCE, ABILITY_ANTICIPATION},
         // #endif
@@ -7620,7 +7620,7 @@ const struct BaseStats gBaseStats[] =
         //#if P_UPDATED_EGG_GROUPS >= GEN_8
             .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_SYNCHRONIZE, ABILITY_TRACE},
+        .abilities = {ABILITY_EMPATH, ABILITY_TRACE},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_FOREWARN, ABILITY_TELEPATHY},//on purpose can replace with forewarn
         // #endif
@@ -7648,7 +7648,7 @@ const struct BaseStats gBaseStats[] =
         //#if P_UPDATED_EGG_GROUPS >= GEN_8
             .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_SYNCHRONIZE, ABILITY_TRACE},
+        .abilities = {ABILITY_EMPATH, ABILITY_TRACE},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_FOREWARN, ABILITY_TELEPATHY},
         // #endif
@@ -7676,7 +7676,7 @@ const struct BaseStats gBaseStats[] =
         //#if P_UPDATED_EGG_GROUPS >= GEN_8
             .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_SYNCHRONIZE, ABILITY_TRACE},
+        .abilities = {ABILITY_EMPATH, ABILITY_TRACE},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_FOREWARN, ABILITY_TELEPATHY},
         // #endif
@@ -16389,7 +16389,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_TELEPATHY, ABILITY_SYNCHRONIZE},
+            .abilities = {ABILITY_TELEPATHY, ABILITY_EMPATH},
             .abilityHidden = {ABILITY_ANALYTIC, ABILITY_LIQUID_VOICE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -16415,7 +16415,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_TELEPATHY, ABILITY_SYNCHRONIZE},
+            .abilities = {ABILITY_TELEPATHY, ABILITY_EMPATH},
             .abilityHidden = {ABILITY_ANALYTIC, ABILITY_LIQUID_VOICE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -23645,7 +23645,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_FAIRY,
         .eggGroup2 = EGG_GROUP_FAIRY,
-        .abilities = {ABILITY_INNER_FOCUS, ABILITY_SYNCHRONIZE},
+        .abilities = {ABILITY_INNER_FOCUS, ABILITY_EMPATH},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_PSYCHIC_SURGE, ABILITY_NONE},
         // #endif
@@ -33138,7 +33138,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_FAIRY,
         .eggGroup2 = EGG_GROUP_FAIRY,
-        .abilities = {ABILITY_OWN_TEMPO, ABILITY_SYNCHRONIZE},
+        .abilities = {ABILITY_OWN_TEMPO, ABILITY_EMPATH},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_PSYCHIC_SURGE, ABILITY_NONE},
         // #endif
