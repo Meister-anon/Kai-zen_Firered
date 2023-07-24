@@ -2944,6 +2944,7 @@ BattleScript_StatUpCantGoHigher::
 
 BattleScript_StatUp::
 	playanimation BS_EFFECT_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+BattleScript_StatUpMsg::
 	printfromtable gStatUpStringIds
 	waitmessage 0x40
 	return
@@ -3030,7 +3031,7 @@ BattleScript_EmpathAttackAnimation::
 	waitanimation
 BattleScript_EmpathActivates::	
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_AbilityNoSpecificStatLoss
-	statbuffchange STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_EmpathEnd	@end if fail stat change
+	statbuffchange STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_BS_PTR, BattleScript_EmpathEnd	@end if fail stat change
 	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_EmpathAnimation	@if able to lower go to animation
 	goto BattleScript_MirrorArmorReflectPrintString	@else display stat cant fall message
 BattleScript_EmpathAnimation:
@@ -3041,7 +3042,7 @@ BattleScript_EmpathAnimation:
 BattleScript_EmpathSecondLower:
 	copybyte sBATTLER, gBattlerAttacker
 	jumpifstatus2 BS_ATTACKER, STATUS2_SUBSTITUTE, BattleScript_AbilityNoSpecificStatLoss
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_EmpathEnd
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_BS_PTR, BattleScript_EmpathEnd
 	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_SecondEmpathAnimation
 	goto BattleScript_MirrorArmorReflectPrintString
 BattleScript_SecondEmpathAnimation:
@@ -3060,7 +3061,7 @@ BattleScript_MirrorArmorReflect::
 	@call BattleScript_AbilityPopUp
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_AbilityNoSpecificStatLoss
 BattleScript_MirrorArmorReflectStatLoss:
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_MirrorArmorReflectEnd
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_MIRROR_ARMOR | STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_BS_PTR, BattleScript_MirrorArmorReflectEnd
 	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_MirrorArmorReflectAnim
 	goto BattleScript_MirrorArmorReflectWontFall
 BattleScript_MirrorArmorReflectAnim:
@@ -6724,7 +6725,7 @@ BattleScript_DmgHazardsOnAttacker::
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	call BattleScript_PrintHurtByDmgHazards
-	tryfaintmon BS_ATTACKER
+	tryfaintmon BS_ATTACKER 0, NULL
 	tryfaintmon_spikes BS_ATTACKER, BattleScript_DmgHazardsOnAttackerFainted
 	return
 
@@ -6739,7 +6740,7 @@ BattleScript_DmgHazardsOnTarget::
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
 	call BattleScript_PrintHurtByDmgHazards
-	tryfaintmon BS_TARGET
+	tryfaintmon BS_TARGET 0, NULL
 	tryfaintmon_spikes BS_TARGET, BattleScript_DmgHazardsOnTargetFainted
 	return
 
@@ -6754,7 +6755,7 @@ BattleScript_DmgHazardsOnFaintedBattler::
 	healthbarupdate BS_FAINTED
 	datahpupdate BS_FAINTED
 	call BattleScript_PrintHurtByDmgHazards
-	tryfaintmon BS_FAINTED
+	tryfaintmon BS_FAINTED 0, NULL
 	tryfaintmon_spikes BS_FAINTED, BattleScript_DmgHazardsOnFaintedBattlerFainted
 	return
 

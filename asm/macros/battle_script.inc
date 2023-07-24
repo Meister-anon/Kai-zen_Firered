@@ -2023,6 +2023,10 @@
 	sethword sSAVED_MOVE_EFFECT \effect
 	.endm
 
+	.macro tryfaintmon_spikes battler:req, ptr:req	@for hazards port
+	tryfaintmon \battler 0x1 \ptr
+	.endm
+
 	.macro chosenstatus1animation battler:req, status:req
 	chosenstatusanimation \battler 0x0 \status
 	.endm
