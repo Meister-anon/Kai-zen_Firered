@@ -5,14 +5,11 @@
 #include "battle_ai_util.h"
 #include "battle_ai_main.h"
 #include "random.h"
-//#include "battle_factory.h"
 #include "battle_setup.h"
-//#include "battle_z_move.h"
 #include "data.h"
 #include "event_data.h"
 #include "item.h"
 #include "pokemon.h"
-//#include "recorded_battle.h"
 #include "util.h"
 #include "constants/abilities.h"
 #include "constants/battle_ai.h"
@@ -20,6 +17,9 @@
 #include "constants/hold_effects.h"
 #include "constants/moves.h"
 #include "constants/items.h"
+//#include "battle_factory.h"
+//#include "battle_z_move.h"
+//#include "recorded_battle.h"
 
 #define AI_ACTION_DONE          0x0001
 #define AI_ACTION_FLEE          0x0002

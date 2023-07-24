@@ -134,7 +134,7 @@ u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16
 bool32 CanMegaEvolve(u8 battlerId);
 void UndoMegaEvolution(u32 monId);
 bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 toxicSpikes);
-void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
+void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut);
 bool32 DoBattlersShareType(u32 battler1, u32 battler2);
 bool32 CanBattlerEscape(u32 battlerId);
 bool32 IsHealBlockPreventingMove(u32 battler, u32 move);

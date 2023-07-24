@@ -153,12 +153,14 @@ extern u8 gStringVar4[];
 #define NUM_FLAG_BYTES (ROUND_BITS_TO_BYTES(FLAGS_COUNT))
 
 // Calls m0/m1/.../m8 depending on how many arguments are passed.
-/*#define VARARG_8(m, ...) CAT(m, NARG_8(__VA_ARGS__))(__VA_ARGS__)
+#define VARARG_8(m, ...) CAT(m, NARG_8(__VA_ARGS__))(__VA_ARGS__)
 #define NARG_8(...) NARG_8_(_, ##__VA_ARGS__, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 #define NARG_8_(_, a, b, c, d, e, f, g, h, N, ...) N
 
 #define CAT(a, b) CAT_(a, b)
-#define CAT_(a, b) a ## b*/  //logic for prete emeralds new cmd argms stuff its confusing to read so i dont like it
+#define CAT_(a, b) a ## b
+//logic for prete emeralds new cmd argms stuff its confusing to read so i dont like it
+//changed mind adding
 
 // This produces an error at compile-time if expr is zero.
 // It looks like file.c:line: size of array `id' is negative
