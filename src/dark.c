@@ -852,6 +852,7 @@ void AnimClawSlash(struct Sprite *sprite)
 void AnimTask_MetallicShine(u8 taskId) //think will do the same for ghost absorb,
 //will add logic to anim tasks for if target is ghost that will change the color of eth bubles 
 //using a custom color argument
+//can potentially use dif pallete tag? ANIM_TAG_SHADOW_BALL want to make it black vsonic
 {
     u16 species;
     u8 spriteId, newSpriteId;

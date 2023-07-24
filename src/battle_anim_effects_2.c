@@ -210,7 +210,7 @@ const struct SpriteTemplate gSwordsDanceBladeSpriteTemplate =
     .callback = Anim_SwordsDanceBlade,
 };
 
-const struct SpriteTemplate gSonicBoomSpriteTemplate =
+const struct SpriteTemplate gSonicScreechSpriteTemplate =
 {
     .tileTag = ANIM_TAG_AIR_WAVE,
     .paletteTag = ANIM_TAG_AIR_WAVE,
@@ -219,7 +219,7 @@ const struct SpriteTemplate gSonicBoomSpriteTemplate =
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimSonicBoomProjectile,
-};
+};//left for now potentially rename later
 
 const struct SpriteTemplate gAirWaveProjectileSpriteTemplate =
 {
