@@ -3121,9 +3121,9 @@ void TransformedMonStats(struct Pokemon *mon)
         newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
     }
 
-    gBattleScripting.field_28 = newMaxHP - oldMaxHP;
-    if (gBattleScripting.field_28 == 0)
-        gBattleScripting.field_28 = 1;
+    gBattleScripting.field_23 = newMaxHP - oldMaxHP;
+    if (gBattleScripting.field_23 == 0)
+        gBattleScripting.field_23 = 1;
 
     SetMonData(mon, MON_DATA_MAX_HP, &newMaxHP);
 
