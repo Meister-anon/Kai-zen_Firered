@@ -978,14 +978,37 @@ static const struct WindowTemplate sWindowTemplates_Dummy[] =
 };
 
 
-static const u8 sLevelNickTextColors[][3] =
+enum Text_Colors
 {
-    {0, 14, 10},
-    {0, 1, 2},
-    {0, 9, 8},
-    {0, 5, 4},
-    {0, 2, 3},
-    {0, 11, 10},
+    BLACK_COLOR,
+    RED_COLOR,
+    BLUE_PURPLE_COLOR,
+    LIGHT_GREEN_COLOR,
+    ORANGE_COLOR,
+    LIGHT_BROWN_COLOR,
+    PURPLE_COLOR,
+    LIGHT_GREY_COLOR
+};
+
+
+//3 values were in ARRAY represent
+/*  printer.bgColor = color[0];
+    printer.fgColor = color[1];
+    printer.shadowColor = color[2];*/
+    //first value should always be 0
+    //colors are different on different windows I think,
+    //so for reference these colors are on bg of skill page
+    //make new colors instead of editing existing for /nature
+static const u8 sLevelNickTextColors[][3] =
+{                      //bgColor   //fgColor         //shadowColor
+   [BLACK_COLOR] =          {0,     BLACK,               GREY_LAVENDER  },
+   [RED_COLOR] =            {0,      RED,                 ORANGE        },
+   [BLUE_PURPLE_COLOR] =    {0,    NAVY_BLUE,             PURPLE        },
+   [LIGHT_GREEN_COLOR] =    {0,   LIGHT_GREEN,            TAN           },
+   [ORANGE_COLOR] =         {0,     ORANGE,               PEACH         },
+   [LIGHT_BROWN_COLOR] =    {0,    LIGHT_BROWN,          GREY_LAVENDER  },
+   [PURPLE_COLOR] =         {0,      PURPLE,              PURPLE        },
+   [LIGHT_GREY_COLOR] =     {0,   GREY_LAVENDER,         WHITE          }, //colors cap at 14 it seems, changed grey shadow to white to make more readable was grey
 };
 
 static const u8 ALIGNED(4) sMultiBattlePartyOrder[] =
@@ -2664,14 +2687,215 @@ static void PrintInfoPage(void)
     }
 }
 
-static void PrintSkillsPage(void)//vsonic
+static const u8* GetNatureStatColor(u16 *string) 
+{                     
+    //changed struct to read the string for hte x position i.e which stat its on.
+    // if (string == &sMonSkillsPrinterXpos->curHpStr) /always 0  actually don't need to worry about this, can just leave it off my function 
+    // if (string == &sMonSkillsPrinterXpos->atkStr)
+    // if (string == &sMonSkillsPrinterXpos->defStr)
+    // if (string == &sMonSkillsPrinterXpos->spAStr)
+    // if (string == &sMonSkillsPrinterXpos->spDStr)
+    // if (string == &sMonSkillsPrinterXpos->speStr)
+    u16  *atkString = &sMonSkillsPrinterXpos->atkStr;
+    u16  *defString = &sMonSkillsPrinterXpos->defStr;
+    u16  *speedString = &sMonSkillsPrinterXpos->speStr;
+    u16  *spAtkString = &sMonSkillsPrinterXpos->spAStr;
+    u16  *spDefString = &sMonSkillsPrinterXpos->spDStr;
+    
+    //in comparison say if string == atkString as an example (I think?)
+    u8 nature;
+
+    nature = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY, NULL) % 25;
+
+
+
+    //actually this is all I need, this will be first check, filters for natures that default to black text 
+    //order of case if string == statraised return 6 else if string == statlowered return 7  else return 0
+    //temp separate for ease of reading
+    switch (nature) 
+    {
+    case NATURE_LONELY:
+        if (string == atkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == defString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_BRAVE:
+        if (string == atkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == speedString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_ADAMANT:
+        if (string == atkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spAtkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_NAUGHTY:
+        if (string == atkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spDefString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break; //end of attack boosts
+    case NATURE_BOLD:
+        if (string == defString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == atkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_RELAXED:
+        if (string == defString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == speedString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_IMPISH:
+        if (string == defString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spAtkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_LAX:
+        if (string == defString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spDefString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break; //end of defense boosts
+    case NATURE_TIMID:
+        if (string == speedString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == atkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_HASTY:
+        if (string == speedString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == defString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_JOLLY:
+        if (string == speedString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spAtkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_NAIVE:
+        if (string == speedString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spDefString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;//end of speed boosts
+    case NATURE_MODEST:
+        if (string == spAtkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == atkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_MILD:
+        if (string == spAtkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == defString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_QUIET:
+        if (string == spAtkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == speedString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_RASH:
+        if (string == spAtkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spDefString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break; //end of sp atk boosts
+    case NATURE_CALM:
+        if (string == spDefString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == atkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_GENTLE:
+        if (string == spDefString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == defString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_SASSY:
+        if (string == spDefString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == speedString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_CAREFUL:
+        if (string == spDefString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spAtkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break; //end of sp def boosts
+    case NATURE_QUIRKY:
+    case NATURE_BASHFUL:
+    case NATURE_SERIOUS:
+    case NATURE_DOCILE:
+    case NATURE_HARDY:
+    default: //neutral natures
+        return sLevelNickTextColors[BLACK_COLOR]; //for natures that don't boost any stat i.e neutral natures
+        break;
+    }
+}
+
+//put logic here for nature color 6 for boost   7 for negative
+//think can replace sLevelNickTextColors with  function that checks nature 
+//and returns color 0 6 or 7 based on how stat should be affected by nature
+static void PrintSkillsPage(void)//vsonic 
 {
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 14 + sMonSkillsPrinterXpos->curHpStr, 4, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.curHpStrBuf);
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->atkStr, 22, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK]);
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->defStr, 35, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF]);
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->spAStr, 48, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA]);
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->spDStr, 61, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD]);
-    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->speStr, 74, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->atkStr, 22, GetNatureStatColor(&sMonSkillsPrinterXpos->atkStr), TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->defStr, 35, GetNatureStatColor(&sMonSkillsPrinterXpos->defStr), TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->spAStr, 48, GetNatureStatColor(&sMonSkillsPrinterXpos->spAStr), TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->spDStr, 61, GetNatureStatColor(&sMonSkillsPrinterXpos->spDStr), TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->speStr, 74, GetNatureStatColor(&sMonSkillsPrinterXpos->speStr), TEXT_SKIP_DRAW, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE]);
     //AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 15 + sMonSkillsPrinterXpos->expStr, 87, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.expPointsStrBuf);
     AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 15 + sMonSkillsPrinterXpos->toNextLevel, 87, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.expToNextLevelStrBuf);
 }   //ok since this is going on window 3, and I need to move up abilities which are on window 5 think need decrease height of 3 for skills menu

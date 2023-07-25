@@ -4836,7 +4836,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 70,
         .baseSpDefense = 50,
         .type1 = TYPE_PSYCHIC,
-        .type2 = TYPE_FLYING,
+        .type2 = TYPE_NORMAL,   //Can't fly
         .catchRate = 190,
         .expYield = 64,
         //.evYield_SpAttack = 1,
@@ -7733,7 +7733,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_BUG,
-        .abilities = {ABILITY_INTIMIDATE, ABILITY_NONE},
+        .abilities = {ABILITY_INTIMIDATE, ABILITY_SWIFT_SWIM}, //keep this cuz water strider can still stand on water w wings
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_UNNERVE, ABILITY_ANTICIPATION},
         // #endif

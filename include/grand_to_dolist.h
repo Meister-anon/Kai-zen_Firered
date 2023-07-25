@@ -1196,7 +1196,7 @@ Thunder Wave Electric TM45
 * actually simpler than I thought, all I need to do is move up the text and fill the bottom of the window, with the```
 * description pixels - may not be able to move window? - DONE
 * 
-* noticed with ability names at 16 instead of 12,, will need to expand ability name graphic space in summary screen, 
+* noticed with ability names at 16 instead of 12,, will need to expand ability name graphic space in summary screen, -
 * 
 * buffed arceus, gave global stab, and changed to mystery type
 * 
@@ -2303,7 +2303,7 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * -so it copies all the enemies stats  but keeps its normal hp stat ( so 9/10 its just an inferior version)
 * also copies the enemies ivs and evs when most have 0, that seems horrible...  so change that so it keeps the users ivs and evs. - DONE? need test
 * -appears wasn't working, not properly copying species/stats was just doing moves, didn't get target ability etc.
-* working on retooling function having pointer errors
+* working on retooling function having pointer errors -DONE changed to keep enemy ivs as to reveal their ivs along with ability
 * 
 * better idea for ability name thanks to Anercomp,  rathr than counterorm ability name will be "Inversion"  pairs well with imposter
 *  base transform/imposoter logic seems to work, needs update hp box to show changed hp
@@ -2370,10 +2370,14 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * oh wait it gets those as a tm so guess I'd need to make branch poke a tm 
 * //buffed low kick & other weight based movs so base 40 power kicks in faster, at 5kg rather than 10
 * 
+* -for summary screen change colors for nature stat display, I never liked red/blue it didn't make senes to me,
+* instead changing to purple and light gray, contrast is color vs non-color making it more obvious which stat is the boost, and which is the draw back.
+* color handeled by sLevelNickTextColors array
+* 
 * will finish logic after pickup, as its essentially the same functionality, loop array of values and pick/assign one based on logic
 * 
 * rock head buff like iron fist boost power head based moves  headbutt skull bash etc.
-* moves list: head charge, head smash, headbutt, headlong rush, iron head, zen headbutt, skull bash
+* moves list: head charge, head smash, headbutt, headlong rush, iron head, zen headbutt, skull bash - DONE
 * 
 * //revampt skull  bash along with other "moves w charging turns" they're outdated
 * charging moves to change (that I haven't already)

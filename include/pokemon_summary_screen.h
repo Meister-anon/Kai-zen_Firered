@@ -14,6 +14,23 @@ u8 GetLastViewedMonIndex(void);
 void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, void (*callback)(void), u8 a4);
 void SetPokemonSummaryScreenMode(u8);
 
+//sLevelNickTextColors
+#define WHITE 0
+#define RED 1
+#define ORANGE 2
+#define PEACH 3
+#define TAN 4
+#define LIGHT_GREEN 5
+#define LIGHT_BLUE 6
+#define BLUE 7
+#define PURPLE 8
+#define NAVY_BLUE 9
+#define GREY_LAVENDER 10
+#define LIGHT_BROWN 11
+#define PINK 12
+#define DARK_BLUE 13
+#define BLACK 14
+
 // The Pokemon Summary Screen can operate in different modes. Certain features,
 // such as move re-ordering, are available in the different modes.
 enum PokemonSummaryScreenMode

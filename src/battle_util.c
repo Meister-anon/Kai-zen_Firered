@@ -3427,6 +3427,7 @@ u8 AtkCanceller_UnableToUseMove2(void)
 const u16 gFloatingSpecies[129] = {
     SPECIES_BEAUTIFLY,
     SPECIES_DUSTOX,
+    SPECIES_MASQUERAIN,
     SPECIES_NINJASK,
     SPECIES_DUSCLOPS,
     SPECIES_DUSKNOIR,
