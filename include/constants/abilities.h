@@ -329,7 +329,7 @@
 #define ABILITY_WETIKO 306 // for my version crabominable mix of refrigerate & regenerator
 #define ABILITY_EMPATH 307 // upgraded synchronize, not for umbreon psychic only
 #define ABILITY_EMPATHIC_CURSE 308 //ability for Mespirit - synchronize with pain split
-#define ABILITY_THRALL 309 //ability for Uxie - anticipation except it seals the move so it can't be used/selected
+#define ABILITY_INTHRALL 309 //ability for Uxie - anticipation except it seals the move so it can't be used/selected
 #define ABILITY_IRON_WILL 310 //abillity for Azelf - mix of pressure where it can paralyze the attacker, but lower odds, as thye also have to break will pressure odds that lower dmg done
 
 #define ABILITIES_COUNT 311 //   ability count is last ability number + 1 since we have to count ability 0

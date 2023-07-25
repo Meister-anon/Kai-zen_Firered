@@ -5469,6 +5469,21 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     ++effect;
                 }
                 break;
+            case ABILITY_EMPATHIC_CURSE:
+                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && gBattleMons[gBattlerAttacker].hp != 0
+                    && gBattleMons[gBattlerTarget].hp != 0
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && TARGET_TURN_DAMAGED)
+                {
+                    gBattleMoveDamage = (gHpDealt) / 5;
+                    if (gBattleMoveDamage == 0)
+                        gBattleMoveDamage = 1;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_RoughSkinActivates; //vsonic make new message
+                    ++effect;
+                }
+                break;
             case ABILITY_SIROCCO:
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && gBattleMons[gBattlerAttacker].hp != 0
@@ -6361,7 +6376,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_SYNCHRONIZE: // 7
-            if ((gLastUsedAbility == ABILITY_SYNCHRONIZE || gLastUsedAbility == ABILITY_EMPATH) && (gHitMarker & HITMARKER_SYNCHRONIZE_EFFECT))
+            if ((gLastUsedAbility == ABILITY_SYNCHRONIZE 
+                || gLastUsedAbility == ABILITY_EMPATH
+                || gLastUsedAbility == ABILITY_EMPATHIC_CURSE) 
+                && (gHitMarker & HITMARKER_SYNCHRONIZE_EFFECT))
             {
                 gHitMarker &= ~(HITMARKER_SYNCHRONIZE_EFFECT);
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
