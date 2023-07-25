@@ -342,6 +342,7 @@ struct SpecialStatus    //pretty sure all values
     u8 focusBanded : 1;
     u8 focusSashed : 1;
     u8 sturdied : 1;
+    u8 sturdyhungon:1; //new one time use  for sturdy avoiding exploion moves death
     u8 field1[3];
     u8 berryReduced : 1;
     u8 rototillerAffected : 1;  // to be affected by rototiller
