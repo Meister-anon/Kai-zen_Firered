@@ -803,12 +803,33 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * remember bad onion idea is set trainer view to 0, so you could walk right in front of a trainer and they wouldn't battle you.
 * You'd have to directly talk to them to trigger battle.
 * 
+* -note potentially tweak this logic so it doesn't work indoors, that way it doesn't affect battler guantlets for story
+* or just make it so it doesn't work in gyms, making it not work indoors would affct caves, and also  it not being useful
+* when you're going through a trainer guantlet would kinda make it pointless? - leave more for playerchoice is my motto
+* 
+* ok I'll leave it as it is, if players want to use it to skip guantlets missing out on exp that's up to them, 
+* but I need to see how that would affect certain points of the game like say nugget bridge.
+* 
+* may need to eithr disable based on  route/location or make alternative scripts to account for it...
+* 
 * Ironically its the change they made in gen 9, but my version is better as its linked to player choice rather than a global thing.
 * 
 * attempted setting up two type move effects, tyepcalc logic done, need make custom twotype effect for splishysplash, as want to add paralyze chance to it.
 * believe will add twotypeeffect to list of certain effects so the effect chance will be exclusively for whatever move effect I set.
 * I think adding the para chance is simple as just making a new effect and having its battlescript start with setmoveeffect paralysis 
 * then when done with logic can just go to battlescript hit.
+* 
+* idea from Jaan pokemoonchallenges repel should be easilly accessed through L button/ button press in overworld 
+* instead of requirin to go through menus.
+* I'm using help menu which is on L R so would potentially need tweak things
+* 
+* Also players setting game mode to L = A would cause issue potentially disable option
+* Set Help menu to L OR R,  set Repel Script/Function to the Alternate button since I have multiple variants of repel i.e bad onion
+* think what I will do is make repel bag slot, and pressing Button prompt in overworld would auto open bag to that slot without being able to move to others.
+* B press would return to overworld but from there you select which repel you want to use, and it'd continue as normal.
+* 
+* I alreeady have the BW  use another repel script setup for both versions so after that its no problem.
+* 
 * 
 * ok two_typed_move effect just uses normal hit battlescript by default, giving it its own effect, was just for logic in typecalc
 * so it reads the type from both move and argument.
