@@ -152,6 +152,7 @@ static const u8 sText_PkmnTrappedBySandTomb[] = _("{B_DEF_NAME_WITH_PREFIX} was 
 static const u8 sText_PkmnWrappedBy[] = _("{B_DEF_NAME_WITH_PREFIX} was WRAPPED by\n{B_ATK_NAME_WITH_PREFIX}!");
 static const u8 sText_PkmnClamped[] = _("{B_ATK_NAME_WITH_PREFIX} CLAMPED\n{B_DEF_NAME_WITH_PREFIX}!");
 static const u8 sText_PkmnHurtBy[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt\nby {B_BUFF1}!");
+static const u8 sText_PkmnHurtEmpathCurse[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} suffered the {B_DEF_ABILITY}!");
 static const u8 sText_PkmnFreedFrom[] = _("{B_ATK_NAME_WITH_PREFIX} was freed\nfrom {B_BUFF1}!");
 static const u8 sText_PkmnCrashed[] = _("{B_ATK_NAME_WITH_PREFIX} kept going\nand crashed!");
 const u8 gBattleText_MistShroud[] = _("{B_ATK_PREFIX2} became\nshrouded in MIST!");
@@ -1426,6 +1427,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_STICKYHOLDABSORBEDITEM - BATTLESTRINGS_TABLE_START]        = sText_StickyHoldAbsorb,
     [STRINGID_METEORBEAMCHARGING - BATTLESTRINGS_TABLE_START]            = sText_MeteorBeamCharging,
     [STRINGID_HEATUPBEAK - BATTLESTRINGS_TABLE_START]                    = sText_HeatingUpBeak,
+    [STRINGID_EMPATHIC_CURSE_ACTIVATES - BATTLESTRINGS_TABLE_START]      = sText_PkmnHurtEmpathCurse,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,

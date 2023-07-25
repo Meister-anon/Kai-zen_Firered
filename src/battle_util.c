@@ -5480,7 +5480,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
                     BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_RoughSkinActivates; //vsonic make new message
+                    gBattlescriptCurrInstr = BattleScript_EmpathicCurseActivates; //vsonic test
                     ++effect;
                 }
                 break;

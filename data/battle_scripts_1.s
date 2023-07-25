@@ -8718,6 +8718,15 @@ BattleScript_RoughSkinActivates::
 	waitmessage 0x40
 	tryfaintmon BS_ATTACKER, 0, NULL
 	return
+	
+BattleScript_EmpathicCurseActivates::
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	printstring STRINGID_EMPATHIC_CURSE_ACTIVATES
+	waitmessage 0x40
+	tryfaintmon BS_ATTACKER, 0, NULL
+	return
 
 BattleScript_RockyHelmetActivates::
 	@ don''t play the animation for a fainted mon
