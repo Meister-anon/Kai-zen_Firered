@@ -431,6 +431,10 @@ With that I can use GetMondata ability num, if 0 set a random abilityNum between
 * 
 * General Notes end:
 */
+goto NEW_STURDY_EFFECT  //logic in faintifabilitynotdamp for hpbar drop
+goto NEW_STURDY_PT2     //logic in setatkhptozero for hp data update, effects like memento explosion not healing wish
+goto NEW_STURDY_EFFECT_PT3 //last part of effect logic in tryfaintmon, for destiny bond
+
 goto TRAINER_PARTY_DATA
 goto TRAINER_DATA_STRUCTS
 

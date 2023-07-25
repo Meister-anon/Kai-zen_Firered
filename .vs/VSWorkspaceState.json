@@ -1,16 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\graphics",
-    "\\graphics\\door_anims",
-    "\\graphics\\object_events",
-    "\\graphics\\object_events\\pics",
-    "\\graphics\\object_events\\pics\\people",
     "\\include",
-    "\\sound",
-    "\\sound\\songs",
-    "\\sound\\songs\\midi"
+    "\\src"
   ],
-  "SelectedNode": "\\graphics\\door_anims\\hideout_elevator.png",
+  "SelectedNode": "\\include\\pokemon_summary_screen.h",
   "PreviewInSolutionExplorer": false
 }

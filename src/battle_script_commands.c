@@ -5483,6 +5483,7 @@ static void atk18_clearstatusfromeffect(void)
     gBattleScripting.multihitMoveEffect = 0;
 }
 
+#define NEW_STURDY_EFFECT_PT3
 static void atk19_tryfaintmon(void)
 {
     const u8 *BS_ptr;
@@ -5561,8 +5562,21 @@ static void atk19_tryfaintmon(void)
             {
                 gHitMarker &= ~(HITMARKER_DESTINYBOND);
                 BattleScriptPush(gBattlescriptCurrInstr);
-                gBattleMoveDamage = gBattleMons[battlerId].hp;
-                gBattlescriptCurrInstr = BattleScript_DestinyBondTakesLife;
+                if (GetBattlerAbility(battlerId) == ABILITY_STURDY
+                    && gBattleMons[battlerId].hp != 1 //lol glad I caught that, almost reintroduced  sturdy bug
+                    && !gSpecialStatuses[battlerId].sturdyhungon)
+                {
+                    gBattleMoveDamage = (gBattleMons[battlerId].hp - 1);//hopefully limits explosion to once per battle for mon whenever special status are cleared in main
+                    gSpecialStatuses[battlerId].sturdyhungon = TRUE;
+                   // gSpecialStatuses[battlerId].sturdied = TRUE; //sets moveresult sturdy plays mon hung on with sturdy message - wont work destinybond doesnt call moveresult
+                    gBattlescriptCurrInstr = BattleScript_AttackerSturdiedMsg; //need test should call sturdymessage
+                }
+                else
+                {
+                    gBattleMoveDamage = gBattleMons[battlerId].hp;
+                    gBattlescriptCurrInstr = BattleScript_DestinyBondTakesLife;
+                }
+                    
             }
             if ((gStatuses3[gBattlerTarget] & STATUS3_GRUDGE)
              && !(gHitMarker & HITMARKER_GRUDGE)
@@ -12128,6 +12142,7 @@ static void atk77_setprotectlike(void)
     ++gBattlescriptCurrInstr;
 }
 
+#define NEW_STURDY_EFFECT
 static void atk78_faintifabilitynotdamp(void)
 {
     if (!gBattleControllerExecFlags)
@@ -12144,16 +12159,13 @@ static void atk78_faintifabilitynotdamp(void)
             {
                 gBattleMoveDamage = (gBattleMons[gActiveBattler].hp - 1);//hopefully limits explosion to once per battle for mon whenever special status are cleared in main
                 gSpecialStatuses[gActiveBattler].sturdyhungon = TRUE;
+                RecordAbilityBattle(gActiveBattler, ABILITY_STURDY);
+                gLastUsedAbility = ABILITY_STURDY;
             }
             else
                 gBattleMoveDamage = gBattleMons[gActiveBattler].hp;
             BtlController_EmitHealthBarUpdate(0, INSTANT_HP_BAR_DROP);   //moves hp bar, not actually doing damage, that's in setatkhptozero
             MarkBattlerForControllerExec(gActiveBattler);
-            if (GetBattlerAbility(gActiveBattler) == ABILITY_STURDY)
-            {
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_SturdiedMsg; //hopefully this works how I want, should explode be on 1 hp play sturdy message then continue as normal
-            }
             ++gBattlescriptCurrInstr;
 
             for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; ++gBattlerTarget)
@@ -12169,6 +12181,7 @@ static void atk78_faintifabilitynotdamp(void)
     }
 }
 
+#define NEW_STURDY_PT2
 static void atk79_setatkhptozero(void)
 {
     if (!gBattleControllerExecFlags)
@@ -12182,6 +12195,9 @@ static void atk79_setatkhptozero(void)
             gBattleMons[gActiveBattler].hp = 0;
         BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, 0, 2, &gBattleMons[gActiveBattler].hp);
         MarkBattlerForControllerExec(gActiveBattler);
+        if (GetBattlerAbility(gActiveBattler) == ABILITY_STURDY
+            && gBattleMoves[gCurrentMove].effect != EFFECT_HEALING_WISH)
+            BattleScriptPushCursorAndCallback(BattleScript_AttackerSturdiedMsg); //not perfect but should display message for sturdy mon surviving
         ++gBattlescriptCurrInstr;
     }
 }

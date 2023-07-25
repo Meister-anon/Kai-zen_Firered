@@ -4645,7 +4645,7 @@ BattleScript_EffectBatonPass::
 	switchineffects BS_ATTACKER
 	goto BattleScript_MoveEnd
 
-	BattleScript_EffectMindBlown::
+BattleScript_EffectMindBlown::
 	attackcanceler
 	attackstring
 	ppreduce
@@ -7258,6 +7258,14 @@ BattleScript_SturdiedMsg::
 	printstring STRINGID_ENDUREDSTURDY
 	waitmessage B_WAIT_TIME_LONG
 	return
+
+BattleScript_AttackerSturdiedMsg::
+	pause B_WAIT_TIME_SHORTEST
+	@ call BattleScript_AbilityPopUpTarget
+	printstring STRINGID_ATTACKER_STURDY
+	waitmessage B_WAIT_TIME_LONG
+	return	
+
 
 BattleScript_SAtkDown2::
 	setbyte sSTAT_ANIM_PLAYED, 0

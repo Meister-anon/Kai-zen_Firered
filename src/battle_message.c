@@ -536,6 +536,7 @@ static const u8 sText_StenchExits[] = _("The foul odor has cleared!");  //setup 
 // New battle strings.
 static const u8 sText_Infestation[] = _("{B_DEF_NAME_WITH_PREFIX} has been afflicted\nwith an infestation by {B_ATK_NAME_WITH_PREFIX}!");
 static const s8 sText_EnduredViaSturdy[] = _("{B_DEF_NAME_WITH_PREFIX} ENDURED\nthe hit via {B_DEF_ABILITY}!");
+static const s8 sText_AttackerEnduredViaSturdy[] = _("{B_ATK_NAME_WITH_PREFIX} ENDURED\nthe hit via {B_DEF_ABILITY}!");
 static const s8 sText_PowerHerbActivation[] = _("{B_ATK_NAME_WITH_PREFIX} became fully charged\ndue to its {B_LAST_ITEM}!");
 static const s8 sText_HurtByItem[] = _("{B_ATK_NAME_WITH_PREFIX} was hurt\nby its {B_LAST_ITEM}!");
 static const s8 sText_BadlyPoisonedByItem[] = _("{B_EFF_NAME_WITH_PREFIX} was badly \npoisoned by the {B_LAST_ITEM}!");
@@ -1428,6 +1429,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_METEORBEAMCHARGING - BATTLESTRINGS_TABLE_START]            = sText_MeteorBeamCharging,
     [STRINGID_HEATUPBEAK - BATTLESTRINGS_TABLE_START]                    = sText_HeatingUpBeak,
     [STRINGID_EMPATHIC_CURSE_ACTIVATES - BATTLESTRINGS_TABLE_START]      = sText_PkmnHurtEmpathCurse,
+    [STRINGID_ATTACKER_STURDY - BATTLESTRINGS_TABLE_START]               = sText_AttackerEnduredViaSturdy,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
