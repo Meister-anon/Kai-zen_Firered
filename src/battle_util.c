@@ -5492,7 +5492,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && (IsMoveMakingContact(move, gBattlerAttacker)))
                 {
                     gBattleWeather = (WEATHER_SANDSTORM_TEMPORARY);
-                    BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
+                    BattleScriptPushCursorAndCallback(BattleScript_SandSpitActivates); //made custom as sandstream used attack while this is target specific 
                     gBattleScripting.battler = battler;
                     ++effect;
                 }

@@ -186,10 +186,10 @@
 	.byte 0x20
 	.endm
 
-	.macro jumpargeq param0:req, param1:req, ptr:req
+	.macro jumpargeq argId:req, value:req, ptr:req
 	.byte 0x21
-	.byte \param0
-	.2byte \param1
+	.byte \argId
+	.2byte \value
 	.4byte \ptr
 	.endm
 

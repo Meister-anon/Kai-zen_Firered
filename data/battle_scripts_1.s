@@ -7991,6 +7991,16 @@ BattleScript_SandstreamActivates::
 	call BattleScript_HandleWeatherFormChanges
 	end3
 
+@NEED test
+BattleScript_SandSpitActivates::
+	pause B_WAIT_TIME_SHORT
+	@call BattleScript_AbilityPopUp
+	printstring STRINGID_TARGETSXWHIPPEDUPSANDSTORM
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_SANDSTORM_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	return
+
 BattleScript_ShedSkinActivates::
 	printstring STRINGID_PKMNSXCUREDYPROBLEM
 	waitmessage 0x40

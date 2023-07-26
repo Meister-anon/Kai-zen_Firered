@@ -923,7 +923,7 @@ Move_MIRROR_MOVE:: @ 81C6F34
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg 1
 	setalpha 12, 8
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
 	waitforvisualfinish
@@ -938,7 +938,7 @@ Move_DOUBLE_SLAP:: @ 81C6F65
 	choosetwoturnanim DoubleSlapLeft, DoubleSlapRight
 DoubleSlapContinue:: @ 81C6F76
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg 1
 	blendoff
@@ -955,7 +955,7 @@ DoubleSlapRight:: @ 81C6FA4
 Move_POISON_POWDER:: @ 81C6FB8
 	loadspritegfx ANIM_TAG_POISON_POWDER
 	loadspritegfx ANIM_TAG_POISON_BUBBLE
-	loopsewithpan SE_M_POISON_POWDER, 63, 10, 6
+	loopsewithpan SE_M_POISON_POWDER, SOUND_PAN_TARGET, 10, 6
 	createsprite gPoisonPowderParticleSpriteTemplate, ANIM_TARGET, 2, -30, -22, 117, 80, 5, 1
 	createsprite gPoisonPowderParticleSpriteTemplate, ANIM_TARGET, 2, 10, -22, 117, 80, -5, 1
 	createsprite gPoisonPowderParticleSpriteTemplate, ANIM_TARGET, 2, -25, -22, 117, 112, 5, 3
@@ -979,7 +979,7 @@ Move_POISON_POWDER:: @ 81C6FB8
 
 Move_STUN_SPORE:: @ 81C70E9
 	loadspritegfx ANIM_TAG_STUN_SPORE
-	loopsewithpan SE_M_POISON_POWDER, 63, 10, 6
+	loopsewithpan SE_M_POISON_POWDER, SOUND_PAN_TARGET, 10, 6
 	createsprite gStunSporeParticleSpriteTemplate, ANIM_TARGET, 2, -30, -22, 117, 80, 5, 1
 	createsprite gStunSporeParticleSpriteTemplate, ANIM_TARGET, 2, 10, -22, 117, 80, -5, 1
 	createsprite gStunSporeParticleSpriteTemplate, ANIM_TARGET, 2, -25, -22, 117, 112, 5, 3
@@ -1003,7 +1003,7 @@ Move_STUN_SPORE:: @ 81C70E9
 
 Move_SLEEP_POWDER:: @ 81C7217
 	loadspritegfx ANIM_TAG_SLEEP_POWDER
-	loopsewithpan SE_M_POISON_POWDER, 63, 10, 6
+	loopsewithpan SE_M_POISON_POWDER, SOUND_PAN_TARGET, 10, 6
 	createsprite gSleepPowderParticleSpriteTemplate, ANIM_TARGET, 2, -30, -22, 117, 80, 5, 1
 	createsprite gSleepPowderParticleSpriteTemplate, ANIM_TARGET, 2, 10, -22, 117, 80, -5, 1
 	createsprite gSleepPowderParticleSpriteTemplate, ANIM_TARGET, 2, -25, -22, 117, 112, 5, 3
@@ -1063,13 +1063,13 @@ Move_STRENGTH:: @ 81C73FE
 	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 4
 	createvisualtask AnimTask_TranslateMonEllipticalRespectSide, 2, 1, 18, 6, 2, 4
 	delay 4
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 16, 12, 1, 1
 	delay 4
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, -16, -12, 1, 1
 	delay 4
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 3, 4, 1, 1
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 8, 1
@@ -1086,7 +1086,7 @@ Move_TACKLE:: @ 81C7492
 	delay 6
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg 1
 	blendoff
@@ -1103,7 +1103,7 @@ Move_BODY_SLAM:: @ 81C74D0
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 0, 26, 0, 0, 5
 	delay 6
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 4, -10, 0, 1, 0
-	loopsewithpan SE_M_MEGA_KICK2, 63, 10, 2
+	loopsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET, 10, 2
 	delay 1
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 1, -28, 0, 0, 3
 	waitforvisualfinish
@@ -1186,7 +1186,7 @@ Move_FLAME_WHEEL:: @ 81C7602
 	delay 4
 	createvisualtask AnimTask_ShakeMon, 2, 1, 5, 0, 8, 1
 	createvisualtask AnimTask_BlendMonInAndOut, 3, 1, 31, 12, 1, 1
-	playsewithpan SE_M_FLAME_WHEEL2, 63
+	playsewithpan SE_M_FLAME_WHEEL2, SOUND_PAN_TARGET
 	call FireSpreadEffect
 	delay 7
 	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 9
@@ -1208,17 +1208,17 @@ Move_PIN_MISSILE:: @ 81C76FC
 	delay 15
 	createsprite gPinMissileSpriteTemplate, ANIM_ATTACKER, 2, 20, -8, 8, 8, 20, -40
 	delay 4
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, -8, -8, 1, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 2, 1
 	delay 9
 	createsprite gPinMissileSpriteTemplate, ANIM_ATTACKER, 2, 20, -8, 0, 0, 20, -32
 	delay 4
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 8, 8, 1, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 2, 1
 	delay 14
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 2, 1
 	waitforvisualfinish
@@ -1237,17 +1237,17 @@ Move_ICICLE_SPEAR:: @ 81C77C1
 	delay 15
 	createsprite gIcicleSpearSpriteTemplate, ANIM_ATTACKER, 2, 20, -8, 8, 8, 20, -40
 	delay 4
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, -8, -8, 1, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 2, 1
 	delay 9
 	createsprite gIcicleSpearSpriteTemplate, ANIM_ATTACKER, 2, 20, -8, 0, 0, 20, -32
 	delay 4
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 8, 8, 1, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 2, 1
 	delay 14
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 2, 1
 	waitforvisualfinish
@@ -1264,7 +1264,7 @@ Move_TAKE_DOWN:: @ 81C7886
 	delay 35
 	createsprite gComplexPaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 31, 3, 1, 0, 10, 0, 0
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 4, -10, 0, 1, 0
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	delay 1
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 1, -16, 0, 0, 4
 	waitforvisualfinish
@@ -1293,7 +1293,7 @@ Move_DOUBLE_EDGE:: @ 81C791A
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 0, 20, 0, 0, 4
 	delay 3
 	waitforvisualfinish
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 4, -10, 0, 1, 0
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 1, -32, 0, 0, 3
 	waitforvisualfinish
@@ -1324,7 +1324,7 @@ Move_POISON_STING:: @ 81C7A2D
 	waitforvisualfinish
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 5, 1
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	waitforvisualfinish
 	call PoisonBubblesEffect
 	waitforvisualfinish
@@ -1344,7 +1344,7 @@ Move_TWINEEDLE:: @ 81C7A82
 	delay 20
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 5, 1
 	createsprite gHandleInvertHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, -4, 1, 3
-	loopsewithpan SE_M_HORN_ATTACK, 63, 5, 2
+	loopsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET, 5, 2
 	delay 1
 	createsprite gHandleInvertHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 10, 12, 1, 3
 	waitforvisualfinish
@@ -1354,7 +1354,7 @@ Move_TWINEEDLE:: @ 81C7A82
 
 Move_FIRE_BLAST:: @ 81C7AF5
 	loadspritegfx ANIM_TAG_SMALL_EMBER
-	createsoundtask sub_80DCE10, 137, 138
+	createsoundtask SoundTask_FireBlast, 137, 138
 	call FireBlastRing
 	call FireBlastRing
 	call FireBlastRing
@@ -1413,7 +1413,7 @@ Move_LEECH_SEED:: @ 81C7C23
 	playsewithpan SE_M_POISON_POWDER, 192
 	createsprite gLeechSeedSpriteTemplate, ANIM_TARGET, 2, 15, 0, 16, 24, 35, -37
 	delay 12
-	loopsewithpan SE_M_TAIL_WHIP, 63, 10, 8
+	loopsewithpan SE_M_TAIL_WHIP, SOUND_PAN_TARGET, 10, 8
 	waitforvisualfinish
 	end
 
@@ -1426,7 +1426,7 @@ Move_EMBER:: @ 81C7C79
 	delay 4
 	createsprite gEmberSpriteTemplate, ANIM_TARGET, 2, 20, 0, 16, 24, 20, 1
 	delay 16
-	playsewithpan SE_M_FLAME_WHEEL, 63
+	playsewithpan SE_M_FLAME_WHEEL, SOUND_PAN_TARGET
 	call EmberFireHit
 	call EmberFireHit
 	call EmberFireHit
@@ -1444,7 +1444,7 @@ Move_MEGA_PUNCH:: @ 81C7CED
 	delay 2
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 0, 0, 16, 0
 	setalpha 12, 8
-	playsewithpan SE_M_MEGA_KICK, 63
+	playsewithpan SE_M_MEGA_KICK, SOUND_PAN_TARGET
 	createsprite gMegaPunchKickSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 0, 50
 	createvisualtask AnimTask_BlendSelected, 10, 4, 2, 0, 7, RGB_WHITE
 	delay 50
@@ -1453,7 +1453,7 @@ Move_MEGA_PUNCH:: @ 81C7CED
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 22, 1
 	createvisualtask AnimTask_BlendSelected, 10, 4, 2, 0, 0, RGB_WHITE
 	createsprite gComplexPaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 31, 3, 1, 0, 8, 0, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg 1
 	blendoff
@@ -1491,11 +1491,11 @@ Move_MEGA_KICK:: @ 81C7DC7
 	delay 2
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 0, 0, 16, 0
 	setalpha 12, 8
-	playsewithpan SE_M_MEGA_KICK, 63
+	playsewithpan SE_M_MEGA_KICK, SOUND_PAN_TARGET
 	createsprite gMegaPunchKickSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 50
 	createvisualtask AnimTask_BlendSelected, 10, 4, 2, 0, 7, RGB_WHITE
 	delay 50
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	call SetImpactBackground
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 0
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 22, 1
@@ -1518,7 +1518,7 @@ Move_COMET_PUNCH:: @ 81C7E63
 
 CometPunchContinue:: @ 81C7E77
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg 1
 	blendoff
@@ -1568,7 +1568,7 @@ Move_THUNDER_SHOCK:: @ 81C7F3C
 	waitforvisualfinish
 	delay 10
 	createvisualtask AnimTask_ElectricBolt, 5, 0, -44, 0
-	playsewithpan SE_M_THUNDERBOLT, 63
+	playsewithpan SE_M_THUNDERBOLT, SOUND_PAN_TARGET
 	delay 9
 	createvisualtask AnimTask_BlendSelected, 10, 4, 0, 0, 13, RGB_BLACK
 	waitforvisualfinish
@@ -1590,13 +1590,13 @@ Move_THUNDERBOLT:: @ 81C7FAA
 	waitforvisualfinish
 	delay 10
 	createvisualtask AnimTask_ElectricBolt, 5, 24, -52, 0
-	playsewithpan SE_M_THUNDERBOLT, 63
+	playsewithpan SE_M_THUNDERBOLT, SOUND_PAN_TARGET
 	delay 7
 	createvisualtask AnimTask_ElectricBolt, 5, -24, -52, 0
-	playsewithpan SE_M_THUNDERBOLT, 63
+	playsewithpan SE_M_THUNDERBOLT, SOUND_PAN_TARGET
 	delay 7
 	createvisualtask AnimTask_ElectricBolt, 5, 0, -60, 1
-	playsewithpan SE_M_THUNDERBOLT, 63
+	playsewithpan SE_M_THUNDERBOLT, SOUND_PAN_TARGET
 	delay 9
 	createvisualtask AnimTask_BlendSelected, 10, 4, 0, 0, 13, RGB_BLACK
 	waitforvisualfinish
@@ -1612,7 +1612,7 @@ Move_THUNDERBOLT:: @ 81C7FAA
 	createsprite gSparkElectricityFlashingSpriteTemplate, ANIM_TARGET, 4, 0, 0, 16, 44, 96, 40, 1, -32765
 	createsprite gSparkElectricityFlashingSpriteTemplate, ANIM_TARGET, 4, 0, 0, 16, 44, 160, 40, 0, -32765
 	createsprite gSparkElectricityFlashingSpriteTemplate, ANIM_TARGET, 4, 0, 0, 16, 44, 224, 40, 2, -32765
-	playsewithpan SE_M_HYPER_BEAM, 63
+	playsewithpan SE_M_HYPER_BEAM, SOUND_PAN_TARGET
 	delay 0
 	createvisualtask AnimTask_BlendSelected, 10, 1, 0, 2, 2, RGB_BLACK
 	delay 6
@@ -1623,7 +1623,7 @@ Move_THUNDERBOLT:: @ 81C7FAA
 	createvisualtask AnimTask_BlendSelected, 10, 1, 0, 6, 6, RGB_BLACK
 	waitforvisualfinish
 	delay 20
-	waitplaysewithpan SE_M_THUNDERBOLT2, 63, 19
+	waitplaysewithpan SE_M_THUNDERBOLT2, SOUND_PAN_TARGET, 19
 	call ElectricityEffect
 	waitforvisualfinish
 	delay 20
@@ -1639,9 +1639,9 @@ Move_THUNDER_WAVE:: @ 81C8160
 	waitforvisualfinish
 	delay 10
 	createvisualtask AnimTask_ElectricBolt, 5, 0, -48, 0
-	playsewithpan SE_M_THUNDER_WAVE, 63
+	playsewithpan SE_M_THUNDER_WAVE, SOUND_PAN_TARGET
 	delay 20
-	loopsewithpan SE_M_THUNDERBOLT2, 63, 10, 4
+	loopsewithpan SE_M_THUNDERBOLT2, SOUND_PAN_TARGET, 10, 4
 	createsprite gThunderWaveSpriteTemplate, ANIM_TARGET, 2, -16, -16
 	delay 4
 	createsprite gThunderWaveSpriteTemplate, ANIM_TARGET, 2, -16, 0
@@ -1668,24 +1668,24 @@ BeatUpLeft:: @ 81C81E8
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, -20, -20, 1, 2
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 3, -20, -12, 8, 1, 0
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	delay 8
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, 8, 0, 1, 2
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 3, 8, 8, 8, 1, 0
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	goto BeatUpContinue
 
 BeatUpRight:: @ 81C8259
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, 12, -20, 1, 2
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 3, 12, -12, 8, 1, 0
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	delay 8
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, -12, 0, 1, 2
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 3, -12, 8, 8, 1, 0
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	goto BeatUpContinue
 
 Move_STOMP:: @ 81C82CA
@@ -1693,12 +1693,12 @@ Move_STOMP:: @ 81C82CA
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg 1
 	setalpha 12, 8
-	playsewithpan SE_M_DOUBLE_TEAM, 63
+	playsewithpan SE_M_DOUBLE_TEAM, SOUND_PAN_TARGET
 	createsprite gStompFootSpriteTemplate, ANIM_ATTACKER, 3, 0, -32, 15
 	delay 19
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, -8, 1, 1
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 4, 9, 1
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg 1
 	blendoff
@@ -1714,7 +1714,7 @@ Move_CUT:: @ 81C832A
 	loadspritegfx ANIM_TAG_CUT
 	monbg 1
 	setalpha 12, 8
-	playsewithpan SE_M_CUT, 63
+	playsewithpan SE_M_CUT, SOUND_PAN_TARGET
 	createsprite gCuttingSliceSpriteTemplate, ANIM_ATTACKER, 2, 40, -32, 0
 	delay 5
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 3, 10, 1
@@ -1775,7 +1775,7 @@ Move_REVERSAL:: @ 81C8445
 	delay 20
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 6, 4
 	delay 8
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gComplexPaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 31, 3, 1, RGB_WHITE, 8, 0, 0
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 4, 0, 0, 10, 1, 0
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 1
@@ -1800,13 +1800,13 @@ PursuitContinue:: @ 81C8536
 	end
 
 PursuitNormal:: @ 81C853F
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeTargetBasedOnMovePowerOrDmg, 5, 0, 1, 6, 1, 0
 	goto PursuitContinue
 
 PursuitOnSwitchout:: @ 81C8568
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 1
 	createvisualtask AnimTask_ShakeTargetBasedOnMovePowerOrDmg, 5, 0, 1, 6, 1, 0
 	goto PursuitContinue
@@ -1829,7 +1829,7 @@ Move_SPIKE_CANNON:: @ 81C8591
 	createsprite gHandleInvertHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 2
 	createsprite gHandleInvertHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 8, 8, 1, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 7, 1
-	loopsewithpan SE_M_HORN_ATTACK, 63, 5, 3
+	loopsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET, 5, 3
 	waitforvisualfinish
 	clearmonbg 1
 	blendoff
@@ -1878,7 +1878,7 @@ Move_DIZZY_PUNCH:: @ 81C86FC
 	call DizzyPunchLunge
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 5, 16, 8, 20, 1, 0
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 4, 16, 0, 1, 1
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gDizzyPunchDuckSpriteTemplate, ANIM_TARGET, 3, 16, 8, 160, -32
 	createsprite gDizzyPunchDuckSpriteTemplate, ANIM_TARGET, 3, 16, 8, -256, -40
 	createsprite gDizzyPunchDuckSpriteTemplate, ANIM_TARGET, 3, 16, 8, 128, -16
@@ -1889,7 +1889,7 @@ Move_DIZZY_PUNCH:: @ 81C86FC
 	call DizzyPunchLunge
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 5, -16, -8, 20, 1, 0
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 4, -16, -16, 1, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gDizzyPunchDuckSpriteTemplate, ANIM_TARGET, 3, -16, -8, 160, -32
 	createsprite gDizzyPunchDuckSpriteTemplate, ANIM_TARGET, 3, -16, -8, -256, -40
 	createsprite gDizzyPunchDuckSpriteTemplate, ANIM_TARGET, 3, -16, -8, 128, -16
@@ -1909,7 +1909,7 @@ DizzyPunchLunge:: @ 81C8817
 
 Move_FIRE_SPIN:: @ 81C8836
 	loadspritegfx ANIM_TAG_SMALL_EMBER
-	playsewithpan SE_M_SACRED_FIRE2, 63
+	playsewithpan SE_M_SACRED_FIRE2, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 2, 47, 1
 	call FireSpinEffect
 	call FireSpinEffect
@@ -1936,7 +1936,7 @@ Move_FURY_CUTTER:: @ 81C88EA
 	loadspritegfx ANIM_TAG_CUT
 	monbg 1
 	setalpha 12, 8
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	createvisualtask AnimTask_IsFuryCutterHitRight, 2, 
 	jumpargeq 7, 0, FuryCutterLeft
 	goto FuryCutterRight
@@ -2019,7 +2019,7 @@ Move_SLAM:: @ 81C8AA9
 	delay 1
 	createsprite gSlamHitSpriteTemplate, ANIM_ATTACKER, 2, 0, 0
 	delay 3
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 1
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 1, -12, 10, 0, 3
 	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 5
@@ -2039,7 +2039,7 @@ Move_VINE_WHIP:: @ 81C8B31
 	playsewithpan SE_M_JUMP_KICK, 192
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 4, 6
 	delay 6
-	playsewithpan SE_M_SCRATCH, 63
+	playsewithpan SE_M_SCRATCH, SOUND_PAN_TARGET
 	createsprite gVineWhipSpriteTemplate, ANIM_TARGET, 2, 0, 0
 	delay 6
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 6, 1
@@ -2054,7 +2054,7 @@ Move_DRILL_PECK:: @ 81C8B68
 	delay 2
 	createsprite gBowMonSpriteTemplate, ANIM_ATTACKER, 2, 1
 	delay 2
-	loopsewithpan SE_M_HORN_ATTACK, 63, 4, 8
+	loopsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET, 4, 8
 	createvisualtask AnimTask_DrillPeckHitSplats, 5
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 18, 1
 	waitforvisualfinish
@@ -2106,7 +2106,7 @@ Move_WATERFALL:: @ 81C8BC1
 	end
 
 RisingWaterHitEffect:: @ 81C8CA2
-	playsewithpan SE_M_WATERFALL, 63
+	playsewithpan SE_M_WATERFALL, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon2, 5, 1, 4, 0, 17, 1
 	createsprite gWaterHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 20, 1, 1
 	createsprite gSmallDriftingBubblesSpriteTemplate, ANIM_ATTACKER, 4, 0, 20
@@ -2249,22 +2249,22 @@ Frustration_Strongest:: @ 81C9004
 	delay 5
 	createvisualtask AnimTask_ShakeMon2, 5, 1, 4, 0, 30, 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 24, 8, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, -24, -16, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 8, 4, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, -16, 19, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 18, -18, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_BlendSelected, 10, 2, 3, 9, 0, RGB(31, 0, 0)
 	goto Frustration_Continue
@@ -2281,15 +2281,15 @@ Frustration_Strong:: @ 81C910A
 	delay 5
 	createvisualtask AnimTask_StrongFrustrationGrowAndShrink, 5, 
 	delay 7
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 8, 1, 1
 	createvisualtask AnimTask_ShakeMon2, 5, 1, 4, 0, 6, 1
 	delay 14
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 12, -6, 1, 1
 	createvisualtask AnimTask_ShakeMon2, 5, 1, 4, 0, 6, 1
 	delay 14
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, -12, -6, 1, 1
 	createvisualtask AnimTask_ShakeMon2, 5, 1, 4, 0, 6, 1
 	waitforvisualfinish
@@ -2303,13 +2303,13 @@ Frustration_Medium:: @ 81C91D7
 	delay 5
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 4, 4
 	delay 6
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 10, 4, 1, 1
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 6, 1
 	waitforvisualfinish
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 4, 4
 	delay 6
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -10, -4, 1, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 6, 1
 	goto Frustration_Continue
@@ -2320,7 +2320,7 @@ Frustration_Weak:: @ 81C9253
 	delay 10
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 10, 2
 	delay 12
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 1, 0, 6, 1
 	goto Frustration_Continue
@@ -2372,7 +2372,7 @@ Move_VICE_GRIP:: @ 81C9381
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
-	playsewithpan SE_M_VICEGRIP, 63
+	playsewithpan SE_M_VICEGRIP, SOUND_PAN_TARGET
 	createsprite gViceGripSpriteTemplate, ANIM_ATTACKER, 2, 0
 	createsprite gViceGripSpriteTemplate, ANIM_ATTACKER, 2, 1
 	delay 9
@@ -2390,7 +2390,7 @@ Move_GUILLOTINE:: @ 81C93C9
 	setalpha 12, 8
 	fadetobgfromset 12, 13, 14
 	waitbgfadein
-	playsewithpan SE_M_VICEGRIP, 63
+	playsewithpan SE_M_VICEGRIP, SOUND_PAN_TARGET
 	createsprite gGuillotineSpriteTemplate, ANIM_ATTACKER, 2, 0
 	createsprite gGuillotineSpriteTemplate, ANIM_ATTACKER, 2, 1
 	createvisualtask AnimTask_BlendSelected, 10, 4, 2, 0, 16, RGB_BLACK
@@ -2400,7 +2400,7 @@ Move_GUILLOTINE:: @ 81C93C9
 	createvisualtask AnimTask_ShakeMon2, 5, 1, 4, 0, 8, 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 0
 	createsprite gComplexPaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 31, 3, 1, 0, 8, 0, 0
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -2417,7 +2417,7 @@ Move_PAY_DAY:: @ 81C9455
 	playsewithpan SE_M_RAZOR_WIND2, 192
 	createsprite gCoinThrowSpriteTemplate, ANIM_ATTACKER, 2, 20, 0, 0, 0, 1152
 	waitforvisualfinish
-	playsewithpan SE_M_PAY_DAY, 63
+	playsewithpan SE_M_PAY_DAY, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 1, 0, 0, 1, 2
 	createsprite gFallingCoinSpriteTemplate, ANIM_ATTACKER, 2, 
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 1, 0, 6, 1
@@ -2509,7 +2509,7 @@ Move_SPARK:: @ 81C9643
 	createvisualtask AnimTask_BlendColorCycle, 2, 3, -31, 1, 0, 0, 23551
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 4, 4
 	delay 4
-	playsewithpan SE_M_HYPER_BEAM, 63
+	playsewithpan SE_M_HYPER_BEAM, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
 	waitforvisualfinish
@@ -2525,7 +2525,7 @@ Move_ATTRACT:: @ 81C985A
 	delay 15
 	createsprite gRedHeartProjectileSpriteTemplate, ANIM_TARGET, 3, 20, -8
 	waitforvisualfinish
-	playsewithpan SE_M_ATTRACT, 63
+	playsewithpan SE_M_ATTRACT, SOUND_PAN_TARGET
 	createsprite gRedHeartBurstSpriteTemplate, ANIM_TARGET, 3, 160, -32
 	createsprite gRedHeartBurstSpriteTemplate, ANIM_TARGET, 3, -256, -40
 	createsprite gRedHeartBurstSpriteTemplate, ANIM_TARGET, 3, 128, -16
@@ -2569,12 +2569,12 @@ Move_WHIRLWIND:: @ 81C9989
 	createsprite gWhirlwindLineSpriteTemplate, ANIM_ATTACKER, 2, 0, 24, 1, 60, 4
 	createsprite gWhirlwindLineSpriteTemplate, ANIM_ATTACKER, 2, 0, 32, 1, 60, 0
 	delay 5
-	loopsewithpan SE_M_DOUBLE_TEAM, 63, 10, 4
+	loopsewithpan SE_M_DOUBLE_TEAM, SOUND_PAN_TARGET, 10, 4
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 15, 1
 	delay 29
 	createvisualtask AnimTask_TranslateMonEllipticalRespectSide, 2, 1, 12, 6, 1, 5
 	delay 7
-	playsewithpan SE_M_STRING_SHOT, 63
+	playsewithpan SE_M_STRING_SHOT, SOUND_PAN_TARGET
 	createvisualtask AnimTask_SlideOffScreen, 5, 1, 8
 	waitforvisualfinish
 	end
@@ -2584,12 +2584,12 @@ Move_CONFUSE_RAY:: @ 81C9A31
 	monbg ANIM_DEF_PARTNER
 	fadetobg 2
 	waitbgfadein
-	createvisualtask SoundTask_AdjustPanningVar, 2, -64, 63, 2, 0
+	createvisualtask SoundTask_AdjustPanningVar, 2, -64, SOUND_PAN_TARGET, 2, 0
 	createvisualtask AnimTask_BlendColorCycleByTag, 2, ANIM_TAG_YELLOW_BALL, 0, 6, 0, 14, 351
 	createsprite gConfuseRayBallBounceSpriteTemplate, ANIM_TARGET, 2, 28, 0, 288
 	waitforvisualfinish
 	setalpha 8, 8
-	playsewithpan SE_M_STRING_SHOT2, 63
+	playsewithpan SE_M_STRING_SHOT2, SOUND_PAN_TARGET
 	createsprite gConfuseRayBallSpiralSpriteTemplate, ANIM_TARGET, 2, 0, -16
 	waitforvisualfinish
 	delay 0
@@ -2616,8 +2616,8 @@ Move_MEAN_LOOK:: @ 81C9ABA
 	monbg ANIM_DEF_PARTNER
 	playsewithpan SE_M_PSYBEAM, 192
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 1, 0, 16, 0
-	loopsewithpan SE_M_CONFUSE_RAY, 63, 15, 4
-	waitplaysewithpan SE_M_LEER, 63, 85
+	loopsewithpan SE_M_CONFUSE_RAY, SOUND_PAN_TARGET, 15, 4
+	waitplaysewithpan SE_M_LEER, SOUND_PAN_TARGET, 85
 	createsprite gMeanLookEyeSpriteTemplate, ANIM_ATTACKER, 2, 
 	delay 120
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 2, 16, 0, 0
@@ -2630,20 +2630,20 @@ Move_ROCK_THROW:: @ 81C9AFF
 	loadspritegfx ANIM_TAG_ROCKS
 	createsprite gShakeMonOrTerrainSpriteTemplate, ANIM_TARGET, 2, 6, 1, 15, 1
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, 0, 1, 0, 0
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 6
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, 19, 1, 10, 0
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 6
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, -23, 2, -10, 0
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 5, 20, 1
 	delay 6
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, -15, 1, -10, 0
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 6
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, 23, 2, 10, 0
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	waitforvisualfinish
 	end
 
@@ -2652,16 +2652,16 @@ Move_ROCK_SLIDE:: @ 81C9B8B
 	monbg ANIM_DEF_PARTNER
 	createsprite gShakeMonOrTerrainSpriteTemplate, ANIM_ATTACKER, 2, 7, 1, 11, 1
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, -5, 1, -5, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, 5, 0, 6, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, 19, 1, 10, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, -23, 2, -10, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 5, 50, 1
 	createvisualtask AnimTask_ShakeMon, 2, 3, 0, 5, 50, 1
 	delay 2
@@ -2673,28 +2673,28 @@ Move_ROCK_SLIDE:: @ 81C9B8B
 
 RockSlideRocks:: @ 81C9C23
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, -20, 0, -10, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, 28, 1, 10, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, -10, 1, -5, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, 10, 0, 6, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, 24, 1, 10, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, -32, 2, -10, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, -20, 0, -10, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFallingRockSpriteTemplate, ANIM_TARGET, 2, 30, 2, 10, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 2
 	return
 
@@ -2707,7 +2707,7 @@ Move_THIEF:: @ 81C9CCC
 	setalpha 12, 8
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 6, 4
 	delay 6
-	playsewithpan SE_M_VITAL_THROW, 63
+	playsewithpan SE_M_VITAL_THROW, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 1, 0, 8, 1
 	waitforvisualfinish
@@ -2767,11 +2767,11 @@ Move_ICY_WIND:: @ 81C9DF0
 	playsewithpan SE_M_ICY_WIND, 0
 	waitbgfadein
 	waitforvisualfinish
-	panse_1B SE_M_GUST, 192, 63, 2, 0
+	panse_1B SE_M_GUST, 192, SOUND_PAN_TARGET, 2, 0
 	call IcyWindSwirlingSnowballs
 	delay 5
 	call IcyWindSwirlingSnowballs
-	playsewithpan SE_M_GUST2, 63
+	playsewithpan SE_M_GUST2, SOUND_PAN_TARGET
 	delay 55
 	call IceSpikesEffectLong
 	waitforvisualfinish
@@ -2802,7 +2802,7 @@ Move_SMOKESCREEN:: @ 81C9EB0
 	waitforvisualfinish
 	createvisualtask AnimTask_SmokescreenImpact, 2, 
 	delay 2
-	playsewithpan SE_M_SAND_ATTACK, 63
+	playsewithpan SE_M_SAND_ATTACK, SOUND_PAN_TARGET
 	createsprite gBlackSmokeSpriteTemplate, ANIM_TARGET, 4, 0, -12, 104, 0, 75
 	createsprite gBlackSmokeSpriteTemplate, ANIM_TARGET, 4, 0, -12, 72, 1, 75
 	createsprite gBlackSmokeSpriteTemplate, ANIM_TARGET, 4, 0, -6, 56, 1, 75
@@ -2876,7 +2876,7 @@ Move_CONVERSION_2:: @ 81CA0BE
 	monbgprio_2A 1
 	setalpha 0, 16
 	delay 0
-	playsewithpan SE_M_BARRIER, 63
+	playsewithpan SE_M_BARRIER, SOUND_PAN_TARGET
 	createsprite gConversion2SpriteTemplate, ANIM_ATTACKER, 2, -24, -24, 60
 	createsprite gConversion2SpriteTemplate, ANIM_ATTACKER, 2, -8, -24, 65
 	createsprite gConversion2SpriteTemplate, ANIM_ATTACKER, 2, 8, -24, 70
@@ -2895,21 +2895,21 @@ Move_CONVERSION_2:: @ 81CA0BE
 	createsprite gConversion2SpriteTemplate, ANIM_ATTACKER, 2, 24, 24, 135
 	createvisualtask AnimTask_Conversion2AlphaBlend, 5, 
 	delay 60
-	playsewithpan SE_M_SWIFT, 63
+	playsewithpan SE_M_SWIFT, SOUND_PAN_TARGET
 	delay 10
-	playsewithpan SE_M_SWIFT, 63
+	playsewithpan SE_M_SWIFT, SOUND_PAN_TARGET
 	delay 10
-	playsewithpan SE_M_SWIFT, 63
+	playsewithpan SE_M_SWIFT, SOUND_PAN_TARGET
 	delay 10
-	playsewithpan SE_M_SWIFT, 63
+	playsewithpan SE_M_SWIFT, SOUND_PAN_TARGET
 	delay 10
-	playsewithpan SE_M_SWIFT, 63
+	playsewithpan SE_M_SWIFT, SOUND_PAN_TARGET
 	delay 10
-	playsewithpan SE_M_SWIFT, 63
+	playsewithpan SE_M_SWIFT, SOUND_PAN_TARGET
 	delay 10
-	playsewithpan SE_M_SWIFT, 63
+	playsewithpan SE_M_SWIFT, SOUND_PAN_TARGET
 	delay 10
-	playsewithpan SE_M_SWIFT, 63
+	playsewithpan SE_M_SWIFT, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -2928,7 +2928,7 @@ Move_ROLLING_KICK:: @ 81CA1DA
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 0, 20, 0, 0, 4
 	createsprite gSlidingKickSpriteTemplate, ANIM_ATTACKER, 2, -24, 0, 48, 10, 160, 0
 	delay 5
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -8, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon, 2, 1, 5, 0, 6, 1
 	waitforvisualfinish
@@ -2949,7 +2949,7 @@ Move_HEADBUTT:: @ 81CA25D
 	createvisualtask AnimTask_ShakeMon, 2, 1, 5, 0, 6, 1
 	createsprite gBowMonSpriteTemplate, ANIM_ATTACKER, 2, 2
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	end
 
@@ -2967,7 +2967,7 @@ Move_HORN_ATTACK:: @ 81CA2BA
 	createvisualtask AnimTask_ShakeMon, 2, 1, 5, 0, 6, 1
 	createsprite gBowMonSpriteTemplate, ANIM_ATTACKER, 2, 2
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 1
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	waitforvisualfinish
 	end
 
@@ -2985,14 +2985,14 @@ FuryAttackRight:: @ 81CA358
 	createsprite gHornHitSpriteTemplate, ANIM_TARGET, 4, 8, 8, 10
 	waitforvisualfinish
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 1
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	goto FuryAttackContinue
 
 FuryAttackLeft:: @ 81CA37E
 	createsprite gHornHitSpriteTemplate, ANIM_TARGET, 4, -8, -8, 10
 	waitforvisualfinish
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 1
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	goto FuryAttackContinue
 
 Move_HORN_DRILL:: @ 81CA3A4
@@ -3016,37 +3016,37 @@ HornDrillContinue:: @ 81CA3C1
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 0, 2, 0, 40, 1
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 1, 10, 0, 40, 1
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 3
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	delay 4
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 2, 1, 3
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	delay 4
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, -4, 3, 1, 3
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	delay 4
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, -8, -5, 1, 3
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	delay 4
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 4, -12, 1, 3
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	delay 4
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 16, 0, 1, 3
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	delay 4
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 5, 18, 1, 3
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	delay 4
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, -17, 12, 1, 2
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	delay 4
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, -21, -15, 1, 2
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	delay 4
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 8, -27, 1, 2
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	delay 4
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 32, 0, 1, 2
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	delay 4
 	createsprite gBowMonSpriteTemplate, ANIM_ATTACKER, 2, 2
 	waitforvisualfinish
@@ -3069,15 +3069,15 @@ Move_THRASH:: @ 81CA521
 	createvisualtask AnimTask_ThrashMoveMonVertical, 2, 
 	createsprite gFistFootRandomPosSpriteTemplate, ANIM_TARGET, 3, 1, 10, 0
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 1, 4, 0, 7, 1
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	delay 28
 	createsprite gFistFootRandomPosSpriteTemplate, ANIM_TARGET, 3, 1, 10, 1
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 1, 4, 0, 7, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	delay 28
 	createsprite gFistFootRandomPosSpriteTemplate, ANIM_TARGET, 3, 1, 10, 3
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 1, 8, 0, 16, 1
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	end
 
 Move_SING:: @ 81CA5A0
@@ -3085,7 +3085,7 @@ Move_SING:: @ 81CA5A0
 	monbg ANIM_DEF_PARTNER
 	createvisualtask AnimTask_MusicNotesRainbowBlend, 2, 
 	waitforvisualfinish
-	panse_1B SE_M_SING, 192, 63, 2, 0
+	panse_1B SE_M_SING, 192, SOUND_PAN_TARGET, 2, 0
 	createsprite gWavyMusicNotesSpriteTemplate, ANIM_TARGET, 2, 7, 0, 12
 	delay 5
 	createsprite gWavyMusicNotesSpriteTemplate, ANIM_TARGET, 2, 6, 1, 12
@@ -3124,7 +3124,7 @@ Move_LOW_KICK:: @ 81CA674
 	delay 4
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, -8, 8, 1, 2
 	createvisualtask AnimTask_RotateMonSpriteToSide, 2, 6, 384, 1, 2
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 1, 4
 	end
@@ -3143,7 +3143,7 @@ Move_FISSURE:: @ 81CA71E
 	loadspritegfx ANIM_TAG_MUD_SAND
 	createvisualtask AnimTask_HorizontalShake, 3, 5, 10, 50
 	createvisualtask AnimTask_HorizontalShake, 3, 1, 10, 50
-	playsewithpan SE_M_EARTHQUAKE, 63
+	playsewithpan SE_M_EARTHQUAKE, SOUND_PAN_TARGET
 	delay 8
 	call FissureDirtPlumeFar
 	delay 15
@@ -3171,7 +3171,7 @@ FissureDirtPlumeFar:: @ 81CA79F
 	createsprite gDirtPlumeSpriteTemplate, ANIM_TARGET, 2, 1, 0, 16, -16, -10, 24
 	createsprite gDirtPlumeSpriteTemplate, ANIM_TARGET, 2, 1, 1, 14, -52, -18, 24
 	createsprite gDirtPlumeSpriteTemplate, ANIM_TARGET, 2, 1, 1, 12, -32, -16, 24
-	playsewithpan SE_M_DIG, 63
+	playsewithpan SE_M_DIG, SOUND_PAN_TARGET
 	return
 
 FissureDirtPlumeClose:: @ 81CA7F0
@@ -3179,7 +3179,7 @@ FissureDirtPlumeClose:: @ 81CA7F0
 	createsprite gDirtPlumeSpriteTemplate, ANIM_TARGET, 2, 1, 0, 16, -38, -10, 24
 	createsprite gDirtPlumeSpriteTemplate, ANIM_TARGET, 2, 1, 1, 14, -20, -18, 24
 	createsprite gDirtPlumeSpriteTemplate, ANIM_TARGET, 2, 1, 1, 12, -36, -16, 24
-	playsewithpan SE_M_DIG, 63
+	playsewithpan SE_M_DIG, SOUND_PAN_TARGET
 	return
 
 Move_DIG:: @ 81CA841
@@ -3291,7 +3291,7 @@ Move_SONIC_BOOM::
 	delay 17
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 16, 0, 1, 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -16, 0, 1, 1
-	loopsewithpan SE_M_DOUBLE_SLAP, 63, 5, 2
+	loopsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET, 5, 2
 	waitforvisualfinish
 	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 11
 	waitforvisualfinish
@@ -3316,7 +3316,7 @@ Move_WING_ATTACK:: @ 81CF699
 	delay 17
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 16, 0, 1, 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -16, 0, 1, 1
-	loopsewithpan SE_M_DOUBLE_SLAP, 63, 5, 2
+	loopsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET, 5, 2
 	waitforvisualfinish
 	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 11
 	waitforvisualfinish
@@ -3334,7 +3334,7 @@ Move_QUICK_ATTACK:: @ 81CA9C4
 	delay 4
 	createvisualtask AnimTask_ShakeMon, 2, 1, 5, 0, 6, 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 4, 0, 0, 1, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_ATK_PARTNER
 	blendoff
@@ -3357,7 +3357,7 @@ Move_RAGE:: @ 81CAA1C
 	delay 4
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeTargetBasedOnMovePowerOrDmg, 2, 1, 1, 10, 1, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg 1
 	end
@@ -3449,7 +3449,7 @@ SkullBashAttack:: @ 81CAB86
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 0, 2, 0, 40, 1
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 1, 10, 0, 40, 1
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 4, 0, 0, 1, 0
-	loopsewithpan SE_M_MEGA_KICK2, 63, 8, 3
+	loopsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET, 8, 3
 	waitforvisualfinish
 	createvisualtask AnimTask_SkullBashPosition, 2, 1
 	goto SkullBashEnd
@@ -3511,7 +3511,7 @@ Move_BARRAGE:: @ 81CACD3
 	createsprite gShakeMonOrTerrainSpriteTemplate, ANIM_ATTACKER, 2, 8, 1, 40, 1
 	createvisualtask AnimTask_ShakeMon, 3, 1, 0, 4, 20, 1
 	createvisualtask AnimTask_ShakeMon, 3, 3, 0, 4, 20, 1
-	loopsewithpan SE_M_STRENGTH, 63, 8, 2
+	loopsewithpan SE_M_STRENGTH, SOUND_PAN_TARGET, 8, 2
 	end
 
 Move_SKY_ATTACK:: @ 81CAD1B
@@ -3574,7 +3574,7 @@ SkyAttackUnleash:: @ 81CAE2E
 	createsprite gSkyAttackBirdSpriteTemplate, ANIM_TARGET, 2
 	delay 14
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 10, 0, 18, 1
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, SOUND_PAN_TARGET
 	delay 20
 	createvisualtask AnimTask_AttackerFadeFromInvisible, 5, 1
 	delay 2
@@ -3626,7 +3626,7 @@ Move_SUPER_FANG:: @ 81CAEFA
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 4, 4
 	delay 4
 	createsprite gSuperFangSpriteTemplate, ANIM_TARGET, 2, 
-	playsewithpan SE_M_BITE, 63
+	playsewithpan SE_M_BITE, SOUND_PAN_TARGET
 	delay 8
 	createsprite gComplexPaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 3, 1, 2143, 14, RGB_WHITE, 14
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 7, 12, 1
@@ -3637,11 +3637,11 @@ Move_SUPER_FANG:: @ 81CAEFA
 Move_SLASH:: @ 81CAF7B
 	loadspritegfx ANIM_TAG_SLASH
 	createsprite gSlashSliceSpriteTemplate, ANIM_TARGET, 2, 1, -8, 0
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gSlashSliceSpriteTemplate, ANIM_TARGET, 2, 1, 8, 0
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 18, 1
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	waitforvisualfinish
 	end
 
@@ -3657,7 +3657,7 @@ Move_STRUGGLE:: @ 81CAFB5
 	waitforvisualfinish
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 1, 3, 0, 6, 1
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg 1
 	blendoff
@@ -3681,7 +3681,7 @@ Move_NIGHTMARE:: @ 81CB043
 	monbg ANIM_DEF_PARTNER
 	createvisualtask AnimTask_NightmareClone, 2
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 40, 1
-	playsewithpan SE_M_NIGHTMARE, 63
+	playsewithpan SE_M_NIGHTMARE, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	restorebg
@@ -3691,7 +3691,7 @@ Move_NIGHTMARE:: @ 81CB043
 NightmareInContest:: @ 81CB06F
 	createvisualtask AnimTask_BlendMonInAndOut, 2, 0, RGB_WHITE, 10, 2, 1
 	createvisualtask AnimTask_ShakeMon, 2, 0, 3, 0, 32, 1
-	playsewithpan SE_M_NIGHTMARE, 63
+	playsewithpan SE_M_NIGHTMARE, SOUND_PAN_TARGET
 	waitforvisualfinish
 	restorebg
 	waitbgfadein
@@ -3706,7 +3706,7 @@ Move_FLAIL:: @ 81CB099
 	waitforvisualfinish
 	createsprite gRandomPosHitSplatSpriteTemplate, ANIM_TARGET, 3, 1, 3
 	createvisualtask AnimTask_ShakeTargetBasedOnMovePowerOrDmg, 2, 0, 1, 30, 1, 0
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg 1
 	blendoff
@@ -3719,7 +3719,7 @@ Move_SPITE:: @ 81CB0D6
 	monbg ANIM_DEF_PARTNER
 	createvisualtask AnimTask_BlendColorCycle, 2, 2, 2, 6, 0, 8, RGB_WHITE
 	createvisualtask AnimTask_SpiteTargetShadow, 2
-	loopsewithpan SE_M_PSYBEAM, 63, 20, 3
+	loopsewithpan SE_M_PSYBEAM, SOUND_PAN_TARGET, 20, 3
 	waitforvisualfinish
 	restorebg
 	waitbgfadein
@@ -3765,7 +3765,7 @@ MachPunchContinue:: @ 81CB11E
 	delay 6
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 1
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 4, 0, 0, 8, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
 	waitforvisualfinish
 	clearmonbg ANIM_ATK_PARTNER
@@ -3787,13 +3787,13 @@ Move_FORESIGHT:: @ 81CB18D
 	setalpha 16, 0
 	createsprite gForesightMagnifyingGlassSpriteTemplate, ANIM_TARGET, 2, 1
 	delay 17
-	loopsewithpan SE_M_SKETCH, 63, 16, 4
+	loopsewithpan SE_M_SKETCH, SOUND_PAN_TARGET, 16, 4
 	delay 48
 	delay 24
-	playsewithpan SE_M_SKETCH, 63
+	playsewithpan SE_M_SKETCH, SOUND_PAN_TARGET
 	delay 10
 	createvisualtask AnimTask_BlendMonInAndOut, 5, 1, RGB_WHITE, 12, 2, 1
-	playsewithpan SE_M_DETECT, 63
+	playsewithpan SE_M_DETECT, SOUND_PAN_TARGET
 	waitforvisualfinish
 	blendoff
 	clearmonbg ANIM_DEF_PARTNER
@@ -3811,7 +3811,7 @@ Move_DESTINY_BOND:: @ 81CB1CC
 	createvisualtask AnimTask_BlendExcept, 2, 6, 1, 0, 12, 30653
 	delay 24
 	createvisualtask AnimTask_BlendExcept, 2, 6, 1, 12, 0, 30653
-	playsewithpan SE_M_NIGHTMARE, 63
+	playsewithpan SE_M_NIGHTMARE, SOUND_PAN_TARGET
 	waitforvisualfinish
 	restorebg
 	waitbgfadein
@@ -3869,7 +3869,7 @@ Move_ROLLOUT:: @ 81CB2FE
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeTargetBasedOnMovePowerOrDmg, 2, 0, 1, 30, 1, 0
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 4, 0, 0, 1, 2
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -3879,27 +3879,27 @@ Move_FALSE_SWIPE:: @ 81CB33F
 	loadspritegfx ANIM_TAG_SLASH_2
 	loadspritegfx ANIM_TAG_IMPACT
 	createsprite gFalseSwipeSliceSpriteTemplate, ANIM_TARGET, 2, 
-	playsewithpan SE_M_VITAL_THROW, 63
+	playsewithpan SE_M_VITAL_THROW, SOUND_PAN_TARGET
 	delay 16
 	createsprite gFalseSwipePositionedSliceSpriteTemplate, ANIM_TARGET, 2, 0
-	playsewithpan SE_M_DOUBLE_TEAM, 63
+	playsewithpan SE_M_DOUBLE_TEAM, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFalseSwipePositionedSliceSpriteTemplate, ANIM_TARGET, 2, 16
 	delay 2
 	createsprite gFalseSwipePositionedSliceSpriteTemplate, ANIM_TARGET, 2, 32
-	playsewithpan SE_M_DOUBLE_TEAM, 63
+	playsewithpan SE_M_DOUBLE_TEAM, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFalseSwipePositionedSliceSpriteTemplate, ANIM_TARGET, 2, 48
 	delay 2
 	createsprite gFalseSwipePositionedSliceSpriteTemplate, ANIM_TARGET, 2, 64
-	playsewithpan SE_M_DOUBLE_TEAM, 63
+	playsewithpan SE_M_DOUBLE_TEAM, SOUND_PAN_TARGET
 	delay 2
 	createsprite gFalseSwipePositionedSliceSpriteTemplate, ANIM_TARGET, 2, 80
 	delay 2
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeMon, 2, 1, 5, 0, 6, 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 4, 0, 0, 1, 3
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	end
 
 Move_SWAGGER:: @ 81CB3C6
@@ -3913,10 +3913,10 @@ Move_SWAGGER:: @ 81CB3C6
 	waitforvisualfinish
 	delay 24
 	createsprite gAngerMarkSpriteTemplate, ANIM_TARGET, 2, 1, -20, -28
-	playsewithpan SE_M_SWAGGER2, 63
+	playsewithpan SE_M_SWAGGER2, SOUND_PAN_TARGET
 	delay 12
 	createsprite gAngerMarkSpriteTemplate, ANIM_TARGET, 2, 1, 20, -28
-	playsewithpan SE_M_SWAGGER2, 63
+	playsewithpan SE_M_SWAGGER2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	end
 
@@ -3952,13 +3952,13 @@ MagnitudeEnd:: @ 81CB468
 MagnitudeRegular:: @ 81CB469
 	createvisualtask AnimTask_HorizontalShake, 5, 5, 0, 50
 	createvisualtask AnimTask_HorizontalShake, 5, 4, 0, 50
-	loopsewithpan SE_M_STRENGTH, 63, 8, 10
+	loopsewithpan SE_M_STRENGTH, SOUND_PAN_TARGET, 8, 10
 	goto MagnitudeEnd
 
 MagnitudeIntense:: @ 81CB48E
 	createvisualtask AnimTask_HorizontalShake, 5, 5, 0, 50
 	createvisualtask AnimTask_HorizontalShake, 5, 4, 0, 50
-	loopsewithpan SE_M_STRENGTH, 63, 8, 10
+	loopsewithpan SE_M_STRENGTH, SOUND_PAN_TARGET, 8, 10
 	delay 10
 	createsprite gComplexPaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 3, 1, 0, 14, RGB_WHITE, 14
 	delay 16
@@ -3975,7 +3975,7 @@ Move_RAPID_SPIN:: @ 81CB4E1
 	waitforvisualfinish
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeTargetBasedOnMovePowerOrDmg, 2, 0, 1, 10, 1, 0
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	waitforvisualfinish
 	delay 8
 	createvisualtask AnimTask_RapinSpinMonElevation, 2, 0, 2, 1
@@ -4032,13 +4032,13 @@ ExtremeSpeedContinue:: @ 81CB5F5
 	delay 18
 	createvisualtask AnimTask_ExtremeSpeedImpact, 2, 
 	delay 2
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gMonEdgeHitSplatSpriteTemplate, ANIM_TARGET, 2, 1, 0, -12, 3
 	delay 10
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gMonEdgeHitSplatSpriteTemplate, ANIM_TARGET, 2, 1, 0, 12, 3
 	delay 10
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gMonEdgeHitSplatSpriteTemplate, ANIM_TARGET, 2, 1, 0, 0, 3
 	waitforvisualfinish
 	createvisualtask AnimTask_SpeedDust, 2, 
@@ -4091,7 +4091,7 @@ Move_HEAT_WAVE:: @ 81CB766
 	createvisualtask AnimTask_BlendParticle, 5, 10261, 0, 6, 6, 31
 	createvisualtask AnimTask_LoadSandstormBackground, 5, 1
 	createvisualtask AnimTask_BlendBackground, 6, 6, 31
-	panse_1B SE_M_HEAT_WAVE, 192, 63, 2, 0
+	panse_1B SE_M_HEAT_WAVE, 192, SOUND_PAN_TARGET, 2, 0
 	delay 4
 	createvisualtask AnimTask_MoveHeatWaveTargets, 5
 	delay 12
@@ -4128,10 +4128,10 @@ Move_TORMENT:: @ 81CB84E
 	waitforvisualfinish
 	createvisualtask AnimTask_BlendMonInAndOut, 2, 1, 31, 10, 1, 1
 	createsprite gAngerMarkSpriteTemplate, ANIM_TARGET, 2, 1, -20, -28
-	playsewithpan SE_M_SWAGGER2, 63
+	playsewithpan SE_M_SWAGGER2, SOUND_PAN_TARGET
 	delay 20
 	createsprite gAngerMarkSpriteTemplate, ANIM_TARGET, 2, 1, 20, -28
-	playsewithpan SE_M_SWAGGER2, 63
+	playsewithpan SE_M_SWAGGER2, SOUND_PAN_TARGET
 	end
 
 Move_MEMENTO:: @ 81CB892
@@ -4150,7 +4150,7 @@ Move_MEMENTO:: @ 81CB892
 	delay 1
 	monbg_22 1
 	createvisualtask AnimTask_MoveTargetMementoShadow, 5
-	playsewithpan SE_M_PSYBEAM, 63
+	playsewithpan SE_M_PSYBEAM, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg_23 1
 	delay 1
@@ -4172,12 +4172,12 @@ Move_SMELLING_SALT:: @ 81CB8F6
 	createsprite gSmellingSaltsHandSpriteTemplate, ANIM_TARGET, 2, 1, 1, 2
 	delay 32
 	createvisualtask AnimTask_SmellingSaltsSquish, 3, 1, 2
-	loopsewithpan SE_M_DOUBLE_SLAP, 63, 12, 2
+	loopsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET, 12, 2
 	waitforvisualfinish
 	delay 4
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 6, 2
 	createsprite gSmellingSaltExclamationSpriteTemplate, ANIM_TARGET, 2, 1, 8, 3
-	loopsewithpan SE_M_SWAGGER2, 63, 16, 3
+	loopsewithpan SE_M_SWAGGER2, SOUND_PAN_TARGET, 16, 3
 	end
 
 Move_FOLLOW_ME:: @ 81CB951
@@ -4238,11 +4238,11 @@ Move_TAUNT:: @ 81CBA0B
 	waitforvisualfinish
 	delay 8
 	createsprite gAngerMarkSpriteTemplate, ANIM_TARGET, 2, 1, -20, -28
-	playsewithpan SE_M_SWAGGER2, 63
+	playsewithpan SE_M_SWAGGER2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	delay 12
 	createsprite gAngerMarkSpriteTemplate, ANIM_TARGET, 2, 1, 20, -28
-	playsewithpan SE_M_SWAGGER2, 63
+	playsewithpan SE_M_SWAGGER2, SOUND_PAN_TARGET
 	end
 
 Move_HELPING_HAND:: @ 81CBA5F
@@ -4306,7 +4306,7 @@ Move_SUPERPOWER:: @ 81CBB43
 	playsewithpan SE_M_SWAGGER, 192
 	delay 16
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 8, 0, 16, 1
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_ATK_PARTNER
 	blendoff
@@ -4344,20 +4344,20 @@ BrickBreakNormal:: @ 81CBC47
 	delay 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, -18, -18, 1, 1
 	createsprite gFistFootSpriteTemplate, ANIM_ATTACKER, 2, -18, -18, 10, 1, 0
-	playsewithpan SE_M_VITAL_THROW, 63
+	playsewithpan SE_M_VITAL_THROW, SOUND_PAN_TARGET
 	delay 20
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 3, 8
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 18, 18, 1, 1
 	createsprite gFistFootSpriteTemplate, ANIM_ATTACKER, 2, 18, 18, 10, 1, 0
-	playsewithpan SE_M_VITAL_THROW, 63
+	playsewithpan SE_M_VITAL_THROW, SOUND_PAN_TARGET
 	delay 20
 	createvisualtask AnimTask_WindUpLunge, 2, 0, -24, 0, 24, 10, 24, 3
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 2, 0, 6, 0
 	delay 37
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 1
 	createsprite gFistFootSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 10, 1, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 2, 6, 0, 0
 	waitforvisualfinish
@@ -4373,26 +4373,26 @@ BrickBreakShatteredWall:: @ 81CBD16
 	delay 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, -18, -18, 1, 1
 	createsprite gFistFootSpriteTemplate, ANIM_ATTACKER, 2, -18, -18, 10, 1, 0
-	playsewithpan SE_M_VITAL_THROW, 63
+	playsewithpan SE_M_VITAL_THROW, SOUND_PAN_TARGET
 	delay 20
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 3, 8
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 18, 18, 1, 1
 	createsprite gFistFootSpriteTemplate, ANIM_ATTACKER, 2, 18, 18, 10, 1, 0
-	playsewithpan SE_M_VITAL_THROW, 63
+	playsewithpan SE_M_VITAL_THROW, SOUND_PAN_TARGET
 	delay 20
 	createvisualtask AnimTask_WindUpLunge, 2, 0, -24, 0, 24, 10, 24, 3
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 2, 0, 6, 0
 	delay 37
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 1
 	createsprite gFistFootSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 10, 1, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gBrickBreakWallShardSpriteTemplate, ANIM_ATTACKER, 2, 1, 0, -8, -12
 	createsprite gBrickBreakWallShardSpriteTemplate, ANIM_ATTACKER, 2, 1, 1, 8, -12
 	createsprite gBrickBreakWallShardSpriteTemplate, ANIM_ATTACKER, 2, 1, 2, -8, 12
 	createsprite gBrickBreakWallShardSpriteTemplate, ANIM_ATTACKER, 2, 1, 3, 8, 12
-	playsewithpan SE_M_BRICK_BREAK, 63
+	playsewithpan SE_M_BRICK_BREAK, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 2, 6, 0, 0
 	waitforvisualfinish
@@ -4412,7 +4412,7 @@ Move_YAWN:: @ 81CBE37
 	createsprite gYawnCloudSpriteTemplate, ANIM_TARGET, 5, 0
 	waitforvisualfinish
 	createvisualtask AnimTask_DeepInhale, 2, 1
-	playsewithpan SE_M_YAWN, 63
+	playsewithpan SE_M_YAWN, SOUND_PAN_TARGET
 	end
 
 Move_ENDEAVOR:: @ 81CBE7A
@@ -4424,11 +4424,11 @@ Move_ENDEAVOR:: @ 81CBE7A
 	delay 6
 	createvisualtask AnimTask_ShakeTargetBasedOnMovePowerOrDmg, 5, 0, 1, 8, 1, 0
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, 12, -12, 1, 2
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	delay 24
 	createvisualtask AnimTask_ShakeTargetBasedOnMovePowerOrDmg, 5, 0, 1, 8, 1, 0
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, -12, 12, 1, 2
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	end
 
 Move_ERUPTION:: @ 81CBEEF
@@ -4451,7 +4451,7 @@ Move_ERUPTION:: @ 81CBEEF
 	delay 22
 	createvisualtask AnimTask_HorizontalShake, 5, 5, 8, 60
 	createvisualtask AnimTask_HorizontalShake, 5, 4, 8, 60
-	loopsewithpan SE_M_ROCK_THROW, 63, 16, 12
+	loopsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET, 16, 12
 	delay 80
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 40, 31, 4, 4, 0, 31
 	end
@@ -4497,7 +4497,7 @@ Move_GRUDGE:: @ 81CC04A
 	loopsewithpan SE_M_EMBER, 192, 16, 4
 	delay 10
 	delay 80
-	playsewithpan SE_M_NIGHTMARE, 63
+	playsewithpan SE_M_NIGHTMARE, SOUND_PAN_TARGET
 	waitforvisualfinish
 	restorebg
 	waitbgfadein
@@ -4556,22 +4556,22 @@ Move_LUSTER_PURGE:: @ 81CC0FB
 	createvisualtask AnimTask_BlendParticle, 5, 10135, 0, 12, 12, 23552
 	waitforvisualfinish
 	createsprite gRandomPosHitSplatSpriteTemplate, ANIM_TARGET, 3, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 208, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 208, SOUND_PAN_TARGET
 	delay 3
 	createsprite gRandomPosHitSplatSpriteTemplate, ANIM_TARGET, 3, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 208, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 208, SOUND_PAN_TARGET
 	delay 3
 	createsprite gRandomPosHitSplatSpriteTemplate, ANIM_TARGET, 3, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 208, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 208, SOUND_PAN_TARGET
 	delay 3
 	createsprite gRandomPosHitSplatSpriteTemplate, ANIM_TARGET, 3, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 208, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 208, SOUND_PAN_TARGET
 	delay 3
 	createsprite gRandomPosHitSplatSpriteTemplate, ANIM_TARGET, 3, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 208, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 208, SOUND_PAN_TARGET
 	delay 3
 	createsprite gRandomPosHitSplatSpriteTemplate, ANIM_TARGET, 3, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 208, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 208, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_BlendExcept, 5, 5, 2, 16, 0, -1
 	createvisualtask AnimTask_HorizontalShake, 5, 1, 5, 14
@@ -4588,7 +4588,7 @@ Move_MIST_BALL:: @ 81CC212
 	playsewithpan SE_M_STRING_SHOT, 192
 	createsprite gMistBallSpriteTemplate, ANIM_TARGET, 0, 0, 0, 0, 0, 30, 0
 	waitforvisualfinish
-	playsewithpan SE_M_SAND_ATTACK, 63
+	playsewithpan SE_M_SAND_ATTACK, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 2, 1, 5, 0, 10, 0
 	createsprite gComplexPaletteBlendSpriteTemplate, ANIM_ATTACKER, 0, 1, 1, 1, 32279, 16, RGB_WHITE, 16
 	delay 0
@@ -4605,7 +4605,7 @@ Move_FEATHER_DANCE:: @ 81CC2A1
 	loadspritegfx ANIM_TAG_WHITE_FEATHER
 	monbg ANIM_DEF_PARTNER
 	monbgprio_29
-	playsewithpan SE_M_PETAL_DANCE, 63
+	playsewithpan SE_M_PETAL_DANCE, SOUND_PAN_TARGET
 	delay 0
 	createsprite gFallingFeatherSpriteTemplate, ANIM_TARGET, 0, 0, -16, 64, 2, 104, 11304, 32, 1
 	delay 6
@@ -4694,7 +4694,7 @@ Move_NEEDLE_ARM:: @ 81CC513
 	loadspritegfx ANIM_TAG_GREEN_SPIKE
 	loadspritegfx ANIM_TAG_IMPACT
 	loadspritegfx ANIM_TAG_HANDS_AND_FEET
-	loopsewithpan SE_M_HORN_ATTACK, 63, 2, 16
+	loopsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET, 2, 16
 	createsprite gNeedleArmSpikeSpriteTemplate, ANIM_TARGET, 2, 1, 0, 0, -32, 16
 	delay 2
 	createsprite gNeedleArmSpikeSpriteTemplate, ANIM_TARGET, 2, 1, 0, 22, -22, 16
@@ -4722,7 +4722,7 @@ Move_NEEDLE_ARM:: @ 81CC513
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 18, 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 1
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 4, 0, 0, 8, 1, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gNeedleArmSpikeSpriteTemplate, ANIM_TARGET, 2, 1, 1, 0, -24, 10
 	createsprite gNeedleArmSpikeSpriteTemplate, ANIM_TARGET, 2, 1, 1, 17, -17, 10
 	createsprite gNeedleArmSpikeSpriteTemplate, ANIM_TARGET, 2, 1, 1, 24, 0, 10
@@ -4759,11 +4759,11 @@ Move_CRUSH_CLAW:: @ 81CC6DB
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 18, 1
 	createsprite gClawSlashSpriteTemplate, ANIM_TARGET, 2, -10, -10, 0
 	createsprite gClawSlashSpriteTemplate, ANIM_TARGET, 2, -10, 10, 0
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	delay 12
 	createsprite gClawSlashSpriteTemplate, ANIM_TARGET, 2, 10, -10, 1
 	createsprite gClawSlashSpriteTemplate, ANIM_TARGET, 2, 10, 10, 1
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	waitforvisualfinish
 	waitforvisualfinish
 	blendoff
@@ -4842,7 +4842,7 @@ Move_AIR_CUTTER:: @ 81CC93D
 	delay 0
 	createvisualtask AnimTask_AirCutterProjectile, 2, 32, -24, 1536, 2, 128
 	waitforvisualfinish
-	playsewithpan SE_M_CUT, 63
+	playsewithpan SE_M_CUT, SOUND_PAN_TARGET
 	createsprite gAirCutterSliceSpriteTemplate, ANIM_ATTACKER, 2, 40, -32, 0, 2
 	delay 5
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 8, 1
@@ -4875,7 +4875,7 @@ Move_GRASS_WHISTLE:: @ 81CC9E9
 	waitforvisualfinish
 	createvisualtask AnimTask_MusicNotesRainbowBlend, 2, 
 	waitforvisualfinish
-	panse_1B SE_M_GRASSWHISTLE, 192, 63, 2, 0
+	panse_1B SE_M_GRASSWHISTLE, 192, SOUND_PAN_TARGET, 2, 0
 	createsprite gWavyMusicNotesSpriteTemplate, ANIM_TARGET, 2, 7, 1, 0
 	delay 5
 	createsprite gWavyMusicNotesSpriteTemplate, ANIM_TARGET, 2, 6, 1, 0
@@ -4920,7 +4920,7 @@ Move_TICKLE:: @ 81CCADC
 	createvisualtask AnimTask_SwayMon, 3, 0, 6, 1280, 3, 0
 	delay 12
 	createvisualtask AnimTask_RockMonBackAndForth, 3, 1, 6, 2
-	loopsewithpan SE_M_TAIL_WHIP, 63, 8, 8
+	loopsewithpan SE_M_TAIL_WHIP, SOUND_PAN_TARGET, 8, 8
 	waitforvisualfinish
 	end
 
@@ -4936,7 +4936,7 @@ Move_WATER_SPOUT:: @ 81CCB48
 	waitforvisualfinish
 	delay 16
 	createvisualtask AnimTask_WaterSpoutRain, 5, 
-	playsewithpan SE_M_SURF, 63
+	playsewithpan SE_M_SURF, SOUND_PAN_TARGET
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
 	end
@@ -4953,7 +4953,7 @@ Move_SHADOW_PUNCH:: @ 81CCB76
 	delay 6
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 1
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 4, 0, 0, 8, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
 	waitforvisualfinish
 	clearmonbg ANIM_ATK_PARTNER
@@ -4968,11 +4968,11 @@ Move_EXTRASENSORY:: @ 81CCBD1
 	setalpha 12, 8
 	createvisualtask AnimTask_BlendMonInAndOut, 5, 0, 891, 12, 1, 1
 	createvisualtask AnimTask_ExtrasensoryDistortion, 5, 0
-	playsewithpan SE_M_BIND, 63
+	playsewithpan SE_M_BIND, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_BlendMonInAndOut, 5, 0, 891, 12, 1, 1
 	createvisualtask AnimTask_ExtrasensoryDistortion, 5, 1
-	playsewithpan SE_M_BIND, 63
+	playsewithpan SE_M_BIND, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_TransparentCloneGrowAndShrink, 5, ANIM_ATTACKER
 	createvisualtask AnimTask_ExtrasensoryDistortion, 5, 2
@@ -4994,7 +4994,7 @@ Move_AERIAL_ACE:: @ 81CCC39
 	delay 5
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 3, 10, 1
 	createsprite gComplexPaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 31, 3, 1, 0, 10, 0, 0
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg 1
 	blendoff
@@ -5010,7 +5010,7 @@ Move_IRON_DEFENSE:: @ 81CCCA3
 Move_BLOCK:: @ 81CCCCD
 	loadspritegfx ANIM_TAG_X_SIGN
 	createsprite gBlockXSpriteTemplate, ANIM_TARGET, 66, 
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	end
 
 Move_HOWL:: @ 81CCCDC
@@ -5047,7 +5047,7 @@ Move_COVET:: @ 81CCD1C
 	playsewithpan SE_M_CHARM, 192
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 8, 1
-	loopsewithpan SE_M_DIZZY_PUNCH, 63, 4, 3
+	loopsewithpan SE_M_DIZZY_PUNCH, SOUND_PAN_TARGET, 4, 3
 	end
 
 Move_VOLT_TACKLE:: @ 81CCD79
@@ -5068,19 +5068,19 @@ Move_VOLT_TACKLE:: @ 81CCD79
 	playsewithpan SE_M_THUNDERBOLT, 192
 	waitforvisualfinish
 	createvisualtask AnimTask_VoltTackleBolt, 5, 1
-	playsewithpan SE_M_THUNDERBOLT, 63
+	playsewithpan SE_M_THUNDERBOLT, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_VoltTackleBolt, 5, 2
 	playsewithpan SE_M_THUNDERBOLT, 192
 	waitforvisualfinish
 	createvisualtask AnimTask_VoltTackleBolt, 5, 3
-	playsewithpan SE_M_THUNDERBOLT, 63
+	playsewithpan SE_M_THUNDERBOLT, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_VoltTackleBolt, 5, 4
 	playsewithpan SE_M_THUNDERBOLT, 192
 	delay 8
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 10, 0, 18, 1
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gElectricPuffSpriteTemplate, ANIM_ATTACKER, 2, 1, 16, 16
 	delay 2
 	createsprite gElectricPuffSpriteTemplate, ANIM_ATTACKER, 2, 1, -16, -16
@@ -5107,7 +5107,7 @@ Move_WATER_SPORT:: @ 81CCE71
 	delay 44
 	playsewithpan SE_M_SURF, 192
 	delay 44
-	panse_1B SE_M_SURF, 192, 63, 2, 0
+	panse_1B SE_M_SURF, 192, SOUND_PAN_TARGET, 2, 0
 	end
 
 Move_CALM_MIND:: @ 81CCE97
@@ -5140,20 +5140,20 @@ Move_LEAF_BLADE:: @ 81CCF17
 	createvisualtask AnimTask_LeafBlade, 5, 
 	delay 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 8, 1
-	playsewithpan SE_M_CUT, 63
+	playsewithpan SE_M_CUT, SOUND_PAN_TARGET
 	delay 50
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 8, 1
-	playsewithpan SE_M_CUT, 63
+	playsewithpan SE_M_CUT, SOUND_PAN_TARGET
 	delay 50
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 8, 1
-	playsewithpan SE_M_CUT, 63
+	playsewithpan SE_M_CUT, SOUND_PAN_TARGET
 	waitforvisualfinish
 	monbg 1
 	setalpha 12, 8
 	delay 12
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 8, 0, 18, 1
 	createsprite gCrossImpactSpriteTemplate, ANIM_TARGET, 2, 0, 0, 1, 36
-	playsewithpan SE_M_LEER, 63
+	playsewithpan SE_M_LEER, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg 1
 	blendoff
@@ -5201,7 +5201,7 @@ Move_SHOCK_WAVE:: @ 81CD009
 	delay 12
 	waitforvisualfinish
 	createvisualtask AnimTask_ShockWaveLightning, 5,
-	playsewithpan SE_M_TRI_ATTACK2, 63
+	playsewithpan SE_M_TRI_ATTACK2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 6, 18, 1
 	createvisualtask AnimTask_BlendSelected, 5, 1, 3, 16, 0, RGB_WHITE
@@ -5267,11 +5267,11 @@ Move_MIND_READER:: @ 81CD1A8
 	loadspritegfx ANIM_TAG_OPENING_EYE
 	loadspritegfx ANIM_TAG_ROUND_WHITE_HALO
 	monbg 4
-	playsewithpan SE_M_CONFUSE_RAY, 63
+	playsewithpan SE_M_CONFUSE_RAY, SOUND_PAN_TARGET
 	createsprite gOpeningEyeSpriteTemplate, ANIM_ATTACKER, 5, 0, 0, 1, 0
 	createsprite gWhiteHaloSpriteTemplate, ANIM_ATTACKER, 5, 
 	delay 40
-	playsewithpan SE_M_LEER, 63
+	playsewithpan SE_M_LEER, SOUND_PAN_TARGET
 	createvisualtask AnimTask_BlendColorCycle, 2, 1, 1, 2, 0, 10, 0
 	call MindReaderEyeSpikeEffect
 	waitforvisualfinish
@@ -5311,7 +5311,7 @@ Move_ICE_PUNCH:: @ 81CD2E0
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 1, 0, 7, 0
 	createvisualtask AnimTask_BlendSelected, 10, 4, 2, 0, 9, RGB(12, 26, 31)
 	delay 20
-	playsewithpan SE_M_STRING_SHOT, 63
+	playsewithpan SE_M_STRING_SHOT, SOUND_PAN_TARGET
 	createsprite gIceCrystalSpiralInwardSmall, ANIM_ATTACKER, 2, 0
 	createsprite gIceCrystalSpiralInwardSmall, ANIM_ATTACKER, 2, 64
 	createsprite gIceCrystalSpiralInwardSmall, ANIM_ATTACKER, 2, 128
@@ -5324,7 +5324,7 @@ Move_ICE_PUNCH:: @ 81CD2E0
 	delay 17
 	createsprite gFistFootSpriteTemplate, ANIM_ATTACKER, 4, 0, -10, 8, 1, 0
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, -10, 1, 1
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	delay 2
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 5, 3, 1
 	waitforvisualfinish
@@ -5357,7 +5357,7 @@ Move_CONFUSION:: @ 81CD40B
 	createvisualtask AnimTask_ShakeMon2, 2, 0, 1, 0, 10, 1
 	createvisualtask AnimTask_BlendColorCycle, 2, 2, 0, 2, 0, 8, RGB_WHITE
 	waitforvisualfinish
-	playsewithpan SE_M_SUPERSONIC, 63
+	playsewithpan SE_M_SUPERSONIC, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 15, 1
 	createvisualtask AnimTask_ScaleMonAndRestore, 5, -4, -4, 15, 1, 1
 	waitforvisualfinish
@@ -5374,7 +5374,7 @@ Move_PSYCHIC:: @ 81CD46C
 	createvisualtask AnimTask_ShakeMon2, 2, 0, 1, 0, 10, 1
 	createvisualtask AnimTask_BlendColorCycle, 2, 2, 0, 2, 0, 8, 767
 	waitforvisualfinish
-	loopsewithpan SE_M_SUPERSONIC, 63, 10, 3
+	loopsewithpan SE_M_SUPERSONIC, SOUND_PAN_TARGET, 10, 3
 	createvisualtask AnimTask_ShakeMon, 2, 1, 5, 0, 15, 1
 	createvisualtask AnimTask_ScaleMonAndRestore, 5, -6, -6, 15, 1, 1
 	waitforvisualfinish
@@ -5408,8 +5408,8 @@ FutureSight:: @ 81CD4DD
 	playsewithpan SE_M_PSYBEAM, 192
 	call SetPsychicBackground
 	setalpha 8, 8
-	playsewithpan SE_M_SUPERSONIC, 63
-	waitplaysewithpan SE_M_SUPERSONIC, 63, 8
+	playsewithpan SE_M_SUPERSONIC, SOUND_PAN_TARGET
+	waitplaysewithpan SE_M_SUPERSONIC, SOUND_PAN_TARGET, 8
 	createvisualtask AnimTask_ShakeMon, 2, 1, 4, 0, 15, 1
 	createvisualtask AnimTask_ScaleMonAndRestore, 5, -5, -5, 15, 1, 1
 	waitforvisualfinish
@@ -5428,7 +5428,7 @@ Move_THUNDER:: @ 81CD570
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 2, 0, 16, 0
 	delay 16
 	createvisualtask AnimTask_InvertScreenColor, 2, 257, 257, 257
-	playsewithpan SE_M_THUNDER_WAVE, 63
+	playsewithpan SE_M_THUNDER_WAVE, SOUND_PAN_TARGET
 	delay 1
 	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 16, -36
 	delay 1
@@ -5437,12 +5437,12 @@ Move_THUNDER:: @ 81CD570
 	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 16, 12
 	delay 20
 	createsprite gLightningSpriteTemplate, ANIM_TARGET, 6, -16, -32
-	playsewithpan SE_M_THUNDER_WAVE, 63
+	playsewithpan SE_M_THUNDER_WAVE, SOUND_PAN_TARGET
 	delay 1
 	createsprite gLightningSpriteTemplate, ANIM_TARGET, 6, -16, -16
 	delay 1
 	createsprite gLightningSpriteTemplate, ANIM_TARGET, 6, -16, 16
-	playsewithpan SE_M_THUNDER_WAVE, 63
+	playsewithpan SE_M_THUNDER_WAVE, SOUND_PAN_TARGET
 	delay 5
 	createvisualtask AnimTask_InvertScreenColor, 2, 257, 257, 257
 	delay 1
@@ -5457,7 +5457,7 @@ Move_THUNDER:: @ 81CD570
 	createvisualtask AnimTask_InvertScreenColor, 2, 257, 257, 257
 	delay 1
 	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 0, -32
-	playsewithpan SE_M_TRI_ATTACK2, 63
+	playsewithpan SE_M_TRI_ATTACK2, SOUND_PAN_TARGET
 	delay 1
 	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 0, -16
 	delay 1
@@ -5485,7 +5485,7 @@ Move_THUNDER_PUNCH:: @ 81CD6CA
 	setalpha 12, 8
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 2, 0, 16, 0
 	waitforvisualfinish
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 4, 0, 0, 8, 1, 0
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 1
 	delay 1
@@ -5497,7 +5497,7 @@ Move_THUNDER_PUNCH:: @ 81CD6CA
 	delay 1
 	createsprite gLightningSpriteTemplate, ANIM_ATTACKER, 2, 0, 16
 	delay 1
-	playsewithpan SE_M_TRI_ATTACK2, 63
+	playsewithpan SE_M_TRI_ATTACK2, SOUND_PAN_TARGET
 	createvisualtask AnimTask_InvertScreenColor, 2, 257, 257, 257
 	delay 2
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 3, 15, 1
@@ -5534,13 +5534,13 @@ Move_SACRED_FIRE:: @ 81CD793
 	createvisualtask AnimTask_InvertScreenColor, 2, 257, 257, 257
 	delay 1
 	waitforvisualfinish
-	playsewithpan SE_M_SACRED_FIRE2, 63
+	playsewithpan SE_M_SACRED_FIRE2, SOUND_PAN_TARGET
 	createsprite gLargeFlameSpriteTemplate, ANIM_TARGET, 2, -16, 0, 70, 16, 0, 1
 	delay 10
-	playsewithpan SE_M_SACRED_FIRE2, 63
+	playsewithpan SE_M_SACRED_FIRE2, SOUND_PAN_TARGET
 	createsprite gLargeFlameSpriteTemplate, ANIM_TARGET, 2, 0, 0, 70, 16, 0, 1
 	delay 10
-	playsewithpan SE_M_SACRED_FIRE2, 63
+	playsewithpan SE_M_SACRED_FIRE2, SOUND_PAN_TARGET
 	createsprite gLargeFlameSpriteTemplate, ANIM_TARGET, 2, 16, 0, 80, 16, 0, 1
 	delay 1
 	createvisualtask AnimTask_InvertScreenColor, 2, 257, 257, 257
@@ -5548,7 +5548,7 @@ Move_SACRED_FIRE:: @ 81CD793
 	waitforvisualfinish
 	createvisualtask AnimTask_InvertScreenColor, 2, 257, 257, 257
 	delay 1
-	playsewithpan SE_M_FLAME_WHEEL2, 63
+	playsewithpan SE_M_FLAME_WHEEL2, SOUND_PAN_TARGET
 	createsprite gLargeFlameScatterSpriteTemplate, ANIM_TARGET, 2, 0, 0, 30, 30, -1, 0
 	delay 1
 	createsprite gLargeFlameScatterSpriteTemplate, ANIM_TARGET, 2, 0, 0, 30, 30, 0, 1
@@ -5571,7 +5571,7 @@ Move_SCRATCH:: @ 81CD97A
 	loadspritegfx ANIM_TAG_SCRATCH
 	monbg 1
 	setalpha 12, 8
-	playsewithpan SE_M_SCRATCH, 63
+	playsewithpan SE_M_SCRATCH, SOUND_PAN_TARGET
 	createsprite gScratchSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 0
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
 	waitforvisualfinish
@@ -5751,27 +5751,27 @@ Move_BUBBLE:: @ 81CDD4A
 	delay 1
 	createsprite gWaterBubbleProjectileSpriteTemplate, ANIM_ATTACKER, 2, 18, 0, 15, -15, 10, 128, 100
 	playsewithpan SE_M_BUBBLE, 192
-	waitplaysewithpan SE_M_BUBBLE2, 63, 100
+	waitplaysewithpan SE_M_BUBBLE2, SOUND_PAN_TARGET, 100
 	delay 6
 	createsprite gWaterBubbleProjectileSpriteTemplate, ANIM_ATTACKER, 2, 18, 0, 35, 37, 40, 128, 100
 	playsewithpan SE_M_BUBBLE, 192
-	waitplaysewithpan SE_M_BUBBLE2, 63, 100
+	waitplaysewithpan SE_M_BUBBLE2, SOUND_PAN_TARGET, 100
 	delay 6
 	createsprite gWaterBubbleProjectileSpriteTemplate, ANIM_ATTACKER, 2, 18, 0, 10, -37, 30, 128, 100
 	playsewithpan SE_M_BUBBLE, 192
-	waitplaysewithpan SE_M_BUBBLE2, 63, 100
+	waitplaysewithpan SE_M_BUBBLE2, SOUND_PAN_TARGET, 100
 	delay 6
 	createsprite gWaterBubbleProjectileSpriteTemplate, ANIM_ATTACKER, 2, 18, 0, 30, 10, 15, 128, 100
 	playsewithpan SE_M_BUBBLE, 192
-	waitplaysewithpan SE_M_BUBBLE2, 63, 100
+	waitplaysewithpan SE_M_BUBBLE2, SOUND_PAN_TARGET, 100
 	delay 6
 	createsprite gWaterBubbleProjectileSpriteTemplate, ANIM_ATTACKER, 2, 18, 0, 20, 33, 20, 128, 100
 	playsewithpan SE_M_BUBBLE, 192
-	waitplaysewithpan SE_M_BUBBLE2, 63, 100
+	waitplaysewithpan SE_M_BUBBLE2, SOUND_PAN_TARGET, 100
 	delay 6
 	createsprite gWaterBubbleProjectileSpriteTemplate, ANIM_ATTACKER, 2, 18, 0, 25, -30, 10, 128, 100
 	playsewithpan SE_M_BUBBLE, 192
-	waitplaysewithpan SE_M_BUBBLE2, 63, 100
+	waitplaysewithpan SE_M_BUBBLE2, SOUND_PAN_TARGET, 100
 	waitforvisualfinish
 	call WaterBubblesEffectLong
 	waitforvisualfinish
@@ -5784,7 +5784,7 @@ Move_SMOG:: @ 81CDE20
 	monbg ANIM_DEF_PARTNER
 	monbgprio_29
 	setalpha 12, 8
-	loopsewithpan SE_M_MIST, 63, 17, 10
+	loopsewithpan SE_M_MIST, SOUND_PAN_TARGET, 17, 10
 	call SmogCloud
 	call SmogCloud
 	call SmogCloud
@@ -5793,7 +5793,7 @@ Move_SMOG:: @ 81CDE20
 	call SmogCloud
 	call SmogCloud
 	delay 120
-	loopsewithpan SE_M_TOXIC, 63, 18, 2
+	loopsewithpan SE_M_TOXIC, SOUND_PAN_TARGET, 18, 2
 	createvisualtask AnimTask_BlendColorCycle, 2, 4, 2, 2, 0, 12, 26650
 	delay 10
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 15, 1
@@ -5824,7 +5824,7 @@ Move_FAINT_ATTACK:: @ 81CDE9B
 	monbg 1
 	setalpha 12, 8
 	delay 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 1
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 9, 1
 	waitforvisualfinish
@@ -5906,7 +5906,7 @@ Move_DRAGON_RAGE:: @ 81CE068
 	waitforvisualfinish
 	createsprite gDragonRageFireSpitSpriteTemplate, ANIM_TARGET, 2, 30, 15, 0, 10, 10
 	waitforvisualfinish
-	loopsewithpan SE_M_FLAME_WHEEL2, 63, 11, 3
+	loopsewithpan SE_M_FLAME_WHEEL2, SOUND_PAN_TARGET, 11, 3
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 3, 25, 1
 	createsprite gDragonRageFirePlumeSpriteTemplate, ANIM_TARGET, 66, 1, 5, 0
 	delay 1
@@ -5947,7 +5947,7 @@ Move_BITE:: @ 81CE190
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg 1
 	setalpha 12, 8
-	playsewithpan SE_M_BITE, 63
+	playsewithpan SE_M_BITE, SOUND_PAN_TARGET
 	createsprite gSharpTeethSpriteTemplate, ANIM_ATTACKER, 2, 0, -32, 0, 0, 819, 10
 	createsprite gSharpTeethSpriteTemplate, ANIM_ATTACKER, 2, 0, 32, 4, 0, -819, 10
 	delay 10
@@ -5966,14 +5966,14 @@ Move_CRUNCH:: @ 81CE1EE
 	fadetobg 1
 	waitbgfadein
 	setalpha 12, 8
-	playsewithpan SE_M_BITE, 63
+	playsewithpan SE_M_BITE, SOUND_PAN_TARGET
 	createsprite gSharpTeethSpriteTemplate, ANIM_ATTACKER, 2, -32, -32, 1, 819, 819, 10
 	createsprite gSharpTeethSpriteTemplate, ANIM_ATTACKER, 2, 32, 32, 5, -819, -819, 10
 	delay 10
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -8, 0, 1, 1
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 7, 5, 2
 	waitforvisualfinish
-	playsewithpan SE_M_BITE, 63
+	playsewithpan SE_M_BITE, SOUND_PAN_TARGET
 	createsprite gSharpTeethSpriteTemplate, ANIM_ATTACKER, 2, 32, -32, 7, -819, 819, 10
 	createsprite gSharpTeethSpriteTemplate, ANIM_ATTACKER, 2, -32, 32, 3, 819, -819, 10
 	delay 10
@@ -5992,7 +5992,7 @@ Move_CLAMP:: @ 81CE29E
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg 1
 	setalpha 12, 8
-	playsewithpan SE_M_VICEGRIP, 63
+	playsewithpan SE_M_VICEGRIP, SOUND_PAN_TARGET
 	createsprite gClampJawSpriteTemplate, ANIM_ATTACKER, 2, -32, 0, 2, 819, 0, 10
 	createsprite gClampJawSpriteTemplate, ANIM_ATTACKER, 2, 32, 0, 6, -819, 0, 10
 	delay 10
@@ -6011,7 +6011,7 @@ Move_ICE_BEAM:: @ 81CE2FB
 	loadspritegfx ANIM_TAG_ICE_CRYSTALS
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 1, 0, 7, 0
 	waitforvisualfinish
-	createsoundtask SoundTask_LoopSEAdjustPanning, 176, -64, 63, 4, 4, 0, 10
+	createsoundtask SoundTask_LoopSEAdjustPanning, 176, -64, SOUND_PAN_TARGET, 4, 4, 0, 10
 	createsprite gIceBeamOuterCrystalSpriteTemplate, ANIM_ATTACKER, 2, 20, 12, 0, 12, 20
 	createsprite gIceBeamOuterCrystalSpriteTemplate, ANIM_ATTACKER, 2, 20, -12, 0, -12, 20
 	delay 1
@@ -6068,7 +6068,7 @@ Move_AURORA_BEAM:: @ 81CE43F
 	call AuroraBeamCreateRings
 	call AuroraBeamCreateRings
 	setarg 7, 65535
-	createsoundtask SoundTask_LoopSEAdjustPanning, 176, -64, 63, 3, 6, 0, 10
+	createsoundtask SoundTask_LoopSEAdjustPanning, 176, -64, SOUND_PAN_TARGET, 3, 6, 0, 10
 	createvisualtask AnimTask_ShakeMon2, 5, 1, 2, 0, 40, 1
 	call AuroraBeamCreateRings
 	call AuroraBeamCreateRings
@@ -6143,7 +6143,7 @@ SolarBeamAbsorbEffect:: @ 81CE54B
 
 SolarBeamUnleash:: @ 81CE61E
 	call SetSolarbeamBg
-	panse_1B SE_M_SOLAR_BEAM, 192, 63, 2, 0
+	panse_1B SE_M_SOLAR_BEAM, 192, SOUND_PAN_TARGET, 2, 0
 	createvisualtask AnimTask_CreateSmallSolarbeamOrbs, 5, 
 	createsprite gSolarbeamBigOrbSpriteTemplate, ANIM_TARGET, 3, 15, 0, 20, 0
 	delay 4
@@ -6197,10 +6197,10 @@ BlizzardContinue:: @ 81CE77E
 	createvisualtask AnimTask_StartSlidingBg, 5, -2304, 0, 1, -1
 	waitbgfadein
 	waitforvisualfinish
-	panse_1B SE_M_BLIZZARD, 192, 63, 2, 0
+	panse_1B SE_M_BLIZZARD, 192, SOUND_PAN_TARGET, 2, 0
 	call BlizzardIceCrystals
 	call BlizzardIceCrystals
-	playsewithpan SE_M_BLIZZARD2, 63
+	playsewithpan SE_M_BLIZZARD2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	call IceCrystalEffectLong
 	waitforvisualfinish
@@ -6245,10 +6245,10 @@ Move_POWDER_SNOW:: @ 81CE8F4
 	monbg ANIM_DEF_PARTNER
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 31, 1, 0, 3, 0
 	waitforvisualfinish
-	panse_1B SE_M_GUST, 192, 63, 2, 0
+	panse_1B SE_M_GUST, 192, SOUND_PAN_TARGET, 2, 0
 	call PowderSnowSnowballs
 	call PowderSnowSnowballs
-	playsewithpan SE_M_GUST2, 63
+	playsewithpan SE_M_GUST2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	waitsound
 	call IceCrystalEffectLong
@@ -6283,7 +6283,7 @@ Move_HYDRO_PUMP:: @ 81CE9EE
 	setalpha 12, 8
 	createvisualtask AnimTask_ShakeMon, 5, 0, 0, 2, 40, 1
 	delay 6
-	panse_1B SE_M_HYDRO_PUMP, 192, 63, 2, 0
+	panse_1B SE_M_HYDRO_PUMP, 192, SOUND_PAN_TARGET, 2, 0
 	createvisualtask AnimTask_StartSinAnimTimer, 5, 100
 	call HydroPumpBeams
 	call HydroPumpBeams
@@ -6330,7 +6330,7 @@ Move_SIGNAL_BEAM:: @ 81CEAED
 	loadspritegfx ANIM_TAG_DUCK
 	createvisualtask AnimTask_ShakeMon, 5, 0, 0, 2, 25, 1
 	delay 6
-	panse_1B SE_M_BUBBLE_BEAM, 192, 63, 1, 0
+	panse_1B SE_M_BUBBLE_BEAM, 192, SOUND_PAN_TARGET, 1, 0
 	createvisualtask AnimTask_StartSinAnimTimer, 5, 100
 	call SignalBeamOrbs
 	call SignalBeamOrbs
@@ -6375,7 +6375,7 @@ Move_ABSORB:: @ 81CEBD5
 	setalpha 12, 8
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 1, 0, 4, 13293
 	waitforvisualfinish
-	playsewithpan SE_M_ABSORB, 63
+	playsewithpan SE_M_ABSORB, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
 	delay 2
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 5, 5, 1
@@ -6393,28 +6393,28 @@ Move_ABSORB:: @ 81CEBD5
 	end
 
 AbsorbEffect:: @ 81CEC44
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	delay 4
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	delay 4
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -5, 15, 16, 33
 	delay 4
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, -15, -16, 36
 	delay 4
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	delay 4
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	delay 4
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -10, 20, 20, 39
 	delay 4
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 5, -18, -20, 35
 	delay 4
 	return
@@ -6428,7 +6428,7 @@ Move_MEGA_DRAIN:: @ 81CECED
 	setalpha 12, 8
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 1, 0, 8, 13293
 	waitforvisualfinish
-	playsewithpan SE_M_ABSORB, 63
+	playsewithpan SE_M_ABSORB, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 1
 	delay 2
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 5, 5, 1
@@ -6446,35 +6446,35 @@ Move_MEGA_DRAIN:: @ 81CECED
 	end
 
 MegaDrainAbsorbEffect:: @ 81CED5C
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 5, -18, -20, 35
 	delay 4
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -10, 20, 20, 39
 	delay 4
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -5, 15, 16, 33
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	delay 4
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, -15, -16, 36
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	delay 4
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, -15, -16, 36
 	delay 4
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -5, 15, 16, 33
 	delay 4
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -10, 20, 20, 39
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	delay 4
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 5, -18, -20, 35
 	delay 4
@@ -6489,7 +6489,7 @@ Move_GIGA_DRAIN:: @ 81CEE7D
 	setalpha 12, 8
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 1, 0, 12, 13293
 	waitforvisualfinish
-	playsewithpan SE_M_ABSORB, 63
+	playsewithpan SE_M_ABSORB, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 0
 	delay 2
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 5, 5, 1
@@ -6507,42 +6507,42 @@ Move_GIGA_DRAIN:: @ 81CEE7D
 	end
 
 GigaDrainAbsorbEffect:: @ 81CEEEC
-	playsewithpan SE_M_GIGA_DRAIN, 63
+	playsewithpan SE_M_GIGA_DRAIN, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 5, -18, -40, 35
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -10, 20, 20, 39
 	delay 4
-	playsewithpan SE_M_GIGA_DRAIN, 63
+	playsewithpan SE_M_GIGA_DRAIN, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 28, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -10, 20, 40, 39
 	delay 4
-	playsewithpan SE_M_GIGA_DRAIN, 63
+	playsewithpan SE_M_GIGA_DRAIN, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -5, 15, 16, 33
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -32, 26
 	delay 4
-	playsewithpan SE_M_GIGA_DRAIN, 63
+	playsewithpan SE_M_GIGA_DRAIN, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, -15, -16, 36
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	delay 4
-	playsewithpan SE_M_GIGA_DRAIN, 63
+	playsewithpan SE_M_GIGA_DRAIN, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -5, 15, 16, 33
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, -15, -16, 36
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	delay 4
-	playsewithpan SE_M_GIGA_DRAIN, 63
+	playsewithpan SE_M_GIGA_DRAIN, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -5, 15, 16, 33
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -40, 26
 	delay 4
-	playsewithpan SE_M_GIGA_DRAIN, 63
+	playsewithpan SE_M_GIGA_DRAIN, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -5, 15, 36, 33
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -10, 20, 20, 39
 	delay 4
-	playsewithpan SE_M_GIGA_DRAIN, 63
+	playsewithpan SE_M_GIGA_DRAIN, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 5, -18, -20, 35
@@ -6562,7 +6562,7 @@ Move_LEECH_LIFE:: @ 81CF085
 	createsprite gLeechLifeNeedleSpriteTemplate, ANIM_ATTACKER, 2, -20, 15, 12
 	waitforvisualfinish
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
-	playsewithpan SE_M_ABSORB, 63
+	playsewithpan SE_M_ABSORB, SOUND_PAN_TARGET
 	delay 2
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 5, 5, 1
 	waitforvisualfinish
@@ -6603,16 +6603,16 @@ Move_TOXIC:: @ 81CF131
 
 ToxicBubbles:: @ 81CF14B
 	createsprite gToxicBubbleSpriteTemplate, ANIM_TARGET, 2, -24, 16, 1, 1
-	playsewithpan SE_M_TOXIC, 63
+	playsewithpan SE_M_TOXIC, SOUND_PAN_TARGET
 	delay 15
 	createsprite gToxicBubbleSpriteTemplate, ANIM_TARGET, 2, 8, 16, 1, 1
-	playsewithpan SE_M_TOXIC, 63
+	playsewithpan SE_M_TOXIC, SOUND_PAN_TARGET
 	delay 15
 	createsprite gToxicBubbleSpriteTemplate, ANIM_TARGET, 2, -8, 16, 1, 1
-	playsewithpan SE_M_TOXIC, 63
+	playsewithpan SE_M_TOXIC, SOUND_PAN_TARGET
 	delay 15
 	createsprite gToxicBubbleSpriteTemplate, ANIM_TARGET, 2, 24, 16, 1, 1
-	playsewithpan SE_M_TOXIC, 63
+	playsewithpan SE_M_TOXIC, SOUND_PAN_TARGET
 	delay 15
 	return
 
@@ -6645,19 +6645,19 @@ Move_SLUDGE_BOMB:: @ 81CF1E2
 	createsprite gSludgeBombHitParticleSpriteTemplate, ANIM_TARGET, 2, -27, 44, 20
 	createsprite gSludgeBombHitParticleSpriteTemplate, ANIM_TARGET, 2, 39, -28, 20
 	createsprite gSludgeBombHitParticleSpriteTemplate, ANIM_TARGET, 2, -42, -42, 20
-	playsewithpan SE_M_DIG, 63
+	playsewithpan SE_M_DIG, SOUND_PAN_TARGET
 	delay 5
 	createsprite gSludgeBombHitParticleSpriteTemplate, ANIM_TARGET, 2, 0, 40, 20
 	createsprite gSludgeBombHitParticleSpriteTemplate, ANIM_TARGET, 2, -8, -44, 20
 	createsprite gSludgeBombHitParticleSpriteTemplate, ANIM_TARGET, 2, -46, -28, 20
 	createsprite gSludgeBombHitParticleSpriteTemplate, ANIM_TARGET, 2, 46, 9, 20
-	playsewithpan SE_M_DIG, 63
+	playsewithpan SE_M_DIG, SOUND_PAN_TARGET
 	delay 5
 	createsprite gSludgeBombHitParticleSpriteTemplate, ANIM_TARGET, 2, 42, 0, 20
 	createsprite gSludgeBombHitParticleSpriteTemplate, ANIM_TARGET, 2, -43, -12, 20
 	createsprite gSludgeBombHitParticleSpriteTemplate, ANIM_TARGET, 2, 16, -46, 20
 	createsprite gSludgeBombHitParticleSpriteTemplate, ANIM_TARGET, 2, -16, 44, 20
-	playsewithpan SE_M_DIG, 63
+	playsewithpan SE_M_DIG, SOUND_PAN_TARGET
 	delay 0
 	waitsound
 	waitforvisualfinish
@@ -6687,19 +6687,19 @@ Move_ACID:: @ 81CF308
 	createvisualtask AnimTask_ShakeMon2, 5, 3, 2, 0, 10, 1
 	createvisualtask AnimTask_BlendColorCycle, 2, 20, 2, 2, 0, 12, 31774
 	createsprite gAcidPoisonDropletSpriteTemplate, ANIM_TARGET, 2, 0, -22, 0, 15, 55
-	playsewithpan SE_M_BUBBLE, 63
+	playsewithpan SE_M_BUBBLE, SOUND_PAN_TARGET
 	delay 10
 	createsprite gAcidPoisonDropletSpriteTemplate, ANIM_TARGET, 2, -26, -24, 0, 15, 55
-	playsewithpan SE_M_BUBBLE, 63
+	playsewithpan SE_M_BUBBLE, SOUND_PAN_TARGET
 	delay 10
 	createsprite gAcidPoisonDropletSpriteTemplate, ANIM_TARGET, 2, 15, -27, 0, 15, 50
-	playsewithpan SE_M_BUBBLE, 63
+	playsewithpan SE_M_BUBBLE, SOUND_PAN_TARGET
 	delay 10
 	createsprite gAcidPoisonDropletSpriteTemplate, ANIM_TARGET, 2, -15, -17, 0, 10, 45
-	playsewithpan SE_M_BUBBLE, 63
+	playsewithpan SE_M_BUBBLE, SOUND_PAN_TARGET
 	delay 10
 	createsprite gAcidPoisonDropletSpriteTemplate, ANIM_TARGET, 2, 27, -22, 0, 15, 50
-	playsewithpan SE_M_BUBBLE, 63
+	playsewithpan SE_M_BUBBLE, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	end
@@ -6713,7 +6713,7 @@ Move_BONEMERANG:: @ 81CF402
 	playsewithpan SE_M_BONEMERANG, 192
 	createsprite gBonemerangSpriteTemplate, ANIM_ATTACKER, 2
 	delay 20
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 1
 	createvisualtask AnimTask_ShakeMon, 5, 1, 5, 0, 5, 1
 	delay 17
@@ -6730,13 +6730,13 @@ Move_BONE_CLUB:: @ 81CF456
 	monbg ANIM_DEF_PARTNER
 	monbgprio_28 1
 	setalpha 12, 8
-	playsewithpan SE_M_BONEMERANG, 63
+	playsewithpan SE_M_BONEMERANG, SOUND_PAN_TARGET
 	createsprite gSpinningBoneSpriteTemplate, ANIM_ATTACKER, 2, -42, -25, 0, 0, 15
 	delay 12
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 1
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 5, 5, 1
 	createsprite gComplexPaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 7, 5, 1, 0, 10, 0, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -6747,12 +6747,12 @@ Move_BONE_RUSH:: @ 81CF4B8
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
-	playsewithpan SE_M_BONEMERANG, 63
+	playsewithpan SE_M_BONEMERANG, SOUND_PAN_TARGET
 	createsprite gSpinningBoneSpriteTemplate, ANIM_ATTACKER, 2, -42, -25, 0, 0, 15
 	delay 12
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 3, 5, 1
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -6762,14 +6762,14 @@ Move_SPIKES:: @ 81CF503
 	loadspritegfx ANIM_TAG_SPIKES
 	monbg ANIM_DEF_PARTNER
 	playsewithpan SE_M_JUMP_KICK, 192
-	waitplaysewithpan SE_M_HORN_ATTACK, 63, 28
+	waitplaysewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET, 28
 	createsprite gSpikesSpriteTemplate, ANIM_TARGET, 2, 20, 0, 0, 24, 30
 	delay 10
 	playsewithpan SE_M_JUMP_KICK, 192
-	waitplaysewithpan SE_M_HORN_ATTACK, 63, 28
+	waitplaysewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET, 28
 	createsprite gSpikesSpriteTemplate, ANIM_TARGET, 2, 20, 0, -24, 24, 30
 	delay 10
-	waitplaysewithpan SE_M_HORN_ATTACK, 63, 28
+	waitplaysewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET, 28
 	createsprite gSpikesSpriteTemplate, ANIM_TARGET, 2, 20, 0, 24, 24, 30
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
@@ -6794,7 +6794,7 @@ MegahornContinue:: @ 81CF57D
 	delay 3
 	createsprite gMegahornHornSpriteTemplate, ANIM_ATTACKER, 3, -42, 25, 0, 0, 6
 	delay 4
-	playsewithpan SE_M_VICEGRIP, 63
+	playsewithpan SE_M_VICEGRIP, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 0
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 1, -16, 4, 1, 4
 	waitforvisualfinish
@@ -6826,13 +6826,13 @@ Move_GUST:: @ 81CF648
 	monbg ANIM_DEF_PARTNER
 	monbgprio_28 1
 	setalpha 12, 8
-	playsewithpan SE_M_GUST, 63
+	playsewithpan SE_M_GUST, SOUND_PAN_TARGET
 	createsprite gEllipticalGustSpriteTemplate, ANIM_ATTACKER, 2, 0, -16
 	createvisualtask AnimTask_AnimateGustTornadoPalette, 5, 1, 70
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeMon2, 5, 1, 1, 0, 7, 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
-	playsewithpan SE_M_GUST2, 63
+	playsewithpan SE_M_GUST2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -6840,7 +6840,7 @@ Move_GUST:: @ 81CF648
 
 Move_PECK:: @ 81CF736
 	loadspritegfx ANIM_TAG_IMPACT
-	playsewithpan SE_M_HORN_ATTACK, 63
+	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
 	createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 3, -768, 1, 2
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, -12, 0, 1, 3
 	waitforvisualfinish
@@ -6861,7 +6861,7 @@ Move_AEROBLAST:: @ 81CF75D
 	call AeroblastBeam
 	waitforvisualfinish
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 0
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -6900,13 +6900,13 @@ Move_WATER_GUN:: @ 81CF87A
 	createvisualtask AnimTask_ShakeMon2, 5, 1, 1, 0, 8, 1
 	createsprite gWaterHitSplatSpriteTemplate, ANIM_ATTACKER, 4, 0, 0, 1, 2
 	createsprite gWaterGunDropletSpriteTemplate, ANIM_ATTACKER, 2, 0, -15, 0, 15, 55
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	delay 10
 	createsprite gWaterGunDropletSpriteTemplate, ANIM_ATTACKER, 2, 15, -20, 0, 15, 50
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	delay 10
 	createsprite gWaterGunDropletSpriteTemplate, ANIM_ATTACKER, 2, -15, -10, 0, 10, 45
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -6918,7 +6918,7 @@ Move_CRABHAMMER:: @ 81CF907
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
 	createsprite gWaterHitSplatSpriteTemplate, ANIM_ATTACKER, 4, 0, 0, 1, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	delay 1
 	createsprite gComplexPaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 31, 3, 1, 32429, 10, 0, 0
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 1, -24, 0, 0, 4
@@ -6927,7 +6927,7 @@ Move_CRABHAMMER:: @ 81CF907
 	waitforvisualfinish
 	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 1, 0, 4
 	waitforvisualfinish
-	loopsewithpan SE_M_CRABHAMMER, 63, 20, 3
+	loopsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET, 20, 3
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 4, 8, 1
 	createsprite gSmallBubblePairSpriteTemplate, ANIM_ATTACKER, 2, 10, 10, 20, 1
 	delay 4
@@ -6952,7 +6952,7 @@ Move_CRABHAMMER:: @ 81CF907
 Move_SURF:: @ 81CFA01
 	createvisualtask AnimTask_CreateSurfWave, 2, 0
 	delay 24
-	panse_1B SE_M_SURF, 192, 63, 2, 0
+	panse_1B SE_M_SURF, 192, SOUND_PAN_TARGET, 2, 0
 	waitforvisualfinish
 	end
 
@@ -6964,7 +6964,7 @@ Move_FLAMETHROWER:: @ 81CFA15
 	createvisualtask AnimTask_ShakeMon, 5, 0, 0, 2, 46, 1
 	delay 6
 	createvisualtask AnimTask_StartSinAnimTimer, 5, 100
-	panse_1B SE_M_FLAMETHROWER, 192, 63, 2, 0
+	panse_1B SE_M_FLAMETHROWER, 192, SOUND_PAN_TARGET, 2, 0
 	call FlamethrowerCreateFlames
 	call FlamethrowerCreateFlames
 	call FlamethrowerCreateFlames
@@ -7016,7 +7016,7 @@ Move_WHIRLPOOL:: @ 81CFB3A
 	setalpha 12, 8
 	delay 0
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 0, 4, 2, 0, 7, 23968
-	playsewithpan SE_M_WHIRLPOOL, 63
+	playsewithpan SE_M_WHIRLPOOL, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 2, 50, 1
 	call WhirlpoolEffect
 	call WhirlpoolEffect
@@ -7063,7 +7063,7 @@ FlyUnleash:: @ 81CFC46
 	delay 20
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 0
 	createvisualtask AnimTask_ShakeMon, 5, 1, 6, 0, 8, 1
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -7084,10 +7084,10 @@ BounceSetUp:: @ 81CFC97
 BounceUnleash:: @ 81CFCAB
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	createsprite gBounceBallLandSpriteTemplate, ANIM_TARGET, 3
 	delay 7
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, 0, 0, 1, 0
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 5, 11, 1
 	waitforvisualfinish
@@ -7101,10 +7101,10 @@ Move_KARATE_CHOP:: @ 81CFCEA
 	monbg ANIM_DEF_PARTNER
 	monbgprio_28 1
 	setalpha 12, 8
-	playsewithpan SE_M_DOUBLE_TEAM, 63
+	playsewithpan SE_M_DOUBLE_TEAM, SOUND_PAN_TARGET
 	createsprite gKarateChopSpriteTemplate, ANIM_ATTACKER, 2, -16, 0, 0, 0, 10, 1, 3, 0
 	waitforvisualfinish
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon, 5, 1, 4, 0, 6, 1
 	waitforvisualfinish
@@ -7117,11 +7117,11 @@ Move_CROSS_CHOP:: @ 81CFD3C
 	loadspritegfx ANIM_TAG_CROSS_IMPACT
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
-	playsewithpan SE_M_MEGA_KICK, 63
+	playsewithpan SE_M_MEGA_KICK, SOUND_PAN_TARGET
 	createsprite gCrossChopHandSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 0
 	createsprite gCrossChopHandSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1
 	delay 40
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	createsprite gComplexPaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 31, 3, 1, RGB_WHITE, 10, 0, 10
 	createsprite gCrossImpactSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 20
 	createvisualtask AnimTask_ShakeMon, 5, 1, 7, 0, 9, 1
@@ -7138,11 +7138,11 @@ Move_JUMP_KICK:: @ 81CFDA5
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 4, 4
 	delay 3
 	createsprite gJumpKickSpriteTemplate, ANIM_ATTACKER, 2, -16, 8, 0, 0, 10, 1, 1, 1
-	playsewithpan SE_M_JUMP_KICK, 63
+	playsewithpan SE_M_JUMP_KICK, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 1, 0, 0, 1, 1
 	createvisualtask AnimTask_ShakeMon, 5, 1, 5, 0, 7, 1
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -7159,10 +7159,10 @@ Move_HI_JUMP_KICK:: @ 81CFE02
 	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 3
 	delay 2
 	createsprite gJumpKickSpriteTemplate, ANIM_ATTACKER, 2, -16, 8, 0, 0, 10, 1, 1, 1
-	playsewithpan SE_M_JUMP_KICK, 63
+	playsewithpan SE_M_JUMP_KICK, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 1, -28, 0, 0, 3
 	delay 3
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 1, 3, 0, 11, 1
@@ -7181,7 +7181,7 @@ Move_DOUBLE_KICK:: @ 81CFE98
 	setalpha 12, 8
 	createsprite gFistFootRandomPosSpriteTemplate, ANIM_ATTACKER, 3, 1, 20, 1
 	createvisualtask AnimTask_ShakeMon, 5, 1, 4, 0, 6, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
@@ -7193,7 +7193,7 @@ Move_TRIPLE_KICK:: @ 81CFECB
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	jumpifmoveturn 0, TripleKickLeft
 	jumpifmoveturn 1, TripleKickRight
 	goto TripleKickCenter
@@ -7229,26 +7229,26 @@ Move_DYNAMIC_PUNCH:: @ 81CFF92
 	delay 1
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 3, 0, 0, 20, 1, 0
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, 0, 0, 1, 0
 	createvisualtask AnimTask_ShakeMon, 5, 1, 5, 0, 7, 1
 	delay 1
 	waitsound
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon2, 5, 1, 5, 0, 28, 1
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, 24, -24, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, -16, 16, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, -24, -12, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, 16, 16, 1, 1
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
@@ -7266,18 +7266,18 @@ Move_COUNTER:: @ 81D005A
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 0, 20, 0, 0, 4
 	delay 4
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -15, 18, 1, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	delay 1
 	createvisualtask AnimTask_ShakeMon, 2, 1, 5, 0, 25, 1
 	createsprite gFistFootSpriteTemplate, ANIM_ATTACKER, 3, -15, 18, 8, 1, 0
 	delay 3
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, -4, 1, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	delay 1
 	createsprite gFistFootSpriteTemplate, ANIM_ATTACKER, 3, 0, -4, 8, 1, 0
 	delay 3
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 15, 9, 1, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	delay 1
 	createsprite gFistFootSpriteTemplate, ANIM_ATTACKER, 3, 15, 9, 8, 1, 0
 	delay 5
@@ -7297,7 +7297,7 @@ Move_VITAL_THROW:: @ 81D0129
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 0, 20, 0, 0, 4
 	delay 2
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	delay 1
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 1, -24, 0, 0, 4
 	waitforvisualfinish
@@ -7319,10 +7319,10 @@ Move_ROCK_SMASH:: @ 81D01A4
 	delay 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 1
 	createsprite gFistFootSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 8, 1, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 5, 1
 	waitforvisualfinish
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	createsprite gRockFragmentSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 20, 24, 14, 2
 	createsprite gRockFragmentSpriteTemplate, ANIM_ATTACKER, 2, 5, 0, -20, 24, 14, 1
 	createsprite gRockFragmentSpriteTemplate, ANIM_ATTACKER, 2, 0, 5, 20, -24, 14, 2
@@ -7342,15 +7342,15 @@ Move_SUBMISSION:: @ 81D029C
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
 	playsewithpan SE_M_DOUBLE_TEAM, 192
-	waitplaysewithpan SE_M_COMET_PUNCH, 63, 10
+	waitplaysewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET, 10
 	waitplaysewithpan SE_M_DOUBLE_TEAM, 192, 20
-	waitplaysewithpan SE_M_COMET_PUNCH, 63, 30
+	waitplaysewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET, 30
 	waitplaysewithpan SE_M_DOUBLE_TEAM, 192, 40
-	waitplaysewithpan SE_M_COMET_PUNCH, 63, 50
+	waitplaysewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET, 50
 	waitplaysewithpan SE_M_DOUBLE_TEAM, 192, 60
-	waitplaysewithpan SE_M_COMET_PUNCH, 63, 70
+	waitplaysewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET, 70
 	waitplaysewithpan SE_M_DOUBLE_TEAM, 192, 80
-	waitplaysewithpan SE_M_COMET_PUNCH, 63, 90
+	waitplaysewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET, 90
 	createvisualtask AnimTask_TranslateMonElliptical, 2, 0, -18, 6, 6, 4
 	createvisualtask AnimTask_TranslateMonElliptical, 2, 1, 18, 6, 6, 4
 	call SubmissionHit
@@ -7376,7 +7376,7 @@ Move_SUNNY_DAY:: @ 81D033F
 	setalpha 13, 3
 	createvisualtask AnimTask_BlendSelected, 10, 1 | (0xF << 7), 1, 0, 6, RGB_WHITE
 	waitforvisualfinish
-	panse_26 SE_M_PETAL_DANCE, 192, 63, 1, 0
+	panse_26 SE_M_PETAL_DANCE, 192, SOUND_PAN_TARGET, 1, 0
 	call SunnyDayLightRay
 	call SunnyDayLightRay
 	call SunnyDayLightRay
@@ -7397,7 +7397,7 @@ Move_COTTON_SPORE:: @ 81D0395
 	loadspritegfx ANIM_TAG_SPORE
 	monbg ANIM_DEF_PARTNER
 	monbgprio_28 1
-	loopsewithpan SE_M_POISON_POWDER, 63, 18, 10
+	loopsewithpan SE_M_POISON_POWDER, SOUND_PAN_TARGET, 18, 10
 	call CreateCottonSpores
 	call CreateCottonSpores
 	call CreateCottonSpores
@@ -7419,7 +7419,7 @@ Move_SPORE:: @ 81D03EF
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
 	createvisualtask AnimTask_SporeDoubleBattle, 2, 
-	loopsewithpan SE_M_POISON_POWDER, 63, 16, 11
+	loopsewithpan SE_M_POISON_POWDER, SOUND_PAN_TARGET, 16, 11
 	call CreateSpore
 	call CreateSpore
 	call CreateSpore
@@ -7465,7 +7465,7 @@ Move_PETAL_DANCE:: @ 81D0454
 	waitforvisualfinish
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 0, 24, 0, 0, 5
 	delay 3
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 0
 	createvisualtask AnimTask_ShakeMon, 2, 1, 6, 0, 8, 1
 	waitforvisualfinish
@@ -7508,7 +7508,7 @@ Move_RAZOR_LEAF:: @ 81D058C
 	createsprite gRazorLeafCutterSpriteTemplate, ANIM_TARGET, 3, 20, -10, 20, 0, 22, 20, 1
 	createsprite gRazorLeafCutterSpriteTemplate, ANIM_TARGET, 3, 20, -10, 20, 0, 22, -20, 1
 	delay 20
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 8, 1
 	createvisualtask AnimTask_ShakeMon2, 2, 3, 2, 0, 8, 1
 	waitforvisualfinish
@@ -7539,7 +7539,7 @@ Move_ANCIENT_POWER:: @ 81D0693
 	waitforvisualfinish
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 0, 16, 0, 0, 4
 	delay 3
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 1
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 6, 1
 	waitforvisualfinish
@@ -7555,7 +7555,7 @@ Move_OCTAZOOKA:: @ 81D07BB
 	playsewithpan SE_M_MEGA_KICK2, 192
 	createsprite gOctazookaBallSpriteTemplate, ANIM_TARGET, 2, 20, 0, 0, 0, 20, 0
 	waitforvisualfinish
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gOctazookaSmokeSpriteTemplate, ANIM_TARGET, 2, 8, 8, 1, 0
 	delay 2
 	createsprite gOctazookaSmokeSpriteTemplate, ANIM_TARGET, 2, -8, -8, 1, 0
@@ -7611,14 +7611,14 @@ Move_FIRE_PUNCH:: @ 81D08B5
 	createsprite gFireSpiralInwardSpriteTemplate, ANIM_TARGET, 1, 64
 	createsprite gFireSpiralInwardSpriteTemplate, ANIM_TARGET, 1, 128
 	createsprite gFireSpiralInwardSpriteTemplate, ANIM_TARGET, 1, 196
-	playsewithpan SE_M_FLAME_WHEEL, 63
+	playsewithpan SE_M_FLAME_WHEEL, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gFistFootSpriteTemplate, ANIM_TARGET, 3, 0, 0, 8, 1, 0
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, 0, 0, 1, 1
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 3, 15, 1
 	call FireSpreadEffect
 	delay 4
-	playsewithpan SE_M_FIRE_PUNCH, 63
+	playsewithpan SE_M_FIRE_PUNCH, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_BlendSelected, 10, 4, 0, 9, 0, RGB(31, 0, 0)
 	waitforvisualfinish
@@ -7663,7 +7663,7 @@ Move_DREAM_EATER:: @ 81D0A1F
 	playsewithpan SE_M_PSYBEAM, 192
 	call SetPsychicBackground
 	setalpha 8, 8
-	playsewithpan SE_M_MINIMIZE, 63
+	playsewithpan SE_M_MINIMIZE, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 2, 1, 5, 0, 15, 1
 	createvisualtask AnimTask_ScaleMonAndRestore, 5, -6, -6, 15, 1, 1
 	waitforvisualfinish
@@ -7681,42 +7681,42 @@ Move_DREAM_EATER:: @ 81D0A1F
 	end
 
 DreamEaterAbsorb:: @ 81D0A89
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 5, -18, -40, 35
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -10, 20, 20, 39
 	delay 4
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 28, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -10, 20, 40, 39
 	delay 4
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -5, 15, 16, 33
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -32, 26
 	delay 4
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, -15, -16, 36
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	delay 4
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -5, 15, 16, 33
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, -15, -16, 36
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	delay 4
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -5, 15, 16, 33
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -40, 26
 	delay 4
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -5, 15, 36, 33
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 10, -5, -8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, -10, 20, 20, 39
 	delay 4
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 0, 5, 8, 26
 	createsprite gAbsorptionOrbSpriteTemplate, ANIM_ATTACKER, 3, 5, -18, -20, 35
@@ -7749,7 +7749,7 @@ Move_POISON_GAS:: @ 81D0C22
 	playsewithpan SE_M_MIST, 192
 	createsprite gPoisonGasCloudSpriteTemplate, ANIM_TARGET, 0, 64, 0, 0, -32, -6, 4192, 1072, 0
 	delay 40
-	loopsewithpan SE_M_MIST, 63, 28, 6
+	loopsewithpan SE_M_MIST, SOUND_PAN_TARGET, 28, 6
 	createvisualtask AnimTask_BlendColorCycle, 2, 4, 6, 2, 0, 12, 26650
 	waitforvisualfinish
 	blendoff
@@ -7762,7 +7762,7 @@ Move_BIND:: @ 81D0D00
 	goto BindWrap
 
 BindWrap:: @ 81D0D16
-	playsewithpan SE_M_BIND, 63
+	playsewithpan SE_M_BIND, SOUND_PAN_TARGET
 	call BindWrapSqueezeTarget
 	call BindWrapSqueezeTarget
 	waitforvisualfinish
@@ -7781,7 +7781,7 @@ Move_PSYBEAM:: @ 81D0D50
 	loadspritegfx ANIM_TAG_GOLD_RING
 	playsewithpan SE_M_PSYBEAM, 192
 	call SetPsychicBackground
-	createsoundtask SoundTask_LoopSEAdjustPanning, 193, -64, 63, 3, 4, 0, 15
+	createsoundtask SoundTask_LoopSEAdjustPanning, 193, -64, SOUND_PAN_TARGET, 3, 4, 0, 15
 	call PsybeamRings
 	call PsybeamRings
 	createvisualtask AnimTask_SwayMon, 5, 0, 6, 2048, 4, 1
@@ -7829,7 +7829,7 @@ Move_PSYWAVE:: @ 81D0E4A
 	playsewithpan SE_M_PSYBEAM, 192
 	call SetPsychicBackground
 	createvisualtask AnimTask_StartSinAnimTimer, 5, 100
-	createsoundtask SoundTask_LoopSEAdjustPanning, 196, -64, 63, 2, 9, 0, 10
+	createsoundtask SoundTask_LoopSEAdjustPanning, 196, -64, SOUND_PAN_TARGET, 2, 9, 0, 10
 	call PsywaveRings
 	call PsywaveRings
 	createvisualtask AnimTask_BlendColorCycle, 2, 4, 1, 4, 0, 12, 32351
@@ -7865,7 +7865,7 @@ Move_ZAP_CANNON:: @ 81D0ED0
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 5, 1
 	delay 15
-	waitplaysewithpan SE_M_THUNDERBOLT2, 63, 19
+	waitplaysewithpan SE_M_THUNDERBOLT2, SOUND_PAN_TARGET, 19
 	call ElectricityEffect
 	waitforvisualfinish
 	end
@@ -7889,7 +7889,7 @@ Move_STEEL_WING:: @ 81D0FB5
 	delay 17
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 16, 0, 1, 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -16, 0, 1, 1
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 11
 	waitforvisualfinish
@@ -7908,7 +7908,7 @@ Move_IRON_TAIL:: @ 81D1064
 	delay 6
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_SetGreyscaleOrOriginalPal, 5, 0, 1
 	clearmonbg 1
@@ -7928,7 +7928,7 @@ Move_POISON_TAIL:: @ 81D10C2
 	delay 6
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_SetGreyscaleOrOriginalPal, 5, 0, 1
 	clearmonbg 1
@@ -7944,14 +7944,14 @@ Move_METAL_CLAW:: @ 81D1128
 	waitforvisualfinish
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 6, 4
 	delay 2
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	createsprite gClawSlashSpriteTemplate, ANIM_TARGET, 2, -10, -10, 0
 	createsprite gClawSlashSpriteTemplate, ANIM_TARGET, 2, -10, 10, 0
 	createsprite gShakeMonOrTerrainSpriteTemplate, ANIM_ATTACKER, 2, -4, 1, 10, 3, 1
 	delay 8
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 6, 4
 	delay 2
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	createsprite gClawSlashSpriteTemplate, ANIM_TARGET, 2, 10, -10, 1
 	createsprite gClawSlashSpriteTemplate, ANIM_TARGET, 2, 10, 10, 1
 	createsprite gShakeMonOrTerrainSpriteTemplate, ANIM_ATTACKER, 2, -4, 1, 10, 3, 1
@@ -7985,19 +7985,19 @@ Move_EGG_BOMB:: @ 81D1203
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 16, 1
 	createsprite gExplosionSpriteTemplate, ANIM_TARGET, 4, 6, 5, 1, 0
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	delay 3
 	createsprite gExplosionSpriteTemplate, ANIM_TARGET, 4, -16, -15, 1, 0
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	delay 3
 	createsprite gExplosionSpriteTemplate, ANIM_TARGET, 4, 16, -5, 1, 0
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	delay 3
 	createsprite gExplosionSpriteTemplate, ANIM_TARGET, 4, -12, 18, 1, 0
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	delay 3
 	createsprite gExplosionSpriteTemplate, ANIM_TARGET, 4, 0, 5, 1, 0
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	delay 3
 	waitforvisualfinish
 	end
@@ -8007,10 +8007,10 @@ Move_SHADOW_BALL:: @ 81D129D
 	fadetobg 2
 	waitbgfadein
 	delay 15
-	createsoundtask SoundTask_LoopSEAdjustPanning, 161, -64, 63, 5, 5, 0, 5
+	createsoundtask SoundTask_LoopSEAdjustPanning, 161, -64, SOUND_PAN_TARGET, 5, 5, 0, 5
 	createsprite gShadowBallSpriteTemplate, ANIM_TARGET, 2, 16, 16, 8
 	waitforvisualfinish
-	playsewithpan SE_M_SAND_ATTACK, 63
+	playsewithpan SE_M_SAND_ATTACK, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 8, 1
 	waitforvisualfinish
 	restorebg
@@ -8020,7 +8020,7 @@ Move_SHADOW_BALL:: @ 81D129D
 Move_LICK:: @ 81D12E0
 	loadspritegfx ANIM_TAG_LICK
 	delay 15
-	playsewithpan SE_M_LICK, 63
+	playsewithpan SE_M_LICK, SOUND_PAN_TARGET
 	createsprite gLickSpriteTemplate, ANIM_TARGET, 2, 0, 0
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 1, 0, 16, 1
 	waitforvisualfinish
@@ -8062,13 +8062,13 @@ BattleAnimScript_Bide_Release:: @ 81D137D
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 0, 2, 0, 12, 1
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 16, 1
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 1, 18, -8, 1, 1
 	delay 5
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 1, -18, 8, 1, 1
 	delay 5
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 1, -8, -5, 1, 1
 	waitforvisualfinish
 	delay 5
@@ -8107,7 +8107,7 @@ Move_STRING_SHOT:: @ 81D1446
 	call StringShotThread
 	call StringShotThread
 	waitforvisualfinish
-	playsewithpan SE_M_STRING_SHOT2, 63
+	playsewithpan SE_M_STRING_SHOT2, SOUND_PAN_TARGET
 	createsprite gStringWrapSpriteTemplate, ANIM_TARGET, 2, 0, 10
 	delay 4
 	createsprite gStringWrapSpriteTemplate, ANIM_TARGET, 2, 0, -2
@@ -8149,7 +8149,7 @@ Move_SPIDER_WEB:: @ 81D1518
 	call SpiderWebThread
 	call SpiderWebThread
 	waitforvisualfinish
-	playsewithpan SE_M_STRING_SHOT2, 63
+	playsewithpan SE_M_STRING_SHOT2, SOUND_PAN_TARGET
 	createsprite gSpiderWebSpriteTemplate, ANIM_ATTACKER, 2, 
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
@@ -8193,7 +8193,7 @@ RazorWindUnleash:: @ 81D1614
 	playsewithpan SE_M_RAZOR_WIND2, 192
 	createsprite gAirWaveCrescentSpriteTemplate, ANIM_ATTACKER, 2, 14, 12, -16, -14, 22, 0, 1
 	delay 17
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 10, 1
 	createvisualtask AnimTask_ShakeMon2, 2, 3, 2, 0, 10, 1
 	waitforvisualfinish
@@ -8210,7 +8210,7 @@ Move_DISABLE:: @ 81D169F
 	createsprite gSpriteTemplate_83BF480, ANIM_ATTACKER, 13, 24, -16
 	waitforvisualfinish
 	createvisualtask AnimTask_GrowAndGreyscale, 5, 
-	loopsewithpan SE_M_BIND, 63, 15, 4
+	loopsewithpan SE_M_BIND, SOUND_PAN_TARGET, 15, 4
 	waitforvisualfinish
 	delay 1
 	clearmonbg 1
@@ -8256,7 +8256,7 @@ Move_MIMIC:: @ 81D1777
 	loadspritegfx ANIM_TAG_ORBS
 	monbg_22 3
 	setalpha 11, 5
-	panse_1B SE_M_MINIMIZE, 63, 192, 253, 0
+	panse_1B SE_M_MINIMIZE, SOUND_PAN_TARGET, 192, 253, 0
 	createvisualtask AnimTask_ShrinkTargetCopy, 5, 128, 24
 	delay 15
 	createsprite gMimicOrbSpriteTemplate, ANIM_TARGET, 2, -12, 24
@@ -8272,7 +8272,7 @@ Move_MIMIC:: @ 81D1777
 
 Move_CONSTRICT:: @ 81D17C1
 	loadspritegfx ANIM_TAG_TENDRILS
-	loopsewithpan SE_M_SCRATCH, 63, 6, 4
+	loopsewithpan SE_M_SCRATCH, SOUND_PAN_TARGET, 6, 4
 	createsprite gConstrictBindingSpriteTemplate, ANIM_TARGET, 4, 0, 16, 0, 2
 	delay 7
 	createsprite gConstrictBindingSpriteTemplate, ANIM_TARGET, 3, 0, 0, 0, 2
@@ -8282,7 +8282,7 @@ Move_CONSTRICT:: @ 81D17C1
 	delay 8
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 6, 1
 	delay 20
-	playsewithpan SE_M_BIND, 63
+	playsewithpan SE_M_BIND, SOUND_PAN_TARGET
 	setarg 7, 65535
 	waitforvisualfinish
 	end
@@ -8308,7 +8308,7 @@ CurseGhost:: @ 81D1832
 	clearmonbg ANIM_ATK_PARTNER
 	delay 1
 	monbg ANIM_DEF_PARTNER
-	playsewithpan SE_M_NIGHTMARE, 63
+	playsewithpan SE_M_NIGHTMARE, SOUND_PAN_TARGET
 	createsprite gCurseGhostSpriteTemplate, ANIM_TARGET, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 14, 1
 	waitforvisualfinish
@@ -8416,7 +8416,7 @@ Move_FAKE_OUT:: @ 81D1B65
 	playsewithpan SE_M_FLATTER, 0
 	createvisualtask AnimTask_FakeOut, 5, 
 	waitforvisualfinish
-	playsewithpan SE_M_SKETCH, 63
+	playsewithpan SE_M_SKETCH, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 5, 1
 	createvisualtask AnimTask_StretchTargetUp, 3
 	waitforvisualfinish
@@ -8436,7 +8436,7 @@ Move_SCARY_FACE:: @ 81D1BA0
 	createsprite gEyeSparkleSpriteTemplate, ANIM_ATTACKER, 0, 16, -8
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeTargetInPattern, 3, 20, 1, 0
-	playsewithpan SE_M_STRING_SHOT2, 63
+	playsewithpan SE_M_STRING_SHOT2, SOUND_PAN_TARGET
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 27, 3, 16, 0, 0
 	waitforvisualfinish
 	end
@@ -8445,14 +8445,14 @@ Move_SWEET_KISS:: @ 81D1C03
 	loadspritegfx ANIM_TAG_RED_HEART
 	loadspritegfx ANIM_TAG_ANGEL
 	createsprite gAngelSpriteTemplate, ANIM_TARGET, 2, 16, -48
-	playsewithpan SE_M_HEAL_BELL, 63
+	playsewithpan SE_M_HEAL_BELL, SOUND_PAN_TARGET
 	delay 23
-	playsewithpan SE_M_HEAL_BELL, 63
+	playsewithpan SE_M_HEAL_BELL, SOUND_PAN_TARGET
 	delay 23
-	playsewithpan SE_M_HEAL_BELL, 63
+	playsewithpan SE_M_HEAL_BELL, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gRedHeartBurstSpriteTemplate, ANIM_TARGET, 3, 160, -30
-	playsewithpan SE_M_ATTRACT, 63
+	playsewithpan SE_M_ATTRACT, SOUND_PAN_TARGET
 	createsprite gRedHeartBurstSpriteTemplate, ANIM_TARGET, 3, -256, -42
 	createsprite gRedHeartBurstSpriteTemplate, ANIM_TARGET, 3, 128, -14
 	createsprite gRedHeartBurstSpriteTemplate, ANIM_TARGET, 3, 416, -38
@@ -8464,9 +8464,9 @@ Move_LOVELY_KISS:: @ 81D1C6C
 	loadspritegfx ANIM_TAG_PINK_HEART
 	loadspritegfx ANIM_TAG_DEVIL
 	createsprite gDevilSpriteTemplate, ANIM_TARGET, 2, 0, -24
-	playsewithpan SE_M_PSYBEAM2, 63
+	playsewithpan SE_M_PSYBEAM2, SOUND_PAN_TARGET
 	waitforvisualfinish
-	playsewithpan SE_M_ATTRACT, 63
+	playsewithpan SE_M_ATTRACT, SOUND_PAN_TARGET
 	createsprite gPinkHeartSpriteTemplate, ANIM_TARGET, 3, -256, -42
 	createsprite gPinkHeartSpriteTemplate, ANIM_TARGET, 3, 128, -14
 	createsprite gPinkHeartSpriteTemplate, ANIM_TARGET, 3, 416, -38
@@ -8477,13 +8477,13 @@ Move_FURY_SWIPES:: @ 81D1CB3
 	loadspritegfx ANIM_TAG_SWIPE
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 5, 5
 	delay 4
-	playsewithpan SE_M_SCRATCH, 63
+	playsewithpan SE_M_SCRATCH, SOUND_PAN_TARGET
 	createsprite gFurySwipesSpriteTemplate, ANIM_TARGET, 2, 16, 0, 1
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 5, 1
 	delay 10
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_TARGET, 2, 5, 5
 	delay 4
-	playsewithpan SE_M_SCRATCH, 63
+	playsewithpan SE_M_SCRATCH, SOUND_PAN_TARGET
 	createsprite gFurySwipesSpriteTemplate, ANIM_TARGET, 2, -16, 0, 0
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 7, 1
 	end
@@ -8528,7 +8528,7 @@ Move_PRESENT:: @ 81D1DC8
 	delay 14
 	playsewithpan SE_M_BUBBLE2, 0
 	delay 20
-	playsewithpan SE_M_BUBBLE2, 63
+	playsewithpan SE_M_BUBBLE2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	jumpargeq 7, 0, PresentDamage
 	jumpargeq 7, 1, PresentHeal
@@ -8536,26 +8536,26 @@ Move_PRESENT:: @ 81D1DC8
 
 PresentDamage:: @ 81D1E0B
 	loadspritegfx ANIM_TAG_EXPLOSION
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_TARGET, 3, 24, -24, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_TARGET, 3, -16, 16, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_TARGET, 3, -24, -12, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_TARGET, 3, 16, 16, 1, 1
 	end
 
 PresentHeal:: @ 81D1E76
 	loadspritegfx ANIM_TAG_GREEN_SPARKLE
 	loadspritegfx ANIM_TAG_BLUE_STAR
-	playsewithpan SE_M_MORNING_SUN, 63
+	playsewithpan SE_M_MORNING_SUN, SOUND_PAN_TARGET
 	createsprite gPresentHealParticleSpriteTemplate, ANIM_TARGET, 4, -16, 32, -3, 1
 	delay 3
 	createsprite gPresentHealParticleSpriteTemplate, ANIM_TARGET, 4, 16, 32, -3, -1
@@ -8605,7 +8605,7 @@ Move_PERISH_SONG:: @ 81D1F41
 	createsprite gPerishSongMusicNoteSpriteTemplate, ANIM_ATTACKER, 4, 15, 0, 240
 	createsprite gPerishSongMusicNote2SpriteTemplate, ANIM_ATTACKER, 4, 15, 0, 0
 	delay 20
-	panse_1B SE_M_PERISH_SONG, 192, 63, 2, 0
+	panse_1B SE_M_PERISH_SONG, 192, SOUND_PAN_TARGET, 2, 0
 	delay 80
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 3, 0, 16, 0
 	createvisualtask AnimTask_SetGreyscaleOrOriginalPal, 5, 4, 0
@@ -8650,7 +8650,7 @@ Move_SLEEP_TALK:: @ 81D20AA
 
 Move_HYPER_FANG:: @ 81D2165
 	loadspritegfx ANIM_TAG_FANG_ATTACK
-	playsewithpan SE_M_BITE, 63
+	playsewithpan SE_M_BITE, SOUND_PAN_TARGET
 	delay 1
 	delay 2
 	createvisualtask AnimTask_IsContest, 2, 
@@ -8663,7 +8663,7 @@ HyperFangContinue:: @ 81D2193
 	createsprite gFangSpriteTemplate, ANIM_TARGET, 2, 
 	waitbgfadein
 	createvisualtask AnimTask_ShakeMon, 3, 1, 0, 10, 10, 1
-	playsewithpan SE_M_LEER, 63
+	playsewithpan SE_M_LEER, SOUND_PAN_TARGET
 	delay 20
 	restorebg
 	waitbgfadein
@@ -8689,13 +8689,13 @@ Move_TRI_ATTACK:: @ 81D21CC
 	delay 20
 	playsewithpan SE_M_TRI_ATTACK, 192
 	delay 20
-	createsoundtask SoundTask_LoopSEAdjustPanning, 213, -64, 63, 5, 6, 0, 7
+	createsoundtask SoundTask_LoopSEAdjustPanning, 213, -64, SOUND_PAN_TARGET, 5, 6, 0, 7
 	waitforvisualfinish
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 2, 0, 16, 0
 	delay 16
 	loadspritegfx ANIM_TAG_FIRE
 	createsprite gLargeFlameScatterSpriteTemplate, ANIM_TARGET, 2, 0, 0, 30, 30, -1, 0
-	playsewithpan SE_M_FLAME_WHEEL2, 63
+	playsewithpan SE_M_FLAME_WHEEL2, SOUND_PAN_TARGET
 	createsprite gLargeFlameScatterSpriteTemplate, ANIM_TARGET, 2, 0, 0, 30, 30, 0, 1
 	delay 1
 	createsprite gLargeFlameScatterSpriteTemplate, ANIM_TARGET, 2, 0, 0, 30, 30, -1, -1
@@ -8714,7 +8714,7 @@ Move_TRI_ATTACK:: @ 81D21CC
 	waitforvisualfinish
 	loadspritegfx ANIM_TAG_LIGHTNING
 	createvisualtask AnimTask_InvertScreenColor, 2, 257, 257, 257
-	playsewithpan SE_M_TRI_ATTACK2, 63
+	playsewithpan SE_M_TRI_ATTACK2, SOUND_PAN_TARGET
 	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 0, -48
 	delay 1
 	createsprite gLightningSpriteTemplate, ANIM_TARGET, 2, 0, -16
@@ -8747,10 +8747,10 @@ Move_WILL_O_WISP:: @ 81D2340
 	delay 3
 	createsprite gWillOWispOrbSpriteTemplate, ANIM_ATTACKER, 4, 0, 0, 3
 	delay 40
-	createvisualtask SoundTask_AdjustPanningVar, 2, -64, 63, 2, 0
+	createvisualtask SoundTask_AdjustPanningVar, 2, -64, SOUND_PAN_TARGET, 2, 0
 	waitforvisualfinish
 	monbgprio_29
-	playsewithpan SE_M_FLAME_WHEEL2, 63
+	playsewithpan SE_M_FLAME_WHEEL2, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 13, 1
 	createsprite gWillOWispFireSpriteTemplate, ANIM_ATTACKER, 2, 0
 	createsprite gWillOWispFireSpriteTemplate, ANIM_ATTACKER, 2, 42
@@ -8774,7 +8774,7 @@ Move_ENCORE:: @ 81D23FE
 	createsprite gClappingHand2SpriteTemplate, ANIM_ATTACKER, 3, -2, 0, 0, 0, 9
 	createsprite gClappingHand2SpriteTemplate, ANIM_ATTACKER, 3, 2, 0, 1, 0, 9
 	delay 16
-	createvisualtask SoundTask_PlaySE2WithPanning, 5, 216, 63
+	createvisualtask SoundTask_PlaySE2WithPanning, 5, 216, SOUND_PAN_TARGET
 	createvisualtask AnimTask_SwayMon, 5, 1, 8, 1536, 5, 1
 	waitforvisualfinish
 	createvisualtask AnimTask_HardwarePaletteFade, 2, BLDCNT_TGT1_BG3 | BLDCNT_TGT1_OBJ | BLDCNT_TGT1_BD | BLDCNT_EFFECT_DARKEN, 3, 10, 0, TRUE
@@ -8815,7 +8815,7 @@ Move_WISH:: @ 81D2523
 	loadspritegfx ANIM_TAG_SPARKLE_2
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 3, 0, 10, 0
 	waitforvisualfinish
-	panse_27 SE_M_REFLECT, 63, 192, 253, 0
+	panse_27 SE_M_REFLECT, SOUND_PAN_TARGET, 192, 253, 0
 	createsprite gWishStarSpriteTemplate, ANIM_ATTACKER, 40, 
 	waitforvisualfinish
 	delay 60
@@ -8879,10 +8879,10 @@ Move_SPIT_UP:: @ 81D2622
 SpitUpContinue:: @ 81D26B2
 	delay 5
 	createvisualtask AnimTask_ShakeTargetBasedOnMovePowerOrDmg, 2, 0, 1, 8, 1, 0
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, -12, 10, 1, 1
 	delay 5
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 12, -10, 1, 1
 	waitforvisualfinish
 	end
@@ -8994,7 +8994,7 @@ Move_SWEET_SCENT:: @ 81D28BD
 	setpan 0
 	call SweetScentEffect
 	createsprite gSweetScentPetalSpriteTemplate, ANIM_ATTACKER, 2, 55, 0
-	setpan 63
+	setpan SOUND_PAN_TARGET
 	createvisualtask AnimTask_BlendColorCycle, 2, 20, 1, 5, 5, 13, 22207
 	call SweetScentEffect
 	waitforvisualfinish
@@ -9034,7 +9034,7 @@ Move_HYPER_BEAM:: @ 81D29A7
 	createvisualtask AnimTask_ShakeMon2, 2, 0, 1, 0, 4, 1
 	waitforvisualfinish
 	delay 30
-	createsoundtask SoundTask_LoopSEAdjustPanning, 240, -64, 63, 1, 15, 0, 5
+	createsoundtask SoundTask_LoopSEAdjustPanning, 240, -64, SOUND_PAN_TARGET, 1, 15, 0, 5
 	createvisualtask AnimTask_ShakeMon, 2, 0, 0, 4, 50, 1
 	createvisualtask AnimTask_FlashAnimTagWithColor, 2, 10147, 1, 12, 31, 16, 0, 0
 	call HyperBeamOrbs
@@ -9079,7 +9079,7 @@ HyperBeamOrbs:: @ 81D2AD8
 Move_FLATTER:: @ 81D2AE9
 	loadspritegfx ANIM_TAG_SPOTLIGHT
 	loadspritegfx ANIM_TAG_CONFETTI
-	createvisualtask SoundTask_PlaySE2WithPanning, 5, 216, 63
+	createvisualtask SoundTask_PlaySE2WithPanning, 5, 216, SOUND_PAN_TARGET
 	createvisualtask AnimTask_CreateSpotlight, 2, 
 	createvisualtask AnimTask_HardwarePaletteFade, 2, BLDCNT_TGT1_BG3 | BLDCNT_TGT1_OBJ | BLDCNT_TGT1_BD | BLDCNT_EFFECT_DARKEN, 3, 0, 10, FALSE
 	waitforvisualfinish
@@ -9110,7 +9110,7 @@ Move_FLATTER:: @ 81D2AE9
 	call CreateFlatterConfetti
 	call CreateFlatterConfetti
 	delay 5
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 222, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 222, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_HardwarePaletteFade, 2, BLDCNT_TGT1_BG3 | BLDCNT_TGT1_OBJ | BLDCNT_TGT1_BD | BLDCNT_EFFECT_DARKEN, 3, 10, 0, TRUE
 	waitforvisualfinish
@@ -9157,11 +9157,11 @@ Move_BLAZE_KICK:: @ 81D2C85
 	loadspritegfx ANIM_TAG_SMALL_EMBER
 	monbg 1
 	setalpha 12, 8
-	playsewithpan SE_M_FLAME_WHEEL, 63
+	playsewithpan SE_M_FLAME_WHEEL, SOUND_PAN_TARGET
 	createsprite gSpinningHandOrFootSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 30
 	createvisualtask AnimTask_BlendSelected, 10, 4, 2, 0, 7, RGB_WHITE
 	delay 30
-	playsewithpan SE_M_FIRE_PUNCH, 63
+	playsewithpan SE_M_FIRE_PUNCH, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, 0, 0, 1, 0
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 14, 1
 	createvisualtask AnimTask_BlendSelected, 10, 4, 2, 0, 0, RGB_WHITE
@@ -9196,7 +9196,7 @@ Move_SAND_TOMB:: @ 81D2D96
 	loadspritegfx ANIM_TAG_MUD_SAND
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 0, 4, 2, 0, 7, 563
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 2, 43, 1
-	playsewithpan SE_M_SAND_TOMB, 63
+	playsewithpan SE_M_SAND_TOMB, SOUND_PAN_TARGET
 	call SandTombSwirlingDirt
 	call SandTombSwirlingDirt
 	call SandTombSwirlingDirt
@@ -9231,7 +9231,7 @@ Move_SHEER_COLD:: @ 81D2E6E
 	monbgprio_28 1
 	setalpha 12, 8
 	createvisualtask AnimTask_FrozenIceCube, 2
-	waitplaysewithpan SE_M_HAIL, 63, 17
+	waitplaysewithpan SE_M_HAIL, SOUND_PAN_TARGET, 17
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -9248,11 +9248,11 @@ Move_ARM_THRUST:: @ 81D2E93
 	delay 6
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 4, 3
 	delay 4
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	createsprite gArmThrustHandSpriteTemplate, ANIM_TARGET, 2, 10, -8, 14, 3
 	waitforvisualfinish
 	createvisualtask AnimTask_RotateMonSpriteToSide, 5, 8, 5, 0, 1
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	choosetwoturnanim ArmThrustRight, ArmThrustLeft
 ArmThrustContinue:: @ 81D2EEC
 	createvisualtask AnimTask_ShakeMon, 5, 1, 4, 0, 6, 1
@@ -9269,7 +9269,7 @@ ArmThrustLeft:: @ 81D2F14
 	goto ArmThrustContinue
 
 Move_MUDDY_WATER:: @ 81D2F28
-	panse_1B SE_M_WHIRLPOOL, 192, 63, 2, 0
+	panse_1B SE_M_WHIRLPOOL, 192, SOUND_PAN_TARGET, 2, 0
 	createvisualtask AnimTask_CreateSurfWave, 2, 1
 	waitforvisualfinish
 	end
@@ -9310,7 +9310,7 @@ Move_DRAGON_CLAW:: @ 81D2FD0
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 6, 4
 	createsprite gFireSpinSpriteTemplate, ANIM_ATTACKER, 2, 0, 28, 528, 30, 13, 50, 0
 	delay 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 129, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 129, SOUND_PAN_TARGET
 	createsprite gClawSlashSpriteTemplate, ANIM_TARGET, 2, -10, -10, 0
 	createsprite gClawSlashSpriteTemplate, ANIM_TARGET, 2, -10, 10, 0
 	createsprite gShakeMonOrTerrainSpriteTemplate, ANIM_ATTACKER, 2, -4, 1, 10, 3, 1
@@ -9323,7 +9323,7 @@ Move_DRAGON_CLAW:: @ 81D2FD0
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 6, 4
 	createsprite gFireSpinSpriteTemplate, ANIM_ATTACKER, 2, 0, 28, 512, 25, 16, 46, 0
 	delay 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 129, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 129, SOUND_PAN_TARGET
 	createsprite gClawSlashSpriteTemplate, ANIM_TARGET, 2, 10, -10, 1
 	createsprite gClawSlashSpriteTemplate, ANIM_TARGET, 2, 10, 10, 1
 	createsprite gShakeMonOrTerrainSpriteTemplate, ANIM_ATTACKER, 2, -4, 1, 10, 3, 1
@@ -9368,7 +9368,7 @@ Move_MUD_SHOT:: @ 81D3239
 	createvisualtask AnimTask_ShakeMon, 5, 0, 0, 2, 46, 1
 	delay 6
 	createvisualtask AnimTask_StartSinAnimTimer, 5, 100
-	panse_1B SE_M_WHIRLPOOL, 192, 63, 1, 0
+	panse_1B SE_M_WHIRLPOOL, 192, SOUND_PAN_TARGET, 1, 0
 	call MudShotOrbs
 	call MudShotOrbs
 	call MudShotOrbs
@@ -9397,7 +9397,7 @@ Move_METEOR_MASH:: @ 81D32D6
 	loadspritegfx ANIM_TAG_GOLD_STARS
 	loadspritegfx ANIM_TAG_IMPACT
 	loadspritegfx ANIM_TAG_HANDS_AND_FEET
-	panse_1B SE_M_BARRIER, 192, 63, 3, 0
+	panse_1B SE_M_BARRIER, 192, SOUND_PAN_TARGET, 3, 0
 	fadetobg 16
 	waitbgfadein
 	waitforvisualfinish
@@ -9408,7 +9408,7 @@ Move_METEOR_MASH:: @ 81D32D6
 	createsprite gSpinningHandOrFootSpriteTemplate, ANIM_TARGET, 3, 0, 0, 0, 30
 	createsprite gMeteorMashStarSpriteTemplate, ANIM_TARGET, 3, -80, -64, 40, 32, 30
 	delay 20
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 1
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 5, 0, 20, 1
 	waitforvisualfinish
@@ -9431,17 +9431,17 @@ Move_REVENGE:: @ 81D335D
 	loadspritegfx ANIM_TAG_PURPLE_SWIPE
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 6, 4
 	delay 4
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	createsprite gRevengeBigScratchSpriteTemplate, ANIM_TARGET, 2, 10, -10
 	waitforvisualfinish
 	unloadspritegfx ANIM_TAG_PURPLE_SWIPE
 	loadspritegfx ANIM_TAG_IMPACT
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 3, 0, 10, 1
 	createsprite gPersistHitSplatSpriteTemplate, ANIM_TARGET, 3, -10, -8, 1, 1, 8
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	delay 8
 	createsprite gPersistHitSplatSpriteTemplate, ANIM_TARGET, 3, 10, 8, 1, 1, 8
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg 1
 	blendoff
@@ -9450,7 +9450,7 @@ Move_REVENGE:: @ 81D335D
 Move_POISON_FANG:: @ 81D33F4
 	loadspritegfx ANIM_TAG_FANG_ATTACK
 	loadspritegfx ANIM_TAG_POISON_BUBBLE
-	playsewithpan SE_M_BITE, 63
+	playsewithpan SE_M_BITE, SOUND_PAN_TARGET
 	createsprite gFangSpriteTemplate, ANIM_TARGET, 2, 
 	delay 10
 	createvisualtask AnimTask_ShakeMon, 3, 1, 3, 0, 10, 1
@@ -9492,32 +9492,32 @@ Move_FRENZY_PLANT:: @ 81D343F
 	playsewithpan SE_M_SCRATCH, 42
 	delay 5
 	createsprite gFrenzyPlantRootSpriteTemplate, ANIM_ATTACKER, 2, 75, 8, 0, 0, 0, 85
-	playsewithpan SE_M_SCRATCH, 63
+	playsewithpan SE_M_SCRATCH, SOUND_PAN_TARGET
 	delay 5
 	createsprite gFrenzyPlantRootSpriteTemplate, ANIM_ATTACKER, 2, 85, 16, 6, 0, 3, 80
-	playsewithpan SE_M_SCRATCH, 63
+	playsewithpan SE_M_SCRATCH, SOUND_PAN_TARGET
 	delay 5
 	createsprite gFrenzyPlantRootSpriteTemplate, ANIM_ATTACKER, 2, 85, -16, -6, 0, 2, 75
-	playsewithpan SE_M_SCRATCH, 63
+	playsewithpan SE_M_SCRATCH, SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -10, -10, 1, 3
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 3, 1, 8, 0, 20, 1
 	delay 3
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 10, 8, 1, 3
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	delay 3
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 10, -3, 1, 2
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	delay 3
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -3, 1, 1, 2
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	delay 2
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -10, 1, 1, 1
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	delay 2
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 10, 1, 1
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 0, 1, 2, 5, 0, 0
 	waitforvisualfinish
@@ -9541,7 +9541,7 @@ Move_METAL_SOUND:: @ 81D35E3
 	end
 
 MetalSoundRings:: @ 81D3616
-	panse_1B SE_M_SCREECH, 192, 63, 2, 0
+	panse_1B SE_M_SCREECH, 192, SOUND_PAN_TARGET, 2, 0
 	createsprite gMetalSoundSpriteTemplate, ANIM_TARGET, 2, 16, 0, 0, 0, 30, 0
 	delay 2
 	return
@@ -9565,20 +9565,20 @@ FocusPunchContinue:: @ 81D3668
 	waitbgfadein
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
-	playsewithpan SE_M_SWAGGER, 63
+	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
 	createsprite gFocusPunchFistSpriteTemplate, ANIM_TARGET, 2
 	delay 10
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -10, -8, 1, 0
 	createvisualtask AnimTask_ShakeMon, 5, 1, 8, 0, 24, 1
 	delay 8
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 10, 2, 1, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	delay 8
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 10, -6, 1, 0
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	delay 8
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 8, 1, 0
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	restorebg
 	waitbgfadein
@@ -9622,7 +9622,7 @@ ReturnWeak:: @ 81D3730
 	createvisualtask SoundTask_PlaySE2WithPanning, 5, 160, -64
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -10, -8, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 132, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 132, SOUND_PAN_TARGET
 	goto ReturnContinue
 
 ReturnMedium:: @ 81D3782
@@ -9636,7 +9636,7 @@ ReturnMedium:: @ 81D3782
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 5, 4
 	delay 6
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, SOUND_PAN_TARGET
 	goto ReturnContinue
 
 ReturnStrong:: @ 81D37E2
@@ -9653,19 +9653,19 @@ ReturnStrong:: @ 81D37E2
 	createvisualtask SoundTask_PlaySE2WithPanning, 5, 160, -64
 	waitforvisualfinish
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -10, -8, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 6, 0, 8, 1
 	delay 8
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 10, 10, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 6, 0, 8, 1
 	delay 8
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 3, -5, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 6, 0, 8, 1
 	delay 8
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -5, 3, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 6, 0, 8, 1
 	goto ReturnContinue
 
@@ -9676,13 +9676,13 @@ ReturnStrongest:: @ 81D38FD
 	createvisualtask SoundTask_PlaySE2WithPanning, 5, 160, -64
 	delay 8
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 3, -5, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gVerticalDipSpriteTemplate, ANIM_ATTACKER, 2, 12, 1, 0
 	createvisualtask SoundTask_PlaySE2WithPanning, 5, 160, -64
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -10, -8, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 6, 0, 8, 1
 	waitforvisualfinish
 	delay 4
@@ -9690,7 +9690,7 @@ ReturnStrongest:: @ 81D38FD
 	createvisualtask SoundTask_PlaySE2WithPanning, 5, 160, -64
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -10, -8, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 6, 0, 8, 1
 	waitforvisualfinish
 	delay 2
@@ -9698,7 +9698,7 @@ ReturnStrongest:: @ 81D38FD
 	createsprite gVerticalDipSpriteTemplate, ANIM_ATTACKER, 2, 4, 1, 0
 	createvisualtask SoundTask_PlaySE2WithPanning, 5, 160, -64
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -10, -8, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 6, 0, 8, 1
 	createvisualtask AnimTask_CloneBattlerSpriteWithBlend, 2, 0, 4, 5, 1
 	waitforvisualfinish
@@ -9706,7 +9706,7 @@ ReturnStrongest:: @ 81D38FD
 	createvisualtask SoundTask_PlaySE2WithPanning, 5, 160, -64
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -10, -8, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 6, 0, 8, 1
 	createvisualtask AnimTask_CloneBattlerSpriteWithBlend, 2, 0, 4, 5, 1
 	waitforvisualfinish
@@ -9715,17 +9715,17 @@ ReturnStrongest:: @ 81D38FD
 	call ReturnStrongestHit
 	call ReturnStrongestHit
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -10, -8, 1, 0
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 8, 0, 24, 1
 	delay 6
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 10, 10, 1, 0
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, SOUND_PAN_TARGET
 	delay 6
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 3, -5, 1, 0
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, SOUND_PAN_TARGET
 	delay 6
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, -5, 3, 1, 0
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 0, 6, 0, 0
 	goto ReturnContinue
@@ -9734,7 +9734,7 @@ ReturnStrongestHit:: @ 81D3B35
 	createsprite gVerticalDipSpriteTemplate, ANIM_ATTACKER, 2, 4, 3, 0
 	createvisualtask SoundTask_PlaySE2WithPanning, 5, 160, -64
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 116, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 6, 0, 8, 1
 	createvisualtask AnimTask_CloneBattlerSpriteWithBlend, 2, 0, 4, 5, 1
 	waitforvisualfinish
@@ -9818,24 +9818,24 @@ Move_ROCK_TOMB:: @ 81D3E50
 	createsprite gRockTombRockSpriteTemplate, ANIM_TARGET, 2, 20, 12, 64, 114, 0
 	delay 8
 	createvisualtask AnimTask_ShakeBattleTerrain, 2, 0, 2, 3, 1
-	playsewithpan SE_M_STRENGTH, 63
+	playsewithpan SE_M_STRENGTH, SOUND_PAN_TARGET
 	delay 8
 	createsprite gRockTombRockSpriteTemplate, ANIM_TARGET, 2, -20, 12, 64, 98, 0
 	delay 8
 	createvisualtask AnimTask_ShakeBattleTerrain, 2, 0, 2, 3, 1
-	playsewithpan SE_M_STRENGTH, 63
+	playsewithpan SE_M_STRENGTH, SOUND_PAN_TARGET
 	delay 8
 	createsprite gRockTombRockSpriteTemplate, ANIM_TARGET, 66, 3, 6, 64, 82, 0
 	delay 8
 	createvisualtask AnimTask_ShakeBattleTerrain, 2, 0, 2, 3, 1
-	playsewithpan SE_M_STRENGTH, 63
+	playsewithpan SE_M_STRENGTH, SOUND_PAN_TARGET
 	delay 8
 	createsprite gRockTombRockSpriteTemplate, ANIM_TARGET, 2, -3, 13, 64, 66, 0
 	delay 8
 	createvisualtask AnimTask_ShakeBattleTerrain, 2, 0, 2, 3, 1
-	playsewithpan SE_M_STRENGTH, 63
+	playsewithpan SE_M_STRENGTH, SOUND_PAN_TARGET
 	delay 24
-	playsewithpan SE_M_HYPER_BEAM, 63
+	playsewithpan SE_M_HYPER_BEAM, SOUND_PAN_TARGET
 	createsprite gRedXSpriteTemplate, ANIM_TARGET, 5, 1, 50
 	createvisualtask AnimTask_ShakeMon, 5, 1, 3, 0, 20, 1
 	createvisualtask AnimTask_ShakeBattleTerrain, 2, 2, 0, 10, 1
@@ -9843,7 +9843,7 @@ Move_ROCK_TOMB:: @ 81D3E50
 	end
 
 SetBugBg:
-	createvisualtask AnimTask_BlendBattleAnimPalExclude, 10, 1, 0, 0, 4, RGB_BLACK
+	createvisualtask AnimTask_BlendExcept, 10, 1, 0, 0, 4, RGB_BLACK
 	createvisualtask AnimTask_GetAttackerSide, 2
 	jumprettrue SetBugBgPlayer
 	fadetobg BG_BUG_OPPONENT
@@ -9863,14 +9863,14 @@ SetBugBgFade:
 UnsetBugBg:
 	restorebg
 	waitbgfadeout
-	createvisualtask AnimTask_BlendBattleAnimPalExclude, 10, 1, 0, 4, 0, RGB_BLACK
+	createvisualtask AnimTask_BlendExcept, 10, 1, 0, 4, 0, RGB_BLACK
 	setarg 7, -1
 	waitbgfadein
 	return
 
 Move_SILVER_WIND:: @ 81D3F37
 	loadspritegfx ANIM_TAG_SPARKLE_6
-	panse_1B SE_M_GUST, 192, 63, 2, 0
+	panse_1B SE_M_GUST, 192, SOUND_PAN_TARGET, 2, 0
 	playsewithpan SE_M_MORNING_SUN, 0
 	delay 0
 	monbg ANIM_DEF_PARTNER
@@ -9910,7 +9910,7 @@ SilverWindContinue:: @ 81D3F7E
 	createsprite gSilverWindSmallSparkSpriteTemplate, ANIM_TARGET, 66, -4, 16, 0, 6, 1, 2, 1
 	createsprite gSilverWindSmallSparkSpriteTemplate, ANIM_TARGET, 66, -16, 12, 192, 5, 2, 3, 1
 	waitforvisualfinish
-	playsewithpan SE_M_GUST2, 63
+	playsewithpan SE_M_GUST2, SOUND_PAN_TARGET
 	clearmonbg ANIM_DEF_PARTNER
 	delay 0
 	restorebg
@@ -9960,7 +9960,7 @@ DiveAttack:: @ 81D41CD
 	loadspritegfx ANIM_TAG_SMALL_BUBBLES
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
-	playsewithpan SE_M_EXPLOSION, 63
+	playsewithpan SE_M_EXPLOSION, SOUND_PAN_TARGET
 	createsprite gDiveWaterSplashSpriteTemplate, ANIM_TARGET, 3, 1
 	call DiveAttackWaterDroplets
 	call DiveAttackWaterDroplets
@@ -9989,7 +9989,7 @@ Move_ROCK_BLAST:: @ 81D4223
 	createsprite gRockBlastRockSpriteTemplate, ANIM_TARGET, 2, 16, 0, 0, 0, 25, 257
 	waitforvisualfinish
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	createsprite gRockFragmentSpriteTemplate, ANIM_TARGET, 2, 0, 0, 20, 24, 14, 2
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 5, 1
 	createsprite gRockFragmentSpriteTemplate, ANIM_TARGET, 2, 5, 0, -20, 24, 14, 1
@@ -10047,17 +10047,17 @@ Move_OVERHEAT:: @ 81D42C0
 	delay 5
 	waitforvisualfinish
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, -5, 3, 1, 0
-	playsewithpan SE_M_FIRE_PUNCH, 63
+	playsewithpan SE_M_FIRE_PUNCH, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 2, 1, 10, 0, 25, 1
 	delay 6
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 8, -5, 1, 0
-	playsewithpan SE_M_FIRE_PUNCH, 63
+	playsewithpan SE_M_FIRE_PUNCH, SOUND_PAN_TARGET
 	delay 8
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 10, 10, 1, 0
-	playsewithpan SE_M_FIRE_PUNCH, 63
+	playsewithpan SE_M_FIRE_PUNCH, SOUND_PAN_TARGET
 	delay 8
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 0
-	playsewithpan SE_M_FIRE_PUNCH, 63
+	playsewithpan SE_M_FIRE_PUNCH, SOUND_PAN_TARGET
 	createvisualtask AnimTask_CopyPalFadedToUnfaded, 5, 1
 	delay 1
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 2, -1, 0, 13, 19026
@@ -10089,7 +10089,7 @@ Move_HYDRO_CANNON:: @ 81D45B2
 	delay 10
 	createvisualtask AnimTask_InvertScreenColor, 2, 257, 257, 257
 	delay 30
-	panse_1B SE_M_HYDRO_PUMP, 192, 63, 2, 0
+	panse_1B SE_M_HYDRO_PUMP, 192, SOUND_PAN_TARGET, 2, 0
 	call HydroCannonBeam
 	createvisualtask AnimTask_ShakeMon, 5, 1, 10, 0, 40, 1
 	createsprite gWaterHitSplatSpriteTemplate, ANIM_TARGET, 2, 0, 0, 1, 0
@@ -10128,7 +10128,7 @@ Move_ASTONISH:: @ 81D46E4
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 4, 6
 	delay 25
 	createsprite gSprayWaterDropletSpriteTemplate, ANIM_TARGET, 5, 0, 1
-	playsewithpan SE_M_SKETCH, 63
+	playsewithpan SE_M_SKETCH, SOUND_PAN_TARGET
 	createsprite gSprayWaterDropletSpriteTemplate, ANIM_TARGET, 5, 1, 1
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 5, 1
 	createvisualtask AnimTask_StretchTargetUp, 3, 
@@ -10189,7 +10189,7 @@ SeismicTossStrong:: @ 81D47A8
 
 SeismicTossRockScatter1:: @ 81D47C7
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, -10, -8, 1, 1
-	playsewithpan SE_M_STRENGTH, 63
+	playsewithpan SE_M_STRENGTH, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 3, 5, 1
 	createsprite gRockScatterSpriteTemplate, ANIM_TARGET, 2, -12, 27, 2, 3
 	createsprite gRockScatterSpriteTemplate, ANIM_TARGET, 2, 8, 28, 3, 4
@@ -10199,7 +10199,7 @@ SeismicTossRockScatter1:: @ 81D47C7
 
 SeismicTossRockScatter2:: @ 81D4828
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 10, -8, 1, 1
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 3, 5, 1
 	createsprite gRockScatterSpriteTemplate, ANIM_TARGET, 2, -12, 32, 3, 4
 	createsprite gRockScatterSpriteTemplate, ANIM_TARGET, 2, 8, 31, 2, 2
@@ -10230,7 +10230,7 @@ Move_WATER_PULSE:: @ 81D48A6
 	createsprite gWaterPulseBubbleSpriteTemplate, ANIM_ATTACKER, 66, 200, 80, 8, 1, 40, 20, 0
 	createsprite gWaterPulseBubbleSpriteTemplate, ANIM_ATTACKER, 66, 80, 60, 10, 3, 20, 50, 0
 	createsprite gWaterPulseBubbleSpriteTemplate, ANIM_ATTACKER, 66, 140, 100, 16, 1, 20, 30, 1
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	waitforvisualfinish
 	playsewithpan SE_M_GIGA_DRAIN, 192
 	createsprite gWaterPulseRingSpriteTemplate, ANIM_TARGET, 2, 0, 0, 40, 15
@@ -10268,7 +10268,7 @@ Move_PSYCHO_BOOST:: @ 81D499B
 	loopsewithpan SE_M_PSYBEAM2, 192, 7, 10
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeMon2, 2, 1, -8, 1, 24, 1
-	playsewithpan SE_M_LEER, 63
+	playsewithpan SE_M_LEER, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_ATK_PARTNER
 	blendoff
@@ -10280,12 +10280,12 @@ Move_KNOCK_OFF:: @ 81D4A0F
 	loadspritegfx ANIM_TAG_IMPACT
 	createsprite gHorizontalLungeSpriteTemplate, ANIM_ATTACKER, 2, 4, 6
 	delay 4
-	playsewithpan SE_M_VITAL_THROW, 63
+	playsewithpan SE_M_VITAL_THROW, SOUND_PAN_TARGET
 	createsprite gKnockOffStrikeSpriteTemplate, ANIM_TARGET, 2, -16, -16
 	delay 8
 	createsprite gComplexPaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 31, 5, 1, RGB_WHITE, 10, 0, 0
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, 0, 1, 2
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 1, -12, 10, 0, 3
 	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 5
 	delay 3
@@ -10324,22 +10324,22 @@ Move_DOOM_DESIRE:: @ 81D4A9F
 	delay 10
 	playsewithpan SE_M_CONFUSE_RAY, 0
 	delay 10
-	playsewithpan SE_M_CONFUSE_RAY, 63
+	playsewithpan SE_M_CONFUSE_RAY, SOUND_PAN_TARGET
 	delay 23
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 1, 10, 0, 20, 1
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, 24, -24, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, -16, 16, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, -24, -12, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, 16, 16, 1, 1
 	waitforvisualfinish
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 3, 16, 0, RGB_WHITE
@@ -10360,20 +10360,20 @@ Move_SKY_UPPERCUT:: @ 81D4BC1
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 0, 28, 0, 0, 5
 	delay 4
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 6, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, -28, 28, 1, 1
 	delay 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, -15, 8, 1, 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	delay 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, -5, -12, 1, 1
 	delay 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 0, -32, 1, 1
 	delay 1
-	playsewithpan SE_M_VITAL_THROW2, 63
+	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 5, -52, 1, 1
 	createsprite gSlideMonToOffsetSpriteTemplate, ANIM_ATTACKER, 2, 1, -26, 16, 1, 4
 	delay 4
@@ -10409,7 +10409,7 @@ Move_TWISTER:: @ 81D4D0E
 	loadspritegfx ANIM_TAG_ROCKS
 	monbg ANIM_DEF_PARTNER
 	monbgprio_28 1
-	playsewithpan SE_M_TWISTER, 63
+	playsewithpan SE_M_TWISTER, SOUND_PAN_TARGET
 	createsprite gTwisterLeafParticleSpriteTemplate, ANIM_TARGET, 2, 120, 70, 5, 70, 30
 	delay 1
 	createsprite gTwisterLeafParticleSpriteTemplate, ANIM_TARGET, 2, 115, 55, 6, 60, 25
@@ -10432,18 +10432,18 @@ Move_TWISTER:: @ 81D4D0E
 	createsprite gTwisterLeafParticleSpriteTemplate, ANIM_TARGET, 2, 110, 10, 8, 32, 20
 	waitforvisualfinish
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, -32, -16, 1, 3
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 1, 3, 0, 12, 1
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 3, 3, 0, 12, 1
 	delay 4
 	createsprite gRandomPosHitSplatSpriteTemplate, ANIM_TARGET, 3, 1, 3
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	delay 4
 	createsprite gRandomPosHitSplatSpriteTemplate, ANIM_TARGET, 3, 1, 3
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	delay 4
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, 32, 20, 1, 3
-	playsewithpan SE_M_COMET_PUNCH, 63
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -10482,7 +10482,7 @@ Move_MAGICAL_LEAF:: @ 81D4E6D
 	createsprite gRazorLeafCutterSpriteTemplate, ANIM_TARGET, 3, 20, -10, 20, 0, 32, 20, 0
 	createsprite gRazorLeafCutterSpriteTemplate, ANIM_TARGET, 3, 20, -10, 20, 0, 32, -20, 0
 	delay 30
-	playsewithpan SE_M_RAZOR_WIND, 63
+	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 4, -10, -4, 1, 2
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 4, 10, 4, 1, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 8, 1
@@ -10502,7 +10502,7 @@ IceBallContinue:: @ 81D4FA5
 	playsewithpan SE_M_ICY_WIND, 192
 	createsprite gIceBallChunkSpriteTemplate, ANIM_TARGET, 2, 15, 0, -12, -16, 30, -40
 	delay 28
-	playsewithpan SE_M_BRICK_BREAK, 63
+	playsewithpan SE_M_BRICK_BREAK, SOUND_PAN_TARGET
 	createvisualtask AnimTask_GetRolloutCounter, 5, 0
 	jumpargeq 0, 0, IceBallWeakest
 	jumpargeq 0, 1, IceBallWeak
@@ -10614,7 +10614,7 @@ WeatherBallNormal:: @ 81D51C8
 	loadspritegfx ANIM_TAG_IMPACT
 	createsprite gWeatherBallNormalDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 1, 0, 0
 	waitforvisualfinish
-	playsewithpan SE_M_MEGA_KICK2, 63
+	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 4, -10, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 3, 8, 1
 	waitforvisualfinish
@@ -10623,15 +10623,15 @@ WeatherBallNormal:: @ 81D51C8
 WeatherBallFire:: @ 81D5205
 	loadspritegfx ANIM_TAG_SMALL_EMBER
 	createsprite gWeatherBallFireDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 1, 40, 10
-	playsewithpan SE_M_FLAME_WHEEL, 63
+	playsewithpan SE_M_FLAME_WHEEL, SOUND_PAN_TARGET
 	delay 10
 	createsprite gWeatherBallFireDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 1, -40, 20
-	playsewithpan SE_M_FLAME_WHEEL, 63
+	playsewithpan SE_M_FLAME_WHEEL, SOUND_PAN_TARGET
 	delay 10
 	createsprite gWeatherBallFireDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 1, 0, 0
-	playsewithpan SE_M_FLAME_WHEEL, 63
+	playsewithpan SE_M_FLAME_WHEEL, SOUND_PAN_TARGET
 	waitforvisualfinish
-	playsewithpan SE_M_FLAME_WHEEL2, 63
+	playsewithpan SE_M_FLAME_WHEEL2, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 3, 8, 1
 	waitforvisualfinish
 	end
@@ -10639,31 +10639,31 @@ WeatherBallFire:: @ 81D5205
 WeatherBallWater:: @ 81D5269
 	loadspritegfx ANIM_TAG_SMALL_BUBBLES
 	createsprite gWeatherBallWaterDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 1, 50, 10
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	delay 8
 	createsprite gWeatherBallWaterDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 1, -20, 20
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	delay 13
 	createsprite gWeatherBallWaterDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 1, 0, 0
-	playsewithpan SE_M_CRABHAMMER, 63
+	playsewithpan SE_M_CRABHAMMER, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeMon, 2, 1, 0, 3, 8, 1
-	playsewithpan SE_M_GIGA_DRAIN, 63
+	playsewithpan SE_M_GIGA_DRAIN, SOUND_PAN_TARGET
 	waitforvisualfinish
 	end
 
 WeatherBallSandstorm:: @ 81D52CD
 	loadspritegfx ANIM_TAG_ROCKS
 	createsprite gWeatherBallRockDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 1, 30, 0
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 5
 	createsprite gWeatherBallRockDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 1, -40, 20
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 14
 	createsprite gWeatherBallRockDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 1, 0, 0
-	playsewithpan SE_M_ROCK_THROW, 63
+	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	waitforvisualfinish
-	playsewithpan SE_M_STRENGTH, 63
+	playsewithpan SE_M_STRENGTH, SOUND_PAN_TARGET
 	createsprite gRockScatterSpriteTemplate, ANIM_TARGET, 2, -12, 27, 2, 3
 	createsprite gRockScatterSpriteTemplate, ANIM_TARGET, 2, 8, 28, 3, 4
 	createsprite gRockScatterSpriteTemplate, ANIM_TARGET, 2, -4, 30, 2, 3
@@ -10676,16 +10676,16 @@ WeatherBallIce:: @ 81D536D
 	loadspritegfx ANIM_TAG_HAIL
 	loadspritegfx ANIM_TAG_ICE_CRYSTALS
 	createsprite gWeatherBallIceDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 25, -40, 20
-	playsewithpan SE_M_HAIL, 63
+	playsewithpan SE_M_HAIL, SOUND_PAN_TARGET
 	delay 10
 	createsprite gWeatherBallIceDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 25, 40, 0
-	playsewithpan SE_M_HAIL, 63
+	playsewithpan SE_M_HAIL, SOUND_PAN_TARGET
 	delay 10
 	createsprite gWeatherBallIceDownSpriteTemplate, ANIM_TARGET, 2, -30, -100, 25, 25, 0, 0
-	playsewithpan SE_M_HAIL, 63
+	playsewithpan SE_M_HAIL, SOUND_PAN_TARGET
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 8, 1
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	call IceCrystalEffectShort
 	waitforvisualfinish
 	end
@@ -10770,7 +10770,7 @@ Move_WAKE_UP_SLAP:
 	createvisualtask AnimTask_ShakeMon, 5, ANIM_TARGET, 4, 0, 6, 2
 	waitforvisualfinish
 	createsprite gSmellingSaltExclamationSpriteTemplate, ANIM_TARGET, 2, 1, 8, 3
-	loopsewithpan SE_M_SWAGGER2, +63, 16, 3
+	loopsewithpan SE_M_SWAGGER2, +SOUND_PAN_TARGET, 16, 3
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
 	end
@@ -10858,7 +10858,7 @@ Move_BRINE:
 	waitforvisualfinish
 	delay 16
 	createvisualtask AnimTask_WaterSpoutRain, 5
-	playsewithpan SE_M_SURF, +63
+	playsewithpan SE_M_SURF, +SOUND_PAN_TARGET
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
 	end
@@ -11040,7 +11040,7 @@ Move_DIVE_BOMB::
 	createsprite gSkyAttackBirdSpriteTemplate, ANIM_TARGET, 2
 	delay 14
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 10, 0, 18, 1
-	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, 63
+	createvisualtask SoundTask_PlaySE1WithPanning, 5, 134, SOUND_PAN_TARGET
 	delay 20
 	createvisualtask AnimTask_AttackerFadeFromInvisible, 5, 1
 	delay 2
@@ -11058,27 +11058,27 @@ Move_CLOSE_COMBAT:
 	call SetHighSpeedBg
 	createsprite gFistFootRandomPosSpriteTemplate, ANIM_TARGET, 3, 1, 10, 0
 	createvisualtask AnimTask_ShakeMonInPlace, 2, ANIM_TARGET, 4, 0, 7, 1
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	delay 10
 	createsprite gFistFootRandomPosSpriteTemplate, ANIM_TARGET, 3, 1, 10, 0
 	createvisualtask AnimTask_ShakeMonInPlace, 2, ANIM_TARGET, 4, 0, 7, 1
-	playsewithpan SE_M_VITAL_THROW2, +63
+	playsewithpan SE_M_VITAL_THROW2, +SOUND_PAN_TARGET
 	delay 10
 	createsprite gFistFootRandomPosSpriteTemplate, ANIM_TARGET, 3, 1, 10, 0
 	createvisualtask AnimTask_ShakeMonInPlace, 2, ANIM_TARGET, 4, 0, 7, 1
-	playsewithpan SE_M_MEGA_KICK2, +63
+	playsewithpan SE_M_MEGA_KICK2, +SOUND_PAN_TARGET
 	delay 10
 	createsprite gFistFootRandomPosSpriteTemplate, ANIM_TARGET, 3, 1, 10, 0
 	createvisualtask AnimTask_ShakeMonInPlace, 2, ANIM_TARGET, 4, 0, 7, 1
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	delay 10
 	createsprite gFistFootRandomPosSpriteTemplate, ANIM_TARGET, 3, 1, 10, 0
 	createvisualtask AnimTask_ShakeMonInPlace, 2, ANIM_TARGET, 4, 0, 7, 1
-	playsewithpan SE_M_VITAL_THROW2, +63
+	playsewithpan SE_M_VITAL_THROW2, +SOUND_PAN_TARGET
 	delay 10
 	createsprite gFistFootRandomPosSpriteTemplate, ANIM_TARGET, 3, 1, 10, 0
 	createvisualtask AnimTask_ShakeMonInPlace, 2, ANIM_TARGET, 4, 0, 7, 1
-	playsewithpan SE_M_MEGA_KICK2, +63
+	playsewithpan SE_M_MEGA_KICK2, +SOUND_PAN_TARGET
 	delay 10
 	call UnsetHighSpeedBg
 	clearmonbg ANIM_TARGET
@@ -11097,22 +11097,22 @@ Move_PAYBACK:
 	setalpha 12, 8
 	createvisualtask AnimTask_ShakeMon2, 5, ANIM_TARGET, 4, 0, 30, 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 24, 8, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, -24, -16, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 8, 4, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, -16, 19, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 18, -18, 1, 0
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_TARGET
 	blendoff
@@ -11143,13 +11143,13 @@ Move_EMBARGO:
 	loadspritegfx ANIM_TAG_RED_ORB
 	monbg ANIM_DEF_PARTNER
 	monbgprio_28 ANIM_TARGET
-	loopsewithpan SE_M_POISON_POWDER, +63, 18, 10
+	loopsewithpan SE_M_POISON_POWDER, +SOUND_PAN_TARGET, 18, 10
 	call EmbargoOrbs1
 	call EmbargoOrbs1
 	call EmbargoOrbs1
 	waitforvisualfinish
 	createvisualtask AnimTask_ShakeMon2, 5, ANIM_TARGET, 4, 0, 10, 1
-	playsewithpan SE_M_NIGHTMARE, +63
+	playsewithpan SE_M_NIGHTMARE, +SOUND_PAN_TARGET
 	clearmonbg ANIM_DEF_PARTNER
 	end
 EmbargoOrbs1:
@@ -11172,7 +11172,7 @@ Move_FLING:
 	waitforvisualfinish
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon, 2, ANIM_TARGET, 3, 0, 6, 1
-	playsewithpan SE_M_VITAL_THROW, +63
+	playsewithpan SE_M_VITAL_THROW, +SOUND_PAN_TARGET
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
 	end
@@ -11709,35 +11709,35 @@ Move_FLARE_BLITZ:
 	createvisualtask AnimTask_BlendMonInAndOut, 3, ANIM_TARGET, RGB_RED, 12, 1, 1
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 0
 	createsprite gFireSpreadSpriteTemplate, 0x81, 0, 10, 192, 176, 40
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 24, 8, 1, 0
 	createvisualtask AnimTask_BlendMonInAndOut, 3, ANIM_TARGET, RGB_RED, 12, 1, 1
 	createsprite gFireSpreadSpriteTemplate, 0x81, 0, 10, -192, 240, 40
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, -24, -16, 1, 0
 	createvisualtask AnimTask_BlendMonInAndOut, 3, ANIM_TARGET, RGB_RED, 12, 1, 1
 	createsprite gFireSpreadSpriteTemplate, 0x81, 0, 10, 192, -160, 40
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 8, 4, 1, 0
 	createvisualtask AnimTask_BlendMonInAndOut, 3, ANIM_TARGET, RGB_RED, 12, 1, 1
 	createsprite gFireSpreadSpriteTemplate, 0x81, 0, 10, -192, -112, 40
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, -16, 19, 1, 0
 	createvisualtask AnimTask_BlendMonInAndOut, 3, ANIM_TARGET, RGB_RED, 12, 1, 1
 	createsprite gFireSpreadSpriteTemplate, 0x81, 0, 10, 160, 48, 40
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	delay 5
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 18, -18, 1, 0
 	createvisualtask AnimTask_BlendMonInAndOut, 3, ANIM_TARGET, RGB_RED, 12, 1, 1
 	createsprite gFireSpreadSpriteTemplate, 0x81, 0, 10, -224, -32, 40
 	createsprite gFireSpreadSpriteTemplate, 0x81, 0, 10, 112, -128, 40
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	createvisualtask AnimTask_BlendSelected, 10, 4, 2, 0, 0, RGB_BLACK
-	playsewithpan SE_M_COMET_PUNCH, +63
+	playsewithpan SE_M_COMET_PUNCH, +SOUND_PAN_TARGET
 	waitforvisualfinish
 	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 9
 	waitforvisualfinish
@@ -12981,12 +12981,12 @@ Move_DRACO_METEOR:
 	fadetobg BG_COSMIC
 	waitbgfadein
 	waitforvisualfinish
-	createsprite gDracoMeteorSmashSpriteTemplate, 131, 5, -47, -63, 72, 32, 30
+	createsprite gDracoMeteorSmashSpriteTemplate, 131, 5, -47, -SOUND_PAN_TARGET, 72, 32, 30
 	delay 10
-	createsprite gDracoMeteorSmashSpriteTemplate, 131, 5, -111, -63, 8, 32, 30
+	createsprite gDracoMeteorSmashSpriteTemplate, 131, 5, -111, -SOUND_PAN_TARGET, 8, 32, 30
 	delay 40
 	createsprite gDracoMetorSpriteTemplate, 131, 4, 0, 0, 0, 30
-	createsprite gDracoMeteorSmashSpriteTemplate, 131, 5, -79, -63, 40, 32, 30
+	createsprite gDracoMeteorSmashSpriteTemplate, 131, 5, -79, -SOUND_PAN_TARGET, 40, 32, 30
 	delay 20
 	playsewithpan SE_M_ROCK_THROW, SOUND_PAN_TARGET
 	delay 10
@@ -13426,7 +13426,7 @@ Move_MAGNET_BOMB:
 	createsprite gHiddenPowerOrbScatterSpriteTemplate, ANIM_TARGET, 2, 224
 	loadspritegfx ANIM_TAG_GRAY_SMOKE
 	loadspritegfx ANIM_TAG_BLACK_BALL
-	playsewithpan 177, 63
+	playsewithpan 177, SOUND_PAN_TARGET
 	createsprite gOctazookaSmokeSpriteTemplate, 130, 4, 8, 8, 1, 0
 	delay 2
 	createsprite gOctazookaSmokeSpriteTemplate, 130, 4, -8, -8, 1, 0
@@ -13435,7 +13435,7 @@ Move_MAGNET_BOMB:
 	delay 2
 	createsprite gOctazookaSmokeSpriteTemplate, 130, 4, -8, 8, 1, 0
 	waitforvisualfinish
-	playsewithpan 177, 63
+	playsewithpan 177, SOUND_PAN_TARGET
 	createsprite gOctazookaSmokeSpriteTemplate, 130, 4, 8, 8, 1, 0
 	delay 2
 	createsprite gOctazookaSmokeSpriteTemplate, 130, 4, -8, -8, 1, 0
@@ -14848,7 +14848,7 @@ Move_SOAK:
 	createsprite gWaterGunProjectileSpriteTemplate, ANIM_ATTACKER, 2, 20, 0, -5, 0, 40, -25
 	playsewithpan SE_M_BUBBLE, 192
 	delay 30
-	playsewithpan SE_M_WATERFALL, 63
+	playsewithpan SE_M_WATERFALL, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon2, 5, 1, 4, 0, 17, 1
 	createvisualtask AnimTask_BlendColorCycle, 2, 4, 1, 2, 0, 12, RGB_BLUE
 	createsprite gWaterHitSplatSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 1
@@ -24204,7 +24204,7 @@ Move_DRYADS_CURSE::		@Need to ttest
 	clearmonbg ANIM_ATK_PARTNER
 	delay 1
 	monbg ANIM_DEF_PARTNER
-	playsewithpan SE_M_NIGHTMARE, 63
+	playsewithpan SE_M_NIGHTMARE, SOUND_PAN_TARGET
 	createsprite gCurseGhostSpriteTemplate, ANIM_TARGET, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 14, 1
 	waitforvisualfinish
@@ -24225,7 +24225,7 @@ Move_COUNT:: @ 81D53D9
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg 1
 	setalpha 12, 8
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
 	waitforvisualfinish
@@ -24235,64 +24235,64 @@ Move_COUNT:: @ 81D53D9
 
 IceCrystalEffectShort:: @ 81D540A
 	createsprite gIceCrystalHitLargeSpriteTemplate, ANIM_TARGET, 2, -10, -10, 0
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitSmallSpriteTemplate, ANIM_TARGET, 2, 10, 20, 0
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitLargeSpriteTemplate, ANIM_TARGET, 2, -5, 10, 0
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitSmallSpriteTemplate, ANIM_TARGET, 2, 17, -12, 0
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitSmallSpriteTemplate, ANIM_TARGET, 2, -15, 15, 0
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitSmallSpriteTemplate, ANIM_TARGET, 2, 0, 0, 0
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitLargeSpriteTemplate, ANIM_TARGET, 2, 20, 2, 0
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	return
 
 IceCrystalEffectLong:: @ 81D548E
 	createsprite gIceCrystalHitLargeSpriteTemplate, ANIM_TARGET, 2, -10, -10, 1
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitSmallSpriteTemplate, ANIM_TARGET, 2, 10, 20, 1
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitLargeSpriteTemplate, ANIM_TARGET, 2, -29, 0, 1
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitSmallSpriteTemplate, ANIM_TARGET, 2, 29, -20, 1
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitLargeSpriteTemplate, ANIM_TARGET, 2, -5, 10, 1
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitSmallSpriteTemplate, ANIM_TARGET, 2, 17, -12, 1
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitLargeSpriteTemplate, ANIM_TARGET, 2, -20, 0, 1
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitSmallSpriteTemplate, ANIM_TARGET, 2, -15, 15, 1
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitSmallSpriteTemplate, ANIM_TARGET, 2, 26, -5, 1
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitSmallSpriteTemplate, ANIM_TARGET, 2, 0, 0, 1
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	delay 4
 	createsprite gIceCrystalHitLargeSpriteTemplate, ANIM_TARGET, 2, 20, 2, 1
-	playsewithpan SE_M_ICY_WIND, 63
+	playsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET
 	return
     
 IceSpikesEffectShort: @ Unused
-	loopsewithpan SE_M_ICY_WIND, 63, 6, 4
+	loopsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET, 6, 4
 	createsprite gIceGroundSpikeSpriteTemplate, ANIM_TARGET, 2, 0, 24, 0
 	delay 4
 	createsprite gIceGroundSpikeSpriteTemplate, ANIM_TARGET, 2, 8, 24, 0
@@ -24309,7 +24309,7 @@ IceSpikesEffectShort: @ Unused
 	return
 
 IceSpikesEffectLong:: @ 81D55E2
-	loopsewithpan SE_M_ICY_WIND, 63, 6, 4
+	loopsewithpan SE_M_ICY_WIND, SOUND_PAN_TARGET, 6, 4
 	createsprite gIceGroundSpikeSpriteTemplate, ANIM_TARGET, 2, 0, 24, 1
 	delay 4
 	createsprite gIceGroundSpikeSpriteTemplate, ANIM_TARGET, 2, 8, 24, 1
@@ -24351,7 +24351,7 @@ HealingEffect:: @ 81D56C9
 	return
 
 HealingEffect2:: @ 81D5712
-	playsewithpan SE_M_ABSORB_2, 63
+	playsewithpan SE_M_ABSORB_2, SOUND_PAN_TARGET
 	createsprite gHealingBlueStarSpriteTemplate, ANIM_TARGET, 2, 0, -5, 1, 0
 	delay 7
 	createsprite gHealingBlueStarSpriteTemplate, ANIM_TARGET, 2, -15, 10, 1, 0
@@ -24364,72 +24364,72 @@ HealingEffect2:: @ 81D5712
 
 PoisonBubblesEffect:: @ 81D575B
 	createsprite gPoisonBubbleSpriteTemplate, ANIM_TARGET, 2, 10, 10, 0
-	playsewithpan SE_M_TOXIC, 63
+	playsewithpan SE_M_TOXIC, SOUND_PAN_TARGET
 	delay 6
 	createsprite gPoisonBubbleSpriteTemplate, ANIM_TARGET, 2, 20, -20, 0
-	playsewithpan SE_M_TOXIC, 63
+	playsewithpan SE_M_TOXIC, SOUND_PAN_TARGET
 	delay 6
 	createsprite gPoisonBubbleSpriteTemplate, ANIM_TARGET, 2, -20, 15, 0
-	playsewithpan SE_M_TOXIC, 63
+	playsewithpan SE_M_TOXIC, SOUND_PAN_TARGET
 	delay 6
 	createsprite gPoisonBubbleSpriteTemplate, ANIM_TARGET, 2, 0, 0, 0
-	playsewithpan SE_M_TOXIC, 63
+	playsewithpan SE_M_TOXIC, SOUND_PAN_TARGET
 	delay 6
 	createsprite gPoisonBubbleSpriteTemplate, ANIM_TARGET, 2, -20, -20, 0
-	playsewithpan SE_M_TOXIC, 63
+	playsewithpan SE_M_TOXIC, SOUND_PAN_TARGET
 	delay 6
 	createsprite gPoisonBubbleSpriteTemplate, ANIM_TARGET, 2, 16, -8, 0
-	playsewithpan SE_M_TOXIC, 63
+	playsewithpan SE_M_TOXIC, SOUND_PAN_TARGET
 	return
 
 WaterBubblesEffectShort:: @ 81D57CC
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, 10, 10, 0
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	delay 6
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, 20, -20, 0
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	delay 6
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, -20, 15, 0
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	delay 6
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 0
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	delay 6
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, -20, -20, 0
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	delay 6
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, 16, -8, 0
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	return
 
 WaterBubblesEffectLong:: @ 81D583D
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, 10, 10, 1
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	delay 6
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, -28, -10, 1
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	delay 6
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, 20, -20, 1
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	delay 6
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, -20, 15, 1
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	delay 6
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	delay 6
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, 27, 8, 1
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	delay 6
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, -20, -20, 1
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	delay 6
 	createsprite gWaterBubbleSpriteTemplate, ANIM_ATTACKER, 2, 16, -8, 1
-	playsewithpan SE_M_BUBBLE3, 63
+	playsewithpan SE_M_BUBBLE3, SOUND_PAN_TARGET
 	return
 
 ElectricityEffect:: @ 81D58D4
-	playsewithpan SE_M_THUNDERBOLT2, 63
+	playsewithpan SE_M_THUNDERBOLT2, SOUND_PAN_TARGET
 ElectricityEffectNoSound:
 	createsprite gElectricitySpriteTemplate, ANIM_TARGET, 2, 5, 0, 5, 0
 	delay 2
@@ -24449,7 +24449,7 @@ ElectricityEffectNoSound:
 	return
 
 ConfusionEffect:: @ 81D595F
-	loopsewithpan SE_M_DIZZY_PUNCH, 63, 13, 6
+	loopsewithpan SE_M_DIZZY_PUNCH, SOUND_PAN_TARGET, 13, 6
 	createsprite gConfusionDuckSpriteTemplate, ANIM_TARGET, 2, 0, -15, 0, 3, 90
 	createsprite gConfusionDuckSpriteTemplate, ANIM_TARGET, 2, 0, -15, 51, 3, 90
 	createsprite gConfusionDuckSpriteTemplate, ANIM_TARGET, 2, 0, -15, 102, 3, 90
@@ -24521,7 +24521,7 @@ UnsetSolarbeamBg:: @ 81D5A41
 	return
 
 Status_Poison:: @ 81D5A44
-	loopsewithpan SE_M_TOXIC, 63, 13, 6
+	loopsewithpan SE_M_TOXIC, SOUND_PAN_TARGET, 13, 6
 	createvisualtask AnimTask_ShakeMon2, 2, 0, 1, 0, 18, 2
 	createvisualtask AnimTask_BlendColorCycle, 2, 2, 2, 2, 0, 12, 31774
 	end
@@ -24533,7 +24533,7 @@ Status_Confusion:: @ 81D5A6F
 
 Status_Burn:: @ 81D5A78
 	loadspritegfx ANIM_TAG_SMALL_EMBER
-	playsewithpan SE_M_FLAME_WHEEL, 63
+	playsewithpan SE_M_FLAME_WHEEL, SOUND_PAN_TARGET
 	call BurnFlame
 	call BurnFlame
 	call BurnFlame
@@ -24576,7 +24576,7 @@ Status_Freeze:: @ 81D5B23
 	loadspritegfx ANIM_TAG_ICE_CUBE
 	monbg ANIM_DEF_PARTNER
 	monbgprio_28 1
-	waitplaysewithpan SE_M_HAIL, 63, 17
+	waitplaysewithpan SE_M_HAIL, SOUND_PAN_TARGET, 17
 	createvisualtask AnimTask_FrozenIceCube, 2, 
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
@@ -24585,7 +24585,7 @@ Status_Freeze:: @ 81D5B23
 Status_Curse:: @ 81D5B3E
 	loadspritegfx ANIM_TAG_GHOSTLY_SPIRIT
 	monbg ANIM_DEF_PARTNER
-	playsewithpan SE_M_NIGHTMARE, 63
+	playsewithpan SE_M_NIGHTMARE, SOUND_PAN_TARGET
 	createsprite gCurseGhostSpriteTemplate, ANIM_TARGET, 2, 
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 14, 1
 	waitforvisualfinish
@@ -24595,7 +24595,7 @@ Status_Curse:: @ 81D5B3E
 Status_Nightmare:: @ 81D5B63
 	loadspritegfx ANIM_TAG_DEVIL
 	monbg ANIM_DEF_PARTNER
-	playsewithpan SE_M_NIGHTMARE, 63
+	playsewithpan SE_M_NIGHTMARE, SOUND_PAN_TARGET
 	createsprite gNightmareDevilSpriteTemplate, ANIM_TARGET, 2
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 14, 1
 	waitforvisualfinish
@@ -24653,7 +24653,7 @@ General_BaitThrow:: @ 81D5C0C
 	waitplaysewithpan SE_M_JUMP_KICK, 192, 22
 	createsprite gSafariBaitSpriteTemplate, ANIM_TARGET, 3, -18, 12, 0, 32
 	delay 50
-	loopsewithpan SE_M_TAIL_WHIP, 63, 19, 2
+	loopsewithpan SE_M_TAIL_WHIP, SOUND_PAN_TARGET, 19, 2
 	createvisualtask AnimTask_SwayMon, 5, 1, 8, 1536, 2, 1
 	waitforvisualfinish
 	createvisualtask AnimTask_FreeBaitGfx, 2, 
@@ -24674,7 +24674,7 @@ General_TurnTrap:: @ 81D5C5F
 
 Status_BindWrap:: @ 81D5C8B
 	loadspritegfx ANIM_TAG_TENDRILS
-	loopsewithpan SE_M_SCRATCH, 63, 6, 2
+	loopsewithpan SE_M_SCRATCH, SOUND_PAN_TARGET, 6, 2
 	createsprite gConstrictBindingSpriteTemplate, ANIM_TARGET, 4, 0, 16, 0, 1
 	delay 7
 	createsprite gConstrictBindingSpriteTemplate, ANIM_TARGET, 2, 0, 8, 1, 1
@@ -24682,13 +24682,13 @@ Status_BindWrap:: @ 81D5C8B
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 8, 1
 	delay 20
 	setarg 7, 65535
-	playsewithpan SE_M_BIND, 63
+	playsewithpan SE_M_BIND, SOUND_PAN_TARGET
 	waitforvisualfinish
 	end
 
 Status_FireSpin:: @ 81D5CD3
 	loadspritegfx ANIM_TAG_SMALL_EMBER
-	playsewithpan SE_M_SACRED_FIRE2, 63
+	playsewithpan SE_M_SACRED_FIRE2, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 2, 30, 1
 	call FireSpinEffect
 	call FireSpinEffect
@@ -24703,7 +24703,7 @@ Status_Whirlpool:: @ 81D5CF8
 	setalpha 12, 8
 	delay 0
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 0, 4, 2, 0, 7, 23968
-	playsewithpan SE_M_WHIRLPOOL, 63
+	playsewithpan SE_M_WHIRLPOOL, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 2, 30, 1
 	call WhirlpoolEffect
 	call WhirlpoolEffect
@@ -24719,7 +24719,7 @@ Status_Clamp:: @ 81D5D4C
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg 1
 	setalpha 12, 8
-	playsewithpan SE_M_VICEGRIP, 63
+	playsewithpan SE_M_VICEGRIP, SOUND_PAN_TARGET
 	createsprite gClampJawSpriteTemplate, ANIM_ATTACKER, 2, -32, 0, 2, 819, 0, 10
 	createsprite gClampJawSpriteTemplate, ANIM_ATTACKER, 2, 32, 0, 6, -819, 0, 10
 	delay 10
@@ -24735,7 +24735,7 @@ Status_SandTomb:: @ 81D5DA9
 	loadspritegfx ANIM_TAG_MUD_SAND
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 0, 4, 2, 0, 7, 563
 	createvisualtask AnimTask_ShakeMon, 5, 1, 0, 2, 30, 1
-	playsewithpan SE_M_SAND_TOMB, 63
+	playsewithpan SE_M_SAND_TOMB, SOUND_PAN_TARGET
 	call SandTombSwirlingDirt
 	call SandTombSwirlingDirt
 	delay 22
@@ -24771,23 +24771,23 @@ General_SmokeballEscape:: @ 81D5E66
 	monbg ANIM_ATTACKER
 	setalpha 12, 4
 	delay 0
-	playsewithpan SE_BALL_OPEN, 63
+	playsewithpan SE_BALL_OPEN, SOUND_PAN_TARGET
 	createsprite gSmokeBallEscapeCloudSpriteTemplate, ANIM_TARGET, 0, 0, 32, 28, 30
 	delay 4
-	playsewithpan SE_BALL_OPEN, 63
+	playsewithpan SE_BALL_OPEN, SOUND_PAN_TARGET
 	createsprite gSmokeBallEscapeCloudSpriteTemplate, ANIM_ATTACKER, 127, 2, 12, 20, 30
 	delay 12
-	playsewithpan SE_BALL_OPEN, 63
+	playsewithpan SE_BALL_OPEN, SOUND_PAN_TARGET
 	createsprite gSmokeBallEscapeCloudSpriteTemplate, ANIM_ATTACKER, 126, 2, -28, 4, 30
 	delay 12
-	playsewithpan SE_BALL_OPEN, 63
+	playsewithpan SE_BALL_OPEN, SOUND_PAN_TARGET
 	createsprite gSmokeBallEscapeCloudSpriteTemplate, ANIM_ATTACKER, 124, 2, 14, -20, 30
 	delay 4
-	playsewithpan SE_BALL_OPEN, 63
+	playsewithpan SE_BALL_OPEN, SOUND_PAN_TARGET
 	createvisualtask AnimTask_AttackerFadeToInvisible, 2, 2
 	createsprite gSmokeBallEscapeCloudSpriteTemplate, ANIM_ATTACKER, 123, 3, 4, 4, 30
 	delay 14
-	playsewithpan SE_BALL_OPEN, 63
+	playsewithpan SE_BALL_OPEN, SOUND_PAN_TARGET
 	createsprite gSmokeBallEscapeCloudSpriteTemplate, ANIM_ATTACKER, 122, 3, -14, 18, 46
 	delay 0
 	createsprite gSmokeBallEscapeCloudSpriteTemplate, ANIM_ATTACKER, 121, 3, 14, -14, 46
@@ -24846,7 +24846,7 @@ General_MonHit:: @ 81D5FF5
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg 1
 	setalpha 12, 8
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 1, 2
 	createvisualtask AnimTask_ShakeMon, 2, 1, 3, 0, 6, 1
 	waitforvisualfinish
@@ -24894,8 +24894,8 @@ General_FutureSightHit:: @ 81D60A9
 	playsewithpan SE_M_PSYBEAM, 192
 	call SetPsychicBackground
 	setalpha 8, 8
-	playsewithpan SE_M_SUPERSONIC, 63
-	waitplaysewithpan SE_M_SUPERSONIC, 63, 8
+	playsewithpan SE_M_SUPERSONIC, SOUND_PAN_TARGET
+	waitplaysewithpan SE_M_SUPERSONIC, SOUND_PAN_TARGET, 8
 	createvisualtask AnimTask_ShakeMon, 2, 1, 4, 0, 15, 1
 	createvisualtask AnimTask_ScaleMonAndRestore, 5, -5, -5, 15, 1, 1
 	waitforvisualfinish
@@ -24920,22 +24920,22 @@ General_DoomDesireHit:: @ 81D6108
 	delay 9
 	playsewithpan SE_M_CONFUSE_RAY, 0
 	delay 9
-	playsewithpan SE_M_CONFUSE_RAY, 63
+	playsewithpan SE_M_CONFUSE_RAY, SOUND_PAN_TARGET
 	delay 25
 	createvisualtask AnimTask_ShakeMonInPlace, 2, 1, 10, 0, 20, 1
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, 24, -24, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, -16, 16, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, -24, -12, 1, 1
 	delay 6
-	playsewithpan SE_M_SELF_DESTRUCT, 63
+	playsewithpan SE_M_SELF_DESTRUCT, SOUND_PAN_TARGET
 	createsprite gExplosionSpriteTemplate, ANIM_ATTACKER, 3, 16, 16, 1, 1
 	waitforvisualfinish
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 3, 16, 0, RGB_WHITE
@@ -24995,7 +24995,7 @@ General_MonScared:: @ 81D628A
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 10, 1
 	delay 20
 	createsprite gSprayWaterDropletSpriteTemplate, ANIM_TARGET, 5, 0, 1
-	playsewithpan SE_M_SKETCH, 63
+	playsewithpan SE_M_SKETCH, SOUND_PAN_TARGET
 	createsprite gSprayWaterDropletSpriteTemplate, ANIM_TARGET, 5, 1, 1
 	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 5, 1
 	createvisualtask AnimTask_StretchTargetUp, 3, 
@@ -25012,7 +25012,7 @@ General_GhostGetOut:: @ 81D6301
 	monbg_22 0
 	createvisualtask sub_80B6BBC, 2, 
 	waitbgfadein
-	loopsewithpan SE_M_PSYBEAM, 63, 20, 3
+	loopsewithpan SE_M_PSYBEAM, SOUND_PAN_TARGET, 20, 3
 	waitforvisualfinish
 	clearmonbg_23 0
 	delay 1
@@ -25051,7 +25051,7 @@ General_SafariRockThrow:: @ 81D6394
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
 	delay 0
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, -4, -20, 1, 2
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
@@ -25103,10 +25103,10 @@ General_MegaEvolution:
 	playsewithpan SE_M_SOLAR_BEAM, SOUND_PAN_ATTACKER
 	createsprite gMegaStoneSpriteTemplate, ANIM_ATTACKER, 41, 0, 0, 0, 0
 	delay 20
-	createvisualtask AnimTask_BlendBattleAnimPalExclude, 5, 5, 2, 0, 16, RGB_WHITEALPHA
+	createvisualtask AnimTask_BlendExcept, 5, 5, 2, 0, 16, RGB_WHITEALPHA
 	waitforvisualfinish
 	createvisualtask AnimTask_TransformMon, 2, 0, 1
-	createvisualtask AnimTask_BlendBattleAnimPalExclude, 5, 5, 2, 16, 0, RGB_WHITEALPHA
+	createvisualtask AnimTask_BlendExcept, 5, 5, 2, 16, 0, RGB_WHITEALPHA
 	createvisualtask AnimTask_HorizontalShake, 5, 1, 5, 14
 	waitforvisualfinish
 	createsprite gMegaSymbolSpriteTemplate ANIM_ATTACKER, 2
@@ -25211,10 +25211,10 @@ General_PrimalReversion_Alpha:
 	playsewithpan SE_M_SOLAR_BEAM, SOUND_PAN_ATTACKER
 	createsprite gAlphaStoneSpriteTemplate, ANIM_ATTACKER, 41, 0, 0, 0, 0
 	delay 20
-	createvisualtask AnimTask_BlendBattleAnimPalExclude, 5, 5, 2, 0, 16, RGB_WHITEALPHA
+	createvisualtask AnimTask_BlendExcept, 5, 5, 2, 0, 16, RGB_WHITEALPHA
 	waitforvisualfinish
 	createvisualtask AnimTask_TransformMon, 2, 0, 1
-	createvisualtask AnimTask_BlendBattleAnimPalExclude, 5, 5, 2, 16, 0, RGB_WHITEALPHA
+	createvisualtask AnimTask_BlendExcept, 5, 5, 2, 16, 0, RGB_WHITEALPHA
 	createvisualtask AnimTask_HorizontalShake, 5, 1, 5, 14
 	waitforvisualfinish
 	createsprite gAlphaSymbolSpriteTemplate ANIM_ATTACKER, 2
@@ -25237,10 +25237,10 @@ General_PrimalReversion_Omega:
 	playsewithpan SE_M_SOLAR_BEAM, SOUND_PAN_ATTACKER
 	createsprite gOmegaStoneSpriteTemplate, ANIM_ATTACKER, 41, 0, 0, 0, 0
 	delay 20
-	createvisualtask AnimTask_BlendBattleAnimPalExclude, 5, 5, 2, 0, 16, RGB_WHITEALPHA
+	createvisualtask AnimTask_BlendExcept, 5, 5, 2, 0, 16, RGB_WHITEALPHA
 	waitforvisualfinish
 	createvisualtask AnimTask_TransformMon, 2, 0, 1
-	createvisualtask AnimTask_BlendBattleAnimPalExclude, 5, 5, 2, 16, 0, RGB_WHITEALPHA
+	createvisualtask AnimTask_BlendExcept, 5, 5, 2, 16, 0, RGB_WHITEALPHA
 	createvisualtask AnimTask_HorizontalShake, 5, 1, 5, 14
 	waitforvisualfinish
 	createsprite gOmegaSymbolSpriteTemplate ANIM_ATTACKER, 2
@@ -25266,28 +25266,28 @@ PrimalReversionParticles:
 	return
 
 SafariReaction_WatchingCarefully:: @ 81D63FD
-	playsewithpan SE_M_TAKE_DOWN, 63
+	playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_TARGET
 	createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 16, 96, 0, 2
 	waitforvisualfinish
-	playsewithpan SE_M_TAKE_DOWN, 63
+	playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_TARGET
 	createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 16, -96, 0, 2
 	end
 
 SafariReaction_Angry:: @ 81D6425
 	loadspritegfx ANIM_TAG_ANGER
 	createsprite gAngerMarkSpriteTemplate, ANIM_TARGET, 2, 1, 20, -20
-	playsewithpan SE_M_SWAGGER2, 63
+	playsewithpan SE_M_SWAGGER2, SOUND_PAN_TARGET
 	waitforvisualfinish
 	delay 12
 	createsprite gAngerMarkSpriteTemplate, ANIM_TARGET, 2, 1, -20, -20
-	playsewithpan SE_M_SWAGGER2, 63
+	playsewithpan SE_M_SWAGGER2, SOUND_PAN_TARGET
 	end
 
 SafariReaction_Eating:: @ 81D644E
-	playsewithpan SE_M_TAKE_DOWN, 63
+	playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_TARGET
 	createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 8, 136, 0, 2
 	waitforvisualfinish
-	playsewithpan SE_M_TAKE_DOWN, 63
+	playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_TARGET
 	createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 8, 136, 0, 2
 	end
 
@@ -25383,7 +25383,7 @@ BallThrowTrainerBlock:: @ 81D652D
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
 	delay 0
-	playsewithpan SE_M_DOUBLE_SLAP, 63
+	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 2, -4, -20, 1, 2
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
@@ -25393,8 +25393,8 @@ BallThrowTrainerBlock:: @ 81D652D
 BallThrowGhostDodged:: @ 81D6555
 	delay 16
 	createvisualtask AnimTask_WindUpLunge, 2, 1, 48, 6, 16, 48, -48, 16
-	playsewithpan SE_M_TAKE_DOWN, 63
-	waitplaysewithpan SE_M_TAKE_DOWN, 63, 48
+	playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_TARGET
+	waitplaysewithpan SE_M_TAKE_DOWN, SOUND_PAN_TARGET, 48
 	waitforvisualfinish
 	goto BallThrowEnd
 

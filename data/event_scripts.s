@@ -1229,10 +1229,11 @@ EventScript_DoInGameTrade:: @ 81A8CD9
 	faceplayer
 	return
 
+@pretty sure not using vseeeker can remove? plan to just rematch battle
 EventScript_VsSeekerChargingDone:: @ 81A8CED
-	special VsSeekerFreezeObjectsAfterChargeComplete
-	waitstate
-	special VsSeekerResetObjectMovementAfterChargeComplete
+	@special VsSeekerFreezeObjectsAfterChargeComplete
+	@waitstate
+	@special VsSeekerResetObjectMovementAfterChargeComplete
 	releaseall
 	end
 
