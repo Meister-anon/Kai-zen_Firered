@@ -1184,7 +1184,9 @@ bool8 PartyHasMonWithSurf(void)
         {
             if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE)
                 break;
-            if (MonKnowsMove(&gPlayerParty[i], MOVE_SURF))
+            /*if (MonKnowsMove(&gPlayerParty[i], MOVE_SURF))
+                return TRUE;*/
+            if (CanMonLearnTMHM(&gPlayerParty[i], ITEM_HM03_SURF - ITEM_TM01_FOCUS_PUNCH))
                 return TRUE;
         }
     }

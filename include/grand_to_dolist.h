@@ -1886,7 +1886,7 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 * did I setup using hm use without needing to have learned it yet?
 * idea is for hms  use tmhm learnset check.  ok hadn't done it, made an attempt need test
 */
-goto FIELDMOVE_LISTMENU
+goto FIELDMOVE_LISTMENU //partymenu.c setup for field hm use is here
 goto CURSORSELECTION_FIELDMOVES
 goto ABILITY_CAPSULE_DATA
 /*

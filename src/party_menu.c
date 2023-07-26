@@ -4106,13 +4106,14 @@ static void FieldCallback_Surf(void)
 static bool8 SetUpFieldMove_Surf(void)
 {
     s16 x, y;
-    u16 item;
+    u16 item = gSpecialVar_ItemId;
+
     struct Pokemon *mon;
     
     GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
     if (MetatileBehavior_IsSemiDeepWater(MapGridGetMetatileBehaviorAt(x, y)) != TRUE
         && IsPlayerFacingSurfableFishableWater() == TRUE
-        && CanMonLearnTMHM(mon, ITEM_HM03_SURF)) //hopefully that works
+        && PartyHasMonWithSurf() == TRUE) //hopefully that works 
     {
         gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
         gPostMenuFieldCallback = FieldCallback_Surf;
@@ -4334,15 +4335,15 @@ static void sub_8124DE0(void)
     }
 }
 
-static void sub_8124E48(void) //check emerald if tms
+static void sub_8124E48(void) //check emerald if tms  //appears to be tm use logic
 {
     if (ItemId_GetPocket(gSpecialVar_ItemId) == POCKET_TM_CASE
      && PSA_IsCancelDisabled() == TRUE)
     {
         GiveMoveToMon(&gPlayerParty[gPartyMenu.slotId], ItemIdToBattleMoveId(gSpecialVar_ItemId));
         AdjustFriendship(&gPlayerParty[gPartyMenu.slotId], 4);
-        if (gSpecialVar_ItemId <= ITEM_TM50)
-            RemoveBagItem(gSpecialVar_ItemId, 1);
+        /*if (gSpecialVar_ItemId <= ITEM_TM50)
+            RemoveBagItem(gSpecialVar_ItemId, 1);*/ //removing this line should make all tms reusable
         SetMainCallback2(gPartyMenu.exitCallback);
     }
     else

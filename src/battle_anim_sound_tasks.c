@@ -13,6 +13,7 @@ static void SoundTask_LoopSEAdjustPanning_Step(u8 taskId);
 static void SoundTask_PlayDoubleCry_Step(u8 taskId);
 static void SoundTask_PlayCryWithEcho_Step(u8 taskId);
 static void SoundTask_AdjustPanningVar_Step(u8 taskId);
+static void SoundTask_SeVolumeChange(u8 taskId);
 
 void SoundTask_FireBlast(u8 taskId) //these don't have .h defines they still work
 {

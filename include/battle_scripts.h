@@ -240,6 +240,7 @@ extern const u8 BattleScript_MirrorArmorAttackAnimation[];
 extern const u8 BattleScript_MirrorArmorReflect[];
 extern const u8 BattleScript_EmpathAttackAnimation[];
 extern const u8 BattleScript_EmpathActivates[];
+extern const u8 BattleScript_EmpathicCurseActivates[];
 extern const u8 BattleScript_StickyHoldActivates[];
 extern const u8 BattleScript_StickyHoldKnockoff[];
 extern const u8 BattleScript_ColorChangeActivates[];

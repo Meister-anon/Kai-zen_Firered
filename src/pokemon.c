@@ -7510,7 +7510,7 @@ u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm)
         u32 mask = 1 << tm;
         return sTMHMLearnsets[species][0] & mask;
     }
-    else
+    else  //actually I think this is a type split? breaking the array into 2 32 bit section? - yup
     {
         u32 mask = 1 << (tm - 32);
         return sTMHMLearnsets[species][1] & mask;

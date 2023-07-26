@@ -206,6 +206,6 @@ s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fi
 // percent in UQ_4_12 format
 extern const u16 gPercentToModifier[101];
 
-extern const u16 gFloatingSpecies[129];
+extern const u16 gFloatingSpecies[130];
 
 #endif // GUARD_BATTLE_UTIL_H
