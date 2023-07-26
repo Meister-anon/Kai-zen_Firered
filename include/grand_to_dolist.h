@@ -1882,6 +1882,9 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 * 
 * //shifting 8 is the same as using 100, left shift << is multiplying,,  >> right shift is dividing
 * 
+* adjust filed move to only add to list when its available i.e need badge for hms even if you can learn it
+* did I setup using hm use without needing to have learned it yet?
+* idea is for hms  use tmhm learnset check.  ok hadn't done it, made an attempt need test
 */
 goto FIELDMOVE_LISTMENU
 goto CURSORSELECTION_FIELDMOVES

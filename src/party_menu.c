@@ -2996,7 +2996,7 @@ static void SetPartyMonSelectionActions(struct Pokemon *mons, u8 slotId, u8 acti
 #define FIELDMOVE_LISTMENU
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
-    u8 i, j;
+    u8 i, j, k;
 
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
@@ -3005,11 +3005,23 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     {
         for (j = 0; sFieldMoves[j] != FIELD_MOVE_END; ++j)
         {
-            if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) == sFieldMoves[j])
+            if (sFieldMoves[j] <= FIELD_MOVE_WATERFALL && FlagGet(FLAG_BADGE01_GET + sFieldMoves[j]) == TRUE) //adding hm moves to list, need to add tmhm search that takes move
+            {
+                for (k = 0; k < NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES; k++)
+                {
+                    if ((ItemIdToBattleMoveId(ITEM_TM01/*_FOCUS_PUNCH*/ + k) == sFieldMoves[j]) && CanMonLearnTMHM(&mons[slotId], k))
+                    {
+                        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
+                        break;
+                    }
+                }//test attempt of setup hm field use without learning
+                
+            }
+            else if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) == sFieldMoves[j]) //should be just for non hm moves?
             {
                 AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
                 break;
-            }
+            }//need test, with 2 checks unsure what break is doing for loop
         }
     }
     if (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE)
@@ -3956,7 +3968,7 @@ static void CursorCB_FieldMove(u8 taskId)
     else
     {
         // All field moves before WATERFALL are HMs.
-        if (fieldMove <= FIELD_MOVE_WATERFALL && FlagGet(FLAG_BADGE01_GET + fieldMove) != TRUE)
+        if (fieldMove <= FIELD_MOVE_WATERFALL && FlagGet(FLAG_BADGE01_GET + fieldMove) != TRUE) //use this for telling not to add to list
         {
             DisplayPartyMenuMessage(gText_CantUseUntilNewBadge, TRUE);
             gTasks[taskId].func = Task_ReturnToChooseMonAfterText;
@@ -4100,7 +4112,7 @@ static bool8 SetUpFieldMove_Surf(void)
     GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
     if (MetatileBehavior_IsSemiDeepWater(MapGridGetMetatileBehaviorAt(x, y)) != TRUE
         && IsPlayerFacingSurfableFishableWater() == TRUE
-        && CanMonLearnTMHM(mon, item - ITEM_HM03_SURF)) //hopefully that works
+        && CanMonLearnTMHM(mon, ITEM_HM03_SURF)) //hopefully that works
     {
         gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
         gPostMenuFieldCallback = FieldCallback_Surf;
@@ -4733,7 +4745,7 @@ static void ShowMoveSelectWindow(u8 slot)
     }
     Menu_InitCursor(windowId, fontId, 0, 2, 16, moveCount, FALSE);
     ScheduleBgCopyTilemapToVram(2);
-}//may be relevant to party menu ui
+}//may be relevant to party menu ui  vsonic
 
 static void Task_HandleWhichMoveInput(u8 taskId)
 {
