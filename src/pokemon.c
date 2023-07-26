@@ -3590,7 +3590,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         gBattleMovePower /= 2;
 
     //in a pinch abilities
-    if (attacker->hp < (attacker->maxHP / 2))
+    if (attacker->hp <= (attacker->maxHP / 2)) //change to less or equal to be exact to yellow, more for super fang and effects that exactly do half hp
     {
         if (type == TYPE_GRASS && attacker->ability == ABILITY_OVERGROW)// && attacker->hp < (attacker->maxHP / 3))
             gBattleMovePower = (150 * gBattleMovePower) / 100;
@@ -3609,7 +3609,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     }
 
     //Special case - Partner in a pinch -need test
-    if (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].hp < (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].maxHP / 2))
+    if (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].hp <= (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].maxHP / 2))
     {
         if (type == TYPE_ELECTRIC && attacker->ability == ABILITY_PLUS && GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_MINUS)
             gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;

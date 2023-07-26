@@ -3187,8 +3187,6 @@ static void PreviewDeterminativeMoveTargets(void) //determine who targetting
             case MOVE_RAIN_DANCE:
             case MOVE_SUNNY_DAY:
             case MOVE_HAIL:
-            case MOVE_MUD_SPORT:
-            case MOVE_WATER_SPORT:
                 bitMask = 0xF0000;
                 break;
             case MOVE_SAFEGUARD:
@@ -3197,6 +3195,8 @@ static void PreviewDeterminativeMoveTargets(void) //determine who targetting
             case MOVE_MIST:
             case MOVE_HEAL_BELL:
             case MOVE_AROMATHERAPY:
+            case MOVE_MUD_SPORT:
+            case MOVE_WATER_SPORT:
                 bitMask = (gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)] 
                          | gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)]) << 16; 
                 break;

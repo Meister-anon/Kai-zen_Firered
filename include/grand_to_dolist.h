@@ -11,6 +11,9 @@ and a brief description of what my goal is there
 each thing should be checked off when done
 //OK REALIZED I can use goto's with variabls as a shortcut parts of to .c files
 
+note: personal notes within repo- zsonic used as points removed ewram was also spots to double check,
+but forgot and eventually used vsonic instead for notation to refer back to
+
 */
 
 /*
@@ -428,6 +431,18 @@ With that I can use GetMondata ability num, if 0 set a random abilityNum between
 * learned pp ups effect on moves is limited to increasing basae pp by 60%  5-8  1.6 boost 15 to 24 1.6 boost  10 to 16 1.6 boost.
 * 
 * buffed sturdy to survive explosion need add to ai logic
+* 
+* for abilities that boost stats, think want setup a a function that doesn't exactly reveal the ability to the player
+* but just acts as a signifier that one reached an activation condition,  with a hint in the color of animation
+* 
+* plan loop battlers check for actiation condition if active check stat that would be raised and play appropriate stat animation color
+* just need figure where to put
+* 
+* for mudsport watersport or moves that boost stat, think can play animationn on turn move used, and on switch in.
+* i.e if gcurrentmove is watersport and side check mon is battler grass play speed boost animation
+* 
+* will prob make a bs command for this and put function in battle_script_commands.c can easily put in switch script  no text for these
+* 
 * 
 * General Notes end:
 */
