@@ -3584,9 +3584,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         attack = (150 * attack) / 100;
     if (defender->ability == ABILITY_MARVEL_SCALE && defender->status1 & STATUS1_ANY)
         defense = (150 * defense) / 100;
-    if (type == TYPE_ELECTRIC && AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, 0, ABILITYEFFECT_MUD_SPORT, 0))
+    if (type == TYPE_ELECTRIC && (sideStatus & SIDE_STATUS_MUDSPORT)) //sidestatus means target side status, checked from bs_commands.c damagecalc function
         gBattleMovePower /= 2;
-    if (type == TYPE_FIRE && AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, 0, ABILITYEFFECT_WATER_SPORT, 0))
+    if (type == TYPE_FIRE && (sideStatus & SIDE_STATUS_WATERSPORT))
         gBattleMovePower /= 2;
 
     //in a pinch abilities
@@ -3643,6 +3643,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (gBattleStruct->lastMoveFailed & gBitTable[battlerIdAtk])
             gBattleMovePower *= 2;
     }
+
+    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND) && (sideStatus & SIDE_STATUS_MUDSPORT))//give to more ground types?
+        spDefense = (130 * spDefense) / 100;
+
 
     // sandstorm sp.def boost for rock types  // decided to add this for ground types as well,
     if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK) || (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)))
