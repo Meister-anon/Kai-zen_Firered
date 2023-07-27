@@ -562,7 +562,7 @@
 //#define B_ANIM_STATUS_SPRT				0xA	//for spirit lock
 
 // Most tasks return a value to gBattleAnimArgs[7].
-#define ARG_RET_ID 0x7
+#define ARG_RET_ID 7
 
 // For createsprite macro to use internally
 #define ANIMSPRITE_IS_TARGET (1 << 7)

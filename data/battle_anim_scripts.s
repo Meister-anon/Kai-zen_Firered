@@ -3728,7 +3728,7 @@ Move_SPITE:: @ 81CB0D6
 
 SetHighSpeedBg:
 	createvisualtask AnimTask_GetAttackerSide, 2
-	jumprettrue SetHighSpeedBgPlayer
+	jumpargeq 7, 1, SetHighSpeedBgPlayer
 	fadetobg BG_HIGHSPEED_OPPONENT
 	goto SetHighSpeedBgFade
 SetHighSpeedBgPlayer:
@@ -9845,7 +9845,7 @@ Move_ROCK_TOMB:: @ 81D3E50
 SetBugBg:
 	createvisualtask AnimTask_BlendExcept, 10, 1, 0, 0, 4, RGB_BLACK
 	createvisualtask AnimTask_GetAttackerSide, 2
-	jumprettrue SetBugBgPlayer
+	jumpargeq 7, 1, SetBugBgPlayer
 	fadetobg BG_BUG_OPPONENT
 	waitbgfadeout
 	createvisualtask AnimTask_StartSlidingBg, 5, 1536, 0, 0, -1
@@ -9856,7 +9856,7 @@ SetBugBgPlayer:
 	createvisualtask AnimTask_StartSlidingBg, 5, -1536, 0, 0, -1
 SetBugBgFade:
 	delay 0
-	createvisualtask AnimTask_BlendBattleAnimPal, 10, 1, 0, 4, 4, RGB_BLACK
+	createvisualtask AnimTask_BlendSelected, 10, 1, 0, 4, 4, RGB_BLACK
 	waitbgfadein
 	return
 
@@ -11007,7 +11007,7 @@ Move_U_TURN:
 	createsprite gFlyBallUpSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 13, 336
 	playsewithpan SE_M_DOUBLE_TEAM, SOUND_PAN_ATTACKER
 	createvisualtask AnimTask_CanBattlerSwitch, 1, ANIM_ATTACKER
-	jumpretfalse UTurnVisible
+	jumpargeq 7, 0, UTurnVisible
 	createsprite gFlyBallAttackSpriteTemplate, ANIM_ATTACKER, 2, 20, TRUE
 UTurnContinue:
 	delay 20
@@ -11017,7 +11017,7 @@ UTurnContinue:
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	createvisualtask AnimTask_CanBattlerSwitch, 1, ANIM_ATTACKER
-	jumpretfalse UTurnLast
+	jumpargeq 7, 0, UTurnLast
 	invisible ANIM_ATTACKER
 UTurnLast:
 	blendoff
@@ -11049,7 +11049,7 @@ Move_DIVE_BOMB::
 	clearmonbg ANIM_ATTACKER
 	call UnsetSkyBg
 	createvisualtask AnimTask_CanBattlerSwitch, 1, ANIM_ATTACKER
-	jumpretfalse SkyAttackEnd
+	jumpargeq 7, 0, SkyAttackEnd
 	@goto SkyAttackEnd
 
 Move_CLOSE_COMBAT:
@@ -15936,16 +15936,16 @@ Move_VOLT_SWITCH:
 	call ElectricityEffect
 	playsewithpan SE_M_THUNDERBOLT2, SOUND_PAN_ATTACKER
 	createvisualtask AnimTask_CanBattlerSwitch 1, ANIM_ATTACKER
-	jumpretfalse VoltSwitchContinue
+	jumpargeq 7, 0, VoltSwitchContinue
 	createvisualtask AnimTask_IsTargetSameSide 1
-	jumprettrue VoltSwitchAgainstPartner
+	jumpargeq 7, 1, VoltSwitchAgainstPartner
 	createvisualtask AnimTask_SlideOffScreen, 5, ANIM_ATTACKER, -2
 VoltSwitchContinue:
 	waitforvisualfinish
 	clearmonbg ANIM_ATTACKER
 	blendoff
 	createvisualtask AnimTask_CanBattlerSwitch 1, ANIM_ATTACKER
-	jumpretfalse VoltSwitchLast
+	jumpargeq 7, 0, VoltSwitchLast
 	invisible ANIM_ATTACKER
 VoltSwitchLast:
 	delay 8
