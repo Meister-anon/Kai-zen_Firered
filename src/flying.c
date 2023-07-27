@@ -1312,8 +1312,8 @@ void AnimTask_LoadWindstormBackground(u8 taskId)
     SetGpuReg(REG_OFFSET_BG1VOFS, gBattle_BG1_Y);
 
     GetBattleAnimBg1Data(&animBg);
-    AnimLoadCompressedBgGfx(animBg.bgId, gBattleAnimBgImage_Sandstorm, animBg.tilesOffset);
-    AnimLoadCompressedBgTilemapHandleContest(&animBg, gBattleAnimBgTilemap_Sandstorm, 0);
+    AnimLoadCompressedBgGfx(animBg.bgId, gFile_graphics_battle_anims_backgrounds_sandstorm_brew_sheet, animBg.tilesOffset);
+    AnimLoadCompressedBgTilemapHandleContest(&animBg, gFile_graphics_battle_anims_backgrounds_sandstorm_brew_tilemap, 0);//
     LoadCompressedPalette(gBattleAnimSpritePal_Windstorm, animBg.paletteId * 16, 32);
 
     if (gBattleAnimArgs[0] && GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
@@ -1371,7 +1371,7 @@ static void AnimTask_LoadWindstormBackground_Step(u8 taskId)
         break;
     case 3:
         GetBattleAnimBg1Data(&animBg);
-        ClearBattleAnimBg(animBg.bgId);
+        ClearBattleAnimBg(animBg.bgId);//
         gTasks[taskId].data[12]++;
         break;
     case 4:

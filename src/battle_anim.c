@@ -2520,22 +2520,22 @@ void MoveBattlerSpriteToBG(u8 battlerId, bool8 toBG_2)
     }
 }
 
-void sub_80730C0(u16 a, u16 *b, s32 c, u8 d)
+void RelocateBattleBgPal(u16 paletteNum, u16 *dest, s32 offset, bool8 largeScreen)
 {
     u8 i, j;   
     u32 var;
 
-    if (d == 0)
+    if (largeScreen == 0)
         var = 32;
     else
         var = 64;
     
-    a <<= 12;
+    paletteNum <<= 12;
     for (i = 0; i < var; i++)
     {
         for (j = 0; j < 32; j++)
         {
-            b[32 * i + j] = ((b[32 * i + j] & 0xFFF) | a) + c;
+            dest[32 * i + j] = ((dest[32 * i + j] & 0xFFF) | paletteNum) + offset;
         }
     }
 }
@@ -2855,10 +2855,20 @@ static void ScriptCmd_goto(void)
     sBattleAnimScriptPtr = T2_READ_PTR(sBattleAnimScriptPtr);
 }
 
-bool8 IsContest(void)
+bool8 IsContest(void) //not setup as of yet 
 {
     return FALSE;
 }
+
+/*// Uses of this function that rely on a TRUE return are expecting inBattle to not be ticked as defined in contest behavior.
+// As a result, if misused, this function cannot reliably discern between field and contest status and could result in undefined behavior.
+bool8 IsContest(void)
+{
+    if (!gMain.inBattle)
+        return TRUE;
+    else
+        return FALSE;
+}*/
 
 // Unused
 static bool8 sub_807378C(u16 a)

@@ -334,7 +334,7 @@ void AnimTask_SetUpCurseBackground(u8 taskId)
     GetBattleAnimBg1Data(&animBgData);
     AnimLoadCompressedBgTilemap(animBgData.bgId, gFile_graphics_battle_anims_masks_curse_tilemap);
     if (IsContest())
-        sub_80730C0(animBgData.paletteId, animBgData.bgTilemap, 0, 0);
+        RelocateBattleBgPal(animBgData.paletteId, animBgData.bgTilemap, 0, 0);
     AnimLoadCompressedBgGfx(animBgData.bgId, gFile_graphics_battle_anims_masks_curse_sheet, animBgData.tilesOffset);
     LoadPalette(sRgbWhite, animBgData.paletteId * 16 + 1, 2);
     gBattle_BG1_X = -gSprites[spriteId].pos1.x + 32;
@@ -486,7 +486,7 @@ static void sub_80BB2A0(u8 taskId)
     else
         AnimLoadCompressedBgTilemap(animBgData.bgId, gBattleStatMask2_Tilemap);
     if (IsContest())
-        sub_80730C0(animBgData.paletteId, animBgData.bgTilemap, 0, 0);
+        RelocateBattleBgPal(animBgData.paletteId, animBgData.bgTilemap, 0, 0);
     AnimLoadCompressedBgGfx(animBgData.bgId, gBattleStatMask_Gfx, animBgData.tilesOffset);
     switch (sAnimStatsChangeData->data[1])
     {
@@ -786,7 +786,7 @@ void sub_80BBA20(u8 taskId, s32 unused, u16 arg2, u8 battler1, u8 arg4, u8 arg5,
     GetBattleAnimBg1Data(&animBgData);
     AnimLoadCompressedBgTilemap(animBgData.bgId, tilemap);
     if (IsContest())
-        sub_80730C0(animBgData.paletteId, animBgData.bgTilemap, 0, 0);
+        RelocateBattleBgPal(animBgData.paletteId, animBgData.bgTilemap, 0, 0);
     AnimLoadCompressedBgGfx(animBgData.bgId, gfx, animBgData.tilesOffset);
     LoadCompressedPalette(palette, animBgData.paletteId * 16, 32);
     gBattle_BG1_X = 0;

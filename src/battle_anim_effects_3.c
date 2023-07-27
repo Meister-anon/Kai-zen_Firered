@@ -2381,7 +2381,7 @@ void AnimTask_MorningSunLightBeam(u8 taskId)
         LoadCompressedPalette(gBattleAnim_MorningSunPal, animBg.paletteId * 16, 32);
         if (IsContest())
         {
-            sub_80730C0(animBg.paletteId, animBg.bgTilemap, 0, 0);
+            RelocateBattleBgPal(animBg.paletteId, animBg.bgTilemap, 0, 0);
             gBattle_BG1_X = -56;
             gBattle_BG1_Y = 0;
         }
@@ -2562,7 +2562,7 @@ void AnimTask_DoomDesireLightBeam(u8 taskId)
                 
         if (IsContest())
         {
-            sub_80730C0(animBg.paletteId, animBg.bgTilemap, 0, 0);
+            RelocateBattleBgPal(animBg.paletteId, animBg.bgTilemap, 0, 0);
             gBattle_BG1_X = -56;
             gBattle_BG1_Y = 0;
         }

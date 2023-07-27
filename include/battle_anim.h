@@ -155,7 +155,7 @@ s16 CalculatePanIncrement(s16 sourcePan, s16 targetPan, s16 incrementPan);
 u8 GetAnimBattlerId(u8 wantedBattler);
 bool8 IsBattlerSpriteVisible(u8 battlerId);
 s16 KeepPanInRange(s16 a, s32 oldPan);
-void sub_80730C0(u16, u16 *, s32, u8);
+void RelocateBattleBgPal(u16 paletteNum, u16 *dest, s32 offset, bool8 largeScreen);
 
 // battle_intro.c
 void SetAnimBgAttribute(u8 bgId, u8 attributeId, u8 value);
@@ -432,7 +432,9 @@ bool8 IsBattlerSpritePresent(u8 battlerId);
 bool8 IsDoubleBattle(void);
 void GetBattleAnimBg1Data(struct BattleAnimBgData *animBgData);
 void GetBattleAnimBgData(struct BattleAnimBgData *animBgData, u32 bgId);
+void ClearBattleAnimBg(u32 bgId);
 void GetBattleAnimBgDataByPriorityRank(struct BattleAnimBgData *animBgData, u8 unused);
+void AnimLoadCompressedBgTilemapHandleContest(struct BattleAnimBgData *, const void *, bool32);
 void InitBattleAnimBg(u32 bgId);
 void AnimLoadCompressedBgGfx(u32 bgId, const u32 *src, u32 tilesOffset);
 void InitAnimBgTilemapBuffer(u32 bgId, const void *src);
