@@ -6,6 +6,7 @@
 #include "trig.h"
 #include "util.h"
 #include "decompress.h"
+#include "item_icon.h"
 #include "constants/songs.h"
 #include "constants/moves.h"
 
@@ -274,14 +275,25 @@ const struct SpriteTemplate gFlashCannonBallMovementTemplate =
     .callback = AnimShadowBall
 };
 
+const struct SpriteTemplate gPoltergeistEffectTemplate =
+{
+    .tileTag = ANIM_TAG_POLTERGEIST,
+    .paletteTag = ANIM_TAG_POLTERGEIST,
+    .oam = &gOamData_AffineNormal_ObjNormal_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_ShadowBall,
+    .callback = AnimPoltergeistItem,
+};
+
 static void AnimConfuseRayBallBounce(struct Sprite *sprite)
 {
-    InitSpritePosToAnimAttacker(sprite, 1);
+    InitSpritePosToAnimAttacker(sprite, TRUE);
     sprite->data[0] = gBattleAnimArgs[2];
     sprite->data[1] = sprite->pos1.x;
-    sprite->data[2] = GetBattlerSpriteCoord(gBattleAnimTarget, 2);
+    sprite->data[2] = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2);
     sprite->data[3] = sprite->pos1.y;
-    sprite->data[4] = GetBattlerSpriteCoord(gBattleAnimTarget, 3);
+    sprite->data[4] = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET);
     BattleAnim_InitLinearTranslationWithDuration(sprite);
     sprite->callback = AnimConfuseRayBallBounce_Step1;
     sprite->data[6] = 16;
@@ -1543,4 +1555,102 @@ static void AnimMonMoveCircular_Step(struct Sprite *sprite)
         gSprites[sprite->data[5]].pos1.y -= 8;
         sprite->callback = DestroySpriteAndMatrix;
     }
+}
+
+void AnimTask_PoltergeistItem(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+    u8 x = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X);
+    u8 y = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y) + (GetBattlerSpriteCoordAttr(gBattleAnimTarget, BATTLER_COORD_ATTR_HEIGHT) / 2);
+
+    task->data[0] = AddItemIconSprite(ANIM_TAG_ITEM_BAG, ANIM_TAG_ITEM_BAG, gLastUsedItem);//don't have table in my game yet, instead tweaked function to not use it.
+    gSprites[task->data[0]].x = x + 4; 
+    gSprites[task->data[0]].y = y + 4;
+    gSprites[task->data[0]].data[0] = x + 4;
+    gSprites[task->data[0]].data[1] = y + 4;
+    gSprites[task->data[0]].callback = AnimPoltergeistItem;
+
+    task->data[1] = CreateSprite(&gPoltergeistEffectTemplate, x, y, 1);
+    gSprites[task->data[1]].data[0] = x;
+    gSprites[task->data[1]].data[1] = y;
+
+    gAnimVisualTaskCount += 2;
+
+    DestroyAnimVisualTask(taskId);
+}
+
+static void AnimPoltergeistItem(struct Sprite *sprite)
+{
+    sprite->data[2] += 4;
+
+    sprite->x = sprite->data[0] + Sin(sprite->data[2], 24);
+    sprite->y = sprite->data[1] + (Cos(sprite->data[2], 24) - 24);
+
+    if (sprite->data[2] == 256)
+        DestroyAnimSprite(sprite);
+}
+
+//pulverizing pancake - destiny bond shadow from attacker to target
+void AnimTask_PulverizingPancakeWhiteShadow(u8 taskId)
+{
+    struct Task *task;
+    s16 battler;
+    u8 spriteId;
+    s16 baseX, baseY;
+    s16 x, y;
+
+    task = &gTasks[taskId];
+    SetGpuReg(REG_OFFSET_BLDCNT, (BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_ALL));
+    SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(0, 0x10));
+    task->data[5] = 0;
+    task->data[6] = 0;
+    task->data[7] = 0;
+    task->data[8] = 0;
+    task->data[9] = 16;
+    task->data[10] = gBattleAnimArgs[0];
+
+    baseX = GetBattlerSpriteCoord(gBattleAnimAttacker, 2);
+    baseY = GetBattlerSpriteCoordAttr(gBattleAnimAttacker, BATTLER_COORD_ATTR_BOTTOM);
+    if (!IsContest())
+    {
+        spriteId = CreateSprite(&gDestinyBondWhiteShadowSpriteTemplate, baseX, baseY, 55);
+        if (spriteId != MAX_SPRITES)
+        {
+            x = GetBattlerSpriteCoord(gBattleAnimTarget, 2);
+            y = GetBattlerSpriteCoordAttr(gBattleAnimTarget, BATTLER_COORD_ATTR_BOTTOM);
+            gSprites[spriteId].data[0] = baseX << 4;
+            gSprites[spriteId].data[1] = baseY << 4;
+            gSprites[spriteId].data[2] = ((x - baseX) << 4) / gBattleAnimArgs[1];
+            gSprites[spriteId].data[3] = ((y - baseY) << 4) / gBattleAnimArgs[1];
+            gSprites[spriteId].data[4] = gBattleAnimArgs[1];
+            gSprites[spriteId].data[5] = x;
+            gSprites[spriteId].data[6] = y;
+            gSprites[spriteId].callback = AnimDestinyBondWhiteShadow_Step;
+
+            task->data[task->data[12] + 13] = spriteId;
+            task->data[12]++;
+        }
+    }
+    else
+    {
+        spriteId = CreateSprite(&gDestinyBondWhiteShadowSpriteTemplate, baseX, baseY, 55);
+        if (spriteId != MAX_SPRITES)
+        {
+            x = 48;
+            y = 40;
+            gSprites[spriteId].data[0] = baseX << 4;
+            gSprites[spriteId].data[1] = baseY << 4;
+            gSprites[spriteId].data[2] = ((x - baseX) << 4) / gBattleAnimArgs[1];
+            gSprites[spriteId].data[3] = ((y - baseY) << 4) / gBattleAnimArgs[1];
+            gSprites[spriteId].data[4] = gBattleAnimArgs[1];
+            gSprites[spriteId].data[5] = x;
+            gSprites[spriteId].data[6] = y;
+            gSprites[spriteId].callback = AnimDestinyBondWhiteShadow_Step;
+
+            task->data[13] = spriteId;
+            task->data[12] = 1;
+        }
+    }
+
+    task->func = AnimTask_DestinyBondWhiteShadow_Step;
 }

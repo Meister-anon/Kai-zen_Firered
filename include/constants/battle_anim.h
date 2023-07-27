@@ -391,7 +391,11 @@
 #define ANIM_TAG_DREEPY                     (ANIM_SPRITES_START + 379)
 #define ANIM_TAG_ICE_ROCK_SINGLE            (ANIM_SPRITES_START + 380)
 #define ANIM_TAG_STONE_PILLAR_MULTI         (ANIM_SPRITES_START + 381)
-
+#define ANIM_TAG_ALPHA_SYMBOL               (ANIM_SPRITES_START + 382)
+#define ANIM_TAG_OMEGA_SYMBOL               (ANIM_SPRITES_START + 383)
+#define ANIM_TAG_STEEL_BEAM                 (ANIM_SPRITES_START + 384)
+#define ANIM_TAG_POLTERGEIST                (ANIM_SPRITES_START + 385)
+#define ANIM_TAG_TEAPOT                     (ANIM_SPRITES_START + 386)
 // battlers
 #define ANIM_ATTACKER    0
 #define ANIM_TARGET      1
@@ -492,6 +496,8 @@
 #define BG_HYPER_BEAM                           75
 #define BG_DYNAMAX_CANNON                       76
 #define BG_AURA_SPHERE                          77
+#define BG_STEEL_BEAM_OPPONENT					78
+#define BG_STEEL_BEAM_PLAYER					79
 
 #define B_ANIM_CONSTANTS
 // table ids for general animations	(gBattleAnims_General) //buffer for values from battle_anim_scripts.s
@@ -535,7 +541,9 @@
 #define B_ANIM_AQUA_RING_HEAL           0X25
 #define B_ANIM_SPIKE_TOSS				0x26 // for spike shield spike set
 #define B_ANIM_BASIC_HEAL				0x27 // general healing effect separate from moves animation, done for loafing off heal use for comatose too? other absorb healing?
-
+#define B_ANIM_BEAK_BLAST_SETUP         0x28
+#define B_ANIM_SHELL_TRAP_SETUP         0x29
+#define B_ANIM_ZMOVE_ACTIVATE           0x2A // Using Z Moves
 
 // special animations table
 #define B_ANIM_LVL_UP                   0x0
@@ -548,7 +556,7 @@
 #define B_ANIM_LVL_UP_EVOLVE            0x7
 #define B_ANIM_CRITICAL_CAPTURE_THROW   0x8	//added need test
 
-// status animation table
+// status animation table (gBattleAnims_StatusConditions)
 #define B_ANIM_STATUS_PSN               0x0
 #define B_ANIM_STATUS_CONFUSION         0x1
 #define B_ANIM_STATUS_BRN               0x2

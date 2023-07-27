@@ -7026,7 +7026,7 @@ extern const u32 gItemIconPalette_SuperRepel[];
 extern const u32 gItemIconPalette_MaxRepel[];
 extern const u32 gItemIcon_EscapeRope[];
 extern const u32 gItemIconPalette_EscapeRope[];
-extern const u32 gItemIcon_Repel[];
+extern const u32 gItemIcon_Repel[];	//why is this twice?
 extern const u32 gItemIconPalette_Repel[];
 // Evolution stones
 extern const u32 gItemIcon_SunStone[];

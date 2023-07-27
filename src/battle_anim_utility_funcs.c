@@ -409,6 +409,22 @@ void AnimTask_CanBattlerSwitch(u8 taskId)
     DestroyAnimVisualTask(taskId);
 }
 
+void AnimTask_SetInvisible(u8 taskId)
+{
+    u32 battlerId = GetAnimBattlerId(gBattleAnimArgs[0]);
+    u32 spriteId = gBattlerSpriteIds[battlerId];
+
+    gSprites[spriteId].invisible = gBattleSpritesDataPtr->battlerData[battlerId].invisible = gBattleAnimArgs[1];
+    DestroyAnimVisualTask(taskId);
+}
+
+void AnimTask_SetAnimTargetToAttackerOpposite(u8 taskId)
+{
+    gBattleAnimTarget = BATTLE_OPPOSITE(gBattleAnimAttacker);
+    DestroyAnimVisualTask(taskId);
+}
+
+
 static void sub_80BB0D8(u8 taskId)
 {
     if (sAnimStatsChangeData->data[2] == 0)

@@ -866,34 +866,34 @@ gBattleAnims_StatusConditions::
 	@value go in 
 
 gBattleAnims_General::		@aligns with constants/battle_anim.h
-	.4byte General_CastformChange
-	.4byte General_StatsChange
-	.4byte General_SubstituteFade
-	.4byte General_SubstituteAppear
-	.4byte General_BaitThrow
-	.4byte General_ItemKnockoff
-	.4byte General_TurnTrap
-	.4byte General_ItemEffect
-	.4byte General_SmokeballEscape
-	.4byte General_HangedOn
-	.4byte General_Rain
-	.4byte General_Sun
-	.4byte General_Sandstorm
-	.4byte General_Hail
-	.4byte General_LeechSeedDrain
-	.4byte General_MonHit
-	.4byte General_ItemSteal
-	.4byte General_SnatchMove
-	.4byte General_FutureSightHit
-	.4byte General_DoomDesireHit
-	.4byte General_FocusPunchSetUp
-	.4byte General_IngrainHeal
-	.4byte General_WishHeal
-	.4byte General_MonScared
-	.4byte General_GhostGetOut
-	.4byte General_SilphScoped
-	.4byte General_SafariRockThrow
-	.4byte General_SafariReaction
+	.4byte General_CastformChange			@ B_ANIM_CASTFORM_CHANGE
+	.4byte General_StatsChange				@ B_ANIM_STATS_CHANGE
+	.4byte General_SubstituteFade			@ B_ANIM_SUBSTITUTE_FADE
+	.4byte General_SubstituteAppear			@ B_ANIM_SUBSTITUTE_APPEAR
+	.4byte General_BaitThrow				@ B_ANIM_BAIT_THROW
+	.4byte General_ItemKnockoff				@ B_ANIM_ITEM_KNOCKOFF
+	.4byte General_TurnTrap					@ B_ANIM_TURN_TRAP
+	.4byte General_ItemEffect				@ B_ANIM_ITEM_EFFECT
+	.4byte General_SmokeballEscape			@ B_ANIM_SMOKEBALL_ESCAPE
+	.4byte General_HangedOn					@ B_ANIM_HANGED_ON
+	.4byte General_Rain						@ B_ANIM_RAIN_CONTINUES
+	.4byte General_Sun						@ B_ANIM_SUN_CONTINUES
+	.4byte General_Sandstorm				@ B_ANIM_SANDSTORM_CONTINUES
+	.4byte General_Hail						@ B_ANIM_HAIL_CONTINUES
+	.4byte General_LeechSeedDrain			@ B_ANIM_LEECH_SEED_DRAIN
+	.4byte General_MonHit					@ B_ANIM_MON_HIT
+	.4byte General_ItemSteal				@ B_ANIM_ITEM_STEAL
+	.4byte General_SnatchMove				@ B_ANIM_SNATCH_MOVE
+	.4byte General_FutureSightHit			@ B_ANIM_FUTURE_SIGHT_HIT
+	.4byte General_DoomDesireHit			@ B_ANIM_DOOM_DESIRE_HIT
+	.4byte General_FocusPunchSetUp			@ B_ANIM_FOCUS_PUNCH_SETUP
+	.4byte General_IngrainHeal				@ B_ANIM_INGRAIN_HEAL
+	.4byte General_WishHeal					@ B_ANIM_WISH_HEAL
+	.4byte General_MonScared				@ B_ANIM_MON_SCARED
+	.4byte General_GhostGetOut				@ B_ANIM_GHOST_GET_OUT
+	.4byte General_SilphScoped				@ B_ANIM_SILPH_SCOPED
+	.4byte General_SafariRockThrow			@ B_ANIM_ROCK_THROW
+	.4byte General_SafariReaction			@ B_ANIM_SAFARI_REACTION
 	.4byte General_MegaEvolution            @ B_ANIM_MEGA_EVOLUTION
 	.4byte General_IllusionOff              @ B_ANIM_ILLUSION_OFF
 	.4byte General_FormChange               @ B_ANIM_FORM_CHANGE
@@ -906,6 +906,9 @@ gBattleAnims_General::		@aligns with constants/battle_anim.h
 	.4byte General_AquaRingHeal             @ B_ANIM_AQUA_RING_HEAL
 	.4byte Move_SPIKES						@ B_ANIM_SPIKE_TOSS
 	.4byte General_Heal_Animation			@ B_ANIM_BASIC_HEAL
+	.4byte General_BeakBlastSetUp           @ B_ANIM_BEAK_BLAST_SETUP
+	.4byte General_ShellTrapSetUp           @ B_ANIM_SHELL_TRAP_SETUP
+	.4byte General_ZMoveActivate            @ B_ANIM_ZMOVE_ACTIVATE
 
 gBattleAnims_Special::
 	.4byte Special_LevelUp					@ B_ANIM_LVL_UP
@@ -2209,7 +2212,7 @@ Move_DETECT:: @ 81C8F72
 	createvisualtask AnimTask_BlendSelected, 10, 2, 1, 0, 9, RGB_WHITE
 	delay 18
 	playsewithpan SE_M_DETECT, 192
-	createsprite gSpriteTemplate_83BF480, ANIM_ATTACKER, 13, 20, -20
+	createsprite gSpinningSparkleSpriteTemplate, ANIM_ATTACKER, 13, 20, -20
 	waitforvisualfinish
 	delay 10
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 2, 1, 2, 9, 0, 0
@@ -8208,7 +8211,7 @@ Move_DISABLE:: @ 81D169F
 	monbgprio_28 1
 	setalpha 8, 8
 	playsewithpan SE_M_DETECT, 192
-	createsprite gSpriteTemplate_83BF480, ANIM_ATTACKER, 13, 24, -16
+	createsprite gSpinningSparkleSpriteTemplate, ANIM_ATTACKER, 13, 24, -16
 	waitforvisualfinish
 	createvisualtask AnimTask_GrowAndGreyscale, 5, 
 	loopsewithpan SE_M_BIND, SOUND_PAN_TARGET, 15, 4
@@ -13920,7 +13923,7 @@ Move_DEFEND_ORDER:
 	clearmonbg ANIM_ATK_PARTNER
 	blendoff
 	delay 1
-	call BideSetUp
+	call BattleAnimScript_Bide_Setup
 	waitforvisualfinish
 	end
 
@@ -25199,7 +25202,7 @@ General_PrimalReversion::
 	jumpargeq 0x1, ITEM_BLUE_ORB, General_PrimalReversion_Alpha
 General_PrimalReversion_Alpha:
 	loadspritegfx ANIM_TAG_ALPHA_STONE
-	loadspritegfx ANIM_TAG_PRIMAL_PARTICLES
+	loadspritegfx ANIM_TAG_MEGA_PARTICLES
 	loadspritegfx ANIM_TAG_ALPHA_SYMBOL
 	monbg ANIM_ATTACKER
 	setalpha 12, 8
@@ -25225,7 +25228,7 @@ General_PrimalReversion_Alpha:
 	end
 General_PrimalReversion_Omega:
 	loadspritegfx ANIM_TAG_OMEGA_STONE
-	loadspritegfx ANIM_TAG_PRIMAL_PARTICLES
+	loadspritegfx ANIM_TAG_MEGA_PARTICLES
 	loadspritegfx ANIM_TAG_OMEGA_SYMBOL
 	monbg ANIM_ATTACKER
 	setalpha 12, 8
