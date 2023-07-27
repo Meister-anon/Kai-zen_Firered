@@ -3522,7 +3522,7 @@ SkyAttackEnd:: @ 81CAD24
 SkyAttackSetUp:: @ 81CAD25
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 11
-	createvisualtask AnimTask_GetTargetIsAttackerPartner, 5, 7
+	createvisualtask AnimTask_GetTargetIsAttackerPartner, 5, ARG_RET_ID
 	jumpargeq 7, 0, SkyAttackSetUpAgainstOpponent
 	goto SkyAttackSetUpAgainstPartner
 

@@ -88,16 +88,16 @@
 	.byte 0xf
 	.endm
 
-	.macro setarg param0:req, param1:req
+	.macro setarg argId:req, value:req
 	.byte 0x10
-	.byte \param0
-	.2byte \param1
+	.byte \argId
+	.2byte \value
 	.endm
 
-	.macro choosetwoturnanim param0:req, param1:req
+	.macro choosetwoturnanim ptr1:req, ptr2:req
 	.byte 0x11
-	.4byte \param0
-	.4byte \param1
+	.4byte \ptr1
+	.4byte \ptr2
 	.endm
 
 	.macro jumpifmoveturn param0:req, ptr:req
@@ -270,6 +270,50 @@
 	.macro stopsound
 	.byte 0x2f
 	.endm
+
+@ same as createvisualtask except takes in battlerargindex, which is the battle anim arg index of the battler to loop through
+	.macro createvisualtaskontargets addr:req, priority:req, battlerargindex:req, argv:vararg
+	.byte 0x30
+	.4byte \addr
+	.byte \priority
+	.byte \battlerargindex
+	.byte (.Lcreatetask_\@_2 - .Lcreatetask_\@_1) / 2	@ num_args
+.Lcreatetask_\@_1:
+	.2byte \argv
+.Lcreatetask_\@_2:
+	.endm
+
+	@ same as createsprite except takes in battlerargindex, which is the battle anim arg index of the battler to loop through
+	.macro createspriteontargets template:req, anim_battler:req, subpriority_offset:req, battlerargindex:req, argv:vararg
+	.byte 0x31
+	.4byte \template
+	.if \anim_battler == ANIM_TARGET
+	.byte 0x80 | (\subpriority_offset & 0x7F)
+	.else
+	.byte (\subpriority_offset & 0x7F)
+	.endif
+	.byte \battlerargindex
+	.byte (.Lsprite_\@_2 - .Lsprite_\@_1) / 2
+.Lsprite_\@_1:
+	.2byte \argv
+.Lsprite_\@_2:
+	.endm
+
+	@ does not overwrite gBattleAnimArgs[battlerargindex], some sprite templates are too dependent on the value (e.g. heal block)
+	.macro createspriteontargets_onpos template:req, anim_battler:req, subpriority_offset:req, battlerargindex:req, argv:vararg
+	.byte 0x32
+	.4byte \template
+	.if \anim_battler == ANIM_TARGET
+	.byte 0x80 | (\subpriority_offset & 0x7F)
+	.else
+	.byte (\subpriority_offset & 0x7F)
+	.endif
+	.byte \battlerargindex
+	.byte (.Lsprite_\@_2 - .Lsprite_\@_1) / 2
+.Lsprite_\@_1:
+	.2byte \argv
+.Lsprite_\@_2:
+	.endm
 	
 @ useful macros
 	.macro jumpreteq value:req, ptr:req
@@ -290,6 +334,7 @@
 	.endm
 
 @ keep CFRU macros cause I'm lazy. todo: update to createsprite and createvisualtask, respectively
+@...don't remove it breaks everything apeparently
 .macro launchtemplate launchtemplatePtr launchtemplatePriority launchtemplateArgsNo launchtemplatearg0 launchtemplatearg1 launchtemplatearg2 launchtemplatearg3 launchtemplatearg4 launchtemplatearg5 launchtemplatearg6 launchtemplatearg7 launchtemplatearg8
     .byte 0x2
     .word \launchtemplatePtr

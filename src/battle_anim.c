@@ -8,8 +8,13 @@
 #include "decompress.h"
 #include "graphics.h"
 #include "m4a.h"
+#include "palette.h"
+#include "pokemon.h"
+#include "sound.h"
+#include "sprite.h"
 #include "task.h"
 #include "constants/battle_anim.h"
+#include "constants/moves.h"
 
 #define ANIM_SPRITE_INDEX_COUNT 8
 
@@ -101,6 +106,9 @@ static void ScriptCmd_visible(void);
 static void ScriptCmd_doublebattle_2D(void);
 static void ScriptCmd_doublebattle_2E(void);
 static void ScriptCmd_stopsound(void);
+static void ScriptCmd_createvisualtaskontargets(void);
+static void ScriptCmd_createspriteontargets(void);
+static void ScriptCmd_createspriteontargets_onpos(void);
 
 // Data
 const struct OamData gOamData_AffineOff_ObjNormal_8x8 =
@@ -1777,7 +1785,10 @@ static void (*const sScriptCmdTable[])(void) =
     ScriptCmd_visible,
     ScriptCmd_doublebattle_2D,
     ScriptCmd_doublebattle_2E,
-    ScriptCmd_stopsound
+    ScriptCmd_stopsound,
+    ScriptCmd_createvisualtaskontargets,
+    ScriptCmd_createspriteontargets,
+    ScriptCmd_createspriteontargets_onpos
 };
 
 // Functions
@@ -1963,6 +1974,74 @@ static void ScriptCmd_unloadspritegfx(void)
     ClearSpriteIndex(GET_TRUE_SPRITE_INDEX(index));
 }
 
+static u8 GetBattleAnimMoveTargets(u8 battlerArgIndex, u8 *targets)
+{
+    u8 numTargets = 1;
+    switch (GetBattlerMoveTargetType(gBattleAnimAttacker, gAnimMoveIndex))
+    {
+    case MOVE_TARGET_BOTH:
+        targets[0] = gBattleAnimArgs[battlerArgIndex];
+        numTargets = 1;
+        if (IsBattlerAlive(BATTLE_PARTNER(targets[0])))
+        {
+            targets[1] = BATTLE_PARTNER(targets[0]);
+            numTargets = 2;
+        }
+        break;
+    case MOVE_TARGET_FOES_AND_ALLY:
+        targets[0] = gBattleAnimArgs[battlerArgIndex];
+        numTargets = 1;
+        if (IsBattlerAlive(BATTLE_PARTNER(targets[0])))
+        {
+            targets[1] = BATTLE_PARTNER(targets[0]);
+            numTargets++;
+        }
+
+        if (IsBattlerAlive(BATTLE_PARTNER(BATTLE_OPPOSITE(targets[0]))))
+        {
+            targets[2] = BATTLE_PARTNER(BATTLE_OPPOSITE(targets[0]));
+            numTargets++;
+        }
+        break;
+    default:
+        targets[0] = gBattleAnimArgs[battlerArgIndex]; // original
+        numTargets = 1;
+        break;
+    }
+
+    return numTargets;
+}
+
+static s16 GetSubpriorityForMoveAnim(u8 argVar)
+{
+    s16 subpriority;
+
+    if (argVar & ANIMSPRITE_IS_TARGET)
+    {
+        argVar ^= ANIMSPRITE_IS_TARGET;
+        if (argVar >= 64)
+            argVar -= 64;
+        else
+            argVar *= -1;
+
+        subpriority = GetBattlerSpriteSubpriority(gBattleAnimTarget) + (s8)(argVar);
+    }
+    else
+    {
+        if (argVar >= 64)
+            argVar -= 64;
+        else
+            argVar *= -1;
+
+        subpriority = GetBattlerSpriteSubpriority(gBattleAnimAttacker) + (s8)(argVar);
+    }
+
+    if (subpriority < 3)
+        subpriority = 3;
+
+    return subpriority;
+}
+
 // Create sprite from template and init data array with varargs
 // args: template, flags, va_args
 // flags:
@@ -2022,6 +2101,86 @@ static void ScriptCmd_createsprite(void)
     gAnimVisualTaskCount++;
 }
 
+static void CreateSpriteOnTargets(const struct SpriteTemplate *template, u8 argVar, u8 battlerArgIndex, u8 argsCount, bool32 overwriteAnimTgt)
+{
+    u32 i;
+    u8 targets[MAX_BATTLERS_COUNT];
+    int ntargets;
+    s16 subpriority;
+
+    for (i = 0; i < argsCount; i++)
+    {
+        gBattleAnimArgs[i] = T1_READ_16(sBattleAnimScriptPtr);
+        sBattleAnimScriptPtr += 2;
+    }
+
+    subpriority = GetSubpriorityForMoveAnim(argVar);
+
+    ntargets = GetBattleAnimMoveTargets(battlerArgIndex, targets);
+
+    for (i = 0; i < ntargets; i++) {
+
+        if (overwriteAnimTgt)
+            gBattleAnimArgs[battlerArgIndex] = targets[i];
+
+        if (CreateSpriteAndAnimate(template,
+            GetBattlerSpriteCoord(targets[i], BATTLER_COORD_X_2),
+            GetBattlerSpriteCoord(targets[i], BATTLER_COORD_Y_PIC_OFFSET),
+            subpriority) != MAX_SPRITES) // Don't increment the task count if the sprite couldn't be created(i.e. there are too many created sprites atm).
+        {
+            gAnimVisualTaskCount++;
+        }
+    }
+}
+
+// will NOT overwrite gBattleAnimArgs
+static void ScriptCmd_createspriteontargets_onpos(void)
+{
+    const struct SpriteTemplate *template;
+    u8 argVar;
+    u8 argsCount;
+    u8 battlerArgIndex;
+
+    sBattleAnimScriptPtr++;
+    template = (const struct SpriteTemplate *)(T2_READ_32(sBattleAnimScriptPtr));
+    sBattleAnimScriptPtr += 4;
+
+    argVar = sBattleAnimScriptPtr[0];
+    sBattleAnimScriptPtr++;
+
+    battlerArgIndex = sBattleAnimScriptPtr[0];
+    sBattleAnimScriptPtr++;
+
+    argsCount = sBattleAnimScriptPtr[0];
+    sBattleAnimScriptPtr++;
+
+    CreateSpriteOnTargets(template, argVar, battlerArgIndex, argsCount, FALSE);
+}
+
+// DOES overwrite gBattleAnimArgs
+static void ScriptCmd_createspriteontargets(void)
+{
+    const struct SpriteTemplate *template;
+    u8 argVar;
+    u8 argsCount;
+    u8 battlerArgIndex;
+
+    sBattleAnimScriptPtr++;
+    template = (const struct SpriteTemplate *)(T2_READ_32(sBattleAnimScriptPtr));
+    sBattleAnimScriptPtr += 4;
+
+    argVar = sBattleAnimScriptPtr[0];
+    sBattleAnimScriptPtr++;
+
+    battlerArgIndex = sBattleAnimScriptPtr[0];
+    sBattleAnimScriptPtr++;
+
+    argsCount = sBattleAnimScriptPtr[0];
+    sBattleAnimScriptPtr++;
+
+    CreateSpriteOnTargets(template, argVar, battlerArgIndex, argsCount, TRUE);
+}
+
 static void ScriptCmd_createvisualtask(void)
 {
     TaskFunc taskFunc;
@@ -2050,6 +2209,47 @@ static void ScriptCmd_createvisualtask(void)
     taskId = CreateTask(taskFunc, taskPriority);
     taskFunc(taskId);
     gAnimVisualTaskCount++;
+}
+
+static void ScriptCmd_createvisualtaskontargets(void)
+{
+    TaskFunc taskFunc;
+    u8 taskPriority;
+    u8 taskId;
+    u8 numArgs;
+    u8 battlerArgIndex; // index in gBattleAnimArgs that has the battlerId
+    s32 i;
+    u8 targets[MAX_BATTLERS_COUNT] = {0};
+
+    sBattleAnimScriptPtr++;
+
+    taskFunc = (TaskFunc)T2_READ_32(sBattleAnimScriptPtr);
+    sBattleAnimScriptPtr += 4;
+
+    taskPriority = sBattleAnimScriptPtr[0];
+    sBattleAnimScriptPtr++;
+
+    battlerArgIndex = sBattleAnimScriptPtr[0];
+    sBattleAnimScriptPtr++;
+
+    numArgs = sBattleAnimScriptPtr[0];
+    sBattleAnimScriptPtr++;
+
+    // copy task arguments
+    for (i = 0; i < numArgs; i++) {
+        gBattleAnimArgs[i] = T1_READ_16(sBattleAnimScriptPtr);
+        sBattleAnimScriptPtr += 2;
+    }
+
+    numArgs = GetBattleAnimMoveTargets(battlerArgIndex, targets);
+
+    for (i = 0; i < numArgs; i++)
+    {
+        gBattleAnimArgs[battlerArgIndex] = targets[i];
+        taskId = CreateTask(taskFunc, taskPriority);
+        taskFunc(taskId);
+        gAnimVisualTaskCount++;
+    }
 }
 
 static void ScriptCmd_delay(void)

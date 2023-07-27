@@ -5,7 +5,9 @@
 // The number 1103515245 comes from the example implementation
 // of rand and srand in the ISO C standard.
 
+// IWRAM common     /search showed file random.txt guess had to aadd rng2 to that?
 u32 gRngValue;
+u32 gRng2Value;
 
 u16 Random(void)
 {

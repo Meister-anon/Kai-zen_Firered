@@ -564,6 +564,9 @@
 // Most tasks return a value to gBattleAnimArgs[7].
 #define ARG_RET_ID 0x7
 
+// For createsprite macro to use internally
+#define ANIMSPRITE_IS_TARGET (1 << 7)
+
 // Trapping Wrap-like moves end turn animation.
 #define TRAP_ANIM_BIND 0
 #define TRAP_ANIM_WRAP 0
@@ -571,7 +574,10 @@
 #define TRAP_ANIM_WHIRLPOOL 2
 #define TRAP_ANIM_CLAMP 3
 #define TRAP_ANIM_SAND_TOMB 4
-#define TRAP_ANIM_INFESTATION 5  //new value prob need create
+#define TRAP_ANIM_MAGMA_STORM 5 //new values need create
+#define TRAP_ANIM_INFESTATION 6
+#define TRAP_ANIM_SNAP_TRAP 7
+#define TRAP_ANIM_THUNDER_CAGE 8
 
 // Weather defines for battle animation scripts.
 #define ANIM_WEATHER_NONE 0
