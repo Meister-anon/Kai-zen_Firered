@@ -5,16 +5,20 @@
 #include "random.h"
 #include "gpu_regs.h"
 #include "item.h"
-//#include "item_icon.h"  //maybe add its functions to item_menu_icons
+#include "rtc.h"
+#include "item_icon.h"  //maybe add its functions to item_menu_icons
 #include "sound.h"
 #include "menu.h"
 #include "malloc.h"
 #include "util.h"
+#include "trig.h"
 #include "graphics.h"
 #include "battle_scripts.h"
 #include "battle_controllers.h"
 #include "constants/moves.h"
 #include "constants/hold_effects.h"
+#include "constants/pokemon.h"
+#include "battle_util.h"
 
 //// function declarations
 static void SpriteCB_SpriteToCentreOfSide(struct Sprite* sprite);
@@ -55,6 +59,20 @@ static void AnimSkyDropBallUp(struct Sprite *sprite);
 static void SpriteCB_SearingShotRock(struct Sprite* sprite);
 static void AnimHappyHourCoinShower(struct Sprite *sprite);
 static void SpriteCB_Geyser(struct Sprite* sprite);
+static void SpriteCB_GeyserTarget(struct Sprite *sprite);
+static void SpriteCB_TwinkleOnBattler(struct Sprite *sprite);
+static void AnimBlastBurnTargetPlume_Step1(struct Sprite *sprite);
+static void AnimBlastBurnTargetPlume(struct Sprite *sprite);
+static void AnimEllipticalGustAttacker(struct Sprite *sprite);
+static void AnimEllipticalGustAttacker_Step(struct Sprite *sprite);
+static void AnimGrowingShockWaveOrbOnTarget(struct Sprite *sprite);
+static void AnimTask_GrowStep(u8 taskId);
+static void AnimExtremeEvoboostCircle(struct Sprite *sprite);
+static void AnimExtremeEvoboostCircle_Step(struct Sprite *sprite);
+static void AnimOceanicOperettaSpotlight(struct Sprite *sprite);
+static void AnimSoulStealingStar(struct Sprite *sprite);
+static void AnimSoulStealingStar_Step1(struct Sprite *sprite);
+static void AnimSoulStealingStar_Step2(struct Sprite *sprite);
 
 //////// const data
 //// general
@@ -4180,6 +4198,7 @@ const struct SpriteTemplate gAcidDownpourAuraSpriteTemplate =
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimParticleInVortex
 };
+
 //tectonic rage
 const struct SpriteTemplate gTectonicRageBlastBurnSpriteTemplate =
 {
@@ -4620,7 +4639,7 @@ const struct SpriteTemplate gBloomDoomGreenBeamSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_RAZOR_LEAF,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = gSolarBeamBigOrbAnimTable,
+    .anims = gSolarbeamBigOrbAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimHyperBeamOrb
@@ -5160,7 +5179,7 @@ const struct SpriteTemplate g10MillionVoltBoltRedBeamSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_VERTICAL_HEX,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = gSolarBeamBigOrbAnimTable,
+    .anims = gSolarbeamBigOrbAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimHyperBeamOrb
@@ -5170,7 +5189,7 @@ const struct SpriteTemplate g10MillionVoltBoltBlueBeamSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_WATER_ORB,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = gSolarBeamBigOrbAnimTable,
+    .anims = gSolarbeamBigOrbAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimHyperBeamOrb
@@ -5180,7 +5199,7 @@ const struct SpriteTemplate g10MillionVoltBoltPinkBeamSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_BERRY_EATEN,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = gSolarBeamBigOrbAnimTable,
+    .anims = gSolarbeamBigOrbAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimHyperBeamOrb
@@ -5190,7 +5209,7 @@ const struct SpriteTemplate g10MillionVoltBoltYellowBeamSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_ELECTRIC_ORBS,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = gSolarBeamBigOrbAnimTable,
+    .anims = gSolarbeamBigOrbAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimHyperBeamOrb
@@ -5200,7 +5219,7 @@ const struct SpriteTemplate g10MillionVoltBoltGreenBeamSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_LEAF,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = gSolarBeamBigOrbAnimTable,
+    .anims = gSolarbeamBigOrbAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimHyperBeamOrb
@@ -5210,7 +5229,7 @@ const struct SpriteTemplate g10MillionVoltBoltPurpleBeamSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_POISON_BUBBLE,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = gSolarBeamBigOrbAnimTable,
+    .anims = gSolarbeamBigOrbAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimHyperBeamOrb
@@ -6306,7 +6325,7 @@ const struct SpriteTemplate gMoonrazeMaelstromBeamSpriteTemplate =
     .tileTag = ANIM_TAG_ORBS,
     .paletteTag = ANIM_TAG_POISON_BUBBLE,
     .oam = &gOamData_AffineOff_ObjNormal_8x8,
-    .anims = gSolarBeamBigOrbAnimTable,
+    .anims = gSolarbeamBigOrbAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimHyperBeamOrb
@@ -6610,8 +6629,8 @@ static void InitSpritePosToAnimAttackersCentre(struct Sprite *sprite, bool8 resp
 //sprite callbacks
 static void AnimSoulStealingStar(struct Sprite *sprite)
 {
-    sprite->x += gBattleAnimArgs[0];
-    sprite->y += gBattleAnimArgs[1];
+    sprite->pos1.x += gBattleAnimArgs[0];
+    sprite->pos1.y += gBattleAnimArgs[1];
     sprite->data[0] = gBattleAnimArgs[3];
     sprite->data[1] = gBattleAnimArgs[4];
     sprite->data[2] = gBattleAnimArgs[5];
@@ -6622,8 +6641,8 @@ static void AnimSoulStealingStar_Step1(struct Sprite *sprite)
 {
     sprite->data[4] += sprite->data[0];
     sprite->data[5] += sprite->data[1];
-    sprite->x2 = sprite->data[4] >> 8;
-    sprite->y2 = sprite->data[5] >> 8;
+    sprite->pos2.x = sprite->data[4] >> 8;
+    sprite->pos2.y = sprite->data[5] >> 8;
     if (++sprite->data[3] == sprite->data[2])
         sprite->callback = AnimSoulStealingStar_Step2;
 }
@@ -6632,8 +6651,8 @@ static void AnimSoulStealingStar_Step2(struct Sprite *sprite)
 {
     sprite->data[4] -= sprite->data[0];
     sprite->data[5] -= sprite->data[1];
-    sprite->x2 = sprite->data[4] >> 8;
-    sprite->y2 = sprite->data[5] >> 8;
+    sprite->pos2.x = sprite->data[4] >> 8;
+    sprite->pos2.y = sprite->data[5] >> 8;
     if (--sprite->data[3] == 0)
         DestroySpriteAndMatrix(sprite);
 }
@@ -6642,7 +6661,7 @@ static void AnimSoulStealingStar_Step2(struct Sprite *sprite)
 static void AnimExtremeEvoboostCircle(struct Sprite *sprite)
 {
     InitSpritePosToAnimAttacker(sprite, FALSE);
-    sprite->y += 20;
+    sprite->pos1.y += 20;
     sprite->data[1] = 191;
     sprite->callback = AnimExtremeEvoboostCircle_Step;
     sprite->callback(sprite);
@@ -6650,8 +6669,8 @@ static void AnimExtremeEvoboostCircle(struct Sprite *sprite)
 
 static void AnimExtremeEvoboostCircle_Step(struct Sprite *sprite)
 {
-    sprite->x2 = Sin(sprite->data[1], 32);
-    sprite->y2 = Cos(sprite->data[1], 8);
+    sprite->pos2.x = Sin(sprite->data[1], 32);
+    sprite->pos2.y = Cos(sprite->data[1], 8);
     sprite->data[1] += 5;
     sprite->data[1] &= 0xFF;
     if (++sprite->data[0] == 71)
@@ -6663,8 +6682,8 @@ static void AnimGrowingShockWaveOrbOnTarget(struct Sprite *sprite)
     switch (sprite->data[0])
     {
     case 0:
-        sprite->x = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2);
-        sprite->y = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET);
+        sprite->pos1.x = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2);
+        sprite->pos1.y = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET);
         StartSpriteAffineAnim(sprite, 2);
         sprite->data[0]++;
         break;
@@ -6678,7 +6697,7 @@ static void AnimGrowingShockWaveOrbOnTarget(struct Sprite *sprite)
 static void AnimEllipticalGustAttacker(struct Sprite *sprite)
 {
     InitSpritePosToAnimAttacker(sprite, FALSE);
-    sprite->y += 20;
+    sprite->pos1.y += 20;
     sprite->data[1] = 191;
     sprite->callback = AnimEllipticalGustAttacker_Step;
     sprite->callback(sprite);
@@ -6686,8 +6705,8 @@ static void AnimEllipticalGustAttacker(struct Sprite *sprite)
 
 static void AnimEllipticalGustAttacker_Step(struct Sprite *sprite)
 {
-    sprite->x2 = Sin(sprite->data[1], 32);
-    sprite->y2 = Cos(sprite->data[1], 8);
+    sprite->pos2.x = Sin(sprite->data[1], 32);
+    sprite->pos2.y = Cos(sprite->data[1], 8);
     sprite->data[1] += 5;
     sprite->data[1] &= 0xFF;
     if (++sprite->data[0] == 71)
@@ -6696,8 +6715,8 @@ static void AnimEllipticalGustAttacker_Step(struct Sprite *sprite)
 
 static void SetSpriteCoordsToAnimTargetCoords(struct Sprite *sprite)
 {
-    sprite->x = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2);
-    sprite->y = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET);
+    sprite->pos1.x = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2);
+    sprite->pos1.y = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET);
 }
 
 static void AnimBlastBurnTargetPlume(struct Sprite *sprite)
@@ -6705,14 +6724,14 @@ static void AnimBlastBurnTargetPlume(struct Sprite *sprite)
     SetSpriteCoordsToAnimTargetCoords(sprite);
     if (GetBattlerSide(gBattleAnimTarget))
     {
-        sprite->x -= gBattleAnimArgs[0];
-        sprite->y += gBattleAnimArgs[1];
+        sprite->pos1.x -= gBattleAnimArgs[0];
+        sprite->pos1.y += gBattleAnimArgs[1];
         sprite->data[2] = -gBattleAnimArgs[4];
     }
     else
     {
-        sprite->x += gBattleAnimArgs[0];
-        sprite->y += gBattleAnimArgs[1];
+        sprite->pos1.x += gBattleAnimArgs[0];
+        sprite->pos1.y += gBattleAnimArgs[1];
         sprite->data[2] = gBattleAnimArgs[4];
     }
 
@@ -6722,12 +6741,13 @@ static void AnimBlastBurnTargetPlume(struct Sprite *sprite)
 
     sprite->callback = AnimBlastBurnTargetPlume_Step1;
 }
+
 static void AnimBlastBurnTargetPlume_Step1(struct Sprite *sprite)
 {
     if (++sprite->data[0] < sprite->data[4])
     {
-        sprite->x2 += sprite->data[2];
-        sprite->y2 += sprite->data[3];
+        sprite->pos2.x += sprite->data[2];
+        sprite->pos2.y += sprite->data[3];
     }
 
     if (sprite->data[0] == sprite->data[1])
@@ -7527,6 +7547,19 @@ static void SpriteCB_Geyser(struct Sprite* sprite)
 {
     sprite->pos1.x = GetBattlerSpriteCoord(gBattleAnimAttacker, 2) + gBattleAnimArgs[1];
     sprite->pos1.y = GetBattlerSpriteCoord(gBattleAnimAttacker, 3) + gBattleAnimArgs[2];
+
+    sprite->data[0] = gBattleAnimArgs[1] > 0 ? 1 : -1;
+    sprite->callback = AnimMudSportDirtRising;
+}
+
+//Launches an object upwards like they were being shot from a geyser
+//arg 0: null
+//arg 1: initial x pixel offset
+//arg 2: initial y pixel offset
+static void SpriteCB_GeyserTarget(struct Sprite* sprite)
+{
+    sprite->pos1.x = GetBattlerSpriteCoord(gBattleAnimTarget, 2) + gBattleAnimArgs[1];
+    sprite->pos1.y = GetBattlerSpriteCoord(gBattleAnimTarget, 3) + gBattleAnimArgs[2];
 
     sprite->data[0] = gBattleAnimArgs[1] > 0 ? 1 : -1;
     sprite->callback = AnimMudSportDirtRising;

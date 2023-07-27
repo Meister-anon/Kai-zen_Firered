@@ -100,7 +100,7 @@ static const union AnimCmd sAnim_SpinningSparkle[] =
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sAnims_SpinningSparkle[] =
+const union AnimCmd *const sAnims_SpinningSparkle[] =
 {
     sAnim_SpinningSparkle
 };

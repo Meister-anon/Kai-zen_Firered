@@ -6,7 +6,7 @@
 #include "random.h"
 #include "graphics.h"
 
-static void AnimEllipticalGust(struct Sprite *sprite);
+//static void AnimEllipticalGust(struct Sprite *sprite);
 static void AnimEllipticalGust_Step(struct Sprite *sprite);
 static void AnimGustToTarget(struct Sprite *sprite);
 static void AnimGustToTarget_Step(struct Sprite *sprite);
@@ -16,7 +16,7 @@ static void AnimWhirlwindLine(struct Sprite *sprite);
 static void AnimWhirlwindLine_Step(struct Sprite *sprite);
 static void AnimUnusedBubbleThrow(struct Sprite *sprite);
 static void AnimBounceBallShrink(struct Sprite *sprite);
-static void AnimBounceBallLand(struct Sprite *sprite);
+//static void AnimBounceBallLand(struct Sprite *sprite);
 static void AnimDiveBall(struct Sprite *sprite);
 static void AnimDiveBall_Step1(struct Sprite *sprite);
 static void AnimDiveBall_Step2(struct Sprite *sprite);
@@ -263,7 +263,7 @@ static const union AffineAnimCmd sAffineAnim_BounceBallLand[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sAffineAnims_BounceBallLand[] =
+const union AffineAnimCmd *const gAffineAnims_BounceBallLand[] =
 {
     sAffineAnim_BounceBallLand,
 };
@@ -275,7 +275,7 @@ const struct SpriteTemplate gBounceBallLandSpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjNormal_64x64,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sAffineAnims_BounceBallLand,
+    .affineAnims = gAffineAnims_BounceBallLand,
     .callback = AnimBounceBallLand,
 };
 
@@ -363,7 +363,7 @@ const struct SpriteTemplate gSkyAttackBirdSpriteTemplate =
     .callback = AnimSkyAttackBird,
 };
 
-static void AnimEllipticalGust(struct Sprite *sprite)
+void AnimEllipticalGust(struct Sprite *sprite)
 {
     InitSpritePosToAnimTarget(sprite, FALSE);
     sprite->pos1.y += 20;
@@ -1062,7 +1062,7 @@ static void AnimBounceBallShrink(struct Sprite *sprite)
     }
 }
 
-static void AnimBounceBallLand(struct Sprite *sprite)
+void AnimBounceBallLand(struct Sprite *sprite)
 {
     switch (sprite->data[0])
     {

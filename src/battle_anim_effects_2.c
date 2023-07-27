@@ -2342,7 +2342,7 @@ void AnimTask_ThrashMoveMonVertical(u8 taskId)
 
 static void ThrashMoveMon(u8 taskId)
 {
-    struct Task* task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId]; //thought this was an vs bug but is actually set this way in pret firered too, its only dif in emerald??
     
     if (++task->data[7] > 2)
     {

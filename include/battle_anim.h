@@ -391,6 +391,7 @@ enum
 #define STAT_ANIM_MULTIPLE_MINUS1 57
 #define STAT_ANIM_MULTIPLE_MINUS2 58
 void LaunchStatusAnimation(u8 battlerId, u8 statusAnimId);
+extern const union AnimCmd *const sAnims_SpinningSparkle[];
 
 // battle_anim_mons.c
 extern const struct MonCoords gCastformFrontSpriteCoords[];
@@ -586,6 +587,7 @@ void AnimTask_MoveSeismicTossBg(u8 taskId);
 void AnimTask_SeismicTossBgAccelerateDownAtEnd(u8 taskId);
 extern const union AffineAnimCmd *const gAffineAnims_Whirlpool[];
 extern const union AffineAnimCmd *const gAffineAnims_BasicRock[];
+extern const union AffineAnimCmd *const gAnims_FlyingRock[];
 void AnimParticleInVortex(struct Sprite *sprite);
 void AnimFallingRock(struct Sprite *sprite);
 void AnimRaiseSprite(struct Sprite *sprite);
@@ -630,9 +632,13 @@ void AnimFlyBallUp(struct Sprite *sprite);
 void AnimFlyBallUp_Step(struct Sprite *sprite);
 void AnimFlyBallAttack(struct Sprite *sprite);
 void AnimFlyBallAttack_Step(struct Sprite *sprite);
+void AnimBounceBallLand(struct Sprite *sprite);
+void AnimEllipticalGust(struct Sprite *);
 extern const union AnimCmd *const gAffineAnims_AirWaveCrescent[]; //looks wrong but is right
 extern const union AffineAnimCmd *const gAffineAnims_FlyBallUp[];
 extern const union AffineAnimCmd *const gAffineAnims_FlyBallAttack[];
+extern const union AffineAnimCmd *const gAffineAnims_BounceBallLand[];
+
 
 // poison.c
 extern const union AffineAnimCmd *const gAffineAnims_Droplet[];
@@ -701,8 +707,14 @@ void AnimTask_BlendBackground(u8 taskId);
 void AnimTask_MoveHeatWaveTargets(u8 taskId);
 void AnimFireSpread(struct Sprite *sprite);
 void AnimFireSpiralOutward(struct Sprite *sprite);
+void AnimWillOWispOrb(struct Sprite *);
+void AnimEruptionFallingRock(struct Sprite *);
+void AnimFireCross(struct Sprite *);
+void AnimFirePlume(struct Sprite *sprite);
 extern const union AnimCmd *const gAnims_BasicFire[];
 extern const union AnimCmd *const gAnims_FireBlastCross[];
+extern const union AnimCmd *const gAnims_FirePlume[];
+extern const union AnimCmd *const gAnims_WillOWispOrb[];
 
 // water.c
 extern const union AnimCmd *const gAnims_WaterMudOrb[];
