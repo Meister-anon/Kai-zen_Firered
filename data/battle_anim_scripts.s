@@ -7,6 +7,7 @@
 #include "constants/pokemon.h"
 	.include "asm/macros.inc"
 	.include "asm/macros/battle_anim_script.inc"
+	.include "constants/constants.inc"
 
 #define FALSE 0
 #define TRUE 1
