@@ -176,7 +176,7 @@ u8 GetBattlerSpriteCoord(u8 battlerId, u8 coordType)
     return retVal;
 }
 
-#define  SPRITE_COORDINATE_AND_ELEVATION_LOGIC
+#define  SPRITE_COORDINATE_AND_ELEVATION_LOGIC //checck above as well
 u8 GetBattlerYDelta(u8 battlerId, u16 species)
 {
     u16 letter;

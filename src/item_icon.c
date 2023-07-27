@@ -2,6 +2,7 @@
 #include "decompress.h"
 #include "graphics.h"
 #include "item_icon.h"
+#include "item_menu_icons.h"
 #include "malloc.h"
 #include "sprite.h"
 #include "constants/items.h"
@@ -71,7 +72,7 @@ bool8 AllocItemIconTemporaryBuffers(void)
 
 void FreeItemIconTemporaryBuffers(void)
 {
-    Free(gItemIconDecompressionBuffer);
+    Free(gItemIconDecompressionBuffer);//apparently is how it shoould be same in emerald not throwing errors
     Free(gItemIcon4x4Buffer);
 }
 
@@ -167,5 +168,5 @@ const void *GetItemIconPicOrPalette(u16 itemId, u8 which)
     else if (itemId >= ITEMS_COUNT)
         itemId = 0;
 
-    return //gItemIconTable[itemId][which];
+    return; //gItemIconTable[itemId][which];
 }

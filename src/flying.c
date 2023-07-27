@@ -4,6 +4,7 @@
 #include "trig.h"
 #include "constants/battle_anim.h"
 #include "random.h"
+#include "graphics.h"
 
 static void AnimEllipticalGust(struct Sprite *sprite);
 static void AnimEllipticalGust_Step(struct Sprite *sprite);

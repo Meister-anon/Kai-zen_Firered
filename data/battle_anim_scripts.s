@@ -21570,6 +21570,14 @@ Move_INSTRUCT::
 	blendoff
 	end
 
+General_BeakBlastSetUp:
+	loadspritegfx ANIM_TAG_SMALL_EMBER @Fire
+	playsewithpan SE_M_DRAGON_RAGE, SOUND_PAN_ATTACKER
+	delay 0x3
+	createvisualtask AnimTask_BlendColorCycle, 0x2, F_PAL_ATTACKER, 0x2, 0x2, 0x0, 0xb, 0x1f
+	createsprite gFireSpiralOutwardSpriteTemplate, ANIM_ATTACKER, 3, 0x0, 0x0, 0x38, 0x0
+	waitforvisualfinish
+	end
 Move_BEAK_BLAST::
 	loadspritegfx ANIM_TAG_SMALL_EMBER @Fire
 	playsewithpan SE_M_DRAGON_RAGE, SOUND_PAN_ATTACKER
@@ -21727,8 +21735,7 @@ Move_AURORA_VEIL::
 	blendoff
 	end
 
-Move_SHELL_TRAP::
-ShellTrapChargeUp:
+General_ShellTrapSetUp:
 	loadspritegfx ANIM_TAG_SMALL_EMBER
 	loadspritegfx ANIM_TAG_IMPACT
 	monbg ANIM_TARGET
@@ -21737,14 +21744,15 @@ ShellTrapChargeUp:
 	delay 0x4
 	playsewithpan SE_M_FIRE_PUNCH, SOUND_PAN_TARGET
 	delay 0x15
-	launchtemplate gBasicHitSplatSpriteTemplate 0x2 0x4 0x0 0x0 0x1 0x2
-	launchtemplate gBasicHitSplatSpriteTemplate 0x2 0x4 0x0 0xA 0x1 0x2
-	launchtemplate gBasicHitSplatSpriteTemplate 0x2 0x4 0xA 0x0 0x1 0x2
-	launchtemplate gBasicHitSplatSpriteTemplate 0x2 0x4 0xA 0xA 0x1 0x2
+	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0x0, 0x0, 0x1, 0x2
+	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0x0, 0xA, 0x1, 0x2
+	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0xA, 0x0, 0x1, 0x2
+	createsprite gBasicHitSplatSpriteTemplate, ANIM_ATTACKER, 2, 0xA, 0xA, 0x1, 0x2
 	waitforvisualfinish
 	clearmonbg ANIM_TARGET
 	blendoff
 	end
+Move_SHELL_TRAP::
 ShellTrapUnleash:
 	loadspritegfx ANIM_TAG_IMPACT @pound
 	loadspritegfx ANIM_TAG_SMALL_RED_EYE @red
@@ -25140,6 +25148,41 @@ General_RestoreBg:
 	restorebg
 	waitbgfadein
 	end
+
+General_ZMoveActivate:
+	loadspritegfx ANIM_TAG_FOCUS_ENERGY @focus energy
+	loadspritegfx ANIM_TAG_Z_MOVE_SYMBOL @Z-Move Symbol
+	loadspritegfx ANIM_TAG_WHIP_HIT @green color
+	loadspritegfx ANIM_TAG_SWEAT_BEAD @blue color
+	loadspritegfx ANIM_TAG_PAW_PRINT @yellow color
+	monbg ANIM_ATTACKER
+	setalpha 12, 8
+	fadetobg BG_ZMOVE_ACTIVATE
+	waitbgfadein
+	createvisualtask AnimTask_StartSlidingBg, 0x5, 0x0, 0x0, 0x0, 0xFFFF
+	playsewithpan SE_M_SOLAR_BEAM, SOUND_PAN_ATTACKER
+	createvisualtask AnimTask_BlendColorCycle, 0x2, F_PAL_ATTACKER, 0x0, 0x6, 0x0, 0xb, 0x76BC
+	call ZMoveBuffEffect
+	call ZMoveBuffEffect
+	call ZMoveBuffEffect
+	createsprite gZMoveSymbolSpriteTemplate, ANIM_ATTACKER, 41, 0x0, 0x0, 0x0, 0x0
+	call ZMoveBuffEffect
+	call ZMoveBuffEffect
+	waitforvisualfinish
+	call UnsetPsychicBg
+	blendoff
+	clearmonbg ANIM_ATTACKER
+	end
+ZMoveBuffEffect:
+	createsprite gBlueZMoveEnergySpriteTemplate, ANIM_ATTACKER, 2, 0x0, 0xffe8, 0x1a, 0x2
+	delay 0x3
+	createsprite gEndureEnergySpriteTemplate, ANIM_ATTACKER, 2, 0x0, 0xe, 0x1c, 0x1 @Red Buff
+	delay 0x3
+	createsprite gGreenZMoveEnergySpriteTemplate, ANIM_ATTACKER, 2, 0x0, 0xfffb, 0xa, 0x2
+	delay 0x3
+	createsprite gYellowZMoveEnergySpriteTemplate, ANIM_ATTACKER, 2, 0x0, 0x1c, 0x1a, 0x3
+	delay 0x3
+	return
 
 General_TotemFlare::
 	loadspritegfx ANIM_TAG_FOCUS_ENERGY

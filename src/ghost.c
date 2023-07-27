@@ -44,6 +44,7 @@ static void sub_80B6BE4(u8 taskId);
 static void sub_80B6F30(u8 taskId);
 static void sub_80B6FC4(u8 taskId);
 static void AnimMonMoveCircular_Step(struct Sprite *sprite);
+static void AnimPoltergeistItem(struct Sprite *sprite);
 
 static const union AffineAnimCmd sAffineAnim_ConfuseRayBallBounce[] =
 {
@@ -1564,8 +1565,8 @@ void AnimTask_PoltergeistItem(u8 taskId)
     u8 y = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y) + (GetBattlerSpriteCoordAttr(gBattleAnimTarget, BATTLER_COORD_ATTR_HEIGHT) / 2);
 
     task->data[0] = AddItemIconSprite(ANIM_TAG_ITEM_BAG, ANIM_TAG_ITEM_BAG, gLastUsedItem);//don't have table in my game yet, instead tweaked function to not use it.
-    gSprites[task->data[0]].x = x + 4; 
-    gSprites[task->data[0]].y = y + 4;
+    gSprites[task->data[0]].pos1.x = x + 4;
+    gSprites[task->data[0]].pos1.y = y + 4;
     gSprites[task->data[0]].data[0] = x + 4;
     gSprites[task->data[0]].data[1] = y + 4;
     gSprites[task->data[0]].callback = AnimPoltergeistItem;
@@ -1583,8 +1584,8 @@ static void AnimPoltergeistItem(struct Sprite *sprite)
 {
     sprite->data[2] += 4;
 
-    sprite->x = sprite->data[0] + Sin(sprite->data[2], 24);
-    sprite->y = sprite->data[1] + (Cos(sprite->data[2], 24) - 24);
+    sprite->pos1.x = sprite->data[0] + Sin(sprite->data[2], 24);
+    sprite->pos1.y = sprite->data[1] + (Cos(sprite->data[2], 24) - 24);
 
     if (sprite->data[2] == 256)
         DestroyAnimSprite(sprite);

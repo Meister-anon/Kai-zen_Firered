@@ -455,6 +455,10 @@ goto TRAINER_DATA_STRUCTS
 
 goto B_ANIM_CONSTANTS //for porting animation, need set constant for recognition in battlescript
 
+//unrelated but any file that has ewram_data must be included in sym_ewram.txt
+
+goto SRC_DATA_DEFINES //this where they must be defined for including elsewhere
+
 goto SRC_DATA_FILES //IMPORTANT all .h files in src/data folder MUST be included in data.c here or can't be found
 /* realized logic for damage on air targets was incomplete 
 * correcting setup - DONE
