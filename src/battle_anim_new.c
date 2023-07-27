@@ -5024,7 +5024,7 @@ void AnimTask_TechnoBlast(u8 taskId)
 
 // Z MOVES
 //Creates a twinkle at the location the target was knocked too in Twinkle Tackle
-static void SpriteCB_TwinkleOnBattler(struct Sprite* sprite)
+static void SpriteCB_TwinkleOnBattler(struct Sprite *sprite)
 {
     struct Sprite* monSprite;
 
@@ -5033,10 +5033,10 @@ static void SpriteCB_TwinkleOnBattler(struct Sprite* sprite)
     else
         monSprite = &gSprites[GetAnimBattlerSpriteId(ANIM_ATTACKER)];
 
-    sprite->x = monSprite->x;
-    sprite->y = monSprite->y;
-    sprite->x2 = monSprite->x2;
-    sprite->y2 = monSprite->y2;
+    sprite->pos1.x = monSprite->pos1.x;
+    sprite->pos1.y = monSprite->pos1.y;
+    sprite->pos2.x = monSprite->pos2.x;
+    sprite->pos2.y = monSprite->pos2.y;
     sprite->callback = RunStoredCallbackWhenAnimEnds;
     StoreSpriteCallbackInData6(sprite, DestroyAnimSprite);
 }

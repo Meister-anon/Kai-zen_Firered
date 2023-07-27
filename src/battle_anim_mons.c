@@ -852,8 +852,8 @@ void GetBattleAnimBg1Data(struct BattleAnimBgData *animBgData)
 {
     if (IsContest())
     {
-        animBgData->bgTiles = gBattleAnimBgTileBuffer;
-        animBgData->bgTilemap = (u16*)gBattleAnimBgTilemapBuffer;
+        animBgData->bgTiles = gBattleAnimMons_BgTilesBuffer;
+        animBgData->bgTilemap = (u16*)gBattleAnimMons_BgTilemapBuffer;
         animBgData->paletteId = BG_ANIM_PAL_CONTEST;
         animBgData->bgId = 1;
         animBgData->tilesOffset = 0;
@@ -874,8 +874,8 @@ void GetBattleAnimBgData(struct BattleAnimBgData *animBgData, u32 bgId)
 {
     if (IsContest())
     {
-        animBgData->bgTiles = gBattleAnimBgTileBuffer;
-        animBgData->bgTilemap = (u16*)gBattleAnimBgTilemapBuffer;
+        animBgData->bgTiles = gBattleAnimMons_BgTilesBuffer;
+        animBgData->bgTilemap = (u16*)gBattleAnimMons_BgTilemapBuffer;
         animBgData->paletteId = BG_ANIM_PAL_CONTEST;
         animBgData->bgId = 1;
         animBgData->tilesOffset = 0;
