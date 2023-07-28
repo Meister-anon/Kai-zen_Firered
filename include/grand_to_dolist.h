@@ -908,6 +908,11 @@ beleive all effects to interupt are in battle_util.c & pokemon.c, if I block fly
 * ok gave new stall to a few mon unsure how useful it'll be, I'll leave it up to future users
 * to decide who should have it
 * 
+* /also setup infestation as bug status can do with augment may need to set a fixed change in case move has odds I can't set to certain
+        //15% prob good if I need to. -
+
+        made attempt at setting argumentchance separate from normal effectchance need test
+* 
 * 
 * idea from Jaan pokemoonchallenges repel should be easilly accessed through L button/ button press in overworld 
 * instead of requirin to go through menus.

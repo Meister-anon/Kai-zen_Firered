@@ -5326,7 +5326,18 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
 
     //hey old me, that ish is all wrong, without secondary chance, effects won't apply, and that's dealt with in battle_moves file
     //
-    u32 percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
+    u32 percentChance,argumentChance;
+
+    if (gBattleMoves[gCurrentMove].argumentEffectChance == 0)
+        argumentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
+    else
+        argumentChance = gBattleMoves[gCurrentMove].argumentEffectChance;
+    
+    if (gBattleScripting.moveEffect == gBattleMoves[gCurrentMove].effect) //on second look think this won't work as variosargumetotmoveeffect may be 
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;   //setting the argumentt as the move effct?
+    else if (gBattleScripting.moveEffect == gBattleMoves[gCurrentMove].argument)
+        percentChance = argumentChance //confused it doesn't use them interchangeably so may work? be different?
+
     //hail based freeze boost, 
     if ((gBattleWeather & WEATHER_HAIL_ANY)
         && gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
@@ -5348,6 +5359,8 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     
     if (gBattleMoves[gCurrentMove].effect == ITS_A_TRAP)   //if this works make a define for trap effects & separate effect & move effect & battlscript for each
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //that way may not need to make a separate status,// seems to work no apparent bugs
+    //will need to remove infestation from this as I want to use that as new bug specific status also
+    //is best way to do other than making an entirely new status of same effect\
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN); 
@@ -5362,6 +5375,9 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_SPEED_UP_HIT)       //go over 100%  effects, see which I can put here to just make certain, may be able to do all.
+        SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
+
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_BUG_BITE)
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
     
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_POISONED_LEGACY
@@ -10456,9 +10472,9 @@ static void atk76_various(void) //will need to add all these emerald various com
             && gBattleMons[gBattlerAttacker].statStages[STAT_ATK] != 12)
         {
            // if (B_FELL_STINGER_STAT_RAISE >= GEN_7)
-                SET_STATCHANGER(STAT_ATK, 3, FALSE);
+              //  SET_STATCHANGER(STAT_ATK, 3, FALSE);
             //else
-              //  SET_STATCHANGER(STAT_ATK, 2, FALSE);
+                SET_STATCHANGER(STAT_ATK, 2, FALSE);
 
             PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_ATK);
             BattleScriptPush(gBattlescriptCurrInstr + 3);
@@ -10795,7 +10811,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattleScripting.moveEffect = MOVE_EFFECT_TOXIC;
             break;
         default:
-            gBattleScripting.moveEffect = 0;
+            gBattleScripting.moveEffect = 0; //if not any of those sets moveeffect to 0
             break;
         }
         if (gBattleScripting.moveEffect != 0)
@@ -11091,7 +11107,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         return;
     case VARIOUS_ARGUMENT_TO_MOVE_EFFECT:   //argumenttomoveeffect works with seconaryeffectchance can prob also do like move effect set certain or effect user
-        gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument;
+        gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument; //potentially need make argument field for bs. as well vsonic
         break;  //I think what this does is, pass the argument to move effect? and then it gets read by seteffectwithchance function?
     case VARIOUS_SPECTRAL_THIEF:
         // Raise stats

@@ -243,6 +243,12 @@ struct BattleMove
     u32 flags; // is u32 in emerald, might not need to do that, will ask //they use a lot of move flags will update
     u8 split;
     u16 argument;// for transferring move effects
+    u8 argumentEffectChance; // setup status commands and seteffectwithchance function to read this as a value explicitly for argument
+    //would possibly need to redo setup for effects that become certain without reading effectchance nvm it works 
+    //Argument works by passive value of argument to battlescript.moveeffect
+    //so just do a check in seteffectwithchance that checks if  battlescripting.moveeffect equals gbattlemons[move].effect or the argument
+    //if it equals the argument use argument chance, that means it has already done the effect
+    //and has passed the arugment over so it can use the argument chance
 };//without u32 flags, type overflowed with added moves
 //argument is for extra effects other than secondary effect
 
