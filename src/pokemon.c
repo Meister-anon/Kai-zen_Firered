@@ -3565,14 +3565,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         attack = (150 * attack) / 100;
     if (attacker->ability == ABILITY_SOLAR_POWER)
         spAttack = (150 * spAttack) / 100;
-    if (attacker->ability == ABILITY_URSURPER && attacker->status1 & STATUS1_ANY)
+    if (attacker->ability == ABILITY_URSURPER && attacker->status1 & STATUS1_ANY && IsBlackFogNotOnField())
     {
         attack = (125 * attack) / 100;
         spAttack = (125 * spAttack) / 100;        
     }
-    if (attacker->ability == ABILITY_DEFIANT && attacker->status1 & STATUS1_ANY)
+    if (attacker->ability == ABILITY_DEFIANT && attacker->status1 & STATUS1_ANY && IsBlackFogNotOnField())
         attack = (130 * attack) / 100;
-    if (attacker->ability == ABILITY_COMPETITIVE && attacker->status1 & STATUS1_ANY)
+    if (attacker->ability == ABILITY_COMPETITIVE && attacker->status1 & STATUS1_ANY && IsBlackFogNotOnField())
         spAttack = (130 * spAttack) / 100;  //CUT Back to 130, because it already has stat raise component
     if (attacker->ability == ABILITY_PLUS && ABILITY_ON_FIELD2(ABILITY_MINUS))
         spAttack = (150 * spAttack) / 100;
@@ -3580,9 +3580,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         spAttack = (150 * spAttack) / 100;
     if (attacker->ability == ABILTY_UNKNOWN_POWER && (BATTLE_PARTNER(attacker->species) == SPECIES_UNOWN))
         gBattleMoveDamage *= 2;
-    if (attacker->ability == ABILITY_GUTS && attacker->status1 & STATUS1_ANY)
+    if (attacker->ability == ABILITY_GUTS && attacker->status1 & STATUS1_ANY && IsBlackFogNotOnField())
         attack = (150 * attack) / 100;
-    if (defender->ability == ABILITY_MARVEL_SCALE && defender->status1 & STATUS1_ANY)
+    if (defender->ability == ABILITY_MARVEL_SCALE && defender->status1 & STATUS1_ANY && IsBlackFogNotOnField())
         defense = (150 * defense) / 100;
     if (type == TYPE_ELECTRIC && (sideStatus & SIDE_STATUS_MUDSPORT)) //sidestatus means target side status, checked from bs_commands.c damagecalc function
         gBattleMovePower /= 2;
@@ -3634,7 +3634,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_SMELLINGSALT)
     {
-        if (gBattleMons[gBattlerTarget].status1 & STATUS1_PARALYSIS)
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_PARALYSIS && IsBlackFogNotOnField())
             gBattleMovePower *= 2;
     }
 
@@ -3645,17 +3645,17 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     }
 
     if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND) && (sideStatus & SIDE_STATUS_MUDSPORT))//give to more ground types?
-        spDefense = (130 * spDefense) / 100;
+        spDefense = (130 * spDefense) / 100;    //gets to work as its on the ground not in the air
 
 
     // sandstorm sp.def boost for rock types  // decided to add this for ground types as well,
     if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK) || (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)))
-        && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY)// && !usesDefStat)
+        && IsBattlerWeatherAffected(gBattlerTarget, WEATHER_SANDSTORM_ANY))// && !usesDefStat)        
         spDefense = (150 * spDefense) / 100;
 
     // hail sp.def & def boost for ice types  // still deciding if I want a 50% defense boost or a 25% boost to def & sp def
     if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ICE)
-        && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_HAIL_ANY)// && !usesDefStat)
+        && IsBattlerWeatherAffected(gBattlerTarget, WEATHER_HAIL_ANY))// && !usesDefStat)        
     {
         spDefense = (125 * spDefense) / 100;
         defense = (140 * defense) / 100;
@@ -3681,12 +3681,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMoveDamage *= 2; //is right syntax, and type calc always goes before dmg calc
         break;
     case ABILITY_FLARE_BOOST:
-        if (gBattleMons[gBattlerAttacker].status1 & STATUS1_BURN && !usesDefStat) //IS_MOVE_SPECIAL(move))
+        if (gBattleMons[gBattlerAttacker].status1 & STATUS1_BURN && !usesDefStat //IS_MOVE_SPECIAL(move))
+            && IsBlackFogNotOnField())
             gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_TOXIC_BOOST:
-        if (gBattleMons[gBattlerAttacker].status1 & STATUS1_PSN_ANY && usesDefStat) //IS_MOVE_PHYSICAL(move))
+        if (gBattleMons[gBattlerAttacker].status1 & STATUS1_PSN_ANY && usesDefStat //IS_MOVE_PHYSICAL(move))
+            && IsBlackFogNotOnField())
             gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
         break;
@@ -3712,7 +3714,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_SAND_FORCE:
         if ((type == TYPE_STEEL || type == TYPE_ROCK || type == TYPE_GROUND)
-            && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SANDSTORM_ANY)
+            && IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SANDSTORM_ANY))
             gBattleMovePower = (gBattleMovePower * 130 / 100);
         //MulModifier(&modifier, UQ_4_12(1.3));
         break;
@@ -3826,6 +3828,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (type == TYPE_ELECTRIC)
             gBattleMovePower = (gBattleMovePower * 150 / 100);
         //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_STALL:
+        gBattleMovePower *= 2;
         break;
     case ABILITY_DRAGONS_MAW:
         if (type == TYPE_DRAGON)
@@ -4086,7 +4091,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     if (((sideStatus & SIDE_STATUS_AURORA_VEIL) && !IS_CRIT) //not a crit
         && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR
-        && !gProtectStructs[gBattlerAttacker].confusionSelfDmg)
+        && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+        && IsBlackFogNotOnField())
     {
         gBattleMoveDamage /= 2;
     }
@@ -4108,13 +4114,18 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage *= (2 * attacker->level / 5 + 2); //offense side of damage formula for level scaled damage
 
         //trap effects
-        if ((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION))
+        if ((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION)
+            && IsBlackFogNotOnField())
         {
             //gBattleMons[battlerIdDef].statStages[STAT_DEF] -= 2;    //should lower defense by 2 i.e 50% 
-            if (gBattleMons[gActiveBattler].statStages[STAT_DEF] < 0)
+            /*if (gBattleMons[gActiveBattler].statStages[STAT_DEF] < 0)
                 gBattleMons[gActiveBattler].statStages[STAT_DEF] = 0;
-            APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)
+            APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)*/
+            damage *= 2;
         }//need fix setup for this, think  stat drop isn't right as well, plan to only drop once during status duration look at how burn atk drop works //vsonic
+        //rather than a stat change burn just augments the attackrs damage to an equivalent of a stat drop,  fixed, may be too strong may set to 1.5
+        //also setup infestation as bug status can do with augment may need to set a fixed change in case move has odds I can't set to certain
+        //15% prob good if I need to. vsonic
 
 
         // critical hits ignore def stat buffs
@@ -4155,12 +4166,13 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
    
 
         
-        if ((attacker->status1 & STATUS1_BURN) && attacker->ability != ABILITY_GUTS) //nvm don't need is physical because its already in the bracket for that ^
+        if ((attacker->status1 & STATUS1_BURN) && IsBlackFogNotOnField() && attacker->ability != ABILITY_GUTS) //nvm don't need is physical because its already in the bracket for that ^
             damage /= 2;
 
         if ((sideStatus & SIDE_STATUS_REFLECT) && !IS_CRIT
             && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR
-            && !gProtectStructs[gBattlerAttacker].confusionSelfDmg) //not a crit
+            && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+            && IsBlackFogNotOnField())
         {
             if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
                // damage = 2 * (damage / 3); //believe what's happening here is it lowers the effectiveness of reflect for doubles 
@@ -4168,7 +4180,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                 damage /= 2;
         }
 
-        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == 8 && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2) // this is spread move cut
+        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == MOVE_TARGET_BOTH && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2) // this is spread move cut
             damage /= 1; //target 0x8 is target both    
         //this removes the split damage from double target moves
 
@@ -4183,7 +4195,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     //removed for normalize buff to work
 
     // are effects of weather negated with cloud nine or air lock
-    if (WEATHER_HAS_EFFECT2)
+    if (WEATHER_HAS_EFFECT2 && IsBlackFogNotOnField())
     {
         if (gBattleWeather & WEATHER_RAIN_ANY)
         {
@@ -4304,7 +4316,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             damageHelper = spDefense;
 
         if ((sideStatus & SIDE_STATUS_LIGHTSCREEN) && !IS_CRIT
-            && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR)
+            && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR
+            && IsBlackFogNotOnField())
         {
             if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
                 /*damage = 2 * (damage / 3);    //looks strange, but screens blocked less damage instead of more for doubles, 
@@ -4312,7 +4325,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                 damage /= 2;
         }
 
-        if (attacker->status1 & STATUS1_SPIRIT_LOCK) //function that gives spirit_lock special atk cut
+        if ((attacker->status1 & STATUS1_SPIRIT_LOCK) && IsBlackFogNotOnField()) //function that gives spirit_lock special atk cut
             damage /= 2;
 
         if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == MOVE_TARGET_BOTH && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)

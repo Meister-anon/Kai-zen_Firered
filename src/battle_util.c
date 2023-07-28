@@ -674,6 +674,9 @@ bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags) //need to add ut
     if (!WEATHER_HAS_EFFECT)
         return FALSE;
 
+    if (!IsBlackFogNotOnField())
+        return FALSE;
+
     if (gBattleWeather & weatherFlags)
     {
         // given weather is active -> check if its sun, rain against utility umbrella ( since only 1 weather can be active at once)
@@ -1364,6 +1367,7 @@ enum
     ENDTURN_MAGIC_COAT,
     ENDTURN_AURORA_VEIL,
     ENDTURN_MIST,
+    ENDTURN_HAZE,
     ENDTURN_LUCKY_CHANT,
     ENDTURN_SAFEGUARD,
     ENDTURN_HEALBLOCK,
@@ -1522,6 +1526,15 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT
                 ++gBattleStruct->turnCountersTracker;
                 gBattleStruct->turnSideTracker = 0;
             }
+            break;
+        case ENDTURN_HAZE:
+            if (gFieldStatuses & STATUS_FIELD_BLACK_FOG && --gFieldTimers.HazeTimer == 0)
+            {
+                gFieldStatuses &= ~STATUS_FIELD_BLACK_FOG;
+                BattleScriptExecute(BattleScript_TrickRoomEnds);//MAKE new script for later vsonic
+                ++effect;
+            }
+            gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_SAFEGUARD:
             while (gBattleStruct->turnSideTracker < 2)
@@ -2006,7 +2019,8 @@ u8 DoBattlerEndTurnEffects(void)
                 if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED) //IT FUCKING WORKS!!!   prob need lower limit from 15 to llike 7
                     && !BATTLER_MAX_HP(gActiveBattler)
                     && !(gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK)
-                    && gBattleMons[gActiveBattler].hp != 0) //function changes & new rooted defines courtesy of phoenix_bound
+                    && gBattleMons[gActiveBattler].hp != 0 //function changes & new rooted defines courtesy of phoenix_bound
+                    && IsBlackFogNotOnField())
                 {
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
                     if (gBattleMoveDamage == 0)//this caps at 16 turns because the orginal & bit calculation == 0, then it adds 0x100 if it doesn't equal 0xF00 which is 1500
@@ -2026,7 +2040,8 @@ u8 DoBattlerEndTurnEffects(void)
                 if ((gStatuses3[gActiveBattler] & STATUS3_AQUA_RING) //hopefully allows to just reuse counter here for aqua ring to duplicate effect
                     && !BATTLER_MAX_HP(gActiveBattler)
                     && !(gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_HEAL_BLOCK)
-                    && gBattleMons[gActiveBattler].hp != 0) //function changes & new rooted defines courtesy of phoenix_bound
+                    && gBattleMons[gActiveBattler].hp != 0 //function changes & new rooted defines courtesy of phoenix_bound
+                    && IsBlackFogNotOnField())
                 {
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
                     if (gBattleMoveDamage == 0)
@@ -2060,8 +2075,11 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_LEECH_SEED:  // leech seed
                 if ((gStatuses3[gActiveBattler] & STATUS3_LEECHSEED) //idea increased healing if in rain or hit with water gBattleMoveDamage *= 2 
                     && gBattleMons[gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER].hp != 0
-                    && gBattleMons[gActiveBattler].hp != 0)
+                    && gBattleMons[gActiveBattler].hp != 0
+                    && IsBlackFogNotOnField())
                 {
+                    MAGIC_GUARD_CHECK;
+
                     gBattlerTarget = gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER; // Notice gBattlerTarget is actually the HP receiver.
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;//heal leech target max hp
                     if (gBattleMoveDamage == 0)
@@ -2078,7 +2096,8 @@ u8 DoBattlerEndTurnEffects(void)
                 ++gBattleStruct->turnEffectsTracker;//ghost drain works need to find proper graphic though/plus do same for if draining poison top
                 break;//pretty sure it uses the water bubble graphic
             case ENDTURN_POISON:  // poison
-                if ((gBattleMons[gActiveBattler].status1 & STATUS1_POISON) && gBattleMons[gActiveBattler].hp != 0)
+                if ((gBattleMons[gActiveBattler].status1 & STATUS1_POISON) && gBattleMons[gActiveBattler].hp != 0
+                    && IsBlackFogNotOnField())
                 {
                     MAGIC_GUARD_CHECK;
 
@@ -2107,7 +2126,8 @@ u8 DoBattlerEndTurnEffects(void)
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_BAD_POISON:  // toxic poison
-                if ((gBattleMons[gActiveBattler].status1 & STATUS1_TOXIC_POISON) && gBattleMons[gActiveBattler].hp != 0)
+                if ((gBattleMons[gActiveBattler].status1 & STATUS1_TOXIC_POISON) && gBattleMons[gActiveBattler].hp != 0
+                    && IsBlackFogNotOnField()) //works as I want, black fog here should also prevent toxic increment so it effectively pauses the dmg boost as well
                 {
                     MAGIC_GUARD_CHECK;
 
@@ -2140,8 +2160,11 @@ u8 DoBattlerEndTurnEffects(void)
                 break;
             case ENDTURN_BURN:  // burn
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_BURN) && gBattleMons[gActiveBattler].hp != 0
-                    && GetBattlerAbility(gActiveBattler) != ABILITY_FLARE_BOOST)
+                    && GetBattlerAbility(gActiveBattler) != ABILITY_FLARE_BOOST
+                    && IsBlackFogNotOnField())
                 {
+                    MAGIC_GUARD_CHECK;
+
                     if (GetBattlerAbility(gActiveBattler) == ABILITY_HEATPROOF) {
                         gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
                     }
@@ -2157,14 +2180,18 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_FREEZE:  //FROZEN
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_FREEZE) && gBattleMons[gActiveBattler].hp != 0)
                 {
-                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16; //changed to same as others, combined with hail will do  .186 kills in about 5 turns by itself
-                    if (gBattleMoveDamage == 0) //balanced by being a temporary status and needing the hail setup to have a good chance of being applied.
-                        gBattleMoveDamage = 1;
+                    if (IsBlackFogNotOnField() && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD)//actually need add magic guard check to all of theese...
+                    {
+                        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16; //changed to same as others, combined with hail will do  .186 kills in about 5 turns by itself
+                        if (gBattleMoveDamage == 0) //balanced by being a temporary status and needing the hail setup to have a good chance of being applied.
+                            gBattleMoveDamage = 1;
+                        //separate to ensure doesn't block decrement
 
-                    if (gDisableStructs[gActiveBattler].FrozenTurns) //timer starts at 3, will decrement giving 2 full turns of freeze
-                        BattleScriptExecute(BattleScript_FreezeTurnDmg); //changed back to 1/16, when hail is active it'll be 1/8 so equal to all others. 
-                    else
-                        BattleScriptExecute(BattleScript_FrostbiteTurnDmg);
+                        if (gDisableStructs[gActiveBattler].FrozenTurns) //timer starts at 3, will decrement giving 2 full turns of freeze
+                            BattleScriptExecute(BattleScript_FreezeTurnDmg); //changed back to 1/16, when hail is active it'll be 1/8 so equal to all others. 
+                        else
+                            BattleScriptExecute(BattleScript_FrostbiteTurnDmg);
+                    }
 
                     if (--gDisableStructs[gActiveBattler].FrozenTurns == 0) //actual decrement with conditional  
                     {
@@ -2178,6 +2205,7 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_NIGHTMARES:  // spooky nightmares
                 if ((gBattleMons[gActiveBattler].status2 & STATUS2_NIGHTMARE) && gBattleMons[gActiveBattler].hp != 0)
                 {
+                    MAGIC_GUARD_CHECK;
                     // R/S does not perform this sleep check, which causes the nightmare effect to
                     // persist even after the affected Pokemon has been awakened by Shed Skin.
                     if (gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP)
@@ -2195,9 +2223,12 @@ u8 DoBattlerEndTurnEffects(void)
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
-            case ENDTURN_CURSE:  // curse
-                if ((gBattleMons[gActiveBattler].status2 & STATUS2_CURSED) && gBattleMons[gActiveBattler].hp != 0)
+            case ENDTURN_CURSE:  // curse //I prob need add magic guard check here and in nightmare
+                if ((gBattleMons[gActiveBattler].status2 & STATUS2_CURSED) && gBattleMons[gActiveBattler].hp != 0
+                    && IsBlackFogNotOnField())
                 {
+                    MAGIC_GUARD_CHECK;
+
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
@@ -2211,7 +2242,8 @@ u8 DoBattlerEndTurnEffects(void)
                     && gBattleMons[gActiveBattler].hp != 0)
                 { //made separate because environment traps should be mutually exclusive as they would counter each other
                     //can't have a whirlpool in the same place you'd have a sand tomb or fire hazard etc.
-                    if (--gDisableStructs[gActiveBattler].environmentTrapTurns != 0)  // damaged by wrap
+                    if (--gDisableStructs[gActiveBattler].environmentTrapTurns != 0  // damaged by wrap
+                        && IsBlackFogNotOnField()) //shouold decrement than prevent dmg if haze on field vsonic test
                     {
                         MAGIC_GUARD_CHECK;
 
@@ -2255,7 +2287,8 @@ u8 DoBattlerEndTurnEffects(void)
                 if (((gBattleMons[gActiveBattler].status2 & STATUS2_WRAPPED) || (gBattleMons[gActiveBattler].status1 & STATUS1_WRAPPED))
                     && gBattleMons[gActiveBattler].hp != 0)
                 {
-                    if (--gDisableStructs[gActiveBattler].wrapTurns != 0)  // damaged by wrap
+                    if (--gDisableStructs[gActiveBattler].wrapTurns != 0
+                        && IsBlackFogNotOnField())  // damaged by wrap
                     {
                         MAGIC_GUARD_CHECK;
 
@@ -2293,7 +2326,8 @@ u8 DoBattlerEndTurnEffects(void)
                 if (((gBattleMons[gActiveBattler].status4 & STATUS4_CLAMP) || (gBattleMons[gActiveBattler].status1 & STATUS1_CLAMP))
                     && gBattleMons[gActiveBattler].hp != 0)
                 {
-                    if (--gDisableStructs[gActiveBattler].clampTurns != 0)  // damaged by wrap
+                    if (--gDisableStructs[gActiveBattler].clampTurns != 0
+                        && IsBlackFogNotOnField())  // damaged by wrap
                     {
                         MAGIC_GUARD_CHECK;
 
@@ -2331,7 +2365,8 @@ u8 DoBattlerEndTurnEffects(void)
                 if (((gBattleMons[gActiveBattler].status4 & STATUS4_INFESTATION) || (gBattleMons[gActiveBattler].status1 & STATUS1_INFESTATION))
                     && gBattleMons[gActiveBattler].hp != 0)
                 {
-                    if (--gDisableStructs[gActiveBattler].infestationTurns != 0)  // damaged by wrap
+                    if (--gDisableStructs[gActiveBattler].infestationTurns != 0
+                        && IsBlackFogNotOnField())  // damaged by wrap
                     {
                         MAGIC_GUARD_CHECK;
 
@@ -2368,7 +2403,8 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_SNAPTRAP:  // may need add fallthrough?     //make environemnt trap end turn & then separate ones for each physical trap
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_SNAP_TRAP) && gBattleMons[gActiveBattler].hp != 0)
                 {
-                    if (--gDisableStructs[gActiveBattler].snaptrapTurns != 0)  // damaged by wrap
+                    if (--gDisableStructs[gActiveBattler].snaptrapTurns != 0
+                        && IsBlackFogNotOnField())  // damaged by wrap
                     {
                         MAGIC_GUARD_CHECK;
 
@@ -2684,6 +2720,7 @@ bool8 HandleWishPerishSongOnTurnEnd(void)
             }
             ++gBattleStruct->wishPerishSongBattlerId;
             if (gWishFutureKnock.futureSightCounter[gActiveBattler] != 0
+                && IsBlackFogNotOnField()   //should prevent decrement
                 && --gWishFutureKnock.futureSightCounter[gActiveBattler] == 0
                 && gBattleMons[gActiveBattler].hp != 0)
             {
@@ -2836,6 +2873,7 @@ enum
     CANCELLER_CLAMPED,
     CANCELLER_TRUANT,
     CANCELLER_RECHARGE,
+    CANCELLER_BLACK_FOG,
     CANCELLER_FLINCH,
     CANCELLER_DISABLED,
     CANCELLER_GRAVITY,
@@ -2897,6 +2935,15 @@ u8 AtkCanceller_UnableToUseMove(void)
                     BattleScriptPushCursor();
                     gBattleCommunication[MULTISTRING_CHOOSER] = 1;
                     gBattlescriptCurrInstr = BattleScript_MoveUsedWokeUp;
+                    effect = 2;
+                }
+                else if (!IsBlackFogNotOnField()) //black fog on field wake up mon
+                {
+                    gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_SLEEP);
+                    gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_NIGHTMARE);
+                    BattleScriptPushCursor();
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                    gBattlescriptCurrInstr = BattleScript_MoveUsedWokeUp; //how I want to work is wake up, attack next turn
                     effect = 2;
                 }
                 else // ok need to figure how this works, but seems to be sleep chance
@@ -2965,7 +3012,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 //gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 //gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
                 //gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                effect = 1;
+                //effect = 1;  don'et need set effect it'll be done in flinch case
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
@@ -3000,6 +3047,21 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gBattlescriptCurrInstr = BattleScript_MoveUsedMustRecharge;
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 effect = 1;
+            }
+            ++gBattleStruct->atkCancellerTracker;
+            break;
+        case CANCELLER_BLACK_FOG: // fly sky drop block
+            if (!IsBlackFogNotOnField()) // black fog on field
+            {
+                if ((gCurrentMove == MOVE_FLY) || (gCurrentMove == MOVE_SKY_DROP))
+                {
+                    CancelMultiTurnMoves(gBattlerAttacker);
+                    gBattlescriptCurrInstr = BattleScript_ButItFailed; //could make custom script leave as is for now, need test vsonic
+                    gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+
+                    effect = 1;
+                }
+
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
@@ -3080,7 +3142,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 u8 target = gBattleMoves[gCurrentMove].target;
                 --gBattleMons[gBattlerAttacker].status2;    //nvm couldn't put bug clause above this line, or confusion wouldn't decrement & be permanent
 
-                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION) //&& !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG))
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION && IsBlackFogNotOnField()) //&& !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG))
                 {
                     if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG)) //moved bug exclusion to here, so status decrements //NEED TEST //vsonic
                     {
@@ -3165,7 +3227,8 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_PARALYZED: // paralysis
-            if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && (Random() % 4) == 0)
+            if (((gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && (Random() % 4) == 0)
+                && IsBlackFogNotOnField())
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
@@ -3175,8 +3238,9 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_PRESSURE: // new pressure effect
-            if ((GetBattlerAbility(gBattlerTarget) == ABILITY_PRESSURE
+            if (((GetBattlerAbility(gBattlerTarget) == ABILITY_PRESSURE
                 || GetBattlerAbility(gBattlerTarget) == ABILITY_HI_PRESSURE) && (Random() % 4) == 1)
+                && IsBlackFogNotOnField())
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MovePressureCanceler;
@@ -3208,24 +3272,48 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_IN_LOVE: // infatuation
-            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION)
+            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION)                
                 //&& gBattleMons[gBattlerAttacker].status2 |= STATUS2_INFATUATED_WITH(gBattlerTarget)) //important change ot add check that the target is the one pokemon is infatuated with
             {
-                gBattleScripting.battler = CountTrailingZeroBits((gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION) >> 0x10);
-                if (Random() & 1) //test if that worked, next step change so infatuation animation only plays if battler their infatuated with is on the field.
-                    //well maybe not, if it reminds you each turn, even if not there, its a good reminder the status is still in effect.
-                {
-                    BattleScriptPushCursor(); //unfortunately didn't work, will look into it later
+                if (IsBlackFogNotOnField()) {
+
+
+                    gBattleScripting.battler = CountTrailingZeroBits((gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION) >> 0x10);
+                    if (Random() & 1) //test if that worked, next step change so infatuation animation only plays if battler their infatuated with is on the field.
+                        //well maybe not, if it reminds you each turn, even if not there, its a good reminder the status is still in effect.
+                    {
+                        BattleScriptPushCursor(); //unfortunately didn't work, will look into it later
+                    }
+                    else
+                    {
+                        BattleScriptPush(BattleScript_MoveUsedIsInLoveCantAttack);
+                        gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                        gProtectStructs[gBattlerAttacker].loveImmobility = 1;
+                        CancelMultiTurnMoves(gBattlerAttacker);
+                    }
+                    gBattlescriptCurrInstr = BattleScript_MoveUsedIsInLove;
+                    effect = 1;
                 }
-                else
+                else if (!IsBlackFogNotOnField() //black fog on field
+                    && (GetBattlerAbility(gBattlerTarget) == ABILITY_CUPIDS_ARROW))
                 {
-                    BattleScriptPush(BattleScript_MoveUsedIsInLoveCantAttack);
-                    gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                    gProtectStructs[gBattlerAttacker].loveImmobility = 1;
-                    CancelMultiTurnMoves(gBattlerAttacker);
+                    gBattleScripting.battler = CountTrailingZeroBits((gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION) >> 0x10);
+
+                    if (Random() & 1) //test if that worked, next step change so infatuation animation only plays if battler their infatuated with is on the field.
+                        //well maybe not, if it reminds you each turn, even if not there, its a good reminder the status is still in effect.
+                    {
+                        BattleScriptPushCursor(); //unfortunately didn't work, will look into it later
+                    }
+                    else
+                    {
+                        BattleScriptPush(BattleScript_MoveUsedIsInLoveCantAttack);
+                        gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                        gProtectStructs[gBattlerAttacker].loveImmobility = 1;
+                        CancelMultiTurnMoves(gBattlerAttacker);
+                    }
+                    gBattlescriptCurrInstr = BattleScript_MoveUsedIsInLove;
+                    effect = 1;
                 }
-                gBattlescriptCurrInstr = BattleScript_MoveUsedIsInLove;
-                effect = 1;
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
@@ -3590,6 +3678,8 @@ bool8 IsBattlerGrounded(u8 battlerId)
     //according to Mcgriffin needed make flying & roost flag true statement
     //as else at bottom just means not flyign or has roost flag, TRUE
     if (gFieldStatuses & STATUS_FIELD_GRAVITY)
+        grounded = TRUE;
+    if (gFieldStatuses & STATUS_FIELD_BLACK_FOG) //on review this does make sense, its not that they are face down on the ground its that flying higher isn't an option
         grounded = TRUE;
     if (gStatuses3[battlerId] & STATUS3_ROOTED)
         grounded = TRUE;
@@ -9254,6 +9344,14 @@ bool32 IsNeutralizingGasOnField(void)   //not used anymore, but still here if wa
     } //added side statement, should make it only remove ability if neutralzing gas is on other side,
     //change how the ability is used a bit ,but I'm fixing bad abilities anyway so it shouldn't be used to remove bad abiliites.
     return FALSE;
+}
+
+bool8 IsBlackFogNotOnField(void)
+{
+    if (!(gFieldStatuses & STATUS_FIELD_BLACK_FOG))
+        return TRUE;
+    else
+        return FALSE;
 }
 
 u32 GetBattlerAbility(u8 battlerId)  //Deokishishu in pret mentioned there is a practice of making things that could

@@ -427,6 +427,7 @@ struct FieldTimer
     u8 gravityTimer;
     u8 fairyLockTimer;
     u8 IonDelugeTimer; // this & roost will be only ones that don't fail if used when timer isn't 0
+    u8 HazeTimer;
 
 };//check how I setup roost may not need iondelugetimer here
 

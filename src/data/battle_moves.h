@@ -1533,7 +1533,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_RAGE,
         .power = 20,
-        .type = TYPE_NORMAL,
+        .type = TYPE_MYSTERY, //Its power of anger type of attack would depend on mon type etc. so doesn't really make sense to be normal
         .accuracy = 100,
         .pp = 20,
         .secondaryEffectChance = 0,

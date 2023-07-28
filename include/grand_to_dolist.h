@@ -842,6 +842,73 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * I think adding the para chance is simple as just making a new effect and having its battlescript start with setmoveeffect paralysis 
 * then when done with logic can just go to battlescript hit.
 * 
+* new idea buffing haze back to gen1 standard  renaming inspired by literal translation of japanese name, to Black Fog -attempt shift palette for move make darker
+* also make end turn animation for, 
+* A mysterious black haze covers the field/ 
+* -an inpennetrabe block fog covers the field  blocking field effects, status effects and resetting stat changes for all battlers for the duration/ 3 turns
+
+is an equalizers resets stats,  back to normal
+clears secondary status, and while doesn't remove status1
+all secondary effects from primary status are disabled for duration of the fog
+no end turn poison, freeze burn, atk cut from burn is removed,
+speed cut from paralysis is removed and paralysis chance is 0
+as an extra bonus no critical hits can be landed during fog
+
+guts boost from status is also undone. actually could just do neutralizing gas disable all abilities?
+that would prob be too much, just limit to status related stuff, to put everyone on even footing 
+
+Generation I
+Haze resets the stat stages of both active Pokémon to 0 and removes the stat reductions due to burns and paralysis.
+It also lifts the effects of Focus Energy and Dire Hit, Mist and Guard Spec.,
+X Accuracy, Leech Seed, Disable, Reflect and Light Screen from both sides of the field. 
+Additionally, Haze cures confusion and turns bad poison into regular poison for both active Pokémon,
+and also removes any non-volatile status condition from the opponent.   
+
+ -don't need to remove leech seed/poison just stop endturn from activating
+-for focus energy dire hit also don't need to remove just prevent crit during fog
+-grounds all as well, idea being dark fog is inpenetrable & can't see to fly - block fly & sky drop?
+-my version wont remove extranormal status effects just keep them frm taking effect for duration
+-i.e if reflect/light screen was in effect the defense boost wouldn't work but the effect would still be up
+-and counting down, so there's a chance you can get the effect back when "haze" fades
+-for strength of effect make lower duration i.e 3 turns (3 full turns)
+-blocks weather effects as well -(non permanent weather) actually nvm I'll block all weather (excluding wind based weather i.e mega ray)
+*as its not good design to have some mechancis just have a counter locked to only a specific character.
+* so it'll become a weather counter also, but balanced by the consideration of pros and cons from its use as its field wide
+* think only primary status will remove will be sleep which is temp anyway, freeze  is already balanced now for duration 
+* blocks stealth rock , weather block mostly done sleep removal done, crit block done mist block done, float block done, nvm undonig change to just cant use fly or skydrop
+* put that logic in atk canclor w sleep - done
+need do end turn block status2 removal and side status block
+-weather done, battler end turn done added grouned back
+-blocked all side status I planned to, aurora veil, reflect ligh screen future sight wish perish song mist & stealth rocks
+-status2 done, believe function of effect is complete
+
+just left is refinereies, extra text end tur animation - final decision keeping name haze
+
+Haze does not remove any non-volatile status ailments that the user has,
+does not change the generic Minimize graphic back to the Pokémon's regular image,
+and does not reset either Pokémon's current type, moves, or species.
+
+-  covers the field in a strange black fog, resetting stat changs for all battlers and blocking outside effects and status effects for the duration
+
+will need block weather animations for end turn, replace with haze animation
+
+do a check for  field status black fog
+if (gFieldStatuses & STATUS_FIELD_BLACK_FOG) - well I'm setting this as normal effect goes through long as black fog not on field so...
+if (!(gFieldStatuses & STATUS_FIELD_BLACK_FOG))   && !gFieldStatuses & STATUS_FIELD_BLACK_FOG
+
+made function for simple paste   IsBlackFogNotOnField()     if (!IsBlackFogNotOnField())
+
+beleive all effects to interupt are in battle_util.c & pokemon.c, if I block fly/sky drop would need to put in atk cancler as well
+
+* eventually came up with a buff for stall gave it double move power, buff so high because it'll be extra punishing in doubles elsewise
+* now to figure out who I shuold give this too, would exclude mon from trick room, so could give to slow bulky mon that do low dmg,
+* or some mon with average stats to give them the ability to potentially do delayed one shots
+* could even put on blissey  - unrelated note healing uses gbattlemovedamage make sure be careful when using that...-
+* 
+* ok gave new stall to a few mon unsure how useful it'll be, I'll leave it up to future users
+* to decide who should have it
+* 
+* 
 * idea from Jaan pokemoonchallenges repel should be easilly accessed through L button/ button press in overworld 
 * instead of requirin to go through menus.
 * I'm using help menu which is on L R so would potentially need tweak things

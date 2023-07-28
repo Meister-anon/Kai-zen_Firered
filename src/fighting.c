@@ -34,7 +34,7 @@ static void AnimSuperpowerOrb_Step(struct Sprite *sprite);
 static void AnimSuperpowerRock(struct Sprite *sprite);
 static void AnimSuperpowerRock_Step1(struct Sprite *sprite);
 static void AnimSuperpowerRock_Step2(struct Sprite *sprite);
-static void AnimSuperpowerFireball(struct Sprite *sprite);
+//static void AnimSuperpowerFireball(struct Sprite *sprite);
 static void AnimArmThrustHit(struct Sprite *sprite);
 static void AnimArmThrustHit_Step(struct Sprite *sprite);
 static void AnimFocusPunchFist(struct Sprite *sprite);
@@ -947,7 +947,7 @@ static void AnimSuperpowerRock_Step2(struct Sprite *sprite)
         DestroyAnimSprite(sprite);
 }
 
-static void AnimSuperpowerFireball(struct Sprite *sprite)
+void AnimSuperpowerFireball(struct Sprite *sprite)
 {
     u8 battler;
 

@@ -3090,6 +3090,7 @@ BattleScript_EffectHaze::
 	ppreduce
 	attackanimation
 	waitanimation
+	setmist
 	normalisebuffs
 	printstring STRINGID_STATCHANGESGONE
 	waitmessage 0x40

@@ -658,6 +658,7 @@ void AnimJumpKick(struct Sprite *sprite);
 void AnimBasicFistOrFoot(struct Sprite *sprite);
 void AnimRevengeScratch(struct Sprite *sprite);
 void AnimDizzyPunchDuck(struct Sprite *sprite);
+void AnimSuperpowerFireball(struct Sprite *);
 extern const union AnimCmd *const gAnims_HandsAndFeet[];
 extern const union AffineAnimCmd *const gAffineAnims_MegaPunchKick[];
 extern const union AffineAnimCmd *const gAffineAnims_SpinningHandOrFoot[];
