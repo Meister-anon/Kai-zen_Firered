@@ -1331,7 +1331,10 @@ u32 SelectBattleAnimSpriteAndBgPalettes(bool8 battleBackground, bool8 attacker, 
 
     if (battleBackground)
     {
-        selectedPalettes = 0xe;
+        if (!IsContest())
+            selectedPalettes = 0xe; // Palettes 1, 2, and 3
+        else
+            selectedPalettes = 1 << GetBattleBgPaletteNum();
     }
     if (attacker)
     {
@@ -1361,11 +1364,15 @@ u32 SelectBattleAnimSpriteAndBgPalettes(bool8 battleBackground, bool8 attacker, 
     }
     if (a6)
     {
-        selectedPalettes |= 0x100;
+        if (!IsContest())
+            selectedPalettes |= 1 << BG_ANIM_PAL_1;
+        else
+            selectedPalettes |= 1 << BG_ANIM_PAL_CONTEST;
     }
     if (a7)
     {
-        selectedPalettes |= 0x200;
+        if (!IsContest())
+            selectedPalettes |= 1 << BG_ANIM_PAL_2;
     }
     return selectedPalettes;
 }

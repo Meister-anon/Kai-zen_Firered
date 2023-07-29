@@ -4114,7 +4114,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage *= (2 * attacker->level / 5 + 2); //offense side of damage formula for level scaled damage
 
         //trap effects
-        if ((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION)
+        if (((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION))
             && IsBlackFogNotOnField())
         {
             //gBattleMons[battlerIdDef].statStages[STAT_DEF] -= 2;    //should lower defense by 2 i.e 50% 

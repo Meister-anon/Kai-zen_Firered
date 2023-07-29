@@ -647,4 +647,21 @@
 #define ANIM_SURF_PAL_MUDDY_WATER    1
 #define ANIM_SURF_PAL_SLUDGE_WAVE    2
 
+// Flags given to various functions to indicate which palettes to consider.
+// Handled by UnpackSelectedBattleAnimPalettes
+#define F_PAL_BG                  (1 << 0)
+#define F_PAL_ATTACKER            (1 << 1)
+#define F_PAL_TARGET              (1 << 2)
+#define F_PAL_ATK_PARTNER         (1 << 3)
+#define F_PAL_DEF_PARTNER         (1 << 4)
+#define F_PAL_ANIM_1              (1 << 5) // Palette set for GetBattleAnimBg1Data/GetBgDataForTransform. Only used (ineffectually?) by Aromatherapy.
+#define F_PAL_ANIM_2              (1 << 6) // Palette set for GetBattleAnimBgData/GetBgDataForTransform. Unused.
+#define F_PAL_ATK_SIDE            (F_PAL_ATTACKER | F_PAL_ATK_PARTNER)
+#define F_PAL_DEF_SIDE            (F_PAL_TARGET | F_PAL_DEF_PARTNER)
+#define F_PAL_BATTLERS            (F_PAL_ATK_SIDE | F_PAL_DEF_SIDE)
+#define F_PAL_ADJACENT            (F_PAL_DEF_SIDE | F_PAL_ATK_PARTNER)
+#define F_PAL_ALL_BUT_DEF         (F_PAL_ATK_SIDE | F_PAL_DEF_PARTNER)
+#define F_PAL_ALL_BUT_ATK_PARTNER (F_PAL_ATTACKER | F_PAL_DEF_SIDE)
+
+
 #endif // GUARD_CONSTANTS_BATTLE_ANIM_H

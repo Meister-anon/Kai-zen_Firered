@@ -76,14 +76,6 @@ void FreeItemIconTemporaryBuffers(void)
     Free(gItemIcon4x4Buffer);
 }
 
-void CopyItemIconPicTo4x4Buffer(const void *src, void *dest)
-{
-    u8 i;
-
-    for (i = 0; i < 3; i++)
-        CpuCopy16(src + i * 96, dest + i * 128, 0x60);
-}
-
 u8 AddItemIconSprite(u16 tilesTag, u16 paletteTag, u16 itemId)
 {
     if (!AllocItemIconTemporaryBuffers())

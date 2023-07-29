@@ -894,14 +894,12 @@ static bool8 TryAllocItemIconTilesBuffers(void)
     return TRUE;
 }
 
-void CopyItemIconPicTo4x4Buffer(const void * src, void * dest)
+void CopyItemIconPicTo4x4Buffer(const void *src, void *dest)
 {
     u8 i;
 
     for (i = 0; i < 3; i++)
-    {
-        CpuCopy16(src + 0x60 * i, dest + 0x80 * i, 0x60);
-   }
+        CpuCopy16(src + i * 96, dest + i * 128, 0x60);
 }
 
 u8 AddItemIconObject(u16 tilesTag, u16 paletteTag, u16 itemId)
