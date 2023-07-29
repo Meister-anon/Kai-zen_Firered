@@ -4600,10 +4600,10 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
         speed /= 4;
 
     //trap effects
-    if ((gBattleMons[battlerId].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battlerId].status1 & STATUS1_WHIRLPOOL)
+    if (((gBattleMons[battlerId].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battlerId].status1 & STATUS1_WHIRLPOOL))
         && IsBlackFogNotOnField())  //should be good
         speed /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
-    if ((gBattleMons[battlerId].status2 & STATUS2_WRAPPED) || (gBattleMons[battlerId].status1 & STATUS1_WRAPPED)
+    if (((gBattleMons[battlerId].status2 & STATUS2_WRAPPED) || (gBattleMons[battlerId].status1 & STATUS1_WRAPPED))
         && IsBlackFogNotOnField())
         speed /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
 

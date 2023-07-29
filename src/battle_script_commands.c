@@ -1864,7 +1864,7 @@ static void atk01_accuracycheck(void)
         moveAcc = gBattleMoves[move].accuracy;
 
         //trap effects
-        if ((gBattleMons[gBattlerAttacker].status4 & STATUS4_SAND_TOMB) || (gBattleMons[gBattlerAttacker].status1 & STATUS1_SAND_TOMB)
+        if (((gBattleMons[gBattlerAttacker].status4 & STATUS4_SAND_TOMB) || (gBattleMons[gBattlerAttacker].status1 & STATUS1_SAND_TOMB))
             && IsBlackFogNotOnField())
         {
             moveAcc = (moveAcc * 60) / 100; //euivalent of a 2 stage acc drop
@@ -5336,12 +5336,12 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     if (gBattleScripting.moveEffect == gBattleMoves[gCurrentMove].effect) //on second look think this won't work as variosargumetotmoveeffect may be 
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;   //setting the argumentt as the move effct?
     else if (gBattleScripting.moveEffect == gBattleMoves[gCurrentMove].argument)
-        percentChance = argumentChance //confused it doesn't use them interchangeably so may work? be different?
+        percentChance = argumentChance; //confused it doesn't use them interchangeably so may work? think is different?
 
     //hail based freeze boost, 
     if ((gBattleWeather & WEATHER_HAIL_ANY)
         && gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;  //its good, happened 2 out of 5 hits. decided to make it 1/16 dmg
+        percentChance *= 2; //= gBattleMoves[gCurrentMove].secondaryEffectChance * 2;  //its good, happened 2 out of 5 hits. decided to make it 1/16 dmg
     
       
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
@@ -5349,13 +5349,17 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     if (GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_DARK_DEAL) //hopefully stacks
         percentChance *= 2;
     else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_DARK_DEAL) //is excluded
-        percentChance = (gBattleMoves[gCurrentMove].secondaryEffectChance * 150) / 100;
+        percentChance = (percentChance * 150) / 100;
 
         
 
     
 
-    
+    //for these to work must be placed in .effect member of battle_moves.h they aren't used in argument,
+    //these are the main effects of the move
+    //I could set it to gbattlescripting.moveeffect and it'd work for both but I don't want that.
+    //this is a restriction for the sake of structure.
+    //to separate primary effects from  secondary effects
     
     if (gBattleMoves[gCurrentMove].effect == ITS_A_TRAP)   //if this works make a define for trap effects & separate effect & move effect & battlscript for each
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //that way may not need to make a separate status,// seems to work no apparent bugs
@@ -5399,7 +5403,7 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
         && ((gBattleMoves[gCurrentMove].effect == EFFECT_BURN_HIT || gBattleMoves[gCurrentMove].effect == EFFECT_SCALD)
         || (gBattleMoves[gCurrentMove].argument == EFFECT_BURN_HIT || gBattleMoves[gCurrentMove].argument == EFFECT_SCALD)))
     {
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 6;
+        percentChance *= 6;
 
         if (gBattleWeather & WEATHER_SUN_ANY)
         {

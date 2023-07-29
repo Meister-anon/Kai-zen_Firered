@@ -7609,8 +7609,8 @@ void AnimTask_TwinkleTackleLaunchStep(u8 taskId)
     {
         if (task->tTimer > task->tAnimLengthTime + 5) //Wait an extra few frames so the glint can be placed on the target
         {
-            sprite->x = task->tInitialXPos;
-            sprite->y = task->tInitialYPos;
+            sprite->pos1.x = task->tInitialXPos;
+            sprite->pos1.y = task->tInitialYPos;
             ResetSpriteRotScale(task->tSpriteId);
             DestroyAnimVisualTask(taskId);
         }
@@ -7623,12 +7623,12 @@ void AnimTask_TwinkleTackleLaunchStep(u8 taskId)
         s8 movement = sHomerunEnemyHorizontalMovement[task->tTimer];
         if (task->tSide == B_SIDE_PLAYER)
             movement *= -1;
-        sprite->x += movement;
+        sprite->pos1.x += movement;
 
         movement = sHomerunEnemyVerticalMovement[task->tTimer];
         if (task->tSide == B_SIDE_PLAYER)
             movement *= -1;
-        sprite->y += movement;
+        sprite->pos1.y += movement;
     }
 
     xScale = 0x180;
@@ -7657,8 +7657,8 @@ void AnimTask_TwinkleTackleLaunch(u8 taskId)
     task->tSpriteId = GetAnimBattlerSpriteId(ANIM_TARGET);
     task->tSide = GetBattlerSide(gBattleAnimTarget);
     task->tAnimLengthTime = gBattleAnimArgs[0];
-    task->tInitialXPos = gSprites[task->tSpriteId].x;
-    task->tInitialYPos = gSprites[task->tSpriteId].y;
+    task->tInitialXPos = gSprites[task->tSpriteId].pos1.x;
+    task->tInitialYPos = gSprites[task->tSpriteId].pos1.y;
     task->tTimer = 0;
     task->func = AnimTask_TwinkleTackleLaunchStep;
 
