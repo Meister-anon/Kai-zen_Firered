@@ -1386,6 +1386,11 @@ Thunder Wave Electric TM45
 * was able to use ctrl h replacement, to quick define all move descriptions just need to slot into table.
 * and would owr, then can fix naming convention later
 * 
+* realized for move effects I've changed that were tms or hms I need to update the item description with the new effects
+* not just the move description so need to compare move_info.h  descriptions with that of items.json...
+* 
+* ok next job update from json -_-  for some reason pret hasn't done that yet for fire red -
+* 
 * need buff poison i think
 * for poison think can just give sp def boosts, as poison specialists poison themselves to build up immunity to poison
 * giving them a stronger than normal internal constitution. - DONE

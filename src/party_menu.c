@@ -4364,8 +4364,8 @@ static void sub_8124EFC(void) //check emerald if is tms
         SetMonMoveSlot(mon, ItemIdToBattleMoveId(gSpecialVar_ItemId), moveIdx);
         AdjustFriendship(mon, 4);
         ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, mon, gSpecialVar_ItemId, move);
-        if (gSpecialVar_ItemId <= ITEM_TM50)
-            RemoveBagItem(gSpecialVar_ItemId, 1);
+        /*if (gSpecialVar_ItemId <= ITEM_TM50)
+            RemoveBagItem(gSpecialVar_ItemId, 1);*/
         SetMainCallback2(gPartyMenu.exitCallback);
     }
     else
