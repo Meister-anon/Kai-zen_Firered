@@ -1410,7 +1410,7 @@ const struct CompressedSpriteSheet gBattleAnimPicTable[] =
     {gBattleAnimSpriteGfx_Slash, 0x0800, ANIM_TAG_SLASH_2},
     {gBattleAnimSpriteGfx_SlamHit, 0x1000, ANIM_TAG_WHIP_HIT},
     {gBattleAnimSpriteGfx_GoldRing, 0x0100, ANIM_TAG_BLUE_RING_2},
-        //New battle gfxs
+
     { gBattleAnimSpriteGfx_WhiteStreak, 0x0200, ANIM_TAG_WHITE_STREAK },
     { gBattleAnimSpriteGfx_PurpleJab, 0x0100, ANIM_TAG_PURPLE_JAB },
     { gBattleAnimSpriteGfx_Spikes, 0x0080, ANIM_TAG_TOXIC_SPIKES },
@@ -1801,9 +1801,9 @@ const struct CompressedSpritePalette gBattleAnimPaletteTable[] =
     {gBattleAnimSpritePal_Slash2, ANIM_TAG_SLASH_2},
     {gBattleAnimSpritePal_WhipHit, ANIM_TAG_WHIP_HIT},
     {gBattleAnimSpritePal_BlueRing2, ANIM_TAG_BLUE_RING_2},
+
     { gBattleAnimSpritePal_WhiteStreak, ANIM_TAG_WHITE_STREAK },
     { gBattleAnimSpritePal_PurpleJab, ANIM_TAG_PURPLE_JAB },
-        //new particles Pals
     { gBattleAnimSpritePal_ToxicSpikes, ANIM_TAG_TOXIC_SPIKES },
     { gBattleAnimSpritePal_EnergyBall, ANIM_TAG_ENERGY_BALL },
     { gBattleAnimSpritePal_SeedBrown, ANIM_TAG_SEED_BROWN },
@@ -1930,7 +1930,7 @@ const struct BattleAnimBackground gBattleAnimBackgroundTable[] =
     [BG_SOLARBEAM_OPPONENT] = {gBattleAnimBgImage_Impact, gBattleAnimBgPalette_Solarbeam, gBattleAnimBgTilemap_ImpactOpponent},
     [BG_SOLARBEAM_PLAYER] = {gBattleAnimBgImage_Impact, gBattleAnimBgPalette_Solarbeam, gBattleAnimBgTilemap_ImpactPlayer},
     [BG_SOLARBEAM_CONTESTS] = {gBattleAnimBgImage_Impact, gBattleAnimBgPalette_Solarbeam, gBattleAnimBgTilemap_ImpactContests},
-    //new battle bgs
+
     [BG_MAGMA_STORM]               = {gBattleAnimBgImage_InAir,                   gBattleAnimBgPalette_MagmaStorm,              gBattleAnimBgTilemap_InAir},
     [BG_GIGA_IMPACT_OPPONENT]      = {gBattleAnimBgImage_GigaImpact,              gBattleAnimBgPalette_GigaImpact,              gBattleAnimBgTilemap_GigaImpactOpponent},
     [BG_GIGA_IMPACT_PLAYER]        = {gBattleAnimBgImage_GigaImpact,              gBattleAnimBgPalette_GigaImpact,              gBattleAnimBgTilemap_GigaImpactPlayer},

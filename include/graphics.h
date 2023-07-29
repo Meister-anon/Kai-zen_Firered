@@ -8266,6 +8266,7 @@ extern const u32 gBattleAnimSpritePal_AirWave[];
 extern const u32 gBattleAnimSpritePal_Orb[];
 extern const u32 gBattleAnimSpritePal_Sword[];
 extern const u32 gBattleAnimSpritePal_Seed[];
+extern const u32 gBattleAnimSpritePal_SeedBrown[];
 extern const u32 gBattleAnimSpritePal_Explosion6[];
 extern const u32 gBattleAnimSpritePal_PinkOrb[];
 extern const u32 gBattleAnimSpritePal_Gust[];
@@ -8530,13 +8531,32 @@ extern const u32 gBattleAnimSpriteGfx_PurpleJab[];
 extern const u32 gBattleAnimSpritePal_PurpleJab[];
 extern const u32 gBattleAnimSpritePal_ToxicSpikes[];
 extern const u32 gBattleAnimSpriteGfx_EnergyBall[];
-extern const u32 gBattleAnimSpritePal_EnergyBall[];
+extern const u32 gBattleAnimSpritePal_EnergyBall[];//
+extern const u32 gBattleAnimSpriteGfx_SeedBrown[]; //new
+extern const u32 gBattleAnimSpriteGfx_Feint[];
+extern const u32 gBattleAnimSpritePal_Feint[];
 extern const u32 gBattleAnimSpriteGfx_MegaStone[];
 extern const u32 gBattleAnimSpritePal_MegaStone[];
-extern const u32 gBattleAnimSpriteGfx_MegaParticles[];
-extern const u32 gBattleAnimSpritePal_MegaParticles[];
 extern const u32 gBattleAnimSpriteGfx_MegaSymbol[];
 extern const u32 gBattleAnimSpritePal_MegaSymbol[];
+extern const u32 gBattleAnimSpriteGfx_MegaParticles[];
+extern const u32 gBattleAnimSpritePal_MegaParticles[];//put missing below
+extern const u32 gBattleAnimSpriteGfx_TrumpCard[];
+extern const u32 gBattleAnimSpriteGfx_TrumpCardParticles[];
+extern const u32 gBattleAnimSpriteGfx_Acupressure[];
+extern const u32 gBattleAnimSpriteGfx_WringOut[];
+extern const u32 gBattleAnimSpriteGfx_ColoredOrbs[];
+extern const u32 gBattleAnimSpriteGfx_WorrySeed[];
+extern const u32 gBattleAnimSpriteGfx_SmallCloud[];
+extern const u32 gBattleAnimSpriteGfx_AttackOrder[];
+extern const u32 gBattleAnimSpriteGfx_DragonPulse[];
+extern const u32 gBattleAnimSpriteGfx_WoodHammer[];
+extern const u32 gBattleAnimSpriteGfx_PsychoCut[];
+extern const u32 gBattleAnimSpriteGfx_PowerGem[];
+extern const u32 gBattleAnimSpriteGfx_StoneEdge[];
+extern const u32 gBattleAnimSpriteGfx_StealthRock[];
+extern const u32 gBattleAnimSpriteGfx_PoisonJab[];
+
 extern const u32 gBattleAnimSpriteGfx_FlashCannonBall[];
 extern const u32 gBattleAnimSpritePal_FlashCannonBall[];
 extern const u32 gBattleAnimSpriteGfx_WaterGun[];
