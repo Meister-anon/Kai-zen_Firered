@@ -184,6 +184,7 @@ extern const union AnimCmd *const gPetalDanceSmallFlowerAnimTable[];
 extern const union AnimCmd *const gGrantingStarsAnimTable[];
 extern const union AffineAnimCmd *const gSwiftStarAffineAnimTable[];
 extern const union AnimCmd *const gMetronomeThroughtBubbleAnimTable[];
+extern const union AffineAnimCmd *const gStockpileAbsorptionOrbAffineAnimTable;
 extern const union AnimCmd *const gEndureEnergyAnimTable[];
 extern const union AffineAnimCmd *const gMimicOrbAffineAnimTable[];
 extern const union AnimCmd *const gPowderParticlesAnimTable[];
@@ -312,6 +313,7 @@ extern const struct SpriteTemplate gMiniTwinklingStarSpriteTemplate;
 extern const union AnimCmd *const gScratchAnimTable[];
 extern const union AnimCmd *const gEclipsingOrbAnimTable[];
 extern const union AnimCmd *const gOpeningEyeAnimTable[];
+extern const union AffineAnimCmd *const gSpotlightAffineAnimTable;
 void AnimBlackSmoke(struct Sprite *);
 void AnimWhiteHalo(struct Sprite *);
 void AnimTealAlert(struct Sprite *);
@@ -335,6 +337,7 @@ void AnimSweetScentPetal(struct Sprite *);
 void AnimPainSplitProjectile(struct Sprite *);
 void AnimFlatterConfetti(struct Sprite *);
 void AnimFlatterSpotlight(struct Sprite *);
+void AnimFlatterSpotlight_Step(struct Sprite *sprite);
 void AnimReversalOrb(struct Sprite *);
 void AnimYawnCloud(struct Sprite *);
 void AnimSmokeBallEscapeCloud(struct Sprite *);
@@ -552,6 +555,7 @@ void AnimTask_PositionFissureBgOnBattler(u8 taskId);
 void AnimMudSportDirt(struct Sprite *sprite);
 void AnimDirtScatter(struct Sprite *sprite);
 void AnimMudSportDirtRising(struct Sprite *sprite);
+void AnimFissureDirtPlumeParticle(struct Sprite *sprite);
 extern const union AffineAnimCmd *const gAffineAnims_SpinningBone[];
 
 // dragon.c
@@ -645,8 +649,10 @@ extern const union AffineAnimCmd *const gAffineAnims_Droplet[];
 extern const union AnimCmd *const gAnims_PoisonProjectile[];
 extern const union AnimCmd *const gAnims_AcidPoisonDroplet[];
 extern const union AffineAnimCmd *const gAffineAnims_PoisonProjectile[];
+extern const union AffineAnimCmd *const gAffineAnims_Bubble;
 void AnimSludgeBombHitParticle(struct Sprite *sprite);  //only strut Sprite * in emerald, this should be fine
 void AnimAcidPoisonBubble_Step(struct Sprite *sprite);
+void AnimBubbleEffect(struct Sprite *sprite);
 
 // fighting.c
 void AnimTask_MoveSkyUppercutBg(u8 taskId); //defined here in firered not emerald
@@ -695,6 +701,7 @@ void AnimSparkElectricity(struct Sprite *sprite);
 void AnimElectricPuff(struct Sprite *sprite);
 void AnimSparkElectricityFlashing(struct Sprite *sprite);
 void AnimGrowingShockWaveOrb(struct Sprite *sprite);
+void AnimElectricity(struct Sprite *sprite);
 extern const union AffineAnimCmd *const gAffineAnims_GrowingElectricOrb[];
 extern const union AffineAnimCmd *const gAffineAnims_FlashingSpark[];
 extern const union AnimCmd *const gAnims_ThunderboltOrb[];

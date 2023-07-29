@@ -912,7 +912,12 @@ beleive all effects to interupt are in battle_util.c & pokemon.c, if I block fly
         //15% prob good if I need to. -
 
         made attempt at setting argumentchance separate from normal effectchance need test
+*  fixed infestation  stat drop, and sandtomb stat drop all trap statuses should be workign now
+* with argument chance set -need test if working - can add status chance to all fire/fairy/electric/ice/poison type moves 
+* would be in line with expectation every fire move can burn every electric move can paralyze etc. just have lower odds for weaker moves etc.
+* min would be 5%
 * 
+* need add on to ability description of aviator, defeatist, and run away that they are able to switch out even if trapped etc. can always switch
 * 
 * idea from Jaan pokemoonchallenges repel should be easilly accessed through L button/ button press in overworld 
 * instead of requirin to go through menus.

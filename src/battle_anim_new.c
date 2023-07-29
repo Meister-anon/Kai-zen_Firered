@@ -5118,7 +5118,7 @@ const struct SpriteTemplate gTwinkleTackleDigStarSpriteTemplate =
     .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = AnimDirtPlumeParticle
+    .callback = AnimFissureDirtPlumeParticle
 };
 const struct SpriteTemplate gTwinkleTackleYellowImpactSpriteTemplate =
 {
@@ -7565,7 +7565,177 @@ static void SpriteCB_GeyserTarget(struct Sprite* sprite)
     sprite->callback = AnimMudSportDirtRising;
 }
 
-// Anim Task Functions
+// Anim Tasks Functions
+#define tSpriteId data[0]
+#define tTimer data[1]
+#define tInitialXPos data[2]
+#define tInitialYPos data[3]
+#define tSide data[4]
+#define tAnimLengthTime data[5]
+static const s8 sHomerunEnemyHorizontalMovement[] =
+{
+    3, 3, 3, 3,
+    3, 3, 2, 2,
+    1, 1, 1, 1,
+    1, 1, 1, 1,
+    0, 1, 0, 1,
+    0, 1, 0, 0,
+    1, 0, 0, 1,
+    0, 0, 0, 1,
+    0, 0, 0, 1,
+};
+
+static const s8 sHomerunEnemyVerticalMovement[] =
+{
+    -4, -4, -4, -4,
+    -4, -3, -3, -2,
+    -2, -1, -1, -1,
+    -1, -1, -1, -1,
+     0, -1,  0, -1,
+     0, -1,  0,  0,
+     0,  0, -1,  0,
+     0, -1,  0,  0,
+    -1,  0,  0,  0,
+};
+
+void AnimTask_TwinkleTackleLaunchStep(u8 taskId)
+{
+    u16 rotation;
+    s16 xScale, yScale;
+    struct Task* task = &gTasks[taskId];
+    struct Sprite *sprite = &gSprites[task->tSpriteId];
+
+    if (task->tTimer > task->tAnimLengthTime)
+    {
+        if (task->tTimer > task->tAnimLengthTime + 5) //Wait an extra few frames so the glint can be placed on the target
+        {
+            sprite->x = task->tInitialXPos;
+            sprite->y = task->tInitialYPos;
+            ResetSpriteRotScale(task->tSpriteId);
+            DestroyAnimVisualTask(taskId);
+        }
+        else
+            ++task->tTimer;
+        return;
+    }
+    else if ((u16) task->tTimer < NELEMS(sHomerunEnemyHorizontalMovement))
+    {
+        s8 movement = sHomerunEnemyHorizontalMovement[task->tTimer];
+        if (task->tSide == B_SIDE_PLAYER)
+            movement *= -1;
+        sprite->x += movement;
+
+        movement = sHomerunEnemyVerticalMovement[task->tTimer];
+        if (task->tSide == B_SIDE_PLAYER)
+            movement *= -1;
+        sprite->y += movement;
+    }
+
+    xScale = 0x180;
+    yScale = 0x180;
+    rotation = (task->tTimer << 4) + (task->tTimer << 3);
+
+    xScale += rotation;
+    yScale += rotation;
+    rotation <<= 7;
+
+    if (task->tSide == B_SIDE_OPPONENT)
+        rotation *= -1;
+
+    SetSpriteRotScale(task->tSpriteId, xScale, yScale, rotation);
+
+    if (++task->tTimer > task->tAnimLengthTime)
+        sprite->invisible = TRUE;
+}
+
+//Launches the target in Twinkle Tackle
+//arg 0: Anim time
+void AnimTask_TwinkleTackleLaunch(u8 taskId)
+{
+    struct Task* task = &gTasks[taskId];
+
+    task->tSpriteId = GetAnimBattlerSpriteId(ANIM_TARGET);
+    task->tSide = GetBattlerSide(gBattleAnimTarget);
+    task->tAnimLengthTime = gBattleAnimArgs[0];
+    task->tInitialXPos = gSprites[task->tSpriteId].x;
+    task->tInitialYPos = gSprites[task->tSpriteId].y;
+    task->tTimer = 0;
+    task->func = AnimTask_TwinkleTackleLaunchStep;
+
+    PrepareBattlerSpriteForRotScale(task->tSpriteId, ST_OAM_OBJ_NORMAL);
+}
+#undef tSpriteId
+#undef tTimer
+#undef tInitialXPos
+#undef tInitialYPos
+#undef tSide
+#undef tAnimLengthTime
+
+void AnimTask_GetTimeOfDay(u8 taskId)
+{
+    gBattleAnimArgs[0] = 0; //Daytime is default
+
+    RtcCalcLocalTime();
+    if (gLocalTime.hours >= 20 || gLocalTime.hours < 4)
+        gBattleAnimArgs[0] = 1;
+    else if (gLocalTime.hours >= 17 && gLocalTime.hours < 20)
+        gBattleAnimArgs[0] = 2;
+
+    DestroyAnimVisualTask(taskId);
+}
+
+void AnimTask_GetLycanrocForm(u8 taskId)
+{
+    if (GetMonData(GetIllusionMonPtr(gBattleAnimAttacker), MON_DATA_SPECIES) == SPECIES_LYCANROC_MIDNIGHT)
+        gBattleAnimArgs[0] = 1;
+    else
+        gBattleAnimArgs[0] = 0;
+
+    gBattleAnimArgs[0] = 0;
+    DestroyAnimVisualTask(taskId);
+}
+
+// Scales up the target mon sprite
+// Used in Let's Snuggle Forever
+// No args.
+void AnimTask_GrowTarget(u8 taskId)
+{
+    u8 spriteId = GetAnimBattlerSpriteId(ANIM_TARGET);
+    PrepareBattlerSpriteForRotScale(spriteId, ST_OAM_OBJ_BLEND);
+    SetSpriteRotScale(spriteId, 208, 208, 0);
+    gTasks[taskId].data[0] = 120;
+    gTasks[taskId].func = AnimTask_GrowStep;
+}
+static void AnimTask_GrowStep(u8 taskId)
+{
+    if (--gTasks[taskId].data[0] == -1)
+    {
+        u8 spriteId = GetAnimBattlerSpriteId(ANIM_TARGET);
+        ResetSpriteRotScale(spriteId);
+        DestroyAnimVisualTask(taskId);
+    }
+}
+
+// Uses a spotlight sprite as a light mask to illuminate the attacker. The spotlight grows and shrinks.
+// arg 0: initial x pixel offset
+// arg 1: initial y pixel offset
+// arg 2: duration of fully-opened spotlight
+static void AnimOceanicOperettaSpotlight(struct Sprite *sprite)
+{
+    SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WIN01_BG_ALL | WINOUT_WIN01_OBJ | WINOUT_WIN01_CLR | WINOUT_WINOBJ_BG_ALL | WINOUT_WINOBJ_OBJ);
+    SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_OBJWIN_ON);
+    gBattle_WIN0H = 0;
+    gBattle_WIN0V = 0;
+    SetGpuReg(REG_OFFSET_WIN0H, gBattle_WIN0H);
+    SetGpuReg(REG_OFFSET_WIN0V, gBattle_WIN0V);
+
+    sprite->data[0] = gBattleAnimArgs[2];
+    InitSpritePosToAnimAttacker(sprite, FALSE);
+    sprite->oam.objMode = ST_OAM_OBJ_WINDOW;
+    sprite->invisible = TRUE;
+    sprite->callback = AnimFlatterSpotlight_Step;
+}
+
 static void AnimTask_WaitAffineAnim(u8 taskId)
 {
     struct Task* task = &gTasks[taskId];

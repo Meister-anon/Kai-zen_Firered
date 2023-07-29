@@ -4315,7 +4315,7 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                          if ((GetBattlerAbility(gActiveBattler) == ABILITY_DEFEATIST
                              && gSpecialStatuses[gActiveBattler].defeatistActivated) //overwrite usual switch preveention from status & traps
                              || (GetBattlerAbility(gActiveBattler) == ABILITY_RUN_AWAY)
-                             || (GetBattlerAbility(gActiveBattler) == ABILITY_AVIATOR)) //can escape trap abilities //need display ability message, mon broke free with ability or mon used ability and broke free!
+                             || (GetBattlerAbility(gActiveBattler) == ABILITY_AVIATOR)) //can escape trap abilities //add to ability descriptions vsonic
                          {
                             if (gActiveBattler == 2 && gChosenActionByBattler[0] == B_ACTION_SWITCH)
                                 BtlController_EmitChoosePokemon(0, PARTY_ACTION_CHOOSE_MON, *(gBattleStruct->monToSwitchIntoId + 0), ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
@@ -4568,9 +4568,9 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
     // item effects
     if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE || HOLD_EFFECT_POWERITEM)
         && (ability != ABILITY_TANGLED_FEET
-            || ability != ABILITY_AVIATOR
-            || ability != ABILITY_RUN_AWAY
-            || ability != ABILITY_QUICK_FEET
+            && ability != ABILITY_AVIATOR
+            && ability != ABILITY_RUN_AWAY
+            && ability != ABILITY_QUICK_FEET
             ))
         speed /= 2;
 
@@ -4592,9 +4592,9 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
     // paralysis drop
     if ((gBattleMons[battlerId].status1 & STATUS1_PARALYSIS)
         && (ability != ABILITY_QUICK_FEET
-            || ability != ABILITY_TANGLED_FEET
-            || ability != ABILITY_AVIATOR
-            || ability != ABILITY_RUN_AWAY
+            && ability != ABILITY_TANGLED_FEET
+            && ability != ABILITY_AVIATOR
+            && ability != ABILITY_RUN_AWAY
             )
         && IsBlackFogNotOnField())
         speed /= 4;

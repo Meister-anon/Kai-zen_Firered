@@ -43,7 +43,7 @@ static void AnimTask_RockMonBackAndForthStep(u8);
 static void AnimSweetScentPetalStep(struct Sprite *);
 static void AnimTask_FlailMovementStep(u8);
 static void AnimFlatterConfettiStep(struct Sprite *);
-static void AnimFlatterSpotlightStep(struct Sprite *);
+//static void AnimFlatterSpotlight_Step(struct Sprite *);
 static void AnimReversalOrbStep(struct Sprite *);
 static void AnimTask_RolePlaySilhouetteStep1(u8);
 static void AnimTask_RolePlaySilhouetteStep2(u8);
@@ -317,24 +317,24 @@ const struct SpriteTemplate gFangSpriteTemplate =
     .callback = AnimFang,
 };
 
-static const union AffineAnimCmd sSpotlightAffineAnimCmds1[] =
+const union AffineAnimCmd gSpotlightAffineAnimCmds1[] =
 {
     AFFINEANIMCMD_FRAME(0x0, 0x180, 0, 0),
     AFFINEANIMCMD_FRAME(0x10, 0x0, 0, 20),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sSpotlightAffineAnimCmds2[] =
+const union AffineAnimCmd gSpotlightAffineAnimCmds2[] =
 {
     AFFINEANIMCMD_FRAME(0x140, 0x180, 0, 0),
     AFFINEANIMCMD_FRAME(-0x10, 0x0, 0, 19),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sSpotlightAffineAnimTable[] =
+const union AffineAnimCmd *const gSpotlightAffineAnimTable[] =
 {
-    sSpotlightAffineAnimCmds1,
-    sSpotlightAffineAnimCmds2,
+    gSpotlightAffineAnimCmds1,
+    gSpotlightAffineAnimCmds2,
 };
 
 const struct SpriteTemplate gSpotlightSpriteTemplate =
@@ -344,7 +344,7 @@ const struct SpriteTemplate gSpotlightSpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjNormal_64x64,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sSpotlightAffineAnimTable,
+    .affineAnims = gSpotlightAffineAnimTable,
     .callback = AnimSpotlight,
 };
 
@@ -724,7 +724,7 @@ const struct SpriteTemplate gFlatterSpotlightSpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjNormal_64x64,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sSpotlightAffineAnimTable,
+    .affineAnims = gSpotlightAffineAnimTable,
     .callback = AnimFlatterSpotlight,
 };
 
@@ -3088,10 +3088,10 @@ void AnimFlatterSpotlight(struct Sprite *sprite)
     InitSpritePosToAnimTarget(sprite, FALSE);
     sprite->oam.objMode = ST_OAM_OBJ_WINDOW;
     sprite->invisible = TRUE;
-    sprite->callback = AnimFlatterSpotlightStep;
+    sprite->callback = AnimFlatterSpotlight_Step;
 }
 
-static void AnimFlatterSpotlightStep(struct Sprite *sprite)
+void AnimFlatterSpotlight_Step(struct Sprite *sprite)
 {
     switch (sprite->data[1])
     {

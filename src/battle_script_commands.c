@@ -15202,6 +15202,7 @@ static void atkD1_trysethelpinghand(void)
 static void atkD2_tryswapitems(void) // trick
 {
     // opponent can't swap items with player in regular battles
+    //change this later, would need setup logic so item gets recovered at battle end, just like knockoff
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_TOWER
      || (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT
          && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_EREADER_TRAINER))
@@ -15228,8 +15229,9 @@ static void atkD2_tryswapitems(void) // trick
               || gBattleMons[gBattlerAttacker].item == ITEM_ENIGMA_BERRY
               || gBattleMons[gBattlerTarget].item == ITEM_ENIGMA_BERRY
               || IS_ITEM_MAIL(gBattleMons[gBattlerAttacker].item)
-              || IS_ITEM_MAIL(gBattleMons[gBattlerTarget].item))
-        {
+              || IS_ITEM_MAIL(gBattleMons[gBattlerTarget].item)
+              || GetBattlerAbility(gBattlerTarget) == ABILITY_KLUTZ)  //ADDED klutz mon would just drop it, could make logic for that, if klutz mon has held item it'd default to knocked off on swith in
+        {                                                                   //"mon dropped it's "glastusditem"/helditem!" so that'd only be an ability reveal if you were dumb enough to leave an item on a klutz mon  vsonic
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
         }
         // check if ability prevents swapping
