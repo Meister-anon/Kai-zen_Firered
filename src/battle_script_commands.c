@@ -5328,7 +5328,7 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     //
     u32 percentChance,argumentChance;
 
-    if (gBattleMoves[gCurrentMove].argumentEffectChance == 0)
+    if (gBattleMoves[gCurrentMove].argumentEffectChance == 0)   //to ensure arguments already set work
         argumentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
     else
         argumentChance = gBattleMoves[gCurrentMove].argumentEffectChance;
