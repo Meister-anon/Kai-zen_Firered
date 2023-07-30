@@ -12,6 +12,13 @@
 
 #define METATILE_ID(tileset, name) (METATILE_##tileset##_##name)
 
+//potentially what I need to setup normal grass as encouter tiles
+//can have things treated like bioms within an area 
+//deep water vs shallow water
+//deep grass vs normal grass/field
+//deep sand  vs normal sand in desert etc.
+//would give me more encounter options per map
+
 enum
 {
     METATILE_ATTRIBUTE_BEHAVIOR,

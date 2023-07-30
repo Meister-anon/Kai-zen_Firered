@@ -21,7 +21,7 @@
 #include "battle_util.h"
 
 //// function declarations
-static void SpriteCB_SpriteToCentreOfSide(struct Sprite* sprite);
+static void SpriteCB_SpriteToCentreOfSide(struct Sprite *sprite);
 static void SpriteCB_SpriteOnMonForDuration(struct Sprite *sprite);
 static void SpriteCB_ToxicThreadWrap(struct Sprite *sprite);
 static void SpriteCB_GrowingSuperpower(struct Sprite *sprite);

@@ -72,6 +72,7 @@
 #define OPTIONS_BATTLE_STYLE_SHIFT  0 //need to remove opponent pokemon alert from shift.  DONE!
 #define OPTIONS_BATTLE_STYLE_SET    1
 
+//potentially make medicine and repel pouches, or combine them into a field-use pouch
 #define POCKET_ITEMS        1
 #define POCKET_KEY_ITEMS    2
 #define POCKET_POKE_BALLS   3

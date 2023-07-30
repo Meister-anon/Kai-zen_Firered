@@ -18,6 +18,7 @@ const u32 gSmokescreenImpactTiles[] = INCBIN_U32("graphics/battle_anims/sprites/
 const u32 gSmokescreenImpactPalette[] = INCBIN_U32("graphics/battle_anims/sprites/smokescreen_impact.gbapal.lz");
 
 #include "data/graphics/interface_pokeballs.h"
+//for animation of pokeballs opening for battle, will need add to this file, if adding more pokeballs
 
 const u32 gBlankGfxCompressed[] = INCBIN_U32("graphics/interface/blank.4bpp.lz");
 

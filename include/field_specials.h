@@ -38,12 +38,12 @@ void ResetFieldTasksArgs(void);
 bool8 UsedPokemonCenterWarp(void);
 void sub_80CC534(void);
 void sub_80CC59C(void);
-void SetPlayerBulbasaurBall(void); //pray this works, and its not in the wrong place
+/*void SetPlayerBulbasaurBall(void); //pray this works, and its not in the wrong place
 void SetPlayerSquirtleBall(void);
 void SetPlayerCharmanderBall(void);
 void SetRivalBulbasaurBall(void);
 void SetRivalSquirtleBall(void);
-void SetRivalCharmanderBall(void);
+void SetRivalCharmanderBall(void);*/
 void SetPlayerRandomStarterSpecies(void);
 void SetRivalRandomStarterSpecies(void);
 

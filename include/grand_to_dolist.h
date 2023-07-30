@@ -455,7 +455,7 @@ goto TRAINER_DATA_STRUCTS
 
 goto B_ANIM_CONSTANTS //for porting animation, need set constant for recognition in battlescript
 
-//unrelated but any file that has ewram_data must be included in sym_ewram.txt
+//unrelated but any file that has ewram_data must be included in sym_ewram.txt\\
 
 goto SRC_DATA_DEFINES //this where they must be defined for including elsewhere
 
