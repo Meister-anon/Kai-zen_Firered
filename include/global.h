@@ -12,7 +12,7 @@
 #include "constants/abilities.h"
 #include "constants/items.h"
 #include "constants/sound.h"
-#include "field_specials.h"
+#include "field_specials.h" //this is the file I used to set dynamic starter type checks
 
 /*code added in this commit was to upgrade ld_script to sync wild cards
     i.e make it auto recognize new .c files*/

@@ -14,7 +14,7 @@
 #include "sprite.h"
 #include "task.h"
 #include "constants/battle_anim.h"
-#include "constants/moves.h"
+//#include "constants/moves.h"  //already in global.h may not need
 
 #define ANIM_SPRITE_INDEX_COUNT 8
 
@@ -37,7 +37,7 @@ EWRAM_DATA static u16 sSoundAnimFramesToWait = 0;
 EWRAM_DATA static u8 sMonAnimTaskIdArray[2] = {0};
 EWRAM_DATA u8 gAnimMoveTurn = 0;
 EWRAM_DATA static u8 sAnimBackgroundFadeState = 0;
-EWRAM_DATA u32 gAnimMoveIndex = 0;  //changed from u16 because more than 512 moves
+EWRAM_DATA u16 gAnimMoveIndex = 0;  //changed from u16 because more than 512...wrong I didn't understand types, u16 limit is 65k its not 256 x 2 its 2^16 power as binary has 2 states 0 & 1
 EWRAM_DATA u8 gBattleAnimAttacker = 0;
 EWRAM_DATA u8 gBattleAnimTarget = 0;
 EWRAM_DATA u16 gAnimBattlerSpecies[MAX_BATTLERS_COUNT] = {0};
