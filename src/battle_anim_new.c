@@ -6,7 +6,6 @@
 #include "gpu_regs.h"
 #include "item.h"
 #include "rtc.h"
-#include "item_icon.h"  //maybe add its functions to item_menu_icons
 #include "sound.h"
 #include "menu.h"
 #include "malloc.h"

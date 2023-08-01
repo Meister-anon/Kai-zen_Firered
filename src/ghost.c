@@ -6,7 +6,7 @@
 #include "trig.h"
 #include "util.h"
 #include "decompress.h"
-#include "item_icon.h"
+#include "item_menu_icons.h"
 #include "constants/songs.h"
 #include "constants/moves.h"
 
@@ -1564,7 +1564,7 @@ void AnimTask_PoltergeistItem(u8 taskId)
     u8 x = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X);
     u8 y = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y) + (GetBattlerSpriteCoordAttr(gBattleAnimTarget, BATTLER_COORD_ATTR_HEIGHT) / 2);
 
-    task->data[0] = AddItemIconSprite(ANIM_TAG_ITEM_BAG, ANIM_TAG_ITEM_BAG, gLastUsedItem);//don't have table in my game yet, instead tweaked function to not use it.
+    task->data[0] = AddItemIconObject(ANIM_TAG_ITEM_BAG, ANIM_TAG_ITEM_BAG, gLastUsedItem);//don't have table in my game yet, instead tweaked function to not use it.
     gSprites[task->data[0]].pos1.x = x + 4;
     gSprites[task->data[0]].pos1.y = y + 4;
     gSprites[task->data[0]].data[0] = x + 4;
