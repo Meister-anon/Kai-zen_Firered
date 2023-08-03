@@ -28,8 +28,8 @@ void PlayCry_Normal(u16 species, s8 pan);
 void PlayCry_NormalNoDucking(u16 species, s8 pan, s8 volume, u8 priority);
 void PlayCry_ByMode(u16 species, s8 pan, u8 mode);
 void PlayCry_ReleaseDouble(u16 species, s8 pan, u8 mode);
-void PlayCry5(u16 species, u8 mode);
-void PlayCry6(u16 species, s8 pan, u8 mode);
+//void PlayCry5(u16 species, u8 mode);
+//void PlayCry6(u16 species, s8 pan, u8 mode);  emerald exclusives
 void PlayCry7(u16 species, u8 mode);
 void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode);
 bool8 IsCryFinished(void);

@@ -3,9 +3,10 @@
 #include "battle.h"
 #include "battle_anim.h"
 #include "m4a.h"
-#include "sound.h"  //need this to reference the constants file
+#include "sound.h"
 #include "task.h"
 #include "constants/battle_anim.h"
+#include "constants/sound.h"
 
 static void SoundTask_FireBlast_Step1(u8 taskId);
 static void SoundTask_FireBlast_Step2(u8 taskId);
