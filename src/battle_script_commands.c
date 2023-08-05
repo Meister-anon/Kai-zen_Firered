@@ -1856,17 +1856,19 @@ static void atk01_accuracycheck(void)
         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNAWARE)
             buff = acc;
 
-        //trap effects
-        if ((gBattleMons[gBattlerAttacker].status4 & STATUS4_SAND_TOMB) || (gBattleMons[gBattlerAttacker].status1 & STATUS1_SAND_TOMB))  //hope works should lower accruacy 2 stages if trapped by sandtomb
-        {
-            acc -= 2;
-        }
 
         if (buff < MIN_STAT_STAGE)
             buff = MIN_STAT_STAGE;
         if (buff > MAX_STAT_STAGE)
             buff = MAX_STAT_STAGE;
         moveAcc = gBattleMoves[move].accuracy;
+
+        //trap effects
+        if (((gBattleMons[gBattlerAttacker].status4 & STATUS4_SAND_TOMB) || (gBattleMons[gBattlerAttacker].status1 & STATUS1_SAND_TOMB))
+            && IsBlackFogNotOnField())
+        {
+            moveAcc = (moveAcc * 60) / 100; //euivalent of a 2 stage acc drop
+        }
 
         if (gCurrentMove == MOVE_FURY_CUTTER) { //still not quite right, doesn't display right message for things like wonderguard
            // if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5) { //increment until reach 5
@@ -2119,8 +2121,11 @@ static void atk04_critcalc(void)    //figure later
     if (critChance >= NELEMS(gCriticalHitChance))
         critChance = NELEMS(gCriticalHitChance) - 1; // minus 1 because arrays start at 0
 
+    if (!IsBlackFogNotOnField()) //black fog on field no one can crit
+        gCritMultiplier = 1;
+
     //while everything here is calculating crit damage, so need to add gCritMultiplier = 3; for that crit boosting ability
-    if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR)
+   else if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR)
      && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
      && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
      && (Random() % gCriticalHitChance[critChance] == 0) //sets crit odds by array and crit ratio, random % selects crit odds based on stat stage i.e if 0, uses 1st value in array i.e random 16 == 0 for 1 in 16 crit chance
@@ -4458,7 +4463,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             BattleScriptPush(gBattlescriptCurrInstr + 1);//hmm or what I could do is keep full sleep turns but counter by letting heal, so you get free dmg but you may need to expend more to kill
                 //yeah I like that a lot better, ok set it up like traunt, but end turn, that way you still get 2 chances to catch a wild mon before it starts to heal
             //makes rest better, which is fine but should be no issues, just test and tweak heal value
-            if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_SLEEP)//actually way this is counted it decrements before effect takes palce 
+            if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_SLEEP)//actually way this is counted it decrements before effect takes palce (i.e in atk canceler not end turn)
                 gBattleMons[gEffectBattler].status1 |= ((Random() % 3) + 3); //duration of sleep, and its 2-5 here. /changed to 2-4 /guarantees 1 free turn unless earlybird  //confirmed
             else if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_FREEZE)
             {
@@ -5321,11 +5326,22 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
 
     //hey old me, that ish is all wrong, without secondary chance, effects won't apply, and that's dealt with in battle_moves file
     //
-    u32 percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
+    u32 percentChance,argumentChance;
+
+    if (gBattleMoves[gCurrentMove].argumentEffectChance == 0)   //to ensure arguments already set work
+        argumentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
+    else
+        argumentChance = gBattleMoves[gCurrentMove].argumentEffectChance;
+    
+    if (gBattleScripting.moveEffect == gBattleMoves[gCurrentMove].effect) //on second look think this won't work as variosargumetotmoveeffect may be 
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;   //setting the argumentt as the move effct?
+    else if (gBattleScripting.moveEffect == gBattleMoves[gCurrentMove].argument)
+        percentChance = argumentChance; //confused it doesn't use them interchangeably so may work? think is different?
+
     //hail based freeze boost, 
     if ((gBattleWeather & WEATHER_HAIL_ANY)
         && gBattleMoves[gCurrentMove].effect == EFFECT_FREEZE_HIT)
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;  //its good, happened 2 out of 5 hits. decided to make it 1/16 dmg
+        percentChance *= 2; //= gBattleMoves[gCurrentMove].secondaryEffectChance * 2;  //its good, happened 2 out of 5 hits. decided to make it 1/16 dmg
     
       
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
@@ -5333,16 +5349,22 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
     if (GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_DARK_DEAL) //hopefully stacks
         percentChance *= 2;
     else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_DARK_DEAL) //is excluded
-        percentChance = (gBattleMoves[gCurrentMove].secondaryEffectChance * 150) / 100;
+        percentChance = (percentChance * 150) / 100;
 
         
 
     
 
-    
+    //for these to work must be placed in .effect member of battle_moves.h they aren't used in argument,
+    //these are the main effects of the move
+    //I could set it to gbattlescripting.moveeffect and it'd work for both but I don't want that.
+    //this is a restriction for the sake of structure.
+    //to separate primary effects from  secondary effects
     
     if (gBattleMoves[gCurrentMove].effect == ITS_A_TRAP)   //if this works make a define for trap effects & separate effect & move effect & battlscript for each
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //that way may not need to make a separate status,// seems to work no apparent bugs
+    //will need to remove infestation from this as I want to use that as new bug specific status also
+    //is best way to do other than making an entirely new status of same effect\
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN); 
@@ -5358,11 +5380,15 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_SPEED_UP_HIT)       //go over 100%  effects, see which I can put here to just make certain, may be able to do all.
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
+
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_BUG_BITE)
+        SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
     
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_POISONED_LEGACY
         && (gBattleMons[gBattlerAttacker].hp < (gBattleMons[gBattlerAttacker].maxHP / 2))) //make sure effects only activate when in a pinch
     {
-        if (gBattleMoves[gCurrentMove].effect == EFFECT_POISON_HIT || gBattleMoves[gCurrentMove].effect == EFFECT_TOXIC_FANG)
+        if ((gBattleMoves[gCurrentMove].effect == EFFECT_POISON_HIT || gBattleMoves[gCurrentMove].effect == EFFECT_TOXIC_FANG)
+           || (gBattleMoves[gCurrentMove].argument == EFFECT_POISON_HIT || gBattleMoves[gCurrentMove].argument == EFFECT_TOXIC_FANG))
             SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //gauranteed poison
     }
 
@@ -5374,9 +5400,10 @@ static void atk15_seteffectwithchance(void) //occurs to me that fairy moves were
 
     //trap effects
     if (((gBattleMons[gBattlerTarget].status4 == STATUS4_FIRE_SPIN) || (gBattleMons[gBattlerTarget].status1 == STATUS1_FIRE_SPIN))
-        && gBattleMoves[gCurrentMove].effect == (EFFECT_BURN_HIT || EFFECT_SCALD))
+        && ((gBattleMoves[gCurrentMove].effect == EFFECT_BURN_HIT || gBattleMoves[gCurrentMove].effect == EFFECT_SCALD)
+        || (gBattleMoves[gCurrentMove].argument == EFFECT_BURN_HIT || gBattleMoves[gCurrentMove].argument == EFFECT_SCALD)))
     {
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 6;
+        percentChance *= 6;
 
         if (gBattleWeather & WEATHER_SUN_ANY)
         {
@@ -6701,7 +6728,8 @@ static void atk48_playstatchangeanimation(void)
                         ++changeableStatsCount;
                     }
                 }
-                else if (!gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer
+                else if ((!gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer
+                        || (!IsBlackFogNotOnField() && gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer))
                         && ability != ABILITY_CLEAR_BODY
                         && ability != ABILITY_LEAF_GUARD
                         && ability != ABILITY_FULL_METAL_BODY
@@ -8719,7 +8747,8 @@ static void atk52_switchineffects(void) //important, think can put ability reset
     else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK_DAMAGED)
         && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK)
         && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
-        && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD)
+        && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD
+        && IsBlackFogNotOnField())
     {
         gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STEALTH_ROCK_DAMAGED;
         gBattleMoveDamage = GetStealthHazardDamage(gBattleMoves[MOVE_STEALTH_ROCK].type, gActiveBattler);
@@ -10447,9 +10476,9 @@ static void atk76_various(void) //will need to add all these emerald various com
             && gBattleMons[gBattlerAttacker].statStages[STAT_ATK] != 12)
         {
            // if (B_FELL_STINGER_STAT_RAISE >= GEN_7)
-                SET_STATCHANGER(STAT_ATK, 3, FALSE);
+              //  SET_STATCHANGER(STAT_ATK, 3, FALSE);
             //else
-              //  SET_STATCHANGER(STAT_ATK, 2, FALSE);
+                SET_STATCHANGER(STAT_ATK, 2, FALSE);
 
             PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_ATK);
             BattleScriptPush(gBattlescriptCurrInstr + 3);
@@ -10786,7 +10815,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattleScripting.moveEffect = MOVE_EFFECT_TOXIC;
             break;
         default:
-            gBattleScripting.moveEffect = 0;
+            gBattleScripting.moveEffect = 0; //if not any of those sets moveeffect to 0
             break;
         }
         if (gBattleScripting.moveEffect != 0)
@@ -11082,7 +11111,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         return;
     case VARIOUS_ARGUMENT_TO_MOVE_EFFECT:   //argumenttomoveeffect works with seconaryeffectchance can prob also do like move effect set certain or effect user
-        gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument;
+        gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument; //potentially need make argument field for bs. as well vsonic
         break;  //I think what this does is, pass the argument to move effect? and then it gets read by seteffectwithchance function?
     case VARIOUS_SPECTRAL_THIEF:
         // Raise stats
@@ -12030,7 +12059,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             gBattlescriptCurrInstr += 7;
         return;
     }
-    case VARIOUS_CHECK_PARENTAL_BOND_COUNTER:  //vsonic
+    case VARIOUS_CHECK_PARENTAL_BOND_COUNTER:  //vsonic   redo and use emerald setup now that I've porter args
     {
         //VARIOUS_ARGS(u8 counter, const u8 * jumpInstr);
         // Some effects should only happen on the first or second strike of Parental Bond,
@@ -12675,6 +12704,7 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
         //these are set of exclusions that prevenet stat drop
         //afterwards it attempts to do stat change
         if (gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer
+            && IsBlackFogNotOnField()
             && !certain && gCurrentMove != MOVE_CURSE
             && !(gActiveBattler == gBattlerTarget && GetBattlerAbility(gBattlerAttacker) == ABILITY_INFILTRATOR))
         {
@@ -13499,17 +13529,44 @@ static void atk98_updatestatusicon(void)
 
 static void atk99_setmist(void)
 {
-    if (gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].mistTimer)
-    {
-        gMoveResultFlags |= MOVE_RESULT_FAILED;
-        gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+    u32 i;
+
+    if (gCurrentMove == MOVE_MIST) {
+
+        if (gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].mistTimer)
+        {
+            gMoveResultFlags |= MOVE_RESULT_FAILED;
+            gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+        }
+        else
+        {
+            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].mistTimer = 5;
+            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].mistBattlerId = gBattlerAttacker;
+            gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] |= SIDE_STATUS_MIST;
+            gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+        }
     }
-    else
+    else if (gCurrentMove == MOVE_HAZE)
     {
-        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].mistTimer = 5;
-        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].mistBattlerId = gBattlerAttacker;
-        gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] |= SIDE_STATUS_MIST;
-        gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+        if (gFieldTimers.HazeTimer) //haze timer not 0
+        {
+            gMoveResultFlags |= MOVE_RESULT_FAILED;
+            gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+        }
+        else
+        {
+            gFieldTimers.HazeTimer = 4; //is 3 turns,  potentially drop to timer 3?idk 
+            gFieldStatuses |= STATUS_FIELD_BLACK_FOG;
+            for (i = 0; i < MAX_BATTLERS_COUNT, ++i;) //since this isn't supposed to change species I'm gonna need to remove status2 one by one to preserve transform
+            {
+                //gBattleMons[i].status2 &= ~(STATUS2_WRAPPED); nvm just skip effect in util
+                gBattleMons[i].status2 &= ~(STATUS2_FOCUS_ENERGY);
+                gBattleMons[i].status2 &= ~(STATUS2_RAGE);  //black fog would reset atk boost but this would also let you get a hit in if faster before they use rage again
+                gBattleMons[i].status2 &= ~(STATUS2_SUBSTITUTE); //for further consideration
+            }
+            gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+        }
+
     }
     ++gBattlescriptCurrInstr;
 }
@@ -15149,6 +15206,7 @@ static void atkD1_trysethelpinghand(void)
 static void atkD2_tryswapitems(void) // trick
 {
     // opponent can't swap items with player in regular battles
+    //change this later, would need setup logic so item gets recovered at battle end, just like knockoff
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_TOWER
      || (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT
          && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_EREADER_TRAINER))
@@ -15175,8 +15233,9 @@ static void atkD2_tryswapitems(void) // trick
               || gBattleMons[gBattlerAttacker].item == ITEM_ENIGMA_BERRY
               || gBattleMons[gBattlerTarget].item == ITEM_ENIGMA_BERRY
               || IS_ITEM_MAIL(gBattleMons[gBattlerAttacker].item)
-              || IS_ITEM_MAIL(gBattleMons[gBattlerTarget].item))
-        {
+              || IS_ITEM_MAIL(gBattleMons[gBattlerTarget].item)
+              || GetBattlerAbility(gBattlerTarget) == ABILITY_KLUTZ)  //ADDED klutz mon would just drop it, could make logic for that, if klutz mon has held item it'd default to knocked off on swith in
+        {                                                                   //"mon dropped it's "glastusditem"/helditem!" so that'd only be an ability reveal if you were dumb enough to leave an item on a klutz mon  vsonic
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
         }
         // check if ability prevents swapping

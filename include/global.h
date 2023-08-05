@@ -12,7 +12,7 @@
 #include "constants/abilities.h"
 #include "constants/items.h"
 #include "constants/sound.h"
-#include "field_specials.h"
+#include "field_specials.h" //this is the file I used to set dynamic starter type checks
 
 /*code added in this commit was to upgrade ld_script to sync wild cards
     i.e make it auto recognize new .c files*/
@@ -213,7 +213,7 @@ struct Time //want month seasons potentialy add here
     /*0x02*/ s8 hours;
     /*0x03*/ s8 minutes;
     /*0x04*/ s8 seconds;
-};
+};//month logic already included/in port in rtc file
 
 struct Pokedex
 {
@@ -799,6 +799,7 @@ struct TrainerNameRecord
 
 // For external event data storage. The majority of these may have never been used.
 // In FRLG, the only known used fields are the PokeCoupon and BoxRS ones, but hacking the distribution discs allows FRLG to receive events and set the others
+//-already removed gcn flags so may just remove these external stuff, or trigger them anotoher way.
 struct ExternalEventData
 {
     u8 unknownExternalDataFields1[7]; // if actually used, may be broken up into different fields.
@@ -815,6 +816,7 @@ struct ExternalEventData
 
 // For external event flags. The majority of these may have never been used.
 // In FRLG, Jirachi cannot normally be received, but hacking the distribution discs allows FRLG to receive Jirachi and set the flag
+//-potentially setup pokemon box stuff as breeding/daycare bonuss but at lower levels i.e 20 instad of 100 for zigzagoon
 struct ExternalEventFlags
 {
     u8 usedBoxRS:1; // Set by Pokémon Box: Ruby & Sapphire; denotes whether this save has connected to it and triggered the free False Swipe Swablu Egg giveaway.

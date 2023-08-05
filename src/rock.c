@@ -45,7 +45,7 @@ static const union AnimCmd sAnim_FlyingRock_2[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_FlyingRock[] =
+const union AnimCmd *const gAnims_FlyingRock[] =
 {
     sAnim_FlyingRock_0,
     sAnim_FlyingRock_1,
@@ -57,7 +57,7 @@ const struct SpriteTemplate gFallingRockSpriteTemplate =
     .tileTag = ANIM_TAG_ROCKS,
     .paletteTag = ANIM_TAG_ROCKS,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnims_FlyingRock,
+    .anims = gAnims_FlyingRock,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimFallingRock,
@@ -68,7 +68,7 @@ const struct SpriteTemplate gRockFragmentSpriteTemplate =
     .tileTag = ANIM_TAG_ROCKS,
     .paletteTag = ANIM_TAG_ROCKS,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnims_FlyingRock,
+    .anims = gAnims_FlyingRock,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimRockFragment,
@@ -516,7 +516,7 @@ void AnimTask_LoadSandstormBackground(u8 taskId)
     AnimLoadCompressedBgGfx(animBg.bgId, gFile_graphics_battle_anims_backgrounds_sandstorm_brew_sheet, animBg.tilesOffset);
     LoadCompressedPalette(gBattleAnimSpritePal_FlyingDirt, animBg.paletteId * 16, 32);
     if (IsContest())
-        sub_80730C0(animBg.paletteId, animBg.bgTilemap, 0, 0);
+        RelocateBattleBgPal(animBg.paletteId, animBg.bgTilemap, 0, 0);
     if (gBattleAnimArgs[0] && GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
         var0 = 1;
     gTasks[taskId].data[0] = var0;

@@ -334,7 +334,7 @@ void AnimTask_SetUpCurseBackground(u8 taskId)
     GetBattleAnimBg1Data(&animBgData);
     AnimLoadCompressedBgTilemap(animBgData.bgId, gFile_graphics_battle_anims_masks_curse_tilemap);
     if (IsContest())
-        sub_80730C0(animBgData.paletteId, animBgData.bgTilemap, 0, 0);
+        RelocateBattleBgPal(animBgData.paletteId, animBgData.bgTilemap, 0, 0);
     AnimLoadCompressedBgGfx(animBgData.bgId, gFile_graphics_battle_anims_masks_curse_sheet, animBgData.tilesOffset);
     LoadPalette(sRgbWhite, animBgData.paletteId * 16 + 1, 2);
     gBattle_BG1_X = -gSprites[spriteId].pos1.x + 32;
@@ -409,6 +409,22 @@ void AnimTask_CanBattlerSwitch(u8 taskId)
     DestroyAnimVisualTask(taskId);
 }
 
+void AnimTask_SetInvisible(u8 taskId)
+{
+    u32 battlerId = GetAnimBattlerId(gBattleAnimArgs[0]);
+    u32 spriteId = gBattlerSpriteIds[battlerId];
+
+    gSprites[spriteId].invisible = gBattleSpritesDataPtr->battlerData[battlerId].invisible = gBattleAnimArgs[1];
+    DestroyAnimVisualTask(taskId);
+}
+
+void AnimTask_SetAnimTargetToAttackerOpposite(u8 taskId)
+{
+    gBattleAnimTarget = BATTLE_OPPOSITE(gBattleAnimAttacker);
+    DestroyAnimVisualTask(taskId);
+}
+
+
 static void sub_80BB0D8(u8 taskId)
 {
     if (sAnimStatsChangeData->data[2] == 0)
@@ -470,7 +486,7 @@ static void sub_80BB2A0(u8 taskId)
     else
         AnimLoadCompressedBgTilemap(animBgData.bgId, gBattleStatMask2_Tilemap);
     if (IsContest())
-        sub_80730C0(animBgData.paletteId, animBgData.bgTilemap, 0, 0);
+        RelocateBattleBgPal(animBgData.paletteId, animBgData.bgTilemap, 0, 0);
     AnimLoadCompressedBgGfx(animBgData.bgId, gBattleStatMask_Gfx, animBgData.tilesOffset);
     switch (sAnimStatsChangeData->data[1])
     {
@@ -770,7 +786,7 @@ void sub_80BBA20(u8 taskId, s32 unused, u16 arg2, u8 battler1, u8 arg4, u8 arg5,
     GetBattleAnimBg1Data(&animBgData);
     AnimLoadCompressedBgTilemap(animBgData.bgId, tilemap);
     if (IsContest())
-        sub_80730C0(animBgData.paletteId, animBgData.bgTilemap, 0, 0);
+        RelocateBattleBgPal(animBgData.paletteId, animBgData.bgTilemap, 0, 0);
     AnimLoadCompressedBgGfx(animBgData.bgId, gfx, animBgData.tilesOffset);
     LoadCompressedPalette(palette, animBgData.paletteId * 16, 32);
     gBattle_BG1_X = 0;

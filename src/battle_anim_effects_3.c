@@ -43,7 +43,7 @@ static void AnimTask_RockMonBackAndForthStep(u8);
 static void AnimSweetScentPetalStep(struct Sprite *);
 static void AnimTask_FlailMovementStep(u8);
 static void AnimFlatterConfettiStep(struct Sprite *);
-static void AnimFlatterSpotlightStep(struct Sprite *);
+//static void AnimFlatterSpotlight_Step(struct Sprite *);
 static void AnimReversalOrbStep(struct Sprite *);
 static void AnimTask_RolePlaySilhouetteStep1(u8);
 static void AnimTask_RolePlaySilhouetteStep2(u8);
@@ -317,24 +317,24 @@ const struct SpriteTemplate gFangSpriteTemplate =
     .callback = AnimFang,
 };
 
-static const union AffineAnimCmd sSpotlightAffineAnimCmds1[] =
+const union AffineAnimCmd gSpotlightAffineAnimCmds1[] =
 {
     AFFINEANIMCMD_FRAME(0x0, 0x180, 0, 0),
     AFFINEANIMCMD_FRAME(0x10, 0x0, 0, 20),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd sSpotlightAffineAnimCmds2[] =
+const union AffineAnimCmd gSpotlightAffineAnimCmds2[] =
 {
     AFFINEANIMCMD_FRAME(0x140, 0x180, 0, 0),
     AFFINEANIMCMD_FRAME(-0x10, 0x0, 0, 19),
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sSpotlightAffineAnimTable[] =
+const union AffineAnimCmd *const gSpotlightAffineAnimTable[] =
 {
-    sSpotlightAffineAnimCmds1,
-    sSpotlightAffineAnimCmds2,
+    gSpotlightAffineAnimCmds1,
+    gSpotlightAffineAnimCmds2,
 };
 
 const struct SpriteTemplate gSpotlightSpriteTemplate =
@@ -344,7 +344,7 @@ const struct SpriteTemplate gSpotlightSpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjNormal_64x64,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sSpotlightAffineAnimTable,
+    .affineAnims = gSpotlightAffineAnimTable,
     .callback = AnimSpotlight,
 };
 
@@ -724,7 +724,7 @@ const struct SpriteTemplate gFlatterSpotlightSpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjNormal_64x64,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sSpotlightAffineAnimTable,
+    .affineAnims = gSpotlightAffineAnimTable,
     .callback = AnimFlatterSpotlight,
 };
 
@@ -1140,6 +1140,83 @@ static const union AffineAnimCmd sSlackOffSquishAffineAnimCmds[] =
     AFFINEANIMCMD_FRAME(0, 0, 0, 24),
     AFFINEANIMCMD_FRAME(1, -5, 0, 16),
     AFFINEANIMCMD_END,
+};
+
+const struct SpriteTemplate gMegaStoneSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_MEGA_STONE,
+    .paletteTag = ANIM_TAG_MEGA_STONE,
+    .oam = &gOamData_AffineDouble_ObjBlend_64x64,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_LusterPurgeCircle,
+    .callback = AnimSpriteOnMonPos,
+};
+
+const struct SpriteTemplate gMegaParticlesSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_MEGA_PARTICLES,
+    .paletteTag = ANIM_TAG_MEGA_PARTICLES,
+    .oam = &gOamData_AffineNormal_ObjBlend_16x16,
+    .anims = gPowerAbsorptionOrbAnimTable,
+    .images = NULL,
+    .affineAnims = gPowerAbsorptionOrbAffineAnimTable,
+    .callback = AnimPowerAbsorptionOrb,
+};
+
+const struct SpriteTemplate gMegaSymbolSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_MEGA_SYMBOL,
+    .paletteTag = ANIM_TAG_MEGA_SYMBOL,
+    .oam = &gOamData_AffineOff_ObjBlend_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimGhostStatusSprite,
+};
+
+const struct SpriteTemplate gAlphaStoneSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_ALPHA_STONE,
+    .paletteTag = ANIM_TAG_ALPHA_STONE,
+    .oam = &gOamData_AffineDouble_ObjBlend_64x64,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_LusterPurgeCircle,
+    .callback = AnimSpriteOnMonPos,
+};
+
+const struct SpriteTemplate gOmegaStoneSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_OMEGA_STONE,
+    .paletteTag = ANIM_TAG_OMEGA_STONE,
+    .oam = &gOamData_AffineDouble_ObjBlend_64x64,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_LusterPurgeCircle,
+    .callback = AnimSpriteOnMonPos,
+};
+
+const struct SpriteTemplate gAlphaSymbolSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_ALPHA_SYMBOL,
+    .paletteTag = ANIM_TAG_ALPHA_SYMBOL,
+    .oam = &gOamData_AffineOff_ObjBlend_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimGhostStatusSprite,
+};
+
+const struct SpriteTemplate gOmegaSymbolSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_OMEGA_SYMBOL,
+    .paletteTag = ANIM_TAG_OMEGA_SYMBOL,
+    .oam = &gOamData_AffineOff_ObjBlend_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimGhostStatusSprite,
 };
 
 // Functions
@@ -2304,7 +2381,7 @@ void AnimTask_MorningSunLightBeam(u8 taskId)
         LoadCompressedPalette(gBattleAnim_MorningSunPal, animBg.paletteId * 16, 32);
         if (IsContest())
         {
-            sub_80730C0(animBg.paletteId, animBg.bgTilemap, 0, 0);
+            RelocateBattleBgPal(animBg.paletteId, animBg.bgTilemap, 0, 0);
             gBattle_BG1_X = -56;
             gBattle_BG1_Y = 0;
         }
@@ -2485,7 +2562,7 @@ void AnimTask_DoomDesireLightBeam(u8 taskId)
                 
         if (IsContest())
         {
-            sub_80730C0(animBg.paletteId, animBg.bgTilemap, 0, 0);
+            RelocateBattleBgPal(animBg.paletteId, animBg.bgTilemap, 0, 0);
             gBattle_BG1_X = -56;
             gBattle_BG1_Y = 0;
         }
@@ -3011,10 +3088,10 @@ void AnimFlatterSpotlight(struct Sprite *sprite)
     InitSpritePosToAnimTarget(sprite, FALSE);
     sprite->oam.objMode = ST_OAM_OBJ_WINDOW;
     sprite->invisible = TRUE;
-    sprite->callback = AnimFlatterSpotlightStep;
+    sprite->callback = AnimFlatterSpotlight_Step;
 }
 
-static void AnimFlatterSpotlightStep(struct Sprite *sprite)
+void AnimFlatterSpotlight_Step(struct Sprite *sprite)
 {
     switch (sprite->data[1])
     {

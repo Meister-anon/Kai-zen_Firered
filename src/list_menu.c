@@ -108,8 +108,10 @@ const struct MoveMenuInfoIcon gMoveMenuInfoIcons[] = //fairy addition this shoul
 }; // use this comment order for any additional types
 //important  fairy addition ok so found out putting fairy at end as 0x17 messes up gTypeNames
 //which I need to make my dynamic starter text work, so I'll try rearranging the order of the icons
-//in the list,  note put any future type icons after type dark, that way the game will read it as next.
-//and avoid any issue.
+//in the list,  note put any future type icons after type dark, that way the game will read it as next. -nvm understood that wrong
+// how it actually works a function reads the type_icon file and it reads it left to right row by row....  what that's still wrong since it goes normal to fighting..
+// ok it ACTUALLY uses the order listed in graphics_file_rules.mk, I believe if the type isn't listed in that file it isn't recognized as a mon type
+// so it instead tried to read it as a non mon type i.e the type power accuracy icons
 //note array reads 2 more than last value, because it starts at 0, and has unusued value (pretty sure used for pokeball symbol so can't remove)
 
 static void ListMenuDummyTask(u8 taskId)

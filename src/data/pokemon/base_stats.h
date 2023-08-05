@@ -3113,7 +3113,7 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_NATURAL_CURE, ABILITY_SERENE_GRACE},
         .safariZoneFleeRate = 125,
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_HEALER, ABILITY_NONE},
+            .abilityHidden = {ABILITY_HEALER, ABILITY_TRUANT},//replace slow start with immunity, a little TOO unkillable.. //nvm did truant as gave blissey stall, better themati matchup
         // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
@@ -3249,7 +3249,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_2,
         .abilities = {ABILITY_WATER_BUBBLE, ABILITY_HYDRATION},
         .safariZoneFleeRate = 50,
-        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_STALL},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },
@@ -3276,7 +3276,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_2,
         .abilities = {ABILITY_WATER_BUBBLE, ABILITY_HYDRATION},
         .safariZoneFleeRate = 75,
-        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_STALL},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },//replaced abilities since they suck, and goldeen usually doesns't learn physical water moves, VSONIC
@@ -3333,7 +3333,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         .abilities = {ABILITY_ILLUMINATE, ABILITY_NATURAL_CURE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_ANALYTIC, ABILITY_NONE},
+            .abilityHidden = {ABILITY_ANALYTIC, ABILITY_STALL}, //JUST an idea since it has recover potential bulk starkmie with quick claw
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -3360,7 +3360,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SOUNDPROOF, ABILITY_FILTER},
-            .abilityHidden = {ABILITY_TECHNICIAN, ABILITY_NONE},
+            .abilityHidden = {ABILITY_TECHNICIAN, ABILITY_STALL}, //give more physical moves for troll stall powerswap strats
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -6566,7 +6566,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_THICK_FAT, ABILITY_SCRAPPY},
-            .abilityHidden = {ABILITY_SAP_SIPPER, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SAP_SIPPER, ABILITY_STALL},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -6593,7 +6593,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FAIRY,
         .abilities = {ABILITY_NATURAL_CURE, ABILITY_SERENE_GRACE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_HEALER, ABILITY_NONE},
+            .abilityHidden = {ABILITY_HEALER, ABILITY_STALL},
         // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
@@ -16319,7 +16319,7 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_LIGHT_METAL},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-    },
+    }, //why is it not water?
 
     [SPECIES_EELEKTRIK] =
     {
@@ -19789,7 +19789,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STAKEOUT, ABILITY_STRONG_JAW},
-            .abilityHidden = {ABILITY_ADAPTABILITY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_ADAPTABILITY, ABILITY_STALL},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -19816,7 +19816,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_STAKEOUT, ABILITY_STRONG_JAW},
-            .abilityHidden = {ABILITY_ADAPTABILITY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_ADAPTABILITY, ABILITY_STALL},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },//give first impressions as evo move & facade
@@ -25138,7 +25138,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_MAGIC_BOUNCE, ABILITY_MAGIC_BOUNCE},
        // #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_STALL, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -26088,7 +26088,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PICKUP, ABILITY_TECHNICIAN},
-            .abilityHidden = {ABILITY_RATTLED, ABILITY_NONE},
+            .abilityHidden = {ABILITY_RATTLED, ABILITY_STALL},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26116,7 +26116,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_FUR_COAT, ABILITY_TECHNICIAN},
-            .abilityHidden = {ABILITY_RATTLED, ABILITY_NONE},
+            .abilityHidden = {ABILITY_RATTLED, ABILITY_STALL},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -26924,7 +26924,7 @@ const struct BaseStats gBaseStats[] =
             .eggGroup1 = EGG_GROUP_MINERAL,
             .eggGroup2 = EGG_GROUP_MINERAL,
             .abilities = {ABILITY_LEAF_GUARD, ABILITY_STATIC},
-            .abilityHidden = {ABILITY_GRASSY_SURGE, ABILITY_SKILL_LINK},
+            .abilityHidden = {ABILITY_GRASSY_SURGE, ABILITY_SKILL_LINK}, //ok remember wy I did this now, their grass so get bullet seed, this would guarantee 5 hit
             .bodyColor = BODY_COLOR_RED,
             .noFlip = FALSE,
             .flags = F_HISUIAN_FORM,

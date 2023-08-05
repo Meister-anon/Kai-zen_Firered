@@ -4,8 +4,9 @@
 #include "trig.h"
 #include "constants/battle_anim.h"
 #include "random.h"
+#include "graphics.h"
 
-static void AnimEllipticalGust(struct Sprite *sprite);
+//static void AnimEllipticalGust(struct Sprite *sprite);
 static void AnimEllipticalGust_Step(struct Sprite *sprite);
 static void AnimGustToTarget(struct Sprite *sprite);
 static void AnimGustToTarget_Step(struct Sprite *sprite);
@@ -15,7 +16,7 @@ static void AnimWhirlwindLine(struct Sprite *sprite);
 static void AnimWhirlwindLine_Step(struct Sprite *sprite);
 static void AnimUnusedBubbleThrow(struct Sprite *sprite);
 static void AnimBounceBallShrink(struct Sprite *sprite);
-static void AnimBounceBallLand(struct Sprite *sprite);
+//static void AnimBounceBallLand(struct Sprite *sprite);
 static void AnimDiveBall(struct Sprite *sprite);
 static void AnimDiveBall_Step1(struct Sprite *sprite);
 static void AnimDiveBall_Step2(struct Sprite *sprite);
@@ -32,6 +33,7 @@ static void AnimFlyBallUp_Step(struct Sprite *sprite);
 static void AnimFlyBallAttack(struct Sprite *sprite);
 static void AnimFlyBallAttack_Step(struct Sprite *sprite);*/
 static void AnimTask_AnimateGustTornadoPalette_Step(u8 taskId);
+static void AnimTask_LoadWindstormBackground_Step(u8 taskId);
 static void sub_80B2514(struct Sprite *sprite);
 static void sub_80B268C(struct Sprite *sprite);
 
@@ -261,7 +263,7 @@ static const union AffineAnimCmd sAffineAnim_BounceBallLand[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sAffineAnims_BounceBallLand[] =
+const union AffineAnimCmd *const gAffineAnims_BounceBallLand[] =
 {
     sAffineAnim_BounceBallLand,
 };
@@ -273,7 +275,7 @@ const struct SpriteTemplate gBounceBallLandSpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjNormal_64x64,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sAffineAnims_BounceBallLand,
+    .affineAnims = gAffineAnims_BounceBallLand,
     .callback = AnimBounceBallLand,
 };
 
@@ -361,7 +363,7 @@ const struct SpriteTemplate gSkyAttackBirdSpriteTemplate =
     .callback = AnimSkyAttackBird,
 };
 
-static void AnimEllipticalGust(struct Sprite *sprite)
+void AnimEllipticalGust(struct Sprite *sprite)
 {
     InitSpritePosToAnimTarget(sprite, FALSE);
     sprite->pos1.y += 20;
@@ -1060,7 +1062,7 @@ static void AnimBounceBallShrink(struct Sprite *sprite)
     }
 }
 
-static void AnimBounceBallLand(struct Sprite *sprite)
+void AnimBounceBallLand(struct Sprite *sprite)
 {
     switch (sprite->data[0])
     {
@@ -1289,4 +1291,100 @@ static void AnimTask_SetAttackerVisibility(u8 taskId)
         gSprites[spriteId].invisible = FALSE;
     }
     DestroyAnimVisualTask(taskId);
+}
+
+void AnimTask_LoadWindstormBackground(u8 taskId)
+{
+    int var0;
+    struct BattleAnimBgData animBg;
+
+    var0 = 0;
+    SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG1 | BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND);
+    SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(0, 16));
+    SetAnimBgAttribute(1, BG_ANIM_PRIORITY, 1);
+    SetAnimBgAttribute(1, BG_ANIM_SCREEN_SIZE, 0);
+
+    if (!IsContest())
+        SetAnimBgAttribute(1, BG_ANIM_CHAR_BASE_BLOCK, 1);
+
+    gBattle_BG1_X = 0;
+    gBattle_BG1_Y = 0;
+    SetGpuReg(REG_OFFSET_BG1HOFS, gBattle_BG1_X);
+    SetGpuReg(REG_OFFSET_BG1VOFS, gBattle_BG1_Y);
+
+    GetBattleAnimBg1Data(&animBg);
+    AnimLoadCompressedBgGfx(animBg.bgId, gFile_graphics_battle_anims_backgrounds_sandstorm_brew_sheet, animBg.tilesOffset);
+    AnimLoadCompressedBgTilemapHandleContest(&animBg, gFile_graphics_battle_anims_backgrounds_sandstorm_brew_tilemap, 0);//
+    LoadCompressedPalette(gBattleAnimSpritePal_Windstorm, animBg.paletteId * 16, 32);
+
+    if (gBattleAnimArgs[0] && GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
+        var0 = 1;
+
+    gTasks[taskId].data[0] = var0;
+    gTasks[taskId].func = AnimTask_LoadWindstormBackground_Step;
+}
+
+static void AnimTask_LoadWindstormBackground_Step(u8 taskId)
+{
+    struct BattleAnimBgData animBg;
+
+    if (gTasks[taskId].data[0] == 0)
+        gBattle_BG1_X += -6;
+    else
+        gBattle_BG1_X += 6;
+
+    gBattle_BG1_Y += -1;
+
+    switch (gTasks[taskId].data[12])
+    {
+    case 0:
+        if (++gTasks[taskId].data[10] == 4)
+        {
+            gTasks[taskId].data[10] = 0;
+            gTasks[taskId].data[11]++;
+            SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(gTasks[taskId].data[11], 16 - gTasks[taskId].data[11]));
+            if (gTasks[taskId].data[11] == 7)
+            {
+                gTasks[taskId].data[12]++;
+                gTasks[taskId].data[11] = 0;
+            }
+        }
+        break;
+    case 1:
+        if (++gTasks[taskId].data[11] == 101)
+        {
+            gTasks[taskId].data[11] = 7;
+            gTasks[taskId].data[12]++;
+        }
+        break;
+    case 2:
+        if (++gTasks[taskId].data[10] == 4)
+        {
+            gTasks[taskId].data[10] = 0;
+            gTasks[taskId].data[11]--;
+            SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(gTasks[taskId].data[11], 16 - gTasks[taskId].data[11]));
+            if (gTasks[taskId].data[11] == 0)
+            {
+                gTasks[taskId].data[12]++;
+                gTasks[taskId].data[11] = 0;
+            }
+        }
+        break;
+    case 3:
+        GetBattleAnimBg1Data(&animBg);
+        ClearBattleAnimBg(animBg.bgId);//
+        gTasks[taskId].data[12]++;
+        break;
+    case 4:
+        if (!IsContest())
+            SetAnimBgAttribute(1, BG_ANIM_CHAR_BASE_BLOCK, 0);
+
+        gBattle_BG1_X = 0;
+        gBattle_BG1_Y = 0;
+        SetGpuReg(REG_OFFSET_BLDCNT, 0);
+        SetGpuReg(REG_OFFSET_BLDALPHA, 0);
+        SetAnimBgAttribute(1, BG_ANIM_PRIORITY, 1);
+        DestroyAnimVisualTask(taskId);
+        break;
+    }
 }

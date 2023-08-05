@@ -37,7 +37,7 @@ EWRAM_DATA static u16 sSoundAnimFramesToWait = 0;
 EWRAM_DATA static u8 sMonAnimTaskIdArray[2] = {0};
 EWRAM_DATA u8 gAnimMoveTurn = 0;
 EWRAM_DATA static u8 sAnimBackgroundFadeState = 0;
-EWRAM_DATA u32 gAnimMoveIndex = 0;  //changed from u16 because more than 512 moves
+EWRAM_DATA u16 gAnimMoveIndex = 0;  //changed from u16 because more than 512...wrong I didn't understand types, u16 limit is 65k its not 256 x 2 its 2^16 power as binary has 2 states 0 & 1
 EWRAM_DATA u8 gBattleAnimAttacker = 0;
 EWRAM_DATA u8 gBattleAnimTarget = 0;
 EWRAM_DATA u16 gAnimBattlerSpecies[MAX_BATTLERS_COUNT] = {0};
@@ -2520,22 +2520,22 @@ void MoveBattlerSpriteToBG(u8 battlerId, bool8 toBG_2)
     }
 }
 
-void sub_80730C0(u16 a, u16 *b, s32 c, u8 d)
+void RelocateBattleBgPal(u16 paletteNum, u16 *dest, s32 offset, bool8 largeScreen)
 {
     u8 i, j;   
     u32 var;
 
-    if (d == 0)
+    if (largeScreen == 0)
         var = 32;
     else
         var = 64;
     
-    a <<= 12;
+    paletteNum <<= 12;
     for (i = 0; i < var; i++)
     {
         for (j = 0; j < 32; j++)
         {
-            b[32 * i + j] = ((b[32 * i + j] & 0xFFF) | a) + c;
+            dest[32 * i + j] = ((dest[32 * i + j] & 0xFFF) | paletteNum) + offset;
         }
     }
 }
@@ -2855,10 +2855,20 @@ static void ScriptCmd_goto(void)
     sBattleAnimScriptPtr = T2_READ_PTR(sBattleAnimScriptPtr);
 }
 
-bool8 IsContest(void)
+bool8 IsContest(void) //not setup as of yet 
 {
     return FALSE;
 }
+
+/*// Uses of this function that rely on a TRUE return are expecting inBattle to not be ticked as defined in contest behavior.
+// As a result, if misused, this function cannot reliably discern between field and contest status and could result in undefined behavior.
+bool8 IsContest(void)
+{
+    if (!gMain.inBattle)
+        return TRUE;
+    else
+        return FALSE;
+}*/
 
 // Unused
 static bool8 sub_807378C(u16 a)

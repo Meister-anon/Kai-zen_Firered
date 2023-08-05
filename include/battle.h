@@ -427,6 +427,7 @@ struct FieldTimer
     u8 gravityTimer;
     u8 fairyLockTimer;
     u8 IonDelugeTimer; // this & roost will be only ones that don't fail if used when timer isn't 0
+    u8 HazeTimer;
 
 };//check how I setup roost may not need iondelugetimer here
 
@@ -710,7 +711,6 @@ struct BattleStruct //fill in unused fields when porting
 {
     u8 turnEffectsTracker;
     u8 turnEffectsBattlerId;
-    u8 filler2; // unused
     u8 turnCountersTracker;
     u16 wrappedMove[MAX_BATTLERS_COUNT]; // Leftover from Ruby's ewram access.
     u16 moveTarget[MAX_BATTLERS_COUNT];
@@ -810,6 +810,7 @@ struct BattleStruct //fill in unused fields when porting
     u8 field_182;
     struct StolenItem itemStolen[PARTY_SIZE];  // Player's team that had items stolen (two bytes per party member)
     u8 blunderPolicy : 1; // should blunder policy activate
+    u8 swapDamageCategory:1; // Photon Geyser, Shell Side Arm, Light That Burns the Sky
     u8 sameMoveTurns[MAX_BATTLERS_COUNT]; // For Metronome, number of times the same moves has been SUCCESFULLY used.
     u16 moveEffect2; // For Knock Off smack down and removestatus moves i.e smelling salts wakeupslap & sparklin aria   -PORTED
     u8 ballSpriteIds[2];    // item gfx, window gfx

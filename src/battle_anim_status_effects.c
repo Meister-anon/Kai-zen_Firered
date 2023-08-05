@@ -90,7 +90,7 @@ const struct SpriteTemplate gWeatherBallNormalDownSpriteTemplate =
     .callback = AnimWeatherBallDown,
 };
 
-static const union AnimCmd sUnknown_83BF464[] =
+static const union AnimCmd sAnim_SpinningSparkle[] =
 {
     ANIMCMD_FRAME(0, 3),
     ANIMCMD_FRAME(16, 3),
@@ -100,17 +100,17 @@ static const union AnimCmd sUnknown_83BF464[] =
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sSpriteAnimTable_83BF47C[] =
+const union AnimCmd *const sAnims_SpinningSparkle[] =
 {
-    sUnknown_83BF464
+    sAnim_SpinningSparkle
 };
 
-const struct SpriteTemplate gSpriteTemplate_83BF480 =
+const struct SpriteTemplate gSpinningSparkleSpriteTemplate =
 {
     .tileTag = ANIM_TAG_SPARKLE_4,
     .paletteTag = ANIM_TAG_SPARKLE_4,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sSpriteAnimTable_83BF47C,
+    .anims = sAnims_SpinningSparkle,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimSpinningSparkle,

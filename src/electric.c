@@ -16,7 +16,7 @@ static void AnimThunderboltOrb(struct Sprite *sprite);
 //static void AnimSparkElectricity(struct Sprite *sprite);
 //static void AnimSparkElectricityFlashing(struct Sprite *sprite);
 static void AnimSparkElectricityFlashing_Step(struct Sprite *sprite);
-static void AnimElectricity(struct Sprite *sprite);
+//static void AnimElectricity(struct Sprite *sprite);
 static void AnimTask_ElectricBolt_Step(u8 taskId);
 static void AnimElectricBoltSegment(struct Sprite *sprite);
 //static void AnimThunderWave(struct Sprite *sprite);
@@ -747,7 +747,7 @@ static void AnimSparkElectricityFlashing_Step(struct Sprite *sprite)
 }
 
 // Electricity arcs around the target. Used for Paralysis and various electric move hits
-static void AnimElectricity(struct Sprite *sprite)
+void AnimElectricity(struct Sprite *sprite)
 {
     InitSpritePosToAnimTarget(sprite, FALSE);
     sprite->oam.tileNum += gBattleAnimArgs[3] * 4;

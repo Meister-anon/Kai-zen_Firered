@@ -2342,7 +2342,7 @@ void AnimTask_ThrashMoveMonVertical(u8 taskId)
 
 static void ThrashMoveMon(u8 taskId)
 {
-    struct Task* task = &gTasks[taskId];
+    struct Task* task = &gTasks[taskId]; //thought this was an vs bug but is actually set this way in pret firered too, its only dif in emerald??
     
     if (++task->data[7] > 2)
     {
@@ -3283,7 +3283,7 @@ void AnimTask_HeartsBackground(u8 taskId)
     AnimLoadCompressedBgGfx(animBg.bgId, gBattleAnimBg_AttractGfx, animBg.tilesOffset);
     LoadCompressedPalette(gBattleAnimBg_AttractPal, animBg.paletteId * 16, 32);
     if (IsContest())
-        sub_80730C0(animBg.paletteId, animBg.bgTilemap, 0, 0);
+        RelocateBattleBgPal(animBg.paletteId, animBg.bgTilemap, 0, 0);
     
     gTasks[taskId].func = HeartsBackground_Step;
 }
@@ -3371,7 +3371,7 @@ void AnimTask_ScaryFace(u8 taskId)
     AnimLoadCompressedBgGfx(animBg.bgId, gBattleAnim_ScaryFaceGfx, animBg.tilesOffset);
     LoadCompressedPalette(gBattleAnim_ScaryFacePal, animBg.paletteId * 16, 32);
     if (IsContest())
-        sub_80730C0(animBg.paletteId, animBg.bgTilemap, 0, 0);
+        RelocateBattleBgPal(animBg.paletteId, animBg.bgTilemap, 0, 0);
     
     gTasks[taskId].func = ScaryFace_Step;
 }

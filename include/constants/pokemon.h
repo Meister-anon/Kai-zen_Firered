@@ -94,7 +94,8 @@
 
 #define TYPE_DEFINES
 
-// Pokemon types	type order found in list_menu.c
+// Pokemon types	type order found in list_menu.c    actually is in graphics_file_rules.mk 
+//list menu is the location of the icons on the graphic
 #define TYPE_NORMAL   0x00
 #define TYPE_FIGHTING 0x01
 #define TYPE_FLYING   0x02

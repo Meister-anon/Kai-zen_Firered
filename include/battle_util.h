@@ -126,6 +126,7 @@ u8 IsMonDisobedient(void);
 //bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
 u32 GetBattleMoveSplit(u32 moveId);
 bool8 IsBattlerAlive(u8 battlerId);
+bool8 IsBlackFogNotOnField(void);
 u32 GetBattlerAbility(u8 battlerId);
 u32 GetBattlerWeight(u8 battlerId);
 u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId);

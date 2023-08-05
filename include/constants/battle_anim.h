@@ -391,6 +391,11 @@
 #define ANIM_TAG_DREEPY                     (ANIM_SPRITES_START + 379)
 #define ANIM_TAG_ICE_ROCK_SINGLE            (ANIM_SPRITES_START + 380)
 #define ANIM_TAG_STONE_PILLAR_MULTI         (ANIM_SPRITES_START + 381)
+#define ANIM_TAG_ALPHA_SYMBOL               (ANIM_SPRITES_START + 382)
+#define ANIM_TAG_OMEGA_SYMBOL               (ANIM_SPRITES_START + 383)
+#define ANIM_TAG_STEEL_BEAM                 (ANIM_SPRITES_START + 384)
+#define ANIM_TAG_POLTERGEIST                (ANIM_SPRITES_START + 385)
+#define ANIM_TAG_TEAPOT                     (ANIM_SPRITES_START + 386)
 
 // battlers
 #define ANIM_ATTACKER    0
@@ -492,6 +497,8 @@
 #define BG_HYPER_BEAM                           75
 #define BG_DYNAMAX_CANNON                       76
 #define BG_AURA_SPHERE                          77
+#define BG_STEEL_BEAM_OPPONENT					78
+#define BG_STEEL_BEAM_PLAYER					79
 
 #define B_ANIM_CONSTANTS
 // table ids for general animations	(gBattleAnims_General) //buffer for values from battle_anim_scripts.s
@@ -535,7 +542,9 @@
 #define B_ANIM_AQUA_RING_HEAL           0X25
 #define B_ANIM_SPIKE_TOSS				0x26 // for spike shield spike set
 #define B_ANIM_BASIC_HEAL				0x27 // general healing effect separate from moves animation, done for loafing off heal use for comatose too? other absorb healing?
-
+#define B_ANIM_BEAK_BLAST_SETUP         0x28
+#define B_ANIM_SHELL_TRAP_SETUP         0x29
+#define B_ANIM_ZMOVE_ACTIVATE           0x2A // Using Z Moves
 
 // special animations table
 #define B_ANIM_LVL_UP                   0x0
@@ -548,7 +557,7 @@
 #define B_ANIM_LVL_UP_EVOLVE            0x7
 #define B_ANIM_CRITICAL_CAPTURE_THROW   0x8	//added need test
 
-// status animation table
+// status animation table (gBattleAnims_StatusConditions)
 #define B_ANIM_STATUS_PSN               0x0
 #define B_ANIM_STATUS_CONFUSION         0x1
 #define B_ANIM_STATUS_BRN               0x2
@@ -638,5 +647,21 @@
 #define ANIM_SURF_PAL_SURF           0
 #define ANIM_SURF_PAL_MUDDY_WATER    1
 #define ANIM_SURF_PAL_SLUDGE_WAVE    2
+
+// Flags given to various functions to indicate which palettes to consider.
+// Handled by UnpackSelectedBattlePalettes
+#define F_PAL_BG                  (1 << 0)
+#define F_PAL_ATTACKER            (1 << 1)
+#define F_PAL_TARGET              (1 << 2)
+#define F_PAL_ATK_PARTNER         (1 << 3)
+#define F_PAL_DEF_PARTNER         (1 << 4)
+#define F_PAL_ANIM_1              (1 << 5) // Palette set for GetBattleAnimBg1Data/GetBgDataForTransform. Only used (ineffectually?) by Aromatherapy.
+#define F_PAL_ANIM_2              (1 << 6) // Palette set for GetBattleAnimBgData/GetBgDataForTransform. Unused.
+#define F_PAL_ATK_SIDE            (F_PAL_ATTACKER | F_PAL_ATK_PARTNER)
+#define F_PAL_DEF_SIDE            (F_PAL_TARGET | F_PAL_DEF_PARTNER)
+#define F_PAL_BATTLERS            (F_PAL_ATK_SIDE | F_PAL_DEF_SIDE)
+#define F_PAL_ADJACENT            (F_PAL_DEF_SIDE | F_PAL_ATK_PARTNER)
+#define F_PAL_ALL_BUT_DEF         (F_PAL_ATK_SIDE | F_PAL_DEF_PARTNER)
+#define F_PAL_ALL_BUT_ATK_PARTNER (F_PAL_ATTACKER | F_PAL_DEF_SIDE)
 
 #endif // GUARD_CONSTANTS_BATTLE_ANIM_H

@@ -8,7 +8,7 @@
 #include "constants/songs.h"
 
 // RAM
-EWRAM_DATA static s16 gUnknown_203999C[4] = {0};
+EWRAM_DATA static s16 gUnknown_203999C[4] = {0}; //zsonic looks like I can remove this  vsonic
 
 // Function Declarations
 static void AnimMovePowderParticleStep(struct Sprite *);
@@ -521,16 +521,16 @@ const struct SpriteTemplate gSolarbeamSmallOrbSpriteTemplate =
     .callback = AnimSolarbeamSmallOrb,
 };
 
-static const union AffineAnimCmd sStockpileAbsorptionOrbAffineCmds[] =
+const union AffineAnimCmd gStockpileAbsorptionOrbAffineCmds[] =
 {
     AFFINEANIMCMD_FRAME(320, 320, 0, 0),
     AFFINEANIMCMD_FRAME(-14, -14, 0, 1),
     AFFINEANIMCMD_JUMP(1),
 };
 
-static const union AffineAnimCmd *const sStockpileAbsorptionOrbAffineAnimTable[] =
+const union AffineAnimCmd *const gStockpileAbsorptionOrbAffineAnimTable[] =
 {
-    sStockpileAbsorptionOrbAffineCmds,
+    gStockpileAbsorptionOrbAffineCmds,
 };
 
 const struct SpriteTemplate gStockpileAbsorptionOrbSpriteTemplate =
@@ -540,7 +540,7 @@ const struct SpriteTemplate gStockpileAbsorptionOrbSpriteTemplate =
     .oam = &gOamData_AffineDouble_ObjNormal_8x8,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sStockpileAbsorptionOrbAffineAnimTable,
+    .affineAnims = gStockpileAbsorptionOrbAffineAnimTable,
     .callback = AnimPowerAbsorptionOrb,
 };
 
@@ -1899,6 +1899,39 @@ const struct SpriteTemplate gEndureEnergySpriteTemplate =
 {
     .tileTag = ANIM_TAG_FOCUS_ENERGY,
     .paletteTag = ANIM_TAG_FOCUS_ENERGY,
+    .oam = &gOamData_AffineOff_ObjNormal_16x32,
+    .anims = gEndureEnergyAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimEndureEnergy,
+};
+
+const struct SpriteTemplate gBlueEndureEnergySpriteTemplate =
+{
+    .tileTag = ANIM_TAG_FOCUS_ENERGY,
+    .paletteTag = ANIM_TAG_SWEAT_BEAD,
+    .oam = &gOamData_AffineOff_ObjNormal_16x32,
+    .anims = gEndureEnergyAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimEndureEnergy,
+};
+
+const struct SpriteTemplate gGreenEndureEnergySpriteTemplate =
+{
+    .tileTag = ANIM_TAG_FOCUS_ENERGY,
+    .paletteTag = ANIM_TAG_WHIP_HIT,
+    .oam = &gOamData_AffineOff_ObjNormal_16x32,
+    .anims = gEndureEnergyAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimEndureEnergy,
+};
+
+const struct SpriteTemplate gYellowEndureEnergySpriteTemplate =
+{
+    .tileTag = ANIM_TAG_FOCUS_ENERGY,
+    .paletteTag = ANIM_TAG_PAW_PRINT,
     .oam = &gOamData_AffineOff_ObjNormal_16x32,
     .anims = gEndureEnergyAnimTable,
     .images = NULL,
@@ -6766,3 +6799,41 @@ void AnimTask_CompressTargetHorizontally(u8 taskId)
 	task->func = AnimTask_CompressTargetStep;
 }
 
+const struct SpriteTemplate gSteelBeamBigOrbSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_STEEL_BEAM,
+    .paletteTag = ANIM_TAG_STEEL_BEAM,
+    .oam = &gOamData_AffineOff_ObjNormal_8x8,
+    .anims = gSolarbeamBigOrbAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimSolarbeamBigOrb,
+};
+
+const struct SpriteTemplate gSteelBeamSmallOrbSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_STEEL_BEAM,
+    .paletteTag = ANIM_TAG_STEEL_BEAM,
+    .oam = &gOamData_AffineOff_ObjNormal_8x8,
+    .anims = gSolarbeamSmallOrbAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimSolarbeamSmallOrb,
+};
+
+void AnimTask_CreateSmallSteelBeamOrbs(u8 taskId)
+{
+    if (--gTasks[taskId].data[0] == -1)
+    {
+        gTasks[taskId].data[1]++;
+        gTasks[taskId].data[0] = 6;
+        gBattleAnimArgs[0] = 15;
+        gBattleAnimArgs[1] = 0;
+        gBattleAnimArgs[2] = 80;
+        gBattleAnimArgs[3] = 0;
+        CreateSpriteAndAnimate(&gSteelBeamSmallOrbSpriteTemplate, 0, 0, GetBattlerSpriteSubpriority(gBattleAnimTarget) + 1);
+    }
+
+    if (gTasks[taskId].data[1] == 15)
+        DestroyAnimVisualTask(taskId);
+}

@@ -1530,6 +1530,7 @@ void ForcePlayerToStartSurfing(void)
 //couting first list value as 0. Need to use random percent equal to value shown when hovering over array. Just used nelms so I don't have to manually change
 //just need each array to be equal on hover  and check for type exceptions
 
+//should beat/resist water type or be weak to/against fire
 const u16 sBulbasaurBall[] = {
     SPECIES_BULBASAUR,
     SPECIES_CHIKORITA,
@@ -1550,10 +1551,11 @@ const u16 sBulbasaurBall[] = {
     SPECIES_MISDREAVUS,
     SPECIES_SWINUB,
     SPECIES_TYNAMO,
-    SPECIES_SKITTY
+    SPECIES_TOGEDEMARU    
     //LIST_END
 };
 
+//should beat/resist fire, or be weak to/against grass
 const u16 sSquirtleBall[] = {
     SPECIES_SQUIRTLE,
     SPECIES_TOTODILE,
@@ -1569,15 +1571,16 @@ const u16 sSquirtleBall[] = {
     SPECIES_PHANPY,
     SPECIES_AZURILL,
     SPECIES_ROCKRUFF,
-    SPECIES_BIDOOF,
+    SPECIES_SKITTY, //with ghost change skitty would be better in squirtle group
     SPECIES_SANDSHREW,
     SPECIES_WOOPER,
-    SPECIES_GABITE,
+    SPECIES_GIBLE, 
     SPECIES_WAILMER,
     SPECIES_SPHEAL
     //LIST_END
 };
 
+//should beat/resist grass type and be weak to/against water
 const u16 sCharmanderBall[] = {
     SPECIES_CHARMANDER,
     SPECIES_CYNDAQUIL,
@@ -1621,6 +1624,7 @@ const u16 sTypeExceptions[] = {
     SPECIES_DODUO,
     SPECIES_LICKITUNG,
     SPECIES_HOUNDOUR,
+    SPECIES_TYROGUE,
     SPECIES_TEPIG
 };
 

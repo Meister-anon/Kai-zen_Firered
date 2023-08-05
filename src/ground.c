@@ -9,7 +9,7 @@ static void AnimBonemerangProjectile(struct Sprite *sprite);
 static void AnimBoneHitProjectile(struct Sprite *sprite);
 //static void AnimDirtScatter(struct Sprite *sprite);
 //static void AnimMudSportDirt(struct Sprite *sprite);
-static void AnimFissureDirtPlumeParticle(struct Sprite *sprite);
+//static void AnimFissureDirtPlumeParticle(struct Sprite *sprite);
 static void AnimDigDirtMound(struct Sprite *sprite);
 static void AnimBonemerangProjectileStep(struct Sprite *sprite);
 static void AnimBonemerangProjectileEnd(struct Sprite *sprite);
@@ -512,7 +512,7 @@ static void SetDigScanlineEffect(u8 useBG1, s16 y, s16 endY)
 // arg 3: target y offset
 // arg 4: wave amplitude
 // arg 5: duration
-static void AnimFissureDirtPlumeParticle(struct Sprite *sprite)
+void AnimFissureDirtPlumeParticle(struct Sprite *sprite)
 {
     s8 battler;
     s16 xOffset;  //different in emerald but not referenced in new anim file,

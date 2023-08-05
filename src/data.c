@@ -278,7 +278,7 @@ const union AnimCmd *const gSpriteAnimTable_82349BC[] =
 #define TRAINER_SPRITE(trainerPic, sprite, size) [TRAINER_PIC_##trainerPic] = {sprite, size, TRAINER_PIC_##trainerPic}
 #define TRAINER_PAL(trainerPic, pal) [TRAINER_PIC_##trainerPic] = {pal, TRAINER_PIC_##trainerPic}
 
-#define SRC_DATA_FILES
+#define SRC_DATA_FILES  //all files in a data folder must be included at bottom of this file
 
 #include "data/pokemon_graphics/front_pic_coordinates.h"
 #include "data/pokemon_graphics/front_pic_table.h"

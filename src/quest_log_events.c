@@ -882,14 +882,14 @@ static const u16 *BufferQuestLogText_UsedItem(const u16 *eventData)
         if (r5[2] != 0xFFFF)
         {
             StringCopy(gStringVar3, gMoveNames[r5[2]]);
-            if (r5[0] > ITEM_TM50)
+            if (r5[0] >= ITEM_HM01)
                 StringExpandPlaceholders(gStringVar4, gText_QuestLog_MonReplacedMoveWithHM);
             else
                 StringExpandPlaceholders(gStringVar4, gText_QuestLog_MonReplacedMoveWithTM);
         }
         else
         {
-            if (r5[0] > ITEM_TM50)
+            if (r5[0] >= ITEM_HM01)
                 StringExpandPlaceholders(gStringVar4, gText_QuestLog_MonLearnedMoveFromHM);
             else
                 StringExpandPlaceholders(gStringVar4, gText_QuestLog_MonLearnedMoveFromTM);

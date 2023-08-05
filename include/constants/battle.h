@@ -209,7 +209,7 @@
 #define STATUS2_FORESIGHT             (1 << 29)
 #define STATUS2_DEFENSE_CURL          (1 << 30)
 #define STATUS2_TORMENT               (1 << 31)	//ok updated from current firered thought would let me have more status
-//but realized its u32 so possibly may need to upgrade to u64? if even possible to hvae more status 2
+//but realized its u32  cant go higher than 31, either make new status type or replace existing
 //haev 2 extra spaces now
 
 // Seems like per-battler statuses. Not quite sure how to categorize these
@@ -289,7 +289,7 @@
 #define ITS_A_TRAP_STATUS4 (STATUS4_FIRE_SPIN || STATUS4_CLAMP || STATUS4_WHIRLPOOL || STATUS4_SAND_TOMB || STATUS4_MAGMA_STORM || STATUS4_INFESTATION)
 
 //effects for traps together //move data used in battle_moves_effects.h  each needs own battlescript
-#define ITS_A_TRAP (EFFECT_TRAP || EFFECT_FIRE_SPIN || EFFECT_CLAMP || EFFECT_WHIRLPOOL || EFFECT_SAND_TOMB || EFFECT_MAGMA_STORM || EFFECT_INFESTATION || EFFECT_SNAP_TRAP)
+#define ITS_A_TRAP (EFFECT_TRAP || EFFECT_FIRE_SPIN || EFFECT_CLAMP || EFFECT_WHIRLPOOL || EFFECT_SAND_TOMB || EFFECT_MAGMA_STORM || EFFECT_SNAP_TRAP)
 
 #define GROUND_TRAPS (EFFECT_TRAP || EFFECT_FIRE_SPIN || EFFECT_CLAMP || EFFECT_WHIRLPOOL || EFFECT_SAND_TOMB || EFFECT_INFESTATION || EFFECT_SNAP_TRAP)
 
@@ -328,14 +328,14 @@
 #define SIDE_STATUS_STICKY_WEB				(1 << 2)
 #define SIDE_STATUS_SPIKES					(1 << 4)
 #define SIDE_STATUS_SAFEGUARD				(1 << 5)
-#define SIDE_STATUS_FUTUREATTACK			(1 << 6)
-#define SIDE_STATUS_MIST					(1 << 8)
+#define SIDE_STATUS_FUTUREATTACK			(1 << 6)	//block fog shuold prevnt same as block burn/etc. dmg
+#define SIDE_STATUS_MIST					(1 << 8)	//blocked by black fog
 #define SIDE_STATUS_SPIKES_DAMAGED			(1 << 9)
-#define SIDE_STATUS_TAILWIND                (1 << 10)
+#define SIDE_STATUS_TAILWIND                (1 << 10)	//unsure could have tail wind use do defog affect, remove mist & black fog
 #define SIDE_STATUS_AURORA_VEIL             (1 << 11)
 #define SIDE_STATUS_LUCKY_CHANT             (1 << 12)
 #define SIDE_STATUS_TOXIC_SPIKES            (1 << 13)
-#define SIDE_STATUS_STEALTH_ROCK            (1 << 14)
+#define SIDE_STATUS_STEALTH_ROCK            (1 << 14) //also prevented from dmg when black fog up
 #define SIDE_STATUS_STEALTH_ROCK_DAMAGED    (1 << 15)
 #define SIDE_STATUS_TOXIC_SPIKES_DAMAGED    (1 << 16)
 #define SIDE_STATUS_STICKY_WEB_DAMAGED      (1 << 17)
@@ -363,13 +363,14 @@
 #define STATUS_FIELD_FLOODED_TERRAIN    (1 << 5)	//can use surf tile/ or edit a blue puddle into normal graphic
 #define STATUS_FIELD_OCEAN_TERRAIN      (1 << 6)	//for when surfing on ocean/deeper water /grass terrain & scorched terrain wouldn't work
 #define STATUS_FIELD_GRASSY_TERRAIN     (1 << 7)	//longer grass
-#define STATUS_FIELD_MISTY_TERRAIN      (1 << 8)	//mist/haze/defog 
+#define STATUS_FIELD_MISTY_TERRAIN      (1 << 8)	//mist/haze/defog -?? ooh this was to use the animation from those for field effect
 #define STATUS_FIELD_ELECTRIC_TERRAIN   (1 << 9)	//sparks tag
 #define STATUS_FIELD_PSYCHIC_TERRAIN    (1 << 10)	//could surround field w hidden power orbs?
 #define STATUS_FIELD_SNOWY_TERRAIN		(1 << 11)	//for snow area
 #define STATUS_FIELD_TERRAIN_PERMANENT  (1 << 12)		//last terrain effect so putting here //(1 << 12)   
 #define STATUS_FIELD_ION_DELUGE         (1 << 13)
 #define STATUS_FIELD_FAIRY_LOCK         (1 << 14)
+#define STATUS_FIELD_BLACK_FOG          (1 << 15)	//HAZE -3 full turns so timer is 4
 //#define STATUS_FIELD_MUDSPORT			(1 << 15) gonna put these in side status instead
 //#define STATUS_FIELD_WATERSPORT         (1 << 16)
 

@@ -455,6 +455,10 @@ goto TRAINER_DATA_STRUCTS
 
 goto B_ANIM_CONSTANTS //for porting animation, need set constant for recognition in battlescript
 
+//unrelated but any file that has ewram_data must be included in sym_ewram.txt
+
+goto SRC_DATA_DEFINES //this where they must be defined for including elsewhere
+
 goto SRC_DATA_FILES //IMPORTANT all .h files in src/data folder MUST be included in data.c here or can't be found
 /* realized logic for damage on air targets was incomplete 
 * correcting setup - DONE
@@ -837,6 +841,83 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * believe will add twotypeeffect to list of certain effects so the effect chance will be exclusively for whatever move effect I set.
 * I think adding the para chance is simple as just making a new effect and having its battlescript start with setmoveeffect paralysis 
 * then when done with logic can just go to battlescript hit.
+* 
+* new idea buffing haze back to gen1 standard  renaming inspired by literal translation of japanese name, to Black Fog -attempt shift palette for move make darker
+* also make end turn animation for, 
+* A mysterious black haze covers the field/ 
+* -an inpennetrabe block fog covers the field  blocking field effects, status effects and resetting stat changes for all battlers for the duration/ 3 turns
+
+is an equalizers resets stats,  back to normal
+clears secondary status, and while doesn't remove status1
+all secondary effects from primary status are disabled for duration of the fog
+no end turn poison, freeze burn, atk cut from burn is removed,
+speed cut from paralysis is removed and paralysis chance is 0
+as an extra bonus no critical hits can be landed during fog
+
+guts boost from status is also undone. actually could just do neutralizing gas disable all abilities?
+that would prob be too much, just limit to status related stuff, to put everyone on even footing 
+
+Generation I
+Haze resets the stat stages of both active Pokémon to 0 and removes the stat reductions due to burns and paralysis.
+It also lifts the effects of Focus Energy and Dire Hit, Mist and Guard Spec.,
+X Accuracy, Leech Seed, Disable, Reflect and Light Screen from both sides of the field. 
+Additionally, Haze cures confusion and turns bad poison into regular poison for both active Pokémon,
+and also removes any non-volatile status condition from the opponent.   
+
+ -don't need to remove leech seed/poison just stop endturn from activating
+-for focus energy dire hit also don't need to remove just prevent crit during fog
+-grounds all as well, idea being dark fog is inpenetrable & can't see to fly - block fly & sky drop?
+-my version wont remove extranormal status effects just keep them frm taking effect for duration
+-i.e if reflect/light screen was in effect the defense boost wouldn't work but the effect would still be up
+-and counting down, so there's a chance you can get the effect back when "haze" fades
+-for strength of effect make lower duration i.e 3 turns (3 full turns)
+-blocks weather effects as well -(non permanent weather) actually nvm I'll block all weather (excluding wind based weather i.e mega ray)
+*as its not good design to have some mechancis just have a counter locked to only a specific character.
+* so it'll become a weather counter also, but balanced by the consideration of pros and cons from its use as its field wide
+* think only primary status will remove will be sleep which is temp anyway, freeze  is already balanced now for duration 
+* blocks stealth rock , weather block mostly done sleep removal done, crit block done mist block done, float block done, nvm undonig change to just cant use fly or skydrop
+* put that logic in atk canclor w sleep - done
+need do end turn block status2 removal and side status block
+-weather done, battler end turn done added grouned back
+-blocked all side status I planned to, aurora veil, reflect ligh screen future sight wish perish song mist & stealth rocks
+-status2 done, believe function of effect is complete
+
+just left is refinereies, extra text end tur animation - final decision keeping name haze
+
+Haze does not remove any non-volatile status ailments that the user has,
+does not change the generic Minimize graphic back to the Pokémon's regular image,
+and does not reset either Pokémon's current type, moves, or species.
+
+-  covers the field in a strange black fog, resetting stat changs for all battlers and blocking outside effects and status effects for the duration
+
+will need block weather animations for end turn, replace with haze animation
+
+do a check for  field status black fog
+if (gFieldStatuses & STATUS_FIELD_BLACK_FOG) - well I'm setting this as normal effect goes through long as black fog not on field so...
+if (!(gFieldStatuses & STATUS_FIELD_BLACK_FOG))   && !gFieldStatuses & STATUS_FIELD_BLACK_FOG
+
+made function for simple paste   IsBlackFogNotOnField()     if (!IsBlackFogNotOnField())
+
+beleive all effects to interupt are in battle_util.c & pokemon.c, if I block fly/sky drop would need to put in atk cancler as well
+
+* eventually came up with a buff for stall gave it double move power, buff so high because it'll be extra punishing in doubles elsewise
+* now to figure out who I shuold give this too, would exclude mon from trick room, so could give to slow bulky mon that do low dmg,
+* or some mon with average stats to give them the ability to potentially do delayed one shots
+* could even put on blissey  - unrelated note healing uses gbattlemovedamage make sure be careful when using that...-
+* 
+* ok gave new stall to a few mon unsure how useful it'll be, I'll leave it up to future users
+* to decide who should have it
+* 
+* /also setup infestation as bug status can do with augment may need to set a fixed change in case move has odds I can't set to certain
+        //15% prob good if I need to. -
+
+        made attempt at setting argumentchance separate from normal effectchance need test
+*  fixed infestation  stat drop, and sandtomb stat drop all trap statuses should be workign now
+* with argument chance set -need test if working - can add status chance to all fire/fairy/electric/ice/poison type moves 
+* would be in line with expectation every fire move can burn every electric move can paralyze etc. just have lower odds for weaker moves etc.
+* min would be 5%
+* 
+* need add on to ability description of aviator, defeatist, and run away that they are able to switch out even if trapped etc. can always switch
 * 
 * idea from Jaan pokemoonchallenges repel should be easilly accessed through L button/ button press in overworld 
 * instead of requirin to go through menus.
@@ -1305,6 +1386,11 @@ Thunder Wave Electric TM45
 * was able to use ctrl h replacement, to quick define all move descriptions just need to slot into table.
 * and would owr, then can fix naming convention later
 * 
+* realized for move effects I've changed that were tms or hms I need to update the item description with the new effects
+* not just the move description so need to compare move_info.h  descriptions with that of items.json...
+* 
+* ok next job update from json -_-  for some reason pret hasn't done that yet for fire red -
+* 
 * need buff poison i think
 * for poison think can just give sp def boosts, as poison specialists poison themselves to build up immunity to poison
 * giving them a stronger than normal internal constitution. - DONE
@@ -1466,7 +1552,7 @@ Thunder Wave Electric TM45
 goto TYPE_CHART
 goto TYPE_NAMES
 goto TYPE_DEFINES
-goto TYPE_ICON_DATA
+goto TYPE_ICON_DATA //was missing something listing of the types and their order is in the graphics_file_rules.mk  file
 
 /* NOTE - still need to finish set message for spite changes, can do just like I did anticipation ability messages
 * -DONE   also made eerie spell use the new spite effect rather than only taking 3 pp. //NEED test errie spell test if still works aftr sheer force logic added
@@ -1628,6 +1714,8 @@ goto WEATHER_AND_TERRAIN_EFFECTS
 goto SPRITE_COORDINATE_AND_ELEVATION_LOGIC
 goto FRONT_PIC_TABLE    //table for front pic use rules to standardize mon brought in from expansion
 goto MON_ELEVATION_TABLE    //SAME BUT for elevation    /some mon for pokedex need raising see if these are relevant-
+
+goto METATILE_TYPES //of interest coud be behavrio fro recognizing grahpics as encounter tables i.e tilesets to grass water etc.
 
 goto TERRAIN_DEFINES
 goto FIELD_ENDTURN  //battle_util.c  includes weather & terrain decrement //still to do     vsonic

@@ -25,7 +25,7 @@ CREDITSGFXDIR := graphics/credits
 ITEMMENUGFXDIR := graphics/item_menu
 INTROGFXDIR := graphics/intro
 
-types := normal fight flying poison ground rock bug ghost steel mystery fire water grass electric psychic ice dragon dark fairy
+types := normal fight flying poison ground rock bug ghost steel mystery fire water grass electric psychic ice dragon dark fairy sound
 contest_types := cool beauty cute smart tough
 
 CASTFORMGFXDIR := graphics/pokemon/castform

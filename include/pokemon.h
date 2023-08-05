@@ -208,12 +208,12 @@ struct BaseStats  // had to adjust struct order to match paste value from base_s
  /* 0x07 */ u8 type2;
  /* 0x08 */ u8 catchRate;
  /* 0x09 */ u16 expYield;
- /* 0x0A */ u16 evYield_HP:2;
- /* 0x0A */ u16 evYield_Attack:2;
- /* 0x0A */ u16 evYield_Defense:2;
- /* 0x0A */ u16 evYield_Speed:2;
- /* 0x0B */ u16 evYield_SpAttack:2;
- /* 0x0B */ u16 evYield_SpDefense:2;
+ /* 0x0A */ //u16 evYield_HP:2; //not using these so might as well remove from struct to save room
+ /* 0x0A */ //u16 evYield_Attack:2;
+ /* 0x0A */ //u16 evYield_Defense:2;
+ /* 0x0A */ //u16 evYield_Speed:2;
+ /* 0x0B */ //u16 evYield_SpAttack:2;
+ /* 0x0B */ //u16 evYield_SpDefense:2;
  /* 0x0C */ u16 item1;
  /* 0x0E */ u16 item2;
  /* 0x10 */ u8 genderRatio;
@@ -243,6 +243,12 @@ struct BattleMove
     u32 flags; // is u32 in emerald, might not need to do that, will ask //they use a lot of move flags will update
     u8 split;
     u16 argument;// for transferring move effects
+    u8 argumentEffectChance; // setup status commands and seteffectwithchance function to read this as a value explicitly for argument
+    //would possibly need to redo setup for effects that become certain without reading effectchance nvm it works 
+    //Argument works by passive value of argument to battlescript.moveeffect
+    //so just do a check in seteffectwithchance that checks if  battlescripting.moveeffect equals gbattlemons[move].effect or the argument
+    //if it equals the argument use argument chance, that means it has already done the effect
+    //and has passed the arugment over so it can use the argument chance
 };//without u32 flags, type overflowed with added moves
 //argument is for extra effects other than secondary effect
 
@@ -516,8 +522,8 @@ u8 GetMonsStateToDoubles(void);
 u16 GetAbilityBySpecies(u16 species, u8 abilityNum);    //since abilityNum can go to 4, removed bool for u
 u16 GetMonAbility(struct Pokemon *mon);
 bool32 IsMonType(struct Pokemon *mon, u8 type); //uses get mondata species to check mon type from base stats, not battle type,  used for field poison
-u8 GetSecretBaseTrainerPicIndex(void);
-u8 GetSecretBaseTrainerNameIndex(void);
+//u8 GetSecretBaseTrainerPicIndex(void); 
+//u8 GetSecretBaseTrainerNameIndex(void);
 bool8 IsPlayerPartyAndPokemonStorageFull(void);
 void GetSpeciesName(u8 *name, u16 species);
 u8 CalculatePPWithBonus(u16 move, u8 ppBonuses, u8 moveIndex);
@@ -583,6 +589,7 @@ bool8 CheckBattleTypeGhost(struct Pokemon *mon, u8 bank);
 struct OakSpeechNidoranFStruct *OakSpeechNidoranFSetup(u8 battlePosition, bool8 enable);
 void OakSpeechNidoranFFreeResources(void);
 void *OakSpeechNidoranFGetBuffer(u8 bufferId);
+
 u16 GetFormSpeciesId(u16 speciesId, u8 formId);
 u8 GetFormIdFromFormSpeciesId(u16 formSpeciesId);
 
