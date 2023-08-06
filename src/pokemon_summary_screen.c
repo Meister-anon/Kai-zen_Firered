@@ -186,7 +186,7 @@ struct PokemonSummaryScreenData
 
         u8 ALIGNED(4) abilityNameStrBuf[4][ABILITY_NAME_LENGTH + 1]; //made 4 string values eventually make constants for each, slot 1 slot 2 slot 3(rotatoin) and party
         u8 ALIGNED(4) abilityDescStrBuf[4][ABILITY_DESCRIPTION_LENGTH + 1]; //tested & works
-    } summary;
+    } summary; //move descriptinos are off, clearly a result of chang to the ability buffs here? don't know why didn't see taht in my pret red version unless I did and forgot?
 
     u8 ALIGNED(4) isEgg; /* 0x3200 */
     u8 ALIGNED(4) isBadEgg; /* 0x3204 */
@@ -627,6 +627,7 @@ static const u32 sBgTilemap_MovesInfoPage[] = INCBIN_U32( "graphics/interface/po
                         //pretty sure this file is the move info page i.e move selection.  /was able to confirm this is file that affects moveinfo page
 static const u32 sBgTilemap_MovesPage[] = INCBIN_U32("graphics/interface/pokesummary_unk_8463C80_replace.bin.lz");//test to see what color gets blinded
 
+// const rom data
 #include "data/text/nature_names.h"
 
 static const u8 * const sEggHatchTimeTexts[] = {
@@ -2339,7 +2340,7 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
 
         if (!(gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && !gBattleTypeFlags & BATTLE_TYPE_ROTATION)
         {
-            if (curr_personality == slot1_personality)//....default meant if address of party slot x does not equal 0
+            if (curr_personality == slot1_personality)//
             {
                 abilitydatabattler = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability;
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[0], gAbilityNames[abilitydatabattler]);
@@ -3358,7 +3359,7 @@ static void PokeSum_PrintSelectedMoveStats(void)
                                      sMonSummaryScreen->summary.moveAccuracyStrBufs[sMoveSelectionCursorPos]);
 
         AddTextPrinterParameterized4(sMonSummaryScreen->windowIds[4], FONT_NORMAL,
-                                     7, 42,
+                                     7, 12,
                                      0, 0,
                                      sLevelNickTextColors[0], TEXT_SKIP_DRAW,
                                      gMoveDescriptionPointers[sMonSummaryScreen->moveIds[sMoveSelectionCursorPos] - 1]);

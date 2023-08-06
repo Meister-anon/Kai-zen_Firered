@@ -930,7 +930,7 @@ void PrepareStringBattle(u16 stringId, u8 battler)
     }
 
     //specific case just for intimidate, uses normal effect
-    else if (stringId == STRINGID_PKMNCUTSATTACKWITH
+    else if ((stringId == STRINGID_PKMNCUTSATTACKWITH || stringId == STRINGID_TIGER_MOM_ACTIVATES)
         && ((targetAbility == ABILITY_DEFIANT && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
             || (targetAbility == ABILITY_COMPETITIVE && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
             || (targetAbility == ABILITY_URSURPER && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)
@@ -954,7 +954,8 @@ void PrepareStringBattle(u16 stringId, u8 battler)
         }
     }
 
-    else if (stringId == STRINGID_PKMNCUTSATTACKWITH && targetAbility == ABILITY_RATTLED
+    else if ((stringId == STRINGID_PKMNCUTSATTACKWITH || stringId == STRINGID_TIGER_MOM_ACTIVATES)
+        && targetAbility == ABILITY_RATTLED
         && CompareStat(gBattlerTarget, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
     {
         gBattlerAbility = gBattlerTarget;
@@ -962,7 +963,9 @@ void PrepareStringBattle(u16 stringId, u8 battler)
         gBattlescriptCurrInstr = BattleScript_AbilityRaisesDefenderStat;
         SET_STATCHANGER(STAT_SPEED, 2, FALSE);  //buffed to 2 stage stat boost
     }
-    else if (stringId == STRINGID_PKMNCUTSATTACKWITH && targetAbility == ABILITY_ANGER_POINT && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)) //For the trolls  :)
+    else if ((stringId == STRINGID_PKMNCUTSATTACKWITH || stringId == STRINGID_TIGER_MOM_ACTIVATES)
+        && targetAbility == ABILITY_ANGER_POINT 
+        && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)) //For the trolls  :)
     {
         gBattlerAbility = gBattlerTarget;
         BattleScriptPushCursor();

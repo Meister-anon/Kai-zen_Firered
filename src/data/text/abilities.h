@@ -1,4 +1,3 @@
-#include "global.h"
 
 static const u8 sNoneDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("No special ability.");
 static const u8 sStenchDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Helps repel wild POKéMON and trainers.\nAll battlers have a chance to flinch.");
@@ -96,7 +95,7 @@ static const u8 sSkillLinkDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Multi
 static const u8 sHydrationDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Cures status in rain.");
 static const u8 sSolarPowerDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Powers up in sunshine.\nBut is hurt by its uncontrollable power");
 static const u8 sQuickFeetDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups Speed if suffering from status.\nPrevents loss of speed except from traps.");
-static const u8 sNormalizeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("The PKMN exudes a completely average aura\nAll moves do True Normal damage.");
+static const u8 sNormalizeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("The PKMN exudes a completely average\naura. All moves do True Normal damage.");
 static const u8 sSniperDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Boosts critical hits.");
 static const u8 sMagicGuardDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Only damaged by attacks\nand ignores indirect damage.");
 static const u8 sNoGuardDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ensures that all moves used by\nand against the user hit.");

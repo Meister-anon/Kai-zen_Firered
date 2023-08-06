@@ -1153,21 +1153,6 @@ PalletTown_ProfessorOaksLab_Movement_RivalExit:: @ 8169BA4
 	walk_down
 	step_end
 
-PalletTown_ProfessorOaksLab_EventScript_BulbasaurBall:: @ 8169BAB
-	lock
-	faceplayer
-	setvar PLAYER_STARTER_NUM, 0
-	copyvar PLAYER_STARTER_SPECIES, VAR_TEMP_5
-	copyvar VAR_RIVAL_STARTER, VAR_TEMP_8
-	setvar RIVAL_STARTER_ID, LOCALID_CHARMANDER_BALL
-	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3
-	goto_if_ge PalletTown_ProfessorOaksLab_EventScript_LastPokeBall
-	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 2
-	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_ConfirmStarterChoice
-	msgbox PalletTown_ProfessorOaksLab_Text_ThoseArePokeBalls
-	release
-	end
-
 PalletTown_ProfessorOaksLab_EventScript_ConfirmStarterChoice:: @ 8169BE1
 	applymovement LOCALID_PROF_OAK, Movement_FaceRight
 	waitmovement 0
@@ -1318,6 +1303,21 @@ PalletTown_ProfessorOaksLab_Movement_RivalWalksToBulbasaur:: @ 8169D72
 	walk_right
 	walk_in_place_fastest_up
 	step_end
+
+PalletTown_ProfessorOaksLab_EventScript_BulbasaurBall:: @ 8169BAB
+	lock
+	faceplayer
+	setvar PLAYER_STARTER_NUM, 0
+	copyvar PLAYER_STARTER_SPECIES, VAR_TEMP_5
+	copyvar VAR_RIVAL_STARTER, VAR_TEMP_8
+	setvar RIVAL_STARTER_ID, LOCALID_CHARMANDER_BALL
+	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3
+	goto_if_ge PalletTown_ProfessorOaksLab_EventScript_LastPokeBall
+	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 2
+	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_ConfirmStarterChoice
+	msgbox PalletTown_ProfessorOaksLab_Text_ThoseArePokeBalls
+	release
+	end
 
 PalletTown_ProfessorOaksLab_EventScript_SquirtleBall:: @ 8169D78
 	lock

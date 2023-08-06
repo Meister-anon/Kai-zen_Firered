@@ -8167,7 +8167,7 @@ BattleScript_TigerMomActivates::
 	goto BattleScript_IntimidateActivationAnimLoop
 
 BattleScript_TigerMomBattleMessage::
-	printstring STRINGID_TIGER_MOM_ACTIVATION
+	printstring STRINGID_TIGER_MOM_ACTIVATES
 	waitmessage 0x40
 	goto BattleScript_IntimidateFail
 
