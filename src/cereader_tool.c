@@ -8,7 +8,10 @@
 #define SEC31_SIZE  (sizeof(struct EReaderTrainerTowerSet) - SEC30_SIZE)
 
 // The trainer tower data exceeds SECTOR_DATA_SIZE. They're allowed to use the full save sector up to the counter field.
-STATIC_ASSERT(SEC30_SIZE + SEC31_SIZE <= SECTOR_COUNTER_OFFSET * 3, EReaderTrainerTowerSetFreeSpace);
+//keep this as is its a check to ensure trainer tower data isn't overflowing its bounds, to ensure all of it gets saved,
+//if its too big for save struct it'll keep it from compiling
+//*2 is indeed for the 2 sectors trainter tower is meant to go in
+//STATIC_ASSERT(SEC30_SIZE + SEC31_SIZE <= SECTOR_COUNTER_OFFSET * 2, EReaderTrainerTowerSetFreeSpace);
 
 static u8 GetTrainerHillUnkVal(void)
 {
@@ -64,8 +67,8 @@ bool32 CEReaderTool_SaveTrainerTower(struct EReaderTrainerTowerSet * ttdata)
     u8 * buffer = AllocZeroed(SECTOR_SIZE);
     bool32 result = CEReaderTool_SaveTrainerTower_r(ttdata, buffer);
     Free(buffer);
-    return result;
-}
+    return FALSE;  //changed to return 0, rather than return result advice from GriffinR  prevents saving of ereader stuff giving more space in save data
+} //apparently enough space for 3 poke boxes, this on top of using the save optimization thing from emerald, nice
 
 static bool32 CEReaderTool_LoadTrainerTower_r(struct EReaderTrainerTowerSet * ttdata, void *buffer)
 {

@@ -56,7 +56,7 @@ struct PokemonSubstruct3
  /* 0x05 */ u32 spAttackIV:5;
  /* 0x06 */ u32 spDefenseIV:5; //changed abilityNum to 3, so I can get the second hidden ability slot.
  /* 0x07 */ u32 isEgg:1;
- /* 0x07 */ u32 abilityNum:3; // allability num are 2 in emerald. so that is the right call
+ /* 0x07 */ u32 abilityNum:2; // allability num are 2 in emerald. so that is the right call //  yeah didn't understand bit fields 2 is correct
 
  /* 0x08 */ u32 coolRibbon:3;
  /* 0x08 */ u32 beautyRibbon:3; //having this be 3 seems to correspond to 4 options, which matches the above's 3 ability options of 2 slots and 1 hidden.
@@ -128,7 +128,7 @@ struct PokemonStorage
     /*0x83C2*/ u8 boxWallpapers[TOTAL_BOXES_COUNT];
 };
 
-struct BattleTowerPokemon
+struct BattleTowerPokemon //apparently used for both battle tower leftover from emerald, AND trainer tower, on sevii island
 {
     /*0x00*/ u16 species;
     /*0x02*/ u16 heldItem;
@@ -141,19 +141,19 @@ struct BattleTowerPokemon
     /*0x11*/ u8 speedEV;
     /*0x12*/ u8 spAttackEV;
     /*0x13*/ u8 spDefenseEV;
-    /*0x14*/ u32 otId;
-    /*0x18*/ u32 hpIV:5;
-             u32 attackIV:5;
+    /*0x14*/ u32 otId;  //if I need to could remove this? I think this is only for the enemy party data, so idk if this is necessary? oh wait that's combined with personality to determine nature?
+    /*0x18*/ u32 hpIV:5; //I think this also goes into createmon function used in battle_main.c createtrainerparty if able to set fixed nature can remove otId & personality then
+             u32 attackIV:5; //nmv also sets gender
              u32 defenseIV:5;
              u32 speedIV:5;
-             u32 spAttackIV:5;
+             u32 spAttackIV:5; //since its restricting to bits, it doesn't much matter the type
              u32 spDefenseIV:5;
              u32 gap:1;
-             u32 abilityNum:3;
-    /*0x1C*/ u32 personality;
+             u16 abilityNum:2;  //didn't properly understand bit fields, each bit stores 2 values so rather than 3 I only need 2 for 4 abilities ? i.e 0-3
+    /*0x1C*/ u32 personality;  //personality values only go up to 0x96 so think can use bitfield o
     /*0x20*/ u8 nickname[POKEMON_NAME_LENGTH + 1];
-    /*0x2B*/ u8 friendship;
-};
+    /*0x2B*/ u8 friendship; //used for frustration and return, exists in either 0 or 255
+}; //don't need to change anything foud more space by removing ereader stuff
 
 #define BATTLE_STATS_NO 8
 
@@ -173,7 +173,7 @@ struct BattlePokemon
     /*0x16*/ u32 spAttackIV:5;
     /*0x17*/ u32 spDefenseIV:5;
     /*0x17*/ u32 isEgg:1;
-    /*0x17*/ u32 abilityNum:3;
+    /*0x17*/ u32 abilityNum:2;
     /*0x18*/ s8 statStages[BATTLE_STATS_NO];
     /*0x20*/ u16 ability;
     /*0x21*/ u8 type1;

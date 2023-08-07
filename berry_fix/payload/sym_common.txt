@@ -2,10 +2,10 @@
     .include "rtc.o"
 
     .align 4
-gFirstSaveSector: @ 0x03001220
+gLastWrittenSector: @ 0x03001220
 	.space 0x4
 
-gPrevSaveCounter: @ 0x03001224
+gLastSaveCounter: @ 0x03001224
 	.space 0x4
 
 gLastKnownGoodSector: @ 0x03001228
@@ -17,7 +17,7 @@ gDamagedSaveSectors: @ 0x0300122C
 gSaveCounter: @ 0x03001230
 	.space 0x4
 
-gFastSaveSection: @ 0x03001234
+gSaveDataBufferPtr: @ 0x03001234
 	.space 0x4
 
 gCurSaveChunk:

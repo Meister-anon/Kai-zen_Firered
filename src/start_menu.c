@@ -808,7 +808,7 @@ static u8 SaveDialogCB_DoSave(void)
 
 static u8 SaveDialogCB_PrintSaveResult(void)
 {
-    if (gSaveSucceeded == TRUE)
+    if (gSaveAttemptStatus  == TRUE)
         PrintSaveTextWithFollowupFunc(gText_PlayerSavedTheGame, SaveDialogCB_WaitPrintSuccessAndPlaySE);
     else
         PrintSaveTextWithFollowupFunc(gText_SaveError_PleaseExchangeBackupMemory, SaveDialogCB_WaitPrintErrorAndPlaySE);

@@ -320,7 +320,7 @@ struct BattleTowerData // Leftover from R/S
     /*0x03D8, 0x0488*/ u16 firstMonSpecies; // species of the first pokemon in the player's battle tower party
     /*0x03DA, 0x048A*/ u16 defeatedBySpecies; // species of the pokemon that defated the player
     /*0x03DC, 0x048C*/ u8 defeatedByTrainerName[8];
-    /*0x03E4, 0x0494*/ u8 firstMonNickname[POKEMON_NAME_LENGTH]; // nickname of the first pokemon in the player's battle tower party
+    /*0x03E4, 0x0494*/ u8 firstMonNickname[10]; // nickname of the first pokemon in the player's battle tower party
     /*0x03F0, 0x04A0*/ struct BattleTowerEReaderTrainer ereaderTrainer;
     /*0x04AC, 0x055C*/ u8 battleTowerLevelType:1; // 0 = level 50; 1 = level 100
     /*0x04AC, 0x055C*/ u8 unk_554:1;
@@ -602,13 +602,13 @@ struct DaycareMon
     u32 steps;
 };
 
-#define DAYCARE_MON_COUNT   2
+#define DAYCARE_MON_COUNT   2 //plan to raise, 
 
 struct DayCare
 {
     struct DaycareMon mons[DAYCARE_MON_COUNT];
     u16 offspringPersonality;
-    u8 stepCounter;
+    u8 stepCounter; //if I add more mon would require a separate step counter for each pairing...or not since it alraedy works based on individual mon?
 };
 
 struct RecordMixingDayCareMail
@@ -909,7 +909,7 @@ struct SaveBlock1
     /*0x3C98*/ struct DaycareMon route5DayCareMon;
     /*0x3D24*/ u8 filler3D24[0x10];
     /*0x3D34*/ u32 towerChallengeId;
-    /*0x3D38*/ struct TrainerTower trainerTower[NUM_TOWER_CHALLENGE_TYPES];
+    /*0x3D38*/ struct TrainerTower trainerTower[NUM_TOWER_CHALLENGE_TYPES];  //not battle tower its trainer tower, look into if usbale if not remove  vsonic
 }; // size: 0x3D68
 
 struct MapPosition

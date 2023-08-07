@@ -2599,7 +2599,7 @@ static void sub_8053E8C(void)
         }
         break;
     case 52:
-        if (sub_80DA3D8())
+        if (LinkFullSave_WriteSector())
         {
             ClearContinueGameWarpStatus2();
             gMain.state = 4;
@@ -2611,7 +2611,7 @@ static void sub_8053E8C(void)
         }
         break;
     case 4:
-        sub_80DA40C();
+        LinkFullSave_ReplaceLastSector();
         gMain.state = 40;
         sTradeData->timer = 0;
         break;
@@ -2643,7 +2643,7 @@ static void sub_8053E8C(void)
     case 42:
         if (IsLinkTaskFinished())
         {
-            sub_80DA434();
+            LinkFullSave_SetLastSectorSignature();
             gMain.state = 5;
         }
         break;
