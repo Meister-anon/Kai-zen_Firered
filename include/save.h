@@ -28,7 +28,7 @@
 // Save Slot 1: 0-13;  Save Slot 2: 14-27
 #define SECTOR_ID_HOF_1              28
 #define SECTOR_ID_HOF_2              29
-#define SECTOR_ID_TRAINER_TOWER_1    30
+#define SECTOR_ID_TRAINER_TOWER_1    30 //not saving this should make sure was able to free these sectors up nwo
 #define SECTOR_ID_TRAINER_TOWER_2    31
 #define SECTORS_COUNT                32
 

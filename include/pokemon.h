@@ -150,7 +150,7 @@ struct BattleTowerPokemon //apparently used for both battle tower leftover from 
              u32 spDefenseIV:5;
              u32 gap:1;
              u16 abilityNum:2;  //didn't properly understand bit fields, each bit stores 2 values so rather than 3 I only need 2 for 4 abilities ? i.e 0-3
-    /*0x1C*/ u32 personality;  //personality values only go up to 0x96 so think can use bitfield o
+    /*0x1C*/ u32 personality:8;  //personality values only go up to 0x96 so think can use bitfield o
     /*0x20*/ u8 nickname[POKEMON_NAME_LENGTH + 1];
     /*0x2B*/ u8 friendship; //used for frustration and return, exists in either 0 or 255
 }; //don't need to change anything foud more space by removing ereader stuff
