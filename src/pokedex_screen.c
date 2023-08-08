@@ -1644,7 +1644,7 @@ static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
     DexScreen_PrintMonDexNo(sPokedexScreenData->numericalOrderWindowId, FONT_SMALL, species, 12, y);
     if (caught)
     {
-        BlitMoveInfoIcon(sPokedexScreenData->numericalOrderWindowId, 0, 0x28, y); //pokeball icon
+        BlitMoveInfoIcon(sPokedexScreenData->numericalOrderWindowId, MENU_INFO_ICON_CAUGHT, 0x28, y); //pokeball icon
         type1 = gBaseStats[species].type1;
         BlitMoveInfoIcon(sPokedexScreenData->numericalOrderWindowId, type1 + 1, 0x84, y); //4bpp 32 width between these 2 type icons
         if (type1 != gBaseStats[species].type2)

@@ -97,6 +97,7 @@ static const struct MenuAction sMenuActions_ItemPc[] = {
     {gFameCheckerText_Cancel, Task_PlayerPcCancel}
 };
 
+//for streamer mode do #ifdef to filter items for streamers
 static const struct ItemSlot gNewGamePCItems[] = {
     { ITEM_POTION, 1 },
     //{ ITEM_NONE,   0 }
@@ -196,9 +197,9 @@ static void Task_TopMenuHandleInput(u8 taskId)
     s8 input = Menu_ProcessInputNoWrapAround();
     switch (input)
     {
-    case -2:
+    case MENU_NOTHING_CHOSEN:
         break;
-    case -1:
+    case MENU_B_PRESSED:
         PlaySE(SE_SELECT);
         ClearStdWindowAndFrameToTransparent(tWindowId, FALSE);
         ClearWindowTilemap(tWindowId);
@@ -206,14 +207,14 @@ static void Task_TopMenuHandleInput(u8 taskId)
         ScheduleBgCopyTilemapToVram(0);
         gTasks[taskId].func = Task_PlayerPcTurnOff;
         break;
-    default:
+    default: //essentially if pressed A
         ClearStdWindowAndFrameToTransparent(tWindowId, FALSE);
         ClearWindowTilemap(tWindowId);
         RemoveWindow(tWindowId);
         ScheduleBgCopyTilemapToVram(0);
         gTasks[taskId].func = sMenuActions_TopMenu[sItemOrder[input]].func.void_u8;
         break;
-    }
+    } //works correctly but broken at sMenuActions_ItemPc
 }
 
 static void Task_ReturnToTopMenu(u8 taskId)
@@ -280,7 +281,7 @@ static void Task_CreateItemStorageSubmenu(u8 taskId, u8 cursorPos)
     Menu_InitCursor(tWindowId, 2, 0, 2, 16, 3, cursorPos);
     ScheduleBgCopyTilemapToVram(0);
     PrintStringOnWindow0WithDialogueFrame(sItemStorageActionDescriptionPtrs[cursorPos]);
-}
+} //thinnk works window is displayed description is displayed issues is on selection
 
 static void PrintStringOnWindow0WithDialogueFrame(const u8 *str)
 {
@@ -312,7 +313,7 @@ static void Task_TopMenu_ItemStorageSubmenu_HandleInput(u8 taskId)
     {
         PlaySE(SE_SELECT);
         sMenuActions_ItemPc[Menu_GetCursorPos()].func.void_u8(taskId);
-    }
+    } //breaks here but only on deposit i.e cursor pos 1
     else if (JOY_NEW(B_BUTTON))
     {
         PlaySE(SE_SELECT);

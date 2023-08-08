@@ -7623,12 +7623,12 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
     return numMoves;
 }
 
-u16 SpeciesToPokedexNum(u16 species)
+u16 SpeciesToPokedexNum(u16 species) //used yb sum screen to put ??? in place of num if not kanto dex mon
 {
     species = SpeciesToNationalPokedexNum(species);
 
-    if (!IsNationalPokedexEnabled() && species > 151)
-        return 0xFFFF;
+    /*if (!IsNationalPokedexEnabled() && species > 151)
+        return 0xFFFF;*/  //quick fix to ensure no mon has ??? in sum screen for starters
     return species;
 }
 

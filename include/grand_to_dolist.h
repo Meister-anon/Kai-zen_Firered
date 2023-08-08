@@ -947,6 +947,12 @@ beleive all effects to interupt are in battle_util.c & pokemon.c, if I block fly
 * loop through species and set all flags, and unlock national dex
 * may also give a few mon with script, this is to check pokedex entries fit
 * 
+* -note removing kanto dex from game, doesn't make sense to have
+* will need to update/remove every insance of IsNationalPokedexEnabled checks throughout
+* and then change IsNationalPokedexEnabled so it always returns true.
+* essentially unlocking nat dex from the start, soon as you get pokedex
+* or can just put EnableNationalPokedex in script when you receive pokedex?
+* 
 * test rotom, gave custom dex entry based on legends dex - actually all I need to do is set rotom entry to starter.
 * 
 *  THOUGHT attempt change item use, allow for using multiple of the same item at once.
@@ -2027,6 +2033,19 @@ goto CATCHING_LOGIC
 * plan to do via time or a stepp counter, when condition is met, reset trainer flags of all npc on map.
 * this would also give rise to need to use b.o  trainer repellent from pewter, further setting the realistic world economy, etc.
 * 
+* -new idea make command for bs that goes before move animation for moves above 
+* base power 1, give auditory alert for mon hitting for big damage
+* i.e if mon hits max damage roll, or rolls a crit, the attacking mon will growl
+* before/as the move animation goes off. either do a wait state or do a small time wait
+* before animation comamnd to hopefully clear the audio channels
+* 
+* would require rolling adjustnormaldamage & critcalc command into one, which 
+* honeslty makes sense to do, just put crit calc at bottom  and change type of
+* ApplyRandomDmgMultiplier so it returns randPercent  then I can just do a check for
+* if is_Crit (critmultiplier >1) or randPercent == 100, or >=95 play growl/cry.
+* -could get annoying but also a good qol perhaps don't use normal cry but a version of it
+* maybe shortend version of it/faster but also lower pitch so it sounds normal? 
+* 
 * potential idea need recharge gems with element stones instead of removing item, after gem is used up in battle,
 * add item to bag, that is a grey gem,  spent gem something,   late game wont need evo stones so this will be new use for them,
 * Add Lore Gems captured power of the elements, from crystalizing/forming in environments near evo stones
@@ -2201,6 +2220,22 @@ goto EVOLUTION_LOGIC
 * 
 * purifying aura, Suicune Ability similar effect to healer, also mon removes all status effects on itself & allies at the end of turn
 * in doubles heals status of ally on switchin as well. -DONE need test
+* 
+* need misdreavus mismagius ability to replace levitate, 
+* could be trickster as mon is known to be a trickster and enjoy frightening people
+* has relatively good speed so could be has a chance to make oppponent flinch when they attack
+* as if they were popping in and out or maybe call it fright
+* think would apply for non damamgnig attacks as well for extra utility,
+* so just any attack that targets the opponent/doesn't target the user
+* yeah I like that if targetted by this mon has a chance to get flinched
+* possibly put in accuracy check?    think may also give pressure as a hidden ability
+* 
+* might also setup some ghost moves
+* that can paralyze  or give it glare idk, something ghostly stare?  
+* 
+* -ok yeah shelving this ability prankster works fine, and over abundance of flinch would be un fun
+* 
+* look at danny phantom abilities?
 * 
 * BUFF for Golisopod Emergency Exit, rather than it being the same as wimp out,
 * keep main effect but tweak it to be more offensive instead of force switch on hp threshold.

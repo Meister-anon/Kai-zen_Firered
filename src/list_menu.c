@@ -76,35 +76,36 @@ static u8 ListMenuAddCursorObject(struct ListMenu *list, u32 cursorKind);
 //use chart as refernce, each row is 4 icons across, width is 32, divide that by 8 and its 4.
 //so from each icon to the next (one column) is +-0x04 , and the each column is +4 icons, (since 4 is an entire row)
 //that makes +-0x20 for each row.  starting with 00.
+//anything above 0xFF 255 need use reverse indian or little indian ? so 00 01  should be 0x100, actually that's just for binary, I can just write 0x100 here I think
 #define TYPE_ICON_DATA
-const struct MoveMenuInfoIcon gMoveMenuInfoIcons[] = //fairy addition this should be for coordinates. use HMA table to easily apply additions, just read the hex value @ bottom right
-{ //                             anything above 0xFF 255 need use reverse indian or little indian? so 00 01  should be 0x100, actually that's just for binary, I can just write 0x100 here I think
-    { 12, 12, 0x00 },       // Unused
-    { 32, 12, 0x20 },       // Normal icon  -00
-    { 32, 12, 0x64 },       // Fight icon   -01
-    { 32, 12, 0x60 },       // Flying icon  -02
-    { 32, 12, 0x80 },       // Poison icon  -03
-    { 32, 12, 0x48 },       // Ground icon  -04
-    { 32, 12, 0x44 },       // Rock icon    -05
-    { 32, 12, 0x6C },       // Bug icon     -06
-    { 32, 12, 0x68 },       // Ghost icon   -07
-    { 32, 12, 0x88 },       // Steel icon   -08
-    { 32, 12, 0xA4 },       // ??? (Mystery) icon
-    { 32, 12, 0x24 },       // Fire icon    -0A
-    { 32, 12, 0x28 },       // Water icon   -0B
-    { 32, 12, 0x2C },       // Grass icon   -0C
-    { 32, 12, 0x40 },       // Electric icon 0D
-    { 32, 12, 0x84 },       // Psychic icon -0E
-    { 32, 12, 0x4C },       // Ice icon     -0F
-    { 32, 12, 0xA0 },       // Dragon icon  -10
-    { 32, 12, 0x8C },       // Dark icon    -11
-    { 40, 12, 0x08 },       // Fairy Icon   -12    //fixed was 17 realized I could put here.
-    { 32, 12, 0x104 },      // Sound Icon   -13
-    { 40, 12, 0xA8 },       // -Type- icon  -14  This is why setting fairy to 0x12 put up type icon instead of fairy.
-    { 40, 12, 0xC0 },       // -Power- icon -15
-    { 40, 12, 0xC8 },       // -Accuracy- icon 
-    { 40, 12, 0xE0 },       // -PP- icon    -16
-    { 40, 12, 0xE8 },       // -Effect- icon 17    
+static const struct MoveMenuInfoIcon sMoveMenuInfoIcons[] =
+{ // { width, height, offset }
+    [MENU_INFO_ICON_CAUGHT] = { 12, 12, 0x00 },
+    [TYPE_NORMAL + 1] = { 32, 12, 0x20 },
+    [TYPE_FIGHTING + 1] = { 32, 12, 0x64 },
+    [TYPE_FLYING + 1] = { 32, 12, 0x60 },
+    [TYPE_POISON + 1] = { 32, 12, 0x80 },
+    [TYPE_GROUND + 1] = { 32, 12, 0x48 },
+    [TYPE_ROCK + 1] = { 32, 12, 0x44 },
+    [TYPE_BUG + 1] = { 32, 12, 0x6C },
+    [TYPE_GHOST + 1] = { 32, 12, 0x68 },
+    [TYPE_STEEL + 1] = { 32, 12, 0x88 },
+    [TYPE_MYSTERY + 1] = { 32, 12, 0xA4 },
+    [TYPE_FIRE + 1] = { 32, 12, 0x24 },
+    [TYPE_WATER + 1] = { 32, 12, 0x28 },
+    [TYPE_GRASS + 1] = { 32, 12, 0x2C },
+    [TYPE_ELECTRIC + 1] = { 32, 12, 0x40 },
+    [TYPE_PSYCHIC + 1] = { 32, 12, 0x84 },
+    [TYPE_ICE + 1] = { 32, 12, 0x4C },
+    [TYPE_DRAGON + 1] = { 32, 12, 0xA0 },
+    [TYPE_DARK + 1] = { 32, 12, 0x8C },
+    [TYPE_FAIRY + 1] = { 40, 12, 0x08 },       // Fairy Icon   -12    //fixed was 17 realized I could put here.
+    [TYPE_SOUND + 1] = { 32, 12, 0x104 },      // Sound Icon   -13
+    [MENU_INFO_ICON_TYPE] = { 40, 12, 0xA8 },
+    [MENU_INFO_ICON_POWER] = { 40, 12, 0xC0 },
+    [MENU_INFO_ICON_ACCURACY] = { 40, 12, 0xC8 },
+    [MENU_INFO_ICON_PP] = { 40, 12, 0xE0 },
+    [MENU_INFO_ICON_EFFECT] = { 40, 12, 0xE8 },
 }; // use this comment order for any additional types
 //important  fairy addition ok so found out putting fairy at end as 0x17 messes up gTypeNames
 //which I need to make my dynamic starter text work, so I'll try rearranging the order of the icons
@@ -791,7 +792,7 @@ void ListMenuLoadStdPalAt(u8 palOffset, u8 palId)
 
 void BlitMoveInfoIcon(u8 windowId, u8 iconId, u16 x, u16 y)
 {
-    BlitBitmapRectToWindow(windowId, gFireRedMenuElements_Gfx + gMoveMenuInfoIcons[iconId].offset * 32, 0, 0, 128, 256, x, y, gMoveMenuInfoIcons[iconId].width, gMoveMenuInfoIcons[iconId].height);
+    BlitBitmapRectToWindow(windowId, &gFireRedMenuElements_Gfx[sMoveMenuInfoIcons[iconId].offset * TILE_SIZE_4BPP], 0, 0, 128, 256, x, y, sMoveMenuInfoIcons[iconId].width, sMoveMenuInfoIcons[iconId].height);
 }//gFireRedMenuElements_Gfx is ex_caught_pokeball_and_pokemon_types file, default file dimmension is 128 x 128 which is source width height
 //so I think if my file is ever extended I just need change those values to be able to read it?
 //doubled checked in kai zen my file is extended to 256, lol apparently I added seraph type and just forgot, lol borderlands

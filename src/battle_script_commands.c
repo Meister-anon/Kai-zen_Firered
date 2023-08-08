@@ -3348,7 +3348,7 @@ END:
     }
 
     // WEATHER_STRONG_WINDS prints a string when it's about to reduce the power
-    // of a move that is Super Effective against a Flying-type Pokémon.
+    // of a move that is Super Effective against a Flying-type Pokï¿½mon.
    /* if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
@@ -3455,7 +3455,7 @@ END:
     }
 
     // WEATHER_STRONG_WINDS prints a string when it's about to reduce the power
-    // of a move that is Super Effective against a Flying-type Pokémon.
+    // of a move that is Super Effective against a Flying-type Pokï¿½mon.
    /* if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
@@ -5307,7 +5307,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattlescriptCurrInstr = BattleScript_AttackerRemoveType;
                 break;
             case MOVE_EFFECT_ROUND:
-                TryUpdateRoundTurnOrder(); // If another Pokémon uses Round before the user this turn, the user will use Round directly after it
+                TryUpdateRoundTurnOrder(); // If another Pokï¿½mon uses Round before the user this turn, the user will use Round directly after it
                 gBattlescriptCurrInstr++;
                 break;
             }
@@ -7510,7 +7510,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
               && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))           // Obviously attack needs to have worked
             {
                 u8 battlers[4] = {0, 1, 2, 3};
-                SortBattlersBySpeed(battlers, FALSE); //If multiple Pokémon with this Ability are hit by the same move that made contact,
+                SortBattlersBySpeed(battlers, FALSE); //If multiple Pokï¿½mon with this Ability are hit by the same move that made contact,
                 for (i = 0; i < gBattlersCount; i++)//Pickpocket will activate for the fastest one that does not already have an item.
                 {
                     u8 battler = battlers[i];
@@ -11599,7 +11599,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             break;
         }
         gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;    // remove the terrain
-        TryToRevertMimicry(); // restore the types of Pokémon with Mimicry
+        TryToRevertMimicry(); // restore the types of Pokï¿½mon with Mimicry
         break;
     case VARIOUS_JUMP_IF_UNDER_200:
         // If the Pokemon is less than 200 kg, or weighing less than 441 lbs, then Sky Drop will work. Otherwise, it will fail.
@@ -11872,8 +11872,8 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         return;
     case VARIOUS_SET_ATTACKER_STICKY_WEB_USER:
-        // For Mirror Armor: "If the Pokémon with this Ability is affected by Sticky Web, the effect is reflected back to the Pokémon which set it up.
-        //  If Pokémon which set up Sticky Web is not on the field, no Pokémon have their Speed lowered."
+        // For Mirror Armor: "If the Pokï¿½mon with this Ability is affected by Sticky Web, the effect is reflected back to the Pokï¿½mon which set it up.
+        //  If Pokï¿½mon which set up Sticky Web is not on the field, no Pokï¿½mon have their Speed lowered."
         gBattlerAttacker = gBattlerTarget;  // Initialize 'fail' condition
         SET_STATCHANGER(STAT_SPEED, 2, TRUE);
         if (gBattleStruct->stickyWebUser != 0xFF)

@@ -846,11 +846,11 @@ static void PrintMoveInfo(u16 move)
 
 static void LoadMoveInfoUI(void)
 {
-    BlitMoveInfoIcon(0, 19, 1, 4);
-    BlitMoveInfoIcon(1, 20, 0, 4);
-    BlitMoveInfoIcon(1, 21, 0, 19);
-    BlitMoveInfoIcon(0, 22, 1, 19);
-    BlitMoveInfoIcon(0, 23, 1, 34);
+    BlitMoveInfoIcon(0, MENU_INFO_ICON_TYPE, 1, 4);
+    BlitMoveInfoIcon(1, MENU_INFO_ICON_POWER, 0, 4);
+    BlitMoveInfoIcon(1, MENU_INFO_ICON_ACCURACY, 0, 19);
+    BlitMoveInfoIcon(0, MENU_INFO_ICON_PP, 1, 19);
+    BlitMoveInfoIcon(0, MENU_INFO_ICON_EFFECT, 1, 34);
     PutWindowTilemap(0);
     PutWindowTilemap(1);
     PutWindowTilemap(4);

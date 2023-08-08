@@ -60,7 +60,7 @@ if it would otherwise be 0/NONE except in the case of ability.
 
 //note researching abilities on bulb/db I've come to conclusion ability slots follow a pattern
 //slot 1 is a natural capability/ability of the mon i.e intimidatation strong jaws a cute charm etc.
-//slot 2 offers some form of boost or synergy
+//slot 2 offers some form of boost or synergy  but is also direvative of natural ability/biology i.e lighting rod for cubone with its bone or flash fire
 //while the hidden ability slot is meant to be something special/unique that allows it to fit into a different niche or a niche.
 
 //consider comb over ability allocation to make sure correctly follows this logic
@@ -5460,8 +5460,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
-        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
+        .abilities = {ABILITY_PRESSURE, ABILITY_PRANKSTER}, 
+        .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -11648,7 +11648,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilities = {ABILITY_MAGIC_BOUNCE, ABILITY_PRANKSTER},
+        .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
