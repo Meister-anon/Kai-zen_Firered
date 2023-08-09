@@ -1918,16 +1918,20 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                         || partyData[i].species == SPECIES_SQUIRTLE
                         || partyData[i].species == SPECIES_CHARMANDER)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter
-                        VarSet(VAR_RIVAL_EVO, 0);   //gaurantees values are different, as species will never be none
+                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter, to species
+                        VarSet(VAR_RIVAL_EVO, 0);   //gaurantees values are different, as species will never be none\ to prime evolution condition
                     }
                    else if (partyData[i].species == SPECIES_IVYSAUR
                         || partyData[i].species == SPECIES_WARTORTLE
                         || partyData[i].species == SPECIES_CHARMELEON)
                     {
-                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO)) 
+                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO))
                         {
-                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
+                                targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
+                            else
+                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
+                            
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
                                 VarSet(VAR_RIVAL_EVO, targetSpecies);
@@ -1957,11 +1961,11 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                             }
                             else
                                 species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
-                        }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
+                        }  //check 2nd/final evo   //think evo can be set up using the evo loop in the daycare file
                     }
-                   else
+                   else// for mon in party other than starter
                         species = partyData[i].species;
-                }
+                }// for non rival battles
                 else
                     species = partyData[i].species;
 
@@ -2123,7 +2127,10 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     {
                         if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO)) 
                         {
-                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
+                                targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
+                            else
+                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
                                 VarSet(VAR_RIVAL_EVO, targetSpecies);
@@ -2150,10 +2157,10 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                                 species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
                         }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
                     }
-                   else
+                   else// for mon in party other than starter
                         species = partyData[i].species;
                 }
-                else
+                else// for non rival battles
                     species = partyData[i].species;
 
                 for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
@@ -2320,7 +2327,10 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     {
                         if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO)) 
                         {
-                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
+                                targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
+                            else
+                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
                                 VarSet(VAR_RIVAL_EVO, targetSpecies);
@@ -2347,10 +2357,10 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                                 species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
                         }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
                     }
-                   else
+                   else// for mon in party other than starter
                         species = partyData[i].species;
                 }
-                else
+                else// for non rival battles
                     species = partyData[i].species;
 
                 for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
@@ -2507,7 +2517,10 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     {
                         if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO)) 
                         {
-                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
+                                targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
+                            else
+                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
                                 VarSet(VAR_RIVAL_EVO, targetSpecies);
@@ -2534,10 +2547,10 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                                 species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
                         }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
                     }
-                   else
+                   else// for mon in rival party other than starter
                         species = partyData[i].species;
                 }//need correct logic with this, I think its excluding rivals from the rest of this logic.
-                else
+                else// for non rival mon
                     species = partyData[i].species;
 
                 for (j = 0; gSpeciesNames[species][j] != EOS; ++j)

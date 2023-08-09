@@ -17,6 +17,7 @@ extern const u16 sTypeExceptions[11]; //update this value when adding to the arr
 s32 CountDigits(s32 number);
 void TV_PrintIntToStringVar(u8 varidx, s32 number);
 u16 GetStarterSpecies(void);
+u16 RivalEeveelutionForPlayerStarter(void);
 void StopPokemonLeagueLightingEffectTask(void);
 void nullsub_60(void);
 void nullsub_61(void);

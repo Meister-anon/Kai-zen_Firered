@@ -3873,7 +3873,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .power = 120,
             .accuracy = 100,
             .pp = 10,
-        #elif B_UPDATED_MOVE_DATA == GEN_5 //may lower accuracy to 95
+        #elif B_UPDATED_MOVE_DATA == GEN_5
             .power = 100,
             .accuracy = 100,
             .pp = 10,

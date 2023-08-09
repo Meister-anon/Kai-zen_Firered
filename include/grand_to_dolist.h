@@ -953,6 +953,22 @@ beleive all effects to interupt are in battle_util.c & pokemon.c, if I block fly
 * essentially unlocking nat dex from the start, soon as you get pokedex
 * or can just put EnableNationalPokedex in script when you receive pokedex?
 * 
+* type chart fixed found issue with some added sprites noties chespin has transparanecy alpha chennel is corrputer somehow need check
+* note from watching pchal on run bun thunder wave has 100 accuracy spec to electric types 
+* could potentially do that? ...oh nvm I already buffed accuracy its 100 by default
+* 
+* select front sprites from emerald expansion have the wrong transparency use file
+* sprite correction pallete take first color.pal in ubuntu syncer folder
+* replace first color in image palette with first color in loaded pallete via graphicsgale
+* 
+* can't check all mon with starters script rather, give pokedex and set all mon as seen
+* that way can just scroll to see which ones are broken.
+* 
+* -now type chart is fixed that leaves 3 issues, 
+* 1.move descriptions  are misalligned they are pointing to the wrong move descriptrions
+* 2.battles are broken, soon as rival battle starts game breaks - don't know if just rival battle 
+* 3.can't deposit into pc.  confirmed items can't check if mon as well
+* 
 * test rotom, gave custom dex entry based on legends dex - actually all I need to do is set rotom entry to starter.
 * 
 *  THOUGHT attempt change item use, allow for using multiple of the same item at once.

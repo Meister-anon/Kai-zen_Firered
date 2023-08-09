@@ -82,6 +82,10 @@ static void MoveDeoxysObject(u8 num);
 static void Task_WaitDeoxysFieldEffect(u8 taskId);
 static void Task_WingFlapSound(u8 taskId);
 
+static const u16 sEeveelutionGrassStarter[];
+static const u16 sEeveelutionWaterStarter[];
+static const u16 sEeveelutionFireStarter[];
+
 static u8 *const sStringVarPtrs[] = {
     gStringVar1,
     gStringVar2,
@@ -1548,7 +1552,7 @@ const u16 sBulbasaurBall[] = {
     SPECIES_MAGNEMITE,
     SPECIES_SCYTHER,
     SPECIES_ODDISH,
-    SPECIES_MISDREAVUS,
+    SPECIES_FOMANTIS,
     SPECIES_SWINUB,
     SPECIES_TYNAMO,
     SPECIES_TOGEDEMARU    
@@ -1574,13 +1578,13 @@ const u16 sSquirtleBall[] = {
     SPECIES_SKITTY, //with ghost change skitty would be better in squirtle group
     SPECIES_SANDSHREW,
     SPECIES_WOOPER,
-    SPECIES_GIBLE, 
+    SPECIES_MISDREAVUS,
     SPECIES_WAILMER,
     SPECIES_SPHEAL
     //LIST_END
 };
 
-//should beat/resist grass type and be weak to/against water
+//should beat/resist grass type and or be weak to/against water
 const u16 sCharmanderBall[] = {
     SPECIES_CHARMANDER,
     SPECIES_CYNDAQUIL,
@@ -1666,10 +1670,54 @@ static u16 GetStarterSpeciesById(u16 idx) //this should work unchanged since its
     return sCharmanderBall[idx];*/
 } //this shouldbe good
 
-u16 GetStarterSpecies(void) //this is just used for the roamer,
+//plan to use for eevee evolution check in CreateNPCTrainerParty (battle_main.c)  if rival starter species was eevee check this  function result 
+//if return squirtle - evolve into jolteon or leafeon
+//if bulbasaur - evolve into flareon or glaceon -(or cefiereon as its flying)
+//if charmander - evolve into vaporeon or sylveon
+//potentailly make arrays for starter based eeveelutions so I can just use random % nelems for filter can do species = sEeveelutionarray[Random() % NELEMS(sEeveelutionarray)]
+//will just make a function that does the checks and selection when run and just put that in CreateNPCTrainerParty can make arrays static that way as well
+u16 GetStarterSpecies(void) //this is just used for the roamer,  
 {
     return GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
 }
+
+#define STARTER_BULBASAUR   0
+#define STARTER_SQUIRTLE    1
+#define STARTER_CHARMANDER  2
+
+//condition for this function to run if rival starter species eevee, and var species is currently still eevee.
+//as it runs random it can't be run each time rival encountered as evolution species would change each battle
+//so need this to just be run a single time when rival starter should first evolve
+u16 RivalEeveelutionForPlayerStarter(void) 
+{
+    u16 starter = VarGet(VAR_STARTER_MON);
+
+    if (starter == STARTER_BULBASAUR)
+        return sEeveelutionGrassStarter[Random() % NELEMS(sEeveelutionGrassStarter)];
+    else if (starter == STARTER_SQUIRTLE)
+        return sEeveelutionWaterStarter[Random() % NELEMS(sEeveelutionWaterStarter)];
+    else if (starter == STARTER_CHARMANDER)
+        return sEeveelutionFireStarter[Random() % NELEMS(sEeveelutionFireStarter)];
+}
+
+static const u16 sEeveelutionGrassStarter[] =
+{
+    SPECIES_FLAREON,
+    SPECIES_GLACEON,
+    SPECIES_CEFIREON
+};
+
+static const u16 sEeveelutionWaterStarter[] =
+{
+    SPECIES_JOLTEON,
+    SPECIES_LEAFEON
+};
+
+static const u16 sEeveelutionFireStarter[] =
+{
+    SPECIES_VAPOREON,
+    SPECIES_SYLVEON
+};
 
 //NELEMS average doesn't work, whatever happened, it caused the game to reset...on some value.
 //trying it again, may have been parenthesis.
