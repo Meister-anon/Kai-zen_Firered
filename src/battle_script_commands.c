@@ -710,7 +710,7 @@ s32 AICalcCritChance(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbilit
     {
         critChance = -1;
     }
-    else if (abilityDef == ABILITY_BATTLE_ARMOR || abilityDef == ABILITY_SHELL_ARMOR)
+    else if (abilityDef == ABILITY_BATTLE_ARMOR || abilityDef == ABILITY_SHELL_ARMOR || (abilityDef == ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL))
     {
         if (recordAbility)
             RecordAbilityBattle(battlerDef, abilityDef);
@@ -2125,7 +2125,7 @@ static void atk04_critcalc(void)    //figure later
         gCritMultiplier = 1;
 
     //while everything here is calculating crit damage, so need to add gCritMultiplier = 3; for that crit boosting ability
-   else if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR)
+   else if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR && (GetBattlerAbility(gBattlerTarget) != ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL))
      && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
      && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
      && (Random() % gCriticalHitChance[critChance] == 0) //sets crit odds by array and crit ratio, random % selects crit odds based on stat stage i.e if 0, uses 1st value in array i.e random 16 == 0 for 1 in 16 crit chance
@@ -2145,7 +2145,7 @@ static void atk04_critcalc(void)    //figure later
 
     }//...why did I make this an else if I have no idea, and see no reason for doing it...
     //ok now I see I set it for always crit effects
-   else if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR)
+   else if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR && (GetBattlerAbility(gBattlerTarget) != ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL))
         && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
         && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
         && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))

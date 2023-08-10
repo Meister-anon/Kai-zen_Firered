@@ -5138,7 +5138,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     if (heldItem == ITEM_NONE && (Random() % 3 == 0))
                     {
                         
-                        gLastUsedItem = *changedItem = sPickupBattleArray[randomItem];
+                        gLastUsedItem = *changedItem = sPickupBattleArray[Random() % NumPickupItems];
                         PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem)
                             gBattleMons[battler].item = gLastUsedItem;
                         BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, battler, sizeof(gLastUsedItem), &gLastUsedItem);
@@ -5736,9 +5736,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gWishFutureKnock.knockedOffMons[side] |= gBitTable[gBattlerPartyIndexes[gBattlerAttacker]];
                         BattleScriptPushCursor();
                         if (GetBattlerAbility(battler) == ABILITY_MAGMA_ARMOR)
-                        gBattlescriptCurrInstr = BattleScript_MoveEffectIncinerate;   //changed to new magma armor script
+                            gBattlescriptCurrInstr = BattleScript_MoveEffectIncinerate;   //changed to new magma armor script
                         else if (GetBattlerAbility(battler) == ABILITY_STICKY_HOLD)
-                        gBattlescriptCurrInstr = BattleScript_StickyHoldKnockoff;   //if sticky hold
+                            gBattlescriptCurrInstr = BattleScript_StickyHoldKnockoff;   //if sticky hold
                         *(u8*)((u8*)(&gBattleStruct->choicedMove[gBattlerAttacker]) + 0) = 0;   //necessary line
                         *(u8*)((u8*)(&gBattleStruct->choicedMove[gBattlerAttacker]) + 1) = 0;
                         ++effect;
