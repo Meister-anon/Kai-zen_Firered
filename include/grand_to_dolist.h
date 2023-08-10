@@ -1197,7 +1197,7 @@ as well as the effect of increasing trap duration
 * fix sneasal-line give better moves to learnset
 * it hass great stats, but is usually only encuotnered late game,
 * and is hard to evolve.
-* but the biggest issue is prob, that it doesn't seem to get any moves above like 50 power.
+* but the biggest issue is prob, that it doesn't seem to get any moves above like 50 power. -give beat down and brutal swing
 * 
 * added more buffs to paras line with ideas from youtubeer Zen Mode also leans
 * into what I want of giving a good reason to use mon indivdually from their evolution
@@ -1214,6 +1214,9 @@ as well as the effect of increasing trap duration
 * 
 * buff for suction cups, give it built in grip claw, using a trap move with suction cups will extend its duration
 * in addition to normal force switch prevention effects
+* 
+* give eviolite everstone effect where holding prevents evolution 
+* potentially replace everstone, or give it some other effect thing it was useful for breeding?
 * 
 * make revisions to add grass moves to sudowoodo line lvl up and tm learnsets   thinkin ingrain & bullet seed
 * think want to also add beatup if it doesn't have already

@@ -333,9 +333,9 @@ enum
     BODY_COLOR_PINK
 };
 
-#define EVO_FRIENDSHIP       				0x0001 // Pokémon levels up with friendship ≥ 220
-#define EVO_FRIENDSHIP_DAY   				0x0002 // Pokémon levels up during the day with friendship ≥ 220
-#define EVO_FRIENDSHIP_NIGHT 				0x0003 // Pokémon levels up at night with friendship ≥ 220
+#define EVO_FRIENDSHIP       				0x0001 // Pokémon levels up with friendship ≥ FRIENDSHIP_EVO_LIMITER
+#define EVO_FRIENDSHIP_DAY   				0x0002 // Pokémon levels up during the day with friendship ≥ FRIENDSHIP_EVO_LIMITER
+#define EVO_FRIENDSHIP_NIGHT 				0x0003 // Pokémon levels up at night with friendship ≥ FRIENDSHIP_EVO_LIMITER
 #define EVO_LEVEL            				0x0004 // Pokémon reaches the specified level
 #define EVO_TRADE            				0x0005 // Pokémon is traded
 #define EVO_TRADE_ITEM       				0x0006 // Pokémon is traded while it's holding the specified item
@@ -353,6 +353,7 @@ enum
 #define EVO_LEVEL_NIGHT     				0x0012 // Pokémon reaches the specified level, is night
 #define EVO_LEVEL_DAY       				0x0013 // Pokémon reaches the specified level, is day
 #define EVO_LEVEL_DUSK      				0x0014 // Pokémon reaches the specified level, is dusk (5-6 P.M)
+#define EVO_ITEM_HOLD  		    		    0x0027 // Pokémon levels up, holds specified item
 #define EVO_ITEM_HOLD_DAY  		    		0x0015 // Pokémon levels up, holds specified item at day
 #define EVO_ITEM_HOLD_NIGHT 				0x0016 // Pokémon levels up, holds specified item at night
 #define EVO_MOVE           			    	0x0017 // Pokémon levels up, knows specified move
@@ -371,6 +372,12 @@ enum
 #define EVO_MEGA_EVOLUTION					0x0024 // (change later)Not an actual evolution, used to temporarily mega evolve in battle.
 #define EVO_MOVE_MEGA_EVOLUTION		        0x0025 // Mega Evolution that checks for a move instead of held item
 #define EVO_PRIMAL_REVERSION                0x0026// Not an actual evolution, used to undergo primal reversion in battle.
+#define EVO_LEVEL_NATURE_AMPED              0x0028     // Pokémon reaches the specified level, it has a Hardy, Brave, Adamant, Naughty, Docile, Impish, Lax, Hasty, Jolly, Naive, Rash, Sassy, or Quirky nature.
+#define EVO_LEVEL_NATURE_LOW_KEY            0x0029     // Pokémon reaches the specified level, it has a Lonely, Bold, Relaxed, Timid, Serious, Modest, Mild, Quiet, Bashful, Calm, Gentle, or Careful nature.
+#define EVO_CRITICAL_HITS                   0x002a     // Pokémon performs specified number of critical hits in one battle
+#define EVO_SCRIPT_TRIGGER_DMG              0x002b     // Pokémon has specified HP below max, then player interacts trigger
+#define EVO_DARK_SCROLL                     0x002c     // interacts with Scroll of Darkness
+#define EVO_WATER_SCROLL                    0x002d     // interacts with Scroll of Waters
 
 struct Evolution
 {

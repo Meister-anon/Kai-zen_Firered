@@ -6737,26 +6737,67 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
             switch (gEvolutionTable[species][i].method)
             {
             case EVO_FRIENDSHIP:
-                if (friendship >= 220)
+                if (friendship >= FRIENDSHIP_EVO_LIMITER)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 break;
             // FR/LG removed the time of day evolutions due to having no RTC.
             case EVO_FRIENDSHIP_DAY:
                 
                 RtcCalcLocalTime();
-                if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && friendship >= 220)
+                if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && friendship >= FRIENDSHIP_EVO_LIMITER)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 
                 break;
             case EVO_FRIENDSHIP_NIGHT:
                 
                 RtcCalcLocalTime();
-                if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && friendship >= 220)
+                if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && friendship >= FRIENDSHIP_EVO_LIMITER)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 
                 break;
+            case EVO_ITEM_HOLD:
+                if (heldItem == gEvolutionTable[species][i].param)
+                {
+                    heldItem = 0;
+                    SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                }
+                break;
+            case EVO_ITEM_HOLD_NIGHT:
+                RtcCalcLocalTime();
+                if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && heldItem == gEvolutionTable[species][i].param)
+                {
+                    heldItem = 0;
+                    SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                }
+                break;
+            case EVO_ITEM_HOLD_DAY:
+                RtcCalcLocalTime();
+                if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && heldItem == gEvolutionTable[species][i].param)
+                {
+                    heldItem = 0;
+                    SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                }
+                break;
             case EVO_LEVEL:
                 if (gEvolutionTable[species][i].param <= level)
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_LEVEL_DAY:
+                RtcCalcLocalTime();
+                if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && gEvolutionTable[species][i].param <= level)
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_LEVEL_NIGHT:
+                RtcCalcLocalTime();
+                if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && gEvolutionTable[species][i].param <= level)
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_LEVEL_DUSK:
+                RtcCalcLocalTime();
+                if (gLocalTime.hours >= 17 && gLocalTime.hours < 18 && gEvolutionTable[species][i].param <= level)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 break;
             case EVO_LEVEL_ATK_GT_DEF:
@@ -6891,6 +6932,53 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 currentMap = ((gSaveBlock1Ptr->location.mapGroup) << 8 | gSaveBlock1Ptr->location.mapNum);
                 if (currentMap == gEvolutionTable[species][i].param)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_LEVEL_NATURE_AMPED:
+                if (gEvolutionTable[species][i].param <= level)
+                {
+                    u8 nature = GetNature(mon);
+                    switch (nature)
+                    {
+                    case NATURE_HARDY:
+                    case NATURE_BRAVE:
+                    case NATURE_ADAMANT:
+                    case NATURE_NAUGHTY:
+                    case NATURE_DOCILE:
+                    case NATURE_IMPISH:
+                    case NATURE_LAX:
+                    case NATURE_HASTY:
+                    case NATURE_JOLLY:
+                    case NATURE_NAIVE:
+                    case NATURE_RASH:
+                    case NATURE_SASSY:
+                    case NATURE_QUIRKY:
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        break;
+                    }
+                }
+                break;
+            case EVO_LEVEL_NATURE_LOW_KEY:
+                if (gEvolutionTable[species][i].param <= level)
+                {
+                    u8 nature = GetNature(mon);
+                    switch (nature)
+                    {
+                    case NATURE_LONELY:
+                    case NATURE_BOLD:
+                    case NATURE_RELAXED:
+                    case NATURE_TIMID:
+                    case NATURE_SERIOUS:
+                    case NATURE_MODEST:
+                    case NATURE_MILD:
+                    case NATURE_QUIET:
+                    case NATURE_BASHFUL:
+                    case NATURE_CALM:
+                    case NATURE_GENTLE:
+                    case NATURE_CAREFUL:
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        break;
+                    }
+                }
                 break;
             }
         }

@@ -235,6 +235,7 @@
 #define MAX_TOTAL_EVS 788	//previosly 510
 #define EV_ITEM_BOOSTER_LIMIT 250	//how many evs can be gained from ev boost items, previously 100  each one apparently ads 10 evs? every 4 is 1 stat point
 //consider raising to new per stat cap, don't want to make it to easy to get the boosted evs, I want people to actually train their mon.
+#define FRIENDSHIP_EVO_LIMITER 85
 
 //Stat EV Ids- believe was mostly for power items logic
 #define HpEV 0
