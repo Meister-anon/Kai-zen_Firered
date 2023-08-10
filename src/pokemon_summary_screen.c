@@ -3362,7 +3362,7 @@ static void PokeSum_PrintSelectedMoveStats(void)
                                      7, 12,
                                      0, 0,
                                      sLevelNickTextColors[0], TEXT_SKIP_DRAW,
-                                     gMoveDescriptionPointers[sMonSummaryScreen->moveIds[sMoveSelectionCursorPos] - 1]);
+                                     gMoveDescriptionPointers[sMonSummaryScreen->moveIds[sMoveSelectionCursorPos]]);
     }
 }
 
