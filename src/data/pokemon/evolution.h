@@ -211,7 +211,7 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_CORPHISH] = {{EVO_LEVEL, 30, SPECIES_CRAWDAUNT}},
     [SPECIES_FEEBAS] = {{EVO_BEAUTY, 170, SPECIES_MILOTIC},
                                        {EVO_ITEM, ITEM_PRISM_SCALE, SPECIES_MILOTIC},
-                                       {EVO_ITEM_HOLD, ITEM_PRISM_SCALE, SPECIES_MILOTIC}
+                                       {EVO_ITEM_HOLD, ITEM_PRISM_SCALE, SPECIES_MILOTIC},
                                        {EVO_FRIENDSHIP, 0, SPECIES_MILOTIC}},
     [SPECIES_CARVANHA] = {{EVO_LEVEL, 30, SPECIES_SHARPEDO}},
     [SPECIES_SHARPEDO]           //   = {{EVO_MEGA_EVOLUTION, ITEM_SHARPEDONITE, SPECIES_SHARPEDO_MEGA}},

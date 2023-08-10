@@ -82,10 +82,6 @@ static void MoveDeoxysObject(u8 num);
 static void Task_WaitDeoxysFieldEffect(u8 taskId);
 static void Task_WingFlapSound(u8 taskId);
 
-static const u16 sEeveelutionGrassStarter[];
-static const u16 sEeveelutionWaterStarter[];
-static const u16 sEeveelutionFireStarter[];
-
 static u8 *const sStringVarPtrs[] = {
     gStringVar1,
     gStringVar2,
@@ -1681,6 +1677,25 @@ u16 GetStarterSpecies(void) //this is just used for the roamer,
     return GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
 }
 
+const u16 sEeveelutionGrassStarter[] =
+{
+    SPECIES_FLAREON,
+    SPECIES_GLACEON,
+    SPECIES_CEFIREON
+};
+
+const u16 sEeveelutionWaterStarter[] =
+{
+    SPECIES_JOLTEON,
+    SPECIES_LEAFEON
+};
+
+const u16 sEeveelutionFireStarter[] =
+{
+    SPECIES_VAPOREON,
+    SPECIES_SYLVEON
+};
+
 #define STARTER_BULBASAUR   0
 #define STARTER_SQUIRTLE    1
 #define STARTER_CHARMANDER  2
@@ -1688,7 +1703,7 @@ u16 GetStarterSpecies(void) //this is just used for the roamer,
 //condition for this function to run if rival starter species eevee, and var species is currently still eevee.
 //as it runs random it can't be run each time rival encountered as evolution species would change each battle
 //so need this to just be run a single time when rival starter should first evolve
-u16 RivalEeveelutionForPlayerStarter(void) 
+const u16 RivalEeveelutionForPlayerStarter(void) 
 {
     u16 starter = VarGet(VAR_STARTER_MON);
 
@@ -1700,24 +1715,7 @@ u16 RivalEeveelutionForPlayerStarter(void)
         return sEeveelutionFireStarter[Random() % NELEMS(sEeveelutionFireStarter)];
 }
 
-static const u16 sEeveelutionGrassStarter[] =
-{
-    SPECIES_FLAREON,
-    SPECIES_GLACEON,
-    SPECIES_CEFIREON
-};
 
-static const u16 sEeveelutionWaterStarter[] =
-{
-    SPECIES_JOLTEON,
-    SPECIES_LEAFEON
-};
-
-static const u16 sEeveelutionFireStarter[] =
-{
-    SPECIES_VAPOREON,
-    SPECIES_SYLVEON
-};
 
 //NELEMS average doesn't work, whatever happened, it caused the game to reset...on some value.
 //trying it again, may have been parenthesis.
