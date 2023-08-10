@@ -7256,6 +7256,7 @@ static u16 ModifyStatByNature(u8 nature, u16 n, u8 statIndex)
 #define TRAINER_CLASS_LEADER         0x57
 #define TRAINER_CLASS_CHAMPION       0x5A
 
+#define FRIENDSHIP_FUNCTION
 void AdjustFriendship(struct Pokemon *mon, u8 event)
 {
     u16 species = GetMonData(mon, MON_DATA_SPECIES2, 0);
@@ -7283,6 +7284,9 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
         if (friendship > 199)
             friendshipLevel++;
 
+        if (event == FRIENDSHIP_EVENT_EXP_GAINED) //setup in exp function should work/ same place as ev gain
+            friendship++;
+
         if ((event != FRIENDSHIP_EVENT_WALKING || !(Random() & 1))
          && (event != FRIENDSHIP_EVENT_LEAGUE_BATTLE
           || ((gBattleTypeFlags & BATTLE_TYPE_TRAINER)
@@ -7303,6 +7307,7 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
                     friendship++;
             }
 
+           
             if (friendship < 0)
                 friendship = 0;
             if (friendship > 255)

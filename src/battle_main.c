@@ -823,7 +823,7 @@ static void CB2_InitBattleInternal(void)
     }
     gMain.inBattle = TRUE;
     for (i = 0; i < PARTY_SIZE; ++i)
-        AdjustFriendship(&gPlayerParty[i], 3);
+        AdjustFriendship(&gPlayerParty[i], FRIENDSHIP_EVENT_LEAGUE_BATTLE);
     gBattleCommunication[MULTIUSE_STATE] = 0;
 }
 //believe this is summary screen during battle 

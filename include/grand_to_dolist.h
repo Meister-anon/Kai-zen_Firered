@@ -2706,6 +2706,15 @@ goto EXP_FUNCTION //battle_script_commands.c has exp & level up logic, can be us
     //try to sell the item when they realize can't use it on a mon
     //and see its worth a fuckton and then see it was a double fake out!
     //the troll is THERE WAS NO troll!!!
+/*
+* ok also plan make assumpion of frienship actually a mechanic
+* winning a normal battle with a pokemon will increase friendship by 1 point.
+* 
+* plan is check exp function, if mon received exp, and battle result was success/won  boost friendship
+* don't worry about gBattleOutcome  just use get exp, that's all I really need
+*/
+goto FRIENDSHIP_FUNCTION
+
 
 goto MOVE_LEARN_PROCESS 
 /*

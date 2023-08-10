@@ -4341,7 +4341,7 @@ static void sub_8124E48(void) //check emerald if tms  //appears to be tm use log
      && PSA_IsCancelDisabled() == TRUE)
     {
         GiveMoveToMon(&gPlayerParty[gPartyMenu.slotId], ItemIdToBattleMoveId(gSpecialVar_ItemId));
-        AdjustFriendship(&gPlayerParty[gPartyMenu.slotId], 4);
+        AdjustFriendship(&gPlayerParty[gPartyMenu.slotId], FRIENDSHIP_EVENT_LEARN_TMHM);
         /*if (gSpecialVar_ItemId <= ITEM_TM50)
             RemoveBagItem(gSpecialVar_ItemId, 1);*/ //removing this line should make all tms reusable
         SetMainCallback2(gPartyMenu.exitCallback);
@@ -4362,7 +4362,7 @@ static void sub_8124EFC(void) //check emerald if is tms
         
         RemoveMonPPBonus(mon, moveIdx);
         SetMonMoveSlot(mon, ItemIdToBattleMoveId(gSpecialVar_ItemId), moveIdx);
-        AdjustFriendship(mon, 4);
+        AdjustFriendship(mon, FRIENDSHIP_EVENT_LEARN_TMHM);
         ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, mon, gSpecialVar_ItemId, move);
         /*if (gSpecialVar_ItemId <= ITEM_TM50)
             RemoveBagItem(gSpecialVar_ItemId, 1);*/
@@ -4981,7 +4981,7 @@ static void Task_LearnedMove(u8 taskId)
 
     if (move[1] == 0)
     {
-        AdjustFriendship(mon, 4);
+        AdjustFriendship(mon, FRIENDSHIP_EVENT_LEARN_TMHM);
         //if (item < ITEM_HM01_CUT)
           //  RemoveBagItem(item, 1);  //reallized need to remove this for reusable tm
     }

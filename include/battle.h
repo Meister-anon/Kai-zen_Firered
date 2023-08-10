@@ -650,18 +650,19 @@ struct BattleResults
     u8 shinyWildMon : 1;        // 0x5
     u8 unk5_7 : 1;              // 0x5
     u16 playerMon1Species;    // 0x6
-    u8 playerMon1Name[11];    // 0x8
+    u8 playerMon1Name[POKEMON_NAME_LENGTH + 1];    // 0x8
     u8 battleTurnCounter;     // 0x13
-    u8 playerMon2Name[11];    // 0x14
+    u8 playerMon2Name[POKEMON_NAME_LENGTH + 1];    // 0x14
     u8 pokeblockThrows;       // 0x1F   //leave in in case I can implement contest/ emerlad style safari zone planters
     u16 lastOpponentSpecies;  // 0x20
     u16 lastUsedMovePlayer;   // 0x22
     u16 lastUsedMoveOpponent; // 0x24
     u16 playerMon2Species;    // 0x26
     u16 caughtMonSpecies;     // 0x28
-    u8 caughtMonNick[10];     // 0x2A
+    u8 caughtMonNick[POKEMON_NAME_LENGTH];     // 0x2A
     u8 filler34[2];
-    u8 catchAttempts[11];     // 0x36
+    //u8 catchAttempts[11];     // 0x36
+    u8 catchAttempts[POKEMON_NAME_LENGTH + 1];     // 0x36
 };
 
 extern struct BattleResults gBattleResults;
