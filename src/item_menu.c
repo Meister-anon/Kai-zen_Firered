@@ -495,7 +495,7 @@ static bool8 LoadBagMenuGraphics(void)
         gMain.state++;
         break;
     case 19:
-        if (!(gBagMenuState.location == ITEMMENULOCATION_ITEMPC))
+        //if (!(gBagMenuState.location == ITEMMENULOCATION_ITEMPC))  //this was cause of pc deposit break
             //SetHelpContext(HELPCONTEXT_PLAYERS_PC_ITEMS);
         //else
          //   SetHelpContext(HELPCONTEXT_BAG);
