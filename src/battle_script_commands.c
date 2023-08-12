@@ -99,6 +99,7 @@ s16 spatk_diff(void); //hopefully this works, and I don't actually need to defin
 //since its not static
 static bool8 IsBattlerProtected(u8 battlerId, u16 move);//gabe me compiler double definition error so made static
 //static void ProtectBreak(void); add back later when I figure it out
+static u8 WeightBoostedDamageFormula(void); //new seismic toss boost
 
 static void SpriteCB_MonIconOnLvlUpBox(struct Sprite *sprite);
 
@@ -1305,6 +1306,7 @@ u16 GetNaturePowerMove(void)
     return sNaturePowerMoves[gBattleTerrain];
 }
 
+
 static const u16 sWeightToDamageTable[] =
 {
     50, 20,
@@ -1312,6 +1314,7 @@ static const u16 sWeightToDamageTable[] =
     500, 60,
     1000, 80,
     2000, 100,
+    10000, 120,
     0xFFFF, 0xFFFF
 };
 
@@ -3348,7 +3351,7 @@ END:
     }
 
     // WEATHER_STRONG_WINDS prints a string when it's about to reduce the power
-    // of a move that is Super Effective against a Flying-type Pokémon.
+    // of a move that is Super Effective against a Flying-type Pokï¿½mon.
    /* if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
@@ -3369,9 +3372,13 @@ END:
     //set defense type to type flying
     //finally use condition on return if [j][type_flying] == super effective do thing
     //possibly need to adjust layout of array to be able to read value in atk type def type == effectiveness format
+    
+    //now that I ported other type chart think can just use that actually, should be simple?
 }
 
 // The same as 0x7 except it doesn't check for false swipe move effect.
+//only used in future sight/doom desire & confusion self hit, so false swipe doesn't even matter...
+//strange in that case this command is prob useless and can just use the normal version
 static void atk08_adjustnormaldamage2(void)
 {
     u8 holdEffect, param;
@@ -3455,7 +3462,7 @@ END:
     }
 
     // WEATHER_STRONG_WINDS prints a string when it's about to reduce the power
-    // of a move that is Super Effective against a Flying-type Pokémon.
+    // of a move that is Super Effective against a Flying-type Pokï¿½mon.
    /* if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
@@ -5307,7 +5314,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattlescriptCurrInstr = BattleScript_AttackerRemoveType;
                 break;
             case MOVE_EFFECT_ROUND:
-                TryUpdateRoundTurnOrder(); // If another Pokémon uses Round before the user this turn, the user will use Round directly after it
+                TryUpdateRoundTurnOrder(); // If another Pokï¿½mon uses Round before the user this turn, the user will use Round directly after it
                 gBattlescriptCurrInstr++;
                 break;
             }
@@ -7511,7 +7518,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
               && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))           // Obviously attack needs to have worked
             {
                 u8 battlers[4] = {0, 1, 2, 3};
-                SortBattlersBySpeed(battlers, FALSE); //If multiple Pokémon with this Ability are hit by the same move that made contact,
+                SortBattlersBySpeed(battlers, FALSE); //If multiple Pokï¿½mon with this Ability are hit by the same move that made contact,
                 for (i = 0; i < gBattlersCount; i++)//Pickpocket will activate for the fastest one that does not already have an item.
                 {
                     u8 battler = battlers[i];
@@ -11600,7 +11607,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             break;
         }
         gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;    // remove the terrain
-        TryToRevertMimicry(); // restore the types of Pokémon with Mimicry
+        TryToRevertMimicry(); // restore the types of Pokï¿½mon with Mimicry
         break;
     case VARIOUS_JUMP_IF_UNDER_200:
         // If the Pokemon is less than 200 kg, or weighing less than 441 lbs, then Sky Drop will work. Otherwise, it will fail.
@@ -11873,8 +11880,8 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         return;
     case VARIOUS_SET_ATTACKER_STICKY_WEB_USER:
-        // For Mirror Armor: "If the Pokémon with this Ability is affected by Sticky Web, the effect is reflected back to the Pokémon which set it up.
-        //  If Pokémon which set up Sticky Web is not on the field, no Pokémon have their Speed lowered."
+        // For Mirror Armor: "If the Pokï¿½mon with this Ability is affected by Sticky Web, the effect is reflected back to the Pokï¿½mon which set it up.
+        //  If Pokï¿½mon which set up Sticky Web is not on the field, no Pokï¿½mon have their Speed lowered."
         gBattlerAttacker = gBattlerTarget;  // Initialize 'fail' condition
         SET_STATCHANGER(STAT_SPEED, 2, TRUE);
         if (gBattleStruct->stickyWebUser != 0xFF)
@@ -13770,9 +13777,43 @@ static void atk9E_metronome(void)
     }
 }
 
-static void atk9F_dmgtolevel(void)
+static u8 WeightBoostedDamageFormula(void)
 {
-    gBattleMoveDamage = gBattleMons[gBattlerAttacker].level;
+    s32 i;
+    u8 damage;
+
+    for (i = 0; sWeightToDamageTable[i] != 0xFFFF; i += 2) //go to next row, if not 0xffff
+    {
+        if (sWeightToDamageTable[i] > GetBattlerWeight(gBattlerTarget))
+            break;
+    }
+    if (sWeightToDamageTable[i] != 0xFFFF)
+        damage = sWeightToDamageTable[i + 1];
+
+    return damage;
+}
+
+//used for seismic toss, adjust using move filter and GetBattlerWeight function
+//actually plan to make new function just for weight scaling similar to flail
+//atkAC_remaininghptopower function  check target level break if they are below a certain level
+//that way it'd only do normal seismic damage for early game
+static void atk9F_dmgtolevel(void) 
+{
+    u8 max_skill_lvl = 50;
+    u8 level_Limiter = gBattleMons[gBattlerAttacker].level;
+    u32 weightscaling = WeightBoostedDamageFormula();
+
+    if (gCurrentMove == MOVE_SEISMIC_TOSS)
+    {
+        if (level_Limiter < max_skill_lvl)
+        {
+            gBattleMoveDamage = gBattleMons[gBattlerAttacker].level + (weightscaling * (level_Limiter / max_skill_lvl));
+        }
+        else
+            gBattleMoveDamage = gBattleMons[gBattlerAttacker].level + weightscaling;
+    }
+    else
+        gBattleMoveDamage = gBattleMons[gBattlerAttacker].level;
     ++gBattlescriptCurrInstr;
 }
 
@@ -13781,7 +13822,7 @@ static void atkA0_psywavedamageeffect(void)
     s32 randDamage;
     u8 scaler = 50;
 
-    if (Random() % 19 > 15)  //returns 20 values, double scale value if above 15, slightly greater than 1 in 4 odds.
+    if ((Random() % 19) > 15)  //returns 20 values, double scale value if above 15, slightly greater than 1 in 4 odds. - think lowered to 19 for balance
         scaler *= 2;
 
     randDamage = (Random() % 11); //VALUe between 0 & 10
@@ -15483,15 +15524,15 @@ static void atkDD_weightdamagecalculation(void)
 {
     s32 i;
 
-    for (i = 0; sWeightToDamageTable[i] != 0xFFFF; i += 2)
+    for (i = 0; sWeightToDamageTable[i] != 0xFFFF; i += 2) //go to next row, if not 0xffff
     {
-        if (sWeightToDamageTable[i] > GetPokedexHeightWeight(SpeciesToNationalPokedexNum(gBattleMons[gBattlerTarget].species), 1))
-            break;
+        if (sWeightToDamageTable[i] > GetBattlerWeight(gBattlerTarget))
+            break;  //tells it to stop loop, sets damage
     }
     if (sWeightToDamageTable[i] != 0xFFFF)
         gDynamicBasePower = sWeightToDamageTable[i + 1];
-    else
-        gDynamicBasePower = 120;
+    //else
+      //  gDynamicBasePower = 120;
     ++gBattlescriptCurrInstr;
 }
 

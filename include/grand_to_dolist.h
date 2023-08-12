@@ -1540,7 +1540,44 @@ Thunder Wave Electric TM45
 * and make sure it can read the location correctly for the new icon placement. - DONE
 * 
 * making sound type, but still keep flag check on moves for flag sound, still using that for soundproof. - DONE
-* putting areas needed for new type addition below
+* putting areas needed for new type addition below - DONE - still need update some moves with sound flag to sound type
+* 
+* seismic toss buff to make scale for end game with extra damage calced as a function of enemy weight
+* weight measured in kg in game but way its done (since can't store decimlas) is every is muliplied by 10
+* so 9.9 kg is 99 weight in game. and so on.
+* plan is make a table/array based on these weight categories from bulbapedia
+* since some mon are really light if I do flat weight it won't matter much so I think what I'll do is
+* set up each category and make each a multiplier setup just like falil array
+* where it uses max weight for the category as the array labels then in the function checks if less than weight at x use value at y..
+* I think I want it to be max weight caps it at 2x dmg so you'll do 2 times level damage.
+* way I'll have it work is if greater than 2nd to last max weight it'll just do 2x dmg so it hits everyone in that last category  (i.e this is where snorlax and most legendaries are)
+* 
+* actually nvm grass knot and low kick exist I'll base it on those ratios
+* 
+* will then scale with level to balance
+* effect starts at level 20, so that'll be divisor mon hp should be high enough
+* by lvl 50 I think, so will receive max effect at that point.
+* i.e formula will be level + (weight booster * (level /50))  if level is below 50
+* hm actually if I do it that way, I don't even need to limit the effect to being lvl 20
+* it'll scale on its own.  -DONE
+* 
+* 1.1	0.0 lbs. to 21.8 lbs. (0.0 kg to 9.9 kg) //20 bsp for weight based moves
+1.2	22.0 lbs. to 44.1 lbs. (10.0 kg to 20.0 kg) //40 bsp for weight based moves
+1.3	44.3 lbs. to 54.9 lbs. (20.1 kg to 24.9 kg)
+1.4	55.1 lbs. to 110.0 lbs. (25.0 kg to 49.9 kg) //60 bsp for weight based moves
+1.5	110.2 lbs. to 132.1 lbs. (50.0 kg to 59.9 kg) //where low kick/grass knot hit 80 base power
+1.6	132.3 lbs. to 218.0 lbs. (60.0 kg to 98.9 kg)
+1.7	218.3 lbs. to 220.2 lbs. (99.0 kg to 99.9 kg)
+1.8	220.5 lbs. to 225.5 lbs. (100.0 kg to 102.3 kg) //where low kick/grass knot hit 100 base power
+1.9	225.8 lbs. to 330.5 lbs. (102.4 kg to 149.9 kg)
+1.10	330.7 lbs. to 440.7 lbs. (150.0 kg to 199.9 kg)
+1.11	440.9 lbs. to 451.3 lbs. (200.0 kg to 204.7 kg) //where low kick/grass knot hit max power
+1.12	451.5 lbs. to 661.2 lbs. (204.8 kg to 299.9 kg)
+1.13	661.4 lbs. to 677.0 lbs. (300.0 kg to 307.1 kg)
+1.14	677.3 lbs. to 793.4 lbs. (307.2 kg to 359.9 kg)
+1.15	793.7 lbs. to 902.8 lbs. (360.0 kg to 409.5 kg)
+1.16	903.0 lbs. to 2204.4 lbs. (409.6 kg to 999.9 kg)
+
 * 
 * check gearup make sure it works and does stat raise for user/in singles
 * 
@@ -2057,6 +2094,8 @@ goto CATCHING_LOGIC
 * i.e if mon hits max damage roll, or rolls a crit, the attacking mon will growl
 * before/as the move animation goes off. either do a wait state or do a small time wait
 * before animation comamnd to hopefully clear the audio channels
+* 
+* use PlayCry_Normal(GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES), 25);
 * 
 * would require rolling adjustnormaldamage & critcalc command into one, which 
 * honeslty makes sense to do, just put crit calc at bottom  and change type of

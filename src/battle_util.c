@@ -9476,15 +9476,21 @@ u32 IsAbilityPreventingEscape(u32 battlerId) //ported for ai, equivalent logic i
 }
 
 u32 GetBattlerWeight(u8 battlerId) //use ethis for calculating  seismic toss damage change
-{ //since way I plan to make damage formula may make it strong at early levels
+{ //since way I plan to make damage formula may make it too strong at early levels
     //I may need to do an extra level scale component, just to mitigate damage at game start
     //where hp is low.  like say if lvl is less than or equal to 10, gbattlemovedamage *= 2/3
     //so the move will do a third less than the damage calculated from the forumla
     //can also think of it like they have to grow before they can utilize the full power ofthe move
+    // 
+    //change plan have the weight component be added to normal move damage, 
+    //and level scalar can just be there to ensure it scales into late game,
+    //pretty much formula will be (normal seismic dmg aka gbattlemovedmg) + (lvl multiplier [0 at lower levels]  * formula for weight-based dmg)
     u32 i;
-    u32 weight = GetPokedexHeightWeight(SpeciesToNationalPokedexNum(gBattleMons[battlerId].species), 1);
+    u32 weight = GetPokedexHeightWeight(SpeciesToNationalPokedexNum(gBattleMons[battlerId].species), 1);    //weight measured in kilo grams 69 = 6.9 kg -bulbasaur
     u32 ability = GetBattlerAbility(battlerId);
     u32 holdEffect = GetBattlerHoldEffect(battlerId, TRUE);
+
+    //weight goes up to around 999 kg  average weight is 50kg so 500 weight
 
     if (ability == ABILITY_HEAVY_METAL)
         weight *= 2;
