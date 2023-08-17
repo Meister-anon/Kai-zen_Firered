@@ -391,7 +391,7 @@ static void CompleteWhenChoseItem(void)
          && gSpecialVar_ItemId == ITEM_POTION
          && gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE)
         {
-            BtlCtrl_OakOldMan_SetState2Flag(FIRST_BATTLE_MSG_FLAG_HP_RESTORE);
+            BtlCtrl_OakOldMan_SetState2Flag(FIRST_BATTLE_MSG_FLAG_HP_RESTORE); //vsonic
             gBattlerControllerFuncs[gActiveBattler] = PrintOakText_KeepAnEyeOnHP;
         }
         else

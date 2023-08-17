@@ -162,9 +162,9 @@ void BattleAI_SetupFlags(void)
     /*else if (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE)
         AI_THINKING_STRUCT->aiFlags = AI_FLAG_FIRST_BATTLE;*./
     /*else if (gBattleTypeFlags & BATTLE_TYPE_FACTORY)
-        AI_THINKING_STRUCT->aiFlags = GetAiScriptsInBattleFactory();*/
-    else if (gBattleTypeFlags & (/*BATTLE_TYPE_FRONTIER |*/ BATTLE_TYPE_EREADER_TRAINER | /*BATTLE_TYPE_TRAINER_HILL |*/ BATTLE_TYPE_SECRET_BASE))
-        AI_THINKING_STRUCT->aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT;
+        AI_THINKING_STRUCT->aiFlags = GetAiScriptsInBattleFactory();
+    else if (gBattleTypeFlags & (/*BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL | BATTLE_TYPE_SECRET_BASE))
+        AI_THINKING_STRUCT->aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT;*/
     else if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
         AI_THINKING_STRUCT->aiFlags = gTrainers[gTrainerBattleOpponent_A].aiFlags | gTrainers[gTrainerBattleOpponent_B].aiFlags;
     else
@@ -502,7 +502,7 @@ static u8 ChooseMoveOrAction_Doubles(void)
         {
             actionOrMoveIndex[i] = 0xFF;
             bestMovePointsForTarget[i] = -1;
-        }
+        } //loop through possible battlers check if they are alive/valid, if not skip them/take invalid inputs
         else
         {
 
@@ -2822,7 +2822,7 @@ static s16 AI_DoubleBattle(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     }
                     break;
                 case ABILITY_LIGHTNING_ROD:
-                    if (moveType == TYPE_ELECTRIC
+                    if (moveType == TYPE_ELECTRIC //for absorb abilities I changed will need to update these I think
                       && HasMoveWithSplit(battlerAtkPartner, SPLIT_SPECIAL)
                       && BattlerStatCanRise(battlerAtkPartner, atkPartnerAbility, STAT_SPATK))
                     {
@@ -3199,8 +3199,8 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
     case EFFECT_MEMENTO:
         if (AI_THINKING_STRUCT->aiFlags & AI_FLAG_WILL_SUICIDE && gBattleMons[battlerDef].statStages[STAT_EVASION] < 7)
         {
-            if (AI_DATA->hpPercents[battlerAtk] < 50 && AI_RandLessThan(128))
-                score++;
+            if (AI_DATA->hpPercents[battlerAtk] < 50 && AI_RandLessThan(128)) //change this logic to make it smarter
+                score++; //something to do with speed, target health, if can kill with other move, then attacker health
         }
         break;
     case EFFECT_MIRROR_MOVE:

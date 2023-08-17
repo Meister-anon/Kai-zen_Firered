@@ -50,7 +50,7 @@ struct InGameTrade {
     /*0x0E*/ u8 ivs[NUM_STATS];
     /*0x14*/ u8 abilityNum;
     /*0x18*/ u32 otId;
-    /*0x1C*/ u8 conditions[5];
+    /*0x1C*/ u8 contestStats[5];
     /*0x24*/ u32 personality;
     /*0x28*/ u16 heldItem;
     /*0x2A*/ //u8 mailNum;
@@ -2448,11 +2448,11 @@ static void CreateInGameTradePokemonInternal(u8 playerSlot, u8 inGameTradeIdx) /
     SetMonData(tradeMon, MON_DATA_OT_NAME, inGameTrade->otName);
     SetMonData(tradeMon, MON_DATA_OT_GENDER, &inGameTrade->otGender);
     SetMonData(tradeMon, MON_DATA_ABILITY_NUM, &inGameTrade->abilityNum);
-    SetMonData(tradeMon, MON_DATA_BEAUTY, &inGameTrade->conditions[1]);
-    SetMonData(tradeMon, MON_DATA_CUTE, &inGameTrade->conditions[2]);
-    SetMonData(tradeMon, MON_DATA_COOL, &inGameTrade->conditions[0]);
-    SetMonData(tradeMon, MON_DATA_SMART, &inGameTrade->conditions[3]);
-    SetMonData(tradeMon, MON_DATA_TOUGH, &inGameTrade->conditions[4]);
+    SetMonData(tradeMon, MON_DATA_BEAUTY, &inGameTrade->contestStats[1]);
+    SetMonData(tradeMon, MON_DATA_CUTE, &inGameTrade->contestStats[2]);
+    SetMonData(tradeMon, MON_DATA_COOL, &inGameTrade->contestStats[0]);
+    SetMonData(tradeMon, MON_DATA_SMART, &inGameTrade->contestStats[3]);
+    SetMonData(tradeMon, MON_DATA_TOUGH, &inGameTrade->contestStats[4]);
     SetMonData(tradeMon, MON_DATA_SHEEN, &inGameTrade->sheen);
     SetMonData(tradeMon, MON_DATA_MET_LOCATION, &metLocation);
     //mailNum = 0;

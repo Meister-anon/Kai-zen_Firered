@@ -592,6 +592,20 @@ goto MORE_PCLOGIC   // note change effect from ctrl selecting mon leave withdraw
 /*Issue left to work out, removing all mon from party, puts corrupted mon in slot, based on original first slot mon species
 also puts grey question mark in 1st slot party menu when no mon there*/
 
+
+goto TRAINER_REMATCH //stuff
+//notes lost attempt remade, plan for rematchable trainers  with overworld stuff game is already broken into badge based leveling
+/*so do plus/minus average trainer level based on number of gym badges when you return to an area, (also based on your team level)
+* this way everything would scale properly to your levels
+* i.e considering the normal path you're meant to take you should be at certain paths/maps at a certain gym badge count.
+* use that as the base scale and then plus or minus levels from the enemy team based on how many badges you actually have.
+* only issue is custom moveset trainers but not hard to work around
+* 
+* also did steadfast buff made activate off of super effective and flinch simlar to how I did anger point accessibility buff
+* had also plans to go back and redo some back sprites that were bad I'm lookin at chespin right now
+* think that's all the notes I lost but of course can't recall...
+*/
+
 goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads space in the box
 goto OTHER_BOX_LOGIC    //deals with moving mon and moving item logic
 goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repellent, also use for stench ability

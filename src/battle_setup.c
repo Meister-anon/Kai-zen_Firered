@@ -855,6 +855,7 @@ u16 GetRivalBattleFlags(void)
     return sRivalBattleFlags;
 }
 
+#define TRAINER_REMATCH
 u16 Script_HasTrainerBeenFought(void)
 {
     return FlagGet(GetTrainerAFlag());
@@ -911,7 +912,7 @@ void StartTrainerBattle(void)
 {
     gBattleTypeFlags = BATTLE_TYPE_TRAINER;
     if (GetTrainerBattleMode() == TRAINER_BATTLE_EARLY_RIVAL && GetRivalBattleFlags() & RIVAL_BATTLE_TUTORIAL)
-        gBattleTypeFlags |= BATTLE_TYPE_FIRST_BATTLE;
+        gBattleTypeFlags |= BATTLE_TYPE_FIRST_BATTLE; //vsonic IMPORTANT this where set first battle flag in firered
     gMain.savedCallback = CB2_EndTrainerBattle;
     DoTrainerBattle();
     ScriptContext1_Stop();
@@ -952,7 +953,8 @@ static void CB2_EndTrainerBattle(void)
         {
             SetMainCallback2(CB2_ReturnToFieldContinueScriptPlayMapMusic);
         }
-        else */if (IsPlayerDefeated(gBattleOutcome) == TRUE)
+        else */
+        if (IsPlayerDefeated(gBattleOutcome) == TRUE)
         {
             SetMainCallback2(CB2_WhiteOut);
         }

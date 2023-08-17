@@ -3070,7 +3070,6 @@ u8 AtkCanceller_UnableToUseMove(void)
                     CancelMultiTurnMoves(gBattlerAttacker);
                     gBattlescriptCurrInstr = BattleScript_ButItFailed; //could make custom script leave as is for now, need test vsonic
                     gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-
                     effect = 1;
                 }
 
@@ -3084,7 +3083,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gProtectStructs[gBattlerAttacker].flinchImmobility = 1;
                 CancelMultiTurnMoves(gBattlerAttacker);
                 gBattlescriptCurrInstr = BattleScript_MoveUsedFlinched;
-                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;                              
                 effect = 1;
             }
             ++gBattleStruct->atkCancellerTracker;
@@ -4095,8 +4094,6 @@ u8 CastformDataTypeChange(u8 battler)
 
 } //check to make sure cherrim form change works
 
-static u16 sPickupBattleArray[ITEMS_COUNT] = { 0 }; 
-
 #define ABILITYBATTLE_FUNCTION
 
 //order only matters as which activates first.
@@ -4141,7 +4138,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         u16 heldItem = gBattleMons[battler].item;
         u16 rand = Random();
 
-        //u16 sPickupBattleArray[ITEMS_COUNT] = { 0 }; //tips from anercomp should create array with num elements found from function, and set all array values to 0
+        u16 sPickupBattleArray[ITEMS_COUNT] = { 0 }; //tips from anercomp should create array with num elements found from function, and set all array values to 0
         //u16 sPickupBattleArray[HeldItemSearch()] = {0};
         //this fills the array, and makes it usable I can then use a loop to populate it and replace the 0s.
             //use a function to set to number helditems i.e items in gitems without helditem none
@@ -5934,7 +5931,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && TARGET_TURN_DAMAGED)
                 {
                     u8 battlers[4] = { 0, 1, 2, 3 };
-                    SortBattlersBySpeed(battlers, FALSE); //If multiple Pokï¿½mon with this Ability are hit by the same move that made contact,
+                    SortBattlersBySpeed(battlers, FALSE); //If multiple Pokémon with this Ability are hit by the same move that made contact,
                     for (i = 0; i < gBattlersCount; i++)//Pickpocket will activate for the fastest one that does not already have an item.
                     {
                         u8 battler = battlers[i];
@@ -6800,7 +6797,7 @@ bool32 CanTargetBattler(u8 battlerAtk, u8 battlerDef, u16 move)
     if (gBattleMoves[move].effect == EFFECT_HIT_ENEMY_HEAL_ALLY
         && GetBattlerSide(battlerAtk) == GetBattlerSide(battlerDef)
         && gSideStatuses[GET_BATTLER_SIDE(battlerAtk)] & SIDE_STATUS_HEAL_BLOCK)
-        return FALSE;   // Pokï¿½mon affected by Heal Block cannot target allies with Pollen Puff
+        return FALSE;   // Pokémon affected by Heal Block cannot target allies with Pollen Puff
     return TRUE;
 }
 
@@ -9903,7 +9900,7 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
     if (moveType == TYPE_FIRE && gDisableStructs[battlerDef].tarShot)
         mod = UQ_4_12(1.5);
 
-    // B_WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pokï¿½mon
+    // B_WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pokémon
     if (gBattleWeather & WEATHER_STRONG_WINDS && WEATHER_HAS_EFFECT)
     {
         if (defType == TYPE_FLYING && mod >= UQ_4_12(1.5))

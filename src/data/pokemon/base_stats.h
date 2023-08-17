@@ -3646,14 +3646,14 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_EEVEE] =
     {
-        .baseHP = 55,
-        .baseAttack = 55,
-        .baseDefense = 50,
-        .baseSpeed = 55,
-        .baseSpAttack = 45,
-        .baseSpDefense = 65,
+        .baseHP = 65,
+        .baseAttack = 75,
+        .baseDefense = 55,
+        .baseSpeed = 85,
+        .baseSpAttack = 85,
+        .baseSpDefense = 75,
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_NORMAL,   //change up eevee stats as its evo is more of a form change than a growth imo so stats are average but actually mid game viable
         .catchRate = 45,
         .expYield = 65,
         //.evYield_SpDefense = 1,
@@ -6892,7 +6892,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_UNBURDEN, ABILITY_NONE},
+            .abilityHidden = {ABILITY_UNBURDEN, ABILITY_TECHNICIAN},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -6907,7 +6907,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 105,
         .baseSpDefense = 85,
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_DRAGON, //vintage white change, works for me as I made grass imune to fairy
         .catchRate = 45,
         .expYield = 239,
         //.evYield_Speed = 3,
@@ -6917,9 +6917,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_DRAGON,
-        .abilities = {ABILITY_OVERGROW, ABILITY_NONE},
+        .abilities = {ABILITY_OVERGROW, ABILITY_ADAPTABILITY},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_UNBURDEN, ABILITY_NONE},
+            .abilityHidden = {ABILITY_UNBURDEN, ABILITY_TECHNICIAN},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,

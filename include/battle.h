@@ -103,7 +103,7 @@
 #define B_FLAG_FORCE_DOUBLE_WILD    0     // If this flag is set, all land and surfing wild battles will be double battles.
 #define B_SMART_WILD_AI_FLAG        1     // If not 0, you can set this flag in a script to enable smart wild pokemon
 #define B_FLAG_NO_BAG_USE           0     // If this flag is set, the ability to use the bag in battle is disabled.
-#define B_FLAG_NO_CATCHING          0     // If this flag is set, the ability to catch wild Pokï¿½mon is disabled.
+#define B_FLAG_NO_CATCHING          0     // If this flag is set, the ability to catch wild Pokémon is disabled.
 
 struct TrainerMonNoItemDefaultMoves //pull from 4-12 later
 {
@@ -516,7 +516,7 @@ struct AI_ThinkingStruct
     u8 aiLogicId;
     struct AI_SavedBattleMon saved[4];  //had incomplete type error but all defined think issue is it tried to refer to struct that was below it, so moved savedbattlemon above it
     u8 simulatedRNG[4];
-    bool8 switchMon; // Because all available moves have no/little effect. -NOT DEFAULT
+    bool8 switchMon; // When all available moves have no/little effect. -NOT DEFAULT
 };
 
 
@@ -919,7 +919,7 @@ struct BattleScripting  //remember expanding this costs ewram
     u8 battleStyle;
     u8 atk6C_drawlvlupboxState;
     u8 learnMoveState;
-    u8 field_25_pursuitDoublesAttacker; //pursuit damage
+    u8 field_25_pursuitDoublesAttacker; //pursuit damage  //not sure what htis does don't see it used and double damage is handled in script not with this value?
     u8 reshowMainState;
     u8 reshowHelperState;
     u8 savedStatChanger; // For if attempting to change stat two times(ex. Moody)
@@ -934,8 +934,8 @@ struct BattleScripting  //remember expanding this costs ewram
     u8 overrideBerryRequirements;
     u8 stickyWebStatDrop; // To prevent Defiant activating on a Court Change'd Sticky Web
     s32 savedDmg;   //port feature leaving out for now - added as needed for bs somehow
-    //bool8 monCaught;  //believe most of these aren't needed, can be handled with battlescript
-    u8 field_23;    //they are just different ways of doing things, btu I prefer saving ram.
+    //bool8 monCaught;  //believe most of these aren't needed, can be handled with battlescript , they are just different ways of doing things, btu I prefer saving ram.
+    u8 field_23;    //used for hp change on level up & shedinja hp stuff in pokemon.c
 };
 
 enum

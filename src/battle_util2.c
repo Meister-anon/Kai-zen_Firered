@@ -4,7 +4,7 @@
 #include "battle_anim.h"
 #include "pokemon.h"
 #include "malloc.h"
-//#include "gflib.h" //seemed alloczero wasn't properly picking up reference but could have just been a vs thing
+//#include "gflib.h" //seemed alloczero wasn't properly picking up reference but could have just been a vs thing //potentially relace maloc with this
 #include "trainer_tower.h"
 
 void AllocateBattleResources(void)
@@ -27,7 +27,7 @@ void AllocateBattleResources(void)
     gBattleResources->beforeLvlUp = AllocZeroed(sizeof(*gBattleResources->beforeLvlUp));
     gBattleResources->ai = AllocZeroed(sizeof(*gBattleResources->ai));
     gBattleResources->battleHistory = AllocZeroed(sizeof(*gBattleResources->battleHistory));
-    gBattleResources->AI_ScriptsStack = AllocZeroed(sizeof(*gBattleResources->AI_ScriptsStack));//may remove
+    //gBattleResources->AI_ScriptsStack = AllocZeroed(sizeof(*gBattleResources->AI_ScriptsStack));
     gBattleAnimMons_BgTilesBuffer = AllocZeroed(0x2000);
     gBattleAnimMons_BgTilemapBuffer = AllocZeroed(0x1000);
     SetBgTilemapBuffer(1, gBattleAnimMons_BgTilemapBuffer);
