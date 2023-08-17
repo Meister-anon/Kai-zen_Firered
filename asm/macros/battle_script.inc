@@ -412,10 +412,10 @@
 	.byte \param2
 	.endm
 
-	.macro moveend param0:req, param1:req
+	.macro moveend endMode:req, endState:req
 	.byte 0x49
-	.byte \param0
-	.byte \param1
+	.byte \endMode
+	.byte \endState
 	.endm
 
 	@ Help macros for 5 uses of moveend command
@@ -432,13 +432,13 @@
 	moveend 1, 0
 	.endm
 
-	@ All cases from (inclusive)
+	@ All cases from (inclusive)  (meaning starts with that value)
 	.macro moveendfrom from:req
 	setbyte sMOVEEND_STATE, \from
 	moveend 0, 0
 	.endm
 
-	@ All cases from 0 to (not inclusive)
+	@ All cases from 0 to (not inclusive)		(meaning excludes that value)
 	.macro moveendto to:req
 	setbyte sMOVEEND_STATE, 0
 	moveend 2, \to

@@ -11,6 +11,7 @@
 #include "battle_gfx_sfx_util.h"
 #include "battle_util2.h"
 #include "battle_bg.h"
+#include "window.h"
 
 /*
     Banks are a name given to what could be called a 'battlerId' or 'monControllerId'.
@@ -102,7 +103,7 @@
 #define B_FLAG_FORCE_DOUBLE_WILD    0     // If this flag is set, all land and surfing wild battles will be double battles.
 #define B_SMART_WILD_AI_FLAG        1     // If not 0, you can set this flag in a script to enable smart wild pokemon
 #define B_FLAG_NO_BAG_USE           0     // If this flag is set, the ability to use the bag in battle is disabled.
-#define B_FLAG_NO_CATCHING          0     // If this flag is set, the ability to catch wild Pokémon is disabled.
+#define B_FLAG_NO_CATCHING          0     // If this flag is set, the ability to catch wild Pokï¿½mon is disabled.
 
 struct TrainerMonNoItemDefaultMoves //pull from 4-12 later
 {
@@ -707,6 +708,14 @@ struct StolenItem
     u16 originalItem : 15;
     u16 stolen : 1;
 };
+
+struct StatFractions
+{
+    u8 dividend;
+    u8 divisor;
+};
+
+extern const struct StatFractions gAccuracyStageRatios[]; 
 
 struct BattleStruct //fill in unused fields when porting
 {

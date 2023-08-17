@@ -609,7 +609,7 @@ static void Task_WaitFadeOnInit(u8 taskId) //makes sure menu isn't displayed unt
 static bool8 TryExitPickMode(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
-    return;
+    return 0;
     
 }
 

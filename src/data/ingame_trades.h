@@ -3,10 +3,10 @@ static const struct InGameTrade sInGameTrades[] = {
     {
         .nickname = _("MIMIEN"),
         .species = SPECIES_MR_MIME,
-        .ivs = {20, 15, 17, 24, 23, 22},
-        .abilityNum = 0,    //would like to have a way to randomize these
+        .ivs = {20, 15, 17, 24, 23, 22}, //hp, atk, def, speed, spatk, spdef
+        .abilityNum = 0,    //would like to have a way to randomize these  //redistribute all Ivs for best options, and change ability from base, 
         .otId = 1985,
-        .conditions = {5, 5, 5, 30, 5},
+        .conditions = {5, 5, 5, 30, 5}, //conditions are the contest stats
         .personality = 0x00009cae,
         .heldItem = ITEM_NONE,
         //.mailNum = 255,

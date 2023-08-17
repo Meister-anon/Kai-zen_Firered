@@ -4381,6 +4381,10 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalOaksLabCharma
                 },
         .lvl = 5,
         .species = SPECIES_CHARMANDER,
+    }, 
+    {
+        .lvl = 5,
+        .species = SPECIES_ARBOK,
     },
 };
 

@@ -37,11 +37,11 @@ GCC_VER = $(shell $(CC) -dumpversion)
 
 ifeq ($(MODERN),0)
 CC1             := tools/agbcc/bin/agbcc$(EXE)
-override CFLAGS += -mthumb-interwork -Wimplicit -Wparentheses -Werror -O2 -fhex-asm
+override CFLAGS += -mthumb-interwork -Wimplicit -Wparentheses -Werror -O2 -fhex-asm -ggdb
 LIBPATH := -L ../../tools/agbcc/lib
 else
 CC1             := $(shell $(CC) --print-prog-name=cc1) -quiet
-override CFLAGS += -mthumb -mthumb-interwork -O2 -mtune=arm7tdmi -march=armv4t -mabi=apcs-gnu -fno-toplevel-reorder -fno-aggressive-loop-optimizations -Wno-pointer-to-int-cast
+override CFLAGS += -mthumb -mthumb-interwork -O2 -mtune=arm7tdmi -march=armv4t -mabi=apcs-gnu -fno-toplevel-reorder -fno-aggressive-loop-optimizations -Wno-pointer-to-int-cast -ggdb
 #LIBPATH := -L $(TOOLCHAIN)/lib/gcc/arm-none-eabi/$(GCC_VER)/thumb -L $(TOOLCHAIN)/arm-none-eabi/lib/thumb
 LIBPATH := -L ../../tools/agbcc/lib
 endif
@@ -182,7 +182,8 @@ clean-tools:
 clean: mostlyclean clean-tools
 
 tidy:
-	$(RM) $(ALL_BUILDS:%=poke%{.gba,.elf,.map})
+	$(RM) $(ALL_BUILDS:%=poke%{.gba,.elf,.map})  $(ALL_BUILDS:%=Kai-zen_%{.gba,.elf,.map}) $(ALL_BUILDS:%=poke%_modern{.gba,.elf,.map})  $(ALL_BUILDS:%=Kai-zen_%_modern{.gba,.elf,.map})
+#	$(RM) $(ALL_BUILDS:%=poke%{.gba,.elf,.map})
 	$(RM) -r build
 	@$(MAKE) -C berry_fix tidy
 

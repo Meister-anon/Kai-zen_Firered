@@ -238,7 +238,7 @@ struct PokemonSummaryScreenData
     } monList;
 
     MainCallback savedCallback;
-    struct Sprite * markingSprite;
+    //struct Sprite * markingSprite;
 
     u8 ALIGNED(4) lastPageFlipDirection[2]; /* 0x3300 */
     u8 ALIGNED(4) unk3304[3]; /* 0x3304 */
@@ -1732,7 +1732,7 @@ static void PokeSum_HideSpritesBeforePageFlip(void)
         if (sMonSummaryScreen->pageFlipDirection == 1)
         {
             PokeSum_ShowOrHideMonPicSprite(1);
-            PokeSum_ShowOrHideMonMarkingsSprite(1);
+            //PokeSum_ShowOrHideMonMarkingsSprite(1);
             ShowOrHideBallIconObj(1);
             ShowOrHideStatusIcon(1);
             HideShowPokerusIcon(1);
@@ -1784,7 +1784,7 @@ static void PokeSum_ShowSpritesBeforePageFlip(void)
         break;
     case PSS_PAGE_MOVES_INFO:
         PokeSum_ShowOrHideMonPicSprite(0);
-        PokeSum_ShowOrHideMonMarkingsSprite(0);
+        //PokeSum_ShowOrHideMonMarkingsSprite(0);
         ShowOrHideStatusIcon(0);
         ShowOrHideBallIconObj(0);
         HideShowPokerusIcon(0);
@@ -2081,7 +2081,7 @@ static void CB2_SetUpPSS(void)
         else
         {
             PokeSum_ShowOrHideMonPicSprite(0);
-            PokeSum_ShowOrHideMonMarkingsSprite(0);
+            //PokeSum_ShowOrHideMonMarkingsSprite(0);
             ShowOrHideBallIconObj(0);
             ShowOrHideHpBarObjs(0);
             ShowOrHideExpBarObjs(0);
@@ -2500,7 +2500,7 @@ static u8 PokeSum_HandleCreateSprites(void)
         CreatePokerusIconObj(TAG_PSS_UNK_96, TAG_PSS_UNK_96);
         break;
     case 2:
-        PokeSum_CreateMonMarkingsSprite();
+        //PokeSum_CreateMonMarkingsSprite();
         break;
     case 3:
         CreateMoveSelectionCursorObjs(TAG_PSS_UNK_64, TAG_PSS_UNK_64);
@@ -5534,7 +5534,7 @@ static void PokeSum_DestroySprites(void)
     PokeSum_DestroyMonPicSprite();
     PokeSum_DestroyMonIconSprite();
     DestroyBallIconObj();
-    PokeSum_DestroyMonMarkingsSprite();
+    //PokeSum_DestroyMonMarkingsSprite();
     DestroyMonStatusIconObj();
     DestroyPokerusIconObj();
     DestroyShinyStarObj();
@@ -5550,7 +5550,7 @@ static void PokeSum_CreateSprites(void)
     PokeSum_ShowOrHideMonPicSprite(0);
     UpdateHpBarObjs();
     UpdateExpBarObjs();
-    PokeSum_UpdateMonMarkingsAnim();
+    //PokeSum_UpdateMonMarkingsAnim();
     UpdateMonStatusIconObj();
     ShowPokerusIconObjIfHasOrHadPokerus();
     ShowShinyStarObjIfMonShiny();
@@ -5558,7 +5558,7 @@ static void PokeSum_CreateSprites(void)
 
 static void PokeSum_CreateMonMarkingsSprite(void)
 {
-    u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS);
+    /*u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS);
 
     DestroySpriteAndFreeResources(sMonSummaryScreen->markingSprite);
    // sMonSummaryScreen->markingSprite = CreateMonMarkingSprite_SelectCombo(TAG_PSS_UNK_8C, TAG_PSS_UNK_8C, sUnknown_84636E0);
@@ -5570,30 +5570,33 @@ static void PokeSum_CreateMonMarkingsSprite(void)
         sMonSummaryScreen->markingSprite->pos1.y = 91;
     }
 
-    PokeSum_ShowOrHideMonMarkingsSprite(TRUE);
+    PokeSum_ShowOrHideMonMarkingsSprite(TRUE); */
+    return;  //ok cuz this is void
 }
 
 static void PokeSum_DestroyMonMarkingsSprite(void)
 {
-    DestroySpriteAndFreeResources(sMonSummaryScreen->markingSprite);
+    return; //DestroySpriteAndFreeResources(sMonSummaryScreen->markingSprite);
 }
 
 static void PokeSum_ShowOrHideMonMarkingsSprite(u8 invisible)
 {
-    u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS);
+    return;
+    /*u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS);
 
     if (markings == 0)
         sMonSummaryScreen->markingSprite->invisible = TRUE;
     else
-        sMonSummaryScreen->markingSprite->invisible = invisible;
+        sMonSummaryScreen->markingSprite->invisible = invisible;*/
 }
 
 static void PokeSum_UpdateMonMarkingsAnim(void)
 {
-    u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS);
+    return;
+    /*u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS);
 
     StartSpriteAnim(sMonSummaryScreen->markingSprite, markings);
-    PokeSum_ShowOrHideMonMarkingsSprite(0);
+    PokeSum_ShowOrHideMonMarkingsSprite(0); */
 }
 
 static void PokeSum_SeekToNextMon(u8 taskId, s8 direction)

@@ -1028,7 +1028,7 @@ static void SetCursorMonData(void *pokemon, u8 mode)
             GetMonData(mon, MON_DATA_NICKNAME, gPSSData->cursorMonNick);
             StringGet_Nickname(gPSSData->cursorMonNick);
             gPSSData->cursorMonLevel = GetMonData(mon, MON_DATA_LEVEL);
-            gPSSData->cursorMonMarkings = GetMonData(mon, MON_DATA_MARKINGS);
+            //gPSSData->cursorMonMarkings = GetMonData(mon, MON_DATA_MARKINGS);
             gPSSData->cursorMonPersonality = GetMonData(mon, MON_DATA_PERSONALITY);
             gPSSData->cursorMonPalette = GetMonFrontSpritePal(mon);
             gender = GetMonGender(mon);
@@ -1053,7 +1053,7 @@ static void SetCursorMonData(void *pokemon, u8 mode)
             GetBoxMonData(boxMon, MON_DATA_NICKNAME, gPSSData->cursorMonNick);
             StringGet_Nickname(gPSSData->cursorMonNick);
             gPSSData->cursorMonLevel = GetLevelFromBoxMonExp(boxMon);
-            gPSSData->cursorMonMarkings = GetBoxMonData(boxMon, MON_DATA_MARKINGS);
+            //gPSSData->cursorMonMarkings = GetBoxMonData(boxMon, MON_DATA_MARKINGS);
             gPSSData->cursorMonPersonality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
             gPSSData->cursorMonPalette = GetMonSpritePalFromSpeciesAndPersonality(gPSSData->cursorMonSpecies, otId, gPSSData->cursorMonPersonality);
             gender = GetGenderFromSpeciesAndPersonality(gPSSData->cursorMonSpecies, gPSSData->cursorMonPersonality);

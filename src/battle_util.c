@@ -973,6 +973,15 @@ void PrepareStringBattle(u16 stringId, u8 battler)
         SET_STATCHANGER(STAT_ATK, MAX_STAT_STAGE - gBattleMons[gBattlerTarget].statStages[STAT_ATK], FALSE);
 
     }
+    else if ((stringId == STRINGID_PKMNFLINCHED)
+        && battlerAbility == ABILITY_STEADFAST
+        && CompareStat(gBattlerAttacker, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
+    {
+        gBattlerAbility = gBattlerAttacker;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_AttackerAbilityStatRaise;  //need test
+        SET_STATCHANGER(STAT_SPEED, 1, FALSE);
+    }
 
     gActiveBattler = battler;
     BtlController_EmitPrintString(0, stringId);
@@ -4010,7 +4019,7 @@ u16 HeldItemSearch(void)
 {
     u16 j;
     u16 NumFoundItems = 0;
-    for (j = 0; j < ITEMS_COUNT; j++)
+    for (j = 0; j < ITEM_N_A; j++)
     {
         if (ItemId_GetHoldEffect(j) != HOLD_EFFECT_NONE) //for searching out list of items, with held effects
         {
@@ -4086,6 +4095,8 @@ u8 CastformDataTypeChange(u8 battler)
 
 } //check to make sure cherrim form change works
 
+static u16 sPickupBattleArray[ITEMS_COUNT] = { 0 }; 
+
 #define ABILITYBATTLE_FUNCTION
 
 //order only matters as which activates first.
@@ -4130,12 +4141,12 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         u16 heldItem = gBattleMons[battler].item;
         u16 rand = Random();
 
-        u16 sPickupBattleArray[ITEMS_COUNT] = { 0 }; //tips from anercomp should create array with num elements found from function, and set all array values to 0
+        //u16 sPickupBattleArray[ITEMS_COUNT] = { 0 }; //tips from anercomp should create array with num elements found from function, and set all array values to 0
         //u16 sPickupBattleArray[HeldItemSearch()] = {0};
         //this fills the array, and makes it usable I can then use a loop to populate it and replace the 0s.
             //use a function to set to number helditems i.e items in gitems without helditem none
         u16 NumPickupItems = HeldItemSearch();
-        u32 randomItem = rand % NumPickupItems;   //return random item from pickup battle itme list, array compiles and is able to set item, but random item selection isn't working
+        //u32 randomItem = rand % NumPickupItems;   //return random item from pickup battle itme list, array compiles and is able to set item, but random item selection isn't working
         u16 *changedItem = &gBattleStruct->changedItems[battler];
         if (special)
             gLastUsedAbility = special;
@@ -5923,7 +5934,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && TARGET_TURN_DAMAGED)
                 {
                     u8 battlers[4] = { 0, 1, 2, 3 };
-                    SortBattlersBySpeed(battlers, FALSE); //If multiple Pokémon with this Ability are hit by the same move that made contact,
+                    SortBattlersBySpeed(battlers, FALSE); //If multiple Pokï¿½mon with this Ability are hit by the same move that made contact,
                     for (i = 0; i < gBattlersCount; i++)//Pickpocket will activate for the fastest one that does not already have an item.
                     {
                         u8 battler = battlers[i];
@@ -6054,6 +6065,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     SET_STATCHANGER(STAT_ATK, MAX_STAT_STAGE - gBattleMons[battler].statStages[STAT_ATK], FALSE);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_TargetsStatWasMaxedOut;
+                    ++effect;
+                }
+                break;
+            case ABILITY_STEADFAST:
+                if ((gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)   //if take a super effective hit
+                    && TARGET_TURN_DAMAGED
+                    && IsBattlerAlive(battler)
+                    && CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
+                {
+                    SET_STATCHANGER(STAT_SPEED, 1, FALSE);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseOnMoveEnd;  //need test
                     ++effect;
                 }
                 break;
@@ -6777,7 +6800,7 @@ bool32 CanTargetBattler(u8 battlerAtk, u8 battlerDef, u16 move)
     if (gBattleMoves[move].effect == EFFECT_HIT_ENEMY_HEAL_ALLY
         && GetBattlerSide(battlerAtk) == GetBattlerSide(battlerDef)
         && gSideStatuses[GET_BATTLER_SIDE(battlerAtk)] & SIDE_STATUS_HEAL_BLOCK)
-        return FALSE;   // Pokémon affected by Heal Block cannot target allies with Pollen Puff
+        return FALSE;   // Pokï¿½mon affected by Heal Block cannot target allies with Pollen Puff
     return TRUE;
 }
 
@@ -9880,7 +9903,7 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
     if (moveType == TYPE_FIRE && gDisableStructs[battlerDef].tarShot)
         mod = UQ_4_12(1.5);
 
-    // B_WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pokémon
+    // B_WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pokï¿½mon
     if (gBattleWeather & WEATHER_STRONG_WINDS && WEATHER_HAS_EFFECT)
     {
         if (defType == TYPE_FLYING && mod >= UQ_4_12(1.5))

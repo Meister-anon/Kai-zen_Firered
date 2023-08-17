@@ -275,7 +275,7 @@ const u8 gMoveDescription_RolePlay[] = _("The user mimics the\nfoe completely an
 const u8 gMoveDescription_Wish[] = _("A self-healing move\nthat restores half\nthe full HP on the\nnext turn.");
 const u8 gMoveDescription_Assist[] = _("The user randomly\npicks and uses a\nmove of an allied\nPOKéMON.");
 const u8 gMoveDescription_Ingrain[] = _("The user lays roots\nthat restore HP on\nevery turn.\nIt can't switch out.");
-const u8 gMoveDescription_Superpower[] = _("A powerful attack,\nbut it also lowers\nthe user's ATTACK\nand DEFENSE stats.");
+const u8 gMoveDescription_Superpower[] = _("A powerful attack,\nmade with no\nregard for Defense.\nBut it also lowers\nthe user's\nDEFENSE stats.");
 const u8 gMoveDescription_MagicCoat[] = _("Reflects back the\nfoe's LEECH SEED\nand any status-\ndamaging move.");
 const u8 gMoveDescription_Recycle[] = _("A move that\nrecycles a used\nitem for use once\nmore.");
 const u8 gMoveDescription_Revenge[] = _("An attack move that\ngains in intensity if\nthe target has hurt\nthe user.");
@@ -371,7 +371,7 @@ const u8 gMoveDescription_Tailwind[] = _("Whips up a\nturbulent gale\nbehind the
 const u8 gMoveDescription_Acupressure[] = _("The user sharply\nraises a\nrandom stat.");
 const u8 gMoveDescription_MetalBurst[] = _("After taking a hit\nretaliates with\ngreater power.");
 const u8 gMoveDescription_U_turn[] = _("Does damage then\nswitches out the user.");
-const u8 gMoveDescription_CloseCombat[] = _("A strong attack\nbut lowers defense.");
+const u8 gMoveDescription_CloseCombat[] = _("The user risks\nit all to\ndeliver a strong\nattack from within\nthe foe's guard\nbut lowers defense.");
 const u8 gMoveDescription_Payback[] = _("An attack that\ngains power if\nthe user moves\nafter the target.");
 const u8 gMoveDescription_Assurance[] = _("An attack that\ndoubles power if\nthe target has\nalready taken damage.");
 const u8 gMoveDescription_Embargo[] = _("Blocks the foes from\nusing any items.");
@@ -3151,7 +3151,7 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("MIRROR MOVE"),
     _("SELFDESTRUCT"),
     _("EGG BOMB"),
-    _("LICK"),
+    _("AURORA VEIL"),
     _("SMOG"),
     _("SLUDGE"),
     _("BONE CLUB"),
@@ -3686,7 +3686,7 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("CLANGING SCALES"),
     _("DRAGON HAMMER"),
     _("BRUTAL SWING"),
-    _("AURORA VEIL"),
+    _("LICK"),
     _("SHELL TRAP"),
     _("FLEUR CANNON"),
     _("PSYCHIC FANGS"),

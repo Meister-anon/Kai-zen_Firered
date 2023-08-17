@@ -1423,7 +1423,7 @@ static bool8 shedinja_maker_maybe(void)
         break;
     case 16:
         if (GetBlockReceivedStatus() == 3)
-            return;
+            return 0;
         /*{
             Trade_Memcpy(gLinkPartnerMail, gBlockRecvBuffer[id ^ 1], PARTY_SIZE * sizeof(struct MailStruct));
             ResetBlockReceivedFlags();

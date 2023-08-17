@@ -1572,7 +1572,7 @@ static bool32 JumpIfMoveFailed(u8 adder, u16 move) //updated to emerald standard
     {
         TrySetDestinyBondToHappen();
         if (AbilityBattleEffects(ABILITYEFFECT_ABSORBING, gBattlerTarget, 0, 0, move))
-            return;
+            return TRUE;
     }
     gBattlescriptCurrInstr += adder;
     return FALSE;
@@ -6832,6 +6832,8 @@ static u32 GetNextTarget(u32 moveTarget)
 #define ATK_49_MOVEEND
 static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  //vsonic IMPORTANT
 {
+    CMD_ARGS(u8 endMode, u8 endState);
+
     s32 i;
     bool32 effect = FALSE;
     u8 moveType = 0;
@@ -6840,12 +6842,12 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
     u8 endMode, endState; //renamed for compatibility with emerald
     u16 originallyUsedMove; //need reordere cases below
 
-    if (gChosenMove == 0xFFFF)
+    if (gChosenMove == MOVE_UNAVAILABLE)
         originallyUsedMove = MOVE_NONE;
     else
         originallyUsedMove = gChosenMove;
-    endMode = gBattlescriptCurrInstr[1];
-    endState = gBattlescriptCurrInstr[2];
+    endMode = cmd->endMode;
+    endState = cmd->endState;
     if (gBattleMons[gBattlerAttacker].item == ITEM_ENIGMA_BERRY)
         holdEffectAtk = gEnigmaBerries[gBattlerAttacker].holdEffect;
     else
@@ -6891,7 +6893,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                             gBattleMoveDamage = 1;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SHIELD_BASH);
                         BattleScriptPushCursor();
-                        gBattlescriptCurrInstr = BattleScript_ShieldBash;//needs animation  //done
+                        gBattlescriptCurrInstr = BattleScript_ShieldBash;//needs animation  //done -make better eventually
                         effect = 1;
                     }
                     /*else if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //should do what i want
@@ -7663,7 +7665,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
     }
     while (gBattleScripting.atk49_state != MOVE_END_COUNT && effect == FALSE);
     if (gBattleScripting.atk49_state == MOVE_END_COUNT && effect == FALSE)
-        gBattlescriptCurrInstr += 3;
+        gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 //doesn't have stab check

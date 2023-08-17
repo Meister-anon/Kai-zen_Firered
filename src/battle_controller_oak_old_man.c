@@ -944,7 +944,7 @@ static void CompleteOnFinishedBattleAnimation(void)
         OakOldManBufferExecCompleted();
 }
 
-static void OakOldManBufferExecCompleted(void)
+static void OakOldManBufferExecCompleted(void) //vsonic
 {
     gBattlerControllerFuncs[gActiveBattler] = OakOldManBufferRunCommand;
     if (gBattleTypeFlags & BATTLE_TYPE_LINK)

@@ -91,7 +91,7 @@ struct SaveSectorLocation gRamSaveSectorLocations[NUM_SECTORS_PER_SLOT];
 u16 gSaveAttemptStatus;
 
 EWRAM_DATA struct SaveSector gSaveDataBuffer = {0};
-EWRAM_DATA u32 gSaveUnusedVar2 = 0;
+EWRAM_DATA u32 gSaveUnusedVar2 = 0; //zsonic vsonic find if this is really unusued not needed
 
 void ClearSaveData(void)
 {

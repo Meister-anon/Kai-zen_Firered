@@ -2523,7 +2523,7 @@ void ZeroMonData(struct Pokemon *mon)
     SetMonData(mon, MON_DATA_SPATK, &arg);
     SetMonData(mon, MON_DATA_SPDEF, &arg);
     arg = 255;
-    SetMonData(mon, MON_DATA_MAIL, &arg);
+    //SetMonData(mon, MON_DATA_MAIL, &arg);
 }
 
 void ZeroPlayerPartyMons(void)
@@ -2547,7 +2547,7 @@ void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFix
     CreateBoxMon(&mon->box, species, level, fixedIV, hasFixedPersonality, fixedPersonality, otIdType, fixedOtId);
     SetMonData(mon, MON_DATA_LEVEL, &level);
     arg = 255;
-    SetMonData(mon, MON_DATA_MAIL, &arg);
+    //SetMonData(mon, MON_DATA_MAIL, &arg);
     CalculateMonStats(mon);
 } //believe used for wild poke generation, and give mons etc. actually used for all mon, trainer included
 
@@ -3054,7 +3054,7 @@ void BoxMonToMon(struct BoxPokemon *src, struct Pokemon *dest)
     SetMonData(dest, MON_DATA_HP, &value);
     SetMonData(dest, MON_DATA_MAX_HP, &value);
     value = 255;
-    SetMonData(dest, MON_DATA_MAIL, &value);
+    //SetMonData(dest, MON_DATA_MAIL, &value);
     CalculateMonStats(dest);
 }
 
@@ -4643,7 +4643,7 @@ u32 GetMonData(struct Pokemon *mon, s32 field, u8 *data)
         ret = mon->spDefense;
         break;
     case MON_DATA_MAIL:
-        ret = mon->mail;
+        //ret = mon->mail;
         break;
     default:
         ret = GetBoxMonData(&mon->box, field, data);
@@ -4752,7 +4752,7 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
         break;
     }
     case MON_DATA_MARKINGS:
-        retVal = boxMon->markings;
+        //retVal = boxMon->markings;
         break;
     case MON_DATA_CHECKSUM:
         retVal = boxMon->checksum;
@@ -5025,7 +5025,7 @@ void SetMonData(struct Pokemon *mon, s32 field, const void *dataArg)
         SET16(mon->spDefense);
         break;
     case MON_DATA_MAIL:
-        SET8(mon->mail);
+        //SET8(mon->mail);
         break;
     case MON_DATA_SPECIES2:
         break;
@@ -5112,7 +5112,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
     }
     case MON_DATA_MARKINGS:
-        SET8(boxMon->markings);
+        //SET8(boxMon->markings);
         break;
     case MON_DATA_CHECKSUM:
         SET16(boxMon->checksum);
@@ -5197,7 +5197,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
 /*  case MON_DATA_LOST_LOCATON:  // plan to use this for pokemon death, will return the val of the map at the time the function determines the pokemon is dead.
        SET8(substruct3->lostLocation);
-       break;*/
+       break;*/  //not really needed I guess? met location is apparently only practical use is boosting friendship and no one even knows that, it'd be cool to have though
     case MON_DATA_MET_LEVEL:
     {
         u8 metLevel = *data;

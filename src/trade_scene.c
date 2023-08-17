@@ -131,7 +131,7 @@ static void SpriteCB_TradePokeball_Outbound(struct Sprite * sprite);
 static void SpriteCB_TradePokeball_Outbound2(struct Sprite * sprite);
 static void SpriteCB_TradePokeball_Inbound(struct Sprite * sprite);
 static void BufferInGameTradeMonName(void);
-static void GetInGameTradeMail(struct MailStruct * mail, const struct InGameTrade * inGameTrade);
+//static void GetInGameTradeMail(struct MailStruct * mail, const struct InGameTrade * inGameTrade);
 static void CB2_RunTradeAnim_LinkTrade(void);
 static void CB2_WaitAndAckTradeComplete(void);
 static void sub_8053E8C(void);

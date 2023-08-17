@@ -159,8 +159,8 @@ void BattleAI_SetupFlags(void)
         AI_THINKING_STRUCT->aiFlags = AI_FLAG_SAFARI;
     else if (gBattleTypeFlags & BATTLE_TYPE_ROAMER)
         AI_THINKING_STRUCT->aiFlags = AI_FLAG_ROAMING;
-    else if (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE)
-        AI_THINKING_STRUCT->aiFlags = AI_FLAG_FIRST_BATTLE;
+    /*else if (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE)
+        AI_THINKING_STRUCT->aiFlags = AI_FLAG_FIRST_BATTLE;*./
     /*else if (gBattleTypeFlags & BATTLE_TYPE_FACTORY)
         AI_THINKING_STRUCT->aiFlags = GetAiScriptsInBattleFactory();*/
     else if (gBattleTypeFlags & (/*BATTLE_TYPE_FRONTIER |*/ BATTLE_TYPE_EREADER_TRAINER | /*BATTLE_TYPE_TRAINER_HILL |*/ BATTLE_TYPE_SECRET_BASE))

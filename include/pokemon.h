@@ -94,7 +94,7 @@ struct BoxPokemon
     u8 isEgg:1;
     u8 unused:5;
     u8 otName[OT_NAME_LENGTH];
-    u8 markings;
+    //u8 markings;
     u16 checksum;
     u16 unknown;
 
@@ -110,7 +110,7 @@ struct Pokemon
     struct BoxPokemon box;
     u32 status;
     u8 level;
-    u8 mail;
+    //u8 mail;
     u16 hp;
     u16 maxHP;
     u16 attack;
@@ -125,8 +125,8 @@ struct PokemonStorage
     /*0x0000*/ u8 currentBox;
     /*0x0001*/ struct BoxPokemon boxes[TOTAL_BOXES_COUNT][IN_BOX_COUNT];
     /*0x8344*/ u8 boxNames[TOTAL_BOXES_COUNT][BOX_NAME_LENGTH + 1];
-    /*0x83C2*/ u8 boxWallpapers[TOTAL_BOXES_COUNT];
-};
+    /*0x83C2*/ u8 boxWallpapers[TOTAL_BOXES_COUNT]; //when I'm able to expand box counts give this its own separate constant won't need 
+};  //a unique wall paper for each box, could even remove some of the wall papers I don't like/no one likes
 
 struct BattleTowerPokemon //apparently used for both battle tower leftover from emerald, AND trainer tower, on sevii island
 {

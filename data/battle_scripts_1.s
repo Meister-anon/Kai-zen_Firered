@@ -3161,7 +3161,7 @@ BattleScript_DoMultiHit::
 	waitmessage 0x40
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
-	addbyte gBattleScripting + 12, 1
+	addbyte gBattleScripting + 12, 1   @ updated pret uses this addbyte sMULTIHIT_STRING + 4, 1
 	moveendto MOVE_END_NEXT_TARGET
 	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_FOE_ENDURED, BattleScript_MultiHitPrintStrings
 	decrementmultihit BattleScript_MultiHitLoop
@@ -3179,8 +3179,8 @@ BattleScript_MultiHitPrintStrings::
 BattleScript_MultiHitEnd::
 	seteffectwithchance
 	tryfaintmon BS_TARGET, 0, NULL
-	moveendcase 2
-	moveendfrom 4
+	moveendcase MOVE_END_SYNCHRONIZE_TARGET
+	moveendfrom MOVE_END_STATUS_IMMUNITY_ABILITIES
 	end
 
 BattleScript_MultiHitMiss::
@@ -4183,7 +4183,7 @@ BattleScript_TripleKickPrintStrings::
 BattleScript_TripleKickEnd::
 	seteffectwithchance
 	tryfaintmon BS_TARGET, 0, NULL
-	moveendfrom 14
+	moveendfrom MOVE_END_UPDATE_LAST_MOVES
 	end
 
 BattleScript_EffectThief::
@@ -6359,7 +6359,7 @@ BattleScript_PursuitDmgOnSwitchOut::
 	resultmessage
 	waitmessage 0x40
 	tryfaintmon BS_TARGET, 0, NULL
-	moveendfromto 3, 6
+	moveendfromto MOVE_END_MOVE_END_ABILITIES, MOVE_END_CHOICE_MOVE
 	getbattlerfainted BS_TARGET
 	jumpifbyte CMP_EQUAL, gBattleCommunication, 0, BattleScript_PursuitSwitchRivalSkip
 	setbyte sGIVEEXP_STATE, 0
@@ -7035,9 +7035,10 @@ BattleScript_DoFutureAttackHit::
 	resultmessage
 	waitmessage 0x40
 	tryfaintmon BS_TARGET, 0, NULL
-	confirmlosingteam .+4
-	moveendcase 0
-	moveendfromto 11, 14
+	confirmlosingteam .+4 @check this make sure updates didn't break 
+	@moveendcase 0  was original setup but changed order of case constants so need use actual constant 
+	moveendcase MOVE_END_RAGE
+	moveendfromto MOVE_END_ITEM_EFFECTS_ALL, MOVE_END_UPDATE_LAST_MOVES
 	setbyte gMoveResultFlags, 0
 	end2
 
