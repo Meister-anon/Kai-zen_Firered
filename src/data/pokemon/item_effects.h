@@ -1,6 +1,6 @@
 static const u8 sItemEffect_Potion[7] = {
     [4] = ITEM4_HEAL_HP,
-    [6] = 20,
+    [6] = 20, // Amount of HP to recover
 };
 
 static const u8 sItemEffect_Antidote[6] = {
@@ -26,22 +26,22 @@ static const u8 sItemEffect_ParalyzeHeal[6] = {
 static const u8 sItemEffect_FullRestore[7] = {
     [3] = ITEM3_STATUS_ALL,
     [4] = ITEM4_HEAL_HP,
-    [6] = -1,
+    [6] = ITEM6_HEAL_HP_FULL,
 };
 
 static const u8 sItemEffect_MaxPotion[7] = {
     [4] = ITEM4_HEAL_HP,
-    [6] = -1,
+    [6] = ITEM6_HEAL_HP_FULL,
 };
 
 static const u8 sItemEffect_HyperPotion[7] = {
     [4] = ITEM4_HEAL_HP,
-    [6] = 200,
+    [6] = 200, // Amount of HP to recover
 };
 
 static const u8 sItemEffect_SuperPotion[7] = {
     [4] = ITEM4_HEAL_HP,
-    [6] = 50,
+    [6] = 50, // Amount of HP to recover
 };
 
 static const u8 sItemEffect_FullHeal[6] = {
@@ -50,87 +50,87 @@ static const u8 sItemEffect_FullHeal[6] = {
 
 static const u8 sItemEffect_Revive[7] = {
     [4] = ITEM4_REVIVE | ITEM4_HEAL_HP,
-    [6] = -2,
+    [6] = ITEM6_HEAL_HP_HALF,
 };
 
 static const u8 sItemEffect_MaxRevive[7] = {
     [4] = ITEM4_REVIVE | ITEM4_HEAL_HP,
-    [6] = -1,
+    [6] = ITEM6_HEAL_HP_FULL,
 };
 
 static const u8 sItemEffect_FreshWater[7] = {
     [4] = ITEM4_HEAL_HP,
-    [6] = 50,
+    [6] = 50, // Amount of HP to recover
 };
 
 static const u8 sItemEffect_SodaPop[7] = {
     [4] = ITEM4_HEAL_HP,
-    [6] = 60,
+    [6] = 60, // Amount of HP to recover
 };
 
 static const u8 sItemEffect_Lemonade[7] = {
     [4] = ITEM4_HEAL_HP,
-    [6] = 80,
+    [6] = 80, // Amount of HP to recover
 };
 
 static const u8 sItemEffect_MoomooMilk[7] = {
     [4] = ITEM4_HEAL_HP,
-    [6] = 100,
+    [6] = 100, // Amount of HP to recover
 };
 
 static const u8 sItemEffect_EnergyPowder[10] = {
     [4] = ITEM4_HEAL_HP,
     [5] = ITEM5_FRIENDSHIP_ALL,
-    [6] = 50,
-    [7] = -5,
-    [8] = -5,
-    [9] = -10,
+    [6] = 50,  // Amount of HP to recover
+    [7] = -5,  // Friendship change, low
+    [8] = -5,  // Friendship change, mid
+    [9] = -10, // Friendship change, high
 };
 
 static const u8 sItemEffect_EnergyRoot[10] = {
     [4] = ITEM4_HEAL_HP,
     [5] = ITEM5_FRIENDSHIP_ALL,
-    [6] = 200,
-    [7] = -10,
-    [8] = -10,
-    [9] = -15,
+    [6] = 200, // Amount of HP to recover
+    [7] = -10, // Friendship change, low
+    [8] = -10, // Friendship change, mid
+    [9] = -15, // Friendship change, high
 };
 
 static const u8 sItemEffect_HealPowder[9] = {
     [3] = ITEM3_STATUS_ALL,
     [5] = ITEM5_FRIENDSHIP_ALL,
-    [6] = -5,
-    [7] = -5,
-    [8] = -10,
+    [6] = -5,  // Friendship change, low
+    [7] = -5,  // Friendship change, mid
+    [8] = -10, // Friendship change, high
 };
 
 static const u8 sItemEffect_RevivalHerb[10] = {
     [4] = ITEM4_REVIVE | ITEM4_HEAL_HP,
     [5] = ITEM5_FRIENDSHIP_ALL,
-    [6] = -1,
-    [7] = -15,
-    [8] = -15,
-    [9] = -20,
+    [6] = ITEM6_HEAL_HP_FULL,
+    [7] = -15, // Friendship change, low
+    [8] = -15, // Friendship change, mid
+    [9] = -20, // Friendship change, high
 };
 
 static const u8 sItemEffect_Ether[7] = {
     [4] = ITEM4_HEAL_PP_ONE | ITEM4_HEAL_PP_ALL,
-    [6] = 10,
+    [6] = 10, // Amount of PP to recover
 };
 
 static const u8 sItemEffect_MaxEther[7] = {
     [4] = ITEM4_HEAL_PP_ONE | ITEM4_HEAL_PP_ALL,
-    [6] = 0x7F,
+    [6] = ITEM6_HEAL_PP_FULL,
 };
 
 static const u8 sItemEffect_Elixir[7] = {
     [4] = ITEM4_HEAL_PP_ALL,
-    [6] = 10,
+    [6] = 10, // Amount of PP to recover
 };
 
 static const u8 sItemEffect_MaxElixir[7] = {
     [4] = ITEM4_HEAL_PP_ALL,
-    [6] = 0x7F,
+    [6] = ITEM6_HEAL_PP_FULL,
 };
 
 static const u8 sItemEffect_LavaCookie[6] = {
@@ -151,144 +151,127 @@ static const u8 sItemEffect_RedFlute[6] = {
 
 static const u8 sItemEffect_BerryJuice[7] = {
     [4] = ITEM4_HEAL_HP,
-    [6] = 20,
+    [6] = 20, // Amount of HP to recover
 };
 
 static const u8 sItemEffect_SacredAsh[7] = {
     [0] = ITEM0_SACRED_ASH,
     [4] = ITEM4_REVIVE | ITEM4_HEAL_HP,
-    [6] = -1,
+    [6] = ITEM6_HEAL_HP_FULL,
 };
+
+#define VITAMIN_FRIENDSHIP_CHANGE(i)             \
+    [(i) + 0] = 5, /* Friendship change, low */  \
+    [(i) + 1] = 3, /* Friendship change, mid */  \
+    [(i) + 2] = 2  /* Friendship change, high */
 
 static const u8 sItemEffect_HPUp[10] = {
     [4] = ITEM4_EV_HP,
     [5] = ITEM5_FRIENDSHIP_ALL,
-    [6] = 10,
-    [7] = 5,
-    [8] = 3,
-    [9] = 2,
+    [6] = ITEM6_ADD_EV,
+    VITAMIN_FRIENDSHIP_CHANGE(7),
 };
 
 static const u8 sItemEffect_Protein[10] = {
     [4] = ITEM4_EV_ATK,
     [5] = ITEM5_FRIENDSHIP_ALL,
-    [6] = 10,
-    [7] = 5,
-    [8] = 3,
-    [9] = 2,
+    [6] = ITEM6_ADD_EV,
+    VITAMIN_FRIENDSHIP_CHANGE(7),
 };
 
 static const u8 sItemEffect_Iron[10] = {
     [5] = ITEM5_EV_DEF | ITEM5_FRIENDSHIP_ALL,
-    [6] = 10,
-    [7] = 5,
-    [8] = 3,
-    [9] = 2,
+    [6] = ITEM6_ADD_EV,
+    VITAMIN_FRIENDSHIP_CHANGE(7),
 };
 
 static const u8 sItemEffect_Carbos[10] = {
     [5] = ITEM5_EV_SPEED | ITEM5_FRIENDSHIP_ALL,
-    [6] = 10,
-    [7] = 5,
-    [8] = 3,
-    [9] = 2,
+    [6] = ITEM6_ADD_EV,
+    VITAMIN_FRIENDSHIP_CHANGE(7),
 };
 
 static const u8 sItemEffect_Calcium[10] = {
     [5] = ITEM5_EV_SPATK | ITEM5_FRIENDSHIP_ALL,
-    [6] = 10,
-    [7] = 5,
-    [8] = 3,
-    [9] = 2,
+    [6] = ITEM6_ADD_EV,
+    VITAMIN_FRIENDSHIP_CHANGE(7),
 };
 
 static const u8 sItemEffect_RareCandy[10] = {
     [3] = ITEM3_LEVEL_UP,
     [4] = ITEM4_REVIVE | ITEM4_HEAL_HP,
     [5] = ITEM5_FRIENDSHIP_ALL,
-    [6] = 0xFD,
-    [7] = 5,
-    [8] = 3,
-    [9] = 2,
+    [6] = ITEM6_HEAL_HP_LVL_UP,
+    VITAMIN_FRIENDSHIP_CHANGE(7),
 };
 
 static const u8 sItemEffect_PPUp[9] = {
     [4] = ITEM4_PP_UP,
     [5] = ITEM5_FRIENDSHIP_ALL,
-    [6] = 5,
-    [7] = 3,
-    [8] = 2,
+    VITAMIN_FRIENDSHIP_CHANGE(6),
 };
 
 static const u8 sItemEffect_Zinc[10] = {
     [5] = ITEM5_EV_SPDEF | ITEM5_FRIENDSHIP_ALL,
-    [6] = 10,
-    [7] = 5,
-    [8] = 3,
-    [9] = 2,
+    [6] = ITEM6_ADD_EV,
+    VITAMIN_FRIENDSHIP_CHANGE(7),
 };
 
 static const u8 sItemEffect_PPMax[9] = {
     [5] = ITEM5_PP_MAX | ITEM5_FRIENDSHIP_ALL,
-    [6] = 5,
-    [7] = 3,
-    [8] = 2,
+    VITAMIN_FRIENDSHIP_CHANGE(6),
 };
+
+#define STAT_BOOST_FRIENDSHIP_CHANGE      \
+    [6] = 1, /* Friendship change, low */ \
+    [7] = 1  /* Friendship change, mid */
 
 static const u8 sItemEffect_GuardSpec[8] = {
     [3] = ITEM3_MIST,
     [5] = ITEM5_FRIENDSHIP_LOW | ITEM5_FRIENDSHIP_MID,
-    [6] = 1,
-    [7] = 1,
+    STAT_BOOST_FRIENDSHIP_CHANGE
 };
 
 static const u8 sItemEffect_DireHit[8] = {
-    [0] = 2 << 4,
+    [0] = 2 << 4, // ITEM0_DIRE_HIT
     [5] = ITEM5_FRIENDSHIP_LOW | ITEM5_FRIENDSHIP_MID,
-    [6] = 1,
-    [7] = 1,
+    STAT_BOOST_FRIENDSHIP_CHANGE
 };
 
 static const u8 sItemEffect_XAttack[8] = {
-    [0] = 1,
+    [0] = 1, // ITEM0_X_ATTACK
     [5] = ITEM5_FRIENDSHIP_LOW | ITEM5_FRIENDSHIP_MID,
-    [6] = 1,
-    [7] = 1,
+    STAT_BOOST_FRIENDSHIP_CHANGE
 };
 
 static const u8 sItemEffect_XDefend[8] = {
-    [1] = 1 << 4,
+    [1] = 1 << 4, /// ITEM1_X_DEFEND
     [5] = ITEM5_FRIENDSHIP_LOW | ITEM5_FRIENDSHIP_MID,
-    [6] = 1,
-    [7] = 1,
+    STAT_BOOST_FRIENDSHIP_CHANGE,
 };
 
 static const u8 sItemEffect_XSpeed[8] = {
-    [1] = 1,
+    [1] = 1, // ITEM1_X_SPEED
     [5] = ITEM5_FRIENDSHIP_LOW | ITEM5_FRIENDSHIP_MID,
-    [6] = 1,
-    [7] = 1,
+    STAT_BOOST_FRIENDSHIP_CHANGE,
 };
 
 static const u8 sItemEffect_XAccuracy[8] = {
-    [2] = 1 << 4,
+    [2] = 1 << 4, // ITEM2_X_ACCURACY
     [5] = ITEM5_FRIENDSHIP_LOW | ITEM5_FRIENDSHIP_MID,
-    [6] = 1,
-    [7] = 1,
+    STAT_BOOST_FRIENDSHIP_CHANGE,
 };
 
 static const u8 sItemEffect_XSpecial[8] = {
-    [2] = 1,
+    [2] = 1, // ITEM2_X_SPATK
     [5] = ITEM5_FRIENDSHIP_LOW | ITEM5_FRIENDSHIP_MID,
-    [6] = 1,
-    [7] = 1,
+    STAT_BOOST_FRIENDSHIP_CHANGE,
 };
 
 static const u8 sItemEffect_XSpDef[8] = {
-    [2] = 1,
+    [2] = 1, //plan for // ITEM2_X_SPADEF   //vsonic value here isn't permanent need to figure out how these are calc to find correct value
     [5] = ITEM5_FRIENDSHIP_LOW | ITEM5_FRIENDSHIP_MID,
-    [6] = 1,
-    [7] = 1,
+    STAT_BOOST_FRIENDSHIP_CHANGE,
 };
 
 static const u8 sItemEffect_SunStone[6] = {
@@ -337,12 +320,12 @@ static const u8 sItemEffect_AspearBerry[6] = {
 
 static const u8 sItemEffect_LeppaBerry[7] = {
     [4] = ITEM4_HEAL_PP_ONE | ITEM4_HEAL_PP_ALL,
-    [6] = 10,
+    [6] = 10, // Amount of PP to recover
 };
 
 static const u8 sItemEffect_OranBerry[7] = {
     [4] = ITEM4_HEAL_HP,
-    [6] = 10,
+    [6] = 10, // Amount of HP to recover
 };
 
 static const u8 sItemEffect_PersimBerry[6] = {
@@ -355,10 +338,10 @@ static const u8 sItemEffect_LumBerry[6] = {
 
 static const u8 sItemEffect_SitrusBerry[7] = {
     [4] = ITEM4_HEAL_HP,
-    [6] = 30,
+    [6] = 30, // Amount of HP to recover
 };
 
-const u8 *const gItemEffectTable[] =
+const u8* const gItemEffectTable[] =
 {
     [ITEM_POTION - ITEM_POTION] = sItemEffect_Potion,
     [ITEM_ANTIDOTE - ITEM_POTION] = sItemEffect_Antidote,

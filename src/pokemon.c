@@ -2416,18 +2416,29 @@ static const u8 sStatsToRaise[] =
     STAT_ATK, STAT_ATK, STAT_SPEED, STAT_DEF, STAT_SPATK, STAT_ACC
 };
 
+//this is a table for the change in friendship expected for each event
+//based on friendship level low/mid/high  0-99, 100-199, 200-255
+//need to add my tenth event, and the emerald berry/root events (based on bulbapedia)
+//talked with griffinR none of those need to be added here, they are handled in item_effects.h powder and roots are already setup
+//but I need to add friendship increasing berries, and change their field use value,
+//as right now they can't be used, and instead are only for berry crush which I've removed.
+//hmm as I"m adding berry trees, I may repurpose that cerulean event, 
+//rather than remove it, or take berrypowder, have him take the raw berries themselves
+//what he gave in base was just on amount of powder irrespective of what type of berries you used.
+//I will change it to each item require a different quantity and combination of berries  vsonic
 static const s8 sFriendshipEventDeltas[][3] = 
-{
-    { 5,  3,  2 },
-    { 5,  3,  2 },
-    { 1,  1,  0 },
-    { 3,  2,  1 },
-    { 1,  1,  0 },
-    { 1,  1,  1 },
-    { 3,  3,  3 },
-    {-1, -1, -1 },
-    {-5, -5, -10 },
-    {-5, -5, -10 },
+{           //friendship lvl min value   =    0   100   200
+    [FRIENDSHIP_EVENT_GROW_LEVEL]           = { 5,  3,  2 },
+    [FRIENDSHIP_EVENT_VITAMIN]              = { 5,  3,  2 },
+    [FRIENDSHIP_EVENT_BATTLE_ITEM]          = { 1,  1,  0 },
+    [FRIENDSHIP_EVENT_LEAGUE_BATTLE]        = { 3,  2,  1 },
+    [FRIENDSHIP_EVENT_LEARN_TMHM]           = { 1,  1,  0 },
+    [FRIENDSHIP_EVENT_WALKING]              = { 1,  1,  1 },
+    [FRIENDSHIP_EVENT_MASSAGE]              = { 3,  3,  3 },
+    [FRIENDSHIP_EVENT_FAINT_SMALL]          = {-1, -1, -1 },
+    [FRIENDSHIP_EVENT_FAINT_OUTSIDE_BATTLE] = {-5, -5, -10 },
+    [FRIENDSHIP_EVENT_FAINT_LARGE]          = {-5, -5, -10 },
+    [FRIENDSHIP_EVENT_EXP_GAINED]           = { 1,  1,  1 },
 };
 
 static const u16 sHMMoves[] = 
@@ -6107,36 +6118,47 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
         if (friendship > 199)
             friendshipLevel++;
 
-        if (event == FRIENDSHIP_EVENT_EXP_GAINED) //setup in exp function should work/ same place as ev gain
-            friendship++;
-
-        if ((event != FRIENDSHIP_EVENT_WALKING || !(Random() & 1))
-         && (event != FRIENDSHIP_EVENT_LEAGUE_BATTLE
-          || ((gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-           && (gTrainers[gTrainerBattleOpponent_A].trainerClass == TRAINER_CLASS_ELITE_FOUR
-            || gTrainers[gTrainerBattleOpponent_A].trainerClass == TRAINER_CLASS_LEADER
-            || gTrainers[gTrainerBattleOpponent_A].trainerClass == TRAINER_CLASS_CHAMPION))))
+        if (event == FRIENDSHIP_EVENT_WALKING)
         {
-            s8 delta = sFriendshipEventDeltas[event][friendshipLevel];
-            if (delta > 0 && holdEffect == HOLD_EFFECT_HAPPINESS_UP)
-                delta = (150 * delta) / 100;
-
-            friendship += delta;
-            if (delta > 0)
-            {
-                if (GetMonData(mon, MON_DATA_POKEBALL, 0) == ITEM_LUXURY_BALL)
-                    friendship++;
-                if (GetMonData(mon, MON_DATA_MET_LOCATION, 0) == GetCurrentRegionMapSectionId())
-                    friendship++;
-            }
-
-            if (friendship < 0)
-                friendship = 0;
-            if (friendship > 255)
-                friendship = 255;
-
-            SetMonData(mon, MON_DATA_FRIENDSHIP, &friendship);
+            // 50% chance every 128 steps
+            if (Random() & 1)
+                return;
         }
+        if (event == FRIENDSHIP_EVENT_LEAGUE_BATTLE)
+        {
+            // Only if it's a trainer battle with league progression significance
+            if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+                return;
+            if (!(gTrainers[gTrainerBattleOpponent_A].trainerClass == TRAINER_CLASS_LEADER
+                || gTrainers[gTrainerBattleOpponent_A].trainerClass == TRAINER_CLASS_ELITE_FOUR
+                || gTrainers[gTrainerBattleOpponent_A].trainerClass == TRAINER_CLASS_CHAMPION))
+                return;
+        }
+
+        s8 delta = sFriendshipEventDeltas[event][friendshipLevel]; //exp friendship is now part of this
+        if (delta > 0 && holdEffect == HOLD_EFFECT_HAPPINESS_UP) //if event delta raises friendship boost if have hold item that boosts friendhsip
+            delta = (150 * delta) / 100; //boost the increase you would have
+
+
+        friendship += delta; //adds delta to friendship is a plus but as delta can be negative this is where subtraction is done as well as main setting of friendship value
+
+        if (delta > 0) //if your friendship should be raised, add an additional increase based on these conditions
+        {
+            if (GetMonData(mon, MON_DATA_POKEBALL, 0) == ITEM_LUXURY_BALL)
+                friendship++;
+            if (GetMonData(mon, MON_DATA_MET_LOCATION, 0) == GetCurrentRegionMapSectionId())
+                friendship++;
+        }
+
+
+        if (friendship < 0)
+            friendship = 0;
+        if (friendship > 255)
+            friendship = 255; //standard limitter stuff
+
+        //don't need loop, this function is usually called within a loop so using mon is enough
+        if (GetMonData(mon, MON_DATA_HP, NULL) != 0) //added filter for if mon is alive,wouldn't affect exp event as it already works based on mon being alive
+            SetMonData(mon, MON_DATA_FRIENDSHIP, &friendship); //need check message script and vitamin use/itemuse to make sure can't be done on fainted mon vsonic
     }
 }
 
