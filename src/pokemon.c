@@ -5751,21 +5751,21 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
             switch (gEvolutionTable[species][i].method)
             {
             case EVO_FRIENDSHIP:
-                if (friendship >= 220)
+                if (friendship >= FRIENDSHIP_EVO_LIMITER)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 break;
             // FR/LG removed the time of day evolutions due to having no RTC.
             case EVO_FRIENDSHIP_DAY:
                 /*
                 RtcCalcLocalTime();
-                if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && friendship >= 220)
+                if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && friendship >= FRIENDSHIP_EVO_LIMITER)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 */
                 break;
             case EVO_FRIENDSHIP_NIGHT:
                 /*
                 RtcCalcLocalTime();
-                if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && friendship >= 220)
+                if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && friendship >= FRIENDSHIP_EVO_LIMITER)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 */
                 break;
@@ -6106,6 +6106,9 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
             friendshipLevel++;
         if (friendship > 199)
             friendshipLevel++;
+
+        if (event == FRIENDSHIP_EVENT_EXP_GAINED) //setup in exp function should work/ same place as ev gain
+            friendship++;
 
         if ((event != FRIENDSHIP_EVENT_WALKING || !(Random() & 1))
          && (event != FRIENDSHIP_EVENT_LEAGUE_BATTLE
