@@ -92,7 +92,10 @@
 #define MON_DATA_SPATK2            87
 #define MON_DATA_SPDEF2            88
 
-// Pokemon types	type order found in list_menu.c
+#define TYPE_DEFINES
+
+// Pokemon types	type order found in list_menu.c    actually is in graphics_file_rules.mk 
+//list menu is the location of the icons on the graphic
 #define TYPE_NORMAL   0x00
 #define TYPE_FIGHTING 0x01
 #define TYPE_FLYING   0x02
@@ -111,8 +114,9 @@
 #define TYPE_ICE      0x0f
 #define TYPE_DRAGON   0x10
 #define TYPE_DARK     0x11
-#define TYPE_FAIRY	  0x17 //fairy addition
-#define NUMBER_OF_MON_TYPES     0x13
+#define TYPE_FAIRY	  0x12 //fairy addition
+#define TYPE_SOUND	  0x13 //for normal type sound moves -having issue with non move type locations.. //may need to be 18?
+#define NUMBER_OF_MON_TYPES     0x14
 
 // Pokemon egg groups
 #define EGG_GROUP_NONE 0
@@ -174,6 +178,21 @@
 #define NUM_STATS 6
 #define NUM_BATTLE_STATS 8
 
+#define MIN_STAT_STAGE     0
+#define DEFAULT_STAT_STAGE 6
+#define MAX_STAT_STAGE    12
+
+#define NUM_ABILITY_SLOTS (NUM_NORMAL_ABILITY_SLOTS + NUM_HIDDEN_ABILITY_SLOTS)
+#define NUM_NORMAL_ABILITY_SLOTS 2
+#define NUM_HIDDEN_ABILITY_SLOTS 2
+#define ABILITY_SLOT_1 0
+#define ABILITY_SLOT_2 1
+#define HIDDEN_ABILITY_SLOT_1 0
+#define HIDDEN_ABILITY_SLOT_2 1
+#define ABILITYNUM_HIDDEN_ABILITY_START 2
+#define ABILITYNUM_NORMAL_ABILITY_START 0
+
+
 // Shiny odds
 #define SHINY_ODDS 8 // Actual probability is SHINY_ODDS/65536
 
@@ -185,7 +204,6 @@
 #define PLAYER_HAS_ONE_MON                      0x1
 #define PLAYER_HAS_ONE_USABLE_MON               0x2
 
-#define MAX_LEVEL 100
 
 #define OT_ID_RANDOM_NO_SHINY 2
 #define OT_ID_PRESET 1
@@ -199,24 +217,75 @@
 #define MON_FEMALE     0xFE
 #define MON_GENDERLESS 0xFF
 
-#define FRIENDSHIP_EVENT_GROW_LEVEL           0x0
-#define FRIENDSHIP_EVENT_VITAMIN              0x1
-#define FRIENDSHIP_EVENT_BATTLE_ITEM          0x2
-#define FRIENDSHIP_EVENT_LEAGUE_BATTLE        0x3
-#define FRIENDSHIP_EVENT_LEARN_TMHM           0x4
-#define FRIENDSHIP_EVENT_WALKING              0x5
-#define FRIENDSHIP_EVENT_FAINT_SMALL          0x6
-#define FRIENDSHIP_EVENT_FAINT_OUTSIDE_BATTLE 0x7
-#define FRIENDSHIP_EVENT_FAINT_LARGE          0x8
+#define FRIENDSHIP_EVENT_GROW_LEVEL           0
+#define FRIENDSHIP_EVENT_VITAMIN              1
+#define FRIENDSHIP_EVENT_BATTLE_ITEM          2
+#define FRIENDSHIP_EVENT_LEAGUE_BATTLE        3		//should include gym leaders,elite four & champion
+#define FRIENDSHIP_EVENT_LEARN_TMHM           4
+#define FRIENDSHIP_EVENT_WALKING              5
+#define FRIENDSHIP_EVENT_MASSAGE              6
+#define FRIENDSHIP_EVENT_FAINT_SMALL          7
+#define FRIENDSHIP_EVENT_FAINT_OUTSIDE_BATTLE 8
+#define FRIENDSHIP_EVENT_FAINT_LARGE          9
+#define FRIENDSHIP_EVENT_EXP_GAINED          10		//added logic gain +1 for gaining exp in battle; also counts exp share //emerald has extra option for berries  will need to addd
+
+
+#define MAX_PER_STAT_IVS 31
+#define MIN_FIXED_IVS 20	//minimum value I plan to use for trainer assignment, is used for gym leaders  [replaced IV Mask]
+#define USE_RANDOM_IVS (MAX_PER_STAT_IVS + 1)	//makes createmon function use random data for ivs, just like wild mon	can override fixed value for trainer party
+#define MAX_PER_STAT_EVS 564	//prviously 255
+#define MAX_TOTAL_EVS 788	//previosly 510
+#define EV_ITEM_BOOSTER_LIMIT 250	//how many evs can be gained from ev boost items, previously 100  each one apparently ads 10 evs? every 4 is 1 stat point
+//consider raising to new per stat cap, don't want to make it to easy to get the boosted evs, I want people to actually train their mon.
+#define FRIENDSHIP_EVO_LIMITER 85
+
+//Stat EV Ids- believe was mostly for power items logic
+#define HpEV 0
+#define AttackEV 1
+#define DefenseEV 2
+#define SpeedEV 3
+#define SpAttackEV 4
+#define SpDefenseEV 5
+
+//changed define values from 0-3 to 1-4, to make it default to random if 0.
+//ABILITY NUM DEFINES
+#define RANDOM_ABILITY		0
+#define ABILITY_1			1
+#define ABILITY_2			2
+#define HIDDEN_ABILITY		3
+#define HIDDEN_ABILITY_2	4
+
+
 
 #define PARTY_SIZE 6
-#define MAX_TOTAL_EVS 788
 #define UNOWN_FORM_COUNT 28
 #define BOX_NAME_LENGTH 8
+#define MAX_LEVEL_UP_MOVES 35	//attempt raisae to 35?
+#define MAX_LEVEL 100
 
 #define EVO_MODE_NORMAL     0
 #define EVO_MODE_TRADE      1
 #define EVO_MODE_ITEM_USE   2
 #define EVO_MODE_ITEM_CHECK 3 // If an Everstone is being held, still want to show that the stone *could* be used on that Pokémon to evolve
+
+// Split defines.
+#define SPLIT_PHYSICAL  0x0
+#define SPLIT_SPECIAL   0x1
+#define SPLIT_STATUS    0x2
+
+#define MON_PIC_WIDTH 64
+#define MON_PIC_HEIGHT 64
+#define MON_PIC_SIZE (MON_PIC_WIDTH * MON_PIC_HEIGHT / 2)
+
+//use with CountAliveMonsInBattle
+#define BATTLE_ALIVE_EXCEPT_ACTIVE   0
+#define BATTLE_ALIVE_ATK_SIDE        1
+#define BATTLE_ALIVE_DEF_SIDE        2
+#define BATTLE_ALIVE_EXCEPT_ATTACKER 3
+
+// used by ShouldIgnoreDeoxysForm
+#define DEOXYS_CHECK_BATTLE_SPRITE      1
+#define DEOXYS_CHECK_TRADE_MAIN         3
+#define DEOXYS_CHECK_BATTLE_ANIM        5
 
 #endif // GUARD_CONSTANTS_POKEMON_H

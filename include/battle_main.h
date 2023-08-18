@@ -27,15 +27,15 @@ struct MultiBattlePokemonTx
 #define ABILITY_NAME_LENGTH 14
 
 // defines for the u8 array gTypeEffectiveness
-#define TYPE_EFFECT_ATK_TYPE(i)((gTypeEffectiveness[i + 0]))
-#define TYPE_EFFECT_DEF_TYPE(i)((gTypeEffectiveness[i + 1]))
-#define TYPE_EFFECT_MULTIPLIER(i)((gTypeEffectiveness[i + 2]))
+#define TYPE_EFFECT_ATK_TYPE(i)((gTypeEffectiveness[i + 0]))    //chart is broken into 3 fields per row, i reads the row, + value shifts the column, size of array is total number of fields, i.e num rows x columns
+#define TYPE_EFFECT_DEF_TYPE(i)((gTypeEffectiveness[i + 1]))    //chart is broken into 3 fields per row, i reads the row, + value shifts the column, size of array is total number of fields, i.e num rows x columns
+#define TYPE_EFFECT_MULTIPLIER(i)((gTypeEffectiveness[i + 2]))  //chart is broken into 3 fields per row, i reads the row, + value shifts the column, size of array is total number of fields, i.e num rows x columns
 
 // defines for the gTypeEffectiveness multipliers
 #define TYPE_MUL_NO_EFFECT          0
 #define TYPE_MUL_NOT_EFFECTIVE      5
 #define TYPE_MUL_NORMAL             10
-#define TYPE_MUL_SUPER_EFFECTIVE    20
+#define TYPE_MUL_SUPER_EFFECTIVE    15
 
 // special type table Ids
 #define TYPE_FORESIGHT  0xFE
