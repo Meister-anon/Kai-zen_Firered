@@ -16,7 +16,7 @@
 #define asm_comment(x) asm volatile("@ -- " x " -- ")
 #define asm_unified(x) asm(".syntax unified\n" x "\n.syntax divided")
 
-#if defined (__APPLE__) || defined (__CYGWIN__) || defined(__CLION_IDE__)
+/*#if defined (__APPLE__) || defined (__CYGWIN__) || defined(__CLION_IDE__)
 // Get the IDE to stfu
 
 // We define it this way to fool preproc.
@@ -31,7 +31,27 @@
 #define __(x) (x)
 #endif // __APPLE__
 
-#define NELEMS(array) (sizeof(array) / sizeof((array)[0]))
+#define NELEMS(array) (sizeof(array) / sizeof((array)[0]))*/
+//Old IDE stuff archived for reference
+
+// IDE support
+#if defined(__APPLE__) || defined(__CYGWIN__) || defined(__INTELLISENSE__)
+// We define these when using certain IDEs to fool preproc
+#define _(x)        (x)
+#define __(x)       (x)
+#define INCBIN(...) {0}
+#define INCBIN_U8   INCBIN
+#define INCBIN_U16  INCBIN
+#define INCBIN_U32  INCBIN
+#define INCBIN_S8   INCBIN
+#define INCBIN_S16  INCBIN
+#define INCBIN_S32  INCBIN
+#endif // IDE support
+
+#define ARRAY_COUNT(array) (sizeof(array) / sizeof((array)[0]))
+
+// Alias of ARRAY_COUNT using GameFreak's name from AgbAssert calls.
+#define NELEMS(array) ARRAY_COUNT(array)
 
 #define SWAP(a, b, temp)    \
 {                           \
@@ -47,12 +67,40 @@
 
 // Converts a number to Q4.12 fixed-point format
 #define Q_4_12(n)  ((s16)((n) * 4096))
+#define UQ_4_12(n)  ((u16)((n) * 4096))
+
+// Converts a number to Q24.8 fixed-point format
+#define Q_24_8(n)  ((s32)((n) << 8))
+
+// Converts a Q8.8 fixed-point format number to a regular integer
+#define Q_8_8_TO_INT(n) ((int)((n) / 256))
+
+// Converts a Q4.12 fixed-point format number to a regular integer
+#define Q_4_12_TO_INT(n)  ((int)((n) / 4096))
+#define UQ_4_12_TO_INT(n)  ((int)((n) / 4096))
+//ported uq & everything below as well as percent value modifier
+//could this let me use decimal values instead of having to use fraction work around?
+
+// Converts a Q24.8 fixed-point format number to a regular integer
+#define Q_24_8_TO_INT(n) ((int)((n) >> 8))
+
+// Rounding value for Q4.12 fixed-point format
+#define Q_4_12_ROUND ((1) << (12 - 1))
+#define UQ_4_12_ROUND ((1) << (12 - 1))
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 #define max(a, b) ((a) >= (b) ? (a) : (b))
 
 #if MODERN
 #define abs(x) (((x) < 0) ? -(x) : (x))
+#endif
+
+// Used in cases where division by 0 can occur in the retail version.
+// Avoids invalid opcodes on some emulators, and the otherwise UB.
+#ifdef UBFIX
+#define SAFE_DIV(a, b) ((b) ? (a) / (b) : 0)
+#else
+#define SAFE_DIV(a, b) ((a) / (b))
 #endif
 
 // There are many quirks in the source code which have overarching behavioral differences from
@@ -96,6 +144,20 @@ extern u8 gStringVar4[];
 
 #define DEX_FLAGS_NO (ROUND_BITS_TO_BYTES(NUM_SPECIES))
 #define NUM_FLAG_BYTES (ROUND_BITS_TO_BYTES(FLAGS_COUNT))
+
+// Calls m0/m1/.../m8 depending on how many arguments are passed.
+#define VARARG_8(m, ...) CAT(m, NARG_8(__VA_ARGS__))(__VA_ARGS__)
+#define NARG_8(...) NARG_8_(_, ##__VA_ARGS__, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+#define NARG_8_(_, a, b, c, d, e, f, g, h, N, ...) N
+
+#define CAT(a, b) CAT_(a, b)
+#define CAT_(a, b) a ## b
+//logic for prete emeralds new cmd argms stuff its confusing to read so i dont like it
+//changed mind adding
+
+// This produces an error at compile-time if expr is zero.
+// It looks like file.c:line: size of array `id' is negative
+#define STATIC_ASSERT(expr, id) typedef char id[(expr) ? 1 : -1];
 
 struct Coords8
 {
