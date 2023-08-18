@@ -303,14 +303,71 @@ static const union AffineAnimCmd *const gUnknown_824F044[] =
 
 static const s8 sPlayerThrowXTranslation[] = { -32, -16, -16, -32, -32, 0, 0, 0 };
 
+#define X UQ_4_12
+//rows are attacking type
+//columns are defending type 
+//still confused about static vs const but pretty sure static can be called outside of file, just not directly
+const u16 gTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] =
+{
+ //               normal  fight   flying  poison  ground   rock    bug    ghost   steel   mystery  fire   water   grass  electric  psychic  ice   dragon   dark   fairy    sound
+      /*normal*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(0.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)}, // normal
+
+       /*fight*/ {X(1.5), X(1.0), X(0.5), X(0.5), X(1.0), X(1.5), X(0.5), X(0.0), X(1.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.5), X(1.0), X(1.5), X(0.5), X(1.0)}, // fight
+
+      /*flying*/ {X(1.0), X(1.5), X(1.0), X(1.0), X(1.0), X(0.5), X(1.5), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.5), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0)}, // flying
+
+      /*poison*/ {X(1.0), X(1.5), X(1.0), X(0.0), X(0.5), X(0.0), X(1.0), X(0.5), X(0.0), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.5), X(1.0)}, // poison
+
+      /*ground*/ {X(1.0), X(1.0), X(0.0), X(1.5), X(1.0), X(1.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(0.5), X(1.5), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0)}, // ground
+
+        /*rock*/ {X(1.0), X(0.5), X(1.5), X(1.0), X(0.5), X(1.0), X(1.5), X(1.0), X(0.5), X(1.0), X(1.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(1.0), X(1.0), X(1.0)}, // rock
+
+         /*bug*/ {X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.5), X(1.0), X(1.5), X(0.5), X(1.0), X(1.5), X(1.0), X(1.0)}, // bug
+
+       /*ghost*/ {X(0.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(1.0)}, // ghost
+
+       /*steel*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(1.0), X(0.5), X(1.0), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(1.5), X(1.0), X(1.0), X(1.5), X(1.0)}, // steel
+
+     /*mystery*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)}, // mystery
+
+        /*fire*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(1.5), X(0.5), X(1.5), X(1.0), X(0.5), X(0.5), X(1.5), X(1.0), X(1.0), X(1.5), X(0.5), X(1.0), X(1.0), X(1.0)}, // fire
+
+       /*water*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.5), X(1.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.5), X(0.5), X(0.5), X(1.0), X(1.0), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0)}, // water
+
+       /*grass*/ {X(1.0), X(1.0), X(0.5), X(0.5), X(1.5), X(1.5), X(0.5), X(1.0), X(0.5), X(1.0), X(0.5), X(1.5), X(0.5), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0)}, // grass
+
+    /*electric*/ {X(1.0), X(1.0), X(1.5), X(1.0), X(0.0), X(0.5), X(0.5), X(1.0), X(1.5), X(1.0), X(1.0), X(1.5), X(1.0), X(0.5), X(1.0), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0)}, // electric
+
+     /*psychic*/ {X(1.0), X(1.5), X(1.0), X(1.5), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(0.0), X(0.5), X(1.0)}, // psychic
+
+         /*ice*/ {X(1.0), X(1.0), X(1.5), X(1.0), X(1.5), X(1.0), X(1.5), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(1.5), X(1.0), X(1.0), X(0.5), X(1.5), X(1.0), X(1.0), X(1.0)}, // ice
+
+      /*dragon*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(0.5), X(1.0)}, // dragon
+
+        /*dark*/ {X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(1.0), X(1.5), X(1.5), X(1.0)}, // dark
+
+       /*fairy*/ {X(1.5), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(0.0), X(1.0), X(1.0), X(1.0), X(1.5), X(1.5), X(1.0), X(1.0)}, // fairy
+
+       /*sound*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)}, // sound
+};//              normal  fight   flying  poison  ground   rock    bug    ghost   steel   mystery  fire   water   grass  electric  psychic  ice   dragon    dark   fairy   sound
+
+#undef X
+
+
+
 // format: attacking type, defending type, damage multiplier
 // the multiplier is a (decimal) fixed-point number:
 // 20 is ×2.0 TYPE_MUL_SUPER_EFFECTIVE
 // 10 is ×1.0 TYPE_MUL_NORMAL
 // 05 is ×0.5 TYPE_MUL_NOT_EFFECTIVE
 // 00 is ×0.0 TYPE_MUL_NO_EFFECT
-const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
-{ // counted from ompen bracket to end of table. so subtract line end table is on from where open bracket starts (313)  then multipy by 3.
+
+//each line adds 3 because there are 3 arguments in each line, atk type, def type, & effectiveness  /so SUBTRACT 3 for any lines kept but commented out
+//DON'T FORGET every time I change below, need to update in the .h / also need to update table above, so ai, and other pre-damage type calcs are accurate
+#define TYPE_CHART
+
+const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+{ // counted from ompen bracket to end of table. so subtract line first entry is on from line closing bracket is on  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIRE, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
@@ -318,23 +375,29 @@ const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of
     TYPE_FIRE, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIRE, TYPE_ICE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIRE, TYPE_BUG, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_FIRE, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE, //ghost adjustment same logic as ice
     TYPE_FIRE, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FIRE, TYPE_GROUND, TYPE_MUL_NOT_EFFECTIVE, //NEW effectiveness for snivy, may remove
     TYPE_FIRE, TYPE_DRAGON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIRE, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_WATER, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_WATER, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_WATER, TYPE_GRASS, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_WATER, TYPE_GROUND, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_DRAGON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_ELECTRIC, TYPE_WATER, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_ELECTRIC, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ELECTRIC, TYPE_ELECTRIC, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_ELECTRIC, TYPE_GRASS, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_ELECTRIC, TYPE_GROUND, TYPE_MUL_NO_EFFECT,
+    TYPE_ELECTRIC, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,   //new change mostly for cloyster but makes sense.
+    TYPE_ELECTRIC, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,    //tentative change to make ice better defensively //there are several water ice & flying ice, makes science sense as well
+    TYPE_ELECTRIC, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE, //made bug resist electric always made sense to me, they can chew threw electric cables
+    TYPE_ELECTRIC, TYPE_GROUND, TYPE_MUL_NO_EFFECT,  //plus bug is related to nature like grass, which already resist electric
     TYPE_ELECTRIC, TYPE_FLYING, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ELECTRIC, TYPE_DRAGON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GRASS, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_GRASS, TYPE_WATER, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_GRASS, TYPE_WATER, TYPE_MUL_SUPER_EFFECTIVE,//removed grass resistance to electric,  lighting splits trees and can spark fire, didn't make sense, leaving neutral
     TYPE_GRASS, TYPE_GRASS, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GRASS, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GRASS, TYPE_GROUND, TYPE_MUL_SUPER_EFFECTIVE,
@@ -343,9 +406,10 @@ const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of
     TYPE_GRASS, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_GRASS, TYPE_DRAGON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GRASS, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_ICE, TYPE_WATER, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_ICE, TYPE_BUG, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ICE, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ICE, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_ICE, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,   //ghost adjustment, the dead aren't bothered by cold
     TYPE_ICE, TYPE_GROUND, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ICE, TYPE_FLYING, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ICE, TYPE_DRAGON, TYPE_MUL_SUPER_EFFECTIVE,
@@ -354,46 +418,48 @@ const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of
     TYPE_FIGHTING, TYPE_NORMAL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIGHTING, TYPE_ICE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIGHTING, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FIGHTING, TYPE_FLYING, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FIGHTING, TYPE_FLYING, TYPE_MUL_NOT_EFFECTIVE, //when grounded fighting should do normal damage to flying
     TYPE_FIGHTING, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIGHTING, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIGHTING, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIGHTING, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIGHTING, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_POISON, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_POISON, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_POISON, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_POISON, TYPE_POISON, TYPE_MUL_NO_EFFECT,
     TYPE_POISON, TYPE_GROUND, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_POISON, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_POISON, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,  //cold slows spread of poison
+    TYPE_POISON, TYPE_ROCK, TYPE_MUL_NO_EFFECT,
     TYPE_POISON, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_POISON, TYPE_STEEL, TYPE_MUL_NO_EFFECT,
+    TYPE_GROUND, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GROUND, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_GROUND, TYPE_ELECTRIC, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_GROUND, TYPE_GRASS, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_GROUND, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_GROUND, TYPE_FLYING, TYPE_MUL_NO_EFFECT,
-    TYPE_GROUND, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_GROUND, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_GROUND, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_GROUND, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,// delete ground to flying so its set to normal effective
+    TYPE_GROUND, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE, //then create condition where its set to no effect if not grounded
+    TYPE_GROUND, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE, //made ground steel neutral, as its better rock, and materiel for steel comes from the earth
     TYPE_FLYING, TYPE_ELECTRIC, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FLYING, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_FLYING, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_FLYING, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,  //makes sense flying resists grass, birds make their home in trees,
+    TYPE_FLYING, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,   //also hurricanes/tornadoes uproot & destroy trees
     TYPE_FLYING, TYPE_BUG, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FLYING, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FLYING, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FLYING, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,  //screw it!! it makes sense so I'm doing it
+    TYPE_FLYING, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,      //Removed psychic super to flying, too strong, psychic strong offensively can already beat flying at neutral
     TYPE_PSYCHIC, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_PSYCHIC, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_PSYCHIC, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_PSYCHIC, TYPE_DARK, TYPE_MUL_NO_EFFECT,
-    TYPE_PSYCHIC, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_BUG, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_BUG, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_PSYCHIC, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,    //psychic power can stop a target cold, can keep them from flying,    
+    TYPE_PSYCHIC, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,     //or confuse them which would make it impossible to fly, so makes sense,
+    TYPE_PSYCHIC, TYPE_DARK, TYPE_MUL_NO_EFFECT,        //mostly done to counter fairy resistance
+    TYPE_PSYCHIC, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,   //effect prob too strong, flying is weak defensively and psychic is strong offenseively
+    TYPE_BUG, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,    //plus fairy nerfed, will replace with resistancee instad of super effectiveness
+    TYPE_BUG, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE, //changed mind, flying still weak defensively regardless but they exell at attack so worse to weaken their atk power
     TYPE_BUG, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_BUG, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_FLYING, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_BUG, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_BUG, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_BUG, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_BUG, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_BUG, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,//removed ghost resistance to bug by accident in my chart, but was so good will add to my chart
+    TYPE_BUG, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE, //removed still resist to bug, apparently many insect types are known to destroy/consume light metals, would be great for the type
     TYPE_ROCK, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ROCK, TYPE_ICE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ROCK, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
@@ -401,43 +467,63 @@ const u8 gTypeEffectiveness[375] = // 336 is number of entries x 3 i.e number of
     TYPE_ROCK, TYPE_FLYING, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ROCK, TYPE_BUG, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ROCK, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_ROCK, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GHOST, TYPE_NORMAL, TYPE_MUL_NO_EFFECT,
     TYPE_GHOST, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_GHOST, TYPE_DARK, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_GHOST, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GHOST, TYPE_GHOST, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_DRAGON, TYPE_DRAGON, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_DRAGON, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_DARK, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_DARK, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_DARK, TYPE_GHOST, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_DARK, TYPE_DARK, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_DARK, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_STEEL, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_DARK, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,    //type change from wolveyvgc to buff bugs, its weak to bugs, so resists it, and dark is evil & bugs are //also associated with evil  so makes sense
+    TYPE_DARK, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,  //-keeping psychic weakness to dark post ghost change as dark is living and able to do physical attacks while psychic is usually phsycially weak
+    TYPE_DARK, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,  //changed there's nothing significant bout dark, its more or less same as ghost but alive, and ghosts thrive in darkness
+    TYPE_DARK, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,   //change essentially makes ghost inverse of normal type effect wise, where most things are neutral and it has 1 weakness
+    TYPE_DARK, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_STEEL, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,//NEW type relation for dark types, showed positively for offense capability and makes sense sneaky backstabbers bad guys take each other out often.
     TYPE_STEEL, TYPE_WATER, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_STEEL, TYPE_ELECTRIC, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_STEEL, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_STEEL, TYPE_ICE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_STEEL, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_STEEL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FORESIGHT, TYPE_FORESIGHT, TYPE_MUL_NO_EFFECT,
-    TYPE_NORMAL, TYPE_GHOST, TYPE_MUL_NO_EFFECT,
-    TYPE_FIGHTING, TYPE_GHOST, TYPE_MUL_NO_EFFECT,
+    TYPE_FAIRY, TYPE_NORMAL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FAIRY, TYPE_DRAGON, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FAIRY, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FAIRY, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FAIRY, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FAIRY, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FAIRY, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FAIRY, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FAIRY, TYPE_GRASS, TYPE_MUL_NO_EFFECT,     //grass buff, and based on idea fairy are nature spirits i.e can't hurt nature as they can't exist without it
     TYPE_POISON, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_STEEL, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_DARK, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIGHTING, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GHOST, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_BUG, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_PSYCHIC, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_DRAGON, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FORESIGHT, TYPE_FORESIGHT, TYPE_MUL_NO_EFFECT,
+    TYPE_NORMAL, TYPE_GHOST, TYPE_MUL_NO_EFFECT,
+    TYPE_FIGHTING, TYPE_GHOST, TYPE_MUL_NO_EFFECT,
+    TYPE_SOUND, TYPE_SOUND, TYPE_MUL_NO_EFFECT,
     TYPE_ENDTABLE, TYPE_ENDTABLE, TYPE_MUL_NO_EFFECT
 };
 
+//questioned bug and ice resistance to electricity, but after research it made even more sense, than I initially thought.
+//initial basis was grass resists, bug is like nature so is similar, also bugs chew threw electrical cables,
+//and ice slowls electron flow, which can prevent electrical flow.
+//but later found, not only  does ice stop electrical flow, bugs and ice are capable of producing lightning/electricity mostly via friction
+//and as electric resists electric, that is another reason ice/bug resistance to electricity makes sense.
+
+//logic for dark beating dark is similar to dragon, bad guys/evil are most likely to backstab/take each other out
+//same as dragons fight and defeat other dragons
+
+    //consider makign bugs immune to confusion status, like wolfeyvgc said, he didn't explain but I gather logic is most bugs work by hivemind,
+//on top of having some type of extra sensory options with its feelers etc. will have to add dark type exception to prankster back i guess
+//think this is done?
+
+#define TYPE_NAMES
 const u8 gTypeNames[][TYPE_NAME_LENGTH + 1] =
 {
     _("NORMAL"),
@@ -459,7 +545,12 @@ const u8 gTypeNames[][TYPE_NAME_LENGTH + 1] =
     _("DRAGON"),
     _("DARK"),
     _("FAIRY"), //fairy addition
-};
+    _("SOUND"),
+}; //uses same type order as list_menu.c so this fairy is 12, but my actuall fairy type
+//was at 17. fixed now they are both 12.
+//had to retruncate type names to fit move name
+
+//also needed change value in & pokemon.h
 
 // This is a factor in how much money you get for beating a trainer.
 const struct TrainerMoney gTrainerMoneyTable[] =

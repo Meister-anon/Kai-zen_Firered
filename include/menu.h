@@ -8,6 +8,14 @@
 #define MENU_NOTHING_CHOSEN -2
 #define MENU_B_PRESSED -1
 
+//used in list menu file for type icons
+#define MENU_INFO_ICON_CAUGHT    0
+#define MENU_INFO_ICON_TYPE      (NUMBER_OF_MON_TYPES + 1)
+#define MENU_INFO_ICON_POWER     (NUMBER_OF_MON_TYPES + 2)
+#define MENU_INFO_ICON_ACCURACY  (NUMBER_OF_MON_TYPES + 3)
+#define MENU_INFO_ICON_PP        (NUMBER_OF_MON_TYPES + 4)
+#define MENU_INFO_ICON_EFFECT    (NUMBER_OF_MON_TYPES + 5)
+
 struct MenuAction
 {
     const u8 *text;
