@@ -107,7 +107,7 @@ static void sub_813995C(void);
 static void sub_81393D4(u8 taskId);
 static void sub_8137EE8(void);
 static void sub_8136FB0(void);
-static void sub_81370EC(void);
+static void PrintSkillsPage(void);
 static void sub_8137270(void);
 static void sub_81372E4(u8 i);
 static void sub_8137554(void);
@@ -145,7 +145,7 @@ struct PokemonSummaryScreenData
     u16 unk0[0x800];
     u16 unk1000[0x800];
     u16 unk2000[0x800];
-    u8 ALIGNED(4) unk3000[7];
+    u8 ALIGNED(4) windowIds[7];
 
     u8 ALIGNED(4) unk3008;
     u8 ALIGNED(4) unk300C;
@@ -172,8 +172,8 @@ struct PokemonSummaryScreenData
 
         u8 ALIGNED(4) unk3084[3];
         u8 ALIGNED(4) unk3088[7];
-        u8 ALIGNED(4) unk3090[9];
-        u8 ALIGNED(4) unk309C[5][5];
+        u8 ALIGNED(4) curHpStrBuf[9];
+        u8 ALIGNED(4) statValueStrBufs[5][5];
 
         u8 ALIGNED(4) unk30B8[5][11];
         u8 ALIGNED(4) unk30F0[5][11];
@@ -181,8 +181,8 @@ struct PokemonSummaryScreenData
         u8 ALIGNED(4) unk316C[5][5];
         u8 ALIGNED(4) unk3188[5][5];
 
-        u8 ALIGNED(4) unk31A4[9];
-        u8 ALIGNED(4) unk31B0[9];
+        u8 ALIGNED(4) expPointsStrBuf[9];
+        u8 ALIGNED(4) expToNextLevelStrBuf[9];
 
         u8 ALIGNED(4) unk31BC[13];
         u8 ALIGNED(4) unk31CC[52];
@@ -247,14 +247,14 @@ struct PokemonSummaryScreenData
 struct Struct203B144
 {
     u16 unk00;
-    u16 unk02;
-    u16 unk04;
-    u16 unk06;
-    u16 unk08;
-    u16 unk0A;
-    u16 unk0C;
-    u16 unk0E;
-    u16 unk10;
+    u16 curHpStr;
+    u16 atkStr;
+    u16 defStr;
+    u16 spAStr;
+    u16 spDStr;
+    u16 speStr;
+    u16 expStr;
+    u16 toNextLevel;
 
     u16 unk12[5];
     u16 unk1C[5];
@@ -281,41 +281,41 @@ struct Struct203B15C
 struct Struct203B170
 {
     u8 ALIGNED(4) unk00; /* 0x00 */
-    u8 ALIGNED(4) unk04; /* 0x04 */
-    u8 ALIGNED(4) unk08; /* 0x08 */
+    u8 ALIGNED(4) atkStr; /* 0x04 */
+    u8 ALIGNED(4) spAStr; /* 0x08 */
 };
 
 struct Struct203B148
 {
     struct Sprite * sprite; /* 0x00 */
-    u16 unk04; /* 0x04 */
-    u16 unk06; /* 0x06 */
-    u16 unk08; /* 0x08 */
+    u16 atkStr; /* 0x04 */
+    u16 defStr; /* 0x06 */
+    u16 spAStr; /* 0x08 */
 };
 
 struct Struct203B158
 {
     struct Sprite * sprite; /* 0x00 */
-    u16 unk04; /* 0x04 */
-    u16 unk06; /* 0x06 */
+    u16 atkStr; /* 0x04 */
+    u16 defStr; /* 0x06 */
 };
 
 struct Struct203B164
 {
     struct Sprite * sprite; /* 0x00 */
-    u16 unk04; /* 0x04 */
-    u16 unk06; /* 0x06 */
+    u16 atkStr; /* 0x04 */
+    u16 defStr; /* 0x06 */
 };
 
 struct Struct203B168
 {
     struct Sprite * sprite; /* 0x00 */
-    u16 unk04; /* 0x04 */
-    u16 unk06; /* 0x06 */
+    u16 atkStr; /* 0x04 */
+    u16 defStr; /* 0x06 */
 };
 
 static EWRAM_DATA struct PokemonSummaryScreenData * sMonSummaryScreen = NULL;
-static EWRAM_DATA struct Struct203B144 * sUnknown_203B144 = NULL;
+static EWRAM_DATA struct Struct203B144 * sMonSkillsPrinterXpos = NULL;
 static EWRAM_DATA struct Struct203B148 * sUnknown_203B148[4] = {};
 static EWRAM_DATA struct Struct203B158 * sUnknown_203B158 = NULL;
 static EWRAM_DATA struct Struct203B15C * sUnknown_203B15C = NULL;
@@ -690,6 +690,41 @@ static const struct BgTemplate sUnknown_8463EFC[] =
 	 }
 };
 
+#define POKESUM_WIN_PAGE_NAME        0
+#define POKESUM_WIN_CONTROLS         1
+#define POKESUM_WIN_LVL_NICK         2
+#define POKESUM_WIN_RIGHT_PANE       3
+#define POKESUM_WIN_TRAINER_MEMO     4
+
+//PokeSum_CreateWindows function  loops 4 times 0-3
+//to create 4 windows/templates for each page of the 3 summary screens
+//loop is 0-3 but then functions adds 3 to the loop value
+//which is why these constants are 3-6
+//this is important because I could potentially use those functionns
+//to create new window templates to more easily split up the existing ui.
+
+//PokeSum_AddWindows is used via PokeSum_CreateWindows so look into that as well
+
+#define POKESUM_WIN_INFO_3           3
+#define POKESUM_WIN_INFO_4           4
+#define POKESUM_WIN_INFO_5           5
+#define POKESUM_WIN_INFO_6           6
+
+#define POKESUM_WIN_SKILLS_3         3
+#define POKESUM_WIN_SKILLS_4         4
+#define POKESUM_WIN_SKILLS_5         5
+#define POKESUM_WIN_SKILLS_6         6
+
+#define POKESUM_WIN_MOVES_3          3  //mon move names & pp window
+#define POKESUM_WIN_MOVES_4          4  //move selct descriptions & info
+#define POKESUM_WIN_MOVES_5          5  //Type Icons
+#define POKESUM_WIN_MOVES_6          6  //Mon Type Icons
+#define POKESUM_WIN_MOVES_5_1        7  //Type Icon Move 2
+#define POKESUM_WIN_MOVES_5_2        8  //Type Icon Move 3
+#define POKESUM_WIN_MOVES_5_3        9  //Type Icon Move 4
+#define POKESUM_WIN_MOVES_5_4        10  //Type Icon Move 5 potentially for new move learning?
+
+
 static const struct WindowTemplate sUnknown_8463F0C[] =
 {
     {
@@ -886,14 +921,37 @@ static const struct WindowTemplate sUnknown_8463F9C[] =
 };
 
 
-static const u8 sUnknown_8463FA4[][3] =
+enum Text_Colors
 {
-    {0, 14, 10},
-    {0, 1, 2},
-    {0, 9, 8},
-    {0, 5, 4},
-    {0, 2, 3},
-    {0, 11, 10},
+    BLACK_COLOR,
+    RED_COLOR,
+    BLUE_PURPLE_COLOR,
+    LIGHT_GREEN_COLOR,
+    ORANGE_COLOR,
+    LIGHT_BROWN_COLOR,
+    PURPLE_COLOR,
+    LIGHT_GREY_COLOR
+};
+
+
+//3 values were in ARRAY represent
+/*  printer.bgColor = color[0];
+    printer.fgColor = color[1];
+    printer.shadowColor = color[2];*/
+    //first value should always be 0
+    //colors are different on different windows I think,
+    //so for reference these colors are on bg of skill page
+    //make new colors instead of editing existing for /nature
+static const u8 sLevelNickTextColors[][3] =
+{                      //bgColor   //fgColor         //shadowColor
+   [BLACK_COLOR] =          {0,     BLACK,               GREY_LAVENDER  },
+   [RED_COLOR] =            {0,      RED,                 ORANGE        },
+   [BLUE_PURPLE_COLOR] =    {0,    NAVY_BLUE,             PURPLE        },
+   [LIGHT_GREEN_COLOR] =    {0,   LIGHT_GREEN,            TAN           },
+   [ORANGE_COLOR] =         {0,     ORANGE,               PEACH         },
+   [LIGHT_BROWN_COLOR] =    {0,    LIGHT_BROWN,          GREY_LAVENDER  },
+   [PURPLE_COLOR] =         {0,      PURPLE,              PURPLE        },
+   [LIGHT_GREY_COLOR] =     {0,   GREY_LAVENDER,         WHITE          }, //colors cap at 14 it seems, changed grey shadow to white to make more readable was grey
 };
 
 static const u8 ALIGNED(4) sUnknown_8463FB8[] =
@@ -956,7 +1014,7 @@ static const u16 * const sUnknown_8463FFC[] =
 void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, MainCallback savedCallback, u8 mode)
 {
     sMonSummaryScreen = AllocZeroed(sizeof(struct PokemonSummaryScreenData));
-    sUnknown_203B144 = AllocZeroed(sizeof(struct Struct203B144));
+    sMonSkillsPrinterXpos = AllocZeroed(sizeof(struct Struct203B144));
 
     if (sMonSummaryScreen == NULL)
     {
@@ -1245,9 +1303,9 @@ static void sub_8134BAC(u8 taskId)
         sub_8137D28(sMonSummaryScreen->curPageIndex);
         break;
     case 3:
-        CopyWindowToVram(sMonSummaryScreen->unk3000[0], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[1], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[2], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[0], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[1], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[2], 2);
         break;
     case 4:
         if (!IsDma3ManagerBusyWithBgCopy())
@@ -1278,10 +1336,10 @@ static void sub_8134BAC(u8 taskId)
         sub_8138A38();
         break;
     case 8:
-        CopyWindowToVram(sMonSummaryScreen->unk3000[3], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[4], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[5], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[6], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[3], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[4], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[5], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[6], 2);
         break;
     case 9:
         if (!IsDma3ManagerBusyWithBgCopy())
@@ -1349,8 +1407,8 @@ static void sub_8134E84(u8 taskId)
 
         break;
     case 4:
-        CopyWindowToVram(sMonSummaryScreen->unk3000[0], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[1], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[0], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[1], 2);
         break;
     case 5:
         if (!IsDma3ManagerBusyWithBgCopy())
@@ -1366,8 +1424,8 @@ static void sub_8134E84(u8 taskId)
     case 6:
         sub_8136F4C();
         sub_8137BD0();
-        CopyWindowToVram(sMonSummaryScreen->unk3000[3], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[5], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[3], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[5], 2);
         break;
     case 7:
         if (!IsDma3ManagerBusyWithBgCopy())
@@ -1385,7 +1443,7 @@ static void sub_8134E84(u8 taskId)
             return;
 
         sub_81374E8();
-        CopyWindowToVram(sMonSummaryScreen->unk3000[4], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[4], 2);
         break;
     case 9:
         sub_8138A38();
@@ -1393,8 +1451,8 @@ static void sub_8134E84(u8 taskId)
         break;
     case 10:
         sub_81356EC();
-        CopyWindowToVram(sMonSummaryScreen->unk3000[6], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[2], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[6], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[2], 2);
         break;
     case 11:
         if (!IsDma3ManagerBusyWithBgCopy())
@@ -1450,9 +1508,9 @@ static void sub_81351A0(u8 taskId)
         sub_8136F4C();
         sub_81374E8();
         sub_8137BD0();
-        CopyWindowToVram(sMonSummaryScreen->unk3000[3], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[4], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[5], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[3], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[4], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[5], 2);
         CopyBgTilemapBufferToVram(0);
         break;
     case 4:
@@ -1460,8 +1518,8 @@ static void sub_81351A0(u8 taskId)
         sub_8136DF0(gUnknown_8419C82);
         break;
     case 5:
-        CopyWindowToVram(sMonSummaryScreen->unk3000[0], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[1], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[0], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[1], 2);
         CopyBgTilemapBufferToVram(2);
         CopyBgTilemapBufferToVram(1);
         break;
@@ -1481,8 +1539,8 @@ static void sub_81351A0(u8 taskId)
         sub_8136E50(gUnknown_8419C45);
         break;
     case 9:
-        CopyWindowToVram(sMonSummaryScreen->unk3000[6], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[2], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[6], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[2], 2);
         CopyBgTilemapBufferToVram(0);
         CopyBgTilemapBufferToVram(2);
         CopyBgTilemapBufferToVram(1);
@@ -1939,13 +1997,13 @@ static void sub_8135C34(void)
         break;
     case 13:
         BeginNormalPaletteFade(0xffffffff, 0, 16, 0, 0);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[0], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[1], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[2], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[6], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[3], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[4], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[5], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[0], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[1], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[2], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[6], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[3], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[4], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[5], 2);
         break;
     case 14:
         CopyBgTilemapBufferToVram(0);
@@ -2071,7 +2129,7 @@ static void sub_81360D4(void) // seems to be PSS_PAGE_INFO or data for it
     else
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk3064, dexNum, STR_CONV_MODE_LEADING_ZEROS, 3);
 
-    sUnknown_203B144->unk00 = 0;
+    sMonSkillsPrinterXpos->unk00 = 0;
 
     if (!sMonSummaryScreen->isEgg)
     {
@@ -2140,63 +2198,63 @@ static void sub_8136350(void) // seems to be PSS_PAGE_SKILLS or data for it.
     u32 expToNextLevel;
 
     hp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP);
-    ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk3090, hp, STR_CONV_MODE_LEFT_ALIGN, 3);
-    StringAppend(sMonSummaryScreen->summary.unk3090, gText_Slash);
+    ConvertIntToDecimalStringN(sMonSummaryScreen->summary.curHpStrBuf, hp, STR_CONV_MODE_LEFT_ALIGN, 3);
+    StringAppend(sMonSummaryScreen->summary.curHpStrBuf, gText_Slash);
 
     hp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MAX_HP);
     ConvertIntToDecimalStringN(tempStr, hp, STR_CONV_MODE_LEFT_ALIGN, 3);
-    StringAppend(sMonSummaryScreen->summary.unk3090, tempStr);
+    StringAppend(sMonSummaryScreen->summary.curHpStrBuf, tempStr);
 
-    sUnknown_203B144->unk02 = MACRO_8136350_0(sMonSummaryScreen->summary.unk3090);
+    sMonSkillsPrinterXpos->curHpStr = MACRO_8136350_0(sMonSummaryScreen->summary.curHpStrBuf);
 
     if (sMonSummaryScreen->savedCallback == CB2_ReturnToTradeMenuFromSummary && sMonSummaryScreen->isEnemyParty == TRUE)
     {
         statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK2);
-        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk309C[PSS_STAT_ATK], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
-        sUnknown_203B144->unk04 = MACRO_8136350_1(sMonSummaryScreen->summary.unk309C[PSS_STAT_ATK]);
+        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
+        sMonSkillsPrinterXpos->atkStr = MACRO_8136350_1(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK]);
 
         statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF2);
-        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk309C[PSS_STAT_DEF], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
-        sUnknown_203B144->unk06 = MACRO_8136350_1(sMonSummaryScreen->summary.unk309C[PSS_STAT_DEF]);
+        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
+        sMonSkillsPrinterXpos->defStr = MACRO_8136350_1(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF]);
 
         statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK2);
-        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPA], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
-        sUnknown_203B144->unk08 = MACRO_8136350_1(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPA]);
+        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
+        sMonSkillsPrinterXpos->spAStr = MACRO_8136350_1(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA]);
 
         statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF2);
-        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPD], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
-        sUnknown_203B144->unk0A = MACRO_8136350_1(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPD]);
+        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
+        sMonSkillsPrinterXpos->spDStr = MACRO_8136350_1(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD]);
 
         statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED2);
-        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPE], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
-        sUnknown_203B144->unk0C = MACRO_8136350_1(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPE]);
+        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
+        sMonSkillsPrinterXpos->speStr = MACRO_8136350_1(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE]);
     }
     else
     {
         statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK);
-        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk309C[PSS_STAT_ATK], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
-        sUnknown_203B144->unk04 = MACRO_8136350_1(sMonSummaryScreen->summary.unk309C[PSS_STAT_ATK]);
+        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
+        sMonSkillsPrinterXpos->atkStr = MACRO_8136350_1(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK]);
 
         statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF);
-        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk309C[PSS_STAT_DEF], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
-        sUnknown_203B144->unk06 = MACRO_8136350_1(sMonSummaryScreen->summary.unk309C[PSS_STAT_DEF]);
+        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
+        sMonSkillsPrinterXpos->defStr = MACRO_8136350_1(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF]);
 
         statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK);
-        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPA], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
-        sUnknown_203B144->unk08 = MACRO_8136350_1(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPA]);
+        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
+        sMonSkillsPrinterXpos->spAStr = MACRO_8136350_1(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA]);
 
         statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF);
-        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPD], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
-        sUnknown_203B144->unk0A = MACRO_8136350_1(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPD]);
+        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
+        sMonSkillsPrinterXpos->spDStr = MACRO_8136350_1(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD]);
 
         statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED);
-        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPE], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
-        sUnknown_203B144->unk0C = MACRO_8136350_1(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPE]);
+        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
+        sMonSkillsPrinterXpos->speStr = MACRO_8136350_1(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE]);
     }
 
     exp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_EXP);
-    ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk31A4, exp, STR_CONV_MODE_LEFT_ALIGN, 7);
-    sUnknown_203B144->unk0E = MACRO_8136350_0(sMonSummaryScreen->summary.unk31A4);
+    ConvertIntToDecimalStringN(sMonSummaryScreen->summary.expPointsStrBuf, exp, STR_CONV_MODE_LEFT_ALIGN, 7);
+    sMonSkillsPrinterXpos->expStr = MACRO_8136350_0(sMonSummaryScreen->summary.expPointsStrBuf);
 
     level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LEVEL);
     expToNextLevel = 0;
@@ -2206,8 +2264,8 @@ static void sub_8136350(void) // seems to be PSS_PAGE_SKILLS or data for it.
         expToNextLevel = gExperienceTables[gBaseStats[species].growthRate][level + 1] - exp;
     }
 
-    ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk31B0, expToNextLevel, STR_CONV_MODE_LEFT_ALIGN, 7);
-    sUnknown_203B144->unk10 = MACRO_8136350_0(sMonSummaryScreen->summary.unk31B0);
+    ConvertIntToDecimalStringN(sMonSummaryScreen->summary.expToNextLevelStrBuf, expToNextLevel, STR_CONV_MODE_LEFT_ALIGN, 7);
+    sMonSkillsPrinterXpos->toNextLevel = MACRO_8136350_0(sMonSummaryScreen->summary.expToNextLevelStrBuf);
 
     type = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
     StringCopy(sMonSummaryScreen->summary.unk31BC, gAbilityNames[type]);
@@ -2243,8 +2301,8 @@ static void sub_81367E8(u8 i)
         StringCopy(sMonSummaryScreen->summary.unk30B8[i], gUnknown_8416210);
         StringCopy(sMonSummaryScreen->summary.unk316C[i], gText_ThreeHyphens);
         StringCopy(sMonSummaryScreen->summary.unk3188[i], gText_ThreeHyphens);
-        sUnknown_203B144->unk12[i] = 0xff;
-        sUnknown_203B144->unk1C[i] = 0xff;
+        sMonSkillsPrinterXpos->unk12[i] = 0xff;
+        sMonSkillsPrinterXpos->unk1C[i] = 0xff;
         return;
     }
 
@@ -2268,8 +2326,8 @@ static void sub_81367E8(u8 i)
                                    STR_CONV_MODE_LEFT_ALIGN, 3);
     }
 
-    sUnknown_203B144->unk12[i] = MACRO_81367E8_0(2, sMonSummaryScreen->summary.unk30B8[i]);
-    sUnknown_203B144->unk1C[i] = MACRO_81367E8_0(2, sMonSummaryScreen->summary.unk30F0[i]);
+    sMonSkillsPrinterXpos->unk12[i] = MACRO_81367E8_0(2, sMonSummaryScreen->summary.unk30B8[i]);
+    sMonSkillsPrinterXpos->unk1C[i] = MACRO_81367E8_0(2, sMonSummaryScreen->summary.unk30F0[i]);
 
     if (gBattleMoves[sMonSummaryScreen->unk325A[i]].power <= 1)
         StringCopy(sMonSummaryScreen->summary.unk316C[i], gText_ThreeHyphens);
@@ -2383,9 +2441,9 @@ static void sub_8136D54(void)
 
 static void sub_8136DA4(const u8 * str)
 {
-    FillWindowPixelBuffer(sMonSummaryScreen->unk3000[0], 0);
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[0], 2, 4, 1, sUnknown_8463FA4[1], 0, str);
-    PutWindowTilemap(sMonSummaryScreen->unk3000[0]);
+    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[0], 0);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[0], 2, 4, 1, sLevelNickTextColors[1], 0, str);
+    PutWindowTilemap(sMonSummaryScreen->windowIds[0]);
 }
 
 static void sub_8136DF0(const u8 * str)
@@ -2394,36 +2452,36 @@ static void sub_8136DF0(const u8 * str)
     s32 width;
     u8 r1;
 
-    FillWindowPixelBuffer(sMonSummaryScreen->unk3000[1], 0);
+    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[1], 0);
     width = GetStringWidth(0, str, 0);
-    r1 = sMonSummaryScreen->unk3000[1];
-    AddTextPrinterParameterized3(r1, 0, 0x54 - width, 0, sUnknown_8463FA4[1], 0, str);
-    PutWindowTilemap(sMonSummaryScreen->unk3000[1]);
+    r1 = sMonSummaryScreen->windowIds[1];
+    AddTextPrinterParameterized3(r1, 0, 0x54 - width, 0, sLevelNickTextColors[1], 0, str);
+    PutWindowTilemap(sMonSummaryScreen->windowIds[1]);
 }
 
 static void sub_8136E50(const u8 * msg)
 {
-    FillWindowPixelBuffer(sMonSummaryScreen->unk3000[2], 0);
+    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[2], 0);
 
     if (!sMonSummaryScreen->isEgg)
     {
         if (sMonSummaryScreen->curPageIndex != PSS_PAGE_MOVES_INFO)
-            AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[2], 2, 4, 2, sUnknown_8463FA4[1], 0xff, sMonSummaryScreen->summary.unk3088);
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[2], 2, 4, 2, sLevelNickTextColors[1], 0xff, sMonSummaryScreen->summary.unk3088);
 
-        AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[2], 2, 40, 2, sUnknown_8463FA4[1], 0xff, sMonSummaryScreen->summary.unk3034);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[2], 2, 40, 2, sLevelNickTextColors[1], 0xff, sMonSummaryScreen->summary.unk3034);
 
         if (GetMonGender(&sMonSummaryScreen->currentMon) == MON_FEMALE)
-            AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[2], 2, 105, 2, sUnknown_8463FA4[3], 0, sMonSummaryScreen->summary.unk3084);
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[2], 2, 105, 2, sLevelNickTextColors[3], 0, sMonSummaryScreen->summary.unk3084);
         else
-            AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[2], 2, 105, 2, sUnknown_8463FA4[2], 0, sMonSummaryScreen->summary.unk3084);
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[2], 2, 105, 2, sLevelNickTextColors[2], 0, sMonSummaryScreen->summary.unk3084);
     }
 
-    PutWindowTilemap(sMonSummaryScreen->unk3000[2]);
+    PutWindowTilemap(sMonSummaryScreen->windowIds[2]);
 }
 
 static void sub_8136F4C(void)
 {
-    FillWindowPixelBuffer(sMonSummaryScreen->unk3000[3], 0);
+    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[3], 0);
 
     switch (sMonSummaryScreen->curPageIndex)
     {
@@ -2431,7 +2489,7 @@ static void sub_8136F4C(void)
         sub_8136FB0();
         break;
     case PSS_PAGE_SKILLS:
-        sub_81370EC();
+        PrintSkillsPage();
         break;
     case PSS_PAGE_MOVES:
     case PSS_PAGE_MOVES_INFO:
@@ -2439,19 +2497,19 @@ static void sub_8136F4C(void)
         break;
     }
 
-    PutWindowTilemap(sMonSummaryScreen->unk3000[3]);
+    PutWindowTilemap(sMonSummaryScreen->windowIds[3]);
 }
 
 static void sub_8136FB0(void)
 {
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 47, 19, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk3028);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], 2, 47, 19, sLevelNickTextColors[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk3028);
 
     if (!sMonSummaryScreen->isEgg)
     {
-        AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 47 + sUnknown_203B144->unk00, 5, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk3064);
-        AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 47, 49, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk3040);
-        AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 47, 64, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk306C);
-        AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 47, 79, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk3074);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], 2, 47 + sMonSkillsPrinterXpos->unk00, 5, sLevelNickTextColors[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk3064);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], 2, 47, 49, sLevelNickTextColors[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk3040);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], 2, 47, 64, sLevelNickTextColors[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk306C);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], 2, 47, 79, sLevelNickTextColors[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk3074);
     }
     else
     {
@@ -2472,21 +2530,223 @@ static void sub_8136FB0(void)
         if (sMonSummaryScreen->isBadEgg)
             hatchMsgIndex = 0;
 
-        AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 7, 45, sUnknown_8463FA4[0], TEXT_SPEED_FF, sUnknown_8463EC4[hatchMsgIndex]);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], 2, 7, 45, sLevelNickTextColors[0], TEXT_SPEED_FF, sUnknown_8463EC4[hatchMsgIndex]);
     }
 }
 
-static void sub_81370EC(void)
+static const u8* GetNatureStatColor(u16* string)
 {
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 14 + sUnknown_203B144->unk02, 4, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk3090);
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 50 + sUnknown_203B144->unk04, 22, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk309C[PSS_STAT_ATK]);
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 50 + sUnknown_203B144->unk06, 35, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk309C[PSS_STAT_DEF]);
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 50 + sUnknown_203B144->unk08, 48, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk309C[PSS_STAT_SPA]);
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 50 + sUnknown_203B144->unk0A, 61, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk309C[PSS_STAT_SPD]);
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 50 + sUnknown_203B144->unk0C, 74, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk309C[PSS_STAT_SPE]);
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 15 + sUnknown_203B144->unk0E, 87, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk31A4);
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 15 + sUnknown_203B144->unk10, 100, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk31B0);
+    //changed struct to read the string for hte x position i.e which stat its on.
+    // if (string == &sMonSkillsPrinterXpos->curHpStr) /always 0  actually don't need to worry about this, can just leave it off my function 
+    // if (string == &sMonSkillsPrinterXpos->atkStr)
+    // if (string == &sMonSkillsPrinterXpos->defStr)
+    // if (string == &sMonSkillsPrinterXpos->spAStr)
+    // if (string == &sMonSkillsPrinterXpos->spDStr)
+    // if (string == &sMonSkillsPrinterXpos->speStr)
+    u16* atkString = &sMonSkillsPrinterXpos->atkStr;
+    u16* defString = &sMonSkillsPrinterXpos->defStr;
+    u16* speedString = &sMonSkillsPrinterXpos->speStr;
+    u16* spAtkString = &sMonSkillsPrinterXpos->spAStr;
+    u16* spDefString = &sMonSkillsPrinterXpos->spDStr;
+
+    //in comparison say if string == atkString as an example (I think?)
+    u8 nature;
+
+    nature = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY, NULL) % 25;
+
+
+
+    //actually this is all I need, this will be first check, filters for natures that default to black text 
+    //order of case if string == statraised return 6 else if string == statlowered return 7  else return 0
+    //temp separate for ease of reading
+    switch (nature)
+    {
+    case NATURE_LONELY:
+        if (string == atkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == defString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_BRAVE:
+        if (string == atkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == speedString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_ADAMANT:
+        if (string == atkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spAtkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_NAUGHTY:
+        if (string == atkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spDefString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break; //end of attack boosts
+    case NATURE_BOLD:
+        if (string == defString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == atkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_RELAXED:
+        if (string == defString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == speedString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_IMPISH:
+        if (string == defString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spAtkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_LAX:
+        if (string == defString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spDefString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break; //end of defense boosts
+    case NATURE_TIMID:
+        if (string == speedString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == atkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_HASTY:
+        if (string == speedString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == defString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_JOLLY:
+        if (string == speedString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spAtkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_NAIVE:
+        if (string == speedString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spDefString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;//end of speed boosts
+    case NATURE_MODEST:
+        if (string == spAtkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == atkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_MILD:
+        if (string == spAtkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == defString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_QUIET:
+        if (string == spAtkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == speedString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_RASH:
+        if (string == spAtkString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spDefString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break; //end of sp atk boosts
+    case NATURE_CALM:
+        if (string == spDefString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == atkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_GENTLE:
+        if (string == spDefString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == defString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_SASSY:
+        if (string == spDefString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == speedString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break;
+    case NATURE_CAREFUL:
+        if (string == spDefString)
+            return sLevelNickTextColors[PURPLE_COLOR];
+        else if (string == spAtkString)
+            return sLevelNickTextColors[LIGHT_GREY_COLOR];
+        else
+            return sLevelNickTextColors[BLACK_COLOR];
+        break; //end of sp def boosts
+    case NATURE_QUIRKY:
+    case NATURE_BASHFUL:
+    case NATURE_SERIOUS:
+    case NATURE_DOCILE:
+    case NATURE_HARDY:
+    default: //neutral natures
+        return sLevelNickTextColors[BLACK_COLOR]; //for natures that don't boost any stat i.e neutral natures
+        break;
+    }
 }
+
+//put logic here for nature color 6 for boost   7 for negative
+//think can replace sLevelNickTextColors with  function that checks nature 
+//and returns color 0 6 or 7 based on how stat should be affected by nature
+static void PrintSkillsPage(void)//vsonic 
+{
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], FONT_NORMAL, 14 + sMonSkillsPrinterXpos->curHpStr, 4, sLevelNickTextColors[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.curHpStrBuf);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->atkStr, 22, GetNatureStatColor(&sMonSkillsPrinterXpos->atkStr), TEXT_SPEED_FF, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->defStr, 35, GetNatureStatColor(&sMonSkillsPrinterXpos->defStr), TEXT_SPEED_FF, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->spAStr, 48, GetNatureStatColor(&sMonSkillsPrinterXpos->spAStr), TEXT_SPEED_FF, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->spDStr, 61, GetNatureStatColor(&sMonSkillsPrinterXpos->spDStr), TEXT_SPEED_FF, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 50 + sMonSkillsPrinterXpos->speStr, 74, GetNatureStatColor(&sMonSkillsPrinterXpos->speStr), TEXT_SPEED_FF, sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE]);
+    //AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 15 + sMonSkillsPrinterXpos->expStr, 87, sLevelNickTextColors[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.expPointsStrBuf);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[POKESUM_WIN_RIGHT_PANE], FONT_NORMAL, 15 + sMonSkillsPrinterXpos->toNextLevel, 87, sLevelNickTextColors[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.expToNextLevelStrBuf);
+}   //ok since this is going on window 3, and I need to move up abilities which are on window 5 think need decrease height of 3 for skills menu
+
 
 #define MACRO_8137270(x) ((x) * 28 + 5)
 
@@ -2502,7 +2762,7 @@ static void sub_8137270(void)
         if (sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE)
             sub_81372E4(4);
         else
-            AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2,
+            AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], 2,
                                          3, MACRO_8137270(4),
                                          sUnknown_8463EF0[0], TEXT_SPEED_FF, gFameCheckerText_Cancel);
     }
@@ -2521,7 +2781,7 @@ static void sub_81372E4(u8 i)
     if (i == 4)
         curPP = maxPP;
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 3, MACRO_8137270(i), sUnknown_8463EF0[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk3128[i]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], 2, 3, MACRO_8137270(i), sUnknown_8463EF0[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk3128[i]);
 
     if (sMonSummaryScreen->unk325A[i] == 0 || (curPP == maxPP))
         v0 = 0;
@@ -2547,19 +2807,19 @@ static void sub_81372E4(u8 i)
             v0 = 1;
     }
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 36, MACRO_81372E4(i), sUnknown_8463EF0[v0], TEXT_SPEED_FF, gUnknown_8416238);
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 46 + sUnknown_203B144->unk12[i], MACRO_81372E4(i), sUnknown_8463EF0[v0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk30B8[i]);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], 2, 36, MACRO_81372E4(i), sUnknown_8463EF0[v0], TEXT_SPEED_FF, gUnknown_8416238);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], 2, 46 + sMonSkillsPrinterXpos->unk12[i], MACRO_81372E4(i), sUnknown_8463EF0[v0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk30B8[i]);
 
     if (sMonSummaryScreen->unk325A[i] != MOVE_NONE)
     {
-        AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 58, MACRO_81372E4(i), sUnknown_8463EF0[v0], TEXT_SPEED_FF, gText_Slash);
-        AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[3], 2, 64 + sUnknown_203B144->unk1C[i], MACRO_81372E4(i), sUnknown_8463EF0[v0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk30F0[i]);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], 2, 58, MACRO_81372E4(i), sUnknown_8463EF0[v0], TEXT_SPEED_FF, gText_Slash);
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[3], 2, 64 + sMonSkillsPrinterXpos->unk1C[i], MACRO_81372E4(i), sUnknown_8463EF0[v0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk30F0[i]);
     }
 }
 
 static void sub_81374E8(void)
 {
-    FillWindowPixelBuffer(sMonSummaryScreen->unk3000[4], 0);
+    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[4], 0);
 
     switch (sMonSummaryScreen->curPageIndex)
     {
@@ -2576,7 +2836,7 @@ static void sub_81374E8(void)
         break;
     }
 
-    PutWindowTilemap(sMonSummaryScreen->unk3000[4]);
+    PutWindowTilemap(sMonSummaryScreen->windowIds[4]);
 }
 
 static void sub_8137554(void)
@@ -2656,7 +2916,7 @@ static void sub_8137578(void) // seems to relate to or be PSS_PAGE_INFO
         }
     }
 
-    AddTextPrinterParameterized4(sMonSummaryScreen->unk3000[4], 2, 0, 3, 0, 0, sUnknown_8463FA4[0], TEXT_SPEED_FF, natureMetOrHatchedAtLevelStr);
+    AddTextPrinterParameterized4(sMonSummaryScreen->windowIds[4], 2, 0, 3, 0, 0, sLevelNickTextColors[0], TEXT_SPEED_FF, natureMetOrHatchedAtLevelStr);
 }
 
 static void sub_8137724(void)
@@ -2705,7 +2965,7 @@ static void sub_8137724(void)
                 DynamicPlaceholderTextUtil_ExpandPlaceholders(natureMetOrHatchedAtLevelStr, gUnknown_8419782);
         }
 
-        AddTextPrinterParameterized4(sMonSummaryScreen->unk3000[4], 2, 0, 3, 0, 0, sUnknown_8463FA4[0], TEXT_SPEED_FF, natureMetOrHatchedAtLevelStr);
+        AddTextPrinterParameterized4(sMonSummaryScreen->windowIds[4], 2, 0, 3, 0, 0, sLevelNickTextColors[0], TEXT_SPEED_FF, natureMetOrHatchedAtLevelStr);
         return;
     }
 
@@ -2751,7 +3011,7 @@ static void sub_8137724(void)
         }
     }
 
-    AddTextPrinterParameterized4(sMonSummaryScreen->unk3000[4], 2, 0, 3, 0, 0, sUnknown_8463FA4[0], TEXT_SPEED_FF, natureMetOrHatchedAtLevelStr);
+    AddTextPrinterParameterized4(sMonSummaryScreen->windowIds[4], 2, 0, 3, 0, 0, sLevelNickTextColors[0], TEXT_SPEED_FF, natureMetOrHatchedAtLevelStr);
 }
 
 static void sub_8137944(void)
@@ -2812,19 +3072,19 @@ static void sub_8137970(void)
     if (sMonSummaryScreen->isBadEgg)
         chosenStrIndex = 0;
 
-    AddTextPrinterParameterized4(sMonSummaryScreen->unk3000[4], 2, 0, 3, 0, 0, sUnknown_8463FA4[0], TEXT_SPEED_FF, sUnknown_8463ED4[chosenStrIndex]);
+    AddTextPrinterParameterized4(sMonSummaryScreen->windowIds[4], 2, 0, 3, 0, 0, sLevelNickTextColors[0], TEXT_SPEED_FF, sUnknown_8463ED4[chosenStrIndex]);
 }
 
 static void sub_8137A90(void)
 {
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[4], 2,
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[4], 2,
                                  26, 7,
-                                 sUnknown_8463FA4[0], TEXT_SPEED_FF,
+                                 sLevelNickTextColors[0], TEXT_SPEED_FF,
                                  gUnknown_8419C4D);
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[4], 2,
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[4], 2,
                                  26, 20,
-                                 sUnknown_8463FA4[0], TEXT_SPEED_FF,
+                                 sLevelNickTextColors[0], TEXT_SPEED_FF,
                                  gUnknown_8419C59);
 }
 
@@ -2835,20 +3095,20 @@ static void sub_8137AF8(void)
         if (sMonSummaryScreen->mode != PSS_MODE_SELECT_MOVE && sUnknown_203B16D == 4)
             return;
 
-        AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[4], 2,
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[4], 2,
                                      57, 1,
-                                     sUnknown_8463FA4[0], TEXT_SPEED_FF,
+                                     sLevelNickTextColors[0], TEXT_SPEED_FF,
                                      sMonSummaryScreen->summary.unk316C[sUnknown_203B16D]);
 
-        AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[4], 2,
+        AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[4], 2,
                                      57, 15,
-                                     sUnknown_8463FA4[0], TEXT_SPEED_FF,
+                                     sLevelNickTextColors[0], TEXT_SPEED_FF,
                                      sMonSummaryScreen->summary.unk3188[sUnknown_203B16D]);
 
-        AddTextPrinterParameterized4(sMonSummaryScreen->unk3000[4], 2,
+        AddTextPrinterParameterized4(sMonSummaryScreen->windowIds[4], 2,
                                      7, 42,
                                      0, 0,
-                                     sUnknown_8463FA4[0], TEXT_SPEED_FF,
+                                     sLevelNickTextColors[0], TEXT_SPEED_FF,
                                      gMoveDescriptionPointers[sMonSummaryScreen->unk325A[sUnknown_203B16D] - 1]);
     }
 }
@@ -2868,18 +3128,18 @@ static void sub_8137BD0(void)
         break;
     }
 
-    PutWindowTilemap(sMonSummaryScreen->unk3000[5]);
+    PutWindowTilemap(sMonSummaryScreen->windowIds[5]);
 }
 
 static void sub_8137C18(void)
 {
-    FillWindowPixelBuffer(sMonSummaryScreen->unk3000[5], 0);
+    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[5], 2,
-                                 66, 1, sUnknown_8463FA4[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk31BC);
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], 2,
+                                 66, 1, sLevelNickTextColors[0], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk31BC);
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->unk3000[5], 2,
-                                 2, 15, sUnknown_8463FA4[0], TEXT_SPEED_FF,
+    AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], 2,
+                                 2, 15, sLevelNickTextColors[0], TEXT_SPEED_FF,
                                  sMonSummaryScreen->summary.unk31CC);
 
 }
@@ -2888,18 +3148,18 @@ static void sub_8137C90(void)
 {
     u8 i;
 
-    FillWindowPixelBuffer(sMonSummaryScreen->unk3000[5], 0);
+    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
     for (i = 0; i < 4; i++)
     {
         if (sMonSummaryScreen->unk325A[i] == MOVE_NONE)
             continue;
 
-        BlitMoveInfoIcon(sMonSummaryScreen->unk3000[5], sMonSummaryScreen->unk3250[i] + 1, 3, MACRO_8137270(i));
+        BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->unk3250[i] + 1, 3, MACRO_8137270(i));
     }
 
     if (sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE)
-        BlitMoveInfoIcon(sMonSummaryScreen->unk3000[5], sMonSummaryScreen->unk3250[4] + 1, 3, MACRO_8137270(4));
+        BlitMoveInfoIcon(sMonSummaryScreen->windowIds[5], sMonSummaryScreen->unk3250[4] + 1, 3, MACRO_8137270(4));
 }
 
 static void sub_8137D28(u8 curPageIndex) //
@@ -2945,9 +3205,9 @@ static void sub_8137D28(u8 curPageIndex) //
 
 static void sub_8137E28(void)
 {
-    PutWindowTilemap(sMonSummaryScreen->unk3000[0]);
-    PutWindowTilemap(sMonSummaryScreen->unk3000[1]);
-    PutWindowTilemap(sMonSummaryScreen->unk3000[2]);
+    PutWindowTilemap(sMonSummaryScreen->windowIds[0]);
+    PutWindowTilemap(sMonSummaryScreen->windowIds[1]);
+    PutWindowTilemap(sMonSummaryScreen->windowIds[2]);
 }
 
 static void sub_8137E64(u8 taskId)
@@ -2966,7 +3226,7 @@ static void sub_8137E64(u8 taskId)
     sLastViewedMonIndex = GetLastViewedMonIndex();
 
     FREE_AND_SET_NULL_IF_SET(sMonSummaryScreen);
-    FREE_AND_SET_NULL_IF_SET(sUnknown_203B144);
+    FREE_AND_SET_NULL_IF_SET(sMonSkillsPrinterXpos);
 }
 
 static void sub_8137EE8(void)
@@ -3124,20 +3384,20 @@ static void sub_81381D0(void)
     InitWindows(sUnknown_8463F9C);
 
     for (i = 0; i < 3; i++)
-        sMonSummaryScreen->unk3000[i] = AddWindow(&sUnknown_8463F0C[i]);
+        sMonSummaryScreen->windowIds[i] = AddWindow(&sUnknown_8463F0C[i]);
 
     for (i = 0; i < 4; i++)
         switch (sMonSummaryScreen->curPageIndex)
         {
         case PSS_PAGE_INFO:
-            sMonSummaryScreen->unk3000[i + 3] = AddWindow(&sUnknown_8463F3C[i]);
+            sMonSummaryScreen->windowIds[i + 3] = AddWindow(&sUnknown_8463F3C[i]);
             break;
         case PSS_PAGE_SKILLS:
-            sMonSummaryScreen->unk3000[i + 3] = AddWindow(&sUnknown_8463F5C[i]);
+            sMonSummaryScreen->windowIds[i + 3] = AddWindow(&sUnknown_8463F5C[i]);
             break;
         case PSS_PAGE_MOVES:
         case PSS_PAGE_MOVES_INFO:
-            sMonSummaryScreen->unk3000[i + 3] = AddWindow(&sUnknown_8463F7C[i]);
+            sMonSummaryScreen->windowIds[i + 3] = AddWindow(&sUnknown_8463F7C[i]);
             break;
         default:
             break;
@@ -3151,41 +3411,41 @@ static void sub_8138280(u8 curPageIndex)
     u32 bgPriority2 = GetGpuReg(REG_OFFSET_BG2CNT) & 3;
 
     for (i = 0; i < 7; i++)
-        sMonSummaryScreen->unk3000[i] = 0xff;
+        sMonSummaryScreen->windowIds[i] = 0xff;
 
     if ((sMonSummaryScreen->unk3224 == 1 && sMonSummaryScreen->curPageIndex != PSS_PAGE_MOVES_INFO)
         || (sMonSummaryScreen->unk3224 == 0 && sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES))
     {
         if (bgPriority2 > bgPriority1)
             for (i = 0; i < 3; i++)
-                sMonSummaryScreen->unk3000[i] = AddWindow(&sUnknown_8463F24[i]);
+                sMonSummaryScreen->windowIds[i] = AddWindow(&sUnknown_8463F24[i]);
         else
             for (i = 0; i < 3; i++)
-                sMonSummaryScreen->unk3000[i] = AddWindow(&sUnknown_8463F0C[i]);
+                sMonSummaryScreen->windowIds[i] = AddWindow(&sUnknown_8463F0C[i]);
     }
     else
     {
         if (bgPriority2 > bgPriority1)
             for (i = 0; i < 3; i++)
-                sMonSummaryScreen->unk3000[i] = AddWindow(&sUnknown_8463F0C[i]);
+                sMonSummaryScreen->windowIds[i] = AddWindow(&sUnknown_8463F0C[i]);
         else
             for (i = 0; i < 3; i++)
-                sMonSummaryScreen->unk3000[i] = AddWindow(&sUnknown_8463F24[i]);
+                sMonSummaryScreen->windowIds[i] = AddWindow(&sUnknown_8463F24[i]);
     }
 
     for (i = 0; i < 4; i++)
         switch (curPageIndex)
         {
         case PSS_PAGE_INFO:
-            sMonSummaryScreen->unk3000[i + 3] = AddWindow(&sUnknown_8463F3C[i]);
+            sMonSummaryScreen->windowIds[i + 3] = AddWindow(&sUnknown_8463F3C[i]);
             break;
         case PSS_PAGE_SKILLS:
         default:
-            sMonSummaryScreen->unk3000[i + 3] = AddWindow(&sUnknown_8463F5C[i]);
+            sMonSummaryScreen->windowIds[i + 3] = AddWindow(&sUnknown_8463F5C[i]);
             break;
         case PSS_PAGE_MOVES:
         case PSS_PAGE_MOVES_INFO:
-            sMonSummaryScreen->unk3000[i + 3] = AddWindow(&sUnknown_8463F7C[i]);
+            sMonSummaryScreen->windowIds[i + 3] = AddWindow(&sUnknown_8463F7C[i]);
             break;
         }
 }
@@ -3195,7 +3455,7 @@ static void sub_8138414(u8 curPageIndex)
     u8 i;
 
     for (i = 0; i < 7; i++)
-        RemoveWindow(sMonSummaryScreen->unk3000[i]);
+        RemoveWindow(sMonSummaryScreen->windowIds[i]);
 
 }
 
@@ -3338,10 +3598,10 @@ static void sub_8138A38(void)
     case PSS_PAGE_INFO:
         if (!sMonSummaryScreen->isEgg)
         {
-            BlitMoveInfoIcon(sMonSummaryScreen->unk3000[3], sMonSummaryScreen->unk3220[0] + 1, 47, 35);
+            BlitMoveInfoIcon(sMonSummaryScreen->windowIds[3], sMonSummaryScreen->unk3220[0] + 1, 47, 35);
 
             if (sMonSummaryScreen->unk3220[0] != sMonSummaryScreen->unk3220[1])
-                BlitMoveInfoIcon(sMonSummaryScreen->unk3000[3], sMonSummaryScreen->unk3220[1] + 1, 83, 35);
+                BlitMoveInfoIcon(sMonSummaryScreen->windowIds[3], sMonSummaryScreen->unk3220[1] + 1, 83, 35);
         }
         break;
     case PSS_PAGE_SKILLS:
@@ -3349,13 +3609,13 @@ static void sub_8138A38(void)
     case PSS_PAGE_MOVES:
         break;
     case PSS_PAGE_MOVES_INFO:
-        FillWindowPixelBuffer(sMonSummaryScreen->unk3000[6], 0);
-        BlitMoveInfoIcon(sMonSummaryScreen->unk3000[6], sMonSummaryScreen->unk3220[0] + 1, 0, 3);
+        FillWindowPixelBuffer(sMonSummaryScreen->windowIds[6], 0);
+        BlitMoveInfoIcon(sMonSummaryScreen->windowIds[6], sMonSummaryScreen->unk3220[0] + 1, 0, 3);
 
         if (sMonSummaryScreen->unk3220[0] != sMonSummaryScreen->unk3220[1])
-            BlitMoveInfoIcon(sMonSummaryScreen->unk3000[6], sMonSummaryScreen->unk3220[1] + 1, 36, 3);
+            BlitMoveInfoIcon(sMonSummaryScreen->windowIds[6], sMonSummaryScreen->unk3220[1] + 1, 36, 3);
 
-        PutWindowTilemap(sMonSummaryScreen->unk3000[6]);
+        PutWindowTilemap(sMonSummaryScreen->windowIds[6]);
         break;
     }
 }
@@ -3640,10 +3900,10 @@ static void sub_8138CD8(u8 id)
         if (MenuHelpers_CallLinkSomething() == TRUE || sub_800B270() == TRUE)
             return;
 
-        CopyWindowToVram(sMonSummaryScreen->unk3000[3], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[4], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[5], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[6], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[3], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[4], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[5], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[6], 2);
         CopyBgTilemapBufferToVram(0);
         CopyBgTilemapBufferToVram(3);
         sMonSummaryScreen->unk3288 = 0;
@@ -3858,22 +4118,22 @@ static void sub_81393D4(u8 taskId)
         if (MenuHelpers_CallLinkSomething() == TRUE || sub_800B270() == TRUE)
             return;
 
-        CopyWindowToVram(sMonSummaryScreen->unk3000[3], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[4], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[5], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[6], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[3], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[4], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[5], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[6], 2);
         CopyBgTilemapBufferToVram(0);
         CopyBgTilemapBufferToVram(3);
         sMonSummaryScreen->unk3288 = 2;
         break;
     case 5:
-        FillWindowPixelBuffer(sMonSummaryScreen->unk3000[4], 0);
-        AddTextPrinterParameterized4(sMonSummaryScreen->unk3000[4], 2,
+        FillWindowPixelBuffer(sMonSummaryScreen->windowIds[4], 0);
+        AddTextPrinterParameterized4(sMonSummaryScreen->windowIds[4], 2,
                                      7, 42,
                                      0, 0,
-                                     sUnknown_8463FA4[0], TEXT_SPEED_FF,
+                                     sLevelNickTextColors[0], TEXT_SPEED_FF,
                                      gUnknown_8419CB9);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[4], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[4], 2);
         CopyBgTilemapBufferToVram(0);
         CopyBgTilemapBufferToVram(3);
         sMonSummaryScreen->unk3288 = 2;
@@ -3894,11 +4154,11 @@ static void sub_8139768(struct Sprite * sprite)
     if (sMonSummaryScreen->unk3020 >= 2)
         return;
 
-    if (sUnknown_203B170->unk04++ >= 2)
+    if (sUnknown_203B170->atkStr++ >= 2)
     {
         u8 v0;
 
-        switch (sUnknown_203B170->unk08)
+        switch (sUnknown_203B170->spAStr)
         {
         case 0:
             sprite->pos1.y += sUnknown_8463FBE[sUnknown_203B170->unk00++];
@@ -3925,7 +4185,7 @@ static void sub_8139768(struct Sprite * sprite)
             sMonSummaryScreen->unk3020++;
         }
 
-        sUnknown_203B170->unk04 = 0;
+        sUnknown_203B170->atkStr = 0;
     }
 }
 
@@ -3934,41 +4194,41 @@ static void sub_8139868(struct Sprite * sprite)
     if (sMonSummaryScreen->unk3020 >= 2)
         return;
 
-    switch (sUnknown_203B170->unk08)
+    switch (sUnknown_203B170->spAStr)
     {
     case 0:
     default:
-        if (sUnknown_203B170->unk04++ >= 120)
+        if (sUnknown_203B170->atkStr++ >= 120)
         {
             sprite->pos1.x += sUnknown_8463FD4[sUnknown_203B170->unk00];
             if (++sUnknown_203B170->unk00 >= NELEMS(sUnknown_8463FD4))
             {
                 sUnknown_203B170->unk00 = 0;
-                sUnknown_203B170->unk04 = 0;
+                sUnknown_203B170->atkStr = 0;
                 sMonSummaryScreen->unk3020++;
             }
         }
         break;
     case 1:
-        if (sUnknown_203B170->unk04++ >= 90)
+        if (sUnknown_203B170->atkStr++ >= 90)
         {
             sprite->pos1.x += sUnknown_8463FDF[sUnknown_203B170->unk00];
             if (++sUnknown_203B170->unk00 >= NELEMS(sUnknown_8463FDF))
             {
                 sUnknown_203B170->unk00 = 0;
-                sUnknown_203B170->unk04 = 0;
+                sUnknown_203B170->atkStr = 0;
                 sMonSummaryScreen->unk3020++;
             }
         }
         break;
     case 2:
-        if (sUnknown_203B170->unk04++ >= 60)
+        if (sUnknown_203B170->atkStr++ >= 60)
         {
             sprite->pos1.x += sUnknown_8463FEA[sUnknown_203B170->unk00];
             if (++sUnknown_203B170->unk00 >= NELEMS(sUnknown_8463FEA))
             {
                 sUnknown_203B170->unk00 = 0;
-                sUnknown_203B170->unk04 = 0;
+                sUnknown_203B170->atkStr = 0;
                 sMonSummaryScreen->unk3020++;
             }
         }
@@ -4033,13 +4293,13 @@ static void sub_8139AAC(u16 spriteId)
         u8 friendship = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FRIENDSHIP);
 
         if (friendship <= 5)
-            sUnknown_203B170->unk08 = 2;
+            sUnknown_203B170->spAStr = 2;
         else
         {
             if (friendship <= 10)
-                sUnknown_203B170->unk08 = 1;
+                sUnknown_203B170->spAStr = 1;
             else if (friendship <= 40)
-                sUnknown_203B170->unk08 = 0;
+                sUnknown_203B170->spAStr = 0;
         }
 
         gSprites[spriteId].callback = sub_8139868;
@@ -4059,13 +4319,13 @@ static void sub_8139AAC(u16 spriteId)
     maxHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MAX_HP);
 
     if (curHp == maxHp)
-        sUnknown_203B170->unk08 = 3;
+        sUnknown_203B170->spAStr = 3;
     else if (maxHp * 0.8 <= curHp)
-        sUnknown_203B170->unk08 = 2;
+        sUnknown_203B170->spAStr = 2;
     else if (maxHp * 0.6 <= curHp)
-        sUnknown_203B170->unk08 = 1;
+        sUnknown_203B170->spAStr = 1;
     else
-        sUnknown_203B170->unk08 = 0;
+        sUnknown_203B170->spAStr = 0;
 
     gSprites[spriteId].callback = sub_8139768;
 }
@@ -4197,9 +4457,9 @@ static void sub_8139F64(u16 tileTag, u16 palTag)
 
         spriteId = CreateSprite(&template, 64 * (i % 2) + 152, sUnknown_203B16D * 28 + 34, i % 2);
         sUnknown_203B148[i]->sprite = &gSprites[spriteId];
-        sUnknown_203B148[i]->unk04 = i;
-        sUnknown_203B148[i]->unk06 = tileTag + i;
-        sUnknown_203B148[i]->unk08 = palTag;
+        sUnknown_203B148[i]->atkStr = i;
+        sUnknown_203B148[i]->defStr = tileTag + i;
+        sUnknown_203B148[i]->spAStr = palTag;
         sUnknown_203B148[i]->sprite->subpriority = i;
 
         if (i > 1)
@@ -4309,8 +4569,8 @@ static void sub_813A254(u16 tileTag, u16 palTag)
 
         spriteId = CreateSprite(&template, 0, 0, 0);
         sUnknown_203B158->sprite = &gSprites[spriteId];
-        sUnknown_203B158->unk04 = tileTag;
-        sUnknown_203B158->unk06 = palTag;
+        sUnknown_203B158->atkStr = tileTag;
+        sUnknown_203B158->defStr = palTag;
     }
 
     sub_813A3B8(1);
@@ -4690,8 +4950,8 @@ static void sub_813ABAC(u16 tileTag, u16 palTag)
 
         spriteId = CreateSprite(&template, 114, 92, 0);
         sUnknown_203B164->sprite = &gSprites[spriteId];
-        sUnknown_203B164->unk04 = tileTag;
-        sUnknown_203B164->unk06 = palTag;
+        sUnknown_203B164->atkStr = tileTag;
+        sUnknown_203B164->defStr = palTag;
     }
 
     sub_813ACF8(1);
@@ -4774,8 +5034,8 @@ static void sub_813ADA8(u16 tileTag, u16 palTag)
         LoadSpritePalette(&palette);
         spriteId = CreateSprite(&template, 106, 40, 0);
         sUnknown_203B168->sprite = &gSprites[spriteId];
-        sUnknown_203B168->unk04 = tileTag;
-        sUnknown_203B168->unk06 = palTag;
+        sUnknown_203B168->atkStr = tileTag;
+        sUnknown_203B168->defStr = palTag;
     }
 
     sub_813AEB0(1);
@@ -5108,13 +5368,13 @@ static void sub_813B3F0(u8 id)
         sMonSummaryScreen->unk328C++;
         break;
     case 10:
-        CopyWindowToVram(sMonSummaryScreen->unk3000[0], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[1], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[2], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[6], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[3], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[4], 2);
-        CopyWindowToVram(sMonSummaryScreen->unk3000[5], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[0], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[1], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[2], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[6], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[3], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[4], 2);
+        CopyWindowToVram(sMonSummaryScreen->windowIds[5], 2);
         CopyBgTilemapBufferToVram(0);
         CopyBgTilemapBufferToVram(2);
         CopyBgTilemapBufferToVram(3);

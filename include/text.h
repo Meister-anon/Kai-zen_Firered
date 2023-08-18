@@ -142,7 +142,21 @@
 #define NUM_TEXT_PRINTERS 32
 
 #define TEXT_SPEED_INSTANT 0
+
+// Given as a text speed when all the text should be
+// loaded at once but not copied to vram yet.
 #define TEXT_SPEED_FF 0xFF
+
+enum {
+    FONT_SMALL,
+    FONT_NORMAL_COPY_1,
+    FONT_NORMAL,
+    FONT_NORMAL_COPY_2,
+    FONT_MALE,
+    FONT_FEMALE,
+    FONT_BRAILLE,
+    FONT_BOLD,
+};
 
 enum
 {
