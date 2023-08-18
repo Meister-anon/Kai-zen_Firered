@@ -2721,7 +2721,7 @@ gUnknown_847F16C::
 	.2byte EC_WORD_OKAY, EC_WORD_I, EC_WORD_CONCEDE, EC_WORD_ELLIPSIS, EC_WORD_I, EC_WORD_LOST
 
 	.align 2
-	.2byte SPECIES_FERALIGATR, ITEM_FOCUS_BAND
+	.2byte SPECIES_FERALIGATOR, ITEM_FOCUS_BAND
 	.2byte MOVE_SURF, MOVE_EARTHQUAKE, MOVE_CRUNCH, MOVE_DRAGON_CLAW
 	.byte 0, 0x00 @ level, ppBonuses
 	.byte 0, 255, 0, 0, 100, 155 @ EVs
@@ -2729,7 +2729,7 @@ gUnknown_847F16C::
 	trainerid 0, 4096 @ OT ID
 	ivs 15, 15, 15, 15, 15, 15, 0 @ IVs, ability
 	.4byte 0x00000032 @ personality
-	.string "FERALIGATR$", 11
+	.string "FERALIGATOR$", 11
 	.byte 255 @ friendship
 
 	.align 2

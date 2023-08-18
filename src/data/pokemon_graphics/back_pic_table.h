@@ -160,7 +160,7 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(TYPHLOSION, gMonBackPic_Typhlosion),
     SPECIES_SPRITE(TOTODILE, gMonBackPic_Totodile),
     SPECIES_SPRITE(CROCONAW, gMonBackPic_Croconaw),
-    SPECIES_SPRITE(FERALIGATR, gMonBackPic_Feraligatr),
+    SPECIES_SPRITE(FERALIGATOR, gMonBackPic_Feraligatr),
     SPECIES_SPRITE(SENTRET, gMonBackPic_Sentret),
     SPECIES_SPRITE(FURRET, gMonBackPic_Furret),
     SPECIES_SPRITE(HOOTHOOT, gMonBackPic_Hoothoot),
@@ -521,7 +521,7 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(MUSHARNA, gMonBackPic_Musharna),
     SPECIES_SPRITE(PIDOVE, gMonBackPic_Pidove),
     SPECIES_SPRITE(TRANQUILL, gMonBackPic_Tranquill),
-    SPECIES_SPRITE(UNFEZANT, gMonBackPic_Unfezant),
+    SPECIES_SPRITE(UNFEZANT_M, gMonBackPic_Unfezant),
     SPECIES_SPRITE(BLITZLE, gMonBackPic_Blitzle),
     SPECIES_SPRITE(ZEBSTRIKA, gMonBackPic_Zebstrika),
     SPECIES_SPRITE(ROGGENROLA, gMonBackPic_Roggenrola),
@@ -668,7 +668,7 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(SPEWPA, gMonBackPic_Spewpa),
     SPECIES_SPRITE(VIVILLON, gMonBackPic_Vivillon),
     SPECIES_SPRITE(LITLEO, gMonBackPic_Litleo),
-    SPECIES_SPRITE(PYROAR, gMonBackPic_Pyroar),
+    SPECIES_SPRITE(PYROAR_M, gMonBackPic_Pyroar),
     SPECIES_SPRITE(FLABEBE, gMonBackPic_Flabebe),
     SPECIES_SPRITE(FLOETTE, gMonBackPic_Floette),
     SPECIES_SPRITE(FLORGES, gMonBackPic_Florges),
@@ -1137,6 +1137,10 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(VIVILLON_FANCY, gMonBackPic_VivillonFancy),
     SPECIES_SPRITE(VIVILLON_POKE_BALL, gMonBackPic_VivillonPokeBall),
 
+    SPECIES_SPRITE(UNFEZANT_F, gMonBackPic_Unfezant_F),
+
+    SPECIES_SPRITE(PYROAR_F, gMonBackPic_PyroarF),
+
     SPECIES_SPRITE(FLABEBE_YELLOW_FLOWER, gMonBackPic_Flabebe),
     SPECIES_SPRITE(FLABEBE_ORANGE_FLOWER, gMonBackPic_Flabebe),
     SPECIES_SPRITE(FLABEBE_BLUE_FLOWER, gMonBackPic_Flabebe),
@@ -1275,3 +1279,20 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(EGG, gMonFrontPic_Egg),
 };
 
+const struct CompressedSpriteSheet gMonBackPicTableFemale[] =
+{
+    /*SPECIES_SPRITE(EEVEE, gMonBackPic_EeveeF),
+    SPECIES_SPRITE(STARLY, gMonBackPic_StarlyF),
+    SPECIES_SPRITE(STARAVIA, gMonBackPic_StaraviaF),
+    SPECIES_SPRITE(STARAPTOR, gMonBackPic_Staraptor),
+    SPECIES_SPRITE(BIDOOF, gMonBackPic_BidoofF),
+    SPECIES_SPRITE(KRICKETOT, gMonBackPic_KricketotF),
+    SPECIES_SPRITE(KRICKETUNE, gMonBackPic_KricketuneF),
+    SPECIES_SPRITE(SHINX, gMonBackPic_ShinxF),
+    SPECIES_SPRITE(COMBEE, gMonBackPic_Combee),
+    SPECIES_SPRITE(HIPPOPOTAS, gMonBackPic_HippopotasF),
+    SPECIES_SPRITE(HIPPOWDON, gMonBackPic_HippowdonF),
+    SPECIES_SPRITE(FRILLISH, gMonBackPic_FrillishF),
+    SPECIES_SPRITE(JELLICENT, gMonBackPic_JellicentF),*/
+    
+};

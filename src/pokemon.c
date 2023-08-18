@@ -113,8 +113,10 @@ static const struct CombinedMove sCombinedMoves[2] =
     {0xFFFF, 0xFFFF, 0xFFFF}
 };
 
-static const u16 sSpeciesToHoennPokedexNum[] = // Assigns all species to the Hoenn Dex Index (Summary No. for Hoenn Dex)
-{ // if I want truly acacurate to files, I should add the missing names for later evolutions like rhyperior & magnezone, but it'll work as is. (I think)
+// Assigns all species to the Hoenn Dex Index (Summary No. for Hoenn Dex)
+// if I want truly acacurate to files, I should add the missing names for later evolutions like rhyperior & magnezone, but it'll work as is. (I think)
+static const u16 sSpeciesToHoennPokedexNum[] =
+{
     SPECIES_TO_HOENN(BULBASAUR),
     SPECIES_TO_HOENN(IVYSAUR),
     SPECIES_TO_HOENN(VENUSAUR),
@@ -274,7 +276,7 @@ static const u16 sSpeciesToHoennPokedexNum[] = // Assigns all species to the Hoe
     SPECIES_TO_HOENN(TYPHLOSION),
     SPECIES_TO_HOENN(TOTODILE),
     SPECIES_TO_HOENN(CROCONAW),
-    SPECIES_TO_HOENN(FERALIGATR),
+    SPECIES_TO_HOENN(FERALIGATOR),
     SPECIES_TO_HOENN(SENTRET),
     SPECIES_TO_HOENN(FURRET),
     SPECIES_TO_HOENN(HOOTHOOT),
@@ -366,7 +368,7 @@ static const u16 sSpeciesToHoennPokedexNum[] = // Assigns all species to the Hoe
     SPECIES_TO_HOENN(LUGIA),
     SPECIES_TO_HOENN(HO_OH),
     SPECIES_TO_HOENN(CELEBI),
-    
+
     SPECIES_TO_HOENN(TREECKO),
     SPECIES_TO_HOENN(GROVYLE),
     SPECIES_TO_HOENN(SCEPTILE),
@@ -504,7 +506,8 @@ static const u16 sSpeciesToHoennPokedexNum[] = // Assigns all species to the Hoe
     SPECIES_TO_HOENN(CHIMECHO),
 };
 
-static const u16 sSpeciesToNationalPokedexNum[] = // Assigns all species to the National Dex Index (Summary No. for National Dex)
+// Assigns all species to the National Dex Index (Summary No. for National Dex)
+static const u16 sSpeciesToNationalPokedexNum[] =
 {
     SPECIES_TO_NATIONAL(BULBASAUR),
     SPECIES_TO_NATIONAL(IVYSAUR),
@@ -665,7 +668,7 @@ static const u16 sSpeciesToNationalPokedexNum[] = // Assigns all species to the 
     SPECIES_TO_NATIONAL(TYPHLOSION),
     SPECIES_TO_NATIONAL(TOTODILE),
     SPECIES_TO_NATIONAL(CROCONAW),
-    SPECIES_TO_NATIONAL(FERALIGATR),
+    SPECIES_TO_NATIONAL(FERALIGATOR),
     SPECIES_TO_NATIONAL(SENTRET),
     SPECIES_TO_NATIONAL(FURRET),
     SPECIES_TO_NATIONAL(HOOTHOOT),
@@ -1026,7 +1029,7 @@ static const u16 sSpeciesToNationalPokedexNum[] = // Assigns all species to the 
     SPECIES_TO_NATIONAL(MUSHARNA),
     SPECIES_TO_NATIONAL(PIDOVE),
     SPECIES_TO_NATIONAL(TRANQUILL),
-    SPECIES_TO_NATIONAL(UNFEZANT),
+    SPECIES_TO_NATIONAL(UNFEZANT_M),
     SPECIES_TO_NATIONAL(BLITZLE),
     SPECIES_TO_NATIONAL(ZEBSTRIKA),
     SPECIES_TO_NATIONAL(ROGGENROLA),
@@ -1173,7 +1176,7 @@ static const u16 sSpeciesToNationalPokedexNum[] = // Assigns all species to the 
     SPECIES_TO_NATIONAL(SPEWPA),
     SPECIES_TO_NATIONAL(VIVILLON),
     SPECIES_TO_NATIONAL(LITLEO),
-    SPECIES_TO_NATIONAL(PYROAR),
+    SPECIES_TO_NATIONAL(PYROAR_M),
     SPECIES_TO_NATIONAL(FLABEBE),
     SPECIES_TO_NATIONAL(FLOETTE),
     SPECIES_TO_NATIONAL(FLORGES),
@@ -2093,7 +2096,7 @@ static const u16 sHoennToNationalOrder[] = // Assigns Hoenn Dex Pokémon (Using 
     HOENN_TO_NATIONAL(TYPHLOSION),
     HOENN_TO_NATIONAL(TOTODILE),
     HOENN_TO_NATIONAL(CROCONAW),
-    HOENN_TO_NATIONAL(FERALIGATR),
+    HOENN_TO_NATIONAL(FERALIGATOR),
     HOENN_TO_NATIONAL(SENTRET),
     HOENN_TO_NATIONAL(FURRET),
     HOENN_TO_NATIONAL(HOOTHOOT),
@@ -2165,7 +2168,7 @@ static const u16 sHoennToNationalOrder[] = // Assigns Hoenn Dex Pokémon (Using 
     HOENN_TO_NATIONAL(LUGIA),
     HOENN_TO_NATIONAL(HO_OH),
     HOENN_TO_NATIONAL(CELEBI),
- };
+};
 
 static const struct SpindaSpot sSpindaSpotGraphics[] =
 {
@@ -6113,6 +6116,7 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
     {
         u8 friendshipLevel = 0;
         s16 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
+        s8 delta;
         if (friendship > 99)
             friendshipLevel++;
         if (friendship > 199)
@@ -6135,7 +6139,7 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
                 return;
         }
 
-        s8 delta = sFriendshipEventDeltas[event][friendshipLevel]; //exp friendship is now part of this
+        delta = sFriendshipEventDeltas[event][friendshipLevel]; //exp friendship is now part of this
         if (delta > 0 && holdEffect == HOLD_EFFECT_HAPPINESS_UP) //if event delta raises friendship boost if have hold item that boosts friendhsip
             delta = (150 * delta) / 100; //boost the increase you would have
 
@@ -6159,6 +6163,7 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
         //don't need loop, this function is usually called within a loop so using mon is enough
         if (GetMonData(mon, MON_DATA_HP, NULL) != 0) //added filter for if mon is alive,wouldn't affect exp event as it already works based on mon being alive
             SetMonData(mon, MON_DATA_FRIENDSHIP, &friendship); //need check message script and vitamin use/itemuse to make sure can't be done on fainted mon vsonic
+
     }
 }
 

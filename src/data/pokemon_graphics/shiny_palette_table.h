@@ -160,7 +160,7 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(TYPHLOSION, gMonShinyPalette_Typhlosion),
     SPECIES_SHINY_PAL(TOTODILE, gMonShinyPalette_Totodile),
     SPECIES_SHINY_PAL(CROCONAW, gMonShinyPalette_Croconaw),
-    SPECIES_SHINY_PAL(FERALIGATR, gMonShinyPalette_Feraligatr),
+    SPECIES_SHINY_PAL(FERALIGATOR, gMonShinyPalette_Feraligatr),
     SPECIES_SHINY_PAL(SENTRET, gMonShinyPalette_Sentret),
     SPECIES_SHINY_PAL(FURRET, gMonShinyPalette_Furret),
     SPECIES_SHINY_PAL(HOOTHOOT, gMonShinyPalette_Hoothoot),
@@ -521,7 +521,7 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(MUSHARNA, gMonShinyPalette_Musharna),
     SPECIES_SHINY_PAL(PIDOVE, gMonShinyPalette_Pidove),
     SPECIES_SHINY_PAL(TRANQUILL, gMonShinyPalette_Tranquill),
-    SPECIES_SHINY_PAL(UNFEZANT, gMonShinyPalette_Unfezant),
+    SPECIES_SHINY_PAL(UNFEZANT_M, gMonShinyPalette_Unfezant),
     SPECIES_SHINY_PAL(BLITZLE, gMonShinyPalette_Blitzle),
     SPECIES_SHINY_PAL(ZEBSTRIKA, gMonShinyPalette_Zebstrika),
     SPECIES_SHINY_PAL(ROGGENROLA, gMonShinyPalette_Roggenrola),
@@ -668,7 +668,7 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(SPEWPA, gMonShinyPalette_Spewpa),
     SPECIES_SHINY_PAL(VIVILLON, gMonShinyPalette_Vivillon),
     SPECIES_SHINY_PAL(LITLEO, gMonShinyPalette_Litleo),
-    SPECIES_SHINY_PAL(PYROAR, gMonShinyPalette_Pyroar),
+    SPECIES_SHINY_PAL(PYROAR_M, gMonShinyPalette_Pyroar),
     SPECIES_SHINY_PAL(FLABEBE, gMonShinyPalette_Flabebe),
     SPECIES_SHINY_PAL(FLOETTE, gMonShinyPalette_Floette),
     SPECIES_SHINY_PAL(FLORGES, gMonShinyPalette_Florges),
@@ -1137,6 +1137,10 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(VIVILLON_FANCY, gMonShinyPalette_VivillonFancy),
     SPECIES_SHINY_PAL(VIVILLON_POKE_BALL, gMonShinyPalette_VivillonPokeBall),
 
+    SPECIES_SHINY_PAL(UNFEZANT_F, gMonShinyPalette_Unfezant_F),
+
+    SPECIES_SHINY_PAL(PYROAR_F, gMonShinyPalette_PyroarF),
+
     SPECIES_SHINY_PAL(FLABEBE_YELLOW_FLOWER, gMonShinyPalette_FlabebeYellowFlower),
     SPECIES_SHINY_PAL(FLABEBE_ORANGE_FLOWER, gMonShinyPalette_FlabebeOrangeFlower),
     SPECIES_SHINY_PAL(FLABEBE_BLUE_FLOWER, gMonShinyPalette_FlabebeBlueFlower),
@@ -1275,7 +1279,23 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(EGG, gMonPalette_Egg),
 };
 
+//think I'll only include gender variations  that are actually distinct enough to be a different mon like meosic & unfezant & pyroar
+//actually this struct isn't even referenced anywhere yet, so its prob better for me to just make them all distinct species
+//like indeedee & meowstic are already done
 const struct CompressedSpritePalette gMonShinyPaletteTableFemale[] =
 {
     SPECIES_SHINY_PAL(EEVEE, gMonShinyPalette_Eevee),
-};
+    SPECIES_SHINY_PAL(STARLY, gMonShinyPalette_Starly),
+    SPECIES_SHINY_PAL(STARAVIA, gMonShinyPalette_Staravia),
+    SPECIES_SHINY_PAL(STARAPTOR, gMonShinyPalette_Staraptor),
+    SPECIES_SHINY_PAL(BIDOOF, gMonShinyPalette_Bidoof),
+    SPECIES_SHINY_PAL(KRICKETOT, gMonShinyPalette_Kricketot),
+    SPECIES_SHINY_PAL(KRICKETUNE, gMonShinyPalette_Kricketune),
+    SPECIES_SHINY_PAL(SHINX, gMonShinyPalette_Shinx),
+    SPECIES_SHINY_PAL(COMBEE, gMonShinyPalette_Combee),
+   // SPECIES_SHINY_PAL(HIPPOPOTAS, gMonShinyPalette_HippopotasF),
+    //SPECIES_SHINY_PAL(HIPPOWDON, gMonShinyPalette_HippowdonF),
+    
+    /*SPECIES_SHINY_PAL(FRILLISH, gMonShinyPalette_FrillishF),
+    SPECIES_SHINY_PAL(JELLICENT, gMonShinyPalette_JellicentF),*/
+};//think I'll only include gender variations  that are actually distinct enough to be a different mon like meosic & unfezant & pyroar

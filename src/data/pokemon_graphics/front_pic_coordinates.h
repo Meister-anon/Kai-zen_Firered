@@ -1,5 +1,44 @@
+#define FRONT_PIC_TABLE
 const struct MonCoords gMonFrontPicCoords[] =
-{
+{//species none is the dummy value btu I think its actually showing max valus for each field,? max size 88, highest y is 00?  //changing didn't seem to change battle at all
+    //ok think this may not be what I need, since things are differnt specifically for doubles...
+    //or not? somehow able to use negative values and it be read,  moved groundon from 0x01 to -0x07 works for him,
+    //so if I can access this from doubles make y offset -8 but not everymon needs that, like rayquaza i already perfect..
+    //sigh i'm gonna need to test each of the 900...
+    //2nd thoughts floating mon are on another array gEnemyMonElevation, so I can add a filter
+    //so that my change for mon, would only appy for mon below a certain elevation range, in addition to only for doubles... think that'd do it
+    //tested -8 seems to work as a standard for all the values/mon that actually need to be raised up.
+    //ok step 1, go through floating mon first attempt to make them work with elevation,
+    //if that works then can exclude them from the y offseet boost
+
+    //basing that on castform position, but its possible its just exeedingly high and should just come down, and would look strange in single
+    //it could be an outlier as several others seem to get cut off, in doubles regardless of being floating
+    //if I don't need to exclude them and bring down any outiers it would give everything a better uniformity instad
+    //karasuukuun brought up that its possible different mon have different height requirements based on how much space they fill up
+    //in their relevant png sprite images.   so when adding new stuff, or considering outliers,
+    //look to the png front sprite and how far it is from the bottom of the image compared to others etc.
+    //plan for uniformity, differences in size and y offset/height aren't major usually need a difference of 4-8 to even be noticeable
+    //so think can easily organize things into y groups based on their size.
+    //if the y value for mon in the same evolution tree for example is only different by 1 or 2 values, can safely 
+    //bring together into 1 value   with some exceptions for mon with unique floating or unique shaped/direction facing sprites
+
+    //larger mon have higher y value, I guess placed higher, with their larger size in mind
+    //while smaller mon have lower y, placing them lower
+
+    //Legendaris are usually largest at size 0x88, w a y value between 0-2 can make all  0x1
+    //final evos and other large mon around size, 0x77 - 0x88 with y values between 2-6 usually //can consilidate to  0x4
+
+    //mid evos and averaage size mon usually between size 0x50-0x65 and have a y value around 0x9 - 0x10    //can consolidate to 0xa
+
+    //small size or baby mon w size between 0x34 - 0x45  usually have y value between 0xc - 15  //can consolidate to 0xe
+
+    //can use that as short hand for adding in new mon, and then adjust their y value up or down within  a range of 3 values basd on relative size
+    //and if they have a strange model/swimming fish, can use logic of different size class, and then use variance rules from there
+
+    //variance following the same rule as above, where larger size correspones to lower y value, and smaller size is higher y value
+    //unless mon has a unique sprite positioning i.e like metapod
+    //also of note, water mon that are "swimming" also have large variance  some use large mon catgory, others  have used small mon y value
+    //nothr note, seems size doesn't affect pic size, I think its used for pokedex comparison?
     [SPECIES_NONE] =
     {
         .size = 0x88,
@@ -208,7 +247,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_ZUBAT] =
     {
         .size = 0x67,
-        .y_offset = 16,
+        .y_offset = 5, //fixed, so weird the lower the number the higher they are...
     },
     [SPECIES_GOLBAT] =
     {
@@ -747,7 +786,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     },
     [SPECIES_DRAGONITE] =
     {
-        .size = 0x88,
+        .size = 0x87,
         .y_offset = 0,
     },
     [SPECIES_MEWTWO] =
@@ -800,7 +839,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x67,
         .y_offset = 5,
     },
-    [SPECIES_FERALIGATR] =
+    [SPECIES_FERALIGATOR] =
     {
         .size = 0x88,
         .y_offset = 1,
@@ -1913,12 +1952,12 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_LATIAS] =
     {
         .size = 0x88,
-        .y_offset = 8,
+        .y_offset = 1,
     },
     [SPECIES_LATIOS] =
     {
         .size = 0x88,
-        .y_offset = 0,
+        .y_offset = 2,
     },
     [SPECIES_JIRACHI] =
     {
@@ -1933,7 +1972,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_CHIMECHO] =
     {
         .size = 0x37,
-        .y_offset = 11,
+        .y_offset = 6,
     },
     [SPECIES_TURTWIG] =
     {
@@ -2605,7 +2644,12 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 7,
     },
-    [SPECIES_UNFEZANT] =
+    [SPECIES_UNFEZANT_F] =
+    {
+        .size = 0x45,
+        .y_offset = 0,
+    },
+    [SPECIES_UNFEZANT_M] =
     {
         .size = 0x45,
         .y_offset = 0,
@@ -3341,7 +3385,12 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 10,
     },
-    [SPECIES_PYROAR] =
+    [SPECIES_PYROAR_M] =
+    {
+        .size = 0x45,
+        .y_offset = 0,
+    },
+    [SPECIES_PYROAR_F] =
     {
         .size = 0x45,
         .y_offset = 0,

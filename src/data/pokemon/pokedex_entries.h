@@ -1,5 +1,20 @@
 const struct PokedexEntry gPokedexEntries[] =
-{
+{   //need to make additions here and then think just add to species file but not pokedex orders so they only show the main pookemon entry
+    //but if I'm filtering by type and have found the pokemon variant I want it to show up in types
+    //pretty much make entires for forms, and variants, but don't put entry here as I want them to be visible from the main mon dex page
+    //rather than be  a bunch of numbers down. see how it works already forms like unown already default to 
+    //this value even though each is technically a different form
+    //will need to update pokemon scale and offset for post gen 3 mon.
+    //smaller scale number means a bigger pokemon, 256 is equal to trainer/human height
+    //higher scale number means smaller pokemon
+
+    //note excessively large pokemon are denotd by shifting the trainer scale value up to make them appear smaller
+    //base trainer scale is 256, but mon with height at or above 15 appear to be about where it begins to shift
+    //set that as standard shift mon at height 15 , that don't change trainer scale, down in height to below that value
+
+    //offset appars to be a y vaue, mon at scale 256 or lower seem to use offset 0
+    //offset should decrease as scale decreases. i.e as mon gets bigger scale gets lower
+
     [NATIONAL_DEX_NONE] =
     {
         .categoryName = _("Unknown"),
@@ -1920,7 +1935,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_FERALIGATR] =
+    [NATIONAL_DEX_FERALIGATOR] =
     {
         .categoryName = _("Big Jaw"),
         .height = 23,
@@ -3614,7 +3629,7 @@ const struct PokedexEntry gPokedexEntries[] =
 
     [NATIONAL_DEX_DELCATTY] =
     {
-        .categoryName = _("Prim"),
+        .categoryName = _("Cherish"),
         .height = 11,
         .weight = 326,
         .description = gDelcattyPokedexText,
@@ -6252,7 +6267,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_UNFEZANT] =
+    [NATIONAL_DEX_UNFEZANT_M] =
     {
         .categoryName = _("Proud"),
         .height = 12,
@@ -8016,7 +8031,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PYROAR] =
+    [NATIONAL_DEX_PYROAR_M] =
     {
         .categoryName = _("Royal"),
         .height = 15,

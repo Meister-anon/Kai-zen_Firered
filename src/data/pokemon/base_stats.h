@@ -4595,7 +4595,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     },
 
-    [SPECIES_FERALIGATR] =
+    [SPECIES_FERALIGATOR] =
     {
         .baseHP = 85,
         .baseAttack = 105,
@@ -14791,7 +14791,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     },
 
-    [SPECIES_UNFEZANT] =
+    [SPECIES_UNFEZANT_M] =
     {
         .baseHP = 80,
         .baseDefense = 80,
@@ -19050,7 +19050,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     },
 
-    [SPECIES_PYROAR] =
+    [SPECIES_PYROAR_M] =
     {
         .baseHP = 86,
         .baseAttack = 68,

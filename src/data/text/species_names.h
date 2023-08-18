@@ -159,7 +159,7 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_TYPHLOSION] = _("Typhlosion"),
     [SPECIES_TOTODILE] = _("Totodile"),
     [SPECIES_CROCONAW] = _("Croconaw"),
-    [SPECIES_FERALIGATR] = _("Feraligatr"),
+    [SPECIES_FERALIGATOR] = _("Feraligator"),
     [SPECIES_SENTRET] = _("Sentret"),
     [SPECIES_FURRET] = _("Furret"),
     [SPECIES_HOOTHOOT] = _("Hoothoot"),
@@ -407,7 +407,7 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_LUXRAY] = _("Luxray"),
     [SPECIES_BUDEW] = _("Budew"),
     [SPECIES_ROSERADE] = _("Roserade"),
-    [SPECIES_CRANIDOS] = _("Cranidos"),
+    [SPECIES_CRANIDOS] = _("Cranidos"),    //changed name then changed my mind
     [SPECIES_RAMPARDOS] = _("Rampardos"),
     [SPECIES_SHIELDON] = _("Shieldon"),
     [SPECIES_BASTIODON] = _("Bastiodon"),
@@ -520,7 +520,7 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_MUSHARNA] = _("Musharna"),
     [SPECIES_PIDOVE] = _("Pidove"),
     [SPECIES_TRANQUILL] = _("Tranquill"),
-    [SPECIES_UNFEZANT] = _("Unfezant"),
+    [SPECIES_UNFEZANT_M] = _("Unfezant"),
     [SPECIES_BLITZLE] = _("Blitzle"),
     [SPECIES_ZEBSTRIKA] = _("Zebstrika"),
     [SPECIES_ROGGENROLA] = _("Roggenrola"),
@@ -667,7 +667,7 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_SPEWPA] = _("Spewpa"),
     [SPECIES_VIVILLON] = _("Vivillon"),
     [SPECIES_LITLEO] = _("Litleo"),
-    [SPECIES_PYROAR] = _("Pyroar"),
+    [SPECIES_PYROAR_M] = _("Pyroar"),
     [SPECIES_FLABEBE] = _("Flabébé"),
     [SPECIES_FLOETTE] = _("Floette"),
     [SPECIES_FLORGES] = _("Florges"),
@@ -1139,6 +1139,10 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_VIVILLON_JUNGLE] = _("Vivillon"),
     [SPECIES_VIVILLON_FANCY] = _("Vivillon"),
     [SPECIES_VIVILLON_POKE_BALL] = _("Vivillon"),
+    //Unfezant
+    [SPECIES_UNFEZANT_F] = _("Unfezant"),
+    //Pyroar
+    [SPECIES_PYROAR_F] = _("Pyroar"),
     // Flabébé
     [SPECIES_FLABEBE_YELLOW_FLOWER] = _("Flabébé"),
     [SPECIES_FLABEBE_ORANGE_FLOWER] = _("Flabébé"),
@@ -1273,5 +1277,8 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_ZARUDE_DADA] = _("Zarude"),
     // Calyrex
     [SPECIES_CALYREX_ICE_RIDER] = _("Calyrex"),
-    [SPECIES_CALYREX_SHADOW_RIDER] = _("Calyrex"),
+    [SPECIES_CALYREX_SHADOW_RIDER] = _("Calyrex"), 
+
+    //New megas
+    [SPECIES_TORTERRA_MEGA] = _("Torterra"), 
 };
