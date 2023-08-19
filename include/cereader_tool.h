@@ -18,7 +18,7 @@ struct TrainerTowerTrainer
 
 struct TrainerTowerFloor
 {
-    /* 0x000 */ u8 unk_000;
+    /* 0x000 */ u8 id;
     /* 0x001 */ u8 floorIdx;
     /* 0x002 */ u8 challengeType;
     /* 0x003 */ u8 prize;
@@ -46,7 +46,6 @@ struct EReaderTrainerTowerSet
 bool32 ValidateTrainerTowerData(struct EReaderTrainerTowerSet * ttdata);
 bool32 CEReaderTool_SaveTrainerTower(struct EReaderTrainerTowerSet * ttdata);
 bool32 CEReaderTool_LoadTrainerTower(struct EReaderTrainerTowerSet * ttdata);
-u8 sub_815D654(void);
 bool32 ReadTrainerTowerAndValidate(void);
 
 #endif //GUARD_CEREADER_TOOL_H

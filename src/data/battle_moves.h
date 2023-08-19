@@ -3965,7 +3965,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
     },
 
-    [MOVE_POISON_FANG] =
+    [MOVE_TOXIC_FANG] =
     {
         .effect = EFFECT_POISON_FANG,
         .power = 50,

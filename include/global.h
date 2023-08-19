@@ -8,6 +8,11 @@
 #include "constants/flags.h"
 #include "constants/vars.h"
 #include "constants/species.h"
+#include "constants/moves.h"
+#include "constants/abilities.h"
+#include "constants/items.h"
+#include "constants/sound.h"
+#include "field_specials.h" //this is the file I used to set dynamic starter type checks
 
 // Prevent cross-jump optimization.
 #define BLOCK_CROSS_JUMP asm("");

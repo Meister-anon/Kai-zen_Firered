@@ -294,7 +294,7 @@ const struct BattleTowerPokemonTemplate gBattleTowerLevel50Mons[] =
 			MOVE_SCREECH,
 			MOVE_GLARE,
 			MOVE_DIG,
-			MOVE_POISON_FANG
+			MOVE_TOXIC_FANG
 		},
 		.evSpread = F_EV_SPREAD_SPEED | F_EV_SPREAD_DEFENSE,
 		.nature = NATURE_HARDY,
