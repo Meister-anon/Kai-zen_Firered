@@ -639,7 +639,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_SONIC_BOOM] =
     {
-        .effect = EFFECT_SONICBOOM,
+        .effect = EFFECT_SONIC_SCREECH,
         .power = 1,
         .type = TYPE_NORMAL,
         .accuracy = 90,
@@ -3967,7 +3967,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_TOXIC_FANG] =
     {
-        .effect = EFFECT_POISON_FANG,
+        .effect = EFFECT_TOXIC_FANG,
         .power = 50,
         .type = TYPE_POISON,
         .accuracy = 100,

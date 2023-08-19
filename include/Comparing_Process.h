@@ -14,8 +14,10 @@
 * 4.species names update -			done
 * 5.base stats
 * 6.friendship rework -				done (missing base stats changes)
-* 7.ability constant ability data 
-* 8.move info data file and move constants 
+* 7.ability constant ability data  -  done
+* 8.move info data file and move constants -  done
+* .move effect constants update 
+* . then port battle moves back
 * .summary screen ui
 * .battle ui
 * .name expansion -					partial
