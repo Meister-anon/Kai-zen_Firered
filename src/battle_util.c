@@ -686,7 +686,7 @@ u8 DoBattlerEndTurnEffects(void)
 {
     u8 effect = 0;
 
-    gHitMarker |= (HITMARKER_GRUDGE | HITMARKER_x20);
+    gHitMarker |= (HITMARKER_GRUDGE | HITMARKER_SKIP_DMG_TRACK);
     while (gBattleStruct->turnEffectsBattlerId < gBattlersCount && gBattleStruct->turnEffectsTracker <= ENDTURN_BATTLER_COUNT)
     {
         gActiveBattler = gBattlerAttacker = gBattlerByTurnOrder[gBattleStruct->turnEffectsBattlerId];
@@ -903,7 +903,7 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleMons[gActiveBattler].status2 &= ~(STATUS2_MULTIPLETURNS);
                         if (!(gBattleMons[gActiveBattler].status2 & STATUS2_CONFUSION))
                         {
-                            gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_CONFUSION | MOVE_EFFECT_AFFECTS_USER;
+                            gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION | MOVE_EFFECT_AFFECTS_USER;
                             SetMoveEffect(1, 0);
                             if (gBattleMons[gActiveBattler].status2 & STATUS2_CONFUSION)
                                 BattleScriptExecute(BattleScript_ThrashConfuses);
@@ -999,13 +999,13 @@ u8 DoBattlerEndTurnEffects(void)
                 return effect;
         }
     }
-    gHitMarker &= ~(HITMARKER_GRUDGE | HITMARKER_x20);
+    gHitMarker &= ~(HITMARKER_GRUDGE | HITMARKER_SKIP_DMG_TRACK);
     return 0;
 }
 
 bool8 HandleWishPerishSongOnTurnEnd(void)
 {
-    gHitMarker |= (HITMARKER_GRUDGE | HITMARKER_x20);
+    gHitMarker |= (HITMARKER_GRUDGE | HITMARKER_SKIP_DMG_TRACK);
     switch (gBattleStruct->wishPerishSongState)
     {
     case 0:
@@ -1072,7 +1072,7 @@ bool8 HandleWishPerishSongOnTurnEnd(void)
         }
         break;
     }
-    gHitMarker &= ~(HITMARKER_GRUDGE | HITMARKER_x20);
+    gHitMarker &= ~(HITMARKER_GRUDGE | HITMARKER_SKIP_DMG_TRACK);
     return FALSE;
 }
 
@@ -2032,16 +2032,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && (Random() % 2) == 0)
                 {
                     do
-                        gBattleCommunication[MOVE_EFFECT_BYTE] = Random() % 5;
-                    while (gBattleCommunication[MOVE_EFFECT_BYTE] == 0);
+                        gBattleScripting.moveEffect = Random() % 5;
+                    while (gBattleScripting.moveEffect == 0);
 
-                    if (gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_BURN)
-                        gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_PARALYSIS;
+                    if (gBattleScripting.moveEffect == MOVE_EFFECT_BURN)
+                        gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
 
 
-                    if (gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_FREEZE)
-                        gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_CONFUSION;
-                    gBattleCommunication[MOVE_EFFECT_BYTE] += MOVE_EFFECT_AFFECTS_USER;
+                    if (gBattleScripting.moveEffect == MOVE_EFFECT_FREEZE)
+                        gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION;
+                    gBattleScripting.moveEffect += MOVE_EFFECT_AFFECTS_USER;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
@@ -2056,7 +2056,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT)
                  && (Random() % 3) == 0)
                 {
-                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_POISON;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_POISON;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
@@ -2071,7 +2071,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT)
                  && (Random() % 3) == 0)
                 {
-                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_PARALYSIS;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_PARALYSIS;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
@@ -2086,7 +2086,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                  && TARGET_TURN_DAMAGED
                  && (Random() % 3) == 0)
                 {
-                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BURN;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BURN;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
@@ -2214,13 +2214,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_SYNCHRONIZE: // 7
-            if (gLastUsedAbility == ABILITY_SYNCHRONIZE && (gHitMarker & HITMARKER_SYNCHRONISE_EFFECT))
+            if (gLastUsedAbility == ABILITY_SYNCHRONIZE && (gHitMarker & HITMARKER_SYNCHRONIZE_EFFECT))
             {
-                gHitMarker &= ~(HITMARKER_SYNCHRONISE_EFFECT);
+                gHitMarker &= ~(HITMARKER_SYNCHRONIZE_EFFECT);
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                 if (gBattleStruct->synchronizeMoveEffect == MOVE_EFFECT_TOXIC)
                     gBattleStruct->synchronizeMoveEffect = MOVE_EFFECT_POISON;
-                gBattleCommunication[MOVE_EFFECT_BYTE] = gBattleStruct->synchronizeMoveEffect + MOVE_EFFECT_AFFECTS_USER;
+                gBattleScripting.moveEffect = gBattleStruct->synchronizeMoveEffect + MOVE_EFFECT_AFFECTS_USER;
                 gBattleScripting.battler = gBattlerTarget;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_SynchronizeActivates;
@@ -2229,13 +2229,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_ATK_SYNCHRONIZE: // 8
-            if (gLastUsedAbility == ABILITY_SYNCHRONIZE && (gHitMarker & HITMARKER_SYNCHRONISE_EFFECT))
+            if (gLastUsedAbility == ABILITY_SYNCHRONIZE && (gHitMarker & HITMARKER_SYNCHRONIZE_EFFECT))
             {
-                gHitMarker &= ~(HITMARKER_SYNCHRONISE_EFFECT);
+                gHitMarker &= ~(HITMARKER_SYNCHRONIZE_EFFECT);
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                 if (gBattleStruct->synchronizeMoveEffect == MOVE_EFFECT_TOXIC)
                     gBattleStruct->synchronizeMoveEffect = MOVE_EFFECT_POISON;
-                gBattleCommunication[MOVE_EFFECT_BYTE] = gBattleStruct->synchronizeMoveEffect;
+                gBattleScripting.moveEffect = gBattleStruct->synchronizeMoveEffect;
                 gBattleScripting.battler = gBattlerAttacker;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_SynchronizeActivates;
@@ -3094,7 +3094,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                  && gBattleMoves[gCurrentMove].flags & FLAG_KINGSROCK_AFFECTED
                  && gBattleMons[gBattlerTarget].hp)
                 {
-                    gBattleCommunication[MOVE_EFFECT_BYTE] = MOVE_EFFECT_FLINCH;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
                     BattleScriptPushCursor();
                     SetMoveEffect(0, 0);
                     BattleScriptPop();
@@ -3278,7 +3278,7 @@ u8 IsMonDisobedient(void)
             gCalledMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
             gBattlescriptCurrInstr = BattleScript_IgnoresAndUsesRandomMove;
             gBattlerTarget = GetMoveTarget(gCalledMove, 0);
-            gHitMarker |= HITMARKER_x200000;
+            gHitMarker |= HITMARKER_DISOBEDIENT_MOVE;
             return 2;
         }
     }
