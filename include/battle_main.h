@@ -23,8 +23,8 @@ struct MultiBattlePokemonTx
     /*0x1D*/ u8 language;
 };
 
-#define TYPE_NAME_LENGTH 6
-#define ABILITY_NAME_LENGTH 14
+//#define TYPE_NAME_LENGTH 6
+//#define ABILITY_NAME_LENGTH 14
 
 // defines for the u8 array gTypeEffectiveness
 #define TYPE_EFFECT_ATK_TYPE(i)((gTypeEffectiveness[i + 0]))    //chart is broken into 3 fields per row, i reads the row, + value shifts the column, size of array is total number of fields, i.e num rows x columns
