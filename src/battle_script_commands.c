@@ -79,7 +79,7 @@ static bool8 IsTwoTurnsMove(u16 move);
 static void TrySetDestinyBondToHappen(void);
 static u8 AttacksThisTurn(u8 battlerId, u16 move); // Note: returns 1 if it's a charging turn, otherwise 2.
 static void CheckWonderGuardAndLevitate(void);
-static u8 ChangeStatBuffs(s8 statValue, u8 statId, u8, const u8 *BS_ptr);
+static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr);
 static void sub_8026480(void);
 static bool8 sub_80264D0(void);
 static void DrawLevelUpWindow1(void);
@@ -3908,7 +3908,7 @@ static void atk47_setgraphicalstatchangevalues(void)
 {
     u8 value = 0;
 
-    switch (GET_STAT_BUFF_VALUE2(gBattleScripting.statChanger))
+    switch (GET_STAT_BUFF_VALUE_WITH_SIGN(gBattleScripting.statChanger))
     {
     case SET_STAT_BUFF_VALUE(1): // +1
         value = STAT_ANIM_PLUS1;
@@ -6466,10 +6466,9 @@ static void atk88_negativedamage(void)
     ++gBattlescriptCurrInstr;
 }
 
-#define STAT_CHANGE_WORKED      0
-#define STAT_CHANGE_DIDNT_WORK  1
 
-static u8 ChangeStatBuffs(s8 statValue, u8 statId, u8 flags, const u8 *BS_ptr)
+
+static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr)
 {
     bool8 certain = FALSE;
     bool8 notProtectAffected = FALSE;
@@ -6623,11 +6622,17 @@ static u8 ChangeStatBuffs(s8 statValue, u8 statId, u8 flags, const u8 *BS_ptr)
     return STAT_CHANGE_WORKED;
 }
 
-static void atk89_statbuffchange(void)
+static void atk89_statbuffchange(void) //alternate logic for if stat change fails,
 {
-    const u8 *jumpPtr = T1_READ_PTR(gBattlescriptCurrInstr + 2);
-    if (ChangeStatBuffs(gBattleScripting.statChanger & 0xF0, GET_STAT_BUFF_ID(gBattleScripting.statChanger), gBattlescriptCurrInstr[1], jumpPtr) == STAT_CHANGE_WORKED)
-        gBattlescriptCurrInstr += 6;
+    CMD_ARGS(u16 flags, const u8 *jumpptr);
+    u16 flags = cmd->flags;
+    const u8 *ptrBefore = gBattlescriptCurrInstr;
+    const u8 *jumpPtr = cmd->jumpptr;
+
+    if (ChangeStatBuffs(GET_STAT_BUFF_VALUE_WITH_SIGN(gBattleScripting.statChanger), GET_STAT_BUFF_ID(gBattleScripting.statChanger), flags, jumpPtr) == STAT_CHANGE_WORKED)
+        gBattlescriptCurrInstr = cmd->nextInstr;
+    else if (gBattlescriptCurrInstr == ptrBefore) // Prevent infinite looping.
+        gBattlescriptCurrInstr = jumpPtr;
 }
 
 static void atk8A_normalisebuffs(void) // haze
