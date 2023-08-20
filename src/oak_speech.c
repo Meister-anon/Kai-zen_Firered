@@ -1198,10 +1198,9 @@ static void Task_OakSpeech35(u8 taskId) //important slide sprite to the right, a
         if (data[1] > -60)
         {
             data[1] -= 2;
-            //if (sGpuBgConfigs2[2].bg_x == 0)
-
-            gSpriteCoordOffsetX += 2; //but commenting this out moves character but not the circle it stands on..
-            ChangeBgX(2, 0x200, 2);//commenting this keeps character from moving (think it slides the backgruond image to simulate movement?)
+            //ChangeBgX(2, -0x3C00, 0);
+            gSpriteCoordOffsetX = 64; //but commenting this out moves character but not the circle it stands on..
+            ChangeBgX(2, -0x3C00, 0);//commenting this keeps character from moving (think it slides the backgruond image to simulate movement?)
         }
         else
         {
@@ -1726,7 +1725,7 @@ static void SpriteCB_PikaSync(struct Sprite * sprite)
 
 static void CreatePikaOrGrassPlatformSpriteAndLinkToCurrentTask(u8 taskId, u8 state)
 {
-    u8 spriteId;
+    u8 spriteId; //vsonic could I use this for battle?
     u8 i = 0;
 
     switch (state)
