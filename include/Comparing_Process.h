@@ -6,7 +6,7 @@
 //and clear change list, for easy tracking of files to be moved for commit.
 /*
 * Will need to do piece meal updates not entire files but portions
-* 
+//file for updating repo to main branch head
 * 1.Make file update -				done
 * 2.Summary screen nature color -	done
 * 3.Super multiplier update -		done
@@ -16,18 +16,20 @@
 * 6.friendship rework -				done (missing base stats changes)
 * 7.ability constant ability data  -  done
 * 8.move info data file and move constants -  done
-* .move effect constants update 
+* .move effect constants update  - done
 * . then port battle moves back
 * .summary screen ui
 * .battle ui
 * .name expansion -					partial
 * pokedex ui.
 * removal of lg pokedex entries.
-* emerald stye naming screen. for intro, add fade in for rival rename
-* .move effects
-* .ability effects
+* emerald stye naming screen. for intro, add fade in for rival rename nvm don't need change rival
+* port back dynamic starters
+* .move effects functions
+* .ability effects functions
 * .battle script
 * .move animations
+
 * . attempt setup sMonSpriteAnchorCoords x y & placement of mon sprite on pokedex screen w constants
 * based on height and mon elevation will put exact arrays here shortly 
 * -do this after pokedex port

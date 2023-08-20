@@ -35,6 +35,7 @@ struct OakSpeechResources
 
 EWRAM_DATA struct OakSpeechResources * sOakSpeechResources = NULL;
 
+
 static void Task_OaksSpeech1(u8 taskId);
 static void CreateHelpDocsPage1(void);
 static void Task_OaksSpeech2(u8 taskId);
@@ -64,11 +65,14 @@ static void Task_OakSpeech29(u8 taskId);
 static void Task_OakSpeech25(u8 taskId);
 static void Task_OakSpeech26(u8 taskId);
 static void Task_OakSpeech27(u8 taskId);
+static void Task_OakSpeech28(u8 taskId);
 static void Task_OakSpeech30(u8 taskId);
 static void Task_OakSpeech31(u8 taskId);
 static void Task_OakSpeech32(u8 taskId);
 static void Task_OakSpeech34(u8 taskId);
+static void Task_OakSpeech3C(u8 taskId); //new version of 34 for the player, to lead into 35
 static void Task_OakSpeech33(u8 taskId);
+static void Task_OakSpeech35(u8 taskId);
 static void Task_OakSpeech36(u8 taskId);
 static void Task_OakSpeech37(u8 taskId);
 static void Task_OakSpeech38(u8 taskId);
@@ -92,6 +96,7 @@ static void CreateFadeInTask(u8 taskId, u8 state);
 static void CreateFadeOutTask(u8 taskId, u8 state);
 static void PrintNameChoiceOptions(u8 taskId, u8 state);
 static void GetDefaultName(u8 arg0, u8 namePick);
+static void GetRandomPlayerName(u8 arg0, u8 namePick);
 
 extern const u8 gText_Controls[];
 extern const u8 gText_ABUTTONNext[];
@@ -400,7 +405,7 @@ static const u8 *const sMaleNameChoices[] = {
     gNameChoice_Kene,
     gNameChoice_Geki,
 #elif defined(LEAFGREEN)
-    gNameChoice_Green,
+    gNameChoice_Blue,
     gNameChoice_Leaf,
     gNameChoice_Gary,
     gNameChoice_Kaz,
@@ -427,23 +432,24 @@ static const u8 *const sFemaleNameChoices[] = {
     gNameChoice_Red,
     gNameChoice_Fire,
 #elif defined(LEAFGREEN)
-    gNameChoice_Green,
+    gNameChoice_Green,   
     gNameChoice_Leaf,
 #endif
     gNameChoice_Omi,
     gNameChoice_Jodi,
     gNameChoice_Amanda,
-    gNameChoice_Hillary,
+    //gNameChoice_Hillary,
     gNameChoice_Makey,
     gNameChoice_Michi,
     gNameChoice_Paula,
     gNameChoice_June,
     gNameChoice_Cassie,
-    gNameChoice_Rey,
+    gNameChoice_Green,
     gNameChoice_Seda,
     gNameChoice_Kiko,
     gNameChoice_Mina,
     gNameChoice_Norie,
+    gNameChoice_Red,
     gNameChoice_Sai,
     gNameChoice_Momo,
     gNameChoice_Suzi
@@ -451,16 +457,38 @@ static const u8 *const sFemaleNameChoices[] = {
 
 static const u8 *const sRivalNameChoices[] = {
 #if defined(FIRERED)
-    gNameChoice_Green,
+    gNameChoice_Blue,
     gNameChoice_Gary,
     gNameChoice_Kaz,
     gNameChoice_Toru
 #elif defined(LEAFGREEN)
-    gNameChoice_Red,
-    gNameChoice_Ash,
+    gNameChoice_Blue,
+    gNameChoice_Gary,
     gNameChoice_Kene,
-    gNameChoice_Geki
+    gNameChoice_Red    
 #endif
+}; //make sure ther's a check to ensure player and rival name are different
+
+static const u8 *const sPlayerMaleNameChoices[] = {
+    gNameChoice_Red,
+#if defined(FIRERED) 
+    gNameChoice_Fire,
+#elif defined(LEAFGREEN)
+    gNameChoice_Leaf,
+#endif
+    gNameChoice_Ash,
+    gNameChoice_OtherName
+};
+
+static const u8 *const sPlayerFemaleNameChoices[] = {
+    gNameChoice_Green,
+#if defined(FIRERED)
+    gNameChoice_Fire,
+#elif defined(LEAFGREEN)
+    gNameChoice_Leaf,
+#endif
+    gNameChoice_Kiko,
+    gNameChoice_OtherName
 };
 
 static void VBlankCB_NewGameOaksSpeech(void)
@@ -502,7 +530,7 @@ static void Task_OaksSpeech1(u8 taskId)
         ResetSpriteData();
         FreeAllSpritePalettes();
         ResetTempTileDataBuffers();
-        SetHelpContext(HELPCONTEXT_NEW_GAME);
+        //SetHelpContext(HELPCONTEXT_NEW_GAME);
         break;
     case 1:
         sOakSpeechResources = AllocZeroed(sizeof(*sOakSpeechResources));
@@ -992,7 +1020,7 @@ static void Task_OakSpeech15(u8 taskId)
     }
 }
 
-static void Task_OakSpeech16(u8 taskId)
+static void Task_OakSpeech16(u8 taskId) //new beginnning of rename loop
 {
     s16 * data = gTasks[taskId].data;
 
@@ -1036,7 +1064,7 @@ static void Task_OakSpeech17(u8 taskId)
     }
 }
 
-static void Task_OakSpeech18(u8 taskId)
+static void Task_OakSpeech18(u8 taskId) //ok HERE is where it asks gender.
 {
     s16 * data = gTasks[taskId].data;
 
@@ -1076,7 +1104,7 @@ static void Task_OakSpeech19(u8 taskId)
     }
 }
 
-static void Task_OakSpeech20(u8 taskId)
+static void Task_OakSpeech20(u8 taskId) //gender finalized
 {
     s8 input = Menu_ProcessInputNoWrapAround();
     switch (input)
@@ -1095,7 +1123,7 @@ static void Task_OakSpeech20(u8 taskId)
 
 }
 
-static void Task_OakSpeech21(u8 taskId)
+static void Task_OakSpeech21(u8 taskId) //believe its change window, and set background
 {
     s16 * data = gTasks[taskId].data;
     ClearStdWindowAndFrameToTransparent(data[13], 1);
@@ -1107,18 +1135,18 @@ static void Task_OakSpeech21(u8 taskId)
     gTasks[taskId].func = Task_OakSpeech22;
 }
 
-static void Task_OakSpeech22(u8 taskId)
+static void Task_OakSpeech22(u8 taskId) //loads the big trainer pic, for after gender select
 {
     if (gSaveBlock2Ptr->playerGender == MALE)
         LoadOaksSpeechTrainerPic(MALE, 0);
     else
         LoadOaksSpeechTrainerPic(FEMALE, 0);
     CreateFadeOutTask(taskId, 2);
-    gTasks[taskId].data[3] = 32;
+    gTasks[taskId].data[3] = 32; //first case of data[3]
     gTasks[taskId].func = Task_OakSpeech23;
 }
 
-static void Task_OakSpeech23(u8 taskId)
+static void Task_OakSpeech23(u8 taskId) //beginning of player naming
 {
     s16 * data = gTasks[taskId].data;
 
@@ -1129,32 +1157,51 @@ static void Task_OakSpeech23(u8 taskId)
         else
         {
             data[1] = 0;
-            OaksSpeechPrintMessage(gOakText_AskPlayerName, sOakSpeechResources->textSpeed);
-            gTasks[taskId].func = Task_OakSpeech24;
-        }
+            //OaksSpeechPrintMessage(gOakText_AskPlayerName, sOakSpeechResources->textSpeed);
+            gTasks[taskId].func = Task_OakSpeech3C; //new attempt skips 24, but stilll eventually should get to 25
+        } 
     }
 }
 
-static void Task_OakSpeech24(u8 taskId)
-{
+static void Task_OakSpeech24(u8 taskId)// previously there was a loop on 24 & 25, fading screen and calling player naming screen.
+{   //but I removed that to loop back to gender select instead. task16
     if (!IsTextPrinterActive(0))
     {
         BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
         sOakSpeechResources->unk_0010 = 0;
-        gTasks[taskId].func = Task_OakSpeech25;
+        gTasks[taskId].func = Task_OakSpeech25; //this is what I need to change, I swapped the loop
+        //gTasks[taskId].func = Task_OakSpeech3C; //as unk0010 is set here, would allow PrintNameChoiceOptions to pickup plaer options 
+    } // options is either 35 or could be 28 //35 didn't work think I need to go Task_OakSpeech34
+    // to lead into 35 like rival does instead of going directly
+}
+
+//alt verion of oakspeech34 for the player
+static void Task_OakSpeech3C(u8 taskId)
+{
+    s16* data = gTasks[taskId].data;
+
+    if (data[2] != 0)
+    {
+        OaksSpeechPrintMessage(gOakText_AskPlayerName, sOakSpeechResources->textSpeed);
+        sOakSpeechResources->unk_0010 = 0;
+        gTasks[taskId].func = Task_OakSpeech35;
     }
 }
-static void Task_OakSpeech35(u8 taskId)
+
+static void Task_OakSpeech35(u8 taskId) //important slide sprite to the right, and create window for default name choices
 {
     s16 * data = gTasks[taskId].data;
 
-    if (!IsTextPrinterActive(0))
+    //ok I konw it executes both blocks before going to 29
+    if (!IsTextPrinterActive(0)) //want to just move pic if it was centered but not on redisplay for player naming
     {
         if (data[1] > -60)
         {
             data[1] -= 2;
-            gSpriteCoordOffsetX += 2;
-            ChangeBgX(2, 0x200, 2);
+            //if (sGpuBgConfigs2[2].bg_x == 0)
+
+            gSpriteCoordOffsetX += 2; //but commenting this out moves character but not the circle it stands on..
+            ChangeBgX(2, 0x200, 2);//commenting this keeps character from moving (think it slides the backgruond image to simulate movement?)
         }
         else
         {
@@ -1165,12 +1212,14 @@ static void Task_OakSpeech35(u8 taskId)
     }
 }
 
-static void Task_OakSpeech28(u8 taskId)
-{
+static void Task_OakSpeech28(u8 taskId) //believe paired with task_23 alternates to rival if palyer name chosen
+{   //actually isn't, though it has a player option the player never actually triggers this task,
+    //its rival only
+    //Guess player was added here for simplicity and to make them all match. 
     PrintNameChoiceOptions(taskId, sOakSpeechResources->unk_0010);
     if (sOakSpeechResources->unk_0010 == 0)
     {
-        OaksSpeechPrintMessage(gOakText_AskPlayerName, 0);
+        OaksSpeechPrintMessage(gOakText_AskPlayerName, sOakSpeechResources->textSpeed);
     }
     else
     {
@@ -1183,39 +1232,80 @@ static void Task_OakSpeech29(u8 taskId)
 {
     s16 * data = gTasks[taskId].data;
     s8 input = Menu_ProcessInput();
-    switch (input)
-    {
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-        PlaySE(SE_SELECT);
-        ClearStdWindowAndFrameToTransparent(data[13], TRUE);
-        RemoveWindow(data[13]);
-        GetDefaultName(sOakSpeechResources->unk_0010, input - 1);
-        data[15] = 1;
-        gTasks[taskId].func = Task_OakSpeech26;
-        break;
-    case 0:
-        PlaySE(SE_SELECT);
-        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, 0);
-        gTasks[taskId].func = Task_OakSpeech25;
-        break;
-    case -1:
-        break;
+
+    if (sOakSpeechResources->unk_0010 == 0) //now seutp different functionality for player and rival
+    { //player name selection
+        switch (input) //this is the name window, 0 is new name 1-4 are the selected names
+        {
+        case 1:
+        case 2:
+        case 3:
+            // player name options, case 4 rerserved for random selection
+            PlaySE(SE_SELECT);
+            ClearStdWindowAndFrameToTransparent(data[13], TRUE);
+            RemoveWindow(data[13]);
+            GetDefaultName(sOakSpeechResources->unk_0010, input - 1); //saves the name option
+            data[15] = 1;
+            gTasks[taskId].func = Task_OakSpeech26; // go to confirm name choice
+            break;
+        case 4:
+            PlaySE(SE_SELECT);
+            ClearStdWindowAndFrameToTransparent(data[13], TRUE);
+            RemoveWindow(data[13]);
+            GetRandomPlayerName(sOakSpeechResources->unk_0010, input - 1);
+            data[15] = 1;
+            gTasks[taskId].func = Task_OakSpeech26; // go to confirm name choice
+            break;
+        case 0: //New Name
+            PlaySE(SE_SELECT);
+            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, 0);
+            gTasks[taskId].func = Task_OakSpeech25; //go to DoNamingScreen
+            break;
+        case -1: // if press B, fade into gender select   new Loop start
+            PlaySE(SE_SELECT);
+            ClearStdWindowAndFrameToTransparent(data[13], TRUE);
+            RemoveWindow(data[13]);
+            gTasks[taskId].func = Task_OakSpeech16;
+            break;
+        }
     }
+    else
+    { //rival name selection
+        switch (input) //this is the name window, 0 is new name 1-4 are the selected names
+        {
+        case 1:
+        case 2:
+        case 3:
+        case 4: // name options -rival has 4 options
+            PlaySE(SE_SELECT);
+            ClearStdWindowAndFrameToTransparent(data[13], TRUE);
+            RemoveWindow(data[13]);
+            GetDefaultName(sOakSpeechResources->unk_0010, input - 1);
+            data[15] = 1;
+            gTasks[taskId].func = Task_OakSpeech26; // go to task setname choose rival name
+            break;
+        case 0: //New name
+            PlaySE(SE_SELECT);
+            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, 0);
+            gTasks[taskId].func = Task_OakSpeech25; //go to DoNamingScreen
+            break;
+        case -1:
+            break;
+        }
+    }
+    
 }
 
-static void Task_OakSpeech25(u8 taskId)
+static void Task_OakSpeech25(u8 taskId) //important reset player gender new game  done
 {
-    if (!gPaletteFade.active)
+    if (!gPaletteFade.active) //here getDefaultName, is picking a name from the list for the player, so this must be loop, to get a different name each time
     {
-        GetDefaultName(sOakSpeechResources->unk_0010, 0);
-        if (sOakSpeechResources->unk_0010 == 0)
-        {
+        GetDefaultName(sOakSpeechResources->unk_0010, 0); //next step, get player name select like rival, if click newname then go to naming screen
+        if (sOakSpeechResources->unk_0010 == 0) //i.e make name select for player like rival
+        { 
             DoNamingScreen(NAMING_SCREEN_PLAYER, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, CB2_ReturnFromNamingScreen);
         }
-        else
+        else // rival
         {
             ClearStdWindowAndFrameToTransparent(gTasks[taskId].data[13], 1);
             RemoveWindow(gTasks[taskId].data[13]);
@@ -1226,7 +1316,7 @@ static void Task_OakSpeech25(u8 taskId)
     }
 }
 
-static void Task_OakSpeech26(u8 taskId)
+static void Task_OakSpeech26(u8 taskId) // continues from 25 after pallleteFade ends & goes to 27  for player and rival
 {
     s16 * data = gTasks[taskId].data;
 
@@ -1264,16 +1354,16 @@ static void Task_OakSpeech27(u8 taskId)
     s8 input = Menu_ProcessInputNoWrapClearOnChoose();
     switch (input)
     {
-    case 0:
+    case 0: //choose yes
         PlaySE(SE_SELECT);
         gTasks[taskId].data[3] = 40;
-        if (sOakSpeechResources->unk_0010 == 0)
+        if (sOakSpeechResources->unk_0010 == 0) //player
         {
             ClearDialogWindowAndFrame(0, 1);
-            CreateFadeInTask(taskId, 2);
-            gTasks[taskId].func = Task_OakSpeech30;
+            CreateFadeInTask(taskId, 2);        
+            gTasks[taskId].func = Task_OakSpeech30; // goto choose rival name
         }
-        else
+        else //rival  //rival name finalized
         {
             StringExpandPlaceholders(gStringVar4, gOakText_RememberRivalName);
             OaksSpeechPrintMessage(gStringVar4, sOakSpeechResources->textSpeed);
@@ -1281,17 +1371,18 @@ static void Task_OakSpeech27(u8 taskId)
         }
         break;
     case 1:
-    case -1:
+    case -1: //choose no
         PlaySE(SE_SELECT);
-        if (sOakSpeechResources->unk_0010 == 0)
-            gTasks[taskId].func = Task_OakSpeech24;
+        if (sOakSpeechResources->unk_0010 == 0) //confirmed this just means if player
+            //gTasks[taskId].func = Task_OakSpeech24; //ok think this is what I need to replace
+            gTasks[taskId].func = Task_OakSpeech28; //changed, moved loop to earlier
         else
-            gTasks[taskId].func = Task_OakSpeech28;
+            gTasks[taskId].func = Task_OakSpeech28; //choose rival name
         break;
     }
 }
 
-static void Task_OakSpeech30(u8 taskId)
+static void Task_OakSpeech30(u8 taskId) //finish naming player go to rival
 {
     s16 * data = gTasks[taskId].data;
 
@@ -1299,8 +1390,8 @@ static void Task_OakSpeech30(u8 taskId)
     {
         DestroyOaksSpeechTrainerPic();
         if (data[3] != 0)
-            data[3]--;
-        else
+            data[3]--; // think this is a loop/return, think this sends me back to previous task i.e to 29, if condition isn't met.?
+        else             //no nvm this isnt gtasts.func so its something different
             gTasks[taskId].func = Task_OakSpeech32;
     }
 }
@@ -1315,17 +1406,17 @@ static void Task_OakSpeech31(u8 taskId)
     }
 }
 
-static void Task_OakSpeech32(u8 taskId)
-{
+static void Task_OakSpeech32(u8 taskId) //important begin rival name choice, rival-style player name select  2nd part in oakspeech35
+{   //load centered sprite
     ChangeBgX(2, 0, 0);
     gTasks[taskId].data[1] = 0;
     gSpriteCoordOffsetX = 0;
-    LoadOaksSpeechTrainerPic(2, 0);
+    LoadOaksSpeechTrainerPic(2, 0); //create rival pic
     CreateFadeOutTask(taskId, 2);
     gTasks[taskId].func = Task_OakSpeech34;
 }
 
-static void Task_OakSpeech34(u8 taskId)
+static void Task_OakSpeech34(u8 taskId)//edit this to check for player set unk to 0, and ask player name
 {
     s16 * data = gTasks[taskId].data;
 
@@ -1337,13 +1428,13 @@ static void Task_OakSpeech34(u8 taskId)
     }
 }
 
-static void Task_OakSpeech33(u8 taskId)
+static void Task_OakSpeech33(u8 taskId) //after naming rival
 {
     s16 * data = gTasks[taskId].data;
 
     if (data[2] != 0)
     {
-        DestroyOaksSpeechTrainerPic();
+        DestroyOaksSpeechTrainerPic(); //remove rival pic after naming him, then show player
         if (data[3] != 0)
             data[3]--;
         else
@@ -1353,7 +1444,7 @@ static void Task_OakSpeech33(u8 taskId)
             else
                 LoadOaksSpeechTrainerPic(FEMALE, 0);
             gTasks[taskId].data[1] = 0;
-            gSpriteCoordOffsetX = 0;
+            gSpriteCoordOffsetX = 0; //believe this puts them at center
             ChangeBgX(2, 0, 0);
             CreateFadeOutTask(taskId, 2);
             gTasks[taskId].func = Task_OakSpeech36;
@@ -1361,7 +1452,7 @@ static void Task_OakSpeech33(u8 taskId)
     }
 }
 
-static void Task_OakSpeech36(u8 taskId)
+static void Task_OakSpeech36(u8 taskId) //Oak's last line
 {
     if (gTasks[taskId].data[2] != 0)
     {
@@ -1372,7 +1463,7 @@ static void Task_OakSpeech36(u8 taskId)
     }
 }
 
-static void Task_OakSpeech37(u8 taskId)
+static void Task_OakSpeech37(u8 taskId) //last task before gamestart warp
 {
     if (!IsTextPrinterActive(0))
     {
@@ -1848,7 +1939,7 @@ static void CreateFadeOutTask(u8 taskId, u8 state)
     }
 }
 
-static void PrintNameChoiceOptions(u8 taskId, u8 state)
+static void PrintNameChoiceOptions(u8 taskId, u8 state)//
 {
     s16 * data = gTasks[taskId].data;
     const u8 *const * textPtrs;
@@ -1859,8 +1950,29 @@ static void PrintNameChoiceOptions(u8 taskId, u8 state)
     DrawStdFrameWithCustomTileAndPalette(data[13], 1, GetStdWindowBaseTileNum(), 14);
     FillWindowPixelBuffer(gTasks[taskId].data[13], 0x11);
     AddTextPrinterParameterized(data[13], 2, gOtherText_NewName, 8, 1, 0, NULL);
-    if (state == 0)
-        textPtrs = gSaveBlock2Ptr->playerGender == MALE ? sMaleNameChoices : sFemaleNameChoices;
+    //my addition not working yet, still jumping straight to naming screen
+    if (state == 0) {
+        if (gSaveBlock2Ptr->playerGender == MALE) //adjusted here to emulate rival
+        {
+            textPtrs = sPlayerMaleNameChoices;
+            for (i = 0; i < 4; i++)
+            {
+                AddTextPrinterParameterized(data[13], 2, textPtrs[i], 8, 16 * (i + 1) + 1, 0, NULL);
+            }
+            Menu_InitCursor(data[13], 2, 0, 1, 16, 5, 0);
+            CopyWindowToVram(data[13], COPYWIN_BOTH);
+        }
+        else if (gSaveBlock2Ptr->playerGender == FEMALE)
+        {
+            textPtrs = sPlayerFemaleNameChoices;
+            for (i = 0; i < 4; i++)
+            {
+                AddTextPrinterParameterized(data[13], 2, textPtrs[i], 8, 16 * (i + 1) + 1, 0, NULL);
+            }
+            Menu_InitCursor(data[13], 2, 0, 1, 16, 5, 0);
+            CopyWindowToVram(data[13], COPYWIN_BOTH);
+        }
+    }
     else
         textPtrs = sRivalNameChoices;
     for (i = 0; i < 4; i++)
@@ -1871,7 +1983,7 @@ static void PrintNameChoiceOptions(u8 taskId, u8 state)
     CopyWindowToVram(data[13], COPYWIN_BOTH);
 }
 
-static void GetDefaultName(u8 arg0, u8 namePick)
+static void GetRandomPlayerName(u8 arg0, u8 namePick) 
 {
     const u8 * src;
     u8 * dest;
@@ -1880,14 +1992,34 @@ static void GetDefaultName(u8 arg0, u8 namePick)
     if (arg0 == 0)
     {
         if (gSaveBlock2Ptr->playerGender == MALE)
-            src = sMaleNameChoices[Random() % 19];
+            src = sMaleNameChoices[Random() % 19]; //picks a random name
         else
             src = sFemaleNameChoices[Random() % 19];
         dest = gSaveBlock2Ptr->playerName;
     }
+    for (i = 0; i < PLAYER_NAME_LENGTH && src[i] != EOS; i++)
+        dest[i] = src[i];
+    for (; i < PLAYER_NAME_LENGTH + 1; i++)
+        dest[i] = EOS;
+}
+
+static void GetDefaultName(u8 arg0, u8 namePick) //not name selection window, but the random name set if not choose name
+{
+    const u8 * src;
+    u8 * dest;
+    u8 i;
+
+    if (arg0 == 0)
+    {
+        if (gSaveBlock2Ptr->playerGender == MALE)
+            src = sPlayerMaleNameChoices[namePick]; //picks a random name
+        else
+            src = sPlayerFemaleNameChoices[namePick];
+        dest = gSaveBlock2Ptr->playerName;
+    }
     else
     {
-        src = sRivalNameChoices[namePick];
+        src = sRivalNameChoices[namePick];//name pick think always 0, so always loads first name
         dest = gSaveBlock1Ptr->rivalName;
     }
     for (i = 0; i < PLAYER_NAME_LENGTH && src[i] != EOS; i++)

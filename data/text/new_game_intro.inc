@@ -1,11 +1,14 @@
 gOtherText_NewName:: @ 81C574F
     .string "NEW NAME$"
 
-gNameChoice_Green:: @ 81C5758
-    .string "GREEN$"
+gNameChoice_Blue:: @ 81C5758
+    .string "BLUE$"
 
 gNameChoice_Red:: @ 81C575E
     .string "RED$"
+
+gNameChoice_Green:: @ 81C5806
+    .string "GREEN$"
 
 gNameChoice_Leaf:: @ 81C5762
     .string "LEAF$"
@@ -59,7 +62,7 @@ gNameChoice_Max:: @ 81C57B4
     .string "MAX$"
 
 gNameChoice_Jon:: @ 81C57B8
-    .string "JON$"
+    .string "NICK$"
 
 gNameChoice_Ralph:: @ 81C57BC
     .string "RALPH$"
@@ -83,7 +86,7 @@ gNameChoice_Amanda:: @ 81C57D9
     .string "AMANDA$"
 
 gNameChoice_Hillary:: @ 81C57E0
-    .string "HILLARY$"
+    .string "JAIDEN$"
 
 gNameChoice_Makey:: @ 81C57E8
     .string "MAKEY$"
@@ -99,9 +102,6 @@ gNameChoice_June:: @ 81C57FA
 
 gNameChoice_Cassie:: @ 81C57FF
     .string "CASSIE$"
-
-gNameChoice_Rey:: @ 81C5806
-    .string "REY$"
 
 gNameChoice_Seda:: @ 81C580A
     .string "SEDA$"
@@ -123,6 +123,9 @@ gNameChoice_Momo:: @ 81C5823
 
 gNameChoice_Suzi:: @ 81C5828
     .string "SUZI$"
+
+gNameChoice_OtherName::
+    .string "OTHER$"
 
 gNewGame_HelpDocs1:: @ 81C582D
     .string "The various buttons will be explained in\n"
