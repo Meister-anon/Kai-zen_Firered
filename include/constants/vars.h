@@ -61,11 +61,12 @@
 // renewable hidden items and this counter is capped,
 // the counter resets to 0 and all renewable hidden
 // item flags are resampled.
-#define VAR_RENEWABLE_ITEM_STEP_COUNTER     0x4023
+#define VAR_RENEWABLE_ITEM_STEP_COUNTER     0x4023 //important make another like this, but for trainer flags
 
 // Determines which wild encounter set to use in the
 // Altering Cave. Incremented by Mystery Event.
 // Wraps around at 10.
+//vsonic note to increment weekly
 #define VAR_ALTERING_CAVE_WILD_SET          0x4024
 
 // Step counter set to 500 at game start. When you get
@@ -126,7 +127,8 @@
 #define VAR_0x404E                         0x404E
 #define VAR_LOTAD_SIZE_RECORD              0x404F
 
-// Map Scene
+// Map Scene //I'm guessign these are just for displaying questlog
+//was wrong these are progression vars, their values are changed in script to progress events.
 #define VAR_MAP_SCENE_PALLET_TOWN_OAK                                          0x4050
 #define VAR_MAP_SCENE_VIRIDIAN_CITY_OLD_MAN                                    0x4051
 #define VAR_MAP_SCENE_CERULEAN_CITY_RIVAL                                      0x4052
@@ -304,8 +306,30 @@
 #define VAR_0x40FD                 0x40FD
 #define VAR_0x40FE                 0x40FE
 #define VAR_0x40FF                 0x40FF
+#define VAR_RIVAL_STARTER		   0x4100 //use rival starter species
+#define VAR_RIVAL_EVO			   0x4101 //use rival starter Evolution
+#define VAR_PLAYER_STARTER		   0x4102 //use to hold player starter for rival branch evo check (pretty much just eevee)  not using right now
+//actually may not need since game already keeps track of player starter with the roamer check
+//so instead of really complex evo ai, I'll try to just block rival eevee from doing certain evolutions based on player starter group
 
-#define VARS_END                   0x40FF
+#define VAR_DAYS				   0x4103
+#define VAR_WEEKS				   0x4104
+#define VAR_MONTHS				   0x4105
+#define VAR_SEASONS				   0x4106
+#define VAR_TERRAIN				   0x4107	// If this var has a value, assigning a STATUS_FIELD_xx_TERRAIN to it before battle causes the battle to start with that terrain active
+
+// Counts up every step. Wraps around at 25.
+// When wraparound occurs, and the player
+//has a mon with pickup ability in their party
+//the ability logic activates and mon has a 
+//10% chance to attempt searching for an item
+#define VAR_PICKUP_COUNTER		   0x4108
+
+// If nonzero, counts down by one every step.
+// When it hits zero, repel's effect wears off.
+#define VAR_TRAINER_REPEL_STEP_COUNT                0x4109
+
+#define VARS_END                   VAR_PICKUP_COUNTER
 #define VARS_COUNT                 (VARS_END - VARS_START + 1)
 
 #define SPECIAL_VARS_START         0x8000

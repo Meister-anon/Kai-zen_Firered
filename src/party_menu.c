@@ -4585,6 +4585,110 @@ static void Task_ClosePartyMenuAfterText(u8 taskId)
     }
 }
 
+#define tState      data[0]
+#define tSpecies    data[1]
+#define tAbilityNum data[2] //now return current ability will need to use task, to select new ability/abilitynum
+#define tMonId      data[3]
+#define tOldFunc    4
+
+#define ABILITY_CAPSULE_DATA
+
+void Task_AbilityCapsule(u8 taskId) //important seemed easy enough so ported now, also ftw you can defnie text anywhere FP,
+{
+    static const u8 askText[] = _("Would you like to change {STR_VAR_1}'s\nability to {STR_VAR_2}?");
+    static const u8 doneText[] = _("{STR_VAR_1}'s ability became\n{STR_VAR_2}!{PAUSE_UNTIL_PRESS}");
+    s16* data = gTasks[taskId].data;    //vsonic imporant this is how can define text without having to go to messages
+
+    switch (tState)//change how works, let it change current ability to any other abilities it has 
+    {//make opena dialgoue displaying species abilities in order of slots and print to a box if not equal current ability
+    //so should print every possible ability excluding the one it currently has, populate selected ability to str_var_2
+    case 0:
+        // Can't use.   -  made new conditional
+        if ((gBaseStats[tSpecies].abilities[0] == gBaseStats[tSpecies].abilities[1] //if both ability slots have same ability
+            //|| gBaseStats[tSpecies].abilities[1] == 0 // if the other slot is ability none
+            && ((gBaseStats[tSpecies].abilityHidden[0] == 0) && (gBaseStats[tSpecies].abilityHidden[1] == 0))) //and no hidden ability
+            //|| tAbilityNum > 1 // if current ability, is hidden ability
+            || !tSpecies) //if species is 0
+        {
+            gPartyMenuUseExitCallback = FALSE;
+            PlaySE(SE_SELECT);
+            DisplayPartyMenuMessage(gText_WontHaveEffect, 1);
+            ScheduleBgCopyTilemapToVram(2);
+            gTasks[taskId].func = Task_ClosePartyMenuAfterText;
+            return;
+        }
+        gPartyMenuUseExitCallback = TRUE;
+        GetMonNickname(&gPlayerParty[tMonId], gStringVar1);
+        StringCopy(gStringVar2, gAbilityNames[GetAbilityBySpecies(tSpecies, tAbilityNum)]);
+        StringExpandPlaceholders(gStringVar4, askText);
+        PlaySE(SE_SELECT);
+        DisplayPartyMenuMessage(gStringVar4, 1);
+        ScheduleBgCopyTilemapToVram(2);
+        tState++;
+        break;
+    case 1:
+        if (!IsPartyMenuTextPrinterActive())
+        {
+            PartyMenuDisplayYesNoMenu();
+            tState++;
+        }
+        break;
+    case 2:
+        switch (Menu_ProcessInputNoWrapClearOnChoose())
+        {
+        case 0:
+            tState++;
+            break;
+        case 1:
+        case MENU_B_PRESSED:
+            gPartyMenuUseExitCallback = FALSE;
+            PlaySE(SE_SELECT);
+            ScheduleBgCopyTilemapToVram(2);
+            // Don't exit party selections screen, return to choosing a mon.
+            ClearStdWindowAndFrameToTransparent(6, 0);
+            ClearWindowTilemap(6);
+            DisplayPartyMenuStdMessage(5);
+            gTasks[taskId].func = (void*)GetWordTaskArg(taskId, tOldFunc);
+            return;
+        }
+        break;
+    case 3:
+        PlaySE(SE_USE_ITEM);
+        StringExpandPlaceholders(gStringVar4, doneText);
+        DisplayPartyMenuMessage(gStringVar4, 1);
+        ScheduleBgCopyTilemapToVram(2);
+        tState++;
+        break;
+    case 4:
+        if (!IsPartyMenuTextPrinterActive())
+            tState++;
+        break;
+    case 5:
+        SetMonData(&gPlayerParty[tMonId], MON_DATA_ABILITY_NUM, &tAbilityNum);
+        RemoveBagItem(gSpecialVar_ItemId, 1);
+        gTasks[taskId].func = Task_ClosePartyMenu;
+        break;
+    }
+}
+
+void ItemUseCB_AbilityCapsule(u8 taskId, TaskFunc task)//need to understand
+{
+    s16* data = gTasks[taskId].data;
+
+    tState = 0;
+    tMonId = gPartyMenu.slotId;
+    tSpecies = GetMonData(&gPlayerParty[tMonId], MON_DATA_SPECIES, NULL);
+    tAbilityNum = GetMonData(&gPlayerParty[tMonId], MON_DATA_ABILITY_NUM, NULL); //may need to remove this since its setting to one ability
+    SetWordTaskArg(taskId, tOldFunc, (uintptr_t)(gTasks[taskId].func));
+    gTasks[taskId].func = Task_AbilityCapsule; //prob instead handle abilityNum selection in this task
+}//
+
+#undef tState
+#undef tSpecies
+#undef tAbilityNum
+#undef tMonId
+#undef tOldFunc
+
 static void ShowMoveSelectWindow(u8 slot)
 {
     u8 i;

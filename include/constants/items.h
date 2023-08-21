@@ -2,6 +2,8 @@
 #define GUARD_CONSTANTS_ITEMS_H
 // because of my change to the item table I need to change all values that are ITEM_(some hex value) into ITEM_NONE I think..yeah I do, because they were previously
 //auto aligned with a question mark icon & palette.   actually imma leave it for now, since I plan to fill those placeholders in.
+
+//actually I think this file just needs to match the items.json //yup confirmed
 #define ITEM_NONE 0
 #define ITEM_MASTER_BALL 1
 #define ITEM_ULTRA_BALL 2
@@ -88,8 +90,8 @@
 #define ITEM_SUPER_REPEL 83
 #define ITEM_MAX_REPEL 84
 #define ITEM_ESCAPE_ROPE 85
-#define ITEM_ABILITY_CAPSULE 86
-#define ITEM_REPEL 87
+#define ITEM_REPEL 86
+#define ITEM_ABILITY_CAPSULE 87	//remmbeber need change logic of this, so lets me select the slot to change to
 #define ITEM_058 88
 #define ITEM_059 89
 #define ITEM_05A 90
@@ -227,33 +229,33 @@
 #define ITEM_LUCKY_PUNCH 222
 #define ITEM_METAL_POWDER 223
 #define ITEM_THICK_CLUB 224
-#define ITEM_STICK 225
+#define ITEM_LEEK 225
 #define ITEM_PRISM_SCALE 226 // will make this an evo hold item level up, but because its milotic and difficult, make it random %4 only evolve while 0, so a 1 in 5 each level up.
 #define ITEM_RAZOR_CLAW 227
-#define ITEM_0E4 228
+#define ITEM_EVIOLITE 228
 #define ITEM_0E5 229
 #define ITEM_0E6 230
 #define ITEM_0E7 231
 #define ITEM_0E8 232
 #define ITEM_0E9 233
 //Power Items
-#define ITEM_POWER_BRACER 234
-#define ITEM_POWER_BELT 235
-#define ITEM_POWER_LENS 236
-#define ITEM_POWER_BAND 237
-#define ITEM_POWER_ANKLET 238
-#define ITEM_POWER_WEIGHT 239
+#define ITEM_POWER_WEIGHT 234	
+#define ITEM_POWER_BRACER 235		
+#define ITEM_POWER_BELT 236		
+#define ITEM_POWER_LENS 237		
+#define ITEM_POWER_BAND 238	
+#define ITEM_POWER_ANKLET 239
 //Fossils
-#define ITEM_SAIL_FOSSIL 240
-#define ITEM_JAW_FOSSIL 241
-#define ITEM_PLUME_FOSSIL 242
-#define ITEM_COVER_FOSSIL 243
-#define ITEM_0F4 244
-#define ITEM_0F5 245
-#define ITEM_SKULL_FOSSIL 246
-#define ITEM_ARMOR_FOSSIL 247
-#define ITEM_0F8 248
-#define ITEM_0F9 249
+#define ITEM_SAIL_FOSSIL 240		//amaura
+#define ITEM_JAW_FOSSIL 241			//tyrunt
+#define ITEM_PLUME_FOSSIL 242		//archen
+#define ITEM_COVER_FOSSIL 243		//tirtouga
+#define ITEM_FOSSILIZED_BIRD 244	//dracozolt = bird + drake
+#define ITEM_FOSSILIZED_FISH 245	//dracovish = fish + drake
+#define ITEM_SKULL_FOSSIL 246		//craniados
+#define ITEM_ARMOR_FOSSIL 247		//shieldon
+#define ITEM_FOSSILIZED_DINO 248	//arctozolt = bird + dino
+#define ITEM_FOSSILIZED_DRAKE 249	//arctovish = fish + dino
 #define ITEM_0FA 250
 #define ITEM_0FB 251
 #define ITEM_0FC 252
@@ -290,8 +292,8 @@
 #define ITEM_ROOM_4_KEY 283
 #define ITEM_ROOM_6_KEY 284
 #define ITEM_STORAGE_KEY 285
-#define ITEM_ROOT_FOSSIL 286
-#define ITEM_CLAW_FOSSIL 287
+#define ITEM_ROOT_FOSSIL 286	//lileep
+#define ITEM_CLAW_FOSSIL 287	//anorith
 #define ITEM_DEVON_SCOPE 288
 #define ITEM_TM01 289
 #define ITEM_TM02 290
@@ -419,11 +421,11 @@
 #define ITEM_SECRET_KEY 351
 #define ITEM_BIKE_VOUCHER 352
 #define ITEM_GOLD_TEETH 353
-#define ITEM_OLD_AMBER 354
+#define ITEM_OLD_AMBER 354		//aerodactyl
 #define ITEM_CARD_KEY 355
 #define ITEM_LIFT_KEY 356
-#define ITEM_HELIX_FOSSIL 357
-#define ITEM_DOME_FOSSIL 358
+#define ITEM_HELIX_FOSSIL 357	//omanyte
+#define ITEM_DOME_FOSSIL 358	//kabuto
 #define ITEM_SILPH_SCOPE 359
 #define ITEM_BICYCLE 360
 #define ITEM_TOWN_MAP 361
@@ -432,25 +434,28 @@
 #define ITEM_TM_CASE 364
 #define ITEM_BERRY_POUCH 365
 #define ITEM_TEACHY_TV 366
-#define ITEM_TRI_PASS 367
-#define ITEM_RAINBOW_PASS 368
-#define ITEM_TEA 369
-#define ITEM_MYSTIC_TICKET 370
-#define ITEM_AURORA_TICKET 371 /*
+#define ITEM_LINK_KEY 367 //NEW IDEA make key item call link key, trade evos can level up evolve long as yuo have this item
+#define ITEM_TRI_PASS 368 //  AND they meet whatever other condition they have
+#define ITEM_RAINBOW_PASS 369
+#define ITEM_TEA 370
+#define ITEM_MYSTIC_TICKET 371
+#define ITEM_AURORA_TICKET 372 /*
 #define ITEM_POWDER_JAR 372 */
-#define ITEM_RUBY 373
-#define ITEM_SAPPHIRE 374
-#define ITEM_ULTIMA_BRACE 375
-#define ITEM_EV_SHACKLES  376
+#define ITEM_MAGMA_EMBLEM 373
+#define ITEM_OLD_SEA_MAP 374
+#define ITEM_RUBY 375
+#define ITEM_SAPPHIRE 376
+#define ITEM_ULTIMA_BRACE 377
+#define ITEM_EV_SHACKLES  378
 // Secondary Set of Use items  (mostly for evo) 
-#define ITEM_UP_GRADE 377  //need to change these items in other items.h so they are evo items.
-#define ITEM_ELECTIRIZER 378
-#define ITEM_MAGMARIZER 379
-#define ITEM_DUBIOUS_DISC 380
-#define ITEM_REAPER_CLOTH 381
-#define ITEM_METAL_COAT 382
-#define ITEM_LINK_STONE 383 /*
-#define ITEM_ABOMASITE 384
+#define ITEM_UP_GRADE 379  //need to change these items in items.json so they are evo items.
+#define ITEM_ELECTIRIZER 380 //don't forget to list in evolutions table as well
+#define ITEM_MAGMARIZER 381
+#define ITEM_DUBIOUS_DISC 382
+#define ITEM_REAPER_CLOTH 383
+#define ITEM_METAL_COAT 384
+//#define ITEM_LINK_CABLE 383 	
+/*#define ITEM_ABOMASITE 384	
 #define ITEM_ABOMASITE 385
 #define ITEM_ABSOLITE 386
 #define ITEM_AERODACTYLITE 399
@@ -565,7 +570,7 @@
 #define ITEM_LAGGING_TAIL 288
 #define ITEM_SHED_SHELL 289
 #define ITEM_BIG_ROOT 290
-#define ITEM_EVIOLITE 291
+#define 
 #define ITEM_FLOAT_STONE 292
 #define ITEM_ROCKY_HELMET 293
 #define ITEM_AIR_BALLOON 294
@@ -587,10 +592,13 @@
 #define ITEM_PSYCHIC_SEED 310
 #define ITEM_MISTY_SEED 311
 #define ITEM_GRASSY_SEED 312*/
+//END of 2nd set of Use items
 // Incenses
-#define ITEM_SEA_INCENSE 384
-#define ITEM_LAX_INCENSE 385 /*  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
-#define ITEM_ODD_INCENSE 386
+#define ITEM_SEA_INCENSE 385 
+#define ITEM_LAX_INCENSE 386
+#define ITEM_BLACK_SLUDGE 387
+#define ITEM_BAD_ONION 388 //  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
+/*#define ITEM_ODD_INCENSE 386
 #define ITEM_ROCK_INCENSE 387
 #define ITEM_FULL_INCENSE 388
 #define ITEM_WAVE_INCENSE 389
@@ -667,23 +675,22 @@
 #define ITEM_ADAMANT_ORB
 #define ITEM_LUSTROUS_ORB
 #define ITEM_GRISEOUS_ORB */
-#define ITEM_N_A 386 // keep this as last item value,   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
+#define ITEM_N_A 389 // keep this as last item value, needs be +1 last defined item value   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
 #define ITEMS_COUNT ITEM_N_A +1
 #define ITEM_FIELD_ARROW ITEM_N_A//field arrow isn't defined as an item, it just end of item_menu_icons.c list
 // Emerald   BUT based on list from vanilla its actually ID was equal to items N_A, circumventing that equation.
-#define ITEM_MAGMA_EMBLEM 388
-#define ITEM_OLD_SEA_MAP 389
+
 
 #define FIRST_BERRY_INDEX ITEM_CHERI_BERRY
 #define LAST_BERRY_INDEX ITEM_ENIGMA_BERRY
 #define ITEM_TO_BERRY(itemId)(((itemId - FIRST_BERRY_INDEX) + 1))
 
-#define NUM_TECHNICAL_MACHINES 50 //change to 120 later
+#define NUM_TECHNICAL_MACHINES 50 //change to 120 later  / or more plan to add on to tms I think for ease spreading certain moves
 #define NUM_HIDDEN_MACHINES     8
 
 // Check if the item is one that can be used on a Pokemon.
-#define IS_POKEMON_ITEM(item) ((item) >= ITEM_POTION && (item) <= ITEM_0B2)
-#define IS_POKEMON_ITEM2(item) ((item) >= ITEM_EV_SHACKLES && (item) <= ITEM_LINK_STONE)
+#define IS_POKEMON_ITEM(item) ((item) > ITEM_PREMIER_BALL && (item) < ITEM_PROTECTOR)
+#define IS_POKEMON_ITEM2(item) ((item) > ITEM_EV_SHACKLES && (item) < ITEM_SEA_INCENSE)
 //BECAUSE of this need to add mega stones in somewhere before to cutoff.
 // or copy function for define and create a new range, for IS_POKEMON_ITEM2
 //that way I can just add on to end. but before N_A

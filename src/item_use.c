@@ -59,6 +59,7 @@ static void InitBerryPouchFromBattle(void);
 static void InitTeachyTvFromBag(void);
 static void Task_InitTeachyTvFromField(u8 taskId);
 static void sub_80A19E8(u8 taskId);
+static void use_trainer_repel(u8 taskId);
 static void sub_80A1A44(void);
 static void sub_80A1B48(u8 taskId);
 static void sub_80A1C08(u8 taskId);
@@ -462,6 +463,12 @@ static void InitTMCaseFromBag(void)
     InitTMCase(0, CB2_BagMenuFromStartMenu, 0);
 }
 
+void FieldUseFunc_AbilityCapsule(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_AbilityCapsule;
+    sub_80A16D0(taskId);
+}
+
 static void Task_InitTMCaseFromField(u8 taskId)
 {
     if (!gPaletteFade.active)
@@ -559,12 +566,35 @@ void FieldUseFunc_SuperRepel(u8 taskId)
         DisplayItemMessageInBag(taskId, 2, gUnknown_841659E, Task_ReturnToBagFromContextMenu);
 }
 
+void FieldUseFunc_BadOnion(u8 taskId)
+{
+    if (VarGet(VAR_TRAINER_REPEL_STEP_COUNT) == 0)
+    {
+        PlaySE(SE_REPEL);
+        gTasks[taskId].func = use_trainer_repel;
+    }
+    else
+        // An earlier repel is still in effect
+        DisplayItemMessageInBag(taskId, 2, gUnknown_841659E, Task_ReturnToBagFromContextMenu);
+}
+
 static void sub_80A19E8(u8 taskId)
 {
     if (!IsSEPlaying())
     {
         ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, NULL, gSpecialVar_ItemId, 0xFFFF);
         VarSet(VAR_REPEL_STEP_COUNT, ItemId_GetHoldEffectParam(gSpecialVar_ItemId));
+        sub_80A1A44();
+        DisplayItemMessageInBag(taskId, 2, gStringVar4, Task_ReturnToBagFromContextMenu);
+    }
+}
+
+static void use_trainer_repel(u8 taskId)
+{
+    if (!IsSEPlaying())
+    {
+        ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, NULL, gSpecialVar_ItemId, 0xFFFF);
+        VarSet(VAR_TRAINER_REPEL_STEP_COUNT, ItemId_GetHoldEffectParam(gSpecialVar_ItemId));
         sub_80A1A44();
         DisplayItemMessageInBag(taskId, 2, gStringVar4, Task_ReturnToBagFromContextMenu);
     }
