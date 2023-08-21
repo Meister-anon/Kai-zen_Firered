@@ -10,19 +10,27 @@
 * 1.Make file update -				done
 * 2.Summary screen nature color -	done
 * 3.Super multiplier update -		done
-* .type chart -						done
+* .type chart -						done    -added additional type tweak chart is now finalized
 * 4.species names update -			done
-* 5.base stats
+* 5.base stats -                    done
 * 6.friendship rework -				done (missing base stats changes)
 * 7.ability constant ability data  -  done
 * 8.move info data file and move constants -  done
-* .move effect constants update 
-* . then port battle moves back
+* .move effect constants update  -      done
+* . then port battle moves back -       done
 * .summary screen ui
 * .battle ui
 * .name expansion -					partial
 * pokedex ui.
 * removal of lg pokedex entries.
+*.added item values back -          done
+*.port battlescripts defines strings & messages
+*.battle script commands & macros
+*.battle anim commands & macros
+*.after that can attempt port battlescript 1s 2s
+*
+* move trainer tower data to C file so can remove data_8479668.s
+*
 * emerald stye naming screen. for intro, add fade in for rival rename nvm
 * .change namign screens for player to load like rival,  start in center like normal
 * then move off to the side and load a message box w names when asking your name
@@ -43,6 +51,7 @@
 * track the value of data[1]   as I step through the intro?
 *
 * didnt debug, removed destory sprite with a reverse slide seems to work as of yet haven't seen another glitch
+*saw it once, unsure if because hadn't made clean, just putting off having to actually debug this -_-
 * 
 * #if defined(FIRERED)   
 * #elif defined(LEAFGREEN)
