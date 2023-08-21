@@ -41,6 +41,8 @@
 * kurausukun recommends "Either use print debugging or track relevant variables in gdb"
 * to debug it, says it should be able to find the issue I guess I would need to 
 * track the value of data[1]   as I step through the intro?
+*
+* didnt debug, removed destory sprite with a reverse slide seems to work as of yet haven't seen another glitch
 * 
 * #if defined(FIRERED)   
 * #elif defined(LEAFGREEN)
