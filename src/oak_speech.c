@@ -1045,7 +1045,7 @@ static void Task_OakSpeech16(u8 taskId) //new beginnning of rename loop
         }
         else
         {
-            OaksSpeechPrintMessage(gOakText_TellMeALittleAboutYourself, sOakSpeechResources->textSpeed);
+            OaksSpeechPrintMessage(gOakText_TellMeALittleAboutYourself, sOakSpeechResources->textSpeed); 
             gTasks[taskId].func = Task_OakSpeech17;
         }
     }
@@ -1058,7 +1058,7 @@ static void Task_OakSpeech17(u8 taskId)
     if (!IsTextPrinterActive(0))
     {
         ClearDialogWindowAndFrame(0, 1);
-        CreateFadeInTask(taskId, 2);
+        CreateFadeInTask(taskId, 2); 
         data[3] = 48;
         gTasks[taskId].func = Task_OakSpeech18;
     }
@@ -1086,6 +1086,8 @@ static void Task_OakSpeech19(u8 taskId)
 {
     if (!IsTextPrinterActive(0))
     {
+        gSpriteCoordOffsetX = 0; //reset values back to center in pret for slide on reset
+        ChangeBgX(2, 0, 0); 
         gTasks[taskId].data[13] = AddWindow(&sNewGameAdventureIntroWindowTemplates[1]);
         PutWindowTilemap(gTasks[taskId].data[13]);
         DrawStdFrameWithCustomTileAndPalette(gTasks[taskId].data[13], 1, GetStdWindowBaseTileNum(), 14);
@@ -1265,6 +1267,9 @@ static void Task_OakSpeech29(u8 taskId)
             PlaySE(SE_SELECT);
             ClearStdWindowAndFrameToTransparent(data[13], TRUE);
             RemoveWindow(data[13]);
+          //  DestroyOaksSpeechTrainerPic(); //had to add this to remove sprite first so looks good
+           // gSpriteCoordOffsetX = 0; //reset values back to center in pret for slide on reset
+           // ChangeBgX(2, 0, 0); 
             gTasks[taskId].func = Task_OakSpeech16;
             break;
         }
@@ -1685,7 +1690,7 @@ static void CB2_ReturnFromNamingScreen(void)
             LoadOaksSpeechTrainerPic(2, 0);
         gTasks[taskId].data[1] = -60;
         gSpriteCoordOffsetX += 60;
-        ChangeBgX(2, -0x3C00, 0);
+        ChangeBgX(2, -0x3E00, 0);
         CreatePikaOrGrassPlatformSpriteAndLinkToCurrentTask(taskId, 1);
         gTasks[taskId].data[15] = 1;
         break;
