@@ -1195,12 +1195,13 @@ static void Task_OakSpeech35(u8 taskId) //important slide sprite to the right, a
     //ok I konw it executes both blocks before going to 29
     if (!IsTextPrinterActive(0)) //want to just move pic if it was centered but not on redisplay for player naming
     {
-        if (data[1] > -60)
+        if (data[1] > -60) //data[1] is set to 0 right before this in oakspeech23,  oakspeech18 sets it to -60 (also decrement data[3]?) os18 is first instance of data[1]
         {
-            data[1] -= 2;
-            //ChangeBgX(2, -0x3C00, 0);
-            gSpriteCoordOffsetX = 64; //but commenting this out moves character but not the circle it stands on..
-            ChangeBgX(2, -0x3C00, 0);//commenting this keeps character from moving (think it slides the backgruond image to simulate movement?)
+            data[1] -= 2; //if this is removed function can't work/continue, think may need to just completely change how this function works/undestand data[1]
+            //gSpriteCoordOffsetX = 64; using this pair fixes drift issue, but isn't a smooth transition...
+	    //ChangeBgX(2, -0x3C00, 0);
+	    gSpriteCoordOffsetX += 2;//but commenting this out moves character but not the circle it stands on..
+            ChangeBgX(2, 0x200, 2);//commenting this keeps character from moving (think it slides the backgruond image to simulate movement?)
         }
         else
         {
