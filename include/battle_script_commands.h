@@ -21,6 +21,8 @@ void HandleBattleWindow(u8 xStart, u8 yStart, u8 xEnd, u8 yEnd, u8 flags);
 u8 GetBattlerTurnOrderNum(u8 battlerId);
 void BufferMoveToLearnIntoBattleTextBuff2(void);
 
+extern const u16 gCriticalHitChance[];	//made global, so can run in ai file
+
 extern void (* const gBattleScriptingCommandsTable[])(void);
 
 #endif // GUARD_BATTLE_SCRIPT_COMMANDS_H

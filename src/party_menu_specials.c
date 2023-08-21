@@ -44,7 +44,7 @@ static void sub_80BF97C(u8 taskId)
 void SelectMoveDeleterMove(void)
 {
     ShowSelectMovePokemonSummaryScreen(gPlayerParty, gSpecialVar_0x8004, gPlayerPartyCount - 1, CB2_ReturnToField, 0);
-    sub_8138B38(3);
+    SetPokemonSummaryScreenMode(3);
     gFieldCallback = FieldCB_ContinueScriptHandleMusic;
 }
 

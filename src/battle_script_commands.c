@@ -591,13 +591,8 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atkF7_finishturn,
 };
 
-struct StatFractions
-{
-    u8 dividend;
-    u8 divisor;
-};
 
-static const struct StatFractions sAccuracyStageRatios[] =
+const struct StatFractions gAccuracyStageRatios[] =
 {
     {  33, 100 }, // -6
     {  36, 100 }, // -5
@@ -614,8 +609,14 @@ static const struct StatFractions sAccuracyStageRatios[] =
     {   3,   1 }, // +6
 };
 
-// The chance is 1/N for each stage.
-static const u16 sCriticalHitChance[] = { 16, 8, 4, 3, 2 };
+// The chance is 1/N for each stage. 0 - +4
+// value  1 would be 100% crit late gen has stage 3 & u as 100%, I could do that? would have   good dark deal synergy...
+//making my own version of crit stages, gen 2 high crit moves were +2 so 1/4, rather than making +2, I'll raise the value for stage 1
+//and keep stage 2 where it is, would make things mostly balance out since people use high crit w scope lens so it'll still be the same
+//its just not so bad without the scope boost,  just unsure if want to use value of 5 or 6
+//decied to use 6, way it balances out each stat would be about a 10% crit increase until stage 4
+//static const u16 sCriticalHitChance[] = { 16, 6, 4, 3, 1 };   values used for referenced, but moved to .h to make global use for ai file
+const u16 gCriticalHitChance[] = { 16, 6, 4, 3, 1 };
 
 static const u32 sStatusFlagsForMoveEffects[] =
 {
@@ -1125,8 +1126,8 @@ static void atk01_accuracycheck(void)
         // check Thunder on sunny weather
         if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY && gBattleMoves[move].effect == EFFECT_THUNDER)
             moveAcc = 50;
-        calc = sAccuracyStageRatios[buff].dividend * moveAcc;
-        calc /= sAccuracyStageRatios[buff].divisor;
+        calc = gAccuracyStageRatios[buff].dividend * moveAcc;
+        calc /= gAccuracyStageRatios[buff].divisor;
         if (gBattleMons[gBattlerAttacker].ability == ABILITY_COMPOUND_EYES)
             calc = (calc * 130) / 100; // 1.3 compound eyes boost
         if (WEATHER_HAS_EFFECT && gBattleMons[gBattlerTarget].ability == ABILITY_SAND_VEIL && gBattleWeather & WEATHER_SANDSTORM_ANY)
@@ -1240,12 +1241,12 @@ static void atk04_critcalc(void)
                 + (holdEffect == HOLD_EFFECT_SCOPE_LENS)
                 + 2 * (holdEffect == HOLD_EFFECT_LUCKY_PUNCH && gBattleMons[gBattlerAttacker].species == SPECIES_CHANSEY)
                 + 2 * (holdEffect == HOLD_EFFECT_LEEK && gBattleMons[gBattlerAttacker].species == SPECIES_FARFETCHD);
-    if (critChance >= NELEMS(sCriticalHitChance))
-        critChance = NELEMS(sCriticalHitChance) - 1;
+    if (critChance >= NELEMS(gCriticalHitChance))
+        critChance = NELEMS(gCriticalHitChance) - 1;
     if ((gBattleMons[gBattlerTarget].ability != ABILITY_BATTLE_ARMOR && gBattleMons[gBattlerTarget].ability != ABILITY_SHELL_ARMOR)
      && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
      && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
-     && !(Random() % sCriticalHitChance[critChance])
+     && !(Random() % gCriticalHitChance[critChance])
      && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))
      && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE))
         gCritMultiplier = 2;
@@ -7079,7 +7080,7 @@ static void atk97_tryinfatuating(void)
     personalityTarget = GetMonData(monTarget, MON_DATA_PERSONALITY);
     if (gBattleMons[gBattlerTarget].ability == ABILITY_OBLIVIOUS)
     {
-        gBattlescriptCurrInstr = BattleScript_ObliviousPreventsAttraction;
+        gBattlescriptCurrInstr = BattleScript_AbilityPreventsMoodShift;
         gLastUsedAbility = ABILITY_OBLIVIOUS;
         RecordAbilityBattle(gBattlerTarget, ABILITY_OBLIVIOUS);
     }

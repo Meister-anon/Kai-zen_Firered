@@ -434,7 +434,7 @@ static const struct PokedexScreenWindowGfx sUnknown_84520F4[] = {
     {.map = gUnknown_8440BD8, .pal = gUnknown_8443440},
     {.map = gUnknown_8441D54, .pal = gUnknown_8443500},
     {.map = gUnknown_844223C, .pal = gUnknown_8443540},
-    {.map = gUnknown_8E9C16C, .pal = gUnknown_8E9C14C},
+    //{.map = gUnknown_8E9C16C, .pal = gUnknown_8E9C14C},
     {.map = gUnknown_8442BC0, .pal = gUnknown_84435A0},
     {.map = gUnknown_8442EF8, .pal = gUnknown_84435C0},
     {.map = gUnknown_844318C, .pal = gUnknown_84435E0},

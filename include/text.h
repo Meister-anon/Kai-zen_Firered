@@ -143,9 +143,14 @@
 
 #define TEXT_SPEED_INSTANT 0
 
+#define TEXT_SPEED_FF 0xFF
+
 // Given as a text speed when all the text should be
 // loaded at once but not copied to vram yet.
-#define TEXT_SPEED_FF 0xFF
+#define TEXT_SKIP_DRAW TEXT_SPEED_FF //done to easily replace constant without removing it
+
+
+
 
 enum {
     FONT_SMALL,

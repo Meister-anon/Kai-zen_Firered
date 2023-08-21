@@ -89,4 +89,9 @@ void HandleAction_RunBattleScript(void);
 u8 GetMoveTarget(u16 move, u8 setTarget);
 u8 IsMonDisobedient(void);
 
+bool8 IsBattlerAlive(u8 battlerId);
+struct Pokemon *GetIllusionMonPtr(u32 battlerId);
+void ClearIllusionMon(u32 battlerId);
+bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
+
 #endif // GUARD_BATTLE_UTIL_H

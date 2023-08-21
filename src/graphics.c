@@ -1224,29 +1224,32 @@ const u16 gUnknown_8E99F24[] = INCBIN_U16("graphics/link_rfu/unk_8E9A168.gbapal"
 const u32 gEasyChatSelectGroupHelp_Tiles[] = INCBIN_U32("graphics/link_rfu/unk_8E99F44.4bpp.lz");
 const u32 gEasyChatModeIcons_Tiles[] = INCBIN_U32("graphics/link_rfu/unk_8E9A168.4bpp.lz");
 
-const u32 gUnknown_8E9A460[] = INCBIN_U32("graphics/interface/trainer_memo.4bpp.lz");
-const u32 gUnknown_8E9B310[] = INCBIN_U32("graphics/interface/trainer_memo_pal1.gbapal");
-const u32 gUnknown_8E9B3B0[] = INCBIN_U32("graphics/interface/trainer_memo_pal2.gbapal");
+//summary screen grahpics
+const u32 gPokeSumBgTiles[] = INCBIN_U32("graphics/interface/trainer_memo_phase5.4bpp.lz"); //hopefully final edits
+const u32 gTrainerMemoPal1[] = INCBIN_U32("graphics/interface/trainer_memo_pal1.gbapal"); //tileset seems only used for sum screen
+const u32 gUnknown_8E9B3B0[] = INCBIN_U32("graphics/interface/trainer_memo_pal2.gbapal");//so can safely edit set without causing issues elsewhere
 const u32 gUnknown_8E9B3D0[] = INCBIN_U32("graphics/interface/trainer_memo_pal3.gbapal");
 
-const u32 gUnknown_8E9B3F0[] = INCBIN_U32("graphics/interface/summary_exp_bar.4bpp.lz");
-const u32 gUnknown_8E9B4B8[] = INCBIN_U32("graphics/interface/summary_hp_bar.4bpp.lz");
-const u16 gUnknown_8E9B578[] = INCBIN_U16("graphics/interface/summary_exp_bar.gbapal"); // hp bar uses this too
+const u32 gPokeSummary_ExpBarTiles[] = INCBIN_U32("graphics/interface/summary_exp_bar.4bpp.lz");
+const u32 gPokeSummary_HpBarTiles[] = INCBIN_U32("graphics/interface/summary_hp_bar.4bpp.lz");
+const u16 gPokeSummary_ExpBarPals[] = INCBIN_U16("graphics/interface/summary_exp_bar.gbapal"); // hp bar uses this too
 
-const u32 gUnknown_8E9B598[] = INCBIN_U32("graphics/interface/trainer_memo.bin.lz");
-const u32 gUnknown_8E9B750[] = INCBIN_U32("graphics/interface/trainer_memo_2.bin.lz");
-const u32 gUnknown_8E9B950[] = INCBIN_U32("graphics/interface/trainer_memo_3.bin.lz");
-const u32 gUnknown_8E9BA9C[] = INCBIN_U32("graphics/interface/trainer_memo_4.bin.lz");
-const u32 gUnknown_8E9BBCC[] = INCBIN_U32("graphics/interface/trainer_memo_5.bin.lz");
+const u32 gBgTilemap_TrainerMemo_Details[] = INCBIN_U32("graphics/interface/trainer_memo.bin.lz");
+const u32 gBgTilemap_TrainerMemo_Stats[] = INCBIN_U32("graphics/interface/trainer_memo_2_updated.bin.lz");  //skils page tweaked image (done)
+const u32 gBgTilemap_PokeSum_MovesListForDelete[] = INCBIN_U32("graphics/interface/trainer_memo_3_Revised.bin.lz"); //graphic for moves page
+//const u32 gBgTilemap_PokeSum_MoveDetailsForDelete[] = INCBIN_U32("graphics/interface/trainer_memo_4.bin.lz"); //was graphic move selection
+const u32 gBgTilemap_PokeSum_MoveDetailsForDelete[] = INCBIN_U32("graphics/interface/trainer_memo_4_phase2.bin.lz"); //now extended move description field
+const u32 gBgTilemap_TrainerMemo_Egg[] = INCBIN_U32("graphics/interface/trainer_memo_5.bin.lz");
+//end summary
 
 const u16 gUnknown_8E9BD08[] = INCBIN_U16("graphics/unknown/unknown_E9BD08.gbapal"); // might be an alternate unused palette of the link_rfu gfx below.
 
 const u32 gEasyChatRedRectangularCursor_Tiles[] = INCBIN_U32("graphics/interface/link_rfu_frame.4bpp.lz");
-const u16 gUnknown_8E9BF28[] = INCBIN_U16("graphics/interface/link_rfu_frame.gbapal");
-const u32 gUnknown_8E9BF48[] = INCBIN_U32("graphics/interface/link_rfu_status.4bpp.lz");
+const u16 gPokeSummary_StatusAilmentIconPals[] = INCBIN_U16("graphics/interface/link_rfu_frame.gbapal");
+const u32 gPokeSummary_StatusAilmentIconTiles[] = INCBIN_U32("graphics/interface/link_rfu_status.4bpp.lz");
 
-const u16 gUnknown_8E9C14C[] = INCBIN_U16("graphics/interface/pokedex_abc.gbapal");
-const u16 gUnknown_8E9C16C[] = INCBIN_U16("graphics/interface/pokedex_abc.4bpp.lz");
+const u16 gDexScreen_TopMenuIconPals_AtoZ[] = INCBIN_U16("graphics/interface/pokedex_abc.gbapal");
+const u16 gDexScreen_TopMenuIconTiles_AtoZ[] = INCBIN_U16("graphics/interface/pokedex_abc.4bpp.lz");
 
 const u16 gPSSMenu_Pal[] = INCBIN_U16("graphics/interface/box_tiles_pal1.gbapal");
 const u16 gUnknown_8E9C3F8[] = INCBIN_U16("graphics/interface/box_tiles_pal2.gbapal");

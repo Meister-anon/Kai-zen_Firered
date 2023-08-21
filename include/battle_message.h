@@ -3,57 +3,72 @@
 
 #include "global.h"
 
-// for 0xFD
+// for 0xFD values in charmap.txt
+//what I don't understand is why we don't use the same names
+//as the actual buffer? If I used the actual names I wouldn't have to be guessing what I need to use.
 
-#define B_TXT_BUFF1 0x0
-#define B_TXT_BUFF2 0x1
-#define B_TXT_COPY_VAR_1 0x2
-#define B_TXT_COPY_VAR_2 0x3
-#define B_TXT_COPY_VAR_3 0x4
-#define B_TXT_PLAYER_MON1_NAME 0x5
-#define B_TXT_OPPONENT_MON1_NAME 0x6
-#define B_TXT_PLAYER_MON2_NAME 0x7
-#define B_TXT_OPPONENT_MON2_NAME 0x8
-#define B_TXT_LINK_PLAYER_MON1_NAME 0x9
-#define B_TXT_LINK_OPPONENT_MON1_NAME 0xA
-#define B_TXT_LINK_PLAYER_MON2_NAME 0xB
-#define B_TXT_LINK_OPPONENT_MON2_NAME 0xC
-#define B_TXT_ATK_NAME_WITH_PREFIX_MON1 0xD
-#define B_TXT_ATK_PARTNER_NAME 0xE
-#define B_TXT_ATK_NAME_WITH_PREFIX 0xF
-#define B_TXT_DEF_NAME_WITH_PREFIX 0x10
-#define B_TXT_EFF_NAME_WITH_PREFIX 0x11 // EFF = short for gEffectBank
-#define B_TXT_ACTIVE_NAME_WITH_PREFIX 0x12
-#define B_TXT_SCR_ACTIVE_NAME_WITH_PREFIX 0x13
-#define B_TXT_CURRENT_MOVE 0x14
-#define B_TXT_LAST_MOVE 0x15
-#define B_TXT_LAST_ITEM 0x16
-#define B_TXT_LAST_ABILITY 0x17
-#define B_TXT_ATK_ABILITY 0x18
-#define B_TXT_DEF_ABILITY 0x19
-#define B_TXT_SCR_ACTIVE_ABILITY 0x1A
-#define B_TXT_EFF_ABILITY 0x1B
-#define B_TXT_TRAINER1_CLASS 0x1C
-#define B_TXT_TRAINER1_NAME 0x1D
-#define B_TXT_LINK_PLAYER_NAME 0x1E
-#define B_TXT_LINK_PARTNER_NAME 0x1F
-#define B_TXT_LINK_OPPONENT1_NAME 0x20
-#define B_TXT_LINK_OPPONENT2_NAME 0x21
-#define B_TXT_LINK_SCR_TRAINER_NAME 0x22
-#define B_TXT_PLAYER_NAME 0x23
-#define B_TXT_TRAINER1_LOSE_TEXT 0x24
-#define B_TXT_TRAINER1_WIN_TEXT 0x25
-#define B_TXT_26 0x26
-#define B_TXT_PC_CREATOR_NAME 0x27
-#define B_TXT_ATK_PREFIX1 0x28
-#define B_TXT_DEF_PREFIX1 0x29
-#define B_TXT_ATK_PREFIX2 0x2A
-#define B_TXT_DEF_PREFIX2 0x2B
-#define B_TXT_ATK_PREFIX3 0x2C
-#define B_TXT_DEF_PREFIX3 0x2D
-#define B_TXT_TRAINER2_LOSE_TEXT 0x2E
-#define B_TXT_TRAINER2_WIN_TEXT 0x2F
-#define B_TXT_BUFF3 0x30
+#define B_BUFF1 0x0
+#define B_BUFF2 0x1
+#define B_COPY_VAR_1 0x2
+#define B_COPY_VAR_2 0x3
+#define B_COPY_VAR_3 0x4
+#define B_PLAYER_MON1_NAME 0x5
+#define B_OPPONENT_MON1_NAME 0x6
+#define B_PLAYER_MON2_NAME 0x7
+#define B_OPPONENT_MON2_NAME 0x8
+#define B_LINK_PLAYER_MON1_NAME 0x9
+#define B_LINK_OPPONENT_MON1_NAME 0xA
+#define B_LINK_PLAYER_MON2_NAME 0xB
+#define B_LINK_OPPONENT_MON2_NAME 0xC
+#define B_ATK_NAME_WITH_PREFIX_MON1 0xD
+#define B_ATK_PARTNER_NAME 0xE
+#define B_ATK_NAME_WITH_PREFIX 0xF  //B_ATK_NAME_WITH_PREFIX  names used in battle_message.c are determined by charmap.txt and match this list order 0xF here FD 0F there
+#define B_DEF_NAME_WITH_PREFIX 0x10
+#define B_EFF_NAME_WITH_PREFIX 0x11 // EFF = short for gEffectBank
+#define B_ACTIVE_NAME_WITH_PREFIX 0x12
+#define B_SCR_ACTIVE_NAME_WITH_PREFIX 0x13
+#define B_CURRENT_MOVE 0x14
+#define B_LAST_MOVE 0x15
+#define B_LAST_ITEM 0x16
+#define B_LAST_ABILITY 0x17
+#define B_ATK_ABILITY 0x18
+#define B_DEF_ABILITY 0x19
+#define B_SCR_ACTIVE_ABILITY 0x1A
+#define B_EFF_ABILITY 0x1B
+#define B_TRAINER1_CLASS 0x1C
+#define B_TRAINER1_NAME 0x1D
+#define B_LINK_PLAYER_NAME 0x1E
+#define B_LINK_PARTNER_NAME 0x1F
+#define B_LINK_OPPONENT1_NAME 0x20
+#define B_LINK_OPPONENT2_NAME 0x21
+#define B_LINK_SCR_TRAINER_NAME 0x22
+#define B_PLAYER_NAME 0x23
+#define B_TRAINER1_LOSE_TEXT 0x24
+#define B_TRAINER1_WIN_TEXT 0x25
+#define B_26 0x26
+#define B_PC_CREATOR_NAME 0x27
+#define B_ATK_PREFIX1 0x28
+#define B_DEF_PREFIX1 0x29
+#define B_ATK_PREFIX2 0x2A
+#define B_DEF_PREFIX2 0x2B
+#define B_ATK_PREFIX3 0x2C
+#define B_DEF_PREFIX3 0x2D
+#define B_TRAINER2_CLASS 0x2E
+#define B_TRAINER2_NAME 0x2F
+#define B_TRAINER2_LOSE_TEXT 0x30
+#define B_TRAINER2_WIN_TEXT 0x31
+#define B_PARTNER_CLASS 0x32
+#define B_PARTNER_NAME 0x33
+#define B_BUFF3 0x34
+#define B_ATK_TRAINER_NAME 0x35
+#define B_ATK_TRAINER_CLASS 0x36
+#define B_ATK_TEAM1 0x37 // Your/The opposing
+#define B_ATK_TEAM2 0x38 // your/the opposing
+#define B_DEF_NAME 0x39
+#define B_DEF_TEAM1 0x3A // Your/The opposing
+#define B_DEF_TEAM2 0x3B // your/the opposing
+#define B_ACTIVE_NAME 0x3C
+#define B_ACTIVE_NAME2 0x3D // no Illusion check
 
 // for B_TXT_BUFF1, B_TXT_BUFF2 and B_TXT_BUFF3
 
@@ -143,19 +158,19 @@
 {                                                               \
     textVar[0] = B_BUFF_PLACEHOLDER_BEGIN;                      \
     textVar[1] = B_BUFF_STRING;                                 \
-    textVar[2] = stringId;                                      \
+    textVar[2] = stringId & 0xFF;                               \
     textVar[3] = (stringId & 0xFF00) >> 8;                      \
     textVar[4] = B_BUFF_EOS;                                    \
-}
+}//ok way this works, can't have comments or spaces after  or between backslash stuff
 
 #define PREPARE_MOVE_BUFFER(textVar, move)                      \
 {                                                               \
     textVar[0] = B_BUFF_PLACEHOLDER_BEGIN;                      \
     textVar[1] = B_BUFF_MOVE;                                   \
-    textVar[2] = move;                                          \
+    textVar[2] = (move & 0xFF);                                 \
     textVar[3] = (move & 0xFF00) >> 8;                          \
     textVar[4] = B_BUFF_EOS;                                    \
-}
+}//changed  textvar 2 from just move; w update of levelup move struct
 
 #define PREPARE_ITEM_BUFFER(textVar, item)                      \
 {                                                               \
@@ -193,6 +208,8 @@
     textVar[4] = B_BUFF_EOS;                                    \
 }
 
+#define TEXT_BUFF_ARRAY_COUNT   17
+
 struct BattleMsgData
 {
     u16 currentMove;
@@ -205,7 +222,7 @@ struct BattleMsgData
     u8 itemEffectBattler;
     u8 moveType;
     u16 abilities[4];
-    u8 textBuffs[3][0x10];
+    u8 textBuffs[3][TEXT_BUFF_ARRAY_COUNT];
 };
 
 void BufferStringBattle(u16 stringID);
@@ -219,9 +236,8 @@ bool8 BattleStringShouldBeColored(u16);
 
 extern struct BattleMsgData *gBattleMsgDataPtr;
 
-#define TEXT_BUFF_ARRAY_COUNT   16
 
-extern u8 gDisplayedStringBattle[300];
+extern u8 gDisplayedStringBattle[380];
 extern u8 gBattleTextBuff1[TEXT_BUFF_ARRAY_COUNT];
 extern u8 gBattleTextBuff2[TEXT_BUFF_ARRAY_COUNT];
 extern u8 gBattleTextBuff3[TEXT_BUFF_ARRAY_COUNT];

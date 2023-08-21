@@ -4121,9 +4121,10 @@ BattleScript_PSNPrevention::
 	waitmessage 0x40
 	return
 
-BattleScript_ObliviousPreventsAttraction::
+@use for oblivious & unaware extra effect prevention  was oblivious attraction prevention
+BattleScript_AbilityPreventsMoodShift::
 	pause 0x20
-	printstring STRINGID_PKMNPREVENTSROMANCEWITH
+	printstring STRINGID_PKMNIGNOREDADVANCESWITH
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
@@ -4169,7 +4170,7 @@ BattleScript_RoughSkinActivates::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
-	printstring STRINGID_PKMNHURTSWITH
+	printstring STRINGID_PKMNHURTSWITHABILITY
 	waitmessage 0x40
 	tryfaintmon BS_ATTACKER, 0, NULL
 	return

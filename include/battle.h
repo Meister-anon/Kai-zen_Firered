@@ -81,7 +81,7 @@
 #define B_FLAG_FORCE_DOUBLE_WILD    0     // If this flag is set, all land and surfing wild battles will be double battles.
 #define B_SMART_WILD_AI_FLAG        1     // If not 0, you can set this flag in a script to enable smart wild pokemon
 #define B_FLAG_NO_BAG_USE           0     // If this flag is set, the ability to use the bag in battle is disabled.
-#define B_FLAG_NO_CATCHING          0     // If this flag is set, the ability to catch wild Pokémon is disabled.
+#define B_FLAG_NO_CATCHING          0     // If this flag is set, the ability to catch wild Pokï¿½mon is disabled.
 
 
 struct TrainerMonNoItemDefaultMoves
@@ -381,6 +381,29 @@ struct LinkPartnerHeader
     struct BattleEnigmaBerry battleEnigmaBerry;
 };
 
+struct Illusion
+{
+    u8 on;
+    u8 set;
+    u8 broken;
+    u8 partyId;
+    struct Pokemon *mon;
+};
+
+struct StolenItem
+{
+    u16 originalItem : 15;
+    u16 stolen : 1;
+};
+
+struct StatFractions
+{
+    u8 dividend;
+    u8 divisor;
+};
+
+extern const struct StatFractions gAccuracyStageRatios[];
+
 struct BattleStruct
 {
     u8 turnEffectsTracker;
@@ -422,15 +445,16 @@ struct BattleStruct
     u8 formToChangeInto;
     u8 chosenMovePositions[MAX_BATTLERS_COUNT];
     u8 stateIdAfterSelScript[MAX_BATTLERS_COUNT];
-    u8 field_88; // unused
+    struct Illusion illusion[MAX_BATTLERS_COUNT];
+    /*u8 field_88; // unused
     u8 field_89; // unused
-    u8 field_8A; // unused
+    u8 field_8A; // unused */
     u8 playerPartyIdx;
-    u8 field_8C; // unused
-    u8 field_8D; // unused
+    //u8 field_8C; // unused
+    //u8 field_8D; // unused
     u8 stringMoveType;
     u8 expGetterBattlerId;
-    u8 field_90; // unused
+    //u8 field_90; // unused
     u8 absentBattlerFlags;
     u8 AI_monToSwitchIntoId[2];
     u8 simulatedInputState[4];  // used by Oak/Old Man/Pokedude controllers
@@ -674,6 +698,7 @@ extern u16 gLastUsedItem;
 extern u32 gBattleTypeFlags;
 extern struct MonSpritesGfx *gMonSpritesGfxPtr;
 extern u16 gTrainerBattleOpponent_A;
+extern u16 gTrainerBattleOpponent_B;
 extern u16 gMoveToLearn;
 extern u16 gBattleMovePower;
 extern struct BattleEnigmaBerry gEnigmaBerries[MAX_BATTLERS_COUNT];

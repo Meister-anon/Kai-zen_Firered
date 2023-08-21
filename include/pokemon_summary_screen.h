@@ -12,7 +12,7 @@ void SummaryScreen_SetUnknownTaskId(u8 a0);
 void SummaryScreen_DestroyUnknownTask(void);
 u8 GetLastViewedMonIndex(void);
 void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, void (*callback)(void), u8 a4);
-void sub_8138B38(u8);
+void SetPokemonSummaryScreenMode(u8);
 
 //sLevelNickTextColors
 #define WHITE 0
