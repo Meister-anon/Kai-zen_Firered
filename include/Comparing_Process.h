@@ -18,13 +18,15 @@
 * 8.move info data file and move constants -  done
 * .move effect constants update  -      done
 * . then port battle moves back -       done
-* .summary screen ui
+* .summary screen ui -                  done
 * .battle ui
 * .name expansion -					partial
 * pokedex ui.
 * removal of lg pokedex entries.
+*.apparently didn't add new ability desc in pokemon summary screen update
+* before computer crashed so implementation incomplete...
 *.added item values back -          done
-*.port battlescripts defines strings & messages
+*.port battlescripts defines strings & messages -  done
 *.battle script commands & macros
 *.battle anim commands & macros
 *.after that can attempt port battlescript 1s 2s
