@@ -6,7 +6,7 @@
 //and clear change list, for easy tracking of files to be moved for commit.
 /*
 * Will need to do piece meal updates not entire files but portions
-//file for updating repo to main branch head
+* 
 * 1.Make file update -				done
 * 2.Summary screen nature color -	done
 * 3.Super multiplier update -		done
@@ -16,20 +16,40 @@
 * 6.friendship rework -				done (missing base stats changes)
 * 7.ability constant ability data  -  done
 * 8.move info data file and move constants -  done
-* .move effect constants update  - done
+* .move effect constants update 
 * . then port battle moves back
 * .summary screen ui
 * .battle ui
 * .name expansion -					partial
 * pokedex ui.
 * removal of lg pokedex entries.
-* emerald stye naming screen. for intro, add fade in for rival rename nvm don't need change rival
-* port back dynamic starters
-* .move effects functions
-* .ability effects functions
+* emerald stye naming screen. for intro, add fade in for rival rename nvm
+* .change namign screens for player to load like rival,  start in center like normal
+* then move off to the side and load a message box w names when asking your name
+* but keep emerald style gender swap fade in
+* (it alraedy exists just need to swap order, right now its the view shown
+* when confirming your name) remember change starting names
+* Blue for rival, Red for Male player  Green for female player (also add Fire & Leaf as Male/ Female names)
+* think will potentially keep Red as a random option for female player if rom is red
+* and Green asa random option for male player if rom is leaf green
+* 
+* 
+* menu cahnges worked, but from wh;at; I can tell thre's still a strange shift/glitch
+* that only occurs when I go to naming screen and then press B to return to gender select
+* and select a DIFFERENT gender than the one I was using (i.e go from male to female or female to male)
+* 
+* kurausukun recommends "Either use print debugging or track relevant variables in gdb"
+* to debug it, says it should be able to find the issue I guess I would need to 
+* track the value of data[1]   as I step through the intro?
+* 
+* #if defined(FIRERED)   
+* #elif defined(LEAFGREEN)
+* #endif		-use these  they are defined at run time, so don't need to use both and be equal
+* 
+* .move effects
+* .ability effects
 * .battle script
 * .move animations
-
 * . attempt setup sMonSpriteAnchorCoords x y & placement of mon sprite on pokedex screen w constants
 * based on height and mon elevation will put exact arrays here shortly 
 * -do this after pokedex port
