@@ -6167,81 +6167,97 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
     }
 }
 
+enum
+{
+    HP,
+    ATTACK,
+    DEFENSE,
+    SPEED,
+    SP_ATTACK,
+    SP_DEFENSE,
+};
+
+//removed battle evs just need to add power items and custom item changes
+//for the new system will need to change ultima brace to work like exp share idea
+//where it registers a pokemon, and activates on top of any held items
+#define EV_GAIN //Made edits, if works, ev changes are done
+
 void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function doesn't use exp, it proves ev gain is separate from exp gain.
-{ //                                            this means making an item to 0 out exp gain wouldn't break exp gain.
-    u16 evs[NUM_STATS]; //per stat evs                That means I can still hvae my item that blocks exp, and one that blocks ev but not exp.
+{ //                                            this means making an item to 0 out exp gain wouldn't break ev gain.
+    u16 evs[NUM_STATS]; //per stat evs                
     u16 evIncrease = 0;
     u16 totalEVs = 0;
+    u8 MinEv_GAIN = 4;  //adjust this to change how many evs gained by macho brace, trainer items etc.  base multipliers rely on
     u16 heldItem;
     u8 holdEffect;
+    u8 hasHadPokerus;
+    int multiplier = 1; //base multiplier, but with how it used, best to think of it more as an exponent, as changing this will shift others exponentially
     int i;
 
-    for (i = 0; i < NUM_STATS; i++)
+    for (i = 0; i < NUM_STATS; i++)//totalling stats
     {
-        evs[i] = GetMonData(mon, MON_DATA_HP_EV + i, 0);
+        evs[i] = GetMonData(mon, MON_DATA_HP_EV + i, NULL);
         totalEVs += evs[i];
     }
 
-    for (i = 0; i < NUM_STATS; i++)
+    heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
+
+    if (heldItem == ITEM_ENIGMA_BERRY)
     {
-        u8 hasHadPokerus;
-        int multiplier;
-
-        if (totalEVs >= MAX_TOTAL_EVS) //ok figured out how to block ev gain, when the item is in effect make max total evs = totalEVs. for the hold effect
-            break; // it needs to specifically be that, Max total == totalEVS, the other way around would increase pokemons evs.
-
-        hasHadPokerus = CheckPartyHasHadPokerus(mon, 0);
-
-        if (hasHadPokerus)
-            multiplier = 2;
+        if (gMain.inBattle)
+            holdEffect = gEnigmaBerries[0].holdEffect;
         else
-            multiplier = 1;
+            holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
+    }
+    else
+    {
+        holdEffect = ItemId_GetHoldEffect(heldItem);
+    }
+    //for entire function, 
+    hasHadPokerus = CheckPartyHasHadPokerus(mon, 0);
+
+    //made multipliers inclusively stacking, more logical
+    if (hasHadPokerus)
+        multiplier *= 2;
+    if (holdEffect == HOLD_EFFECT_ULTIMA_BRACE)
+        multiplier *= 3;
+    if (holdEffect == HOLD_EFFECT_POWERITEM)
+        multiplier *= 2;
+
+    //if holdeffect is a power item, i for switch case equals helditem secondary item  ItemId_GetSecondaryId
+
+    if (holdEffect == HOLD_EFFECT_POWERITEM)    //should be ev gain separate from macho brace loop, so I can safely increase a single stat 
+    {
+        i = ItemId_GetSecondaryId(heldItem);    //held item guaranteed to be, one of power items, this filters specific one, also used as discriminator for which ev to raise
 
         switch (i)
         {
-        case 0:
-            evIncrease = gBaseStats[defeatedSpecies].evYield_HP * multiplier;
+        case HP:
+            evIncrease = MinEv_GAIN * multiplier;
             break;
-        case 1:
-            evIncrease = gBaseStats[defeatedSpecies].evYield_Attack * multiplier;
+        case ATTACK:
+            evIncrease = MinEv_GAIN * multiplier;
             break;
-        case 2:
-            evIncrease = gBaseStats[defeatedSpecies].evYield_Defense * multiplier;
+        case DEFENSE:
+            evIncrease = MinEv_GAIN * multiplier;
             break;
-        case 3:
-            evIncrease = gBaseStats[defeatedSpecies].evYield_Speed * multiplier;
+        case SPEED:
+            evIncrease = MinEv_GAIN * multiplier;
             break;
-        case 4:
-            evIncrease = gBaseStats[defeatedSpecies].evYield_SpAttack * multiplier;
+        case SP_ATTACK:
+            evIncrease = MinEv_GAIN * multiplier;
             break;
-        case 5:
-            evIncrease = gBaseStats[defeatedSpecies].evYield_SpDefense * multiplier;
+        case SP_DEFENSE:
+            evIncrease = MinEv_GAIN * multiplier;
             break;
         }
 
-        heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
-
-        if (heldItem == ITEM_ENIGMA_BERRY)
-        {
-            if (gMain.inBattle)
-                holdEffect = gEnigmaBerries[0].holdEffect;
-            else
-                holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
-        }
-        else
-        {
-            holdEffect = ItemId_GetHoldEffect(heldItem);
-        }
-
-        if (holdEffect == HOLD_EFFECT_MACHO_BRACE) //need to figure to re add power items, and effect plus gen 6 exp share
-            evIncrease *= 2;
-
-        if (totalEVs + (s16)evIncrease > MAX_TOTAL_EVS)
+        if (totalEVs + (s16)evIncrease > MAX_TOTAL_EVS) //total ev cap
             evIncrease = ((s16)evIncrease + MAX_TOTAL_EVS) - (totalEVs + evIncrease);
 
-        if (evs[i] + (s16)evIncrease > 564) //ev cap
+        if (evs[i] + (s16)evIncrease > MAX_PER_STAT_EVS) //ev cap
         {
-            int val1 = (s16)evIncrease + 564;
+            int val1 = (s16)evIncrease + MAX_PER_STAT_EVS;
             int val2 = evs[i] + evIncrease;
             evIncrease = val1 - val2;
         }
@@ -6250,12 +6266,65 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
         totalEVs += evIncrease;
         SetMonData(mon, MON_DATA_HP_EV + i, &evs[i]);
 
-        if (holdEffect == HOLD_EFFECT_EV_SHACKLES)
-            MAX_TOTAL_EVS == totalEVs;
-
-        if (holdEffect == HOLD_EFFECT_ULTIMA_BRACE)
-            evIncrease *= 5;
     }
+
+    for (i = 0; i < NUM_STATS; i++) //adding stats
+    {
+
+
+        if (totalEVs >= MAX_TOTAL_EVS) //ok figured out how to block ev gain, when the item is in effect make max total evs = totalEVs. for the hold effect
+            break; // it needs to specifically be that, Max total == totalEVS, the other way around would increase pokemons evs.
+
+
+
+        if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE))    //should loop each stat and add evs for every stat
+        {
+            switch (i)
+            {
+            case HP:
+                evIncrease = MinEv_GAIN * multiplier;
+                break;
+            case ATTACK:
+                evIncrease = MinEv_GAIN * multiplier;
+                break;
+            case DEFENSE:
+                evIncrease = MinEv_GAIN * multiplier;
+                break;
+            case SPEED:
+                evIncrease = MinEv_GAIN * multiplier;
+                break;
+            case SP_ATTACK:
+                evIncrease = MinEv_GAIN * multiplier;
+                break;
+            case SP_DEFENSE:
+                evIncrease = MinEv_GAIN * multiplier;
+                break;
+            }
+        }
+
+
+        //if (holdEffect == HOLD_EFFECT_MACHO_BRACE) //need to figure to re add power items, and effect plus gen 6 exp share
+          //  evIncrease *= 2;    //this is for calculating number of evs, not for the gain itself
+
+
+
+        if (totalEVs + (s16)evIncrease > MAX_TOTAL_EVS) //total ev cap
+            evIncrease = ((s16)evIncrease + MAX_TOTAL_EVS) - (totalEVs + evIncrease);
+
+        if (evs[i] + (s16)evIncrease > MAX_PER_STAT_EVS) //ev cap
+        {
+            int val1 = (s16)evIncrease + MAX_PER_STAT_EVS;
+            int val2 = evs[i] + evIncrease;
+            evIncrease = val1 - val2;
+        }
+
+        evs[i] += evIncrease;
+        totalEVs += evIncrease;
+        SetMonData(mon, MON_DATA_HP_EV + i, &evs[i]);
+
+    }
+    //ev shackles and ultima brace will no longer work with 
+    //current change to ev gain, so will have to adjust somehow  maybe make like gen 1 exp share, make it a key item that switches on off
 }
 
 u16 GetMonEVCount(struct Pokemon *mon)

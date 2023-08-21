@@ -178,12 +178,12 @@ struct BattlePokemon
     /*0x16*/ u32 spAttackIV:5;
     /*0x17*/ u32 spDefenseIV:5;
     /*0x17*/ u32 isEgg:1;
-    /*0x17*/ u32 abilityNum:1;
+    /*0x17*/ u32 abilityNum:2;
     /*0x18*/ s8 statStages[BATTLE_STATS_NO];
     /*0x20*/ u16 ability;
     /*0x21*/ u8 type1;
     /*0x22*/ u8 type2;
-    /*0x23*/ u8 unknown;
+    /*0x23*/ u8 type3; //no space change replaced unknown
     /*0x24*/ u8 pp[4];
     /*0x28*/ u16 hp;
     /*0x2A*/ u8 level;
@@ -195,9 +195,10 @@ struct BattlePokemon
     /*0x3C*/ u8 otName[8];
     /*0x44*/ u32 experience;
     /*0x48*/ u32 personality;
-    /*0x4C*/ u32 status1;
-    /*0x50*/ u32 status2;
-    /*0x54*/ u32 otId;
+    /*0x4C*/ u32 status1;   //stays on switch
+    /*0x50*/ u32 status2;   //temp status lost on switch
+    /*0x54*/ u32 status4;   //new addition  for new statuses mostly for new wrap effects, plan to make equivalent of status2
+    /*0x58*/ u32 otId; //may not need status4 in struct status3 & 4 seem to work through gstatuses3 & gstatus4 the same as status 2 already?
 };
 
 struct BaseStats  // had to adjust struct order to match paste value from base_stats.h
@@ -212,12 +213,12 @@ struct BaseStats  // had to adjust struct order to match paste value from base_s
  /* 0x07 */ u8 type2;
  /* 0x08 */ u8 catchRate;
  /* 0x09 */ u16 expYield;
- /* 0x0A */ u16 evYield_HP:2;
- /* 0x0A */ u16 evYield_Attack:2;
- /* 0x0A */ u16 evYield_Defense:2;
- /* 0x0A */ u16 evYield_Speed:2;
- /* 0x0B */ u16 evYield_SpAttack:2;
- /* 0x0B */ u16 evYield_SpDefense:2;
+ /* 0x0A */ //u16 evYield_HP:2; //not using these so might as well remove from struct to save room
+ /* 0x0A */ //u16 evYield_Attack:2;
+ /* 0x0A */ //u16 evYield_Defense:2;
+ /* 0x0A */ //u16 evYield_Speed:2;
+ /* 0x0B */ //u16 evYield_SpAttack:2;
+ /* 0x0B */ //u16 evYield_SpDefense:2;
  /* 0x0C */ u16 item1;
  /* 0x0E */ u16 item2;
  /* 0x10 */ u8 genderRatio;
@@ -226,9 +227,9 @@ struct BaseStats  // had to adjust struct order to match paste value from base_s
  /* 0x13 */ u8 growthRate;
  /* 0x14 */ u8 eggGroup1;
  /* 0x15 */ u8 eggGroup2;
- /* 0x16 */ u16 abilities[2];
+ /* 0x16 */ u16 abilities[2]; //[partysize] is 6 values, so this is ability 1 and ability 2, doesn't include hidden //this means 2 states, 0 & 1
  /* 0x1A */ u8 safariZoneFleeRate;
- /* 0x1B */ u16 abilityHidden;
+ /* 0x1B */ u16 abilityHidden[2]; //need to make sure ability num can be 2, then set that as hidden ability
  /* 0x1D */ u8 bodyColor : 7;
             u8 noFlip : 1;
  /* 0x1E */ u8 flags;
@@ -236,30 +237,65 @@ struct BaseStats  // had to adjust struct order to match paste value from base_s
 
 struct BattleMove
 {
-    u8 effect;
+    u16 effect;
     u8 power;
     u8 type;
     u8 accuracy;
     u8 pp;
     u8 secondaryEffectChance;
-    u8 target;
+    u16 target;
     s8 priority;
-    u8 flags;
-};
+    u32 flags; // is u32 in emerald, might not need to do that, will ask //they use a lot of move flags will update
+    u8 split;
+    u16 argument;// for transferring move effects
+    u8 argumentEffectChance; // setup status commands and seteffectwithchance function to read this as a value explicitly for argument
+    //would possibly need to redo setup for effects that become certain without reading effectchance nvm it works 
+    //Argument works by passive value of argument to battlescript.moveeffect
+    //so just do a check in seteffectwithchance that checks if  battlescripting.moveeffect equals gbattlemons[move].effect or the argument
+    //if it equals the argument use argument chance, that means it has already done the effect
+    //and has passed the arugment over so it can use the argument chance
+};//without u32 flags, type overflowed with added moves
+//argument is for extra effects other than secondary effect
 
 extern const struct BattleMove gBattleMoves[];
 
-#define FLAG_MAKES_CONTACT          0x1
-#define FLAG_PROTECT_AFFECTED       0x2
-#define FLAG_MAGICCOAT_AFFECTED     0x4
-#define FLAG_SNATCH_AFFECTED        0x8
-#define FLAG_MIRROR_MOVE_AFFECTED   0x10
-#define FLAG_KINGSROCK_AFFECTED     0x20
+// Battle move flags
+#define FLAG_MAKES_CONTACT          (1 << 0)
+#define FLAG_PROTECT_AFFECTED       (1 << 1)
+#define FLAG_MAGIC_COAT_AFFECTED    (1 << 2)
+#define FLAG_SNATCH_AFFECTED        (1 << 3)
+#define FLAG_MIRROR_MOVE_AFFECTED   (1 << 4)
+#define FLAG_KINGS_ROCK_AFFECTED    (1 << 5)
+#define FLAG_HIGH_CRIT              (1 << 6)
+#define FLAG_RECKLESS_BOOST         (1 << 7)
+#define FLAG_IRON_FIST_BOOST        (1 << 8)
+#define FLAG_SHEER_FORCE_BOOST      (1 << 9)
+#define FLAG_STRONG_JAW_BOOST       (1 << 10)
+#define FLAG_MEGA_LAUNCHER_BOOST    (1 << 11)
+#define FLAG_STAT_STAGES_IGNORED    (1 << 12)
+#define FLAG_DMG_MINIMIZE           (1 << 13)
+#define FLAG_DMG_UNDERGROUND        (1 << 14)
+#define FLAG_DMG_UNDERWATER         (1 << 15)
+#define FLAG_SOUND                  (1 << 16)
+#define FLAG_BALLISTIC              (1 << 17)
+#define FLAG_PROTECTION_MOVE        (1 << 18)
+#define FLAG_POWDER                 (1 << 19)
+#define FLAG_TARGET_ABILITY_IGNORED (1 << 20)
+#define FLAG_DANCE                  (1 << 21)
+#define FLAG_DMG_2X_IN_AIR          (1 << 22) // If target is in the air, can hit and deal double damage.
+#define FLAG_DMG_IN_AIR             (1 << 23) // If target is in the air, can hit.
+#define FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING (1 << 24) // Makes a Ground type move do 1x damage to flying and levitating targets
+#define FLAG_THAW_USER                            (1 << 25)
+#define FLAG_HIT_IN_SUBSTITUTE                    (1 << 26) // Hyperspace Fury
+#define FLAG_TWO_STRIKES                          (1 << 27) // A move with this flag will strike twice, and may apply its effect on each hit
+#define FLAG_ROCK_HEAD_BOOST    (1 << 28)   //EQUIvalent iron fist will boost moves that used head
+
+#define SPINDA_SPOT_HEIGHT 16
 
 struct SpindaSpot
 {
     u8 x, y;
-    u16 image[16];
+    u16 image[SPINDA_SPOT_HEIGHT];
 };
 
 struct __attribute__((packed)) LevelUpMove
@@ -482,5 +518,7 @@ void OakSpeechNidoranFFreeResources(void);
 void *OakSpeechNidoranFGetBuffer(u8 bufferId);
 u16 GetFormSpeciesId(u16 speciesId, u8 formId);
 u8 GetFormIdFromFormSpeciesId(u16 formSpeciesId);
+
+#define HOLD_EFFECT_POWERITEM    (HOLD_EFFECT_POWER_WEIGHT || HOLD_EFFECT_POWER_BRACER || HOLD_EFFECT_POWER_BELT || HOLD_EFFECT_POWER_ANKLET || HOLD_EFFECT_POWER_LENS || HOLD_EFFECT_POWER_BAND)
 
 #endif // GUARD_POKEMON_H
