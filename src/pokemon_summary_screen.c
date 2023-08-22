@@ -2338,7 +2338,7 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
         slot2_personality = GetMonData(&gPlayerParty[1], MON_DATA_PERSONALITY);
         slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY);
 
-        if (!(gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && !gBattleTypeFlags & BATTLE_TYPE_ROTATION)
+        if (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TWO_OPPONENTS))) //found fix, setup before had wrong operation now it works
         {
             if (curr_personality == slot1_personality)//
             {
@@ -2374,7 +2374,7 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
                 StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[3], gAbilityDescriptionPointers[abilitydataparty]);
             }
         }
-        else if (gBattleTypeFlags & BATTLE_TYPE_ROTATION)
+        else if (gBattleTypeFlags & BATTLE_TYPE_ROTATION) //potentially setup triple batttle as well
         {
             //still to do, only one mon on field at atime technically so same layout as singles, but would need to store data for all mon for ai and battle logic
             //idea show icons in triangle, show relative health by speed of bounce, make icon flash red for mon in red health,
