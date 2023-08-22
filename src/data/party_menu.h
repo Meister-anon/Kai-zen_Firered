@@ -35,6 +35,17 @@ enum
     PARTY_BOX_RIGHT_COLUMN,
 };
 
+enum PartySlots
+{
+    SLOT_1,
+    SLOT_2,
+    SLOT_3,
+    SLOT_4,
+    SLOT_5,
+    SLOT_6,
+};
+
+#define PARTYMENU_GRAPHICS
 static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
 {
     [PARTY_BOX_LEFT_COLUMN] = 
@@ -42,9 +53,9 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
         BlitBitmapToPartyWindow_LeftColumn, 
         {
             // The below are the x, y, width, and height for each of the following info
-            24, 11, 40, 13, // Nickname
-            32, 20, 32,  8, // Level
-            64, 20,  8,  8, // Gender
+            5, 20, 40, 13, // Nickname
+            32, 11, 32,  8, // Level
+            24, 11,  8,  8, // Gender
             38, 36, 24,  8, // HP
             53, 36, 24,  8, // Max HP
             24, 35, 48,  3  // HP bar
@@ -56,9 +67,9 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
         BlitBitmapToPartyWindow_RightColumn, 
         {
              // The below are the x, y, width, and height for each of the following info
-             22,  3, 40, 13, // Nickname
-             32, 12, 32,  8, // Level
-             64, 12,  8,  8, // Gender
+             18,  12, 40, 13, // Nickname
+             28, 3, 32,  8, // Level
+             20, 3,  8,  8, // Gender
             102, 12, 24,  8, // HP
             117, 12, 24,  8, // Max HP
              88, 10, 48,  3  // HP bar
@@ -67,43 +78,118 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
     },
 };
 
+//array break up, 4 groups, 6 slots in party, & coords split into 4 pairs of 2
+//status icon did -4 x position,  changed to +20 x value from pokemon x position and +4 from the y value of pokemon sprite
+//pokemon icon  & held item -10 y position
 static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
 {
-    [PARTY_LAYOUT_SINGLE] = 
+    [PARTY_LAYOUT_SINGLE] =
     {
-        { 16,  40,  20,  50,  56,  52,  16,  34},
-        {104,  18, 108,  28, 144,  27, 102,  25},
-        {104,  42, 108,  52, 144,  51, 102,  49},
-        {104,  66, 108,  76, 144,  75, 102,  73},
-        {104,  90, 108, 100, 144,  99, 102,  97},
-        {104, 114, 108, 124, 144, 123, 102, 121},
+
+       [SLOT_1] = { 16,  30,    // pokemon coords,
+                    20,  40,    // held item coords,
+                    38,  34,    // status coords,
+                    16,  34},   // pokeball coords
+
+       [SLOT_2] = {104,  18,    // pokemon coords,
+                   108,  28,    // held item coords,
+                   154,  17,    // status coords,
+                   102,  25},   // pokeball coords
+
+       [SLOT_3] = {104,  42,    // pokemon coords,
+                   108,  52,    // held item coords,
+                   154,  41,    // status coords,
+                   102,  49},   // pokeball coords
+
+       [SLOT_4] = {104,  66,    // pokemon coords,
+                   108,  76,    // held item coords,
+                   154,  65,    // status coords,
+                   102,  73},   // pokeball coords
+
+       [SLOT_5] = {104,  90,    // pokemon coords,
+                   108, 100,    // held item coords,
+                   154,  89,    // status coords,
+                   102,  97},   // pokeball coords
+
+       [SLOT_6] = {104, 114,    // pokemon coords,
+                   108, 124,    // held item coords,
+                   154, 113,    // status coords,
+                   102, 121},   // pokeball coords
     },
-    [PARTY_LAYOUT_DOUBLE] = 
+    [PARTY_LAYOUT_DOUBLE] =
     {
-        { 16,  24,  20,  34,  56,  36,  16,  18},
-        { 16,  80,  20,  90,  56,  92,  16,  74},
-        {104,  18, 108,  28, 144,  27, 102,  25},
-        {104,  50, 108,  60, 144,  59, 102,  57},
-        {104,  82, 108,  92, 144,  91, 102,  89},
-        {104, 114, 108, 124, 144, 123, 102, 121},
+
+       [SLOT_1] = { 16,  14,    // pokemon coords,
+                    20,  24,    // held item coords,
+                    38,  18,    // status coords,
+                    16,  18},   // pokeball coords
+
+       [SLOT_2] = {16,  70,    // pokemon coords,
+                   20,  80,    // held item coords,
+                   38,  74,    // status coords,
+                   16,  74},   // pokeball coords
+
+       [SLOT_3] = {104,  18,    // pokemon coords,
+                   108,  28,    // held item coords,
+                   154,  17,    // status coords,
+                   102,  25},   // pokeball coords
+
+       [SLOT_4] = {104,  50,    // pokemon coords,
+                   108,  60,    // held item coords,
+                   154,  49,    // status coords,
+                   102,  57},   // pokeball coords
+
+       [SLOT_5] = {104,  82,    // pokemon coords,
+                   108,  92,    // held item coords,
+                   154,  81,    // status coords,
+                   102,  89},   // pokeball coords
+
+       [SLOT_6] = {104, 114,    // pokemon coords,
+                   108, 124,    // held item coords,
+                   154, 113,    // status coords,
+                   102, 121},   // pokeball coords
     },
-    [PARTY_LAYOUT_MULTI] = 
+    [PARTY_LAYOUT_MULTI] =  //multi battles are partner battles, they are in emerald but not used in fire red by default
     {
-        { 16,  24,  20,  34,  56,  36,  16,  18},
-        { 16,  80,  20,  90,  56,  92,  16,  74},
-        {104,  26, 106,  36, 144,  35, 102,  33},
-        {104,  50, 106,  60, 144,  59, 102,  57},
-        {104,  82, 106,  92, 144,  91, 102,  89},
-        {104, 106, 106, 116, 144, 115, 102, 113},
+
+       [SLOT_1] = { 16,  14,    // pokemon coords,
+                    20,  24,    // held item coords,
+                    38,  18,    // status coords,
+                    16,  18},   // pokeball coords
+
+       [SLOT_2] = { 16,  70,    // pokemon coords,
+                    20,  80,    // held item coords,
+                    38,  74,    // status coords,
+                    16,  74},   // pokeball coords
+
+       [SLOT_3] = {104,  26,    // pokemon coords,
+                   106,  36,    // held item coords,
+                   154,  25,    // status coords,
+                   102,  33},   // pokeball coords
+
+       [SLOT_4] = {104,  50,    // pokemon coords,
+                   106,  60,    // held item coords,
+                   154,  49,    // status coords,
+                   102,  57},    // pokeball coords
+
+       [SLOT_5] = {104,  82,    // pokemon coords,
+                   106,  92,    // held item coords,
+                   154,  81,    // status coords,
+                   102,  89},   // pokeball coords
+
+       [SLOT_6] = {104,  106,    // pokemon coords,
+                   106,  116,    // held item coords,
+                   154,  105,    // status coords,
+                   102,  113},   // pokeball coords
     },
-    [PARTY_LAYOUT_MULTI_SHOWCASE] = 
+    [PARTY_LAYOUT_MULTI_SHOWCASE] =
     {
-        { 16,  32,  20,  42,  56,  44,  16,  26},
-        {104,  34, 106,  44, 144,  43, 102,  41},
-        {104,  58, 106,  68, 144,  67, 102,  65},
-        { 16, 104,  20, 114,  56, 116,  16,  98},
-        {104, 106, 106, 116, 144, 115, 102, 113},
-        {104, 130, 106, 140, 144, 139, 102, 137},
+       [SLOT_1] = { 16,  32,  20,  42,  38,  44,  16,  26},
+       [SLOT_2] = {104,  34, 106,  44, 154,  43, 102,  41},
+       [SLOT_3] = {104,  58, 106,  68, 154,  67, 102,  65},
+       [SLOT_4] = { 16, 104,  20, 114,  38, 116,  16,  98},
+       [SLOT_5] = {104, 106, 106, 116, 154, 115, 102, 113},
+       [SLOT_6] = {104, 130, 106, 140, 154, 139, 102, 137},
     },
 };
 
@@ -122,6 +208,7 @@ static const u8 sFontColorTable[][3] =
 
 static const struct WindowTemplate sSinglePartyMenuWindowTemplate[] =
 {
+    [SLOT_1] =
     {
         .bg = 0,
         .tilemapLeft = 1,
@@ -131,6 +218,7 @@ static const struct WindowTemplate sSinglePartyMenuWindowTemplate[] =
         .paletteNum = 3,
         .baseBlock = 0x63,
     },
+    [SLOT_2] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -140,6 +228,7 @@ static const struct WindowTemplate sSinglePartyMenuWindowTemplate[] =
         .paletteNum = 4,
         .baseBlock = 0xA9,
     },
+    [SLOT_3] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -149,6 +238,7 @@ static const struct WindowTemplate sSinglePartyMenuWindowTemplate[] =
         .paletteNum = 5,
         .baseBlock = 0xDF,
     },
+    [SLOT_4] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -158,6 +248,7 @@ static const struct WindowTemplate sSinglePartyMenuWindowTemplate[] =
         .paletteNum = 6,
         .baseBlock = 0x115,
     },
+    [SLOT_5] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -167,6 +258,7 @@ static const struct WindowTemplate sSinglePartyMenuWindowTemplate[] =
         .paletteNum = 7,
         .baseBlock = 0x14B,
     },
+    [SLOT_6] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -190,6 +282,7 @@ static const struct WindowTemplate sSinglePartyMenuWindowTemplate[] =
 
 static const struct WindowTemplate sDoublePartyMenuWindowTemplate[] =
 {
+    [SLOT_1] =
     {
         .bg = 0,
         .tilemapLeft = 1,
@@ -199,6 +292,7 @@ static const struct WindowTemplate sDoublePartyMenuWindowTemplate[] =
         .paletteNum = 3,
         .baseBlock = 0x63,
     },
+    [SLOT_2] =
     {
         .bg = 0,
         .tilemapLeft = 1,
@@ -208,6 +302,7 @@ static const struct WindowTemplate sDoublePartyMenuWindowTemplate[] =
         .paletteNum = 4,
         .baseBlock = 0xA9,
     },
+    [SLOT_3] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -217,6 +312,7 @@ static const struct WindowTemplate sDoublePartyMenuWindowTemplate[] =
         .paletteNum = 5,
         .baseBlock = 0xEF,
     },
+    [SLOT_4] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -226,6 +322,7 @@ static const struct WindowTemplate sDoublePartyMenuWindowTemplate[] =
         .paletteNum = 6,
         .baseBlock = 0x125,
     },
+    [SLOT_5] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -235,6 +332,7 @@ static const struct WindowTemplate sDoublePartyMenuWindowTemplate[] =
         .paletteNum = 7,
         .baseBlock = 0x15B,
     },
+    [SLOT_6] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -258,6 +356,7 @@ static const struct WindowTemplate sDoublePartyMenuWindowTemplate[] =
 
 static const struct WindowTemplate sMultiPartyMenuWindowTemplate[] =
 {
+    [SLOT_1] =
     {
         .bg = 0,
         .tilemapLeft = 1,
@@ -267,6 +366,7 @@ static const struct WindowTemplate sMultiPartyMenuWindowTemplate[] =
         .paletteNum = 3,
         .baseBlock = 0x63,
     },
+    [SLOT_2] =
     {
         .bg = 0,
         .tilemapLeft = 1,
@@ -276,6 +376,7 @@ static const struct WindowTemplate sMultiPartyMenuWindowTemplate[] =
         .paletteNum = 4,
         .baseBlock = 0xA9,
     },
+    [SLOT_3] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -285,6 +386,7 @@ static const struct WindowTemplate sMultiPartyMenuWindowTemplate[] =
         .paletteNum = 5,
         .baseBlock = 0xEF,
     },
+    [SLOT_4] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -294,6 +396,7 @@ static const struct WindowTemplate sMultiPartyMenuWindowTemplate[] =
         .paletteNum = 6,
         .baseBlock = 0x125,
     },
+    [SLOT_5] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -303,6 +406,7 @@ static const struct WindowTemplate sMultiPartyMenuWindowTemplate[] =
         .paletteNum = 7,
         .baseBlock = 0x15B,
     },
+    [SLOT_6] =
     {
         .bg = 0,
         .tilemapLeft = 12,
@@ -324,6 +428,8 @@ static const struct WindowTemplate sMultiPartyMenuWindowTemplate[] =
     DUMMY_WIN_TEMPLATE
 };
 
+//NOT 100% on this, assume is partner battles? where you each have 3.
+//player is in top half of menu partner is in bottom half, so battle tower stuff i think.
 static const struct WindowTemplate sShowcaseMultiPartyMenuWindowTemplate[] =
 {
     {
@@ -1144,6 +1250,7 @@ static const u8 sPartyMenuAction_ReadTakeMailCancel[] = {MENU_READ, MENU_TAKE_MA
 static const u8 sPartyMenuAction_RegisterSummaryCancel[] = {MENU_REGISTER, MENU_SUMMARY, MENU_CANCEL1};
 static const u8 sPartyMenuAction_TradeSummaryCancel1[] = {MENU_TRADE1, MENU_SUMMARY, MENU_CANCEL1};
 static const u8 sPartyMenuAction_TradeSummaryCancel2[] = {MENU_TRADE2, MENU_SUMMARY, MENU_CANCEL1};
+//think I need to only remove mail, because other options have other places they could be used besides union room
 
 // IDs for the action lists that appear when a party mon is selected
 enum
@@ -1235,7 +1342,12 @@ static const u8 *const sUnionRoomTradeMessages[] =
     [UR_TRADE_MSG_CANT_TRADE_WITH_PARTNER_1 - 1]   = gText_CantTradeWithTrainer,
     [UR_TRADE_MSG_CANT_TRADE_WITH_PARTNER_2 - 1]   = gText_CantTradeWithTrainer,
 };
-
+//important, for adding tms, will have to update this list,
+//and keep it in proper order
+//line up with constants tm01 = move_focus_punch etc so I track the tm associated
+//actually think I can't do that, as it needs to use move id values
+//pretty sure this is used to translate tm ids to the move associated with them
+//as its ordered by tm id value/order here.  so can't change
 static const u16 sTMHMMoves[] =
 {
     MOVE_FOCUS_PUNCH,
