@@ -14,6 +14,8 @@ u8 GetLastViewedMonIndex(void);
 void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, void (*callback)(void), u8 a4);
 void SetPokemonSummaryScreenMode(u8);
 
+void PokeballIcon_CaughtIn(u8 y);
+
 //sLevelNickTextColors
 #define WHITE 0
 #define RED 1

@@ -183,6 +183,281 @@ void sub_8017298(u8 arg0)
     gBattleControllerExecFlags &= ~(0x10000000 << arg0);
 }
 
+static const u8 sAbilitiesAffectedByMoldBreaker[] =
+{
+    [ABILITY_BATTLE_ARMOR] = 1,
+    [ABILITY_CLEAR_BODY] = 1,
+    [ABILITY_LIQUID_METAL] = 1,
+    [ABILITY_DAMP] = 1,
+    [ABILITY_DRY_SKIN] = 1,
+    [ABILITY_FILTER] = 1,
+    [ABILITY_FLASH_FIRE] = 1,
+    [ABILITY_FLOWER_GIFT] = 1,
+    [ABILITY_HEATPROOF] = 1,
+    [ABILITY_HYPER_CUTTER] = 1,
+    [ABILITY_IMMUNITY] = 1,
+    [ABILITY_INNER_FOCUS] = 1,
+    [ABILITY_INSOMNIA] = 1,
+    [ABILITY_KEEN_EYE] = 1,
+    [ABILITY_LEAF_GUARD] = 1,
+    [ABILITY_LEVITATE] = 1,
+    [ABILITY_LIGHTNING_ROD] = 1,
+    [ABILITY_LIMBER] = 1,
+    [ABILITY_MAGMA_ARMOR] = 1,
+    [ABILITY_MARVEL_SCALE] = 1,
+    [ABILITY_MOTOR_DRIVE] = 1,
+    [ABILITY_OBLIVIOUS] = 1,
+    [ABILITY_OWN_TEMPO] = 1,
+    [ABILITY_SAND_VEIL] = 1,
+    [ABILITY_SHELL_ARMOR] = 1,
+    [ABILITY_SHIELD_DUST] = 1,
+    [ABILITY_SIMPLE] = 1,
+    [ABILITY_SNOW_CLOAK] = 1,
+    [ABILITY_SOLID_ROCK] = 1,
+    [ABILITY_SOUNDPROOF] = 1,
+    [ABILITY_STICKY_HOLD] = 1,
+    [ABILITY_STORM_DRAIN] = 1,
+    [ABILITY_STURDY] = 1,
+    [ABILITY_SUCTION_CUPS] = 1,
+    [ABILITY_TANGLED_FEET] = 1,
+    [ABILITY_THICK_FAT] = 1,
+    [ABILITY_UNAWARE] = 1,
+    [ABILITY_VITAL_SPIRIT] = 1,
+    [ABILITY_VOLT_ABSORB] = 1,
+    [ABILITY_WATER_ABSORB] = 1,
+    [ABILITY_WATER_VEIL] = 1,
+    [ABILITY_WHITE_SMOKE] = 1,
+    [ABILITY_WONDER_GUARD] = 1,
+    [ABILITY_DISPIRIT_GUARD] = 1,
+    [ABILITY_BIG_PECKS] = 1,
+    [ABILITY_CONTRARY] = 1,
+    [ABILITY_FRIEND_GUARD] = 1,
+    [ABILITY_HEAVY_METAL] = 1,
+    [ABILITY_LIGHT_METAL] = 1,
+    [ABILITY_MAGIC_BOUNCE] = 1,
+    [ABILITY_MULTISCALE] = 1,
+    [ABILITY_SAP_SIPPER] = 1,
+    [ABILITY_TELEPATHY] = 1,
+    [ABILITY_WONDER_SKIN] = 1,
+    [ABILITY_AROMA_VEIL] = 1,
+    [ABILITY_BULLETPROOF] = 1,
+    [ABILITY_FLOWER_VEIL] = 1,
+    [ABILITY_FUR_COAT] = 1,
+    [ABILITY_OVERCOAT] = 1,
+    [ABILITY_SWEET_VEIL] = 1,
+    [ABILITY_DAZZLING] = 1,
+    [ABILITY_DISGUISE] = 1,
+    [ABILITY_FLUFFY] = 1,
+    [ABILITY_QUEENLY_MAJESTY] = 1,
+    [ABILITY_WATER_BUBBLE] = 1,
+    [ABILITY_MIRROR_ARMOR] = 1,
+    [ABILITY_PUNK_ROCK] = 1,
+    [ABILITY_ICE_SCALES] = 1,
+    [ABILITY_ICE_FACE] = 1,
+    [ABILITY_PASTEL_VEIL] = 1,
+};
+
+static const u8 sAbilitiesNotTraced[ABILITIES_COUNT] =
+{
+    [ABILITY_AS_ONE_ICE_RIDER] = 1,
+    [ABILITY_AS_ONE_SHADOW_RIDER] = 1,
+    [ABILITY_BATTLE_BOND] = 1,
+    [ABILITY_COMATOSE] = 1,
+    [ABILITY_DISGUISE] = 1,
+    [ABILITY_FLOWER_GIFT] = 1,
+    [ABILITY_FORECAST] = 1,
+    [ABILITY_GULP_MISSILE] = 1,
+    [ABILITY_HUNGER_SWITCH] = 1,
+    [ABILITY_ICE_FACE] = 1,
+    [ABILITY_ILLUSION] = 1,
+    [ABILITY_IMPOSTER] = 1,
+    [ABILITY_MULTITYPE] = 1,
+    [ABILITY_NEUTRALIZING_GAS] = 1,
+    [ABILITY_NONE] = 1,
+    [ABILITY_POWER_CONSTRUCT] = 1,
+    [ABILITY_POWER_OF_ALCHEMY] = 1,
+    [ABILITY_RECEIVER] = 1,
+    [ABILITY_RKS_SYSTEM] = 1,
+    [ABILITY_SCHOOLING] = 1,
+    [ABILITY_SHIELDS_DOWN] = 1,
+    [ABILITY_STANCE_CHANGE] = 1,
+    [ABILITY_TRACE] = 1,
+    [ABILITY_ZEN_MODE] = 1,
+};
+
+//come back to this when doing move expansion
+//changing stench so no longer applicable.
+/*static const u8 sMovesNotAffectedByStench[] =
+{
+    [MOVE_AIR_SLASH] = 1,
+    [MOVE_ASTONISH] = 1,
+    [MOVE_BITE] = 1,
+    [MOVE_BONE_CLUB] = 1,
+    [MOVE_DARK_PULSE] = 1,
+    [MOVE_DOUBLE_IRON_BASH] = 1,
+    [MOVE_DRAGON_RUSH] = 1,
+    [MOVE_EXTRASENSORY] = 1,
+    [MOVE_FAKE_OUT] = 1,
+    [MOVE_FIERY_WRATH] = 1,
+    [MOVE_FIRE_FANG] = 1,
+    [MOVE_FLING] = 1,
+    [MOVE_FLOATY_FALL] = 1,
+    [MOVE_HEADBUTT] = 1,
+    [MOVE_HEART_STAMP] = 1,
+    [MOVE_HYPER_FANG] = 1,
+    [MOVE_ICE_FANG] = 1,
+    [MOVE_ICICLE_CRASH] = 1,
+    [MOVE_IRON_HEAD] = 1,
+    [MOVE_NEEDLE_ARM] = 1,
+    [MOVE_NONE] = 1,
+    [MOVE_ROCK_SLIDE] = 1,
+    [MOVE_ROLLING_KICK] = 1,
+    [MOVE_SECRET_POWER] = 1,
+    [MOVE_SKY_ATTACK] = 1,
+    [MOVE_SNORE] = 1,
+    [MOVE_STEAMROLLER] = 1,
+    [MOVE_STOMP] = 1,
+    [MOVE_THUNDER_FANG] = 1,
+    [MOVE_TWISTER] = 1,
+    [MOVE_WATERFALL] = 1,
+    [MOVE_ZEN_HEADBUTT] = 1,
+    [MOVE_ZING_ZAP] = 1,
+};*/
+
+static const u16 sSkillSwapBannedAbilities[] =
+{
+    //ABILITY_WONDER_GUARD,
+    //ABILITY_DISPIRIT_GUARD,
+    ABILITY_MULTITYPE,
+    ABILITY_ILLUSION,
+    ABILITY_STANCE_CHANGE,
+    ABILITY_SCHOOLING,
+    ABILITY_COMATOSE,
+    ABILITY_SHIELDS_DOWN,
+    ABILITY_DISGUISE,
+    ABILITY_RKS_SYSTEM,
+    ABILITY_BATTLE_BOND,
+    ABILITY_POWER_CONSTRUCT,
+    ABILITY_NEUTRALIZING_GAS,
+    ABILITY_ICE_FACE,
+    ABILITY_HUNGER_SWITCH,
+    ABILITY_GULP_MISSILE,
+};
+
+static const u16 sRolePlayBannedAbilities[] =
+{
+    ABILITY_TRACE,
+    //ABILITY_WONDER_GUARD,
+    //ABILITY_DISPIRIT_GUARD,
+    ABILITY_FORECAST,
+    ABILITY_FLOWER_GIFT,
+    ABILITY_MULTITYPE,
+    ABILITY_ILLUSION,
+    ABILITY_ZEN_MODE,
+    ABILITY_IMPOSTER,
+    ABILITY_STANCE_CHANGE,
+    ABILITY_POWER_OF_ALCHEMY,
+    ABILITY_RECEIVER,
+    ABILITY_SCHOOLING,
+    ABILITY_COMATOSE,
+    ABILITY_SHIELDS_DOWN,
+    ABILITY_DISGUISE,
+    ABILITY_RKS_SYSTEM,
+    ABILITY_BATTLE_BOND,
+    ABILITY_POWER_CONSTRUCT,
+    ABILITY_ICE_FACE,
+    ABILITY_HUNGER_SWITCH,
+    ABILITY_GULP_MISSILE,
+};
+
+//don't understand what this does yet
+static const u16 sRolePlayBannedAttackerAbilities[] =
+{
+    ABILITY_MULTITYPE,
+    ABILITY_ZEN_MODE,
+    ABILITY_STANCE_CHANGE,
+    ABILITY_SCHOOLING,
+    ABILITY_COMATOSE,
+    ABILITY_SHIELDS_DOWN,
+    ABILITY_DISGUISE,
+    ABILITY_RKS_SYSTEM,
+    ABILITY_BATTLE_BOND,
+    ABILITY_POWER_CONSTRUCT,
+    ABILITY_ICE_FACE,
+    ABILITY_GULP_MISSILE,
+};
+
+static const u16 sWorrySeedBannedAbilities[] =
+{
+    ABILITY_MULTITYPE,
+    ABILITY_STANCE_CHANGE,
+    ABILITY_SCHOOLING,
+    ABILITY_COMATOSE,
+    ABILITY_SHIELDS_DOWN,
+    ABILITY_DISGUISE,
+    ABILITY_RKS_SYSTEM,
+    ABILITY_BATTLE_BOND,
+    ABILITY_POWER_CONSTRUCT,
+    ABILITY_TRUANT,
+    ABILITY_ICE_FACE,
+    ABILITY_GULP_MISSILE,
+};
+
+//or this...
+static const u16 sGastroAcidBannedAbilities[] =
+{
+    ABILITY_AS_ONE_ICE_RIDER,
+    ABILITY_AS_ONE_SHADOW_RIDER,
+    ABILITY_BATTLE_BOND,
+    ABILITY_COMATOSE,
+    ABILITY_DISGUISE,
+    ABILITY_GULP_MISSILE,
+    ABILITY_ICE_FACE,
+    ABILITY_MULTITYPE,
+    ABILITY_POWER_CONSTRUCT,
+    ABILITY_RKS_SYSTEM,
+    ABILITY_SCHOOLING,
+    ABILITY_SHIELDS_DOWN,
+    ABILITY_STANCE_CHANGE,
+    ABILITY_ZEN_MODE,
+};
+
+static const u16 sEntrainmentBannedAttackerAbilities[] =
+{
+    ABILITY_TRACE,
+    ABILITY_FORECAST,
+    ABILITY_FLOWER_GIFT,
+    ABILITY_ZEN_MODE,
+    ABILITY_ILLUSION,
+    ABILITY_IMPOSTER,
+    ABILITY_POWER_OF_ALCHEMY,
+    ABILITY_RECEIVER,
+    ABILITY_DISGUISE,
+    ABILITY_POWER_CONSTRUCT,
+    ABILITY_NEUTRALIZING_GAS,
+    ABILITY_ICE_FACE,
+    ABILITY_HUNGER_SWITCH,
+    ABILITY_GULP_MISSILE,
+};
+//LOGIC seems to be doesn't work on biology based abilities
+static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] =
+{
+    ABILITY_TRUANT,
+    ABILITY_MULTITYPE,
+    ABILITY_STANCE_CHANGE,
+    ABILITY_SCHOOLING,
+    ABILITY_COMATOSE,
+    ABILITY_SHIELDS_DOWN,
+    ABILITY_ZEN_MODE,
+    ABILITY_DISGUISE,
+   // ABILITY_MAGMA_ARMOR,    //POTENTIAL do
+    ABILITY_RKS_SYSTEM,
+    ABILITY_BATTLE_BOND,
+    ABILITY_ICE_FACE,
+    ABILITY_GULP_MISSILE,
+    ABILITY_LAVA_FISSURE,
+};
+
 void CancelMultiTurnMoves(u8 battler)
 {
     gBattleMons[battler].status2 &= ~(STATUS2_MULTIPLETURNS);
@@ -1745,6 +2020,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     gStatuses3[battler] |= STATUS3_TRACE;
                     gSpecialStatuses[battler].traced = 1;
+                }
+                break;
+            case ABILITY_IMPOSTER:
+                if (IsBattlerAlive(BATTLE_OPPOSITE(battler))
+                    && !(gBattleMons[BATTLE_OPPOSITE(battler)].status2 & (STATUS2_TRANSFORMED | STATUS2_SUBSTITUTE))
+                    && !(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+                    && !(gBattleStruct->illusion[BATTLE_OPPOSITE(battler)].on)
+                    && !(gStatuses3[BATTLE_OPPOSITE(battler)] & STATUS3_SEMI_INVULNERABLE))
+                {
+                    gBattlerAttacker = battler;
+                    gBattlerTarget = BATTLE_OPPOSITE(battler);
+                    BattleScriptPushCursorAndCallback(BattleScript_ImposterActivates); //uses transform bs command
+                    ++effect;
                 }
                 break;
             case ABILITY_CLOUD_NINE:
@@ -3377,6 +3665,62 @@ u8 IsMonDisobedient(void)
             return 1;
         }
     }
+}
+
+bool32 IsNeutralizingGasBannedAbility(u32 ability)
+{
+    switch (ability)
+    {
+    case ABILITY_MULTITYPE:
+    case ABILITY_ZEN_MODE:
+    case ABILITY_STANCE_CHANGE:
+    case ABILITY_POWER_CONSTRUCT:
+    case ABILITY_SCHOOLING:
+    case ABILITY_RKS_SYSTEM:
+    case ABILITY_SHIELDS_DOWN:
+    case ABILITY_COMATOSE:
+    case ABILITY_DISGUISE:
+    case ABILITY_GULP_MISSILE:
+    case ABILITY_ICE_FACE:
+    case ABILITY_AS_ONE_ICE_RIDER:
+    case ABILITY_AS_ONE_SHADOW_RIDER:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+} //abilities excluded  from neutralizing gas, as they are intrinsic to the pokemon biology/unique to themselves/involves changing their body.
+
+u32 DoesSideHaveAbility(u32 battlerId, u32 ability) //adapted ability search function that doesn't use getbattlerability
+{
+    if (IsBattlerAlive(battlerId) && gBattleMons[battlerId].ability == ability && !(gStatuses3[battlerId] & STATUS3_GASTRO_ACID))
+        return battlerId + 1;
+    else if (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && gBattleMons[BATTLE_PARTNER(battlerId)].ability == ability && !(gStatuses3[BATTLE_PARTNER(battlerId)] & STATUS3_GASTRO_ACID))
+        return BATTLE_PARTNER(battlerId) + 1;
+    else
+        return 0;
+}//realized needed to add back in gastro acid check
+
+u32 GetBattlerAbility(u8 battlerId)  //Deokishishu in pret mentioned there is a practice of making things that could
+ // be type u8 either s32 or u32, because it has an positive effect on speed, ussually done for things 
+ //constantly refernced or looped.
+{
+    if (gStatuses3[battlerId] & STATUS3_GASTRO_ACID) //only added this, because focusing abilities should work
+        return ABILITY_NONE;
+    //if (IsNeutralizingGasOnField() && !IsNeutralizingGasBannedAbility(gBattleMons[battlerId].ability))
+    if (DoesSideHaveAbility(BATTLE_OPPOSITE(battlerId), ABILITY_NEUTRALIZING_GAS) && !IsNeutralizingGasBannedAbility(gBattleMons[battlerId].ability))
+        return ABILITY_NONE;//I don't need to subtract 1 from Id because my function isn't doing anything with the id returned by the function
+    if ((((gBattleMons[gBattlerAttacker].ability == ABILITY_MOLD_BREAKER
+        || gBattleMons[gBattlerAttacker].ability == ABILITY_TERAVOLT
+        || gBattleMons[gBattlerAttacker].ability == ABILITY_TURBOBLAZE)
+        && !(gStatuses3[gBattlerAttacker] & STATUS3_GASTRO_ACID))
+        || gBattleMoves[gCurrentMove].flags & FLAG_TARGET_ABILITY_IGNORED)
+        && sAbilitiesAffectedByMoldBreaker[gBattleMons[battlerId].ability]
+        && gBattlerByTurnOrder[gCurrentTurnActionNumber] == gBattlerAttacker
+        && gActionsByTurnOrder[gBattlerByTurnOrder[gBattlerAttacker]] == B_ACTION_USE_MOVE
+        && gCurrentTurnActionNumber < gBattlersCount)
+        return ABILITY_NONE;
+
+    return gBattleMons[battlerId].ability;
 }
 
 bool8 IsBattlerAlive(u8 battlerId)

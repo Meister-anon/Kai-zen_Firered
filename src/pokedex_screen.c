@@ -1513,7 +1513,8 @@ static void sub_8103A40(u8 windowId, s32 itemId, u8 y)
     sub_8104A34(gUnknown_203ACF0->field_40, 0, species, 12, y);
     if (caught)
     {
-        BlitMoveInfoIcon(gUnknown_203ACF0->field_40, 0, 0x28, y);
+        //PokeballIcon_CaughtIn(y);// attempt to setup pokeball icon based on pokeball sprites/caught mon in 
+        BlitMoveInfoIcon(gUnknown_203ACF0->field_40, 0, 0x28, y); //pokeball icon
         type1 = gBaseStats[species].type1;
         BlitMoveInfoIcon(gUnknown_203ACF0->field_40, type1 + 1, 0x78, y);
         if (type1 != gBaseStats[species].type2)

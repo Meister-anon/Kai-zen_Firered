@@ -94,4 +94,6 @@ struct Pokemon *GetIllusionMonPtr(u32 battlerId);
 void ClearIllusionMon(u32 battlerId);
 bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
 
+u32 DoesSideHaveAbility(u32 battlerId, u32 ability);
+u32 GetBattlerAbility(u8 battlerId);
 #endif // GUARD_BATTLE_UTIL_H

@@ -4786,6 +4786,29 @@ static void PokeSum_DestroyMonPicSprite(void)
     FREE_AND_SET_NULL(sMonPicBounceState);
 }
 
+void PokeballIcon_CaughtIn(u8 y) //figure out how to use this, need put in pokemonsummary screen but make non static
+{
+    u16 ballItemId; //forgot sum screen took pokeball you caught them in, plan use this  for pokedex
+    u8 ballId; //what I plan to do make function that defaults it to pokeball(id 0) but make it invisible until caught
+    //and so I don't need to make a new storage value make function call in caught functio, that checks pokeball of caught mon
+//if the mon hasn't been caught before, then replaces the pokeball with the ball you caught it in and makes it visible)
+
+    ballItemId = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL); //change current mon to identifier 
+
+
+    ballId = ItemIdToBallId(ballItemId);
+    LoadBallGfx(ballId);
+    //need put logic here to explicitlyu put it on the correct pokedex window
+    //sPokedexScreenData->numericalOrderWindowId
+
+    /*sMonSummaryScreen->ballIconSpriteId =*/ CreateSprite(&gBallSpriteTemplates[ballId], 0x28, y, 0);
+    //gSprites[gBallSpriteTemplates[ballId]].callback = SpriteCallbackDummy;  //sMonSummaryScreen->ballIconSpriteId
+    //gSprites[gBallSpriteTemplates[ballId]].oam.priority = 0;//value here is meant as stand in for index/id but can use gBallSpriteTemplates[ballId] for that
+    //inside isn't right need pass to other value or variable to work, dereferrence?
+
+    ShowOrHideBallIconObj(TRUE);
+}
+
 static void CreateBallIconObj(void)
 {
     u16 ballItemId;

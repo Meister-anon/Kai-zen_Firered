@@ -4166,6 +4166,14 @@ BattleScript_ColorChangeActivates::
 	waitmessage 0x40
 	return
 
+BattleScript_ImposterActivates::
+	transformdataexecution	
+	@playmoveanimation BS_ATTACKER, MOVE_TRANSFORM  still to port, in emerald expansion donot have various in kai-zen old
+	waitanimation
+	printstring STRINGID_IMPOSTERTRANSFORM
+	waitmessage 0x40
+	end3
+
 BattleScript_RoughSkinActivates::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	healthbarupdate BS_ATTACKER
