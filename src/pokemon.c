@@ -3007,12 +3007,15 @@ void TransformedMonStats(struct Pokemon *mon)
     else
         targetSpecies = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SPECIES, NULL);
 
-    species = targetSpecies;
+    species = targetSpecies; //put here to reset species since can't put ogic above defines
+    
 
     if (GetBattlerSide(gBattlerTarget) == B_SIDE_OPPONENT)
         party = &gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
     else
         party = &gPlayerParty[gBattlerPartyIndexes[gBattlerTarget]];
+
+    ability = GetMonAbility(party); //attempted fix for hp not changing with wondergaurd correctly
 
     hpIV = GetMonData(party, MON_DATA_HP_IV, NULL);
     attackIV = GetMonData(party, MON_DATA_ATK_IV, NULL);

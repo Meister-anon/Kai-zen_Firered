@@ -175,10 +175,10 @@ struct PokemonSummaryScreenData
         u8 ALIGNED(4) curHpStrBuf[9];
         u8 ALIGNED(4) statValueStrBufs[5][5];
 
-        u8 ALIGNED(4) moveCurPpStrBufs[5][11];
-        u8 ALIGNED(4) moveMaxPpStrBufs[5][11];
-        u8 ALIGNED(4) moveNameStrBufs[5][MOVE_NAME_LENGTH + 1];
-        u8 ALIGNED(4) movePowerStrBufs[5][5];
+        u8 ALIGNED(4) moveCurPpStrBufs[5][11]; //these already have enough space to display transform mon moves, just use 0-3 seutp like abilityname
+        u8 ALIGNED(4) moveMaxPpStrBufs[5][11]; //will set moves but not think will keep type as is, in summary screen since its still your ditto.
+        u8 ALIGNED(4) moveNameStrBufs[5][MOVE_NAME_LENGTH + 1]; //if you've caught the mon before you should already know, if you haven't
+        u8 ALIGNED(4) movePowerStrBufs[5][5]; //then ditto transforming wouldn't help tell you.
         u8 ALIGNED(4) moveAccuracyStrBufs[5][5];
 
         //u8 ALIGNED(4) expPointsStrBuf[9];   //planning to remove this, to make room for expanded ability descriptions
@@ -2340,7 +2340,8 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
 
         if (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TWO_OPPONENTS))) //found fix, setup before had wrong operation now it works
         {
-            if (curr_personality == slot1_personality)//
+            if ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
             {
                 abilitydatabattler = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability;
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[0], gAbilityNames[abilitydatabattler]);
@@ -2355,13 +2356,15 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
         }
         else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
         {
-            if (curr_personality == slot1_personality)//slot 1
+            if ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))//slot 1
             {
                 abilitydatabattler = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability;
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[0], gAbilityNames[abilitydatabattler]);
                 StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[0], gAbilityDescriptionPointers[abilitydatabattler]);
             }
-            else if (curr_personality == slot2_personality) //slot 2
+            else if ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP)) //slot 2
             {
                 abilitydatabattler2 = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].ability;
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[1], gAbilityNames[abilitydataparty]);
@@ -2380,19 +2383,22 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
             //idea show icons in triangle, show relative health by speed of bounce, make icon flash red for mon in red health,
             //play low hp music if a mon "on field" has low hp, not just mon out as that would just constantly change
             //abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
-            if (curr_personality == slot1_personality)//....default meant if address of party slot x does not equal 0
+            if ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
             {
                 abilitydatabattler = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability;
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[0], gAbilityNames[abilitydatabattler]);
                 StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[0], gAbilityDescriptionPointers[abilitydatabattler]);
             }
-            else if (curr_personality == slot2_personality) //slot 2
+            else if ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP)) //slot 2
             {
                 abilitydatabattler2 = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].ability;
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[1], gAbilityNames[abilitydataparty]);
                 StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[1], gAbilityDescriptionPointers[abilitydataparty]);
             }
-            else if (curr_personality == slot3_personality) //...slot 3
+            else if ((curr_personality == slot3_personality)
+            && GetMonData(&gPlayerParty[2], MON_DATA_HP)) //...slot 3
             {
                 //will need change this and when I setup triple battler/rotation battle extra battler positions
                 //could make display of all mon in battle with their icons, then based on turn order could load/deload sprites
@@ -2441,7 +2447,7 @@ static void BufferMonMoves(void)
 
 #define GetRightAlignXpos_NDigits(a, b) ((6 * (a)) - StringLength((b)) * 6)
 
-static void BufferMonMoveI(u8 i)//think this is the menu/function I need has move index and pp ony one in file that uses gMoveNames
+static void BufferMonMoveI(u8 i)//think this is the menu/function I need has move index and pp ony one in file that uses gMoveNames //transform need change
 {
     if (i < 4)
         sMonSummaryScreen->moveIds[i] = GetMonMoveBySlotId(&sMonSummaryScreen->currentMon, i);
@@ -3400,6 +3406,8 @@ static void PokeSum_PrintAbilityDataOrMoveTypes(void)
 }//best option use original window 5 height, the type icons are positioned perfectly I just need to split up the window
 
 
+//think I was planning to run move values & ability values into a single function?
+//could work/make sense
 static void PokeSum_PrintAbilityNameAndDesc(void)
 {
 
@@ -3421,11 +3429,12 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
     }
 
     //for in battle
-    if (gMain.inBattle)
+    if (gMain.inBattle) //trainer in bnattle, not if mon is in battle
     {
         if (!(IsDoubleBattle())) //problem appears to be function always returns 0, I think I need to loop
         {
-            if (curr_personality == slot1_personality)//....default meant if address of party slot x does not equal 0
+            if ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))//....changedd if current mon matches party slot and hp not 0, use battle value
             {
                 FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0); //I think this is clearing window ? so extra safety
 
@@ -3448,7 +3457,8 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
         }
         else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
         {
-            if (curr_personality == slot1_personality)
+            if ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
             {
                 FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
@@ -3458,7 +3468,8 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
                 AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
                     2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[0]);
             }
-            else if (curr_personality == slot2_personality)
+            else if ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
             {
                 FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
@@ -3481,7 +3492,8 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
         }
         else if (gBattleTypeFlags & BATTLE_TYPE_ROTATION)
         {
-            if (curr_personality == slot1_personality)
+            if ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
             {
                 FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
@@ -3491,7 +3503,8 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
                 AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
                     2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[0]);
             }
-            else if (curr_personality == slot2_personality)
+            else if ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
             {
                 FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
@@ -3501,7 +3514,8 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
                 AddTextPrinterParameterized3(sMonSummaryScreen->windowIds[5], FONT_NORMAL,
                     2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[1]);
             }
-            else if (curr_personality == slot3_personality)
+            else if ((curr_personality == slot3_personality)
+            && GetMonData(&gPlayerParty[2], MON_DATA_HP))
             {
                 FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 

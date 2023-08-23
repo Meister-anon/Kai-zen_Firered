@@ -4169,7 +4169,7 @@ BattleScript_ColorChangeActivates::
 BattleScript_ImposterActivates::
 	transformdataexecution	
 	@playmoveanimation BS_ATTACKER, MOVE_TRANSFORM  still to port, in emerald expansion donot have various in kai-zen old
-	waitanimation
+	@waitanimation
 	printstring STRINGID_IMPOSTERTRANSFORM
 	waitmessage 0x40
 	end3

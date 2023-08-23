@@ -7237,6 +7237,7 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
         s32 i;
         u8 *battleMonAttacker, *battleMonTarget;
         struct Pokemon *mon;
+        u8 found_species;
         u16 original_ability = GetBattlerAbility(gBattlerAttacker); //store transformer ability for differeing logic
 
         gBattleMons[gBattlerAttacker].status2 |= STATUS2_TRANSFORMED;
@@ -7246,17 +7247,19 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
         gDisableStructs[gBattlerAttacker].mimickedMoves = 0;
         //put new ditto hidden ability species search  here, set to target species
         //if (original_ability == ABILITY_INVERSION)
-        //do species search
-        //gBattleMons[gBattlerTarget].species = found species
-        PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerTarget].species)//for counter-form search species to use and assign to this value so it will be target species
+        //do species search assign found species to value
+        //PREPARE_SPECIES_BUFFER(gBattleTextBuff1, found_species)//for counter-form search species to use and assign to this value so it will be target species
+           
+           PREPARE_ABILITY_BUFFER(gBattleTextBuff2, original_ability); //for imposter & inversion
+
             if (gCurrentMove == MOVE_TRANSFORM || original_ability == ABILITY_IMPOSTER)
             {
-                battleMonAttacker = (u8*)(&gBattleMons[gBattlerAttacker].moves);
-                battleMonTarget = (u8*)(&gBattleMons[gBattlerTarget].moves); //v changed should make only copy move data
+                battleMonAttacker = (u8*)(&gBattleMons[gBattlerAttacker]);
+                battleMonTarget = (u8*)(&gBattleMons[gBattlerTarget]); //v changed should make only copy move data
                 for (i = offsetof(struct BattlePokemon, moves[0]); i < offsetof(struct BattlePokemon, moves[4]); ++i) //ok THIS is what tells it to explicitly take values excluding hp. it loops and copies values from struct down to hp.
                     battleMonAttacker[i] = battleMonTarget[i]; //to get this to work would need change value from struct higher htan pp, and replace i = 0 with accurate byte value of starting value
             }//NEEDED to separate as counter_form wouldn't be using battler data to find species/moves it would only be able to asign moves by levelup use trainerparty move selector function for that
-                //works sets moves correctly
+                //works sets moves correctly - ported why is it not working? //ok its missing multiple things its not probperly resetting my stats after battle...
 
         if (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT) //use this instead taken from mega logic
             mon = &gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker]];  //mon being transformed
@@ -7268,6 +7271,10 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
         TransformRecalcBattlerStats(gBattlerAttacker, mon); //rather than using this to change species to populate sum screen with transferrd abilitynum,
         //just go to summary screen and change line to read the targets abilitynum if current move transform or ability imposter/inversion
         //need find way for one time change that resets on faint/switch/battle end, and that won't just keep changing every turn long as status2 is transformed/trace etc.
+        //that was problem I wasn't actually setting my ability but now I am, just 
+        //need to change the script for imposter to read original ability not current ability
+        //as my ability gets changes, do same for inversion  prob just make read buff and
+        //send original ability to buffer maybe buff 3
 
         UpdateHealthboxAttribute(gHealthboxSpriteIds[gBattlerAttacker], mon, HEALTHBOX_ALL); //should update hp values in healthox
 
@@ -8336,7 +8343,7 @@ static void atkC4_trydobeatup(void)
 
         for (;gBattleCommunication[0] < 6; ++gBattleCommunication[0])
         {
-            if (GetMonData(&party[gBattleCommunication[0]], MON_DATA_HP)
+            if (GetMonData(&party[gBattleCommunication[0]], MON_DATA_HP) //hp not zero species not zero not egg and non statused
              && GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES2)
              && GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES2) != SPECIES_EGG
              && !GetMonData(&party[gBattleCommunication[0]], MON_DATA_STATUS))

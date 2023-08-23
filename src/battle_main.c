@@ -691,7 +691,7 @@ static void (*const sEndTurnFuncsTable[])(void) =
     [B_OUTCOME_MON_FLED] = HandleEndTurn_MonFled,
     [B_OUTCOME_CAUGHT] = HandleEndTurn_FinishBattle,
     [B_OUTCOME_NO_SAFARI_BALLS] = HandleEndTurn_FinishBattle,
-};
+}; //while not shown all other effects eventually get to HandleEndTurn_FinishBattle
 
 const u8 gStatusConditionString_PoisonJpn[8] = _("どく$$$$$");
 const u8 gStatusConditionString_SleepJpn[8] = _("ねむり$$$$");
@@ -2460,6 +2460,7 @@ void FaintClearSetData(void)
 {
     s32 i;
     u8 *ptr;
+    struct Pokemon *party;
 
     for (i = 0; i < NUM_BATTLE_STATS; ++i)
         gBattleMons[gActiveBattler].statStages[i] = 6;
@@ -2530,6 +2531,15 @@ void FaintClearSetData(void)
     gBattleResources->flags->flags[gActiveBattler] = 0;
     gBattleMons[gActiveBattler].type1 = gBaseStats[gBattleMons[gActiveBattler].species].type1;
     gBattleMons[gActiveBattler].type2 = gBaseStats[gBattleMons[gActiveBattler].species].type2;
+    gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
+
+    if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT) //use this instead taken from mega logic
+        party = &gEnemyParty[gBattlerPartyIndexes[gActiveBattler]];  //mon being transformed
+    else
+        party = &gPlayerParty[gBattlerPartyIndexes[gActiveBattler]];
+
+    //if (gBattleMons[gActiveBattler].status2 & STATUS2_TRANSFORMED)
+        CalculateMonStats(party); //to reset stats to normal  //remove transformatino line as status2 would alraedy be removed  fron fainted
 }
 
 static void BattleIntroGetMonsData(void)
@@ -3829,6 +3839,8 @@ static void HandleEndTurn_MonFled(void)
 
 static void HandleEndTurn_FinishBattle(void)
 {
+      u32 i;
+    
     if (gCurrentActionFuncId == B_ACTION_TRY_FINISH || gCurrentActionFuncId == B_ACTION_FINISHED)
     {
         if (!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER_TOWER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_OLD_MAN_TUTORIAL | BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_SAFARI | BATTLE_TYPE_FIRST_BATTLE | BATTLE_TYPE_LINK)))
@@ -3855,6 +3867,16 @@ static void HandleEndTurn_FinishBattle(void)
             ClearRematchStateByTrainerId();
         BeginFastPaletteFade(3);
         FadeOutMapMusic(5);
+
+        for (i = 0; i < PARTY_SIZE; i++) //erecalc stat after battle
+        {
+            if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2) != SPECIES_NONE
+                && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2) != SPECIES_EGG)
+            {
+                CalculateMonStats(&gPlayerParty[i]);
+            }
+        }
+
         gBattleMainFunc = FreeResetData_ReturnToOvOrDoEvolutions;
         gCB2_AfterEvolution = BattleMainCB2;
     }
@@ -4139,6 +4161,7 @@ static void HandleAction_UseMove(void)
 
 static void HandleAction_Switch(void)
 {
+    struct Pokemon *party;
     gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 0;
@@ -4150,6 +4173,14 @@ static void HandleAction_Switch(void)
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
     if (gBattleResults.playerSwitchesCounter < 255)
         ++gBattleResults.playerSwitchesCounter;
+
+    if (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT) //use this instead taken from mega logic
+        party = &gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker]];  //mon being transformed
+    else
+        party = &gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]];
+
+    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED)
+        CalculateMonStats(party); //for resetting stats to normal
 }
 
 static void HandleAction_UseItem(void)
