@@ -516,7 +516,7 @@
 	.byte 0x59
 	.4byte \param0
 	.4byte \param1
-	.byte \param2
+	.byte \param2 @make this 2bybte? looks like not necessary
 	.endm
 
 	.macro yesnoboxlearnmove param0:req

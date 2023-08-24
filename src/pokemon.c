@@ -2997,7 +2997,7 @@ void TransformedMonStats(struct Pokemon *mon)
     s32 spAttackEV = GetMonData(mon, MON_DATA_SPATK_EV, NULL);
     s32 spDefenseIV = GetMonData(mon, MON_DATA_SPDEF_IV, NULL);
     s32 spDefenseEV = GetMonData(mon, MON_DATA_SPDEF_EV, NULL);
-    u16 species = targetSpecies;
+    u16 species = targetSpecies; //used for stat calc but not actually setting species to target as so can still use quick powder for ditto
     s32 level = GetLevelFromMonExp(mon);
     s32 newMaxHP;
     u16 ability = GetMonAbility(mon);
@@ -3015,7 +3015,7 @@ void TransformedMonStats(struct Pokemon *mon)
     else
         party = &gPlayerParty[gBattlerPartyIndexes[gBattlerTarget]];
 
-    ability = GetMonAbility(party); //attempted fix for hp not changing with wondergaurd correctly
+    ability = GetMonAbility(party); //attempted fix for hp not changing with wondergaurd correctly/worked
 
     hpIV = GetMonData(party, MON_DATA_HP_IV, NULL);
     attackIV = GetMonData(party, MON_DATA_ATK_IV, NULL);
@@ -3163,30 +3163,38 @@ void GiveMonInitialMoveset(struct Pokemon *mon)
     GiveBoxMonInitialMoveset(&mon->box);
 }
 
-static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon)
+void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //important can use this to set up my nature based moveset ranking system
 {
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     s32 level = GetLevelFromBoxMonExp(boxMon);
     s32 i;
+    s32 personality; // added these two for later edits, idea for learnset order based on personality or nature
+    u8 nature;
 
-    for (i = 0; gLevelUpLearnsets[species][i] != LEVEL_UP_END; i++)
+    nature = GetNatureFromPersonality(personality); //put this somewhere
+
+    for (i = 0; gLevelUpLearnsets[species][i].move != LEVEL_UP_END; i++) //if move to be learned is actually a move
     {
         u16 moveLevel;
         u16 move;
 
-        moveLevel = (gLevelUpLearnsets[species][i] & 0xFE00);
+        moveLevel = (gLevelUpLearnsets[species][i].level);
 
-        if (moveLevel > (level << 9))
+        if (moveLevel == 0)
+            continue; //ok this line means after evo move learning code changes are in, still need test if works
+
+        if (moveLevel > level) // prevents learnign moves above level
             break;
 
-        move = (gLevelUpLearnsets[species][i] & 0x1FF);
+        move = (gLevelUpLearnsets[species][i].move);
 
-        if (GiveMoveToBoxMon(boxMon, move) == 0xFFFF)
-            DeleteFirstMoveAndGiveMoveToBoxMon(boxMon, move);
-    }
+        if (GiveMoveToBoxMon(boxMon, move) == LEVEL_UP_END) // this may be the move learn function I need.
+            DeleteFirstMoveAndGiveMoveToBoxMon(boxMon, move); //important since I know boxmon works for enemy npc & i think wild as well.
+    } // that function should be very useful for setting up wild move learning.
 }
 
-u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove)
+//this appears to be the problem, 
+u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try and match cfru lvl 0 evo learn move function
 {
     u32 retVal = 0;
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -3200,23 +3208,24 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove)
     {
         sLearningMoveTableID = 0;
 
-        while ((gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) != (level << 9))
+        while (gLevelUpLearnsets[species][sLearningMoveTableID].level != level)// && (gLevelUpLearnsets[species][sLearningMoveTableID].level != 0) //not this or not that
         {
             sLearningMoveTableID++;
-            if (gLevelUpLearnsets[species][sLearningMoveTableID] == LEVEL_UP_END)
-                return 0;
+            if (gLevelUpLearnsets[species][sLearningMoveTableID].move == LEVEL_UP_END) //may need change from.move to .level
+            //|| (gLevelUpLearnsets[species][sLearningMoveTableID].move == 0))  //nvm first struct value is .move so should be correct
+                return 0; //pretty sure means to skip move learn
         }
-    }
+    }//need test lvl 0 evo move learn
 
-    if ((gLevelUpLearnsets[species][sLearningMoveTableID] & 0xFE00) == (level << 9))
+    if ((gLevelUpLearnsets[species][sLearningMoveTableID].level == level) || (gLevelUpLearnsets[species][sLearningMoveTableID].level == 0))
     {
-        gMoveToLearn = (gLevelUpLearnsets[species][sLearningMoveTableID] & 0x1FF);
+        gMoveToLearn = (gLevelUpLearnsets[species][sLearningMoveTableID].move); //something here
         sLearningMoveTableID++;
         retVal = GiveMoveToMon(mon, gMoveToLearn);
     }
 
     return retVal;
-}
+}//changed it, what I did it works now, still need retest lvl 0  move learn
 
 void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move)
 {
@@ -6563,12 +6572,12 @@ u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm)
     {
         return 0;
     }
-    else if (tm < 32)
+    else if (tm < 32) //this may be hex 32, since 32 in hex is 50 in decimal?
     {
         u32 mask = 1 << tm;
         return sTMHMLearnsets[species][0] & mask;
     }
-    else
+    else  //actually I think this is a type split? breaking the array into 2 32 bit section? - yup
     {
         u32 mask = 1 << (tm - 32);
         return sTMHMLearnsets[species][1] & mask;
@@ -6577,36 +6586,36 @@ u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm)
 
 u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
 {
-    u16 learnedMoves[4];
+    u16 learnedMoves[MAX_MON_MOVES];
     u8 numMoves = 0;
     u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, 0);
     int i, j, k;
 
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < MAX_MON_MOVES; i++)
         learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
 
-    for (i = 0; i < 20; i++)
+    for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)//find what this 20 is
     {
         u16 moveLevel;
 
-        if (gLevelUpLearnsets[species][i] == 0xFFFF)
+        if (gLevelUpLearnsets[species][i].move == LEVEL_UP_END)
             break;
 
-        moveLevel = gLevelUpLearnsets[species][i] & 0xFE00;
+        moveLevel = gLevelUpLearnsets[species][i].level;
 
-        if (moveLevel <= (level << 9))
+        if (moveLevel <= level)
         {
-            for (j = 0; j < 4 && learnedMoves[j] != (gLevelUpLearnsets[species][i] & 0x1FF); j++)
+            for (j = 0; j < MAX_MON_MOVES && learnedMoves[j] != (gLevelUpLearnsets[species][i].move); j++)
                 ;
 
-            if (j == 4)
+            if (j == MAX_MON_MOVES)
             {
-                for (k = 0; k < numMoves && moves[k] != (gLevelUpLearnsets[species][i] & 0x1FF); k++)
+                for (k = 0; k < numMoves && moves[k] != (gLevelUpLearnsets[species][i].move); k++)
                     ;
 
                 if (k == numMoves)
-                    moves[numMoves++] = gLevelUpLearnsets[species][i] & 0x1FF;
+                    moves[numMoves++] = gLevelUpLearnsets[species][i].move;
             }
         }
     }
@@ -6619,16 +6628,16 @@ u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves)
     u8 numMoves = 0;
     int i;
 
-    for (i = 0; i < 20 && gLevelUpLearnsets[species][i] != 0xFFFF; i++)
-         moves[numMoves++] = gLevelUpLearnsets[species][i] & 0x1FF;
+    for (i = 0; i < MAX_LEVEL_UP_MOVES && gLevelUpLearnsets[species][i].move != LEVEL_UP_END; i++) //20 again, 
+         moves[numMoves++] = gLevelUpLearnsets[species][i].move;
 
      return numMoves;
-}
+} //checked adn emeeald has thee 20 listed as "max level up moves" so itis a limit
 
 u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
 {
-    u16 learnedMoves[4];
-    u16 moves[20];
+    u16 learnedMoves[MAX_MON_MOVES];
+    u16 moves[MAX_LEVEL_UP_MOVES]; //again 20. hmm possibly a limit for move lists? I heard something like that existing
     u8 numMoves = 0;
     u16 species = GetMonData(mon, MON_DATA_SPECIES2, 0);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, 0);
@@ -6637,30 +6646,30 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
     if (species == SPECIES_EGG)
         return 0;
 
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < MAX_MON_MOVES; i++)
         learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
 
-    for (i = 0; i < 20; i++)
+    for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)
     {
         u16 moveLevel;
 
-        if (gLevelUpLearnsets[species][i] == 0xFFFF)
+        if (gLevelUpLearnsets[species][i].move == LEVEL_UP_END)
             break;
 
-        moveLevel = gLevelUpLearnsets[species][i] & 0xFE00;
+        moveLevel = gLevelUpLearnsets[species][i].level;
 
-        if (moveLevel <= (level << 9))
+        if (moveLevel <= level)
         {
-            for (j = 0; j < 4 && learnedMoves[j] != (gLevelUpLearnsets[species][i] & 0x1FF); j++)
+            for (j = 0; j < MAX_MON_MOVES && learnedMoves[j] != (gLevelUpLearnsets[species][i].move); j++)
                 ;
 
-            if (j == 4)
+            if (j == MAX_MON_MOVES)
             {
-                for (k = 0; k < numMoves && moves[k] != (gLevelUpLearnsets[species][i] & 0x1FF); k++)
+                for (k = 0; k < numMoves && moves[k] != (gLevelUpLearnsets[species][i].move); k++)
                     ;
 
                 if (k == numMoves)
-                    moves[numMoves++] = gLevelUpLearnsets[species][i] & 0x1FF;
+                    moves[numMoves++] = gLevelUpLearnsets[species][i].move;
             }
         }
     }

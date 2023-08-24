@@ -143,7 +143,7 @@ const u8 gMoveDescription_Barrage[] = _("Round objects are\nhurled at the foe\nt
 const u8 gMoveDescription_LeechLife[] = _("An attack that\nabsorbs half the\ndamage it inflicted\nto restore HP.");
 const u8 gMoveDescription_LovelyKiss[] = _("The user forces a\nkiss on the foe\nwith a scary face\nthat induces sleep.");
 const u8 gMoveDescription_SkyAttack[] = _("The user raises its\nevasiveness in the\n1st turn, then\nattacks in the 2nd\nwith heightend crit.\nThe foe may flinch.");
-const u8 gMoveDescription_Transform[] = _("The user transforms\ninto a copy of the\nfoe with even the\nsame move set.");
+const u8 gMoveDescription_Transform[] = _("The user transforms\ninto a copy of the\nfoe with even the\nsame move set.\nKeeps EVs and nature");
 const u8 gMoveDescription_Bubble[] = _("A spray of bubbles\nhits the foe.\nIt may lower the\nfoe's SPEED stat.");
 const u8 gMoveDescription_DizzyPunch[] = _("The foe is hit with\na rhythmic punch\nthat may leave it\nconfused.");
 const u8 gMoveDescription_Spore[] = _("The user scatters\nbursts of fine\nspores that induce\nsleep.");
@@ -994,7 +994,7 @@ const u8 gHOLD_HANDSDescription
     [] = _("The user and ally hold hands\nmaking them happy.");
 
 const u8 gBABYDOLL_EYESDescription 
-    [] = _("Lowers the foe's Attack\nbefore it can move.");
+    [] = _("Lowers the foe's\nAttack before it\ncan move.");
 
 const u8 gNUZZLEDescription 
     [] = _("Rubs its cheecks against\nthe foe, paralyzing it.");

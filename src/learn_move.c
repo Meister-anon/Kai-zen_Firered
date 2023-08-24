@@ -17,6 +17,8 @@
 #include "constants/songs.h"
 #include "constants/moves.h"
 
+#define MOVE_LEARN_PROCESS
+//since I changed order edit this for future users
 /*
  * Move relearner state machine
  * ------------------------
@@ -135,13 +137,13 @@ struct LearnMoveGfxResources
     u8 unk_1C;
     u8 unk_1D;
     u8 unk_1E;
-    struct ListMenuItem listMenuItems[25];
-    u16 learnableMoves[25];
-    u8 listMenuStrbufs[25][13];
-    bool8 scheduleMoveInfoUpdate;
-    u8 selectedPartyMember;
+    struct ListMenuItem listMenuItems[MAX_LEVEL_UP_MOVES + 1];
+    u16 learnableMoves[MAX_LEVEL_UP_MOVES+ 1]; //ok looking at emerald at looks like possible max move relearner moves, as that's 25? don't know why higher than lvl up moves
+    u8 listMenuStrbufs[MAX_LEVEL_UP_MOVES + 1][MOVE_NAME_LENGTH + 1];//replace 25 with max move learn +1, way code is used think need it to be at min 1 greater
+    bool8 scheduleMoveInfoUpdate;   //didn't understand loop, original was 25, didn't need + 1 I THINK
+    u8 selectedPartyMember; //nvm keeping  the + 1 as origal setup was larger than possible values
     u8 selectedMoveSlot;
-    u8 unk_262;
+    u8 unk_262;//undid changes aren't this part, something with move learn or level up struct/functions
     u8 listMenuTaskId;
     u8 bg1TilemapBuffer[BG_SCREEN_SIZE]; // 264
     u8 textColor[3]; // A64
@@ -707,9 +709,10 @@ static void InitMoveRelearnerStateVariables(void)
     sMoveRelearner->unk_1D = 0;
     sMoveRelearner->unk_1E = 0;
     sMoveRelearner->scheduleMoveInfoUpdate = FALSE;
-    for (i = 0; i < 20; i++)
-        sMoveRelearner->learnableMoves[i] = MOVE_NONE;
-}
+    for (i = 0; i < 20; i++) //maybe this is issue, seems to be state of process not moves? 
+        sMoveRelearner->learnableMoves[i] = MOVE_NONE; //guess change it back to 20?
+}//I got it to work but don't know what htis actually is, i.e if it needs to be 20 or can use 35
+//need recap what old learn limit was, but value was 25, but a lot of 20's were here as well.
 
 static void SpriteCB_ListMenuScrollIndicators(struct Sprite * sprite)
 {
@@ -750,7 +753,7 @@ static void MoveRelearnerInitListMenuBuffersEtc(void)
 {
     int i;
     s32 count;
-    u8 nickname[11];
+    u8 nickname[POKEMON_NAME_LENGTH];
 
     sMoveRelearner->numLearnableMoves = GetMoveRelearnerMoves(&gPlayerParty[sMoveRelearner->selectedPartyMember], sMoveRelearner->learnableMoves);
     count = GetMoveRelearnerMoves(&gPlayerParty[sMoveRelearner->selectedPartyMember], sMoveRelearner->learnableMoves);
@@ -844,11 +847,11 @@ static void PrintMoveInfo(u16 move)
 
 static void LoadMoveInfoUI(void)
 {
-    BlitMoveInfoIcon(0, 19, 1, 4);
-    BlitMoveInfoIcon(1, 20, 0, 4);
-    BlitMoveInfoIcon(1, 21, 0, 19);
-    BlitMoveInfoIcon(0, 22, 1, 19);
-    BlitMoveInfoIcon(0, 23, 1, 34);
+    BlitMoveInfoIcon(0, MENU_INFO_ICON_TYPE, 1, 4);
+    BlitMoveInfoIcon(1, MENU_INFO_ICON_POWER, 0, 4);
+    BlitMoveInfoIcon(1, MENU_INFO_ICON_ACCURACY, 0, 19);
+    BlitMoveInfoIcon(0, MENU_INFO_ICON_PP, 1, 19);
+    BlitMoveInfoIcon(0, MENU_INFO_ICON_EFFECT, 1, 34);
     PutWindowTilemap(0);
     PutWindowTilemap(1);
     PutWindowTilemap(4);

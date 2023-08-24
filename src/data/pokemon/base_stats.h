@@ -3637,20 +3637,20 @@ const struct BaseStats gBaseStats[] =
        // #ifdef ITEM_EXPANSION
            // //.item1 = ITEM_QUICK_POWDER,  vsoonic  , is actually useless, with imposter, even more useless with my joke speed boost
         // #endif
-        //.item2 = ITEM_METAL_POWDER,
+        //.item2 = ITEM_METAL_POWDER,   //so way I setup transform quick powder actually really good lol, since transoformign doesn't change spcies in my version
         .genderRatio = MON_GENDERLESS,
         .eggCycles = 20,
         .friendship = 35,
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_DITTO,
         .eggGroup2 = EGG_GROUP_DITTO,
-        .abilities = {ABILITY_IMPOSTER, ABILITY_NONE},
+        .abilities = {ABILITY_IMMUNITY, ABILITY_IMPOSTER},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_INVERSION, ABILITY_IMMUNITY},
+            .abilityHidden = {ABILITY_INVERSION, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-    },
+    },//levle up is broken...pretty sure its not able to read the species properly if you level up while transformed, or someother part of data
 
     [SPECIES_EEVEE] =
     {

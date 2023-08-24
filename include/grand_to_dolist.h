@@ -649,7 +649,10 @@ think I'd like 120fps or 4x for full health, 90or 3x for above 50,
 
 ok checked with audio I now know 60 fps is normal speed
 
-animation are better at 90fps so 1/3rd normal durations for everything I guess
+battle animation are better at 90fps so would need divide normal duration by 2/3rd to get a 50% increase
+
+the pokemon bounce/shake in summary screen are perfect at 60fps, and it already slows down with lowered hp,
+rate is good, potentially just copy  the rate for that for mon bounce in battle
 
 * but not so fast the game loses the chill vibe -
 
