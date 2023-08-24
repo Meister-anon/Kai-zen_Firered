@@ -4115,23 +4115,157 @@ static void BufferSelectedMonData(struct Pokemon * mon)
     }
 }
 
+#define SINGLE_BATTLE   (gMain.inBattle && singles)
+#define DOUBLE_BATTLE   (gMain.inBattle && doubles)
+#define TRIPLE_ROTATION (gMain.inBattle && rotation) //update for triple battle add for ability desc list too, need defines from below
+
 static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot)
 {
     u16 move;
+    u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
+    u32 singles, doubles, rotation;
+    curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
+    slot1_personality = GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY);
+    slot2_personality = GetMonData(&gPlayerParty[1], MON_DATA_PERSONALITY);
+    slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY);
+    
+    singles = (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TWO_OPPONENTS)));
+    doubles = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE);
+    rotation = (gBattleTypeFlags & BATTLE_TYPE_ROTATION);
 
     switch (moveSlot)
     {
-    case 0:
-        move = GetMonData(mon, MON_DATA_MOVE1);
+    case 0://move 1
+        if (SINGLE_BATTLE && (curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+        {
+            move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[0];
+        }
+        else if (DOUBLE_BATTLE)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[0];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[0];
+        }
+        else if (TRIPLE_ROTATION)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[0];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[0];
+
+            if  ((curr_personality == slot3_personality)
+            && GetMonData(&gPlayerParty[2], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[0];
+        }
+        else
+            move = GetMonData(mon, MON_DATA_MOVE1);
         break;
-    case 1:
-        move = GetMonData(mon, MON_DATA_MOVE2);
+    case 1://move 2
+        if (SINGLE_BATTLE && (curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+        {
+            move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[1];
+        }
+        else if (DOUBLE_BATTLE)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[1];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[1];
+        }
+        else if (TRIPLE_ROTATION)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[1];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[1];
+
+            if  ((curr_personality == slot3_personality)
+            && GetMonData(&gPlayerParty[2], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[1];
+        }
+        else
+            move = GetMonData(mon, MON_DATA_MOVE2);
         break;
-    case 2:
-        move = GetMonData(mon, MON_DATA_MOVE3);
+    case 2://move 3
+        if (SINGLE_BATTLE && (curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+        {
+            move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[2];
+        }
+        else if (DOUBLE_BATTLE)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[2];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[2];
+        }
+        else if (TRIPLE_ROTATION)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[2];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[2];
+
+            if  ((curr_personality == slot3_personality)
+            && GetMonData(&gPlayerParty[2], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[2];
+        }
+        else
+            move = GetMonData(mon, MON_DATA_MOVE3);
         break;
-    default:
-        move = GetMonData(mon, MON_DATA_MOVE4);
+    default://move 4
+        if (SINGLE_BATTLE && (curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+        {
+            move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[3];
+        }
+        else if (DOUBLE_BATTLE)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[3];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[3];
+        }
+        else if (TRIPLE_ROTATION)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[3];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[3];
+
+            if  ((curr_personality == slot3_personality)
+            && GetMonData(&gPlayerParty[2], MON_DATA_HP))
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[3];
+        }
+        else
+            move = GetMonData(mon, MON_DATA_MOVE4);
     }
 
     return move;
@@ -4140,20 +4274,150 @@ static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot)
 static u16 GetMonPpByMoveSlot(struct Pokemon * mon, u8 moveSlot)
 {
     u16 pp;
+    u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
+    u32 singles, doubles, rotation;
+    curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
+    slot1_personality = GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY);
+    slot2_personality = GetMonData(&gPlayerParty[1], MON_DATA_PERSONALITY);
+    slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY);
+    
+    singles = (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TWO_OPPONENTS)));
+    doubles = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE);
+    rotation = (gBattleTypeFlags & BATTLE_TYPE_ROTATION);
 
     switch (moveSlot)
     {
-    case 0:
-        pp = GetMonData(mon, MON_DATA_PP1);
+    case 0://move 1
+        if (SINGLE_BATTLE && (curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+        {
+            pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[0];
+        }
+        else if (DOUBLE_BATTLE)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[0];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[0];
+        }
+        else if (TRIPLE_ROTATION)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[0];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[0];
+
+            if  ((curr_personality == slot3_personality)
+            && GetMonData(&gPlayerParty[2], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[0];
+        }
+        else
+            pp = GetMonData(mon, MON_DATA_PP1);
         break;
-    case 1:
-        pp = GetMonData(mon, MON_DATA_PP2);
+    case 1://move 2
+        if (SINGLE_BATTLE && (curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+        {
+            pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[1];
+        }
+        else if (DOUBLE_BATTLE)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[1];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[1];
+        }
+        else if (TRIPLE_ROTATION)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[1];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[1];
+
+            if  ((curr_personality == slot3_personality)
+            && GetMonData(&gPlayerParty[2], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[1];
+        }
+        else
+            pp = GetMonData(mon, MON_DATA_PP2);
         break;
-    case 2:
-        pp = GetMonData(mon, MON_DATA_PP3);
+    case 2://move 3
+        if (SINGLE_BATTLE && (curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+        {
+            pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[2];
+        }
+        else if (DOUBLE_BATTLE)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[2];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[2];
+        }
+        else if (TRIPLE_ROTATION)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[2];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[2];
+
+            if  ((curr_personality == slot3_personality)
+            && GetMonData(&gPlayerParty[2], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[2];
+        }
+        else
+            pp = GetMonData(mon, MON_DATA_PP3);
         break;
-    default:
-        pp = GetMonData(mon, MON_DATA_PP4);
+    default://move 4
+        if (SINGLE_BATTLE && (curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+        {
+            pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[3];
+        }
+        else if (DOUBLE_BATTLE)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[3];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[3];
+        }
+        else if (TRIPLE_ROTATION)
+        {
+            if  ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[3];
+
+            if  ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[3];
+
+            if  ((curr_personality == slot3_personality)
+            && GetMonData(&gPlayerParty[2], MON_DATA_HP))
+                pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[3];
+        }
+        else
+            pp = GetMonData(mon, MON_DATA_PP4);
     }
     return pp;
 }

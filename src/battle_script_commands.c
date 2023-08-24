@@ -7292,6 +7292,9 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
         //send original ability to buffer maybe buff 3
 
         UpdateHealthboxAttribute(gHealthboxSpriteIds[gBattlerAttacker], mon, HEALTHBOX_ALL); //should update hp values in healthox
+        //right now this doesn't perfectly sync up, with transormation health box changes before animation done so best thing is prob to make it a bs command
+        //and run this part afterwards  put transform animation,  health box shift then a wait animation command after that,
+        //that way I can put a pause between transform and hp update so I can time it as I want it.
 
         //do type 3 and ability slot set based on target
         gBattleMons[gBattlerAttacker].type3 = gBattleMons[gBattlerTarget].type3;

@@ -29,14 +29,14 @@ sVcountAfterSound
 sVcountAtIntr
 sVcountBeforeSound
  
-Meister_anon — Today at 6:22 PM
+Meister_anon ï¿½ Today at 6:22 PM
 thank you very much,  what does the com_sym stuff do? so I know what I'm doing.
-CompuMax — Today at 6:24 PM
+CompuMax ï¿½ Today at 6:24 PM
 The first change is defining that it does not include the DEBUG used during the development and testing of the game. Since they forgot to remove it before publishing the ROM. 
 And the second change removes the references in IWRAM from references used in the DEBUG
-Meister_anon — Today at 6:25 PM
+Meister_anon ï¿½ Today at 6:25 PM
 ok so its all part of the same removal?  for taking out the debug stuff?
-CompuMax — Today at 6:26 PM
+CompuMax ï¿½ Today at 6:26 PM
 Exactly
 * 
 * [tested in pret and works so adapting for main repo, worked for expanding species name]
@@ -44,29 +44,29 @@ Exactly
 * 
 * 
 * did you inspect how much space you needed in iwram before moving stuff to ewram?
-CompuMax — 06/03/2021 10:23 AM
+CompuMax ï¿½ 06/03/2021 10:23 AM
 No, but now that you mention it, it could be the IWRAM that is generating the problem for me.
 I am still installing the mixer in pokeemerald to rule out that the tutorial has overlooked something
-PikalaxALT — 06/03/2021 10:24 AM,<<<
+PikalaxALT ï¿½ 06/03/2021 10:24 AM,<<<
 one thing you can do is set config.h to define NDEBUG
 that'd give you back 0xB4 bytes in IWRAM
-CompuMax — 06/03/2021 10:33 AM
+CompuMax ï¿½ 06/03/2021 10:33 AM
 Oh! Thanks! I will do it
 Although I imagine that I am exceeding the IWRAM when compiling, it should show an error, right?
-PikalaxALT — 06/03/2021 10:35 AM<<<<
+PikalaxALT ï¿½ 06/03/2021 10:35 AM<<<<
 it'll also give you back something like 0x754 bytes in EWRAM, which is huge
 
 
 
 Notes on health box
 I'm wondering why its using TextIntoHealthboxObject twice
-CompuMax — Today at 8:33 PM
+CompuMax ï¿½ Today at 8:33 PM
 @Meister_anon Because the Healthboxes are too big, they are divided into 2 OBJs of 64x64
 What the first TextIntoHealthBox does is copy the first 6 tiles that make up the nickname to the first OBJ
 Then depending if you are in a double battle or not, determine where to copy the remaining 7 tiles into the next OBJ
 
 
-Meister_anon — Today at 12:46 PM
+Meister_anon ï¿½ Today at 12:46 PM
 ok I see it now, I luckily came close to the right solution,  32 x 4bpp is the same thing as I had before 0x400 etc.
 and is still half of the playersidee values so the relation is the same.
 
@@ -76,22 +76,22 @@ the 2nd function needs the value 6 * TILE_SIZE_4BPP
 and since the enemy side ends in 7  that's why I need 7 * TILE_SIZE_4BPP
 
 
-Palachu — Today at 4:06 AM
+Palachu ï¿½ Today at 4:06 AM
 Fun fact: the new character limit for Pokemon as of Gen. 6 is actually 12 (Crabominable and since Gen. 9 also Squawkabilly)
 
 Stat calc Iv allocation note
 
-Meister_anon — Yesterday at 10:29 PM
+Meister_anon ï¿½ Yesterday at 10:29 PM
 ok so apparently trainer mon have ivs and are used the same way, but unlike wild mon, they aren't set randomly,  it uses fix values to generate the same ivs for each stat?
 but most have 0?
-GriffinR — Yesterday at 10:33 PM
+GriffinR ï¿½ Yesterday at 10:33 PM
 That's correct
-Meister_anon — Yesterday at 10:52 PM
+Meister_anon ï¿½ Yesterday at 10:52 PM
 awesome glad I understand that now
 
 
 
-Meister_anon — Yesterday at 11:33 PM
+Meister_anon ï¿½ Yesterday at 11:33 PM
 I don't understand bit wise so I'm just gonna have to ask this.
 since trainer mon personality is also fixed and based on trainer name and mon species name.
 
@@ -100,22 +100,22 @@ does that mean rematching the rival, or other enemies you face multiple times, w
 is it possible their mon could have completely different abilities when they evolve?
 As personality determines the ability slot.
 
-GriffinR — Yesterday at 11:36 PM
+GriffinR ï¿½ Yesterday at 11:36 PM
 No, because the way they're generated will never set the first bit of the personality. NPC trainer pokemon will never use the alternate ability
 Other things like their natures would change, though
-Meister_anon — Today at 12:15 AM
+Meister_anon ï¿½ Today at 12:15 AM
 hmm I see, so if I want them to be able to, I need to make it use non fixed personality, or set it up to be able to set the ability from trainer party
 
-GriffinR — Today at 12:26 AM
+GriffinR ï¿½ Today at 12:26 AM
 This is where the first byte of each pokemon's personality is set (none of these values have the first bit set).
 You could calculate this byte any way you like, including setting the first bit
 
 if (gTrainers[trainerNum].doubleBattle == TRUE)
                 personalityValue = 0x80;
             else if (gTrainers[trainerNum].encounterMusic_gender & F_TRAINER_FEMALE)
-                personalityValue = 0x78; // Use personality more likely to result in a female Pokémon
+                personalityValue = 0x78; // Use personality more likely to result in a female Pokï¿½mon
             else
-                personalityValue = 0x88; // Use personality more likely to result in a male Pokémon
+                personalityValue = 0x88; // Use personality more likely to result in a male Pokï¿½mon
 
                 apparently ecounter music field uses/has a gender value
 
@@ -173,106 +173,106 @@ would call personalityvaluechecksum or sometihng
 
 //function value set & value comparison logic
 
-Meister_anon — Today at 10:10 AM
+Meister_anon ï¿½ Today at 10:10 AM
 Does a function have to return a  value, for it to be used as a value comparison?
 like does it only make sense to use logic x == function
 
 if that function is built to return a value?
-Kurausukun — Today at 10:20 AM
+Kurausukun ï¿½ Today at 10:20 AM
 I don't see how else it would work
 Otherwise you're comparing with whatever garbage is in the register
 
 
 
-Meister_anon — Today at 2:09 PM
+Meister_anon ï¿½ Today at 2:09 PM
 what does it mean when this value is used?   " \ "
 I see that in the repo in some places,  its not the division one
 
 I'm assuming it does something similar to commenting?
-GriffinR — Today at 2:44 PM
+GriffinR ï¿½ Today at 2:44 PM
 No, this wouldn't be a comment. It's a backslash, its meaning depends on the context. For example in a string n is just the character n, but \n is a newline
 In general it's used as an indicator to treat what follows in a different way
 
-Kurausukun — Today at 5:00 PM
+Kurausukun ï¿½ Today at 5:00 PM
 It's called an escape sequence
 If you Google it you will find more info
 
-Meister_anon — Today at 5:24 PM
+Meister_anon ï¿½ Today at 5:24 PM
 ok looked into it, but the way its used wasn't mentioned in the resource i found.
 the escape was used at the end of a line, where a constant was being defined.
 
 I'm guessing using the escape that way lets you extend the values for a define for
 further than a single line?
-GriffinR — Today at 5:35 PM
+GriffinR ï¿½ Today at 5:35 PM
 Yes, that'd be to carry the definition onto the next line
 
 
-Meister_anon — Today at 12:18 PM
+Meister_anon ï¿½ Today at 12:18 PM
 Can someone give me a heads up on why this text causes issue in pokedex entries?
 
-"will-o’-the-wisp"
+"will-oï¿½-the-wisp"
 
 from what I can tell all the characters individually are used in other dex entries.
 
-GriffinR — Today at 12:21 PM
-’ is not the same as '
-Meister_anon — Today at 12:21 PM
+GriffinR ï¿½ Today at 12:21 PM
+ï¿½ is not the same as '
+Meister_anon ï¿½ Today at 12:21 PM
 ok got it,
 alright easy fix to make then
 you can prob tell yes, I copy pasted from online
-GriffinR — Today at 12:23 PM
-You can also add it to the charmap by putting a '’' = B4 in charmap.txt. It was added to pokeemerald's, it just hasn't been added to pokefirered's yet.
+GriffinR ï¿½ Today at 12:23 PM
+You can also add it to the charmap by putting a 'ï¿½' = B4 in charmap.txt. It was added to pokeemerald's, it just hasn't been added to pokefirered's yet.
 This would treat it the same way as '
-Meister_anon — Today at 12:24 PM
+Meister_anon ï¿½ Today at 12:24 PM
 good to know,  
 oh wait,
 you're saying it would default to the same character oh ok cool.
 ok I prob will do that then.
 
-Meister_anon — Today at 9:08 PM
+Meister_anon ï¿½ Today at 9:08 PM
 
 can someone explain how foresight works for me?
 i know its supposed to get passed the no effect multiplier for typing but I'm not understanding how.
 
  is it changing the move type so it hits neutral, but while TYPE_FORESIGHT
 is in the table, its not listed under type names.
-Kurausukun — Today at 9:10 PM
+Kurausukun ï¿½ Today at 9:10 PM
 It's a massive hack
 It's just in the type effectiveness chart
-Meister_anon — Today at 9:11 PM
+Meister_anon ï¿½ Today at 9:11 PM
 is the i+3 making it go to type_endtable and somehow skipping typeset so it does neutral or something?
-Kurausukun — Today at 9:12 PM
+Kurausukun ï¿½ Today at 9:12 PM
 I forget exactly how it works, but I remember it being stupid
-Meister_anon — Today at 9:13 PM
+Meister_anon ï¿½ Today at 9:13 PM
 sigh I can imagine.
-The Sylph is In — Today at 9:13 PM
-If the defender has the foresight status, it breaks out and stops checking the type effectiveness table (and ghost’s normal/fighting immunities conveniently are located after type_foresight)
-Kurausukun — Today at 9:14 PM
+The Sylph is In ï¿½ Today at 9:13 PM
+If the defender has the foresight status, it breaks out and stops checking the type effectiveness table (and ghostï¿½s normal/fighting immunities conveniently are located after type_foresight)
+Kurausukun ï¿½ Today at 9:14 PM
 Also you're reading that wrong, the break keeps it from going to +3
 Yeah, what they said
-Meister_anon — Today at 9:14 PM
+Meister_anon ï¿½ Today at 9:14 PM
 yup that'd do it.
 and it defaults to normal multiplier which is why it does neutral (I think)
-Kurausukun — Today at 9:15 PM
+Kurausukun ï¿½ Today at 9:15 PM
 Yes
-Meister_anon — Today at 9:16 PM
+Meister_anon ï¿½ Today at 9:16 PM
 ok just needed to understand that so I could setup scrappy logic.
 just need to double check I didn't move those type checks.
 
 if not I should be able to just have it use the same logic to make that work.
 Thanks to both of you. 
-Kurausukun — Today at 9:17 PM
+Kurausukun ï¿½ Today at 9:17 PM
 Yeah that should work
 
 
-Meister_anon — Yesterday at 8:55 PM
+Meister_anon ï¿½ Yesterday at 8:55 PM
 yo archie think you can help me with something,
 I'm workign on an effect and I think I'm misunderstanding a line, it seems to be used elsewhere about exactly how I have it, and I think I've already fixed any pointer issus I had
 &gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
 
 
 does this mean the target is the enemy, or does it mean the mon the enemy is targetting?
-Archie — Yesterday at 9:17 PM
+Archie ï¿½ Yesterday at 9:17 PM
 This code seems like it should only be running when you are targeting an enemy mon
 gBattlerTarget is the mon currently being targeted by a move
 Indexing that in gBattlerPartyIndexes pulls out the position in the party that Pokemon is in
@@ -630,9 +630,31 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * 
 * make game run smoother, i.e faster base text, move animations, battle text
 * movement speed as well, want to move twice as far, without needing to 
-* change the actual walking animation. and make running slightly faster
+* change the actual walking animation. and make running slightly faster     
 * pretty much optimizing things so speed up isnt so necessary,
+
+karasukun mentioned the game DOES have different durations for fade in fade out effects
+so one thing I can quickly do is speed those up, if base speed is 60fps my game runs on emulator at around 1k fps and that makes fade instantaneous
+also speed that mon bounce in game I like where it is on 1k fps would want that to be close to base speed,
+and slow it down to where it is normally when they get down to red hp.
+but fwant to keep hp box buonce about where it is normally
+
+I think base game is 30fps 120fps is perfect for character bounce so possibly 4x, 
+think then drop down to 90fps
+30fps for red health
+think I'd like 120fps or 4x for full health, 90or 3x for above 50,  
+60 fps 2x in yellow I think
+30 fps 1x at red
+120fps is also nice for some fadeins
+
+ok checked with audio I now know 60 fps is normal speed
+
+animation are better at 90fps so 1/3rd normal durations for everything I guess
+
 * but not so fast the game loses the chill vibe -
+
+side note, I think I would like to add a repel pouch hmm berry pouch is a key item isn't it? 
+I could set it up like that, either a bag pouch or a key item that opens in to a list just for that category of items
 * 
 * redo disobedience mechanics to work on player mon, just for the sake of new game plus, as the point is to  make the game like new again
 * and allow you to go through the trials with a different team.
@@ -646,6 +668,10 @@ goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repel
 * think change encounter data to lvl 1 met fateful encounter text)
 * also reevaluate benefit of new game + as original idea as makign the game new again and having a way to get other starters...
 * 
+* hm actually think what I will do is set ALL mon to lvl 1, so you  can use anyone, but mon in box will auto level up based on pre-determined lvl caps so badges
+* will set the mon in the box to a certain lvl, so you can just pick up whoever and go, without having to do levels on them
+* that will be just for new game plus, since yuo keep evs and moves, think plan is set lvl to a few levels below average trainer/gym leader cap
+*
 * played OPAL effing amazing, incorporate the great qol stuff frome there, flame charge buff to raise speed, (oh it already does that lol)
 * try to get meowth forms, setup exp share with icon on summary screen. [would make Cefireon ghost flying in my game]
 * 
@@ -872,10 +898,10 @@ guts boost from status is also undone. actually could just do neutralizing gas d
 that would prob be too much, just limit to status related stuff, to put everyone on even footing 
 
 Generation I
-Haze resets the stat stages of both active Pokémon to 0 and removes the stat reductions due to burns and paralysis.
+Haze resets the stat stages of both active Pokï¿½mon to 0 and removes the stat reductions due to burns and paralysis.
 It also lifts the effects of Focus Energy and Dire Hit, Mist and Guard Spec.,
 X Accuracy, Leech Seed, Disable, Reflect and Light Screen from both sides of the field. 
-Additionally, Haze cures confusion and turns bad poison into regular poison for both active Pokémon,
+Additionally, Haze cures confusion and turns bad poison into regular poison for both active Pokï¿½mon,
 and also removes any non-volatile status condition from the opponent.   
 
  -don't need to remove leech seed/poison just stop endturn from activating
@@ -899,8 +925,8 @@ need do end turn block status2 removal and side status block
 just left is refinereies, extra text end tur animation - final decision keeping name haze
 
 Haze does not remove any non-volatile status ailments that the user has,
-does not change the generic Minimize graphic back to the Pokémon's regular image,
-and does not reset either Pokémon's current type, moves, or species.
+does not change the generic Minimize graphic back to the Pokï¿½mon's regular image,
+and does not reset either Pokï¿½mon's current type, moves, or species.
 
 -  covers the field in a strange black fog, resetting stat changs for all battlers and blocking outside effects and status effects for the duration
 
@@ -1405,7 +1431,7 @@ Thunder Wave Electric TM45
 * grass immune to powder, ease of access to status moves to take advantage of multi status and higher than average vitatliy as part of nature
 * fire can't be burned, poison can't be poisoned etc. 
 * 
-* note -A badly poisoned Pokémon will remain badly poisoned even if switched out or the battle ends, although the counter is reset. *bulbapedia
+* note -A badly poisoned Pokï¿½mon will remain badly poisoned even if switched out or the battle ends, although the counter is reset. *bulbapedia
 * didn't realize this is how it worked, thought I would have to set it that way myself nice
 * 
 * poison types can't be poisoned, meaning if they are given poison_heal as an ability they can never activate it,
@@ -2721,8 +2747,8 @@ goto VARIOUS_BS_COMMANDS	//long function for easily setting up new bs commands. 
 goto GROUNDED_FUNCTION //battle_util.c grounded logic, also right below floating mon list
 /*
 * Relevant Notes:
-* Raised Pokémon are not affected by Ground type moves, Spikes, Toxic Spikes nor Arena Trap.
-* Pokémon no longer stay raised (and cannot become raised) if Gravity or Ingrain is in effect, 
+* Raised Pokï¿½mon are not affected by Ground type moves, Spikes, Toxic Spikes nor Arena Trap.
+* Pokï¿½mon no longer stay raised (and cannot become raised) if Gravity or Ingrain is in effect, 
 * the move Smack Down is used against them, or Iron Ball is held.
 * 
 * Its a status 3 so smackdown would be removed on switch 
