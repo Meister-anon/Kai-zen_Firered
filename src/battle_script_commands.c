@@ -5962,15 +5962,22 @@ static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon)
 
 static void atk76_various(void)
 {
-    u8 side;
-    s32 i;
+
+    CMD_ARGS(u8 battler, u8 id);
+    struct Pokemon *mon;
+    u32 side, bits;
+    s32 i, j;
+    u8 data[10];
     u32 monToCheck, status;
     u16 species;
     u8 abilityNum;
+    u16 lastMove = gLastMoves[gBattlerTarget];
+    u8 lost_type = gBattleMoves[gCurrentMove].argument;
 
-    gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+    //gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+    gActiveBattler = GetBattlerForBattleScript(cmd->battler);
 
-    switch (gBattlescriptCurrInstr[2])
+    switch (cmd->id)
     {
     case VARIOUS_CANCEL_MULTI_TURN_MOVES:
         CancelMultiTurnMoves(gActiveBattler);
@@ -6055,6 +6062,14 @@ static void atk76_various(void)
             }
         }
         break;
+    case VARIOUS_PLAY_MOVE_ANIMATION:
+    {
+        VARIOUS_ARGS(u16 move);
+        BtlController_EmitMoveAnimation(BUFFER_A, cmd->move, gBattleScripting.animTurn, 0, 0, gBattleMons[gActiveBattler].friendship, &gDisableStructs[gActiveBattler]);//, gMultiHitCounter);
+        MarkBattlerForControllerExec(gActiveBattler); //don't know why friendship and multihit are used
+        gBattlescriptCurrInstr = cmd->nextInstr;//temp remove multihit as base functino doesn't have that argument, need update
+        return;
+    }
     case VARIOUS_CHECK_POKEFLUTE:
         gBattleCommunication[MULTISTRING_CHOOSER] = 0;
         monToCheck = 0;

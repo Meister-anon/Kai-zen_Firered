@@ -1287,6 +1287,11 @@
 	various \battler, VARIOUS_RETURN_OPPONENT_MON2
 	.endm
 
+	.macro playmoveanimation battler:req, move:req
+	various \battler, VARIOUS_PLAY_MOVE_ANIMATION
+	.2byte \move
+	.endm
+
 	.macro checkpokeflute battler:req
 	various \battler, 11
 	.endm
@@ -1294,6 +1299,7 @@
 	.macro waitfanfare battler:req
 	various \battler, 12
 	.endm
+	
 
 @ helpful macros
 	.macro setstatchanger stat:req, stages:req, down:req
