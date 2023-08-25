@@ -61,6 +61,7 @@ void MarkBattlerForControllerExec(u8 battlerId);
 void sub_8017298(u8 arg0);
 void CancelMultiTurnMoves(u8 battler);
 bool8 WasUnableToUseMove(u8 battler);
+u16 HeldItemSearch(void);
 void PrepareStringBattle(u16 stringId, u8 battler);
 void ResetSentPokesToOpponentValue(void);
 void sub_8017434(u8 battler);
@@ -73,12 +74,20 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check);
 bool8 AreAllMovesUnusable(void);
 u8 GetImprisonedMovesCount(u8 battlerId, u16 move);
 u8 DoFieldEndTurnEffects(void);
+s32 GetDrainedBigRootHp(u32 battler, s32 hp);
 u8 DoBattlerEndTurnEffects(void);
 bool8 HandleWishPerishSongOnTurnEnd(void);
 bool8 HandleFaintedMonActions(void);
 void TryClearRageStatuses(void);
 u8 AtkCanceller_UnableToUseMove(void);
+u8 AtkCanceller_UnableToUseMove2(void);
+bool8 IsFloatingSpecies(u8 battlerId);
+bool8 IsBattlerGrounded(u8 battlerId);
 bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2);
+bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
+static bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer);
+static bool32 ShouldChangeFormHpBased(u32 battler);
+static u8 ForewarnChooseMove(u32 battler);
 u8 CastformDataTypeChange(u8 battler);
 u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 moveArg);
 void BattleScriptExecute(const u8 *BS_ptr);
@@ -87,13 +96,92 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn);
 void ClearFuryCutterDestinyBondGrudge(u8 battlerId);
 void HandleAction_RunBattleScript(void);
 u8 GetMoveTarget(u16 move, u8 setTarget);
+u32 SetRandomTarget(u32 battlerId);
+bool32 IsAffectedByFollowMe(u32 battlerAtk, u32 defSide, u32 move);
 u8 IsMonDisobedient(void);
-
+//bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
+u32 GetBattleMoveSplit(u32 moveId);
 bool8 IsBattlerAlive(u8 battlerId);
+bool8 IsBlackFogNotOnField(void);
+u32 GetBattlerAbility(u8 battlerId);
+u32 GetBattlerWeight(u8 battlerId);
+u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId);
+u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId);
+u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16 moveId3, u16 moveId4);
+bool32 CanMegaEvolve(u8 battlerId);
+void UndoMegaEvolution(u32 monId);
+bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 toxicSpikes);
+void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut);
+bool32 DoBattlersShareType(u32 battler1, u32 battler2);
+bool32 CanBattlerEscape(u32 battlerId);
+bool32 IsHealBlockPreventingMove(u32 battler, u32 move);
+u32 IsAbilityPreventingEscape(u32 battlerId);
+u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability);
+u32 IsAbilityOnField(u32 ability); 
+u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating);
+u32 GetBattlerHoldEffectParam(u8 battlerId);
+bool8 IsMoveMakingContact(u16 move, u8 battlerAtk); //made bool8 since its just a true false return
+bool8 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId); //same as above
 struct Pokemon *GetIllusionMonPtr(u32 battlerId);
 void ClearIllusionMon(u32 battlerId);
 bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
+u32 IsAbilityOnSide(u32 battlerId, u32 ability);
+u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability);
+u32 DoesSideHaveAbility(u32 battlerId, u32 ability); // //adapted abilityonside function that doesn't use getbattlerability
+bool32 CanFling(u8 battlerId);
+bool32 IsRolePlayBannedAbilityAtk(u16 ability);  //looping array kept 32
+bool32 IsRolePlayBannedAbility(u16 ability);
+bool32 IsSkillSwapBannedAbility(u16 ability);
+bool32 IsWorrySeedBannedAbility(u16 ability);
+bool32 IsGastroAcidBannedAbility(u16 ability);
+bool32 IsEntrainmentBannedAbilityAttacker(u16 ability);
+bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability);
+bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
+bool32 CanSleep(u8 battlerId);
+bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget);
+bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget); //actually needs to be different
+bool32 CanBeBurned(u8 battlerId);
+bool32 CanBeParalyzed(u8 battlerId);
+bool32 CanBeFrozen(u8 battlerId);
+bool32 CanBeConfused(u8 battlerId);
+bool32 HasEnoughHpToEatBerry(u8 battlerId, u32 hpFraction, u16 itemId);
+bool32 DoesPranksterBlockMove(u16 move, u8 battlerwithPrankster, u8 battlerDef, bool32 checkTarget);
+bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind);
+bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags);
+u16 GetUsedHeldItem(u8 battler);
+bool32 TryRoomService(u8 battlerId);
+bool32 TestSheerForceFlag(u8 battler, u16 move);
+u8 TryHandleSeed(u8 battler, u32 terrainFlag, u8 statId, u16 itemId, bool32 execute);
+void TryToRevertMimicry(void);
+void TryToApplyMimicry(u8 battlerId, bool8 various);
+void RestoreBattlerOriginalTypes(u8 battlerId);
+void ResetFuryCutterCounter(u8 battlerId);
+void MulModifier(u16 *modifier, u16 val);
+u32 ApplyModifier(u16 modifier, u32 val);
+bool32 UnnerveOn(u32 battlerId, u32 itemId);
+void TryRestoreStolenItems(void);
+void TrySaveExchangedItem(u8 battlerId, u16 stolenItem);
+bool32 TryActivateBattlePoisonHeal(void);   //replaced normal poisonheal checks, allows use for poison types
+u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
+u32 GetBattlerMoveTargetType(u8 battlerId, u16 move); //need port these two fully
+bool32 CanTargetBattler(u8 battlerAtk, u8 battlerDef, u16 move);
+u16 GetTypeModifier(u8 atkType, u8 defType);
+//u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef);  ported in case, but pretty sure I have no use for this, as these are just for reading battlre data and running dmg calc predictions
+s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u16 *typeEffectivenessModifier);
+//learned defined need be on one line, this should be logic for thawing i.e remove frozen status
+//removed fire fang restriction, any heat transafer is good enough
 
-u32 DoesSideHaveAbility(u32 battlerId, u32 ability);
-u32 GetBattlerAbility(u8 battlerId);
+bool32 TestMoveFlags(u16 move, u32 flag);
+
+s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower,
+    bool32 isCrit, bool32 randomFactor, bool32 updateFlags, u16 typeEffectivenessModifier);
+
+#define GROUNDED_GHOSTMON ((SPECIES_SPIRITOMB || SPECIES_CORSOLA_GALARIAN || SPECIES_CURSOLA || SPECIES_SANDYGAST || SPECIES_PALOSSAND || SPECIES_GOLETT || SPECIES_TREVENANT || SPECIES_MARSHADOW || SPECIES_MIMIKYU || SPECIES_MIMIKYU_BUSTED || SPECIES_SABLEYE_MEGA))
+
+#define THAW_CONDITION(move) ((move == MOVE_SCALD) || (((gBattleMoves[move].type == TYPE_FIRE) || (gBattleMoves[move].argument == TYPE_FIRE)) && (gBattleMoves[move].power >= 60 || gDynamicBasePower >= 60)))
+
+// percent in UQ_4_12 format
+extern const u16 gPercentToModifier[101];
+
+extern const u16 gFloatingSpecies[130];
 #endif // GUARD_BATTLE_UTIL_H

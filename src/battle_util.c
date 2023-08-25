@@ -33,6 +33,111 @@ static const u16 sSoundMovesTable[] =
     MOVE_UPROAR, MOVE_METAL_SOUND, MOVE_GRASS_WHISTLE, MOVE_HYPER_VOICE, 0xFFFF
 };
 
+const u16 gPercentToModifier[101] =
+{
+    UQ_4_12(0.00), // 0
+    UQ_4_12(0.01), // 1
+    UQ_4_12(0.02), // 2
+    UQ_4_12(0.03), // 3
+    UQ_4_12(0.04), // 4
+    UQ_4_12(0.05), // 5
+    UQ_4_12(0.06), // 6
+    UQ_4_12(0.07), // 7
+    UQ_4_12(0.08), // 8
+    UQ_4_12(0.09), // 9
+    UQ_4_12(0.10), // 10
+    UQ_4_12(0.11), // 11
+    UQ_4_12(0.12), // 12
+    UQ_4_12(0.13), // 13
+    UQ_4_12(0.14), // 14
+    UQ_4_12(0.15), // 15
+    UQ_4_12(0.16), // 16
+    UQ_4_12(0.17), // 17
+    UQ_4_12(0.18), // 18
+    UQ_4_12(0.19), // 19
+    UQ_4_12(0.20), // 20
+    UQ_4_12(0.21), // 21
+    UQ_4_12(0.22), // 22
+    UQ_4_12(0.23), // 23
+    UQ_4_12(0.24), // 24
+    UQ_4_12(0.25), // 25
+    UQ_4_12(0.26), // 26
+    UQ_4_12(0.27), // 27
+    UQ_4_12(0.28), // 28
+    UQ_4_12(0.29), // 29
+    UQ_4_12(0.30), // 30
+    UQ_4_12(0.31), // 31
+    UQ_4_12(0.32), // 32
+    UQ_4_12(0.33), // 33
+    UQ_4_12(0.34), // 34
+    UQ_4_12(0.35), // 35
+    UQ_4_12(0.36), // 36
+    UQ_4_12(0.37), // 37
+    UQ_4_12(0.38), // 38
+    UQ_4_12(0.39), // 39
+    UQ_4_12(0.40), // 40
+    UQ_4_12(0.41), // 41
+    UQ_4_12(0.42), // 42
+    UQ_4_12(0.43), // 43
+    UQ_4_12(0.44), // 44
+    UQ_4_12(0.45), // 45
+    UQ_4_12(0.46), // 46
+    UQ_4_12(0.47), // 47
+    UQ_4_12(0.48), // 48
+    UQ_4_12(0.49), // 49
+    UQ_4_12(0.50), // 50
+    UQ_4_12(0.51), // 51
+    UQ_4_12(0.52), // 52
+    UQ_4_12(0.53), // 53
+    UQ_4_12(0.54), // 54
+    UQ_4_12(0.55), // 55
+    UQ_4_12(0.56), // 56
+    UQ_4_12(0.57), // 57
+    UQ_4_12(0.58), // 58
+    UQ_4_12(0.59), // 59
+    UQ_4_12(0.60), // 60
+    UQ_4_12(0.61), // 61
+    UQ_4_12(0.62), // 62
+    UQ_4_12(0.63), // 63
+    UQ_4_12(0.64), // 64
+    UQ_4_12(0.65), // 65
+    UQ_4_12(0.66), // 66
+    UQ_4_12(0.67), // 67
+    UQ_4_12(0.68), // 68
+    UQ_4_12(0.69), // 69
+    UQ_4_12(0.70), // 70
+    UQ_4_12(0.71), // 71
+    UQ_4_12(0.72), // 72
+    UQ_4_12(0.73), // 73
+    UQ_4_12(0.74), // 74
+    UQ_4_12(0.75), // 75
+    UQ_4_12(0.76), // 76
+    UQ_4_12(0.77), // 77
+    UQ_4_12(0.78), // 78
+    UQ_4_12(0.79), // 79
+    UQ_4_12(0.80), // 80
+    UQ_4_12(0.81), // 81
+    UQ_4_12(0.82), // 82
+    UQ_4_12(0.83), // 83
+    UQ_4_12(0.84), // 84
+    UQ_4_12(0.85), // 85
+    UQ_4_12(0.86), // 86
+    UQ_4_12(0.87), // 87
+    UQ_4_12(0.88), // 88
+    UQ_4_12(0.89), // 89
+    UQ_4_12(0.90), // 90
+    UQ_4_12(0.91), // 91
+    UQ_4_12(0.92), // 92
+    UQ_4_12(0.93), // 93
+    UQ_4_12(0.94), // 94
+    UQ_4_12(0.95), // 95
+    UQ_4_12(0.96), // 96
+    UQ_4_12(0.97), // 97
+    UQ_4_12(0.98), // 98
+    UQ_4_12(0.99), // 99
+    UQ_4_12(1.00), // 100
+};
+
 u8 GetBattlerForBattleScript(u8 caseId)
 {
     u32 ret = 0;
@@ -457,6 +562,102 @@ static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] =
     ABILITY_GULP_MISSILE,
     ABILITY_LAVA_FISSURE,
 };
+
+bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags) //need to add utility umbrella clause to weather effects
+{
+    if (!WEATHER_HAS_EFFECT)
+        return FALSE;
+
+    /*if (!IsBlackFogNotOnField())
+        return FALSE;*/
+
+    if (gBattleWeather & weatherFlags)
+    {
+        // given weather is active -> check if its sun, rain against utility umbrella ( since only 1 weather can be active at once)
+        if (gBattleWeather & (WEATHER_SUN_ANY | WEATHER_RAIN_ANY) && GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_UTILITY_UMBRELLA)
+            return FALSE; // utility umbrella blocks sun, rain effects
+
+        return TRUE;
+    }
+    return FALSE;
+}
+
+// This function is the body of "jumpifstat", but can be used dynamically in a function
+bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind)
+{
+    bool8 ret = FALSE;
+    u8 statValue = gBattleMons[battlerId].statStages[statId];
+
+    // Because this command is used as a way of checking if a stat can be lowered/raised,
+    // we need to do some modification at run-time.
+    if (GetBattlerAbility(battlerId) == ABILITY_CONTRARY)
+    {
+        if (cmpKind == CMP_GREATER_THAN)
+            cmpKind = CMP_LESS_THAN;
+        else if (cmpKind == CMP_LESS_THAN)
+            cmpKind = CMP_GREATER_THAN;
+
+        if (cmpTo == MIN_STAT_STAGE)
+            cmpTo = MAX_STAT_STAGE;
+        else if (cmpTo == MAX_STAT_STAGE)
+            cmpTo = MIN_STAT_STAGE;
+    }
+
+    switch (cmpKind)
+    {
+    case CMP_EQUAL:
+        if (statValue == cmpTo)
+            ret = TRUE;
+        break;
+    case CMP_NOT_EQUAL:
+        if (statValue != cmpTo)
+            ret = TRUE;
+        break;
+    case CMP_GREATER_THAN:
+        if (statValue > cmpTo)
+            ret = TRUE;
+        break;
+    case CMP_LESS_THAN:
+        if (statValue < cmpTo)
+            ret = TRUE;
+        break;
+    case CMP_COMMON_BITS:
+        if (statValue & cmpTo)
+            ret = TRUE;
+        break;
+    case CMP_NO_COMMON_BITS:
+        if (!(statValue & cmpTo))
+            ret = TRUE;
+        break;
+    }
+
+    return ret;
+}
+
+void BufferStatChange(u8 battlerId, u8 statId, u8 stringId)
+{
+    bool8 hasContrary = (GetBattlerAbility(battlerId) == ABILITY_CONTRARY);
+
+    PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
+    if (stringId == STRINGID_STATFELL)
+    {
+        if (hasContrary)
+            PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_STATROSE)
+        else
+            PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_STATFELL)
+    }
+    else if (stringId == STRINGID_STATROSE)
+    {
+        if (hasContrary)
+            PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_STATFELL)
+        else
+            PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_STATROSE)
+    }
+    else
+    {
+        PREPARE_STRING_BUFFER(gBattleTextBuff2, stringId)
+    }
+}
 
 void CancelMultiTurnMoves(u8 battler)
 {
@@ -1740,6 +1941,214 @@ u8 AtkCanceller_UnableToUseMove(void)
         MarkBattlerForControllerExec(gActiveBattler);
     }
     return effect;
+}
+
+//logic for this is non-flying type pokemon that are typically
+//floating or attack while in the air/ can fly
+//already checked to add all pokemon that have levitate as their ability
+//2nd pass add ghosts to grounded clause  with specific exclusions spirit tomb cursola galarian corsola etc object linked ghost, just like doduo
+//looked over and realized still mising some pokemon that float, but aren't flying types, and also just don't get levitate
+//i.e porygon and magnemite line, may be others
+const u16 gFloatingSpecies[130] = {
+    SPECIES_BEAUTIFLY,
+    SPECIES_DUSTOX,
+    SPECIES_MASQUERAIN,
+    SPECIES_NINJASK,
+    SPECIES_DUSCLOPS,
+    SPECIES_DUSKNOIR,
+    SPECIES_DUSKULL,
+    SPECIES_CHARIZARD_MEGA_X,
+    SPECIES_VENOMOTH,
+    SPECIES_GASTLY,
+    SPECIES_HAUNTER,
+    SPECIES_GENGAR,
+    SPECIES_DUNSPARCE,
+    SPECIES_MEW,
+    SPECIES_MEWTWO,
+    SPECIES_MEWTWO_MEGA_X,
+    SPECIES_MEWTWO_MEGA_Y,
+    SPECIES_SCIZOR,
+    SPECIES_LEDYBA,
+    SPECIES_LEDIAN,
+    SPECIES_CELEBI,
+    SPECIES_ALTARIA_MEGA,
+    SPECIES_LUNATONE,
+    SPECIES_SOLROCK,
+    SPECIES_MISDREAVUS,
+    SPECIES_MISMAGIUS,
+    SPECIES_BALTOY,
+    SPECIES_CLAYDOL,
+    SPECIES_PORYGON,
+    SPECIES_PORYGON2,
+    SPECIES_PORYGON_Z,
+    SPECIES_BELDUM,
+    SPECIES_METANG,
+    SPECIES_METAGROSS,
+    SPECIES_LATIAS,
+    SPECIES_LATIOS,
+    SPECIES_BRONZOR,
+    SPECIES_BRONZONG,
+    SPECIES_MAGNEMITE,
+    SPECIES_MAGNETON,
+    SPECIES_MAGNEZONE,
+    SPECIES_CHATOT,
+    SPECIES_CARNIVINE,
+    SPECIES_ROTOM,
+    SPECIES_UXIE,
+    SPECIES_AZELF,
+    SPECIES_MESPRIT,
+    SPECIES_JIRACHI,
+    SPECIES_DEOXYS,
+    SPECIES_DEOXYS_ATTACK,
+    SPECIES_DEOXYS_DEFENSE,
+    SPECIES_DEOXYS_SPEED,
+    SPECIES_GIRATINA_ORIGIN,
+    SPECIES_GENGAR_MEGA,
+    SPECIES_LATIAS_MEGA,
+    SPECIES_LATIOS_MEGA,
+    SPECIES_CRESSELIA,
+    SPECIES_MUNNA,
+    SPECIES_MUSHARNA,
+    SPECIES_DARKRAI,
+    SPECIES_VIBRAVA,
+    SPECIES_FLYGON,
+    SPECIES_HYDREIGON,
+    SPECIES_VOLCARONA,
+    SPECIES_TYNAMO,
+    SPECIES_EELEKTRIK,
+    SPECIES_EELEKTROSS,
+    SPECIES_VIKAVOLT,
+    SPECIES_KOFFING,
+    SPECIES_WEEZING,
+    SPECIES_WEEZING_GALARIAN,
+    SPECIES_RAICHU_ALOLAN,
+    SPECIES_UNOWN,
+    SPECIES_UNOWN_B,
+    SPECIES_UNOWN_C,
+    SPECIES_UNOWN_D,
+    SPECIES_UNOWN_E,
+    SPECIES_UNOWN_EMARK,
+    SPECIES_UNOWN_F,
+    SPECIES_UNOWN_QMARK,
+    SPECIES_UNOWN_G,
+    SPECIES_UNOWN_H,
+    SPECIES_UNOWN_I,
+    SPECIES_UNOWN_J,
+    SPECIES_UNOWN_K,
+    SPECIES_UNOWN_L,
+    SPECIES_UNOWN_M,
+    SPECIES_UNOWN_N,
+    SPECIES_UNOWN_O,
+    SPECIES_UNOWN_P,
+    SPECIES_UNOWN_Q,
+    SPECIES_UNOWN_R,
+    SPECIES_UNOWN_S,
+    SPECIES_UNOWN_T,
+    SPECIES_UNOWN_U,
+    SPECIES_UNOWN_V,
+    SPECIES_UNOWN_W,
+    SPECIES_UNOWN_X,
+    SPECIES_UNOWN_Y,
+    SPECIES_UNOWN_Z,
+    SPECIES_CASTFORM,
+    SPECIES_CASTFORM_RAINY,
+    SPECIES_CASTFORM_SNOWY,
+    SPECIES_CASTFORM_SUNNY,
+    SPECIES_ROTOM_FAN,
+    SPECIES_ROTOM_FROST,
+    SPECIES_ROTOM_MOW,
+    SPECIES_ROTOM_HEAT,
+    SPECIES_CUTIEFLY,
+    SPECIES_RIBOMBEE,
+    SPECIES_SOLOSIS,
+    SPECIES_DUOSION,
+    SPECIES_REUNICLUS,
+    SPECIES_COMFEY,
+    SPECIES_RESHIRAM,
+    SPECIES_ZEKROM,
+    SPECIES_COSMOG,
+    SPECIES_COSMOEM,
+    SPECIES_LUNALA,
+    SPECIES_NECROZMA_DAWN_WINGS,
+    SPECIES_NECROZMA_ULTRA,
+    SPECIES_NIHILEGO,
+    SPECIES_POIPOLE,
+    SPECIES_NAGANADEL,
+    SPECIES_FROSMOTH,
+    SPECIES_DREEPY,
+    SPECIES_DRAKLOAK,
+    SPECIES_DRAGAPULT,
+    SPECIES_ETERNATUS,
+    SPECIES_ETERNATUS_ETERNAMAX
+};
+
+bool8 IsFloatingSpecies(u8 battlerId) {
+    s32 i;
+
+
+    for (i = 0; i < NELEMS(gFloatingSpecies); i++)
+    {
+        if (gBattleMons[battlerId].species == gFloatingSpecies[i])
+            return TRUE;
+    }
+    return FALSE;
+
+}
+
+
+#define GROUNDED_FUNCTION
+//remember else if, makes it exclusive, it only goes to that if the if before it is false,
+//and it itself gets skipped over if its false, to the go to the next else if
+//need to comb over else if logic to make sure parses
+bool8 IsBattlerGrounded(u8 battlerId)
+//important done for now, need test later
+//finihsed adding to type calc, so should be battle ready
+//set as type 8, instead of 32 for test build
+{
+    u32 species = gBattleMons[battlerId].species;
+    bool8 grounded = TRUE; //changed so goes through all checks  //not using else, so need to make it default TRUE
+
+
+
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
+        grounded = TRUE; //hope this set up right/works
+    //according to Mcgriffin needed make flying & roost flag true statement
+    //as else at bottom just means not flyign or has roost flag, TRUE
+    if (gFieldStatuses & STATUS_FIELD_GRAVITY)
+        grounded = TRUE;
+    if (gFieldStatuses & STATUS_FIELD_BLACK_FOG) //on review this does make sense, its not that they are face down on the ground its that flying higher isn't an option
+        grounded = TRUE;
+    if (gStatuses3[battlerId] & STATUS3_ROOTED)
+        grounded = TRUE;
+    if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
+        grounded = TRUE;
+    if (species == (SPECIES_DODUO || SPECIES_DODRIO))
+        grounded = TRUE;//edit because flightless bird
+    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
+        grounded = TRUE;
+    if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && (species == (GROUNDED_GHOSTMON)))   //test GHOST exclusions
+        grounded = TRUE;
+
+    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
+        grounded = FALSE;
+
+    if (IsFloatingSpecies(battlerId))//used if as breakline, as else if only reads if everything above it is false
+        grounded = FALSE;
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (species != SPECIES_DODUO && species != SPECIES_DODRIO)
+        && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
+        grounded = FALSE;  
+
+    if (gBattleMons[battlerId].ability == ABILITY_LEVITATE) //remove after removing all instances of levitate on mon
+        grounded = FALSE;    
+    if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
+        grounded = FALSE;
+    if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
+        grounded = FALSE;
+    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
+        grounded = FALSE;
+    
+    
+        return grounded;
 }
 
 bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2)
@@ -3504,6 +3913,51 @@ u8 GetMoveTarget(u16 move, u8 setTarget)
     return targetBattler;
 }
 
+u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating)
+{
+    if (checkNegating)  //if equals 0, I think?
+    {
+
+        if (gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_EMBARGO)
+            return HOLD_EFFECT_NONE;
+        if (gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)
+            return HOLD_EFFECT_NONE;
+        if (gBattleMons[battlerId].ability == ABILITY_KLUTZ && !(gStatuses3[battlerId] & STATUS3_GASTRO_ACID))
+            return HOLD_EFFECT_NONE;
+    }
+
+    gPotentialItemEffectBattler = battlerId;
+
+    /*if (B_ENABLE_DEBUG && gBattleStruct->debugHoldEffects[battlerId] != 0 && gBattleMons[battlerId].item)
+        return gBattleStruct->debugHoldEffects[battlerId];
+    else */if (gBattleMons[battlerId].item == ITEM_ENIGMA_BERRY)
+        return gEnigmaBerries[battlerId].holdEffect;
+    else
+        return ItemId_GetHoldEffect(gBattleMons[battlerId].item);
+}
+
+u32 GetBattlerHoldEffectParam(u8 battlerId)
+{
+    if (gBattleMons[battlerId].item == ITEM_ENIGMA_BERRY)
+        return gEnigmaBerries[battlerId].holdEffectParam;
+    else
+        return ItemId_GetHoldEffectParam(gBattleMons[battlerId].item);
+}
+
+bool8 IsMoveMakingContact(u16 move, u8 battlerAtk)
+{
+    if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT))
+        return FALSE;
+    else if (GetBattlerAbility(battlerAtk) == ABILITY_LONG_REACH)
+        return FALSE;
+    else if (GetBattlerAbility(battlerAtk) == ABILITY_MUSCLE_MAGIC)
+        return TRUE;
+    else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PROTECTIVE_PADS)
+        return FALSE;
+    else
+        return TRUE;
+}
+
 struct Pokemon* GetIllusionMonPtr(u32 battlerId)
 {
     if (gBattleStruct->illusion[battlerId].broken)
@@ -3733,4 +4187,9 @@ bool8 IsBattlerAlive(u8 battlerId)
         return FALSE;
     else
         return TRUE;
+}
+
+u32 GetBattleMoveSplit(u32 moveId)
+{
+    return gBattleMoves[moveId].split;
 }

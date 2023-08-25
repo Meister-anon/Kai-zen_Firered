@@ -142,10 +142,14 @@ extern const struct Trainer gTrainers[];
 
 struct ResourceFlags
 {
-    u32 flags[4];
+    u32 flags[MAX_BATTLERS_COUNT];
 };
 
-#define RESOURCE_FLAG_FLASH_FIRE 1
+#define RESOURCE_FLAG_FLASH_FIRE     1
+#define RESOURCE_FLAG_ROOST          2
+#define RESOURCE_FLAG_UNBURDEN       4
+#define RESOURCE_FLAG_EMERGENCY_EXIT 8  //check how this used will prob do it differently for my implementation
+#define RESOURCE_FLAG_NEUTRALIZING_GAS 16 //works by doubling previous
 
 struct DisableStruct
 {
@@ -262,6 +266,21 @@ struct SideTimer
 };
 
 extern struct SideTimer gSideTimers[];
+
+struct FieldTimer
+{
+
+    u8 wonderRoomTimer;
+    u8 magicRoomTimer;
+    u8 trickRoomTimer;
+    u8 terrainTimer;
+    u8 echoVoiceCounter;
+    u8 gravityTimer;
+    u8 fairyLockTimer;
+    u8 IonDelugeTimer; // this & roost will be only ones that don't fail if used when timer isn't 0
+    u8 HazeTimer;
+
+};//check how I setup roost may not need iondelugetimer here
 
 struct WishFutureKnock
 {
@@ -514,6 +533,10 @@ struct BattleStruct
 
 extern struct BattleStruct *gBattleStruct;
 
+#define F_DYNAMIC_TYPE_1 (1 << 6)
+#define F_DYNAMIC_TYPE_2 (1 << 7)
+#define DYNAMIC_TYPE_MASK (F_DYNAMIC_TYPE_1 - 1)
+
 #define GET_MOVE_TYPE(move, typeArg)                        \
 {                                                           \
     if (gBattleStruct->dynamicMoveType)                     \
@@ -522,14 +545,32 @@ extern struct BattleStruct *gBattleStruct;
         typeArg = gBattleMoves[move].type;                  \
 }
 
-#define IS_TYPE_PHYSICAL(moveType)(moveType < TYPE_MYSTERY)
-#define IS_TYPE_SPECIAL(moveType)(moveType > TYPE_MYSTERY)
+//#define IS_TYPE_PHYSICAL(moveType)(moveType < TYPE_MYSTERY)
+//#define IS_TYPE_SPECIAL(moveType)(moveType > TYPE_MYSTERY)
+
+#define IS_MOVE_PHYSICAL(move)(GetBattleMoveSplit(move) == SPLIT_PHYSICAL)
+#define IS_MOVE_SPECIAL(move)(GetBattleMoveSplit(move) == SPLIT_SPECIAL)
+#define IS_MOVE_STATUS(move)(gBattleMoves[move].split == SPLIT_STATUS)
+#define BATTLER_MAX_HP(battlerId)(gBattleMons[battlerId].hp == gBattleMons[battlerId].maxHP)
 #define TARGET_TURN_DAMAGED ((gSpecialStatuses[gBattlerTarget].physicalDmg != 0 || gSpecialStatuses[gBattlerTarget].specialDmg != 0))
-#define IS_BATTLER_OF_TYPE(battlerId, type)((gBattleMons[battlerId].type1 == type || gBattleMons[battlerId].type2 == type))
-#define SET_BATTLER_TYPE(battlerId, type)   \
-{                                           \
-    gBattleMons[battlerId].type1 = type;    \
-    gBattleMons[battlerId].type2 = type;    \
+#define IS_BATTLER_OF_TYPE(battlerId, type)((gBattleMons[battlerId].type1 == type || gBattleMons[battlerId].type2 == type || gBattleMons[battlerId].type3 == type))
+#define SET_BATTLER_TYPE(battlerId, type)           \
+{                                                   \
+    gBattleMons[battlerId].type1 = type;            \
+    gBattleMons[battlerId].type2 = type;            \
+    gBattleMons[battlerId].type3 = TYPE_MYSTERY;    \
+}
+//made this myself
+#define SET_BATTLER_TYPE2(battlerId, type)           \
+{                                                   \
+    gBattleMons[battlerId].type2 = type;            \
+    gBattleMons[battlerId].type3 = TYPE_MYSTERY;    \
+}
+
+//made this myself
+#define SET_BATTLER_TYPE3(battlerId, type)           \
+{                                                   \
+    gBattleMons[battlerId].type3 = type;            \
 }
 
 #define GET_STAT_BUFF_ID(n)((n & 7))              // first three bits 0x1, 0x2, 0x4
@@ -776,6 +817,8 @@ extern u8 gChosenMovePos;
 extern u8 gBattleControllerData[MAX_BATTLERS_COUNT];
 extern u8 gBattlerStatusSummaryTaskId[MAX_BATTLERS_COUNT];
 extern u16 gDynamicBasePower;
+extern u32 gFieldStatuses;
+extern struct FieldTimer gFieldTimers; //both needed for things like gravity etc.  //can apparently hold more than one effect at once?
 extern u16 gLastLandedMoves[MAX_BATTLERS_COUNT];
 extern u8 gLastHitBy[MAX_BATTLERS_COUNT];
 extern u8 gMultiUsePlayerCursor;

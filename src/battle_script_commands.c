@@ -988,23 +988,25 @@ static void atk00_attackcanceler(void)
     }
 }
 
-static void JumpIfMoveFailed(u8 adder, u16 move)
+static bool32 JumpIfMoveFailed(u8 adder, u16 move) //updated to emerald standard
 {
-    const u8 *BS_ptr = gBattlescriptCurrInstr + adder;
+    //const u8 *BS_ptr = gBattlescriptCurrInstr + adder;
 
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
     {
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0;
-        BS_ptr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        return TRUE;
     }
     else
     {
         TrySetDestinyBondToHappen();
         if (AbilityBattleEffects(ABILITYEFFECT_ABSORBING, gBattlerTarget, 0, 0, move))
-            return;
+            return TRUE;
     }
-    gBattlescriptCurrInstr = BS_ptr;
+    gBattlescriptCurrInstr += adder;
+    return FALSE;
 }
 
 static void atk40_jumpifaffectedbyprotect(void)
@@ -1035,20 +1037,29 @@ static bool8 JumpIfMoveAffectedByProtect(u16 move)
     return affected;
 }
 
-static bool8 AccuracyCalcHelper(u16 move)
-{
+static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accuracy ignore  //done
+{   //in emerald these are else ifs, rather than if, think will change to that so it checks through all instead of just 1st true
     if (gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS && gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker)
     {
         JumpIfMoveFailed(7, move);
         return TRUE;
     }
-    if (!(gHitMarker & HITMARKER_IGNORE_ON_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+
+    else if (gBattleMoves[move].effect == EFFECT_TOXIC
+        && IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_POISON))   //ironically with type chart change I don't need this
+    {
+        JumpIfMoveFailed(7, move);
+        return TRUE;
+    }
+
+    /*if (!(gHitMarker & HITMARKER_IGNORE_ON_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         JumpIfMoveFailed(7, move);
         return TRUE;
     }
     gHitMarker &= ~HITMARKER_IGNORE_ON_AIR;
+
     if (!(gHitMarker & HITMARKER_IGNORE_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
@@ -1056,19 +1067,79 @@ static bool8 AccuracyCalcHelper(u16 move)
         return TRUE;
     }
     gHitMarker &= ~HITMARKER_IGNORE_UNDERGROUND;
+
     if (!(gHitMarker & HITMARKER_IGNORE_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER)
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         JumpIfMoveFailed(7, move);
         return TRUE;
     }
-    gHitMarker &= ~HITMARKER_IGNORE_UNDERWATER;
-    if ((WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_RAIN_ANY) && gBattleMoves[move].effect == EFFECT_THUNDER)
-     || (gBattleMoves[move].effect == EFFECT_ALWAYS_HIT || gBattleMoves[move].effect == EFFECT_VITAL_THROW))
+    gHitMarker &= ~HITMARKER_IGNORE_UNDERWATER;*/
+
+    // If the attacker has the ability No Guard and they aren't targeting a Pokemon involved in a Sky Drop with the move Sky Drop, move hits.
+    else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NO_GUARD && (move != MOVE_SKY_DROP || gBattleStruct->skyDropTargets[gBattlerTarget] == 0xFF))
     {
+        if (!JumpIfMoveFailed(7, move))
+            RecordAbilityBattle(gBattlerAttacker, ABILITY_NO_GUARD);
+        return TRUE;
+    }
+
+    // If the target has the ability No Guard and they aren't involved in a Sky Drop or the current move isn't Sky Drop, move hits.
+    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_NO_GUARD && (move != MOVE_SKY_DROP || gBattleStruct->skyDropTargets[gBattlerTarget] == 0xFF))
+    {
+        if (!JumpIfMoveFailed(7, move))
+            RecordAbilityBattle(gBattlerTarget, ABILITY_NO_GUARD);
+        return TRUE;
+    }
+
+    if ((gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE)//i beleve this is the replacement for the hitmarker values for semi invul, just need to add flags to omve data
+        || (!(gBattleMoves[move].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR)) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+        || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
+        || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER))
+    {
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
         JumpIfMoveFailed(7, move);
         return TRUE;
     }
+
+    if ((!IsBattlerGrounded(gBattlerTarget) || IS_BATTLER_OF_TYPE(gBattlerTarget,TYPE_GHOST)) && (gBattleMoves[move].effect == (GROUND_TRAPS)))
+    {
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        JumpIfMoveFailed(7, move);
+        return TRUE;
+    }//exclusions for traps that don't work on floating targets so if you're trap heavy you need a grounder
+    //note prob need more moves that do ground effects so its not just a rock & a psychic move
+    //may make custom text for this.   //vsonic IMPORTANT
+
+    if (move == MOVE_SHEER_COLD && IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ICE))
+    {
+        gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+        JumpIfMoveFailed(7, move);
+        return TRUE;
+    }
+
+    if ((WEATHER_HAS_EFFECT && 
+        ((IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
+        || ((gBattleWeather & WEATHER_HAIL_ANY) && move == MOVE_BLIZZARD)))
+        || (gBattleMoves[move].effect == EFFECT_ALWAYS_HIT || gBattleMoves[move].effect == EFFECT_VITAL_THROW)
+        || ((gStatuses3[gBattlerTarget] & STATUS3_MINIMIZED) && (gBattleMoves[move].flags & FLAG_DMG_MINIMIZE)))
+    {
+        JumpIfMoveFailed(7, move);
+        return TRUE;
+    }   //this will do weather buffs but double check think I added this elsewhere? plus I don't think I'd want it to be surehit but its fine i guess
+
+    if (gBattleMoves[move].accuracy == 0)   //MOVED OUT HERE for wonderskin buff? yeah affect isn't in base wonderskin   
+    {
+        if (IS_MOVE_STATUS(move) && GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_SKIN)
+            return FALSE;
+        else
+        {
+            JumpIfMoveFailed(7, move);
+            return TRUE;
+        }
+    }
+    
+
     return FALSE;
 }
 
@@ -1135,7 +1206,7 @@ static void atk01_accuracycheck(void)
             calc = (calc * 130) / 100; // 1.3 compound eyes boost
         if (WEATHER_HAS_EFFECT && gBattleMons[gBattlerTarget].ability == ABILITY_SAND_VEIL && gBattleWeather & WEATHER_SANDSTORM_ANY)
             calc = (calc * 80) / 100; // 1.2 sand veil loss
-        if (gBattleMons[gBattlerAttacker].ability == ABILITY_HUSTLE && IS_TYPE_PHYSICAL(type))
+        if (gBattleMons[gBattlerAttacker].ability == ABILITY_HUSTLE && IS_MOVE_PHYSICAL(move))
             calc = (calc * 80) / 100; // 1.2 hustle loss
         if (gBattleMons[gBattlerTarget].item == ITEM_ENIGMA_BERRY)
         {
@@ -1809,6 +1880,7 @@ static void atk0B_healthbarupdate(void)
 static void atk0C_datahpupdate(void)
 {
     u32 moveType;
+    u16 move = gCurrentMove;
 
     if (!gBattleControllerExecFlags)
     {
@@ -1883,7 +1955,7 @@ static void atk0C_datahpupdate(void)
                     }
                     if (!gSpecialStatuses[gActiveBattler].dmg && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE))
                         gSpecialStatuses[gActiveBattler].dmg = gHpDealt;
-                    if (IS_TYPE_PHYSICAL(moveType) && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE) && gCurrentMove != MOVE_PAIN_SPLIT)
+                    if (IS_MOVE_PHYSICAL(move) && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE) && gCurrentMove != MOVE_PAIN_SPLIT)
                     {
                         gProtectStructs[gActiveBattler].physicalDmg = gHpDealt;
                         gSpecialStatuses[gActiveBattler].physicalDmg = gHpDealt;
@@ -1898,7 +1970,7 @@ static void atk0C_datahpupdate(void)
                             gSpecialStatuses[gActiveBattler].physicalBattlerId = gBattlerTarget;
                         }
                     }
-                    else if (!IS_TYPE_PHYSICAL(moveType) && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE))
+                    else if (IS_MOVE_SPECIAL(move) && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE))
                     {
                         gProtectStructs[gActiveBattler].specialDmg = gHpDealt;
                         gSpecialStatuses[gActiveBattler].specialDmg = gHpDealt;
@@ -7260,12 +7332,25 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
         gDisableStructs[gBattlerAttacker].disableTimer = 0;
         gDisableStructs[gBattlerAttacker].transformedMonPersonality = gBattleMons[gBattlerAttacker].personality; //changed I want to keep my own personality
         gDisableStructs[gBattlerAttacker].mimickedMoves = 0;
+
+
+        if (gCurrentMove == MOVE_TRANSFORM)
+        {
+            
+            PREPARE_SPECIES_BUFFER(gBattleTextBuff1, GetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SPECIES));
+        }
+
         //put new ditto hidden ability species search  here, set to target species
-        //if (original_ability == ABILITY_INVERSION)
+        if (original_ability == ABILITY_INVERSION)
+        {
+            //found_species = mon search
+            PREPARE_SPECIES_BUFFER(gBattleTextBuff1, found_species);
+        }
+        
         //do species search assign found species to value
         //PREPARE_SPECIES_BUFFER(gBattleTextBuff1, found_species)//for counter-form search species to use and assign to this value so it will be target species
-           
-           PREPARE_ABILITY_BUFFER(gBattleTextBuff2, original_ability); //for imposter & inversion
+           if (original_ability == ABILITY_IMPOSTER || original_ability == ABILITY_INVERSION)
+            PREPARE_ABILITY_BUFFER(gBattleTextBuff2, original_ability); //for imposter & inversion
 
             if (gCurrentMove == MOVE_TRANSFORM || original_ability == ABILITY_IMPOSTER)
             {
