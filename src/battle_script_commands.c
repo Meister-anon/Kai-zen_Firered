@@ -3296,9 +3296,9 @@ static void atk23_getexp(void)
                 gBattleResources->beforeLvlUp->stats[STAT_SPDEF] = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPDEF);
                 gActiveBattler = gBattleStruct->expGetterBattlerId;
                 BtlController_EmitExpUpdate(0, gBattleStruct->expGetterMonId, gBattleMoveDamage);
-                MarkBattlerForControllerExec(gActiveBattler);
-            }
-            ++gBattleScripting.atk23_getexpState;
+                MarkBattlerForControllerExec(gActiveBattler);//ditto transformed has a strange stat distro using this method
+            }//specifically for transform mon, would be better to use getmondata for species ditto/transformer rather than the battle stats prior to level up,
+            ++gBattleScripting.atk23_getexpState; //can't be a perfect fix but can be something, to at least look normal/natural  right now stats are widely varying based on mon transformed into
         }
         break;
     case 4: // lvl up if necessary
