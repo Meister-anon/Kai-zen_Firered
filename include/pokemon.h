@@ -92,9 +92,9 @@ struct BoxPokemon
     u8 isBadEgg:1;
     u8 hasSpecies:1;
     u8 isEgg:1;
-    u8 unused:5;
+    u8 unused:5; //huh I never removed this, what is it?
     u8 otName[OT_NAME_LENGTH];
-    u8 markings;
+    u8 markings; //remove this
     u16 checksum;
     u16 unknown;
 
@@ -110,7 +110,7 @@ struct Pokemon
     struct BoxPokemon box;
     u32 status;
     u8 level;
-    u8 mail;
+    u8 mail; //remove mail
     u16 hp;
     u16 maxHP;
     u16 attack;
@@ -128,8 +128,8 @@ struct PokemonStorage
     /*0x0000*/ u8 currentBox;
     /*0x0001*/ struct BoxPokemon boxes[TOTAL_BOXES_COUNT][IN_BOX_COUNT];
     /*0x8344*/ u8 boxNames[TOTAL_BOXES_COUNT][BOX_NAME_LENGTH + 1];
-    /*0x83C2*/ u8 boxWallpapers[TOTAL_BOXES_COUNT];
-};
+    /*0x83C2*/ u8 boxWallpapers[TOTAL_BOXES_COUNT]; //when I'm able to expand box counts give this its own separate constant won't need 
+};  //a unique wall paper for each box, could even remove some of the wall papers I don't like/no one likes
 
 struct BattleTowerPokemon
 {
@@ -286,6 +286,8 @@ struct BattleMove
 
 extern const struct BattleMove gBattleMoves[];
 
+#define IS_CRIT (gCritMultiplier > 1)
+
 // Battle move flags
 #define FLAG_MAKES_CONTACT          (1 << 0)
 #define FLAG_PROTECT_AFFECTED       (1 << 1)
@@ -358,9 +360,9 @@ enum
     BODY_COLOR_PINK
 };
 
-#define EVO_FRIENDSHIP       				0x0001 // Pokémon levels up with friendship ≥ 220
-#define EVO_FRIENDSHIP_DAY   				0x0002 // Pokémon levels up during the day with friendship ≥ 220
-#define EVO_FRIENDSHIP_NIGHT 				0x0003 // Pokémon levels up at night with friendship ≥ 220
+#define EVO_FRIENDSHIP       				0x0001 // Pokémon levels up with friendship ≥ FRIENDSHIP_EVO_LIMITER
+#define EVO_FRIENDSHIP_DAY   				0x0002 // Pokémon levels up during the day with friendship ≥ FRIENDSHIP_EVO_LIMITER
+#define EVO_FRIENDSHIP_NIGHT 				0x0003 // Pokémon levels up at night with friendship ≥ FRIENDSHIP_EVO_LIMITER
 #define EVO_LEVEL            				0x0004 // Pokémon reaches the specified level
 #define EVO_TRADE            				0x0005 // Pokémon is traded
 #define EVO_TRADE_ITEM       				0x0006 // Pokémon is traded while it's holding the specified item
@@ -378,6 +380,7 @@ enum
 #define EVO_LEVEL_NIGHT     				0x0012 // Pokémon reaches the specified level, is night
 #define EVO_LEVEL_DAY       				0x0013 // Pokémon reaches the specified level, is day
 #define EVO_LEVEL_DUSK      				0x0014 // Pokémon reaches the specified level, is dusk (5-6 P.M)
+#define EVO_ITEM_HOLD  		    		    0x0027 // Pokémon levels up, holds specified item
 #define EVO_ITEM_HOLD_DAY  		    		0x0015 // Pokémon levels up, holds specified item at day
 #define EVO_ITEM_HOLD_NIGHT 				0x0016 // Pokémon levels up, holds specified item at night
 #define EVO_MOVE           			    	0x0017 // Pokémon levels up, knows specified move
@@ -387,11 +390,21 @@ enum
 #define EVO_ITEM_FEMALE    				    0x001b // specified item is used on a female Pokémon
 #define EVO_LEVEL_RAIN     				    0x001c // Pokémon reaches the specified level while it's raining
 #define EVO_SPECIFIC_MON_IN_PARTY         	0x001d // Pokémon levels up with a specified Pokémon in party
-#define EVO_LEVEL_DARK_TYPE_MON_IN_PARTY    0x001e // Pokémon reaches the specified level with a Dark Type Pokémon in party
-#define EVO_TRADE_SPECIFIC_MON   			0x001f // Pokémon is traded for a specified Pokémon
-#define EVO_SPECIFIC_MAP   				    0x0020 // Pokémon levels up in a specific room of a specified map.
-#define EVO_MEGA_EVOLUTION					0x0021 // (change later)Not an actual evolution, used to temporarily mega evolve in battle.
-#define EVO_MOVE_MEGA_EVOLUTION		        0x0022 // Mega Evolution that checks for a move instead of held item.
+#define EVO_SPECIFIC_TYPE_IN_PARTY         	0x001e // Pokémon levels up with a specified Pokémon Type in party (made to bypass nosepass evo location requirement)
+#define EVO_LEVEL_DARK_TYPE_MON_IN_PARTY    0x001f // Pokémon reaches the specified level with a Dark Type Pokémon in party
+#define EVO_LEVEL_KARRABLAST                0x0020 // Pokémon reaches the specified level (special value for Karrablast)
+#define EVO_LEVEL_SHELMET                   0x0021 // Pokémon reaches the specified level (special value for Shelmet)
+#define EVO_TRADE_SPECIFIC_MON   			0x0022 // Pokémon is traded for a specified Pokémon
+#define EVO_SPECIFIC_MAP   				    0x0023 // Pokémon levels up in a specific room of a specified map.
+#define EVO_MEGA_EVOLUTION					0x0024 // (change later)Not an actual evolution, used to temporarily mega evolve in battle.
+#define EVO_MOVE_MEGA_EVOLUTION		        0x0025 // Mega Evolution that checks for a move instead of held item
+#define EVO_PRIMAL_REVERSION                0x0026// Not an actual evolution, used to undergo primal reversion in battle.
+#define EVO_LEVEL_NATURE_AMPED              0x0028     // Pokémon reaches the specified level, it has a Hardy, Brave, Adamant, Naughty, Docile, Impish, Lax, Hasty, Jolly, Naive, Rash, Sassy, or Quirky nature.
+#define EVO_LEVEL_NATURE_LOW_KEY            0x0029     // Pokémon reaches the specified level, it has a Lonely, Bold, Relaxed, Timid, Serious, Modest, Mild, Quiet, Bashful, Calm, Gentle, or Careful nature.
+#define EVO_CRITICAL_HITS                   0x002a     // Pokémon performs specified number of critical hits in one battle
+#define EVO_SCRIPT_TRIGGER_DMG              0x002b     // Pokémon has specified HP below max, then player interacts trigger
+#define EVO_DARK_SCROLL                     0x002c     // interacts with Scroll of Darkness
+#define EVO_WATER_SCROLL                    0x002d     // interacts with Scroll of Waters
 
 struct Evolution
 {
@@ -400,7 +413,15 @@ struct Evolution
     u16 targetSpecies;
 };
 
+struct FormChange {
+    u16 method;
+    u16 targetSpecies;
+    u16 param1;
+    u16 param2;
+}; //may change based on how I use forms
+
 #define EVOS_PER_MON 16 // set to 16 in case I need the shedinja byte change fix
+#define FORMS_PER_MON 5 //for breeding
 
 extern u8 gPlayerPartyCount;
 extern struct Pokemon gPlayerParty[PARTY_SIZE];
@@ -481,6 +502,7 @@ u8 CalculateEnemyPartyCount(void);
 u8 GetMonsStateToDoubles(void);
 u16 GetAbilityBySpecies(u16 species, bool8 abilityNum);
 u16 GetMonAbility(struct Pokemon *mon);
+bool32 IsMonType(struct Pokemon *mon, u8 type); //uses get mondata species to check mon type from base stats, not battle type,  used for field poison
 u8 GetSecretBaseTrainerPicIndex(void);
 u8 GetSecretBaseTrainerNameIndex(void);
 bool8 IsPlayerPartyAndPokemonStorageFull(void);
@@ -515,8 +537,8 @@ void PartySpreadPokerus(struct Pokemon *party);
 bool8 TryIncrementMonLevel(struct Pokemon *mon);
 u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm);
 u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves);
-u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves);
-u8 GetNumberOfRelearnableMoves(struct Pokemon *mon);
+u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves); //keep track of this for rotom forms 
+u8 GetNumberOfRelearnableMoves(struct Pokemon *mon);//this too
 u16 SpeciesToPokedexNum(u16 species);
 void ClearBattleMonForms(void);
 void PlayBattleBGM(void);
@@ -550,6 +572,8 @@ void OakSpeechNidoranFFreeResources(void);
 void *OakSpeechNidoranFGetBuffer(u8 bufferId);
 u16 GetFormSpeciesId(u16 speciesId, u8 formId);
 u8 GetFormIdFromFormSpeciesId(u16 formSpeciesId);
+
+void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst);
 
 #define HOLD_EFFECT_POWERITEM    (HOLD_EFFECT_POWER_WEIGHT || HOLD_EFFECT_POWER_BRACER || HOLD_EFFECT_POWER_BELT || HOLD_EFFECT_POWER_ANKLET || HOLD_EFFECT_POWER_LENS || HOLD_EFFECT_POWER_BAND)
 
