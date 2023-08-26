@@ -296,6 +296,10 @@ static const u8 sInversionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Trans
 static const u8 sWetikoDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("The Wendigo curse, all moves become Ice.\nHeals upon switching out.");
 static const u8 sEmpathDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Passes on status problems.\nAs well as stat reductions.");
 static const u8 sEmpathicCurseDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Passes on status problems.\nAnd a portion of their pain as damage.");
+static const u8 sInthrallDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("");
+static const u8 sIronWillDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("");
+static const u8 sLivewireDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Body made of electricity\nUps damage of electric moves.");
+static const u8 sGaleforceDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Immune to wind-based moves\nBoosts sp atk when hit by them.");
 //checked in fire red limit is 40 chars per line, changing description length to 80/    changed to 82 max
 //based on suction cups I kinda have more space?  so more like 41 per line?
 //template - top line: literal effect\n bottom line: flavor text    -flipped usually put flavor text on top, effect on bottom
@@ -612,8 +616,10 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_WETIKO] = sWetikoDescription,
     [ABILITY_EMPATH] = sEmpathDescription,
     [ABILITY_EMPATHIC_CURSE] = sEmpathicCurseDescription,
-    [ABILITY_INTHRALL] = sNoneDescription,
-    [ABILITY_IRON_WILL] = sNoneDescription,
+    [ABILITY_INTHRALL] = sInthrallDescription,
+    [ABILITY_IRON_WILL] = sIronWillDescription,
+    [ABILITY_LIVEWIRE] = sLivewireDescription,
+    [ABILITY_GALEFORCE] = sGaleforceDescription,
 };//last value can have comma
   //FOREWARN should work how I want,for ai make ability check to not use fakeout if have said ability,still need setup reactivation
 
@@ -934,5 +940,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_EMPATH] =_("EMPATH"),
     [ABILITY_EMPATHIC_CURSE] =_("EMPATHIC CURSE"),
     [ABILITY_INTHRALL] =_("INTHRALL"),
-    [ABILITY_IRON_WILL] =_("IRON WILL")
+    [ABILITY_IRON_WILL] =_("IRON WILL"),
+    [ABILITY_LIVEWIRE] =_("LIVEWIRE"),
+    [ABILITY_GALEFORCE] =_("GALEFORCE")
 };//no comma for last value

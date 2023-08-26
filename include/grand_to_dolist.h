@@ -1013,7 +1013,11 @@ beleive all effects to interupt are in battle_util.c & pokemon.c, if I block fly
 * 3.can't deposit into pc.  confirmed items can't check if mon as well
 * 
 * test rotom, gave custom dex entry based on legends dex - actually all I need to do is set rotom entry to starter.
-* 
+* //working on rotom buffs need give each form own learnset, figure out swap between
+* plan put seoondary type moves in learnset at pattern, check if learnset is from that type 2 then check the level of learnset
+* and replace with move at that level from other form /species
+*do similar thing for tms only problem is surf, but can just make it not learn surf as its a washing machine
+*
 *  THOUGHT attempt change item use, allow for using multiple of the same item at once.
 * from outside of battle. i.e use 5 oran berries,  to equal 1 super potion.
 * the item use image would play 1 time, but it would apply the effects of the item 

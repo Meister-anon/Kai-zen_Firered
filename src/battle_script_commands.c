@@ -18,6 +18,7 @@
 #include "party_menu.h"
 #include "trainer_pokemon_sprites.h"
 #include "field_specials.h"
+#include "pokemon.h"
 #include "battle.h"
 #include "battle_message.h"
 #include "battle_anim.h"
@@ -3197,6 +3198,50 @@ static void atk22_jumpiftype(void)
         gBattlescriptCurrInstr += 7;
 }
 
+static s32  HP_StatRecalc(s32 iv, s32 ev)
+{
+    s32 level = GetLevelFromMonExp(&gPlayerParty[gBattleStruct->expGetterMonId]); 
+    u8 baseStat = gBaseStats[gBattleMons[gBattleStruct->expGetterMonId].species].baseHP;     
+    s32 n = 2 * baseStat + ((iv * 160) / 100) + (((iv * 200) - 36) / 100);             
+    s32 newMaxHP = (((n + ev / 4) * level) / 100) + level + 10;                        
+    return newMaxHP; 
+}
+
+static s32 StatReclacForLevelup(s32 iv, s32 ev, u8 statIndex)
+{        
+    u8 baseStat;
+    s32 n;      
+    u8 nature;
+    s32 level = GetLevelFromMonExp(&gPlayerParty[gBattleStruct->expGetterMonId]); 
+
+    switch(statIndex)
+    {
+        case STAT_ATK:
+            baseStat = gBaseStats[gBattleMons[gBattleStruct->expGetterMonId].species].baseAttack;
+            break;
+        case STAT_DEF:
+            baseStat = gBaseStats[gBattleMons[gBattleStruct->expGetterMonId].species].baseDefense;
+            break;
+        case STAT_SPEED:
+            baseStat = gBaseStats[gBattleMons[gBattleStruct->expGetterMonId].species].baseSpeed;
+            break;
+        case STAT_SPATK:
+            baseStat = gBaseStats[gBattleMons[gBattleStruct->expGetterMonId].species].baseSpAttack;
+            break;
+        case STAT_SPDEF:
+            baseStat = gBaseStats[gBattleMons[gBattleStruct->expGetterMonId].species].baseSpDefense;
+            break;
+        
+    }
+
+    n = (((2 * baseStat + ((iv * 240) /100) + ev / 4) * level) / 100) + 5;          
+    nature = GetNature(&gPlayerParty[gBattleStruct->expGetterMonId]);                
+    n = ModifyStatByNature(nature, n, statIndex);                                       
+    return n;                                                                           
+}
+
+
+#define EXP_FUNCTION
 static void atk23_getexp(void)
 {
     u16 item;
@@ -3205,6 +3250,21 @@ static void atk23_getexp(void)
     s32 sentIn;
     s32 viaExpShare = 0;
     u16 *exp = &gBattleStruct->expValue;
+
+    //values for stat recalc for transformed mons level up
+    s32 hpIV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP_IV, NULL);
+    s32 hpEV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP_EV, NULL);
+    s32 attackIV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_ATK_IV, NULL);
+    s32 attackEV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_ATK_EV, NULL);
+    s32 defenseIV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_DEF_IV, NULL);
+    s32 defenseEV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_DEF_EV, NULL);
+    s32 speedIV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPEED_IV, NULL);
+    s32 speedEV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPEED_EV, NULL);
+    s32 spAttackIV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPATK_IV, NULL);
+    s32 spAttackEV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPATK_EV, NULL);
+    s32 spDefenseIV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPDEF_IV, NULL);
+    s32 spDefenseEV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPDEF_EV, NULL);
+    
 
     gBattlerFainted = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     sentIn = gSentPokesToOpponent[(gBattlerFainted & 2) >> 1];
@@ -3286,9 +3346,10 @@ static void atk23_getexp(void)
             else if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) == MAX_LEVEL)
             {
                 *(&gBattleStruct->sentInPokes) >>= 1;
-                gBattleScripting.atk23_getexpState = 5;
-                gBattleMoveDamage = 0; // used for exp
-            }
+                gBattleScripting.atk23_getexpState = 3;  //replaced the jump to case 5. should allow for ev gain at max level
+                gBattleMoveDamage = 0; // used for exp // confirmed from Lunos, apparently the case jump only happens after everything in the code block is run so he added the evgain function here and it ran even though it was below the case jump
+                MonGainEVs(&gPlayerParty[gBattleStruct->expGetterMonId], gBattleMons[gBattlerFainted].species);// his method works but not sure if stats will change since think that's in case 3,  so I'm removing the jump and putting ev gain to here.
+            } //hopefully this works without issue
             else
             {
                 // music change in wild battle after fainting a poke
@@ -3302,6 +3363,17 @@ static void atk23_getexp(void)
                 }
                 if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP))
                 {
+                    //should be able to do streamer/creator mode exp boost here
+                    //would be total exp  * multiplier /size of party,
+                    //or maybe multiplier will be a switch case determined by party size
+                    //that way you boost consistently regardless of team size
+                    //again need implement level cap in creator mode
+                    //*don't want normal players acceessing this so won't put in options
+                    //if they want to play normally in their downtime have interacting with
+                    //house gamestation bring up option to toggle creator mode off/on
+                    //use flag check created at time of game creation
+                    //so even after turning it off,  it can still tell it was a game
+                    //created with creator mode in mind
                     if (gBattleStruct->sentInPokes & 1)
                         gBattleMoveDamage = *exp;
                     else
@@ -3347,25 +3419,38 @@ static void atk23_getexp(void)
                     PREPARE_WORD_NUMBER_BUFFER(gBattleTextBuff3, 5, gBattleMoveDamage);
                     PrepareStringBattle(STRINGID_PKMNGAINEDEXP, gBattleStruct->expGetterBattlerId);
                     MonGainEVs(&gPlayerParty[gBattleStruct->expGetterMonId], gBattleMons[gBattlerFainted].species);
-                    AdjustFriendship(&gPlayerParty[gBattleStruct->expGetterMonId], FRIENDSHIP_EVENT_EXP_GAINED);
-                }
+                    AdjustFriendship(&gPlayerParty[gBattleStruct->expGetterMonId], FRIENDSHIP_EVENT_EXP_GAINED);//apparently friendship calculation doesnt have a filter for if mon is alive
+                }//so it triggers regardless,  but putting here ensures that it would only activate if mon is alive,
                 gBattleStruct->sentInPokes >>= 1;
                 ++gBattleScripting.atk23_getexpState;
             }
         }
         break;
     case 3: // Set stats and give exp
-        if (!gBattleControllerExecFlags)
-        {
+        if (!gBattleControllerExecFlags) //this is what i need to change for transform level up, think can use a version fo calc_stat but just remove set stat part
+        {                                           //my species isn't changed with transform so it should properly read the right base stats, so if mew or ditto is using it it'd still work
             gBattleBufferB[gBattleStruct->expGetterBattlerId][0] = 0;
-            if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP) && GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) != MAX_LEVEL)
-            {
-                gBattleResources->beforeLvlUp->stats[STAT_HP]    = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_MAX_HP);
-                gBattleResources->beforeLvlUp->stats[STAT_ATK]   = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_ATK);
-                gBattleResources->beforeLvlUp->stats[STAT_DEF]   = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_DEF);
-                gBattleResources->beforeLvlUp->stats[STAT_SPEED] = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPEED);
-                gBattleResources->beforeLvlUp->stats[STAT_SPATK] = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPATK);
-                gBattleResources->beforeLvlUp->stats[STAT_SPDEF] = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPDEF);
+            if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP))// && GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL) != MAX_LEVEL)
+            { // that and case 2 change were all for ev again/stat change @ level 100, think peak condition/phsycal prime like track stars. they can still get small marginal gains form training
+
+                if (gBattleMons[gBattleStruct->expGetterMonId].status2 & STATUS2_TRANSFORMED)
+                {
+                    gBattleResources->beforeLvlUp->stats[STAT_HP] = HP_StatRecalc(hpIV, hpEV);
+                    gBattleResources->beforeLvlUp->stats[STAT_ATK] = StatReclacForLevelup(attackIV, attackEV, STAT_ATK);
+                    gBattleResources->beforeLvlUp->stats[STAT_DEF] = StatReclacForLevelup(defenseIV, defenseEV, STAT_DEF);
+                    gBattleResources->beforeLvlUp->stats[STAT_SPEED] = StatReclacForLevelup(speedIV, speedEV, STAT_SPEED);
+                    gBattleResources->beforeLvlUp->stats[STAT_SPATK] = StatReclacForLevelup(spAttackIV, spAttackEV, STAT_SPATK);
+                    gBattleResources->beforeLvlUp->stats[STAT_SPDEF] = StatReclacForLevelup(spDefenseIV, spDefenseEV, STAT_SPDEF);
+                }
+                else
+                {
+                    gBattleResources->beforeLvlUp->stats[STAT_HP] = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_MAX_HP);
+                    gBattleResources->beforeLvlUp->stats[STAT_ATK] = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_ATK);
+                    gBattleResources->beforeLvlUp->stats[STAT_DEF] = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_DEF);
+                    gBattleResources->beforeLvlUp->stats[STAT_SPEED] = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPEED);
+                    gBattleResources->beforeLvlUp->stats[STAT_SPATK] = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPATK);
+                    gBattleResources->beforeLvlUp->stats[STAT_SPDEF] = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPDEF);
+                }
                 gActiveBattler = gBattleStruct->expGetterBattlerId;
                 BtlController_EmitExpUpdate(0, gBattleStruct->expGetterMonId, gBattleMoveDamage);
                 MarkBattlerForControllerExec(gActiveBattler);//ditto transformed has a strange stat distro using this method

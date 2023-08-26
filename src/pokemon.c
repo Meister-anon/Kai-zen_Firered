@@ -82,7 +82,7 @@ static EWRAM_DATA struct OakSpeechNidoranFStruct *sOakSpeechNidoranResources = N
 static union PokemonSubstruct *GetSubstruct(struct BoxPokemon *boxMon, u32 personality, u8 substructType);
 static u16 GetDeoxysStat(struct Pokemon *mon, s32 statId);
 static bool8 IsShinyOtIdPersonality(u32 otId, u32 personality);
-static u16 ModifyStatByNature(u8 nature, u16 n, u8 statIndex);
+
 static u8 GetNatureFromPersonality(u32 personality);
 static bool8 PartyMonHasStatus(struct Pokemon *mon, u32 unused, u32 healMask, u8 battleId);
 static bool8 HealStatusConditions(struct Pokemon *mon, u32 unused, u32 healMask, u8 battleId);
@@ -92,7 +92,7 @@ static void EncryptBoxMon(struct BoxPokemon *boxMon);
 static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
 static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon);
 static u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
-static u8 GetLevelFromMonExp(struct Pokemon *mon);
+
 static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon);
 //const u16* const gFormSpeciesIdTables[NUM_SPECIES]
 
@@ -2886,13 +2886,13 @@ static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon)
     return checksum;
 }
 
-#define CALC_STAT(base, iv, ev, statIndex, field)               \
-{                                                               \
-    u8 baseStat = gBaseStats[species].base;                     \
-    s32 n = (((2 * baseStat + iv + ev / 4) * level) / 100) + 5; \
-    u8 nature = GetNature(mon);                                 \
-    n = ModifyStatByNature(nature, n, statIndex);               \
-    SetMonData(mon, field, &n);                                 \
+#define CALC_STAT(base, iv, ev, statIndex, field)                               \
+{                                                                               \
+    u8 baseStat = gBaseStats[species].base;                                     \
+    s32 n = (((2 * baseStat + ((iv * 240) /100) + ev / 4) * level) / 100) + 5;  \
+    u8 nature = GetNature(mon);                                                 \
+    n = ModifyStatByNature(nature, n, statIndex);                               \
+    SetMonData(mon, field, &n);                                                 \
 }
 
 void CalculateMonStats(struct Pokemon *mon)
@@ -2918,21 +2918,20 @@ void CalculateMonStats(struct Pokemon *mon)
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
 
-    if (ability == ABILITY_WONDER_GUARD)
-    {
+    if (ability == ABILITY_WONDER_GUARD) {
+        currentHP = 1; //worked correctly without but just an extra protection
         newMaxHP = 1;
     }
-   else if (ability == ABILITY_DISPIRIT_GUARD
-   && species == SPECIES_SHEDINJA)
+   else if (ability == ABILITY_DISPIRIT_GUARD)
     {
-        s32 n = 2 * gBaseStats[species].baseHP + hpIV;
+        s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 160) / 100) + (((hpIV * 200) - 36) / 100);
         newMaxHP = (((n + hpEV / 4) * level) / 100) + level;
     }
     else
-    {
-        s32 n = 2 * gBaseStats[species].baseHP + hpIV;
+   {
+        s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 160) / 100) + (((hpIV * 200) - 36) / 100);
         newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
-    }
+   }
 
     gBattleScripting.field_23 = newMaxHP - oldMaxHP;
     if (gBattleScripting.field_23 == 0)
@@ -2957,8 +2956,15 @@ void CalculateMonStats(struct Pokemon *mon)
     {
         if (currentHP == 0 && oldMaxHP == 0)
             currentHP = newMaxHP;
-        else if (currentHP != 0)
+        else if (currentHP != 0 && newMaxHP >= oldMaxHP) //To prevent garbage data after Dynamax form change (from cfru hopefully will allow hp shift mid battle)
+        {
+            // BUG: currentHP is unintentionally able to become <= 0 after the instruction below.
             currentHP += newMaxHP - oldMaxHP;
+            #ifdef BUGFIX
+            if (currentHP <= 0)
+                currentHP = 1;
+            #endif
+        }
         else
             return;
     }
@@ -3082,7 +3088,7 @@ void TransformedMonStats(struct Pokemon *mon)
     SetMonData(mon, MON_DATA_HP, &currentHP);
 }
 
-static u8 GetLevelFromMonExp(struct Pokemon *mon)
+u8 GetLevelFromMonExp(struct Pokemon *mon)
 {
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u32 exp = GetMonData(mon, MON_DATA_EXP, NULL);
@@ -6133,7 +6139,7 @@ u8 GetTrainerEncounterMusicId(u16 trainer)
     return gTrainers[trainer].encounterMusic_gender & 0x7F;
 }
 
-static u16 ModifyStatByNature(u8 nature, u16 n, u8 statIndex)
+u16 ModifyStatByNature(u8 nature, u16 n, u8 statIndex)
 {
     if (statIndex < 1 || statIndex > 5)
     {

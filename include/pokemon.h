@@ -120,6 +120,9 @@ struct Pokemon
     u16 spDefense;
 };
 
+u8 GetLevelFromMonExp(struct Pokemon *mon);
+u16 ModifyStatByNature(u8 nature, u16 n, u8 statIndex); //made global for bs command level up calc
+
 struct PokemonStorage
 {
     /*0x0000*/ u8 currentBox;
@@ -313,6 +316,7 @@ extern const struct BattleMove gBattleMoves[];
 #define FLAG_HIT_IN_SUBSTITUTE                    (1 << 26) // Hyperspace Fury
 #define FLAG_TWO_STRIKES                          (1 << 27) // A move with this flag will strike twice, and may apply its effect on each hit
 #define FLAG_ROCK_HEAD_BOOST    (1 << 28)   //EQUIvalent iron fist will boost moves that used head
+#define FLAG_WIND_MOVE              (1 << 29)
 
 #define SPINDA_SPOT_HEIGHT 16
 

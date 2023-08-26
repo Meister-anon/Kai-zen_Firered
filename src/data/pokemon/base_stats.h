@@ -12989,11 +12989,11 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_ROTOM] =
     {
-        .baseHP = 50,
+        .baseHP = 66,
         .baseAttack = 65,
-        .baseDefense = 107,
-        .baseSpeed = 90,
-        .baseSpAttack = 105,
+        .baseDefense = 77,
+        .baseSpeed = 105, //shoudl be near fastest form as not weighed down by an object
+        .baseSpAttack = 103,
         .baseSpDefense = 107,
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_GHOST,
@@ -13007,9 +13007,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_SHADOW_TAG, ABILITY_OVERCHARGE},
-        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_NONE},
-        .bodyColor = BODY_COLOR_RED,
+        .abilities = {ABILITY_INFILTRATOR, ABILITY_OVERCHARGE},
+        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_LIVEWIRE}, //here another ghost or dark ability
+        .bodyColor = BODY_COLOR_RED, //replace ABILITY NONE with new ability LIVE_WIRE weaker version fo transistor 20% movedamage boost for electric types
         .noFlip = FALSE,
     },
 
@@ -28719,12 +28719,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_ROTOM_HEAT] =
     {
-        .baseHP = 50,
-        .baseAttack = 65,
-        .baseDefense = 107,
-        .baseSpeed = 86,
-        .baseSpAttack = 105,
-        .baseSpDefense = 107,
+        .baseHP = 66,
+        .baseAttack = 76,
+        .baseDefense = 106, //hp is average so needs this higher value to give it some physical bulk
+        .baseSpeed = 76,
+        .baseSpAttack = 102,
+        .baseSpDefense = 85,
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FIRE,
         .catchRate = 45,
@@ -28738,19 +28738,20 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_SOLAR_POWER, ABILITY_OVERCHARGE},
-        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_FLAME_BODY},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    }, //higher defense than base lower than bulk forms as its a microwave / plan to give second secondary type hidden ability for slot 4 so here anotehr fire ability
+    //need to change weight for these forms as well
 
     [SPECIES_ROTOM_WASH] =
     {
-        .baseHP = 50,
+        .baseHP = 105,
         .baseAttack = 65,
-        .baseDefense = 107,
+        .baseDefense = 97,
         .baseSpeed = 86,
-        .baseSpAttack = 105,
-        .baseSpDefense = 107,
+        .baseSpAttack = 75,
+        .baseSpDefense = 97,
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -28764,19 +28765,19 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_SWIFT_SWIM, ABILITY_OVERCHARGE},
-        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_STORM_DRAIN}, //here another water ability
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    },//bulk
 
     [SPECIES_ROTOM_FROST] =
     {
-        .baseHP = 50,
-        .baseAttack = 65,
+        .baseHP = 105,
+        .baseAttack = 74,
         .baseDefense = 107,
-        .baseSpeed = 86,
-        .baseSpAttack = 105,
-        .baseSpDefense = 107,
+        .baseSpeed = 74,
+        .baseSpAttack = 81,
+        .baseSpDefense = 97,
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ICE,
         .catchRate = 45,
@@ -28790,19 +28791,19 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_SNOW_CLOAK, ABILITY_OVERCHARGE},
-        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_FILTER},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    }, //all in floating list so immune to ground by base, so while not ghost still retains ghost elements
+    }, //all in floating list so immune to ground by base, so while not ghost still retains ghost elements / bulk
 
     [SPECIES_ROTOM_FAN] =
     {
-        .baseHP = 50,
+        .baseHP = 66,
         .baseAttack = 65,
-        .baseDefense = 107,
-        .baseSpeed = 86,
+        .baseDefense = 67,
+        .baseSpeed = 107,
         .baseSpAttack = 105,
-        .baseSpDefense = 107,
+        .baseSpDefense = 87,
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -28816,19 +28817,21 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_GALE_WINGS, ABILITY_OVERCHARGE},
-        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_GALEFORCE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    }, //between gale wings & aerilate for flying ability
+    }, //Maybe Fan could be given a spatk version of wind rider So it has a wind immunity and gets spatk boosts
+    //wind moves i.e gust whirlwind huricane etc. setup with flag like iron  fist
+    //ability name wind tunnel or turbine (still worksshopping name)  /Galeforce!!
 
     [SPECIES_ROTOM_MOW] =
     {
-        .baseHP = 50,
-        .baseAttack = 65,
-        .baseDefense = 107,
-        .baseSpeed = 86,
-        .baseSpAttack = 105,
-        .baseSpDefense = 107,
+        .baseHP = 76,
+        .baseAttack = 102,
+        .baseDefense = 80,
+        .baseSpeed = 90,
+        .baseSpAttack = 103,
+        .baseSpDefense = 77,
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_GRASS,
         .catchRate = 45,
@@ -28842,10 +28845,10 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_LEAF_GUARD, ABILITY_OVERCHARGE},
-        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_GRASSY_SURGE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    }, //speed attacker
 
     [SPECIES_GIRATINA_ORIGIN] =
     {
