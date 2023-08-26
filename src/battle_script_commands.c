@@ -963,15 +963,15 @@ static void atk00_attackcanceler(void)
             return;
         }
     }
-    if (gSpecialStatuses[gBattlerTarget].lightningRodRedirected)
+    /*if (gSpecialStatuses[gBattlerTarget].lightningRodRedirected)
     {
         gSpecialStatuses[gBattlerTarget].lightningRodRedirected = FALSE;
         gLastUsedAbility = ABILITY_LIGHTNING_ROD;
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_TookAttack;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
-    }
-    else if (DEFENDER_IS_PROTECTED
+    }*/
+    if (DEFENDER_IS_PROTECTED
           && (gCurrentMove != MOVE_CURSE || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST))
           && ((!IsTwoTurnsMove(gCurrentMove) || (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))))
     {

@@ -121,11 +121,11 @@ EWRAM_DATA u16 gBattle_WIN0H = 0;
 EWRAM_DATA u16 gBattle_WIN0V = 0;
 EWRAM_DATA u16 gBattle_WIN1H = 0;
 EWRAM_DATA u16 gBattle_WIN1V = 0; //gonna try 380, estimated by counting hover over values for 3 buffs and gunown below whih was about 73
-EWRAM_DATA u8 gDisplayedStringBattle[380] = { 0 }; //need increase from 300 to fix brocks
+EWRAM_DATA u8 gDisplayedStringBattle[380] = {0}; //need increase from 300 to fix brocks
 EWRAM_DATA u8 gBattleTextBuff1[TEXT_BUFF_ARRAY_COUNT] = {0};
 EWRAM_DATA u8 gBattleTextBuff2[TEXT_BUFF_ARRAY_COUNT] = {0};
 EWRAM_DATA u8 gBattleTextBuff3[TEXT_BUFF_ARRAY_COUNT] = {0};
-static EWRAM_DATA u32 gUnknown_2022AE8[25] = {0};
+//static EWRAM_DATA u32 gUnknown_2022AE8[25] = {0}; //zsonic  //GriffinR came through again,  thought this was unused but removing is what broke brocks battle.
 EWRAM_DATA u32 gBattleTypeFlags = 0;
 EWRAM_DATA u8 gBattleTerrain = 0;
 EWRAM_DATA u32 gUnknown_2022B54 = 0;
@@ -136,6 +136,7 @@ static EWRAM_DATA u16 *sUnknownDebugSpriteDataBuffer = NULL;
 EWRAM_DATA u8 gBattleBufferA[MAX_BATTLERS_COUNT][0x200] = {0};
 EWRAM_DATA u8 gBattleBufferB[MAX_BATTLERS_COUNT][0x200] = {0};
 EWRAM_DATA u8 gActiveBattler = 0;
+EWRAM_DATA u8 gBattlerAbility = 0;  //didn't want to port but its required since its the main thing used with ability popups
 EWRAM_DATA u32 gBattleControllerExecFlags = 0;
 EWRAM_DATA u8 gBattlersCount = 0;
 EWRAM_DATA u16 gBattlerPartyIndexes[MAX_BATTLERS_COUNT] = {0};
@@ -156,6 +157,8 @@ EWRAM_DATA s32 gHpDealt = 0;
 EWRAM_DATA s32 gTakenDmg[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gLastUsedItem = 0;
 EWRAM_DATA u16 gLastUsedAbility = 0;
+EWRAM_DATA u8 gAnticipatedBattler = 0;  
+EWRAM_DATA u8 gForewarnedBattler = 0;   
 EWRAM_DATA u8 gBattlerAttacker = 0;
 EWRAM_DATA u8 gBattlerTarget = 0;
 EWRAM_DATA u8 gBattlerFainted = 0;
@@ -164,6 +167,7 @@ EWRAM_DATA u8 gPotentialItemEffectBattler = 0;
 EWRAM_DATA u8 gAbsentBattlerFlags = 0;
 EWRAM_DATA u8 gCritMultiplier = 0;
 EWRAM_DATA u8 gMultiHitCounter = 0;
+EWRAM_DATA u8 gMultiTask = 0;
 EWRAM_DATA const u8 *gBattlescriptCurrInstr = NULL;
 EWRAM_DATA u32 gUnusedBattleMainVar = 0;
 EWRAM_DATA u8 gChosenActionByBattler[MAX_BATTLERS_COUNT] = {0};
@@ -171,11 +175,12 @@ EWRAM_DATA const u8 *gSelectionBattleScripts[MAX_BATTLERS_COUNT] = {NULL};
 EWRAM_DATA u16 gLastPrintedMoves[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gLastMoves[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gLastLandedMoves[MAX_BATTLERS_COUNT] = {0};
-EWRAM_DATA u16 gLastHitByType[MAX_BATTLERS_COUNT] = {0};
+EWRAM_DATA u16 gLastHitByType[MAX_BATTLERS_COUNT] = {0};    //may need to add last hit by move for fly cancel?
 EWRAM_DATA u16 gLastResultingMoves[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gLockedMoves[MAX_BATTLERS_COUNT] = {0};
-EWRAM_DATA u8 gLastHitBy[MAX_BATTLERS_COUNT] = {0};
-EWRAM_DATA u16 gChosenMoveByBattler[MAX_BATTLERS_COUNT] = {0};
+EWRAM_DATA u16 gLastUsedMove = 0; //still unsure if I need to add this or can just use gLastResultingMoves which seems to be equivalent
+EWRAM_DATA u8 gLastHitBy[MAX_BATTLERS_COUNT] = {0};//ran make with and without above line came to same conclusion so either works
+EWRAM_DATA u16 gChosenMoveByBattler[MAX_BATTLERS_COUNT] = {0};//rn I'll use existing value to save on ram
 EWRAM_DATA u8 gMoveResultFlags = 0;
 EWRAM_DATA u32 gHitMarker = 0;
 static EWRAM_DATA u8 gUnknown_2023DD4[MAX_BATTLERS_COUNT] = {0};
@@ -184,6 +189,7 @@ EWRAM_DATA u8 gUnknown_2023DDC = 0;
 EWRAM_DATA u16 gSideStatuses[2] = {0};
 EWRAM_DATA struct SideTimer gSideTimers[2] = {0};
 EWRAM_DATA u32 gStatuses3[MAX_BATTLERS_COUNT] = {0};
+EWRAM_DATA u32 gStatuses4[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA struct DisableStruct gDisableStructs[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gPauseCounterBattle = 0;
 EWRAM_DATA u16 gPaydayMoney = 0;
@@ -198,12 +204,12 @@ EWRAM_DATA u16 gIntroSlideFlags = 0;
 EWRAM_DATA u8 gSentPokesToOpponent[2] = {0};
 EWRAM_DATA u16 gDynamicBasePower = 0;
 EWRAM_DATA u16 gExpShareExp = 0;
-EWRAM_DATA struct BattleEnigmaBerry gEnigmaBerries[MAX_BATTLERS_COUNT] = {0};
+EWRAM_DATA struct BattleEnigmaBerry gEnigmaBerries[MAX_BATTLERS_COUNT] = {0}; //onlyused for ereader stuff can remove
 EWRAM_DATA struct BattleScripting gBattleScripting = {0};
 EWRAM_DATA struct BattleStruct *gBattleStruct = NULL;
 EWRAM_DATA u8 *gLinkBattleSendBuffer = NULL;
 EWRAM_DATA u8 *gLinkBattleRecvBuffer = NULL;
-EWRAM_DATA struct BattleResources *gBattleResources = NULL;
+EWRAM_DATA struct BattleResources *gBattleResources = NULL;  //edited includes flags I added i.e flashfire etc.
 EWRAM_DATA u8 gActionSelectionCursor[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gMoveSelectionCursor[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gBattlerStatusSummaryTaskId[MAX_BATTLERS_COUNT] = {0};
@@ -217,6 +223,12 @@ EWRAM_DATA u16 gMoveToLearn = 0;
 EWRAM_DATA u8 gBattleMonForms[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u32 gFieldStatuses = 0;
 EWRAM_DATA struct FieldTimer gFieldTimers = { 0 };
+EWRAM_DATA struct TotemBoost gTotemBoosts[MAX_BATTLERS_COUNT] = { 0 };  //not gonna use for my stuff so can comment out
+EWRAM_DATA bool8 gHasFetchedBall = FALSE;
+EWRAM_DATA u8 gLastUsedBall = 0;    //need to implement add in these 2 somewhere
+EWRAM_DATA u16 gLastThrownBall = 0;
+EWRAM_DATA bool8 gSwapDamageCategory = FALSE; // Photon Geyser, Shell Side Arm, Light That Burns the Sky
+
 
 void (*gPreBattleCallback1)(void);
 void (*gBattleMainFunc)(void);
@@ -1988,7 +2000,7 @@ void SpriteCallbackDummy2(struct Sprite *sprite)
 }
 
 // not used
-UNUSED static void SpriteCB_Unused_8011E28(struct Sprite *sprite)
+/*UNUSED static void SpriteCB_Unused_8011E28(struct Sprite *sprite)
 {
     sprite->data[3] = 6;
     sprite->data[4] = 1;
@@ -2011,7 +2023,7 @@ static void SpriteCB_Unused_8011E28_Step(struct Sprite *sprite)
             gUnknown_2022AE8[0] = 0;
         }
     }
-}
+}*/
 
 void SpriteCB_FaintOpponentMon(struct Sprite *sprite)
 {
@@ -4115,7 +4127,7 @@ static void HandleAction_UseMove(void)
         {
             gActiveBattler = gBattlerByTurnOrder[var];
             RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);
-            gSpecialStatuses[gActiveBattler].lightningRodRedirected = 1;
+            //gSpecialStatuses[gActiveBattler].lightningRodRedirected = 1;
             gBattlerTarget = gActiveBattler;
         }
     }

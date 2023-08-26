@@ -3866,7 +3866,7 @@ u8 GetMoveTarget(u16 move, u8 setTarget)
             {
                 targetBattler ^= BIT_FLANK;
                 RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
-                gSpecialStatuses[targetBattler].lightningRodRedirected = 1;
+               // gSpecialStatuses[targetBattler].lightningRodRedirected = 1;
             }
         }
         break;
