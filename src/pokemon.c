@@ -3149,10 +3149,13 @@ void TransformedMonStats(struct Pokemon *mon)
                 currentHP = newMaxHP;
             else if (currentHP != 0) {
                 // BUG: currentHP is unintentionally able to become <= 0 after the instruction below.
-                currentHP += newMaxHP - oldMaxHP;
+                currentHP += newMaxHP - oldMaxHP;   //this is the problem I believe since hp is able to increase I need to make sure it doesn't go ABOVE newmaxhp, right now its just continuously adding the dif
 #ifdef BUGFIX
                 if (currentHP <= 0)
                     currentHP = 1;
+
+                /*if (currentHP >= newMaxHP)
+                    currentHP = newMaxHP;*/  //just a stop gap for an actual soluition, issue hp keeps increasing above maxhp when transforming to a mon with more hp than ditto
 #endif
             }
             else
@@ -4923,7 +4926,7 @@ static void CopyPlayerPartyMonToBattleData(u8 battlerId, u8 partyIndex)
     gBattleMons[battlerId].type2 = gBaseStats[gBattleMons[battlerId].species].type2;
     gBattleMons[battlerId].ability = GetAbilityBySpecies(gBattleMons[battlerId].species, gBattleMons[battlerId].abilityNum);
     GetMonData(&gPlayerParty[partyIndex], MON_DATA_NICKNAME, nickname);
-    StringCopy10(gBattleMons[battlerId].nickname, nickname);
+    StringCopy_Nickname(gBattleMons[battlerId].nickname, nickname);
     GetMonData(&gPlayerParty[partyIndex], MON_DATA_OT_NAME, gBattleMons[battlerId].otName);
 
     hpSwitchout = &gBattleStruct->hpOnSwitchout[GetBattlerSide(battlerId)];
@@ -7172,7 +7175,7 @@ bool8 CheckBattleTypeGhost(struct Pokemon *mon, u8 battlerId)
     if (gBattleTypeFlags & BATTLE_TYPE_GHOST && GetBattlerSide(battlerId) != B_SIDE_PLAYER)
     {
         GetMonData(mon, MON_DATA_NICKNAME, buffer);
-        StringGetEnd10(buffer);
+        StringGet_Nickname(buffer);
         if (!StringCompare(buffer, gText_Ghost))
             return TRUE;
     }

@@ -92,7 +92,7 @@ void ShowDiploma(void)
 {
     QuestLog_CutRecording();
     SetMainCallback2(CB2_ShowDiploma);
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
 }
 
 void ForcePlayerOntoBike(void)
@@ -1337,7 +1337,7 @@ static void Task_CreateScriptListMenu(u8 taskId)
     s32 mwidth;
     struct Task * task = &gTasks[taskId];
     u8 windowId;
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     if (gSpecialVar_0x8004 == LISTMENU_SILPHCO_FLOORS)
         sListMenuLastScrollPosition = sElevatorScroll;
     else
@@ -1478,7 +1478,7 @@ void ReturnToListMenu(void)
 
 static void Task_RedrawScrollArrowsAndWaitInput(u8 taskId)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     Task_CreateMenuRemoveScrollIndicatorArrowPair(taskId);
     gTasks[taskId].func = Task_ListMenuHandleInput;
 }
@@ -1850,7 +1850,7 @@ static void ChangePokemonNickname_CB(void)
 void BufferMonNickname(void)
 {
     GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_NICKNAME, gStringVar1);
-    StringGetEnd10(gStringVar1);
+    StringGet_Nickname(gStringVar1);
 }
 
 void IsMonOTIDNotPlayers(void)
@@ -2494,7 +2494,7 @@ void CutMoveOpenDottedHoleDoor(void)
     DrawWholeMapView();
     PlaySE(SE_BANG);
     FlagSet(FLAG_USED_CUT_ON_RUIN_VALLEY_BRAILLE);
-    ScriptContext2_Disable();
+    UnlockPlayerFieldControls();
 }
 
 static const u16 sDeoxysObjectPals[][16] = {

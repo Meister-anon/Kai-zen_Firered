@@ -37,7 +37,7 @@ extern u8 gExpandedPlaceholder_Groudon[];
 extern u8 gExpandedPlaceholder_Red[];
 extern u8 gExpandedPlaceholder_Green[];
 
-u8 *StringCopy10(u8 *dest, const u8 *src)
+u8 *StringCopy_Nickname(u8 *dest, const u8 *src)
 {
     u8 i;
     u32 limit = 10;
@@ -54,7 +54,7 @@ u8 *StringCopy10(u8 *dest, const u8 *src)
     return &dest[i];
 }
 
-u8 *StringGetEnd10(u8 *str)
+u8 *StringGet_Nickname(u8 *str)
 {
     u8 i;
     u32 limit = 10;
@@ -67,7 +67,7 @@ u8 *StringGetEnd10(u8 *str)
     return &str[i];
 }
 
-u8 *StringCopy7(u8 *dest, const u8 *src)
+u8 *StringCopy_PlayerName(u8 *dest, const u8 *src)
 {
     s32 i;
     s32 limit = 7;

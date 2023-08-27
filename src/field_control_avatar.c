@@ -319,12 +319,12 @@ void FieldInput_HandleCancelSignpost(struct FieldInput * input)
                 else if (input->dpadDirection == DIR_EAST)
                     RegisterQuestLogInput(QL_INPUT_RIGHT);
                 ScriptContext1_SetupScript(EventScript_CancelMessageBox);
-                ScriptContext2_Enable();
+                LockPlayerFieldControls();
             }
             else if (input->pressedStartButton)
             {
                 ScriptContext1_SetupScript(EventScript_CancelMessageBox);
-                ScriptContext2_Enable();
+                LockPlayerFieldControls();
                 if (!FuncIsActiveTask(Task_QuestLogPlayback_OpenStartMenu))
                     CreateTask(Task_QuestLogPlayback_OpenStartMenu, 8);
             }
@@ -334,7 +334,7 @@ void FieldInput_HandleCancelSignpost(struct FieldInput * input)
 
 static void Task_QuestLogPlayback_OpenStartMenu(u8 taskId)
 {
-    if (!ScriptContext2_IsEnabled())
+    if (!ArePlayerFieldControlsLocked())
     {
         PlaySE(SE_WIN_OPEN);
         ShowStartMenu();
@@ -1087,7 +1087,7 @@ void HandleBoulderActivateVictoryRoadSwitch(u16 x, u16 y)
             {
                 QuestLog_CutRecording();
                 ScriptContext1_SetupScript(events[i].script);
-                ScriptContext2_Enable();
+                LockPlayerFieldControls();
             }
         }
     }

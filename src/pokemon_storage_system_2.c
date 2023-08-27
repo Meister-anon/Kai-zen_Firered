@@ -278,7 +278,7 @@ static void Task_PokemonStorageSystemPC(u8 taskId)
         case  4:
             ClearStdWindowAndFrame(0, TRUE);
             ClearStdWindowAndFrame(task->data[15], TRUE);
-            ScriptContext2_Disable();
+            UnlockPlayerFieldControls();
             EnableBothScriptContexts();
             DestroyTask(taskId);
             break;
@@ -347,7 +347,7 @@ void ShowPokemonStorageSystemPC(void)
     u8 taskId = CreateTask(Task_PokemonStorageSystemPC, 80);
     gTasks[taskId].data[0] = 0;
     gTasks[taskId].data[1] = 0;
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
 }
 
 static void FieldCb_ReturnToPcMenu(void)

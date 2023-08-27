@@ -1397,13 +1397,13 @@ static void DoCB1_Overworld(u16 newKeys, u16 heldKeys)
     FieldClearPlayerInput(&fieldInput);
     FieldGetPlayerInput(&fieldInput, newKeys, heldKeys);
     FieldInput_HandleCancelSignpost(&fieldInput);
-    if (!ScriptContext2_IsEnabled())
+    if (!ArePlayerFieldControlsLocked())
     {
         if (ProcessPlayerFieldInput(&fieldInput) == TRUE)
         {
             if (gQuestLogPlaybackState == 2)
                 sub_81127F8(&gInputToStoreInQuestLogMaybe);
-            ScriptContext2_Enable();
+            LockPlayerFieldControls();
             DismissMapNamePopup();
         }
         else
@@ -1424,11 +1424,11 @@ static void DoCB1_Overworld_QuestLogPlayback(void)
     FieldClearPlayerInput(&fieldInput);
     fieldInput = gQuestLogFieldInput;
     FieldInput_HandleCancelSignpost(&fieldInput);
-    if (!ScriptContext2_IsEnabled())
+    if (!ArePlayerFieldControlsLocked())
     {
         if (ProcessPlayerFieldInput(&fieldInput) == TRUE)
         {
-            ScriptContext2_Enable();
+            LockPlayerFieldControls();
             DismissMapNamePopup();
         }
         else
@@ -1525,7 +1525,7 @@ void CB2_NewGame(void)
     ResetInitialPlayerAvatarState();
     PlayTimeCounter_Start();
     ScriptContext1_Init();
-    ScriptContext2_Disable();
+    UnlockPlayerFieldControls();
     gFieldCallback = FieldCB_WarpExitFadeFromBlack;
     gFieldCallback2 = NULL;
     do_load_map_stuff_loop(&gMain.state);
@@ -1546,7 +1546,7 @@ void CB2_WhiteOut(void)
         DoWhiteOut();
         SetInitialPlayerAvatarStateWithDirection(DIR_NORTH);
         ScriptContext1_Init();
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         gFieldCallback = FieldCB_RushInjuredPokemonToCenter;
         val = 0;
         do_load_map_stuff_loop(&val);
@@ -1561,7 +1561,7 @@ void CB2_LoadMap(void)
 {
     FieldClearVBlankHBlankCallbacks();
     ScriptContext1_Init();
-    ScriptContext2_Disable();
+    UnlockPlayerFieldControls();
     SetMainCallback1(NULL);
     SetMainCallback2(CB2_DoChangeMap);
     gMain.savedCallback = CB2_LoadMap2;
@@ -1641,7 +1641,7 @@ void CB2_ReturnToFieldFromMultiplayer(void)
         gFieldCallback = FieldCB_ReturnToFieldCableLink;
 
     ScriptContext1_Init();
-    ScriptContext2_Disable();
+    UnlockPlayerFieldControls();
     CB2_ReturnToField();
 }
 
@@ -1692,7 +1692,7 @@ void CB2_ContinueSavedGame(void)
     InitMapFromSavedGame();
     PlayTimeCounter_Start();
     ScriptContext1_Init();
-    ScriptContext2_Disable();
+    UnlockPlayerFieldControls();
     gFieldCallback2 = NULL;
     gUnknown_2031DE0 = TRUE;
     if (UseContinueGameWarp() == TRUE)
@@ -1767,7 +1767,7 @@ static bool32 map_loading_iteration_3(u8 *state)
     case 0:
         InitOverworldBgs();
         ScriptContext1_Init();
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         (*state)++;
         break;
     case 1:
@@ -2205,7 +2205,7 @@ void CB2_SetUpOverworldForQLPlaybackWithWarpExit(void)
     FieldClearVBlankHBlankCallbacks();
     gUnknown_2036E28 = 1;
     ScriptContext1_Init();
-    ScriptContext2_Disable();
+    UnlockPlayerFieldControls();
     SetMainCallback1(NULL);
     SetMainCallback2(CB2_DoChangeMap);
     gMain.savedCallback = CB2_LoadMapForQLPlayback;
@@ -2217,7 +2217,7 @@ void CB2_SetUpOverworldForQLPlayback(void)
     gUnknown_2036E28 = 1;
     LoadSaveblockMapHeader();
     ScriptContext1_Init();
-    ScriptContext2_Disable();
+    UnlockPlayerFieldControls();
     SetMainCallback1(NULL);
     SetMainCallback2(CB2_LoadMapForQLPlayback);
 }
@@ -2396,7 +2396,7 @@ static bool32 SetUpScrollSceneForCredits(u8 *state, u8 unused)
         WarpIntoMap();
         gPaletteFade.bufferTransferDisabled = TRUE;
         ScriptContext1_Init();
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         SetMainCallback1(NULL);
         gFieldCallback2 = FieldCB2_Credits_WaitFade;
         gMain.state = 0;
@@ -2848,7 +2848,7 @@ static void ResetPlayerHeldKeys(u16 *keys)
 
 static u16 KeyInterCB_SelfIdle(u32 key)
 {
-    if (ScriptContext2_IsEnabled() == TRUE)
+    if (ArePlayerFieldControlsLocked() == TRUE)
         return LINK_KEY_CODE_EMPTY;
     if (GetLinkRecvQueueLength() > 4)
         return LINK_KEY_CODE_HANDLE_RECV_QUEUE;
@@ -2868,7 +2868,7 @@ static u16 sub_8057D98(u32 key)
 static u16 KeyInterCB_DeferToEventScript(u32 key)
 {
     u16 retVal;
-    if (ScriptContext2_IsEnabled() == TRUE)
+    if (ArePlayerFieldControlsLocked() == TRUE)
     {
         retVal = LINK_KEY_CODE_EMPTY;
     }
@@ -2891,7 +2891,7 @@ static u16 KeyInterCB_DeferToRecvQueue(u32 key)
     else
     {
         retVal = LINK_KEY_CODE_UNK_4;
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         SetKeyInterceptCallback(sub_8057D98);
     }
     return retVal;
@@ -2908,7 +2908,7 @@ static u16 KeyInterCB_DeferToSendQueue(u32 key)
     else
     {
         retVal = LINK_KEY_CODE_UNK_4;
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         SetKeyInterceptCallback(sub_8057D98);
     }
     return retVal;
@@ -3140,42 +3140,42 @@ static u16 GetDirectionForEventScript(const u8 *script)
 
 static void sub_80581BC(void)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
 }
 
 static void InitLinkRoomStartMenuScript(void)
 {
     PlaySE(SE_WIN_OPEN);
     ShowStartMenu();
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
 }
 
 static void sub_80581DC(const u8 *script)
 {
     PlaySE(SE_SELECT);
     ScriptContext1_SetupScript(script);
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
 }
 
 static void CreateConfirmLeaveTradeRoomPrompt(void)
 {
     PlaySE(SE_WIN_OPEN);
     ScriptContext1_SetupScript(TradeCenter_ConfirmLeaveRoom);
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
 }
 
 static void InitMenuBasedScript(const u8 *script)
 {
     PlaySE(SE_SELECT);
     ScriptContext1_SetupScript(script);
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
 }
 
 static void sub_8058230(void)
 {
     return;
   //ScriptContext1_SetupScript(TradeCenter_TerminateLink);
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
 }
 
 bool32 Overworld_LinkRecvQueueLengthMoreThan2(void)

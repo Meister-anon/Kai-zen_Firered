@@ -1020,7 +1020,7 @@ static void FieldCallback_Fly(void)
 {
     FadeInFromBlack();
     CreateTask(Task_FlyOut, 0);
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FreezeObjectEvents();
     gFieldCallback = NULL;
 }
@@ -1059,7 +1059,7 @@ static void FieldCallback_FlyArrive(void)
     {
         ObjectEventTurn(&gObjectEvents[gPlayerAvatar.objectEventId], DIR_WEST);
     }
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FreezeObjectEvents();
     gFieldCallback = NULL;
 }
@@ -1079,7 +1079,7 @@ static void Task_FlyIn(u8 taskId)
     }
     if (!FieldEffectActiveListContains(FLDEFF_FLY_IN))
     {
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         UnfreezeObjectEvents();
         DestroyTask(taskId);
     }
@@ -1109,7 +1109,7 @@ void FieldCB_FallWarpExit(void)
     Overworld_PlaySpecialMapMusic();
     WarpFadeInScreen();
     QuestLog_DrawPreviouslyOnQuestHeaderIfInPlaybackMode();
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FreezeObjectEvents();
     CreateTask(Task_FallWarpFieldEffect, 0);
     gFieldCallback = NULL;
@@ -1227,7 +1227,7 @@ static bool8 FallWarpEffect_7(struct Task * task)
 {
     s16 x, y;
     gPlayerAvatar.preventStep = FALSE;
-    ScriptContext2_Disable();
+    UnlockPlayerFieldControls();
     CameraObjectReset1();
     UnfreezeObjectEvents();
     InstallCameraPanAheadCallback();
@@ -1413,7 +1413,7 @@ static void FieldCB_EscalatorWarpIn(void)
     Overworld_PlaySpecialMapMusic();
     WarpFadeInScreen();
     QuestLog_DrawPreviouslyOnQuestHeaderIfInPlaybackMode();
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FreezeObjectEvents();
     CreateTask(Task_EscalatorWarpInFieldEffect, 0);
     gFieldCallback = NULL;
@@ -1530,7 +1530,7 @@ static bool8 EscalatorWarpInEffect_7(struct Task * task)
     if (ObjectEventClearHeldMovementIfFinished(objectEvent))
     {
         CameraObjectReset1();
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         UnfreezeObjectEvents();
         ObjectEventSetHeldMovement(objectEvent, GetWalkNormalMovementAction(DIR_EAST));
         DestroyTask(FindTaskIdByFunc(Task_EscalatorWarpInFieldEffect));
@@ -1571,7 +1571,7 @@ static void Task_UseWaterfall(u8 taskId)
 
 static bool8 waterfall_0_setup(struct Task * task, struct ObjectEvent * playerObj)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     gPlayerAvatar.preventStep = TRUE;
     task->data[0]++;
     return FALSE;
@@ -1579,7 +1579,7 @@ static bool8 waterfall_0_setup(struct Task * task, struct ObjectEvent * playerOb
 
 static bool8 waterfall_1_do_anim_probably(struct Task * task, struct ObjectEvent * playerObj)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     if (!ObjectEventIsMovementOverridden(playerObj))
     {
         ObjectEventClearHeldMovementIfFinished(playerObj);
@@ -1614,7 +1614,7 @@ static bool8 waterfall_4_wait_player_move_probably(struct Task * task, struct Ob
         task->data[0] = 3;
         return TRUE;
     }
-    ScriptContext2_Disable();
+    UnlockPlayerFieldControls();
     gPlayerAvatar.preventStep = FALSE;
     DestroyTask(FindTaskIdByFunc(Task_UseWaterfall));
     FieldEffectActiveListRemove(FLDEFF_USE_WATERFALL);
@@ -1656,7 +1656,7 @@ static bool8 dive_1_lock(struct Task * task)
 
 static bool8 dive_2_unknown(struct Task * task)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     gFieldEffectArguments[0] = task->data[15];
     FieldEffectStart(FLDEFF_FIELD_MOVE_SHOW_MON_INIT);
     task->data[0]++;
@@ -1823,7 +1823,7 @@ static void FieldCB_LavaridgeGymB1FWarpExit(void)
     Overworld_PlaySpecialMapMusic();
     WarpFadeInScreen();
     QuestLog_DrawPreviouslyOnQuestHeaderIfInPlaybackMode();
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     gFieldCallback = NULL;
     CreateTask(Task_LavaridgeGymB1FWarpExit, 0);
 }
@@ -1876,7 +1876,7 @@ static bool8 LavaridgeGymB1FWarpExitEffect_4(struct Task * task, struct ObjectEv
     if (ObjectEventClearHeldMovementIfFinished(objectEvent))
     {
         gPlayerAvatar.preventStep = FALSE;
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         UnfreezeObjectEvents();
         DestroyTask(FindTaskIdByFunc(Task_LavaridgeGymB1FWarpExit));
     }
@@ -2027,7 +2027,7 @@ static void (*const gEscapeRopeFieldEffectFuncs[])(struct Task * task) = {
 
 void StartEscapeRopeFieldEffect(void)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FreezeObjectEvents();
     CreateTask(Task_DoEscapeRopeFieldEffect, 80);
 }
@@ -2190,7 +2190,7 @@ static void FieldCallback_EscapeRopeExit(void)
     Overworld_PlaySpecialMapMusic();
     WarpFadeInScreen();
     QuestLog_DrawPreviouslyOnQuestHeaderIfInPlaybackMode();
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FreezeObjectEvents();
     gFieldCallback = NULL;
     gObjectEvents[gPlayerAvatar.objectEventId].invisible = TRUE;
@@ -2231,7 +2231,7 @@ static void EscapeRopeExitFieldEffect_Step1(struct Task * task)
     {
         playerObj->invisible = FALSE;
         playerObj->fixedPriority = FALSE;
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         UnfreezeObjectEvents();
         DestroyTask(FindTaskIdByFunc(Task_DoEscapeRopeExitFieldEffect));
     }
@@ -2267,7 +2267,7 @@ static void Task_DoTeleportFieldEffect(u8 taskId)
 
 static void TeleportFieldEffectTask1(struct Task * task)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FreezeObjectEvents();
     CameraObjectReset2();
     task->data[15] = GetPlayerFacingDirection();
@@ -2354,7 +2354,7 @@ static void FieldCallback_TeleportIn(void)
     Overworld_PlaySpecialMapMusic();
     WarpFadeInScreen();
     QuestLog_DrawPreviouslyOnQuestHeaderIfInPlaybackMode();
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FreezeObjectEvents();
     gFieldCallback = NULL;
     gObjectEvents[gPlayerAvatar.objectEventId].invisible = TRUE;
@@ -2435,7 +2435,7 @@ static void TeleportInFieldEffectTask3(struct Task * task)
         task->data[1] = 8;
         if ((++task->data[2]) > 4 && task->data[14] == objectEvent->facingDirection)
         {
-            ScriptContext2_Disable();
+            UnlockPlayerFieldControls();
             CameraObjectReset1();
             UnfreezeObjectEvents();
             DestroyTask(FindTaskIdByFunc(Task_DoTeleportInFieldEffect));
@@ -2904,7 +2904,7 @@ static void Task_FldEffUseSurf(u8 taskId)
 
 static void UseSurfEffect_1(struct Task * task)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FreezeObjectEvents();
     gPlayerAvatar.preventStep = TRUE;
     SetPlayerAvatarStateMask(8);
@@ -2965,7 +2965,7 @@ static void UseSurfEffect_5(struct Task * task)
         ObjectEventSetHeldMovement(objectEvent, GetFaceDirectionMovementAction(objectEvent->movementDirection));
         sub_80DC44C(objectEvent->fieldEffectSpriteId, 1);
         UnfreezeObjectEvents();
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         FieldEffectActiveListRemove(FLDEFF_USE_SURF);
         DestroyTask(FindTaskIdByFunc(Task_FldEffUseSurf));
         SetHelpContext(HELPCONTEXT_SURFING);
@@ -3000,7 +3000,7 @@ static void Task_FldEffUseVsSeeker(u8 taskId)
 
 static void UseVsSeekerEffect_1(struct Task * task)
 {
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FreezeObjectEvents();
     gPlayerAvatar.preventStep = TRUE;
     task->data[0]++;

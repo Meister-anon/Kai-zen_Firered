@@ -198,7 +198,7 @@ void AnimateFlash(u8 flashLevel)
         value = TRUE;
     sub_807EFC8(120, 80, sFlashLevelPixelRadii[curFlashLevel], sFlashLevelPixelRadii[flashLevel], value, 2);
     sub_807EFA4();
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
 }
 
 void WriteFlashScanlineEffectBuffer(u8 flashLevel)
@@ -452,7 +452,7 @@ void FieldCB_RushInjuredPokemonToCenter(void)
 {
     u8 taskId;
 
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     palette_bg_faded_fill_black();
     taskId = CreateTask(Task_RushInjuredPokemonToCenter, 10);
     gTasks[taskId].data[0] = 0;
