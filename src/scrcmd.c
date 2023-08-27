@@ -21,6 +21,7 @@
 #include "script_menu.h"
 #include "data.h"
 #include "field_specials.h"
+#include "battle_main.h"
 #include "constants/items.h"
 #include "script_pokemon_util.h"
 #include "pokemon_storage_system.h"
@@ -1595,6 +1596,25 @@ bool8 ScrCmd_bufferspeciesname(struct ScriptContext * ctx)
     u16 species = VarGet(ScriptReadHalfword(ctx));
 
     StringCopy(sScriptStringVars[stringVarIndex], gSpeciesNames[species]);
+    return FALSE;
+} //if using u16 src for new string copy function doesn't workr, try make gStringVar1 u16
+
+bool8 ScrCmd_bufferspeciestype(struct ScriptContext * ctx)
+{
+    u8 stringVarIndex = ScriptReadByte(ctx);
+    u16 species = VarGet(ScriptReadHalfword(ctx));
+    s32 i;
+    u8 type;// = gBaseStats[species].type1 == gBaseStats[species].type2 ? gBaseStats[species].type1 : gBaseStats[species].type2;
+    for (i = 0; i < NELEMS(sTypeExceptions); i++) {
+        if (species == sTypeExceptions[i])
+            break; // break needs to be in loop/ that's what tells it to stop looping
+    }
+    if (i == NELEMS(sTypeExceptions)) // did not find the species
+        type = gBaseStats[species].type1;
+    else // found the species
+        type = gBaseStats[species].type2;
+    
+    StringCopy(sScriptStringVars[stringVarIndex], gTypeNames[type]);
     return FALSE;
 }
 

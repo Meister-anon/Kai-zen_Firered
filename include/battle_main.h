@@ -9,6 +9,14 @@ struct TrainerMoney
     u8 value;
 };
 
+// for Natural Gift and Fling
+struct TypePower
+{
+    u8 type;
+    u8 power;
+    u16 effect;
+};
+
 struct MultiBattlePokemonTx
 {
     /*0x00*/ u16 species;
@@ -60,6 +68,7 @@ extern const u8 *const gStatusConditionStringsTable[7][2];
 extern const u16 gTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES]; //type table port
 extern const u8 gTypeEffectiveness[420]; //normal type array
 extern const struct TrainerMoney gTrainerMoneyTable[];
+extern const struct TypePower gNaturalGiftTable[];
 //extern const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT];
 //extern const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1];
 
@@ -92,8 +101,15 @@ u8 IsRunningFromBattleImpossible(void);
 void UpdatePartyOwnerOnSwitch_NonMulti(u8 battler);
 void SwapTurnOrder(u8 id1, u8 id2);
 u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves);
+void SortBattlersBySpeed(u8 *battlers, bool8 slowToFast);
+u32 GetBattlerTotalSpeedStat(u8 battlerId);
 void RunBattleScriptCommands_PopCallbacksStack(void);
 void RunBattleScriptCommands(void);
 bool8 TryRunFromBattle(u8 battler);
+s8 GetMovePriority(u8 battlerId, u16 move);
+s8 GetChosenMovePriority(u8 battlerId);
+bool8 IsRivalBattle(u16 trainerNum);
+bool32 IsWildMonSmart(void);
+void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk);
 
 #endif // GUARD_BATTLE_MAIN_H

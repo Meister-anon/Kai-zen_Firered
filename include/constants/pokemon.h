@@ -192,6 +192,12 @@
 #define ABILITYNUM_HIDDEN_ABILITY_START 2
 #define ABILITYNUM_NORMAL_ABILITY_START 0
 
+//trainer party abilityNum values, 
+#define RANDOM_ABILITY			0
+#define ABILITY_1				1
+#define ABILITY_2				2
+#define HIDDEN_ABILITY_1		3
+#define HIDDEN_ABILITY_2		4
 
 // Shiny odds
 #define SHINY_ODDS 8 // Actual probability is SHINY_ODDS/65536

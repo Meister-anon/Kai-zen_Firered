@@ -12,9 +12,12 @@ enum HiddenItemAttr
 };
 
 u8 GetLeadMonIndex(void);
+//extern const u8 gTypeNames[][TYPE_NAME_LENGTH + 1];
+extern const u16 sTypeExceptions[11]; //update this value when adding to the array
 s32 CountDigits(s32 number);
 void TV_PrintIntToStringVar(u8 varidx, s32 number);
 u16 GetStarterSpecies(void);
+const u16 RivalEeveelutionForPlayerStarter(void);
 void StopPokemonLeagueLightingEffectTask(void);
 void nullsub_60(void);
 void nullsub_61(void);
@@ -32,9 +35,17 @@ void RunMassageCooldownStepCounter(void);
 void IncrementResortGorgeousStepCounter(void);
 void IncrementBirthIslandRockStepCount(void);
 void ResetCyclingRoadChallengeData(void);
-void ResetFieldTasksArgs(void);
+void ResetFieldTasksArgs(void);  //not in .c? is used its in a differnt file
 bool8 UsedPokemonCenterWarp(void);
 void sub_80CC534(void);
 void sub_80CC59C(void);
+/*void SetPlayerBulbasaurBall(void); //pray this works, and its not in the wrong place
+void SetPlayerSquirtleBall(void);
+void SetPlayerCharmanderBall(void);
+void SetRivalBulbasaurBall(void);
+void SetRivalSquirtleBall(void);
+void SetRivalCharmanderBall(void);*/
+void SetPlayerRandomStarterSpecies(void);
+void SetRivalRandomStarterSpecies(void);
 
 #endif // GUARD_FIELD_SPECIALS_H

@@ -1633,20 +1633,37 @@ static void SpriteCB_UnusedDebugSprite_Step(struct Sprite *sprite)
     }
 }
 
-static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
+bool8 IsRivalBattle(u16 trainerNum)
+{
+    u8 trainerClass = gTrainers[trainerNum].trainerClass;
+    if (trainerClass == CLASS_RIVAL || trainerClass == CLASS_RIVAL_2 || trainerClass == CLASS_CHAMPION_2)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+#define TRAINER_PARTY_DATA
+static u8 CreateNPCTrainerParty(struct Pokemon* party, u16 trainerNum)
 {
     u32 nameHash = 0;
-    u32 personalityValue;
-    u8 fixedIV;
+    u8 RandomAbility = Random() % 4;    //to put in setmondata dataarg to hopefully set random ability slot 0-3
+    u32 personalityValue; //personality now uses name hash, which is trainer name
+    u8 fixedIV; //figure how to set personality for individual pokemon, or at least set their ability
+    u8 abilityNum;  //should let set ability slot for mon
+    u16 totalEVs = 0;
+    u16 evs[NUM_EV_STATS];
+    u16 species;
     s32 i, j;
+    int l = 0;
+    u16 targetSpecies = 0;
 
     if (trainerNum == TRAINER_SECRET_BASE)
         return 0;
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER
-     && !(gBattleTypeFlags & (BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_TOWER)))
+        && !(gBattleTypeFlags & (BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_TOWER)))
     {
         ZeroEnemyPartyMons();
-        for (i = 0; i < gTrainers[trainerNum].partySize; ++i)
+        for (i = 0; i < gTrainers[trainerNum].partySize; ++i)   //uses i, to loop through trainers entir party 
         {
 
             if (gTrainers[trainerNum].doubleBattle == TRUE)
@@ -1659,65 +1676,801 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 nameHash += gTrainers[trainerNum].trainerName[j];
             switch (gTrainers[trainerNum].partyFlags)
             {
-            case 0:
+            case 0: //evolution works, only issue is if you give the rival multiple instances of the same starter line, with the evolved form first
+                //because their both using the same var, it just eliminated the unevolved version of the pokemon if it comes after the evolved form.
             {
-                const struct TrainerMonNoItemDefaultMoves *partyData = gTrainers[trainerNum].party.NoItemDefaultMoves;
-
-                for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j)
-                    nameHash += gSpeciesNames[partyData[i].species][j];
-                personalityValue += nameHash << 8;
-                fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
-                break;
-            }
-            case F_TRAINER_PARTY_CUSTOM_MOVESET:
-            {
-                const struct TrainerMonNoItemCustomMoves *partyData = gTrainers[trainerNum].party.NoItemCustomMoves;
-
-                for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j)
-                    nameHash += gSpeciesNames[partyData[i].species][j];
-                personalityValue += nameHash << 8;
-                fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
-                for (j = 0; j < MAX_MON_MOVES; ++j)
+                const struct TrainerMonNoItemDefaultMoves* partyData = gTrainers[trainerNum].party.NoItemDefaultMoves;
+                if (IsRivalBattle(trainerNum)) // && i == gTrainers[trainerNum].partySize - 1) //probably go back & make a nested function based on the species
+                    //of the starter in trainer_parties, it may need to be constant so instead of a variable I'll use a define like weather_hail but for starter 
+                    //to set teh species checks it'll be partyData[i].species == StarterEvo_0  up to StarterEvo_2 for last evolution
+                    //if species can't evolve target species will be species
                 {
-                    SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
-                    SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp);
-                }
-                break;
-            }
-            case F_TRAINER_PARTY_HELD_ITEM:
-            {
-                const struct TrainerMonItemDefaultMoves *partyData = gTrainers[trainerNum].party.ItemDefaultMoves;
+                    if (partyData[i].species == SPECIES_BULBASAUR
+                        || partyData[i].species == SPECIES_SQUIRTLE
+                        || partyData[i].species == SPECIES_CHARMANDER)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter, to species
+                        VarSet(VAR_RIVAL_EVO, 0);   //gaurantees values are different, as species will never be none\ to prime evolution condition
+                    }
+                    else if (partyData[i].species == SPECIES_IVYSAUR
+                        || partyData[i].species == SPECIES_WARTORTLE
+                        || partyData[i].species == SPECIES_CHARMELEON)
+                    {
+                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO))
+                        {
+                            if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
+                                targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
+                            else
+                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
 
-                for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j)
-                    nameHash += gSpeciesNames[partyData[i].species][j];
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, targetSpecies);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
+
+                        }
+                        //check first evo 
+                        //if evolution branches preferrably pick the one with type advantage to player starter,
+                        //to do this realize I need another var to hold player starter, and use basestates type (playervar) to check its type
+                        //to help ai pick evolution     actually only eevee has branch evo
+
+                        //in that case make it based on partydatea.species if its charizard be flareon, if venusaur lefeon or jolteon
+                        //and vaporeon if blastoise check what mon I put in lists again I may make the eeveelutions have 2 options per starter group
+                    }
+                    else if (partyData[i].species == SPECIES_VENUSAUR
+                        || partyData[i].species == SPECIES_BLASTOISE
+                        || partyData[i].species == SPECIES_CHARIZARD)
+                    {
+                        if (VarGet(VAR_RIVAL_STARTER) == VarGet(VAR_RIVAL_EVO))
+                        {
+                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, 0);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
+                        }  //check 2nd/final evo   //think evo can be set up using the evo loop in the daycare file
+                    }
+                    else// for mon in party other than starter
+                        species = partyData[i].species;
+                }// for non rival battles
+                else
+                    species = partyData[i].species;
+
+                for (j = 0; gSpeciesNames[species][j] != EOS; ++j) //starting from 0, loops through all the species names until it matches for each slot in party
+                    nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
-                fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                fixedIV = partyData[i].iv;   //I think actually is Ivs, uses weird logic to make fixed iv, think will set to random
+                //but if I set it to random, but refight trainers, does it keep the iv distribution or generate a new one..?
+                //I'm gonna guess it regenerates, based on how the roamers are handled, where it specifically saves all their data
+                //ok setting random but attempt to treat rival starter like roamer so it keeps iv distribution
+                if (fixedIV > MAX_PER_STAT_IVS)
+                    fixedIV = MAX_PER_STAT_IVS;
+                if (fixedIV < MIN_FIXED_IVS)
+                    fixedIV = USE_RANDOM_IVS;
+
+                //as ability and ev are not part of CreateMon arguments may need to put these two below createmon function to have them take effect. hm,
+                //checked against custom move set  and move assignment logic is BELOW createmon so that confirms I need to move createmon up to here.
+                //double checked again, and Ivs and Evs need to go BEFORE cretemon as function uses those to do calcstats
+                //so for now will leave these where they are I "think" it will work. or just move ability data to below function...
+                /*//Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));*/
+
+                    //Set Evs               
+                for (j = 0; j < NUM_EV_STATS; ++j)
+                {
+                    evs[j] = GetMonData(&party[i], partyData[i].evs[j], NULL);
+
+                    //make identical conditional for each possible value for evs 0-5,
+
+                    switch (j)  //limit conditional
+                    {
+                    case 0: //hpEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 1: //attackEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 2: //defenseEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 3: //speedEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 4: //spAttackEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 5: //spDefenseEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);//did basic test I THINK this shouldn't break first condition logic, should always be less
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    }
+
+                }
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                //Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &RandomAbility); //for some reason only worked with u8??
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &abilityNum - 1);
+                break; //&party[i] checks mon slot.   next one checks species for that slot
+            }
+            case F_TRAINER_PARTY_CUSTOM_MOVESET: //could probably get custom moves working with same trick as above but going to a different array
+            { //but that can probably better be solved by getting my smart learnsets up and running
+                const struct TrainerMonNoItemCustomMoves* partyData = gTrainers[trainerNum].party.NoItemCustomMoves;
+                if (IsRivalBattle(trainerNum))
+                {
+                    if (partyData[i].species == SPECIES_BULBASAUR
+                        || partyData[i].species == SPECIES_SQUIRTLE
+                        || partyData[i].species == SPECIES_CHARMANDER)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter
+                        VarSet(VAR_RIVAL_EVO, 0);
+                    }
+                    else if (partyData[i].species == SPECIES_IVYSAUR
+                        || partyData[i].species == SPECIES_WARTORTLE
+                        || partyData[i].species == SPECIES_CHARMELEON)
+                    {
+                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO))
+                        {
+                            if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
+                                targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
+                            else
+                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, targetSpecies);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
+
+                        }
+                        //check first evo 
+
+                    }
+                    else if (partyData[i].species == SPECIES_VENUSAUR
+                        || partyData[i].species == SPECIES_BLASTOISE
+                        || partyData[i].species == SPECIES_CHARIZARD)
+                    {
+                        if (VarGet(VAR_RIVAL_STARTER) == VarGet(VAR_RIVAL_EVO))
+                        {
+                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, 0);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
+                        }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
+                    }
+                    else// for mon in party other than starter
+                        species = partyData[i].species;
+                }
+                else// for non rival battles
+                    species = partyData[i].species;
+
+                for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
+                    nameHash += gSpeciesNames[species][j];
+                personalityValue += nameHash << 8;
+                fixedIV = partyData[i].iv;
+                if (fixedIV > MAX_PER_STAT_IVS)
+                    fixedIV = MAX_PER_STAT_IVS;
+                if (fixedIV < MIN_FIXED_IVS)
+                    fixedIV = USE_RANDOM_IVS;
+
+                /* //Set ability slot
+                 abilityNum = partyData[i].abilityNum;
+                 if (abilityNum == 0)
+                     SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                 else
+                     SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));*/
+
+                     //Set Evs
+                for (j = 0; j < NUM_EV_STATS; ++j)
+                {
+                    evs[j] = GetMonData(&party[i], partyData[i].evs[j], NULL);
+
+                    //make identical conditional for each possible value for evs 0-5,
+
+                    switch (j)  //limit conditional
+                    {
+                    case 0: //hpEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 1: //attackEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 2: //defenseEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 3: //speedEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 4: //spAttackEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 5: //spDefenseEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);//did basic test I THINK this shouldn't break first condition logic, should always be less
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    }
+
+                }
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+
+                //Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &RandomAbility);
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &abilityNum - 1);
+
+                for (j = 0; j < MAX_MON_MOVES; ++j) //max moves is 4, .moves field is size 4, so loop is to loop through all possible moves
+                {
+                    SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]); //actually I need custom moves, otherwise its not a good base
+                    SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp); //so I need a way to change how this works
+
+                    if (partyData[i].moves[0] == MOVE_NONE) //hopefully this'll do what I want. set to default moves, if mon has none set
+                        GiveMonInitialMoveset(&party[i]);
+                }
+                break; //like custom moves for some, but if its blank just give them default moves.  I think it defaults to 0, if nothing is there.
+                //so making it break if move is move_none should let it default to normal learnset.?
+
+                //note, to change battle type, i.e custom moves no item, etc. need to change trainer.h & trainer_parties.h files
+            }
+            case F_TRAINER_PARTY_HELD_ITEM: //make choose ai flags for individual pokemon, instead of party/trainer
+            { //also add pp bonus setting to custom moves,for more strategy/control //important
+                const struct TrainerMonItemDefaultMoves* partyData = gTrainers[trainerNum].party.ItemDefaultMoves;
+                if (IsRivalBattle(trainerNum))
+                {
+                    if (partyData[i].species == SPECIES_BULBASAUR
+                        || partyData[i].species == SPECIES_SQUIRTLE
+                        || partyData[i].species == SPECIES_CHARMANDER)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter
+                        VarSet(VAR_RIVAL_EVO, 0);
+                    }
+                    else if (partyData[i].species == SPECIES_IVYSAUR
+                        || partyData[i].species == SPECIES_WARTORTLE
+                        || partyData[i].species == SPECIES_CHARMELEON)
+                    {
+                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO))
+                        {
+                            if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
+                                targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
+                            else
+                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, targetSpecies);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
+
+                        }
+                        //check first evo 
+
+                    }
+                    else if (partyData[i].species == SPECIES_VENUSAUR
+                        || partyData[i].species == SPECIES_BLASTOISE
+                        || partyData[i].species == SPECIES_CHARIZARD)
+                    {
+                        if (VarGet(VAR_RIVAL_STARTER) == VarGet(VAR_RIVAL_EVO))
+                        {
+                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, 0);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
+                        }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
+                    }
+                    else// for mon in party other than starter
+                        species = partyData[i].species;
+                }
+                else// for non rival battles
+                    species = partyData[i].species;
+
+                for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
+                    nameHash += gSpeciesNames[species][j];
+                personalityValue += nameHash << 8;
+                fixedIV = partyData[i].iv;
+                if (fixedIV > MAX_PER_STAT_IVS)
+                    fixedIV = MAX_PER_STAT_IVS;
+                if (fixedIV < MIN_FIXED_IVS)
+                    fixedIV = USE_RANDOM_IVS;
+
+                /*//Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));*/
+
+                    //Set Evs
+                for (j = 0; j < NUM_EV_STATS; ++j)
+                {
+                    evs[j] = GetMonData(&party[i], partyData[i].evs[j], NULL);
+
+                    //make identical conditional for each possible value for evs 0-5,
+
+                    switch (j)  //limit conditional
+                    {
+                    case 0: //hpEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 1: //attackEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 2: //defenseEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 3: //speedEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 4: //spAttackEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 5: //spDefenseEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);//did basic test I THINK this shouldn't break first condition logic, should always be less
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    }
+
+                }
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+
+                //Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &RandomAbility);
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &abilityNum - 1);
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
                 break;
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
             {
-                const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerNum].party.ItemCustomMoves;
+                const struct TrainerMonItemCustomMoves* partyData = gTrainers[trainerNum].party.ItemCustomMoves;
+                if (IsRivalBattle(trainerNum))
+                {
+                    if (partyData[i].species == SPECIES_BULBASAUR
+                        || partyData[i].species == SPECIES_SQUIRTLE
+                        || partyData[i].species == SPECIES_CHARMANDER)
+                    {
+                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter
+                        VarSet(VAR_RIVAL_EVO, 0);
+                    }
+                    else if (partyData[i].species == SPECIES_IVYSAUR
+                        || partyData[i].species == SPECIES_WARTORTLE
+                        || partyData[i].species == SPECIES_CHARMELEON)
+                    {
+                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO))
+                        {
+                            if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
+                                targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
+                            else
+                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, targetSpecies);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
 
-                for (j = 0; gSpeciesNames[partyData[i].species][j] != EOS; ++j)
-                    nameHash += gSpeciesNames[partyData[i].species][j];
+                        }
+                        //check first evo 
+
+                    }
+                    else if (partyData[i].species == SPECIES_VENUSAUR
+                        || partyData[i].species == SPECIES_BLASTOISE
+                        || partyData[i].species == SPECIES_CHARIZARD)
+                    {
+                        if (VarGet(VAR_RIVAL_STARTER) == VarGet(VAR_RIVAL_EVO))
+                        {
+                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            if (targetSpecies != SPECIES_NONE) {
+                                VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, 0);
+                            }
+                            else
+                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
+                        }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
+                    }
+                    else// for mon in rival party other than starter
+                        species = partyData[i].species;
+                }//need correct logic with this, I think its excluding rivals from the rest of this logic.
+                else// for non rival mon
+                    species = partyData[i].species;
+
+                for (j = 0; gSpeciesNames[species][j] != EOS; ++j)
+                    nameHash += gSpeciesNames[species][j];
                 personalityValue += nameHash << 8;
-                fixedIV = partyData[i].iv * 31 / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                fixedIV = partyData[i].iv;
+                if (fixedIV > MAX_PER_STAT_IVS)
+                    fixedIV = MAX_PER_STAT_IVS;
+                if (fixedIV < MIN_FIXED_IVS)    //for new game plus do flag check and set fixed ivs to max per stat, would require you ev train 
+                    fixedIV = USE_RANDOM_IVS;   //mon instead of needing perfect ivs, and ideally you should alraedy have trained mon, and easy access to fast training items.
+
+                /*//Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));*/
+
+                    //Set Evs
+                for (j = 0; j < NUM_EV_STATS; ++j)
+                {
+                    evs[j] = GetMonData(&party[i], partyData[i].evs[j], NULL);
+
+                    //make identical conditional for each possible value for evs 0-5,
+
+                    switch (j)  //limit conditional
+                    {
+                    case 0: //hpEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 1: //attackEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 2: //defenseEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 3: //speedEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 4: //spAttackEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    case 5: //spDefenseEV
+                        if (totalEVs >= MAX_TOTAL_EVS)  //prevent addition of more evs
+                            break;
+
+                        if (evs[j] > MAX_PER_STAT_EVS) //reduce applied evs to per stat cap
+                        {
+                            evs[j] = MAX_PER_STAT_EVS;
+
+                        }
+                        else if ((totalEVs + evs[j]) > MAX_TOTAL_EVS)//reduce applied evs to dif of applied & total cap, if exceeds max & if below per stat cap 
+                        {
+                            evs[j] = (MAX_TOTAL_EVS - totalEVs);//did basic test I THINK this shouldn't break first condition logic, should always be less
+                        }
+                        SetMonData(&party[i], MON_DATA_HP_EV + j, &evs[j]);
+                        totalEVs += evs[j]; //increment totalEvs
+                        break;
+                    }
+
+                }//had to readjust order, as ev set had to go before CreateMon, for Evs to be applied, now matches order of struct as well
+                //iv ev lvl species Helditem moves
+                CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
+
+                //Set ability slot
+                abilityNum = partyData[i].abilityNum;
+                if (abilityNum == 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &RandomAbility);
+                else
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &abilityNum - 1);
+
                 for (j = 0; j < MAX_MON_MOVES; ++j)
                 {
                     SetMonData(&party[i], MON_DATA_MOVE1 + j, &partyData[i].moves[j]);
                     SetMonData(&party[i], MON_DATA_PP1 + j, &gBattleMoves[partyData[i].moves[j]].pp);
-                }
-                break;
+
+                    if (partyData[i].moves[0] == MOVE_NONE) //hopefully this'll do what I want. set to default moves, if mon has none set
+                        GiveMonInitialMoveset(&party[i]);   //it works!!
+                }//works but had to change, to only if moveslot 1 is no move, otherwise it replaced custom setting that has slots set to move_none
             }
-            }
-        }
+            break;
+            }   //end of switch case
+        }//end of i
         gBattleTypeFlags |= gTrainers[trainerNum].doubleBattle;
     }
     return gTrainers[trainerNum].partySize;

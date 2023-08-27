@@ -34,6 +34,7 @@
 #include "dynamic_placeholder_text_util.h"
 #include "new_menu_helpers.h"
 #include "constants/songs.h"
+#include "constants/pokemon.h"
 #include "constants/items.h"
 #include "constants/maps.h"
 #include "constants/region_map_sections.h"
@@ -409,7 +410,7 @@ void GiveLeadMonEffortRibbon(void)
 bool8 AreLeadMonEVsMaxedOut(void)
 {
     u8 leadMonIndex = GetLeadMonIndex();
-    if (GetMonEVCount(&gPlayerParty[leadMonIndex]) >= 788)
+    if (GetMonEVCount(&gPlayerParty[leadMonIndex]) >= MAX_TOTAL_EVS)
         return TRUE;
     else
         return FALSE;
@@ -1516,6 +1517,116 @@ void ForcePlayerToStartSurfing(void)
     SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_SURFING);
 }
 
+//change this to show return value from arrays.
+//use regional pokemon only
+//will be list of alternative starters, for the most part try keep type relation between each the same.
+//player    rival
+//bulbasaur -> charmander
+//squirtle ->  bulbasaur
+//charmander -> squirtle
+
+//#define LIST_END 0xFFFF   //since I'm not doing a loop, I don't really need List_End, just need to match my random function to number of values 
+//couting first list value as 0. Need to use random percent equal to value shown when hovering over array. Just used nelms so I don't have to manually change
+//just need each array to be equal on hover  and check for type exceptions
+
+//should beat/resist water type or be weak to/against fire
+const u16 sBulbasaurBall[] = {
+    SPECIES_BULBASAUR,
+    SPECIES_CHIKORITA,
+    SPECIES_TREECKO,
+    SPECIES_TURTWIG,
+    SPECIES_SNIVY,
+    SPECIES_CHESPIN,
+    SPECIES_ROWLET,
+    SPECIES_AIPOM,
+    SPECIES_PARAS,
+    SPECIES_VULPIX_ALOLAN,
+    SPECIES_TYROGUE,
+    SPECIES_EEVEE,
+    SPECIES_RALTS,
+    SPECIES_MAGNEMITE,
+    SPECIES_SCYTHER,
+    SPECIES_ODDISH,
+    SPECIES_FOMANTIS,
+    SPECIES_SWINUB,
+    SPECIES_TYNAMO,
+    SPECIES_TOGEDEMARU
+    //LIST_END
+};
+
+//should beat/resist fire, or be weak to/against grass
+const u16 sSquirtleBall[] = {
+    SPECIES_SQUIRTLE,
+    SPECIES_TOTODILE,
+    SPECIES_MUDKIP,
+    SPECIES_PIPLUP,
+    SPECIES_OSHAWOTT,
+    SPECIES_FROAKIE,
+    SPECIES_POPPLIO,
+    SPECIES_CORSOLA,
+    SPECIES_BONSLY,
+    SPECIES_EEVEE,
+    SPECIES_LOTAD,
+    SPECIES_PHANPY,
+    SPECIES_AZURILL,
+    SPECIES_ROCKRUFF,
+    SPECIES_SKITTY, //with ghost change skitty would be better in squirtle group
+    SPECIES_SANDSHREW,
+    SPECIES_WOOPER,
+    SPECIES_MISDREAVUS,
+    SPECIES_WAILMER,
+    SPECIES_SPHEAL
+    //LIST_END
+};
+
+//should beat/resist grass type and or be weak to/against water
+const u16 sCharmanderBall[] = {
+    SPECIES_CHARMANDER,
+    SPECIES_CYNDAQUIL,
+    SPECIES_TORCHIC,
+    SPECIES_CHIMCHAR,
+    SPECIES_TEPIG,
+    SPECIES_FENNEKIN,
+    SPECIES_LITTEN,
+    SPECIES_GLIGAR,
+    SPECIES_CASTFORM,
+    SPECIES_EEVEE,
+    SPECIES_MURKROW,
+    SPECIES_LICKITUNG,
+    SPECIES_PONYTA,
+    SPECIES_TOGEPI,
+    SPECIES_TEDDIURSA,
+    SPECIES_SPINARAK,
+    SPECIES_MILTANK,
+    SPECIES_SABLEYE,
+    SPECIES_DODUO,
+    SPECIES_HOUNDOUR
+    //LIST_END
+};
+
+//setup define for nuber of starters, to plug in for in place of % n
+//right now value matches hover over value for array, so count of values in array should be able to make things more efficient.
+
+
+//started with entire list step 1, remove mono type, step 2 remove all I want to list as type 1.  keep all I want listed as type 2 in teh script here.
+//this array below is to substitute type 2 in the oak script where he reads the starter choice. "you picked the *blank* type, species name"
+
+//update the definitnion this value when adding to the array
+//should be number of values in array count from 1 not 0.
+const u16 sTypeExceptions[] = {
+    SPECIES_TOGEPI,
+    SPECIES_RALTS,
+    SPECIES_AZURILL,
+    SPECIES_MISDREAVUS,
+    SPECIES_SPHEAL,
+    SPECIES_MURKROW,
+    SPECIES_DODUO,
+    SPECIES_LICKITUNG,
+    SPECIES_HOUNDOUR,
+    SPECIES_TYROGUE,
+    SPECIES_TEPIG
+};
+
 static const u16 sStarterSpecies[] = { //ok didn't realize changing starter species was this simple and I didn't need a script but wtvr.
     // but looking at this gives me idea for setting up the other thing I wanted, if I use switch cases to include multiple pokemon on same idea, with random chance.
     SPECIES_BULBASAUR,// then I can have multiple options so each playthrough the mon in the pokeball is different, 
@@ -1531,9 +1642,83 @@ static u16 GetStarterSpeciesById(u16 idx)
     return sStarterSpecies[idx];
 }
 
-u16 GetStarterSpecies(void)
+//plan to use for eevee evolution check in CreateNPCTrainerParty (battle_main.c)  if rival starter species was eevee check this  function result 
+//if return squirtle - evolve into jolteon or leafeon
+//if bulbasaur - evolve into flareon or glaceon -(or cefiereon as its flying)
+//if charmander - evolve into vaporeon or sylveon
+//potentailly make arrays for starter based eeveelutions so I can just use random % nelems for filter can do species = sEeveelutionarray[Random() % NELEMS(sEeveelutionarray)]
+//will just make a function that does the checks and selection when run and just put that in CreateNPCTrainerParty can make arrays static that way as well
+u16 GetStarterSpecies(void) //this is just used for the roamer,  
 {
     return GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
+}
+
+const u16 sEeveelutionGrassStarter[] =
+{
+    SPECIES_FLAREON,
+    SPECIES_GLACEON,
+    SPECIES_CEFIREON
+};
+
+const u16 sEeveelutionWaterStarter[] =
+{
+    SPECIES_JOLTEON,
+    SPECIES_LEAFEON
+};
+
+const u16 sEeveelutionFireStarter[] =
+{
+    SPECIES_VAPOREON,
+    SPECIES_SYLVEON
+};
+
+#define STARTER_BULBASAUR   0
+#define STARTER_SQUIRTLE    1
+#define STARTER_CHARMANDER  2
+
+//condition for this function to run if rival starter species eevee, and var species is currently still eevee.
+//as it runs random it can't be run each time rival encountered as evolution species would change each battle
+//so need this to just be run a single time when rival starter should first evolve
+const u16 RivalEeveelutionForPlayerStarter(void)
+{
+    u16 starter = VarGet(VAR_STARTER_MON);
+
+    if (starter == STARTER_BULBASAUR)
+        return sEeveelutionGrassStarter[Random() % NELEMS(sEeveelutionGrassStarter)];
+    else if (starter == STARTER_SQUIRTLE)
+        return sEeveelutionWaterStarter[Random() % NELEMS(sEeveelutionWaterStarter)];
+    else if (starter == STARTER_CHARMANDER)
+        return sEeveelutionFireStarter[Random() % NELEMS(sEeveelutionFireStarter)];
+}
+
+
+
+//NELEMS average doesn't work, whatever happened, it caused the game to reset...on some value.
+//trying it again, may have been parenthesis.
+//it was the parenthesis, cause of how nelems works, needed each one
+//to be separated before adding, group them all in a parenthesis, and then set the divider on the outside
+//but also in parenthesis.
+
+//ok so none of that was actually the issue, the problem seems to be that a pokemon's name
+//is too long for the  buffer and is causing overflow just like brock's text
+
+//#define STARTERCOUNT 13 //(((NELEMS(sBulbasaurBall)) + (NELEMS(sSquirtleBall)) + (NELEMS(sCharmanderBall))) / 3)
+
+//with advice from ExpoSeed, instead of using a define averaging the array, just use NELEMS array in place of n
+
+//eventually make dynamic so it works off of counting and averaging the arrays essentially  (n + n + n) / 3 = n
+void SetPlayerRandomStarterSpecies(void)
+{
+    VarSet(VAR_TEMP_5, sBulbasaurBall[Random() % NELEMS(sBulbasaurBall)]);
+    VarSet(VAR_TEMP_6, sSquirtleBall[Random() % NELEMS(sSquirtleBall)]);
+    VarSet(VAR_TEMP_7, sCharmanderBall[Random() % NELEMS(sCharmanderBall)]);
+}
+
+void SetRivalRandomStarterSpecies(void)
+{
+    VarSet(VAR_TEMP_8, sCharmanderBall[Random() % NELEMS(sCharmanderBall)]);
+    VarSet(VAR_TEMP_9, sBulbasaurBall[Random() % NELEMS(sBulbasaurBall)]);
+    VarSet(VAR_TEMP_A, sSquirtleBall[Random() % NELEMS(sSquirtleBall)]);
 }
 
 void SetSeenMon(void)
