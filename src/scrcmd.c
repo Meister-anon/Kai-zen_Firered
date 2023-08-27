@@ -1599,6 +1599,7 @@ bool8 ScrCmd_bufferspeciesname(struct ScriptContext * ctx)
     return FALSE;
 } //if using u16 src for new string copy function doesn't workr, try make gStringVar1 u16
 
+//these go along with script_cmd_table.inc
 bool8 ScrCmd_bufferspeciestype(struct ScriptContext * ctx)
 {
     u8 stringVarIndex = ScriptReadByte(ctx);

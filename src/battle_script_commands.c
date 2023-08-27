@@ -7557,6 +7557,15 @@ static void atk9D_mimicattackcopy(void)
     }
 }
 
+//think can use this for pickup battle setup
+//looks like it picks random value, than casts it to the move limit. and then adds conditionals to limit the value further
+/*i.e looks for random value if value greater than move count random search again
+* then if passes that filter, if move is on the banned moves list, stop and go back to step 1 search
+* if it clears the banned move list go ahead and dothe effect i.e use the move
+* 
+* so rather than trying to make a list of moves with a loop, can just loop all possible values
+* and just filter from there to what I want.
+*/
 static void atk9E_metronome(void)
 {
     while (1)
