@@ -3030,7 +3030,7 @@ void CalculateMonStats(struct Pokemon *mon)
     {
         if (currentHP == 0 && oldMaxHP == 0)
             currentHP = newMaxHP;
-        else if (currentHP != 0 && newMaxHP >= oldMaxHP) //To prevent garbage data after Dynamax form change (from cfru hopefully will allow hp shift mid battle)
+        else if (currentHP != 0) //didn't need max hp > oldmax hp part from cfru, that made things less specific and broke transform
         {
             // BUG: currentHP is unintentionally able to become <= 0 after the instruction below.
             currentHP += newMaxHP - oldMaxHP;
