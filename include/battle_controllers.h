@@ -85,14 +85,15 @@ enum { // Values given to the emit functions to choose gBattleBufferA or gBattle
 #define BALL_TRAINER_BLOCK      5
 #define BALL_GHOST_DODGE        6
 
-#define RET_VALUE_LEVELLED_UP   11
+//#define RET_VALUE_LEVELLED_UP   11
 
 #define INSTANT_HP_BAR_DROP     0x7FFF
 
 // Special return values in gBattleBufferB from Battle Controller functions.
 #define RET_VALUE_LEVELED_UP   11
+#define RET_MEGA_EVOLUTION 0x80
 
-struct UnusedControllerStruct
+struct BattleBoxMessageDisplay
 {
     u8 field_0 : 7;
     u8 flag_x80 : 1;
@@ -106,19 +107,21 @@ struct HpAndStatus
 
 struct MovePpInfo
 {
-    u16 moves[4];
-    u8 pp[4];
+    u16 moves[MAX_MON_MOVES];
+    u8 pp[MAX_MON_MOVES];
     u8 ppBonuses;
 };
 
 struct ChooseMoveStruct
 {
-    u16 moves[4];
-    u8 currentPp[4];
-    u8 maxPp[4];
+    u16 moves[MAX_MON_MOVES];
+    u8 currentPp[MAX_MON_MOVES];
+    u8 maxPp[MAX_MON_MOVES];
     u16 species;
     u8 monType1;
     u8 monType2;
+    u8 monType3;
+    struct MegaEvolutionData mega;
 };
 
 enum
@@ -184,7 +187,7 @@ enum
     CONTROLLER_CMDS_COUNT
 };
 
-extern struct UnusedControllerStruct gUnknown_2022870;
+extern struct BattleBoxMessageDisplay gUnknown_2022870; //absolutely NOT unused, without this text doesn't display in battle boxes
 
 // general functions
 //void HandleLinkBattleSetup(void);
@@ -275,8 +278,11 @@ void SetControllerToOakOrOldMan(void);
 #define FIRST_BATTLE_MSG_FLAG_STAT_CHG       0x2
 // Keep an eye on your HP
 #define FIRST_BATTLE_MSG_FLAG_HP_RESTORE     0x4
-//
+// for opening party menu swtich
 #define FIRST_BATTLE_MSG_FLAG_PARTY_MENU     0x8
+//  move learn ui adjusts (for first time learn new move)
+#define FIRST_LEARNED_MOVE_MSG_FLAG         0x10 //should this be 10?  
+//^custom  for displaying can move to stat screen from level up move info
 
 bool8 BtlCtrl_OakOldMan_TestState2Flag(u8 mask);
 void BtlCtrl_OakOldMan_SetState2Flag(u8 mask);

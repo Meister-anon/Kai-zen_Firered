@@ -18,7 +18,7 @@
 //static EWRAM_DATA u8 sLinkSendTaskId = 0;
 //static EWRAM_DATA u8 sLinkReceiveTaskId = 0;
 static EWRAM_DATA u8 gUnknown_202286E = 0;
-EWRAM_DATA struct UnusedControllerStruct gUnknown_2022870 = {0};
+EWRAM_DATA struct BattleBoxMessageDisplay gUnknown_2022870 = {0};
 static EWRAM_DATA u8 sBattleBuffersTransferData[0x100] = {0};
 
 //static void CreateTasksForSendRecvLinkBuffers(void);

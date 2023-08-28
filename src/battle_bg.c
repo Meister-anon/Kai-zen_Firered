@@ -2,6 +2,7 @@
 #include "gflib.h"
 #include "battle.h"
 #include "battle_bg.h"
+#include "battle_anim.h"    //added for some raeson
 #include "battle_message.h"
 #include "decompress.h"
 #include "graphics.h"
@@ -20,6 +21,7 @@ struct BattleBackground
 {
     const void *tileset;
     const void *tilemap;
+    const void *tilemap2;   //for doubles
     const void *entryTileset;
     const void *entryTilemap;
     const void *palette;
@@ -139,8 +141,14 @@ const struct BgTemplate gBattleBgTemplates[4] = {
     }
 };
 
-static const struct WindowTemplate gUnknown_8248330[] = {
-    {
+
+//each constant refers to a windowID that is the window/area for each value within the main window/border of the menu
+//this struct tells the dimmenssions and relative location of each windowID within the main window/border
+//can rearrange move type pp etc from here, but need to figure out how to change the main window size so I can move the movenames
+//tilemapLeft & tilemapTop are the respective X & Y coordinates
+//need to figure out  what baseBlock means
+const struct WindowTemplate sStandardBattleWindowTemplates[] = {
+    [B_WIN_MSG] = {
         .bg = 0,
         .tilemapLeft = 1,
         .tilemapTop = 15,
@@ -148,7 +156,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 4,
         .paletteNum = 0,
         .baseBlock = 0x090
-    }, {
+    },
+    [B_WIN_ACTION_PROMPT] = {
         .bg = 0,
         .tilemapLeft = 1,
         .tilemapTop = 35,
@@ -156,7 +165,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 4,
         .paletteNum = 0,
         .baseBlock = 0x1c0
-    }, {
+    },
+    [B_WIN_ACTION_MENU] = {
         .bg = 0,
         .tilemapLeft = 17,
         .tilemapTop = 35,
@@ -164,7 +174,8 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 4,
         .paletteNum = 5,
         .baseBlock = 0x190
-    }, {
+    },
+    [B_WIN_MOVE_NAME_1] = {
         .bg = 0,
         .tilemapLeft = 2,
         .tilemapTop = 55,
@@ -172,220 +183,260 @@ static const struct WindowTemplate gUnknown_8248330[] = {
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x300
-    }, {
+    },
+    //adjusted so (MoveSelectionCreateCursorAt) will use this window position to update itself
+    [B_WIN_MOVE_NAME_2] = {
         .bg = 0,
-        .tilemapLeft = 11,
+        .tilemapLeft = 12,
         .tilemapTop = 55,
-        .width = 8,
+        .width = 10,
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x310
-    }, {
+    },//original was 11, difference of 9 beetween left and right move, so increased by 4 to add increase spacing by about half, was too much 
+    //brought back down to only 1 up, 13 didn't leave enough room for right side long moves
+    //need to find how move cursor
+    [B_WIN_MOVE_NAME_3] = {
         .bg = 0,
         .tilemapLeft = 2,
         .tilemapTop = 57,
         .width = 8,
         .height = 2,
         .paletteNum = 5,
-        .baseBlock = 0x320
-    }, {
+        .baseBlock = 0x32c
+    },
+    [B_WIN_MOVE_NAME_4] = {
         .bg = 0,
-        .tilemapLeft = 11,
+        .tilemapLeft = 12,
         .tilemapTop = 57,
-        .width = 8,
+        .width = 10,
         .height = 2,
         .paletteNum = 5,
-        .baseBlock = 0x330
-    }, {
-        .bg = 0,
-        .tilemapLeft = 21,
-        .tilemapTop = 55,
-        .width = 3,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x290
-    }, {
-        .bg = 0,
-        .tilemapLeft = 21,
-        .tilemapTop = 57,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x296
-    }, {
+        .baseBlock = 0x33f
+    },//width 2 starting from x coordinate 22 means my characters will fill positions 22 & 23!
+    //width appears to be left alligned meaning changing with will shift the right dimmension and not the left
+    [B_WIN_PP] = {
         .bg = 0,
         .tilemapLeft = 24,
         .tilemapTop = 55,
+        .width = 2,
+        .height = 2,
+        .paletteNum = 5,
+        .baseBlock = 0x290
+    },//moving the window from 21 to 24 has overwritten the border bounds I now understand the width counts the tilemap left position as 1
+    [B_WIN_MOVE_TYPE] = {
+        .bg = 0,
+        .tilemapLeft = 24,
+        .tilemapTop = 57,
         .width = 5,
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x2a6
-    }, {
+    },//that's based on seeing the limit from pp remaining if I cound 8 from 21 & 5 from 24 I get the same ending position of 28
+    //also seems width may not exactly equal number of characters since I can fit NORMAL which is 6 characters in a 5 width window
+    //but width does affect the border dimmensions so I need to manage width, with tilemapLeft to make sure my window is within the bg
+    [B_WIN_PP_REMAINING] = {
+        .bg = 0,
+        .tilemapLeft = 26,
+        .tilemapTop = 55,
+        .width = 3,
+        .height = 2,
+        .paletteNum = 5,
+        .baseBlock = 0x2b6
+    },
+    [B_WIN_DUMMY] = {
         .bg = 0,
         .tilemapLeft = 25,
         .tilemapTop = 57,
         .width = 0,
         .height = 0,
         .paletteNum = 5,
-        .baseBlock = 0x2b0
-    }, {
+        .baseBlock = 0x2c0
+    },
+    [B_WIN_SWITCH_PROMPT] = {
         .bg = 0,
-        .tilemapLeft = 21,
+        .tilemapLeft = 24,
         .tilemapTop = 55,
-        .width = 8,
+        .width = 5,
         .height = 4,
         .paletteNum = 5,
-        .baseBlock = 0x2b0
-    }, {
-        .bg = 1,
-        .tilemapLeft = 19,
-        .tilemapTop = 8,
-        .width = 10,
-        .height = 11,
-        .paletteNum = 5,
-        .baseBlock = 0x100
-    }, {
-        .bg = 2,
-        .tilemapLeft = 18,
-        .tilemapTop = 0,
-        .width = 12,
-        .height = 3,
-        .paletteNum = 6,
-        .baseBlock = 0x16e
-    }, {
-        .bg = 0,
-        .tilemapLeft = 25,
-        .tilemapTop = 9,
-        .width = 4,
-        .height = 4,
-        .paletteNum = 5,
-        .baseBlock = 0x100
-    }, {
-        .bg = 1,
-        .tilemapLeft = 2,
-        .tilemapTop = 3,
-        .width = 7,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x020
-    }, {
-        .bg = 2,
-        .tilemapLeft = 2,
-        .tilemapTop = 3,
-        .width = 7,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x040
-    }, {
-        .bg = 1,
-        .tilemapLeft = 2,
-        .tilemapTop = 2,
-        .width = 7,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x020
-    }, {
-        .bg = 2,
-        .tilemapLeft = 2,
-        .tilemapTop = 2,
-        .width = 7,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x040
-    }, {
-        .bg = 1,
-        .tilemapLeft = 2,
-        .tilemapTop = 6,
-        .width = 7,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x060
-    }, {
-        .bg = 2,
-        .tilemapLeft = 2,
-        .tilemapTop = 6,
-        .width = 7,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x080
-    }, {
-        .bg = 0,
-        .tilemapLeft = 11,
-        .tilemapTop = 2,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 0,
-        .baseBlock = 0x0a0
-    }, {
-        .bg = 0,
-        .tilemapLeft = 4,
-        .tilemapTop = 2,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 0,
-        .baseBlock = 0x0a0
-    }, {
-        .bg = 0,
-        .tilemapLeft = 19,
-        .tilemapTop = 2,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 0,
-        .baseBlock = 0x0b0
-    }, {
-        .bg = 0,
-        .tilemapLeft = 2,
-        .tilemapTop = 15,
-        .width = 26,
-        .height = 4,
-        .paletteNum = 7,
-        .baseBlock = 0x090
-    }, DUMMY_WIN_TEMPLATE
+        .baseBlock = 0x2c0
+    },//thsi at 21 no longer fits new window had to move to 23 then need to make sure it clears, this come up with move swap in battle
+    //clearing text worked after moving tileleft, just need to lower width set to 6 asame as type
+    //need to move this and ppsymbol & type further over, move right lower width as needed gonna assume full width value is 30
+        //since I have to account for border will make 29 max
+[B_WIN_LEVEL_UP_BOX] = {
+    .bg = 1,
+    .tilemapLeft = 19,
+    .tilemapTop = 8,
+    .width = 10,
+    .height = 11,
+    .paletteNum = 5,
+    .baseBlock = 0x100
+},
+[B_WIN_LEVEL_UP_BANNER] = {
+    .bg = 2,
+    .tilemapLeft = 18,
+    .tilemapTop = 0,
+    .width = 12,
+    .height = 3,
+    .paletteNum = 6,
+    .baseBlock = 0x16e
+},
+[B_WIN_YESNO] = {
+    .bg = 0,
+    .tilemapLeft = 25,
+    .tilemapTop = 9,
+    .width = 4,
+    .height = 4,
+    .paletteNum = 5,
+    .baseBlock = 0x100
+},
+[B_WIN_VS_PLAYER] = {
+    .bg = 1,
+    .tilemapLeft = 2,
+    .tilemapTop = 3,
+    .width = 7,
+    .height = 2,
+    .paletteNum = 5,
+    .baseBlock = 0x020
+},
+[B_WIN_VS_OPPONENT] = {
+    .bg = 2,
+    .tilemapLeft = 2,
+    .tilemapTop = 3,
+    .width = 7,
+    .height = 2,
+    .paletteNum = 5,
+    .baseBlock = 0x040
+},
+[B_WIN_VS_MULTI_PLAYER_1] = {
+    .bg = 1,
+    .tilemapLeft = 2,
+    .tilemapTop = 2,
+    .width = 7,
+    .height = 2,
+    .paletteNum = 5,
+    .baseBlock = 0x020
+},
+[B_WIN_VS_MULTI_PLAYER_2] = {
+    .bg = 2,
+    .tilemapLeft = 2,
+    .tilemapTop = 2,
+    .width = 7,
+    .height = 2,
+    .paletteNum = 5,
+    .baseBlock = 0x040
+},
+[B_WIN_VS_MULTI_PLAYER_3] = {
+    .bg = 1,
+    .tilemapLeft = 2,
+    .tilemapTop = 6,
+    .width = 7,
+    .height = 2,
+    .paletteNum = 5,
+    .baseBlock = 0x060
+},
+[B_WIN_VS_MULTI_PLAYER_4] = {
+    .bg = 2,
+    .tilemapLeft = 2,
+    .tilemapTop = 6,
+    .width = 7,
+    .height = 2,
+    .paletteNum = 5,
+    .baseBlock = 0x080
+},
+[B_WIN_VS_OUTCOME_DRAW] = {
+    .bg = 0,
+    .tilemapLeft = 11,
+    .tilemapTop = 2,
+    .width = 8,
+    .height = 2,
+    .paletteNum = 0,
+    .baseBlock = 0x0a0
+},
+[B_WIN_VS_OUTCOME_LEFT] = {
+    .bg = 0,
+    .tilemapLeft = 4,
+    .tilemapTop = 2,
+    .width = 8,
+    .height = 2,
+    .paletteNum = 0,
+    .baseBlock = 0x0a0
+},
+[B_WIN_VS_OUTCOME_RIGHT] = {
+    .bg = 0,
+    .tilemapLeft = 19,
+    .tilemapTop = 2,
+    .width = 8,
+    .height = 2,
+    .paletteNum = 0,
+    .baseBlock = 0x0b0
+},
+[B_WIN_OAK_OLD_MAN] = {
+    .bg = 0,
+    .tilemapLeft = 2,
+    .tilemapTop = 15,
+    .width = 26,
+    .height = 4,
+    .paletteNum = 7,
+    .baseBlock = 0x090
+},
+DUMMY_WIN_TEMPLATE
 };
 
 static const u32 sBattleTerrainPalette_Grass[] = INCBIN_U32("graphics/battle/unk_8248400.gbapal.lz");
 static const u32 sBattleTerrainTiles_Grass[] = INCBIN_U32("graphics/battle/unk_824844C.4bpp.lz");
-static const u32 sBattleTerrainTilemap_Grass[] = INCBIN_U32("graphics/battle/unk_82489A8.bin.lz");
+static const u32 sBattleTerrainTilemap_Grass[] = INCBIN_U32("graphics/battle/Grass_Terrain.bin.lz");
+static const u32 sBattleTerrainTilemap_Grass_Doubles[] = INCBIN_U32("graphics/battle/Grass_Terrain_Doubles.bin.lz");
 static const u32 sBattleTerrainAnimTiles_Grass[] = INCBIN_U32("graphics/battle/unk_8248C68.4bpp.lz");
 static const u32 sBattleTerrainAnimTilemap_Grass[] = INCBIN_U32("graphics/battle/unk_8248F58.bin.lz");
 static const u32 sBattleTerrainPalette_LongGrass[] = INCBIN_U32("graphics/battle/unk_8249074.gbapal.lz");
 static const u32 sBattleTerrainTiles_LongGrass[] = INCBIN_U32("graphics/battle/unk_82490C4.4bpp.lz");
-static const u32 sBattleTerrainTilemap_LongGrass[] = INCBIN_U32("graphics/battle/unk_8249620.bin.lz");
+static const u32 sBattleTerrainTilemap_LongGrass[] = INCBIN_U32("graphics/battle/LongGrass_Terrain.bin.lz");
+static const u32 sBattleTerrainTilemap_LongGrass_Doubles[] = INCBIN_U32("graphics/battle/LongGrass_Terrain_Doubles.bin.lz");
 static const u32 sBattleTerrainAnimTiles_LongGrass[] = INCBIN_U32("graphics/battle/unk_82498DC.4bpp.lz");
 static const u32 sBattleTerrainAnimTilemap_LongGrass[] = INCBIN_U32("graphics/battle/unk_8249E10.bin.lz");
 static const u32 sBattleTerrainPalette_Sand[] = INCBIN_U32("graphics/battle/unk_8249F98.gbapal.lz");
 static const u32 sBattleTerrainTiles_Sand[] = INCBIN_U32("graphics/battle/unk_8249FE4.4bpp.lz");
-static const u32 sBattleTerrainTilemap_Sand[] = INCBIN_U32("graphics/battle/unk_824A37C.bin.lz");
+static const u32 sBattleTerrainTilemap_Sand[] = INCBIN_U32("graphics/battle/Sand_Terrain.bin.lz");
+static const u32 sBattleTerrainTilemap_Sand_Doubles[] = INCBIN_U32("graphics/battle/Sand_Terrain_Doubles.bin.lz");
 static const u32 sBattleTerrainAnimTiles_Sand[] = INCBIN_U32("graphics/battle/unk_824A618.4bpp.lz");
 static const u32 sBattleTerrainAnimTilemap_Sand[] = INCBIN_U32("graphics/battle/unk_824A844.bin.lz");
 static const u32 sBattleTerrainPalette_Underwater[] = INCBIN_U32("graphics/battle/unk_824A940.gbapal.lz");
 static const u32 sBattleTerrainTiles_Underwater[] = INCBIN_U32("graphics/battle/unk_824A990.4bpp.lz");
-static const u32 sBattleTerrainTilemap_Underwater[] = INCBIN_U32("graphics/battle/unk_824ACD0.bin.lz");
+static const u32 sBattleTerrainTilemap_Underwater[] = INCBIN_U32("graphics/battle/Underwater_Terrain.bin.lz");
+static const u32 sBattleTerrainTilemap_Underwater_Doubles[] = INCBIN_U32("graphics/battle/Underwater_Terrain_Doubles.bin.lz");
 static const u32 sBattleTerrainAnimTiles_Underwater[] = INCBIN_U32("graphics/battle/unk_824AF70.4bpp.lz");
 static const u32 sBattleTerrainAnimTilemap_Underwater[] = INCBIN_U32("graphics/battle/unk_824B0DC.bin.lz");
 static const u32 sBattleTerrainPalette_Water[] = INCBIN_U32("graphics/battle/unk_824B19C.gbapal.lz");
 static const u32 sBattleTerrainTiles_Water[] = INCBIN_U32("graphics/battle/unk_824B1EC.4bpp.lz");
-static const u32 sBattleTerrainTilemap_Water[] = INCBIN_U32("graphics/battle/unk_824B608.bin.lz");
+static const u32 sBattleTerrainTilemap_Water[] = INCBIN_U32("graphics/battle/Water_Terrain.bin.lz");
+static const u32 sBattleTerrainTilemap_Water_Doubles[] = INCBIN_U32("graphics/battle/Water_Terrain_Doubles.bin.lz");
 static const u32 sBattleTerrainAnimTiles_Water[] = INCBIN_U32("graphics/battle/unk_824B8A8.4bpp.lz");
 static const u32 sBattleTerrainAnimTilemap_Water[] = INCBIN_U32("graphics/battle/unk_824BBE0.bin.lz");
 static const u32 sBattleTerrainPalette_Pond[] = INCBIN_U32("graphics/battle/unk_824BCE0.gbapal.lz");
 static const u32 sBattleTerrainTiles_Pond[] = INCBIN_U32("graphics/battle/unk_824BD38.4bpp.lz");
-static const u32 sBattleTerrainTilemap_Pond[] = INCBIN_U32("graphics/battle/unk_824C07C.bin.lz");
+static const u32 sBattleTerrainTilemap_Pond[] = INCBIN_U32("graphics/battle/Pond_Terrain.bin.lz");
+static const u32 sBattleTerrainTilemap_Pond_Doubles[] = INCBIN_U32("graphics/battle/Pond_Terrain_Doubles.bin.lz");
 static const u32 sBattleTerrainAnimTiles_Pond[] = INCBIN_U32("graphics/battle/unk_824C314.4bpp.lz");
 static const u32 sBattleTerrainAnimTilemap_Pond[] = INCBIN_U32("graphics/battle/unk_824C520.bin.lz");
 static const u32 sBattleTerrainPalette_Mountain[] = INCBIN_U32("graphics/battle/unk_824C5D8.gbapal.lz");
 static const u32 sBattleTerrainTiles_Mountain[] = INCBIN_U32("graphics/battle/unk_824C624.4bpp.lz");
-static const u32 sBattleTerrainTilemap_Mountain[] = INCBIN_U32("graphics/battle/unk_824C958.bin.lz");
+static const u32 sBattleTerrainTilemap_Mountain[] = INCBIN_U32("graphics/battle/Mountain_Terrain.bin.lz");
+static const u32 sBattleTerrainTilemap_Mountain_Doubles[] = INCBIN_U32("graphics/battle/Mountain_Terrain_Doubles.bin.lz");
 static const u32 sBattleTerrainAnimTiles_Mountain[] = INCBIN_U32("graphics/battle/unk_824CBF8.4bpp.lz");
 static const u32 sBattleTerrainAnimTilemap_Mountain[] = INCBIN_U32("graphics/battle/unk_824CEC8.bin.lz");
 static const u32 sBattleTerrainPalette_Cave[] = INCBIN_U32("graphics/battle/unk_824CF98.gbapal.lz");
 static const u32 sBattleTerrainTiles_Cave[] = INCBIN_U32("graphics/battle/unk_824CFEC.4bpp.lz");
-static const u32 sBattleTerrainTilemap_Cave[] = INCBIN_U32("graphics/battle/unk_824D418.bin.lz");
+static const u32 sBattleTerrainTilemap_Cave[] = INCBIN_U32("graphics/battle/Cave_Terrain.bin.lz");
+static const u32 sBattleTerrainTilemap_Cave_Doubles[] = INCBIN_U32("graphics/battle/Cave_Terrain_Doubles.bin.lz");
 static const u32 sBattleTerrainAnimTiles_Cave[] = INCBIN_U32("graphics/battle/unk_824D6B8.4bpp.lz");
 static const u32 sBattleTerrainAnimTilemap_Cave[] = INCBIN_U32("graphics/battle/unk_824DC98.bin.lz");
 static const u32 sBattleTerrainPalette_Building[] = INCBIN_U32("graphics/battle/unk_824DDF0.gbapal.lz");
 static const u32 sBattleTerrainTiles_Building[] = INCBIN_U32("graphics/battle/unk_824DE34.4bpp.lz");
-static const u32 sBattleTerrainTilemap_Building[] = INCBIN_U32("graphics/battle/unk_824E16C.bin.lz");
+static const u32 sBattleTerrainTilemap_Building[] = INCBIN_U32("graphics/battle/Building_Terrain.bin.lz");
+static const u32 sBattleTerrainTilemap_Building_Doubles[] = INCBIN_U32("graphics/battle/Building_Terrain_Doubles.bin.lz");
 static const u32 sBattleTerrainAnimTiles_Building[] = INCBIN_U32("graphics/battle/unk_824E410.4bpp.lz");
 static const u32 sBattleTerrainAnimTilemap_Building[] = INCBIN_U32("graphics/battle/unk_824E490.bin.lz");
 static const u32 sBattleTerrainPalette_Link[] = INCBIN_U32("graphics/battle/unk_824E528.gbapal.lz");
@@ -399,14 +450,16 @@ static const u32 sBattleTerrainPalette_Agatha[] = INCBIN_U32("graphics/battle/un
 static const u32 sBattleTerrainPalette_Lance[] = INCBIN_U32("graphics/battle/unk_824E78C.gbapal.lz");
 static const u32 sBattleTerrainPalette_Champion[] = INCBIN_U32("graphics/battle/unk_824E7DC.gbapal.lz");
 static const u32 sBattleTerrainPalette_Plain[] = INCBIN_U32("graphics/battle/unk_824E81C.gbapal.lz");
-static const u32 sBattleTerrainTiles_Indoor2[] = INCBIN_U32("graphics/battle/unk_824E858.4bpp.lz");
-static const u32 sBattleTerrainTilemap_Indoor2[] = INCBIN_U32("graphics/battle/unk_824EB90.bin.lz");
+static const u32 sBattleTerrainTiles_Indoor[] = INCBIN_U32("graphics/battle/unk_824E858.4bpp.lz");
+static const u32 sBattleTerrainTilemap_Indoor[] = INCBIN_U32("graphics/battle/Indoor_Terrain.bin.lz");
+static const u32 sBattleTerrainTilemap_Indoor_Doubles[] = INCBIN_U32("graphics/battle/Indoor_Terrain_Doubles.bin.lz");
 
 static const struct BattleBackground sBattleTerrainTable[] = {
     [BATTLE_TERRAIN_GRASS] =
     {
         .tileset = sBattleTerrainTiles_Grass,
         .tilemap = sBattleTerrainTilemap_Grass,
+        .tilemap2 = sBattleTerrainTilemap_Grass_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Grass,
         .entryTilemap = sBattleTerrainAnimTilemap_Grass,
         .palette = sBattleTerrainPalette_Grass
@@ -415,6 +468,7 @@ static const struct BattleBackground sBattleTerrainTable[] = {
     {
         .tileset = sBattleTerrainTiles_LongGrass,
         .tilemap = sBattleTerrainTilemap_LongGrass,
+        .tilemap2 = sBattleTerrainTilemap_LongGrass_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_LongGrass,
         .entryTilemap = sBattleTerrainAnimTilemap_LongGrass,
         .palette = sBattleTerrainPalette_LongGrass
@@ -423,6 +477,7 @@ static const struct BattleBackground sBattleTerrainTable[] = {
     {
         .tileset = sBattleTerrainTiles_Sand,
         .tilemap = sBattleTerrainTilemap_Sand,
+        .tilemap2 = sBattleTerrainTilemap_Sand_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Sand,
         .entryTilemap = sBattleTerrainAnimTilemap_Sand,
         .palette = sBattleTerrainPalette_Sand
@@ -431,6 +486,7 @@ static const struct BattleBackground sBattleTerrainTable[] = {
     {
         .tileset = sBattleTerrainTiles_Underwater,
         .tilemap = sBattleTerrainTilemap_Underwater,
+        .tilemap2 = sBattleTerrainTilemap_Underwater_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Underwater,
         .entryTilemap = sBattleTerrainAnimTilemap_Underwater,
         .palette = sBattleTerrainPalette_Underwater
@@ -439,6 +495,7 @@ static const struct BattleBackground sBattleTerrainTable[] = {
     {
         .tileset = sBattleTerrainTiles_Water,
         .tilemap = sBattleTerrainTilemap_Water,
+        .tilemap2 = sBattleTerrainTilemap_Water_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Water,
         .entryTilemap = sBattleTerrainAnimTilemap_Water,
         .palette = sBattleTerrainPalette_Water
@@ -447,6 +504,7 @@ static const struct BattleBackground sBattleTerrainTable[] = {
     {
         .tileset = sBattleTerrainTiles_Pond,
         .tilemap = sBattleTerrainTilemap_Pond,
+        .tilemap2 = sBattleTerrainTilemap_Pond_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Pond,
         .entryTilemap = sBattleTerrainAnimTilemap_Pond,
         .palette = sBattleTerrainPalette_Pond
@@ -455,6 +513,7 @@ static const struct BattleBackground sBattleTerrainTable[] = {
     {
         .tileset = sBattleTerrainTiles_Mountain,
         .tilemap = sBattleTerrainTilemap_Mountain,
+        .tilemap2 = sBattleTerrainTilemap_Mountain_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Mountain,
         .entryTilemap = sBattleTerrainAnimTilemap_Mountain,
         .palette = sBattleTerrainPalette_Mountain
@@ -463,6 +522,7 @@ static const struct BattleBackground sBattleTerrainTable[] = {
     {
         .tileset = sBattleTerrainTiles_Cave,
         .tilemap = sBattleTerrainTilemap_Cave,
+        .tilemap2 = sBattleTerrainTilemap_Cave_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Cave,
         .entryTilemap = sBattleTerrainAnimTilemap_Cave,
         .palette = sBattleTerrainPalette_Cave
@@ -471,6 +531,7 @@ static const struct BattleBackground sBattleTerrainTable[] = {
     {
         .tileset = sBattleTerrainTiles_Building,
         .tilemap = sBattleTerrainTilemap_Building,
+        .tilemap2 = sBattleTerrainTilemap_Building_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Building,
         .entryTilemap = sBattleTerrainAnimTilemap_Building,
         .palette = sBattleTerrainPalette_Building
@@ -479,6 +540,7 @@ static const struct BattleBackground sBattleTerrainTable[] = {
     {
         .tileset = sBattleTerrainTiles_Building,
         .tilemap = sBattleTerrainTilemap_Building,
+        .tilemap2 = sBattleTerrainTilemap_Building_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Building,
         .entryTilemap = sBattleTerrainAnimTilemap_Building,
         .palette = sBattleTerrainPalette_Plain
@@ -487,6 +549,7 @@ static const struct BattleBackground sBattleTerrainTable[] = {
     {
         .tileset = sBattleTerrainTiles_Building,
         .tilemap = sBattleTerrainTilemap_Building,
+        .tilemap2 = sBattleTerrainTilemap_Building_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Building,
         .entryTilemap = sBattleTerrainAnimTilemap_Building,
         .palette = sBattleTerrainPalette_Link
@@ -495,6 +558,7 @@ static const struct BattleBackground sBattleTerrainTable[] = {
     {
         .tileset = sBattleTerrainTiles_Building,
         .tilemap = sBattleTerrainTilemap_Building,
+        .tilemap2 = sBattleTerrainTilemap_Building_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Building,
         .entryTilemap = sBattleTerrainAnimTilemap_Building,
         .palette = sBattleTerrainPalette_Gym
@@ -503,62 +567,70 @@ static const struct BattleBackground sBattleTerrainTable[] = {
     {
         .tileset = sBattleTerrainTiles_Building,
         .tilemap = sBattleTerrainTilemap_Building,
+        .tilemap2 = sBattleTerrainTilemap_Building_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Building,
         .entryTilemap = sBattleTerrainAnimTilemap_Building,
         .palette = sBattleTerrainPalette_Leader
     },
     [BATTLE_TERRAIN_INDOOR_2] =
     {
-        .tileset = sBattleTerrainTiles_Indoor2,
-        .tilemap = sBattleTerrainTilemap_Indoor2,
+        .tileset = sBattleTerrainTiles_Indoor,
+        .tilemap = sBattleTerrainTilemap_Indoor,
+        .tilemap2 = sBattleTerrainTilemap_Indoor_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Building,
         .entryTilemap = sBattleTerrainAnimTilemap_Building,
         .palette = sBattleTerrainPalette_Indoor2
     },
     [BATTLE_TERRAIN_INDOOR_1] =
     {
-        .tileset = sBattleTerrainTiles_Indoor2,
-        .tilemap = sBattleTerrainTilemap_Indoor2,
+        .tileset = sBattleTerrainTiles_Indoor,
+        .tilemap = sBattleTerrainTilemap_Indoor,
+        .tilemap2 = sBattleTerrainTilemap_Indoor_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Building,
         .entryTilemap = sBattleTerrainAnimTilemap_Building,
         .palette = sBattleTerrainPalette_Indoor1
     },
     [BATTLE_TERRAIN_LORELEI] =
     {
-        .tileset = sBattleTerrainTiles_Indoor2,
-        .tilemap = sBattleTerrainTilemap_Indoor2,
+        .tileset = sBattleTerrainTiles_Indoor,
+        .tilemap = sBattleTerrainTilemap_Indoor,
+        .tilemap2 = sBattleTerrainTilemap_Indoor_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Building,
         .entryTilemap = sBattleTerrainAnimTilemap_Building,
         .palette = sBattleTerrainPalette_Lorelei
     },
     [BATTLE_TERRAIN_BRUNO] =
     {
-        .tileset = sBattleTerrainTiles_Indoor2,
-        .tilemap = sBattleTerrainTilemap_Indoor2,
+        .tileset = sBattleTerrainTiles_Indoor,
+        .tilemap = sBattleTerrainTilemap_Indoor,
+        .tilemap2 = sBattleTerrainTilemap_Indoor_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Building,
         .entryTilemap = sBattleTerrainAnimTilemap_Building,
         .palette = sBattleTerrainPalette_Bruno
     },
     [BATTLE_TERRAIN_AGATHA] =
     {
-        .tileset = sBattleTerrainTiles_Indoor2,
-        .tilemap = sBattleTerrainTilemap_Indoor2,
+        .tileset = sBattleTerrainTiles_Indoor,
+        .tilemap = sBattleTerrainTilemap_Indoor,
+        .tilemap2 = sBattleTerrainTilemap_Indoor_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Building,
         .entryTilemap = sBattleTerrainAnimTilemap_Building,
         .palette = sBattleTerrainPalette_Agatha
     },
     [BATTLE_TERRAIN_LANCE] =
     {
-        .tileset = sBattleTerrainTiles_Indoor2,
-        .tilemap = sBattleTerrainTilemap_Indoor2,
+        .tileset = sBattleTerrainTiles_Indoor,
+        .tilemap = sBattleTerrainTilemap_Indoor,
+        .tilemap2 = sBattleTerrainTilemap_Indoor_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Building,
         .entryTilemap = sBattleTerrainAnimTilemap_Building,
         .palette = sBattleTerrainPalette_Lance
     },
     [BATTLE_TERRAIN_CHAMPION] =
     {
-        .tileset = sBattleTerrainTiles_Indoor2,
-        .tilemap = sBattleTerrainTilemap_Indoor2,
+        .tileset = sBattleTerrainTiles_Indoor,
+        .tilemap = sBattleTerrainTilemap_Indoor,
+        .tilemap2 = sBattleTerrainTilemap_Indoor_Doubles,
         .entryTileset = sBattleTerrainAnimTiles_Building,
         .entryTilemap = sBattleTerrainAnimTilemap_Building,
         .palette = sBattleTerrainPalette_Champion
@@ -606,13 +678,17 @@ static u8 GetBattleTerrainByMapScene(u8 mapBattleScene)
     return 9;
 }
 
+#define BATTLE_TERRAIN //Battle Terrain, NOT TERRAIN effect, is the entire battle field, including part battler sits on
 static void LoadBattleTerrainGfx(u16 terrain)
 {
     if (terrain >= NELEMS(sBattleTerrainTable))
         terrain = 9;
     // Copy to bg3
-    LZDecompressVram(sBattleTerrainTable[terrain].tileset, (void *)BG_CHAR_ADDR(2));
-    LZDecompressVram(sBattleTerrainTable[terrain].tilemap, (void *)BG_SCREEN_ADDR(26));
+    LZDecompressVram(sBattleTerrainTable[terrain].tileset, (void*)BG_CHAR_ADDR(2));
+    if (!IsDoubleBattle())
+        LZDecompressVram(sBattleTerrainTable[terrain].tilemap, (void*)BG_SCREEN_ADDR(26));
+    else
+        LZDecompressVram(sBattleTerrainTable[terrain].tilemap2, (void*)BG_SCREEN_ADDR(26));
     LoadCompressedPalette(sBattleTerrainTable[terrain].palette, 0x20, 0x60);
 }
 
@@ -621,8 +697,8 @@ static void LoadBattleTerrainEntryGfx(u16 terrain)
     if (terrain >= NELEMS(sBattleTerrainTable))
         terrain = 9;
     // Copy to bg1
-    LZDecompressVram(sBattleTerrainTable[terrain].entryTileset, (void *)BG_CHAR_ADDR(1));
-    LZDecompressVram(sBattleTerrainTable[terrain].entryTilemap, (void *)BG_SCREEN_ADDR(28));
+    LZDecompressVram(sBattleTerrainTable[terrain].entryTileset, (void*)BG_CHAR_ADDR(1));
+    LZDecompressVram(sBattleTerrainTable[terrain].entryTilemap, (void*)BG_SCREEN_ADDR(28));
 }
 
 UNUSED void GetBattleTerrainGfxPtrs(u8 terrain, const u32 **tilesPtr, const u32 **mapPtr, const u32 **palPtr)
@@ -634,18 +710,18 @@ UNUSED void GetBattleTerrainGfxPtrs(u8 terrain, const u32 **tilesPtr, const u32 
     *palPtr = sBattleTerrainTable[terrain].palette;
 }
 
-void sub_800F324(void)
+void BattleInitBgsAndWindows(void)
 {
     ResetBgsAndClearDma3BusyFlags(FALSE);
-    InitBgsFromTemplates(0, gBattleBgTemplates, NELEMS(gBattleBgTemplates));
-    InitWindows(gUnknown_8248330);
-    DeactivateAllTextPrinters();
+    InitBgsFromTemplates(0, gBattleBgTemplates, NELEMS(gBattleBgTemplates));//I believe bgs & windows have different definitions than i use
+    InitWindows(sStandardBattleWindowTemplates); //windows seem to be spaces where text/strings can be printed or displayed
+    DeactivateAllTextPrinters();//while the bg (background) holds the window themselves?
 }
 
 void InitBattleBgsVideo(void)
 {
     EnableInterrupts(INTR_FLAG_VBLANK | INTR_FLAG_VCOUNT | INTR_FLAG_TIMER3 | INTR_FLAG_SERIAL);
-    sub_800F324();
+    BattleInitBgsAndWindows();
     SetGpuReg(REG_OFFSET_BLDCNT, 0);
     SetGpuReg(REG_OFFSET_BLDALPHA, 0);
     SetGpuReg(REG_OFFSET_BLDY, 0);
@@ -677,10 +753,10 @@ void DrawMainBattleBackground(void)
 
 void LoadBattleTextboxAndBackground(void)
 {
-    LZDecompressVram(gBattleTextboxTiles, (void *)BG_CHAR_ADDR(0));
-    CopyToBgTilemapBuffer(0, gBattleTextboxTilemap, 0, 0x000);
+    LZDecompressVram(gBattleInterface_Textbox_Gfx, (void *)BG_CHAR_ADDR(0));
+    CopyToBgTilemapBuffer(0, gBattleInterface_Textbox_Tilemap, 0, 0x000);
     CopyBgTilemapBufferToVram(0);
-    LoadCompressedPalette(gBattleTextboxPalette, 0x00, 0x40);
+    LoadCompressedPalette(gBattleInterface_Textbox_Pal, 0x00, 0x40);
     LoadBattleMenuWindowGfx();
     DrawMainBattleBackground();
 }
@@ -1044,14 +1120,14 @@ bool8 LoadChosenBattleElement(u8 caseId)
     switch (caseId)
     {
     case 0:
-        LZDecompressVram(gBattleTextboxTiles, (void *)BG_CHAR_ADDR(0));
+        LZDecompressVram(gBattleInterface_Textbox_Gfx, (void *)BG_CHAR_ADDR(0));
         break;
     case 1:
-        CopyToBgTilemapBuffer(0, gBattleTextboxTilemap, 0, 0x000);
+        CopyToBgTilemapBuffer(0, gBattleInterface_Textbox_Tilemap, 0, 0x000);
         CopyBgTilemapBufferToVram(0);
         break;
     case 2:
-        LoadCompressedPalette(gBattleTextboxPalette, 0x00, 0x40);
+        LoadCompressedPalette(gBattleInterface_Textbox_Pal, 0x00, 0x40);
         break;
     case 3:
         battleScene = GetBattleTerrainOverride();

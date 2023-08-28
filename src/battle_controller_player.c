@@ -514,7 +514,8 @@ void HandleInputChooseMove(void)
             gMoveSelectionCursor[gActiveBattler] ^= 1;
             PlaySE(SE_SELECT);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-            MoveSelectionDisplayPpNumber();
+            //MoveSelectionDisplayPpNumber();
+            MoveSelectionDisplayPpString();
             MoveSelectionDisplayMoveType();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
         }
@@ -528,7 +529,8 @@ void HandleInputChooseMove(void)
             gMoveSelectionCursor[gActiveBattler] ^= 1;
             PlaySE(SE_SELECT);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-            MoveSelectionDisplayPpNumber();
+            //MoveSelectionDisplayPpNumber();
+            MoveSelectionDisplayPpString();
             MoveSelectionDisplayMoveType();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
         }
@@ -541,7 +543,8 @@ void HandleInputChooseMove(void)
             gMoveSelectionCursor[gActiveBattler] ^= 2;
             PlaySE(SE_SELECT);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-            MoveSelectionDisplayPpNumber();
+            //MoveSelectionDisplayPpNumber();
+            MoveSelectionDisplayPpString();
             MoveSelectionDisplayMoveType();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
         }
@@ -555,7 +558,8 @@ void HandleInputChooseMove(void)
             gMoveSelectionCursor[gActiveBattler] ^= 2;
             PlaySE(SE_SELECT);
             MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
-            MoveSelectionDisplayPpNumber();
+            //MoveSelectionDisplayPpNumber();
+            MoveSelectionDisplayPpString();
             MoveSelectionDisplayMoveType();
             BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
         }
@@ -1359,30 +1363,43 @@ static void DoHitAnimBlinkSpriteEffect(void)
     }
 }
 
-static void MoveSelectionDisplayMoveNames(void)
+//Quotes from GriffinR
+//BattleWindowText is information about the text on the window, not the window itself.
+//So the coordinates would be the text's position relative to the window's position
+//The coordinates for the windows themselves are in src/battle_bg.c   sStandardBattleWindowTemplates
+static void MoveSelectionDisplayMoveNames(void)//relevant
 {
     s32 i;
-    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
+    struct ChooseMoveStruct* moveInfo = (struct ChooseMoveStruct*)(&gBattleBufferA[gActiveBattler][4]);
     gNumberOfMovesToChoose = 0;
 
     for (i = 0; i < MAX_MON_MOVES; ++i)
     {
         MoveSelectionDestroyCursorAt(i);
-        StringCopy(gDisplayedStringBattle, gText_MoveInterfaceDynamicColors);
+        StringCopy(gDisplayedStringBattle, gText_MoveInterfaceDynamicColors);   //shadow/ font shading
         StringAppend(gDisplayedStringBattle, gMoveNames[moveInfo->moves[i]]);
-        BattlePutTextOnWindow(gDisplayedStringBattle, i + 3);
+        BattlePutTextOnWindow(gDisplayedStringBattle, i + 3); //not sure how this works with move slots and coordinate
         if (moveInfo->moves[i] != MOVE_NONE)
             ++gNumberOfMovesToChoose;
-    }
+    }//belive this means as long as you haven't looped 4 times and move does not equal move none (i.e a move does exist) keep looping
 }
+//MoveSelectionDisplayMoveNames loops through move slots, and fills slots 3-6   flows left to right, from top and then bottom
+//MoveSelectionDisplayPpString prints the PP text and fills slot 7
+//MoveSelectionDisplayMoveType  prints the Type/ string & displays move type they fill slot 8
+//MoveSelectionDisplayPpNumber  displays the current and max pp of a move and fills slot 9
+//window pp & movetype is in seems to follow different order top to bottom and then left to right, but apparently only 3 spaces rather than 4?
 
-static void MoveSelectionDisplayPpString(void)
+
+/*static void MoveSelectionDisplayPpString(void)//will change where in window pp is shown & window size so relevant
 {
-    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 7);
-}
+    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP); //pp text
+    BattlePutTextOnWindow(gDisplayedStringBattle, 7); //think 7 is x coordinate in window
+}//note these are the values I'm looking for since file refers to in battle
+//experiemented with shifting this, the value can't take the space of a buffer already printing/displaying some other value.
+//the number wasn't an x coordinate instead it was a slot within the main window, they all have fixed points
+//which are determined elsewhere
 
-static void MoveSelectionDisplayPpNumber(void)
+static void MoveSelectionDisplayPpNumber(void)//displays actual pp current & max value
 {
     u8 *txtPtr;
     struct ChooseMoveStruct *moveInfo;
@@ -1392,42 +1409,106 @@ static void MoveSelectionDisplayPpNumber(void)
     SetPpNumbersPaletteInMoveSelection();
     moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
     txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
-    *txtPtr = CHAR_SLASH;
+    *txtPtr = CHAR_SLASH; //this the backslash between current & max pp
     ConvertIntToDecimalStringN(++txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
     BattlePutTextOnWindow(gDisplayedStringBattle, 9);
+}//gDisplayedStringBattle is a ewram container used to store values for battle text strings  including win/lose text & move selection
+//think I can also call it a text buffer,BattlePutTextOnWindow uses text as first argument but the buffer can be used in place
+*/
+
+static void MoveSelectionDisplayPpNumber(void)//function content swap to fix reversed values
+{
+    /*u8 *txtPtr;
+    struct ChooseMoveStruct *moveInfo;
+
+    if (gBattleBufferA[gActiveBattler][2] == TRUE) // check if we didn't want to display pp number
+        return;
+    SetPpNumbersPaletteInMoveSelection();
+    moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
+    txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
+    *txtPtr = CHAR_SLASH;
+    ConvertIntToDecimalStringN(++txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);*/
+    StringCopy(gDisplayedStringBattle, gText_BattleMoveInterfacePP);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP); //B_WIN_PP
+}//tested last two values in convertint do absolutely nothing in this function changing it doesn't even craete a new build
+
+static void MoveSelectionDisplayPpString(void)
+{
+    /*StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);*/
+    u8* txtPtr;
+    struct ChooseMoveStruct* moveInfo;
+
+    if (gBattleBufferA[gActiveBattler][2] == TRUE) // check if we didn't want to display pp number
+        return;
+    SetPpNumbersPaletteInMoveSelection();
+    moveInfo = (struct ChooseMoveStruct*)(&gBattleBufferA[gActiveBattler][4]);
+    txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
+    *txtPtr = CHAR_SLASH;
+    ConvertIntToDecimalStringN(++txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP_REMAINING); //B_WIN_PP_REMAINING
 }
 
-static void MoveSelectionDisplayMoveType(void)
+static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
 {
-    u8 *txtPtr;
-    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
+    u8* txtPtr;
+    struct ChooseMoveStruct* moveInfo = (struct ChooseMoveStruct*)(&gBattleBufferA[gActiveBattler][4]);
 
-    txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceType);
+    /*txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceType); //type/
     *txtPtr++ = EXT_CTRL_CODE_BEGIN;
     *txtPtr++ = 6;
-    *txtPtr++ = 1;
-    txtPtr = StringCopy(txtPtr, gText_MoveInterfaceDynamicColors);
-    StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 8);
-}
+    *txtPtr++ = 1;*/ //based on results I think this somehow changed the base font from small to normal  normal font is value 1 so idk?
+    txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceDynamicColors);
+    /*if (gMoveNames[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]] == MOVE_HIDDEN_POWER)
+    {
+        s32 typeBits = ((gBattleMons[gBattlerAttacker].hpIV & 1) << 0)
+            | ((gBattleMons[gBattlerAttacker].attackIV & 1) << 1)
+            | ((gBattleMons[gBattlerAttacker].defenseIV & 1) << 2)
+            | ((gBattleMons[gBattlerAttacker].speedIV & 1) << 3)
+            | ((gBattleMons[gBattlerAttacker].spAttackIV & 1) << 4)
+            | ((gBattleMons[gBattlerAttacker].spDefenseIV & 1) << 5);
 
-void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 arg1)
+        u8 type = ((NUMBER_OF_MON_TYPES - 3) * typeBits) / 63 + 1; //think changing from 15 to 16 adds one more type to options so now have fairy
+        if (type == TYPE_MYSTERY)
+            type = TYPE_FAIRY; // or may need to increase it by 6 to get over other types to 21 since the +1 and ++ adds 2 tellign the last type added
+        type |= F_DYNAMIC_TYPE_1 | F_DYNAMIC_TYPE_2;
+        gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type = type;
+
+    }*/
+    StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_TYPE);
+}//can't use convertIntToDecimalString to attempt make right align, text becomes garbalded numbers and still is left alingned...
+//used StringCopyPadded to have 4 elements to use str_conv right aline it doens't actually right align, but correctly displayed movetype
+//no idea where to go from here.
+
+//since this uses right window should never need to adjust again, even after moving
+#define MOVE_NAME_2_X_VALUE (sStandardBattleWindowTemplates[B_WIN_MOVE_NAME_2].tilemapLeft - 2) //had put parenthesis to fix/make work
+#define MOVE_NAME_2_Y_VALUE sStandardBattleWindowTemplates[B_WIN_MOVE_NAME_2].tilemapTop
+
+//putting brackets around values was the issue
+
+void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 arg1) //actually I think this may not be what i need its create cursor
+//it may just be the start position, which is move 1
 {
     u16 src[2];
 
     src[0] = arg1 + 1;
-    src[1] = arg1 + 2;
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 9 * (cursorPosition & 1) + 1, 55 + (cursorPosition & 2), 1, 2, 0x11);
+    src[1] = arg1 + 2; //changing  + 2 value seems to change tilemap/symbol
+    CopyToBgTilemapBufferRect_ChangePalette(0, src, MOVE_NAME_2_X_VALUE * (cursorPosition & 1) + 1,
+        MOVE_NAME_2_Y_VALUE + (cursorPosition & 2), 1, 2, 0x11);//55 just changes y value
     CopyBgTilemapBufferToVram(0);
-}
+}//figured it out change the multiplyer to move x value, 9 *  12 is too high, it removes any valueu below it when it moves so needs perfect space
+//11 before cursor & 1 represents tilemapleft    55 before cursor & 2 represents tilemaptop
+//not sure what src[0] & src[1] do but I know the relation to the window so I'll just use that
 
-void MoveSelectionDestroyCursorAt(u8 cursorPosition)
+
+void MoveSelectionDestroyCursorAt(u8 cursorPosition)//with these defines in the 2 functions cursor position will auto update with move name window position changes
 {
     u16 src[2];
 
     src[0] = 32;
     src[1] = 32;
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 9 * (cursorPosition & 1) + 1, 55 + (cursorPosition & 2), 1, 2, 0x11);
+    CopyToBgTilemapBufferRect_ChangePalette(0, src, MOVE_NAME_2_X_VALUE * (cursorPosition & 1) + 1,
+        MOVE_NAME_2_Y_VALUE + (cursorPosition & 2), 1, 2, 0x11);
     CopyBgTilemapBufferToVram(0);
 }
 
