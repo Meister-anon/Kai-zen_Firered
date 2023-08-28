@@ -6413,10 +6413,10 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderBrock[] = {
     },
     {
         .iv = 20,
-        .lvl = 14,
+        .lvl = 13,
         .species = SPECIES_ONIX,
         .moves = {MOVE_TACKLE, MOVE_BIND, MOVE_ROCK_TOMB, MOVE_NONE},
-    },
+    },//considering buffs to onix had bring down lvl to 13 instead of 14, beatable but worried would make player overleveled for section after brock
 };
 
 static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderMisty[] = {

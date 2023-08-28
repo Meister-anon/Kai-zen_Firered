@@ -2202,6 +2202,8 @@ goto PARTYMENU_GRAPHICS
 * name limit 12 is cutoff in pc, and I can't make the graphic bigger as
 * there is no more space so instead I need to make the font smaller.
 * 
+* (new idea in place of markings put ability name of mon in selection on pc screen)
+*
 * also my need to re-capitalize species namees as well. it prob looks fine in emerald but for fire red looks a bit off
 * espcially on some of the wider characters like M  -DONE  (unless I decide to go in and redo the font to look better myself that's it)
 * 

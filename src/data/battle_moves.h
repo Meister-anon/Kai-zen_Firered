@@ -5554,7 +5554,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_ROOST] =
     {
-        .effect = EFFECT_ROOST,
+        .effect = EFFECT_RESTORE_HP,//EFFECT_ROOST,
         .power = 0,
         .type = TYPE_FLYING,
         .accuracy = 0,
@@ -11943,7 +11943,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_COCOON] =
     {
-        .effect = EFFECT_COCOON,    //made its own effect because it also lowers speed
+        .effect = EFFECT_COSMIC_POWER,//EFFECT_COCOON,    //made its own effect because it also lowers speed
         .power = 0,
         .type = TYPE_BUG,
         .accuracy = 0,

@@ -1403,23 +1403,63 @@ void ModulateDmgByType(u8 multiplier)
     }
 }
 
+#define TYPE_AND_STAB_CHECK
 static void atk06_typecalc(void)
 {
     s32 i = 0;
-    u8 moveType;
+    u8 moveType, argument;
+    u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBattleMons[gBattlerTarget].type3;
+    u16 effect = gBattleMoves[gCurrentMove].effect;
 
-    if (gCurrentMove == MOVE_STRUGGLE)
+    if (gCurrentMove == (MOVE_STRUGGLE || MOVE_BIDE)) //should let hit ghost types could just remove typecalc bs from script instead...
     {
         ++gBattlescriptCurrInstr;
         return;
     }
+    argument = gBattleMoves[gCurrentMove].argument;
     GET_MOVE_TYPE(gCurrentMove, moveType);
     // check stab
-    if (IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType))
+    if (effect != EFFECT_COUNTER && effect != EFFECT_MIRROR_COAT)   //skip stab-likes for mirror coat & counter
     {
-        gBattleMoveDamage = gBattleMoveDamage * 15;
-        gBattleMoveDamage = gBattleMoveDamage / 10;
+        if (IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType)
+            || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
+                && IS_BATTLER_OF_TYPE(gBattlerAttacker, argument)))
+        {
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_ADAPTABILITY)
+            {
+                gBattleMoveDamage = gBattleMoveDamage * 175;
+                gBattleMoveDamage = gBattleMoveDamage / 100;
+            }
+            else
+            {
+                gBattleMoveDamage = gBattleMoveDamage * 150;
+                gBattleMoveDamage = gBattleMoveDamage / 100;
+            }
+
+        }
+        //joat check jack of all trades  inclusive normal type dmg buff 
+        //joat stacks w stab long as not normal move, added mystrey type exclusion for normalize change
+        //forgot calculatebasedamage in pokemon.c, has it set so mystery type does 0 damage will need to remove that. 
+        //why does it even do that? there are no mystery moves, is it an extra failsafe for hidden power?
+        if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL)) //added mystery line to prevent triggering joat, on normalize
+        {
+            if ((moveType != TYPE_NORMAL && moveType != TYPE_MYSTERY)
+                || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
+                    && (argument != TYPE_NORMAL && argument != TYPE_MYSTERY)))
+            {
+                gBattleMoveDamage = gBattleMoveDamage * 125;
+                gBattleMoveDamage = gBattleMoveDamage / 100;
+            }
+        }
+
+        //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
+        if (gBattleMons[gBattlerAttacker].species == SPECIES_ARCEUS)
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 15;
+            gBattleMoveDamage = gBattleMoveDamage / 10;
+        }
     }
+
 
     if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     {
@@ -1593,20 +1633,59 @@ static void ModulateDmgByType2(u8 multiplier, u16 move, u8 *flags)
     }
 }
 
+
+//appears to be used for ai logic?
 u8 TypeCalc(u16 move, u8 attacker, u8 defender)
 {
     s32 i = 0;
     u8 flags = 0;
-    u8 moveType;
+    u8 moveType, argument;
+    u8 type1 = gBaseStats[defender].type1, type2 = gBaseStats[defender].type2, type3 = gBattleMons[defender].type3;
+    u16 effect = gBattleMoves[gCurrentMove].effect;
 
-    if (move == MOVE_STRUGGLE)
+    if (move == (MOVE_STRUGGLE || MOVE_BIDE))
         return 0;
     moveType = gBattleMoves[move].type;
+    argument = gBattleMoves[move].argument;
     // check stab
-    if (IS_BATTLER_OF_TYPE(attacker, moveType))
+    if (effect != EFFECT_COUNTER && effect != EFFECT_MIRROR_COAT)   //skip stab-likes for mirror coat & counter
     {
-        gBattleMoveDamage = gBattleMoveDamage * 15;
-        gBattleMoveDamage = gBattleMoveDamage / 10;
+        if (IS_BATTLER_OF_TYPE(attacker, moveType)
+            || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
+                && IS_BATTLER_OF_TYPE(attacker, argument)))
+        {
+            if (GetBattlerAbility(attacker) == ABILITY_ADAPTABILITY)
+            {
+                gBattleMoveDamage = gBattleMoveDamage * 175;
+                gBattleMoveDamage = gBattleMoveDamage / 100;
+            }
+            else
+            {
+                gBattleMoveDamage = gBattleMoveDamage * 150;
+                gBattleMoveDamage = gBattleMoveDamage / 100;
+            }
+
+        }
+
+        //joat check jack of all trades  inclusive normal type dmg buff 
+        //joat stacks w stab long as not normal move,
+        if (IS_BATTLER_OF_TYPE(attacker, TYPE_NORMAL)) //added mystery line to prevent triggering joat, on normalize
+        {
+            if ((moveType != TYPE_NORMAL && moveType != TYPE_MYSTERY)
+                || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
+                    && (argument != TYPE_NORMAL && argument != TYPE_MYSTERY)))
+            {
+                gBattleMoveDamage = gBattleMoveDamage * 125;
+                gBattleMoveDamage = gBattleMoveDamage / 100;
+            }
+        }
+
+        //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
+        if (gBattleMons[attacker].species == SPECIES_ARCEUS)
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 15;
+            gBattleMoveDamage = gBattleMoveDamage / 10;
+        }
     }
 
     if (gBattleMons[defender].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)

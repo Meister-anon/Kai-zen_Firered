@@ -950,7 +950,7 @@ const struct BaseStats gBaseStats[] =
         .baseHP = 81,
         .baseDefense = 77,
         .baseSpeed = 85,
-        .baseSpAttack = 95,
+        .baseSpAttack = 91,
         .baseSpDefense = 95,
         .baseAttack = 102,
         .type1 = TYPE_POISON,
@@ -5942,7 +5942,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 40,
         .baseSpeed = 20,
         .baseSpAttack = 72,
-        .baseSpDefense = 40,
+        .baseSpDefense = 56,
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 190,
@@ -5956,7 +5956,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_MAGMA_ARMOR, ABILITY_FLAME_BODY},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_WEAK_ARMOR, ABILITY_GOOEY},
+            .abilityHidden = {ABILITY_LIQUID_OOZE, ABILITY_GOOEY}, //make sure liquid ooze works on leech seed
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
