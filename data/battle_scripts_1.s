@@ -4239,6 +4239,11 @@ BattleScript_SubstituteFade::
 	printstring STRINGID_PKMNSUBSTITUTEFADED
 	return
 
+BattleScript_InBattlePickup::
+	printstring STRINGID_PICKUP_ITEM
+	waitmessage 0x40
+	end
+
 BattleScript_BerryCurePrlzEnd2::
 	call BattleScript_BerryCureParRet
 	end2

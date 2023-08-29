@@ -2258,6 +2258,26 @@ u8 CastformDataTypeChange(u8 battler)
     return formChange;
 }
 
+#define PICKUP_FORBIDDEN_END            0xFFFF
+
+static const u16 sForbiddenHoldEffects[] =
+{
+    HOLD_EFFECT_EXP_SHARE,
+    HOLD_EFFECT_PREVENT_EVOLVE,
+    HOLD_EFFECT_UP_GRADE,
+    HOLD_EFFECT_ADAMANT_ORB,
+    HOLD_EFFECT_LUSTROUS_ORB,
+    HOLD_EFFECT_GRISEOUS_ORB,
+    HOLD_EFFECT_GRACIDEA,
+    HOLD_EFFECT_DRIVE,
+    HOLD_EFFECT_MEGA_STONE,
+    HOLD_EFFECT_PRIMAL_ORB,
+    HOLD_EFFECT_MEMORY,
+    HOLD_EFFECT_Z_CRYSTAL,
+    HOLD_EFFECT_ULTIMA_BRACE, //remove this effect I think
+    PICKUP_FORBIDDEN_END
+}; //think add on to this from hold_effects.h to further tailor what I want effect to be
+
 u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 moveArg)
 {
     u8 effect = 0;
@@ -2290,6 +2310,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         s32 i;
         u8 side;
         u8 target1;
+
+        //Pickup variables needed put above switch start
+        u16 PickUpItem, heldItem;
+
+        u16 *changedItem = &gBattleStruct->changedItems[battler];
 
         if (special)
             gLastUsedAbility = special;
@@ -2500,6 +2525,33 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         BattleScriptPushCursorAndCallback(BattleScript_ShedSkinActivates);
                         BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
                         MarkBattlerForControllerExec(gActiveBattler);
+                        ++effect;
+                    }
+                    break;
+                case ABILITY_PICKUP:
+
+                    if (gBattleMons[battler].item == ITEM_NONE && (Random() % 3 == 0))
+                    {   //item search
+                        for (PickUpItem = 0; ItemId_GetHoldEffect(PickUpItem) == HOLD_EFFECT_NONE; heldItem = (Random() % LAST_ITEM_INDEX) + 1)   
+                        {   //exclusion checks
+                            for (i = 0; sForbiddenHoldEffects[i] != PICKUP_FORBIDDEN_END; ++i)//variable needs to come after increment as its being set to the same variable, otherwise it can't increment
+                            {   
+                                if (ItemId_GetHoldEffect(heldItem) == sForbiddenHoldEffects[i])
+                                    break; //breaks out to above loop to search a new item, as pickupitem is still 0
+
+                            }
+                            //item assignment 
+                            if (sForbiddenHoldEffects[i] == PICKUP_FORBIDDEN_END)
+                                PickUpItem = heldItem;
+
+                        }
+
+                        gLastUsedItem = *changedItem = PickUpItem;
+                        PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem)
+                            gBattleMons[battler].item = gLastUsedItem;
+                        BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, battler, sizeof(gLastUsedItem), &gLastUsedItem);
+                        MarkBattlerForControllerExec(battler);
+                        BattleScriptExecute(BattleScript_InBattlePickup);
                         ++effect;
                     }
                     break;
