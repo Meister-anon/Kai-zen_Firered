@@ -851,33 +851,6 @@ static const u16 sWeightToDamageTable[] =
     0xFFFF, 0xFFFF
 };
 
-struct PickupItem
-{
-    u16 itemId;
-    u8 chance;
-};
-
-static const struct PickupItem sPickupItems[] =
-{
-    { ITEM_ORAN_BERRY, 15 },
-    { ITEM_CHERI_BERRY, 25 },
-    { ITEM_CHESTO_BERRY, 35 },
-    { ITEM_PECHA_BERRY, 45 },
-    { ITEM_RAWST_BERRY, 55 },
-    { ITEM_ASPEAR_BERRY, 65 },
-    { ITEM_PERSIM_BERRY, 75 },
-    { ITEM_TM10, 80 },
-    { ITEM_PP_UP, 85 },
-    { ITEM_RARE_CANDY, 90 },
-    { ITEM_NUGGET, 95 },
-    { ITEM_SPELON_BERRY, 96 },
-    { ITEM_PAMTRE_BERRY, 97 },
-    { ITEM_WATMEL_BERRY, 98 },
-    { ITEM_DURIN_BERRY, 99 },
-    { ITEM_BELUE_BERRY, 1 },
-
-};
-
 static const u8 sTerrainToType[] =
 {
     TYPE_GRASS,  // tall grass
@@ -9239,7 +9212,7 @@ static void atkE4_getsecretpowereffect(void)
 
 static void atkE5_pickup(void)
 {
-    s32 i;
+    /*s32 i;
     u32 j;
     u16 species, heldItem;
     u32 ability;
@@ -9261,7 +9234,7 @@ static void atkE5_pickup(void)
                     break;
             SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &sPickupItems[j]);
         }
-    }
+    }*/
     ++gBattlescriptCurrInstr;
 }
 

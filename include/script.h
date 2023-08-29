@@ -41,6 +41,7 @@ bool8 ArePlayerFieldControlsLocked(void);
 void ScriptContext1_Init(void);
 bool8 ScriptContext1_IsScriptSetUp(void);
 bool8 ScriptContext2_RunScript(void);
+void LockForFieldEffect(void);
 void ScriptContext1_SetupScript(const u8 *ptr);
 void ScriptContext1_Stop(void);
 void EnableBothScriptContexts(void);

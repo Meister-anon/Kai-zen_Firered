@@ -1,6 +1,7 @@
 #include "global.h"
 #include "gflib.h"
 #include "strings.h"
+#include "constants/abilities.h"
 #include "task.h"
 #include "field_message_box.h"
 #include "script.h"
@@ -9,6 +10,7 @@
 #include "party_menu.h"
 #include "field_poison.h"
 #include "constants/battle.h"
+#include "constants/items.h"
 
 static bool32 IsMonValidSpecies(struct Pokemon *pokemon)
 {
@@ -43,7 +45,7 @@ static bool32 MonFaintedFromPoison(u8 partyIdx)
 {
     struct Pokemon *pokemon = gPlayerParty + partyIdx;
     if (IsMonValidSpecies(pokemon) && !GetMonData(pokemon, MON_DATA_HP) && GetAilmentFromStatus(GetMonData(pokemon, MON_DATA_STATUS)) == AILMENT_PSN)
-        return TRUE;
+        return TRUE; //if species, hp == 0, and status is poisoned
     return FALSE;
 }
 
@@ -89,27 +91,54 @@ void TryFieldPoisonWhiteOut(void)
     ScriptContext1_Stop();
 }
 
-s32 DoPoisonFieldEffect(void)
+static bool32 TryActivateFieldPoisonHeal(struct Pokemon *mon) //putting inside the loop so doesn't need a loop...I think
+{
+    
+    if (GetMonData(mon, MON_DATA_SANITY_HAS_SPECIES) && GetMonAbility(mon) == ABILITY_POISON_HEAL) //think can just use pokemon constant, as its already a pointer, so shouldn't need ampersand
+    {
+        if (GetAilmentFromStatus(GetMonData(mon, MON_DATA_STATUS)) == AILMENT_PSN)
+            return TRUE;
+        else if (IsMonType(mon, TYPE_POISON) && (GetMonData(mon, MON_DATA_HELD_ITEM) == ITEM_BLACK_SLUDGE)) //also work for poison_orb when setup
+            return TRUE;
+        else
+            return FALSE;
+    }
+    else
+        return FALSE;
+    
+
+}
+
+s32 DoPoisonFieldEffect(void) //now heals poison heal pokemon outside of battle
 {
     int i;
     u32 hp;
+    //u32 max;
     
     struct Pokemon *pokemon = gPlayerParty;
     u32 numPoisoned = 0;
     u32 numFainted = 0;
-    for (i = 0; i < PARTY_SIZE; i++)
+    for (i = 0; i < PARTY_SIZE; i++)  //fix found by shinny from pret his code solution
     {
-        if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES) && GetAilmentFromStatus(GetMonData(pokemon, MON_DATA_STATUS)) == AILMENT_PSN)
+        hp = GetMonData(pokemon, MON_DATA_HP);
+        //if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES) && GetAilmentFromStatus(GetMonData(pokemon, MON_DATA_STATUS)) == AILMENT_PSN)//replace this
+        if (TryActivateFieldPoisonHeal(pokemon))
         {
-            hp = GetMonData(pokemon, MON_DATA_HP);
+
+            if (hp < GetMonData(pokemon, MON_DATA_MAX_HP))
+                hp++;
+            //if (GetMonAbility(&gPlayerParty[i]) == ABILITY_POISON_HEAL)//replace this
+        }
+        else if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES) && GetAilmentFromStatus(GetMonData(pokemon, MON_DATA_STATUS)) == AILMENT_PSN) //normal poison checks
+        {
             if (hp == 0 || --hp == 0)
                 numFainted++;
-            SetMonData(pokemon, MON_DATA_HP, &hp);
             numPoisoned++;
         }
+        SetMonData(pokemon, MON_DATA_HP, &hp);        
         pokemon++;
     }
-    if (numFainted || numPoisoned)
+    if (numFainted || numPoisoned) //if not 0
         FldEffPoison_Start();
     if (numFainted)
         return FLDPSN_FNT;

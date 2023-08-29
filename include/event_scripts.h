@@ -1160,8 +1160,8 @@ extern const u8 EventScript_ItemfinderDigUpUnderfootItem[];
 extern const u8 EventScript_DoNoIntroTrainerBattle[];
 extern const u8 EventScript_TryDoDoubleTrainerBattle[];
 extern const u8 EventScript_TryDoNormalTrainerBattle[];
-extern const u8 EventScript_TryDoDoubleRematchBattle[];
-extern const u8 EventScript_TryDoRematchBattle[];
+extern const u8 EventScript_TryDoDoubleRematchBattle[]; //had removed
+extern const u8 EventScript_TryDoRematchBattle[];       //had removed
 extern const u8 EventScript_DoTrainerBattleFromApproach[];
 extern const u8 EventScript_TestSignpostMsg[];
 
@@ -1193,6 +1193,14 @@ extern const u8 CableClub_Text_CanMakeBerryPowder[];
 extern const u8 EventScript_PC[];
 
 extern const u8 EventScript_RepelWoreOff[];
+extern const u8 EventScript_BwRepelWoreOff[];
+extern const u8 EventScript_BwTrainerRepelWoreOff[];
+extern const u8 EventScript_AnotherRepel[];
+extern const u8 EventScript_UseAnotherRepel[];
+extern const u8 EventScript_UseAnotherSuperRepel[];
+extern const u8 EventScript_UseAnotherMaxRepel[];
+extern const u8 EventScript_FinishNewRepel[];
+extern const u8 EventScript_EndScript[];
 
 // battle_message
 extern const u8 Text_MonSentToBoxInSomeonesPC[];
@@ -1216,6 +1224,7 @@ extern const u8 EventScript_FldEffFlash[];
 
 // field_control_avatar
 extern const u8 EventScript_CancelMessageBox[];
+extern const u8 EventScript_DelayedCancelMessageBox[];
 extern const u8 PalletTown_PlayersHouse_2F_EventScript_PC[];
 extern const u8 EventScript_HiddenItemScript[];
 extern const u8 EventScript_PC[];

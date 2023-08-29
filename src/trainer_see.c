@@ -10,6 +10,10 @@
 #include "constants/battle_setup.h"
 #include "constants/event_object_movement.h"
 #include "constants/event_objects.h"
+#include "constants/abilities.h"
+#include "constants/items.h"
+#include "event_data.h"
+#include "event_scripts.h"
 
 typedef u8 (*TrainerApproachFunc)(struct ObjectEvent *, s16, s16, s16);
 typedef bool8 (*TrainerSeeFunc)(u8, struct Task *, struct ObjectEvent *);
@@ -84,6 +88,32 @@ static const TrainerSeeFunc sTrainerSeeFuncList2[] = {
     TrainerSeeFunc_EndJumpOutOfAsh
 };
 
+bool8 UpdateBadOnionCounter(void)
+{
+    u16 steps;
+
+    /*if (InUnionRoom() == TRUE)
+        return FALSE;*/
+
+    if (gQuestLogState == QL_STATE_PLAYBACK)
+        return FALSE;
+
+    //steps = VarGet(VAR_REPEL_STEP_COUNT);
+    steps = VarGet(VAR_TRAINER_REPEL_STEP_COUNT);
+
+    if (steps != 0)
+    {
+        steps--;
+        VarSet(VAR_TRAINER_REPEL_STEP_COUNT, steps);
+        if (steps == 0)
+        {
+            ScriptContext1_SetupScript(EventScript_BwTrainerRepelWoreOff); //replace with own script   EventScript_BwTrainerRepelWoreOff
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 bool8 CheckForTrainersWantingBattle(void)
 {
     u8 i;
@@ -104,6 +134,11 @@ bool8 CheckForTrainersWantingBattle(void)
     return FALSE;
 }
 
+#define TRAINER_APPROACH_LOGIC
+//important for idea of 2 trainers meeting at once causing double battle prob have to work with this
+//while I could use trainerapproachdistance function, I think I can make trainer repellent work with just this function?
+//would just need a conditional to set approachDistance to 0.. 
+//tested in basered, worked perfectly.
 static bool8 CheckTrainer(u8 trainerObjId)
 {
     const u8 *script = GetObjectEventScriptPointerByObjectEventId(trainerObjId);
@@ -111,10 +146,17 @@ static bool8 CheckTrainer(u8 trainerObjId)
     if (GetTrainerFlagFromScriptPointer(script))
         return FALSE;
     approachDistance = GetTrainerApproachDistance(&gObjectEvents[trainerObjId]);
-    if (approachDistance != 0)
+
+    if (GetMonAbility(&gPlayerParty[0]) == ABILITY_STENCH)  //if a mon with stench is 1st in party, trainers won't approach
+        approachDistance = 0;   //I think I want to tweak this so it doesn't work in gyms?  but then again if player wants to do that, that's fine for them.
+
+    if (VarGet(VAR_TRAINER_REPEL_STEP_COUNT) != 0)
+        approachDistance = 0;   //value of 0 means trainer won't approach
+
+    if (approachDistance != 0)  //default logic
     {
-        if (script[1] == TRAINER_BATTLE_DOUBLE && GetMonsStateToDoubles())
-            return FALSE;
+        if (script[1] == TRAINER_BATTLE_DOUBLE && GetMonsStateToDoubles())//figure what this means,
+            return FALSE;   //think this is just saying, paired doubles trainers don't approach?
         ConfigureAndSetUpOneTrainerBattle(trainerObjId, script);
         TrainerApproachPlayer(&gObjectEvents[trainerObjId], approachDistance - 1);
         return TRUE;

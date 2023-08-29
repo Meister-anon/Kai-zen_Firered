@@ -95,6 +95,7 @@ static u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
 
 static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon);
 //const u16* const gFormSpeciesIdTables[NUM_SPECIES]
+static bool32 CheckTypeBySpecies(u16 species, u8 type); //made for field poiso to check if mon is a poison type, but could have other use
 
 #include "data/battle_moves.h"
 
@@ -4788,6 +4789,22 @@ u16 GetMonAbility(struct Pokemon *mon)
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u8 abilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM, NULL);
     return GetAbilityBySpecies(species, abilityNum);
+}
+
+bool32 IsMonType(struct Pokemon *mon, u8 type)
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    return CheckTypeBySpecies(species, type);
+}
+
+static bool32 CheckTypeBySpecies(u16 species, u8 type)
+{
+    if (gBaseStats[species].type1 == type)
+        return TRUE;
+    else if (gBaseStats[species].type2 == type)
+        return TRUE;
+    else
+        return FALSE;
 }
 
 static void CreateSecretBaseEnemyParty(struct SecretBaseRecord *secretBaseRecord)

@@ -2,6 +2,7 @@
 #include "script.h"
 #include "event_data.h"
 #include "quest_log.h"
+#include "event_object_movement.h"
 
 #define RAM_SCRIPT_MAGIC 51
 #define SCRIPT_STACK_SIZE 20
@@ -325,6 +326,12 @@ bool8 ScriptContext2_RunScript(void)
     }
 
     return 1;
+}
+
+void LockForFieldEffect(void)
+{
+    FreezeObjectEvents();   //think this locks npcs too?
+    LockPlayerFieldControls();
 }
 
 void ScriptContext1_SetupScript(const u8 *ptr)

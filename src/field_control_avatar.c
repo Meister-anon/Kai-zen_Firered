@@ -30,6 +30,16 @@
 #include "constants/event_objects.h"
 #include "constants/maps.h"
 #include "constants/metatile_behaviors.h"
+#include "constants/abilities.h"
+#include "pokemon.h"
+#include "random.h"
+#include "field_message_box.h"
+#include "party_menu.h"
+#include "item.h"
+#include "battle_script_commands.h"
+#include "strings.h"
+#include "constants/items.h"    //for NUM_TECHNICAL_MACHINES constant
+
 
 #define SIGNPOST_POKECENTER 0
 #define SIGNPOST_POKEMART 1
@@ -55,6 +65,7 @@ static bool8 TryStartCoordEventScript(struct MapPosition * position);
 static bool8 TryStartMiscWalkingScripts(u16 metatileBehavior);
 static bool8 TryStartStepCountScript(u16 metatileBehavior);
 static void UpdateHappinessStepCounter(void);
+static void UpdatePickupCounter(void);
 static bool8 UpdatePoisonStepCounter(void);
 static bool8 CheckStandardWildEncounter(u32 encounter);
 static bool8 TrySetUpWalkIntoSignpostScript(struct MapPosition * position, u16 metatileBehavior, u8 playerDirection);
@@ -70,6 +81,37 @@ static s8 GetWarpEventAtMapPosition(struct MapHeader * mapHeader, struct MapPosi
 static bool8 TryDoorWarp(struct MapPosition * position, u16 metatileBehavior, u8 playerDirection);
 static s8 GetWarpEventAtPosition(struct MapHeader * mapHeader, u16 x, u16 y, u8 z);
 static const u8 *GetCoordEventScriptAtPosition(struct MapHeader * mapHeader, u16 x, u16 y, u8 z);
+
+
+struct PickupItem
+{
+    u16 itemId;
+    u8 chance;
+};
+
+//revert to static and move these 2 to field_control_avatar?
+//but would still need it for battle_util.c  ;  nvm will make separate one for that, since not all of these items can be used in battle
+//and I'm going to be setting the list as held items
+static const struct PickupItem sPickupItems[] =
+{
+    { ITEM_ORAN_BERRY, 15 },
+    { ITEM_CHERI_BERRY, 25 },
+    { ITEM_CHESTO_BERRY, 35 },
+    { ITEM_PECHA_BERRY, 45 },
+    { ITEM_POKE_BALL, 50 },
+    { ITEM_RAWST_BERRY, 55 },
+    { ITEM_ASPEAR_BERRY, 65 },
+    { ITEM_PERSIM_BERRY, 75 },
+    { ITEM_TM10, 80 },
+    { ITEM_PP_UP, 85 },
+    { ITEM_RARE_CANDY, 90 },
+    { ITEM_NUGGET, 95 },
+    { ITEM_SPELON_BERRY, 96 },
+    { ITEM_PAMTRE_BERRY, 97 },
+    { ITEM_WATMEL_BERRY, 98 },
+    { ITEM_DURIN_BERRY, 99 },
+    { ITEM_LUXURY_BALL, 100 },
+};
 
 struct FieldInput gInputToStoreInQuestLogMaybe;
 
@@ -446,8 +488,8 @@ static const u8 *GetInteractedObjectEventScript(struct MapPosition *position, u8
             return NULL;
     }
 
-    if (InUnionRoom() == TRUE && !ObjectEventCheckHeldMovementStatus(&gObjectEvents[objectEventId]))
-        return NULL;
+   /* if (InUnionRoom() == TRUE && !ObjectEventCheckHeldMovementStatus(&gObjectEvents[objectEventId]))
+        return NULL;*/
 
     gSelectedObjectEvent = objectEventId;
     gSpecialVar_LastTalked = gObjectEvents[objectEventId].localId;
@@ -648,21 +690,44 @@ static bool8 TryStartMiscWalkingScripts(u16 metatileBehavior)
 
 static bool8 TryStartStepCountScript(u16 metatileBehavior)
 {
-    if (InUnionRoom() == TRUE)
-        return FALSE;
+    u8 i;
+    bool8 found = FALSE;
+
+
+    /*if (InUnionRoom() == TRUE)
+        return FALSE;*/
     if (gQuestLogState == QL_STATE_PLAYBACK)
         return FALSE;
 
     UpdateHappinessStepCounter();
 
+    for (i = 0; i < PARTY_SIZE; ++i)
+    {
+
+        if (GetMonAbility(&gPlayerParty[i]) == ABILITY_PICKUP)
+        {
+            found = TRUE;
+
+        }
+    }
+
+        if (found == TRUE)
+            UpdatePickupCounter();
+
+        else if (found == FALSE)    //if doesn't find pickup mon in party, reset counter to 0
+        {
+            VarSet(VAR_PICKUP_COUNTER, 0);
+        }
+    
+
     if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_FISHING) && !MetatileBehavior_IsForcedMovementTile(metatileBehavior))
     {
-        if (UpdateVsSeekerStepCounter() == TRUE)
+        /*if (UpdateVsSeekerStepCounter() == TRUE)
         {
             ScriptContext1_SetupScript(EventScript_VsSeekerChargingDone);
             return TRUE;
         }
-        else if (UpdatePoisonStepCounter() == TRUE)
+        else */if (UpdatePoisonStepCounter() == TRUE)
         {
             ScriptContext1_SetupScript(EventScript_FieldPoison);
             return TRUE;
@@ -702,6 +767,56 @@ static void UpdateHappinessStepCounter(void)
     }
 }
 
+static void UpdatePickupCounter(void)
+{
+    u16 *ptr = GetVarPointer(VAR_PICKUP_COUNTER);
+    s32 i;
+    u32 j;
+    s32 randomTM = Random() % NUM_TECHNICAL_MACHINES;   //using will make function automatically scale
+    u16 arrayItem = sPickupItems[j].itemId;
+    
+
+    (*ptr)++;       //increment counter
+    (*ptr) %= 250;   //wrap around at 250
+
+        for (i = 0; i < PARTY_SIZE; ++i)
+        {
+            if (GetMonAbility(&gPlayerParty[i]) == ABILITY_PICKUP)
+                break;
+        }
+
+
+        if (*ptr == 0)  //can use pointer without ability check, as ability check is already in call for this function
+        {
+            s32 random = Random() % 101;
+            for (j = 0; j < ARRAY_COUNT(sPickupItems); ++j) //minus 1 was specific for this array, as it wasn't made to go to last value, I changed it.
+            {
+                if (sPickupItems[j].chance > random)
+                    break;
+            }
+
+            if ((sPickupItems[j].itemId == ITEM_TM10_HIDDEN_POWER) && (BagGetQuantityByItemId(ITEM_TM10_HIDDEN_POWER) != 0)
+                && (Random() % 3))    //makes it only do swap 1/3rd of the time
+                arrayItem = ((ITEM_TM10_HIDDEN_POWER - 9) + randomTM);// give random tm, if already have tm10, will put add random%3  so not super easy to get everything
+            else
+                arrayItem = sPickupItems[j].itemId;
+
+            if (AddBagItem(sPickupItems[j].itemId, 1) == TRUE)  //attempting remove from loop. think placing within made it add for each value of  the array. yup that's why *facepalm
+            {
+
+                GetMonNickname(&gPlayerParty[i], gStringVar2);  //for battle effect
+                CopyItemName(sPickupItems[j].itemId, gStringVar1);
+                LockForFieldEffect();
+
+                ShowFieldMessage(gText_MonPickedUpItem);
+                ScriptContext1_SetupScript(EventScript_DelayedCancelMessageBox);
+
+            }
+
+        }
+    
+}
+
 void ClearPoisonStepCounter(void)
 {
     VarSet(VAR_POISON_STEP_COUNTER, 0);
@@ -715,8 +830,8 @@ static bool8 UpdatePoisonStepCounter(void)
     {
         ptr = GetVarPointer(VAR_POISON_STEP_COUNTER);
         (*ptr)++;
-        (*ptr) %= 5;
-        if (*ptr == 0)
+        (*ptr) %= 5;    //wrap around value
+        if (*ptr == 0)//when the counter wraps around to do the effect
         {
             switch (DoPoisonFieldEffect())
             {

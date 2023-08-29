@@ -1082,7 +1082,7 @@ EventScript_GymBadgeFanfare:: @ 81A6C21
 	waitfanfare
 	return
 
-EventScript_OutOfCenterPartyHeal:: @ 81A6C26
+EventScript_OutOfCenterPartyHeal:: @ 81A6C26 //important progression healing
 	fadescreen FADE_TO_BLACK
 	playfanfare MUS_HEAL
 	waitfanfare
@@ -1166,6 +1166,12 @@ EventScript_CancelMessageBox:: @ 81A7ADB
 	release
 	end
 
+EventScript_DelayedCancelMessageBox::
+	waitmessage
+	special DoPicboxCancel
+	releaseall
+	end
+
 EventScript_ReleaseEnd:: @ 81A7AE0
 	release
 	end
@@ -1223,10 +1229,11 @@ EventScript_DoInGameTrade:: @ 81A8CD9
 	faceplayer
 	return
 
+@pretty sure not using vseeeker can remove? plan to just rematch battle
 EventScript_VsSeekerChargingDone:: @ 81A8CED
-	special VsSeekerFreezeObjectsAfterChargeComplete
-	waitstate
-	special VsSeekerResetObjectMovementAfterChargeComplete
+	@special VsSeekerFreezeObjectsAfterChargeComplete
+	@waitstate
+	@special VsSeekerResetObjectMovementAfterChargeComplete
 	releaseall
 	end
 
