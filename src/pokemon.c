@@ -3276,7 +3276,6 @@ void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //important can use thi
     } // that function should be very useful for setting up wild move learning.
 }
 
-//this appears to be the problem, 
 u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try and match cfru lvl 0 evo learn move function
 {
     u32 retVal = 0;
@@ -3303,7 +3302,7 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try 
         }
         sLearningMoveTableID++;
     }
-    return retVal;
+    return retVal; //but anyway lvl 0 move learn works now
 
        /* while (gLevelUpLearnsets[species][sLearningMoveTableID].level != level)// && (gLevelUpLearnsets[species][sLearningMoveTableID].level != 0) //not this or not that
         {
@@ -6771,8 +6770,8 @@ u16 SpeciesToPokedexNum(u16 species)
 {
     species = SpeciesToNationalPokedexNum(species);
 
-    if (!IsNationalPokedexEnabled() && species > 151)
-        return 0xFFFF;
+    /*if (!IsNationalPokedexEnabled() && species > 151)
+        return 0xFFFF;*/  //quick fix to ensure no mon has ??? in sum screen for starters
     return species;
 }
 
