@@ -66,6 +66,15 @@
 * . attempt setup sMonSpriteAnchorCoords x y & placement of mon sprite on pokedex screen w constants
 * based on height and mon elevation will put exact arrays here shortly 
 * -do this after pokedex port
+
+learned moves post evolution isn't propoerly showing up in summary sreen
+even though I learn them its showing up blank,
+
+the moves are in the code as learned as if I learn enough to go over 
+4 it will generate add move script  its just not recognized by summaryscreen
+
+ok and looks like learning a move (or just the weird issues with cocoon)
+cause straight up game break
 * 
 * save systems and graphics for later, do smaller updates first
 * file constant renames will prob have to come last as it would affect everything

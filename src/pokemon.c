@@ -3290,24 +3290,38 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try 
     if (firstMove)
     {
         sLearningMoveTableID = 0;
+    }
+    while(gLevelUpLearnsets[species][sLearningMoveTableID].move != LEVEL_UP_END)
+    {
+        u16 moveLevel;
+        moveLevel = (gLevelUpLearnsets[species][sLearningMoveTableID].level);
+        while (moveLevel == 0 || moveLevel == level) //this is bad practice its say while while is true?
+        {
+            gMoveToLearn = (gLevelUpLearnsets[species][sLearningMoveTableID].move);
+            sLearningMoveTableID++;
+            return GiveMoveToMon(mon, gMoveToLearn);
+        }
+        sLearningMoveTableID++;
+    }
+    return retVal;
 
-        while (gLevelUpLearnsets[species][sLearningMoveTableID].level != level)// && (gLevelUpLearnsets[species][sLearningMoveTableID].level != 0) //not this or not that
+       /* while (gLevelUpLearnsets[species][sLearningMoveTableID].level != level)// && (gLevelUpLearnsets[species][sLearningMoveTableID].level != 0) //not this or not that
         {
             sLearningMoveTableID++;
             if (gLevelUpLearnsets[species][sLearningMoveTableID].move == LEVEL_UP_END) //may need change from.move to .level
             //|| (gLevelUpLearnsets[species][sLearningMoveTableID].move == 0))  //nvm first struct value is .move so should be correct
                 return 0; //pretty sure means to skip move learn
         }
-    }//need test lvl 0 evo move learn
+    //need test lvl 0 evo move learn
 
     if ((gLevelUpLearnsets[species][sLearningMoveTableID].level == level) || (gLevelUpLearnsets[species][sLearningMoveTableID].level == 0))
     {
         gMoveToLearn = (gLevelUpLearnsets[species][sLearningMoveTableID].move); //something here
         sLearningMoveTableID++;
         retVal = GiveMoveToMon(mon, gMoveToLearn);
-    }
+    } 
 
-    return retVal;
+    return retVal;*/
 }//changed it, what I did it works now, still need retest lvl 0  move learn
 
 void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move)
