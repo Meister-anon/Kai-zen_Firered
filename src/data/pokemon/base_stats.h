@@ -349,6 +349,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_BUG,
         .eggGroup2 = EGG_GROUP_BUG,
         .abilities = {ABILITY_MARVEL_SCALE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_STAMINA, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },//Lunos explained hidden ability is saved even if mid evo doesn't have  a hidden ability final evo will go back to hidden ability slot
