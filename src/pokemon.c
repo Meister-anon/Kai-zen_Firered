@@ -3264,8 +3264,8 @@ void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //important can use thi
 
         moveLevel = (gLevelUpLearnsets[species][i].level);
 
-        if (moveLevel == 0)
-            continue; //ok this line means after evo move learning code changes are in, still need test if works
+        //if (moveLevel == 0) actually I think this means skip the moves if they are lvl 0, so its only for player learn, don't need that
+         //   continue; //ok this line means after evo move learning code changes are in, still need test if works
 
         if (moveLevel > level) // prevents learnign moves above level
             break;
