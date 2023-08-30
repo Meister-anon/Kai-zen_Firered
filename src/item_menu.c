@@ -494,11 +494,11 @@ static bool8 LoadBagMenuGraphics(void)
         ShowBagOrBeginWin0OpenTask();
         gMain.state++;
         break;
-    case 19:
-        if (gBagMenuState.location == ITEMMENULOCATION_ITEMPC)
+    case 19: //why did I need to remove this? oh because its just for hellp context and THEN the fade
+        /*if (gBagMenuState.location == ITEMMENULOCATION_ITEMPC)
             SetHelpContext(HELPCONTEXT_PLAYERS_PC_ITEMS);
         else
-            SetHelpContext(HELPCONTEXT_BAG);
+            SetHelpContext(HELPCONTEXT_BAG);*/
         gPaletteFade.bufferTransferDisabled = FALSE;
         gMain.state++;
         break;
