@@ -1337,10 +1337,10 @@ static void PrintStringTMCaseOnWindow3(void)
 
 static void DrawMoveInfoUIMarkers(void)
 {
-    BlitMoveInfoIcon(4, 19, 0, 0);
-    BlitMoveInfoIcon(4, 20, 0, 12);
-    BlitMoveInfoIcon(4, 21, 0, 24);
-    BlitMoveInfoIcon(4, 22, 0, 36);
+    BlitMoveInfoIcon(4, MENU_INFO_ICON_TYPE, 0, 0);
+    BlitMoveInfoIcon(4, MENU_INFO_ICON_POWER, 0, 12);
+    BlitMoveInfoIcon(4, MENU_INFO_ICON_ACCURACY, 0, 24);
+    BlitMoveInfoIcon(4, MENU_INFO_ICON_PP, 0, 36);
     CopyWindowToVram(4, COPYWIN_GFX);
 }
 

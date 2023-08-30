@@ -792,5 +792,5 @@ void ListMenuLoadStdPalAt(u8 palOffset, u8 palId)
 
 void BlitMoveInfoIcon(u8 windowId, u8 iconId, u16 x, u16 y)
 {
-    BlitBitmapRectToWindow(windowId, gFireRedMenuElements_Gfx + sMoveMenuInfoIcons[iconId].offset * 32, 0, 0, 128, 128, x, y, sMoveMenuInfoIcons[iconId].width, sMoveMenuInfoIcons[iconId].height);
+    BlitBitmapRectToWindow(windowId, &gFireRedMenuElements_Gfx[sMoveMenuInfoIcons[iconId].offset * TILE_SIZE_4BPP], 0, 0, 128, 256, x, y, sMoveMenuInfoIcons[iconId].width, sMoveMenuInfoIcons[iconId].height);
 }
