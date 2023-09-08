@@ -812,13 +812,13 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(MELMETAL, gMonShinyPalette_Melmetal),
     SPECIES_SHINY_PAL(GROOKEY, gMonShinyPalette_Grookey),
     SPECIES_SHINY_PAL(THWACKEY, gMonShinyPalette_Thwackey),
-    SPECIES_SHINY_PAL(RILLABOOM, gMonShinyPalette_DoubleQuestionMark/*gMonShinyPalette_Rillaboom*/),
+    SPECIES_SHINY_PAL(RILLABOOM, gMonShinyPalette_Rillaboom),
     SPECIES_SHINY_PAL(SCORBUNNY, gMonShinyPalette_Scorbunny),
     SPECIES_SHINY_PAL(RABOOT, gMonShinyPalette_Raboot),
     SPECIES_SHINY_PAL(CINDERACE, gMonShinyPalette_Cinderace),
     SPECIES_SHINY_PAL(SOBBLE, gMonShinyPalette_Sobble),
     SPECIES_SHINY_PAL(DRIZZILE, gMonShinyPalette_Drizzile),
-    SPECIES_SHINY_PAL(INTELEON, gMonShinyPalette_DoubleQuestionMark/*gMonShinyPalette_Inteleon*/),
+    SPECIES_SHINY_PAL(INTELEON, gMonShinyPalette_Inteleon),
     SPECIES_SHINY_PAL(SKWOVET, gMonShinyPalette_Skwovet),
     SPECIES_SHINY_PAL(GREEDENT, gMonShinyPalette_Greedent),
     SPECIES_SHINY_PAL(ROOKIDEE, gMonShinyPalette_Rookidee),
@@ -894,7 +894,7 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(KUBFU, gMonShinyPalette_Kubfu),
     SPECIES_SHINY_PAL(URSHIFU, gMonShinyPalette_Urshifu),
     SPECIES_SHINY_PAL(ZARUDE, gMonShinyPalette_Zarude),
-    SPECIES_SHINY_PAL(REGIELEKI, gMonShinyPalette_DoubleQuestionMark/*gMonShinyPalette_Regieleki*/),
+    SPECIES_SHINY_PAL(REGIELEKI, gMonShinyPalette_Regieleki),
     SPECIES_SHINY_PAL(REGIDRAGO, gMonShinyPalette_Regidrago),
     SPECIES_SHINY_PAL(GLASTRIER, gMonShinyPalette_Glastrier),
     SPECIES_SHINY_PAL(SPECTRIER, gMonShinyPalette_Spectrier),
@@ -990,6 +990,23 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(DARMANITAN_GALARIAN, gMonShinyPalette_DarmanitanGalarian),
     SPECIES_SHINY_PAL(YAMASK_GALARIAN, gMonShinyPalette_YamaskGalarian),
     SPECIES_SHINY_PAL(STUNFISK_GALARIAN, gMonShinyPalette_StunfiskGalarian),
+
+    SPECIES_SHINY_PAL(GROWLITHE_HISUIAN, gMonShinyPalette_GrowlitheHisuian),
+    SPECIES_SHINY_PAL(ARCANINE_HISUIAN, gMonShinyPalette_ArcanineHisuian),
+    SPECIES_SHINY_PAL(VOLTORB_HISUIAN, gMonShinyPalette_VoltorbHisuian),
+    SPECIES_SHINY_PAL(ELECTRODE_HISUIAN, gMonShinyPalette_ElectrodeHisuian),
+    SPECIES_SHINY_PAL(TYPHLOSION_HISUIAN, gMonShinyPalette_TyphlosionHisuian),
+    SPECIES_SHINY_PAL(QWILFISH_HISUIAN, gMonShinyPalette_QwilfishHisuian),
+    SPECIES_SHINY_PAL(SNEASEL_HISUIAN, gMonShinyPalette_SneaselHisuian),
+    SPECIES_SHINY_PAL(SAMUROTT_HISUIAN, gMonShinyPalette_SamurottHisuian),
+    SPECIES_SHINY_PAL(LILLIGANT_HISUIAN, gMonShinyPalette_LilligantHisuian),
+    SPECIES_SHINY_PAL(ZORUA_HISUIAN, gMonShinyPalette_ZoruaHisuian),
+    SPECIES_SHINY_PAL(ZOROARK_HISUIAN, gMonShinyPalette_ZoroarkHisuian),
+    SPECIES_SHINY_PAL(BRAVIARY_HISUIAN, gMonShinyPalette_BraviaryHisuian),
+    SPECIES_SHINY_PAL(SLIGGOO_HISUIAN, gMonShinyPalette_SliggooHisuian),
+    SPECIES_SHINY_PAL(GOODRA_HISUIAN, gMonShinyPalette_GoodraHisuian),
+    SPECIES_SHINY_PAL(AVALUGG_HISUIAN, gMonShinyPalette_AvaluggHisuian),
+    SPECIES_SHINY_PAL(DECIDUEYE_HISUIAN, gMonShinyPalette_DecidueyeHisuian),
 
     SPECIES_SHINY_PAL(PIKACHU_COSPLAY, gMonShinyPalette_PikachuCosplay),
     SPECIES_SHINY_PAL(PIKACHU_ROCK_STAR, gMonShinyPalette_PikachuRockStar),
@@ -1267,7 +1284,7 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
 
     SPECIES_SHINY_PAL(ZAMAZENTA_CROWNED_SHIELD, gMonShinyPalette_ZamazentaCrownedShield),
 
-    SPECIES_SHINY_PAL(ETERNATUS_ETERNAMAX, gMonShinyPalette_Eternatus/*Eternamax*/),
+    SPECIES_SHINY_PAL(ETERNATUS_ETERNAMAX, gMonShinyPalette_EternatusEternamax),
 
     SPECIES_SHINY_PAL(URSHIFU_RAPID_STRIKE_STYLE, gMonShinyPalette_UrshifuRapidStrikeStyle),
 
@@ -1281,7 +1298,7 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
 
 //think I'll only include gender variations  that are actually distinct enough to be a different mon like meosic & unfezant & pyroar
 //actually this struct isn't even referenced anywhere yet, so its prob better for me to just make them all distinct species
-//like indeedee & meowstic are already done
+//like indeedee & meowstic are already done vsonic
 const struct CompressedSpritePalette gMonShinyPaletteTableFemale[] =
 {
     SPECIES_SHINY_PAL(EEVEE, gMonShinyPalette_Eevee),

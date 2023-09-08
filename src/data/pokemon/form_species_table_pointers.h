@@ -234,6 +234,28 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_DARMANITAN_GALARIAN] = sDarmanitanFormSpeciesIdTable,
     [SPECIES_YAMASK_GALARIAN] = sYamaskFormSpeciesIdTable,
     [SPECIES_STUNFISK_GALARIAN] = sStunfiskFormSpeciesIdTable,
+
+    //Hisuian Forms
+    [SPECIES_GROWLITHE_HISUIAN] = sGrowlitheFormSpeciesIdTable,
+    [SPECIES_ARCANINE_HISUIAN] = sArcanineFormSpeciesIdTable,
+    [SPECIES_VOLTORB_HISUIAN] = sVoltorbFormSpeciesIdTable,
+    [SPECIES_ELECTRODE_HISUIAN] = sElectrodeFormSpeciesIdTable,
+    [SPECIES_TYPHLOSION_HISUIAN] = sTyphlosionFormSpeciesIdTable,
+    [SPECIES_QWILFISH_HISUIAN] = sQwilfishFormSpeciesIdTable,
+    [SPECIES_SNEASEL_HISUIAN] = sSneaselFormSpeciesIdTable,
+
+    [SPECIES_SAMUROTT_HISUIAN] = sSamurottFormSpeciesIdTable,
+    [SPECIES_LILLIGANT_HISUIAN] = sLilligantFormSpeciesIdTable,
+    [SPECIES_ZORUA_HISUIAN] = sZoruaFormSpeciesIdTable,
+    [SPECIES_ZOROARK_HISUIAN] = sZoroarkFormSpeciesIdTable,
+    [SPECIES_BRAVIARY_HISUIAN] = sBraviaryFormSpeciesIdTable,
+
+    [SPECIES_SLIGGOO_HISUIAN] = sSliggooFormSpeciesIdTable,
+    [SPECIES_GOODRA_HISUIAN] = sGoodraFormSpeciesIdTable,
+    [SPECIES_AVALUGG_HISUIAN] = sAvaluggFormSpeciesIdTable,
+
+    [SPECIES_DECIDUEYE_HISUIAN] = sDecidueyeFormSpeciesIdTable,
+
     // Misc Forms
     // Cosplay Pikachu
     [SPECIES_PIKACHU_COSPLAY] = sPikachuFormSpeciesIdTable,

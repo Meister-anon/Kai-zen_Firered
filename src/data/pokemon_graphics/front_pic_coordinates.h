@@ -22,10 +22,10 @@ const struct MonCoords gMonFrontPicCoords[] =
     //if the y value for mon in the same evolution tree for example is only different by 1 or 2 values, can safely 
     //bring together into 1 value   with some exceptions for mon with unique floating or unique shaped/direction facing sprites
 
-    //larger mon have higher y value, I guess placed higher, with their larger size in mind
-    //while smaller mon have lower y, placing them lower
+    //larger mon have lower y value, I guess placed lower, with their larger size in mind
+    //while smaller mon have larger y, placing them higher I believe
 
-    //Legendaris are usually largest at size 0x88, w a y value between 0-2 can make all  0x1
+    //Legendaris are usually largest at size 0x88, with a y value between 0-2 can make all  0x1
     //final evos and other large mon around size, 0x77 - 0x88 with y values between 2-6 usually //can consilidate to  0x4
 
     //mid evos and averaage size mon usually between size 0x50-0x65 and have a y value around 0x9 - 0x10    //can consolidate to 0xa
@@ -4984,6 +4984,27 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x65,
         .y_offset = 14,
     },
+    // Hisuian Forms
+    [SPECIES_GROWLITHE_HISUIAN]            = { .size = 0x77, .y_offset =  6 },
+    [SPECIES_ARCANINE_HISUIAN]             = { .size = 0x85, .y_offset =  2 },
+    [SPECIES_VOLTORB_HISUIAN]              = { .size = 0x65, .y_offset =  0 },
+    [SPECIES_ELECTRODE_HISUIAN]            = { .size = 0x77, .y_offset =  0 },
+    [SPECIES_TYPHLOSION_HISUIAN]           = { .size = 0x77, .y_offset =  0 },
+    [SPECIES_QWILFISH_HISUIAN]             = { .size = 0x55, .y_offset =  8 },
+    [SPECIES_SNEASEL_HISUIAN]              = { .size = 0x65, .y_offset =  7 },
+
+    [SPECIES_SAMUROTT_HISUIAN]             = { .size = 0x85, .y_offset =  0 },
+    [SPECIES_LILLIGANT_HISUIAN]            = { .size = 0x65, .y_offset =  1 },
+    [SPECIES_ZORUA_HISUIAN]                = { .size = 0x55, .y_offset =  2 },
+    [SPECIES_ZOROARK_HISUIAN]              = { .size = 0x77, .y_offset =  1 },
+    [SPECIES_BRAVIARY_HISUIAN]             = { .size = 0x85, .y_offset =  0 },
+
+    [SPECIES_SLIGGOO_HISUIAN]              = { .size = 0x55, .y_offset =  6 },
+    [SPECIES_GOODRA_HISUIAN]               = { .size = 0x78, .y_offset =  0 },
+    [SPECIES_AVALUGG_HISUIAN]              = { .size = 0x85, .y_offset =  5 },
+
+    [SPECIES_DECIDUEYE_HISUIAN]            = { .size = 0x77, .y_offset =  0 },
+
     // Misc Forms
     // Cosplay Pikachu
     [SPECIES_PIKACHU_COSPLAY] =
@@ -5611,7 +5632,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 0,
     },
-    // Flabébé
+    // Flabï¿½bï¿½
     [SPECIES_FLABEBE_YELLOW_FLOWER] =
     {
         .size = 0x45,
