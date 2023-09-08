@@ -26,14 +26,14 @@
 #include "constants/songs.h"
 #include "constants/maps.h"
 
-struct HallofFameMon
+struct HallofFameMon //changes this allows expanded species to show correctly in hall of fame
 {
     u32 tid;
     u32 personality;
     u16 species :11; // since Species_egg with expand mon is 1260, and bit 9 is 2^9-1 aka 511, had to increase to bit 11.
     u16 lvl :7;
-    u8 nick[10];
-};
+    u8 nick[10]; //because its bitwise which is 0 or 1, i.e the base of the number system, raised to the power of the numbers place - 1.
+}; // that's what I should do when I see a number next to a colon
 
 struct HallofFameTeam
 {
@@ -317,7 +317,7 @@ static bool8 InitHallOfFameScreen(void)
     switch (gMain.state)
     {
     case 0:
-        gHelpSystemEnabled = FALSE;
+       // gHelpSystemEnabled = FALSE;
         SetVBlankCallback(NULL);
         ClearVramOamPltt_LoadHofPal();
         sHofGfxPtr = AllocZeroed(sizeof(struct HofGfx));
@@ -429,7 +429,7 @@ static void Task_Hof_InitTeamSaveData(u8 taskId)
     }
     else
     {
-        if (Save_LoadGameData(SAVE_HALL_OF_FAME) != TRUE)
+        if (LoadGameSave(SAVE_HALL_OF_FAME) != TRUE)
             memset(gDecompressionBuffer, 0, 0x2000);
     }
 
@@ -523,7 +523,7 @@ static void Task_Hof_PlayMonCryAndPrintInfo(u8 taskId)
     if (gSprites[gTasks[taskId].data[5 + currMonId]].data[0])
     {
         if (currMon->species != SPECIES_EGG)
-            PlayCry1(currMon->species, 0);
+            PlayCry_Normal(currMon->species, 0);
         HallOfFame_PrintMonInfo(currMon, 0, 14);
         gTasks[taskId].data[3] = 120;
         gTasks[taskId].func = Task_Hof_TryDisplayAnotherMon;
@@ -759,7 +759,7 @@ static void Task_HofPC_CopySaveData(u8 taskId)
     struct HallofFameTeam* savedTeams;
 
     CreateTopBarWindowLoadPalette(0, 30, 0, 0x0C, 0x226);
-    if (Save_LoadGameData(SAVE_HALL_OF_FAME) != SAVE_STATUS_OK)
+    if (LoadGameSave(SAVE_HALL_OF_FAME) != SAVE_STATUS_OK)
     {
         gTasks[taskId].func = Task_HofPC_PrintDataIsCorrupted;
     }
@@ -874,7 +874,7 @@ static void Task_HofPC_PrintMonInfo(u8 taskId)
     if (currMon->species != SPECIES_EGG)
     {
         StopCryAndClearCrySongs();
-        PlayCry1(currMon->species, 0);
+        PlayCry_Normal(currMon->species, 0);
     }
     HallOfFame_PrintMonInfo(currMon, 0, 14);
 

@@ -110,6 +110,7 @@ SECTIONS {
         src/palette.o(.text);
         src/sound.o(.text);
         src/battle_anim.o(.text);
+        src/battle_anim_new.o(.text);
         src/battle_anim_mons.o(.text);
         src/task.o(.text);
         src/reshow_battle_screen.o(.text);
@@ -315,6 +316,8 @@ SECTIONS {
         src/berry_powder.o(.text);
         src/minigame_countdown.o(.text);
         src/berry_fix_program.o(.text);
+        src/rtc.o(.text);
+        src/clock.o(.text);
     } =0
 
     script_data :
@@ -344,6 +347,7 @@ SECTIONS {
         src/librfu_rfu.o(.text);
         src/librfu_sio32id.o(.text);
         src/isagbprn.o(.text);
+        src/siirtc.o(.text);
         src/libagbsyscall.o(.text);
         *libgcc.a:_call_via_rX.o(.text);
         *libgcc.a:_divdi3.o(.text);
@@ -448,6 +452,7 @@ SECTIONS {
         src/palette.o(.rodata);
         src/sound.o(.rodata);
         src/battle_anim.o(.rodata);
+        src/battle_anim_new.o(.rodata);
         src/battle_anim_mons.o(.rodata);
         data/map_events.o(.rodata);
         src/battle_anim_status_effects.o(.rodata);
@@ -613,10 +618,11 @@ SECTIONS {
         src/cereader_tool.o(.rodata);
         src/renewable_hidden_items.o(.rodata);
         src/trainer_tower.o(.rodata);
+        src/trainer_tower_sets.o(.rodata);
         src/minigame_countdown.o(.rodata);
         src/berry_fix_program.o(.rodata);
         src/keyboard_text.o(.rodata);
-        data/data_8479668.o(.rodata);
+        src/rtc.o(.rodata);
 
         /* These should not be moved to C files */
         src/mystery_event_msg.o(.rodata);
@@ -986,6 +992,7 @@ SECTIONS {
         src/agb_flash_le.o(.rodata);
         src/librfu_rfu.o(.rodata);
         src/librfu_sio32id.o(.rodata);
+        src/siirtc.o(.rodata);
         src/isagbprn.o(.rodata);
         *libgcc.a:_divdi3.o(.rodata);
         *libgcc.a:_udivdi3.o(.rodata);

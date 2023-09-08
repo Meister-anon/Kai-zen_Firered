@@ -1,33 +1,79 @@
 
-gProgrammableWaveData_84A31EC:: @ 84A31EC
-	.incbin "sound/programmable_wave_samples/84A31EC.pcm"
+ProgrammableWaveData_1::
+	.incbin "sound/programmable_wave_samples/01.pcm"
 
-gProgrammableWaveData_84A31FC:: @ 84A31FC
-	.incbin "sound/programmable_wave_samples/84A31FC.pcm"
+ProgrammableWaveData_2::
+	.incbin "sound/programmable_wave_samples/02.pcm"
 
-gProgrammableWaveData_84A320C:: @ 84A320C
-	.incbin "sound/programmable_wave_samples/84A320C.pcm"
+ProgrammableWaveData_3::
+	.incbin "sound/programmable_wave_samples/03.pcm"
 
-gProgrammableWaveData_84A321C:: @ 84A321C
-	.incbin "sound/programmable_wave_samples/84A321C.pcm"
+ProgrammableWaveData_4::
+	.incbin "sound/programmable_wave_samples/04.pcm"
 
-gProgrammableWaveData_84A322C:: @ 84A322C
-	.incbin "sound/programmable_wave_samples/84A322C.pcm"
+ProgrammableWaveData_5::
+	.incbin "sound/programmable_wave_samples/05.pcm"
 
-gProgrammableWaveData_84A323C:: @ 84A323C
-	.incbin "sound/programmable_wave_samples/84A323C.pcm"
+ProgrammableWaveData_6::
+	.incbin "sound/programmable_wave_samples/06.pcm"
 
-gProgrammableWaveData_84A324C:: @ 84A324C
-	.incbin "sound/programmable_wave_samples/84A324C.pcm"
+ProgrammableWaveData_7::
+	.incbin "sound/programmable_wave_samples/07.pcm"
 
-gProgrammableWaveData_84A325C:: @ 84A325C
-	.incbin "sound/programmable_wave_samples/84A325C.pcm"
+ProgrammableWaveData_8::
+	.incbin "sound/programmable_wave_samples/08.pcm"
 
-gProgrammableWaveData_84A326C:: @ 84A326C
-	.incbin "sound/programmable_wave_samples/84A326C.pcm"
+ProgrammableWaveData_9::
+	.incbin "sound/programmable_wave_samples/09.pcm"
 
-gProgrammableWaveData_84A327C:: @ 84A327C
-	.incbin "sound/programmable_wave_samples/84A327C.pcm"
+ProgrammableWaveData_10::
+	.incbin "sound/programmable_wave_samples/10.pcm"
 
-gProgrammableWaveData_84A328C:: @ 84A328C
-	.incbin "sound/programmable_wave_samples/84A328C.pcm"
+ProgrammableWaveData_11::
+	.incbin "sound/programmable_wave_samples/11.pcm"
+
+ProgrammableWaveData_12::
+	.incbin "sound/programmable_wave_samples/12.pcm"
+
+ProgrammableWaveData_13::
+	.incbin "sound/programmable_wave_samples/13.pcm"
+
+ProgrammableWaveData_14::
+	.incbin "sound/programmable_wave_samples/14.pcm"
+
+ProgrammableWaveData_15::
+	.incbin "sound/programmable_wave_samples/15.pcm"
+
+ProgrammableWaveData_16::
+	.incbin "sound/programmable_wave_samples/16.pcm"
+
+@ Unused
+ProgrammableWaveData_17::
+	.incbin "sound/programmable_wave_samples/17.pcm"
+
+@ Unused
+ProgrammableWaveData_18::
+	.incbin "sound/programmable_wave_samples/18.pcm"
+
+@ Unused
+ProgrammableWaveData_19::
+	.incbin "sound/programmable_wave_samples/19.pcm"
+
+@ Unused
+ProgrammableWaveData_20::
+	.incbin "sound/programmable_wave_samples/20.pcm"
+
+ProgrammableWaveData_21::
+	.incbin "sound/programmable_wave_samples/21.pcm"
+
+ProgrammableWaveData_22::
+	.incbin "sound/programmable_wave_samples/22.pcm"
+
+ProgrammableWaveData_23::
+	.incbin "sound/programmable_wave_samples/23.pcm"
+
+ProgrammableWaveData_24::
+	.incbin "sound/programmable_wave_samples/24.pcm"
+
+ProgrammableWaveData_25::
+	.incbin "sound/programmable_wave_samples/25.pcm"

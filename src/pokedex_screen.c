@@ -1715,7 +1715,7 @@ static void sub_8103AC8(u8 taskId)
             CopyBgTilemapBufferToVram(2);
             CopyBgTilemapBufferToVram(1);
             CopyBgTilemapBufferToVram(0);
-            PlayCry2(gUnknown_203ACF0->field_5A, 0, 125, 10);
+            PlayCry_NormalNoDucking(gUnknown_203ACF0->field_5A, 0, 125, 10);
             gUnknown_203ACF0->field_02[0] = 0;
             gUnknown_203ACF0->field_01 = 17;
         }
@@ -1888,7 +1888,7 @@ static void sub_81042EC(u8 taskId)
         CopyBgTilemapBufferToVram(2);
         CopyBgTilemapBufferToVram(1);
         CopyBgTilemapBufferToVram(0);
-        PlayCry2(gUnknown_203ACF0->field_5A, 0, 125, 10);
+        PlayCry_NormalNoDucking(gUnknown_203ACF0->field_5A, 0, 125, 10);
         gUnknown_203ACF0->field_01 = 4;
         break;
     case 4:
@@ -3211,10 +3211,10 @@ u8 sub_8106AF8(u16 a0)
 void sub_8106B34(void)
 {
     if (JOY_NEW(START_BUTTON))
-        PlayCry2(gUnknown_203ACF0->field_5A, 0, 125, 10);
+        PlayCry_NormalNoDucking(gUnknown_203ACF0->field_5A, 0, 125, 10);
 }
 
-u8 sub_8106B60(u16 species)
+u8 DexScreen_RegisterMonToPokedex(u16 species)
 {
     sub_8104AB0(species, 2, 1);
     sub_8104AB0(species, 3, 1);
@@ -3329,7 +3329,7 @@ static void sub_8106BE8(u8 taskId)
             CopyBgTilemapBufferToVram(1);
             CopyBgTilemapBufferToVram(0);
 
-            PlayCry2(gUnknown_203ACF0->field_5A, 0, 125, 10);
+            PlayCry_NormalNoDucking(gUnknown_203ACF0->field_5A, 0, 125, 10);
             gUnknown_203ACF0->field_02[0] = 0;
             gUnknown_203ACF0->field_01 = 11;
         }

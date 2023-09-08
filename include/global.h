@@ -200,13 +200,13 @@ struct UCoords32
     u32 y;
 };
 
-struct Time
+struct Time //want month seasons potentialy add here
 {
     /*0x00*/ s16 days;
     /*0x02*/ s8 hours;
     /*0x03*/ s8 minutes;
     /*0x04*/ s8 seconds;
-};
+};//month logic already included/in port in rtc file
 
 struct Pokedex
 {
@@ -589,13 +589,13 @@ struct DaycareMon
     u32 steps;
 };
 
-#define DAYCARE_MON_COUNT   2
+#define DAYCARE_MON_COUNT   2 //plan to raise, 
 
 struct DayCare
 {
     struct DaycareMon mons[DAYCARE_MON_COUNT];
     u16 offspringPersonality;
-    u8 stepCounter;
+    u8 stepCounter; //if I add more mon would require a separate step counter for each pairing...or not since it alraedy works based on individual mon?
 };
 
 struct RecordMixingDayCareMail
@@ -894,7 +894,7 @@ struct SaveBlock1
     /*0x3C98*/ struct DaycareMon route5DayCareMon;
     /*0x3D24*/ u8 filler3D24[0x10];
     /*0x3D34*/ u32 towerChallengeId;
-    /*0x3D38*/ struct TrainerTower trainerTower[NUM_TOWER_CHALLENGE_TYPES];
+     /*0x3D38*/ struct TrainerTower trainerTower[NUM_TOWER_CHALLENGE_TYPES];  //not battle tower its trainer tower, look into if usbale if not remove  vsonic
 }; // size: 0x3D68
 
 struct MapPosition

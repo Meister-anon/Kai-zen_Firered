@@ -51,10 +51,16 @@ gBattlescriptsForSafariActions::
 	.4byte BattleScript_ThrowBait
 	.4byte BattleScript_LeftoverWallyPrepToThrow
 
+BattleScript_SkipTurn::
+	printstring STRINGID_PKMNWAITSFORTARGET
+	waitmessage 0x40
+	end2
+
 BattleScript_ThrowBall::
 	jumpifbattletype BATTLE_TYPE_OLD_MAN_TUTORIAL, BattleScript_OldManThrowBall
 	jumpifbattletype BATTLE_TYPE_POKEDUDE, BattleScript_PokedudeThrowBall
 	printstring STRINGID_PLAYERUSEDITEM
+	mondamaged		@ put here to try and set playermondamaged before catching
 	handleballthrow
 
 BattleScript_OldManThrowBall::
@@ -75,7 +81,7 @@ BattleScript_SuccessBallThrow::
 	incrementgamestat GAME_STAT_POKEMON_CAPTURES
 BattleScript_SafariNoIncGameStat::
 	printstring STRINGID_GOTCHAPKMNCAUGHT
-	trysetcaughtmondexflags BattleScript_CaughtPokemonSkipNewDex
+	trysetcaughtmondexflags BattleScript_CaughtPokemonSkipNewDex  @ also couldnt repeat scripts like this one
 	printstring STRINGID_PKMNDATAADDEDTODEX
 	waitstate
 	setbyte gBattleCommunication, 0
@@ -236,3 +242,40 @@ BattleScript_LeftoverWallyPrepToThrow::
 	printstring STRINGID_YOUTHROWABALLNOWRIGHT
 	waitmessage 64
 	end2
+
+BattleScript_NonGhost_BallDodge::
+	waitmessage 64
+	printstring STRINGID_YOUMISSEDPKMN
+	waitmessage 46 @ first part needs to be long to match the dodge anim, but this should make it smoother
+	finishaction
+
+BattleScript_WildMonBallBlock::
+	waitmessage 32	@ adjusted feels much more dynamic now
+	printstring STRINGID_POKEMONBLOCKEDBALL
+	waitmessage 64
+	finishaction
+
+
+
+@how did I set this up I feel I made it effectively only work when taking damage? 
+@did I just set it to not work if first turn?
+@found it, used playMonwasdamaged in handleballthrow bs command
+BattleScript_ExpOnCatch:: @ can skip safari stusff, but need copy everything till caughtpokemondone
+	incrementgamestat GAME_STAT_POKEMON_CAPTURES
+	printstring STRINGID_GOTCHAPKMNCAUGHT
+	setbyte sGIVEEXP_STATE, 0x0			@ want to set only on damage, but making script is difficult -done
+	getexp BS_TARGET
+	trysetcaughtmondexflags BattleScript_CaughtPokemonSkipNewDex2  @ also couldnt repeat scripts like this one so changed name
+	printstring STRINGID_PKMNDATAADDEDTODEX
+	waitstate
+	setbyte gBattleCommunication, 0
+	displaydexinfo
+BattleScript_CaughtPokemonSkipNewDex2::
+	printstring STRINGID_GIVENICKNAMECAPTURED
+	waitstate
+	setbyte gBattleCommunication, 0
+	trygivecaughtmonnick BattleScript_CaughtPokemonSkipNickname
+	givecaughtmon
+	printfromtable gCaughtMonStringIds
+	waitmessage 64
+	goto BattleScript_CaughtPokemonDone

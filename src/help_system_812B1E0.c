@@ -1874,7 +1874,7 @@ void SetHelpContextForMap(void)
 
 bool8 HelpSystem_UpdateHasntSeenIntro(void)
 {
-    return;
+    return 0;
  //   if (sSeenHelpSystemIntro == TRUE)
     //    return FALSE;
 
@@ -2018,7 +2018,7 @@ static void SetHelpSystemSubmenuItems(struct HelpSystemListMenu * helpListMenu, 
 
 static bool8 HelpSystem_ShouldShowBasicTerms(void)
 {
-    return;
+    return 0;
     if (FlagGet(FLAG_DEFEATED_BROCK) == TRUE)// && gHelpSystemState[1] == TOPIC_TERMS)
         return TRUE;
     return FALSE;
@@ -2262,7 +2262,7 @@ static bool8 HasGottenAtLeastOneHM(void)
 
 bool8 RunHelpMenuSubroutine(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
 {
-    return;
+    return 0;
     switch (helpListMenu->state)
     {
     case  8:
@@ -2394,7 +2394,7 @@ void HelpSystem_PrintTopicLabel(void)
 
 bool8 HelpMenuSubroutine_HelpItemPrint(struct HelpSystemListMenu * helpListMenu, struct ListMenuItem * listMenuItemsBuffer)
 {
-    return;
+    return 0;
     gHelpSystemState[0] = 2;
     sub_813BDA4(0);
     HelpSystem_FillPanel1();
@@ -2467,7 +2467,7 @@ static void PrintTextOnPanel2Row52RightAlign(const u8 * str)
 
 u8 sub_812BF88(void)
 {
-    return;// gHelpSystemState[0];
+    return 0;// gHelpSystemState[0];
 }
 
 static void ResetHelpSystemCursor(struct HelpSystemListMenu * helpListMenu)

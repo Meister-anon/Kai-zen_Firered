@@ -1147,7 +1147,7 @@ static void PlayAmbientCry(void)
         return;
     }
 
-    PlayCry2(sAmbientCrySpecies, pan, volume, 1);
+    PlayCry_NormalNoDucking(sAmbientCrySpecies, pan, volume, 1);
 }
 
 void UpdateAmbientCry(s16 *state, u16 *delayCounter)
@@ -2961,7 +2961,7 @@ static u16 KeyInterCB_WaitForPlayersToExit(u32 keyOrPlayerId)
         CheckRfuKeepAliveTimer();
     if (AreAllPlayersInTradingState(PLAYER_TRADING_STATE_EXITING_ROOM) == TRUE)
     {
-        return;
+        return 0;
       //ScriptContext1_SetupScript(CableClub_EventScript_DoLinkRoomExit);
         SetKeyInterceptCallback(KeyInterCB_SendNothing);
     }
@@ -3098,9 +3098,9 @@ static const u8 *TryInteractWithPlayer(struct TradeRoomPlayer *player)
         else if (sPlayerTradingStates[linkPlayerId] != PLAYER_TRADING_STATE_IDLE)
             return CableClub_EventScript_TooBusyToNotice;
         else if (!GetSeeingLinkPlayerCardMsg(linkPlayerId))
-            return;
+            return 0;
         else
-            return;
+            return 0;
     }
 
     return GetInteractedLinkPlayerScript(&otherPlayerPos, player->field_C, player->facing);

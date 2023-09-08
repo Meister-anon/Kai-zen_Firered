@@ -6,21 +6,22 @@
 #include "trig.h"
 #include "util.h"
 
-static void sub_80B7ACC(struct Sprite *sprite);
-static void AnimBite(struct Sprite *sprite);
-static void AnimTearDrop(struct Sprite *sprite);
-static void AnimClawSlash(struct Sprite *sprite);
+static void AnimUnusedBagSteal(struct Sprite *sprite);
+static void AnimUnusedBagSteal_Step(struct Sprite *sprite);
+//static void AnimBite(struct Sprite *sprite);
+//static void AnimTearDrop(struct Sprite *sprite);
+//static void AnimClawSlash(struct Sprite *sprite);
 static void AnimTask_AttackerFadeToInvisible_Step(u8 taskId);
 static void AnimTask_AttackerFadeFromInvisible_Step(u8 taskId);
-static void sub_80B7B48(struct Sprite *sprite);
-static void sub_80B7C10(struct Sprite *sprite);
-static void sub_80B7C50(struct Sprite *sprite);
-static void sub_80B7D88(struct Sprite *sprite);
-static void sub_80B856C(u8 priority);
-static void sub_80B7F58(u8 taskId);
-static void sub_80B843C(struct Task *task);
-static void sub_80B82C0(u8 taskId);
-static void sub_80B8920(u8 taskId);
+static void AnimBite_Step1(struct Sprite *sprite);
+static void AnimBite_Step2(struct Sprite *sprite);
+static void AnimTearDrop_Step(struct Sprite *sprite);
+static void AnimTask_MoveAttackerMementoShadow_Step(u8 taskId);
+static void AnimTask_MoveTargetMementoShadow_Step(u8 taskId);
+static void DoMementoShadowEffect(struct Task *task);
+static void SetAllBattlersSpritePriority(u8 priority);
+static void AnimPunishment(struct Sprite *sprite);
+static void AnimTask_MetallicShine_Step(u8 taskId);
 
 const struct SpriteTemplate gUnknown_83E7878 =
 {
@@ -30,7 +31,7 @@ const struct SpriteTemplate gUnknown_83E7878 =
     .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = sub_80B7ACC,
+    .callback = AnimUnusedBagSteal,
 };
 
 static const union AffineAnimCmd sAffineAnim_Bite_0[] =
@@ -129,7 +130,7 @@ static const union AffineAnimCmd sAffineAnim_TearDrop_1[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sAffineAnims_TearDrop[] =
+const union AffineAnimCmd *const gAffineAnims_TearDrop[] =
 {
     sAffineAnim_TearDrop_0,
     sAffineAnim_TearDrop_1,
@@ -142,7 +143,7 @@ const struct SpriteTemplate gTearDropSpriteTemplate =
     .oam = &gOamData_AffineNormal_ObjNormal_16x16,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
-    .affineAnims = sAffineAnims_TearDrop,
+    .affineAnims = gAffineAnims_TearDrop,
     .callback = AnimTearDrop,
 };
 
@@ -166,7 +167,7 @@ static const union AnimCmd sAnim_ClawSlash_1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_ClawSlash[] =
+const union AnimCmd *const gAnims_ClawSlash[] =
 {
     sAnim_ClawSlash_0,
     sAnim_ClawSlash_1,
@@ -177,11 +178,95 @@ const struct SpriteTemplate gClawSlashSpriteTemplate =
     .tileTag = ANIM_TAG_CLAW_SLASH,
     .paletteTag = ANIM_TAG_CLAW_SLASH,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnims_ClawSlash,
+    .anims = gAnims_ClawSlash,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimClawSlash,
 };
+
+const union AffineAnimCmd gPunishmentImpactAffineAnimCmd_1[] =
+{
+    AFFINEANIMCMD_FRAME(0x0, 0x0, 0, 8),
+    AFFINEANIMCMD_END,
+};
+
+const union AffineAnimCmd gPunishmentImpactAffineAnimCmd_2[] =
+{
+    AFFINEANIMCMD_FRAME(0xD8, 0xD8, 0, 0),
+    AFFINEANIMCMD_FRAME(0x0, 0x0, 0, 8),
+    AFFINEANIMCMD_END,
+};
+
+const union AffineAnimCmd gPunishmentImpactAffineAnimCmd_3[] =
+{
+    AFFINEANIMCMD_FRAME(0xB0, 0xB0, 0, 0),
+    AFFINEANIMCMD_FRAME(0x0, 0x0, 0, 8),
+    AFFINEANIMCMD_END,
+};
+
+const union AffineAnimCmd gPunishmentImpactAffineAnimCmd_4[] =
+{
+    AFFINEANIMCMD_FRAME(0x80, 0x80, 0, 0),
+    AFFINEANIMCMD_FRAME(0x0, 0x0, 0, 8),
+    AFFINEANIMCMD_END,
+};
+
+const union AffineAnimCmd *const gPunishmentImpactAffineAnim[] =
+{
+    gPunishmentImpactAffineAnimCmd_1,
+    gPunishmentImpactAffineAnimCmd_2,
+    gPunishmentImpactAffineAnimCmd_3,
+    gPunishmentImpactAffineAnimCmd_4,
+};
+
+const union AnimCmd gPunishmentAnimCmd[] =
+{
+    ANIMCMD_FRAME(0, 4),
+    ANIMCMD_FRAME(16, 4),
+    ANIMCMD_FRAME(32, 4),
+    ANIMCMD_FRAME(48, 4),
+    ANIMCMD_FRAME(64, 4),
+    ANIMCMD_END,
+};
+
+const union AnimCmd *const gPunishmentAnim[] =
+{
+    gPunishmentAnimCmd,
+};
+
+const struct SpriteTemplate gPunishmentSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_SCRATCH,
+    .paletteTag = ANIM_TAG_POISON_BUBBLE,
+    .oam = &gOamData_AffineNormal_ObjNormal_32x32,
+    .anims = gPunishmentAnim,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimSpriteOnMonPos,
+};
+
+const struct SpriteTemplate gPunishmentImpactSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_IMPACT,
+    .paletteTag = ANIM_TAG_POISON_BUBBLE,
+    .oam = &gOamData_AffineNormal_ObjNormal_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gPunishmentImpactAffineAnim,
+    .callback = AnimPunishment,
+};
+
+static void AnimPunishment(struct Sprite *sprite)
+{
+    StartSpriteAffineAnim(sprite, gBattleAnimArgs[3]);
+    if (gBattleAnimArgs[2] == 0)
+        InitSpritePosToAnimAttacker(sprite, 1);
+    else
+        InitSpritePosToAnimTarget(sprite, TRUE);
+
+    sprite->callback = RunStoredCallbackWhenAffineAnimEnds;
+    StoreSpriteCallbackInData6(sprite, DestroyAnimSprite);
+}
 
 void AnimTask_AttackerFadeToInvisible(u8 taskId)
 {
@@ -265,7 +350,7 @@ void AnimTask_InitAttackerFadeFromInvisible(u8 taskId)
     DestroyAnimVisualTask(taskId);
 }
 
-static void sub_80B7ACC(struct Sprite *sprite)
+static void AnimUnusedBagSteal(struct Sprite *sprite)
 {
     sprite->data[1] = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2);
     sprite->data[2] = GetBattlerSpriteCoord(gBattleAnimAttacker, BATTLER_COORD_X_2);
@@ -276,11 +361,11 @@ static void sub_80B7ACC(struct Sprite *sprite)
     sprite->data[3] = -sprite->data[1];
     sprite->data[4] = -sprite->data[2];
     sprite->data[6] = 0xFFD8;
-    sprite->callback = sub_80B7B48;
+    sprite->callback = AnimUnusedBagSteal_Step;
     sprite->callback(sprite);
 }
 
-static void sub_80B7B48(struct Sprite *sprite)
+static void AnimUnusedBagSteal_Step(struct Sprite *sprite)
 {
     sprite->data[3] += sprite->data[1];
     sprite->data[4] += sprite->data[2];
@@ -306,7 +391,7 @@ static void sub_80B7B48(struct Sprite *sprite)
         DestroyAnimSprite(sprite);
 }
 
-static void AnimBite(struct Sprite *sprite)
+void AnimBite(struct Sprite *sprite)
 {
     sprite->pos1.x += gBattleAnimArgs[0];
     sprite->pos1.y += gBattleAnimArgs[1];
@@ -314,20 +399,20 @@ static void AnimBite(struct Sprite *sprite)
     sprite->data[0] = gBattleAnimArgs[3];
     sprite->data[1] = gBattleAnimArgs[4];
     sprite->data[2] = gBattleAnimArgs[5];
-    sprite->callback = sub_80B7C10;
+    sprite->callback = AnimBite_Step1;
 }
 
-static void sub_80B7C10(struct Sprite *sprite)
+static void AnimBite_Step1(struct Sprite *sprite)
 {
     sprite->data[4] += sprite->data[0];
     sprite->data[5] += sprite->data[1];
     sprite->pos2.x = sprite->data[4] >> 8;
     sprite->pos2.y = sprite->data[5] >> 8;
     if (++sprite->data[3] == sprite->data[2])
-        sprite->callback = sub_80B7C50;
+        sprite->callback = AnimBite_Step2;
 }
 
-static void sub_80B7C50(struct Sprite *sprite)
+static void AnimBite_Step2(struct Sprite *sprite)
 {
     sprite->data[4] -= sprite->data[0];
     sprite->data[5] -= sprite->data[1];
@@ -337,7 +422,7 @@ static void sub_80B7C50(struct Sprite *sprite)
         DestroySpriteAndMatrix(sprite);
 }
 
-static void AnimTearDrop(struct Sprite *sprite)
+void AnimTearDrop(struct Sprite *sprite)
 {
     u8 battler;
     s8 xOffset;
@@ -376,10 +461,10 @@ static void AnimTearDrop(struct Sprite *sprite)
     sprite->data[4] = sprite->pos1.y + 12;
     sprite->data[5] = -12;
     InitAnimArcTranslation(sprite);
-    sprite->callback = sub_80B7D88;
+    sprite->callback = AnimTearDrop_Step;
 }
 
-static void sub_80B7D88(struct Sprite *sprite)
+static void AnimTearDrop_Step(struct Sprite *sprite)
 {
     if (TranslateAnimHorizontalArc(sprite))
         DestroySpriteAndMatrix(sprite);
@@ -436,7 +521,7 @@ void AnimTask_MoveAttackerMementoShadow(u8 taskId)
     task->data[0] = 0;
     task->data[1] = 0;
     task->data[2] = 0;
-    sub_80B856C(3);
+    SetAllBattlersSpritePriority(3);
     for (i = 0; i < 112; ++i)
     {
         gScanlineEffectRegBuffers[0][i] = task->data[10];
@@ -448,10 +533,10 @@ void AnimTask_MoveAttackerMementoShadow(u8 taskId)
     gBattle_WIN0H = (task->data[14] << 8) | task->data[15];
     gBattle_WIN0V = 160;
 
-    task->func = sub_80B7F58;
+    task->func = AnimTask_MoveAttackerMementoShadow_Step;
 }
 
-static void sub_80B7F58(u8 taskId)
+static void AnimTask_MoveAttackerMementoShadow_Step(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
 
@@ -477,13 +562,13 @@ static void sub_80B7F58(u8 taskId)
         break;
     case 1:
         task->data[4] -= 8;
-        sub_80B843C(task);
+        DoMementoShadowEffect(task);
         if (task->data[4] < task->data[8])
             ++task->data[0];
         break;
     case 2:
         task->data[4] -= 8;
-        sub_80B843C(task);
+        DoMementoShadowEffect(task);
         task->data[14] += 4;
         task->data[15] -= 4;
         if (task->data[14] >= task->data[15])
@@ -549,7 +634,7 @@ void AnimTask_MoveTargetMementoShadow(u8 taskId)
             task->data[10] = gBattle_BG2_Y;
             FillPalette(0, 9 * 16, 32);
         }
-        sub_80B856C(3);
+        SetAllBattlersSpritePriority(3);
         ++task->data[0];
         break;
     case 2:
@@ -597,12 +682,12 @@ void AnimTask_MoveTargetMementoShadow(u8 taskId)
         task->data[1] = 0;
         task->data[2] = 0;
         SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(12, 8));
-        task->func = sub_80B82C0;
+        task->func = AnimTask_MoveTargetMementoShadow_Step;
         break;
     }
 }
 
-static void sub_80B82C0(u8 taskId)
+static void AnimTask_MoveTargetMementoShadow_Step(u8 taskId)
 {
     u8 pos;
     u16 i;
@@ -614,7 +699,7 @@ static void sub_80B82C0(u8 taskId)
         task->data[5] += 8;
         if (task->data[5] >= task->data[7])
             task->data[5] = task->data[7];
-        sub_80B843C(task);
+        DoMementoShadowEffect(task);
         if (task->data[5] == task->data[7])
             ++task->data[0];
         break;
@@ -632,7 +717,7 @@ static void sub_80B82C0(u8 taskId)
         task->data[4] += 8;
         if (task->data[4] >= task->data[6])
             task->data[4] = task->data[6];
-        sub_80B843C(task);
+        DoMementoShadowEffect(task);
         if (task->data[4] == task->data[6] && task->data[1])
         {
             task->data[1] = 0;
@@ -672,7 +757,7 @@ static void sub_80B82C0(u8 taskId)
     }
 }
 
-static void sub_80B843C(struct Task *task)
+static void DoMementoShadowEffect(struct Task *task)
 {
     s32 var0, var1, var4;
     s16 var2, i;
@@ -711,7 +796,7 @@ static void sub_80B843C(struct Task *task)
     }
 }
 
-static void sub_80B856C(u8 priority)
+static void SetAllBattlersSpritePriority(u8 priority)
 {
     u16 i;
 
@@ -738,6 +823,7 @@ void AnimTask_InitMementoShadow(u8 taskId)
     DestroyAnimVisualTask(taskId);
 }
 
+//equivalent to sub_8114470 in emerald
 void sub_80B8664(u8 taskId)
 {
     bool8 toBG2 = GetBattlerSpriteBGPriorityRank(gBattleAnimAttacker) ^ 1 ? TRUE : FALSE;
@@ -748,7 +834,7 @@ void sub_80B8664(u8 taskId)
     DestroyAnimVisualTask(taskId);
 }
 
-static void AnimClawSlash(struct Sprite *sprite)
+void AnimClawSlash(struct Sprite *sprite)
 {
     sprite->pos1.x += gBattleAnimArgs[0];
     sprite->pos1.y += gBattleAnimArgs[1];
@@ -763,7 +849,10 @@ static void AnimClawSlash(struct Sprite *sprite)
 // arg1: if true, use custom color
 // arg2: custom color
 // Custom color argument is used in MOVE_POISON_TAIL to make the mon turn purplish/pinkish as if became cloaked in poison.
-void AnimTask_MetallicShine(u8 taskId)
+void AnimTask_MetallicShine(u8 taskId) //think will do the same for ghost absorb,
+//will add logic to anim tasks for if target is ghost that will change the color of eth bubles 
+//using a custom color argument
+//can potentially use dif pallete tag? ANIM_TAG_SHADOW_BALL want to make it black vsonic
 {
     u16 species;
     u8 spriteId, newSpriteId;
@@ -799,7 +888,7 @@ void AnimTask_MetallicShine(u8 taskId)
     else
         species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gBattleAnimAttacker]], MON_DATA_SPECIES);
     spriteId = GetAnimBattlerSpriteId(ANIM_ATTACKER);
-    newSpriteId = sub_8076E34(gBattleAnimAttacker, spriteId, species);
+    newSpriteId = CreateInvisibleSpriteCopy(gBattleAnimAttacker, spriteId, species);
     GetBattleAnimBg1Data(&animBg);
     AnimLoadCompressedBgTilemap(animBg.bgId, gMetalShineTilemap);
     AnimLoadCompressedBgGfx(animBg.bgId, gMetalShineGfx, animBg.tilesOffset);
@@ -816,10 +905,10 @@ void AnimTask_MetallicShine(u8 taskId)
     gTasks[taskId].data[2] = gBattleAnimArgs[1];
     gTasks[taskId].data[3] = gBattleAnimArgs[2];
     gTasks[taskId].data[6] = priorityChanged;
-    gTasks[taskId].func = sub_80B8920;
+    gTasks[taskId].func = AnimTask_MetallicShine_Step;
 }
 
-static void sub_80B8920(u8 taskId)
+static void AnimTask_MetallicShine_Step(u8 taskId)
 {
     struct BattleAnimBgData animBg;
     u16 paletteNum;
@@ -913,8 +1002,8 @@ void AnimTask_SetGreyscaleOrOriginalPal(u8 taskId)
 void GetIsDoomDesireHitTurn(u8 taskId)
 {
     if (gAnimMoveTurn < 2)
-        gBattleAnimArgs[7] = 0;
+        gBattleAnimArgs[ARG_RET_ID] = FALSE;
     if (gAnimMoveTurn == 2)
-        gBattleAnimArgs[7] = 1;
+        gBattleAnimArgs[ARG_RET_ID] = TRUE;
     DestroyAnimVisualTask(taskId);
 }

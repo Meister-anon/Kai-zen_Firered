@@ -6,17 +6,17 @@
 static void AnimMegahornHorn(struct Sprite *sprite);
 static void AnimLeechLifeNeedle(struct Sprite *sprite);
 static void AnimTranslateWebThread(struct Sprite *sprite);
+static void AnimTranslateWebThread_Step(struct Sprite *sprite);
 static void AnimStringWrap(struct Sprite *sprite);
-static void AnimSpiderWeb(struct Sprite *sprite);
+static void AnimSpiderWeb_Step(struct Sprite *sprite);
+static void AnimSpiderWeb_End(struct Sprite *sprite);
+//void AnimSpiderWeb(struct Sprite *sprite); like this some for emerald are not static
 static void AnimTranslateStinger(struct Sprite *sprite);
-static void AnimMissileArc(struct Sprite *sprite);
+//static void AnimMissileArc(struct Sprite *sprite);
 static void AnimTailGlowOrb(struct Sprite *sprite);
-static void sub_80B41C0(struct Sprite *sprite);
-static void sub_80B4274(struct Sprite *sprite);
-static void sub_80B42E8(struct Sprite *sprite);
-static void sub_80B4344(struct Sprite *sprite);
-static void AnimMissileArcStep(struct Sprite *sprite);
-
+//static void AnimStringWrap_Step(struct Sprite *sprite);
+//static void AnimMissileArcStep(struct Sprite *sprite);
+//in that case are defined in battle_anim.h
 static const union AffineAnimCmd sAffineAnim_MegahornHorn_0[] =
 {
     AFFINEANIMCMD_FRAME(0x100, 0x100, 30, 0),
@@ -266,10 +266,10 @@ static void AnimTranslateWebThread(struct Sprite *sprite)
     }
     BattleAnim_InitLinearTranslationWithDuration(sprite);
     sprite->data[5] = gBattleAnimArgs[3];
-    sprite->callback = sub_80B41C0;
+    sprite->callback = AnimTranslateWebThread_Step;
 }
 
-static void sub_80B41C0(struct Sprite *sprite)
+static void AnimTranslateWebThread_Step(struct Sprite *sprite)
 {
     if (AnimTranslateLinear(sprite))
     {
@@ -290,10 +290,10 @@ static void AnimStringWrap(struct Sprite *sprite)
     sprite->pos1.y += gBattleAnimArgs[1];
     if (GetBattlerSide(gBattleAnimTarget) == B_SIDE_PLAYER)
         sprite->pos1.y += 8;
-    sprite->callback = sub_80B4274;
+    sprite->callback = AnimStringWrap_Step;
 }
 
-static void sub_80B4274(struct Sprite *sprite)
+void AnimStringWrap_Step(struct Sprite *sprite)
 {
     if (++sprite->data[0] == 3)
     {
@@ -306,15 +306,28 @@ static void sub_80B4274(struct Sprite *sprite)
     }
 }
 
-static void AnimSpiderWeb(struct Sprite *sprite)
+// arg0: x
+// arg1: y
+// arg2: targets both
+void AnimSpiderWeb(struct Sprite *sprite)
 {
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND);
     SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(16, 0));
+
+    if (gBattleAnimArgs[2])
+        SetAverageBattlerPositions(gBattleAnimTarget, FALSE, &sprite->pos1.x, &sprite->pos1.y);
+
+    if (GetBattlerSide(gBattleAnimAttacker) == B_SIDE_OPPONENT)
+        sprite->pos1.x -= gBattleAnimArgs[0];
+    else
+        sprite->pos1.x += gBattleAnimArgs[0];
+
+    sprite->pos1.y += gBattleAnimArgs[1];
     sprite->data[0] = 16;
-    sprite->callback = sub_80B42E8;
+    sprite->callback = AnimSpiderWeb_Step;
 }
 
-static void sub_80B42E8(struct Sprite *sprite)
+static void AnimSpiderWeb_Step(struct Sprite *sprite)
 {
     if (sprite->data[2] < 20)
     {
@@ -328,12 +341,12 @@ static void sub_80B42E8(struct Sprite *sprite)
         if (sprite->data[0] == 0)
         {
             sprite->invisible = TRUE;
-            sprite->callback = sub_80B4344;
+            sprite->callback = AnimSpiderWeb_End;
         }
     }
 }
 
-static void sub_80B4344(struct Sprite *sprite)
+static void AnimSpiderWeb_End(struct Sprite *sprite)
 {
     SetGpuReg(REG_OFFSET_BLDCNT, 0);
     SetGpuReg(REG_OFFSET_BLDALPHA, 0);
@@ -396,7 +409,7 @@ static void AnimTranslateStinger(struct Sprite *sprite)
 // arg 3: target y pixel offset
 // arg 4: duration
 // arg 5: wave amplitude
-static void AnimMissileArc(struct Sprite *sprite)
+void AnimMissileArc(struct Sprite *sprite)
 {
     InitSpritePosToAnimAttacker(sprite, 1);
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
@@ -406,11 +419,11 @@ static void AnimMissileArc(struct Sprite *sprite)
     sprite->data[4] = GetBattlerSpriteCoord(gBattleAnimTarget, 3) + gBattleAnimArgs[3];
     sprite->data[5] = gBattleAnimArgs[5];
     InitAnimArcTranslation(sprite);
-    sprite->callback = AnimMissileArcStep;
+    sprite->callback = AnimMissileArc_Step; //forgot to make function name match definition missed underscore
     sprite->invisible = TRUE;
 }
 
-static void AnimMissileArcStep(struct Sprite *sprite)
+void AnimMissileArc_Step(struct Sprite *sprite)
 {
     sprite->invisible = FALSE;
 

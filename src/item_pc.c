@@ -259,7 +259,7 @@ static void ItemPc_RunSetup(void)
     {
         if (ItemPc_DoGfxSetup() == TRUE)
             break;
-        if (MenuHelpers_LinkSomething() == TRUE)
+        if (MenuHelpers_IsLinkActive() == TRUE)
             break;
     }
 }

@@ -812,7 +812,7 @@
 #define MOVE_UP_ROOT 784
 #define MOVE_DIVE_BOMB 785
 #define MOVE_NETTLE_WHIP 786	//Will be grass move that can apply burn	//MOVE_NETTLE_WHIP	MOVE_BURNING_VINE    MOVE_NETTLE_WHIP
-#define MOVE_SONIC_BOOM 787	//new move
+#define MOVE_SONIC_BOOM 787	//new move  -animations for these are set below aren't
 #define MOVE_OVER_MAX_POWER 788	//PSYCHIC BURN OUT	
 #define MOVE_SHIMON 789	//FIGHTING BURN OUT	
 #define MOVE_FINAL_FLIGHT 790	//FLYING BURN OUT	
@@ -822,6 +822,9 @@
 #define MOVE_DOUBLE_SHOCK 794
 #define MOVE_POUNCE 795
 #define MOVE_CHEAP_SHOT 796 //low prio fighting uturn
+// Selective Gen 9 moves & additional custom moves
+#define MOVE_RAGE_FIST 797
+#define MOVE_SNOWBALL 798
 
 //#define MOVES_COUNT_GEN8 757
 
@@ -831,7 +834,7 @@
 // also need actual move data in battle_moves.h
 //* consolidated move name & move description files into move_info.h
 
-#define LAST_MOVE_INDEX     MOVE_CHEAP_SHOT
+#define LAST_MOVE_INDEX     MOVE_SNOWBALL
 
 #define MOVES_COUNT_GEN8 (LAST_MOVE_INDEX + 1) //changed so define auto updates
 

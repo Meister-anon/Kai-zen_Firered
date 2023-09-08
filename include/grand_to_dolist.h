@@ -1012,11 +1012,6 @@ beleive all effects to interupt are in battle_util.c & pokemon.c, if I block fly
 * 2.battles are broken, soon as rival battle starts game breaks - don't know if just rival battle 
 * 3.can't deposit into pc.  confirmed items can't check if mon as well
 * 
-* test rotom, gave custom dex entry based on legends dex - actually all I need to do is set rotom entry to starter.
-* //working on rotom buffs need give each form own learnset, figure out swap between
-* plan put seoondary type moves in learnset at pattern, check if learnset is from that type 2 then check the level of learnset
-* and replace with move at that level from other form /species
-*do similar thing for tms only problem is surf, but can just make it not learn surf as its a washing machine
 *
 *  THOUGHT attempt change item use, allow for using multiple of the same item at once.
 * from outside of battle. i.e use 5 oran berries,  to equal 1 super potion.
@@ -1220,6 +1215,23 @@ as well as the effect of increasing trap duration
 * 
 * fix acelgor sprite change lips
 * fix delibird learnset oh already done
+*
+*new plan buff present , make like tripel axel, make multi hit and boost power with each sucessive hit.
+* so it becomes a crap shot gamble, either do big damage or a heal and the damage has a chance to outweigh the heal if there is one
+* so its not a complete waste.  plan augment move damage by an amount each loop,
+*  potentially ensure the heal and damage boost for the heal is to a lesser degree
+*
+* researched base power of move was random, from 40-120... and it healed for 1/4th target max hp smh
+* no wonder its bad,  new thing base 120  guaranteed hit between 3-5 5 hit should be total 120  (24bp)
+* lower healing odds,  but each hit have chance to  roll either damage or heal on hit, divide base heal by 3, as its meant to be able to land multiple times
+* so each heal would do 1/12th targt max hp,  that way it'd take 3 heals to get back 1/4th max hp
+*hmm if I do it that way don't need to increase damage - think done need test
+*
+*make new move snowball,  variable dmg physical attk, use psywave effect, keep ice ball animation for now, idea throw ice/snow ball of varying size and power or something
+*will be physical ice version of psywave, potentially w chance to flinch
+*
+* note on advice from anthroyd give more mon fly, go by movie logic if it can float it can fly  just like in movie 2000 guy flew on his gengar
+*
 * Give crabominable a better front sprite, its just ugly 
 * -progress
 * takng inspiration from wendigo lore mixed with abominable snowman - lore actually works too 
@@ -2150,6 +2162,40 @@ goto CATCHING_LOGIC
 * if is_Crit (critmultiplier >1) or randPercent == 100, or >=95 play growl/cry.
 * -could get annoying but also a good qol perhaps don't use normal cry but a version of it
 * maybe shortend version of it/faster but also lower pitch so it sounds normal? 
+*
+*nother new idea preview damage?
+expansion has a  battle history component that saves moves and estimates ai dmg.
+
+and othe  jrpgs, have the mechanic of being able to see how much dmg a certain attack would do to the enemy health bar.
+and sometimes expected dmg you would take.
+
+so I had the idea if we could get that!
+we select a move and target and we can get the selected enemy health bar to flash with the amount of predicted dmg they would take
+either make it perfectly accurate (somehow), or make it based on low roll or max roll dmg.
+
+then on the defensive side you could  pick a known enemy move, and try to predict damage taken,
+maybe even pull up the player party screen (or something) to show the estimated dmg for your entire team for said move.
+
+that way pivot strats could be more intuitive, and you could make enemy ai more complex far as switching
+without it being too cheap since the player can lookup their move (assuming they used it before in that battle)
+so we also have some information, we can make use of.
+
+thought process behind not making the prediction perfect is to leave somehting up to high skill/high knowledge players
+and let them still have reason to run calcs, cuz people enjoy that.
+
+edit will make display the low roll dmg for player prediction switching, so calcing the high roll is still needed for full info
+I guess display max roll for the player dmg to the opponent?
+
+plan is have it as a toggle, press L or select in battle, for info mode to get predictions
+then press B or L while in info mode, to return to normal.
+ok so press L while target selecting will display dmg predictions on target so will need check target type for move, to tell what to show
+same for mon damage flicker thing
+
+then would need figure out how to pull up history for a selected target and then pick a move to run dgm calcs with,
+and have it show the entire party healthbar to show how much dmg said move would do against everyone.
+
+I could specifically save it for pivoting, like the trainer considering their party given what they know of the enemy. ??
+
 * 
 * potential idea need recharge gems with element stones instead of removing item, after gem is used up in battle,
 * add item to bag, that is a grey gem,  spent gem something,   late game wont need evo stones so this will be new use for them,
@@ -2718,6 +2764,21 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * a costume pikachu (not one of the hats)
 * //since changed to radicla red standard will need to update learnsets, consider radical red showdown for learnets (will need to make diff learnset for each rotom form)
 * -(also made base rotom have posesion rotom stats in base/lightbulb form)
+*
+* test rotom, gave custom dex entry based on legends dex - actually all I need to do is set rotom entry to starter.
+* //working on rotom buffs need give each form own learnset, figure out swap between
+* plan put seoondary type moves in learnset at pattern, check if learnset is from that type 2 then check the level of learnset
+* and replace with move at that level from other form /species
+*do similar thing for tms only problem is surf, but can just make it not learn surf as its a washing machine
+*do like my version of rotom forms, line up learnsets and off type moves and thmhm sets with off time moves, 
+*    //search moveset for move that matches learnsets replace with move from same spot in other form learnset  do same for tmhm so the replacement would be for the 
+*    //appropriate type
+*buff arena trap shadow tag, to lower enemy speed if they are trapped can do same for magnet pull and meanlook
+* use IsAbilityPreventingEscape != 0  along with ability in quetion, lower speed, will exclude the abilities that block the effect
+* think will just do simple stat drop, might exclude magnet pull?  arena trap & shado tag can be thought of as doing something to weaken the target explaining the slow
+*and a reason why it would last, passed switchout, i.e arena trap pop out of ground bite leg, to slow
+* can use IsRunningFromBattleImpossible != battle_run_success    actually nvm just gonna do for arena trap as the others don't make sense to last
+*
 * removed item1 item2 from base stat data to add back later when item expansion done
 * also gender based forms, I moved to new species etc. won't show up in pokedex as of yet.
 * only the male/base form is displayed need to setup logic, for pokedex to move between the forms
@@ -2734,6 +2795,16 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * 
 * to build had to define parts of mega implementation, did not add completely need to properly setup mega evolution etc.
 * includes sprit defines values in battle_interface adn graphic files --removed piece of mega kept defines as caused errors add later
+*
+*
+*rage buff,  gen 2 was continious move that boosted attack stage every time was hit.
+*gen 3 onward it was no longer continuous but required you to keep using rage, for the atk stat to boost when taking damgage
+*
+*my change, using rage sucessfully applies rage status, that persists when ever take damage atk stat will raise, regardless of if using rage again
+*so works more akin to focus energy
+*but that would remove reason to use move again, so my idea if have rage status, using move will increase atk stat before attacking without needing to take damage 
+*same as strength . with changes made I "think" I have just enouhg room to fit it into status 2?  nah status3 I have room in, not status2, would work just as well  
+* I think, depends on if yawn change is right or not
 */
 
 goto PRIORITY_EFFECTS	//battle_main.c all effects regarding priority changes go here.

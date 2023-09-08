@@ -97,7 +97,7 @@ const u8 gMoveDescription_Hypnosis[] = _("Hypnotic suggestion\nis used to make t
 const u8 gMoveDescription_Meditate[] = _("The user meditates\nto awaken its power\nand raise its\nATTACK stat.");
 const u8 gMoveDescription_Agility[] = _("The user relaxes\nand lightens its\nbody to sharply\nboost its SPEED.");
 const u8 gMoveDescription_QuickAttack[] = _("An almost invisibly\nfast attack that\nis certain to strike\nfirst.");
-const u8 gMoveDescription_Rage[] = _("An attack that\nbecomes stronger\neach time the user\nis hit in battle.");
+const u8 gMoveDescription_Rage[] = _("An attack that\nbecomes stronger\neach time the user\nis hit in battle.");//and when it is used, type matches that of user
 const u8 gMoveDescription_Teleport[] = _("Use it to flee from\nany wild POKéMON.\nAlso warps to the\nlast POKé CENTER.");
 const u8 gMoveDescription_NightShade[] = _("An attack with a\nmirage that inflicts\ndamage matching\nthe user's level.");
 const u8 gMoveDescription_Mimic[] = _("The user copies the\nmove last used by\nthe foe for the\nrest of the battle.");
@@ -1463,6 +1463,8 @@ const u8 gMoveDescription_PlasmaRailgun[] = _("");
 const u8 gMoveDescription_Boltbeam[] = _("");
 const u8 gMoveDescription_Pounce[] = _("");
 const u8 gMoveDescription_CheapShot[] = _("The user throws\nan unexpected\ndelayed punch\nand then retreats.");
+const u8 gMoveDescription_Snowball[] = _("The user throws\nan compact ball\nof snow and ice\nof varying size\nand power at\nthe target.");
+
 
     //Description can hold 5 line breaks (so 6 lines total) given current space post expansion!  at approx 20 chars per line// so 120 max
 
@@ -2244,6 +2246,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [MOVE_BACK_STAB] = gMoveDescription_BackStab,
     [MOVE_POUNCE] = gMoveDescription_Pounce,
     [MOVE_CHEAP_SHOT] = gMoveDescription_CheapShot,
+    [MOVE_SNOWBALL] = gMoveDescription_Snowball,
 };//last value can have comma
 
 
@@ -3025,6 +3028,7 @@ const u8 gLowerMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_DOUBLE_SHOCK] = _("Double Shock"),
     [MOVE_POUNCE] = _("Pounce"),
     [MOVE_CHEAP_SHOT] = _("Cheap Shot"),
+    [MOVE_SNOWBALL] =_("Snowball"),
 };//don't need remove comma from last value for this file, port of emerald
 
 //default move names 
@@ -3801,5 +3805,6 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("BACKSTAB"),
     _("DOUBLE SHOCK"),
     _("POUNCE"),
-    _("CHEAP SHOT")
+    _("CHEAP SHOT"),
+    _("SNOWBALL")
 };//remember to remove comma from last entry //longest name is 17 chars

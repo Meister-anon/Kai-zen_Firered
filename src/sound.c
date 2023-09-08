@@ -315,7 +315,7 @@ bool8 IsBGMStopped(void)
     return FALSE;
 }
 
-void PlayCry1(u16 species, s8 pan)
+void PlayCry_Normal(u16 species, s8 pan)
 {
     m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 85);
     PlayCryInternal(species, pan, CRY_VOLUME, 10, 0);
@@ -323,12 +323,12 @@ void PlayCry1(u16 species, s8 pan)
     RestoreBGMVolumeAfterPokemonCry();
 }
 
-void PlayCry2(u16 species, s8 pan, s8 volume, u8 priority)
+void PlayCry_NormalNoDucking(u16 species, s8 pan, s8 volume, u8 priority)
 {
     PlayCryInternal(species, pan, volume, priority, 0);
 }
 
-void PlayCry3(u16 species, s8 pan, u8 mode)
+void PlayCry_ByMode(u16 species, s8 pan, u8 mode)
 {
     if (mode == 1)
     {
@@ -343,7 +343,7 @@ void PlayCry3(u16 species, s8 pan, u8 mode)
     }
 }
 
-void PlayCry4(u16 species, s8 pan, u8 mode)
+void PlayCry_ReleaseDouble(u16 species, s8 pan, u8 mode)
 {
     if (mode == 1)
     {
@@ -372,7 +372,7 @@ void PlayCry7(u16 species, u8 mode) // exclusive to FR/LG
 
 void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
 {
-    bool32 v0;
+    bool32 reverse;
     u32 release;
     u32 length;
     u32 pitch;
@@ -382,75 +382,76 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
 
     species--;
     length = 140;
-    v0 = FALSE;
+    reverse = FALSE;
     release = 0;
     pitch = 15360;
     chorus = 0;
 
     switch (mode)
     {
-    case 0:
+    case CRY_MODE_NORMAL:
         break;
-    case 1:
+    case CRY_MODE_DOUBLES:
         length = 20;
         release = 225;
         break;
-    case 2:
+    case CRY_MODE_ENCOUNTER:
         release = 225;
         pitch = 15600;
         chorus = 20;
         volume = 90;
         break;
-    case 3:
+    case CRY_MODE_HIGH_PITCH:
         length = 50;
         release = 200;
         pitch = 15800;
         chorus = 20;
         volume = 90;
         break;
-    case 4:
+    case CRY_MODE_ECHO_START:
         length = 25;
-        v0 = TRUE;
+        reverse = TRUE;
         release = 100;
         pitch = 15600;
         chorus = 192;
         volume = 90;
         break;
-    case 5:
+    case CRY_MODE_FAINT:
         release = 200;
         pitch = 14440;
         break;
-    case 6: // _08072044
+    case CRY_MODE_ECHO_END: // _08072044
         release = 220;
         pitch = 15555;
         chorus = 192;
         volume = 90; // FR/LG changed this from 70 to 90
         break;
-    case 7:
+    case CRY_MODE_ROAR_1:
         length = 10;
         release = 100;
         pitch = 14848;
         break;
-    case 8:
+    case CRY_MODE_ROAR_2:
         length = 60;
         release = 225;
         pitch = 15616;
         break;
-    case 9:
+    case CRY_MODE_GROWL_1:
         length = 15;
-        v0 = TRUE;
+        reverse = TRUE;
         release = 125;
         pitch = 15200;
         break;
-    case 10:
+    case CRY_MODE_GROWL_2:
         length = 100;
         release = 225;
         pitch = 15200;
         break;
-    case 12:
+    case CRY_MODE_WEAK_DOUBLES:
         length = 20;
         release = 225;
-    case 11:
+        // fallthrough
+    case CRY_MODE_WEAK:
         pitch = 15000;
         break;
     }
@@ -464,6 +465,10 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
     SetPokemonCryChorus(chorus);
     SetPokemonCryPriority(priority);
 
+    //other logic is hard to line up, so will attempt to use the emerald expansion version and bypass all that
+    gMPlay_PokemonCry = SetPokemonCryTone(reverse ? &gCryTable2[species] : &gCryTable[species]);
+
+    /*
     // This is a fancy way to get a cry of a pokemon.
     // It creates 4 sets of 128 mini cry tables.
     // If you wish to expand pokemon, you need to
@@ -518,7 +523,11 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
         gMPlay_PokemonCry = SetPokemonCryTone(
             v0 ? &gCryTable2[(128 * 9) + index] : &gCryTable[(128 * 9) + index]);
         break;
-    }
+    case 10:
+        gMPlay_PokemonCry = SetPokemonCryTone(
+            v0 ? &gCryTable2[(128 * 10) + index] : &gCryTable[(128 * 10) + index]);
+        break;
+    }*/
 }
 
 bool8 IsCryFinished(void)

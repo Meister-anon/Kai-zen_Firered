@@ -1538,6 +1538,7 @@ const u16 sBulbasaurBall[] = {
     SPECIES_SNIVY,
     SPECIES_CHESPIN,
     SPECIES_ROWLET,
+    SPECIES_GROOKEY,
     SPECIES_AIPOM,
     SPECIES_PARAS,
     SPECIES_VULPIX_ALOLAN,
@@ -1552,7 +1553,7 @@ const u16 sBulbasaurBall[] = {
     SPECIES_TYNAMO,
     SPECIES_TOGEDEMARU
     //LIST_END
-};
+}; //this list matches the best the others need more work
 
 //should beat/resist fire, or be weak to/against grass
 const u16 sSquirtleBall[] = {
@@ -1563,6 +1564,7 @@ const u16 sSquirtleBall[] = {
     SPECIES_OSHAWOTT,
     SPECIES_FROAKIE,
     SPECIES_POPPLIO,
+    SPECIES_BINACLE,
     SPECIES_CORSOLA,
     SPECIES_BONSLY,
     SPECIES_EEVEE,
@@ -1571,9 +1573,9 @@ const u16 sSquirtleBall[] = {
     SPECIES_AZURILL,
     SPECIES_ROCKRUFF,
     SPECIES_SKITTY, //with ghost change skitty would be better in squirtle group
-    SPECIES_SANDSHREW,
+    SPECIES_SANDSHREW, //resist fire weak to grass, but electric in grass ball breaks list
     SPECIES_WOOPER,
-    SPECIES_MISDREAVUS,
+    SPECIES_ROGGENROLA, //works but I like SPECIES_GOLETT better? is more interesting/popular
     SPECIES_WAILMER,
     SPECIES_SPHEAL
     //LIST_END
@@ -1588,18 +1590,19 @@ const u16 sCharmanderBall[] = {
     SPECIES_TEPIG,
     SPECIES_FENNEKIN,
     SPECIES_LITTEN,
-    SPECIES_GLIGAR,
-    SPECIES_CASTFORM,
+    SPECIES_SCORBUNNY,
+    SPECIES_GLIGAR, //weak to water, poison beats grass
+    SPECIES_CASTFORM,   //easter egg mon, not really good for starter also seems changing weather too often lower odds of changing weather if weather exists
     SPECIES_EEVEE,
-    SPECIES_MURKROW,
+    SPECIES_MURKROW,    //beats grass no relation to water
     SPECIES_LICKITUNG,
     SPECIES_PONYTA,
-    SPECIES_TOGEPI,
+    SPECIES_LITWICK,
     SPECIES_TEDDIURSA,
-    SPECIES_SPINARAK,
+    SPECIES_FLETCHLING,
     SPECIES_MILTANK,
-    SPECIES_SABLEYE,
-    SPECIES_DODUO,
+    SPECIES_GROWLITHE_HISUIAN,    //didn't have graphics just added
+    SPECIES_DODUO,  //flyign so beats grass no affiliation to water
     SPECIES_HOUNDOUR
     //LIST_END
 };
@@ -1614,7 +1617,7 @@ const u16 sCharmanderBall[] = {
 //update the definitnion this value when adding to the array
 //should be number of values in array count from 1 not 0.
 const u16 sTypeExceptions[] = {
-    SPECIES_TOGEPI,
+    SPECIES_BINACLE,
     SPECIES_RALTS,
     SPECIES_AZURILL,
     SPECIES_MISDREAVUS,
@@ -1624,6 +1627,7 @@ const u16 sTypeExceptions[] = {
     SPECIES_LICKITUNG,
     SPECIES_HOUNDOUR,
     SPECIES_TYROGUE,
+    SPECIES_FLETCHLING,
     SPECIES_TEPIG
 };
 
@@ -1714,7 +1718,12 @@ void SetPlayerRandomStarterSpecies(void)
     VarSet(VAR_TEMP_7, sCharmanderBall[Random() % NELEMS(sCharmanderBall)]);
 }
 
-void SetRivalRandomStarterSpecies(void)
+//vsonic add further logic to this, long as player starter randomized first, can reroll this based on that to ensure type alignment matches advantage/disadvantage
+//inspired metronome/pickup logic, just need compare with respective player var i.e  bulb var == sbulbasaurball[value]  
+// && rival chrmanderball var  is scharmanderball[value]  reroll  this way I can preserve the relationship or at the least don't end up with an advantage to rival starter
+//for exmample if I as player roll value that gives me a tyrogue, rival is unable to save value for miltank, which would give me advantage.
+//instead if they landed on that they would reroll.  ...damn I miss vs studio. 
+void SetRivalRandomStarterSpecies(void) 
 {
     VarSet(VAR_TEMP_8, sCharmanderBall[Random() % NELEMS(sCharmanderBall)]);
     VarSet(VAR_TEMP_9, sBulbasaurBall[Random() % NELEMS(sBulbasaurBall)]);
@@ -1818,7 +1827,7 @@ void ChangeBoxPokemonNickname(void)
     species = GetBoxMonData(pokemon, MON_DATA_SPECIES, NULL);
     gender = GetBoxMonGender(pokemon);
     personality = GetBoxMonData(pokemon, MON_DATA_PERSONALITY, NULL);
-    DoNamingScreen(NAMING_SCREEN_NAME_RATER, gStringVar2, species, gender, personality, ChangeBoxPokemonNickname_CB);
+    DoNamingScreen(NAMING_SCREEN_NICKNAME, gStringVar2, species, gender, personality, ChangeBoxPokemonNickname_CB);
 }
 
 static void ChangeBoxPokemonNickname_CB(void)
@@ -1838,7 +1847,7 @@ void ChangePokemonNickname(void)
     species = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES, NULL);
     gender = GetMonGender(&gPlayerParty[gSpecialVar_0x8004]);
     personality = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_PERSONALITY, NULL);
-    DoNamingScreen(NAMING_SCREEN_NAME_RATER, gStringVar2, species, gender, personality, ChangePokemonNickname_CB);
+    DoNamingScreen(NAMING_SCREEN_NICKNAME, gStringVar2, species, gender, personality, ChangePokemonNickname_CB);
 }
 
 static void ChangePokemonNickname_CB(void)

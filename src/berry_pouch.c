@@ -461,7 +461,7 @@ static void CB2_InitBerryPouch(void)
             break;
         if (RunBerryPouchInit() == TRUE)
             break;
-        if (MenuHelpers_LinkSomething() == TRUE)
+        if (MenuHelpers_IsLinkActive() == TRUE)
             break;
     }
 }
@@ -498,7 +498,7 @@ static bool8 RunBerryPouchInit(void)
         gMain.state++;
         break;
     case 6:
-        if (!MenuHelpers_LinkSomething())
+        if (!MenuHelpers_IsLinkActive())
             ResetTasks();
         gMain.state++;
         break;
@@ -1004,7 +1004,7 @@ static void CreateNormalContextMenu(u8 taskId)
         sContextMenuOptions = sOptions_UseToss_Exit;
         sContextMenuNumOptions = 3;
     }
-    else if (MenuHelpers_LinkSomething() == TRUE || InUnionRoom() == TRUE)
+    else if (MenuHelpers_IsLinkActive() == TRUE || InUnionRoom() == TRUE)
     {
         if (!itemid_link_can_give_berry(gSpecialVar_ItemId))
         {

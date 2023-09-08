@@ -3437,7 +3437,7 @@ static void ReceiveUnionRoomActivityPacket(struct UnkStruct_URoom * uroom)
 
 static bool32 UnionRoom_HandleContactFromOtherPlayer(struct UnkStruct_URoom * uroom)
 {
-    return;
+    return 0;
     if (uroom->recvActivityRequest[0] != 0)
     {
         s32 var = GetChatLeaderActionRequestMessage(gStringVar4, gLinkPlayers[1].gender, &uroom->recvActivityRequest[0], uroom);
@@ -3785,7 +3785,7 @@ static u8 CreateTask_ListenForPartnersWithSerial7F7D(struct UnkStruct_Main4 * ma
 
 static bool32 UR_PrintFieldMessage(const u8 *src)
 {
-    return;
+    return 0;
     LoadStdWindowFrameGfx();
     DrawDialogueFrame(0, 1);
     StringExpandPlaceholders(gStringVar4, src);
@@ -3795,7 +3795,7 @@ static bool32 UR_PrintFieldMessage(const u8 *src)
 
 static bool32 UR_RunTextPrinters_CheckPrinter0Active(void)
 {
-    return;
+    return 0;
     if (!RunTextPrinters_CheckPrinter0Active())
     {
         return TRUE;

@@ -74,12 +74,12 @@ bool32 RunSaveFailedScreen(void)
     case 5:
         if (TryWipeDamagedSectors() == TRUE)
         {
-            gSaveSucceeded = SAVE_STATUS_OK;
+            gSaveAttemptStatus = SAVE_STATUS_OK;
             PrintTextOnSaveFailedScreen(gText_SaveFailedScreen_SaveCompleted);
         }
         else
         {
-            gSaveSucceeded = SAVE_STATUS_ERROR;
+            gSaveAttemptStatus  = SAVE_STATUS_ERROR;
             PrintTextOnSaveFailedScreen(gText_SaveFailedScreen_BackupMemoryDamaged);
         }
         sSaveFailedScreenState = 6;
@@ -155,7 +155,7 @@ static void PrintTextOnSaveFailedScreen(const u8 *str)
 {
     GenerateFontHalfRowLookupTable(TEXT_COLOR_DARK_GREY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GREY);
     CpuFill16(PIXEL_FILL(1) | (PIXEL_FILL(1) << 8), gDecompressionBuffer + 0x20, 0x2300);
-    HelpSystemRenderText(2, gDecompressionBuffer + 0x20, str, 2, 2, 28, 10);
+   // HelpSystemRenderText(2, gDecompressionBuffer + 0x20, str, 2, 2, 28, 10);
     RequestDmaCopyFromCharBuffer();
 }
 

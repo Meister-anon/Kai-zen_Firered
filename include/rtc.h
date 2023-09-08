@@ -1,5 +1,5 @@
-#ifndef GUARD_RTC_UTIL_H
-#define GUARD_RTC_UTIL_H
+#ifndef GUARD_RTC_H
+#define GUARD_RTC_H //just realized name for these was wrong entire time it said rtc_util_h  , I guess that was previous name of file
 
 #include "siirtc.h"
 
@@ -46,4 +46,4 @@ void CalcTimeDifference(struct Time *result, struct Time *t1, struct Time *t2);
 u32 RtcGetMinuteCount(void);
 u32 RtcGetLocalDayCount(void);
 
-#endif // GUARD_RTC_UTIL_H
+#endif // GUARD_RTC_H

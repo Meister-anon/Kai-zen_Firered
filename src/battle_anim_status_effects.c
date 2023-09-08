@@ -43,7 +43,7 @@ const struct SpriteTemplate gSpriteTemplate_83BF3F8 =
     .anims = sSpriteAnimTable_83BF3F4,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = sub_8076F58,
+    .callback = AnimTranslateLinearAndFlicker,
 };
 
 const struct SpriteTemplate gSpriteTemplate_83BF410 =
@@ -54,7 +54,7 @@ const struct SpriteTemplate gSpriteTemplate_83BF410 =
     .anims = sSpriteAnimTable_83BF3F4,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = sub_8076ED8,
+    .callback = AnimTranslateLinearAndFlicker_Flipped,
 };
 
 static const union AnimCmd sUnknown_83BF428[] =
@@ -76,7 +76,7 @@ const struct SpriteTemplate gWeatherBallUpSpriteTemplate =
     .anims = sSpriteAnimTable_83BF430,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = sub_807729C,
+    .callback = AnimWeatherBallUp,
 };
 
 const struct SpriteTemplate gWeatherBallNormalDownSpriteTemplate =
@@ -90,7 +90,7 @@ const struct SpriteTemplate gWeatherBallNormalDownSpriteTemplate =
     .callback = AnimWeatherBallDown,
 };
 
-static const union AnimCmd sUnknown_83BF464[] =
+static const union AnimCmd sAnim_SpinningSparkle[] =
 {
     ANIMCMD_FRAME(0, 3),
     ANIMCMD_FRAME(16, 3),
@@ -100,20 +100,20 @@ static const union AnimCmd sUnknown_83BF464[] =
     ANIMCMD_END
 };
 
-static const union AnimCmd *const sSpriteAnimTable_83BF47C[] =
+const union AnimCmd *const sAnims_SpinningSparkle[] =
 {
-    sUnknown_83BF464
+    sAnim_SpinningSparkle
 };
 
-const struct SpriteTemplate gSpriteTemplate_83BF480 =
+const struct SpriteTemplate gSpinningSparkleSpriteTemplate =
 {
     .tileTag = ANIM_TAG_SPARKLE_4,
     .paletteTag = ANIM_TAG_SPARKLE_4,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sSpriteAnimTable_83BF47C,
+    .anims = sAnims_SpinningSparkle,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = sub_8076FD0,
+    .callback = AnimSpinningSparkle,
 };
 
 const struct SpriteTemplate gSpriteTemplate_83BF498 =
@@ -124,7 +124,7 @@ const struct SpriteTemplate gSpriteTemplate_83BF498 =
     .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = sub_8076F58,
+    .callback = AnimTranslateLinearAndFlicker,
 };
 
 static const union AnimCmd sUnknown_83BF4B0[] =
@@ -160,7 +160,7 @@ const struct SpriteTemplate gSpriteTemplate_83BF4D4 =
     .anims = sSpriteAniimTable_83BF4C8,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = sub_8076F58,
+    .callback = AnimTranslateLinearAndFlicker,
 };
 
 static const union AnimCmd sUnknown_83BF4EC[] =
@@ -194,7 +194,7 @@ const struct SpriteTemplate gSpriteTemplate_83BF514 =
     .anims = sSpriteAnimTable_83BF4F4,
     .images = NULL,
     .affineAnims = sSpriteAffineAnimTable_83BF510,
-    .callback = sub_8076ED8,
+    .callback = AnimTranslateLinearAndFlicker_Flipped,
 };
 
 static const u8 sUnknown_83BF52C[] = _("TASK OVER\nタスクがオ-バ-しました");

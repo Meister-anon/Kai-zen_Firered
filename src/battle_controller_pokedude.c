@@ -1834,7 +1834,7 @@ static void PokedudeHandleFaintingCry(void)
     else
         mon = &gEnemyParty[gBattlerPartyIndexes[gActiveBattler]];
     species = GetMonData(mon, MON_DATA_SPECIES);
-    PlayCry1(species, 25);
+   PlayCry_Normal(species, 25);
     PokedudeBufferExecCompleted();
 }
 

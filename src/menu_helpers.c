@@ -112,7 +112,7 @@ bool8 CanWriteMailHere(u16 itemId)
         return FALSE;
 }
 
-bool8 MenuHelpers_LinkSomething(void)
+bool8 MenuHelpers_IsLinkActive(void)
 {
     if (IsUpdateLinkStateCBActive() == TRUE || gReceivedRemoteLinkPlayers == 1)
         return TRUE;
@@ -122,7 +122,7 @@ bool8 MenuHelpers_LinkSomething(void)
 
 bool8 MenuHelpers_CallLinkSomething(void)
 {
-    if (!MenuHelpers_LinkSomething())
+    if (!MenuHelpers_IsLinkActive())
         return FALSE;
     else
         return (u8)Overworld_LinkRecvQueueLengthMoreThan2();

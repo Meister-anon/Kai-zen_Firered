@@ -2843,11 +2843,11 @@ static void sub_80868C0(struct Sprite * sprite)
         sprite->callback = sub_8086904;
         if (sprite->data[6])
         {
-            PlayCry2(sprite->data[0], 0, 0x7d, 0xa);
+            PlayCry_NormalNoDucking(sprite->data[0], 0, 0x7d, 0xa);
         }
         else
         {
-            PlayCry1(sprite->data[0], 0);
+           PlayCry_Normal(sprite->data[0], 0);
         }
     }
 }

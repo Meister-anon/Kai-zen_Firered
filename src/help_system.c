@@ -46,7 +46,7 @@ u8 RunHelpSystemCallback(void)
 {
     
     s32 i;
-    return;
+    return 0;
     switch (sVideoState.state)
     {
     case 0:

@@ -212,10 +212,17 @@ static void SetUpStartMenu_NormalField(void)
     AppendToStartMenuItems(STARTMENU_SAVE);
     AppendToStartMenuItems(STARTMENU_OPTION);
     AppendToStartMenuItems(STARTMENU_EXIT); //prob need to use a switch case, to replace startmenu_exit with iv/ev
-    /*if (gSaveBlock2Ptr->optionsButtonMode != OPTIONS_BUTTON_MODE_HELP)
+    /*if (gSaveBlock2Ptr->optionsButtonMode != OPTIONS_BUTTON_MODE_HELP
+    && FLAG_SYS_POKEMON_GET == TRUE)
         AppendToStartMenuItems(STARTMENU_EV_IV);*/
-    /*if (FlagGet(FLAG_SYS_DEXNAV_GET) == TRUE)
-        AppendToStartMenuItems(STARTMENU_DEXNAV);*/
+    /*if (FlagGet(FLAG_SYS_DEXNAV_GET) == TRUE
+    && FlagGet(FLAG_SYS_POKEDEX_GET == TRUE)
+        AppendToStartMenuItems(STARTMENU_DEXNAV);*/ //Ok I remember I added this
+    //intending to add these menu items to the screen as L & R responses.
+    //important
+
+    //may not need ev iv, menu since I'm not using the diploma screen,
+    //instead will setup ev iv swap with l & r from summary screen.
 }
 
 static void SetUpStartMenu_SafariZone(void)
@@ -322,7 +329,7 @@ static s8 DoDrawStartMenu(void)
         break;
     case 5:
         sStartMenuCursorPos = Menu_InitCursor(GetStartMenuWindowId(), 2, 0, 0, 15, sNumStartMenuItems, sStartMenuCursorPos);
-        if (!MenuHelpers_LinkSomething() && InUnionRoom() != TRUE && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_HELP)
+        if (!MenuHelpers_IsLinkActive() && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_HELP)
         {
             DrawHelpMessageWindowWithText(sStartMenuDescPointers[sStartMenuOrder[sStartMenuCursorPos]]);
         }
@@ -376,8 +383,8 @@ void Task_StartMenuHandleInput(u8 taskId)
     switch (data[0])
     {
     case 0:
-        if (InUnionRoom() == TRUE)
-            var_800D_set_xB();
+        //if (InUnionRoom() == TRUE)
+          //  var_800D_set_xB();
         sStartMenuCallback = StartCB_HandleInput;
         data[0]++;
         break;
@@ -406,7 +413,7 @@ static bool8 StartCB_HandleInput(void)
     {
         PlaySE(SE_SELECT);
         sStartMenuCursorPos = Menu_MoveCursor(-1);
-        if (!MenuHelpers_LinkSomething() && InUnionRoom() != TRUE && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_HELP)
+        if (!MenuHelpers_IsLinkActive() && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_HELP)
         {
             PrintTextOnHelpMessageWindow(sStartMenuDescPointers[sStartMenuOrder[sStartMenuCursorPos]], 2);
         }
@@ -415,7 +422,7 @@ static bool8 StartCB_HandleInput(void)
     {
         PlaySE(SE_SELECT);
         sStartMenuCursorPos = Menu_MoveCursor(+1);
-        if (!MenuHelpers_LinkSomething() && InUnionRoom() != TRUE && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_HELP)
+        if (!MenuHelpers_IsLinkActive() && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_HELP)
         {
             PrintTextOnHelpMessageWindow(sStartMenuDescPointers[sStartMenuOrder[sStartMenuCursorPos]], 2);
         }
@@ -562,8 +569,8 @@ static bool8 StartMenuLinkPlayerCallback(void)
 
 static bool8 StartCB_Save1(void)
 {
-    BackupHelpContext();
-    SetHelpContext(HELPCONTEXT_SAVE);
+    //BackupHelpContext();
+    //SetHelpContext(HELPCONTEXT_SAVE);
     StartMenu_PrepareForSave();
     sStartMenuCallback = StartCB_Save2;
     return FALSE;
@@ -579,19 +586,19 @@ static bool8 StartCB_Save2(void)
         ClearDialogWindowAndFrameToTransparent(0, TRUE);
         ClearPlayerHeldMovementAndUnfreezeObjectEvents();
         UnlockPlayerFieldControls();
-        RestoreHelpContext();
+       // RestoreHelpContext();
         return TRUE;
     case SAVECB_RETURN_CANCEL:
         ClearDialogWindowAndFrameToTransparent(0, FALSE);
         DrawStartMenuInOneGo();
-        RestoreHelpContext();
+        //RestoreHelpContext();
         sStartMenuCallback = StartCB_HandleInput;
         break;
     case SAVECB_RETURN_ERROR:
         ClearDialogWindowAndFrameToTransparent(0, TRUE);
         ClearPlayerHeldMovementAndUnfreezeObjectEvents();
         UnlockPlayerFieldControls();
-        RestoreHelpContext();
+        //RestoreHelpContext();
         return TRUE;
     }
     return FALSE;
@@ -614,8 +621,8 @@ static u8 RunSaveDialogCB(void)
 
 void Field_AskSaveTheGame(void)
 {
-    BackupHelpContext();
-    SetHelpContext(HELPCONTEXT_SAVE);
+    //BackupHelpContext();
+    //SetHelpContext(HELPCONTEXT_SAVE);
     StartMenu_PrepareForSave();
     CreateTask(task50_save_game, 80);
 }
@@ -645,7 +652,7 @@ static void task50_save_game(u8 taskId)
     }
     DestroyTask(taskId);
     EnableBothScriptContexts();
-    RestoreHelpContext();
+    //RestoreHelpContext();
 }
 
 static void CloseSaveMessageWindow(void)
@@ -801,7 +808,7 @@ static u8 SaveDialogCB_DoSave(void)
 
 static u8 SaveDialogCB_PrintSaveResult(void)
 {
-    if (gSaveSucceeded == TRUE)
+    if (gSaveAttemptStatus  == TRUE)
         PrintSaveTextWithFollowupFunc(gText_PlayerSavedTheGame, SaveDialogCB_WaitPrintSuccessAndPlaySE);
     else
         PrintSaveTextWithFollowupFunc(gText_SaveError_PleaseExchangeBackupMemory, SaveDialogCB_WaitPrintErrorAndPlaySE);

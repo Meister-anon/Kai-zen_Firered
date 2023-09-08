@@ -12,6 +12,8 @@
 	.include "sprite.o"
 	.align 2
 	.include "link.o"
+	.align 2
+	.include "rtc.o"
 	.align 4
 	.include "battle_main.o"
 	.align 2

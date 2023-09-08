@@ -871,7 +871,7 @@ void c2_copyright_1(void)
     {
         ResetMenuAndMonGlobals();
         Save_ResetSaveCounters();
-        Save_LoadGameData(SAVE_NORMAL);
+        LoadGameSave(SAVE_NORMAL);
         if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_INVALID)
             Sav2_ClearSetDefault();
         SetPokemonCryStereo(gSaveBlock2Ptr->optionsSound);
@@ -2205,7 +2205,7 @@ static void SpriteCB_NidorinoRearsUp(struct Sprite * sprite)
         }
         break;
     case 1:
-        PlayCry3(SPECIES_NIDORINO, 0x3F, 1);
+        PlayCry_ByMode(SPECIES_NIDORINO, 0x3F, 1);
         sprite->data[1] = 0;
         sprite->data[0]++;
         break;

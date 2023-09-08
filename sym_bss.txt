@@ -52,6 +52,8 @@
 	.include "src/wireless_communication_status_screen.o"
 	.align 2
 	.include "src/dodrio_berry_picking.o"
+	.align 2
+	.include "src/rtc.o"
 	.align 3
 	.include "src/ereader_helpers.o"
 	.align 3
