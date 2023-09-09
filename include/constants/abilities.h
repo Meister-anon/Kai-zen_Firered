@@ -333,7 +333,8 @@
 #define ABILITY_IRON_WILL 310 //abillity for Azelf - mix of pressure where it can paralyze the attacker, but lower odds, as thye also have to break will pressure odds that lower dmg done
 #define ABILITY_LIVEWIRE 311
 #define ABILITY_GALEFORCE 312
+#define ABILITY_LETHAL_LEGS 313 //hitmonlee ability boost kicking moves
 
-#define ABILITIES_COUNT ABILITY_GALEFORCE + 1 //   ability count is last ability number + 1 since we have to count ability 0
+#define ABILITIES_COUNT ABILITY_LETHAL_LEGS + 1 //   ability count is last ability number + 1 since we have to count ability 0
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H

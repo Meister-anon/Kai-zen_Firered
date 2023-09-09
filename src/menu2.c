@@ -3,9 +3,24 @@
 #include "task.h"
 #include "wild_encounter.h"
 
-static void Task_SmoothBlendLayers(u8 taskId);
+static void Task_SmoothBlendLayers(u8 taskId);//front_pic_coordinates.h
 
-static const u8 sMonSpriteAnchorCoords[][5] = { //will add on here as I need to.
+//according to griffinR,  first 2 are x y for mon approx forehead
+//that's necessary for the tm/hm learn animation, so I really will need to 
+//upate these
+//see if there's a way I can extrapolate or simplify this rather than having to guess for xy
+//maybe a relation of mon height? and sprite elevation?
+//since there's a function for the elevation of sprites that float.
+//potentially attempt for pokededx as well, that way can use constants
+//making things much simpler  //vsonic
+ //will add on here as I need to.   //arguments foro array first value species 2nd value "a2" is 0-4
+ //tells which value in array to pick from, again 0 corresponds to x,  1 matches y.
+ //every value isn't used at once, instead it picks one?
+ //based on InitItemIconSpriteState function last 2 values are also some form of x y
+ //so 0, 1 are an xy pair, and 3, 4 are also an xy pair, used for slightly different things?
+ //thoughts these, all use front sprite, so may be able to reverse engineer a macro to replace these with,
+ //thinking something based
+static const u8 sMonSpriteAnchorCoords[][5] = {
     [SPECIES_BULBASAUR       - 1] = {0x16, 0x1b, 0x30, 0x16, 0x29},
     [SPECIES_IVYSAUR         - 1] = {0x14, 0x1b, 0x30, 0x15, 0x2a},
     [SPECIES_VENUSAUR        - 1] = {0x1b, 0x20, 0x20, 0x1b, 0x33},

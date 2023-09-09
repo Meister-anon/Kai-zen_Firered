@@ -1105,6 +1105,12 @@ static void LinkOpponentHandleDrawTrainerPic(void)
 {
     s16 xPos;
     u32 trainerPicId;
+    u8 trainercoordinate;
+
+    if (!IsDoubleBattle())
+        trainercoordinate = gTrainerFrontPicCoords[trainerPicId].size;
+    else
+        trainercoordinate = (gTrainerFrontPicCoords[trainerPicId].size + 2);
 
     if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
     {
@@ -1117,9 +1123,9 @@ static void LinkOpponentHandleDrawTrainerPic(void)
          || (gLinkPlayers[GetBattlerMultiplayerId(gActiveBattler)].version & 0xFF) == VERSION_EMERALD)
         {
             if (gLinkPlayers[GetBattlerMultiplayerId(gActiveBattler)].gender != MALE)
-                trainerPicId = gFacilityClassToPicIndex[FACILITY_CLASS_PKMN_TRAINER_5];
+                trainerPicId = gFacilityClassToPicIndex[FACILITY_CLASS_PKMN_TRAINER_MAY];
             else
-                trainerPicId = gFacilityClassToPicIndex[FACILITY_CLASS_PKMN_TRAINER_2];
+                trainerPicId = gFacilityClassToPicIndex[FACILITY_CLASS_PKMN_TRAINER_BRENDAN];
         }
         else if (gLinkPlayers[GetBattlerMultiplayerId(gActiveBattler)].gender != MALE)
         {
@@ -1142,9 +1148,9 @@ static void LinkOpponentHandleDrawTrainerPic(void)
               || (gLinkPlayers[GetMultiplayerId() ^ BIT_SIDE].version & 0xFF) == VERSION_EMERALD)
         {
             if (gLinkPlayers[GetMultiplayerId() ^ BIT_SIDE].gender != MALE)
-                trainerPicId = gFacilityClassToPicIndex[FACILITY_CLASS_PKMN_TRAINER_5];
+                trainerPicId = gFacilityClassToPicIndex[FACILITY_CLASS_PKMN_TRAINER_MAY];
             else
-                trainerPicId = gFacilityClassToPicIndex[FACILITY_CLASS_PKMN_TRAINER_2];
+                trainerPicId = gFacilityClassToPicIndex[FACILITY_CLASS_PKMN_TRAINER_BRENDAN];
         }
         else if (gLinkPlayers[GetMultiplayerId() ^ BIT_SIDE].gender != MALE)
         {
@@ -1159,7 +1165,7 @@ static void LinkOpponentHandleDrawTrainerPic(void)
     SetMultiuseSpriteTemplateToTrainerBack(trainerPicId, GetBattlerPosition(gActiveBattler));
     gBattlerSpriteIds[gActiveBattler] = CreateSprite(&gMultiuseSpriteTemplate,
                                                      xPos,
-                                                     (8 - gTrainerFrontPicCoords[trainerPicId].size) * 4 + 40,
+                                                     (8 - trainercoordinate) * 4 + 40,
                                                      GetBattlerSpriteSubpriority(gActiveBattler));
     gSprites[gBattlerSpriteIds[gActiveBattler]].pos2.x = -240;
     gSprites[gBattlerSpriteIds[gActiveBattler]].data[0] = 2;
@@ -1512,7 +1518,7 @@ static void LinkOpponentHandleFaintingCry(void)
 {
     u16 species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
 
-    PlayCry3(species, 25, 5);
+    PlayCry_ByMode(species, 25, 5);
     LinkOpponentBufferExecCompleted();
 }
 
@@ -1667,8 +1673,8 @@ static void LinkOpponentHandleCmd55(void)
     FadeOutMapMusic(5);
     BeginFastPaletteFade(3);
     LinkOpponentBufferExecCompleted();
-  //  gBattlerControllerFuncs[gActiveBattler] = SetBattleEndCallbacks;
-}
+    //gBattlerControllerFuncs[gActiveBattler] = SetBattleEndCallbacks;
+} //aparently I had alraedy removed this line
 
 static void LinkOpponentCmdEnd(void)
 {

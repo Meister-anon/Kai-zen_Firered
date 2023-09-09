@@ -722,8 +722,8 @@
 #define FLAG_TUTOR_THUNDER_WAVE                          0x2C1
 #define FLAG_TUTOR_ROCK_SLIDE                            0x2C2
 #define FLAG_TUTOR_EXPLOSION                             0x2C3
-#define FLAG_TUTOR_MEGA_PUNCH                            0x2C4
-#define FLAG_TUTOR_MEGA_KICK                             0x2C5
+#define FLAG_TUTOR_MEGA_PUNCH                            0x2C4 //may set these to a counter and clear routinely
+#define FLAG_TUTOR_MEGA_KICK                             0x2C5 //or maybe use vars with a counter?
 #define FLAG_TUTOR_DREAM_EATER                           0x2C6
 #define FLAG_TUTOR_SOFT_BOILED                           0x2C7
 #define FLAG_TUTOR_SUBSTITUTE                            0x2C8
@@ -1322,7 +1322,7 @@
 #define FLAG_SYS_BLACK_FLUTE_ACTIVE                                 (SYS_FLAGS + 0x4)
 #define FLAG_SYS_USE_STRENGTH                                       (SYS_FLAGS + 0x5)
 #define FLAG_SYS_FLASH_ACTIVE                                       (SYS_FLAGS + 0x6)
-#define FLAG_SYS_SPECIAL_WILD_BATTLE                                (SYS_FLAGS + 0x7)
+#define FLAG_SYS_SPECIAL_WILD_BATTLE                                (SYS_FLAGS + 0x7)	//Don't know what is, potentially use for double wilds?
 
 #define FLAG_0x808                                                  (SYS_FLAGS + 0x8)
 #define FLAG_0x809                                                  (SYS_FLAGS + 0x9)
@@ -1348,9 +1348,10 @@
 #define FLAG_0x81D                                                  (SYS_FLAGS + 0x1D)
 #define FLAG_0x81E                                                  (SYS_FLAGS + 0x1E)
 #define FLAG_0x81F                                                  (SYS_FLAGS + 0x1F)
+#define FLAG_INVERSE_BATTLE                                         (SYS_FLAGS + 0x20)	//ported not yet used
 
 // Permanent system flags
-#define PERMA_SYS_FLAGS_START                                       (FLAG_0x81F + 1)
+#define PERMA_SYS_FLAGS_START                                       (FLAG_INVERSE_BATTLE + 1)
 
 #define FLAG_BADGE01_GET                                            (SYS_FLAGS + 0x20)
 #define FLAG_BADGE02_GET                                            (SYS_FLAGS + 0x21)
@@ -1398,9 +1399,11 @@
 #define FLAG_SYS_UNLOCKED_TANOBY_RUINS                              (SYS_FLAGS + 0x49)
 #define FLAG_ENABLE_SHIP_NAVEL_ROCK                                 (SYS_FLAGS + 0x4A)
 #define FLAG_ENABLE_SHIP_BIRTH_ISLAND                               (SYS_FLAGS + 0x4B)
+#define	FLAG_SYS_CLOCK_SET											(SYS_FLAGS + 0x4C)	//76
+
 
 // World Map Flags
-#define FLAG_WORLD_MAP_PALLET_TOWN                                  (SYS_FLAGS + 0x90)
+#define FLAG_WORLD_MAP_PALLET_TOWN                                  (SYS_FLAGS + 0x90)	//144
 #define FLAG_WORLD_MAP_VIRIDIAN_CITY                                (SYS_FLAGS + 0x91)
 #define FLAG_WORLD_MAP_PEWTER_CITY                                  (SYS_FLAGS + 0x92)
 #define FLAG_WORLD_MAP_CERULEAN_CITY                                (SYS_FLAGS + 0x93)
@@ -1515,7 +1518,9 @@
 #define FLAG_0x8FF                                                  (SYS_FLAGS + 0xFF)
 // My New Flags
 #define FLAG_NEW_EXP_SHARE											(SYS_FLAGS + 0x100)
+//#define B_SMART_WILD_AI_FLAG											(SYS_FLAGS + 0x100)
 #define FLAGS_COUNT (FLAG_NEW_EXP_SHARE + 1)
+
 
 // SPECIAL FLAGS (unknown purpose)
 #define SPECIAL_FLAGS_START 0x4000

@@ -65,6 +65,14 @@ if it would otherwise be 0/NONE except in the case of ability.
 
 //consider comb over ability allocation to make sure correctly follows this logic
 
+//type idea changes
+//type 1 is main type,  type 2 is secondary type
+//but also concepts...flying tpye is thought of as the "bird" type which is accurate should be an adept flyer to be flying, not just have wings
+//to that end I think of normal type as the "animal/beast" type. for consistency want to try keeping to that for my type changes
+//for joat I want to add more normal types and I added it to hitmons, but that doesn't feel right now?
+//It would make sense for them to stay pure fighting as they have human shape, but that leaves hitmontop available I guess 
+//ok went through and adjusted pure fighting mon I felt matched normal archetype
+
 const struct BaseStats gBaseStats[] =
 {
     [SPECIES_NONE] = {0},
@@ -955,8 +963,8 @@ const struct BaseStats gBaseStats[] =
         .baseSpDefense = 95,
         .baseAttack = 102,
         .type1 = TYPE_POISON,
-        .type2 = TYPE_DARK,
-        .catchRate = 45,
+        .type2 = TYPE_DARK, //initially forgot logic, but traded electric immunity for psychic immunity, while poison covers the bug and fighting weakness, 
+        .catchRate = 45,    //as well as the other dark benefits I get.   //same thing for nidoqueen except she gets normal benefits
         .expYield = 227,
         //.evYield_Attack = 3,
         .genderRatio = MON_MALE,
@@ -1565,8 +1573,8 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 77,
         .baseSpAttack = 35,
         .baseSpDefense = 45,
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_FIGHTING,
+        .type1 = TYPE_FIGHTING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 190,
         .expYield = 61,
         //.evYield_Attack = 1,
@@ -1591,8 +1599,8 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 105,
         .baseSpAttack = 60,
         .baseSpDefense = 70,
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_FIGHTING,
+        .type1 = TYPE_FIGHTING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 75,
         .expYield = 159,
         //.evYield_Attack = 2,
@@ -2765,7 +2773,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_MINERAL,
         .eggGroup2 = EGG_GROUP_MINERAL,
-        .abilities = {ABILITY_SOUNDPROOF, ABILITY_STATIC},
+        .abilities = {ABILITY_SOUNDPROOF, ABILITY_STATIC}, //with low attack stat and defense potentially remove static for aftermath, but it also has steel typing now
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_STURDY, ABILITY_OVERCHARGE}, //: )
         // #endif
@@ -2918,7 +2926,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 87,
         .baseSpAttack = 35,
         .baseSpDefense = 110,
-        .type1 = TYPE_NORMAL,
+        .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
         .catchRate = 45,
         .expYield = 159,
@@ -2930,9 +2938,9 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_LIMBER, ABILITY_RECKLESS},
+            .abilities = {ABILITY_LIMBER, ABILITY_LETHAL_LEGS}, //replaced reckless 
             .abilityHidden = {ABILITY_UNBURDEN, ABILITY_MUSCLE_MAGIC},
-        .bodyColor = BODY_COLOR_BROWN,
+        .bodyColor = BODY_COLOR_BROWN, //give ability lethal legs strenghts kicking moves?
         .noFlip = FALSE,
     },
 
@@ -2944,7 +2952,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 76,
         .baseSpAttack = 35,
         .baseSpDefense = 123,
-        .type1 = TYPE_NORMAL,
+        .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
         .catchRate = 45,
         .expYield = 159,
@@ -4423,7 +4431,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_RUN_AWAY, ABILITY_KEEN_EYE},
+        .abilities = {ABILITY_ANALYTIC, ABILITY_KEEN_EYE},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_RATTLED},
         // #endif
@@ -6146,11 +6154,11 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_WATER_1,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_ANTICIPATION, ABILITY_HUSTLE},
-        .abilityHidden = {ABILITY_INSOMNIA, ABILITY_NONE},
+        .abilities = {ABILITY_UNNERVE, ABILITY_HUSTLE}, //ABILITY_ICE_BODY, ABILITY_UNNERVE
+        .abilityHidden = {ABILITY_MULTI_TASK, ABILITY_MAGIC_GUARD},  //ABILITY_HUSTLE, ABILITY_MAGIC_GUARD
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    }, //idk if I like these abilities
 
     [SPECIES_MANTINE] =
     {
@@ -6296,8 +6304,8 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 46,
         .baseSpAttack = 40,
         .baseSpDefense = 40,
-        .type1 = TYPE_GROUND,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_GROUND,
         .catchRate = 120,
         .expYield = 66,
         //.evYield_HP = 1,
@@ -6321,8 +6329,8 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 65,
         .baseSpAttack = 60,
         .baseSpDefense = 65,
-        .type1 = TYPE_GROUND,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_GROUND,
         .catchRate = 60,
         .expYield = 175,
         //.evYield_Attack = 1,
@@ -6426,7 +6434,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 35,
         .baseSpAttack = 35,
         .baseSpDefense = 35,
-        .type1 = TYPE_NORMAL,
+        .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
         .catchRate = 65,
         .expYield = 42,
@@ -6452,7 +6460,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 70,
         .baseSpAttack = 35,
         .baseSpDefense = 115,
-        .type1 = TYPE_NORMAL,
+        .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
         .catchRate = 45,
         .expYield = 159,
@@ -8048,7 +8056,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 20,
         .baseSpDefense = 30,
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 180,
         .expYield = 47,
         //.evYield_HP = 1,
@@ -8077,7 +8085,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 40,
         .baseSpDefense = 60,
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 200,
         .expYield = 166,
         //.evYield_HP = 2,
@@ -11554,7 +11562,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_AFTERMATH, ABILITY_UNBURDEN},
-            .abilityHidden = {ABILITY_FLARE_BOOST, ABILITY_NONE},
+            .abilityHidden = {ABILITY_FLARE_BOOST, ABILITY_NONE}, //still fixing aftermath, replace others with none
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -12128,7 +12136,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 35,
         .baseSpDefense = 40,
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 75,
         .expYield = 57,
         //.evYield_Attack = 1,
@@ -16756,7 +16764,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 55,
         .baseSpDefense = 50,
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 180,
         .expYield = 70,
         //.evYield_Attack = 1,
@@ -16782,7 +16790,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 95,
         .baseSpDefense = 60,
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 179,
         //.evYield_Attack = 2,
@@ -18211,7 +18219,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 46,
         .baseSpDefense = 48,
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 220,
         .expYield = 70,
         //.evYield_Attack = 1,
@@ -20464,7 +20472,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_OBLIVIOUS, ABILITY_QUEENLY_MAJESTY}, //oblivious is hidden ability as it can't be infatuated as its a seductress itself, new idea make femme fatale to replace
         .bodyColor = BODY_COLOR_BLACK, //give base oblivious affect and roll in gen 9 buff immunity to taunt and maybe flinch?  replace levitate
         .noFlip = FALSE, //Femme fatale ABILITY_FEMME_FATALE
-    },
+    },//vsonic
 
     [SPECIES_STUFFUL] =
     {
@@ -20669,7 +20677,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 40,
         .baseSpDefense = 60,
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 172,
         //.evYield_Attack = 2,
@@ -23479,7 +23487,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 75,
         .baseSpAttack = 70,
         .baseSpDefense = 60,
-        .type1 = TYPE_FIGHTING,
+        .type1 = TYPE_NORMAL,
         .type2 = TYPE_FIGHTING,
         .catchRate = 45,
         .expYield = 165,
@@ -23994,7 +24002,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 80,
         .baseSpDefense = 115,
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 10,
         .expYield = 335,
         //.evYield_Speed = 3,
@@ -27308,19 +27316,20 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_STATIC, ABILITY_NONE},
-        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    },//ok cosplay pikachu, is just the special base form, that  changes with the costome so not necessary as I'm doing the radical red version
+    //doing plus 40 bst for each form to make unique/
 
     [SPECIES_PIKACHU_ROCK_STAR] =
     {
         .baseHP = 35,
-        .baseAttack = 75,
+        .baseAttack = 95,
         .baseSpeed = 95,
         .baseSpAttack = 85,
-        .baseDefense = 40,
+        .baseDefense = 60,
         .baseSpDefense = 50,
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_STEEL,
@@ -27334,22 +27343,23 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_STATIC, ABILITY_NONE},
-        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },//don't take rest of pika abilitie instead for forms that change type fill with abilities that fit secondary type
-
+    //nvm just keeping lightning rod,  as that's what it had in game change typing and stats and instead of doing like rotom forms give each its own learnset
+    
     [SPECIES_PIKACHU_BELLE] =
     {
         .baseHP = 35,
         .baseAttack = 75,
         .baseSpeed = 95,
-        .baseSpAttack = 85,
-        .baseDefense = 40,
-        .baseSpDefense = 50,
+        .baseSpAttack = 95,
+        .baseDefense = 70,
+        .baseSpDefense = 66,
         .type1 = TYPE_ELECTRIC,
-        .type2 = TYPE_GRASS,    //lol cottage core
+        .type2 = TYPE_ICE,    //lol cottage core
         .catchRate = 190,
         .expYield = 112,
         //.evYield_Speed = 2,
@@ -27360,20 +27370,20 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_STATIC, ABILITY_NONE},
-        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    }, //ok can't make this grass, but would really really want a grass/electric one so I could do a cottage core pikachu idea.  but idk maybe still fits
 
     [SPECIES_PIKACHU_POP_STAR] =
     {
-        .baseHP = 35,
+        .baseHP = 55,
         .baseAttack = 75,
         .baseSpeed = 95,
-        .baseSpAttack = 85,
+        .baseSpAttack = 105,
         .baseDefense = 40,
-        .baseSpDefense = 50,
+        .baseSpDefense = 70,
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FAIRY,
         .catchRate = 190,
@@ -27386,8 +27396,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_STATIC, ABILITY_NONE},
-        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -27396,10 +27406,10 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP = 35,
         .baseAttack = 75,
-        .baseSpeed = 95,
-        .baseSpAttack = 85,
+        .baseSpeed = 105,
+        .baseSpAttack = 100,
         .baseDefense = 40,
-        .baseSpDefense = 50,
+        .baseSpDefense = 60,
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 190,
@@ -27412,8 +27422,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_STATIC, ABILITY_NONE},
-        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -27421,7 +27431,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_PIKACHU_LIBRE] =
     {
         .baseHP = 35,
-        .baseAttack = 75,
+        .baseAttack = 110,
         .baseSpeed = 95,
         .baseSpAttack = 85,
         .baseDefense = 40,
@@ -27438,11 +27448,11 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_STATIC, ABILITY_NONE},
-        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+       .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    }, //not taking cap forms
 
     [SPECIES_PIKACHU_ORIGINAL_CAP] =
     {

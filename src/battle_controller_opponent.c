@@ -1120,10 +1120,16 @@ static void DoSwitchOutAnimation(void)
 static void OpponentHandleDrawTrainerPic(void)
 {
     u32 trainerPicId;
+    u8 trainercoordinate;
 
-    if (gTrainerBattleOpponent_A == 0x400)
+    if (!IsDoubleBattle())
+        trainercoordinate = gTrainerFrontPicCoords[trainerPicId].size;
+    else
+        trainercoordinate = (gTrainerFrontPicCoords[trainerPicId].size + 2);
+
+    /*if (gTrainerBattleOpponent_A == 0x400)
         trainerPicId = GetSecretBaseTrainerPicIndex();
-    else if (gBattleTypeFlags & BATTLE_TYPE_BATTLE_TOWER)
+    else */if (gBattleTypeFlags & BATTLE_TYPE_BATTLE_TOWER)
         trainerPicId = GetBattleTowerTrainerFrontSpriteId();
     else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_TOWER)
         trainerPicId = GetTrainerTowerTrainerFrontSpriteId();
@@ -1135,7 +1141,7 @@ static void OpponentHandleDrawTrainerPic(void)
     SetMultiuseSpriteTemplateToTrainerBack(trainerPicId, GetBattlerPosition(gActiveBattler));
     gBattlerSpriteIds[gActiveBattler] = CreateSprite(&gMultiuseSpriteTemplate,
                                                      176,
-                                                     (8 - gTrainerFrontPicCoords[trainerPicId].size) * 4 + 40,
+                                                     (8 - trainercoordinate) * 4 + 40,
                                                      GetBattlerSpriteSubpriority(gActiveBattler));
     gSprites[gBattlerSpriteIds[gActiveBattler]].pos2.x = -240;
     gSprites[gBattlerSpriteIds[gActiveBattler]].data[0] = 2;
@@ -1150,10 +1156,16 @@ static void OpponentHandleDrawTrainerPic(void)
 static void OpponentHandleTrainerSlide(void)
 {
     u32 trainerPicId;
+    u8 trainercoordinate;
 
-    if (gTrainerBattleOpponent_A == 0x400)
+    if (!IsDoubleBattle())
+        trainercoordinate = gTrainerFrontPicCoords[trainerPicId].size;
+    else
+        trainercoordinate = (gTrainerFrontPicCoords[trainerPicId].size + 2);
+
+    /*if (gTrainerBattleOpponent_A == 0x400)
         trainerPicId = GetSecretBaseTrainerPicIndex();
-    else if (gBattleTypeFlags & BATTLE_TYPE_BATTLE_TOWER)
+    else */if (gBattleTypeFlags & BATTLE_TYPE_BATTLE_TOWER)
         trainerPicId = GetBattleTowerTrainerFrontSpriteId();
     else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_TOWER)
         trainerPicId = GetTrainerTowerTrainerFrontSpriteId();
@@ -1165,7 +1177,7 @@ static void OpponentHandleTrainerSlide(void)
     SetMultiuseSpriteTemplateToTrainerBack(trainerPicId, GetBattlerPosition(gActiveBattler));
     gBattlerSpriteIds[gActiveBattler] = CreateSprite(&gMultiuseSpriteTemplate,
                                                      176,
-                                                     (8 - gTrainerFrontPicCoords[trainerPicId].size) * 4 + 40,
+                                                     (8 - trainercoordinate) * 4 + 40,
                                                      30);
     gSprites[gBattlerSpriteIds[gActiveBattler]].pos2.x = 96;
     gSprites[gBattlerSpriteIds[gActiveBattler]].pos1.x += 32;
@@ -1410,7 +1422,7 @@ static void OpponentHandleChoosePokemon(void)
 {
     s32 chosenMonId;
 
-    if (*(gBattleStruct->AI_monToSwitchIntoId + (GetBattlerPosition(gActiveBattler) >> 1)) == PARTY_SIZE)
+    if (*(gBattleStruct->AI_monToSwitchIntoId + gActiveBattler) == PARTY_SIZE)
     {
         chosenMonId = GetMostSuitableMonToSwitchInto();
 
@@ -1436,8 +1448,8 @@ static void OpponentHandleChoosePokemon(void)
     }
     else
     {
-        chosenMonId = *(gBattleStruct->AI_monToSwitchIntoId + (GetBattlerPosition(gActiveBattler) >> 1));
-        *(gBattleStruct->AI_monToSwitchIntoId + (GetBattlerPosition(gActiveBattler) >> 1)) = PARTY_SIZE;
+        chosenMonId = *(gBattleStruct->AI_monToSwitchIntoId + gActiveBattler);
+        *(gBattleStruct->AI_monToSwitchIntoId + gActiveBattler) = PARTY_SIZE;
     }
     *(gBattleStruct->monToSwitchIntoId + gActiveBattler) = chosenMonId;
     BtlController_EmitChosenMonReturnValue(1, chosenMonId, NULL);
@@ -1611,7 +1623,7 @@ static void OpponentHandleFaintingCry(void)
 {
     u16 species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
 
-    PlayCry3(species, 25, 5);
+    PlayCry_ByMode(species, 25, 5);
     OpponentBufferExecCompleted();
 }
 

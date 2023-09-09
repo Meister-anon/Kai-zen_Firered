@@ -1046,7 +1046,7 @@ static void InitItemIconSpriteState(struct PokemonSpecialAnimScene * scene, stru
         int x;
     #endif
     u8 y;
-    if (closeness == 3)
+    if (closeness == 3) //max closeness, believe for use item on max friendship mon,  source CreateItemIconSpriteAtMaxCloseness
     {
         sprite->pos1.x = 120;
         sprite->pos1.y = scene->monSpriteY2;
@@ -1060,7 +1060,7 @@ static void InitItemIconSpriteState(struct PokemonSpecialAnimScene * scene, stru
     sprite->pos1.y += 4;
     species = PSA_GetMonSpecies();
     personality = PSA_GetMonPersonality();
-    if (PSA_GetAnimType() == 4)
+    if (PSA_GetAnimType() == 4) //GetAnimTypeByItemId  source, looks like sets animtype, 0, is for  rare candy,  1, is for potion, 4, is for tms/hms, absent of those items it defaults to 0
     {
         x = Menu2_GetMonSpriteAnchorCoord(species, personality, 0);
         y = Menu2_GetMonSpriteAnchorCoord(species, personality, 1);
@@ -1171,7 +1171,7 @@ static void StartZoomOutAnimForUseTM(u8 closeness)
 #undef tCurrCloseness
 #undef tState
 
-static void CreateStarSprites(struct PokemonSpecialAnimScene * scene)
+static void CreateStarSprites(struct PokemonSpecialAnimScene * scene) //shiny animation?
 {
     int i;
     u8 spriteId;

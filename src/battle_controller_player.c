@@ -22,6 +22,8 @@
 #include "constants/items.h"
 #include "constants/moves.h"
 #include "constants/songs.h"
+//#include "battle_scripts.h"  only added this for that dumb skip turn idea
+//#include "src/battle_bg.c"    //forgot remove this sStandardBattleWindowTemplates defined in battle.h now for MOVE_NAME_2_X_VALUE cursor defines
 
 static void PlayerHandleGetMonData(void);
 static void PlayerHandleSetMonData(void);
@@ -105,6 +107,7 @@ static void Task_GiveExpWithExpBar(u8 taskId);
 static void Task_CreateLevelUpVerticalStripes(u8 taskId);
 static void StartSendOutAnim(u8 battlerId, bool8 dontClearSubstituteBit);
 static void EndDrawPartyStatusSummary(void);
+//static void HandleAction_WaitTurnEnd(void);
 
 static void (*const sPlayerBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
 {
@@ -240,7 +243,10 @@ static void HandleInputChooseAction(void)
             BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0);
             break;
         }
-        PlayerBufferExecCompleted();
+        PlayerBufferExecCompleted(); //realized why it uses move, using playerbufexec without an argument
+        //is the same as selecting use move, but skipping target select,
+        //which apparently makes it default to the user.
+        //or it targets the attaker, because of how the function is set, or because thats battler 0
     }
     else if (JOY_NEW(DPAD_LEFT))
     {
@@ -289,23 +295,32 @@ static void HandleInputChooseAction(void)
          && !(gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)])
          && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
         {
-            if (gBattleBufferA[gActiveBattler][1] == B_ACTION_USE_ITEM)
-            {
+            if (gBattleBufferA[gActiveBattler][1] == B_ACTION_USE_ITEM) //if first pokemon has chosen actoin use item
+            { //and player presses B button with second pokemon.
                 // Add item to bag if it is a ball
-                if (itemId <= ITEM_PREMIER_BALL)
-                    AddBagItem(itemId, 1);
+                if (itemId <= ITEM_PREMIER_BALL)//!important keep in mind to put all pokeballs below premier and just increment
+                    AddBagItem(itemId, 1);//also make note to make didffernet type of premier ball for each tier of pokeball so its actually useful.
                 else
-                    return;
-            }
+                    return; //for great ball use gs premier ball (throwback to gs ball from gen 2) or just gs ball
+            }//can have ultra ball version be omega ball?  idea is each unique premier style ball will have catch rate equal to what you have to purchase to get it
             PlaySE(SE_SELECT);
             BtlController_EmitTwoReturnValues(1, B_ACTION_CANCEL_PARTNER, 0);
-            PlayerBufferExecCompleted();
+            PlayerBufferExecCompleted();//since gs ball is cool and has lore I'll make its catch rate higher, closer to an ultra ball
         }
     }
-    else if (JOY_NEW(START_BUTTON))
+    else if (JOY_NEW(START_BUTTON)) //broken? haven't seen thsi work yet
     {
         SwapHpBarsWithHpText();
-    }
+    }//could set to Joy_rept to avoid accident press?
+    /*else if (JOY_NEW(L_BUTTON)) // should display message on atk turn, and skip turn.
+    {//need add to handleinput choosetarget & choosemove
+       // if (!(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL))
+       // { // should make sure it works for all but old man tutorial
+        PlaySE(SE_SELECT);
+        BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
+        //PlayerBufferExecCompleted();
+    }//not gonna skip turn will instead use this to show true move power and type
+    */
 }
 
 UNUSED static void UnusedEndBounceEffect(void)
@@ -432,15 +447,114 @@ static void HandleInputChooseTarget(void)
     }
 }
 
-void HandleInputChooseMove(void)
+static void HideAllTargets(void)
 {
-    bool32 canSelectTarget = FALSE;
-    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
+    s32 i;
+    for (i = 0; i < MAX_BATTLERS_COUNT; i++)
+    {
+        if (IsBattlerAlive(i) && gBattleSpritesDataPtr->healthBoxesData[i].healthboxIsBouncing)
+        {
+            gSprites[gBattlerSpriteIds[i]].callback = SpriteCb_HideAsMoveTarget;
+            EndBounceEffect(i, BOUNCE_HEALTHBOX);
+        }
+    }
+}
 
-    PreviewDeterminativeMoveTargets();
+static void HideShownTargets(void)
+{
+    s32 i;
+    for (i = 0; i < MAX_BATTLERS_COUNT; i++)
+    {
+        if (IsBattlerAlive(i) && gBattleSpritesDataPtr->healthBoxesData[i].healthboxIsBouncing && i != gActiveBattler)
+        {
+            gSprites[gBattlerSpriteIds[i]].callback = SpriteCb_HideAsMoveTarget;
+            EndBounceEffect(i, BOUNCE_HEALTHBOX);
+        }
+    }
+}
+
+static void HandleInputShowEntireFieldTargets(void)
+{
+    /*if (JOY_HELD(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+        gPlayerDpadHoldFrames++;
+    else
+        gPlayerDpadHoldFrames = 0;*/
+
     if (JOY_NEW(A_BUTTON))
     {
-        u8 moveTarget;
+        PlaySE(SE_SELECT);
+        HideAllTargets();
+        if (gBattleStruct->mega.playerSelect)
+            BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | RET_MEGA_EVOLUTION | (gMultiUsePlayerCursor << 8));
+        else
+            BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
+        //HideMegaTriggerSprite();
+        PlayerBufferExecCompleted();
+    }
+    else if (gMain.newKeys & B_BUTTON)// || gPlayerDpadHoldFrames > 59)
+    {
+        PlaySE(SE_SELECT);
+        HideAllTargets();
+        gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
+        DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
+        DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
+    }
+}
+
+static void HandleInputShowTargets(void)
+{
+    /*if (JOY_HELD(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+        gPlayerDpadHoldFrames++;
+    else
+        gPlayerDpadHoldFrames = 0;*/
+
+    if (JOY_NEW(A_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        HideShownTargets();
+        if (gBattleStruct->mega.playerSelect)
+            BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | RET_MEGA_EVOLUTION | (gMultiUsePlayerCursor << 8));
+        else
+            BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
+        //HideMegaTriggerSprite();
+        //TryHideLastUsedBall();
+        PlayerBufferExecCompleted();
+    }
+    else if (gMain.newKeys & B_BUTTON)// || gPlayerDpadHoldFrames > 59)
+    {
+        PlaySE(SE_SELECT);
+        HideShownTargets();
+        gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
+        DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
+        DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
+    }
+}
+
+static void TryShowAsTarget(u32 battlerId)
+{
+    if (IsBattlerAlive(battlerId))
+    {
+        DoBounceEffect(battlerId, BOUNCE_HEALTHBOX, 15, 1);
+        gSprites[gBattlerSpriteIds[battlerId]].callback = SpriteCb_ShowAsMoveTarget;
+    }
+}
+
+
+void HandleInputChooseMove(void)    //test new targetting setup
+{
+    u16 moveTarget;
+    u32 canSelectTarget = 0;
+    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
+
+    /*if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+        gPlayerDpadHoldFrames++;
+    else
+        gPlayerDpadHoldFrames = 0;*/
+
+    PreviewDeterminativeMoveTargets();  //not in emerald may be redundent after upgrade test if any issues
+    if (JOY_NEW(A_BUTTON))  //noted this uses pallete fades while emerald doesnt appear to.
+    {
+        //u8 moveTarget;
 
         PlaySE(SE_SELECT);
         if (moveInfo->moves[gMoveSelectionCursor[gActiveBattler]] == MOVE_CURSE)
@@ -463,45 +577,84 @@ void HandleInputChooseMove(void)
         if (!gBattleBufferA[gActiveBattler][1]) // not a double battle
         {
             if (moveTarget & MOVE_TARGET_USER_OR_SELECTED && !gBattleBufferA[gActiveBattler][2])
-                ++canSelectTarget;
+                canSelectTarget = 1;
         }
         else // double battle
         {
             if (!(moveTarget & (MOVE_TARGET_RANDOM | MOVE_TARGET_BOTH | MOVE_TARGET_DEPENDS | MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_USER)))
-                ++canSelectTarget; // either selected or user
+                canSelectTarget = 1; // either selected or user
+            if (moveTarget == (MOVE_TARGET_USER | MOVE_TARGET_ALLY) && IsBattlerAlive(BATTLE_PARTNER(gActiveBattler)))
+                canSelectTarget = 1;
             if (moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]] == 0)
             {
-                canSelectTarget = FALSE;
+                canSelectTarget = 0;
             }
             else if (!(moveTarget & (MOVE_TARGET_USER | MOVE_TARGET_USER_OR_SELECTED)) && CountAliveMonsInBattle(BATTLE_ALIVE_EXCEPT_ACTIVE) <= 1)
             {
                 gMultiUsePlayerCursor = GetDefaultMoveTarget(gActiveBattler);
-                canSelectTarget = FALSE;
+                canSelectTarget = 0;
+            }
+
+            if ((moveTarget & MOVE_TARGET_ALL_BATTLERS) == MOVE_TARGET_ALL_BATTLERS)
+            {
+                u32 i = 0;
+                for (i = 0; i < gBattlersCount; i++)
+                    TryShowAsTarget(i);
+
+                canSelectTarget = 3;
+            }
+            else if (moveTarget & (MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
+            {
+                TryShowAsTarget(gMultiUsePlayerCursor);
+                TryShowAsTarget(BATTLE_PARTNER(gMultiUsePlayerCursor));
+                if (moveTarget & MOVE_TARGET_FOES_AND_ALLY)
+                    TryShowAsTarget(BATTLE_PARTNER(gActiveBattler));
+                canSelectTarget = 2;
             }
         }
         ResetPaletteFadeControl();
         BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
-        if (!canSelectTarget)
+
+
+
+        switch (canSelectTarget)
         {
-            BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
+        case 0:
+        default:
+            if (gBattleStruct->mega.playerSelect)
+                BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | RET_MEGA_EVOLUTION | (gMultiUsePlayerCursor << 8));
+            else
+                BtlController_EmitTwoReturnValues(BUFFER_B, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
+            //HideMegaTriggerSprite();
+            //TryHideLastUsedBall();
             PlayerBufferExecCompleted();
-        }
-        else
-        {
+            break;
+        case 1:
             gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseTarget;
+
             if (moveTarget & (MOVE_TARGET_USER | MOVE_TARGET_USER_OR_SELECTED))
                 gMultiUsePlayerCursor = gActiveBattler;
             else if (gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)])
                 gMultiUsePlayerCursor = GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
             else
                 gMultiUsePlayerCursor = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+
             gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCb_ShowAsMoveTarget;
+            break;
+        case 2:
+            gBattlerControllerFuncs[gActiveBattler] = HandleInputShowTargets;
+            break;
+        case 3: // Entire field
+            gBattlerControllerFuncs[gActiveBattler] = HandleInputShowEntireFieldTargets;
+            break;
         }
-    }
-    else if (JOY_NEW(B_BUTTON))
+    }    
+    else if (JOY_NEW(B_BUTTON))// || gPlayerDpadHoldFrames > 59)
     {
         PlaySE(SE_SELECT);
-        BtlController_EmitTwoReturnValues(1, 10, 0xFFFF);
+        gBattleStruct->mega.playerSelect = FALSE;
+        BtlController_EmitTwoReturnValues(BUFFER_B, 10, 0xFFFF);
+        //HideMegaTriggerSprite();
         PlayerBufferExecCompleted();
         ResetPaletteFadeControl();
         BeginNormalPaletteFade(0xF0000, 0, 0, 0, RGB_WHITE);
@@ -523,7 +676,7 @@ void HandleInputChooseMove(void)
     else if (JOY_NEW(DPAD_RIGHT))
     {
         if (!(gMoveSelectionCursor[gActiveBattler] & 1)
-         && (gMoveSelectionCursor[gActiveBattler] ^ 1) < gNumberOfMovesToChoose)
+            && (gMoveSelectionCursor[gActiveBattler] ^ 1) < gNumberOfMovesToChoose)
         {
             MoveSelectionDestroyCursorAt(gMoveSelectionCursor[gActiveBattler]);
             gMoveSelectionCursor[gActiveBattler] ^= 1;
@@ -552,7 +705,7 @@ void HandleInputChooseMove(void)
     else if (JOY_NEW(DPAD_DOWN))
     {
         if (!(gMoveSelectionCursor[gActiveBattler] & 2)
-         && (gMoveSelectionCursor[gActiveBattler] ^ 2) < gNumberOfMovesToChoose)
+            && (gMoveSelectionCursor[gActiveBattler] ^ 2) < gNumberOfMovesToChoose)
         {
             MoveSelectionDestroyCursorAt(gMoveSelectionCursor[gActiveBattler]);
             gMoveSelectionCursor[gActiveBattler] ^= 2;
@@ -578,7 +731,18 @@ void HandleInputChooseMove(void)
             gBattlerControllerFuncs[gActiveBattler] = HandleMoveSwitching;
         }
     }
-}
+    /*else if (JOY_NEW(L_BUTTON)) // should display message on atk turn, and skip turn.
+    {//need add to handleinput choosetarget & choosemove
+       // if (!(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL))
+       // { // should make sure it works for all but old man tutorial
+       PlaySE(SE_SELECT);
+       BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
+       //PlayerBufferExecCompleted();
+    }*///no longer plan to make skip turn, instead can use this to display true move power & true type
+} //changed mind I DO want to skip trun do more simply just trigger attack canceler, w mon waiting patiently
+//hm but I ALSO think it would be useful to display actual move power etc. but i can just do that with 
+//code long as in battle the summary screen can display actual power, and can just change
+//the usual ui displaymovetype, to use dynamic type?
 
 // not used
 static u32 HandleMoveInputUnused(void)
@@ -911,6 +1075,20 @@ static void Intro_WaitForShinyAnimAndHealthbox(void)
     }
 }
 
+/*static void HandleAction_WaitTurnEnd(void) {
+    if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+    {
+        gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
+        PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, gBattlerAttacker, *(gBattleStruct->battlerPartyIndexes + gBattlerAttacker));
+        gBattleScripting.battler = gBattlerAttacker;
+        gBattlescriptCurrInstr = BattleScript_SkipTurn;
+        gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
+        //gCurrentActionFuncId = B_ACTION_FINISHED;
+        //++gCurrentTurnActionNumber;
+    }
+}*/
+
+
 static void Intro_TryShinyAnimShowHealthbox(void)
 {
     if (!gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].ballAnimActive && !gBattleSpritesDataPtr->healthBoxesData[gActiveBattler ^ BIT_FLANK].ballAnimActive)
@@ -1021,7 +1199,7 @@ void CompleteOnInactiveTextPrinter(void)
 #define tExpTask_frames     data[10]
 // TODO: document other used fields
 
-static void Task_GiveExpToMon(u8 taskId)
+static void Task_GiveExpToMon(u8 taskId)//important note for later will need to adjust catch mechanic when it comes to doubles wild battles
 {
     u32 monId = (u8)(gTasks[taskId].tExpTask_monId);
     u8 battlerId = gTasks[taskId].tExpTask_battler;
@@ -1035,7 +1213,7 @@ static void Task_GiveExpToMon(u8 taskId)
         u32 currExp = GetMonData(mon, MON_DATA_EXP);
         u32 nextLvlExp = gExperienceTables[gBaseStats[species].growthRate][level + 1];
 
-        if (currExp + gainedExp >= nextLvlExp)
+        if (currExp + gainedExp >= nextLvlExp)  //lvl up
         {
             u8 savedActiveBattler;
 
@@ -1143,7 +1321,12 @@ static void Task_LaunchLvlUpAnim(u8 taskId)
 
     if (IsDoubleBattle() == TRUE && monIndex == gBattlerPartyIndexes[battlerId ^ BIT_FLANK])
         battlerId ^= BIT_FLANK;
-    InitAndLaunchSpecialAnimation(battlerId, battlerId, battlerId, B_ANIM_LVL_UP);
+    //add more conditions make work for more evo methods could change to use pokmeon.c main evo function, or canevolve function
+    //will flash blue if meets condition,but connsider make flash red for mega evo condition.
+    if (GetEvolutionTargetSpecies(&gPlayerParty[monIndex], EVO_MODE_NORMAL, 0) != SPECIES_NONE)
+        InitAndLaunchSpecialAnimation(battlerId, battlerId, battlerId, B_ANIM_LVL_UP_EVOLVE);
+    else
+        InitAndLaunchSpecialAnimation(battlerId, battlerId, battlerId, B_ANIM_LVL_UP);
     gTasks[taskId].func = Task_UpdateLvlInHealthbox;
 }
 
@@ -1370,7 +1553,7 @@ static void DoHitAnimBlinkSpriteEffect(void)
 static void MoveSelectionDisplayMoveNames(void)//relevant
 {
     s32 i;
-    struct ChooseMoveStruct* moveInfo = (struct ChooseMoveStruct*)(&gBattleBufferA[gActiveBattler][4]);
+    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
     gNumberOfMovesToChoose = 0;
 
     for (i = 0; i < MAX_MON_MOVES; ++i)
@@ -1392,7 +1575,7 @@ static void MoveSelectionDisplayMoveNames(void)//relevant
 
 /*static void MoveSelectionDisplayPpString(void)//will change where in window pp is shown & window size so relevant
 {
-    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP); //pp text
+    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP); //pp text 
     BattlePutTextOnWindow(gDisplayedStringBattle, 7); //think 7 is x coordinate in window
 }//note these are the values I'm looking for since file refers to in battle
 //experiemented with shifting this, the value can't take the space of a buffer already printing/displaying some other value.
@@ -1435,13 +1618,13 @@ static void MoveSelectionDisplayPpNumber(void)//function content swap to fix rev
 static void MoveSelectionDisplayPpString(void)
 {
     /*StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);*/
-    u8* txtPtr;
-    struct ChooseMoveStruct* moveInfo;
+    u8 *txtPtr;
+    struct ChooseMoveStruct *moveInfo;
 
     if (gBattleBufferA[gActiveBattler][2] == TRUE) // check if we didn't want to display pp number
         return;
     SetPpNumbersPaletteInMoveSelection();
-    moveInfo = (struct ChooseMoveStruct*)(&gBattleBufferA[gActiveBattler][4]);
+    moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
     txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
     *txtPtr = CHAR_SLASH;
     ConvertIntToDecimalStringN(++txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
@@ -1450,32 +1633,28 @@ static void MoveSelectionDisplayPpString(void)
 
 static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
 {
-    u8* txtPtr;
-    struct ChooseMoveStruct* moveInfo = (struct ChooseMoveStruct*)(&gBattleBufferA[gActiveBattler][4]);
+    u8 *txtPtr;
+    u32 moveType;
+    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleBufferA[gActiveBattler][4]);
 
     /*txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceType); //type/
     *txtPtr++ = EXT_CTRL_CODE_BEGIN;
     *txtPtr++ = 6;
     *txtPtr++ = 1;*/ //based on results I think this somehow changed the base font from small to normal  normal font is value 1 so idk?
     txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceDynamicColors);
-    /*if (gMoveNames[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]] == MOVE_HIDDEN_POWER)
-    {
-        s32 typeBits = ((gBattleMons[gBattlerAttacker].hpIV & 1) << 0)
-            | ((gBattleMons[gBattlerAttacker].attackIV & 1) << 1)
-            | ((gBattleMons[gBattlerAttacker].defenseIV & 1) << 2)
-            | ((gBattleMons[gBattlerAttacker].speedIV & 1) << 3)
-            | ((gBattleMons[gBattlerAttacker].spAttackIV & 1) << 4)
-            | ((gBattleMons[gBattlerAttacker].spDefenseIV & 1) << 5);
+    
 
-        u8 type = ((NUMBER_OF_MON_TYPES - 3) * typeBits) / 63 + 1; //think changing from 15 to 16 adds one more type to options so now have fairy
-        if (type == TYPE_MYSTERY)
-            type = TYPE_FAIRY; // or may need to increase it by 6 to get over other types to 21 since the +1 and ++ adds 2 tellign the last type added
-        type |= F_DYNAMIC_TYPE_1 | F_DYNAMIC_TYPE_2;
-        gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type = type;
+    //reusing won't make a difference but if I understand this right, will only need use this once?
+    //so potentially remove from battle_main...well actually no don't do that, this only works off of move cursor,
+    //well I can't select a move without hovering it , so it may work?
+    //see if moves stil work if remove settypebeforeusingmove from HandleAction_UseMove function in battle_main
+    //for now leave it
+    SetTypeBeforeUsingMove(moveInfo->moves[gMoveSelectionCursor[gActiveBattler]],gActiveBattler); //should attempt set dynamicmovetype based on move cursor is on
+    GET_MOVE_TYPE(moveInfo->moves[gMoveSelectionCursor[gActiveBattler]], moveType) //should decide whether to set base type ro dynamicmovetype to moveType
 
-    }*/
-    StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
-    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_TYPE);
+    //StringCopy(txtPtr, gTypeNames[gBattleMoves[moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]].type]);
+    StringCopy(txtPtr, gTypeNames[moveType]);   //should display whatever argument was passed,  so rather than 0 when no dynamic type, would display normal move type
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_TYPE); //tested works perfectly
 }//can't use convertIntToDecimalString to attempt make right align, text becomes garbalded numbers and still is left alingned...
 //used StringCopyPadded to have 4 elements to use str_conv right aline it doens't actually right align, but correctly displayed movetype
 //no idea where to go from here.
@@ -2354,7 +2533,7 @@ static void PlayerHandleSuccessBallThrowAnim(void)
     gDoingBattleAnim = TRUE;
     InitAndLaunchSpecialAnimation(gActiveBattler, gActiveBattler, GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), B_ANIM_BALL_THROW);
     gBattlerControllerFuncs[gActiveBattler] = CompleteOnSpecialAnimDone;
-}
+}//same as below
 
 static void PlayerHandleBallThrowAnim(void)
 {
@@ -2364,7 +2543,7 @@ static void PlayerHandleBallThrowAnim(void)
     gDoingBattleAnim = TRUE;
     InitAndLaunchSpecialAnimation(gActiveBattler, gActiveBattler, GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), B_ANIM_BALL_THROW);
     gBattlerControllerFuncs[gActiveBattler] = CompleteOnSpecialAnimDone;
-}
+}//look into may be relatedd to why can't catch double wild mon it and why it only ever targets the left mon for catching.
 
 static void PlayerHandlePause(void)
 {
@@ -2500,7 +2679,7 @@ static void PlayerHandleUnknownYesNoBox(void)
 {
 }
 
-static void HandleChooseMoveAfterDma3(void)
+static void HandleChooseMoveAfterDma3(void)//need to find what this means, if it has anythiing to do with window size
 {
     if (!IsDma3ManagerBusyWithBgCopy())
     {
@@ -2516,7 +2695,7 @@ static void PlayerHandleChooseMove(void)
     gBattlerControllerFuncs[gActiveBattler] = HandleChooseMoveAfterDma3;
 }
 
-void InitMoveSelectionsVarsAndStrings(void)
+void InitMoveSelectionsVarsAndStrings(void)//think relevant
 {
     MoveSelectionDisplayMoveNames();
     gMultiUsePlayerCursor = 0xFF;
@@ -2608,7 +2787,7 @@ static void PlayerHandleExpUpdate(void)
     }
 }
 
-static void PlayerHandleStatusIconUpdate(void)
+static void PlayerHandleStatusIconUpdate(void)//important for spirit lock
 {
     if (!IsBattleSEPlaying(gActiveBattler))
     {
@@ -2769,7 +2948,7 @@ static void PlayerHandlePlayFanfare(void)
 
 static void PlayerHandleFaintingCry(void)
 {
-    PlayCry3(GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES), -25, 5);
+    PlayCry_ByMode(GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES), -25, 5);
     PlayerBufferExecCompleted();
 }
 
@@ -2960,7 +3139,8 @@ static void PlayerCmdEnd(void)
 {
 }
 
-static void PreviewDeterminativeMoveTargets(void)
+static void PreviewDeterminativeMoveTargets(void) //determine who targetting
+//will need to port final changes here to all controllers
 {
     u32 bitMask = 0;
     u8 startY = 0;
@@ -3006,16 +3186,16 @@ static void PreviewDeterminativeMoveTargets(void)
             case MOVE_RAIN_DANCE:
             case MOVE_SUNNY_DAY:
             case MOVE_HAIL:
-            case MOVE_MUD_SPORT:
-            case MOVE_WATER_SPORT:
                 bitMask = 0xF0000;
-                break;
+                break; //player side
             case MOVE_SAFEGUARD:
             case MOVE_REFLECT:
             case MOVE_LIGHT_SCREEN:
             case MOVE_MIST:
             case MOVE_HEAL_BELL:
             case MOVE_AROMATHERAPY:
+            case MOVE_MUD_SPORT:
+            case MOVE_WATER_SPORT:
                 bitMask = (gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)] 
                          | gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)]) << 16; 
                 break;
@@ -3032,6 +3212,17 @@ static void PreviewDeterminativeMoveTargets(void)
             bitMask = (gBitTable[GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)] 
                      | gBitTable[GetBattlerAtPosition(GetBattlerPosition(gActiveBattler) ^ BIT_FLANK)] 
                      | gBitTable[GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT)]) << 16;
+            startY = 8;
+            break;
+        case MOVE_TARGET_ALL_BATTLERS:  // wwas MOVE_TARGET_USER_AND_ALL  questioning if this wasn't something I added?
+            bitMask = (gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]
+                     | gBitTable[GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)]
+                     | gBitTable[GetBattlerAtPosition(GetBattlerPosition(gActiveBattler) ^ BIT_FLANK)] 
+                     | gBitTable[GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT)]) << 16;
+            startY = 8;
+            break;
+        case MOVE_TARGET_ALLY:
+            bitMask = (gBitTable[GetBattlerAtPosition(GetBattlerPosition(gActiveBattler) ^ BIT_FLANK)]) << 16;
             startY = 8;
             break;
         }
