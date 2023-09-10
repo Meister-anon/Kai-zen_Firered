@@ -10,6 +10,7 @@
 #include "item.h"
 #include "event_data.h"
 #include "util.h"
+#include "pokemon.h"
 #include "pokemon_storage_system.h"
 #include "battle_gfx_sfx_util.h"
 #include "battle_controllers.h"
@@ -37,12 +38,8 @@
 #include "constants/facility_trainer_classes.h"
 #include "constants/hold_effects.h"
 #include "constants/battle_move_effects.h"
-//#include "battle_script_commands.c" //hope I included that right, this should make calculatedExp work and hopefully 0 itout.
 #include "constants/weather.h"
-//#include "data/pokemon/form_species_table_pointers.h"
-//#include "data/pokemon/form_species_tables.h"
-#include "pokemon.h"
-//#include "rtc.h"    // weird but failure to build pokemon.s was literally all becuase of these two, inclusions that I guess I didn't add to repository correctly
+#include "rtc.h"    // weird but failure to build pokemon.s was literally all becuase of these two, inclusions that I guess I didn't add to repository correctly
 //#include "species_names.h"
 // oh wait include weather doesn't exist, in pokeemerald its include/constants weather.h    ... facepalm
 //wrong again the problem was literally all from the species names include??!!
@@ -82,19 +79,18 @@ static EWRAM_DATA struct OakSpeechNidoranFStruct *sOakSpeechNidoranResources = N
 static union PokemonSubstruct *GetSubstruct(struct BoxPokemon *boxMon, u32 personality, u8 substructType);
 static u16 GetDeoxysStat(struct Pokemon *mon, s32 statId);
 static bool8 IsShinyOtIdPersonality(u32 otId, u32 personality);
-
 static u8 GetNatureFromPersonality(u32 personality);
 static bool8 PartyMonHasStatus(struct Pokemon *mon, u32 unused, u32 healMask, u8 battleId);
 static bool8 HealStatusConditions(struct Pokemon *mon, u32 unused, u32 healMask, u8 battleId);
 static bool8 IsPokemonStorageFull(void);
-static u8 SendMonToPC(struct Pokemon* mon);
+static u8 SendMonToPC(struct Pokemon* mon); //apparently this is what it should be
 static void EncryptBoxMon(struct BoxPokemon *boxMon);
 static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
-static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon);
+//static void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon);
 static u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move);
-
+//static u8 GetLevelFromMonExp(struct Pokemon *mon);
 static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon);
-//const u16* const gFormSpeciesIdTables[NUM_SPECIES]
+static u16 AbilitybasedStatChanges(u16 species);    //what even is this? I forgot
 static bool32 CheckTypeBySpecies(u16 species, u8 type); //made for field poiso to check if mon is a poison type, but could have other use
 
 #include "data/battle_moves.h"
@@ -116,7 +112,7 @@ static const struct CombinedMove sCombinedMoves[2] =
 
 // Assigns all species to the Hoenn Dex Index (Summary No. for Hoenn Dex)
 // if I want truly acacurate to files, I should add the missing names for later evolutions like rhyperior & magnezone, but it'll work as is. (I think)
-static const u16 sSpeciesToHoennPokedexNum[] =
+static const u16 sSpeciesToHoennPokedexNum[] = 
 {
     SPECIES_TO_HOENN(BULBASAUR),
     SPECIES_TO_HOENN(IVYSAUR),
@@ -369,7 +365,7 @@ static const u16 sSpeciesToHoennPokedexNum[] =
     SPECIES_TO_HOENN(LUGIA),
     SPECIES_TO_HOENN(HO_OH),
     SPECIES_TO_HOENN(CELEBI),
-
+    
     SPECIES_TO_HOENN(TREECKO),
     SPECIES_TO_HOENN(GROVYLE),
     SPECIES_TO_HOENN(SCEPTILE),
@@ -508,7 +504,7 @@ static const u16 sSpeciesToHoennPokedexNum[] =
 };
 
 // Assigns all species to the National Dex Index (Summary No. for National Dex)
-static const u16 sSpeciesToNationalPokedexNum[] =
+static const u16 sSpeciesToNationalPokedexNum[] = 
 {
     SPECIES_TO_NATIONAL(BULBASAUR),
     SPECIES_TO_NATIONAL(IVYSAUR),
@@ -1498,6 +1494,27 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     [SPECIES_DARMANITAN_GALARIAN - 1] = NATIONAL_DEX_DARMANITAN,
     [SPECIES_YAMASK_GALARIAN - 1] = NATIONAL_DEX_YAMASK,
     [SPECIES_STUNFISK_GALARIAN - 1] = NATIONAL_DEX_STUNFISK,
+    //Hisuian Forms
+    [SPECIES_GROWLITHE_HISUIAN - 1] = NATIONAL_DEX_GROWLITHE,
+    [SPECIES_ARCANINE_HISUIAN - 1] = NATIONAL_DEX_ARCANINE,
+    [SPECIES_VOLTORB_HISUIAN - 1] = NATIONAL_DEX_VOLTORB,
+    [SPECIES_ELECTRODE_HISUIAN - 1] = NATIONAL_DEX_ELECTRODE,
+    [SPECIES_TYPHLOSION_HISUIAN - 1] = NATIONAL_DEX_TYPHLOSION,
+    [SPECIES_QWILFISH_HISUIAN - 1] = NATIONAL_DEX_QWILFISH,
+    [SPECIES_SNEASEL_HISUIAN - 1] = NATIONAL_DEX_SNEASEL,
+
+    [SPECIES_SAMUROTT_HISUIAN - 1] = NATIONAL_DEX_SAMUROTT,
+    [SPECIES_LILLIGANT_HISUIAN - 1] = NATIONAL_DEX_LILLIGANT,
+    [SPECIES_ZORUA_HISUIAN - 1] = NATIONAL_DEX_ZORUA,
+    [SPECIES_ZOROARK_HISUIAN - 1] = NATIONAL_DEX_ZOROARK,
+    [SPECIES_BRAVIARY_HISUIAN - 1] = NATIONAL_DEX_BRAVIARY,
+
+    [SPECIES_SLIGGOO_HISUIAN - 1] = NATIONAL_DEX_SLIGGOO,
+    [SPECIES_GOODRA_HISUIAN - 1] = NATIONAL_DEX_GOODRA,
+    [SPECIES_AVALUGG_HISUIAN - 1] = NATIONAL_DEX_AVALUGG,
+
+    [SPECIES_DECIDUEYE_HISUIAN - 1] = NATIONAL_DEX_DECIDUEYE,
+
     // Cosplay Pikachu
     [SPECIES_PIKACHU_COSPLAY - 1] = NATIONAL_DEX_PIKACHU,
     [SPECIES_PIKACHU_ROCK_STAR - 1] = NATIONAL_DEX_PIKACHU,
@@ -2169,7 +2186,7 @@ static const u16 sHoennToNationalOrder[] = // Assigns Hoenn Dex Pokémon (Using 
     HOENN_TO_NATIONAL(LUGIA),
     HOENN_TO_NATIONAL(HO_OH),
     HOENN_TO_NATIONAL(CELEBI),
-};
+ };
 
 static const struct SpindaSpot sSpindaSpotGraphics[] =
 {
@@ -2401,8 +2418,8 @@ const struct SpriteTemplate gSpriteTemplates_TrainerBackpics[] =
 
 static const u8 sSecretBaseFacilityClasses[][5] = 
 {
-    { FACILITY_CLASS_YOUNGSTER_2, FACILITY_CLASS_YOUNGSTER_2, FACILITY_CLASS_YOUNGSTER_2, FACILITY_CLASS_YOUNGSTER_2, FACILITY_CLASS_YOUNGSTER_2 },
-    { FACILITY_CLASS_YOUNGSTER_2, FACILITY_CLASS_YOUNGSTER_2, FACILITY_CLASS_YOUNGSTER_2, FACILITY_CLASS_YOUNGSTER_2, FACILITY_CLASS_YOUNGSTER_2 },
+    { FACILITY_CLASS_YOUNGSTER, FACILITY_CLASS_YOUNGSTER, FACILITY_CLASS_YOUNGSTER, FACILITY_CLASS_YOUNGSTER, FACILITY_CLASS_YOUNGSTER },
+    { FACILITY_CLASS_YOUNGSTER, FACILITY_CLASS_YOUNGSTER, FACILITY_CLASS_YOUNGSTER, FACILITY_CLASS_YOUNGSTER, FACILITY_CLASS_YOUNGSTER },
 };
 
 static const u8 sGetMonDataEVConstants[] = 
@@ -2418,7 +2435,8 @@ static const u8 sGetMonDataEVConstants[] =
 static const u8 sStatsToRaise[] = 
 {
     STAT_ATK, STAT_ATK, STAT_SPEED, STAT_DEF, STAT_SPATK, STAT_ACC
-};
+}; //the double atk, here is normal
+//why isn't evasion in this, wouldn't double team fit the criteria?
 
 //this is a table for the change in friendship expected for each event
 //based on friendship level low/mid/high  0-99, 100-199, 200-255
@@ -2475,10 +2493,10 @@ static const u16 sDeoxysBaseStats[] =
 
 const u16 gLinkPlayerFacilityClasses[] = 
 {
-    FACILITY_CLASS_COOLTRAINER_3, FACILITY_CLASS_BLACK_BELT_2, FACILITY_CLASS_CAMPER_2, FACILITY_CLASS_YOUNGSTER_2, FACILITY_CLASS_PSYCHIC_3,
-    FACILITY_CLASS_BUG_CATCHER_2, FACILITY_CLASS_TAMER, FACILITY_CLASS_JUGGLER, FACILITY_CLASS_COOLTRAINER_4, FACILITY_CLASS_CHANNELER,
-    FACILITY_CLASS_PICNICKER_2, FACILITY_CLASS_LASS_2, FACILITY_CLASS_PSYCHIC_4, FACILITY_CLASS_CRUSH_GIRL, FACILITY_CLASS_PKMN_BREEDER_3,
-    FACILITY_CLASS_BEAUTY_2, FACILITY_CLASS_AQUA_LEADER,
+    FACILITY_CLASS_COOLTRAINER_M, FACILITY_CLASS_BLACK_BELT, FACILITY_CLASS_CAMPER, FACILITY_CLASS_YOUNGSTER, FACILITY_CLASS_PSYCHIC_M,
+    FACILITY_CLASS_BUG_CATCHER, FACILITY_CLASS_TAMER, FACILITY_CLASS_JUGGLER, FACILITY_CLASS_COOLTRAINER_F, FACILITY_CLASS_CHANNELER,
+    FACILITY_CLASS_PICNICKER, FACILITY_CLASS_LASS, FACILITY_CLASS_PSYCHIC_F, FACILITY_CLASS_CRUSH_GIRL, FACILITY_CLASS_PKMN_BREEDER,
+    FACILITY_CLASS_BEAUTY, FACILITY_CLASS_AQUA_LEADER,
 };
 
 static const struct OamData sOakSpeechNidoranFDummyOamData = 
@@ -2532,7 +2550,7 @@ void ZeroMonData(struct Pokemon *mon)
     SetMonData(mon, MON_DATA_SPATK, &arg);
     SetMonData(mon, MON_DATA_SPDEF, &arg);
     arg = 255;
-    SetMonData(mon, MON_DATA_MAIL, &arg);
+    //SetMonData(mon, MON_DATA_MAIL, &arg); //haven't removed mail yet redo later
 }
 
 void ZeroPlayerPartyMons(void)
@@ -2556,11 +2574,11 @@ void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFix
     CreateBoxMon(&mon->box, species, level, fixedIV, hasFixedPersonality, fixedPersonality, otIdType, fixedOtId);
     SetMonData(mon, MON_DATA_LEVEL, &level);
     arg = 255;
-    SetMonData(mon, MON_DATA_MAIL, &arg);
+    //SetMonData(mon, MON_DATA_MAIL, &arg); 
     CalculateMonStats(mon);
-}
+} //believe used for wild poke generation, and give mons etc. actually used for all mon, trainer included
 
-void CreateBoxMon(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
+void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
 { //because its in above function, though it says box, its actually for wild/all pokemon
     u8 speciesName[POKEMON_NAME_LENGTH + 1];
     u32 personality;
@@ -2568,11 +2586,11 @@ void CreateBoxMon(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedIV, 
     u16 checksum;
 
     s8 abilityodds = ((Random() % 111) - 10); //to hopefully weight things so I can get first slot abilities more often, doesn't change high odds.  perfect
-    u8 Normal_AbilityChance = 44;       //random function isn't truly random so setting at 50% split isn't really even, values seem to trend high rather than low, so need higher 
+    u8 Normal_AbilityChance = 48;       //random function isn't truly random so setting at 50% split isn't really even, values seem to trend high rather than low, so need higher 
     u8 HiddenAbility1_Chance = 0;  //value to ensure ability 1 comes up more often than ability 2 -forgot -10 artificially boosted hidden1 chance everything from 10 is this odds
     u8 HiddenAbility2_Chance = 93;
 
-    if (abilityodds < 0) { abilityodds = 0; }//prevent negative values
+    //if (abilityodds < 0) { abilityodds = 0; }//prevent negative values, why did I add this?? I explicitly need it to be  negative to be able to set hidden ability 1
 
     //checkd and base game hidden abilities are only found by chance at low to increasing odds using pokenav/dexnav in gen 6
     //and with pokerader in gen 8 its only 3% odds, so I think this (1/3) is too high, l dropping to 7 & 93 respectively for about 15% odds
@@ -2604,9 +2622,9 @@ void CreateBoxMon(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedIV, 
     else //Player is the OT
     {
         value = gSaveBlock2Ptr->playerTrainerId[0]
-            | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
-            | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
-            | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
+              | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+              | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+              | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
     }
 
     SetBoxMonData(boxMon, MON_DATA_OT_ID, &value);
@@ -2671,9 +2689,9 @@ void CreateBoxMon(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedIV, 
     //it uses value to set so I could shift the value of variable outside of the personality
     /*if ((Random() % 100) + 1 <= ABILITY_2_CHANCE)
         value = 1;
-
+        
         THINK that may work ability_2 is abiilityNum1 i.e second ability slot
-        ABILITY_2_CHANCE would have its own constant value which would be its odds of occurring,
+        ABILITY_2_CHANCE would have its own constant value which would be its odds of occurring, 
         (Random() % 100) + 1 would be replaced with its own constant [ABILITY_ODDS], so its run a single time at start of function call
         and value just gets compared to chance
         think want ability slot 1 & 2 to be equal odds, while the hidden abilities have decreasing odds
@@ -2683,19 +2701,19 @@ void CreateBoxMon(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedIV, 
         hidden abilities will be a sub section within that range
         if odds <= 50 set ability1
         inside that function put if odds <= 15 set hiddenability1
-
+        
         then use,
         else if odds > 50 set ability 2
         and inside that put if odds >= 75 set hiddenabiity2
-
+        
         kinda poetic as that way the other abilitis are literally hidden within the normal abilitiies*/
-
+    
 
     if ((abilityodds) <= Normal_AbilityChance)
     {
         value = 0;
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);    //since I'm not using bitwise I think I may need to remove :3 from definition of AbilityNum?
-        if ((abilityodds) <= HiddenAbility1_Chance)   //should be if odds & hiddenability 1 isn't 0, don't need check if ability is none, logic for that is in GetAbilityBySpecies
+        if ((abilityodds) <= HiddenAbility1_Chance)   //should be 10% odds if ability odds -10 to 0, don't need check if ability is none, logic for that is in GetAbilityBySpecies
         {
             value = 2;
             SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
@@ -2705,7 +2723,7 @@ void CreateBoxMon(struct BoxPokemon* boxMon, u16 species, u8 level, u8 fixedIV, 
     {
         value = 1;
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
-        if ((abilityodds) >= HiddenAbility2_Chance)   //should be if odds & hiddenability 2 isn't 0
+        if ((abilityodds) >= HiddenAbility2_Chance)   //should be about 7% odds values 93-100
         {
             value = 3;
             SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
@@ -2740,7 +2758,7 @@ void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV,
     {
         personality = Random32();
     }
-    while (nature != GetNatureFromPersonality(personality));
+    while (nature != GetNatureFromPersonality(personality));    //keep generating random values until a mon with the requested nature is made
 
     CreateMon(mon, species, level, fixedIV, 1, personality, OT_ID_PLAYER_ID, 0);
 }
@@ -2989,7 +3007,7 @@ void CalculateMonStats(struct Pokemon *mon)
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     s32 level = GetLevelFromMonExp(mon);
     s32 newMaxHP;
-    u16 ability;
+    u16 ability = GetMonAbility(mon);
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
 
@@ -2997,19 +3015,21 @@ void CalculateMonStats(struct Pokemon *mon)
         currentHP = 1; //worked correctly without but just an extra protection
         newMaxHP = 1;
     }
-   else if (ability == ABILITY_DISPIRIT_GUARD)
+    
+    else if (ability == ABILITY_DISPIRIT_GUARD)
     {
         s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 160) / 100) + (((hpIV * 200) - 36) / 100);
         newMaxHP = (((n + hpEV / 4) * level) / 100) + level;
     }
-    else
+
+   else
    {
         s32 n = 2 * gBaseStats[species].baseHP + ((hpIV * 160) / 100) + (((hpIV * 200) - 36) / 100);
         newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
    }
 
     gBattleScripting.field_23 = newMaxHP - oldMaxHP;
-    if (gBattleScripting.field_23 == 0)
+    if (gBattleScripting.field_23 == 0) //field_23 is for level up hp change
         gBattleScripting.field_23 = 1;
 
     SetMonData(mon, MON_DATA_MAX_HP, &newMaxHP);
@@ -3047,6 +3067,7 @@ void CalculateMonStats(struct Pokemon *mon)
     SetMonData(mon, MON_DATA_HP, &currentHP);
 }
 
+
 void BoxMonToMon(struct BoxPokemon *src, struct Pokemon *dest)
 {
     u32 value = 0;
@@ -3055,13 +3076,13 @@ void BoxMonToMon(struct BoxPokemon *src, struct Pokemon *dest)
     SetMonData(dest, MON_DATA_HP, &value);
     SetMonData(dest, MON_DATA_MAX_HP, &value);
     value = 255;
-    SetMonData(dest, MON_DATA_MAIL, &value);
+    //SetMonData(dest, MON_DATA_MAIL, &value);
     CalculateMonStats(dest);
 }
 
 void TransformedMonStats(struct Pokemon *mon)
 {
-    u16 targetSpecies; //mon is mon being transformed, 
+    u16 targetSpecies; //mon is mon being transformed, i.e attacker using transform effect
     struct Pokemon *party;
     
     s32 oldMaxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
@@ -3088,7 +3109,7 @@ void TransformedMonStats(struct Pokemon *mon)
     else
         targetSpecies = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SPECIES, NULL);
 
-    species = targetSpecies; //put here to reset species since can't put ogic above defines
+    species = targetSpecies; //put here to reset species since can't put logic above defines
     
 
     if (GetBattlerSide(gBattlerTarget) == B_SIDE_OPPONENT)
@@ -3150,13 +3171,10 @@ void TransformedMonStats(struct Pokemon *mon)
                 currentHP = newMaxHP;
             else if (currentHP != 0) {
                 // BUG: currentHP is unintentionally able to become <= 0 after the instruction below.
-                currentHP += newMaxHP - oldMaxHP;   //this is the problem I believe since hp is able to increase I need to make sure it doesn't go ABOVE newmaxhp, right now its just continuously adding the dif
+                currentHP += newMaxHP - oldMaxHP;
 #ifdef BUGFIX
                 if (currentHP <= 0)
                     currentHP = 1;
-
-                /*if (currentHP >= newMaxHP)
-                    currentHP = newMaxHP;*/  //just a stop gap for an actual soluition, issue hp keeps increasing above maxhp when transforming to a mon with more hp than ditto
 #endif
             }
             else
@@ -3291,6 +3309,7 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try 
     {
         sLearningMoveTableID = 0;
     }
+
     while(gLevelUpLearnsets[species][sLearningMoveTableID].move != LEVEL_UP_END)
     {
         u16 moveLevel;
@@ -3304,27 +3323,10 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try 
         sLearningMoveTableID++;
     }
     return retVal; //but anyway lvl 0 move learn works now
+}
 
-       /* while (gLevelUpLearnsets[species][sLearningMoveTableID].level != level)// && (gLevelUpLearnsets[species][sLearningMoveTableID].level != 0) //not this or not that
-        {
-            sLearningMoveTableID++;
-            if (gLevelUpLearnsets[species][sLearningMoveTableID].move == LEVEL_UP_END) //may need change from.move to .level
-            //|| (gLevelUpLearnsets[species][sLearningMoveTableID].move == 0))  //nvm first struct value is .move so should be correct
-                return 0; //pretty sure means to skip move learn
-        }
-    //need test lvl 0 evo move learn
 
-    if ((gLevelUpLearnsets[species][sLearningMoveTableID].level == level) || (gLevelUpLearnsets[species][sLearningMoveTableID].level == 0))
-    {
-        gMoveToLearn = (gLevelUpLearnsets[species][sLearningMoveTableID].move); //something here
-        sLearningMoveTableID++;
-        retVal = GiveMoveToMon(mon, gMoveToLearn);
-    } 
-
-    return retVal;*/
-}//changed it, what I did it works now, still need retest lvl 0  move learn
-
-void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move)
+void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move) // this important too, and above.
 {
     s32 i;
     u16 moves[4];
@@ -3351,7 +3353,10 @@ void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move)
     SetMonData(mon, MON_DATA_PP_BONUSES, &ppBonuses);
 }
 
-static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move)
+// this may be used for daycare and wild mon level up laernset, prob need 2 change.
+//if usedin daycare make it not forget moves that are not in level up learnset or tm learnset, instead delete next slot move
+//that way irreplacable moves aren't lost
+static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move) 
 {
     s32 i;
     u16 moves[4];
@@ -3378,24 +3383,48 @@ static void DeleteFirstMoveAndGiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 mo
     SetBoxMonData(boxMon, MON_DATA_PP_BONUSES, &ppBonuses);
 }
 
+static bool32 CanEvolve(u32 species) //default use for eviolite but will also use for new nidoqueen ability
+{
+    u32 i;
+
+    for (i = 0; i < EVOS_PER_MON; i++)
+    {
+        if (gEvolutionTable[species][i].method
+         && gEvolutionTable[species][i].method != EVO_MEGA_EVOLUTION
+         && gEvolutionTable[species][i].method != EVO_MOVE_MEGA_EVOLUTION
+         && gEvolutionTable[species][i].method != EVO_PRIMAL_REVERSION)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 #define APPLY_STAT_MOD(var, mon, stat, statIndex)                                   \
 {                                                                                   \
     (var) = (stat) * (gStatStageRatios)[(mon)->statStages[(statIndex)]][0];         \
     (var) /= (gStatStageRatios)[(mon)->statStages[(statIndex)]][1];                 \
 }
 
+#define STAT_AND_DAMAGE_ABILITIES_ETC
+
+// seems this is the equivalent of emerald's CalcDefenseStat function
+// actually can put calcmovebasepower aft mod in here too, to set up those abilities.
 s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *defender, u32 move, u16 sideStatus, u16 powerOverride, u8 typeOverride, u8 battlerIdAtk, u8 battlerIdDef)
 {
     u32 i;
+    u32 percentBoost;
     s32 damage = 0;
     s32 damageHelper;
     u8 type;
-    u16 attack, defense;
-    u16 spAttack, spDefense;
+    bool8 usesDefStat;  //determines split, 
+    u8 defStage;
+    u16 attack, defense, speed;
+    u16 spAttack, spDefense, defStat;
     u8 defenderHoldEffect;
     u8 defenderHoldEffectParam;
     u8 attackerHoldEffect;
     u8 attackerHoldEffectParam;
+    u32 abilityDef = GetBattlerAbility(battlerIdDef);
+    u16 itemDef = gBattleMons[battlerIdDef].item;
 
     if (!powerOverride)
         gBattleMovePower = gBattleMoves[move].power;
@@ -3407,11 +3436,25 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     else
         type = typeOverride & 0x3F;
 
-
     attack = attacker->attack;
     defense = defender->defense;
     spAttack = attacker->spAttack;
     spDefense = defender->spDefense;
+    speed = attacker->speed;
+
+    if (gBattleMoves[move].effect == EFFECT_PSYSHOCK || gBattleMons[battlerIdAtk].ability == ABILITY_MUSCLE_MAGIC || IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
+    {
+        defStat = defense;
+        defStage = gBattleMons[battlerIdDef].statStages[STAT_DEF];  //defined these now hopefully it works fine and doens't mess up normla damage calc
+        usesDefStat = TRUE;
+    }
+    else if (IS_MOVE_SPECIAL(move)) // is special   //extra redundency for incase I make an effect/move that works the opposite i.e phys does special
+    {
+        defStat = spDefense;
+        defStage = gBattleMons[battlerIdDef].statStages[STAT_SPDEF];
+        usesDefStat = FALSE; //ported from emerald, will use this later  this wasn't actually the problem can most likely safely bring back in.
+    } //sets what defense stat move effects based on if special or physical and sets usesDefStat accordingly
+    
 
     if (attacker->item == ITEM_ENIGMA_BERRY)
     {
@@ -3439,6 +3482,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         attack *= 2;
 
     // In FRLG, the Battle Tower and opponent checks are stubbed here.
+    //badge boost for move damage start
     if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK | /*BATTLE_TYPE_BATTLE_TOWER |*/ BATTLE_TYPE_EREADER_TRAINER)))
     {
         if (FlagGet(FLAG_BADGE01_GET)
@@ -3469,13 +3513,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (attackerHoldEffect == sHoldEffectToType[i][0]
             && type == sHoldEffectToType[i][1])
         {
-            if (IS_MOVE_PHYSICAL(move))
+            if (usesDefStat)    //changed was redundant as being move physical sets usesdefstat
                 attack = (attack * (attackerHoldEffectParam + 100)) / 100;
             else
                 spAttack = (spAttack * (attackerHoldEffectParam + 100)) / 100;
             break;
-        }
+        }//sets what atk stat used by moves based on if physical or special etc.
     }
+
 
     if (attackerHoldEffect == HOLD_EFFECT_CHOICE_BAND)
         attack = (150 * attack) / 100;
@@ -3493,36 +3538,607 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         defense *= 2;
     if (attackerHoldEffect == HOLD_EFFECT_THICK_CLUB && (attacker->species == SPECIES_CUBONE || attacker->species == SPECIES_MAROWAK))
         attack *= 2;
-    if (defender->ability == ABILITY_THICK_FAT && (type == TYPE_FIRE || type == TYPE_ICE))
-        spAttack /= 2;
+    if (attackerHoldEffect == HOLD_EFFECT_METRONOME)
+    {
+        percentBoost = min((gBattleStruct->sameMoveTurns[gBattlerAttacker] * GetBattlerHoldEffectParam(gBattlerAttacker)), 100);
+        {
+            gBattleMovePower *= (100 + gPercentToModifier[percentBoost]);
+            gBattleMovePower /= 100;
+
+        } // I THINK?? this fits? mulmod is setup but think would need to change
+        //return to use applymodifier if I put in this function?
+        //MulModifier(&finalModifier, UQ_4_12(1.0) + gPercentToModifier[percentBoost]);
+    }
+    if (attackerHoldEffect == HOLD_EFFECT_EXPERT_BELT)
+    {
+        if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
+            //MulModifier(&finalModifier, UQ_4_12(1.2));
+    }
+    if (attackerHoldEffect == HOLD_EFFECT_LIFE_ORB) //hp drop already in util
+        gBattleMovePower = (gBattleMovePower * 130 / 100);
+
+    if (defenderHoldEffect == HOLD_EFFECT_RESIST_BERRY)
+    {
+        if (type == GetBattlerHoldEffectParam(gBattlerTarget)
+            && (type == TYPE_NORMAL || gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE))
+            //&& !UnnerveOn(battlerIdDef, itemDef))
+        {
+            if (abilityDef == ABILITY_RIPEN)
+                //MulModifier(&finalModifier, UQ_4_12(0.25));
+            {
+                gBattleMoveDamage *= 25;
+                gBattleMoveDamage /= 100;
+            }
+
+            else
+                gBattleMoveDamage /= 2;
+                //MulModifier(&finalModifier, UQ_4_12(0.5));
+            //if (updateFlags)      //not sure what this does, it may change move result flag & sound effect to match?
+                gSpecialStatuses[battlerIdDef].berryReduced = TRUE;
+        }
+    }
+
+
+    /*if (defender->ability == ABILITY_THICK_FAT && (type == TYPE_FIRE || type == TYPE_ICE))
+        spAttack /= 2;*/    //removed this version as it only blocked special moves not physical moves too, more efficient
+    //stat change abilities/same effect as gbattlemovedamage change but just more complient
     if (attacker->ability == ABILITY_HUSTLE)
         attack = (150 * attack) / 100;
+    if (attacker->ability == ABILITY_SOLAR_POWER)
+        spAttack = (150 * spAttack) / 100;
+    if (attacker->ability == ABILITY_URSURPER && attacker->status1 & STATUS1_ANY && IsBlackFogNotOnField())
+    {
+        attack = (125 * attack) / 100;
+        spAttack = (125 * spAttack) / 100;        
+    }
+    if (attacker->ability == ABILITY_DEFIANT && attacker->status1 & STATUS1_ANY && IsBlackFogNotOnField())
+        attack = (130 * attack) / 100;
+    if (attacker->ability == ABILITY_COMPETITIVE && attacker->status1 & STATUS1_ANY && IsBlackFogNotOnField())
+        spAttack = (130 * spAttack) / 100;  //CUT Back to 130, because it already has stat raise component
     if (attacker->ability == ABILITY_PLUS && ABILITY_ON_FIELD2(ABILITY_MINUS))
         spAttack = (150 * spAttack) / 100;
     if (attacker->ability == ABILITY_MINUS && ABILITY_ON_FIELD2(ABILITY_PLUS))
         spAttack = (150 * spAttack) / 100;
-    if (attacker->ability == ABILITY_GUTS && attacker->status1)
+    if (attacker->ability == ABILTY_UNKNOWN_POWER && (BATTLE_PARTNER(attacker->species) == SPECIES_UNOWN))
+        gBattleMoveDamage *= 2;
+    if (attacker->ability == ABILITY_GUTS && attacker->status1 & STATUS1_ANY && IsBlackFogNotOnField())
         attack = (150 * attack) / 100;
-    if (defender->ability == ABILITY_MARVEL_SCALE && defender->status1)
+    if (defender->ability == ABILITY_MARVEL_SCALE && defender->status1 & STATUS1_ANY && IsBlackFogNotOnField())
         defense = (150 * defense) / 100;
-    if (type == TYPE_ELECTRIC && AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, 0, 0xFD, 0))
+    if (type == TYPE_ELECTRIC && (sideStatus & SIDE_STATUS_MUDSPORT)) //sidestatus means target side status, checked from bs_commands.c damagecalc function
         gBattleMovePower /= 2;
-    if (type == TYPE_FIRE && AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, 0, 0xFE, 0))
+    if (type == TYPE_FIRE && (sideStatus & SIDE_STATUS_WATERSPORT))
         gBattleMovePower /= 2;
-    if (type == TYPE_GRASS && attacker->ability == ABILITY_OVERGROW && attacker->hp <= (attacker->maxHP / 3))
-        gBattleMovePower = (150 * gBattleMovePower) / 100;
-    if (type == TYPE_FIRE && attacker->ability == ABILITY_BLAZE && attacker->hp <= (attacker->maxHP / 3))
-        gBattleMovePower = (150 * gBattleMovePower) / 100;
-    if (type == TYPE_WATER && attacker->ability == ABILITY_TORRENT && attacker->hp <= (attacker->maxHP / 3))
-        gBattleMovePower = (150 * gBattleMovePower) / 100;
-    if (type == TYPE_BUG && attacker->ability == ABILITY_SWARM && attacker->hp <= (attacker->maxHP / 3))
-        gBattleMovePower = (150 * gBattleMovePower) / 100;
+
+    //in a pinch abilities
+    if (attacker->hp <= (attacker->maxHP / 2)) //change to less or equal to be exact to yellow, more for super fang and effects that exactly do half hp
+    {
+        if (type == TYPE_GRASS && attacker->ability == ABILITY_OVERGROW)// && attacker->hp < (attacker->maxHP / 3))
+            gBattleMovePower = (150 * gBattleMovePower) / 100;
+        if (type == TYPE_FIRE && attacker->ability == ABILITY_BLAZE)// && attacker->hp < (attacker->maxHP / 3))
+            gBattleMovePower = (150 * gBattleMovePower) / 100;
+        if (type == TYPE_WATER && attacker->ability == ABILITY_TORRENT)// && attacker->hp < (attacker->maxHP / 3))
+            gBattleMovePower = (150 * gBattleMovePower) / 100;
+        if (type == TYPE_BUG && attacker->ability == ABILITY_SWARM)// && attacker->hp < (attacker->maxHP / 3))
+            gBattleMovePower = (150 * gBattleMovePower) / 100;
+        //changing in a pinch to below 50%, rather than 30%, so should be soon as hp gets to yellow
+        //may make more in a pinch abilities for more types idea for electric overcharge
+        if (type == TYPE_ELECTRIC && attacker->ability == ABILITY_OVERCHARGE)
+            gBattleMovePower = (150 * gBattleMovePower) / 100;
+        if (type == TYPE_POISON && attacker->ability == ABILITY_POISONED_LEGACY)
+            gBattleMovePower = (150 * gBattleMovePower) / 100;
+    }
+
+    //Special case - Partner in a pinch -need test
+    if (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].hp <= (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].maxHP / 2))
+    {
+        if (type == TYPE_ELECTRIC && attacker->ability == ABILITY_PLUS && GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_MINUS)
+            gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;
+
+        if (type == TYPE_ELECTRIC && attacker->ability == ABILITY_MINUS && GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_PLUS)
+            gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;    //used gbattlemovedamage, to stack with on field plus/minus effects
+    }
+
+    //MOVE EFFECTS
     if (gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)
         defense /= 2;
-
-    if (IS_MOVE_PHYSICAL(move))
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_ASSURANCE
+        && (gProtectStructs[battlerIdDef].physicalDmg != 0 || gProtectStructs[battlerIdDef].specialDmg != 0 || gProtectStructs[battlerIdDef].confusionSelfDmg))
+        gBattleMovePower *= 2;
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_KNOCK_OFF && gBattleMons[gBattlerTarget].item != 0)
+        gBattleMovePower = (130 * gBattleMovePower) / 100; //CHANGed modern boost 1.3 rathr than 1.5
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_WAKE_UP_SLAP)
     {
-        if (gCritMultiplier == 2)
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || GetBattlerAbility(gBattlerTarget) == ABILITY_COMATOSE)
+            gBattleMovePower *= 2;
+    }
+
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_SMELLINGSALT)
+    {
+        if (gBattleMons[gBattlerTarget].status1 & STATUS1_PARALYSIS && IsBlackFogNotOnField())
+            gBattleMovePower *= 2;
+    }
+
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_STOMPING_TANTRUM)
+    {
+        if (gBattleStruct->lastMoveFailed & gBitTable[battlerIdAtk])
+            gBattleMovePower *= 2;
+    }
+
+    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND) && (sideStatus & SIDE_STATUS_MUDSPORT))//give to more ground types?
+        spDefense = (130 * spDefense) / 100;    //gets to work as its on the ground not in the air
+
+
+    // sandstorm sp.def boost for rock types  // decided to add this for ground types as well,
+    if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK) || (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)))
+        && IsBattlerWeatherAffected(gBattlerTarget, WEATHER_SANDSTORM_ANY))// && !usesDefStat)        
+        spDefense = (150 * spDefense) / 100;
+
+    // hail sp.def & def boost for ice types  // still deciding if I want a 50% defense boost or a 25% boost to def & sp def
+    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ICE)
+        && IsBattlerWeatherAffected(gBattlerTarget, WEATHER_HAIL_ANY))// && !usesDefStat)        
+    {
+        spDefense = (125 * spDefense) / 100;
+        defense = (140 * defense) / 100;
+    }//think safe to make this 50% or at least highre  since 50% is the same as plus 1 stat stage and using harden once, doen't really do much
+    
+
+    //put abilities ported here
+    // attacker's abilities  
+    switch (GetBattlerAbility(gBattlerAttacker)) //checked emerald doeesn't appear to need to order by ability value, emerald doesn't do so.
+    {
+    /*case ABILITY_SNIPER:  //DONE IN bs commands
+        if (IS_CRIT)
+            MulModifier(&finalModifier, UQ_4_12(1.5));
+        break;*/
+    case ABILITY_TECHNICIAN:
+        if (gBattleMovePower <= 60)
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_TIGER_CUB:
+    case ABILITY_TINTED_LENS:
+        if (gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE) //think should work,  it might not work, if move result is foud after damage stepp, it should work 
+            gBattleMoveDamage *= 2; //is right syntax, and type calc always goes before dmg calc
+        break;
+    case ABILITY_FLARE_BOOST:
+        if (gBattleMons[gBattlerAttacker].status1 & STATUS1_BURN && !usesDefStat //IS_MOVE_SPECIAL(move))
+            && IsBlackFogNotOnField())
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_TOXIC_BOOST:
+        if (gBattleMons[gBattlerAttacker].status1 & STATUS1_PSN_ANY && usesDefStat //IS_MOVE_PHYSICAL(move))
+            && IsBlackFogNotOnField())
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_RECKLESS:
+        if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.2));
+        break;
+    case ABILITY_IRON_FIST:
+        if (gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST)
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.2));
+        break;
+    case ABILITY_LETHAL_LEGS:
+        if (gBattleMoves[move].flags & FLAG_LETHAL_LEGS_BOOST)
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.2));
+        break;
+    case ABILITY_ROCK_HEAD:
+        if (gBattleMoves[move].flags & FLAG_ROCK_HEAD_BOOST)
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.2));
+        break;
+    case ABILITY_SHEER_FORCE:
+        if (gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST)
+            gBattleMovePower = (gBattleMovePower * 130 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.3));
+        break;
+    case ABILITY_SAND_FORCE:
+        if ((type == TYPE_STEEL || type == TYPE_ROCK || type == TYPE_GROUND)
+            && IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SANDSTORM_ANY))
+            gBattleMovePower = (gBattleMovePower * 130 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.3));
+        break;
+    case ABILITY_RIVALRY:
+        if (GetGenderFromSpeciesAndPersonality(gBattleMons[gBattlerAttacker].species, gBattleMons[gBattlerAttacker].personality) != MON_GENDERLESS
+            && GetGenderFromSpeciesAndPersonality(gBattleMons[gBattlerTarget].species, gBattleMons[gBattlerTarget].personality) != MON_GENDERLESS)
+        {
+            if (GetGenderFromSpeciesAndPersonality(gBattleMons[gBattlerAttacker].species, gBattleMons[gBattlerAttacker].personality)
+                == GetGenderFromSpeciesAndPersonality(gBattleMons[gBattlerTarget].species, gBattleMons[gBattlerTarget].personality))
+                gBattleMovePower = (gBattleMovePower * 125 / 100);
+            //MulModifier(&modifier, UQ_4_12(1.25));
+        /*else
+            gBattleMovePower = (gBattleMovePower * 75 / 100);*/
+            //MulModifier(&modifier, UQ_4_12(0.75));  removed above section cause don't want negative effects of rivalry.
+        }
+        break;
+    case ABILITY_SLOW_START:
+        if (gDisableStructs[gBattlerAttacker].slowStartTimer != 0)
+            gBattleMoveDamage /= 2;
+    case ABILITY_NORMALIZE:
+        if (gBattleStruct->ateBoost[gBattlerAttacker])//    if receives altl type damage boost?
+            gBattleMovePower = (gBattleMovePower * 120 / 100);  //will do neutral to everything, but keeping this line, as also won't get stab, buffed to 130 from 120
+        //MulModifier(&modifier, UQ_4_12(1.2));                                 //DROPPED back to 120 as realized way to make neutral while still getting stab
+        break;
+    case ABILITY_ANALYTIC:
+        if (GetBattlerTurnOrderNum(gBattlerAttacker) == gBattlersCount - 1 && move != MOVE_FUTURE_SIGHT && move != MOVE_DOOM_DESIRE)
+            gBattleMovePower = (gBattleMovePower * 130 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.3));
+        break;
+    case ABILITY_TOUGH_CLAWS:
+        if (IsMoveMakingContact(move, gBattlerAttacker))
+            gBattleMovePower = (gBattleMovePower * 130 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.3));
+        break;
+    case ABILITY_STRONG_JAW:
+        if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_STAKEOUT:
+        if (gDisableStructs[gBattlerTarget].isFirstTurn == 2) // just switched in
+            gBattleMoveDamage *= 2;
+        break;
+    case ABILITY_MEGA_LAUNCHER:
+        if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_WATER_BUBBLE:
+        if (type == TYPE_WATER)
+            gBattleMovePower *= 2;
+        //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_STEELWORKER:
+        if (type == TYPE_STEEL)
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_HEAVY_METAL:
+        if (type == TYPE_STEEL)
+            gBattleMoveDamage = (gBattleMoveDamage * 120) / 100;
+        break;
+    case ABILITY_LIVEWIRE:
+        if (type == TYPE_ELECTRIC)
+            gBattleMoveDamage = (gBattleMoveDamage * 120) / 100;
+        break;
+    case ABILITY_TOADSTOOL_NYMPH:
+        if (type == TYPE_FAIRY) //Fake stab
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 15;
+            gBattleMoveDamage = gBattleMoveDamage / 10;
+        }
+
+    case ABILITY_PIXILATE:
+        if (type == TYPE_FAIRY && gBattleStruct->ateBoost[gBattlerAttacker])
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.2));
+        break;
+    case ABILITY_REFRIGERATE:
+        if (type == TYPE_ICE && gBattleStruct->ateBoost[gBattlerAttacker])
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.2));
+        break;
+    case ABILITY_AERILATE:
+        if (type == TYPE_FLYING && gBattleStruct->ateBoost[gBattlerAttacker])
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.2));
+        break;
+    case ABILITY_GALVANIZE:
+        if (type == TYPE_ELECTRIC && gBattleStruct->ateBoost[gBattlerAttacker])
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.2));
+        break;
+    case ABILITY_NEUROFORCE:
+        if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+            gBattleMoveDamage = (gBattleMoveDamage * 125 / 100);
+            //MulModifier(&finalModifier, UQ_4_12(1.25));
+        break;
+    case ABILITY_PUNK_ROCK:
+        if (gBattleMoves[move].flags & FLAG_SOUND)
+            gBattleMovePower = (gBattleMovePower * 130 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.3));
+        break;
+    case ABILITY_SONAR:
+        if (gBattleMoves[move].flags & FLAG_SOUND)
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 15;
+            gBattleMoveDamage = gBattleMoveDamage / 10;
+        }
+            //gBattleMoveDamage *= 2; //somce using total dmg 2x may be too much, 1.5 boost on sonic_screech would still be good.
+        //MulModifier(&modifier, UQ_4_12(1.3));
+        break;
+    case ABILITY_STEELY_SPIRIT:
+        if (type == TYPE_STEEL)
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_TRANSISTOR:
+        if (type == TYPE_ELECTRIC)
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_STALL:
+        gBattleMovePower *= 2;
+        break;
+    case ABILITY_DRAGONS_MAW:
+        if (type == TYPE_DRAGON)
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
+        //MulModifier(&modifier, UQ_4_12(1.5));
+        break;
+    case ABILITY_GORILLA_TACTICS:
+        attack = (150 * attack) / 100;
+        spAttack = (150 * spAttack) / 100;
+        break;
+    case ABILITY_FLOWER_GIFT:   //flower gift is supposd to be what makes cherrim transform along w sunlight
+        if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY)) //split ability bonus between different attack/target functions
+        {
+            attack = (150 * attack) / 100;
+        }
+        break;
+    case ABILITY_BATTLE_MATRON:
+        if (IsBattlerAlive(BATTLE_PARTNER(gBattlerAttacker)) && CanEvolve(gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].species))
+            gBattleMovePower = (gBattleMovePower * 150 / 100);   //current preference
+        break;
+        //if checks work and it pulls species of partner mon need to decide if I boost move power or total move damage
+        //move power is less damage than gBattleMoveDamage
+            //fix found from DoesSideHaveAbility function from util.c
+
+    }//put adaptability logic in typecalc in bs command becaus that's where stab is handled
+
+    // field abilities
+    /*if ((IsAbilityOnField(ABILITY_DARK_AURA) && type == TYPE_DARK)
+        || (IsAbilityOnField(ABILITY_FAIRY_AURA) && type == TYPE_FAIRY))
+    {
+        if (IsAbilityOnField(ABILITY_AURA_BREAK))
+            gBattleMovePower = (gBattleMovePower * 75 / 100);
+            //MulModifier(&modifier, UQ_4_12(0.75));
+        else
+            gBattleMovePower = (gBattleMovePower * 125 / 100);
+           // MulModifier(&modifier, UQ_4_12(1.25));
+    }*/
+
+    // attacker partner's abilities
+    if (IsBattlerAlive(BATTLE_PARTNER(gBattlerAttacker)))
+    {
+        switch (GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)))
+        {
+        case ABILITY_BATTERY:
+            if (!usesDefStat)//IS_MOVE_SPECIAL(move))
+                gBattleMovePower = (gBattleMovePower * 130 / 100);
+                //MulModifier(&modifier, UQ_4_12(1.3));
+            break;
+        case ABILITY_POWER_SPOT:
+            gBattleMovePower = (gBattleMovePower * 130 / 100);
+            //MulModifier(&modifier, UQ_4_12(1.3));
+            break;
+        case ABILITY_STEELY_SPIRIT:
+            if (type == TYPE_STEEL)
+                gBattleMovePower = (gBattleMovePower * 150 / 100);
+                //MulModifier(&modifier, UQ_4_12(1.5));
+            break;
+        case ABILITY_FLOWER_GIFT:
+            if (IsBattlerWeatherAffected(BATTLE_PARTNER(gBattlerAttacker), WEATHER_SUN_ANY))
+            {
+                attack = (150 * attack) / 100;
+            }
+            break;
+        case ABILITY_DARK_DEAL:
+            if (gBattleMoves[move].power > 80 || gDynamicBasePower > 80)
+                gBattleMovePower /= 2;
+            break;
+        }
+    }
+
+    // target's abilities
+    //ability = GetBattlerAbility(gBattlerTarget); //check ABILITYEFFECT_ABSORBING if effect 1 ability remove damage null from here its needed for battle util
+    switch (GetBattlerAbility(gBattlerTarget))  //readjusted order of abilities to be numeric order in case I need switch case to flow low to high
+    {                          //after examining switches from emerald repo, appears value order of the switch case doesn't matter, can go anywhere
+        //don't need put absorb abilities that heal here, as they use gbattlemovedamage todo heal and convert it in the util
+    case ABILITY_LAVA_FISSURE:
+    case ABILITY_FLASH_FIRE:
+        if (type == TYPE_FIRE)  //need to make sure these for hidden power type change, so dynamic type rather than just normal move power? think alrady does
+            gBattleMoveDamage = 0;  //idk if this is needed, THINK It might be, since before the move was canceled, not actually used.
+        break;
+    //case ABILITY_VOLT_ABSORB:
+    case ABILITY_LIGHTNING_ROD:
+    case ABILITY_MOTOR_DRIVE:
+        if (type == TYPE_ELECTRIC)  //should work type is move type or type override which I think accounts for things that change movetype
+            gBattleMoveDamage = 0; //think may not need these as damage nullifcation is handled in battle_util
+        break;
+    case ABILITY_THICK_FAT:
+        if (type == (TYPE_FIRE || TYPE_ICE))
+            gBattleMoveDamage /= 2;
+        break;
+    case ABILITY_FEATHER_JACKET:
+        if (type == TYPE_ICE)
+            gBattleMoveDamage /= 2;
+        break;
+    case ABILITY_DAMP:
+    case ABILITY_WATER_BUBBLE:
+        if (type == TYPE_FIRE)
+        {
+            gBattleMoveDamage /= 2;
+            //MulModifier(&modifier, UQ_4_12(0.5));
+            //if (updateFlags)
+              //  RecordAbilityBattle(gBattlerTarget, ability);
+        }
+        break;
+    case ABILITY_HEATPROOF:
+        if (type == TYPE_FIRE)
+            gBattleMoveDamage /= 2; //reset from 4 back to 2, with super multiplier change, keeping others as they are
+        break;
+    case ABILITY_GLACIAL_ICE:
+        if (type == TYPE_FIRE)// || TYPE_ICE))
+            gBattleMoveDamage = 0;
+        break;
+    case ABILITY_SAP_SIPPER:
+        if (type == TYPE_GRASS)
+            gBattleMoveDamage = 0;
+        break;
+    case ABILITY_GALEFORCE:
+        if (gBattleMoves[move].flags & FLAG_WIND_MOVE)
+            gBattleMoveDamage = 0;
+    case ABILITY_DRY_SKIN:
+        if (type == TYPE_FIRE)
+            gBattleMoveDamage = (gBattleMoveDamage * 125) / 100;
+            //MulModifier(&modifier, UQ_4_12(1.25));
+       // if (type == TYPE_WATER)
+         //   gBattleMoveDamage = 0;
+        break;
+    //case ABILITY_WATER_ABSORB:
+    case ABILITY_STORM_DRAIN:
+        if (type == TYPE_WATER)
+            gBattleMoveDamage = 0;
+        break;
+    case ABILITY_JEWEL_METABOLISM:
+        if (type == TYPE_ROCK)
+            gBattleMoveDamage = 0;
+        break;
+    case ABILITY_PICKPOCKET:
+        if (IsMoveMakingContact(move, gBattlerAttacker)) //small common sense damage reduction as most mon with this have shit defense,
+        {
+            gBattleMoveDamage = (gBattleMoveDamage * 200) / 300;    //makes sense cuz of common pickpocket tacket of bump/run they prepare and intentionally take a hit
+        }
+        break;
+    case ABILITY_FLUFFY:
+        if (IsMoveMakingContact(move, gBattlerAttacker))
+        {
+            gBattleMoveDamage /= 2;
+            //MulModifier(&modifier, UQ_4_12(0.5));
+            //if (updateFlags)
+                //RecordAbilityBattle(gBattlerTarget, ability);//test if I need this line.
+        }
+        if (type == TYPE_FIRE) //changed with super effective rework in mind
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 15;
+            gBattleMoveDamage = gBattleMoveDamage / 10;
+        }
+            //MulModifier(&modifier, UQ_4_12(1.5)); //CHeck if need else if, fire contact moves should be 1
+        break;  //tested in w3 schools, checks out, it reads top to bottom with ifs, not like switch breaks, its all inclusive
+        //...actually following with else if is what makes it non inclusive...i.e not read the else if vsonic IMPORTANT
+    case ABILITY_LIQUID_METAL:
+        if ((IsMoveMakingContact(move, gBattlerAttacker)) || usesDefStat)   //regi steel exclusive
+        {
+            gBattleMoveDamage = (gBattleMoveDamage * 67 / 100);
+            
+        }
+        break;
+    case ABILITY_MULTISCALE:
+    case ABILITY_SHADOW_SHIELD: //lunala exclusive
+        if (BATTLER_MAX_HP(gBattlerTarget))
+            gBattleMoveDamage /= 2;
+        break;
+    case ABILITY_FILTER:
+    case ABILITY_SOLID_ROCK:
+    case ABILITY_PRISM_ARMOR:   //necrozma exclusive
+        if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+        {
+            gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
+        }  // MulModifier(&finalModifier, UQ_4_12(0.75));
+        break;    
+    case ABILITY_FUR_COAT:
+        if (usesDefStat)//IS_MOVE_PHYSICAL(move))
+        {
+            gBattleMoveDamage /= 2;
+        }
+        break;
+    case ABILITY_KLUTZ:
+        if (usesDefStat)//IS_MOVE_PHYSICAL(move))   //klutz used to falling over has higher pain tollereance
+        {
+            gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
+        }
+        break;
+    case ABILITY_MAGMA_ARMOR:
+    case ABILITY_ICE_SCALES:
+        if (!usesDefStat)//IS_MOVE_SPECIAL(move))
+            gBattleMoveDamage /= 2;
+        break;
+    case ABILITY_SLOW_START:
+        if (gDisableStructs[gBattlerTarget].slowStartTimer != 0)    //was gonna add crit excluion clause but it seems abilities don't have that, only the moves
+            gBattleMoveDamage /= 4; //so that's an extra bonus of having damage reduction via ability     may do 4 turn timer with 75% damage reduction instead of 50% @ 2 turns
+        break;//yeah like that idea a lot more
+    case ABILITY_GRASS_PELT:
+        if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN
+            && !gProtectStructs[gBattlerAttacker].confusionSelfDmg)
+        {
+            defense = (150 * defense) / 100;
+        }
+        break;
+    case ABILITY_FLOWER_GIFT:
+        if (IsBattlerWeatherAffected(gBattlerTarget, WEATHER_SUN_ANY))
+            spDefense = (150 * spDefense) / 100;
+        break;
+    case ABILITY_PUNK_ROCK:
+        if (gBattleMoves[move].flags & FLAG_SOUND)
+            gBattleMoveDamage /= 2;
+        break;
+    case ABILITY_WATER_COMPACTION:
+        if (type == TYPE_WATER)
+            gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
+        break;
+    case ABILITY_OCEAN_MEMORY:
+        if (type == TYPE_WATER)
+            gBattleMoveDamage /= 2;
+        break;
+    }
+
+    // target's ally's abilities
+    if (IsBattlerAlive(BATTLE_PARTNER(gBattlerTarget)))
+    {
+        switch (GetBattlerAbility(BATTLE_PARTNER(gBattlerTarget)))
+        {
+        case ABILITY_FRIEND_GUARD:
+            gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
+            break;
+        case ABILITY_FLOWER_GIFT:
+            if (IsBattlerWeatherAffected(BATTLE_PARTNER(gBattlerTarget), WEATHER_SUN_ANY))
+            {
+                spDefense = (150 * spDefense) / 100;
+                
+            }
+            break;
+        }
+    }
+
+    //logic didn't work in adjustnormaldamage bs command function, put here bcause is equivalent to where aurora veil damage reducion is done 4 emerald
+    //I'm stupid I forgot this was meant to be flat damage reduction, not require contact
+    if (gProtectStructs[gBattlerTarget].shieldBashed
+        && !IS_CRIT) //most things done just need put in super effective logic
+    { //here and in atk49 move end
+        //shouldn't affect ohko moves will prob affect fixed damage moves but that's prob fine since its supposed to be a protect like, on level w endure etc.
+        if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //get wonder guard logic to work here
+        {
+            //((gBattleMoveDamage *= 15) / 100); //should be 15% damage i.e 85% damage cut
+            gBattleMoveDamage *= 15;
+            gBattleMoveDamage /= 100; //just realized this effectively makes super effective do same damage as normal which since its through a shield guess this is fine
+        }
+        else if (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE))  //hopefully works for normal effect and doesn't break fixed damage & oh ko moves
+        {
+            //((gBattleMoveDamage *= 30) / 100); //should be 30% damage i.e 70% damage cut
+            gBattleMoveDamage *= 30;
+            gBattleMoveDamage /= 100;
+        }
+    }//move animation similar to spike shield use protect effect think combine with harden
+
+    if (((sideStatus & SIDE_STATUS_AURORA_VEIL) && !IS_CRIT) //not a crit
+        && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR
+        && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+        && IsBlackFogNotOnField())
+    {
+        gBattleMoveDamage /= 2;
+    }
+
+    // critical hits ignore attack stat's stage drops
+    if (usesDefStat)//IS_MOVE_PHYSICAL(move))
+    {
+        if (IS_CRIT)
         {
             if (attacker->statStages[STAT_ATK] > 6)
                 APPLY_STAT_MOD(damage, attacker, attack, STAT_ATK)
@@ -3533,9 +4149,25 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             APPLY_STAT_MOD(damage, attacker, attack, STAT_ATK)
 
         damage = damage * gBattleMovePower;
-        damage *= (2 * attacker->level / 5 + 2);
+        damage *= (2 * attacker->level / 5 + 2); //offense side of damage formula for level scaled damage
 
-        if (gCritMultiplier == 2)
+        //trap effects
+        if (((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION))
+            && IsBlackFogNotOnField())
+        {
+            //gBattleMons[battlerIdDef].statStages[STAT_DEF] -= 2;    //should lower defense by 2 i.e 50% 
+            /*if (gBattleMons[gActiveBattler].statStages[STAT_DEF] < 0)
+                gBattleMons[gActiveBattler].statStages[STAT_DEF] = 0;
+            APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)*/
+            damage *= 2;
+        }//need fix setup for this, think  stat drop isn't right as well, plan to only drop once during status duration look at how burn atk drop works //vsonic
+        //rather than a stat change burn just augments the attackrs damage to an equivalent of a stat drop,  fixed, may be too strong may set to 1.5
+        //also setup infestation as bug status can do with augment may need to set a fixed change in case move has odds I can't set to certain
+        //15% prob good if I need to. vsonic
+
+
+        // critical hits ignore def stat buffs
+        if (IS_CRIT) //forgot about the else/ or effect of using >= since using else means, less than, or not equal, so changed to just use greater than 1 for crit
         {
             if (defender->statStages[STAT_DEF] < 6)
                 APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)
@@ -3543,36 +4175,151 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                 damageHelper = defense;
         }
         else
-            APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)
+            APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF) //apply stat mod actually sets damgageHelper to value of stat stage
+
+        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNAWARE)
+        {
+            damage = attack;
+            damageHelper = defense;
+        }
+            
+
+        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
+            damage = attack;
+
+        if (GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE)
+        {
+            damage = attack;
+            damageHelper = defense;
+        }
+            
+
+        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
+            damageHelper = defense; //doubl check but think these need to go here
+        //to overwrite the typical damage calc?
 
         damage = damage / damageHelper;
-        damage /= 50;
+        damage /= 50; 
+        //defense side of dmg formula
+   
 
-        if ((attacker->status1 & STATUS1_BURN) && attacker->ability != ABILITY_GUTS)
-            damage /= 2;
-
-        if ((sideStatus & SIDE_STATUS_REFLECT) && gCritMultiplier == 1)
+        
+        if ((attacker->status1 & STATUS1_BURN) && IsBlackFogNotOnField() && attacker->ability != ABILITY_GUTS) //nvm don't need is physical because its already in the bracket for that ^
         {
-            if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
-                damage = 2 * (damage / 3);
+            if (attacker->ability == ABILITY_HEATPROOF) //halves effects from burn & heat/fire
+                damage = (damage * 3) / 4;
             else
                 damage /= 2;
         }
 
-        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == 8 && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
-            damage /= 2;
+        if ((sideStatus & SIDE_STATUS_REFLECT) && !IS_CRIT
+            && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR
+            && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+            && IsBlackFogNotOnField())
+        {
+            if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
+               // damage = 2 * (damage / 3); //believe what's happening here is it lowers the effectiveness of reflect for doubles 
+           // else //to balance the decreased amount of damage double damaging moves do.
+                damage /= 2;
+        }
+
+        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == MOVE_TARGET_BOTH && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2) // this is spread move cut
+            damage /= 1; //target 0x8 is target both    
+        //this removes the split damage from double target moves
 
         // moves always do at least 1 damage.
         if (damage == 0)
             damage = 1;
     }
 
-   // if (type == TYPE_MYSTERY)
-       // damage = 0; // is ??? type. does 0 damage.
+    /*if (type == TYPE_MYSTERY)
+        damage = 0; // is ??? type. does 0 damage.
+    *///this existed as an extra fail safe, before physical special split, where split &dmg was based on type
+    //removed for normalize buff to work
 
-    if (IS_MOVE_SPECIAL(move))
+    // are effects of weather negated with cloud nine or air lock
+    if (WEATHER_HAS_EFFECT2 && IsBlackFogNotOnField())
     {
-        if (gCritMultiplier == 2)
+        if (gBattleWeather & WEATHER_RAIN_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+                damage /= 2;
+                break;
+            case TYPE_WATER:
+                damage = (damage * 15) / 10;
+                break;
+            }
+
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_LIQUID_SOUL
+                && gBattleMoves[move].type == TYPE_WATER)  //hopefully checks if move was orginally water and will boost damage in rain even when ghost type
+            {
+                damage = (damage * 15) / 10;
+            }
+        }
+        //moved these here, because they don't have to do with physical or special damage alone anymore.  since I removed the type link
+        // any weather except sun weakens solar beam
+        if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
+            damage /= 2;
+
+        // sunny
+        if (gBattleWeather & WEATHER_SUN_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+                damage = (damage * 15) / 10;  //50% damage increase
+                break;
+            case TYPE_WATER:
+                damage /= 2;            //50% damage cut
+                break;
+            case TYPE_ICE:
+                damage = (damage * 10) / 30; //66% dmg cut  this is a grass type buff, especially so for sunflora who is now grass/fire
+                break;
+            }
+        }
+
+        // hail
+        if (gBattleWeather & WEATHER_HAIL_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+                damage = (damage * 10) / 30;  //33% damage cut, so less of a cut than in rain, edit- actually fires are harder to start in cold so makes sense to have higher drop than rain
+                break;  //changed to 66% cut,  so for mon weak to fire they take slightly less than neutral dmg
+
+            case TYPE_ICE:
+                damage = (damage * 125) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
+                break;
+            } //since I made hail a defensive boost, I may remove dmg boost, 
+        }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
+    }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing
+
+    /*In order for a fire to start, your tinderand firewood must reach a combustible temperature.
+    Fires in the summer, even after a summer rain, can be easier to start
+    because the wood will be closer to a combustible temperature than even dry wood in the winter.
+    You will need more heat to get your fire started in the cold.*/  //logic for why fire dmg cut in hail/
+
+    // flash fire triggered
+    if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
+        damage = (damage * 15) / 10;  //how does this work, do I need to move it, or does it auto boost all damage?
+                                        //it boosts all because its not in physical or special formula 
+
+    if (gBattleMoves[move].flags & FLAG_DMG_MINIMIZE && gStatuses3[gBattlerTarget] & STATUS3_MINIMIZED)
+        gBattleMoveDamage *= 2;
+    if (gBattleMoves[move].flags & FLAG_DMG_UNDERGROUND && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
+        gBattleMoveDamage *= 2;
+    if (gBattleMoves[move].flags & FLAG_DMG_UNDERWATER && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER)
+        gBattleMoveDamage *= 2;
+    if (gBattleMoves[move].flags & FLAG_DMG_2X_IN_AIR && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+        gBattleMoveDamage *= 2;
+    //port from emerald simplify battlescript don't need jumps and damage bytes in the script
+
+    if (!usesDefStat)//IS_MOVE_SPECIAL(move))
+    {
+        // critical hits ignore attack stat's stage drops
+        if (IS_CRIT)
         {
             if (attacker->statStages[STAT_SPATK] > 6)
                 APPLY_STAT_MOD(damage, attacker, spAttack, STAT_SPATK)
@@ -3583,9 +4330,16 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             APPLY_STAT_MOD(damage, attacker, spAttack, STAT_SPATK)
 
         damage = damage * gBattleMovePower;
-        damage *= (2 * attacker->level / 5 + 2);
+        damage *= (2 * attacker->level / 5 + 2); //it isn't, realized that's calc for normal level scaling damage.
 
-        if (gCritMultiplier == 2)
+        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNAWARE)
+            damage = spAttack;
+
+        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
+            damage = spAttack;
+
+        // critical hits ignore def stat buffs
+        if (IS_CRIT)
         {
             if (defender->statStages[STAT_SPDEF] < 6)
                 APPLY_STAT_MOD(damageHelper, defender, spDefense, STAT_SPDEF)
@@ -3598,55 +4352,29 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage = (damage / damageHelper);
         damage /= 50;
 
-        if ((sideStatus & SIDE_STATUS_LIGHTSCREEN) && gCritMultiplier == 1)
+        if (GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE) //nto sure if right but trying it, may replace with emerald version.
+            damageHelper = spDefense;
+
+        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
+            damageHelper = spDefense;
+
+        if ((sideStatus & SIDE_STATUS_LIGHTSCREEN) && !IS_CRIT
+            && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR
+            && IsBlackFogNotOnField())
         {
             if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
-                damage = 2 * (damage / 3);
-            else
+                /*damage = 2 * (damage / 3);    //looks strange, but screens blocked less damage instead of more for doubles, 
+            else*/          //because there was already logic that cut dmg for moves that hit multiple targets
                 damage /= 2;
         }
 
-        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == 8 && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
+        if ((attacker->status1 & STATUS1_SPIRIT_LOCK) && IsBlackFogNotOnField()) //function that gives spirit_lock special atk cut
             damage /= 2;
 
-        // are effects of weather negated with cloud nine or air lock
-        if (WEATHER_HAS_EFFECT2)
-        {
-            if (gBattleWeather & WEATHER_RAIN_TEMPORARY)
-            {
-                switch (type)
-                {
-                case TYPE_FIRE:
-                    damage /= 2;
-                    break;
-                case TYPE_WATER:
-                    damage = (15 * damage) / 10;
-                    break;
-                }
-            }
+        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == MOVE_TARGET_BOTH && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
+            damage /= 1; //special verision double battle damage change
 
-            // any weather except sun weakens solar beam
-            if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gCurrentMove == MOVE_SOLAR_BEAM)
-                damage /= 2;
-
-            // sunny
-            if (gBattleWeather & WEATHER_SUN_ANY)
-            {
-                switch (type)
-                {
-                case TYPE_FIRE:
-                    damage = (15 * damage) / 10;
-                    break;
-                case TYPE_WATER:
-                    damage /= 2;
-                    break;
-                }
-            }
-        }
-
-        // flash fire triggered
-        if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
-            damage = (15 * damage) / 10;
+        
     }
 
     return damage + 2;
@@ -3899,7 +4627,7 @@ static union PokemonSubstruct *GetSubstruct(struct BoxPokemon *boxMon, u32 perso
     return substruct;
 }
 
-u32 GetMonData(struct Pokemon *mon, s32 field, u8* data)
+u32 GetMonData(struct Pokemon *mon, s32 field, u8 *data)
 {
     u32 ret;
 
@@ -3958,7 +4686,7 @@ u32 GetMonData(struct Pokemon *mon, s32 field, u8* data)
         ret = mon->spDefense;
         break;
     case MON_DATA_MAIL:
-        ret = mon->mail;
+        //ret = mon->mail;
         break;
     default:
         ret = GetBoxMonData(&mon->box, field, data);
@@ -4067,8 +4795,8 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
         break;
     }
     case MON_DATA_MARKINGS:
-        retVal = boxMon->markings;
-        break;
+        //retVal = boxMon->markings;
+        break; //potentially keep markings, or replace with stars, use as signal for which iv stat is maxed? nah, keep fully hidden
     case MON_DATA_CHECKSUM:
         retVal = boxMon->checksum;
         break;
@@ -4335,7 +5063,7 @@ void SetMonData(struct Pokemon *mon, s32 field, const void *dataArg)
         SET16(mon->spDefense);
         break;
     case MON_DATA_MAIL:
-        SET8(mon->mail);
+        //SET8(mon->mail);
         break;
     case MON_DATA_SPECIES2:
         break;
@@ -4346,13 +5074,8 @@ void SetMonData(struct Pokemon *mon, s32 field, const void *dataArg)
     case MON_DATA_VICTORY_RIBBON:
     case MON_DATA_ARTIST_RIBBON:
     case MON_DATA_EFFORT_RIBBON:
-    case MON_DATA_MARINE_RIBBON:
-    case MON_DATA_LAND_RIBBON:
-    case MON_DATA_SKY_RIBBON:
-    case MON_DATA_COUNTRY_RIBBON:
     case MON_DATA_NATIONAL_RIBBON:
     case MON_DATA_EARTH_RIBBON:
-    case MON_DATA_WORLD_RIBBON:
     case MON_DATA_FILLER:
     case MON_DATA_EVENT_LEGAL:
     case MON_DATA_KNOWN_MOVES:
@@ -4427,7 +5150,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
     }
     case MON_DATA_MARKINGS:
-        SET8(boxMon->markings);
+        //SET8(boxMon->markings);
         break;
     case MON_DATA_CHECKSUM:
         SET16(boxMon->checksum);
@@ -4469,22 +5192,22 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         SET8(substruct1->pp[field - MON_DATA_PP1]);
         break;
     case MON_DATA_HP_EV:
-        SET8(substruct2->hpEV);
+        SET16(substruct2->hpEV);
         break;
     case MON_DATA_ATK_EV:
-        SET8(substruct2->attackEV);
+        SET16(substruct2->attackEV);
         break;
     case MON_DATA_DEF_EV:
-        SET8(substruct2->defenseEV);
+        SET16(substruct2->defenseEV);
         break;
     case MON_DATA_SPEED_EV:
-        SET8(substruct2->speedEV);
+        SET16(substruct2->speedEV);
         break;
     case MON_DATA_SPATK_EV:
-        SET8(substruct2->spAttackEV);
+        SET16(substruct2->spAttackEV);
         break;
     case MON_DATA_SPDEF_EV:
-        SET8(substruct2->spDefenseEV);
+        SET16(substruct2->spDefenseEV);
         break;
     case MON_DATA_COOL:
         SET8(substruct2->cool);
@@ -4512,7 +5235,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
 /*  case MON_DATA_LOST_LOCATON:  // plan to use this for pokemon death, will return the val of the map at the time the function determines the pokemon is dead.
        SET8(substruct3->lostLocation);
-       break;*/
+       break;*/  //not really needed I guess? met location is apparently only practical use is boosting friendship and no one even knows that, it'd be cool to have though
     case MON_DATA_MET_LEVEL:
     {
         u8 metLevel = *data;
@@ -4551,12 +5274,12 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
     case MON_DATA_IS_EGG:
         SET8(substruct3->isEgg);
-        if (substruct3->isEgg)
+        if (substruct3->isEgg) //?
             boxMon->isEgg = 1;
         else
             boxMon->isEgg = 0;
         break;
-    case MON_DATA_ABILITY_NUM:
+    case MON_DATA_ABILITY_NUM: //this is just setting the abiityNum tothe mon, not calculating what it should be.
         SET8(substruct3->abilityNum);
         break;
     case MON_DATA_COOL_RIBBON:
@@ -4600,7 +5323,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
     case MON_DATA_IVS:
     {
-#ifdef BUGFIX_SETMONIVS
+#ifdef BUGFIX
         u32 ivs = data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
 #else
         u32 ivs = *data; // Bug: Only the HP IV and the lower 3 bits of the Attack IV are read. The rest become 0.
@@ -4651,6 +5374,7 @@ u8 GiveMonToPlayer(struct Pokemon *mon)
     return MON_GIVEN_TO_PARTY;
 }
 
+#define DEPOSIT_TO_PCLOGIC
 static u8 SendMonToPC(struct Pokemon* mon)
 {
     s32 boxNo, boxPos;
@@ -4731,12 +5455,12 @@ u8 GetMonsStateToDoubles(void)
             aliveCount++;
     }
 
-    return (aliveCount > 1) ? PLAYER_HAS_TWO_USABLE_MONS : PLAYER_HAS_ONE_USABLE_MON;
-}
+    return (aliveCount > 1) ? PLAYER_HAS_TWO_USABLE_MONS : PLAYER_HAS_ONE_USABLE_MON;//need to understand this line
+} //ternary operator, if expression before ? is true, use value before colon :  else use value after colon :
 
 //abilitynum assigned by createboxmon this function translates that number into ability slot selection logic
 //had to assign s8 to compile to get around always true error becuase of constant values
-u16 GetAbilityBySpecies(u16 species, u8 abilityNum)
+u16 GetAbilityBySpecies(u16 species, u8 abilityNum) 
 {
 
     u8 i;
@@ -4781,8 +5505,10 @@ u16 GetAbilityBySpecies(u16 species, u8 abilityNum)
         }
     }
 
-    return gLastUsedAbility;
+        return gLastUsedAbility;
 } //so 4 ability optionns total, would like to set hidden ability chance like shiny odds, just much better odds, then have gauranteed hidden ability with dexnav
+
+
 
 u16 GetMonAbility(struct Pokemon *mon)
 {
@@ -4807,7 +5533,7 @@ static bool32 CheckTypeBySpecies(u16 species, u8 type)
         return FALSE;
 }
 
-static void CreateSecretBaseEnemyParty(struct SecretBaseRecord *secretBaseRecord)
+/*static void CreateSecretBaseEnemyParty(struct SecretBaseRecord *secretBaseRecord)
 {
     s32 i, j;
 
@@ -4853,7 +5579,7 @@ u8 GetSecretBaseTrainerNameIndex(void)
 {
     u8 facilityClass = sSecretBaseFacilityClasses[gBattleResources->secretBase->gender][gBattleResources->secretBase->trainerId[0] % 5];
     return gFacilityClassToTrainerClass[facilityClass];
-}
+}*/
 
 bool8 IsPlayerPartyAndPokemonStorageFull(void)
 {
@@ -4915,9 +5641,57 @@ void RemoveBattleMonPPBonus(struct BattlePokemon *mon, u8 moveIndex)
     mon->ppBonuses &= gPPUpSetMask[moveIndex];
 }
 
-static void CopyPlayerPartyMonToBattleData(u8 battlerId, u8 partyIndex)
+void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst)
 {
-    u16* hpSwitchout;
+    s32 i;
+    u8 nickname[POKEMON_NAME_LENGTH * 2];
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        dst->moves[i] = GetMonData(src, MON_DATA_MOVE1 + i, NULL);
+        dst->pp[i] = GetMonData(src, MON_DATA_PP1 + i, NULL);
+    }
+
+    dst->species = GetMonData(src, MON_DATA_SPECIES, NULL);
+    dst->item = GetMonData(src, MON_DATA_HELD_ITEM, NULL);
+    dst->ppBonuses = GetMonData(src, MON_DATA_PP_BONUSES, NULL);
+    dst->friendship = GetMonData(src, MON_DATA_FRIENDSHIP, NULL);
+    dst->experience = GetMonData(src, MON_DATA_EXP, NULL);
+    dst->hpIV = GetMonData(src, MON_DATA_HP_IV, NULL);
+    dst->attackIV = GetMonData(src, MON_DATA_ATK_IV, NULL);
+    dst->defenseIV = GetMonData(src, MON_DATA_DEF_IV, NULL);
+    dst->speedIV = GetMonData(src, MON_DATA_SPEED_IV, NULL);
+    dst->spAttackIV = GetMonData(src, MON_DATA_SPATK_IV, NULL);
+    dst->spDefenseIV = GetMonData(src, MON_DATA_SPDEF_IV, NULL);
+    dst->personality = GetMonData(src, MON_DATA_PERSONALITY, NULL);
+    dst->status1 = GetMonData(src, MON_DATA_STATUS, NULL);
+    dst->level = GetMonData(src, MON_DATA_LEVEL, NULL);
+    dst->hp = GetMonData(src, MON_DATA_HP, NULL);
+    dst->maxHP = GetMonData(src, MON_DATA_MAX_HP, NULL);
+    dst->attack = GetMonData(src, MON_DATA_ATK, NULL);
+    dst->defense = GetMonData(src, MON_DATA_DEF, NULL);
+    dst->speed = GetMonData(src, MON_DATA_SPEED, NULL);
+    dst->spAttack = GetMonData(src, MON_DATA_SPATK, NULL);
+    dst->spDefense = GetMonData(src, MON_DATA_SPDEF, NULL);
+    dst->abilityNum = GetMonData(src, MON_DATA_ABILITY_NUM, NULL);
+    dst->otId = GetMonData(src, MON_DATA_OT_ID, NULL);
+    dst->type1 = gBaseStats[dst->species].type1;
+    dst->type2 = gBaseStats[dst->species].type2;
+    dst->type3 = TYPE_MYSTERY;
+    dst->ability = GetAbilityBySpecies(dst->species, dst->abilityNum);
+    GetMonData(src, MON_DATA_NICKNAME, nickname);
+    StringCopy_Nickname(dst->nickname, nickname);
+    GetMonData(src, MON_DATA_OT_NAME, dst->otName);
+
+    for (i = 0; i < NUM_BATTLE_STATS; i++)
+        dst->statStages[i] = DEFAULT_STAT_STAGE;
+
+    dst->status2 = 0;
+}
+
+static void CopyPlayerPartyMonToBattleData(u8 battlerId, u8 partyIndex) //function brokeninto several smaller functions in emerald
+{
+    u16 *hpSwitchout;
     s32 i;
     u8 nickname[POKEMON_NAME_LENGTH * 2]; // Why is the nickname array here longer in FR/LG?
 
@@ -4963,9 +5737,9 @@ static void CopyPlayerPartyMonToBattleData(u8 battlerId, u8 partyIndex)
     *hpSwitchout = gBattleMons[battlerId].hp;
 
     for (i = 0; i < 8; i++)
-        gBattleMons[battlerId].statStages[i] = 6;
+        gBattleMons[battlerId].statStages[i] = 6;   //vsonic  on switch resets stat stage to normal
 
-    gBattleMons[battlerId].status2 = 0;
+    gBattleMons[battlerId].status2 = 0; //clears status 2 on switch, no mention of status3 or status 4 (can't remember if I made status 4...)
     UpdateSentPokesToOpponentValue(battlerId);
     ClearTemporarySpeciesSpriteData(battlerId, FALSE);
 }
@@ -4975,6 +5749,7 @@ bool8 ExecuteTableBasedItemEffect(struct Pokemon *mon, u16 item, u8 partyIndex, 
     return PokemonUseItemEffects(mon, item, partyIndex, moveIndex, 0);
 }
 
+#define ITEM_USE
 bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 moveIndex, u8 e) //this "e" isn't wrong
 {
     u32 data;
@@ -5025,10 +5800,10 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
         battleMonId = 4;
     }
 
-    if (!IS_POKEMON_ITEM(item) && !IS_POKEMON_ITEM2(item))
+    if ((!IS_POKEMON_ITEM(item)) && !IS_POKEMON_ITEM2(item)) //not this or not that
         return TRUE;
-    if (gItemEffectTable[item - ITEM_POTION] == NULL && item != ITEM_ENIGMA_BERRY)
-        return TRUE;
+    if (gItemEffectTable[item - ITEM_POTION] == NULL && item != ITEM_ENIGMA_BERRY)//will need to update this table for new gen stuff
+        return TRUE; //could prob add clause right below here, if status of mon is heal block return false
 
     if (item == ITEM_ENIGMA_BERRY)
     {
@@ -5114,8 +5889,8 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                 gSideTimers[GetBattlerSide(gActiveBattler)].mistTimer = 5;
                 retVal = FALSE;
             }
-            if ((itemEffect[cmdIndex] & ITEM3_LEVEL_UP)  // raise level
-             && GetMonData(mon, MON_DATA_LEVEL, NULL) != 100)
+            if ((itemEffect[cmdIndex] & ITEM3_LEVEL_UP)  // raise level /rare candy
+             && GetMonData(mon, MON_DATA_LEVEL, NULL) != MAX_LEVEL) //+1 is level up replace with n, where n is quantity of itemused
             {
                 data = gExperienceTables[gBaseStats[GetMonData(mon, MON_DATA_SPECIES, NULL)].growthRate][GetMonData(mon, MON_DATA_LEVEL, NULL) + 1];
                 SetMonData(mon, MON_DATA_EXP, &data);
@@ -5173,20 +5948,20 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
      
                     switch (i)
                     {
-                    case 0: // EV_HP    delta is ev change 510 should be max total, and 100 is how many vitamins can be used, each vitamin use ads 10 evs.
+                    case 0: // EV_HP    delta is ev change, 510 (changed)should be max total, and 100 is how many vitamins can be used, each vitamin use ads 10 evs.
                     case 1: // EV_ATK
                         evCount = GetMonEVCount(mon);
-                        if (evCount >= 788)
+                        if (evCount >= MAX_TOTAL_EVS)
                             return TRUE;
-                        data = GetMonData(mon, sGetMonDataEVConstants[i], NULL);
-                        if (data < 200)
+                        data = GetMonData(mon, sGetMonDataEVConstants[i], NULL); //data is amount of evs for each stat
+                        if (data < EV_ITEM_BOOSTER_LIMIT)
                         {
-                            if (data + itemEffect[idx] > 200)
-                                evDelta = 200 - (data + itemEffect[idx]) + itemEffect[idx];
+                            if (data + itemEffect[idx] > EV_ITEM_BOOSTER_LIMIT)
+                                evDelta = EV_ITEM_BOOSTER_LIMIT - (data + itemEffect[idx]) + itemEffect[idx];
                             else
                                 evDelta = itemEffect[idx];
-                            if (evCount + evDelta > 788)
-                                evDelta += 788 - (evCount + evDelta);
+                            if (evCount + evDelta > MAX_TOTAL_EVS)
+                                evDelta += MAX_TOTAL_EVS - (evCount + evDelta);
                             data += evDelta;
                             SetMonData(mon, sGetMonDataEVConstants[i], &data);
                             CalculateMonStats(mon);
@@ -5360,17 +6135,17 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                     case 2: // EV_SPDEF
                     case 3: // EV_SPATK
                         evCount = GetMonEVCount(mon);
-                        if (evCount >= 788)
+                        if (evCount >= MAX_TOTAL_EVS)
                             return TRUE;
                         data = GetMonData(mon, sGetMonDataEVConstants[i + 2], NULL);
-                        if (data < 200)
+                        if (data < EV_ITEM_BOOSTER_LIMIT)
                         {
-                            if (data + itemEffect[idx] > 200)
-                                evDelta = 200 - (data + itemEffect[idx]) + itemEffect[idx];
+                            if (data + itemEffect[idx] > EV_ITEM_BOOSTER_LIMIT)
+                                evDelta = EV_ITEM_BOOSTER_LIMIT - (data + itemEffect[idx]) + itemEffect[idx];
                             else
                                 evDelta = itemEffect[idx];
-                            if (evCount + evDelta > 788)
-                                evDelta += 788 - (evCount + evDelta);
+                            if (evCount + evDelta > MAX_TOTAL_EVS)
+                                evDelta += MAX_TOTAL_EVS - (evCount + evDelta);
                             data += evDelta;
                             SetMonData(mon, sGetMonDataEVConstants[i + 2], &data);
                             CalculateMonStats(mon);
@@ -5545,7 +6320,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
         gActiveBattler = 0;
         battlerId = 4;
     }
-    if (!IS_POKEMON_ITEM(item) && !IS_POKEMON_ITEM2(item))
+    if ((!IS_POKEMON_ITEM(item)) && !IS_POKEMON_ITEM2(item))  //based on crit calc this DOES need to be and, not or
         return TRUE;
     if (gItemEffectTable[item - ITEM_POTION] == NULL && item != ITEM_ENIGMA_BERRY)
         return TRUE;
@@ -5601,7 +6376,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
              && gSideTimers[GetBattlerSide(gActiveBattler)].mistTimer == 0)
                 retVal = FALSE;
             if ((itemEffect[cmdIndex] & ITEM3_LEVEL_UP)  // raise level
-             && GetMonData(mon, MON_DATA_LEVEL, NULL) != 100)
+             && GetMonData(mon, MON_DATA_LEVEL, NULL) != MAX_LEVEL)
                 retVal = FALSE;
             if ((itemEffect[cmdIndex] & ITEM3_SLEEP)
              && PartyMonHasStatus(mon, partyIndex, STATUS1_SLEEP, battlerId))
@@ -5638,10 +6413,10 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
                     {
                     case 0: // EV_HP
                     case 1: // EV_ATK
-                        if (GetMonEVCount(mon) >= 788)
+                        if (GetMonEVCount(mon) >= MAX_TOTAL_EVS)
                             return TRUE;
                         data = GetMonData(mon, sGetMonDataEVConstants[i], NULL);
-                        if (data < 200) // not 100% sure about this
+                        if (data < EV_ITEM_BOOSTER_LIMIT) // not 100% sure about this  assuming vitamin limit
                         {
                             idx++;
                             retVal = FALSE;
@@ -5715,10 +6490,10 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
                     case 1: // EV_SPEED
                     case 2: // EV_SPDEF
                     case 3: // EV_SPATK
-                        if (GetMonEVCount(mon) >= 788)
+                        if (GetMonEVCount(mon) >= MAX_TOTAL_EVS)
                             return TRUE;
                         data = GetMonData(mon, sGetMonDataEVConstants[i + 2], NULL);
-                        if (data < 200)
+                        if (data < EV_ITEM_BOOSTER_LIMIT)
                         {
                             retVal = FALSE;
                             idx++;
@@ -5952,10 +6727,21 @@ static u8 GetNatureFromPersonality(u32 personality)
     return personality % 25;
 }
 
+//type is only used in evoltion function for switch case while here I want it to be pokeon type so don't need type as parameter
+//unless I make a switch case that checks parent mon typing
+/*u16 GetBreedingTargetSpecies(struct Pokemon *mon, u8 type, u16 breedingItem) //got an error because variable name "type" was same as parameter "type"
+{
+    u16 targetSpecies = 0;
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
+    u16 heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
+    u8 montype = ((gBaseStats[GetMonData(mon, MON_DATA_SPECIES, 0)].type1) 
+        || (gBaseStats[GetMonData(mon, MON_DATA_SPECIES, 0)].type2)) //forgot this is pokemon.c so gemondata is different, added 0, hpoefully works
+}*/
+
 u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
 {
-    int i;
-    u16 targetSpecies = 0;
+    int i, j;
+    u16 targetSpecies = 0; 
     u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
     u16 heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
@@ -5964,6 +6750,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
     u8 beauty = GetMonData(mon, MON_DATA_BEAUTY, 0);
     u16 upperPersonality = personality >> 16;
     u8 holdEffect;
+    u16 currentMap;
 
     if (heldItem == ITEM_ENIGMA_BERRY)
         holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
@@ -5979,7 +6766,8 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
         level = GetMonData(mon, MON_DATA_LEVEL, 0);
         friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
 
-        for (i = 0; i < 5; i++)
+        for (i = 0; i < EVOS_PER_MON; i++) //may need change, think this is looping based on previous num evolutions this is 5 options
+            //which was old evos per mon I may need change to 16   yup that is the case
         {
             switch (gEvolutionTable[species][i].method)
             {
@@ -5989,21 +6777,62 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 break;
             // FR/LG removed the time of day evolutions due to having no RTC.
             case EVO_FRIENDSHIP_DAY:
-                /*
+                
                 RtcCalcLocalTime();
                 if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && friendship >= FRIENDSHIP_EVO_LIMITER)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
-                */
+                
                 break;
             case EVO_FRIENDSHIP_NIGHT:
-                /*
+                
                 RtcCalcLocalTime();
                 if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && friendship >= FRIENDSHIP_EVO_LIMITER)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
-                */
+                
+                break;
+            case EVO_ITEM_HOLD:
+                if (heldItem == gEvolutionTable[species][i].param)
+                {
+                    heldItem = 0;
+                    SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                }
+                break;
+            case EVO_ITEM_HOLD_NIGHT:
+                RtcCalcLocalTime();
+                if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && heldItem == gEvolutionTable[species][i].param)
+                {
+                    heldItem = 0;
+                    SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                }
+                break;
+            case EVO_ITEM_HOLD_DAY:
+                RtcCalcLocalTime();
+                if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && heldItem == gEvolutionTable[species][i].param)
+                {
+                    heldItem = 0;
+                    SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                }
                 break;
             case EVO_LEVEL:
                 if (gEvolutionTable[species][i].param <= level)
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_LEVEL_DAY:
+                RtcCalcLocalTime();
+                if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && gEvolutionTable[species][i].param <= level)
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_LEVEL_NIGHT:
+                RtcCalcLocalTime();
+                if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && gEvolutionTable[species][i].param <= level)
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_LEVEL_DUSK:
+                RtcCalcLocalTime();
+                if (gLocalTime.hours >= 17 && gLocalTime.hours < 18 && gEvolutionTable[species][i].param <= level)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 break;
             case EVO_LEVEL_ATK_GT_DEF:
@@ -6020,7 +6849,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 if (gEvolutionTable[species][i].param <= level)
                     if (GetMonData(mon, MON_DATA_ATK, 0) < GetMonData(mon, MON_DATA_DEF, 0))
                         targetSpecies = gEvolutionTable[species][i].targetSpecies;
-                break;
+                break;//these 3 were just for hitmon evolutions never using
             case EVO_LEVEL_SILCOON:
                 if (gEvolutionTable[species][i].param <= level && (upperPersonality % 10) <= 4)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
@@ -6037,11 +6866,160 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 if (gEvolutionTable[species][i].param <= beauty)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
                 break;
+            case EVO_MOVE:
+                if (MonKnowsMove(mon, gEvolutionTable[species][i].param))
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_MOVE_TYPE:
+                for (j = 0; j < 4; j++)
+                {
+                    if (gBattleMoves[GetMonData(mon, MON_DATA_MOVE1 + j, NULL)].type == gEvolutionTable[species][i].param)
+                    {
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        break;
+                    }
+                }
+                break;
+            case EVO_SPECIFIC_MON_IN_PARTY:
+                for (j = 0; j < PARTY_SIZE; j++)
+                {
+                    if (GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL) == gEvolutionTable[species][i].param)
+                    {
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        break;
+                    }
+                }
+                break;
+            case EVO_SPECIFIC_TYPE_IN_PARTY: //need to get type stored in variable so can use as parameter in evo table like mondataspecies
+                for (j = 0; j < PARTY_SIZE; j++)//OK should work, should loop through party get species read type of species
+                    //and then compare it against the parameter listed in the table for evo, which will be variable value for type
+                {
+                    u16 species = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
+                    if (gBaseStats[species].type1 == gEvolutionTable[species][i].param
+                        || gBaseStats[species].type2 == gEvolutionTable[species][i].param)
+                    {
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        break;
+                    }
+                }
+                break;
+            case EVO_LEVEL_DARK_TYPE_MON_IN_PARTY:
+                if (gEvolutionTable[species][i].param <= level) //checks if mons level is greater or equal to lvl required for evo in table
+                {
+                    for (j = 0; j < PARTY_SIZE; j++)
+                    {
+                        u16 species = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
+                        if (gBaseStats[species].type1 == TYPE_DARK
+                            || gBaseStats[species].type2 == TYPE_DARK)
+                        {
+                            targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                            break;
+                        }
+                    }
+                }
+                break;
+            case EVO_LEVEL_KARRABLAST: //plan for this is have rival mon in party as well as an electric type mon parameter will be lvl
+                if ((gEvolutionTable[species][i].param || gEvolutionTable[SPECIES_SHELMET][i].param) <= level) //should let it evolve regardless of which one in your party levels up
+                {
+                    for (j = 0; j < PARTY_SIZE; j++)
+                    {
+                        u16 species = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
+                        if (gBaseStats[species].type1 == TYPE_ELECTRIC
+                            || gBaseStats[species].type2 == TYPE_ELECTRIC)
+                        {
+                            if (GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL) == SPECIES_SHELMET)
+                            {
+                                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                                break;
+                            }
+                        }
+                    } //important need to test this
+                }
+                break;//if species change doesn't work use one evo method for both and a switch case for species for either
+            case EVO_LEVEL_SHELMET:
+                if ((gEvolutionTable[species][i].param || gEvolutionTable[SPECIES_KARRABLAST][i].param) <= level) //should make them both evolve when either levels up
+                {
+                    for (j = 0; j < PARTY_SIZE; j++)
+                    {
+                        u16 species = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
+                        if (gBaseStats[species].type1 == TYPE_ELECTRIC
+                            || gBaseStats[species].type2 == TYPE_ELECTRIC)
+                        {
+                            if (GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL) == SPECIES_KARRABLAST)
+                            {
+                                targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                                break;
+                            }
+                        }
+                    }
+                }//want them both to evolve at the same time since one evolving would keep the other from evolving otherwise
+                break;//make sure karrablast and shelmet are catchable above the level at which they evolve, i.e above lvl 20
+            case EVO_LEVEL_RAIN:
+                j = GetCurrentWeather();
+                if (j == WEATHER_RAIN || j == WEATHER_RAIN_THUNDERSTORM || j == WEATHER_DOWNPOUR)
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_MAPSEC:
+                if (gMapHeader.regionMapSectionId == gEvolutionTable[species][i].param)
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_SPECIFIC_MAP:
+                currentMap = ((gSaveBlock1Ptr->location.mapGroup) << 8 | gSaveBlock1Ptr->location.mapNum);
+                if (currentMap == gEvolutionTable[species][i].param)
+                    targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                break;
+            case EVO_LEVEL_NATURE_AMPED:
+                if (gEvolutionTable[species][i].param <= level)
+                {
+                    u8 nature = GetNature(mon);
+                    switch (nature)
+                    {
+                    case NATURE_HARDY:
+                    case NATURE_BRAVE:
+                    case NATURE_ADAMANT:
+                    case NATURE_NAUGHTY:
+                    case NATURE_DOCILE:
+                    case NATURE_IMPISH:
+                    case NATURE_LAX:
+                    case NATURE_HASTY:
+                    case NATURE_JOLLY:
+                    case NATURE_NAIVE:
+                    case NATURE_RASH:
+                    case NATURE_SASSY:
+                    case NATURE_QUIRKY:
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        break;
+                    }
+                }
+                break;
+            case EVO_LEVEL_NATURE_LOW_KEY:
+                if (gEvolutionTable[species][i].param <= level)
+                {
+                    u8 nature = GetNature(mon);
+                    switch (nature)
+                    {
+                    case NATURE_LONELY:
+                    case NATURE_BOLD:
+                    case NATURE_RELAXED:
+                    case NATURE_TIMID:
+                    case NATURE_SERIOUS:
+                    case NATURE_MODEST:
+                    case NATURE_MILD:
+                    case NATURE_QUIET:
+                    case NATURE_BASHFUL:
+                    case NATURE_CALM:
+                    case NATURE_GENTLE:
+                    case NATURE_CAREFUL:
+                        targetSpecies = gEvolutionTable[species][i].targetSpecies;
+                        break;
+                    }
+                }
+                break;
             }
         }
         break;
     case EVO_MODE_TRADE:
-        for (i = 0; i < 5; i++)
+        for (i = 0; i < EVOS_PER_MON; i++)
         {
             switch (gEvolutionTable[species][i].method)
             {
@@ -6065,7 +7043,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
         break;
     case EVO_MODE_ITEM_USE:
     case EVO_MODE_ITEM_CHECK:
-        for (i = 0; i < 5; i++)
+        for (i = 0; i < EVOS_PER_MON; i++)
         {
             if (gEvolutionTable[species][i].method == EVO_ITEM
              && gEvolutionTable[species][i].param == evolutionItem)
@@ -6158,7 +7136,7 @@ u16 HoennToNationalOrder(u16 hoennNum)
     return sHoennToNationalOrder[hoennNum - 1];
 }
 
-u16 SpeciesToCryId(u16 species)
+u16 SpeciesToCryId(u16 species) //not used anymore changed to emerald logic
 {
     if (species < SPECIES_EGG)
         return species;
@@ -6288,7 +7266,7 @@ u8 GetTrainerEncounterMusicId(u16 trainer)
 
 u16 ModifyStatByNature(u8 nature, u16 n, u8 statIndex)
 {
-    if (statIndex < 1 || statIndex > 5)
+    if (statIndex < 1 || statIndex > 5) //I think this is to exclude hp and battle stats i.e accuracy & evasion
     {
         // should just be "return n", but it wouldn't match without this
         u16 retVal = n;
@@ -6313,6 +7291,7 @@ u16 ModifyStatByNature(u8 nature, u16 n, u8 statIndex)
 #define TRAINER_CLASS_LEADER         0x57
 #define TRAINER_CLASS_CHAMPION       0x5A
 
+#define FRIENDSHIP_FUNCTION
 void AdjustFriendship(struct Pokemon *mon, u8 event)
 {
     u16 species = GetMonData(mon, MON_DATA_SPECIES2, 0);
@@ -6328,13 +7307,13 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
     }
     else
     {
-        holdEffect = ItemId_GetHoldEffect(heldItem);
+        holdEffect = ItemId_GetHoldEffect(heldItem); //get hold effect for checking for friendship item
     }
 
     if (species && species != SPECIES_EGG)
     {
         u8 friendshipLevel = 0;
-        s16 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
+        s16 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0); //calc friendship level for delta
         s8 delta;
         if (friendship > 99)
             friendshipLevel++;
@@ -6359,29 +7338,29 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
         }
 
         delta = sFriendshipEventDeltas[event][friendshipLevel]; //exp friendship is now part of this
-        if (delta > 0 && holdEffect == HOLD_EFFECT_HAPPINESS_UP) //if event delta raises friendship boost if have hold item that boosts friendhsip
-            delta = (150 * delta) / 100; //boost the increase you would have
+            if (delta > 0 && holdEffect == HOLD_EFFECT_HAPPINESS_UP) //if event delta raises friendship boost if have hold item that boosts friendhsip
+                delta = (150 * delta) / 100; //boost the increase you would have
 
 
-        friendship += delta; //adds delta to friendship is a plus but as delta can be negative this is where subtraction is done as well as main setting of friendship value
+            friendship += delta; //adds delta to friendship is a plus but as delta can be negative this is where subtraction is done as well as main setting of friendship value
+            
+            if (delta > 0) //if your friendship should be raised, add an additional increase based on these conditions
+            {
+                if (GetMonData(mon, MON_DATA_POKEBALL, 0) == ITEM_LUXURY_BALL)
+                    friendship++;
+                if (GetMonData(mon, MON_DATA_MET_LOCATION, 0) == GetCurrentRegionMapSectionId())
+                    friendship++;
+            }
 
-        if (delta > 0) //if your friendship should be raised, add an additional increase based on these conditions
-        {
-            if (GetMonData(mon, MON_DATA_POKEBALL, 0) == ITEM_LUXURY_BALL)
-                friendship++;
-            if (GetMonData(mon, MON_DATA_MET_LOCATION, 0) == GetCurrentRegionMapSectionId())
-                friendship++;
-        }
+           
+            if (friendship < 0)
+                friendship = 0;
+            if (friendship > 255)
+                friendship = 255; //standard limitter stuff
 
-
-        if (friendship < 0)
-            friendship = 0;
-        if (friendship > 255)
-            friendship = 255; //standard limitter stuff
-
-        //don't need loop, this function is usually called within a loop so using mon is enough
-        if (GetMonData(mon, MON_DATA_HP, NULL) != 0) //added filter for if mon is alive,wouldn't affect exp event as it already works based on mon being alive
-            SetMonData(mon, MON_DATA_FRIENDSHIP, &friendship); //need check message script and vitamin use/itemuse to make sure can't be done on fainted mon vsonic
+            //don't need loop, this function is usually called within a loop so using mon is enough
+                if (GetMonData(mon, MON_DATA_HP, NULL) != 0) //added filter for if mon is alive,wouldn't affect exp event as it already works based on mon being alive
+                    SetMonData(mon, MON_DATA_FRIENDSHIP, &friendship); //need check message script and vitamin use/itemuse to make sure can't be done on fainted mon vsonic
 
     }
 }
@@ -6393,14 +7372,15 @@ enum
     DEFENSE,
     SPEED,
     SP_ATTACK,
-    SP_DEFENSE,
+    SP_DEFENSE,    
 };
 
 //removed battle evs just need to add power items and custom item changes
 //for the new system will need to change ultima brace to work like exp share idea
 //where it registers a pokemon, and activates on top of any held items
-#define EV_GAIN //Made edits, if works, ev changes are done
 
+
+#define EV_GAIN //Made edits, if works, ev changes are done
 void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function doesn't use exp, it proves ev gain is separate from exp gain.
 { //                                            this means making an item to 0 out exp gain wouldn't break ev gain.
     u16 evs[NUM_STATS]; //per stat evs                
@@ -6442,7 +7422,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
         multiplier *= 3;
     if (holdEffect == HOLD_EFFECT_POWERITEM)
         multiplier *= 2;
-
+    
     //if holdeffect is a power item, i for switch case equals helditem secondary item  ItemId_GetSecondaryId
 
     if (holdEffect == HOLD_EFFECT_POWERITEM)    //should be ev gain separate from macho brace loop, so I can safely increase a single stat 
@@ -6489,12 +7469,12 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
 
     for (i = 0; i < NUM_STATS; i++) //adding stats
     {
-
+        
 
         if (totalEVs >= MAX_TOTAL_EVS) //ok figured out how to block ev gain, when the item is in effect make max total evs = totalEVs. for the hold effect
             break; // it needs to specifically be that, Max total == totalEVS, the other way around would increase pokemons evs.
 
-
+        
 
         if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE))    //should loop each stat and add evs for every stat
         {
@@ -6520,7 +7500,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
                 break;
             }
         }
-
+        
 
         //if (holdEffect == HOLD_EFFECT_MACHO_BRACE) //need to figure to re add power items, and effect plus gen 6 exp share
           //  evIncrease *= 2;    //this is for calculating number of evs, not for the gain itself
@@ -6552,7 +7532,7 @@ u16 GetMonEVCount(struct Pokemon *mon)
     u16 count = 0;
 
     for (i = 0; i < NUM_STATS; i++)
-        count += GetMonData(mon, MON_DATA_HP_EV + i, 0);
+        count += GetMonData(mon, MON_DATA_HP_EV + i, NULL);
 
     return count;
 }
@@ -6653,7 +7633,7 @@ bool8 TryIncrementMonLevel(struct Pokemon *mon)
     u8 newLevel = level + 1;
     u32 exp = GetMonData(mon, MON_DATA_EXP, NULL);
 
-    if (level < 100)
+    if (level < MAX_LEVEL)
     {
         if (exp > gExperienceTables[gBaseStats[species].growthRate][newLevel])
         {
@@ -6783,7 +7763,7 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
     return numMoves;
 }
 
-u16 SpeciesToPokedexNum(u16 species)
+u16 SpeciesToPokedexNum(u16 species) //used by sum screen to put ??? in place of num if not kanto dex mon
 {
     species = SpeciesToNationalPokedexNum(species);
 
@@ -6792,7 +7772,7 @@ u16 SpeciesToPokedexNum(u16 species)
     return species;
 }
 
-void ClearBattleMonForms(void)
+void ClearBattleMonForms(void) //!important if I make mega evos permanent I may need to add an exclusion here
 {
     int i;
     for (i = 0; i < 4; i++)
@@ -6886,13 +7866,13 @@ const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(u
         return &gMonPaletteTable[species];
 }
 
-bool32 IsHMMove2(u16 move)
+bool32 IsHMMove2(u16 move)//vsonic
 {
     int i = 0;
     while (sHMMoves[i] != 0xFFFF)
     {
         if (sHMMoves[i++] == move)
-            return TRUE;
+            return FALSE;  //used for move learn to check if should be able to forget, that's why made false here
     }
     return FALSE;
 }
@@ -6947,7 +7927,7 @@ void MonRestorePP(struct Pokemon *mon)
     BoxMonRestorePP(&mon->box);
 }
 
-void BoxMonRestorePP(struct BoxPokemon *boxMon) //useful for dead pokemon pc fix.  also need check function for boxmon health restore
+void BoxMonRestorePP(struct BoxPokemon *boxMon) //useful for dead pokemon pc fix.  also need check function for boxmon health restore  VSONIC
 {
     int i;
 

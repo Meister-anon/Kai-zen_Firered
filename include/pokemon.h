@@ -131,34 +131,8 @@ struct PokemonStorage
     /*0x83C2*/ u8 boxWallpapers[TOTAL_BOXES_COUNT]; //when I'm able to expand box counts give this its own separate constant won't need 
 };  //a unique wall paper for each box, could even remove some of the wall papers I don't like/no one likes
 
-struct BattleTowerPokemon
-{
-    /*0x00*/ u16 species;
-    /*0x02*/ u16 heldItem;
-    /*0x04*/ u16 moves[4];
-    /*0x0C*/ u8 level;
-    /*0x0D*/ u8 ppBonuses;
-    /*0x0E*/ u8 hpEV;
-    /*0x0F*/ u8 attackEV;
-    /*0x10*/ u8 defenseEV;
-    /*0x11*/ u8 speedEV;
-    /*0x12*/ u8 spAttackEV;
-    /*0x13*/ u8 spDefenseEV;
-    /*0x14*/ u32 otId;
-    /*0x18*/ u32 hpIV:5;
-             u32 attackIV:5;
-             u32 defenseIV:5;
-             u32 speedIV:5;
-             u32 spAttackIV:5;
-             u32 spDefenseIV:5;
-             u32 gap:1;
-             u32 abilityNum:1;
-    /*0x1C*/ u32 personality;
-    /*0x20*/ u8 nickname[11];
-    /*0x2B*/ u8 friendship;
-};
 
-/*
+
 struct BattleTowerPokemon //apparently used for both battle tower leftover from emerald, AND trainer tower, on sevii island
 {
              u16 species;
@@ -185,7 +159,8 @@ struct BattleTowerPokemon //apparently used for both battle tower leftover from 
              u8 nickname[POKEMON_NAME_LENGTH + 1];
              u8 friendship; //used for frustration and return, exists in either 0 or 255
 }; //don't need to change anything foud more space by removing ereader stuff
-*/ //leave as is for now, replace above noe, with this one, when move battletower to C, adn remove trainer hill stuff
+ //leave as is for now, replace above noe, with this one, when move battletower to C, adn remove trainer hill stuff
+//need check padding to make sure actually saving space
 
 #define BATTLE_STATS_NO 8
 
@@ -317,8 +292,9 @@ extern const struct BattleMove gBattleMoves[];
 #define FLAG_THAW_USER                            (1 << 25)
 #define FLAG_HIT_IN_SUBSTITUTE                    (1 << 26) // Hyperspace Fury
 #define FLAG_TWO_STRIKES                          (1 << 27) // A move with this flag will strike twice, and may apply its effect on each hit
-#define FLAG_ROCK_HEAD_BOOST    (1 << 28)   //EQUIvalent iron fist will boost moves that used head
-#define FLAG_WIND_MOVE              (1 << 29)
+#define FLAG_ROCK_HEAD_BOOST        (1 << 28)   //EQUIvalent iron fist will boost moves that used head
+#define FLAG_WIND_MOVE              (1 << 29)   //added for rotom ability
+#define FLAG_LETHAL_LEGS_BOOST      (1 << 30)  //hitmon lee ability kick move boost
 
 #define SPINDA_SPOT_HEIGHT 16
 
@@ -457,6 +433,7 @@ void ConvertPokemonToBattleTowerPokemon(struct Pokemon *mon, struct BattleTowerP
 void CalculateMonStats(struct Pokemon *mon);
 void TransformedMonStats(struct Pokemon *mon);
 void GiveMonInitialMoveset(struct Pokemon *mon);
+void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon);   //moved these defins here so could use in battle_main
 void BoxMonToMon(struct BoxPokemon *src, struct Pokemon *dest);
 u8 GetLevelFromBoxMonExp(struct BoxPokemon *boxMon);
 u16 GiveMoveToMon(struct Pokemon *mon, u16 move);
@@ -503,8 +480,8 @@ u8 GetMonsStateToDoubles(void);
 u16 GetAbilityBySpecies(u16 species, bool8 abilityNum);
 u16 GetMonAbility(struct Pokemon *mon);
 bool32 IsMonType(struct Pokemon *mon, u8 type); //uses get mondata species to check mon type from base stats, not battle type,  used for field poison
-u8 GetSecretBaseTrainerPicIndex(void);
-u8 GetSecretBaseTrainerNameIndex(void);
+u8 GetSecretBaseTrainerPicIndex(void); //remove this later
+u8 GetSecretBaseTrainerNameIndex(void); //remove this later
 bool8 IsPlayerPartyAndPokemonStorageFull(void);
 void GetSpeciesName(u8 *name, u16 species);
 u8 CalculatePPWithBonus(u16 move, u8 ppBonuses, u8 moveIndex);

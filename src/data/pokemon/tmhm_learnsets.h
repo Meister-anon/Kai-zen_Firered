@@ -5,6 +5,11 @@
 // Each entry is a 64-bit bit array spread across two 32-bit values, with
 // each bit corresponding to a machine.
 //think that means as a whole I can only have each mon learn up to 64 tm/hms?  which should be enough
+
+//remember add FLY to more mon learnsets, refer to gFloatingSpecies list for starting point, note even pidgey learns fly, size irrelevant
+//emerald expansion changed how these are handled, more akin to levelup learnset, which removes the bit array limit allowing for many more learned moves
+//so will port that
+
 static const u32 sTMHMLearnsets[][2] =
 {
     [SPECIES_NONE]        = TMHM_LEARNSET(0),
@@ -6415,6 +6420,7 @@ static const u32 sTMHMLearnsets[][2] =
                                         | TMHM(TM44_REST)
                                         | TMHM(TM45_ATTRACT)
                                         | TMHM(TM46_THIEF)
+                                        | TMHM(HM02_FLY)
                                         | TMHM(HM05_FLASH)),
 
     [SPECIES_CASCOON]     = TMHM_LEARNSET(0),
@@ -6439,6 +6445,7 @@ static const u32 sTMHMLearnsets[][2] =
                                         | TMHM(TM44_REST)
                                         | TMHM(TM45_ATTRACT)
                                         | TMHM(TM46_THIEF)
+                                        | TMHM(HM02_FLY)
                                         | TMHM(HM05_FLASH)),
 
     [SPECIES_LOTAD]       = TMHM_LEARNSET(TMHM(TM03_WATER_PULSE)
@@ -6852,6 +6859,7 @@ static const u32 sTMHMLearnsets[][2] =
                                         | TMHM(TM44_REST)
                                         | TMHM(TM45_ATTRACT)
                                         | TMHM(TM46_THIEF)
+                                        | TMHM(HM02_FLY)
                                         | TMHM(HM05_FLASH)),
 
     [SPECIES_WAILMER]     = TMHM_LEARNSET(TMHM(TM03_WATER_PULSE)
@@ -8001,6 +8009,7 @@ static const u32 sTMHMLearnsets[][2] =
                                         | TMHM(TM46_THIEF)
                                         | TMHM(TM48_SKILL_SWAP)
                                         | TMHM(TM49_SNATCH)
+                                        | TMHM(HM02_FLY)
                                         | TMHM(HM05_FLASH)),
 
     [SPECIES_DUSCLOPS]    = TMHM_LEARNSET(TMHM(TM01_FOCUS_PUNCH)
@@ -8029,6 +8038,7 @@ static const u32 sTMHMLearnsets[][2] =
                                         | TMHM(TM46_THIEF)
                                         | TMHM(TM48_SKILL_SWAP)
                                         | TMHM(TM49_SNATCH)
+                                        | TMHM(HM02_FLY)
                                         | TMHM(HM04_STRENGTH)
                                         | TMHM(HM05_FLASH)
                                         | TMHM(HM06_ROCK_SMASH)),

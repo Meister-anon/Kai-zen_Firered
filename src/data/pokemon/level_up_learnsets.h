@@ -1539,10 +1539,10 @@ static const struct LevelUpMove sMarowakLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sHitmonleeLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_ROLLING_KICK),
     LEVEL_UP_MOVE(1, MOVE_REVENGE),
     LEVEL_UP_MOVE(1, MOVE_DOUBLE_KICK),
     LEVEL_UP_MOVE(6, MOVE_MEDITATE),
-    LEVEL_UP_MOVE(11, MOVE_ROLLING_KICK),
     LEVEL_UP_MOVE(16, MOVE_JUMP_KICK),
     LEVEL_UP_MOVE(20, MOVE_BRICK_BREAK),
     LEVEL_UP_MOVE(21, MOVE_FOCUS_ENERGY),
@@ -1556,8 +1556,8 @@ static const struct LevelUpMove sHitmonleeLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sHitmonchanLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_COMET_PUNCH),
     LEVEL_UP_MOVE(1, MOVE_REVENGE),
-    LEVEL_UP_MOVE(1, MOVE_COMET_PUNCH),
     LEVEL_UP_MOVE(7, MOVE_AGILITY),
     LEVEL_UP_MOVE(13, MOVE_PURSUIT),
     LEVEL_UP_MOVE(20, MOVE_MACH_PUNCH),
@@ -3221,17 +3221,18 @@ static const struct LevelUpMove sOctilleryLevelUpLearnset[] = {
 static const struct LevelUpMove sDelibirdLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_PRESENT),
     LEVEL_UP_MOVE(1, MOVE_SAND_ATTACK),
-    LEVEL_UP_MOVE(1, MOVE_ICE_BALL),
-    LEVEL_UP_MOVE(11, MOVE_AURORA_BEAM),
+    LEVEL_UP_MOVE(1, MOVE_ICE_BALL),//make new move snowball,  variable dmg physical attk, use psywave effect, keep ice ball animation for now, idea throw ice/snow ball of varying size and power or something
+    LEVEL_UP_MOVE(11, MOVE_AURORA_BEAM), //will be physical ice version of psywave, potentially w chance to flinch
     LEVEL_UP_MOVE(16, MOVE_QUICK_ATTACK),
     LEVEL_UP_MOVE(22, MOVE_FUTURE_SIGHT),
+    LEVEL_UP_MOVE(22, MOVE_SNOWBALL),
     LEVEL_UP_MOVE(27, MOVE_DOUBLE_TEAM),
     LEVEL_UP_MOVE(31, MOVE_DRILL_PECK),
     LEVEL_UP_MOVE(37, MOVE_AURORA_VEIL),
     LEVEL_UP_MOVE(42, MOVE_FLING),
     LEVEL_UP_MOVE(42, MOVE_RECYCLE),
     LEVEL_UP_END
-};
+};//give extreme speed and add a few stronger special ice moves ice beam, blizzard etc.
 
 static const struct LevelUpMove sMantineLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
@@ -3385,8 +3386,9 @@ static const struct LevelUpMove sTyrogueLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sHitmontopLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_REVENGE),
+    LEVEL_UP_MOVE(0, MOVE_TRIPLE_KICK),
     LEVEL_UP_MOVE(1, MOVE_ROLLING_KICK),
+    LEVEL_UP_MOVE(1, MOVE_REVENGE),
     LEVEL_UP_MOVE(7, MOVE_FOCUS_ENERGY),
     LEVEL_UP_MOVE(13, MOVE_PURSUIT),
     LEVEL_UP_MOVE(19, MOVE_QUICK_ATTACK),

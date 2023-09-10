@@ -11,6 +11,7 @@
 #include "battle_gfx_sfx_util.h"
 #include "battle_util2.h"
 #include "battle_bg.h"
+#include "window.h" //need this for build modern to work for battle window ui
 
 /*
     Banks are a name given to what could be called a 'battlerId' or 'monControllerId'.
@@ -465,6 +466,7 @@ struct BattleHistory
     /*0x24*/ u8 itemEffects[MAX_BATTLERS_COUNT / 2];
     /*0x26*/ u16 trainerItems[MAX_BATTLERS_COUNT];
     /*0x2E*/ u8 itemsNo;
+             u16 heldItems[MAX_BATTLERS_COUNT]; //not default added
 };
 
 struct BattleScriptsStack
@@ -494,6 +496,8 @@ struct BattleResources
     struct AI_ThinkingStruct *ai;
     struct BattleHistory *battleHistory;
     struct BattleScriptsStack *AI_ScriptsStack;
+    u8 bufferA[MAX_BATTLERS_COUNT][0x200]; //ported seems for megas
+    u8 bufferB[MAX_BATTLERS_COUNT][0x200];
 };
 
 extern struct BattleResources *gBattleResources;
@@ -578,23 +582,24 @@ struct StatFractions
 
 extern const struct StatFractions gAccuracyStageRatios[];
 
-struct BattleStruct
+struct BattleStruct //fill in unused fields when porting
 {
     u8 turnEffectsTracker;
     u8 turnEffectsBattlerId;
-    u8 filler2; // unused
     u8 turnCountersTracker;
-    u8 wrappedMove[MAX_BATTLERS_COUNT * 2]; // Leftover from Ruby's ewram access.
-    u8 moveTarget[MAX_BATTLERS_COUNT];
+    u16 wrappedMove[MAX_BATTLERS_COUNT * 2]; // Leftover from Ruby's ewram access. /u16 because epanded move ids
+    u16 moveTarget[MAX_BATTLERS_COUNT];
     u8 expGetterMonId;
-    u8 field_11; // unused
+    u8 targetsDone[MAX_BATTLERS_COUNT]; // Each battler as a bit.
     u8 wildVictorySong;
     u8 dynamicMoveType;
     u8 wrappedBy[MAX_BATTLERS_COUNT];
+    u8 weathersetBy[MAX_BATTLERS_COUNT];    //new member for tracking who set new weather conditions
     u16 assistPossibleMoves[PARTY_SIZE * MAX_MON_MOVES]; // 6 mons, each of them knowing 4 moves
-    u8 focusPunchBattlerId;
+    //u8 focusPunchBattlerId; //don't need as changed focus punch effct
     u8 battlerPreventingSwitchout;
     u8 moneyMultiplier;
+    u8 moneyMultiplierMove : 1;
     u8 savedTurnActionNumber;
     u8 switchInAbilitiesCounter;
     u8 faintedActionsState;
@@ -609,7 +614,8 @@ struct BattleStruct
     u8 battlerPartyOrders[MAX_BATTLERS_COUNT][3];
     u8 runTries;
     u8 caughtMonNick[POKEMON_NAME_LENGTH + 1];
-    u8 field_78; // unused
+    struct MegaEvolutionData mega;
+    //u8 field_78; // unused
     u8 safariGoNearCounter;
     u8 safariPkblThrowCounter;
     u8 safariEscapeFactor;
@@ -620,29 +626,44 @@ struct BattleStruct
     u8 chosenMovePositions[MAX_BATTLERS_COUNT];
     u8 stateIdAfterSelScript[MAX_BATTLERS_COUNT];
     struct Illusion illusion[MAX_BATTLERS_COUNT];
-    /*u8 field_88; // unused
-    u8 field_89; // unused
-    u8 field_8A; // unused */
+    //u8 field_88; // unused
+    //u8 field_89; // unused
+    //u8 field_8A; // unused
     u8 playerPartyIdx;
     //u8 field_8C; // unused
     //u8 field_8D; // unused
+    //s8 aiFinalScore[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT][MAX_MON_MOVES]; // AI, target, moves to make debugging easier
+    //u8 aiMoveOrAction[MAX_BATTLERS_COUNT];
+    //u8 aiChosenTarget[MAX_BATTLERS_COUNT]; //ported these 3 hope ot a problem
+    u8 soulheartBattlerId;  //Magearna ability
+    u8 friskedBattler; // Frisk needs to identify 2 battlers in double battles.
+    bool8 friskedAbility; // If identifies two mons, show the ability pop-up only once.
+    u16 changedSpecies[PARTY_SIZE]; // For Zygarde or future forms when multiple mons can change into the same pokemon.
     u8 stringMoveType;
     u8 expGetterBattlerId;
-    //u8 field_90; // unused
+    bool8 ateBoost[MAX_BATTLERS_COUNT];//says that but ateberry seems to only be used by dodriogame
+    u8 ateBerry[2]; // array id determined by side, each party pokemon as bit
+    u8 stolenStats[NUM_BATTLE_STATS]; // hp byte is used for which stats to raise, other inform about by how many stages
+    //u8 field_90; // unused   //ok thank god these really are unused, I'll replace when I need to bing stuff from emerald
     u8 absentBattlerFlags;
-    u8 AI_monToSwitchIntoId[2];
+    u8 AI_monToSwitchIntoId[MAX_BATTLERS_COUNT]; //changed from 2, based on emerald
     u8 simulatedInputState[4];  // used by Oak/Old Man/Pokedude controllers
-    u8 lastTakenMove[MAX_BATTLERS_COUNT * 2 * 2]; // ask gamefreak why they declared it that way
+    //u8 lastTakenMove[MAX_BATTLERS_COUNT * 2 * 2]; // ask gamefreak why they declared it that way /original here, emerald version below
+    u16 lastTakenMove[MAX_BATTLERS_COUNT]; // Last move that a battler was hit with.
+    u8 lastMoveFailed; // as bits for each battler, for the sake of Stomping Tantrum
+    u8 lastMoveTarget[MAX_BATTLERS_COUNT]; // The last target on which each mon used a move, for the sake of Instruct
     u16 hpOnSwitchout[2];
-    u16 abilityPreventingSwitchout;
+    u16 abilityPreventingSwitchout; //could probably use lastTakenMove with ai, to keep a count of a party mons moveset.
     u8 hpScale;
     u16 savedBattleTypeFlags;
     void (*savedCallback)(void);
     u8 synchronizeMoveEffect;
     u8 multiplayerId;
-    u8 overworldWeatherDone;
+    bool8 overworldWeatherDone;
+    bool8 terrainDone;
     u8 atkCancellerTracker;
-    u16 usedHeldItems[MAX_BATTLERS_COUNT];
+    //u16 usedHeldItems[MAX_BATTLERS_COUNT]; //original value below is emerald expansion changed version,  
+    u16 usedHeldItems[PARTY_SIZE][NUM_BATTLE_SIDES]; // For each party member and side. For harvest, recycle  //think I"m setup to use this? adjusted all values now
     u8 chosenItem[4]; // why is this an u8?
     u8 AI_itemType[2];
     u8 AI_itemFlags[2];
@@ -652,10 +673,10 @@ struct BattleStruct
     u8 switchInItemsCounter;
     u8 field_DA; // battle tower related
     u8 turnSideTracker;
-    u8 fillerDC[0xDF-0xDC];
+    u8 fillerDC[0xDF - 0xDC];
     u8 givenExpMons;
-    u8 lastTakenMoveFrom[MAX_BATTLERS_COUNT * MAX_BATTLERS_COUNT * 2];
-    u16 castformPalette[MAX_BATTLERS_COUNT][16];
+    u16 lastTakenMoveFrom[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT];// a 2-D array [target][attacker]
+    u16 castformPalette[MAX_BATTLERS_COUNT][16]; //important, may be how they fixed alcremie?
     u8 wishPerishSongState;
     u8 wishPerishSongBattlerId;
     u8 savedBattlerTarget;
@@ -663,7 +684,7 @@ struct BattleStruct
     u16 tracedAbility[MAX_BATTLERS_COUNT]; //didn't really need to port, but prob can use it to show current ability in menu summary screen //important
     u16 hpBefore[MAX_BATTLERS_COUNT]; // Hp of battlers before using a move. For Berserk
     bool8 spriteIgnore0Hp;
-    u8 field_182;
+    u8 field_182; //look into this
     struct StolenItem itemStolen[PARTY_SIZE];  // Player's team that had items stolen (two bytes per party member)
     u8 blunderPolicy : 1; // should blunder policy activate
     u8 swapDamageCategory:1; // Photon Geyser, Shell Side Arm, Light That Burns the Sky
