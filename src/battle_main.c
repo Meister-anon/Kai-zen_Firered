@@ -4634,7 +4634,8 @@ void SwapTurnOrder(u8 id1, u8 id2)
 
 u32 GetBattlerTotalSpeedStat(u8 battlerId)
 {
-    u32 speed = gBattleMons[battlerId].speed;
+    u32 speed = gBattleMons[battlerId].speed; //activebattler /attacker
+    u32 targetspeed = gBattleMons[gBattlerTarget].speed; //may work may not, for now use ability on opposing field
     u32 ability = GetBattlerAbility(battlerId);
     u32 holdEffect = GetBattlerHoldEffect(battlerId, TRUE);
     u32 highestStat = GetHighestStatId(battlerId);  //3was for protosynthesis will use for ultranerozma move instead i think
@@ -4659,6 +4660,8 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
         speed *= 2;
     else if (ability == ABILITY_SLOW_START && gDisableStructs[battlerId].slowStartTimer != 0)
         speed /= 2; //so I ironically complete missed adding this...
+    else if (IsAbilityOnOpposingSide(battlerId, ABILITY_MAGNET_PULL) && IS_BATTLER_OF_TYPE(battlerId, TYPE_STEEL))
+        speed /= 2; //magnet pull buff
     //gen 9
     /*else if (ability == ABILITY_PROTOSYNTHESIS && gBattleWeather & WEATHER_SUN_ANY && highestStat == STAT_SPEED)
         speed = (speed * 150) / 100;
