@@ -4237,14 +4237,14 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
         return BATTLE_RUN_FAILURE;
     }//vsonic IMPORTANT do search, for status2_wrapped & wrappedby  implement new trap checks where it makes sense
     //similar to as below
-    if ((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))//vsonic need add new trap status here
+    if (((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))//vsonic need add new trap status here
      || (gBattleMons[gActiveBattler].status4 == ITS_A_TRAP_STATUS4)
      || (gBattleMons[gActiveBattler].status1 == ITS_A_TRAP_STATUS1)
      || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
-     || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK)
+     || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK))
      /*|| (!IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
         && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING))*/
-     || (IsBattlerGrounded(gActiveBattler))) //use paras ingraint to check I didn't break affect with this
+     && IsBattlerGrounded(gActiveBattler)) //use paras ingraint to check I didn't break affect with this, I made it impossible to flee unless not gronded because I used or instead of and -__
     {
         gBattleCommunication[MULTISTRING_CHOOSER] = 0;
         return BATTLE_RUN_FORBIDDEN;
