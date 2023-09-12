@@ -1216,6 +1216,10 @@ as well as the effect of increasing trap duration
 * fix acelgor sprite change lips
 * fix delibird learnset oh already done
 *
+*   forgot need change castform ability logic, 
+* changes weather too often,  check switchin, don't want to always change weather if weather exists
+* for end turn change want to lower odds, so can actually better take advantage of weather change if possible
+*
 *new plan buff present , make like tripel axel, make multi hit and boost power with each sucessive hit.
 * so it becomes a crap shot gamble, either do big damage or a heal and the damage has a chance to outweigh the heal if there is one
 * so its not a complete waste.  plan augment move damage by an amount each loop,
