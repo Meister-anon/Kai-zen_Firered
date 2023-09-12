@@ -23,7 +23,7 @@ PalletTown_PlayersHouse_2F_FirstWarpIn:: @ 8168CC8
 
 PalletTown_PlayersHouse_2F_EventScript_NES:: @ 8168CD2
 	msgbox PalletTown_PlayersHouse_2F_Text_PlayedWithNES, MSGBOX_SIGN
-	givemon SPECIES_DITTO, 5, ITEM_NONE
+	givemon SPECIES_DRIFLOON, 5, ITEM_NONE  @for early game testing, rn for aftermath
 	end
 
 PalletTown_PlayersHouse_2F_EventScript_Sign:: @ 8168CDB

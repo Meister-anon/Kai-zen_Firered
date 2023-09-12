@@ -1230,7 +1230,35 @@ as well as the effect of increasing trap duration
 *make new move snowball,  variable dmg physical attk, use psywave effect, keep ice ball animation for now, idea throw ice/snow ball of varying size and power or something
 *will be physical ice version of psywave, potentially w chance to flinch
 *
+* thought give opal style heal vial, make menu for item use clause, full heal / and set mode  there are times/strategies where you don't want full hp , or to clear status
+* so make it full restore, max potion, and set,  change item effect to that of those two items, for set make menu effect where you can explicitly set the hp to heal to.
+* moving left and right adjusts hp by 10s up and down d pad moves it one digit at a time.   setup logic for hold as well.
+*
+* setup be able to accss pc on the go pull out and deposit mon whenever,
+* thought was for things lilke emrald kaizo, those games are extra difficult and annoying to deal with, since you need specific things for each fight
+* so to counter that have hp vial to fully heal your team free, giving you two tries, rather than a wipe the vial is used to heal you up, or you are put back 
+*  to a position before the fight, out of trainer sight, and you are able to heal and try again.  
+* if do that, need store map location  of trainer fought, and direction of entrance of map, to put player closer to the map entrance
+* in relation to the trainer they fought, and out of their potential line of sight.
+* think also say put them at a warp position x number of tiles awaym so they aren't far and away from where they were before they lost
+*
+*should you win a match the vial would be refreshed, so every time battle outcome won you refresh the vial.
+*hmm could use that as battle streak, rather than having to go to pokemon center to refill vials.
+* could instead need to win a certain amount of matches.
+*
+* shuold be a different benchamrk for each batle type. i.e wilds vs trainers
+* beat or catch 3-5 wild mon,  or win 1 (or more idk) trainer battles to recharge vial.
+*
+* would need setup new gvalue counter for batte stat increments on battle outcome won, reset to 0 on vial use
+* only count up if vial counter is 0, since don't need to track it if its full
+*
+* notes boosted/fixed setup for psywave and seismic toss
+*
 * note on advice from anthroyd give more mon fly, go by movie logic if it can float it can fly  just like in movie 2000 guy flew on his gengar
+*
+* adjust type for lycanroc forms, need adjust evo move adn learnsets, adjust abilities as well
+*as I buffed all move accuracy keen eye isn't as good? could make it never miss, but would just be better no gaurd
+* could give no gaurd a 10-20% dmg boost to compensate.. prob not?
 *
 * Give crabominable a better front sprite, its just ugly 
 * -progress
