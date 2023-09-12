@@ -214,24 +214,26 @@
 
 // Seems like per-battler statuses. Not quite sure how to categorize these
 //#define STATUS3_SKY_DROPPED             0x1 // Target of Sky Drop
-#define STATUS3_LEECHSEED_BATTLER       0x3
-#define STATUS3_LEECHSEED               0x4
-#define STATUS3_ALWAYS_HITS             0x18    // two bits
-#define STATUS3_PERISH_SONG             0x20
-#define STATUS3_ON_AIR                  0x40
-#define STATUS3_UNDERGROUND             0x80
-#define STATUS3_MINIMIZED               0x100
-#define STATUS3_ROOTED                  0x400
-#define STATUS3_CHARGED_UP              0x200
-#define STATUS3_YAWN                    0x1800  // two bits
-#define STATUS3_IMPRISONED_OTHERS       0x2000
-#define STATUS3_GRUDGE                  0x4000
-#define STATUS3_CANT_SCORE_A_CRIT       0x8000	//(1 << 15)
-#define STATUS3_MUDSPORT                0x10000	//(1 << 16)	//can move these 2 to side status?
-#define STATUS3_WATERSPORT              0x20000	//(1 << 17) //remove sports later
-#define STATUS3_UNDERWATER              0x40000	//(1 << 18)
-#define STATUS3_INTIMIDATE_POKES        0x80000	//(1 << 19)
-#define STATUS3_TRACE                   0x100000	//(1 << 20)
+#define STATUS3_LEECHSEED_BATTLER       (1 << 0 | 1 << 1) // The battler to receive HP from Leech Seed
+#define STATUS3_LEECHSEED                (1 << 2)
+#define STATUS3_ALWAYS_HITS             (1 << 3 | 1 << 4)    // two bits
+#define STATUS3_ALWAYS_HITS_TURN(num)   (((num) << 3) & STATUS3_ALWAYS_HITS) // "Always Hits" is set as a 2 turn timer, i.e. next turn is the last turn when it's active
+#define STATUS3_PERISH_SONG             (1 << 5)
+#define STATUS3_ON_AIR                  (1 << 6)
+#define STATUS3_UNDERGROUND             (1 << 7)
+#define STATUS3_MINIMIZED               (1 << 8)
+#define STATUS3_CHARGED_UP              (1 << 9)
+#define STATUS3_ROOTED                  (1 << 10) //if I understand correctly, change gives extra statur 3 space 12 would be unused
+#define STATUS3_YAWN                    (1 << 11) // Number of turns to sleep
+//#define STATUS3_YAWN_TURN(num)          (((num) << 11) & STATUS3_YAWN)  changing set status yawn, then at end turn check for it, if there remove and put to sleep
+#define STATUS3_IMPRISONED_OTHERS       (1 << 13)
+#define STATUS3_GRUDGE                  (1 << 14)
+#define STATUS3_CANT_SCORE_A_CRIT       (1 << 15)
+//#define STATUS3_MUDSPORT                (1 << 16)	//can move these 2 to side status?
+//#define STATUS3_WATERSPORT              0x20000	//(1 << 17) //remove sports later
+#define STATUS3_UNDERWATER              (1 << 18)
+#define STATUS3_INTIMIDATE_POKES        (1 << 19)
+#define STATUS3_TRACE                   (1 << 20)
 #define STATUS3_ROOTED_SHIFT (21)
 #define STATUS3_ROOTED_COUNTER (0xF << STATUS3_ROOTED_SHIFT)
 #define STATUS3_ROOTED_TURN(num) ((num) << STATUS3_ROOTED_SHIFT)
@@ -561,7 +563,7 @@
 // Window Ids for sTextOnWindowsInfo_Normal
 #define B_WIN_MSG                 0
 #define B_WIN_ACTION_PROMPT       1 // "What will {x} do?"
-#define B_WIN_ACTION_MENU         2 // "Fight/Pokémon/Bag/Run" menu
+#define B_WIN_ACTION_MENU         2 // "Fight/Pokï¿½mon/Bag/Run" menu
 #define B_WIN_MOVE_NAME_1         3 // Top left
 #define B_WIN_MOVE_NAME_2         4 // Top right
 #define B_WIN_MOVE_NAME_3         5 // Bottom left
