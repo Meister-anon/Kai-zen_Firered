@@ -47,7 +47,7 @@ static void Cb_ShiftMon(u8 taskId);
 static void Cb_WithdrawMon(u8 taskId);
 static void Cb_DepositMenu(u8 taskId);
 static void Cb_ReleaseMon(u8 taskId);
-static void Cb_ShowMarkMenu(u8 taskId);
+//static void Cb_ShowMarkMenu(u8 taskId);
 static void Cb_TakeItemForMoving(u8 taskId);
 static void Cb_GiveMovingItemToMon(u8 taskId);
 static void Cb_ItemToBag(u8 taskId);
@@ -72,7 +72,7 @@ static void LoadPSSMenuGfx(void);
 static bool8 InitPSSWindows(void);
 static void LoadWaveformSpritePalette(void);
 static void sub_808F078(void);
-static void PSS_CreateMonMarkingSprite(void);
+//static void PSS_CreateMonMarkingSprite(void);
 static void CreateWaveformSprites(void);
 static void RefreshCursorMonData(void);
 static void BoxSetMosaic(void);
@@ -243,6 +243,7 @@ static const struct StorageAction sPCStorageActionTexts[] = {
     [PC_TEXT_MARK_POKE] = {gText_MarkYourPkmn, PC_TEXT_FMT_NORMAL},
     [PC_TEXT_LAST_POKE] = {gText_ThatsYourLastPkmn, PC_TEXT_FMT_NORMAL},
     [PC_TEXT_PARTY_FULL] = {gText_YourPartysFull, PC_TEXT_FMT_NORMAL},
+    [PC_TEXT_PARTY_EMPTY] = {gText_YourPartysEmpty, PC_TEXT_FMT_NORMAL},
     [PC_TEXT_HOLDING_POKE] = {gText_YoureHoldingAPkmn, PC_TEXT_FMT_NORMAL},
     [PC_TEXT_WHICH_ONE_WILL_TAKE] = {gText_WhichOneWillYouTake, PC_TEXT_FMT_NORMAL},
     [PC_TEXT_CANT_RELEASE_EGG] = {gText_YouCantReleaseAnEgg, PC_TEXT_FMT_NORMAL},
@@ -378,7 +379,7 @@ void Cb2_EnterPSS(u8 boxOption)
         gUnknown_20397BA = 0;
         gPSSData->state = 0;
         gPSSData->taskId = CreateTask(Cb_InitPSS, 3);
-        SetHelpContext(HELPCONTEXT_BILLS_PC);
+       // SetHelpContext(HELPCONTEXT_BILLS_PC);
         sLastUsedBox = StorageGetCurrentBox();
         SetMainCallback2(Cb2_PSS);
     }
@@ -396,7 +397,7 @@ void Cb2_ReturnToPSS(void)
         gPSSData->isReshowingPSS = TRUE;
         gPSSData->state = 0;
         gPSSData->taskId = CreateTask(Cb_InitPSS, 3);
-        SetHelpContext(HELPCONTEXT_BILLS_PC);
+       // SetHelpContext(HELPCONTEXT_BILLS_PC);
         SetMainCallback2(Cb2_PSS);
     }
 }
@@ -533,8 +534,8 @@ static void Cb_InitPSS(u8 taskId)
         {
             gPSSData->field_DA4.baseTileTag = TAG_TILE_D;
             gPSSData->field_DA4.basePaletteTag = TAG_PAL_DACE;
-            SetMonMarkingsMenuPointer(&gPSSData->field_DA4);
-            LoadMonMarkingsFrameGfx();
+            //SetMonMarkingsMenuPointer(&gPSSData->field_DA4);
+            //LoadMonMarkingsFrameGfx();
         }
         else
         {
@@ -678,7 +679,7 @@ static void Cb_MainPSS(u8 taskId)
             }
             break;
         case 11:
-            if (!CanMovePartyMon())
+            if (!CanMovePartyMon()) //false is can move
             {
                 if (ItemIsMail(gPSSData->cursorMonItem))
                 {
@@ -812,7 +813,7 @@ static void Cb_MainPSS(u8 taskId)
             gPSSData->state = 0;
         }
         break;
-    case 4:
+    case 4: //change in system_2 file keeps this from triggering, but the on mon still blocks.
         PlaySE(SE_FAILURE);
         PrintStorageActionText(PC_TEXT_LAST_POKE);
         gPSSData->state = 6;
@@ -927,12 +928,12 @@ static void Cb_OnSelectedMon(u8 taskId)
     case 2:
         switch (sub_8094F94())
         {
-        case -1:
-        case  0:
+        case MENU_B_PRESSED:
+        case  PC_TEXT_CANCEL:
             ClearBottomWindow();
             SetPSSCallback(Cb_MainPSS);
             break;
-        case 3:
+        case PC_TEXT_MOVE:
             if (CanMovePartyMon())
             {
                 gPSSData->state = 3;
@@ -944,12 +945,12 @@ static void Cb_OnSelectedMon(u8 taskId)
                 SetPSSCallback(Cb_MoveMon);
             }
             break;
-        case 5:
+        case PC_TEXT_PLACE:
             PlaySE(SE_SELECT);
             ClearBottomWindow();
             SetPSSCallback(Cb_PlaceMon);
             break;
-        case 4:
+        case PC_TEXT_SHIFT: //only fo rmail, and I removed mail
             if (!CanShiftMon())
             {
                 gPSSData->state = 3;
@@ -961,12 +962,12 @@ static void Cb_OnSelectedMon(u8 taskId)
                 SetPSSCallback(Cb_ShiftMon);
             }
             break;
-        case 2:
+        case PC_TEXT_WITHDRAW:
             PlaySE(SE_SELECT);
             ClearBottomWindow();
             SetPSSCallback(Cb_WithdrawMon);
             break;
-        case 1:
+        case PC_TEXT_STORE:
             if (CanMovePartyMon())
             {
                 gPSSData->state = 3;
@@ -982,7 +983,7 @@ static void Cb_OnSelectedMon(u8 taskId)
                 SetPSSCallback(Cb_DepositMenu);
             }
             break;
-        case 7:
+        case PC_TEXT_RELEASE:
             if (CanMovePartyMon())
             {
                 gPSSData->state = 3;
@@ -1001,32 +1002,32 @@ static void Cb_OnSelectedMon(u8 taskId)
                 SetPSSCallback(Cb_ReleaseMon);
             }
             break;
-        case 6:
+        case PC_TEXT_SUMMARY:
             PlaySE(SE_SELECT);
             SetPSSCallback(Cb_ShowMonSummary);
             break;
-        case 8:
+        /*case 8:
             PlaySE(SE_SELECT);
             SetPSSCallback(Cb_ShowMarkMenu);
-            break;
-        case 12:
+            break;*/
+        case PC_TEXT_TAKE_ITEM:
             PlaySE(SE_SELECT);
             SetPSSCallback(Cb_TakeItemForMoving);
             break;
-        case 13:
+        case PC_TEXT_GIVE_ITEM:
             PlaySE(SE_SELECT);
             SetPSSCallback(Cb_GiveMovingItemToMon);
             break;
-        case 16:
+        case PC_TEXT_BAG:
             SetPSSCallback(Cb_ItemToBag);
             break;
-        case 15:
+        case PC_TEXT_SWITCH_ITEM:
             SetPSSCallback(Cb_SwitchSelectedItem);
             break;
-        case 14:
+        case PC_TEXT_GIVE_ITEM2:
             SetPSSCallback(Cb_GiveItemFromBag);
             break;
-        case 17:
+        case PC_TEXT_ITEM_INFO:
             SetPSSCallback(Cb_ShowItemInfo);
             break;
         }
@@ -1366,7 +1367,7 @@ static void Cb_ReleaseMon(u8 taskId)
     }
 }
 
-static void Cb_ShowMarkMenu(u8 taskId)
+/*static void Cb_ShowMarkMenu(u8 taskId)
 {
     switch (gPSSData->state)
     {
@@ -1387,7 +1388,7 @@ static void Cb_ShowMarkMenu(u8 taskId)
         }
         break;
     }
-}
+}*/
 
 static void Cb_TakeItemForMoving(u8 taskId)
 {
@@ -1913,12 +1914,13 @@ static void Cb_GiveItemFromBag(u8 taskId)
     }
 }
 
-static void Cb_OnCloseBoxPressed(u8 taskId)
+#define OTHER_BOX_LOGIC
+static void Cb_OnCloseBoxPressed(u8 taskId) //not what I thought, this isn't closing bills pc, this is the closepc button inside the box.
 {
     switch (gPSSData->state)
     {
     case 0:
-        if (IsMonBeingMoved())
+        if (IsMonBeingMoved())//change this to auto return to origina spot if holding, rather than playing a dumb message
         {
             PlaySE(SE_FAILURE);
             PrintStorageActionText(PC_TEXT_HOLDING_POKE);
@@ -1926,7 +1928,7 @@ static void Cb_OnCloseBoxPressed(u8 taskId)
         }
         else if (IsActiveItemMoving())
         {
-            SetPSSCallback(Cb_CloseBoxWhileHoldingItem);
+            SetPSSCallback(Cb_CloseBoxWhileHoldingItem);    //change logic for this, to put item back on mon picked up from.
         }
         else
         {
@@ -1974,20 +1976,26 @@ static void Cb_OnCloseBoxPressed(u8 taskId)
     }
 }
 
-static void Cb_OnBPressed(u8 taskId)
+static void Cb_OnBPressed(u8 taskId)    //pressing B, while inside box.
 {
-    switch (gPSSData->state)
+    switch (gPSSData->state)    
     {
     case 0:
-        if (IsMonBeingMoved())
+        if (IsMonBeingMoved())  //change this to auto return to origina spot if holding, rather than playing a dumb message
         {
             PlaySE(SE_FAILURE);
             PrintStorageActionText(PC_TEXT_HOLDING_POKE);
             gPSSData->state = 1;
         }
-        else if (IsActiveItemMoving())
+        else if (IsActiveItemMoving())  //change logic for this, to put item back on mon picked up from.
         {
             SetPSSCallback(Cb_CloseBoxWhileHoldingItem);
+        }
+        else if (CountPartyMons() == 0)    //add to hopefully display when trying to close box with no mon in party
+        {
+            PlaySE(SE_FAILURE);
+            PrintStorageActionText(PC_TEXT_PARTY_EMPTY);
+            gPSSData->state = 1;
         }
         else
         {
@@ -2156,12 +2164,12 @@ static void sub_808F078(void)
 
     SetGpuReg(REG_OFFSET_BG1CNT, BGCNT_PRIORITY(1) | BGCNT_CHARBASE(1) | BGCNT_16COLOR | BGCNT_SCREENBASE(30));
     LoadCursorMonSprite();
-    PSS_CreateMonMarkingSprite();
+   // PSS_CreateMonMarkingSprite();
     CreateWaveformSprites();
     RefreshCursorMonData();
 }
 
-static void PSS_CreateMonMarkingSprite(void)
+/*static void PSS_CreateMonMarkingSprite(void)
 {
     gPSSData->monMarkingSprite = CreateMonMarkingSprite_AllOff(TAG_TILE_10, TAG_PAL_DAC8, NULL);
     gPSSData->monMarkingSprite->oam.priority = 1;
@@ -2169,7 +2177,7 @@ static void PSS_CreateMonMarkingSprite(void)
     gPSSData->monMarkingSprite->pos1.x = 40;
     gPSSData->monMarkingSprite->pos1.y = 150;
     gPSSData->monMarkingSpriteTileStart = (void *)OBJ_VRAM0 + 32 * GetSpriteTileStartByTag(TAG_TILE_10);
-}
+}*/
 
 static void CreateWaveformSprites(void)
 {
@@ -2294,26 +2302,26 @@ static void PrintCursorMonInfo(void)
     {
         for (i = 0, y = 0; i < 3; i++, y += 14)
         {
-            AddTextPrinterParameterized(0, 2, gPSSData->cursorMonTexts[i], i == 2 ? 10 : 6, y, TEXT_SPEED_FF, NULL);
+            AddTextPrinterParameterized(0, 2, gPSSData->cursorMonTexts[i], i == 2 ? 10 : 6, y, TEXT_SKIP_DRAW, NULL);
         }
-        AddTextPrinterParameterized(0, 0, gPSSData->cursorMonTexts[3], 6, y + 2, TEXT_SPEED_FF, NULL);
+        AddTextPrinterParameterized(0, 0, gPSSData->cursorMonTexts[3], 6, y + 2, TEXT_SKIP_DRAW, NULL);
     }
     else
     {
-        AddTextPrinterParameterized(0, 0, gPSSData->cursorMonTexts[3], 6, 0, TEXT_SPEED_FF, NULL);
+        AddTextPrinterParameterized(0, 0, gPSSData->cursorMonTexts[3], 6, 0, TEXT_SKIP_DRAW, NULL);
         for (i = 0, y = 15; i < 3; i++, y += 14)
         {
-            AddTextPrinterParameterized(0, 2, gPSSData->cursorMonTexts[i], i == 2 ? 10 : 6, y, TEXT_SPEED_FF, NULL);
+            AddTextPrinterParameterized(0, 2, gPSSData->cursorMonTexts[i], i == 2 ? 10 : 6, y, TEXT_SKIP_DRAW, NULL);
         }
     }
 
     CopyWindowToVram(0, COPYWIN_GFX);
     if (gPSSData->cursorMonSpecies != SPECIES_NONE)
-    {
+    /*{
         RequestDma3LoadMonMarking(gPSSData->cursorMonMarkings, gPSSData->monMarkingSpriteTileStart);
         gPSSData->monMarkingSprite->invisible = FALSE;
     }
-    else
+    else*/
     {
         gPSSData->monMarkingSprite->invisible = TRUE;
     }
@@ -2592,7 +2600,7 @@ static void PrintStorageActionText(u8 id)
 
     DynamicPlaceholderTextUtil_ExpandPlaceholders(gPSSData->field_2190, sPCStorageActionTexts[id].text);
     FillWindowPixelBuffer(1, PIXEL_FILL(1));
-    AddTextPrinterParameterized(1, 1, gPSSData->field_2190, 0, 2, TEXT_SPEED_FF, NULL);
+    AddTextPrinterParameterized(1, 1, gPSSData->field_2190, 0, 2, TEXT_SKIP_DRAW, NULL);
     DrawTextBorderOuter(1, 2, 13);
     PutWindowTilemap(1);
     CopyWindowToVram(1, COPYWIN_GFX);

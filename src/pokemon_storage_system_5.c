@@ -912,7 +912,7 @@ s16 CompactPartySlots(void)
     return retVal;
 }
 
-void SetMonMarkings(u8 markings)
+/*void SetMonMarkings(u8 markings)
 {
     gPSSData->cursorMonMarkings = markings;
     if (sIsMonBeingMoved)
@@ -926,7 +926,7 @@ void SetMonMarkings(u8 markings)
         if (sBoxCursorArea == CURSOR_AREA_IN_BOX)
             SetCurrentBoxMonData(sBoxCursorPosition, MON_DATA_MARKINGS, &markings);
     }
-}
+}*/
 
 bool8 CanMovePartyMon(void)
 {
@@ -1028,7 +1028,7 @@ static void SetCursorMonData(void *pokemon, u8 mode)
             GetMonData(mon, MON_DATA_NICKNAME, gPSSData->cursorMonNick);
             StringGet_Nickname(gPSSData->cursorMonNick);
             gPSSData->cursorMonLevel = GetMonData(mon, MON_DATA_LEVEL);
-            gPSSData->cursorMonMarkings = GetMonData(mon, MON_DATA_MARKINGS);
+            //gPSSData->cursorMonMarkings = GetMonData(mon, MON_DATA_MARKINGS);
             gPSSData->cursorMonPersonality = GetMonData(mon, MON_DATA_PERSONALITY);
             gPSSData->cursorMonPalette = GetMonFrontSpritePal(mon);
             gender = GetMonGender(mon);
@@ -1053,7 +1053,7 @@ static void SetCursorMonData(void *pokemon, u8 mode)
             GetBoxMonData(boxMon, MON_DATA_NICKNAME, gPSSData->cursorMonNick);
             StringGet_Nickname(gPSSData->cursorMonNick);
             gPSSData->cursorMonLevel = GetLevelFromBoxMonExp(boxMon);
-            gPSSData->cursorMonMarkings = GetBoxMonData(boxMon, MON_DATA_MARKINGS);
+            //gPSSData->cursorMonMarkings = GetBoxMonData(boxMon, MON_DATA_MARKINGS);
             gPSSData->cursorMonPersonality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
             gPSSData->cursorMonPalette = GetMonSpritePalFromSpeciesAndPersonality(gPSSData->cursorMonSpecies, otId, gPSSData->cursorMonPersonality);
             gender = GetGenderFromSpeciesAndPersonality(gPSSData->cursorMonSpecies, gPSSData->cursorMonPersonality);
@@ -1251,11 +1251,11 @@ static u8 InBoxInput_Normal(void)
                     return 14;
                 case PC_TEXT_PLACE:
                     return 15;
-                case PC_TEXT_TAKE:
+                case PC_TEXT_TAKE_ITEM:
                     return 16;
-                case PC_TEXT_GIVE:
+                case PC_TEXT_GIVE_ITEM:
                     return 17;
-                case PC_TEXT_SWITCH:
+                case PC_TEXT_SWITCH_ITEM:
                     return 18;
                 }
             }
@@ -1531,11 +1531,11 @@ static u8 HandleInput_InParty(void)
                     return 14;
                 case PC_TEXT_PLACE:
                     return 15;
-                case PC_TEXT_TAKE:
+                case PC_TEXT_TAKE_ITEM:
                     return 16;
-                case PC_TEXT_GIVE:
+                case PC_TEXT_GIVE_ITEM:
                     return 17;
-                case PC_TEXT_SWITCH:
+                case PC_TEXT_SWITCH_ITEM:
                     return 18;
                 }
             }
@@ -1826,16 +1826,16 @@ static bool8 sub_8094A0C(void)
             if (gPSSData->cursorMonSpecies == SPECIES_NONE)
                 return FALSE;
 
-            SetMenuText(PC_TEXT_GIVE2);
+            SetMenuText(PC_TEXT_GIVE_ITEM2);
         }
         else
         {
             if (!ItemIsMail(gPSSData->cursorMonItem))
             {
-                SetMenuText(PC_TEXT_TAKE);
+                SetMenuText(PC_TEXT_TAKE_ITEM);
                 SetMenuText(PC_TEXT_BAG);
             }
-            SetMenuText(PC_TEXT_INFO);
+            SetMenuText(PC_TEXT_ITEM_INFO);
         }
     }
     else
@@ -1845,14 +1845,14 @@ static bool8 sub_8094A0C(void)
             if (gPSSData->cursorMonSpecies == SPECIES_NONE)
                 return FALSE;
 
-            SetMenuText(PC_TEXT_GIVE);
+            SetMenuText(PC_TEXT_GIVE_ITEM);
         }
         else
         {
             if (ItemIsMail(gPSSData->cursorMonItem) == TRUE)
                 return FALSE;
 
-            SetMenuText(PC_TEXT_SWITCH);
+            SetMenuText(PC_TEXT_SWITCH_ITEM);
         }
     }
 
