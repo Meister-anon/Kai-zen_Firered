@@ -4289,9 +4289,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                 damage = (damage * 10) / 30;  //33% damage cut, so less of a cut than in rain, edit- actually fires are harder to start in cold so makes sense to have higher drop than rain
                 break;  //changed to 66% cut,  so for mon weak to fire they take slightly less than neutral dmg
 
-            case TYPE_ICE:
-                damage = (damage * 125) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
-                break;
+            //case TYPE_ICE:
+              //  damage = (damage * 125) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
+              //  break;
             } //since I made hail a defensive boost, I may remove dmg boost, 
         }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
     }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing
