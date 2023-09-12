@@ -54,7 +54,8 @@
 #define sFIELD_23 gBattleScripting + 0x31				//u8 field_23;	1 byte 0x31		//nothing in struct below this think all used values must go above here
 #define sWINDOWS_TYPE gBattleScripting + 0x32
 #define sMULTIPLAYER_ID gBattleScripting + 0x33
-#define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x34
+#define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x34    //wait aren't these limited to 32?
+
 
 #define cEFFECT_CHOOSER gBattleCommunication + 3
 #define cMULTISTRING_CHOOSER gBattleCommunication + 5
@@ -65,21 +66,23 @@
 #define BS_EFFECT_BATTLER           2
 #define BS_FAINTED                  3
 #define BS_ATTACKER_WITH_PARTNER    4 // for atk98_updatestatusicon
-#define BS_UNKNOWN_5                5 // for openpartyscreen
-#define BS_UNKNOWN_6                6 // for openpartyscreen
+#define BS_FAINTED_LINK_MULTIPLE_1  5 // for openpartyscreen
+#define BS_FAINTED_LINK_MULTIPLE_2  6 // for openpartyscreen
 #define BS_BATTLER_0                7
 #define BS_ATTACKER_SIDE            8 // for atk1E_jumpifability
-#define BS_NOT_ATTACKER_SIDE        9 // for atk1E_jumpifability
+#define BS_TARGET_SIDE				9 // for atk1E_jumpifability
 #define BS_SCRIPTING                10
 #define BS_PLAYER1                  11
 #define BS_OPPONENT1                12
-#define BS_PLAYER2                  13 // for atk98_updatestatusicon
+#define BS_PLAYER2                  13 // for atk98_updatestatusicon  /?? i don't remember tis
 #define BS_OPPONENT2                14
+#define BS_ABILITY_BATTLER          15	//port from emerald
+#define BS_ATTACKER_PARTNER         16
 
 // used for openpartyscreen
 #define OPEN_PARTY_ALLOW_CANCEL     0x80
 
-// atk 01, accuracy calc
+// atk01_accuracycheck
 #define NO_ACC_CALC 0xFFFE
 #define NO_ACC_CALC_CHECK_LOCK_ON 0xFFFF
 #define ACC_CURR_MOVE 0
@@ -92,16 +95,16 @@
 #define CMP_COMMON_BITS         0x4
 #define CMP_NO_COMMON_BITS      0x5
 
-// TODO: documentation
+// TODO: documentation	//need to set bs.inc various to the order of this file
 // atk76, various
 #define VARIOUS_CANCEL_MULTI_TURN_MOVES         0
 #define VARIOUS_SET_MAGIC_COAT_TARGET           1
 #define VARIOUS_IS_RUNNING_IMPOSSIBLE           2
 #define VARIOUS_GET_MOVE_TARGET                 3
-#define VARIOUS_CASE_4                          4
+#define VARIOUS_GET_BATTLER_FAINTED                          4
 #define VARIOUS_RESET_INTIMIDATE_TRACE_BITS     5
 #define VARIOUS_UPDATE_CHOICE_MOVE_ON_LVL_UP    6
-#define VARIOUS_RESET_PLAYER_FAINTED_FLAG       7
+#define VARIOUS_RESET_PLAYER_FAINTED			7
 #define VARIOUS_CASE_8                          8
 #define VARIOUS_RETURN_OPPONENT_MON1            9
 #define VARIOUS_RETURN_OPPONENT_MON2            10
@@ -261,42 +264,78 @@
 
 
 // atk80, dmg manipulation
-#define ATK80_DMG_CHANGE_SIGN                               0
-#define ATK80_DMG_HALF_BY_TWO_NOT_MORE_THAN_HALF_MAX_HP     1
-#define ATK80_DMG_DOUBLED                                   2
+#define NEGATIVE_DMG					0
+#define RECOIL_MISS_DMG					1	//udated this should do miss & immunity
+#define DOUBLE_DMG						2
+#define DMG_1_8_TARGET_HP				3
+#define DMG_FULL_ATTACKER_HP			4
+#define DMG_CURR_ATTACKER_HP			5
+#define DMG_BIG_ROOT					6
+#define DMG_1_2_ATTACKER_HP				7
+#define DMG_RECOIL_FROM_IMMUNE		    8 // Used to calculate recoil for the Gen 4 version of Jump Kick, will tweak and instead consolidate in case 1
+
+// Cmd_jumpifcantswitch
+#define SWITCH_IGNORE_ESCAPE_PREVENTION   (1 << 7)
 
 // atk4F, a flag used for the jumpifcantswitch command
 #define ATK4F_DONT_CHECK_STATUSES   0x80
 
+//equivalent of STAT_BUFF_ALLOW_PTR  just has different name
+//& STAT_BUFF_NOT_PROTECT_AFFECTED
+
 // statchange defines
-#define STAT_CHANGE_BS_PTR                  0x1
-#define STAT_CHANGE_NOT_PROTECT_AFFECTED    0x20
+#define STAT_CHANGE_BS_PTR                  (1 << 0) // If set, allow use of jumpptr. Set in every use of statbuffchange		//equivalent stat_change_allow_ptr
+#define STAT_CHANGE_MIRROR_ARMOR			(1 << 1)	// Stat change redirection caused by Mirror Armor ability.
+#define STAT_CHANGE_NOT_PROTECT_AFFECTED    (1 << 5)
+#define STAT_CHANGE_UPDATE_MOVE_EFFECT		(1 << 6)	//still don't know what does
 
 // atk48
-#define ATK48_STAT_NEGATIVE         0x1
-#define ATK48_STAT_BY_TWO           0x2
-#define ATK48_ONLY_MULTIPLE         0x4
-#define ATK48_DONT_CHECK_LOWER      0x8
+#define STAT_CHANGE_STAT_NEGATIVE         0x1
+#define STAT_CHANGE_STAT_BY_TWO           0x2
+#define STAT_CHANGE_ONLY_MULTIPLE         0x4
+#define STAT_CHANGE_DONT_CHECK_LOWER      0x8	//think equivalent of stat_change_cant_prevent
 
 // atk49, moveend cases
-#define ATK49_RAGE                              0
-#define ATK49_DEFROST                           1
-#define ATK49_SYNCHRONIZE_TARGET                2
-#define ATK49_MOVE_END_ABILITIES                3
-#define ATK49_STATUS_IMMUNITY_ABILITIES         4
-#define ATK49_SYNCHRONIZE_ATTACKER              5
-#define ATK49_CHOICE_MOVE                       6
-#define ATK49_CHANGED_ITEMS                     7
-#define ATK49_ATTACKER_INVISIBLE                8
-#define ATK49_ATTACKER_VISIBLE                  9
-#define ATK49_TARGET_VISIBLE                    10
-#define ATK49_ITEM_EFFECTS_ALL                  11
-#define ATK49_KINGSROCK_SHELLBELL               12
-#define ATK49_SUBSTITUTE                        13
-#define ATK49_UPDATE_LAST_MOVES                 14
-#define ATK49_MIRROR_MOVE                       15
-#define ATK49_NEXT_TARGET                       16
-#define ATK49_COUNT                             17
+#define MOVE_END_PROTECT_LIKE_EFFECT			   0
+#define MOVE_END_RAGE                              1
+#define MOVE_END_DEFROST                           2
+#define MOVE_END_SYNCHRONIZE_TARGET                3
+#define MOVE_END_MOVE_END_ABILITIES                4
+#define MOVE_END_ABILITIES_ATTACKER				   5 //increment above 1
+#define MOVE_END_STATUS_IMMUNITY_ABILITIES         6
+#define MOVE_END_SYNCHRONIZE_ATTACKER              7
+#define MOVE_END_CHOICE_MOVE                       8
+#define MOVE_END_CHANGED_ITEMS                     9
+#define MOVE_END_ATTACKER_INVISIBLE                10
+#define MOVE_END_ATTACKER_VISIBLE                  11
+#define MOVE_END_TARGET_VISIBLE                    12
+#define MOVE_END_ITEM_EFFECTS_TARGET			   13
+#define MOVE_END_MOVE_EFFECTS2					   14      
+#define MOVE_END_ITEM_EFFECTS_ALL                  15
+#define MOVE_END_KINGSROCK						   16  //item effect need to be bfore kingsrock for things like rocky helm I guess
+#define MOVE_END_SUBSTITUTE                        17
+#define MOVE_END_SKY_DROP_CONFUSE				   18
+#define MOVE_END_UPDATE_LAST_MOVES                 19
+#define MOVE_END_MIRROR_MOVE                       20
+
+#define MOVE_END_MULTIHIT_MOVE					   21   //added don't need, except for dragon darts but coudl potentially setup in bs maybe rename for parental bond instead?
+#define MOVE_END_MAGICIAN                          22    // Occurs after final multi-hit strike, and after other items/abilities would activate
+#define MOVE_END_EJECT_BUTTON                      23
+#define MOVE_END_RED_CARD                          24
+#define MOVE_END_EJECT_PACK                        25
+#define MOVE_END_LIFEORB_SHELLBELL                 26    // Includes shell bell, throat spray, etc
+#define MOVE_END_PICKPOCKET                        27
+#define MOVE_END_DANCER							   28
+#define MOVE_END_EMERGENCY_EXIT					   29
+#define MOVE_END_SYMBIOSIS						   30
+#define MOVE_END_NEXT_TARGET                       31 //was last value before count, in base firered
+#define MOVE_END_CLEAR_BITS						   32
+#define MOVE_END_COUNT							   33
+
+// switch cases - PORTED right now not used, adding red card only for now
+#define B_SWITCH_NORMAL     0
+#define B_SWITCH_HIT        1   // dragon tail, circle throw
+#define B_SWITCH_RED_CARD   2
 
 #define BIT_HP                      0x1
 #define BIT_ATK                     0x2
@@ -306,5 +345,8 @@
 #define BIT_SPDEF                   0x20
 #define BIT_ACC                     0x40
 #define BIT_EVASION                 0x80
+
+//battle communication stuff
+#define MISS_TYPE               6
 
 #endif // GUARD_CONSTANTS_BATTLE_SCRIPT_COMMANDS_H
