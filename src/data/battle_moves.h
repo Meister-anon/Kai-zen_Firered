@@ -11710,7 +11710,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #else
             .power = 100,
         #endif
-        .effect = EFFECT_CLOSE_COMBAT,
+        .effect = EFFECT_OVERHEAT, //changed from close combat, is recoil move
         .type = TYPE_GROUND,
         .accuracy = 100,
         .pp = 5,

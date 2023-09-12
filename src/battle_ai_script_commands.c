@@ -5,6 +5,7 @@
 #include "item.h"
 #include "random.h"
 #include "battle_ai_script_commands.h"
+#include "battle_script_commands.h"
 #include "constants/abilities.h"
 #include "constants/battle_ai.h"
 #include "constants/battle_move_effects.h"
@@ -1805,16 +1806,29 @@ static void Cmd_is_double_battle(void)
     sAIScriptPtr += 1;
 }
 
-static void Cmd_get_used_held_item(void)
+static void Cmd_get_used_held_item(void) //could change to use side and party?
 {
-    u8 battlerId;
+    u8 battlerId,battlerSide;
+
 
     if (sAIScriptPtr[1] == AI_USER)
+    {
         battlerId = gBattlerAttacker;
+        battlerSide = GetBattlerSide(gBattlerAttacker);
+    }
     else
+    {
         battlerId = gBattlerTarget;
+        battlerSide = GetBattlerSide(gBattlerTarget);
+    }
 
-    AI_THINKING_STRUCT->funcResult = ((u8 *)gBattleStruct->usedHeldItems)[battlerId * 2];
+    //AI_THINKING_STRUCT->funcResult = ((u8 *)gBattleStruct->usedHeldItems)[battlerId * 2];
+
+    ///for (i = 0; i < PARTY_SIZE; i++)
+     //   AI_THINKING_STRUCT->funcResult = ((u8 *)gBattleStruct->usedHeldItems)[gBattlerPartyIndexes[i]][GetBattlerSide(battlerId)]; //hopefully works
+
+    //unsure if needs loop if not use this
+    AI_THINKING_STRUCT->funcResult = gBattleStruct->usedHeldItems[gBattlerPartyIndexes[battlerId]][battlerSide]; //hopefully works
     sAIScriptPtr += 2;
 }
 

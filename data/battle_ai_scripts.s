@@ -568,10 +568,6 @@ AI_CBM_Refresh:: @ 81DA3AE
 	if_not_status AI_USER, STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON, Score_Minus10
 	end
 
-AI_CBM_MudSport:: @ 81DA3B9
-	if_status3 AI_USER, STATUS3_MUDSPORT, Score_Minus10
-	end
-
 AI_CBM_Tickle:: @ 81DA3C4
 	if_stat_level_equal AI_TARGET, STAT_ATK, 0, Score_Minus10
 	if_stat_level_equal AI_TARGET, STAT_DEF, 0, Score_Minus8
@@ -587,8 +583,12 @@ AI_CBM_BulkUp:: @ 81DA3E6
 	if_stat_level_equal AI_USER, STAT_DEF, 12, Score_Minus8
 	end
 
+AI_CBM_MudSport:: @ 81DA3B9
+	if_side_affecting AI_USER, SIDE_STATUS_MUDSPORT, Score_Minus10
+	end
+
 AI_CBM_WaterSport:: @ 81DA3F7
-	if_status3 AI_USER, STATUS3_WATERSPORT, Score_Minus10
+	if_side_affecting AI_USER, SIDE_STATUS_WATERSPORT, Score_Minus10
 	end
 
 AI_CBM_CalmMind:: @ 81DA402

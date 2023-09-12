@@ -9,36 +9,59 @@
 #define MOVE_LIMITATION_TORMENTED               (1 << 3)
 #define MOVE_LIMITATION_TAUNT                   (1 << 4)
 #define MOVE_LIMITATION_IMPRISON                (1 << 5)
+#define MOVE_LIMITATIONS_ALL                    0xFF
 
 #define ABILITYEFFECT_ON_SWITCHIN                0x0
 #define ABILITYEFFECT_ENDTURN                    0x1
 #define ABILITYEFFECT_MOVES_BLOCK                0x2
 #define ABILITYEFFECT_ABSORBING                  0x3
-#define ABILITYEFFECT_MOVE_END                   0x4
-#define ABILITYEFFECT_IMMUNITY                   0x5
-#define ABILITYEFFECT_FORECAST                   0x6
-#define ABILITYEFFECT_SYNCHRONIZE                0x7
-#define ABILITYEFFECT_ATK_SYNCHRONIZE            0x8
-#define ABILITYEFFECT_INTIMIDATE1                0x9
-#define ABILITYEFFECT_INTIMIDATE2                0xA
-#define ABILITYEFFECT_TRACE                      0xB
-#define ABILITYEFFECT_CHECK_OTHER_SIDE           0xC
-#define ABILITYEFFECT_CHECK_BATTLER_SIDE         0xD
-#define ABILITYEFFECT_FIELD_SPORT                0xE
-#define ABILITYEFFECT_CHECK_FIELD_EXCEPT_BATTLER 0xF // TODO: Is it correct? 
-#define ABILITYEFFECT_COUNT_OTHER_SIDE           0x10
-#define ABILITYEFFECT_COUNT_BATTLER_SIDE         0x11
-#define ABILITYEFFECT_COUNT_ON_FIELD             0x12
-#define ABILITYEFFECT_CHECK_ON_FIELD             0x13
-#define ABILITYEFFECT_SWITCH_IN_WEATHER          0xFF
+#define ABILITYEFFECT_MOVE_END_ATTACKER          0x4
+#define ABILITYEFFECT_MOVE_END                   0x5
+#define ABILITYEFFECT_IMMUNITY                   0x6
+#define ABILITYEFFECT_FORECAST                   0x7
+#define ABILITYEFFECT_SYNCHRONIZE                0x8
+#define ABILITYEFFECT_ATK_SYNCHRONIZE            0x9
+#define ABILITYEFFECT_INTIMIDATE1                0xA
+#define ABILITYEFFECT_INTIMIDATE2                0xB
+#define ABILITYEFFECT_TRACE                      0xC
+#define ABILITYEFFECT_CHECK_OTHER_SIDE           0xD
+#define ABILITYEFFECT_CHECK_BATTLER_SIDE         0xE
+#define ABILITYEFFECT_FIELD_SPORT                0xF
+#define ABILITYEFFECT_CHECK_FIELD_EXCEPT_BATTLER 0x10 // TODO: Is it correct? 
+#define ABILITYEFFECT_COUNT_OTHER_SIDE           0x11   //check what this  does, may rename
+#define ABILITYEFFECT_COUNT_BATTLER_SIDE         0x12
+#define ABILITYEFFECT_COUNT_ON_FIELD             0x13
+#define ABILITYEFFECT_CHECK_ON_FIELD             0x14
+#define ABILITYEFFECT_NEUTRALIZINGGAS			 0x15  //swapped what was a nuisance ability test
+#define ABILITYEFFECT_MOVE_END_OTHER			 0x16
+#define ABILITYEFFECT_SWITCH_IN_ABILITIES		 0x17   //realized ability battle effects function doesn't really separate blocks well, so added more for better organization
+#define ABILITYEFFECT_SWITCH_IN_TERRAIN_ABILITY	 0x18   //nvm can't do more as new block would require new switch...and would break switch in effects i beleive //could just put in same plac as switcin think in bs commands
+//#define ABILITYEFFECT_CUPIDSARROW				 0x15  //1st attempted implementation realized goes in switchin don't need new effect
+#define ABILITYEFFECT_MUD_SPORT                  0xFC	//actually potentially does as trace and intimidate have them? look over implementation again
+#define ABILITYEFFECT_WATER_SPORT                0xFD //changed to side status no longer needed
+//figure out what this does, adn check any limitations
+//I want to redo tererain graphic for something more subtle
+//instead of everything glowing display graphic template that's fitting
+//over/inside the mon circle, so will only be noticeable from enemy side
+//i.e sparks tags for electric terrain etc.
+#define ABILITYEFFECT_SWITCH_IN_TERRAIN          0xFF
+#define ABILITYEFFECT_SWITCH_IN_WEATHER          0xFE   //sets battle weather from map conditions, nothing to do with ability
 
 #define ABILITY_ON_OPPOSING_FIELD(battlerId, abilityId)(AbilityBattleEffects(ABILITYEFFECT_CHECK_OTHER_SIDE, battlerId, abilityId, 0, 0))
 #define ABILITY_ON_FIELD(abilityId)(AbilityBattleEffects(ABILITYEFFECT_CHECK_ON_FIELD, 0, abilityId, 0, 0))
 #define ABILITY_ON_FIELD2(abilityId)(AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, abilityId, 0, 0))
 
+#define IS_WHOLE_SIDE_ALIVE(battler)((IsBattlerAlive(battler) && IsBattlerAlive(BATTLE_PARTNER(battler))))
+
+
 #define ITEMEFFECT_ON_SWITCH_IN                 0x0
+#define ITEMEFFECT_NORMAL                       0x1
 #define ITEMEFFECT_MOVE_END                     0x3
-#define ITEMEFFECT_KINGSROCK_SHELLBELL          0x4
+#define ITEMEFFECT_KINGSROCK          0x4		//removed shell bell from this effect and renamed to just kingsrock
+#define ITEMEFFECT_TARGET                       0x5
+#define ITEMEFFECT_ORBS                         0x6
+#define ITEMEFFECT_LIFEORB_SHELLBELL            0x7		
+#define ITEMEFFECT_BATTLER_MOVE_END             0x8 // move end effects for just the battler, not whole field
 
 #define WEATHER_HAS_EFFECT ((!AbilityBattleEffects(ABILITYEFFECT_CHECK_ON_FIELD, 0, ABILITY_CLOUD_NINE, 0, 0) && !AbilityBattleEffects(ABILITYEFFECT_CHECK_ON_FIELD, 0, ABILITY_AIR_LOCK, 0, 0)))
 #define WEATHER_HAS_EFFECT2 ((!AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, ABILITY_CLOUD_NINE, 0, 0) && !AbilityBattleEffects(ABILITYEFFECT_FIELD_SPORT, 0, ABILITY_AIR_LOCK, 0, 0)))
@@ -53,6 +76,7 @@
 #define BS_GET_OPPONENT2                14
 
 u8 GetBattlerForBattleScript(u8 caseId);
+
 void PressurePPLose(u8 target, u8 attacker, u16 move);
 void PressurePPLoseOnUsingImprison(u8 attacker);
 void PressurePPLoseOnUsingPerishSong(u8 attacker);
@@ -184,4 +208,5 @@ s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fi
 extern const u16 gPercentToModifier[101];
 
 extern const u16 gFloatingSpecies[130];
+
 #endif // GUARD_BATTLE_UTIL_H

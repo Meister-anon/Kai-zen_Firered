@@ -3074,7 +3074,7 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_ROCK_HEAD},
         .safariZoneFleeRate = 75,
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_RECKLESS, ABILITY_NONE},
+            .abilityHidden = {ABILITY_RECKLESS, ABILITY_SHEER_FORCE},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -3101,11 +3101,11 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_ROCK_HEAD},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_RECKLESS, ABILITY_NONE},
+            .abilityHidden = {ABILITY_RECKLESS, ABILITY_MUSCLE_MAGIC}, //muscle magic makes this thing getting surf actuallyt not a troll
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-    },
+    }, //give head charge & headlong rush
 
     [SPECIES_CHANSEY] =
     {
@@ -3116,7 +3116,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 45,
         .baseSpDefense = 105,
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_FAIRY,
         .catchRate = 30,
         .expYield = 395,
         //.evYield_HP = 2,
@@ -3132,7 +3132,7 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_HEALER, ABILITY_TRUANT},//replace slow start with immunity, a little TOO unkillable.. //nvm did truant as gave blissey stall, better themati matchup
         // #endif
-        .bodyColor = BODY_COLOR_PINK,
+        .bodyColor = BODY_COLOR_PINK,//giving fairy type as well, mostly just  a few other weaknesses to counter its increased strength witih super changes
         .noFlip = FALSE,
     },
 
@@ -3599,7 +3599,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-    },
+    },  //give new version of rage, if doesn't already get rage
 
     [SPECIES_LAPRAS] =
     {
@@ -6597,7 +6597,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 75,
         .baseSpDefense = 135,
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_FAIRY,
         .catchRate = 30,
         .expYield = 608,
         //.evYield_HP = 3,
@@ -12608,7 +12608,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_SOLID_ROCK},
-            .abilityHidden = {ABILITY_RECKLESS, ABILITY_NONE},
+            .abilityHidden = {ABILITY_RECKLESS, ABILITY_ROCK_HEAD},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -12734,7 +12734,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 116,
         .baseSpDefense = 56,
         .type1 = TYPE_BUG,
-        .type2 = TYPE_FLYING,
+        .type2 = TYPE_DRAGON,
         .catchRate = 30,
         .expYield = 180,
         //.evYield_Attack = 2,
@@ -12752,7 +12752,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_FRISK, ABILITY_ANTICIPATION},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-    },
+    },//give dragon rage, dragon breath outrage  dragon pulse draco meteor  //potentially rage
 
     [SPECIES_LEAFEON] =
     {
@@ -20073,7 +20073,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 60,
         .baseSpAttack = 30,
         .baseSpDefense = 40,
-        .type1 = TYPE_ROCK,
+        .type1 = TYPE_NORMAL,
         .type2 = TYPE_ROCK,
         .catchRate = 190,
         .expYield = 56,
@@ -20090,7 +20090,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-    },
+    }, //give these normal secondary
 
     [SPECIES_LYCANROC] =
     {
@@ -20100,7 +20100,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 112,
         .baseSpAttack = 55,
         .baseSpDefense = 65,
-        .type1 = TYPE_ROCK,
+        .type1 = TYPE_NORMAL,
         .type2 = TYPE_ROCK,
         .catchRate = 90,
         .expYield = 170,
@@ -20116,7 +20116,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_STEADFAST, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-    },
+    }, //give crush claw
 
     [SPECIES_WISHIWASHI] =
     {
@@ -23289,7 +23289,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_RECKLESS, ABILITY_GUTS},
-            .abilityHidden = {ABILITY_DEFIANT, ABILITY_DARK_DEAL},
+            .abilityHidden = {ABILITY_DEFIANT, ABILITY_MAGNET_PULL},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -23302,7 +23302,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 50,
         .baseSpAttack = 50,
         .baseSpDefense = 60,
-        .type1 = TYPE_STEEL,
+        .type1 = TYPE_DARK,
         .type2 = TYPE_STEEL,
         .catchRate = 90,
         .expYield = 154,
@@ -23315,7 +23315,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_BATTLE_ARMOR, ABILITY_TOUGH_CLAWS},
-            .abilityHidden = {ABILITY_STEELY_SPIRIT, ABILITY_NONE},
+            .abilityHidden = {ABILITY_STEELY_SPIRIT, ABILITY_MAGNET_PULL},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -26139,7 +26139,7 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
-    },
+    }, //changed up sprite face
 
     [SPECIES_GEODUDE_ALOLAN] =
     {
@@ -26351,7 +26351,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 40,
         .baseSpAttack = 40,
         .baseSpDefense = 40,
-        .type1 = TYPE_STEEL,
+        .type1 = TYPE_DARK,
         .type2 = TYPE_STEEL,
         .catchRate = 255,
         .expYield = 58,
@@ -31665,7 +31665,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 60,
         .baseSpAttack = 30,
         .baseSpDefense = 40,
-        .type1 = TYPE_ROCK,
+        .type1 = TYPE_NORMAL,
         .type2 = TYPE_ROCK,
         .catchRate = 190,
         .expYield = 56,
@@ -31690,7 +31690,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 82,
         .baseSpAttack = 55,
         .baseSpDefense = 75,
-        .type1 = TYPE_ROCK,
+        .type1 = TYPE_DARK,
         .type2 = TYPE_ROCK,
         .catchRate = 90,
         .expYield = 170,
@@ -31701,13 +31701,13 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_KEEN_EYE, ABILITY_VITAL_SPIRIT},
+        .abilities = {ABILITY_NO_GUARD, ABILITY_ROCK_HEAD},//known for headbuts, doesn't learn headbut...
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_NO_GUARD, ABILITY_NONE},
+            .abilityHidden = {ABILITY_VITAL_SPIRIT, ABILITY_NONE}, //change evo move to headbutt   eventually learn move head smash
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    },  //give sucker punch /setup to also evolve with moon stone, make no guard first abiility, think buff keen eye
 
     [SPECIES_LYCANROC_DUSK] =
     {
@@ -31717,8 +31717,8 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 110,
         .baseSpAttack = 55,
         .baseSpDefense = 65,
-        .type1 = TYPE_ROCK,
-        .type2 = TYPE_ROCK,
+        .type1 = TYPE_FIGHTING, //each form has different evo move, shift moves around to fit new typing, give counter
+        .type2 = TYPE_ROCK, //setup to evolve with dusk stone as well
         .catchRate = 90,
         .expYield = 170,
         //.evYield_Attack = 2,
@@ -31729,7 +31729,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_TOUGH_CLAWS, ABILITY_NONE},
+            .abilities = {ABILITY_TOUGH_CLAWS, ABILITY_ROCK_HEAD},
        // #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
