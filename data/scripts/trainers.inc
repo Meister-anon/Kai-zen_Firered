@@ -467,7 +467,7 @@ Route11_EventScript_BernieRematch:: @ 81A9C6A
 	end
 
 Route11_EventScript_Hugo:: @ 81A9C81
-	trainerbattle_single TRAINER_GAMER_HUGO, Route11_Text_HugoIntro, Route11_Text_HugoDefeat
+	trainerbattle_single TRAINER_GAMBLER_HUGO, Route11_Text_HugoIntro, Route11_Text_HugoDefeat
 	specialvar VAR_RESULT, ShouldTryRematchBattle
 	compare VAR_RESULT, TRUE
 	goto_if_eq Route11_EventScript_HugoRematch
@@ -475,12 +475,12 @@ Route11_EventScript_Hugo:: @ 81A9C81
 	end
 
 Route11_EventScript_HugoRematch:: @ 81A9CA8
-	trainerbattle_rematch TRAINER_GAMER_HUGO, Route11_Text_HugoRematchIntro, Route11_Text_HugoDefeat
+	trainerbattle_rematch TRAINER_GAMBLER_HUGO, Route11_Text_HugoRematchIntro, Route11_Text_HugoDefeat
 	msgbox Route11_Text_HugoPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 Route11_EventScript_Jasper:: @ 81A9CBF
-	trainerbattle_single TRAINER_GAMER_JASPER, Route11_Text_JasperIntro, Route11_Text_JasperDefeat
+	trainerbattle_single TRAINER_GAMBLER_JASPER, Route11_Text_JasperIntro, Route11_Text_JasperDefeat
 	specialvar VAR_RESULT, ShouldTryRematchBattle
 	compare VAR_RESULT, TRUE
 	goto_if_eq Route11_EventScript_JasperRematch
@@ -488,12 +488,12 @@ Route11_EventScript_Jasper:: @ 81A9CBF
 	end
 
 Route11_EventScript_JasperRematch:: @ 81A9CE6
-	trainerbattle_rematch TRAINER_GAMER_JASPER, Route11_Text_JasperRematchIntro, Route11_Text_JasperDefeat
+	trainerbattle_rematch TRAINER_GAMBLER_JASPER, Route11_Text_JasperRematchIntro, Route11_Text_JasperDefeat
 	msgbox Route11_Text_JasperPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 Route11_EventScript_Dirk:: @ 81A9CFD
-	trainerbattle_single TRAINER_GAMER_DIRK, Route11_Text_DirkIntro, Route11_Text_DirkDefeat
+	trainerbattle_single TRAINER_GAMBLER_DIRK, Route11_Text_DirkIntro, Route11_Text_DirkDefeat
 	specialvar VAR_RESULT, ShouldTryRematchBattle
 	compare VAR_RESULT, TRUE
 	goto_if_eq Route11_EventScript_DirkRematch
@@ -501,12 +501,12 @@ Route11_EventScript_Dirk:: @ 81A9CFD
 	end
 
 Route11_EventScript_DirkRematch:: @ 81A9D24
-	trainerbattle_rematch TRAINER_GAMER_DIRK, Route11_Text_DirkRematchIntro, Route11_Text_DirkDefeat
+	trainerbattle_rematch TRAINER_GAMBLER_DIRK, Route11_Text_DirkRematchIntro, Route11_Text_DirkDefeat
 	msgbox Route11_Text_DirkPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 Route11_EventScript_Darian:: @ 81A9D3B
-	trainerbattle_single TRAINER_GAMER_DARIAN, Route11_Text_DarianIntro, Route11_Text_DarianDefeat
+	trainerbattle_single TRAINER_GAMBLER_DARIAN, Route11_Text_DarianIntro, Route11_Text_DarianDefeat
 	specialvar VAR_RESULT, ShouldTryRematchBattle
 	compare VAR_RESULT, TRUE
 	goto_if_eq Route11_EventScript_DarianRematch
@@ -514,7 +514,7 @@ Route11_EventScript_Darian:: @ 81A9D3B
 	end
 
 Route11_EventScript_DarianRematch:: @ 81A9D62
-	trainerbattle_rematch TRAINER_GAMER_DARIAN, Route11_Text_DarianRematchIntro, Route11_Text_DarianDefeat
+	trainerbattle_rematch TRAINER_GAMBLER_DARIAN, Route11_Text_DarianRematchIntro, Route11_Text_DarianDefeat
 	msgbox Route11_Text_DarianPostBattle, MSGBOX_AUTOCLOSE
 	end
 
@@ -805,7 +805,7 @@ Route8_EventScript_LeslieRematch:: @ 81AA2B6
 	end
 
 Route8_EventScript_Stan:: @ 81AA2CD
-	trainerbattle_single TRAINER_GAMER_STAN, Route8_Text_StanIntro, Route8_Text_StanDefeat
+	trainerbattle_single TRAINER_GAMBLER_STAN, Route8_Text_StanIntro, Route8_Text_StanDefeat
 	specialvar VAR_RESULT, ShouldTryRematchBattle
 	compare VAR_RESULT, TRUE
 	goto_if_eq Route8_EventScript_StanRematch
@@ -813,12 +813,12 @@ Route8_EventScript_Stan:: @ 81AA2CD
 	end
 
 Route8_EventScript_StanRematch:: @ 81AA2F4
-	trainerbattle_rematch TRAINER_GAMER_STAN, Route8_Text_StanRematchIntro, Route8_Text_StanDefeat
+	trainerbattle_rematch TRAINER_GAMBLER_STAN, Route8_Text_StanRematchIntro, Route8_Text_StanDefeat
 	msgbox Route8_Text_StanPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 Route8_EventScript_Rich:: @ 81AA30B
-	trainerbattle_single TRAINER_GAMER_RICH, Route8_Text_RichIntro, Route8_Text_RichDefeat
+	trainerbattle_single TRAINER_GAMBLER_RICH, Route8_Text_RichIntro, Route8_Text_RichDefeat
 	specialvar VAR_RESULT, ShouldTryRematchBattle
 	compare VAR_RESULT, TRUE
 	goto_if_eq Route8_EventScript_RichRematch
@@ -826,7 +826,7 @@ Route8_EventScript_Rich:: @ 81AA30B
 	end
 
 Route8_EventScript_RichRematch:: @ 81AA332
-	trainerbattle_rematch TRAINER_GAMER_RICH, Route8_Text_RichRematchIntro, Route8_Text_RichDefeat
+	trainerbattle_rematch TRAINER_GAMBLER_RICH, Route8_Text_RichRematchIntro, Route8_Text_RichDefeat
 	msgbox Route8_Text_RichPostBattle, MSGBOX_AUTOCLOSE
 	end
 

@@ -4,6 +4,7 @@
 #include <limits.h>
 #include "global.h"
 #include "constants/battle.h"
+#include "constants/battle_move_effects.h"
 #include "battle_util.h"
 #include "battle_script_commands.h"
 #include "battle_main.h"
@@ -171,13 +172,16 @@ struct Trainer
     /*0x03*/ u8 trainerPic;
     /*0x04*/ u8 trainerName[12];
     /*0x10*/ u16 items[4];
-    /*0x18*/ bool8 doubleBattle; //with addition fo triple & rotation change this from bool, to just a constant value to represent each battle type
+    /*0x18*/ u8 battleType; //with addition fo triple & rotation change this from bool, to just a constant value to represent each battle type
     /*0x1C*/ u32 aiFlags;
     /*0x20*/ u8 partySize;
     /*0x24*/ const union TrainerMonPtr party;
 };
 
 extern const struct Trainer gTrainers[];
+
+#define SINGLES      0  //needed rename include was causing issues
+
 
 struct ResourceFlags
 {
@@ -749,6 +753,12 @@ extern struct BattleStruct *gBattleStruct;
     gBattleMons[battlerId].type3 = type;            \
 }
 
+#define SET_BATTLER_TYPE_PROTEAN(battlerId, type)   \
+{                                                   \
+    gBattleMons[battlerId].type1 = type;            \
+    gBattleMons[battlerId].type2 = type;            \
+}//change so type 3 is unaffected
+
 #define GET_STAT_BUFF_ID(n)((n & 7))              // first three bits 0x1, 0x2, 0x4
 #define GET_STAT_BUFF_VALUE_WITH_SIGN(n)((n & 0xF8))
 #define GET_STAT_BUFF_VALUE(n)(((n >> 3) & 0xF))      // 0x8, 0x10, 0x20, 0x40
@@ -774,7 +784,7 @@ struct BattleScripting  //remember expanding this costs ewram
     u8 atk49_state; //move end
     u8 battlerWithAbility;
     //u8 multihitMoveEffect; //important, why do these need to go here   [they make up the table, if not properly orded bs effets won't work correctly
-    u16 multihitMoveEffect;
+    u16 multihitMoveEffect; //why did I make u16?   -because it is in emerald
     u16 savedMoveEffect; // For moves hitting multiple targets.
     u16 moveEffect; //don't change capitalization won't be able to just copy from emerald easily
     u8 battler;

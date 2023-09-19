@@ -539,6 +539,7 @@ static const u8 sText_StenchExits[] = _("The foul odor has cleared!");  //setup 
 
 // New battle strings.
 static const u8 sText_Infestation[] = _("{B_DEF_NAME_WITH_PREFIX} has been afflicted\nwith an infestation by {B_ATK_NAME_WITH_PREFIX}!");
+static const u8 sText_Infested[] = _("{B_ATK_NAME_WITH_PREFIX} is infested!");
 static const s8 sText_EnduredViaSturdy[] = _("{B_DEF_NAME_WITH_PREFIX} ENDURED\nthe hit via {B_DEF_ABILITY}!");
 static const s8 sText_AttackerEnduredViaSturdy[] = _("{B_ATK_NAME_WITH_PREFIX} ENDURED\nthe hit via {B_DEF_ABILITY}!");
 static const s8 sText_PowerHerbActivation[] = _("{B_ATK_NAME_WITH_PREFIX} became fully charged\ndue to its {B_LAST_ITEM}!");
@@ -649,7 +650,7 @@ static const u8 sText_ImposterTransform[] = _("{B_ATK_NAME_WITH_PREFIX} transfor
 static const u8 sText_NotDoneYet[] = _("This move effect is not done yet!\p"); //also potentially replace b def name since I want target species for impostre but something dif w inversion
                                                                         //actually look into handle nik case and if can just assign the found species to buff to get prefix or b_eff_namewith prefix
 
-//end turn name scripts need to use b_atk_name,  src_active name or anything else causes issues
+//end turn name scripts need to use B_ATK_NAME_WITH_PREFIX,  scr_active name or anything else causes issues
 static const u8 sText_Battle_Pickup[] = _("{B_ATK_NAME_WITH_PREFIX} picked up\na {B_BUFF1}!");
 static const u8 sText_PkmnBlewAwayToxicSpikes[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nTOXIC SPIKES!");
 static const u8 sText_PkmnBlewAwayStickyWeb[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nSTICKY WEB!");
@@ -1437,7 +1438,8 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_EMPATHIC_CURSE_ACTIVATES - BATTLESTRINGS_TABLE_START]      = sText_PkmnHurtEmpathCurse,
     [STRINGID_ATTACKER_STURDY - BATTLESTRINGS_TABLE_START]               = sText_AttackerEnduredViaSturdy,
     [STRINGID_TARGETSXWHIPPEDUPSANDSTORM - BATTLESTRINGS_TABLE_START]    = sText_TargetsXWhippedUpSandstorm,
-    [STRINGID_ATTACKER_ABILITYHURTS_TARGET - BATTLESTRINGS_TABLE_START]   = sText_AttackerHurtsPkmnWith,
+    [STRINGID_ATTACKER_ABILITYHURTS_TARGET - BATTLESTRINGS_TABLE_START]  = sText_AttackerHurtsPkmnWith,
+    [STRINGID_PKMNINFESTED - BATTLESTRINGS_TABLE_START]                  = sText_Infested,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
@@ -1451,6 +1453,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_TRAINER1MON2COMEBACK - BATTLESTRINGS_TABLE_START]          = sText_Trainer1RecallPkmn2,
     [STRINGID_TRAINER1MON1AND2COMEBACK - BATTLESTRINGS_TABLE_START]      = sText_Trainer1RecallBoth
 };
+//end turn name scripts need to use B_ATK_NAME_WITH_PREFIX,  scr_active name or anything else causes issues
 
 //may be able to use for wondeguard miss with multhit moves
 /*
@@ -1851,7 +1854,7 @@ const u16 gTrappingMoves[] = {
     MOVE_WHIRLPOOL, // lower speed of wrapped target 1 stage    //already does double damage to underwater target
     MOVE_SAND_TOMB, // decrease accuracy of wrapped target  //do double damage to underground target, use sandpit description from emerald
     MOVE_MAGMA_STORM,   //heatran specific, might buff to give guaranteed burn, don't need lower damage since its lowered from 120 already
-    MOVE_INFESTATION,   //since bug infestations can cause structural integrity issues, think I'll make this lower def & sp def or just def
+    MOVE_SWARM,   //since bug infestations can cause structural integrity issues, think I'll make this lower def & sp def or just def
     MOVE_SNAP_TRAP,     //still to do, effect not made yet, since bear traps hurt more you move, I'll make it hurt attacker every time they use a move just use hurt atacker script
     0xFFFF              //since its a physical trap I think I'll also make this the only affect that persists if user switches out/faints
 };

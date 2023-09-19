@@ -13,6 +13,7 @@
 #include "strings.h"
 #include "trainer_card.h"
 #include "constants/battle.h"
+#include "constants/battle_move_effects.h"
 #include "constants/songs.h"
 #include "constants/maps.h"
 

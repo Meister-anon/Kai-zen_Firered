@@ -22,9 +22,9 @@
 #define sTRIPLE_KICK_POWER gBattleScripting + 0x12		//tripleKickPower; 2 byte 0x12 0x13
 #define sMOVEEND_STATE gBattleScripting + 0x14			//u8 atk49_state; 1 byte 0x14
 #define sBATTLER_WITH_ABILITY gBattleScripting + 0x15	//u8 battlerWithAbility; 1 byte 0x15
-#define sMULTIHIT_EFFECT gBattleScripting + 0x16		//u16 multihitMoveEffect; 2 byte 0x16 0x17	 //multihitMoveEffect
+#define sMULTIHIT_EFFECT gBattleScripting + 0x16		//u16 multihitMoveEffect; 2 byte 0x16 0x17	 //stores move effect for multihit moves, like twineedle uses it to store poison
 #define sSAVED_MOVE_EFFECT gBattleScripting + 0x18		//u16 savedMoveEffect; 2 byte 0x18 0x19         // savedMoveEffect
-#define sMOVE_EFFECT gBattleScripting + 0x1A			//u16 moveEffect; 2 byte 0x1a 0x1b          // moveEffect
+#define sMOVE_EFFECT gBattleScripting + 0x1A			//u16 moveEffect; 2 byte 0x1a 0x1b          // moveEffect   //these really are move effect
 #define sBATTLER gBattleScripting + 0x1C				//u8 battler; 1 byte 0x1c
 #define sB_ANIM_TURN gBattleScripting + 0x1D			//u8 animTurn; 1 byte 0x1d
 #define sB_ANIM_TARGETS_HIT gBattleScripting + 0x1E		//u8 animTargetsHit; 1 byte 0x1e

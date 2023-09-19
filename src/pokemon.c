@@ -37,7 +37,7 @@
 #include "constants/trainer_classes.h"
 #include "constants/facility_trainer_classes.h"
 #include "constants/hold_effects.h"
-#include "constants/battle_move_effects.h"
+#include "constants/battle_effects.h"
 #include "constants/weather.h"
 #include "rtc.h"    // weird but failure to build pokemon.s was literally all becuase of these two, inclusions that I guess I didn't add to repository correctly
 //#include "species_names.h"
@@ -2315,8 +2315,8 @@ static const u8 sHoldEffectToType[][2] =
     {HOLD_EFFECT_FIRE_POWER, TYPE_FIRE},
     {HOLD_EFFECT_DRAGON_POWER, TYPE_DRAGON},
     {HOLD_EFFECT_NORMAL_POWER, TYPE_NORMAL},
-    {HOLD_EFFECT_FAIRY_POWER, TYPE_FAIRY}, //fairy addition
-};
+    {HOLD_EFFECT_FAIRY_POWER, TYPE_FAIRY}, //fairy addition item added in gen 9, Fairy_Feather
+};//apparently these aren't for gems? but for stat boost items i.e rock power twisted spoon, nevermelt ice etc.
 
 const struct SpriteTemplate gSpriteTemplates_Battlers[] = 
 {
@@ -3513,12 +3513,48 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (attackerHoldEffect == sHoldEffectToType[i][0]
             && type == sHoldEffectToType[i][1])
         {
-            if (usesDefStat)    //changed was redundant as being move physical sets usesdefstat
+            gBattleMovePower = (gBattleMovePower * (attackerHoldEffectParam + 100)) / 100;  //i.e (gBattleMovePower * 120) /100
+            /*if (usesDefStat)    //changed was redundant as being move physical sets usesdefstat
                 attack = (attack * (attackerHoldEffectParam + 100)) / 100;
             else
-                spAttack = (spAttack * (attackerHoldEffectParam + 100)) / 100;
+                spAttack = (spAttack * (attackerHoldEffectParam + 100)) / 100;*/
             break;
         }//sets what atk stat used by moves based on if physical or special etc.
+    } //also now that I realize these are for hard stone etc teh effect is just supposed to boost move power
+
+    //buff for weather extension items
+    //but mostly for  ice ground rock types who dont get dmg boost from weather conditions
+    switch(attackerHoldEffect)
+    {
+        case HOLD_EFFECT_DAMP_ROCK:
+            if (type == TYPE_WATER)
+                gBattleMovePower = (110 * gBattleMovePower) / 100;
+            break;
+        case HOLD_EFFECT_HEAT_ROCK:
+            if (type == TYPE_FIRE)
+                gBattleMovePower = (110 * gBattleMovePower) / 100;
+            break;
+        case HOLD_EFFECT_ICY_ROCK:
+            if (type == TYPE_ICE)
+                gBattleMovePower = (110 * gBattleMovePower) / 100;
+            break;
+        case HOLD_EFFECT_SMOOTH_ROCK:
+            if (type == TYPE_ROCK || type == TYPE_GROUND)
+                gBattleMovePower = (110 * gBattleMovePower) / 100;
+            break; 
+        case HOLD_EFFECT_EVIOLITE:
+            if (CanEvolve(gBattleMons[gBattlerTarget].species))
+            {
+                spDefense = (150 * spDefense) / 100;
+                defense = (150 * defense) / 100;
+            }//think raise boost 1.5x isn't really enough to be worth not evolving,
+            //or even keep up with what stats would be at evolution
+            //hmm or so I thought? but paras base 55 defense with evolving to parasect base 80 def
+            //my eviolite def was higher than my evolved defense??
+            //pre-evo def was 70 w eviolite,  post evo it was just 61
+            //but my hp is much higher so overall I'm still bulkier post evo. hmm. I thinkI should still boost it up 2 points
+            //change description when added to reflect change, say greatly boost def spdef
+            //keep an eye on consider may be too strong for some good mon but eh pve doesnt matter as much
     }
 
 
@@ -3534,7 +3570,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         spDefense *= 2;
     if (attackerHoldEffect == HOLD_EFFECT_LIGHT_BALL && attacker->species == SPECIES_PIKACHU)
         spAttack *= 2;
-    if (defenderHoldEffect == HOLD_EFFECT_METAL_POWDER && defender->species == SPECIES_DITTO)
+    if (defenderHoldEffect == HOLD_EFFECT_METAL_POWDER && defender->species == SPECIES_DITTO) //changed transform so ditto can actually still use this post transformation
         defense *= 2;
     if (attackerHoldEffect == HOLD_EFFECT_THICK_CLUB && (attacker->species == SPECIES_CUBONE || attacker->species == SPECIES_MAROWAK))
         attack *= 2;
@@ -3608,8 +3644,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         defense = (150 * defense) / 100;
     if (type == TYPE_ELECTRIC && (sideStatus & SIDE_STATUS_MUDSPORT)) //sidestatus means target side status, checked from bs_commands.c damagecalc function
         gBattleMovePower /= 2;
-    if (type == TYPE_FIRE && (sideStatus & SIDE_STATUS_WATERSPORT))
-        gBattleMovePower /= 2;
+    if (type == TYPE_FIRE && (sideStatus & SIDE_STATUS_WATERSPORT)) //hmm since these use gbattlemovepower rather than gbattlemovedamage they are less effective by default
+        gBattleMovePower /= 2;     //consider using gbattlemovedamage, negative is it would directly affect crits too, well could be a plus
+                                    //but conisidering I lowered super already it might be op
+                                    //using move power just affects move power, gbattlemovedamage affects power stab crit etc. all multipliers inclusively
 
     //in a pinch abilities
     if (attacker->hp <= (attacker->maxHP / 2)) //change to less or equal to be exact to yellow, more for super fang and effects that exactly do half hp
@@ -3666,9 +3704,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMovePower *= 2;
     }
 
-    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND) && (sideStatus & SIDE_STATUS_MUDSPORT))//give to more ground types?
+    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND) && (sideStatus & SIDE_STATUS_MUDSPORT)) //if done right these should stack
+     //&& IsBattlerGrounded(gBattlerTarget))//give to more ground types?
         spDefense = (130 * spDefense) / 100;    //gets to work as its on the ground not in the air
-
+                    //changed mind,not as realistic but gives more options, keep just ground affecting, rock/ground are only rocks that really need 
 
     // sandstorm sp.def boost for rock types  // decided to add this for ground types as well,
     if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK) || (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)))
@@ -3893,7 +3932,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     }//put adaptability logic in typecalc in bs command becaus that's where stab is handled
 
     // field abilities
-    /*if ((IsAbilityOnField(ABILITY_DARK_AURA) && type == TYPE_DARK)
+    if ((IsAbilityOnField(ABILITY_DARK_AURA) && type == TYPE_DARK)
         || (IsAbilityOnField(ABILITY_FAIRY_AURA) && type == TYPE_FAIRY))
     {
         if (IsAbilityOnField(ABILITY_AURA_BREAK))
@@ -3902,7 +3941,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         else
             gBattleMovePower = (gBattleMovePower * 125 / 100);
            // MulModifier(&modifier, UQ_4_12(1.25));
-    }*/
+    }//dont know why I had this commented out...
 
     // attacker partner's abilities
     if (IsBattlerAlive(BATTLE_PARTNER(gBattlerAttacker)))
@@ -3973,6 +4012,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     case ABILITY_HEATPROOF:
         if (type == TYPE_FIRE)
             gBattleMoveDamage /= 2; //reset from 4 back to 2, with super multiplier change, keeping others as they are
+        break;
+    case ABILITY_AURA_BREAK:
+        if (type == TYPE_DARK || type == TYPE_FAIRY)
+            gBattleMoveDamage /= 2;
         break;
     case ABILITY_GLACIAL_ICE:
         if (type == TYPE_FIRE)// || TYPE_ICE))
@@ -4153,13 +4196,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
         //trap effects
         if (((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION))
-            && IsBlackFogNotOnField())
+            && IsBlackFogNotOnField()) //liked the idea of creating a bug status effect, change  move infestaion to swarm, atked by biting swarm!
+            //then make infested/infestation the bug status, the extra effect of swarm would be setting the infestation status
         {
             //gBattleMons[battlerIdDef].statStages[STAT_DEF] -= 2;    //should lower defense by 2 i.e 50% 
             /*if (gBattleMons[gActiveBattler].statStages[STAT_DEF] < 0)
                 gBattleMons[gActiveBattler].statStages[STAT_DEF] = 0;
             APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF)*/
-            damage *= 2;
+            defense /= 2;
         }//need fix setup for this, think  stat drop isn't right as well, plan to only drop once during status duration look at how burn atk drop works //vsonic
         //rather than a stat change burn just augments the attackrs damage to an equivalent of a stat drop,  fixed, may be too strong may set to 1.5
         //also setup infestation as bug status can do with augment may need to set a fixed change in case move has odds I can't set to certain
@@ -4863,9 +4907,9 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
     case MON_DATA_TOUGH:
         retVal = substruct2->tough;
         break;
-    case MON_DATA_SHEEN:
+    /*case MON_DATA_SHEEN:
         retVal = substruct2->sheen;
-        break;
+        break;*/
     case MON_DATA_POKERUS:
         retVal = substruct3->pokerus;
         break;
@@ -5224,9 +5268,9 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
     case MON_DATA_TOUGH:
         SET8(substruct2->tough);
         break;
-    case MON_DATA_SHEEN:
+    /*case MON_DATA_SHEEN:
         SET8(substruct2->sheen);
-        break;
+        break;*/
     case MON_DATA_POKERUS:
         SET8(substruct3->pokerus);
         break;
@@ -7419,7 +7463,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
     if (hasHadPokerus)
         multiplier *= 2;
     if (holdEffect == HOLD_EFFECT_ULTIMA_BRACE)
-        multiplier *= 3;
+        multiplier *= 5;
     if (holdEffect == HOLD_EFFECT_POWERITEM)
         multiplier *= 2;
     
@@ -7783,8 +7827,8 @@ static u16 GetBattleBGM(void)
 {
     if (gBattleTypeFlags & BATTLE_TYPE_KYOGRE_GROUDON)
         return MUS_VS_WILD;
-    if (gBattleTypeFlags & BATTLE_TYPE_REGI)
-        return MUS_RS_VS_TRAINER;
+    /*if (gBattleTypeFlags & BATTLE_TYPE_REGI) //don't need this another function sets by default in startlegendarybattle
+        return MUS_RS_VS_TRAINER;*/
     if (gBattleTypeFlags & BATTLE_TYPE_LINK)
         return MUS_RS_VS_TRAINER;
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)

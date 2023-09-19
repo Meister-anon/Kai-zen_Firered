@@ -501,7 +501,7 @@
 #define BG_STEEL_BEAM_PLAYER					79
 
 #define B_ANIM_CONSTANTS
-// table ids for general animations	(gBattleAnims_General) //buffer for values from battle_anim_scripts.s
+// table ids for general animations	(gBattleAnims_General) //buffer for values from battle_anim_scripts.s       //ntot battle.inc that's not used
 #define B_ANIM_CASTFORM_CHANGE          0x0
 #define B_ANIM_STATS_CHANGE             0x1
 #define B_ANIM_SUBSTITUTE_FADE          0x2
@@ -567,8 +567,10 @@
 #define B_ANIM_STATUS_FRZ               0x6
 #define B_ANIM_STATUS_CURSED            0x7
 #define B_ANIM_STATUS_NIGHTMARE         0x8
-#define B_ANIM_STATUS_WRAPPED           0x9 // does not actually exist
-//#define B_ANIM_STATUS_SPRT				0xA	//for spirit lock
+#define B_ANIM_STATUS_INFESTED          0x9
+#define B_ANIM_POWDER                   0xA
+#define B_ANIM_STATUS_SPRT				0xB	//for spirit lock
+#define B_ANIM_STATUS_WRAPPED           0xC // does not actually exist, so needs be on end
 
 // Most tasks return a value to gBattleAnimArgs[7].
 #define ARG_RET_ID 7

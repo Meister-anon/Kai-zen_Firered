@@ -26,6 +26,8 @@ extern const u8 BattleScript_MicleBerryActivateEnd2[];
 extern const u8 BattleScript_MicleBerryActivateRet[];
 extern const u8 BattleScript_JabocaRowapBerryActivates[];
 extern const u8 BattleScript_BattleBondActivatesOnMoveEndAttacker[];
+extern const u8 BattleScript_BrickBreakWithScreens[];
+extern const u8 BattleScript_BrickBreakNoScreens[];
 extern const u8 BattleScript_MoveEnd[];
 extern const u8 BattleScript_MakeMoveMissed[];
 extern const u8 BattleScript_PrintMoveMissed[];
@@ -145,6 +147,7 @@ extern const u8 BattleScript_FocusPunchSetUp[];
 extern const u8 BattleScript_MoveUsedIsAsleep[];
 extern const u8 BattleScript_MoveUsedWokeUp[];
 extern const u8 BattleScript_MonWokeUpInUproar[];
+extern const u8 BattleScript_StatusInfested[];  //script for playing infest animation
 extern const u8 BattleScript_PoisonWorsened[];
 extern const u8 BattleScript_PoisonTurnDmg[];
 extern const u8 BattleScript_BurnTurnDmg[];
@@ -712,7 +715,7 @@ extern const u8 BattleScript_OldMan_Pokedude_CaughtMessage[];
 extern const u8 BattleScript_SilphScopeUnveiled[];
 extern const u8 BattleScript_BattleTowerTrainerBattleWon[];
 
-extern const u8 *const gBattleScriptsForMoveEffects[]; //down here because these are pointers
+extern const u8 *const gBattleScriptsForBattleEffects[]; //down here because these are pointers
 extern const u8 *const gBattlescriptsForBallThrow[];
 extern const u8 *const gBattlescriptsForRunningByItem[];
 extern const u8 *const gBattlescriptsForUsingItem[];

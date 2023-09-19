@@ -48,32 +48,32 @@
 #define BIT_FLANK       2
 
 // Battle Type Flags
-#define BATTLE_TYPE_DOUBLE           0x0001
+#define BATTLE_TYPE_DOUBLE           0x0001 //relized this was used as 1 for double value in trainers.h because it lined up with this for gbattletypeflags, its the actual value, 0 is no flags so just default single I guess
 #define BATTLE_TYPE_LINK             0x0002
 #define BATTLE_TYPE_IS_MASTER        0x0004 // In not-link battles, it's always set.
 #define BATTLE_TYPE_TRAINER          0x0008
 #define BATTLE_TYPE_FIRST_BATTLE     0x0010
-#define BATTLE_TYPE_20               0x0020
-#define BATTLE_TYPE_MULTI            0x0040
-#define BATTLE_TYPE_SAFARI           0x0080
-#define BATTLE_TYPE_BATTLE_TOWER     0x0100
-#define BATTLE_TYPE_OLD_MAN_TUTORIAL 0x0200
+#define BATTLE_TYPE_ROTATION         0x0020     
+#define BATTLE_TYPE_TRIPLE           0x0040     
+#define BATTLE_TWO_VS_ONE_PLAYER     0x0080 //planned but yet to do
+#define BATTLE_TYPE_BATTLE_TOWER     0x0100 //last value for u8 size, so if want use this for trainer set in trainers, would need all relevant battle types below this...
+#define BATTLE_TYPE_OLD_MAN_TUTORIAL 0x0200 //checked and can move all others, without issue, trainer battle type is only one that uses u8 value all else is u32
 #define BATTLE_TYPE_ROAMER           0x0400
 #define BATTLE_TYPE_EREADER_TRAINER  0x0800	//remove this, so I can replace it.
 #define BATTLE_TYPE_KYOGRE_GROUDON   0x1000
 #define BATTLE_TYPE_LEGENDARY        0x2000
 #define BATTLE_TYPE_GHOST_UNVEILED   0x2000 // Re-use of BATTLE_TYPE_LEGENDARY, when combined with BATTLE_TYPE_GHOST
-#define BATTLE_TYPE_REGI             0x4000
+#define BATTLE_TYPE_SAFARI           0x4000 //no using regi can replace this
 #define BATTLE_TYPE_GHOST            0x8000
 #define BATTLE_TYPE_POKEDUDE         0x10000
 #define BATTLE_TYPE_WILD_SCRIPTED    0x20000
 #define BATTLE_TYPE_LEGENDARY_FRLG   0x40000
 #define BATTLE_TYPE_TRAINER_TOWER    0x80000
-#define BATTLE_TYPE_ROTATION         0x100000
-#define BATTLE_TYPE_x200000          0x200000
+#define BATTLE_TYPE_20               0x100000   //this appears to be for link battle?   /renmae to link at some point will eventually remove these 2
+#define BATTLE_TYPE_MULTI            0x200000   //multi link battle?  swapped these 2 placement, so could use incldues for trainers.h battle type setting
 #define BATTLE_TYPE_INGAME_PARTNER   0x400000
 #define BATTLE_TYPE_TWO_OPPONENTS    0x800000	//carry over from emerald, not used here but is reason for gTrainerBattleOpponent_B  when 2 trainers approach player
-#define BATTLE_TYPE_RECORDED         0x1000000
+#define BATTLE_TYPE_RECORDED         0x1000000  //also not used, or wont be
 #define BATTLE_TYPE_x2000000         0x2000000
 #define BATTLE_TYPE_x4000000         0x4000000
 #define BATTLE_TYPE_SECRET_BASE      0x8000000
@@ -181,6 +181,7 @@
 
 // Volatile status ailments
 // These are removed after exiting the battle or switching out
+//from what I see game is only set up to display status animations for status 1 & status2 staus...but then leech seed works and its status3?
 #define STATUS2_CONFUSION             (1 << 0 | 1 << 1 | 1 << 2)
 #define STATUS2_CONFUSION_TURN(num)   ((num) << 0)
 #define STATUS2_FLINCHED              (1 << 3)
@@ -432,100 +433,6 @@
 #define WEATHER_ANY						(WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_SUN_ANY | WEATHER_HAIL_ANY)
 #define WEATHER_PRIMAL_ANY				(WEATHER_RAIN_PRIMAL | WEATHER_SUN_PRIMAL | WEATHER_STRONG_WINDS)
 
-// Move Effects
-#define MOVE_EFFECT_NOTHING_0           0x0
-#define MOVE_EFFECT_SLEEP               0x1
-#define MOVE_EFFECT_POISON              0x2
-#define MOVE_EFFECT_BURN                0x3
-#define MOVE_EFFECT_FREEZE              0x4
-#define MOVE_EFFECT_PARALYSIS           0x5
-#define MOVE_EFFECT_TOXIC               0x6
-#define PRIMARY_STATUS_MOVE_EFFECT      MOVE_EFFECT_TOXIC // All above move effects apply primary status
-//#define MOVE_EFFECT_SPIRIT_LOCK       0x6  //increase everything til v create by 1 use incrementer from discord for that
-#define MOVE_EFFECT_CONFUSION           0x7 //have to do it by hand since incrementer tool cant handle hexadecimal
-#define MOVE_EFFECT_FLINCH              0x8
-#define MOVE_EFFECT_TRI_ATTACK          0x9
-#define MOVE_EFFECT_UPROAR              0xA
-#define MOVE_EFFECT_PAYDAY              0xB
-#define MOVE_EFFECT_CHARGING            0xC
-#define MOVE_EFFECT_WRAP                0xD
-#define MOVE_EFFECT_RECOIL_25           0xE
-#define MOVE_EFFECT_ATK_PLUS_1          0xF
-#define MOVE_EFFECT_DEF_PLUS_1          0x10
-#define MOVE_EFFECT_SPD_PLUS_1          0x11
-#define MOVE_EFFECT_SP_ATK_PLUS_1       0x12
-#define MOVE_EFFECT_SP_DEF_PLUS_1       0x13
-#define MOVE_EFFECT_ACC_PLUS_1          0x14
-#define MOVE_EFFECT_EVS_PLUS_1          0x15
-#define MOVE_EFFECT_ATK_MINUS_1         0x16
-#define MOVE_EFFECT_DEF_MINUS_1         0x17
-#define MOVE_EFFECT_SPD_MINUS_1         0x18
-#define MOVE_EFFECT_SP_ATK_MINUS_1      0x19
-#define MOVE_EFFECT_SP_DEF_MINUS_1      0x1A
-#define MOVE_EFFECT_ACC_MINUS_1         0x1B
-#define MOVE_EFFECT_EVS_MINUS_1         0x1C
-#define MOVE_EFFECT_RECHARGE            0x1D
-#define MOVE_EFFECT_RAGE                0x1E
-#define MOVE_EFFECT_STEAL_ITEM          0x1F
-#define MOVE_EFFECT_PREVENT_ESCAPE      0x20
-#define MOVE_EFFECT_NIGHTMARE           0x21
-#define MOVE_EFFECT_ALL_STATS_UP        0x22
-#define MOVE_EFFECT_RAPIDSPIN           0x23
-#define MOVE_EFFECT_REMOVE_STATUS		0x24
-#define MOVE_EFFECT_ATK_DEF_DOWN        0x25
-#define MOVE_EFFECT_RECOIL_33           0x26
-#define MOVE_EFFECT_ATK_PLUS_2          0x27
-#define MOVE_EFFECT_DEF_PLUS_2          0x28
-#define MOVE_EFFECT_SPD_PLUS_2          0x29
-#define MOVE_EFFECT_SP_ATK_PLUS_2       0x2A
-#define MOVE_EFFECT_SP_DEF_PLUS_2       0x2B
-#define MOVE_EFFECT_ACC_PLUS_2          0x2C
-#define MOVE_EFFECT_EVS_PLUS_2          0x2D
-#define MOVE_EFFECT_ATK_MINUS_2         0x2E
-#define MOVE_EFFECT_DEF_MINUS_2         0x2F
-#define MOVE_EFFECT_SPD_MINUS_2         0x30
-#define MOVE_EFFECT_SP_ATK_MINUS_2      0x31
-#define MOVE_EFFECT_SP_DEF_MINUS_2      0x32
-#define MOVE_EFFECT_ACC_MINUS_2         0x33
-#define MOVE_EFFECT_EVS_MINUS_2         0x34
-#define MOVE_EFFECT_THRASH              0x35
-#define MOVE_EFFECT_KNOCK_OFF           0x36
-#define MOVE_EFFECT_CLEAR_SMOG          0x37
-#define MOVE_EFFECT_DEF_SPDEF_DOWN      0x38
-#define MOVE_EFFECT_SP_ATK_TWO_DOWN     0x39
-#define MOVE_EFFECT_RECOIL_50	        0x3A
-#define MOVE_EFFECT_RECOIL_33_STATUS	0x3B
-#define MOVE_EFFECT_FIRE_SPIN			0x3C
-#define MOVE_EFFECT_CLAMP				0x3D
-#define MOVE_EFFECT_WHIRLPOOL			0x3E
-#define MOVE_EFFECT_SAND_TOMB			0x3F
-#define MOVE_EFFECT_MAGMA_STORM			0x40
-#define MOVE_EFFECT_INFESTATION			0x41
-#define MOVE_EFFECT_SNAP_TRAP			0x42
-#define MOVE_EFFECT_SMACK_DOWN          0x43	//reordered move effects for shield dust logic
-#define MOVE_EFFECT_FLAME_BURST         0x44
-#define MOVE_EFFECT_FEINT				0x45
-#define MOVE_EFFECT_SPECTRAL_THIEF      0x46
-#define MOVE_EFFECT_ATTRACT				0x47	//just need to set this to the effect attract?	//setstatus in bscommands, this infatuates w target should work for effect spore
-#define MOVE_EFFECT_SPIRIT_LOCK			0x48  //but if
-#define MOVE_EFFECT_HAPPY_HOUR          0x49
-#define MOVE_EFFECT_CORE_ENFORCER       0x4A
-#define MOVE_EFFECT_THROAT_CHOP         0x4B
-#define MOVE_EFFECT_INCINERATE          0x4C
-#define MOVE_EFFECT_BUG_BITE	        0x4D
-
-#define MOVE_EFFECT_V_CREATE			0x4E
-#define MOVE_EFFECT_RELIC_SONG          0x4F
-#define MOVE_EFFECT_TRAP_BOTH           0x50
-#define MOVE_EFFECT_SKY_DROP            0x51	//add move_effects for other wrap moves
-#define MOVE_EFFECT_SCALE_SHOT			0x52
-#define MOVE_EFFECT_LOSE_TYPE			0x53
-#define MOVE_EFFECT_ROUND				0x54
-
-#define NUM_MOVE_EFFECTS                85	//ok think i got this right, battlescript are assigned based on battle_move_effects.h file
-#define MOVE_EFFECT_AFFECTS_USER        0x4000//that has to line up with battle_scripts_1.s but don't need move effect unlesss new status made or other new effect
-#define MOVE_EFFECT_CERTAIN             0x8000	//OK THIS SEEMS FINE its just a define doesn't need to be a specific value
-//dosn't actually need to line up with some othr file, move effect logic is in battle script commands.c setmoveeffect function then just had setmoveeffect to battlescripts
 
 // Battle terrain defines for gBattleTerrain.
 #define BATTLE_TERRAIN_GRASS        0

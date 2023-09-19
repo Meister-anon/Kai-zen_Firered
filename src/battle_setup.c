@@ -64,7 +64,7 @@ static const u8 *GetIntroSpeechOfApproachingTrainer(void);
 static const u8 *GetTrainerCantBattleSpeech(void);
 
 static EWRAM_DATA u16 sTrainerBattleMode = 0;
-EWRAM_DATA u16 gTrainerBattleOpponent_A = 0;
+EWRAM_DATA u16 gTrainerBattleOpponent_A = 0;    //vsonic need setup logic for battleopponent_B 
 EWRAM_DATA u16 gTrainerBattleOpponent_B = 0;    //not for double battle, for updated trainer see interaction 2 trainers meet for one battle
 static EWRAM_DATA u16 sTrainerObjectEventLocalId = 0;
 static EWRAM_DATA u8 *sTrainerAIntroSpeech = NULL;
@@ -376,11 +376,11 @@ void StartGroudonKyogreBattle(void)
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
 }
 
-void StartRegiBattle(void)
+void StartRegiBattle(void)  //not using this, just use startlegendarybattle, same effect
 {
     LockPlayerFieldControls();
     gMain.savedCallback = CB2_EndScriptedWildBattle;
-    gBattleTypeFlags = BATTLE_TYPE_LEGENDARY | BATTLE_TYPE_REGI;
+    gBattleTypeFlags = BATTLE_TYPE_LEGENDARY;
     CreateBattleStartTask(B_TRANSITION_BLUR, MUS_RS_VS_TRAINER);
     IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
     IncrementGameStat(GAME_STAT_WILD_BATTLES);
@@ -630,7 +630,7 @@ static u8 GetTrainerBattleTransition(void)
     }
     if (gTrainers[gTrainerBattleOpponent_A].trainerClass == CLASS_CHAMPION_2)
         return B_TRANSITION_BLUE;
-    if (gTrainers[gTrainerBattleOpponent_A].doubleBattle == TRUE)
+    if (gTrainers[gTrainerBattleOpponent_A].battleType == BATTLE_TYPE_DOUBLE) //eventually add on or replace with switch vsonic
         minPartyCount = 2; // double battles always at least have 2 pokemon.
     else //important, test 2 on 1 battles
         //Ketsuban in pret, informed me that by default if 1 pokemon in double battle

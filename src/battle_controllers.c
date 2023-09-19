@@ -14,6 +14,7 @@
 #include "util.h"
 #include "constants/abilities.h"
 #include "constants/battle.h"
+#include "constants/battle_move_effects.h"
 
 //static EWRAM_DATA u8 sLinkSendTaskId = 0;
 //static EWRAM_DATA u8 sLinkReceiveTaskId = 0;
@@ -887,10 +888,13 @@ void BtlController_EmitStatusIconUpdate(u8 bufferId, u32 status1, u32 status2)
     PrepareBufferDataTransfer(bufferId, sBattleBuffersTransferData, 9);
 }
 
+//seems to be same as InitAndLaunchChosenStatusAnimation function, just used from different places?
+//actually this seems to be setting the values for that, then the values
+//are read from that battlecontroller and actually sets the status
 void BtlController_EmitStatusAnimation(u8 bufferId, bool8 status2, u32 status)
 {
     sBattleBuffersTransferData[0] = CONTROLLER_STATUSANIMATION;
-    sBattleBuffersTransferData[1] = status2;
+    sBattleBuffersTransferData[1] = status2; //is true false check for if looking for status 2
     sBattleBuffersTransferData[2] = status;
     sBattleBuffersTransferData[3] = (status & 0x0000FF00) >> 8;
     sBattleBuffersTransferData[4] = (status & 0x00FF0000) >> 16;

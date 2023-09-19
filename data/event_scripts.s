@@ -14,6 +14,7 @@
 #include "constants/trainer_classes.h"
 #include "constants/vars.h"
 #include "constants/battle.h"
+#include "constants/battle_move_effects.h"
 #include "constants/heal_locations.h"
 #include "constants/field_effects.h"
 #include "constants/trainers.h"

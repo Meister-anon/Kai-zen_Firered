@@ -3257,7 +3257,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_CueBallChase[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerHugo[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamblerHugo[] = {
     {
         .iv = 0,
         .lvl = 18,
@@ -3270,7 +3270,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerHugo[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerJasper[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamblerJasper[] = {
     {
         .iv = 0,
         .lvl = 18,
@@ -3283,7 +3283,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerJasper[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerDirk[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamblerDirk[] = {
     {
         .iv = 0,
         .lvl = 18,
@@ -3296,7 +3296,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerDirk[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerDarian[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamblerDarian[] = {
     {
         .iv = 0,
         .lvl = 18,
@@ -3309,7 +3309,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerDarian[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerStan[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamblerStan[] = {
     {
         .iv = 0,
         .lvl = 22,
@@ -3327,7 +3327,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerStan[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_Gamer1[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_Gambler1[] = {
     {
         .iv = 0,
         .lvl = 5,
@@ -3335,7 +3335,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_Gamer1[] = {
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerRich[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamblerRich[] = {
     {
         .iv = 0,
         .lvl = 24,
@@ -9866,7 +9866,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_EngineerBernie2[] 
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerDarian2[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamblerDarian2[] = {
     {
         .iv = 7,
         .lvl = 29,
@@ -10081,7 +10081,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_SuperNerdGlenn2[] 
     },
 };
 
-static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamerRich2[] = {
+static const struct TrainerMonNoItemDefaultMoves sTrainerMons_GamblerRich2[] = {
     {
         .iv = 7,
         .lvl = 30,

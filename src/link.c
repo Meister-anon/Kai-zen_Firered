@@ -23,6 +23,7 @@
 #include "help_system.h"
 #include "reset_save_heap.h"
 #include "constants/battle.h"
+#include "constants/battle_move_effects.h"
 #include "constants/songs.h"
 
 extern u16 gHeldKeyCodeToSend;

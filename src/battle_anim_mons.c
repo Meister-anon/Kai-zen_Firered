@@ -36,21 +36,21 @@ static EWRAM_DATA union AffineAnimCmd *sAnimTaskAffineAnim = NULL;
 static EWRAM_DATA u32 gUnknown_2037F2C = 0; // not used
 
 enum {
-    SINGLE_BATTLE,
-    DOUBLE_BATTLE,
+    SINGLE_BATTLES,
+    DOUBLE_BATTLES,
     ENEMY_DOUBLES,
 };
 
 static const struct UCoords8 sBattlerCoords[][4] =
 {
-    [SINGLE_BATTLE] =
+    [SINGLE_BATTLES] =
     { // Single battle
        [B_POSITION_PLAYER_LEFT] = { 72, 80 },
        [B_POSITION_OPPONENT_LEFT] = { 176, 40 },
        [B_POSITION_PLAYER_RIGHT] = { 48, 40 },
        [B_POSITION_OPPONENT_RIGHT] = { 112, 80 },
     },
-    [DOUBLE_BATTLE] =
+    [DOUBLE_BATTLES] =
     { // Double battle
        [B_POSITION_PLAYER_LEFT] = { 32, 80 },
        [B_POSITION_OPPONENT_LEFT] = { 200, 40 },

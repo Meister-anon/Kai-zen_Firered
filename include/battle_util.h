@@ -195,6 +195,8 @@ s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, 
 //learned defined need be on one line, this should be logic for thawing i.e remove frozen status
 //removed fire fang restriction, any heat transafer is good enough
 
+bool32 TryRemoveScreens(u8 battler); //made non-static to use with brick break too
+
 bool32 TestMoveFlags(u16 move, u32 flag);
 
 s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower,
@@ -207,6 +209,6 @@ s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fi
 // percent in UQ_4_12 format
 extern const u16 gPercentToModifier[101];
 
-extern const u16 gFloatingSpecies[130];
+extern const u16 gFloatingSpecies[152];
 
 #endif // GUARD_BATTLE_UTIL_H

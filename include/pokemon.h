@@ -36,8 +36,47 @@ struct PokemonSubstruct2
     u8 cute;
     u8 smart;
     u8 tough;
-    u8 sheen;
+    u8 flagcheck;   //think replace with flag check, planned use for exp share ev item activation condition
 };
+
+//pokemonflags
+#define FLAG_EXP_SHARE              (1 << 0)
+#define FLAG_HP_POWER_ITEM          (1 << 1)
+#define FLAG_ATK_POWER_ITEM         (1 << 2)
+#define FLAG_DEF_POWER_ITEM         (1 << 3)
+#define FLAG_SPD_POWER_ITEM         (1 << 4)
+#define FLAG_SPATK_POWER_ITEM       (1 << 5)
+#define FLAG_SPDEF_POWER_ITEM       (1 << 6)
+
+//set flags same as set for battle moves flags, 
+//will effect menu but think should have fast global turn off from within key item?
+//trainer suite split into exp share and ev trainer,  
+//no make two separate items, exp share key item you can activate and turn off from party menu
+//and ev trainer key item you setup from party menu, but also have global
+//off setting from item itself for both to make easier to cut off
+
+/*think will also use the flag for exp share and ev item boost, so don't need to waste held item slot
+//part of setting it up like opal, so have key item, trainer suite, which adds menu fields EXP_SHARE & EV_TRAIN
+//taking through task/menu options that would set the specific flag for that mon.
+//setting exp share flag should add little "E" symbol  to partymenu window so easy to tell its active
+//think can do similar thing for ev items, just set item icon in a spot on party menu to show you're ev training and what stat you're boosting.
+//this would be separate from held item position as that's directly on the mon icon itself.*/
+//ev shackle item would still be of use, what it would do is actually be a held item, 
+//either it doesn't lower speed or its the only training tool that actually DOES lower speed when in use.
+//it'd multiply the individual stat ev gain you normally get by a multiplier
+//also of note you should be able to set multiple ev train items at once with this.
+//since its a u8 flag I have space for 8 flags at once, and only 6 stat flags plus the exp flag, leaving one space still for the form flag!!
+
+//put more thought into this and I'm wondering if it matters where I put the flag, 
+//if I use it here itd be in basestats struct
+//but evs are stored in PokemonSubstruct2, idk if it needs to be in teh same struct or not, I assume it shoudn't matter
+//its just a matter of checking and setting the relevant fields as I need them.
+//I believe its easier to adjust values when they are in the same struct?
+//should I need to I could easily replace sheen with the flag as they would both be u8
+//meaning savestruct wouldn't be affected  but for form change/breeding it makes more sense
+//to use base stat struct for form change/flag check,  I could do both
+//leave form change in base stats but move the exp share & ev item flag checks to PokemonSubstruct2
+//in place of sheen
 
 struct PokemonSubstruct3
 {
@@ -234,7 +273,7 @@ struct BaseStats  // had to adjust struct order to match paste value from base_s
  /* 0x1B */ u16 abilityHidden[2]; //need to make sure ability num can be 2, then set that as hidden ability
  /* 0x1D */ u8 bodyColor : 7;
             u8 noFlip : 1;
- /* 0x1E */ u8 flags;
+ /* 0x1E */ u8 flags;   //use for gender diff & form change, when creating mon plan check for flag and divert to what should be based on form species, //also used for making beast ball work, etc.
 };
 
 struct BattleMove
@@ -272,7 +311,7 @@ extern const struct BattleMove gBattleMoves[];
 #define FLAG_KINGS_ROCK_AFFECTED    (1 << 5)
 #define FLAG_HIGH_CRIT              (1 << 6)
 #define FLAG_RECKLESS_BOOST         (1 << 7)
-#define FLAG_IRON_FIST_BOOST        (1 << 8)
+#define FLAG_IRON_FIST_BOOST        (1 << 8)    //1 byte
 #define FLAG_SHEER_FORCE_BOOST      (1 << 9)
 #define FLAG_STRONG_JAW_BOOST       (1 << 10)
 #define FLAG_MEGA_LAUNCHER_BOOST    (1 << 11)
@@ -280,21 +319,26 @@ extern const struct BattleMove gBattleMoves[];
 #define FLAG_DMG_MINIMIZE           (1 << 13)
 #define FLAG_DMG_UNDERGROUND        (1 << 14)
 #define FLAG_DMG_UNDERWATER         (1 << 15)
-#define FLAG_SOUND                  (1 << 16)
+#define FLAG_SOUND                  (1 << 16)   //2 byte
 #define FLAG_BALLISTIC              (1 << 17)
 #define FLAG_PROTECTION_MOVE        (1 << 18)
-#define FLAG_POWDER                 (1 << 19)
+#define FLAG_POWDER_MOVE            (1 << 19)
 #define FLAG_TARGET_ABILITY_IGNORED (1 << 20)
 #define FLAG_DANCE                  (1 << 21)
 #define FLAG_DMG_2X_IN_AIR          (1 << 22) // If target is in the air, can hit and deal double damage.
 #define FLAG_DMG_IN_AIR             (1 << 23) // If target is in the air, can hit.
-#define FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING (1 << 24) // Makes a Ground type move do 1x damage to flying and levitating targets
-#define FLAG_THAW_USER                            (1 << 25)
-#define FLAG_HIT_IN_SUBSTITUTE                    (1 << 26) // Hyperspace Fury
-#define FLAG_TWO_STRIKES                          (1 << 27) // A move with this flag will strike twice, and may apply its effect on each hit
-#define FLAG_ROCK_HEAD_BOOST        (1 << 28)   //EQUIvalent iron fist will boost moves that used head
-#define FLAG_WIND_MOVE              (1 << 29)   //added for rotom ability
-#define FLAG_LETHAL_LEGS_BOOST      (1 << 30)  //hitmon lee ability kick move boost
+//#define FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING (1 << 24) // Makes a Ground type move do 1x damage to flying and levitating targets /realied already changed type so this doesn't do anything 
+//#define FLAG_THAW_USER                            (1 << 25) //since changed thaw to conditional effect can remove this
+//#define FLAG_TWO_STRIKES                          (1 << 27) // A move with this flag will strike twice, and may apply its effect on each hit //whgy is this necessary multihit already works that way?
+#define FLAG_HIT_IN_SUBSTITUTE                    (1 << 24) // Hyperspace Fury  //3 byte
+#define FLAG_ROCK_HEAD_BOOST        (1 << 25)   //EQUIvalent iron fist will boost moves that used head
+#define FLAG_WIND_MOVE              (1 << 26)   //added for rotom ability
+#define FLAG_LETHAL_LEGS_BOOST      (1 << 27)  //hitmon lee ability kick move boost
+#define FLAG_ALWAYS_CRIT            (1 << 28)   //replace effect always crit do with flag check, simpler
+
+//thaw user and two strikes can be removed, FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING  can also be removed 
+//also flags are u32, so I beleive I can go up to 32 with this
+//have 4 spaces left
 
 #define SPINDA_SPOT_HEIGHT 16
 

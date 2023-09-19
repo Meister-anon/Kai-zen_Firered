@@ -1,4 +1,5 @@
 #include "constants/battle.h"
+#include "constants/battle_move_effects.h"
 #include "constants/battle_anim.h"
 #include "constants/rgb.h"
 #include "constants/items.h"
@@ -665,7 +666,7 @@ gBattleAnims_Moves::
 	.4byte Move_BABY_DOLL_EYES
 	.4byte Move_NUZZLE
 	.4byte Move_HOLD_BACK
-	.4byte Move_INFESTATION
+	.4byte MOVE_SWARM
 	.4byte Move_POWER_UP_PUNCH
 	.4byte Move_OBLIVION_WING
 	.4byte Move_THOUSAND_ARROWS
@@ -861,17 +862,18 @@ gBattleAnims_Moves::
 	.4byte Move_COUNT @ cannot be reached, because last move is Eerie Spell  important check move order moves.h
 
 gBattleAnims_StatusConditions::
-	.4byte Status_Poison
-	.4byte Status_Confusion
-	.4byte Status_Burn
-	.4byte Status_Infatuation
-	.4byte Status_Sleep
-	.4byte Status_Paralysis
-	.4byte Status_Freeze
-	.4byte Status_Curse
-	.4byte Status_Nightmare
-	.4byte Status_Powder
-	@.4byte Status_Spiritlock
+	.4byte Status_Poison                    @ B_ANIM_STATUS_PSN
+	.4byte Status_Confusion                 @ B_ANIM_STATUS_CONFUSION
+	.4byte Status_Burn                      @ B_ANIM_STATUS_BRN
+	.4byte Status_Infatuation               @ B_ANIM_STATUS_INFATUATION
+	.4byte Status_Sleep                     @ B_ANIM_STATUS_SLP
+	.4byte Status_Paralysis                 @ B_ANIM_STATUS_PRZ
+	.4byte Status_Freeze                    @ B_ANIM_STATUS_FRZ
+	.4byte Status_Curse                     @ B_ANIM_STATUS_CURSED
+	.4byte Status_Nightmare                 @ B_ANIM_STATUS_NIGHTMARE
+	.4byte Status_Infestation				@ B_ANIM_STATUS_INFESTED
+	.4byte Status_Powder					@ B_ANIM_POWDER			
+	@.4byte Status_Spiritlock				@ B_ANIM_STATUS_SPRT
 
 	@value go in 
 
@@ -19444,7 +19446,10 @@ Move_HOLD_BACK::
 	blendoff
 	end
 
-Move_INFESTATION::
+@edit this add attack order insect animation, ending with the vortex
+@that way swarm animation and infestation satus animation are distinct
+@changed back forgot move already had distinct animation from end status
+Move_SWARM::
 	loadspritegfx ANIM_TAG_HANDS_AND_FEET @black color
 	loadspritegfx ANIM_TAG_SMALL_BUBBLES @circle particles
 	monbg ANIM_DEF_PARTNER
@@ -24699,10 +24704,14 @@ General_ItemKnockoff:: @ 81D5C54
 
 General_TurnTrap:: @ 81D5C5F
 	createvisualtask AnimTask_GetTrappedMoveAnimId, 5, 
-	jumpargeq 0, 1, Status_FireSpin
-	jumpargeq 0, 2, Status_Whirlpool
-	jumpargeq 0, 3, Status_Clamp
-	jumpargeq 0, 4, Status_SandTomb
+	jumpargeq 0, TRAP_ANIM_FIRE_SPIN, Status_FireSpin
+	jumpargeq 0, TRAP_ANIM_WHIRLPOOL, Status_Whirlpool
+	jumpargeq 0, TRAP_ANIM_CLAMP,     Status_Clamp
+	jumpargeq 0, TRAP_ANIM_SAND_TOMB, Status_SandTomb
+	jumpargeq 0, TRAP_ANIM_MAGMA_STORM, Status_MagmaStorm
+	jumpargeq 0, TRAP_ANIM_INFESTATION, Endturn_Swarm
+	jumpargeq 0, TRAP_ANIM_SNAP_TRAP, Status_Snap_Trap
+	jumpargeq 0, TRAP_ANIM_THUNDER_CAGE, Status_Thunder_Cage
 	goto Status_BindWrap
 
 Status_BindWrap:: @ 81D5C8B
@@ -24776,6 +24785,106 @@ Status_SandTomb:: @ 81D5DA9
 	waitforvisualfinish
 	stopsound
 	end
+
+Status_Thunder_Cage:
+	@ TODO
+	goto Move_THUNDER_CAGE
+
+Status_Snap_Trap: @ placeholder
+	goto Move_BITE
+
+@not using for swarm, keep for infestation bug status so animations are different
+@since swarm sets infestation	vsonic
+@trying to setup animation to work since looked like coudln't pull status4 from normla function?
+Status_Infestation:
+	loadspritegfx ANIM_TAG_HANDS_AND_FEET @black color
+	loadspritegfx ANIM_TAG_SMALL_BUBBLES @circle particles
+	monbg ANIM_DEF_PARTNER
+	monbgprio_28 ANIM_TARGET
+	createvisualtask AnimTask_BlendSelected, 10, ANIM_PAL_DEF, 0x2, 0x0, 0x9, 0x7320
+	launchtask AnimTask_ShakeMon 0x2 0x5 ANIM_TARGET 0x3 0x0 0x4f 0x1
+	loopsewithpan SE_M_CHARGE, SOUND_PAN_ATTACKER, 0x0, 30
+	call InfestationVortex
+	call InfestationVortex
+	waitforvisualfinish
+	launchtask AnimTask_BlendSelected 0xA 0x5 ANIM_PAL_DEF 0x2 0x9 0x0 0x7320
+	waitforvisualfinish
+	clearmonbg ANIM_DEF_PARTNER
+	end
+
+Status_MagmaStorm:
+	loadspritegfx ANIM_TAG_SMALL_EMBER
+	fadetobg BG_MAGMA_STORM
+	waitbgfadeout
+	createvisualtask AnimTask_MoveSeismicTossBg, 3
+	playsewithpan SE_M_SACRED_FIRE2, SOUND_PAN_TARGET
+	loopsewithpan SE_M_SACRED_FIRE2, SOUND_PAN_TARGET, 5, 8
+	createvisualtask AnimTask_SeismicTossBgAccelerateDownAtEnd, 3
+	createvisualtask AnimTask_ShakeMon, 5, ANIM_TARGET, 0, 2, 47, 1
+	createvisualtask AnimTask_BlendColorCycle, 2, 6, 4, 2, 2, 0, 12, RGB(22, 9, 7)
+	call FireSpinEffect
+	call FireSpinEffect
+	createvisualtask AnimTask_BlendColorCycle, 2, 6, 4, 2, 2, 0, 12, RGB(22, 9, 7)
+	call FireSpinEffect
+	call FireSpinEffect
+	createvisualtask AnimTask_BlendColorCycle, 2, 6, 4, 2, 2, 0, 12, RGB(22, 9, 7)
+	call FireSpinEffect
+	restorebg
+	waitbgfadeout
+	setarg 7, 0xFFF
+	waitbgfadein
+	stopsound
+	clearmonbg ANIM_DEF_PARTNER
+	blendoff
+	end
+
+@mix of attack order and infestation vortex
+@potentially tweak more/ need check/test to see visual
+Endturn_Swarm:
+	loadspritegfx ANIM_TAG_ATTACK_ORDER
+	loadspritegfx ANIM_TAG_IMPACT
+	loadspritegfx ANIM_TAG_ROCKS
+	monbg ANIM_DEF_PARTNER
+	monbgprio_28 ANIM_TARGET
+	playsewithpan SE_M_SWEET_SCENT, SOUND_PAN_TARGET
+	createsprite gAttackOrderParticleSpriteTemplate, ANIM_TARGET, 5, 120, 70, 5, 70, 30
+	delay 1
+	createsprite gAttackOrderParticleSpriteTemplate, ANIM_TARGET, 5, 120, 55, 6, 60, 25
+	delay 1
+	createsprite gAttackOrderParticleSpriteTemplate, ANIM_TARGET, 5, 120, 60, 7, 60, 30
+	createsprite gAttackOrderParticleSpriteTemplate, ANIM_TARGET, 5, 120, 55, 10, 60, 30
+	delay 3
+	createsprite gAttackOrderParticleSpriteTemplate, ANIM_TARGET, 5, 100, 50, 4, 50, 26
+	delay 1
+	createsprite gAttackOrderParticleSpriteTemplate, ANIM_TARGET, 5, 105, 25, 8, 60, 20
+	delay 1
+	createsprite gAttackOrderParticleSpriteTemplate, ANIM_TARGET, 5, 120, 40, 10, 48, 30
+	delay 3
+	createsprite gAttackOrderParticleSpriteTemplate, ANIM_TARGET, 5, 120, 30, 6, 45, 25
+	createsprite gAttackOrderParticleSpriteTemplate, ANIM_TARGET, 5, 120, 35, 10, 60, 30
+	delay 3
+	createsprite gAttackOrderParticleSpriteTemplate, ANIM_TARGET, 5, 105, 20, 8, 40, 0
+	delay 3
+	createsprite gAttackOrderParticleSpriteTemplate, ANIM_TARGET, 5, 20, 255, 15, 32, 0
+	createsprite gAttackOrderParticleSpriteTemplate, ANIM_TARGET, 5, 110, 10, 8, 32, 20
+	waitforvisualfinish
+	createsprite gBasicHitSplatSpriteTemplate 131, 4, -32, -16, 1, 3
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
+	createvisualtask AnimTask_ShakeMonInPlace, 2, 5, 1, 3, 0, 12, 1
+	createvisualtask AnimTask_ShakeMonInPlace, 2, 5, 1, 3, 0, 12, 1
+	delay 4
+	createsprite gRandomPosHitSplatSpriteTemplate 131, 2, 1, 3
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
+	delay 4
+	createsprite gRandomPosHitSplatSpriteTemplate 131, 2, 1, 3
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
+	delay 4
+	createsprite gBasicHitSplatSpriteTemplate 131, 4, 32, 20, 1, 3
+	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
+	waitforvisualfinish
+	blendoff
+	goto Status_Infestation
+
 
 General_ItemEffect:: @ 81D5DF2
 	loadspritegfx ANIM_TAG_THIN_RING

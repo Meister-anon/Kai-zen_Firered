@@ -2,7 +2,7 @@
 const u8 gMoveDescription_Pound[] = _("A physical attack\ndelivered with a\nlong tail or a\nforeleg, etc.");
 const u8 gMoveDescription_KarateChop[] = _("The foe is attacked\nwith a sharp chop.\nIt has a high\ncritical-hit ratio.");
 const u8 gMoveDescription_DoubleSlap[] = _("The foe is slapped\nrepeatedly, back\nand forth, two to\nfive times.");
-const u8 gMoveDescription_CometPunch[] = _("The foe is hit with\na flurry of punches\nthat strike two to\nfive times.");
+const u8 gMoveDescription_CometPunch[] = _("The foe is hit with\na flurry of punches\nthat strike two to\nfive times.\nFast as\na burning comet");
 const u8 gMoveDescription_MegaPunch[] = _("The foe is slugged\nby a punch thrown\nwith muscle-packed\npower.");
 const u8 gMoveDescription_PayDay[] = _("Numerous coins are\nhurled at the foe.\nMoney is earned\nafter battle.");
 const u8 gMoveDescription_FirePunch[] = _("The foe is punched\nwith a fiery fist.\nIt may leave the\nfoe with a burn.");
@@ -999,8 +999,8 @@ const u8 gBABYDOLL_EYESDescription
 const u8 gNUZZLEDescription 
     [] = _("Rubs its cheecks against\nthe foe, paralyzing it.");
 
-const u8 gINFESTATIONDescription 
-    [] = _("The foe is infested and\nattacked for 2 to 5 turns.");
+const u8 gSWARMDescription 
+    [] = _("Foe is surrounded\nby biting insects\nand infested for\n2 to 5 turns.");
 
 const u8 gPOWER_UP_PUNCHDescription 
     [] = _("A hard punch that raises\nthe user's Attack.");
@@ -2081,7 +2081,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [ MOVE_BABY_DOLL_EYES ] = gBABYDOLL_EYESDescription,
     [ MOVE_NUZZLE ] = gNUZZLEDescription,
     [ MOVE_HOLD_BACK ] = gMoveDescription_FalseSwipe,
-    [ MOVE_INFESTATION ] = gINFESTATIONDescription,
+    [ MOVE_SWARM ] = gSWARMDescription,
     [ MOVE_POWER_UP_PUNCH ] = gPOWER_UP_PUNCHDescription,
     [ MOVE_OBLIVION_WING ] = gDRAINING_KISSDescription,
     [ MOVE_THOUSAND_ARROWS ] = gTHOUSAND_ARROWSDescription,
@@ -2865,7 +2865,7 @@ const u8 gLowerMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_BABY_DOLL_EYES] = _("BabyDollEyes"),
     [MOVE_NUZZLE] = _("Nuzzle"),
     [MOVE_HOLD_BACK] = _("Hold Back"),
-    [MOVE_INFESTATION] = _("Infestation"),
+    [MOVE_SWARM] = _("Swarm"),
     [MOVE_POWER_UP_PUNCH] = _("PowerUpPunch"),
     [MOVE_OBLIVION_WING] = _("OblivionWing"),
     [MOVE_THOUSAND_ARROWS] = _("ThousndArrws"),
@@ -3644,7 +3644,7 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("BABY DOLL EYES"),
     _("NUZZLE"),
     _("HOLD BACK"),
-    _("INFESTATION"),
+    _("SWARM"),
     _("POWER UP PUNCH"),
     _("OBLIVION WING"),
     _("THOUSAND ARROWS"),

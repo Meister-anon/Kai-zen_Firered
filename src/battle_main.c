@@ -35,7 +35,7 @@
 #include "vs_seeker.h"
 #include "util.h"
 #include "constants/abilities.h"
-#include "constants/battle_move_effects.h"
+#include "constants/battle_effects.h"
 #include "constants/battle_setup.h"
 #include "constants/hold_effects.h"
 #include "constants/items.h"
@@ -334,7 +334,7 @@ const u16 gTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] =
 
       /*poison*/ {X(1.0), X(1.5), X(1.0), X(0.0), X(0.5), X(0.0), X(1.0), X(0.5), X(0.0), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.5), X(1.0)}, // poison
 
-      /*ground*/ {X(1.0), X(1.0), X(0.0), X(1.5), X(1.0), X(1.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(0.5), X(1.5), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0)}, // ground
+      /*ground*/ {X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(1.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(0.5), X(1.5), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0)}, // ground
 
         /*rock*/ {X(1.0), X(0.5), X(1.5), X(1.0), X(0.5), X(1.0), X(1.5), X(1.0), X(0.5), X(1.0), X(1.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(1.0), X(1.0), X(1.0)}, // rock
 
@@ -358,7 +358,7 @@ const u16 gTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] =
 
          /*ice*/ {X(1.0), X(1.0), X(1.5), X(1.0), X(1.5), X(1.0), X(1.5), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(1.5), X(1.0), X(1.0), X(0.5), X(1.5), X(1.0), X(1.0), X(1.0)}, // ice
 
-      /*dragon*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(0.5), X(1.0)}, // dragon
+      /*dragon*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.5), X(1.0), X(0.5), X(1.0)}, // dragon
 
         /*dark*/ {X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.5), X(1.0), X(1.0), X(1.5), X(1.5), X(1.0)}, // dark
 
@@ -382,7 +382,7 @@ const u16 gTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] =
 //DON'T FORGET every time I change below, need to update in the .h / also need to update table above, so ai, and other pre-damage type calcs are accurate
 #define TYPE_CHART
 
-const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
+const u8 gTypeEffectiveness[] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line first entry is on from line closing bracket is on  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_NORMAL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
@@ -393,7 +393,7 @@ const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of
     TYPE_FIRE, TYPE_BUG, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIRE, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE, //ghost adjustment same logic as ice
     TYPE_FIRE, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FIRE, TYPE_GROUND, TYPE_MUL_NOT_EFFECTIVE, //NEW effectiveness for snivy, may remove
+    TYPE_FIRE, TYPE_GROUND, TYPE_MUL_NOT_EFFECTIVE, //NEW effectiveness for snivy, also gives closer tie between rock/ground
     TYPE_FIRE, TYPE_DRAGON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIRE, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_WATER, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
@@ -436,19 +436,21 @@ const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of
     TYPE_FIGHTING, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIGHTING, TYPE_FLYING, TYPE_MUL_NOT_EFFECTIVE, //when grounded fighting should do normal damage to flying
     TYPE_FIGHTING, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FIGHTING, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FIGHTING, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,    //dont understand this other than some super sentai stuff but I'm keeping it
+    TYPE_FIGHTING, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FIGHTING, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIGHTING, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FIGHTING, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_POISON, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_POISON, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_POISON, TYPE_POISON, TYPE_MUL_NO_EFFECT,
+    TYPE_POISON, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,   //poison resists fighting, usually type is super against what it resists, also poison spreads faster in more active, and best way to take out physically strong opponents
+    TYPE_POISON, TYPE_POISON, TYPE_MUL_NO_EFFECT,       //furthering of late gen poison can't be poisoned logic, also makes better as a pivot/defensive typing
     TYPE_POISON, TYPE_GROUND, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_POISON, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,  //cold slows spread of poison
-    TYPE_POISON, TYPE_ROCK, TYPE_MUL_NO_EFFECT,
+    TYPE_POISON, TYPE_ROCK, TYPE_MUL_NO_EFFECT,     //same as steel, not alive so not affecting by poison
     TYPE_POISON, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_POISON, TYPE_STEEL, TYPE_MUL_NO_EFFECT,
-    TYPE_GROUND, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_POISON, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_GROUND, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,  //logic water in the ground gets frozen earth cant shift/move
     TYPE_GROUND, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_GROUND, TYPE_ELECTRIC, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_GROUND, TYPE_GRASS, TYPE_MUL_NOT_EFFECTIVE,
@@ -456,21 +458,22 @@ const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of
     TYPE_GROUND, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE, //then create condition where its set to no effect if not grounded
     TYPE_GROUND, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE, //made ground steel neutral, as its better rock, and materiel for steel comes from the earth
     TYPE_FLYING, TYPE_ELECTRIC, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FLYING, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,  //makes sense flying resists grass, birds make their home in trees,
-    TYPE_FLYING, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,   //also hurricanes/tornadoes uproot & destroy trees
+    TYPE_FLYING, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,  //makes sense flying resists grass, birds make their home in trees,also hurricanes/tornadoes uproot & destroy trees
+    TYPE_FLYING, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,   // I have the HIGH GROUND Anakin!!!
     TYPE_FLYING, TYPE_BUG, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FLYING, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FLYING, TYPE_GROUND, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FLYING, TYPE_GROUND, TYPE_MUL_NOT_EFFECTIVE,   //wind doesn't really affect ground itself, after torandoes/hurricanes ground itself is undamage just everying on top (and mon can just go underground to avoid attacks)
     TYPE_FLYING, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FLYING, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,  //screw it!! it makes sense so I'm doing it
+    TYPE_FLYING, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,  //screw it!! it makes sense so I'm doing it, psychic abilities already catch things in the air and throw them around, even control wind
     TYPE_FLYING, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,      //Removed psychic super to flying, too strong, psychic strong offensively can already beat flying at neutral
     TYPE_PSYCHIC, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_PSYCHIC, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,    //psychic power can stop a target cold, can keep them from flying,    
-    TYPE_PSYCHIC, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,     //or confuse them which would make it impossible to fly, so makes sense,
+    TYPE_PSYCHIC, TYPE_POISON, TYPE_MUL_SUPER_EFFECTIVE,    //think logic is psychic powers would keep you from being poisoned/subtle attacks you could read their mind, so its "very effective"
+    TYPE_PSYCHIC, TYPE_PSYCHIC, TYPE_MUL_NOT_EFFECTIVE,     //psychic power can stop a target cold, can keep them from flying, or confuse them which would make it impossible to fly, so makes sense,
     TYPE_PSYCHIC, TYPE_DARK, TYPE_MUL_NO_EFFECT,        //mostly done to counter fairy resistance
     TYPE_PSYCHIC, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,   //effect prob too strong, flying is weak defensively and psychic is strong offenseively
+    TYPE_PSYCHIC, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,    //plus fairy nerfed, will replace with resistancee instad of super effectiveness
-    TYPE_BUG, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE, //changed mind, flying still weak defensively regardless but they exell at attack so worse to weaken their atk power
+    TYPE_BUG, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE, 
     TYPE_BUG, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
@@ -486,23 +489,27 @@ const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of
     TYPE_ROCK, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_ROCK, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GHOST, TYPE_NORMAL, TYPE_MUL_NO_EFFECT,
-    TYPE_GHOST, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_GHOST, TYPE_DARK, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_GHOST, TYPE_GHOST, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_DRAGON, TYPE_DRAGON, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_GHOST, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE, //research ghost fairy thought to be same thing, difference ghosts are dead fae are considered alive, but at they were at one point both considered spirits
+    TYPE_GHOST, TYPE_DARK, TYPE_MUL_NOT_EFFECTIVE,          //removed ghost psychic effect as typically mediums and ghosts are mostly equal enemies,  psychis exorsise ghosts but ghosts also kill psychis
+    TYPE_GHOST, TYPE_GHOST, TYPE_MUL_SUPER_EFFECTIVE,           
+    TYPE_DRAGON, TYPE_DRAGON, TYPE_MUL_SUPER_EFFECTIVE, 
+    TYPE_DRAGON, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,  //Mostly done to keep num types, but also works for giving an extra reason to use ice type mon against dragons over just using an ice move
     TYPE_DRAGON, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_DARK, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_DARK, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,    //type change from wolveyvgc to buff bugs, its weak to bugs, so resists it, and dark is evil & bugs are //also associated with evil  so makes sense
+    TYPE_DRAGON, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,    //i can't explain fairy immunity to dragon, other than a pure balance decision, there's no lore that I can find to any relation between them.
+    TYPE_DARK, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,   //I thought it was a king arthur thing, but he never actually fought a dragon, though he did have protection of fae magic
+    TYPE_DARK, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,    //type change from wolveyvgc to buff bugs, its weak to bugs, so resists it, and dark is evil & bugs are associated with heroes through kamen rider so makes sense
     TYPE_DARK, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,  //-keeping psychic weakness to dark post ghost change as dark is living and able to do physical attacks while psychic is usually phsycially weak
     TYPE_DARK, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,  //changed there's nothing significant bout dark, its more or less same as ghost but alive, and ghosts thrive in darkness
     TYPE_DARK, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,   //change essentially makes ghost inverse of normal type effect wise, where most things are neutral and it has 1 weakness
     TYPE_DARK, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_DARK, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_STEEL, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,//NEW type relation for dark types, showed positively for offense capability and makes sense sneaky backstabbers bad guys take each other out often.
     TYPE_STEEL, TYPE_WATER, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_STEEL, TYPE_ELECTRIC, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_STEEL, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_STEEL, TYPE_ICE, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_STEEL, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_STEEL, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_STEEL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FAIRY, TYPE_NORMAL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FAIRY, TYPE_DRAGON, TYPE_MUL_SUPER_EFFECTIVE,
@@ -512,18 +519,11 @@ const u8 gTypeEffectiveness[420] = // 336 is number of entries x 3 i.e number of
     TYPE_FAIRY, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FAIRY, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FAIRY, TYPE_GRASS, TYPE_MUL_NO_EFFECT,     //grass buff, and based on idea fairy are nature spirits i.e can't hurt nature as they can't exist without it
-    TYPE_POISON, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_STEEL, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_DARK, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
-    TYPE_FIGHTING, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_GHOST, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_PSYCHIC, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_DRAGON, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FORESIGHT, TYPE_FORESIGHT, TYPE_MUL_NO_EFFECT, //can remove this when confident removed all type_foresight checks, would give room for 1 type change well I could leave it idk,
-    TYPE_NORMAL, TYPE_GHOST, TYPE_MUL_NO_EFFECT,
-    TYPE_FIGHTING, TYPE_GHOST, TYPE_MUL_NO_EFFECT,
-    TYPE_SOUND, TYPE_SOUND, TYPE_MUL_NO_EFFECT,
-    TYPE_ENDTABLE, TYPE_ENDTABLE, TYPE_MUL_NO_EFFECT
+    TYPE_FORESIGHT, TYPE_FORESIGHT, TYPE_MUL_NO_EFFECT, //can remove this when confident removed all type_foresight checks, would give room for 1 type change well I could leave it idk, i'll leave it...becuz I want the dumb 420 number...
+    TYPE_NORMAL, TYPE_GHOST, TYPE_MUL_NO_EFFECT, //will eventually remove type foresight so num types will change, so would want to add something
+    TYPE_FIGHTING, TYPE_GHOST, TYPE_MUL_NO_EFFECT,  //I'm thinkikng of making a fairy/fairy immunity, its all same class of magic, and would lean more into making it a counter part to dark
+    TYPE_SOUND, TYPE_SOUND, TYPE_MUL_NO_EFFECT,     //which is now super to iself,   and make dark//fairy a true chaos hybrid best of both worlds type deal, need check type calculator
+    TYPE_ENDTABLE, TYPE_ENDTABLE, TYPE_MUL_NO_EFFECT    //tabling fairy resist for now, would have to play test but loooks like any change to  fairy either immune to or resisting self just makes it worse overall, though I do prefer making it resist itself for dark/fairy
 };
 
 //questioned bug and ice resistance to electricity, but after research it made even more sense, than I initially thought.
@@ -603,7 +603,7 @@ const struct TrainerMoney gTrainerMoneyTable[] =
     { CLASS_CAMPER_2, 5 },
     { CLASS_PSYCHIC_2, 5 },
     { CLASS_BIKER, 5 },
-    { CLASS_GAMER, 18 },
+    { CLASS_GAMBLER, 18 },
     { CLASS_SCIENTIST, 12 },
     { CLASS_CRUSH_GIRL, 6 },
     { CLASS_TUBER_3, 1 },
@@ -1115,7 +1115,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     gSpecialStatuses[battlerAtk].gemBoost = FALSE;
 
     
-    if (gBattleMoves[move].effect == EFFECT_CHANGE_TYPE_ON_ITEM)
+    if (gBattleMoves[move].effect == EFFECT_CHANGE_TYPE_ON_ITEM) //not fling
     {
         if (holdEffect == gBattleMoves[move].argument)
             gBattleStruct->dynamicMoveType = ItemId_GetSecondaryId(gBattleMons[battlerAtk].item);// | F_DYNAMIC_TYPE_2;
@@ -1894,7 +1894,7 @@ bool8 IsRivalBattle(u16 trainerNum)
 #define TRAINER_PARTY_DATA
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 {
-    u32 nameHash = 0;
+    u32 nameHash = 0; //check other function that sets abilitysot for wilds may not need that randomability value vsonic
     u8 RandomAbility = Random() % 4;    //to put in setmondata dataarg to hopefully set random ability slot 0-3
     u32 personalityValue; //personality now uses name hash, which is trainer name
     u8 fixedIV; //figure how to set personality for individual pokemon, or at least set their ability
@@ -1911,13 +1911,13 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER
      && !(gBattleTypeFlags & (BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_TOWER)))
     {
-        ZeroEnemyPartyMons();
+        ZeroEnemyPartyMons();//would need put logic for filtering party size directly below this
         for (i = 0; i < gTrainers[trainerNum].partySize; ++i)   //uses i, to loop through trainers entir party 
-        {
+        {//vsonic
 
-            if (gTrainers[trainerNum].doubleBattle == TRUE)
+            if (gTrainers[trainerNum].battleType != SINGLES) //may need change to just not singles, since adding more?
                 personalityValue = 0x80;
-            else if (gTrainers[trainerNum].encounterMusic_gender & 0x80)
+            else if (gTrainers[trainerNum].encounterMusic_gender & 0x80) //specific value for male/female trainers to set party mon gender
                 personalityValue = 0x78;
             else
                 personalityValue = 0x88;
@@ -2013,6 +2013,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));*/
 
                 //Set Evs               
+                //ok so evs aren't random set they are user set, good.
                 for (j = 0; j < NUM_EV_STATS; ++j)
                 {
                     evs[j] = GetMonData(&party[i], partyData[i].evs[j], NULL);
@@ -2584,10 +2585,10 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 
                 /*//Set ability slot
                 abilityNum = partyData[i].abilityNum;
-                if (abilityNum == 0)
-                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(Random() % 4));
-                else
-                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1));*/
+                if (abilityNum != 0)
+                    SetMonData(&party[i], MON_DATA_ABILITY_NUM, &(abilityNum - 1)); //random ability setting odds already handled in other function
+                               //so all I need here is, if num mot 0  set
+                    */
 
                 //Set Evs
                 for (j = 0; j < NUM_EV_STATS; ++j)
@@ -2720,7 +2721,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             break;
             }   //end of switch case
         }//end of i
-       gBattleTypeFlags |= gTrainers[trainerNum].doubleBattle;
+       gBattleTypeFlags |= gTrainers[trainerNum].battleType;
     }
     return gTrainers[trainerNum].partySize;
 }
@@ -4241,10 +4242,10 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
      || (gBattleMons[gActiveBattler].status4 == ITS_A_TRAP_STATUS4)
      || (gBattleMons[gActiveBattler].status1 == ITS_A_TRAP_STATUS1)
      || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
-     || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK))
+     || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK))//I need to redo this setup,
      /*|| (!IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
         && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING))*/
-     && IsBattlerGrounded(gActiveBattler)) //use paras ingraint to check I didn't break affect with this, I made it impossible to flee unless not gronded because I used or instead of and -__
+     && IsBattlerGrounded(gActiveBattler)) // I made it impossible to flee unless not gronded because I used or instead of and -__
     {
         gBattleCommunication[MULTISTRING_CHOOSER] = 0;
         return BATTLE_RUN_FORBIDDEN;
@@ -4399,7 +4400,7 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                     if (gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION) 
                         || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
                         || (gBattleMons[gActiveBattler].status1 & (ITS_A_TRAP_STATUS1)) 
-                        || (gStatuses4[gActiveBattler] & (ITS_A_TRAP_STATUS4))) //hope this works...
+                        || (gBattleMons[gActiveBattler].status4 & (ITS_A_TRAP_STATUS4))) //hope this works...
                     {
                         if ((GetBattlerAbility(gActiveBattler) == ABILITY_DEFEATIST
                             && gSpecialStatuses[gActiveBattler].defeatistActivated) //overwrite usual switch preveention from status & traps
@@ -5551,9 +5552,15 @@ static void HandleAction_UseMove(void)
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
         gBattleStruct->hpBefore[i] = gBattleMons[i].hp;
 
-    gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect];
+    gBattlescriptCurrInstr = gBattleScriptsForBattleEffects[gBattleMoves[gCurrentMove].effect];   //important, link for battle_1.s effects at top to effects from battle_effects.h   vsonic
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
-}
+}//when use move above line will read effect and make it start at specific battlescript as ordered by battle_move_effects
+//but there are also move_effects as named from the /constants/battle.h  this is needlesl confusing
+//plan rename gBattleScriptsForMoveEffects  gBattleScriptsForBattleEffects
+//rename all includes for file battle_move_effects.h to battle_effects.h
+//make new file battle_move_effects.h copy all move effects from constants/battle.h to that file
+//then every file where constants/battle is included should also include new battle_move_effects.h constant file
+//finally rename seteffectwithchance command/function  setmoveeffectwithchance  so its clear that is for move effects
 
 static void HandleAction_Switch(void) //actual switch code
 {

@@ -1,6 +1,7 @@
 #include "constants/moves.h"
 #include "constants/battle.h"
 #include "constants/battle_move_effects.h"
+#include "constants/battle_effects.h"
 #include "constants/battle_script_commands.h"
 #include "constants/battle_anim.h"
 #include "constants/items.h"
@@ -20,7 +21,7 @@
 	.section script_data, "aw", %progbits
 	.align 2
 
-gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
+gBattleScriptsForBattleEffects::	@must match order of battle_effects.h file
 	.4byte BattleScript_EffectHit
 	.4byte BattleScript_EffectSleep
 	.4byte BattleScript_EffectPoisonHit
@@ -374,7 +375,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectWorrySeed
 	.4byte BattleScript_EffectFellStinger
 	.4byte BattleScript_EffectCaptivate
-	.4byte BattleScript_EffectAlwaysCrit
+	.4byte BattleScript_EffectHit
 	.4byte BattleScript_EffectHammerArm
 	.4byte BattleScript_EffectFusionCombo
 	.4byte BattleScript_EffectHealBlock
@@ -424,12 +425,12 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectFlash
 	.4byte BattleScript_EffectCocoon
 	.4byte BattleScript_EffectFlashFreeze	@ice will o wisp
-	.4byte BattleScript_EffectFireSpin	@copyof trap
+	.4byte BattleScript_EffectFireSpin	@separate trap effects
 	.4byte BattleScript_EffectClamp
 	.4byte BattleScript_EffectWhirlpool
 	.4byte BattleScript_EffectSandTomb
 	.4byte BattleScript_EffectMagmaStorm
-	.4byte BattleScript_EffectInfestation
+	.4byte BattleScript_EffectSwarm
 	.4byte BattleScript_EffectSnapTrap
 	.4byte BattleScript_EffectDryadsCurse
 	.4byte BattleScript_EffectProtect	@shield bash
@@ -440,6 +441,7 @@ gBattleScriptsForMoveEffects::	@must match order of battle_move_effects.h file
 	.4byte BattleScript_EffectVictoryDance            @ EFFECT_VICTORY_DANCE
 	.4byte BattleScript_EffectTeatime                 @ EFFECT_TEATIME
 	.4byte BattleScript_EffectAttackUpUserAlly        @ EFFECT_ATTACK_UP_USER_ALLY
+													  @ EFFECT_INFESTATION  bug status
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -522,6 +524,7 @@ BattleScript_BurnUpWorks:
 	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -686,6 +689,7 @@ BattleScript_EffectFling:
 	ppreduce
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -1530,7 +1534,7 @@ BattleScript_EffectFinalGambit:		@CHANGED effect to do dmg based on missing heal
 	setatkhptozero
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
-	seteffectwithchance
+	setmoveeffectwithchance
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	tryfaintmon BS_TARGET, FALSE, NULL
 	jumpifmovehadnoeffect BattleScript_MoveEnd
@@ -1543,6 +1547,7 @@ BattleScript_EffectHitSwitchTarget:
 	ppreduce
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -2478,6 +2483,7 @@ BattleScript_EffectHitEscape:
 	ppreduce
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -2492,7 +2498,7 @@ BattleScript_EffectHitEscape:
 	resultmessage
 	waitmessage 0x40
 	jumpifmovehadnoeffect BattleScript_MoveEnd
-	seteffectwithchance
+	setmoveeffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	moveendto MOVE_END_ATTACKER_VISIBLE
 	moveendfrom MOVE_END_TARGET_VISIBLE
@@ -2540,14 +2546,18 @@ BattleScript_EffectPlaceholder:
 	printstring STRINGID_NOTDONEYET
 	goto BattleScript_MoveEnd
 
-
+@vsonic tracking down battle bug
+@changes I've made have had an effect so it means the game is actually IN this script
+@but i'm also confused on what its dooing with the weird wrap affect,I assumed scripts were out of alignment and it was going to dif effect
+@but that can't be right?
+@seems to be happening on switchin/ battle start?
 BattleScript_EffectHit::
 	jumpifmove MOVE_ROCK_SMASH, BattleScript_EffectRockSmash
 	jumpifmove MOVE_CUT, BattleScript_EffectCut
 	jumpifmove MOVE_SPLISHY_SPLASH, BattleScript_EffectParalyzeHit
 	jumpifmove MOVE_FREEZE_SHOCK, BattleScript_EffectParalyzeHit
 	jumpifmove MOVE_ICE_BURN, BattleScript_EffectBurnHit
-	jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler	@hmm double check how logic is handled now, potentially remove this
+	@jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler	@hmm double check how logic is handled now, potentially remove this
 	@jumpifnostatus3 BS_TARGET, STATUS3_UNDERWATER, BattleScript_HitFromAtkCanceler
 	@orword gHitMarker, HITMARKER_IGNORE_UNDERWATER
 	@setbyte sDMG_MULTIPLIER, 2
@@ -2557,33 +2567,33 @@ BattleScript_HitFromAtkCanceler::
 BattleScript_HitFromAccCheck::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 BattleScript_HitFromAtkString::
-	ppreduce
 	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_MultiHitFromAtkString
+	ppreduce
 BattleScript_SkyDropHitFromAtkString::
 	attackstring	
 BattleScript_HitFromCritCalc::
-	critcalc
+	critcalc		@ok actually I'm starting to think my type chart is just somehow out of sync? like its reading a different line than what it should be
 	damagecalc
-	typecalc
-	call_if	EFFECT_ROLLOUT	@fix for rollout, alloows get stab, can remove typecalc2
-	adjustnormaldamage
-	pause 0x01
+	typecalc	@typecalc has issue its only reading first type for some reason, also some other issue with wrap animation? effect? @something weirder absorb always not effective ghost moves always no effect against things it should effect
+	call_if EFFECT_ROLLOUT	@somehow not working its being triggered everytime, when it shouldnt? thought that was a thing but then ran clean and no issue? / change to use nativeargs seems fine now?
+	adjustnormaldamage	@THIS was the issue, forgot the currinstr increment *facepalm so obviously it couldnt continue passed this to animation
+	pause 0x01	@was put after every adjustnormaldamage script, as added playcry pause is to clear values
 BattleScript_HitFromAtkAnimation::
 	attackanimation
 	waitanimation
 	effectivenesssound
-	groundonairbattlerwithoutgravity BS_TARGET, BattleScript_GroundFlyingEnemywithoutGravity	@Need to change this and make a jump put here becuz should make target visible, shuold work for evrthing
+	@groundonairbattlerwithoutgravity BS_TARGET, BattleScript_GroundFlyingEnemywithoutGravity	@Need to change this and make a jump put here becuz should make target visible, shuold work for evrthing  this is an issue
 	hitanimation BS_TARGET
-BattleScript_HitFromHpUpdate::
 	waitstate
+BattleScript_HitFromHpUpdate::
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
 	critmessage
 	waitmessage 0x40
 	resultmessage
 	waitmessage 0x40
-	seteffectwithchance
-	argumenttomoveeffect
+	setmoveeffectwithchance		@seems to be fine
+	argumenttomoveeffect	@seems to be fine
 	tryfaintmon BS_TARGET, 0, NULL
 BattleScript_MoveEnd::
 	moveendall
@@ -2591,6 +2601,7 @@ BattleScript_MoveEnd::
 
 BattleScript_GroundFlyingEnemywithoutGravity::
 	hitanimation BS_TARGET
+	waitstate
 	printstring STRINGID_CRASHEDTOTHEGROUND
 	waitmessage 0x20	
 	goto BattleScript_HitFromHpUpdate
@@ -2606,6 +2617,7 @@ BattleScript_EffectNaturalGift:
 	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -2619,7 +2631,7 @@ BattleScript_EffectNaturalGift:
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	seteffectwithchance
+	setmoveeffectwithchance
 	jumpifmovehadnoeffect BattleScript_EffectNaturalGiftEnd
 	checkparentalbondcounter 2, BattleScript_EffectNaturalGiftEnd
 	removeitem BS_ATTACKER
@@ -2652,6 +2664,9 @@ BattleScript_EffectSleep::
 	jumpifability BS_TARGET_SIDE, ABILITY_SWEET_VEIL, BattleScript_SweetVeilProtects
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
+	typecalc
+	jumpifmovehadnoeffect BattleScript_NotAffected
+BattleScript_EndingSleepChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
@@ -2743,6 +2758,7 @@ BattleScript_DoPoison:
 BattleScript_SkipToDmgPhase:
 	goto BattleScript_EffectHit
 
+	@for some reason this is ALWAYS defaulting to moveresult not effective
 BattleScript_EffectAbsorb::  @need setup multi task also make ghost with liquid ooze for extra troll...CURSOLA!
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
@@ -2787,11 +2803,13 @@ BattleScript_AbsorbTryFainting::
 BattleScript_EffectBurnHit::
 BattleScript_EffectScald:
 	setmoveeffect MOVE_EFFECT_BURN
+	jumpifmove MOVE_ICE_BURN, BattleScript_HitFromAtkCanceler
 	goto BattleScript_EffectHit
 
 BattleScript_EffectParalyzeHit::
 	setmoveeffect MOVE_EFFECT_PARALYSIS
 	jumpifmove MOVE_SPLISHY_SPLASH, BattleScript_HitFromAtkCanceler
+	jumpifmove MOVE_FREEZE_SHOCK, BattleScript_HitFromAtkCanceler
 	goto BattleScript_EffectHit
 
 BattleScript_EffectExplosion::
@@ -2977,15 +2995,15 @@ BattleScript_EffectAccuracyDown::
 	setstatchanger STAT_ACC, 1, TRUE
 	goto BattleScript_EffectStatDown
 
-@HOPE works if eerror would be because seteffectwithchance is not at end of script hope not an issue dont know how else to deal with it
-@had a weird thing where move missed but it still caused flinh effect, think its because I had seteffectwithchance before an accuracy check
+@HOPE works if eerror would be because setmoveeffectwithchance is not at end of script hope not an issue dont know how else to deal with it
+@had a weird thing where move missed but it still caused flinh effect, think its because I had setmoveeffectwithchance before an accuracy check
 @that worked last fix is to still do move animation even when stat wont go lower
 BattleScript_EffectFlash::
 	setmoveeffect MOVE_EFFECT_FLINCH
 	attackcanceler
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailedAtkStringPpReduce
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	seteffectwithchance
+	setmoveeffectwithchance
 	setstatchanger STAT_ACC, 1, TRUE
 	goto BattleScript_StatDownFromAttackString
 
@@ -3139,15 +3157,38 @@ BattleScript_EffectRoar::
 BattleScript_ForceRandomSwitch::	
 	forcerandomswitch BattleScript_ButItFailed
 
+@something here is causing freeze with furycutter, vsonic
+@also just realized this doesn't have setmoveeffectwithchance or argumenttomoveeffect
+@meaning this never sets extra effects...
+@ok checked and that's more because usually multiihit IS the effect so those moves never got other effects...
+@excluding things like twinneedle
+@ok nvm twinneedle STILL only poisons on last hit until gen 4
+@emerlad expansion revamped multihit and twinneedle just uses poison_hit with a twohit flag
+@I'll take the best of both, removes most setmultihit commands just does logic in atk canceler command,
+@doing that will let me use setmoveeffectchance & argumenttomoveeffect within loop ... I think
+@will also need to slightly adjust multitask setup in effecthit: etc.
+@but main issue is effect_multihit would trigger the script to go to effectmultihit therefore jumping OUT of the loop...
+@I think what I can do is, use movevaluescleanup direclty after(or before) attackcanceler, and for multihit moves set the moveeffect to use in the argument
+@and for multitask moves make sure they always jump to multihitfromatkstring to skip the move effect clear
+@so twineedle would have argument MOVE_EFFECT_POISON and the script effect for it would only be a goto BattleScript_EffectMultiHit
+@once in atkcanceler it'll read the effect of the move and set the counter to 2  (might as well replace with effect 2 hit honestly)
+@no that was wrong, I put setmoveeffect MOVE_EFFECT_POISON in twineedle then a goto multihit from atk cancelere 
+@it'll apply the poison when it gets to setmoveeffectwithchance  that way I can still use argument as well
+@yeah that works was confused on what setmoveeffectwithchance did, it had nothing to do with effect it was move_effect all along
+@ok other issue use of seteffectwithchance zeros out the move effect set in script which would mean it wouldnt be applied in loop
+@only solution I can come up with is for multihit also set move effect based on effect in another macro command/function
+@same as atkcancler is now used to set counter, it would need to go after movevaluescleanup
+@do switch case for multihit moves that should do move effect like twinneedle (actually will need do for every move w effect cuz multitask)
+
 BattleScript_EffectMultiHit::
 	attackcanceler
 	@ accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE  realized dont need 2 accuracycheck it could just as well miss on the first strike from the one below
 BattleScript_MultiHitFromAtkString::
 	attackstring
 	ppreduce
-	setmultihitcounter2 0	@adjust script  for specific logic for move_present
+	@setmultihitcounter2 0	@adjust script  for specific logic for move_present
 	initmultihitstring
-	setbyte sMULTIHIT_EFFECT, 0
+	setbyte sMULTIHIT_EFFECT, 0  @now that i understand this, this clears stored move effects of multihit moves... twineedle jumps to below this to avoid the clear, so can remove
 BattleScript_MultiHitLoop::
 	jumpifhasnohp BS_ATTACKER, BattleScript_MultiHitEnd
 	jumpifhasnohp BS_TARGET, BattleScript_MultiHitPrintStrings
@@ -3155,8 +3196,9 @@ BattleScript_MultiHitLoop::
 	jumpifstatus BS_ATTACKER, STATUS1_SLEEP, BattleScript_MultiHitPrintStrings
 BattleScript_DoMultiHit::
 	accuracycheck BattleScript_MultiHitMiss, ACC_CURR_MOVE	@this is what I need to change, for miss message not below
-	movevaluescleanup
-	copybyte cEFFECT_CHOOSER, sMULTIHIT_EFFECT
+	movevaluescleanup		@this directly clears move effect, not sMULTIHIT_EFFECT needed to keep every hit from critting etc.
+	copybyte cEFFECT_CHOOSER, sMULTIHIT_EFFECT	@copies multihi_effect to effect choosesr don't know what that does with it after
+	getmoveeffect
 	furycuttercalc
 	presentdamagecalculation BattleScript_NewPresentHealMulti @if heal, I would need to skip passed crit calc etc then jump to play attack animation and do heal animation and text, then return in place to loop again
 	critcalc			@plan set curr instr to BattleScript_MultiHitEndMessage  then do jump to and return from present heal logic (may need pushcursor call back?)
@@ -3176,6 +3218,8 @@ BattleScript_DoMultiHit::
 BattleScript_MultiHitEndMessages:
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1 @ to clear any buffer issues
+	setmoveeffectwithchance
+	argumenttomoveeffect
 	addbyte gBattleScripting + 12, 1   @ updated pret uses this addbyte sMULTIHIT_STRING + 4, 1
 	moveendto MOVE_END_NEXT_TARGET
 	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_FOE_ENDURED, BattleScript_MultiHitPrintStrings
@@ -3204,7 +3248,7 @@ BattleScript_MultiHitPrintStrings::
 	printstring STRINGID_HITXTIMES
 	waitmessage 0x40
 BattleScript_MultiHitEnd::
-	seteffectwithchance
+	setmoveeffectwithchance
 	tryfaintmon BS_TARGET, 0, NULL
 	moveendcase MOVE_END_SYNCHRONIZE_TARGET
 	moveendfrom MOVE_END_STATUS_IMMUNITY_ABILITIES
@@ -3236,6 +3280,7 @@ BattleScript_EffectFlinchHit::
 	goto BattleScript_EffectHit
 
 @test if works		cant remember wht this for	pretty sure not using, using argumenttomoveeffect  instead if this was for traps
+@ok checked this is from emerald, for things like thunder fang ice fang fire fang etc.
 BattleScript_EffectFlinchStatus:
 	setmoveeffect MOVE_EFFECT_FLINCH
 	attackcanceler
@@ -3244,6 +3289,7 @@ BattleScript_EffectFlinchStatus:
 	ppreduce
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -3257,7 +3303,7 @@ BattleScript_EffectFlinchStatus:
 	waitmessage 0x40
 	resultmessage
 	waitmessage 0x40
-	seteffectwithchance
+	setmoveeffectwithchance
 	argumentstatuseffect
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
@@ -3288,8 +3334,10 @@ BattleScript_EffectToxic::
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
-	jumpiftype BS_TARGET, TYPE_POISON, BattleScript_NotAffected
-	jumpiftype BS_TARGET, TYPE_STEEL, BattleScript_NotAffected
+	jumpifability BS_ATTACKER, ABILITY_CORROSION, BattleScript_EndingToxicChecks
+	typecalc
+	jumpifmovehadnoeffect BattleScript_NotAffected
+BattleScript_EndingToxicChecks:
 	@jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_AlreadyPoisoned
 	jumpifstatus BS_TARGET, STATUS1_TOXIC_POISON, BattleScript_AlreadyPoisoned
 	jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_ToxicAccuracyCheck
@@ -3311,7 +3359,7 @@ BattleScript_AlreadyPoisoned::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
-@setmoveeffect function is the basis for all move effects, the seteffectwithchance command & augments as well.
+@setmoveeffect function is the basis for all move effects, the setmoveeffectwithchance command & augments as well.
 @so for this poinsoning mechanc I need to properly set it up through setmoveeffect, and then have proper checks in bs command, like above 
 @to skip STATUS1_ANY check.
 @@edited, did work in main setmoveeffect dont think ill be usin this script at all. string will only be used on toxic.
@@ -3482,7 +3530,7 @@ BattleScript_EffectMagmaStorm::
 	setmoveeffect MOVE_EFFECT_MAGMA_STORM	
 	goto BattleScript_EffectHit
 
-BattleScript_EffectInfestation::
+BattleScript_EffectSwarm::
 	setmoveeffect MOVE_EFFECT_INFESTATION	
 	goto BattleScript_EffectHit
 
@@ -3492,21 +3540,16 @@ BattleScript_EffectSnapTrap::
 
 BattleScript_EffectDoubleHit::
 	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	setmultihitcounter 2
-	initmultihitstring
-	setbyte sMULTIHIT_EFFECT, 0
-	goto BattleScript_MultiHitLoop
+	goto BattleScript_MultiHitFromAtkString
 
 BattleScript_EffectRecoilIfMiss::
 	attackcanceler
-	typecalc	@put higher to aply for both jumps
+	typecalc	@put higher to aply for both jumps @as before any dmg calc doesnt affect dmg
 	accuracycheck BattleScript_MoveMissedDoDamage, ACC_CURR_MOVE	
 	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE, BattleScript_MoveMissedDoDamage
 	goto BattleScript_HitFromAtkString
 
+@recoil
 BattleScript_MoveMissedDoDamage::
 	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD, BattleScript_PrintMoveMissed
 	attackstring
@@ -3593,7 +3636,7 @@ BattleScript_TripleArrowsMoveAnimation:
 	waitmessage 0x40
 	resultmessage
 	waitmessage 0x40
-	seteffectwithchance
+	setmoveeffectwithchance
 	argumenttomoveeffect
 BattleScript_TripleArrowsMoveEnd:
 	tryfaintmon BS_TARGET, 0, NULL
@@ -3714,8 +3757,10 @@ BattleScript_EffectPoison::
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
 	jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_AlreadyPoisoned
 	jumpifstatus BS_TARGET, STATUS1_TOXIC_POISON, BattleScript_AlreadyPoisoned
-	jumpiftype BS_TARGET, TYPE_POISON, BattleScript_NotAffected
-	jumpiftype BS_TARGET, TYPE_STEEL, BattleScript_NotAffected
+	jumpifability BS_ATTACKER, ABILITY_CORROSION, BattleScript_EndingPoisonChecks
+	typecalc
+	jumpifmovehadnoeffect BattleScript_NotAffected
+BattleScript_EndingPoisonChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
@@ -3727,6 +3772,11 @@ BattleScript_EffectPoison::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
+@status filters already in setmoveeffect, but added typecalc to these
+@ for more specificity on which moves can be used to effect which mon
+@i.e doesnt make sense for thunderwave to paralyze a groudn type, even though they can be paralyzed
+@use ability jump checks if more corosion like abilities are added
+@that would get around type immunity, as in above example
 BattleScript_EffectParalyze::
 	attackcanceler
 	attackstring
@@ -3737,8 +3787,9 @@ BattleScript_EffectParalyze::
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
-	typecalc
-	jumpifmovehadnoeffect BattleScript_ButItFailed
+	typecalc 
+	jumpifmovehadnoeffect BattleScript_NotAffected
+BattleScript_EndingParalysisChecks:
 	jumpifstatus BS_TARGET, STATUS1_PARALYSIS, BattleScript_AlreadyParalyzed
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
@@ -3799,13 +3850,7 @@ BattleScript_EffectConfuseHit::
 
 BattleScript_EffectTwineedle::
 	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	setbyte sMULTIHIT_EFFECT, MOVE_EFFECT_POISON
-	attackstring
-	ppreduce
-	setmultihitcounter 2
-	initmultihitstring
-	goto BattleScript_MultiHitLoop
+	goto BattleScript_MultiHitFromAtkString
 
 BattleScript_EffectSubstitute::
 	attackcanceler
@@ -4137,7 +4182,7 @@ BattleScript_EffectEerieSpell::	@excluded from multitask
 	waitmessage 0x40
 	printstring STRINGID_PKMNREDUCEDPP
 	waitmessage 0x40
-	seteffectwithchance
+	setmoveeffectwithchance
 	argumenttomoveeffect
 	tryfaintmon BS_TARGET, 0, NULL
 	goto BattleScript_MoveEnd
@@ -4172,7 +4217,7 @@ BattleScript_EffectTripleKick::
 	@setbyte sTRIPLE_KICK_POWER, 0	@wont need this when done
 	@setbyte gBattleScripting + 19, 0	@pretty sure is triple_kick_power in scripting battlestruct, so also remove?
 	initmultihitstring
-	setmultihit 3
+	@setmultihit 3
 BattleScript_TripleKickLoop::
 	jumpifhasnohp BS_ATTACKER, BattleScript_TripleKickEnd
 	jumpifhasnohp BS_TARGET, BattleScript_TripleKickNoMoreHits
@@ -4191,9 +4236,9 @@ EffectTripleKick_TripleAxelBoost:
 EffectTripleKick_DoDmgCalcs:
 	@copyhword gDynamicBasePower, sTRIPLE_KICK_POWER
 	critcalc		@added alwayscrit logic to critcalc, should make surgingstrikes work
+	damagecalc
 	typecalc
 	jumpifmovehadnoeffect BattleScript_TripleKickNoMoreHits  @thinking shouldn't just put this right below typecalc?
-	damagecalc
 	adjustnormaldamage
 	attackanimation
 	waitanimation
@@ -4224,7 +4269,7 @@ BattleScript_TripleKickPrintStrings::
 	printstring STRINGID_HITXTIMES
 	waitmessage 0x40
 BattleScript_TripleKickEnd::
-	seteffectwithchance
+	setmoveeffectwithchance
 	tryfaintmon BS_TARGET, 0, NULL
 	moveendfrom MOVE_END_UPDATE_LAST_MOVES
 	end
@@ -4544,12 +4589,7 @@ BattleScript_SwaggerTryConfuse::
 @ accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE  think I need that
 BattleScript_EffectFuryCutter::
 	attackcanceler
-	attackstring
-	ppreduce
-	setbyte sMULTIHIT_EFFECT, 0
-	setmultihitcounter2 5	@this means it hits 5 times every time, actual num hits depends on accuracy chances
-	initmultihitstring
-	goto BattleScript_MultiHitLoop
+	goto BattleScript_MultiHitFromAtkString
 
 @BattleScript_FuryCutterLoop::
 @	jumpifhasnohp BS_ATTACKER, BattleScript_FuryCutterEnd
@@ -4594,7 +4634,7 @@ BattleScript_EffectFuryCutter::
 @	printstring STRINGID_HITXTIMES
 @	waitmessage 0x40
 @BattleScript_FuryCutterEnd::
-@	seteffectwithchance
+@	setmoveeffectwithchance
 @	tryfaintmon BS_TARGET, 0, NULL
 @	moveendfrom 14
 @	end
@@ -4705,9 +4745,45 @@ BattleScript_EffectMindBlown::
 	call BattleScript_PreserveMissedBitDoMoveAnim
 	goto BattleScript_ExplosionLoop
 
+@adjust script so effect works with multitask
+@jump to BattleScript_HitFromAtkString
+@will need use setmoveeffect MOVE_EFFECT_RAPIDSPIN | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+@but without seteffectchange directy after
+@and setup like strength change where stat buff is at start of script
 BattleScript_EffectRapidSpin::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	critcalc
+	damagecalc
+	typecalc
+	adjustnormaldamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	jumpifhalfword CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE, BattleScript_MoveEnd
 	setmoveeffect MOVE_EFFECT_RAPIDSPIN | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
-	goto BattleScript_EffectHit
+	setmoveeffectwithchance
+	setstatchanger STAT_SPEED, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_BS_PTR, BattleScript_EffectRapidSpinEnd
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_EffectRapidSpinEnd
+	setgraphicalstatchangevalues
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_EffectRapidSpinEnd::
+	tryfaintmon BS_TARGET, 0, NULL
+	moveendall
+	end
 
 BattleScript_EffectSonicscreech::
 	attackcanceler
@@ -5148,7 +5224,7 @@ BattleScript_FirstTurnSemiInvulnerable::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectWithChance::
-	seteffectwithchance
+	setmoveeffectwithchance
 
 BattleScript_SideStatusWoreOff::	@ dont know if that B_wait is gonna work
 	printstring STRINGID_PKMNSXWOREOFF
@@ -5361,6 +5437,9 @@ BattleScript_EffectWillOWisp::
 	jumpifflowerveil BattleScript_FlowerVeilProtects
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
+	typecalc
+	jumpifmovehadnoeffect BattleScript_NotAffected
+BattleScript_EndingBurnChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
@@ -5382,6 +5461,9 @@ BattleScript_EffectFlashFreeze::	@nearly done  just need to make animation for..
 	@jumpifflowerveil BattleScript_FlowerVeilProtects
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
+	typecalc
+	jumpifmovehadnoeffect BattleScript_NotAffected
+BattleScript_EndingFreezeChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
@@ -5460,7 +5542,7 @@ BattleScript_EffectFacade::
 	goto BattleScript_EffectHit
 
 BattleScript_FacadeDoubleDmg::
-	setbyte sDMG_MULTIPLIER, 2
+	manipulatedamage DOUBLE_DMG @replaced sDMG_MULTIPLIER
 	goto BattleScript_EffectHit
 
 BattleScript_EffectFocusPunch::
@@ -5625,6 +5707,10 @@ BattleScript_EffectRevenge::
 	goto BattleScript_EffectHit
 
 BattleScript_EffectBrickBreak::
+	call_if	EFFECT_BRICK_BREAK
+
+@still working on this vsonic
+BattleScript_BrickBreakWithScreens::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
@@ -5653,7 +5739,34 @@ BattleScript_BrickBreakDoHit::
 	waitmessage 0x40
 	resultmessage
 	waitmessage 0x40
-	seteffectwithchance
+	setmoveeffectwithchance
+	argumenttomoveeffect	@added for psychic fangs to add flinch effect, should do nothing for normal brickbreak
+	tryfaintmon BS_TARGET, 0, NULL
+	goto BattleScript_MoveEnd
+
+BattleScript_BrickBreakNoScreens::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	@removelightscreenreflect @check if I added my other effects to this already vsonic	 hadnt added new stuff, but just use scrancleaner stuff instead no longer need this
+	critcalc
+	damagecalc
+	typecalc
+	adjustnormaldamage
+	pause 0x01
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage 0x40
+	resultmessage
+	waitmessage 0x40
+	setmoveeffectwithchance
 	argumenttomoveeffect	@added for psychic fangs to add flinch effect, should do nothing for normal brickbreak
 	tryfaintmon BS_TARGET, 0, NULL
 	goto BattleScript_MoveEnd
@@ -5784,15 +5897,16 @@ BattleScript_EffectLowKick::
 @tip from ghoulslash had to add empty string to free resources to do stat animation
 BattleScript_EffectStrengthUpHit::
 	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	setstatchanger STAT_ATK, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_BS_PTR, BattleScript_HitFromAccCheck
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_BS_PTR, BattleScript_HitFromAtkString
 	setgraphicalstatchangevalues
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 0x1
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printfromtable gStatUpStringIds
 	waitmessage 0x30
-	goto BattleScript_HitFromAccCheck
+	goto BattleScript_HitFromAtkString
 
 BattleScript_EffectSecretPower::
 	getsecretpowereffect
@@ -6358,7 +6472,8 @@ BattleScript_PrintFullBox::
 BattleScript_ActionSwitch::
 	hpthresholds2 BS_ATTACKER
 	printstring STRINGID_RETURNMON
-	setbyte sDMG_MULTIPLIER, 2
+	manipulatedamage DOUBLE_DMG @for pursuit hopefully works?
+	@setbyte sDMG_MULTIPLIER, 2
 	jumpifbattletype BATTLE_TYPE_DOUBLE, BattleScript_PursuitSwitchCheckTwice
 	setmultihit 1
 	goto BattleScript_PursuitSwitchLoop
@@ -7721,6 +7836,12 @@ BattleScript_MoveEffectParalysis::
 	waitmessage 0x40
 	goto BattleScript_UpdateEffectStatusIconRet
 
+BattleScript_StatusInfested::
+	playanimation BS_ATTACKER, B_ANIM_STATUS_INFESTED, NULL
+	printstring STRINGID_PKMNINFESTED
+	waitmessage 0x40
+	return
+
 BattleScript_MoveEffectSpiritLock::
 	goto BattleScript_UpdateEffectStatusIconRet
 
@@ -7733,7 +7854,7 @@ BattleScript_AftermathOnSwitch::
 	waitmessage 0x40
 	@swapattackerwithtarget
 	setmoveeffect MOVE_EFFECT_SPD_MINUS_1 | MOVE_EFFECT_CERTAIN
-	seteffectwithchance
+	setmoveeffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	@setstatchanger STAT_SPEED, 1, TRUE	@think will work?
 	@statbuffchange MOVE_EFFECT_CERTAIN | STAT_CHANGE_NOT_PROTECT_AFFECTED, NULL
@@ -8906,6 +9027,7 @@ BattleScript_EffectPhotonGeyser:
 	ppreduce
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	photongeysercheck
@@ -8920,7 +9042,7 @@ BattleScript_EffectPhotonGeyser:
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	seteffectwithchance
+	setmoveeffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
 
@@ -9052,7 +9174,7 @@ BattleScript_EffectHyperspaceFuryUnbound::
 	pause B_WAIT_TIME_LONG
 	ppreduce
 	setmoveeffect MOVE_EFFECT_FEINT
-	seteffectwithchance
+	setmoveeffectwithchance
 	setmoveeffect MOVE_EFFECT_DEF_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
 	goto BattleScript_HitFromCritCalc
 
@@ -9073,6 +9195,7 @@ BattleScript_EffectPlasmaFists:
 	ppreduce
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -9086,7 +9209,7 @@ BattleScript_EffectPlasmaFists:
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	seteffectwithchance
+	setmoveeffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	applyplasmafists
 	printstring STRINGID_IONDELUGEON
@@ -9100,6 +9223,7 @@ BattleScript_EffectSparklySwirl:
 	ppreduce
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -9127,6 +9251,7 @@ BattleScript_EffectFreezyFrost:
 	ppreduce
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -9154,6 +9279,7 @@ BattleScript_EffectSappySeed:
 	ppreduce
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -9182,6 +9308,7 @@ BattleScript_EffectBaddyBad:
 	ppreduce
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -9209,6 +9336,7 @@ BattleScript_EffectGlitzyGlow:
 	ppreduce
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -9230,13 +9358,7 @@ BattleScript_EffectGlitzyGlow:
 
 BattleScript_EffectDoubleIronBash:
 	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	setmultihitcounter 2
-	initmultihitstring
-	sethword sMULTIHIT_EFFECT, MOVE_EFFECT_FLINCH
-	goto BattleScript_MultiHitLoop
+	goto BattleScript_MultiHitFromAtkString
 
 BattleScript_EffectEvasionUpHit:
 	setmoveeffect MOVE_EFFECT_EVS_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
@@ -9338,6 +9460,7 @@ BattleScript_EffectRemoveTerrain:
 	jumpifword CMP_NO_COMMON_BITS, gFieldStatuses, STATUS_FIELD_TERRAIN_ANY, BattleScript_ButItFailed
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -9462,6 +9585,7 @@ BattleScript_EffectRelicSong:
 	ppreduce
 	critcalc
 	damagecalc
+	typecalc
 	adjustnormaldamage
 	pause 0x01
 	attackanimation
@@ -9475,7 +9599,7 @@ BattleScript_EffectRelicSong:
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	seteffectwithchance
+	setmoveeffectwithchance
 	argumentstatuseffect
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd

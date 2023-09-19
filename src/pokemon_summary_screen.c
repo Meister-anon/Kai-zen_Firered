@@ -25,6 +25,7 @@
 #include "field_specials.h"
 #include "party_menu.h"
 #include "constants/battle.h"
+#include "constants/battle_move_effects.h"
 #include "event_data.h"
 #include "trainer_pokemon_sprites.h"
 #include "battle_anim.h"
@@ -4129,7 +4130,7 @@ static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot)
     slot2_personality = GetMonData(&gPlayerParty[1], MON_DATA_PERSONALITY);
     slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY);
     
-    singles = (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TWO_OPPONENTS)));
+    singles = (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TRIPLE | BATTLE_TYPE_TWO_OPPONENTS)));
     doubles = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE);
     rotation = (gBattleTypeFlags & BATTLE_TYPE_ROTATION);
 
