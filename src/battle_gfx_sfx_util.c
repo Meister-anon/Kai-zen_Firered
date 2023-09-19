@@ -168,6 +168,11 @@ void SpriteCB_TrainerSlideIn(struct Sprite *sprite)
     }
 }
 
+//will need to change to task based work
+//check if battler has status1  status2 then status4
+//check if (status1) increment through each status 1 to see if htey have that status flag and do animaiton if so
+//then do case checks for status2 do same thing, 
+//followed by check for status 4 then switch for status4 that increments through each status4, playing animation and doing effects if present
 void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
 {
     gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 1;
@@ -183,6 +188,8 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_SLP);
         else if (status == STATUS1_PARALYSIS)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PRZ);
+        /*else if (status & STATUS4_INFESTATION)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_INFESTED);*/
         else // no animation
             gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 0;
     }

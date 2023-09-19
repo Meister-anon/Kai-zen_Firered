@@ -1713,6 +1713,10 @@ const u16 RivalEeveelutionForPlayerStarter(void)
 //eventually make dynamic so it works off of counting and averaging the arrays essentially  (n + n + n) / 3 = n
 void SetPlayerRandomStarterSpecies(void)
 {
+    //VarSet(VAR_TEMP_5, SPECIES_BULBASAUR);    //for testing
+    //VarSet(VAR_TEMP_6, SPECIES_SQUIRTLE);
+    //VarSet(VAR_TEMP_7, SPECIES_CHARMANDER);
+
     VarSet(VAR_TEMP_5, sBulbasaurBall[Random() % NELEMS(sBulbasaurBall)]);
     VarSet(VAR_TEMP_6, sSquirtleBall[Random() % NELEMS(sSquirtleBall)]);
     VarSet(VAR_TEMP_7, sCharmanderBall[Random() % NELEMS(sCharmanderBall)]);

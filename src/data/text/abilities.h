@@ -8,7 +8,7 @@ static const u8 sSturdyDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Negates 
 static const u8 sDampDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Dampens area preventing explosions.\nAnd weakens incoming fire damage.");
 static const u8 sLimberDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents paralysis.");
 static const u8 sSandVeilDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups evasion in a sandstorm.");
-static const u8 sStaticDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Paralyzes on contact.");
+static const u8 sStaticDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("May Paralyze on contact.");
 static const u8 sVoltAbsorbDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Turns electricity into HP.");
 static const u8 sWaterAbsorbDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Changes water into HP.");
 static const u8 sObliviousDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents attraction and ignores extra\neffects from things that affect mood.");
@@ -37,9 +37,9 @@ static const u8 sChlorophyllDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Rai
 static const u8 sIlluminateDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Encounter rate increases.\nRaises accuracy.");
 static const u8 sTraceDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Copies special ability.");
 static const u8 sHugePowerDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Raises ATTACK double.");
-static const u8 sPoisonPointDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Poisons foe on contact.");
+static const u8 sPoisonPointDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Contact with the Pokémon\nmay poison the attacker.");
 static const u8 sInnerFocusDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents flinching.");
-static const u8 sMagmaArmorDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents freezing and eggs hatch faster."); //has added effects to include here
+static const u8 sMagmaArmorDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents freezing burns items on contact\nBoosts Sp.Def and blocks physical crits"); //has added effects to include here ...I may have gone overboard
 static const u8 sWaterVeilDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents burns.");
 static const u8 sMagnetPullDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Traps STEEL-type POKéMON with magnetism\nAlso drops their speed.");
 static const u8 sSoundproofDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Avoids sound-based moves.");
@@ -48,7 +48,7 @@ static const u8 sSandStreamDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Summ
 static const u8 sPressureDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Raises foe's PP usage.\nMay make foe too afraid to attack.");
 static const u8 sThickFatDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Heat-and-cold protection.");
 static const u8 sEarlyBirdDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Awakens quickly from sleep.");
-static const u8 sFlameBodyDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Burns the foe on contact.\nCan't be frozen and hatches eggs faster.");
+static const u8 sFlameBodyDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("May cause Burn on contact.\nCan't be frozen and hatches eggs faster.");
 static const u8 sRunAwayDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Makes escaping easier.\nPrevents loss of speed except from traps.");
 static const u8 sKeenEyeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents loss of accuracy.");
 static const u8 sHyperCutterDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents ATTACK reduction.");
@@ -86,7 +86,7 @@ static const u8 sAngerPointDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Maxe
 static const u8 sUnburdenDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Using a hold item ups Speed.");
 static const u8 sHeatproofDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Increased heat and burn protection.");
 static const u8 sSimpleDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prone to wild stat changes.");
-static const u8 sDrySkinDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prefers moisture to heat.\nHeals in rain, hurt by harsh sun.");
+static const u8 sDrySkinDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Absorbs water. Prefers moisture to heat.\nHeals in rain, weak to fire dmg."); //removed sunlight hp drop
 static const u8 sDownloadDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Adjusts offensive power favorably,\nto foe's defenses.");
 static const u8 sIronFistDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Boosts Punching moves.");
 static const u8 sPoisonHealDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Restores HP if poisoned.");
@@ -141,13 +141,14 @@ static const u8 sHarvestDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("May rec
 static const u8 sTelepathyDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Can't be damaged by an ally.");
 static const u8 sMoodyDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Stats change gradually.");
 static const u8 sOvercoatDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Blocks weather and powder.");
+static const u8 sPoisonTouchDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("May poison a target when the Pokémon\nmakes contact.");
 static const u8 sBigPecksDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Prevents Defense loss.");
 static const u8 sSandRushDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups Speed in a sandstorm.");
 static const u8 sWonderSkinDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("May avoid status problems.");
 static const u8 sAnalyticDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Moving last boosts power.");
 static const u8 sIllusionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Appears as a partner.");
 static const u8 sImposterDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Transforms into the foe.");
-static const u8 sInfiltratorDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Passes through barriers.");
+static const u8 sInfiltratorDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Stealthily bypasses barriers and walls.");//adjust for non ghost stealthily bypasses walls and barriers
 static const u8 sMummyDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Spreads with contact.");
 static const u8 sMoxieDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("KOs raise Attack.");
 static const u8 sJustifiedDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Dark hits raise Attack.");
@@ -180,7 +181,7 @@ static const u8 sAerilateDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Normal
 static const u8 sParentalBondDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Moves hit twice.");
 static const u8 sDarkAuraDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Boosts Dark moves.");
 static const u8 sFairyAuraDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Boosts Fairy moves.");
-static const u8 sAuraBreakDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Reverse aura abilities.");
+static const u8 sAuraBreakDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Reverse aura abilities.\nWeakens Dark and Fairy moves."); //buffed aura break to actually be useful
 static const u8 sPrimordialSeaDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Summons heavy rain.");
 static const u8 sDesolateLandDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Summons intense sunlight.");
 static const u8 sDeltaStreamDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Summons strong winds.");
@@ -264,11 +265,11 @@ static const u8 sHipressureDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Shar
 static const u8 sCupidsArrowDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Infatuates a target upon switching in.");
 static const u8 sBattleMatronDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Powers up moves to protect young PKMN.");
 static const u8 sOceanMemoryDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Reduces Damage from Water-type moves.");
-static const u8 sLiquidSoulDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Transforms Water moves into Ghost moves.");  //swapped back
+static const u8 sLiquidSoulDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Turns users Water moves into Ghost moves\nAnd is immune to Water dmg."); //needed extra effects to make viable
 static const u8 sOverchargeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups ELECTRIC moves in a pinch.\nThe POKéMON charges up to the max!");
 static const u8 sPhotosynthesizeDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Slight HP recovery in sun.");
 static const u8 sGlacialIceDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Is immune to fire,\nand turns ice and hail into hp.");
-static const u8 sLavaFissureDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Field becomes scorched.\nDraws in and powers up fire moves");
+static const u8 sLavaFissureDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Draws in and powers up fire moves\nPrevents Freeze, field becomes scorched.");
 static const u8 sToadstoolNymphDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups Fairy Damage. A blessing of the fae,\ngiven for devotion to nature.");
 static const u8 sUnknownPowerDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("A mysterious ability from the unown\ndimension, it doubles power when with unown");
 static const u8 sPurifyingAuraDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Status heal.The POKéMON flares its aura\npurifying itself and allies in reach.");
@@ -301,6 +302,7 @@ static const u8 sIronWillDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("");
 static const u8 sLivewireDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Body made of electricity\nUps damage of electric moves.");
 static const u8 sGaleforceDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Immune to wind-based moves\nBoosts sp atk when hit by them.");
 static const u8 sLethalLegsDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Boosts Kicking moves.");
+static const u8 sToxungueDescription[ABILITY_DESCRIPTION_LENGTH + 1] =_("\nStrikes foe with toxungen covered tongue\nThat may Paralyze on contact.");
 //checked in fire red limit is 40 chars per line, changing description length to 80/    changed to 82 max
 //based on suction cups I kinda have more space?  so more like 41 per line?
 //template - top line: literal effect\n bottom line: flavor text    -flipped usually put flavor text on top, effect on bottom
@@ -451,7 +453,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TELEPATHY] = sTelepathyDescription,
     [ABILITY_MOODY] = sMoodyDescription,
     [ABILITY_OVERCOAT] = sOvercoatDescription,
-    [ABILITY_POISON_TOUCH] = sPoisonPointDescription,
+    [ABILITY_POISON_TOUCH] = sPoisonTouchDescription,
     [ABILITY_REGENERATOR] = sNaturalCureDescription,
     [ABILITY_BIG_PECKS] = sBigPecksDescription,
     [ABILITY_SAND_RUSH] = sSandRushDescription,
@@ -622,6 +624,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_LIVEWIRE] = sLivewireDescription,
     [ABILITY_GALEFORCE] = sGaleforceDescription,
     [ABILITY_LETHAL_LEGS] = sLethalLegsDescription,
+    [ABILITY_TOXUNGUE] = sToxungueDescription,
 };//last value can have comma
   //FOREWARN should work how I want,for ai make ability check to not use fakeout if have said ability,still need setup reactivation
 
@@ -630,6 +633,8 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
 //to the end, its invisible to me as its automatic. but its there.
 //so all limits should exclude the +1 from their calculation
 //-remember all these are having +1 added to them, so sub 1 from name value to get actual value name length is 16, so max for table is 17
+//like moves think need lowercase version, for those that want it.
+//then just make option 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
     [ABILITY_NONE] = _("-------"),
@@ -646,7 +651,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_WATER_ABSORB] = _("WATER ABSORB"),
     [ABILITY_OBLIVIOUS] = _("OBLIVIOUS"),
     [ABILITY_CLOUD_NINE] = _("CLOUD NINE"),
-    [ABILITY_COMPOUND_EYES] = _("COMPOUNDEYES"),
+    [ABILITY_COMPOUND_EYES] = _("COMPOUND EYES"),
     [ABILITY_INSOMNIA] = _("INSOMNIA"),
     [ABILITY_COLOR_CHANGE] = _("COLOR CHANGE"),
     [ABILITY_IMMUNITY] = _("IMMUNITY"),
@@ -663,7 +668,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SYNCHRONIZE] = _("SYNCHRONIZE"),
     [ABILITY_CLEAR_BODY] = _("CLEAR BODY"),
     [ABILITY_NATURAL_CURE] = _("NATURAL CURE"),
-    [ABILITY_LIGHTNING_ROD] = _("LIGHTNINGROD"),
+    [ABILITY_LIGHTNING_ROD] = _("LIGHTNING ROD"),
     [ABILITY_SERENE_GRACE] = _("SERENE GRACE"),
     [ABILITY_SWIFT_SWIM] = _("SWIFT SWIM"),
     [ABILITY_CHLOROPHYLL] = _("CHLOROPHYLL"),
@@ -832,7 +837,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SHIELDS_DOWN] = _("SHIELDS DOWN"),
     [ABILITY_STAKEOUT] = _("STAKEOUT"),
     [ABILITY_WATER_BUBBLE] = _("WATER BUBBLE"),
-    [ABILITY_STEELWORKER] = _("STEELWORKER"),
+    [ABILITY_STEELWORKER] = _("STEEL WORKER"),
     [ABILITY_BERSERK] = _("BERSERK"),
     [ABILITY_SLUSH_RUSH] = _("SLUSH RUSH"),
     [ABILITY_LONG_REACH] = _("LONG REACH"),
@@ -945,5 +950,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_IRON_WILL] =_("IRON WILL"),
     [ABILITY_LIVEWIRE] =_("LIVEWIRE"),
     [ABILITY_GALEFORCE] =_("GALEFORCE"),
-    [ABILITY_LETHAL_LEGS] =_("LETHAL LEGS")
-};//no comma for last value
+    [ABILITY_LETHAL_LEGS] =_("LETHAL LEGS"),
+    [ABILITY_TOXUNGUE] =_("TOXUNGUE"),
+};//can have comma

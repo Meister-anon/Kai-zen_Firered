@@ -906,11 +906,12 @@
 #define SPECIES_BASCULEGION 902
 #define SPECIES_SNEASLER 903
 #define SPECIES_OVERQWIL 904
-#define SPECIES_ENAMORUS 905	//Pokemon Opal has some original mon so can add after this as gen 10, like Cefireon and unknown legendar
+#define SPECIES_ENAMORUS 905	//Pokemon Opal has some original mon so can add after this as gen 10, like Cefireon and unknown legendar with the s/v mon I actually want
 
 #define SPECIES_CEFIREON 906
+#define SPECIES_FRAEYJTA 907    //fray-eat-ah original mon fairy ghost mysthic from another world (fairy world) protector healer and watches over the dead, so found graveyard comforts living and dead
 
-#define FORMS_START SPECIES_CEFIREON
+#define FORMS_START SPECIES_FRAEYJTA
 
 // Megas
 #define SPECIES_VENUSAUR_MEGA                FORMS_START + 1
@@ -1213,7 +1214,7 @@
 //Pyroar Female
 #define SPECIES_PYROAR_F					FORMS_START + 227
 
-// Flabébé
+// Flabï¿½bï¿½
 #define SPECIES_FLABEBE_YELLOW_FLOWER        FORMS_START + 228
 #define SPECIES_FLABEBE_ORANGE_FLOWER        FORMS_START + 229
 #define SPECIES_FLABEBE_BLUE_FLOWER          FORMS_START + 230
@@ -2716,7 +2717,8 @@
 #define F_GALARIAN_FORM (1 << 2)
 #define F_HISUIAN_FORM  (1 << 3)
 #define F_CEFIRIAN_FORM (1 << 4)	//For pokemon opal Cefira region forms
-#define SPECIES_FLAG_GENDER_DIFFERENCE (1 << 5)	//only for basculegion
-#define F_MEGA_FORM (1 << 6)	//to denote mega? may not need, idk
-#define SPECIES_FLAG_ALL_PERFECT_IVS    (1 << 7) //use for giving special mon bug psuedo gym etc.
+#define F_MEGA_FORM     (1 << 5)	//to denote mega? may not need, idk
+#define SPECIES_LEGEND_MYSTIC (1 << 6)
+#define SPECIES_FLAG_GENDER_DIFFERENCE (1 << 7)	//only for basculegion
+#define FLAG_ALL_PERFECT_IVS    (1 << 8) //use for giving special mon bug psuedo gym etc. (think use for fighting gym too, special mon trained for fighting sabrina)
 #endif  // GUARD_CONSTANTS_SPECIES_H

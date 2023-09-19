@@ -110,7 +110,7 @@ GriffinR � Today at 12:26 AM
 This is where the first byte of each pokemon's personality is set (none of these values have the first bit set).
 You could calculate this byte any way you like, including setting the first bit
 
-if (gTrainers[trainerNum].doubleBattle == TRUE)
+if (gTrainers[trainerNum].battleType == TRUE)
                 personalityValue = 0x80;
             else if (gTrainers[trainerNum].encounterMusic_gender & F_TRAINER_FEMALE)
                 personalityValue = 0x78; // Use personality more likely to result in a female Pok�mon
@@ -304,10 +304,76 @@ But it's only for enemy mons, to do the same with the player you would just swap
 */
 
 //realized text buffers used in battle_message.c allign with values in charmap.txt, the names used are those, and the value is from battle_message.h
+
+//NOTE-:
+//zygrade forms are wonky the way they set them up is odd, they separated zygrade out into multiple species based on if it had power construct or not
+//rather than just making that an alternate ability for the same species
+
+// plan to just fold it all into a single ability aura break & powerconstruction
+//they also made the base zygrade the 50% form rather htan the base 10% form, whem that one is usually the one you initially get
+//so I need to remove the extra species, and change the graphic values so base zygrade coresponds to the 10% form
+//will end up with SPECIES_ZYGARDE_10 , SPECIES_ZYGARDE_15, SPECIES_ZYGARDE_COMPLETE
+//With a single ability, hmm no I'll keep two abilities but fold aura break affects into power construct as well.
+//because you may want to just keep the faster form, rather than changing to a slower but bulkier form when low hp
+//and allow ability capsule to work with it, to change it  -time consuming so do later not now
+
+//note make weather rocks also boost move type damaage, so I'm not losing out for example I have a hard stoneo for rock dmg
+// but if I want a smooth rock for extending weather make the holder also get a rock/groud type move boost,
+//think need boost to a lesser degree for balance but still need the boost to get use out of it
+//think will do old bonus 10% for these, keep 20% for specialized boost items themselves - done but need add to descriptions when do item expansion
+
+//realized since plan to have easy access move relearner
+//there's no purpose for prisms scales or heart scales,
+//can use for move turtor but think would also do version of idea from anthroyd server
+//where a mon can learn any move, more specifically using a scale will allow a mon to learn
+//a tm move that is otherwise outside of its learnset.
+
+//and since its a rare material to find, doesn't even need to cost levels.
+//plus this is a cool thing that adds a bit of realism, like in the show
+//where mon could use moves they aren't capable of learning in game.
  
 
 //TODO:
 /*Add logic for when flying types are grounded they take neutral damage from fighting types
+* also do same for electric based on doduo, idea of flying weakness to electricity
+* is them flying high in the air makes them more likely to be hit by lightning
+* but doduo can't fly, so that doesn't make sense, so to account for that,
+* make all grounded flying types neutral to electricity,
+*
+* added that along with tweaking fossil typing for early gen fossils
+* also adjusted primary status setting status moves to add type checks
+* will fail for mon immune to them  
+* will allow for more nuance and also easier abiity selection 
+* as based on type some mon may not need abilities like insomnia to prevent sleep
+* as they would be realtively protected  i.e nuzleaf which powder move change
+* is suddenly immune to all grass sleep moves, as well as psychic sleep moves via its dark type
+* so its effectively safe from being put to sleep already
+* freeing it up to use better abilities
+*
+*
+* 
+* Another point make roost work/ground mon even if full hp, as extra nuance
+* so they can take shelter against lighting, still need work out logic for going back into air
+*logic says roost should last for timer duration or use of a flying move,
+* but if you expand the idea to just staying low to the ground i.e low elevation flight?
+* the idea can work, so just make FLY and SKY DROP auto break grounded status if roosted/smacked down
+*
+* extra idea, potentially make move other than roost that gives "grounded" status for flying mon
+* maybe call it 'Trench Run'  so low level flight, to make more palatbile give its own effect
+* thinking raise evasiveness one level, since the strategy is usually used for aircraft to dodge radar
+
+*Nap-of-the-earth (NOE) is a type of very low-altitude flight course
+* used by military aircraft to avoid enemy detection and attack in a high-threat environment.
+* Other, mostly older terms include "contour flying", "ground-hugging", 
+*"terrain masking", "flying under the radar" and "hedgehopping".
+*
+* While "Trench Run" isn't exactly the most accurate name its best I can come up with for this idea
+* Description: "For 3 turns the user\nswitches to low level flight\nboosing evasiveness.\nAlso losing its Electric\nweakness, for the duration."
+* rather than setting another thing, think just use roost timer/logic for grounding, hmm
+* nah make just make new status for this, and put that in isbattlergrouded function
+*anyway move just makes grounded, which would trigger typecalc change, and 
+*just have move raise evasiveness if not already have status/used.
+*
 * Look at how emerald handeled smack down and roost logic for ground type dmg -
 * 
 * Setup moves with flag 2x dmg on air to remove on air status and ground target when they hit flying target
@@ -600,13 +666,126 @@ goto TRAINER_REMATCH //stuff
 * i.e considering the normal path you're meant to take you should be at certain paths/maps at a certain gym badge count.
 * use that as the base scale and then plus or minus levels from the enemy team based on how many badges you actually have.
 * only issue is custom moveset trainers but not hard to work around
+*
+*also consider doing for wild's go back to area with gym badge or 2 above, and at least 1(could make 2-3 instead? unsure) mon in the new lvl range
+* and wild mon will spawn at the higher level, also consider having different encounter tables.  
+*i.e add some evolved form mon in there where they weren't before, and maybe some rarer stronger mon too.
+* could do something like every two gym badges area upgrades? up to a point, early areas so should overall be lower than the later areas
+* once all boosts applied.
+*
+*plan alternate ways for getting through barriers, like paying off oak's aides to get rewards if you don't want to catch everything
+*
+* something occured to me, there are a "limited" number of trainers you can have, that's down to trainer flags,
+* i.e the trainer info showed in trainer page, but that limit doesn't exist for number of trainer parties I can make...
+* so theoretically I can make multiple different parties for a single trainer
+* but then just use a function to shift the party value etc.
+* I can setup non-static battles that way???
+* imagine a trainer has default moves and 2 mon, then under different conditions they have custom moves 5 mon and its a double battle o.0
+*
+* ok double battles etc. are cool but its hard to plan out everything individually so what if, I just made a check in battle setup, if the trainer CAN 
+* double battle, i.e search party size for trainer talking and player,  then set up an random chance for it to switch from single to a double battle!
+*
+* I could also do that for triple/rotation battles, and since everyone is rematchable it'd make them feel more unique, like hey I feel like doing it a little different today.
+* file is src/data/trainers.h   first would need to make party field take the category/struct the name I chose uses in trainer_parties.h rather than needing it specified.
+* after that I need alter these bottom 4 categories.
+        .battleType = FALSE,
+        .aiFlags = AI_SCRIPT_CHECK_BAD_MOVE,
+        .partySize = NELEMS(sTrainerMons_TeamAqua1),
+        .party = {.NoItemDefaultMoves = sTrainerMons_TeamAqua1}
 * 
+* while I"m at it replac battleType member with battleType u8 rather than bool8,   with values 0-3  
+* 0 = singles, 1 = doubles, 2 = rotation, 3 = triples hmmm... potential 4th option  
+*2 v 1 battles, mostly for evil teams (would be with mycustom 2v1 version though, where you get extra action at before turn end)
+* if need be bring back dmg cut from double battles but just for 2 v 1 battles, but  they had 2 v 1 in sun moon so idk, might be fine -(nvm sun moon ai is dumb af)
+*
+* anyway, since would be using same value 0 and 1 for single double, would only require renaming category- DONE except found value were actually aligned with gbattletypeflags
+* in battle_main or battle_setup I found it assigned the gbattletypeflags based on the value from trainers struct
+* and since I made it u8, but trainer flags went up to u32, I needed to move around the values for the battle types I wanted to use
+*and make sure they were all below 0x100 i.e 256 
+* did that now just need setup a function that for rematch, has a chance to change the trainer struct value for battleType
+*setup checks for determining which battle type the trainer & player are capable of doing,
+* and then do switch for setting different randomizer based on that, which would set the battle type I want
+* now I don't need a bunch of different variations for everyone,
+* for space can do most adjusting with functions, can adjust lvl and battle type and ai with functions
+* but for custom moves and increases to number of party mon that would have to be done separately
+*  but I could also reset moves field to 0, if they were already in the custom struct, to make use default lvl up. hmm
+* so I could make everything custom, actually set custom moves, but then use a function check to not use them and instead use default.
+* until rematch, which would be a flag check for if you entered the area before could also do badge check either or both *shrug
+*
+* if done that way, would greatly cut down on amount of extra space I'd need to take up with additional party data,
+* would just pair down a fully custom value, since I have npc function already set to set random values on certain things
+* if move field is 0, sets normal learnset, if ivs less than min, sets random ivs, if abilitynum 0 sets random ability.
+* and item alraedy defaults to none if 0, so I could fully customize these and then make psuedo default parties.
+* and adjust level as I chose...  holy shit o.0
+*...now what happens if I directly set party size, to a value lower than the actual number of mon in party data array?
+* if I can do that,...and it 0's out the values above the number I give then, I can also easily set custom party size..o.0
+* if so I can make full parties in a single party set and just change the value with a function so party size is what I want.
+* and it counts on order of mon top to bottom, so would be simple to get how I want it.
+* like say I add a shuckle on to brocks team,  party size using nelms for his struct would then be 3 instead of 2.
+* but if I can set it to 2, the shuckle would be in the struct but just left off for the battle.
+*
+* IT WORKS!!  I can set the actual trainer party to as many mon as I want, and if I change party size it'll just only right up to that amount!
+* ok new plan was going to keep other trainer structs but with that realization there's no reason to use anyting other than TrainerMonItemCustomMoves
+* I can fill in everything and then just zero out the data with function checks, to set it how I want o.0
+*
+* it saves a bit of space, for fields you're not going to use, but with code I can do so much with it
+* there's no reason not to considering the extra utility I get out of doing so.
+* now all changes would need to go into CreateNPCTrainerParty in battle_main
+* now removing the extra structs is also a major plus because it allows me to GREATLY pair down that function
+* so I would just have a single case for the struct rather than different valuyes for each one.
+*
+* ok doing this, need setup function that checks thing/sets default value for party size  gtrainers[trainerid].partysize
+*   DEFAULT_SIZE would be the normal party size for base game, I could make brock have as many mon as I want,
+* but base game he has 2, so defautl size should be 2, each trainerId would have a default_size value for what they had in base game
+* then I expand based on progression criteria for rematches, up to the max, which would just use the actual value in the
+* struct nelms party size, so I could just skip the partisize setting and it'd just use the normal value for them.
+*
+* thing still to figure is it better to just add a member to the trainers struct for defualt size, which I could easily just fill in.
+* but would take up ewram for gtrainers
+* or should I make a function with u8 Default_Size  and then just make a massive switch case in said function with all Ids from gtrainers
+* and have it return party size to use  so function would need default size & party size members
+* and then each case block would need default_size listed at top in brackets then a check for rematch what value party size should be
+* and at end of case block set gtrainers.partySize to default size or calculated value for partysize for that trainer
+* think need include a break as well, so if it skips all criteriea for filtering it'll just use the size actually in the array for true party
+* make function take trainerNum like npctrainerparty, the argument it uses for that is gTrainerBattleOpponent_A
+* so putting the function in npctrainerparty I can just make switchase use traineNum and itll go to teh proper trainer id
+* so at end of each case block I can put  gtrainers[trainerNum].partySize
+*
+*this function that sets party size would nneed go at top of CreateNPCTrainerParty function right below ZeroEnemyPartyMons function
+* now issue i'm working with now is,  should make multiple functions for filtering of each part
+* or a single function put right at the top, that filters everything, since its more or less the same criteria,
+* and Im gonna be using just one struct
+* the function would be filtering what the create function reads of the trainers struct data, not actually changing that since its const (struct isn't const just gtrainers itself so maybe not anissue?)
+* I could make multiple functions that return void but take trainerNum argument, or some similar but may be simplest just do the one
+*would need variable value for each member of trainer struct lvl item move abiitynum partysize etc.
+* then I can run my filters and assign the values as I desire  
+* -(got info amount of physical text in funcitons doesnt matter for size it gets compacted for compile, so do everything with just 1 function not in struct)
+* 
+* next step need remove partyFlags from trainer struct, need do that, because partysize uses that as pprt of argument (kinda)
+* so remove that  to save more space, for setting customitem moves as only trainer struct will offset the increase in values slightly
+* since major change, commit current things before attempting
+* 
+* other note, for idea to have emerlad in game idk if fire red actually has trainer flags for all the emerlad mon still in it, it might and seems to?
+* but in case not idea for reusing trainer flags,  rather than just have the flag itself be check for trainer, split it between the regions
+* so flag 0x1 alone wouldn't be the check for if battled trainer, it'd be set flag 0x1 while on a map sec that is wihtin region for fire red
+* then can use flag 0x1 for emerald trainer, and it wouldnt count as set until encountered them while in max sec that is within region emerald
+* thus allowing to reuse flags based on map sec/ fire red, or in emerlad ruby saph  (I think)
+* idea is make a two part check, so when flag set, check map sec and set 0 or 1 for encounterd in fire red vs emerald
+* or 1 for encounterd in fire red  2 for encounterd in emearld and 3 for encounterd both
+* nah do like how battle_main does the trainer party flags  held item is a value custom moves is another value
+* and custom moves w held items  assigns them both  like so F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM
+* ENCOUNTERED_IN_FR could be 1 << 0 (i.e 1)  ENCOUNTERED_IN_RS could be 1 << 1 (i.e 2)  
+* so make new macro check to replace basic flag check,  so the flag can be reused 
+*
+*make choose ai flags for individual pokemon, instead of party/trainer - look into how ai works consider if doable, think would make sense/be better may require full overhaul though.
+* also add pp bonus setting to custom moves,for more strategy/control //important
+*
 * also did steadfast buff made activate off of super effective and flinch simlar to how I did anger point accessibility buff
 * had also plans to go back and redo some back sprites that were bad I'm lookin at chespin right now
 * think that's all the notes I lost but of course can't recall...
 */
 
-goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads space in the box
+goto DEP OSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads space in the box
 goto OTHER_BOX_LOGIC    //deals with moving mon and moving item logic
 goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repellent, also use for stench ability
 /* 
@@ -959,6 +1138,10 @@ beleive all effects to interupt are in battle_util.c & pokemon.c, if I block fly
 * with argument chance set -need test if working - can add status chance to all fire/fairy/electric/ice/poison type moves 
 * would be in line with expectation every fire move can burn every electric move can paralyze etc. just have lower odds for weaker moves etc.
 * min would be 5%
+*
+* changing infestation, setup as bug status but forgot would need to separate effects out from the trap.  
+* so renamed move infestation to swarm, need to set it up as that's the trap, and it does end turn damage.
+* but the defense drop is tied to infested status so swarm should set infestation status, and clear it when swarm ends
 * 
 * need add on to ability description of aviator, defeatist, and run away that they are able to switch out even if trapped etc. can always switch
 * 
@@ -1067,7 +1250,7 @@ as well as the effect of increasing trap duration
 //updated battle_ai from script to .c file based on emerald expansion, everythinig should be defined but still needs tweaking
 //files are battle_ai_util & battle_ai_main
 
-/* 
+/* POKEMON CHANGES -
 * Finish Ability_Defeatist setup need to finish setting up
 * the cleanse effect, actually can just do what runnaway does
 * then that would just leave trap effects to remove then do hp drop
@@ -1276,6 +1459,35 @@ as well as the effect of increasing trap duration
 * 
 * remake SPECIES_GOTHITELLE line sprites, to something more in line with gothic lolita, not ugly may take inspiration from Ori for final evo,
 * black/white bob/bangs instead of the weird spike spider hair
+* -lost references with old pc, have ssd need get new laptop to recover
+*
+* new idea for new lenendary/mysthic/mythic mon ghost fairy
+* ghost fairy is very good defensively kinda want ghost/fairy legend/mystic with wonderguard low dmg high hp kind of priestess character
+* no recovery moves, least not for self, but buffs debuffs rituals (curse painsplit etc.) some dmg moves //high sp def barely there defense
+* since only weakness would be steel which is usually physical / maybe make like poipoi its legendary here, but common in its own world?
+* maybe like its a pokemon from the fae world , think want to use Priscilla from dark souls as inspiration for this character
+* foud perfect pose, reference, just need to tweak to make less human.
+*  wonder gaurd would be a hidden ability to take advantage of its very neutral defenses typiing 
+* I also wanted to have more partner heal abilities, since their aren't many
+* its main ability could be applying heal affects to partner, so any heal effects it gets could ONLY be applied/would be transferreld to its battle partner
+* that would also keep it from being too horendously broken.
+* /I'm thinking high hp, tiny defense like 25, practically no atk  midling sp atk like 50 high sp def and average speed? 60 speed?
+* can't use priscillla as a name it just  sounds like a name not pokemon
+* but after research, darksouls was inspired moslty by norse mythology
+* and priscilla's character found in anor lando which was inspired by the milan cathedral in Italy
+* so and pokemon usually takes name inspirations from the region of the thing in question
+*and what its supposed to be.  pikachu originally japanese  uses pikapika and chuchu  which are japanese onomaopea for sound of sparklikng and mouse squeks for an electric mouse
+*
+* I'm making a fairy ghost princess/goddess/cleric type character
+*  and using original reference  I'm looking at both italian and norse  frames
+* in itially fairy are tied to fate/destiny the word they use for them is Fata (also they are all women so La Fata)
+*
+*   JaFraeyta.... Freyja  norse spelling freya  goddess of fertility kind giving protective, who presided over a realm of the norse afterlife, typically for common folk as opposited to valhala
+* Fata italin for fairy,  but linkmed with fatae from latin, which are also called Fae
+Fraeyjta  - think this spelling works, even in norse the j is silent, so this is a mix of latin word for fate, which in itialian is also fairy, and freyja norse goddess of fertility 
+*                               //and ruler of the land of dead
+* 
+* pronounced fray-ee-ta
 * 
 * make cursola signature ability PERISH_BODY only activate for enemy mon
 * watching JPR Poketrainer showed me how niche/bad it is, especially whene mon already has such low def stat
@@ -2179,6 +2391,25 @@ goto CATCHING_LOGIC
 * as well as plan to make all trainers rematchable which would make it easy to get more money from grinding battles.
 * plan to do via time or a stepp counter, when condition is met, reset trainer flags of all npc on map.
 * this would also give rise to need to use b.o  trainer repellent from pewter, further setting the realistic world economy, etc.
+*
+* thought on ev system, for most its too grindy, but grind isn't always bad it needs proper balance.
+* and balancing your grind doesn't always mean to reduce the grind, but to improve the reward/effort ratio, and have it more seamlessly integrated into your core gameplay loop.
+* the default system forced you to engage with the game in a patently abnormal way, searching out specific mon and just grinding them relentlessly before you could continue with the main story.
+*a method that would have allowed you to continue as normal would be awarding evs for natural progression through the game, and since I can rematch trainers that's earsier for me to setup.
+*my idea is beating important trainers, ace trainers, gym leaders, (and potentially gym trainers)  evil team leaders/admins  would net you battle points
+* which don't go into evs, but allow you to allocate them specifically later, setup like exp, loop entire party, check summary screen, potentially put where had total exp
+* if can fit it with needed ability slot changes
+* ok it can't fit, BUT  what I can do is have the exp text change with pressing ctr to display evs for the mon,
+* change it to show BP for battle points, and replace the number for exp to next level with amount of bp that mon has. pressing A
+* will take you to stat info, same as move info is for pressing A on move page, here you can select the individual stat and 
+* pressing using the dpad will alocate allocating  battle points,  up down is intervals of 1,  left right is intervals of 10 
+* and once set they can't be removed.  so will need a confirmation message,  Pressing B will prompt to exit, if amount of battle points is different from before allocating/pressing B from within menu
+* will prompt confirm message,  if its the same then no points were allocated and there is no consiquence to exit again, so just let the player retufn to menu normally
+*make sure to setup outline same as move selection, press A to enter menu,  red outlined box appears at default top position, press again for it to blink and show selection.
+*from there stat is selected and you can actually apply battle points.  
+* Pressing B once, removes blinking and takes you back to stat selection  allowing move to next stat go to allocation phase.
+* Pressing B again from ostat selection prompts the confirmtation message, not the first one.
+*
 * 
 * -new idea make command for bs that goes before move animation for moves above 
 * base power 1, give auditory alert for mon hitting for big damage
@@ -2550,6 +2781,7 @@ goto MOVE_EEFFCTS  //setmoveeffects move logic in battle_script_commands.c DONE 
 
 goto ATK_49_MOVEEND //battle_script_commands.c  move end  still to do   vsonic
 
+goto ABSORB_ABILITY_TARGETTING
 goto STAT_ANIM_W_ABILITIES
 goto STAT_CHANGE_ABILITIES
 goto ACCURACY_BASED_ABILITIES   //other ability logic exists outside battle_util.c  make sure to go over all ability effects
@@ -2751,8 +2983,13 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * should be typeless dmg that makes contact.  i.e if user has fluffy and did recoil 
 * as its a contact move recoil dmg taken would be reduced.  stuff like that
 * 
-* nots on defense setup for rrecoil, pass gbattlemovedamage into a version of defense side of CalculateBaseDamage function -     
-* 
+* notes on defense setup for rrecoil, pass gbattlemovedamage into a version of defense side of CalculateBaseDamage function -     
+* confusion dmg runs through damage formula and is affected by atk stat and defense
+* confusion hit uses  
+* gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, 40, 0, gBattlerAttacker, gBattlerAttacker);
+* function has type and power override, if I change type to sound or mystery it'd be neutral for all
+*then potentially see if power override lets me slot in my own dmg amount so I could use hp delt by atk, or quater gbattlemovedmg or something?
+*
 * comtinue adding notes...
 * array won't end well if size doesn't match random value, so do just like, starter selection random % nelems 
 * but I'm making the list with the function logic,   so I cant do array nelms
@@ -2765,7 +3002,7 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 *  make one list and set that as atk type, and loop through all the species that
 * have a defending type that  are not effective or no effect result.
 * 
-* Then randomly pick a species wihtin that list to transform into
+* Then randomly pick a species wihtin that list to transform into       -for conversion & inversion new transform ability
 * 
 * If the type 2 doesn't match type 1, make two lists of the above guuidelines
 * select a random species, and then compare the species for each list,

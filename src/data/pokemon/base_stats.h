@@ -50,11 +50,34 @@ if it would otherwise be 0/NONE except in the case of ability.
 //if I plan to add more pokemon to safari zone.
 
 //may need add flag to every pokemon, so can set it as evo case, i.e pokemon with this flag, can evolve to this variant.
+//added flag field, think will also use the flag for exp share and ev item boost, so don't need to waste held item slot
+//part of setting it up like opal, so have key item, trainer suite, which adds menu fields EXP_SHARE & EV_TRAIN
+//taking through task/menu options that would set the specific flag for that mon.
+//setting exp share flag should add little "E" symbol  to partymenu window so easy to tell its active
+//think can do similar thing for ev items, just set item icon in a spot on party menu to show you're ev training and what stat you're boosting.
+//this would be separate from held item position as that's directly on the mon icon itself.
+//ev shackle item would still be of use, what it would do is actually be a held item, 
+//either it doesn't lower speed or its the only training tool that actually DOES lower speed when in use.
+//it'd multiply the individual stat ev gain you normally get by a multiplier
+//also of note you should be able to set multiple ev train items at once with this.
+//since its a u8 flag I have space for 8 flags at once, and only 6 stat flags plus the exp flag, leaving one space still for the form flag!!
+
+//put more thought into this and I'm wondering if it matters where I put the flag, 
+//if I use it here itd be in basestats struct
+//but evs are stored in PokemonSubstruct2, idk if it needs to be in teh same struct or not, I assume it shoudn't matter
+//its just a matter of checking and setting the relevant fields as I need them.
+//I believe its easier to adjust values when they are in the same struct?
+//should I need to I could easily replace sheen with the flag as they would both be u8
+//meaning savestruct wouldn't be affected  but for form change/breeding it makes more sense
+//to use base stat struct for form change/flag check,  I could do both
+//leave form change in base stats but move the exp share & ev item flag checks to PokemonSubstruct2
+//in place of sheen
 
 //adjusted geodude, added drayano stat changes
 
 //* note I may need to lower some drayano stats 
 //to account for my higher ev range, to balance
+//read most -_-
 
 //check rotom etc. to ensure I''ve replaced every instance of levitate
 
@@ -72,6 +95,26 @@ if it would otherwise be 0/NONE except in the case of ability.
 //for joat I want to add more normal types and I added it to hitmons, but that doesn't feel right now?
 //It would make sense for them to stay pure fighting as they have human shape, but that leaves hitmontop available I guess 
 //ok went through and adjusted pure fighting mon I felt matched normal archetype
+
+//more notes for flying, mon like doduo I kept flying type but since it cant fly in the type calcs
+//I made it take neutral from electricity.   I plan to do same for archen/archeops 
+//idea is while it can fly, it needs a runnnings start to do so, so 
+//when its battling somone, its gonna be running on the ground, not fighting from the air, like other flying types
+//...I didnt' actually do type effect yet. *facepalm such an idiot,
+//if flying type grounded and movetype is electric and multiplier is super effective, multiplier is normal
+//if flying type grounded and movetype is fighting and multiplier is not very effective, multiplier is normal
+
+//logic for flying types will be, if bird, or if majorly attacks from the air
+//w lugia as example for rare cases dragon type can stand in for flying part of identity,  as dragons are rulers of land and sky (and sea for water dragons)
+
+//redoing early fossil mon as well, rock type doesn't really make sense for most of them
+//they don't getg many rock moves, they dont have rocky characteristics
+//only thing is they are from fossils, and from the "stone age"
+//watched cammeemealtea video and they brought up them being dragonsin stead,
+//also as that gives ice weakness it makes sense, as ice age killed off dinosaurs.
+//or it folllowed end of dinosaurs
+//most early fossils could be normal dragon or pure dragon,  but reconciling the loss of resistance is difficult
+//especially when its a dual type already
 
 const struct BaseStats gBaseStats[] =
 {
@@ -978,7 +1021,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_COMPETITIVE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-    },
+    },  //because dark type intimidate exclusion, should I add workaround so competitive still activates?
+    //they attempted to, it just didn't work, yeah find work around, similar idea to anger point
 
     [SPECIES_CLEFAIRY] =
     {
@@ -1282,8 +1326,8 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_PARAS] =
     {
         .baseHP = 65,
-        .baseAttack = 70,
-        .baseDefense = 77,
+        .baseAttack = 78,
+        .baseDefense = 67,
         .baseSpeed = 55,
         .baseSpAttack = 45,
         .baseSpDefense = 75,
@@ -2206,7 +2250,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-    },
+    }, //buff tm learnset and mvoe pool needs it badly  learning payvback,gyro ball slow moves, and more water moves early would be good
 
     [SPECIES_SLOWBRO] =
     {
@@ -2992,10 +3036,10 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_MONSTER,
-        .abilities = {ABILITY_OWN_TEMPO, ABILITY_OBLIVIOUS},//replace own tempo with new versino of poison touch that paralyzes instead make signature
-        .abilityHidden = {ABILITY_CLOUD_NINE, ABILITY_ADAPTABILITY},
+        .abilities = {ABILITY_TOXUNGUE, ABILITY_OBLIVIOUS},//replace own tempo with new versino of poison touch that paralyzes instead make signature
+        .abilityHidden = {ABILITY_CLOUD_NINE, ABILITY_STALL},//relacing adaptability with stall
         .bodyColor = BODY_COLOR_PINK,
-        .noFlip = FALSE,
+        .noFlip = FALSE,//ability name ToxuTongue  based on toxungen which this technically is, or maybe ToxunTongue? to lean more into the name?
     },
 
     [SPECIES_KOFFING] =
@@ -3909,8 +3953,8 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 130,
         .baseSpAttack = 60,
         .baseSpDefense = 75,
-        .type1 = TYPE_ROCK,
-        .type2 = TYPE_FLYING,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_DRAGON,
         .catchRate = 45,
         .expYield = 180,
         //.evYield_Speed = 2,
@@ -3922,7 +3966,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         .abilities = {ABILITY_ROCK_HEAD, ABILITY_PRESSURE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_UNNERVE, ABILITY_RIVALRY},
+            .abilityHidden = {ABILITY_UNNERVE, ABILITY_STRONG_JAW},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -4287,7 +4331,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 80,
         .baseSpDefense = 70,
         .type1 = TYPE_FIRE,
-        .type2 = TYPE_FIRE,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 142,
         //.evYield_Speed = 1,
@@ -5950,7 +5994,7 @@ const struct BaseStats gBaseStats[] =
         .baseAttack = 40,
         .baseDefense = 40,
         .baseSpeed = 20,
-        .baseSpAttack = 72,
+        .baseSpAttack = 88,
         .baseSpDefense = 56,
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -5996,7 +6040,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    },//move give acid armor shell smash
 
     [SPECIES_SWINUB] =
     {
@@ -6897,7 +6941,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 85,
         .baseSpDefense = 65,
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_DRAGON,
         .catchRate = 45,
         .expYield = 142,
         //.evYield_Speed = 2,
@@ -6913,7 +6957,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-    },
+    }, //I think I'll actually make this dragon here since other mon are getting their secondary at mid evo
 
     [SPECIES_SCEPTILE] =
     {
@@ -7448,10 +7492,10 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_NUZLEAF] =
     {
-        .baseHP = 80,
+        .baseHP = 86,
         .baseAttack = 82,
         .baseDefense = 40,
-        .baseSpeed = 86,
+        .baseSpeed = 80,
         .baseSpAttack = 60,
         .baseSpDefense = 40,
         .type1 = TYPE_GRASS,
@@ -7468,12 +7512,12 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_CHLOROPHYLL, ABILITY_EARLY_BIRD},
-        //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_PICKPOCKET, ABILITY_NONE},
+        .abilities = {ABILITY_CHLOROPHYLL, ABILITY_INFILTRATOR},//why does it need earlybird? its grass dark, its immune to all forms of sleep?
+        //#ifdef BATTLE_ENGINE          //ok so thats not actually how status moves worked, but I tweaked so status moves that set status 1, have to pass type immunity check
+            .abilityHidden = {ABILITY_PICKPOCKET, ABILITY_NONE}, //with chlorophyll water sport, should outspeed pretty much everything
         // #endif
-        .bodyColor = BODY_COLOR_BROWN,
-        .noFlip = FALSE,
+        .bodyColor = BODY_COLOR_BROWN, //give moves feint and watersport think also give mudsport. hmm good idea since I removed grass electirc resistance, so give them both mudsport/watersport 
+        .noFlip = FALSE,    //as both water and mud/ground are important for plants  vsonic
     },
 
     [SPECIES_SHIFTRY] =
@@ -7498,7 +7542,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_CHLOROPHYLL, ABILITY_EARLY_BIRD},
+        .abilities = {ABILITY_CHLOROPHYLL, ABILITY_INFILTRATOR},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_PICKPOCKET, ABILITY_NONE},
         // #endif
@@ -8532,7 +8576,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 75,
         .baseSpDefense = 85,
         .type1 = TYPE_BUG,
-        .type2 = TYPE_ELECTRIC,
+        .type2 = TYPE_ELECTRIC, 
         .catchRate = 150,
         .expYield = 151,
         //.evYield_Speed = 1,
@@ -8560,7 +8604,7 @@ const struct BaseStats gBaseStats[] =
         .baseDefense = 75,
         .baseSpDefense = 85,
         .type1 = TYPE_BUG,
-        .type2 = TYPE_BUG,
+        .type2 = TYPE_GRASS,    //grass for sweet smelling  fragance/aroma
         .catchRate = 150,
         .expYield = 151,
         //.evYield_Speed = 1,
@@ -8576,7 +8620,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_PRANKSTER, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-    },
+    }, //give grass and fairy moves and acrobatics
 
     [SPECIES_ROSELIA] =
     {
@@ -8817,7 +8861,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_ANGER_POINT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    }, //keep an eye on this, vsonic, see if with super change it survives well enough or needs more bulk
 
     [SPECIES_TORKOAL] =
     {
@@ -9452,7 +9496,7 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP = 45,
         .baseAttack = 95,
-        .baseDefense = 50,
+        .baseDefense = 70,
         .baseSpeed = 75,
         .baseSpAttack = 40,
         .baseSpDefense = 50,
@@ -9469,8 +9513,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         .abilities = {ABILITY_BATTLE_ARMOR, ABILITY_OCEAN_MEMORY},
         .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_LIQUID_SOUL},//GAVE this based on ultra sun dex entry, use that dex for mon
-        .bodyColor = BODY_COLOR_GRAY,
-        .noFlip = FALSE,
+        .bodyColor = BODY_COLOR_GRAY,   //don't know why I wnted ultra sun dex for this, and liquid soul doesn't make sense here or at all.
+        .noFlip = FALSE,    //it'd be for mon that aren't water type, so don't get stab, but just get rain boosted ghost moves  but ghost is a defensive not offensive type in my game, so not worth
     },  //also let it learn rain dance tm
 
     [SPECIES_ARMALDO] =
@@ -9496,7 +9540,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_LIQUID_SOUL},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-    },
+    }, //think keep rock bug, give move forge to make it bug steel?
 
     [SPECIES_FEEBAS] =
     {
@@ -10442,7 +10486,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    },//now that it exists give solar blade instead
 
     [SPECIES_RAYQUAZA] =
     {
@@ -11099,8 +11143,8 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 58,
         .baseSpAttack = 30,
         .baseSpDefense = 30,
-        .type1 = TYPE_ROCK,
-        .type2 = TYPE_ROCK,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_DRAGON,
         .catchRate = 45,
         .expYield = 70,
         //.evYield_Attack = 1,
@@ -11115,7 +11159,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-    },
+    }, //THERE'S nothing rock like about most fossil mon, just them being from fossils, and from the stone age... most of this ones moves are normal too
 
     [SPECIES_RAMPARDOS] =
     {
@@ -11125,8 +11169,8 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 58,
         .baseSpAttack = 65,
         .baseSpDefense = 50,
-        .type1 = TYPE_ROCK,
-        .type2 = TYPE_ROCK,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_DRAGON,
         .catchRate = 45,
         .expYield = 173,
         //.evYield_Attack = 2,
@@ -12581,9 +12625,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_MONSTER,
-        .abilities = {ABILITY_OWN_TEMPO, ABILITY_OBLIVIOUS},//replace own tempo w new licki signature ability
-        .abilityHidden = {ABILITY_CLOUD_NINE, ABILITY_ADAPTABILITY},
-        .bodyColor = BODY_COLOR_PINK,
+        .abilities = {ABILITY_TOXUNGUE, ABILITY_OBLIVIOUS},//replace own tempo w new licki signature ability
+        .abilityHidden = {ABILITY_CLOUD_NINE, ABILITY_ADAPTABILITY}, //think keep adaptability here, so serves a different niche, if want keep stall can use for eviolite strats
+        .bodyColor = BODY_COLOR_PINK,   //was worried it'd be too strong?
         .noFlip = FALSE,
     },
 
@@ -15362,7 +15406,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 70,
         .baseSpAttack = 74,
         .baseSpDefense = 45,
-        .type1 = TYPE_ROCK,
+        .type1 = TYPE_DRAGON,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
         .expYield = 71,
@@ -15389,7 +15433,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpeed = 110,
         .baseSpAttack = 112,
         .baseSpDefense = 65,
-        .type1 = TYPE_ROCK,
+        .type1 = TYPE_DRAGON,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
         .expYield = 177,
@@ -20086,7 +20130,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_KEEN_EYE, ABILITY_VITAL_SPIRIT},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_STEADFAST, ABILITY_NONE},
+            .abilityHidden = {ABILITY_STEADFAST, ABILITY_OWN_TEMPO}, //base game needs own tempo to evolve into dusk form, gave owntempo to work, so could just use ability patch
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -24250,7 +24294,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-    },
+    },//need to add below mon to species_to_national dex in pokemon.c
 
     [SPECIES_WYRDEER] =
         {
@@ -24455,7 +24499,35 @@ const struct BaseStats gBaseStats[] =
             // #endif
             .bodyColor = BODY_COLOR_YELLOW,
             .noFlip = FALSE,
+            
         },
+
+        [SPECIES_FRAEYJTA] =
+        {
+            .baseHP = 170,  //hp betweeen snorlax and chansey
+            .baseAttack = 15,
+            .baseDefense = 25,
+            .baseSpeed = 60,
+            .baseSpAttack = 50,
+            .baseSpDefense = 210,
+            .type1 = TYPE_FAIRY,
+            .type2 = TYPE_GHOST,
+            .catchRate = 13,
+            .expYield = 384,
+            //.evYield_SpDefense = 2,
+            .genderRatio = MON_FEMALE,
+            .eggCycles = 35,
+            .friendship = 35,
+            .growthRate = GROWTH_SLOW,
+            .eggGroup1 = EGG_GROUP_UNDISCOVERED,
+            .eggGroup2 = EGG_GROUP_UNDISCOVERED,
+            .abilities = {ABILITY_OMNIPOTENT_AIDE, ABILITY_NONE}, //make ability that passes on any healing received to battle partner, potentially also makes healing effect priority?
+            //#ifdef BATTLE_ENGINE
+            .abilityHidden = {ABILITY_WONDER_GUARD, ABILITY_NONE}, //not able to heal this mon, ok just make it so recovery moves don't work on it, otherwise would be horribly annoying
+            // #endif
+            .bodyColor = BODY_COLOR_GRAY,
+            .noFlip = FALSE,
+        }, //give move powersplit
 
     [SPECIES_VENUSAUR_MEGA] =
     {
@@ -24793,7 +24865,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack = 70,
         .baseSpDefense = 95,
         .type1 = TYPE_ROCK,
-        .type2 = TYPE_FLYING,
+        .type2 = TYPE_DRAGON,
         .catchRate = 45,
         .expYield = 215,
         //.evYield_Speed = 2,

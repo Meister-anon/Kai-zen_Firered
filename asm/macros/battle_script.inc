@@ -92,7 +92,7 @@
 	.4byte \ptr
 	.endm
 
-	.macro seteffectwithchance
+	.macro setmoveeffectwithchance
 	.byte 0x15
 	.endm
 
@@ -140,9 +140,9 @@
 	.4byte \ptr
 	.endm
 
-	.macro jumpifability param0:req, ability:req, ptr:req
+	.macro jumpifability battler:req, ability:req, ptr:req
 	.byte 0x1e
-	.byte \param0
+	.byte \battler
 	.2byte \ability
 	.4byte \ptr
 	.endm
@@ -667,10 +667,10 @@
 	.byte 0x75
 	.endm
 
-	.macro various battler:req, param1:req
+	.macro various battler:req, id:req
 	.byte 0x76
 	.byte \battler
-	.byte \param1
+	.byte \id
 	.endm
 
 	.macro setprotectlike
@@ -1392,6 +1392,10 @@
 	callnative BS_typebaseddmgboost
 	.endm
 
+	.macro getmoveeffect
+	callnative BS_getmoveeffect
+	.endm
+
 	@case specific fixer
 	@realized needed to take effect from script, to not uninintentionally trigger other cases
 	.macro call_if	effect:req
@@ -1400,6 +1404,7 @@
 	.endm
 
 @actually pretty sure order doesnt matter what matters is the macro is alligned with the correct various command
+@pretty much just have the right name for the case, which is easy won't even compile if listed various isn't defined 
 @ various command changed to more readable macros		various \battler, is like byte goes in sequence
 	.macro cancelmultiturnmoves battler:req
 	various \battler, VARIOUS_CANCEL_MULTI_TURN_MOVES		@this is 0
