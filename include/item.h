@@ -45,7 +45,7 @@ bool8 CheckPCHasItem(u16 itemId, u16 count);
 bool8 AddPCItem(u16 itemId, u16 count);
 void SwapRegisteredBike(void);
 const u8 *ItemId_GetName(u16 itemId);
-u16 ItemId_GetId(u16 itemId);
+u16 ItemId_GetId(u16 itemId);   //added here, could use, but most use hold effect, no reason not to...
 u16 ItemId_GetPrice(u16 itemId);
 u8 ItemId_GetHoldEffect(u16 itemId);
 u8 ItemId_GetHoldEffectParam(u16 itemId);
@@ -60,6 +60,7 @@ u8 ItemId_GetBattleUsage(u16 itemId);
 ItemUseFunc ItemId_GetBattleFunc(u16 itemId);
 u8 ItemId_GetSecondaryId(u16 itemId);
 u16 itemid_get_market_price(u16 itemId);
+u16 itemid_get_Id(u16 itemId);
 void ClearBag(void);
 void ClearPCItemSlots(void);
 void TrySetObtainedItemQuestLogEvent(u16 itemId);

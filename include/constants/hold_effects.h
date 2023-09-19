@@ -48,8 +48,8 @@
 #define HOLD_EFFECT_DRAGON_SCALE   44
 #define HOLD_EFFECT_LIGHT_BALL     45
 #define HOLD_EFFECT_GROUND_POWER   46
-#define HOLD_EFFECT_ROCK_POWER     47
-#define HOLD_EFFECT_GRASS_POWER    48
+#define HOLD_EFFECT_ROCK_POWER     47   //type boosters not gems, hard stone
+#define HOLD_EFFECT_GRASS_POWER    48   //grass seed
 #define HOLD_EFFECT_DARK_POWER     49
 #define HOLD_EFFECT_FIGHTING_POWER 50
 #define HOLD_EFFECT_ELECTRIC_POWER 51
@@ -67,12 +67,12 @@
 #define HOLD_EFFECT_LUCKY_PUNCH    63
 #define HOLD_EFFECT_METAL_POWDER   64
 #define HOLD_EFFECT_THICK_CLUB     65
-#define HOLD_EFFECT_LEEK          66
+#define HOLD_EFFECT_LEEK           66
 
 // Gen4 hold effects.
 #define HOLD_EFFECT_CHOICE_SCARF   67
 #define HOLD_EFFECT_CHOICE_SPECS   68
-#define HOLD_EFFECT_DAMP_ROCK      69
+#define HOLD_EFFECT_DAMP_ROCK      69   //change to weather extenders , boost type move 10%, use itemid of held item rather than hold effect
 #define HOLD_EFFECT_GRIP_CLAW      70
 #define HOLD_EFFECT_HEAT_ROCK      71
 #define HOLD_EFFECT_ICY_ROCK       72

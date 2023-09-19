@@ -621,7 +621,7 @@ const u8 * ItemId_GetName(u16 itemId)
     return gItems[SanitizeItemId(itemId)].name;
 }
 
-u16 itemid_get_number(u16 itemId)
+u16 itemid_get_Id(u16 itemId)
 {
     return gItems[SanitizeItemId(itemId)].itemId;
 }
