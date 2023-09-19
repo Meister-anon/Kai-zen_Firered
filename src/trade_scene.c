@@ -56,7 +56,7 @@ struct InGameTrade {
     /*0x2A*/ //u8 mailNum;
     /*0x2B*/ u8 otName[11];
     /*0x36*/ u8 otGender;
-    /*0x37*/ u8 sheen;
+    /*0x37*/ //u8 sheen;
     /*0x38*/ u16 requestedSpecies;
 };
 
@@ -2453,7 +2453,7 @@ static void CreateInGameTradePokemonInternal(u8 playerSlot, u8 inGameTradeIdx) /
     SetMonData(tradeMon, MON_DATA_COOL, &inGameTrade->contestStats[0]);
     SetMonData(tradeMon, MON_DATA_SMART, &inGameTrade->contestStats[3]);
     SetMonData(tradeMon, MON_DATA_TOUGH, &inGameTrade->contestStats[4]);
-    SetMonData(tradeMon, MON_DATA_SHEEN, &inGameTrade->sheen);
+    //SetMonData(tradeMon, MON_DATA_SHEEN, &inGameTrade->sheen);
     SetMonData(tradeMon, MON_DATA_MET_LOCATION, &metLocation);
     //mailNum = 0;
     if (inGameTrade->heldItem != ITEM_NONE)

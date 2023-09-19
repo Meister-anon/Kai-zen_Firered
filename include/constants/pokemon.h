@@ -50,7 +50,7 @@
 #define MON_DATA_IS_EGG            45
 #define MON_DATA_ABILITY_NUM       46
 #define MON_DATA_TOUGH             47
-#define MON_DATA_SHEEN             48
+//#define MON_DATA_SHEEN             48     //with how value is handled believe I can just remove  without needing to reorder without breaking anything
 #define MON_DATA_OT_GENDER         49
 #define MON_DATA_COOL_RIBBON       50
 #define MON_DATA_BEAUTY_RIBBON     51

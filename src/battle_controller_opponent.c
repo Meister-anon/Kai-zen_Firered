@@ -727,10 +727,10 @@ static u32 GetOpponentMonData(u8 monId, u8 *dst)
         dst[0] = GetMonData(&gEnemyParty[monId], MON_DATA_TOUGH);
         size = 1;
         break;
-    case REQUEST_SHEEN_BATTLE:
+    /*case REQUEST_SHEEN_BATTLE:
         dst[0] = GetMonData(&gEnemyParty[monId], MON_DATA_SHEEN);
         size = 1;
-        break;
+        break;*/
     case REQUEST_COOL_RIBBON_BATTLE:
         dst[0] = GetMonData(&gEnemyParty[monId], MON_DATA_COOL_RIBBON);
         size = 1;
@@ -985,9 +985,9 @@ static void SetOpponentMonData(u8 monId)
     case REQUEST_TOUGH_BATTLE:
         SetMonData(&gEnemyParty[monId], MON_DATA_TOUGH, &gBattleBufferA[gActiveBattler][3]);
         break;
-    case REQUEST_SHEEN_BATTLE:
+    /*case REQUEST_SHEEN_BATTLE:
         SetMonData(&gEnemyParty[monId], MON_DATA_SHEEN, &gBattleBufferA[gActiveBattler][3]);
-        break;
+        break;*/
     case REQUEST_COOL_RIBBON_BATTLE:
         SetMonData(&gEnemyParty[monId], MON_DATA_COOL_RIBBON, &gBattleBufferA[gActiveBattler][3]);
         break;

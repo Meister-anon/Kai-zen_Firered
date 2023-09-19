@@ -12,7 +12,7 @@ static const struct InGameTrade sInGameTrades[] = {
         //.mailNum = 255,
         .otName = _("REYLEY"),
         .otGender = MALE, //replaced mailNum set removed mail items on jynx, may use trades as a way to get rare items
-        .sheen = 10,
+        //.sheen = 10,
         .requestedSpecies = SPECIES_ABRA
     }, 
     [INGAME_TRADE_JYNX] = 
@@ -28,7 +28,7 @@ static const struct InGameTrade sInGameTrades[] = {
         //.mailNum = 0,
         .otName = _("DONTAE"),
         .otGender = MALE,
-        .sheen = 10,
+        //.sheen = 10,
         .requestedSpecies = SPECIES_POLIWHIRL
     }, 
     [INGAME_TRADE_NIDORAN] = 
@@ -45,7 +45,7 @@ static const struct InGameTrade sInGameTrades[] = {
         //.mailNum = 255,
         .otName = _("SAIGE"),
         .otGender = FEMALE,
-        .sheen = 10,
+        //.sheen = 10,
         .requestedSpecies = SPECIES_NIDORAN_M
 #elif defined(LEAFGREEN)
         .nickname = _("MR. NIDO"),
@@ -59,7 +59,7 @@ static const struct InGameTrade sInGameTrades[] = {
         //.mailNum = 255,
         .otName = _("SAIGE"),
         .otGender = FEMALE,
-        .sheen = 10,
+        //.sheen = 10,
         .requestedSpecies = SPECIES_NIDORAN_F
 #endif
     }, 
@@ -76,7 +76,7 @@ static const struct InGameTrade sInGameTrades[] = {
         //.mailNum = 255,
         .otName = _("ELYSSA"),
         .otGender = MALE,
-        .sheen = 10,
+        //.sheen = 10,
         .requestedSpecies = SPECIES_SPEAROW
     }, 
     [INGAME_TRADE_NIDORINOA] = 
@@ -93,7 +93,7 @@ static const struct InGameTrade sInGameTrades[] = {
         //.mailNum = 255,
         .otName = _("TURNER"),
         .otGender = MALE,
-        .sheen = 10,
+        //.sheen = 10,
         .requestedSpecies = SPECIES_NIDORINO
 #elif defined(LEAFGREEN)
         .nickname = _("NINO"),
@@ -107,7 +107,7 @@ static const struct InGameTrade sInGameTrades[] = {
         //.mailNum = 255,
         .otName = _("TURNER"),
         .otGender = MALE,
-        .sheen = 10,
+        //.sheen = 10,
         .requestedSpecies = SPECIES_NIDORINA
 #endif
     }, 
@@ -124,7 +124,7 @@ static const struct InGameTrade sInGameTrades[] = {
         //.mailNum = 255,
         .otName = _("HADEN"),
         .otGender = MALE,
-        .sheen = 10,
+        //.sheen = 10,
 #if defined(FIRERED)
         .requestedSpecies = SPECIES_GOLDUCK
 #elif defined(LEAFGREEN)
@@ -144,7 +144,7 @@ static const struct InGameTrade sInGameTrades[] = {
         //.mailNum = 255,
         .otName = _("CLIFTON"),
         .otGender = MALE,
-        .sheen = 10,
+        //.sheen = 10,
         .requestedSpecies = SPECIES_RAICHU
     }, 
     [INGAME_TRADE_TANGELA] = 
@@ -160,7 +160,7 @@ static const struct InGameTrade sInGameTrades[] = {
         //.mailNum = 255,
         .otName = _("NORMA"),
         .otGender = FEMALE,
-        .sheen = 10,
+        //.sheen = 10,
         .requestedSpecies = SPECIES_VENONAT
     },
     [INGAME_TRADE_SEEL] = 
@@ -176,7 +176,7 @@ static const struct InGameTrade sInGameTrades[] = {
         //.mailNum = 255,
         .otName = _("GARETT"),
         .otGender = MALE,
-        .sheen = 10,
+        //.sheen = 10,
         .requestedSpecies = SPECIES_PONYTA
     }
 };
