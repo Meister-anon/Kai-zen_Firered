@@ -1,6 +1,16 @@
 // Maximum value for a female Pokémon is 254 (MON_FEMALE) which is 100% female.
 // 255 (MON_GENDERLESS) is reserved for genderless Pokémon.
 #define PERCENT_FEMALE(percent) min(254, ((percent * 255) / 100))
+
+#define STATS(hp, atk, def, speed, spAtk, spDef) \
+.baseHP        = (hp), \
+.baseAttack    = (atk), \
+.baseDefense   = (def), \
+.baseSpeed     = (speed), \
+.baseSpAttack  = (spAtk), \
+.baseSpDefense = (spDef), \
+.statTotal = (hp) + (atk) + (def) + (speed) + (spAtk) + (spDef)
+
 //added from emerald expansion so everyone has flags and abilities.
 //but I forgot that removes safariZoneFleeRate so need to add that back for first 151 or so.
 
@@ -38,7 +48,7 @@ if it would otherwise be 0/NONE except in the case of ability.
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = { ABILITY_OVERGROW, ABILITY_NONE },
+        .abilities = {ABILITY_OVERGROW, ABILITY_NONE },
         .safariZoneFleeRate = 0,
         .abilityHidden = {ABILITY_CHLOROPHYLL,
         .bodyColor = BODY_COLOR_GREEN,
@@ -121,18 +131,13 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_NONE] = {0},
 
     [SPECIES_BULBASAUR] =
-    {
-        .baseHP = 55,
-        .baseAttack = 49,
-        .baseDefense = 49,
-        .baseSpeed = 45,
-        .baseSpAttack = 65,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 49, 49, 45, 65, 65),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
         .catchRate = 45,
         .expYield = 64,
-        //.evYield_SpAttack = 1,
         .genderRatio = PERCENT_FEMALE(12.5),
         .eggCycles = 20,
         .friendship = 35,
@@ -143,16 +148,13 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
+
     },
 
     [SPECIES_IVYSAUR] =
-    {
-        .baseHP = 72,
-        .baseAttack = 62,
-        .baseDefense = 63,
-        .baseSpeed = 60,
-        .baseSpAttack = 80,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(72, 62, 63, 60, 80, 80),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
         .catchRate = 45,
@@ -172,13 +174,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VENUSAUR] =
-    {
-        .baseHP = 93,
-        .baseAttack = 82,
-        .baseDefense = 83,
-        .baseSpeed = 80,
-        .baseSpAttack = 100,
-        .baseSpDefense = 100,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(93, 82, 83, 80, 100, 100),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
         .catchRate = 45,
@@ -198,13 +196,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHARMANDER] =
-    {
-        .baseHP = 39,
-        .baseAttack = 52,
-        .baseDefense = 43,
-        .baseSpeed = 65,
-        .baseSpAttack = 60,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(39, 52, 43, 65, 60, 50),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 45,
@@ -225,13 +219,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHARMELEON] =
-    {
-        .baseHP = 58,
-        .baseAttack = 64,
-        .baseDefense = 58,
-        .baseSpeed = 80,
-        .baseSpAttack = 80,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(58, 64, 58, 80, 80, 65),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 45,
@@ -253,13 +243,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHARIZARD] =
-    {
-        .baseHP = 78,
-        .baseAttack = 84,
-        .baseDefense = 78,
-        .baseSpeed = 100,
-        .baseSpAttack = 109,
-        .baseSpDefense = 85,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(78, 84, 78, 100, 109, 85),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -280,13 +266,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SQUIRTLE] =
-    {
-        .baseHP = 44,
-        .baseAttack = 48,
-        .baseDefense = 65,
-        .baseSpeed = 43,
-        .baseSpAttack = 50,
-        .baseSpDefense = 64,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(44, 48, 65, 43, 50, 64),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -305,13 +287,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WARTORTLE] =
-    {
-        .baseHP = 59,
-        .baseAttack = 63,
-        .baseDefense = 80,
-        .baseSpeed = 58,
-        .baseSpAttack = 65,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(59, 63, 80, 58, 65, 80),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -331,13 +309,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BLASTOISE] =
-    {
-        .baseHP = 79,
-        .baseAttack = 83,
-        .baseDefense = 100,
-        .baseSpeed = 78,
-        .baseSpAttack = 85,
-        .baseSpDefense = 105,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(79, 83, 100, 78, 85, 105),
         .type1 = TYPE_WATER,
         .type2 = TYPE_STEEL,
         .catchRate = 45,
@@ -356,13 +330,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CATERPIE] =
-    {
-        .baseHP = 45,
-        .baseAttack = 30,
-        .baseDefense = 35,
-        .baseSpeed = 45,
-        .baseSpAttack = 20,
-        .baseSpDefense = 20,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 30, 35, 45, 20, 20),
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
         .catchRate = 255,
@@ -381,15 +351,11 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_METAPOD] =
-    {
-        .baseHP = 85,
-        .baseAttack = 20,
-        .baseDefense = 65,
-        .baseSpeed = 30,
-        .baseSpAttack = 25,
-        .baseSpDefense = 25,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(85, 20, 65, 30, 25, 25),
         .type1 = TYPE_BUG,
-        .type2 = TYPE_BUG,
+        .type2 = TYPE_BUG, //potentially make normal bug? would be stronger but then who would be normal but, keep aneye on this prob use type
         .catchRate = 120,
         .expYield = 72,
         //.evYield_Defense = 2,
@@ -407,14 +373,9 @@ const struct BaseStats gBaseStats[] =
   //ok augment hp for late game effectiveness hopefully balanced by you encountering them at such low level bc the hp formula isn't fully effective
 
     [SPECIES_BUTTERFREE] =
-    {
-        .baseHP = 60,
-        .baseAttack = 45,
-        .baseDefense = 50,
-        .baseSpeed = 90,
-        .baseSpDefense = 80,
-        .baseSpAttack = 95,
-        
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 45, 50, 90, 95, 80),     
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -437,13 +398,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WEEDLE] =
-    {
-        .baseHP = 40,
-        .baseAttack = 35,
-        .baseDefense = 30,
-        .baseSpeed = 50,
-        .baseSpAttack = 20,
-        .baseSpDefense = 40,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 35, 30, 50, 20, 40),
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
         .catchRate = 255,
@@ -462,13 +419,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KAKUNA] =
-    {
-        .baseHP = 75,
-        .baseAttack = 25,
-        .baseDefense = 50,
-        .baseSpeed = 35,
-        .baseSpAttack = 25,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 25, 50, 35, 25, 65),
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
         .catchRate = 120,
@@ -486,13 +439,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BEEDRILL] =
-    {
-        .baseHP = 65,
-        .baseDefense = 40,
-        .baseSpeed = 95,
-        .baseSpAttack = 45,
-        .baseSpDefense = 98,
-        .baseAttack = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 95, 40, 95, 45, 98),
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
         .catchRate = 45,
@@ -515,13 +464,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIDGEY] =
-    {
-        .baseHP = 40,
-        .baseAttack = 45,
-        .baseDefense = 40,
-        .baseSpeed = 67,
-        .baseSpAttack = 35,
-        .baseSpDefense = 35,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 45, 40, 67, 35, 35),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 255,
@@ -541,13 +486,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIDGEOTTO] =
-    {
-        .baseHP = 63,
-        .baseAttack = 60,
-        .baseDefense = 55,
-        .baseSpeed = 91,
-        .baseSpAttack = 50,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(63, 60, 55, 91, 50, 50),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 120,
@@ -567,13 +508,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIDGEOT] =
-    {
-        .baseHP = 105,
-        .baseAttack = 90,
-        .baseDefense = 85,
-        .baseSpAttack = 70,
-        .baseSpDefense = 80,
-        .baseSpeed = 121,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(105, 90, 85, 121, 70, 80),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -593,13 +530,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RATTATA] =
-    {
-        .baseHP = 30,
-        .baseAttack = 56,
-        .baseDefense = 35,
-        .baseSpeed = 72,
-        .baseSpAttack = 25,
-        .baseSpDefense = 35,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(30, 56, 35, 72, 25, 35),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 255,
@@ -618,13 +551,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RATICATE] =
-    {
-        .baseHP = 60,
-        .baseAttack = 87,
-        .baseDefense = 60,
-        .baseSpeed = 109,
-        .baseSpAttack = 50,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 87, 60, 109, 50, 70),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 127,
@@ -643,13 +572,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SPEAROW] =
-    {
-        .baseHP = 40,
-        .baseAttack = 60,
-        .baseDefense = 30,
-        .baseSpeed = 70,
-        .baseSpAttack = 31,
-        .baseSpDefense = 31,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 60, 30, 70, 31, 31),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 255,
@@ -671,13 +596,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FEAROW] =
-    {
-        .baseHP = 65,
-        .baseAttack = 100,
-        .baseDefense = 65,
-        .baseSpeed = 100,
-        .baseSpAttack = 61,
-        .baseSpDefense = 61,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 100, 65, 100, 61, 61),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 90,
@@ -699,13 +620,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_EKANS] =
-    {
-        .baseHP = 35,
-        .baseAttack = 60,
-        .baseDefense = 44,
-        .baseSpeed = 55,
-        .baseSpAttack = 40,
-        .baseSpDefense = 64,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(35, 60, 44, 55, 40, 64),
         .type1 = TYPE_POISON,
         .type2 = TYPE_NORMAL,
         .catchRate = 255,
@@ -726,13 +643,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARBOK] =
-    {
-        .baseHP = 60,
-        .baseDefense = 69,
-        .baseSpeed = 87,
-        .baseSpAttack = 80,
-        .baseSpDefense = 89,
-        .baseAttack = 96,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 96, 69, 87, 80, 89),
         .type1 = TYPE_POISON,
         .type2 = TYPE_NORMAL,
         .catchRate = 90,
@@ -753,13 +666,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIKACHU] =
-    {
-        .baseHP = 35,
-        .baseAttack = 75,
-        .baseSpeed = 95,
-        .baseSpAttack = 85,
-        .baseDefense = 40,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(35, 75, 40, 95, 85, 50),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 190,
@@ -779,13 +688,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RAICHU] =
-    {
-        .baseHP = 60,
-        .baseAttack = 100,
-        .baseDefense = 55,
-        .baseSpAttack = 95,
-        .baseSpDefense = 90,
-        .baseSpeed = 110,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 100, 75, 70, 95, 90),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 75,
@@ -804,13 +709,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SANDSHREW] =
-    {
-        .baseHP = 50,
-        .baseAttack = 75,
-        .baseDefense = 85,
-        .baseSpeed = 65,
-        .baseSpAttack = 20,
-        .baseSpDefense = 30,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(50, 75, 85, 65, 20, 30),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GROUND,
         .catchRate = 255,
@@ -834,13 +735,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SANDSLASH] =
-    {
-        .baseHP = 75,
-        .baseAttack = 100,
-        .baseDefense = 110,
-        .baseSpeed = 75,
-        .baseSpAttack = 45,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 100, 110, 75, 45, 55),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GROUND,
         .catchRate = 90,
@@ -864,13 +761,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NIDORAN_F] =
-    {
-        .baseHP = 55,
-        .baseAttack = 47,
-        .baseDefense = 52,
-        .baseSpeed = 41,
-        .baseSpAttack = 40,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 47, 52, 41, 40, 50),
         .type1 = TYPE_POISON,
         .type2 = TYPE_NORMAL,
         .catchRate = 235,
@@ -891,13 +784,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NIDORINA] =
-    {
-        .baseHP = 70,
-        .baseAttack = 62,
-        .baseDefense = 67,
-        .baseSpeed = 56,
-        .baseSpAttack = 55,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 62, 67, 56, 55, 75),
         .type1 = TYPE_POISON,
         .type2 = TYPE_NORMAL,
         .catchRate = 120,
@@ -918,13 +807,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NIDOQUEEN] =
-    {
-        .baseHP = 97,
-        .baseDefense = 87,
-        .baseSpeed = 76,
-        .baseSpAttack = 90,
-        .baseSpDefense = 105,
-        .baseAttack = 92,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(97, 92, 87, 76, 90, 105),
         .type1 = TYPE_POISON,
         .type2 = TYPE_NORMAL,
         .catchRate = 45,
@@ -944,7 +829,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NIDORAN_M] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(46, 57, 40, 50, 40, 50),
         .baseHP = 46,
         .baseAttack = 57,
         .baseDefense = 40,
@@ -971,13 +858,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NIDORINO] =
-    {
-        .baseHP = 61,
-        .baseAttack = 77,
-        .baseDefense = 57,
-        .baseSpeed = 65,
-        .baseSpAttack = 55,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(61, 77, 57, 65, 55, 65),
         .type1 = TYPE_POISON,
         .type2 = TYPE_NORMAL,
         .catchRate = 120,
@@ -998,13 +881,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NIDOKING] =
-    {
-        .baseHP = 81,
-        .baseDefense = 77,
-        .baseSpeed = 85,
-        .baseSpAttack = 91,
-        .baseSpDefense = 95,
-        .baseAttack = 102,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(81, 102, 77, 85, 91, 95),
         .type1 = TYPE_POISON,
         .type2 = TYPE_DARK, //initially forgot logic, but traded electric immunity for psychic immunity, while poison covers the bug and fighting weakness, 
         .catchRate = 45,    //as well as the other dark benefits I get.   //same thing for nidoqueen except she gets normal benefits
@@ -1025,13 +904,9 @@ const struct BaseStats gBaseStats[] =
     //they attempted to, it just didn't work, yeah find work around, similar idea to anger point
 
     [SPECIES_CLEFAIRY] =
-    {
-        .baseHP = 70,
-        .baseAttack = 45,
-        .baseDefense = 48,
-        .baseSpeed = 35,
-        .baseSpAttack = 60,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 45, 48, 35, 60, 65),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FAIRY,
         .catchRate = 150,
@@ -1052,13 +927,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CLEFABLE] =
-    {
-        .baseHP = 105,
-        .baseAttack = 70,
-        .baseDefense = 73,
-        .baseSpeed = 60,
-        .baseSpDefense = 100,
-        .baseSpAttack = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(105, 70, 73, 60, 100, 95),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FAIRY,
         .catchRate = 25,
@@ -1079,13 +950,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VULPIX] =
-    {
-        .baseHP = 38,
-        .baseAttack = 41,
-        .baseDefense = 40,
-        .baseSpeed = 65,
-        .baseSpAttack = 50,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(38, 41, 40, 65, 50, 65),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 190,
@@ -1105,13 +972,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NINETALES] =
-    {
-        .baseHP = 73,
-        .baseAttack = 76,
-        .baseDefense = 75,
-        .baseSpeed = 100,
-        .baseSpAttack = 81,
-        .baseSpDefense = 100,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(73, 76, 75, 100, 81, 100),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 75,
@@ -1132,13 +995,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_JIGGLYPUFF] =
-    {
-        .baseHP = 115,
-        .baseAttack = 45,
-        .baseDefense = 37,
-        .baseSpeed = 20,
-        .baseSpAttack = 45,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(115, 45, 37, 20, 45, 50),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FAIRY,
         .catchRate = 170,
@@ -1159,13 +1018,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WIGGLYTUFF] =
-    {
-        .baseHP = 140,
-        .baseAttack = 70,
-        .baseDefense = 55,
-        .baseSpeed = 45,
-        .baseSpDefense = 68,
-        .baseSpAttack = 85,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(140, 70, 55, 45, 85, 68),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FAIRY,
         .catchRate = 50,
@@ -1186,13 +1041,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZUBAT] =
-    {
-        .baseHP = 40,
-        .baseAttack = 45,
-        .baseDefense = 35,
-        .baseSpeed = 55,
-        .baseSpAttack = 30,
-        .baseSpDefense = 53,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 45, 35, 55, 30, 53),
         .type1 = TYPE_POISON,
         .type2 = TYPE_FLYING,
         .catchRate = 255,
@@ -1213,13 +1064,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOLBAT] =
-    {
-        .baseHP = 75,
-        .baseAttack = 80,
-        .baseDefense = 70,
-        .baseSpeed = 85,
-        .baseSpAttack = 65,
-        .baseSpDefense = 82,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 80, 70, 85, 65, 82),
         .type1 = TYPE_POISON,
         .type2 = TYPE_FLYING,
         .catchRate = 90,
@@ -1240,13 +1087,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ODDISH] =
-    {
-        .baseHP = 60,
-        .baseAttack = 50,
-        .baseDefense = 55,
-        .baseSpeed = 30,
-        .baseSpAttack = 75,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 50, 55, 30, 75, 75),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
         .catchRate = 255,
@@ -1268,13 +1111,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GLOOM] =
-    {
-        .baseHP = 75,
-        .baseAttack = 65,
-        .baseDefense = 70,
-        .baseSpeed = 40,
-        .baseSpAttack = 85,
-        .baseSpDefense = 85,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 65, 70, 40, 85, 85),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
         .catchRate = 120,
@@ -1296,13 +1135,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VILEPLUME] =
-    {
-        .baseHP = 85,
-        .baseAttack = 80,
-        .baseDefense = 85,
-        .baseSpeed = 50,
-        .baseSpDefense = 101,
-        .baseSpAttack = 110,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(85, 80, 85, 50, 110, 101),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
         .catchRate = 45,
@@ -1324,13 +1159,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PARAS] =
-    {
-        .baseHP = 65,
-        .baseAttack = 78,
-        .baseDefense = 67,
-        .baseSpeed = 55,
-        .baseSpAttack = 45,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 78, 67, 63, 45, 75),
         .type1 = TYPE_BUG,
         .type2 = TYPE_GRASS,
         .catchRate = 190,
@@ -1353,13 +1184,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PARASECT] =
-    {
-        .baseHP = 88,
-        .baseAttack = 95,
-        .baseDefense = 115,
-        .baseSpeed = 30,
-        .baseSpAttack = 60,
-        .baseSpDefense = 88,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(88, 95, 115, 30, 60, 88),
         .type1 = TYPE_BUG,  //think prefer grass for mushroom, as bug is dead the mushroom is the only thing left to be affected
         .type2 = TYPE_GHOST,    //changed back,its the body of a bug its abilities can represent the mushroom effect, plus type strength is about same
         .catchRate = 75,
@@ -1391,13 +1218,9 @@ const struct BaseStats gBaseStats[] =
     //perhaps aftermath?
 
     [SPECIES_VENONAT] =
-    {
-        .baseHP = 67,
-        .baseAttack = 55,
-        .baseDefense = 50,
-        .baseSpeed = 60,
-        .baseSpAttack = 45,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(67, 55, 50, 60, 45, 75),
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
         .catchRate = 190,
@@ -1415,16 +1238,12 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_RUN_AWAY, ABILITY_ANTICIPATION},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-    },
+    }, //since it has tinted lens I kinda want this to be normal type..but its literlaly venom nat so poison bug
 
     [SPECIES_VENOMOTH] =
-    {
-        .baseHP = 77,
-        .baseAttack = 65,
-        .baseDefense = 60,
-        .baseSpeed = 100,
-        .baseSpAttack = 100,
-        .baseSpDefense = 90,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(77, 65, 60, 100, 100, 90),
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
         .catchRate = 75,
@@ -1449,15 +1268,11 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DIGLETT] =
-    {
-        .baseHP = 10,
-        .baseAttack = 55,
-        .baseDefense = 25,
-        .baseSpeed = 95,
-        .baseSpAttack = 35,
-        .baseSpDefense = 45,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(10, 55, 25, 95, 35, 45),
         .type1 = TYPE_GROUND,
-        .type2 = TYPE_GROUND,
+        .type2 = TYPE_NORMAL,
         .catchRate = 255,
         .expYield = 53,
         //.evYield_Speed = 1,
@@ -1474,18 +1289,14 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-    },
+    },//making normal ground for more dmg
 
     [SPECIES_DUGTRIO] =
-    {
-        .baseHP = 35,
-        .baseDefense = 50,
-        .baseSpeed = 120,
-        .baseSpAttack = 50,
-        .baseSpDefense = 70,
-        .baseAttack = 105,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(35, 105, 50, 120, 50, 70),
         .type1 = TYPE_GROUND,
-        .type2 = TYPE_GROUND,
+        .type2 = TYPE_NORMAL,
         .catchRate = 50,
         .expYield = 149,
         //.evYield_Speed = 2,
@@ -1505,13 +1316,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MEOWTH] =
-    {
-        .baseHP = 40,
-        .baseAttack = 45,
-        .baseDefense = 35,
-        .baseSpeed = 90,
-        .baseSpAttack = 40,
-        .baseSpDefense = 40,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 45, 35, 90, 40, 40),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 255,
@@ -1532,13 +1339,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PERSIAN] =
-    {
-        .baseHP = 65,
-        .baseAttack = 70,
-        .baseDefense = 60,
-        .baseSpeed = 115,
-        .baseSpAttack = 77,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 70, 60, 115, 77, 65),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 90,
@@ -1559,13 +1362,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PSYDUCK] =
-    {
-        .baseHP = 40,
-        .baseAttack = 56,
-        .baseDefense = 58,
-        .baseSpeed = 55,
-        .baseSpAttack = 85,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 56, 58, 55, 85, 65),
         .type1 = TYPE_WATER,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 190,
@@ -1585,13 +1384,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOLDUCK] =
-    {
-        .baseHP = 90,
-        .baseAttack = 95,
-        .baseDefense = 78,
-        .baseSpeed = 85,
-        .baseSpAttack = 95,
-        .baseSpDefense = 87,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 95, 78, 85, 95, 87),
         .type1 = TYPE_WATER,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 75,
@@ -1610,13 +1405,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MANKEY] =
-    {
-        .baseHP = 48,
-        .baseAttack = 80,
-        .baseDefense = 50,
-        .baseSpeed = 77,
-        .baseSpAttack = 35,
-        .baseSpDefense = 45,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(48, 80, 50, 77, 35, 45),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_NORMAL,
         .catchRate = 190,
@@ -1636,13 +1427,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PRIMEAPE] =
-    {
-        .baseHP = 69,
-        .baseAttack = 105,
-        .baseDefense = 65,
-        .baseSpeed = 105,
-        .baseSpAttack = 60,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(69, 105, 65, 105, 60, 70),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_NORMAL,
         .catchRate = 75,
@@ -1662,13 +1449,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GROWLITHE] =
-    {
-        .baseHP = 55,
-        .baseAttack = 70,
-        .baseDefense = 45,
-        .baseSpeed = 70,
-        .baseSpAttack = 70,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 70, 45, 70, 70, 50),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FIRE,
         .catchRate = 190,
@@ -1689,13 +1472,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCANINE] =
-    {
-        .baseHP = 90,
-        .baseAttack = 110,
-        .baseDefense = 80,
-        .baseSpeed = 105,
-        .baseSpAttack = 100,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 110, 80, 105, 100, 80),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FIRE,
         .catchRate = 75,
@@ -1716,13 +1495,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_POLIWAG] =
-    {
-        .baseHP = 40,
-        .baseAttack = 50,
-        .baseDefense = 40,
-        .baseSpeed = 90,
-        .baseSpAttack = 40,
-        .baseSpDefense = 40,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 50, 40, 90, 40, 40),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 255,
@@ -1742,13 +1517,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_POLIWHIRL] =
-    {
-        .baseHP = 65,
-        .baseAttack = 65,
-        .baseDefense = 75,
-        .baseSpeed = 90,
-        .baseSpAttack = 50,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 65, 75, 90, 50, 50),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 120,
@@ -1768,13 +1539,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_POLIWRATH] =
-    {
-        .baseHP = 90,
-        .baseDefense = 105,
-        .baseSpeed = 70,
-        .baseSpAttack = 70,
-        .baseSpDefense = 90,
-        .baseAttack = 105,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 105, 105, 70, 70, 90),
         .type1 = TYPE_WATER,
         .type2 = TYPE_FIGHTING,
         .catchRate = 45,
@@ -1794,13 +1561,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ABRA] =
-    {
-        .baseHP = 85,
-        .baseAttack = 20,
-        .baseDefense = 25,
-        .baseSpeed = 90,
-        .baseSpAttack = 105,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(85, 20, 25, 90, 105, 55),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 200,
@@ -1813,22 +1576,18 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
-        .abilities = {ABILITY_COMATOSE, ABILITY_ANTICIPATION},
+        .abilities = {ABILITY_COMATOSE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_MAGIC_GUARD, ABILITY_NONE},
+            .abilityHidden = {ABILITY_MAGIC_GUARD, ABILITY_ANTICIPATION},
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },//buffed hp as perma sleep,  buffing comatose w healing as mon can't rest think will attempt to set to have sleep status icon, no reason not to
 
     [SPECIES_KADABRA] =
-    {
-        .baseHP = 40,
-        .baseAttack = 35,
-        .baseDefense = 30,
-        .baseSpeed = 105,
-        .baseSpAttack = 120,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 35, 30, 105, 120, 70),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 100,
@@ -1850,13 +1609,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALAKAZAM] =
-    {
-        .baseHP = 55,
-        .baseAttack = 50,
-        .baseDefense = 45,
-        .baseSpeed = 120,
-        .baseSpAttack = 135,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 50, 45, 120, 135, 95),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 50,
@@ -1878,13 +1633,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MACHOP] =
-    {
-        .baseHP = 70,
-        .baseAttack = 80,
-        .baseDefense = 50,
-        .baseSpeed = 35,
-        .baseSpAttack = 35,
-        .baseSpDefense = 35,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 80, 50, 35, 35, 35),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
         .catchRate = 180,
@@ -1905,13 +1656,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MACHOKE] =
-    {
-        .baseHP = 80,
-        .baseAttack = 100,
-        .baseDefense = 70,
-        .baseSpeed = 45,
-        .baseSpAttack = 50,
-        .baseSpDefense = 60,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(80, 100, 70, 45, 50, 60),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
         .catchRate = 90,
@@ -1932,13 +1679,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MACHAMP] =
-    {
-        .baseHP = 90,
-        .baseAttack = 130,
-        .baseDefense = 80,
-        .baseSpeed = 60,
-        .baseSpAttack = 65,
-        .baseSpDefense = 85,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 130, 80, 60, 65, 85),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
         .catchRate = 45,
@@ -1959,13 +1702,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BELLSPROUT] =
-    {
-        .baseHP = 65,
-        .baseAttack = 75,
-        .baseDefense = 36,
-        .baseSpeed = 89,
-        .baseSpAttack = 70,
-        .baseSpDefense = 56,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 75, 36, 89, 70, 56),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
         .catchRate = 255,
@@ -1988,13 +1727,9 @@ const struct BaseStats gBaseStats[] =
     //can lower others as needed.
 
     [SPECIES_WEEPINBELL] =
-    {
-        .baseHP = 90,
-        .baseAttack = 90,
-        .baseDefense = 50,
-        .baseSpeed = 55,
-        .baseSpAttack = 85,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 90, 50, 55, 85, 65),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
         .catchRate = 120,
@@ -2015,13 +1750,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VICTREEBEL] =
-    {
-        .baseHP = 111,
-        .baseAttack = 105,
-        .baseDefense = 75,
-        .baseSpeed = 57,
-        .baseSpAttack = 100,
-        .baseSpDefense = 87,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(111, 105, 75, 57, 100, 87),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
         .catchRate = 45,
@@ -2042,13 +1773,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TENTACOOL] =
-    {
-        .baseHP = 40,
-        .baseAttack = 40,
-        .baseDefense = 75,
-        .baseSpeed = 70,
-        .baseSpAttack = 50,
-        .baseSpDefense = 100,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 40, 75, 70, 50, 100),
         .type1 = TYPE_WATER,
         .type2 = TYPE_POISON,
         .catchRate = 190,
@@ -2068,13 +1795,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TENTACRUEL] =
-    {
-        .baseHP = 60,
-        .baseAttack = 70,
-        .baseDefense = 95,
-        .baseSpeed = 100,
-        .baseSpAttack = 80,
-        .baseSpDefense = 130,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 70, 95, 100, 80, 130),
         .type1 = TYPE_WATER,
         .type2 = TYPE_POISON,
         .catchRate = 60,
@@ -2094,13 +1817,9 @@ const struct BaseStats gBaseStats[] =
     },
    
     [SPECIES_GEODUDE] =
-    {
-        .baseHP = 45,
-        .baseAttack = 80,
-        .baseDefense = 100,
-        .baseSpeed = 20,
-        .baseSpAttack = 30,
-        .baseSpDefense = 45,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 80, 100, 20, 30, 45),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_GROUND,
         .catchRate = 255,
@@ -2120,13 +1839,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GRAVELER] =
-    {
-        .baseHP = 60,
-        .baseAttack = 95,
-        .baseDefense = 115,
-        .baseSpeed = 35,
-        .baseSpAttack = 45,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 95, 115, 35, 45, 65),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_GROUND,
         .catchRate = 120,
@@ -2146,13 +1861,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOLEM] =
-    {
-        .baseHP = 85,
-        .baseDefense = 130,
-        .baseSpeed = 45,
-        .baseSpAttack = 55,
-        .baseSpDefense = 75,
-        .baseAttack = 120,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(85, 120, 130, 45, 55, 75),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_GROUND,
         .catchRate = 45,
@@ -2172,13 +1883,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PONYTA] =
-    {
-        .baseHP = 50,
-        .baseAttack = 85,
-        .baseDefense = 55,
-        .baseSpeed = 90,
-        .baseSpAttack = 65,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(50, 85, 55, 90, 65, 65),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 190,
@@ -2197,13 +1904,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RAPIDASH] =
-    {
-        .baseHP = 65,
-        .baseAttack = 100,
-        .baseDefense = 70,
-        .baseSpeed = 105,
-        .baseSpAttack = 80,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 100, 70, 105, 80, 80),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 60,
@@ -2222,13 +1925,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SLOWPOKE] =
-    {
-        .baseHP = 90,
-        .baseAttack = 65,
-        .baseDefense = 65,
-        .baseSpeed = 15,
-        .baseSpAttack = 40,
-        .baseSpDefense = 40,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 65, 65, 15, 40, 40),
         .type1 = TYPE_WATER,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 190,
@@ -2253,13 +1952,9 @@ const struct BaseStats gBaseStats[] =
     }, //buff tm learnset and mvoe pool needs it badly  learning payvback,gyro ball slow moves, and more water moves early would be good
 
     [SPECIES_SLOWBRO] =
-    {
-        .baseHP = 95,
-        .baseAttack = 75,
-        .baseDefense = 110,
-        .baseSpeed = 30,
-        .baseSpAttack = 100,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(95, 75, 110, 30, 100, 80),
         .type1 = TYPE_WATER,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 75,
@@ -2281,13 +1976,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAGNEMITE] =
-    {
-        .baseHP = 25,
-        .baseAttack = 35,
-        .baseDefense = 70,
-        .baseSpeed = 45,
-        .baseSpAttack = 95,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(25, 35, 70, 45, 95, 55),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_STEEL,
         .catchRate = 190,
@@ -2309,13 +2000,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAGNETON] =
-    {
-        .baseHP = 50,
-        .baseAttack = 60,
-        .baseDefense = 95,
-        .baseSpeed = 70,
-        .baseSpAttack = 120,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(50, 60, 95, 70, 120, 70),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_STEEL,
         .catchRate = 60,
@@ -2337,13 +2024,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FARFETCHD] =
-    {
-        .baseHP = 70,
-        .baseDefense = 60,
-        .baseSpeed = 60,
-        .baseSpAttack = 50,
-        .baseSpDefense = 62,
-        .baseAttack = 105,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 105, 60, 60, 50, 62),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -2365,13 +2048,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DODUO] =
-    {
-        .baseHP = 50,
-        .baseAttack = 85,
-        .baseDefense = 45,
-        .baseSpeed = 75,
-        .baseSpAttack = 35,
-        .baseSpDefense = 35,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(50, 85, 45, 75, 35, 35),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 190,
@@ -2394,13 +2073,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DODRIO] =
-    {
-        .baseHP = 70,
-        .baseAttack = 110,
-        .baseDefense = 70,
-        .baseSpAttack = 60,
-        .baseSpDefense = 60,
-        .baseSpeed = 110,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 110, 70, 110, 60, 60),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -2422,13 +2097,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SEEL] =
-    {
-        .baseHP = 65,
-        .baseAttack = 45,
-        .baseDefense = 55,
-        .baseSpeed = 55,
-        .baseSpAttack = 45,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 45, 55, 55, 45, 70),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 190,
@@ -2448,13 +2119,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DEWGONG] =
-    {
-        .baseHP = 90,
-        .baseAttack = 70,
-        .baseDefense = 80,
-        .baseSpeed = 76,
-        .baseSpAttack = 85,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 70, 80, 76, 85, 95),
         .type1 = TYPE_WATER,
         .type2 = TYPE_ICE,
         .catchRate = 75,
@@ -2474,13 +2141,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GRIMER] =
-    {
-        .baseHP = 80,
-        .baseAttack = 80,
-        .baseDefense = 50,
-        .baseSpeed = 25,
-        .baseSpAttack = 40,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(80, 80, 50, 25, 40, 65),
         .type1 = TYPE_POISON,
         .type2 = TYPE_POISON,
         .catchRate = 190,
@@ -2504,13 +2167,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MUK] =
-    {
-        .baseHP = 105,
-        .baseAttack = 105,
-        .baseDefense = 75,
-        .baseSpeed = 50,
-        .baseSpAttack = 65,
-        .baseSpDefense = 100,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(105, 105, 75, 50, 65, 100),
         .type1 = TYPE_POISON,
         .type2 = TYPE_POISON,
         .catchRate = 75,
@@ -2535,13 +2194,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHELLDER] =
-    {
-        .baseHP = 30,
-        .baseAttack = 65,
-        .baseDefense = 100,
-        .baseSpeed = 54,
-        .baseSpAttack = 45,
-        .baseSpDefense = 25,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(30, 65, 100, 54, 45, 25),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 190,
@@ -2563,13 +2218,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CLOYSTER] =
-    {
-        .baseHP = 55,
-        .baseAttack = 95,
-        .baseDefense = 180,
-        .baseSpeed = 65,
-        .baseSpAttack = 85,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 95, 180, 65, 85, 50),
         .type1 = TYPE_ICE,  //most moves were ice rather than water related plus its a clam which makes pearls so kinda fitting
         .type2 = TYPE_ROCK,
         .catchRate = 60,
@@ -2591,13 +2242,9 @@ const struct BaseStats gBaseStats[] =
     },//need add rock moves
 
     [SPECIES_GASTLY] =
-    {
-        .baseHP = 30,
-        .baseAttack = 55,
-        .baseDefense = 30,
-        .baseSpeed = 80,
-        .baseSpAttack = 100,
-        .baseSpDefense = 45,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(30, 55, 30, 80, 100, 45),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_POISON,
         .catchRate = 190,
@@ -2616,13 +2263,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HAUNTER] =
-    {
-        .baseHP = 45,
-        .baseAttack = 70,
-        .baseDefense = 45,
-        .baseSpeed = 95,
-        .baseSpAttack = 115,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 70, 45, 95, 115, 75),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_POISON,
         .catchRate = 90,
@@ -2640,13 +2283,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GENGAR] =
-    {
-        .baseHP = 60,
-        .baseAttack = 85,
-        .baseDefense = 60,
-        .baseSpeed = 110,
-        .baseSpAttack = 130,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 85, 60, 110, 130, 80),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_POISON,
         .catchRate = 45,
@@ -2666,13 +2305,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ONIX] =
-    {
-        .baseHP = 35,
-        .baseAttack = 62,
-        .baseDefense = 160,
-        .baseSpeed = 77,
-        .baseSpAttack = 30,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(35, 62, 160, 77, 30, 55),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_GROUND,
         .catchRate = 45,
@@ -2693,13 +2328,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DROWZEE] =
-    {
-        .baseHP = 70,
-        .baseAttack = 48,
-        .baseDefense = 45,
-        .baseSpeed = 42,
-        .baseSpAttack = 43,
-        .baseSpDefense = 90,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 48, 45, 42, 43, 90),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 190,
@@ -2719,13 +2350,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HYPNO] =
-    {
-        .baseHP = 105,
-        .baseAttack = 73,
-        .baseDefense = 70,
-        .baseSpeed = 67,
-        .baseSpAttack = 73,
-        .baseSpDefense = 115,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(105, 73, 70, 67, 73, 115),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 75,
@@ -2745,13 +2372,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KRABBY] =
-    {
-        .baseHP = 30,
-        .baseAttack = 105,
-        .baseDefense = 90,
-        .baseSpeed = 55,
-        .baseSpAttack = 39,
-        .baseSpDefense = 25,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(30, 105, 90, 55, 39, 25),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 225,
@@ -2772,13 +2395,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KINGLER] =
-    {
-        .baseHP = 55,
-        .baseAttack = 130,
-        .baseDefense = 115,
-        .baseSpeed = 75,
-        .baseSpAttack = 50,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 130, 115, 75, 50, 50),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 60,
@@ -2799,13 +2418,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VOLTORB] =
-    {
-        .baseHP = 40,
-        .baseAttack = 30,
-        .baseDefense = 55,
-        .baseSpeed = 105,
-        .baseSpAttack = 65,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 30, 55, 105, 65, 75),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_STEEL,
         .catchRate = 190,
@@ -2826,13 +2441,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ELECTRODE] =
-    {
-        .baseHP = 60,
-        .baseAttack = 50,
-        .baseDefense = 75,
-        .baseSpAttack = 95,
-        .baseSpDefense = 100,
-        .baseSpeed = 150,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 50, 75, 150, 95, 100),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_STEEL,
         .catchRate = 60,
@@ -2853,13 +2464,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_EXEGGCUTE] =
-    {
-        .baseHP = 75,
-        .baseAttack = 55,
-        .baseDefense = 101,
-        .baseSpeed = 40,
-        .baseSpAttack = 60,
-        .baseSpDefense = 45,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 55, 101, 40, 60, 45),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 90,
@@ -2884,13 +2491,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_EXEGGUTOR] =
-    {
-        .baseHP = 115,
-        .baseAttack = 95,
-        .baseDefense = 85,
-        .baseSpeed = 55,
-        .baseSpAttack = 125,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(115, 95, 85, 55, 125, 75),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 45,
@@ -2911,13 +2514,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CUBONE] =
-    {
-        .baseHP = 50,
-        .baseAttack = 50,
-        .baseDefense = 95,
-        .baseSpeed = 45,
-        .baseSpAttack = 40,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(50, 50, 95, 45, 40, 50),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GROUND,
         .catchRate = 190,
@@ -2937,13 +2536,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAROWAK] =
-    {
-        .baseHP = 60,
-        .baseAttack = 88,
-        .baseDefense = 118,
-        .baseSpeed = 65,
-        .baseSpAttack = 50,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 88, 118, 65, 50, 80),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GROUND,
         .catchRate = 75,
@@ -2963,13 +2558,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HITMONLEE] =
-    {
-        .baseHP = 50,
-        .baseAttack = 121,
-        .baseDefense = 53,
-        .baseSpeed = 87,
-        .baseSpAttack = 35,
-        .baseSpDefense = 110,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(50, 121, 53, 87, 35, 110),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
         .catchRate = 45,
@@ -2989,13 +2580,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HITMONCHAN] =
-    {
-        .baseHP = 50,
-        .baseAttack = 105,
-        .baseDefense = 79,
-        .baseSpeed = 76,
-        .baseSpAttack = 35,
-        .baseSpDefense = 123,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(50, 105, 79, 76, 35, 123),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
         .catchRate = 45,
@@ -3015,13 +2602,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LICKITUNG] =
-    {
-        .baseHP = 112,
-        .baseAttack = 55,
-        .baseDefense = 75,
-        .baseSpeed = 30,
-        .baseSpAttack = 60,
-        .baseSpDefense = 96,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(112, 55, 75, 30, 60, 96),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_POISON,
         .catchRate = 45,
@@ -3043,13 +2626,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KOFFING] =
-    {
-        .baseHP = 40,
-        .baseAttack = 65,
-        .baseDefense = 75,
-        .baseSpeed = 35,
-        .baseSpAttack = 60,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 65, 75, 35, 60, 95),
         .type1 = TYPE_POISON,
         .type2 = TYPE_POISON,
         .catchRate = 190,
@@ -3070,13 +2649,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WEEZING] =
-    {
-        .baseHP = 65,
-        .baseAttack = 90,
-        .baseDefense = 88,
-        .baseSpeed = 60,
-        .baseSpAttack = 85,
-        .baseSpDefense = 120,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 90, 88, 60, 85, 120),
         .type1 = TYPE_POISON,
         .type2 = TYPE_POISON,
         .catchRate = 60,
@@ -3097,13 +2672,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RHYHORN] =
-    {
-        .baseHP = 80,
-        .baseAttack = 85,
-        .baseDefense = 95,
-        .baseSpeed = 25,
-        .baseSpAttack = 30,
-        .baseSpDefense = 45,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(80, 85, 95, 25, 30, 45),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_ROCK,
         .catchRate = 120,
@@ -3125,13 +2696,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RHYDON] =
-    {
-        .baseHP = 105,
-        .baseAttack = 130,
-        .baseDefense = 120,
-        .baseSpeed = 40,
-        .baseSpAttack = 45,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(105, 130, 120, 40, 45, 65),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_ROCK,
         .catchRate = 60,
@@ -3152,13 +2719,9 @@ const struct BaseStats gBaseStats[] =
     }, //give head charge & headlong rush
 
     [SPECIES_CHANSEY] =
-    {
-        .baseHP = 250,
-        .baseAttack = 15,
-        .baseDefense = 10,
-        .baseSpeed = 50,
-        .baseSpAttack = 45,
-        .baseSpDefense = 105,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(250, 15, 10, 50, 45, 105),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FAIRY,
         .catchRate = 30,
@@ -3181,13 +2744,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TANGELA] =
-    {
-        .baseHP = 85,
-        .baseAttack = 55,
-        .baseDefense = 115,
-        .baseSpeed = 60,
-        .baseSpAttack = 100,
-        .baseSpDefense = 51,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(85, 54, 115, 60, 100, 51),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
         .catchRate = 45,
@@ -3207,13 +2766,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KANGASKHAN] =
-    {
-        .baseHP = 105,
-        .baseAttack = 95,
-        .baseDefense = 80,
-        .baseSpeed = 90,
-        .baseSpAttack = 40,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(105, 95, 80, 90, 40, 80),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 45,
@@ -3234,13 +2789,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HORSEA] =
-    {
-        .baseHP = 30,
-        .baseAttack = 40,
-        .baseDefense = 70,
-        .baseSpeed = 60,
-        .baseSpAttack = 70,
-        .baseSpDefense = 25,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(30, 40, 70, 60, 70, 25),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 225,
@@ -3261,13 +2812,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SEADRA] =
-    {
-        .baseHP = 55,
-        .baseAttack = 65,
-        .baseDefense = 95,
-        .baseSpeed = 85,
-        .baseSpAttack = 95,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 65, 95, 85, 95, 55),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 75,
@@ -3289,13 +2836,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOLDEEN] =
-    {
-        .baseHP = 45,
-        .baseAttack = 67,
-        .baseDefense = 60,
-        .baseSpeed = 63,
-        .baseSpAttack = 55,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 67, 60, 63, 55, 50),
         .type1 = TYPE_WATER,
         .type2 = TYPE_NORMAL,
         .catchRate = 225,
@@ -3310,19 +2853,15 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_2,
         .abilities = {ABILITY_WATER_BUBBLE, ABILITY_HYDRATION},
         .safariZoneFleeRate = 50,
-        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_STALL},
+        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_STALL},//idk why I gaev this stall, its slow but not at all bulky
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    },//thinking give unaware, keeping stall on pre evo for eviolite strats taht's about it
 
     [SPECIES_SEAKING] =
-    {
-        .baseHP = 80,
-        .baseAttack = 92,
-        .baseDefense = 65,
-        .baseSpeed = 88,
-        .baseSpAttack = 65,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(80, 92, 65, 88, 65, 80),
         .type1 = TYPE_WATER,
         .type2 = TYPE_NORMAL,
         .catchRate = 60,
@@ -3337,19 +2876,15 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_2,
         .abilities = {ABILITY_WATER_BUBBLE, ABILITY_HYDRATION},
         .safariZoneFleeRate = 75,
-        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_STALL},
+        .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_UNAWARE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },//replaced abilities since they suck, and goldeen usually doesns't learn physical water moves, VSONIC
 
     [SPECIES_STARYU] =
-    {
-        .baseHP = 30,
-        .baseAttack = 45,
-        .baseDefense = 55,
-        .baseSpeed = 85,
-        .baseSpAttack = 70,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(30, 45, 55, 85, 70, 55),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 225,
@@ -3372,13 +2907,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STARMIE] =
-    {
-        .baseHP = 60,
-        .baseAttack = 75,
-        .baseDefense = 85,
-        .baseSpeed = 115,
-        .baseSpAttack = 100,
-        .baseSpDefense = 85,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 75, 85, 115, 100, 85),
         .type1 = TYPE_WATER,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 60,
@@ -3401,13 +2932,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MR_MIME] =
-    {
-        .baseHP = 56,
-        .baseAttack = 45,
-        .baseDefense = 75,
-        .baseSpeed = 90,
-        .baseSpAttack = 100,
-        .baseSpDefense = 120,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(56, 45, 75, 90, 100, 120),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FAIRY,
         .catchRate = 45,
@@ -3427,13 +2954,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SCYTHER] =
-    {
-        .baseHP = 70,
-        .baseAttack = 110,
-        .baseDefense = 80,
-        .baseSpeed = 105,
-        .baseSpAttack = 55,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 110, 80, 105, 55, 80),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -3454,13 +2977,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_JYNX] =
-    {
-        .baseHP = 65,
-        .baseAttack = 50,
-        .baseDefense = 45,
-        .baseSpeed = 95,
-        .baseSpAttack = 115,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 50, 45, 95, 115, 95),
         .type1 = TYPE_ICE,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 45,
@@ -3480,13 +2999,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ELECTABUZZ] =
-    {
-        .baseHP = 65,
-        .baseAttack = 83,
-        .baseDefense = 57,
-        .baseSpeed = 105,
-        .baseSpAttack = 95,
-        .baseSpDefense = 85,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 83, 57, 105, 95, 85),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 45,
@@ -3508,13 +3023,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAGMAR] =
-    {
-        .baseHP = 65,
-        .baseAttack = 95,
-        .baseDefense = 57,
-        .baseSpeed = 93,
-        .baseSpAttack = 100,
-        .baseSpDefense = 85,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 95, 57, 93, 100, 85),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 45,
@@ -3536,13 +3047,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PINSIR] =
-    {
-        .baseHP = 65,
-        .baseAttack = 125,
-        .baseDefense = 100,
-        .baseSpeed = 85,
-        .baseSpAttack = 55,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 125, 100, 85, 55, 70),
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
         .catchRate = 45,
@@ -3563,13 +3070,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TAUROS] =
-    {
-        .baseHP = 75,
-        .baseAttack = 110,
-        .baseDefense = 95,
-        .baseSpeed = 110,
-        .baseSpAttack = 40,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 110, 95, 110, 40, 70),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 45,
@@ -3591,13 +3094,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAGIKARP] =
-    {
-        .baseHP = 20,
-        .baseAttack = 160,
-        .baseDefense = 125,
-        .baseSpeed = 80,
-        .baseSpAttack = 155,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(20, 160, 125, 45, 155, 95),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 255,
@@ -3616,16 +3115,12 @@ const struct BaseStats gBaseStats[] =
         .safariZoneFleeRate = 25,
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },// [done]kek make troll dex entry[ and increase max lvl 4 old rod spawn
+    },// [done]kek make troll dex entry[ and increase max lvl for old rod spawn
 
     [SPECIES_GYARADOS] =
-    {
-        .baseHP = 95,
-        .baseAttack = 125,
-        .baseDefense = 79,
-        .baseSpeed = 81,
-        .baseSpAttack = 60,
-        .baseSpDefense = 100,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(95, 125, 79, 81, 60, 100),
         .type1 = TYPE_WATER,
         .type2 = TYPE_DRAGON,
         .catchRate = 45,
@@ -3646,13 +3141,9 @@ const struct BaseStats gBaseStats[] =
     },  //give new version of rage, if doesn't already get rage
 
     [SPECIES_LAPRAS] =
-    {
-        .baseHP = 130,
-        .baseAttack = 85,
-        .baseDefense = 80,
-        .baseSpeed = 60,
-        .baseSpAttack = 85,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(130, 85, 80, 60, 85, 95),
         .type1 = TYPE_WATER,
         .type2 = TYPE_ICE,
         .catchRate = 45,
@@ -3675,13 +3166,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DITTO] =
-    {
-        .baseHP = 48,
-        .baseAttack = 99,
-        .baseDefense = 99,
-        .baseSpeed = 130,
-        .baseSpAttack = 99,
-        .baseSpDefense = 99,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(48, 99, 99, 130, 99, 99),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GHOST, //the ghost type was a joke but eh guess I'll give it night shade
         .catchRate = 35,
@@ -3706,13 +3193,9 @@ const struct BaseStats gBaseStats[] =
     },//levle up is broken...pretty sure its not able to read the species properly if you level up while transformed, or someother part of data
 
     [SPECIES_EEVEE] =
-    {
-        .baseHP = 65,
-        .baseAttack = 75,
-        .baseDefense = 55,
-        .baseSpeed = 85,
-        .baseSpAttack = 85,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 75, 55, 85, 85, 75),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,   //change up eevee stats as its evo is more of a form change than a growth imo so stats are average but actually mid game viable
         .catchRate = 45,
@@ -3733,13 +3216,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VAPOREON] =
-    {
-        .baseHP = 130,
-        .baseAttack = 65,
-        .baseDefense = 60,
-        .baseSpeed = 65,
-        .baseSpAttack = 110,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(130, 65, 60, 65, 110, 95),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -3760,13 +3239,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_JOLTEON] =
-    {
-        .baseHP = 65,
-        .baseAttack = 85,
-        .baseDefense = 60,
-        .baseSpeed = 120,
-        .baseSpAttack = 110,
-        .baseSpDefense = 90,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 85, 60, 120, 110, 90),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 45,
@@ -3787,13 +3262,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLAREON] =
-    {
-        .baseHP = 65,
-        .baseAttack = 130,
-        .baseDefense = 60,
-        .baseSpeed = 65,
-        .baseSpAttack = 95,
-        .baseSpDefense = 110,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 130, 60, 65, 95, 110),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 45,
@@ -3812,13 +3283,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PORYGON] =
-    {
-        .baseHP = 65,
-        .baseAttack = 60,
-        .baseDefense = 70,
-        .baseSpeed = 40,
-        .baseSpAttack = 85,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 60, 70, 40, 85, 75),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 45,
@@ -3838,13 +3305,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_OMANYTE] =
-    {
-        .baseHP = 35,
-        .baseAttack = 40,
-        .baseDefense = 100,
-        .baseSpeed = 35,
-        .baseSpAttack = 90,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(35, 40, 100, 35, 90, 55),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -3865,13 +3328,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_OMASTAR] =
-    {
-        .baseHP = 70,
-        .baseAttack = 60,
-        .baseDefense = 125,
-        .baseSpeed = 55,
-        .baseSpAttack = 115,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 60, 125, 55, 115, 70),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -3892,13 +3351,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KABUTO] =
-    {
-        .baseHP = 30,
-        .baseAttack = 80,
-        .baseDefense = 90,
-        .baseSpeed = 55,
-        .baseSpAttack = 55,
-        .baseSpDefense = 45,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(30, 80, 90, 55, 55, 45),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -3919,13 +3374,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KABUTOPS] =
-    {
-        .baseHP = 60,
-        .baseAttack = 115,
-        .baseDefense = 105,
-        .baseSpeed = 80,
-        .baseSpAttack = 65,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 115, 105, 80, 65, 70),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -3946,13 +3397,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AERODACTYL] =
-    {
-        .baseHP = 80,
-        .baseAttack = 105,
-        .baseDefense = 65,
-        .baseSpeed = 130,
-        .baseSpAttack = 60,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(80, 105, 65, 130, 60, 75),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_DRAGON,
         .catchRate = 45,
@@ -3973,13 +3420,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SNORLAX] =
-    {
-        .baseHP = 160,
-        .baseAttack = 110,
-        .baseDefense = 65,
-        .baseSpeed = 30,
-        .baseSpAttack = 65,
-        .baseSpDefense = 110,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(160, 110, 65, 30, 65, 110),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 25,
@@ -4003,13 +3446,9 @@ const struct BaseStats gBaseStats[] =
     //make function that checks lastuseditem from opposite side, and one that looks through berries just like neutralizing gas does abilities
 
     [SPECIES_ARTICUNO] =
-    {
-        .baseHP = 90,
-        .baseAttack = 85,
-        .baseDefense = 100,
-        .baseSpeed = 85,
-        .baseSpAttack = 115,
-        .baseSpDefense = 125,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 75, 100, 85, 115, 115),
         .type1 = TYPE_ICE,
         .type2 = TYPE_FLYING,
         .catchRate = 3,
@@ -4030,13 +3469,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZAPDOS] =
-    {
-        .baseHP = 90,
-        .baseAttack = 90,
-        .baseDefense = 85,
-        .baseSpeed = 100,
-        .baseSpAttack = 125,
-        .baseSpDefense = 90,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 90, 85, 100, 125, 90),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FLYING,
         .catchRate = 3,
@@ -4054,7 +3489,9 @@ const struct BaseStats gBaseStats[] =
     },//based on JPRPokeTrainer98 youtube vid replace pressure for most legendaries, keep for mewtwo 
 
     [SPECIES_MOLTRES] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 100, 90, 90, 125, 85),
         .baseHP = 90,
         .baseAttack = 100,
         .baseDefense = 90,
@@ -4080,13 +3517,9 @@ const struct BaseStats gBaseStats[] =
     //but with a higher chance to burn,  maybe call it primordial flame/fire  also works as a status cleanse/field cleanse
 
     [SPECIES_DRATINI] =
-    {
-        .baseHP = 41,
-        .baseAttack = 64,
-        .baseDefense = 45,
-        .baseSpeed = 50,
-        .baseSpAttack = 50,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(41, 64, 45, 50, 50, 50),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_DRAGON,
         .catchRate = 45,
@@ -4107,13 +3540,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRAGONAIR] =
-    {
-        .baseHP = 61,
-        .baseAttack = 84,
-        .baseDefense = 65,
-        .baseSpeed = 70,
-        .baseSpAttack = 70,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(61, 84, 65, 70, 70, 70),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_DRAGON,
         .catchRate = 45,
@@ -4134,13 +3563,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRAGONITE] =
-    {
-        .baseHP = 91,
-        .baseAttack = 134,
-        .baseDefense = 95,
-        .baseSpeed = 80,
-        .baseSpAttack = 100,
-        .baseSpDefense = 100,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(91, 134, 95, 80, 100, 100),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -4162,13 +3587,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MEWTWO] =
-    {
-        .baseHP = 106,
-        .baseAttack = 110,
-        .baseDefense = 90,
-        .baseSpeed = 130,
-        .baseSpAttack = 154,
-        .baseSpDefense = 90,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(106, 110, 90, 130, 154, 90),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 3,
@@ -4189,13 +3610,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MEW] =
-    {
-        .baseHP = 100,
-        .baseAttack = 100,
-        .baseDefense = 100,
-        .baseSpeed = 127,
-        .baseSpAttack = 100,
-        .baseSpDefense = 160,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(100, 100, 100, 127, 100, 160),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 45,
@@ -4215,13 +3632,9 @@ const struct BaseStats gBaseStats[] =
     },//buff to give realm of excellence as mewtwo is more offenseive whille mew was always about avoiding fights/damage
 
     [SPECIES_CHIKORITA] =
-    {
-        .baseHP = 61,
-        .baseAttack = 49,
-        .baseDefense = 65,
-        .baseSpeed = 45,
-        .baseSpAttack = 49,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(61, 49, 65, 45, 49, 75),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
         .catchRate = 45,
@@ -4242,13 +3655,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BAYLEEF] =
-    {
-        .baseHP = 87,
-        .baseAttack = 57,
-        .baseDefense = 80,
-        .baseSpeed = 60,
-        .baseSpAttack = 63,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(87, 57, 80, 60, 63, 95),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
         .catchRate = 45,
@@ -4270,13 +3679,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MEGANIUM] =
-    {
-        .baseHP = 110,
-        .baseAttack = 82,
-        .baseDefense = 100,
-        .baseSpeed = 80,
-        .baseSpAttack = 83,
-        .baseSpDefense = 153,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(110, 82, 100, 80, 83, 153),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
         .catchRate = 45,
@@ -4298,13 +3703,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CYNDAQUIL] =
-    {
-        .baseHP = 39,
-        .baseAttack = 52,
-        .baseDefense = 43,
-        .baseSpeed = 72,
-        .baseSpAttack = 60,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(39, 52, 43, 72, 60, 50),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 45,
@@ -4323,13 +3724,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_QUILAVA] =
-    {
-        .baseHP = 68,
-        .baseAttack = 64,
-        .baseDefense = 58,
-        .baseSpeed = 87,
-        .baseSpAttack = 80,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(68, 64, 58, 87, 80, 70),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_NORMAL,
         .catchRate = 45,
@@ -4349,13 +3746,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TYPHLOSION] =
-    {
-        .baseHP = 78,
-        .baseAttack = 84,
-        .baseDefense = 78,
-        .baseSpeed = 100,
-        .baseSpAttack = 109,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(78, 84, 78, 100, 109, 95),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_NORMAL,
         .catchRate = 45,
@@ -4374,13 +3767,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TOTODILE] =
-    {
-        .baseHP = 50,
-        .baseAttack = 65,
-        .baseDefense = 64,
-        .baseSpeed = 47,
-        .baseSpAttack = 44,
-        .baseSpDefense = 48,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(50, 65, 64, 47, 44, 48),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -4401,13 +3790,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CROCONAW] =
-    {
-        .baseHP = 65,
-        .baseAttack = 80,
-        .baseDefense = 80,
-        .baseSpeed = 66,
-        .baseSpAttack = 59,
-        .baseSpDefense = 63,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 80, 80, 66, 59, 63),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -4429,13 +3814,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FERALIGATOR] =
-    {
-        .baseHP = 105,
-        .baseAttack = 115,
-        .baseDefense = 100,
-        .baseSpeed = 82,
-        .baseSpAttack = 79,
-        .baseSpDefense = 83,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(105, 115, 100, 82, 79, 83),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -4457,13 +3838,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SENTRET] =
-    {
-        .baseHP = 35,
-        .baseAttack = 56,
-        .baseDefense = 34,
-        .baseSpeed = 25,
-        .baseSpAttack = 35,
-        .baseSpDefense = 45,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(35, 56, 34, 25, 35, 45),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GROUND,
         .catchRate = 255,
@@ -4484,13 +3861,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FURRET] =
-    {
-        .baseHP = 85,
-        .baseAttack = 86,
-        .baseDefense = 64,
-        .baseSpeed = 100,
-        .baseSpAttack = 45,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(85, 86, 64, 100, 45, 55),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GROUND,
         .catchRate = 90,
@@ -4511,13 +3884,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HOOTHOOT] =
-    {
-        .baseHP = 60,
-        .baseAttack = 40,
-        .baseDefense = 30,
-        .baseSpeed = 50,
-        .baseSpAttack = 46,
-        .baseSpDefense = 56,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 40, 30, 50, 66, 56),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 255,
@@ -4538,13 +3907,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NOCTOWL] =
-    {
-        .baseHP = 80,
-        .baseAttack = 50,
-        .baseDefense = 50,
-        .baseSpeed = 70,
-        .baseSpDefense = 96,
-        .baseSpAttack = 120,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(80, 50, 50, 70, 120, 96),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FLYING,
         .catchRate = 90,
@@ -4565,13 +3930,9 @@ const struct BaseStats gBaseStats[] =
     },//change the type to match grand colloseum [done]
 
     [SPECIES_LEDYBA] =
-    {
-        .baseHP = 40,
-        .baseAttack = 65,
-        .baseDefense = 50,
-        .baseSpeed = 55,
-        .baseSpAttack = 20,
-        .baseSpDefense = 100,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 65, 50, 55, 20, 100),
         .type1 = TYPE_BUG,
         .type2 = TYPE_NORMAL, //ok was thinking fighting but will keep this, use normal type joat  to make it super versatile
         .catchRate = 255, //give all the elemental punches
@@ -4592,13 +3953,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LEDIAN] =
-    {
-        .baseHP = 55,
-        .baseAttack = 95,
-        .baseDefense = 65,
-        .baseSpeed = 85,
-        .baseSpAttack = 35,
-        .baseSpDefense = 135,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 95, 65, 85, 35, 135),
         .type1 = TYPE_BUG,
         .type2 = TYPE_NORMAL,
         .catchRate = 90,
@@ -4619,13 +3976,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SPINARAK] =
-    {
-        .baseHP = 40,
-        .baseAttack = 60,
-        .baseDefense = 40,
-        .baseSpeed = 65,
-        .baseSpAttack = 40,
-        .baseSpDefense = 60,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 60, 40, 65, 40, 60),
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
         .catchRate = 255,
@@ -4646,13 +3999,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARIADOS] =
-    {
-        .baseHP = 70,
-        .baseAttack = 90,
-        .baseDefense = 70,
-        .baseSpeed = 88,
-        .baseSpAttack = 60,
-        .baseSpDefense = 88,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 90, 70, 88, 60, 88),
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
         .catchRate = 90,
@@ -4673,13 +4022,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CROBAT] =
-    {
-        .baseHP = 85,
-        .baseAttack = 90,
-        .baseDefense = 80,
-        .baseSpeed = 130,
-        .baseSpAttack = 70,
-        .baseSpDefense = 90,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(85, 90, 80, 130, 70, 90),
         .type1 = TYPE_POISON,
         .type2 = TYPE_FLYING,
         .catchRate = 90,
@@ -4700,13 +4045,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHINCHOU] =
-    {
-        .baseHP = 75,
-        .baseAttack = 38,
-        .baseDefense = 48,
-        .baseSpeed = 67,
-        .baseSpAttack = 66,
-        .baseSpDefense = 66,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 38, 48, 67, 66, 66),
         .type1 = TYPE_WATER,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 190,
@@ -4726,13 +4067,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LANTURN] =
-    {
-        .baseHP = 125,
-        .baseAttack = 58,
-        .baseDefense = 68,
-        .baseSpeed = 67,
-        .baseSpAttack = 86,
-        .baseSpDefense = 86,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(125, 58, 68, 67, 86, 86),
         .type1 = TYPE_WATER,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 75,
@@ -4752,13 +4089,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PICHU] =
-    {
-        .baseHP = 20,
-        .baseAttack = 30,
-        .baseDefense = 30,
-        .baseSpeed = 60,
-        .baseSpAttack = 65,
-        .baseSpDefense = 25,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(20, 40, 30, 60, 55, 25),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 190,
@@ -4777,13 +4110,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CLEFFA] =
-    {
-        .baseHP = 50,
-        .baseAttack = 25,
-        .baseDefense = 28,
-        .baseSpeed = 15,
-        .baseSpAttack = 45,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(50, 25, 28, 15, 45, 55),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FAIRY,
         .catchRate = 150,
@@ -4804,13 +4133,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_IGGLYBUFF] =
-    {
-        .baseHP = 90,
-        .baseAttack = 30,
-        .baseDefense = 25,
-        .baseSpeed = 15,
-        .baseSpAttack = 40,
-        .baseSpDefense = 25,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 30, 25, 15, 40, 25),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FAIRY,
         .catchRate = 170,
@@ -4830,13 +4155,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TOGEPI] =
-    {
-        .baseHP = 35,
-        .baseAttack = 20,
-        .baseDefense = 65,
-        .baseSpeed = 20,
-        .baseSpAttack = 40,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(35, 20, 65, 20, 40, 80),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FAIRY,
         .catchRate = 190,
@@ -4857,13 +4178,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TOGETIC] =
-    {
-        .baseHP = 55,
-        .baseAttack = 40,
-        .baseDefense = 85,
-        .baseSpeed = 40,
-        .baseSpAttack = 80,
-        .baseSpDefense = 115,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 40, 85, 40, 80, 115),
         /*//#if P_UPDATED_TYPES >= GEN_6
             .type1 = TYPE_FAIRY,
             .type2 = TYPE_FLYING,
@@ -4889,13 +4206,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NATU] =
-    {
-        .baseHP = 40,
-        .baseAttack = 50,
-        .baseDefense = 45,
-        .baseSpeed = 70,
-        .baseSpAttack = 70,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 50, 45, 70, 70, 50),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_NORMAL,   //Can't fly
         .catchRate = 190,
@@ -4916,13 +4229,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_XATU] =
-    {
-        .baseHP = 65,
-        .baseAttack = 75,
-        .baseDefense = 70,
-        .baseSpeed = 100,
-        .baseSpAttack = 100,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 75, 70, 100, 100, 75),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FLYING,
         .catchRate = 75,
@@ -4944,13 +4253,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAREEP] =
-    {
-        .baseHP = 55,
-        .baseAttack = 40,
-        .baseDefense = 95,
-        .baseSpeed = 35,
-        .baseSpAttack = 65,
-        .baseSpDefense = 86,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 40, 95, 35, 65, 86),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 235,
@@ -4969,13 +4274,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLAAFFY] =
-    {
-        .baseHP = 70,
-        .baseAttack = 55,
-        .baseDefense = 55,
-        .baseSpeed = 65,
-        .baseSpAttack = 85,
-        .baseSpDefense = 60,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 55, 55, 65, 85, 60),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 120,
@@ -4994,13 +4295,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AMPHAROS] =
-    {
-        .baseHP = 90,
-        .baseAttack = 75,
-        .baseSpeed = 55,
-        .baseSpAttack = 115,
-        .baseSpDefense = 90,
-        .baseDefense = 85,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 75, 85, 55, 115, 90),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 45,
@@ -5019,13 +4316,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BELLOSSOM] =
-    {
-        .baseHP = 65,
-        .baseAttack = 80,
-        .baseSpeed = 75,
-        .baseSpAttack = 100,
-        .baseSpDefense = 110,
-        .baseDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 80, 95, 75, 100, 110),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FAIRY,
         .catchRate = 45,
@@ -5049,13 +4342,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MARILL] =
-    {
-        .baseHP = 70,
-        .baseAttack = 35,
-        .baseDefense = 50,
-        .baseSpeed = 40,
-        .baseSpAttack = 50,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 35, 50, 40, 50, 50),
         .type1 = TYPE_WATER,
         .type2 = TYPE_FAIRY,
         .catchRate = 190,
@@ -5076,13 +4365,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AZUMARILL] =
-    {
-        .baseHP = 110,
-        .baseAttack = 55,
-        .baseDefense = 80,
-        .baseSpeed = 50,
-        .baseSpDefense = 80,
-        .baseSpAttack = 90,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(110, 55, 80, 50, 90, 80),
         .type1 = TYPE_WATER,
         .type2 = TYPE_FAIRY,
         .catchRate = 75,
@@ -5103,13 +4388,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SUDOWOODO] =
-    {
-        .baseHP = 85,
-        .baseAttack = 110,
-        .baseDefense = 115,
-        .baseSpeed = 30,
-        .baseSpAttack = 30,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(85, 110, 115, 30, 30, 75),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_GRASS,
         .catchRate = 65,
@@ -5130,13 +4411,9 @@ const struct BaseStats gBaseStats[] =
     },//make revisions to add grass moves to lvl up and tm learnsets   thinkin ingrain & bullet seed
 
     [SPECIES_POLITOED] =
-    {
-        .baseHP = 90,
-        .baseAttack = 75,
-        .baseDefense = 75,
-        .baseSpeed = 70,
-        .baseSpAttack = 90,
-        .baseSpDefense = 110,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 75, 75, 70, 90, 110),
         .type1 = TYPE_WATER,
         .type2 = TYPE_FAIRY,
         .catchRate = 45,
@@ -5156,13 +4433,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HOPPIP] =
-    {
-        .baseHP = 35,
-        .baseAttack = 45,
-        .baseDefense = 40,
-        .baseSpeed = 50,
-        .baseSpAttack = 45,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(35, 45, 40, 50, 45, 65),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FLYING,
         .catchRate = 255,
@@ -5182,7 +4455,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SKIPLOOM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 45,
         .baseDefense = 85,
@@ -5208,13 +4483,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_JUMPLUFF] =
-    {
-        .baseHP = 75,
-        .baseAttack = 55,
-        .baseDefense = 70,
-        .baseSpeed = 128,
-        .baseSpAttack = 105,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 55, 70, 128, 105, 95),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -5234,13 +4505,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AIPOM] =
-    {
-        .baseHP = 55,
-        .baseAttack = 70,
-        .baseDefense = 55,
-        .baseSpeed = 85,
-        .baseSpAttack = 40,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 70, 55, 85, 40, 55),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 45,
@@ -5261,13 +4528,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SUNKERN] =
-    {
-        .baseHP = 45,
-        .baseAttack = 30,
-        .baseDefense = 30,
-        .baseSpeed = 30,
-        .baseSpAttack = 55,
-        .baseSpDefense = 30,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 30, 30, 30, 55, 30),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FIRE,
         .catchRate = 235,
@@ -5287,13 +4550,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SUNFLORA] =
-    {
-        .baseHP = 75,
-        .baseAttack = 75,
-        .baseDefense = 85,
-        .baseSpeed = 53,
-        .baseSpAttack = 135,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 75, 85, 53, 135, 95),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FIRE,
         .catchRate = 120,
@@ -5313,13 +4572,9 @@ const struct BaseStats gBaseStats[] =
     },//made fire match grand colloseum changes
 
     [SPECIES_YANMA] =
-    {
-        .baseHP = 65,
-        .baseAttack = 65,
-        .baseDefense = 45,
-        .baseSpeed = 95,
-        .baseSpAttack = 75,
-        .baseSpDefense = 45,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 65, 45, 95, 75, 45),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
         .catchRate = 75,
@@ -5343,13 +4598,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WOOPER] =
-    {
-        .baseHP = 60,
-        .baseAttack = 45,
-        .baseDefense = 45,
-        .baseSpeed = 15,
-        .baseSpAttack = 35,
-        .baseSpDefense = 32,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 45, 45, 15, 35, 32),
         .type1 = TYPE_WATER,
         .type2 = TYPE_GROUND,
         .catchRate = 255,
@@ -5370,13 +4621,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_QUAGSIRE] =
-    {
-        .baseHP = 95,
-        .baseAttack = 95,
-        .baseDefense = 95,
-        .baseSpeed = 35,
-        .baseSpAttack = 65,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(95, 95, 95, 35, 65, 65),
         .type1 = TYPE_WATER,
         .type2 = TYPE_GROUND,
         .catchRate = 90,
@@ -5397,13 +4644,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ESPEON] =
-    {
-        .baseHP = 65,
-        .baseAttack = 65,
-        .baseDefense = 60,
-        .baseSpeed = 110,
-        .baseSpAttack = 130,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 65, 60, 110, 130, 95),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 45,
@@ -5424,13 +4667,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UMBREON] =
-    {
-        .baseHP = 95,
-        .baseAttack = 79,
-        .baseDefense = 110,
-        .baseSpeed = 65,
-        .baseSpAttack = 66,
-        .baseSpDefense = 130,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(95, 79, 110, 65, 66, 130),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DARK,
         .catchRate = 45,
@@ -5449,13 +4688,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MURKROW] =
-    {
-        .baseHP = 60,
-        .baseAttack = 85,
-        .baseDefense = 42,
-        .baseSpeed = 91,
-        .baseSpAttack = 85,
-        .baseSpDefense = 42,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 85, 42, 91, 85, 42),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FLYING,
         .catchRate = 30,
@@ -5475,13 +4710,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SLOWKING] =
-    {
-        .baseHP = 95,
-        .baseAttack = 75,
-        .baseDefense = 80,
-        .baseSpeed = 30,
-        .baseSpAttack = 100,
-        .baseSpDefense = 110,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(95, 75, 80, 30, 100, 110),
         .type1 = TYPE_WATER,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 70,
@@ -5503,13 +4734,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MISDREAVUS] =
-    {
-        .baseHP = 60,
-        .baseAttack = 60,
-        .baseDefense = 60,
-        .baseSpeed = 85,
-        .baseSpAttack = 85,
-        .baseSpDefense = 85,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 60, 60, 85, 85, 85),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_FAIRY,
         .catchRate = 45,
@@ -5528,13 +4755,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN] =
-    {
-        .baseHP = 64,
-        .baseAttack = 64,
-        .baseDefense = 48,
-        .baseSpeed = 76,
-        .baseSpAttack = 64,
-        .baseSpDefense = 48,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(64, 64, 48, 76, 64, 48),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 225,
@@ -5558,13 +4781,9 @@ const struct BaseStats gBaseStats[] =
     //same as plus minus but if another unown is on field with it/meaning same side
 
     [SPECIES_WOBBUFFET] =
-    {
-        .baseHP = 190,
-        .baseAttack = 33,
-        .baseDefense = 58,
-        .baseSpeed = 33,
-        .baseSpAttack = 33,
-        .baseSpDefense = 58,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(190, 33, 58, 33, 33, 58),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 45,
@@ -5585,13 +4804,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GIRAFARIG] =
-    {
-        .baseHP = 70,
-        .baseAttack = 80,
-        .baseDefense = 65,
-        .baseSpeed = 105,
-        .baseSpAttack = 110,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(69, 77, 63, 95, 97, 64),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 60,
@@ -5609,18 +4824,14 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    },//stats lowered to allow use of eviolite
 
     [SPECIES_PINECO] =
-    {
-        .baseHP = 50,
-        .baseAttack = 65,
-        .baseDefense = 90,
-        .baseSpeed = 15,
-        .baseSpAttack = 35,
-        .baseSpDefense = 35,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(50, 65, 90, 15, 35, 35),
         .type1 = TYPE_BUG,
-        .type2 = TYPE_BUG,
+        .type2 = TYPE_NORMAL,   //bcuz
         .catchRate = 190,
         .expYield = 58,
         //.evYield_Defense = 1,
@@ -5639,13 +4850,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FORRETRESS] =
-    {
-        .baseHP = 75,
-        .baseAttack = 90,
-        .baseDefense = 140,
-        .baseSpeed = 40,
-        .baseSpAttack = 60,
-        .baseSpDefense = 60,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 90, 140, 40, 60, 60),
         .type1 = TYPE_BUG,
         .type2 = TYPE_STEEL,
         .catchRate = 75,
@@ -5666,13 +4873,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DUNSPARCE] =
-    {
-        .baseHP = 100,
-        .baseAttack = 70,
-        .baseDefense = 70,
-        .baseSpeed = 45,
-        .baseSpAttack = 65,
-        .baseSpDefense = 87,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(100, 70, 70, 45, 65, 87),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_POISON,
         .catchRate = 190,
@@ -5695,13 +4898,9 @@ const struct BaseStats gBaseStats[] =
     //think I will do that actually, that removes its fighting weakness too. 
 
     [SPECIES_GLIGAR] =
-    {
-        .baseHP = 65,
-        .baseAttack = 75,
-        .baseDefense = 105,
-        .baseSpeed = 85,
-        .baseSpAttack = 35,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 75, 105, 85, 35, 65),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_FLYING,
         .catchRate = 60,
@@ -5720,13 +4919,9 @@ const struct BaseStats gBaseStats[] =
     },//from zenmodeyt give fly - done
 
     [SPECIES_STEELIX] =
-    {
-        .baseHP = 75,
-        .baseAttack = 85,
-        .baseDefense = 200,
-        .baseSpeed = 30,
-        .baseSpAttack = 55,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 85, 200, 30, 55, 65),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_GROUND,
         .catchRate = 25,
@@ -5748,13 +4943,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SNUBBULL] =
-    {
-        .baseHP = 60,
-        .baseAttack = 80,
-        .baseDefense = 50,
-        .baseSpeed = 30,
-        .baseSpAttack = 40,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 80, 50, 30, 40, 50),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FAIRY,
         .catchRate = 190,
@@ -5775,13 +4966,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GRANBULL] =
-    {
-        .baseHP = 86,
-        .baseAttack = 120,
-        .baseDefense = 75,
-        .baseSpeed = 45,
-        .baseSpAttack = 60,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(86, 120, 75, 45, 60, 80),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FAIRY,
         .catchRate = 75,
@@ -5801,13 +4988,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_QWILFISH] =
-    {
-        .baseHP = 65,
-        .baseAttack = 95,
-        .baseSpeed = 85,
-        .baseSpAttack = 95,
-        .baseSpDefense = 65,
-        .baseDefense = 85,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 95, 85, 85, 95, 65),
         .type1 = TYPE_WATER,
         .type2 = TYPE_POISON,
         .catchRate = 45,
@@ -5827,13 +5010,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SCIZOR] =
-    {
-        .baseHP = 70,
-        .baseAttack = 130,
-        .baseDefense = 100,
-        .baseSpeed = 80,
-        .baseSpAttack = 55,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 130, 100, 80, 55, 80),
         .type1 = TYPE_BUG,
         .type2 = TYPE_STEEL,
         .catchRate = 25,
@@ -5853,13 +5032,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHUCKLE] =
-    {
-        .baseHP = 20,
-        .baseAttack = 10,
-        .baseDefense = 230,
-        .baseSpeed = 5,
-        .baseSpAttack = 10,
-        .baseSpDefense = 230,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(20, 10, 230, 5, 10, 230),
         .type1 = TYPE_BUG,
         .type2 = TYPE_ROCK,
         .catchRate = 190,
@@ -5882,13 +5057,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HERACROSS] =
-    {
-        .baseHP = 80,
-        .baseAttack = 125,
-        .baseDefense = 75,
-        .baseSpeed = 85,
-        .baseSpAttack = 40,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(80, 125, 75, 85, 40, 95),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FIGHTING,
         .catchRate = 45,
@@ -5909,13 +5080,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SNEASEL] =
-    {
-        .baseHP = 55,
-        .baseAttack = 105,
-        .baseDefense = 55,
-        .baseSpeed = 115,
-        .baseSpAttack = 35,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 105, 55, 115, 35, 80),
         .type1 = TYPE_DARK,
         .type2 = TYPE_ICE,
         .catchRate = 60,
@@ -5937,13 +5104,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TEDDIURSA] =
-    {
-        .baseHP = 60,
-        .baseAttack = 80,
-        .baseDefense = 50,
-        .baseSpeed = 40,
-        .baseSpAttack = 50,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 80, 50, 40, 50, 50),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 120,
@@ -5963,13 +5126,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_URSARING] =
-    {
-        .baseHP = 90,
-        .baseAttack = 130,
-        .baseDefense = 75,
-        .baseSpeed = 55,
-        .baseSpAttack = 75,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 130, 75, 55, 75, 75),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 60,
@@ -5989,13 +5148,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SLUGMA] =
-    {
-        .baseHP = 40,
-        .baseAttack = 40,
-        .baseDefense = 40,
-        .baseSpeed = 20,
-        .baseSpAttack = 88,
-        .baseSpDefense = 56,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(40, 40, 40, 20, 88, 56),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 190,
@@ -6016,13 +5171,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAGCARGO] =
-    {
-        .baseSpDefense = 90,
-        .baseAttack = 50,
-        .baseDefense = 120,
-        .baseSpeed = 30,
-        .baseHP = 60,
-        .baseSpAttack = 115,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(60, 50, 120, 30, 115, 90),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_ROCK,
         .catchRate = 75,
@@ -6043,13 +5194,9 @@ const struct BaseStats gBaseStats[] =
     },//move give acid armor shell smash
 
     [SPECIES_SWINUB] =
-    {
-        .baseHP = 50,
-        .baseAttack = 50,
-        .baseDefense = 40,
-        .baseSpeed = 50,
-        .baseSpAttack = 30,
-        .baseSpDefense = 30,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(50, 50, 40, 50, 30, 30),
         .type1 = TYPE_ICE,
         .type2 = TYPE_GROUND,
         .catchRate = 225,
@@ -6069,13 +5216,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PILOSWINE] =
-    {
-        .baseHP = 100,
-        .baseAttack = 100,
-        .baseDefense = 80,
-        .baseSpeed = 50,
-        .baseSpAttack = 60,
-        .baseSpDefense = 60,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(100, 100, 80, 50, 60, 60),
         .type1 = TYPE_ICE,
         .type2 = TYPE_GROUND,
         .catchRate = 75,
@@ -6096,13 +5239,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CORSOLA] =
-    {
-        .baseAttack = 65,
-        .baseSpeed = 35,
-        .baseSpAttack = 85,
-        .baseHP = 65,
-        .baseDefense = 115,
-        .baseSpDefense = 110,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 65, 115, 35, 85, 110),
         .type1 = TYPE_WATER,
         .type2 = TYPE_ROCK,
         .catchRate = 60,
@@ -6127,13 +5266,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_REMORAID] =
-    {
-        .baseHP = 35,
-        .baseAttack = 65,
-        .baseDefense = 35,
-        .baseSpeed = 65,
-        .baseSpAttack = 65,
-        .baseSpDefense = 35,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(35, 65, 35, 65, 65, 35),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 190,
@@ -6153,13 +5288,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_OCTILLERY] =
-    {
-        .baseHP = 75,
-        .baseAttack = 105,
-        .baseDefense = 75,
-        .baseSpeed = 45,
-        .baseSpAttack = 105,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 105, 75, 45, 105, 75),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 75,
@@ -6180,13 +5311,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DELIBIRD] =
-    {
-        .baseHP = 101,
-        .baseAttack = 95,
-        .baseDefense = 55,
-        .baseSpeed = 95,
-        .baseSpAttack = 75,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(101, 95, 55, 95, 75, 55),
         .type1 = TYPE_ICE,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -6205,13 +5332,9 @@ const struct BaseStats gBaseStats[] =
     }, //idk if I like these abilities
 
     [SPECIES_MANTINE] =
-    {
-        .baseAttack = 40,
-        .baseDefense = 70,
-        .baseSpeed = 70,
-        .baseSpAttack = 80,
-        .baseSpDefense = 140,
-        .baseHP = 85,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(85, 40, 70, 70, 80, 140),
         .type1 = TYPE_WATER,
         .type2 = TYPE_FLYING,
         .catchRate = 25,
@@ -6230,13 +5353,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SKARMORY] =
-    {
-        .baseHP = 65,
-        .baseAttack = 80,
-        .baseDefense = 140,
-        .baseSpeed = 70,
-        .baseSpAttack = 40,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(65, 80, 140, 70, 40, 70),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_FLYING,
         .catchRate = 25,
@@ -6255,16 +5374,12 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-    },
+    }, //give better steel moves smart strike etc.
 
     [SPECIES_HOUNDOUR] =
-    {
-        .baseHP = 45,
-        .baseAttack = 85,
-        .baseDefense = 30,
-        .baseSpeed = 65,
-        .baseSpAttack = 70,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 85, 30, 65, 70, 50),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FIRE,
         .catchRate = 120,
@@ -6285,13 +5400,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HOUNDOOM] =
-    {
-        .baseHP = 75,
-        .baseAttack = 110,
-        .baseDefense = 50,
-        .baseSpeed = 95,
-        .baseSpAttack = 95,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 110, 50, 95, 95, 80),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FIRE,
         .catchRate = 45,
@@ -6312,13 +5423,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KINGDRA] =
-    {
-        .baseHP = 75,
-        .baseAttack = 95,
-        .baseDefense = 95,
-        .baseSpeed = 85,
-        .baseSpAttack = 95,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(75, 95, 95, 85, 95, 95),
         .type1 = TYPE_WATER,
         .type2 = TYPE_DRAGON,
         .catchRate = 45,
@@ -6341,13 +5448,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PHANPY] =
-    {
-        .baseHP = 90,
-        .baseAttack = 60,
-        .baseDefense = 60,
-        .baseSpeed = 46,
-        .baseSpAttack = 40,
-        .baseSpDefense = 40,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 60, 60, 46, 40, 40),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GROUND,
         .catchRate = 120,
@@ -6366,13 +5469,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DONPHAN] =
-    {
-        .baseHP = 90,
-        .baseAttack = 120,
-        .baseDefense = 120,
-        .baseSpeed = 65,
-        .baseSpAttack = 60,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 120, 120, 65, 60, 65),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GROUND,
         .catchRate = 60,
@@ -6392,13 +5491,9 @@ const struct BaseStats gBaseStats[] =
     },//I guess keep low speed for use in trick room?
 
     [SPECIES_PORYGON2] =
-    {
-        .baseHP = 85,
-        .baseAttack = 80,
-        .baseDefense = 90,
-        .baseSpeed = 60,
-        .baseSpAttack = 105,
-        .baseSpDefense = 95,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(85, 80, 90, 60, 105, 95),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 45,
@@ -6418,13 +5513,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STANTLER] =
-    {
-        .baseHP = 73,
-        .baseAttack = 100,
-        .baseDefense = 62,
-        .baseSpeed = 85,
-        .baseSpAttack = 85,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(73, 100, 62, 85, 85, 65),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 45,
@@ -6445,13 +5536,9 @@ const struct BaseStats gBaseStats[] =
       
 
     [SPECIES_SMEARGLE] =
-    {
-        .baseHP = 55,
-        .baseAttack = 40,
-        .baseDefense = 35,
-        .baseSpeed = 85,
-        .baseSpAttack = 40,
-        .baseSpDefense = 45,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(55, 40, 35, 85, 40, 45),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 45,
@@ -6468,16 +5555,12 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_MOODY, ABILITY_SIMPLE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-    }, 
-    //also slight increase in speed to help chose the right move
+    }, //also slight increase in speed to help chose the right move
+    
     [SPECIES_TYROGUE] =
-    {
-        .baseHP = 78,
-        .baseAttack = 35,
-        .baseDefense = 35,
-        .baseSpeed = 35,
-        .baseSpAttack = 35,
-        .baseSpDefense = 35,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(78, 35, 35, 35, 35, 35),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
         .catchRate = 65,
@@ -6497,13 +5580,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HITMONTOP] =
-    {
-        .baseHP = 57,
-        .baseAttack = 95,
-        .baseDefense = 95,
-        .baseSpeed = 70,
-        .baseSpAttack = 35,
-        .baseSpDefense = 115,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(57, 95, 95, 70, 35, 115),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
         .catchRate = 45,
@@ -6523,13 +5602,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SMOOCHUM] =
-    {
-        .baseHP = 45,
-        .baseAttack = 30,
-        .baseDefense = 15,
-        .baseSpeed = 65,
-        .baseSpAttack = 85,
-        .baseSpDefense = 65,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 30, 15, 65, 85, 65),
         .type1 = TYPE_ICE,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 45,
@@ -6543,19 +5618,15 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_OBLIVIOUS, ABILITY_FOREWARN},
-            .abilityHidden = {ABILITY_HYDRATION, ABILITY_NONE},
+            .abilityHidden = {ABILITY_CUPIDS_ARROW, ABILITY_NONE},//changed ability hydration sucks for this, one time pass on this ability as it makes sense here
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
 
     [SPECIES_ELEKID] =
-    {
-        .baseHP = 45,
-        .baseAttack = 63,
-        .baseDefense = 37,
-        .baseSpeed = 95,
-        .baseSpAttack = 65,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 63, 37, 95, 65, 55),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 45,
@@ -6577,13 +5648,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAGBY] =
-    {
-        .baseHP = 45,
-        .baseAttack = 75,
-        .baseDefense = 37,
-        .baseSpeed = 83,
-        .baseSpAttack = 70,
-        .baseSpDefense = 55,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 75, 37, 83, 70, 55),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 45,
@@ -6605,13 +5672,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MILTANK] =
-    {
-        .baseHP = 95,
-        .baseAttack = 80,
-        .baseDefense = 105,
-        .baseSpeed = 100,
-        .baseSpAttack = 40,
-        .baseSpDefense = 80,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(95, 80, 105, 100, 40, 80),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 45,
@@ -6633,13 +5696,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BLISSEY] =
-    {
-        .baseHP = 255,
-        .baseAttack = 30,
-        .baseDefense = 20,
-        .baseSpeed = 55,
-        .baseSpAttack = 75,
-        .baseSpDefense = 135,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(255, 30, 20, 55, 75, 135),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FAIRY,
         .catchRate = 30,
@@ -6661,13 +5720,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RAIKOU] =
-    {
-        .baseHP = 90,
-        .baseAttack = 85,
-        .baseDefense = 75,
-        .baseSpeed = 115,
-        .baseSpAttack = 115,
-        .baseSpDefense = 100,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(90, 85, 75, 115, 115, 100),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 3,
@@ -6696,13 +5751,9 @@ const struct BaseStats gBaseStats[] =
    
 
     [SPECIES_ENTEI] =
-    {
-        .baseHP = 115,
-        .baseAttack = 115,
-        .baseDefense = 85,
-        .baseSpeed = 100,
-        .baseSpAttack = 90,
-        .baseSpDefense = 75,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(115, 115, 85, 100, 90, 75),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 3,
@@ -6722,13 +5773,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SUICUNE] =
-    {
-        .baseHP = 100,
-        .baseAttack = 75,
-        .baseDefense = 115,
-        .baseSpeed = 85,
-        .baseSpAttack = 90,
-        .baseSpDefense = 115,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(100, 75, 115, 85, 90, 115),
         .type1 = TYPE_WATER,
         .type2 = TYPE_ICE,
         .catchRate = 3,
@@ -6748,13 +5795,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LARVITAR] =
-    {
-        .baseHP = 50,
-        .baseAttack = 64,
-        .baseDefense = 50,
-        .baseSpeed = 41,
-        .baseSpAttack = 45,
-        .baseSpDefense = 50,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(50, 64, 50, 41, 45, 50),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_GROUND,
         .catchRate = 45,
@@ -6773,13 +5816,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PUPITAR] =
-    {
-        .baseHP = 70,
-        .baseAttack = 84,
-        .baseDefense = 70,
-        .baseSpeed = 51,
-        .baseSpAttack = 65,
-        .baseSpDefense = 70,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 84, 70, 51, 65, 65),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_GROUND,
         .catchRate = 45,
@@ -6797,13 +5836,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TYRANITAR] =
-    {
-        .baseHP = 100,
-        .baseAttack = 134,
-        .baseDefense = 110,
-        .baseSpeed = 61,
-        .baseSpAttack = 95,
-        .baseSpDefense = 100,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(100, 134, 110, 61, 95, 100),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_DARK,
         .catchRate = 45,
@@ -6817,20 +5852,16 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MONSTER,
         .abilities = {ABILITY_SAND_STREAM, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_UNNERVE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_UNNERVE, ABILITY_MUSCLE_MAGIC},
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
 
     [SPECIES_LUGIA] =
-    {
-        .baseHP = 106,
-        .baseAttack = 90,
-        .baseDefense = 130,
-        .baseSpeed = 110,
-        .baseSpAttack = 90,
-        .baseSpDefense = 154,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(106, 90, 130, 110, 90, 154),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_PSYCHIC,  //dragon to resist 3 birds, and dragons have dominion over air and sea, psychic because it has bariers and is able to "talk"
         .catchRate = 3,
@@ -6851,13 +5882,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HO_OH] =
-    {
-        .baseHP = 106,
-        .baseAttack = 130,
-        .baseDefense = 90,
-        .baseSpeed = 90,
-        .baseSpAttack = 110,
-        .baseSpDefense = 154,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(106, 130, 90, 90, 110, 154),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FLYING,
         .catchRate = 3,
@@ -6880,13 +5907,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CELEBI] =
-    {
-        .baseHP = 120,
-        .baseAttack = 35,
-        .baseDefense = 110,
-        .baseSpeed = 110,
-        .baseSpAttack = 130,
-        .baseSpDefense = 120,
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(120, 35, 110, 110, 130, 120),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FAIRY,
         .catchRate = 45,
@@ -6906,7 +5929,9 @@ const struct BaseStats gBaseStats[] =
     }, //Can make fairy type now that dual weakness is not so punishing
 
     [SPECIES_TREECKO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 45,
         .baseDefense = 35,
@@ -6933,7 +5958,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GROVYLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 81,
         .baseAttack = 65,
         .baseDefense = 45,
@@ -6960,7 +5987,9 @@ const struct BaseStats gBaseStats[] =
     }, //I think I'll actually make this dragon here since other mon are getting their secondary at mid evo
 
     [SPECIES_SCEPTILE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 97,
         .baseAttack = 85,
         .baseDefense = 65,
@@ -6987,7 +6016,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TORCHIC] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 60,
         .baseDefense = 40,
@@ -7012,7 +6043,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_COMBUSKEN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 85,
         .baseDefense = 60,
@@ -7038,7 +6071,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BLAZIKEN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 120,
         .baseDefense = 70,
@@ -7063,7 +6098,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MUDKIP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 70,
         .baseDefense = 50,
@@ -7088,7 +6125,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MARSHTOMP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 85,
         .baseDefense = 70,
@@ -7113,7 +6152,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SWAMPERT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 110,
         .baseDefense = 90,
@@ -7138,7 +6179,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_POOCHYENA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 55,
         .baseDefense = 35,
@@ -7164,7 +6207,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MIGHTYENA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 105,
         .baseDefense = 70,
@@ -7190,7 +6235,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZIGZAGOON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 38,
         .baseAttack = 40,
         .baseDefense = 41,
@@ -7218,7 +6265,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LINOONE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 85,
         .baseDefense = 61,
@@ -7246,7 +6295,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WURMPLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 45,
         .baseDefense = 35,
@@ -7273,7 +6324,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILCOON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 35,
         .baseDefense = 55,
@@ -7297,7 +6350,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BEAUTIFLY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 70,
         .baseDefense = 60,
@@ -7331,7 +6386,9 @@ const struct BaseStats gBaseStats[] =
     //will do the same for dustox and other winged-non flying types
 
     [SPECIES_CASCOON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 35,
         .baseDefense = 55,
@@ -7355,7 +6412,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DUSTOX] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 60,
         .baseDefense = 70,
@@ -7383,7 +6442,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LOTAD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 56,
         .baseAttack = 30,
         .baseDefense = 30,
@@ -7409,7 +6470,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LOMBRE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 77,
         .baseAttack = 50,
         .baseDefense = 50,
@@ -7435,7 +6498,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LUDICOLO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 92,
         .baseAttack = 70,
         .baseDefense = 70,
@@ -7461,7 +6526,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SEEDOT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 59,
         .baseAttack = 40,
         .baseDefense = 50,
@@ -7491,7 +6558,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NUZLEAF] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 86,
         .baseAttack = 82,
         .baseDefense = 40,
@@ -7521,7 +6590,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHIFTRY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 92,
         .baseAttack = 100,
         .baseDefense = 88,
@@ -7551,7 +6622,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TAILLOW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 55,
         .baseDefense = 30,
@@ -7578,7 +6651,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SWELLOW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 100,
         .baseDefense = 60,
@@ -7605,7 +6680,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WINGULL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 30,
         .baseDefense = 30,
@@ -7634,7 +6711,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PELIPPER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 50,
         .baseDefense = 120,
@@ -7662,7 +6741,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RALTS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 32,
         .baseAttack = 25,
         .baseDefense = 25,
@@ -7690,7 +6771,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KIRLIA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 56,
         .baseAttack = 35,
         .baseDefense = 55,
@@ -7718,7 +6801,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GARDEVOIR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 65,
         .baseDefense = 65,
@@ -7746,7 +6831,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SURSKIT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 42,
         .baseDefense = 32,
@@ -7774,7 +6861,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MASQUERAIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 60,
         .baseDefense = 62,
@@ -7803,7 +6892,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHROOMISH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 40,
         .baseDefense = 60,
@@ -7831,7 +6922,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BRELOOM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 77,
         .baseAttack = 130,
         .baseDefense = 80,
@@ -7859,7 +6952,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SLAKOTH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 60,
         .baseDefense = 60,
@@ -7884,7 +6979,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIGOROTH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 100,
         .baseDefense = 80,
@@ -7909,7 +7006,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SLAKING] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 150,
         .baseAttack = 160,
         .baseDefense = 100,
@@ -7934,7 +7033,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NINCADA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 31,
         .baseAttack = 45,
         .baseDefense = 90,
@@ -7960,7 +7061,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NINJASK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 61,
         .baseAttack = 110,
         .baseDefense = 45,
@@ -7987,7 +7090,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHEDINJA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 27,
         .baseAttack = 90,
         .baseDefense = 45,
@@ -8011,7 +7116,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WHISMUR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 64,
         .baseAttack = 56,
         .baseDefense = 36,
@@ -8038,7 +7145,9 @@ const struct BaseStats gBaseStats[] =
     }, //add disarming voice to learn set
 
     [SPECIES_LOUDRED] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 84,
         .baseAttack = 80,
         .baseDefense = 43,
@@ -8065,7 +7174,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_EXPLOUD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 104,
         .baseAttack = 91,
         .baseDefense = 63,
@@ -8092,7 +7203,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAKUHITA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 72,
         .baseAttack = 60,
         .baseDefense = 30,
@@ -8121,7 +7234,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HARIYAMA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 144,
         .baseAttack = 120,
         .baseDefense = 60,
@@ -8150,7 +7265,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AZURILL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 20,
         .baseDefense = 40,
@@ -8177,7 +7294,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NOSEPASS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 30,
         .baseAttack = 45,
         .baseDefense = 135,
@@ -8205,7 +7324,9 @@ const struct BaseStats gBaseStats[] =
     },//change evo to work with certain type in party, either electric type or electric & steel stype [DONE]
 
     [SPECIES_SKITTY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 45,
         .baseDefense = 45,
@@ -8231,7 +7352,9 @@ const struct BaseStats gBaseStats[] =
     },//higher hp isn't meant to denote bulk, but a high vitality/zest for life/energy
 
     [SPECIES_DELCATTY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 75,
         .baseDefense = 65,
@@ -8260,7 +7383,9 @@ const struct BaseStats gBaseStats[] =
     //new update made ghost type to cover its weaker stats, leans on the cats 9 lives thing
     //its a live but techinically could have been dead.  prob need tweak its pokedex entry to fit
     [SPECIES_SABLEYE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 85,
         .baseDefense = 75,
@@ -8293,7 +7418,9 @@ const struct BaseStats gBaseStats[] =
     //gabite has similar similar def/spdef but 20 more hp, 20 more atk and double speed...
     //think will boost hp, keep atk where it is, there's no reason for to be so low hp, its not a pre evo
     [SPECIES_MAWILE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 87,
         .baseDefense = 90,
@@ -8324,7 +7451,9 @@ const struct BaseStats gBaseStats[] =
     },//adjust learnset to give all bite moves
 
     [SPECIES_ARON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 70,
         .baseDefense = 100,
@@ -8352,7 +7481,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LAIRON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 90,
         .baseDefense = 140,
@@ -8380,7 +7511,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AGGRON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 110,
         .baseDefense = 180,
@@ -8408,7 +7541,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MEDITITE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 30,
         .baseAttack = 40,
         .baseDefense = 55,
@@ -8435,7 +7570,9 @@ const struct BaseStats gBaseStats[] =
     },//note add explosion and self destruct to list of immune moves
 
     [SPECIES_MEDICHAM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 60,
         .baseDefense = 75,
@@ -8462,7 +7599,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ELECTRIKE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 45,
         .baseDefense = 40,
@@ -8487,7 +7626,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MANECTRIC] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 75,
         .baseDefense = 60,
@@ -8512,7 +7653,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PLUSLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 50,
         .baseDefense = 40,
@@ -8540,7 +7683,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINUN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 40,
         .baseDefense = 50,
@@ -8568,7 +7713,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VOLBEAT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 53,
         .baseSpeed = 85,
@@ -8596,7 +7743,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ILLUMISE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 47,
         .baseSpeed = 95,
@@ -8623,7 +7772,9 @@ const struct BaseStats gBaseStats[] =
     }, //give grass and fairy moves and acrobatics
 
     [SPECIES_ROSELIA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 60,
         .baseDefense = 45,
@@ -8651,7 +7802,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GULPIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 43,
         .baseDefense = 53,
@@ -8680,7 +7833,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SWALOT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 73,
         .baseDefense = 83,
@@ -8709,7 +7864,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CARVANHA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 90,
         .baseDefense = 20,
@@ -8735,7 +7892,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHARPEDO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 120,
         .baseDefense = 40,
@@ -8761,7 +7920,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WAILMER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 130,
         .baseAttack = 70,
         .baseDefense = 35,
@@ -8786,7 +7947,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WAILORD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 170,
         .baseAttack = 90,
         .baseDefense = 45,
@@ -8811,7 +7974,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NUMEL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 60,
         .baseDefense = 40,
@@ -8837,7 +8002,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CAMERUPT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 100,
         .baseDefense = 70,
@@ -8864,7 +8031,9 @@ const struct BaseStats gBaseStats[] =
     }, //keep an eye on this, vsonic, see if with super change it survives well enough or needs more bulk
 
     [SPECIES_TORKOAL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 95,
         .baseDefense = 140,
@@ -8890,7 +8059,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SPOINK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 25,
         .baseDefense = 35,
@@ -8917,7 +8088,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GRUMPIG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 45,
         .baseDefense = 65,
@@ -8944,7 +8117,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SPINDA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 80,
         .baseDefense = 80,
@@ -8970,7 +8145,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TRAPINCH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 100,
         .baseDefense = 45,
@@ -8999,7 +8176,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIBRAVA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 70,
         .baseDefense = 50,
@@ -9026,7 +8205,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLYGON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 100,
         .baseDefense = 80,
@@ -9053,7 +8234,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CACNEA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 85,
         .baseDefense = 40,
@@ -9081,7 +8264,9 @@ const struct BaseStats gBaseStats[] =
     }, //give crass equivalent of rough skin  tough spines 
 
     [SPECIES_CACTURNE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 115,
         .baseDefense = 60,
@@ -9110,7 +8295,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SWABLU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 40,
         .baseDefense = 60,
@@ -9135,7 +8322,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALTARIA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 70,
         .baseDefense = 90,
@@ -9160,7 +8349,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZANGOOSE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 73,
         .baseAttack = 115,
         .baseDefense = 60,
@@ -9188,7 +8379,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SEVIPER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 73,
         .baseAttack = 80,
         .baseDefense = 70,
@@ -9219,7 +8412,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LUNATONE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseAttack = 65,
         .baseDefense = 65,
         .baseSpeed = 70,
@@ -9246,7 +8441,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SOLROCK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseAttack = 95,
         .baseDefense = 85,
         .baseSpeed = 70,
@@ -9273,7 +8470,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BARBOACH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 48,
         .baseDefense = 43,
@@ -9299,7 +8498,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WHISCASH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseAttack = 98,
         .baseDefense = 73,
@@ -9325,7 +8526,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CORPHISH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 43,
         .baseAttack = 80,
         .baseDefense = 65,
@@ -9352,7 +8555,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CRAWDAUNT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 63,
         .baseAttack = 120,
         .baseDefense = 85,
@@ -9379,7 +8584,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BALTOY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 40,
         .baseDefense = 55,
@@ -9406,7 +8613,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CLAYDOL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 70,
         .baseDefense = 105,
@@ -9433,7 +8642,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LILEEP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 76,
         .baseAttack = 41,
         .baseDefense = 77,
@@ -9463,7 +8674,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CRADILY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 96,
         .baseAttack = 81,
         .baseDefense = 97,
@@ -9493,7 +8706,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ANORITH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 95,
         .baseDefense = 70,
@@ -9518,7 +8733,9 @@ const struct BaseStats gBaseStats[] =
     },  //also let it learn rain dance tm
 
     [SPECIES_ARMALDO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 125,
         .baseDefense = 100,
@@ -9543,7 +8760,9 @@ const struct BaseStats gBaseStats[] =
     }, //think keep rock bug, give move forge to make it bug steel?
 
     [SPECIES_FEEBAS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 37,
         .baseAttack = 35,
         .baseDefense = 40,
@@ -9570,7 +8789,9 @@ const struct BaseStats gBaseStats[] =
     },//change give high sp def think thick skin from everyone calling it ugly
 
     [SPECIES_MILOTIC] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 60,
         .baseDefense = 79,
@@ -9596,7 +8817,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CASTFORM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 70,
         .baseDefense = 70,
@@ -9622,7 +8845,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KECLEON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 90,
         .baseDefense = 70,
@@ -9649,7 +8874,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHUPPET] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 44,
         .baseAttack = 75,
         .baseDefense = 35,
@@ -9676,7 +8903,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BANETTE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 64,
         .baseAttack = 115,
         .baseDefense = 65,
@@ -9703,7 +8932,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DUSKULL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 20,
         .baseAttack = 40,
         .baseDefense = 90,
@@ -9731,7 +8962,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DUSCLOPS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 70,
         .baseDefense = 130,
@@ -9760,7 +8993,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TROPIUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseAttack = 80,
         .baseDefense = 83,
@@ -9786,7 +9021,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHIMECHO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseAttack = 50,
         .baseSpeed = 65,
         .baseSpAttack = 95,
@@ -9813,7 +9050,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ABSOL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 130,
         .baseDefense = 60,
@@ -9839,7 +9078,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WYNAUT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 23,
         .baseDefense = 48,
@@ -9866,7 +9107,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SNORUNT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 50,
         .baseDefense = 50,
@@ -9895,7 +9138,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GLALIE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 95,
         .baseDefense = 100,
@@ -9921,7 +9166,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SPHEAL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 40,
         .baseDefense = 50,
@@ -9947,7 +9194,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SEALEO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 60,
         .baseDefense = 70,
@@ -9973,7 +9222,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WALREIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseAttack = 80,
         .baseDefense = 90,
@@ -9999,7 +9250,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CLAMPERL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 64,
         .baseDefense = 125,
@@ -10029,7 +9282,9 @@ const struct BaseStats gBaseStats[] =
     //but then can evolve to suit a different purpose/niche  keep an eye on this balance wise
 
     [SPECIES_HUNTAIL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 104,
         .baseDefense = 95,
@@ -10056,7 +9311,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOREBYSS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 84,
         .baseDefense = 75,
@@ -10084,7 +9341,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RELICANTH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 90,
         .baseDefense = 130,
@@ -10111,7 +9370,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LUVDISC] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 43,
         .baseAttack = 55,
         .baseDefense = 71,
@@ -10139,7 +9400,9 @@ const struct BaseStats gBaseStats[] =
     }, //NEW ability will be 33% or 50% chance to infatuate on switch in loop check for target that can infatuate if double use trace targetting
     //stat ajustments made using numbers for love
     [SPECIES_BAGON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 75,
         .baseDefense = 60,
@@ -10167,7 +9430,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHELGON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 95,
         .baseDefense = 100,
@@ -10195,7 +9460,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SALAMENCE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 135,
         .baseDefense = 80,
@@ -10223,7 +9490,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BELDUM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 55,
         .baseDefense = 80,
@@ -10251,7 +9520,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_METANG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 75,
         .baseDefense = 100,
@@ -10279,7 +9550,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_METAGROSS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 135,
         .baseDefense = 130,
@@ -10307,7 +9580,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_REGIROCK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 100,
         .baseDefense = 200,
@@ -10332,7 +9607,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_REGICE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 50,
         .baseDefense = 100,
@@ -10359,7 +9636,9 @@ const struct BaseStats gBaseStats[] =
     }, 
 
     [SPECIES_REGISTEEL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 75,
         .baseDefense = 150,
@@ -10387,7 +9666,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LATIAS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 80,
         .baseDefense = 90,
@@ -10414,7 +9695,9 @@ const struct BaseStats gBaseStats[] =
     //red spector blue spector?  or spectrum blend?  that works, just make it a switch in ability that would increase evasiveness, so they can effectively start boosted +1 potentially +2
 
     [SPECIES_LATIOS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 90,
         .baseDefense = 80,
@@ -10439,7 +9722,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KYOGRE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 100,
         .baseDefense = 90,
@@ -10464,7 +9749,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GROUDON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 150,
         .baseDefense = 140,
@@ -10489,7 +9776,9 @@ const struct BaseStats gBaseStats[] =
     },//now that it exists give solar blade instead
 
     [SPECIES_RAYQUAZA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 150,
         .baseDefense = 90,
@@ -10515,7 +9804,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_JIRACHI] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 100,
         .baseDefense = 100,
@@ -10542,7 +9833,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DEOXYS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 150,
         .baseDefense = 50,
@@ -10569,7 +9862,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TURTWIG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 68,
         .baseDefense = 64,
@@ -10594,7 +9889,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GROTLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 89,
         .baseDefense = 85,
@@ -10620,7 +9917,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TORTERRA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 112,
         .baseAttack = 109,
         .baseDefense = 105,
@@ -10646,7 +9945,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHIMCHAR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 44,
         .baseAttack = 58,
         .baseDefense = 44,
@@ -10673,7 +9974,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MONFERNO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 64,
         .baseAttack = 78,
         .baseDefense = 52,
@@ -10701,7 +10004,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_INFERNAPE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 76,
         .baseAttack = 104,
         .baseDefense = 71,
@@ -10730,7 +10035,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIPLUP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 53,
         .baseAttack = 51,
         .baseDefense = 53,
@@ -10757,7 +10064,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PRINPLUP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 64,
         .baseAttack = 66,
         .baseDefense = 68,
@@ -10784,7 +10093,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_EMPOLEON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 84,
         .baseAttack = 86,
         .baseDefense = 88,
@@ -10811,7 +10122,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STARLY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 55,
         .baseDefense = 30,
@@ -10838,7 +10151,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STARAVIA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 75,
         .baseDefense = 50,
@@ -10865,7 +10180,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STARAPTOR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 120,
         .baseDefense = 70,
@@ -10892,7 +10209,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BIDOOF] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 69,
         .baseAttack = 45,
         .baseDefense = 40,
@@ -10918,7 +10237,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BIBAREL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 89,
         .baseAttack = 95,
         .baseDefense = 80,
@@ -10944,7 +10265,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KRICKETOT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 37,
         .baseAttack = 25,
         .baseDefense = 41,
@@ -10972,7 +10295,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KRICKETUNE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 77,
         .baseAttack = 104,
         .baseDefense = 51,
@@ -11002,7 +10327,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHINX] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 65,
         .baseDefense = 34,
@@ -11028,7 +10355,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LUXIO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 85,
         .baseDefense = 49,
@@ -11054,7 +10383,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LUXRAY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 120,
         .baseDefense = 79,
@@ -11080,7 +10411,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BUDEW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 30,
         .baseDefense = 35,
@@ -11108,7 +10441,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ROSERADE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 70,
         .baseSpeed = 90,
@@ -11136,7 +10471,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CRANIDOS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 67,
         .baseAttack = 125,
         .baseDefense = 40,
@@ -11162,7 +10499,9 @@ const struct BaseStats gBaseStats[] =
     }, //THERE'S nothing rock like about most fossil mon, just them being from fossils, and from the stone age... most of this ones moves are normal too
 
     [SPECIES_RAMPARDOS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 97,
         .baseAttack = 165,
         .baseDefense = 60,
@@ -11188,7 +10527,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHIELDON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 30,
         .baseAttack = 42,
         .baseDefense = 118,
@@ -11213,7 +10554,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BASTIODON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 52,
         .baseDefense = 168,
@@ -11238,7 +10581,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BURMY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 29,
         .baseDefense = 45,
@@ -11265,7 +10610,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WORMADAM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 86,
         .baseAttack = 59,
         .baseDefense = 85,
@@ -11292,7 +10639,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MOTHIM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 94,
         .baseDefense = 50,
@@ -11321,7 +10670,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_COMBEE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 30,
         .baseAttack = 30,
         .baseDefense = 42,
@@ -11350,7 +10701,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VESPIQUEN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 80,
         .baseDefense = 102,
@@ -11379,7 +10732,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PACHIRISU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 45,
         .baseDefense = 70,
@@ -11404,7 +10759,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BUIZEL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 65,
         .baseDefense = 35,
@@ -11429,7 +10786,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLOATZEL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 105,
         .baseDefense = 55,
@@ -11454,7 +10813,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHERUBI] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 35,
         .baseDefense = 45,
@@ -11479,7 +10840,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHERRIM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 60,
         .baseDefense = 70,
@@ -11508,7 +10871,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHELLOS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 76,
         .baseAttack = 48,
         .baseDefense = 48,
@@ -11534,7 +10899,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GASTRODON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 111,
         .baseAttack = 83,
         .baseDefense = 68,
@@ -11560,7 +10927,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AMBIPOM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 100,
         .baseDefense = 66,
@@ -11586,7 +10955,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRIFLOON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 50,
         .baseDefense = 34,
@@ -11612,7 +10983,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRIFBLIM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 150,
         .baseAttack = 80,
         .baseDefense = 44,
@@ -11638,7 +11011,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BUNEARY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 66,
         .baseDefense = 44,
@@ -11665,7 +11040,9 @@ const struct BaseStats gBaseStats[] =
     //klutz take 75% dmg and no damage from recoil effects i.e rockhead with dmg reduction DONE
 
     [SPECIES_LOPUNNY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 86,
         .baseDefense = 84,
@@ -11691,7 +11068,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MISMAGIUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 66,
         .baseAttack = 66,
         .baseDefense = 66,
@@ -11717,7 +11096,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HONCHKROW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 125,
         .baseDefense = 52,
@@ -11743,7 +11124,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GLAMEOW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 49,
         .baseAttack = 55,
         .baseDefense = 42,
@@ -11768,7 +11151,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PURUGLY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 89,
         .baseAttack = 82,
         .baseDefense = 74,
@@ -11795,7 +11180,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHINGLING] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 30,
         .baseDefense = 50,
@@ -11820,7 +11207,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STUNKY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 63,
         .baseAttack = 63,
         .baseDefense = 47,
@@ -11846,7 +11235,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SKUNTANK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 103,
         .baseAttack = 93,
         .baseDefense = 67,
@@ -11872,7 +11263,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BRONZOR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 57,
         .baseAttack = 24,
         .baseDefense = 86,
@@ -11899,7 +11292,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BRONZONG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 67,
         .baseAttack = 89,
         .baseDefense = 116,
@@ -11927,7 +11322,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BONSLY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 57,
         .baseAttack = 80,
         .baseDefense = 95,
@@ -11954,7 +11351,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MIME_JR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 20,
         .baseAttack = 25,
         .baseDefense = 45,
@@ -11981,7 +11380,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HAPPINY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 5,
         .baseDefense = 5,
@@ -12011,7 +11412,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHATOT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 76,
         .baseAttack = 65,
         .baseDefense = 56,
@@ -12040,7 +11443,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SPIRITOMB] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 92,
         .baseDefense = 108,
@@ -12068,7 +11473,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GIBLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 58,
         .baseAttack = 70,
         .baseDefense = 45,
@@ -12093,7 +11500,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GABITE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 90,
         .baseDefense = 65,
@@ -12118,7 +11527,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GARCHOMP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 108,
         .baseAttack = 130,
         .baseDefense = 95,
@@ -12143,7 +11554,9 @@ const struct BaseStats gBaseStats[] =
     },//MAKE new garchomp ability to replace sand spit, that works only on contact
 
     [SPECIES_MUNCHLAX] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 135,
         .baseAttack = 85,
         .baseDefense = 40,
@@ -12172,7 +11585,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RIOLU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 70,
         .baseDefense = 40,
@@ -12198,7 +11613,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LUCARIO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 110,
         .baseDefense = 70,
@@ -12225,7 +11642,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HIPPOPOTAS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 72,
         .baseDefense = 78,
@@ -12252,7 +11671,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HIPPOWDON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 108,
         .baseAttack = 112,
         .baseDefense = 118,
@@ -12279,7 +11700,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SKORUPI] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 50,
         .baseDefense = 90,
@@ -12306,7 +11729,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRAPION] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 90,
         .baseDefense = 110,
@@ -12333,7 +11758,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CROAGUNK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 52,
         .baseAttack = 61,
         .baseDefense = 40,
@@ -12362,7 +11789,9 @@ const struct BaseStats gBaseStats[] =
     }, //needs more fighting moves barely learns any
 
     [SPECIES_TOXICROAK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 83,
         .baseAttack = 106,
         .baseDefense = 65,
@@ -12391,7 +11820,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CARNIVINE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 84,
         .baseAttack = 113,
         .baseDefense = 72,
@@ -12415,7 +11846,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FINNEON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 49,
         .baseAttack = 49,
         .baseDefense = 56,
@@ -12441,7 +11874,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LUMINEON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 69,
         .baseAttack = 69,
         .baseDefense = 76,
@@ -12467,7 +11902,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MANTYKE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 20,
         .baseDefense = 50,
@@ -12492,7 +11929,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SNOVER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 62,
         .baseDefense = 50,
@@ -12519,7 +11958,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ABOMASNOW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 107,
         .baseAttack = 92,
         .baseDefense = 75,
@@ -12547,7 +11988,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WEAVILE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 120,
         .baseDefense = 65,
@@ -12576,7 +12019,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAGNEZONE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 70,
         .baseDefense = 115,
@@ -12604,7 +12049,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LICKILICKY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseAttack = 85,
         .baseDefense = 95,
@@ -12632,7 +12079,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RHYPERIOR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 115,
         .baseAttack = 140,
         .baseDefense = 130,
@@ -12658,7 +12107,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TANGROWTH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 100,
         .baseDefense = 125,
@@ -12684,7 +12135,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ELECTIVIRE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 123,
         .baseDefense = 67,
@@ -12713,7 +12166,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAGMORTAR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 95,
         .baseDefense = 67,
@@ -12741,7 +12196,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TOGEKISS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 50,
         .baseDefense = 95,
@@ -12770,7 +12227,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_YANMEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 86,
         .baseAttack = 76,
         .baseDefense = 86,
@@ -12799,7 +12258,9 @@ const struct BaseStats gBaseStats[] =
     },//give dragon rage, dragon breath outrage  dragon pulse draco meteor  //potentially rage
 
     [SPECIES_LEAFEON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 86,
         .baseAttack = 110,
         .baseDefense = 130,
@@ -12825,7 +12286,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GLACEON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 60,
         .baseDefense = 110,
@@ -12851,7 +12314,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GLISCOR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 95,
         .baseDefense = 125,
@@ -12878,7 +12343,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAMOSWINE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseAttack = 130,
         .baseDefense = 80,
@@ -12904,7 +12371,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PORYGON_Z] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 80,
         .baseDefense = 70,
@@ -12930,7 +12399,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GALLADE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 125,
         .baseDefense = 65,
@@ -12957,7 +12428,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PROBOPASS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 55,
         .baseDefense = 145,
@@ -12986,7 +12459,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DUSKNOIR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 100,
         .baseDefense = 135,
@@ -13015,7 +12490,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FROSLASS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 80,
         .baseDefense = 70,
@@ -13041,7 +12518,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ROTOM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 66,
         .baseAttack = 65,
         .baseDefense = 77,
@@ -13067,7 +12546,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UXIE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 75,
         .baseDefense = 130,
@@ -13101,7 +12582,9 @@ const struct BaseStats gBaseStats[] =
    //will need exit message
    //vsonic IMPORTANT
     [SPECIES_MESPRIT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 105,
         .baseDefense = 105,
@@ -13129,7 +12612,9 @@ const struct BaseStats gBaseStats[] =
     //as plan to make new synchronize buff its own ability & call that empath as realized its a mirror armor/corvinight copy/hybrid and I DON'T want that going on umbreon ...
 
     [SPECIES_AZELF] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 125,
         .baseDefense = 70,
@@ -13164,7 +12649,9 @@ const struct BaseStats gBaseStats[] =
     //actually to make more noticeable think need raise dmg reduction chance maybe 40%
 
     [SPECIES_DIALGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -13213,7 +12700,9 @@ const struct BaseStats gBaseStats[] =
    //god that really is going to be annnoying..  oh and add solar beam & future sight to its learnset skull bash too if it isn't already
 
     [SPECIES_PALKIA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 120,
         .baseDefense = 100,
@@ -13242,7 +12731,9 @@ const struct BaseStats gBaseStats[] =
     //in singles moves can't miss
 
     [SPECIES_HEATRAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 91,
         .baseAttack = 90,
         .baseDefense = 106,
@@ -13267,7 +12758,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_REGIGIGAS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseAttack = 160,
         .baseDefense = 110,
@@ -13292,7 +12785,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GIRATINA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 150,
         .baseAttack = 100,
         .baseDefense = 120,
@@ -13319,7 +12814,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CRESSELIA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 70,
         .baseDefense = 120,
@@ -13345,7 +12842,9 @@ const struct BaseStats gBaseStats[] =
     //like suicine ability heal should also work on switch in for anyone already asleep
 
     [SPECIES_PHIONE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 88,
         .baseAttack = 88,
         .baseDefense = 88,
@@ -13370,7 +12869,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MANAPHY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 100,
         .baseDefense = 100,
@@ -13395,7 +12896,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DARKRAI] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 90,
         .baseDefense = 90,
@@ -13421,7 +12924,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHAYMIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 130,
         .baseAttack = 100,
         .baseDefense = 100,
@@ -13447,7 +12952,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -13472,7 +12979,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VICTINI] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 100,
         .baseDefense = 100,
@@ -13497,7 +13006,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SNIVY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 45,
         .baseDefense = 55,
@@ -13524,7 +13035,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SERVINE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 73,
         .baseAttack = 60,
         .baseDefense = 75,
@@ -13551,7 +13064,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SERPERIOR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 88,
         .baseAttack = 75,
         .baseDefense = 95,
@@ -13577,7 +13092,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TEPIG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 63,
         .baseDefense = 45,
@@ -13602,7 +13119,9 @@ const struct BaseStats gBaseStats[] =
     },//add ground moves to learnset  check add back adaptability? drayano style
 
     [SPECIES_PIGNITE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 93,
         .baseDefense = 55,
@@ -13629,7 +13148,9 @@ const struct BaseStats gBaseStats[] =
     //blaze stuff as well. make it less than 50%, plus it works since below 50 is when hp bar turns yellow
     //note could make fire type u turn for doubles to self proc flash fire...hmm
     [SPECIES_EMBOAR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 121,
         .baseAttack = 123,
         .baseDefense = 65,
@@ -13657,7 +13178,9 @@ const struct BaseStats gBaseStats[] =
     //also sandstorm for stat buff
 
     [SPECIES_OSHAWOTT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 55,
         .baseDefense = 45,
@@ -13682,7 +13205,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DEWOTT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 75,
         .baseDefense = 60,
@@ -13707,7 +13232,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SAMUROTT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 100,
         .baseDefense = 85,
@@ -13732,7 +13259,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PATRAT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 55,
         .baseDefense = 39,
@@ -13759,7 +13288,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WATCHOG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 85,
         .baseDefense = 69,
@@ -13786,7 +13317,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LILLIPUP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 60,
         .baseDefense = 45,
@@ -13811,7 +13344,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HERDIER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 80,
         .baseDefense = 65,
@@ -13837,7 +13372,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STOUTLAND] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseDefense = 90,
         .baseSpeed = 80,
@@ -13863,7 +13400,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PURRLOIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 41,
         .baseAttack = 50,
         .baseDefense = 37,
@@ -13889,7 +13428,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LIEPARD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 64,
         .baseAttack = 98,
         .baseDefense = 50,
@@ -13915,7 +13456,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PANSAGE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 66,
         .baseAttack = 62,
         .baseDefense = 48,
@@ -13941,7 +13484,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SIMISAGE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 86,
         .baseAttack = 105,
         .baseDefense = 63,
@@ -13967,7 +13512,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PANSEAR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 67,
         .baseDefense = 48,
@@ -13993,7 +13540,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SIMISEAR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 116,
         .baseDefense = 63,
@@ -14019,7 +13568,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PANPOUR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 53,
         .baseDefense = 56,
@@ -14045,7 +13596,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SIMIPOUR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 98,
         .baseDefense = 79,
@@ -14071,7 +13624,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MUNNA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 76,
         .baseAttack = 25,
         .baseDefense = 45,
@@ -14097,7 +13652,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MUSHARNA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 116,
         .baseAttack = 55,
         .baseDefense = 85,
@@ -14123,7 +13680,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIDOVE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 36,
         .baseDefense = 40,
@@ -14149,7 +13708,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TRANQUILL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 62,
         .baseAttack = 50,
         .baseDefense = 52,
@@ -14176,7 +13737,9 @@ const struct BaseStats gBaseStats[] =
     //will need to reupdate species file again...
 
     [SPECIES_UNFEZANT_M] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseDefense = 65,
         .baseSpeed = 113,
@@ -14202,7 +13765,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BLITZLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 60,
         .baseDefense = 32,
@@ -14228,7 +13793,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZEBSTRIKA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 100,
         .baseDefense = 63,
@@ -14254,7 +13821,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ROGGENROLA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 75,
         .baseDefense = 85,
@@ -14282,7 +13851,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BOLDORE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 105,
         .baseDefense = 105,
@@ -14311,7 +13882,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GIGALITH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 135,
         .baseDefense = 130,
@@ -14340,7 +13913,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WOOBAT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseAttack = 45,
         .baseDefense = 43,
         .baseSpeed = 72,
@@ -14366,7 +13941,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SWOOBAT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 77,
         .baseAttack = 67,
         .baseDefense = 55,
@@ -14392,7 +13969,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRILBUR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 85,
         .baseDefense = 40,
@@ -14418,7 +13997,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_EXCADRILL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseAttack = 135,
         .baseDefense = 60,
@@ -14444,7 +14025,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AUDINO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 103,
         .baseAttack = 60,
         .baseDefense = 86,
@@ -14472,7 +14055,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TIMBURR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 70,
@@ -14498,7 +14083,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GURDURR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 105,
         .baseDefense = 95,
@@ -14524,7 +14111,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CONKELDURR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 140,
         .baseDefense = 100,
@@ -14550,7 +14139,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TYMPOLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 50,
         .baseDefense = 40,
@@ -14576,7 +14167,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PALPITOAD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 65,
         .baseDefense = 55,
@@ -14602,7 +14195,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SEISMITOAD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseDefense = 75,
         .baseSpeed = 74,
@@ -14628,7 +14223,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_THROH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 100,
         .baseDefense = 85,
@@ -14656,7 +14253,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SAWK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 125,
         .baseDefense = 75,
@@ -14684,7 +14283,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SEWADDLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 62,
         .baseAttack = 53,
         .baseDefense = 70,
@@ -14712,7 +14313,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SWADLOON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 74,
         .baseAttack = 63,
         .baseDefense = 90,
@@ -14739,7 +14342,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LEAVANNY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 103,
         .baseDefense = 80,
@@ -14767,7 +14372,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VENIPEDE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 30,
         .baseAttack = 45,
         .baseDefense = 59,
@@ -14793,7 +14400,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WHIRLIPEDE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 55,
         .baseDefense = 99,
@@ -14819,7 +14428,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SCOLIPEDE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 77,
         .baseDefense = 89,
         .baseSpeed = 117,
@@ -14845,7 +14456,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_COTTONEE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 56,
         .baseAttack = 27,
         .baseDefense = 60,
@@ -14874,7 +14487,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WHIMSICOTT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 67,
         .baseDefense = 85,
@@ -14903,7 +14518,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PETILIL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 35,
         .baseDefense = 50,
@@ -14933,7 +14550,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LILLIGANT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 89,
         .baseAttack = 60,
         .baseDefense = 75,
@@ -14963,7 +14582,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BASCULIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 92,
         .baseDefense = 65,
@@ -14990,7 +14611,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SANDILE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 72,
         .baseDefense = 35,
@@ -15017,7 +14640,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KROKOROK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 82,
         .baseDefense = 45,
@@ -15044,7 +14669,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KROOKODILE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 117,
         .baseSpeed = 92,
@@ -15071,7 +14698,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DARUMAKA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 90,
         .baseDefense = 45,
@@ -15096,7 +14725,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DARMANITAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 155,
         .baseAttack = 140,
         .baseDefense = 55,
@@ -15122,7 +14753,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MARACTUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 86,
         .baseDefense = 77,
@@ -15150,7 +14783,9 @@ const struct BaseStats gBaseStats[] =
     },//LEARNS ingraine can counter solar power hp drop, could also just leech seed, either works
 
     [SPECIES_DWEBBLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 65,
         .baseDefense = 85,
@@ -15178,7 +14813,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CRUSTLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 84,
         .baseDefense = 125,
         .baseSpeed = 45,
@@ -15206,7 +14843,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SCRAGGY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 75,
         .baseDefense = 70,
@@ -15235,7 +14874,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SCRAFTY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 90,
         .baseDefense = 115,
@@ -15265,7 +14906,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SIGILYPH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 72,
         .baseAttack = 58,
         .baseDefense = 80,
@@ -15291,7 +14934,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_YAMASK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 38,
         .baseAttack = 30,
         .baseDefense = 85,
@@ -15319,7 +14964,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_COFAGRIGUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 58,
         .baseAttack = 50,
         .baseDefense = 145,
@@ -15347,7 +14994,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TIRTOUGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 54,
         .baseAttack = 78,
         .baseDefense = 103,
@@ -15373,7 +15022,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CARRACOSTA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 74,
         .baseAttack = 108,
         .baseDefense = 133,
@@ -15399,7 +15050,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCHEN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 112,
         .baseDefense = 45,
@@ -15426,7 +15079,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCHEOPS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 140,
         .baseDefense = 65,
@@ -15454,7 +15109,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TRUBBISH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 50,
         .baseDefense = 62,
@@ -15482,7 +15139,9 @@ const struct BaseStats gBaseStats[] =
     }, //ADD steel moves to garbodor
 
     [SPECIES_GARBODOR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 95,
         .baseDefense = 82,
@@ -15512,7 +15171,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZORUA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 65,
         .baseDefense = 40,
@@ -15539,7 +15200,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZOROARK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 105,
         .baseDefense = 60,
@@ -15566,7 +15229,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINCCINO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 50,
         .baseDefense = 40,
@@ -15592,7 +15257,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CINCCINO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 95,
         .baseDefense = 60,
@@ -15618,7 +15285,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOTHITA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 30,
         .baseDefense = 50,
@@ -15644,7 +15313,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOTHORITA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 45,
         .baseDefense = 70,
@@ -15670,7 +15341,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOTHITELLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 55,
         .baseDefense = 95,
@@ -15696,7 +15369,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SOLOSIS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 30,
         .baseDefense = 40,
@@ -15722,7 +15397,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DUOSION] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 40,
         .baseDefense = 50,
@@ -15748,7 +15425,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_REUNICLUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseAttack = 65,
         .baseDefense = 85,
@@ -15774,7 +15453,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DUCKLETT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 62,
         .baseAttack = 44,
         .baseDefense = 50,
@@ -15800,7 +15481,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SWANNA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 97,
         .baseDefense = 63,
@@ -15826,7 +15509,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VANILLITE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 36,
         .baseAttack = 50,
         .baseDefense = 50,
@@ -15853,7 +15538,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VANILLISH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 51,
         .baseAttack = 65,
         .baseDefense = 65,
@@ -15880,7 +15567,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VANILLUXE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 71,
         .baseAttack = 95,
         .baseDefense = 85,
@@ -15907,7 +15596,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DEERLING] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 60,
         .baseDefense = 50,
@@ -15933,7 +15624,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SAWSBUCK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 99,
         .baseAttack = 100,
         .baseDefense = 70,
@@ -15959,7 +15652,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_EMOLGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 85,
         .baseDefense = 60,
@@ -15986,7 +15681,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KARRABLAST] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 75,
         .baseDefense = 45,
@@ -16013,7 +15710,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ESCAVALIER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 135,
         .baseDefense = 105,
@@ -16040,7 +15739,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FOONGUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 69,
         .baseAttack = 55,
         .baseDefense = 45,
@@ -16069,7 +15770,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AMOONGUSS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 114,
         .baseAttack = 85,
         .baseDefense = 70,
@@ -16098,7 +15801,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FRILLISH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 40,
         .baseDefense = 50,
@@ -16124,7 +15829,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_JELLICENT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 60,
         .baseDefense = 70,
@@ -16150,7 +15857,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALOMOMOLA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 165,
         .baseAttack = 75,
         .baseDefense = 80,
@@ -16176,7 +15885,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_JOLTIK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 47,
         .baseDefense = 50,
@@ -16202,7 +15913,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GALVANTULA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 87,
         .baseDefense = 60,
@@ -16228,7 +15941,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FERROSEED] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 54,
         .baseAttack = 50,
         .baseDefense = 91,
@@ -16257,7 +15972,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FERROTHORN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 88,
         .baseAttack = 94,
         .baseDefense = 131,
@@ -16286,7 +16003,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KLINK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 55,
         .baseDefense = 70,
@@ -16311,7 +16030,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KLANG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 80,
         .baseDefense = 95,
@@ -16336,7 +16057,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KLINKLANG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 100,
         .baseDefense = 115,
@@ -16361,7 +16084,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TYNAMO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 55,
         .baseDefense = 40,
@@ -16385,7 +16110,9 @@ const struct BaseStats gBaseStats[] =
     }, //why is it not water?
 
     [SPECIES_EELEKTRIK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 85,
         .baseDefense = 70,
@@ -16409,7 +16136,9 @@ const struct BaseStats gBaseStats[] =
     }, //LOWER EVolution and learnsets
 
     [SPECIES_EELEKTROSS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 77,
         .baseAttack = 115,
         .baseDefense = 80,
@@ -16433,7 +16162,9 @@ const struct BaseStats gBaseStats[] =
     },//copy learnset of pre evo
 
     [SPECIES_ELGYEM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 55,
         .baseDefense = 55,
@@ -16459,7 +16190,9 @@ const struct BaseStats gBaseStats[] =
     }, //add round to learnset early on
 
     [SPECIES_BEHEEYEM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 75,
         .baseDefense = 75,
@@ -16485,7 +16218,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LITWICK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 30,
         .baseDefense = 55,
@@ -16512,7 +16247,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LAMPENT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 40,
         .baseDefense = 60,
@@ -16539,7 +16276,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHANDELURE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 55,
         .baseDefense = 90,
@@ -16566,7 +16305,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AXEW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 46,
         .baseAttack = 87,
         .baseDefense = 60,
@@ -16592,7 +16333,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FRAXURE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 66,
         .baseAttack = 117,
         .baseDefense = 70,
@@ -16618,7 +16361,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HAXORUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 76,
         .baseAttack = 147,
         .baseDefense = 90,
@@ -16644,7 +16389,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CUBCHOO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 70,
         .baseDefense = 40,
@@ -16670,7 +16417,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BEARTIC] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseDefense = 85,
         .baseSpeed = 50,
@@ -16696,7 +16445,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CRYOGONAL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseAttack = 50,
         .baseSpeed = 105,
         .baseSpAttack = 95,
@@ -16722,7 +16473,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHELMET] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 40,
         .baseDefense = 85,
@@ -16748,7 +16501,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ACCELGOR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 70,
         .baseDefense = 40,
@@ -16774,7 +16529,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STUNFISK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 109,
         .baseAttack = 66,
         .baseDefense = 84,
@@ -16800,7 +16557,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MIENFOO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 85,
         .baseDefense = 50,
@@ -16826,7 +16585,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MIENSHAO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 125,
         .baseDefense = 60,
@@ -16852,7 +16613,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRUDDIGON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 77,
         .baseAttack = 120,
         .baseDefense = 90,
@@ -16879,7 +16642,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOLETT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 59,
         .baseAttack = 74,
         .baseDefense = 50,
@@ -16908,7 +16673,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOLURK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 99,
         .baseAttack = 124,
         .baseDefense = 80,
@@ -16937,7 +16704,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PAWNIARD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 85,
         .baseDefense = 70,
@@ -16962,7 +16731,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BISHARP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 125,
         .baseDefense = 100,
@@ -16987,7 +16758,9 @@ const struct BaseStats gBaseStats[] =
     },//GIVE Hi pressure ability
 
     [SPECIES_BOUFFALANT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 110,
         .baseDefense = 95,
@@ -17012,7 +16785,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RUFFLET] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 83,
         .baseDefense = 50,
@@ -17037,7 +16812,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BRAVIARY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 123,
         .baseDefense = 75,
@@ -17062,7 +16839,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VULLABY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 55,
         .baseDefense = 75,
@@ -17088,7 +16867,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MANDIBUZZ] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseAttack = 65,
         .baseDefense = 105,
@@ -17114,7 +16895,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HEATMOR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 97,
         .baseDefense = 66,
@@ -17140,7 +16923,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DURANT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 109,
         .baseDefense = 112,
@@ -17166,7 +16951,9 @@ const struct BaseStats gBaseStats[] =
     //and just being neutral for mon with normal weakness isn't exactly "heat proof"
 
     [SPECIES_DEINO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 52,
         .baseAttack = 65,
         .baseDefense = 50,
@@ -17191,7 +16978,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZWEILOUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 72,
         .baseAttack = 85,
         .baseDefense = 70,
@@ -17216,7 +17005,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HYDREIGON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 92,
         .baseAttack = 105,
         .baseDefense = 90,
@@ -17241,7 +17032,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LARVESTA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 85,
         .baseDefense = 55,
@@ -17266,7 +17059,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VOLCARONA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 99,
         .baseDefense = 65,
@@ -17293,7 +17088,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_COBALION] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 91,
         .baseAttack = 90,
         .baseDefense = 129,
@@ -17320,7 +17117,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TERRAKION] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 91,
         .baseAttack = 129,
         .baseDefense = 90,
@@ -17347,7 +17146,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIRIZION] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 91,
         .baseAttack = 90,
         .baseDefense = 72,
@@ -17374,7 +17175,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TORNADUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 79,
         .baseAttack = 115,
         .baseDefense = 70,
@@ -17400,7 +17203,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_THUNDURUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 79,
         .baseAttack = 115,
         .baseDefense = 70,
@@ -17426,7 +17231,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RESHIRAM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 120,
         .baseDefense = 100,
@@ -17453,7 +17260,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZEKROM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 150,
         .baseDefense = 120,
@@ -17480,7 +17289,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LANDORUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 89,
         .baseAttack = 125,
         .baseDefense = 90,
@@ -17505,7 +17316,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KYUREM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 125,
         .baseAttack = 130,
         .baseDefense = 90,
@@ -17532,7 +17345,9 @@ const struct BaseStats gBaseStats[] =
     },//absolute zero, turns all water type attacks into ice type attacks field wide, think also change type effect like ecosystem eto resist ice - DONE
 
     [SPECIES_KELDEO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 91,
         .baseAttack = 72,
         .baseDefense = 90,
@@ -17557,7 +17372,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MELOETTA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 77,
         .baseDefense = 77,
@@ -17586,7 +17403,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GENESECT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 71,
         .baseAttack = 120,
         .baseDefense = 95,
@@ -17613,7 +17432,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHESPIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 66,
         .baseAttack = 61,
         .baseDefense = 65,
@@ -17640,7 +17461,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_QUILLADIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 71,
         .baseAttack = 78,
         .baseDefense = 95,
@@ -17667,7 +17490,9 @@ const struct BaseStats gBaseStats[] =
     },//has takedown wood hammer so rock head could be useful plus has enough stats for eviolite to be worthwhile
 
     [SPECIES_CHESNAUGHT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 98,
         .baseAttack = 107,
         .baseDefense = 127,
@@ -17696,7 +17521,9 @@ const struct BaseStats gBaseStats[] =
     //think what I'll do is split it into 2 effects, it'll scatter spikes when it gets hit
 
     [SPECIES_FENNEKIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 45,
         .baseDefense = 40,
@@ -17723,7 +17550,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BRAIXEN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 59,
         .baseAttack = 59,
         .baseDefense = 58,
@@ -17750,7 +17579,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DELPHOX] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 69,
         .baseDefense = 72,
@@ -17777,7 +17608,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FROAKIE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 41,
         .baseAttack = 56,
         .baseDefense = 40,
@@ -17804,7 +17637,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FROGADIER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 54,
         .baseAttack = 63,
         .baseDefense = 52,
@@ -17831,7 +17666,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GRENINJA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 72,
         .baseAttack = 95,
         .baseDefense = 67,
@@ -17858,7 +17695,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BUNNELBY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 38,
         .baseAttack = 36,
         .baseDefense = 38,
@@ -17884,7 +17723,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DIGGERSBY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 56,
         .baseDefense = 77,
@@ -17910,7 +17751,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLETCHLING] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 50,
         .baseDefense = 43,
@@ -17936,7 +17779,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLETCHINDER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 62,
         .baseAttack = 73,
         .baseDefense = 55,
@@ -17963,7 +17808,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TALONFLAME] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 81,
         .baseDefense = 71,
@@ -17990,7 +17837,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SCATTERBUG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 35,
         .baseDefense = 40,
@@ -18017,7 +17866,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SPEWPA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 22,
         .baseDefense = 60,
@@ -18044,7 +17895,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 54,
         .baseDefense = 66,
@@ -18073,7 +17926,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LITLEO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 62,
         .baseAttack = 50,
         .baseDefense = 58,
@@ -18099,7 +17954,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PYROAR_M] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 106,
         .baseAttack = 78,
         .baseDefense = 87,
@@ -18125,7 +17982,9 @@ const struct BaseStats gBaseStats[] =
     },//add sunny day crunch extremespeed to learnet and have thunderbolt as tm move    vsonic
     
     [SPECIES_FLABEBE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 44,
         .baseAttack = 38,
         .baseDefense = 39,
@@ -18151,7 +18010,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLOETTE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 54,
         .baseAttack = 45,
         .baseDefense = 47,
@@ -18177,7 +18038,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLORGES] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 65,
         .baseDefense = 68,
@@ -18203,7 +18066,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SKIDDO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 66,
         .baseAttack = 65,
         .baseDefense = 48,
@@ -18229,7 +18094,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOGOAT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 123,
         .baseAttack = 100,
         .baseDefense = 62,
@@ -18255,7 +18122,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PANCHAM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 67,
         .baseAttack = 82,
         .baseDefense = 62,
@@ -18282,7 +18151,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PANGORO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 124,
         .baseDefense = 78,
@@ -18309,7 +18180,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FURFROU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 60,
@@ -18337,7 +18210,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ESPURR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 62,
         .baseAttack = 48,
         .baseDefense = 54,
@@ -18363,7 +18238,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MEOWSTIC] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 74,
         .baseAttack = 48,
         .baseDefense = 76,
@@ -18389,7 +18266,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HONEDGE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 80,
         .baseDefense = 100,
@@ -18414,7 +18293,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DOUBLADE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 59,
         .baseAttack = 110,
         .baseDefense = 150,
@@ -18439,7 +18320,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AEGISLASH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 50,
         .baseSpeed = 60,
@@ -18465,7 +18348,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SPRITZEE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 52,
         .baseDefense = 60,
@@ -18490,7 +18375,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AROMATISSE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 101,
         .baseAttack = 72,
         .baseDefense = 72,
@@ -18516,7 +18403,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SWIRLIX] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 62,
         .baseAttack = 48,
         .baseDefense = 66,
@@ -18542,7 +18431,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SLURPUFF] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 82,
         .baseAttack = 80,
         .baseDefense = 86,
@@ -18568,7 +18459,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_INKAY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 53,
         .baseAttack = 54,
         .baseDefense = 53,
@@ -18594,7 +18487,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MALAMAR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 86,
         .baseAttack = 92,
         .baseDefense = 88,
@@ -18620,7 +18515,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BINACLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 42,
         .baseAttack = 52,
         .baseDefense = 67,
@@ -18646,7 +18543,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BARBARACLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 72,
         .baseAttack = 105,
         .baseDefense = 115,
@@ -18672,7 +18571,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SKRELP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 60,
         .baseDefense = 60,
@@ -18698,7 +18599,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRAGALGE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 75,
         .baseDefense = 90,
@@ -18724,7 +18627,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CLAUNCHER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 53,
         .baseDefense = 62,
@@ -18749,7 +18654,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CLAWITZER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 71,
         .baseAttack = 73,
         .baseDefense = 88,
@@ -18777,7 +18684,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HELIOPTILE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 44,
         .baseAttack = 38,
         .baseDefense = 33,
@@ -18803,7 +18712,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HELIOLISK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 62,
         .baseAttack = 55,
         .baseDefense = 52,
@@ -18830,7 +18741,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TYRUNT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 58,
         .baseAttack = 89,
         .baseDefense = 77,
@@ -18856,7 +18769,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TYRANTRUM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 82,
         .baseAttack = 121,
         .baseDefense = 119,
@@ -18882,7 +18797,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AMAURA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 77,
         .baseAttack = 59,
         .baseDefense = 50,
@@ -18908,7 +18825,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AURORUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 123,
         .baseAttack = 77,
         .baseDefense = 72,
@@ -18934,7 +18853,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SYLVEON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 65,
         .baseDefense = 65,
@@ -18961,7 +18882,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HAWLUCHA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 92,
         .baseDefense = 75,
@@ -18989,7 +18912,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DEDENNE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 67,
         .baseAttack = 58,
         .baseDefense = 57,
@@ -19015,7 +18940,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CARBINK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 50,
         .baseDefense = 150,
@@ -19041,7 +18968,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOOMY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 50,
         .baseDefense = 35,
@@ -19070,7 +18999,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SLIGGOO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 75,
         .baseDefense = 53,
@@ -19099,7 +19030,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOODRA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 100,
         .baseDefense = 70,
@@ -19125,7 +19058,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KLEFKI] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 57,
         .baseAttack = 80,
         .baseDefense = 91,
@@ -19151,7 +19086,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PHANTUMP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 58,
         .baseAttack = 70,
         .baseDefense = 48,
@@ -19177,7 +19114,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TREVENANT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 110,
         .baseDefense = 76,
@@ -19203,7 +19142,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PUMPKABOO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 64,
         .baseAttack = 66,
         .baseDefense = 70,
@@ -19229,7 +19170,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOURGEIST] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 90,
         .baseDefense = 122,
@@ -19255,7 +19198,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BERGMITE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 69,
         .baseDefense = 85,
@@ -19283,7 +19228,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AVALUGG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 117,
         .baseDefense = 184,
@@ -19308,7 +19255,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NOIBAT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 30,
         .baseDefense = 35,
@@ -19333,7 +19282,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NOIVERN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 70,
         .baseDefense = 80,
@@ -19358,7 +19309,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_XERNEAS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 126,
         .baseAttack = 131,
         .baseDefense = 95,
@@ -19386,7 +19339,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_YVELTAL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 126,
         .baseAttack = 131,
         .baseDefense = 95,
@@ -19414,7 +19369,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZYGARDE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 108,
         .baseAttack = 100,
         .baseDefense = 121,
@@ -19442,7 +19399,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DIANCIE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 100,
         .baseDefense = 150,
@@ -19468,7 +19427,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HOOPA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 110,
         .baseDefense = 60,
@@ -19494,7 +19455,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VOLCANION] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 110,
         .baseDefense = 120,
@@ -19519,7 +19482,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ROWLET] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 55,
         .baseDefense = 55,
@@ -19544,7 +19509,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DARTRIX] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 88,
         .baseAttack = 75,
         .baseDefense = 75,
@@ -19569,7 +19536,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DECIDUEYE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 88,
         .baseAttack = 107,
         .baseDefense = 75,
@@ -19594,7 +19563,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LITTEN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 65,
         .baseDefense = 40,
@@ -19619,7 +19590,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TORRACAT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 85,
         .baseDefense = 50,
@@ -19644,7 +19617,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_INCINEROAR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 115,
         .baseDefense = 90,
@@ -19669,7 +19644,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_POPPLIO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 54,
         .baseDefense = 54,
@@ -19696,7 +19673,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BRIONNE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 69,
         .baseDefense = 69,
@@ -19723,7 +19702,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PRIMARINA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 74,
         .baseDefense = 74,
@@ -19750,7 +19731,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIKIPEK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 75,
         .baseDefense = 30,
@@ -19777,7 +19760,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TRUMBEAK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 85,
         .baseDefense = 50,
@@ -19804,7 +19789,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TOUCANNON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 120,
         .baseDefense = 75,
@@ -19831,7 +19818,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_YUNGOOS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 70,
         .baseDefense = 30,
@@ -19858,7 +19847,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GUMSHOOS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 88,
         .baseAttack = 110,
         .baseDefense = 60,
@@ -19885,7 +19876,9 @@ const struct BaseStats gBaseStats[] =
     },//give first impressions as evo move & facade
 
     [SPECIES_GRUBBIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 47,
         .baseAttack = 62,
         .baseDefense = 55,
@@ -19910,7 +19903,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHARJABUG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 67,
         .baseAttack = 82,
         .baseDefense = 95,
@@ -19939,7 +19934,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIKAVOLT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 77,
         .baseAttack = 70,
         .baseDefense = 90,
@@ -19964,7 +19961,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CRABRAWLER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 47,
         .baseAttack = 82,
         .baseDefense = 57,
@@ -19991,7 +19990,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CRABOMINABLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 97,
         .baseAttack = 132,
         .baseDefense = 117,
@@ -20022,7 +20023,9 @@ const struct BaseStats gBaseStats[] =
     //which is algonuin for wendigo i.e original word
 
     [SPECIES_ORICORIO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 70,
         .baseDefense = 70,
@@ -20052,7 +20055,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CUTIEFLY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 45,
         .baseDefense = 40,
@@ -20081,7 +20086,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RIBOMBEE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 55,
         .baseDefense = 60,
@@ -20110,7 +20117,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ROCKRUFF] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 65,
         .baseDefense = 40,
@@ -20137,7 +20146,9 @@ const struct BaseStats gBaseStats[] =
     }, //give these normal secondary
 
     [SPECIES_LYCANROC] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 115,
         .baseDefense = 65,
@@ -20163,7 +20174,9 @@ const struct BaseStats gBaseStats[] =
     }, //give crush claw
 
     [SPECIES_WISHIWASHI] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 20,
         .baseDefense = 20,
@@ -20191,7 +20204,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAREANIE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 53,
         .baseDefense = 62,
@@ -20218,7 +20233,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TOXAPEX] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 63,
         .baseDefense = 152,
@@ -20245,7 +20262,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MUDBRAY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 100,
         .baseDefense = 70,
@@ -20274,7 +20293,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MUDSDALE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 125,
         .baseDefense = 100,
@@ -20303,7 +20324,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DEWPIDER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 38,
         .baseAttack = 50,
         .baseDefense = 52,
@@ -20330,7 +20353,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARAQUANID] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 69,
         .baseAttack = 86,
         .baseDefense = 92,
@@ -20357,7 +20382,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FOMANTIS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 76,
         .baseAttack = 55,
         .baseDefense = 35,
@@ -20384,7 +20411,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LURANTIS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 92,
         .baseAttack = 105,
         .baseDefense = 90,
@@ -20411,7 +20440,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MORELULL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 35,
         .baseDefense = 55,
@@ -20438,7 +20469,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHIINOTIC] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseAttack = 45,
         .baseDefense = 100,
@@ -20465,7 +20498,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SALANDIT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 44,
         .baseDefense = 40,
@@ -20492,7 +20527,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SALAZZLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 64,
         .baseDefense = 60,
@@ -20515,11 +20552,13 @@ const struct BaseStats gBaseStats[] =
             .abilities = {ABILITY_CORROSION, ABILITY_MERCILESS},
         .abilityHidden = {ABILITY_OBLIVIOUS, ABILITY_QUEENLY_MAJESTY}, //oblivious is hidden ability as it can't be infatuated as its a seductress itself, new idea make femme fatale to replace
         .bodyColor = BODY_COLOR_BLACK, //give base oblivious affect and roll in gen 9 buff immunity to taunt and maybe flinch?  replace levitate
-        .noFlip = FALSE, //Femme fatale ABILITY_FEMME_FATALE
+        .noFlip = FALSE, //Femme fatale ABILITY_FEMME_FATALE    //so cant be flinched or taunted
     },//vsonic
 
     [SPECIES_STUFFUL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 75,
         .baseDefense = 50,
@@ -20545,7 +20584,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BEWEAR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 125,
         .baseDefense = 80,
@@ -20571,7 +20612,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BOUNSWEET] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 52,
         .baseAttack = 30,
         .baseDefense = 38,
@@ -20600,7 +20643,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STEENEE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 72,
         .baseAttack = 40,
         .baseDefense = 48,
@@ -20629,7 +20674,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TSAREENA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 87,
         .baseAttack = 120,
         .baseDefense = 98,
@@ -20658,7 +20705,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_COMFEY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 51,
         .baseAttack = 52,
         .baseDefense = 90,
@@ -20687,7 +20736,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ORANGURU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 75,
         .baseDefense = 80,
@@ -20713,7 +20764,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PASSIMIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 120,
         .baseDefense = 90,
@@ -20739,7 +20792,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WIMPOD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 25,
         .baseAttack = 35,
         .baseDefense = 40,
@@ -20765,7 +20820,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOLISOPOD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 115,
         .baseAttack = 125,
         .baseDefense = 140,
@@ -20791,7 +20848,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SANDYGAST] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 55,
         .baseDefense = 80,
@@ -20818,7 +20877,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PALOSSAND] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 75,
         .baseDefense = 110,
@@ -20845,7 +20906,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PYUKUMUKU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 60,
         .baseDefense = 130,
@@ -20871,7 +20934,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TYPE_NULL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -20896,7 +20961,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -20924,7 +20991,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 60,
         .baseDefense = 100,
@@ -20954,7 +21023,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KOMALA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 115,
         .baseDefense = 65,
@@ -20982,7 +21053,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TURTONATOR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 78,
         .baseDefense = 165,
@@ -21008,7 +21081,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TOGEDEMARU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 98,
         .baseDefense = 63,
@@ -21037,7 +21112,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MIMIKYU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 90,
         .baseDefense = 80,
@@ -21066,7 +21143,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BRUXISH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 105,
         .baseDefense = 70,
@@ -21095,7 +21174,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRAMPA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 60,
         .baseDefense = 85,
@@ -21122,7 +21203,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DHELMISE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 97,
         .baseAttack = 131,
         .baseDefense = 100,
@@ -21150,7 +21233,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_JANGMO_O] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 55,
         .baseDefense = 65,
@@ -21179,7 +21264,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HAKAMO_O] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 75,
         .baseDefense = 90,
@@ -21208,7 +21295,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KOMMO_O] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 110,
         .baseDefense = 125,
@@ -21237,7 +21326,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TAPU_KOKO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 115,
         .baseDefense = 85,
@@ -21263,7 +21354,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TAPU_LELE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 85,
         .baseDefense = 75,
@@ -21289,7 +21382,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TAPU_BULU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 83,
         .baseAttack = 130,
         .baseDefense = 115,
@@ -21315,7 +21410,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TAPU_FINI] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 75,
         .baseDefense = 115,
@@ -21341,7 +21438,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_COSMOG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 43,
         .baseAttack = 29,
         .baseDefense = 31,
@@ -21369,7 +21468,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_COSMOEM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 43,
         .baseAttack = 29,
         .baseDefense = 131,
@@ -21395,7 +21496,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SOLGALEO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 137,
         .baseAttack = 137,
         .baseDefense = 107,
@@ -21423,7 +21526,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LUNALA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 137,
         .baseAttack = 113,
         .baseDefense = 89,
@@ -21451,7 +21556,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NIHILEGO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 109,
         .baseAttack = 53,
         .baseDefense = 47,
@@ -21480,7 +21587,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BUZZWOLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 107,
         .baseAttack = 139,
         .baseDefense = 139,
@@ -21510,7 +21619,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PHEROMOSA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 71,
         .baseAttack = 137,
         .baseDefense = 37,
@@ -21539,7 +21650,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_XURKITREE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 83,
         .baseAttack = 89,
         .baseDefense = 71,
@@ -21568,7 +21681,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CELESTEELA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 97,
         .baseAttack = 101,
         .baseDefense = 103,
@@ -21599,7 +21714,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KARTANA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 69,
         .baseAttack = 181,
         .baseDefense = 131,
@@ -21628,7 +21745,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GUZZLORD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 223,
         .baseAttack = 101,
         .baseDefense = 53,
@@ -21655,7 +21774,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NECROZMA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 97,
         .baseAttack = 107,
         .baseDefense = 101,
@@ -21685,7 +21806,9 @@ const struct BaseStats gBaseStats[] =
     //moves solar beam, synthesis, moonlight, morning sun, etc. sunny day too.  Do like sound just setup a flag for it
 
     [SPECIES_MAGEARNA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 95,
         .baseDefense = 115,
@@ -21713,7 +21836,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MARSHADOW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 125,
         .baseDefense = 80,
@@ -21742,7 +21867,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_POIPOLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 67,
         .baseAttack = 73,
         .baseDefense = 67,
@@ -21771,7 +21898,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NAGANADEL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 73,
         .baseAttack = 73,
         .baseDefense = 73,
@@ -21800,7 +21929,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STAKATAKA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 61,
         .baseAttack = 131,
         .baseDefense = 211,
@@ -21828,7 +21959,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BLACEPHALON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 53,
         .baseAttack = 127,
         .baseDefense = 53,
@@ -21857,7 +21990,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZERAORA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 88,
         .baseAttack = 112,
         .baseDefense = 75,
@@ -21882,7 +22017,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MELTAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 46,
         .baseAttack = 65,
         .baseDefense = 65,
@@ -21907,7 +22044,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MELMETAL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 135,
         .baseAttack = 143,
         .baseDefense = 143,
@@ -21935,7 +22074,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GROOKEY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 65,
         .baseDefense = 50,
@@ -21962,7 +22103,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_THWACKEY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 86,
         .baseAttack = 85,
         .baseDefense = 70,
@@ -21989,7 +22132,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RILLABOOM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 130,
         .baseAttack = 125,
         .baseDefense = 90,
@@ -22016,7 +22161,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SCORBUNNY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 71,
         .baseDefense = 40,
@@ -22043,7 +22190,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RABOOT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 86,
         .baseDefense = 60,
@@ -22070,7 +22219,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CINDERACE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 116,
         .baseDefense = 75,
@@ -22097,7 +22248,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SOBBLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 40,
         .baseDefense = 40,
@@ -22125,7 +22278,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRIZZILE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 60,
         .baseDefense = 55,
@@ -22152,7 +22307,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_INTELEON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 85,
         .baseDefense = 65,
@@ -22179,7 +22336,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SKWOVET] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 55,
         .baseDefense = 55,
@@ -22206,7 +22365,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GREEDENT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -22233,7 +22394,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ROOKIDEE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 38,
         .baseAttack = 47,
         .baseDefense = 35,
@@ -22259,7 +22422,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CORVISQUIRE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 67,
         .baseDefense = 55,
@@ -22285,7 +22450,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CORVIKNIGHT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 98,
         .baseAttack = 87,
         .baseDefense = 105,
@@ -22311,7 +22478,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BLIPBUG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 20,
         .baseDefense = 20,
@@ -22338,7 +22507,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DOTTLER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 35,
         .baseDefense = 80,
@@ -22368,7 +22539,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ORBEETLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 63,
         .baseAttack = 45,
         .baseDefense = 110,
@@ -22397,7 +22570,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NICKIT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 28,
         .baseDefense = 28,
@@ -22423,7 +22598,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_THIEVUL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 78,
         .baseDefense = 58,
@@ -22449,7 +22626,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOSSIFLEUR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 56,
         .baseAttack = 40,
         .baseDefense = 60,
@@ -22475,7 +22654,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ELDEGOSS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 50,
         .baseDefense = 90,
@@ -22501,7 +22682,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WOOLOO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 42,
         .baseAttack = 40,
         .baseDefense = 55,
@@ -22527,7 +22710,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DUBWOOL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 72,
         .baseAttack = 80,
         .baseDefense = 100,
@@ -22553,7 +22738,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHEWTLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 64,
         .baseDefense = 50,
@@ -22579,7 +22766,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DREDNAW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 115,
         .baseDefense = 90,
@@ -22605,7 +22794,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_YAMPER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 59,
         .baseAttack = 45,
         .baseDefense = 50,
@@ -22631,7 +22822,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BOLTUND] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 69,
         .baseAttack = 90,
         .baseDefense = 60,
@@ -22657,7 +22850,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ROLYCOLY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 30,
         .baseAttack = 40,
         .baseDefense = 50,
@@ -22683,7 +22878,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CARKOL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 60,
         .baseDefense = 90,
@@ -22709,7 +22906,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_COALOSSAL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseAttack = 80,
         .baseDefense = 120,
@@ -22735,7 +22934,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_APPLIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 51,
         .baseAttack = 40,
         .baseDefense = 80,
@@ -22761,7 +22962,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLAPPLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 87,
         .baseAttack = 110,
         .baseDefense = 80,
@@ -22787,7 +22990,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_APPLETUN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 110,
         .baseAttack = 85,
         .baseDefense = 80,
@@ -22813,7 +23018,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILICOBRA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 52,
         .baseAttack = 57,
         .baseDefense = 75,
@@ -22839,7 +23046,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SANDACONDA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 72,
         .baseAttack = 107,
         .baseDefense = 125,
@@ -22865,7 +23074,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CRAMORANT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 85,
         .baseDefense = 55,
@@ -22893,7 +23104,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARROKUDA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 41,
         .baseAttack = 63,
         .baseDefense = 40,
@@ -22920,7 +23133,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BARRASKEWDA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 61,
         .baseAttack = 123,
         .baseDefense = 60,
@@ -22947,7 +23162,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TOXEL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 38,
         .baseDefense = 35,
@@ -22975,7 +23192,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TOXTRICITY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 98,
         .baseDefense = 70,
@@ -23001,7 +23220,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SIZZLIPEDE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 65,
         .baseDefense = 45,
@@ -23026,7 +23247,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CENTISKORCH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 115,
         .baseDefense = 65,
@@ -23051,7 +23274,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CLOBBOPUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 68,
         .baseDefense = 60,
@@ -23078,7 +23303,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GRAPPLOCT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 118,
         .baseDefense = 90,
@@ -23105,7 +23332,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SINISTEA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 45,
         .baseDefense = 45,
@@ -23131,7 +23360,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_POLTEAGEIST] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 65,
         .baseDefense = 65,
@@ -23157,7 +23388,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HATENNA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 42,
         .baseAttack = 30,
         .baseDefense = 45,
@@ -23183,7 +23416,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HATTREM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 57,
         .baseAttack = 40,
         .baseDefense = 65,
@@ -23209,7 +23444,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HATTERENE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 57,
         .baseAttack = 90,
         .baseDefense = 95,
@@ -23235,7 +23472,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_IMPIDIMP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 45,
         .baseDefense = 30,
@@ -23261,7 +23500,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MORGREM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 60,
         .baseDefense = 45,
@@ -23287,7 +23528,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GRIMMSNARL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 120,
         .baseDefense = 65,
@@ -23313,7 +23556,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_OBSTAGOON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 93,
         .baseAttack = 90,
         .baseDefense = 101,
@@ -23339,7 +23584,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PERRSERKER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 110,
         .baseDefense = 100,
@@ -23365,7 +23612,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CURSOLA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 105,
         .baseDefense = 50,
@@ -23391,7 +23640,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SIRFETCHD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 62,
         .baseAttack = 135,
         .baseDefense = 95,
@@ -23418,7 +23669,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MR_RIME] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 85,
         .baseDefense = 75,
@@ -23444,7 +23697,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RUNERIGUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 58,
         .baseAttack = 95,
         .baseDefense = 145,
@@ -23472,7 +23727,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MILCERY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 40,
         .baseDefense = 40,
@@ -23498,7 +23755,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALCREMIE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 60,
         .baseDefense = 75,
@@ -23524,7 +23783,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FALINKS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 100,
         .baseDefense = 100,
@@ -23550,7 +23811,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PINCURCHIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 101,
         .baseDefense = 95,
@@ -23577,7 +23840,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SNOM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 25,
         .baseDefense = 35,
@@ -23607,7 +23872,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FROSMOTH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 77,
         .baseAttack = 65,
         .baseDefense = 60,
@@ -23634,7 +23901,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STONJOURNER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 125,
         .baseDefense = 135,
@@ -23662,7 +23931,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_EISCUE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 110,
@@ -23690,7 +23961,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_INDEEDEE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 65,
         .baseDefense = 55,
@@ -23717,7 +23990,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MORPEKO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 58,
         .baseAttack = 95,
         .baseDefense = 58,
@@ -23745,7 +24020,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CUFANT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 72,
         .baseAttack = 80,
         .baseDefense = 49,
@@ -23774,7 +24051,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_COPPERAJAH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 122,
         .baseAttack = 130,
         .baseDefense = 69,
@@ -23803,7 +24082,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRACOZOLT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 100,
         .baseDefense = 90,
@@ -23830,7 +24111,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCTOZOLT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 100,
         .baseDefense = 90,
@@ -23857,7 +24140,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRACOVISH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 90,
         .baseDefense = 100,
@@ -23883,7 +24168,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCTOVISH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 90,
         .baseDefense = 100,
@@ -23909,7 +24196,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DURALUDON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 95,
         .baseDefense = 115,
@@ -23935,7 +24224,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DREEPY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 28,
         .baseAttack = 60,
         .baseDefense = 30,
@@ -23961,7 +24252,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRAKLOAK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 80,
         .baseDefense = 50,
@@ -23987,7 +24280,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DRAGAPULT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 88,
         .baseAttack = 120,
         .baseDefense = 75,
@@ -24013,7 +24308,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZACIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 92,
         .baseAttack = 130,
         .baseDefense = 115,
@@ -24038,7 +24335,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZAMAZENTA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 92,
         .baseAttack = 130,
         .baseDefense = 115,
@@ -24063,7 +24362,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ETERNATUS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 140,
         .baseAttack = 85,
         .baseDefense = 95,
@@ -24088,7 +24389,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KUBFU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 90,
         .baseDefense = 60,
@@ -24113,7 +24416,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_URSHIFU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 130,
         .baseDefense = 100,
@@ -24139,7 +24444,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZARUDE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 120,
         .baseDefense = 105,
@@ -24164,7 +24471,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_REGIELEKI] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 100,
         .baseDefense = 50,
@@ -24189,7 +24498,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_REGIDRAGO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 200,
         .baseAttack = 100,
         .baseDefense = 50,
@@ -24214,7 +24525,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GLASTRIER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 145,
         .baseDefense = 130,
@@ -24241,7 +24554,9 @@ const struct BaseStats gBaseStats[] =
     }, //note setup ability so it plays the cry before the stat boost
 
     [SPECIES_SPECTRIER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 65,
         .baseDefense = 60,
@@ -24269,7 +24584,9 @@ const struct BaseStats gBaseStats[] =
     },//note setup ability so it plays the cry before the stat boost  /DONE
 
     [SPECIES_CALYREX] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 80,
         .baseDefense = 80,
@@ -24297,7 +24614,9 @@ const struct BaseStats gBaseStats[] =
     },//need to add below mon to species_to_national dex in pokemon.c
 
     [SPECIES_WYRDEER] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 103,
             .baseAttack = 105,
             .baseDefense = 72,
@@ -24322,7 +24641,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_KLEAVOR] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 70,
             .baseAttack = 135,
             .baseDefense = 95,
@@ -24347,7 +24668,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_URSALUNA] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 130,
             .baseAttack = 140,
             .baseDefense = 105,
@@ -24372,7 +24695,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_BASCULEGION] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 120,
             .baseAttack = 112,
             .baseDefense = 65,
@@ -24398,7 +24723,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_SNEASLER] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 80,
             .baseAttack = 130,
             .baseDefense = 60,
@@ -24424,7 +24751,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_OVERQWIL] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 85,
             .baseAttack = 115,
             .baseDefense = 95,
@@ -24449,7 +24778,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_ENAMORUS] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 74,
             .baseAttack = 115,
             .baseDefense = 70,
@@ -24475,7 +24806,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_CEFIREON] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 65,
             .baseAttack = 65,
             .baseDefense = 60,
@@ -24503,7 +24836,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_FRAEYJTA] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 170,  //hp betweeen snorlax and chansey
             .baseAttack = 15,
             .baseDefense = 25,
@@ -24530,7 +24865,9 @@ const struct BaseStats gBaseStats[] =
         }, //give move powersplit
 
     [SPECIES_VENUSAUR_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 100,
         .baseDefense = 123,
@@ -24556,7 +24893,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHARIZARD_MEGA_X] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 130,
         .baseDefense = 111,
@@ -24584,7 +24923,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHARIZARD_MEGA_Y] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 104,
         .baseDefense = 78,
@@ -24609,7 +24950,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BLASTOISE_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 79,
         .baseAttack = 103,
         .baseDefense = 120,
@@ -24637,7 +24980,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BEEDRILL_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 150,
         .baseDefense = 40,
@@ -24667,7 +25012,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIDGEOT_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 83,
         .baseAttack = 80,
         .baseDefense = 80,
@@ -24695,7 +25042,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALAKAZAM_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 50,
         .baseDefense = 65,
@@ -24722,7 +25071,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SLOWBRO_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 75,
         .baseDefense = 180,
@@ -24748,7 +25099,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GENGAR_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 65,
         .baseDefense = 80,
@@ -24773,7 +25126,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KANGASKHAN_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 125,
         .baseDefense = 100,
@@ -24801,7 +25156,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PINSIR_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 155,
         .baseDefense = 120,
@@ -24829,7 +25186,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GYARADOS_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 155,
         .baseDefense = 109,
@@ -24857,7 +25216,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AERODACTYL_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 135,
         .baseDefense = 85,
@@ -24885,7 +25246,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MEWTWO_MEGA_X] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 106,
         .baseAttack = 190,
         .baseDefense = 100,
@@ -24913,7 +25276,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MEWTWO_MEGA_Y] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 106,
         .baseAttack = 150,
         .baseDefense = 70,
@@ -24938,7 +25303,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AMPHAROS_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 95,
         .baseDefense = 105,
@@ -24966,7 +25333,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STEELIX_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 125,
         .baseDefense = 230,
@@ -24995,7 +25364,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SCIZOR_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 150,
         .baseDefense = 140,
@@ -25023,7 +25394,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HERACROSS_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 185,
         .baseDefense = 115,
@@ -25051,7 +25424,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HOUNDOOM_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 90,
         .baseDefense = 90,
@@ -25079,7 +25454,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TYRANITAR_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 164,
         .baseDefense = 150,
@@ -25104,7 +25481,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SCEPTILE_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 110,
         .baseDefense = 75,
@@ -25129,7 +25508,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BLAZIKEN_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 160,
         .baseDefense = 80,
@@ -25154,7 +25535,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SWAMPERT_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 150,
         .baseDefense = 110,
@@ -25179,7 +25562,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GARDEVOIR_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 85,
         .baseDefense = 65,
@@ -25207,7 +25592,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SABLEYE_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 85,
         .baseDefense = 125,
@@ -25236,7 +25623,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAWILE_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 105,
         .baseDefense = 125,
@@ -25262,7 +25651,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AGGRON_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 140,
         .baseDefense = 230,
@@ -25291,7 +25682,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MEDICHAM_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 100,
         .baseDefense = 85,
@@ -25316,7 +25709,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MANECTRIC_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 75,
         .baseDefense = 80,
@@ -25341,7 +25736,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHARPEDO_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 140,
         .baseDefense = 70,
@@ -25370,7 +25767,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CAMERUPT_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 120,
         .baseDefense = 100,
@@ -25399,7 +25798,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALTARIA_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 110,
         .baseDefense = 110,
@@ -25427,7 +25828,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BANETTE_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 64,
         .baseAttack = 165,
         .baseDefense = 75,
@@ -25456,7 +25859,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ABSOL_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 150,
         .baseDefense = 60,
@@ -25484,7 +25889,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GLALIE_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 120,
         .baseDefense = 80,
@@ -25510,7 +25917,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SALAMENCE_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 145,
         .baseDefense = 130,
@@ -25539,7 +25948,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_METAGROSS_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 145,
         .baseDefense = 150,
@@ -25568,7 +25979,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LATIAS_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 100,
         .baseDefense = 120,
@@ -25593,7 +26006,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LATIOS_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 130,
         .baseDefense = 100,
@@ -25618,7 +26033,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LOPUNNY_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 136,
         .baseDefense = 94,
@@ -25646,7 +26063,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GARCHOMP_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 108,
         .baseAttack = 170,
         .baseDefense = 115,
@@ -25674,7 +26093,9 @@ const struct BaseStats gBaseStats[] =
     }, //ugly don't want to use
 
     [SPECIES_LUCARIO_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 145,
         .baseDefense = 88,
@@ -25703,7 +26124,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ABOMASNOW_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 132,
         .baseDefense = 105,
@@ -25733,7 +26156,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GALLADE_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 68,
         .baseAttack = 165,
         .baseDefense = 95,
@@ -25758,7 +26183,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AUDINO_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 103,
         .baseAttack = 60,
         .baseDefense = 126,
@@ -25788,7 +26215,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DIANCIE_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 160,
         .baseDefense = 110,
@@ -25817,7 +26246,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RAYQUAZA_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 180,
         .baseDefense = 100,
@@ -25846,7 +26277,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KYOGRE_PRIMAL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 150,
         .baseDefense = 90,
@@ -25874,7 +26307,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GROUDON_PRIMAL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 180,
         .baseDefense = 160,
@@ -25902,7 +26337,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RATTATA_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 30,
         .baseAttack = 56,
         .baseDefense = 35,
@@ -25930,7 +26367,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RATICATE_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 71,
         .baseDefense = 70,
@@ -25958,7 +26397,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RAICHU_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 85,
         .baseDefense = 50,
@@ -25987,7 +26428,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SANDSHREW_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 75,
         .baseDefense = 90,
@@ -26017,7 +26460,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SANDSLASH_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 100,
         .baseDefense = 120,
@@ -26044,7 +26489,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VULPIX_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 38,
         .baseAttack = 41,
         .baseDefense = 40,
@@ -26074,7 +26521,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NINETALES_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 73,
         .baseAttack = 67,
         .baseDefense = 75,
@@ -26102,7 +26551,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DIGLETT_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 10,
         .baseAttack = 55,
         .baseDefense = 30,
@@ -26130,7 +26581,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DUGTRIO_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 100,
         .baseDefense = 60,
@@ -26158,7 +26611,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MEOWTH_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 60,
         .baseDefense = 35,
@@ -26186,7 +26641,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PERSIAN_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 88,
         .baseDefense = 60,
@@ -26214,7 +26671,9 @@ const struct BaseStats gBaseStats[] =
     }, //changed up sprite face
 
     [SPECIES_GEODUDE_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 80,
         .baseDefense = 100,
@@ -26245,7 +26704,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GRAVELER_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 95,
         .baseDefense = 115,
@@ -26276,7 +26737,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOLEM_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 120,
         .baseDefense = 130,
@@ -26304,7 +26767,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GRIMER_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 80,
         .baseDefense = 50,
@@ -26334,7 +26799,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MUK_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 105,
         .baseDefense = 75,
@@ -26362,7 +26829,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_EXEGGUTOR_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 105,
         .baseDefense = 85,
@@ -26389,7 +26858,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAROWAK_ALOLAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 88,
         .baseDefense = 80,
@@ -26416,7 +26887,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MEOWTH_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 65,
         .baseDefense = 55,
@@ -26443,7 +26916,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PONYTA_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 85,
         .baseDefense = 55,
@@ -26470,7 +26945,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_RAPIDASH_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 100,
         .baseDefense = 70,
@@ -26497,7 +26974,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SLOWPOKE_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 65,
         .baseDefense = 65,
@@ -26525,7 +27004,9 @@ const struct BaseStats gBaseStats[] =
 
 
     [SPECIES_SLOWBRO_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 100,
         .baseDefense = 95,
@@ -26552,7 +27033,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FARFETCHD_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 52,
         .baseAttack = 95,
         .baseDefense = 55,
@@ -26580,7 +27063,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WEEZING_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 90,
         .baseDefense = 120,
@@ -26610,7 +27095,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MR_MIME_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 65,
         .baseDefense = 65,
@@ -26637,7 +27124,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARTICUNO_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 85,
         .baseDefense = 85,
@@ -26666,7 +27155,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZAPDOS_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 125,
         .baseDefense = 90,
@@ -26695,7 +27186,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MOLTRES_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 85,
         .baseDefense = 90,
@@ -26724,7 +27217,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SLOWKING_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 65,
         .baseDefense = 80,
@@ -26751,7 +27246,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CORSOLA_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 75,
         .baseDefense = 100,
@@ -26779,7 +27276,9 @@ const struct BaseStats gBaseStats[] =
     }, //gave this line liquid ooze to double up on absorb damage from ghost tweak :)
 
     [SPECIES_ZIGZAGOON_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 38,
         .baseAttack = 30,
         .baseDefense = 41,
@@ -26806,7 +27305,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LINOONE_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 70,
         .baseDefense = 61,
@@ -26833,7 +27334,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DARUMAKA_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 90,
         .baseDefense = 45,
@@ -26859,7 +27362,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DARMANITAN_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 140,
         .baseDefense = 55,
@@ -26886,7 +27391,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_YAMASK_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 38,
         .baseAttack = 55,
         .baseDefense = 85,
@@ -26915,7 +27422,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_STUNFISK_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 109,
         .baseAttack = 81,
         .baseDefense = 99,
@@ -26944,7 +27453,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GROWLITHE_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 60,
             .baseAttack = 75,
             .baseDefense = 45,
@@ -26970,7 +27481,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_ARCANINE_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 95,
             .baseAttack = 115,
             .baseDefense = 80,
@@ -26996,7 +27509,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_VOLTORB_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 56,
             .baseAttack = 55,
             .baseDefense = 50,
@@ -27022,7 +27537,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_ELECTRODE_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 76,
             .baseAttack = 75,
             .baseDefense = 70,
@@ -27048,7 +27565,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_TYPHLOSION_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 73,
             .baseAttack = 84,
             .baseDefense = 78,
@@ -27074,7 +27593,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_QWILFISH_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 65,
             .baseAttack = 95,
             .baseDefense = 85,
@@ -27101,7 +27622,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_SNEASEL_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 55,
             .baseAttack = 95,
             .baseDefense = 55,
@@ -27129,7 +27652,9 @@ const struct BaseStats gBaseStats[] =
 
 //////#if P_GEN_5_POKEMON == TRUE
         [SPECIES_SAMUROTT_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 90,
             .baseAttack = 108,
             .baseDefense = 80,
@@ -27155,7 +27680,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_LILLIGANT_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 70,
             .baseAttack = 105,
             .baseDefense = 75,
@@ -27182,7 +27709,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_ZORUA_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 35,
             .baseAttack = 60,
             .baseDefense = 40,
@@ -27208,7 +27737,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_ZOROARK_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 55,
             .baseAttack = 100,
             .baseDefense = 60,
@@ -27234,7 +27765,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_BRAVIARY_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 110,
             .baseAttack = 83,
             .baseDefense = 70,
@@ -27262,7 +27795,9 @@ const struct BaseStats gBaseStats[] =
 
 ////#if P_GEN_6_POKEMON == TRUE
         [SPECIES_SLIGGOO_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 58,
             .baseAttack = 75,
             .baseDefense = 83,
@@ -27289,7 +27824,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_GOODRA_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 80,
             .baseAttack = 100,
             .baseDefense = 100,
@@ -27315,7 +27852,9 @@ const struct BaseStats gBaseStats[] =
         },
 
         [SPECIES_AVALUGG_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 95,
             .baseAttack = 127,
             .baseDefense = 184,
@@ -27343,7 +27882,9 @@ const struct BaseStats gBaseStats[] =
 
 ////#if P_GEN_7_POKEMON == TRUE
         [SPECIES_DECIDUEYE_HISUIAN] =
-        {
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
             .baseHP = 98,
             .baseAttack = 112,
             .baseDefense = 80,
@@ -27369,7 +27910,9 @@ const struct BaseStats gBaseStats[] =
         },
 
     [SPECIES_PIKACHU_COSPLAY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 75,
         .baseSpeed = 95,
@@ -27396,7 +27939,9 @@ const struct BaseStats gBaseStats[] =
     //doing plus 40 bst for each form to make unique/
 
     [SPECIES_PIKACHU_ROCK_STAR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 95,
         .baseSpeed = 95,
@@ -27423,7 +27968,9 @@ const struct BaseStats gBaseStats[] =
     //nvm just keeping lightning rod,  as that's what it had in game change typing and stats and instead of doing like rotom forms give each its own learnset
     
     [SPECIES_PIKACHU_BELLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 75,
         .baseSpeed = 95,
@@ -27449,7 +27996,9 @@ const struct BaseStats gBaseStats[] =
     }, //ok can't make this grass, but would really really want a grass/electric one so I could do a cottage core pikachu idea.  but idk maybe still fits
 
     [SPECIES_PIKACHU_POP_STAR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 75,
         .baseSpeed = 95,
@@ -27475,7 +28024,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIKACHU_PH_D] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 75,
         .baseSpeed = 105,
@@ -27501,7 +28052,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIKACHU_LIBRE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 110,
         .baseSpeed = 95,
@@ -27527,7 +28080,9 @@ const struct BaseStats gBaseStats[] =
     }, //not taking cap forms
 
     [SPECIES_PIKACHU_ORIGINAL_CAP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 75,
         .baseSpeed = 95,
@@ -27553,7 +28108,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIKACHU_HOENN_CAP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 75,
         .baseSpeed = 95,
@@ -27579,7 +28136,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIKACHU_SINNOH_CAP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 75,
         .baseSpeed = 95,
@@ -27605,7 +28164,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIKACHU_UNOVA_CAP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 75,
         .baseSpeed = 95,
@@ -27631,7 +28192,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIKACHU_KALOS_CAP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 75,
         .baseSpeed = 95,
@@ -27657,7 +28220,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIKACHU_ALOLA_CAP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 75,
         .baseSpeed = 95,
@@ -27683,7 +28248,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIKACHU_PARTNER_CAP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 75,
         .baseSpeed = 95,
@@ -27709,7 +28276,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PIKACHU_WORLD_CAP] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 35,
         .baseAttack = 75,
         .baseSpeed = 95,
@@ -27735,7 +28304,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PICHU_SPIKY_EARED] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 20,
         .baseAttack = 40,
         .baseDefense = 15,
@@ -27760,7 +28331,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_B] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -27786,7 +28359,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_C] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -27812,7 +28387,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_D] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -27838,7 +28415,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_E] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -27863,7 +28442,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_F] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -27889,7 +28470,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_G] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -27915,7 +28498,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_H] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -27941,7 +28526,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_I] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -27967,7 +28554,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_J] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -27993,7 +28582,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_K] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28019,7 +28610,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_L] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28045,7 +28638,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_M] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28071,7 +28666,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_N] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28097,7 +28694,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_O] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28123,7 +28722,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_P] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28149,7 +28750,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_Q] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28175,7 +28778,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_R] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28201,7 +28806,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_S] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28227,7 +28834,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_T] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28253,7 +28862,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_U] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28279,7 +28890,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_V] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28305,7 +28918,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_W] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28331,7 +28946,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_X] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28357,7 +28974,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_Y] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28383,7 +29002,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_Z] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28409,7 +29030,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_EMARK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28435,7 +29058,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNOWN_QMARK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 48,
         .baseAttack = 72,
         .baseDefense = 48,
@@ -28461,7 +29086,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CASTFORM_SUNNY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 70,
         .baseDefense = 70,
@@ -28487,7 +29114,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CASTFORM_RAINY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 70,
         .baseDefense = 70,
@@ -28513,7 +29142,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CASTFORM_SNOWY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 70,
         .baseDefense = 70,
@@ -28539,7 +29170,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DEOXYS_ATTACK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 180,
         .baseDefense = 20,
@@ -28565,7 +29198,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DEOXYS_DEFENSE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 70,
         .baseDefense = 160,
@@ -28591,7 +29226,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DEOXYS_SPEED] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 50,
         .baseAttack = 95,
         .baseDefense = 90,
@@ -28616,7 +29253,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BURMY_SANDY_CLOAK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 29,
         .baseDefense = 45,
@@ -28642,7 +29281,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BURMY_TRASH_CLOAK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 29,
         .baseDefense = 45,
@@ -28668,7 +29309,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WORMADAM_SANDY_CLOAK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 89,
         .baseDefense = 125,
@@ -28695,7 +29338,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WORMADAM_TRASH_CLOAK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 69,
         .baseDefense = 115,
@@ -28723,7 +29368,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CHERRIM_SUNSHINE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 90,
         .baseAttack = 60,
         .baseDefense = 70,
@@ -28749,7 +29396,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHELLOS_EAST_SEA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 76,
         .baseAttack = 48,
         .baseDefense = 48,
@@ -28775,7 +29424,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GASTRODON_EAST_SEA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 111,
         .baseAttack = 83,
         .baseDefense = 68,
@@ -28801,7 +29452,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ROTOM_HEAT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 66,
         .baseAttack = 76,
         .baseDefense = 106, //hp is average so needs this higher value to give it some physical bulk
@@ -28828,7 +29481,9 @@ const struct BaseStats gBaseStats[] =
     //need to change weight for these forms as well
 
     [SPECIES_ROTOM_WASH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 65,
         .baseDefense = 97,
@@ -28854,7 +29509,9 @@ const struct BaseStats gBaseStats[] =
     },//bulk
 
     [SPECIES_ROTOM_FROST] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 74,
         .baseDefense = 107,
@@ -28880,7 +29537,9 @@ const struct BaseStats gBaseStats[] =
     }, //all in floating list so immune to ground by base, so while not ghost still retains ghost elements / bulk
 
     [SPECIES_ROTOM_FAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 66,
         .baseAttack = 65,
         .baseDefense = 67,
@@ -28908,7 +29567,9 @@ const struct BaseStats gBaseStats[] =
     //ability name wind tunnel or turbine (still worksshopping name)  /Galeforce!!
 
     [SPECIES_ROTOM_MOW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 76,
         .baseAttack = 102,
         .baseDefense = 80,
@@ -28934,7 +29595,9 @@ const struct BaseStats gBaseStats[] =
     }, //speed attacker
 
     [SPECIES_GIRATINA_ORIGIN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 150,
         .baseAttack = 120,
         .baseDefense = 100,
@@ -28959,7 +29622,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SHAYMIN_SKY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 130,
         .baseAttack = 103,
         .baseDefense = 75,
@@ -28986,7 +29651,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_FIGHTING] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29014,7 +29681,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_FLYING] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29042,7 +29711,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_POISON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29070,7 +29741,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_GROUND] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29098,7 +29771,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_ROCK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29126,7 +29801,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_BUG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29154,7 +29831,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_GHOST] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29182,7 +29861,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_STEEL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29210,7 +29891,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_FIRE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29238,7 +29921,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_WATER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29266,7 +29951,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_GRASS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29294,7 +29981,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_ELECTRIC] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29322,7 +30011,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_PSYCHIC] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29350,7 +30041,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_ICE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29378,7 +30071,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_DRAGON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29406,7 +30101,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_DARK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29434,7 +30131,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ARCEUS_FAIRY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 120,
         .baseAttack = 120,
         .baseDefense = 120,
@@ -29462,7 +30161,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_BASCULIN_BLUE_STRIPED] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 92,
         .baseDefense = 65,
@@ -29489,7 +30190,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DARMANITAN_ZEN_MODE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 155,
         .baseAttack = 30,
         .baseDefense = 105,
@@ -29515,7 +30218,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DARMANITAN_ZEN_MODE_GALARIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 160,
         .baseDefense = 55,
@@ -29542,7 +30247,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DEERLING_SUMMER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 60,
         .baseDefense = 50,
@@ -29568,7 +30275,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DEERLING_AUTUMN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 60,
         .baseDefense = 50,
@@ -29594,7 +30303,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_DEERLING_WINTER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 60,
         .baseDefense = 50,
@@ -29620,7 +30331,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SAWSBUCK_SUMMER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 99,
         .baseAttack = 100,
         .baseDefense = 70,
@@ -29646,7 +30359,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SAWSBUCK_AUTUMN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 99,
         .baseAttack = 100,
         .baseDefense = 70,
@@ -29672,7 +30387,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SAWSBUCK_WINTER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 99,
         .baseAttack = 100,
         .baseDefense = 70,
@@ -29698,7 +30415,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TORNADUS_THERIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 79,
         .baseAttack = 100,
         .baseDefense = 80,
@@ -29726,7 +30445,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_THUNDURUS_THERIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 79,
         .baseAttack = 105,
         .baseDefense = 70,
@@ -29751,7 +30472,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LANDORUS_THERIAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 89,
         .baseAttack = 145,
         .baseDefense = 90,
@@ -29775,7 +30498,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KYUREM_WHITE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 125,
         .baseAttack = 120,
         .baseDefense = 90,
@@ -29803,7 +30528,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KYUREM_BLACK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 125,
         .baseAttack = 170,
         .baseDefense = 100,
@@ -29831,7 +30558,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_KELDEO_RESOLUTE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 91,
         .baseAttack = 72,
         .baseDefense = 90,
@@ -29859,7 +30588,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MELOETTA_PIROUETTE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 128,
         .baseDefense = 90,
@@ -29888,7 +30619,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GENESECT_DOUSE_DRIVE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 71,
         .baseAttack = 120,
         .baseDefense = 95,
@@ -29918,7 +30651,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GENESECT_SHOCK_DRIVE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 71,
         .baseAttack = 120,
         .baseDefense = 95,
@@ -29948,7 +30683,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GENESECT_BURN_DRIVE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 71,
         .baseAttack = 120,
         .baseDefense = 95,
@@ -29978,7 +30715,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GENESECT_CHILL_DRIVE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 71,
         .baseAttack = 120,
         .baseDefense = 95,
@@ -30008,7 +30747,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GRENINJA_BATTLE_BOND] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 72,
         .baseAttack = 95,
         .baseDefense = 67,
@@ -30036,7 +30777,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GRENINJA_ASH] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 72,
         .baseAttack = 145,
         .baseDefense = 67,
@@ -30064,7 +30807,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_POLAR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30093,7 +30838,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_TUNDRA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30122,7 +30869,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_CONTINENTAL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30151,7 +30900,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_GARDEN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30180,7 +30931,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_ELEGANT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30209,7 +30962,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_MEADOW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30238,7 +30993,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_MODERN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30267,7 +31024,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_MARINE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30296,7 +31055,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_ARCHIPELAGO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30325,7 +31086,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_HIGH_PLAINS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30354,7 +31117,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_SANDSTORM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30383,7 +31148,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_RIVER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30412,7 +31179,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_MONSOON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30441,7 +31210,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_SAVANNA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30470,7 +31241,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_SUN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30499,7 +31272,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_OCEAN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30528,7 +31303,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_JUNGLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30557,7 +31334,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_FANCY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30586,7 +31365,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_VIVILLON_POKE_BALL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 52,
         .baseDefense = 50,
@@ -30615,7 +31396,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_UNFEZANT_F] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseDefense = 65,
         .baseSpeed = 93,
@@ -30641,7 +31424,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PYROAR_F] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 89,
         .baseAttack = 98,
         .baseDefense = 72,
@@ -30667,7 +31452,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLABEBE_YELLOW_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 44,
         .baseAttack = 38,
         .baseDefense = 39,
@@ -30693,7 +31480,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLABEBE_ORANGE_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 44,
         .baseAttack = 38,
         .baseDefense = 39,
@@ -30719,7 +31508,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLABEBE_BLUE_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 44,
         .baseAttack = 38,
         .baseDefense = 39,
@@ -30745,7 +31536,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLABEBE_WHITE_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 44,
         .baseAttack = 38,
         .baseDefense = 39,
@@ -30771,7 +31564,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLOETTE_YELLOW_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 54,
         .baseAttack = 45,
         .baseDefense = 47,
@@ -30797,7 +31592,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLOETTE_ORANGE_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 54,
         .baseAttack = 45,
         .baseDefense = 47,
@@ -30823,7 +31620,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLOETTE_BLUE_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 54,
         .baseAttack = 45,
         .baseDefense = 47,
@@ -30849,7 +31648,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLOETTE_WHITE_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 54,
         .baseAttack = 45,
         .baseDefense = 47,
@@ -30875,7 +31676,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLOETTE_ETERNAL_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 74,
         .baseAttack = 65,
         .baseDefense = 67,
@@ -30901,7 +31704,9 @@ const struct BaseStats gBaseStats[] =
     },//special az version
 
     [SPECIES_FLORGES_YELLOW_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 65,
         .baseDefense = 68,
@@ -30927,7 +31732,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLORGES_ORANGE_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 65,
         .baseDefense = 68,
@@ -30953,7 +31760,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLORGES_BLUE_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 65,
         .baseDefense = 68,
@@ -30979,7 +31788,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FLORGES_WHITE_FLOWER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 78,
         .baseAttack = 65,
         .baseDefense = 68,
@@ -31005,7 +31816,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FURFROU_HEART_TRIM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 60,
@@ -31033,7 +31846,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FURFROU_STAR_TRIM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 60,
@@ -31061,7 +31876,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FURFROU_DIAMOND_TRIM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 60,
@@ -31089,7 +31906,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FURFROU_DEBUTANTE_TRIM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 60,
@@ -31117,7 +31936,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FURFROU_MATRON_TRIM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 60,
@@ -31145,7 +31966,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FURFROU_DANDY_TRIM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 60,
@@ -31173,7 +31996,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FURFROU_LA_REINE_TRIM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 60,
@@ -31201,7 +32026,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FURFROU_KABUKI_TRIM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 60,
@@ -31229,7 +32056,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_FURFROU_PHARAOH_TRIM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 60,
@@ -31257,7 +32086,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MEOWSTIC_FEMALE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 74,
         .baseAttack = 48,
         .baseDefense = 76,
@@ -31283,7 +32114,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_AEGISLASH_BLADE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseDefense = 50,
         .baseSpeed = 60,
@@ -31313,7 +32146,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PUMPKABOO_SMALL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 59,
         .baseAttack = 66,
         .baseDefense = 70,
@@ -31339,7 +32174,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PUMPKABOO_LARGE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 69,
         .baseAttack = 66,
         .baseDefense = 70,
@@ -31365,7 +32202,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_PUMPKABOO_SUPER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 79,
         .baseAttack = 66,
         .baseDefense = 70,
@@ -31391,7 +32230,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOURGEIST_SMALL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 85,
         .baseDefense = 122,
@@ -31417,7 +32258,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOURGEIST_LARGE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 122,
@@ -31443,7 +32286,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_GOURGEIST_SUPER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 100,
         .baseDefense = 122,
@@ -31469,7 +32314,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_XERNEAS_ACTIVE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 126,
         .baseAttack = 131,
         .baseDefense = 95,
@@ -31497,7 +32344,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZYGARDE_10] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 54,
         .baseAttack = 100,
         .baseDefense = 71,
@@ -31525,7 +32374,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZYGARDE_10_POWER_CONSTRUCT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 54,
         .baseAttack = 100,
         .baseDefense = 71,
@@ -31553,7 +32404,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZYGARDE_50_POWER_CONSTRUCT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 108,
         .baseAttack = 100,
         .baseDefense = 121,
@@ -31581,7 +32434,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZYGARDE_COMPLETE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 216,
         .baseAttack = 100,
         .baseDefense = 121,
@@ -31609,7 +32464,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_HOOPA_UNBOUND] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 160,
         .baseDefense = 60,
@@ -31637,7 +32494,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ORICORIO_POM_POM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 70,
         .baseDefense = 70,
@@ -31668,7 +32527,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ORICORIO_PAU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 70,
         .baseDefense = 70,
@@ -31699,7 +32560,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ORICORIO_SENSU] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 70,
         .baseDefense = 70,
@@ -31730,7 +32593,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ROCKRUFF_OWN_TEMPO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 65,
         .baseDefense = 40,
@@ -31755,7 +32620,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_LYCANROC_MIDNIGHT] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 85,
         .baseAttack = 115,
         .baseDefense = 75,
@@ -31782,7 +32649,9 @@ const struct BaseStats gBaseStats[] =
     },  //give sucker punch /setup to also evolve with moon stone, make no guard first abiility, think buff keen eye
 
     [SPECIES_LYCANROC_DUSK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 117,
         .baseDefense = 65,
@@ -31810,7 +32679,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_WISHIWASHI_SCHOOL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 45,
         .baseAttack = 140,
         .baseDefense = 130,
@@ -31838,7 +32709,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_FIGHTING] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -31866,7 +32739,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_FLYING] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -31894,7 +32769,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_POISON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -31922,7 +32799,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_GROUND] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -31950,7 +32829,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_ROCK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -31978,7 +32859,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_BUG] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -32006,7 +32889,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_GHOST] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -32034,7 +32919,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_STEEL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -32062,7 +32949,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_FIRE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -32090,7 +32979,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_WATER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -32118,7 +33009,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_GRASS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -32146,7 +33039,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_ELECTRIC] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -32174,7 +33069,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_PSYCHIC] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -32202,7 +33099,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_ICE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -32230,7 +33129,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_DRAGON] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -32258,7 +33159,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_DARK] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -32286,7 +33189,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SILVALLY_FAIRY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 95,
         .baseAttack = 95,
         .baseDefense = 95,
@@ -32314,7 +33219,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_METEOR_ORANGE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 60,
         .baseDefense = 100,
@@ -32344,7 +33251,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_METEOR_YELLOW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 60,
         .baseDefense = 100,
@@ -32374,7 +33283,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_METEOR_GREEN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 60,
         .baseDefense = 100,
@@ -32404,7 +33315,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_METEOR_BLUE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 60,
         .baseDefense = 100,
@@ -32434,7 +33347,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_METEOR_INDIGO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 60,
         .baseDefense = 100,
@@ -32464,7 +33379,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_METEOR_VIOLET] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 60,
         .baseDefense = 100,
@@ -32494,7 +33411,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_CORE_RED] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 100,
         .baseDefense = 60,
@@ -32524,7 +33443,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_CORE_ORANGE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 100,
         .baseDefense = 60,
@@ -32554,7 +33475,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_CORE_YELLOW] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 100,
         .baseDefense = 60,
@@ -32584,7 +33507,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_CORE_GREEN] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 100,
         .baseDefense = 60,
@@ -32614,7 +33539,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_CORE_BLUE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 100,
         .baseDefense = 60,
@@ -32644,7 +33571,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_CORE_INDIGO] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 100,
         .baseDefense = 60,
@@ -32674,7 +33603,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MINIOR_CORE_VIOLET] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 100,
         .baseDefense = 60,
@@ -32704,7 +33635,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MIMIKYU_BUSTED] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 55,
         .baseAttack = 90,
         .baseDefense = 80,
@@ -32732,7 +33665,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NECROZMA_DUSK_MANE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 97,
         .baseAttack = 157,
         .baseDefense = 127,
@@ -32760,7 +33695,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NECROZMA_DAWN_WINGS] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 97,
         .baseAttack = 113,
         .baseDefense = 109,
@@ -32788,7 +33725,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_NECROZMA_ULTRA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 97,
         .baseAttack = 167,
         .baseDefense = 97,
@@ -32818,7 +33757,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MAGEARNA_ORIGINAL_COLOR] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 80,
         .baseAttack = 95,
         .baseDefense = 115,
@@ -32846,7 +33787,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CRAMORANT_GULPING] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 85,
         .baseDefense = 55,
@@ -32874,7 +33817,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CRAMORANT_GORGING] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 85,
         .baseDefense = 55,
@@ -32902,7 +33847,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_TOXTRICITY_LOW_KEY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 98,
         .baseDefense = 70,
@@ -32928,7 +33875,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_SINISTEA_ANTIQUE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 40,
         .baseAttack = 45,
         .baseDefense = 45,
@@ -32954,7 +33903,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_POLTEAGEIST_ANTIQUE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 60,
         .baseAttack = 65,
         .baseDefense = 65,
@@ -32980,7 +33931,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALCREMIE_RUBY_CREAM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 60,
         .baseDefense = 75,
@@ -33006,7 +33959,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALCREMIE_MATCHA_CREAM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 60,
         .baseDefense = 75,
@@ -33032,7 +33987,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALCREMIE_MINT_CREAM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 60,
         .baseDefense = 75,
@@ -33058,7 +34015,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALCREMIE_LEMON_CREAM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 60,
         .baseDefense = 75,
@@ -33084,7 +34043,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALCREMIE_SALTED_CREAM] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 60,
         .baseDefense = 75,
@@ -33110,7 +34071,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALCREMIE_RUBY_SWIRL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 60,
         .baseDefense = 75,
@@ -33136,7 +34099,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALCREMIE_CARAMEL_SWIRL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 60,
         .baseDefense = 75,
@@ -33162,7 +34127,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ALCREMIE_RAINBOW_SWIRL] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 65,
         .baseAttack = 60,
         .baseDefense = 75,
@@ -33188,7 +34155,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_EISCUE_NOICE_FACE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 75,
         .baseAttack = 80,
         .baseDefense = 70,
@@ -33216,7 +34185,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_INDEEDEE_FEMALE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 70,
         .baseAttack = 55,
         .baseDefense = 65,
@@ -33243,7 +34214,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_MORPEKO_HANGRY] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 58,
         .baseAttack = 95,
         .baseDefense = 58,
@@ -33271,7 +34244,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZACIAN_CROWNED_SWORD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 92,
         .baseAttack = 170,
         .baseDefense = 115,
@@ -33299,7 +34274,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZAMAZENTA_CROWNED_SHIELD] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 92,
         .baseAttack = 130,
         .baseDefense = 145,
@@ -33327,7 +34304,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ETERNATUS_ETERNAMAX] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 255,
         .baseAttack = 115,
         .baseDefense = 250,
@@ -33352,7 +34331,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_URSHIFU_RAPID_STRIKE_STYLE] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 130,
         .baseDefense = 100,
@@ -33380,7 +34361,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_ZARUDE_DADA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 105,
         .baseAttack = 120,
         .baseDefense = 105,
@@ -33408,7 +34391,9 @@ const struct BaseStats gBaseStats[] =
     },
 
     [SPECIES_CALYREX_ICE_RIDER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 165,
         .baseDefense = 150,
@@ -33436,7 +34421,9 @@ const struct BaseStats gBaseStats[] =
     },//note setup ability so it plays the cry of glastrier before the stat boost
     
     [SPECIES_CALYREX_SHADOW_RIDER] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 100,
         .baseAttack = 85,
         .baseDefense = 80,
@@ -33464,7 +34451,9 @@ const struct BaseStats gBaseStats[] =
     },//note setup ability so it plays the cry of spectrier before the stat boost IMPORTANT - DONE
 
     [SPECIES_TORTERRA_MEGA] =
-    {
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(45, 49, 49, 45, 65, 65),
         .baseHP = 175,
         .baseAttack = 92,
         .baseDefense = 126,

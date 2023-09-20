@@ -3418,7 +3418,7 @@ u16 GetBaseStatTotal(u16 species)
 
 bool8 CanEvioliteActivate(u16 species)
 {
-    if (CanEvolve(species) && (GetBaseStatTotal(species) < 450))
+    if (CanEvolve(species) && (GetBaseStatTotal(species) < 465)) //with boosted stats thing may raiase limit to 465? using new tangela as example, is still below chansey 
         return TRUE;
     else
         return FALSE;
