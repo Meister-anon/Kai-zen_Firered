@@ -10515,11 +10515,11 @@ u32 GetHighestStatId(u32 battlerId)
 
     for (i = STAT_DEF; i < NUM_STATS; i++)
     {
-        u16 *statVal = &gBattleMons[battlerId].attack + (i - 1);
-        if (*statVal > highestStat)
+        u16 *statVal = &gBattleMons[battlerId].attack + (i - 1); //of note doesn't include hp so could be why - 1   //also thinkm this is dereferencing so need the asterisk etc here
+        if (*statVal > highestStat) //effect of line above is to increse stored stat, i starts at defense whchi is value 2,  but ti reads stat attack + (i -1)  which is attack + 1,  i.e defense stat so same value we're on
         {
             highestStat = *statVal;
-            highestId = i;
+            highestId = i; //sets highestId to atk at start, then checks other stats so if not passed it auto returns attack
         }
     }
     return highestId;

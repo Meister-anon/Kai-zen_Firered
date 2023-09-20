@@ -306,6 +306,14 @@ But it's only for enemy mons, to do the same with the player you would just swap
 //realized text buffers used in battle_message.c allign with values in charmap.txt, the names used are those, and the value is from battle_message.h
 
 //NOTE-:
+//.4bpp name and gbapal graphic define names have to match to be able to build pal from png     /ex below use "eviolite" as name
+//const u32 gItemIcon_Eviolite[] = INCBIN_U32("graphics/items/icons/eviolite.4bpp.lz");
+//const u32 gItemIconPalette_Eviolite[] = INCBIN_U32("graphics/items/icon_palettes/eviolite.gbapal.lz");
+
+//redid base stats field need properly fill macros then remove stat fields
+//setup basestattotl function like kurausukun said, need proplery setup item grahpic swap for eviolite
+//find how species is set. search  CanEvioliteActivate   to find where put function/item icon stuff
+
 //zygrade forms are wonky the way they set them up is odd, they separated zygrade out into multiple species based on if it had power construct or not
 //rather than just making that an alternate ability for the same species
 
@@ -891,6 +899,35 @@ I could set it up like that, either a bag pouch or a key item that opens in to a
 * then need to filter use items that can be used in multi use
 * i.e only healing and stat boosting items and pp ups.  not status cure items
 */ 
+goto ITEM_ICON_SETTING //item_menu_icons.c
+/*
+ * setup new eviolite effect graphic swap here, compiles need test
+ * 
+ * all item icons are set with this function
+ * 
+ * //think raise boost 1.5x isn't really enough to be worth not evolving,
+ * or even keep up with what stats would be at evolution
+ * hmm or so I thought? but paras base 55 defense with evolving to parasect base 80 def
+ * my eviolite def was higher than my evolved defense??
+ * pre-evo def was 70 w eviolite,  post evo it was just 61
+ * but my hp is much higher so overall I'm still bulkier post evo. hmm. I thinkI should still boost it up 2 points
+ * keep an eye on consider may be too strong for some good mon but eh pve doesnt matter as much
+ * 
+ * changed affect, to only work on mon that aren't already good, i.e below a certain bst, using chansey as best example will use bst 450 as cap
+ * with this value it won't affect mon already "good" will nolonger work for chansey
+ * 
+ * //now way for player to see their bst unles i make that, but no reason to have it other than for this
+    //so instead plan to indicate if eviolite is working on mon in question by a palette affect
+    //make greyed out palette version, or more simply make grey version of icon and add that without palette data so it takes the value for that and makes palette from that
+    //then just have function that checks if eviolite could activate and if false, tell it to use the other graphic icon on the mon.
+    //would confuse the player but they would be able to intuite that something is wrong and the item just wouldn't work for the mon in question.
+    //activation condition would be exactly what have above, so replace those checks with full function  - ok done that
+    //last thing is need to create the other version
+ * 
+ * 
+*/
+
+
  goto ITEM_USE
 /* 
 * low cost of ev boost items.  1k or 2k per rebalance other things I like that cost economy balance

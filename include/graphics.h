@@ -7697,6 +7697,8 @@ extern const u32 gItemIconPalette_SkullFossil[];
 // Gen 5 Items
 extern const u32 gItemIcon_Eviolite[];
 extern const u32 gItemIconPalette_Eviolite[];
+extern const u32 gItemIcon_EvioliteFailed[];
+extern const u32 gItemIconPalette_EvioliteFailed[];
 extern const u32 gItemIcon_FloatStone[];
 extern const u32 gItemIconPalette_FloatStone[];
 extern const u32 gItemIcon_BindingBand[];

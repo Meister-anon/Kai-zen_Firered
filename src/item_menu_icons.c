@@ -4,6 +4,7 @@
 #include "graphics.h"
 #include "item_menu_icons.h"
 #include "constants/items.h"
+#include "party_menu.h"
 
 static EWRAM_DATA u8 sItemMenuIconSpriteIds[12] = {0};
 static EWRAM_DATA void * sItemIconTilesBuffer = NULL;
@@ -603,8 +604,9 @@ static const void *const sItemIconGfxPtrs[][2] = {
     [ITEM_ARMOR_FOSSIL] = {gItemIcon_ArmorFossil, gItemIconPalette_ArmorFossil},
     [ITEM_SKULL_FOSSIL] = {gItemIcon_SkullFossil, gItemIconPalette_SkullFossil},
     // Gen 5 Items
-     /*   [ITEM_EVIOLITE] = {gItemIcon_Eviolite, gItemIconPalette_Eviolite},
-    [ITEM_FLOAT_STONE] = {gItemIcon_FloatStone, gItemIconPalette_FloatStone},
+     [ITEM_EVIOLITE] = {gItemIcon_Eviolite, gItemIconPalette_Eviolite},
+     [ITEM_EVIOLITE_FAIL] = {gItemIcon_EvioliteFailed, gItemIconPalette_EvioliteFailed}, //special versionn for eviolite change
+    /*[ITEM_FLOAT_STONE] = {gItemIcon_FloatStone, gItemIconPalette_FloatStone},
     [ITEM_BINDING_BAND] = {gItemIcon_BindingBand, gItemIconPalette_BindingBand},
     [ITEM_DOUSE_DRIVE] = {gItemIcon_DouseDrive, gItemIconPalette_DouseDrive},
     [ITEM_SHOCK_DRIVE] = {gItemIcon_ShockDrive, gItemIconPalette_ShockDrive},
@@ -996,10 +998,14 @@ void DestroyItemMenuIcon(u8 idx)
    }
 }
 
-const void * GetItemIconGfxPtr(u16 itemId, u8 attrId)
+#define ITEM_ICON_SETTING
+const void * GetItemIconGfxPtr(u16 itemId, u8 attrId) 
 {
     if (itemId > ITEM_N_A) //think this equation is what was messing up my field arrow,
         itemId = ITEM_NONE; //because it was listed grater than ITEM_N_A
+    if ((itemId == ITEM_EVIOLITE) && !CanEvioliteActivate(GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES))) //ok dont need loop for everything think this 
+        itemId = ITEM_EVIOLITE_FAIL; //doesn't change item, just changes effect of function / com
+ 
     return sItemIconGfxPtrs[itemId][attrId];
 }
 

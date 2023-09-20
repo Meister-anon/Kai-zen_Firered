@@ -233,7 +233,7 @@
 #define ITEM_PRISM_SCALE 226 // will make this an evo hold item level up, but because its milotic and difficult, make it random %4 only evolve while 0, so a 1 in 5 each level up.
 #define ITEM_RAZOR_CLAW 227
 #define ITEM_EVIOLITE 228
-#define ITEM_0E5 229
+#define ITEM_EVIOLITE_FAIL 229
 #define ITEM_0E6 230
 #define ITEM_0E7 231
 #define ITEM_0E8 232

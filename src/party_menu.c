@@ -5461,7 +5461,7 @@ static void sub_8126BD4(void)
     RemoveBagItem(gSpecialVar_ItemId, 1);
 }
 
-static bool8 MonCanEvolve(void)
+static bool8 MonCanEvolve(void) //not trulyt an evolution check, is more for if a mon that can evolve is allowed to evolve, made default to true so all evos available
 {
     if (!IsNationalPokedexEnabled()
      && GetEvolutionTargetSpecies(&gPlayerParty[gPartyMenu.slotId], EVO_MODE_ITEM_USE, gSpecialVar_ItemId) > KANTO_DEX_COUNT)

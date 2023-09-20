@@ -3398,6 +3398,32 @@ static bool32 CanEvolve(u32 species) //default use for eviolite but will also us
     return FALSE;
 }
 
+//u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL); with this realize I don't need to directly use mon
+//makes functino more flexible 
+//basing off GetHighestStatId function & atk9B_transformdataexecution  function
+//on advice from kurasukuun removed loop just did base arithmatic its simpler and more efficient code wise something about
+//something about being faster and not needlesly clearing the  prefetch cache
+//(couldn't get it to wotk just gave me ivalid operand to binary errors when I tried to add the pointer values so just put it back
+//slow and inefficient but it works)
+u16 GetBaseStatTotal(u16 species)
+{
+    u32 statTotal;
+
+
+        statTotal = gBaseStats[species].baseHP + gBaseStats[species].baseAttack + gBaseStats[species].baseDefense //of note doesn't include hp so could be why - 1   //also thinkm this is dereferencing so need the asterisk etc here
+             + gBaseStats[species].baseSpeed + gBaseStats[species].baseSpAttack + gBaseStats[species].baseSpDefense;
+    return statTotal;
+} //...so just realized I could make a macro like below for base stats file to calculate base stat total for  the mon directly from the base stat data
+//would add a u16 value to basestat but would be very useful for users, and partially offset by removal of ev yeild field  nope couldn't do that...
+
+bool8 CanEvioliteActivate(u16 species)
+{
+    if (CanEvolve(species) && (GetBaseStatTotal(species) < 450))
+        return TRUE;
+    else
+        return FALSE;
+}
+
 #define APPLY_STAT_MOD(var, mon, stat, statIndex)                                   \
 {                                                                                   \
     (var) = (stat) * (gStatStageRatios)[(mon)->statStages[(statIndex)]][0];         \
@@ -3542,20 +3568,19 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             if (type == TYPE_ROCK || type == TYPE_GROUND)
                 gBattleMovePower = (110 * gBattleMovePower) / 100;
             break; 
-        case HOLD_EFFECT_EVIOLITE:
-            if (CanEvolve(gBattleMons[gBattlerTarget].species))
-            {
-                spDefense = (150 * spDefense) / 100;
-                defense = (150 * defense) / 100;
-            }//think raise boost 1.5x isn't really enough to be worth not evolving,
-            //or even keep up with what stats would be at evolution
-            //hmm or so I thought? but paras base 55 defense with evolving to parasect base 80 def
-            //my eviolite def was higher than my evolved defense??
-            //pre-evo def was 70 w eviolite,  post evo it was just 61
-            //but my hp is much higher so overall I'm still bulkier post evo. hmm. I thinkI should still boost it up 2 points
-            //change description when added to reflect change, say greatly boost def spdef
-            //keep an eye on consider may be too strong for some good mon but eh pve doesnt matter as much
     }
+
+    switch(defenderHoldEffect)
+    {
+        case HOLD_EFFECT_EVIOLITE:  //
+            if (CanEvioliteActivate)    //
+            {
+                spDefense = (170 * spDefense) / 100;
+                defense = (170 * defense) / 100;
+            }
+            break;
+            
+    }   
 
 
     if (attackerHoldEffect == HOLD_EFFECT_CHOICE_BAND)

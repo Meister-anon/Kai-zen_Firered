@@ -3666,7 +3666,7 @@
     },
     {
       "english": "????????",
-      "itemId": "ITEM_NONE",
+      "itemId": "ITEM_EVIOLITE_FAIL",
       "price": 0,
       "holdEffect": "HOLD_EFFECT_NONE",
       "holdEffectParam": 0,

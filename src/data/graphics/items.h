@@ -1058,6 +1058,9 @@ const u32 gItemIconPalette_SkullFossil[] = INCBIN_U32("graphics/items/icon_palet
 const u32 gItemIcon_Eviolite[] = INCBIN_U32("graphics/items/icons/eviolite.4bpp.lz");
 const u32 gItemIconPalette_Eviolite[] = INCBIN_U32("graphics/items/icon_palettes/eviolite.gbapal.lz");
 
+const u32 gItemIcon_EvioliteFailed[] = INCBIN_U32("graphics/items/icons/eviolite_fail.4bpp.lz");
+const u32 gItemIconPalette_EvioliteFailed[] = INCBIN_U32("graphics/items/icon_palettes/eviolite_fail.gbapal.lz");
+
 const u32 gItemIcon_FloatStone[] = INCBIN_U32("graphics/items/icons/float_stone.4bpp.lz");
 const u32 gItemIconPalette_FloatStone[] = INCBIN_U32("graphics/items/icon_palettes/float_stone.gbapal.lz");
 

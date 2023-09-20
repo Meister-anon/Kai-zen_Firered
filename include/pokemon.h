@@ -271,9 +271,10 @@ struct BaseStats  // had to adjust struct order to match paste value from base_s
  /* 0x16 */ u16 abilities[2]; //[partysize] is 6 values, so this is ability 1 and ability 2, doesn't include hidden //this means 2 states, 0 & 1
  /* 0x1A */ u8 safariZoneFleeRate;
  /* 0x1B */ u16 abilityHidden[2]; //need to make sure ability num can be 2, then set that as hidden ability
- /* 0x1D */ u8 bodyColor : 7;
+ /* 0x1D */ u8 bodyColor : 7; //what are bodyColor and noFLip fields are they necesary?
             u8 noFlip : 1;
  /* 0x1E */ u8 flags;   //use for gender diff & form change, when creating mon plan check for flag and divert to what should be based on form species, //also used for making beast ball work, etc.
+            u16 statTotal;  //with new macro from GriffinR am able to display mon bst
 };
 
 struct BattleMove
@@ -593,6 +594,8 @@ void OakSpeechNidoranFFreeResources(void);
 void *OakSpeechNidoranFGetBuffer(u8 bufferId);
 u16 GetFormSpeciesId(u16 speciesId, u8 formId);
 u8 GetFormIdFromFormSpeciesId(u16 formSpeciesId);
+u16 GetBaseStatTotal(u16 species);
+bool8 CanEvioliteActivate(u16 species);
 
 void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst);
 
