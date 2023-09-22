@@ -570,50 +570,35 @@ BattleScript_PurifyWorks:
 	goto BattleScript_RestoreHp
 	
 BattleScript_EffectStrengthSap:
-	setstatchanger STAT_ATK, 1, TRUE
+	setstatchanger STAT_ATK, 1, TRUE	@set stat to affect and if being lowered
 	attackcanceler
 	jumpifsubstituteblocks BattleScript_ButItFailedAtkStringPpReduce
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	jumpifstat BS_TARGET, CMP_NOT_EQUAL, STAT_ATK, 0, BattleScript_StrengthSapTryLower
-	pause 0x20
-	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_MoveEnd
-	printfromtable gStatDownStringIds
-	waitmessage 0x40
-	goto BattleScript_MoveEnd
-BattleScript_StrengthSapTryLower:
-	getstatvalue BS_TARGET, STAT_ATK
-	jumpiffullhp BS_ATTACKER, BattleScript_StrengthSapMustLower
+	jumpifstat BS_TARGET, CMP_EQUAL, STAT_ATK, 0, BattleScript_ButItFailed	@if can lower stat move continues otherwise fail
+	pause 0x20	@don't know if necessary but will keep
+BattleScript_StrengthSapTryLower:	@start of main logic
+	getstatvalue BS_TARGET, STAT_ATK	@get atk statvalue for later heal
 	attackanimation
 	waitanimation
-	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_StrengthSapHp
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x3, BattleScript_StrengthSapHp
+	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_StrengthSapHp	@think go to heal if cant lower stat
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x3, BattleScript_StrengthSapHp	@dont know what does assumed similar to above so keeping
 BattleScript_StrengthSapLower:
 	setgraphicalstatchangevalues
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printfromtable gStatDownStringIds
-	waitmessage 0x40
-	goto BattleScript_StrengthSapHp
-@ Drain HP without lowering a stat
-BattleScript_StrengthSapTryHp:
-	jumpiffullhp BS_ATTACKER, BattleScript_ButItFailed
-	attackanimation
-	waitanimation
+	waitmessage 0x40	@finish stat drop effect go to heal
 BattleScript_StrengthSapHp:
-	jumpiffullhp BS_ATTACKER, BattleScript_MoveEnd
-	manipulatedamage DMG_BIG_ROOT
-	healthbarupdate BS_ATTACKER
+	jumpiffullhp BS_ATTACKER, BattleScript_MoveEnd	@goto moev end if cant heal
+	jumpifhealblock BS_ATTACKER, BattleScript_MoveEnd
+	manipulatedamage DMG_BIG_ROOT @this is a physical drain unlike dream eater so think can use liquid ooze 
+	jumpifability BS_TARGET, ABILITY_LIQUID_OOZE, BattleScript_AbsorbLiquidOoze	@should always be below DMG_BIG_ROOT
+	healthbarupdate BS_ATTACKER	@& ghost drain here think will put ghost drain effect into big root for ease of use
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_PKMNENERGYDRAINED
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
-BattleScript_StrengthSapMustLower:
-	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_MoveEnd
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x3, BattleScript_MoveEnd
-	attackanimation
-	waitanimation
-	goto BattleScript_StrengthSapLower
 
 @need test move will succeed
 BattleScript_EffectSkyDrop:
@@ -2044,6 +2029,8 @@ BattleScript_EffectHealPulse:
 	attackcanceler
 	attackstring
 	ppreduce
+	jumpifhealblock BS_ATTACKER, BattleScript_MoveUsedHealBlockPrevents @ stops pollen puff
+    jumpifhealblock BS_TARGET, BattleScript_MoveUsedHealBlockPrevents
 	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
 	jumpifsubstituteblocks BattleScript_ButItFailed
 	tryhealpulse BS_TARGET, BattleScript_AlreadyAtFullHp
@@ -2780,9 +2767,11 @@ BattleScript_EffectAbsorb::  @need setup multi task also make ghost with liquid 
 	waitmessage 0x40
 	resultmessage
 	waitmessage 0x40
+	jumpifhealblock BS_ATTACKER, BattleScript_AbsorbHealBlock
 	sethpdrain	@ without this, damgae to attacker is doubleed
+	manipulatedamage DMG_BIG_ROOT		@makes negative to heal
  	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
- 	jumpifability BS_TARGET, ABILITY_LIQUID_OOZE, BattleScript_AbsorbLiquidOoze
+ 	jumpifability BS_TARGET, ABILITY_LIQUID_OOZE, BattleScript_AbsorbLiquidOoze	@should always be below DMG_BIG_ROOT
 	setbyte cMULTISTRING_CHOOSER, 0
 	goto BattleScript_AbsorbUpdateHp @went one by one, the problem was jumpifability from when I expanded abilities 
 
@@ -2797,6 +2786,7 @@ BattleScript_AbsorbUpdateHp::
 	waitmessage 0x40
 BattleScript_AbsorbTryFainting::
 	tryfaintmon BS_ATTACKER, 0, NULL
+BattleScript_AbsorbHealBlock::
 	tryfaintmon BS_TARGET, 0, NULL
 	goto BattleScript_MoveEnd
 
@@ -2896,8 +2886,10 @@ BattleScript_DreamEaterWorked::
 	waitmessage 0x40
 	resultmessage
 	waitmessage 0x40
-	sethpdrain
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
+	jumpifhealblock BS_ATTACKER, BattleScript_AbsorbHealBlock
+	sethpdrain	@ without this, damgae to attacker is doubleed
+	manipulatedamage DMG_BIG_ROOT		@makes negative to heal
+ 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	jumpifmovehadnoeffect BattleScript_DreamEaterTryFaintEnd
@@ -6671,14 +6663,15 @@ BattleScript_LeechSeedTurnDrain::
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	copyword gBattleMoveDamage, gHpDealt
-	jumpifability BS_ATTACKER, ABILITY_LIQUID_OOZE, BattleScript_LeechSeedTurnPrintLiquidOoze
 	setbyte cMULTISTRING_CHOOSER, 0x3
-	jumpifhealblock BattleScript_LeechSeedHealBlock
+	jumpifhealblock BS_TARGET, BattleScript_LeechSeedHealBlock
 	manipulatedamage DMG_BIG_ROOT
+	jumpifability BS_ATTACKER, ABILITY_LIQUID_OOZE, BattleScript_LeechSeedTurnPrintLiquidOoze
 	goto BattleScript_LeechSeedTurnPrintAndUpdateHp
 BattleScript_LeechSeedTurnPrintLiquidOoze::
+	manipulatedamage NEGATIVE_DMG
 	copybyte gBattlerAbility, gBattlerAttacker
-	setbyte cMULTISTRING_CHOOSER, 0x4
+	setbyte cMULTISTRING_CHOOSER, 0x4	@don'tknow what this does so hope nota problem
 BattleScript_LeechSeedTurnPrintAndUpdateHp::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	healthbarupdate BS_TARGET

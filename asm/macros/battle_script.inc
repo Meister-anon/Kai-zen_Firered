@@ -2162,6 +2162,7 @@
 	.4byte \jumpptr
 	.endm
 
+	@should onlly have 1: argument if has 1f in values
 	.macro jumpifleafguard jumpptr:req
 	jumpifhalfword CMP_NO_COMMON_BITS, gBattleWeather, WEATHER_SUN_ANY, 1f
 	jumpifability BS_TARGET, ABILITY_LEAF_GUARD, \jumpptr
@@ -2174,14 +2175,12 @@
 	1:
 	.endm
 
-	.macro jumpifhealblock jumpptr:req
-	jumpifsideaffecting BS_TARGET, SIDE_STATUS_HEAL_BLOCK, \jumpptr
-	1:
+	.macro jumpifhealblock battler:req, jumpptr:req
+	jumpifsideaffecting \battler, SIDE_STATUS_HEAL_BLOCK, \jumpptr
 	.endm
 
 	.macro jumpifembargo jumpptr:req
 	jumpifsideaffecting BS_ATTACKER, SIDE_STATUS_EMBARGO, \jumpptr
-	1:
 	.endm
 
 	@ Will jump to script pointer if the target weighs less than 200 kg, or 441 lbs.

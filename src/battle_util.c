@@ -1356,8 +1356,11 @@ bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget)  //somehow works...
 }
 
 // Ingrain, Leech Seed, Strength Sap and Aqua Ring
+//leech seed has weird targetting so I'm worried it'llc ause issues for ghost drain & leech seed logic
+//but if works for big root which uses battler and is pulled from gbattlerattacker I think it should work
 s32 GetDrainedBigRootHp(u32 battler, s32 hp)
 {
+    s32 ghostdmg;
     if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BIG_ROOT) //prob need to balance this for ingrain,
     {
         hp = (hp * 1300) / 1000;
@@ -1365,10 +1368,42 @@ s32 GetDrainedBigRootHp(u32 battler, s32 hp)
             hp = (hp * 1100) / 1000;
     }
 
+     //set ghost drain damg
+     //hp argument is gbattlemovedamage 
+     //needed change from explicitly only work with x effects because leech seed
+    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST)
+        && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST)
+        && gBattleMoves[gCurrentMove].effect != EFFECT_DREAM_EATER) //work on physical drain moves, dream eater is mental/dreams not lifeforce
+        //should prevent damage for ghost types
+    {
+        if ((hp / 2) < gBattleMons[battler].maxHP / 8)
+            ghostdmg = gBattleMons[battler].maxHP / 8;
+
+        else if ((hp / 2) > gBattleMons[battler].maxHP / 8)
+            ghostdmg = hp / 2;
+        //take the greater of the two, changed from else, so I don't have to worry about it
+        if (GetBattlerAbility(gBattlerTarget) == ABILITY_LIQUID_OOZE) //rest fo liquid ooze logic handled in script
+        {
+            hp += ghostdmg;
+
+            /*if (gBattleMoves[gCurrentMove].effect == EFFECT_STRENGTH_SAP)
+                hp = (hp + ghostdmg) / 2; //to try keep this from just being an insta kill
+                */ //...nevermnid then -_- liquid ooze was meant to work with strength sap from the start
+                //so I should let it work as is, not try to scale it back for balance I guess
+        }
+        else
+        {
+            hp = -ghostdmg; //since below flips sign need set this negative to properly do damage
+                //would love a script for this but cant do anything as set in a command? idk I might be able to put
+                //something below that pushes and returns?
+        }      
+        //if can setup text to say aborb ghostly energy!  it'd go here vsonic  
+    }
+
     if (hp == 0)
         hp = 1;
 
-    return hp * -1;
+    return hp * -1; //sets value negative as pass command
 }
 
 #define MAGIC_GUARD_CHECK \
@@ -3937,7 +3972,9 @@ bool8 IsBattlerGrounded(u8 battlerId)
         grounded = FALSE;
     if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
         grounded = FALSE;
-    
+
+    if (gStatuses3[battlerId] & STATUS3_UNDERGROUND)
+        grounded = TRUE;
     
         return grounded;
 }
@@ -4182,11 +4219,11 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
                         data[count].power = 0;
                     break;
                 case EFFECT_EXPLOSION:
-                    if ((gCurrentMove == MOVE_SELF_DESTRUCT
-                        || gCurrentMove == MOVE_EXPLOSION)
+                    if ((data[count].moveId == MOVE_SELF_DESTRUCT
+                        || data[count].moveId == MOVE_EXPLOSION)
                         && (!(IS_BATTLER_OF_TYPE(battler, TYPE_GHOST))))
                         data[count].power = 200;
-                    else if (gCurrentMove == MOVE_MISTY_EXPLOSION
+                    else if (data[count].moveId == MOVE_MISTY_EXPLOSION
                         && (!(IS_BATTLER_OF_TYPE(battler, TYPE_GRASS))))
                         data[count].power = 200;
                     else
@@ -4985,7 +5022,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                     ++effect;//
                                     break;
                                 }
-                                else if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(1.5))//vsonic  //THINK CAN use typecalc fort this?
+                                else if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(1.6))//vsonic  //THINK CAN use typecalc fort this?
                                 {
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_DEFAULT);
                                     ++effect;//
@@ -10044,7 +10081,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
     }
 }*/
 
-//format for use is MulModifier(&modifier, UQ_4_12(1.5));   & is used to denote pointer here
+//format for use is MulModifier(&modifier, UQ_4_12(1.6));   & is used to denote pointer here
 //all functions that use modifier start with u16 modifier = UQ_4_12(1.0); so it defaults to 1, and is modulated from there
 void MulModifier(u16 *modifier, u16 val) //portd tried to set globably hope works   //can use decimal values
 {
@@ -10064,8 +10101,8 @@ static u16 GetInverseTypeMultiplier(u16 multiplier) //could use total damgae cal
     case UQ_4_12(0.0):
         return UQ_4_12(1.0);
     case UQ_4_12(0.5):
-        return UQ_4_12(1.5);
-    case UQ_4_12(1.5):
+        return UQ_4_12(1.6);
+    case UQ_4_12(1.6):
         return UQ_4_12(0.5);
     case UQ_4_12(1.0):
     default:
@@ -10103,16 +10140,16 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
             mod = UQ_4_12(1.0);
 
         else if (mod == UQ_4_12(0.5))
-            mod = UQ_4_12(1.5);
+            mod = UQ_4_12(1.6);
 
-        else if (mod == UQ_4_12(1.5))
+        else if (mod == UQ_4_12(1.6))
             mod = UQ_4_12(0.5);
     }
-    else if ((moveType == TYPE_ICE) && GetBattlerAbility(battlerDef) == ABILITY_ECOSYSTEM && defType == TYPE_GRASS && mod == UQ_4_12(1.5))
+    else if ((moveType == TYPE_ICE) && GetBattlerAbility(battlerDef) == ABILITY_ECOSYSTEM && defType == TYPE_GRASS && mod == UQ_4_12(1.6))
     {
         mod = UQ_4_12(1.0); //for purose of this being only on mega torterra deftype would be grass
     }
-    else if ((moveType == TYPE_ICE) && GetBattlerAbility(battlerDef) == ABILITY_ABSOLUTE_ZERO && defType == TYPE_DRAGON && mod == UQ_4_12(1.5))
+    else if ((moveType == TYPE_ICE) && GetBattlerAbility(battlerDef) == ABILITY_ABSOLUTE_ZERO && defType == TYPE_DRAGON && mod == UQ_4_12(1.6))
     {
         mod = UQ_4_12(0.5); //Because only on kyurem deftype would be dragon
     }
@@ -10120,16 +10157,16 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
     if (moveType == TYPE_PSYCHIC && defType == TYPE_DARK && gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
     if (gBattleMoves[move].effect == EFFECT_FREEZE_DRY && defType == TYPE_WATER)
-        mod = UQ_4_12(1.5);
+        mod = UQ_4_12(1.6);
     if (moveType == TYPE_GROUND && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
     if (moveType == TYPE_FIRE && gDisableStructs[battlerDef].tarShot)
-        mod = UQ_4_12(1.5);
+        mod = UQ_4_12(1.6);
 
     // B_WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pok�mon
     if (gBattleWeather & WEATHER_STRONG_WINDS && WEATHER_HAS_EFFECT)
     {
-        if (defType == TYPE_FLYING && mod >= UQ_4_12(1.5))
+        if (defType == TYPE_FLYING && mod >= UQ_4_12(1.6))
             mod = UQ_4_12(1.0);
     }
 

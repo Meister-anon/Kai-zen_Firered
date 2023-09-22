@@ -2483,7 +2483,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
             }
             else
             {
-                gBattleMoveDamage = gBattleMoveDamage * 150;
+                gBattleMoveDamage = gBattleMoveDamage * 130;
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
 
@@ -2524,7 +2524,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
         //so change to else if, after adding unique terra from above comment section
         if (gBattleMons[gBattlerAttacker].species == SPECIES_ARCEUS)
         {
-            gBattleMoveDamage = gBattleMoveDamage * 150;
+            gBattleMoveDamage = gBattleMoveDamage * 130;
             gBattleMoveDamage = gBattleMoveDamage / 100;
         }
     }
@@ -3022,8 +3022,8 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
             }
             else
             {
-                gBattleMoveDamage = gBattleMoveDamage * 15;
-                gBattleMoveDamage = gBattleMoveDamage / 10;
+                gBattleMoveDamage = gBattleMoveDamage * 130;
+                gBattleMoveDamage = gBattleMoveDamage / 100;
             }
 
         }
@@ -3044,8 +3044,8 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
         //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
         if (gBattleMons[attacker].species == SPECIES_ARCEUS)
         {
-            gBattleMoveDamage = gBattleMoveDamage * 15;
-            gBattleMoveDamage = gBattleMoveDamage / 10;
+            gBattleMoveDamage = gBattleMoveDamage * 130;
+            gBattleMoveDamage = gBattleMoveDamage / 100;
         }
     }
 
@@ -3548,11 +3548,11 @@ static void atk07_adjustnormaldamage(void)
    /* if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(1.5))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(1.6))
          || (gBattleMons[gBattlerTarget].type2 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(1.5))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(1.6))
          || (gBattleMons[gBattlerTarget].type3 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(1.5)))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(1.6)))
         {
             gBattlerAbility = gBattlerTarget;
             BattleScriptPushCursor();
@@ -3661,11 +3661,11 @@ static void atk08_adjustnormaldamage2(void)
    /* if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(1.5))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(1.6))
          || (gBattleMons[gBattlerTarget].type2 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(1.5))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(1.6))
          || (gBattleMons[gBattlerTarget].type3 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(1.5)))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(1.6)))
         {
             gBattlerAbility = gBattlerTarget;
             BattleScriptPushCursor();
@@ -12720,7 +12720,7 @@ static void atk7F_setseeded(void)  //removed grass immunity
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2; //matter of fact, since they're actually plants I'd expect it to be MORE effective against them.
     }*/ // or at least heal for more i.e be more nutrient rich, same if used against ground, or water type, well maybe more water types, 
-    //since grounded isn't necessarily made of earth, just more suited for the dry environment.
+    //since grounded isn't necessarily made of earth, just more suited for the dry environment.  also plants can steal nutrients from other plants, typically throughts roots so more or less same
     else
     {
         gStatuses3[gBattlerTarget] |= gBattlerAttacker;
@@ -12732,7 +12732,7 @@ static void atk7F_setseeded(void)  //removed grass immunity
 
 static void atk80_manipulatedamage(void)
 {
-    switch (gBattlescriptCurrInstr[1])
+    switch (gBattlescriptCurrInstr[1]) //reads value 1 byte after command, i.e next argument in script
     {
     case NEGATIVE_DMG:
         gBattleMoveDamage *= -1;
@@ -12932,28 +12932,22 @@ static void atk87_stockpiletohpheal(void)
     }
 }
 
-static void atk88_sethpdrain(void) //need to make absorbing life from ghosts damaging- DONE  vsonic
+//need to make absorbing life from ghosts damaging- DONE  vsonic
+//adapted to emerald logic using manipulatedmg big root in script, to set values negative
+//actually makes this easier to calc too
+//moved ghost drain to big root logic(function) as majority of
+//base effect is done in that now anyway
+static void atk88_sethpdrain(void) 
 {
-    if (gBattleMoves[gCurrentMove].effect == EFFECT_ABSORB
-        && IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST)
-        && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST)) //if done right,
-        //should prevent damage for ghost types
-    {
-        if ((gHpDealt / 4) < gBattleMons[gBattlerAttacker].maxHP / 16)
-            gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
+    //set gbattlemovedamage : normal hp drain dmg
+    if (gBattleMoves[gCurrentMove].argument != 0)
+        gBattleMoveDamage = (gHpDealt * gBattleMoves[gCurrentMove].argument / 100);
+    else
+        gBattleMoveDamage = (gHpDealt / 2)
 
-        else if ((gHpDealt / 4) > gBattleMons[gBattlerAttacker].maxHP / 16)
-            gBattleMoveDamage = gHpDealt / 4;
-        //take the greater of the two, changed from else, so I don't have to worry about it
-        if (gBattleMoveDamage == 0)
-            gBattleMoveDamage = 1;
-    } //hopefully will make it do damage instead of healing, and doesn't change effect of below.
-    else if (gBattleMoves[gCurrentMove].effect == EFFECT_ABSORB)//all works.
-    {
-        gBattleMoveDamage = -(gHpDealt / 2);
-        if (gBattleMoveDamage == 0)
-            gBattleMoveDamage = -1;
-    }
+    if (gBattleMoveDamage == 0)
+        gBattleMoveDamage = 1;
+    
     ++gBattlescriptCurrInstr;
 }
 
@@ -16981,7 +16975,7 @@ static void atkF9_mondamaged(void) //edited based on recommendation from mcgriff
        
     ++gBattlescriptCurrInstr; //without this script doesn't continue stays stuck on this
     //also leanred that order matters for stacked ifs or else ifs, since it will
-    //take the first true statement for either if or else if, and igonore any other following.
+    //take the first true statement for either if or else if.
     //..i think, need to read logic
     
 
