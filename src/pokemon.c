@@ -2239,9 +2239,9 @@ static const s8 sNatureStatTable[][5] =
 #include "data/pokemon/form_species_tables.h"
 #include "data/pokemon/form_species_table_pointers.h"
 
-static const s8 sPokeblockFlavorCompatibilityTable[] =
+static const s8 gBerryFlavorCompatibilityTable[] =
 {
-    // Cool, Beauty, Cute, Smart, Tough
+     // Spicy,  Dry, Sweet, Bitter, Sour
           0,      0,    0,     0,     0, // Hardy
           1,      0,    0,     0,    -1, // Lonely
           1,      0,   -1,     0,     0, // Brave
@@ -7951,16 +7951,17 @@ bool8 IsPokeSpriteNotFlipped(u16 species)
     return gBaseStats[species].noFlip;
 }
 
+#define BERRY_TO_NATURE_RELATION
 static s8 GetMonFlavorRelation(struct Pokemon *mon, u8 flavor)
 {
     u8 nature = GetNature(mon);
-    return sPokeblockFlavorCompatibilityTable[nature * 5 + flavor];
+    return gBerryFlavorCompatibilityTable[nature * 5 + flavor];
 }
 
 s8 GetFlavorRelationByPersonality(u32 personality, u8 flavor)
 {
     u8 nature = GetNatureFromPersonality(personality);
-    return sPokeblockFlavorCompatibilityTable[nature * 5 + flavor];
+    return gBerryFlavorCompatibilityTable[nature * 5 + flavor];
 }
 
 bool8 IsTradedMon(struct Pokemon *mon)

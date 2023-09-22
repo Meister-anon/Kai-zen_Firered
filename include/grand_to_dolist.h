@@ -898,7 +898,65 @@ I could set it up like that, either a bag pouch or a key item that opens in to a
 * "used = 0, increment long as used is less than quantity selected"
 * then need to filter use items that can be used in multi use
 * i.e only healing and stat boosting items and pp ups.  not status cure items
-*/ 
+
+for licquid oozwe need special logic for ghost change to absorb nmoves\
+
+didn't work how I thought
+
+change needed is just don't swap hp drain for ghost instead 
+just add the max hp damage to gbattlemovedamage and leave  the negating swap to liquid ooze logic
+while I was at it, redid ghost absorb setup moved ghost drain to bigroot formula 
+setup like emerald where its in every healing script
+redid strength sap bs script as well, as it seemed unnecessarily bloated
+
+NEW BIG IDEA
+*with what I just learned about legends arceus came up with new idea
+make berry incense using the berries, it'll be inspired by the prebattle nature checking
+that was in legends arceus where they used the flavor of the berry to show which mon had what nature
+since I know now the berry flavors align with the stats boosted by nature
+I can set this up
+
+Idea is, key item berry incense (name pending) use a berry in the item
+it will create an aura/aroma around the player  setup a timer for the effect
+will work similar to repel counter.
+
+text will be "A "flavor" aroma wafts through the air"  
+pretty much use sweet scent battle message but replace "sweet" with the flavor of 
+whatever berry was used, for berries that have multiple flavors 
+it'll display both/all ex. spicy and sweet  or spicy yet sweet aroma
+can make multiple strings for if berry has more than one flavor
+
+then the effect you get for consuming the berry in this way
+is that mon you spawn will be GUARANTEED to have the a nature corresponding to the stat boost.
+meaning if you use a spicy berry you're guaranteed a mon with an attack boosting nature.
+it won't auto be adamant but that still cuts down on rng
+as well as gives a good reason to have /farm berries
+
+ok fire red doesn't have the display for berry flavor will need port that to firered sigh
+//as well as berry trees
+
+make function that alings with gBerryFlavorCompatibilityTable
+read flavor of berry, and set nature to craete for mon based on that flavor
+
+need figure out how to do that, as its not just random % 5
+and one value for each nature
+
+there are cases where flavor can overlap so you have 2 groups of naures 
+or perhaps 3 even figure out later
+
+//have this new item replace berry crush, and be given by old man in cerulean city
+*/
+goto BERRY_TO_NATURE_RELATION //pokemon.c logic for relating berry flavor to nature useful for ide
+
+goto WILD_NATURE_SETTING //where nature is set for wild mon
+
+goto STARTER_ULTIMATE_MOVE_SELECTION //function for setting who can learn frenzy plant etc
+///need update with later mon starers
+
+//note must find out why some bs macros in the .inc use 1f as a argument?
+
+//and check this function for relevance Cmd_if_type_effectiveness
+
 goto ITEM_ICON_SETTING //item_menu_icons.c
 /*
  * setup new eviolite effect graphic swap here, compiles need test
@@ -2802,6 +2860,9 @@ goto TYPE_AND_STAB_CHECK //battle_script_commands.c  type calc also where s.t.a.
 * that would stack with stab should they be a dual type - DONE
 * inspiration from wolfeyvgc
 * new effect calling it, jack of all trades  and gives reason to want normal as secondary type  25% non normal type damage buff
+*
+* changeed super multiplier to 1.5, considering change to 1.6 and changing stab multiplier to 1.4, think leave adaptability where it is 
+* double check muscle magic swap doesn't affect things that already shift split, i.e psyshock hidden power, well then again them being physical would be best anyway
 */ 
 
 

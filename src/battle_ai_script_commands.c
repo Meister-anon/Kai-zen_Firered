@@ -1238,6 +1238,7 @@ static void Cmd_get_highest_type_effectiveness(void)
     sAIScriptPtr += 1;
 }
 
+//ai damage calc type multiplier vsonic
 static void Cmd_if_type_effectiveness(void)
 {
     u8 damageVar;

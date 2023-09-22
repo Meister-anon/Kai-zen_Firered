@@ -225,6 +225,7 @@ static bool8 UnlockedTanobyOrAreNotInTanoby(void)
     return FALSE;
 }
 
+#define WILD_NATURE_SETTING
 static void GenerateWildMon(u16 species, u8 level, u8 slot)
 {
     u32 personality;
