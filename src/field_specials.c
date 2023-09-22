@@ -2404,12 +2404,16 @@ void StopPokemonLeagueLightingEffectTask(void)
     }
 }
 
+//add other gen starers on to this list
 static const u8 sCapeBrinkCompatibleSpecies[] = {
     SPECIES_VENUSAUR,
     SPECIES_CHARIZARD,
     SPECIES_BLASTOISE
 };
 
+//actually just remove list and make 3 arrays like starter selection 
+//fire starter water starer grass starter
+#define STARTER_ULTIMATE_MOVE_SELECTION
 bool8 CapeBrinkGetMoveToTeachLeadPokemon(void)
 {
     // Returns:
