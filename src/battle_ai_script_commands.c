@@ -1219,9 +1219,9 @@ static void Cmd_get_highest_type_effectiveness(void)
             TypeCalc(gCurrentMove, gBattlerAttacker, gBattlerTarget);
 
             if (gBattleMoveDamage == 120) // Super effective STAB.
-                gBattleMoveDamage = AI_EFFECTIVENESS_x2;
+                gBattleMoveDamage = AI_EFFECTIVENESS_x1_6;
             if (gBattleMoveDamage == 240)
-                gBattleMoveDamage = AI_EFFECTIVENESS_x4;
+                gBattleMoveDamage = AI_EFFECTIVENESS_x2_56;
             if (gBattleMoveDamage == 30) // Not very effective STAB.
                 gBattleMoveDamage = AI_EFFECTIVENESS_x0_5;
             if (gBattleMoveDamage == 15)
@@ -1255,9 +1255,9 @@ static void Cmd_if_type_effectiveness(void)
     TypeCalc(gCurrentMove, gBattlerAttacker, gBattlerTarget);
 
     if (gBattleMoveDamage == 120) // Super effective STAB.
-        gBattleMoveDamage = AI_EFFECTIVENESS_x2;
+        gBattleMoveDamage = AI_EFFECTIVENESS_x1_6;
     if (gBattleMoveDamage == 240)
-        gBattleMoveDamage = AI_EFFECTIVENESS_x4;
+        gBattleMoveDamage = AI_EFFECTIVENESS_x2_56;
     if (gBattleMoveDamage == 30) // Not very effective STAB.
         gBattleMoveDamage = AI_EFFECTIVENESS_x0_5;
     if (gBattleMoveDamage == 15)

@@ -15,8 +15,8 @@
 #define AI_TYPE_MOVE 4
 
 // type effectiveness
-#define AI_EFFECTIVENESS_x4     160
-#define AI_EFFECTIVENESS_x2     80
+#define AI_EFFECTIVENESS_x2_56  102
+#define AI_EFFECTIVENESS_x1_6   64
 #define AI_EFFECTIVENESS_x1     40
 #define AI_EFFECTIVENESS_x0_5   20
 #define AI_EFFECTIVENESS_x0_25  10
