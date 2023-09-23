@@ -4297,7 +4297,7 @@ static bool8 IsFinalStrikeEffect(u16 move)
 
 #define INCREMENT_RESET_RETURN                  \
 {                                               \
-    gBattlescriptCurrInstr++;                   \
+    ++gBattlescriptCurrInstr;                   \
     gBattleScripting.moveEffect = 0;            \
     return;                                     \
 } 
@@ -4335,15 +4335,15 @@ void SetMoveEffect(bool32 primary, u32 certain)
     case MOVE_EFFECT_SMACK_DOWN:
     case MOVE_EFFECT_REMOVE_STATUS:
         gBattleStruct->moveEffect2 = gBattleScripting.moveEffect;
-        gBattlescriptCurrInstr++;
+        ++gBattlescriptCurrInstr;
         return;
     } //ported but don't know why need, knock off works without moveeffect2 by default? -its a change for modern item effects, to make sure effects trigger after item effect
 
     if (gBattleScripting.moveEffect & MOVE_EFFECT_AFFECTS_USER)  //because of bit logic  and value of affects user, this means if given move effect does not return 0, make affect user return true, meant to always return non 0 value
     {
         gEffectBattler = gBattlerAttacker; // battlerId that effects get applied on
-        gBattleScripting.moveEffect &= ~(MOVE_EFFECT_AFFECTS_USER);
-        affectsUser = MOVE_EFFECT_AFFECTS_USER;
+        gBattleScripting.moveEffect &= ~(MOVE_EFFECT_AFFECTS_USER); //looked into contact move multihit bug I think this is the cause, it swaps targetting around
+        affectsUser = MOVE_EFFECT_AFFECTS_USER; //and remove affects user when move effect/ability would be triggered but can reactivate before moveend/turnend
         gBattleScripting.battler = gBattlerTarget; // theoretically the attacker
     }//so success condition is,  2 bytes? so can fit higher values/more move effects, and can filter/set affect user and effect certain to true non zero values
     else
@@ -5525,7 +5525,10 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;
             }
         }
-    }
+    }//end of move effect checks
+    gBattleScripting.moveEffect = 0;
+    gBattleScripting.multihitMoveEffect = 0;  //added here for seteffetprimary & seteffectsecondary as they bypass seteffedtwithchance that clears moveeffects after use
+                                                //also fix for contact ability status bug
 }
 
 #define SPECIAL_TRAP_EFFECTCHANCE
@@ -5541,10 +5544,10 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
     //
     u32 percentChance,argumentChance;
 
-    if (gBattleMoves[gCurrentMove].argumentEffectChance == 0)   //to ensure arguments already set work
-        argumentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
-    else
-        argumentChance = gBattleMoves[gCurrentMove].argumentEffectChance;
+    if (gBattleMoves[gCurrentMove].argumentEffectChance == 0)   //to ensure arguments already set work, so dont need to add argumentchance to every move
+        argumentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;  //but keeps from using the percentChance 0 makes certain effect for arguments
+    else                                                                //not a major issue if can just keep important/main effects to effect not argument, 
+        argumentChance = gBattleMoves[gCurrentMove].argumentEffectChance;   //just make sure argument never has effect that would need to be set certain (just use 100 if need to)
     
     //THIS IS WHY IT WAS CONFUSING battlescripting.moveEffect AREN'T moveeffects they are just "effects"
     //MOVE EFFECT is a completely different thing that is actually being set by this function  not battlescripting.moveEffect!!!!
@@ -5559,12 +5562,14 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
         percentChance *= 2; //= gBattleMoves[gCurrentMove].secondaryEffectChance * 2;  //its good, happened 2 out of 5 hits. decided to make it 1/16 dmg
     
       
-    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
-        percentChance *= 2;
-    if (GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_DARK_DEAL) //hopefully stacks
-        percentChance *= 2;
-    else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_DARK_DEAL) //is excluded
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE) //way if else-if works,they are paired and only the one that is true will be executed
+        percentChance *= 2;                                         //if I need to execute multiple, than use multiple ifs instead  vsonic
+    
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_DARK_DEAL) //is excluded
         percentChance = (percentChance * 150) / 100;
+
+    else if (GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_DARK_DEAL) //hopefully stacks
+        percentChance *= 2; //ok now the order is right
 
         
 
@@ -5576,7 +5581,13 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
     //this is a restriction for the sake of structure.
     //to separate primary effects from  secondary effects
     
-    if (gBattleMoves[gCurrentMove].effect == ITS_A_TRAP)   //if this works make a define for trap effects & separate effect & move effect & battlscript for each
+    //rather than doing all this can replace with if secondary effect chance equals 0, set certain
+    //triggers for effect when secondary effect chance is 0, and erroneously for argument if secondary effect chance is 0, and argument effect chance is 0
+    //last case should not happen as I should have arugment chance set for moves that dont have secondary effect chance already.
+    if (percentChance == 0)
+        SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
+
+   /* if (gBattleMoves[gCurrentMove].effect == ITS_A_TRAP)   //if this works make a define for trap effects & separate effect & move effect & battlscript for each
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //that way may not need to make a separate status,// seems to work no apparent bugs
     //will need to remove infestation from this as I want to use that as new bug specific status also
     //is best way to do other than making an entirely new status of same effect\
@@ -5594,7 +5605,7 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_BUG_BITE)
-        SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
+        SetMoveEffect(0, MOVE_EFFECT_CERTAIN); */
     
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_POISONED_LEGACY
         && (gBattleMons[gBattlerAttacker].hp < (gBattleMons[gBattlerAttacker].maxHP / 2))) //make sure effects only activate when in a pinch
@@ -5641,8 +5652,8 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
         else
             SetMoveEffect(0, 0);
     }
-    else //doesn't have move effect
-    {
+    else //doesn't have move effect  /need double check and make sure two_typed_moves aren't passing type from arguemnt to moveEffect 
+    {                                               //argumenttomoveeffect was taking them but I added conditional to exclude it
         ++gBattlescriptCurrInstr;
     }
     gBattleScripting.moveEffect = 0;
@@ -11481,9 +11492,10 @@ static void atk76_various(void) //will need to add all these emerald various com
 
             gBattlescriptCurrInstr += 7;
         }
-        return;
+        return;//think need if here to exclude two_type_moves as its not meant to read the argument as a move effect
     case VARIOUS_ARGUMENT_TO_MOVE_EFFECT:   //argumenttomoveeffect works with seconaryeffectchance can prob also do like move effect set certain or effect user
-        gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument; //potentially need make argument field for bs. as well vsonic
+        if (gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE)
+            gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument; //potentially need make argument field for bs. as well vsonic
         break;  //I think what this does is, pass the argument to move effect? and then it gets read by seteffectwithchance function?
     case VARIOUS_SPECTRAL_THIEF:
         // Raise stats
@@ -16075,7 +16087,7 @@ static void atkE2_switchoutabilities(void) //emerald has logic for switchin that
         BattleScriptPush(gBattlescriptCurrInstr);
         gBattlescriptCurrInstr = BattleScript_StenchExits;
     }//else if worked,
-    else if (GetBattlerAbility(gActiveBattler) == ABILITY_AFTERMATH)
+    else if (GetBattlerAbility(gActiveBattler) == ABILITY_AFTERMATH) //vsonic still in progress
     {
         if ((gActiveBattler = IsAbilityOnField(ABILITY_DAMP)))
             {
@@ -16083,7 +16095,7 @@ static void atkE2_switchoutabilities(void) //emerald has logic for switchin that
                 BattleScriptPush(gBattlescriptCurrInstr);
                 gBattlescriptCurrInstr = BattleScript_DampPreventsAftermath; //consider replace with break, so no message just switch out
             }
-            else
+            else //does work for both battlers or just one enemy, if one, how does it select target? need work that out
             {
                 //--gBattleMons[gBattlerTarget].statStages[STAT_SPEED]; //don't know if will properly trigger animation or not
                 //gBattleMons[gActiveBattler].ability = ABILITY_NONE; //this was the issue same as others,  with push command keeping ability causes loop issue
