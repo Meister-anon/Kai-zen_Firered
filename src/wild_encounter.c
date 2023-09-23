@@ -269,6 +269,7 @@ enum
 #define WILD_CHECK_REPEL    0x1
 #define WILD_CHECK_KEEN_EYE 0x2
 
+//setup like emerald TryGenerateWildMon there has ability logic/filters
 static bool8 TryGenerateWildMon(const struct WildPokemonInfo * info, u8 area, u8 flags)
 {
     u8 slot = 0;
@@ -334,7 +335,7 @@ static bool8 DoWildEncounterRateTest(u32 encounterRate, bool8 ignoreAbility)
     return DoWildEncounterRateDiceRoll(encounterRate);
 }
 
-static u8 GetAbilityEncounterRateModType(void)
+static u8 GetAbilityEncounterRateModType(void) //redo this based on emerald logic but dang I was so sure I had already done this stuff...wait its probably in my other repo still to add
 {
     sWildEncounterData.abilityEffect = 0;
     if (!GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG))
@@ -342,7 +343,10 @@ static u8 GetAbilityEncounterRateModType(void)
         u16 ability = GetMonAbility(&gPlayerParty[0]);
         if (ability == ABILITY_STENCH)
             sWildEncounterData.abilityEffect = 1;
-        else if (ability == ABILITY_ILLUMINATE)
+        else if (ability == ABILITY_ILLUMINATE
+        || ability == ABILITY_ARENA_TRAP
+        || ability == ABILITY_HONEY_GATHER
+        )
             sWildEncounterData.abilityEffect = 2;
     }
     return sWildEncounterData.abilityEffect;
