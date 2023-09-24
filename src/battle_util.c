@@ -4937,6 +4937,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     ++effect;
                 }
                 break;
+            case ABILITY_FLUORESCENCE:
+                if (!gSpecialStatuses[battler].switchInAbilityDone && !IsBlackFogNotOnField())
+                {
+
+
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FLUORESCENT;
+                    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                    gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                    ++effect;
+                    
+                }
+                
+                break;
             case ABILITY_PASTEL_VEIL:
                 if (!gSpecialStatuses[battler].switchInAbilityDone)
                 {

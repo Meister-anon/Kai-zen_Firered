@@ -4642,17 +4642,17 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
     u32 highestStat = GetHighestStatId(battlerId);  //3was for protosynthesis will use for ultranerozma move instead i think
 
     // weather abilities
-    if (WEATHER_HAS_EFFECT)
-    {
-        if (ability == ABILITY_SWIFT_SWIM && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & WEATHER_RAIN_ANY)
-            speed *= 2;
-        else if (ability == ABILITY_CHLOROPHYLL && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & WEATHER_SUN_ANY)
-            speed *= 2;
-        else if (ability == ABILITY_SAND_RUSH && gBattleWeather & WEATHER_SANDSTORM_ANY)
-            speed *= 2;
-        else if (ability == ABILITY_SLUSH_RUSH && gBattleWeather & WEATHER_HAIL)
-            speed *= 2;
-    }
+    if (ability == ABILITY_SWIFT_SWIM && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
+        speed *= 2;
+    else if (ability == ABILITY_CHLOROPHYLL && IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY))
+        speed *= 2;
+    else if (ability == ABILITY_SAND_RUSH && IsBattlerWeatherAffected(battlerId, WEATHER_SANDSTORM_ANY))
+        speed *= 2;
+    else if (ability == ABILITY_SLUSH_RUSH && IsBattlerWeatherAffected(battlerId, WEATHER_HAIL))
+        speed *= 2;
+    else if (ability == ABILITY_FLUORESCENCE && IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY))
+        speed = (speed * 150) / 100;
+
 
     // other abilities
     if (ability == ABILITY_QUICK_FEET && gBattleMons[battlerId].status1 & STATUS1_ANY)

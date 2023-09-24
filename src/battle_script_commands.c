@@ -14499,7 +14499,9 @@ static u8 AttacksThisTurn(u8 battlerId, u16 move) // Note: returns 1 if it's a c
 {
     // first argument is unused
     if (gBattleMoves[move].effect == EFFECT_SOLARBEAM
-     && (gBattleWeather & WEATHER_SUN_ANY))
+     && (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY))
+      || ((GetBattlerAbility(battlerId) == ABILITY_FLUORESCENCE) && !IsBlackFogNotOnField())
+    )
         return 2;
     if (gBattleMoves[move].effect == EFFECT_SKULL_BASH
      || gBattleMoves[move].effect == EFFECT_RAZOR_WIND

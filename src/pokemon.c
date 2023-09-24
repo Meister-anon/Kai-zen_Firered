@@ -3940,6 +3940,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         attack = (150 * attack) / 100;
         spAttack = (150 * spAttack) / 100;
         break;
+    case ABILITY_FLUORESCENCE:
+        if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY))
+            spAttack = (150 * spAttack) / 100;
     case ABILITY_FLOWER_GIFT:   //flower gift is supposd to be what makes cherrim transform along w sunlight
         if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY)) //split ability bonus between different attack/target functions
         {

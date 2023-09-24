@@ -302,7 +302,9 @@ static const u8 sIronWillDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("");
 static const u8 sLivewireDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Body made of electricity\nUps damage of electric moves.");
 static const u8 sGaleforceDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Immune to wind-based moves\nBoosts sp atk when hit by them.");
 static const u8 sLethalLegsDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Boosts Kicking moves.");
-static const u8 sToxungueDescription[ABILITY_DESCRIPTION_LENGTH + 1] =_("\nStrikes foe with toxungen covered tongue\nThat may Paralyze on contact.");
+static const u8 sToxungueDescription[ABILITY_DESCRIPTION_LENGTH + 1] =_("Strikes foe with toxungen covered tongue\nThat may Paralyze on contact.");
+static const u8 sOmnipotentAideDescription[ABILITY_DESCRIPTION_LENGTH + 1] =_("Gives priority to healing effects.\nBut can only heal allies not itself.");
+static const u8 sFluorescenceDescription[ABILITY_DESCRIPTION_LENGTH + 1] =_("Naturally absorbs sunlight.\nBoosts speed and Sp.Atk in sun.");
 //checked in fire red limit is 40 chars per line, changing description length to 80/    changed to 82 max
 //based on suction cups I kinda have more space?  so more like 41 per line?
 //template - top line: literal effect\n bottom line: flavor text    -flipped usually put flavor text on top, effect on bottom
@@ -625,6 +627,8 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_GALEFORCE] = sGaleforceDescription,
     [ABILITY_LETHAL_LEGS] = sLethalLegsDescription,
     [ABILITY_TOXUNGUE] = sToxungueDescription,
+    [ABILITY_OMNIPOTENT_AIDE] = sOmnipotentAideDescription,
+    [ABILITY_FLUORESCENCE] = sFluorescenceDescription,
 };//last value can have comma
   //FOREWARN should work how I want,for ai make ability check to not use fakeout if have said ability,still need setup reactivation
 
@@ -952,4 +956,6 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_GALEFORCE] =_("GALEFORCE"),
     [ABILITY_LETHAL_LEGS] =_("LETHAL LEGS"),
     [ABILITY_TOXUNGUE] =_("TOXUNGUE"),
+    [ABILITY_OMNIPOTENT_AIDE] =_("OMNIPOTENT AIDE"),
+    [ABILITY_FLUORESCENCE] =_("FLUORESCENCE"),
 };//can have comma
