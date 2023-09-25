@@ -909,6 +909,21 @@ while I was at it, redid ghost absorb setup moved ghost drain to bigroot formula
 setup like emerald where its in every healing script
 redid strength sap bs script as well, as it seemed unnecessarily bloated
 
+some abilities are only bad because they lack utility, they activate omce and  then you get no
+use out of them.
+I thinjk rather than adding effects thet can be fixed ht making a new
+c=abilitty categiryt amd puttomg them there,
+
+Idea, same as contact abilities are broken down imto
+activation either attacker comtacting opponent or being targettted
+switch in shoukd do tje same
+
+make a category of abilities for oppomemt switch in (look at spikes)
+and add existing ones there  things like frisk, which checks items,
+or things like trace, 
+
+think cam also look at setmoveffect logic for affectsuser for target swapping
+
 NEW BIG IDEA
 *with what I just learned about legends arceus came up with new idea
 make berry incense using the berries, it'll be inspired by the prebattle nature checking

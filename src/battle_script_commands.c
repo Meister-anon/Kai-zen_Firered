@@ -2483,7 +2483,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
             }
             else
             {
-                gBattleMoveDamage = gBattleMoveDamage * 130;
+                gBattleMoveDamage = gBattleMoveDamage * 135;
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
 
@@ -2524,7 +2524,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
         //so change to else if, after adding unique terra from above comment section
         if (gBattleMons[gBattlerAttacker].species == SPECIES_ARCEUS)
         {
-            gBattleMoveDamage = gBattleMoveDamage * 130;
+            gBattleMoveDamage = gBattleMoveDamage * 135;
             gBattleMoveDamage = gBattleMoveDamage / 100;
         }
     }
@@ -3022,7 +3022,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
             }
             else
             {
-                gBattleMoveDamage = gBattleMoveDamage * 130;
+                gBattleMoveDamage = gBattleMoveDamage * 135;
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
 
@@ -3044,7 +3044,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
         //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
         if (gBattleMons[attacker].species == SPECIES_ARCEUS)
         {
-            gBattleMoveDamage = gBattleMoveDamage * 130;
+            gBattleMoveDamage = gBattleMoveDamage * 135;
             gBattleMoveDamage = gBattleMoveDamage / 100;
         }
     }
@@ -15469,7 +15469,7 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
                 || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK)
            {
                 //gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
-               gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;
+               gBattleMoveDamage = (135 * gBattleMoveDamage) / 100;
                //gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier;
            } //thikn that above line doubled crit damage again.
 
