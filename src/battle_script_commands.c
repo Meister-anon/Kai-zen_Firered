@@ -12955,7 +12955,7 @@ static void atk88_sethpdrain(void)
     if (gBattleMoves[gCurrentMove].argument != 0)
         gBattleMoveDamage = (gHpDealt * gBattleMoves[gCurrentMove].argument / 100);
     else
-        gBattleMoveDamage = (gHpDealt / 2)
+        gBattleMoveDamage = (gHpDealt / 2);
 
     if (gBattleMoveDamage == 0)
         gBattleMoveDamage = 1;
@@ -14498,9 +14498,9 @@ static bool8 IsInvalidForAssist(u16 move)
 static u8 AttacksThisTurn(u8 battlerId, u16 move) // Note: returns 1 if it's a charging turn, otherwise 2
 {
     // first argument is unused
-    if (gBattleMoves[move].effect == EFFECT_SOLARBEAM
-     && (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY))
-      || ((GetBattlerAbility(battlerId) == ABILITY_FLUORESCENCE) && !IsBlackFogNotOnField())
+    if ((gBattleMoves[move].effect == EFFECT_SOLARBEAM)
+     && (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY)
+      || ((GetBattlerAbility(battlerId) == ABILITY_FLUORESCENCE) && !IsBlackFogNotOnField()))
     )
         return 2;
     if (gBattleMoves[move].effect == EFFECT_SKULL_BASH
