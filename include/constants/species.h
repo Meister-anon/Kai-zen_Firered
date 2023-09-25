@@ -909,7 +909,7 @@
 #define SPECIES_ENAMORUS 905	//Pokemon Opal has some original mon so can add after this as gen 10, like Cefireon and unknown legendar with the s/v mon I actually want
 
 #define SPECIES_CEFIREON 906
-#define SPECIES_FRAEYJTA 907    //fray-eat-ah original mon fairy ghost mysthic from another world (fairy world) protector healer and watches over the dead, so found graveyard comforts living and dead
+#define SPECIES_FRAEYJTA 907    //fray-eat-ah fray-tah  fray-itta original mon fairy ghost mysthic from another world (fairy world) protector healer and watches over the dead, so found graveyard comforts living and dead
 
 #define FORMS_START SPECIES_FRAEYJTA
 
