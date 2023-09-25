@@ -852,12 +852,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(46, 57, 40, 50, 40, 50),
-        .baseHP = 46,
-        .baseAttack = 57,
-        .baseDefense = 40,
-        .baseSpeed = 50,
-        .baseSpAttack = 40,
-        .baseSpDefense = 50,
         .type1 = TYPE_POISON,
         .type2 = TYPE_NORMAL,
         .catchRate = 235,
@@ -3512,12 +3506,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(90, 100, 90, 90, 125, 85),
-        .baseHP = 90,
-        .baseAttack = 100,
-        .baseDefense = 90,
-        .baseSpeed = 90,
-        .baseSpAttack = 125,
-        .baseSpDefense = 85,
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FLYING,
         .catchRate = 3,
@@ -4477,13 +4465,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_SKIPLOOM] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(45, 49, 49, 45, 65, 65),
-        .baseHP = 60,
-        .baseAttack = 45,
-        .baseDefense = 85,
-        .baseSpeed = 84,
-        .baseSpAttack = 45,
-        .baseSpDefense = 70,
+         STATS(60, 45, 85, 84, 45, 70),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FLYING,
         .catchRate = 120,
@@ -10392,12 +10374,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(108, 130, 95, 102, 80, 85),
-        .baseHP = 108,
-        .baseAttack = 130,
-        .baseDefense = 95,
-        .baseSpeed = 102,
-        .baseSpAttack = 80,
-        .baseSpDefense = 85,
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_GROUND,
         .catchRate = 45,
@@ -11616,7 +11592,7 @@ const struct BaseStats gBaseStats[] =
         75,
         83,
         60,
-        75,
+        75
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GROUND,
@@ -11646,7 +11622,7 @@ const struct BaseStats gBaseStats[] =
         95,
         113,
         75,
-        95,
+        95
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GROUND,
@@ -11675,7 +11651,7 @@ const struct BaseStats gBaseStats[] =
         45,
         45,
         45,
-        45,
+        45
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_FIRE,
@@ -11703,7 +11679,7 @@ const struct BaseStats gBaseStats[] =
         55,
         55,
         70,
-        55,
+        55
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_FIGHTING,
@@ -11733,7 +11709,7 @@ const struct BaseStats gBaseStats[] =
         65,
         65,
         100,
-        65,
+        65
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_FIGHTING,
@@ -11764,7 +11740,7 @@ const struct BaseStats gBaseStats[] =
         45,
         45,
         63,
-        45,
+        45
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -11792,7 +11768,7 @@ const struct BaseStats gBaseStats[] =
         60,
         60,
         83,
-        60,
+        60
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -11820,7 +11796,7 @@ const struct BaseStats gBaseStats[] =
         85,
         70,
         108,
-        70,
+        70
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -11848,7 +11824,7 @@ const struct BaseStats gBaseStats[] =
         39,
         42,
         35,
-        39,
+        39
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -11878,7 +11854,7 @@ const struct BaseStats gBaseStats[] =
         69,
         77,
         70,
-        69,
+        69
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -11908,7 +11884,7 @@ const struct BaseStats gBaseStats[] =
         45,
         55,
         25,
-        45,
+        45
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -11936,7 +11912,7 @@ const struct BaseStats gBaseStats[] =
         65,
         60,
         35,
-        65,
+        65
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -11965,7 +11941,7 @@ const struct BaseStats gBaseStats[] =
         90,
         80,
         45,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -11994,7 +11970,7 @@ const struct BaseStats gBaseStats[] =
         37,
         66,
         50,
-        37,
+        37
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DARK,
@@ -12023,7 +11999,7 @@ const struct BaseStats gBaseStats[] =
         50,
         116,
         98,
-        50,
+        50
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DARK,
@@ -12052,7 +12028,7 @@ const struct BaseStats gBaseStats[] =
         48,
         74,
         62,
-        48,
+        48
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -12081,7 +12057,7 @@ const struct BaseStats gBaseStats[] =
         63,
         111,
         105,
-        63,
+        63
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -12110,7 +12086,7 @@ const struct BaseStats gBaseStats[] =
         48,
         74,
         60,
-        48,
+        48
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -12139,7 +12115,7 @@ const struct BaseStats gBaseStats[] =
         63,
         111,
         101,
-        63,
+        63
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -12168,7 +12144,7 @@ const struct BaseStats gBaseStats[] =
         56,
         74,
         67,
-        48,
+        48
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -12197,7 +12173,7 @@ const struct BaseStats gBaseStats[] =
         79,
         111,
         117,
-        63,
+        63
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -12226,7 +12202,7 @@ const struct BaseStats gBaseStats[] =
         45,
         24,
         67,
-        55,
+        55
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -12255,7 +12231,7 @@ const struct BaseStats gBaseStats[] =
         85,
         29,
         107,
-        95,
+        95
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -12284,7 +12260,7 @@ const struct BaseStats gBaseStats[] =
         40,
         43,
         56,
-        50,
+        50
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
@@ -12313,7 +12289,7 @@ const struct BaseStats gBaseStats[] =
         52,
         65,
         77,
-        62,
+        62
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
@@ -12343,7 +12319,7 @@ const struct BaseStats gBaseStats[] =
         65,
         113,
         115,
-        100,
+        100
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
@@ -12372,7 +12348,7 @@ const struct BaseStats gBaseStats[] =
         32,
         76,
         50,
-        32,
+        32
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -12401,7 +12377,7 @@ const struct BaseStats gBaseStats[] =
         63,
         116,
         80,
-        63,
+        63
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -12430,7 +12406,7 @@ const struct BaseStats gBaseStats[] =
         85,
         15,
         25,
-        40,
+        40
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_ROCK,
@@ -12461,7 +12437,7 @@ const struct BaseStats gBaseStats[] =
         105,
         20,
         50,
-        55,
+        55
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_ROCK,
@@ -12493,7 +12469,7 @@ const struct BaseStats gBaseStats[] =
         130,
         25,
         60,
-        80,        
+        80        
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_ROCK,
@@ -12525,7 +12501,7 @@ const struct BaseStats gBaseStats[] =
         43,
         72,
         55,
-        43,
+        43
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FLYING,
@@ -12554,7 +12530,7 @@ const struct BaseStats gBaseStats[] =
         55,
         114,
         97,
-        65,
+        65
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FLYING,
@@ -12583,7 +12559,7 @@ const struct BaseStats gBaseStats[] =
         40,
         68,
         30,
-        45,
+        45
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_GROUND,
@@ -12612,7 +12588,7 @@ const struct BaseStats gBaseStats[] =
         60,
         88,
         50,
-        65,
+        65
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_STEEL,
@@ -12641,7 +12617,7 @@ const struct BaseStats gBaseStats[] =
         86,
         50,
         60,
-        86,
+        86
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -12672,7 +12648,7 @@ const struct BaseStats gBaseStats[] =
         70,
         35,
         25,
-        45,
+        45
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_ROCK,
@@ -12701,7 +12677,7 @@ const struct BaseStats gBaseStats[] =
         95,
         40,
         40,
-        60,
+        60
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_ROCK,
@@ -12730,7 +12706,7 @@ const struct BaseStats gBaseStats[] =
         100,
         45,
         55,
-        75,
+        75
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_ROCK,
@@ -12759,7 +12735,7 @@ const struct BaseStats gBaseStats[] =
         40,
         64,
         50,
-        40,
+        40
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -12788,7 +12764,7 @@ const struct BaseStats gBaseStats[] =
         55,
         69,
         65,
-        55,
+        55
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_GROUND,
@@ -12817,7 +12793,7 @@ const struct BaseStats gBaseStats[] =
         75,
         74,
         85,
-        75,
+        75
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_GROUND,
@@ -12846,7 +12822,7 @@ const struct BaseStats gBaseStats[] =
         85,
         45,
         30,
-        85,
+        85
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
@@ -12877,7 +12853,7 @@ const struct BaseStats gBaseStats[] =
         75,
         85,
         30,
-        75,
+        75
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
@@ -12908,7 +12884,7 @@ const struct BaseStats gBaseStats[] =
         70,
         42,
         40,
-        60,
+        60
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_GRASS,
@@ -12939,7 +12915,7 @@ const struct BaseStats gBaseStats[] =
         90,
         42,
         50,
-        80,
+        80
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_GRASS,
@@ -12969,7 +12945,7 @@ const struct BaseStats gBaseStats[] =
         80,
         92,
         70,
-        80,
+        80
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_GRASS,
@@ -13000,7 +12976,7 @@ const struct BaseStats gBaseStats[] =
         59,
         57,
         30,
-        69,
+        69
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
@@ -13029,7 +13005,7 @@ const struct BaseStats gBaseStats[] =
         99,
         97,
         40,
-        89,
+        89
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
@@ -13058,7 +13034,7 @@ const struct BaseStats gBaseStats[] =
         89,
         117,
         55,
-        69,
+        69
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
@@ -13087,7 +13063,7 @@ const struct BaseStats gBaseStats[] =
         60,
         66,
         37,
-        50,
+        50
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FAIRY,
@@ -13119,7 +13095,7 @@ const struct BaseStats gBaseStats[] =
         85,
         116,
         77,
-        75,
+        75
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FAIRY,
@@ -13151,7 +13127,7 @@ const struct BaseStats gBaseStats[] =
         50,
         30,
         70,
-        50,
+        50
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -13184,7 +13160,7 @@ const struct BaseStats gBaseStats[] =
         75,
         90,
         110,
-        75,
+        75
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -13217,7 +13193,7 @@ const struct BaseStats gBaseStats[] =
         65,
         108,
         80,
-        55,
+        55
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -13247,7 +13223,7 @@ const struct BaseStats gBaseStats[] =
         35,
         65,
         35,
-        35,
+        35
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_DARK,
@@ -13277,7 +13253,7 @@ const struct BaseStats gBaseStats[] =
         45,
         74,
         45,
-        45,
+        45
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_DARK,
@@ -13307,7 +13283,7 @@ const struct BaseStats gBaseStats[] =
         80,
         92,
         65,
-        70,
+        70
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_DARK,
@@ -13337,7 +13313,7 @@ const struct BaseStats gBaseStats[] =
         45,
         60,
         15,
-        45,
+        45
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -13365,7 +13341,7 @@ const struct BaseStats gBaseStats[] =
         55,
         75,
         30,
-        55,
+        55
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -13394,7 +13370,7 @@ const struct BaseStats gBaseStats[] =
         77,
         60,
         106,
-        77,
+        77
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -13425,7 +13401,7 @@ const struct BaseStats gBaseStats[] =
         85,
         55,
         35,
-        55,
+        55
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_ROCK,
@@ -13456,7 +13432,7 @@ const struct BaseStats gBaseStats[] =
         125,
         45,
         65,
-        75,
+        75
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_ROCK,
@@ -13487,7 +13463,7 @@ const struct BaseStats gBaseStats[] =
         70,
         48,
         35,
-        70,
+        70
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FIGHTING,
@@ -13519,7 +13495,7 @@ const struct BaseStats gBaseStats[] =
         115,
         58,
         45,
-        115,
+        115
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FIGHTING,
@@ -13552,7 +13528,7 @@ const struct BaseStats gBaseStats[] =
         80,
         97,
         103,
-        80,
+        80
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FLYING,
@@ -13581,7 +13557,7 @@ const struct BaseStats gBaseStats[] =
         85,
         30,
         55,
-        65,
+        65
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GHOST,
@@ -13612,7 +13588,7 @@ const struct BaseStats gBaseStats[] =
         145,
         30,
         95,
-        105,
+        105
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_STEEL,
@@ -13643,7 +13619,7 @@ const struct BaseStats gBaseStats[] =
         103,
         22,
         53,
-        45,
+        45
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_ROCK,
@@ -13672,7 +13648,7 @@ const struct BaseStats gBaseStats[] =
         133,
         32,
         83,
-        65,
+        65
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_ROCK,
@@ -13701,7 +13677,7 @@ const struct BaseStats gBaseStats[] =
         45,
         70,
         74,
-        45,
+        45
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_FLYING,
@@ -13731,7 +13707,7 @@ const struct BaseStats gBaseStats[] =
         65,
         110,
         112,
-        65,
+        65
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_FLYING,
@@ -13762,7 +13738,7 @@ const struct BaseStats gBaseStats[] =
         62,
         65,
         40,
-        76,
+        76
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_POISON,
@@ -13793,7 +13769,7 @@ const struct BaseStats gBaseStats[] =
         82,
         75,
         75,
-        102,
+        102
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_STEEL,
@@ -13826,7 +13802,7 @@ const struct BaseStats gBaseStats[] =
         40,
         65,
         80,
-        40,
+        40
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DARK,
@@ -13856,7 +13832,7 @@ const struct BaseStats gBaseStats[] =
         60,
         105,
         120,
-        60,
+        60
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DARK,
@@ -13886,7 +13862,7 @@ const struct BaseStats gBaseStats[] =
         40,
         75,
         40,
-        40,
+        40
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -13915,7 +13891,7 @@ const struct BaseStats gBaseStats[] =
         60,
         115,
         65,
-        60,
+        60
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -13944,7 +13920,7 @@ const struct BaseStats gBaseStats[] =
         50,
         45,
         55,
-        65,
+        65
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_PSYCHIC,
@@ -13973,7 +13949,7 @@ const struct BaseStats gBaseStats[] =
         70,
         55,
         75,
-        85,
+        85
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_PSYCHIC,
@@ -14002,7 +13978,7 @@ const struct BaseStats gBaseStats[] =
         95,
         65,
         95,
-        110,
+        110
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_PSYCHIC,
@@ -14031,7 +14007,7 @@ const struct BaseStats gBaseStats[] =
         40,
         20,
         105,
-        50,
+        50
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -14060,7 +14036,7 @@ const struct BaseStats gBaseStats[] =
         50,
         30,
         125,
-        60,
+        60
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -14089,7 +14065,7 @@ const struct BaseStats gBaseStats[] =
         85,
         30,
         125,
-        85,
+        85
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -14118,7 +14094,7 @@ const struct BaseStats gBaseStats[] =
         50,
         55,
         44,
-        50,
+        50
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_FLYING,
@@ -14147,7 +14123,7 @@ const struct BaseStats gBaseStats[] =
         63,
         98,
         97,
-        63,
+        63
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_FLYING,
@@ -14176,7 +14152,7 @@ const struct BaseStats gBaseStats[] =
         50,
         44,
         65,
-        60,
+        60
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -14206,7 +14182,7 @@ const struct BaseStats gBaseStats[] =
         65,
         59,
         80,
-        75,
+        75
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -14236,7 +14212,7 @@ const struct BaseStats gBaseStats[] =
         85,
         79,
         110,
-        95,
+        95
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -14266,7 +14242,7 @@ const struct BaseStats gBaseStats[] =
         50,
         75,
         40,
-        50,
+        50
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GRASS,
@@ -14295,7 +14271,7 @@ const struct BaseStats gBaseStats[] =
         70,
         95,
         60,
-        70,
+        70
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GRASS,
@@ -14324,7 +14300,7 @@ const struct BaseStats gBaseStats[] =
         60,
         103,
         85,
-        60,
+        60
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FLYING,
@@ -14354,7 +14330,7 @@ const struct BaseStats gBaseStats[] =
         45,
         60,
         40,
-        45,
+        45
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
@@ -14384,7 +14360,7 @@ const struct BaseStats gBaseStats[] =
         105,
         60,
         60,
-        105,
+        105
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_STEEL,
@@ -14414,7 +14390,7 @@ const struct BaseStats gBaseStats[] =
         45,
         35,
         55,
-        70,
+        70
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
@@ -14446,7 +14422,7 @@ const struct BaseStats gBaseStats[] =
         70,
         50,
         85,
-        95,
+        95
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
@@ -14478,7 +14454,7 @@ const struct BaseStats gBaseStats[] =
         50,
         40,
         65,
-        85,
+        85
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_GHOST,
@@ -14507,7 +14483,7 @@ const struct BaseStats gBaseStats[] =
         70,
         60,
         85,
-        105,
+        105
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_GHOST,
@@ -14536,7 +14512,7 @@ const struct BaseStats gBaseStats[] =
         80,
         65,
         40,
-        45,
+        45
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -14565,7 +14541,7 @@ const struct BaseStats gBaseStats[] =
         50,
         85,
         57,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_ELECTRIC,
@@ -14594,7 +14570,7 @@ const struct BaseStats gBaseStats[] =
         60,
         112,
         97,
-        60,
+        60
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_ELECTRIC,
@@ -14623,7 +14599,7 @@ const struct BaseStats gBaseStats[] =
         91,
         10,
         24,
-        86,
+        86
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_STEEL,
@@ -14655,7 +14631,7 @@ const struct BaseStats gBaseStats[] =
         131,
         20,
         54,
-        116,
+        116
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_STEEL,
@@ -14687,7 +14663,7 @@ const struct BaseStats gBaseStats[] =
         70,
         30,
         45,
-        60,
+        60
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_STEEL,
@@ -14715,7 +14691,7 @@ const struct BaseStats gBaseStats[] =
         95,
         50,
         70,
-        85,
+        85
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_STEEL,
@@ -14743,7 +14719,7 @@ const struct BaseStats gBaseStats[] =
         115,
         90,
         70,
-        85,
+        85
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_STEEL,
@@ -14771,7 +14747,7 @@ const struct BaseStats gBaseStats[] =
         40,
         60,
         45,
-        40,
+        40
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -14798,7 +14774,7 @@ const struct BaseStats gBaseStats[] =
         70,
         50,
         75,
-        70,
+        70
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -14825,7 +14801,7 @@ const struct BaseStats gBaseStats[] =
         80,
         56,
         105,
-        80,
+        80
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -14852,7 +14828,7 @@ const struct BaseStats gBaseStats[] =
         55,
         30,
         85,
-        55,
+        55
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_STEEL,
@@ -14881,7 +14857,7 @@ const struct BaseStats gBaseStats[] =
         75,
         40,
         125,
-        95,
+        95
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_STEEL,
@@ -14910,7 +14886,7 @@ const struct BaseStats gBaseStats[] =
         55,
         20,
         65,
-        55,
+        55
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_FIRE,
@@ -14940,7 +14916,7 @@ const struct BaseStats gBaseStats[] =
         60,
         55,
         95,
-        60,
+        60
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_FIRE,
@@ -14970,7 +14946,7 @@ const struct BaseStats gBaseStats[] =
         90,
         80,
         145,
-        90,
+        90
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_FIRE,
@@ -15000,7 +14976,7 @@ const struct BaseStats gBaseStats[] =
         60,
         57,
         30,
-        40,
+        40
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_DRAGON,
@@ -15029,7 +15005,7 @@ const struct BaseStats gBaseStats[] =
         70,
         67,
         40,
-        50,
+        50
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_DRAGON,
@@ -15058,7 +15034,7 @@ const struct BaseStats gBaseStats[] =
         90,
         97,
         60,
-        70,
+        70
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_DRAGON,
@@ -15087,7 +15063,7 @@ const struct BaseStats gBaseStats[] =
         40,
         40,
         60,
-        60,
+        60
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_ICE,
@@ -15116,7 +15092,7 @@ const struct BaseStats gBaseStats[] =
         85,
         50,
         70,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_ICE,
@@ -15145,7 +15121,7 @@ const struct BaseStats gBaseStats[] =
         50,
         105,
         95,
-        135,
+        135
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -15174,7 +15150,7 @@ const struct BaseStats gBaseStats[] =
         85,
         25,
         40,
-        65,
+        65
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
@@ -15203,7 +15179,7 @@ const struct BaseStats gBaseStats[] =
         40,
         145,
         120,
-        60,
+        60
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
@@ -15232,7 +15208,7 @@ const struct BaseStats gBaseStats[] =
         84,
         32,
         81,
-        99,
+        99
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_ELECTRIC,
@@ -15261,7 +15237,7 @@ const struct BaseStats gBaseStats[] =
         50,
         65,
         55,
-        50,
+        50
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_NORMAL,
@@ -15290,7 +15266,7 @@ const struct BaseStats gBaseStats[] =
         60,
         105,
         95,
-        60,
+        60
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_NORMAL,
@@ -15319,7 +15295,7 @@ const struct BaseStats gBaseStats[] =
         90,
         48,
         60,
-        90,
+        90
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_DRAGON,
@@ -15349,7 +15325,7 @@ const struct BaseStats gBaseStats[] =
         50,
         35,
         35,
-        50,
+        50
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_GHOST,
@@ -15381,7 +15357,7 @@ const struct BaseStats gBaseStats[] =
         80,
         55,
         55,
-        80,
+        80
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_GHOST,
@@ -15413,7 +15389,7 @@ const struct BaseStats gBaseStats[] =
         70,
         60,
         40,
-        40,
+        40
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_STEEL,
@@ -15441,7 +15417,7 @@ const struct BaseStats gBaseStats[] =
         100,
         70,
         60,
-        70,
+        70
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_STEEL,
@@ -15469,7 +15445,7 @@ const struct BaseStats gBaseStats[] =
         95,
         55,
         40,
-        95,
+        95
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -15497,7 +15473,7 @@ const struct BaseStats gBaseStats[] =
         50,
         60,
         37,
-        50,
+        50
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
@@ -15525,7 +15501,7 @@ const struct BaseStats gBaseStats[] =
         75,
         80,
         57,
-        75,
+        75
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
@@ -15553,7 +15529,7 @@ const struct BaseStats gBaseStats[] =
         75,
         60,
         45,
-        65,
+        65
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FLYING,
@@ -15582,7 +15558,7 @@ const struct BaseStats gBaseStats[] =
         105,
         80,
         55,
-        95,
+        95
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FLYING,
@@ -15611,7 +15587,7 @@ const struct BaseStats gBaseStats[] =
         66,
         65,
         105,
-        66,
+        66
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -15640,7 +15616,7 @@ const struct BaseStats gBaseStats[] =
         112,
         109,
         48,
-        48,
+        48
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_STEEL,
@@ -15669,7 +15645,7 @@ const struct BaseStats gBaseStats[] =
         50,
         38,
         45,
-        50,
+        50
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DRAGON,
@@ -15697,7 +15673,7 @@ const struct BaseStats gBaseStats[] =
         70,
         58,
         65,
-        70,
+        70
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DRAGON,
@@ -15725,7 +15701,7 @@ const struct BaseStats gBaseStats[] =
         90,
         98,
         125,
-        90,
+        90
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DRAGON,
@@ -15753,7 +15729,7 @@ const struct BaseStats gBaseStats[] =
         55,
         80,
         50,
-        55,
+        55
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FIRE,
@@ -15781,7 +15757,7 @@ const struct BaseStats gBaseStats[] =
         65,
         110,
         135,
-        105,
+        105
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FIRE,
@@ -15811,7 +15787,7 @@ const struct BaseStats gBaseStats[] =
         129,
         108,
         90,
-        72,
+        72
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_FIGHTING,
@@ -15841,7 +15817,7 @@ const struct BaseStats gBaseStats[] =
         90,
         108,
         72,
-        90,
+        90
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FIGHTING,
@@ -15871,7 +15847,7 @@ const struct BaseStats gBaseStats[] =
         72,
         108,
         90,
-        129,
+        129
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FIGHTING,
@@ -15901,7 +15877,7 @@ const struct BaseStats gBaseStats[] =
         70,
         111,
         125,
-        80,
+        80
         ),
         .type1 = TYPE_FLYING,
         .type2 = TYPE_FLYING,
@@ -15930,7 +15906,7 @@ const struct BaseStats gBaseStats[] =
         70,
         111,
         125,
-        80,
+        80
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FLYING,
@@ -15959,7 +15935,7 @@ const struct BaseStats gBaseStats[] =
         100,
         90,
         150,
-        120,
+        120
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_FIRE,
@@ -15989,7 +15965,7 @@ const struct BaseStats gBaseStats[] =
         120,
         90,
         120,
-        100,
+        100
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_ELECTRIC,
@@ -16019,7 +15995,7 @@ const struct BaseStats gBaseStats[] =
         90,
         101,
         115,
-        80,
+        80
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_FLYING,
@@ -16047,7 +16023,7 @@ const struct BaseStats gBaseStats[] =
         90,
         95,
         130,
-        90,
+        90
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_ICE,
@@ -16077,7 +16053,7 @@ const struct BaseStats gBaseStats[] =
         90,
         108,
         129,
-        90,
+        90
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_FIGHTING,
@@ -16105,7 +16081,7 @@ const struct BaseStats gBaseStats[] =
         77,
         90,
         128,
-        128,
+        128
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_PSYCHIC,
@@ -16137,7 +16113,7 @@ const struct BaseStats gBaseStats[] =
         95,
         99,
         120,
-        95,
+        95
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_STEEL,
@@ -16167,7 +16143,7 @@ const struct BaseStats gBaseStats[] =
         65,
         38,
         48,
-        45,
+        45
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -16197,7 +16173,7 @@ const struct BaseStats gBaseStats[] =
         95,
         57,
         56,
-        58,
+        58
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -16227,7 +16203,7 @@ const struct BaseStats gBaseStats[] =
         127,
         64,
         74,
-        75,
+        75
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FIGHTING,
@@ -16259,7 +16235,7 @@ const struct BaseStats gBaseStats[] =
         40,
         60,
         62,
-        60,
+        60
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -16289,7 +16265,7 @@ const struct BaseStats gBaseStats[] =
         58,
         73,
         90,
-        70,
+        70
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -16319,7 +16295,7 @@ const struct BaseStats gBaseStats[] =
         72,
         104,
         114,
-        100,
+        100
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_PSYCHIC,
@@ -16349,7 +16325,7 @@ const struct BaseStats gBaseStats[] =
         40,
         71,
         62,
-        44,
+        44
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -16379,7 +16355,7 @@ const struct BaseStats gBaseStats[] =
         52,
         97,
         83,
-        56,
+        56
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -16409,7 +16385,7 @@ const struct BaseStats gBaseStats[] =
         67,
         122,
         103,
-        71,
+        71
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_DARK,
@@ -16439,7 +16415,7 @@ const struct BaseStats gBaseStats[] =
         38,
         57,
         32,
-        36,
+        36
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -16468,7 +16444,7 @@ const struct BaseStats gBaseStats[] =
         77,
         78,
         50,
-        77,
+        77
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GROUND,
@@ -16497,7 +16473,7 @@ const struct BaseStats gBaseStats[] =
         43,
         62,
         40,
-        38,
+        38
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
@@ -16526,7 +16502,7 @@ const struct BaseStats gBaseStats[] =
         55,
         84,
         56,
-        52,
+        52
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FLYING,
@@ -16556,7 +16532,7 @@ const struct BaseStats gBaseStats[] =
         71,
         126,
         74,
-        69,
+        69
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FLYING,
@@ -16586,7 +16562,7 @@ const struct BaseStats gBaseStats[] =
         40,
         35,
         27,
-        25,
+        25
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
@@ -16616,7 +16592,7 @@ const struct BaseStats gBaseStats[] =
         60,
         29,
         27,
-        30,
+        30
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
@@ -16646,7 +16622,7 @@ const struct BaseStats gBaseStats[] =
         66,
         99,
         95,
-        66,
+        66
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -16678,7 +16654,7 @@ const struct BaseStats gBaseStats[] =
         58,
         72,
         73,
-        54,
+        54
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_NORMAL,
@@ -16707,7 +16683,7 @@ const struct BaseStats gBaseStats[] =
         87,
         106,
         109,
-        66,
+        66
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_NORMAL,
@@ -16736,7 +16712,7 @@ const struct BaseStats gBaseStats[] =
         39,
         42,
         61,
-        79,
+        79
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -16765,7 +16741,7 @@ const struct BaseStats gBaseStats[] =
         47,
         52,
         75,
-        98,
+        98
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -16794,7 +16770,7 @@ const struct BaseStats gBaseStats[] =
         68,
         75,
         112,
-        154,
+        154
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -16823,7 +16799,7 @@ const struct BaseStats gBaseStats[] =
         48,
         52,
         62,
-        57,
+        57
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -16852,7 +16828,7 @@ const struct BaseStats gBaseStats[] =
         62,
         68,
         97,
-        81,
+        81
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -16881,7 +16857,7 @@ const struct BaseStats gBaseStats[] =
         62,
         43,
         46,
-        48,
+        48
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_NORMAL,
@@ -16911,7 +16887,7 @@ const struct BaseStats gBaseStats[] =
         78,
         58,
         69,
-        71,
+        71
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_DARK,
@@ -16941,7 +16917,7 @@ const struct BaseStats gBaseStats[] =
         60,
         102,
         65,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -16972,7 +16948,7 @@ const struct BaseStats gBaseStats[] =
         54,
         68,
         63,
-        60,
+        60
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -17001,7 +16977,7 @@ const struct BaseStats gBaseStats[] =
         76,
         104,
         83,
-        81,
+        81
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -17030,7 +17006,7 @@ const struct BaseStats gBaseStats[] =
         100,
         28,
         35,
-        37,
+        37
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_GHOST,
@@ -17058,7 +17034,7 @@ const struct BaseStats gBaseStats[] =
         150,
         35,
         45,
-        49,
+        49
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_GHOST,
@@ -17086,7 +17062,7 @@ const struct BaseStats gBaseStats[] =
         150,
         60,
         50,
-        150,
+        150
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_GHOST,
@@ -17115,7 +17091,7 @@ const struct BaseStats gBaseStats[] =
         60,
         23,
         63,
-        65,
+        65
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -17143,7 +17119,7 @@ const struct BaseStats gBaseStats[] =
         72,
         29,
         99,
-        89,
+        89
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -17172,7 +17148,7 @@ const struct BaseStats gBaseStats[] =
         66,
         49,
         59,
-        57,
+        57
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -17201,7 +17177,7 @@ const struct BaseStats gBaseStats[] =
         86,
         72,
         85,
-        75,
+        75
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -17230,7 +17206,7 @@ const struct BaseStats gBaseStats[] =
         53,
         45,
         37,
-        46,
+        46
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_PSYCHIC,
@@ -17259,7 +17235,7 @@ const struct BaseStats gBaseStats[] =
         88,
         73,
         68,
-        75,
+        75
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_PSYCHIC,
@@ -17288,7 +17264,7 @@ const struct BaseStats gBaseStats[] =
         67,
         50,
         39,
-        56,
+        56
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_WATER,
@@ -17317,7 +17293,7 @@ const struct BaseStats gBaseStats[] =
         115,
         68,
         54,
-        86,
+        86
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_WATER,
@@ -17346,7 +17322,7 @@ const struct BaseStats gBaseStats[] =
         60,
         30,
         60,
-        60,
+        60
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_WATER,
@@ -17375,7 +17351,7 @@ const struct BaseStats gBaseStats[] =
         90,
         44,
         97,
-        123,
+        123
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_DRAGON,
@@ -17404,7 +17380,7 @@ const struct BaseStats gBaseStats[] =
         62,
         44,
         58,
-        63,
+        63
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -17432,7 +17408,7 @@ const struct BaseStats gBaseStats[] =
         88,
         59,
         120,
-        89,
+        89
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -17463,7 +17439,7 @@ const struct BaseStats gBaseStats[] =
         33,
         70,
         61,
-        43,
+        43
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_NORMAL,
@@ -17492,7 +17468,7 @@ const struct BaseStats gBaseStats[] =
         52,
         109,
         109,
-        94,
+        94
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_NORMAL,
@@ -17522,7 +17498,7 @@ const struct BaseStats gBaseStats[] =
         77,
         48,
         45,
-        45,
+        45
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_DRAGON,
@@ -17551,7 +17527,7 @@ const struct BaseStats gBaseStats[] =
         119,
         71,
         69,
-        59,
+        59
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_DRAGON,
@@ -17580,7 +17556,7 @@ const struct BaseStats gBaseStats[] =
         50,
         46,
         67,
-        63,
+        63
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_ICE,
@@ -17609,7 +17585,7 @@ const struct BaseStats gBaseStats[] =
         72,
         58,
         99,
-        92,
+        92
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_ICE,
@@ -17638,7 +17614,7 @@ const struct BaseStats gBaseStats[] =
         65,
         60,
         110,
-        130,
+        130
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -17668,7 +17644,7 @@ const struct BaseStats gBaseStats[] =
         75,
         118,
         74,
-        63,
+        63
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FLYING,
@@ -17699,7 +17675,7 @@ const struct BaseStats gBaseStats[] =
         57,
         101,
         81,
-        67,
+        67
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FAIRY,
@@ -17728,7 +17704,7 @@ const struct BaseStats gBaseStats[] =
         150,
         50,
         50,
-        150,
+        150
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FAIRY,
@@ -17757,7 +17733,7 @@ const struct BaseStats gBaseStats[] =
         35,
         40,
         55,
-        75,
+        75
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_DRAGON,
@@ -17789,7 +17765,7 @@ const struct BaseStats gBaseStats[] =
         53,
         60,
         83,
-        113,
+        113
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_DRAGON,
@@ -17821,7 +17797,7 @@ const struct BaseStats gBaseStats[] =
         70,
         80,
         110,
-        150,
+        150
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_DRAGON,
@@ -17850,7 +17826,7 @@ const struct BaseStats gBaseStats[] =
         91,
         75,
         80,
-        87,
+        87
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_FAIRY,
@@ -17879,7 +17855,7 @@ const struct BaseStats gBaseStats[] =
         48,
         38,
         50,
-        60,
+        60
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GRASS,
@@ -17908,7 +17884,7 @@ const struct BaseStats gBaseStats[] =
         76,
         56,
         65,
-        82,
+        82
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GRASS,
@@ -17937,7 +17913,7 @@ const struct BaseStats gBaseStats[] =
         70,
         51,
         44,
-        55,
+        55
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GRASS,
@@ -17966,7 +17942,7 @@ const struct BaseStats gBaseStats[] =
         122,
         84,
         58,
-        75,
+        75
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GRASS,
@@ -17995,7 +17971,7 @@ const struct BaseStats gBaseStats[] =
         85,
         28,
         32,
-        35,
+        35
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -18026,7 +18002,7 @@ const struct BaseStats gBaseStats[] =
         184,
         28,
         44,
-        46,
+        46
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -18054,7 +18030,7 @@ const struct BaseStats gBaseStats[] =
         35,
         55,
         45,
-        40,
+        40
         ),
         .type1 = TYPE_FLYING,
         .type2 = TYPE_DRAGON,
@@ -18082,7 +18058,7 @@ const struct BaseStats gBaseStats[] =
         80,
         123,
         97,
-        80,
+        80
         ),
         .type1 = TYPE_FLYING,
         .type2 = TYPE_DRAGON,
@@ -18110,7 +18086,7 @@ const struct BaseStats gBaseStats[] =
         95,
         99,
         131,
-        98,
+        98
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -18141,7 +18117,7 @@ const struct BaseStats gBaseStats[] =
         95,
         99,
         131,
-        98,
+        98
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FLYING,
@@ -18172,7 +18148,7 @@ const struct BaseStats gBaseStats[] =
         121,
         95,
         81,
-        95,
+        95
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_GROUND,
@@ -18203,7 +18179,7 @@ const struct BaseStats gBaseStats[] =
         150,
         50,
         100,
-        150,
+        150
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FAIRY,
@@ -18232,7 +18208,7 @@ const struct BaseStats gBaseStats[] =
         60,
         70,
         150,
-        130,
+        130
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_GHOST,
@@ -18261,7 +18237,7 @@ const struct BaseStats gBaseStats[] =
         120,
         70,
         130,
-        90,
+        90
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_WATER,
@@ -18289,7 +18265,7 @@ const struct BaseStats gBaseStats[] =
         55,
         42,
         50,
-        50,
+        50
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FLYING,
@@ -18317,7 +18293,7 @@ const struct BaseStats gBaseStats[] =
         75,
         52,
         70,
-        70,
+        70
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FLYING,
@@ -18345,7 +18321,7 @@ const struct BaseStats gBaseStats[] =
         75,
         70,
         100,
-        100,
+        100
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GHOST,
@@ -18373,7 +18349,7 @@ const struct BaseStats gBaseStats[] =
         40,
         70,
         60,
-        40,
+        40
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -18401,7 +18377,7 @@ const struct BaseStats gBaseStats[] =
         50,
         90,
         80,
-        50,
+        50
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -18429,7 +18405,7 @@ const struct BaseStats gBaseStats[] =
         90,
         60,
         80,
-        90,
+        90
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_DARK,
@@ -18457,7 +18433,7 @@ const struct BaseStats gBaseStats[] =
         54,
         40,
         66,
-        56,
+        56
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -18487,7 +18463,7 @@ const struct BaseStats gBaseStats[] =
         69,
         50,
         91,
-        81,
+        81
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -18517,7 +18493,7 @@ const struct BaseStats gBaseStats[] =
         74,
         60,
         126,
-        116,
+        116
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_FAIRY,
@@ -18547,7 +18523,7 @@ const struct BaseStats gBaseStats[] =
         30,
         65,
         30,
-        30,
+        30
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
@@ -18577,7 +18553,7 @@ const struct BaseStats gBaseStats[] =
         50,
         75,
         40,
-        50,
+        50
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
@@ -18607,7 +18583,7 @@ const struct BaseStats gBaseStats[] =
         75,
         60,
         75,
-        75,
+        75
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
@@ -18637,7 +18613,7 @@ const struct BaseStats gBaseStats[] =
         30,
         45,
         30,
-        30,
+        30
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -18667,7 +18643,7 @@ const struct BaseStats gBaseStats[] =
         60,
         45,
         55,
-        60,
+        60
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -18697,7 +18673,7 @@ const struct BaseStats gBaseStats[] =
         55,
         46,
         55,
-        55,
+        55
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
@@ -18725,7 +18701,7 @@ const struct BaseStats gBaseStats[] =
         95,
         36,
         55,
-        83,
+        83
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_ELECTRIC,
@@ -18757,7 +18733,7 @@ const struct BaseStats gBaseStats[] =
         90,
         100,
         145,
-        75,
+        75
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_ELECTRIC,
@@ -18785,7 +18761,7 @@ const struct BaseStats gBaseStats[] =
         57,
         63,
         42,
-        47,
+        47
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
@@ -18815,7 +18791,7 @@ const struct BaseStats gBaseStats[] =
         117,
         43,
         62,
-        67,
+        67
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_ICE,
@@ -18849,7 +18825,7 @@ const struct BaseStats gBaseStats[] =
         70,
         93,
         98,
-        70,
+        70
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FLYING,
@@ -18882,7 +18858,7 @@ const struct BaseStats gBaseStats[] =
         40,
         84,
         55,
-        40,
+        40
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FAIRY,
@@ -18914,7 +18890,7 @@ const struct BaseStats gBaseStats[] =
         60,
         124,
         95,
-        70,
+        70
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FAIRY,
@@ -18946,7 +18922,7 @@ const struct BaseStats gBaseStats[] =
         40,
         60,
         30,
-        40,
+        40
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_ROCK,
@@ -18976,7 +18952,7 @@ const struct BaseStats gBaseStats[] =
         65,
         112,
         55,
-        65,
+        65
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_ROCK,
@@ -19005,7 +18981,7 @@ const struct BaseStats gBaseStats[] =
         20,
         40,
         25,
-        25,
+        25
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -19036,7 +19012,7 @@ const struct BaseStats gBaseStats[] =
         62,
         45,
         43,
-        62,
+        62
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_WATER,
@@ -19066,7 +19042,7 @@ const struct BaseStats gBaseStats[] =
         152,
         35,
         53,
-        142,
+        142
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_WATER,
@@ -19096,7 +19072,7 @@ const struct BaseStats gBaseStats[] =
         70,
         45,
         45,
-        55,
+        55
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_GROUND,
@@ -19128,7 +19104,7 @@ const struct BaseStats gBaseStats[] =
         100,
         35,
         55,
-        85,
+        85
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_GROUND,
@@ -19160,7 +19136,7 @@ const struct BaseStats gBaseStats[] =
         52,
         27,
         55,
-        72,
+        72
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_BUG,
@@ -19190,7 +19166,7 @@ const struct BaseStats gBaseStats[] =
         92,
         72,
         80,
-        132,
+        132
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_BUG,
@@ -19220,7 +19196,7 @@ const struct BaseStats gBaseStats[] =
         35,
         35,
         50,
-        35,
+        35
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -19250,7 +19226,7 @@ const struct BaseStats gBaseStats[] =
         90,
         45,
         80,
-        90,
+        90
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -19280,7 +19256,7 @@ const struct BaseStats gBaseStats[] =
         55,
         15,
         65,
-        75,
+        75
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FAIRY,
@@ -19310,7 +19286,7 @@ const struct BaseStats gBaseStats[] =
         100,
         30,
         90,
-        100,
+        100
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GHOST,
@@ -19340,7 +19316,7 @@ const struct BaseStats gBaseStats[] =
         40,
         77,
         71,
-        57,
+        57
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_FIRE,
@@ -19370,7 +19346,7 @@ const struct BaseStats gBaseStats[] =
         60,
         117,
         111,
-        77,
+        77
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_FIRE,
@@ -19400,7 +19376,7 @@ const struct BaseStats gBaseStats[] =
         50,
         50,
         45,
-        50,
+        50
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FIGHTING,
@@ -19429,7 +19405,7 @@ const struct BaseStats gBaseStats[] =
         80,
         60,
         55,
-        60,
+        60
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FIGHTING,
@@ -19458,7 +19434,7 @@ const struct BaseStats gBaseStats[] =
         38,
         32,
         30,
-        38,
+        38
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -19490,7 +19466,7 @@ const struct BaseStats gBaseStats[] =
         48,
         62,
         40,
-        48,
+        48
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -19522,7 +19498,7 @@ const struct BaseStats gBaseStats[] =
         98,
         72,
         50,
-        98,
+        98
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -19554,7 +19530,7 @@ const struct BaseStats gBaseStats[] =
         90,
         100,
         82,
-        110,
+        110
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -19586,7 +19562,7 @@ const struct BaseStats gBaseStats[] =
         80,
         60,
         90,
-        110,
+        110
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_PSYCHIC,
@@ -19615,7 +19591,7 @@ const struct BaseStats gBaseStats[] =
         90,
         80,
         40,
-        60,
+        60
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_NORMAL,
@@ -19644,7 +19620,7 @@ const struct BaseStats gBaseStats[] =
         40,
         99,
         20,
-        30,
+        30
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_WATER,
@@ -19673,7 +19649,7 @@ const struct BaseStats gBaseStats[] =
         140,
         55,
         60,
-        90,
+        90
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_WATER,
@@ -19702,7 +19678,7 @@ const struct BaseStats gBaseStats[] =
         80,
         15,
         70,
-        45,
+        45
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GROUND,
@@ -19732,7 +19708,7 @@ const struct BaseStats gBaseStats[] =
         110,
         35,
         100,
-        75,
+        75
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GROUND,
@@ -19762,7 +19738,7 @@ const struct BaseStats gBaseStats[] =
         130,
         5,
         30,
-        130,
+        130
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -19791,7 +19767,7 @@ const struct BaseStats gBaseStats[] =
         95,
         59,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_MYSTERY,
@@ -19819,7 +19795,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_MYSTERY,
@@ -19850,7 +19826,7 @@ const struct BaseStats gBaseStats[] =
         100,
         60,
         60,
-        100,
+        100
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -19883,7 +19859,7 @@ const struct BaseStats gBaseStats[] =
         65,
         65,
         75,
-        95,
+        95
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -19914,7 +19890,7 @@ const struct BaseStats gBaseStats[] =
         165,
         47,
         91,
-        85,
+        85
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_DRAGON,
@@ -19943,7 +19919,7 @@ const struct BaseStats gBaseStats[] =
         63,
         96,
         40,
-        73,
+        73
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_STEEL,
@@ -19975,7 +19951,7 @@ const struct BaseStats gBaseStats[] =
         80,
         96,
         50,
-        105,
+        105
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_FAIRY,
@@ -20007,7 +19983,7 @@ const struct BaseStats gBaseStats[] =
         70,
         92,
         70,
-        70,
+        70
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_PSYCHIC,
@@ -20039,7 +20015,7 @@ const struct BaseStats gBaseStats[] =
         85,
         36,
         135,
-        91,
+        91
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_DRAGON,
@@ -20069,7 +20045,7 @@ const struct BaseStats gBaseStats[] =
         100,
         40,
         86,
-        90,
+        90
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GRASS,
@@ -20100,7 +20076,7 @@ const struct BaseStats gBaseStats[] =
         65,
         45,
         45,
-        45,
+        45
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_DRAGON,
@@ -20132,7 +20108,7 @@ const struct BaseStats gBaseStats[] =
         90,
         65,
         65,
-        70,
+        70
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_FIGHTING,
@@ -20164,7 +20140,7 @@ const struct BaseStats gBaseStats[] =
         125,
         85,
         100,
-        105,
+        105
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_FIGHTING,
@@ -20196,7 +20172,7 @@ const struct BaseStats gBaseStats[] =
         85,
         130,
         95,
-        75,
+        75
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FAIRY,
@@ -20225,7 +20201,7 @@ const struct BaseStats gBaseStats[] =
         75,
         95,
         130,
-        115,
+        115
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FAIRY,
@@ -20254,7 +20230,7 @@ const struct BaseStats gBaseStats[] =
         115,
         75,
         85,
-        95,
+        95
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FAIRY,
@@ -20283,7 +20259,7 @@ const struct BaseStats gBaseStats[] =
         115,
         85,
         95,
-        130,
+        130
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_FAIRY,
@@ -20312,7 +20288,7 @@ const struct BaseStats gBaseStats[] =
         31,
         37,
         29,
-        31,
+        31
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -20343,7 +20319,7 @@ const struct BaseStats gBaseStats[] =
         131,
         37,
         29,
-        131,
+        131
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -20372,7 +20348,7 @@ const struct BaseStats gBaseStats[] =
         107,
         97,
         113,
-        89,
+        89
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_STEEL,
@@ -20403,7 +20379,7 @@ const struct BaseStats gBaseStats[] =
         89,
         97,
         137,
-        107,
+        107
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_GHOST,
@@ -20434,7 +20410,7 @@ const struct BaseStats gBaseStats[] =
         47,
         103,
         127,
-        131,
+        131
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_POISON,
@@ -20466,7 +20442,7 @@ const struct BaseStats gBaseStats[] =
         139,
         79,
         53,
-        53,
+        53
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FIGHTING,
@@ -20499,7 +20475,7 @@ const struct BaseStats gBaseStats[] =
         37,
         151,
         137,
-        37,
+        37
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FIGHTING,
@@ -20531,7 +20507,7 @@ const struct BaseStats gBaseStats[] =
         71,
         83,
         173,
-        71,
+        71
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -20563,7 +20539,7 @@ const struct BaseStats gBaseStats[] =
         103,
         61,
         107,
-        101,
+        101
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_FLYING,
@@ -20597,7 +20573,7 @@ const struct BaseStats gBaseStats[] =
         131,
         109,
         59,
-        31,
+        31
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_STEEL,
@@ -20629,7 +20605,7 @@ const struct BaseStats gBaseStats[] =
         53,
         43,
         97,
-        53,
+        53
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DRAGON,
@@ -20659,7 +20635,7 @@ const struct BaseStats gBaseStats[] =
         101,
         79,
         127,
-        89,
+        89
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -20693,7 +20669,7 @@ const struct BaseStats gBaseStats[] =
         115,
         65,
         130,
-        115,
+        115
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_FAIRY,
@@ -20724,7 +20700,7 @@ const struct BaseStats gBaseStats[] =
         80,
         125,
         90,
-        90,
+        90
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_GHOST,
@@ -20756,7 +20732,7 @@ const struct BaseStats gBaseStats[] =
         67,
         73,
         73,
-        67,
+        67
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_POISON,
@@ -20788,7 +20764,7 @@ const struct BaseStats gBaseStats[] =
         73,
         121,
         127,
-        73,
+        73
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_DRAGON,
@@ -20820,7 +20796,7 @@ const struct BaseStats gBaseStats[] =
         211,
         13,
         53,
-        101,
+        101
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_STEEL,
@@ -20851,7 +20827,7 @@ const struct BaseStats gBaseStats[] =
         53,
         107,
         151,
-        79,
+        79
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_GHOST,
@@ -20883,7 +20859,7 @@ const struct BaseStats gBaseStats[] =
         75,
         143,
         102,
-        80,
+        80
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -20911,7 +20887,7 @@ const struct BaseStats gBaseStats[] =
         65,
         34,
         55,
-        35,
+        35
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_STEEL,
@@ -20939,7 +20915,7 @@ const struct BaseStats gBaseStats[] =
         143,
         34,
         80,
-        65,
+        65
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_STEEL,
@@ -20970,7 +20946,7 @@ const struct BaseStats gBaseStats[] =
         50,
         65,
         40,
-        40,
+        40
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -21000,7 +20976,7 @@ const struct BaseStats gBaseStats[] =
         70,
         80,
         55,
-        60,
+        60
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -21030,7 +21006,7 @@ const struct BaseStats gBaseStats[] =
         90,
         85,
         60,
-        70,
+        70
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -21060,7 +21036,7 @@ const struct BaseStats gBaseStats[] =
         40,
         69,
         40,
-        40,
+        40
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -21090,7 +21066,7 @@ const struct BaseStats gBaseStats[] =
         60,
         94,
         55,
-        60,
+        60
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -21120,7 +21096,7 @@ const struct BaseStats gBaseStats[] =
         75,
         119,
         65,
-        75,
+        75
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -21150,7 +21126,7 @@ const struct BaseStats gBaseStats[] =
         40,
         70,
         70,
-        40,
+        40
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -21181,7 +21157,7 @@ const struct BaseStats gBaseStats[] =
         55,
         90,
         95,
-        55,
+        55
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -21211,7 +21187,7 @@ const struct BaseStats gBaseStats[] =
         65,
         120,
         125,
-        65,
+        65
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -21241,7 +21217,7 @@ const struct BaseStats gBaseStats[] =
         55,
         25,
         35,
-        35,
+        35
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -21271,7 +21247,7 @@ const struct BaseStats gBaseStats[] =
         95,
         20,
         55,
-        75,
+        75
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -21301,7 +21277,7 @@ const struct BaseStats gBaseStats[] =
         35,
         57,
         33,
-        35,
+        35
         ),
         .type1 = TYPE_FLYING,
         .type2 = TYPE_FLYING,
@@ -21330,7 +21306,7 @@ const struct BaseStats gBaseStats[] =
         55,
         77,
         43,
-        55,
+        55
         ),
         .type1 = TYPE_FLYING,
         .type2 = TYPE_FLYING,
@@ -21359,7 +21335,7 @@ const struct BaseStats gBaseStats[] =
         105,
         67,
         53,
-        85,
+        85
         ),
         .type1 = TYPE_FLYING,
         .type2 = TYPE_STEEL,
@@ -21388,7 +21364,7 @@ const struct BaseStats gBaseStats[] =
         20,
         75,
         25,
-        45,
+        45
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
@@ -21418,7 +21394,7 @@ const struct BaseStats gBaseStats[] =
         80,
         30,
         50,
-        90,
+        90
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_PSYCHIC,
@@ -21451,7 +21427,7 @@ const struct BaseStats gBaseStats[] =
         110,
         117,
         90,
-        120,
+        120
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_PSYCHIC,
@@ -21483,7 +21459,7 @@ const struct BaseStats gBaseStats[] =
         28,
         50,
         47,
-        52,
+        52
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DARK,
@@ -21512,7 +21488,7 @@ const struct BaseStats gBaseStats[] =
         58,
         112,
         87,
-        92,
+        92
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DARK,
@@ -21541,7 +21517,7 @@ const struct BaseStats gBaseStats[] =
         60,
         10,
         40,
-        60,
+        60
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -21570,7 +21546,7 @@ const struct BaseStats gBaseStats[] =
         90,
         60,
         80,
-        120,
+        120
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -21599,7 +21575,7 @@ const struct BaseStats gBaseStats[] =
         55,
         48,
         40,
-        45,
+        45
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -21628,7 +21604,7 @@ const struct BaseStats gBaseStats[] =
         100,
         88,
         60,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -21657,7 +21633,7 @@ const struct BaseStats gBaseStats[] =
         50,
         44,
         38,
-        38,
+        38
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -21686,7 +21662,7 @@ const struct BaseStats gBaseStats[] =
         90,
         74,
         48,
-        68,
+        68
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_ROCK,
@@ -21715,7 +21691,7 @@ const struct BaseStats gBaseStats[] =
         50,
         26,
         40,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -21744,7 +21720,7 @@ const struct BaseStats gBaseStats[] =
         60,
         121,
         90,
-        60,
+        60
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -21773,7 +21749,7 @@ const struct BaseStats gBaseStats[] =
         50,
         30,
         40,
-        50,
+        50
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_ROCK,
@@ -21802,7 +21778,7 @@ const struct BaseStats gBaseStats[] =
         90,
         50,
         60,
-        70,
+        70
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FIRE,
@@ -21831,7 +21807,7 @@ const struct BaseStats gBaseStats[] =
         120,
         30,
         80,
-        90,
+        90
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FIRE,
@@ -21860,7 +21836,7 @@ const struct BaseStats gBaseStats[] =
         80,
         20,
         40,
-        40,
+        40
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_DRAGON,
@@ -21889,7 +21865,7 @@ const struct BaseStats gBaseStats[] =
         80,
         70,
         95,
-        60,
+        60
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_DRAGON,
@@ -21918,7 +21894,7 @@ const struct BaseStats gBaseStats[] =
         80,
         30,
         100,
-        80,
+        80
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_DRAGON,
@@ -21947,7 +21923,7 @@ const struct BaseStats gBaseStats[] =
         75,
         46,
         35,
-        50,
+        50
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_GROUND,
@@ -21976,7 +21952,7 @@ const struct BaseStats gBaseStats[] =
         125,
         71,
         65,
-        70,
+        70
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_GROUND,
@@ -22005,7 +21981,7 @@ const struct BaseStats gBaseStats[] =
         55,
         85,
         85,
-        95,
+        95
         ),
         .type1 = TYPE_FLYING,
         .type2 = TYPE_WATER,
@@ -22036,7 +22012,7 @@ const struct BaseStats gBaseStats[] =
         40,
         66,
         40,
-        30,
+        30
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -22066,7 +22042,7 @@ const struct BaseStats gBaseStats[] =
         60,
         136,
         60,
-        50,
+        50
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -22096,7 +22072,7 @@ const struct BaseStats gBaseStats[] =
         35,
         40,
         54,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_POISON,
@@ -22127,7 +22103,7 @@ const struct BaseStats gBaseStats[] =
         70,
         75,
         114,
-        87,
+        87
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_POISON,
@@ -22156,7 +22132,7 @@ const struct BaseStats gBaseStats[] =
         45,
         65,
         50,
-        50,
+        50
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_BUG,
@@ -22184,7 +22160,7 @@ const struct BaseStats gBaseStats[] =
         65,
         81,
         90,
-        90,
+        90
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_BUG,
@@ -22212,7 +22188,7 @@ const struct BaseStats gBaseStats[] =
         60,
         32,
         50,
-        50,
+        50
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
@@ -22242,7 +22218,7 @@ const struct BaseStats gBaseStats[] =
         90,
         42,
         70,
-        80,
+        80
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
@@ -22272,7 +22248,7 @@ const struct BaseStats gBaseStats[] =
         45,
         50,
         74,
-        54,
+        54
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GHOST,
@@ -22301,7 +22277,7 @@ const struct BaseStats gBaseStats[] =
         65,
         70,
         134,
-        114,
+        114
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GHOST,
@@ -22330,7 +22306,7 @@ const struct BaseStats gBaseStats[] =
         45,
         39,
         56,
-        53,
+        53
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -22359,7 +22335,7 @@ const struct BaseStats gBaseStats[] =
         65,
         49,
         86,
-        73,
+        73
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -22388,7 +22364,7 @@ const struct BaseStats gBaseStats[] =
         95,
         29,
         136,
-        103,
+        103
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FAIRY,
@@ -22417,7 +22393,7 @@ const struct BaseStats gBaseStats[] =
         30,
         50,
         55,
-        40,
+        40
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FAIRY,
@@ -22446,7 +22422,7 @@ const struct BaseStats gBaseStats[] =
         45,
         70,
         75,
-        55,
+        55
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FAIRY,
@@ -22475,7 +22451,7 @@ const struct BaseStats gBaseStats[] =
         65,
         60,
         95,
-        75,
+        75
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FAIRY,
@@ -22504,7 +22480,7 @@ const struct BaseStats gBaseStats[] =
         101,
         95,
         60,
-        81,
+        81
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_NORMAL,
@@ -22533,7 +22509,7 @@ const struct BaseStats gBaseStats[] =
         100,
         50,
         50,
-        60,
+        60
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_STEEL,
@@ -22562,7 +22538,7 @@ const struct BaseStats gBaseStats[] =
         50,
         30,
         145,
-        145,
+        145
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_ROCK,
@@ -22591,7 +22567,7 @@ const struct BaseStats gBaseStats[] =
         95,
         65,
         68,
-        82,
+        82
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FLYING,
@@ -22621,7 +22597,7 @@ const struct BaseStats gBaseStats[] =
         75,
         70,
         110,
-        100,
+        100
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_PSYCHIC,
@@ -22650,7 +22626,7 @@ const struct BaseStats gBaseStats[] =
         145,
         30,
         50,
-        105,
+        105
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_GHOST,
@@ -22681,7 +22657,7 @@ const struct BaseStats gBaseStats[] =
         40,
         34,
         50,
-        61,
+        61
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -22710,7 +22686,7 @@ const struct BaseStats gBaseStats[] =
         75,
         64,
         110,
-        121,
+        121
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -22739,7 +22715,7 @@ const struct BaseStats gBaseStats[] =
         100,
         75,
         70,
-        60,
+        60
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FIGHTING,
@@ -22768,7 +22744,7 @@ const struct BaseStats gBaseStats[] =
         95,
         15,
         91,
-        85,
+        85
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -22798,7 +22774,7 @@ const struct BaseStats gBaseStats[] =
         35,
         20,
         45,
-        30,
+        30
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_BUG,
@@ -22831,7 +22807,7 @@ const struct BaseStats gBaseStats[] =
         60,
         85,
         125,
-        90,
+        90
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_BUG,
@@ -22861,7 +22837,7 @@ const struct BaseStats gBaseStats[] =
         135,
         70,
         20,
-        30,
+        30
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_ROCK,
@@ -22892,7 +22868,7 @@ const struct BaseStats gBaseStats[] =
         110,
         50,
         65,
-        90,
+        90
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -22923,7 +22899,7 @@ const struct BaseStats gBaseStats[] =
         55,
         95,
         105,
-        95,
+        95
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_NORMAL,
@@ -22953,7 +22929,7 @@ const struct BaseStats gBaseStats[] =
         58,
         97,
         70,
-        58,
+        58
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_DARK,
@@ -22984,7 +22960,7 @@ const struct BaseStats gBaseStats[] =
         49,
         40,
         40,
-        49,
+        49
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_STEEL,
@@ -23016,7 +22992,7 @@ const struct BaseStats gBaseStats[] =
         69,
         30,
         80,
-        69,
+        69
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_STEEL,
@@ -23048,7 +23024,7 @@ const struct BaseStats gBaseStats[] =
         90,
         75,
         80,
-        70,
+        70
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_DRAGON,
@@ -23078,7 +23054,7 @@ const struct BaseStats gBaseStats[] =
         90,
         55,
         90,
-        80,
+        80
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ICE,
@@ -23108,7 +23084,7 @@ const struct BaseStats gBaseStats[] =
         100,
         75,
         70,
-        80,
+        80
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_DRAGON,
@@ -23137,7 +23113,7 @@ const struct BaseStats gBaseStats[] =
         100,
         55,
         80,
-        90,
+        90
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_ICE,
@@ -23166,7 +23142,7 @@ const struct BaseStats gBaseStats[] =
         115,
         85,
         120,
-        50,
+        50
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_DRAGON,
@@ -23195,7 +23171,7 @@ const struct BaseStats gBaseStats[] =
         30,
         82,
         40,
-        30,
+        30
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_GHOST,
@@ -23224,7 +23200,7 @@ const struct BaseStats gBaseStats[] =
         50,
         102,
         60,
-        50,
+        50
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_GHOST,
@@ -23253,7 +23229,7 @@ const struct BaseStats gBaseStats[] =
         75,
         142,
         100,
-        75,
+        75
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_GHOST,
@@ -23282,7 +23258,7 @@ const struct BaseStats gBaseStats[] =
         115,
         138,
         80,
-        115,
+        115
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -23310,7 +23286,7 @@ const struct BaseStats gBaseStats[] =
         115,
         138,
         80,
-        115,
+        115
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_NORMAL,
@@ -23338,7 +23314,7 @@ const struct BaseStats gBaseStats[] =
         95,
         130,
         145,
-        95,
+        95
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_DRAGON,
@@ -23366,7 +23342,7 @@ const struct BaseStats gBaseStats[] =
         60,
         72,
         53,
-        50,
+        50
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
@@ -23394,7 +23370,7 @@ const struct BaseStats gBaseStats[] =
         100,
         97,
         63,
-        60,
+        60
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_DARK,
@@ -23423,7 +23399,7 @@ const struct BaseStats gBaseStats[] =
         105,
         105,
         70,
-        95,
+        95
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_GRASS,
@@ -23451,7 +23427,7 @@ const struct BaseStats gBaseStats[] =
         50,
         200,
         100,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -23479,7 +23455,7 @@ const struct BaseStats gBaseStats[] =
         50,
         80,
         100,
-        50,
+        50
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_DRAGON,
@@ -23507,7 +23483,7 @@ const struct BaseStats gBaseStats[] =
         130,
         30,
         65,
-        110,
+        110
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -23537,7 +23513,7 @@ const struct BaseStats gBaseStats[] =
         60,
         130,
         145,
-        80,
+        80
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GHOST,
@@ -23568,7 +23544,7 @@ const struct BaseStats gBaseStats[] =
         80,
         80,
         80,
-        80,
+        80
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_GRASS,
@@ -23599,9 +23575,9 @@ const struct BaseStats gBaseStats[] =
             72,
             65,
             105,
-            75,
+            75
             ),
-        .type1 = TYPE_NORMAL,
+            .type1 = TYPE_NORMAL,
             .type2 = TYPE_PSYCHIC,
             .catchRate = 45,
             .expYield = 184,
@@ -23627,9 +23603,9 @@ const struct BaseStats gBaseStats[] =
             95,
             85,
             45,
-            70,
+            70
             ),
-        .type1 = TYPE_BUG,
+            .type1 = TYPE_BUG,
             .type2 = TYPE_ROCK,
             .catchRate = 25,
             .expYield = 175,
@@ -23655,9 +23631,9 @@ const struct BaseStats gBaseStats[] =
             105,
             50,
             45,
-            80,
+            80
             ),
-        .type1 = TYPE_GROUND,
+            .type1 = TYPE_GROUND,
             .type2 = TYPE_NORMAL,
             .catchRate = 75,
             .expYield = 194,
@@ -23683,9 +23659,9 @@ const struct BaseStats gBaseStats[] =
             65,
             78,
             80,
-            75,
+            75
             ),
-        .type1 = TYPE_WATER,
+            .type1 = TYPE_WATER,
             .type2 = TYPE_GHOST,
             .catchRate = 25,
             .expYield = 186,
@@ -23712,9 +23688,9 @@ const struct BaseStats gBaseStats[] =
             60,
             120,
             40,
-            80,
+            80
             ),
-        .type1 = TYPE_FIGHTING,
+            .type1 = TYPE_FIGHTING,
             .type2 = TYPE_POISON,
             .catchRate = 135,
             .expYield = 179,
@@ -23741,9 +23717,9 @@ const struct BaseStats gBaseStats[] =
             95,
             85,
             65,
-            65,
+            65
             ),
-        .type1 = TYPE_DARK,
+            .type1 = TYPE_DARK,
             .type2 = TYPE_POISON,
             .catchRate = 135,
             .expYield = 180,
@@ -23769,9 +23745,9 @@ const struct BaseStats gBaseStats[] =
             70,
             106,
             135,
-            80,
+            80
             ),
-        .type1 = TYPE_FAIRY,
+            .type1 = TYPE_FAIRY,
             .type2 = TYPE_FLYING,
             .catchRate = 3,
             .expYield = 261,
@@ -23798,9 +23774,9 @@ const struct BaseStats gBaseStats[] =
             60,
             130,
             110,
-            95,
+            95
             ),
-        .type1 = TYPE_FLYING,
+            .type1 = TYPE_FLYING,
             .type2 = TYPE_GHOST,
             .catchRate = 45,
             .expYield = 184,
@@ -23829,9 +23805,9 @@ const struct BaseStats gBaseStats[] =
             25,
             60,
             50,
-            210,
+            210
             ),
-        .type1 = TYPE_FAIRY,
+            .type1 = TYPE_FAIRY,
             .type2 = TYPE_GHOST,
             .catchRate = 13,
             .expYield = 384,
@@ -23859,7 +23835,7 @@ const struct BaseStats gBaseStats[] =
         123,
         80,
         122,
-        120,
+        120
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_POISON,
@@ -23888,7 +23864,7 @@ const struct BaseStats gBaseStats[] =
         111,
         100,
         130,
-        85,
+        85
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_DRAGON,
@@ -23919,7 +23895,7 @@ const struct BaseStats gBaseStats[] =
         78,
         100,
         159,
-        115,
+        115
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FLYING,
@@ -23947,7 +23923,7 @@ const struct BaseStats gBaseStats[] =
         120,
         78,
         135,
-        115,
+        115
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_STEEL,
@@ -23978,7 +23954,7 @@ const struct BaseStats gBaseStats[] =
         40,
         145,
         15,
-        80,
+        80
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_POISON,
@@ -24011,7 +23987,7 @@ const struct BaseStats gBaseStats[] =
         80,
         121,
         135,
-        80,
+        80
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
@@ -24042,7 +24018,7 @@ const struct BaseStats gBaseStats[] =
         65,
         150,
         175,
-        105,
+        105
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -24071,7 +24047,7 @@ const struct BaseStats gBaseStats[] =
         180,
         30,
         130,
-        80,
+        80
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_PSYCHIC,
@@ -24100,7 +24076,7 @@ const struct BaseStats gBaseStats[] =
         80,
         130,
         170,
-        95,
+        95
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_POISON,
@@ -24128,7 +24104,7 @@ const struct BaseStats gBaseStats[] =
         100,
         100,
         60,
-        100,
+        100
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -24159,7 +24135,7 @@ const struct BaseStats gBaseStats[] =
         120,
         105,
         65,
-        90,
+        90
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -24190,7 +24166,7 @@ const struct BaseStats gBaseStats[] =
         109,
         81,
         70,
-        130,
+        130
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_DARK,
@@ -24221,7 +24197,7 @@ const struct BaseStats gBaseStats[] =
         85,
         150,
         70,
-        95,
+        95
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_DRAGON,
@@ -24252,7 +24228,7 @@ const struct BaseStats gBaseStats[] =
         100,
         130,
         154,
-        100,
+        100
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FIGHTING,
@@ -24283,7 +24259,7 @@ const struct BaseStats gBaseStats[] =
         70,
         140,
         194,
-        120,
+        120
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -24311,7 +24287,7 @@ const struct BaseStats gBaseStats[] =
         105,
         45,
         165,
-        110,
+        110
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_DRAGON,
@@ -24342,7 +24318,7 @@ const struct BaseStats gBaseStats[] =
         230,
         30,
         55,
-        95,
+        95
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_GROUND,
@@ -24374,7 +24350,7 @@ const struct BaseStats gBaseStats[] =
         140,
         75,
         65,
-        100,
+        100
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_STEEL,
@@ -24405,7 +24381,7 @@ const struct BaseStats gBaseStats[] =
         115,
         75,
         40,
-        105,
+        105
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FIGHTING,
@@ -24436,7 +24412,7 @@ const struct BaseStats gBaseStats[] =
         90,
         115,
         140,
-        90,
+        90
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FIRE,
@@ -24467,7 +24443,7 @@ const struct BaseStats gBaseStats[] =
         150,
         71,
         95,
-        120,
+        120
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_DARK,
@@ -24495,7 +24471,7 @@ const struct BaseStats gBaseStats[] =
         75,
         145,
         145,
-        85,
+        85
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_DRAGON,
@@ -24523,7 +24499,7 @@ const struct BaseStats gBaseStats[] =
         80,
         100,
         130,
-        80,
+        80
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIGHTING,
@@ -24551,7 +24527,7 @@ const struct BaseStats gBaseStats[] =
         110,
         70,
         95,
-        110,
+        110
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_GROUND,
@@ -24579,7 +24555,7 @@ const struct BaseStats gBaseStats[] =
         65,
         100,
         165,
-        135,
+        135
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FAIRY,
@@ -24610,7 +24586,7 @@ const struct BaseStats gBaseStats[] =
         125,
         20,
         85,
-        115,
+        115
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_GHOST,
@@ -24642,7 +24618,7 @@ const struct BaseStats gBaseStats[] =
         125,
         50,
         55,
-        95,
+        95
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_FAIRY,
@@ -24671,7 +24647,7 @@ const struct BaseStats gBaseStats[] =
         230,
         50,
         60,
-        80,
+        80
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_STEEL,
@@ -24703,7 +24679,7 @@ const struct BaseStats gBaseStats[] =
         85,
         100,
         80,
-        85,
+        85
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_PSYCHIC,
@@ -24731,7 +24707,7 @@ const struct BaseStats gBaseStats[] =
         80,
         135,
         135,
-        80,
+        80
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -24759,7 +24735,7 @@ const struct BaseStats gBaseStats[] =
         70,
         105,
         110,
-        65,
+        65
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_DARK,
@@ -24791,7 +24767,7 @@ const struct BaseStats gBaseStats[] =
         100,
         20,
         145,
-        105,
+        105
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_GROUND,
@@ -24823,7 +24799,7 @@ const struct BaseStats gBaseStats[] =
         110,
         80,
         110,
-        105,
+        105
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_FAIRY,
@@ -24854,7 +24830,7 @@ const struct BaseStats gBaseStats[] =
         75,
         75,
         93,
-        83,
+        83
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GHOST,
@@ -24886,7 +24862,7 @@ const struct BaseStats gBaseStats[] =
         60,
         115,
         115,
-        60,
+        60
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DARK,
@@ -24917,7 +24893,7 @@ const struct BaseStats gBaseStats[] =
         80,
         100,
         120,
-        80,
+        80
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ROCK,
@@ -24946,7 +24922,7 @@ const struct BaseStats gBaseStats[] =
         130,
         120,
         120,
-        90,
+        90
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_FLYING,
@@ -24978,7 +24954,7 @@ const struct BaseStats gBaseStats[] =
         150,
         110,
         105,
-        110,
+        110
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_PSYCHIC,
@@ -25010,7 +24986,7 @@ const struct BaseStats gBaseStats[] =
         120,
         110,
         140,
-        150,
+        150
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_PSYCHIC,
@@ -25038,7 +25014,7 @@ const struct BaseStats gBaseStats[] =
         100,
         110,
         160,
-        120,
+        120
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_PSYCHIC,
@@ -25066,7 +25042,7 @@ const struct BaseStats gBaseStats[] =
         94,
         135,
         54,
-        96,
+        96
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FIGHTING,
@@ -25097,7 +25073,7 @@ const struct BaseStats gBaseStats[] =
         115,
         92,
         120,
-        95,
+        95
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_GROUND,
@@ -25128,7 +25104,7 @@ const struct BaseStats gBaseStats[] =
         88,
         112,
         140,
-        70,
+        70
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_STEEL,
@@ -25160,7 +25136,7 @@ const struct BaseStats gBaseStats[] =
         105,
         30,
         132,
-        105,
+        105
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_ICE,
@@ -25193,7 +25169,7 @@ const struct BaseStats gBaseStats[] =
         95,
         110,
         65,
-        115,
+        115
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FIGHTING,
@@ -25221,7 +25197,7 @@ const struct BaseStats gBaseStats[] =
         126,
         50,
         80,
-        126,
+        126
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FAIRY,
@@ -25254,7 +25230,7 @@ const struct BaseStats gBaseStats[] =
         110,
         110,
         160,
-        110,
+        110
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FAIRY,
@@ -25286,7 +25262,7 @@ const struct BaseStats gBaseStats[] =
         100,
         115,
         180,
-        100,
+        100
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_FLYING,
@@ -25318,7 +25294,7 @@ const struct BaseStats gBaseStats[] =
         90,
         90,
         180,
-        160,
+        160
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -25349,7 +25325,7 @@ const struct BaseStats gBaseStats[] =
         160,
         90,
         150,
-        90,
+        90
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_FIRE,
@@ -25380,7 +25356,7 @@ const struct BaseStats gBaseStats[] =
         35,
         72,
         25,
-        35,
+        35
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_NORMAL,
@@ -25411,7 +25387,7 @@ const struct BaseStats gBaseStats[] =
         70,
         77,
         40,
-        80,
+        80
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_NORMAL,
@@ -25442,7 +25418,7 @@ const struct BaseStats gBaseStats[] =
         50,
         110,
         105,
-        85,
+        85
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_PSYCHIC,
@@ -25474,7 +25450,7 @@ const struct BaseStats gBaseStats[] =
         90,
         40,
         10,
-        35,
+        35
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_STEEL,
@@ -25507,7 +25483,7 @@ const struct BaseStats gBaseStats[] =
         120,
         65,
         25,
-        65,
+        65
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_STEEL,
@@ -25537,7 +25513,7 @@ const struct BaseStats gBaseStats[] =
         40,
         65,
         50,
-        65,
+        65
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -25570,7 +25546,7 @@ const struct BaseStats gBaseStats[] =
         75,
         109,
         81,
-        100,
+        100
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_FAIRY,
@@ -25601,7 +25577,7 @@ const struct BaseStats gBaseStats[] =
         30,
         90,
         35,
-        45,
+        45
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_STEEL,
@@ -25632,7 +25608,7 @@ const struct BaseStats gBaseStats[] =
         60,
         110,
         50,
-        70,
+        70
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_STEEL,
@@ -25663,7 +25639,7 @@ const struct BaseStats gBaseStats[] =
         35,
         97,
         50,
-        40,
+        40
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_DARK,
@@ -25694,7 +25670,7 @@ const struct BaseStats gBaseStats[] =
         60,
         135,
         75,
-        65,
+        65
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_DARK,
@@ -25725,7 +25701,7 @@ const struct BaseStats gBaseStats[] =
         100,
         20,
         30,
-        45,
+        45
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_ELECTRIC,
@@ -25759,7 +25735,7 @@ const struct BaseStats gBaseStats[] =
         115,
         35,
         45,
-        65,
+        65
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_ELECTRIC,
@@ -25793,7 +25769,7 @@ const struct BaseStats gBaseStats[] =
         130,
         45,
         55,
-        75,
+        75
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_ELECTRIC,
@@ -25819,7 +25795,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(80, 80, 50, 25, 40, 65),
-        ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_DARK,
         .catchRate = 190,
@@ -25846,7 +25821,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(105, 105, 75, 50, 65, 100),
-        ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_DARK,
         .catchRate = 75,
@@ -25871,7 +25845,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(115, 105, 85, 37, 125, 75),
-        ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_DRAGON,
         .catchRate = 45,
@@ -25895,7 +25868,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(60, 88, 80, 65, 66, 118),
-        ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_GHOST,
         .catchRate = 75,
@@ -25924,7 +25896,7 @@ const struct BaseStats gBaseStats[] =
         55,
         40,
         40,
-        40,
+        40
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_STEEL,
@@ -25954,7 +25926,7 @@ const struct BaseStats gBaseStats[] =
         55,
         90,
         65,
-        65,
+        65
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -25984,7 +25956,7 @@ const struct BaseStats gBaseStats[] =
         70,
         105,
         80,
-        80,
+        80
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FAIRY,
@@ -26014,7 +25986,7 @@ const struct BaseStats gBaseStats[] =
         65,
         15,
         40,
-        40,
+        40
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -26045,7 +26017,7 @@ const struct BaseStats gBaseStats[] =
         95,
         30,
         100,
-        70,
+        70
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_PSYCHIC,
@@ -26075,7 +26047,7 @@ const struct BaseStats gBaseStats[] =
         55,
         55,
         58,
-        62,
+        62
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FLYING,
@@ -26106,7 +26078,7 @@ const struct BaseStats gBaseStats[] =
         120,
         60,
         85,
-        90,
+        90
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_FAIRY,
@@ -26139,7 +26111,7 @@ const struct BaseStats gBaseStats[] =
         65,
         100,
         90,
-        90,
+        90
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_PSYCHIC,
@@ -26169,7 +26141,7 @@ const struct BaseStats gBaseStats[] =
         85,
         95,
         125,
-        100,
+        100
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FLYING,
@@ -26201,7 +26173,7 @@ const struct BaseStats gBaseStats[] =
         90,
         100,
         85,
-        90,
+        90
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FLYING,
@@ -26233,7 +26205,7 @@ const struct BaseStats gBaseStats[] =
         90,
         90,
         100,
-        125,
+        125
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_FLYING,
@@ -26265,7 +26237,7 @@ const struct BaseStats gBaseStats[] =
         80,
         30,
         110,
-        110,
+        110
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_PSYCHIC,
@@ -26295,7 +26267,7 @@ const struct BaseStats gBaseStats[] =
         100,
         30,
         75,
-        120,
+        120
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_ROCK,
@@ -26326,7 +26298,7 @@ const struct BaseStats gBaseStats[] =
         41,
         60,
         30,
-        41,
+        41
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_NORMAL,
@@ -26356,7 +26328,7 @@ const struct BaseStats gBaseStats[] =
         61,
         100,
         50,
-        61,
+        61
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_NORMAL,
@@ -26386,7 +26358,7 @@ const struct BaseStats gBaseStats[] =
         45,
         50,
         15,
-        45,
+        45
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -26415,7 +26387,7 @@ const struct BaseStats gBaseStats[] =
         55,
         95,
         30,
-        55,
+        55
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -26445,7 +26417,7 @@ const struct BaseStats gBaseStats[] =
         85,
         30,
         30,
-        65,
+        65
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_GHOST,
@@ -26477,7 +26449,7 @@ const struct BaseStats gBaseStats[] =
         99,
         32,
         66,
-        84,
+        84
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_STEEL,
@@ -26509,9 +26481,9 @@ const struct BaseStats gBaseStats[] =
             45,
             55,
             65,
-            50,
+            50
             ),
-        .type1 = TYPE_FIRE,
+            .type1 = TYPE_FIRE,
             .type2 = TYPE_ROCK,
             .catchRate = 190,
             .expYield = 70,
@@ -26538,9 +26510,9 @@ const struct BaseStats gBaseStats[] =
             80,
             90,
             95,
-            80,
+            80
             ),
-        .type1 = TYPE_FIRE,
+            .type1 = TYPE_FIRE,
             .type2 = TYPE_ROCK,
             .catchRate = 75,
             .expYield = 194,
@@ -26567,9 +26539,9 @@ const struct BaseStats gBaseStats[] =
             50,
             100,
             65,
-            70,
+            70
             ),
-        .type1 = TYPE_ELECTRIC,
+            .type1 = TYPE_ELECTRIC,
             .type2 = TYPE_GRASS,
             .catchRate = 190,
             .expYield = 66,
@@ -26596,9 +26568,9 @@ const struct BaseStats gBaseStats[] =
             70,
             130,
             90,
-            90,
+            90
             ),
-        .type1 = TYPE_ELECTRIC,
+            .type1 = TYPE_ELECTRIC,
             .type2 = TYPE_GRASS,
             .catchRate = 60,
             .expYield = 172,
@@ -26625,9 +26597,9 @@ const struct BaseStats gBaseStats[] =
             78,
             95,
             119,
-            85,
+            85
             ),
-        .type1 = TYPE_FIRE,
+            .type1 = TYPE_FIRE,
             .type2 = TYPE_GHOST,
             .catchRate = 45,
             .expYield = 240,
@@ -26654,9 +26626,9 @@ const struct BaseStats gBaseStats[] =
             85,
             85,
             55,
-            55,
+            55
             ),
-        .type1 = TYPE_DARK,
+            .type1 = TYPE_DARK,
             .type2 = TYPE_POISON,
             .catchRate = 45,
             .expYield = 88,
@@ -26684,9 +26656,9 @@ const struct BaseStats gBaseStats[] =
             55,
             115,
             35,
-            75,
+            75
             ),
-        .type1 = TYPE_POISON,
+            .type1 = TYPE_POISON,
             .type2 = TYPE_FIGHTING,
             .catchRate = 60,
             .expYield = 86,
@@ -26715,9 +26687,9 @@ const struct BaseStats gBaseStats[] =
             80,
             85,
             100,
-            65,
+            65
             ),
-        .type1 = TYPE_WATER,
+            .type1 = TYPE_WATER,
             .type2 = TYPE_DARK,
             .catchRate = 45,
             .expYield = 238,
@@ -26744,9 +26716,9 @@ const struct BaseStats gBaseStats[] =
             75,
             105,
             50,
-            75,
+            75
             ),
-        .type1 = TYPE_GRASS,
+            .type1 = TYPE_GRASS,
             .type2 = TYPE_FIGHTING,
             .catchRate = 75,
             .expYield = 168,
@@ -26774,9 +26746,9 @@ const struct BaseStats gBaseStats[] =
             40,
             70,
             85,
-            40,
+            40
             ),
-        .type1 = TYPE_NORMAL,
+            .type1 = TYPE_NORMAL,
             .type2 = TYPE_GHOST,
             .catchRate = 75,
             .expYield = 66,
@@ -26803,9 +26775,9 @@ const struct BaseStats gBaseStats[] =
             60,
             110,
             125,
-            60,
+            60
             ),
-        .type1 = TYPE_NORMAL,
+            .type1 = TYPE_NORMAL,
             .type2 = TYPE_GHOST,
             .catchRate = 45,
             .expYield = 179,
@@ -26832,9 +26804,9 @@ const struct BaseStats gBaseStats[] =
             70,
             65,
             112,
-            70,
+            70
             ),
-        .type1 = TYPE_PSYCHIC,
+            .type1 = TYPE_PSYCHIC,
             .type2 = TYPE_FLYING,
             .catchRate = 60,
             .expYield = 179,
@@ -26863,9 +26835,9 @@ const struct BaseStats gBaseStats[] =
             83,
             40,
             83,
-            113,
+            113
             ),
-        .type1 = TYPE_DRAGON,
+            .type1 = TYPE_DRAGON,
             .type2 = TYPE_STEEL,
             .catchRate = 45,
             .expYield = 158,
@@ -26893,9 +26865,9 @@ const struct BaseStats gBaseStats[] =
             100,
             60,
             110,
-            150,
+            150
             ),
-        .type1 = TYPE_DRAGON,
+            .type1 = TYPE_DRAGON,
             .type2 = TYPE_STEEL,
             .catchRate = 45,
             .expYield = 270,
@@ -26922,9 +26894,9 @@ const struct BaseStats gBaseStats[] =
             184,
             38,
             34,
-            36,
+            36
             ),
-        .type1 = TYPE_ICE,
+            .type1 = TYPE_ICE,
             .type2 = TYPE_ROCK,
             .catchRate = 55,
             .expYield = 180,
@@ -26953,9 +26925,9 @@ const struct BaseStats gBaseStats[] =
             80,
             60,
             95,
-            95,
+            95
             ),
-        .type1 = TYPE_GRASS,
+            .type1 = TYPE_GRASS,
             .type2 = TYPE_FIGHTING,
             .catchRate = 45,
             .expYield = 239,
@@ -26982,7 +26954,7 @@ const struct BaseStats gBaseStats[] =
         40,
         95,
         85,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -27012,7 +26984,7 @@ const struct BaseStats gBaseStats[] =
         60,
         95,
         85,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_STEEL,
@@ -27042,7 +27014,7 @@ const struct BaseStats gBaseStats[] =
         70,
         95,
         95,
-        66,
+        66
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ICE,    //lol cottage core
@@ -27071,7 +27043,7 @@ const struct BaseStats gBaseStats[] =
         40,
         95,
         105,
-        70,
+        70
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FAIRY,
@@ -27100,7 +27072,7 @@ const struct BaseStats gBaseStats[] =
         40,
         105,
         100,
-        60,
+        60
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_PSYCHIC,
@@ -27129,7 +27101,7 @@ const struct BaseStats gBaseStats[] =
         40,
         95,
         85,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FIGHTING,
@@ -27158,7 +27130,7 @@ const struct BaseStats gBaseStats[] =
         40,
         95,
         85,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -27187,7 +27159,7 @@ const struct BaseStats gBaseStats[] =
         40,
         95,
         85,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -27216,7 +27188,7 @@ const struct BaseStats gBaseStats[] =
         40,
         95,
         85,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -27245,7 +27217,7 @@ const struct BaseStats gBaseStats[] =
         40,
         95,
         85,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -27274,7 +27246,7 @@ const struct BaseStats gBaseStats[] =
         40,
         95,
         85,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -27303,7 +27275,7 @@ const struct BaseStats gBaseStats[] =
         40,
         95,
         85,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -27332,7 +27304,7 @@ const struct BaseStats gBaseStats[] =
         40,
         95,
         85,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -27361,7 +27333,7 @@ const struct BaseStats gBaseStats[] =
         40,
         95,
         85,
-        50,
+        50
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -27390,7 +27362,7 @@ const struct BaseStats gBaseStats[] =
         15,
         60,
         35,
-        35,
+        35
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -27418,7 +27390,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27447,7 +27419,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27476,7 +27448,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27505,7 +27477,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27533,7 +27505,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27562,7 +27534,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27591,7 +27563,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27620,7 +27592,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27649,7 +27621,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27678,7 +27650,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27707,7 +27679,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27736,7 +27708,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27765,7 +27737,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27794,7 +27766,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27823,7 +27795,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27852,7 +27824,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27881,7 +27853,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27910,7 +27882,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27939,7 +27911,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27968,7 +27940,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -27997,7 +27969,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -28026,7 +27998,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -28055,7 +28027,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -28084,7 +28056,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -28113,7 +28085,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -28142,7 +28114,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -28171,7 +28143,7 @@ const struct BaseStats gBaseStats[] =
         48,
         48,
         72,
-        48,
+        48
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -28195,7 +28167,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(75, 70, 70, 70, 70, 70),
-        ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
         .catchRate = 45,
@@ -28218,7 +28189,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(75, 70, 70, 70, 70, 70),
-        ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -28241,7 +28211,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(75, 70, 70, 70, 70, 70),
-        ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
         .catchRate = 45,
@@ -28264,7 +28233,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(50, 180, 20, 150, 180, 20),
-        ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 3,
@@ -28287,7 +28255,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(50, 70, 160, 90, 70, 160),
-        ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 3,
@@ -28310,7 +28277,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(50, 95, 90, 180, 95, 90),
-        ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 3,
@@ -28332,7 +28298,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(40, 29, 45, 36, 29, 45),
-        ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
         .catchRate = 120,
@@ -28355,7 +28320,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(40, 29, 45, 36, 29, 45),
-        ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
         .catchRate = 120,
@@ -28378,7 +28342,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(70, 89, 125, 36, 59, 85),
-        ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_GROUND,
         .catchRate = 45,
@@ -28402,7 +28365,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(70, 69, 115, 36, 69, 115),
-        ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_STEEL,
         .catchRate = 45,
@@ -28427,7 +28389,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(90, 60, 70, 85, 87, 78),
-        ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
         .catchRate = 75,
@@ -28450,7 +28411,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(76, 48, 48, 34, 57, 62),
-        ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 190,
@@ -28473,7 +28433,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(111, 83, 68, 39, 92, 82),
-        ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_GROUND,
         .catchRate = 75,
@@ -28496,7 +28455,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(66, 76, 110, 76, 107, 85),
-        ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FIRE,
         .catchRate = 45,
@@ -28520,7 +28478,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(105, 65, 97, 81, 75, 97),
-        ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_WATER,
         .catchRate = 45,
@@ -28543,7 +28500,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(105, 74, 107, 74, 81, 97),
-        ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ICE,
         .catchRate = 45,
@@ -28566,7 +28522,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(66, 67, 67, 112, 105, 87),
-        ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -28591,7 +28546,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(76, 102, 80, 90, 103, 77),
-        ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_GRASS,
         .catchRate = 45,
@@ -28614,7 +28568,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(150, 120, 100, 90, 120, 100),
-        ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_DRAGON,
         .catchRate = 3,
@@ -28636,7 +28589,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(130, 103, 75, 127, 120, 75),
-        ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -28665,7 +28617,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_FIGHTING,
@@ -28696,7 +28648,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_FLYING,
         .type2 = TYPE_FLYING,
@@ -28727,7 +28679,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_POISON,
@@ -28758,7 +28710,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_GROUND,
@@ -28789,7 +28741,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_ROCK,
@@ -28820,7 +28772,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_BUG,
@@ -28851,7 +28803,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GHOST,
@@ -28882,7 +28834,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_STEEL,
@@ -28913,7 +28865,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_FIRE,
@@ -28944,7 +28896,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -28975,7 +28927,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
@@ -29006,7 +28958,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
@@ -29037,7 +28989,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -29068,7 +29020,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -29099,7 +29051,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_DRAGON,
@@ -29130,7 +29082,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_DARK,
@@ -29161,7 +29113,7 @@ const struct BaseStats gBaseStats[] =
         120,
         120,
         120,
-        120,
+        120
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -29187,7 +29139,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(70, 92, 65, 98, 80, 55),
-        ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
         .catchRate = 25,
@@ -29211,7 +29162,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(155, 30, 105, 55, 140, 105),
-        ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 60,
@@ -29234,7 +29184,6 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(105, 160, 55, 135, 30, 55),
-        ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_FIRE,
         .catchRate = 60,
@@ -29263,7 +29212,7 @@ const struct BaseStats gBaseStats[] =
         50,
         75,
         40,
-        50,
+        50
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GRASS,
@@ -29292,7 +29241,7 @@ const struct BaseStats gBaseStats[] =
         50,
         75,
         40,
-        50,
+        50
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GRASS,
@@ -29321,7 +29270,7 @@ const struct BaseStats gBaseStats[] =
         50,
         75,
         40,
-        50,
+        50
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GRASS,
@@ -29350,7 +29299,7 @@ const struct BaseStats gBaseStats[] =
         70,
         95,
         60,
-        70,
+        70
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GRASS,
@@ -29379,7 +29328,7 @@ const struct BaseStats gBaseStats[] =
         70,
         95,
         60,
-        70,
+        70
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GRASS,
@@ -29408,7 +29357,7 @@ const struct BaseStats gBaseStats[] =
         70,
         95,
         60,
-        70,
+        70
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_GRASS,
@@ -29437,7 +29386,7 @@ const struct BaseStats gBaseStats[] =
         80,
         121,
         110,
-        90,
+        90
         ),
         .type1 = TYPE_FLYING,
         .type2 = TYPE_FLYING,
@@ -29468,7 +29417,7 @@ const struct BaseStats gBaseStats[] =
         70,
         101,
         145,
-        80,
+        80
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FLYING,
@@ -29496,7 +29445,7 @@ const struct BaseStats gBaseStats[] =
         90,
         91,
         105,
-        80,
+        80
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_FLYING,
@@ -29523,7 +29472,7 @@ const struct BaseStats gBaseStats[] =
         90,
         95,
         170,
-        100,
+        100
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_ICE,
@@ -29554,7 +29503,7 @@ const struct BaseStats gBaseStats[] =
         100,
         95,
         120,
-        90,
+        90
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_ICE,
@@ -29585,7 +29534,7 @@ const struct BaseStats gBaseStats[] =
         90,
         108,
         129,
-        90,
+        90
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_FIGHTING,
@@ -29616,7 +29565,7 @@ const struct BaseStats gBaseStats[] =
         90,
         128,
         77,
-        77,
+        77
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FIGHTING,
@@ -29648,7 +29597,7 @@ const struct BaseStats gBaseStats[] =
         95,
         99,
         120,
-        95,
+        95
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_STEEL,
@@ -29681,7 +29630,7 @@ const struct BaseStats gBaseStats[] =
         95,
         99,
         120,
-        95,
+        95
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_STEEL,
@@ -29714,7 +29663,7 @@ const struct BaseStats gBaseStats[] =
         95,
         99,
         120,
-        95,
+        95
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_STEEL,
@@ -29747,7 +29696,7 @@ const struct BaseStats gBaseStats[] =
         95,
         99,
         120,
-        95,
+        95
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_STEEL,
@@ -29780,7 +29729,7 @@ const struct BaseStats gBaseStats[] =
         67,
         122,
         103,
-        71,
+        71
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_DARK,
@@ -29811,7 +29760,7 @@ const struct BaseStats gBaseStats[] =
         67,
         132,
         153,
-        71,
+        71
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_DARK,
@@ -29842,7 +29791,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -29874,7 +29823,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -29906,7 +29855,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -29938,7 +29887,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -29970,7 +29919,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30002,7 +29951,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30034,7 +29983,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30066,7 +30015,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30098,7 +30047,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30130,7 +30079,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30162,7 +30111,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30194,7 +30143,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30226,7 +30175,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30258,7 +30207,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30290,7 +30239,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30322,7 +30271,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30354,7 +30303,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30386,7 +30335,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30418,7 +30367,7 @@ const struct BaseStats gBaseStats[] =
         50,
         89,
         90,
-        50,
+        50
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_FLYING,
@@ -30450,7 +30399,7 @@ const struct BaseStats gBaseStats[] =
         65,
         93,
         115,
-        100,
+        100
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
@@ -30479,7 +30428,7 @@ const struct BaseStats gBaseStats[] =
         72,
         116,
         109,
-        66,
+        66
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_NORMAL,
@@ -30508,7 +30457,7 @@ const struct BaseStats gBaseStats[] =
         39,
         42,
         61,
-        79,
+        79
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30537,7 +30486,7 @@ const struct BaseStats gBaseStats[] =
         39,
         42,
         61,
-        79,
+        79
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30566,7 +30515,7 @@ const struct BaseStats gBaseStats[] =
         39,
         42,
         61,
-        79,
+        79
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30595,7 +30544,7 @@ const struct BaseStats gBaseStats[] =
         39,
         42,
         61,
-        79,
+        79
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30624,7 +30573,7 @@ const struct BaseStats gBaseStats[] =
         47,
         52,
         75,
-        98,
+        98
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30653,7 +30602,7 @@ const struct BaseStats gBaseStats[] =
         47,
         52,
         75,
-        98,
+        98
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30682,7 +30631,7 @@ const struct BaseStats gBaseStats[] =
         47,
         52,
         75,
-        98,
+        98
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30711,7 +30660,7 @@ const struct BaseStats gBaseStats[] =
         47,
         52,
         75,
-        98,
+        98
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30740,7 +30689,7 @@ const struct BaseStats gBaseStats[] =
         67,
         92,
         125,
-        128,
+        128
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30769,7 +30718,7 @@ const struct BaseStats gBaseStats[] =
         68,
         75,
         112,
-        154,
+        154
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30798,7 +30747,7 @@ const struct BaseStats gBaseStats[] =
         68,
         75,
         112,
-        154,
+        154
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30827,7 +30776,7 @@ const struct BaseStats gBaseStats[] =
         68,
         75,
         112,
-        154,
+        154
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30856,7 +30805,7 @@ const struct BaseStats gBaseStats[] =
         68,
         75,
         112,
-        154,
+        154
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -30885,7 +30834,7 @@ const struct BaseStats gBaseStats[] =
         60,
         102,
         65,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -30916,7 +30865,7 @@ const struct BaseStats gBaseStats[] =
         60,
         102,
         65,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -30947,7 +30896,7 @@ const struct BaseStats gBaseStats[] =
         60,
         102,
         65,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -30978,7 +30927,7 @@ const struct BaseStats gBaseStats[] =
         60,
         102,
         65,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -31009,7 +30958,7 @@ const struct BaseStats gBaseStats[] =
         60,
         102,
         65,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -31040,7 +30989,7 @@ const struct BaseStats gBaseStats[] =
         60,
         102,
         65,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -31071,7 +31020,7 @@ const struct BaseStats gBaseStats[] =
         60,
         102,
         65,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -31102,7 +31051,7 @@ const struct BaseStats gBaseStats[] =
         60,
         102,
         65,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -31133,7 +31082,7 @@ const struct BaseStats gBaseStats[] =
         60,
         102,
         65,
-        90,
+        90
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
@@ -31164,7 +31113,7 @@ const struct BaseStats gBaseStats[] =
         76,
         104,
         83,
-        81,
+        81
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
@@ -31193,7 +31142,7 @@ const struct BaseStats gBaseStats[] =
         50,
         60,
         150,
-        50,
+        50
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_GHOST,
@@ -31225,7 +31174,7 @@ const struct BaseStats gBaseStats[] =
         70,
         56,
         44,
-        55,
+        55
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GRASS,
@@ -31254,7 +31203,7 @@ const struct BaseStats gBaseStats[] =
         70,
         46,
         44,
-        55,
+        55
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GRASS,
@@ -31283,7 +31232,7 @@ const struct BaseStats gBaseStats[] =
         70,
         41,
         44,
-        55,
+        55
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GRASS,
@@ -31312,7 +31261,7 @@ const struct BaseStats gBaseStats[] =
         122,
         99,
         58,
-        75,
+        75
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GRASS,
@@ -31341,7 +31290,7 @@ const struct BaseStats gBaseStats[] =
         122,
         69,
         58,
-        75,
+        75
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GRASS,
@@ -31370,7 +31319,7 @@ const struct BaseStats gBaseStats[] =
         122,
         54,
         58,
-        75,
+        75
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GRASS,
@@ -31399,7 +31348,7 @@ const struct BaseStats gBaseStats[] =
         95,
         99,
         131,
-        98,
+        98
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -31430,7 +31379,7 @@ const struct BaseStats gBaseStats[] =
         71,
         115,
         61,
-        85,
+        85
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_GROUND,
@@ -31461,7 +31410,7 @@ const struct BaseStats gBaseStats[] =
         71,
         115,
         61,
-        85,
+        85
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_GROUND,
@@ -31492,7 +31441,7 @@ const struct BaseStats gBaseStats[] =
         121,
         95,
         81,
-        95,
+        95
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_GROUND,
@@ -31523,7 +31472,7 @@ const struct BaseStats gBaseStats[] =
         121,
         85,
         91,
-        95,
+        95
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_GROUND,
@@ -31554,7 +31503,7 @@ const struct BaseStats gBaseStats[] =
         60,
         80,
         170,
-        130,
+        130
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_DARK,
@@ -31585,7 +31534,7 @@ const struct BaseStats gBaseStats[] =
         70,
         93,
         98,
-        70,
+        70
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FLYING,
@@ -31619,7 +31568,7 @@ const struct BaseStats gBaseStats[] =
         70,
         93,
         98,
-        70,
+        70
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FLYING,
@@ -31653,7 +31602,7 @@ const struct BaseStats gBaseStats[] =
         70,
         93,
         98,
-        70,
+        70
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_FLYING,
@@ -31687,7 +31636,7 @@ const struct BaseStats gBaseStats[] =
         40,
         60,
         30,
-        40,
+        40
         ),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_ROCK,
@@ -31715,7 +31664,7 @@ const struct BaseStats gBaseStats[] =
         75,
         82,
         55,
-        75,
+        75
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_ROCK,
@@ -31745,7 +31694,7 @@ const struct BaseStats gBaseStats[] =
         65,
         110,
         55,
-        65,
+        65
         ),
         .type1 = TYPE_FIGHTING, //each form has different evo move, shift moves around to fit new typing, give counter
         .type2 = TYPE_ROCK, //setup to evolve with dusk stone as well
@@ -31776,7 +31725,7 @@ const struct BaseStats gBaseStats[] =
         130,
         30,
         140,
-        135,
+        135
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -31807,7 +31756,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_MYSTERY,
@@ -31838,7 +31787,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_FLYING,
         .type2 = TYPE_MYSTERY,
@@ -31869,7 +31818,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_MYSTERY,
@@ -31900,7 +31849,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_GROUND,
         .type2 = TYPE_MYSTERY,
@@ -31931,7 +31880,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_MYSTERY,
@@ -31962,7 +31911,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_BUG,
         .type2 = TYPE_MYSTERY,
@@ -31993,7 +31942,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_MYSTERY,
@@ -32024,7 +31973,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_MYSTERY,
@@ -32055,7 +32004,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_FIRE,
         .type2 = TYPE_MYSTERY,
@@ -32086,7 +32035,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_WATER,
         .type2 = TYPE_MYSTERY,
@@ -32117,7 +32066,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_MYSTERY,
@@ -32148,7 +32097,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_MYSTERY,
@@ -32179,7 +32128,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_MYSTERY,
@@ -32210,7 +32159,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_MYSTERY,
@@ -32241,7 +32190,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_DRAGON,
         .type2 = TYPE_MYSTERY,
@@ -32272,7 +32221,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_MYSTERY,
@@ -32303,7 +32252,7 @@ const struct BaseStats gBaseStats[] =
         95,
         95,
         95,
-        95,
+        95
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_MYSTERY,
@@ -32334,7 +32283,7 @@ const struct BaseStats gBaseStats[] =
         100,
         60,
         60,
-        100,
+        100
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32367,7 +32316,7 @@ const struct BaseStats gBaseStats[] =
         100,
         60,
         60,
-        100,
+        100
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32400,7 +32349,7 @@ const struct BaseStats gBaseStats[] =
         100,
         60,
         60,
-        100,
+        100
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32433,7 +32382,7 @@ const struct BaseStats gBaseStats[] =
         100,
         60,
         60,
-        100,
+        100
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32466,7 +32415,7 @@ const struct BaseStats gBaseStats[] =
         100,
         60,
         60,
-        100,
+        100
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32499,7 +32448,7 @@ const struct BaseStats gBaseStats[] =
         100,
         60,
         60,
-        100,
+        100
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32532,7 +32481,7 @@ const struct BaseStats gBaseStats[] =
         60,
         120,
         100,
-        60,
+        60
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32565,7 +32514,7 @@ const struct BaseStats gBaseStats[] =
         60,
         120,
         100,
-        60,
+        60
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32598,7 +32547,7 @@ const struct BaseStats gBaseStats[] =
         60,
         120,
         100,
-        60,
+        60
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32631,7 +32580,7 @@ const struct BaseStats gBaseStats[] =
         60,
         120,
         100,
-        60,
+        60
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32664,7 +32613,7 @@ const struct BaseStats gBaseStats[] =
         60,
         120,
         100,
-        60,
+        60
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32697,7 +32646,7 @@ const struct BaseStats gBaseStats[] =
         60,
         120,
         100,
-        60,
+        60
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32730,7 +32679,7 @@ const struct BaseStats gBaseStats[] =
         60,
         120,
         100,
-        60,
+        60
         ),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_FLYING,
@@ -32763,7 +32712,7 @@ const struct BaseStats gBaseStats[] =
         80,
         96,
         50,
-        105,
+        105
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_FAIRY,
@@ -32794,7 +32743,7 @@ const struct BaseStats gBaseStats[] =
         127,
         77,
         113,
-        109,
+        109
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_STEEL,
@@ -32825,7 +32774,7 @@ const struct BaseStats gBaseStats[] =
         109,
         77,
         157,
-        127,
+        127
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_GHOST,
@@ -32856,7 +32805,7 @@ const struct BaseStats gBaseStats[] =
         97,
         129,
         167,
-        97,
+        97
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_DRAGON,
@@ -32889,7 +32838,7 @@ const struct BaseStats gBaseStats[] =
         115,
         65,
         130,
-        115,
+        115
         ),
         .type1 = TYPE_STEEL,
         .type2 = TYPE_FAIRY,
@@ -32920,7 +32869,7 @@ const struct BaseStats gBaseStats[] =
         55,
         85,
         85,
-        95,
+        95
         ),
         .type1 = TYPE_FLYING,
         .type2 = TYPE_WATER,
@@ -32951,7 +32900,7 @@ const struct BaseStats gBaseStats[] =
         55,
         85,
         85,
-        95,
+        95
         ),
         .type1 = TYPE_FLYING,
         .type2 = TYPE_WATER,
@@ -32982,7 +32931,7 @@ const struct BaseStats gBaseStats[] =
         70,
         75,
         114,
-        87,
+        87
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_POISON,
@@ -33011,7 +32960,7 @@ const struct BaseStats gBaseStats[] =
         45,
         50,
         74,
-        54,
+        54
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GHOST,
@@ -33040,7 +32989,7 @@ const struct BaseStats gBaseStats[] =
         65,
         70,
         134,
-        114,
+        114
         ),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GHOST,
@@ -33069,7 +33018,7 @@ const struct BaseStats gBaseStats[] =
         75,
         64,
         110,
-        121,
+        121
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -33098,7 +33047,7 @@ const struct BaseStats gBaseStats[] =
         75,
         64,
         110,
-        121,
+        121
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -33127,7 +33076,7 @@ const struct BaseStats gBaseStats[] =
         75,
         64,
         110,
-        121,
+        121
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -33156,7 +33105,7 @@ const struct BaseStats gBaseStats[] =
         75,
         64,
         110,
-        121,
+        121
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -33185,7 +33134,7 @@ const struct BaseStats gBaseStats[] =
         75,
         64,
         110,
-        121,
+        121
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -33214,7 +33163,7 @@ const struct BaseStats gBaseStats[] =
         75,
         64,
         110,
-        121,
+        121
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -33243,7 +33192,7 @@ const struct BaseStats gBaseStats[] =
         75,
         64,
         110,
-        121,
+        121
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -33272,7 +33221,7 @@ const struct BaseStats gBaseStats[] =
         75,
         64,
         110,
-        121,
+        121
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
@@ -33301,7 +33250,7 @@ const struct BaseStats gBaseStats[] =
         70,
         130,
         65,
-        50,
+        50
         ),
         .type1 = TYPE_ICE,
         .type2 = TYPE_ICE,
@@ -33332,7 +33281,7 @@ const struct BaseStats gBaseStats[] =
         65,
         85,
         95,
-        105,
+        105
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_NORMAL,
@@ -33362,7 +33311,7 @@ const struct BaseStats gBaseStats[] =
         58,
         97,
         70,
-        58,
+        58
         ),
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_DARK,
@@ -33393,7 +33342,7 @@ const struct BaseStats gBaseStats[] =
         115,
         148,
         80,
-        115,
+        115
         ),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_STEEL,
@@ -33424,7 +33373,7 @@ const struct BaseStats gBaseStats[] =
         145,
         128,
         80,
-        145,
+        145
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_STEEL,
@@ -33455,7 +33404,7 @@ const struct BaseStats gBaseStats[] =
         250,
         130,
         125,
-        250,
+        250
         ),
         .type1 = TYPE_POISON,
         .type2 = TYPE_DRAGON,
@@ -33483,7 +33432,7 @@ const struct BaseStats gBaseStats[] =
         100,
         97,
         63,
-        60,
+        60
         ),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_WATER,
@@ -33514,7 +33463,7 @@ const struct BaseStats gBaseStats[] =
         105,
         105,
         70,
-        95,
+        95
         ),
         .type1 = TYPE_DARK,
         .type2 = TYPE_GRASS,
@@ -33545,7 +33494,7 @@ const struct BaseStats gBaseStats[] =
         150,
         50,
         85,
-        130,
+        130
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_ICE,
@@ -33576,14 +33525,14 @@ const struct BaseStats gBaseStats[] =
         80,
         150,
         165,
-        100,
+        100
         ),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_GHOST,
         .catchRate = 3,
         .expYield = 340,
         //.evYield_SpAttack = 3,
-        .genderRatio = MON_GENDERLESS,snivy
+        .genderRatio = MON_GENDERLESS,
         .eggCycles = 120,
         .friendship = 100,
         .growthRate = GROWTH_SLOW,
@@ -33607,7 +33556,7 @@ const struct BaseStats gBaseStats[] =
         126,
         21,
         92,
-        106,
+        106
         ),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_ROCK,
