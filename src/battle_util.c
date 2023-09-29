@@ -2081,7 +2081,7 @@ enum   //battler end turn
     ENDTURN_ENVIRONMENT_TRAP,//one of these was the issue
     ENDTURN_WRAP,
     ENDTURN_CLAMP,
-    ENDTURN_SWARM,
+    ENDTURN_SWARM,  //THIS was the issue, DIDN'T HAVE A STATUS CHECK
     ENDTURN_SNAPTRAP,   //commented out this section and error went away  vsonic
     ENDTURN_OCTOLOCK, //nvm this isn't the issue, comparison repo has this same logic and it works perfect
     ENDTURN_UPROAR,
@@ -2108,7 +2108,7 @@ enum   //battler end turn
     ENDTURN_PLASMA_FISTS,
     ENDTURN_BIDE,
     ENDTURN_BATTLER_COUNT
-};
+}; //fixed wrap bug has some other issue need find, froze when try to faint
 
 
 
@@ -2495,7 +2495,9 @@ u8 DoBattlerEndTurnEffects(void)
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_SWARM:  // may need add fallthrough?     //make environemnt trap end turn & then separate ones for each physical trap
-                {
+                if (((gBattleMons[gActiveBattler].status4 & STATUS4_INFESTATION) || (gBattleMons[gActiveBattler].status1 & STATUS1_INFESTATION))
+                    && gBattleMons[gActiveBattler].hp != 0)
+                {   //THIS was the problem, why didn't i put a status check on this like I did the others?
                     if (--gDisableStructs[gActiveBattler].infestationTurns != 0
                         && IsBlackFogNotOnField())  // damaged by wrap
                     {
@@ -2508,6 +2510,7 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleTextBuff1[2] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
                         gBattleTextBuff1[3] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
                         gBattleTextBuff1[4] = EOS;*/
+
                         gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler];
                         gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
@@ -9440,16 +9443,16 @@ bool8 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId)//changed logic will only
 
 struct Pokemon *GetIllusionMonPtr(u32 battlerId)
 {
-    if (gBattleStruct->illusion[battlerId].broken)
+    if (gBattleStruct->illusion[battlerId].broken) //if illusion broken return null
         return NULL;
-    if (!gBattleStruct->illusion[battlerId].set)
+    if (!gBattleStruct->illusion[battlerId].set) //if illusion not set, set it
     {
         if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
             SetIllusionMon(&gPlayerParty[gBattlerPartyIndexes[battlerId]], battlerId);
         else
             SetIllusionMon(&gEnemyParty[gBattlerPartyIndexes[battlerId]], battlerId);
     }
-    if (!gBattleStruct->illusion[battlerId].on)
+    if (!gBattleStruct->illusion[battlerId].on) //if illusion not on return null?
         return NULL;
 
     return gBattleStruct->illusion[battlerId].mon;

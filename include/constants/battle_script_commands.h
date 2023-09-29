@@ -31,7 +31,7 @@
 #define sSTATCHANGER gBattleScripting + 0x1F			//u8 statChanger; 1 byte 0x1f
 #define sSTAT_ANIM_PLAYED gBattleScripting + 0x20		//bool8 statAnimPlayed; 1 byte 0x20
 #define sGIVEEXP_STATE gBattleScripting + 0x21			//u8 atk23_getexpState; 1 byte 0x21
-#define sBATTLE_STYLE gBattleScripting + 0x22			//u8 battleStyle; 1 byte 0x22
+#define sBATTLE_STYLE gBattleScripting + 0x22			//u8 battleStyle; 1 byte 0x22   //switch or set
 #define sLVLBOX_STATE gBattleScripting + 0x23			//u8 atk6C_drawlvlupboxState; 1 byte 0x23
 #define sLEARNMOVE_STATE gBattleScripting + 0x24		//u8 learnMoveState; 1 byte 0x24
 #define sPURSUIT_DOUBLE_DAMAGE gBattleScripting + 0x25	//u8 field_25_pursuitDoublesAttacker; 1 byte 0x25    //unsure of use  maybe i changed but does'nt seem used

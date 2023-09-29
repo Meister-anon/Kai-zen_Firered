@@ -1,6 +1,6 @@
 #include "constants/moves.h"
 #include "constants/battle.h"
-#include "constants/battle_move_effects.h"
+#include "constants/battle_move_effects.h"	@put here as move effects were previously in batttle.h
 #include "constants/battle_effects.h"
 #include "constants/battle_script_commands.h"
 #include "constants/battle_anim.h"
@@ -147,7 +147,7 @@ gBattleScriptsForBattleEffects::	@must match order of battle_effects.h file
 	.4byte BattleScript_EffectPresent
 	.4byte BattleScript_EffectReturn
 	.4byte BattleScript_EffectSafeguard
-	.4byte BattleScript_EffectThawHit
+	.4byte BattleScript_EffectHit
 	.4byte BattleScript_EffectMagnitude
 	.4byte BattleScript_EffectBatonPass
 	.4byte BattleScript_EffectHit
@@ -1183,7 +1183,7 @@ BattleScript_MoveEffectFlameBurst::
 	copybyte gBattlerTarget, sBATTLER
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
-	tryfaintmon BS_TARGET, FALSE, NULL
+	tryfaintmon BS_TARGET, FALSE, NULL	@idk if I need two fo these? oh its not using this at all?
 	restoretarget
 	goto BattleScript_MoveEnd
 
@@ -2569,9 +2569,10 @@ BattleScript_HitFromAtkAnimation::
 	attackanimation
 	waitanimation
 	effectivenesssound
-	@groundonairbattlerwithoutgravity BS_TARGET, BattleScript_GroundFlyingEnemywithoutGravity	@Need to change this and make a jump put here becuz should make target visible, shuold work for evrthing  this is an issue
-	hitanimation BS_TARGET
+	@groundonairbattlerwithoutgravity BS_TARGET	@Need to change this and make a jump put here becuz should make target visible, shuold work for evrthing  this is an issue
+	hitanimation BS_TARGET	@fixed above issue was various command needed return not break, doesnt break but also just in wrong place
 	waitstate
+	groundonairbattlerwithoutgravity BS_TARGET
 BattleScript_HitFromHpUpdate::
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
@@ -2581,17 +2582,15 @@ BattleScript_HitFromHpUpdate::
 	waitmessage 0x40
 	setmoveeffectwithchance		@seems to be fine
 	argumenttomoveeffect	@seems to be fine
-	tryfaintmon BS_TARGET, 0, NULL
+	tryfaintmon BS_TARGET, 0, NULL	@somehow this is an issue now, player mon isn't fainting animation
 BattleScript_MoveEnd::
 	moveendall
 	end
 
 BattleScript_GroundFlyingEnemywithoutGravity::
-	hitanimation BS_TARGET
-	waitstate
 	printstring STRINGID_CRASHEDTOTHEGROUND
 	waitmessage 0x20	
-	goto BattleScript_HitFromHpUpdate
+	return
 
 BattleScript_EffectNaturalGift:
 	attackcanceler
@@ -3203,6 +3202,7 @@ BattleScript_DoMultiHit::
 	effectivenesssound
 	hitanimation BS_TARGET
 	waitstate
+	groundonairbattlerwithoutgravity BS_TARGET
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
 	critmessage
@@ -3240,7 +3240,7 @@ BattleScript_MultiHitPrintStrings::
 	printstring STRINGID_HITXTIMES
 	waitmessage 0x40
 BattleScript_MultiHitEnd::
-	setmoveeffectwithchance
+	@setmoveeffectwithchance
 	tryfaintmon BS_TARGET, 0, NULL
 	moveendcase MOVE_END_SYNCHRONIZE_TARGET
 	moveendfrom MOVE_END_STATUS_IMMUNITY_ABILITIES
@@ -6205,7 +6205,7 @@ BattleScript_FaintAttacker::
 	return
 
 BattleScript_FaintTarget::
-	tryillusionoff BS_TARGET
+	tryillusionoff BS_TARGET		@same as issue as before this script naviagting wrong broke rest of script
 	playfaintcry BS_TARGET
 	pause 0x40
 	dofaintanimation BS_TARGET
@@ -6262,7 +6262,7 @@ BattleScript_FaintedMonTryChooseAnother::
 	@ check double battle in case this doesnt let you pick your pokemon and instead
 	@ sends out your next ordered mon
 	jumpifword CMP_COMMON_BITS, gHitMarker, HITMARKER_PLAYER_FAINTED, BattleScript_FaintedMonChooseAnother
-	jumpifbyte CMP_EQUAL, sBATTLE_STYLE, 1, BattleScript_FaintedMonChooseAnother
+	jumpifbyte CMP_EQUAL, sBATTLE_STYLE, 1, BattleScript_FaintedMonChooseAnother @believe checking if set mode not switch
 	jumpifcantswitch BS_PLAYER1, BattleScript_FaintedMonChooseAnother
 	printstring STRINGID_ENEMYABOUTTOSWITCHPKMN
 	setbyte gBattleCommunication, 0

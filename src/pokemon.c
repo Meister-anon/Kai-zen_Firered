@@ -3675,9 +3675,11 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                                     //using move power just affects move power, gbattlemovedamage affects power stab crit etc. all multipliers inclusively
 
     //in a pinch abilities
-    if (attacker->hp <= (attacker->maxHP / 2)) //change to less or equal to be exact to yellow, more for super fang and effects that exactly do half hp
+    //since I lowered stab and super, think I may buff these
+    if (attacker->hp <= (attacker->maxHP / 2)) //changed to less or equal to be exact to yellow, more for super fang and effects that exactly do half hp
     {
         if (type == TYPE_GRASS && attacker->ability == ABILITY_OVERGROW)// && attacker->hp < (attacker->maxHP / 3))
+            //gBattleMovePower *= 2;  //this is actually too strong, stronger than base
             gBattleMovePower = (150 * gBattleMovePower) / 100;
         if (type == TYPE_FIRE && attacker->ability == ABILITY_BLAZE)// && attacker->hp < (attacker->maxHP / 3))
             gBattleMovePower = (150 * gBattleMovePower) / 100;
@@ -3697,10 +3699,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].hp <= (gBattleMons[BATTLE_PARTNER(gBattlerAttacker)].maxHP / 2))
     {
         if (type == TYPE_ELECTRIC && attacker->ability == ABILITY_PLUS && GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_MINUS)
-            gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;
+            gBattleMovePower = (150 * gBattleMovePower) / 100;
 
         if (type == TYPE_ELECTRIC && attacker->ability == ABILITY_MINUS && GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_PLUS)
-            gBattleMoveDamage = (150 * gBattleMoveDamage) / 100;    //used gbattlemovedamage, to stack with on field plus/minus effects
+            gBattleMovePower = (150 * gBattleMovePower) / 100;   //used gbattlemovedamage, to stack with on field plus/minus effects , it already stacks without that
     }
 
     //MOVE EFFECTS

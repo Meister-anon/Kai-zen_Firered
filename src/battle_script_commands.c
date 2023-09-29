@@ -1,6 +1,5 @@
 #include "global.h"
 #include "gflib.h"
-#include "battle.h"
 #include "item.h"
 #include "util.h"
 #include "random.h"
@@ -2020,7 +2019,9 @@ static void atk01_accuracycheck(void)
             //can do that without doubling the multiplier.
             //nvm not using typecalc, forgot I ported emerald's CalcTypeEffectivenessMultiplier function, 
             //that's what's used in emerald think can just copy it straight over
-            //CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
+    //        CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
+        //may put this back need test more on a working system
+        
         //this runs type check against base chart, compares result to abilities then sets result flags
         //I came to conclusion this isn't actually necessary since type calc already does that?
         //dif is checkwonder gaurd set move_result_no effect while otehrs set missed
@@ -2763,6 +2764,11 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
     ++gBattlescriptCurrInstr;
 }
 
+//think understand now, funciton is in accuract check because it sets move result as missed if type doesn't  hit wonderguard or levitate/the opponent
+//its a bit of weird logic, reads type chart before typecalc uses flags rather than moveresult
+//for things besides what would be no effect, use of flags is so type readings etc. don't go beyond this function
+//I believe they are used in equivalence of moveresult flags
+//not 100% but I believe this can be safely removed/ignored and left to typecalc to handle
 static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i need is in grouded function also included wherever this is called.  think can remove
 {
     u8 flags = 0;
@@ -4963,7 +4969,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 ++gBattleMons[gBattlerTarget].statStages[STAT_ATK];
                 BattleScriptPushCursorAndCallback(BattleScript_RageIsBuilding); //ok would need to see if this works, since in this script setmoveeffect is before atk, this should work but idk
                 //gBattlescriptCurrInstr = BattleScript_RageIsBuilding;
-                ++gBattlescriptCurrInstr;
+                ++gBattlescriptCurrInstr;//vsonic unsure if use pushcallback or just push with this? as well as new sturdy
             }
             else
             {
@@ -5277,7 +5283,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
                     if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
-                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
+                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups - need work on better define setup this vsonic
                     {
                         gDisableStructs[gEffectBattler].infestationTurns = 7;
                         gBattleMons[gEffectBattler].status1 |= STATUS1_INFESTATION;
@@ -5760,28 +5766,29 @@ static void atk18_clearstatusfromeffect(void)
 #define NEW_STURDY_EFFECT_PT3
 static void atk19_tryfaintmon(void)
 {
+    CMD_ARGS(u8 battler, bool8 fromSpikes, const u8 *ptr);
     const u8 *BS_ptr;
 
-    if (gBattlescriptCurrInstr[2] != 0) //looks like this is spikes
+    if (cmd->fromSpikes != 0)
     {
-        gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+        gActiveBattler = GetBattlerForBattleScript(cmd->battler);
         if (gHitMarker & HITMARKER_FAINTED(gActiveBattler))  //believe this is for self-faint
         {
-            BS_ptr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
+            BS_ptr = cmd->ptr;
             BattleScriptPop();
             gBattlescriptCurrInstr = BS_ptr;
-            gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~(SIDE_STATUS_SPIKES_DAMAGED);
+            gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~(SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_TOXIC_SPIKES_DAMAGED | SIDE_STATUS_STEALTH_ROCK_DAMAGED | SIDE_STATUS_STICKY_WEB_DAMAGED);
         }
         else //think jump to another instruction
         {
-            gBattlescriptCurrInstr += 7;
+            gBattlescriptCurrInstr = cmd->nextInstr;
         }
     }
     else  //not spikes?  basing off emerald 
     {
         u8 battlerId;
 
-        if (gBattlescriptCurrInstr[1] == BS_ATTACKER)
+        if (cmd->battler == BS_ATTACKER)
         {
             gActiveBattler = gBattlerAttacker;
             battlerId = gBattlerTarget;
@@ -5797,7 +5804,7 @@ static void atk19_tryfaintmon(void)
          && gBattleMons[gActiveBattler].hp == 0)    //if mon is fainted i.e 0 hp
         {
             gHitMarker |= HITMARKER_FAINTED(gActiveBattler);
-            BattleScriptPush(gBattlescriptCurrInstr + 7);
+            BattleScriptPush(cmd->nextInstr);
             gBattlescriptCurrInstr = BS_ptr;
             if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)// player mon faint
             {
@@ -5805,32 +5812,34 @@ static void atk19_tryfaintmon(void)
                 if (gBattleResults.playerFaintCounter < 0xFF)
                     ++gBattleResults.playerFaintCounter;
                 AdjustFriendshipOnBattleFaint(gActiveBattler);
+                gSideTimers[B_SIDE_PLAYER].retaliateTimer = 2;
             }
             else //enemy side faint
             {
                 if (gBattleResults.opponentFaintCounter < 0xFF)
                     ++gBattleResults.opponentFaintCounter;
                 gBattleResults.lastOpponentSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
-                *(u8 *)(&gBattleStruct->field_182) = gBattlerAttacker;
+                *(u8 *)(&gBattleStruct->field_182) = gBattlerAttacker;  //tracks defeated species
+                gSideTimers[B_SIDE_OPPONENT].retaliateTimer = 2;
             }
             //ok think I should put anticipate/forewarn logic here actually
                 //that way I can read the battler id of the target fainted, if it matches reset forewarn anticipate
             //--doing this way don't need macro for resetforewarnanticipationbits, - could be what i need to make intimidate/etc. work how I want
 
                 //just need to store battler id of main functions, and ensure gbattlretarger, matches stored battlerid
-            if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_FOREWARN) && gSpecialStatuses[gBattlerAttacker].switchInAbilityDone
-                && !gSpecialStatuses[gBattlerAttacker].forewarnDone
-                && gBattlerTarget == gForewarnedBattler)    //if fainted mon is same as forewarn target
+            if ((GetBattlerAbility(battlerId) == ABILITY_FOREWARN) && gSpecialStatuses[battlerId].switchInAbilityDone
+                && !gSpecialStatuses[battlerId].forewarnDone
+                && gActiveBattler == gForewarnedBattler)    //if fainted mon is same as forewarn target
             {
-                gSpecialStatuses[gBattlerAttacker].forewarnedMove = 0;    //clears stored move, 
-                gSpecialStatuses[gBattlerAttacker].switchInAbilityDone = FALSE; //and allows switchin to reactivate
+                gSpecialStatuses[battlerId].forewarnedMove = 0;    //clears stored move, 
+                gSpecialStatuses[battlerId].switchInAbilityDone = FALSE; //and allows switchin to reactivate
             }
-            if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_ANTICIPATION) && gSpecialStatuses[gBattlerAttacker].switchInAbilityDone
-                && !gSpecialStatuses[gBattlerAttacker].anticipationDone
-                && gBattlerTarget == gAnticipatedBattler)
+            else if ((GetBattlerAbility(battlerId) == ABILITY_ANTICIPATION) && gSpecialStatuses[battlerId].switchInAbilityDone
+                && !gSpecialStatuses[battlerId].anticipationDone
+                && gActiveBattler == gAnticipatedBattler)
             {
-                gSpecialStatuses[gBattlerAttacker].anticipatedMove = 0;   //clears stored move, and allows switchin to reactivate
-                gSpecialStatuses[gBattlerAttacker].switchInAbilityDone = FALSE;
+                gSpecialStatuses[battlerId].anticipatedMove = 0;   //clears stored move, and allows switchin to reactivate
+                gSpecialStatuses[battlerId].switchInAbilityDone = FALSE;  //need better setup make sure takes destiny bond into acout vsonic
             }
             if ((gHitMarker & HITMARKER_DESTINYBOND) && gBattleMons[gBattlerAttacker].hp != 0)
             {
@@ -5871,7 +5880,7 @@ static void atk19_tryfaintmon(void)
         }
         else
         {
-            gBattlescriptCurrInstr += 7;
+            gBattlescriptCurrInstr = cmd->nextInstr;
         }
     }
 }
@@ -6450,6 +6459,7 @@ static void atk23_getexp(void)
 //It then sets gBattleOutcome accordingly, if necessary.
 static void atk24_confirmlosingteam(void)
 {
+    CMD_ARGS(const u8 *jumpInstr);
     u16 HP_count = 0;
     s32 i;
 
@@ -6497,21 +6507,21 @@ static void atk24_confirmlosingteam(void)
             if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
             {
                 if (foundOpponent + foundPlayer > 1)
-                    gBattlescriptCurrInstr = T2_READ_PTR(gBattlescriptCurrInstr + 1);
+                     gBattlescriptCurrInstr = cmd->jumpInstr;
                 else
-                    gBattlescriptCurrInstr += 5;
+                    gBattlescriptCurrInstr = cmd->nextInstr;
             }
             else
             {
                 if (foundOpponent != 0 && foundPlayer != 0)
-                    gBattlescriptCurrInstr = T2_READ_PTR(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = cmd->jumpInstr;
                 else
-                    gBattlescriptCurrInstr += 5;
+                    gBattlescriptCurrInstr = cmd->nextInstr;
             }
         }
         else
         {
-            gBattlescriptCurrInstr += 5;
+            gBattlescriptCurrInstr = cmd->nextInstr;
         }
     }
 }
@@ -10555,6 +10565,9 @@ static void atk76_various(void) //will need to add all these emerald various com
     //u16 lastMove = gLastResultingMoves[gBattlerAttacker]; //why did I need to use this, when this "gLastMoves[gbattlertargt]" existed?
     
 
+    if (gBattleControllerExecFlags)
+        return;
+
     gActiveBattler = GetBattlerForBattleScript(cmd->battler);//switch order doesn't matter it'll go to whatever id is, it has a value because it has to, not becuase of order
 
     switch (cmd->id) //put every case within brackets, and add VARIOUS_ARGS  to everythihng, battler arg alread covered by cmd
@@ -11642,18 +11655,24 @@ static void atk76_various(void) //will need to add all these emerald various com
         gBattleStruct->friskedAbility = FALSE;
         break;
     case VARIOUS_TRY_ILLUSION_OFF:
+    {
+        VARIOUS_ARGS();
         if (GetIllusionMonPtr(gActiveBattler) != NULL)
         {
-            gBattlescriptCurrInstr += 3;
+            gBattlescriptCurrInstr = cmd->nextInstr;
             BattleScriptPushCursor();
             gBattlescriptCurrInstr = BattleScript_IllusionOff;
             return;
         }
         break;
+    }
     case VARIOUS_SET_SPRITEIGNORE0HP:
-        gBattleStruct->spriteIgnore0Hp = gBattlescriptCurrInstr[3];
-        gBattlescriptCurrInstr += 4;
+    {
+        VARIOUS_ARGS(bool8 ignore0HP);
+        gBattleStruct->spriteIgnore0Hp = cmd->ignore0HP;
+        gBattlescriptCurrInstr = cmd->nextInstr;
         return;
+    }
     case VARIOUS_UPDATE_NICK:
         if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
             mon = &gPlayerParty[gBattlerPartyIndexes[gActiveBattler]];
@@ -11692,23 +11711,19 @@ static void atk76_various(void) //will need to add all these emerald various com
         gStatuses3[gActiveBattler] &= ~(STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS | STATUS3_ON_AIR);
         break;
     case VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG:    //uses gactivebattler sets actually target in bs script  groundonairbattlerwithoutgravity
+            // VARIOUS_ARGS(const u8 *ptr); //doesn't need put battler for these already handeled by cmdargs aat top
+        if (gBattleMoves[gCurrentMove].flags == FLAG_DMG_2X_IN_AIR && gStatuses3[gActiveBattler] & STATUS3_ON_AIR)   //using fly
         {
-                VARIOUS_ARGS(const u8 *ptr); //doesn't need put battler for these already handeled by cmdargs aat top
-            if (gBattleMoves[gCurrentMove].flags == FLAG_DMG_2X_IN_AIR && gStatuses3[gActiveBattler] & STATUS3_ON_AIR)   //using fly
-            {
-                CancelMultiTurnMoves(gActiveBattler); //just for fly /skydrop
-                gSprites[gBattlerSpriteIds[gActiveBattler]].invisible = FALSE;
-                //gStatuses3[gActiveBattler] &= ~(STATUS3_ON_AIR); // doesn't need this part handled in cancelmultiturn
-                gStatuses3[gActiveBattler] |= STATUS3_SMACKED_DOWN;
-                gBattleMoveDamage *= 2; //can't believe I forgot this...
-                gBattlescriptCurrInstr = cmd->ptr;
-                //gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3); //do effect then jump
-            }//NEW bs for 
-            else
-                gBattlescriptCurrInstr = cmd->nextInstr;   //else skip pointer and go to next script
-        
-            break;
-        }
+            CancelMultiTurnMoves(gActiveBattler); //just for fly /skydrop
+            gSprites[gBattlerSpriteIds[gActiveBattler]].invisible = FALSE;
+            //gStatuses3[gActiveBattler] &= ~(STATUS3_ON_AIR); // doesn't need this part handled in cancelmultiturn
+            gStatuses3[gActiveBattler] |= STATUS3_SMACKED_DOWN;
+             BattleScriptPush(gBattlescriptCurrInstr + 3);
+            gBattlescriptCurrInstr = BattleScript_GroundFlyingEnemywithoutGravity;
+            //BattleScriptPushCursorAndCallback(BattleScript_GroundFlyingEnemywithoutGravity);
+            //gBattleMoveDamage *= 2; //can't believe I forgot this...
+        }//NEW bs for   //didnt need move damage multiplier that's already accounted for by damage calc
+        break;
     /*case VARIOUS_HANDLE_TRAINER_SLIDE_MSG:
         if (gBattlescriptCurrInstr[3] == 0)
         {
@@ -13767,12 +13782,12 @@ static void atk96_weatherdamage(void)
         ++gBattlescriptCurrInstr;
         return;
     }
-    if (IsBattlerAlive(gBattlerAttacker) && WEATHER_HAS_EFFECT && ability != ABILITY_MAGIC_GUARD
+    if (IsBattlerAlive(gBattlerAttacker) && ability != ABILITY_MAGIC_GUARD
         && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERGROUND)
         && !(gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER)  //remove rendancy put here
         && GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES)
     {
-        if (gBattleWeather & WEATHER_SANDSTORM_ANY)
+        if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SANDSTORM_ANY))
         {
             if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ROCK)
              && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL)
@@ -13792,7 +13807,7 @@ static void atk96_weatherdamage(void)
                 gBattleMoveDamage = 0;
             }
         }
-        if (gBattleWeather & WEATHER_HAIL)
+        if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_HAIL))
         {
             if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ICE) //add ice weather abilities
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_OVERCOAT
@@ -13819,7 +13834,6 @@ static void atk96_weatherdamage(void)
         gBattleMoveDamage = 0;
     ++gBattlescriptCurrInstr;
 }
-
 
 static void atk97_tryinfatuating(void)  
 {
@@ -13863,7 +13877,7 @@ static void atk97_tryinfatuating(void)
             gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);//can make attract hit battle script idk if would be unbalanced ?
             gBattlescriptCurrInstr += 5;        //would just need to replace the move end and but it failed jumps, with jumps to the hit battlescript
         }
-    }
+    }//vsonic come back to this
 }
 
 static void atk98_updatestatusicon(void)

@@ -4140,7 +4140,7 @@ void BattleTurnPassed(void)
     {
         if (DoFieldEndTurnEffects()) //probably posssible wrap trap logic?  actually no, that is in battlereffecfs... missed turn counter reset in endturn wish seeing if that was issue
             return; //wish wasn't it, but missed turnisde increment in aurora veil, due to bad replace could be it?
-        if (DoBattlerEndTurnEffects()) //identified fieldendturn is the probolem
+        if (DoBattlerEndTurnEffects()) //identified fieldendturn is the probolem / fixed that , that was part of freeze, but main issue for wrap dmg is battlerendturn
             return;
     }
     if (HandleFaintedMonActions())

@@ -109,10 +109,10 @@
 	.byte \battler
 	.endm
 
-	.macro tryfaintmon battler:req, fromMove:req, ptr:req
+	.macro tryfaintmon battler:req, fromHazard:req, ptr:req
 	.byte 0x19
 	.byte \battler
-	.byte \fromMove
+	.byte \fromHazard
 	.4byte \ptr
 	.endm
 
@@ -1709,9 +1709,11 @@
 	various \battler, VARIOUS_GRAVITY_ON_AIRBORNE_MONS
 	.endm
 	
-	.macro groundonairbattlerwithoutgravity battler:req, ptr:req	@made jump effect
+	@changed back from jump effect realized didnt make sense
+	@it doesnt do dmg boost it just changes status to knocked down if flying
+	@so not an issue for multi hit to use
+	.macro groundonairbattlerwithoutgravity battler:req	
 	various \battler, VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG
-	.4byte \ptr
 	.endm
 
 	.macro checkgrassyterrainheal battler:req, ptr:req
@@ -1752,9 +1754,9 @@
 	various \battler, VARIOUS_TRY_ILLUSION_OFF
 	.endm
 
-	.macro spriteignore0hp val:req
+	.macro spriteignore0hp ignore0HP:req
 	various BS_ATTACKER, VARIOUS_SET_SPRITEIGNORE0HP
-	.byte \val
+	.byte \ignore0HP
 	.endm
 
 	.macro getstatvalue battler:req, statId:req
@@ -2045,7 +2047,7 @@
 	.endm
 
 	.macro tryfaintmon_spikes battler:req, ptr:req	@for hazards port
-	tryfaintmon \battler 0x1 \ptr
+	tryfaintmon \battler, TRUE, \ptr
 	.endm
 
 	.macro chosenstatus1animation battler:req, status:req

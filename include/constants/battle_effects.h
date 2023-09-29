@@ -57,7 +57,7 @@
 #define EFFECT_SPECIAL_ATTACK_UP_2 53
 #define EFFECT_SPECIAL_DEFENSE_UP_2 54
 #define EFFECT_ACCURACY_UP_2 55 // unused
-#define EFFECT_EVASION_UP_2 56 // unused
+#define EFFECT_EVASION_UP_2 56 // unused - adding for trench run
 #define EFFECT_TRANSFORM 57
 #define EFFECT_ATTACK_DOWN_2 58
 #define EFFECT_DEFENSE_DOWN_2 59
@@ -111,7 +111,7 @@
 #define EFFECT_NIGHTMARE 107
 #define EFFECT_MINIMIZE 108
 #define EFFECT_CURSE 109
-#define EFFECT_HEALING_WISH 110 //replaced unused
+#define EFFECT_HEALING_WISH 110 //replaced unused value
 #define EFFECT_PROTECT 111
 #define EFFECT_SPIKES 112
 #define EFFECT_FORESIGHT 113
@@ -126,7 +126,7 @@
 #define EFFECT_PRESENT 122
 #define EFFECT_FRUSTRATION 123
 #define EFFECT_SAFEGUARD 124
-#define EFFECT_THAW_HIT 125
+#define EFFECT_UNUSED_7D 125     //was thaw hit, unused
 #define EFFECT_MAGNITUDE 126
 #define EFFECT_BATON_PASS 127
 #define EFFECT_PURSUIT 128

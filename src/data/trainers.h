@@ -1,6 +1,5 @@
 #include "battle.h"
 #include "constants/battle.h"
-#include "constants/battle_move_effects.h"
 const struct Trainer gTrainers[] = {
     [TRAINER_NONE] = {
         .partyFlags = 0,

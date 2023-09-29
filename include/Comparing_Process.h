@@ -24,14 +24,14 @@
 * pokedex ui.
 * removal of lg pokedex entries.
 *.apparently didn't add new ability desc in pokemon summary screen update
-* before computer crashed so implementation incomplete...
+* before computer crashed so implementation incomplete... *redone
 *.added item values back -          done
 *.port battlescripts defines strings & messages -  done
-*.battle script commands & macros
-*.battle anim commands & macros
-*.after that can attempt port battlescript 1s 2s
+*.battle script commands & macros       -ported and updated
+*.battle anim commands & macros         -done
+*.after that can attempt port battlescript 1s 2s    -done
 *
-* move trainer tower data to C file so can remove data_8479668.s
+* move trainer tower data to C file so can remove data_8479668.s    -done
 *
 * emerald stye naming screen. for intro, add fade in for rival rename nvm
 * .change namign screens for player to load like rival,  start in center like normal
@@ -75,6 +75,14 @@ the moves are in the code as learned as if I learn enough to go over
 
 ok and looks like learning a move (or just the weird issues with cocoon)
 cause straight up game break
+*
+* found wrap anim end turn glitch,
+* somehow roost is causing freeze again,
+*furycutter isn't working again/ freezing game * but after animtion  and attack string
+* some other issue with rattata as well, possibly beatup also freezing
+* type reading is broken seems to be doing some form of shift when reading types
+*
+*
 * 
 * save systems and graphics for later, do smaller updates first
 * file constant renames will prob have to come last as it would affect everything

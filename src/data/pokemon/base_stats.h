@@ -10992,7 +10992,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SNOW_CLOAK, ABILITY_SNOW_CLOAK},
-            .abilityHidden = {ABILITY_ICE_BODY, ABILITY_CUTE_CHARM},    //just a lil troll :)
+            .abilityHidden = {ABILITY_CUTE_CHARM, ABILITY_ICE_BODY},    //just a lil troll :)
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },

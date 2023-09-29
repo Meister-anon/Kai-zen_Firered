@@ -380,7 +380,7 @@ But it's only for enemy mons, to do the same with the player you would just swap
 * rather than setting another thing, think just use roost timer/logic for grounding, hmm
 * nah make just make new status for this, and put that in isbattlergrouded function
 *anyway move just makes grounded, which would trigger typecalc change, and 
-*just have move raise evasiveness if not already have status/used.
+*just have move raise evasiveness if not already have status/used.  give effct evasion up 2
 *
 * Look at how emerald handeled smack down and roost logic for ground type dmg -
 * 
@@ -701,7 +701,7 @@ goto TRAINER_REMATCH //stuff
         .partySize = NELEMS(sTrainerMons_TeamAqua1),
         .party = {.NoItemDefaultMoves = sTrainerMons_TeamAqua1}
 * 
-* while I"m at it replac battleType member with battleType u8 rather than bool8,   with values 0-3  
+* while I"m at it replace battleType member with battleType u8 rather than bool8,   with values 0-3  
 * 0 = singles, 1 = doubles, 2 = rotation, 3 = triples hmmm... potential 4th option  
 *2 v 1 battles, mostly for evil teams (would be with mycustom 2v1 version though, where you get extra action at before turn end)
 * if need be bring back dmg cut from double battles but just for 2 v 1 battles, but  they had 2 v 1 in sun moon so idk, might be fine -(nvm sun moon ai is dumb af)
@@ -791,6 +791,12 @@ goto TRAINER_REMATCH //stuff
 * also did steadfast buff made activate off of super effective and flinch simlar to how I did anger point accessibility buff
 * had also plans to go back and redo some back sprites that were bad I'm lookin at chespin right now
 * think that's all the notes I lost but of course can't recall...
+*
+* breeding/overworld buff give everstone and destiny knot overworld effects, be counterparts
+* since putting all of everstones effects onto eviolite, i.e stopping evolution it needed its own effect
+* now holding everstone on lead mon will have wild mon spawn with the same gender as it where possible. idea ever is remaining the same/being the same
+*
+* destiny knot, when held by lead mon in party wild mon will have the opposite gender where possible. idea finding your destined one.
 */
 
 goto DEP OSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads space in the box

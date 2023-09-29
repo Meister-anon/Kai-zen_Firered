@@ -397,6 +397,7 @@ extern const u8 BattleScript_GravityLoopDrop[];
 extern const u8 BattleScript_GravityLoop[];
 extern const u8 BattleScript_EffectGravity[];
 extern const u8 BattleScript_GravityEnds[];
+extern const u8 BattleScript_GroundFlyingEnemywithoutGravity[]; //2x dmg in air flag
 extern const u8 BattleScript_EffectMircleEye[];
 extern const u8 BattleScript_EffectTailwind[];
 extern const u8 BattleScript_TailwindEnds[];
