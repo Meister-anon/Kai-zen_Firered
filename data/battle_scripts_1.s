@@ -1490,7 +1490,7 @@ BattleScript_AutotomizePrintString::
 	printfromtable gStatUpStringIds
 	waitmessage 0x40
 BattleScript_AutotomizeWeightLoss::
-	jumpifmovehadnoeffect BattleScript_MoveEnd
+	jumpifmovehadnoeffect BattleScript_MoveEnd		@doesnt have type calc wondering what this means? how work?
 	tryautotomize BS_ATTACKER, BattleScript_MoveEnd
 	printstring STRINGID_BECAMENIMBLE
 	waitmessage 0x40
@@ -2651,7 +2651,6 @@ BattleScript_EffectSleep::
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
 	typecalc
-	jumpifmovehadnoeffect BattleScript_NotAffected
 BattleScript_EndingSleepChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
@@ -2983,6 +2982,7 @@ BattleScript_EffectSpeedDown::
 	goto BattleScript_EffectStatDown
 
 BattleScript_EffectAccuracyDown::
+	call_if EFFECT_ACCURACY_DOWN	@would prefer put after animation but way stat script works has to be here, stops sandattack from affecting earth types
 	setstatchanger STAT_ACC, 1, TRUE
 	goto BattleScript_EffectStatDown
 
@@ -3329,7 +3329,6 @@ BattleScript_EffectToxic::
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
 	jumpifability BS_ATTACKER, ABILITY_CORROSION, BattleScript_EndingToxicChecks
 	typecalc
-	jumpifmovehadnoeffect BattleScript_NotAffected
 BattleScript_EndingToxicChecks:
 	@jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_AlreadyPoisoned
 	jumpifstatus BS_TARGET, STATUS1_TOXIC_POISON, BattleScript_AlreadyPoisoned
@@ -3752,7 +3751,6 @@ BattleScript_EffectPoison::
 	jumpifstatus BS_TARGET, STATUS1_TOXIC_POISON, BattleScript_AlreadyPoisoned
 	jumpifability BS_ATTACKER, ABILITY_CORROSION, BattleScript_EndingPoisonChecks
 	typecalc
-	jumpifmovehadnoeffect BattleScript_NotAffected
 BattleScript_EndingPoisonChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
@@ -3781,7 +3779,6 @@ BattleScript_EffectParalyze::
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
 	typecalc 
-	jumpifmovehadnoeffect BattleScript_NotAffected
 BattleScript_EndingParalysisChecks:
 	jumpifstatus BS_TARGET, STATUS1_PARALYSIS, BattleScript_AlreadyParalyzed
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
@@ -5431,7 +5428,6 @@ BattleScript_EffectWillOWisp::
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
 	typecalc
-	jumpifmovehadnoeffect BattleScript_NotAffected
 BattleScript_EndingBurnChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
@@ -5453,7 +5449,6 @@ BattleScript_EffectFlashFreeze::	@nearly done  just need to make animation for..
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
 	typecalc
-	jumpifmovehadnoeffect BattleScript_NotAffected
 BattleScript_EndingFreezeChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE

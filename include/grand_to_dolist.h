@@ -835,7 +835,26 @@ goto TRAINER_REMATCH //stuff
  //flag check not set in item use
 
  //co dependent status - cure cancel out brn cant be with freeze  sleep cant be w spirit lock  psn cant be w toxic
+ //still working on new version of conversion and inversion ability for ditto
+
+ //make sunny day and moon light field moves, to swap day night schedule
+ //already done, but for effects taht set primary status made it so status moves have to pass type check (not be no effect) to work
+ //for example nuzleaf being grass dark would not be able to be put to sleep by hypnosis as its dark type gives it psychic immunity
+ //with powder move change that leaves it imune to nearly all methods of sleep outside of yawn and dark void 
+ done with jumpifmovehadnoeffect BattleScript_NotAffected, only could swap to do in C /setmoveeffect function instead for more tailoring
+ //but could just work with command/macro it should still be fine right now the command is before other checks,
+ //I waffle on it but I think that's fine, it has no effect there is no point to putting it after other checks, and the animation just for that
+ //only change planned left for that is making normal moves be the exception just make them work for everyone, and bypass type check.
+
+ //jumpifmovehadnoeffect doesnt allow for adding specific logic, so plan make bs native function to replace
+ that way can add what I need   if gMoveResultFlags & MOVE_RESULT_NO_EFFECT and gcurrent move type  != type normal  jump to fail condition done replaced setmultihitcounter2
+
+ ok nvm removing those will instead do in C, as otherwise it'd bypass ability checks  in setmoveeffect, so it'll be the last check
+ //before status1 checks  ok done, and made sure to include that its only for status moves, need test but should hopefully work
 */
+
+goto BASESTATS_TO_BATTLEMONS_CONVERSION //battle_script_commands.c place where basestats types are transferred to battlemons struct for battle, done on switchin
+goto POKEMON_TO_BATTLEMON  //pokemon.c other stuff relevant blah blah
 
 goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads space in the box
 goto OTHER_BOX_LOGIC    //deals with moving mon and moving item logic

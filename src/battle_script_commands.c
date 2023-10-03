@@ -145,7 +145,7 @@ static void atk22_jumpbasedontype(void);
 static void atk23_getexp(void);
 static void atk24_confirmlosingteam(void);
 static void atk25_movevaluescleanup(void);
-static void atk26_setmultihit(void);    //mostly unused just used for pursuit for some reason
+static void atk26_setmultihit(void);    //mostly unused just used for pursuit for some reason so kept
 static void atk27_decrementmultihit(void);
 static void atk28_goto(void);
 static void atk29_jumpifbyte(void);
@@ -248,7 +248,7 @@ static void atk89_statbuffchange(void);
 static void atk8A_normalisebuffs(void);
 static void atk8B_setbide(void);
 static void atk8C_confuseifrepeatingattackends(void);
-static void atk8D_setmultihitcounter(void); //will be unused upgrading to emerald
+static void atk8D_setmultihitcounter(void); //will be unused upgrading to emerald, done no longer used can replace
 static void atk8E_initmultihitstring(void);
 static void atk8F_forcerandomswitch(void);
 static void atk90_tryconversiontypechange(void);
@@ -2495,7 +2495,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
     s32 i = 0;
     u8 moveType, argument;
     u8 type1 = gBaseStats[gBattlerTarget].type1, type2 = gBaseStats[gBattlerTarget].type2, type3 = gBattleMons[gBattlerTarget].type3;
-    u16 effect = gBattleMoves[gCurrentMove].effect;
+    u16 effect = gBattleMoves[gCurrentMove].effect; //just realized should prob swap these for battlemons types since all types can shift, find where base stats becomes battlemons
 
     if (gCurrentMove == (MOVE_STRUGGLE || MOVE_BIDE)) //should let hit ghost types could just remove typecalc bs from script instead...
     {
@@ -3956,6 +3956,9 @@ static bool8 IsFinalStrikeEffect(u16 move)
 // when ready will redefine what prevents applying status here, don't forget setyawn  after that grfx for status animation next
 //function update complete, remaining is multi status update, will do later
 //think  this is the issue, somthing causing wrap effect, so assumings move effects are being triggered oddly
+//sets status based on moves, in bs called from setmoveeffectwithchance
+//but some things can bypass this function to set status directly
+//usually ability logic or item logic
 void SetMoveEffect(bool32 primary, u32 certain) 
 {
 
@@ -4046,7 +4049,13 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gActiveBattler < gBattlersCount && !(gBattleMons[gActiveBattler].status2 & STATUS2_UPROAR);
                     ++gActiveBattler);
             else
-                gActiveBattler = gBattlersCount;
+                gActiveBattler = gBattlersCount; //why is vital spirit etc. not here? check later  has jumpifcantmakeasleep that checks these abilities so think this is fine
+
+            if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
+            && gBattleMoves[gCurrentMove].type != TYPE_NORMAL
+            && gBattleMoves[gCurrentMove].type != TYPE_GHOST)    
+            gBattlescriptCurrInstr = BattleScript_NotAffected; //do jump
+            
             if (gBattleMons[gEffectBattler].status1) //!important part that prevents status inflict while statused 
                 break;
             if (gActiveBattler != gBattlersCount)
@@ -4076,7 +4085,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 }
                 return;
             }
-            if (!CanPoisonType(gBattleScripting.battler, gEffectBattler)
+            if (!CanPoisonType(gBattleScripting.battler, gEffectBattler) //corrossion logic here
              && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             {
@@ -4085,6 +4094,11 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattleCommunication[MULTISTRING_CHOOSER] = 2;
                 return;
             }
+            //put no effect check here, below ability checks above status1 check
+            if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
+            && gBattleMoves[gCurrentMove].type != TYPE_NORMAL
+            && gBattleMoves[gCurrentMove].type != TYPE_GHOST)    
+            gBattlescriptCurrInstr = BattleScript_NotAffected; //do jump
             
 
             /*if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_POISON))
@@ -4118,6 +4132,13 @@ void SetMoveEffect(bool32 primary, u32 certain)
         case STATUS1_SPIRIT_LOCK:
             if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_FAIRY))
                 break;
+
+            //put no effect check here, below ability checks above status1 check
+            if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
+            && gBattleMoves[gCurrentMove].type != TYPE_NORMAL
+            && gBattleMoves[gCurrentMove].type != TYPE_GHOST)    
+            gBattlescriptCurrInstr = BattleScript_NotAffected; //do jump
+
             if (gBattleMons[gEffectBattler].status1)
                 break;
             statusChanged = TRUE;
@@ -4158,6 +4179,13 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;
             if (battlerAbility == ABILITY_WATER_BUBBLE)
                 break;
+
+            //put no effect check here, below ability checks above status1 check
+            if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
+            && gBattleMoves[gCurrentMove].type != TYPE_NORMAL
+            && gBattleMoves[gCurrentMove].type != TYPE_GHOST)    
+            gBattlescriptCurrInstr = BattleScript_NotAffected; //do jump
+
             if (gBattleMons[gEffectBattler].status1)
                 break;
             statusChanged = TRUE;
@@ -4167,14 +4195,22 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 noSunCanFreeze = FALSE;
             if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_ICE))
                 break;
-            if (gBattleMons[gEffectBattler].status1)
-                break;
             if (noSunCanFreeze == 0)
                 break;
             if (battlerAbility == ABILITY_MAGMA_ARMOR
                 || battlerAbility == ABILITY_FLAME_BODY
                 || battlerAbility == ABILITY_LAVA_FISSURE)
                 break;
+
+            //put no effect check here, below ability checks above status1 check
+            if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
+            && gBattleMoves[gCurrentMove].type != TYPE_NORMAL
+            && gBattleMoves[gCurrentMove].type != TYPE_GHOST)    
+            gBattlescriptCurrInstr = BattleScript_NotAffected; //do jump
+
+            if (gBattleMons[gEffectBattler].status1)
+                break;
+
             CancelMultiTurnMoves(gEffectBattler);
             statusChanged = TRUE;
             //moved freeze timer below w sleep //2-4 turns for frozn should work  - nvm using value of 3, can have 2 full turns of freeze, decrement in end turn
@@ -4183,12 +4219,13 @@ void SetMoveEffect(bool32 primary, u32 certain)
             //freeze status cure effects would remove frostbite, after freeze, as well as if applied during freez.
             //so frostbite would take efffect when frozen turn counter reaches zero and last item effect/battle effect wasn't freeze cure  vsonic IMPORTANT
         case STATUS1_PARALYSIS:
-            if (battlerAbility == ABILITY_LIMBER)
+            if (!CanBeParalyzed(gEffectBattler))  //replaced did setup for custom paralysis in cleaner function
             {
                 if (primary == TRUE || certain == MOVE_EFFECT_CERTAIN)
                 {
-                    gLastUsedAbility = ABILITY_LIMBER;
-                    RecordAbilityBattle(gEffectBattler, ABILITY_LIMBER);
+                    if (battlerAbility == ABILITY_LIMBER || battlerAbility ABILITY_COMATOSE)
+                    gLastUsedAbility = battlerAbility;
+                    RecordAbilityBattle(gEffectBattler, gLastUsedAbility);
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
                     gBattlescriptCurrInstr = BattleScript_PRLZPrevention;
                     if (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
@@ -4205,7 +4242,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 else
                     break;
             }
-            if (!CanBeParalyzed(gEffectBattler)  //replaced did setup for custom paralysis in cleaner function
+           /* if (!CanBeParalyzed(gEffectBattler)  //replaced did setup for custom paralysis in cleaner function
                 && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
                 && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             {
@@ -4214,7 +4251,14 @@ void SetMoveEffect(bool32 primary, u32 certain)
 
                 gBattleCommunication[MULTISTRING_CHOOSER] = 2; // may need to setup a string for this, it uses gPRLZPreventionStringIds string exists, so works
                 return;
-            }//vsonic IMPORTANT
+            }//vsonic IMPORTANT*/
+
+            //put no effect check here, below ability checks above status1 check
+            if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
+            && gBattleMoves[gCurrentMove].type != TYPE_NORMAL
+            && gBattleMoves[gCurrentMove].type != TYPE_GHOST)    
+            gBattlescriptCurrInstr = BattleScript_NotAffected; //do jump
+
             if (!CanBeParalyzed(gEffectBattler))
                 break;
             statusChanged = TRUE;
@@ -4246,6 +4290,14 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattleCommunication[MULTISTRING_CHOOSER] = 2;
                 return;
             }
+
+            //put no effect check here, below ability checks above status1 check
+            //I guess put this here? its passed most checks
+            if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
+            && (gBattleMoves[gCurrentMove].type != TYPE_NORMAL
+            && gBattleMoves[gCurrentMove].type != TYPE_GHOST) 
+            && !(GetBattlerAbility(battlerAttacker) == ABILITY_CORROSION))   //extra protection to make sure doesn't overwrite ability logic
+            gBattlescriptCurrInstr = BattleScript_NotAffected; //do jump
             /*if (gBattleMons[gEffectBattler].status1)    //for poison worsend need change this to status1 != poison break, will let it set toxic if normal poison
                 break;*/
             //attempting to just remove, as status checks etc. are already part of battlescript
@@ -7898,6 +7950,7 @@ static void atk4C_getswitchedmondata(void)
     }
 }
 
+#define BASESTATS_TO_BATTLEMONS_CONVERSION
 static void atk4D_switchindataupdate(void)  //important, think can use THIS to make switchin abilities repeat, would work for both fainted and turn switched.
 { // ok switch in repeat isn't here can do it elsewhere
     struct BattlePokemon oldData;
@@ -12494,7 +12547,8 @@ static void atk84_jumpifcantmakeasleep(void)
         gBattlescriptCurrInstr = jumpPtr;
     }
     else if (GetBattlerAbility(gBattlerTarget) == ABILITY_INSOMNIA
-          || GetBattlerAbility(gBattlerTarget) == ABILITY_VITAL_SPIRIT)
+          || GetBattlerAbility(gBattlerTarget) == ABILITY_VITAL_SPIRIT
+          || GetBattlerAbility(gBattlerTarget) == ABILITY_COMATOSE)
     {
         gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
@@ -13035,13 +13089,13 @@ static void atk8C_confuseifrepeatingattackends(void)
     ++gBattlescriptCurrInstr;
 }
 
-//not really used, mostly replaced with version 2 for multi task, only used for fixed moves i.e twinneedle double hit etc.
+//replaced with upgraded emerald logic set in attack canceler so no longer needed/ can replace
 static void atk8D_setmultihitcounter(void)  //setmultihit   looks like I should put skill link here, is it not already setup? do for multitask as well  yeah ABILITY_SKILL_LINK isn't setup yet huh
 {
    // gMultiTask = gMultiHitCounter;  //not sure if doing this way will work, but I'll try it
     //multihitcounter is outside of the loop and only run once, so if it copies the value from here
     //instead of directly it may work.
-    if (gBattlescriptCurrInstr[1]) //if has a value beside command i.e is a fixed hit multi hit move
+    /*if (gBattlescriptCurrInstr[1]) //if has a value beside command i.e is a fixed hit multi hit move
     {
         gMultiHitCounter = gBattlescriptCurrInstr[1];
     }
@@ -13054,7 +13108,8 @@ static void atk8D_setmultihitcounter(void)  //setmultihit   looks like I should 
             gMultiHitCounter += 2; //else add 2 to multi counter, returning a multihit of 2 or 3.
     }
    // gMultiTask = gMultiHitCounter;
-    gBattlescriptCurrInstr += 2;
+    gBattlescriptCurrInstr += 2;*/
+    ++gBattlescriptCurrInstr;
 }
 
 
@@ -13064,6 +13119,7 @@ static void atk8E_initmultihitstring(void)
     ++gBattlescriptCurrInstr;
 }
 
+//vsonic see if can use for hit escape etc. if needed?
 static bool8 TryDoForceSwitchOut(void)
 {
     if (gBattleMons[gBattlerAttacker].level >= gBattleMons[gBattlerTarget].level)
@@ -13182,7 +13238,9 @@ static void atk8F_forcerandomswitch(void)
     }
 }
 
-static void atk90_tryconversiontypechange(void) // randomly changes user's type to one of its moves' type
+// randomly changes user's type to one of its moves' type
+//incomplete still working on
+static void atk90_tryconversiontypechange(void) 
 {
     u8 validMoves = 0;
     u8 moveChecked;
@@ -16525,7 +16583,7 @@ static void atkF7_finishturn(void)
 //vsonic need remember to add to ai decision tree
 static void atkF8_setroost(void) { //actually I don't like this type change idea so not gonna do it.
 
-    u16 virtue = Random() % 4; //had to make start value timer and set equal so they use the same value without recalc
+    //u16 virtue = Random() % 4; //had to make start value timer and set equal so they use the same value without recalc
     gDisableStructs[gBattlerAttacker].RoostTimer = 4; //setting timer to 4, should give 3 full turns
     //gDisableStructs[gBattlerAttacker].RoostTimerStartValue = 0;
     //u8 timervalue = gDisableStructs[gBattlerAttacker].RoostTimer && gDisableStructs[gBattlerAttacker].RoostTimerStartValue;
@@ -17025,49 +17083,6 @@ void BS_setattackerstatus3(void) {
         gBattlescriptCurrInstr += 9;
     }
 }
-//not used anymore  all done in attack cancueler so remove this and other multi counters vsonic
-void BS_setmultihitcounter2(void) //should do what the original does but in a separate variable, then pass the original value to gmultihitcounter so the script can complete.
-{
-    // gMultiTask = gMultiHitCounter;  //not sure if doing this way will work, but I'll try it
-     //multihitcounter is outside of the loop and only run once, so if it copies the value from here
-     //instead of directly it may work.
-     //putting in atk calnceler do switch in curentmove effect set counter based on that
-
-    //forgot entire reason I needed make multiask its own value was I needed a global value to put in damage calc
-    //that would store counter and not be decremented
-
-    if (gBattleMoves[gCurrentMove].effect == EFFECT_PRESENT)
-    {
-        gMultiTask = Random() % 4; //return a number between 0 & 3
-        if (gMultiTask > 1)
-            gMultiTask = (Random() % 3) + 3; // if non 0, present lands between 3-5 htis
-        else
-            gMultiTask += 3; //else present lands 3 hits /odds of dmg vs heal is in presentdamagecalc
-
-    }
-    else //effect multihit
-    {
-        gMultiTask = Random() % 4; //return a number between 0 & 3
-        if (gMultiTask > 1)
-            gMultiTask = (Random() % 4) + 2; // if non 0, multihit is between 2-5 htis
-        else
-            gMultiTask += 2; //else add 2 to multi counter, returning a multihit of 2.
-    }
-    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SKILL_LINK
-        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK)) //will only affect multi hit & fury cutter /was just meant to be for things that were already multihit
-    {
-        if (gBattleMoves[gCurrentMove].effect == EFFECT_MULTI_HIT
-            || (gBattleMoves[gCurrentMove].effect == EFFECT_FURY_CUTTER)
-            || (gBattleMoves[gCurrentMove].effect == EFFECT_PRESENT)
-            )
-            gMultiTask = 5;                
-    } //put this part at bottom of multihit
-
-
-    gMultiHitCounter = gMultiTask;
-    
-    gBattlescriptCurrInstr += 2;
-}
 
 void BS_setiondeluge(void) //removed under_score in name seemed to prevent use
 { //since battlescript alrady sets field effect, just sets timer here
@@ -17193,11 +17208,18 @@ void BS_call_if(void) //comparing to jumpifholdeffect
             //end result the actual brick break effect script would just be this one command 
             case EFFECT_BRICK_BREAK:
                  if (TryRemoveScreens(gBattlerAttacker)) //replace with function check for screens / adapted screen cleaner logic, rather than make from scratch
-                    gBattlescriptCurrInstr = BattleScript_BrickBreakWithScreens;
+                    gBattlescriptCurrInstr = BattleScript_BrickBreakWithScreens;//may be able to do something similar to fury cutter where anim effects used a stored value to change animation?
                 else
                     gBattlescriptCurrInstr = BattleScript_BrickBreakNoScreens;
                 break;//removes screens from start, still need to setup script with screens, need understand how wall animation worked in default script
-            
+                //sand attack ground immunity
+            case EFFECT_ACCURACY_DOWN:
+                if (gCurrentMove == MOVE_SAND_ATTACK
+                    && (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ROCK)
+                    || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL)
+                    || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)))
+                    gBattlescriptCurrInstr = BattleScript_NotAffected
+                break;
         }
     }
     gBattlescriptCurrInstr = cmd->nextInstr; //had to put in hitfromcritcalc for rollout, so put intr increment back in, so won't break everything else, 

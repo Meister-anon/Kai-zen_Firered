@@ -935,6 +935,7 @@ static void Cmd_get_turn_count(void)
     sAIScriptPtr += 1;
 }
 
+//vsonic add typep 3
 static void Cmd_get_type(void)
 {
     switch (sAIScriptPtr[1])
