@@ -4223,7 +4223,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             {
                 if (primary == TRUE || certain == MOVE_EFFECT_CERTAIN)
                 {
-                    if (battlerAbility == ABILITY_LIMBER || battlerAbility ABILITY_COMATOSE)
+                    if (battlerAbility == ABILITY_LIMBER || battlerAbility == ABILITY_COMATOSE)
                     gLastUsedAbility = battlerAbility;
                     RecordAbilityBattle(gEffectBattler, gLastUsedAbility);
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
@@ -4296,7 +4296,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
             && (gBattleMoves[gCurrentMove].type != TYPE_NORMAL
             && gBattleMoves[gCurrentMove].type != TYPE_GHOST) 
-            && !(GetBattlerAbility(battlerAttacker) == ABILITY_CORROSION))   //extra protection to make sure doesn't overwrite ability logic
+            && !(GetBattlerAbility(gBattlerAttacker) == ABILITY_CORROSION))   //extra protection to make sure doesn't overwrite ability logic
             gBattlescriptCurrInstr = BattleScript_NotAffected; //do jump
             /*if (gBattleMons[gEffectBattler].status1)    //for poison worsend need change this to status1 != poison break, will let it set toxic if normal poison
                 break;*/
@@ -10039,7 +10039,7 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear)
     for (i = 0; i < 2; i++)
     {
         struct SideTimer *sideTimer = &gSideTimers[i];
-        u16 *sideStatuses = &gSideStatuses[i]; //to make it work I can either upgrade gSudeStaatuses to u32 (taking more ewram)
+        u32 *sideStatuses = &gSideStatuses[i]; //to make it work I can either upgrade gSudeStaatuses to u32 (taking more ewram)
         //or I can swap the movevaleu for aurora_veil for something below 255
 
         gBattlerAttacker = i;
@@ -17218,7 +17218,7 @@ void BS_call_if(void) //comparing to jumpifholdeffect
                     && (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ROCK)
                     || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL)
                     || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)))
-                    gBattlescriptCurrInstr = BattleScript_NotAffected
+                    gBattlescriptCurrInstr = BattleScript_NotAffected;
                 break;
         }
     }
