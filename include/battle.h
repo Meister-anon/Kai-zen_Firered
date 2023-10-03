@@ -991,7 +991,7 @@ extern void (*gBattleMainFunc)(void);
 extern u8 gMoveSelectionCursor[MAX_BATTLERS_COUNT];
 extern u32 gUnknown_2022B54;
 extern u8 gUnknown_2023DDC;
-extern u8 gAnticipatedBattler;  //for storing battlerId of anticipation target
+extern u8 gAnticipatedBattler;  //for storing battlerId of anticipation target   unsure if need max battler array thing [MAX_BATTLERS_COUNT];
 extern u8 gForewarnedBattler;   //for storing battlerId of forewarn target
 extern u8 gBattlerAttacker;
 extern u8 gEffectBattler;
@@ -1007,7 +1007,7 @@ extern const u8 *gSelectionBattleScripts[MAX_BATTLERS_COUNT];
 extern u16 gLastMoves[MAX_BATTLERS_COUNT];
 extern u8 gBattlerByTurnOrder[MAX_BATTLERS_COUNT];
 extern u8 gBattleCommunication[BATTLE_COMMUNICATION_ENTRIES_COUNT];
-extern u16 gSideStatuses[2];
+extern u32 gSideStatuses[2];    //upgraded from u16, because of increase in side status flags
 extern u32 gHitMarker;
 extern u16 gChosenMoveByBattler[MAX_BATTLERS_COUNT];
 extern u8 gMoveResultFlags;

@@ -771,7 +771,7 @@
 	.macro confuseifrepeatingattackends
 	.byte 0x8c
 	.endm
-
+			@depricated no longer used
 	.macro setmultihitcounter param0:req
 	.byte 0x8d
 	.byte \param0
@@ -1371,11 +1371,6 @@
 	callnative BS_setattackerstatus3
 	.4byte \flags
 	.4byte \ptr
-	.endm
-
-	.macro setmultihitcounter2 param0:req
-	callnative BS_setmultihitcounter2
-	.byte \param0
 	.endm
 
 	.macro setiondeluge

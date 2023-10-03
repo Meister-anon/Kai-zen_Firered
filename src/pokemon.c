@@ -5723,7 +5723,8 @@ void RemoveBattleMonPPBonus(struct BattlePokemon *mon, u8 moveIndex)
     mon->ppBonuses &= gPPUpSetMask[moveIndex];
 }
 
-void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst)
+#define POKEMON_TO_BATTLEMON//potentially add status4 here? and status3?  compare with emerald expansion
+void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst) 
 {
     s32 i;
     u8 nickname[POKEMON_NAME_LENGTH * 2];
@@ -5821,9 +5822,9 @@ static void CopyPlayerPartyMonToBattleData(u8 battlerId, u8 partyIndex) //functi
     for (i = 0; i < 8; i++)
         gBattleMons[battlerId].statStages[i] = 6;   //vsonic  on switch resets stat stage to normal
 
-    gBattleMons[battlerId].status2 = 0; //clears status 2 on switch, no mention of status3 or status 4 (can't remember if I made status 4...)
-    UpdateSentPokesToOpponentValue(battlerId);
-    ClearTemporarySpeciesSpriteData(battlerId, FALSE);
+    gBattleMons[battlerId].status2 = 0; //clears status 2 on switch, no mention of status3 or status 4
+    UpdateSentPokesToOpponentValue(battlerId); //check if status 3 and status4 are being zeroes out properly if not they could be assigning garbage data
+    ClearTemporarySpeciesSpriteData(battlerId, FALSE);  //and that coudl be reason for glitch? as most status4 stuff are the new traps
 }
 
 bool8 ExecuteTableBasedItemEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 moveIndex)
