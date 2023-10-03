@@ -84,7 +84,6 @@ extern const u8 *const gBattleScriptsForBattleEffects[];
 
 static bool8 IsTwoTurnsMove(u16 move);
 static void TrySetDestinyBondToHappen(void);
-static u8 AttacksThisTurn(u8 battlerId, u16 move); // Note: returns 1 if it's a charging turn, otherwise 2.
 static void CheckWonderGuardAndLevitate(void);//attempted replace, not currently using, attempt using emerald equivalent CalcTypeEffectivenessMultiplier need test,then can remove funtion
 static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr);
 static void sub_8026480(void);
@@ -681,7 +680,7 @@ s32 AICalcCritChance(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbilit
     {
         critChance = -1;
     }
-    else if (abilityDef == ABILITY_BATTLE_ARMOR || abilityDef == ABILITY_SHELL_ARMOR || (abilityDef == ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL) || abilityDef == ABILITY_STEADFAST)
+    else if (abilityDef == ABILITY_BATTLE_ARMOR || abilityDef == ABILITY_SHELL_ARMOR || (abilityDef == ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL) || abilityDef == ABILITY_STEADFAST || (abilityDef == ABILITY_TANGLED_FEET && gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION))
     {
         if (recordAbility)
             RecordAbilityBattle(battlerDef, abilityDef);
@@ -718,6 +717,8 @@ s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32
         updateFlags, CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, updateFlags));
 }
 
+//understand how this works now, it had to line up with order of move effects
+//which is why there are so many 0's here, while the emerald setup is a more 1 to 1 arrangement 
 /*static const u32 sStatusFlagsForMoveEffects[] =
 {
     0x00000000,
@@ -804,7 +805,6 @@ static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
     [MOVE_EFFECT_PREVENT_ESCAPE] = STATUS2_ESCAPE_PREVENTION,
     [MOVE_EFFECT_NIGHTMARE] = STATUS2_NIGHTMARE,
     [MOVE_EFFECT_THRASH] = STATUS2_LOCK_CONFUSE,
-    [MOVE_EFFECT_ATTRACT] = STATUS2_INFATUATION,    //didn't work couldn't use infatuatedwith
     [MOVE_EFFECT_FIRE_SPIN] = STATUS4_FIRE_SPIN,
     [MOVE_EFFECT_CLAMP] = STATUS4_CLAMP,
     [MOVE_EFFECT_WHIRLPOOL] = STATUS4_WHIRLPOOL,
@@ -812,6 +812,7 @@ static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
     [MOVE_EFFECT_MAGMA_STORM] = STATUS4_MAGMA_STORM,
     [MOVE_EFFECT_INFESTATION] = STATUS4_INFESTATION,
     [MOVE_EFFECT_SNAP_TRAP] = STATUS1_SNAP_TRAP,
+    [MOVE_EFFECT_ATTRACT] = STATUS2_INFATUATION,    //didn't work couldn't use infatuatedwith
 };//actually rather than making this u64 prob should try putting in different status field since it doesn't need to be all status2 Ian use status4
 //mof don't think the gba can parse u64, it can only go up to 3 mbs?
 
@@ -857,7 +858,6 @@ static const u8 *const sMoveEffectBS_Ptrs[] =
     [MOVE_EFFECT_REMOVE_STATUS] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_ATK_DEF_DOWN] = BattleScript_MoveEffectSleep,//BattleScript_MoveEffectFallInLove
     [MOVE_EFFECT_RECOIL_33] = BattleScript_MoveEffectRecoil,
-    [MOVE_EFFECT_ATTRACT] = BattleScript_MoveEffectAttract,   //see if it works as is, or I need actuall battlescript for this
     [MOVE_EFFECT_FIRE_SPIN] = BattleScript_MoveEffectFireSpin,
     [MOVE_EFFECT_CLAMP] = BattleScript_MoveEffectClamp,
     [MOVE_EFFECT_WHIRLPOOL] = BattleScript_MoveEffectWhirlpool,
@@ -865,6 +865,7 @@ static const u8 *const sMoveEffectBS_Ptrs[] =
     [MOVE_EFFECT_MAGMA_STORM] = BattleScript_MoveEffectMagmaStorm,
     [MOVE_EFFECT_INFESTATION] = BattleScript_MoveEffectInfestation,
     [MOVE_EFFECT_SNAP_TRAP] = BattleScript_MoveEffectSnapTrap,
+    [MOVE_EFFECT_ATTRACT] = BattleScript_MoveEffectAttract,   //see if it works as is, or I need actuall battlescript for this
     //[MOVE_EFFECT_SPIRIT_LOCK] = BattleScript_MoveEffectSpiritLock,
 }; //don't know why a lot of these default to sleep, but I added attract to hopefully do something?
 //those that default to sleep have their effects set in SetMoveEffect function
@@ -1215,9 +1216,9 @@ static const u16 sMultiTaskExcludedEffects[] =
     EFFECT_SOLARBEAM,
     EFFECT_SKULL_BASH,
     EFFECT_SEMI_INVULNERABLE,
-    EFFECT_RAZOR_WIND,
-   // EFFECT_MULTI_HIT,
-   // EFFECT_FURY_CUTTER,
+    //EFFECT_RAZOR_WIND,  //canremove from exclusions since changed to two_typed effect well, razorwind as an effect isn't used at all now
+    EFFECT_MULTI_HIT,
+    EFFECT_FURY_CUTTER,
     EFFECT_DOUBLE_HIT,
     EFFECT_TRIPLE_KICK,
     EFFECT_SUPER_FANG,
@@ -1227,7 +1228,7 @@ static const u16 sMultiTaskExcludedEffects[] =
     EFFECT_LEVEL_DAMAGE, //same
     EFFECT_DRAGON_RAGE,
     EFFECT_BIDE,
-    //EFFECT_PRESENT, //since making multi-hit would work,  give delibird multitask, since like santa everywhere at once
+    EFFECT_PRESENT, //since making multi-hit would work,  give delibird multitask, since like santa everywhere at once
     EFFECT_MIRROR_COAT,
     EFFECT_BEAT_UP,
     EFFECT_TWINEEDLE,
@@ -1239,7 +1240,7 @@ static const u16 sMultiTaskExcludedEffects[] =
     //EFFECT_HIT,  //for testing   test passed
     //EFFECT_TWO_TURNS_ATTACK // because I'm not using two turns attack??  doube check this
     MULTI_TASK_FORBIDDEN_END
-};
+}; //had add multi hit effects back to this, it only affects dmg share from dmg calc macro
 
 // the moves that are multihit without the effect i.e use setmultihit or setmultihitcounter, before going to multihitloop...it was only twinneedle
 //so don't need this now
@@ -1355,13 +1356,10 @@ bool32 ProteanTryChangeType(u32 battler, u32 ability, u32 move, u32 moveType)
     return FALSE;
 }
 
-static void atk00_attackcanceler(void)
+static void atk00_attackcanceler(void) //vsonic
 {
     s32 i, moveType;
 
-    if (gCurrentMove == MOVE_FURY_CUTTER) {
-        ResetFuryCutterCounter(gBattlerAttacker);
-    } //should check for move at start, and make sure damage gets reset
 
     if (gBattleOutcome)
     {
@@ -1422,7 +1420,7 @@ static void atk00_attackcanceler(void)
     }
     gHitMarker |= HITMARKER_OBEYS;
 
-    if (gProtectStructs[gBattlerTarget].bounceMove  //target has magic coat effect/ may need replace this line with side status check
+    if (gProtectStructs[gBattlerTarget].bounceMove  //target has magic coat effect/ already setup and should work as sidestatus, could replace with timer check but don't need to
         && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED
         && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR   //since this is a screen-like, needed add infiltrator bypass
         && !gProtectStructs[gBattlerAttacker].usesBouncedMove) //move attacker is using is not one already bounced
@@ -1570,7 +1568,7 @@ static bool32 JumpIfMoveFailed(u8 adder, u16 move) //updated to emerald standard
     else
     {
         TrySetDestinyBondToHappen();
-        if (AbilityBattleEffects(ABILITYEFFECT_ABSORBING, gBattlerTarget, 0, 0, move))
+        if (AbilityBattleEffects(ABILITYEFFECT_ABSORBING, gBattlerTarget, 0, 0, move)) //what do?
             return TRUE;
     }
     gBattlescriptCurrInstr += adder;
@@ -1736,7 +1734,7 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
     }
 
     if ((gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE)//i beleve this is the replacement for the hitmarker values for semi invul, just need to add flags to omve data
-        || (!(gBattleMoves[move].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR)) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+        || (!(gBattleMoves[move].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR)) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR && gCurrentMove != MOVE_ROCK_THROW)
         || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
         || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER))
     {
@@ -1791,7 +1789,7 @@ static void atk01_accuracycheck(void)
 {
     u16 move = T2_READ_16(gBattlescriptCurrInstr + 5);
 
-    if ((gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE
+    if (/*(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE
         && !BtlCtrl_OakOldMan_TestState2Flag(1)
         && gBattleMoves[move].power != 0
         && GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
@@ -1799,12 +1797,16 @@ static void atk01_accuracycheck(void)
             && !BtlCtrl_OakOldMan_TestState2Flag(2)
             && gBattleMoves[move].power == 0
             && GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
-        || (gBattleTypeFlags & BATTLE_TYPE_POKEDUDE))
+        || */(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE))
     {
-        JumpIfMoveFailed(7, move);
-        return;
+        JumpIfMoveFailed(7, move);  //looks like this makes it so player cant miss in first rival battle?
+        return; //seems to be too ensure the battle messages for dmg & lowering stats play, not really likely to be an issue but ok
     }
-    if (move == NO_ACC_CALC || move == NO_ACC_CALC_CHECK_LOCK_ON)
+
+    //with move expansion at some point this could be an issue but very unlikely
+    //seems much simpler to remove them, ratrher than move  just use lock on status check
+    //and already have logic for accuracy 0  in AccuracyCalcHelper to skip acc check
+    if (move == NO_ACC_CALC || move == NO_ACC_CALC_CHECK_LOCK_ON) 
     {
         if (gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS && move == NO_ACC_CALC_CHECK_LOCK_ON && gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker)
             gBattlescriptCurrInstr += 7;
@@ -1814,12 +1816,12 @@ static void atk01_accuracycheck(void)
             gBattlescriptCurrInstr += 7;
     }
     else if (gSpecialStatuses[gBattlerAttacker].parentalBondState == PARENTAL_BOND_2ND_HIT
-            || (gSpecialStatuses[gBattlerAttacker].multiHitOn && (gBattleMoves[move].effect != EFFECT_TRIPLE_KICK
-            || GetBattlerAbility(gBattlerAttacker) == ABILITY_SKILL_LINK)))
+            || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SKILL_LINK && gMultiHitCounter > 0 && gMultiHitCounter != gMultiTask))
     {
-        // No acc checks for second hit of Parental Bond or multi hit moves, except Triple Kick/Triple Axel
+        // No acc checks for second hit of Parental Bond or skill linked moves, removed other multihit as I want those to work differently, now all go through acc check on each hit
         gBattlescriptCurrInstr += 7;
     }
+
     else
     {
         u8 type, moveAcc, holdEffect, param;
@@ -1872,18 +1874,34 @@ static void atk01_accuracycheck(void)
             moveAcc = (moveAcc * 60) / 100; //euivalent of a 2 stage acc drop
         }
 
-        if (gCurrentMove == MOVE_FURY_CUTTER) { //still not quite right, doesn't display right message for things like wonderguard
-           // if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5) { //increment until reach 5
-             //   ++gDisableStructs[gBattlerAttacker].furyCutterCounter; //removing to test that it isn't incrementing twice. (it was)
+        
+        
 
-                for (i = 1; i < gDisableStructs[gBattlerAttacker].furyCutterCounter; ++i) {
-                    moveAcc = (moveAcc * 2) / 3; //so far is working to stop the move,
-                    //but isn't displaying the miss message...    apparently that's normal
-                    //should be able to change by putting "result message" before hit x times string?
-                }
-            //}
-        } //hopefully THIS  will affect the accuracy. works , it loses 1/4 per hit. 
-        //changed from 3/4 to 2/3 to drop 1/3 per hit.
+        if (gCurrentMove == MOVE_FURY_CUTTER) { //still not quite right, doesn't display right message for things like wonderguard
+
+            //Logic for altering animation used in battle_anim_effects_2
+            if (gDisableStructs[gBattlerAttacker].furyCutterCounter == 5)
+                gDisableStructs[gBattlerAttacker].furyCutterCounter = 0;
+           
+            if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5)  //increment until reach 5
+               ++gDisableStructs[gBattlerAttacker].furyCutterCounter; //removing to test that it isn't incrementing twice. (it was)
+            
+            //acc drop effect
+            gDisableStructs[gBattlerAttacker].furyCutterAccDrop = moveAcc;
+
+                for (i = 1; i <= (5 - gMultiHitCounter); ++i) { //potentaially scale with i, moveacc - i * 95/100 ?
+
+                    gDisableStructs[gBattlerAttacker].furyCutterAccDrop -= (i - 1); //doesn't subtract until 3rd hit
+                 if (i == 3) {
+                    gDisableStructs[gBattlerAttacker].furyCutterAccDrop -= 7; //weighting for last 2 hits, only need to do for one i value as its all passed to next
+                 }
+                    gDisableStructs[gBattlerAttacker].furyCutterAccDrop *= 95; //so far is working to stop the move,
+                    gDisableStructs[gBattlerAttacker].furyCutterAccDrop /= 100;  //may replace with just moveAcc  still don't know why not working
+                    
+                } 
+
+            moveAcc = gDisableStructs[gBattlerAttacker].furyCutterAccDrop;
+        } 
 
         if (gCurrentMove == MOVE_ROCK_THROW && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
             moveAcc = 85; // reduced accuracy drop, move is very specific use case, is just more accessible version of smackdown
@@ -1904,11 +1922,22 @@ static void atk01_accuracycheck(void)
         calc /= gAccuracyStageRatios[buff].divisor;
 
         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_COMPOUND_EYES
-            || GetBattlerAbility(gBattlerAttacker) == ABILITY_ILLUMINATE)
+            || GetBattlerAbility(gBattlerAttacker) == ABILITY_ILLUMINATE)   
             calc = (calc * 130) / 100; // 1.3 compound eyes boost
-        if (WEATHER_HAS_EFFECT && GetBattlerAbility(gBattlerTarget) == ABILITY_SAND_VEIL && gBattleWeather & WEATHER_SANDSTORM_ANY)
+
+        if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SANDSTORM_ANY) 
+        && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ROCK)
+        && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL)
+        && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)
+        && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_RUSH
+        && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_VEIL
+        && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_FORCE
+        && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM)
+            calc = (calc * 90) / 100; // new 10% sandstorm loss (extra effect given since hail got extra stuff)
+
+        if (GetBattlerAbility(gBattlerTarget) == ABILITY_SAND_VEIL && IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SANDSTORM_ANY))
             calc = (calc * 80) / 100; // 1.2 sand veil loss
-        if (WEATHER_HAS_EFFECT && GetBattlerAbility(gBattlerTarget) == ABILITY_SNOW_CLOAK && gBattleWeather & WEATHER_HAIL_ANY)
+        if (GetBattlerAbility(gBattlerTarget) == ABILITY_SNOW_CLOAK && IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_HAIL_ANY))
             calc = (calc * 80) / 100; //
         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_HUSTLE && IS_MOVE_PHYSICAL(move)) //can put status based evasion/accuracy effects here
             calc = (calc * 95) / 100; // 20% hustle loss   removed low accuracy effcts,  so changed to 5% accuracy drop
@@ -2013,13 +2042,16 @@ static void atk01_accuracycheck(void)
             else
                 gBattleCommunication[MISS_TYPE] = B_MSG_MISSED;
 
+            gDisableStructs[gBattlerAttacker].furyCutterCounter = 0;  //reset if miss
+
+
             //if (gBattleMoves[move].power)   //i ALREADY have a typecalc I don't need this to update move result flags I think?
              //  CalcTypeEffectivenessMultiplier(move, type, gBattlerAttacker, gBattlerTarget, TRUE);    //this is only instance where uses TRUE, without that it doesn't change effectiveness
             //removing this as it has foresight logic, emerald uses typecalc? hopefully
             //can do that without doubling the multiplier.
             //nvm not using typecalc, forgot I ported emerald's CalcTypeEffectivenessMultiplier function, 
             //that's what's used in emerald think can just copy it straight over
-    //        CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
+            CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
         //may put this back need test more on a working system
         
         //this runs type check against base chart, compares result to abilities then sets result flags
@@ -2138,7 +2170,7 @@ static void atk04_critcalc(void)    //figure later
         gCritMultiplier = 1;
 
     //while everything here is calculating crit damage, so need to add gCritMultiplier = 3; for that crit boosting ability
-   else if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR && (GetBattlerAbility(gBattlerTarget) != ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL) && GetBattlerAbility(gBattlerTarget) != ABILITY_STEADFAST)
+   else if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR && (GetBattlerAbility(gBattlerTarget) != ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL) && GetBattlerAbility(gBattlerTarget) != ABILITY_STEADFAST && ((GetBattlerAbility(gBattlerTarget) != ABILITY_TANGLED_FEET) && gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION))
      && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
      && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
      && (Random() % gCriticalHitChance[critChance] == 0) //sets crit odds by array and crit ratio, random % selects crit odds based on stat stage i.e if 0, uses 1st value in array i.e random 16 == 0 for 1 in 16 crit chance
@@ -2146,7 +2178,7 @@ static void atk04_critcalc(void)    //figure later
      && !(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE)
      && !(gBattleMoves[gCurrentMove].flags & FLAG_ALWAYS_CRIT)
      && !(gStatuses3[gBattlerAttacker] & STATUS3_LASER_FOCUS)
-     && !((GetBattlerAbility(gBattlerAttacker) == ABILITY_MERCILESS) && gBattleMons[gBattlerTarget].status1 & STATUS1_PSN_ANY)
+     && !((GetBattlerAbility(gBattlerAttacker) == ABILITY_MERCILESS) && gBattleMons[gBattlerTarget].status1 & STATUS1_PSN_ANY) //unsure if this is right
      && !(gSideStatuses[gBattlerTarget] & SIDE_STATUS_LUCKY_CHANT))
     {
         gCritMultiplier = 2;
@@ -2157,7 +2189,8 @@ static void atk04_critcalc(void)    //figure later
 
     }//...why did I make this an else if I have no idea, and see no reason for doing it...
     //ok now I see I set it for always crit effects
-   else if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR && (GetBattlerAbility(gBattlerTarget) != ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL) && GetBattlerAbility(gBattlerTarget) != ABILITY_STEADFAST)
+    //to go here
+   else if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR && (GetBattlerAbility(gBattlerTarget) != ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL) && GetBattlerAbility(gBattlerTarget) != ABILITY_STEADFAST && ((GetBattlerAbility(gBattlerTarget) != ABILITY_TANGLED_FEET) && gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION))
         && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
         && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
         && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))
@@ -2271,7 +2304,7 @@ static void atk05_damagecalc(void)
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK
         && CanMultiTask(gCurrentMove) == TRUE
         && gBattleMoves[gCurrentMove].split != SPLIT_STATUS) // normal syntax (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE)
-        //&& gMultiHitCounter > 0) //setup a function that checks if move is multihit, or multiturn, with bool8 so it returns true or false, then use false here.
+        
     {
         gBattleMoveDamage = (gBattleMoveDamage / gMultiTask); //works, problem was furycalc in multihit, fixed
        if (gBattleMoveDamage == 0) //need to add move exclusions for multi hit & multi turn moves before its compolete.
@@ -2311,7 +2344,7 @@ s32 AI_CalcDmgFormula(u8 attacker, u8 defender) //made for ai .c update
         gBattleMoveDamage *= 2;
     if (gProtectStructs[attacker].helpingHand)
         gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
-    if (gBattleMons[attacker].ability == ABILITY_MULTI_TASK
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK
         && CanMultiTask(gCurrentMove) == TRUE
         && gBattleMoves[attacker].split != SPLIT_STATUS)
     {
@@ -2353,7 +2386,7 @@ void AI_CalcDmg(u8 attacker, u8 defender) //needed for ai script  , brought back
         gBattleMoveDamage *= 2;
     if (gProtectStructs[attacker].helpingHand)
         gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
-    if (gBattleMons[attacker].ability == ABILITY_MULTI_TASK
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK
         && CanMultiTask(gCurrentMove) == TRUE
         && gBattleMoves[attacker].split != SPLIT_STATUS)
     {
@@ -2400,6 +2433,7 @@ void ModulateDmgByType(u8 multiplier)   //Put all ability effects above ring tar
     if (GetBattlerHoldEffect(gBattlerTarget, TRUE) == HOLD_EFFECT_RING_TARGET
         && multiplier == TYPE_MUL_NO_EFFECT)
         multiplier = TYPE_MUL_NORMAL;   //not 100 on if it would work but should turn no effect into normal effectiveness
+    
 
     gBattleMoveDamage = gBattleMoveDamage * multiplier / 10;    //sets dmg from multiplier
     if (gBattleMoveDamage == 0 && multiplier)   //doesn't need to be below switch, just below multiplier augments
@@ -2573,9 +2607,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
 
         while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE) //identified issue with typecalc, its only reading type 1 for some reason,
         {
-
-                
-            /*if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)  //replacing to remove type chart break.
+            if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
             {
                 if (gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
                     break;//
@@ -2584,47 +2616,18 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
                 i += 3; //don't undeerstand what this is doing.     //ok now I get it, starts at i+0 2 more arguments in row, using +3 moves to the next row
                 continue;//its a while lloop, instead of a for loop, but this is essentially the ++i part, its the increment that changes type, which is why its also at the bottom
             }//logic is while atk type isnt endtable i.e last row of type chart, do stuff inside, then at bottom increment to next row and start again. */
-            if (TYPE_EFFECT_ATK_TYPE(i) == moveType)//loops through entire type chart
+            else if (TYPE_EFFECT_ATK_TYPE(i) == moveType)//loops through entire type chart
             {
                 // check type1
                 if (TYPE_EFFECT_DEF_TYPE(i) == type1)//this define checks the type chart, chart is broken into 3 fields per row, i reads the row
                 {
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type1 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type1 == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
-                        ModulateDmgByType(TYPE_MUL_NORMAL); //can set multiplier with this, and mudluatedmg will set the move result based on that
-                    //flying type groudned mechanic
-                    if ((moveType == TYPE_ELECTRIC || moveType == TYPE_FIGHTING) && type1 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    //type change abilities
-                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    else if (moveType == TYPE_ICE && type1 == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    else if (moveType == TYPE_ICE && type1 == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)    //HOPEFULLY this doesn't turn into a 4x resist since duel type,
-                        ModulateDmgByType(TYPE_MUL_NOT_EFFECTIVE);  //would still be fine I guess if it did
-                    else
+                    
                         ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));   //which will translate to correct effectiveness sound message etc.
                 }
                 // check type2
                 if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
                     type1 != type2) //emerald update literally just adds a check for type 3
                 {
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type2 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type2 == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                     //flying type groudned mechanic
-                    if ((moveType == TYPE_ELECTRIC || moveType == TYPE_FIGHTING) && type2 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    //type change abilities
-                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    else if (moveType == TYPE_ICE && type2 == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    else if (moveType == TYPE_ICE && type2 == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)    //HOPEFULLY this doesn't turn into a 4x resist since duel type,
-                        ModulateDmgByType(TYPE_MUL_NOT_EFFECTIVE);  //would still be fine I guess if it did
-                    else
                         ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
                 }
                 //check type3
@@ -2633,124 +2636,41 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
                     type3 != type2 &&
                     type3 != type1)
                 {
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type3 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type3 == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    //flying type groudned mechanic
-                    if ((moveType == TYPE_ELECTRIC || moveType == TYPE_FIGHTING) && type3 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    //type change abilities
-                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    else if (moveType == TYPE_ICE && type3 == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    else if (moveType == TYPE_ICE && type3 == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)    //HOPEFULLY this doesn't turn into a 4x resist since duel type,
-                        ModulateDmgByType(TYPE_MUL_NOT_EFFECTIVE);  //would still be fine I guess if it did
-                    else
+                    
                         ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
                 }                                              //ok this function is setting the multiplyer here
                                                                 //while calc2 is setting the effectiveness flag
                 //seems modulatedmgbytype  & modbytype2 may be the same as only 2 has a flag argument?
             }
-            if (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE) //will need to add or for any special custom dual types, like splishy splash 
-            {
-                if (TYPE_EFFECT_ATK_TYPE(i) == argument)//loops through entire type chart
-                {
-                    // check type1
-                    if (TYPE_EFFECT_DEF_TYPE(i) == type1)//this define checks the type chart, chart is broken into 3 fields per row, i reads the row
-                    {
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type1 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                            ModulateDmgByType(TYPE_MUL_NORMAL);
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type1 == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
-                            ModulateDmgByType(TYPE_MUL_NORMAL); //can set multiplier with this, and mudluatedmg will set the move result based on that
-                        //flying type groudned mechanic
-                    if ((argument == TYPE_ELECTRIC || argument == TYPE_FIGHTING) && type1 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    //type change abilities
-                        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                            ModulateDmgByType(TYPE_MUL_NORMAL);
-                        else if (argument == TYPE_ICE && type1 == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
-                            ModulateDmgByType(TYPE_MUL_NORMAL);
-                        else if (argument == TYPE_ICE && type1 == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
-                            ModulateDmgByType(TYPE_MUL_NOT_EFFECTIVE);
-                        else
-                            ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));   //which will translate to correct effectiveness sound message etc.
-                    }
-                    // check type2
-                    if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
-                        type1 != type2) //emerald update literally just adds a check for type 3
-                    {
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type2 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                            ModulateDmgByType(TYPE_MUL_NORMAL);
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type2 == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
-                            ModulateDmgByType(TYPE_MUL_NORMAL);
-                        if ((argument == TYPE_ELECTRIC || argument == TYPE_FIGHTING) && type2 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    //type change abilities
-                        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                            ModulateDmgByType(TYPE_MUL_NORMAL);
-                        else if (argument == TYPE_ICE && type2 == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
-                            ModulateDmgByType(TYPE_MUL_NORMAL);
-                        else if (argument == TYPE_ICE && type2 == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
-                            ModulateDmgByType(TYPE_MUL_NOT_EFFECTIVE);
-                        else
-                            ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
-                    }
-                    //check type3
-                    if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
-                        type3 != TYPE_MYSTERY &&
-                        type3 != type2 &&
-                        type3 != type1)
-                    {
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type3 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                            ModulateDmgByType(TYPE_MUL_NORMAL);
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type3 == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
-                            ModulateDmgByType(TYPE_MUL_NORMAL);
-                        if ((argument == TYPE_ELECTRIC || argument == TYPE_FIGHTING) && type3 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType(TYPE_MUL_NORMAL);
-                    //type change abilities
-                        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                            ModulateDmgByType(TYPE_MUL_NORMAL);
-                        else if (argument == TYPE_ICE && type3 == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
-                            ModulateDmgByType(TYPE_MUL_NORMAL);
-                        else if (argument == TYPE_ICE && type3 == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
-                            ModulateDmgByType(TYPE_MUL_NOT_EFFECTIVE);
-                        else
-                            ModulateDmgByType(TYPE_EFFECT_MULTIPLIER(i));
-                    }                                              //ok this function is setting the multiplyer here
-                                                                    //while calc2 is setting the effectiveness flag
-                    //seems modulatedmgbytype  & modbytype2 may be the same as only 2 has a flag argument?
-                }
-            }//attempt at setting up dual type moves
+            
             i += 3;
         }
-    }
-    if (GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_GUARD && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2
+    } //think can remove the attacksthisturn from this so I can use it in attackcanceler
+    //  its not really doing anything here, and I already have if move power isn't 0
+    if (GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_GUARD
      && (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) || ((gMoveResultFlags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
      && gBattleMoves[gCurrentMove].power)   //I know understand this and why it works, its saying if not super effective, and then, 
     {                           //uses both super effective and not very effective bit flags, which balance out to normal effectiveness with or, so only super effective can dmg
         gLastUsedAbility = ABILITY_WONDER_GUARD;
-        //gMoveResultFlags |= MOVE_RESULT_MISSED;
-        gMoveResultFlags |= MOVE_RESULT_NO_EFFECT;
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0;
         gBattleCommunication[6] = 3;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
-    if (GetBattlerAbility(gBattlerTarget) == ABILITY_DISPIRIT_GUARD && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2
+    if (GetBattlerAbility(gBattlerTarget) == ABILITY_DISPIRIT_GUARD
         && (!(gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE) || ((gMoveResultFlags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
         && gBattleMoves[gCurrentMove].power)
     {
         gLastUsedAbility = ABILITY_DISPIRIT_GUARD;
-        gMoveResultFlags |= MOVE_RESULT_NO_EFFECT;
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0;
         gBattleCommunication[6] = 3;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
     if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
-        && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2 && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
+        && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
     {
         gLastUsedAbility = ABILITY_TELEPATHY;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
@@ -2788,6 +2708,8 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
         RecordAbilityBattle(gBattlerTarget, ABILITY_LEVITATE);
         return;
     }
+    if ((!IsBattlerGrounded(gBattlerTarget)) && moveType == TYPE_GROUND && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_IN_AIR)) 
+        return;
     while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
     {
         if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
@@ -2848,66 +2770,10 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
                 type3 != type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
                 flags |= 2;
         }
-        if (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE) //will need to add or for any special custom dual types, like splishysplash /nvm handled w battlescript
-        {
-            GET_MOVE_TYPE(gCurrentMove, argument);
-            if (TYPE_EFFECT_ATK_TYPE(i) == argument)
-            {
-                // check no effect  //need add type 3 arguments to this
-                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1
-                    && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
-                {
-                    gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
-                    gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
-                }
-                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2 &&
-                    gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2 &&
-                    TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT)
-                {
-                    gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
-                    gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
-                }
-                if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
-                    type3 != TYPE_MYSTERY &&
-                    type3 != type2 &&
-                    type3 != type1
-                    && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NO_EFFECT
-                    )
-                {
-                    gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
-                    gProtectStructs[gBattlerAttacker].targetNotAffected = TRUE;
-                }
-                // check super effective
-                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
-                    flags |= 1;
-                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2
-                    && gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2
-                    && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
-                    flags |= 1;
-                if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
-                    type3 != TYPE_MYSTERY &&
-                    type3 != type2 &&
-                    type3 != type1 
-                    && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_SUPER_EFFECTIVE)
-                    flags |= 1;
-                // check not very effective
-                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type1 && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
-                    flags |= 2;
-                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[gBattlerTarget].type2
-                    && gBattleMons[gBattlerTarget].type1 != gBattleMons[gBattlerTarget].type2
-                    && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
-                    flags |= 2;
-                if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
-                    type3 != TYPE_MYSTERY &&
-                    type3 != type2 &&
-                    type3 != type1 
-                    && TYPE_EFFECT_MULTIPLIER(i) == TYPE_MUL_NOT_EFFECTIVE)
-                    flags |= 2;
-            }
-        }   //attempt at setup dual type moves
+        
         i += 3;
     }
-    if (GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_GUARD && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2)
+    if (GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_GUARD)
     {
         if (((flags & 2) || !(flags & 1)) && gBattleMoves[gCurrentMove].power)
         {
@@ -2916,7 +2782,7 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
             RecordAbilityBattle(gBattlerTarget, ABILITY_WONDER_GUARD);
         }
     }
-    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_DISPIRIT_GUARD && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2)
+    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_DISPIRIT_GUARD)
     {
         if (((flags & 1) || !(flags & 2)) && gBattleMoves[gCurrentMove].power) //think reversing was right. 
         { //    I believe it says if super effectie, or not Not effective, do same as wonder guard.
@@ -2926,7 +2792,7 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
         }
     } // the way this reads confuses me, I may just replace with cfru argument instead, nvm I just reversed whatever was in wonderguard function.
     else if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
-        && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2)
+       )
     {
         gLastUsedAbility = ABILITY_TELEPATHY;
         gBattleCommunication[6] = 3;
@@ -2967,36 +2833,36 @@ static void ModulateDmgByType2(u8 multiplier, u16 move, u8 *flags)//maybe do dua
     switch (multiplier) //ok difference is for some reason it uses a flag pointer argument rather than gmoveresultflags?
     {                   //so the first one sets it, but this one only points to it?
     case TYPE_MUL_NO_EFFECT:
-        /*flags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+        *flags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
         *flags &= ~MOVE_RESULT_NOT_VERY_EFFECTIVE;
-        *flags &= ~MOVE_RESULT_SUPER_EFFECTIVE;*/
-        gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
-        gMoveResultFlags &= ~(MOVE_RESULT_NOT_VERY_EFFECTIVE | MOVE_RESULT_SUPER_EFFECTIVE);
+        *flags &= ~MOVE_RESULT_SUPER_EFFECTIVE;
+        //gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+        //gMoveResultFlags &= ~(MOVE_RESULT_NOT_VERY_EFFECTIVE | MOVE_RESULT_SUPER_EFFECTIVE);
         break;
     case TYPE_MUL_NOT_EFFECTIVE:
-        gMoveResultFlags |= MOVE_RESULT_NOT_VERY_EFFECTIVE;
-        gMoveResultFlags &= ~(MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_DOESNT_AFFECT_FOE);
-        /*if (gBattleMoves[move].power && !(*flags & MOVE_RESULT_NO_EFFECT))
+        //gMoveResultFlags |= MOVE_RESULT_NOT_VERY_EFFECTIVE;
+        //gMoveResultFlags &= ~(MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_DOESNT_AFFECT_FOE);
+        if (gBattleMoves[move].power && !(*flags & MOVE_RESULT_NO_EFFECT))
         {
             if (*flags & MOVE_RESULT_SUPER_EFFECTIVE)
                 *flags &= ~MOVE_RESULT_SUPER_EFFECTIVE;
             else
                 *flags |= MOVE_RESULT_NOT_VERY_EFFECTIVE;
-        }*/
+        }
         break;
     case TYPE_MUL_SUPER_EFFECTIVE:
-        gMoveResultFlags |= MOVE_RESULT_SUPER_EFFECTIVE;
-        gMoveResultFlags &= ~(MOVE_RESULT_NOT_VERY_EFFECTIVE | MOVE_RESULT_DOESNT_AFFECT_FOE);
-        /*if (gBattleMoves[move].power && !(*flags & MOVE_RESULT_NO_EFFECT))
+        //gMoveResultFlags |= MOVE_RESULT_SUPER_EFFECTIVE;
+        //gMoveResultFlags &= ~(MOVE_RESULT_NOT_VERY_EFFECTIVE | MOVE_RESULT_DOESNT_AFFECT_FOE);
+        if (gBattleMoves[move].power && !(*flags & MOVE_RESULT_NO_EFFECT))
         {
             if (*flags & MOVE_RESULT_NOT_VERY_EFFECTIVE)
                 *flags &= ~MOVE_RESULT_NOT_VERY_EFFECTIVE;
             else
                 *flags |= MOVE_RESULT_SUPER_EFFECTIVE;
-        }*/
+        }
         break;
     case TYPE_MUL_NORMAL:
-        gMoveResultFlags &= ~(MOVE_RESULT_NOT_VERY_EFFECTIVE | MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_DOESNT_AFFECT_FOE);
+      //  gMoveResultFlags &= ~(MOVE_RESULT_NOT_VERY_EFFECTIVE | MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_DOESNT_AFFECT_FOE);
         break;
     }
 }
@@ -3066,173 +2932,55 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
     {
         while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
         {
-            /*if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
+            if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
             {
                 if (gBattleMons[defender].status2 & STATUS2_FORESIGHT)
                     break;
                 i += 3;
                 continue;
-            }*/
+            }
 
-            if (TYPE_EFFECT_ATK_TYPE(i) == moveType)
+            else if (TYPE_EFFECT_ATK_TYPE(i) == moveType)
             {
                 // check type1
-                if (TYPE_EFFECT_DEF_TYPE(i) == type1)
-                {
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type1 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type1 == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    //flying type groudned mechanic
-                    if ((moveType == TYPE_ELECTRIC || moveType == TYPE_FIGHTING) && type1 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    //type change abilities
-                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && type1 == TYPE_GRASS && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && type1 == TYPE_DRAGON && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
-                        ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
-                    else
+                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[defender].type1)
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
-                }
                 // check type2
-                if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
-                    type1 != type2)
-                {
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type2 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type2 == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    //flying type groudned mechanic
-                    if ((moveType == TYPE_ELECTRIC || moveType == TYPE_FIGHTING) && type2 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    //type change abilities
-                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && type2 == TYPE_GRASS && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && type2 == TYPE_DRAGON && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
-                        ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
-                    else
+                if (TYPE_EFFECT_DEF_TYPE(i) == gBattleMons[defender].type2 &&
+                gBattleMons[defender].type1 != gBattleMons[defender].type2)
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
-                }
+                
                 //check type3
                 if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
                     type3 != TYPE_MYSTERY &&
                     type3 != type2 &&
                     type3 != type1)
                 {
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type3 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type3 == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    //flying type groudned mechanic
-                    if ((moveType == TYPE_ELECTRIC || moveType == TYPE_FIGHTING) && type3 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    //type change abilities
-                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && type3 == TYPE_GRASS && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && type3 == TYPE_DRAGON && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
-                        ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
-                    else
-                        ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
+                     ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
                 }
             }
-            if (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE) //will need to add or for any special custom dual types, like splishy splash 
-            {
-                if (TYPE_EFFECT_ATK_TYPE(i) == argument)
-                {
-                    // check type1
-                    if (TYPE_EFFECT_DEF_TYPE(i) == type1)
-                    {
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type1 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type1 == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        //flying type groudned mechanic
-                        if ((argument == TYPE_ELECTRIC || argument == TYPE_FIGHTING) && type1 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        //type change abilities
-                        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && type1 == TYPE_GRASS && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && type1 == TYPE_DRAGON && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
-                            ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
-                        else
-                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
-                    }
-                    // check type2
-                    if (TYPE_EFFECT_DEF_TYPE(i) == type2 &&
-                        type1 != type2)
-                    {
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type2 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type2 == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        //flying type groudned mechanic
-                        if ((argument == TYPE_ELECTRIC || argument == TYPE_FIGHTING) && type2 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        //type change abilities
-                        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && type2 == TYPE_GRASS && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && type2 == TYPE_DRAGON && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
-                            ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
-                        else
-                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
-                    }
-                    //check type3
-                    if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
-                        type3 != TYPE_MYSTERY &&
-                        type3 != type2 &&
-                        type3 != type1)
-                    {
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type3 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type3 == TYPE_GHOST && gBattleMons[attacker].ability == ABILITY_SCRAPPY)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        //flying type groudned mechanic
-                        if ((argument == TYPE_ELECTRIC || argument == TYPE_FIGHTING) && type3 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        //type change abilities
-                        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && type3 == TYPE_GRASS && gBattleMons[defender].ability == ABILITY_ECOSYSTEM)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && type3 == TYPE_DRAGON && gBattleMons[defender].ability == ABILITY_ABSOLUTE_ZERO)
-                            ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
-                        else
-                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
-                    }
-                }
-            }//attempt at setting dual type moves
             i += 3;
-        }
-    }
+        }//attempt at setting dual type moves
+    }    
     if (gBattleMons[defender].ability == ABILITY_WONDER_GUARD
      && !(flags & MOVE_RESULT_MISSED)
-     && AttacksThisTurn(attacker, move) == 2
+     
      && (!(flags & MOVE_RESULT_SUPER_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
      && gBattleMoves[move].power)
-        flags |= MOVE_RESULT_NO_EFFECT;
+        flags |= MOVE_RESULT_MISSED;
     return flags;
 
     if (gBattleMons[defender].ability == ABILITY_DISPIRIT_GUARD
         && !(flags & MOVE_RESULT_MISSED)
-        && AttacksThisTurn(attacker, move) == 2
+        
         && (!(flags & MOVE_RESULT_NOT_VERY_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
         && gBattleMoves[move].power)
-        flags |= MOVE_RESULT_NO_EFFECT;
+        flags |= MOVE_RESULT_MISSED;
     return flags;
 
     if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
         && !(flags & MOVE_RESULT_MISSED)
-        && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2 && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
+        && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
         flags |= MOVE_RESULT_MISSED;
     return flags;
 }
@@ -3246,7 +2994,7 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
 
     if (move == (MOVE_STRUGGLE || MOVE_BIDE))
         return 0;
-    argument = gBattleMoves[move].argument;
+    argument = gBattleMoves[move].argument; //think should replace with getmovetype macro?
     moveType = gBattleMoves[move].type; //think don't need to change this since battle_main has function for type change
     //if (targetAbility == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     if (!IsBattlerGrounded(gBattlerTarget) //set without ! it means if function is TRUE aka non-zero
@@ -3258,146 +3006,29 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
     {
         while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
         {
-            /*if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
+            if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
             {
                 i += 3;
                 continue;
-            }*/
+            }
             if (TYPE_EFFECT_ATK_TYPE(i) == moveType)
             {
                 // check type1
                 if (TYPE_EFFECT_DEF_TYPE(i) == type1)
-                {
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type1 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type1 == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    //flying type groudned mechanic
-                    if ((moveType == TYPE_ELECTRIC || moveType == TYPE_FIGHTING) && type1 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                    ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    //type change abilities
-                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && type1 == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && type1 == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
-                        ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
-                    else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
-                }
-                // check type2
+                                // check type2
                 if (TYPE_EFFECT_DEF_TYPE(i) == type2 && type1 != type2)
-                {
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type2 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type2 == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    //flying type groudned mechanic
-                    if ((moveType == TYPE_ELECTRIC || moveType == TYPE_FIGHTING) && type2 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                    ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    //type change abilities
-                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && type2 == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && type2 == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
-                        ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
-                    else
                         ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
-                }
+
                 //check type3
                 if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
                     type3 != TYPE_MYSTERY &&
                     type3 != type2 &&
                     type3 != type1)
                 {
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type3 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    if ((moveType == TYPE_NORMAL || moveType == TYPE_FIGHTING) && type3 == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    //flying type groudned mechanic
-                    if ((moveType == TYPE_ELECTRIC || moveType == TYPE_FIGHTING) && type3 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                    ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    //type change abilities
-                    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && type3 == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                    else if (moveType == TYPE_ICE && type3 == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
-                        ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
-                    else
-                        ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
+                    ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
                 }
-            }
-            if (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE) //will need to add or for any special custom dual types, like splishy splash 
-            {
-                if (TYPE_EFFECT_ATK_TYPE(i) == argument)
-                {
-                    // check type1
-                    if (TYPE_EFFECT_DEF_TYPE(i) == type1)
-                    {
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type1 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type1 == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        //flying type groudned mechanic
-                        if ((argument == TYPE_ELECTRIC || argument == TYPE_FIGHTING) && type1 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        //type change abilities
-                        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && type1 == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && type1 == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
-                            ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
-                        else
-                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
-                    }
-                    // check type2
-                    if (TYPE_EFFECT_DEF_TYPE(i) == type2 && type1 != type2)
-                    {
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type2 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type2 == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        //flying type groudned mechanic
-                        if ((argument == TYPE_ELECTRIC || argument == TYPE_FIGHTING) && type2 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        //type change abilities
-                        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && type2 == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && type2 == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
-                            ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
-                        else
-                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
-                    }
-                    //check type3
-                    if (TYPE_EFFECT_DEF_TYPE(i) == type3 &&
-                        type3 != TYPE_MYSTERY &&
-                        type3 != type2 &&
-                        type3 != type1)
-                    {
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type3 == TYPE_GHOST && gBattleMons[gBattlerTarget].status2 & STATUS2_FORESIGHT)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        if ((argument == TYPE_NORMAL || argument == TYPE_FIGHTING) && type3 == TYPE_GHOST && GetBattlerAbility(gBattlerAttacker) == ABILITY_SCRAPPY)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        //flying type groudned mechanic
-                        if ((argument == TYPE_ELECTRIC || argument == TYPE_FIGHTING) && type3 == TYPE_FLYING && IsBattlerGrounded(gBattlerTarget))
-                        ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        //type change abilities
-                        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_NORMALIZE)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && type3 == TYPE_GRASS && GetBattlerAbility(gBattlerTarget) == ABILITY_ECOSYSTEM)
-                            ModulateDmgByType2(TYPE_MUL_NORMAL, move, &flags);
-                        else if (argument == TYPE_ICE && type3 == TYPE_DRAGON && GetBattlerAbility(gBattlerTarget) == ABILITY_ABSOLUTE_ZERO)
-                            ModulateDmgByType2(TYPE_MUL_NOT_EFFECTIVE, move, &flags);
-                        else
-                            ModulateDmgByType2(TYPE_EFFECT_MULTIPLIER(i), move, &flags);
-                    }
-                }
-            }   //attempt at 2 type move setup
+            }            
             i += 3;
         }
     }
@@ -3520,7 +3151,7 @@ static void atk07_adjustnormaldamage(void)
         gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
         gLastUsedItem = gBattleMons[gBattlerTarget].item;
     }
-    else if (gSpecialStatuses[gBattlerTarget].sturdied)
+    else if (gSpecialStatuses[gBattlerTarget].sturdied && gMultiHitCounter == 0) //cant believe I forgot htis again
     {
         gMoveResultFlags |= MOVE_RESULT_STURDIED;
         gLastUsedAbility = ABILITY_STURDY;
@@ -3632,7 +3263,7 @@ static void atk08_adjustnormaldamage2(void)
         gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
         gLastUsedItem = gBattleMons[gBattlerTarget].item;
     }
-    else if (gSpecialStatuses[gBattlerTarget].sturdied)
+    else if (gSpecialStatuses[gBattlerTarget].sturdied && gMultiHitCounter == 0)
     {
         gMoveResultFlags |= MOVE_RESULT_STURDIED;
         gLastUsedAbility = ABILITY_STURDY;
@@ -3684,6 +3315,7 @@ static void atk08_adjustnormaldamage2(void)
     //set defense type to type flying
     //finally use condition on return if [j][type_flying] == super effective do thing
     //possibly need to adjust layout of array to be able to read value in atk type def type == effectiveness format
+     ++gBattlescriptCurrInstr;  //AGAIN i FORGOT THIS!!!
 }
 
 static void atk09_attackanimation(void)
@@ -3711,10 +3343,10 @@ static void atk09_attackanimation(void)
             {
                 gActiveBattler = gBattlerAttacker;
                 BtlController_EmitMoveAnimation(BUFFER_A, gCurrentMove, gBattleScripting.animTurn, gBattleMovePower, gBattleMoveDamage, gBattleMons[gBattlerAttacker].friendship, &gDisableStructs[gBattlerAttacker]);
-                gBattleScripting.animTurn++;    
-                gBattleScripting.animTargetsHit++;
-                MarkBattlerForControllerExec(gBattlerAttacker); 
-                gBattlescriptCurrInstr++;            
+                ++gBattleScripting.animTurn;
+                ++gBattleScripting.animTargetsHit;
+                MarkBattlerForControllerExec(gBattlerAttacker);
+                ++gBattlescriptCurrInstr;          
             }
             else
             {
@@ -3766,7 +3398,7 @@ static void atk0B_healthbarupdate(void)
 static void atk0C_datahpupdate(void)
 {
     u32 moveType;
-    u16 move; //don't know if should be u32
+    u16 move = gCurrentMove;
 
     if (!gBattleControllerExecFlags)
     {
@@ -4510,24 +4142,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 }
                 return;
             }
-            /*if (battlerAbility == ABILITY_WATER_BUBBLE
-                && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
-            {
-                gLastUsedAbility = ABILITY_WATER_BUBBLE;
-                RecordAbilityBattle(gEffectBattler, ABILITY_WATER_BUBBLE);
-                BattleScriptPush(gBattlescriptCurrInstr + 1);
-                gBattlescriptCurrInstr = BattleScript_BRNPrevention;
-                if (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
-                {
-                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
-                    gHitMarker &= ~(HITMARKER_IGNORE_SAFEGUARD);
-                }
-                else
-                {
-                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-                }
-                return;
-            }*/
+    
             if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_FIRE)
              && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
@@ -4590,8 +4205,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 else
                     break;
             }
-            if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_ELECTRIC) //if did right should prevent paralysis to electric types
-                && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC
+            if (!CanBeParalyzed(gEffectBattler)  //replaced did setup for custom paralysis in cleaner function
                 && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
                 && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             {
@@ -4601,13 +4215,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattleCommunication[MULTISTRING_CHOOSER] = 2; // may need to setup a string for this, it uses gPRLZPreventionStringIds string exists, so works
                 return;
             }//vsonic IMPORTANT
-            if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_ELECTRIC)
-                && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC) //while still allowing non electric moves like bodyslam to paralyze
-                break;
-            if (gBattleMons[gEffectBattler].status1)
-                break;
-            if (battlerAbility == ABILITY_COMATOSE
-                || battlerAbility == ABILITY_LIMBER)
+            if (!CanBeParalyzed(gEffectBattler))
                 break;
             statusChanged = TRUE;
             break;
@@ -5549,18 +5157,24 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
     //hey old me, that ish is all wrong, without secondary chance, effects won't apply, and that's dealt with in battle_moves file
     //
     u32 percentChance,argumentChance;
+    if (gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE)
+    {
 
-    if (gBattleMoves[gCurrentMove].argumentEffectChance == 0)   //to ensure arguments already set work, so dont need to add argumentchance to every move
-        argumentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;  //but keeps from using the percentChance 0 makes certain effect for arguments
-    else                                                                //not a major issue if can just keep important/main effects to effect not argument, 
-        argumentChance = gBattleMoves[gCurrentMove].argumentEffectChance;   //just make sure argument never has effect that would need to be set certain (just use 100 if need to)
-    
+        if (gBattleMoves[gCurrentMove].argumentEffectChance == 0)   //to ensure arguments already set work, so dont need to add argumentchance to every move
+            argumentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;  //but keeps from using the percentChance 0 makes certain effect for arguments
+        else                                                                //not a major issue if can just keep important/main effects to effect not argument, 
+            argumentChance = gBattleMoves[gCurrentMove].argumentEffectChance;   //just make sure argument never has effect that would need to be set certain (just use 100 if need to)
+    }
     //THIS IS WHY IT WAS CONFUSING battlescripting.moveEffect AREN'T moveeffects they are just "effects"
     //MOVE EFFECT is a completely different thing that is actually being set by this function  not battlescripting.moveEffect!!!!
-    if (gBattleScripting.moveEffect == gBattleMoves[gCurrentMove].effect) //on second look think this won't work as variosargumetotmoveeffect may be 
+    //wrong again it IS moveeffect the EFFECT goes to battlescript which assings a move effect and is stored in scripting.moveEffect to read here
+
+    if ((gBattleScripting.moveEffect != gBattleMoves[gCurrentMove].argument) && gBattleScripting.moveEffect != 0) //on second look think this won't work as variosargumetotmoveeffect may be 
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;   //setting the argumentt as the move effct?
-    else if (gBattleScripting.moveEffect == gBattleMoves[gCurrentMove].argument)
+    else if ((gBattleScripting.moveEffect == gBattleMoves[gCurrentMove].argument) && gBattleMoves[gCurrentMove].argument != 0
+        && gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE)
         percentChance = argumentChance; //confused it doesn't use them interchangeably so may work? think is different?
+    //since I didn't understand scripting.moveEffect this was the isue it was always defaulting to 0 as above block didn't read
 
     //hail based freeze boost, 
     if ((gBattleWeather & WEATHER_HAIL_ANY)
@@ -5571,6 +5185,9 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE) //way if else-if works,they are paired and only the one that is true will be executed
         percentChance *= 2;                                         //if I need to execute multiple, than use multiple ifs instead  vsonic
     
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_FRISK && IsMoveMakingContact(gCurrentMove, gBattlerAttacker)) //
+        percentChance = (percentChance * 150) / 100;
+
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_DARK_DEAL) //is excluded
         percentChance = (percentChance * 150) / 100;
 
@@ -5591,7 +5208,9 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
     //triggers for effect when secondary effect chance is 0, and erroneously for argument if secondary effect chance is 0, and argument effect chance is 0
     //last case should not happen as I should have arugment chance set for moves that dont have secondary effect chance already.
     if (percentChance == 0)
-        SetMoveEffect(0, MOVE_EFFECT_CERTAIN);
+        SetMoveEffect(0, MOVE_EFFECT_CERTAIN); 
+        //think this was issue for effects always procing, not proper exclusions/checks on this
+        //added them above, testing
 
    /* if (gBattleMoves[gCurrentMove].effect == ITS_A_TRAP)   //if this works make a define for trap effects & separate effect & move effect & battlscript for each
         SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //that way may not need to make a separate status,// seems to work no apparent bugs
@@ -7075,6 +6694,7 @@ static void atk48_playstatchangeanimation(void)
                         && !(ability == ABILITY_AVIATOR && currStat == STAT_SPEED)
                         && !(ability == ABILITY_RUN_AWAY && currStat == STAT_SPEED)
                         && !(ability == ABILITY_HYPER_CUTTER && currStat == STAT_ATK)
+                        && !(ability == ABILITY_BIG_PECKS && currStat == STAT_ATK)
                         && !(ability == ABILITY_BIG_PECKS && currStat == STAT_DEF))
                 {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > 0)
@@ -7628,7 +7248,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
         
         case MOVE_END_MULTIHIT_MOVE:
         {
-            if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+           /* if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
             && !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
             && gMultiHitCounter
             && !(gCurrentMove == MOVE_PRESENT && gBattleStruct->presentBasePower == 0)) // Silly edge case
@@ -7661,7 +7281,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                         gSpecialStatuses[gBattlerTarget].sturdied = 0;  //forgto this wasn't a gen3 affect, it didn't do this til gen 5 o.0
                         gSpecialStatuses[gBattlerTarget].focusBanded = 0; // Delete this line to make Focus Band last for the duration of the whole move turn.
                         gSpecialStatuses[gBattlerTarget].focusSashed = 0; // Delete this line to make Focus Sash last for the duration of the whole move turn.
-                        gSpecialStatuses[gBattlerAttacker].multiHitOn = TRUE;
+   //this line may be issue makes sure hit    gSpecialStatuses[gBattlerAttacker].multiHitOn = TRUE;
                         MoveValuesCleanUp();
                         BattleScriptPush(gBattleScriptsForBattleEffects[gBattleMoves[gCurrentMove].effect]);
                         gBattlescriptCurrInstr = BattleScript_FlushMessageBox;
@@ -7677,7 +7297,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             gMultiHitCounter = 0;
             gSpecialStatuses[gBattlerAttacker].parentalBondState = PARENTAL_BOND_OFF;
-            gSpecialStatuses[gBattlerAttacker].multiHitOn = 0;
+            gSpecialStatuses[gBattlerAttacker].multiHitOn = 0;*/
             ++gBattleScripting.atk49_state;
             break;
         }
@@ -8219,7 +7839,7 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
     }
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_GUARD
      && !(flags & MOVE_RESULT_NO_EFFECT)
-     && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2
+    
      && (!(flags & MOVE_RESULT_SUPER_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
      && gBattleMoves[gCurrentMove].power)
     {
@@ -8231,7 +7851,7 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
     }
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_DISPIRIT_GUARD
         && !(flags & MOVE_RESULT_NO_EFFECT)
-        && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2
+       
         && (!(flags & MOVE_RESULT_NOT_VERY_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
         && gBattleMoves[gCurrentMove].power)
     {
@@ -8242,7 +7862,7 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
     if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
-        && AttacksThisTurn(gBattlerAttacker, gCurrentMove) == 2 && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
+        && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
     {
         gLastUsedAbility = ABILITY_TELEPATHY;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
@@ -11418,7 +11038,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         else if (gBattleMons[gBattlerAttacker].status1 & STATUS1_SLEEP)
         {
-            if (GetBattlerAbility(gBattlerTarget) == ABILITY_INSOMNIA || GetBattlerAbility(gBattlerTarget) == ABILITY_VITAL_SPIRIT)
+            if (GetBattlerAbility(gBattlerTarget) == ABILITY_INSOMNIA || GetBattlerAbility(gBattlerTarget) == ABILITY_VITAL_SPIRIT) //add comatose if needed vsonic
             {
                 gBattlerAbility = gBattlerTarget;
                 // BattleScriptPush(T1_READ_PTR(gBattlescriptCurrInstr + 3));
@@ -12025,7 +11645,6 @@ static void atk76_various(void) //will need to add all these emerald various com
         gBattleMons[gBattlerTarget].status2 &= ~(STATUS2_UPROAR);
         gBattleMons[gBattlerTarget].status2 &= ~(STATUS2_BIDE);
         gDisableStructs[gBattlerTarget].rolloutTimer = 0;
-        gDisableStructs[gBattlerTarget].furyCutterCounter = 0;
         
         // End any Follow Me/Rage Powder effects caused by the target
         if (gSideTimers[GetBattlerSide(gBattlerTarget)].followmeTimer != 0 && gSideTimers[GetBattlerSide(gBattlerTarget)].followmeTarget == gBattlerTarget)
@@ -13795,7 +13414,8 @@ static void atk96_weatherdamage(void)
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_OVERCOAT
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_RUSH
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_VEIL
-             && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_FORCE)
+             && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_FORCE
+             && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM)
              //&& (gBattleMons[gBattlerAttacker].ability != ABILITY_FORECAST && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM))
             {//doesn't really need the castform logic as it already turns into a type immune to said weather effect also it may be in other battlescript
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
@@ -14509,24 +14129,6 @@ static bool8 IsInvalidForAssist(u16 move)
         return FALSE;
 }
 
-static u8 AttacksThisTurn(u8 battlerId, u16 move) // Note: returns 1 if it's a charging turn, otherwise 2
-{
-    // first argument is unused
-    if ((gBattleMoves[move].effect == EFFECT_SOLARBEAM)
-     && (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY)
-      || ((GetBattlerAbility(battlerId) == ABILITY_FLUORESCENCE) && !IsBlackFogNotOnField()))
-    )
-        return 2;
-    if (gBattleMoves[move].effect == EFFECT_SKULL_BASH
-     || gBattleMoves[move].effect == EFFECT_RAZOR_WIND
-     || gBattleMoves[move].effect == EFFECT_SKY_ATTACK
-     || gBattleMoves[move].effect == EFFECT_SOLARBEAM
-     || gBattleMoves[move].effect == EFFECT_SEMI_INVULNERABLE
-     || gBattleMoves[move].effect == EFFECT_BIDE)
-        if ((gHitMarker & HITMARKER_CHARGING))
-            return 1;
-    return 2;
-}
 
 static void atkA9_trychoosesleeptalkmove(void)
 {
@@ -14864,37 +14466,24 @@ static void atkB4_jumpifconfusedandstatmaxed(void)
 
 static void atkB5_furycuttercalc(void)
 {
+    s32 i;
+
     if (gCurrentMove == MOVE_FURY_CUTTER) //changing script to just use the multi-hit bs, need to add this to its loop though,
         //so to ensure it doesn't trigger for other moves, made the entire thing contingent on move fury cutter, 
         //will need to find & test other multi hit (try spearow fury attack,) to ensure I didn't break it.
     {
-        u16 berserker;
-        if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-        {
-            gDisableStructs[gBattlerAttacker].furyCutterCounter = 0;
-            //gBattlescriptCurrInstr = BattleScript_MoveMissedPause; //...realized don't need that, since I made an entire bs for it.
-        }
-        /*if  (gBattlescriptCurrInstr == BattleScript_FuryCutterEnd) //to make sure it resets before move is used again, even if don't miss
-        {
-            gDisableStructs[gBattlerAttacker].furyCutterCounter = 0; //this isn't working to clear the damage
-        }*/ //but of course it isn't, its in a battle_script command that's only run BEFORE
-        //the command its supposed to check.  I'll put this in a function instead and add it to atkcancelor
-        else
-        {
-            s32 i;
-
-            if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5) //increment until reach 5
-                ++gDisableStructs[gBattlerAttacker].furyCutterCounter;
+        
             gDynamicBasePower = gBattleMoves[gCurrentMove].power; //it's working now.
-            berserker = gBattleMoves[gCurrentMove].accuracy;
 
-            for (i = 1; i < gDisableStructs[gBattlerAttacker].furyCutterCounter; ++i) {
-                gDynamicBasePower *= 2;
+
+            for (i = 0; i < (5 - gMultiHitCounter); ++i) //...changed this and damage multiplier actually works -_-
+            {  
+                gDynamicBasePower *= 2; //new note what this does is loop dmg multiplier to ensure dmg is boosted based on how high couter is
                 // berserker *= 3;  //change from 3 to 1, for large test, should reduce accuracy by 4 each hit if its working
                  //berserker /= 4; 
             }//dizzyegg confirms doing this way also works for establishing 3/4
             //++gBattlescriptCurrInstr; // if done right power should double and accuracy should drop off by a fourth each hti
-        }
+
     }
     ++gBattlescriptCurrInstr;// had to move to accuracy function battlescript was below the accuracy check if done here
 } //don't know if i'm just unlucky but it seeems to be hitting every time, so I'm still unsure
@@ -14911,7 +14500,7 @@ static void atkB6_happinesstodamagecalculation(void)
 
 static void atkB7_presentdamagecalculation(void) //setup logic to jump ptr if heal
 {
-    s32 rand = Random() & 0xFF; //think random value between 0 -256?
+    
     //const u8 *jumpPtr = T1_READ_PTR(gBattlescriptCurrInstr + 1);  could add but don't need
 
     /* Don't reroll present effect/power for the second hit of Parental Bond.
@@ -14923,6 +14512,7 @@ static void atkB7_presentdamagecalculation(void) //setup logic to jump ptr if he
    // if (gSpecialStatuses[gBattlerAttacker].parentalBondState != PARENTAL_BOND_2ND_HIT) //parental bond logic would ensure dmg isn't varied so you get same power constant for 2nd hit
     if (gCurrentMove == MOVE_PRESENT) //potentially weighing name change to present rush, so its clear its diff, but kinda long
     {
+        s32 rand = Random() & 0xFF; //think random value between 0 -256?
         /*if (rand < 102)
         {
             gDynamicBasePower = 60;
@@ -14931,7 +14521,8 @@ static void atkB7_presentdamagecalculation(void) //setup logic to jump ptr if he
         {
             gDynamicBasePower = 80;
         }
-        else */if (rand < 204) //do damage
+        else */
+        if (rand < 204) //do damage
         {
             gDynamicBasePower = 24; //plan move to hit 3-5 times at 5 hits would equal 120 dmg former max dmg setup in mutihitcounter2 - done, last is test, and check odds of heal vs dmg
         }
@@ -14946,7 +14537,7 @@ static void atkB7_presentdamagecalculation(void) //setup logic to jump ptr if he
                 gBattlescriptCurrInstr = BattleScript_ReturnAlreadyAtFullHp;
             else
             {
-                gMoveResultFlags &= ~(MOVE_RESULT_DOESNT_AFFECT_FOE);
+                gMoveResultFlags &= ~(MOVE_RESULT_DOESNT_AFFECT_FOE); //removes doesnt affect so can heal anyone
                 gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
             }
                 
@@ -14966,7 +14557,7 @@ static void atkB7_presentdamagecalculation(void) //setup logic to jump ptr if he
             gBattlescriptCurrInstr = BattleScript_PresentHealTarget;
         } */
     }
-    ++gBattlescriptCurrInstr;
+    gBattlescriptCurrInstr += 5; //this is issue its a pointer it has to go passed the pointer
 }
 
 static void atkB8_setsafeguard(void)
@@ -15227,8 +14818,10 @@ static void atkC0_recoverbasedonsunlight(void)
     {
         if (gBattleWeather == 0 || !WEATHER_HAS_EFFECT)
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
-        else if (gBattleWeather & WEATHER_SUN_ANY)
+        else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY))
             gBattleMoveDamage = 20 * gBattleMons[gBattlerAttacker].maxHP / 30;
+        else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_FLUORESCENCE && IsBlackFogNotOnField()) //eitehr give boosted heal, or make it heal the normal amount regardless of weather change
+            gBattleMoveDamage = 20 * gBattleMons[gBattlerAttacker].maxHP / 30; //it has low bst overall so just keep full boost here, cut solar beam boost
         else // not sunny weather
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
 
@@ -17432,7 +17025,7 @@ void BS_setattackerstatus3(void) {
         gBattlescriptCurrInstr += 9;
     }
 }
-
+//not used anymore  all done in attack cancueler so remove this and other multi counters vsonic
 void BS_setmultihitcounter2(void) //should do what the original does but in a separate variable, then pass the original value to gmultihitcounter so the script can complete.
 {
     // gMultiTask = gMultiHitCounter;  //not sure if doing this way will work, but I'll try it
@@ -17524,6 +17117,40 @@ void BS_typebaseddmgboost(void)
     }
     ++gBattlescriptCurrInstr;
 }
+
+//checked isn't actually used for making move attack this turn, its just in typecalc for wonderguard telepathy stuff
+//setting of attack this turn is set in battlescript so replace that and make use this
+//make it a call native, battlerId should default to gbattlerattacker/bs_attacker
+//can remove move argument and just replace with gcurrentmove
+void BS_AttacksThisTurn(void) // Note: returns 1 if it's a charging turn, otherwise 2
+{
+    NATIVE_ARGS(const u8 *ptr);
+    bool8 Thisturn;
+    // first argument is unused
+    if ((gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM) //rebalanced effect not using special status for
+     && (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY)
+      || (GetBattlerAbility(gBattlerAttacker) == ABILITY_FLUORESCENCE && !IsBlackFogNotOnField())) 
+    )                                                
+        Thisturn = TRUE;             //not using most of below but will keep as is incase I plan to expand this function/macros use beyond just solar beam   
+
+    else if (gBattleMoves[gCurrentMove].effect == EFFECT_SKULL_BASH
+     || gBattleMoves[gCurrentMove].effect == EFFECT_RAZOR_WIND
+     || gBattleMoves[gCurrentMove].effect == EFFECT_SKY_ATTACK
+     || gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM
+     || gBattleMoves[gCurrentMove].effect == EFFECT_SEMI_INVULNERABLE
+     || gBattleMoves[gCurrentMove].effect == EFFECT_BIDE
+     || gHitMarker & HITMARKER_CHARGING)  //not sure how this works??  oh nvm note above seems to clarify
+            Thisturn = FALSE;
+    else
+        Thisturn = TRUE;
+
+    if (Thisturn == TRUE)
+       gBattlescriptCurrInstr = cmd->ptr; //do jump
+
+    else
+       gBattlescriptCurrInstr = cmd->nextInstr;
+    
+} //vsonic double check, nvm planning to only use for solar beam/fluorescence so can leave other setups as they are
 
 //not technical call, replacement for bad code logic, will allow me to just slot in whatever I need
 //more or less

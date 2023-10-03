@@ -214,7 +214,8 @@ struct DisableStruct
     /*0x0E*/ u8 encoreTimerStartValue : 4;
     /*0x0F*/ u8 perishSongTimer : 4;
     /*0x0F*/ u8 perishSongTimerStartValue : 4;
-    /*0x10*/ u8 furyCutterCounter;
+    /*0x10*/ u8 furyCutterCounter;  //apparently still need for anim task in anim_effects_2
+             u16 furyCutterAccDrop; //need for acc drop to keep value 
     /*0x11*/ u8 rolloutTimer : 4;
     /*0x11*/ u8 rolloutTimerStartValue : 4;
     /*0x12*/ u8 chargeTimer : 4;

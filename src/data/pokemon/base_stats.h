@@ -2569,7 +2569,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_BATTLE_ARMOR, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-    },
+    }, //cant give muslce magic as that was meant to be main of mega marowak
 
     [SPECIES_HITMONLEE] =
     { 
@@ -5997,7 +5997,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-    },//since is dragon may give flamethrower  //also acrobatics if doesn't already
+    },//since is dragon may give flamethrower  //also acrobatics if doesn't already incinerate & fire blast & outrage
 
     [SPECIES_TORCHIC] =
     { 
@@ -8287,7 +8287,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_INSOMNIA, ABILITY_FRISK},
-            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_PRESSURE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -8295,7 +8295,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_BANETTE] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(64, 115, 65, 65, 83, 63),
+         STATS(64, 115, 65, 65, 93, 63),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_DARK,
         .catchRate = 45,
@@ -8309,8 +8309,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_INSOMNIA, ABILITY_FRISK},
-            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_COMPETITIVE},
+            .abilities = {ABILITY_INSOMNIA, ABILITY_FRISK}, //buffed frisk
+            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_PRESSURE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -10639,13 +10639,15 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_WATER_2,
         .eggGroup2 = EGG_GROUP_WATER_2,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_FLUORESCENCE, ABILITY_STORM_DRAIN},
-        .abilityHidden = {ABILITY_WATER_VEIL, ABILITY_SWIFT_SWIM},
+            .abilities = {ABILITY_FLUORESCENCE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     }, //vsonic,  I'm unsure how to make this good/interesting, doesn't have much identity
     //ok seems they are tyep of fish that absorb and store sunlight, could give ability so sun absorbing charge moves can fire without charge turn give solar beam/blade
     //Fluorescence, guess also raise speed and sp atk in sun? 1.5x  done should allow be only water mon able to run on sun  team
+    //ya know I think this may be one of the few cases I need to just replcae other abilities entirely unless I massively buff its stats
+    //it doens't really work and having just that ability makes it better thematically, its the water mon you run on sun teams
 
     [SPECIES_LUMINEON] =
     { 
@@ -10663,8 +10665,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_WATER_2,
         .eggGroup2 = EGG_GROUP_WATER_2,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_FLUORESCENCE, ABILITY_STORM_DRAIN},
-        .abilityHidden = {ABILITY_WATER_VEIL, ABILITY_SWIFT_SWIM},
+            .abilities = {ABILITY_FLUORESCENCE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -24469,7 +24471,7 @@ const struct BaseStats gBaseStats[] =
         70,
         110,
         75,
-        145,
+        165,
         145,
         85
         ),
@@ -24484,11 +24486,11 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_DRAGON,
-        .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_LIGHTNING_ROD},
+        .abilities = {ABILITY_REGENERATOR, ABILITY_REGENERATOR}, //...why did this get lightning rod.
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
-        .bodyColor = BODY_COLOR_GREEN,
-        .noFlip = FALSE,
-    },
+        .bodyColor = BODY_COLOR_GREEN, //it regenerates its tail its getting that instead
+        .noFlip = FALSE, //there's little reason to pair this with water or flying type
+    }, //give sceptile flamethrower incinerate & fire blast (incinerate is for technician)
 
     [SPECIES_BLAZIKEN_MEGA] =
     { 
@@ -24582,7 +24584,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(
         60,
-        85,
+        95,
         125,
         20,
         85,
@@ -24825,15 +24827,15 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
-        64,
-        165,
+        84,
+        145,
         75,
-        75,
-        93,
+        86,
+        123,
         83
         ),
         .type1 = TYPE_GHOST,
-        .type2 = TYPE_GHOST,
+        .type2 = TYPE_DARK,
         .catchRate = 45,
         .expYield = 194,
         //.evYield_Attack = 2,
@@ -24865,7 +24867,7 @@ const struct BaseStats gBaseStats[] =
         60
         ),
         .type1 = TYPE_DARK,
-        .type2 = TYPE_DARK,
+        .type2 = TYPE_NORMAL,
         .catchRate = 30,
         .expYield = 198,
         //.evYield_Attack = 2,
@@ -24890,7 +24892,7 @@ const struct BaseStats gBaseStats[] =
          STATS(
         80,
         120,
-        80,
+        130,
         100,
         120,
         80
@@ -25131,7 +25133,7 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
-        90,
+        100,
         132,
         105,
         30,
@@ -25257,9 +25259,9 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
-        105,
+        85,
         180,
-        100,
+        75,
         115,
         180,
         100
@@ -25283,14 +25285,14 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-    },
+    }, //need bring this down in mega/primal readjust
 
     [SPECIES_KYOGRE_PRIMAL] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
         100,
-        150,
+        120,
         90,
         90,
         180,
@@ -25323,8 +25325,8 @@ const struct BaseStats gBaseStats[] =
         100,
         180,
         160,
-        90,
-        150,
+        100,
+        130,
         90
         ),
         .type1 = TYPE_GROUND,
@@ -25881,7 +25883,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MONSTER,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CURSED_BODY, ABILITY_LIGHTNING_ROD},
-        .abilityHidden = {ABILITY_ROCK_HEAD, ABILITY_NONE},
+        .abilityHidden = {ABILITY_ROCK_HEAD, ABILITY_MUSCLE_MAGIC}, //gets so many good special moves
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
@@ -33571,6 +33573,34 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_ECOSYSTEM, ABILITY_ECOSYSTEM},
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
+        .noFlip = FALSE,
+        .flags = F_MEGA_FORM,
+    },
+
+    [SPECIES_MAROWAK_MEGA] =
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(
+        88,
+        126,
+        164,
+        56,
+        31,
+        106
+        ),
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_GROUND,
+        .catchRate = 45,
+        .expYield = 281,
+        .genderRatio = PERCENT_FEMALE(50),
+        .eggCycles = 20,
+        .friendship = 35,
+        .growthRate = GROWTH_MEDIUM_SLOW,
+        .eggGroup1 = EGG_GROUP_MONSTER,
+        .eggGroup2 = EGG_GROUP_MONSTER,
+        .abilities = {ABILITY_MUSCLE_MAGIC, ABILITY_MUSCLE_MAGIC},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
+        .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
         .flags = F_MEGA_FORM,
     },

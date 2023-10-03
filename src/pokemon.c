@@ -3944,7 +3944,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_FLUORESCENCE:
         if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY))
-            spAttack = (150 * spAttack) / 100;
+            spAttack = (175 * spAttack) / 100;
     case ABILITY_FLOWER_GIFT:   //flower gift is supposd to be what makes cherrim transform along w sunlight
         if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY)) //split ability bonus between different attack/target functions
         {
@@ -4336,6 +4336,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         // any weather except sun weakens solar beam
         if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
             damage /= 2;
+
+        else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_FLUORESCENCE 
+        && !IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) && IsBlackFogNotOnField()
+        && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
+        {
+            //damage = (damage * 85) / 100;
+            damage = damage;
+        } //simpler balancing for fluorescence do dmg cut/ nvm removed dmg cut, low bst and forgot lowered super bonus etc., so will mean just avoids dmg cut from other weather
 
         // sunny
         if (gBattleWeather & WEATHER_SUN_ANY)

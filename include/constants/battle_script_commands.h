@@ -57,7 +57,7 @@
 #define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x34    //wait aren't these limited to 32?
 
 
-#define cEFFECT_CHOOSER gBattleCommunication + 3
+#define cEFFECT_CHOOSER gBattleCommunication + 3        //figure what gBattleCommunication is and how works. vsonic
 #define cMULTISTRING_CHOOSER gBattleCommunication + 5
 
 // Battle Script defines for getting the wanted battler
@@ -95,7 +95,7 @@
 #define CMP_COMMON_BITS         0x4
 #define CMP_NO_COMMON_BITS      0x5
 
-// TODO: documentation	//need to set bs.inc various to the order of this file
+// TODO: documentation	//need to set bs.inc various to the order of this file      doesn't need to match order at all
 // atk76, various
 #define VARIOUS_CANCEL_MULTI_TURN_MOVES         0
 #define VARIOUS_SET_MAGIC_COAT_TARGET           1

@@ -1386,8 +1386,9 @@
 //New Mega Forms
 
 #define SPECIES_TORTERRA_MEGA				FORMS_START + 329
+#define SPECIES_MAROWAK_MEGA                FORMS_START + 330
 
-#define SPECIES_EGG SPECIES_TORTERRA_MEGA + 1
+#define SPECIES_EGG SPECIES_MAROWAK_MEGA + 1
 #define NUM_SPECIES SPECIES_EGG	//Num species determins number dex entries now instead of pokemon slots
 
 // National Dex Index Defines

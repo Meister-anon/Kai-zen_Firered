@@ -1388,6 +1388,11 @@
 	.4byte \ptr
 	.endm
 
+	.macro attackthisturn ptr:req
+	callnative BS_AttacksThisTurn
+	.4byte \ptr
+	.endm
+
 	.macro typebaseddmgboost
 	callnative BS_typebaseddmgboost
 	.endm

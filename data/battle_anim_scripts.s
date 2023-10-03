@@ -666,7 +666,7 @@ gBattleAnims_Moves::
 	.4byte Move_BABY_DOLL_EYES
 	.4byte Move_NUZZLE
 	.4byte Move_HOLD_BACK
-	.4byte MOVE_SWARM
+	.4byte Move_SWARM
 	.4byte Move_POWER_UP_PUNCH
 	.4byte Move_OBLIVION_WING
 	.4byte Move_THOUSAND_ARROWS
@@ -859,6 +859,7 @@ gBattleAnims_Moves::
 @@@@@SELECTIVE GEN 9 + CUSTOM MOVES @@@@@@@@@
 	.4byte Move_RAGE_FIST
 	.4byte Move_SNOWBALL
+	.4byte Move_TRENCH_RUN
 	.4byte Move_COUNT @ cannot be reached, because last move is Eerie Spell  important check move order moves.h
 
 gBattleAnims_StatusConditions::
@@ -24216,6 +24217,7 @@ Move_BACK_STAB:
 Move_DOUBLE_SHOCK:
 Move_POUNCE:
 Move_CHEAP_SHOT:
+Move_TRENCH_RUN:
 Move_MONOTYPE::
 	end @to do:
 

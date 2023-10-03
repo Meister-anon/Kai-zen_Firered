@@ -797,9 +797,47 @@ goto TRAINER_REMATCH //stuff
 * now holding everstone on lead mon will have wild mon spawn with the same gender as it where possible. idea ever is remaining the same/being the same
 *
 * destiny knot, when held by lead mon in party wild mon will have the opposite gender where possible. idea finding your destined one.
+ //co dependent status - cure cancel out brn cant be with freeze  sleep cant be w spirit lock  psn cant be w toxic
+ //moved freeze decrement to atk cancelr like sleep  still get 3 turns i.e free switch and an attack, but more beneficial if opponent is faster but it balances out
+ //if their faster you take an extra hit on turn they get frozen,  if they are slower they get the hit on the turn they unfreeze
+
+ //removed logic inside MOVE_END_MULTIHIT_MOVE ported from emerald that broke accuracy for fury cutter issue was multihiton part, remember to redo later
+ //make change where only fury cutter goes through accuracy check each time
+ //think simple to do   if gmultitask != 0 && gmultihitcounter != gmultitask (should only be after first hit of multihit)
+ // and move != MOVE_FURY_CUTTER
+
+ //nvm just not doing that, remembered originally wanted more consistent effect for multihit they can all misss
+ //skill link and parental bond will be the only exceptions
+ //fury cutter will also work differently. as it has the accuracy drop varying number of hits too would be too much
+ //every other multihit will have varied hits, and a chance to miss each hit, to make less punishing as my plan was to buff said moves, they get an accuracy boost
+ //nothing lower than 90
+
+ //reworked priml and meags stats,  normal weather works by who is slowest
+ //change primal weather to work by who's fastest as normally weather cant be overridden
+
+ //gameplay loop change - mon in pc game exp while walking like daycare
+ //but dont make them learn moves, that way can just take them to  move relearner to learn what you want
+ //and no one that has good moves would lose any (actually do same for daycare, its just inconvenient)
+ //tweak pc introduciton messaging so its that you are sending them to oak and he 
+ //says he'll make sure to let them out of their pokeball so they get some exercise
+ //idea is same as anime, they aren't literally in the box the whole time, the pc is for 
+ //transferring/moving them, in anime they are at oak's ranch
+
+ //idea make mon immune to status moves of the same type as them i.e sand attack wont work on ground
+ //thunder wave wont work on electric (thats already done since electric cant be paralyzed by electric moves)
+ //normal wont be immune to any status move
+ //just look into things moslty tied to element, see if can come up with something thats consistent and logical
+
+ //in addition to built in nuzlocke/death mechanic, actually setup nuzlocke mode with flag check in options menu
+ //exclude fainted mon from pc exp gain, make them stay fainted in pc
+ //so setup exp gain logic for that to work only if mon hp isn't 0
+ //don't heal party if white out, item effects that revive make cant use put nuzlocke mode
+ //flag check not set in item use
+
+ //co dependent status - cure cancel out brn cant be with freeze  sleep cant be w spirit lock  psn cant be w toxic
 */
 
-goto DEP OSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads space in the box
+goto DEPOSIT_TO_PCLOGIC //in pokemon.c covers box position, and how it reads space in the box
 goto OTHER_BOX_LOGIC    //deals with moving mon and moving item logic
 goto TRAINER_APPROACH_LOGIC //use for setup bad onion item effect, trainer repellent, also use for stench ability
 /* 

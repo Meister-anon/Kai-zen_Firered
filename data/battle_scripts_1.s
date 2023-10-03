@@ -3179,16 +3179,16 @@ BattleScript_MultiHitFromAtkString::
 	ppreduce
 	@setmultihitcounter2 0	@adjust script  for specific logic for move_present
 	initmultihitstring
-	setbyte sMULTIHIT_EFFECT, 0  @now that i understand this, this clears stored move effects of multihit moves... twineedle jumps to below this to avoid the clear, so can remove
+	@setbyte sMULTIHIT_EFFECT, 0  @now that i understand this, this clears stored move effects of multihit moves... twineedle jumps to below this to avoid the clear, so can remove
 BattleScript_MultiHitLoop::
 	jumpifhasnohp BS_ATTACKER, BattleScript_MultiHitEnd
 	jumpifhasnohp BS_TARGET, BattleScript_MultiHitPrintStrings
 	jumpifhalfword CMP_EQUAL, gChosenMove, MOVE_SLEEP_TALK, BattleScript_DoMultiHit
 	jumpifstatus BS_ATTACKER, STATUS1_SLEEP, BattleScript_MultiHitPrintStrings
+	accuracycheck BattleScript_MultiHitMiss, ACC_CURR_MOVE	@changed this for custom miss message double check and verify vsonic
 BattleScript_DoMultiHit::
-	accuracycheck BattleScript_MultiHitMiss, ACC_CURR_MOVE	@this is what I need to change, for miss message not below
-	movevaluescleanup		@this directly clears move effect, not sMULTIHIT_EFFECT needed to keep every hit from critting etc.
-	copybyte cEFFECT_CHOOSER, sMULTIHIT_EFFECT	@copies multihi_effect to effect choosesr don't know what that does with it after
+	movevaluescleanup		@this directly clears move effect, not sMULTIHIT_EFFECT, its needed to keep every hit from critting etc.
+	@copybyte cEFFECT_CHOOSER, sMULTIHIT_EFFECT	@copies multihi_effect to effect choosesr don't know what that does with it after, something to do with gbattlecommunication + 3?
 	getmoveeffect
 	furycuttercalc
 	presentdamagecalculation BattleScript_NewPresentHealMulti @if heal, I would need to skip passed crit calc etc then jump to play attack animation and do heal animation and text, then return in place to loop again
@@ -3212,7 +3212,8 @@ BattleScript_MultiHitEndMessages:
 	waitmessage 1 @ to clear any buffer issues
 	setmoveeffectwithchance
 	argumenttomoveeffect
-	addbyte gBattleScripting + 12, 1   @ updated pret uses this addbyte sMULTIHIT_STRING + 4, 1
+	@addbyte gBattleScripting + 12, 1   @ updated pret uses this "addbyte sMULTIHIT_STRING + 4, 1"
+	addbyte sMULTIHIT_STRING + 4, 1
 	moveendto MOVE_END_NEXT_TARGET
 	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_FOE_ENDURED, BattleScript_MultiHitPrintStrings
 	decrementmultihit BattleScript_MultiHitLoop
@@ -3236,7 +3237,7 @@ BattleScript_MultiHitPrintStrings::
 	resultmessage
 	waitmessage 0x40
 	jumpifmovehadnoeffect BattleScript_MultiHitEnd		@this includes type not effect need something specifically for missing
-	copyarray gBattleTextBuff1, sMULTIHIT_STRING, 6
+	copyarray gBattleTextBuff1, sMULTIHIT_STRING, 6	@seems this determines how many times hit, I could change to use multitask - multihit counter
 	printstring STRINGID_HITXTIMES
 	waitmessage 0x40
 BattleScript_MultiHitEnd::
@@ -5006,7 +5007,7 @@ BattleScript_HitsAllNoUndergroundBonus::
 	@bicword gHitMarker, HITMARKER_IGNORE_UNDERGROUND
 	@setbyte sDMG_MULTIPLIER, 1
 BattleScript_DoHitAllWithUndergroundBonus::
-	accuracycheck BattleScript_HitAllWithUndergroundBonusMissed, ACC_CURR_MOVE
+	@accuracycheck BattleScript_HitAllWithUndergroundBonusMissed, ACC_CURR_MOVE		@late gen suer hit
 	critcalc
 	damagecalc
 	typecalc
@@ -5058,9 +5059,9 @@ BattleScript_EffectFlinchMinimizeHit::
 	goto BattleScript_FlinchEffect
 
 BattleScript_EffectSolarbeam::
+	attackthisturn BattleScript_SolarbeamOnFirstTurn @replacement for sun check, also setup for fluorescence
 	jumpifabilitypresent ABILITY_CLOUD_NINE, BattleScript_SolarbeamDecideTurn
 	jumpifabilitypresent ABILITY_AIR_LOCK, BattleScript_SolarbeamDecideTurn
-	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, 96, BattleScript_SolarbeamOnFirstTurn
 BattleScript_SolarbeamDecideTurn::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_TwoTurnMovesSecondTurn
 	jumpifword CMP_COMMON_BITS, gHitMarker, HITMARKER_NO_ATTACKSTRING, BattleScript_TwoTurnMovesSecondTurn
@@ -5441,16 +5442,14 @@ BattleScript_EndingBurnChecks:
 	seteffectprimary
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectFlashFreeze::	@nearly done  just need to make animation for...
+BattleScript_EffectFlashFreeze::	@nearly done  just need to make animation for... for now using sheer cold i think
 	attackcanceler
 	attackstring
 	ppreduce
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
-	jumpifstatus BS_TARGET, STATUS1_FREEZE, BattleScript_AlreadyFrozen
+	jumpifstatus BS_TARGET, STATUS1_FREEZE, BattleScript_AlreadyFrozen	@prevents refreezing given new freeze status but thats fine
 	jumpiftype BS_TARGET, TYPE_ICE, BattleScript_NotAffected
-	@jumpifability BS_TARGET, ABILITY_WATER_VEIL, BattleScript_WaterVeilPrevents
 	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_LeafGuardProtects
-	@jumpifflowerveil BattleScript_FlowerVeilProtects
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
 	typecalc
@@ -8333,8 +8332,8 @@ BattleScript_IntimidateFailChecks:
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_UNAWARE, BattleScript_IntimidateAbilityFail
+	jumpifability BS_ATTACKER, ABILITY_INTIMIDATE, BattleScipt_Intimidate_AttackDropExclusions
 	jumpifability BS_ATTACKER, ABILITY_TIGER_MOM, BattleScipt_TigerMom_DefenseDropExclusions	@jump for tigermom to skip atk specific stat drop exclusions
-	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_IntimidateAbilityFail
 BattleScript_IntimidateStatDrop::	
 	copybyte sBATTLER, gBattlerAttacker
 	statbuffchange STAT_CHANGE_BS_PTR | STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_IntimidateFail
@@ -8369,6 +8368,11 @@ BattleScript_TigerMomBattleMessage::
 
 BattleScipt_TigerMom_DefenseDropExclusions::
 	jumpifability BS_TARGET, ABILITY_BIG_PECKS, BattleScript_IntimidateAbilityFail
+	goto BattleScript_IntimidateStatDrop
+
+BattleScipt_Intimidate_AttackDropExclusions::
+	jumpifability BS_TARGET, ABILITY_BIG_PECKS, BattleScript_IntimidateAbilityFail
+	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_IntimidateAbilityFail
 	goto BattleScript_IntimidateStatDrop
 
 BattleScript_DrizzleActivates::

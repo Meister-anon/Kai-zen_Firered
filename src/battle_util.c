@@ -2102,7 +2102,7 @@ enum   //battler end turn
     ENDTURN_ROOST,
     ENDTURN_ELECTRIFY,
     ENDTURN_POWDER,
-    ENDTURN_INFESTATION,
+    //ENDTURN_INFESTATION,
     ENDTURN_THROAT_CHOP,
     ENDTURN_SLOW_START,
     ENDTURN_PLASMA_FISTS,
@@ -2309,14 +2309,14 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_FREEZE:  //FROZEN
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_FREEZE) && gBattleMons[gActiveBattler].hp != 0)
                 {
-                    if (gDisableStructs[gActiveBattler].FrozenTurns) //extra protection to prevent retrigger
+                    /*if (gDisableStructs[gActiveBattler].FrozenTurns) //extra protection to prevent retrigger
                     {
                         if (--gDisableStructs[gActiveBattler].FrozenTurns == 0) //actual decrement with conditional  
                         {
                             BattleScriptPushCursorAndCallback(BattleScript_DefrostBattler_KeepStatus);   //used for value ending with return
-                            //gBattlescriptCurrInstr = BattleScript_DefrostBattler_KeepStatus;
+                            //gBattlescriptCurrInstr = BattleScript_DefrostBattler_KeepStatus;      //need this block above statusdmg as that doenst return, it ends
                         }//since need to execute and run continue to run script below, think need this
-                    }
+                    }*/
                     if (IsBlackFogNotOnField())//actually need add magic guard check to all of theese...
                     {
                         MAGIC_GUARD_CHECK;
@@ -2335,7 +2335,7 @@ u8 DoBattlerEndTurnEffects(void)
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
-            case ENDTURN_NIGHTMARES:  // spooky nightmares
+            case ENDTURN_NIGHTMARES:  // spooky nightmares      //dont need black fog check as it being on field removes nightmare status
                 if ((gBattleMons[gActiveBattler].status2 & STATUS2_NIGHTMARE) && gBattleMons[gActiveBattler].hp != 0)
                 {
                     MAGIC_GUARD_CHECK;
@@ -2514,6 +2514,8 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler];
                         gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        //BattleScriptExecute(BattleScript_StatusInfested);
+                        BattleScriptPushCursorAndCallback(BattleScript_StatusInfested);
                         gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
                         if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
@@ -2523,7 +2525,9 @@ u8 DoBattlerEndTurnEffects(void)
                             gBattleMoveDamage = 1;
                     }   //make sure new trap effects all have switch prevention still
                     else  // broke free
-                    {
+                    {   //how did I not notice I didn't have the removal status here?
+                        gBattleMons[gActiveBattler].status4 &= ~STATUS4_INFESTATION;
+                        gBattleMons[gActiveBattler].status1 &= ~STATUS1_INFESTATION;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
                         gBattlescriptCurrInstr = BattleScript_WrapEnds;
                     }
@@ -2820,14 +2824,6 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_POWDER:
                 gBattleMons[gActiveBattler].status2 &= ~STATUS2_POWDER;
                 ++gBattleStruct->turnEffectsTracker;
-            case ENDTURN_INFESTATION:
-                if (gBattleMons[gActiveBattler].status4 & STATUS4_INFESTATION) //do infestation animation
-                {
-                    BattleScriptExecute(BattleScript_StatusInfested);
-                    ++effect;
-                }
-                ++gBattleStruct->turnEffectsTracker;
-                break;
             case ENDTURN_THROAT_CHOP:
                 if (gDisableStructs[gActiveBattler].throatChopTimer && --gDisableStructs[gActiveBattler].throatChopTimer == 0)
                 {
@@ -3051,7 +3047,6 @@ enum
     CANCELLER_FLAGS,
     CANCELLER_ASLEEP,
     CANCELLER_FROZEN,
-    CANCELLER_CLAMPED,
     CANCELLER_TRUANT,
     CANCELLER_RECHARGE,
     CANCELLER_BLACK_FOG,
@@ -3084,20 +3079,6 @@ u8 AtkCanceller_UnableToUseMove(void)
     u8 effect = 0;
     s32 *bideDmg = &gBattleScripting.bideDmg;
 
-    if ((IsAbilityOnField(ABILITY_STENCH))
-        && (GetBattlerAbility(gBattlerAttacker) != ABILITY_STENCH
-            && GetBattlerAbility(gBattlerAttacker) != ABILITY_INNER_FOCUS
-            && GetBattlerAbility(gBattlerAttacker) != ABILITY_OBLIVIOUS
-            && GetBattlerAbility(gBattlerAttacker) != ABILITY_LEAF_GUARD
-            && GetBattlerAbility(gBattlerAttacker) != ABILITY_SWEET_VEIL
-            && GetBattlerAbility(gBattlerAttacker) != ABILITY_AROMA_VEIL
-            && GetBattlerAbility(gBattlerAttacker) != ABILITY_FLOWER_VEIL
-            && GetBattlerAbility(gBattlerAttacker) != ABILITY_AFTERMATH //immune for opposite reason also putride
-            ) //or could just make grass & poison immune? thinking of removing aftermath exclusion..
-        && Random() % 5 == 0)   //should be 20% chance to set status to battler
-    {
-        gBattleMons[gBattlerAttacker].status2 |= STATUS2_FLINCHED;  //set status
-    }
 
     do
     {
@@ -3138,12 +3119,13 @@ u8 AtkCanceller_UnableToUseMove(void)
                         toSub = 2;  //each turn rather than 1, so still useful
                     else
                         toSub = 1;
+
                     if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_SLEEP) < toSub)
                         gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_SLEEP);
                     else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_EARLY_BIRD
                         && Random() % 4 == 0)
                     {
-                        gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_SLEEP);
+                        gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_SLEEP); //ok this was my buff I gabe earlybird a chance to immediately wake up
                     }
                     else
                     {
@@ -3173,35 +3155,33 @@ u8 AtkCanceller_UnableToUseMove(void)
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
-        case CANCELLER_FROZEN: // check being frozen
-            if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE) && gDisableStructs[gBattlerAttacker].FrozenTurns != 0) //frozen solid
+        case CANCELLER_FROZEN: // check being frozen //think I want change back and put decrement here in atk canceler like sleep does, more punishing for fast mon,  but also simpler endturn logic/messaging
+            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE && gDisableStructs[gActiveBattler].FrozenTurns != 0) //frozen solid
             {
-                //if (Random() % 5)//ok found freeze chance, so 1 in 5 chance of thawing out, on freeze.  pretty much  random % 5 if not 0 stays frozen.
-                if (!THAW_CONDITION(gCurrentMove)) //attempt at frozn timr   actuallg best to put timer decrement at endturn, that way can have consistent freze duration
+                if (--gDisableStructs[gActiveBattler].FrozenTurns != 0)
                 {
-                    //--gDisableStructs[gActiveBattler].FrozenTurns != 0
-                    gBattlescriptCurrInstr = BattleScript_MoveUsedIsFrozen;
-                    gHitMarker |= HITMARKER_NO_ATTACKSTRING;
+                    //if (Random() % 5)//ok found freeze chance, so 1 in 5 chance of thawing out, on freeze.  pretty much  random % 5 if not 0 stays frozen.
+                    if (!THAW_CONDITION(gCurrentMove)) //attempt at frozn timr   actuallg best to put timer decrement at endturn, that way can have consistent freze duration
+                    {
+                        //--gDisableStructs[gActiveBattler].FrozenTurns != 0
+                        gBattlescriptCurrInstr = BattleScript_MoveUsedIsFrozen;
+                        gHitMarker |= HITMARKER_NO_ATTACKSTRING;
+                    }
+                    else //continue to thaw out  
+                    {
+                        ++gBattleStruct->atkCancellerTracker;
+                        break;
+                    } //check more make sure correct with thaw
                 }
-                else
+                else // unfreeze
                 {
-                    ++gBattleStruct->atkCancellerTracker;
-                    break;
-                } //check more make sure correct with thaw
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_DefrostBattler_KeepStatus;
+                    //gBattlescriptCurrInstr = BattleScript_MoveUsedUnfroze;
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                }
                 effect = 2; //changed thaw condition to fire move min 60 base power not fire fang
             }   //done should no longer need thaw effects already replaced
-            ++gBattleStruct->atkCancellerTracker;
-            break;
-        case CANCELLER_CLAMPED: // clamped      //hope works idea is 1 in 3 chance to set flinch status when clamped,
-            //should then default to canceller_flinched clause I think/hope     //actually let me put this above flinch to be safe
-            if (((gBattleMons[gBattlerAttacker].status4 & STATUS4_CLAMP) || (gBattleMons[gBattlerAttacker].status1 & STATUS1_CLAMP)) && ((Random() % 3) == 0))
-            {
-                gBattleMons[gBattlerAttacker].status2 |= STATUS2_FLINCHED;
-                //gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
-                //gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
-                //gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                //effect = 1;  don'et need set effect it'll be done in flinch case
-            }
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_TRUANT: // truant
@@ -3253,6 +3233,30 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_FLINCH: // flinch
+            if ((IsAbilityOnField(ABILITY_STENCH))
+                && (GetBattlerAbility(gBattlerAttacker) != ABILITY_STENCH
+                && GetBattlerAbility(gBattlerAttacker) != ABILITY_INNER_FOCUS
+                && GetBattlerAbility(gBattlerAttacker) != ABILITY_OBLIVIOUS
+                && GetBattlerAbility(gBattlerAttacker) != ABILITY_LEAF_GUARD
+                && GetBattlerAbility(gBattlerAttacker) != ABILITY_SWEET_VEIL
+                && GetBattlerAbility(gBattlerAttacker) != ABILITY_AROMA_VEIL
+                && GetBattlerAbility(gBattlerAttacker) != ABILITY_FLOWER_VEIL
+                && GetBattlerAbility(gBattlerAttacker) != ABILITY_AFTERMATH //immune for opposite reason also putride
+                    ) //or could just make grass & poison immune? thinking of removing aftermath exclusion..
+                && Random() % 5 == 0)   //should be 20% chance to set status to battler
+            {
+                gBattleMons[gBattlerAttacker].status2 |= STATUS2_FLINCHED;  //set status
+            }
+
+            if (((gBattleMons[gBattlerAttacker].status4 & STATUS4_CLAMP) || (gBattleMons[gBattlerAttacker].status1 & STATUS1_CLAMP)) && ((Random() % 3) == 1))
+            {
+                gBattleMons[gBattlerAttacker].status2 |= STATUS2_FLINCHED;
+                //gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
+                //gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
+                //gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                //effect = 1;  don'et need set effect it'll be done in flinch case
+            }
+
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_FLINCHED)
             {
                 gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_FLINCHED);
@@ -3330,8 +3334,8 @@ u8 AtkCanceller_UnableToUseMove(void)
                 --gBattleMons[gBattlerAttacker].status2;    //nvm couldn't put bug clause above this line, or confusion wouldn't decrement & be permanent
 
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION && IsBlackFogNotOnField()) //&& !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG))
-                {
-                    if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG)) //moved bug exclusion to here, so status decrements //NEED TEST //vsonic
+                {// idea cammymealtee trying setup so tangled feet like bug gets confused but never hits themselves
+                    if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG) || GetBattlerAbility(gBattlerAttacker) != ABILITY_TANGLED_FEET) //moved bug exclusion to here, so status decrements //NEED TEST //vsonic
                     {
                         if ((Random() % 2) == 0) //chance confused but used move anyway   think 50% may equal random % 2 not 0
                         {
@@ -3426,7 +3430,8 @@ u8 AtkCanceller_UnableToUseMove(void)
             break;
         case CANCELLER_PRESSURE: // new pressure effect
             if (((GetBattlerAbility(gBattlerTarget) == ABILITY_PRESSURE
-                || GetBattlerAbility(gBattlerTarget) == ABILITY_HI_PRESSURE) && (Random() % 4) == 1)
+                || GetBattlerAbility(gBattlerTarget) == ABILITY_HI_PRESSURE)
+                && (Random() % 4) == 1)
                 && IsBlackFogNotOnField())
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
@@ -3648,22 +3653,30 @@ u8 AtkCanceller_UnableToUseMove(void)
         case CANCELLER_MULTI_HIT_MOVES: //set multihit counter
             {
                 switch(gBattleMoves[gCurrentMove].effect)
-                {
+                {   
+                    case EFFECT_FURY_CUTTER:
+                    {
+                        gMultiTask = 5; //unique effect given acc drop, lowered acc drop rate
+                        break;
+                    }
                     case EFFECT_PRESENT:
+                    {
                         gMultiTask = Random() % 4; //return a number between 0 & 3
                         if (gMultiTask > 1)
                             gMultiTask = (Random() % 3) + 3; // if non 0, present lands between 3-5 htis
                         else
                             gMultiTask += 3; //else present lands 3 hits /odds of dmg vs heal is in presentdamagecalc
                         break;
-                    case EFFECT_FURY_CUTTER:
+                    }
                     case EFFECT_MULTI_HIT:
+                    {
                         gMultiTask = Random() % 4; //return a number between 0 & 3
                         if (gMultiTask > 1)
                             gMultiTask = (Random() % 4) + 2; // if non 0, multihit is between 2-5 htis
                         else
                             gMultiTask += 2; //else add 2 to multi counter, returning a multihit of 2.
                         break;
+                    }
                     case EFFECT_TWINEEDLE:
                     case EFFECT_DOUBLE_HIT:
                     case EFFECT_DOUBLE_IRON_BASH:
@@ -3683,29 +3696,30 @@ u8 AtkCanceller_UnableToUseMove(void)
                                 gMultiTask += 2; //else add 2 to multi counter, returning a multihit of 2.
                         }
                         break;
-
                 }
-                if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_SKILL_LINK
-                    || (GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK))
-                    && CanMultiTask(gCurrentMove) == TRUE) //will only affect multi hit & fury cutter /was just meant to be for things that were already multihit
+
+                if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_SKILL_LINK)
+                    || (GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK)) //will only affect multi hit & fury cutter /was just meant to be for things that were already multihit
                 {
                     if (gBattleMoves[gCurrentMove].effect == EFFECT_MULTI_HIT
-                        || (gBattleMoves[gCurrentMove].effect == EFFECT_FURY_CUTTER)
-                        || (gBattleMoves[gCurrentMove].effect == EFFECT_PRESENT)
-                        )
+                        //|| (gBattleMoves[gCurrentMove].effect == EFFECT_FURY_CUTTER)
+                        || (gBattleMoves[gCurrentMove].effect == EFFECT_PRESENT) //to exclude from damagecalc multitask split need add these effects back to miultitask exclusion
+                        ) //this will still work, it'll just stop the dmg from getting affected/cut
                         gMultiTask = 5;                
                 } //put this part at bottom of multihit
 
                 gMultiHitCounter = gMultiTask;
-                ++gBattleStruct->atkCancellerTracker;
-            }            
-            break;
+                
+            }    
+            ++gBattleStruct->atkCancellerTracker;
+                break; 
         case CANCELLER_END:
             break;
         } //end of main switch
 
     } while (gBattleStruct->atkCancellerTracker != CANCELLER_END && gBattleStruct->atkCancellerTracker != CANCELLER_END2 && effect == 0);
-
+                    //while atkunable touse move hasnt ended, or atkunable to use move 2 hasnt ended and effect is 0 keep looping
+                    //so stops soon as effect is set
     if (effect == 2)
     {
         gActiveBattler = gBattlerAttacker;
@@ -4941,7 +4955,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             case ABILITY_FLUORESCENCE:
-                if (!gSpecialStatuses[battler].switchInAbilityDone && !IsBlackFogNotOnField())
+                if (!gSpecialStatuses[battler].switchInAbilityDone && IsBlackFogNotOnField())
                 {
 
 
@@ -6723,8 +6737,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (effect)
                 {
                     switch (effect) //this switch case tells the effect values what to do
-                        //maybe I can change intimidate and synchronize to a switch case to do the swtich in actiation I want?
-                    {
+                        //co dependent status - cure cancel out brn cant be with freeze  sleep cant be w spirit lock  psn cant be w toxic
+                    {   //was planning change water veil not remove burn if burned but keep from taking burn dmg, would be for things like flame orb toxic orb, 
+                        //would allow for more strat and somewhat make sense, if ability was removed and got status then ability came back it wouldn't change causaility
+                        //but things like insomnia make sense to remove status mostly because the status is fully debilatating so sleep & freeze
                     case 1: // status cleared
                         gBattleMons[battler].status1 = 0; //if I'm able to apply multiple status may have to change this to like the others and clear specific status
                         break;
@@ -10645,8 +10661,10 @@ bool32 CanBeBurned(u8 battlerId)
 
 bool32 CanBeParalyzed(u8 battlerId) //update these functions with my custom status logic so can use for cleaner setup   vsonic
 {
+    u8 movetype;
     u16 ability = GetBattlerAbility(battlerId);
-    if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_ELECTRIC))
+    GET_MOVE_TYPE(gCurrentMove,movetype)
+    if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_ELECTRIC) && movetype == TYPE_ELECTRIC)
         || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_SAFEGUARD
         || ability == ABILITY_LIMBER
         || ability == ABILITY_COMATOSE
