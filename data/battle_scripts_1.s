@@ -441,7 +441,7 @@ gBattleScriptsForBattleEffects::	@must match order of battle_effects.h file
 	.4byte BattleScript_EffectVictoryDance            @ EFFECT_VICTORY_DANCE
 	.4byte BattleScript_EffectTeatime                 @ EFFECT_TEATIME
 	.4byte BattleScript_EffectAttackUpUserAlly        @ EFFECT_ATTACK_UP_USER_ALLY
-													  @ EFFECT_INFESTATION  bug status
+													  @ EFFECT_INFESTATION  bug status / dont need effect for this can use moveeffect
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -3523,7 +3523,7 @@ BattleScript_EffectMagmaStorm::
 	goto BattleScript_EffectHit
 
 BattleScript_EffectSwarm::
-	setmoveeffect MOVE_EFFECT_INFESTATION	
+	call_if EFFECT_SWARM	
 	goto BattleScript_EffectHit
 
 BattleScript_EffectSnapTrap::
@@ -7962,6 +7962,7 @@ BattleScript_MoveEffectMagmaStorm::
 	return
 
 BattleScript_MoveEffectInfestation::
+	setmoveeffect MOVE_EFFECT_INFESTATION
 	printstring STRINGID_INFESTATION
 	waitmessage 0x40
 	return

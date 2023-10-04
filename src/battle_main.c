@@ -3461,7 +3461,7 @@ void SwitchInClearSetData(void) //handles what gets reset on switchout
     {
         gBattleMons[gActiveBattler].status2 = 0;
         gStatuses3[gActiveBattler] = 0; //guess so but seems I misunderstood switch clear it clears data when they switch into battle not switching out
-        //gStatuses4[gActiveBattler] = 0;  if don't clear could make status 4 traps permament so don't need to swap to status1
+        gStatuses4[gActiveBattler] = 0; // if don't clear could make status 4 traps permament so don't need to swap to status1
         //could just put if battler that set status was holding grip claw don't clear   
         //look to wrapped by logic for example, use that as battlerId and check hold effect vsonic
         //should be simple change to trappedby  and use for all traps
@@ -3527,7 +3527,7 @@ void SwitchInClearSetData(void) //handles what gets reset on switchout
 }
 
 #define CLEARDATA_ON_FAINT
-void FaintClearSetData(void)
+void FaintClearSetData(void) //see about make status1 not fade wen faint?
 {
     s32 i;
     u8 *ptr;
@@ -3537,6 +3537,7 @@ void FaintClearSetData(void)
         gBattleMons[gActiveBattler].statStages[i] = 6;
     gBattleMons[gActiveBattler].status2 = 0;
     gStatuses3[gActiveBattler] = 0;
+    gStatuses4[gActiveBattler] = 0;
     for (i = 0; i < gBattlersCount; ++i)
     {
         if ((gBattleMons[i].status2 & STATUS2_ESCAPE_PREVENTION) && gDisableStructs[i].battlerPreventingEscape == gActiveBattler)

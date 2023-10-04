@@ -4224,8 +4224,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage = damage * gBattleMovePower;
         damage *= (2 * attacker->level / 5 + 2); //offense side of damage formula for level scaled damage
 
-        //trap effects
-        if (((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION))
+        //trap effects & bug status def drop
+        if (((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION) //this is bug status
+            || gDisableStructs[gEffectBattler].swarmTurns) //this is trap status
             && IsBlackFogNotOnField()) //liked the idea of creating a bug status effect, change  move infestaion to swarm, atked by biting swarm!
             //then make infested/infestation the bug status, the extra effect of swarm would be setting the infestation status
         {
@@ -5770,6 +5771,7 @@ void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst)
         dst->statStages[i] = DEFAULT_STAT_STAGE;
 
     dst->status2 = 0;
+    dst->status4 = 0;
 }
 
 static void CopyPlayerPartyMonToBattleData(u8 battlerId, u8 partyIndex) //function brokeninto several smaller functions in emerald
@@ -5823,6 +5825,7 @@ static void CopyPlayerPartyMonToBattleData(u8 battlerId, u8 partyIndex) //functi
         gBattleMons[battlerId].statStages[i] = 6;   //vsonic  on switch resets stat stage to normal
 
     gBattleMons[battlerId].status2 = 0; //clears status 2 on switch, no mention of status3 or status 4
+    gBattleMons[battlerId].status4 = 0; 
     UpdateSentPokesToOpponentValue(battlerId); //check if status 3 and status4 are being zeroes out properly if not they could be assigning garbage data
     ClearTemporarySpeciesSpriteData(battlerId, FALSE);  //and that coudl be reason for glitch? as most status4 stuff are the new traps
 }

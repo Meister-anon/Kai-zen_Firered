@@ -2495,11 +2495,11 @@ u8 DoBattlerEndTurnEffects(void)
                 ++gBattleStruct->turnEffectsTracker;
                 break;
             case ENDTURN_SWARM:  // may need add fallthrough?     //make environemnt trap end turn & then separate ones for each physical trap
-                if (((gBattleMons[gActiveBattler].status4 & STATUS4_INFESTATION) || (gBattleMons[gActiveBattler].status1 & STATUS1_INFESTATION))
+                if (((gDisableStructs[gActiveBattler].swarmTurns
+                    && IsBlackFogNotOnField()))
                     && gBattleMons[gActiveBattler].hp != 0)
                 {   //THIS was the problem, why didn't i put a status check on this like I did the others?
-                    if (--gDisableStructs[gActiveBattler].infestationTurns != 0
-                        && IsBlackFogNotOnField())  // damaged by wrap
+                    if (--gDisableStructs[gActiveBattler].swarmTurns != 0)  // damaged by wrap
                     {
                         MAGIC_GUARD_CHECK;
 

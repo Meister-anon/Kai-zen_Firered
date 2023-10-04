@@ -247,7 +247,7 @@ struct DisableStruct
     u8 wrapTurns;  //turn counter for wrap bind
     u8 environmentTrapTurns;   //turn counter for environment traps fire spin whirlpool sandtomb magma storm
     u8 clampTurns;
-    u8 infestationTurns;
+    u8 swarmTurns;
     u8 snaptrapTurns;
     u8 FrozenTurns;
     u8 bideTimer;

@@ -811,7 +811,7 @@ static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
     [MOVE_EFFECT_SAND_TOMB] = STATUS4_SAND_TOMB,
     [MOVE_EFFECT_MAGMA_STORM] = STATUS4_MAGMA_STORM,
     [MOVE_EFFECT_INFESTATION] = STATUS4_INFESTATION,
-    [MOVE_EFFECT_SNAP_TRAP] = STATUS1_SNAP_TRAP,
+    [MOVE_EFFECT_SNAP_TRAP] = STATUS1_SNAP_TRAP, //actually think I don't need make status1, could just check status and remove part that says if wrap user switches out effect is removed
     [MOVE_EFFECT_ATTRACT] = STATUS2_INFATUATION,    //didn't work couldn't use infatuatedwith
 };//actually rather than making this u64 prob should try putting in different status field since it doesn't need to be all status2 Ian use status4
 //mof don't think the gba can parse u64, it can only go up to 3 mbs?
@@ -1871,7 +1871,8 @@ static void atk01_accuracycheck(void)
         if (((gBattleMons[gBattlerAttacker].status4 & STATUS4_SAND_TOMB) || (gBattleMons[gBattlerAttacker].status1 & STATUS1_SAND_TOMB))
             && IsBlackFogNotOnField())
         {
-            moveAcc = (moveAcc * 60) / 100; //euivalent of a 2 stage acc drop
+            moveAcc = (moveAcc * 85) / 100; //since most mon that have this also have access to sandstorm or are in desert made less punishing
+            //moveAcc = (moveAcc * 60) / 100; //euivalent of a 2 stage acc drop
         }
 
         
@@ -1909,7 +1910,7 @@ static void atk01_accuracycheck(void)
         // check Thunder on sunny weather / need add hail blizzard buff?(IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY)
         //don't rememeber why I used effect thunder instead of gcurrentmove
         if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
-            moveAcc = 50;
+            moveAcc = 65;   //make slightly more forgiving
         // Check Wonder Skin.
         if (GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_SKIN 
             && IS_MOVE_STATUS(move) && moveAcc != 50)   //changed so can include 0 accuracy status moves.
@@ -4945,11 +4946,11 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
                         || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups - need work on better define setup this vsonic
                     {
-                        gDisableStructs[gEffectBattler].infestationTurns = 7;
+                        gDisableStructs[gEffectBattler].swarmTurns = 7;
                         gBattleMons[gEffectBattler].status1 |= STATUS1_INFESTATION;
                     }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
                     else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
-                        gDisableStructs[gEffectBattler].infestationTurns = ((Random() % 5) + 2);   //will do 2-6 turns
+                        gDisableStructs[gEffectBattler].swarmTurns = ((Random() % 5) + 2);   //will do 2-6 turns
                         gBattleMons[gEffectBattler].status4 |= STATUS4_INFESTATION;
                     }
 
@@ -17220,6 +17221,20 @@ void BS_call_if(void) //comparing to jumpifholdeffect
                     || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)))
                     gBattlescriptCurrInstr = BattleScript_NotAffected;
                 break;
+            case EFFECT_SWARM:
+            if (!(gDisableStructs[gEffectBattler].swarmTurns)) //for trap status
+            {
+                if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
+                    || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups - need work on better define setup this vsonic
+                {
+                    gDisableStructs[gEffectBattler].swarmTurns = 7;
+                }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
+                else    //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
+                    gDisableStructs[gEffectBattler].swarmTurns = ((Random() % 5) + 2);   //will do 2-6 turns
+
+                    gBattleMons[gActiveBattler].status4 |= STATUS4_INFESTATION; //wasn't planning to include status in this but think need it for animation to play properly
+            }
+            break;
         }
     }
     gBattlescriptCurrInstr = cmd->nextInstr; //had to put in hitfromcritcalc for rollout, so put intr increment back in, so won't break everything else, 
@@ -17260,9 +17275,9 @@ void BS_getmoveeffect(void)//transfer move effects mostly for multihit but also 
         case EFFECT_DOUBLE_IRON_BASH:
         gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
             break;
-        case EFFECT_INFESTATION:
-        gBattleScripting.moveEffect = MOVE_EFFECT_INFESTATION;
-            break;
+        //case EFFECT_INFESTATION:      //no longer called this and moved to argument to set this
+        //gBattleScripting.moveEffect = MOVE_EFFECT_INFESTATION;
+        //    break;
         default:
             gBattleScripting.moveEffect = MOVE_EFFECT_NOTHING_0;
             break;

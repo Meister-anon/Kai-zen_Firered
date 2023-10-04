@@ -851,6 +851,18 @@ goto TRAINER_REMATCH //stuff
 
  ok nvm removing those will instead do in C, as otherwise it'd bypass ability checks  in setmoveeffect, so it'll be the last check
  //before status1 checks  ok done, and made sure to include that its only for status moves, need test but should hopefully work
+
+ still need find way to setup ABILITY_RUN_AWAY to be immune to pursuit switchout dmg
+ //also think would like to buff pursuit, so like with switch it'd check if enemy was attempting to use pursuit, so
+ //you'd take pursuit damage even if you rolled a succees on running
+
+ note broke infestation trap and new bug status infestation into 2 different effects
+//THe new bug status is infestation, ist a status4 for now, and it has the effect of lowering statused target defense by half same as burn does for attack
+
+ the move infestation has been renamed swarm, it will do trap effect, and will also lower defense for duration (not done yet)  //redone done
+
+ need setup ABILITY_SUCTION_CUPS with emerald logic where it increases odds of successful fishing if in lead
+ ITS FIXED WRAP GAME FREEZING BUG IS FIXED IT WAS THE POKEMON.C I DIDN'T PROPERLY INITIALY THE STATUS4!!
 */
 
 goto BASESTATS_TO_BATTLEMONS_CONVERSION //battle_script_commands.c place where basestats types are transferred to battlemons struct for battle, done on switchin
