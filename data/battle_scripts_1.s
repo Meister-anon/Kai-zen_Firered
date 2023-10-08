@@ -421,7 +421,6 @@ gBattleScriptsForBattleEffects::	@must match order of battle_effects.h file
 	@ custom effects  @@@@@@@@@@
 	.4byte BattleScript_EffectMonotype
 	.4byte BattleScript_EffectSketchStatUp
-	.4byte BattleScript_EffectRockSmash		@doesn''t even need special effect as I added teh jump to effect hit..-_-
 	.4byte BattleScript_EffectFlash
 	.4byte BattleScript_EffectCocoon
 	.4byte BattleScript_EffectFlashFreeze	@ice will o wisp
@@ -441,7 +440,7 @@ gBattleScriptsForBattleEffects::	@must match order of battle_effects.h file
 	.4byte BattleScript_EffectVictoryDance            @ EFFECT_VICTORY_DANCE
 	.4byte BattleScript_EffectTeatime                 @ EFFECT_TEATIME
 	.4byte BattleScript_EffectAttackUpUserAlly        @ EFFECT_ATTACK_UP_USER_ALLY
-													  @ EFFECT_INFESTATION  bug status / dont need effect for this can use moveeffect
+	.4byte BattleScript_EffectTargetTypeBasedDmg	  @ EFFECT_TARGET_TYPE_DAMAGE  @ bug status / dont need effect for this can use moveeffect
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -2539,8 +2538,6 @@ BattleScript_EffectPlaceholder:
 @but that can't be right?
 @seems to be happening on switchin/ battle start?
 BattleScript_EffectHit::
-	jumpifmove MOVE_ROCK_SMASH, BattleScript_EffectRockSmash
-	jumpifmove MOVE_CUT, BattleScript_EffectCut
 	jumpifmove MOVE_SPLISHY_SPLASH, BattleScript_EffectParalyzeHit
 	jumpifmove MOVE_FREEZE_SHOCK, BattleScript_EffectParalyzeHit
 	jumpifmove MOVE_ICE_BURN, BattleScript_EffectBurnHit
@@ -3351,27 +3348,6 @@ BattleScript_AlreadyPoisoned::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
-@setmoveeffect function is the basis for all move effects, the setmoveeffectwithchance command & augments as well.
-@so for this poinsoning mechanc I need to properly set it up through setmoveeffect, and then have proper checks in bs command, like above 
-@to skip STATUS1_ANY check.
-@@edited, did work in main setmoveeffect dont think ill be usin this script at all. string will only be used on toxic.
-BattleScript_PoisonWorsened::
-	printstring STRINGID_PKMNSPOISONWORSENED
-	waitmessage 0x40
-	return
-
-BattleScript_PoisonBecameToxic::
-	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
-	attackanimation
-	waitanimation
-	printstring STRINGID_PKMNSPOISONWORSENED
-	waitmessage 0x40
-	setmoveeffect MOVE_EFFECT_TOXIC
-	seteffectprimary
-	resultmessage
-	waitmessage 0x40
-	goto BattleScript_MoveEnd
 
 BattleScript_ImmunityProtected::
 	copybyte gEffectBattler, gBattlerTarget
@@ -4656,16 +4632,11 @@ BattleScript_EffectReturn::
 	happinesstodamagecalculation
 	goto BattleScript_HitFromAtkString
 
-BattleScript_EffectRockSmash::
+BattleScript_EffectTargetTypeBasedDmg::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	typebaseddmgboost
-	goto BattleScript_HitFromAtkString
-
-BattleScript_EffectCut::
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	typebaseddmgboost
+	call_if EFFECT_TARGET_TYPE_DAMAGE	@set defensedown effect back for rock smash
 	goto BattleScript_HitFromAtkString
 
 BattleScript_EffectPresent::
@@ -7926,6 +7897,16 @@ BattleScript_MoveEffectToxic::
 	waitmessage 0x40
 	goto BattleScript_UpdateEffectStatusIconRet
 
+@setmoveeffect function is the basis for all move effects, the setmoveeffectwithchance command & augments as well.
+@so for this poinsoning mechanc I need to properly set it up through setmoveeffect, and then have proper checks in bs command, like above 
+@to skip STATUS1_ANY check.
+@@edited, did work in main setmoveeffect dont think ill be usin this script at all. string will only be used on toxic.
+BattleScript_PoisonWorsened::
+	statusanimation BS_EFFECT_BATTLER
+	printstring STRINGID_PKMNSPOISONWORSENED
+	waitmessage 0x40
+	return
+
 BattleScript_MoveEffectPayDay::
 	printstring STRINGID_COINSSCATTERED
 	waitmessage 0x40
@@ -9002,7 +8983,7 @@ BattleScript_KingsShieldEffect::
 	return
 
 BattleScript_BanefulBunkerEffect::
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_SAFEGUARD | HITMARKER_PASSIVE_DAMAGE
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	bichalfword gMoveResultFlags, MOVE_RESULT_NO_EFFECT
 	seteffectsecondary
 	setmoveeffect 0

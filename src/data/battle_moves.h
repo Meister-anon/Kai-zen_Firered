@@ -217,7 +217,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_CUT] =
     {
-        .effect = EFFECT_HIT,
+        .effect = EFFECT_TARGET_TYPE_DAMAGE,
         .power = 60,
         .type = TYPE_GRASS,
         .accuracy = 100,
@@ -227,7 +227,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-    },
+        .argument = TYPE_GRASS,
+        .argumentEffectChance = 30,
+    }, //make effect easy to adjust, change command  to read type to effct from argument, and dmg multiplier from gbattlemovedmg * argumetn chance/ 10
 
     [MOVE_GUST] =
     {
@@ -2530,7 +2532,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     .effect = EFFECT_HIT,
     .power = 70,
     .type = TYPE_NORMAL,
-    .accuracy = 100,
+    .accuracy = 95,
     .pp = 20,
     .secondaryEffectChance = 0,
     .target = MOVE_TARGET_SELECTED,
@@ -3898,7 +3900,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #else
             .power = 20,
         #endif
-        .effect = EFFECT_DEFENSE_DOWN_HIT,
+        .effect = EFFECT_TARGET_TYPE_DAMAGE, 
         .type = TYPE_FIGHTING,
         .accuracy = 100,
         .pp = 15,
@@ -3907,7 +3909,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
-    }, //same as how I did function for hidden power make conditions to augment damage
+        .argument = TYPE_ROCK,
+        .argumentEffectChance = 20,
+    }, //Redid the seutp for this to make more flexible and easier to use for binary edits argument chance is multiplier
+    //gets divided by  10,  so value of 20 is 2x dmg, binary cant do extra effects though, had to use call if in script to make defense drop work- test
+    //same as how I did function for hidden power make conditions to augment damage
     //specifically if target is a rock type, want to double move power.  works!
 
     [MOVE_WHIRLPOOL] =
@@ -4838,15 +4844,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ASTONISH] =
     {
 
-        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_MINIMIZE,
-        .effect = EFFECT_FLINCH_HIT,
         .power = 30,
-        .type = TYPE_GHOST,
         .accuracy = 100,
+        .effect = EFFECT_FLINCH_HIT,
+        .type = TYPE_GHOST,
         .pp = 15,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_MINIMIZE,
         .split = SPLIT_PHYSICAL,
     },
 
@@ -6275,8 +6281,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_HIT,
         .power = 70,
         .type = TYPE_DARK,
-        .accuracy = 100,
-        .pp = 15,
+        .accuracy = 95,
+        .pp = 20,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
@@ -6339,7 +6345,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_HIT,
         .power = 80,
         .type = TYPE_BUG,
-        .accuracy = 100,
+        .accuracy = 95,
         .pp = 15,
         .secondaryEffectChance = 15,
         .target = MOVE_TARGET_SELECTED,
@@ -6597,8 +6603,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_HIT,
         .power = 70,
         .type = TYPE_GHOST,
-        .accuracy = 100,
-        .pp = 15,
+        .accuracy = 95,
+        .pp = 20,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
@@ -6878,7 +6884,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_POISON_HIT,
         .power = 70,
         .type = TYPE_POISON,
-        .accuracy = 100,
+        .accuracy = 95,
         .pp = 20,
         .secondaryEffectChance = 10,
         .target = MOVE_TARGET_SELECTED,

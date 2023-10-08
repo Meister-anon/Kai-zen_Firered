@@ -749,6 +749,7 @@ extern struct BattleStruct *gBattleStruct;
 }
 
 //made this myself
+//plan use this for planned idea of terra
 #define SET_BATTLER_TYPE3(battlerId, type)           \
 {                                                   \
     gBattleMons[battlerId].type3 = type;            \

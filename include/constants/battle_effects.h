@@ -423,6 +423,7 @@
 #define EFFECT_VICTORY_DANCE                411
 #define EFFECT_TEATIME                      412
 #define EFFECT_ATTACK_UP_USER_ALLY          413 // Howl 8th Gen ver.
+#define EFFECT_TARGET_TYPE_DAMAGE       414
 
 /*MOVE_FIRE_SPIN, //increases burn chance //serenge grace is effect *2 by requires no setup, I think I can get away w * 3 here actually do more to near guarantee 50-60%
 MOVE_CLAMP,     //no extra wrap effect,  but give flich chance on hit //changed mind you're staying clamped on them, so for duration statused target has chance to flinch when attacking

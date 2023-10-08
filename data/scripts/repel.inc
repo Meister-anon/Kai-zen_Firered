@@ -51,7 +51,7 @@ EventScript_UseAnotherRepel::
 	
 EventScript_UseAnotherBadOnion::
 	removeitem ITEM_BAD_ONION, 1
-	setvar VAR_TRAINER_REPEL_STEP_COUNT 100
+	setvar VAR_TRAINER_REPEL_STEP_COUNT 150	@if change this  need change item value as well in items.json
 	goto EventScript_FinishNewRepel
 	
 EventScript_UseAnotherSuperRepel::

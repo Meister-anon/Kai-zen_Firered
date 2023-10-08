@@ -6406,13 +6406,13 @@ static const struct TrainerMonItemCustomMoves sTrainerMons_EliteFourLance[] = {
 
 static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderBrock[] = {
     {
-        .iv = 20,
+        .iv = MIN_FIXED_IVS,
         .lvl = 12,
         .species = SPECIES_GEODUDE,
         //.moves = {MOVE_TACKLE, MOVE_DEFENSE_CURL, MOVE_NONE, MOVE_NONE},
     },
     {
-        .iv = 20,
+        .iv = MIN_FIXED_IVS,
         .lvl = 13,
         .species = SPECIES_ONIX,
         .moves = {MOVE_TACKLE, MOVE_BIND, MOVE_ROCK_TOMB, MOVE_NONE},
@@ -6421,7 +6421,7 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderBrock[] = {
 
 static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderMisty[] = {
     {
-        .iv = 20,
+        .iv = MIN_FIXED_IVS,
         .lvl = 18,
         .species = SPECIES_STARYU,
         .moves = {MOVE_CAMOUFLAGE, MOVE_RAIN_DANCE, MOVE_RECOVER, MOVE_WATER_PULSE},

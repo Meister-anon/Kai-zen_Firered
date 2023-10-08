@@ -151,7 +151,7 @@ static bool8 CheckTrainer(u8 trainerObjId)
         approachDistance = 0;   //I think I want to tweak this so it doesn't work in gyms?  but then again if player wants to do that, that's fine for them.
 
     if (VarGet(VAR_TRAINER_REPEL_STEP_COUNT) != 0)
-        approachDistance = 0;   //value of 0 means trainer won't approach
+        approachDistance = 0;   //value of 0 means trainer won't approach think not setup right dont have item still trainers not approaching
 
     if (approachDistance != 0)  //default logic
     {

@@ -393,6 +393,7 @@ static const struct ListMenuItem sListMenuItems_TypeNames[] = {
     {gTypeNames[TYPE_STEEL],       TYPE_STEEL},
     {gTypeNames[TYPE_DARK],         TYPE_DARK},
     {gTypeNames[TYPE_FAIRY],       TYPE_FAIRY}, // fairy addition seems need special allignment here 4 right side.
+    {gTypeNames[TYPE_SOUND],       TYPE_SOUND},
     {gUnknown_8459360,           NUMBER_OF_MON_TYPES}
 };
 

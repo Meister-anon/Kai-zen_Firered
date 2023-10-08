@@ -3712,7 +3712,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         && (gProtectStructs[battlerIdDef].physicalDmg != 0 || gProtectStructs[battlerIdDef].specialDmg != 0 || gProtectStructs[battlerIdDef].confusionSelfDmg))
         gBattleMovePower *= 2;
     if (gBattleMoves[gCurrentMove].effect == EFFECT_KNOCK_OFF && gBattleMons[gBattlerTarget].item != 0)
-        gBattleMovePower = (130 * gBattleMovePower) / 100; //CHANGed modern boost 1.3 rathr than 1.5
+        gBattleMovePower = (150 * gBattleMovePower) / 100;
     if (gBattleMoves[gCurrentMove].effect == EFFECT_WAKE_UP_SLAP)
     {
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || GetBattlerAbility(gBattlerTarget) == ABILITY_COMATOSE)
@@ -4222,7 +4222,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             APPLY_STAT_MOD(damage, attacker, attack, STAT_ATK)
 
         damage = damage * gBattleMovePower;
-        damage *= (2 * attacker->level / 5 + 2); //offense side of damage formula for level scaled damage
+        //damage *= (2 * attacker->level / 5 + 2); //offense side of damage formula for level scaled damage
+        damage *= (((attacker->level * 160) / 100) / 5 + 3);  //alt lower scaling dmg formula
 
         //trap effects & bug status def drop
         if (((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION) //this is bug status
@@ -4413,7 +4414,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             APPLY_STAT_MOD(damage, attacker, spAttack, STAT_SPATK)
 
         damage = damage * gBattleMovePower;
-        damage *= (2 * attacker->level / 5 + 2); //it isn't, realized that's calc for normal level scaling damage.
+        //damage *= (2 * attacker->level / 5 + 2); //it isn't, realized that's calc for normal level scaling damage.
+        damage *= (((attacker->level * 160) / 100) / 5 + 3);  //alt lower scaling dmg formula
 
         if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNAWARE)
             damage = spAttack;

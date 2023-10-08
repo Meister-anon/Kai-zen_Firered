@@ -863,7 +863,252 @@ goto TRAINER_REMATCH //stuff
 
  need setup ABILITY_SUCTION_CUPS with emerald logic where it increases odds of successful fishing if in lead
  ITS FIXED WRAP GAME FREEZING BUG IS FIXED IT WAS THE POKEMON.C I DIDN'T PROPERLY INITIALY THE STATUS4!!
+
+ I just need to figure out the type issue for the most part now.
+
+ task list:
+fix type chart reading bug,     -fixed ...I'm a retarded idiot, it was all because I used gbasestats instead of gbattlemons 
+fix move end wrap status bug that freezes game - done
+re-add the graphic changes for pokedex
+readjust summary screen graphic so longer ability names fit
+fix windows and y coordinate values for pokedex graphics & double check new dex entries fit
+
+trying to figure out type issue, its not modulate dmg by type I think, the dmg multipier is being adjusted, 
+according to what its reading the type as, the issue is I know the types aren't matching what the effect should be
+
+it was reading every mon as bulbasaurs type...because  I used gbasestats[gbattlertarget].type *FACEPUNCH
+because gbattlertargeet can only default to a value between 0 and 4, and its in the species field so 
+it makes type chart read the type of every target/battler as bulbasaur!!! which is why bug was always not very effective
+and grass was pretty much non existent it was quad resist on everything
+
+for some reason ghost moves seem to still not be reading correctly?
+
+still need rework poison setup or set back to full normal, right now poison animation isn't playing before turn dmg
+
+making own custom icons  for phsy special split.  new gen need know contact moev as well
+will be small icons placed in blue space below accuracy for summary screen 
+icons will be smaller
+P for physical
+S for special
+C for contact
+first two will be if else  based on split  and in first (slot)
+but C will be  there regardless of split in second (slot) beside the split icons
+decide better colors that I would like more
+think I would like dark icon for special, won't have anything for status
+use IsMoveMakingContact  for setting contact icon
+
+may make icons the same color etc, so they can slot together and look seemless
+think I'd just do dark grey background with white forground color for the lettering
+
+changed scratch to ghost dmg worked fine so issue seems to be effect /moveeffect instead?  something in setmoveeffect logic
+seems to be happening on lick and astonish?  flinch hit paralysis hit
+
+also issue of moves missing when it shouldn't be possible i.e 100 accuracy moves  quick attack beat up
+but wondergaurd etc is also not workign right, used tackle as a ghost move against wonder guard shedinja and 
+it should have been super effectve but instead it had no effect?   so didn't read as super effective 
+
+...I am going TO BLOW my FUCKING BRAINS OUT   the wrap bug came back??!
+for some reason using ghost move on dispirit guard shedinja
+
+ghost moves are also still not working on wondergaurd shedinja
+I can only imagine its reading it as a pure neutral move
+
+fury cutter still not workign fully far as the message, way it works if it doesn't kill  and doesn't do all hits
+it won't say type effectiveness message it'll only show that it missed, if it kills or gets all hits it'll show message.
+
+what I would want is show effectiveness on first hit, show miss on last hit if does so for multi hit
+
+no that's not it somehow ghost is only hitting mon that aren't grounded and aren't normal type?   or steel?? works on gligar doesnt work on magnemite
+potential issue with grounded function logic?   gligar is flying type,  while magnemite should just be in floating species so a different check
+
+that didnt seem to work?  but think can replace type check with else if, instead of using ifs, but worried bout messing with the structure too much
+when it doesnt work 
+
+for some reason ghost moves worked correctly in rival fight, but not outside it?  yeah ghost works right in BATTLE_TYPE_FIRST_BATTLE
+
+multitask isn't working...dmg split is working but it isnt attackign multiple times..
+ finished new seutp for rock smash cut etc.  type based effects, still no clue on multitask not working...
+
+leech seed also isn't working, is being applied twice, and not healing the target instead is doing damage to them too,?
+leech seed beign reaplied because its not setting status properly its being used does the end turn effect (improperly)
+and then its over   ok I see what's happening its healing the wrong taret,  its healing the mon seeded, but also dealing dmg to them
+so status is set oddly,/to wrong target?
+
+on catch add mon held item to bag, with brief text trigger after pokedex logic
+
+ //PokeballIcon_CaughtIn(y);// attempt to setup pokeball icon based on pokeball sprites/caught mon in for pokedex & summ screen
+
+ looking into gameplay /gamefocus based on videos by acoutsticharmonia pokemon focuses more on level than skill
+
+ which is true, level is the biggest factor of success even to the point where its a multilier in the damage formula (biggest one even)
+ so on that what if I made level LESS impactful, outside of just meaning bigger stats?
+ like say if I removed the level scaling from the dmg formula?
+
+ doing that would mean the stats of the mon themselves matter much more allowing you to hit higher above your weight scale so to speak
+ which would also let the game be more about strategy intead of just get levels do big damage
+
+ for that look into hwo much levvel affects dmg formula - ok found it.  in pokemon.c calculatebasedamage function used for physical and special
+ damage = damage * gBattleMovePower;
+    //this multiplier alone gets close to /50 cut so higher level means higher less scaling ie stronger with level i.e level becomes MORE important with time
+     damage *= (2 * attacker->level / 5 + 2);
+
+ //alternate lvl scaling
+    damage *= (attacker->level / 5 + 4);  //keeps things mostly the same at lower levels, if not slightly higher, but scales lower as you level
+ //2ND alternative scaling
+    damage *= ((attacker->level + 2) / 4 + 4);  //scales up slower on low side scales up higher w lvl later but still lower than norm
+ //3rd scaler
+    damage *= (((attacker->level * 110) / 100) / 4 + 3); //lowest early scaling slightly lower than 2nd method later scaling, still good deal below base
+
+    (((attacker->level * 130) / 100) / 5 + 4);          or   (((attacker->level * 170) / 100) / 5 + 3);
+
+    general consensous (((attacker->level * 160) / 100) / 5 + 3);  //closest to original scaling, w slightly higher early scaling for early difficulty, and lower later but not caps mostly at 85% drop from norm
+
+        - starting point starting multiplier i.e base dmg - my version on right
+ lvl 5 = 4                                  lvl 5 = 5                              
+ lvl 10 = 6                                 lvl 10 = 6
+ lvl 15 = 8                                 lvl 15 = 7
+ lvl 20 = 10                                lvl 20 = 8
+ lvl 25 = 12                                lvl 25 = 9
+ lvl 35 = 16                                lvl 35 = 11
+ lvl 40 = 18                                lvl 40 = 12
+ lvl 45 = 20                                lvl 45 = 13
+ lvl 70 = 30
+ lvl 100 = 42
+                    
+
+            real ex lvl 7 me vs lvl 9 foe 
+   4.8  vs 5.6                  5.4  vs 5.8
+
+
+ (to see if this lvl dmg scaling keeps up with or exceeds stat growth with lvl  just compare stats now with growth based on stat formula)
+  [n = (((2 * baseStat + ((iv * 240) /100) + ev / 4) * level) / 100) + 5;]   //can rmeove ev iv portion
+
+    [SPECIES_LEAFEON] =
+           //hp, atk, def, spd, spatk, spdef
+         STATS(86, 110, 130, 95, 60, 65),
+
+            remember all values are divide by 50 for final value for damage
+    atk stat:
+        lvl 7 = 20
+        lvl 10 = 27
+        lvl 15 = 38
+        lvl 20 = 49
+        lvl 25 = 60
+        lvl 35 = 82
+        lvl 40 = 93
+        lvl 45 = 104
+        lvl 70 = 159
+        lvl 100 = 225
+
+        ok trend seems to be stat growth is lower as you level, so higher scaling is to keep that sense of progression
+
+
+ dmg multiplier inccreases by 2 every 5 levels, if you assume lvl 5 is base dmg, your dmg multiplier doubles every 10 levels
+ btu that doesn't exactly mean total dmg doubes at that point as just leveling up makes available a greater portion of your total stats
+ //essentially the lvl multuiplier is being added on top of a constantly greater scaling number (more or less)
+
+damageHelper = spDefense;  (defense stat)
+
+ damage = (damage / damageHelper);    high dmg multiplier gets cut down here since it divides by defense stat and includes stat buffs
+
+ damage /= 50;  then seemss to also be done here again?  ok this makes slightly more sense, base move power was 25 with tackle being first move
+                        //effect seems to be to balance dmg   higher your level you do larger portion of true dmg but never 100%
+ 
+ so before level scaling and these large divisors damage as a value (move power) is multiplier from 25 to about 120 as of gen 3
+
+ super multiplier change has larger effect than I first thought which is great, but still need to adjust lvl scaling of base dmg formula
+ purpose of doing so is to act as counter balance for late game where you get far stronger moves, to ensure the multiplier change is still felt
+ also considering stats have a higher ceiling, because of my iv change to stat formula
+ 
+ ex. base game full super multiplier 4x weakness was enough to one shot near anything with a low power move
+ same situation my game its a 2 shot, on average you take 1 extra hit but direct comparison you take 64% of the dmg   4x vs 2.56x
+ so in that scenario something with bad defensive typing but is hyper offensive can still be a worthwhile pick and may be able to win
+
+ very interesting, level bonus scales high but so do the damage cuts, but even with that level largely outclasses defenses/any other gain/metric
+ which isn't in itself bad, because it gives a simple means of progresssion and feeling of growth, where you can obliterate lvl 5 and 10s when you get to be higher level
+ where they used to be a struggle.
+
+ run tests,   base dmg 20   damagehelper 100  multiply base by multiplier then divide by helper and divide by 50 to see end value
+ (I changed super multiplier to balance game but that changed ratios i.e super hits vs normal hits vs stab hits, potentially would have been 
+  better to instead change these dmg formula nunmbers?)
+
+ -make my version terraform called geo-form or something
+
+
+ statusing isn't working right, poison is dooing something weird, not activating
+ and instead using attackers ability as check for if it should work?
+ foe gligar used poison point on turns when it shoud poison
+ me it instead said, foe gligar's toxic_boost had no effect on my pokemon? strange
+
+ trainer repelent counter isn't working right, well it doesn't start at 0, ?
+ pretty much its activating even when I don't have the item for trainer repellent  
+ for now commented out in trainer_see.c
+
+ fixed trainer repelent issue, part of the setup was missing but that wasn't problem, 
+ issue is I forgot to update constant for var_ends /var count so the trainer repel var was being excluded from new game clear
+ so it wasn't being assigned 0
+
+ wonder guard has weird issue, which seems to be in my comparison repo as well,
+ where killing wondergaurd mon gives exp normally but then for some reason it gets turned into a trainer battle.
+ and the shendinja gets replaced with your own party data, if you faint the opposing mon its treated as taking out your own mon
+ and can trigger a whiteout.   running causes no problems 
+
+ also related to plan of setting up custom physical/special contact non-contact icons
+ since will need that in battle, and navigating to summary screen move info page  is tiring
+ setup so pressing L, (or maybe select so L can still be for help menu? ) should navigaate directly 
+ to the move info page (the page with move selection already selected)  pressing b once should take you back to battle.
+ with cursor where you left it
+
+ for streamer mode/nuzlocke mode rather than having exp limiting for level caps introduce sour candies that can lower level.
+ and then make it so player team level is set to the level cap if they are above it.
+ that way takes the stress out of it, if players want to grind levels and evolve or get better moves they can do so.
+ and still be at the level cap, and if you are going the hardcore route, and you have an evo within the cap
+ but you SOMEHOW manage to cancel your evolution, its not problem, just level up again, and then you can go do the gym
+ with your evo as if you did it right the first time. !!
+
+ note for the longer move names, since they only fit in the 2 right most slots in the battle menu. (2nd move slot and 4th move slot)
+ after a move is learned run a check for move length and if the moves already in the right slots 
+ aren't above the move limit, swap position of the longer move with one of those, random % 2  for which it takess if both are available
+
+ that way player doesn't have to see that it doesn't fit elsewhere,  will put as function of move learn task thing
+ after confirm move slot and go back to battle screen for 1 2 poof/learned move
+ will need to put move swap loigic in summary screen as well, so if player swaps moves it'll go back to avoid visual bug
+ dont think can do mid battle, unless I literally don't let the moves be swapped into certain slots...welp guess i'm doing that
+ so that means putting it in 3 places, move learn, summary screen and battle menu
+
+ endure message also isn't working correctly? its showing mon endured the hit, whenever it takes dmg, rather than just when it would take dmg
+ that would otherwise kill it.
+
+ saw video that mentioned omega ruby had portable berry trees, rather than needing to go around and plant in patches of soil
+ so if I do that instead, and have a key item like the egg incubator where I can store 3-5 berry pots/trees I can carry with me
+ it'll cut down on graphic changes I'd need to make, think I will add a berry shop to the game where can buy berries to plant in your pots
+ think will give this item in celadon with berry crush guy, he'll give berry incense and the berry pots
+ you can get a selection of berries via pick up ability, but then when you get to berry shop it'll be where you buy most berries.
+
+ will put berry shop inside celadon gym/erika's gym makes most sense imo, make sure shop isn't available before fighting gym
+ as it would trivialize things.   make script say, this is celadon city gyms personal berry keeper/stock sorry only erika can give permission to use this blah blah
+ after erika loses and gives badge, she'll have extra text where she allows you to use the berry shop  
+ think have berry prices from 200 up to 1200 based on value of berry
+
+ to make berry pots more convenient think rather than having to check it and harvest it, when it becomes fully grown,
+ the berries will be added to your inventory, and then 1 berry from the batch will be planted to start a new batch of trees.  
+ based on last berry planted for each tree.  if a tree is planted and you want to swap it for another berry you can do that,
+ just put a message saying the berries planted will be lost "are you sure" [start on no, make player move up to select yes option]
+ then if click yes it'll remove the tree and plant a fresh berry to grow
+
+ ...using constrict on wondergaurd shedinja breaks game...causes freeze
 */
+goto CHECK_THIS //something potentially relevant for future multi battle/triple etc.
+
+//logic for the actual messages for oak in first battle, can setup extra messages for move learn here
+//double exp gain for gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE  that way guarantee level up
+//then afer level up go to sum screen move info page do what I want and exit back to battle for end stuff
+goto OAK_MESSAGES 
+goto OAK_OPEN_PARY_MENU //functnio for party menu stuff opening stuff etc....
+
+goto BEAT_UP_LOGIC //bs commands file need adjust to work correctly for party based psuedo stab
+
+goto AI_TYPE_DMG_PRECALC //battle_ai_switch_items seems to be for ai to read type chart and adjust calculated dmg? but theres also ai logic in bs commands?
 
 goto BASESTATS_TO_BATTLEMONS_CONVERSION //battle_script_commands.c place where basestats types are transferred to battlemons struct for battle, done on switchin
 goto POKEMON_TO_BATTLEMON  //pokemon.c other stuff relevant blah blah
@@ -1639,6 +1884,21 @@ as well as the effect of increasing trap duration
 * 
 * potentially add dunsparce evo and make better evo, think take inspiration from Fafnir boss from FF 16
 * plan make it ground flying,  more defensive higher atk and hp than dunsparce
+*
+* other idea tsuchinco has extra links give this instead extra heads one largeer main body potentially somewhat sleek
+* but evolve with extra head or heads that also have powerful arms/claws for digging  
+* the brains are linked like a cerberus its highly inteligent able to split  processing between its multiple heads 
+* but they don't get in the way as they are secondary brains that can process more
+* 
+*  addendum - dunsaprce digs with tail drill not arms/claws so no arms with second head intead a second drill tail, that can be individually controlled
+* tail is less stumpy instead being a longer thing tail ending in the drill but still just as strong/sturdy
+* think  glameow tail but rather than coiled is wiry and sprite have it intwined with the other tail.
+* - stronger wings as well     think for tails make them dark red and black, it doesnt need to be flyign type so could make ground electric?
+* tails would be like jumper/battery cables
+
+- like its body naturally generates electricity but it has no way of controlling its output 
+thus it lives undergroud to keep itself perpetually grouded?  - maybe can say its ancient form was a thunder dragon but lost 
+* control of  their power and/or were forced underground by new predators?
 * 
 * Fix Pyroar F sprite front & back , guys in pret won't do it, so I'll have to. its potentially worse than crabominable I can't even look at it.
 * 

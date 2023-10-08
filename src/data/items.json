@@ -6272,7 +6272,7 @@
       "itemId": "ITEM_BAD_ONION",
       "price": 350,
       "holdEffect": "HOLD_EFFECT_NONE",
-      "holdEffectParam": 100,
+      "holdEffectParam": 150,
       "description_english": "Prevents trainers from\\napproaching for 100 steps.",
       "importance": 0,
       "exitsBagOnUse": 0,

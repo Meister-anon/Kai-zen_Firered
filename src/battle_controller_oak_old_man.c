@@ -966,6 +966,7 @@ static void CompleteOnFinishedStatusAnimation(void)
         OakOldManBufferExecCompleted();
 }
 
+#define CHECK_THIS //VSONIC IMPORTANT
 static void OakOldManHandleGetMonData(void)
 {
     u8 monData[sizeof(struct Pokemon) * 2 + 56]; // this allows to get full data of two pokemon, trying to get more will result in overwriting data
@@ -1744,6 +1745,7 @@ static void OakOldManDoMoveAnimation(void)
     }
 }
 
+#define OAK_MESSAGES
 static void OakOldManHandlePrintString(void)
 {
     u16 *stringId;
@@ -1777,6 +1779,14 @@ static void OakOldManHandlePrintString(void)
             case STRINGID_PLAYERGOTMONEY:
                 gBattlerControllerFuncs[gActiveBattler] = PrintOakText_WinEarnsPrizeMoney;
                 return;
+            /*case STRINGID_PKMNGREWTOLV:
+                if (!BtlCtrl_OakOldMan_TestState2Flag(FIRST_LEARNED_MOVE_MSG_FLAG))
+                {
+                    BtlCtrl_OakOldMan_SetState2Flag(FIRST_LEARNED_MOVE_MSG_FLAG);
+                    gBattlerControllerFuncs[gActiveBattler] = PrintOakText_LoweringStats; //setup what I want here
+                    return;
+                }
+                break;*/
             case STRINGID_TRAINER1WINTEXT:
                 gBattlerControllerFuncs[gActiveBattler] = PrintOakText_HowDisappointing;
                 return;

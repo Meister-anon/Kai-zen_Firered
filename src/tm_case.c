@@ -241,7 +241,7 @@ static const struct SpriteTemplate sTMSpriteTemplate = {
     SpriteCallbackDummy
 };
 
-static const u16 sTMSpritePaletteOffsetByType[] = { // fairy addition need do
+static const u16 sTMSpritePaletteOffsetByType[] = { // fairy addition need do, may need do sound as well
     [TYPE_NORMAL]   = 0x000,
     [TYPE_FIRE]     = 0x010,
     [TYPE_WATER]    = 0x020,

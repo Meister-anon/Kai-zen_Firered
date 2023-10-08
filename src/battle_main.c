@@ -1175,10 +1175,10 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
         gBattleStruct->dynamicMoveType = ateType;// | F_DYNAMIC_TYPE_2; //above should do type change already, dmg boosts are already in pokemon.c
         gBattleStruct->ateBoost[battlerAtk] = 1;
     }
-    else if (gBattleMoves[move].type != TYPE_NORMAL
-             && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
+    else if ((gBattleMoves[move].type != TYPE_NORMAL)
+             && (gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
              && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
-             && gBattleMoves[move].effect != EFFECT_CHANGE_TYPE_ON_ITEM
+             && gBattleMoves[move].effect != EFFECT_CHANGE_TYPE_ON_ITEM)
              && attackerAbility == ABILITY_NORMALIZE)   //thought to remove normal exclusion, but would just result in them getting much weaker
     {                                                   //without stab, so not worth
         gBattleStruct->dynamicMoveType = TYPE_NORMAL;// | F_DYNAMIC_TYPE_2;    //WILL MAke moves do neutral damage to everything, need exclude from joat.
@@ -2000,7 +2000,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 if (fixedIV > MAX_PER_STAT_IVS)
                     fixedIV = MAX_PER_STAT_IVS;
                 if (fixedIV < MIN_FIXED_IVS)
-                    fixedIV = USE_RANDOM_IVS;
+                    fixedIV = USE_RANDOM_IVS; //for early game balance may lower brocks party ivs to use random value
                 
                 //as ability and ev are not part of CreateMon arguments may need to put these two below createmon function to have them take effect. hm,
                 //checked against custom move set  and move assignment logic is BELOW createmon so that confirms I need to move createmon up to here.
@@ -3460,6 +3460,7 @@ void SwitchInClearSetData(void) //handles what gets reset on switchout
     else //if not using baton pass clear status 2 & 3 on switch?
     {
         gBattleMons[gActiveBattler].status2 = 0;
+        gBattleMons[gActiveBattler].status4 = 0;
         gStatuses3[gActiveBattler] = 0; //guess so but seems I misunderstood switch clear it clears data when they switch into battle not switching out
         gStatuses4[gActiveBattler] = 0; // if don't clear could make status 4 traps permament so don't need to swap to status1
         //could just put if battler that set status was holding grip claw don't clear   
@@ -3536,6 +3537,7 @@ void FaintClearSetData(void) //see about make status1 not fade wen faint?
     for (i = 0; i < NUM_BATTLE_STATS; ++i)
         gBattleMons[gActiveBattler].statStages[i] = 6;
     gBattleMons[gActiveBattler].status2 = 0;
+    gBattleMons[gActiveBattler].status4 = 0;
     gStatuses3[gActiveBattler] = 0;
     gStatuses4[gActiveBattler] = 0;
     for (i = 0; i < gBattlersCount; ++i)
@@ -3739,6 +3741,7 @@ static void BattleIntroDrawTrainersOrMonsSprites(void)
                 for (i = 0; i < NUM_BATTLE_STATS; ++i)
                     gBattleMons[gActiveBattler].statStages[i] = 6; //important, these two reset stat buffs, and clear status2 effects on switch
                 gBattleMons[gActiveBattler].status2 = 0;
+                gBattleMons[gActiveBattler].status4 = 0;
             }
             if (GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_LEFT)
             {
@@ -5905,7 +5908,7 @@ static void HandleAction_NothingIsFainted(void)
     ++gCurrentTurnActionNumber;
     gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
     gHitMarker &= ~(HITMARKER_DESTINYBOND | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_ATTACKSTRING_PRINTED
-                    | HITMARKER_NO_PPDEDUCT | HITMARKER_IGNORE_SAFEGUARD | HITMARKER_PASSIVE_DAMAGE
+                    | HITMARKER_NO_PPDEDUCT | HITMARKER_PASSIVE_DAMAGE
                     | HITMARKER_OBEYS | HITMARKER_WAKE_UP_CLEAR | HITMARKER_SYNCHRONIZE_EFFECT
                     | HITMARKER_CHARGING | HITMARKER_NEVER_SET);
 }
@@ -5916,7 +5919,7 @@ static void HandleAction_ActionFinished(void) //may be important for intimidate 
     gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
     SpecialStatusesClear(); //yeah the function call here is what resets intimidated mon status,
     gHitMarker &= ~(HITMARKER_DESTINYBOND | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_ATTACKSTRING_PRINTED 
-                    | HITMARKER_NO_PPDEDUCT | HITMARKER_IGNORE_SAFEGUARD | HITMARKER_PASSIVE_DAMAGE
+                    | HITMARKER_NO_PPDEDUCT | HITMARKER_PASSIVE_DAMAGE
                     | HITMARKER_OBEYS | HITMARKER_WAKE_UP_CLEAR | HITMARKER_SYNCHRONIZE_EFFECT
                     | HITMARKER_CHARGING | HITMARKER_NEVER_SET | HITMARKER_IGNORE_DISGUISE);
     gCurrentMove = MOVE_NONE; // but it doesn't loop because the function doesn't get called except at battle start and switch i.e switch in abilities
