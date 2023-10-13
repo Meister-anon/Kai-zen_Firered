@@ -1653,6 +1653,21 @@ start_song:
     mplayInfo = &gPokemonCryMusicPlayers[i];
     mplayInfo->ident++;
 
+/*
+#define CRY ((s32)&gPokemonCrySongs + i * sizeof(struct PokemonCrySong))
+#define CRY_OFS(field) offsetof(struct PokemonCrySong, field)
+
+    memcpy((void *)CRY, &gPokemonCrySong, sizeof(struct PokemonCrySong));
+
+    *(u32 *)(CRY + CRY_OFS(tone)) = (u32)tone;
+    *(u32 *)(CRY + CRY_OFS(part)) = CRY + CRY_OFS(part0);
+    *(u32 *)(CRY + CRY_OFS(part) + 4) = CRY + CRY_OFS(part1);
+    *(u32 *)(CRY + CRY_OFS(gotoTarget)) = CRY + CRY_OFS(cont);
+
+#undef CRY_OFS
+#undef CRY
+*/  //don't know why removed but here's originla cry stuff in case that fixes mon cries  vsonic
+
     gPokemonCrySongs[i] = gPokemonCrySong;
 
     gPokemonCrySongs[i].tone = tone;

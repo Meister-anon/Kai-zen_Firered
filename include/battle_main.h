@@ -43,7 +43,7 @@ struct MultiBattlePokemonTx
 #define TYPE_MUL_NO_EFFECT          0
 #define TYPE_MUL_NOT_EFFECTIVE      5
 #define TYPE_MUL_NORMAL             10
-#define TYPE_MUL_SUPER_EFFECTIVE    16  //changed from 20 to 15 to 16 for 1.6x dmg
+#define TYPE_MUL_SUPER_EFFECTIVE    (155 / 10)//16  //changed from 20 to 15 to 16 for 1.6x dmg  change 1.55x seems works? messed up  forgot these get divided by 10 after heh
 
 // special type table Ids
 #define TYPE_FORESIGHT  0xFE

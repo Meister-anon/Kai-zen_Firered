@@ -124,7 +124,7 @@ if it would otherwise be 0/NONE except in the case of ability.
     Water:  Aquatic type  for fish, or aquatic animals/mamals or things made up of the element, some qualities can also overlap w dragons
     Dragon: rulers of land/air/sea apex predators typically with lizard/reptile like qualities
     Dark: supernatural type typically tricksters or evil or related to things seen as bad/evil
-    Fairy: Magic type  fairy qualities, like dark can also be tricksters, may also have strong relation to nature
+    Fairy: Magic type  fairy qualities, like dark can also be tricksters, may also have strong relation to nature - looked further GF seems to have paterned tem after pixie-like fae, nature spirits explains why not effective on fire, as its their weakness/destroys their homes
     Poison: Is poisonous in some manner, or otherwise involves trash/waste or contamination/corruption
     Ground: Lives in deserts/underground or has some link to earth element, is distinct from rock.
     Rock:  Hardened ground sturdy and solid
@@ -486,7 +486,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_PIDGEY] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(40, 45, 40, 67, 35, 35),
+         STATS(40, 45, 40, 67, 45, 35),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 255,
@@ -508,7 +508,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_PIDGEOTTO] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(63, 60, 55, 91, 50, 50),
+         STATS(63, 70, 55, 91, 70, 50),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 120,
@@ -530,7 +530,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_PIDGEOT] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(105, 90, 85, 121, 70, 80),
+         STATS(105, 90, 85, 121, 85, 80),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 45,
@@ -1435,7 +1435,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_VITAL_SPIRIT, ABILITY_ANGER_POINT},
-            .abilityHidden = {ABILITY_DEFIANT, ABILITY_NONE},
+            .abilityHidden = {ABILITY_DEFIANT, ABILITY_IRON_FIST},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -1443,7 +1443,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_PRIMEAPE] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(69, 105, 65, 105, 60, 70),
+         STATS(69, 105, 65, 95, 60, 70),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_NORMAL,
         .catchRate = 75,
@@ -1457,7 +1457,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_VITAL_SPIRIT, ABILITY_ANGER_POINT},
-            .abilityHidden = {ABILITY_DEFIANT, ABILITY_NONE},
+            .abilityHidden = {ABILITY_DEFIANT, ABILITY_IRON_FIST}, //muscle magic vs iron fist giving iron fist mucscle magic was supposed to be special/unique
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -1855,7 +1855,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_GRAVELER] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(60, 95, 115, 35, 45, 65),
+         STATS(65, 95, 115, 35, 45, 65),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_GROUND,
         .catchRate = 120,
@@ -8229,7 +8229,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(75, 70, 70, 70, 70, 70),
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_GHOST,    //with planned changes makes it a better switch mon, also kinda works think of like casper a friendly ghost
         .catchRate = 45,
         .expYield = 147,
         //.evYield_HP = 1,
@@ -9471,7 +9471,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(80, 130, 79, 72, 95, 79),
         .type1 = TYPE_ELECTRIC,
-        .type2 = TYPE_DARK,
+        .type2 = TYPE_ELECTRIC,
         .catchRate = 45,
         .expYield = 235,
         //.evYield_Attack = 3,
@@ -16148,7 +16148,7 @@ const struct BaseStats gBaseStats[] =
         45
         ),
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 63,
         //.evYield_Defense = 1,
@@ -16164,7 +16164,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-    },
+    }, //making grass normal since has varied move pool, lil chespin love
 
     [SPECIES_QUILLADIN] =
     { 
@@ -16178,7 +16178,7 @@ const struct BaseStats gBaseStats[] =
         58
         ),
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 142,
         //.evYield_Defense = 2,
@@ -19640,7 +19640,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_RATTLED, ABILITY_ANTICIPATION},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-    },
+    }, //give uturn, the turn one flinch move, and good deal of status moves to keep enemy away something hazards or something
 
     [SPECIES_GOLISOPOD] =
     { 
@@ -25732,7 +25732,7 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
-        60,
+        65,
         95,
         115,
         35,
@@ -28169,7 +28169,7 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(75, 70, 70, 70, 70, 70),
-        .type1 = TYPE_FIRE,
+        .type1 = TYPE_NORMAL,
         .type2 = TYPE_FIRE,
         .catchRate = 45,
         .expYield = 147,
@@ -28191,7 +28191,7 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(75, 70, 70, 70, 70, 70),
-        .type1 = TYPE_WATER,
+        .type1 = TYPE_NORMAL,
         .type2 = TYPE_WATER,
         .catchRate = 45,
         .expYield = 147,
@@ -28213,7 +28213,7 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(75, 70, 70, 70, 70, 70),
-        .type1 = TYPE_ICE,
+        .type1 = TYPE_NORMAL,
         .type2 = TYPE_ICE,
         .catchRate = 45,
         .expYield = 147,

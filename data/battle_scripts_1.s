@@ -424,23 +424,17 @@ gBattleScriptsForBattleEffects::	@must match order of battle_effects.h file
 	.4byte BattleScript_EffectFlash
 	.4byte BattleScript_EffectCocoon
 	.4byte BattleScript_EffectFlashFreeze	@ice will o wisp
-	.4byte BattleScript_EffectFireSpin	@separate trap effects
-	.4byte BattleScript_EffectClamp
-	.4byte BattleScript_EffectWhirlpool
-	.4byte BattleScript_EffectSandTomb
-	.4byte BattleScript_EffectMagmaStorm
-	.4byte BattleScript_EffectSwarm
-	.4byte BattleScript_EffectSnapTrap
 	.4byte BattleScript_EffectDryadsCurse
 	.4byte BattleScript_EffectProtect	@shield bash
-	.4byte BattleScript_EffectAttractHit	@use move_effect_attract
+	.4byte BattleScript_EffectAttractHit	@use move_effect_attract	dont thnk work/setup yet think reserve for sallazle
 	.4byte BattleScript_EffectHit		@Expanding Force fill effect  is gen 9, just putting here to fill space, is not setup
 	.4byte BattleScript_EffectTripleArrows @ EFFECT_TRIPLE_ARROWS
 	.4byte BattleScript_EffectSpecialAttackUpHit	@EFFECT_SPECIAL_ATTACK_UP_HIT
 	.4byte BattleScript_EffectVictoryDance            @ EFFECT_VICTORY_DANCE
 	.4byte BattleScript_EffectTeatime                 @ EFFECT_TEATIME
 	.4byte BattleScript_EffectAttackUpUserAlly        @ EFFECT_ATTACK_UP_USER_ALLY
-	.4byte BattleScript_EffectTargetTypeBasedDmg	  @ EFFECT_TARGET_TYPE_DAMAGE  @ bug status / dont need effect for this can use moveeffect
+	.4byte BattleScript_EffectTargetTypeBasedDmg	  @ EFFECT_TARGET_TYPE_DAMAGE  @ bug status / dont need effect for can use moveeffect  instaed w arg to move effect
+	.4byte BattleScript_EffectTrenchrun				  @ EFFECT_TRENCH_RUN
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -793,6 +787,19 @@ BattleScript_EffectLaserFocus:
 	attackanimation
 	waitanimation
 	printstring STRINGID_LASERFOCUS
+	waitmessage 0x40
+	goto BattleScript_MoveEnd
+
+ @not complete need setup evasion boost (2 stage boost) and make sure its removed if status on air i.e flying/skydrop donethat part
+ @also need to put back logi that grounded flying types dont take super from electricity etc. 
+BattleScript_EffectTrenchrun::
+	setuserstatus4 STATUS4_GROUNDED, BattleScript_ButItFailed
+	attackcanceler
+	attackstring
+	ppreduce
+	attackanimation
+	waitanimation
+	printstring STRINGID_LASERFOCUS @give its own string/message
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
@@ -3475,35 +3482,6 @@ BattleScript_EffectDragonRage::
 
 BattleScript_EffectTrap::
 	setmoveeffect MOVE_EFFECT_WRAP	@goes to BattleScript_MoveEffectWrap sets status & stringID
-	goto BattleScript_EffectHit
-
-@dont need fire burn protections since fire spin itself doesnt burn
-BattleScript_EffectFireSpin::
-	setmoveeffect MOVE_EFFECT_FIRE_SPIN	
-	goto BattleScript_EffectHit
-
-BattleScript_EffectClamp::
-	setmoveeffect MOVE_EFFECT_CLAMP	
-	goto BattleScript_EffectHit
-
-BattleScript_EffectWhirlpool::
-	setmoveeffect MOVE_EFFECT_WHIRLPOOL	
-	goto BattleScript_EffectHit
-
-BattleScript_EffectSandTomb::
-	setmoveeffect MOVE_EFFECT_SAND_TOMB	
-	goto BattleScript_EffectHit
-
-BattleScript_EffectMagmaStorm::
-	setmoveeffect MOVE_EFFECT_MAGMA_STORM	
-	goto BattleScript_EffectHit
-
-BattleScript_EffectSwarm::
-	call_if EFFECT_SWARM	
-	goto BattleScript_EffectHit
-
-BattleScript_EffectSnapTrap::
-	setmoveeffect MOVE_EFFECT_SNAP_TRAP	
 	goto BattleScript_EffectHit
 
 BattleScript_EffectDoubleHit::
@@ -6429,7 +6407,10 @@ BattleScript_PrintFullBox::
 BattleScript_ActionSwitch::
 	hpthresholds2 BS_ATTACKER
 	printstring STRINGID_RETURNMON
-	manipulatedamage DOUBLE_DMG @for pursuit hopefully works?
+	@can put runaway avoiding pursuit here just jump to BattleScript_SkipPursuit vsonic
+	jumpifability BS_ATTACKER, ABILITY_RUN_AWAY, BattleScript_SkipPursuit
+	jumpifability BS_ATTACKER, ABILITY_AVIATOR, BattleScript_SkipPursuit
+	manipulatedamage DOUBLE_DMG @for pursuit hopefully works? 
 	@setbyte sDMG_MULTIPLIER, 2
 	jumpifbattletype BATTLE_TYPE_DOUBLE, BattleScript_PursuitSwitchCheckTwice
 	setmultihit 1
@@ -6445,6 +6426,7 @@ BattleScript_PursuitSwitchLoop::
 	swapattackerwithtarget
 BattleScript_DoSwitchOut::
 	decrementmultihit BattleScript_PursuitSwitchLoop
+BattleScript_SkipPursuit::
 	switchoutabilities BS_ATTACKER  @abilities that activate when switching out
 	waitstate
 	returnatktoball
@@ -6628,7 +6610,7 @@ BattleScript_LeechSeedTurnDrain::
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	copyword gBattleMoveDamage, gHpDealt
-	setbyte cMULTISTRING_CHOOSER, 0x3
+	setbyte cMULTISTRING_CHOOSER, 3
 	jumpifhealblock BS_TARGET, BattleScript_LeechSeedHealBlock
 	manipulatedamage DMG_BIG_ROOT
 	jumpifability BS_ATTACKER, ABILITY_LIQUID_OOZE, BattleScript_LeechSeedTurnPrintLiquidOoze
@@ -6636,7 +6618,7 @@ BattleScript_LeechSeedTurnDrain::
 BattleScript_LeechSeedTurnPrintLiquidOoze::
 	manipulatedamage NEGATIVE_DMG
 	copybyte gBattlerAbility, gBattlerAttacker
-	setbyte cMULTISTRING_CHOOSER, 0x4	@don'tknow what this does so hope nota problem
+	setbyte cMULTISTRING_CHOOSER, 4	@don'tknow what this does so hope nota problem
 BattleScript_LeechSeedTurnPrintAndUpdateHp::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	healthbarupdate BS_TARGET
@@ -7794,6 +7776,13 @@ BattleScript_MoveEffectParalysis::
 	waitmessage 0x40
 	goto BattleScript_UpdateEffectStatusIconRet
 
+@change to match above when get status icon setup, plan kamen raider esque neon green icon with bug mask
+BattleScript_MoveEffectInfestation::
+	setmoveeffect MOVE_EFFECT_INFESTATION
+	printstring STRINGID_INFESTATION
+	waitmessage 0x40
+	return
+
 BattleScript_StatusInfested::
 	playanimation BS_ATTACKER, B_ANIM_STATUS_INFESTED, NULL
 	printstring STRINGID_PKMNINFESTED
@@ -7914,42 +7903,6 @@ BattleScript_MoveEffectPayDay::
 
 BattleScript_MoveEffectWrap::
 	printfromtable gWrappedStringIds
-	waitmessage 0x40
-	return
-
-BattleScript_MoveEffectFireSpin::
-	printstring STRINGID_PKMNTRAPPEDINVORTEX
-	waitmessage 0x40
-	return
-
-BattleScript_MoveEffectClamp::
-	printstring STRINGID_PKMNCLAMPED
-	waitmessage 0x40
-	return
-
-BattleScript_MoveEffectWhirlpool::
-	printstring STRINGID_PKMNTRAPPEDINVORTEX
-	waitmessage 0x40
-	return
-
-BattleScript_MoveEffectSandTomb::
-	printstring STRINGID_PKMNTRAPPEDBYSANDTOMB
-	waitmessage 0x40
-	return
-
-BattleScript_MoveEffectMagmaStorm::
-	printstring STRINGID_TRAPPEDBYSWIRLINGMAGMA
-	waitmessage 0x40
-	return
-
-BattleScript_MoveEffectInfestation::
-	setmoveeffect MOVE_EFFECT_INFESTATION
-	printstring STRINGID_INFESTATION
-	waitmessage 0x40
-	return
-
-BattleScript_MoveEffectSnapTrap::
-	printstring STRINGID_SNAPTRAP
 	waitmessage 0x40
 	return
 
@@ -8091,7 +8044,7 @@ BattleScript_TraceActivates::
 	pause 0x20
 	printstring STRINGID_PKMNTRACED
 	waitmessage 0x40
-	healthbarupdate BS_ATTACKER
+	healthbarupdate BS_ATTACKER  @? why??
 	datahpupdate BS_ATTACKER
 	end3
 
@@ -9664,9 +9617,21 @@ BattleScript_IgnoresWhileAsleep::
 BattleScript_IgnoresAndUsesRandomMove::
 	printstring STRINGID_PKMNIGNOREDORDERS
 	waitmessage B_WAIT_TIME_LONG
-	jumptocalledmove 0
+	jumptocalledmove FALSE
 	printfromtable gInobedientStringIds
 	waitmessage B_WAIT_TIME_LONG
+	moveendto MOVE_END_NEXT_TARGET
+	end
+
+BattleScript_PanickedAndUsesRandomMove::
+	printstring STRINGID_PKMNPANICKED
+	waitmessage B_WAIT_TIME_LONG
+	jumptocalledmove TRUE
+	moveendto MOVE_END_NEXT_TARGET
+	end
+
+BattleScript_BindDoCalledMove::
+	jumptocalledmove TRUE
 	moveendto MOVE_END_NEXT_TARGET
 	end
 

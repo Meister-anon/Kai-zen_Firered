@@ -336,7 +336,7 @@
 #define ABILITY_LETHAL_LEGS 313 //hitmonlee ability boost kicking moves
 #define ABILITY_TOXUNGUE 314    //Likitung line signature paralytic poison touch
 #define ABILITY_OMNIPOTENT_AIDE 315//for Fraeyjta, can use healing moves for itself, but transfers any heal it would receive to battle partner (if heal target mon with this ability change target to battle partner, otherwise fail)
-                                    //if this mon uses a healing move its priority gets increased long as it has a living battle partner, for balanve remove priority effect if status 1
+                                    //if this mon uses a healing move its priority gets increased long as it has a living battle partner, for balanve remove priority effect if status 1,  logic is ABILITY_TRIAGE 
 #define ABILITY_FLUORESCENCE 316                                
 #define ABILITIES_COUNT ABILITY_FLUORESCENCE + 1 //   ability count is last ability number + 1 since we have to count ability 0
 

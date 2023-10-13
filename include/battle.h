@@ -244,13 +244,16 @@ struct DisableStruct
     u8 throatChopTimer;
     u8 RoostTimer; // to set random % 4 effect after use roost setup iondelluge the same remove random make constant
     u8 usedMoves : 4; //have iondelug in field timers already
-    u8 wrapTurns;  //turn counter for wrap bind
-    u8 environmentTrapTurns;   //turn counter for environment traps fire spin whirlpool sandtomb magma storm
+    u8 wrapTurns;  //turn counter for wrap 
+    u8 bindTurns;  // turn counter for bind
     u8 clampTurns;
     u8 swarmTurns;
     u8 snaptrapTurns;
+    u8 environmentTrapTurns;   //turn counter for environment traps fire spin whirlpool sandtomb magma storm
     u8 FrozenTurns;
     u8 bideTimer;
+    u8 bindMovepos; //stored pos of bind move
+    u16 bindedMove; //move bind locks you to
     //u8 RoostTimerStartValue;  //remove for now until I get 
     /*0x1A*/ u8 unk1A[2];
 }; //think I may not actually need roost start value, long as I have timer
@@ -592,8 +595,8 @@ struct BattleStruct //fill in unused fields when porting
     u8 turnEffectsTracker;
     u8 turnEffectsBattlerId;
     u8 turnCountersTracker;
-    u16 wrappedMove[MAX_BATTLERS_COUNT * 2]; // Leftover from Ruby's ewram access. /u16 because epanded move ids
-    u16 moveTarget[MAX_BATTLERS_COUNT];
+    u16 wrappedMove[MAX_BATTLERS_COUNT]; // Leftover from Ruby's ewram access. /u16 because epanded move ids  //no longer need the * 2 forgot I redid these
+    u16 moveTarget[MAX_BATTLERS_COUNT]; //checked is u16 in emerald, and fixed missed replacement of wrappedMove logic
     u8 expGetterMonId;
     u8 targetsDone[MAX_BATTLERS_COUNT]; // Each battler as a bit.
     u8 wildVictorySong;
@@ -703,7 +706,7 @@ struct BattleStruct //fill in unused fields when porting
     u8 attackerBeforeBounce : 2;
     u16 overwrittenAbilities[MAX_BATTLERS_COUNT];    // abilities overwritten during battle (keep separate from battle history in case of switching)
     u8 battleBondTransformed[NUM_BATTLE_SIDES]; // Bitfield for each party.
-    u8 presentBasePower;
+    //u8 presentBasePower; //used for   multihit move effect check, but with my version don't need this
     // align 4
     union {
         struct LinkPartnerHeader linkPartnerHeader;

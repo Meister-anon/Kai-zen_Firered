@@ -865,7 +865,7 @@ CableClub_EventScript_DirectCornerAttendant:: @ 81BBB9C
 	end
 
 CableClub_EventScript_DirectCornerSelectService:: @ 81BBBE7
-	goto_if_unset FLAG_GOT_POWDER_JAR, CableClub_EventScript_DirectCornerNoBerry
+	goto CableClub_EventScript_DirectCornerNoBerry
 	multichoice 0, 0, MULTICHOICE_TRADE_COLOSSEUM_CRUSH, FALSE
 	switch VAR_RESULT
 	case 0, CableClub_EventScript_WirelessTrade

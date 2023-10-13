@@ -1,3 +1,4 @@
+#define COMPARISON_FILE
 //file for updating repo to main branch head
 //process order compare this repo with main to find all places changes need to be made
 //either edit this repo with the portion of changes to add to linux dist repo and replace linux files

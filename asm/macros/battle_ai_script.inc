@@ -462,7 +462,7 @@
 	.byte \battler
 	.endm
 
-	.macro get_move_type_from_result
+	.macro get_move_split_from_result
 	.byte 0x4e
 	.endm
 
@@ -566,12 +566,20 @@
 	get_type AI_TYPE2_USER
 	.endm
 	
+	.macro get_user_type3
+	get_type AI_TYPE3_USER
+	.endm
+	
 	.macro get_target_type1
 	get_type AI_TYPE1_TARGET
 	.endm
 	
 	.macro get_target_type2
 	get_type AI_TYPE2_TARGET
+	.endm
+
+	.macro get_target_type3
+	get_type AI_TYPE3_TARGET
 	.endm
 
 	.macro if_target_faster ptr:req

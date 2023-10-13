@@ -315,7 +315,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-    },
+    }, //idae from bug, but making this do encore so attack and enemy cant change moves while trapped
 
     [MOVE_SLAM] =
     {
@@ -1303,7 +1303,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .power = 15,
             .accuracy = 70,
         #endif
-        .effect = EFFECT_FIRE_SPIN,
+        .effect = EFFECT_TRAP,
         .type = TYPE_FIRE,
         .pp = 15,
         .secondaryEffectChance = 0,
@@ -1971,7 +1971,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .accuracy = 75,
             .pp = 10,
         #endif
-        .effect = EFFECT_CLAMP,
+        .effect = EFFECT_TRAP,
         .power = 25,
         .type = TYPE_WATER,
         .secondaryEffectChance = 0,
@@ -3920,7 +3920,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .power = 25,
         .accuracy = 90,
-        .effect = EFFECT_WHIRLPOOL,
+        .effect = EFFECT_TRAP,
         .type = TYPE_WATER,
         .pp = 15,
         .secondaryEffectChance = 0,
@@ -5132,7 +5132,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .power = 15,
             .accuracy = 70,
         #endif
-        .effect = EFFECT_SAND_TOMB,  //all trap effects have 100 secondary chance want to change so can use effect chance for argument extra effect
+        .effect = EFFECT_TRAP,  //all trap effects have 100 secondary chance want to change so can use effect chance for argument extra effect
         .type = TYPE_GROUND,
         .pp = 15,
         .secondaryEffectChance = 0,
@@ -7233,7 +7233,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .power = 110,
         .accuracy = 85,
-        .effect = EFFECT_MAGMA_STORM,   //no major buffs just accuracy buff w gauranteed burn which main game already added apparenlty
+        .effect = EFFECT_TRAP,   //no major buffs just accuracy buff w gauranteed burn which main game already added apparenlty
         .type = TYPE_FIRE,
         .pp = 5,
         .secondaryEffectChance = 0,
@@ -9428,7 +9428,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_SWARM] =
     {
-        .effect = EFFECT_SWARM,
+        .effect = EFFECT_TRAP,
         .power = 25,
         .type = TYPE_BUG,
         .accuracy = 100,
@@ -10846,7 +10846,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     will increase from 1 / 8 of the target's maximum HP to 1/6.*/
     [MOVE_SNAP_TRAP] =
     {
-        .effect = EFFECT_SNAP_TRAP,  //TODO: add case/effect  think use random%2 +4 should make be between 0 & 1 the plus 4 will make it return 4 & 5
+        .effect = EFFECT_TRAP,  //TODO: add case/effect  think use random%2 +4 should make be between 0 & 1 the plus 4 will make it return 4 & 5
         .power = 35,
         .type = TYPE_STEEL, //after that just need specific logic for grip claw     //also changing from grass to a steel move -_-
         .accuracy = 100,
@@ -12273,5 +12273,19 @@ use wonder gaurd logic to determine its super effective
         .split = SPLIT_PHYSICAL, //unsure if shold be physical? ok yeah its, a boobytrap bomb, if explosion is physical this should be too
         .argument = MOVE_EFFECT_FLINCH,
         .argumentEffectChance = 15,
+    },
+
+    [MOVE_TRENCH_RUN] =
+    {
+        .effect = EFFECT_EVASION_UP,  //need make its own effect, planned evasion up 2 and grounds battler like roost
+        .power = 0,
+        .type = TYPE_FLYING,
+        .accuracy = 0,
+        .pp = 15,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .priority = 0, //weight this as flying mon are fast, may make 0 priority so its an option more for faster birds not just all
+       .flags = FLAG_SNATCH_AFFECTED,
+        .split = SPLIT_STATUS, //unsure if shold be physical? ok yeah its, a boobytrap bomb, if explosion is physical this should be too
     },
 };

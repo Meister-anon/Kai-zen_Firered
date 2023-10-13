@@ -1038,7 +1038,7 @@ damageHelper = spDefense;  (defense stat)
  statusing isn't working right, poison is dooing something weird, not activating
  and instead using attackers ability as check for if it should work?
  foe gligar used poison point on turns when it shoud poison
- me it instead said, foe gligar's toxic_boost had no effect on my pokemon? strange
+ me it instead said, foe gligar's toxic_boost had no effect on my pokemon? strange - somewhat fixed keep an eye on
 
  trainer repelent counter isn't working right, well it doesn't start at 0, ?
  pretty much its activating even when I don't have the item for trainer repellent  
@@ -1051,7 +1051,11 @@ damageHelper = spDefense;  (defense stat)
  wonder guard has weird issue, which seems to be in my comparison repo as well,
  where killing wondergaurd mon gives exp normally but then for some reason it gets turned into a trainer battle.
  and the shendinja gets replaced with your own party data, if you faint the opposing mon its treated as taking out your own mon
- and can trigger a whiteout.   running causes no problems 
+ and can trigger a whiteout.   running causes no problems   - still need fix thi9s...
+ -did further testing, it copies your mon data etc. to opponent side, but mon still has shedinja moveset but seems to have your stats as it does less dmg
+ need figure this out
+
+ seems to also keep its wondergaurd ability? or the hp, as a single hit takes it out
 
  also related to plan of setting up custom physical/special contact non-contact icons
  since will need that in battle, and navigating to summary screen move info page  is tiring
@@ -1079,6 +1083,53 @@ damageHelper = spDefense;  (defense stat)
  endure message also isn't working correctly? its showing mon endured the hit, whenever it takes dmg, rather than just when it would take dmg
  that would otherwise kill it.
 
+ ok overall endure just isn't working, kakuna used endure on like 1 hp I still killed it
+
+ bide isn't quite right, its not getting the priority boost on the turn it unleashes energy // nvm seems it is working
+
+ something odd with bind, it partially reintroduced gen 1 bug, its locking in my moves and preventing me from picking a move if I'm binded
+ yeah bind status is doing very weird things, its locking you in to whatever move was picked BEFORE you got binded
+ i.e I use lick, I get binded, I select fight, and it skips straight to battle passed the move selection and uses lick
+
+ //doesn't work perfectly, used bind scored a crit on me and game froze..
+
+ what's crazy is that's actually a really good effect, especially on onix who is fast, think of it like it binds the taret up and squeezes them,
+ making them too panicked to respond to directions from the trainer, so they just keep using the last move until released.
+
+ so setup bind status as being locked into move,  and move is glastusedmove for battler  (encore its doing encore I saw battle message this time)
+
+ I wouldn't have thought of that...once I figure out why that is happening, thinkj I will make that the standard effect for bind
+ (normally encore fails if target hasn't chosen a move I'm assuming that's the freeze condition, for bind I plan to make it default to struggle if no move chosen)
+ (yup confirmed that's the freee condition)
+
+ redid trap status effects, need test, and still need setup bind effect to do encore like effect.
+
+ Encore temporarily prevents the target from using any move except the last used move.
+
+Encore fails if the last move the target used was Transform, Mimic, Sketch, Mirror Move, Sleep Talk, Encore itself, Struggle, or a move that has no PP left.
+ It also fails if the foe has not used a move yet.
+
+If the Pokémon affected by Encore runs out of PP for the affected move, the effects of Encore end immediately.
+ If the move the Pokémon is locked into by Encore 
+ is currently blocked by Disable, Gravity, Heal Block, Imprison, Taunt, Throat Chop, or Torment,
+  the Pokémon will be forced to use Struggle. 
+
+  for bind setup to default to struggle if they haven't selected a move yet, if they run out of pp, also default to struggle
+  if they used one of the encore blocked moves, again default to struggle 
+
+  - ok thikn finished bind effect need test -tseted doesnt work just freezes, 
+
+  faint stuff isn't working fo rplayer - 
+
+ ...absorb effects aren't working everything is triggering as if liquid ooze, on top of leech seed not healing...
+ and the dmg is triggering and fainting before the hp bar even updates or triggers faint animation,
+ so I did absorb with 3 hp left, the dmg I would take back would kill me, but it triggered whiteout before hp even fell...
+
+ that seems to be happening for all things done via passive damage?  had bind status and got killed but my mon didnt do faint animation before whiteout
+ ok so faint animation is just not playing as a result of battle now?? weird
+
+ also  low kick buff seems to not be as impactful as I thought  had weight values too high, lowered field and adjusted power works better now
+
  saw video that mentioned omega ruby had portable berry trees, rather than needing to go around and plant in patches of soil
  so if I do that instead, and have a key item like the egg incubator where I can store 3-5 berry pots/trees I can carry with me
  it'll cut down on graphic changes I'd need to make, think I will add a berry shop to the game where can buy berries to plant in your pots
@@ -1096,9 +1147,131 @@ damageHelper = spDefense;  (defense stat)
  just put a message saying the berries planted will be lost "are you sure" [start on no, make player move up to select yes option]
  then if click yes it'll remove the tree and plant a fresh berry to grow
 
- ...using constrict on wondergaurd shedinja breaks game...causes freeze
+ for plans for custom 2v1 battles will reserve for aggressive trainers, so evil team, and I think bikers as well, so bike road would have it.
+ and double wild battles would have a chance to be this as well, think of it as aggressive mon that ambushed you, before you had a chance to prepare. 
+ keep this to tall grass so a reasonable chance to avoid if they don't want it.
+
+ think make special text when the condition occurs, maybe [PLAYER was ambushed by ...!]
+
+ port emerald berry tag and have it replace fire red berry view nvm simply just need to port the check tag portion of berry menu
+ the graphic and info needed for the dislay of all berries,  then can setup berrry incense idea
+
+
+ note type bug existed before sheen removal so it isn't that
+ & also grookey  & scorbunny have wrong palette for their icons
+
+ ok noted type bug works off whatever was last there, if your last fight was a trainer battle and the values were set correctly
+ you'll go into your next fight in the same state,  switching out clears it, as there's a function that properly sets type from base stats
+ if you fight a wild mon and have bug glitch, and then fight trainer it will carry over the type bug and treat them as type none
+ need to see if it works both ways, if trainer swtiches and it populates correctly and I then fight a wild non will it also work correcltyu
+
+ identified and fixed type bug, problem was BattleIntroDrawTrainersOrMonsSprites, its the function that sets type before battle start
+ problem was battlestruct was set to 0, but I never added type3 to this function, so it was essentially making type 3 default to normal
+ so type bug is gone, now I have to deal with the 4 other bugs I found in the process...
+
+
+ there's now also a move learn bug...if I select no to move learn, without goiong to move deletion selection
+ it'll display as if I deleted the move I was trying to learn and replaced it with  the move I was declined to learn...
+ 1 2 poof deleted baby doll eyes and learned baby doll eyes,...actually nvm it completely replaced my first move...
+ even though I declined to learn the move   sigh
+
+ defiant competitive also don't work for some reason, goes into infini loop when lowering stats smh
+
+ but no the type bug glitch does NOT go both ways, it only goes from wilds into trainer, where it works wrong,
+ it doesn't go from working correclty in trainer to working correctly in wild
+
+ meaning somehow a value isn't getting read correctly, or isn't being written?
+ type bug is affecting both player and enemy side
+
+ further testing way it appears to work is, if mon is not alraedya normal type one of iits type is replaed with type normal
+ (or potentially type3 is getting set to type normal?)  attaked caterpie and it was neutral not resisted need test with weedle
+ that's double resist so single super would make not effetive but if type 2 was being replaced it'd still be neutral.
+ that way I can know for sure  which of the two scenarios is happening
+
+ ok foud a kakuna hit it, and effect was not very effective, meaning, it was the 3rd type like expected very odd, that should be set to type mystery in every instance
+ idk why its being set to normal
+
+
+ the key is going to be the function responsible for setting mon data to battle data for wilds and trainer battle etc.
+
+ //remember add FLY to more mon learnsets, refer to gFloatingSpecies list for starting point, note even pidgey learns fly, size irrelevant
+ //emerald expansion changed how these are handled, more akin to levelup learnset, which removes the bit array limit allowing for many more learned moves
+ //so will port that
+
+ enemy trainer sprite is not moving over to the correct spot
+
+ eventually will need update ai logic not to make more difficult just to adjust for the changes I've alerady made to stay consistent, like phy special split etc.
+ pokemon cries for post gen 3 mon don't sound correct
+
+ redo forecast changes give custom messages for entry, and think would like to make less random.
+ something like when it enters, it'll display a like castform's Forecast predicts bright sun with a chance of hail!
+ that would translate to , setting sun on its entry turn, with the next weather condition after sun to be hail.
+ and it work that way each time before it changes the weather.
+ for that i'd need to roll 2 random rolls at once, and store the second value to be stored and passed/used in the end turn
+ (preferabbly after previous weather's dmg effects) to switch to next weather
+
+ could use a timer here, so weather changes about every 2 turns, it doesn't have a lot of staying power so can't stick around for a longer duration
+ so still have a switch in effect, and end turn effect, but  roll 2 timers at once, setup ewram value to store weather or a special status?
+  specialstatus.forcasted weather? = to weather condition than I guess pass to forecasted weather and use it for weather argument in end turn function
+  after 2 turn timer runs down,  and then set timer to 2 again and roll random value for forcasted weather
+
+  don't exclude being able to roll the same weather twice, if that happens, just reset the duration of weather
+   think make a separate message for when that happes, instead of 2 weather conditions say castform predicts its gonna be (sunny/rainy/hailing) for a long while!
+
+   also think will change castform to normal ghost to make easier to switch in, and remove its ghost type when it transforms
+   so use set_battle_type2 macro -done
+
+ questioning whether, I should really make joat stack with stab?  its a strong effect and makes normal typing desirable as a boost
+ but on the other hand why would you  ever use non stab moves, and the entire point is to capitalize on their flexibility
+ 
+
+//wanted to add small boost to this for joat inclusvive to stab but couldn't do, it had stronger effect on not effective than super
+                //so anything added here would just disincentive using coverage/non stab moves
+
+        //on the other hand keeping it inclusive could work/be fine as my meta would already be more focused on the mon stats/stab typing etc. than super effective coverage moves
+        //so it'd be played more like have a solid stab move, have 2 or so status moves, and a coverage move (that possibly has its own secondary effect/debuff)
+        //if it was inclusive it'd already suit that type of setup, it'd make them even more suited for that format, the stab move woudl be even stronger
+        //and their coverage move would also be more useful than on non-normal mon.
+        //and that also highlights the strength of your type, as being more linked to moves of that type  
+        //the mileage would be limited to how many resist you.  but that's more a buff to those already strong types than normal...
+        //and I cant boost joat while keeping it exclusive as then it'd just be the arceus buff
+        //ok will keep it as it currently is, but to get the most of this will have to greatly tweak movesets so normal types
+        //actually have the type options to be THE coverage warriors try to keep things make sense, they get most coverage
+        //but not somehting that should be super against their alternate typing? like normal/flying not getting an ice/electric move?
+        //check gen 4 tutor moveset for first example of coverage moves to learn, from bulbapedia (as that gen seems to have most variety in movesets)
+        /after that check for moves based on characterstics of mon, i.e things they should be able to do , like how heatwave and ominous wind make sense for pidgey line
+        as they are wind related  same for twister
+        //so that leaves wind moves, wing moves, talon/claw moves slashing moves and beak/horn moves I think I can add as well
+        and again from their exclude anything its non normal type would be weak too
+
+        after learnset redux
+        redo move set for wild mon/trainer mon ensure they have a damaging move regardless of where they are in learnset
+        loop set check if has move with power, if not move loop learnset up to lvl, and replace the last learned move with the last deleted power move
+        with priority given to moves with stab
+
+    ...I think my crit isn't working??,  I've been using high crit moves but never getting a single crit, it worked before...
+    (made new ability block crit functnion testing) - works crit is working again
+
+    need update stat drop ai logic for new abilities that block stat drops did that for leaf gaurd to test,
+    trainers dont use stat dropping moves if found the correct ability, but wilds still ignore ability which is fine I guess
+
+    slightly tweaked ai logic to use split rather than type for phys special stuff as well,  not 100 on if it works but it should
+
+    //since FrozenTurns uses gDisableStructs it'll be cleared when battle ends/new battle starts
+    this works if still frozen at battle end so not frozen solid on next battle makes more sense, but you'll still be frozen, just suffer end turn dmg until healed
+
+ fixed intro trainer select text
+ ...using constrict on wondergaurd shedinja breaks game...causes freeze   going over changes I realized - think fixed, missed a part of status stuff (double check)
 */
+
+goto COMPARISON_FILE  //file added for keeping track of things to port to this new repo to update to previous progress
+
 goto CHECK_THIS //something potentially relevant for future multi battle/triple etc.
+
+goto BATTLE_MOVE_SWAP_LOGIC //use this for changes to prevent seeing the move length bug, prevent moves of certain length from being put/moved
+//into a slot that isn't slot 2 or 4  limit is 13 chars
+
+goto BATTLE_START_VALUES //battle_main.c where mon values are set i.e ability typing etc. before battle start
 
 //logic for the actual messages for oak in first battle, can setup extra messages for move learn here
 //double exp gain for gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE  that way guarantee level up

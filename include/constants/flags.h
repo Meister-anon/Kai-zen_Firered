@@ -713,7 +713,7 @@
 #define FLAG_0x2B8                                       0x2B8
 #define FLAG_0x2B9                                       0x2B9
 #define FLAG_0x2BA                                       0x2BA
-#define FLAG_GOT_POWDER_JAR                              0x2BB //remove or change this flag later, its not necessary now.
+#define FLAG_0x2BB                                       0x2BB //was powder jar check, removed now free flag
 #define FLAG_FOUGHT_MEWTWO                               0x2BC
 #define FLAG_FOUGHT_MOLTRES                              0x2BD
 #define FLAG_FOUGHT_ARTICUNO                             0x2BE
@@ -1322,7 +1322,7 @@
 #define FLAG_SYS_BLACK_FLUTE_ACTIVE                                 (SYS_FLAGS + 0x4)
 #define FLAG_SYS_USE_STRENGTH                                       (SYS_FLAGS + 0x5)
 #define FLAG_SYS_FLASH_ACTIVE                                       (SYS_FLAGS + 0x6)
-#define FLAG_SYS_SPECIAL_WILD_BATTLE                                (SYS_FLAGS + 0x7)	//Don't know what is, potentially use for double wilds?
+#define FLAG_SYS_SPECIAL_WILD_BATTLE                                (SYS_FLAGS + 0x7)	//searched this is for special static encountes, like legendaries, mostly for removing the legendary after the fight
 
 #define FLAG_0x808                                                  (SYS_FLAGS + 0x8)
 #define FLAG_0x809                                                  (SYS_FLAGS + 0x9)
@@ -1347,8 +1347,7 @@
 #define FLAG_0x81C                                                  (SYS_FLAGS + 0x1C)
 #define FLAG_0x81D                                                  (SYS_FLAGS + 0x1D)
 #define FLAG_0x81E                                                  (SYS_FLAGS + 0x1E)
-#define FLAG_0x81F                                                  (SYS_FLAGS + 0x1F)
-#define FLAG_INVERSE_BATTLE                                         (SYS_FLAGS + 0x20)	//ported not yet used
+#define FLAG_INVERSE_BATTLE                                         (SYS_FLAGS + 0x1F) //ported not yet used
 
 // Permanent system flags
 #define PERMA_SYS_FLAGS_START                                       (FLAG_INVERSE_BATTLE + 1)

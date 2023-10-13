@@ -20,7 +20,7 @@ u16 Random2(void);
 
 //Sets the initial seed value of the pseudorandom number generator
 void SeedRng(u16 seed);
-void SeedRng2(u16 seed);
+void SeedRng2(u16 seed); //ported but not using any of the below maybe after I understand it
 
 /* Structured random number generator.
  * Instead of the caller converting bits from Random() to a meaningful

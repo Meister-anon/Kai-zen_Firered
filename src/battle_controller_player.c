@@ -320,7 +320,7 @@ static void HandleInputChooseAction(void)
         BtlController_EmitTwoReturnValues(1, B_ACTION_SKIP_TURN, 0);
         //PlayerBufferExecCompleted();
     }//not gonna skip turn will instead use this to show true move power and type
-    */
+    */ //was custom not default
 }
 
 UNUSED static void UnusedEndBounceEffect(void)
@@ -577,22 +577,22 @@ void HandleInputChooseMove(void)    //test new targetting setup
         if (!gBattleBufferA[gActiveBattler][1]) // not a double battle
         {
             if (moveTarget & MOVE_TARGET_USER_OR_SELECTED && !gBattleBufferA[gActiveBattler][2])
-                canSelectTarget = 1;
+                canSelectTarget = TRUE;
         }
         else // double battle
         {
             if (!(moveTarget & (MOVE_TARGET_RANDOM | MOVE_TARGET_BOTH | MOVE_TARGET_DEPENDS | MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_USER)))
-                canSelectTarget = 1; // either selected or user
+                canSelectTarget = TRUE; // either selected or user
             if (moveTarget == (MOVE_TARGET_USER | MOVE_TARGET_ALLY) && IsBattlerAlive(BATTLE_PARTNER(gActiveBattler)))
-                canSelectTarget = 1;
+                canSelectTarget = TRUE;
             if (moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]] == 0)
             {
-                canSelectTarget = 0;
+                canSelectTarget = FALSE;
             }
             else if (!(moveTarget & (MOVE_TARGET_USER | MOVE_TARGET_USER_OR_SELECTED)) && CountAliveMonsInBattle(BATTLE_ALIVE_EXCEPT_ACTIVE) <= 1)
             {
                 gMultiUsePlayerCursor = GetDefaultMoveTarget(gActiveBattler);
-                canSelectTarget = 0;
+                canSelectTarget = FALSE;
             }
 
             if ((moveTarget & MOVE_TARGET_ALL_BATTLERS) == MOVE_TARGET_ALL_BATTLERS)
@@ -794,6 +794,9 @@ static u32 HandleMoveInputUnused(void)
     return var;
 }
 
+//put logic here to prevent moves of a certain length from beign moved from or into a slot
+//other than slot 2 or 4.  so users can't see move bug limit 13 chars
+#define BATTLE_MOVE_SWAP_LOGIC
 static void HandleMoveSwitching(void)
 {
     u8 perMovePPBonuses[4];

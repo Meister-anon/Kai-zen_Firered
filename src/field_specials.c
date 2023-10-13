@@ -2404,7 +2404,7 @@ void StopPokemonLeagueLightingEffectTask(void)
     }
 }
 
-//add other gen starers on to this list
+//add other gen starers on to this list //vsonic
 static const u8 sCapeBrinkCompatibleSpecies[] = {
     SPECIES_VENUSAUR,
     SPECIES_CHARIZARD,

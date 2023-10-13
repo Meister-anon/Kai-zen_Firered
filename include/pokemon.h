@@ -37,7 +37,7 @@ struct PokemonSubstruct2
     u8 smart;
     u8 tough;
     u8 flagcheck;   //think replace with flag check, planned use for exp share ev item activation condition
-};
+}; //value default to 0,  then check what flgs are set in battle and change end outcome based on that
 
 //pokemonflags
 #define FLAG_EXP_SHARE              (1 << 0)

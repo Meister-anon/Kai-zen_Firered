@@ -82,7 +82,7 @@ CheckIfFlashFireCancelsFire:: @ 81D9CC0
 	goto AI_CheckBadMove_CheckSoundproof
 
 CheckIfWonderGuardCancelsMove:: @ 81D9CCD
-	if_type_effectiveness AI_EFFECTIVENESS_x1_6, AI_CheckBadMove_CheckSoundproof
+	if_type_effectiveness AI_EFFECTIVENESS_x1_55, AI_CheckBadMove_CheckSoundproof
 	goto Score_Minus10
 
 CheckIfLevitateCancelsGroundMove:: @ 81D9CD8
@@ -310,9 +310,10 @@ AI_CBM_EvasionDown:: @ 81DA0BD
 	if_stat_level_equal AI_TARGET, STAT_EVASION, 0, Score_Minus10
 
 CheckIfAbilityBlocksStatChange:: @ 81DA0C5
-	get_ability AI_TARGET
+	get_ability AI_TARGET		@still need update with logic for 4 abilities
 	if_equal ABILITY_CLEAR_BODY, Score_Minus10
 	if_equal ABILITY_WHITE_SMOKE, Score_Minus10
+	if_equal ABILITY_LEAF_GUARD, Score_Minus10	@doesn't prevent picking said move...nvm does work just not for wilds
 	end
 
 AI_CBM_Haze:: @ 81DA0D4
@@ -349,6 +350,9 @@ AI_CBM_Poison:: @ 81DA15B
 	get_target_type2
 	if_equal TYPE_STEEL, Score_Minus10
 	if_equal TYPE_POISON, Score_Minus10
+	get_target_type3
+	if_equal TYPE_STEEL, Score_Minus10
+	if_equal TYPE_POISON, Score_Minus10
 	get_ability AI_TARGET
 	if_equal ABILITY_IMMUNITY, Score_Minus10
 	if_status AI_TARGET, STATUS1_ANY, Score_Minus10
@@ -374,7 +378,7 @@ AI_CBM_HighRiskForDamage:: @ 81DA1B2
 	if_type_effectiveness AI_EFFECTIVENESS_x0, Score_Minus10
 	get_ability AI_TARGET
 	if_not_equal ABILITY_WONDER_GUARD, AI_CBM_HighRiskForDamage_End
-	if_type_effectiveness AI_EFFECTIVENESS_x1_6, AI_CBM_HighRiskForDamage_End
+	if_type_effectiveness AI_EFFECTIVENESS_x1_55, AI_CBM_HighRiskForDamage_End
 	goto Score_Minus10
 
 AI_CBM_HighRiskForDamage_End:: @ 81DA1CB
@@ -417,6 +421,8 @@ AI_CBM_LeechSeed:: @ 81DA22B
 	get_target_type1
 	if_equal TYPE_GRASS, Score_Minus10
 	get_target_type2
+	if_equal TYPE_GRASS, Score_Minus10
+	get_target_type3
 	if_equal TYPE_GRASS, Score_Minus10
 	end
 
@@ -946,8 +952,8 @@ AI_CV_DefenseUp4:: @ 81DA8B4
 	get_move_power_from_result
 	if_equal 0, AI_CV_DefenseUp5
 	get_last_used_move AI_TARGET
-	get_move_type_from_result
-	if_not_in_bytes AI_CV_DefenseUp_PhysicalTypes, AI_CV_DefenseUp_ScoreDown2
+	get_move_split_from_result
+	if_equal 1, AI_CV_DefenseUp_ScoreDown2
 	if_random_less_than 60, AI_CV_DefenseUp_End
 
 AI_CV_DefenseUp5:: @ 81DA8D6
@@ -1026,8 +1032,8 @@ AI_CV_SpDefUp4:: @ 81DA96B
 	get_move_power_from_result
 	if_equal 0, AI_CV_SpDefUp5
 	get_last_used_move AI_TARGET
-	get_move_type_from_result
-	if_in_bytes AI_CV_SpDefUp_PhysicalTypes, AI_CV_SpDefUp_ScoreDown2
+	get_move_split_from_result
+	if_equal 0, AI_CV_SpDefUp_ScoreDown2
 	if_random_less_than 60, AI_CV_SpDefUp_End
 
 AI_CV_SpDefUp5:: @ 81DA98D
@@ -1144,7 +1150,7 @@ AI_CV_AttackDown3:: @ 81DAAA7
 
 AI_CV_AttackDown4:: @ 81DAAB0
 	get_target_type1
-	if_in_bytes AI_CV_AttackDown_PhysicalTypeList, AI_CV_AttackDown_End
+	if_in_bytes AI_CV_AttackDown_PhysicalTypeList, AI_CV_AttackDown_End @going to need to replace this with a check for move split physical
 	get_target_type2
 	if_in_bytes AI_CV_AttackDown_PhysicalTypeList, AI_CV_AttackDown_End
 	if_random_less_than 50, AI_CV_AttackDown_End
@@ -1213,7 +1219,7 @@ AI_CV_SpAtkDown3:: @ 81DAB46
 
 AI_CV_SpAtkDown4:: @ 81DAB4F
 	get_target_type1
-	if_in_bytes AI_CV_SpAtkDown_SpecialTypeList, AI_CV_SpAtkDown_End
+	if_in_bytes AI_CV_SpAtkDown_SpecialTypeList, AI_CV_SpAtkDown_End @gonna need to replace this with macro for special split
 	get_target_type2
 	if_in_bytes AI_CV_SpAtkDown_SpecialTypeList, AI_CV_SpAtkDown_End
 	if_random_less_than 50, AI_CV_SpAtkDown_End
@@ -1536,8 +1542,8 @@ AI_CV_Trap_End:: @ 81DAEEA
 AI_CV_HighCrit:: @ 81DAEEB
 	if_type_effectiveness AI_EFFECTIVENESS_x0_25, AI_CV_HighCrit_End
 	if_type_effectiveness AI_EFFECTIVENESS_x0_5, AI_CV_HighCrit_End
-	if_type_effectiveness AI_EFFECTIVENESS_x1_6, AI_CV_HighCrit2
-	if_type_effectiveness AI_EFFECTIVENESS_x2_56, AI_CV_HighCrit2
+	if_type_effectiveness AI_EFFECTIVENESS_x1_55, AI_CV_HighCrit2
+	if_type_effectiveness AI_EFFECTIVENESS_x2_40, AI_CV_HighCrit2
 	if_random_less_than 128, AI_CV_HighCrit_End
 
 AI_CV_HighCrit2:: @ 81DAF09
@@ -1747,8 +1753,8 @@ AI_CV_Counter3:: @ 81DB0D6
 
 AI_CV_Counter4:: @ 81DB0EC
 	get_last_used_move AI_TARGET
-	get_move_type_from_result
-	if_not_in_bytes AI_CV_Counter_PhysicalTypeList, AI_CV_Counter_ScoreDown1
+	get_move_split_from_result
+	if_equal 1, AI_CV_Counter_ScoreDown1
 	if_random_less_than 100, AI_CV_Counter_End
 	score +1
 	goto AI_CV_Counter_End
@@ -1990,6 +1996,8 @@ AI_CV_Curse:: @ 81DB293
 	if_equal TYPE_GHOST, AI_CV_Curse4
 	get_user_type2
 	if_equal TYPE_GHOST, AI_CV_Curse4
+	get_user_type3
+	if_equal TYPE_GHOST, AI_CV_Curse4
 	if_stat_level_more_than AI_USER, STAT_DEF, 9, AI_CV_Curse_End
 	if_random_less_than 128, AI_CV_Curse2
 	score +1
@@ -2064,6 +2072,8 @@ AI_CV_Foresight:: @ 81DB3A3
 	get_user_type1
 	if_equal TYPE_GHOST, AI_CV_Foresight2
 	get_user_type2
+	if_equal TYPE_GHOST, AI_CV_Foresight2
+	get_user_type3
 	if_equal TYPE_GHOST, AI_CV_Foresight2
 	if_stat_level_more_than AI_USER, STAT_EVASION, 8, AI_CV_Foresight3
 	score -2
@@ -2147,6 +2157,10 @@ AI_CV_Pursuit:: @ 81DB48B
 	get_target_type2
 	if_equal TYPE_GHOST, AI_CV_Pursuit2
 	get_target_type2
+	if_equal TYPE_PSYCHIC, AI_CV_Pursuit2
+	get_target_type3
+	if_equal TYPE_GHOST, AI_CV_Pursuit2
+	get_target_type3
 	if_equal TYPE_PSYCHIC, AI_CV_Pursuit2
 	goto AI_CV_Pursuit_End
 
@@ -2265,8 +2279,8 @@ AI_CV_MirrorCoat3:: @ 81DB5E1
 
 AI_CV_MirrorCoat4:: @ 81DB5F7
 	get_last_used_move AI_TARGET
-	get_move_type_from_result
-	if_not_in_bytes AI_CV_MirrorCoat_SpecialTypeList, AI_CV_MirrorCoat_ScoreDown1
+	get_move_split_from_result
+	if_equal 0, AI_CV_MirrorCoat_ScoreDown1
 	if_random_less_than 100, AI_CV_MirrorCoat_End
 	score +1
 	goto AI_CV_MirrorCoat_End
@@ -2335,8 +2349,8 @@ AI_CV_SemiInvulnerable2:: @ 81DB677
 	if_status2 AI_TARGET, STATUS2_CURSED, AI_CV_SemiInvulnerable_TryEncourage
 	if_status3 AI_TARGET, STATUS3_LEECHSEED, AI_CV_SemiInvulnerable_TryEncourage
 	get_weather
-	if_equal AI_WEATHER_HAIL, AI_CV_SemiInvulnerable_CheckSandstormTypes
-	if_equal AI_WEATHER_SANDSTORM, AI_CV_SemiInvulnerable_CheckIceType
+	if_equal AI_WEATHER_HAIL, AI_CV_SemiInvulnerable_CheckIceType
+	if_equal AI_WEATHER_SANDSTORM, AI_CV_SemiInvulnerable_CheckSandstormTypes
 	goto AI_CV_SemiInvulnerable5
 
 AI_CV_SemiInvulnerable_CheckSandstormTypes:: @ 81DB6A7
@@ -2344,12 +2358,16 @@ AI_CV_SemiInvulnerable_CheckSandstormTypes:: @ 81DB6A7
 	if_in_bytes AI_CV_SandstormResistantTypes, AI_CV_SemiInvulnerable_TryEncourage
 	get_user_type2
 	if_in_bytes AI_CV_SandstormResistantTypes, AI_CV_SemiInvulnerable_TryEncourage
+	get_user_type3
+	if_in_bytes AI_CV_SandstormResistantTypes, AI_CV_SemiInvulnerable_TryEncourage
 	goto AI_CV_SemiInvulnerable5
 
 AI_CV_SemiInvulnerable_CheckIceType:: @ 81DB6C2
 	get_user_type1
 	if_equal TYPE_ICE, AI_CV_SemiInvulnerable_TryEncourage
 	get_user_type2
+	if_equal TYPE_ICE, AI_CV_SemiInvulnerable_TryEncourage
+	get_user_type3
 	if_equal TYPE_ICE, AI_CV_SemiInvulnerable_TryEncourage
 
 AI_CV_SemiInvulnerable5:: @ 81DB6D2
@@ -2705,6 +2723,8 @@ AI_CV_MudSport:: @ 81DB9D8
 	if_equal TYPE_ELECTRIC, AI_CV_MudSport2
 	get_target_type2
 	if_equal TYPE_ELECTRIC, AI_CV_MudSport2
+	get_target_type3
+	if_equal TYPE_ELECTRIC, AI_CV_MudSport2
 	goto AI_CV_MudSport_ScoreDown1
 
 AI_CV_MudSport2:: @ 81DB9F4
@@ -2739,6 +2759,8 @@ AI_CV_WaterSport:: @ 81DBA26
 	if_equal TYPE_FIRE, AI_CV_WaterSport2
 	get_target_type2
 	if_equal TYPE_FIRE, AI_CV_WaterSport2
+	get_target_type3
+	if_equal TYPE_FIRE, AI_CV_WaterSport2
 	goto AI_CV_WaterSport_ScoreDown1
 
 AI_CV_WaterSport2:: @ 81DBA42
@@ -2769,7 +2791,7 @@ AI_TryToFaint:: @ 81DBA6F
 	if_can_faint AI_TryToFaint_TryToEncourageQuickAttack
 	get_how_powerful_move_is
 	if_equal MOVE_NOT_MOST_POWERFUL, Score_Minus1
-@	if_type_effectiveness AI_EFFECTIVENESS_x2_56, AI_TryToFaint_DoubleSuperEffective  @ Improvement in Emerald
+@	if_type_effectiveness AI_EFFECTIVENESS_x2_40, AI_TryToFaint_DoubleSuperEffective  @ Improvement in Emerald
 	end
 
 @ Improvement in Emerald

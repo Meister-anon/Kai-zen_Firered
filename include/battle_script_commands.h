@@ -42,7 +42,7 @@ u16 GetNaturePowerMove(void);
 s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, u32 move);
 
 bool8 CanMultiTask(u16 move);
-
+bool8 DoesTargetAbilityBlockCrit(u8 Targetbattler);
 
 s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags);
 

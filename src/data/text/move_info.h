@@ -2247,6 +2247,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [MOVE_POUNCE] = gMoveDescription_Pounce,
     [MOVE_CHEAP_SHOT] = gMoveDescription_CheapShot,
     [MOVE_SNOWBALL] = gMoveDescription_Snowball,
+    [MOVE_TRENCH_RUN] = gMoveDescription_Snowball, //make own value later
 };//last value can have comma
 
 
@@ -3029,6 +3030,7 @@ const u8 gLowerMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_POUNCE] = _("Pounce"),
     [MOVE_CHEAP_SHOT] = _("Cheap Shot"),
     [MOVE_SNOWBALL] =_("Snowball"),
+    [MOVE_TRENCH_RUN] = _("Trench-run"), //revisit
 };//don't need remove comma from last value for this file, port of emerald
 
 //default move names 
@@ -3806,5 +3808,6 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("DOUBLE SHOCK"),
     _("POUNCE"),
     _("CHEAP SHOT"),
-    _("SNOWBALL")
+    _("SNOWBALL"),
+    _("TRENCH-RUN")
 };//remember to remove comma from last entry //longest name is 17 chars

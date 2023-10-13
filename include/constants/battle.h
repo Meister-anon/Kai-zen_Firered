@@ -72,7 +72,7 @@
 #define BATTLE_TYPE_20               0x100000   //this appears to be for link battle?   /renmae to link at some point will eventually remove these 2
 #define BATTLE_TYPE_MULTI            0x200000   //multi link battle?  swapped these 2 placement, so could use incldues for trainers.h battle type setting
 #define BATTLE_TYPE_INGAME_PARTNER   0x400000
-#define BATTLE_TYPE_TWO_OPPONENTS    0x800000	//carry over from emerald, not used here but is reason for gTrainerBattleOpponent_B  when 2 trainers approach player
+#define BATTLE_TYPE_TWO_OPPONENTS    0x800000	//carry over from emerald, not fully set here yet but is reason for gTrainerBattleOpponent_B  when 2 trainers approach player
 #define BATTLE_TYPE_RECORDED         0x1000000  //also not used, or wont be
 #define BATTLE_TYPE_x2000000         0x2000000
 #define BATTLE_TYPE_x4000000         0x4000000
@@ -159,14 +159,8 @@
 #define STATUS1_TOXIC_COUNTER    (1 << 8 | 1 << 9 | 1 << 10 | 1 << 11)
 #define STATUS1_TOXIC_TURN(num)  ((num) << 8)
 #define STATUS1_SPIRIT_LOCK      (1 << 12)	//redid toxic, put at original value, moved others
-#define STATUS1_SNAP_TRAP		 (1 << 13)	//check status 1 effect for permanent status clear	pretty sure defaults to <= 6
-#define STATUS1_FIRE_SPIN		 (1 << 14)
-#define STATUS1_CLAMP			 (1 << 15)
-#define STATUS1_WHIRLPOOL		 (1 << 16)
-#define STATUS1_SAND_TOMB		 (1 << 17)
-#define STATUS1_MAGMA_STORM		 (1 << 18)
-#define STATUS1_INFESTATION		 (1 << 19)
-#define STATUS1_WRAPPED			 (1 << 20)
+#define STATUS1_INFESTATION		 (1 << 13) //planned bug status keep this remove others
+
 
 #define STATUS1_PSN_ANY          (STATUS1_POISON | STATUS1_TOXIC_POISON)
 //will need to go through and review all use of this variable since I've expanded status1
@@ -192,8 +186,8 @@
 #define STATUS2_BIDE_TURN(num)        (((num) << 8) & STATUS2_BIDE)
 #define STATUS2_LOCK_CONFUSE          (1 << 10 | 1 << 11) // e.g. Thrash
 #define STATUS2_LOCK_CONFUSE_TURN(num)((num) << 10)
-#define STATUS2_MULTIPLETURNS         (1 << 12) //wrapped is wrap & bide
-#define STATUS2_WRAPPED               (1 << 13)	//make individual wrapped for each, but all use same wrap turn counter
+#define STATUS2_MULTIPLETURNS         (1 << 12) //wrapped is wrap & bide  / separting just wrap, think plan put wrap into status4 so all traps together
+#define STATUS2_WRAPPED               (1 << 13)	//make individual wrapped for each, but all use same wrap turn counter / cant usesame counter and multi trap so this will just be wrap
 //#define STATUS2_WRAPPED_TURN(num)     ((num) << 13)	//left shift value is starting point of status wrapped
 #define STATUS2_POWDER                (1 << 14)
 #define STATUS2_INFATUATION           (1 << 16 | 1 << 17 | 1 << 18 | 1 << 19)  // 4 bits, one for every battler
@@ -261,12 +255,17 @@
 //similar to plasma fist effect but for target
 #define STATUS4_ELECTRIFIED             (1 << 0)	//need to check how status4 is setup to make sure it runs on same conditions as status2
 #define STATUS4_PLASMA_FISTS            (1 << 1)	//if it works I can move wrap status and wrap counter up here so it all uses status4
-#define STATUS4_FIRE_SPIN				(1 << 2)
-#define STATUS4_CLAMP					(1 << 3)
-#define STATUS4_WHIRLPOOL				(1 << 4)
-#define STATUS4_SAND_TOMB				(1 << 5)
-#define STATUS4_MAGMA_STORM				(1 << 6)
-#define STATUS4_INFESTATION				(1 << 7)
+//start of new trap effects, each will have its own status and timer in disable structs
+#define STATUS4_BIND                    (1 << 2)
+#define STATUS4_FIRE_SPIN				(1 << 3)
+#define STATUS4_CLAMP					(1 << 4)
+#define STATUS4_WHIRLPOOL				(1 << 5)
+#define STATUS4_SAND_TOMB				(1 << 6)
+#define STATUS4_MAGMA_STORM				(1 << 7)
+#define STATUS4_SWARM   				(1 << 8)
+#define STATUS4_SNAP_TRAP               (1 << 9)
+
+#define STATUS4_GROUNDED                (1 << 10)  //new status  set for move effect trench_run to more easily translate mon into grounded state, add status to groudned function
 
 //was able to save great amount of space with emerald upgrades
 //but now dont have separate counter for each status
@@ -283,18 +282,12 @@
 
 #define STATUS4_ENVIRONMENT_TRAP (STATUS4_FIRE_SPIN || STATUS4_WHIRLPOOL || STATUS4_SAND_TOMB || STATUS4_MAGMA_STORM)
 
-#define STATUS4_PHYSICAL_TRAP (STATUS4_CLAMP || STATUS4_INFESTATION) //summary you get 1 environment trap and as many physical traps as you want
-
 //trap statuses not immune to floating enemies
 //#define ITS_A_TRAP_STATUS_2 (STATUS2_WRAPPED | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL | STATUS4_SAND_TOMB | STATUS4_INFESTATION)
 
 //temp just the status4 stuff		//OK so status4 not currently used in battle? its not in BattlePokemon struct need add and investigate
-#define ITS_A_TRAP_STATUS4 (STATUS4_FIRE_SPIN || STATUS4_CLAMP || STATUS4_WHIRLPOOL || STATUS4_SAND_TOMB || STATUS4_MAGMA_STORM || STATUS4_INFESTATION)
+#define ITS_A_TRAP_STATUS4 (STATUS4_BIND || STATUS4_FIRE_SPIN || STATUS4_CLAMP || STATUS4_WHIRLPOOL || STATUS4_SAND_TOMB || STATUS4_MAGMA_STORM || STATUS4_SWARM)
 
-//effects for traps together //move data used in battle_moves_effects.h  each needs own battlescript
-#define ITS_A_TRAP (EFFECT_TRAP || EFFECT_FIRE_SPIN || EFFECT_CLAMP || EFFECT_WHIRLPOOL || EFFECT_SAND_TOMB || EFFECT_MAGMA_STORM || EFFECT_SNAP_TRAP)
-
-#define GROUND_TRAPS (EFFECT_TRAP || EFFECT_FIRE_SPIN || EFFECT_CLAMP || EFFECT_WHIRLPOOL || EFFECT_SAND_TOMB || EFFECT_SWARM || EFFECT_SNAP_TRAP)
 
 // Not really sure what a "hitmarker" is.
 #define HITMARKER_WAKE_UP_CLEAR         (1 << 4)	//// Cleared when waking up. Never set or checked.

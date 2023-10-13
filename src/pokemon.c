@@ -2316,6 +2316,7 @@ static const u8 sHoldEffectToType[][2] =
     {HOLD_EFFECT_DRAGON_POWER, TYPE_DRAGON},
     {HOLD_EFFECT_NORMAL_POWER, TYPE_NORMAL},
     {HOLD_EFFECT_FAIRY_POWER, TYPE_FAIRY}, //fairy addition item added in gen 9, Fairy_Feather
+    {HOLD_EFFECT_SOUND_POWER, TYPE_SOUND},
 };//apparently these aren't for gems? but for stat boost items i.e rock power twisted spoon, nevermelt ice etc.
 
 const struct SpriteTemplate gSpriteTemplates_Battlers[] = 
@@ -2549,7 +2550,7 @@ void ZeroMonData(struct Pokemon *mon)
     SetMonData(mon, MON_DATA_SPEED, &arg);
     SetMonData(mon, MON_DATA_SPATK, &arg);
     SetMonData(mon, MON_DATA_SPDEF, &arg);
-    arg = 255;
+    //arg = 255;
     //SetMonData(mon, MON_DATA_MAIL, &arg); //haven't removed mail yet redo later
 }
 
@@ -2569,11 +2570,11 @@ void ZeroEnemyPartyMons(void)
 
 void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
 {
-    u32 arg;
+   // u32 arg;
     ZeroMonData(mon);
     CreateBoxMon(&mon->box, species, level, fixedIV, hasFixedPersonality, fixedPersonality, otIdType, fixedOtId);
     SetMonData(mon, MON_DATA_LEVEL, &level);
-    arg = 255;
+   // arg = 255;
     //SetMonData(mon, MON_DATA_MAIL, &arg); 
     CalculateMonStats(mon);
 } //believe used for wild poke generation, and give mons etc. actually used for all mon, trainer included
@@ -3405,14 +3406,9 @@ static bool32 CanEvolve(u32 species) //default use for eviolite but will also us
 //something about being faster and not needlesly clearing the  prefetch cache
 //(couldn't get it to wotk just gave me ivalid operand to binary errors when I tried to add the pointer values so just put it back
 //slow and inefficient but it works)
-u16 GetBaseStatTotal(u16 species)
+u16 GetBaseStatTotal(u16 species) //now that I have a stat total field can just use that
 {
-    u32 statTotal;
-
-
-        statTotal = gBaseStats[species].baseHP + gBaseStats[species].baseAttack + gBaseStats[species].baseDefense //of note doesn't include hp so could be why - 1   //also thinkm this is dereferencing so need the asterisk etc here
-             + gBaseStats[species].baseSpeed + gBaseStats[species].baseSpAttack + gBaseStats[species].baseSpDefense;
-    return statTotal;
+    return gBaseStats[species].statTotal;
 } //...so just realized I could make a macro like below for base stats file to calculate base stat total for  the mon directly from the base stat data
 //would add a u16 value to basestat but would be very useful for users, and partially offset by removal of ev yeild field  nope couldn't do that...
 
@@ -4226,8 +4222,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage *= (((attacker->level * 160) / 100) / 5 + 3);  //alt lower scaling dmg formula
 
         //trap effects & bug status def drop
-        if (((gBattleMons[battlerIdDef].status4 & STATUS4_INFESTATION) || (gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION) //this is bug status
-            || gDisableStructs[gEffectBattler].swarmTurns) //this is trap status
+        if ((gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION) //this is bug status
             && IsBlackFogNotOnField()) //liked the idea of creating a bug status effect, change  move infestaion to swarm, atked by biting swarm!
             //then make infested/infestation the bug status, the extra effect of swarm would be setting the infestation status
         {
@@ -5727,6 +5722,8 @@ void RemoveBattleMonPPBonus(struct BattlePokemon *mon, u8 moveIndex)
 }
 
 #define POKEMON_TO_BATTLEMON//potentially add status4 here? and status3?  compare with emerald expansion
+//...this is a unused ported function the real function is the one bleow this
+//CopyPlayerPartyMonToBattleData
 void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst) 
 {
     s32 i;
@@ -5776,6 +5773,7 @@ void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst)
     dst->status4 = 0;
 }
 
+//wait nvm this function is only used in item_use function... below this
 static void CopyPlayerPartyMonToBattleData(u8 battlerId, u8 partyIndex) //function brokeninto several smaller functions in emerald
 {
     u16 *hpSwitchout;

@@ -967,7 +967,7 @@ static void CompleteOnFinishedStatusAnimation(void)
 }
 
 #define CHECK_THIS //VSONIC IMPORTANT
-static void OakOldManHandleGetMonData(void)
+static void OakOldManHandleGetMonData(void) //this could be part of issue? since changed size of struct?
 {
     u8 monData[sizeof(struct Pokemon) * 2 + 56]; // this allows to get full data of two pokemon, trying to get more will result in overwriting data
     u32 size = 0;

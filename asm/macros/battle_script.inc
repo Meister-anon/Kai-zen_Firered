@@ -1383,6 +1383,12 @@
 	.4byte \ptr
 	.endm
 
+	.macro setuserstatus4 flags:req, ptr:req
+	callnative BS_setuserstatus4
+	.4byte \flags
+	.4byte \ptr
+	.endm
+
 	.macro attackthisturn ptr:req
 	callnative BS_AttacksThisTurn
 	.4byte \ptr

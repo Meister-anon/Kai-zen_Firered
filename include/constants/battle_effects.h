@@ -407,23 +407,18 @@
 #define EFFECT_FLASH 395
 #define EFFECT_COCOON 396
 #define EFFECT_FLASH_FREEZE 397
-#define EFFECT_FIRE_SPIN 398 //needed these separate because otherwise, game doesn't allow multiple traps to be applied
-#define EFFECT_CLAMP 399
-#define EFFECT_WHIRLPOOL 400
-#define EFFECT_SAND_TOMB 401
-#define EFFECT_MAGMA_STORM 402
-#define EFFECT_SWARM 403
-#define EFFECT_SNAP_TRAP 404
-#define EFFECT_DRYADS_CURSE 405
-#define EFFECT_SHIELD_BASH 406
-#define EFFECT_ATTRACT_HIT 407	//NEED test
-#define EFFECT_EXPANDING_FORCE 408	//Just to fill space
-#define EFFECT_TRIPLE_ARROWS 409	//triple arrow change
-#define EFFECT_SPECIAL_ATTACK_UP_HIT 410
-#define EFFECT_VICTORY_DANCE                411
-#define EFFECT_TEATIME                      412
-#define EFFECT_ATTACK_UP_USER_ALLY          413 // Howl 8th Gen ver.
-#define EFFECT_TARGET_TYPE_DAMAGE       414
+//#define EFFECT_FIRE_SPIN 398 //needed these separate because otherwise, game doesn't allow multiple traps to be applied //changed rather than multile effects just use multi status 
+#define EFFECT_DRYADS_CURSE 398
+#define EFFECT_SHIELD_BASH 399
+#define EFFECT_ATTRACT_HIT 400	//NEED test
+#define EFFECT_EXPANDING_FORCE 401	//Just to fill space
+#define EFFECT_TRIPLE_ARROWS 402	//triple arrow change
+#define EFFECT_SPECIAL_ATTACK_UP_HIT 403
+#define EFFECT_VICTORY_DANCE                404
+#define EFFECT_TEATIME                      405
+#define EFFECT_ATTACK_UP_USER_ALLY          406 // Howl 8th Gen ver.
+#define EFFECT_TARGET_TYPE_DAMAGE       407
+#define EFFECT_TRENCH_RUN               408
 
 /*MOVE_FIRE_SPIN, //increases burn chance //serenge grace is effect *2 by requires no setup, I think I can get away w * 3 here actually do more to near guarantee 50-60%
 MOVE_CLAMP,     //no extra wrap effect,  but give flich chance on hit //changed mind you're staying clamped on them, so for duration statused target has chance to flinch when attacking

@@ -128,8 +128,8 @@
 #define HOLD_EFFECT_CELL_BATTERY   129
 
 // Gen6 hold effects
-#define HOLD_EFFECT_FAIRY_POWER     139
-#define HOLD_EFFECT_MEGA_STONE      140
+#define HOLD_EFFECT_FAIRY_POWER     139 //since made its own type potentially need make sound_power item
+#define HOLD_EFFECT_MEGA_STONE      140 //idea call it deci bell?
 #define HOLD_EFFECT_SAFETY_GOGGLES  141
 #define HOLD_EFFECT_LUMINOUS_MOSS   142
 #define HOLD_EFFECT_SNOWBALL        143
@@ -162,6 +162,9 @@
 #define HOLD_EFFECT_POWER_BAND			181
 
 #define HOLD_EFFECT_CURE_ATTRACT		182
+
+//custom hold effects
+#define HOLD_EFFECT_SOUND_POWER 183   //call deci bell (I think)
 
 // Terrain seed params
 #define HOLD_EFFECT_PARAM_ELECTRIC_TERRAIN  0

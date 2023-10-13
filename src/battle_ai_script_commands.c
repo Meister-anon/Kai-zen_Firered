@@ -121,7 +121,7 @@ static void Cmd_is_first_turn_for(void);
 static void Cmd_get_stockpile_count(void);
 static void Cmd_is_double_battle(void);
 static void Cmd_get_used_held_item(void);
-static void Cmd_get_move_type_from_result(void);
+static void Cmd_get_move_split_from_result(void);
 static void Cmd_get_move_power_from_result(void);
 static void Cmd_get_move_effect_from_result(void);
 static void Cmd_get_protect_count(void);
@@ -225,7 +225,7 @@ static const BattleAICmdFunc sBattleAICmdTable[] =
     Cmd_get_stockpile_count,              // 0x4B
     Cmd_is_double_battle,                 // 0x4C
     Cmd_get_used_held_item,               // 0x4D
-    Cmd_get_move_type_from_result,        // 0x4E
+    Cmd_get_move_split_from_result,       // 0x4E
     Cmd_get_move_power_from_result,       // 0x4F
     Cmd_get_move_effect_from_result,      // 0x50
     Cmd_get_protect_count,                // 0x51
@@ -935,7 +935,7 @@ static void Cmd_get_turn_count(void)
     sAIScriptPtr += 1;
 }
 
-//vsonic add typep 3
+//vsonic add typep 3 - done and added to script
 static void Cmd_get_type(void)
 {
     switch (sAIScriptPtr[1])
@@ -951,6 +951,12 @@ static void Cmd_get_type(void)
         break;
     case AI_TYPE2_TARGET:
         AI_THINKING_STRUCT->funcResult = gBattleMons[gBattlerTarget].type2;
+        break;
+    case AI_TYPE3_USER:
+        AI_THINKING_STRUCT->funcResult = gBattleMons[gBattlerAttacker].type3;
+        break;
+    case AI_TYPE3_TARGET:
+        AI_THINKING_STRUCT->funcResult = gBattleMons[gBattlerTarget].type3;
         break;
     case AI_TYPE_MOVE:
         AI_THINKING_STRUCT->funcResult = gBattleMoves[AI_THINKING_STRUCT->moveConsidered].type;
@@ -1219,13 +1225,13 @@ static void Cmd_get_highest_type_effectiveness(void)
         {
             TypeCalc(gCurrentMove, gBattlerAttacker, gBattlerTarget);
 
-            if (gBattleMoveDamage == 120) // Super effective STAB.
-                gBattleMoveDamage = AI_EFFECTIVENESS_x1_6;
-            if (gBattleMoveDamage == 240)
-                gBattleMoveDamage = AI_EFFECTIVENESS_x2_56;
-            if (gBattleMoveDamage == 30) // Not very effective STAB.
+            if (gBattleMoveDamage == ((62 * 135)/ 100)) // Super effective STAB.
+                gBattleMoveDamage = AI_EFFECTIVENESS_x1_55;
+            if (gBattleMoveDamage == ((((62 * 155) / 100) * 135) / 100))   //quad super STAB
+                gBattleMoveDamage = AI_EFFECTIVENESS_x2_40;
+            if (gBattleMoveDamage == 27) // Not very effective STAB.
                 gBattleMoveDamage = AI_EFFECTIVENESS_x0_5;
-            if (gBattleMoveDamage == 15)
+            if (gBattleMoveDamage == ((10 * 135) / 100)) //quad resisted STAB
                 gBattleMoveDamage = AI_EFFECTIVENESS_x0_25;
 
             if (gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE)
@@ -1255,14 +1261,14 @@ static void Cmd_if_type_effectiveness(void)
 
     TypeCalc(gCurrentMove, gBattlerAttacker, gBattlerTarget);
 
-    if (gBattleMoveDamage == 120) // Super effective STAB.
-        gBattleMoveDamage = AI_EFFECTIVENESS_x1_6;
-    if (gBattleMoveDamage == 240)
-        gBattleMoveDamage = AI_EFFECTIVENESS_x2_56;
-    if (gBattleMoveDamage == 30) // Not very effective STAB.
-        gBattleMoveDamage = AI_EFFECTIVENESS_x0_5;
-    if (gBattleMoveDamage == 15)
-        gBattleMoveDamage = AI_EFFECTIVENESS_x0_25;
+        if (gBattleMoveDamage == ((62 * 135)/ 100)) // Super effective STAB.
+            gBattleMoveDamage = AI_EFFECTIVENESS_x1_55;
+        if (gBattleMoveDamage == ((((62 * 155) / 100) * 135) / 100))   //quad super STAB
+            gBattleMoveDamage = AI_EFFECTIVENESS_x2_40;
+        if (gBattleMoveDamage == 27) // Not very effective STAB.
+            gBattleMoveDamage = AI_EFFECTIVENESS_x0_5;
+        if (gBattleMoveDamage == ((10 * 135) / 100)) //quad resisted STAB
+            gBattleMoveDamage = AI_EFFECTIVENESS_x0_25;
 
     if (gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE)
         gBattleMoveDamage = AI_EFFECTIVENESS_x0;
@@ -1834,14 +1840,16 @@ static void Cmd_get_used_held_item(void) //could change to use side and party?
     sAIScriptPtr += 2;
 }
 
-static void Cmd_get_move_type_from_result(void)
+static void Cmd_get_move_split_from_result(void) //only used for checking physical or special move, so replace with split check instead
 {
-    AI_THINKING_STRUCT->funcResult = gBattleMoves[AI_THINKING_STRUCT->funcResult].type;
+    AI_THINKING_STRUCT->funcResult = gBattleMoves[AI_THINKING_STRUCT->funcResult].split;
 
     sAIScriptPtr += 1;
 }
 
-static void Cmd_get_move_power_from_result(void)
+//think way works I need to call another command before that stores a value?
+//this is always used only after get_last_used_move
+static void Cmd_get_move_power_from_result(void) 
 {
     AI_THINKING_STRUCT->funcResult = gBattleMoves[AI_THINKING_STRUCT->funcResult].power;
 

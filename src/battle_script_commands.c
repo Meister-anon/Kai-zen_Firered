@@ -680,7 +680,7 @@ s32 AICalcCritChance(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbilit
     {
         critChance = -1;
     }
-    else if (abilityDef == ABILITY_BATTLE_ARMOR || abilityDef == ABILITY_SHELL_ARMOR || (abilityDef == ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL) || abilityDef == ABILITY_STEADFAST || (abilityDef == ABILITY_TANGLED_FEET && gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION))
+    else if (DoesTargetAbilityBlockCrit(battlerDef))
     {
         if (recordAbility)
             RecordAbilityBattle(battlerDef, abilityDef);
@@ -805,13 +805,6 @@ static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
     [MOVE_EFFECT_PREVENT_ESCAPE] = STATUS2_ESCAPE_PREVENTION,
     [MOVE_EFFECT_NIGHTMARE] = STATUS2_NIGHTMARE,
     [MOVE_EFFECT_THRASH] = STATUS2_LOCK_CONFUSE,
-    [MOVE_EFFECT_FIRE_SPIN] = STATUS4_FIRE_SPIN,
-    [MOVE_EFFECT_CLAMP] = STATUS4_CLAMP,
-    [MOVE_EFFECT_WHIRLPOOL] = STATUS4_WHIRLPOOL,
-    [MOVE_EFFECT_SAND_TOMB] = STATUS4_SAND_TOMB,
-    [MOVE_EFFECT_MAGMA_STORM] = STATUS4_MAGMA_STORM,
-    [MOVE_EFFECT_INFESTATION] = STATUS4_INFESTATION,
-    [MOVE_EFFECT_SNAP_TRAP] = STATUS1_SNAP_TRAP, //actually think I don't need make status1, could just check status and remove part that says if wrap user switches out effect is removed
     [MOVE_EFFECT_ATTRACT] = STATUS2_INFATUATION,    //didn't work couldn't use infatuatedwith
 };//actually rather than making this u64 prob should try putting in different status field since it doesn't need to be all status2 Ian use status4
 //mof don't think the gba can parse u64, it can only go up to 3 mbs?
@@ -858,13 +851,7 @@ static const u8 *const sMoveEffectBS_Ptrs[] =
     [MOVE_EFFECT_REMOVE_STATUS] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_ATK_DEF_DOWN] = BattleScript_MoveEffectSleep,//BattleScript_MoveEffectFallInLove
     [MOVE_EFFECT_RECOIL_33] = BattleScript_MoveEffectRecoil,
-    [MOVE_EFFECT_FIRE_SPIN] = BattleScript_MoveEffectFireSpin,
-    [MOVE_EFFECT_CLAMP] = BattleScript_MoveEffectClamp,
-    [MOVE_EFFECT_WHIRLPOOL] = BattleScript_MoveEffectWhirlpool,
-    [MOVE_EFFECT_SAND_TOMB] = BattleScript_MoveEffectSandTomb,
-    [MOVE_EFFECT_MAGMA_STORM] = BattleScript_MoveEffectMagmaStorm,
     [MOVE_EFFECT_INFESTATION] = BattleScript_MoveEffectInfestation,
-    [MOVE_EFFECT_SNAP_TRAP] = BattleScript_MoveEffectSnapTrap,
     [MOVE_EFFECT_ATTRACT] = BattleScript_MoveEffectAttract,   //see if it works as is, or I need actuall battlescript for this
     //[MOVE_EFFECT_SPIRIT_LOCK] = BattleScript_MoveEffectSpiritLock,
 }; //don't know why a lot of these default to sleep, but I added attract to hopefully do something?
@@ -1280,11 +1267,11 @@ u16 GetNaturePowerMove(void)
 
 static const u16 sWeightToDamageTable[] =
 {
-    50, 20,
-    250, 40,
-    500, 60,
-    1000, 80,
-    2000, 100,
+    50, 40,
+    200, 60,    //geodude is here
+    500, 75,
+    1000, 85,  //graveler is here
+    2400, 100,  //onix is here  //snorlax is double this
     10000, 120,
     0xFFFF, 0xFFFF
 };
@@ -1400,6 +1387,69 @@ static void atk00_attackcanceler(void) //vsonic
 
     if (TryAegiFormChange())
         return;
+
+    //change put bind effect here, since similar to disobedient checks, seems don' teven need specific stuff for bind
+    if (gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND && gDisableStructs[gBattlerAttacker].bindedMove == MOVE_NONE) //if move not locked in yet
+    {
+
+        for (i = 0; i < MAX_MON_MOVES; ++i)
+            if (gBattleMons[gBattlerAttacker].moves[i] == gLastMoves[gBattlerAttacker]) //set to last used move
+                break;
+        if (gLastMoves[gBattlerAttacker] == MOVE_NONE
+        || gLastMoves[gBattlerAttacker] == MOVE_ENCORE
+        || gLastMoves[gBattlerAttacker] == MOVE_TRANSFORM
+        || gLastMoves[gBattlerAttacker] == MOVE_MIMIC
+        || gLastMoves[gBattlerAttacker] == MOVE_SKETCH
+        || gLastMoves[gBattlerAttacker] == MOVE_SLEEP_TALK
+        || gLastMoves[gBattlerAttacker] == MOVE_MIRROR_MOVE)
+            i = 4;
+
+        if (gDisableStructs[gBattlerAttacker].bindedMove == MOVE_NONE
+        && i != 4
+        && gBattleMons[gBattlerAttacker].pp[i] != 0)
+        {
+            //gDisableStructs[gBattlerTarget].bindedMove = gBattleMons[gBattlerTarget].moves[i];
+            //gDisableStructs[gBattlerTarget].bindMovepos = i;
+            gCurrMovePos = gChosenMovePos = i;
+            gCalledMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
+            gDisableStructs[gBattlerAttacker].bindedMove = gCalledMove;
+            gBattlerTarget = GetMoveTarget(gCalledMove, 1);
+            gBattlescriptCurrInstr = BattleScript_BindDoCalledMove; //not 100% if bs is needed for this
+            
+        }
+        else if (i == 4) //
+        {
+            i = Random() % i;
+            gCurrMovePos = gChosenMovePos = i;
+            gCalledMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
+            gBattlerTarget = GetMoveTarget(gCalledMove, 1);
+            gDisableStructs[gBattlerAttacker].bindedMove = gCalledMove;
+            gBattlescriptCurrInstr = BattleScript_PanickedAndUsesRandomMove;
+            
+            //gDisableStructs[gBattlerTarget].bindedMove = gBattleMons[gBattlerTarget].moves[i]; //struggle didn't work well so instead pick random move 
+            //DisableStructs[gBattlerTarget].bindedMove = MOVE_STRUGGLE;
+            // gDisableStructs[gActiveBattler].bindMovepos = i;                       
+        } //ok did that it still didn't work , gets overwritten,(forgot to uncomment parrt about move pos so it wasnt setting that/lockign that)
+        else if (gLastMoves[gBattlerAttacker] == MOVE_STRUGGLE)
+        {
+            gCalledMove = MOVE_STRUGGLE;
+            gBattlerTarget = GetMoveTarget(gCalledMove, 1);
+            gDisableStructs[gBattlerAttacker].bindedMove = gCalledMove;
+            gBattlescriptCurrInstr = BattleScript_BindDoCalledMove;
+
+        }
+    }
+    else if (gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND && gDisableStructs[gBattlerAttacker].bindedMove != MOVE_NONE) //if move already set/loced in
+    {
+        if (gBattleMons[gBattlerAttacker].pp[gCurrMovePos] == 0) //if the selected move ran out of pp, during bind, use struggle
+        {
+            gCalledMove = MOVE_STRUGGLE;
+            gBattlerTarget = GetMoveTarget(gCalledMove, 1);
+            gDisableStructs[gBattlerAttacker].bindedMove = gCalledMove;
+            gBattlescriptCurrInstr = BattleScript_BindDoCalledMove;
+
+        } //still not working need compare this/disobedience to  encore logic which is set before attack canceler I think
+    }
 
     gHitMarker &= ~(HITMARKER_ALLOW_NO_PP);
     if (!(gHitMarker & HITMARKER_OBEYS) 
@@ -1743,16 +1793,6 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
         return TRUE;
     }
 
-    //potentially remove this or redo better, another dumb thing I added wrong, because I didn't know what I was doing
-    if (!(IsBattlerGrounded(gBattlerTarget)) && (gBattleMoves[move].effect == (GROUND_TRAPS)))
-    {
-        gMoveResultFlags |= MOVE_RESULT_MISSED;
-        JumpIfMoveFailed(7, move);
-        return TRUE;
-    }//exclusions for traps that don't work on floating targets so if you're trap heavy you need a grounder
-    //note prob need more moves that do ground effects so its not just a rock & a psychic move
-    //may make custom text for this.   //vsonic IMPORTANT
-
     if (move == MOVE_SHEER_COLD && IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ICE))
     {
         gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
@@ -1869,7 +1909,7 @@ static void atk01_accuracycheck(void)
         moveAcc = gBattleMoves[move].accuracy;
 
         //trap effects
-        if (((gBattleMons[gBattlerAttacker].status4 & STATUS4_SAND_TOMB) || (gBattleMons[gBattlerAttacker].status1 & STATUS1_SAND_TOMB))
+        if ((gBattleMons[gBattlerAttacker].status4 & STATUS4_SAND_TOMB)
             && IsBlackFogNotOnField())
         {
             moveAcc = (moveAcc * 85) / 100; //since most mon that have this also have access to sandstorm or are in desert made less punishing
@@ -1965,9 +2005,7 @@ static void atk01_accuracycheck(void)
         if (gBattleMons[gBattlerTarget].status4 & ITS_A_TRAP_STATUS4)  //I hpoe this works
         //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
             calc = (calc * 115) / 100;
-        if (gBattleMons[gBattlerTarget].status1 & ITS_A_TRAP_STATUS1)  //I hpoe this works
-        //    calc = (calc * 115) / 100;//  should still select normally before hand, but it just change when executed.
-            calc = (calc * 115) / 100; //note need to add logic for trap effects for pokemon catching,
+        //vsonic
         //don't use dodge pokeball effect when trapped, and add slight increase to catch chance, I think make it less than status chance but make it inclusive
         //so they stack
 
@@ -2048,12 +2086,13 @@ static void atk01_accuracycheck(void)
 
 
             //if (gBattleMoves[move].power)   //i ALREADY have a typecalc I don't need this to update move result flags I think?
-             //  CalcTypeEffectivenessMultiplier(move, type, gBattlerAttacker, gBattlerTarget, TRUE);    //this is only instance where uses TRUE, without that it doesn't change effectiveness
+            CalcTypeEffectivenessMultiplier(move, type, gBattlerAttacker, gBattlerTarget, TRUE);    //this is only instance where uses TRUE, without that it doesn't change effectiveness
+            //using this worked perfectly, so can confirm new type chart is solid
             //removing this as it has foresight logic, emerald uses typecalc? hopefully
             //can do that without doubling the multiplier.
             //nvm not using typecalc, forgot I ported emerald's CalcTypeEffectivenessMultiplier function, 
             //that's what's used in emerald think can just copy it straight over
-            CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
+            //CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
         //may put this back need test more on a working system
         
         //this runs type check against base chart, compares result to abilities then sets result flags
@@ -2142,7 +2181,7 @@ static void atk02_attackstring(void)
 }
 
 
-static void atk04_critcalc(void)    //figure later
+static void atk04_critcalc(void)    //working/works
 {
     u8 holdEffect;
     u16 item, critChance;
@@ -2168,11 +2207,9 @@ static void atk04_critcalc(void)    //figure later
     if (critChance >= NELEMS(gCriticalHitChance))
         critChance = NELEMS(gCriticalHitChance) - 1; // minus 1 because arrays start at 0
 
-    if (!IsBlackFogNotOnField()) //black fog on field no one can crit
-        gCritMultiplier = 1;
 
     //while everything here is calculating crit damage, so need to add gCritMultiplier = 3; for that crit boosting ability
-   else if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR && (GetBattlerAbility(gBattlerTarget) != ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL) && GetBattlerAbility(gBattlerTarget) != ABILITY_STEADFAST && ((GetBattlerAbility(gBattlerTarget) != ABILITY_TANGLED_FEET) && gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION))
+   else if ((!(DoesTargetAbilityBlockCrit(gBattlerTarget)))
      && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
      && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
      && (Random() % gCriticalHitChance[critChance] == 0) //sets crit odds by array and crit ratio, random % selects crit odds based on stat stage i.e if 0, uses 1st value in array i.e random 16 == 0 for 1 in 16 crit chance
@@ -2191,8 +2228,8 @@ static void atk04_critcalc(void)    //figure later
 
     }//...why did I make this an else if I have no idea, and see no reason for doing it...
     //ok now I see I set it for always crit effects
-    //to go here
-   else if ((GetBattlerAbility(gBattlerTarget) != ABILITY_BATTLE_ARMOR && GetBattlerAbility(gBattlerTarget) != ABILITY_SHELL_ARMOR && (GetBattlerAbility(gBattlerTarget) != ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL) && GetBattlerAbility(gBattlerTarget) != ABILITY_STEADFAST && ((GetBattlerAbility(gBattlerTarget) != ABILITY_TANGLED_FEET) && gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION))
+    //to go here //think to make simpler will replace this line with a check for if ability blocks crit
+   else if ((!(DoesTargetAbilityBlockCrit(gBattlerTarget)))
         && !(gStatuses3[gBattlerAttacker] & STATUS3_CANT_SCORE_A_CRIT)
         && !(gBattleTypeFlags & BATTLE_TYPE_OLD_MAN_TUTORIAL)
         && (!(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE) || BtlCtrl_OakOldMan_TestState2Flag(1))
@@ -2211,7 +2248,25 @@ static void atk04_critcalc(void)    //figure later
     
     else
         gCritMultiplier = 1;
+    if (!IsBlackFogNotOnField()) //black fog on field no one can crit
+        gCritMultiplier = 1;
+    
     ++gBattlescriptCurrInstr;
+}
+
+bool8 DoesTargetAbilityBlockCrit(u8 Targetbattler)
+{
+    u16 ability = GetBattlerAbility(Targetbattler);
+    bool8 block = FALSE;
+
+     if (ability == ABILITY_BATTLE_ARMOR
+        || ability == ABILITY_SHELL_ARMOR
+        || (ability == ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL)
+        || ability == ABILITY_STEADFAST
+        || (ability == ABILITY_TANGLED_FEET && gBattleMons[Targetbattler].status2 & STATUS2_CONFUSION))
+        block = TRUE;
+
+    return block;
 }
 
 static void TryUpdateRoundTurnOrder(void)
@@ -2528,7 +2583,17 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
     // check stab
     if (effect != EFFECT_COUNTER && effect != EFFECT_MIRROR_COAT)   //skip stab-likes for mirror coat & counter
     {
-        if (IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType)
+        //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
+        //arceus wont terra because it already "has" every type
+        //so change to else if, after adding unique terra from above comment section
+        if (gBattleMons[gBattlerAttacker].species == SPECIES_ARCEUS)
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 135;
+            gBattleMoveDamage = gBattleMoveDamage / 100;
+        }//for psuedo terra could instead use arceus plates for this,  rather than changing type
+        //holding them will make judgement take on the type of plate, and boost dmg by 25%
+        
+        else if (IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType)
             || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
                 && IS_BATTLER_OF_TYPE(gBattlerAttacker, argument)))
         {
@@ -2541,14 +2606,26 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
             {
                 gBattleMoveDamage = gBattleMoveDamage * 135;
                 gBattleMoveDamage = gBattleMoveDamage / 100;
-            }
-
+            } //wanted to add small boost to this for joat inclusvive to stab but couldn't do, it had stronger effect on not effective than super
+                //so anything added here would just disincentive using coverage/non stab moves
         }
+        //on the other hand keeping it inclusive could work/be fine as my meta would already be more focused on the mon stats/stab typing etc. than super effective coverage moves
+        //so it'd be played more like have a solid stab move, have 2 or so status moves, and a coverage move (that possibly has its own secondary effect/debuff)
+        //if it was inclusive it'd already suit that type of setup, it'd make them even more suited for that format, the stab move woudl be even stronger
+        //and their coverage move would also be more useful than on non-normal mon.
+        //and that also highlights the strength of your type, as being more linked to moves of that type  
+        //the mileage would be limited to how many resist you.  but that's more a buff to those already strong types than normal...
+        //and I cant boost joat while keeping it exclusive as then it'd just be the arceus buff
+        //ok will keep it as it currently is, but to get the most of this will have to greatly tweak movesets so normal types
+        //actually have the type options to be THE coverage warriors try to keep things make sense, they get most coverage
+        //but not somehting that should be super against their alternate typing? like normal/flying not getting an ice/electric move?
+        //check gen 4 tutor moveset for first example of coverage moves to learn, from bulbapedia
+
         //joat check jack of all trades  inclusive normal type dmg buff 
         //joat stacks w stab long as not normal move, added mystrey type exclusion for normalize change
         //forgot calculatebasedamage in pokemon.c, has it set so mystery type does 0 damage will need to remove that. 
         //why does it even do that? there are no mystery moves, is it an extra failsafe for hidden power?
-        if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL)) //added mystery line to prevent triggering joat, on normalize
+        else if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_NORMAL)) //added mystery line to prevent triggering joat, on normalize
         {
             if ((moveType != TYPE_NORMAL && moveType != TYPE_MYSTERY)
                 || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
@@ -2557,7 +2634,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
                 gBattleMoveDamage = gBattleMoveDamage * 125;
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
-        }
+        } //changed joat to be non inclusive with stab
 
         //alt terra, terra is glorified 3rd type, so my idea  is just make it change type 3
         //but would also need to add the part where terra of same type as mon doubles stab.
@@ -2567,22 +2644,18 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
         //ok so 1.5 up to 2.0  is  a 33% increase so I can do a multiplier of 1.34 to do equivalent boost for terra
         //so gbattleMoveDamage *= 134;
         //gbattleMoveDamage / 100;
-        /*if ((gBattleMons[gBattlerAttacker].type1 == moveType || gBattleMons[gBattlerAttacker].type2 == moveType)
-            && gBattleMons[gBattlerAttacker].type3 == moveType)
+
+        /*if ((type3 == type1 || type3 == type2)
+            && type3 == moveType)
         {
             gbattleMoveDamage *= 134;
-            gbattleMoveDamage / 100;
+            gbattleMoveDamage /= 100;
         }
-        */
+        */ //keep above arceus check think put above joat check as well, but make this inclusive
+        //make normal type geod/psuedo terra have previous joat effect where it stacks with stab  at 125%, so lower buff wider effect
+        //also add flag or special status for this form, so its distinct from joat
 
-        //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
-        //arceus wont terra because it already "has" every type
-        //so change to else if, after adding unique terra from above comment section
-        if (gBattleMons[gBattlerAttacker].species == SPECIES_ARCEUS)
-        {
-            gBattleMoveDamage = gBattleMoveDamage * 135;
-            gBattleMoveDamage = gBattleMoveDamage / 100;
-        }
+        
     }
     /*if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     {
@@ -2984,7 +3057,17 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
     // check stab
     if (effect != EFFECT_COUNTER && effect != EFFECT_MIRROR_COAT)   //skip stab-likes for mirror coat & counter
     {
-        if (IS_BATTLER_OF_TYPE(attacker, moveType)
+        //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
+        //arceus wont terra because it already "has" every type
+        //so change to else if, after adding unique terra from above comment section
+        if (gBattleMons[attacker].species == SPECIES_ARCEUS)
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 135;
+            gBattleMoveDamage = gBattleMoveDamage / 100;
+        } //for psuedo terra could instead use arceus plates for this,  rather than changing type
+        //holding them will make judgement take on the type of plate, and boost dmg by 25%
+
+        else if (IS_BATTLER_OF_TYPE(attacker, moveType)
             || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
                 && IS_BATTLER_OF_TYPE(attacker, argument)))
         {
@@ -3002,8 +3085,8 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
         }
 
         //joat check jack of all trades  inclusive normal type dmg buff 
-        //joat stacks w stab long as not normal move,
-        if (IS_BATTLER_OF_TYPE(attacker, TYPE_NORMAL)) //added mystery line to prevent triggering joat, on normalize
+        //joat stacks w stab long as not normal move,  aka jack of all types?
+        else if (IS_BATTLER_OF_TYPE(attacker, TYPE_NORMAL)) //added mystery line to prevent triggering joat, on normalize
         {
             if ((moveType != TYPE_NORMAL && moveType != TYPE_MYSTERY)
                 || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
@@ -3012,14 +3095,8 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                 gBattleMoveDamage = gBattleMoveDamage * 125;
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
-        }
+        }//changed joat to be non inclusive with stab
 
-        //Special condition for arceus, gives stab in everything, and is neutral to everything with type change
-        if (gBattleMons[attacker].species == SPECIES_ARCEUS)
-        {
-            gBattleMoveDamage = gBattleMoveDamage * 135;
-            gBattleMoveDamage = gBattleMoveDamage / 100;
-        }
     }
 
     //if (gBattleMons[defender].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
@@ -3411,11 +3488,11 @@ static void atk08_adjustnormaldamage2(void)
    /* if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(1.6))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(1.55))
          || (gBattleMons[gBattlerTarget].type2 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(1.6))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(1.55))
          || (gBattleMons[gBattlerTarget].type3 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(1.6)))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(1.55)))
         {
             gBattlerAbility = gBattlerTarget;
             BattleScriptPushCursor();
@@ -4194,14 +4271,16 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattleCommunication[MULTISTRING_CHOOSER] = 0;
                 return;
             }
-            if (!(CanPoisonType(gBattleScripting.battler, gEffectBattler) //corrossion logic here
+            
+            /*if (!(CanPoisonType(gBattleScripting.battler, gEffectBattler) //corrossion logic here
                 && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN)))
             {
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
                 gBattlescriptCurrInstr = BattleScript_PSNPrevention;
                 gBattleCommunication[MULTISTRING_CHOOSER] = 2;
                 return;
-            }
+            }*/  //need properly review this for later
+
             //put no effect check here, below ability checks above status1 check
             //needs else if here only to make sure it takes into account corrosion check from above
             //vsonic will need change move type checks to use getmovetype or check settypebeforeusingmove function to get actual move type
@@ -4384,14 +4463,15 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattleCommunication[MULTISTRING_CHOOSER] = 0;
                 return;
             }
-            if (!(CanPoisonType(gBattleScripting.battler, gEffectBattler))
+            
+            /*if (!(CanPoisonType(gBattleScripting.battler, gEffectBattler))
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             {
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
                 gBattlescriptCurrInstr = BattleScript_PSNPrevention;
-                gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+                gBattleCommunication[MULTISTRING_CHOOSER] = 2;  //this tells it which string to choose within the gPSNPreventionStringIds array
                 return;
-            }
+            }*/  //paralysis works and this si removed, removing for now, but think need multistring choice 2 for status blocking abilities
 
             if (!(CanBePoisoned(gBattleScripting.battler, gEffectBattler)))
                 break;
@@ -4490,13 +4570,15 @@ void SetMoveEffect(bool32 primary, u32 certain)
     }   //end case move effects less than 6 i.e toxic and below, ok this is potentially what it means by primary, its all status1 stuff
     else
     {       //think this means if status set is the same as the one being attempted to be set, skip to next battle string. i.e can't confuse if already confused?
-        if (gBattleMons[gEffectBattler].status2 & sStatusFlagsForMoveEffects[gBattleScripting.moveEffect])
-        {
+        if (gBattleMons[gEffectBattler].status2 & sStatusFlagsForMoveEffects[gBattleScripting.moveEffect]) //not gonna be a problem for trap status as using dif status for each
+        {                                           //and just put in each case, lan like magic gaurd check, check macro and do increment, with a one line paste
             ++gBattlescriptCurrInstr;
         }
         else
         {
             u8 side;
+            u32 TrapDuration;
+            u32 i;
 
             switch (gBattleScripting.moveEffect)
             {
@@ -4597,35 +4679,131 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 ++gBattlescriptCurrInstr;
                 break;//v IMPORTANT v       //think I'll put traj extra effects in the pokemon.c "damage" formula since it handles concurrent stuff
             case MOVE_EFFECT_WRAP:  //make envionment trap status4 define update other trap moveeffcts below than add end turn effects in util.c
-                if ((gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED) || (gBattleMons[gEffectBattler].status1 & STATUS1_WRAPPED))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
+                //if ((gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED) || (gBattleMons[gEffectBattler].status1 & STATUS1_WRAPPED)) was right this was cause of bind bug, work on setup new effect 
+                /*if (gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
                 {
-                    ++gBattlescriptCurrInstr;
-                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
-                else //need to understand what makes something use secondaryeffectchance for move effect
+                    ++gBattlescriptCurrInstr; //when done change wrapped check to, if wrapped move == currentmove (I think, need to see how set multiple wraps, 
+                    //could just set different timer for each but still do all here)
+                } */  //removed this put increment inside switch case
+                //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
+                //else //need figure out skip logic,  for above, cant use status wrapped
                 {
+                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove; //put at top then set Trap Duration then into switch case based on wrappedmove to set individual timers and status 
+                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;  //still need setup wrappyby logic in battle_main
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
                     //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
                     if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
                         || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
                     {
-                        gDisableStructs[gEffectBattler].wrapTurns = 7;
-                        gBattleMons[gEffectBattler].status1 |= STATUS1_WRAPPED;
+                        TrapDuration = 7;
+                        //gDisableStructs[gEffectBattler].wrapTurns = 7;
+                        //gBattleMons[gEffectBattler].status1 |= STATUS1_WRAPPED; //not doing staus1, instead in battle_main where status2 clear is , check for wrap and hold effect of wrapped by
+                        //if hold effect of wrappedby is grip claw etc. (checks above) then don't remove status when swithing, won't need to do status1
                     }
-                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
-                        gDisableStructs[gEffectBattler].wrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
-                        gBattleMons[gEffectBattler].status2 |= STATUS2_WRAPPED;
-                    }
-                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
-                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
-                    BattleScriptPush(gBattlescriptCurrInstr + 1);
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
-                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
+                    else 
+                    {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
+                        TrapDuration = ((Random() % 5) + 2);   //will do 2-6 turns
+                        
+                    } //as will be using separate timers for each wrap move, will put wrap duration on a constant/variable  and then pass it to the relevant timer directly
+                    
+                    switch (gBattleStruct->wrappedMove[gEffectBattler]) //point of all these is just to set status and timer
+                    {           //think I can put the skip here,  if move specific timer isn't 0 incrment/skip, otherwise  set duration, set status, and gBattleScripting.moveEffect
+                    case MOVE_BIND:
+                    if (gBattleMons[gEffectBattler].status4 & STATUS4_BIND)
+                        ++gBattlescriptCurrInstr;
+                    else
                     {
-                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
-                            break;  //multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
+                        gDisableStructs[gEffectBattler].bindTurns = TrapDuration;
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_BIND; //moved effect to attk canceler
+
+
+                        
+                    }
+                        break;
+                    case MOVE_WRAP:
+                    if (gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)
+                        ++gBattlescriptCurrInstr;
+                    else
+                    {
+                        gDisableStructs[gEffectBattler].wrapTurns = TrapDuration;
+                        gBattleMons[gEffectBattler].status2 |= STATUS2_WRAPPED;
+                    } //if  use individual timer for identifier instead of status for these can do more and save space, without needing to take up flags                 
+                        break; //idk if can do, otherwise could just make status 4  environmentTrapTurns
+                    case MOVE_FIRE_SPIN:
+                    if (gDisableStructs[gEffectBattler].environmentTrapTurns)
+                        ++gBattlescriptCurrInstr;
+                    else
+                    {
+                        gDisableStructs[gEffectBattler].environmentTrapTurns = TrapDuration;
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_FIRE_SPIN;
+                    }
+                        break;
+                    case MOVE_CLAMP:
+                    if (gBattleMons[gEffectBattler].status4 & STATUS4_CLAMP)
+                        ++gBattlescriptCurrInstr;
+                    else
+                    {
+                        gDisableStructs[gEffectBattler].clampTurns = TrapDuration;
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_CLAMP;
+                    }
+                        break;
+                    case MOVE_WHIRLPOOL:
+                     if (gDisableStructs[gEffectBattler].environmentTrapTurns)
+                        ++gBattlescriptCurrInstr;
+                    else
+                    {
+                        gDisableStructs[gEffectBattler].environmentTrapTurns = TrapDuration;
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_WHIRLPOOL;
+                    }
+                        break;
+                    case MOVE_SAND_TOMB:
+                     if (gDisableStructs[gEffectBattler].environmentTrapTurns)
+                        ++gBattlescriptCurrInstr;
+                    else
+                    {
+                        gDisableStructs[gEffectBattler].environmentTrapTurns = TrapDuration;
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_SAND_TOMB;
+                    }
+                        break;
+                    case MOVE_MAGMA_STORM:
+                     if (gDisableStructs[gEffectBattler].environmentTrapTurns)
+                        ++gBattlescriptCurrInstr;
+                    else
+                    {
+                        gDisableStructs[gEffectBattler].environmentTrapTurns = TrapDuration;
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_MAGMA_STORM;
+                    }
+                        break;
+                    case MOVE_SWARM:
+                    if (gBattleMons[gEffectBattler].status4 & STATUS4_SWARM)
+                        ++gBattlescriptCurrInstr;
+                    else
+                    {
+                        gDisableStructs[gEffectBattler].swarmTurns = TrapDuration;
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_SWARM;
+                    }
+                        break;
+                    case MOVE_SNAP_TRAP:
+                    if (gBattleMons[gEffectBattler].status4 & STATUS4_SNAP_TRAP) //snap trap by default should stay if you switch out, grip claw just makes it last longer
+                        ++gBattlescriptCurrInstr;
+                    else
+                    {
+                        gDisableStructs[gEffectBattler].snaptrapTurns = TrapDuration;
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_SNAP_TRAP;
+                    }
+                        break;                    
+
+                    }
+
+                    BattleScriptPush(gBattlescriptCurrInstr + 1);//below set based on move effect so will need to change move effect within switch case
+                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]; //just for displaying battle message for specific wrap move, so dont need change moveeffect
+                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER]) //idk what this is doing?
+                    {
+                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove) //can use this to separte wrap/bind actually can do that for all...
+                            break;                  //what I mean by that is, I could keep all traps in effect wrap, and use wrap turns, but then set a different status for each move at the bottom after checking which move was used to trap
                     }//believe this is only for reading from the trapstring table can prob remove for other trap effects
-                }
+                }//multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
                 break;
             case MOVE_EFFECT_RECOIL_25: // 25% recoil   also struggle
                 gBattleMoveDamage = (gHpDealt) / 4;
@@ -4882,240 +5060,6 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 if (!NoAliveMonsForEitherParty()){
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
                 gBattlescriptCurrInstr = BattleScript_SAtkDown2;
-                }
-                break;
-            case MOVE_EFFECT_FIRE_SPIN:
-                if ((gBattleMons[gEffectBattler].status4 & STATUS4_ENVIRONMENT_TRAP) || (gBattleMons[gEffectBattler].status1 & STATUS1_ENVIRONMENT_TRAP))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
-                {
-                    ++gBattlescriptCurrInstr;   //will need to make status1 clause for grip claw exclusion
-                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
-                else //need to understand what makes something use secondaryeffectchance for move effect
-                {
-                    //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
-                    //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
-                    //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
-                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
-                    {
-                        gDisableStructs[gEffectBattler].environmentTrapTurns = 7;
-                        gBattleMons[gEffectBattler].status1 |= STATUS1_FIRE_SPIN;
-                    }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
-                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
-                        gDisableStructs[gEffectBattler].environmentTrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
-                        gBattleMons[gEffectBattler].status4 |= STATUS4_FIRE_SPIN;
-                    }   //double check this applies correct status for each move but sStatusFlagsForMoveEffects should do that i think
-
-                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
-                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
-                    BattleScriptPush(gBattlescriptCurrInstr + 1);
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
-                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
-                    {
-                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
-                            break;  //multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
-                    }//believe this is only for reading from the trapstring table can prob remove for other trap effects
-                }
-                break;
-            case MOVE_EFFECT_WHIRLPOOL:
-                if ((gBattleMons[gEffectBattler].status4 & STATUS4_ENVIRONMENT_TRAP) || (gBattleMons[gEffectBattler].status1 & STATUS1_ENVIRONMENT_TRAP))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
-                {
-                    ++gBattlescriptCurrInstr;   //will need to make status1 clause for grip claw exclusion
-                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
-                else //need to understand what makes something use secondaryeffectchance for move effect
-                {
-                    //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
-                    //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
-                    //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
-                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
-                    {
-                        gDisableStructs[gEffectBattler].environmentTrapTurns = 7;
-                        gBattleMons[gEffectBattler].status1 |= STATUS1_WHIRLPOOL;
-                    }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
-                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
-                        gDisableStructs[gEffectBattler].environmentTrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
-                        gBattleMons[gEffectBattler].status4 |= STATUS4_WHIRLPOOL;
-                    }   //double check this applies correct status for each move but sStatusFlagsForMoveEffects should do that i think
-
-                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
-                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
-                    BattleScriptPush(gBattlescriptCurrInstr + 1);
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
-                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
-                    {
-                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
-                            break;  //multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
-                    }//believe this is only for reading from the trapstring table can prob remove for other trap effects
-                }
-                break;
-            case MOVE_EFFECT_SAND_TOMB:
-                if ((gBattleMons[gEffectBattler].status4 & STATUS4_ENVIRONMENT_TRAP) || (gBattleMons[gEffectBattler].status1 & STATUS1_ENVIRONMENT_TRAP))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
-                {
-                    ++gBattlescriptCurrInstr;   //will need to make status1 clause for grip claw exclusion
-                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
-                else //need to understand what makes something use secondaryeffectchance for move effect
-                {
-                    //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
-                    //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
-                    //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
-                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
-                    {
-                        gDisableStructs[gEffectBattler].environmentTrapTurns = 7;
-                        gBattleMons[gEffectBattler].status1 |= STATUS1_SAND_TOMB;
-                    }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
-                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
-                        gDisableStructs[gEffectBattler].environmentTrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
-                        gBattleMons[gEffectBattler].status4 |= STATUS4_SAND_TOMB;
-                    }   //double check this applies correct status for each move but sStatusFlagsForMoveEffects should do that i think
-
-                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
-                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
-                    BattleScriptPush(gBattlescriptCurrInstr + 1);
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
-                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
-                    {
-                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
-                            break;  //multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
-                    }//believe this is only for reading from the trapstring table can prob remove for other trap effects
-                }
-                break;
-            case MOVE_EFFECT_MAGMA_STORM:             
-              //make envionment trap status4 define update other trap moveeffcts below than add end turn effects in util.c
-                if ((gBattleMons[gEffectBattler].status4 & STATUS4_ENVIRONMENT_TRAP) || (gBattleMons[gEffectBattler].status1 & STATUS1_ENVIRONMENT_TRAP))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
-                {
-                    ++gBattlescriptCurrInstr;   //will need to make status1 clause for grip claw exclusion
-                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
-                else //need to understand what makes something use secondaryeffectchance for move effect
-                {
-                    //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
-                    //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
-                    //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
-                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
-                    {
-                        gDisableStructs[gEffectBattler].environmentTrapTurns = 7;
-                        gBattleMons[gEffectBattler].status1 |= STATUS1_MAGMA_STORM;
-                    }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
-                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
-                        gDisableStructs[gEffectBattler].environmentTrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
-                        gBattleMons[gEffectBattler].status4 |= STATUS4_MAGMA_STORM;
-                    }   //double check this applies correct status for each move but sStatusFlagsForMoveEffects should do that i think
-
-                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
-                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
-                    BattleScriptPush(gBattlescriptCurrInstr + 1);
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
-                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
-                    {
-                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
-                            break;  //multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
-                    }//believe this is only for reading from the trapstring table can prob remove for other trap effects
-                }
-                break;
-            case MOVE_EFFECT_CLAMP:
-                //make envionment trap status4 define update other trap moveeffcts below than add end turn effects in util.c
-                if ((gBattleMons[gEffectBattler].status4 & STATUS4_CLAMP) || (gBattleMons[gEffectBattler].status1 & STATUS1_CLAMP))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
-                {
-                    ++gBattlescriptCurrInstr;
-                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
-                else //need to understand what makes something use secondaryeffectchance for move effect
-                {
-                    //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
-                    //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
-                    //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
-                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
-                    {
-                        gDisableStructs[gEffectBattler].clampTurns = 7;
-                        gBattleMons[gEffectBattler].status1 |= STATUS1_CLAMP;
-                    }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
-                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
-                        gDisableStructs[gEffectBattler].clampTurns = ((Random() % 5) + 2);   //will do 2-6 turns
-                        gBattleMons[gEffectBattler].status4 |= STATUS4_CLAMP;
-                    }
-
-                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
-                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
-                    BattleScriptPush(gBattlescriptCurrInstr + 1);
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
-                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
-                    {
-                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
-                            break;  //multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
-                    }//believe this is only for reading from the trapstring table can prob remove for other trap effects
-                }
-                break;
-            case MOVE_EFFECT_INFESTATION:
-                //make envionment trap status4 define update other trap moveeffcts below than add end turn effects in util.c
-                if ((gBattleMons[gEffectBattler].status4 & STATUS4_INFESTATION) || (gBattleMons[gEffectBattler].status1 & STATUS1_INFESTATION))  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
-                {
-                    ++gBattlescriptCurrInstr;
-                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
-                else //need to understand what makes something use secondaryeffectchance for move effect
-                {
-                    //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
-                    //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
-                    //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
-                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups - need work on better define setup this vsonic
-                    {
-                        gDisableStructs[gEffectBattler].swarmTurns = 7;
-                        gBattleMons[gEffectBattler].status1 |= STATUS1_INFESTATION;
-                    }   //and check util.c so both status4 & status1 gets cleared when timer hits 0
-                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
-                        gDisableStructs[gEffectBattler].swarmTurns = ((Random() % 5) + 2);   //will do 2-6 turns
-                        gBattleMons[gEffectBattler].status4 |= STATUS4_INFESTATION;
-                    }
-
-                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
-                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
-                    BattleScriptPush(gBattlescriptCurrInstr + 1);
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
-                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
-                    {
-                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
-                            break;  //multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
-                    }//believe this is only for reading from the trapstring table can prob remove for other trap effects
-                }
-                break;
-            case MOVE_EFFECT_SNAP_TRAP:
-                //make envionment trap status4 define update other trap moveeffcts below than add end turn effects in util.c
-                if (gBattleMons[gEffectBattler].status1 & STATUS1_SNAP_TRAP)  //if already wrapped do nothing/revamp wrapped status to be catch all for all traps
-                {
-                    ++gBattlescriptCurrInstr;
-                } //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
-                else //need to understand what makes something use secondaryeffectchance for move effect
-                {
-                    //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
-                    //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
-                    //potentially even more so as its using random & and not random %  since the and function uses bitwise exclusion I believe?
-                    
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
-                        || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
-                    {
-                        gDisableStructs[gEffectBattler].snaptrapTurns = 7;
-                        gBattleMons[gEffectBattler].status1 |= STATUS1_SNAP_TRAP;
-                    }
-                    else {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
-                        gDisableStructs[gEffectBattler].snaptrapTurns = ((Random() % 5) + 2);   //will do 2-6 turns
-                        gBattleMons[gEffectBattler].status1 |= STATUS1_SNAP_TRAP;
-                    }
-                    //for snap trap plan is to make permanent status, so will make a status 1 effect
-                    //then make grip claw do the same for other traps in addition to increasing duration
-                    //since pretty sure no one uses grip claw as no one uses traps
-                    //will hold off on doing snap trap effect though until I can build, as I'm unsure if status1 can hold both status at once.
-                    //as there is no exclusion like for other status effects
-                    //decided to add for now
-                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
-                    gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
-                    BattleScriptPush(gBattlescriptCurrInstr + 1);
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
-                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER])
-                    {
-                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
-                            break;  //multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
-                    }//believe this is only for reading from the trapstring table can prob remove for other trap effects
                 }
                 break;
             case MOVE_EFFECT_CLEAR_SMOG:
@@ -5414,7 +5358,7 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
         oh wait its focus punch*/
 
     //trap effects
-    if (((gBattleMons[gBattlerTarget].status4 == STATUS4_FIRE_SPIN) || (gBattleMons[gBattlerTarget].status1 == STATUS1_FIRE_SPIN))
+    if ((gBattleMons[gBattlerTarget].status4 == STATUS4_FIRE_SPIN)
         && ((gBattleMoves[gCurrentMove].effect == EFFECT_BURN_HIT || gBattleMoves[gCurrentMove].effect == EFFECT_SCALD)
         || (gBattleMoves[gCurrentMove].argument == EFFECT_BURN_HIT || gBattleMoves[gCurrentMove].argument == EFFECT_SCALD)))
     {
@@ -9550,7 +9494,7 @@ static void atk62_hidepartystatussummary(void)
 
 static void atk63_jumptocalledmove(void)
 {
-    if (gBattlescriptCurrInstr[1])
+    if (gBattlescriptCurrInstr[1]) //if not 0
         gCurrentMove = gCalledMove;
     else
         gChosenMove = gCurrentMove = gCalledMove;
@@ -14116,10 +14060,14 @@ static void atkA4_trysetencore(void)
     s32 i;
 
     for (i = 0; i < MAX_MON_MOVES; ++i)
-        if (gBattleMons[gBattlerTarget].moves[i] == gLastMoves[gBattlerTarget])
+        if (gBattleMons[gBattlerTarget].moves[i] == gLastMoves[gBattlerTarget]) //select last used move
             break;
     if (gLastMoves[gBattlerTarget] == MOVE_STRUGGLE
      || gLastMoves[gBattlerTarget] == MOVE_ENCORE
+     || gLastMoves[gBattlerTarget] == MOVE_TRANSFORM
+     || gLastMoves[gBattlerTarget] == MOVE_MIMIC
+     || gLastMoves[gBattlerTarget] == MOVE_SKETCH
+     || gLastMoves[gBattlerTarget] == MOVE_SLEEP_TALK
      || gLastMoves[gBattlerTarget] == MOVE_MIRROR_MOVE)
         i = 4;
     if (gDisableStructs[gBattlerTarget].encoredMove == MOVE_NONE
@@ -14308,7 +14256,7 @@ static void atkA9_trychoosesleeptalkmove(void)
     for (i = 0; i < MAX_MON_MOVES; ++i)
     {
         if (IsInvalidForSleepTalk(gBattleMons[gBattlerAttacker].moves[i])
-         || gBattleMons[gBattlerAttacker].moves[i] == MOVE_FOCUS_PUNCH
+         //|| gBattleMons[gBattlerAttacker].moves[i] == MOVE_FOCUS_PUNCH
          || gBattleMons[gBattlerAttacker].moves[i] == MOVE_UPROAR
          || IsTwoTurnsMove(gBattleMons[gBattlerAttacker].moves[i]))
         {
@@ -14942,7 +14890,7 @@ static void atkBD_copyfoestats(void) // psych up
 
 static void atkBE_rapidspinfree(void)
 {
-    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_WRAPPED)
+    /*if (gBattleMons[gBattlerAttacker].status2 & STATUS2_WRAPPED)
     {
         gBattleScripting.battler = gBattlerTarget;
         gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_WRAPPED);
@@ -14952,6 +14900,15 @@ static void atkBE_rapidspinfree(void)
         gBattleTextBuff1[2] = *(gBattleStruct->wrappedMove + gBattlerAttacker * 2 + 0);
         gBattleTextBuff1[3] = *(gBattleStruct->wrappedMove + gBattlerAttacker * 2 + 1);
         gBattleTextBuff1[4] = B_BUFF_EOS;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_WrapFree;
+    }*/
+    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_WRAPPED)
+    {
+        gBattleScripting.battler = gBattlerTarget;
+        gBattleMons[gBattlerAttacker].status2 &= ~STATUS2_WRAPPED;
+        gBattlerTarget = *(gBattleStruct->wrappedBy + gBattlerAttacker);
+        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gBattlerAttacker]);
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_WrapFree;
     }
@@ -15162,6 +15119,8 @@ static void atkC3_trysetfutureattack(void) //want to set 2, so make new counter 
 #define BEAT_UP_LOGIC
 static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no stab,
 // I'm going to augment this add psuedo stab by increasing damage if pokemon attacking is dark type
+//redo as normal multihit effect that loops based on number of mon in party this function would serve as alternate dmgcalc
+//can put number of hits
 {
     struct Pokemon *party;
     //u16 gDynamicBasePower = 0; //setting to 0, made it not insta kill,
@@ -15279,6 +15238,7 @@ static void atkC5_setsemiinvulnerablebit(void)  //thsi command is why move effec
     {
     case MOVE_FLY:
     case MOVE_BOUNCE:
+    case MOVE_SKY_DROP:
         gStatuses3[gBattlerAttacker] |= STATUS3_ON_AIR;
         break;
     case MOVE_DIG:
@@ -15287,25 +15247,17 @@ static void atkC5_setsemiinvulnerablebit(void)  //thsi command is why move effec
     case MOVE_DIVE:
         gStatuses3[gBattlerAttacker] |= STATUS3_UNDERWATER;
         break;
+    case MOVE_PHANTOM_FORCE:
+    case MOVE_SHADOW_FORCE:
+        gStatuses3[gBattlerAttacker] |= STATUS3_PHANTOM_FORCE;
+        break;
     }
     ++gBattlescriptCurrInstr;
 }
 
 static void atkC6_clearsemiinvulnerablebit(void)
 {
-    switch (gCurrentMove)
-    {
-    case MOVE_FLY:
-    case MOVE_BOUNCE:
-        gStatuses3[gBattlerAttacker] &= ~STATUS3_ON_AIR;
-        break;
-    case MOVE_DIG:
-        gStatuses3[gBattlerAttacker] &= ~STATUS3_UNDERGROUND;
-        break;
-    case MOVE_DIVE:
-        gStatuses3[gBattlerAttacker] &= ~STATUS3_UNDERWATER;
-        break;
-    }
+    gStatuses3[gBattlerAttacker] &= ~STATUS3_SEMI_INVULNERABLE;
     ++gBattlescriptCurrInstr;
 }
 
@@ -15584,13 +15536,13 @@ static void atkD6_doubledamagedealtifdamaged(void)
 static void atkD7_setyawn(void)
 {
     if (gStatuses3[gBattlerTarget] & STATUS3_YAWN
-     || gBattleMons[gBattlerTarget].status1 & STATUS1_ANY)
+     || gBattleMons[gBattlerTarget].status1 & STATUS1_ANY)  //util.c already blocks comatose sleeping so no need to change this line
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
     else
     {
-        gStatuses3[gBattlerTarget] |= 0x1000;
+        gStatuses3[gBattlerTarget] |= STATUS3_YAWN;
         gBattlescriptCurrInstr += 5;
     }
 }
@@ -16312,7 +16264,7 @@ static void atkEF_handleballthrow(void) //important changed
             odds = (catchRate * ballMultiplier / 10) * (gBattleMons[gBattlerTarget].maxHP * 3 - gBattleMons[gBattlerTarget].hp * 2) / (3 * gBattleMons[gBattlerTarget].maxHP);
             if ((gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || gDisableStructs[gBattlerTarget].FrozenTurns != 0)) //juset realiszed I could stack statsus bonsu by including status 2, since right now rules exclude status 1 overlap
                 odds *= 2;
-            if (gBattleMons[gBattlerTarget].status1 & (STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_SPIRIT_LOCK | STATUS1_TOXIC_POISON))
+            if (gBattleMons[gBattlerTarget].status1 & (STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_SPIRIT_LOCK | STATUS1_TOXIC_POISON | STATUS1_INFESTATION))
                 odds = (odds * 15) / 10;
             if (gBattleMons[gBattlerTarget].status1 & STATUS1_FREEZE && gDisableStructs[gBattlerTarget].FrozenTurns == 0)
                 odds = (odds * 15) / 10;
@@ -16320,6 +16272,8 @@ static void atkEF_handleballthrow(void) //important changed
             if (gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION)    //add ifs for status 2 to stack on top of status 1 liek here //include recharge, infatuation, nightmare, curse, & escape prevention & wrap etc
                 odds += (odds / 10);  //TO increase catch chance by 10%,
             if (gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
+                odds += (odds / 5);
+            else if (gBattleMons[gBattlerTarget].status4 & (STATUS4_BIND | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL | STATUS4_SAND_TOMB | STATUS4_MAGMA_STORM | STATUS4_SWARM | STATUS4_SNAP_TRAP))
                 odds += (odds / 5);
             if (gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION)
                 odds += (odds / 2);
@@ -17225,6 +17179,23 @@ void BS_setuserstatus3(void)
 
 }
 
+void BS_setuserstatus4(void)  //right now just usiong to set status groudned, for trenchrun
+{
+    u32 flags = T1_READ_32(gBattlescriptCurrInstr + 1);
+
+    if (gStatuses4[gBattlerAttacker] & flags)
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 5);
+    }
+    else
+    {
+        gStatuses4[gBattlerAttacker] |= flags;
+
+        gBattlescriptCurrInstr += 9;
+    }
+
+}
+
 void BS_typebaseddmgboost(void)
 {
     u8 typeArgument = gBattleMoves[gCurrentMove].argument;
@@ -17332,7 +17303,7 @@ void BS_call_if(void) //comparing to jumpifholdeffect
                     || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)))
                     gBattlescriptCurrInstr = BattleScript_NotAffected;
                 break;
-            case EFFECT_SWARM:
+            /*case EFFECT_SWARM:
             if (!(gDisableStructs[gEffectBattler].swarmTurns)) //for trap status
             {
                 if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
@@ -17345,7 +17316,7 @@ void BS_call_if(void) //comparing to jumpifholdeffect
 
                     gBattleMons[gActiveBattler].status4 |= STATUS4_INFESTATION; //wasn't planning to include status in this but think need it for animation to play properly
             }
-                break;
+                break;*/
             case EFFECT_TARGET_TYPE_DAMAGE:
             if (gCurrentMove == MOVE_ROCK_SMASH)
                 gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;

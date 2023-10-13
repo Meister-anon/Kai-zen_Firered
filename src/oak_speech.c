@@ -1181,12 +1181,13 @@ static void Task_OakSpeech24(u8 taskId)// previously there was a loop on 24 & 25
 //alt verion of oakspeech34 for the player
 static void Task_OakSpeech3C(u8 taskId)
 {
-    s16* data = gTasks[taskId].data;
+    s16 * data = gTasks[taskId].data;
 
-    if (data[2] != 0)
+    if (data[2] != 0) //issue is either this, or text not coming up in time with input and window gets cleared so its caught in between trying to print next image
     {
-        OaksSpeechPrintMessage(gOakText_AskPlayerName, sOakSpeechResources->textSpeed);
         sOakSpeechResources->unk_0010 = 0;
+        //if (!IsTextPrinterActive(0))
+        //OaksSpeechPrintMessage(gOakText_AskPlayerName, sOakSpeechResources->textSpeed);        
         gTasks[taskId].func = Task_OakSpeech35;
     }
 }
@@ -1209,6 +1210,8 @@ static void Task_OakSpeech35(u8 taskId) //important slide sprite to the right, a
         else
         {
             data[1] = -60;
+            if (sOakSpeechResources->unk_0010 == 0)
+                OaksSpeechPrintMessage(gOakText_AskPlayerName, sOakSpeechResources->textSpeed); //gave in put text after slide works perfectly
             PrintNameChoiceOptions(taskId, sOakSpeechResources->unk_0010);
             gTasks[taskId].func = Task_OakSpeech29;
         }
@@ -1271,7 +1274,6 @@ static void Task_OakSpeech29(u8 taskId)
             //DestroyOaksSpeechTrainerPic();
             gSpriteCoordOffsetX -= 60; //circle
             ChangeBgX(2, -0x3C00, 2); //sprite need make clean between but think using slide over set, works best? just need to find EXACT values
-            
            // gSpriteCoordOffsetX = 0; //reset values back to center in pret for slide on reset
            // ChangeBgX(2, 0, 0); 
             gTasks[taskId].func = Task_OakSpeech16;

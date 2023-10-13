@@ -328,41 +328,41 @@ const u16 gTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] =
  //               normal  fight   flying  poison  ground   rock    bug    ghost   steel   mystery  fire   water   grass  electric  psychic  ice   dragon   dark   fairy    sound
       /*normal*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(0.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)}, // normal
 
-       /*fight*/ {X(1.6), X(1.0), X(0.5), X(0.5), X(1.0), X(1.6), X(0.5), X(0.0), X(1.6), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.6), X(1.0), X(1.6), X(0.5), X(1.0)}, // fight
+       /*fight*/ {X(1.55), X(1.0), X(0.5), X(0.5), X(1.0), X(1.55), X(0.5), X(0.0), X(1.55), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.55), X(1.0), X(1.55), X(0.5), X(1.0)}, // fight
 
-      /*flying*/ {X(1.0), X(1.6), X(1.0), X(1.0), X(0.5), X(0.5), X(1.6), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.6), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0)}, // flying
+      /*flying*/ {X(1.0), X(1.55), X(1.0), X(1.0), X(0.5), X(0.5), X(1.55), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.55), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0)}, // flying
 
-      /*poison*/ {X(1.0), X(1.6), X(1.0), X(0.0), X(0.5), X(0.0), X(1.0), X(0.5), X(0.0), X(1.0), X(1.0), X(1.0), X(1.6), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.6), X(1.0)}, // poison
+      /*poison*/ {X(1.0), X(1.55), X(1.0), X(0.0), X(0.5), X(0.0), X(1.0), X(0.5), X(0.0), X(1.0), X(1.0), X(1.0), X(1.55), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.55), X(1.0)}, // poison
 
-      /*ground*/ {X(1.0), X(1.0), X(1.0), X(1.6), X(1.0), X(1.6), X(0.5), X(1.0), X(1.0), X(1.0), X(1.6), X(1.0), X(0.5), X(1.6), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0)}, // ground
+      /*ground*/ {X(1.0), X(1.0), X(1.0), X(1.55), X(1.0), X(1.55), X(0.5), X(1.0), X(1.0), X(1.0), X(1.55), X(1.0), X(0.5), X(1.55), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0)}, // ground
 
-        /*rock*/ {X(1.0), X(0.5), X(1.6), X(1.0), X(0.5), X(1.0), X(1.6), X(1.0), X(0.5), X(1.0), X(1.6), X(1.0), X(1.0), X(1.0), X(1.0), X(1.6), X(1.0), X(1.0), X(1.0), X(1.0)}, // rock
+        /*rock*/ {X(1.0), X(0.5), X(1.55), X(1.0), X(0.5), X(1.0), X(1.55), X(1.0), X(0.5), X(1.0), X(1.55), X(1.0), X(1.0), X(1.0), X(1.0), X(1.55), X(1.0), X(1.0), X(1.0), X(1.0)}, // rock
 
-         /*bug*/ {X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.6), X(1.0), X(1.6), X(0.5), X(1.0), X(1.6), X(1.0), X(1.0)}, // bug
+         /*bug*/ {X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.55), X(1.0), X(1.55), X(0.5), X(1.0), X(1.55), X(1.0), X(1.0)}, // bug
 
-       /*ghost*/ {X(0.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.6), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(1.0)}, // ghost
+       /*ghost*/ {X(0.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.55), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(1.0)}, // ghost
 
-       /*steel*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.6), X(1.0), X(1.0), X(0.5), X(1.0), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(1.6), X(1.0), X(1.0), X(1.6), X(1.0)}, // steel
+       /*steel*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.55), X(1.0), X(1.0), X(0.5), X(1.0), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(1.55), X(1.0), X(1.0), X(1.55), X(1.0)}, // steel
 
      /*mystery*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)}, // mystery
 
-        /*fire*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(1.6), X(0.5), X(1.6), X(1.0), X(0.5), X(0.5), X(1.6), X(1.0), X(1.0), X(1.6), X(0.5), X(1.0), X(1.0), X(1.0)}, // fire
+        /*fire*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(1.55), X(0.5), X(1.55), X(1.0), X(0.5), X(0.5), X(1.55), X(1.0), X(1.0), X(1.55), X(0.5), X(1.0), X(1.0), X(1.0)}, // fire
 
-       /*water*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.6), X(1.6), X(1.0), X(1.0), X(1.0), X(1.0), X(1.6), X(0.5), X(0.5), X(1.0), X(1.0), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0)}, // water
+       /*water*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.55), X(1.55), X(1.0), X(1.0), X(1.0), X(1.0), X(1.55), X(0.5), X(0.5), X(1.0), X(1.0), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0)}, // water
 
-       /*grass*/ {X(1.0), X(1.0), X(0.5), X(0.5), X(1.6), X(1.6), X(0.5), X(1.0), X(0.5), X(1.0), X(0.5), X(1.6), X(0.5), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0)}, // grass
+       /*grass*/ {X(1.0), X(1.0), X(0.5), X(0.5), X(1.55), X(1.55), X(0.5), X(1.0), X(0.5), X(1.0), X(0.5), X(1.55), X(0.5), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0)}, // grass
 
-    /*electric*/ {X(1.0), X(1.0), X(1.6), X(1.0), X(0.0), X(0.5), X(0.5), X(1.0), X(1.6), X(1.0), X(1.0), X(1.6), X(1.0), X(0.5), X(1.0), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0)}, // electric
+    /*electric*/ {X(1.0), X(1.0), X(1.55), X(1.0), X(0.0), X(0.5), X(0.5), X(1.0), X(1.55), X(1.0), X(1.0), X(1.55), X(1.0), X(0.5), X(1.0), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0)}, // electric
 
-     /*psychic*/ {X(1.0), X(1.6), X(1.0), X(1.6), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(0.0), X(0.5), X(1.0)}, // psychic
+     /*psychic*/ {X(1.0), X(1.55), X(1.0), X(1.55), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(0.0), X(0.5), X(1.0)}, // psychic
 
-         /*ice*/ {X(1.0), X(1.0), X(1.6), X(1.0), X(1.6), X(1.0), X(1.6), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(1.6), X(1.0), X(1.0), X(0.5), X(1.6), X(1.0), X(1.0), X(1.0)}, // ice
+         /*ice*/ {X(1.0), X(1.0), X(1.55), X(1.0), X(1.55), X(1.0), X(1.55), X(0.5), X(0.5), X(1.0), X(0.5), X(1.0), X(1.55), X(1.0), X(1.0), X(0.5), X(1.55), X(1.0), X(1.0), X(1.0)}, // ice
 
-      /*dragon*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.6), X(1.0), X(0.5), X(1.0)}, // dragon
+      /*dragon*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(1.55), X(1.0), X(0.5), X(1.0)}, // dragon
 
-        /*dark*/ {X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.6), X(1.0), X(1.0), X(1.6), X(1.6), X(1.0)}, // dark
+        /*dark*/ {X(1.0), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(0.5), X(0.5), X(0.5), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.55), X(1.0), X(1.0), X(1.55), X(1.55), X(1.0)}, // dark
 
-       /*fairy*/ {X(1.6), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(0.5), X(1.0), X(0.5), X(1.0), X(0.5), X(1.0), X(0.0), X(1.0), X(1.0), X(1.0), X(1.6), X(1.6), X(1.0), X(1.0)}, // fairy
+       /*fairy*/ {X(1.55), X(1.0), X(1.0), X(0.5), X(1.0), X(1.0), X(0.5), X(1.0), X(0.5), X(1.0), X(0.5), X(1.0), X(0.0), X(1.0), X(1.0), X(1.0), X(1.55), X(1.55), X(1.0), X(1.0)}, // fairy
 
        /*sound*/ {X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0), X(1.0)}, // sound
 };//              normal  fight   flying  poison  ground   rock    bug    ghost   steel   mystery  fire   water   grass  electric  psychic  ice   dragon    dark   fairy   sound
@@ -1916,7 +1916,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
         for (i = 0; i < gTrainers[trainerNum].partySize; ++i)   //uses i, to loop through trainers entir party 
         {//vsonic
 
-            if (gTrainers[trainerNum].battleType != SINGLES) //may need change to just not singles, since adding more?
+            if (gTrainers[trainerNum].battleType == BATTLE_TYPE_DOUBLE) //may need change to just not singles, since adding more?
                 personalityValue = 0x80;
             else if (gTrainers[trainerNum].encounterMusic_gender & 0x80) //specific value for male/female trainers to set party mon gender
                 personalityValue = 0x78;
@@ -3285,7 +3285,7 @@ static void BattleStartClearSetData(void)
     TurnValuesCleanUp(FALSE);
     SpecialStatusesClear();
 
-    memset(&gDisableStructs, 0, sizeof(gDisableStructs));
+    memset(&gDisableStructs, 0, sizeof(gDisableStructs)); 
     memset(&gFieldTimers, 0, sizeof(gFieldTimers));
     memset(&gSideStatuses, 0, sizeof(gSideStatuses));
     memset(&gSideTimers, 0, sizeof(gSideTimers));
@@ -3710,6 +3710,12 @@ static void BattleIntroPrepareBackgroundSlide(void)
     }
 }
 
+//ok I think THIS is where type gets set to battle values for battle start,
+//and possibly reason for type bug, it wasn't something I changed but something I DIDN'T change,
+//type3 wasn't added to this, but it was used for typecalc, and I think its absense just left it as 0, since battlestruct does get 0'd at some point
+//so it was getting 0'd but not set, similar to wrap issue but in reverse
+//confirmed this was the issue
+#define BATTLE_START_VALUES
 static void BattleIntroDrawTrainersOrMonsSprites(void)
 {
     u8 *ptr;
@@ -3735,6 +3741,7 @@ static void BattleIntroDrawTrainersOrMonsSprites(void)
                     ptr[i] = gBattleBufferB[gActiveBattler][4 + i];
                 gBattleMons[gActiveBattler].type1 = gBaseStats[gBattleMons[gActiveBattler].species].type1;
                 gBattleMons[gActiveBattler].type2 = gBaseStats[gBattleMons[gActiveBattler].species].type2;
+                gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
                 gBattleMons[gActiveBattler].ability = GetAbilityBySpecies(gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].abilityNum);
                 hpOnSwitchout = &gBattleStruct->hpOnSwitchout[GetBattlerSide(gActiveBattler)];
                 *hpOnSwitchout = gBattleMons[gActiveBattler].hp;
@@ -4245,7 +4252,6 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
     //similar to as below
     if (((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))//vsonic need add new trap status here
      || (gBattleMons[gActiveBattler].status4 == ITS_A_TRAP_STATUS4)
-     || (gBattleMons[gActiveBattler].status1 == ITS_A_TRAP_STATUS1)
      || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
      || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK))//I need to redo this setup,
      /*|| (!IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
@@ -4345,7 +4351,7 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
             }
             break;
         case STATE_WAIT_ACTION_CHOSEN: // Try to perform an action.
-            if (!(gBattleControllerExecFlags & ((gBitTable[gActiveBattler]) | (0xF0000000) | (gBitTable[gActiveBattler] << 4) | (gBitTable[gActiveBattler] << 8) | (gBitTable[gActiveBattler] << 0xC))))
+            if (!(gBattleControllerExecFlags & ((gBitTable[gActiveBattler]) | (0xF << 28) | (gBitTable[gActiveBattler] << 4) | (gBitTable[gActiveBattler] << 8) | (gBitTable[gActiveBattler] << 0xC))))
             {
                 gChosenActionByBattler[gActiveBattler] = gBattleBufferB[gActiveBattler][1];
                 switch (gBattleBufferB[gActiveBattler][1])
@@ -4366,6 +4372,14 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                         gBattleCommunication[gActiveBattler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
                         return;
                     }
+                    /*else if (gDisableStructs[gActiveBattler].bindedMove != MOVE_NONE) //ok now undersetand these are fail conditinons nvm was wrong...
+                    //else if (gBattleMons[gActiveBattler].status4 & STATUS4_BIND) //conditions shuold be more or less on same level don' tknow why this one fails
+                    {
+                        gChosenMoveByBattler[gActiveBattler] = gDisableStructs[gActiveBattler].bindedMove;
+                        //*(gBattleStruct->chosenMovePositions + gActiveBattler) = gDisableStructs[gActiveBattler].bindMovepos; //without this fainted logic works??
+                        gBattleCommunication[gActiveBattler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
+                        return;
+                    } */
                     else
                     {
                         struct ChooseMoveStruct moveInfo;
@@ -4404,7 +4418,6 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                     *(gBattleStruct->battlerPartyIndexes + gActiveBattler) = gBattlerPartyIndexes[gActiveBattler];
                     if (gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION) 
                         || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
-                        || (gBattleMons[gActiveBattler].status1 & (ITS_A_TRAP_STATUS1)) 
                         || (gBattleMons[gActiveBattler].status4 & (ITS_A_TRAP_STATUS4))) //hope this works...
                     {
                         if ((GetBattlerAbility(gActiveBattler) == ABILITY_DEFEATIST
@@ -4723,10 +4736,10 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
         speed /= 4;
 
     //trap effects
-    if (((gBattleMons[battlerId].status4 & STATUS4_WHIRLPOOL) || (gBattleMons[battlerId].status1 & STATUS1_WHIRLPOOL))
+    if ((gBattleMons[battlerId].status4 & STATUS4_WHIRLPOOL)
         && IsBlackFogNotOnField())  //should be good
         speed /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
-    if (((gBattleMons[battlerId].status2 & STATUS2_WRAPPED) || (gBattleMons[battlerId].status1 & STATUS1_WRAPPED))
+    if ((gBattleMons[battlerId].status2 & STATUS2_WRAPPED)
         && IsBlackFogNotOnField())
         speed /= 2; //cut speed by half, which is the same as 2 stat stage drops & guess it makes more sense to cut 
 
@@ -4930,9 +4943,9 @@ static void SetActionsAndBattlersTurnOrder(void)
                     ++turnOrderId;
                 }
             }
-            //gBattleMainFunc = CheckFocusPunch_ClearVarsBeforeTurnStarts;   removed here put at end
+            gBattleMainFunc = CheckFocusPunch_ClearVarsBeforeTurnStarts;//   removed here put at end
             //gBattleStruct->focusPunchBattlerId = 0;
-            //return;
+            return;
         }
         else
         {
@@ -5385,6 +5398,14 @@ static void HandleAction_UseMove(void)
     {
         gCurrentMove = gChosenMove = gLockedMoves[gBattlerAttacker];
     }
+    /*else if (gDisableStructs[gBattlerAttacker].bindedMove != MOVE_NONE
+        && gDisableStructs[gBattlerAttacker].bindedMove == gBattleMons[gBattlerAttacker].moves[gDisableStructs[gBattlerAttacker].bindMovepos])  //should always be true cuz bs com logic
+    {
+        gCurrentMove = gChosenMove = gDisableStructs[gBattlerAttacker].bindedMove;  //bind move
+        gCurrMovePos = gChosenMovePos = gDisableStructs[gBattlerAttacker].bindMovepos;
+        *(gBattleStruct->moveTarget + gBattlerAttacker) = GetMoveTarget(gCurrentMove, 0);
+        //return;
+    }*/
     // encore forces you to use the same move
     else if (gDisableStructs[gBattlerAttacker].encoredMove != MOVE_NONE
           && gDisableStructs[gBattlerAttacker].encoredMove == gBattleMons[gBattlerAttacker].moves[gDisableStructs[gBattlerAttacker].encoredMovePos])
@@ -5979,6 +6000,27 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
         priority++;
     }
     else if (GetBattlerAbility(battlerId) == ABILITY_TRIAGE)
+    {
+        switch (gBattleMoves[move].effect)
+        {
+        case EFFECT_RESTORE_HP:
+        case EFFECT_REST:
+        case EFFECT_MORNING_SUN:
+        case EFFECT_MOONLIGHT:
+        case EFFECT_SYNTHESIS:
+        case EFFECT_HEAL_PULSE:
+        case EFFECT_HEALING_WISH:
+        case EFFECT_ROOST:
+        case EFFECT_SWALLOW:
+        case EFFECT_WISH:
+        case EFFECT_SOFTBOILED:
+        case EFFECT_ABSORB:
+            priority += 3;
+            break;
+        }
+    }
+    //sets priority still need setup pass healing  to partner, also add partner mon is alive
+    else if ((GetBattlerAbility(battlerId) == ABILITY_OMNIPOTENT_AIDE) && CAN_ABILITY_ABSORB && IsBattlerAlive(BATTLE_PARTNER(battlerId)))
     {
         switch (gBattleMoves[move].effect)
         {

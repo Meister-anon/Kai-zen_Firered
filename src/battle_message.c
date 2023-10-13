@@ -383,6 +383,7 @@ static const u8 sText_BellChimed[] = _("A bell chimed!");
 static const u8 sText_FaintInThree[] = _("All affected POKéMON will\nfaint in three turns!");
 static const u8 sText_NoPPLeft[] = _("There's no PP left for\nthis move!\p");
 static const u8 sText_ButNoPPLeft[] = _("But there was no PP left\nfor the move!");
+static const u8 sText_PkmnPanicked[] = _("{B_ATK_NAME_WITH_PREFIX} panicked\nand used a random move!");
 static const u8 sText_PkmnIgnoresAsleep[] = _("{B_ATK_NAME_WITH_PREFIX} ignored\norders while asleep!");
 static const u8 sText_PkmnIgnoredOrders[] = _("{B_ATK_NAME_WITH_PREFIX} ignored\norders!");
 static const u8 sText_PkmnBeganToNap[] = _("{B_ATK_NAME_WITH_PREFIX} began to nap!");
@@ -1440,6 +1441,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_TARGETSXWHIPPEDUPSANDSTORM - BATTLESTRINGS_TABLE_START]    = sText_TargetsXWhippedUpSandstorm,
     [STRINGID_ATTACKER_ABILITYHURTS_TARGET - BATTLESTRINGS_TABLE_START]  = sText_AttackerHurtsPkmnWith,
     [STRINGID_PKMNINFESTED - BATTLESTRINGS_TABLE_START]                  = sText_Infested,
+    [STRINGID_PKMNPANICKED - BATTLESTRINGS_TABLE_START]                  = sText_PkmnPanicked,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
@@ -1848,7 +1850,7 @@ const u16 gDoubleBattleRecallStrings[] = {
 //SEARCH //trap effects  for functionality
 //for all traps I change lower stats by 2 stages
 const u16 gTrappingMoves[] = {
-    MOVE_BIND,      //same for wrap, lower speed of wrapped target 2 stages
+    MOVE_BIND,      //same for wrap, lower speed of wrapped target 2 stages  / changing to encore effect, because found bug that did that for some reason
     MOVE_WRAP,
     MOVE_FIRE_SPIN, //increases burn chance //serenge grace is effect *2 by requires no setup, I think I can get away w * 3 here actually do more to near guarantee 50-60%
     MOVE_CLAMP,     //no extra wrap effect,  but give flich chance on hit //changed mind you're staying clamped on them, so for duration statused target has chance to flinch when attacking
@@ -2008,6 +2010,7 @@ const u8 gIce_movetype[] = _("an ICE move");
 const u8 gDragon_movetype[] = _("a DRAGON move");
 const u8 gDark_movetype[] = _("a DARK move");
 const u8 gFairy_movetype[] = _("a FAIRY move"); //Fairy addition; make sure to add this in, where others are referenced.
+const u8 gSound_movetype[] = _("a SOUND move");
 const u8 gText_TimeBoard[] = _("TIME BOARD");
 const u8 gText_ClearTime[] = _("CLEAR TIME"); // Unused
 const u8 gText_XMinYZSec[] = _("{STR_VAR_1}MIN. {STR_VAR_2}.{STR_VAR_3}SEC.");
@@ -2050,7 +2053,8 @@ static const u8 *const sATypeMove_Table[] = {
     gIce_movetype,
     gDragon_movetype,
     gDark_movetype,
-    gFairy_movetype
+    gFairy_movetype,
+    gSound_movetype
 };
 
 //find out why this here
