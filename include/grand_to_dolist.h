@@ -1260,6 +1260,60 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
     //since FrozenTurns uses gDisableStructs it'll be cleared when battle ends/new battle starts
     this works if still frozen at battle end so not frozen solid on next battle makes more sense, but you'll still be frozen, just suffer end turn dmg until healed
 
+ tweak for oak ranch/pc exp idea let it activate after the bill event
+ after rescue him, add new event where he introduces himself as owner of pc, explains what pc is
+ transfer device, rather than a storage device, can store items but not living things obviously.
+ 
+ but he's sure professor oak wouldn't mind taking care of them for a bit.
+ so have him and player walk over to pc talk with oak, have him say he takes care of them at  his ranch
+ and he'll take good care of them and let them out to get some exercise ( potentially explain they gain exp here or just let it be a surprise)
+
+ set flag, after this event, so all mon in pc now start gaining exp. will need add to new game flag clear, idk may do with var? 
+ either works i think.   from there continue with default script where he gives ss ane ticket etc.
+  
+  "That takes care of that, ... why do I feel like I'm forgeting something... Oh!" 
+
+  so fire red has early day care but is only one that only has capacity for one mon,
+  effectively locking breeding to end game as the only day care with space is on the Sevii Islands...
+
+  so change that make route 5 day care have space for 2, and be able to do breeding logic.
+  along with change to not overwrite moves.   and then boost up sevii island day care to have 6 spaces
+  so you can breed 3 pairs.
+
+  change game logic so you can have  0 mon in party, if you are indoors, so you can unload all 6 into daycare.
+  but then just have a block when you try to exit and use oak start text you can't go outside without pokemon/its dangerous etc.
+
+ since expanded move descriptions will have to expand tm case move description window, to fit the 2 extra lines
+ remove one line from tm case scroll and bring graphic/values up to match
+
+ also setup new tm case as separate instance from base tm case, so can use default one for selling tms, 
+  - done, still need seutp so can use icons to select mon to use/give tms to
+
+  //pick up seems to have glitc, not properlu clearing consumable items? either that
+  or I just don't have berry juice setup right, it healed twice because it wasn't removed
+
+  but after second heal it then read as consumed so pickup was able to apply new item
+
+  //didn't realize items in gen 3 didn't use the actual icon sprite, and instead use a general icon symbol
+  //would like to change to icon sprite shuold be possible since can be used for knock off?
+
+  //its pickup berry juice is an gen 2 effect so its base code is fine
+
+  also need that for eviolite changes to make sense
+
+  major glitches leech seed - causes bad egg glitch very bad
+  bind glitch seems to swap party data and other strange effects  not game breaking?
+  wonder guard glitch, swaps party data and faints attacker if attacks themself,  very bad
+  *notes -
+  poison worsening doesn't seem to be working? hard to tell as only poison effect available is 10%
+  //change poison sting to 100% rework script/logic and retry
+
+  //for berries like pamtre berry that's only use seems to be berry powder
+  in ceruleun berry crush/powder man instead of crushing these berries have him 
+  use them to make the medicines like revival powder etc. or the herbs
+
+  falseswipegaming change slow start give flag to make sure it doesn't retrigger
+
  fixed intro trainer select text
  ...using constrict on wondergaurd shedinja breaks game...causes freeze   going over changes I realized - think fixed, missed a part of status stuff (double check)
 */
@@ -1270,6 +1324,8 @@ goto CHECK_THIS //something potentially relevant for future multi battle/triple 
 
 goto BATTLE_MOVE_SWAP_LOGIC //use this for changes to prevent seeing the move length bug, prevent moves of certain length from being put/moved
 //into a slot that isn't slot 2 or 4  limit is 13 chars
+
+goto MON_TINT_LOGIC //tm_case.c stuff ported for new tm cacse that think can use for dexnav idea
 
 goto BATTLE_START_VALUES //battle_main.c where mon values are set i.e ability typing etc. before battle start
 

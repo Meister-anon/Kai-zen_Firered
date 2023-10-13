@@ -3309,6 +3309,7 @@ static void BattleStartClearSetData(void)
         gBattleStruct->lastTakenMove[i] = MOVE_NONE;
         gBattleStruct->choicedMove[i] = MOVE_NONE;
         gBattleStruct->changedItems[i] = 0;
+        gBattleStruct->slowstartDone[i] = 0; //not 100% needs to be here, nvm this is right, set here not on switch in
         gBattleStruct->lastTakenMoveFrom[i][0] = MOVE_NONE;
         gBattleStruct->lastTakenMoveFrom[i][1] = MOVE_NONE;
         gBattleStruct->lastTakenMoveFrom[i][2] = MOVE_NONE;
@@ -3581,7 +3582,7 @@ void FaintClearSetData(void) //see about make status1 not fade wen faint?
     gProtectStructs[gActiveBattler].usedHealBlockedMove = FALSE;
     gProtectStructs[gActiveBattler].usesBouncedMove = FALSE;
     gProtectStructs[gActiveBattler].usedGravityPreventedMove = FALSE;
-    gProtectStructs[gActiveBattler].usedThroatChopPreventedMove = FALSE;
+    gProtectStructs[gActiveBattler].usedThroatChopPreventedMove = FALSE; 
     gDisableStructs[gActiveBattler].isFirstTurn = 2;
     gLastMoves[gActiveBattler] = MOVE_NONE;
     gLastLandedMoves[gActiveBattler] = MOVE_NONE;

@@ -1391,8 +1391,10 @@ const u32 gFile_graphics_interface_bag_swap_sheet[] = INCBIN_U32("graphics/inter
 const u32 gFile_graphics_interface_bag_swap_palette[] = INCBIN_U32("graphics/interface/bag_swap.gbapal.lz");
 
 const u32 gUnknown_8E845D8[] = INCBIN_U32("graphics/tm_case/unk_8E845D8.4bpp.lz");
-const u32 gUnknown_8E84A24[] = INCBIN_U32("graphics/tm_case/unk_8E84A24.bin.lz");
-const u32 gUnknown_8E84B70[] = INCBIN_U32("graphics/tm_case/unk_8E84B70.bin.lz");
+const u32 gTMCase_TM_list_window[] = INCBIN_U32("graphics/tm_case/TM_list_window.bin.lz");
+const u32 gTMCase_TM_box[] = INCBIN_U32("graphics/tm_case/TM_box.bin.lz");
+const u32 gTMCase_TM_list_newTMcase_window[] = INCBIN_U32("graphics/tm_case/TM_list_newcase_window.bin.lz");
+const u32 gTMCase_TM_cleared_box[] = INCBIN_U32("graphics/tm_case/TM_cleared_box.bin.lz");
 const u32 gUnknown_8E84CB0[] = INCBIN_U32("graphics/tm_case/unk_8E84CB0.gbapal.lz");
 const u32 gUnknown_8E84D20[] = INCBIN_U32("graphics/tm_case/unk_8E84D20.gbapal.lz");
 const u32 gTMCase_TMSpriteGfx[] = INCBIN_U32("graphics/tm_case/unk_8E84D90.4bpp.lz");

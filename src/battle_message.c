@@ -733,7 +733,7 @@ static const u8 sText_PkmnsWillPerishIn3Turns[] = _("Both Pokémon will perish\n
 static const u8 sText_AbilityRaisedStatDrastically[] = _("{B_DEF_ABILITY} raised {B_DEF_NAME_WITH_PREFIX}'s\n{B_BUFF1} drastically!");
 static const u8 sText_FellInLoveAtFirstSight[] = _("{B_DEF_NAME_WITH_PREFIX} fell in love at first sight!");
 static const u8 sText_SnapTrap[] = _("{B_DEF_NAME_WITH_PREFIX} was ensnared\nby {B_ATK_NAME_WITH_PREFIX}'s trap!");
-static const u8 sText_PkmnsPoisonWorsened[] = _("{B_DEF_NAME_WITH_PREFIX}'s poisoning got worse!");
+static const u8 sText_PkmnsPoisonWorsened[] = _("{B_EFF_NAME_WITH_PREFIX}'s poisoning got worse!\nIt's badly poisoned!");
 
 
 //extra stuff new

@@ -163,7 +163,7 @@ bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability);
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
 bool32 CanSleep(u8 battlerId);
 bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget);
-bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget); //actually needs to be different
+bool32 CanBePoisoned(u8 PoisonUser, u8 PoisonTarget); //actually needs to be different from type
 bool32 CanBeBurned(u8 battlerId);
 bool32 CanBeParalyzed(u8 battlerId);
 bool32 CanBeFrozen(u8 battlerId);

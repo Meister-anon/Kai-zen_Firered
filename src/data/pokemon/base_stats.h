@@ -477,7 +477,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_BUG,
         .abilities = {ABILITY_SWARM, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_SNIPER, ABILITY_ANTICIPATION},
+            .abilityHidden = {ABILITY_SNIPER, ABILITY_POISONED_LEGACY},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -961,7 +961,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_UNAWARE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-    },
+    }, //need test this and consider if normal type is worth give my changes
 
     [SPECIES_VULPIX] =
     { 
@@ -1347,7 +1347,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PICKUP, ABILITY_TECHNICIAN},
-            .abilityHidden = {ABILITY_UNNERVE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_UNNERVE, ABILITY_SUPER_LUCK},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -1355,7 +1355,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_PERSIAN] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(65, 70, 60, 115, 77, 65),
+         STATS(65, 77, 60, 115, 77, 65),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_NORMAL,
         .catchRate = 90,
@@ -1370,7 +1370,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_LIMBER, ABILITY_TECHNICIAN},
-            .abilityHidden = {ABILITY_UNNERVE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_UNNERVE, ABILITY_SUPER_LUCK}, //harken back to  gen 1 crit days
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -11117,7 +11117,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_DUSKNOIR] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(45, 100, 135, 45, 65, 135),
+         STATS(65, 100, 135, 45, 65, 135),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GHOST,
         .catchRate = 45,

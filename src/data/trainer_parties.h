@@ -4971,9 +4971,15 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderGiovanni[] = 
     {
         .iv = 31,
         .lvl = 50,
-        .species = SPECIES_RHYHORN,
+        .species = SPECIES_RHYDON,
         .moves = {MOVE_TAKE_DOWN, MOVE_ROCK_BLAST, MOVE_SCARY_FACE, MOVE_EARTHQUAKE},
     },
+    {
+        .iv = 31,
+        .lvl = 50,
+        .species = SPECIES_PERSIAN,
+        //.moves = {MOVE_TAKE_DOWN, MOVE_ROCK_BLAST, MOVE_SCARY_FACE, MOVE_EARTHQUAKE},
+    }, //make sure to use abilitynum to give super luck
 };
 
 static const struct TrainerMonNoItemDefaultMoves sTrainerMons_TeamRocketGrunt[] = {

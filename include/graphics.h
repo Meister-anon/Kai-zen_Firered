@@ -6929,8 +6929,10 @@ extern const u16 gFameCheckerBg2Tilemap[0x400];
 
 // tm_case
 extern const u32 gUnknown_8E845D8[];
-extern const u32 gUnknown_8E84A24[];
-extern const u32 gUnknown_8E84B70[];
+extern const u32 gTMCase_TM_list_window[];
+extern const u32 gTMCase_TM_box[];
+extern const u32 gTMCase_TM_list_newTMcase_window[];
+extern const u32 gTMCase_TM_cleared_box[];
 extern const u32 gUnknown_8E84CB0[];
 extern const u32 gUnknown_8E84D20[];
 extern const u32 gTMCase_TMSpriteGfx[];

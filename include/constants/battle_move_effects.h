@@ -70,7 +70,7 @@
 #define MOVE_EFFECT_SPECTRAL_THIEF      0x3F
 #define MOVE_EFFECT_ATTRACT				0x40	//just need to set this to the effect attract?	//setstatus in bscommands, this infatuates w target should work for effect spore
 #define MOVE_EFFECT_SPIRIT_LOCK			0x41  //but if
-#define MOVE_EFFECT_INFESTATION         0x42
+#define MOVE_EFFECT_INFESTATION         0x42 //will need to move down when setup before primary status move effect constant
 #define MOVE_EFFECT_HAPPY_HOUR          0x43
 #define MOVE_EFFECT_CORE_ENFORCER       0x44
 #define MOVE_EFFECT_THROAT_CHOP         0x45

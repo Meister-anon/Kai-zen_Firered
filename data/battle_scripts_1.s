@@ -7778,7 +7778,7 @@ BattleScript_MoveEffectParalysis::
 
 @change to match above when get status icon setup, plan kamen raider esque neon green icon with bug mask
 BattleScript_MoveEffectInfestation::
-	setmoveeffect MOVE_EFFECT_INFESTATION
+	@setmoveeffect MOVE_EFFECT_INFESTATION
 	printstring STRINGID_INFESTATION
 	waitmessage 0x40
 	return
@@ -9626,12 +9626,12 @@ BattleScript_IgnoresAndUsesRandomMove::
 BattleScript_PanickedAndUsesRandomMove::
 	printstring STRINGID_PKMNPANICKED
 	waitmessage B_WAIT_TIME_LONG
-	jumptocalledmove TRUE
+	jumptocalledmove FALSE
 	moveendto MOVE_END_NEXT_TARGET
 	end
 
 BattleScript_BindDoCalledMove::
-	jumptocalledmove TRUE
+	jumptocalledmove FALSE
 	moveendto MOVE_END_NEXT_TARGET
 	end
 

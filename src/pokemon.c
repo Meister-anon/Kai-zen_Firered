@@ -4131,8 +4131,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_SLOW_START:
         if (gDisableStructs[gBattlerTarget].slowStartTimer != 0)    //was gonna add crit excluion clause but it seems abilities don't have that, only the moves
-            gBattleMoveDamage /= 4; //so that's an extra bonus of having damage reduction via ability     may do 4 turn timer with 75% damage reduction instead of 50% @ 2 turns
-        break;//yeah like that idea a lot more
+            gBattleMoveDamage /= 2; //so that's an extra bonus of having damage reduction via ability     may do 4 turn timer with 75% damage reduction instead of 50% @ 2 turns
+        break;//yeah like that idea a lot more , that's most likley way to powerful... doing 3 turn timer at 50%
     case ABILITY_GRASS_PELT:
         if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN
             && !gProtectStructs[gBattlerAttacker].confusionSelfDmg)
@@ -7750,6 +7750,24 @@ u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm)
         return sTMHMLearnsets[species][0] & mask;
     }
     else  //actually I think this is a type split? breaking the array into 2 32 bit section? - yup
+    {
+        u32 mask = 1 << (tm - 32);
+        return sTMHMLearnsets[species][1] & mask;
+    }
+}//ok so when I apply the tmhm expansion that does away with the bit stuff will have to adjust these
+
+u32 CanSpeciesLearnTMHM(u16 species, u8 tm)
+{
+    if (species == SPECIES_EGG)
+    {
+        return 0;
+    }
+    else if (tm < 32)
+    {
+        u32 mask = 1 << tm;
+        return sTMHMLearnsets[species][0] & mask;
+    }
+    else
     {
         u32 mask = 1 << (tm - 32);
         return sTMHMLearnsets[species][1] & mask;

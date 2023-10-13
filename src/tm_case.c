@@ -22,8 +22,11 @@
 #include "menu_indicators.h"
 #include "constants/items.h"
 #include "constants/songs.h"
+#include "pokemon_icon.h"
+#include "pokemon.h"
+#include "gba/types.h"
 
-#define TM_CASE_TM_TAG 400
+#define TM_CASE_TM_TAG 400 //figure what this is as well. vsonic
 
 struct UnkStruct_203B10C
 {
@@ -65,6 +68,11 @@ static EWRAM_DATA void * sTilemapBuffer = NULL; // tilemap buffer
 static EWRAM_DATA struct ListMenuItem * sListMenuItemsBuffer = NULL;
 static EWRAM_DATA u8 (* sListMenuStringsBuffer)[29] = NULL;
 static EWRAM_DATA u16 * sTMSpritePaletteBuffer = NULL;
+//added for new tm case
+static EWRAM_DATA u8    spriteIdData[PARTY_SIZE] = {};
+static EWRAM_DATA u16   spriteIdPalette[PARTY_SIZE] = {};
+
+extern const struct SpritePalette gMonIconPaletteTable[6];
 
 static void CB2_SetUpTMCaseUI_Blocking(void);
 static bool8 DoSetUpTMCaseUI(void);
@@ -127,6 +135,11 @@ static void UpdateTMSpritePosition(struct Sprite * sprite, u8 var);
 static void InitSelectedTMSpriteData(u8 a0, u16 itemId);
 static void SpriteCB_MoveTMSpriteInCase(struct Sprite * sprite);
 static void LoadTMTypePalettes(void);
+//added for new tm case
+static void DrawPartyMonIcons(void);
+static void TintPartyMonIcons(u8 tm);
+static void DestroyPartyMonIcons(void);
+
 
 static const struct BgTemplate sBGTemplates[] = {
     {
@@ -185,6 +198,7 @@ static const u8 sTextColors[][3] = {
     {0, 14, 10}
 };
 
+
 static const struct WindowTemplate sWindowTemplates[] = {
     {0x00, 0x0a, 0x01, 0x13, 0x0a, 0x0f, 0x0081},
     {0x00, 0x0c, 0x0c, 0x12, 0x08, 0x0a, 0x013f},
@@ -196,7 +210,23 @@ static const struct WindowTemplate sWindowTemplates[] = {
     {0x01, 0x11, 0x09, 0x0c, 0x04, 0x0f, 0x02ed},
     {0x01, 0x01, 0x01, 0x08, 0x03, 0x0d, 0x031d},
     DUMMY_WIN_TEMPLATE
-};
+};//figure what these do / kept using for mart sell tms
+
+
+
+static const struct WindowTemplate sWindowTemplates2[] = {
+    {0x00, 0x0e, 0x01, 0x0f, 0x0a, 0x0f, 0x0081},
+    {0x00, 0x0c, 0x0c, 0x12, 0x08, 0x0a, 0x013f},
+    {0x01, 0x05, 0x0f, 0x0f, 0x04, 0x0f, 0x01f9},
+    {0x00, 0x00, 0x01, 0x0a, 0x02, 0x0f, 0x0235},
+    {0x00, 0x01, 0x0d, 0x05, 0x06, 0x0c, 0x0249},
+    {0x00, 0x07, 0x0d, 0x05, 0x06, 0x0c, 0x0267},
+    {0x01, 0x02, 0x0f, 0x1a, 0x04, 0x0b, 0x0285},
+    {0x01, 0x11, 0x09, 0x0c, 0x04, 0x0f, 0x02ed},
+    {0x01, 0x01, 0x01, 0x08, 0x03, 0x0d, 0x031d},
+    DUMMY_WIN_TEMPLATE
+}; //version from port for tm case update
+
 
 static const struct WindowTemplate sYesNoWindowTemplate = {0x01, 0x15, 0x09, 0x06, 0x04, 0x0f, 0x0335};
 
@@ -363,6 +393,8 @@ static bool8 DoSetUpTMCaseUI(void)
         break;
     case 11:
         DrawMoveInfoUIMarkers();
+        if (sSelectTMActionTasks[sTMCaseStaticResources.tmCaseMenuType] != sSelectTMActionTasks[2])
+            DrawPartyMonIcons();  //part of tm case port
         gMain.state++;
         break;
     case 12:
@@ -387,6 +419,7 @@ static bool8 DoSetUpTMCaseUI(void)
         gMain.state++;
         break;
     case 16:
+        if (sSelectTMActionTasks[sTMCaseStaticResources.tmCaseMenuType] == sSelectTMActionTasks[2])
         sTMCaseDynamicResources->tmSpriteId = CreateTMSprite(BagGetItemIdByPocketPosition(POCKET_TM_CASE, sTMCaseStaticResources.scrollOffset + sTMCaseStaticResources.selectedRow));
         gMain.state++;
         break;
@@ -446,12 +479,18 @@ static bool8 HandleLoadTMCaseGraphicsAndPalettes(void)
     case 1:
         if (FreeTempTileDataBuffersIfPossible() != TRUE)
         {
-            LZDecompressWram(gUnknown_8E84A24, sTilemapBuffer);
+            if (sSelectTMActionTasks[sTMCaseStaticResources.tmCaseMenuType] == sSelectTMActionTasks[2]) //if selling tm
+                LZDecompressWram(gTMCase_TM_list_window, sTilemapBuffer);
+            else
+                LZDecompressWram(gTMCase_TM_list_newTMcase_window, sTilemapBuffer); //windows moved over for mon icons
             sTMCaseDynamicResources->seqId++;
         }
         break;
     case 2:
-        LZDecompressWram(gUnknown_8E84B70, GetBgTilemapBuffer(1));
+        if (sSelectTMActionTasks[sTMCaseStaticResources.tmCaseMenuType] == sSelectTMActionTasks[2])
+            LZDecompressWram(gTMCase_TM_box, GetBgTilemapBuffer(1)); //sets tm case inside graphic for tms to sit in
+        else
+            LZDecompressWram(gTMCase_TM_cleared_box, GetBgTilemapBuffer(1)); //removes box graphic so only view icons
         sTMCaseDynamicResources->seqId++;
         break;
     case 3:
@@ -566,7 +605,7 @@ static void TMCase_ItemPrintFunc(u8 windowId, s32 itemId, u8 y)
         }
         else
         {
-            PlaceHMTileInWindow(windowId, 8, y);
+            PlaceHMTileInWindow(windowId, 8, y); //for replacing NO text with HM for hm use
         }
     }
 }
@@ -574,9 +613,10 @@ static void TMCase_ItemPrintFunc(u8 windowId, s32 itemId, u8 y)
 static void TMCase_MoveCursor_UpdatePrintedDescription(s32 itemIndex)
 {
     const u8 * str;
+    u16 itemId = BagGetItemIdByPocketPosition(POCKET_TM_CASE, itemIndex);
     if (itemIndex != -2)
     {
-        str = ItemId_GetDescription(BagGetItemIdByPocketPosition(POCKET_TM_CASE, itemIndex));
+        str = ItemId_GetDescription(itemId);
     }
     else
     {
@@ -584,6 +624,9 @@ static void TMCase_MoveCursor_UpdatePrintedDescription(s32 itemIndex)
     }
     FillWindowPixelBuffer(1, 0);
     AddTextPrinterParameterized_ColorByIndex(1, 2, str, 2, 3, 1, 0, 0, 0);
+
+    // update icons
+    TintPartyMonIcons(itemId - ITEM_TM01);
 }
 
 static void FillBG2RowWithPalette_2timesNplus1(s32 a0)
@@ -794,11 +837,18 @@ static void Task_SelectTMAction_FromFieldBag(u8 taskId)
     StringAppend(strbuf, gText_Var1IsSelected + 2); // +2 skips over the stringvar
     AddTextPrinterParameterized_ColorByIndex(2, 2, strbuf, 0, 2, 1, 0, 0, 1);
     Free(strbuf);
-    if (itemid_is_unique(gSpecialVar_ItemId))
+    
+    //RemoveTMContextMenu(&sTMCaseDynamicResources->contextMenuWindowId); //below is essentially this funtion, but couldnt get to take arg 2
+    ClearStdWindowAndFrameToTransparent(2, FALSE); //replace these with above function if figure out pointer logic...
+    ClearWindowTilemap(2);
+    //RemoveWindow(2);
+    ScheduleBgCopyTilemapToVram(0); //to hopefully remove window for selected tezxt / worked perfect
+    
+    if (itemid_is_unique(gSpecialVar_ItemId)) //should check make sure hm stuff still works with window removal
     {
-        PlaceHMTileInWindow(2, 0, 2);
+        PlaceHMTileInWindow(2, 0, 2); //for adding HM graphic before NO for hms
         CopyWindowToVram(2, COPYWIN_GFX);
-    }
+    } 
     ScheduleBgCopyTilemapToVram(0);
     ScheduleBgCopyTilemapToVram(1);
     gTasks[taskId].func = Task_TMContextMenu_HandleInput;
@@ -1284,11 +1334,13 @@ static void Task_TMCaseDude_Playback(u8 taskId)
     }
 }
 
-static void InitWindowTemplatesAndPals(void)
+static void InitWindowTemplatesAndPals(void) //90% this isn't' gonna work. ...it actually worked. o.o
 {
     u8 i;
-
-    InitWindows(sWindowTemplates);
+    if (sSelectTMActionTasks[sTMCaseStaticResources.tmCaseMenuType] == sSelectTMActionTasks[2])
+        InitWindows(sWindowTemplates);
+    else
+        InitWindows(sWindowTemplates2);
     DeactivateAllTextPrinters();
     TextWindow_SetUserSelectedFrame(0, 0x5B, 0xE0);
     TextWindow_LoadResourcesStdFrame0(0, 0x64, 0xB0);
@@ -1329,9 +1381,14 @@ static void TMCase_PrintMessageWithFollowupTask(u8 taskId, u8 windowId, const u8
     ScheduleBgCopyTilemapToVram(1);
 }
 
-static void PrintStringTMCaseOnWindow3(void)
+static void PrintStringTMCaseOnWindow3(void) //thought was entire tm case graphic is instead just text for tm case
 {
-    u32 distance = 72 - GetStringWidth(1, gText_TMCase, 0);
+    u32 distance;
+
+    if (sSelectTMActionTasks[sTMCaseStaticResources.tmCaseMenuType] == sSelectTMActionTasks[2]) //works but not what I expected
+        distance = 72 - GetStringWidth(1, gText_TMCase, 0);  //should hopefully be in mart/sale
+    else
+        distance = 100 - GetStringWidth(1, gText_TMCase, 0);
     AddTextPrinterParameterized3(3, 1, distance / 2, 1, sTextColors[0], 0, gText_TMCase);
 }
 
@@ -1527,4 +1584,118 @@ static void LoadTMTypePalettes(void)
     spritePalette.data = sTMSpritePaletteBuffer + 0x110;
     spritePalette.tag = TM_CASE_TM_TAG;
     LoadSpritePalette(&spritePalette);
+}
+
+//added functions for new tm case 
+#define sMonIconStill data[3]
+static void SpriteCb_MonIcon(struct Sprite *sprite)
+{
+    if (!sprite->sMonIconStill)
+        UpdateMonIconFrame(sprite);
+}
+#undef sMonIconStill
+
+#define MON_ICON_START_X  0x10
+#define MON_ICON_START_Y  0x2a
+#define MON_ICON_PADDING  0x20
+
+
+void LoadMonIconPalettesTinted(void)
+{
+    u8 i;
+    for (i = 0; i < ARRAY_COUNT(gMonIconPaletteTable); i++)
+    {
+        LoadSpritePalette(&gMonIconPaletteTable[i]);
+        TintPalette_GrayScale2(&gPlttBufferUnfaded[0x170 + i*16], 16);
+    }
+}
+
+
+static void DrawPartyMonIcons(void)
+{
+    u8 i;
+    u16 species;
+    u8 icon_x = 0;
+    u8 icon_y = 0;
+
+    LoadMonIconPalettesTinted();
+
+    for (i = 0; i < gPlayerPartyCount; i++)
+    {
+        //calc icon position (centered)
+        if (gPlayerPartyCount == 1)
+        {
+            icon_x = MON_ICON_START_X + MON_ICON_PADDING;
+            icon_y = MON_ICON_START_Y + MON_ICON_PADDING*0.5;
+        }
+        else if (gPlayerPartyCount == 2)
+        {
+            icon_x = i < 2 ? MON_ICON_START_X + MON_ICON_PADDING*0.5 + MON_ICON_PADDING * i : MON_ICON_START_X + MON_ICON_PADDING*0.5 + MON_ICON_PADDING * (i - 2);
+            icon_y = MON_ICON_START_Y + MON_ICON_PADDING*0.5;
+        }else if (gPlayerPartyCount == 3)
+        {
+            icon_x = i < 3 ? MON_ICON_START_X + MON_ICON_PADDING * i : MON_ICON_START_X + MON_ICON_PADDING * (i - 3);
+            icon_y = MON_ICON_START_Y + MON_ICON_PADDING*0.5;
+        }
+        else if (gPlayerPartyCount == 4)
+        {
+            icon_x = i < 2 ? MON_ICON_START_X + MON_ICON_PADDING*0.5 + MON_ICON_PADDING * i : MON_ICON_START_X + MON_ICON_PADDING*0.5 + MON_ICON_PADDING * (i - 2);
+            icon_y = i < 2 ? MON_ICON_START_Y : MON_ICON_START_Y + MON_ICON_PADDING;
+        }
+        else
+        {
+            icon_x = i < 3 ? MON_ICON_START_X + MON_ICON_PADDING * i : MON_ICON_START_X + MON_ICON_PADDING * (i - 3);
+            icon_y = i < 3 ? MON_ICON_START_Y : MON_ICON_START_Y + MON_ICON_PADDING;
+        }
+        //get species
+        species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
+
+        //create icon sprite
+
+        spriteIdData[i] = CreateMonIcon(species, SpriteCb_MonIcon, icon_x, icon_y, 1, GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY), TRUE);
+
+
+        //Set priority, stop movement and save original palette position
+        gSprites[spriteIdData[i]].oam.priority = 0;
+        StartSpriteAnim(&gSprites[spriteIdData[i]], 4); //full stop
+        spriteIdPalette[i] = gSprites[spriteIdData[i]].oam.paletteNum; //save correct palette number to array
+    }
+}
+
+/*can potentially experiment with this for future dex nav setup where things are fully blacked out
+so its blacked out on route unless you've already caught the mon (or mon in evo chain?)
+but when you see it on the route it'll reveal the mon so you can see the progress for revealing encounters
+for dexnav to work think I may need to make a separate mon seen value*/
+#define MON_TINT_LOGIC
+static void TintPartyMonIcons(u8 tm)
+{
+    u8 i;
+    u16 species;
+
+    for (i = 0; i < gPlayerPartyCount; i++)
+    {
+        species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
+        SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_ALL);
+        SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(7, 11));
+        if (!CanSpeciesLearnTMHM(species, tm))//if cant learn tmhm grey out, 
+        {
+            gSprites[spriteIdData[i]].oam.objMode = ST_OAM_OBJ_BLEND;
+        }
+        else
+        {
+            gSprites[spriteIdData[i]].oam.objMode = ST_OAM_OBJ_NORMAL;//gMonIconPaletteIndices[species];
+        }
+
+    }
+
+}
+
+static void DestroyPartyMonIcons(void)
+{
+    u8 i;
+    for (i = 0; i < gPlayerPartyCount; i++)
+    {
+        DestroyMonIcon(&gSprites[spriteIdData[i]]);
+        FreeMonIconPalettes();
+    }
 }

@@ -590,6 +590,7 @@ struct StatFractions
 
 extern const struct StatFractions gAccuracyStageRatios[];
 
+//think effects meant to last all battle should go here rather than special status as that is cleared on switch
 struct BattleStruct //fill in unused fields when porting
 {
     u8 turnEffectsTracker;
@@ -707,6 +708,7 @@ struct BattleStruct //fill in unused fields when porting
     u16 overwrittenAbilities[MAX_BATTLERS_COUNT];    // abilities overwritten during battle (keep separate from battle history in case of switching)
     u8 battleBondTransformed[NUM_BATTLE_SIDES]; // Bitfield for each party.
     //u8 presentBasePower; //used for   multihit move effect check, but with my version don't need this
+    bool8 slowstartDone[MAX_BATTLERS_COUNT];
     // align 4
     union {
         struct LinkPartnerHeader linkPartnerHeader;

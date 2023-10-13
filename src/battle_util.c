@@ -1351,7 +1351,7 @@ static bool32 IsBelchPreventingMove(u32 battler, u32 move)
 
 bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget)  //somehow works...
 {
-    return ((GetBattlerAbility(battlerAttacker) == ABILITY_CORROSION && gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
+    return (((GetBattlerAbility(battlerAttacker) == ABILITY_CORROSION || GetBattlerAbility(battlerAttacker) == ABILITY_POISONED_LEGACY) && (gBattleMoves[gCurrentMove].split == SPLIT_STATUS))
         || !(IS_BATTLER_OF_TYPE(battlerTarget, TYPE_POISON) || IS_BATTLER_OF_TYPE(battlerTarget, TYPE_STEEL)));
 }
 
@@ -2879,6 +2879,7 @@ u8 DoBattlerEndTurnEffects(void)
                     && --gDisableStructs[gActiveBattler].slowStartTimer == 0
                     && ability == ABILITY_SLOW_START)
                 {
+                    gBattleStruct->slowstartDone[gActiveBattler] = TRUE;
                     BattleScriptExecute(BattleScript_SlowStartEnds);
                     ++effect;
                 }
@@ -4912,11 +4913,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             case ABILITY_SLOW_START:
                 if (!gSpecialStatuses[battler].switchInAbilityDone)
                 {
-                    gDisableStructs[battler].slowStartTimer = 4;    //keeping at 2, so won't be able to just freely setup on this mon
-                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SLOWSTART;   // nvm boosted dmg reduction, keep timer
-                    gSpecialStatuses[battler].switchInAbilityDone = TRUE;
-                    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-                    ++effect;
+                    if (!(gBattleStruct->slowstartDone[battler])) //set in end turn when timer ends, not reset on faint
+                    {
+                        gDisableStructs[battler].slowStartTimer = 3;    //keeping at 2, so won't be able to just freely setup on this mon
+                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SLOWSTART;   // nvm boosted dmg reduction, keep timer
+                        gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                        ++effect;
+                    }
                 }
                 break;
                 /*case ABILITY_UNNERVE: //this isn't fully setup, but effect shuold be enemy side can't eat berries if my ability is intake
@@ -5256,7 +5260,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (gBattleMons[battler].hp < (gBattleMons[battler].maxHP / 2))
                 {
                     u16 speed = gBattleMons[battler].speed;
-                    if (gSpecialStatuses[battler].defeatistActivated != 1)
+                    if (gSpecialStatuses[battler].defeatistActivated != 1) //done so doesn't  reactivate while on field if heal and hp falls again
                     {
 
                         if (gBattleMons[battler].statStages[STAT_ATK] > 0)
@@ -5469,10 +5473,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                         }
 
-                        gLastUsedItem = *changedItem = PickUpItem;
-                        PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem)
-                            gBattleMons[battler].item = gLastUsedItem;
-                        BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, battler, sizeof(gLastUsedItem), &gLastUsedItem);
+                        //gLastUsedItem = *changedItem = PickUpItem; consuimable pickup items not working right possible putting oin glastused too soon is issue
+                        *changedItem = PickUpItem; //think that was it, item battle effects function passes item to glastuseditem
+                        PREPARE_ITEM_BUFFER(gBattleTextBuff1, PickUpItem)
+                            gBattleMons[battler].item = PickUpItem;
+                        BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, battler, sizeof(PickUpItem), &PickUpItem);
                         MarkBattlerForControllerExec(battler);
                         BattleScriptExecute(BattleScript_InBattlePickup);
                         ++effect;
@@ -6003,7 +6008,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED
                     && (IsMoveMakingContact(move, gBattlerAttacker))
-                    && CanBePoisoned(gBattlerAttacker, gBattlerTarget)
+                    && CanBePoisoned(gBattlerTarget, gBattlerAttacker) //need remember battlerTarget is spot for one to be poisoned
                     && (Random() % 3) == 0)
                 {
                     gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_POISON;
@@ -6561,7 +6566,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && gBattleMons[gBattlerTarget].hp != 0
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
-                    && CanBePoisoned(gBattlerTarget, gBattlerAttacker)  //need test change
+                    && CanBePoisoned(gBattlerAttacker, gBattlerTarget)  //2nd value is battler meant to be poisoned
                     && IsMoveMakingContact(move, gBattlerAttacker)
                     && TARGET_TURN_DAMAGED // Need to actually hit the target
                     && (Random() % 3) == 0)
@@ -10651,18 +10656,18 @@ bool32 CanSleep(u8 battlerId)
     return TRUE;
 }
 
-bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget)
+bool32 CanBePoisoned(u8 PoisonUser, u8 PoisonTarget)
 {
-    u16 ability = GetBattlerAbility(battlerTarget);
+    u16 ability = GetBattlerAbility(PoisonTarget);
 
-    if (!(CanPoisonType(battlerAttacker, battlerTarget))
-        || gSideStatuses[GetBattlerSide(battlerTarget)] & SIDE_STATUS_SAFEGUARD
+    if (!(CanPoisonType(PoisonUser, PoisonTarget))
+        || gSideStatuses[GetBattlerSide(PoisonTarget)] & SIDE_STATUS_SAFEGUARD
         || ability == ABILITY_IMMUNITY
         || ability == ABILITY_COMATOSE
-        || IsAbilityOnSide(battlerTarget, ABILITY_PASTEL_VEIL)
-        || IsAbilityStatusProtected(battlerTarget)
-        || IsBattlerTerrainAffected(battlerTarget, STATUS_FIELD_MISTY_TERRAIN)
-        || ((gBattleMons[battlerTarget].status1) && gBattleMons[battlerTarget].status1 != STATUS1_POISON)) //if works should exclude status none, and poison
+        || IsAbilityOnSide(PoisonTarget, ABILITY_PASTEL_VEIL)
+        || IsAbilityStatusProtected(PoisonTarget)
+        || IsBattlerTerrainAffected(PoisonTarget, STATUS_FIELD_MISTY_TERRAIN)
+        || ((gBattleMons[PoisonTarget].status1) && gBattleMons[PoisonTarget].status1 != STATUS1_POISON)) //if works should exclude status none, and poison
         return FALSE;   
     return TRUE;
 }

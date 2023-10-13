@@ -1439,7 +1439,7 @@ static void atk00_attackcanceler(void) //vsonic
 
         }
     }
-    else if (gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND && gDisableStructs[gBattlerAttacker].bindedMove != MOVE_NONE) //if move already set/loced in
+    if (gDisableStructs[gBattlerAttacker].bindedMove != MOVE_NONE) //if move already set/loced in
     {
         if (gBattleMons[gBattlerAttacker].pp[gCurrMovePos] == 0) //if the selected move ran out of pp, during bind, use struggle
         {
@@ -4284,13 +4284,13 @@ void SetMoveEffect(bool32 primary, u32 certain)
             //put no effect check here, below ability checks above status1 check
             //needs else if here only to make sure it takes into account corrosion check from above
             //vsonic will need change move type checks to use getmovetype or check settypebeforeusingmove function to get actual move type
-            else if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS && battlerAbility != ABILITY_CORROSION)
+            else if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS && battlerAbility != ABILITY_CORROSION  && battlerAbility != ABILITY_POISONED_LEGACY)
             && gBattleMoves[gCurrentMove].type != TYPE_NORMAL
             && gBattleMoves[gCurrentMove].type != TYPE_GHOST)    
             {
                 gBattlescriptCurrInstr = BattleScript_NotAffected; //do jump
                 break;
-            }
+            }//think add poisoned legacy to this 
             
 
             /*if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_POISON))
@@ -4303,24 +4303,14 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;*/    //removed this line, has check in battlescript, think will just not do text string, there's no way to do it simply?
             //instead can just do jump in commands to set move effect toxic,  just need to remove poison with this function
             //think this shouldn't go here, status is set below this so it would set twice?
-            if (gBattleMons[gEffectBattler].status1 & STATUS1_POISON)
-            {
-                gBattleScripting.moveEffect = STATUS1_TOXIC_POISON; 
-                break; //should set toxic and skip resetting poison
-            } //OK THIS hopefully works.?   //should remove poison and set toxic, the missing part is setting toxic counter value
+             //OK THIS hopefully works.?   //should remove poison and set toxic, the missing part is setting toxic counter value
             //dont know if works as I want but it compiles
-            else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_POISONED_LEGACY
-                && (gBattleMons[gBattlerAttacker].hp < (gBattleMons[gBattlerAttacker].maxHP / 2)))
-            {
-                gBattleScripting.moveEffect = STATUS1_TOXIC_POISON; 
-                break; //if right should kick out of poison and move into toxic case where I 'll put the actuall effect
-
-            }
+            
            /* else if (gBattleMons[gEffectBattler].status1)   //realized i could keep this, if i use else if,  since thsi should mean if status1 not 0?
                 break;*/ //removed put comparative logic in ported function
             statusChanged = TRUE;
             break;
-        case STATUS1_SPIRIT_LOCK:
+        /*case STATUS1_SPIRIT_LOCK: //can set theese 2 up when reorddr status constants
             if ((battlerAbility == ABILITY_COMATOSE)// so when multi status is set will need to remove breaks
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
             { 
@@ -4348,6 +4338,34 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;
             statusChanged = TRUE;
             break;
+        case STATUS1_INFESTATION:
+            if ((battlerAbility == ABILITY_COMATOSE)// so when multi status is set will need to remove breaks
+             && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
+            { 
+                gLastUsedAbility = battlerAbility;
+                RecordAbilityBattle(gEffectBattler, gLastUsedAbility);
+                BattleScriptPush(gBattlescriptCurrInstr + 1);
+                gBattlescriptCurrInstr = BattleScript_PSNPrevention; //make uniuque sctript for infestation block
+                gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                return;
+            }
+
+            if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_BUG))
+                break;
+
+            //put no effect check here, below ability checks above status1 check
+            if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
+            && gBattleMoves[gCurrentMove].type != TYPE_NORMAL
+            && gBattleMoves[gCurrentMove].type != TYPE_GHOST)    
+            {
+                gBattlescriptCurrInstr = BattleScript_NotAffected; //do jump
+                break;
+            }
+
+            if (gBattleMons[gEffectBattler].status1)
+                break;
+            statusChanged = TRUE;
+            break;*/
         case STATUS1_BURN:
             if ((battlerAbility == ABILITY_WATER_VEIL
                 || battlerAbility == ABILITY_WATER_BUBBLE
@@ -4518,7 +4536,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattleMons[gEffectBattler].status1 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
                 gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
             } //moved here for clarity
-            else if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_TOXIC_POISON)
+            else if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_POISON)
             {
                 if (gBattleMons[gEffectBattler].status1 & STATUS1_POISON)//now i understand the note,
                 {   //the two lins are removing the status even though, the prior logic ensured that no status was set, ironically necessary for my changes
@@ -4528,14 +4546,38 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_POISON;
                     gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start above normal poison base dmg //will o 3/16
                     gBattlescriptCurrInstr = BattleScript_PoisonWorsened;
-                }  
+                }
                 else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_POISONED_LEGACY
                 && (gBattleMons[gBattlerAttacker].hp < (gBattleMons[gBattlerAttacker].maxHP / 2)))
                 {
                     gBattleMons[gEffectBattler].status1 &= ~(STATUS1_TOXIC_POISON);
                     gBattleMons[gEffectBattler].status1 &= ~(STATUS1_POISON); //extra protection
                     gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_POISON;
-                    gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start above normal poison base dmg
+                    gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);
+                    gBattlescriptCurrInstr = BattleScript_MoveEffectToxic; //setup its own message ability severely poisoned I think
+                    
+                }
+                else //normal poison setting
+                {
+                    gBattleMons[gEffectBattler].status1 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
+                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
+                }
+                
+            }
+            else if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_TOXIC_POISON)
+            {
+                if (GetBattlerAbility(gBattlerAttacker) == ABILITY_POISONED_LEGACY
+                && (gBattleMons[gBattlerAttacker].hp < (gBattleMons[gBattlerAttacker].maxHP / 2)))
+                {
+                    gBattleMons[gEffectBattler].status1 &= ~(STATUS1_TOXIC_POISON);
+                    gBattleMons[gEffectBattler].status1 &= ~(STATUS1_POISON); //extra protection
+                    gBattleMons[gEffectBattler].status1 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
+                    gBattleMons[gEffectBattler].status1 |= STATUS1_TOXIC_TURN(2);//attempting set toxic counter, to start above normal poison base dmg   
+                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
+                }
+                else //normal toxic setting
+                {
+                    gBattleMons[gEffectBattler].status1 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
                     gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
                 }
             }            
@@ -4547,7 +4589,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             gActiveBattler = gEffectBattler;
             BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gEffectBattler].status1);  //not really sure what this is doing but leave it
             MarkBattlerForControllerExec(gActiveBattler);
-           gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+           gBattleCommunication[MULTISTRING_CHOOSER] = 0; //add infestation and spirit lock when done to below
             // for synchronize / empath 
             if (gBattleScripting.moveEffect == MOVE_EFFECT_POISON
              || gBattleScripting.moveEffect == MOVE_EFFECT_TOXIC
@@ -9492,7 +9534,7 @@ static void atk62_hidepartystatussummary(void)
     gBattlescriptCurrInstr += 2;
 }
 
-static void atk63_jumptocalledmove(void)
+static void atk63_jumptocalledmove(void) //can't tell differenc between what these do
 {
     if (gBattlescriptCurrInstr[1]) //if not 0
         gCurrentMove = gCalledMove;
