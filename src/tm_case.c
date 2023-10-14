@@ -1816,7 +1816,7 @@ static void SpriteCb_MonIcon(struct Sprite *sprite)
 #undef sMonIconStill
 
 #define MON_ICON_START_X  0x10
-#define MON_ICON_START_Y  0x2a
+#define MON_ICON_START_Y  0x1d
 #define MON_ICON_PADDING  0x20
 
 
