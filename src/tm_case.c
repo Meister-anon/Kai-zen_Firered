@@ -259,12 +259,12 @@ static const struct WindowTemplate sWindowTemplates[] = {
     [WIN_DESCRIPTION] = {
         .bg = 0,
         .tilemapLeft = 12,
-        .tilemapTop = 10,
+        .tilemapTop = 9,
         .width = 18,
-        .height = 10,
+        .height = 11,
         .paletteNum = 10,
         .baseBlock = 0x13f
-    }, //or this is description //decrease top by 2 increase height by 2
+    }, //or this is description //decrease top by 3 increase height by 3
     [WIN_SELECTED_MSG] = {
         .bg = 1,
         .tilemapLeft = 5,
@@ -281,7 +281,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
         .width = 10,
         .height = 2,
         .paletteNum = 15,
-        .baseBlock = 0x235
+        .baseBlock = 0x255
     }, //think tm case name window? raised top by 1
     [WIN_MOVE_INFO_LABELS] = {
         .bg = 0,
@@ -290,7 +290,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
         .width = 5,
         .height = 8,
         .paletteNum = 12,
-        .baseBlock = 0x249
+        .baseBlock = 0x269
     }, //believe icons type power acc in box  //decrease top by 2 increase height by 2
     [WIN_MOVE_INFO] = {
         .bg = 0,
@@ -299,7 +299,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
         .width = 5,
         .height = 8,
         .paletteNum = 12,
-        .baseBlock = 0x275
+        .baseBlock = 0x295
     }, //think values that go with type power acc in box  //decrease top by 2 increase height by 2
     [WIN_MESSAGE] = {
         .bg = 1,
@@ -345,12 +345,12 @@ static const struct WindowTemplate sWindowTemplates2[] = {
     [WIN_DESCRIPTION] = {
         .bg = 0,
         .tilemapLeft = 12,
-        .tilemapTop = 10,
+        .tilemapTop = 9,
         .width = 18,
-        .height = 10,
+        .height = 11,
         .paletteNum = 10,
         .baseBlock = 0x13f
-    }, //or this is description //decrease top by 2 increase height by 2
+    }, //or this is description //decrease top by 3 increase height by 3
     [WIN_SELECTED_MSG] = {
         .bg = 1,
         .tilemapLeft = 5,
@@ -367,7 +367,7 @@ static const struct WindowTemplate sWindowTemplates2[] = {
         .width = 10,
         .height = 2,
         .paletteNum = 15,
-        .baseBlock = 0x235
+        .baseBlock = 0x255
     }, //think tm case name window? raised top by 1
     [WIN_MOVE_INFO_LABELS] = {
         .bg = 0,
@@ -376,7 +376,7 @@ static const struct WindowTemplate sWindowTemplates2[] = {
         .width = 5,
         .height = 8,
         .paletteNum = 12,
-        .baseBlock = 0x249
+        .baseBlock = 0x269
     }, //believe icons type power acc in box  //decrease top by 2 increase height by 2
     [WIN_MOVE_INFO] = {
         .bg = 0,
@@ -385,7 +385,7 @@ static const struct WindowTemplate sWindowTemplates2[] = {
         .width = 5,
         .height = 8,
         .paletteNum = 12,
-        .baseBlock = 0x275
+        .baseBlock = 0x295
     }, //think values that go with type power acc in box  //decrease top by 2 increase height by 2
     [WIN_MESSAGE] = {
         .bg = 1,

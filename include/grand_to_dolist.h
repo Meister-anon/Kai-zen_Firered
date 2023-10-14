@@ -1187,9 +1187,24 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
  defiant competitive also don't work for some reason, goes into infini loop when lowering stats smh
 
+ held item spirte/icon think too big to use in held item slot but think can use make file rules to build smaller versions
+ same idea as the logic for audio file compression for stuff that was too big
 
+ see if can setup rules to build files in a certain folder an extra smaller icon in a icon folder
+ so put all item graphics that can be held in a helditem folder  or just separate key items out
+ and make all icons in there compile smaller versions into a helditem_icon folder
 
+ also for physical special contact icons, isntead of one for each
+ make icons that are combinations of them, so don't have to worry about them
+ loading in separately
 
+ so. physical contact,  special contact
+ then, just physical  and just special
+
+ tm case decided I should go fuck myself -_-  
+ graphic glitches on both sets even though haven't even changed windows yet
+ but only when windows pop up i.e money window when trying to sell tm
+ title glitches when try to use tms
 
  //remember add FLY to more mon learnsets, refer to gFloatingSpecies list for starting point, note even pidgey learns fly, size irrelevant
  //emerald expansion changed how these are handled, more akin to levelup learnset, which removes the bit array limit allowing for many more learned moves
