@@ -443,12 +443,12 @@ const u8 gTypeEffectiveness[] = // 336 is number of entries x 3 i.e number of ef
     TYPE_FIGHTING, TYPE_STEEL, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_POISON, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_POISON, TYPE_FIGHTING, TYPE_MUL_SUPER_EFFECTIVE,   //poison resists fighting, usually type is super against what it resists, also poison spreads faster in more active, and best way to take out physically strong opponents
-    TYPE_POISON, TYPE_POISON, TYPE_MUL_NO_EFFECT,       //furthering of late gen poison can't be poisoned logic, also makes better as a pivot/defensive typing
     TYPE_POISON, TYPE_GROUND, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_POISON, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,  //cold slows spread of poison
-    TYPE_POISON, TYPE_ROCK, TYPE_MUL_NO_EFFECT,     //same as steel, not alive so not affecting by poison
     TYPE_POISON, TYPE_GHOST, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_POISON, TYPE_POISON, TYPE_MUL_NO_EFFECT,       //furthering of late gen poison can't be poisoned logic, also makes better as a pivot/defensive typing
     TYPE_POISON, TYPE_STEEL, TYPE_MUL_NO_EFFECT,
+    TYPE_POISON, TYPE_ROCK, TYPE_MUL_NO_EFFECT,     //same as steel, not alive so not affecting by poison
     TYPE_POISON, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_GROUND, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,  //logic water in the ground gets frozen earth cant shift/move
     TYPE_GROUND, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,

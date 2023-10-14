@@ -1351,7 +1351,7 @@ static bool32 IsBelchPreventingMove(u32 battler, u32 move)
 
 bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget)  //somehow works...
 {
-    return (((GetBattlerAbility(battlerAttacker) == ABILITY_CORROSION || GetBattlerAbility(battlerAttacker) == ABILITY_POISONED_LEGACY) && (gBattleMoves[gCurrentMove].split == SPLIT_STATUS))
+    return (((GetBattlerAbility(battlerAttacker) == ABILITY_CORROSION) && (gBattleMoves[gCurrentMove].split == SPLIT_STATUS))
         || !(IS_BATTLER_OF_TYPE(battlerTarget, TYPE_POISON) || IS_BATTLER_OF_TYPE(battlerTarget, TYPE_STEEL)));
 }
 
@@ -3811,7 +3811,7 @@ u8 AtkCanceller_UnableToUseMove2(void)
 //2nd pass add ghosts to grounded clause  with specific exclusions spirit tomb cursola galarian corsola etc object linked ghost, just like doduo
 //looked over and realized still mising some pokemon that float, but aren't flying types, and also just don't get levitate
 //i.e porygon and magnemite line, may be others
-const u16 gFloatingSpecies[152] = {
+const u16 gFloatingSpecies[153] = {
     SPECIES_BEAUTIFLY,
     SPECIES_DUSTOX,
     SPECIES_BEEDRILL,
@@ -3841,6 +3841,7 @@ const u16 gFloatingSpecies[152] = {
     SPECIES_LEDYBA,
     SPECIES_LEDIAN,
     SPECIES_CELEBI,
+    SPECIES_TOGETIC,
     SPECIES_ALTARIA,
     SPECIES_ALTARIA_MEGA,
     SPECIES_LUNATONE,

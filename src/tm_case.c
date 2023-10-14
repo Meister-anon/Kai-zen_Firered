@@ -28,6 +28,54 @@
 
 #define TM_CASE_TM_TAG 400 //figure what this is as well. vsonic
 
+//port from upgraded pret, most unused current just using win ids
+
+#define TAG_SCROLL_ARROW 110
+
+enum {
+    WIN_LIST,
+    WIN_DESCRIPTION,
+    WIN_SELECTED_MSG,
+    WIN_TITLE,
+    WIN_MOVE_INFO_LABELS,
+    WIN_MOVE_INFO,
+    WIN_MESSAGE,
+    WIN_SELL_QUANTITY,
+    WIN_MONEY,
+};
+
+// Window IDs for the context menu that opens when a TM/HM is selected
+enum {
+    WIN_USE_GIVE_EXIT,
+    WIN_GIVE_EXIT,
+};
+
+// IDs for the actions in the context menu
+enum {
+    ACTION_USE,
+    ACTION_GIVE,
+    ACTION_EXIT
+};
+
+enum {
+    COLOR_LIGHT,
+    COLOR_DARK,
+    COLOR_CURSOR_SELECTED,
+    COLOR_MOVE_INFO,
+    COLOR_CURSOR_ERASE = 0xFF
+};
+
+// Base position for TM/HM disc sprite
+#define DISC_BASE_X 41
+#define DISC_BASE_Y 46
+
+#define DISC_CASE_DISTANCE 20 // The total number of pixels a disc travels vertically in/out of the case
+#define DISC_Y_MOVE 10 // The number of pixels a disc travels vertically per movement step
+
+#define TAG_DISC 400
+
+#define DISC_HIDDEN 0xFF // When no TM/HM is selected, hide the disc sprite
+
 struct UnkStruct_203B10C
 {
     void (* savedCallback)(void);
@@ -192,13 +240,184 @@ static const u8 sText_SingleSpace[] = _(" ");
 static ALIGNED(4) const u16 sPal3Override[] = {RGB(8, 8, 8), RGB(30, 16, 6)};
 
 static const u8 sTextColors[][3] = {
-    {0, 1, 2},
-    {0, 2, 3},
-    {0, 3, 6},
-    {0, 14, 10}
+    [COLOR_LIGHT] = {0, 1, 2},
+    [COLOR_DARK] = {0, 2, 3},
+    [COLOR_CURSOR_SELECTED] = {0, 3, 6},
+    [COLOR_MOVE_INFO] = {0, 14, 10},
+};
+
+static const struct WindowTemplate sWindowTemplates[] = {
+    [WIN_LIST] = {
+        .bg = 0,
+        .tilemapLeft = 10,
+        .tilemapTop = 1,
+        .width = 19,
+        .height = 8,
+        .paletteNum = 15,
+        .baseBlock = 0x081
+    },//is item list not tm case decrease height by 2
+    [WIN_DESCRIPTION] = {
+        .bg = 0,
+        .tilemapLeft = 12,
+        .tilemapTop = 10,
+        .width = 18,
+        .height = 10,
+        .paletteNum = 10,
+        .baseBlock = 0x13f
+    }, //or this is description //decrease top by 2 increase height by 2
+    [WIN_SELECTED_MSG] = {
+        .bg = 1,
+        .tilemapLeft = 5,
+        .tilemapTop = 15,
+        .width = 15,
+        .height = 4,
+        .paletteNum = 13,
+        .baseBlock = 0x1f9
+    },
+    [WIN_TITLE] = {
+        .bg = 0,
+        .tilemapLeft = 0,
+        .tilemapTop = 0,
+        .width = 10,
+        .height = 2,
+        .paletteNum = 15,
+        .baseBlock = 0x235
+    }, //think tm case name window? raised top by 1
+    [WIN_MOVE_INFO_LABELS] = {
+        .bg = 0,
+        .tilemapLeft = 1,
+        .tilemapTop = 11,
+        .width = 5,
+        .height = 8,
+        .paletteNum = 12,
+        .baseBlock = 0x249
+    }, //believe icons type power acc in box  //decrease top by 2 increase height by 2
+    [WIN_MOVE_INFO] = {
+        .bg = 0,
+        .tilemapLeft = 7,
+        .tilemapTop = 11,
+        .width = 5,
+        .height = 8,
+        .paletteNum = 12,
+        .baseBlock = 0x275
+    }, //think values that go with type power acc in box  //decrease top by 2 increase height by 2
+    [WIN_MESSAGE] = {
+        .bg = 1,
+        .tilemapLeft = 2,
+        .tilemapTop = 15,
+        .width = 26,
+        .height = 4,
+        .paletteNum = 11,
+        .baseBlock = 0x295
+    },
+    [WIN_SELL_QUANTITY] = {
+        .bg = 1,
+        .tilemapLeft = 17,
+        .tilemapTop = 9,
+        .width = 12,
+        .height = 4,
+        .paletteNum = 15,
+        .baseBlock = 0x2fd
+    },
+    [WIN_MONEY] = {
+        .bg = 1,
+        .tilemapLeft = 1,
+        .tilemapTop = 1,
+        .width = 8,
+        .height = 3,
+        .paletteNum = 13,
+        .baseBlock = 0x32d
+    },
+    DUMMY_WIN_TEMPLATE
 };
 
 
+static const struct WindowTemplate sWindowTemplates2[] = {
+    [WIN_LIST] = {
+        .bg = 0,
+        .tilemapLeft = 14,
+        .tilemapTop = 1,
+        .width = 15,
+        .height = 8,
+        .paletteNum = 15,
+        .baseBlock = 0x081
+    }, //is item list not tm case decrease height by 2
+    [WIN_DESCRIPTION] = {
+        .bg = 0,
+        .tilemapLeft = 12,
+        .tilemapTop = 10,
+        .width = 18,
+        .height = 10,
+        .paletteNum = 10,
+        .baseBlock = 0x13f
+    }, //or this is description //decrease top by 2 increase height by 2
+    [WIN_SELECTED_MSG] = {
+        .bg = 1,
+        .tilemapLeft = 5,
+        .tilemapTop = 15,
+        .width = 15,
+        .height = 4,
+        .paletteNum = 15,
+        .baseBlock = 0x1f9
+    },
+    [WIN_TITLE] = {
+        .bg = 0,
+        .tilemapLeft = 0,
+        .tilemapTop = 0,
+        .width = 10,
+        .height = 2,
+        .paletteNum = 15,
+        .baseBlock = 0x235
+    }, //think tm case name window? raised top by 1
+    [WIN_MOVE_INFO_LABELS] = {
+        .bg = 0,
+        .tilemapLeft = 1,
+        .tilemapTop = 11,
+        .width = 5,
+        .height = 8,
+        .paletteNum = 12,
+        .baseBlock = 0x249
+    }, //believe icons type power acc in box  //decrease top by 2 increase height by 2
+    [WIN_MOVE_INFO] = {
+        .bg = 0,
+        .tilemapLeft = 7,
+        .tilemapTop = 11,
+        .width = 5,
+        .height = 8,
+        .paletteNum = 12,
+        .baseBlock = 0x275
+    }, //think values that go with type power acc in box  //decrease top by 2 increase height by 2
+    [WIN_MESSAGE] = {
+        .bg = 1,
+        .tilemapLeft = 2,
+        .tilemapTop = 15,
+        .width = 26,
+        .height = 4,
+        .paletteNum = 11,
+        .baseBlock = 0x295
+    },
+    [WIN_SELL_QUANTITY] = {
+        .bg = 1,
+        .tilemapLeft = 17,
+        .tilemapTop = 9,
+        .width = 12,
+        .height = 4,
+        .paletteNum = 15,
+        .baseBlock = 0x2fd
+    },
+    [WIN_MONEY] = {
+        .bg = 1,
+        .tilemapLeft = 1,
+        .tilemapTop = 1,
+        .width = 8,
+        .height = 3,
+        .paletteNum = 13,
+        .baseBlock = 0x32d
+    },
+    DUMMY_WIN_TEMPLATE
+};
+
+/*
 static const struct WindowTemplate sWindowTemplates[] = {
     {0x00, 0x0a, 0x01, 0x13, 0x0a, 0x0f, 0x0081},
     {0x00, 0x0c, 0x0c, 0x12, 0x08, 0x0a, 0x013f},
@@ -226,6 +445,7 @@ static const struct WindowTemplate sWindowTemplates2[] = {
     {0x01, 0x01, 0x01, 0x08, 0x03, 0x0d, 0x031d},
     DUMMY_WIN_TEMPLATE
 }; //version from port for tm case update
+*/
 
 
 static const struct WindowTemplate sYesNoWindowTemplate = {0x01, 0x15, 0x09, 0x06, 0x04, 0x0f, 0x0335};

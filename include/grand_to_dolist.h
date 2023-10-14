@@ -1128,7 +1128,11 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  that seems to be happening for all things done via passive damage?  had bind status and got killed but my mon didnt do faint animation before whiteout
  ok so faint animation is just not playing as a result of battle now?? weird
 
+  bind logic is half working, way I have it rn,  a faster bind mon will force target into a random move.
+  but they aren't locked into it, and can select another one, but using the locked move directly seems to cause freeze?
+
  also  low kick buff seems to not be as impactful as I thought  had weight values too high, lowered field and adjusted power works better now
+ -fixed, 
 
  saw video that mentioned omega ruby had portable berry trees, rather than needing to go around and plant in patches of soil
  so if I do that instead, and have a key item like the egg incubator where I can store 3-5 berry pots/trees I can carry with me
@@ -1175,24 +1179,17 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  1 2 poof deleted baby doll eyes and learned baby doll eyes,...actually nvm it completely replaced my first move...
  even though I declined to learn the move   sigh
 
+ also forgot evo moves that are auto learned don't populate the screen i.e lvl 0 moves
+ i.e learn 2 moves on evo from lvl 0, so but then learn a move from level up in the evo
+ the lvl 0 moves dont show up so you're unable to replace them in the move learn screen
+ only the moves you had prior to evo are displayed,
+ but after evo they are shown
+
  defiant competitive also don't work for some reason, goes into infini loop when lowering stats smh
 
- but no the type bug glitch does NOT go both ways, it only goes from wilds into trainer, where it works wrong,
- it doesn't go from working correclty in trainer to working correctly in wild
-
- meaning somehow a value isn't getting read correctly, or isn't being written?
- type bug is affecting both player and enemy side
-
- further testing way it appears to work is, if mon is not alraedya normal type one of iits type is replaed with type normal
- (or potentially type3 is getting set to type normal?)  attaked caterpie and it was neutral not resisted need test with weedle
- that's double resist so single super would make not effetive but if type 2 was being replaced it'd still be neutral.
- that way I can know for sure  which of the two scenarios is happening
-
- ok foud a kakuna hit it, and effect was not very effective, meaning, it was the 3rd type like expected very odd, that should be set to type mystery in every instance
- idk why its being set to normal
 
 
- the key is going to be the function responsible for setting mon data to battle data for wilds and trainer battle etc.
+
 
  //remember add FLY to more mon learnsets, refer to gFloatingSpecies list for starting point, note even pidgey learns fly, size irrelevant
  //emerald expansion changed how these are handled, more akin to levelup learnset, which removes the bit array limit allowing for many more learned moves
@@ -1250,7 +1247,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
         with priority given to moves with stab
 
     ...I think my crit isn't working??,  I've been using high crit moves but never getting a single crit, it worked before...
-    (made new ability block crit functnion testing) - works crit is working again
+    (made new ability block crit functnion to replace else if or logic, testing) - works crit is working again
 
     need update stat drop ai logic for new abilities that block stat drops did that for leaf gaurd to test,
     trainers dont use stat dropping moves if found the correct ability, but wilds still ignore ability which is fine I guess
@@ -1292,12 +1289,12 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   //pick up seems to have glitc, not properlu clearing consumable items? either that
   or I just don't have berry juice setup right, it healed twice because it wasn't removed
 
-  but after second heal it then read as consumed so pickup was able to apply new item
+  but after second heal it then read as consumed so pickup was able to apply new item - think fixed
 
   //didn't realize items in gen 3 didn't use the actual icon sprite, and instead use a general icon symbol
   //would like to change to icon sprite shuold be possible since can be used for knock off?
 
-  //its pickup berry juice is an gen 2 effect so its base code is fine
+
 
   also need that for eviolite changes to make sense
 
@@ -1313,6 +1310,17 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   use them to make the medicines like revival powder etc. or the herbs
 
   falseswipegaming change slow start give flag to make sure it doesn't retrigger
+  -done think
+
+  //issue with poison setting when on mon that cant be poisoned i.e poison on poison poison type - priority
+  only happens on instance when it would actually set poison so issue must be setmoveefect function
+
+  ok weird thing changed effect chance, it only happens when its 0, i.e set to certain, but doesn't happen at 100 for some reason??
+    -fixed problem was how I setup certain effect in seteffectwithchance
+
+    -need fix multitask setup works for fury cut but not multitask for some reason
+
+ //broken leech seed on top of target poison/toxic breaks game..  force switch out weird stuff
 
  fixed intro trainer select text
  ...using constrict on wondergaurd shedinja breaks game...causes freeze   going over changes I realized - think fixed, missed a part of status stuff (double check)

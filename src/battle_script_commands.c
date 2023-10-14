@@ -4157,7 +4157,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
 {
 
     u32 flags = 0;
-    u16 battlerAbility;
+    u16 battlerAbility, AttackerAbility;
     bool32 statusChanged = FALSE;
     s32 affectsUser, byTwo, i = 0; // 0x40 otherwise
     bool32 mirrorArmorReflected = ((GetBattlerAbility(gBattlerTarget) == ABILITY_MIRROR_ARMOR) || (GetBattlerAbility(gBattlerTarget) == ABILITY_EMPATH));
@@ -4193,6 +4193,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
         return;
     }
     battlerAbility = GetBattlerAbility(gEffectBattler); //port      is for target ability
+    AttackerAbility = GetBattlerAbility(gBattlerAttacker);   //for attacker ability
 
     // Just in case this flag is still set
     gBattleScripting.moveEffect &= ~MOVE_EFFECT_CERTAIN;
@@ -4284,7 +4285,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             //put no effect check here, below ability checks above status1 check
             //needs else if here only to make sure it takes into account corrosion check from above
             //vsonic will need change move type checks to use getmovetype or check settypebeforeusingmove function to get actual move type
-            else if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS && battlerAbility != ABILITY_CORROSION  && battlerAbility != ABILITY_POISONED_LEGACY)
+            else if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS && AttackerAbility != ABILITY_CORROSION && AttackerAbility != ABILITY_POISONED_LEGACY)
             && gBattleMoves[gCurrentMove].type != TYPE_NORMAL
             && gBattleMoves[gCurrentMove].type != TYPE_GHOST)    
             {
@@ -4297,8 +4298,10 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;
             if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_STEEL))
                 break;  */
+
             if (!(CanBePoisoned(gBattleScripting.battler, gEffectBattler)))
                 break;
+
             /*if (gBattleMons[gEffectBattler].status1)
                 break;*/    //removed this line, has check in battlescript, think will just not do text string, there's no way to do it simply?
             //instead can just do jump in commands to set move effect toxic,  just need to remove poison with this function
@@ -4310,6 +4313,19 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;*/ //removed put comparative logic in ported function
             statusChanged = TRUE;
             break;
+            
+            /*if (CanBePoisoned(gBattleScripting.battler, gEffectBattler))
+            {
+                   
+                statusChanged = TRUE;
+                break;
+            }
+            else if (!(CanPoisonType(gBattleScripting.battler, gEffectBattler)))
+            {
+                gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
+            }
+            break;*/
+            
         /*case STATUS1_SPIRIT_LOCK: //can set theese 2 up when reorddr status constants
             if ((battlerAbility == ABILITY_COMATOSE)// so when multi status is set will need to remove breaks
              && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
@@ -4495,10 +4511,9 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;
             //put no effect check here, below ability checks above status1 check
             //I guess put this here? its passed most checks
-            else if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS && battlerAbility != ABILITY_CORROSION)
+            else if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS && AttackerAbility != ABILITY_CORROSION && AttackerAbility != ABILITY_POISONED_LEGACY)
             && (gBattleMoves[gCurrentMove].type != TYPE_NORMAL
-            && gBattleMoves[gCurrentMove].type != TYPE_GHOST) 
-            && !(GetBattlerAbility(gBattlerAttacker) == ABILITY_CORROSION))   //extra protection to make sure doesn't overwrite ability logic
+            && gBattleMoves[gCurrentMove].type != TYPE_GHOST))   //extra protection to make sure doesn't overwrite ability logic
             {
                 gBattlescriptCurrInstr = BattleScript_NotAffected; //do jump
                 break;
@@ -5360,8 +5375,9 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
     //rather than doing all this can replace with if secondary effect chance equals 0, set certain
     //triggers for effect when secondary effect chance is 0, and erroneously for argument if secondary effect chance is 0, and argument effect chance is 0
     //last case should not happen as I should have arugment chance set for moves that dont have secondary effect chance already.
-    if (percentChance == 0)
-        SetMoveEffect(0, MOVE_EFFECT_CERTAIN); 
+    if (percentChance == 0) //seems to have issue when using certain on no effect moves so preventing that here
+        gBattleScripting.moveEffect |= MOVE_EFFECT_CERTAIN;  //ok I don't know difference but this works without issue 
+        //SetMoveEffect(0, MOVE_EFFECT_CERTAIN); 
         //think this was issue for effects always procing, not proper exclusions/checks on this
         //added them above, testing
 
@@ -5390,7 +5406,7 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
     {
         if ((gBattleMoves[gCurrentMove].effect == EFFECT_POISON_HIT || gBattleMoves[gCurrentMove].effect == EFFECT_TOXIC_FANG)
            || (gBattleMoves[gCurrentMove].argument == EFFECT_POISON_HIT || gBattleMoves[gCurrentMove].argument == EFFECT_TOXIC_FANG))
-            SetMoveEffect(0, MOVE_EFFECT_CERTAIN);  //gauranteed poison
+            gBattleScripting.moveEffect |= MOVE_EFFECT_CERTAIN;  //gauranteed poison
     }
 
     /*if (gBattleMoves[gCurrentMove].effect == EFFECT_RECHARGE) 
