@@ -1199,8 +1199,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  think best fix is just make switchout abilities case after switchin abilities then use switchout abilities done flag
  similar to how switchin abilities done works. - well nvm fixed aftermath, it mostly worked I just forgot to put the ability removal back
 
- note * change run logic to work off battle speed stat, not just base stat
+- fixed mon cries, issue was firered table was in diff order than emerald table, prob because of 
+ the firered weird bit table logic default used.
  
+ note * change run logic to work off battle speed stat, not just base stat
+
+ also eventually go back to summary screen move descriptnions graphics and adjust lines 1 , 2, 5, & 6
+ first group is too high,  2nd group is too low
+ couldn't fit with existing tileset prob need to expand and add on to image
 
  also for physical special contact icons, isntead of one for each
  make icons that are combinations of them, so don't have to worry about them

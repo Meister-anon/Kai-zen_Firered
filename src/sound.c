@@ -275,11 +275,11 @@ void FadeInNewBGM(u16 songNum, u8 speed)
 {
     if (gDisableMusic)
         songNum = 0;
-    if (songNum == 0xFFFF)
+    if (songNum == MUS_NONE)
         songNum = 0;
     m4aSongNumStart(songNum);
     m4aMPlayImmInit(&gMPlayInfo_BGM);
-    m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 0);
+    m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 0);
     m4aSongNumStop(songNum);
     m4aMPlayFadeIn(&gMPlayInfo_BGM, speed);
 }
@@ -317,27 +317,27 @@ bool8 IsBGMStopped(void)
 
 void PlayCry_Normal(u16 species, s8 pan)
 {
-    m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 85);
-    PlayCryInternal(species, pan, CRY_VOLUME, 10, 0);
+    m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 85);
+    PlayCryInternal(species, pan, CRY_VOLUME, CRY_PRIORITY_NORMAL, CRY_MODE_NORMAL);
     gPokemonCryBGMDuckingCounter = 2;
     RestoreBGMVolumeAfterPokemonCry();
 }
 
 void PlayCry_NormalNoDucking(u16 species, s8 pan, s8 volume, u8 priority)
 {
-    PlayCryInternal(species, pan, volume, priority, 0);
+    PlayCryInternal(species, pan, volume, priority, CRY_MODE_NORMAL);
 }
 
 void PlayCry_ByMode(u16 species, s8 pan, u8 mode)
 {
-    if (mode == 1)
+    if (mode == CRY_MODE_DOUBLES)
     {
-        PlayCryInternal(species, pan, CRY_VOLUME, 10, 1);
+        PlayCryInternal(species, pan, CRY_VOLUME, CRY_PRIORITY_NORMAL, mode);
     }
     else
     {
-        m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 85);
-        PlayCryInternal(species, pan, CRY_VOLUME, 10, mode);
+        m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 85);
+        PlayCryInternal(species, pan, CRY_VOLUME, CRY_PRIORITY_NORMAL, mode);
         gPokemonCryBGMDuckingCounter = 2;
         RestoreBGMVolumeAfterPokemonCry();
     }
@@ -345,21 +345,23 @@ void PlayCry_ByMode(u16 species, s8 pan, u8 mode)
 
 void PlayCry_ReleaseDouble(u16 species, s8 pan, u8 mode)
 {
-    if (mode == 1)
+    if (mode == CRY_MODE_DOUBLES)
     {
-        PlayCryInternal(species, pan, CRY_VOLUME, 10, 1);
+        PlayCryInternal(species, pan, CRY_VOLUME, CRY_PRIORITY_NORMAL, mode);
     }
     else
     {
         if (!(gBattleTypeFlags & BATTLE_TYPE_MULTI))
-            m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 85);
-        PlayCryInternal(species, pan, CRY_VOLUME, 10, mode);
+            m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 85);
+        PlayCryInternal(species, pan, CRY_VOLUME, CRY_PRIORITY_NORMAL, mode);
     }
 }
 
 // PlayCry5 and 6 are not in FR/LG.
 
-void PlayCry7(u16 species, u8 mode) // exclusive to FR/LG
+// exclusive to FR/LG
+//-no it isn't its local version of PlayCry_Script,  same just with quest log logic too
+void PlayCry7(u16 species, u8 mode) 
 {
     if (!QL_IS_PLAYBACK_STATE)
     {
@@ -377,10 +379,7 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
     u32 length;
     u32 pitch;
     u32 chorus;
-    u32 index;
-    u8 table;
 
-    species--;
     length = 140;
     reverse = FALSE;
     release = 0;
@@ -466,68 +465,10 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
     SetPokemonCryPriority(priority);
 
     //other logic is hard to line up, so will attempt to use the emerald expansion version and bypass all that
+    species--;
     gMPlay_PokemonCry = SetPokemonCryTone(reverse ? &gCryTable2[species] : &gCryTable[species]);
 
-    /*
-    // This is a fancy way to get a cry of a pokemon.
-    // It creates 4 sets of 128 mini cry tables.
-    // If you wish to expand pokemon, you need to
-    // append new cases to the switch.
-    species = SpeciesToCryId(species);
-    index = species & 0x7F;
-    table = species / 128;
-    // oringal species was 412  412/128=3 hence the * 3 ending. I need divide my total species 1207/128
-    //actually forms use same cry, so I only need individual species? idk, the right answer is either 898 or 1207
-    //if I assume same cry for alt species, that leaves megas, I have 50 mega evos. +5 for therian and kyurem forms. maybe +1 for galarian slowpoke
-    //+ 1 for floette enternal flower form... ok both numbers break evenly, I'm just gonna use the biggest number and not worry about exacts.
-    //for 898 its 7, for 1207 its 9   ok they don't break even calculator app just doesn't show decimal places.
-    switch (table)
-    {
-    case 0:
-        gMPlay_PokemonCry = SetPokemonCryTone(
-            v0 ? &gCryTable2[(128 * 0) + index] : &gCryTable[(128 * 0) + index]);
-        break;
-    case 1:
-        gMPlay_PokemonCry = SetPokemonCryTone(
-            v0 ? &gCryTable2[(128 * 1) + index] : &gCryTable[(128 * 1) + index]);
-        break;
-    case 2:
-        gMPlay_PokemonCry = SetPokemonCryTone(
-            v0 ? &gCryTable2[(128 * 2) + index] : &gCryTable[(128 * 2) + index]);
-        break;
-    case 3:
-        gMPlay_PokemonCry = SetPokemonCryTone(
-            v0 ? &gCryTable2[(128 * 3) + index] : &gCryTable[(128 * 3) + index]);
-        break;
-    case 4:
-        gMPlay_PokemonCry = SetPokemonCryTone(
-            v0 ? &gCryTable2[(128 * 4) + index] : &gCryTable[(128 * 4) + index]);
-        break;
-    case 5:
-        gMPlay_PokemonCry = SetPokemonCryTone(
-            v0 ? &gCryTable2[(128 * 5) + index] : &gCryTable[(128 * 5) + index]);
-        break;
-    case 6:
-        gMPlay_PokemonCry = SetPokemonCryTone(
-            v0 ? &gCryTable2[(128 * 6) + index] : &gCryTable[(128 * 6) + index]);
-        break;
-    case 7:
-        gMPlay_PokemonCry = SetPokemonCryTone(
-            v0 ? &gCryTable2[(128 * 7) + index] : &gCryTable[(128 * 7) + index]);
-        break;
-    case 8:
-        gMPlay_PokemonCry = SetPokemonCryTone(
-            v0 ? &gCryTable2[(128 * 8) + index] : &gCryTable[(128 * 8) + index]);
-        break;
-    case 9:
-        gMPlay_PokemonCry = SetPokemonCryTone(
-            v0 ? &gCryTable2[(128 * 9) + index] : &gCryTable[(128 * 9) + index]);
-        break;
-    case 10:
-        gMPlay_PokemonCry = SetPokemonCryTone(
-            v0 ? &gCryTable2[(128 * 10) + index] : &gCryTable[(128 * 10) + index]);
-        break;
-    }*/
+    
 }
 
 bool8 IsCryFinished(void)

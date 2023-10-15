@@ -263,7 +263,7 @@ const u8 gMoveDescription_Flatter[] = _("Flattery is used to\nconfuse the foe,\n
 const u8 gMoveDescription_WillOWisp[] = _("A sinister, bluish\nwhite flame is shot\nat the foe to\ninflict a burn.");
 const u8 gMoveDescription_Memento[] = _("The user faints,\nbut sharply lowers\nthe foe's ATTACK\nand SP. ATK.");
 const u8 gMoveDescription_Facade[] = _("An attack that is\nboosted if user is\nburned, poisoned,\nor paralyzed.");
-const u8 gMoveDescription_FocusPunch[] = _("A punch that targets\nthe foe's weak spot\nmust recharge after.\nHas a high chance\nto make the foe\nflinch.");
+const u8 gMoveDescription_FocusPunch[] = _("A punch that hits\nthe foe's weak spot\nThen must recharge.\nHas a high chance\nto make the foe\nflinch.");
 const u8 gMoveDescription_SmellingSalt[] = _("Doubly effective on\na paralyzed foe,\nbut it also cures\nthe foe's paralysis.");
 const u8 gMoveDescription_FollowMe[] = _("The user draws\nattention to itself,\nmaking foes attack\nonly the user.");
 const u8 gMoveDescription_NaturePower[] = _("An attack that\nchanges type\ndepending on the\nuser's location.");
@@ -355,7 +355,7 @@ const u8 gMoveDescription_WaterPulse[] = _("An attack with a\npulsing blast of\n
 const u8 gMoveDescription_DoomDesire[] = _("A move that attacks\nthe foe with a\nblast of light two\nturns after use.");
 const u8 gMoveDescription_PsychoBoost[] = _("An intense attack\nthat also sharply\nreduces the user's\nSP. ATK stat.");
 
-//NEW values    -   rules for reading space, 20 chars per line,  5 line breaks. read number letters per word, n # of words, then add number of spaces which is n - 1
+//NEW values    -   rules for reading space, 19 chars per line,  5 line breaks. read number letters per word, n # of words, then add number of spaces which is n - 1
 const u8 gMoveDescription_Roost[] = _("Restores the user's HP by\nhalf of its max HP.");
 const u8 gMoveDescription_Gravity[] = _("Gravity intensifies\ngrounds floating\nPKMN.\nMoves that involve\nflying can’t be used.");
 const u8 gMoveDescription_MiracleEye[] = _("Makes GHOSTS and\nevasive foes easier\nto hit.");
@@ -1466,7 +1466,7 @@ const u8 gMoveDescription_CheapShot[] = _("The user throws\nan unexpected\ndelay
 const u8 gMoveDescription_Snowball[] = _("The user throws\nan compact ball\nof snow and ice\nof varying size\nand power at\nthe target.");
 
 
-    //Description can hold 5 line breaks (so 6 lines total) given current space post expansion!  at approx 20 chars per line// so 120 max
+    //Description can hold 5 line breaks (so 6 lines total) given current space post expansion!  at approx 19 chars per line// so 114 max ( + 5 for escape chars)
 
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [MOVE_NONE         ] = gMoveDescription_Pound,
