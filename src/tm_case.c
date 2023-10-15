@@ -846,7 +846,8 @@ static void TMCase_MoveCursor_UpdatePrintedDescription(s32 itemIndex)
     AddTextPrinterParameterized_ColorByIndex(1, 2, str, 2, 3, 1, 0, 0, 0);
 
     // update icons
-    TintPartyMonIcons(itemId - ITEM_TM01);
+    if (sSelectTMActionTasks[sTMCaseStaticResources.tmCaseMenuType] != sSelectTMActionTasks[2])
+        TintPartyMonIcons(itemId - ITEM_TM01);
 }
 
 static void FillBG2RowWithPalette_2timesNplus1(s32 a0)
