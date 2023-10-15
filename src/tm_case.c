@@ -875,13 +875,13 @@ static void PrintListMenuCursorAt_WithColorIdx(u8 a0, u8 a1)
 
 static void CreateTMCaseScrollIndicatorArrowPair_Main(void)
 {
-    sTMCaseDynamicResources->scrollIndicatorArrowPairId = AddScrollIndicatorArrowPairParameterized(2, 0xA0, 0x08, 0x58, sTMCaseDynamicResources->numTMs - sTMCaseDynamicResources->maxTMsShown + 1, 0x6E, 0x6E, &sTMCaseStaticResources.scrollOffset);
+    sTMCaseDynamicResources->scrollIndicatorArrowPairId = AddScrollIndicatorArrowPairParameterized(2, 0xA0, 0x08, 0x3d, sTMCaseDynamicResources->numTMs - sTMCaseDynamicResources->maxTMsShown + 1, 0x6E, 0x6E, &sTMCaseStaticResources.scrollOffset);
 }
 
 static void CreateTMCaseScrollIndicatorArrowPair_SellQuantitySelect(void)
 {
     sTMCaseDynamicResources->currItem = 1;
-    sTMCaseDynamicResources->scrollIndicatorArrowPairId = AddScrollIndicatorArrowPairParameterized(2, 0x98, 0x48, 0x68, 2, 0x6E, 0x6E, &sTMCaseDynamicResources->currItem);
+    sTMCaseDynamicResources->scrollIndicatorArrowPairId = AddScrollIndicatorArrowPairParameterized(2, 0x98, 0x48, 0x4d, 2, 0x6E, 0x6E, &sTMCaseDynamicResources->currItem);
 }
 
 static void RemoveTMCaseScrollIndicatorArrowPair(void)
@@ -912,7 +912,7 @@ static void TMCaseSetup_GetTMCount(void)
             break;
         sTMCaseDynamicResources->numTMs++;
     }
-    sTMCaseDynamicResources->maxTMsShown = min(sTMCaseDynamicResources->numTMs + 1, 5);
+    sTMCaseDynamicResources->maxTMsShown = min(sTMCaseDynamicResources->numTMs + 1, 3); //determines how many tms to display on screen, was 5 with grhaphic change swap to 3
 }
 
 static void TMCaseSetup_InitListMenuPositions(void)
@@ -931,12 +931,12 @@ static void TMCaseSetup_InitListMenuPositions(void)
     }
 }
 
-static void TMCaseSetup_UpdateVisualMenuOffset(void)
+static void TMCaseSetup_UpdateVisualMenuOffset(void) //think this is scroll effect, when you scroll passed more than 3 values it "scrolls" to update position
 {
     u8 i;
-    if (sTMCaseStaticResources.selectedRow > 3)
+    if (sTMCaseStaticResources.selectedRow > 1) //adjusted for new graphic from 3 to 1, hope work
     {
-        for (i = 0; i <= sTMCaseStaticResources.selectedRow - 3 && sTMCaseStaticResources.scrollOffset + sTMCaseDynamicResources->maxTMsShown != sTMCaseDynamicResources->numTMs + 1; i++)
+        for (i = 0; i <= sTMCaseStaticResources.selectedRow - 1 && sTMCaseStaticResources.scrollOffset + sTMCaseDynamicResources->maxTMsShown != sTMCaseDynamicResources->numTMs + 1; i++)
         {
             do {} while (0);
             sTMCaseStaticResources.selectedRow--;
@@ -1740,8 +1740,8 @@ static void UpdateTMSpritePosition(struct Sprite * sprite, u8 var) //vsonic
     if (var == 0xFF) //var is tm id,  ff is close menu I believe
     {
         x = 0x1B;
-        y = 0x36;
-        sprite->pos2.y = 0x14; //still need check but believe will need adjust both these y values, up(lower) to account for changed graphic
+        y = 0x28;
+        sprite->pos2.y = 0x10; //still need check but believe will need adjust both these y values, up(lower) to account for changed graphic
     }
     else
     {
@@ -1768,7 +1768,7 @@ static void SpriteCB_MoveTMSpriteInCase(struct Sprite * sprite) //vsonic
     switch (sprite->data[1])
     {
     case 0:
-        if (sprite->pos2.y >= 20)
+        if (sprite->pos2.y >= 10)
         {
             if (sprite->data[0] != ITEM_NONE)
             {
