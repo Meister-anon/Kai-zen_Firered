@@ -6445,8 +6445,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                     else
                     {
-                        SET_STATCHANGER(STAT_SPEED, 1, TRUE);
-                        gBattleScripting.moveEffect = MOVE_EFFECT_SPD_MINUS_1;
                         gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;

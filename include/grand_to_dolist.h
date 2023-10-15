@@ -1193,6 +1193,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  see if can setup rules to build files in a certain folder an extra smaller icon in a icon folder
  so put all item graphics that can be held in a helditem folder  or just separate key items out
  and make all icons in there compile smaller versions into a helditem_icon folder
+ - actually may not need to do that, looking at pc move item menu it already shows grahpic for item icon at perfect size for sprite
+
+ next task  fix multi task, then aftermath, issue is targetting is on wrong side, and infini loops
+ think best fix is just make switchout abilities case after switchin abilities then use switchout abilities done flag
+ similar to how switchin abilities done works. - well nvm fixed aftermath, it mostly worked I just forgot to put the ability removal back
+
+ note * change run logic to work off battle speed stat, not just base stat
+ 
 
  also for physical special contact icons, isntead of one for each
  make icons that are combinations of them, so don't have to worry about them
@@ -1200,6 +1208,13 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
  so. physical contact,  special contact
  then, just physical  and just special
+
+ just paint over contact side with transparent color, so it doesn't show up
+  dark grey background, text in black, with deep purple text outline
+  icons will be separated by a white stripe through the center
+  will make it appear separate, and make it even easier blend w transparent color when other side is missing
+  helps keep it symetrical as well
+  rounded corners on outside flight inner side
 
  tm case decided I should go fuck myself -_-  
  graphic glitches on both sets even though haven't even changed windows yet

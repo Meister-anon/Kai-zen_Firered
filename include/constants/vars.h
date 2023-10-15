@@ -318,7 +318,7 @@
 #define VAR_SEASONS				   0x4106
 #define VAR_TERRAIN				   0x4107	// If this var has a value, assigning a STATUS_FIELD_xx_TERRAIN to it before battle causes the battle to start with that terrain active
 
-// Counts up every step. Wraps around at 250.
+// Counts up every step. Wraps around at 325.
 // When wraparound occurs, and the player
 //has a mon with pickup ability in their party
 //the ability logic activates and mon has a 

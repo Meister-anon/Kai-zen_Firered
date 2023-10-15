@@ -779,13 +779,13 @@ static void UpdatePickupCounter(void)
     
 
     (*ptr)++;       //increment counter
-    (*ptr) %= 250;   //wrap around at 250
+    (*ptr) %= 325;   //wrap around at 325
 
         for (i = 0; i < PARTY_SIZE; ++i)
         {
             if (GetMonAbility(&gPlayerParty[i]) == ABILITY_PICKUP)
                 break;
-        }
+        } //looks in party for mon with pickup, functionally stops at first party slot that encounters ability
 
 
         if (*ptr == 0)  //can use pointer without ability check, as ability check is already in call for this function

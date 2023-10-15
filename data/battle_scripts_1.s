@@ -7794,36 +7794,30 @@ BattleScript_MoveEffectSpiritLock::
 	goto BattleScript_UpdateEffectStatusIconRet
 
 BattleScript_AftermathOnSwitch::
-	pause 0x20
+	pause 0x01
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
 	printstring STRINGID_ATTACKER_ABILITYHURTS_TARGET
-	waitmessage 0x40
-	@swapattackerwithtarget
+	waitmessage B_WAIT_TIME_SHORT
+	tryfaintmon BS_TARGET, FALSE, NULL
 	setmoveeffect MOVE_EFFECT_SPD_MINUS_1 | MOVE_EFFECT_CERTAIN
 	setmoveeffectwithchance
-	tryfaintmon BS_TARGET, FALSE, NULL
-	@setstatchanger STAT_SPEED, 1, TRUE	@think will work?
-	@statbuffchange MOVE_EFFECT_CERTAIN | STAT_CHANGE_NOT_PROTECT_AFFECTED, NULL
-	@statbuffchange MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN | STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_AftermathEndRet	@think means to jump to end if cant lower stat
-	@setgraphicalstatchangevalues
-	@playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	@printfromtable gStatDownStringIds
-	@waitmessage 0x40
 BattleScript_AftermathEndRet:
-	@swapattackerwithtarget  @swap back and continue switch out
 	return
 
+@uses diff arguemnts because it takes place on mon attacking aftermon target
 BattleScript_AftermathDmg::
-	pause 0x20
+	pause 0x01
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_AFTERMATHDMG
-	waitmessage 0x40
+	waitmessage B_WAIT_TIME_SHORT
 	tryfaintmon BS_ATTACKER, FALSE, NULL
-	seteffectsecondary  @should lower speed, if enemy doesnt faint
+	setmoveeffect MOVE_EFFECT_SPD_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+	setmoveeffectwithchance
+	@seteffectsecondary  @should lower speed, if enemy doesnt faint
 	return
 
 BattleScript_DampPreventsAftermath::

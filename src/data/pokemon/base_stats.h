@@ -642,7 +642,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_EKANS] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(35, 60, 44, 55, 40, 64),
+         STATS(35, 60, 44, 70, 40, 64),
         .type1 = TYPE_POISON,
         .type2 = TYPE_NORMAL,
         .catchRate = 255,
@@ -1421,7 +1421,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_MANKEY] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(48, 80, 50, 77, 35, 45),
+         STATS(48, 80, 50, 72, 35, 45),
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_NORMAL,
         .catchRate = 190,

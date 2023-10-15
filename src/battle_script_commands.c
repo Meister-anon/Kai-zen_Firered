@@ -15221,7 +15221,7 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerAttacker, gBattleCommunication[0])
             gBattlescriptCurrInstr += 9;
             //gBattleMoveDamage = gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].baseAttack;
-            gBattleMoveDamage = ((GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)) / 10 + 5);
+            gBattleMoveDamage = ((GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)) / 4 + 1); //was too high at early levels scaled down for consistency
             
             //gBattleMoveDamage = (gBattleMons[GetMonData(&party[gBattleCommunication[0]], MON_DATA_ATK2)].attack) / 10 + 5;
             //gBattleMons
@@ -15263,7 +15263,8 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
 
             //vsonic think need readjust this use battler inplace of gbasestats ??
            if (gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type1 == TYPE_DARK
-                || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK)
+                || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK
+                || gBattleMons[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type3 == TYPE_DARK)
            {
                 //gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
                gBattleMoveDamage = (135 * gBattleMoveDamage) / 100;
@@ -15889,8 +15890,9 @@ static void atkE2_switchoutabilities(void) //emerald has logic for switchin that
             }
             else //does work for both battlers or just one enemy, if one, how does it select target? need work that out
             {
+                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gBattleMons[gActiveBattler].ability)
                 //--gBattleMons[gBattlerTarget].statStages[STAT_SPEED]; //don't know if will properly trigger animation or not
-                //gBattleMons[gActiveBattler].ability = ABILITY_NONE; //this was the issue same as others,  with push command keeping ability causes loop issue
+                gBattleMons[gActiveBattler].ability = ABILITY_NONE; //this was the issue same as others,  with push command keeping ability causes loop issue
                 //SET_STATCHANGER(STAT_SPEED, 1, TRUE); //most values don't use battlerscripting with stat changer, but those are ones that don't affect opponent
                 //gBattleScripting.moveEffect = MOVE_EFFECT_SPD_MINUS_1;  //i.e example was gooey/tangled hair, since it affects target stat it doest use statbuffchange command but this effect isn't one that can be bounced
                 gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 16; //potentially make 1/16th as its just meant to do chip damage & break bands and can retrigger?
@@ -15898,7 +15900,7 @@ static void atkE2_switchoutabilities(void) //emerald has logic for switchin that
                     gBattleMoveDamage = 1; //pivot to make it useful so you'd be takeing two hits not just this one, think will put slow on switchout as well.
                 BattleScriptPush(gBattlescriptCurrInstr);
                 gBattlescriptCurrInstr = BattleScript_AftermathOnSwitch; //think stat drop should work now? since i'm bs attacker used swapattackerwithtarget to change battlescript to target for speed drop then
-                SET_STATCHANGER(STAT_SPEED, 1, TRUE);
+                //SET_STATCHANGER(STAT_SPEED, 1, TRUE);
             }//think can't go any further with this till I Fix battles..
     }
     else //noticeable differnece is values in switch, dont use battlescript  and are meant to affect the mon they are on/mon switching?
