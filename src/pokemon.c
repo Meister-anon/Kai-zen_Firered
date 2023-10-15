@@ -3873,8 +3873,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     case ABILITY_TOADSTOOL_NYMPH:
         if (type == TYPE_FAIRY) //Fake stab
         {
-            gBattleMoveDamage = gBattleMoveDamage * 15;
-            gBattleMoveDamage = gBattleMoveDamage / 10;
+            gBattleMoveDamage = gBattleMoveDamage * 135;
+            gBattleMoveDamage = gBattleMoveDamage / 100;
         }
 
     case ABILITY_PIXILATE:
@@ -4086,8 +4086,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         }
         if (type == TYPE_FIRE) //changed with super effective rework in mind
         {
-            gBattleMoveDamage = gBattleMoveDamage * 15;
-            gBattleMoveDamage = gBattleMoveDamage / 10;
+            gBattleMoveDamage = gBattleMoveDamage * 155;
+            gBattleMoveDamage = gBattleMoveDamage / 100;
         }
             //MulModifier(&modifier, UQ_4_12(1.5)); //CHeck if need else if, fire contact moves should be 1
         break;  //tested in w3 schools, checks out, it reads top to bottom with ifs, not like switch breaks, its all inclusive

@@ -1201,7 +1201,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
 - fixed mon cries, issue was firered table was in diff order than emerald table, prob because of 
  the firered weird bit table logic default used.
- 
+
  note * change run logic to work off battle speed stat, not just base stat
 
  also eventually go back to summary screen move descriptnions graphics and adjust lines 1 , 2, 5, & 6
@@ -1276,6 +1276,15 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
         as they are wind related  same for twister
         //so that leaves wind moves, wing moves, talon/claw moves slashing moves and beak/horn moves I think I can add as well
         and again from their exclude anything its non normal type would be weak too
+
+        with grouned change essentially giving many more mon levitate, grounds offensive power is weakened
+        I think I shoudl make a similar effect to joat for them, since grond and rock are close to same thing
+        would give ground mon psuedo stab on rock moves one way rock doesnt get it for ground moves.
+        same values as joat  so if they aren't losing out on damage by using a rock smack down to knock them down.
+        need make more groud moves that can knock down opponents
+
+        will use else if, so will be separate from stab and joat, so groudn rock mon won't be getting an extra boost
+        it'l essentially be a groud mon using a rock move that isn't a rock type and not a normal type
 
         after learnset redux
         redo move set for wild mon/trainer mon ensure they have a damaging move regardless of where they are in learnset
@@ -1994,6 +2003,8 @@ as well as the effect of increasing trap duration
 * purpose is give free switch in on fire types, for type usually weak to them - 
 * powder was original signature move of vivillion   -giving to accelgor as its like a ninja (also try to change front sprite remove stupid puckered lip thing)
 * 
+*  also plan change grumpig front sprite, made dark type, give someting more sinister looking, saved template images
+*
 * ...*Looks left & right* ... should I buff sturdy so it lets exploding mon survive on 1hp o.0
 * yup I'm DOIN it!!!
 * - I DID THE THING!!!!!!!!!!

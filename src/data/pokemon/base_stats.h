@@ -3191,7 +3191,7 @@ const struct BaseStats gBaseStats[] =
        // #ifdef ITEM_EXPANSION
            // //.item1 = ITEM_QUICK_POWDER,  vsoonic  , is actually useless, with imposter, even more useless with my joke speed boost
         // #endif
-        //.item2 = ITEM_METAL_POWDER,   //so way I setup transform quick powder actually really good lol, since transoformign doesn't change spcies in my version
+        //.item2 = ITEM_METAL_POWDER,   //so way I setup transform quick powder & metal powder actually really good lol, since transoformign doesn't change spcies in my version
         .genderRatio = MON_GENDERLESS,
         .eggCycles = 20,
         .friendship = 35,
@@ -3200,11 +3200,12 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DITTO,
         .abilities = {ABILITY_IMMUNITY, ABILITY_IMPOSTER},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_INVERSION, ABILITY_NONE},
+            .abilityHidden = {ABILITY_INVERSION, ABILITY_NONE}, //inversion still to do //think will add bst to logic to avoid transforming into legendaries
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },//levle up is broken...pretty sure its not able to read the species properly if you level up while transformed, or someother part of data
+    //-fixed
 
     [SPECIES_EEVEE] =
     { 
@@ -3215,7 +3216,8 @@ const struct BaseStats gBaseStats[] =
         .catchRate = 45,
         .expYield = 65,
         //.evYield_SpDefense = 1,
-        ////.item2 = ITEM_METAL_POWDER, put eviolite here make farmable spawn
+        //.item1 = ITEM_EVIOLITE
+        ////.item2 = ITEM_EVERSTONE, put eviolite here make farmable spawn /will be this and everstone
         .genderRatio = PERCENT_FEMALE(12.5),
         .eggCycles = 35,
         .friendship = 35,
@@ -5875,9 +5877,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_MULTISCALE},
+        .abilities = {ABILITY_THICK_FAT, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_MULTISCALE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_MULTISCALE, ABILITY_PRESSURE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -7650,7 +7652,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(80, 45, 65, 80, 90, 110),
         .type1 = TYPE_PSYCHIC,
-        .type2 = TYPE_PSYCHIC,
+        .type2 = TYPE_DARK,
         .catchRate = 60,
         .expYield = 165,
         //.evYield_SpDefense = 2,
@@ -7666,7 +7668,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-    },
+    },//vsonic plan to adjust front sprite / prob need do back as well to match
 
     [SPECIES_SPINDA] =
     { 
@@ -7714,6 +7716,7 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     }, //give trick room via tm //potentially give sturdy? slow but w sturdy could be a revenge killer?
+    //well could just do focus band for that, and eviolite is also an option now
 
     [SPECIES_VIBRAVA] =
     { 
