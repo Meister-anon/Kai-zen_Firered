@@ -409,7 +409,7 @@ const u8 gTypeEffectiveness[] = // 336 is number of entries x 3 i.e number of ef
     TYPE_ELECTRIC, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,   //new change mostly for cloyster but makes sense.
     TYPE_ELECTRIC, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,    //tentative change to make ice better defensively //there are several water ice & flying ice, makes science sense as well
     TYPE_ELECTRIC, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE, //made bug resist electric always made sense to me, they can chew threw electric cables
-    TYPE_ELECTRIC, TYPE_GROUND, TYPE_MUL_NO_EFFECT,  //plus bug is related to nature like grass, which already resist electric
+    TYPE_ELECTRIC, TYPE_GROUND, TYPE_MUL_NO_EFFECT,  //plus swarms of bugs are able to generate electricity,as well as some capable of generating bio-electricity
     TYPE_ELECTRIC, TYPE_FLYING, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_ELECTRIC, TYPE_DRAGON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_GRASS, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,

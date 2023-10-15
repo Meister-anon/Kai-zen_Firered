@@ -791,10 +791,12 @@ BattleScript_EffectLaserFocus:
 	goto BattleScript_MoveEnd
 
  @not complete need setup evasion boost (2 stage boost) and make sure its removed if status on air i.e flying/skydrop donethat part
- @also need to put back logi that grounded flying types dont take super from electricity etc. 
+ @also need to put back logic that grounded flying types dont take super from electricity etc. 
 BattleScript_EffectTrenchrun::
 	setuserstatus4 STATUS4_GROUNDED, BattleScript_ButItFailed
-	attackcanceler
+	attackcanceler	@cancel logic should be in attack canceler so not stacked
+	setmoveeffect MOVE_EFFECT_EVS_PLUS_2 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+	setmoveeffectwithchance
 	attackstring
 	ppreduce
 	attackanimation

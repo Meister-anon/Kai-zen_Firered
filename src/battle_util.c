@@ -3811,8 +3811,14 @@ u8 AtkCanceller_UnableToUseMove2(void)
 //2nd pass add ghosts to grounded clause  with specific exclusions spirit tomb cursola galarian corsola etc object linked ghost, just like doduo
 //looked over and realized still mising some pokemon that float, but aren't flying types, and also just don't get levitate
 //i.e porygon and magnemite line, may be others
-const u16 gFloatingSpecies[153] = {
+//delete value in bracket to see actual list total w intellisense to make sure total is correct before final save
+//update define in battle_util.h if diff
+const u16 gFloatingSpecies[157] = {
+    SPECIES_BUTTERFREE,
     SPECIES_BEAUTIFLY,
+    SPECIES_VIVILLON,
+    SPECIES_MOTHIM,
+    SPECIES_COMBEE,
     SPECIES_DUSTOX,
     SPECIES_BEEDRILL,
     SPECIES_MASQUERAIN,

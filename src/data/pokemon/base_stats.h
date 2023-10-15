@@ -124,7 +124,7 @@ if it would otherwise be 0/NONE except in the case of ability.
     Water:  Aquatic type  for fish, or aquatic animals/mamals or things made up of the element, some qualities can also overlap w dragons
     Dragon: rulers of land/air/sea apex predators typically with lizard/reptile like qualities
     Dark: supernatural type typically tricksters or evil or related to things seen as bad/evil
-    Fairy: Magic type  fairy qualities, like dark can also be tricksters, may also have strong relation to nature - looked further GF seems to have paterned tem after pixie-like fae, nature spirits explains why not effective on fire, as its their weakness/destroys their homes
+    Fairy: Magic type  fairy qualities, like dark can also be tricksters, may also have strong relation to nature - looked further GF seems to have paterned them more after pixie-like fae, nature spirits explains why not effective on fire, as its their weakness/destroys their homes
     Poison: Is poisonous in some manner, or otherwise involves trash/waste or contamination/corruption
     Ground: Lives in deserts/underground or has some link to earth element, is distinct from rock.
     Rock:  Hardened ground sturdy and solid
@@ -397,7 +397,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(60, 45, 50, 90, 95, 80),     
         .type1 = TYPE_BUG,
-        .type2 = TYPE_FLYING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 178,
         //.evYield_SpAttack = 2,
@@ -6266,7 +6266,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(60, 70, 60, 90, 105, 60),
         .type1 = TYPE_BUG,
-        .type2 = TYPE_BUG,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 178,
         //.evYield_SpAttack = 3,
@@ -9673,7 +9673,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(70, 94, 50, 66, 94, 76),
         .type1 = TYPE_BUG,
-        .type2 = TYPE_FLYING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 148,
         //.evYield_Attack = 1,
@@ -9698,7 +9698,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(30, 30, 42, 70, 30, 42),
         .type1 = TYPE_BUG,
-        .type2 = TYPE_FLYING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 120,
         .expYield = 49,
         //.evYield_Speed = 1,
@@ -16627,7 +16627,7 @@ const struct BaseStats gBaseStats[] =
         66
         ),
         .type1 = TYPE_BUG,
-        .type2 = TYPE_FLYING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 185,
         //.evYield_HP = 1,
