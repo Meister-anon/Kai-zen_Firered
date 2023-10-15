@@ -1699,7 +1699,7 @@ static void RemoveTMContextMenu(u8 * a0)
 
 static u8 CreateTMSprite(u16 itemId)
 {
-    u8 spriteId = CreateSprite(&sTMSpriteTemplate, 0x29, 0x2E, 0);
+    u8 spriteId = CreateSprite(&sTMSpriteTemplate, 0x29, 0x23, 0); //think is coord for tm sprite sits in case 
     u8 r5;
     if (itemId == ITEM_NONE)
     {
@@ -1708,7 +1708,7 @@ static u8 CreateTMSprite(u16 itemId)
     }
     else
     {
-        r5 = itemId - 33;
+        r5 = itemId - 33; //think this uses 33 because tm uses - 32 to find id values,  this is using 33 prob need to adjust later w tm update/expansion vsonic
         SetTMSpriteAnim(&gSprites[spriteId], r5);
         TintTMSpriteByType(gBattleMoves[ItemIdToBattleMoveId(itemId)].type);
         UpdateTMSpritePosition(&gSprites[spriteId], r5);
@@ -1718,7 +1718,7 @@ static u8 CreateTMSprite(u16 itemId)
 
 static void SetTMSpriteAnim(struct Sprite * sprite, u8 idx)
 {
-    if (idx >= 50)
+    if (idx >= 50) //believe this is also for tm hm, and would need to change i.e 50 base tms
         StartSpriteAnim(sprite, 1);
     else
         StartSpriteAnim(sprite, 0);
@@ -1734,26 +1734,26 @@ static void TintTMSpriteByType(u8 type)
     }
 }
 
-static void UpdateTMSpritePosition(struct Sprite * sprite, u8 var)
+static void UpdateTMSpritePosition(struct Sprite * sprite, u8 var) //vsonic
 {
     s32 x, y;
-    if (var == 0xFF)
+    if (var == 0xFF) //var is tm id,  ff is close menu I believe
     {
         x = 0x1B;
         y = 0x36;
-        sprite->pos2.y = 0x14;
+        sprite->pos2.y = 0x14; //still need check but believe will need adjust both these y values, up(lower) to account for changed graphic
     }
     else
     {
-        if (var >= 50)
+        if (var >= 50) //think this is tm idea as well, so may need to adjust with tm update/expansion
             var -= 50;
         else
             var += 8;
-        x = 0x29 - (((0xE00 * var) / 58) >> 8);
-        y = 0x2E + (((0x800 * var) / 58) >> 8);
+        x = 0x29 - (((0xE00 * var) / 58) >> 8); //what is the 58 for?
+        y = 0x23 + (((0x800 * var) / 58) >> 8); //adjusted y value here, to match other function
     }
     sprite->pos1.x = x;
-    sprite->pos1.y = y;
+    sprite->pos1.y = y; //0x16 value was 2E
 }
 
 static void InitSelectedTMSpriteData(u8 spriteId, u16 itemId)
@@ -1763,7 +1763,7 @@ static void InitSelectedTMSpriteData(u8 spriteId, u16 itemId)
     gSprites[spriteId].callback = SpriteCB_MoveTMSpriteInCase;
 }
 
-static void SpriteCB_MoveTMSpriteInCase(struct Sprite * sprite)
+static void SpriteCB_MoveTMSpriteInCase(struct Sprite * sprite) //vsonic
 {
     switch (sprite->data[1])
     {
