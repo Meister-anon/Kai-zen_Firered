@@ -7815,7 +7815,7 @@ BattleScript_AftermathDmg::
 	printstring STRINGID_AFTERMATHDMG
 	waitmessage B_WAIT_TIME_SHORT
 	tryfaintmon BS_ATTACKER, FALSE, NULL
-	setmoveeffect MOVE_EFFECT_SPD_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+	setmoveeffect MOVE_EFFECT_SPD_MINUS_2 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
 	setmoveeffectwithchance
 	@seteffectsecondary  @should lower speed, if enemy doesnt faint
 	return

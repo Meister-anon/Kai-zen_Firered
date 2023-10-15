@@ -851,11 +851,12 @@ static const u8 *const sMoveEffectBS_Ptrs[] =
     [MOVE_EFFECT_REMOVE_STATUS] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_ATK_DEF_DOWN] = BattleScript_MoveEffectSleep,//BattleScript_MoveEffectFallInLove
     [MOVE_EFFECT_RECOIL_33] = BattleScript_MoveEffectRecoil,
+    [MOVE_EFFECT_SPD_MINUS_2] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_INFESTATION] = BattleScript_MoveEffectInfestation,
     [MOVE_EFFECT_ATTRACT] = BattleScript_MoveEffectAttract,   //see if it works as is, or I need actuall battlescript for this
     //[MOVE_EFFECT_SPIRIT_LOCK] = BattleScript_MoveEffectSpiritLock,
 }; //don't know why a lot of these default to sleep, but I added attract to hopefully do something?
-//those that default to sleep have their effects set in SetMoveEffect function
+//those that default to sleep have their effects set in SetMoveEffect function 
 
 // not used
 static const struct WindowTemplate sUnusedWinTemplate =
