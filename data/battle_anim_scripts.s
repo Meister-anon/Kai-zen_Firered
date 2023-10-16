@@ -24201,9 +24201,9 @@ Move_RAGE_FIST::
 	end @to do:
 
 @Custom moves here
-Move_COCOON:: @ animation didn''t work because I forgot to define it at top
+@ animation didn''t work because I forgot to define it at top
+Move_COCOON:: 
 	loopsewithpan SE_M_HARDEN, 192, 28, 2
-	createvisualtask AnimTask_MusicNotesRainbowBlend, 2,
 	createvisualtask AnimTask_MetallicShine, 5, 0, 0, 0
 	waitforvisualfinish
 	end
