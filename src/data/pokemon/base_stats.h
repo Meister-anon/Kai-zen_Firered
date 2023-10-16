@@ -17395,7 +17395,7 @@ const struct BaseStats gBaseStats[] =
         63
         ),
         .type1 = TYPE_WATER,
-        .type2 = TYPE_WATER,
+        .type2 = TYPE_NORMAL,
         .catchRate = 225,
         .expYield = 66,
         //.evYield_SpAttack = 1,
@@ -17409,7 +17409,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-    },
+    }, //normal because highly varied learnset,  and I just need more normal types, lol nvm I'm good on normal types
 
     [SPECIES_CLAWITZER] =
     { 
@@ -17423,7 +17423,7 @@ const struct BaseStats gBaseStats[] =
         89
         ),
         .type1 = TYPE_WATER,
-        .type2 = TYPE_WATER,
+        .type2 = TYPE_NORMAL,
         .catchRate = 55,
         .expYield = 100,
         //.evYield_SpAttack = 2,

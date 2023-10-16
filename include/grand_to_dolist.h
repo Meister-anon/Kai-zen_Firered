@@ -2932,6 +2932,10 @@ goto BATTLE_SETUP_TERRAIN   //sets battle terrain from metatile/environment
 * I.e raise its search level, and catch one with every possible ability.
 * Once you've maxed that you unlock perfect search, which lets you essentially generate the perfect mon
 * you set the mon species, set the ability, and can even set the nature! 
+*
+* for doing this keep track of search level for individual species for finding species in other locations
+* if reach max level and unlock all dexnav features for mon, sets base stat flag for max search power, 
+* dexnav will only lock feature and grey out a mon if it doesn't hvae max search level
 * 
 * think may not include search level as its already difficult to break through odds to find all abilieties
 * if you get lucky and find them all quickly, don't want to hamstring the player by forcing them to keep searching
