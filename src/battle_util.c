@@ -1355,6 +1355,14 @@ bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget)  //somehow works...
         || !(IS_BATTLER_OF_TYPE(battlerTarget, TYPE_POISON) || IS_BATTLER_OF_TYPE(battlerTarget, TYPE_STEEL)));
 }
 
+bool32 CanThaw(u32 move)
+{
+    if (THAW_CONDITION(move))
+        return TRUE;
+    else
+        return FALSE;
+}
+
 // Ingrain, Leech Seed, Strength Sap and Aqua Ring
 //leech seed has weird targetting so I'm worried it'llc ause issues for ghost drain & leech seed logic
 //but if works for big root which uses battler and is pulled from gbattlerattacker I think it should work
@@ -3204,7 +3212,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 if (--gDisableStructs[gActiveBattler].FrozenTurns != 0)
                 {
                     //if (Random() % 5)//ok found freeze chance, so 1 in 5 chance of thawing out, on freeze.  pretty much  random % 5 if not 0 stays frozen.
-                    if (!THAW_CONDITION(gCurrentMove)) //attempt at frozn timr   actuallg best to put timer decrement at endturn, that way can have consistent freze duration
+                    if (!(CanThaw(gCurrentMove))) //attempt at frozn timr   actuallg best to put timer decrement at endturn, that way can have consistent freze duration
                     {
                         //--gDisableStructs[gActiveBattler].FrozenTurns != 0
                         gBattlescriptCurrInstr = BattleScript_MoveUsedIsFrozen;
@@ -3635,7 +3643,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE
                 && gDisableStructs[gBattlerAttacker].FrozenTurns != 0) //should be thaw if scald, or a fire type move above base 60
             {
-                if (THAW_CONDITION(gCurrentMove))
+                if (CanThaw(gCurrentMove))
                 {
                     gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_FREEZE);
                     BattleScriptPushCursor();
@@ -3693,7 +3701,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
-        case CANCELLER_MULTI_HIT_MOVES: //set multihit counter
+        case CANCELLER_MULTI_HIT_MOVES: //set multihit counter  //not working here think will just make its own thing in atk cancel
             {
                 switch(gBattleMoves[gCurrentMove].effect)
                 {   
@@ -3730,7 +3738,8 @@ u8 AtkCanceller_UnableToUseMove(void)
                         break;         
                     default:
                     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK
-                        && (CanMultiTask(gCurrentMove) == TRUE))
+                        && CanMultiTask(gCurrentMove) == TRUE
+                        && gBattleMoves[gCurrentMove].split != SPLIT_STATUS)
                         {
                             gMultiTask = Random() % 4; //return a number between 0 & 3
                             if (gMultiTask > 1)
@@ -3752,6 +3761,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 } //put this part at bottom of multihit
 
                 gMultiHitCounter = gMultiTask;
+                PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
                 
             }    
             ++gBattleStruct->atkCancellerTracker;

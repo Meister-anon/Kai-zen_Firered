@@ -613,7 +613,7 @@
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_PIKACHU"
+                "species": "SPECIES_PICHU"
               },
               {
                 "min_level": 6,
@@ -623,7 +623,7 @@
               {
                 "min_level": 5,
                 "max_level": 5,
-                "species": "SPECIES_PIKACHU"
+                "species": "SPECIES_PICHU"
               }
             ]
           }

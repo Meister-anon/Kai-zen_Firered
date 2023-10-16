@@ -167,6 +167,7 @@ bool32 CanBePoisoned(u8 PoisonUser, u8 PoisonTarget); //actually needs to be dif
 bool32 CanBeBurned(u8 battlerId);
 bool32 CanBeParalyzed(u8 battlerId);
 bool32 CanBeFrozen(u8 battlerId);
+bool32 CanThaw(u32 move); //always use gcurrentmove hope work
 bool32 CanBeConfused(u8 battlerId);
 bool32 HasEnoughHpToEatBerry(u8 battlerId, u32 hpFraction, u16 itemId);
 bool32 DoesPranksterBlockMove(u16 move, u8 battlerwithPrankster, u8 battlerDef, bool32 checkTarget);

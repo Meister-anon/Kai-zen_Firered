@@ -1225,7 +1225,7 @@ static const u16 sMultiTaskExcludedEffects[] =
     EFFECT_UPROAR,
     EFFECT_RAMPAGE,
     //EFFECT_OHKO, //no pokemon I'm giving this to normally learns a ohko move, so I may leave in for something potentially fun for the player.
-    //EFFECT_HIT,  //for testing   test passed
+    //EFFECT_HIT,  //for testing   test passed  //test ohko make sure doesn't cause break
     //EFFECT_TWO_TURNS_ATTACK // because I'm not using two turns attack??  doube check this
     MULTI_TASK_FORBIDDEN_END
 }; //had add multi hit effects back to this, it only affects dmg share from dmg calc macro
@@ -1390,6 +1390,8 @@ static void atk00_attackcanceler(void) //vsonic
         return;
 
     //change put bind effect here, since similar to disobedient checks, seems don' teven need specific stuff for bind
+    //cant use bindedmove == move none, as that only works for if bind user is slower mon
+    //since I'm not setting bindmove on hit
     if (gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND && gDisableStructs[gBattlerAttacker].bindedMove == MOVE_NONE) //if move not locked in yet
     {
 
@@ -2321,8 +2323,12 @@ bool8 CanMultiTask(u16 move) //works, but now I need to negate the jump, because
 {
     u16 i;
     for (i = 0; sMultiTaskExcludedEffects[i] != MULTI_TASK_FORBIDDEN_END && sMultiTaskExcludedEffects[i] != gBattleMoves[move].effect; ++i);
-    if (sMultiTaskExcludedEffects[i] == MULTI_TASK_FORBIDDEN_END) //should mean if loop through till end, move can be multi tasked
+    ;
+    if (sMultiTaskExcludedEffects[i] == MULTI_TASK_FORBIDDEN_END
+    && gBattleMoves[move].split != SPLIT_STATUS) //should mean if loop through till end, move can be multi tasked
         return TRUE;
+    else
+        return FALSE;
 }
 
 //damgage formula emerald puts stab checks here
@@ -2346,6 +2352,17 @@ static void atk05_damagecalc(void)
         */
     }   //this has to go here, multitask worked below cause it was using gBattleMoveDamage
 
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK
+        && CanMultiTask(gCurrentMove) == TRUE)
+    {
+        gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+        gDynamicBasePower = (gDynamicBasePower / gMultiTask); //works, problem was furycalc in multihit, fixed        
+       
+    }//go more in depth on learning Calculatedamage function above, see how it works with gbttlemovedamage  vsonic
+    //ok because of how gBattleMoveDamage, with divisor like this I need to do a certain amount of damage or it'll do a dmg error
+    //pretty much it'll do less dmg at more hits than at lower hits because the divisor lowers the dmg to 0
+    //fixing this is simple as just using gDynamicBasePower instead, which honestly is prob better because that's how multihit works anyway
+
     gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker],
                                             &gBattleMons[gBattlerTarget],
                                             gCurrentMove,
@@ -2358,16 +2375,7 @@ static void atk05_damagecalc(void)
     if (gStatuses3[gBattlerAttacker] & STATUS3_CHARGED_UP && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC)//pretty sure no longer using dmgMultiplier?
         gBattleMoveDamage *= 2;
     if (gProtectStructs[gBattlerAttacker].helpingHand)//below works, but because hit still jumps to multihit,  I need to add the below check to jumpifability 
-        gBattleMoveDamage = gBattleMoveDamage * 15 / 10;    //works this is default
-    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK
-        && CanMultiTask(gCurrentMove) == TRUE
-        && gBattleMoves[gCurrentMove].split != SPLIT_STATUS) // normal syntax (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE)
-        
-    {
-        gBattleMoveDamage = (gBattleMoveDamage / gMultiTask); //works, problem was furycalc in multihit, fixed
-       if (gBattleMoveDamage == 0) //need to add move exclusions for multi hit & multi turn moves before its compolete.
-            gBattleMoveDamage = 1;  //(gCurrentMove == MOVE_BLIZZARD) //need to block effects & certain move names, like twinneedle that are multihit without the effect
-    }//go more in depth on learning Calculatedamage function above, see how it works with gbttlemovedamage  vsonic
+        gBattleMoveDamage = gBattleMoveDamage * 15 / 10;    //works this is default    
     
     ++gBattlescriptCurrInstr;
 }
@@ -2388,6 +2396,14 @@ s32 AI_CalcDmgFormula(u8 attacker, u8 defender) //made for ai .c update
             gDynamicBasePower *= 3;
     }
 
+    if (GetBattlerAbility(attacker) == ABILITY_MULTI_TASK
+        && CanMultiTask(gCurrentMove) == TRUE)
+    {
+        gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+        gDynamicBasePower = (gDynamicBasePower / gMultiTask);     
+       
+    }
+
     gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[attacker],
                                             &gBattleMons[defender],
                                             gCurrentMove,
@@ -2402,14 +2418,6 @@ s32 AI_CalcDmgFormula(u8 attacker, u8 defender) //made for ai .c update
         gBattleMoveDamage *= 2;
     if (gProtectStructs[attacker].helpingHand)
         gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
-    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK
-        && CanMultiTask(gCurrentMove) == TRUE
-        && gBattleMoves[attacker].split != SPLIT_STATUS)
-    {
-        gBattleMoveDamage = (gBattleMoveDamage / gMultiTask);   //evenly splits damage between number of generated hits
-        if (gBattleMoveDamage == 0)
-            gBattleMoveDamage = 1;
-    }
 
     return gBattleMoveDamage;
 }
@@ -2430,6 +2438,14 @@ void AI_CalcDmg(u8 attacker, u8 defender) //needed for ai script  , brought back
             gDynamicBasePower *= 3;
     }
 
+    if (GetBattlerAbility(attacker) == ABILITY_MULTI_TASK
+        && CanMultiTask(gCurrentMove) == TRUE)
+    {
+        gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+        gDynamicBasePower = (gDynamicBasePower / gMultiTask); //works, problem was furycalc in multihit, fixed        
+       
+    }
+
     gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[attacker],
                                             &gBattleMons[defender],
                                             gCurrentMove,
@@ -2444,14 +2460,7 @@ void AI_CalcDmg(u8 attacker, u8 defender) //needed for ai script  , brought back
         gBattleMoveDamage *= 2;
     if (gProtectStructs[attacker].helpingHand)
         gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
-    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK
-        && CanMultiTask(gCurrentMove) == TRUE
-        && gBattleMoves[attacker].split != SPLIT_STATUS)
-    {
-        gBattleMoveDamage = (gBattleMoveDamage / gMultiTask);   //evenly splits damage between number of generated hits
-        if (gBattleMoveDamage == 0)
-            gBattleMoveDamage = 1;
-    }
+    
 }
 
 #define TYPE_DMG_MODULATER
@@ -3257,7 +3266,7 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
 
 static inline void ApplyRandomDmgMultiplier(void) //vsonic test
 {
-    u16 rand = Random(); //add can multi task to this filter list
+    u16 rand = Random(); //add can multi task to this filter list // but put ability not multitask
     u16 randPercent = 100 - (rand % 16); //make g values to to store random percent for battler
     //if randPercent is 100 before attack animation run cry with below
     u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
@@ -3267,7 +3276,8 @@ static inline void ApplyRandomDmgMultiplier(void) //vsonic test
     && gBattleMoves[gCurrentMove].effect != EFFECT_TRIPLE_KICK
     && gBattleMoves[gCurrentMove].effect != EFFECT_BEAT_UP
     && gBattleMoves[gCurrentMove].effect != EFFECT_RECOIL_IF_MISS
-    && (CanMultiTask(gCurrentMove) == TRUE)) //think shoudl do it, as this is ALWAYS called after critcalc
+    && (CanMultiTask(gCurrentMove) == TRUE)
+    && GetBattlerAbility(gBattlerAttacker) != ABILITY_MULTI_TASK) //think shoudl do it, as this is ALWAYS called after critcalc
             PlayCry_Normal(species, 25); //its inline so I "think" that will work and play in the adjustnormaldamage script
     //added effect check to keep from triggering to frequently, as to become annoying
     if (gBattleMoveDamage != 0)
@@ -3535,6 +3545,7 @@ static void atk08_adjustnormaldamage2(void)
      ++gBattlescriptCurrInstr;  //AGAIN i FORGOT THIS!!!
 }
 
+//look into figure why multi task isn't playing animation again, pretty sure it did previously
 static void atk09_attackanimation(void)
 {
     if (!gBattleControllerExecFlags)
@@ -5744,30 +5755,33 @@ static void atk1D_jumpifstatus2(void)
         gBattlescriptCurrInstr += 10;
 }
 
-static void atk1E_jumpifability(void)
+//sigh ok this was the problem with multitask its still not right, for some reason animation isn't playing
+static void atk1E_jumpifability(void) //tset copy original code back from kaizen, from before cmd arg update
 {
     
-    CMD_ARGS(u8 battler, u16 ability, const u8 *ptr);
-    u8 battlerId = cmd->battler;
-    bool8 hasAbility = FALSE;
+    CMD_ARGS(u8 battler, u16 ability, const u8 *jumpInstr);
+    u32 battlerId;
+    bool32 hasAbility = FALSE;
     u32 ability = cmd->ability;
     //u32 ability = T2_READ_16(gBattlescriptCurrInstr + 2);
 
     //switch (gBattlescriptCurrInstr[1]) //hodge podge port of rh emerald stuff mixed with vanilla firered macros
         //with adjusted type
-    switch (battlerId) //change for cmd args update, hope works
+    switch (cmd->battler) //change for cmd args update, hope works
     {
     default:
-        //battlerId = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+        battlerId = GetBattlerForBattleScript(cmd->battler);
+
         if (GetBattlerAbility(battlerId) == ability)
         {
             if (ability == ABILITY_MULTI_TASK)
             {
-                if (!CanMultiTask(gCurrentMove)
-                    || gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
+                if (CanMultiTask(gCurrentMove)) //seems to be workign now, but some move animations dont show still investigating
                 {
-                    hasAbility = FALSE; //if shouldn't multitask will fail to jump to portion that gives moves multi hit effect
+                    hasAbility = TRUE; //if shouldn't multitask will fail to jump to portion that gives moves multi hit effect
                 } //only used in, low kick script, and non multihit scripts
+                else
+                    hasAbility = FALSE;
             }
             else
                 hasAbility = TRUE;
@@ -5794,7 +5808,7 @@ static void atk1E_jumpifability(void)
     if (hasAbility)
     {
         gLastUsedAbility = ability;
-        gBattlescriptCurrInstr = cmd->ptr;
+        gBattlescriptCurrInstr = cmd->jumpInstr;
         //gBattlescriptCurrInstr = T2_READ_PTR(gBattlescriptCurrInstr + 4);
         RecordAbilityBattle(battlerId, gLastUsedAbility);
         gBattleScripting.battlerWithAbility = battlerId;
@@ -6355,7 +6369,7 @@ static void atk25_movevaluescleanup(void)
     gBattlescriptCurrInstr += 1;
 }
 
-static void atk26_setmultihit(void) //will no longer use
+static void atk26_setmultihit(void) //for now still used, for pursuit dmg
 {
     gMultiHitCounter = gBattlescriptCurrInstr[1];
     gBattlescriptCurrInstr += 2;
@@ -13006,6 +13020,7 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
         else if (!certain
         && ((activeBattlerAbility == ABILITY_KEEN_EYE && statId == STAT_ACC)
         || (activeBattlerAbility == ABILITY_HYPER_CUTTER && statId == STAT_ATK)
+        || (activeBattlerAbility == ABILITY_BIG_PECKS && statId == STAT_ATK)
         || (activeBattlerAbility == ABILITY_BIG_PECKS && statId == STAT_DEF)))
         {
         if (flags == STAT_CHANGE_BS_PTR)
@@ -15237,7 +15252,12 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
              && GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES2) != SPECIES_EGG
              && !GetMonData(&party[gBattleCommunication[0]], MON_DATA_STATUS))
                 break; // continue party loop if mon alive, not an egg, and not statused
-            //if bs change doesn't fix the issue, I'll add gbattle target hp != 0, to this break condition
+
+            //fails when attacker is statused but that is default behavior I guess
+            //can't exactly think of how to make exclusion that fits all cases, unless do a battlerId return/specific battle position
+            //need test later will only attempt if move has different behavior if statuses beat up user is 2nd battler in doubles
+            //right now it breaks at 0, but if it does something different if it breaks at 1, I'll have to adjust for 
+            //consistency
         }
         if (gBattleCommunication[0] < PARTY_SIZE) 
         { //don't want to use base attack that would ignore all gains
@@ -15287,14 +15307,14 @@ static void atkC4_trydobeatup(void) //beatup is still typeless in gen3 so no sta
             //vsonic think need readjust this use battler inplace of gbasestats ??
            if (gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type1 == TYPE_DARK
                 || gBaseStats[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type2 == TYPE_DARK
-                || gBattleMons[GetMonData(&party[gBattleCommunication[0]], MON_DATA_SPECIES)].type3 == TYPE_DARK)
+                || gBattleMons[gBattlerAttacker].type3 == TYPE_DARK)
            {
                 //gBattleMoveDamage = gBattleMoveDamage * 15 / 10;
                gBattleMoveDamage = (135 * gBattleMoveDamage) / 100;
                //gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier;
            } //thikn that above line doubled crit damage again.
 
-           gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier; //should allow to crit without damagecalc
+           gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier; //should allow to crit without damagecalc
 
            //   3/26/23 am unsure if this extra increment is necesary for loop should be incrementing already?
            //checked - yes its necessary, for is looping for end condition/to break, this is a second loop

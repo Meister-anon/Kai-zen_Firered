@@ -1173,6 +1173,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  problem was battlestruct was set to 0, but I never added type3 to this function, so it was essentially making type 3 default to normal
  so type bug is gone, now I have to deal with the 4 other bugs I found in the process...
 
+ //not nat dex mon don't trigger pokedex script on catch, 
 
  there's now also a move learn bug...if I select no to move learn, without goiong to move deletion selection
  it'll display as if I deleted the move I was trying to learn and replaced it with  the move I was declined to learn...
@@ -1199,8 +1200,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  think best fix is just make switchout abilities case after switchin abilities then use switchout abilities done flag
  similar to how switchin abilities done works. - well nvm fixed aftermath, it mostly worked I just forgot to put the ability removal back
 
+ frozen status not working, target can still attack even when supposed to be frozen solid
+ fix in attack canceler logic
+
 - fixed mon cries, issue was firered table was in diff order than emerald table, prob because of 
  the firered weird bit table logic default used.
+
+ - make message for aviator/run away   src atk mon safely escaped with ability buff
+  message will play on switch, will make sense for why pursuit failed to hit them
 
  note * change run logic to work off battle speed stat, not just base stat
 
@@ -1231,7 +1238,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  //emerald expansion changed how these are handled, more akin to levelup learnset, which removes the bit array limit allowing for many more learned moves
  //so will port that
 
- enemy trainer sprite is not moving over to the correct spot
+ enemy trainer sprite is not moving over to the correct spot on battle end, (I think)
 
  eventually will need update ai logic not to make more difficult just to adjust for the changes I've alerady made to stay consistent, like phy special split etc.
  pokemon cries for post gen 3 mon don't sound correct
@@ -1301,6 +1308,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
     //since FrozenTurns uses gDisableStructs it'll be cleared when battle ends/new battle starts
     this works if still frozen at battle end so not frozen solid on next battle makes more sense, but you'll still be frozen, just suffer end turn dmg until healed
+
+    //potentially use moonlight, move animation and day/night shift for battle to make lunar weather condition
+    //that boosts fairy sp def or fairy move dmg, then setup field move w sunny day to  auto shift 
+    //day night schedule will be an ow triggering move, like using strength or fly
+    //so think rather than an instant flip ship should greatly speed of time progression
+    //so dns would shift each minute from current blend/ until it reaches the target time frame and then return to 
+    //normal progression  i.e use moon dance, during afternoon, so each minute shift to  evening twilight to night
+    //for opposite using sunny day from their would shift, from night, to twilight, to day.
 
  tweak for oak ranch/pc exp idea let it activate after the bill event
  after rescue him, add new event where he introduces himself as owner of pc, explains what pc is

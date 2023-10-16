@@ -140,11 +140,11 @@
 	.4byte \ptr
 	.endm
 
-	.macro jumpifability battler:req, ability:req, ptr:req
+	.macro jumpifability battler:req, ability:req, jumpInstr:req
 	.byte 0x1e
 	.byte \battler
 	.2byte \ability
-	.4byte \ptr
+	.4byte \jumpInstr
 	.endm
 
 	@FIXED think needed to make 4byte instead of 2

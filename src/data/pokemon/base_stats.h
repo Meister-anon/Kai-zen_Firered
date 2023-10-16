@@ -607,7 +607,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
+        .abilities = {ABILITY_KEEN_EYE, ABILITY_BIG_PECKS},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_SNIPER, ABILITY_NONE},
         // #endif
@@ -631,7 +631,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_KEEN_EYE, ABILITY_NONE},
+        .abilities = {ABILITY_KEEN_EYE, ABILITY_BIG_PECKS},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_SNIPER, ABILITY_NONE},
         // #endif
@@ -7368,7 +7368,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         .abilities = {ABILITY_ILLUMINATE, ABILITY_SWARM},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_PRANKSTER, ABILITY_NONE},
+            .abilityHidden = {ABILITY_PRANKSTER, ABILITY_VOLT_ABSORB},
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
@@ -7928,6 +7928,13 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     }, //idea lunar power boost in rain? flooding rising tides type deal, maybe double sp def?
+    //potentially use moonlight, animation and day/night shift for battle to make lunar weather condition
+    //that boosts fairy sp def or fairy move dmg, then setup field move w sunny day to  auto shift 
+    //day night schedule will be an ow triggering move, like using strength or fly
+    //so think rather than an instant flip ship should greatly speed of time progression
+    //so dns would shift each minute from current blend/ until it reaches the target time frame and then return to 
+    //normal progression  i.e use moon dance, during afternoon, so each minute shift to  evening twilight to night
+    //for opposite using sunny day from their would shift, from night, to twilight, to day.
 
     [SPECIES_SOLROCK] =
     { 
@@ -23701,7 +23708,7 @@ const struct BaseStats gBaseStats[] =
             .expYield = 179,
             //.evYield_Attack = 1,
             //.evYield_Speed = 1,
-            .genderRatio = PERCENT_FEMALE(50),
+            .genderRatio = PERCENT_FEMALE(MON_FEMALE),
             .eggCycles = 20,
             .friendship = 10,
             .growthRate = GROWTH_MEDIUM_SLOW,
@@ -23711,7 +23718,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_NONE},
             .bodyColor = BODY_COLOR_BLUE,
             .noFlip = FALSE,
-        },
+        },//think will make female only evo, counterpart to salazzle
+        //give ABILITY_FEMME_FATALE when finish setup
 
         [SPECIES_OVERQWIL] =
         { 
@@ -26616,7 +26624,7 @@ const struct BaseStats gBaseStats[] =
             .eggGroup1 = EGG_GROUP_FIELD,
             .eggGroup2 = EGG_GROUP_FIELD,
             .abilities = {ABILITY_BLAZE, ABILITY_NONE},
-            .abilityHidden = {ABILITY_FLASH_FIRE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_FRISK, ABILITY_FILTER},
             .bodyColor = BODY_COLOR_YELLOW,
             .noFlip = FALSE,
             .flags = F_HISUIAN_FORM,
@@ -27384,7 +27392,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_OVERCHARGE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    },//make rare form, that should spawn
 
     [SPECIES_UNOWN_B] =
     { 

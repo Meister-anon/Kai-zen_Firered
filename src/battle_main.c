@@ -5368,6 +5368,7 @@ void RunBattleScriptCommands(void)
 
 #define CAN_ABILITY_ABSORB (gBattleMons[gActiveBattler].status1 == 0 && !(gBattleMons[gActiveBattler].status2 & STATUS2_CONFUSION))
 
+//not exactly sure when this function triggers?
 static void HandleAction_UseMove(void)
 {
     u32 i, side, moveType, var = 4;
@@ -5384,7 +5385,6 @@ static void HandleAction_UseMove(void)
     gBattleStruct->atkCancellerTracker = 0;
     gMoveResultFlags = 0;
     gMultiHitCounter = 0;
-    gMultiTask = 0;
     gBattleCommunication[6] = 0;
     gCurrMovePos = gChosenMovePos = *(gBattleStruct->chosenMovePositions + gBattlerAttacker);
     // choose move

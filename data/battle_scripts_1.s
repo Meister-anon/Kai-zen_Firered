@@ -5057,8 +5057,6 @@ BattleScript_BeatUpLoop::
 	critcalc
 	trydobeatup BattleScript_BeatUpEnd, BattleScript_ButItFailed	@need to do full damagecalc here
 	printstring STRINGID_PKMNATTACK
-	@ jumpifbyte CMP_NOT_EQUAL, gCritMultiplier, 2, BattleScript_BeatUpAttack
-	@ manipulatedamage 2
 BattleScript_BeatUpAttack::
 	adjustnormaldamage
 	attackanimation
