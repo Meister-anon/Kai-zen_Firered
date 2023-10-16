@@ -3124,7 +3124,7 @@ enum
     CANCELLER_END2,
 };
 
-
+//needs to use gbattlerattacker / gbattlertarget  gactivebattler doesn't work here
 u8 AtkCanceller_UnableToUseMove(void)
 {
     u8 effect = 0;
@@ -3207,9 +3207,11 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_FROZEN: // check being frozen //think I want change back and put decrement here in atk canceler like sleep does, more punishing for fast mon,  but also simpler endturn logic/messaging
-            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE && gDisableStructs[gActiveBattler].FrozenTurns != 0) //frozen solid
+            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE && gDisableStructs[gBattlerAttacker].FrozenTurns != 0) //frozen solid
             {
-                if (--gDisableStructs[gActiveBattler].FrozenTurns != 0)
+                --gDisableStructs[gBattlerAttacker].FrozenTurns;
+                
+                if (gDisableStructs[gBattlerAttacker].FrozenTurns != 0)
                 {
                     //if (Random() % 5)//ok found freeze chance, so 1 in 5 chance of thawing out, on freeze.  pretty much  random % 5 if not 0 stays frozen.
                     if (!(CanThaw(gCurrentMove))) //attempt at frozn timr   actuallg best to put timer decrement at endturn, that way can have consistent freze duration
@@ -3652,6 +3654,16 @@ u8 AtkCanceller_UnableToUseMove(void)
                 }
                 effect = 2;
             }
+            else if (gBattleMons[gBattlerAttacker].status1 & STATUS1_FREEZE) //should be thaw if scald, or a fire type move above base 60
+            {
+                if (CanThaw(gCurrentMove))
+                {
+                    gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_FREEZE);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_MoveUsedUnfroze;
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                }
+            }//thaw for if defrosted by timer, doesnt prevent attack, only triggers if timer is 0
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_POWDER_MOVE:

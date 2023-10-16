@@ -1199,12 +1199,19 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  next task  fix multi task, then aftermath, issue is targetting is on wrong side, and infini loops
  think best fix is just make switchout abilities case after switchin abilities then use switchout abilities done flag
  similar to how switchin abilities done works. - well nvm fixed aftermath, it mostly worked I just forgot to put the ability removal back
+ - think fixed, but seems move animations taht call others don't seem to work for repeat hits, they play once
+  and then nothing after, but dmg etc is working fine now
 
  frozen status not working, target can still attack even when supposed to be frozen solid
  fix in attack canceler logic
 
+  - fixed issue was wrong battler logic, used gactive when I should have used gattacker
+
 - fixed mon cries, issue was firered table was in diff order than emerald table, prob because of 
  the firered weird bit table logic default used.
+
+ -pickup still not quite right, when it picks up a berry and uses it same turn, it doesn't remove it
+ so it gets resused  and lansat berry seems ot be displaying wrong message?
 
  - make message for aviator/run away   src atk mon safely escaped with ability buff
   message will play on switch, will make sense for why pursuit failed to hit them
