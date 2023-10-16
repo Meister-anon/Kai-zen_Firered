@@ -74,12 +74,13 @@ PewterCity_Text_GoTakeOnBrock:: @ 817E6C7
 PewterCity_Text_TrainerTipsEarningEXP:: @ 817E6F6
     .string "TRAINER TIPS\p"
     .string "All POKéMON that appear in battle,\n"
-    .string "however briefly, earn EXP Points.$"
+    .string "however briefly, earn EXP Points.\l"
+    .string "And now they gain friendship too!$"
 
 PewterCity_Text_CallPoliceIfInfoOnThieves:: @ 817E748
     .string "NOTICE!\p"
-    .string "Thieves have been stealing POKéMON\n"
-    .string "fossils from MT. MOON.\p"
+    .string "Thieves have been stealing\n"
+    .string "POKéMON fossils from MT. MOON.\p"
     .string "Please call the PEWTER POLICE if\n"
     .string "you have any information.$"
 

@@ -202,11 +202,11 @@ static const struct LevelUpMove sWeedleLevelUpLearnset[] = {
 
 static const struct LevelUpMove sKakunaLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_HARDEN),
-    LEVEL_UP_MOVE(0, MOVE_COCOON),
+    LEVEL_UP_MOVE(0, MOVE_COCOON), //forgot I hadn't fixed this?
     LEVEL_UP_MOVE(0, MOVE_LEECH_SEED),
     LEVEL_UP_MOVE(7, MOVE_ENDURE),
     //LEVEL_UP_MOVE(7, MOVE_COCOON),
-    LEVEL_UP_MOVE(7, MOVE_LEECH_SEED),
+    LEVEL_UP_MOVE(12, MOVE_LEECH_SEED),
     LEVEL_UP_END
 };
 
