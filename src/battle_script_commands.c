@@ -3546,6 +3546,9 @@ static void atk08_adjustnormaldamage2(void)
 }
 
 //look into figure why multi task isn't playing animation again, pretty sure it did previously
+//nvm 1, pretty sure it was never setup properly til now, 
+//2 decided with feedback its better to just play animation once. (plus makes more sense with original concept idea is hitting with multiple instances of move at once)
+//so instituting bug as feature
 static void atk09_attackanimation(void)
 {
     if (!gBattleControllerExecFlags)
@@ -3562,13 +3565,20 @@ static void atk09_attackanimation(void)
             if ((gBattleMoves[gCurrentMove].target & MOVE_TARGET_BOTH
                 || gBattleMoves[gCurrentMove].target & MOVE_TARGET_FOES_AND_ALLY
                 || gBattleMoves[gCurrentMove].target & MOVE_TARGET_DEPENDS)
-             && gBattleScripting.animTargetsHit)
-            {
+             && gBattleScripting.animTargetsHit)  //believe this is play animation once, rather than again for each target hit
+            { //also that above line is why powdersnow didn't work, it was a dual target move, and I believe animtargetshit was set on first pass, so it executed this after
                 ++gBattlescriptCurrInstr;
                 return;
             }
-            if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+            if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) //do animation only if not move result no effect
             {
+                if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK)
+                && CanMultiTask(gCurrentMove)
+                && gBattleScripting.animTargetsHit)
+                {
+                    ++gBattlescriptCurrInstr;
+                    return;
+                }
                 gActiveBattler = gBattlerAttacker;
                 BtlController_EmitMoveAnimation(BUFFER_A, gCurrentMove, gBattleScripting.animTurn, gBattleMovePower, gBattleMoveDamage, gBattleMons[gBattlerAttacker].friendship, &gDisableStructs[gBattlerAttacker]);
                 ++gBattleScripting.animTurn;
