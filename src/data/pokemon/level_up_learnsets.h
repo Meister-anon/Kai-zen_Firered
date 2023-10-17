@@ -311,7 +311,7 @@ static const struct LevelUpMove sSpearowLevelUpLearnset[] = {
     LEVEL_UP_MOVE(37, MOVE_DRILL_PECK),
     LEVEL_UP_MOVE(43, MOVE_AGILITY),
     LEVEL_UP_END
-};
+}; //made normal add more dif type moves
 
 static const struct LevelUpMove sFearowLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_PECK),
