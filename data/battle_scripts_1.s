@@ -3213,9 +3213,11 @@ BattleScript_DoMultiHit::
 	datahpupdate BS_TARGET
 	critmessage
 	waitmessage 0x40
+	multihit_resultmessage
+	waitmessage B_WAIT_TIME_BRIEFEST  @diff duration so doesnt slow things down
 BattleScript_MultiHitEndMessages:
-	printstring STRINGID_EMPTYSTRING3
-	waitmessage 1 @ to clear any buffer issues
+	@printstring STRINGID_EMPTYSTRING3
+	@waitmessage 1 @ to clear any buffer issues  / think I'm fine without this, my new result command does about same thing
 	setmoveeffectwithchance
 	argumenttomoveeffect
 	@addbyte gBattleScripting + 12, 1   @ updated pret uses this "addbyte sMULTIHIT_STRING + 4, 1"

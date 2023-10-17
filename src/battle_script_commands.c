@@ -17363,6 +17363,46 @@ void BS_AttacksThisTurn(void) // Note: returns 1 if it's a charging turn, otherw
     
 } //vsonic double check, nvm planning to only use for solar beam/fluorescence so can leave other setups as they are
 
+//should let multihit moves display effectiveness of first hit
+void BS_Multihit_resultmessage(void) 
+{
+    u32 stringId = 0;
+
+    if (!gBattleControllerExecFlags) //should be only first hit of multi hit
+    {
+        if (gMultiTask == gMultiHitCounter && gMultiTask != 0) //with placement shuold never trigger missed, only super and not very effective
+        { 
+
+            
+            switch (gMoveResultFlags & (u8)(~(MOVE_RESULT_MISSED)))
+            {
+            case MOVE_RESULT_SUPER_EFFECTIVE:
+                stringId = STRINGID_SUPEREFFECTIVE;
+                gBattleCommunication[MSG_DISPLAY] = 0;
+                break;
+            case MOVE_RESULT_NOT_VERY_EFFECTIVE:
+                stringId = STRINGID_NOTVERYEFFECTIVE;
+                gBattleCommunication[MSG_DISPLAY] = 0;
+                break;
+
+            }             
+        }
+        else
+        {
+            stringId = STRINGID_EMPTYSTRING3;
+            gBattleCommunication[MSG_DISPLAY] = 0;
+        }
+
+        if (stringId)
+                PrepareStringBattle(stringId, gBattlerAttacker);
+    
+    }
+    
+
+    ++gBattlescriptCurrInstr; //put outside so doesn't freeze
+    
+}
+
 //not technical call, replacement for bad code logic, will allow me to just slot in whatever I need
 //more or less
 void BS_call_if(void) //comparing to jumpifholdeffect

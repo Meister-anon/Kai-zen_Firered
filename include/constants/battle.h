@@ -461,6 +461,7 @@
 #define B_WAIT_TIME_MED      0x30
 #define B_WAIT_TIME_SHORT    0x20
 #define B_WAIT_TIME_SHORTEST 0x10
+#define B_WAIT_TIME_BRIEFEST 0x7
 
 // Window Ids for sTextOnWindowsInfo_Normal
 #define B_WIN_MSG                 0

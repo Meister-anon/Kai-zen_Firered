@@ -854,7 +854,7 @@ goto TRAINER_REMATCH //stuff
 
  still need find way to setup ABILITY_RUN_AWAY to be immune to pursuit switchout dmg
  //also think would like to buff pursuit, so like with switch it'd check if enemy was attempting to use pursuit, so
- //you'd take pursuit damage even if you rolled a succees on running
+ //you'd take pursuit damage even if you rolled a succees on running - think done, setup jump script in switch command for ability
 
  note broke infestation trap and new bug status infestation into 2 different effects
 //THe new bug status is infestation, ist a status4 for now, and it has the effect of lowering statused target defense by half same as burn does for attack
@@ -917,6 +917,19 @@ fury cutter still not workign fully far as the message, way it works if it doesn
 it won't say type effectiveness message it'll only show that it missed, if it kills or gets all hits it'll show message.
 
 what I would want is show effectiveness on first hit, show miss on last hit if does so for multi hit
+ * could do that, would just need make alterante result message command, that triggers inside loop, but is only on first hit
+ i.e when gmultitask == gmultihitcounter (and is not 0)  since it would be below accuracy check it auto only trigger when hit
+ should be simple and good, move would check accuracy do atk string and animatinon then when hits do multihit result msg
+ show super or not very effective and continue, would need to include to skip the multhit result if move result is no effect
+ as I think normal result message catches that  (it does)
+ - ok did looks like its goood.
+
+ also for shedinja make sure when swap woner guard not only does mon hp become one,  (not max hp)
+ they also get the effect of healing items no longer working on them, so can't heal in battle
+ pay close attention to revised type chart to see any mon that would become fully immune with wonder guard
+ I think dispirit gaurd should swap hp and max hp and still allow for healing,
+ but again need to check to make sure there are no mon that have 0 resistances as it
+ doesn't have the thing of being easily taken out by weater or typeless dmg
 
 no that's not it somehow ghost is only hitting mon that aren't grounded and aren't normal type?   or steel?? works on gligar doesnt work on magnemite
 potential issue with grounded function logic?   gligar is flying type,  while magnemite should just be in floating species so a different check

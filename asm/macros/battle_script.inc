@@ -1398,6 +1398,10 @@
 	callnative BS_typebaseddmgboost
 	.endm
 
+	.macro multihit_resultmessage
+	callnative BS_Multihit_resultmessage
+	.endm
+
 	.macro getmoveeffect
 	callnative BS_getmoveeffect
 	.endm
