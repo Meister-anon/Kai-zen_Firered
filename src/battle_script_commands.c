@@ -9157,13 +9157,13 @@ static void atk59_handlelearnnewmove(void)
     const u8 *jumpPtr2 = T1_READ_PTR(gBattlescriptCurrInstr + 5);
     u16 ret = MonTryLearningNewMove(&gPlayerParty[gBattleStruct->expGetterMonId], gBattlescriptCurrInstr[9]);
     
-    while (ret == 0xFFFE) //normal but when would function ever be 0xFFFE?
+    while (ret == 0xFFFE) //normal but when would function ever be 0xFFFE?  //think found,   MON_ALREADY_KNOWS_MOVE ?
         ret = MonTryLearningNewMove(&gPlayerParty[gBattleStruct->expGetterMonId], 0);
     if (ret == 0) //don't learn move
     {
         gBattlescriptCurrInstr = jumpPtr2;
     }
-    else if (ret == 0xFFFF) //not a move?
+    else if (ret == 0xFFFF) //not a move?   //think LEVEL_UP_END ?
     {
         gBattlescriptCurrInstr += 10;
     }

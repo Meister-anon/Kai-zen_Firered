@@ -3315,10 +3315,42 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try 
     {
         u16 moveLevel;
         moveLevel = (gLevelUpLearnsets[species][sLearningMoveTableID].level);
-        while (moveLevel == 0 || moveLevel == level) //this is bad practice its say while while is true?
+        while (moveLevel == level) //this is bad practice its say while while is true?
         {
             gMoveToLearn = (gLevelUpLearnsets[species][sLearningMoveTableID].move);
             sLearningMoveTableID++;
+            return GiveMoveToMon(mon, gMoveToLearn);
+        }
+        sLearningMoveTableID++;
+    }
+    return retVal; //but anyway lvl 0 move learn works now
+}
+
+//just using in evolution_scene.c not good to use for all move learn
+//think that caused glitch learning
+u16 MonTryLearningEvoMove(struct Pokemon *mon, bool8 firstMove)
+{
+    u32 retVal = 0;
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    u8 level = GetMonData(mon, MON_DATA_LEVEL, NULL);
+
+    // since you can learn more than one move per level
+    // the game needs to know whether you decided to
+    // learn it or keep the old set to avoid asking
+    // you to learn the same move over and over again
+    if (firstMove)
+    {
+        sLearningMoveTableID = 0;
+    }
+
+    while(gLevelUpLearnsets[species][sLearningMoveTableID].move != LEVEL_UP_END)
+    {
+        u16 moveLevel;
+        moveLevel = (gLevelUpLearnsets[species][sLearningMoveTableID].level);
+        while (moveLevel == 0 || moveLevel == level) //this is bad practice its say while while is true?
+        {
+            gMoveToLearn = (gLevelUpLearnsets[species][sLearningMoveTableID].move); //can make uniform, have this only do lvl 0 moves, but this covers more cases
+            sLearningMoveTableID++;     //for evo methods that don't involve level, 
             return GiveMoveToMon(mon, gMoveToLearn);
         }
         sLearningMoveTableID++;
