@@ -4442,7 +4442,7 @@ static void GetMedicineItemEffectMessage(u16 item)
     }
 }
 
-static bool8 NotUsingHPEVItemOnShedinja(struct Pokemon *mon, u16 item, u16 ability)
+static bool8 NotUsingHPEVItemOnShedinja(struct Pokemon *mon, u16 item, u16 ability)//make sure setup for wonder guard not shedinja so works for in battle heal prevention
 {
     if (GetItemEffectType(item) == ITEM_EFFECT_HP_EV && GetMonData(mon, MON_DATA_SPECIES) == SPECIES_SHEDINJA && ability == ABILITY_WONDER_GUARD)
         return TRUE;

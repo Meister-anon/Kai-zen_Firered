@@ -1075,7 +1075,7 @@ damageHelper = spDefense;  (defense stat)
  and the shendinja gets replaced with your own party data, if you faint the opposing mon its treated as taking out your own mon
  and can trigger a whiteout.   running causes no problems   - still need fix thi9s...
  -did further testing, it copies your mon data etc. to opponent side, but mon still has shedinja moveset but seems to have your stats as it does less dmg
- need figure this out
+ need figure this out  - fixed it was calc stats setting current hp to 1, if ability wonderguard that broke it...
 
  seems to also keep its wondergaurd ability? or the hp, as a single hit takes it out
 

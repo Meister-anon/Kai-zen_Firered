@@ -3289,7 +3289,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_FURY_CUTTER] =
     {
         .effect = EFFECT_FURY_CUTTER,
-        .power = 10,
+        .power = 10, //chec furycutter calc command, need further fine tune dmg, still over performing
         .type = TYPE_BUG,
         .accuracy = 95, //for some reason started over-performing, changed mind, will doit in function instead
         .pp = 20,
