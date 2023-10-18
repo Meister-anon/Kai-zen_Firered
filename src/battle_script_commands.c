@@ -2089,13 +2089,13 @@ static void atk01_accuracycheck(void)
 
 
             //if (gBattleMoves[move].power)   //i ALREADY have a typecalc I don't need this to update move result flags I think?
-            CalcTypeEffectivenessMultiplier(move, type, gBattlerAttacker, gBattlerTarget, TRUE);    //this is only instance where uses TRUE, without that it doesn't change effectiveness
+            //CalcTypeEffectivenessMultiplier(move, type, gBattlerAttacker, gBattlerTarget, TRUE);    //this is only instance where uses TRUE, without that it doesn't change effectiveness
             //using this worked perfectly, so can confirm new type chart is solid
             //removing this as it has foresight logic, emerald uses typecalc? hopefully
             //can do that without doubling the multiplier.
             //nvm not using typecalc, forgot I ported emerald's CalcTypeEffectivenessMultiplier function, 
             //that's what's used in emerald think can just copy it straight over
-            //CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
+            CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
         //may put this back need test more on a working system
         
         //this runs type check against base chart, compares result to abilities then sets result flags
@@ -2336,7 +2336,7 @@ bool8 CanMultiTask(u16 move) //works, but now I need to negate the jump, because
 static void atk05_damagecalc(void)
 {
     u16 sideStatus = gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)];
-    //gMultiTask = 0; //don't know if i actually need to set equal to zero.  think I don't actually, will do anyway for now..
+    
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_TRIPLE_KICK
         && gCurrentMove != MOVE_SURGING_STRIKES)    //could put in separate dmg bscommand, but if works for multitask this should also work
@@ -2695,10 +2695,10 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
     //so replace this check with just flag dmg_in_air which thousand arrows ALSO has
     if (!(IsBattlerGrounded(gBattlerTarget)) && moveType == TYPE_GROUND && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_IN_AIR)) 
     {
-        gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
+        gMoveResultFlags |= (MOVE_RESULT_MISSED);
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0; //typecalc & typecalc2 are different, tp2 doesn't have this
-        gBattleCommunication[6] = moveType;
+        gBattleCommunication[6] = B_MSG_GROUND_MISS;
 
         if (GetBattlerAbility(gBattlerTarget) == ABILITY_LEVITATE)
         {
@@ -2711,7 +2711,8 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
         gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0; //typecalc & typecalc2 are different, tp2 doesn't have this
-        gBattleCommunication[6] = moveType;
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+        gBattleCommunication[6] = B_MSG_ABILITY_TYPE_MISS;
 
         gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
@@ -2768,7 +2769,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0;
-        gBattleCommunication[6] = 3;
+        gBattleCommunication[6] = B_MSG_AVOIDED_DMG;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_DISPIRIT_GUARD
@@ -2779,7 +2780,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0;
-        gBattleCommunication[6] = 3;
+        gBattleCommunication[6] = B_MSG_AVOIDED_DMG;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
     if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
@@ -2789,7 +2790,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0;
-        gBattleCommunication[6] = 3;
+        gBattleCommunication[6] = B_MSG_AVOIDED_DMG;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
     if (gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE)
@@ -2821,12 +2822,17 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
         RecordAbilityBattle(gBattlerTarget, ABILITY_LEVITATE);
         return;
     }
-    if (!(IsBattlerGrounded(gBattlerTarget)) && moveType == TYPE_GROUND && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_IN_AIR)) 
+    if (!(IsBattlerGrounded(gBattlerTarget)) && moveType == TYPE_GROUND && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_IN_AIR))
+    {
+        gBattleCommunication[6] = B_MSG_GROUND_MISS;
         return;
+    } 
+        
     if (moveType == TYPE_WATER && GetBattlerAbility(gBattlerTarget) == ABILITY_LIQUID_SOUL) //new buff for liquid soul
     {
-         gLastUsedAbility = ABILITY_LIQUID_SOUL;
-        gBattleCommunication[6] = moveType;
+        gLastUsedAbility = ABILITY_LIQUID_SOUL;
+        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+        gBattleCommunication[6] = B_MSG_ABILITY_TYPE_MISS;
         RecordAbilityBattle(gBattlerTarget, ABILITY_LIQUID_SOUL);
         return;
 
@@ -2973,7 +2979,7 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
         if (((flags & 2) || !(flags & 1)) && gBattleMoves[gCurrentMove].power) //think mean if not very effect, or not super effective
         {
             gLastUsedAbility = ABILITY_WONDER_GUARD;
-            gBattleCommunication[6] = 3;
+            gBattleCommunication[6] = 3; //somehow this is reading gmissstringIds in battle_message.c, think something to do with resultmessage comm
             RecordAbilityBattle(gBattlerTarget, ABILITY_WONDER_GUARD);
         }
     }
@@ -3174,25 +3180,31 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
         }//attempt at setting dual type moves
     }    
     if (gBattleMons[defender].ability == ABILITY_WONDER_GUARD
-     && !(flags & MOVE_RESULT_MISSED)
-     
+     && !(flags & MOVE_RESULT_MISSED)     
      && (!(flags & MOVE_RESULT_SUPER_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
      && gBattleMoves[move].power)
+     {
         flags |= MOVE_RESULT_MISSED;
-    return flags;
+        
+     }
+        
 
     if (gBattleMons[defender].ability == ABILITY_DISPIRIT_GUARD
-        && !(flags & MOVE_RESULT_MISSED)
-        
+        && !(flags & MOVE_RESULT_MISSED)        
         && (!(flags & MOVE_RESULT_NOT_VERY_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
         && gBattleMoves[move].power)
+    {
         flags |= MOVE_RESULT_MISSED;
-    return flags;
+
+    }
 
     if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
         && !(flags & MOVE_RESULT_MISSED)
         && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
+    {
         flags |= MOVE_RESULT_MISSED;
+
+    }
     return flags;
 }
 
@@ -3249,19 +3261,27 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
     if (targetAbility == ABILITY_WONDER_GUARD
      && (!(flags & MOVE_RESULT_SUPER_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
      && gBattleMoves[move].power)
+     {
         flags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
-    return flags;
+        
+     }
 
     if (targetAbility == ABILITY_DISPIRIT_GUARD
         && (!(flags & MOVE_RESULT_NOT_VERY_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
         && gBattleMoves[move].power)
+    {
         flags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
-    return flags;
+
+    }
 
     if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
         && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
+    {
         flags |= MOVE_RESULT_MISSED;
+
+    }
     return flags;
+
 }
 
 static inline void ApplyRandomDmgMultiplier(void) //vsonic test
@@ -8051,8 +8071,7 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
         }
     }
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_GUARD
-     && !(flags & MOVE_RESULT_NO_EFFECT)
-    
+     && !(flags & MOVE_RESULT_NO_EFFECT)    
      && (!(flags & MOVE_RESULT_SUPER_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
      && gBattleMoves[gCurrentMove].power)
     {
@@ -8063,8 +8082,7 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_DISPIRIT_GUARD
-        && !(flags & MOVE_RESULT_NO_EFFECT)
-       
+        && !(flags & MOVE_RESULT_NO_EFFECT)       
         && (!(flags & MOVE_RESULT_NOT_VERY_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
         && gBattleMoves[gCurrentMove].power)
     {
@@ -17368,38 +17386,45 @@ void BS_Multihit_resultmessage(void)
 {
     u32 stringId = 0;
 
+    
     if (!gBattleControllerExecFlags) //should be only first hit of multi hit
     {
-        if (gMultiTask == gMultiHitCounter && gMultiTask != 0) //with placement shuold never trigger missed, only super and not very effective
-        { 
+        if (gMultiHitCounter > 0 && gMultiHitCounter == gMultiTask)
+        {
 
-            
+                   
             switch (gMoveResultFlags & (u8)(~(MOVE_RESULT_MISSED)))
             {
             case MOVE_RESULT_SUPER_EFFECTIVE:
                 stringId = STRINGID_SUPEREFFECTIVE;
-                gBattleCommunication[MSG_DISPLAY] = 0;
+                gBattleCommunication[MSG_DISPLAY] = 1;
                 break;
             case MOVE_RESULT_NOT_VERY_EFFECTIVE:
                 stringId = STRINGID_NOTVERYEFFECTIVE;
-                gBattleCommunication[MSG_DISPLAY] = 0;
+                gBattleCommunication[MSG_DISPLAY] = 1;
                 break;
-
-            }             
+            default:
+                stringId = STRINGID_EMPTYSTRING3;
+                gBattleCommunication[MSG_DISPLAY] = 1;
+                break;
+            } 
         }
-        else
+
+        else if (gMultiHitCounter != gMultiTask)
         {
             stringId = STRINGID_EMPTYSTRING3;
-            gBattleCommunication[MSG_DISPLAY] = 0;
+            gBattleCommunication[MSG_DISPLAY] = 1;
         }
 
         if (stringId)
-                PrepareStringBattle(stringId, gBattlerAttacker);
-    
-    }
-    
+            PrepareStringBattle(stringId, gBattlerAttacker);
 
-    ++gBattlescriptCurrInstr; //put outside so doesn't freeze
+        ++gBattlescriptCurrInstr;
+    
+    }   
+    
+    ++gBattlescriptCurrInstr;
+    
     
 }
 

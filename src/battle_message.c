@@ -65,7 +65,8 @@ static const u8 sText_UseNextPkmn[] = _("Use next POKéMON?");
 static const u8 sText_AttackMissed[] = _("{B_ATK_NAME_WITH_PREFIX}'s\nattack missed!");
 static const u8 sText_PkmnProtectedItself[] = _("{B_DEF_NAME_WITH_PREFIX}\nprotected itself!");
 static const u8 sText_AvoidedDamage[] = _("{B_DEF_NAME_WITH_PREFIX} avoided\ndamage with {B_DEF_ABILITY}!");
-static const u8 sText_PkmnMakesGroundMiss[] = _("{B_DEF_NAME_WITH_PREFIX} took to the air!\nGROUND moves can't hit it!");
+static const u8 sText_PkmnMakesGroundMiss[] = _("{B_DEF_NAME_WITH_PREFIX} nullifies {B_BUFF1}\nmoves with {B_DEF_ABILITY}!");
+static const u8 sText_PkmnMakesGroundMiss2[] = _("{B_DEF_NAME_WITH_PREFIX} can float!\nGROUND moves can't hit it!");
 static const u8 sText_PkmnRoostEnds[] = _("{B_DEF_NAME_WITH_PREFIX} stopped Roosting and took to the air!\nGROUND moves can no longer hit it!");
 static const u8 sText_PkmnAvoidedAttack[] = _("{B_DEF_NAME_WITH_PREFIX} avoided\nthe attack!");
 static const u8 sText_ItDoesntAffect[] = _("It doesn't affect\n{B_DEF_NAME_WITH_PREFIX}…");
@@ -1129,7 +1130,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_EMPTYSTRING4 - BATTLESTRINGS_TABLE_START]                  = sText_EmptyString4,
     [STRINGID_ABOOSTED - BATTLESTRINGS_TABLE_START]                      = sText_ABoosted,
     [STRINGID_PKMNSXINTENSIFIEDSUN - BATTLESTRINGS_TABLE_START]          = sText_PkmnsXIntensifiedSun,
-    [STRINGID_PKMNMAKESGROUNDMISS - BATTLESTRINGS_TABLE_START]           = sText_PkmnMakesGroundMiss,
+    [STRINGID_PKMNMAKESGROUNDMISS - BATTLESTRINGS_TABLE_START]           = sText_PkmnMakesGroundMiss2,
     [STRINGID_YOUTHROWABALLNOWRIGHT - BATTLESTRINGS_TABLE_START]         = sText_YouThrowABallNowRight,
     [STRINGID_PKMNSXTOOKATTACK - BATTLESTRINGS_TABLE_START]              = sText_PkmnsXTookAttack,
     [STRINGID_PKMNCHOSEXASDESTINY - BATTLESTRINGS_TABLE_START]           = sText_PkmnChoseXAsDestiny,
@@ -1442,6 +1443,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_ATTACKER_ABILITYHURTS_TARGET - BATTLESTRINGS_TABLE_START]  = sText_AttackerHurtsPkmnWith,
     [STRINGID_PKMNINFESTED - BATTLESTRINGS_TABLE_START]                  = sText_Infested,
     [STRINGID_PKMNPANICKED - BATTLESTRINGS_TABLE_START]                  = sText_PkmnPanicked,
+    [STRINGID_ABILITYNULLIFYTYPEDAMAGE - BATTLESTRINGS_TABLE_START]      = sText_PkmnMakesGroundMiss,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
@@ -1822,7 +1824,8 @@ const u16 gMissStringIds[] =
     [B_MSG_PROTECTED]   = STRINGID_PKMNPROTECTEDITSELF,
     [B_MSG_AVOIDED_ATK] = STRINGID_PKMNAVOIDEDATTACK,
     [B_MSG_AVOIDED_DMG] = STRINGID_AVOIDEDDAMAGE,
-    [B_MSG_GROUND_MISS] = STRINGID_PKMNMAKESGROUNDMISS
+    [B_MSG_GROUND_MISS] = STRINGID_PKMNMAKESGROUNDMISS,
+    [B_MSG_ABILITY_TYPE_MISS]   = STRINGID_ABILITYNULLIFYTYPEDAMAGE
 };
 
 const u16 gProtectLikeUsedStringIds[] =
@@ -1830,7 +1833,7 @@ const u16 gProtectLikeUsedStringIds[] =
     [B_MSG_PROTECTED_ITSELF] = STRINGID_PKMNPROTECTEDITSELF2,
     [B_MSG_BRACED_ITSELF]    = STRINGID_PKMNBRACEDITSELF,
     [B_MSG_PROTECT_FAILED]   = STRINGID_BUTITFAILED,
-    [B_MSG_PROTECTED_TEAM]   = STRINGID_PROTECTEDTEAM,
+    [B_MSG_PROTECTED_TEAM]   = STRINGID_PROTECTEDTEAM
 };
 
 const u16 gCaughtMonStringIds[] = {

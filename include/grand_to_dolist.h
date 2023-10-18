@@ -940,12 +940,21 @@ when it doesnt work
 for some reason ghost moves worked correctly in rival fight, but not outside it?  yeah ghost works right in BATTLE_TYPE_FIRST_BATTLE
 
 multitask isn't working...dmg split is working but it isnt attackign multiple times..
- finished new seutp for rock smash cut etc.  type based effects, still no clue on multitask not working...
+ finished new seutp for rock smash cut etc.  type based effects, still no clue on multitask not working... - fixed, think I never  properly setup?
 
 leech seed also isn't working, is being applied twice, and not healing the target instead is doing damage to them too,?
 leech seed beign reaplied because its not setting status properly its being used does the end turn effect (improperly)
 and then its over   ok I see what's happening its healing the wrong taret,  its healing the mon seeded, but also dealing dmg to them
 so status is set oddly,/to wrong target?
+
+ idea from sacredalmighty attempt add happiness/friendship meter,  this put in summary screen, on first page
+ diretly above  pokeball,  think heart icon that fills up with happiness,
+  grahpic should have heart beat graphic (the bar that moves on the machine)
+  will put at vertical where friendship evo is, fill up use logic for exp bar fill up to setup graphic
+  its not vertical bar but hopefully its not more complex than that, if I need to change graphic to be a vertical bar
+  // a vertical slider top bar starts at starting friendship portion  everything else is black,   
+  heart icon is at top of current friendship position, bar will always have a gold line on it,
+  the gold line is the friendship evo point. if use bar, make heart icon fancier, 
 
 on catch add mon held item to bag, with brief text trigger after pokedex logic
 
@@ -1069,6 +1078,9 @@ damageHelper = spDefense;  (defense stat)
  need figure this out
 
  seems to also keep its wondergaurd ability? or the hp, as a single hit takes it out
+
+  - double check fury cutter, wonder guard shedinja  hit me fury cutter animatino seemed wrong somehow
+  like it played/struck multiple times per hit? may be imagination/mind playing tricks
 
  also related to plan of setting up custom physical/special contact non-contact icons
  since will need that in battle, and navigating to summary screen move info page  is tiring

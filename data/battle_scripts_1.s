@@ -3213,7 +3213,7 @@ BattleScript_DoMultiHit::
 	datahpupdate BS_TARGET
 	critmessage
 	waitmessage 0x40
-	multihit_resultmessage
+	multihit_resultmessage   @something wrong here messes with fury cutter, it breaks all multi hit
 	waitmessage B_WAIT_TIME_BRIEFEST  @diff duration so doesnt slow things down
 BattleScript_MultiHitEndMessages:
 	@printstring STRINGID_EMPTYSTRING3

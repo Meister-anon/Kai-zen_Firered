@@ -10335,14 +10335,10 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     else if ((moveType == TYPE_GROUND) && !IsBattlerGrounded(battlerDef) && !(gBattleMoves[move].flags & FLAG_DMG_IN_AIR))
     {
         modifier = UQ_4_12(0.0);
-        /*if (recordAbilities && defAbility == ABILITY_LEVITATE)
-        {
-            gLastUsedAbility = ABILITY_LEVITATE;
-            gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
-            gLastLandedMoves[battlerDef] = 0;
-            gBattleCommunication[MISS_TYPE] = B_MSG_GROUND_MISS;
-            RecordAbilityBattle(battlerDef, ABILITY_LEVITATE);
-        } */  //potentially add back later.
+        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gLastLandedMoves[battlerDef] = 0;
+        gBattleCommunication[6] = B_MSG_GROUND_MISS;
+        return modifier;
     }
 
     else if ((move == MOVE_SHEER_COLD) && IS_BATTLER_OF_TYPE(battlerDef, TYPE_ICE))
@@ -10361,7 +10357,6 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     if (((defAbility == ABILITY_WONDER_GUARD && modifier <= UQ_4_12(1.0))
         || (defAbility == ABILITY_TELEPATHY && battlerDef == BATTLE_PARTNER(battlerAtk))
         || (defAbility == ABILITY_DISPIRIT_GUARD && modifier >= UQ_4_12(1.0))
-        || (defAbility == ABILITY_LIQUID_SOUL && moveType == TYPE_WATER)
         )
         && gBattleMoves[move].power)
     {
@@ -10376,9 +10371,25 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
         }
     }
 
+    if ((defAbility == ABILITY_LIQUID_SOUL && moveType == TYPE_WATER)
+        && gBattleMoves[move].power)
+        {
+             modifier = UQ_4_12(0.0);
+        if (recordAbilities)
+        {
+            gLastUsedAbility = gBattleMons[battlerDef].ability;
+            gMoveResultFlags |= MOVE_RESULT_MISSED;
+            gLastLandedMoves[battlerDef] = 0;
+            PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+            gBattleCommunication[MISS_TYPE] = B_MSG_ABILITY_TYPE_MISS;
+            RecordAbilityBattle(battlerDef, gBattleMons[battlerDef].ability);
+        }
+        }
+
     return modifier;
 }
 
+//double check how this works in emerald as doesn't have check for  result missed
 static void UpdateMoveResultFlags(u16 modifier)
 {
     if (modifier == UQ_4_12(0.0))
