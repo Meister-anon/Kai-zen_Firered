@@ -16516,9 +16516,13 @@ static void atkEF_handleballthrow(void) //important changed
     }
 }
 
+//oh I can do the take held item stuff here nice
 static void atkF0_givecaughtmon(void) //useful if I set up alt storage,
 {
-    if (GiveMonToPlayer(&gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker ^ BIT_SIDE]]) != MON_GIVEN_TO_PARTY)
+    u16 heldItem = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker ^ BIT_SIDE]], MON_DATA_HELD_ITEM);
+    u16 clearItem = ITEM_NONE;
+
+    if (GiveMonToPlayer(&gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker ^ BIT_SIDE]]) != MON_GIVEN_TO_PARTY) //if mon going to pc, is this codeblok
     {
         if (!ShouldShowBoxWasFullMessage())
         {
@@ -16533,10 +16537,19 @@ static void atkF0_givecaughtmon(void) //useful if I set up alt storage,
             StringCopy(gStringVar3, GetBoxNamePtr(GetPCBoxToSendMon())); //box the mon was going to be sent to
             gBattleCommunication[MULTISTRING_CHOOSER] = 2;
         }
-        if (FlagGet(FLAG_SYS_NOT_SOMEONES_PC))
+        if (FlagGet(FLAG_SYS_NOT_SOMEONES_PC)) //will change to bill when get to that point
             ++gBattleCommunication[MULTISTRING_CHOOSER];
+
+        if (heldItem != ITEM_NONE)
+        {
+            
+            AddBagItem(heldItem, 1); //taking item works, message doesnt work, removing item from mon doesnt work
+            PREPARE_ITEM_BUFFER(gBattleTextBuff3, heldItem);
+            SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker ^ BIT_SIDE]], MON_DATA_HELD_ITEM, &clearItem); 
+            gBattlescriptCurrInstr = BattleScript_TakeItemfromCaughtMon; //change think use buff3 and end with return 
+        }
     }
-    gBattleResults.caughtMonSpecies = gBattleMons[gBattlerAttacker ^ BIT_SIDE].species;
+    gBattleResults.caughtMonSpecies = gBattleMons[gBattlerAttacker ^ BIT_SIDE].species; //thinkm this is why can't catch both mon? it uses side? is that why?
     GetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker ^ BIT_SIDE]], MON_DATA_NICKNAME, gBattleResults.caughtMonNick);
     ++gBattlescriptCurrInstr;
 }
@@ -17106,13 +17119,17 @@ void BS_jumpifsubstituteblocks(void) {
         gBattlescriptCurrInstr += 5;
 }
 //for those that want it
-static void atk105_trainerslideout(void) {
-    gActiveBattler = GetBattlerAtPosition(gBattlescriptCurrInstr[1]);
+void BS_trainerslideout(void) 
+{
+    NATIVE_ARGS(u8 param); 
+
+    //gActiveBattler = GetBattlerAtPosition(gBattlescriptCurrInstr[1]);
+    gActiveBattler = GetBattlerAtPosition(cmd->param);
     BtlController_EmitTrainerSlideBack(0);
     MarkBattlerForControllerExec(gActiveBattler);
 
-    gBattlescriptCurrInstr += 2;
-}
+    gBattlescriptCurrInstr = cmd->nextInstr;
+} //aparently I just completely forgot to rename this??
 
 static const u16 sTelekinesisBanList[] =
 {
@@ -17286,8 +17303,9 @@ void BS_setattackerstatus3(void) {
 
 void BS_setiondeluge(void) //removed under_score in name seemed to prevent use
 { //since battlescript alrady sets field effect, just sets timer here
+    NATIVE_ARGS();
     gFieldTimers.IonDelugeTimer = 4;
-    gBattlescriptCurrInstr += 5;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 void BS_setuserstatus3(void)
@@ -17329,6 +17347,8 @@ void BS_setuserstatus4(void)  //right now just usiong to set status groudned, fo
 
 void BS_typebaseddmgboost(void)
 {
+    NATIVE_ARGS();
+
     u8 typeArgument = gBattleMoves[gCurrentMove].argument;
     u8 EffectMultiplier = gBattleMoves[gCurrentMove].argumentEffectChance;
 
@@ -17344,7 +17364,7 @@ void BS_typebaseddmgboost(void)
             gDynamicBasePower = (gDynamicBasePower * EffectMultiplier) / 10;
         
     }
-    ++gBattlescriptCurrInstr;
+   gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 //checked isn't actually used for making move attack this turn, its just in typecalc for wonderguard telepathy stuff

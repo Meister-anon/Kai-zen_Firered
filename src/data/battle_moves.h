@@ -4760,7 +4760,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
-    },
+    }, //didn't realize changing moves to sound would exclude from normal transformation abilities like pixelate etc.
+    //could make sound type included in those abilities, but will be a trade off, since sound moves have their own effectiveness?
 
     [MOVE_TOXIC_FANG] =
     {
@@ -9075,7 +9076,6 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
-        .argument = MOVE_EFFECT_CONFUSION,
     },
 
     [MOVE_FAIRY_LOCK] =
@@ -9284,7 +9284,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 1,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_POWDER_MOVE,
         .split = SPLIT_STATUS,
-    },//this move is crazy its a fire type counter, spread to more mon, but make it make sense dustox vespiqueen etc
+    },//this move is crazy its a fire type counter, spread to more mon, but make it make sense dustox vespiqueen butterfree etc
 
     [MOVE_GEOMANCY] =
     {

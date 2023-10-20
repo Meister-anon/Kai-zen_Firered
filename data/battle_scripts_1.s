@@ -6885,6 +6885,11 @@ BattleScript_PrintHurtByDmgHazards::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+BattleScript_TakeItemfromCaughtMon::
+	printstring STRINGID_CAUGHTMONDROPPEDITEM
+	waitmessage 0x40
+	return
+
 BattleScript_PerishSongTakesLife::
 	printstring STRINGID_PKMNPERISHCOUNTFELL
 	waitmessage 0x40
