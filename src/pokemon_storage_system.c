@@ -107,7 +107,7 @@ void BoxMonAtGainExp(u8 boxId, u8 boxPosition)
     struct Pokemon mon;
     BoxMonToMon(&gPokemonStoragePtr->boxes[boxId][boxPosition], &mon);
 
-    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT) //think replace this with speecies check and not egg
     {
         
         

@@ -485,8 +485,9 @@ static void ApplyDaycareExperience(struct Pokemon *mon)
 
     for (i = 0; i < MAX_LEVEL; i++)
     {
+        TryIncrementMonLevel(mon); //increment level if less than max level, commented out move learn
         // Add the mon's gained daycare experience level by level until it can't level up anymore.
-        if (TryIncrementMonLevel(mon)) //hmm so its not exactly experience its instaed just a level gain? hmm
+        /*if (TryIncrementMonLevel(mon)) //hmm so its not exactly experience its instaed just a level gain? hmm
         {
             // Teach the mon new moves it learned while in the daycare.  //prob just delete this
             firstMove = TRUE;
@@ -500,9 +501,9 @@ static void ApplyDaycareExperience(struct Pokemon *mon)
         else
         {
             break;
-        }
+        }*/
     }
-
+    
     // Re-calculate the mons stats at its new level.
     CalculateMonStats(mon);
 }

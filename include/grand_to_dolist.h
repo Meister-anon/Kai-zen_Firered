@@ -1080,7 +1080,7 @@ damageHelper = spDefense;  (defense stat)
  seems to also keep its wondergaurd ability? or the hp, as a single hit takes it out
 
   - double check fury cutter, wonder guard shedinja  hit me fury cutter animatino seemed wrong somehow
-  like it played/struck multiple times per hit? may be imagination/mind playing tricks
+  like it played/struck multiple times per hit? may be imagination/mind playing tricks - its fine
 
  also related to plan of setting up custom physical/special contact non-contact icons
  since will need that in battle, and navigating to summary screen move info page  is tiring
@@ -1198,18 +1198,34 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  problem was battlestruct was set to 0, but I never added type3 to this function, so it was essentially making type 3 default to normal
  so type bug is gone, now I have to deal with the 4 other bugs I found in the process...
 
- //not nat dex mon don't trigger pokedex script on catch, 
+ //not nat dex mon don't trigger pokedex script on catch, need fix
 
  there's now also a move learn bug...if I select no to move learn, without goiong to move deletion selection
  it'll display as if I deleted the move I was trying to learn and replaced it with  the move I was declined to learn...
  1 2 poof deleted baby doll eyes and learned baby doll eyes,...actually nvm it completely replaced my first move...
- even though I declined to learn the move   sigh
+ even though I declined to learn the move   sigh   
+  - still working on , seems part of that was do to being leech seeeded while its broken?
+  - oh that was issue from lvl 0 move learn, separated into 2 separate move learn funcions, lvl 0 just for evo
+
+  - move learn still has some issues, causes freeze when navigating yes no options for some reason
+  -plan fix move learn, fix bind, then fix  tm case windows then mvoe on to dex update and fixes
+
+  //status setting from abilities seems to not be working?  poison point doesn't seem to ever poison
+  sweet kiss also doesn't work, atk string goes off but move does nothing?
 
  also forgot evo moves that are auto learned don't populate the screen i.e lvl 0 moves
  i.e learn 2 moves on evo from lvl 0, so but then learn a move from level up in the evo
  the lvl 0 moves dont show up so you're unable to replace them in the move learn screen
  only the moves you had prior to evo are displayed,
  but after evo they are shown
+
+ - need check sound type change, former normal moves are now exempt abilities that change type from normal like pixelate etc.
+ so check how that affects those abilities, i.e the mon that get them what former normal moves they have that were changed to sound.
+
+ got help from kurausukun and shinny from pret, with oak ranch pc exp idea, it work but had bad optiomization that caused major lag.
+ removing box encryption helped greatly, it was also recommended to put back the species check and not egg check for loop to further optimze
+ and that building modern should help a good deal as well.   right now its down to about half a second at triple speed. so barely noticeable
+ 
 
  defiant competitive also don't work for some reason, goes into infini loop when lowering stats smh
 

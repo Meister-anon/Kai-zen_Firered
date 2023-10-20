@@ -458,11 +458,15 @@ void UpdatePokemonStorageSystemMonExp(void)
 {
     u16 boxId, boxPosition;
 
-    //SetCurrentBox(0);
     for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
     {
-        for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++)
-            BoxMonAtGainExp(boxId, boxPosition);
+        for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++) //put species filter in, on adisement to hopefully cut down unnecessary processing
+        {
+            if (GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_SPECIES) != SPECIES_NONE
+            && !GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_IS_EGG))
+                BoxMonAtGainExp(boxId, boxPosition);
+        }
+            
     }
     gSaveBlock1Ptr->oakRanchStepCounter = 0; //after give exp reset counter
 }

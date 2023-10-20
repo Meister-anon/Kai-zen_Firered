@@ -2958,7 +2958,7 @@ void ConvertPokemonToBattleTowerPokemon(struct Pokemon *mon, struct BattleTowerP
 
 static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon)
 {
-    u16 checksum = 0;
+    /*u16 checksum = 0;
     union PokemonSubstruct *substruct0 = GetSubstruct(boxMon, boxMon->personality, 0);
     union PokemonSubstruct *substruct1 = GetSubstruct(boxMon, boxMon->personality, 1);
     union PokemonSubstruct *substruct2 = GetSubstruct(boxMon, boxMon->personality, 2);
@@ -2977,7 +2977,8 @@ static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon)
     for (i = 0; i < 6; i++)
         checksum += substruct3->raw[i];
 
-    return checksum;
+    return checksum;*/
+    return 0;
 }
 
 #define CALC_STAT(base, iv, ev, statIndex, field)                               \
@@ -4640,22 +4641,22 @@ void SetMultiuseSpriteTemplateToTrainerBack(u16 trainerSpriteId, u8 battlerPosit
 
 static void EncryptBoxMon(struct BoxPokemon *boxMon)
 {
-    u32 i;
+    /*u32 i;
     for (i = 0; i < 12; i++)
     {
         boxMon->secure.raw[i] ^= boxMon->personality;
         boxMon->secure.raw[i] ^= boxMon->otId;
-    }
+    }*/
 }
 
 static void DecryptBoxMon(struct BoxPokemon *boxMon)
 {
-    u32 i;
+    /*u32 i;
     for (i = 0; i < 12; i++)
     {
         boxMon->secure.raw[i] ^= boxMon->otId;
         boxMon->secure.raw[i] ^= boxMon->personality;
-    }
+    }*/
 }
 
 #define SUBSTRUCT_CASE(n, v1, v2, v3, v4)                               \
@@ -5502,13 +5503,6 @@ static u8 SendMonToPC(struct Pokemon* mon)//follows catching/receiving mon, is n
             struct BoxPokemon* checkingMon = GetBoxedMonPtr(boxNo, boxPos);
             if (GetBoxMonData(checkingMon, MON_DATA_SPECIES, NULL) == SPECIES_NONE) //can use this for check if mon in box, but break loop if find species
             {
-                MonRestorePP(mon);
-                CopyMon(checkingMon, &mon->box, sizeof(mon->box));
-                gSpecialVar_MonBoxId = boxNo;
-                gSpecialVar_MonBoxPos = boxPos;
-                if (GetPCBoxToSendMon() != boxNo)
-                    FlagClear(FLAG_SHOWN_BOX_WAS_FULL_MESSAGE);
-                VarSet(VAR_PC_BOX_TO_SEND_MON, boxNo);
                 //this should be where I start gSaveBlock1Ptr->oakRanchStepCounter will do flag setif counter is 0
                 //on close pc, check if there are any mon in pc boxes, if no clear flag and reset counter to 0
                 if (gSaveBlock1Ptr->oakRanchStepCounter == 0 && !FlagGet(FLAG_START_OAK_RANCH_COUNTER)) //set to 0 on new game
@@ -5516,6 +5510,16 @@ static u8 SendMonToPC(struct Pokemon* mon)//follows catching/receiving mon, is n
 
                 if (FlagGet(FLAG_START_OAK_RANCH_COUNTER) && gSaveBlock1Ptr->oakRanchStepCounter != 0)
                     UpdatePokemonStorageSystemMonExp(); //should update exp/levels of mon in pc when catch new mon and reset counter
+                    //put above default logic to ensure box mon exp is calced before new mon goes in
+
+                MonRestorePP(mon);
+                CopyMon(checkingMon, &mon->box, sizeof(mon->box));
+                gSpecialVar_MonBoxId = boxNo;
+                gSpecialVar_MonBoxPos = boxPos;
+                if (GetPCBoxToSendMon() != boxNo)
+                    FlagClear(FLAG_SHOWN_BOX_WAS_FULL_MESSAGE);
+                VarSet(VAR_PC_BOX_TO_SEND_MON, boxNo);
+                
 
                 return MON_GIVEN_TO_PC;
             }
