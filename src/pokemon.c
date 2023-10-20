@@ -5464,7 +5464,7 @@ void CopyMon(void *dest, void *src, size_t size)
     memcpy(dest, src, size);
 }
 
-u8 GiveMonToPlayer(struct Pokemon *mon)
+u8 GiveMonToPlayer(struct Pokemon *mon)//is always used, in both cases of  catching mon or receiving mon
 {
     s32 i;
 
@@ -5487,7 +5487,7 @@ u8 GiveMonToPlayer(struct Pokemon *mon)
 }
 
 #define DEPOSIT_TO_PCLOGIC
-static u8 SendMonToPC(struct Pokemon* mon)
+static u8 SendMonToPC(struct Pokemon* mon)//follows catching/receiving mon, is not same as depositing with pc
 {
     s32 boxNo, boxPos;
 
@@ -5500,7 +5500,7 @@ static u8 SendMonToPC(struct Pokemon* mon)
         for (boxPos = 0; boxPos < IN_BOX_COUNT; boxPos++)
         {
             struct BoxPokemon* checkingMon = GetBoxedMonPtr(boxNo, boxPos);
-            if (GetBoxMonData(checkingMon, MON_DATA_SPECIES, NULL) == SPECIES_NONE)
+            if (GetBoxMonData(checkingMon, MON_DATA_SPECIES, NULL) == SPECIES_NONE) //can use this for check if mon in box, but break loop if find species
             {
                 MonRestorePP(mon);
                 CopyMon(checkingMon, &mon->box, sizeof(mon->box));
@@ -5509,6 +5509,14 @@ static u8 SendMonToPC(struct Pokemon* mon)
                 if (GetPCBoxToSendMon() != boxNo)
                     FlagClear(FLAG_SHOWN_BOX_WAS_FULL_MESSAGE);
                 VarSet(VAR_PC_BOX_TO_SEND_MON, boxNo);
+                //this should be where I start gSaveBlock1Ptr->oakRanchStepCounter will do flag setif counter is 0
+                //on close pc, check if there are any mon in pc boxes, if no clear flag and reset counter to 0
+                if (gSaveBlock1Ptr->oakRanchStepCounter == 0 && !FlagGet(FLAG_START_OAK_RANCH_COUNTER)) //set to 0 on new game
+                    FlagSet(FLAG_START_OAK_RANCH_COUNTER); //if cactch mon think I need to set exp of box mon and then reset counter to 0
+
+                if (FlagGet(FLAG_START_OAK_RANCH_COUNTER) && gSaveBlock1Ptr->oakRanchStepCounter != 0)
+                    UpdatePokemonStorageSystemMonExp(); //should update exp/levels of mon in pc when catch new mon and reset counter
+
                 return MON_GIVEN_TO_PC;
             }
         }

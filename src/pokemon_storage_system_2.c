@@ -390,12 +390,21 @@ static void PSS_CreatePCMenu(u8 whichMenu, s16 *windowIdPtr)
     PrintTextArray(windowId, 2, GetMenuCursorDimensionByFont(2, 0), 2, 16, NELEMS(sUnknown_83CDA20), (void *)sUnknown_83CDA20);
     Menu_InitCursor(windowId, 2, 0, 2, 16, NELEMS(sUnknown_83CDA20), whichMenu);
     *windowIdPtr = windowId;
+    if (FlagGet(FLAG_START_OAK_RANCH_COUNTER) && gSaveBlock1Ptr->oakRanchStepCounter != 0)
+        UpdatePokemonStorageSystemMonExp(); //forgot to set here to update when open pc
 }
 
 void Cb2_ExitPSS(void)  //exit box to return to pss menu
 {
     sPreviousBoxOption = GetCurrentBoxOption();
     gFieldCallback = FieldCb_ReturnToPcMenu;
+    if (CheckIfPcEmpty() && FlagGet(FLAG_START_OAK_RANCH_COUNTER)) //make only run loop check if pc empty and flag isnt alraedy cleared
+    {
+        FlagClear(FLAG_START_OAK_RANCH_COUNTER);
+        gSaveBlock1Ptr->oakRanchStepCounter = 0;
+    }
+    else if (!(CheckIfPcEmpty()))
+        FlagSet(FLAG_START_OAK_RANCH_COUNTER); //forgot need here to set counter, when depositing mon physically
     SetMainCallback2(CB2_ReturnToField);
 }
 
@@ -418,6 +427,44 @@ void ResetPokemonStorageSystem(void)
     {
         SetBoxWallpaper(boxId, boxId % 4);
     }
+}
+
+//main call function put in close pc logic
+//for check if shuold reset oakranch counter, if functino return true clear flag and reset counter
+u8 CheckIfPcEmpty(void)
+{
+    u16 boxId, boxPosition;
+    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
+    {
+        for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++)
+        {
+            if (GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_SPECIES) != SPECIES_NONE
+            && !GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_IS_EGG))
+                return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
+//need setup function for clearing and starting stepcounter, 
+//if there are no mon in pc clear counter and stop incrementing
+//also need to start counter soon as first mon goes into pc
+//so think set flag when catch mon that goes to pc for first time
+//that will start counter auto,
+//this function below should be run soon as you boot up a pc /not player pc
+//and think I can run couter state update funtion when you close pc
+void UpdatePokemonStorageSystemMonExp(void)
+{
+    u16 boxId, boxPosition;
+
+    //SetCurrentBox(0);
+    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
+    {
+        for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++)
+            BoxMonAtGainExp(boxId, boxPosition);
+    }
+    gSaveBlock1Ptr->oakRanchStepCounter = 0; //after give exp reset counter
 }
 
 void LoadBoxSelectionPopupSpriteGfx(struct UnkPSSStruct_2002370 *a0, u16 tileTag, u16 palTag, u8 a3, bool32 loadPal)

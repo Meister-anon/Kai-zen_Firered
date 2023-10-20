@@ -101,6 +101,30 @@ void ZeroBoxMonAt(u8 boxId, u8 boxPosition)
         ZeroBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition]);
 }
 
+void BoxMonAtGainExp(u8 boxId, u8 boxPosition)
+{
+    u32 experience;
+    struct Pokemon mon;
+    BoxMonToMon(&gPokemonStoragePtr->boxes[boxId][boxPosition], &mon);
+
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        
+        
+        if (GetMonData(&mon, MON_DATA_LEVEL) != MAX_LEVEL)
+        {
+            experience = GetMonData(&mon, MON_DATA_EXP) + gSaveBlock1Ptr->oakRanchStepCounter;
+            SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_EXP, &experience);
+        }
+
+        
+
+        if (TryIncrementMonLevel(&mon)) //has max level check built in
+            CalculateMonStats(&mon);
+    }
+        
+}
+
 void BoxMonAtToMon(u8 boxId, u8 boxPosition, struct Pokemon * dst)
 {
     if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)

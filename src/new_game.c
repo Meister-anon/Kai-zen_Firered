@@ -140,6 +140,7 @@ void NewGameInitData(void)
     ResetPokemonStorageSystem();
     ClearRoamerData();
     gSaveBlock1Ptr->registeredItem = 0;
+    gSaveBlock1Ptr->oakRanchStepCounter = 0;
     ClearBag();
     NewGameInitPCItems();
     sub_809C794();

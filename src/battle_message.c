@@ -497,6 +497,7 @@ static const u8 sText_ItAppearedCaught[] = _("Aww!\nIt appeared to be caught!");
 static const u8 sText_AarghAlmostHadIt[] = _("Aargh!\nAlmost had it!");
 static const u8 sText_ShootSoClose[] = _("Shoot!\nIt was so close, too!");
 const u8 gUnknown_83FD78A[] = _("よけられた!\nこいつは つかまりそうにないぞ!");
+static const u8 sText_ReceiveditemfromCaughtMon[] = _("{B_DEF_NAME} dropped a {B_BUFF3}!"); //for taking item caught from mon
 static const u8 sText_GotchaPkmnCaught[] = _("Gotcha!\n{B_DEF_NAME} was caught!{WAIT_SE}{PLAY_BGM MUS_CAUGHT}\p");
 static const u8 sText_GotchaPkmnCaught2[] = _("Gotcha!\n{B_DEF_NAME} was caught!{WAIT_SE}{PLAY_BGM MUS_CAUGHT}{PAUSE 127}");
 static const u8 sText_GiveNicknameCaptured[] = _("Give a nickname to the\ncaptured {B_OPPONENT_MON1_NAME}?");
@@ -1444,6 +1445,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_PKMNINFESTED - BATTLESTRINGS_TABLE_START]                  = sText_Infested,
     [STRINGID_PKMNPANICKED - BATTLESTRINGS_TABLE_START]                  = sText_PkmnPanicked,
     [STRINGID_ABILITYNULLIFYTYPEDAMAGE - BATTLESTRINGS_TABLE_START]      = sText_PkmnMakesGroundMiss,
+    [STRINGID_CAUGHTMONDROPPEDITEM - BATTLESTRINGS_TABLE_START]          = sText_ReceiveditemfromCaughtMon,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,

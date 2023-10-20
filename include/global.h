@@ -585,9 +585,9 @@ struct DayCareMail
 struct DaycareMon
 {
     struct BoxPokemon mon;
-    struct DayCareMail mail;
+    struct DayCareMail mail; //dont have mail so can remove this as well
     u32 steps;
-};
+};//this steps is exp gain, but uses daycaremon value in other struct for assigning count to mon
 
 #define DAYCARE_MON_COUNT   2 //plan to raise, 
 
@@ -596,14 +596,14 @@ struct DayCare
     struct DaycareMon mons[DAYCARE_MON_COUNT];
     u16 offspringPersonality;
     u8 stepCounter; //if I add more mon would require a separate step counter for each pairing...or not since it alraedy works based on individual mon?
-};
+}; //this isn't exp gain its for egg hatching/eggs
 
 struct RecordMixingDayCareMail
 {
     struct DayCareMail mail[DAYCARE_MON_COUNT];
     u32 numDaycareMons;
     bool16 holdsItem[DAYCARE_MON_COUNT];
-};
+}; //can remove
 
 struct MENewsJisanStruct
 {
@@ -772,17 +772,18 @@ struct TrainerTower
     bool8 validated:1;
 };
 
-struct TrainerRematchState
+struct TrainerRematchState //since not using vs seeker, can repurpose this or remove plan for pc exp gain since need counter
 {
     u16 stepCounter;
     u8 rematches[100];
 };
 
+
 struct TrainerNameRecord
 {
     u32 trainerId;
     u8 trainerName[PLAYER_NAME_LENGTH + 1];
-};
+};//assume needed for questlog
 
 // For external event data storage. The majority of these may have never been used.
 // In FRLG, the only known used fields are the PokeCoupon and BoxRS ones, but hacking the distribution discs allows FRLG to receive events and set the others
@@ -859,8 +860,9 @@ struct SaveBlock1
     /*0x05F8*/ u8 seen1[DEX_FLAGS_NO];
     /*0x062C*/ u16 berryBlenderRecords[3]; // unused
     /*0x0632*/ u8 field_632[6]; // unused?
-    /*0x0638*/ u16 trainerRematchStepCounter;
-    /*0x063A*/ u8 ALIGNED(2) trainerRematches[100];
+    /*0x0638*/ u16 trainerRematchStepCounter; //appears, doesn't need to be in struct? its alwaysu referred to by saveblockptr not the trainerrematch struct
+    /*0x063A*/ u8 ALIGNED(2) trainerRematches[100]; //think can safely remove
+               u32 oakRanchStepCounter; //using for pc exp gain, set to 0 on new game, need have functino check for if mon in pc if yes increment w steps if no reset counter
     /*0x06A0*/ struct ObjectEvent objectEvents[OBJECT_EVENTS_COUNT];
     /*0x08E0*/ struct ObjectEventTemplate objectEventTemplates[64];
     /*0x0EE0*/ u8 flags[NUM_FLAG_BYTES];
@@ -876,7 +878,7 @@ struct SaveBlock1
     /*0x2F18*/ OldMan oldMan; // unused
     /*0x2F54*/ struct EasyChatPair easyChatPairs[5]; // unused
     /*0x2F80*/ struct DayCare daycare;
-    /*0x309C*/ u8 giftRibbons[11];
+    /*0x309C*/ u8 giftRibbons[11]; //check this since removed some this may not bneed to be 11
     /*0x30A7*/ struct ExternalEventData externalEventData;
     /*0x30BB*/ struct ExternalEventFlags externalEventFlags;
     /*0x30D0*/ struct Roamer roamer;

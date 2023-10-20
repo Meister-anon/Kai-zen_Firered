@@ -46,4 +46,9 @@ void ResetPokemonStorageSystem(void);
 u8 StorageGetCurrentBox(void);
 void DrawTextWindowAndBufferTiles(const u8 *string, void *dst, u8 zero1, u8 zero2, u8 *buffer, s32 bytesToBuffer);
 
+void UpdatePokemonStorageSystemMonExp(void); //boxx exp gain setup - main function call
+void BoxMonAtGainExp(u8 boxId, u8 boxPosition); //box exp gaain setup  //exp setting logic
+
+u8 CheckIfPcEmpty(void); //check if there is a mon in pc, for resetting pc exp gain counter
+
 #endif // GUARD_POKEMON_STORAGE_SYSTEM_H

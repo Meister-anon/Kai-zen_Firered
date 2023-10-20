@@ -1517,8 +1517,9 @@
 #define FLAG_0x8FF                                                  (SYS_FLAGS + 0xFF)
 // My New Flags
 #define FLAG_NEW_EXP_SHARE											(SYS_FLAGS + 0x100)
+#define FLAG_START_OAK_RANCH_COUNTER                                (SYS_FLAGS + 0x101)
 //#define B_SMART_WILD_AI_FLAG											(SYS_FLAGS + 0x100)
-#define FLAGS_COUNT (FLAG_NEW_EXP_SHARE + 1)
+#define FLAGS_COUNT (FLAG_START_OAK_RANCH_COUNTER + 1)
 
 
 // SPECIAL FLAGS (unknown purpose)

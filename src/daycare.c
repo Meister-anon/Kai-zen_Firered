@@ -472,6 +472,11 @@ static void ShiftDaycareSlots(struct DayCare *daycare)
     }
 }
 
+//since doesn't use expfunction bs command don't have to worry about the friendship gain from exp.
+//think mon in daycare don't gain friendship?  searched and they dont' good.
+//can just copy and slap into pc logic then with a flag check, then again, doesn't really make sense,
+//and would just make extra early mon caught at a disadvantage/unusable for longer if you leave them
+//preference is exp gain/ lvl gain to be at a slightly lower rate than normal fighting/
 static void ApplyDaycareExperience(struct Pokemon *mon)
 {
     s32 i;
@@ -481,9 +486,9 @@ static void ApplyDaycareExperience(struct Pokemon *mon)
     for (i = 0; i < MAX_LEVEL; i++)
     {
         // Add the mon's gained daycare experience level by level until it can't level up anymore.
-        if (TryIncrementMonLevel(mon))
+        if (TryIncrementMonLevel(mon)) //hmm so its not exactly experience its instaed just a level gain? hmm
         {
-            // Teach the mon new moves it learned while in the daycare.
+            // Teach the mon new moves it learned while in the daycare.  //prob just delete this
             firstMove = TRUE;
             while ((learnedMove = MonTryLearningNewMove(mon, firstMove)) != 0)
             {

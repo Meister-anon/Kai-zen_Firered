@@ -713,13 +713,8 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
         }
     }
 
-        if (found == TRUE)
-            UpdatePickupCounter();
-
-        else if (found == FALSE)    //if doesn't find pickup mon in party, reset counter to 0
-        {
-            VarSet(VAR_PICKUP_COUNTER, 0);
-        }
+    if (FlagGet(FLAG_START_OAK_RANCH_COUNTER)) //flag set on deposit to pc, just need to have clear and reset on exit pc
+            gSaveBlock1Ptr->oakRanchStepCounter++; //hope works    //put out here so still works with movement scripts
     
 
     if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_FISHING) && !MetatileBehavior_IsForcedMovementTile(metatileBehavior))
@@ -729,11 +724,22 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
             ScriptContext1_SetupScript(EventScript_VsSeekerChargingDone);
             return TRUE;
         }
-        else */if (UpdatePoisonStepCounter() == TRUE)
+        else */
+        if (found == TRUE)
+            UpdatePickupCounter();
+
+        else if (found == FALSE)    //if doesn't find pickup mon in party, reset counter to 0
+        {
+            VarSet(VAR_PICKUP_COUNTER, 0);
+        }    
+        
+        
+        if (UpdatePoisonStepCounter() == TRUE)
         {
             ScriptContext1_SetupScript(EventScript_FieldPoison);
             return TRUE;
         }
+
         else if (ShouldEggHatch())
         {
             IncrementGameStat(GAME_STAT_HATCHED_EGGS);
