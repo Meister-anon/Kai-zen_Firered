@@ -2513,6 +2513,7 @@ static const struct LevelUpMove sPichuLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_CHARM),
     LEVEL_UP_MOVE(1, MOVE_TAIL_WHIP),
     LEVEL_UP_MOVE(6, MOVE_SWEET_KISS),
+    LEVEL_UP_MOVE(6, MOVE_CONFUSE_RAY),
     LEVEL_UP_MOVE(8, MOVE_THUNDER_WAVE),
     LEVEL_UP_END
 };

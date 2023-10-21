@@ -2265,12 +2265,12 @@ bool8 DoesTargetAbilityBlockCrit(u8 Targetbattler)
      if (ability == ABILITY_BATTLE_ARMOR
         || ability == ABILITY_SHELL_ARMOR
         || (ability == ABILITY_MAGMA_ARMOR && gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL)
-        || ability == ABILITY_STEADFAST
+        || ability == ABILITY_INNER_FOCUS
         || (ability == ABILITY_TANGLED_FEET && gBattleMons[Targetbattler].status2 & STATUS2_CONFUSION))
         block = TRUE;
 
     return block;
-}
+}//replace steadfast with inner focus, makes more thematic sense
 
 static void TryUpdateRoundTurnOrder(void)
 {
@@ -4669,7 +4669,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gEffectBattler].status1);  //not really sure what this is doing but leave it
             MarkBattlerForControllerExec(gActiveBattler);
            gBattleCommunication[MULTISTRING_CHOOSER] = 0; //add infestation and spirit lock when done to below
-            // for synchronize / empath 
+            // for synchronize / empath / empathic curse
             if (gBattleScripting.moveEffect == MOVE_EFFECT_POISON
              || gBattleScripting.moveEffect == MOVE_EFFECT_TOXIC
              || gBattleScripting.moveEffect == MOVE_EFFECT_PARALYSIS
@@ -13511,7 +13511,7 @@ static void atk92_setlightscreen(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atk93_tryKO(void)
+static void atk93_tryKO(void) //EFFECT_OHKO   ohko moves
 {
     u8 holdEffect, param;
 
@@ -13538,7 +13538,7 @@ static void atk93_tryKO(void)
         gSpecialStatuses[gBattlerTarget].focusSashed = TRUE;
     }
 
-    if (GetBattlerAbility(gBattlerTarget) == ABILITY_STURDY)
+    if (GetBattlerAbility(gBattlerTarget) == ABILITY_STURDY) //oh forgot this just makes all ohko moves miss
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gLastUsedAbility = ABILITY_STURDY;
@@ -13553,8 +13553,6 @@ static void atk93_tryKO(void)
         {
             chance = gBattleMoves[gCurrentMove].accuracy + (gBattleMons[gBattlerAttacker].level - gBattleMons[gBattlerTarget].level);
 
-            if (chance < gBattleMoves[gCurrentMove].accuracy)   //prevent further acc drop, now that its possible for move to hit from lower level
-                chance = gBattleMoves[gCurrentMove].accuracy;
             if (Random() % 100 + 1 < chance && gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 7))
                 chance = TRUE;  //only works if random returns a value less than chance ie accuracy is actual odds
             else
@@ -13565,17 +13563,16 @@ static void atk93_tryKO(void)
         {
             chance = TRUE;
         }
-        else
-        {
+        else //check default setup cant tell what this is
+        {   //acc falls lower if below level, now that its possible for move to hit from lower level
             chance = gBattleMoves[gCurrentMove].accuracy + (gBattleMons[gBattlerAttacker].level - gBattleMons[gBattlerTarget].level);
-            if (chance < gBattleMoves[gCurrentMove].accuracy)   //prevent further acc drop, now that its possible for move to hit from lower level
-                chance = gBattleMoves[gCurrentMove].accuracy;
+
             if (Random() % 100 + 1 < chance && gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 7))
                 chance = TRUE;
             else
                 chance = FALSE;
         }
-        if (chance)
+        if (chance) //ohko lands
         {
             if (gProtectStructs[gBattlerTarget].endured)
             {
@@ -16521,7 +16518,6 @@ static void atkF0_givecaughtmon(void) //useful if I set up alt storage,
 {
     u16 heldItem = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker ^ BIT_SIDE]], MON_DATA_HELD_ITEM);
     u16 clearItem = ITEM_NONE;
-
     if (GiveMonToPlayer(&gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker ^ BIT_SIDE]]) != MON_GIVEN_TO_PARTY) //if mon going to pc, is this codeblok
     {
         if (!ShouldShowBoxWasFullMessage())
@@ -16543,10 +16539,11 @@ static void atkF0_givecaughtmon(void) //useful if I set up alt storage,
         if (heldItem != ITEM_NONE)
         {
             
-            AddBagItem(heldItem, 1); //taking item works, message doesnt work, removing item from mon doesnt work
+            AddBagItem(heldItem, 1); //need battle message for this
             PREPARE_ITEM_BUFFER(gBattleTextBuff3, heldItem);
             SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker ^ BIT_SIDE]], MON_DATA_HELD_ITEM, &clearItem); 
-            gBattlescriptCurrInstr = BattleScript_TakeItemfromCaughtMon; //change think use buff3 and end with return 
+            PrepareStringBattle(STRINGID_CAUGHTMONDROPPEDITEM, gBattlerAttacker);
+           // gBattlescriptCurrInstr = BattleScript_TakeItemfromCaughtMon; change think use buff3 and end with return 
         }
     }
     gBattleResults.caughtMonSpecies = gBattleMons[gBattlerAttacker ^ BIT_SIDE].species; //thinkm this is why can't catch both mon? it uses side? is that why?

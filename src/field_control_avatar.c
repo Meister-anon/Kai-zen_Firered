@@ -66,6 +66,7 @@ static bool8 TryStartMiscWalkingScripts(u16 metatileBehavior);
 static bool8 TryStartStepCountScript(u16 metatileBehavior);
 static void UpdateHappinessStepCounter(void);
 static void UpdatePickupCounter(void);
+static void UpdateBoxEXPStepCounter(void);
 static bool8 UpdatePoisonStepCounter(void);
 static bool8 CheckStandardWildEncounter(u32 encounter);
 static bool8 TrySetUpWalkIntoSignpostScript(struct MapPosition * position, u16 metatileBehavior, u8 playerDirection);
@@ -696,6 +697,7 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
     bool8 found = FALSE;
 
 
+
     /*if (InUnionRoom() == TRUE)
         return FALSE;*/
     if (gQuestLogState == QL_STATE_PLAYBACK)
@@ -713,8 +715,7 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
         }
     }
 
-    if (FlagGet(FLAG_START_OAK_RANCH_COUNTER)) //flag set on deposit to pc, just need to have clear and reset on exit pc
-            gSaveBlock1Ptr->oakRanchStepCounter++; //hope works    //put out here so still works with movement scripts
+    UpdateBoxEXPStepCounter(); //hope works    //put out here so still works with movement scripts
     
 
     if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_FISHING) && !MetatileBehavior_IsForcedMovementTile(metatileBehavior))
@@ -824,6 +825,33 @@ static void UpdatePickupCounter(void)
         }
     
 }
+
+static void UpdateBoxEXPStepCounter(void)
+{
+    u16 *ptr = GetVarPointer(VAR_OAK_RANCH_COUNTER_WRAP);
+
+
+    if (FlagGet(FLAG_START_OAK_RANCH_COUNTER))
+    {
+        (*ptr)++;
+        (*ptr) %= 17;
+        if (*ptr == 0)
+        {
+            //flag set on deposit to pc, just need to have clear and reset on exit pc
+            gSaveBlock1Ptr->oakRanchStepCounter++; //hope works    //put out here so still works with movement scripts
+        }
+    }
+    else if (*ptr != 0)
+        ClearOakRanchVar(); //should auto clear var, when flag gets cleared
+
+}
+
+void ClearOakRanchVar(void)
+{
+    VarSet(VAR_OAK_RANCH_COUNTER_WRAP, 0);
+}
+
+
 
 void ClearPoisonStepCounter(void)
 {

@@ -1225,6 +1225,44 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  got help from kurausukun and shinny from pret, with oak ranch pc exp idea, it work but had bad optiomization that caused major lag.
  removing box encryption helped greatly, it was also recommended to put back the species check and not egg check for loop to further optimze
  and that building modern should help a good deal as well.   right now its down to about half a second at triple speed. so barely noticeable
+
+ setup species checks, effect already worked, but need to further optimize/balance.
+ right now each step is 2 exp, so lvl 5 mon would lvl up by the time you walk out of the pokemon center
+ I think keep counter size but make it increment about ever 30 steps?  maybe 23?  
+ (note if I'm running back and forth catching mon it wont really gain exp since counter would be resetting)
+ (oh nvm its fine, since I made sure it wouldn't run function unless counter isn't 0)
+
+ also would need it to scale, so think, add extra filter, before BoxMonAtGainExp  sets exp
+ scale w level, case's must be constant so can't do scale with switch case
+ would need to do if statements instead
+ plan is based on level  (i.e if level is  greater than floor) multiply the exp to be gained by 
+ an amount
+
+ 30 works well - think want just scale to keep it consistent
+
+ can calc how much it needs shift,  
+ medium fast exp gain uses simplest formula
+ #define EXP_MEDIUM_FAST(n)(CUBE(n)) // (n)^3     where n is level
+
+ lvl 5 = 125
+ lvl 15 = 3375
+ lvl 25 = 15625
+ lvl 30
+ lvl 35
+ lvl 40
+ lvl 50
+
+ think when I get to lvl 15 try do exp ^ 2   so will be
+
+
+ experience = GetMonData(&mon, MON_DATA_EXP) + ((gSaveBlock1Ptr->oakRanchStepCounter /= 30) * gSaveBlock1Ptr->oakRanchStepCounter);
+
+  exp gain isn't working now for some reason, only gives exp to first slot mon?
+ fixed issue was, wasn't using constant value for counter replaced 17 divisor with var that wraps at 17 before increments counter
+
+  //change illusinon effect for wilds, make select random mon from encounter table ability illusion
+  //setup pressuer adjsutment so doesn't retrigger in same turn in doubles
+  //moved base odds to hi pressure, remember only want on mewtwo for most part, plan to  replace with uniques for most legendaries
  
 
  defiant competitive also don't work for some reason, goes into infini loop when lowering stats smh

@@ -329,7 +329,10 @@
 // When it hits zero, repel's effect wears off.
 #define VAR_TRAINER_REPEL_STEP_COUNT                0x4109
 
-#define VARS_END                   VAR_TRAINER_REPEL_STEP_COUNT  //this was why trainer repel didn't work, vars end was the pickup counter, so it was excluded from new game clear
+//every 17 steps update oak ranch counter
+#define VAR_OAK_RANCH_COUNTER_WRAP 0x410A
+
+#define VARS_END                   VAR_OAK_RANCH_COUNTER_WRAP  //this was why trainer repel didn't work, vars end was the pickup counter, so it was excluded from new game clear
 #define VARS_COUNT                 (VARS_END - VARS_START + 1)
 
 #define SPECIAL_VARS_START         0x8000

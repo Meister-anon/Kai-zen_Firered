@@ -25,6 +25,7 @@ extern struct FieldInput gInputToStoreInQuestLogMaybe;
 
 void RestartWildEncounterImmunitySteps(void);
 void ClearPoisonStepCounter(void);
+void ClearOakRanchVar(void); //for box exp
 int SetCableClubWarp(void);
 void HandleBoulderFallThroughHole(struct ObjectEvent *);
 bool8 dive_warp(struct MapPosition * pos, u16 behavior);

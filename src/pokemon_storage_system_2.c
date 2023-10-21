@@ -130,6 +130,7 @@ static u8 CountMonsInBox(u8 boxId)
     return count;
 }
 
+//vsonic use for press b while holding mon to put mon in space
 s16 GetFirstFreeBoxSpot(u8 boxId)
 {
     u16 i;
@@ -398,12 +399,12 @@ void Cb2_ExitPSS(void)  //exit box to return to pss menu
 {
     sPreviousBoxOption = GetCurrentBoxOption();
     gFieldCallback = FieldCb_ReturnToPcMenu;
-    if (CheckIfPcEmpty() && FlagGet(FLAG_START_OAK_RANCH_COUNTER)) //make only run loop check if pc empty and flag isnt alraedy cleared
+    if (CheckIfPcEmpty() && FlagGet(FLAG_START_OAK_RANCH_COUNTER)) //make only run loop check if pc empty and flag has been set before
     {
         FlagClear(FLAG_START_OAK_RANCH_COUNTER);
         gSaveBlock1Ptr->oakRanchStepCounter = 0;
     }
-    else if (!(CheckIfPcEmpty()))
+    else if (!(FlagGet(FLAG_START_OAK_RANCH_COUNTER)))
         FlagSet(FLAG_START_OAK_RANCH_COUNTER); //forgot need here to set counter, when depositing mon physically
     SetMainCallback2(CB2_ReturnToField);
 }
@@ -438,8 +439,8 @@ u8 CheckIfPcEmpty(void)
     {
         for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++)
         {
-            if (GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_SPECIES) != SPECIES_NONE
-            && !GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_IS_EGG))
+            if ((GetBoxMonDataAt(boxId,boxPosition, MON_DATA_SPECIES2) != SPECIES_NONE)
+            && (GetBoxMonDataAt(boxId,boxPosition, MON_DATA_SPECIES2) != SPECIES_EGG))
                 return FALSE;
         }
     }
@@ -457,14 +458,19 @@ u8 CheckIfPcEmpty(void)
 void UpdatePokemonStorageSystemMonExp(void)
 {
     u16 boxId, boxPosition;
-
+    
     for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
     {
         for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++) //put species filter in, on adisement to hopefully cut down unnecessary processing
         {
-            if (GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_SPECIES) != SPECIES_NONE
-            && !GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_IS_EGG))
-                BoxMonAtGainExp(boxId, boxPosition);
+            struct BoxPokemon * checkingMon = GetBoxedMonPtr(boxId, boxPosition);
+                
+            if (GetBoxMonData(checkingMon, MON_DATA_SPECIES) != SPECIES_NONE
+                && !GetBoxMonData(checkingMon, MON_DATA_IS_EGG))
+                BoxMonAtGainExp(checkingMon);
+            else
+                continue;
+            
         }
             
     }

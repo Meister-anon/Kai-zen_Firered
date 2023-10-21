@@ -2,6 +2,10 @@
 #include "gflib.h"
 #include "pokemon_storage_system_internal.h"
 
+static void ApplyOakRanchExperience(struct Pokemon *mon); //ohop make work
+
+
+
 void BackupPokemonStorage(struct PokemonStorage * dest)
 {
     *dest = *gPokemonStoragePtr;
@@ -101,28 +105,55 @@ void ZeroBoxMonAt(u8 boxId, u8 boxPosition)
         ZeroBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition]);
 }
 
-void BoxMonAtGainExp(u8 boxId, u8 boxPosition)
+void BoxMonAtGainExp(struct BoxPokemon * mon)
 {
     u32 experience;
-    struct Pokemon mon;
-    BoxMonToMon(&gPokemonStoragePtr->boxes[boxId][boxPosition], &mon);
+    //struct BoxPokemon *mon = &gPokemonStoragePtr->boxes[boxId][boxPosition];
+    struct Pokemon dst;
+    BoxMonToMon(mon, &dst);
 
-    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT) //think replace this with speecies check and not egg
-    {
-        
-        
-        if (GetMonData(&mon, MON_DATA_LEVEL) != MAX_LEVEL)
+    //if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT) //think replace this with speecies check and not egg
+    //{
+        if (GetMonData(&dst, MON_DATA_LEVEL) != MAX_LEVEL) //realize getmondata & getboxmondata have different fields...
         {
-            experience = GetMonData(&mon, MON_DATA_EXP) + gSaveBlock1Ptr->oakRanchStepCounter;
-            SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], MON_DATA_EXP, &experience);
-        }
+            if (GetMonData(&dst, MON_DATA_LEVEL) <= 10) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
+            {
+                experience = GetBoxMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter); //nvm didn't work for some reason because didn't use constant
+                SetBoxMonData(mon, MON_DATA_EXP, &experience);  //replaced setup, now use 17 value wrap around var before counter increments, will need rebalance here
+                ApplyOakRanchExperience(&dst);
+            }
+            else if (GetMonData(&dst, MON_DATA_LEVEL) <= 25) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
+            {
+                experience = GetMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * 3);
+                SetBoxMonData(mon, MON_DATA_EXP, &experience);
+                ApplyOakRanchExperience(&dst);
+            }
+            else if (GetMonData(&dst, MON_DATA_LEVEL) <= 40) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
+            {
+                experience = GetBoxMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * gSaveBlock1Ptr->oakRanchStepCounter);
+                SetBoxMonData(mon, MON_DATA_EXP, &experience);
+                ApplyOakRanchExperience(&dst);
+            }
+            else
+            {
+                experience = GetBoxMonData(mon, MON_DATA_EXP) + ( 2 * (gSaveBlock1Ptr->oakRanchStepCounter * gSaveBlock1Ptr->oakRanchStepCounter));
+                SetBoxMonData(mon, MON_DATA_EXP, &experience);
+                ApplyOakRanchExperience(&dst); //using this is irrelvant for some reason not setting exp evenly to each slot
+            } //but it does or seemingly does if I  use struc Pokemon *mon; ?  but it ignores rule and sets to lvl 100 with FAR more lag for unkown reasons
+        }        
 
-        
 
-        if (TryIncrementMonLevel(&mon)) //has max level check built in
-            CalculateMonStats(&mon);
-    }
+    //}
         
+}
+
+static void ApplyOakRanchExperience(struct Pokemon *mon)
+{
+
+    TryIncrementMonLevel(mon); //increment level if less than max level, commented out move learn
+    
+    // Re-calculate the mons stats at its new level.
+    CalculateMonStats(mon);
 }
 
 void BoxMonAtToMon(u8 boxId, u8 boxPosition, struct Pokemon * dst)

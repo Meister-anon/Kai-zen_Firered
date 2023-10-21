@@ -3519,7 +3519,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         .abilityHidden = {ABILITY_FLAME_BODY, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
@@ -5879,7 +5879,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_THICK_FAT, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_MULTISCALE, ABILITY_PRESSURE},
+            .abilityHidden = {ABILITY_MULTISCALE, ABILITY_HI_PRESSURE},
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -5902,7 +5902,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_REGENERATOR, ABILITY_NONE},
         // #endif
@@ -7641,7 +7641,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_THICK_FAT, ABILITY_OWN_TEMPO},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_GLUTTONY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_GLUTTONY, ABILITY_INNER_FOCUS},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -7664,7 +7664,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_THICK_FAT, ABILITY_OWN_TEMPO},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_GLUTTONY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_GLUTTONY, ABILITY_DANCER},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -8296,11 +8296,13 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_INSOMNIA, ABILITY_FRISK},
-            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_PRESSURE},
+            .abilities = {ABILITY_EMPATHIC_CURSE, ABILITY_FRISK},
+            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_ILLUSION},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-    },
+    }, //found at night typically arodn urban areas as it feeds off negativity
+    //pressure is good but think  I need, make value check to make sure it can't trigger twice in doubles in a turn
+    //lowered odds to balance //I think I prefer illusion for this over pressure? but still need adjust pressure/hi-pressure
 
     [SPECIES_BANETTE] =
     { 
@@ -8319,11 +8321,13 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_INSOMNIA, ABILITY_FRISK}, //buffed frisk
-            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_PRESSURE},
+            .abilities = {ABILITY_EMPATHIC_CURSE, ABILITY_FRISK}, //buffed frisk
+            .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_ILLUSION}, //change illusinon effect for wilds, make select random mon from encounter table
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-    },
+    },//it doesnt get many contact moves with effects so it still cant do much with frisk
+    //zenmode yt had idea to give synchronize since its like voodoo doll, which I like, but realized illusion is also interesting
+    //pressure was given to help its slow nature but idk
 
     [SPECIES_DUSKULL] =
     { 
@@ -9057,7 +9061,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -11246,7 +11250,7 @@ const struct BaseStats gBaseStats[] =
     },//empath, emotion pokemon, give efffect of synchronize but also make attaker feel a portion of my pain
     //so attacker takes a percent of damage dealt 20% 25% something like that or maybe 15% //change call this empathic curse
     //as plan to make new synchronize buff its own ability & call that empath as realized its a mirror armor/corvinight copy/hybrid and I DON'T want that going on umbreon ...
-
+    //eempathic curse is already set to pass status like the others
     [SPECIES_AZELF] =
     { 
            //hp, atk, def, spd, spatk, spdef
@@ -11293,7 +11297,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
@@ -11338,7 +11342,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
@@ -23339,7 +23343,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},  //vsonic would like make own unique ability no idea what shold be, but it does steal light? 
         .bodyColor = BODY_COLOR_PURPLE,         //but don't want to just copy necrozma, it absorbs energy, can possibly affect space time
         .noFlip = FALSE,
@@ -28258,7 +28262,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -28280,7 +28284,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -28301,7 +28305,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -33430,7 +33434,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,

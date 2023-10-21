@@ -904,7 +904,7 @@ void PrepareStringBattle(u16 stringId, u8 battler)
 
 
     // Check Defiant and Competitive stat raise whenever a stat is lowered.
-    if (stringId == STRINGID_DEFENDERSSTATFELL
+    else if (stringId == STRINGID_DEFENDERSSTATFELL
         && ((targetAbility == ABILITY_DEFIANT && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
             || (targetAbility == ABILITY_COMPETITIVE && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
             || (targetAbility == ABILITY_URSURPER && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)
@@ -979,7 +979,7 @@ void PrepareStringBattle(u16 stringId, u8 battler)
         gBattlerAbility = gBattlerAttacker;
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_AttackerAbilityStatRaise;  //need test
-        SET_STATCHANGER(STAT_SPEED, 1, FALSE);
+        SET_STATCHANGER(STAT_SPEED, 2, FALSE);
     }
 
     gActiveBattler = battler;
@@ -3482,8 +3482,16 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_PRESSURE: // new pressure effect
-            if (((GetBattlerAbility(gBattlerTarget) == ABILITY_PRESSURE
-                || GetBattlerAbility(gBattlerTarget) == ABILITY_HI_PRESSURE)
+            if (((GetBattlerAbility(gBattlerTarget) == ABILITY_PRESSURE)
+                && (Random() % 6) == 1)
+                && IsBlackFogNotOnField())
+            {
+                gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
+                gBattlescriptCurrInstr = BattleScript_MovePressureCanceler;
+                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                effect = 1;
+            }
+            else if (((GetBattlerAbility(gBattlerTarget) == ABILITY_HI_PRESSURE) //for legendaries only
                 && (Random() % 4) == 1)
                 && IsBlackFogNotOnField())
             {
@@ -5938,7 +5946,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED)
                 {
-                    gBattleMoveDamage = (gHpDealt) / 5;
+                    gBattleMoveDamage = (gHpDealt) / 3;
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
                     BattleScriptPushCursor();
@@ -6421,11 +6429,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && IsBattlerAlive(battler)
                     && CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
                 {
-                    SET_STATCHANGER(STAT_ATK, MAX_STAT_STAGE - gBattleMons[battler].statStages[STAT_ATK], FALSE);
+                    SET_STATCHANGER(STAT_ATK, 3, FALSE);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_TargetsStatWasMaxedOut;
                     ++effect;
-                }
+                } //changing to half the effect
                 break;
             case ABILITY_STEADFAST:
                 if ((gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)   //if take a super effective hit
@@ -6872,7 +6880,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_ATK_SYNCHRONIZE: // 8
-            if ((gLastUsedAbility == ABILITY_SYNCHRONIZE || gLastUsedAbility == ABILITY_EMPATH) && (gHitMarker & HITMARKER_SYNCHRONIZE_EFFECT))
+            if ((gLastUsedAbility == ABILITY_SYNCHRONIZE 
+                || gLastUsedAbility == ABILITY_EMPATH
+                || gLastUsedAbility == ABILITY_EMPATHIC_CURSE) 
+                && (gHitMarker & HITMARKER_SYNCHRONIZE_EFFECT))
             {
                 gHitMarker &= ~(HITMARKER_SYNCHRONIZE_EFFECT);
                 gBattleStruct->synchronizeMoveEffect &= ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);

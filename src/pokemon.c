@@ -5496,21 +5496,22 @@ static u8 SendMonToPC(struct Pokemon* mon)//follows catching/receiving mon, is n
 
     boxNo = StorageGetCurrentBox();
 
+    //this should be where I start gSaveBlock1Ptr->oakRanchStepCounter will do flag setif counter is 0
+    //on close pc, check if there are any mon in pc boxes, if no clear flag and reset counter to 0
+    if (gSaveBlock1Ptr->oakRanchStepCounter == 0 && !FlagGet(FLAG_START_OAK_RANCH_COUNTER)) //set to 0 on new game
+        FlagSet(FLAG_START_OAK_RANCH_COUNTER); //if cactch mon think I need to set exp of box mon and then reset counter to 0
+
+    if (FlagGet(FLAG_START_OAK_RANCH_COUNTER) && gSaveBlock1Ptr->oakRanchStepCounter != 0)
+        UpdatePokemonStorageSystemMonExp(); //should update exp/levels of mon in pc when catch new mon and reset counter
+        //put above default logic to ensure box mon exp is calced before new mon goes in
+
     do
     {
         for (boxPos = 0; boxPos < IN_BOX_COUNT; boxPos++)
         {
             struct BoxPokemon* checkingMon = GetBoxedMonPtr(boxNo, boxPos);
-            if (GetBoxMonData(checkingMon, MON_DATA_SPECIES, NULL) == SPECIES_NONE) //can use this for check if mon in box, but break loop if find species
+            if (GetBoxMonData(checkingMon, MON_DATA_SPECIES, NULL) == SPECIES_NONE) //is box spot is empty
             {
-                //this should be where I start gSaveBlock1Ptr->oakRanchStepCounter will do flag setif counter is 0
-                //on close pc, check if there are any mon in pc boxes, if no clear flag and reset counter to 0
-                if (gSaveBlock1Ptr->oakRanchStepCounter == 0 && !FlagGet(FLAG_START_OAK_RANCH_COUNTER)) //set to 0 on new game
-                    FlagSet(FLAG_START_OAK_RANCH_COUNTER); //if cactch mon think I need to set exp of box mon and then reset counter to 0
-
-                if (FlagGet(FLAG_START_OAK_RANCH_COUNTER) && gSaveBlock1Ptr->oakRanchStepCounter != 0)
-                    UpdatePokemonStorageSystemMonExp(); //should update exp/levels of mon in pc when catch new mon and reset counter
-                    //put above default logic to ensure box mon exp is calced before new mon goes in
 
                 MonRestorePP(mon);
                 CopyMon(checkingMon, &mon->box, sizeof(mon->box));
