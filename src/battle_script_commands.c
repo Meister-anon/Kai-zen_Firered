@@ -3694,6 +3694,13 @@ static void atk0C_datahpupdate(void)
                     return;
                 }
             }
+            else if (DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove) && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE))
+            {
+                gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU_BUSTED;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_TargetFormChange;
+                return;
+            }
             else
             {
                 gHitMarker &= ~(HITMARKER_IGNORE_SUBSTITUTE);
@@ -3748,7 +3755,7 @@ static void atk0C_datahpupdate(void)
                         }
                     }
                     else if (!IS_MOVE_PHYSICAL(move) && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE)) //changed from special to not phsyical to account for status moves
-                    {   //may revert dont know why I did this
+                    {   //keep that's how it is in emerald
                         gProtectStructs[gActiveBattler].specialDmg = gHpDealt;
                         gSpecialStatuses[gActiveBattler].specialDmg = gHpDealt;
                         if (gBattlescriptCurrInstr[1] == BS_TARGET)
@@ -3764,11 +3771,11 @@ static void atk0C_datahpupdate(void)
                     }
                 }
                 gHitMarker &= ~(HITMARKER_PASSIVE_DAMAGE);
-                BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, 0, 2, &gBattleMons[gActiveBattler].hp);
+                BtlController_EmitSetMonData(BUFFER_A, REQUEST_HP_BATTLE, 0, sizeof(gBattleMons[gActiveBattler].hp), &gBattleMons[gActiveBattler].hp);
                 MarkBattlerForControllerExec(gActiveBattler);
             }
         }
-        else
+        else //need look into this think may be for status moves? / and with how I changed some status moves to read type this may be an issue
         {
             gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
             if (gSpecialStatuses[gActiveBattler].dmg == 0)
@@ -12586,7 +12593,7 @@ static void atk7E_setreflect(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atk7F_setseeded(void)  //removed grass immunity
+static void atk7F_setseeded(void)  //removed grass immunity - revisit
 {
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT || gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED)
     {
@@ -12610,7 +12617,8 @@ static void atk7F_setseeded(void)  //removed grass immunity
 
 static void atk80_manipulatedamage(void)
 {
-    switch (gBattlescriptCurrInstr[1]) //reads value 1 byte after command, i.e next argument in script
+    CMD_ARGS(u8 mode);
+    switch (cmd->mode) //reads value 1 byte after command, i.e next argument in script
     {
     case NEGATIVE_DMG:
         gBattleMoveDamage *= -1;
@@ -12651,7 +12659,7 @@ static void atk80_manipulatedamage(void)
         break;
     
     }
-    gBattlescriptCurrInstr += 2;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 static void atk81_trysetrest(void) //would be useful to track if sleep was set with rest, with my new changes, hmm could make status3 rest? or status4 set it here and remove when sleep turns end if it is on
@@ -12816,18 +12824,23 @@ static void atk87_stockpiletohpheal(void)
 //actually makes this easier to calc too
 //moved ghost drain to big root logic(function) as majority of
 //base effect is done in that now anyway
+//redid setup to use argumenteffectchance more effiicient setup
 static void atk88_sethpdrain(void) 
 {
+    
+    CMD_ARGS();
+    u8 argumentchance = gBattleMoves[gCurrentMove].argumentEffectChance;
     //set gbattlemovedamage : normal hp drain dmg
-    if (gBattleMoves[gCurrentMove].argument != 0)
-        gBattleMoveDamage = (gHpDealt * gBattleMoves[gCurrentMove].argument / 100);
-    else
+    
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_ABSORB && argumentchance == 0)
         gBattleMoveDamage = (gHpDealt / 2);
+    else if (gBattleMoves[gCurrentMove].effect == EFFECT_ABSORB && argumentchance != 0) //issue seems to bne this part?
+        gBattleMoveDamage = ((gHpDealt * argumentchance) / 100);
 
     if (gBattleMoveDamage == 0)
         gBattleMoveDamage = 1;
     
-    ++gBattlescriptCurrInstr;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 static u16 ReverseStatChangeMoveEffect(u16 moveEffect)
@@ -13514,6 +13527,7 @@ static void atk92_setlightscreen(void)
 static void atk93_tryKO(void) //EFFECT_OHKO   ohko moves
 {
     u8 holdEffect, param;
+    u16 targetAbility = GetBattlerAbility(gBattlerTarget);
 
     if (gBattleMons[gBattlerTarget].item == ITEM_ENIGMA_BERRY)
     {
@@ -13549,25 +13563,31 @@ static void atk93_tryKO(void) //EFFECT_OHKO   ohko moves
     {
         u16 chance;
 
-        if (!(gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS))
+        if ((((gStatuses3[gBattlerTarget] & STATUS3_ALWAYS_HITS)
+                && gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker)
+                || GetBattlerAbility(gBattlerAttacker) == ABILITY_NO_GUARD
+                || targetAbility == ABILITY_NO_GUARD)
+                && !(gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE))
         {
-            chance = gBattleMoves[gCurrentMove].accuracy + (gBattleMons[gBattlerAttacker].level - gBattleMons[gBattlerTarget].level);
-
-            if (Random() % 100 + 1 < chance && gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 7))
-                chance = TRUE;  //only works if random returns a value less than chance ie accuracy is actual odds
+            if (gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 3))
+                chance = TRUE;
             else
                 chance = FALSE;
-        }
-        else if (gDisableStructs[gBattlerTarget].battlerWithSureHit == gBattlerAttacker
-                 && gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 7))
-        {
-            chance = TRUE;
         }
         else //check default setup cant tell what this is
         {   //acc falls lower if below level, now that its possible for move to hit from lower level
             chance = gBattleMoves[gCurrentMove].accuracy + (gBattleMons[gBattlerAttacker].level - gBattleMons[gBattlerTarget].level);
 
-            if (Random() % 100 + 1 < chance && gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 7))
+           if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE && gBattleMons[gBattlerAttacker].level > gBattleMons[gBattlerTarget].level)
+                chance *=  2;
+            else if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE && gBattleMons[gBattlerAttacker].level <= gBattleMons[gBattlerTarget].level)
+                chance = chance;
+           else if (gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE)
+                chance = 0;
+           else
+                chance /= 2;
+
+            if (Random() % 100 + 1 < chance && gBattleMons[gBattlerAttacker].level >= (gBattleMons[gBattlerTarget].level - 3))
                 chance = TRUE;
             else
                 chance = FALSE;
@@ -13607,13 +13627,13 @@ static void atk93_tryKO(void) //EFFECT_OHKO   ohko moves
         else
         {
             gMoveResultFlags |= MOVE_RESULT_MISSED;
-            if (gBattleMons[gBattlerAttacker].level >= gBattleMons[gBattlerTarget].level)
+            if (gBattleMons[gBattlerAttacker].level >= gBattleMons[gBattlerTarget].level - 3)
                 gBattleCommunication[MULTISTRING_CHOOSER] = 0;
             else
                 gBattleCommunication[MULTISTRING_CHOOSER] = 1;
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
-        }
-    }
+        } //would like add message specifically for type resist miss, but could just try to fit into move description
+    } //was able to fit logic into description
 }
 
 static void atk94_damagetohalftargethp(void) // super fang

@@ -172,12 +172,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_OHKO,
         .power = 1,
-        .type = TYPE_NORMAL,
-        .accuracy = 40, //change these back - was base 30, made 50 reset back to 40  / may make 35 test later
+        .type = TYPE_STEEL,
+        .accuracy = 30, //change these back - was base 30, made 50 reset back to 40  / may make 35 test later
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .priority = 0,
+        .priority = -5,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_PHYSICAL,
     },
@@ -492,12 +492,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_OHKO,
         .power = 1,
-        .type = TYPE_NORMAL,
-        .accuracy = 40,
+        .type = TYPE_BUG,
+        .accuracy = 30,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .priority = 0,
+        .priority = -5,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_PHYSICAL,
     },
@@ -1405,11 +1405,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_OHKO,
         .power = 1,
         .type = TYPE_GROUND,
-        .accuracy = 40,
+        .accuracy = 30,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .priority = 0,
+        .priority = -5,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_DMG_UNDERGROUND,
         .split = SPLIT_PHYSICAL,
     },
@@ -5151,11 +5151,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_OHKO,
         .power = 1,
         .type = TYPE_ICE,
-        .accuracy = 40,
+        .accuracy = 30,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .priority = 0,
+        .priority = -5,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_SPECIAL,
     },
@@ -8948,7 +8948,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
-        .argument = 75, // restores 75% HP instead of 50% HP
+        .argument = 0, // restores 75% HP instead of 50% HP
+        .argumentEffectChance = 75,
     },
 
     [MOVE_CRAFTY_SHIELD] =
@@ -9466,7 +9467,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_WIND_MOVE,
         .split = SPLIT_SPECIAL,
-        .argument = 75, // restores 75% HP instead of 50% HP
+        .argument = 0, // restores 75% HP instead of 50% HP
+        .argumentEffectChance = 75,
     },
 
     [MOVE_THOUSAND_ARROWS] =
@@ -10419,7 +10421,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .power = 60,
             .pp = 20,
             .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
-            .argument = 100, // restores 100% HP instead of 50% HP
+            .argument = 0, // restores 100% HP instead of 50% HP
+            .argumentEffectChance = 100,
         #else
             .power = 90,
             .pp = 15,

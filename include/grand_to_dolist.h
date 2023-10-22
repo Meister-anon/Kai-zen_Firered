@@ -1150,6 +1150,30 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  and the dmg is triggering and fainting before the hp bar even updates or triggers faint animation,
  so I did absorb with 3 hp left, the dmg I would take back would kill me, but it triggered whiteout before hp even fell...
 
+ still no idea, what's wrong with absorb effcts, it seems to be linked with sethpdrain and or manipulateddamage commands
+ but there is also weird case where if use absorb and get killed for some reason it triggers grudge logic, despite never setting grudge
+ so apparently grudge is getting set ?
+ - its only doing that on the turn I use absorb and should be healing from it,  but it doesn't heal intead it sets grudge?
+ and if I die in that turn it mon loses all their pp - fixed think prob was change made to  sideeffecting command had wrong targetting
+ atk0C_datahpupdate - sets ghpdealt think that is main isssue, since sethpdrain isnt properly cutting gbattlemovedmg so I take full dmg I do
+
+  - GetBattlerSide(gBattlerAttacker)  /should be useful for later
+
+ - just realized most electric moves are named after thunder which has nothing to do with electricity instead of something like lightning
+ like thunderbolt which means literally nothing...  go through rename electric moves  remove thunder
+ think only reason it was used was for character limit, which I've expanded
+
+ - look in to re- rebalancing ok, think do like persona,  very low odds, doesn't work on stronger foes / bosses
+  but a good chance to work on mon weak to the type, think double chance of working if move result super effective
+  but counter balance by making it always go last, i.e a negaitve 1 priority move if only used for mon you are already strong against
+  its not such a big deal, mostly allows you to shave off a 2 or 3 hit into a 1 but makes you have to take a hit for it
+  shuoldn't be guaranteed can turn  horn drill and guillatine into  non normal type moves
+
+  -ok done, made double chance of hitting if super effective and a higher level than your target, can't hit not effective
+  and has half the chance of hitting everything neutral, raised the floor so can only work for 3 levels below not 7
+  //and made the moves always go last, so you have to take a hit
+  - so they're essentially just moves for fun,
+
  that seems to be happening for all things done via passive damage?  had bind status and got killed but my mon didnt do faint animation before whiteout
  ok so faint animation is just not playing as a result of battle now?? weird
 
