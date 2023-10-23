@@ -1371,47 +1371,58 @@ s32 GetDrainedBigRootHp(u32 battler, s32 hp)
     s32 ghostdmg;
     if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BIG_ROOT) //prob need to balance this for ingrain,
     {
-        hp = (hp * 1300) / 1000;
-        if (gStatuses3[gActiveBattler] & STATUS3_ROOTED) //hopefully that works. //should be a weakened effect
-            hp = (hp * 1100) / 1000;
+        
+        if (gStatuses3[battler] & STATUS3_ROOTED) //hopefully that works. //should be a weakened effect
+            hp = (hp * 110) / 100;
+        else
+            hp = (hp * 130) / 100;
     }
 
      //set ghost drain damg
      //hp argument is gbattlemovedamage 
      //needed change from explicitly only work with x effects because leech seed
+    //since function defaults to negative need make these start negative
     if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST)
         && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST)
         && gBattleMoves[gCurrentMove].effect != EFFECT_DREAM_EATER) //work on physical drain moves, dream eater is mental/dreams not lifeforce
         //should prevent damage for ghost types
     {
         if ((hp / 2) < gBattleMons[battler].maxHP / 8)
-            ghostdmg = gBattleMons[battler].maxHP / 8;
+            ghostdmg = -(gBattleMons[battler].maxHP / 8);
 
         else if ((hp / 2) > gBattleMons[battler].maxHP / 8)
-            ghostdmg = hp / 2;
+            ghostdmg = -(hp / 2);
         //take the greater of the two, changed from else, so I don't have to worry about it
         if (GetBattlerAbility(gBattlerTarget) == ABILITY_LIQUID_OOZE) //rest fo liquid ooze logic handled in script
         {
+            hp = -hp;
             hp += ghostdmg;
 
-            /*if (gBattleMoves[gCurrentMove].effect == EFFECT_STRENGTH_SAP)
-                hp = (hp + ghostdmg) / 2; //to try keep this from just being an insta kill
-                */ //...nevermnid then -_- liquid ooze was meant to work with strength sap from the start
+            //if (gBattleMoves[gCurrentMove].effect == EFFECT_STRENGTH_SAP)
+            //    hp = (hp + ghostdmg) / 2; //to try keep this from just being an insta kill
+                 //...nevermnid then -_- liquid ooze was meant to work with strength sap from the start
                 //so I should let it work as is, not try to scale it back for balance I guess
         }
         else
         {
-            hp = -ghostdmg; //since below flips sign need set this negative to properly do damage
+            hp = ghostdmg; //since below flips sign need set this negative to properly do damage
                 //would love a script for this but cant do anything as set in a command? idk I might be able to put
                 //something below that pushes and returns?
         }      
         //if can setup text to say aborb ghostly energy!  it'd go here vsonic  
     }
+    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_LIQUID_OOZE) //rest fo liquid ooze logic handled in script
+    {
+        hp = -hp;
+    }
+
 
     if (hp == 0)
-        hp = 1;
+         hp = 1;
 
-    return hp * -1; //sets value negative as pass command
+       hp *= -1;
+
+    return hp; //sets value negative as pass command
 }
 
 #define MAGIC_GUARD_CHECK \
@@ -4022,20 +4033,53 @@ bool8 IsFloatingSpecies(u8 battlerId) {
 //and it itself gets skipped over if its false, to the go to the next else if
 //need to comb over else if logic to make sure parses
 bool8 IsBattlerGrounded(u8 battlerId)
-//important done for now, need test later
+//important done for now, need test later  -tested w new 2x in air flag effect for grouding and seems to work
 //finihsed adding to type calc, so should be battle ready
 //set as type 8, instead of 32 for test build
 {
     u32 species = gBattleMons[battlerId].species;
     bool8 grounded = TRUE; //changed so goes through all checks  //not using else, so need to make it default TRUE
 
+    //order is bad, need setup so if I change it from not grounded, it doesn't get cleared -fixed orderr
+    //setup is different from emerald, that uses return to immediately  stop if found true case
+    //but I have cases that don't get removed/are always true, so I need to filter
 
+    if (IsFloatingSpecies(battlerId))//used if as breakline, as else if only reads if everything above it is false
+        grounded = FALSE;
+
+    if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING)) 
+    && (species != SPECIES_DODUO && species != SPECIES_DODRIO
+        && species != SPECIES_ARCHEN && species != SPECIES_ARCHEOPS)
+        && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
+        grounded = FALSE;  
+
+    if (gBattleMons[battlerId].ability == ABILITY_LEVITATE) //remove after removing all instances of levitate on mon  vsonic
+        grounded = FALSE;    
+
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
+        grounded = FALSE;
+    
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) && (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
         grounded = TRUE; //hope this set up right/works
     //according to Mcgriffin needed make flying & roost flag true statement
     //as else at bottom just means not flyign or has roost flag, TRUE
-    if (gStatuses4[battlerId] & STATUS4_GROUNDED)
+    if (species == (SPECIES_DODUO || SPECIES_DODRIO || SPECIES_ARCHEN || SPECIES_ARCHEOPS))
+        grounded = TRUE;//edit because flightless bird
+    
+    if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && (species == (GROUNDED_GHOSTMON)))   //test GHOST exclusions
+        grounded = TRUE;
+
+    if ((gStatuses3[battlerId] & STATUS3_TELEKINESIS) && IsBlackFogNotOnField())
+        grounded = FALSE;
+    if ((gStatuses3[battlerId] & STATUS3_MAGNET_RISE) && IsBlackFogNotOnField())
+        grounded = FALSE;
+    if ((gStatuses3[battlerId] & STATUS3_ON_AIR) && IsBlackFogNotOnField())
+        grounded = FALSE;
+    if ((GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON) && IsBlackFogNotOnField())
+        grounded = FALSE;
+
+    if (gStatuses4[battlerId] & STATUS4_GROUNDED) //change name
         grounded = TRUE;
     if (gFieldStatuses & STATUS_FIELD_GRAVITY)
         grounded = TRUE;
@@ -4045,34 +4089,9 @@ bool8 IsBattlerGrounded(u8 battlerId)
         grounded = TRUE;
     if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
         grounded = TRUE;
-    if (species == (SPECIES_DODUO || SPECIES_DODRIO || SPECIES_ARCHEN || SPECIES_ARCHEOPS))
-        grounded = TRUE;//edit because flightless bird
+    
     if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
-        grounded = TRUE;
-    if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && (species == (GROUNDED_GHOSTMON)))   //test GHOST exclusions
-        grounded = TRUE;
-
-    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
-        grounded = FALSE;
-
-    if (IsFloatingSpecies(battlerId))//used if as breakline, as else if only reads if everything above it is false
-        grounded = FALSE;
-    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING) 
-    && (species != SPECIES_DODUO && species != SPECIES_DODRIO
-        && species != SPECIES_ARCHEN && species != SPECIES_ARCHEOPS)
-        && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
-        grounded = FALSE;  
-
-    if (gBattleMons[battlerId].ability == ABILITY_LEVITATE) //remove after removing all instances of levitate on mon  vsonic
-        grounded = FALSE;    
-    if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
-        grounded = FALSE;
-    if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
-        grounded = FALSE;
-    if (gStatuses3[battlerId] & STATUS3_ON_AIR)
-        grounded = FALSE;
-    if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
-        grounded = FALSE;
+        grounded = TRUE;   
 
     if (gStatuses3[battlerId] & STATUS3_UNDERGROUND)
         grounded = TRUE;
@@ -10352,10 +10371,10 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
         return modifier;
     }
 
-    else if ((move == MOVE_SHEER_COLD) && IS_BATTLER_OF_TYPE(battlerDef, TYPE_ICE))
+    else if ((move == MOVE_SHEER_COLD) && IS_BATTLER_OF_TYPE(battlerDef, TYPE_ICE)) //no longer need with other ohko changes
     {
         modifier = UQ_4_12(0.0);
-    }
+    } //potentially replace with effet ohko and not very effective change mod to 0, since it will never land, better for ai
 
 
     // Thousand Arrows ignores type modifiers for flying mons

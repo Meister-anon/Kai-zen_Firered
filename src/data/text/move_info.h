@@ -847,10 +847,10 @@ const u8 gV_CREATEDescription
     [] = _("Very powerful, but lowers\nDefense, Sp. Def and Speed.");
 
 const u8 gFUSION_FLAREDescription 
-    [] = _("Summons a fireball. Works\nwell with a thunderbolt.");
+    [] = _("Summons a fireball. Works\nwell with a lightningbolt."); //descr too long, 19 per line max
 
 const u8 gFUSION_BOLTDescription 
-    [] = _("Summons a thunderbolt.\nWorks well with a fireball.");
+    [] = _("Summons a lightningbolt.\nWorks well with a fireball.");
 
 const u8 gFLYING_PRESSDescription 
     [] = _("The user dives down\nonto the target from\nthe sky.\nAlso deals flying\ndamage.");
@@ -1424,7 +1424,7 @@ const u8 gFIERY_WRATHDescription
     [] = _("An attack fueled\nby great wrath.\nMay cause flinching.");
 
 const u8 gTHUNDEROUS_KICKDescription 
-    [] = _("A lightning-like kick\nstrikes with force.\nLowers foe's Defense.");
+    [] = _("A lightning-like kick\nstrikes with force.\nLowers foe's Defense."); //"with a force like rolling thunder",  (this can keep name)
 
 const u8 gGLACIAL_LANCEDescription 
     [] = _("Strikes by hurling\na blizzard-cloaked\nicicle lance\nat a foe.");
@@ -1464,6 +1464,7 @@ const u8 gMoveDescription_Boltbeam[] = _("");
 const u8 gMoveDescription_Pounce[] = _("");
 const u8 gMoveDescription_CheapShot[] = _("The user throws\nan unexpected\ndelayed punch\nand then retreats.");
 const u8 gMoveDescription_Snowball[] = _("The user throws\nan compact ball\nof snow and ice\nof varying size\nand power at\nthe target.");
+const u8 gMoveDescription_Spindash[] =_("..");
 
 
     //Description can hold 5 line breaks (so 6 lines total) given current space post expansion!  at approx 19 chars per line// so 114 max ( + 5 for escape chars)
@@ -2273,6 +2274,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [MOVE_CHEAP_SHOT] = gMoveDescription_CheapShot,
     [MOVE_SNOWBALL] = gMoveDescription_Snowball,
     [MOVE_TRENCH_RUN] = gMoveDescription_Snowball, //make own value later
+    [MOVE_SPIN_DASH] = gMoveDescription_Spindash,
 };//last value can have comma
 
 
@@ -3082,6 +3084,7 @@ const u8 gLowerMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_CHEAP_SHOT] = _("Cheap Shot"),
     [MOVE_SNOWBALL] =_("Snowball"),
     [MOVE_TRENCH_RUN] = _("Trench-run"), //revisit
+    [MOVE_SPIN_DASH] =_("Spin Dash"),
 };//don't need remove comma from last value for this file, port of emerald
 
 //default move names 
@@ -3886,5 +3889,6 @@ const u8 gMoveNames[][MOVE_NAME_LENGTH + 1] = {
     _("POUNCE"),
     _("CHEAP SHOT"),
     _("SNOWBALL"),
-    _("TRENCH-RUN")
+    _("TRENCH-RUN"),
+    _("SPIN DASH")
 };//remember to remove comma from last entry //longest name is 17 chars

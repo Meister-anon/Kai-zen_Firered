@@ -1406,6 +1406,8 @@ BattleScript_SynchronoiseNoEffect:
 	waitmessage 0x40
 	goto BattleScript_SynchronoiseMoveTargetEnd
 
+ @no longer used, moved to flag check, remove later vsonic
+ @do same for gust,& sky uppercut
 BattleScript_EffectSmackDown:
 	setmoveeffect MOVE_EFFECT_SMACK_DOWN
 	goto BattleScript_EffectHit
@@ -2575,10 +2577,8 @@ BattleScript_HitFromAtkAnimation::
 	attackanimation
 	waitanimation
 	effectivenesssound
-	@groundonairbattlerwithoutgravity BS_TARGET	@Need to change this and make a jump put here becuz should make target visible, shuold work for evrthing  this is an issue
-	hitanimation BS_TARGET	@fixed above issue was various command needed return not break, doesnt break but also just in wrong place
+	hitanimation BS_TARGET
 	waitstate
-	groundonairbattlerwithoutgravity BS_TARGET
 BattleScript_HitFromHpUpdate::
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
@@ -2660,7 +2660,7 @@ BattleScript_EffectSleep::
 BattleScript_EndingSleepChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_SLEEP
@@ -2772,15 +2772,15 @@ BattleScript_EffectAbsorb::  @need setup multi task also make ghost with liquid 
 	resultmessage
 	waitmessage 0x40
 	jumpifhealblock BS_ATTACKER, BattleScript_AbsorbHealBlock
-	sethpdrain	@ without this, damgae to attacker is doubleed
-	manipulatedamage DMG_BIG_ROOT		@makes negative to heal
- 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
+	sethpdrain	@ should change battlemovedamage to half hp dealt, something weird here, removing below but setting this causes freeze
+	@manipulatedamage DMG_BIG_ROOT		@should be making negatiev, but isn't, instead just does something weird with animation triwes to play animation again
+ 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE
  	jumpifability BS_TARGET, ABILITY_LIQUID_OOZE, BattleScript_AbsorbLiquidOoze	@should always be below DMG_BIG_ROOT
 	setbyte cMULTISTRING_CHOOSER, 0
 	goto BattleScript_AbsorbUpdateHp @went one by one, the problem was jumpifability from when I expanded abilities 
 
 BattleScript_AbsorbLiquidOoze::
-  	manipulatedamage NEGATIVE_DMG
+  	@manipulatedamage NEGATIVE_DMG  @think will remove and do in function
 	setbyte cMULTISTRING_CHOOSER, 1
 BattleScript_AbsorbUpdateHp::
 	healthbarupdate BS_ATTACKER
@@ -3208,7 +3208,6 @@ BattleScript_DoMultiHit::
 	effectivenesssound
 	hitanimation BS_TARGET
 	waitstate
-	groundonairbattlerwithoutgravity BS_TARGET
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
 	critmessage
@@ -3222,7 +3221,7 @@ BattleScript_MultiHitEndMessages:
 	argumenttomoveeffect
 	@addbyte gBattleScripting + 12, 1   @ updated pret uses this "addbyte sMULTIHIT_STRING + 4, 1"
 	addbyte sMULTIHIT_STRING + 4, 1
-	moveendto MOVE_END_NEXT_TARGET
+	moveendto MOVE_END_NEXT_TARGET	@check if would trigger new grounding effect if so,  need add gmultihitcounter must equal 0  (it did added to logic)
 	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_FOE_ENDURED, BattleScript_MultiHitPrintStrings
 	decrementmultihit BattleScript_MultiHitLoop
 	goto BattleScript_MultiHitPrintStrings
@@ -3344,7 +3343,7 @@ BattleScript_EndingToxicChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 BattleScript_ToxicAccuracyCheck:
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_TOXIC
@@ -3606,7 +3605,7 @@ BattleScript_EffectConfuse::
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
 	jumpifstatus2 BS_TARGET, STATUS2_CONFUSION, BattleScript_AlreadyConfused
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	jumpifsafeguard BattleScript_SafeguardProtected  @canreplace with jump if safegaurd
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_CONFUSION
@@ -3713,7 +3712,7 @@ BattleScript_EndingPoisonChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 BattleScript_SkiptoPoison:
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_POISON
@@ -3742,7 +3741,7 @@ BattleScript_EndingParalysisChecks:
 	jumpifstatus BS_TARGET, STATUS1_PARALYSIS, BattleScript_AlreadyParalyzed
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_PARALYSIS
@@ -4528,7 +4527,7 @@ BattleScript_SwaggerTryConfuse::
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_OwnTempoPrevents
 	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_AbilityPreventsMoodShift
 	jumpifability BS_TARGET, ABILITY_UNAWARE, BattleScript_AbilityPreventsMoodShift
-	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	jumpifsafeguard BattleScript_SafeguardProtected
 	setmoveeffect MOVE_EFFECT_CONFUSION
 	seteffectprimary
 	goto BattleScript_MoveEnd
@@ -5003,6 +5002,7 @@ BattleScript_EffectFutureSight::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
+ @no longer used. remove later vsonic
 BattleScript_EffectGust::
 	goto BattleScript_EffectHit
 
@@ -5362,7 +5362,7 @@ BattleScript_FlatterTryConfuse::
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_OwnTempoPrevents
 	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_AbilityPreventsMoodShift
 	jumpifability BS_TARGET, ABILITY_UNAWARE, BattleScript_AbilityPreventsMoodShift
-	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	jumpifsafeguard BattleScript_SafeguardProtected
 	setmoveeffect MOVE_EFFECT_CONFUSION
 	seteffectprimary
 	goto BattleScript_MoveEnd
@@ -5383,7 +5383,7 @@ BattleScript_EffectWillOWisp::
 BattleScript_EndingBurnChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_BURN
@@ -5404,7 +5404,7 @@ BattleScript_EffectFlashFreeze::	@nearly done  just need to make animation for..
 BattleScript_EndingFreezeChecks:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation		@still need make animation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_FREEZE
@@ -5720,7 +5720,7 @@ BattleScript_EffectYawn::
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
-	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, BattleScript_SafeguardProtected
+	jumpifsafeguard BattleScript_SafeguardProtected
 	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
 	jumpifcantmakeasleep BattleScript_ButItFailed
 	setyawn BattleScript_ButItFailed
@@ -6042,6 +6042,7 @@ BattleScript_CocoonTrySpeed::
 BattleScript_CocoonEnd::
 	goto BattleScript_MoveEnd
 
+ @no longer used remove later vsonic
 BattleScript_EffectSkyUppercut::
 	goto BattleScript_EffectHit
 
@@ -7866,6 +7867,50 @@ BattleScript_CottonDownReturn:
 	restoretarget
 	return
 
+BattleScript_TargetFormChangeNoPopup:
+	printstring STRINGID_EMPTYSTRING3
+	waitmessage 1
+	handleformchange BS_TARGET, 0
+	handleformchange BS_TARGET, 1
+	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, NULL
+	waitanimation
+	handleformchange BS_TARGET, 2
+	return
+
+BattleScript_TargetFormChange::
+	pause 5
+	@call BattleScript_AbilityPopUpTarget
+	call BattleScript_TargetFormChangeNoPopup
+	return
+
+BattleScript_TargetFormChangeWithString::
+	@pause 5
+	@call BattleScript_AbilityPopUpTarget
+	call BattleScript_TargetFormChangeNoPopup
+	printstring STRINGID_PKMNTRANSFORMED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_TargetFormChangeWithStringNoPopup::
+	call BattleScript_TargetFormChangeNoPopup
+	printstring STRINGID_PKMNTRANSFORMED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_BattlerFormChangeWithStringEnd3::
+	@pause 5
+	@call BattleScript_AbilityPopUp
+	printstring STRINGID_EMPTYSTRING3
+	waitmessage 1
+	handleformchange BS_SCRIPTING, 0
+	handleformchange BS_SCRIPTING, 1
+	playanimation BS_SCRIPTING, B_ANIM_FORM_CHANGE, NULL
+	waitanimation
+	handleformchange BS_SCRIPTING, 2
+	printstring STRINGID_PKMNTRANSFORMED
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
 BattleScript_IllusionOff::
 	spriteignore0hp TRUE
 	playanimation BS_TARGET, B_ANIM_ILLUSION_OFF, NULL
@@ -8621,20 +8666,6 @@ BattleScript_DarkTypePreventsPrankster::
 	waitmessage B_WAIT_TIME_LONG
 	orhalfword gMoveResultFlags, MOVE_RESULT_NO_EFFECT
 	goto BattleScript_MoveEnd
-
-BattleScript_TargetFormChangeWithString::
-	@pause 5
-	@ call BattleScript_AbilityPopUpTarget
-	printstring STRINGID_EMPTYSTRING3
-	waitmessage 1
-	handleformchange BS_TARGET, 0
-	handleformchange BS_TARGET, 1
-	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, NULL
-	waitanimation
-	handleformchange BS_TARGET, 2
-	printstring STRINGID_PKMNTRANSFORMED
-	waitmessage B_WAIT_TIME_LONG
-	return
 
 BattleScript_MoveUsedPsychicTerrainPrevents::
 	printstring STRINGID_POKEMONCANNOTUSEMOVE

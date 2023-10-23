@@ -1978,7 +1978,7 @@ static void atk01_accuracycheck(void)
         && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_VEIL
         && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_FORCE
         && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM)
-            calc = (calc * 90) / 100; // new 10% sandstorm loss (extra effect given since hail got extra stuff)
+            calc = (calc * 95) / 100; // new 10% sandstorm loss (extra effect given since hail got extra stuff) changed to 5%
 
         if (GetBattlerAbility(gBattlerTarget) == ABILITY_SAND_VEIL && IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SANDSTORM_ANY))
             calc = (calc * 80) / 100; // 1.2 sand veil loss
@@ -7360,8 +7360,9 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             }
             ++gBattleScripting.atk49_state;
             break;
-        case MOVE_END_GROUND_TARGET:
-            if (!(IsBattlerGrounded(gBattlerTarget)) && IsBattlerAlive(gBattlerTarget) && gMultiHitCounter == 0) //should make sure doesn't trigger till end of multihit
+        case MOVE_END_GROUND_TARGET: //for some reason retriggering so think, grounded isn't being set right?
+            if (!(IsBattlerGrounded(gBattlerTarget)) && IsBattlerAlive(gBattlerTarget) 
+            && gMultiHitCounter == 0 && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) //should make sure doesn't trigger till end of multihit
             {
                 
                 if (gBattleMoves[gCurrentMove].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)   //using fly
@@ -12853,7 +12854,7 @@ static void atk88_sethpdrain(void)
         gBattleMoveDamage = ((gHpDealt * argumentchance) / 100);
 
     if (gBattleMoveDamage == 0)
-        gBattleMoveDamage = 1;
+        gBattleMoveDamage = 1; //think this is needed to not freeze?  yup
     
     gBattlescriptCurrInstr = cmd->nextInstr;
 }
@@ -15403,6 +15404,7 @@ static void atkC5_setsemiinvulnerablebit(void)  //thsi command is why move effec
     case MOVE_SKY_DROP:
         gStatuses3[gBattlerAttacker] |= STATUS3_ON_AIR;
         gStatuses3[gBattlerAttacker] &= ~(STATUS3_SMACKED_DOWN); //remove grounding by flying/taking to the air //don't forget moves w hit in air flag have priority aginst in air targetgs
+        gStatuses4[gBattlerAttacker] &= ~(STATUS4_GROUNDED);
         break;
     case MOVE_DIG:
         gStatuses3[gBattlerAttacker] |= STATUS3_UNDERGROUND;

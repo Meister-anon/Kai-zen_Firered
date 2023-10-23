@@ -1200,8 +1200,11 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
     did that done. and adjusted to ensure multihit doesn't trigger early, it needs testing, but I consider grounding rework done (excepting putting type logic back)
     properly setup for fly bounce sky drop to remove  smack down status, so you either switch out or use those moves again as a gamble to get resistances back
     also setup for them to cancel rolled in various lets them cancel flying moves as well, plus they have priority over in air mon
+    last thing left to do is, put the grounded exclusions back for flying mon i.e fighting and electric doing neutral to flying when grounded
 
-    make sure check other effects added for ground types, check think I added a sandstorm acc drop against ground mon?
+    -fixed issues with grounding w new flag setup seems to work
+
+    make sure check other effects added for ground types, check think I added a sandstorm acc drop against ground mon? -yeah cut it down some
     double check for balance, also think need add more  moves with FLAG_DMG_2X_IN_AIR & FLAG_DMG_IN_AIR for ground mon
 
     think something like rolling into a ball and speeding up a hill to fly into the air to hit enemy

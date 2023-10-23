@@ -826,6 +826,7 @@
 #define MOVE_RAGE_FIST 797
 #define MOVE_SNOWBALL 798
 #define MOVE_TRENCH_RUN 799     //flying status move, 2 stagae evasion boost, flies low to ground/grounds flyer removing electric weakness
+#define MOVE_SPIN_DASH 800  //groud move tuck into ball and spin at the foe, give flag dmg in air can bounce into the air
 
 //#define MOVES_COUNT_GEN8 757
 
@@ -835,7 +836,7 @@
 // also need actual move data in battle_moves.h
 //* consolidated move name & move description files into move_info.h
 
-#define LAST_MOVE_INDEX     MOVE_TRENCH_RUN
+#define LAST_MOVE_INDEX     MOVE_SPIN_DASH
 
 #define MOVES_COUNT_GEN8 (LAST_MOVE_INDEX + 1) //changed so define auto updates
 

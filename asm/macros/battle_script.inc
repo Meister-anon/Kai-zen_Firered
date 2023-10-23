@@ -712,9 +712,9 @@
 	.byte 0x7f
 	.endm
 
-	.macro manipulatedamage param0:req
+	.macro manipulatedamage mode:req
 	.byte 0x80
-	.byte \param0
+	.byte \mode
 	.endm
 
 	.macro trysetrest param0:req
@@ -1717,13 +1717,6 @@
 
 	.macro bringdownairbornebattler battler:req
 	various \battler, VARIOUS_GRAVITY_ON_AIRBORNE_MONS
-	.endm
-	
-	@changed back from jump effect realized didnt make sense
-	@it doesnt do dmg boost it just changes status to knocked down if flying
-	@so not an issue for multi hit to use
-	.macro groundonairbattlerwithoutgravity battler:req	
-	various \battler, VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG
 	.endm
 
 	.macro checkgrassyterrainheal battler:req, ptr:req
