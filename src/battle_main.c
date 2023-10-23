@@ -473,11 +473,11 @@ const u8 gTypeEffectiveness[] = // 336 is number of entries x 3 i.e number of ef
     TYPE_PSYCHIC, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,   //effect prob too strong, flying is weak defensively and psychic is strong offenseively
     TYPE_PSYCHIC, TYPE_FAIRY, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,    //plus fairy nerfed, will replace with resistancee instad of super effectiveness
-    TYPE_BUG, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE, 
     TYPE_BUG, TYPE_FIGHTING, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_ICE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_BUG, TYPE_FLYING, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_BUG, TYPE_GRASS, TYPE_MUL_SUPER_EFFECTIVE, 
     TYPE_BUG, TYPE_PSYCHIC, TYPE_MUL_SUPER_EFFECTIVE,//removed ghost resistance to bug by accident in my chart, but was so good will add to my chart
     TYPE_BUG, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE, //removed still resist to bug, apparently many insect types are known to destroy/consume light metals, would be great for the type
     TYPE_ROCK, TYPE_FIRE, TYPE_MUL_SUPER_EFFECTIVE,

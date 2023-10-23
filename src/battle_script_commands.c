@@ -4237,7 +4237,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
     switch (gBattleScripting.moveEffect) // Set move effects which happen later on
     {
     case MOVE_EFFECT_KNOCK_OFF:
-    case MOVE_EFFECT_SMACK_DOWN:
+    //case MOVE_EFFECT_SMACK_DOWN:
     case MOVE_EFFECT_REMOVE_STATUS:
         gBattleStruct->moveEffect2 = gBattleScripting.moveEffect;
         ++gBattlescriptCurrInstr;
@@ -4271,12 +4271,12 @@ void SetMoveEffect(bool32 primary, u32 certain)
 
     if (battlerAbility == ABILITY_SHIELD_DUST 
      && !primary
-     && (gBattleScripting.moveEffect <= MOVE_EFFECT_TRI_ATTACK || gBattleScripting.moveEffect >= MOVE_EFFECT_SMACK_DOWN)) // Exclude stat lowering effects)  //skip script command if in threshold
+     && (gBattleScripting.moveEffect <= MOVE_EFFECT_TRI_ATTACK || gBattleScripting.moveEffect >= MOVE_EFFECT_FLAME_BURST)) // Exclude stat lowering effects)  //skip script command if in threshold
     {
         if (battlerAbility == ABILITY_SHIELD_DUST)
             RecordAbilityBattle(gEffectBattler, battlerAbility);
         ++gBattlescriptCurrInstr;
-        return;
+        return; //like emerald so is correct
     }
     if (gSideStatuses[GET_BATTLER_SIDE(gEffectBattler)] & SIDE_STATUS_SAFEGUARD //safegaurd check is here already dont need safeguard in status functions
      //&& !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD) //removing this not part of status check functions from emerald is becuase this was removed in later gen
@@ -7302,7 +7302,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             case MOVE_EFFECT_KNOCK_OFF:
                 effect = TryKnockOffBattleScript(gBattlerTarget);
                 break;
-            case MOVE_EFFECT_SMACK_DOWN:
+            /*case MOVE_EFFECT_SMACK_DOWN: //remove this instead do in MOVE_END_GROUND_TARGET
                 if (!(IsBattlerGrounded(gBattlerTarget)) && IsBattlerAlive(gBattlerTarget))
                 {
                     gStatuses3[gBattlerTarget] |= STATUS3_SMACKED_DOWN;
@@ -7311,7 +7311,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                     BattleScriptPush(gBattlescriptCurrInstr);
                     gBattlescriptCurrInstr = BattleScript_MoveEffectSmackDown;
                 }
-                break;
+                break;*/
             case MOVE_EFFECT_REMOVE_STATUS: // Smelling salts, Wake-Up Slap, Sparkling Aria
                 if ((gBattleMons[gBattlerTarget].status1 & gBattleMoves[gCurrentMove].argument) && IsBattlerAlive(gBattlerTarget))
                 {
@@ -7358,6 +7358,35 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                 if (gDisableStructs[i].substituteHP == 0)
                     gBattleMons[i].status2 &= ~(STATUS2_SUBSTITUTE);
             }
+            ++gBattleScripting.atk49_state;
+            break;
+        case MOVE_END_GROUND_TARGET:
+            if (!(IsBattlerGrounded(gBattlerTarget)) && IsBattlerAlive(gBattlerTarget) && gMultiHitCounter == 0) //should make sure doesn't trigger till end of multihit
+            {
+                
+                if (gBattleMoves[gCurrentMove].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)   //using fly
+                {
+                    CancelMultiTurnMoves(gBattlerTarget); //just for fly /skydrop
+                    gSprites[gBattlerSpriteIds[gBattlerTarget]].invisible = FALSE;
+                    //gStatuses3[gActiveBattler] &= ~(STATUS3_ON_AIR); // doesn't need this part handled in cancelmultiturn
+                    gStatuses3[gBattlerTarget] &= ~(STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS | STATUS3_ON_AIR); //think need these, were part of smack down
+                    gStatuses3[gBattlerTarget] |= STATUS3_SMACKED_DOWN;
+                    effect = TRUE;
+                    BattleScriptPush(gBattlescriptCurrInstr);
+                    gBattlescriptCurrInstr = BattleScript_GroundFlyingEnemywithoutGravity;
+
+                }//NEW bs for   //didnt need move damage multiplier that's already accounted for by damage calc
+
+                else if (gBattleMoves[gCurrentMove].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR))
+                {
+                    gStatuses3[gBattlerTarget] |= STATUS3_SMACKED_DOWN;
+                    gStatuses3[gBattlerTarget] &= ~(STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS | STATUS3_ON_AIR);
+                    effect = TRUE;
+                    BattleScriptPush(gBattlescriptCurrInstr);
+                    gBattlescriptCurrInstr = BattleScript_MoveEffectSmackDown;
+                }
+
+            } //vsonic need test
             ++gBattleScripting.atk49_state;
             break;
         case MOVE_END_SKY_DROP_CONFUSE: // If a Pokemon was released from Sky Drop and was in LOCK_CONFUSE, go to "confused due to fatigue" scripts and clear Sky Drop data.
@@ -11569,20 +11598,6 @@ static void atk76_various(void) //will need to add all these emerald various com
 
         gStatuses3[gActiveBattler] &= ~(STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS | STATUS3_ON_AIR);
         break;
-    case VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG:    //uses gactivebattler sets actually target in bs script  groundonairbattlerwithoutgravity
-            // VARIOUS_ARGS(const u8 *ptr); //doesn't need put battler for these already handeled by cmdargs aat top
-        if (gBattleMoves[gCurrentMove].flags == FLAG_DMG_2X_IN_AIR && gStatuses3[gActiveBattler] & STATUS3_ON_AIR)   //using fly
-        {
-            CancelMultiTurnMoves(gActiveBattler); //just for fly /skydrop
-            gSprites[gBattlerSpriteIds[gActiveBattler]].invisible = FALSE;
-            //gStatuses3[gActiveBattler] &= ~(STATUS3_ON_AIR); // doesn't need this part handled in cancelmultiturn
-            gStatuses3[gActiveBattler] |= STATUS3_SMACKED_DOWN;
-             BattleScriptPush(gBattlescriptCurrInstr + 3);
-            gBattlescriptCurrInstr = BattleScript_GroundFlyingEnemywithoutGravity;
-            //BattleScriptPushCursorAndCallback(BattleScript_GroundFlyingEnemywithoutGravity);
-            //gBattleMoveDamage *= 2; //can't believe I forgot this...
-        }//NEW bs for   //didnt need move damage multiplier that's already accounted for by damage calc
-        break;
     /*case VARIOUS_HANDLE_TRAINER_SLIDE_MSG:
         if (gBattlescriptCurrInstr[3] == 0)
         {
@@ -15387,6 +15402,7 @@ static void atkC5_setsemiinvulnerablebit(void)  //thsi command is why move effec
     case MOVE_BOUNCE:
     case MOVE_SKY_DROP:
         gStatuses3[gBattlerAttacker] |= STATUS3_ON_AIR;
+        gStatuses3[gBattlerAttacker] &= ~(STATUS3_SMACKED_DOWN); //remove grounding by flying/taking to the air //don't forget moves w hit in air flag have priority aginst in air targetgs
         break;
     case MOVE_DIG:
         gStatuses3[gBattlerAttacker] |= STATUS3_UNDERGROUND;

@@ -233,7 +233,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_GUST] =
     {
-        .effect = EFFECT_GUST,
+        .effect = EFFECT_HIT,  //does nothing just goes to hit, can change to hit
         .power = 40,
         .type = TYPE_FLYING,
         .accuracy = 100,
@@ -1360,14 +1360,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_THUNDER] =
     {
         .power = 120,
-        .effect = EFFECT_THUNDER,
+        .effect = EFFECT_THUNDER, //sets paralysis can move to argument nvm did with flag can leave as is
         .type = TYPE_ELECTRIC,
         .accuracy = 85,
         .pp = 10,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_IN_AIR,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_2X_IN_AIR,
         .split = SPLIT_SPECIAL,
     },
 
@@ -3724,7 +3724,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_TWISTER] =
     {
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_2X_IN_AIR,
-        .effect = EFFECT_TWISTER,
+        .effect = EFFECT_TWISTER, //smack down effect done with flag check, twister sets flinch
         .power = 55,
         .type = TYPE_DRAGON,
         .accuracy = 100,
@@ -5112,7 +5112,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_SKY_UPPERCUT] =
     {
-        .effect = EFFECT_SKY_UPPERCUT,
+        .effect = EFFECT_HIT, //doesnt do anything goes to hit, can change to hit
         .power = 85,
         .type = TYPE_FIGHTING,
         .accuracy = 90,
@@ -7472,7 +7472,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_SMACK_DOWN] =
     {
-        .effect = EFFECT_SMACK_DOWN,
+        .effect = EFFECT_HIT, //sets move effect smack down which plays script and sets smack down status which grounds target
         .power = 50,
         .type = TYPE_ROCK,
         .accuracy = 100,
@@ -7482,7 +7482,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_DMG_IN_AIR,
         .split = SPLIT_PHYSICAL,
-    },
+    }, //now that moved smackdown effect to flag, no longer need effect, repalce with hit,
 
     [MOVE_STORM_THROW] =
     {
@@ -8417,14 +8417,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
 
         .power = 120,
-        .effect = EFFECT_HURRICANE,
+        .effect = EFFECT_HURRICANE, //does confusion
         .type = TYPE_FLYING,
         .accuracy = 80,
         .pp = 10,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_IN_AIR | FLAG_WIND_MOVE,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_2X_IN_AIR | FLAG_WIND_MOVE,
         .split = SPLIT_SPECIAL,
     },
 
@@ -9473,7 +9473,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_THOUSAND_ARROWS] =
     {
-        .effect = EFFECT_SMACK_DOWN,
+        .effect = EFFECT_HIT, //replaced smack down effect w flag check
         .power = 90,
         .type = TYPE_GROUND,
         .accuracy = 100,

@@ -64,7 +64,7 @@
 #define MOVE_EFFECT_SP_ATK_TWO_DOWN     0x39
 #define MOVE_EFFECT_RECOIL_50	        0x3A
 #define MOVE_EFFECT_RECOIL_33_STATUS	0x3B
-#define MOVE_EFFECT_SMACK_DOWN          0x3C	//reordered move effects for shield dust logic
+#define MOVE_EFFECT_SMACK_DOWN          0x3C	//reordered move effects for shield dust logic //not using anymore moveed effect to flag check, so can remoe and use flame burst instead
 #define MOVE_EFFECT_FLAME_BURST         0x3D
 #define MOVE_EFFECT_FEINT				0x3E
 #define MOVE_EFFECT_SPECTRAL_THIEF      0x3F

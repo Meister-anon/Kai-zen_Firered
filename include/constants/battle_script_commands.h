@@ -314,23 +314,24 @@
 #define MOVE_END_ITEM_EFFECTS_ALL                  15
 #define MOVE_END_KINGSROCK						   16  //item effect need to be bfore kingsrock for things like rocky helm I guess
 #define MOVE_END_SUBSTITUTE                        17
-#define MOVE_END_SKY_DROP_CONFUSE				   18
-#define MOVE_END_UPDATE_LAST_MOVES                 19
-#define MOVE_END_MIRROR_MOVE                       20
+#define MOVE_END_GROUND_TARGET                     18 //put here so cancel sky drop stuff
+#define MOVE_END_SKY_DROP_CONFUSE				   19
+#define MOVE_END_UPDATE_LAST_MOVES                 20
+#define MOVE_END_MIRROR_MOVE                       21
 
-#define MOVE_END_MULTIHIT_MOVE					   21   //added don't need, except for dragon darts but coudl potentially setup in bs maybe rename for parental bond instead?
-#define MOVE_END_MAGICIAN                          22    // Occurs after final multi-hit strike, and after other items/abilities would activate
-#define MOVE_END_EJECT_BUTTON                      23
-#define MOVE_END_RED_CARD                          24
-#define MOVE_END_EJECT_PACK                        25
-#define MOVE_END_LIFEORB_SHELLBELL                 26    // Includes shell bell, throat spray, etc
-#define MOVE_END_PICKPOCKET                        27
-#define MOVE_END_DANCER							   28
-#define MOVE_END_EMERGENCY_EXIT					   29
-#define MOVE_END_SYMBIOSIS						   30
-#define MOVE_END_NEXT_TARGET                       31 //was last value before count, in base firered
-#define MOVE_END_CLEAR_BITS						   32
-#define MOVE_END_COUNT							   33
+#define MOVE_END_MULTIHIT_MOVE					   22   //added don't need, except for dragon darts but coudl potentially setup in bs maybe rename for parental bond instead?
+#define MOVE_END_MAGICIAN                          23    // Occurs after final multi-hit strike, and after other items/abilities would activate
+#define MOVE_END_EJECT_BUTTON                      24
+#define MOVE_END_RED_CARD                          25
+#define MOVE_END_EJECT_PACK                        26
+#define MOVE_END_LIFEORB_SHELLBELL                 27    // Includes shell bell, throat spray, etc
+#define MOVE_END_PICKPOCKET                        28
+#define MOVE_END_DANCER							   29
+#define MOVE_END_EMERGENCY_EXIT					   30
+#define MOVE_END_SYMBIOSIS						   31
+#define MOVE_END_NEXT_TARGET                       32 //was last value before count, in base firered
+#define MOVE_END_CLEAR_BITS						   33
+#define MOVE_END_COUNT							   34
 
 // switch cases - PORTED right now not used, adding red card only for now
 #define B_SWITCH_NORMAL     0

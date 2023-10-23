@@ -1150,6 +1150,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  and the dmg is triggering and fainting before the hp bar even updates or triggers faint animation,
  so I did absorb with 3 hp left, the dmg I would take back would kill me, but it triggered whiteout before hp even fell...
 
+ that seems to be happening for all things done via passive damage?  had bind status and got killed but my mon didnt do faint animation before whiteout
+ ok so faint animation is just not playing as a result of battle now?? weird
+
  still no idea, what's wrong with absorb effcts, it seems to be linked with sethpdrain and or manipulateddamage commands
  but there is also weird case where if use absorb and get killed for some reason it triggers grudge logic, despite never setting grudge
  so apparently grudge is getting set ?
@@ -1162,8 +1165,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  - just realized most electric moves are named after thunder which has nothing to do with electricity instead of something like lightning
  like thunderbolt which means literally nothing...  go through rename electric moves  remove thunder
  think only reason it was used was for character limit, which I've expanded
+  - think most games did this? prob for same reason back in the day, think will keep most unchanged
+  in most cases it'd just expand the number of moves that break the move limit
 
- - look in to re- rebalancing ok, think do like persona,  very low odds, doesn't work on stronger foes / bosses
+ - look in to re- rebalancing ohko, think do like persona,  very low odds, doesn't work on stronger foes / bosses
   but a good chance to work on mon weak to the type, think double chance of working if move result super effective
   but counter balance by making it always go last, i.e a negaitve 1 priority move if only used for mon you are already strong against
   its not such a big deal, mostly allows you to shave off a 2 or 3 hit into a 1 but makes you have to take a hit for it
@@ -1174,8 +1179,35 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   //and made the moves always go last, so you have to take a hit
   - so they're essentially just moves for fun,
 
- that seems to be happening for all things done via passive damage?  had bind status and got killed but my mon didnt do faint animation before whiteout
- ok so faint animation is just not playing as a result of battle now?? weird
+  //attempt rework grouding, because levitate/floating change, make flag 2x in air and flag dmg in air set smack down to ground floating mon
+    //all moves that have them are simple and can have their effects moved to the argument and done with arguemnttomoveeffect or completly replaced w effect hit
+    //plan put logic in damage calc?  dmg modifiers will be done, by then, so safe to do there double check smackdown move effect  think its already setup
+    //to not trigger till end of multihit but make sure
+    //there's a couple different ways I can do this  have it take place of effect i.e gbatlescript.moveeffect will set smack down w moveend function
+    //but that would mean I can never use the flag with a move that could have a complex effect.
+    //alterantively I could put it into the argument so in damagecalc check move for flag, if flag set  argument to move_effect_smackdown
+    //and then it would trigger same as if with moveeffect just goes through argumenttomoveeffect to moveend instead of setmoveeffet into move end
+
+    //other option is just setting the status leaving both free. would require more setup, also couldn't use moveend to do any animations/text I want.
+    //think would have to make timer for effect, set to 1, and put in end turn for status smackdown, counter should only do message etc.
+    //when status3 smack down is set and counter is 1, after message plays decrement counter so doesn't repeat
+    //to ensure hmm could potentially make moveend effect that just checks for flag?
+    //if that works wont need smackdown move effect and can have the most flexibility as won't need to take up space in  effect or argument
+
+    ok yeah can do that simply just make another main case for atk49_moveend  something like MOVEEND_GROUD_TARGET
+    //once do that won't need various VARIOUS_GROUND_FLYING_TARGET_2XDMGFLAG   can just roll it in together
+
+    did that done. and adjusted to ensure multihit doesn't trigger early, it needs testing, but I consider grounding rework done (excepting putting type logic back)
+    properly setup for fly bounce sky drop to remove  smack down status, so you either switch out or use those moves again as a gamble to get resistances back
+    also setup for them to cancel rolled in various lets them cancel flying moves as well, plus they have priority over in air mon
+
+    make sure check other effects added for ground types, check think I added a sandstorm acc drop against ground mon?
+    double check for balance, also think need add more  moves with FLAG_DMG_2X_IN_AIR & FLAG_DMG_IN_AIR for ground mon
+
+    think something like rolling into a ball and speeding up a hill to fly into the air to hit enemy
+    use some variation of rollout with fly animations to roll up into air and then come down on enemy   lol spin dash XD
+
+ 
 
   bind logic is half working, way I have it rn,  a faster bind mon will force target into a random move.
   but they aren't locked into it, and can select another one, but using the locked move directly seems to cause freeze?
