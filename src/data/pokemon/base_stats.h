@@ -1080,7 +1080,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_GOLBAT] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(75, 80, 70, 85, 65, 82),
+         STATS(75, 80, 110, 80, 65, 85),
         .type1 = TYPE_POISON,
         .type2 = TYPE_FLYING,
         .catchRate = 90,
@@ -1900,7 +1900,7 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(50, 85, 55, 90, 65, 65),
-        .type1 = TYPE_FIRE,
+        .type1 = TYPE_NORMAL,
         .type2 = TYPE_FIRE,
         .catchRate = 190,
         .expYield = 82,
@@ -1921,7 +1921,7 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(65, 100, 70, 105, 80, 80),
-        .type1 = TYPE_FIRE,
+        .type1 = TYPE_NORMAL,
         .type2 = TYPE_FIRE,
         .catchRate = 60,
         .expYield = 175,
@@ -9597,7 +9597,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_SHIELDON] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(30, 42, 118, 30, 42, 88),
+         STATS(40, 42, 118, 30, 42, 88),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_STEEL,
         .catchRate = 45,
@@ -9618,7 +9618,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_BASTIODON] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(60, 52, 168, 30, 47, 138),
+         STATS(70, 52, 168, 30, 47, 138),
         .type1 = TYPE_ROCK,
         .type2 = TYPE_STEEL,
         .catchRate = 45,
@@ -9844,7 +9844,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_CHERRIM] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(90, 60, 70, 85, 87, 78),
+         STATS(90, 60, 90, 85, 77, 117),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
         .catchRate = 75,
@@ -28405,7 +28405,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_CHERRIM_SUNSHINE] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(90, 60, 70, 85, 87, 78),
+         STATS(90, 90, 70, 100, 97, 78),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
         .catchRate = 75,

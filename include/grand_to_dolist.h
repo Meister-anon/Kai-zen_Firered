@@ -1159,6 +1159,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  - its only doing that on the turn I use absorb and should be healing from it,  but it doesn't heal intead it sets grudge?
  and if I die in that turn it mon loses all their pp - fixed think prob was change made to  sideeffecting command had wrong targetting
  atk0C_datahpupdate - sets ghpdealt think that is main isssue, since sethpdrain isnt properly cutting gbattlemovedmg so I take full dmg I do
+  - fixed issue was jumpifhealblock, which used jumpifsideaffecting  I didn't properly setup after making sude status 4byte command rather than 2 byte
 
   - GetBattlerSide(gBattlerAttacker)  /should be useful for later
 
@@ -1208,7 +1209,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
     double check for balance, also think need add more  moves with FLAG_DMG_2X_IN_AIR & FLAG_DMG_IN_AIR for ground mon
 
     think something like rolling into a ball and speeding up a hill to fly into the air to hit enemy
-    use some variation of rollout with fly animations to roll up into air and then come down on enemy   lol spin dash XD
+    use some variation of rollout with fly animations to roll up into air and then come down on enemy   lol spin dash XD  - need put in description
+
+    -now back onto reworking bind effect,  then onto double checking contact ability status stuff, static works, but mostly unsure about
+    the poison abilities. need review 
 
  
 
@@ -2220,7 +2224,7 @@ as well as the effect of increasing trap duration
 * - DONE
 * 
 * 
-* made one hit kos a bit more usable/workable works when up to 7 levels below target- DONE
+* made one hit kos a bit more usable/workable works when up to 7 levels below target- DONE  -com0opletely reworked, now limit to 3 levels
 * 
 * 
 * fix typhlosion line learnset curve, bring in line with charizard - DONE

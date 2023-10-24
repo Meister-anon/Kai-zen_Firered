@@ -110,7 +110,7 @@ extern const u8 BattleScript_AllStatsUp[];
 extern const u8 BattleScript_StatDownCantGoLower[];
 extern const u8 BattleScript_StatUpCantGoHigher[];
 extern const u8 BattleScript_RapidSpinAway[];
-extern const u8 BattleScript_WrapFree[];
+extern const u8 BattleScript_RapidSpinTrapHazardClear[];
 extern const u8 BattleScript_LeechSeedFree[];
 extern const u8 BattleScript_SpikesFree[];
 extern const u8 BattleScript_MonTookFutureAttack[];

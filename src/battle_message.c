@@ -220,7 +220,7 @@ static const u8 sText_PkmnEnduredHit[] = _("{B_DEF_NAME_WITH_PREFIX} ENDURED\nth
 static const u8 sText_MagnitudeStrength[] = _("MAGNITUDE {B_BUFF1}!");
 static const u8 sText_PkmnCutHPMaxedAttack[] = _("{B_ATK_NAME_WITH_PREFIX} cut its own HP\nand maximized ATTACK!");
 static const u8 sText_PkmnCopiedStatChanges[] = _("{B_ATK_NAME_WITH_PREFIX} copied\n{B_DEF_NAME_WITH_PREFIX}'s stat changes!");
-static const u8 sText_PkmnGotFree[] = _("{B_ATK_NAME_WITH_PREFIX} got free of\n{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}!");
+static const u8 sText_PkmnGotFree[] = _("{B_ATK_NAME_WITH_PREFIX} got free of\nall traps and hazards!");
 static const u8 sText_PkmnShedLeechSeed[] = _("{B_ATK_NAME_WITH_PREFIX} shed\nLEECH SEED!");
 static const u8 sText_PkmnBlewAwaySpikes[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nSPIKES!");
 static const u8 sText_PkmnFledFromBattle[] = _("{B_ATK_NAME_WITH_PREFIX} fled from\nbattle!");
@@ -1854,7 +1854,7 @@ const u16 gDoubleBattleRecallStrings[] = {
 
 //SEARCH //trap effects  for functionality
 //for all traps I change lower stats by 2 stages
-const u16 gTrappingMoves[] = {
+const u16 gTrappingMoves[NUM_TRAPPING_MOVES + 1] = {
     MOVE_BIND,      //same for wrap, lower speed of wrapped target 2 stages  / changing to encore effect, because found bug that did that for some reason
     MOVE_WRAP,
     MOVE_FIRE_SPIN, //increases burn chance //serenge grace is effect *2 by requires no setup, I think I can get away w * 3 here actually do more to near guarantee 50-60%

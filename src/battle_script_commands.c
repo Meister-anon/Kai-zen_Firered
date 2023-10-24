@@ -1391,12 +1391,13 @@ static void atk00_attackcanceler(void) //vsonic
 
     //change put bind effect here, since similar to disobedient checks, seems don' teven need specific stuff for bind
     //cant use bindedmove == move none, as that only works for if bind user is slower mon
-    //since I'm not setting bindmove on hit
+    //since I'm not setting bindmove on hit 
+    //move choice logic, and setting of bind move to define etc.
     if (gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND && gDisableStructs[gBattlerAttacker].bindedMove == MOVE_NONE) //if move not locked in yet
     {
 
         for (i = 0; i < MAX_MON_MOVES; ++i)
-            if (gBattleMons[gBattlerAttacker].moves[i] == gLastMoves[gBattlerAttacker]) //set to last used move
+            if (gBattleMons[gBattlerAttacker].moves[i] == gLastMoves[gBattlerAttacker]) //set i to last used move
                 break;
         if (gLastMoves[gBattlerAttacker] == MOVE_NONE
         || gLastMoves[gBattlerAttacker] == MOVE_ENCORE
@@ -1407,8 +1408,7 @@ static void atk00_attackcanceler(void) //vsonic
         || gLastMoves[gBattlerAttacker] == MOVE_MIRROR_MOVE)
             i = 4;
 
-        if (gDisableStructs[gBattlerAttacker].bindedMove == MOVE_NONE
-        && i != 4
+        if (i != 4
         && gBattleMons[gBattlerAttacker].pp[i] != 0)
         {
             //gDisableStructs[gBattlerTarget].bindedMove = gBattleMons[gBattlerTarget].moves[i];
@@ -1442,7 +1442,7 @@ static void atk00_attackcanceler(void) //vsonic
 
         }
     }
-    if (gDisableStructs[gBattlerAttacker].bindedMove != MOVE_NONE) //if move already set/loced in
+    if (gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND && gDisableStructs[gBattlerAttacker].bindedMove != MOVE_NONE) //if move already set/loced in
     {
         if (gBattleMons[gBattlerAttacker].pp[gCurrMovePos] == 0) //if the selected move ran out of pp, during bind, use struggle
         {
@@ -1453,6 +1453,7 @@ static void atk00_attackcanceler(void) //vsonic
 
         } //still not working need compare this/disobedience to  encore logic which is set before attack canceler I think
     }
+    //end of bind effect
 
     gHitMarker &= ~(HITMARKER_ALLOW_NO_PP);
     if (!(gHitMarker & HITMARKER_OBEYS) 
@@ -4817,7 +4818,9 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 //will change to only cover bind and wrap //put new status effects in util.c copy this function for each new wrap effect
                 //else //need figure out skip logic,  for above, cant use status wrapped
                 {
-                    gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove; //put at top then set Trap Duration then into switch case based on wrappedmove to set individual timers and status 
+                     //put at top then set Trap Duration then into switch case based on wrappedmove to set individual timers and status 
+                     //removed wrappedmove as its used for other things like move buffer will use for environment only as that one keeps  original 
+                     //setup where it will pull move from wrapped move set here
                     gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;  //still need setup wrappyby logic in battle_main
                     //I undestand this now first turn is turn status is applied so to get 2-5 full turns 3-6 value is needed
                     //but...I want that luck feelig of the enemy breaking out next turn so I'd like to set it to 2-6 but that is...convoluted
@@ -4836,13 +4839,13 @@ void SetMoveEffect(bool32 primary, u32 certain)
                         
                     } //as will be using separate timers for each wrap move, will put wrap duration on a constant/variable  and then pass it to the relevant timer directly
                     
-                    switch (gBattleStruct->wrappedMove[gEffectBattler]) //point of all these is just to set status and timer
+                    switch (gCurrentMove) //point of all these is just to set status and timer
                     {           //think I can put the skip here,  if move specific timer isn't 0 incrment/skip, otherwise  set duration, set status, and gBattleScripting.moveEffect
                     case MOVE_BIND:
-                    if (gBattleMons[gEffectBattler].status4 & STATUS4_BIND)
-                        ++gBattlescriptCurrInstr;
-                    else
-                    {
+                    if (gBattleMons[gEffectBattler].status4 & STATUS4_BIND) //mos things arodn repo use status2 wrapped for if trap set, rework that
+                        ++gBattlescriptCurrInstr;       //since added multiple statuses and timers make bool  true/valse set below for if trapped
+                    else                                //same as how sturdied focus sashed etc. set battler trapped  when set timers, then clear when clear status
+                    {                                   //replace its a trap status with that as well if used
                         gDisableStructs[gEffectBattler].bindTurns = TrapDuration;
                         gBattleMons[gEffectBattler].status4 |= STATUS4_BIND; //moved effect to attk canceler
 
@@ -4860,21 +4863,13 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     } //if  use individual timer for identifier instead of status for these can do more and save space, without needing to take up flags                 
                         break; //idk if can do, otherwise could just make status 4  environmentTrapTurns
                     case MOVE_FIRE_SPIN:
-                    if (gDisableStructs[gEffectBattler].environmentTrapTurns)
+                    if (gDisableStructs[gEffectBattler].environmentTrapTurns) //vsonic make message environment trap already in effect 
                         ++gBattlescriptCurrInstr;
                     else
                     {
+                        gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
                         gDisableStructs[gEffectBattler].environmentTrapTurns = TrapDuration;
                         gBattleMons[gEffectBattler].status4 |= STATUS4_FIRE_SPIN;
-                    }
-                        break;
-                    case MOVE_CLAMP:
-                    if (gBattleMons[gEffectBattler].status4 & STATUS4_CLAMP)
-                        ++gBattlescriptCurrInstr;
-                    else
-                    {
-                        gDisableStructs[gEffectBattler].clampTurns = TrapDuration;
-                        gBattleMons[gEffectBattler].status4 |= STATUS4_CLAMP;
                     }
                         break;
                     case MOVE_WHIRLPOOL:
@@ -4882,6 +4877,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                         ++gBattlescriptCurrInstr;
                     else
                     {
+                        gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
                         gDisableStructs[gEffectBattler].environmentTrapTurns = TrapDuration;
                         gBattleMons[gEffectBattler].status4 |= STATUS4_WHIRLPOOL;
                     }
@@ -4891,6 +4887,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                         ++gBattlescriptCurrInstr;
                     else
                     {
+                        gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
                         gDisableStructs[gEffectBattler].environmentTrapTurns = TrapDuration;
                         gBattleMons[gEffectBattler].status4 |= STATUS4_SAND_TOMB;
                     }
@@ -4900,8 +4897,18 @@ void SetMoveEffect(bool32 primary, u32 certain)
                         ++gBattlescriptCurrInstr;
                     else
                     {
+                        gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
                         gDisableStructs[gEffectBattler].environmentTrapTurns = TrapDuration;
                         gBattleMons[gEffectBattler].status4 |= STATUS4_MAGMA_STORM;
+                    }
+                        break;
+                    case MOVE_CLAMP:
+                    if (gBattleMons[gEffectBattler].status4 & STATUS4_CLAMP)
+                        ++gBattlescriptCurrInstr;
+                    else
+                    {
+                        gDisableStructs[gEffectBattler].clampTurns = TrapDuration;
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_CLAMP;
                     }
                         break;
                     case MOVE_SWARM:
@@ -4927,9 +4934,11 @@ void SetMoveEffect(bool32 primary, u32 certain)
 
                     BattleScriptPush(gBattlescriptCurrInstr + 1);//below set based on move effect so will need to change move effect within switch case
                     gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]; //just for displaying battle message for specific wrap move, so dont need change moveeffect
-                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER]) //idk what this is doing?
+                    for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; ++gBattleCommunication[MULTISTRING_CHOOSER]) //think this just loops till find current move?
                     {
-                        if (gBattleCommunication[MULTISTRING_CHOOSER] > 4 || gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove) //can use this to separte wrap/bind actually can do that for all...
+                        if (gBattleCommunication[MULTISTRING_CHOOSER] >= NUM_TRAPPING_MOVES - 1)
+                            break;
+                        if (gTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
                             break;                  //what I mean by that is, I could keep all traps in effect wrap, and use wrap turns, but then set a different status for each move at the bottom after checking which move was used to trap
                     }//believe this is only for reading from the trapstring table can prob remove for other trap effects
                 }//multistring > 4 would be a problem if I didn't split off the moves from the wrap effect
@@ -10291,7 +10300,7 @@ u32 IsFlowerVeilProtected(u32 battler) //prvent stat drop for user & ally
 
 u32 IsLeafGuardProtected(u32 battler)
 {
-    if (WEATHER_HAS_EFFECT && (gBattleWeather & WEATHER_SUN_ANY))
+    if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY))
         return GetBattlerAbility(battler) == ABILITY_LEAF_GUARD;
     else
         return 0;
@@ -15063,14 +15072,14 @@ static void atkBE_rapidspinfree(void)
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_WrapFree;
     }*/
-    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_WRAPPED)
+    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_WRAPPED) //potentiall change to all ifs, to just clear everything vsonic add more status
     {
         gBattleScripting.battler = gBattlerTarget;
         gBattleMons[gBattlerAttacker].status2 &= ~STATUS2_WRAPPED;
         gBattlerTarget = *(gBattleStruct->wrappedBy + gBattlerAttacker);
-        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gBattlerAttacker]);
+        //PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gBattlerAttacker]); //chaned to freed from all traps and hazards!
         BattleScriptPushCursor();
-        gBattlescriptCurrInstr = BattleScript_WrapFree;
+        gBattlescriptCurrInstr = BattleScript_RapidSpinTrapHazardClear; //chaned to freed from all traps and hazards! - done
     }
     else if (gStatuses3[gBattlerAttacker] & STATUS3_LEECHSEED)
     {
@@ -15079,10 +15088,10 @@ static void atkBE_rapidspinfree(void)
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_LeechSeedFree;
     }
-    else if (gSideStatuses[GetBattlerSide(gBattlerAttacker)] & SIDE_STATUS_SPIKES)
+    else if (gSideStatuses[GetBattlerSide(gBattlerAttacker)] & SIDE_STATUS_SPIKES) //change spike to not be mutually exclusive, but use same counters
     {
-        gSideStatuses[GetBattlerSide(gBattlerAttacker)] &= ~(SIDE_STATUS_SPIKES);
-        gSideTimers[GetBattlerSide(gBattlerAttacker)].spikesAmount = 0;
+        gSideStatuses[GetBattlerSide(gBattlerAttacker)] &= ~(SIDE_STATUS_SPIKES); //to balance, you can use multiple diffeent spike types but can't stack max of each
+        gSideTimers[GetBattlerSide(gBattlerAttacker)].spikesAmount = 0; //i.e if stealth rocks and toxic spikes are on field you can only get a single stack of spikes
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_SpikesFree;
     }

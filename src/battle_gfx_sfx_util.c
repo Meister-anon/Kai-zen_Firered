@@ -189,7 +189,7 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
         else if (status == STATUS1_PARALYSIS)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PRZ);
         /*else if (status & STATUS4_INFESTATION)
-            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_INFESTED);*/
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_INFESTED);*/ //think for ionfested rather than reuse move animation do battler shake w exclamation point
         else // no animation
             gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 0;
     }

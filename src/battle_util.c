@@ -1175,6 +1175,8 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
             unusableMoves |= gBitTable[i];
         if (GetImprisonedMovesCount(battlerId, gBattleMons[battlerId].moves[i]) && check & MOVE_LIMITATION_IMPRISON)
             unusableMoves |= gBitTable[i];
+        if (gDisableStructs[battlerId].bindTurns && gDisableStructs[battlerId].bindedMove != gBattleMons[battlerId].moves[i])
+            unusableMoves |= gBitTable[i];
         if (gDisableStructs[battlerId].encoreTimer && gDisableStructs[battlerId].encoredMove != gBattleMons[battlerId].moves[i])
             unusableMoves |= gBitTable[i];
         if (holdEffect == HOLD_EFFECT_CHOICE_BAND && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
@@ -2141,6 +2143,7 @@ u8 DoBattlerEndTurnEffects(void)
 {
     //u32 ability;    //ok added back realize its literally just for the magic gaurd check
     u32 ability, i, effect = 0;
+    u16 * moveId = 0;  //for passing wrap effect move name/value to anim args etc. in place of wrappedmove
 
     gHitMarker |= (HITMARKER_GRUDGE | HITMARKER_SKIP_DMG_TRACK);
     while (gBattleStruct->turnEffectsBattlerId < gBattlersCount && gBattleStruct->turnEffectsTracker <= ENDTURN_BATTLER_COUNT)
@@ -2406,9 +2409,12 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleTextBuff1[2] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
                         gBattleTextBuff1[3] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
                         gBattleTextBuff1[4] = EOS;*/
-                        gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler];
-                        gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        //can't just replace these with move as animArgs are u8, instead set somehow w pointer?
+                        //builds but need test 
+                        *moveId =  MOVE_BIND;
+                        gBattleScripting.animArg1 = *moveId;
+                        gBattleScripting.animArg2 = *moveId >> 8;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_BIND);
                         gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
                         if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6; //may raise this to /8 since status effects are strong
@@ -2422,7 +2428,7 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleMons[gActiveBattler].status4 &= ~STATUS4_BIND;
                         gDisableStructs[gActiveBattler].bindedMove = 0;
                         //gDisableStructs[gActiveBattler].bindMovepos = 0;  //not using now replace with gcurrmovepos
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_BIND);
                         gBattlescriptCurrInstr = BattleScript_WrapEnds;
                     }
                     BattleScriptExecute(gBattlescriptCurrInstr);
@@ -2446,9 +2452,10 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleTextBuff1[2] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
                         gBattleTextBuff1[3] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
                         gBattleTextBuff1[4] = EOS;*/
-                        gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler];
-                        gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        *moveId =  MOVE_WRAP;
+                        gBattleScripting.animArg1 = *moveId;
+                        gBattleScripting.animArg2 = *moveId >> 8;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_WRAP);
                         gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
                         if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
@@ -2460,7 +2467,7 @@ u8 DoBattlerEndTurnEffects(void)
                     else  // broke free
                     {
                         gBattleMons[gActiveBattler].status2 &= ~STATUS2_WRAPPED;
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_WRAP); //vsonic need change for multi status
                         gBattlescriptCurrInstr = BattleScript_WrapEnds;
                     }
                     BattleScriptExecute(gBattlescriptCurrInstr);
@@ -2484,12 +2491,13 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleTextBuff1[2] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
                         gBattleTextBuff1[3] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
                         gBattleTextBuff1[4] = EOS;*/
-                        gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler];
-                        gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        *moveId =  MOVE_CLAMP;
+                        gBattleScripting.animArg1 = *moveId;
+                        gBattleScripting.animArg2 = *moveId >> 8;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_CLAMP);
                         gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
                         if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
-                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
+                            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8; //rebalanced not 6th to avoid broken double binding guaranteed 3 turn kill
                         else
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16; ///8  keep 16 for now since buffing effects
                         if (gBattleMoveDamage == 0)
@@ -2498,7 +2506,7 @@ u8 DoBattlerEndTurnEffects(void)
                     else  // broke free
                     {
                         gBattleMons[gActiveBattler].status4 &= ~STATUS4_CLAMP;
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_CLAMP);
                         gBattlescriptCurrInstr = BattleScript_WrapEnds;
                     }
                     BattleScriptExecute(gBattlescriptCurrInstr);
@@ -2523,9 +2531,10 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleTextBuff1[3] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
                         gBattleTextBuff1[4] = EOS;*/
 
-                        gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler]; //need figure this out since wrappedmove, is setting more than one, isntead do based on status?
-                        gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        *moveId =  MOVE_SWARM;
+                        gBattleScripting.animArg1 = *moveId;
+                        gBattleScripting.animArg2 = *moveId >> 8;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SWARM);
                         //BattleScriptExecute(BattleScript_StatusInfested);
                         
                         gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
@@ -2547,7 +2556,7 @@ u8 DoBattlerEndTurnEffects(void)
                     else  // broke free
                     {   //how did I not notice I didn't have the removal status here?
                         gBattleMons[gActiveBattler].status4 &= ~STATUS4_SWARM;
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SWARM);
                         gBattlescriptCurrInstr = BattleScript_WrapEnds;
                     }
                     BattleScriptExecute(gBattlescriptCurrInstr);
@@ -2570,9 +2579,10 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleTextBuff1[2] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 0);
                         gBattleTextBuff1[3] = *(gBattleStruct->wrappedMove + gActiveBattler * 2 + 1);
                         gBattleTextBuff1[4] = EOS;*/
-                        gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler];
-                        gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        *moveId =  MOVE_SNAP_TRAP;
+                        gBattleScripting.animArg1 = *moveId;
+                        gBattleScripting.animArg2 = *moveId >> 8;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SNAP_TRAP);
                         gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
                         if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
@@ -2584,7 +2594,7 @@ u8 DoBattlerEndTurnEffects(void)
                     else  // broke free
                     {
                         gBattleMons[gActiveBattler].status4 &= ~STATUS4_SNAP_TRAP;
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SNAP_TRAP);
                         gBattlescriptCurrInstr = BattleScript_WrapEnds;
                     }
                     BattleScriptExecute(gBattlescriptCurrInstr);
@@ -2593,7 +2603,7 @@ u8 DoBattlerEndTurnEffects(void)
                 ++gBattleStruct->turnEffectsTracker;
                 break;  //added all extra effects hope it works well
             case ENDTURN_ENVIRONMENT_TRAP:  // may need add fallthrough?     //make environemnt trap end turn & then separate ones for each physical trap
-                if ((gBattleMons[gActiveBattler].status4 & STATUS4_ENVIRONMENT_TRAP) //keeping environment traps, put physical traps before this
+                if ((gDisableStructs[gActiveBattler].environmentTrapTurns) //keeping environment traps, put physical traps before this
                     && gBattleMons[gActiveBattler].hp != 0)
                 { //made separate because environment traps should be mutually exclusive as they would counter each other
                     //can't have a whirlpool in the same place you'd have a sand tomb or fire hazard etc.
@@ -2611,7 +2621,7 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleTextBuff1[4] = EOS;*/
                         gBattleScripting.animArg1 = gBattleStruct->wrappedMove[gActiveBattler];
                         gBattleScripting.animArg2 = gBattleStruct->wrappedMove[gActiveBattler] >> 8;
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]); //changed buffer for others but since this is individua can remain the same
                         gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
                         if (GetBattlerHoldEffect(gBattleStruct->wrappedBy[gActiveBattler], TRUE) == HOLD_EFFECT_BINDING_BAND)
                             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 6;
@@ -2626,7 +2636,7 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleMons[gActiveBattler].status4 &= ~STATUS4_WHIRLPOOL;
                         gBattleMons[gActiveBattler].status4 &= ~STATUS4_SAND_TOMB;
                         gBattleMons[gActiveBattler].status4 &= ~STATUS4_MAGMA_STORM;
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]); //vsonic need change this for multi status, so figure move from status
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gActiveBattler]);
                         gBattlescriptCurrInstr = BattleScript_WrapEnds;
                     }
                     BattleScriptExecute(gBattlescriptCurrInstr);
@@ -3854,7 +3864,7 @@ u8 AtkCanceller_UnableToUseMove2(void)
 //i.e porygon and magnemite line, may be others
 //delete value in bracket to see actual list total w intellisense to make sure total is correct before final save
 //update define in battle_util.h if diff
-const u16 gFloatingSpecies[157] = {
+const u16 gFloatingSpecies[158] = {
     SPECIES_BUTTERFREE,
     SPECIES_BEAUTIFLY,
     SPECIES_VIVILLON,
@@ -3863,6 +3873,7 @@ const u16 gFloatingSpecies[157] = {
     SPECIES_DUSTOX,
     SPECIES_BEEDRILL,
     SPECIES_MASQUERAIN,
+    SPECIES_CRYOGONAL,
     SPECIES_NINJASK,
     SPECIES_SHEDINJA,
     SPECIES_VOLBEAT,
@@ -5935,7 +5946,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && gBattleMons[battler].hp != 0)
                 {
                     SET_BATTLER_TYPE2(battler, moveType);   //changed only shifts second type when hit, can take advantage of joat that way.
-                    PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+                    PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);//changed joat no longer stacks with stab so nto so good, but still defensively good
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ColorChangeActivates;
                     ++effect;
@@ -8119,6 +8130,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
 }
 */
 
+//keep bind excluded from this as its a physical affliction
 static bool32 GetMentalHerbEffect(u8 battlerId)
 {
     bool32 ret = FALSE;

@@ -6976,7 +6976,7 @@ BattleScript_RapidSpinAway::
 	rapidspinfree
 	return
 
-BattleScript_WrapFree::
+BattleScript_RapidSpinTrapHazardClear::
 	printstring STRINGID_PKMNGOTFREE
 	waitmessage 0x40
 	copybyte gBattlerTarget, sBATTLER

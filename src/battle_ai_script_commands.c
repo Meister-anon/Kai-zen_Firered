@@ -1687,7 +1687,7 @@ static void Cmd_if_any_move_disabled_or_encored(void)
     }
 }
 
-static void Cmd_if_curr_move_disabled_or_encored(void)
+static void Cmd_if_curr_move_disabled_or_encored(void) //need add bind to these
 {
     switch (sAIScriptPtr[1])
     {
