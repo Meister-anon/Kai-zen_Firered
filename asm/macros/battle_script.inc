@@ -148,11 +148,11 @@
 	.endm
 
 	@FIXED think needed to make 4byte instead of 2
-	.macro jumpifsideaffecting battler:req, sidestatus:req, ptr:req
+	.macro jumpifsideaffecting battler:req, sidestatus:req, jumpInstr:req
 	.byte 0x1f
 	.byte \battler
 	.4byte \sidestatus
-	.4byte \ptr
+	.4byte \jumpInstr
 	.endm
 
 	.macro jumpifstat battler:req, ifflag:req, stat:req, value:req, ptr
