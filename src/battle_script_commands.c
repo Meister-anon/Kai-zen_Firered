@@ -3633,7 +3633,7 @@ static void atk0B_healthbarupdate(void)
             {
                 PrepareStringBattle(STRINGID_SUBSTITUTEDAMAGED, gActiveBattler);
             }
-            else
+            else if (!DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
             {
                 s16 healthValue;
                 s32 currDmg = gBattleMoveDamage;
@@ -3643,7 +3643,7 @@ static void atk0B_healthbarupdate(void)
                     healthValue = currDmg;
                 else
                     healthValue = maxPossibleDmgValue;
-                BtlController_EmitHealthBarUpdate(0, healthValue);
+                BtlController_EmitHealthBarUpdate(BUFFER_A, healthValue);
                 MarkBattlerForControllerExec(gActiveBattler);
                 if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER && gBattleMoveDamage > 0)
                     gBattleResults.playerMonWasDamaged = TRUE;
@@ -3655,17 +3655,18 @@ static void atk0B_healthbarupdate(void)
 
 static void atk0C_datahpupdate(void)
 {
-    u32 moveType;
+    //u32 moveType; //remove this as its a hold over from when moves didn't use split and instead relied on type order
     u16 move = gCurrentMove;
 
     if (!gBattleControllerExecFlags)
     {
-        if (gBattleStruct->dynamicMoveType == 0)
+        /*if (gBattleStruct->dynamicMoveType == 0)
             moveType = gBattleMoves[gCurrentMove].type;
         else if (!(gBattleStruct->dynamicMoveType & 0x40))
             moveType = gBattleStruct->dynamicMoveType & 0x3F;
         else
-            moveType = gBattleMoves[gCurrentMove].type;
+            moveType = gBattleMoves[gCurrentMove].type;*/
+
         if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
         {
             gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
@@ -5858,22 +5859,24 @@ static void atk1E_jumpifability(void) //tset copy original code back from kaizen
 
 static void atk1F_jumpifsideaffecting(void)
 {
+    CMD_ARGS(u8 battler, u32 sidestatus, const u8 *jumpInstr);
     u8 side;
-    u32 flags;
-    const u8 *jumpPtr;
+    u32 sidestatus;
+    const u8 *jumpInstr;
+    
 
-    if (gBattlescriptCurrInstr[1] == BS_ATTACKER)
+    if (cmd->battler == BS_ATTACKER)
         side = GET_BATTLER_SIDE(gBattlerAttacker);
     else
         side = GET_BATTLER_SIDE(gBattlerTarget);
 
-    flags = T2_READ_16(gBattlescriptCurrInstr + 2);
-    jumpPtr = T2_READ_PTR(gBattlescriptCurrInstr + 4);
+    sidestatus = cmd->sidestatus;
+    jumpInstr = cmd->jumpInstr;
 
-    if (gSideStatuses[side] & flags)
-        gBattlescriptCurrInstr = jumpPtr;
+    if (gSideStatuses[side] & sidestatus)
+        gBattlescriptCurrInstr = jumpInstr;
     else
-        gBattlescriptCurrInstr += 8;
+        gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 static void atk20_jumpifstat(void)
@@ -17139,7 +17142,8 @@ bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move)
     if (GetBattlerAbility(battlerDef) != ABILITY_DISGUISE
         || gBattleMons[battlerDef].species != SPECIES_MIMIKYU
         || gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED
-        || gBattleMoves[move].power == 0
+        //|| gBattleMoves[move].power == 0
+        || IS_MOVE_STATUS(move)
         || gHitMarker & HITMARKER_IGNORE_DISGUISE)
         return FALSE;
     else

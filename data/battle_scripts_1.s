@@ -2773,7 +2773,7 @@ BattleScript_EffectAbsorb::  @need setup multi task also make ghost with liquid 
 	waitmessage 0x40
 	jumpifhealblock BS_ATTACKER, BattleScript_AbsorbHealBlock
 	sethpdrain	@ should change battlemovedamage to half hp dealt, something weird here, removing below but setting this causes freeze
-	@manipulatedamage DMG_BIG_ROOT		@should be making negatiev, but isn't, instead just does something weird with animation triwes to play animation again
+	manipulatedamage DMG_BIG_ROOT		@should be making negatiev, but isn't, instead just does something weird with animation triwes to play animation again
  	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE
  	jumpifability BS_TARGET, ABILITY_LIQUID_OOZE, BattleScript_AbsorbLiquidOoze	@should always be below DMG_BIG_ROOT
 	setbyte cMULTISTRING_CHOOSER, 0
@@ -6620,7 +6620,7 @@ BattleScript_LeechSeedTurnDrain::
 	jumpifability BS_ATTACKER, ABILITY_LIQUID_OOZE, BattleScript_LeechSeedTurnPrintLiquidOoze
 	goto BattleScript_LeechSeedTurnPrintAndUpdateHp
 BattleScript_LeechSeedTurnPrintLiquidOoze::
-	manipulatedamage NEGATIVE_DMG
+	@manipulatedamage NEGATIVE_DMG
 	copybyte gBattlerAbility, gBattlerAttacker
 	setbyte cMULTISTRING_CHOOSER, 4	@don'tknow what this does so hope nota problem
 BattleScript_LeechSeedTurnPrintAndUpdateHp::
