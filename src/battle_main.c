@@ -511,13 +511,13 @@ const u8 gTypeEffectiveness[] = // 336 is number of entries x 3 i.e number of ef
     TYPE_STEEL, TYPE_ROCK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_STEEL, TYPE_FAIRY, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_STEEL, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FAIRY, TYPE_NORMAL, TYPE_MUL_SUPER_EFFECTIVE,
+    TYPE_FAIRY, TYPE_NORMAL, TYPE_MUL_SUPER_EFFECTIVE, //fairy can control beasts, mostly just for balance to counter fairy nerfs replace fighting advantage
     TYPE_FAIRY, TYPE_DRAGON, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FAIRY, TYPE_DARK, TYPE_MUL_SUPER_EFFECTIVE,
     TYPE_FAIRY, TYPE_STEEL, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FAIRY, TYPE_FIRE, TYPE_MUL_NOT_EFFECTIVE,
     TYPE_FAIRY, TYPE_POISON, TYPE_MUL_NOT_EFFECTIVE,
-    TYPE_FAIRY, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE,
+    TYPE_FAIRY, TYPE_BUG, TYPE_MUL_NOT_EFFECTIVE, //bug buff because bug beats grass and is similar to nature
     TYPE_FAIRY, TYPE_GRASS, TYPE_MUL_NO_EFFECT,     //grass buff, and based on idea fairy are nature spirits i.e can't hurt nature as they can't exist without it
     TYPE_FORESIGHT, TYPE_FORESIGHT, TYPE_MUL_NO_EFFECT, //can remove this when confident removed all type_foresight checks, would give room for 1 type change well I could leave it idk, i'll leave it...becuz I want the dumb 420 number...
     TYPE_NORMAL, TYPE_GHOST, TYPE_MUL_NO_EFFECT, //will eventually remove type foresight so num types will change, so would want to add something
@@ -5014,13 +5014,11 @@ static void TurnValuesCleanUp(bool8 var0)
                 if (gDisableStructs[gActiveBattler].rechargeTimer == 0)
                     gBattleMons[gActiveBattler].status2 &= ~(STATUS2_RECHARGE);
             }
-            if (gDisableStructs[gActiveBattler].bideTimer == 0)
-                gBattleMons[gActiveBattler].status2 &= ~(STATUS2_BIDE); //status remover
-            //makes sure status isn't removed until end turn
+                
         }
-
         if (gDisableStructs[gActiveBattler].substituteHP == 0)
             gBattleMons[gActiveBattler].status2 &= ~(STATUS2_SUBSTITUTE);
+
     }
     gSideTimers[0].followmeTimer = 0;
     gSideTimers[1].followmeTimer = 0;
@@ -5035,6 +5033,7 @@ static void SpecialStatusesClear(void) //intimidatedmon is a special status so t
 
         for (i = 0; i < sizeof(struct SpecialStatus); ++i)
             dataPtr[i] = 0;
+
     }
 }
 
@@ -5094,6 +5093,7 @@ static void RunTurnActionsFunctions(void) //important
     {
         gHitMarker &= ~(HITMARKER_PASSIVE_DAMAGE);
         gBattleMainFunc = sEndTurnFuncsTable[gBattleOutcome & 0x7F]; //default but why does it use this value?
+
     }
     else
     {
@@ -5121,7 +5121,7 @@ static void HandleEndTurn_BattleWon(void)
         PlayBGM(MUS_VICTORY_TRAINER);
         gBattlescriptCurrInstr = BattleScript_BattleTowerTrainerBattleWon;
     }
-    else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && !(gBattleTypeFlags & BATTLE_TYPE_LINK))
+    else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && !(gBattleTypeFlags & BATTLE_TYPE_LINK)) //can put pokevial logic here
     {
         BattleStopLowHpSound();
         gBattlescriptCurrInstr = BattleScript_LocalTrainerBattleWon;
@@ -5426,9 +5426,9 @@ static void HandleAction_UseMove(void)
         gDisableStructs[gBattlerAttacker].encoreTimer = 0;
         *(gBattleStruct->moveTarget + gBattlerAttacker) = GetMoveTarget(gCurrentMove, 0);
     }
-    else if (gBattleMons[gBattlerAttacker].moves[gCurrMovePos] != gChosenMoveByBattler[gBattlerAttacker])
+    else if (gBattleMons[gBattlerAttacker].moves[gCurrMovePos] != gChosenMoveByBattler[gBattlerAttacker]) //force sets move to curr move if chosen move doesnt match
     {
-        gCurrentMove = gChosenMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
+        gCurrentMove = gChosenMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos]; //so think need bind logic in else if above this block
         *(gBattleStruct->moveTarget + gBattlerAttacker) = GetMoveTarget(gCurrentMove, 0);
     }
     else
@@ -6052,11 +6052,10 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
         priority++;
     }
 
-    else if (gBattleMons[gBattlerAttacker].status2 & STATUS2_BIDE
-        && gDisableStructs[gBattlerAttacker].bideTimer == 0
-        && gCurrentMove == MOVE_BIDE)
+    else if (gBattleMons[battlerId].status2 & STATUS2_BIDE
+        && gDisableStructs[battlerId].bideTimer == 0) //think had to remove check for move bide, since that's not set until atk canceler
     {
-        priority = 3; //if works, second attack will go before most priority moves
+        priority = 3; //if works, second attack will go before most priority moves /that did it works now
     }
     return priority;
 }

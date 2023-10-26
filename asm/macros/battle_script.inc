@@ -1188,9 +1188,9 @@
 	.byte 0xe7
 	.endm
 
-	.macro settypebasedhalvers param0:req
+	.macro settypebasedhalvers jumpInstr:req
 	.byte 0xe8
-	.4byte \param0
+	.4byte \jumpInstr
 	.endm
 
 	.macro setweatherballtype

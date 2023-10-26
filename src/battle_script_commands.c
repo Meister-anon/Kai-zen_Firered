@@ -15152,6 +15152,7 @@ s16 spatk_diff(void) {
 
 static void atkC1_hiddenpowercalc(void)
 {
+    CMD_ARGS();
 
     s32 powerBits;
     s16 i, j;
@@ -15184,27 +15185,6 @@ static void atkC1_hiddenpowercalc(void)
     // if equal I think I'll just toss up a 50/50 Random() % 2  setting each, like I did for forecast.
      //so this should boost attack,if atk is lower & split is physical
     
-    //based on feedback from anthroyd, I may just simplify this
-    //and set the boost to apply against stronger opponents in general
-    //so just remove the moveSplit part of the boost function.
-
-    //I hesitate on that beause in that case, the boost would always be active,
-    //unless facing much lower level pokemon.   will need balance test
-    if (i > 0)// && moveSplit == SPLIT_PHYSICAL)
-        gDynamicBasePower = gDynamicBasePower * 13 / 10; //boosted from 17 to 50 just to see if it works
-
-    if (j > 0)// && moveSplit == SPLIT_SPECIAL)
-        gDynamicBasePower = gDynamicBasePower * 13 / 10; //doesn't seem to be workign, I'll swap to gdynamic
-    //O.o now it works ...ow
-
-    if ((i || j) == 0) // to ensure I don't get the boost if my stats are greater than my opponenet
-    { //hope that syntax is right?
-        gDynamicBasePower = gDynamicBasePower;
-
-    } //ok it compiles but seems to be severly underperforming in first tests, 
-    //I forgot about the varied power part
-
-
     if (gCurrentMove == MOVE_HIDDEN_POWER) // also see about putting split condition for hidden power onto the function for getbattlesplit
     {
 
@@ -15225,7 +15205,28 @@ static void atkC1_hiddenpowercalc(void)
             } //set split here,  put boost below and add split for lower stat to condtion
         }
     }
-    ++gBattlescriptCurrInstr; //moved downhere to hopefully make sure it doesn't jump scripts until everything done
+    //based on feedback from anthroyd, I may just simplify this
+    //and set the boost to apply against stronger opponents in general
+    //so just remove the moveSplit part of the boost function.
+    if ((i == 0 && moveSplit == SPLIT_PHYSICAL) || (j == 0 && moveSplit == SPLIT_SPECIAL)) // to ensure I don't get the boost if my stats are greater than my opponenet
+    { 
+        gBattlescriptCurrInstr = cmd->nextInstr;   //skip dmg boosting
+
+    } //put split logic back
+
+
+    //I hesitate on that beause in that case, the boost would always be active,
+    //unless facing much lower level pokemon.   will need balance test
+    if (i > 0)// && moveSplit == SPLIT_PHYSICAL)
+        gDynamicBasePower = gDynamicBasePower * 13 / 10; //boosted from 17 to 50 just to see if it works
+
+    else if (j > 0)// && moveSplit == SPLIT_SPECIAL)
+        gDynamicBasePower = gDynamicBasePower * 13 / 10; //doesn't seem to be workign, I'll swap to gdynamic
+    //O.o now it works ...ow   
+
+
+    
+    gBattlescriptCurrInstr = cmd->nextInstr; //moved downhere to hopefully make sure it doesn't jump scripts until everything done
 
     //compare abililty_download that is most similar as it does a boost based on opponenet stat comparison
     // gCurrentMove = gChosenMove = MOVE_HIDDEN_POWER;
@@ -15417,6 +15418,8 @@ static void atkC5_setsemiinvulnerablebit(void)  //thsi command is why move effec
         gStatuses3[gBattlerAttacker] |= STATUS3_ON_AIR;
         gStatuses3[gBattlerAttacker] &= ~(STATUS3_SMACKED_DOWN); //remove grounding by flying/taking to the air //don't forget moves w hit in air flag have priority aginst in air targetgs
         gStatuses4[gBattlerAttacker] &= ~(STATUS4_GROUNDED);
+        gBattleResources->flags->flags[gBattlerAttacker] &= ~(RESOURCE_FLAG_ROOST); //end roost
+        gDisableStructs[gBattlerAttacker].RoostTimer = 0;
         break;
     case MOVE_DIG:
         gStatuses3[gBattlerAttacker] |= STATUS3_UNDERGROUND;
@@ -16200,32 +16203,33 @@ static void atkE7_trycastformdatachange(void)
 
 static void atkE8_settypebasedhalvers(void) // water and mud sport
 {
+    CMD_ARGS(const u8 *jumpInstr);
     bool8 worked = FALSE;
     
     if (gBattleMoves[gCurrentMove].effect == EFFECT_MUD_SPORT)
     {
-        if (!(gSideStatuses[gBattlerAttacker] & SIDE_STATUS_MUDSPORT))
+        if (!(gSideStatuses[GetBattlerSide(gBattlerAttacker)] & SIDE_STATUS_MUDSPORT))
         {
-            gSideStatuses[gBattlerAttacker] |= SIDE_STATUS_MUDSPORT;
-            gSideTimers[gBattlerAttacker].mudSportTimer = 5;
+            gSideStatuses[GetBattlerSide(gBattlerAttacker)] |= SIDE_STATUS_MUDSPORT;
+            gSideTimers[GetBattlerSide(gBattlerAttacker)].mudSportTimer = 5;
             gBattleCommunication[MULTISTRING_CHOOSER] = 0;
             worked = TRUE;
         }
     }
     else // water sport
     {
-        if (!(gSideStatuses[gBattlerAttacker] & SIDE_STATUS_WATERSPORT))
+        if (!(gSideStatuses[GetBattlerSide(gBattlerAttacker)] & SIDE_STATUS_WATERSPORT))
         {
-            gSideStatuses[gBattlerAttacker] |= SIDE_STATUS_WATERSPORT;
-            gSideTimers[gBattlerAttacker].waterSportTimer = 5;
+            gSideStatuses[GetBattlerSide(gBattlerAttacker)] |= SIDE_STATUS_WATERSPORT;
+            gSideTimers[GetBattlerSide(gBattlerAttacker)].waterSportTimer = 5;
             gBattleCommunication[MULTISTRING_CHOOSER] = 1;
             worked = TRUE;
         }
     }
     if (worked)
-        gBattlescriptCurrInstr += 5;
+        gBattlescriptCurrInstr = cmd->nextInstr;
     else
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        gBattlescriptCurrInstr = cmd->jumpInstr;
 }
 
 
@@ -16842,68 +16846,69 @@ static void atkF7_finishturn(void)
 
 //vsonic need remember to add to ai decision tree
 static void atkF8_setroost(void) { //actually I don't like this type change idea so not gonna do it.
-
-    //u16 virtue = Random() % 4; //had to make start value timer and set equal so they use the same value without recalc
-    gDisableStructs[gBattlerAttacker].RoostTimer = 4; //setting timer to 4, should give 3 full turns
-    //gDisableStructs[gBattlerAttacker].RoostTimerStartValue = 0;
-    //u8 timervalue = gDisableStructs[gBattlerAttacker].RoostTimer && gDisableStructs[gBattlerAttacker].RoostTimerStartValue;
-
-    
-   // gDisableStructs[gBattlerAttacker].RoostTimer = gDisableStructs[gBattlerAttacker].RoostTimerStartValue += virtue;
-    //gDisableStructs[gBattlerAttacker].RoostTimer += virtue;
-    //REMOVED random effect
-    //ok made slight adjustment here, I think since its starts at zero, this should be enough that timer is always increased when setting roost
-    //which shoud give a nice balance to repeatedly using the move.
-
-    //should be set timer value, and if flag not set, set flag
-    if (!(gBattleResources->flags->flags[gActiveBattler] & RESOURCE_FLAG_ROOST)) //check if this means flag not set
-        gBattleResources->flags->flags[gBattlerAttacker] |= RESOURCE_FLAG_ROOST;
-
-    
-    //need to come up with adjustment to ensure subsequent uses of roost can't give
-    //a value lower than what's already on the timer.
-
-    //think I can use += virtue to do what I want so if timer isn't 0, and roost is set,
-    //the value gets added to time remaining.
-
-    /*else if (gDisableStructs[gBattlerAttacker].RoostTimer && gDisableStructs[gBattlerAttacker].RoostTimerStartValue != 0)
-        timervalue += virtue;*/
-
-
-    // then check if need to update battlescript to for a loop like gravity
-    //need make change for flying type 1 || type 2 & resource flag roost
-
-    //actually don't need to change anything, forgot I removed round to flying immunity
-    //so when ground hits, it should just be treated as a normally effective attack without interfering
-
-    /*
-    // Pure flying type.
-    if (gBattleMons[gBattlerAttacker].type1 == TYPE_FLYING && gBattleMons[gBattlerAttacker].type2 == TYPE_FLYING)
+    CMD_ARGS();
+    if (gDisableStructs[gBattlerAttacker].RoostTimer == 0)
     {
-        gBattleStruct->roostTypes[gBattlerAttacker][0] = TYPE_FLYING;
-        gBattleStruct->roostTypes[gBattlerAttacker][1] = TYPE_FLYING;
-        gBattleStruct->roostTypes[gBattlerAttacker][2] = TYPE_FLYING;
-        SET_BATTLER_TYPE(gBattlerAttacker, TYPE_NORMAL);
-    }
-    // Dual Type with Flying Type.
-    else if ((gBattleMons[gBattlerAttacker].type1 == TYPE_FLYING && gBattleMons[gBattlerAttacker].type2 != TYPE_FLYING)
-        || (gBattleMons[gBattlerAttacker].type2 == TYPE_FLYING && gBattleMons[gBattlerAttacker].type1 != TYPE_FLYING))
-    {
-        gBattleStruct->roostTypes[gBattlerAttacker][0] = gBattleMons[gBattlerAttacker].type1;
-        gBattleStruct->roostTypes[gBattlerAttacker][1] = gBattleMons[gBattlerAttacker].type2;
-        if (gBattleMons[gBattlerAttacker].type1 == TYPE_FLYING)
-            gBattleMons[gBattlerAttacker].type1 = TYPE_MYSTERY;
-        if (gBattleMons[gBattlerAttacker].type2 == TYPE_FLYING)
-            gBattleMons[gBattlerAttacker].type2 = TYPE_MYSTERY;
-    }
-    // Non-flying type.
-    else if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_FLYING))
-    {*/
-    //gBattleStruct->roostTypes[gBattlerAttacker][0] = gBattleMons[gBattlerAttacker].type1;
-    //gBattleStruct->roostTypes[gBattlerAttacker][1] = gBattleMons[gBattlerAttacker].type2;
-//  }
+        //u16 virtue = Random() % 4; //had to make start value timer and set equal so they use the same value without recalc
+        gDisableStructs[gBattlerAttacker].RoostTimer = 4; //setting timer to 4, should give 3 full turns
+        //gDisableStructs[gBattlerAttacker].RoostTimerStartValue = 0;
+        //u8 timervalue = gDisableStructs[gBattlerAttacker].RoostTimer && gDisableStructs[gBattlerAttacker].RoostTimerStartValue;
 
-    ++gBattlescriptCurrInstr;
+        
+    // gDisableStructs[gBattlerAttacker].RoostTimer = gDisableStructs[gBattlerAttacker].RoostTimerStartValue += virtue;
+        //gDisableStructs[gBattlerAttacker].RoostTimer += virtue;
+        //REMOVED random effect
+        //ok made slight adjustment here, I think since its starts at zero, this should be enough that timer is always increased when setting roost
+        //which shoud give a nice balance to repeatedly using the move.
+
+        //should be set timer value, and if flag not set, set flag
+        if (!(gBattleResources->flags->flags[gActiveBattler] & RESOURCE_FLAG_ROOST)) //check if this means flag not set
+            gBattleResources->flags->flags[gBattlerAttacker] |= RESOURCE_FLAG_ROOST;  //why do I need this if I have a timer? but potentially use for trenchrun
+
+        //need to come up with adjustment to ensure subsequent uses of roost can't give
+        //a value lower than what's already on the timer.
+
+        //think I can use += virtue to do what I want so if timer isn't 0, and roost is set,
+        //the value gets added to time remaining.
+
+        /*else if (gDisableStructs[gBattlerAttacker].RoostTimer && gDisableStructs[gBattlerAttacker].RoostTimerStartValue != 0)
+            timervalue += virtue;*/
+
+
+        // then check if need to update battlescript to for a loop like gravity
+        //need make change for flying type 1 || type 2 & resource flag roost
+
+        //actually don't need to change anything, forgot I removed round to flying immunity
+        //so when ground hits, it should just be treated as a normally effective attack without interfering
+
+        /*
+        // Pure flying type.
+        if (gBattleMons[gBattlerAttacker].type1 == TYPE_FLYING && gBattleMons[gBattlerAttacker].type2 == TYPE_FLYING)
+        {
+            gBattleStruct->roostTypes[gBattlerAttacker][0] = TYPE_FLYING;
+            gBattleStruct->roostTypes[gBattlerAttacker][1] = TYPE_FLYING;
+            gBattleStruct->roostTypes[gBattlerAttacker][2] = TYPE_FLYING;
+            SET_BATTLER_TYPE(gBattlerAttacker, TYPE_NORMAL);
+        }
+        // Dual Type with Flying Type.
+        else if ((gBattleMons[gBattlerAttacker].type1 == TYPE_FLYING && gBattleMons[gBattlerAttacker].type2 != TYPE_FLYING)
+            || (gBattleMons[gBattlerAttacker].type2 == TYPE_FLYING && gBattleMons[gBattlerAttacker].type1 != TYPE_FLYING))
+        {
+            gBattleStruct->roostTypes[gBattlerAttacker][0] = gBattleMons[gBattlerAttacker].type1;
+            gBattleStruct->roostTypes[gBattlerAttacker][1] = gBattleMons[gBattlerAttacker].type2;
+            if (gBattleMons[gBattlerAttacker].type1 == TYPE_FLYING)
+                gBattleMons[gBattlerAttacker].type1 = TYPE_MYSTERY;
+            if (gBattleMons[gBattlerAttacker].type2 == TYPE_FLYING)
+                gBattleMons[gBattlerAttacker].type2 = TYPE_MYSTERY;
+        }
+        // Non-flying type.
+        else if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_FLYING))
+        {*/
+        //gBattleStruct->roostTypes[gBattlerAttacker][0] = gBattleMons[gBattlerAttacker].type1;
+        //gBattleStruct->roostTypes[gBattlerAttacker][1] = gBattleMons[gBattlerAttacker].type2;
+    }
+
+    gBattlescriptCurrInstr = cmd->nextInstr;
 } //should have effect of doing pretty much nothing
 
 static void atkF9_mondamaged(void) //edited based on recommendation from mcgriffin & egg (aka dizzyegg)
@@ -17579,7 +17584,13 @@ void BS_call_if(void) //comparing to jumpifholdeffect
             case EFFECT_TARGET_TYPE_DAMAGE:
             if (gCurrentMove == MOVE_ROCK_SMASH)
                 gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
-                break;
+                break;                
+            case EFFECT_ROOST:
+                PrepareStringBattle(STRINGID_MONROOSTING, gBattlerAttacker);
+ 
+                ++gBattlescriptCurrInstr;
+                gBattleCommunication[MSG_DISPLAY] = 0;
+            break;
         }
     }
     gBattlescriptCurrInstr = cmd->nextInstr; //had to put in hitfromcritcalc for rollout, so put intr increment back in, so won't break everything else, 

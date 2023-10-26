@@ -834,14 +834,14 @@ static void UpdateBoxEXPStepCounter(void)
     if (FlagGet(FLAG_START_OAK_RANCH_COUNTER))
     {
         (*ptr)++;
-        (*ptr) %= 17;
+        (*ptr) %= 7; //wrap around to increment exp
         if (*ptr == 0)
         {
             //flag set on deposit to pc, just need to have clear and reset on exit pc
             gSaveBlock1Ptr->oakRanchStepCounter++; //hope works    //put out here so still works with movement scripts
         }
     }
-    else if (*ptr != 0)
+    else if (*ptr != 0) //if flag nto set and pointer isn't 0
         ClearOakRanchVar(); //should auto clear var, when flag gets cleared
 
 }

@@ -3760,19 +3760,21 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMovePower *= 2;
     }
 
-    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND) && (sideStatus & SIDE_STATUS_MUDSPORT)) //if done right these should stack
+    //this isn't working... //ok pretty sure reason wasn't working was because didn't set status in mudsport command correctly
+    //works now
+    if (IS_BATTLER_OF_TYPE(battlerIdDef, TYPE_GROUND) && (gSideStatuses[GET_BATTLER_SIDE(battlerIdDef)] & SIDE_STATUS_MUDSPORT)) //if done right these should stack
      //&& IsBattlerGrounded(gBattlerTarget))//give to more ground types?
         spDefense = (130 * spDefense) / 100;    //gets to work as its on the ground not in the air
                     //changed mind,not as realistic but gives more options, keep just ground affecting, rock/ground are only rocks that really need 
 
     // sandstorm sp.def boost for rock types  // decided to add this for ground types as well,
-    if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK) || (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)))
-        && IsBattlerWeatherAffected(gBattlerTarget, WEATHER_SANDSTORM_ANY))// && !usesDefStat)        
+    if ((IS_BATTLER_OF_TYPE(battlerIdDef, TYPE_ROCK) || (IS_BATTLER_OF_TYPE(battlerIdDef, TYPE_GROUND)))
+        && IsBattlerWeatherAffected(battlerIdDef, WEATHER_SANDSTORM_ANY))// && !usesDefStat)        
         spDefense = (150 * spDefense) / 100;
 
     // hail sp.def & def boost for ice types  // still deciding if I want a 50% defense boost or a 25% boost to def & sp def
-    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ICE)
-        && IsBattlerWeatherAffected(gBattlerTarget, WEATHER_HAIL_ANY))// && !usesDefStat)        
+    if (IS_BATTLER_OF_TYPE(battlerIdDef, TYPE_ICE)
+        && IsBattlerWeatherAffected(battlerIdDef, WEATHER_HAIL_ANY))// && !usesDefStat)        
     {
         spDefense = (125 * spDefense) / 100;
         defense = (140 * defense) / 100;

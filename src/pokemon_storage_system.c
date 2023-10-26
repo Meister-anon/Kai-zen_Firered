@@ -105,6 +105,7 @@ void ZeroBoxMonAt(u8 boxId, u8 boxPosition)
         ZeroBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition]);
 }
 
+#define BOX_EXP_GAIN
 void BoxMonAtGainExp(struct BoxPokemon * mon)
 {
     u32 experience;

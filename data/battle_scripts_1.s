@@ -2437,9 +2437,11 @@ BattleScript_GravityLoopEnd:
 BattleScript_EffectRoost:
 	attackcanceler
 	attackstring
+	pause 0x50
 	ppreduce
+	setroost @just move above heal, and include text message for grounding 
+	call_if EFFECT_ROOST
 	tryhealhalfhealth BattleScript_AlreadyAtFullHp, BS_TARGET
-	setroost
 	goto BattleScript_PresentHealTarget
 
 BattleScript_EffectCaptivate:
@@ -5224,7 +5226,7 @@ BattleScript_PresentHealTarget::
 	goto BattleScript_MoveEnd
 
 BattleScript_AlreadyAtFullHp::
-	pause 0x20
+	pause 0x32
 	printstring STRINGID_PKMNHPFULL
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
@@ -6483,6 +6485,10 @@ BattleScript_PursuitSwitchRivalSkip::
 
 BattleScript_Pausex20::
 	pause 0x20
+	return
+
+BattleScript_Pausex40::
+	pause 0x80
 	return
 
 BattleScript_LevelUp::
@@ -8821,7 +8827,7 @@ BattleScript_WeakArmorActivatesSpeed:
 	printstring STRINGID_TARGETSTATWONTGOHIGHER
 	waitmessage 0x40
 	goto BattleScript_WeakArmorActivatesEnd
-BattleScript_WeakArmorSpeedAnim:
+BattleScript_WeakArmorSpeedAnim::
 	setgraphicalstatchangevalues
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_TARGETABILITYSTATRAISE

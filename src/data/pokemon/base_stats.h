@@ -1069,7 +1069,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FLYING,
         .eggGroup2 = EGG_GROUP_FLYING,
-        .abilities = {ABILITY_NUISANCE, ABILITY_NUISANCE},
+        .abilities = {ABILITY_INNER_FOCUS, ABILITY_NUISANCE},
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_SONAR},
         // #endif
@@ -2914,8 +2914,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         .abilities = {ABILITY_ILLUMINATE, ABILITY_NATURAL_CURE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_ANALYTIC, ABILITY_NONE},
-        // #endif
+            .abilityHidden = {ABILITY_ADAPTABILITY, ABILITY_REGENERATOR}, //analytic doesn't make sense starfish can regen what makes more sense is
+        // #endif                       //adaptability and regenerator  as they can live in many different environments warm hot cold etc
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -2939,9 +2939,9 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_3,
         .abilities = {ABILITY_ILLUMINATE, ABILITY_NATURAL_CURE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_ANALYTIC, ABILITY_STALL}, //JUST an idea since it has recover potential bulk starkmie with quick claw
+            .abilityHidden = {ABILITY_ADAPTABILITY, ABILITY_REGENERATOR}, //JUST an idea since it has recover potential bulk starkmie with quick claw
         // #endif
-        .bodyColor = BODY_COLOR_PURPLE,
+        .bodyColor = BODY_COLOR_PURPLE, //quick claw wouldn't work with stall I think?
         .noFlip = FALSE,
     },
 
@@ -5877,9 +5877,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_THICK_FAT, ABILITY_NONE},
+        .abilities = {ABILITY_THICK_FAT, ABILITY_NONE}, //thick fat to cover ice weakness
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_MULTISCALE, ABILITY_HI_PRESSURE},
+            .abilityHidden = {ABILITY_MULTISCALE, ABILITY_NONE}, //pressure was just he default legendary ability,may just remove pressure for this
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
@@ -7697,7 +7697,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(45, 110, 55, 10, 45, 65),
         .type1 = TYPE_GROUND,
-        .type2 = TYPE_GROUND,
+        .type2 = TYPE_BUG,
         .catchRate = 255,
         .expYield = 58,
         //.evYield_Attack = 1,

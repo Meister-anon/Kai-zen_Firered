@@ -1994,7 +1994,7 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
                     if (--gSideTimers[side].waterSportTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_WATERSPORT;
-                        BattleScriptExecute(BattleScript_WaterSportEnds);
+                        BattleScriptExecute(BattleScript_WaterSportEnds); //works
                         ++effect;
                     }
                 }
@@ -2873,19 +2873,18 @@ u8 DoBattlerEndTurnEffects(void)
                 //setup like healblock timer above.
                 //I'd like to have a little battlestring display when timer is at 0
                 //something like "pokemonname" returned to the air or something..
-                if (gDisableStructs[gActiveBattler].RoostTimer) //realized I never actually built the decrement lol
-                    --gDisableStructs[gActiveBattler].RoostTimer;
-
-                if (gBattleResources->flags->flags[gActiveBattler] & RESOURCE_FLAG_ROOST
-                    && --gDisableStructs[gActiveBattler].RoostTimer == 0)
+                if (gBattleResources->flags->flags[gActiveBattler] & RESOURCE_FLAG_ROOST)
                 {
-                    gBattleResources->flags->flags[gActiveBattler] &= ~(RESOURCE_FLAG_ROOST);
-                    MarkBattlerForControllerExec(gActiveBattler);
-                    gEffectBattler = gActiveBattler;
-                    BattleScriptExecute(BattlesScript_RoostEnds);
-                    ++effect; //think logic is if execute/uses battle script use should increment effect?
-                    //gBattleMons[gActiveBattler].type1 = gBattleStruct->roostTypes[gActiveBattler][0];
-                    //gBattleMons[gActiveBattler].type2 = gBattleStruct->roostTypes[gActiveBattler][1];
+                    if (--gDisableStructs[gActiveBattler].RoostTimer == 0)
+                    {
+                        gBattleResources->flags->flags[gActiveBattler] &= ~(RESOURCE_FLAG_ROOST);
+                        MarkBattlerForControllerExec(gActiveBattler);
+                        gEffectBattler = gActiveBattler;
+                        BattleScriptExecute(BattlesScript_RoostEnds);
+                        ++effect; //think logic is if execute/uses battle script use should increment effect?
+                        //gBattleMons[gActiveBattler].type1 = gBattleStruct->roostTypes[gActiveBattler][0];
+                        //gBattleMons[gActiveBattler].type2 = gBattleStruct->roostTypes[gActiveBattler][1];
+                    }
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
@@ -2931,7 +2930,7 @@ u8 DoBattlerEndTurnEffects(void)
                 }*/
                 if (gBattleMons[gActiveBattler].status2 & STATUS2_BIDE && gDisableStructs[gActiveBattler].bideTimer != 0)
                 {
-                    //--gDisableStructs[gEffectBattler].bideTimer;
+                    --gDisableStructs[gEffectBattler].bideTimer;
                     MarkBattlerForControllerExec(gActiveBattler);
                     gEffectBattler = gActiveBattler;
                     BattleScriptExecute(BattleScript_BideStoringEnergy);//hopefully don't need to change battlescript
@@ -3595,7 +3594,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_BIDE)//still need logic so can't use bide with status bide
             {
                 //gBattleMons[gBattlerAttacker].status2 -= STATUS2_BIDE_TURN(1);
-                --gDisableStructs[gBattlerAttacker].bideTimer;
+                
 
                 /*if (((gBattleMoves[gCurrentMove].power == 0) || (gCurrentMove == MOVE_COUNTER || MOVE_MIRROR_COAT))
                     && gDisableStructs[gBattlerAttacker].bideTimer) {
@@ -3643,11 +3642,13 @@ u8 AtkCanceller_UnableToUseMove(void)
                         if (gAbsentBattlerFlags & gBitTable[gBattlerTarget])
                             gBattlerTarget = GetMoveTarget(MOVE_BIDE, MOVE_TARGET_SELECTED + 1);
                         gBattlescriptCurrInstr = BattleScript_BideAttack;
+                        gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_BIDE); //status remover
                     }
                     else
                     {
                         gCurrentMove = MOVE_BIDE;
                         gBattlescriptCurrInstr = BattleScript_BideNoEnergyToAttack;
+                        gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_BIDE); //status remover
                     }
                     effect = 1;
                 }
@@ -6461,7 +6462,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     SET_STATCHANGER(STAT_ATK, 3, FALSE);
                     BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_TargetsStatWasMaxedOut;
+                    gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseOnMoveEnd;
                     ++effect;
                 } //changing to half the effect
                 break;
@@ -6473,7 +6474,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 { //think will add immunity to crit to thjis, check balance may be too much
                     SET_STATCHANGER(STAT_SPEED, 1, FALSE);
                     BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseOnMoveEnd;  //need test
+                    gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseOnMoveEnd;  //need test //need replace with one that matches level of stat change
                     ++effect;
                 }
                 break;

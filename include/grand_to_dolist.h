@@ -1214,13 +1214,63 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
     -now back onto reworking bind effect,  then onto double checking contact ability status stuff, static works, but mostly unsure about
     the poison abilities. need review 
 
- 
+    don't forget change hazard i.e spikes stealth rock toxic spikes, to not be mutually exclusive, 
+    balanced by sharing counters so setting stealth rocks  with toxic spikes would only allow a single use of regular spikes, rather than 3
+
+    -need fix endure forgot that isn't working for some reason
+    -make message for plus minus if doesn't exist in fire redm, pretty sure there was one in emerald?
+
+    -tested def seems like NO contact status setting abilities are working static etc.
+    //bug confusion immunity isn't working it still hit itself and takes damage  its supposed to do confusion animation but always go to  attack works
+    -what's happening instead is whenever mon breaks through confusion to attack its freezing the game...-_-
+    -sweet kiss is working again at least atually displays animation
+    -double check roost, effect think was supposed to display message about being on ground, copy smack down flag setup
+    -check message for roost timer end considering electric change with grounding consider idea roost timer not reset before runs out
+    -setup full hp effect to just use move for grounding effect rather than to heal.  also consider lower heal
+
+    they use tryhealhalfhealth  command, potentially change to 1/3rd  on other hand, its not meant to be gotten early
+    so mid game when there are stronger moves its not as big of a deal. consider replaying persona to see as there's feels balanced
+    you get different levels of heal to that scale with game, but you're also facing multiple opponents at once, sometimes 4 v 1
+
+    move learn is even more broken than I thought, for evo mon learn move that wasn't in first slot i.e got exp but wasn't in first slot when evolved
+    after battle, it displays the moves of the lead mon rather than the evolving mon...
+
+    actually evo mon was in lead position, adn then was switched out thankfully didn't replace move of other mon, 
+    it just didn't display the correct mon's moveset
+
+    //bide priority on unleash still doesn't seem to be working, ... -works now, problem was bad logic in priority check
+    trap animation setup rework is working, at least
+
+    boost exp game, cut wrap around for exp down from 17,  you still gain exp from normal travel team at FAR FAR greater rate,
+    it should be just below even -adjusted think is ok now
+    - type based statsuing seems to work thunder wave fails to work on geodude so that's good
+    -change fnt box to still display mon level, since moved graphics around they are in different places now
+
+    //for idea of pokevial charing on winning batttles, just put a counter  in battle_main  HandleEndTurn_BattleWon
+    every time battle outcome won and trainer flag is set, increment when ++counter equals 2 (or so), add a charge to vial
+    //then make it wrap around back to 0
+    will need do the whole var thing for that as well I beieve just like oak ranch var
+
+    attempt rework for roost message REFUSES to display...
+    ...apparently I wasn't even using teh roost bs, because I still had restore hp in the move effect
+    so iot wasn't even  setting the grounding flag - is now working abnd displays both roost message and roost end message
+
+    -must remember for bs, if not an effect in the top table must use double colon after battlescript name 
+    or it won't define it
+
+    need make running shoes work inside / I think? if can raise walk speed etc. may not need to
 
   bind logic is half working, way I have it rn,  a faster bind mon will force target into a random move.
   but they aren't locked into it, and can select another one, but using the locked move directly seems to cause freeze?
 
  also  low kick buff seems to not be as impactful as I thought  had weight values too high, lowered field and adjusted power works better now
  -fixed, 
+
+ hidden power over performing - was because bad logic, was getting ALL of the boosts because ordered badly
+ rearranged, changed to use cmd args and now it works well enough I think, keep an eye on 
+
+ mudsport water sport weren't setup correctly fixed
+ -fixed roost, fixed hidden power, fixed field/now side sport effects and fixed bide - ikeep eye on bide possibly lower counter by 1 turn
 
  saw video that mentioned omega ruby had portable berry trees, rather than needing to go around and plant in patches of soil
  so if I do that instead, and have a key item like the egg incubator where I can store 3-5 berry pots/trees I can carry with me
@@ -1538,6 +1588,8 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 goto COMPARISON_FILE  //file added for keeping track of things to port to this new repo to update to previous progress
 
 goto CHECK_THIS //something potentially relevant for future multi battle/triple etc.
+
+goto BOX_EXP_GAIN //setup box exp gain w help from kurausukuun and shiiny
 
 goto BATTLE_MOVE_SWAP_LOGIC //use this for changes to prevent seeing the move length bug, prevent moves of certain length from being put/moved
 //into a slot that isn't slot 2 or 4  limit is 13 chars

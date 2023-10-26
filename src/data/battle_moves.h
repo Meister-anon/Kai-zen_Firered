@@ -5561,7 +5561,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_ROOST] =
     {
-        .effect = EFFECT_RESTORE_HP,//EFFECT_ROOST,
+        .effect = EFFECT_ROOST,//EFFECT_ROOST,
         .power = 0,
         .type = TYPE_FLYING,
         .accuracy = 0,

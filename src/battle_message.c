@@ -67,7 +67,8 @@ static const u8 sText_PkmnProtectedItself[] = _("{B_DEF_NAME_WITH_PREFIX}\nprote
 static const u8 sText_AvoidedDamage[] = _("{B_DEF_NAME_WITH_PREFIX} avoided\ndamage with {B_DEF_ABILITY}!");
 static const u8 sText_PkmnMakesGroundMiss[] = _("{B_DEF_NAME_WITH_PREFIX} nullifies {B_BUFF1}\nmoves with {B_DEF_ABILITY}!");
 static const u8 sText_PkmnMakesGroundMiss2[] = _("{B_DEF_NAME_WITH_PREFIX} can float!\nGROUND moves can't hit it!");
-static const u8 sText_PkmnRoostEnds[] = _("{B_DEF_NAME_WITH_PREFIX} stopped Roosting and took to the air!\nGROUND moves can no longer hit it!");
+static const u8 sText_PkmnRoosting[] = _("{B_ATK_NAME_WITH_PREFIX} is resting on the ground.{PAUSE 32}");
+static const u8 sText_PkmnRoostEnds[] = _("{B_ATK_NAME_WITH_PREFIX} stopped roosting\nand took to the air!{PAUSE 64}");
 static const u8 sText_PkmnAvoidedAttack[] = _("{B_DEF_NAME_WITH_PREFIX} avoided\nthe attack!");
 static const u8 sText_ItDoesntAffect[] = _("It doesn't affect\n{B_DEF_NAME_WITH_PREFIX}…");
 static const u8 sText_AttackerFainted[] = _("{B_ATK_NAME_WITH_PREFIX}\nfainted!\p");
@@ -1446,6 +1447,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_PKMNPANICKED - BATTLESTRINGS_TABLE_START]                  = sText_PkmnPanicked,
     [STRINGID_ABILITYNULLIFYTYPEDAMAGE - BATTLESTRINGS_TABLE_START]      = sText_PkmnMakesGroundMiss,
     [STRINGID_CAUGHTMONDROPPEDITEM - BATTLESTRINGS_TABLE_START]          = sText_ReceiveditemfromCaughtMon,
+    [STRINGID_MONROOSTING - BATTLESTRINGS_TABLE_START]                   = sText_PkmnRoosting,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
