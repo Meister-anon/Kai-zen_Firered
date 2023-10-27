@@ -1058,14 +1058,14 @@ static void TradeMons(u8 playerPartyIdx, u8 partnerPartyIdx)
 
     // Get whether the offered Pokemon have mail
     struct Pokemon * playerMon = &gPlayerParty[playerPartyIdx];
-    u16 playerMail = GetMonData(playerMon, MON_DATA_MAIL);
+    //u16 playerMail = GetMonData(playerMon, MON_DATA_MAIL);
 
     struct Pokemon * partnerMon = &gEnemyParty[partnerPartyIdx];
-    u16 partnerMail = GetMonData(partnerMon, MON_DATA_MAIL);
+    //u16 partnerMail = GetMonData(partnerMon, MON_DATA_MAIL);
 
     // The mail attached to the sent Pokemon no longer exists in your file.
-    if (playerMail != 0xFF)
-        return;
+    //if (playerMail != 0xFF)
+      //  return;       //think this is why trade failed, this returned before actual trade was part of my attempted mail removal. *facepalm
         //ClearMailStruct(&gSaveBlock1Ptr->mail[playerMail]);
 
     // This is where the actual trade happens!!
@@ -1079,7 +1079,7 @@ static void TradeMons(u8 playerPartyIdx, u8 partnerPartyIdx)
         SetMonData(playerMon, MON_DATA_FRIENDSHIP, &friendship);
 
     // Associate your partner's mail with the Pokemon they sent over.
-    if (partnerMail != 0xFF)
+    //if (partnerMail != 0xFF)
         //GiveMailToMon2(playerMon, &gLinkPartnerMail[partnerMail]);
 
     ReceivedMonSetPokedexFlags(playerPartyIdx);

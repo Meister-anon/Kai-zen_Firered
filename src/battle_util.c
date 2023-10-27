@@ -1854,8 +1854,8 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
         case ENDTURN_SUN:
             if (gBattleWeather & WEATHER_SUN_ANY)
             {
-                if (!(gBattleWeather & WEATHER_SUN_PERMANENT)
-                    && !(gBattleWeather & WEATHER_SUN_PRIMAL)
+                if (!(gBattleWeather & WEATHER_SUN_PERMANENT) //overworld permanent
+                    && !(gBattleWeather & WEATHER_SUN_PRIMAL) //ability based permanent
                     && !IsAbilityOnField(ABILITY_DROUGHT)
                     && !IsAbilityOnField(ABILITY_SUN_DISK))
                 {
@@ -1880,8 +1880,12 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
             if (gBattleWeather & WEATHER_HAIL_ANY)
             {
                 if (!(gBattleWeather & WEATHER_HAIL_PERMANENT)
-                    && !IsAbilityOnField(ABILITY_SNOW_WARNING))
-                {
+                    && !IsAbilityOnField(ABILITY_SNOW_WARNING)) //new idea make weather abilities last long as mon is on field,
+                {   //they don't use weatherduartion timer, so weather would end soon as mon is fainted or forced out (easier counter play)
+                    //drought drizzle would be different in that they would still have a counter of 5, so weather would persist for a time even when off field
+                    //that way  weather extenders would still be useful, mon with non perm weather would  hold the extender to get more mileage out of weather
+                    //if they are forced to switch or taken out
+
                     //decided to keep this setup  are below drought/drizzle but still gives reason to use weather crystals its a good middle ground
                     //had to fix, logic hierarchy wasn't right, think wouldn't have properly gone to weather continue
                         if (--gWishFutureKnock.weatherDuration == 0)    //weather decrement
@@ -3747,7 +3751,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                     case EFFECT_PRESENT:
                     {
                         gMultiTask = Random() % 4; //return a number between 0 & 3
-                        if (gMultiTask > 1)
+                        if (gMultiTask >= 1)
                             gMultiTask = (Random() % 3) + 3; // if non 0, present lands between 3-5 htis
                         else
                             gMultiTask += 3; //else present lands 3 hits /odds of dmg vs heal is in presentdamagecalc
@@ -3756,7 +3760,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                     case EFFECT_MULTI_HIT:
                     {
                         gMultiTask = Random() % 4; //return a number between 0 & 3
-                        if (gMultiTask > 1)
+                        if (gMultiTask >= 1)
                             gMultiTask = (Random() % 4) + 2; // if non 0, multihit is between 2-5 htis
                         else
                             gMultiTask += 2; //else add 2 to multi counter, returning a multihit of 2.
@@ -3776,7 +3780,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                         && gBattleMoves[gCurrentMove].split != SPLIT_STATUS)
                         {
                             gMultiTask = Random() % 4; //return a number between 0 & 3
-                            if (gMultiTask > 1)
+                            if (gMultiTask >= 1)
                                 gMultiTask = (Random() % 4) + 2; // if non 0, multihit is between 2-5 htis
                             else
                                 gMultiTask += 2; //else add 2 to multi counter, returning a multihit of 2.
@@ -4202,6 +4206,8 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) 
     //for (i = 0; i < NELEMS(sPermanentWeatherAbilities); i++)//changign only primals  and overworld weathr are permanent weather, 
                                                        //drought drizzle is temp but doesn't decrement long as their on field, so effectively permanent
 
+        gWishFutureKnock.weatherDuration = 0;
+
         if (gBattleWeather & WEATHER_PRIMAL_ANY
             && battlerAbility != ABILITY_DESOLATE_LAND
             && battlerAbility != ABILITY_PRIMORDIAL_SEA
@@ -4210,6 +4216,14 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) 
             return FALSE;
         }//if primal weather set, can't change it, except by other primal effect
 
+        else if (viaAbility &&
+        (weatherEnumId == ENUM_WEATHER_RAIN_PRIMAL
+        || weatherEnumId == ENUM_WEATHER_SUN_PRIMAL
+        || weatherEnumId == ENUM_WEATHER_STRONG_WINDS))
+        {
+            gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][1]);
+            return TRUE;
+        }
 
                                                                         //without for loop don't need this line as its already saying not primal just by being else if
         /*else if (viaAbility && !(gBattleWeather & WEATHER_PRIMAL_ANY))   ////can change if not primal means it can change permanant set weather I think
@@ -4217,30 +4231,41 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) 
             gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1]);   //1 is permanent weather,0 is temp
             return TRUE; //I think this sets permanent weather?
         }*/
-            //checks if that type of weather has been set in permanent, sets temp weather if noto already set
-        else if ((viaAbility && !(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][1]))) //remove temp filter so it continues to script announcing ability, as it is still psuedo permanent
+            //checks if that type of weather has been set in permanent, sets temp weather if perm weather noto already set
+        else if ((viaAbility)
             && (battlerAbility == ABILITY_DROUGHT || battlerAbility == ABILITY_DRIZZLE))
         {
             gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]);
+            gWishFutureKnock.weatherDuration = 5;
+            
             if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2]) //2 is weather extending hold effect
-                gWishFutureKnock.weatherDuration = 8;
-            else
-                gWishFutureKnock.weatherDuration = 5;
+                gWishFutureKnock.weatherDuration += 3;                
 
             return TRUE;
         }//want drought and drizzle to be special with this they can't be overwritten by other temp weather abilities
         //believe this is for squall and sun disk,  if not primal and not permanent weather, set temp weather with ability
+
+        else if ((viaAbility && !(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))
+            && (battlerAbility != ABILITY_DROUGHT && battlerAbility != ABILITY_DRIZZLE))
+            {
+                gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]); //should set temp weather w timer 0
+                //gWishFutureKnock.weatherDuration = 2; //changed mind will set to 2, / double changed mind, like it better with requiring item extender
+
+                if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2]) //2 is weather extending hold effect
+                    gWishFutureKnock.weatherDuration += 3; //would give 2 turns of weather after faint/switch out
+                return TRUE;
+            }
 
         //move based weather change & other normal weather abilities
         else if ((!(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))  //CHECK specific weather isn't alraedy set
             && (!IsAbilityOnField(ABILITY_DROUGHT) && !IsAbilityOnField(ABILITY_DRIZZLE))) //need test if prevents weather change while kyogre/groudon on field
         {
             gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]); //set temp weather if meet conditions
-            if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2]) //2 is weather extending hold effect
-                gWishFutureKnock.weatherDuration = 8;
-            else
-                gWishFutureKnock.weatherDuration = 5;
+            gWishFutureKnock.weatherDuration = 5;
 
+            if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2]) //2 is weather extending hold effect
+                gWishFutureKnock.weatherDuration += 3;       
+                
             return TRUE;
         }
 

@@ -920,7 +920,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_CLEFAIRY] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(70, 45, 48, 35, 60, 65),
+         STATS(70, 50, 48, 35, 60, 75),
         .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
         .catchRate = 150,
@@ -935,7 +935,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FAIRY,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CUTE_CHARM, ABILITY_MAGIC_GUARD},
-            .abilityHidden = {ABILITY_FRIEND_GUARD, ABILITY_NONE},
+            .abilityHidden = {ABILITY_UNAWARE, ABILITY_FRIEND_GUARD},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -958,7 +958,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FAIRY,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_CUTE_CHARM, ABILITY_MAGIC_GUARD},
-            .abilityHidden = {ABILITY_UNAWARE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_UNAWARE, ABILITY_FRIEND_GUARD},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     }, //need test this and consider if normal type is worth give my changes
@@ -990,7 +990,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(73, 76, 75, 100, 81, 100),
         .type1 = TYPE_FIRE,
-        .type2 = TYPE_FIRE,
+        .type2 = TYPE_GHOST,
         .catchRate = 75,
         .expYield = 177,
         //.evYield_Speed = 1,
@@ -1003,10 +1003,10 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_FLASH_FIRE, ABILITY_MULTI_TASK},
-        .abilityHidden = {ABILITY_SUN_DISK, ABILITY_NONE},
+        .abilityHidden = {ABILITY_SUN_DISK, ABILITY_SHADOW_TAG},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    }, //give shadow ball
 
     [SPECIES_JIGGLYPUFF] =
     { 
@@ -8334,7 +8334,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(20, 40, 90, 25, 30, 90),
         .type1 = TYPE_GHOST,
-        .type2 = TYPE_GHOST,
+        .type2 = TYPE_DARK,
         .catchRate = 190,
         .expYield = 59,
         //.evYield_SpDefense = 1,
@@ -8345,9 +8345,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_UNNERVE, ABILITY_NONE},
+        .abilities = {ABILITY_UNNERVE, ABILITY_INFILTRATOR},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_FRISK, ABILITY_NONE},
+            .abilityHidden = {ABILITY_FRISK, ABILITY_BAD_DREAMS},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -8358,7 +8358,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(40, 70, 130, 25, 60, 130),
         .type1 = TYPE_GHOST,
-        .type2 = TYPE_GHOST,
+        .type2 = TYPE_DARK,
         .catchRate = 90,
         .expYield = 159,
         //.evYield_Defense = 1,
@@ -8370,9 +8370,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_PRESSURE, ABILITY_BAD_DREAMS},
+        .abilities = {ABILITY_PRESSURE, ABILITY_INFILTRATOR},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_FRISK, ABILITY_NONE},
+            .abilityHidden = {ABILITY_FRISK, ABILITY_BAD_DREAMS},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -11131,9 +11131,9 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_DUSKNOIR] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(65, 100, 135, 45, 65, 135),
+         STATS(55, 100, 135, 45, 65, 135),
         .type1 = TYPE_GHOST,
-        .type2 = TYPE_GHOST,
+        .type2 = TYPE_DARK,
         .catchRate = 45,
         .expYield = 236,
         //.evYield_Defense = 1,
@@ -11145,9 +11145,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_PRESSURE, ABILITY_BAD_DREAMS},
+        .abilities = {ABILITY_PRESSURE, ABILITY_INFILTRATOR},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_FRISK, ABILITY_NONE},
+            .abilityHidden = {ABILITY_FRISK, ABILITY_BAD_DREAMS},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,

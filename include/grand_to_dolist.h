@@ -1277,7 +1277,15 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
  for some reason camper to the left of nugget bridge end does't have any end text??
  -...no its everyone I somehow removed the end message for EVERY trainer. facepalm
- ....and in game trades are also not working wonderful
+ ....and in game trades are also not working wonderful - fixed trainer testing trades - trades fixed, issue was prior mail removal attempt made return before trade
+  and sun disk isn't working right, sun isn't fading long as mon is alive? -wasn't wrong just forgot how I setup, revamped now works how I want
+
+  for function giveboxmoninitialmoveset, used for createnpctrainerparty  craete task for move learn
+  to help decide what moves to keep when moving through list rather than just deleting the first
+  instead make priority list, if not normal type must have a dmging stab move, priority moves have ...priority over non stab dmg moves
+  then status setting moves  and make switchout moves and debuffs/buffs their own category
+
+  treat similar to ai gives everyhting a score to decide
 
  -note for couple waiting at bills house at cerulean cove turn then into a double battle.
 
