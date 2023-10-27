@@ -1280,6 +1280,20 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  ....and in game trades are also not working wonderful - fixed trainer testing trades - trades fixed, issue was prior mail removal attempt made return before trade
   and sun disk isn't working right, sun isn't fading long as mon is alive? -wasn't wrong just forgot how I setup, revamped now works how I want
 
+  based on pc should be able to fit and display item icons in party menu, 
+  but need move party icons to fit better, right now for right side 
+  of party menu, make icons on hover over move left instead of right, so they don't get cutoff by icon
+
+  setup running allowed everywhere, except gyms 
+
+  for different tile for more encounters i.e tal grass being double encounters and gen 2 style low grass being normal encounters but at a lower encounter rate
+  way maps are setup  blank grass is meant for open areas you don't do anything on, so for separate encouters would need to rearrange tall grass
+  tiles pair them back to give more space to open grass  rearranging maps so it fits together
+
+  issue is encounter rate is handled by map, (not calle encounter rate?) its a separate value that determines how often you get encounters
+  while wild encounter rate is how often certain mon show up
+  possibly move wild_encounters.json to a C file
+
   for function giveboxmoninitialmoveset, used for createnpctrainerparty  craete task for move learn
   to help decide what moves to keep when moving through list rather than just deleting the first
   instead make priority list, if not normal type must have a dmging stab move, priority moves have ...priority over non stab dmg moves

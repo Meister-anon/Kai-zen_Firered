@@ -257,6 +257,11 @@ static s32 CountRoamerNests(u16 species, struct Subsprite * subsprites)
     return 0;
 }
 
+//these numbers should be based on whats in wild_encounters.json, 
+//count the number of entries and that's the number that should be in the group
+//fishing is 10 not 12, 
+//so can add more values to list but the encounter rates must match up to 100%
+//if I have 20 encounters in a group each value can be no greater than 5%
 static bool32 PokemonInAnyEncounterTableInMap(const struct WildPokemonHeader * data, s32 species)
 {
     if (PokemonInEncounterTable(data->landMonsInfo, species, 12))
