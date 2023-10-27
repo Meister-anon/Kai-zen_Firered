@@ -299,7 +299,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
         .width = 5,
         .height = 8,
         .paletteNum = 12,
-        .baseBlock = 0x295
+        .baseBlock = 0x310
     }, //think values that go with type power acc in box  //decrease top by 2 increase height by 2
     [WIN_MESSAGE] = {
         .bg = 1,
@@ -317,7 +317,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
         .width = 12,
         .height = 4,
         .paletteNum = 15,
-        .baseBlock = 0x2fd
+        .baseBlock = 0x310
     },
     [WIN_MONEY] = {
         .bg = 1,
@@ -326,7 +326,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
         .width = 8,
         .height = 3,
         .paletteNum = 13,
-        .baseBlock = 0x32d
+        .baseBlock = 0x34d
     },
     DUMMY_WIN_TEMPLATE
 };
@@ -349,7 +349,7 @@ static const struct WindowTemplate sWindowTemplates2[] = {
         .width = 18,
         .height = 11,
         .paletteNum = 10,
-        .baseBlock = 0x13f
+        .baseBlock = 0x100
     }, //or this is description //decrease top by 3 increase height by 3
     [WIN_SELECTED_MSG] = {
         .bg = 1,
@@ -385,7 +385,7 @@ static const struct WindowTemplate sWindowTemplates2[] = {
         .width = 5,
         .height = 8,
         .paletteNum = 12,
-        .baseBlock = 0x295
+        .baseBlock = 0x310
     }, //think values that go with type power acc in box  //decrease top by 2 increase height by 2
     [WIN_MESSAGE] = {
         .bg = 1,
@@ -403,7 +403,7 @@ static const struct WindowTemplate sWindowTemplates2[] = {
         .width = 12,
         .height = 4,
         .paletteNum = 15,
-        .baseBlock = 0x2fd
+        .baseBlock = 0x310
     },
     [WIN_MONEY] = {
         .bg = 1,
@@ -412,7 +412,7 @@ static const struct WindowTemplate sWindowTemplates2[] = {
         .width = 8,
         .height = 3,
         .paletteNum = 13,
-        .baseBlock = 0x32d
+        .baseBlock = 0x34d
     },
     DUMMY_WIN_TEMPLATE
 };
@@ -491,7 +491,7 @@ static const struct SpriteTemplate sTMSpriteTemplate = {
     SpriteCallbackDummy
 };
 
-static const u16 sTMSpritePaletteOffsetByType[] = { // fairy addition need do, may need do sound as well
+static const u16 sTMSpritePaletteOffsetByType[] = { // fairy addition need do, need do sound as well
     [TYPE_NORMAL]   = 0x000,
     [TYPE_FIRE]     = 0x010,
     [TYPE_WATER]    = 0x020,
@@ -1846,8 +1846,8 @@ static void DrawPartyMonIcons(void)
         //calc icon position (centered)
         if (gPlayerPartyCount == 1)
         {
-            icon_x = MON_ICON_START_X + MON_ICON_PADDING;
-            icon_y = MON_ICON_START_Y + MON_ICON_PADDING*0.5;
+            icon_x = MON_ICON_START_X;
+            icon_y = MON_ICON_START_Y;
         }
         else if (gPlayerPartyCount == 2)
         {
