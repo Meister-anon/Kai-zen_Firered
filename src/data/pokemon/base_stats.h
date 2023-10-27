@@ -921,7 +921,7 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(70, 45, 48, 35, 60, 65),
-        .type1 = TYPE_NORMAL,
+        .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
         .catchRate = 150,
         .expYield = 113,
@@ -944,7 +944,7 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(105, 70, 73, 60, 100, 95),
-        .type1 = TYPE_NORMAL,
+        .type1 = TYPE_FAIRY,
         .type2 = TYPE_FAIRY,
         .catchRate = 25,
         .expYield = 217,

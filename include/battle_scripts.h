@@ -329,6 +329,7 @@ extern const u8 BattleScript_EmergencyExitWild[];
 extern const u8 BattleScript_EmergencyExitWildNoPopUp[];
 extern const u8 BattleScript_ReceiverActivates[];
 extern const u8 BattleScript_AbilityHpHeal[];
+extern const u8 BattleScript_EndTurnAbilityHpHeal[];
 extern const u8 BattleScript_CheekPouchActivates[];
 extern const u8 BattleScript_HarvestActivates[];
 extern const u8 BattleScript_SolarPowerActivates[];

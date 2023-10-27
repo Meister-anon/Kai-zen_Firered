@@ -2859,9 +2859,9 @@ u8 DoBattlerEndTurnEffects(void)
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
                         gBattleMoveDamage *= -1;
-                    }
-                    BattleScriptExecute(BattleScript_SleepHealing);
-                    ++effect;
+                        BattleScriptExecute(BattleScript_SleepHealing);
+                        ++effect;
+                    }                    
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
@@ -3158,6 +3158,8 @@ u8 AtkCanceller_UnableToUseMove(void)
         case CANCELLER_FLAGS: // flags clear
             gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_DESTINY_BOND);
             gStatuses3[gBattlerAttacker] &= ~(STATUS3_GRUDGE);
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_COMATOSE) //in case I decide to nerf comatose healing to sleep levels every other turn
+                gDisableStructs[gBattlerAttacker].sleepCounter ^= 1;
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_ASLEEP: // check being asleep
@@ -3408,45 +3410,22 @@ u8 AtkCanceller_UnableToUseMove(void)
 
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION && IsBlackFogNotOnField()) //&& !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG))
                 {// idea cammymealtee trying setup so tangled feet like bug gets confused but never hits themselves
-                    if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG) || GetBattlerAbility(gBattlerAttacker) != ABILITY_TANGLED_FEET) //moved bug exclusion to here, so status decrements //NEED TEST //vsonic
+                    if (!(IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG)) && GetBattlerAbility(gBattlerAttacker) != ABILITY_TANGLED_FEET) //moved bug exclusion to here, so goes through animations
                     {
                         if ((Random() % 2) == 0) //chance confused but used move anyway   think 50% may equal random % 2 not 0
                         {
-                            if ((Random() % 3) != 0) {   //2/3 chance succesful attack     (doesn't mean not 0,its just returning any value between 0-2)
-                                // The MULTISTRING_CHOOSER is used here as a bool to signal
-                                // to BattleScript_MoveUsedIsConfused whether or not damage was taken
-                                gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;  //need to say != 0 or something, to make it a 2/3rd conditional
-                                BattleScriptPushCursor();
+                            if (rando == 0) {
+                                target = MOVE_TARGET_RANDOM;                                
                             }
-                            else { // 1/3 odds target gets randomly changed
-                                if (rando == 0) {
-                                    target = MOVE_TARGET_RANDOM;
-                                    gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
-                                    BattleScriptPushCursor();
-                                }
-                                if (rando == 1) {
-                                    target = MOVE_TARGET_BOTH;
-                                    gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
-                                    BattleScriptPushCursor();
-                                }
-                                if (rando == 2) {
-                                    target = MOVE_TARGET_FOES_AND_ALLY;
-                                    gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
-                                    BattleScriptPushCursor();
-                                }
-                                if (rando == 3) //hits everyone
-                                {
-                                    target = MOVE_TARGET_USER | MOVE_TARGET_FOES_AND_ALLY;
-                                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
-                                    gProtectStructs[gBattlerAttacker].confusionSelfDmg = TRUE;
-                                    BattleScriptPushCursor(); //not sure what this is doing
-                                } //if it works  may still add just target ally
-
-
+                            if (rando == 2) {
+                                target = MOVE_TARGET_FOES_AND_ALLY;
                             }
-                            //gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-                            //BattleScriptPushCursor();
+                            // The MULTISTRING_CHOOSER is used here as a bool to signal
+                            // to BattleScript_MoveUsedIsConfused whether or not damage was taken (by user?)
+                            gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;  //need to say != 0 or something, to make it a 2/3rd conditional
+                            BattleScriptPushCursor();
                         }
+
                         else // confusion dmg  //yup oddds are 50%  this is the other side where they attack themselves
                         { //ok I want to keep the sucess condition the same, but split the failure condition.
                             //into different effects,
@@ -3454,24 +3433,32 @@ u8 AtkCanceller_UnableToUseMove(void)
                             //ok understand what I did, I have to separte activation conditions for if its a status move
                             //or not and make sure the move does at least 1/16 health damage, 
                             //if its a status it'll do normal confusion self damage I didn't remove that.
+                            gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
                             gBattlerTarget = gBattlerAttacker;  //Handles target swap
-                            gBattleMoveDamage /= 2; //should use move against self at half normal power
-                            if (gBattleMoveDamage < gBattleMons[gBattlerTarget].maxHP / 16
-                                && gBattleMovePower > 0)
-                                gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 16; //minimum dmg clause
-                            gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
+                            
 
                             if (gBattleMovePower == 0) //if status move does default confusion hit 
                             {
-                                gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
+                                
                                 //gBattlerTarget = gBattlerAttacker;    this line not needed already handled above
                                 gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, 40, 0, gBattlerAttacker, gBattlerAttacker);
                                 gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
                                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                             }//consider make this status moves (i.e 0 power) & moves without flag makes contact use normal confusion dmg formula 
                             //for self damage   so only contact moves would go off and damage the attacker
+                            else
+                            {
+                                gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], gCurrentMove, 0, 40, 0, gBattlerAttacker, gBattlerAttacker);
+                                gBattleMoveDamage /= 2; //should use move against self at half normal power
+                                if (gBattleMoveDamage < gBattleMons[gBattlerTarget].maxHP / 8)
+                                    gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 8; //minimum dmg clause
+                                gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
+                            }
                         }
+                        
                     }
+                    
+                    
                     else //should be if bug type, should make bug always use move regardless of being confused
                     {
                         // The MULTISTRING_CHOOSER is used here as a bool to signal
@@ -3749,7 +3736,12 @@ u8 AtkCanceller_UnableToUseMove(void)
                 {   
                     case EFFECT_FURY_CUTTER:
                     {
-                        gMultiTask = 5; //unique effect given acc drop, lowered acc drop rate
+
+                        gMultiTask = Random() % 6; //return a number between 0 & 4
+                        if (gMultiTask >= 4)
+                            gMultiTask = 4; // if non 0, present lands between 3-5 htis
+                        else if (gMultiTask <= 3)
+                            gMultiTask = 3; //else present lands 3 hits /odds of dmg vs heal is in presentdamagecalc
                         break;
                     }
                     case EFFECT_PRESENT:
@@ -4059,9 +4051,7 @@ bool8 IsBattlerGrounded(u8 battlerId)
     if (IsFloatingSpecies(battlerId))//used if as breakline, as else if only reads if everything above it is false
         grounded = FALSE;
 
-    if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING)) 
-    && (species != SPECIES_DODUO && species != SPECIES_DODRIO
-        && species != SPECIES_ARCHEN && species != SPECIES_ARCHEOPS)
+    if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING))
         && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
         grounded = FALSE;  
 
@@ -4076,7 +4066,11 @@ bool8 IsBattlerGrounded(u8 battlerId)
         grounded = TRUE; //hope this set up right/works
     //according to Mcgriffin needed make flying & roost flag true statement
     //as else at bottom just means not flyign or has roost flag, TRUE
-    if (species == (SPECIES_DODUO || SPECIES_DODRIO || SPECIES_ARCHEN || SPECIES_ARCHEOPS))
+
+    if ((species == SPECIES_DODUO) 
+    || (species == SPECIES_DODRIO)
+    || (species == SPECIES_ARCHEN) 
+    || (species == SPECIES_ARCHEOPS))
         grounded = TRUE;//edit because flightless bird
     
     if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && (species == (GROUNDED_GHOSTMON)))   //test GHOST exclusions
@@ -4091,7 +4085,7 @@ bool8 IsBattlerGrounded(u8 battlerId)
     if ((GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON) && IsBlackFogNotOnField())
         grounded = FALSE;
 
-    if (gStatuses4[battlerId] & STATUS4_GROUNDED) //change name
+    if (gStatuses4[battlerId] & STATUS4_GROUNDED) //change name, using for trench run
         grounded = TRUE;
     if (gFieldStatuses & STATUS_FIELD_GRAVITY)
         grounded = TRUE;
@@ -5461,9 +5455,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                 case ABILITY_COMATOSE:
                     if (gBattleMons[battler].maxHP > gBattleMons[battler].hp
+                        && gDisableStructs[battler].sleepCounter
                         && !(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK))
                     {
-                        BattleScriptPushCursorAndCallback(BattleScript_AbilityHpHeal);  //can use same script //but have another from updates
+                        BattleScriptPushCursorAndCallback(BattleScript_EndTurnAbilityHpHeal);  //can use same script //but have another from updates
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 6; //substitute for not being able to use rest, but that in mind woudl be broken with substitute hmm
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;

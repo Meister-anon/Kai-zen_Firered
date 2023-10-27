@@ -77,16 +77,16 @@ gBattleScriptsForBattleEffects::	@must match order of battle_effects.h file
 	.4byte BattleScript_EffectSpeedUp2
 	.4byte BattleScript_EffectSpecialAttackUp2
 	.4byte BattleScript_EffectSpecialDefenseUp2
-	.4byte BattleScript_EffectHit
-	.4byte BattleScript_EffectHit
+	.4byte BattleScript_EffectAccuracyUp2
+	.4byte BattleScript_EffectEvasionUp2
 	.4byte BattleScript_EffectTransform
 	.4byte BattleScript_EffectAttackDown2
 	.4byte BattleScript_EffectDefenseDown2
 	.4byte BattleScript_EffectSpeedDown2
 	.4byte BattleScript_EffectSpecialAttackDown2
 	.4byte BattleScript_EffectSpecialDefenseDown2
-	.4byte BattleScript_EffectHit
-	.4byte BattleScript_EffectHit
+	.4byte BattleScript_EffectAccuracyDown2
+	.4byte BattleScript_EffectEvasionDown2
 	.4byte BattleScript_EffectReflect
 	.4byte BattleScript_EffectPoison
 	.4byte BattleScript_EffectParalyze
@@ -2932,12 +2932,12 @@ BattleScript_EffectSpecialDefenseUp:
 	setstatchanger STAT_SPDEF, 1, FALSE
 	goto BattleScript_EffectStatUp
 
-BattleScript_EffectAccuracyUp:
-	setstatchanger STAT_ACC, 1, FALSE
-	goto BattleScript_EffectStatUp
-
 BattleScript_EffectSpecialAttackUp::
 	setstatchanger STAT_SPATK, 1, FALSE
+	goto BattleScript_EffectStatUp
+
+BattleScript_EffectAccuracyUp:
+	setstatchanger STAT_ACC, 1, FALSE
 	goto BattleScript_EffectStatUp
 
 BattleScript_EffectEvasionUp::
@@ -3646,6 +3646,14 @@ BattleScript_EffectSpecialDefenseUp2::
 	setstatchanger STAT_SPDEF, 2, FALSE
 	goto BattleScript_EffectStatUp
 
+BattleScript_EffectAccuracyUp2:
+	setstatchanger STAT_ACC, 2, FALSE
+	goto BattleScript_EffectStatUp
+
+BattleScript_EffectEvasionUp2::
+	setstatchanger STAT_EVASION, 2, FALSE
+	goto BattleScript_EffectStatUp
+
 BattleScript_EffectSpecialAttackUp3::
 	setstatchanger STAT_SPATK, 3, FALSE
 	goto BattleScript_EffectStatUp
@@ -3675,13 +3683,23 @@ BattleScript_EffectSpeedDown2::
 	setstatchanger STAT_SPEED, 2, TRUE
 	goto BattleScript_EffectStatDown
 
+BattleScript_EffectSpecialAttackDown2:
+	setstatchanger STAT_SPATK, 2, TRUE
+	goto BattleScript_EffectStatDown
+
 BattleScript_EffectSpecialDefenseDown2::
 	setstatchanger STAT_SPDEF, 2, TRUE
 	goto BattleScript_EffectStatDown
 
-BattleScript_EffectSpecialAttackDown2:
-	setstatchanger STAT_SPATK, 2, TRUE
-	goto BattleScript_EffectStatDown
+BattleScript_EffectAccuracyDown2::
+	call_if EFFECT_ACCURACY_DOWN
+	setstatchanger STAT_ACC, 2, TRUE
+    goto BattleScript_EffectStatDown
+
+BattleScript_EffectEvasionDown2::
+	setstatchanger STAT_EVASION, 2, TRUE
+    goto BattleScript_EffectStatDown
+
 
 BattleScript_EffectReflect::
 	attackcanceler
@@ -8115,6 +8133,11 @@ BattleScript_AbilityHpHeal::
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	return
+
+BattleScript_EndTurnAbilityHpHeal::	
+	printstring STRINGID_PKMNSXRESTOREDHPALITTLE2
+	waitmessage 0x40
+	goto BattleScript_HealWithoutMessage
 
 BattleScript_RainDishActivates::
 	printstring STRINGID_PKMNSXRESTOREDHPALITTLE2

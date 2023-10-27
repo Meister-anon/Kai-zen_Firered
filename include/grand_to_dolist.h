@@ -1258,6 +1258,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
     -must remember for bs, if not an effect in the top table must use double colon after battlescript name 
     or it won't define it
 
+    -with how remove berry crush top right machine in pokemon center just breaks causing freeze?
+    -or something else I did either way need better break script so just does nothing
+    instead of attempting to start an event
+
     need make running shoes work inside / I think? if can raise walk speed etc. may not need to
 
   bind logic is half working, way I have it rn,  a faster bind mon will force target into a random move.
@@ -1268,6 +1272,29 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
  hidden power over performing - was because bad logic, was getting ALL of the boosts because ordered badly
  rearranged, changed to use cmd args and now it works well enough I think, keep an eye on 
+
+ flag floating drop didn't work for flying types didn't work on zubat? - reworked battler grounded function
+
+ for some reason camper to the left of nugget bridge end does't have any end text??
+ -...no its everyone I somehow removed the end message for EVERY trainer. facepalm
+ ....and in game trades are also not working wonderful
+
+ -note for couple waiting at bills house at cerulean cove turn then into a double battle.
+
+ -adjustd confusion think bug exclusion should work, believe issue was wrong operator logic
+ setup long ago before I understood it, had double negative and use or instead of and
+ -need check further - bug check works other confusion logic does not, think its just targetting doesn't work
+
+ -add message for overcoat block powder moves in battle_util.c
+
+ -comatose isn't working causes freeze now for some reason smh/ needed end in end2 not return as its an endturn ability
+
+ -for play consider swapping badge hm use of brock's gym and  surges gym
+ -instead of flash make brock let player use surf (for small chance you spawn npc in pallet that gives you fishing access early)
+ -give surge flash, since you don't need flash early, 
+ - actually nvm cant get back to pallet until after surge anyway 
+ so give surge surf and swap with koga so he gives fly instead
+ -makes more sense anyway too, surge is in water town, and koga is a ninja so could "fly"
 
  mudsport water sport weren't setup correctly fixed
  -fixed roost, fixed hidden power, fixed field/now side sport effects and fixed bide - ikeep eye on bide possibly lower counter by 1 turn

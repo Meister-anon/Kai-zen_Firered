@@ -3766,6 +3766,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
      //&& IsBattlerGrounded(gBattlerTarget))//give to more ground types?
         spDefense = (130 * spDefense) / 100;    //gets to work as its on the ground not in the air
                     //changed mind,not as realistic but gives more options, keep just ground affecting, rock/ground are only rocks that really need 
+                    //unsure if should buff further
 
     // sandstorm sp.def boost for rock types  // decided to add this for ground types as well,
     if ((IS_BATTLER_OF_TYPE(battlerIdDef, TYPE_ROCK) || (IS_BATTLER_OF_TYPE(battlerIdDef, TYPE_GROUND)))

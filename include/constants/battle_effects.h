@@ -56,16 +56,16 @@
 #define EFFECT_SPEED_UP_2 52
 #define EFFECT_SPECIAL_ATTACK_UP_2 53
 #define EFFECT_SPECIAL_DEFENSE_UP_2 54
-#define EFFECT_ACCURACY_UP_2 55 // unused
-#define EFFECT_EVASION_UP_2 56 // unused - adding for trench run
+#define EFFECT_ACCURACY_UP_2 55 // added
+#define EFFECT_EVASION_UP_2 56 // added - adding for trench run -since want to be one time boost make it call bs for evasion drop from function command
 #define EFFECT_TRANSFORM 57
 #define EFFECT_ATTACK_DOWN_2 58
 #define EFFECT_DEFENSE_DOWN_2 59
 #define EFFECT_SPEED_DOWN_2 60
 #define EFFECT_SPECIAL_ATTACK_DOWN_2 61
 #define EFFECT_SPECIAL_DEFENSE_DOWN_2 62
-#define EFFECT_ACCURACY_DOWN_2 63 //UNUSED
-#define EFFECT_EVASION_DOWN_2 64 //unnused
+#define EFFECT_ACCURACY_DOWN_2 63 //added
+#define EFFECT_EVASION_DOWN_2 64 //added
 #define EFFECT_REFLECT 65
 #define EFFECT_POISON 66
 #define EFFECT_PARALYZE 67

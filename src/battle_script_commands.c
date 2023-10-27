@@ -1916,7 +1916,7 @@ static void atk01_accuracycheck(void)
         if ((gBattleMons[gBattlerAttacker].status4 & STATUS4_SAND_TOMB)
             && IsBlackFogNotOnField())
         {
-            moveAcc = (moveAcc * 85) / 100; //since most mon that have this also have access to sandstorm or are in desert made less punishing
+            moveAcc = (moveAcc * 90) / 100; //since most mon that have this also have access to sandstorm or are in desert made less punishing
             //moveAcc = (moveAcc * 60) / 100; //euivalent of a 2 stage acc drop
         }
 
@@ -1926,23 +1926,29 @@ static void atk01_accuracycheck(void)
         if (gCurrentMove == MOVE_FURY_CUTTER) { //still not quite right, doesn't display right message for things like wonderguard
 
             //Logic for altering animation used in battle_anim_effects_2
-            if (gDisableStructs[gBattlerAttacker].furyCutterCounter == 5)
+            if (gDisableStructs[gBattlerAttacker].furyCutterCounter == gMultiTask)
                 gDisableStructs[gBattlerAttacker].furyCutterCounter = 0;
            
-            if (gDisableStructs[gBattlerAttacker].furyCutterCounter != 5)  //increment until reach 5
+            if (gDisableStructs[gBattlerAttacker].furyCutterCounter != gMultiTask)  //increment until reach 5
                ++gDisableStructs[gBattlerAttacker].furyCutterCounter; //removing to test that it isn't incrementing twice. (it was)
             
             //acc drop effect
             gDisableStructs[gBattlerAttacker].furyCutterAccDrop = moveAcc;
 
-                for (i = 1; i <= (5 - gMultiHitCounter); ++i) { //potentaially scale with i, moveacc - i * 95/100 ?
-
-                    gDisableStructs[gBattlerAttacker].furyCutterAccDrop -= (i - 1); //doesn't subtract until 3rd hit
-                 if (i == 3) {
-                    gDisableStructs[gBattlerAttacker].furyCutterAccDrop -= 7; //weighting for last 2 hits, only need to do for one i value as its all passed to next
-                 }
-                    gDisableStructs[gBattlerAttacker].furyCutterAccDrop *= 95; //so far is working to stop the move,
-                    gDisableStructs[gBattlerAttacker].furyCutterAccDrop /= 100;  //may replace with just moveAcc  still don't know why not working
+                for (i = 1; i <= (gMultiTask - gMultiHitCounter); ++i) { //potentaially scale with i, moveacc - i * 95/100 ?
+                    
+                    if (i == 3) //makes only trigger onlast 4th hit, to slightly lower chance of landing 4th hit if you rolled it
+                   {
+                        gDisableStructs[gBattlerAttacker].furyCutterAccDrop -= (i - 1); //doesn't subtract until 3rd hit
+                        gDisableStructs[gBattlerAttacker].furyCutterAccDrop *= 92; //so far is working to stop the move,
+                        gDisableStructs[gBattlerAttacker].furyCutterAccDrop /= 100;
+                   } 
+                 //if (i == 3) 
+                 //{/
+                 //   gDisableStructs[gBattlerAttacker].furyCutterAccDrop -= 16; //weighting for last 2 hits, only need to do for one i value as its all passed to next
+                 //}
+                    //gDisableStructs[gBattlerAttacker].furyCutterAccDrop *= 95; //so far is working to stop the move,
+                    //gDisableStructs[gBattlerAttacker].furyCutterAccDrop /= 100;  //may replace with just moveAcc  still don't know why not working
                     
                 } //seems still overperforming potentially drop above 7 to a 8 or 9? or drop to third hit ni stead of 4th? by changing == 3 to ==2 ?  check later vsonic
 
@@ -14763,9 +14769,12 @@ static void atkB5_furycuttercalc(void)
         gDynamicBasePower = gBattleMoves[gCurrentMove].power; //it's working now.
 
 
-        for (i = 0; i < (5 - gMultiHitCounter); ++i) //...changed this and damage multiplier actually works -_-
-        {  
-            gDynamicBasePower *= 2; //new note what this does is loop dmg multiplier to ensure dmg is boosted based on how high couter is
+        for (i = 0; i < (gMultiTask - gMultiHitCounter); ++i) //...changed this and damage multiplier actually works -_-
+        {                 
+            if (gMultiTask == 4 && gMultiHitCounter == 1) //should only trigger on 4th hit if you roll the 4th hit
+                ;  //change do nothing, so it stops boosting dmg after 3 hits //still equates to a base 110 move
+            else
+                gDynamicBasePower *= 2; //new note what this does is loop dmg multiplier to ensure dmg is boosted based on how high couter is
             // berserker *= 3;  //change from 3 to 1, for large test, should reduce accuracy by 4 each hit if its working
                 //berserker /= 4; 
         }//dizzyegg confirms doing this way also works for establishing 3/4
