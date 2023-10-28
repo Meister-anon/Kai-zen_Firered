@@ -262,19 +262,23 @@ static s32 CountRoamerNests(u16 species, struct Subsprite * subsprites)
 //fishing is 10 not 12, 
 //so can add more values to list but the encounter rates must match up to 100%
 //if I have 20 encounters in a group each value can be no greater than 5%
-static bool32 PokemonInAnyEncounterTableInMap(const struct WildPokemonHeader * data, s32 species)
+#define ENCOUNTER_LOGIC
+static bool32 PokemonInAnyEncounterTableInMap(const struct WildPokemonHeader * data, s32 species) 
 {
-    if (PokemonInEncounterTable(data->landMonsInfo, species, 12))
+    //want to change to read how many mon are actual in encounter table if possible
+    //yeah need to replace count with actual amount of mon in encounter table for that map
+    //similar to how I found I could do for partysize data in npctrainer party
+    if (PokemonInEncounterTable(data->landMonsInfo, species, LAND_WILD_COUNT)) 
         return TRUE;
-    if (PokemonInEncounterTable(data->waterMonsInfo, species, 5))
+    if (PokemonInEncounterTable(data->waterMonsInfo, species, WATER_WILD_COUNT))
         return TRUE;
-    if (PokemonInEncounterTable(data->fishingMonsInfo, species, 12)) // 10
+    if (PokemonInEncounterTable(data->fishingMonsInfo, species, FISH_WILD_COUNT)) // 10
         return TRUE;
-    if (PokemonInEncounterTable(data->rockSmashMonsInfo, species, 5))
+    if (PokemonInEncounterTable(data->rockSmashMonsInfo, species, ROCK_WILD_COUNT))
         return TRUE;
 
     return FALSE;
-}
+} //seems function is just for checking there are enconters on map not generating them  
 
 static bool32 PokemonInEncounterTable(const struct WildPokemonInfo * info, s32 species, s32 count)
 {

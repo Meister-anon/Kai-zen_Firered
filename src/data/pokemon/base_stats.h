@@ -1142,11 +1142,11 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
+        .abilities = {ABILITY_CHLOROPHYLL, ABILITY_STENCH},
         .abilityHidden = {ABILITY_AFTERMATH, ABILITY_PRANKSTER},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-    },
+    }, //potentially lower sp atk for addition of stench/additional bulk given?
 
     [SPECIES_VILEPLUME] =
     { 
@@ -1166,7 +1166,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
+        .abilities = {ABILITY_CHLOROPHYLL, ABILITY_STENCH},
         .abilityHidden = {ABILITY_EFFECT_SPORE, ABILITY_PRANKSTER},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,

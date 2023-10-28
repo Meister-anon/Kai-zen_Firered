@@ -63,6 +63,10 @@ void DisableWildEncounters(bool8 state)
     sWildEncountersDisabled = state;
 }
 
+//actual logic for choosing mon to generate
+//from json, need add read map header check for species if find species return count/slot
+//otherwise return slot - 1 or previous slot where condition was true
+//it doesn't have logic to read map sec, because all tables have same number of entries by default
 static u8 ChooseWildMonIndex_Land(void)
 {
     u8 rand = Random() % ENCOUNTER_CHANCE_LAND_MONS_TOTAL;
@@ -270,6 +274,7 @@ enum
 #define WILD_CHECK_KEEN_EYE 0x2
 
 //setup like emerald TryGenerateWildMon there has ability logic/filters
+#define ENCOUNTER_GENERATOR
 static bool8 TryGenerateWildMon(const struct WildPokemonInfo * info, u8 area, u8 flags)
 {
     u8 slot = 0;
@@ -277,7 +282,7 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo * info, u8 area, u8
     switch (area)
     {
     case WILD_AREA_LAND:
-        slot = ChooseWildMonIndex_Land();
+        slot = ChooseWildMonIndex_Land(); //researching this
         break;
     case WILD_AREA_WATER:
         slot = ChooseWildMonIndex_WaterRock();

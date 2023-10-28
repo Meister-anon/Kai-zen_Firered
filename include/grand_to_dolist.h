@@ -896,6 +896,8 @@ but C will be  there regardless of split in second (slot) beside the split icons
 decide better colors that I would like more
 think I would like dark icon for special, won't have anything for status
 use IsMoveMakingContact  for setting contact icon
+since made new category of move that do grounding think should add icon for that as well.
+check for that would be if flag dmg_in_air or 2x_dmg_in_air
 
 may make icons the same color etc, so they can slot together and look seemless
 think I'd just do dark grey background with white forground color for the lettering
@@ -1084,7 +1086,7 @@ damageHelper = spDefense;  (defense stat)
 
  also related to plan of setting up custom physical/special contact non-contact icons
  since will need that in battle, and navigating to summary screen move info page  is tiring
- setup so pressing L, (or maybe select so L can still be for help menu? ) should navigaate directly 
+ setup so pressing L, (or maybe select [select is move swap, use R instead] so L can still be for help menu? ) should navigaate directly 
  to the move info page (the page with move selection already selected)  pressing b once should take you back to battle.
  with cursor where you left it
 
@@ -1271,7 +1273,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  -fixed, 
 
  hidden power over performing - was because bad logic, was getting ALL of the boosts because ordered badly
- rearranged, changed to use cmd args and now it works well enough I think, keep an eye on 
+ rearranged, changed to use cmd args and now it works well enough I think, keep an eye on  - not properly showing type
+
+ -weird issue disable seemed to cause freeze no idea why,  can't seem to reproduce yet
+ and hidden power keeps changing the read type, even though the type itself isn't changing
 
  flag floating drop didn't work for flying types didn't work on zubat? - reworked battler grounded function
 
@@ -1294,6 +1299,38 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   while wild encounter rate is how often certain mon show up
   possibly move wild_encounters.json to a C file
 
+  ok so it is called encounter rate, and I was wrong, its not per map its per category, 
+  so if I setup tall grass encounters I can set the rate lower
+
+  most of the encounters aren't used they are just filled with teh same mon at different levels
+
+  Meister_anon — Today at 6:13 PM
+    Is there a reason the wild encounter file was kept in json?
+    other than it just being a lot of work to change I guess. 
+  Lunos — Today at 6:15 PM
+    Because it makes it easier for Porymap to read its contents. Iirc that's the reason why the original .h was turned into a .json. 
+
+    ok  look into how I would be able to change the file, as a json or a .h file  if I realy do have more access/ flexibility 
+    or I'm overblowing the benefit in this case
+
+    as it is, a mon needs to be in every spot of the encounter array, i.e if the encounter group i.e water/land encounters has x amount of spots
+    they must all be filled or it'll break the game
+
+    think can do everything I need in wild_pokemon_area.c & wild_encounter.c
+
+    not sure how, gonna be able to adjust the json and encounter.c to limit number of encounters but keep teh same
+    encounter rate ratio,  since it would create tabes with less than 100% odds
+    not to mention how odd the fishing odds are setup
+
+    could consolodate fishing logic to just use one size  for all rods,
+    so rather than splitting all 10 spots between the 3 rods, they can all use 5
+
+    pretty sure cant do if in json, hmmm no would just make it 15 rather than 10, no other way to set static encounters
+
+  */
+ goto ENCOUNTER_LOGIC //for wild encounters - this is reading encounter logic
+ goto ENCOUNTER_GENERATOR // this is creating the encounter itself
+ /*
   for function giveboxmoninitialmoveset, used for createnpctrainerparty  craete task for move learn
   to help decide what moves to keep when moving through list rather than just deleting the first
   instead make priority list, if not normal type must have a dmging stab move, priority moves have ...priority over non stab dmg moves
@@ -1309,7 +1346,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
  -add message for overcoat block powder moves in battle_util.c
 
- -comatose isn't working causes freeze now for some reason smh/ needed end in end2 not return as its an endturn ability
+ -comatose isn't working causes freeze now for some reason smh/ needed end in end2 not return as its an endturn ability -fixed
 
  -for play consider swapping badge hm use of brock's gym and  surges gym
  -instead of flash make brock let player use surf (for small chance you spawn npc in pallet that gives you fishing access early)
@@ -1448,7 +1485,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   - fixed issue was wrong battler logic, used gactive when I should have used gattacker
 
-- fixed mon cries, issue was firered table was in diff order than emerald table, prob because of 
+ - fixed mon cries, issue was firered table was in diff order than emerald table, prob because of 
  the firered weird bit table logic default used.
 
  -pickup still not quite right, when it picks up a berry and uses it same turn, it doesn't remove it
@@ -1475,16 +1512,23 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   icons will be separated by a white stripe through the center
   will make it appear separate, and make it even easier blend w transparent color when other side is missing
   helps keep it symetrical as well
-  rounded corners on outside flight inner side
+  rounded corners on outside flat inner side
 
  tm case decided I should go fuck myself -_-  
  graphic glitches on both sets even though haven't even changed windows yet
  but only when windows pop up i.e money window when trying to sell tm
- title glitches when try to use tms
+ title glitches when try to use tms - fixed window isn't fully right 
+ not fully working the messaeg box isn't fully changing color when displaying yes no window -
+
+ -note later rearrange some ss anne trainers to force double fights,  possibly turn them into double battles random chance
+  //and gentelman on second floor that talks about safari zone give rare mon to show he's been to teh safari zone
 
  //remember add FLY to more mon learnsets, refer to gFloatingSpecies list for starting point, note even pidgey learns fly, size irrelevant
  //emerald expansion changed how these are handled, more akin to levelup learnset, which removes the bit array limit allowing for many more learned moves
  //so will port that
+
+ -rival starter evo didn't work, starter wasn't shown in ss anne fight instead duplicated existing entry
+  restart  test to see if that was just because of save issues from rebuilding rom etc.
 
  enemy trainer sprite is not moving over to the correct spot on battle end, (I think)
 
