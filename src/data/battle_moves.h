@@ -1536,10 +1536,10 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_RAGE] =
     {
-        .effect = EFFECT_RAGE,
-        .power = 25,
+        .effect = EFFECT_RAGE, //new effect instead boost attack raise move power for rage each boost, formula gbattlemovepower = power + (10 * rage counter)
+        .power = 25,    //assume hit each turn and use each turn after first use, move gains 20 power each turn
         .type = TYPE_MYSTERY, //Its power of anger type of attack would depend on mon type etc. so doesn't really make sense to be normal
-        .accuracy = 100, //ok got it fixed, setup dynamictype so move type will match mon's type 1, rather than just being normal
+        .accuracy = 100, //ok got it fixed, setup dynamictype so move type will match mon's type 1, rather than just being normal /think done had rearrange type order for mon that were normal
         .pp = 13,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,

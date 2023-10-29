@@ -5063,10 +5063,16 @@ void SetMoveEffect(bool32 primary, u32 certain)
             case MOVE_EFFECT_RAGE:
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE)
             {
-                ++gBattleMons[gBattlerTarget].statStages[STAT_ATK];
-                BattleScriptPushCursorAndCallback(BattleScript_RageIsBuilding); //ok would need to see if this works, since in this script setmoveeffect is before atk, this should work but idk
-                //gBattlescriptCurrInstr = BattleScript_RageIsBuilding;
-                ++gBattlescriptCurrInstr;//vsonic unsure if use pushcallback or just push with this? as well as new sturdy
+                if (gDisableStructs[gBattlerAttacker].rageCounter != 5) //with curr setup would max at a move of bp 75
+                {
+                        gDisableStructs[gBattlerAttacker].rageCounter++;
+                    //BattleScriptPushCursorAndCallback(BattleScript_RageIsBuilding); //ok would need to see if this works, since in this script setmoveeffect is before atk, this should work but idk
+                    BattleScriptPush(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = BattleScript_AttackerRageBuilding; //this works perfectly
+                }
+                else
+                    ++gBattlescriptCurrInstr;
+                
             }
             else
             {
@@ -7177,11 +7183,22 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
              && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
              && TARGET_TURN_DAMAGED
              && gBattleMoves[gCurrentMove].power
-             && gBattleMons[gBattlerTarget].statStages[STAT_ATK] <= 0xB)    //not max atk
+             && gBattleMons[gBattlerTarget].statStages[STAT_ATK] < MAX_STAT_STAGE)    //not max atk
             {
+                if (gDisableStructs[gBattlerAttacker].rageCounter != 5)
+                    gDisableStructs[gBattlerAttacker].rageCounter++;
                 ++gBattleMons[gBattlerTarget].statStages[STAT_ATK];
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_RageIsBuilding;
+                effect = TRUE;
+            }
+            ++gBattleScripting.atk49_state;
+            break;
+        case MOVE_END_ROOST:
+            if (gDisableStructs[gBattlerAttacker].RoostTimer == 4)
+            {
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_Roosting;
                 effect = TRUE;
             }
             ++gBattleScripting.atk49_state;
@@ -14785,6 +14802,29 @@ static void atkB5_furycuttercalc(void)
 } //don't know if i'm just unlucky but it seeems to be hitting every time, so I'm still unsure
 //if the accuracy reduction on hit is working  ok did test, accuracy reduction or accuracy checks just aren't working at all.
 
+void BS_rageboostcalc(void)
+{
+    NATIVE_ARGS();
+    u8 rageCounter = gDisableStructs[gBattlerAttacker].rageCounter;
+
+    if (gCurrentMove == MOVE_RAGE)
+    {
+
+        if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        {
+            gDisableStructs[gBattlerAttacker].rageCounter = 0;
+            gBattlescriptCurrInstr = BattleScript_MoveMissedPause; //create custom message rage abated 
+        }
+        else
+        {
+            gDynamicBasePower = (gBattleMoves[gCurrentMove].power + (10 * rageCounter)); //douesn't boost power till take hit or use move again
+
+            gBattlescriptCurrInstr = cmd->nextInstr;
+        }
+    }
+    gBattlescriptCurrInstr = cmd->nextInstr;
+}
+
 static void atkB6_happinesstodamagecalculation(void)
 {
     if (gBattleMoves[gCurrentMove].effect == EFFECT_RETURN)
@@ -16871,7 +16911,7 @@ static void atkF8_setroost(void) { //actually I don't like this type change idea
         //which shoud give a nice balance to repeatedly using the move.
 
         //should be set timer value, and if flag not set, set flag
-        if (!(gBattleResources->flags->flags[gActiveBattler] & RESOURCE_FLAG_ROOST)) //check if this means flag not set
+        if (!(gBattleResources->flags->flags[gBattlerAttacker] & RESOURCE_FLAG_ROOST)) //check if this means flag not set
             gBattleResources->flags->flags[gBattlerAttacker] |= RESOURCE_FLAG_ROOST;  //why do I need this if I have a timer? but potentially use for trenchrun
 
         //need to come up with adjustment to ensure subsequent uses of roost can't give
@@ -17593,16 +17633,13 @@ void BS_call_if(void) //comparing to jumpifholdeffect
             case EFFECT_TARGET_TYPE_DAMAGE:
             if (gCurrentMove == MOVE_ROCK_SMASH)
                 gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
+                gBattlescriptCurrInstr = cmd->nextInstr;
                 break;                
-            case EFFECT_ROOST:
-                PrepareStringBattle(STRINGID_MONROOSTING, gBattlerAttacker);
- 
-                ++gBattlescriptCurrInstr;
-                gBattleCommunication[MSG_DISPLAY] = 0;
-            break;
         }
     }
-    gBattlescriptCurrInstr = cmd->nextInstr; //had to put in hitfromcritcalc for rollout, so put intr increment back in, so won't break everything else, 
+    gBattlescriptCurrInstr = cmd->nextInstr;
+
+     //had to put in hitfromcritcalc for rollout, so put intr increment back in, so won't break everything else, 
     //will only trigger for whatever effect is listed here, but still needs to be put where it makes senes for the effect
     //+3 because effects are 2 bytes, and macro is 1 actually wrong, talked witwh griffinR, callnative is 5, then effect is 2, so should be 7
 }

@@ -4410,7 +4410,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22EarlyS
                 [SpDefenseEV] = 0
                 },
         .lvl = 9,
-        .species = SPECIES_SQUIRTLE,
+        .species = SPECIES_WARTORTLE,
 
     },
 };
@@ -4441,7 +4441,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22EarlyB
                 [SpDefenseEV] = 0
                 },
         .lvl = 9,
-        .species = SPECIES_BULBASAUR,
+        .species = SPECIES_IVYSAUR,
 
     },
 };
@@ -4472,7 +4472,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22EarlyC
                 [SpDefenseEV] = 0
                 },
         .lvl = 9,
-        .species = SPECIES_CHARMANDER,
+        .species = SPECIES_CHARMELEON,
 
     },
 };

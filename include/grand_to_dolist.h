@@ -1530,6 +1530,22 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  -rival starter evo didn't work, starter wasn't shown in ss anne fight instead duplicated existing entry
   restart  test to see if that was just because of save issues from rebuilding rom etc.
 
+  restartin to test that, but need fix move learn bugs, first, after that go back to fixing bind setup
+
+ //new effect for rage instead boost attack raise move power for rage each boost, formula gbattlemovepower = power + (10 * rage counter)
+ //assume hit each turn and use each turn after first use, move gains 20 power each turn
+ //Its power of anger type of attack would depend on mon type etc. so doesn't really make sense to be normal
+  //ok got it fixed, setup dynamictype so move type will match mon's type 1, rather than just being normal 
+  /think done had rearrange type order for mon that were normal
+
+  made middle ground my new rage gets stab, and boosts base power of move each tiem it gets used or user gets hit
+  and it still gains atk stat when user is hit
+
+  setmovetypebeforemoveused isn't displaying correctly in battle_controller_player
+  for some reason its resetting displayed type based on either type 1 of attacker, or its not working i.e reading dynamicmovetype as 0
+  and showing the base move type
+
+
  enemy trainer sprite is not moving over to the correct spot on battle end, (I think)
 
  eventually will need update ai logic not to make more difficult just to adjust for the changes I've alerady made to stay consistent, like phy special split etc.

@@ -298,40 +298,41 @@
 // atk49, moveend cases
 #define MOVE_END_PROTECT_LIKE_EFFECT			   0
 #define MOVE_END_RAGE                              1
-#define MOVE_END_DEFROST                           2
-#define MOVE_END_SYNCHRONIZE_TARGET                3
-#define MOVE_END_MOVE_END_ABILITIES                4
-#define MOVE_END_ABILITIES_ATTACKER				   5 //increment above 1
-#define MOVE_END_STATUS_IMMUNITY_ABILITIES         6
-#define MOVE_END_SYNCHRONIZE_ATTACKER              7
-#define MOVE_END_CHOICE_MOVE                       8
-#define MOVE_END_CHANGED_ITEMS                     9
-#define MOVE_END_ATTACKER_INVISIBLE                10
-#define MOVE_END_ATTACKER_VISIBLE                  11
-#define MOVE_END_TARGET_VISIBLE                    12
-#define MOVE_END_ITEM_EFFECTS_TARGET			   13
-#define MOVE_END_MOVE_EFFECTS2					   14      
-#define MOVE_END_ITEM_EFFECTS_ALL                  15
-#define MOVE_END_KINGSROCK						   16  //item effect need to be bfore kingsrock for things like rocky helm I guess
-#define MOVE_END_SUBSTITUTE                        17
-#define MOVE_END_GROUND_TARGET                     18 //put here so cancel sky drop stuff
-#define MOVE_END_SKY_DROP_CONFUSE				   19
-#define MOVE_END_UPDATE_LAST_MOVES                 20
-#define MOVE_END_MIRROR_MOVE                       21
+#define MOVE_END_ROOST                             2
+#define MOVE_END_DEFROST                           3
+#define MOVE_END_SYNCHRONIZE_TARGET                4
+#define MOVE_END_MOVE_END_ABILITIES                5
+#define MOVE_END_ABILITIES_ATTACKER				   6 //increment above 1
+#define MOVE_END_STATUS_IMMUNITY_ABILITIES         7
+#define MOVE_END_SYNCHRONIZE_ATTACKER              8
+#define MOVE_END_CHOICE_MOVE                       9
+#define MOVE_END_CHANGED_ITEMS                     10
+#define MOVE_END_ATTACKER_INVISIBLE                11
+#define MOVE_END_ATTACKER_VISIBLE                  12
+#define MOVE_END_TARGET_VISIBLE                    13
+#define MOVE_END_ITEM_EFFECTS_TARGET			   14
+#define MOVE_END_MOVE_EFFECTS2					   15      
+#define MOVE_END_ITEM_EFFECTS_ALL                  16
+#define MOVE_END_KINGSROCK						   17  //item effect need to be bfore kingsrock for things like rocky helm I guess
+#define MOVE_END_SUBSTITUTE                        18
+#define MOVE_END_GROUND_TARGET                     19 //put here so cancel sky drop stuff
+#define MOVE_END_SKY_DROP_CONFUSE				   20
+#define MOVE_END_UPDATE_LAST_MOVES                 21
+#define MOVE_END_MIRROR_MOVE                       22
 
-#define MOVE_END_MULTIHIT_MOVE					   22   //added don't need, except for dragon darts but coudl potentially setup in bs maybe rename for parental bond instead?
-#define MOVE_END_MAGICIAN                          23    // Occurs after final multi-hit strike, and after other items/abilities would activate
-#define MOVE_END_EJECT_BUTTON                      24
-#define MOVE_END_RED_CARD                          25
-#define MOVE_END_EJECT_PACK                        26
-#define MOVE_END_LIFEORB_SHELLBELL                 27    // Includes shell bell, throat spray, etc
-#define MOVE_END_PICKPOCKET                        28
-#define MOVE_END_DANCER							   29
-#define MOVE_END_EMERGENCY_EXIT					   30
-#define MOVE_END_SYMBIOSIS						   31
-#define MOVE_END_NEXT_TARGET                       32 //was last value before count, in base firered
-#define MOVE_END_CLEAR_BITS						   33
-#define MOVE_END_COUNT							   34
+#define MOVE_END_MULTIHIT_MOVE					   23   //added don't need, except for dragon darts but coudl potentially setup in bs maybe rename for parental bond instead?
+#define MOVE_END_MAGICIAN                          24    // Occurs after final multi-hit strike, and after other items/abilities would activate
+#define MOVE_END_EJECT_BUTTON                      25
+#define MOVE_END_RED_CARD                          26
+#define MOVE_END_EJECT_PACK                        27
+#define MOVE_END_LIFEORB_SHELLBELL                 28    // Includes shell bell, throat spray, etc
+#define MOVE_END_PICKPOCKET                        29
+#define MOVE_END_DANCER							   30
+#define MOVE_END_EMERGENCY_EXIT					   31
+#define MOVE_END_SYMBIOSIS						   32
+#define MOVE_END_NEXT_TARGET                       33 //was last value before count, in base firered
+#define MOVE_END_CLEAR_BITS						   34
+#define MOVE_END_COUNT							   35
 
 // switch cases - PORTED right now not used, adding red card only for now
 #define B_SWITCH_NORMAL     0

@@ -1394,6 +1394,11 @@
 	.4byte \ptr
 	.endm
 
+	.macro rageboostcalc
+	callnative BS_rageboostcalc
+	.endm
+
+	@put future commands above this
 	.macro typebaseddmgboost
 	callnative BS_typebaseddmgboost
 	.endm

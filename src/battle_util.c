@@ -860,8 +860,8 @@ void CancelMultiTurnMoves(u8 battler)
         }
     }
 
-    gDisableStructs[battler].rolloutTimer = 0;
-    gDisableStructs[battler].furyCutterCounter = 0;
+    gDisableStructs[battler].rolloutTimer = 0; //replace fury hitcounter was here with rage counter
+    gDisableStructs[battler].rageCounter = 0;
 }
 
 bool8 WasUnableToUseMove(u8 battler)
@@ -2879,6 +2879,14 @@ u8 DoBattlerEndTurnEffects(void)
                 //something like "pokemonname" returned to the air or something..
                 if (gBattleResources->flags->flags[gActiveBattler] & RESOURCE_FLAG_ROOST)
                 {
+                    //put here so active before decrement to ensure easier condition setting //shuold be not first turn and not last turn of roost
+                    if (gDisableStructs[gActiveBattler].RoostTimer != 4 && gDisableStructs[gActiveBattler].RoostTimer != 1) 
+                    {
+                        MarkBattlerForControllerExec(gActiveBattler);
+                        gEffectBattler = gActiveBattler;
+                        BattleScriptExecute(BattleScript_EndturnRoost); //issue is endturn cant end with return
+                        ++effect;
+                    }
                     if (--gDisableStructs[gActiveBattler].RoostTimer == 0)
                     {
                         gBattleResources->flags->flags[gActiveBattler] &= ~(RESOURCE_FLAG_ROOST);
@@ -2889,6 +2897,7 @@ u8 DoBattlerEndTurnEffects(void)
                         //gBattleMons[gActiveBattler].type1 = gBattleStruct->roostTypes[gActiveBattler][0];
                         //gBattleMons[gActiveBattler].type2 = gBattleStruct->roostTypes[gActiveBattler][1];
                     }
+                    
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
@@ -9263,14 +9272,8 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
 
 void ClearFuryCutterDestinyBondGrudge(u8 battlerId)
 {
-    gDisableStructs[battlerId].furyCutterCounter = 0;
     gBattleMons[battlerId].status2 &= ~(STATUS2_DESTINY_BOND);
     gStatuses3[battlerId] &= ~(STATUS3_GRUDGE);
-}
-
-void ResetFuryCutterCounter(u8 battlerId)
-{
-    gDisableStructs[battlerId].furyCutterCounter = 0;
 }
 
 void HandleAction_RunBattleScript(void) // identical to RunBattleScriptCommands
@@ -9693,8 +9696,8 @@ u8 IsMonDisobedient(void)
     // is not obedient
     //if (gCurrentMove == MOVE_RAGE)//hmm didn't know about this effectively removes benefits of things
     //   gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_RAGE);
-    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE)
-        gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_RAGE);
+    //if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) -don't know why I added this it removes the status each attack?
+      //  gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_RAGE); //ok this is a thing I added?
     if (gBattleMons[gBattlerAttacker].status1 & STATUS1_SLEEP && (gCurrentMove == MOVE_SNORE || gCurrentMove == MOVE_SLEEP_TALK))
     {
         gBattlescriptCurrInstr = BattleScript_IgnoresWhileAsleep;

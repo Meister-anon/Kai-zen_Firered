@@ -1646,12 +1646,14 @@ static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
     *txtPtr++ = 1;*/ //based on results I think this somehow changed the base font from small to normal  normal font is value 1 so idk?
     txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceDynamicColors);
     
-
+    gBattleStruct->dynamicMoveType = 0;
     //reusing won't make a difference but if I understand this right, will only need use this once?
     //so potentially remove from battle_main...well actually no don't do that, this only works off of move cursor,
     //well I can't select a move without hovering it , so it may work?
     //see if moves stil work if remove settypebeforeusingmove from HandleAction_UseMove function in battle_main
     //for now leave it
+    
+    //for some reason this is taking the type of the last move used against it, or the type of the target mon that last hit it??
     SetTypeBeforeUsingMove(moveInfo->moves[gMoveSelectionCursor[gActiveBattler]],gActiveBattler); //should attempt set dynamicmovetype based on move cursor is on
     GET_MOVE_TYPE(moveInfo->moves[gMoveSelectionCursor[gActiveBattler]], moveType) //should decide whether to set base type ro dynamicmovetype to moveType
 

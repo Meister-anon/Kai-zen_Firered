@@ -487,8 +487,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(40, 45, 40, 67, 45, 35),
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_FLYING,
+        .type1 = TYPE_FLYING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 255,
         .expYield = 50,
         //.evYield_Speed = 1,
@@ -509,8 +509,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(63, 70, 55, 91, 70, 50),
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_FLYING,
+        .type1 = TYPE_FLYING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 120,
         .expYield = 122,
         //.evYield_Speed = 2,
@@ -531,8 +531,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(105, 90, 85, 121, 85, 80),
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_FLYING,
+        .type1 = TYPE_FLYING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 216,
         //.evYield_Speed = 3,
@@ -595,8 +595,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(40, 60, 30, 70, 31, 31),
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_FLYING,
+        .type1 = TYPE_FLYING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 255,
         .expYield = 52,
         //.evYield_Speed = 1,
@@ -619,8 +619,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(65, 100, 65, 100, 61, 61),
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_FLYING,
+        .type1 = TYPE_FLYING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 90,
         .expYield = 155,
         //.evYield_Speed = 2,
@@ -2041,8 +2041,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(70, 105, 60, 60, 50, 62),
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_FLYING,
+        .type1 = TYPE_FLYING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 192,
         //.evYield_Attack = 1,
@@ -2065,8 +2065,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(50, 85, 45, 75, 35, 35),
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_FLYING,
+        .type1 = TYPE_FLYING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 190,
         .expYield = 62,
         //.evYield_Attack = 1,
@@ -2531,8 +2531,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(50, 50, 95, 45, 40, 50),
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_GROUND,
+        .type1 = TYPE_GROUND,
+        .type2 = TYPE_NORMAL,
         .catchRate = 190,
         .expYield = 64,
         //.evYield_Defense = 1,
@@ -2553,8 +2553,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(60, 88, 118, 65, 50, 80),
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_GROUND,
+        .type1 = TYPE_GROUND,
+        .type2 = TYPE_NORMAL,
         .catchRate = 75,
         .expYield = 149,
         //.evYield_Defense = 2,
@@ -4950,8 +4950,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(60, 80, 50, 30, 40, 50),
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_FAIRY,
+        .type1 = TYPE_FAIRY,
+        .type2 = TYPE_NORMAL,
         .catchRate = 190,
         .expYield = 60,
         //.evYield_Attack = 1,
@@ -4973,8 +4973,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(86, 120, 75, 45, 60, 80),
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_FAIRY,
+        .type1 = TYPE_FAIRY,
+        .type2 = TYPE_NORMAL,
         .catchRate = 75,
         .expYield = 158,
         //.evYield_Attack = 2,

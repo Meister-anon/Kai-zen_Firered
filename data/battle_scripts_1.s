@@ -2437,12 +2437,15 @@ BattleScript_GravityLoopEnd:
 BattleScript_EffectRoost:
 	attackcanceler
 	attackstring
-	pause 0x50
 	ppreduce
 	setroost @just move above heal, and include text message for grounding 
-	call_if EFFECT_ROOST
 	tryhealhalfhealth BattleScript_AlreadyAtFullHp, BS_TARGET
 	goto BattleScript_PresentHealTarget
+
+BattleScript_Roosting::
+	printstring STRINGID_MONROOSTING
+	waitmessage 0x40
+	return
 
 BattleScript_EffectCaptivate:
 	setstatchanger STAT_SPATK, 2, TRUE
@@ -3860,12 +3863,14 @@ BattleScript_MoveUsedMustRecharge::
 
 BattleScript_EffectRage::
 	attackcanceler
-	accuracycheck BattleScript_RageMiss, ACC_CURR_MOVE
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	rageboostcalc
 	setmoveeffect MOVE_EFFECT_RAGE
 	seteffectprimary
-	setmoveeffect 0
+	setmoveeffect 0	@dont know why this is here	
 	goto BattleScript_HitFromAtkString
-
+	
+@not used
 BattleScript_RageMiss::
 	setmoveeffect MOVE_EFFECT_RAGE
 	clearstatusfromeffect BS_ATTACKER
@@ -6782,6 +6787,11 @@ BattleScript_RageIsBuilding::
 	waitmessage 0x40
 	return
 
+BattleScript_AttackerRageBuilding::
+	printstring STRINGID_ATK_RAGEBUILDING
+	waitmessage 0x20
+	return
+
 BattleScript_MoveUsedIsDisabled::
 	printstring STRINGID_PKMNMOVEISDISABLED
 	waitmessage 0x40
@@ -7712,6 +7722,11 @@ BattleScript_YawnMakesAsleep::
 
 BattlesScript_RoostEnds::
 	printstring STRINGID_PKMNSTOPPEDROOSTING
+	waitmessage 0x40
+	end2
+
+BattleScript_EndturnRoost::
+	printstring STRINGID_MONROOSTING
 	waitmessage 0x40
 	end2
 

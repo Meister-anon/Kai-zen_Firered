@@ -232,6 +232,7 @@ struct DisableStruct
     /*0x18*/ u8 unk18_a_2 : 2;
     /*0x18*/ u8 mimickedMoves : 4;
     /*0x19*/ u8 rechargeTimer;
+    u8 rageCounter;
     u8 autotomizeCount;
     u8 noRetreat : 1;
     u8 tarShot : 1;
@@ -723,12 +724,12 @@ extern struct BattleStruct *gBattleStruct;
 #define F_DYNAMIC_TYPE_2 (1 << 7)
 #define DYNAMIC_TYPE_MASK (F_DYNAMIC_TYPE_1 - 1)
 
-#define GET_MOVE_TYPE(move, typeArg)                        \
-{                                                           \
-    if (gBattleStruct->dynamicMoveType)                     \
-        typeArg = gBattleStruct->dynamicMoveType & 0x3F;    \
-    else                                                    \
-        typeArg = gBattleMoves[move].type;                  \
+#define GET_MOVE_TYPE(move, typeArg)                                    \
+{                                                                       \
+    if (gBattleStruct->dynamicMoveType)                                 \
+        typeArg = gBattleStruct->dynamicMoveType & DYNAMIC_TYPE_MASK;   \
+    else                                                                \
+        typeArg = gBattleMoves[move].type;                              \
 }
 
 //#define IS_TYPE_PHYSICAL(moveType)(moveType < TYPE_MYSTERY)
