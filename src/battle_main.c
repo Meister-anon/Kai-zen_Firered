@@ -1154,8 +1154,10 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     attackerAbility = GetBattlerAbility(battlerAtk);
     GET_MOVE_TYPE(move, moveType);
 
+
     if (move == MOVE_RAGE) //sets rage to type 1
-        gBattleStruct->dynamicMoveType = gBattleMons[gBattlerAttacker].type1;
+        gBattleStruct->dynamicMoveType = gBattleMons[battlerAtk].type1; //need make sure use battlerAtk not gbattlerattacker that causes errors for some reason
+
 
     if ((gFieldStatuses & STATUS_FIELD_ION_DELUGE && moveType == TYPE_NORMAL)//add absolute zero, check if ability on field, like stench then do water chance to ice
         || gStatuses4[battlerAtk] & STATUS4_ELECTRIFIED)
@@ -1214,12 +1216,12 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     else if (move == MOVE_HIDDEN_POWER)
     {
 
-        typeBits = ((gBattleMons[gBattlerAttacker].hpIV & 1) << 0)
-            | ((gBattleMons[gBattlerAttacker].attackIV & 1) << 1)
-            | ((gBattleMons[gBattlerAttacker].defenseIV & 1) << 2)
-            | ((gBattleMons[gBattlerAttacker].speedIV & 1) << 3)
-            | ((gBattleMons[gBattlerAttacker].spAttackIV & 1) << 4)
-            | ((gBattleMons[gBattlerAttacker].spDefenseIV & 1) << 5);
+        typeBits = ((gBattleMons[battlerAtk].hpIV & 1) << 0)
+            | ((gBattleMons[battlerAtk].attackIV & 1) << 1)
+            | ((gBattleMons[battlerAtk].defenseIV & 1) << 2)
+            | ((gBattleMons[battlerAtk].speedIV & 1) << 3)
+            | ((gBattleMons[battlerAtk].spAttackIV & 1) << 4)
+            | ((gBattleMons[battlerAtk].spDefenseIV & 1) << 5);
 
         //// Subtract 3 instead of 1 below because 2 types are excluded (TYPE_NORMAL and TYPE_MYSTERY)
         //changed to -4 for sound type addition, need test unsure if fully necessary

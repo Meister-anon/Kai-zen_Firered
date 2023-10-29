@@ -3863,18 +3863,25 @@ BattleScript_MoveUsedMustRecharge::
 
 BattleScript_EffectRage::
 	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	accuracycheck BattleScript_RageMiss, ACC_CURR_MOVE
 	rageboostcalc
 	setmoveeffect MOVE_EFFECT_RAGE
 	seteffectprimary
 	setmoveeffect 0	@dont know why this is here	
-	goto BattleScript_HitFromAtkString
+	attackstring
+	ppreduce
+	critcalc
+	damagecalc
+	typecalc
+	jumpifmovehadnoeffect BattleScript_RageMiss
+	adjustnormaldamage
+	goto BattleScript_HitFromAtkAnimation
 	
-@not used
+
 BattleScript_RageMiss::
 	setmoveeffect MOVE_EFFECT_RAGE
-	clearstatusfromeffect BS_ATTACKER
-	goto BattleScript_PrintMoveMissed
+	clearstatusfromeffect BS_ATTACKER @couter cleared w move end custom message setup done
+	goto BattleScript_MoveMissedPause
 
 BattleScript_EffectMimic::
 	attackcanceler
@@ -6789,6 +6796,11 @@ BattleScript_RageIsBuilding::
 
 BattleScript_AttackerRageBuilding::
 	printstring STRINGID_ATK_RAGEBUILDING
+	waitmessage 0x20
+	return
+
+BattleScript_RageEnds::
+	printstring STRINGID_ATK_RAGEABATED
 	waitmessage 0x20
 	return
 

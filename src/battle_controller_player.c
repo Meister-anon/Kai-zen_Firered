@@ -1646,7 +1646,6 @@ static void MoveSelectionDisplayMoveType(void)//displays type/  & move type
     *txtPtr++ = 1;*/ //based on results I think this somehow changed the base font from small to normal  normal font is value 1 so idk?
     txtPtr = StringCopy(gDisplayedStringBattle, gText_MoveInterfaceDynamicColors);
     
-    gBattleStruct->dynamicMoveType = 0;
     //reusing won't make a difference but if I understand this right, will only need use this once?
     //so potentially remove from battle_main...well actually no don't do that, this only works off of move cursor,
     //well I can't select a move without hovering it , so it may work?

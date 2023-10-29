@@ -196,6 +196,7 @@ static const u8 sText_PkmnSubstituteFaded[] = _("{B_DEF_NAME_WITH_PREFIX}'s\nSUB
 static const u8 sText_PkmnMustRecharge[] = _("{B_ATK_NAME_WITH_PREFIX} must\nrecharge!");
 static const u8 sText_PkmnRageBuilding[] = _("{B_DEF_NAME_WITH_PREFIX}'s RAGE\nis building!");
 static const u8 sText_AttackerRageBuilding[] = _("{B_ATK_NAME_WITH_PREFIX}'s RAGE\nis building!");
+static const u8 sText_AttackerRageEnded[] = _("{B_ATK_NAME_WITH_PREFIX}'s RAGE\nabated!");
 static const u8 sText_PkmnMoveWasDisabled[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\nwas disabled!");
 static const u8 sText_PkmnMoveDisabledNoMore[] = _("{B_ATK_NAME_WITH_PREFIX} is disabled\nno more!");
 static const u8 sText_PkmnGotEncore[] = _("{B_DEF_NAME_WITH_PREFIX} got\nan ENCORE!");
@@ -1450,7 +1451,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_CAUGHTMONDROPPEDITEM - BATTLESTRINGS_TABLE_START]          = sText_ReceiveditemfromCaughtMon,
     [STRINGID_MONROOSTING - BATTLESTRINGS_TABLE_START]                   = sText_PkmnRoosting,
     [STRINGID_ATK_RAGEBUILDING - BATTLESTRINGS_TABLE_START]              = sText_AttackerRageBuilding,
-
+    [STRINGID_ATK_RAGEABATED - BATTLESTRINGS_TABLE_START]                = sText_AttackerRageEnded,
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
     [STRINGID_PLAYERWHITEDOUT - BATTLESTRINGS_TABLE_START]               = sText_PlayerWhiteout2,

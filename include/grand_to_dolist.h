@@ -1532,6 +1532,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   restartin to test that, but need fix move learn bugs, first, after that go back to fixing bind setup
 
+  tested looks like it is broken I'm so sure it worked before so idk wth us going on with this
+  instead of evolving the stored starter species, its just copying the data of the mon before it...
+
  //new effect for rage instead boost attack raise move power for rage each boost, formula gbattlemovepower = power + (10 * rage counter)
  //assume hit each turn and use each turn after first use, move gains 20 power each turn
  //Its power of anger type of attack would depend on mon type etc. so doesn't really make sense to be normal
@@ -1540,6 +1543,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   made middle ground my new rage gets stab, and boosts base power of move each tiem it gets used or user gets hit
   and it still gains atk stat when user is hit
+
+  finished setup, rage looks good, and was able to fix teh issue with displaying the right dynamic type, had the wrong value listed
+  but note* need remember to remove marking option and text from pc menus
 
   setmovetypebeforemoveused isn't displaying correctly in battle_controller_player
   for some reason its resetting displayed type based on either type 1 of attacker, or its not working i.e reading dynamicmovetype as 0

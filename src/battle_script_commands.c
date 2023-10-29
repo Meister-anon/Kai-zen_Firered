@@ -1196,6 +1196,8 @@ static const u8 sFlailHpScaleToPowerTable[] =
 
 //these two arrays relate only to multi_task, could probably do with just 1, but just some extra redundancy
 //ledian buff taking multi hit & fury cutt effect out of this to make like skill link
+//FOR MOVES that cant work with multitask setup, or would be broken
+//rage added as effect can't work in setup - tired
 static const u16 sMultiTaskExcludedEffects[] =
 { 
     EFFECT_MAGNITUDE,
@@ -1224,8 +1226,8 @@ static const u16 sMultiTaskExcludedEffects[] =
     EFFECT_FUTURE_SIGHT,  //yeah, you can come too!! I gotcha.
     EFFECT_UPROAR,
     EFFECT_RAMPAGE,
-    //EFFECT_OHKO, //no pokemon I'm giving this to normally learns a ohko move, so I may leave in for something potentially fun for the player.
-    //EFFECT_HIT,  //for testing   test passed  //test ohko make sure doesn't cause break
+    EFFECT_OHKO, //no pokemon I'm giving this to normally learns a ohko move, so I may leave in for something potentially fun for the player.
+    EFFECT_RAGE,
     //EFFECT_TWO_TURNS_ATTACK // because I'm not using two turns attack??  doube check this
     MULTI_TASK_FORBIDDEN_END
 }; //had add multi hit effects back to this, it only affects dmg share from dmg calc macro
@@ -5065,8 +5067,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             {
                 if (gDisableStructs[gBattlerAttacker].rageCounter != 5) //with curr setup would max at a move of bp 75
                 {
-                        gDisableStructs[gBattlerAttacker].rageCounter++;
-                    //BattleScriptPushCursorAndCallback(BattleScript_RageIsBuilding); //ok would need to see if this works, since in this script setmoveeffect is before atk, this should work but idk
+                        gDisableStructs[gBattlerAttacker].rageCounter++; //ok would need to see if this works, since in this script setmoveeffect is before atk, this should work but idk
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
                     gBattlescriptCurrInstr = BattleScript_AttackerRageBuilding; //this works perfectly
                 }
@@ -7190,6 +7191,15 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                 ++gBattleMons[gBattlerTarget].statStages[STAT_ATK];
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_RageIsBuilding;
+                effect = TRUE;
+            }
+            else if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE
+            && gBattleMoves[gCurrentMove].power
+            && (gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+            {
+                gDisableStructs[gBattlerAttacker].rageCounter = 0;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_RageEnds; //tested and works, just need make message
                 effect = TRUE;
             }
             ++gBattleScripting.atk49_state;
@@ -14813,6 +14823,7 @@ void BS_rageboostcalc(void)
         if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
         {
             gDisableStructs[gBattlerAttacker].rageCounter = 0;
+            gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_RAGE);
             gBattlescriptCurrInstr = BattleScript_MoveMissedPause; //create custom message rage abated 
         }
         else
