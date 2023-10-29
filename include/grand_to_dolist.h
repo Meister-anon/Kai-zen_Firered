@@ -1541,6 +1541,13 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   //ok got it fixed, setup dynamictype so move type will match mon's type 1, rather than just being normal 
   /think done had rearrange type order for mon that were normal
 
+  for better balance, made  atk cancelers for status and truant remove rage status, doesn't affect rage counter
+  sleep freeze paralysis pressure flinch spirit lock (when its done) and truant
+
+  -yawn change works, still testing but rage status removal seems to be solid
+
+  *note go back and fix pickup display text,  give it a pause on the string - perfect that works great now
+
   made middle ground my new rage gets stab, and boosts base power of move each tiem it gets used or user gets hit
   and it still gains atk stat when user is hit
 

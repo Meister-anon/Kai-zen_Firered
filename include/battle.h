@@ -724,9 +724,12 @@ extern struct BattleStruct *gBattleStruct;
 #define F_DYNAMIC_TYPE_2 (1 << 7)
 #define DYNAMIC_TYPE_MASK (F_DYNAMIC_TYPE_1 - 1)
 
+//changing this as it is, doesn't work right with things that set 
+//type normal but aren't normal, since normal is type 0
+//think this may be only change I need to make actually
 #define GET_MOVE_TYPE(move, typeArg)                                    \
 {                                                                       \
-    if (gBattleStruct->dynamicMoveType)                                 \
+    if (gBattleStruct->dynamicMoveType != 0xFF)                         \
         typeArg = gBattleStruct->dynamicMoveType & DYNAMIC_TYPE_MASK;   \
     else                                                                \
         typeArg = gBattleMoves[move].type;                              \

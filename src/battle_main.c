@@ -1110,7 +1110,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     if (move == (MOVE_STRUGGLE || MOVE_BIDE)) 
         return;
 
-    gBattleStruct->dynamicMoveType = 0;
+    gBattleStruct->dynamicMoveType = 0xFF; //change for new setup
     gBattleStruct->ateBoost[battlerAtk] = 0;
     gSpecialStatuses[battlerAtk].gemBoost = FALSE;
 
@@ -1902,7 +1902,7 @@ bool8 IsRivalBattle(u16 trainerNum)
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 {
     u32 nameHash = 0; //check other function that sets abilitysot for wilds may not need that randomability value vsonic
-    u8 RandomAbility = Random() % 4;    //to put in setmondata dataarg to hopefully set random ability slot 0-3
+    u8 RandomAbility;    //to put in setmondata dataarg to hopefully set random ability slot 0-3
     u32 personalityValue; //personality now uses name hash, which is trainer name
     u8 fixedIV; //figure how to set personality for individual pokemon, or at least set their ability
     u8 abilityNum;  //should let set ability slot for mon
@@ -2129,6 +2129,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 
                 }
                 CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                RandomAbility = Random() % 4;
                 //Set ability slot
                 abilityNum = partyData[i].abilityNum;
                 if (abilityNum == 0)
@@ -2316,7 +2317,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 
                 }
                 CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
-
+                RandomAbility = Random() % 4;
                 //Set ability slot
                 abilityNum = partyData[i].abilityNum;
                 if (abilityNum == 0)
@@ -2516,7 +2517,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 
                 }
                 CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
-
+                RandomAbility = Random() % 4;
                 //Set ability slot
                 abilityNum = partyData[i].abilityNum;
                 if (abilityNum == 0)
@@ -2708,7 +2709,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                 //iv ev lvl species Helditem moves
                 CreateMon(&party[i], species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
-
+                RandomAbility = Random() % 4;
                 //Set ability slot
                 abilityNum = partyData[i].abilityNum;
                 if (abilityNum == 0)
@@ -4138,7 +4139,8 @@ static void HandleEndTurn_ContinueBattle(void)
         for (i = 0; i < gBattlersCount; ++i)
         {
             gBattleMons[i].status2 &= ~(STATUS2_FLINCHED);
-            if ((gBattleMons[i].status1 & STATUS1_SLEEP) && (gBattleMons[i].status2 & STATUS2_MULTIPLETURNS))
+            //if ((gBattleMons[i].status1 & STATUS1_SLEEP) && (gBattleMons[i].status2 & STATUS2_MULTIPLETURNS))
+            if ((gBattleMons[i].status1 & STATUS1_SLEEP)) //pretty sure no reason not to just make it auto run on sleep
                 CancelMultiTurnMoves(i);
         }
         gBattleStruct->turnEffectsTracker = 0;

@@ -102,7 +102,7 @@ s32 GetDrainedBigRootHp(u32 battler, s32 hp);
 u8 DoBattlerEndTurnEffects(void);
 bool8 HandleWishPerishSongOnTurnEnd(void);
 bool8 HandleFaintedMonActions(void);
-void TryClearRageStatuses(void);
+void ClearRageStatuses(void);
 u8 AtkCanceller_UnableToUseMove(void);
 u8 AtkCanceller_UnableToUseMove2(void);
 bool8 IsFloatingSpecies(u8 battlerId);

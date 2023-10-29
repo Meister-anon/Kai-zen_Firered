@@ -4625,12 +4625,26 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 {
                     gBattleMons[gEffectBattler].status1 |= ((Random() % 3) + 3); //duration of sleep, and its 2-5 here. /changed to 2-4 /guarantees 1 free turn unless earlybird  //confirmed
                     gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
+                    
+                    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                    {
+                        ClearRageStatuses();
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
+                    }
                 }
             else if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_FREEZE)
             {
                 gDisableStructs[gEffectBattler].FrozenTurns = 3;    
                 gBattleMons[gEffectBattler].status1 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
                 gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
+
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                {
+                    ClearRageStatuses();
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
+                }
             } //moved here for clarity
             else if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_POISON)
             {
@@ -7184,6 +7198,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
              && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
              && TARGET_TURN_DAMAGED
              && gBattleMoves[gCurrentMove].power
+             && IsBlackFogNotOnField()
              && gBattleMons[gBattlerTarget].statStages[STAT_ATK] < MAX_STAT_STAGE)    //not max atk
             {
                 if (gDisableStructs[gBattlerAttacker].rageCounter != 5)
@@ -7193,15 +7208,15 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                 gBattlescriptCurrInstr = BattleScript_RageIsBuilding;
                 effect = TRUE;
             }
-            else if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE
+            /*else if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE //would be any time miss, with ANY attack, so don't really want that
             && gBattleMoves[gCurrentMove].power
-            && (gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
+            && (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) //think changing to put w attack cancelers so freeze, sleep paralysis spirit lock pressure & think flinch
             {
-                gDisableStructs[gBattlerAttacker].rageCounter = 0;
+                ClearRageStatuses();
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_RageEnds; //tested and works, just need make message
                 effect = TRUE;
-            }
+            } //so removing this, and putting in canclers instead  */
             ++gBattleScripting.atk49_state;
             break;
         case MOVE_END_ROOST:
@@ -7218,10 +7233,8 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
              && gBattleMons[gBattlerTarget].hp != 0
              && gBattleMoveDamage != 0 // test to see if this works right. should be all damaging fire moves above 60 power can defrost.
              && gBattlerAttacker != gBattlerTarget
-             //&& gSpecialStatuses[gBattlerTarget].specialDmg  //important MIGHT need to remove this think this is a leftover from split based on type
              && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-             && (gBattleMoves[gCurrentMove].power >= 60 || gDynamicBasePower >= 60)
-             && ((moveType == TYPE_FIRE) || gCurrentMove == MOVE_SCALD))
+             && (CanThaw(gCurrentMove))) //test vsonic
             {
                 gBattleMons[gBattlerTarget].status1 &= ~(STATUS1_FREEZE);
                 gActiveBattler = gBattlerTarget;

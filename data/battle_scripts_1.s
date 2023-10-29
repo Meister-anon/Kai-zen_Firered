@@ -3880,7 +3880,7 @@ BattleScript_EffectRage::
 
 BattleScript_RageMiss::
 	setmoveeffect MOVE_EFFECT_RAGE
-	clearstatusfromeffect BS_ATTACKER @couter cleared w move end custom message setup done
+	clearstatusfromeffect BS_ATTACKER @couter cleared w move end custom message setup done in move end
 	goto BattleScript_MoveMissedPause
 
 BattleScript_EffectMimic::
@@ -5744,7 +5744,7 @@ BattleScript_BrickBreakNoScreens::
 BattleScript_EffectYawn::
 	attackcanceler
 	attackstring
-	ppreduce
+	ppreduce	
 	jumpifability BS_TARGET, ABILITY_VITAL_SPIRIT, BattleScript_PrintBankAbilityMadeIneffective
 	jumpifability BS_TARGET, ABILITY_INSOMNIA, BattleScript_PrintBankAbilityMadeIneffective
 	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_PrintBankAbilityMadeIneffective
@@ -5753,7 +5753,7 @@ BattleScript_EffectYawn::
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
 	jumpifsafeguard BattleScript_SafeguardProtected
-	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
+	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	jumpifcantmakeasleep BattleScript_ButItFailed
 	setyawn BattleScript_ButItFailed
 	attackanimation

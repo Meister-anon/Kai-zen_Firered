@@ -780,6 +780,54 @@ bool32 DoesPranksterBlockMove(u16 move, u8 battlerwithPrankster, u8 battlerDef, 
     return TRUE;
 }
 
+enum   //battler end turn
+{
+    ENDTURN_INGRAIN,
+    ENDTURN_AQUA_RING,
+    ENDTURN_ABILITIES,
+    ENDTURN_ITEMS1,
+    ENDTURN_LEECH_SEED,
+    ENDTURN_POISON,
+    ENDTURN_BAD_POISON,
+    ENDTURN_BURN,
+    ENDTURN_FREEZE,
+    ENDTURN_NIGHTMARES,
+    ENDTURN_CURSE,
+    ENDTURN_BIND,
+    ENDTURN_WRAP,
+    ENDTURN_CLAMP,
+    ENDTURN_SWARM, 
+    ENDTURN_SNAPTRAP,
+    ENDTURN_ENVIRONMENT_TRAP,
+    ENDTURN_OCTOLOCK,
+    ENDTURN_UPROAR,
+    ENDTURN_THRASH,
+    ENDTURN_FLINCH,
+    ENDTURN_DISABLE,
+    ENDTURN_ENCORE,
+    ENDTURN_MAGNET_RISE,
+    ENDTURN_TELEKINESIS,
+    ENDTURN_LOCK_ON,
+    ENDTURN_CHARGE,
+    ENDTURN_LASER_FOCUS,
+    ENDTURN_TAUNT,
+    ENDTURN_YAWN,
+    ENDTURN_SLEEP,
+    ENDTURN_ITEMS2,
+    ENDTURN_ORBS,
+    ENDTURN_ROOST,
+    ENDTURN_ELECTRIFY,
+    ENDTURN_POWDER,
+    //ENDTURN_INFESTATION,  //changed to non-damaging debuff status
+    ENDTURN_THROAT_CHOP,
+    ENDTURN_SLOW_START,
+    ENDTURN_PLASMA_FISTS,
+    ENDTURN_BIDE,
+    ENDTURN_BATTLER_COUNT
+};
+
+//seems this keeps track of every place function is used,and does cancel in different ways
+//based on the condition in the place its set ex. cancel for yawn, cancel for sleep or freeze
 void CancelMultiTurnMoves(u8 battler)
 {
     gBattleMons[battler].status2 &= ~(STATUS2_MULTIPLETURNS);
@@ -810,9 +858,9 @@ void CancelMultiTurnMoves(u8 battler)
         // If target was sky dropped in the middle of Outrage/Thrash/Petal Dance,
         // confuse them upon release and display "confused by fatigue" message & animation.
         // Don't do this if this CancelMultiTurnMoves is caused by falling asleep via Yawn.
-        if (gBattleMons[otherSkyDropper].status2 & STATUS2_LOCK_CONFUSE && gBattleStruct->turnEffectsTracker != 24)
+        if (gBattleMons[otherSkyDropper].status2 & STATUS2_LOCK_CONFUSE && gBattleStruct->turnEffectsTracker != ENDTURN_YAWN)
         {
-            gBattleMons[otherSkyDropper].status2 &= ~(STATUS2_LOCK_CONFUSE);
+            gBattleMons[otherSkyDropper].status2 &= ~(STATUS2_LOCK_CONFUSE); //had replace setup above with constant as changed order of effects
 
             // If the target can be confused, confuse them.
             // Don't use CanBeConfused, can cause issues in edge cases.
@@ -830,7 +878,7 @@ void CancelMultiTurnMoves(u8 battler)
                 }
                 // If this CancelMultiTurnMoves is occuring due to VARIOUS_GRAVITY_ON_AIRBORNE_MONS
                 // Reapplying STATUS3_SKY_DROPPED allows for avoiding unecessary messages when Gravity is applied to the target.
-                else if (gBattlescriptCurrInstr[0] == 0x76 && gBattlescriptCurrInstr[2] == 76)
+                else if (gBattlescriptCurrInstr[0] == 0x76 && gBattlescriptCurrInstr[2] == VARIOUS_GRAVITY_ON_AIRBORNE_MONS) //replaced w constant
                 {
                     gBattleStruct->skyDropTargets[battler] = 0xFE;
                     gStatuses3[otherSkyDropper] |= STATUS3_SKY_DROPPED;
@@ -861,7 +909,7 @@ void CancelMultiTurnMoves(u8 battler)
     }
 
     gDisableStructs[battler].rolloutTimer = 0; //replace fury hitcounter was here with rage counter
-    gDisableStructs[battler].rageCounter = 0;
+
 }
 
 bool8 WasUnableToUseMove(u8 battler)
@@ -2090,7 +2138,7 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
     ENDTURN_BATTLER_COUNT
 };*/
 
-enum   //battler end turn
+/*enum   //battler end turn  moved to top 
 {
     ENDTURN_INGRAIN,
     ENDTURN_AQUA_RING,
@@ -2134,7 +2182,7 @@ enum   //battler end turn
     ENDTURN_PLASMA_FISTS,
     ENDTURN_BIDE,
     ENDTURN_BATTLER_COUNT
-};
+};*/
 
 
 
@@ -3117,13 +3165,10 @@ bool8 HandleFaintedMonActions(void)
     return FALSE;
 }
 
-void TryClearRageStatuses(void) //remove rage if  move used other than rage, changed so just don't call this
+void ClearRageStatuses(void) //remove rage if  move used other than rage, changed so just don't call this
 {
-    s32 i;
-
-    for (i = 0; i < gBattlersCount; ++i)
-        if ((gBattleMons[i].status2 & STATUS2_RAGE) && gChosenMoveByBattler[i] != MOVE_RAGE)
-            gBattleMons[i].status2 &= ~(STATUS2_RAGE);
+    //gDisableStructs[gBattlerAttacker].rageCounter = 0;  don't reset counter so keep power boosts, 
+    gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_RAGE);
 }
 
 enum
@@ -3289,6 +3334,12 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gBattlescriptCurrInstr = BattleScript_MoveUsedLoafingAround;
                 //BattleScriptPushCursorAndCallback(BattleScript_HealWithoutMessage);
                 //gMoveResultFlags |= MOVE_RESULT_MISSED; //this could be a problem to prevent healing? idk leave for now test later
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                {
+                    ClearRageStatuses();
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_RageEnds; //need test ok way this works it plays before script above it, think use something other than push command
+                }//well its not how I planned it but it works *shrug*
                 effect = 1; //apears to be a stopgap? will make moves miss if the truant somehow fails to stop attack
                 //also yup that move result missed line was the last issue, making move miss got rid of damage
             }
@@ -3309,7 +3360,7 @@ u8 AtkCanceller_UnableToUseMove(void)
         case CANCELLER_BLACK_FOG: // fly sky drop block
             if (!IsBlackFogNotOnField()) // black fog on field
             {
-                if ((gCurrentMove == MOVE_FLY) || (gCurrentMove == MOVE_SKY_DROP))
+                if ((gCurrentMove == MOVE_FLY) || (gCurrentMove == MOVE_SKY_DROP) || (gCurrentMove == MOVE_BOUNCE)) //make list for these
                 {
                     CancelMultiTurnMoves(gBattlerAttacker);
                     gBattlescriptCurrInstr = BattleScript_ButItFailed; //could make custom script leave as is for now, need test vsonic
@@ -3351,8 +3402,15 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gProtectStructs[gBattlerAttacker].flinchImmobility = 1;
                 CancelMultiTurnMoves(gBattlerAttacker);
                 gBattlescriptCurrInstr = BattleScript_MoveUsedFlinched;
-                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;                              
-                effect = 1;
+                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;     
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                {
+                    ClearRageStatuses();
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_RageEnds; //need test worry would overright message
+                }                         
+                effect = 1; //think doesn't work as would go to move end
+                
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
@@ -3497,6 +3555,12 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                {
+                    ClearRageStatuses();
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
+                }
                 effect = 1;
             }
             ++gBattleStruct->atkCancellerTracker;
@@ -3509,6 +3573,12 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MovePressureCanceler;
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                {
+                    ClearRageStatuses();
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
+                }
                 effect = 1;
             }
             else if (((GetBattlerAbility(gBattlerTarget) == ABILITY_HI_PRESSURE) //for legendaries only
@@ -3518,6 +3588,12 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MovePressureCanceler;
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                {
+                    ClearRageStatuses();
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
+                }
                 effect = 1;
             }
             ++gBattleStruct->atkCancellerTracker;
@@ -3528,6 +3604,12 @@ u8 AtkCanceller_UnableToUseMove(void)
                 //gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 //gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                {
+                    ClearRageStatuses();
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
+                }
                 effect = 1;
             } //vsonic add on to/finish effedct
             ++gBattleStruct->atkCancellerTracker;
@@ -9556,16 +9638,20 @@ u32 GetBattlerHoldEffectParam(u8 battlerId)
 
 bool8 IsMoveMakingContact(u16 move, u8 battlerAtk)
 {
+    u8 contact = FALSE;
+
     if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT))
-        return FALSE;
+        contact = FALSE;
+    if (GetBattlerAbility(battlerAtk) == ABILITY_MUSCLE_MAGIC)
+        contact = TRUE;
     else if (GetBattlerAbility(battlerAtk) == ABILITY_LONG_REACH)
-        return FALSE;
-    else if (GetBattlerAbility(battlerAtk) == ABILITY_MUSCLE_MAGIC)
-        return TRUE;
-    else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PROTECTIVE_PADS)
-        return FALSE;
+        contact = FALSE;
+    if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PROTECTIVE_PADS)
+        contact = FALSE;
     else
-        return TRUE;
+        contact = TRUE;
+
+    return contact;
 }
 
 //understand why thsi is here now, later gen knock off fully remove the item held
