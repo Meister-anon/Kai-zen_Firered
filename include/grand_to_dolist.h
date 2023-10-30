@@ -1546,6 +1546,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   for better balance, made  atk cancelers for status and truant remove rage status, doesn't affect rage counter
   sleep freeze paralysis pressure flinch spirit lock (when its done) and truant
 
+  -still working on this, plan changed to put rage end message before normal status messages. search BattleScript_RageEnds
+
+  rage looks fixed, foudn and fixed issue with contact abilities,  need add faint message for stench and neutraliing gas removal -eventually
+
   -yawn change works, still testing but rage status removal seems to be solid
 
   *note go back and fix pickup display text,  give it a pause on the string - perfect that works great now

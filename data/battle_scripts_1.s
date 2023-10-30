@@ -7535,7 +7535,7 @@ BattleScript_DefrostedViaFireMove::
 	return
 
 BattleScript_DefrostBattler_KeepStatus::
-	printstring STRINGID_DEFROST_POKEMON
+	printstring STRINGID_PKMNWASDEFROSTED2
 	waitmessage 0x40
 	return
 

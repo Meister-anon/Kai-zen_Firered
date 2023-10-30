@@ -4522,19 +4522,17 @@ void SetMoveEffect(bool32 primary, u32 certain)
         case STATUS1_PARALYSIS:
         {
             u8 movetype;
-            GET_MOVE_TYPE(gCurrentMove,movetype)
+            GET_MOVE_TYPE(gCurrentMove,movetype) //unsure if this will be tracking the corret battler ie effect battler
 
-            if (!(CanBeParalyzed(gEffectBattler)) 
-            || (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_ELECTRIC) && movetype == TYPE_ELECTRIC))  //replaced did setup for custom paralysis in cleaner function
+            if (battlerAbility == ABILITY_LIMBER || battlerAbility == ABILITY_COMATOSE)
             {
                 if (primary == TRUE || certain == MOVE_EFFECT_CERTAIN)
                 {
-                    if (battlerAbility == ABILITY_LIMBER || battlerAbility == ABILITY_COMATOSE)
                     gLastUsedAbility = battlerAbility;
                     RecordAbilityBattle(gEffectBattler, gLastUsedAbility);
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
                     gBattlescriptCurrInstr = BattleScript_PRLZPrevention;
-                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                    gBattleCommunication[MULTISTRING_CHOOSER] = 0; //ability status prevention
                     return;
                 }
                 else
@@ -4551,7 +4549,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 return;
             }//vsonic IMPORTANT*/
 
-            if (!(CanBeParalyzed(gEffectBattler)) 
+            if (!(CanBeParalyzed(gEffectBattler)) //thought caused logic error but its fine, there are no gaps
             || (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_ELECTRIC) && movetype == TYPE_ELECTRIC))
                 break;
 
@@ -4626,22 +4624,22 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gBattleMons[gEffectBattler].status1 |= ((Random() % 3) + 3); //duration of sleep, and its 2-5 here. /changed to 2-4 /guarantees 1 free turn unless earlybird  //confirmed
                     gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
                     
-                    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                    if (gBattleMons[gEffectBattler].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
                     {
-                        ClearRageStatuses();
+                        ClearRageStatuses(gEffectBattler);
                         BattleScriptPushCursor();
-                        gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
-                    }
+                        gBattlescriptCurrInstr = BattleScript_RageEnds; //need test doesn't work, no message
+                    } //just realized I'm not activating this logic since I'm using yawn, that bypasses this function
                 }
             else if (sStatusFlagsForMoveEffects[gBattleScripting.moveEffect] == STATUS1_FREEZE)
             {
-                gDisableStructs[gEffectBattler].FrozenTurns = 3;    
+                gDisableStructs[gEffectBattler].FrozenTurns = 3;    //means 2 turns of freeze
                 gBattleMons[gEffectBattler].status1 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
                 gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
 
-                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                if (gBattleMons[gEffectBattler].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
                 {
-                    ClearRageStatuses();
+                    ClearRageStatuses(gEffectBattler);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
                 }

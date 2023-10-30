@@ -2895,7 +2895,14 @@ u8 DoBattlerEndTurnEffects(void)
                         BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
                         MarkBattlerForControllerExec(gActiveBattler);
                         gEffectBattler = gActiveBattler;
-                        BattleScriptExecute(BattleScript_YawnMakesAsleep); //need test
+                        BattleScriptExecute(BattleScript_YawnMakesAsleep); //need test - works
+
+                        if (gBattleMons[gActiveBattler].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                        {
+                            ClearRageStatuses(gActiveBattler);
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_RageEnds; //ok works
+                        }
                         ++effect;
                     }
                 }
@@ -3165,10 +3172,10 @@ bool8 HandleFaintedMonActions(void)
     return FALSE;
 }
 
-void ClearRageStatuses(void) //remove rage if  move used other than rage, changed so just don't call this
+void ClearRageStatuses(u8 battler) //remove rage if  move used other than rage, changed so just don't call this
 {
     //gDisableStructs[gBattlerAttacker].rageCounter = 0;  don't reset counter so keep power boosts, 
-    gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_RAGE);
+    gBattleMons[battler].status2 &= ~(STATUS2_RAGE);
 }
 
 enum
@@ -3336,7 +3343,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 //gMoveResultFlags |= MOVE_RESULT_MISSED; //this could be a problem to prevent healing? idk leave for now test later
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
                 {
-                    ClearRageStatuses();
+                    ClearRageStatuses(gBattlerAttacker);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_RageEnds; //need test ok way this works it plays before script above it, think use something other than push command
                 }//well its not how I planned it but it works *shrug*
@@ -3405,7 +3412,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;     
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
                 {
-                    ClearRageStatuses();
+                    ClearRageStatuses(gBattlerAttacker);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_RageEnds; //need test worry would overright message
                 }                         
@@ -3557,7 +3564,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
                 {
-                    ClearRageStatuses();
+                    ClearRageStatuses(gBattlerAttacker);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
                 }
@@ -3575,7 +3582,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
                 {
-                    ClearRageStatuses();
+                    ClearRageStatuses(gBattlerAttacker);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
                 }
@@ -3590,7 +3597,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
                 {
-                    ClearRageStatuses();
+                    ClearRageStatuses(gBattlerAttacker);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
                 }
@@ -3606,7 +3613,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
                 {
-                    ClearRageStatuses();
+                    ClearRageStatuses(gBattlerAttacker);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
                 }
@@ -5722,7 +5729,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         ++effect;
                     }
                     break;
-                SOLAR_POWER_HP_DROP:
                 case ABILITY_SOLAR_POWER:
                     if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
                     {
@@ -5885,13 +5891,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             break;
         case ABILITYEFFECT_MOVES_BLOCK: // 2
-        {
-            u16 moveTarget = GetBattlerMoveTargetType(battler, move);
+        {   
+            u16 moveTarget = GetBattlerMoveTargetType(battler, moveArg);
             u16 battlerAbility = GetBattlerAbility(battler);
             u16 targetAbility = GetBattlerAbility(gBattlerTarget);
 
-            if ((gLastUsedAbility == ABILITY_SOUNDPROOF && gBattleMoves[move].flags & FLAG_SOUND && !(moveTarget & MOVE_TARGET_USER))
-                || (gLastUsedAbility == ABILITY_BULLETPROOF && gBattleMoves[move].flags & FLAG_BALLISTIC))
+            if ((gLastUsedAbility == ABILITY_SOUNDPROOF && gBattleMoves[moveArg].flags & FLAG_SOUND && !(moveTarget & MOVE_TARGET_USER))
+                || (gLastUsedAbility == ABILITY_BULLETPROOF && gBattleMoves[moveArg].flags & FLAG_BALLISTIC))
             {
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)
                     gHitMarker |= HITMARKER_NO_PPDEDUCT;
@@ -5908,7 +5914,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattlescriptCurrInstr = BattleScript_DazzlingProtected;
                 effect = 1;
             }
-            else if (DoesPranksterBlockMove(move, gBattlerAttacker, gBattlerTarget, TRUE) && !(IS_MOVE_STATUS(move) && targetAbility == ABILITY_MAGIC_BOUNCE))
+            else if (DoesPranksterBlockMove(moveArg, gBattlerAttacker, gBattlerTarget, TRUE) && !(IS_MOVE_STATUS(moveArg) && targetAbility == ABILITY_MAGIC_BOUNCE))
             {
                 if (!(gBattleTypeFlags & BATTLE_TYPE_DOUBLE) || !(moveTarget & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY)))
                     CancelMultiTurnMoves(gBattlerAttacker); // Don't cancel moves that can hit two targets bc one target might not be protected
@@ -5916,7 +5922,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattlescriptCurrInstr = BattleScript_DarkTypePreventsPrankster;
                 effect = 1;
             }
-            else if (gLastUsedAbility == ABILITY_ICE_FACE && IS_MOVE_PHYSICAL(move) && gBattleMons[gBattlerTarget].species == SPECIES_EISCUE)
+            else if (gLastUsedAbility == ABILITY_ICE_FACE && IS_MOVE_PHYSICAL(moveArg) && gBattleMons[gBattlerTarget].species == SPECIES_EISCUE)
             {
                 gBattleMons[gBattlerTarget].species = SPECIES_EISCUE_NOICE_FACE;
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)
@@ -5968,7 +5974,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         effect = 2, statId = STAT_ATK;
                     break;
                 case ABILITY_GALEFORCE:
-                    if (gBattleMoves[move].flags & FLAG_WIND_MOVE)
+                    if (gBattleMoves[moveArg].flags & FLAG_WIND_MOVE)
                         effect = 2, statId = STAT_ATK;
                 case ABILITY_LAVA_FISSURE:
                 case ABILITY_FLASH_FIRE:
@@ -6071,7 +6077,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && gBattleMons[gBattlerAttacker].hp != 0
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED
-                    && (IsMoveMakingContact(move, gBattlerAttacker)))
+                    && (IsMoveMakingContact(moveArg, gBattlerAttacker)))
                 {
                     gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                     if (gBattleMoveDamage == 0)
@@ -6101,7 +6107,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && gBattleMons[gBattlerAttacker].hp != 0
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED
-                    && (IsMoveMakingContact(move, gBattlerAttacker)))
+                    && (IsMoveMakingContact(moveArg, gBattlerAttacker)))
                 {
                     gBattleWeather = (WEATHER_SANDSTORM_TEMPORARY);
                     BattleScriptPushCursorAndCallback(BattleScript_SandSpitActivates); //made custom as sandstream used attack while this is target specific 
@@ -6117,7 +6123,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && GetBattlerAbility(gBattlerAttacker) != ABILITY_OVERCOAT
                     && GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES
                     && TARGET_TURN_DAMAGED
-                    && (IsMoveMakingContact(move, gBattlerAttacker))
+                    && (IsMoveMakingContact(moveArg, gBattlerAttacker))
                     && (Random() % 2) == 0)
                 {
                     do
@@ -6186,14 +6192,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && gBattleMons[gBattlerAttacker].hp != 0
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED
-                    && (IsMoveMakingContact(move, gBattlerAttacker))
+                    && (IsMoveMakingContact(moveArg, gBattlerAttacker))
                     && CanBePoisoned(gBattlerTarget, gBattlerAttacker) //need remember battlerTarget is spot for one to be poisoned
                     && (Random() % 3) == 0)
                 {
                     gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_POISON;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
-                    ++effect;
+                    ++effect; //suddenly just started working?? issue was my contact function, I redid it a lil while back now it works
                 }
                 break;
             case ABILITY_STATIC:
@@ -6203,7 +6209,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && TARGET_TURN_DAMAGED
                     && CanBeParalyzed(gBattlerAttacker)
                     && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ELECTRIC)
-                    && (IsMoveMakingContact(move, gBattlerAttacker))
+                    && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)
+                    && (IsMoveMakingContact(moveArg, gBattlerAttacker)) //ok only thing I can gather from this is its not setting affect certaain, that's why odds are so low
                     && (Random() % 3) == 0)
                 {
                     gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_PARALYSIS;
@@ -6217,7 +6224,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && gBattleMons[gBattlerAttacker].hp != 0
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && CanBeBurned(gBattlerAttacker)
-                    && (IsMoveMakingContact(move, gBattlerAttacker))
+                    && (IsMoveMakingContact(moveArg, gBattlerAttacker))
                     && TARGET_TURN_DAMAGED
                     && (Random() % 3) == 0)
                 {
@@ -6233,7 +6240,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED
                     //&& IsBattlerAlive(battler) remove this part, so affect activates even if I faint
-                    && IsMoveMakingContact(move, gBattlerAttacker))
+                    && IsMoveMakingContact(moveArg, gBattlerAttacker))
                 {
                     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_STICKY_HOLD)
                     {
@@ -6269,7 +6276,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && gBattleMons[gBattlerAttacker].hp != 0
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
-                    && (IsMoveMakingContact(move, gBattlerAttacker))
+                    && (IsMoveMakingContact(moveArg, gBattlerAttacker))
                     && TARGET_TURN_DAMAGED
                     && gBattleMons[gBattlerTarget].hp != 0
                     && (Random() % 3) == 0
@@ -6290,7 +6297,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED
                     && IsBattlerAlive(battler)
-                    && IsMoveMakingContact(move, gBattlerAttacker)
+                    && IsMoveMakingContact(moveArg, gBattlerAttacker)
                     && !(gStatuses3[gBattlerAttacker] & STATUS3_PERISH_SONG))
                 {
                     /*if (!(gStatuses3[battler] & STATUS3_PERISH_SONG))
@@ -6491,7 +6498,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && IsBattlerAlive(gBattlerAttacker)
                     && TARGET_TURN_DAMAGED
-                    && IsMoveMakingContact(move, gBattlerAttacker)
+                    && IsMoveMakingContact(moveArg, gBattlerAttacker)
                     && gBattleStruct->overwrittenAbilities[gBattlerAttacker] != GetBattlerAbility(gBattlerTarget))
                 {
                     switch (gBattleMons[gBattlerAttacker].ability)
@@ -6523,7 +6530,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) //WHY DO these 2 use different restriction? mummy seems to follow simplebeam/entertainment
                     && IsBattlerAlive(gBattlerAttacker)
                     && TARGET_TURN_DAMAGED
-                    && (gBattleMoves[move].flags & FLAG_MAKES_CONTACT))
+                    && (gBattleMoves[moveArg].flags & FLAG_MAKES_CONTACT))
                 {
                     switch (gBattleMons[gBattlerAttacker].ability)
                     {
@@ -6598,7 +6605,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         || GetBattlerAbility(gBattlerAttacker) == ABILITY_EMPATH)
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED
-                    && IsMoveMakingContact(move, gBattlerAttacker))
+                    && IsMoveMakingContact(moveArg, gBattlerAttacker))
                 {
                     SET_STATCHANGER(STAT_SPEED, 1, TRUE);
                     gBattleScripting.moveEffect = MOVE_EFFECT_SPD_MINUS_1;
@@ -6612,7 +6619,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && gBattleMons[gBattlerTarget].hp == 0
                     && IsBattlerAlive(gBattlerAttacker)
-                    && IsMoveMakingContact(move, gBattlerAttacker))
+                    && IsMoveMakingContact(moveArg, gBattlerAttacker))
                 {
                     u8 battler;
                     if ((battler = IsAbilityOnField(ABILITY_DAMP)))
@@ -6744,7 +6751,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && gBattleMons[gBattlerTarget].hp != 0
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && CanBePoisoned(gBattlerAttacker, gBattlerTarget)  //2nd value is battler meant to be poisoned
-                    && IsMoveMakingContact(move, gBattlerAttacker)
+                    && IsMoveMakingContact(moveArg, gBattlerAttacker)
                     && TARGET_TURN_DAMAGED // Need to actually hit the target
                     && (Random() % 3) == 0)
                 {
@@ -6761,7 +6768,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && gBattleMons[gBattlerTarget].hp != 0
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && CanBeParalyzed(gBattlerTarget)
-                    && IsMoveMakingContact(move, gBattlerAttacker)
+                    && IsMoveMakingContact(moveArg, gBattlerAttacker)
                     && TARGET_TURN_DAMAGED // Need to actually hit the target
                     && (Random() % 3) == 0)
                 {
@@ -6779,7 +6786,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && CanBeParalyzed(gBattlerTarget)
                     && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ELECTRIC) //only addition want make, static shouldn't work on electric types
-                    && IsMoveMakingContact(move, gBattlerAttacker) //not using other paralyze statemetn cuz think I already have my own logic,\ thats for moves not abilities                    
+                    && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)
+                    && IsMoveMakingContact(moveArg, gBattlerAttacker) //not using other paralyze statemetn cuz think I already have my own logic,\ thats for moves not abilities                    
                     && TARGET_TURN_DAMAGED
                     && (Random() % 3) == 0)
                 {
@@ -6795,7 +6803,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && gBattleMons[gBattlerTarget].hp != 0
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && CanBeBurned(gBattlerTarget)
-                    && IsMoveMakingContact(move, gBattlerAttacker)
+                    && IsMoveMakingContact(moveArg, gBattlerAttacker)
                     && TARGET_TURN_DAMAGED
                     && (Random() % 3) == 0)
                 {
@@ -6811,7 +6819,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED
                     && IsBattlerAlive(battler)
-                    && IsMoveMakingContact(move, gBattlerAttacker))
+                    && IsMoveMakingContact(moveArg, gBattlerAttacker))
                 {
                     if (GetBattlerAbility(gBattlerTarget) == ABILITY_STICKY_HOLD)
                     {
@@ -9638,20 +9646,28 @@ u32 GetBattlerHoldEffectParam(u8 battlerId)
 
 bool8 IsMoveMakingContact(u16 move, u8 battlerAtk)
 {
-    u8 contact = FALSE;
+
+    u16 atkHoldEffect = GetBattlerHoldEffect(battlerAtk, TRUE);
 
     if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT))
-        contact = FALSE;
-    if (GetBattlerAbility(battlerAtk) == ABILITY_MUSCLE_MAGIC)
-        contact = TRUE;
-    else if (GetBattlerAbility(battlerAtk) == ABILITY_LONG_REACH)
-        contact = FALSE;
-    if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_PROTECTIVE_PADS)
-        contact = FALSE;
+    {
+        if (gBattleMoves[move].effect == EFFECT_SHELL_SIDE_ARM && gBattleStruct->swapDamageCategory)
+            return TRUE;
+        else if (GetBattlerAbility(battlerAtk) == ABILITY_MUSCLE_MAGIC)
+            return TRUE;
+        else
+            return FALSE;
+    }
+    else if (atkHoldEffect == HOLD_EFFECT_PROTECTIVE_PADS
+           || GetBattlerAbility(battlerAtk) == ABILITY_LONG_REACH)
+    {
+        return FALSE;
+    }
     else
-        contact = TRUE;
+    {
+        return TRUE;
+    }
 
-    return contact;
 }
 
 //understand why thsi is here now, later gen knock off fully remove the item held

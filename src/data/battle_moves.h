@@ -2,7 +2,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 {
     [MOVE_NONE] =
     {
-        .effect = MOVE_EFFECT_SPIRIT_LOCK, //put here just so would compile, ie has a place where define is used
+        .effect = EFFECT_HIT, //put here just so would compile, ie has a place where define is used
         .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 0,
@@ -3943,7 +3943,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-    },
+    },//makes sense to be a contact move, but no way to make work right with contact effects
 
     [MOVE_FAKE_OUT] =
     {
@@ -11992,13 +11992,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_FLASH_FREEZE,   //ice will o wisp - give to regice also need to make animation maybe just use sheer cold animation? done
         .power = 0,
         .type = TYPE_ICE,
-        .pp = 15,
+        .pp = 10,  //consider making a 5 pp move, but sleep powder is 15, so is sing
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_STATUS,
-    },
+    },//lowered to 10 pp, since imobilizing status have lower pp to other similar variant moves
 
     [MOVE_DRYADS_CURSE] =
     {

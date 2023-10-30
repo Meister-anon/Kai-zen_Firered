@@ -97,7 +97,7 @@ const u8 gMoveDescription_Hypnosis[] = _("Hypnotic suggestion\nis used to make t
 const u8 gMoveDescription_Meditate[] = _("The user meditates\nto awaken its power\nand raise its\nATTACK stat.");
 const u8 gMoveDescription_Agility[] = _("The user relaxes\nand lightens its\nbody to sharply\nboost its SPEED.");
 const u8 gMoveDescription_QuickAttack[] = _("An almost invisibly\nfast attack that\nis certain to strike\nfirst.");
-const u8 gMoveDescription_Rage[] = _("An attack that\nbecomes stronger\neach time the user\nis hit in battle,\nor when used again.\nType matches user.");//and when it is used, type matches that of user
+const u8 gMoveDescription_Rage[] = _("A manic rage that\ngrows stronger\nwith each attack.\nThat ends only when\nthe user can't move\nType matches user.");//and when it is used, type matches that of user
 const u8 gMoveDescription_Teleport[] = _("Use it to flee from\nany wild POKéMON.\nAlso warps to the\nlast POKé CENTER.");
 const u8 gMoveDescription_NightShade[] = _("An attack with a\nmirage that inflicts\ndamage matching\nthe user's level.");
 const u8 gMoveDescription_Mimic[] = _("The user copies the\nmove last used by\nthe foe for the\nrest of the battle.");
@@ -280,7 +280,7 @@ const u8 gMoveDescription_MagicCoat[] = _("Reflects back the\nfoe's LEECH SEED\n
 const u8 gMoveDescription_Recycle[] = _("A move that\nrecycles a used\nitem for use once\nmore.");
 const u8 gMoveDescription_Revenge[] = _("An attack move that\ngains in intensity if\nthe target has hurt\nthe user.");
 const u8 gMoveDescription_BrickBreak[] = _("An attack that also\nbreaks any barrier\nlike LIGHT SCREEN\nand REFLECT.");
-const u8 gMoveDescription_Yawn[] = _("A huge yawn lulls\nthe foe into falling\nasleep on the next\nturn.");
+const u8 gMoveDescription_Yawn[] = _("A huge yawn lulls\nthe foe into falling\nasleep at the end\nof the turn.");
 const u8 gMoveDescription_KnockOff[] = _("Knocks down the\nfoe's held item to\nprevent its use\nduring the battle.");
 const u8 gMoveDescription_Endeavor[] = _("Gains power the\nfewer HP the user\nhas compared with\nthe foe.");
 const u8 gMoveDescription_Eruption[] = _("The higher the\nuser's HP, the more\npowerful this\nattack becomes.");
@@ -1442,7 +1442,7 @@ const u8 gMoveDescription_Monotype
     [] = _("This move copies\nthe move last used\nby the foe, then\ndisappears.");
 
 const u8 gMoveDescription_FlashFreeze 
-    [] = _("Instantly freezes\nthe foe with a\ngust of sub-zero wind.");
+    [] = _("Instantly freezes\nthe foe with a gust\nof sub-zero wind.");
 
 const u8 gMoveDescription_DryadsCurse 
     [] = _("Sacrifices stats\nto curse the last foe\nwho attacked the user.");

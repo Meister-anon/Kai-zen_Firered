@@ -23,7 +23,7 @@ PalletTown_PlayersHouse_2F_FirstWarpIn:: @ 8168CC8
 
 PalletTown_PlayersHouse_2F_EventScript_NES:: @ 8168CD2
 	msgbox PalletTown_PlayersHouse_2F_Text_PlayedWithNES, MSGBOX_SIGN
-	givemon SPECIES_STEELIX, 15, ITEM_NONE  @for early game testing, for testing rival starter evo,  still testin rage messages as well
+	@givemon SPECIES_GLOOM, 8, ITEM_NONE @for early game testing,
 	end
 
 PalletTown_PlayersHouse_2F_EventScript_Sign:: @ 8168CDB
