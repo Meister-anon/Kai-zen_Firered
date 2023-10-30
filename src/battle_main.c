@@ -1908,10 +1908,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
     u8 abilityNum;  //should let set ability slot for mon
     u16 totalEVs = 0;
     u16 evs[NUM_EV_STATS];
-    u16 species;
+    u16 species,targetSpecies;
     s32 i, j;
     int l = 0;
-    u16 targetSpecies = 0;
 
     if (trainerNum == TRAINER_SECRET_BASE)
         return 0;
@@ -1962,11 +1961,12 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
                                 VarSet(VAR_RIVAL_EVO, targetSpecies);
+                                species = VarGet(VAR_RIVAL_EVO);  //Set dynamic starter, to species
                             }
-                            else
-                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
-                            
+                                                        
                         }
+                        else
+                            species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
                         //check first evo 
                         //if evolution branches preferrably pick the one with type advantage to player starter,
                         //to do this realize I need another var to hold player starter, and use basestates type (playervar) to check its type
@@ -1984,11 +1984,15 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                             targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, targetSpecies);
+                                species = VarGet(VAR_RIVAL_EVO);  //Set dynamic starter, to species
                                 VarSet(VAR_RIVAL_EVO, 0);
+                                
                             }
-                            else
-                                species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
-                        }  //check 2nd/final evo   //think evo can be set up using the evo loop in the daycare file
+                            
+                        }  //check 2nd/final evo
+                        else
+                            species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
                     }
                    else// for mon in party other than starter
                         species = partyData[i].species;
@@ -2141,35 +2145,42 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case F_TRAINER_PARTY_CUSTOM_MOVESET: //could probably get custom moves working with same trick as above but going to a different array
             { //but that can probably better be solved by getting my smart learnsets up and running
                 const struct TrainerMonNoItemCustomMoves *partyData = gTrainers[trainerNum].party.NoItemCustomMoves;
-                if (IsRivalBattle(trainerNum)) 
+                if (IsRivalBattle(trainerNum))
                 {
                     if (partyData[i].species == SPECIES_BULBASAUR
                         || partyData[i].species == SPECIES_SQUIRTLE
                         || partyData[i].species == SPECIES_CHARMANDER)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter
-                        VarSet(VAR_RIVAL_EVO, 0);
+                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter, to species
+                        VarSet(VAR_RIVAL_EVO, 0);   //gaurantees values are different, as species will never be none\ to prime evolution condition
                     }
                    else if (partyData[i].species == SPECIES_IVYSAUR
                         || partyData[i].species == SPECIES_WARTORTLE
                         || partyData[i].species == SPECIES_CHARMELEON)
                     {
-                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO)) 
+                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO))
                         {
                             if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
                                 targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
                             else
-                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
+                            
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
                                 VarSet(VAR_RIVAL_EVO, targetSpecies);
+                                species = VarGet(VAR_RIVAL_EVO);  //Set dynamic starter, to species
                             }
                             else
                                 species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
                             
                         }
                         //check first evo 
-                        
+                        //if evolution branches preferrably pick the one with type advantage to player starter,
+                        //to do this realize I need another var to hold player starter, and use basestates type (playervar) to check its type
+                        //to help ai pick evolution     actually only eevee has branch evo
+
+                        //in that case make it based on partydatea.species if its charizard be flareon, if venusaur lefeon or jolteon
+                        //and vaporeon if blastoise check what mon I put in lists again I may make the eeveelutions have 2 options per starter group
                     }
                    else if (partyData[i].species == SPECIES_VENUSAUR
                         || partyData[i].species == SPECIES_BLASTOISE
@@ -2180,11 +2191,14 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                             targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, targetSpecies);
+                                species = VarGet(VAR_RIVAL_EVO);  //Set dynamic starter, to species
                                 VarSet(VAR_RIVAL_EVO, 0);
+                                
                             }
                             else
                                 species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
-                        }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
+                        }  //check 2nd/final evo   //think evo can be set up using the evo loop in the daycare file
                     }
                    else// for mon in party other than starter
                         species = partyData[i].species;
@@ -2341,35 +2355,42 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case F_TRAINER_PARTY_HELD_ITEM: //make choose ai flags for individual pokemon, instead of party/trainer
             { //also add pp bonus setting to custom moves,for more strategy/control //important
                 const struct TrainerMonItemDefaultMoves *partyData = gTrainers[trainerNum].party.ItemDefaultMoves;
-                if (IsRivalBattle(trainerNum)) 
+                if (IsRivalBattle(trainerNum))
                 {
                     if (partyData[i].species == SPECIES_BULBASAUR
                         || partyData[i].species == SPECIES_SQUIRTLE
                         || partyData[i].species == SPECIES_CHARMANDER)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter
-                        VarSet(VAR_RIVAL_EVO, 0);
+                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter, to species
+                        VarSet(VAR_RIVAL_EVO, 0);   //gaurantees values are different, as species will never be none\ to prime evolution condition
                     }
                    else if (partyData[i].species == SPECIES_IVYSAUR
                         || partyData[i].species == SPECIES_WARTORTLE
                         || partyData[i].species == SPECIES_CHARMELEON)
                     {
-                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO)) 
+                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO))
                         {
                             if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
                                 targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
                             else
-                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
+                            
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
                                 VarSet(VAR_RIVAL_EVO, targetSpecies);
+                                species = VarGet(VAR_RIVAL_EVO);  //Set dynamic starter, to species
                             }
                             else
                                 species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
                             
                         }
                         //check first evo 
-                        
+                        //if evolution branches preferrably pick the one with type advantage to player starter,
+                        //to do this realize I need another var to hold player starter, and use basestates type (playervar) to check its type
+                        //to help ai pick evolution     actually only eevee has branch evo
+
+                        //in that case make it based on partydatea.species if its charizard be flareon, if venusaur lefeon or jolteon
+                        //and vaporeon if blastoise check what mon I put in lists again I may make the eeveelutions have 2 options per starter group
                     }
                    else if (partyData[i].species == SPECIES_VENUSAUR
                         || partyData[i].species == SPECIES_BLASTOISE
@@ -2380,11 +2401,14 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                             targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, targetSpecies);
+                                species = VarGet(VAR_RIVAL_EVO);  //Set dynamic starter, to species
                                 VarSet(VAR_RIVAL_EVO, 0);
+                                
                             }
                             else
                                 species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
-                        }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
+                        }  //check 2nd/final evo   //think evo can be set up using the evo loop in the daycare file
                     }
                    else// for mon in party other than starter
                         species = partyData[i].species;
@@ -2531,35 +2555,42 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
             case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
             {
                 const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerNum].party.ItemCustomMoves;
-                if (IsRivalBattle(trainerNum)) 
+                if (IsRivalBattle(trainerNum))
                 {
                     if (partyData[i].species == SPECIES_BULBASAUR
                         || partyData[i].species == SPECIES_SQUIRTLE
                         || partyData[i].species == SPECIES_CHARMANDER)
                     {
-                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter
-                        VarSet(VAR_RIVAL_EVO, 0);
+                        species = VarGet(VAR_RIVAL_STARTER);  //Set dynamic starter, to species
+                        VarSet(VAR_RIVAL_EVO, 0);   //gaurantees values are different, as species will never be none\ to prime evolution condition
                     }
                    else if (partyData[i].species == SPECIES_IVYSAUR
                         || partyData[i].species == SPECIES_WARTORTLE
                         || partyData[i].species == SPECIES_CHARMELEON)
                     {
-                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO)) 
+                        if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO))
                         {
                             if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
                                 targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
                             else
-                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
+                            
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
                                 VarSet(VAR_RIVAL_EVO, targetSpecies);
+                                species = VarGet(VAR_RIVAL_EVO);  //Set dynamic starter, to species
                             }
                             else
                                 species = VarGet(VAR_RIVAL_STARTER); //if can evolve do first evolution, otherwise stay the same
                             
                         }
                         //check first evo 
-                        
+                        //if evolution branches preferrably pick the one with type advantage to player starter,
+                        //to do this realize I need another var to hold player starter, and use basestates type (playervar) to check its type
+                        //to help ai pick evolution     actually only eevee has branch evo
+
+                        //in that case make it based on partydatea.species if its charizard be flareon, if venusaur lefeon or jolteon
+                        //and vaporeon if blastoise check what mon I put in lists again I may make the eeveelutions have 2 options per starter group
                     }
                    else if (partyData[i].species == SPECIES_VENUSAUR
                         || partyData[i].species == SPECIES_BLASTOISE
@@ -2570,15 +2601,18 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                             targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
+                                VarSet(VAR_RIVAL_EVO, targetSpecies);
+                                species = VarGet(VAR_RIVAL_EVO);  //Set dynamic starter, to species
                                 VarSet(VAR_RIVAL_EVO, 0);
+                                
                             }
                             else
                                 species = VarGet(VAR_RIVAL_STARTER); //if can evolve do second evolution otherwise stay the same
-                        }  //check 2nd evo   //think evo can be set up using the evo loop in the daycare file
+                        }  //check 2nd/final evo   //think evo can be set up using the evo loop in the daycare file
                     }
-                   else// for mon in rival party other than starter
+                   else// for mon in party other than starter
                         species = partyData[i].species;
-                }//need correct logic with this, I think its excluding rivals from the rest of this logic.
+                }
                 else// for non rival mon
                     species = partyData[i].species;
 

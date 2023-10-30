@@ -1534,6 +1534,8 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   tested looks like it is broken I'm so sure it worked before so idk wth us going on with this
   instead of evolving the stored starter species, its just copying the data of the mon before it...
+  identified issue, it copies previous mon value when party size is larger than species data,
+  it wasn't properly setting a species to teh slot, that was the issue, because it couldn't read a species it copied last mon
 
  //new effect for rage instead boost attack raise move power for rage each boost, formula gbattlemovepower = power + (10 * rage counter)
  //assume hit each turn and use each turn after first use, move gains 20 power each turn
