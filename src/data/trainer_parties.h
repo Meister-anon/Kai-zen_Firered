@@ -4441,7 +4441,7 @@ static const struct TrainerMonNoItemDefaultMoves sTrainerMons_RivalRoute22EarlyB
                 [SpDefenseEV] = 0
                 },
         .lvl = 9,
-        .species = SPECIES_STEELIX,
+        .species = SPECIES_BULBASAUR,
 
     },
 };

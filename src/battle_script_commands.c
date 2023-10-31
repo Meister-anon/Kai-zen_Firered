@@ -15288,10 +15288,10 @@ static void atkC1_hiddenpowercalc(void)
 
     //I hesitate on that beause in that case, the boost would always be active,
     //unless facing much lower level pokemon.   will need balance test
-    if (i > 0)// && moveSplit == SPLIT_PHYSICAL)
+    if (i > 0 && moveSplit == SPLIT_PHYSICAL)
         gDynamicBasePower = gDynamicBasePower * 13 / 10; //boosted from 17 to 50 just to see if it works
 
-    else if (j > 0)// && moveSplit == SPLIT_SPECIAL)
+    else if (j > 0 && moveSplit == SPLIT_SPECIAL)
         gDynamicBasePower = gDynamicBasePower * 13 / 10; //doesn't seem to be workign, I'll swap to gdynamic
     //O.o now it works ...ow   
 

@@ -2450,6 +2450,9 @@ static void BufferMonMoves(void)
 
 static void BufferMonMoveI(u8 i)//think this is the menu/function I need has move index and pp ony one in file that uses gMoveNames //transform need change
 {
+    u32 powerBits;
+    u32 hiddenpower,power;
+    power = gBattleMoves[sMonSummaryScreen->moveIds[i]].power;
     if (i < 4)
         sMonSummaryScreen->moveIds[i] = GetMonMoveBySlotId(&sMonSummaryScreen->currentMon, i);
 
@@ -2464,8 +2467,28 @@ static void BufferMonMoveI(u8 i)//think this is the menu/function I need has mov
         return;
     }
 
+    if (sMonSummaryScreen->moveIds[i] == MOVE_HIDDEN_POWER)
+    {
+        s32 typeBits = ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_IV) & 1) << 0)
+        | ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_IV) & 1) << 1)
+        | ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_IV) & 1) << 2)
+        | ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_IV) & 1) << 3)
+        | ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_IV) & 1) << 4)
+        | ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_IV) & 1) << 5);
+
+
+        u32 type = (((NUMBER_OF_MON_TYPES - 4) * typeBits) / 63 + 1); //think changing from 15 to 16 adds one more type to options so now have fairy
+        if (type == TYPE_MYSTERY || type == TYPE_SOUND)
+            type = TYPE_FAIRY; // or may need to increase it by 6 to get over other types to 21 since the +1 and ++ adds 2 tellign the last type added
+        //type |= F_DYNAMIC_TYPE_1 | F_DYNAMIC_TYPE_2; //no idea why removing this fixed it but guess makes sense?
+        sMonSummaryScreen->moveTypes[i] = type;
+    }
+    else 
+        sMonSummaryScreen->moveTypes[i] = gBattleMoves[sMonSummaryScreen->moveIds[i]].type;// if works right should set hidden power to display its type in summary screen
+        //was playing on keeping this unknown to test but realistic people won't want to use it 
+        //if they don't know what its doing
+
     sMonSummaryScreen->numMoves++;
-    sMonSummaryScreen->moveTypes[i] = gBattleMoves[sMonSummaryScreen->moveIds[i]].type;
     StringCopy(sMonSummaryScreen->summary.moveNameStrBufs[i], gMoveNames[sMonSummaryScreen->moveIds[i]]);
 
     if (i >= 4 && sMonSummaryScreen->mode == PSS_MODE_SELECT_MOVE)//assume it would only be greater than 4 if its a new move that is being learned when you already have 4
@@ -2485,12 +2508,26 @@ static void BufferMonMoveI(u8 i)//think this is the menu/function I need has mov
     }
 
     sMonSkillsPrinterXpos->curPp[i] = GetRightAlignXpos_NDigits(2, sMonSummaryScreen->summary.moveCurPpStrBufs[i]);
-    sMonSkillsPrinterXpos->maxPp[i] = GetRightAlignXpos_NDigits(2, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);
+    sMonSkillsPrinterXpos->maxPp[i] = GetRightAlignXpos_NDigits(2, sMonSummaryScreen->summary.moveMaxPpStrBufs[i]);    
 
-    if (gBattleMoves[sMonSummaryScreen->moveIds[i]].power <= 1)
+    powerBits = ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_IV) & 2) >> 1)
+        | ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_IV) & 2) << 0)
+        | ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_IV) & 2) << 1)
+        | ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_IV) & 2) << 2)
+        | ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_IV) & 2) << 3)
+        | ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_IV) & 2) << 4);
+    
+    hiddenpower = (40 * powerBits) / 63 + 30;
+
+    if (gMoveNames[sMonSummaryScreen->moveIds[i]] == gMoveNames[MOVE_HIDDEN_POWER])
+        power = hiddenpower;
+    else
+        power = gBattleMoves[sMonSummaryScreen->moveIds[i]].power;
+
+    if (power <= 1 && (!(gMoveNames[sMonSummaryScreen->moveIds[i]] == gMoveNames[MOVE_HIDDEN_POWER])))
         StringCopy(sMonSummaryScreen->summary.movePowerStrBufs[i], gText_ThreeHyphens);//the part that makes status/non-damage moves show as hyphens instead of a power
     else
-        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.movePowerStrBufs[i], gBattleMoves[sMonSummaryScreen->moveIds[i]].power, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        ConvertIntToDecimalStringN(sMonSummaryScreen->summary.movePowerStrBufs[i], power, STR_CONV_MODE_RIGHT_ALIGN, 3);
 
     if (gBattleMoves[sMonSummaryScreen->moveIds[i]].accuracy == 0)
         StringCopy(sMonSummaryScreen->summary.moveAccuracyStrBufs[i], gText_ThreeHyphens);//same as above but for accuracy
@@ -3573,23 +3610,8 @@ static void PokeSum_DrawMoveTypeIcons(void) //idea get icons to print on window 
     {
         if (sMonSummaryScreen->moveIds[i] == MOVE_NONE)
             continue;
-        /*if (sMonSummaryScreen->moveIds[i] == MOVE_HIDDEN_POWER)
-        {
-            s32 typeBits = ((gBattleMons[gBattlerAttacker].hpIV & 1) << 0)
-                | ((gBattleMons[gBattlerAttacker].attackIV & 1) << 1)
-                | ((gBattleMons[gBattlerAttacker].defenseIV & 1) << 2)
-                | ((gBattleMons[gBattlerAttacker].speedIV & 1) << 3)
-                | ((gBattleMons[gBattlerAttacker].spAttackIV & 1) << 4)
-                | ((gBattleMons[gBattlerAttacker].spDefenseIV & 1) << 5);
 
-            u8 type = ((NUMBER_OF_MON_TYPES - 3) * typeBits) / 63 + 1; //think changing from 15 to 16 adds one more type to options so now have fairy
-            if (type == TYPE_MYSTERY)
-                type = TYPE_FAIRY; // or may need to increase it by 6 to get over other types to 21 since the +1 and ++ adds 2 tellign the last type added
-            type |= F_DYNAMIC_TYPE_1 | F_DYNAMIC_TYPE_2;
-            sMonSummaryScreen->moveTypes[i] = type;
-        }*/ // if works right should set hidden power to display its type in summary screen
-        //was playing on keeping this unknown to test but realistic people won't want to use it 
-        //if they don't know what its doing
+        
 
         if (i == 0)
 

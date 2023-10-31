@@ -1550,6 +1550,16 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   rage looks fixed, foudn and fixed issue with contact abilities,  need add faint message for stench and neutraliing gas removal -eventually
 
+  - plan make value to store rival starters ability num from first rival battle in oak lab, then use it to set the same ability 
+  so at least that never changes for the whole game.
+  - make g value, in battlemain default it to 0, in npc party for rival is first form,
+  if g value not 0, use it to set abilityNum 
+  else if g value is 0, take abilitynum after its set and store it in value.
+  that way it'll be used for all other fights
+  should default to 0, and be set to 0 at game start or I could just use a var I guess either works
+  if I can store them with vars then I potentially store all abilitys for entire party but mon switch up I think,
+  so think I'd prefer just to do it for starter
+
   -yawn change works, still testing but rage status removal seems to be solid
 
   *note go back and fix pickup display text,  give it a pause on the string - perfect that works great now

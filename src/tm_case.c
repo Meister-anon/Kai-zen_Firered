@@ -850,9 +850,11 @@ static void TMCase_MoveCursor_UpdatePrintedDescription(s32 itemIndex)
         TintPartyMonIcons(itemId - ITEM_TM01);
 }
 
-static void FillBG2RowWithPalette_2timesNplus1(s32 a0)
+// Darkens (or subsequently lightens) the blue bg tiles around the description window when a TM/HM is selected.
+// shade=0: lighten, shade=1: darken
+static void SetDescriptionWindowShade(s32 shade)
 {
-    SetBgTilemapPalette(2, 0, 12, 30, 8, 2 * a0 + 1);
+    SetBgTilemapPalette(2, 0, 12, 30, 8, 2 * shade + 1);
     ScheduleBgCopyTilemapToVram(2);
 }
 
@@ -1014,7 +1016,7 @@ static void Task_TMCaseMain(u8 taskId)
                     break;
                 default:
                     PlaySE(SE_SELECT);
-                    FillBG2RowWithPalette_2timesNplus1(1);
+                    //SetDescriptionWindowShade(1);
                     RemoveTMCaseScrollIndicatorArrowPair();
                     PrintListMenuCursorByID_WithColorIdx(data[0], 2);
                     data[1] = input;
@@ -1030,7 +1032,7 @@ static void Task_TMCaseMain(u8 taskId)
 
 static void Subtask_ReturnToTMCaseMain(u8 taskId)
 {
-    FillBG2RowWithPalette_2timesNplus1(0);
+    //SetDescriptionWindowShade(0);
     CreateTMCaseScrollIndicatorArrowPair_Main();
     gTasks[taskId].func = Task_TMCaseMain;
 }
@@ -1426,6 +1428,7 @@ static void Task_TMCaseDude1(u8 taskId)
     }
 }
 
+//think either for just teach tv or quest log event so leave the shade for this as is
 static void Task_TMCaseDude_Playback(u8 taskId)
 {
     s16 * data = gTasks[taskId].data;
@@ -1443,7 +1446,7 @@ static void Task_TMCaseDude_Playback(u8 taskId)
     {
     case 0:
         BeginNormalPaletteFade(0xFFFF8405, 4, 0, 6, 0);
-        FillBG2RowWithPalette_2timesNplus1(1);
+        SetDescriptionWindowShade(1);
         data[8]++;
         break;
     case 1:
@@ -1497,7 +1500,7 @@ static void Task_TMCaseDude_Playback(u8 taskId)
         }
         break;
     case 8:
-        FillBG2RowWithPalette_2timesNplus1(1);
+        SetDescriptionWindowShade(1);
         TMCase_PrintMessageWithFollowupTask(taskId, 4, gPokedudeText_TMTypes, 0);
         gTasks[taskId].func = Task_TMCaseDude_Playback;
         data[8]++;
@@ -1511,7 +1514,7 @@ static void Task_TMCaseDude_Playback(u8 taskId)
     case 10:
         if (JOY_NEW(A_BUTTON | B_BUTTON))
         {
-            FillBG2RowWithPalette_2timesNplus1(0);
+            SetDescriptionWindowShade(0);
             BeginNormalPaletteFade(0x00000400, 0, 6, 0, 0);
             ClearDialogWindowAndFrameToTransparent(6, 0);
             ScheduleBgCopyTilemapToVram(1);
@@ -1519,7 +1522,7 @@ static void Task_TMCaseDude_Playback(u8 taskId)
         }
         break;
     case 18:
-        FillBG2RowWithPalette_2timesNplus1(1);
+        SetDescriptionWindowShade(1);
         TMCase_PrintMessageWithFollowupTask(taskId, 4, gPokedudeText_ReadTMDescription, NULL);
         gTasks[taskId].func = Task_TMCaseDude_Playback; // this function
         data[8]++;
