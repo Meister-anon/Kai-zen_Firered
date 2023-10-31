@@ -1729,6 +1729,8 @@ goto CHECK_THIS //something potentially relevant for future multi battle/triple 
 
 goto BOX_EXP_GAIN //setup box exp gain w help from kurausukuun and shiiny
 
+goto HIDDENPOWER_CALC //changes made to hidden power dmg calc in bs commands c
+
 goto BATTLE_MOVE_SWAP_LOGIC //use this for changes to prevent seeing the move length bug, prevent moves of certain length from being put/moved
 //into a slot that isn't slot 2 or 4  limit is 13 chars
 

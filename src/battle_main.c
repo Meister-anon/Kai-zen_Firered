@@ -1224,6 +1224,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
             | ((gBattleMons[battlerAtk].spDefenseIV & 1) << 5);
 
         //// Subtract 3 instead of 1 below because 2 types are excluded (TYPE_NORMAL and TYPE_MYSTERY)
+         // The final + 1 skips past Normal, and the following conditional skips TYPE_MYSTERY
         //changed to -4 for sound type addition, need test unsure if fully necessary
         gBattleStruct->dynamicMoveType = ((NUMBER_OF_MON_TYPES - 4) * typeBits) / 63 + 1; //think changing from 15 to 16 adds one more type to options so now have fairy
         if (gBattleStruct->dynamicMoveType == TYPE_MYSTERY || gBattleStruct->dynamicMoveType == TYPE_SOUND) //add or for type sound

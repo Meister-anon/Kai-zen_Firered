@@ -2517,7 +2517,7 @@ static void BufferMonMoveI(u8 i)//think this is the menu/function I need has mov
         | ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_IV) & 2) << 3)
         | ((GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_IV) & 2) << 4);
     
-    hiddenpower = (40 * powerBits) / 63 + 30;
+    hiddenpower = (35 * powerBits) / 63 + 45;
 
     if (gMoveNames[sMonSummaryScreen->moveIds[i]] == gMoveNames[MOVE_HIDDEN_POWER])
         power = hiddenpower;

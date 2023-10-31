@@ -15221,6 +15221,7 @@ s16 spatk_diff(void) {
     return diff;
 }
 
+#define HIDDENPOWER_CALC
 static void atkC1_hiddenpowercalc(void)
 {
     CMD_ARGS();
@@ -15237,7 +15238,14 @@ static void atkC1_hiddenpowercalc(void)
         | ((gBattleMons[gBattlerAttacker].spAttackIV & 2) << 3)
         | ((gBattleMons[gBattlerAttacker].spDefenseIV & 2) << 4);
     
-    gDynamicBasePower = (40 * powerBits) / 63 + 30;
+    gDynamicBasePower = (35 * powerBits) / 63 + 45;
+    //looked on bulbapedia understand the calc now, ivs will return a value of 0 or 1, if all 1 it sums to 63 cancles out divisor leaving just the 40.
+    //to be added on to the 30 if its 0 everything inside cancels leaving just the 30, which is why hidden power
+    //scales between 30 and 70.
+    //so to change the floor value I just need to raise the outside value, to adjust the max I change teh 40.
+    //whatever value I make it, when added to the outside value will bethe max
+    //normal move is now base power 60, I'll make it 50 and have it scale up to 80
+    //made base power 45, scales up to 80 /keeping in mind my boost
     //// Subtract 3 instead of 1 below because 2 types are excluded (TYPE_NORMAL and TYPE_MYSTERY)
    /* gBattleStruct->dynamicMoveType = ((NUMBER_OF_MON_TYPES - 3) * typeBits) / 63 + 1; //think changing from 15 to 16 adds one more type to options so now have fairy
     if (gBattleStruct->dynamicMoveType == TYPE_MYSTERY)
