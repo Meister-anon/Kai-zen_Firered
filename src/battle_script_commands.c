@@ -9288,11 +9288,11 @@ static void atk59_handlelearnnewmove(void)
     {
         gBattlescriptCurrInstr += 10;
     }
-    else
+    else //need figure if problem is this part or montrylearningnewmove part, think its here
     {
-        gActiveBattler = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
+        gActiveBattler = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT); //specifically this
         if (gBattlerPartyIndexes[gActiveBattler] == gBattleStruct->expGetterMonId
-         && !(gBattleMons[gActiveBattler].status2 & STATUS2_TRANSFORMED))
+         && !(gBattleMons[gActiveBattler].status2 & STATUS2_TRANSFORMED)) //with transform change think can remove this condition
         {
             GiveMoveToBattleMon(&gBattleMons[gActiveBattler], ret);
         }
@@ -9342,7 +9342,7 @@ static void atk5A_yesnoboxlearnmove(void)
         if (JOY_NEW(A_BUTTON))
         {
             PlaySE(SE_SELECT);
-            if (gBattleCommunication[1] == 0)
+            if (gBattleCommunication[CURSOR_POSITION] == 0)
             {
                 HandleBattleWindow(0x17, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
                 BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
@@ -9350,14 +9350,14 @@ static void atk5A_yesnoboxlearnmove(void)
             }
             else
             {
-                gBattleScripting.learnMoveState = 7;
+                gBattleScripting.learnMoveState = 8; 
             }
         }
         else if (JOY_NEW(B_BUTTON))
         {
             PlaySE(SE_SELECT);
-            gBattleScripting.learnMoveState = 7;
-        }
+            gBattleScripting.learnMoveState = 8; //not sure why but this line needs 8
+        } //even though 7 works above...because they were both wrong
         break;
     case 2: //should be selection for move to forget, continues after a move is chosen
         if (!gPaletteFade.active)
@@ -9829,6 +9829,15 @@ static void atk69_adjustsetdamage(void)
 {
     u8 holdEffect, param;
 
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SONAR)
+    {
+        if (gBattleMoves[gCurrentMove].flags & FLAG_SOUND)  //specifically for boosting sonic screech fixed dmg
+        {
+            gBattleMoveDamage = gBattleMoveDamage * 15;
+            gBattleMoveDamage = gBattleMoveDamage / 10;
+        }
+    }
+
     if (gBattleMons[gBattlerTarget].item == ITEM_ENIGMA_BERRY)
     {
         holdEffect = gEnigmaBerries[gBattlerTarget].holdEffect;
@@ -9840,6 +9849,7 @@ static void atk69_adjustsetdamage(void)
         param = ItemId_GetHoldEffectParam(gBattleMons[gBattlerTarget].item);
     }
     gPotentialItemEffectBattler = gBattlerTarget;
+    
     if (holdEffect == HOLD_EFFECT_FOCUS_BAND && (Random() % 100) < param)
     {
         RecordItemEffectBattle(gBattlerTarget, holdEffect);

@@ -656,7 +656,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         .abilities = {ABILITY_INTIMIDATE, ABILITY_SHED_SKIN},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_UNNERVE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_UNNERVE, ABILITY_MERCILESS},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -679,7 +679,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_DRAGON,
         .abilities = {ABILITY_INTIMIDATE, ABILITY_SHED_SKIN},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_UNNERVE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_UNNERVE, ABILITY_MERCILESS},
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -4107,7 +4107,8 @@ const struct BaseStats gBaseStats[] =
         .catchRate = 190,
         .expYield = 41,
         //.evYield_Speed = 1,
-        .genderRatio = PERCENT_FEMALE(50),
+        //.item2 = ITEM_LIGHT_BALL, //change logic think give volt tackle if pichu  is created while holding ths item
+        .genderRatio = PERCENT_FEMALE(50),//vsonic
         .eggCycles = 10,
          .friendship = 15,
         .growthRate = GROWTH_MEDIUM_FAST,
@@ -7898,9 +7899,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FLUCTUATING,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_DRAGON,
-        .abilities = {ABILITY_SHED_SKIN, ABILITY_NONE},
+        .abilities = {ABILITY_SHED_SKIN, ABILITY_INFILTRATOR},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_COMPETITIVE},
+            .abilityHidden = {ABILITY_MERCILESS, ABILITY_COMPETITIVE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -27386,7 +27387,8 @@ const struct BaseStats gBaseStats[] =
         .catchRate = 190,
         .expYield = 41,
         //.evYield_Speed = 1,
-        .genderRatio = PERCENT_FEMALE(50),
+        //.item2 = ITEM_LIGHT_BALL, //change logic think give volt tackle if pichu  is created while holding ths item
+        .genderRatio = PERCENT_FEMALE(50), //think want set it so if spiky eared pichuy is generated they always have this
         .eggCycles = 10,
          .friendship = 15,
         .growthRate = GROWTH_MEDIUM_FAST,

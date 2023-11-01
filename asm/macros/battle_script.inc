@@ -2215,3 +2215,36 @@
 	.macro skydropyawn
 	various 0, VARIOUS_SKY_DROP_YAWN
 	.endm
+
+	@taken from emerald used in intimidate in reverse, potentially useful for what I want to do with it
+	@as of yet unsure how to use
+	@ Tries to increase or decrease a battler's stat's stat stage by a specified amount. If impossible, jumps to \script.
+	.macro modifybattlerstatstage battler:req, stat:req, mode:req, amount:req, script:req, animation:req, customString
+
+	@ \mode parameters
+	INCREASE = FALSE
+	DECREASE = TRUE
+
+	@ \animation parameters
+	ANIM_OFF = FALSE
+	ANIM_ON = TRUE
+
+	setstatchanger \stat, \amount, \mode
+	statbuffchange STAT_CHANGE_BS_PTR, \script
+	setgraphicalstatchangevalues
+	.if \animation == TRUE
+		playanimation \battler, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	.endif
+	.ifnb \customString
+		printstring \customString
+	.else
+		.if \mode == DECREASE
+			printfromtable gStatDownStringIds
+		.else
+		.if \mode == INCREASE
+			printfromtable gStatUpStringIds
+		.endif
+		.endif
+	.endif
+	waitmessage B_WAIT_TIME_LONG
+	.endm

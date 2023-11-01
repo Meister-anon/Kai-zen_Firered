@@ -2284,14 +2284,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     .effect = EFFECT_SLEEP,
     .power = 0,
     .type = TYPE_GRASS,
-    .accuracy = 90,
+    .accuracy = 95,
     .pp = 15,
     .secondaryEffectChance = 0,
     .target = MOVE_TARGET_SELECTED,
     .priority = -1,
     .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_POWDER_MOVE,
     .split = SPLIT_STATUS,
-},//keep an eye one
+},//keep an eye on
 
 [MOVE_FLASH] =
 {

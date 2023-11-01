@@ -211,8 +211,9 @@ u8 GetBattlerForBattleScript(u8 caseId)
 void PressurePPLose(u8 target, u8 attacker, u16 move)
 {
     s32 i;
+    u16 ability = GetBattlerAbility(target);
 
-    if (gBattleMons[target].ability == ABILITY_PRESSURE)
+    if (ability == ABILITY_PRESSURE || ability == ABILITY_UNNERVE || ability == ABILITY_AS_ONE_ICE_RIDER || ability == ABILITY_AS_ONE_SHADOW_RIDER)
     {
         for (i = 0; i < MAX_MON_MOVES && gBattleMons[attacker].moves[i] != move; ++i);
         if (i != MAX_MON_MOVES)
@@ -228,7 +229,7 @@ void PressurePPLose(u8 target, u8 attacker, u16 move)
             }
         }
     }
-    else if (gBattleMons[target].ability == ABILITY_HI_PRESSURE)
+    else if (ability == ABILITY_HI_PRESSURE)
     {
         for (i = 0; i < MAX_MON_MOVES && gBattleMons[attacker].moves[i] != move; ++i);
         if (i != MAX_MON_MOVES)
@@ -951,12 +952,12 @@ void PrepareStringBattle(u16 stringId, u8 battler)
         stringId = STRINGID_STATSWONTDECREASE2;
 
 
-    // Check Defiant and Competitive stat raise whenever a stat is lowered.
-    else if (stringId == STRINGID_DEFENDERSSTATFELL
+    // Check Defiant and Competitive stat raise whenever a stat is lowered. - missing something causes infini loop even with emerald logic
+    else if ((stringId == STRINGID_DEFENDERSSTATFELL || stringId == STRINGID_PKMNCUTSATTACKWITH || stringId == STRINGID_TIGER_MOM_ACTIVATES)
         && ((targetAbility == ABILITY_DEFIANT && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
             || (targetAbility == ABILITY_COMPETITIVE && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
-            || (targetAbility == ABILITY_URSURPER && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)
-                && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)))
+            || (targetAbility == ABILITY_URSURPER && (CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)
+                || CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))))
         && gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget)
         && ((gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != gBattlerTarget) || gBattleScripting.stickyWebStatDrop == 1)
         && !(gBattleScripting.stickyWebStatDrop == 1 && gSideTimers[targetSide].stickyWebBattlerSide == targetSide)) // Sticky Web must have been set by the foe
@@ -966,40 +967,16 @@ void PrepareStringBattle(u16 stringId, u8 battler)
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_AbilityRaisesDefenderStat;
         if (targetAbility == ABILITY_DEFIANT)
-            SET_STATCHANGER(STAT_ATK, 1, FALSE);    //since have extra to effect, lowered these 2 to a single stat stage for each stat drop.
-        else if (targetAbility == ABILITY_COMPETITIVE)
-            SET_STATCHANGER(STAT_SPATK, 1, FALSE);
-        else if (targetAbility == ABILITY_URSURPER)
-        {
-            SET_STATCHANGER(STAT_ATK, 1, FALSE);
-            SET_STATCHANGER2(gBattleScripting.savedStatChanger, STAT_SPATK, 1, FALSE);
-        }
-    }
-
-    //specific case just for intimidate, uses normal effect
-    else if ((stringId == STRINGID_PKMNCUTSATTACKWITH || stringId == STRINGID_TIGER_MOM_ACTIVATES)
-        && ((targetAbility == ABILITY_DEFIANT && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
-            || (targetAbility == ABILITY_COMPETITIVE && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
-            || (targetAbility == ABILITY_URSURPER && CompareStat(gBattlerTarget, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)
-                && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)))
-        && gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget)
-        && ((gSpecialStatuses[gBattlerTarget].changedStatsBattlerId != gBattlerTarget) || gBattleScripting.stickyWebStatDrop == 1) //stats weren't dropped byitslf or teammate
-        && !(gBattleScripting.stickyWebStatDrop == 1 && gSideTimers[targetSide].stickyWebBattlerSide == targetSide))
-    {
-        gBattleScripting.stickyWebStatDrop = 0;
-        gBattlerAbility = gBattlerTarget;
-        BattleScriptPushCursor();
-        gBattlescriptCurrInstr = BattleScript_AbilityRaisesDefenderStat; //ok intimidate is actually just 1 stat stage 
-        if (targetAbility == ABILITY_DEFIANT)
-            SET_STATCHANGER(STAT_ATK, 2, FALSE);    //since intimidate is explicitly an 2 stage atk drop, boosting defiant, so you don't just negate
+            SET_STATCHANGER(STAT_ATK, 2, FALSE);    //since have extra to effect, lowered these 2 to a single stat stage for each stat drop.
         else if (targetAbility == ABILITY_COMPETITIVE)
             SET_STATCHANGER(STAT_SPATK, 2, FALSE);
         else if (targetAbility == ABILITY_URSURPER)
         {
-            SET_STATCHANGER(STAT_ATK, 3, FALSE);    //to counteract intimidate and keep pace with sp atk, and for even daring attempting to intimidate it
-            SET_STATCHANGER2(gBattleScripting.savedStatChanger, STAT_SPATK, 2, FALSE); //check if I need to update stat changer for 4 stage stat boost.
+            SET_STATCHANGER(STAT_ATK, 2, FALSE);
+            SET_STATCHANGER2(gBattleScripting.savedStatChanger, STAT_SPATK, 2, FALSE);
         }
     }
+
 
     else if ((stringId == STRINGID_PKMNCUTSATTACKWITH || stringId == STRINGID_TIGER_MOM_ACTIVATES)
         && targetAbility == ABILITY_RATTLED
@@ -5591,7 +5568,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
 
                 case ABILITY_SHED_SKIN: //don't need to make switch in effect, it activates before status dmg
-                    if ((gBattleMons[battler].status1 & STATUS1_ANY) && (Random() % 3) == 0)
+                    if ((gBattleMons[battler].status1 & STATUS1_ANY) && (Random() % 2) == 0) //buffed odds to 50%
                     {
                         if (gBattleMons[battler].status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON))
                             StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn); //no idea why this is here? but its in emerald too

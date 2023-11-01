@@ -1450,8 +1450,9 @@ static const struct LevelUpMove sKinglerLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sVoltorbLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_CHARGE),
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
+    LEVEL_UP_MOVE(1, MOVE_CHARGE),
+    LEVEL_UP_MOVE(5, MOVE_THUNDER_SHOCK),
     LEVEL_UP_MOVE(8, MOVE_SCREECH),
     LEVEL_UP_MOVE(15, MOVE_SONIC_SCREECH),
     LEVEL_UP_MOVE(21, MOVE_SPARK),
@@ -1465,9 +1466,9 @@ static const struct LevelUpMove sVoltorbLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sElectrodeLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_CHARGE),
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
-    LEVEL_UP_MOVE(1, MOVE_SCREECH),
+    LEVEL_UP_MOVE(1, MOVE_CHARGE),
+    LEVEL_UP_MOVE(5, MOVE_THUNDER_SHOCK),
     LEVEL_UP_MOVE(1, MOVE_SONIC_SCREECH),
     LEVEL_UP_MOVE(8, MOVE_SCREECH),
     LEVEL_UP_MOVE(15, MOVE_SONIC_SCREECH),

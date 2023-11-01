@@ -134,7 +134,7 @@
 #define ABILITY_PICKPOCKET 124
 #define ABILITY_SHEER_FORCE 125
 #define ABILITY_CONTRARY 126
-#define ABILITY_UNNERVE 127
+#define ABILITY_UNNERVE 127 //bad in game buffing with og pressure effect of additional pp useage, leans into unnerving aura idea
 #define ABILITY_DEFIANT 128
 #define ABILITY_DEFEATIST 129
 #define ABILITY_CURSED_BODY 130

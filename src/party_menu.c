@@ -382,6 +382,10 @@ static void sub_8125F5C(u8 taskId);
 static void sub_8126BD4(void);
 static bool8 MonCanEvolve(void);
 
+static void ConfirmForgetMovePrompt(u8 taskId); //added to match battle move learn
+static void Task_ConfirmLearningMoveYesNo(u8 taskId);
+static void Task_HandleConfirmLearningMoveYesNoInput(u8 taskId);
+
 static EWRAM_DATA struct PartyMenuInternal *sPartyMenuInternal = NULL;
 EWRAM_DATA struct PartyMenu gPartyMenu = {0};
 static EWRAM_DATA struct PartyMenuBox *sPartyMenuBoxes = NULL;
@@ -4997,14 +5001,14 @@ static void Task_HandleReplaceMoveYesNoInput(u8 taskId)
 {
     switch (Menu_ProcessInputNoWrapClearOnChoose())
     {
-    case 0:
+    case 0: //yes
         DisplayPartyMenuMessage(gText_WhichMoveToForget, TRUE);
         gTasks[taskId].func = Task_ShowSummaryScreenToForgetMove;
         break;
     case MENU_B_PRESSED:
         PlaySE(SE_SELECT);
-        // fallthrough
-    case 1:
+        // fallthrough to no
+    case 1: //no
         StopLearningMovePrompt(taskId);
         break;
     }
@@ -5043,12 +5047,13 @@ static void CB2_ReturnToPartyMenuWhileLearningMove(void)
     }
 }
 
+//vsonic
 static void Task_ReturnToPartyMenuWhileLearningMove(u8 taskId)
 {
     if (!gPaletteFade.active)
     {
         if (GetMoveSlotToReplace() != MAX_MON_MOVES)
-            DisplayPartyMenuForgotMoveMessage(taskId);
+            ConfirmForgetMovePrompt(taskId);//think need add confirmation here
         else
             StopLearningMovePrompt(taskId);
     }
@@ -5108,12 +5113,54 @@ static void StopLearningMovePrompt(u8 taskId)
     gTasks[taskId].func = Task_StopLearningMoveYesNo;
 }
 
+static void ConfirmForgetMovePrompt(u8 taskId)
+{
+    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+    u16 move = GetMonData(mon, MON_DATA_MOVE1 + GetMoveSlotToReplace());
+
+    StringCopy(gStringVar3, gMoveNames[move]);
+    StringExpandPlaceholders(gStringVar4, gText_ConfirmLearnMove);
+    DisplayPartyMenuMessage(gStringVar4, TRUE);
+    ScheduleBgCopyTilemapToVram(2); //seems this was issue, or maybe it was the pause at start
+    gTasks[taskId].func = Task_ConfirmLearningMoveYesNo; //yup it was the pause
+}
+
+static void Task_ConfirmLearningMoveYesNo(u8 taskId)
+{
+    if (IsPartyMenuTextPrinterActive() != TRUE)
+    {
+        PartyMenuDisplayYesNoMenu();
+        gTasks[taskId].func = Task_HandleConfirmLearningMoveYesNoInput;
+    }
+}
+
 static void Task_StopLearningMoveYesNo(u8 taskId)
 {
     if (IsPartyMenuTextPrinterActive() != TRUE)
     {
         PartyMenuDisplayYesNoMenu();
         gTasks[taskId].func = Task_HandleStopLearningMoveYesNoInput;
+    }
+}
+
+static void Task_HandleConfirmLearningMoveYesNoInput(u8 taskId)
+{
+    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+
+    switch (Menu_ProcessInputNoWrapClearOnChoose()) 
+    {
+    case 0: //yes
+        gTasks[taskId].func = DisplayPartyMenuForgotMoveMessage;
+        break;
+    case MENU_B_PRESSED: //this side shoule be fine
+        PlaySE(SE_SELECT);
+        // fallthrough
+    case 1: //no
+        GetMonNickname(mon, gStringVar1);
+        StringCopy(gStringVar2, gMoveNames[gPartyMenu.data1]);
+        DisplayLearnMoveMessage(gText_PkmnNeedsToReplaceMove);
+        gTasks[taskId].func = Task_ReplaceMoveYesNo;
+        break;
     }
 }
 
@@ -5157,6 +5204,7 @@ static void Task_TryLearningNextMoveAfterText(u8 taskId)
         Task_TryLearningNextMove(taskId);
 }
 
+//edit this for set use multiple rare candies
 void ItemUseCB_RareCandy(u8 taskId, TaskFunc func)
 {
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];

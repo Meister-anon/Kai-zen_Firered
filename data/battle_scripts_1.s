@@ -3027,14 +3027,13 @@ BattleScript_StatDownFromAttackString::
 	attackstring
 	ppreduce
 	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_StatDownEnd
-	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, 2, BattleScript_StatDownDoAnim
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 3, BattleScript_StatDownEnd
+	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_StatDownDoAnim
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_FELL_EMPTY, BattleScript_StatDownEnd
 	pause 0x20
 	@goto BattleScript_StatDownPrintString
 	goto BattleScript_StatDownCantGoLower
-@believe its referring to gStatDownStringIds less than 2 is stat fell, 2 is cant lower
-@ pretty sure I commented out the other line to make it play animation even if stat cant be lowered need test, replace statdownend if need too
-@VSONIC check this in case wrong, think issue of misunderstanding what multistring is referrnig too?
+@works, point of change was for move animations to play regardless of stat stage
+@for purspose of clarity prob best to rename
 
 BattleScript_StatDownDoAnim::
 	attackanimation
@@ -8370,18 +8369,32 @@ BattleScript_IntimidateFailChecks:
 BattleScript_IntimidateStatDrop::	
 	copybyte sBATTLER, gBattlerAttacker
 	statbuffchange STAT_CHANGE_BS_PTR | STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_IntimidateFail
-	jumpifbyte CMP_GREATER_THAN, cMULTISTRING_CHOOSER, 1, BattleScript_IntimidateFail
+	@jumpifbyte CMP_GREATER_THAN, cMULTISTRING_CHOOSER, 1, BattleScript_IntimidateFail
 	setgraphicalstatchangevalues
+	@jumpifability BS_TARGET, ABILITY_CONTRARY, BattleScript_IntimidateContrary
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	jumpifability BS_ATTACKER, ABILITY_TIGER_MOM, BattleScript_TigerMomBattleMessage
 	printstring STRINGID_PKMNCUTSATTACKWITH
+BattleScript_IntimidateEffect_WaitString:
 	waitmessage 0x40
+	copybyte sBATTLER, gBattlerTarget
+	@call BattleScript_TryAdrenalineOrb
 BattleScript_IntimidateFail::
-	addbyte gBattlerTarget, 1 @ this value keeps the command from looping on single target
-	goto BattleScript_IntimidateActivationAnimLoop
+	@addbyte gBattlerTarget, 1 @ this value keeps the command from looping on single target
+	@goto BattleScript_IntimidateActivationAnimLoop
+BattleScript_IntimidateLoopIncrement:
+	addbyte gBattlerTarget, 1
+	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_IntimidateActivationAnimLoop
+BattleScript_IntimidateEnd:
+	copybyte sBATTLER, gBattlerAttacker
+	@destroyabilitypopup
+	pause B_WAIT_TIME_MED
+	end3
 
-BattleScript_IntimidateEnd::
-	return
+@far as I can tell change to intimidate from emereald seems to still work the same
+
+@BattleScript_IntimidateEnd::
+@	return
 
 BattleScript_IntimidateAbilityFail::
 	pause 0x20
@@ -8407,6 +8420,25 @@ BattleScipt_Intimidate_AttackDropExclusions::
 	jumpifability BS_TARGET, ABILITY_BIG_PECKS, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_IntimidateAbilityFail
 	goto BattleScript_IntimidateStatDrop
+
+@ported not yet applied to anything
+BattleScript_IntimidateContrary:
+	@call BattleScript_AbilityPopUpTarget
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_IntimidateContrary_WontIncrease
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatUpStringIds
+	goto BattleScript_IntimidateEffect_WaitString
+BattleScript_IntimidateContrary_WontIncrease:
+	printstring STRINGID_TARGETSTATWONTGOHIGHER
+	goto BattleScript_IntimidateEffect_WaitString
+
+BattleScript_IntimidateInReverse:
+	copybyte sBATTLER, gBattlerTarget
+	@call BattleScript_AbilityPopUpTarget
+	pause B_WAIT_TIME_SHORT
+	modifybattlerstatstage BS_TARGET, STAT_ATK, INCREASE, 1, BattleScript_IntimidateLoopIncrement, ANIM_ON
+	call BattleScript_TryAdrenalineOrb
+	goto BattleScript_IntimidateLoopIncrement
 
 BattleScript_DrizzleActivates::
 	pause 0x20

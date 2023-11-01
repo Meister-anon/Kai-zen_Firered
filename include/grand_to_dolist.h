@@ -1546,9 +1546,44 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   for better balance, made  atk cancelers for status and truant remove rage status, doesn't affect rage counter
   sleep freeze paralysis pressure flinch spirit lock (when its done) and truant
 
-  -still working on this, plan changed to put rage end message before normal status messages. search BattleScript_RageEnds
+  -still working on this, plan changed to put rage end message before normal status messages. search BattleScript_RageEnds - works
 
   rage looks fixed, foudn and fixed issue with contact abilities,  need add faint message for stench and neutraliing gas removal -eventually
+
+  -need redownload opal for assets
+  - also remember changes to status moves, that they use type for calculation now,
+  just need remember to communicate that to playerS*
+
+  - discovered MORE FUCKING BUGS, smog does dmg and poinsons, but then prevents user from switching
+  future sight CAN'T kill, the target goes to 1 hp and then it just stops fucking doing dmg
+ - branch poke doesn't have an animation
+
+ -when mon in first slot is swapped out and gains exp to  level up 
+ where it would learn a move its still displaying the wrong mon id slot
+ its showing the mon swapped into slot instead of the actual place of the mon now
+ can use summary screen personality search party loop to fix i think
+
+ -also need do same thing for overworld move learn? it doesn't have confirmation message
+ //icons for message for move learn from party menu/overworld isn't right.
+ //with changes made, actually nvm just some icons don't sit right?
+ //gen 8 icon grookey is too high? most work check gen 8 stuff  scorbunny also too big
+
+
+  for pc access from ow to switch mon, make it not work when "indoors" that way it wont work when inside gyms or what is usually a guantlet
+  plus if you are indoors it might be a pokemon center so there's no reason to.
+  *note add feature so its not cheasable, pretty much can't just drop a mon in pc when its low
+  and then take it back out immediately for free heals
+  message: "blah blah blah pokemon name needs more time to recover"
+
+  think do like I did summary screen logic, store pokemon personality value
+  think do with a counter, when yuo open pc from overworld, it stores the personality values of every mon in the party
+  to a field, before box opens,   if you deposit one of those mons into the box
+  its passed to a global field (i.e g value)  so when you try to with draw a mon, if it matches one
+  of the personality values it'll refuse to withdraw it, and put up the message from above.
+
+  now here's where the counter comes in, after closing the box  you are on a 100 count step counter
+  amd when that hits 0, the stored personality values are reset to 0, and you can take your originally deposited mon out.
+  (potentially make counter 50 the point isn't to lock them out for a whole map,just to ensure player can't cheese and immediatley retrieve them)
 
   - plan make value to store rival starters ability num from first rival battle in oak lab, then use it to set the same ability 
   so at least that never changes for the whole game.
