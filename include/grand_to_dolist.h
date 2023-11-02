@@ -885,6 +885,9 @@ for some reason ghost moves seem to still not be reading correctly?
 
 still need rework poison setup or set back to full normal, right now poison animation isn't playing before turn dmg
 
+ shadow_tasg reading wrong battle name for message for some reason check if just for oak battle and works norma elsewhere
+ i.e put litwick in starter area
+
 making own custom icons  for phsy special split.  new gen need know contact moev as well
 will be small icons placed in blue space below accuracy for summary screen 
 icons will be smaller

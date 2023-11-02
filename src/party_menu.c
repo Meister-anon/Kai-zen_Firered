@@ -5024,6 +5024,8 @@ static void Task_ShowSummaryScreenToForgetMove(u8 taskId)
 }
 
 //thikn this is issue cant find yet /vsonic
+//nvm the function inside is issue, this is party menu so its only rare candy overworld move learn,
+//that's not problem its in battle that's issue.
 static void CB2_ShowSummaryScreenToForgetMove(void)
 {
     ShowSelectMovePokemonSummaryScreen(gPlayerParty, gPartyMenu.slotId, gPlayerPartyCount - 1, CB2_ReturnToPartyMenuWhileLearningMove, gPartyMenu.data1);

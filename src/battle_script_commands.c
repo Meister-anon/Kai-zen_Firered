@@ -3494,11 +3494,11 @@ static void atk08_adjustnormaldamage2(void)
         gSpecialStatuses[gBattlerTarget].sturdied = TRUE;
     }
 
-     if ((!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)    //CORRECT way to start conditional with a negative
-        || gProtectStructs[gBattlerTarget].endured
+     if ((gProtectStructs[gBattlerTarget].endured
         || gSpecialStatuses[gBattlerTarget].focusBanded
         || gSpecialStatuses[gBattlerTarget].focusSashed
         || gSpecialStatuses[gBattlerTarget].sturdied)
+        && !gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE
         && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage
         && gMultiHitCounter == 0
         )
@@ -6058,6 +6058,7 @@ static s32 StatReclacForLevelup(s32 iv, s32 ev, u8 statIndex)
 #define EXP_FUNCTION
 static void atk23_getexp(void)
 {
+    CMD_ARGS(u8 battler);
     u16 item;
     s32 i; // also used as stringId
     u8 holdEffect;
@@ -6080,7 +6081,7 @@ static void atk23_getexp(void)
     s32 spDefenseEV = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_SPDEF_EV, NULL);
 
 
-    gBattlerFainted = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+    gBattlerFainted = GetBattlerForBattleScript(cmd->battler);
     sentIn = gSentPokesToOpponent[(gBattlerFainted & 2) >> 1];
     switch (gBattleScripting.atk23_getexpState)
     {
@@ -6110,15 +6111,15 @@ static void atk23_getexp(void)
             {
                 if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE && GetMonData(&gPlayerParty[i], MON_DATA_HP) != 0)
                 {
-                    if (gBitTable[i] & sentIn)
-                        ++viaSentIn;
-                    item = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
-                    if (item == ITEM_ENIGMA_BERRY)
-                        holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
-                    else
-                        holdEffect = ItemId_GetHoldEffect(item);
-                    if (holdEffect == HOLD_EFFECT_EXP_SHARE)
-                        ++viaExpShare;
+                        if (gBitTable[i] & sentIn)
+                            ++viaSentIn;
+                        item = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
+                        if (item == ITEM_ENIGMA_BERRY)
+                            holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
+                        else
+                            holdEffect = ItemId_GetHoldEffect(item);
+                        if (holdEffect == HOLD_EFFECT_EXP_SHARE)
+                            ++viaExpShare;
                 }
             }
             calculatedExp = gBaseStats[gBattleMons[gBattlerFainted].species].expYield * gBattleMons[gBattlerFainted].level / 7;
@@ -6347,7 +6348,7 @@ static void atk23_getexp(void)
             // not sure why gf clears the item and ability here
             gBattleMons[gBattlerFainted].item = ITEM_NONE;
             gBattleMons[gBattlerFainted].ability = ABILITY_NONE;
-            gBattlescriptCurrInstr += 2;
+            gBattlescriptCurrInstr = cmd->nextInstr;
         }
         break;
     }
@@ -9368,7 +9369,7 @@ static void atk5A_yesnoboxlearnmove(void)
         {
             FreeAllWindowBuffers();
             ShowSelectMovePokemonSummaryScreen(gPlayerParty, gBattleStruct->expGetterMonId, gPlayerPartyCount - 1, ReshowBattleScreenAfterMenu, gMoveToLearn);
-            ++gBattleScripting.learnMoveState; //above line is the problem^
+            ++gBattleScripting.learnMoveState; //above line is the problem^  //specificallyu expgetter
         }
         break;
     case 3: //replaces move whne you answer yes, if it can be deleted
@@ -10151,7 +10152,7 @@ static bool8 sub_8026648(void)
 #define sDestroy                    data[0]
 #define sSavedLvlUpBoxXPosition     data[1]
 
-static void PutMonIconOnLvlUpBox(void)
+static void PutMonIconOnLvlUpBox(void) //don't understand this, if expp getter is storing corect idea, for displaying monthat levels why is the move data wrong...
 {
     u8 spriteId;
     const u16 *iconPal;
@@ -10191,7 +10192,7 @@ static void SpriteCB_MonIconOnLvlUpBox(struct Sprite* sprite)
 
 bool32 IsMonGettingExpSentOut(void)
 {
-    if (gBattlerPartyIndexes[0] == gBattleStruct->expGetterMonId)
+    if (gBattlerPartyIndexes[0] == gBattleStruct->expGetterMonId) //believe index 0 is 1st battle party slot i.e player side left
         return TRUE;
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && gBattlerPartyIndexes[2] == gBattleStruct->expGetterMonId)
         return TRUE;
