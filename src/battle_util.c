@@ -3012,23 +3012,46 @@ bool8 HandleWishPerishSongOnTurnEnd(void)
                 continue;
             }
             ++gBattleStruct->wishPerishSongBattlerId;
-            if (gWishFutureKnock.futureSightCounter[gActiveBattler] != 0
-                && IsBlackFogNotOnField()   //should prevent decrement
-                && --gWishFutureKnock.futureSightCounter[gActiveBattler] == 0
-                && gBattleMons[gActiveBattler].hp != 0)
+            if ((gWishFutureKnock.futureSightCounter[gActiveBattler] || (gWishFutureKnock.futureSightCounter2[gActiveBattler]))
+                && IsBlackFogNotOnField())   //should prevent decrement /no wouldn't prevent decrement unless its part of separate statement
             {
-                if (gWishFutureKnock.futureSightMove[gActiveBattler] == MOVE_FUTURE_SIGHT)
-                    gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-                else
-                    gBattleCommunication[MULTISTRING_CHOOSER] = 1;
-                PREPARE_MOVE_BUFFER(gBattleTextBuff1, gWishFutureKnock.futureSightMove[gActiveBattler]);
-                gBattlerTarget = gActiveBattler;
-                gBattlerAttacker = gWishFutureKnock.futureSightAttacker[gActiveBattler];
-                gBattleMoveDamage = gWishFutureKnock.futureSightDmg[gActiveBattler];
-                gSpecialStatuses[gBattlerTarget].dmg = 0xFFFF;
-                BattleScriptExecute(BattleScript_MonTookFutureAttack);
-                return TRUE;
+                if (gWishFutureKnock.futureSightCounter[gActiveBattler])
+                {
+                   if (--gWishFutureKnock.futureSightCounter[gActiveBattler] == 0)
+                        gSpecialStatuses[gActiveBattler].firstFuturesightHits = TRUE;
+                        //special status or something, futuresight hits
+                }
+                if (gWishFutureKnock.futureSightCounter2[gActiveBattler])
+                {
+                   if (--gWishFutureKnock.futureSightCounter2[gActiveBattler] == 0)
+                        gSpecialStatuses[gActiveBattler].secondFuturesightHits = TRUE;
+                        //special status or something, futuresight2 hits
+                }
+                
+
+                if ((gSpecialStatuses[gActiveBattler].firstFuturesightHits //change this to status check for futuresight 1 or 2 hits is true
+                || gSpecialStatuses[gActiveBattler].secondFuturesightHits)
+                && gBattleMons[gActiveBattler].hp != 0)  //and then clear it within the brackets below
+                {
+                    if (gSpecialStatuses[gActiveBattler].firstFuturesightHits)
+                        gSpecialStatuses[gActiveBattler].firstFuturesightHits = FALSE;
+                    if (gSpecialStatuses[gActiveBattler].secondFuturesightHits)
+                        gSpecialStatuses[gActiveBattler].firstFuturesightHits = FALSE;
+
+                    if (gWishFutureKnock.futureSightMove[gActiveBattler] == MOVE_FUTURE_SIGHT)
+                        gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+                    else if (gWishFutureKnock.futureSightMove[gActiveBattler] == MOVE_DOOM_DESIRE)
+                        gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, gWishFutureKnock.futureSightMove[gActiveBattler]);
+                    gBattlerTarget = gActiveBattler;
+                    gBattlerAttacker = gWishFutureKnock.futureSightAttacker[gActiveBattler];
+                    gBattleMoveDamage = gWishFutureKnock.futureSightDmg[gActiveBattler];
+                    gSpecialStatuses[gBattlerTarget].dmg = 0xFFFF;
+                    BattleScriptExecute(BattleScript_MonTookFutureAttack);
+                    return TRUE; //ok now should prevent decrement if black fog on field, like how I wanted
+                }
             }
+            
         }
         {
             u8 *state = &gBattleStruct->wishPerishSongState;

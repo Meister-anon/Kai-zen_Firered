@@ -885,6 +885,11 @@ for some reason ghost moves seem to still not be reading correctly?
 
 still need rework poison setup or set back to full normal, right now poison animation isn't playing before turn dmg
 
+ thinking remove tynamo from bulbasaur ball found out it isnt actually steel no idea why Ithuoght it was.
+ considering put in squirtle ball instead  nah doesn't get water moves, its best where it is I guess
+
+ need check move olearn its doing weird things when I had it working 
+
  shadow_tasg reading wrong battle name for message for some reason check if just for oak battle and works norma elsewhere
  i.e put litwick in starter area
 

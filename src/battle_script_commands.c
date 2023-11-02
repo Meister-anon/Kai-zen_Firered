@@ -9475,7 +9475,7 @@ static void atk5A_yesnoboxlearnmove(void)
         break;
     case 8:  //case 4
         HandleBattleWindow(0x17, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
-        gBattlescriptCurrInstr = cmd->forgotMovePtr;  //skip jump ptr, move to next instruction
+        gBattlescriptCurrInstr = cmd->nextInstr;  //skip jump ptr, move to next instruction
         break;
     case 9: //not used?
         if (!gBattleControllerExecFlags)
@@ -15335,33 +15335,75 @@ static void atkC2_selectfirstvalidtarget(void)
     ++gBattlescriptCurrInstr;
 }
 
-static void atkC3_trysetfutureattack(void) //want to set 2, so make new counter and make it default to that if other != 0
+//want to set 2, so make new counter and make it default to that if other != 0
+//this is used for future sight and doom desire I want this specifically for future sight only
+static void atkC3_trysetfutureattack(void) 
 {
-    if (gWishFutureKnock.futureSightCounter[gBattlerTarget] != 0) //prevents spamming each turn
-    {   //when set upgrade, change to if both counters do not equal 0
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    if (gCurrentMove == MOVE_FUTURE_SIGHT)
+    {
+        if ((gWishFutureKnock.futureSightCounter[gBattlerTarget]) && (gWishFutureKnock.futureSightCounter2[gBattlerTarget])) //prevents spamming each turn
+        {   //when set upgrade, change to if both counters do not equal 0
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1); //its not showing the failed message and I don't know why
+            //ok think its because it plays after moves are done ni move result, and would be on turn, where it would play on move end
+            //so the move landing overwrites the move failed script I think, annoying but not a major issue
+            //also since this doesn't do super or seem to get stab, its not super op,
+            //despite being 120bp .
+        }
+        else if ((gWishFutureKnock.futureSightCounter[gBattlerTarget] == 0) || (gWishFutureKnock.futureSightCounter2[gBattlerTarget] == 0))
+        {
+            gWishFutureKnock.futureSightMove[gBattlerTarget] = gCurrentMove;
+            gWishFutureKnock.futureSightAttacker[gBattlerTarget] = gBattlerAttacker;
+            if (!(gWishFutureKnock.futureSightCounter[gBattlerTarget])) //if counter 0 set counter
+            gWishFutureKnock.futureSightCounter[gBattlerTarget] = 3;
+            else if ((gWishFutureKnock.futureSightCounter[gBattlerTarget]) && (!gWishFutureKnock.futureSightCounter2[gBattlerTarget]))
+            gWishFutureKnock.futureSightCounter2[gBattlerTarget] = 3;//should be if counter 1 used, but counter 2 empty set counter 2
+
+            gWishFutureKnock.futureSightDmg[gBattlerTarget] = CalculateBaseDamage(&gBattleMons[gBattlerAttacker],
+                                                                                &gBattleMons[gBattlerTarget],
+                                                                                gCurrentMove,
+                                                                                gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)],
+                                                                                0,
+                                                                                0,
+                                                                                gBattlerAttacker,
+                                                                                gBattlerTarget);
+            if (gProtectStructs[gBattlerAttacker].helpingHand)
+                gWishFutureKnock.futureSightDmg[gBattlerTarget] = gWishFutureKnock.futureSightDmg[gBattlerTarget] * 15 / 10;
+            /*if (gCurrentMove == MOVE_DOOM_DESIRE)
+                gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+            else*/
+                gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+            //gBattlescriptCurrInstr += 5;
+        }
     }
     else
     {
-        gWishFutureKnock.futureSightMove[gBattlerTarget] = gCurrentMove;
-        gWishFutureKnock.futureSightAttacker[gBattlerTarget] = gBattlerAttacker;
-        gWishFutureKnock.futureSightCounter[gBattlerTarget] = 3;
-        gWishFutureKnock.futureSightDmg[gBattlerTarget] = CalculateBaseDamage(&gBattleMons[gBattlerAttacker],
-                                                                              &gBattleMons[gBattlerTarget],
-                                                                              gCurrentMove,
-                                                                              gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)],
-                                                                              0,
-                                                                              0,
-                                                                              gBattlerAttacker,
-                                                                              gBattlerTarget);
-        if (gProtectStructs[gBattlerAttacker].helpingHand)
-            gWishFutureKnock.futureSightDmg[gBattlerTarget] = gWishFutureKnock.futureSightDmg[gBattlerTarget] * 15 / 10;
-        if (gCurrentMove == MOVE_DOOM_DESIRE)
-            gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+        if (gWishFutureKnock.futureSightCounter[gBattlerTarget] != 0 && gWishFutureKnock.futureSightCounter2[gBattlerTarget] != 0) //prevents spamming each turn
+        {   //to avoid issues with move name, don't allow doom desire if either couner is in use
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        }
         else
-            gBattleCommunication[MULTISTRING_CHOOSER] = 0;
-        gBattlescriptCurrInstr += 5;
+        {
+            gWishFutureKnock.futureSightMove[gBattlerTarget] = gCurrentMove;
+            gWishFutureKnock.futureSightAttacker[gBattlerTarget] = gBattlerAttacker;
+            gWishFutureKnock.futureSightCounter[gBattlerTarget] = 3;
+            gWishFutureKnock.futureSightDmg[gBattlerTarget] = CalculateBaseDamage(&gBattleMons[gBattlerAttacker],
+                                                                                &gBattleMons[gBattlerTarget],
+                                                                                gCurrentMove,
+                                                                                gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)],
+                                                                                0,
+                                                                                0,
+                                                                                gBattlerAttacker,
+                                                                                gBattlerTarget);
+            if (gProtectStructs[gBattlerAttacker].helpingHand)
+                gWishFutureKnock.futureSightDmg[gBattlerTarget] = gWishFutureKnock.futureSightDmg[gBattlerTarget] * 15 / 10;
+            if (gCurrentMove == MOVE_DOOM_DESIRE)
+                gBattleCommunication[MULTISTRING_CHOOSER] = 1; //potentially add on, if more moves used, 
+            //else
+              //  gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+            //gBattlescriptCurrInstr += 5;
+        }
     }
+    gBattlescriptCurrInstr += 5;
     //vsonic IMPORTANT
 }//may add a way to do a second future sight before timer is up for a bit of strategy
 //should be simple as adding a 2nd futureSightCounter, with same effects

@@ -5033,7 +5033,7 @@ BattleScript_EffectFutureSight::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
- @no longer used. remove later vsonic
+@no longer used. remove later vsonic
 BattleScript_EffectGust::
 	goto BattleScript_EffectHit
 

@@ -24,6 +24,7 @@ PalletTown_PlayersHouse_2F_FirstWarpIn:: @ 8168CC8
 PalletTown_PlayersHouse_2F_EventScript_NES:: @ 8168CD2
 	msgbox PalletTown_PlayersHouse_2F_Text_PlayedWithNES, MSGBOX_SIGN
 	givemon SPECIES_KINGLER, 4, ITEM_NONE @for early game testing, now testing move learn
+	givemon SPECIES_RALTS, 5, ITEM_NONE @testing future sight
 	giveitem ITEM_RARE_CANDY, 15
 	end
 

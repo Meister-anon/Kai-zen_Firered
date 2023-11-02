@@ -366,6 +366,8 @@ struct SpecialStatus    //pretty sure all values
     u8 anticipationDone : 1;// same as forwarn clause //also considering moveend & moveendtarget can prob do swithin repeat, by swapping battler and side w new abilityeffet clause?
     u8 parentalBondState : 2; // 0/1/2
     u8 multiHitOn : 1; //think is a state chech, seems most used with parental bond
+    u8 firstFuturesightHits;
+    u8 secondFuturesightHits;
     u8 field12;
     u8 field13;//check moody case for switchin line something something = 2
 };
@@ -430,6 +432,7 @@ struct FieldTimer
 struct WishFutureKnock
 {
     u8 futureSightCounter[MAX_BATTLERS_COUNT];
+    u8 futureSightCounter2[MAX_BATTLERS_COUNT];
     u8 futureSightAttacker[MAX_BATTLERS_COUNT];
     s32 futureSightDmg[MAX_BATTLERS_COUNT];
     u16 futureSightMove[MAX_BATTLERS_COUNT];
