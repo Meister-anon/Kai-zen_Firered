@@ -6525,11 +6525,11 @@ BattleScript_LevelUp::
 	printstring STRINGID_PKMNGREWTOLV
 	setbyte sLVLBOX_STATE, 0
 	drawlvlupbox
-	handlelearnnewmove BattleScript_LearnedNewMove, BattleScript_LearnMoveReturn, 1 @believe 2 pointers and a bool
+	handlelearnnewmove BattleScript_LearnedNewMove, BattleScript_LearnMoveReturn, TRUE @believe 2 pointers and a bool
 	goto BattleScript_AskToLearnMove
 
 BattleScript_LearnMoveLoop::
-	handlelearnnewmove BattleScript_LearnedNewMove, BattleScript_LearnMoveReturn, 0
+	handlelearnnewmove BattleScript_LearnedNewMove, BattleScript_LearnMoveReturn, FALSE
 BattleScript_AskToLearnMove::
 	buffermovetolearn
 	printstring STRINGID_TRYTOLEARNMOVE1

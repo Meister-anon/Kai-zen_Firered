@@ -9274,27 +9274,29 @@ static void atk58_returntoball(void)
 
 static void atk59_handlelearnnewmove(void)
 {
-    const u8 *jumpPtr1 = T1_READ_PTR(gBattlescriptCurrInstr + 1);
-    const u8 *jumpPtr2 = T1_READ_PTR(gBattlescriptCurrInstr + 5);
-    u16 ret = MonTryLearningNewMove(&gPlayerParty[gBattleStruct->expGetterMonId], gBattlescriptCurrInstr[9]);
+    CMD_ARGS(const u8 *learnedMovePtr, const u8 *nothingToLearnPtr, bool8 isFirstMove);
+    const u8 *learnedMovePtr = cmd->learnedMovePtr; //1st ptr
+    const u8 *nothingToLearnPtr = cmd->nothingToLearnPtr; //2nd ptr
+
+    u16 learnMove = MonTryLearningNewMove(&gPlayerParty[gBattleStruct->expGetterMonId], cmd->isFirstMove);
     
-    while (ret == 0xFFFE) //normal but when would function ever be 0xFFFE?  //think found,   MON_ALREADY_KNOWS_MOVE ?
-        ret = MonTryLearningNewMove(&gPlayerParty[gBattleStruct->expGetterMonId], 0);
-    if (ret == 0) //don't learn move
+    while (learnMove == MON_ALREADY_KNOWS_MOVE) //normal but when would function ever be 0xFFFE?  //think found,   MON_ALREADY_KNOWS_MOVE ?
+        learnMove = MonTryLearningNewMove(&gPlayerParty[gBattleStruct->expGetterMonId], 0);
+    if (learnMove == MOVE_NONE) //don't learn move or nothing to learn
     {
-        gBattlescriptCurrInstr = jumpPtr2;
+        gBattlescriptCurrInstr = nothingToLearnPtr;
     }
-    else if (ret == 0xFFFF) //not a move?   //think LEVEL_UP_END ?
+    else if (learnMove == MON_HAS_MAX_MOVES) //not a move?   //think LEVEL_UP_END ?
     {
-        gBattlescriptCurrInstr += 10;
-    }
-    else //need figure if problem is this part or montrylearningnewmove part, think its here
+        gBattlescriptCurrInstr = cmd->nextInstr; //this is issue, 
+    } //meaning problem is within script BattleScript_AskToLearnMove
+    else
     {
         gActiveBattler = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT); //specifically this
         if (gBattlerPartyIndexes[gActiveBattler] == gBattleStruct->expGetterMonId
          && !(gBattleMons[gActiveBattler].status2 & STATUS2_TRANSFORMED)) //with transform change think can remove this condition
         {
-            GiveMoveToBattleMon(&gBattleMons[gActiveBattler], ret);
+            GiveMoveToBattleMon(&gBattleMons[gActiveBattler], learnMove);
         }
         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
         {
@@ -9302,10 +9304,10 @@ static void atk59_handlelearnnewmove(void)
             if (gBattlerPartyIndexes[gActiveBattler] == gBattleStruct->expGetterMonId
              && !(gBattleMons[gActiveBattler].status2 & STATUS2_TRANSFORMED))
             {
-                GiveMoveToBattleMon(&gBattleMons[gActiveBattler], ret);
+                GiveMoveToBattleMon(&gBattleMons[gActiveBattler], learnMove);
             }
         }
-        gBattlescriptCurrInstr = jumpPtr1;
+        gBattlescriptCurrInstr = learnedMovePtr;
     }
 }
 
@@ -9364,7 +9366,7 @@ static void atk5A_yesnoboxlearnmove(void)
         {
             FreeAllWindowBuffers();
             ShowSelectMovePokemonSummaryScreen(gPlayerParty, gBattleStruct->expGetterMonId, gPlayerPartyCount - 1, ReshowBattleScreenAfterMenu, gMoveToLearn);
-            ++gBattleScripting.learnMoveState;
+            ++gBattleScripting.learnMoveState; //above line is the problem^
         }
         break;
     case 3: //replaces move whne you answer yes, if it can be deleted
