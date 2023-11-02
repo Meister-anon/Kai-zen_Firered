@@ -9313,6 +9313,8 @@ static void atk59_handlelearnnewmove(void)
 
 static void atk5A_yesnoboxlearnmove(void)
 {
+     CMD_ARGS(const u8 *forgotMovePtr);
+
     u8 movePosition = GetMoveSlotToReplace(); //for some reason only works on top line
     u16 moveId = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_MOVE1 + movePosition); //neeed to change 1 of these
     gActiveBattler = 0;//Kurausukun & The Sylph is in  cleared it up for me, variables have to be declared first at the top of a code block above gactivebat in this case
@@ -9436,7 +9438,7 @@ static void atk5A_yesnoboxlearnmove(void)
             PlaySE(SE_SELECT);
             //gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1); //follow pointer
             HandleBattleWindow(0x17, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
-            gBattlescriptCurrInstr += 5; // don't jump don't forget move progress to next script
+            gBattlescriptCurrInstr = cmd->forgotMovePtr; // don't jump don't forget move progress to next script
         }
         break;
     case 7: //put rest of move replace heree
@@ -9448,7 +9450,7 @@ static void atk5A_yesnoboxlearnmove(void)
             {
                 //u16 moveId = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_MOVE1 + movePosition);
 
-                gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1); //does jump to 123 poof
+                gBattlescriptCurrInstr = cmd->forgotMovePtr; //does jump to 123 poof
                 //PREPARE_MOVE_BUFFER(gBattleTextBuff2, moveId) //sets move forgotten to buffer2
                     RemoveMonPPBonus(&gPlayerParty[gBattleStruct->expGetterMonId], movePosition);
                 SetMonMoveSlot(&gPlayerParty[gBattleStruct->expGetterMonId], gMoveToLearn, movePosition);
@@ -9472,7 +9474,7 @@ static void atk5A_yesnoboxlearnmove(void)
         break;
     case 8:  //case 4
         HandleBattleWindow(0x17, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
-        gBattlescriptCurrInstr += 5;  //skip jump ptr, move to next instruction
+        gBattlescriptCurrInstr = cmd->forgotMovePtr;  //skip jump ptr, move to next instruction
         break;
     case 9: //not used?
         if (!gBattleControllerExecFlags)

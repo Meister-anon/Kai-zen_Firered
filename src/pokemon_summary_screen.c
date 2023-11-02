@@ -2456,7 +2456,7 @@ static void BufferMonMoveI(u8 i)//think this is the menu/function I need has mov
     if (i < 4)
         sMonSummaryScreen->moveIds[i] = GetMonMoveBySlotId(&sMonSummaryScreen->currentMon, i);
 
-    if (sMonSummaryScreen->moveIds[i] == 0)//tells function what to do if data doesn't exist in the slot/window i.e no move
+    if (sMonSummaryScreen->moveIds[i] == MOVE_NONE)//tells function what to do if data doesn't exist in the slot/window i.e no move
     {
         StringCopy(sMonSummaryScreen->summary.moveNameStrBufs[i], gText_PokeSum_OneHyphen);
         StringCopy(sMonSummaryScreen->summary.moveCurPpStrBufs[i], gText_PokeSum_TwoHyphens);
