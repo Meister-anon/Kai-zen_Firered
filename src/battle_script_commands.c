@@ -9422,7 +9422,7 @@ static void atk5A_yesnoboxlearnmove(void)
             {
                 //gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1); //follow pointer
                 HandleBattleWindow(24, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
-                gBattlescriptCurrInstr += 5;// don't jump don't forget move progress to next script
+                cmd->nextInstr;// don't jump don't forget move progress to next script
             }
             else //move to next script if select yes
                 //gBattlescriptCurrInstr += 5;  won't to use pointer and learn move just need to continue in this case
@@ -9439,7 +9439,7 @@ static void atk5A_yesnoboxlearnmove(void)
             PlaySE(SE_SELECT);
             //gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1); //follow pointer
             HandleBattleWindow(0x17, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
-            gBattlescriptCurrInstr = cmd->forgotMovePtr; // don't jump don't forget move progress to next script
+            gBattlescriptCurrInstr = cmd->nextInstr; // don't jump don't forget move progress to next script
         }
         break;
     case 7: //put rest of move replace heree
