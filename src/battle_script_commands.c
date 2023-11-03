@@ -3952,12 +3952,13 @@ static void atk0F_resultmessage(void) //covers the battle message displayed afte
 
 static void atk10_printstring(void)
 {
-    if (!gBattleControllerExecFlags)
+    CMD_ARGS(u16 stringid);
+    if (gBattleControllerExecFlags == 0)
     {
-        u16 var = T2_READ_16(gBattlescriptCurrInstr + 1);
+        u16 stringid = cmd->stringid;
 
-        PrepareStringBattle(var, gBattlerAttacker);
-        gBattlescriptCurrInstr += 3;
+        gBattlescriptCurrInstr = cmd->nextInstr;
+        PrepareStringBattle(stringid, gBattlerAttacker);
         gBattleCommunication[MSG_DISPLAY] = 1;
     }
 }
@@ -3995,13 +3996,15 @@ static void atk12_waitmessage(void)
 
 static void atk13_printfromtable(void)
 {
-    if (!gBattleControllerExecFlags)
-    {
-        const u16 *ptr = (const u16 *) T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    CMD_ARGS(const u16 *table);
 
-        ptr += gBattleCommunication[MULTISTRING_CHOOSER];
-        PrepareStringBattle(*ptr, gBattlerAttacker);
-        gBattlescriptCurrInstr += 5;
+    if (gBattleControllerExecFlags == 0)
+    {
+        const u16 *table = cmd->table;
+        table += gBattleCommunication[MULTISTRING_CHOOSER];
+
+        gBattlescriptCurrInstr = cmd->nextInstr;
+        PrepareStringBattle(*table, gBattlerAttacker);
         gBattleCommunication[MSG_DISPLAY] = 1;
     }
 }

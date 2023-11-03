@@ -67,9 +67,9 @@
 	.byte 0xf
 	.endm
 
-	.macro printstring id:req
+	.macro printstring stringid:req
 	.byte 0x10
-	.2byte \id
+	.2byte \stringid
 	.endm
 
 	.macro printselectionstring id:req
@@ -82,9 +82,9 @@
 	.2byte \param0
 	.endm
 
-	.macro printfromtable ptr:req
+	.macro printfromtable table:req
 	.byte 0x13
-	.4byte \ptr
+	.4byte \table
 	.endm
 
 	.macro printselectionstringfromtable ptr:req

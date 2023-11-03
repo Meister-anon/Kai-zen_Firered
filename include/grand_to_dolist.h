@@ -889,6 +889,11 @@ still need rework poison setup or set back to full normal, right now poison anim
  considering put in squirtle ball instead  nah doesn't get water moves, its best where it is I guess
 
  need check move olearn its doing weird things when I had it working 
+  -replaced og jumps w wrong cmd args alues, thats fixed
+  bug with battler switch still an issue
+  -thief logic not right, theif takes target item gives to player battler
+  even when holding an item.
+  change to toss into bag, not give to mon if its already holding an item
 
  shadow_tasg reading wrong battle name for message for some reason check if just for oak battle and works norma elsewhere
  i.e put litwick in starter area

@@ -933,6 +933,7 @@ bool8 WasUnableToUseMove(u8 battler)
         return FALSE;
 }
 
+//most oft comes from atk10_printstring
 void PrepareStringBattle(u16 stringId, u8 battler)
 {
     u32 targetSide = GetBattlerSide(gBattlerTarget);
