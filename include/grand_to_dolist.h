@@ -1118,8 +1118,10 @@ damageHelper = spDefense;  (defense stat)
  after confirm move slot and go back to battle screen for 1 2 poof/learned move
  will need to put move swap loigic in summary screen as well, so if player swaps moves it'll go back to avoid visual bug
  dont think can do mid battle, unless I literally don't let the moves be swapped into certain slots...welp guess i'm doing that
- so that means putting it in 3 places, move learn, summary screen and battle menu
+ so that means putting it in 3 places, move learn, summary screen and battle menu*/
+ goto MOVE_SWAP_FUNCTION
 
+/*
  endure message also isn't working correctly? its showing mon endured the hit, whenever it takes dmg, rather than just when it would take dmg
  that would otherwise kill it.
 
@@ -1303,6 +1305,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   of party menu, make icons on hover over move left instead of right, so they don't get cutoff by icon
 
   setup running allowed everywhere, except gyms 
+
+  very weird bug, attempting to trace adaptability mon, causes weird hp drop, unable to identify exact condition as it acted different between different cases.
+  -hoping its just part of the weirdness of oak battle and it doesn't extend beyond the first fight
+  - IMPORTANT   vsonic
 
   for different tile for more encounters i.e tal grass being double encounters and gen 2 style low grass being normal encounters but at a lower encounter rate
   way maps are setup  blank grass is meant for open areas you don't do anything on, so for separate encouters would need to rearrange tall grass

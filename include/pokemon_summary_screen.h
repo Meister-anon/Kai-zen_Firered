@@ -11,7 +11,7 @@ u8 GetMoveSlotToReplace(void);
 void SummaryScreen_SetUnknownTaskId(u8 a0);
 void SummaryScreen_DestroyUnknownTask(void);
 u8 GetLastViewedMonIndex(void);
-void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, void (*callback)(void), u8 a4);
+void ShowPokemonSummaryScreen(struct Pokemon *party, u8 cursorPos, u8 lastIdx, void (*callback)(void), u8 mode);
 void SetPokemonSummaryScreenMode(u8);
 
 void PokeballIcon_CaughtIn(u8 y);

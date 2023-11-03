@@ -1136,7 +1136,7 @@ void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, 
     sMonSummaryScreen->unk3228 = 0;
     sMonSummaryScreen->unk322C = 1;
 
-    BufferSelectedMonData(&sMonSummaryScreen->currentMon);
+    BufferSelectedMonData(&sMonSummaryScreen->currentMon); //should set currentmon to value of lastviewedindex
     sMonSummaryScreen->isEgg = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_EGG);
     sMonSummaryScreen->isBadEgg = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SANITY_IS_BAD_EGG);
 
@@ -1147,11 +1147,11 @@ void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, 
     SetMainCallback2(CB2_SetUpPSS);
 }
 
-void ShowSelectMovePokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, MainCallback savedCallback, u16 a4)
+void ShowSelectMovePokemonSummaryScreen(struct Pokemon *party, u8 cursorPos, u8 lastIdx, MainCallback savedCallback, u16 newMove)
 {
     ShowPokemonSummaryScreen(party, cursorPos, lastIdx, savedCallback, PSS_MODE_SELECT_MOVE);
-    sMonSummaryScreen->moveIds[4] = a4;
-}
+    sMonSummaryScreen->moveIds[4] = newMove;
+} //cursor position is which mon to show
 
 static u8 sub_813476C(u8 a0)
 {
@@ -4142,15 +4142,21 @@ static void BufferSelectedMonData(struct Pokemon * mon)
 #define DOUBLE_BATTLE   (gMain.inBattle && doubles)
 #define TRIPLE_ROTATION (gMain.inBattle && rotation) //update for triple battle add for ability desc list too, need defines from below
 
-static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot)
+//problem identified its these 2 functions that are the issue
+//issue is this GetBattlerAtPosition(B_POSITION_PLAYER_LEFT) want to get this set in place of player party, want to use battle position that was plan
+//issue was with switching, playerparty isn't changed how I thought, so current setup isn't as fool proof as I thought
+//looking into potentiallt gBattlerPartyIndexes[] can be used
+//mon = &gPlayerParty[gBattlerPartyIndexes[gActiveBattler]];  taht did it, seems to be working now, but need to check doubles as unsure if it is right,
+//but it shold be
+static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot) 
 {
     u16 move;
     u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
     u32 singles, doubles, rotation;
     curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
-    slot1_personality = GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY);
-    slot2_personality = GetMonData(&gPlayerParty[1], MON_DATA_PERSONALITY);
-    slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY);
+    slot1_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_PERSONALITY);
+    slot2_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_PERSONALITY);
+    slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY); //placehold value setup later
     
     singles = (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TRIPLE | BATTLE_TYPE_TWO_OPPONENTS)));
     doubles = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE);
@@ -4186,7 +4192,7 @@ static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot)
 
             if  ((curr_personality == slot3_personality)
             && GetMonData(&gPlayerParty[2], MON_DATA_HP))
-                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[0];
+                move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[0]; //fill in value, will need make new on efor triple/rotation instead of positionm right
         }
         else
             move = GetMonData(mon, MON_DATA_MOVE1);
@@ -4300,9 +4306,9 @@ static u16 GetMonPpByMoveSlot(struct Pokemon * mon, u8 moveSlot)
     u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
     u32 singles, doubles, rotation;
     curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
-    slot1_personality = GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY);
-    slot2_personality = GetMonData(&gPlayerParty[1], MON_DATA_PERSONALITY);
-    slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY);
+    slot1_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_PERSONALITY); //works need test doubles value unsure of if right
+    slot2_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_PERSONALITY);
+    slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY); //placehold value setup later
     
     singles = (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TWO_OPPONENTS)));
     doubles = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE);
@@ -4658,6 +4664,8 @@ static void Task_HandleInput_SelectMove(u8 id)
     }
 }
 
+//vsonic here would be setup for move swap based on move length
+#define MOVE_SWAP_FUNCTION
 static void SwapMonMoveSlots(void)
 {
     struct Pokemon * partyMons;

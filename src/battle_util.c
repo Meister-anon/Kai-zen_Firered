@@ -934,6 +934,8 @@ bool8 WasUnableToUseMove(u8 battler)
 }
 
 //most oft comes from atk10_printstring
+//fixed had to update printstring and printstringfromtable to cmdargs
+//and swap order of print and increment
 void PrepareStringBattle(u16 stringId, u8 battler)
 {
     u32 targetSide = GetBattlerSide(gBattlerTarget);

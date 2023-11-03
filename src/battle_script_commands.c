@@ -6339,7 +6339,7 @@ static void atk23_getexp(void)
         else
         {
             ++gBattleStruct->expGetterMonId;
-            if (gBattleStruct->expGetterMonId <= 5) // this isn't caseid, this is a mon id, so I believe this just says check every pokemon in party
+            if (gBattleStruct->expGetterMonId < PARTY_SIZE) // this is a mon id, so I believe this just says check every pokemon in party
                 gBattleScripting.atk23_getexpState = 2; // loop again
             else
                 gBattleScripting.atk23_getexpState = 6; // we're done
@@ -9353,7 +9353,7 @@ static void atk5A_yesnoboxlearnmove(void)
             if (gBattleCommunication[CURSOR_POSITION] == 0)
             {
                 HandleBattleWindow(0x17, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
-                BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
+                BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
                 ++gBattleScripting.learnMoveState;  //case 2
             }
             else
@@ -9373,6 +9373,8 @@ static void atk5A_yesnoboxlearnmove(void)
             FreeAllWindowBuffers();
             ShowSelectMovePokemonSummaryScreen(gPlayerParty, gBattleStruct->expGetterMonId, gPlayerPartyCount - 1, ReshowBattleScreenAfterMenu, gMoveToLearn);
             ++gBattleScripting.learnMoveState; //above line is the problem^  //specificallyu expgetter
+                                                //nvm this isn't' the problem, its showing the summary screen for said mon, but buffering the moves is done separately THAT'S the issue
+                                                //as I see its showing the correct mon name and image, but if I change 2nd value it shows a different mon
         }
         break;
     case 3: //replaces move whne you answer yes, if it can be deleted
