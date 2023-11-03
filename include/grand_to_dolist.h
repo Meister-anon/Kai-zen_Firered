@@ -1308,7 +1308,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   very weird bug, attempting to trace adaptability mon, causes weird hp drop, unable to identify exact condition as it acted different between different cases.
   -hoping its just part of the weirdness of oak battle and it doesn't extend beyond the first fight
-  - IMPORTANT   vsonic
+  - IMPORTANT   vsonic - checked and luckily it is,
+  //just normal part of weirdness that comes wth switching during oak battle, only occurs on switch,
+  in oak battle, so when finish setup and test everything, and remove test features, this will never be a problem
+  as only one mon will be had, so there would be no switching.
 
   for different tile for more encounters i.e tal grass being double encounters and gen 2 style low grass being normal encounters but at a lower encounter rate
   way maps are setup  blank grass is meant for open areas you don't do anything on, so for separate encouters would need to rearrange tall grass

@@ -1836,7 +1836,7 @@ static void atk01_accuracycheck(void)
 {
     u16 move = T2_READ_16(gBattlescriptCurrInstr + 5);
 
-    if (/*(gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE
+    if ((gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE
         && !BtlCtrl_OakOldMan_TestState2Flag(1)
         && gBattleMoves[move].power != 0
         && GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
@@ -1844,9 +1844,9 @@ static void atk01_accuracycheck(void)
             && !BtlCtrl_OakOldMan_TestState2Flag(2)
             && gBattleMoves[move].power == 0
             && GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
-        || */(gBattleTypeFlags & BATTLE_TYPE_POKEDUDE))
+        || (gBattleTypeFlags & BATTLE_TYPE_POKEDUDE))
     {
-        JumpIfMoveFailed(7, move);  //looks like this makes it so player cant miss in first rival battle?
+        JumpIfMoveFailed(7, move);  //looks like this makes it so player cant miss in first rival battle? (and no one can crit as well)
         return; //seems to be too ensure the battle messages for dmg & lowering stats play, not really likely to be an issue but ok
     }
 
