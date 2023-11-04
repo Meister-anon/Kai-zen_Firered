@@ -1539,18 +1539,18 @@ const u16 sBulbasaurBall[] = {
     SPECIES_CHESPIN,
     SPECIES_ROWLET,
     SPECIES_GROOKEY,
-    SPECIES_AIPOM,
+    SPECIES_AIPOM, //doesnt make sense I just want to show off, would replace w voltorb but you can get those easily, so keep 
     SPECIES_PARAS,
     SPECIES_VULPIX_ALOLAN,
-    SPECIES_TYROGUE,
-    SPECIES_EEVEE,
-    SPECIES_RALTS,
+    SPECIES_DITTO,  //replaced tyrogue w ditto, show off changed transform mechanics, 
+    SPECIES_EEVEE, //free eevee  lets go style
+    SPECIES_RALTS, //resists fire
     SPECIES_MAGNEMITE,
     SPECIES_SCYTHER,
     SPECIES_ODDISH,
     SPECIES_FOMANTIS,
     SPECIES_SWINUB,
-    SPECIES_TYNAMO,
+    SPECIES_FOONGUS, //doesnt work well, breaks relation of lists, hmm replace w voltorb, pokeball in a pokeball
     SPECIES_TOGEDEMARU
     //LIST_END
 }; //this list matches the best the others need more work
@@ -1566,17 +1566,17 @@ const u16 sSquirtleBall[] = {
     SPECIES_POPPLIO,
     SPECIES_BINACLE,
     SPECIES_CORSOLA,
-    SPECIES_BONSLY,
+    SPECIES_BONSLY, //replaced bonsly put it in a forest, BROUGHT bonsley back  fits cute starters
     SPECIES_EEVEE,
-    SPECIES_LOTAD,
+    SPECIES_TEDDIURSA, //replaced lotad
     SPECIES_PHANPY,
     SPECIES_AZURILL,
     SPECIES_ROCKRUFF,
-    SPECIES_SKITTY, //with ghost change skitty would be better in squirtle group
+    SPECIES_SKITTY, //with ghost change skitty would be better in squirtle group, I just want it there, starter doesn't work well as not ghost until evoles,
     SPECIES_SANDSHREW, //resist fire weak to grass, but electric in grass ball breaks list
     SPECIES_WOOPER,
-    SPECIES_ROGGENROLA, //works but I like SPECIES_GOLETT better? is more interesting/popular
-    SPECIES_WAILMER,
+    SPECIES_BUNNELBY, //works but I like SPECIES_GOLETT better? is more interesting/popular , replaced rogenrolla //oh right didn't use cuz ghost was free early game wins
+    SPECIES_LOTAD,  //REPLACED wailmer
     SPECIES_SPHEAL
     //LIST_END
 };
@@ -1597,8 +1597,8 @@ const u16 sCharmanderBall[] = {
     SPECIES_MURKROW,    //beats grass no relation to water
     SPECIES_LICKITUNG,
     SPECIES_PONYTA,
-    SPECIES_LITWICK,
-    SPECIES_TEDDIURSA,
+    SPECIES_NUMEL, //removed litwick put them in laverge tower
+    SPECIES_NOIBAT, //replaced tediursa, looks like a starter but doesn't quite match type since it resists water, but keeping
     SPECIES_FLETCHLING,
     SPECIES_MILTANK,
     SPECIES_GROWLITHE_HISUIAN,    //didn't have graphics just added
@@ -1613,22 +1613,26 @@ const u16 sCharmanderBall[] = {
 
 //started with entire list step 1, remove mono type, step 2 remove all I want to list as type 1.  keep all I want listed as type 2 in teh script here.
 //this array below is to substitute type 2 in the oak script where he reads the starter choice. "you picked the *blank* type, species name"
-
 //update the definitnion this value when adding to the array
 //should be number of values in array count from 1 not 0.
 const u16 sTypeExceptions[] = {
     SPECIES_BINACLE,
     SPECIES_RALTS,
     SPECIES_AZURILL,
-    SPECIES_MISDREAVUS,
     SPECIES_SPHEAL,
     SPECIES_MURKROW,
     SPECIES_LICKITUNG,
     SPECIES_HOUNDOUR,
     SPECIES_TYROGUE,
+    SPECIES_DODUO,
     SPECIES_FLETCHLING,
     SPECIES_SANDSHREW,
+    SPECIES_PHANPY,
     SPECIES_CASTFORM,
+    SPECIES_BUNNELBY,
+    SPECIES_ROCKRUFF,
+    SPECIES_GLIGAR,
+    SPECIES_PONYTA,
     SPECIES_TEPIG
 };
 

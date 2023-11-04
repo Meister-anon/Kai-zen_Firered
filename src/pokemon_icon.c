@@ -1256,6 +1256,7 @@ const u8 *const gMonIconTable[] = {
 };
 
 //don't know if need be in hex
+//seems can go to 0-5
 const u8 gMonIconPaletteIndices[] = {
     [SPECIES_NONE] = 0,
     [SPECIES_BULBASAUR] = 1,
@@ -2096,17 +2097,17 @@ const u8 gMonIconPaletteIndices[] = {
     [SPECIES_ZERAORA] = 0,
     [SPECIES_MELTAN] = 2,
     [SPECIES_MELMETAL] = 2,
-    [SPECIES_GROOKEY] = 0,
-    [SPECIES_THWACKEY] = 0,
-    [SPECIES_RILLABOOM] = 0,
-    [SPECIES_SCORBUNNY] = 0,
-    [SPECIES_RABOOT] = 0,
+    [SPECIES_GROOKEY] = 1,
+    [SPECIES_THWACKEY] = 1,
+    [SPECIES_RILLABOOM] = 1,
+    [SPECIES_SCORBUNNY] = 1,
+    [SPECIES_RABOOT] = 2,
     [SPECIES_CINDERACE] = 0,
-    [SPECIES_SOBBLE] = 0,
-    [SPECIES_DRIZZILE] = 0,
+    [SPECIES_SOBBLE] = 2,
+    [SPECIES_DRIZZILE] = 2,
     [SPECIES_INTELEON] = 0,
-    [SPECIES_SKWOVET] = 0,
-    [SPECIES_GREEDENT] = 0,
+    [SPECIES_SKWOVET] = 2,
+    [SPECIES_GREEDENT] = 2,
     [SPECIES_ROOKIDEE] = 0,
     [SPECIES_CORVISQUIRE] = 0,
     [SPECIES_CORVIKNIGHT] = 0,

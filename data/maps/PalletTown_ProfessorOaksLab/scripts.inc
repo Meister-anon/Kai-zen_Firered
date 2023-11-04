@@ -1199,7 +1199,7 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmCharmander:: @ 8169C52
 PalletTown_ProfessorOaksLab_EventScript_DeclinedStarter:: @ 8169C71
 	erasemonpic
 	release
-	callnative SetPlayerRandomStarterSpecies	@for test, remove this for final version
+	@callnative SetPlayerRandomStarterSpecies	@for test, remove this for final version  vsonic
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_ChoseStarter:: @ 8169C74

@@ -1304,7 +1304,18 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   but need move party icons to fit better, right now for right side 
   of party menu, make icons on hover over move left instead of right, so they don't get cutoff by icon
 
-  setup running allowed everywhere, except gyms 
+  setup running allowed everywhere, except gyms - done
+
+  -seems in general gen 8 icons too big? or is it just the starters, 
+  it causes issue with move info page icon is too big to fit in box
+
+
+  //vsonic add further logic to SetRivalRandomStarterSpecies, in field_speciels.c
+  long as player starter randomized first, can reroll this based on that to ensure type alignment matches advantage/disadvantage
+ //inspired metronome/pickup logic, just need compare with respective player var i.e  bulb var == sbulbasaurball[value]  
+ // && rival chrmanderball var  is scharmanderball[value]  reroll  this way I can preserve the relationship or at the least don't end up with an advantage to rival starter
+ //for exmample if I as player roll value that gives me a tyrogue, rival is unable to save value for miltank, which would give me advantage.
+ //instead if they landed on that they would reroll.  ...damn I miss vs studio. 
 
   very weird bug, attempting to trace adaptability mon, causes weird hp drop, unable to identify exact condition as it acted different between different cases.
   -hoping its just part of the weirdness of oak battle and it doesn't extend beyond the first fight
@@ -1408,7 +1419,17 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
 
  note type bug existed before sheen removal so it isn't that
- & also grookey  & scorbunny have wrong palette for their icons
+ & also grookey  & scorbunny have wrong palette for their icons+
+
+  identified issue with palette icon, its gMonIconPaletteIndices  //seems can go to 0-5
+  the indicees aren't right compared to emerald its different
+  need to go through and adjust all these they can differ per icon, so different evo can have different indicee values that work
+  //seems to just be an issue w gen 8 far as I can see though at least
+
+  also triple check species_names.h seems some names are still truncated found corviknight and corvisquire were off truncated by 1
+
+  - after that will still need to adjust icon size, prob just take it in grahpicsgale scale it down and put it back in buffer dimmenssions
+  //
 
  ok noted type bug works off whatever was last there, if your last fight was a trainer battle and the values were set correctly
  you'll go into your next fight in the same state,  switching out clears it, as there's a function that properly sets type from base stats

@@ -487,8 +487,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(40, 45, 40, 67, 45, 35),
-        .type1 = TYPE_FLYING,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FLYING,
         .catchRate = 255,
         .expYield = 50,
         //.evYield_Speed = 1,
@@ -509,8 +509,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(63, 70, 55, 91, 70, 50),
-        .type1 = TYPE_FLYING,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FLYING,
         .catchRate = 120,
         .expYield = 122,
         //.evYield_Speed = 2,
@@ -531,8 +531,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(105, 90, 85, 121, 85, 80),
-        .type1 = TYPE_FLYING,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FLYING,
         .catchRate = 45,
         .expYield = 216,
         //.evYield_Speed = 3,
@@ -595,8 +595,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(40, 60, 30, 70, 31, 31),
-        .type1 = TYPE_FLYING,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FLYING,
         .catchRate = 255,
         .expYield = 52,
         //.evYield_Speed = 1,
@@ -619,8 +619,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(65, 100, 65, 100, 61, 61),
-        .type1 = TYPE_FLYING,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FLYING,
         .catchRate = 90,
         .expYield = 155,
         //.evYield_Speed = 2,
@@ -2041,8 +2041,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(70, 105, 60, 60, 50, 62),
-        .type1 = TYPE_FLYING,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FLYING,
         .catchRate = 45,
         .expYield = 192,
         //.evYield_Attack = 1,
@@ -2065,8 +2065,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(50, 85, 45, 75, 35, 35),
-        .type1 = TYPE_FLYING,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FLYING,
         .catchRate = 190,
         .expYield = 62,
         //.evYield_Attack = 1,
@@ -2531,8 +2531,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(50, 50, 95, 45, 40, 50),
-        .type1 = TYPE_GROUND,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_GROUND,
         .catchRate = 190,
         .expYield = 64,
         //.evYield_Defense = 1,
@@ -2553,8 +2553,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(60, 88, 118, 65, 50, 80),
-        .type1 = TYPE_GROUND,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_GROUND,
         .catchRate = 75,
         .expYield = 149,
         //.evYield_Defense = 2,
@@ -4754,7 +4754,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_PRESSURE, ABILITY_PRANKSTER}, 
-        .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_NONE},
+        .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_UNNERVE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },
@@ -4951,8 +4951,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(60, 80, 50, 30, 40, 50),
-        .type1 = TYPE_FAIRY,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FAIRY,
         .catchRate = 190,
         .expYield = 60,
         //.evYield_Attack = 1,
@@ -4974,8 +4974,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(86, 120, 75, 45, 60, 80),
-        .type1 = TYPE_FAIRY,
-        .type2 = TYPE_NORMAL,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_FAIRY,
         .catchRate = 75,
         .expYield = 158,
         //.evYield_Attack = 2,
@@ -8440,9 +8440,9 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_PRESSURE, ABILITY_SUPER_LUCK},
+            .abilities = {ABILITY_DARK_DEAL, ABILITY_SUPER_LUCK},
             .abilityHidden = {ABILITY_RATTLED, ABILITY_JUSTIFIED},  //WITH dark type change, had remove justified
-        .bodyColor = BODY_COLOR_WHITE,
+        .bodyColor = BODY_COLOR_WHITE, //actually dark deal makes more sense, call it devils luck
         .noFlip = FALSE,
     },//actually maybe keep justified over ABILITY_DARK_DEAL, absol isn't bad/evil plus w super mul drop it may survive to get the dbenefit?
 
@@ -10039,7 +10039,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_MAGIC_BOUNCE, ABILITY_PRANKSTER},
-        .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_NONE},
+        .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_UNNERVE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -11709,7 +11709,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_BLAZE, ABILITY_RATTLED},
+        .abilities = {ABILITY_BLAZE, ABILITY_RATTLED}, //hard to decide think I like rattled better as a consistent effect?
         .abilityHidden = {ABILITY_THICK_FAT, ABILITY_SAND_RUSH},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -16435,7 +16435,7 @@ const struct BaseStats gBaseStats[] =
         36
         ),
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_GROUND,
         .catchRate = 255,
         .expYield = 47,
         //.evYield_Speed = 1,

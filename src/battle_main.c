@@ -1155,9 +1155,14 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     GET_MOVE_TYPE(move, moveType);
 
 
-    if (move == MOVE_RAGE) //sets rage to type 1
-        gBattleStruct->dynamicMoveType = gBattleMons[battlerAtk].type1; //need make sure use battlerAtk not gbattlerattacker that causes errors for some reason
-
+    if (move == MOVE_RAGE) //sets rage type with preference for non normal
+        {
+            if (gBattleMons[battlerAtk].type1 == TYPE_NORMAL 
+            && gBattleMons[battlerAtk].type2 != TYPE_NORMAL)
+                gBattleStruct->dynamicMoveType = gBattleMons[battlerAtk].type2;
+            else //sets rage to type 1
+                gBattleStruct->dynamicMoveType = gBattleMons[battlerAtk].type1; //need make sure use battlerAtk not gbattlerattacker that causes errors for some reason
+        }
 
     if ((gFieldStatuses & STATUS_FIELD_ION_DELUGE && moveType == TYPE_NORMAL)//add absolute zero, check if ability on field, like stench then do water chance to ice
         || gStatuses4[battlerAtk] & STATUS4_ELECTRIFIED)

@@ -991,6 +991,15 @@ void PrepareStringBattle(u16 stringId, u8 battler)
         SET_STATCHANGER(STAT_SPEED, 2, FALSE);  //buffed to 2 stage stat boost
     }
     else if ((stringId == STRINGID_PKMNCUTSATTACKWITH || stringId == STRINGID_TIGER_MOM_ACTIVATES)
+        && targetAbility == ABILITY_JUSTIFIED
+        && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
+    {
+        gBattlerAbility = gBattlerTarget;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_AbilityRaisesDefenderStat;
+        SET_STATCHANGER(STAT_ATK, 2, FALSE);  //gave to justified
+    }
+    else if ((stringId == STRINGID_PKMNCUTSATTACKWITH || stringId == STRINGID_TIGER_MOM_ACTIVATES)
         && targetAbility == ABILITY_ANGER_POINT 
         && CompareStat(gBattlerTarget, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)) //For the trolls  :)
     {
@@ -3578,7 +3587,7 @@ u8 AtkCanceller_UnableToUseMove(void)
         case CANCELLER_PRESSURE: // new pressure effect
             if (((GetBattlerAbility(gBattlerTarget) == ABILITY_PRESSURE)
                 && (Random() % 6) == 1)
-                && IsBlackFogNotOnField())
+                && IsBlackFogNotOnField()) //was gonna prevent work on switch but that kinda ruins it?
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MovePressureCanceler;
@@ -6321,7 +6330,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && TARGET_TURN_DAMAGED
                     && IsBattlerAlive(battler)
-                    && (moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST)
+                    && (moveType == TYPE_DARK || moveType == TYPE_GHOST) //removed bug as bug is supposed to be "good" ie kamen rider super sentai
                     && CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
                 {
                     gEffectBattler = battler;
