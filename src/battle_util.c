@@ -10416,7 +10416,7 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
     {
         mod = UQ_4_12(1.0);
         /*if (recordAbilities)
-            RecordAbilityBattle(battlerAtk, ABILITY_SCRAPPY);*/
+            RecordAbilityBattle(battlerAtk, ABILITY_SCRAPPY);*/ //may use but for now just not displaying message, for surprise
     }
     //grounded mon logic
     else if ((moveType == TYPE_FIGHTING) && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(0.5))
@@ -10490,8 +10490,9 @@ u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 bat
     }
 
     if (recordAbilities)
-        UpdateMoveResultFlags(modifier); //understand what this does now, it reads the modifier and based on result will change the move result message
+       UpdateMoveResultFlags(modifier); //understand what this does now, it reads the modifier and based on result will change the move result message
     return modifier;                    //that would be done from type chart to reflect the multiplier
+                        //nvm that's not what it does, without that, move result isn't set at all, so dmg is done but no message is shown
 }
 
 //used to repalce CheckWonderGuardAndLevitate, to remove reliance on gamefreak's stupid janky type loop foresight logic
@@ -10499,10 +10500,15 @@ u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 bat
 static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities, u16 modifier)
 {
     u16 defAbility = GetBattlerAbility(battlerDef);
-
-    MulByTypeEffectiveness(&modifier, move, moveType, battlerDef, gBattleMons[battlerDef].type1, battlerAtk, recordAbilities);
+ //issue w this need adjust when read super effective into not very effective vice versa
+ // rather than multiplier going to 1 it multiplies leaving it not very effective 
+        MulByTypeEffectiveness(&modifier, move, moveType, battlerDef, gBattleMons[battlerDef].type1, battlerAtk, recordAbilities);
     if (gBattleMons[battlerDef].type2 != gBattleMons[battlerDef].type1)
         MulByTypeEffectiveness(&modifier, move, moveType, battlerDef, gBattleMons[battlerDef].type2, battlerAtk, recordAbilities);
+
+    if (modifier == UQ_4_12_TO_INT((UQ_4_12(1.55) * UQ_4_12(0.5)) + UQ_4_12_ROUND)) //rebalance after reading type 2, doubt if will work for two type moves(actually it should) so super into resist resets to neutral
+        modifier = UQ_4_12(1.0); //ok working perfect now, and dmg isn't too much greater
+
     if (gBattleMons[battlerDef].type3 != TYPE_MYSTERY && gBattleMons[battlerDef].type3 != gBattleMons[battlerDef].type2
         && gBattleMons[battlerDef].type3 != gBattleMons[battlerDef].type1)
         MulByTypeEffectiveness(&modifier, move, moveType, battlerDef, gBattleMons[battlerDef].type3, battlerAtk, recordAbilities);

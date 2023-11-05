@@ -2622,7 +2622,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
     u8 type1 = gBattleMons[gBattlerTarget].type1, type2 = gBattleMons[gBattlerTarget].type2, type3 = gBattleMons[gBattlerTarget].type3;
     u16 effect = gBattleMoves[gCurrentMove].effect; //just realized should prob swap these for battlemons types since all types can shift, find where base stats becomes battlemons
     u16 multiplier;
-    
+
     if (gCurrentMove == MOVE_STRUGGLE || gCurrentMove == MOVE_BIDE) //should let hit ghost types could just remove typecalc bs from script instead...
     {
         ++gBattlescriptCurrInstr;
@@ -2762,7 +2762,10 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
     else if (gBattleMons[gBattlerTarget].hp != 0)
     {
         // take type effectiveness
-        gBattleMoveDamage = ApplyModifier(multiplier, gBattleMoveDamage);  //tested type replacemente seems to work, need more indepth test doduo etc.
+        gBattleMoveDamage = ApplyModifier(multiplier, gBattleMoveDamage);  
+        //tested type replacemente seems to work, need more indepth test doduo etc.
+        //seems to work differently than base, super/resisted dmg doen't cancel out becuase dif multipliers, 
+        //-addressed issue
 
         /*while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE) //identified issue with typecalc, its only reading type 1 for some reason,
         {

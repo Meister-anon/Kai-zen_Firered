@@ -1433,7 +1433,8 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   used emerald tyep setup to replace firered type chart,  mostly works but issue with mon that are super and then not very effective
   it doesn't cancel to 1, it multiplies so ends up with something below 1 and results in not very effective
   IMPORTANT TO CHANGE if something is super and resisted it should be neutral issue is this setup uses mod to set flags, not 
-  vsonic IMPORTANT
+  vsonic IMPORTANT  - fixed.   put logic ni functino taht after reading 2nd type will check multiplier, and reset to neutral
+  if it read a super and a resist, should work for dual type moves as well without issue I believe
 
  note type bug existed before sheen removal so it isn't that
  & also grookey  & scorbunny have wrong palette for their icons+
