@@ -269,6 +269,7 @@ extern const u8 BattleScript_AbilityCuredStatus[];
 extern const u8 BattleScript_IgnoresAndUsesRandomMove[];    
 extern const u8 BattleScript_PanickedAndUsesRandomMove[];
 extern const u8 BattleScript_BindDoCalledMove[];
+extern const u8 BattleScript_BindMoveRanoutofPP[];
 extern const u8 BattleScript_IllusionOff[];
 extern const u8 BattleScript_TwoTurnMovesSecondTurn[];
 extern const u8 BattleScript_EffectTwoTurnsAttackFreezeShock[];

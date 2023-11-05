@@ -1107,7 +1107,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     u32 moveType, ateType, attackerAbility;
     u16 holdEffect = GetBattlerHoldEffect(battlerAtk, TRUE);
 
-    if (move == (MOVE_STRUGGLE || MOVE_BIDE)) 
+    if (move == MOVE_STRUGGLE || move == MOVE_BIDE)
         return;
 
     gBattleStruct->dynamicMoveType = 0xFF; //change for new setup
@@ -4421,14 +4421,14 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                         gBattleCommunication[gActiveBattler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
                         return;
                     }
-                    /*else if (gDisableStructs[gActiveBattler].bindedMove != MOVE_NONE) //ok now undersetand these are fail conditinons nvm was wrong...
-                    //else if (gBattleMons[gActiveBattler].status4 & STATUS4_BIND) //conditions shuold be more or less on same level don' tknow why this one fails
+                    //else if (gDisableStructs[gActiveBattler].bindedMove != MOVE_NONE) //ok now undersetand these are fail conditinons nvm was wrong...
+                    else if (gBattleMons[gActiveBattler].status4 & STATUS4_BIND) //conditions shuold be more or less on same level don' tknow why this one fails
                     {
                         gChosenMoveByBattler[gActiveBattler] = gDisableStructs[gActiveBattler].bindedMove;
-                        //*(gBattleStruct->chosenMovePositions + gActiveBattler) = gDisableStructs[gActiveBattler].bindMovepos; //without this fainted logic works??
+                        *(gBattleStruct->chosenMovePositions + gActiveBattler) = gDisableStructs[gActiveBattler].bindMovepos; //without this fainted logic works??
                         gBattleCommunication[gActiveBattler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
                         return;
-                    } */
+                    } 
                     else
                     {
                         struct ChooseMoveStruct moveInfo;

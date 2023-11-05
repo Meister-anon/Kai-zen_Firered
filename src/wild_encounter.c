@@ -179,6 +179,7 @@ static u8 ChooseWildMonLevel(const struct WildPokemon * info)
     return lo + res;
 }
 
+#define CHECK_CURR_MAP
 static u16 GetCurrentMapWildMonHeaderId(void)
 {
     u16 i;

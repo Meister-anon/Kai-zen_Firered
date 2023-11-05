@@ -2097,6 +2097,8 @@ const u8 gMonIconPaletteIndices[] = {
     [SPECIES_ZERAORA] = 0,
     [SPECIES_MELTAN] = 2,
     [SPECIES_MELMETAL] = 2,
+    
+    
     [SPECIES_GROOKEY] = 1,
     [SPECIES_THWACKEY] = 1,
     [SPECIES_RILLABOOM] = 1,

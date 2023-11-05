@@ -156,6 +156,7 @@ static const u8 sText_PkmnClamped[] = _("{B_ATK_NAME_WITH_PREFIX} CLAMPED\n{B_DE
 static const u8 sText_PkmnHurtBy[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt\nby {B_BUFF1}!");
 static const u8 sText_PkmnHurtEmpathCurse[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} suffered the {B_DEF_ABILITY}!");
 static const u8 sText_PkmnFreedFrom[] = _("{B_ATK_NAME_WITH_PREFIX} was freed\nfrom {B_BUFF1}!");
+static const u8 sText_BindMoveOutofPP[] =_("{B_BUFF1} ran out PP!");
 static const u8 sText_PkmnCrashed[] = _("{B_ATK_NAME_WITH_PREFIX} kept going\nand crashed!");
 const u8 gBattleText_MistShroud[] = _("{B_ATK_PREFIX2} became\nshrouded in MIST!"); //using mist
 static const u8 sText_PkmnProtectedByMist[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is protected\nby MIST!");  //when targetted with mist up
@@ -1452,6 +1453,8 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_MONROOSTING - BATTLESTRINGS_TABLE_START]                   = sText_PkmnRoosting,
     [STRINGID_ATK_RAGEBUILDING - BATTLESTRINGS_TABLE_START]              = sText_AttackerRageBuilding,
     [STRINGID_ATK_RAGEABATED - BATTLESTRINGS_TABLE_START]                = sText_AttackerRageEnded,
+    [STRINGID_BIND_NO_PP - BATTLESTRINGS_TABLE_START]                    = sText_BindMoveOutofPP,
+
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
     [STRINGID_PLAYERWHITEDOUT - BATTLESTRINGS_TABLE_START]               = sText_PlayerWhiteout2,

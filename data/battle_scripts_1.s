@@ -9747,14 +9747,21 @@ BattleScript_IgnoresAndUsesRandomMove::
 BattleScript_PanickedAndUsesRandomMove::
 	printstring STRINGID_PKMNPANICKED
 	waitmessage B_WAIT_TIME_LONG
-	jumptocalledmove FALSE
-	moveendto MOVE_END_NEXT_TARGET
-	end
+	@jumptocalledmove FALSE
+	@moveendto MOVE_END_NEXT_TARGET
+	return
 
 BattleScript_BindDoCalledMove::
-	jumptocalledmove FALSE
-	moveendto MOVE_END_NEXT_TARGET
-	end
+	@jumptocalledmove FALSE
+	@moveendto MOVE_END_NEXT_TARGET
+	return
+
+BattleScript_BindMoveRanoutofPP::
+	printstring STRINGID_BIND_NO_PP
+	waitmessage B_WAIT_TIME_LONG
+	@jumptocalledmove FALSE
+	@moveendto MOVE_END_NEXT_TARGET
+	return
 
 BattleScript_MoveUsedLoafingAround::
 	printfromtable gInobedientStringIds

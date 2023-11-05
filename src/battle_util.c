@@ -3853,9 +3853,9 @@ u8 AtkCanceller_UnableToUseMove(void)
 
                         gMultiTask = Random() % 6; //return a number between 0 & 4
                         if (gMultiTask >= 4)
-                            gMultiTask = 4; // if non 0, present lands between 3-5 htis
+                            gMultiTask = 4; // sets 4 hits 2 out of 6
                         else if (gMultiTask <= 3)
-                            gMultiTask = 3; //else present lands 3 hits /odds of dmg vs heal is in presentdamagecalc
+                            gMultiTask = 3; //sets 3 hit version 4 out of 6
                         break;
                     }
                     case EFFECT_PRESENT:
@@ -5293,7 +5293,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                     //    want setup different message for each, nickname w prefix sensed an X move and shuddered
                                       //depending on value  or have different value copied to gBattleTextBuff1 for each
                                 }
-                                else if (gBattleMoves[move].effect == EFFECT_OHKO && (gBattleMons[i].level >= (gBattleMons[battler].level - 7))
+                                else if (gBattleMoves[move].effect == EFFECT_OHKO && (gBattleMons[i].level >= (gBattleMons[battler].level - 3))
                                 && CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) != UQ_4_12(0.0))
                                 {
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_OHKO);
@@ -10369,6 +10369,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
 
 //format for use is MulModifier(&modifier, UQ_4_12(1.55));   & is used to denote pointer here
 //all functions that use modifier start with u16 modifier = UQ_4_12(1.0); so it defaults to 1, and is modulated from there
+//going in type calc so beleive value to use inplace of modifier will be gbattlemovedamage?
 void MulModifier(u16 *modifier, u16 val) //portd tried to set globably hope works   //can use decimal values
 {
     *modifier = UQ_4_12_TO_INT((*modifier * val) + UQ_4_12_ROUND);
@@ -10406,6 +10407,7 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
         /*if (recordAbilities)
             RecordItemEffectBattle(battlerDef, HOLD_EFFECT_RING_TARGET);*/
     }
+    //Ghost hit logic
     else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT && mod == UQ_4_12(0.0))
     {
         mod = UQ_4_12(1.0);
@@ -10416,6 +10418,13 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
         /*if (recordAbilities)
             RecordAbilityBattle(battlerAtk, ABILITY_SCRAPPY);*/
     }
+    //grounded mon logic
+    else if ((moveType == TYPE_FIGHTING) && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(0.5))
+        mod = UQ_4_12(1.0);
+    else if ((moveType == TYPE_ELECTRIC) && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(1.55))
+        mod = UQ_4_12(1.0);
+        
+    //ability logic
     else if (GetBattlerAbility(battlerAtk) == ABILITY_NORMALIZE)
     {
         mod = UQ_4_12(1.0);
@@ -10439,7 +10448,7 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
     {
         mod = UQ_4_12(0.5); //Because only on kyurem deftype would be dragon
     }
-
+    //other misc effects
     if (moveType == TYPE_PSYCHIC && defType == TYPE_DARK && gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
     if (gBattleMoves[move].effect == EFFECT_FREEZE_DRY && defType == TYPE_WATER)
@@ -10452,14 +10461,14 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
     // B_WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pok�mon
     if (gBattleWeather & WEATHER_STRONG_WINDS && WEATHER_HAS_EFFECT)
     {
-        if (defType == TYPE_FLYING && mod >= UQ_4_12(1.55))
+        if (defType == TYPE_FLYING && mod == UQ_4_12(1.55))
             mod = UQ_4_12(1.0);
     }
 
     MulModifier(modifier, mod);
 }
 
-u16 GetTypeModifier(u8 atkType, u8 defType)
+u16 GetTypeModifier(u8 atkType, u8 defType) //used inside MulByTypeEffectiveness
 {
 
     if (FlagGet(FLAG_INVERSE_BATTLE) || GetBattlerAbility(gBattlerTarget) == ABILITY_INVERSE_WORLD) //or target mon has invers world ability i.e giratina origin
@@ -10473,7 +10482,7 @@ u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 bat
 {
     u16 modifier = UQ_4_12(1.0);
 
-    if (move != MOVE_STRUGGLE && moveType != TYPE_MYSTERY) //skips type calculation as both are meant to do typeless dmg i.e neutral to all
+    if (move != MOVE_STRUGGLE && move != MOVE_BIDE && moveType != TYPE_SOUND && moveType != TYPE_MYSTERY) //skips type calculation as both are meant to do typeless dmg i.e neutral to all
     {
         modifier = CalcTypeEffectivenessMultiplierInternal(move, moveType, battlerAtk, battlerDef, recordAbilities, modifier);
         if (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE)
@@ -10481,8 +10490,8 @@ u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 bat
     }
 
     if (recordAbilities)
-        UpdateMoveResultFlags(modifier);
-    return modifier;
+        UpdateMoveResultFlags(modifier); //understand what this does now, it reads the modifier and based on result will change the move result message
+    return modifier;                    //that would be done from type chart to reflect the multiplier
 }
 
 //used to repalce CheckWonderGuardAndLevitate, to remove reliance on gamefreak's stupid janky type loop foresight logic
@@ -10512,7 +10521,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     {
         modifier = UQ_4_12(0.0);
     }
-    else if ((moveType == TYPE_GROUND) && !IsBattlerGrounded(battlerDef) && !(gBattleMoves[move].flags & FLAG_DMG_IN_AIR))
+    else if ((moveType == TYPE_GROUND) && !IsBattlerGrounded(battlerDef) && !(gBattleMoves[move].flags & FLAG_DMG_IN_AIR) && !(gBattleMoves[move].flags & FLAG_DMG_2X_IN_AIR))
     {
         modifier = UQ_4_12(0.0);
         gMoveResultFlags |= MOVE_RESULT_MISSED;
@@ -10553,7 +10562,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
 
     if ((defAbility == ABILITY_LIQUID_SOUL && moveType == TYPE_WATER)
         && gBattleMoves[move].power)
-        {
+    {
              modifier = UQ_4_12(0.0);
         if (recordAbilities)
         {
@@ -10564,7 +10573,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
             gBattleCommunication[MISS_TYPE] = B_MSG_ABILITY_TYPE_MISS;
             RecordAbilityBattle(battlerDef, gBattleMons[battlerDef].ability);
         }
-        }
+    }
 
     return modifier;
 }

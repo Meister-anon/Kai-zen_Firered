@@ -252,7 +252,7 @@ PalletTown_ProfessorOaksLab_ChooseStarterScene:: @ 816923E
 	msgbox PalletTown_ProfessorOaksLab_Text_RivalNoFairWhatAboutMe
 	msgbox PalletTown_ProfessorOaksLab_Text_OakBePatientRival
 	callnative SetPlayerRandomStarterSpecies
-	callnative SetRivalRandomStarterSpecies
+	callnative SetRivalRandomStarterSpecies  @vsonic forgot what this was for a minute, rival get starter from oak, separate starter selection
 	setvar VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 2
 	releaseall
 	end

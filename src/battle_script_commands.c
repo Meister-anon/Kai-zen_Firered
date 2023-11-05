@@ -1395,10 +1395,13 @@ static void atk00_attackcanceler(void) //vsonic
     //cant use bindedmove == move none, as that only works for if bind user is slower mon
     //since I'm not setting bindmove on hit 
     //move choice logic, and setting of bind move to define etc.
+    if (!(gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND)) //if not bound set bind move, (this way prevents reset move when bound)
+    gDisableStructs[gBattlerAttacker].bindedMove = gCurrentMove; //loads last used move for bind, if switched in it'll be 0 
+                                                                    //believe loads value at move end / trying currentmove as lastmove didn't work
     if (gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND && gDisableStructs[gBattlerAttacker].bindedMove == MOVE_NONE) //if move not locked in yet
     {
 
-        for (i = 0; i < MAX_MON_MOVES; ++i)
+        /*for (i = 0; i < MAX_MON_MOVES; ++i)
             if (gBattleMons[gBattlerAttacker].moves[i] == gLastMoves[gBattlerAttacker]) //set i to last used move
                 break;
         if (gLastMoves[gBattlerAttacker] == MOVE_NONE
@@ -1409,51 +1412,68 @@ static void atk00_attackcanceler(void) //vsonic
         || gLastMoves[gBattlerAttacker] == MOVE_SLEEP_TALK
         || gLastMoves[gBattlerAttacker] == MOVE_MIRROR_MOVE)
             i = 4;
+        else if (gCurrentMove == MOVE_NONE
+        || gCurrentMove == MOVE_ENCORE
+        || gCurrentMove == MOVE_TRANSFORM
+        || gCurrentMove == MOVE_MIMIC
+        || gCurrentMove == MOVE_SKETCH
+        || gCurrentMove == MOVE_SLEEP_TALK
+        || gCurrentMove == MOVE_MIRROR_MOVE) //extra protection for selected move,
+            i = 4;
 
-        if (i != 4
-        && gBattleMons[gBattlerAttacker].pp[i] != 0)
+        else*/
+            i = Random() % 4;
+
+        if ((gBattleMons[gBattlerAttacker].pp[i] != 0) //if  not forbidden move and move has pp, set random existing move
+        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_NONE //pretty sure don't need this, that pp not 0 would catch it but putting anyway
+        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_ENCORE
+        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_TRANSFORM
+        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_MIMIC
+        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_SKETCH
+        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_SLEEP_TALK
+        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_MIRROR_MOVE)
         {
             //gDisableStructs[gBattlerTarget].bindedMove = gBattleMons[gBattlerTarget].moves[i];
             //gDisableStructs[gBattlerTarget].bindMovepos = i;
-            gCurrMovePos = gChosenMovePos = i;
+            gCurrMovePos = gDisableStructs[gActiveBattler].bindMovepos = gChosenMovePos = i;
             gCalledMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
-            gDisableStructs[gBattlerAttacker].bindedMove = gCalledMove;
+            gDisableStructs[gBattlerAttacker].bindedMove = gCalledMove; //set bind move
             gBattlerTarget = GetMoveTarget(gCalledMove, 1);
-            gBattlescriptCurrInstr = BattleScript_BindDoCalledMove; //not 100% if bs is needed for this
+            gBattlescriptCurrInstr = BattleScript_PanickedAndUsesRandomMove; //not 100% if bs is needed for this
             
         }
-        else if (i == 4) //
+        else //if forbidden move set struggle
         {
-            i = Random() % i;
-            gCurrMovePos = gChosenMovePos = i;
-            gCalledMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
+            //i = Random() % i;
+            gCurrMovePos = gDisableStructs[gActiveBattler].bindMovepos = gChosenMovePos = i;
+            gCalledMove = MOVE_STRUGGLE;
             gBattlerTarget = GetMoveTarget(gCalledMove, 1);
             gDisableStructs[gBattlerAttacker].bindedMove = gCalledMove;
-            gBattlescriptCurrInstr = BattleScript_PanickedAndUsesRandomMove;
+            gBattlescriptCurrInstr = BattleScript_BindDoCalledMove;
             
             //gDisableStructs[gBattlerTarget].bindedMove = gBattleMons[gBattlerTarget].moves[i]; //struggle didn't work well so instead pick random move 
             //DisableStructs[gBattlerTarget].bindedMove = MOVE_STRUGGLE;
             // gDisableStructs[gActiveBattler].bindMovepos = i;                       
         } //ok did that it still didn't work , gets overwritten,(forgot to uncomment parrt about move pos so it wasnt setting that/lockign that)
-        else if (gLastMoves[gBattlerAttacker] == MOVE_STRUGGLE)
-        {
-            gCalledMove = MOVE_STRUGGLE;
-            gBattlerTarget = GetMoveTarget(gCalledMove, 1);
-            gDisableStructs[gBattlerAttacker].bindedMove = gCalledMove;
-            gBattlescriptCurrInstr = BattleScript_BindDoCalledMove;
-
-        }
+        
     }
-    if (gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND && gDisableStructs[gBattlerAttacker].bindedMove != MOVE_NONE) //if move already set/loced in
+    else if (gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND && gDisableStructs[gBattlerAttacker].bindedMove != MOVE_NONE) //if move already set/loced in
     {
-        if (gBattleMons[gBattlerAttacker].pp[gCurrMovePos] == 0) //if the selected move ran out of pp, during bind, use struggle
+        if (gBattleMoves[gDisableStructs[gBattlerAttacker].bindedMove].pp != 0) //if the selected move has pp, use it
+        {
+            gCalledMove = gDisableStructs[gBattlerAttacker].bindedMove;
+            gBattlerTarget = GetMoveTarget(gCalledMove, 1);
+            gBattlescriptCurrInstr = BattleScript_BindDoCalledMove;
+
+        } 
+        else if (gBattleMoves[gDisableStructs[gBattlerAttacker].bindedMove].pp == 0) //if the selected move ran out of pp, during bind, use struggle
         {
             gCalledMove = MOVE_STRUGGLE;
             gBattlerTarget = GetMoveTarget(gCalledMove, 1);
-            gDisableStructs[gBattlerAttacker].bindedMove = gCalledMove;
-            gBattlescriptCurrInstr = BattleScript_BindDoCalledMove;
+            PREPARE_MOVE_BUFFER(gBattleTextBuff1, gDisableStructs[gBattlerAttacker].bindedMove);
+            gBattlescriptCurrInstr = BattleScript_BindMoveRanoutofPP; //make a bind move ran out of pp message than use struggle
 
-        } //still not working need compare this/disobedience to  encore logic which is set before attack canceler I think
+        }//still not working need compare this/disobedience to  encore logic which is set before attack canceler I think
     }
     //end of bind effect
 
@@ -1937,14 +1957,19 @@ static void atk01_accuracycheck(void)
             //acc drop effect
             gDisableStructs[gBattlerAttacker].furyCutterAccDrop = moveAcc;
 
-                for (i = 1; i <= (gMultiTask - gMultiHitCounter); ++i) { //potentaially scale with i, moveacc - i * 95/100 ?
+                for (i = 1; i <= (gMultiTask - gMultiHitCounter); ++i) { //triggers on second hit, so i = 1 - current num hits, i =3 on4th hit
+                    
+                    if (i == 2) //should be 3rd hit
+                    {
+                        gDisableStructs[gBattlerAttacker].furyCutterAccDrop = 95; //set 3rd hit to 95, 4th hit remains the same, set main acc to 100, to ensure first 2 hits land
+                    }
                     
                     if (i == 3) //makes only trigger onlast 4th hit, to slightly lower chance of landing 4th hit if you rolled it
                    {
-                        gDisableStructs[gBattlerAttacker].furyCutterAccDrop -= (i - 1); //doesn't subtract until 3rd hit
+                        gDisableStructs[gBattlerAttacker].furyCutterAccDrop -= (i - 1); 
                         gDisableStructs[gBattlerAttacker].furyCutterAccDrop *= 92; //so far is working to stop the move,
                         gDisableStructs[gBattlerAttacker].furyCutterAccDrop /= 100;
-                   } 
+                   }  //makes 4th hit have 85 accuracy
                  //if (i == 3) 
                  //{/
                  //   gDisableStructs[gBattlerAttacker].furyCutterAccDrop -= 16; //weighting for last 2 hits, only need to do for one i value as its all passed to next
@@ -2098,13 +2123,18 @@ static void atk01_accuracycheck(void)
 
 
             //if (gBattleMoves[move].power)   //i ALREADY have a typecalc I don't need this to update move result flags I think?
-            //CalcTypeEffectivenessMultiplier(move, type, gBattlerAttacker, gBattlerTarget, TRUE);    //this is only instance where uses TRUE, without that it doesn't change effectiveness
+            CalcTypeEffectivenessMultiplier(move, type, gBattlerAttacker, gBattlerTarget, FALSE);    //this is only instance where uses TRUE, without that it doesn't change effectiveness
+            //emerald used true because it made this the type calc, but I'm not replacing typecalc command 
+            //i'm putting this there, so in the typecalc function I'll set true there, everywhere else will be false.
+            //pretty sure it has everything needed for wonderguard stuff to work regardless/without updating move result
+            //-looks to be working
+            
             //using this worked perfectly, so can confirm new type chart is solid
             //removing this as it has foresight logic, emerald uses typecalc? hopefully
             //can do that without doubling the multiplier.
             //nvm not using typecalc, forgot I ported emerald's CalcTypeEffectivenessMultiplier function, 
             //that's what's used in emerald think can just copy it straight over
-            CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
+            //CheckWonderGuardAndLevitate(); //change levitate portion of function to use grounded logic
         //may put this back need test more on a working system
         
         //this runs type check against base chart, compares result to abilities then sets result flags
@@ -2591,14 +2621,16 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
     u8 moveType, argument;
     u8 type1 = gBattleMons[gBattlerTarget].type1, type2 = gBattleMons[gBattlerTarget].type2, type3 = gBattleMons[gBattlerTarget].type3;
     u16 effect = gBattleMoves[gCurrentMove].effect; //just realized should prob swap these for battlemons types since all types can shift, find where base stats becomes battlemons
-
-    if (gCurrentMove == (MOVE_STRUGGLE || MOVE_BIDE)) //should let hit ghost types could just remove typecalc bs from script instead...
+    u16 multiplier;
+    
+    if (gCurrentMove == MOVE_STRUGGLE || gCurrentMove == MOVE_BIDE) //should let hit ghost types could just remove typecalc bs from script instead...
     {
         ++gBattlescriptCurrInstr;
         return;
     }
     argument = gBattleMoves[gCurrentMove].argument;
     GET_MOVE_TYPE(gCurrentMove, moveType);
+    multiplier = CalcTypeEffectivenessMultiplier(gCurrentMove, moveType, gBattlerAttacker, gBattlerTarget, TRUE);
     // check stab
     if (effect != EFFECT_COUNTER && effect != EFFECT_MIRROR_COAT)   //skip stab-likes for mirror coat & counter
     {
@@ -2702,7 +2734,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
     //think can just remove that flag entirely freeing up more options for later
     //groudn is neutral to flying but just can't hit them if htey aren't grounded
     //so replace this check with just flag dmg_in_air which thousand arrows ALSO has
-    if (!(IsBattlerGrounded(gBattlerTarget)) && moveType == TYPE_GROUND && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_IN_AIR)) 
+    if (!(IsBattlerGrounded(gBattlerTarget)) && moveType == TYPE_GROUND && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_IN_AIR) && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_2X_IN_AIR)) 
     {
         gMoveResultFlags |= (MOVE_RESULT_MISSED);
         gLastLandedMoves[gBattlerTarget] = 0;
@@ -2729,8 +2761,10 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
     }
     else if (gBattleMons[gBattlerTarget].hp != 0)
     {
+        // take type effectiveness
+        gBattleMoveDamage = ApplyModifier(multiplier, gBattleMoveDamage);  //tested type replacemente seems to work, need more indepth test doduo etc.
 
-        while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE) //identified issue with typecalc, its only reading type 1 for some reason,
+        /*while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE) //identified issue with typecalc, its only reading type 1 for some reason,
         {
             if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
             {
@@ -2740,7 +2774,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
                 //I think my current setup would work though.
                 i += 3; //don't undeerstand what this is doing.     //ok now I get it, starts at i+0 2 more arguments in row, using +3 moves to the next row
                 continue;//its a while lloop, instead of a for loop, but this is essentially the ++i part, its the increment that changes type, which is why its also at the bottom
-            }//logic is while atk type isnt endtable i.e last row of type chart, do stuff inside, then at bottom increment to next row and start again. */
+            }//logic is while atk type isnt endtable i.e last row of type chart, do stuff inside, then at bottom increment to next row and start again. 
             else if (TYPE_EFFECT_ATK_TYPE(i) == moveType)//loops through entire type chart
             {
                 // check type1
@@ -2768,6 +2802,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
             
             i += 3;
         }
+        */
     } //think can remove the attacksthisturn from this so I can use it in attackcanceler
     //  its not really doing anything here, and I already have if move power isn't 0
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_GUARD
@@ -3005,7 +3040,7 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
        )
     {
         gLastUsedAbility = ABILITY_TELEPATHY;
-        gBattleCommunication[6] = 3;
+        gBattleCommunication[6] = 3; //vbelieve sets moveresult miss
         RecordAbilityBattle(gBattlerTarget, ABILITY_TELEPATHY);
     }   //vsonic IMPORTANT
 }
@@ -3085,11 +3120,14 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
     u8 moveType,argument;
     u8 type1 = gBattleMons[defender].type1, type2 = gBattleMons[defender].type2, type3 = gBattleMons[defender].type3;
     u16 effect = gBattleMoves[gCurrentMove].effect;
+    u16 multiplier;
 
-    if (move == (MOVE_STRUGGLE || MOVE_BIDE))
+    if (move == MOVE_STRUGGLE || move ==  MOVE_BIDE)
         return 0;
-    moveType = gBattleMoves[move].type;
     argument = gBattleMoves[move].argument;
+    GET_MOVE_TYPE(move,moveType);
+    //GET_MOVE_TYPE(gCurrentMove,argument);
+    multiplier = CalcTypeEffectivenessMultiplier(gCurrentMove, moveType, attacker, defender, FALSE);
     // check stab
     if (effect != EFFECT_COUNTER && effect != EFFECT_MIRROR_COAT)   //skip stab-likes for mirror coat & counter
     {
@@ -3149,7 +3187,8 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
     //if (gBattleMons[defender].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     if (!(IsBattlerGrounded(defender)) //set without ! it means if function is TRUE aka non-zero
         && moveType == TYPE_GROUND //just realized grounded already has conditions for levitate so I just need that.
-        && !(gBattleMoves[move].flags & FLAG_DMG_IN_AIR))
+        && !(gBattleMoves[move].flags & FLAG_DMG_IN_AIR)
+        && !(gBattleMoves[move].flags & FLAG_DMG_2X_IN_AIR))
     {
         flags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
     }
@@ -3160,7 +3199,9 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
     }
     else if (gBattleMons[defender].hp != 0)
     {
-        while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
+        // take type effectiveness
+        gBattleMoveDamage = ApplyModifier(multiplier, gBattleMoveDamage);
+        /*while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
         {
             if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
             {
@@ -3187,6 +3228,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
             }
             i += 3;
         }//attempt at setting dual type moves
+        */
     }    
     if (gBattleMons[defender].ability == ABILITY_WONDER_GUARD
      && !(flags & MOVE_RESULT_MISSED)     
@@ -3223,14 +3265,17 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
     u8 flags = 0;
     u8 type1 = gBattleMons[targetSpecies].type1, type2 = gBattleMons[targetSpecies].type2, type3 = gBattleMons[targetSpecies].type3;
     u8 moveType,argument;
+    u16 multiplier;
 
-    if (move == (MOVE_STRUGGLE || MOVE_BIDE))
+    if (move == MOVE_STRUGGLE || move ==  MOVE_BIDE)
         return 0;
     argument = gBattleMoves[move].argument; //think should replace with getmovetype macro?
-    moveType = gBattleMoves[move].type; //think don't need to change this since battle_main has function for type change
+    //moveType = gBattleMoves[move].type; //think don't need to change this since battle_main has function for type change
+    GET_MOVE_TYPE(move, moveType);
+    multiplier = CalcTypeEffectivenessMultiplier(gCurrentMove, moveType, gBattlerAttacker, gBattlerTarget, FALSE); //cehck this if need change 
     //if (targetAbility == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     if (!(IsBattlerGrounded(gBattlerTarget)) //set without ! it means if function is TRUE aka non-zero
-        && moveType == TYPE_GROUND && !(gBattleMoves[move].flags & FLAG_DMG_IN_AIR))
+        && moveType == TYPE_GROUND && !(gBattleMoves[move].flags & FLAG_DMG_IN_AIR) && !(gBattleMoves[move].flags & FLAG_DMG_2X_IN_AIR))
     {
         flags = MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE;
     }
@@ -3241,7 +3286,10 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
     }
     else if (gBattleMons[targetSpecies].hp != 0)
     {
-        while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE) //vsonic also missing two typed logic need add back
+        // take type effectiveness
+        gBattleMoveDamage = ApplyModifier(multiplier, gBattleMoveDamage);
+
+        /*while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE) //vsonic also missing two typed logic need add back
         {
             if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
             {
@@ -3265,7 +3313,7 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
                 }
             }            
             i += 3;
-        }
+        }*/
     }
     if (targetAbility == ABILITY_WONDER_GUARD
      && (!(flags & MOVE_RESULT_SUPER_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
@@ -7990,10 +8038,14 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
 {
     u8 flags = 0;
     s32 i = 0;
-    u8 moveType = gBattleMoves[gCurrentMove].type;
+    u8 moveType;
     u8 argument = gBattleMoves[gCurrentMove].argument;
     u8 type1 = gBattleMons[gBattlerTarget].type1, type2 = gBattleMons[gBattlerTarget].type2, type3 = gBattleMons[gBattlerTarget].type3;
+    u16 multiplier;
 
+    GET_MOVE_TYPE(gCurrentMove, moveType);
+
+    multiplier = CalcTypeEffectivenessMultiplier(gCurrentMove, moveType, gBattlerAttacker, gBattlerTarget, FALSE);
     /*if (gBattleMons[gBattlerTarget].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
    {
        gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
@@ -8003,7 +8055,8 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
        RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
    }*/
     if (!(IsBattlerGrounded(gBattlerTarget)) && moveType == TYPE_GROUND
-        && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_IN_AIR))
+        && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_IN_AIR)
+        && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_2X_IN_AIR))
     {
         gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
         gLastLandedMoves[gBattlerTarget] = 0;
@@ -8028,8 +8081,9 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
     }
     else if (gBattleMons[gBattlerTarget].hp != 0) //change to make sure doesnt exclude things w else
     {
-
-        while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
+        // take type effectiveness
+        gBattleMoveDamage = ApplyModifier(multiplier, gBattleMoveDamage);
+        /*while (TYPE_EFFECT_ATK_TYPE(i) != TYPE_ENDTABLE)
         {
             if (TYPE_EFFECT_ATK_TYPE(i) == TYPE_FORESIGHT)
             {
@@ -8165,7 +8219,7 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
                 }
             }
             i += 3;
-        }
+        } */
     }
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_GUARD
      && !(flags & MOVE_RESULT_NO_EFFECT)    
@@ -10621,6 +10675,14 @@ static void atk76_various(void) //will need to add all these emerald various com
             }
         }
         break;
+    case VARIOUS_PLAY_MOVE_ANIMATION:
+    {
+        VARIOUS_ARGS(u16 move);
+        BtlController_EmitMoveAnimation(BUFFER_A, cmd->move, gBattleScripting.animTurn, 0, 0, gBattleMons[gActiveBattler].friendship, &gDisableStructs[gActiveBattler]);//, gMultiHitCounter);
+        MarkBattlerForControllerExec(gActiveBattler); //don't know why friendship and multihit are used
+        gBattlescriptCurrInstr = cmd->nextInstr;//temp remove multihit as base functino doesn't have that argument, need update
+        return;
+    }
     case VARIOUS_CHECK_POKEFLUTE:
         gBattleCommunication[MULTISTRING_CHOOSER] = 0;
         monToCheck = 0;
@@ -14817,7 +14879,7 @@ static void atkB4_jumpifconfusedandstatmaxed(void)
 
 static void atkB5_furycuttercalc(void)
 {
-    s32 i;
+    u32 i;
 
     if (gCurrentMove == MOVE_FURY_CUTTER) //changing script to just use the multi-hit bs, need to add this to its loop though,
         //so to ensure it doesn't trigger for other moves, made the entire thing contingent on move fury cutter, 
@@ -14829,10 +14891,12 @@ static void atkB5_furycuttercalc(void)
 
         for (i = 0; i < (gMultiTask - gMultiHitCounter); ++i) //...changed this and damage multiplier actually works -_-
         {                 
-            if (gMultiTask == 4 && gMultiHitCounter == 1) //should only trigger on 4th hit if you roll the 4th hit
-                ;  //change do nothing, so it stops boosting dmg after 3 hits //still equates to a base 110 move
-            else
-                gDynamicBasePower *= 2; //new note what this does is loop dmg multiplier to ensure dmg is boosted based on how high couter is
+            //if (gMultiHitCounter == (gMultiTask - 1)) //should only trigger on 4th hit if you roll the 4th hit
+              //  gDynamicBasePower *= 2;  //change do nothing, so it stops boosting dmg after 3 hits //still equates to a base 110 move
+            //else
+                gDynamicBasePower += 10;  //rebalance, raise base power to 15, change to additive boost, higher scale on early hits slightly lower on end
+                                            //new rebalance
+                //new note what this does is loop dmg multiplier to ensure dmg is boosted based on how high couter is
             // berserker *= 3;  //change from 3 to 1, for large test, should reduce accuracy by 4 each hit if its working
                 //berserker /= 4; 
         }//dizzyegg confirms doing this way also works for establishing 3/4

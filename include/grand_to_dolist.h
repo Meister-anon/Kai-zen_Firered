@@ -1363,6 +1363,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   */
  goto ENCOUNTER_LOGIC //for wild encounters - this is reading encounter logic
  goto ENCOUNTER_GENERATOR // this is creating the encounter itself
+ goto CHECK_CURR_MAP //checks/reads current map location
  /*
   for function giveboxmoninitialmoveset, used for createnpctrainerparty  craete task for move learn
   to help decide what moves to keep when moving through list rather than just deleting the first
@@ -1417,9 +1418,28 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  port emerald berry tag and have it replace fire red berry view nvm simply just need to port the check tag portion of berry menu
  the graphic and info needed for the dislay of all berries,  then can setup berrry incense idea
 
+ working on rival starter select, remembered planned to give starter from oak, so need setup new movement patterns and text scripts for that
+
+ -checking pound, but transforming ditto in rival battle also had weird issue again hoping that's just an oak battle issue,
+  but  if it is that means I can't fix it? - fixed it, was bad operator logic in type calc around struggle
+  had weird effect of making pound typeless, I had currentmove == (move struggle || move bind)  rather than using currentmove between each, very dumb
+
+  - did rework on bind hopefully works better?
+
+  somehow imposter broke -__-  now causes freeze
+  ...ook so imposter stopped workiong because somehjow I removed VARIOUS_PLAY_MOVE_ANIMATION  ?
+  idk why or how that happened.
+
+  used emerald tyep setup to replace firered type chart,  mostly works but issue with mon that are super and then not very effective
+  it doesn't cancel to 1, it multiplies so ends up with something below 1 and results in not very effective
+  IMPORTANT TO CHANGE if something is super and resisted it should be neutral issue is this setup uses mod to set flags, not 
+  vsonic IMPORTANT
 
  note type bug existed before sheen removal so it isn't that
  & also grookey  & scorbunny have wrong palette for their icons+
+
+ seems weird bug with move pound its ignoring type?
+ 
 
   identified issue with palette icon, its gMonIconPaletteIndices  //seems can go to 0-5
   the indicees aren't right compared to emerald its different
