@@ -16,6 +16,7 @@
 #include "teachy_tv.h"
 #include "pokemon_storage_system.h"
 #include "party_menu.h"
+#include "tm_case.h"
 #include "data.h"
 #include "scanline_effect.h"
 #include "strings.h"
@@ -511,19 +512,19 @@ static const u16 sTMSpritePaletteOffsetByType[] = { // fairy addition need do, n
     [TYPE_DRAGON]   = 0x100
 };
 
-void InitTMCase(u8 type, void (* callback)(void), u8 a2)
+void InitTMCase(u8 type, void (* exitCallback)(void), bool8 allowSelectClose)
 {
     ResetBufferPointers_NoFree();
     sTMCaseDynamicResources = Alloc(sizeof(struct UnkStruct_203B118));
-    sTMCaseDynamicResources->savedCallback = 0;
-    sTMCaseDynamicResources->scrollIndicatorArrowPairId = 0xFF;
-    sTMCaseDynamicResources->contextMenuWindowId = 0xFF;
-    if (type != 5)
+    sTMCaseDynamicResources->savedCallback = NULL;
+    sTMCaseDynamicResources->scrollIndicatorArrowPairId = TASK_NONE;
+    sTMCaseDynamicResources->contextMenuWindowId = WINDOW_NONE;
+    if (type != TMCASE_REOPENING)
         sTMCaseStaticResources.tmCaseMenuType = type;
-    if (callback != NULL)
-        sTMCaseStaticResources.savedCallback = callback;
-    if (a2 != 0xFF)
-        sTMCaseStaticResources.unk_05 = a2;
+    if (exitCallback != NULL)
+        sTMCaseStaticResources.savedCallback = exitCallback;
+    if (allowSelectClose != TMCASE_KEEP_PREV)
+        sTMCaseStaticResources.unk_05 = allowSelectClose;
     gTextFlags.autoScroll = FALSE;
     SetMainCallback2(CB2_SetUpTMCaseUI_Blocking);
 }

@@ -10497,6 +10497,7 @@ u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 bat
 
 //used to repalce CheckWonderGuardAndLevitate, to remove reliance on gamefreak's stupid janky type loop foresight logic
 //no longer need type foresight, or to ensure type relations go above it
+#define NEW_TYPE_CALC_FORMULA
 static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities, u16 modifier)
 {
     u16 defAbility = GetBattlerAbility(battlerDef);
@@ -10506,8 +10507,12 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     if (gBattleMons[battlerDef].type2 != gBattleMons[battlerDef].type1)
         MulByTypeEffectiveness(&modifier, move, moveType, battlerDef, gBattleMons[battlerDef].type2, battlerAtk, recordAbilities);
 
-    if (modifier == UQ_4_12_TO_INT((UQ_4_12(1.55) * UQ_4_12(0.5)) + UQ_4_12_ROUND)) //rebalance after reading type 2, doubt if will work for two type moves(actually it should) so super into resist resets to neutral
+ //rebalance after reading type 2, doubt if will work for two type moves(actually it should) so super into resist resets to neutral
+  //removed to keep effect for now, comment out if I decide its too much for balance, benefit mostly to normal type
+  //hits for true neutral non stab dmg given a stab move
+    /*if (modifier == UQ_4_12_TO_INT((UQ_4_12(1.55) * UQ_4_12(0.5)) + UQ_4_12_ROUND)) 
         modifier = UQ_4_12(1.0); //ok working perfect now, and dmg isn't too much greater
+        */
 
     if (gBattleMons[battlerDef].type3 != TYPE_MYSTERY && gBattleMons[battlerDef].type3 != gBattleMons[battlerDef].type2
         && gBattleMons[battlerDef].type3 != gBattleMons[battlerDef].type1)

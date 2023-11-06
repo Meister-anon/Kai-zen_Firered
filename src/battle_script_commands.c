@@ -3344,19 +3344,31 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
 
 }
 
-static inline void ApplyRandomDmgMultiplier(void) //vsonic test
+//can remove "canMultiTask" line, but would need to add in a few more effect exclusions,
+//do later vsonic
+//ok issue with this is its playing wrong species, jst a matter of including enemy party index
+static inline void ApplyRandomDmgMultiplier(void) //vsonic test works
 {
     u16 rand = Random(); //add can multi task to this filter list // but put ability not multitask
     u16 randPercent = 100 - (rand % 16); //make g values to to store random percent for battler
     //if randPercent is 100 before attack animation run cry with below
-    u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES);
+    struct Pokemon *mon;
+    u16 species; 
+
+    if (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT) //use this instead taken from mega logic
+            mon = &gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker]];  //mon being transformed
+        else
+            mon = &gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]];
+
+    species = GetMonData(mon, MON_DATA_SPECIES);
+
     if ((randPercent == 100 || IS_CRIT) 
     && gBattleMoves[gCurrentMove].effect != EFFECT_MULTI_HIT
     && !(gBattleMoves[gCurrentMove].flags & FLAG_ALWAYS_CRIT) //hope this is still right vsonic
     && gBattleMoves[gCurrentMove].effect != EFFECT_TRIPLE_KICK
     && gBattleMoves[gCurrentMove].effect != EFFECT_BEAT_UP
     && gBattleMoves[gCurrentMove].effect != EFFECT_RECOIL_IF_MISS
-    && (CanMultiTask(gCurrentMove) == TRUE)
+    && (CanMultiTask(gCurrentMove) == TRUE) //can remove put this here  for blocking two turn but don't think need to
     && GetBattlerAbility(gBattlerAttacker) != ABILITY_MULTI_TASK) //think shoudl do it, as this is ALWAYS called after critcalc
             PlayCry_Normal(species, 25); //its inline so I "think" that will work and play in the adjustnormaldamage script
     //added effect check to keep from triggering to frequently, as to become annoying
@@ -3909,6 +3921,8 @@ static void atk0E_effectivenesssound(void)
 static void atk0F_resultmessage(void) //covers the battle message displayed after attacks
 {
     u32 stringId = 0;
+    u8 moveType;
+    GET_MOVE_TYPE(gCurrentMove,moveType);
 
     if (!gBattleControllerExecFlags)
     {
@@ -3926,6 +3940,9 @@ static void atk0F_resultmessage(void) //covers the battle message displayed afte
                 stringId = STRINGID_SUPEREFFECTIVE;
                 break;
             case MOVE_RESULT_NOT_VERY_EFFECTIVE:
+            if (CalcTypeEffectivenessMultiplier(gCurrentMove, moveType, gBattlerAttacker, gBattlerTarget, FALSE) == UQ_4_12_TO_INT((UQ_4_12(1.55) * UQ_4_12(0.5)) + UQ_4_12_ROUND))
+                gBattleCommunication[MSG_DISPLAY] = 0; //should keep effect remove message, keep not very effective sound
+            else
                 stringId = STRINGID_NOTVERYEFFECTIVE;
                 break;
             case MOVE_RESULT_ONE_HIT_KO:

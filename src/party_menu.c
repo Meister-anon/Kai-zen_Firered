@@ -373,13 +373,13 @@ static u8 FirstBattleEnterParty_CreateWindowAndMsg1Printer(void);
 static void FirstBattleEnterParty_DestroyVoiceoverWindow(u8 windowId);
 static void SetSwitchedPartyOrderQuestLogEvent(void);
 static void SetUsedFieldMoveQuestLogEvent(struct Pokemon *mon, u8 fieldMove);
-static void sub_8124DE0(void);
-static void sub_8124E48(void);
+static void CB2_DoUseItemAnim(void);
+static void CB2_UseItem(void);
 static void sub_812580C(u8 taskId);
 static void sub_8125898(u8 taskId, UNUSED TaskFunc func);
-static void sub_8125F4C(u8 taskId, UNUSED TaskFunc func);
-static void sub_8125F5C(u8 taskId);
-static void sub_8126BD4(void);
+static void ItemUseCB_ReplaceMoveWithTMHM(u8 taskId, UNUSED TaskFunc func);
+static void Task_ReplaceMoveWithTMHM(u8 taskId);
+static void CB2_UseEvolutionStone(void);
 static bool8 MonCanEvolve(void);
 
 static void ConfirmForgetMovePrompt(u8 taskId); //added to match battle move learn
@@ -4289,7 +4289,7 @@ static void CB2_ReturnToBagMenu(void)
 
 static void CB2_ReturnToTMCaseMenu(void)
 {
-    InitTMCase(TMCASE_NA, NULL, 0xFF);
+    InitTMCase(TMCASE_REOPENING, NULL, 0xFF);
 }
 
 static void CB2_ReturnToBerryPouchMenu(void)
@@ -4297,28 +4297,28 @@ static void CB2_ReturnToBerryPouchMenu(void)
     InitBerryPouch(BERRYPOUCH_NA, NULL, 0xFF);
 }
 
-static void sub_8124DC0(u8 taskId)
+static void Task_DoUseItemAnim(u8 taskId)
 {
-    sPartyMenuInternal->exitCallback = sub_8124DE0;
+    sPartyMenuInternal->exitCallback = CB2_DoUseItemAnim;
     Task_ClosePartyMenu(taskId);
 }
 
-static void sub_8124DE0(void)
+static void CB2_DoUseItemAnim(void)
 {
     if (CheckIfItemIsTMHMOrEvolutionStone(gSpecialVar_ItemId) == 2) // Evolution stone
     {
         if (MonCanEvolve() == TRUE)
-            StartUseItemAnim_Normal(gPartyMenu.slotId, gSpecialVar_ItemId, sub_8126BD4);
+            StartUseItemAnim_Normal(gPartyMenu.slotId, gSpecialVar_ItemId, CB2_UseEvolutionStone);
         else
             StartUseItemAnim_CantEvolve(gPartyMenu.slotId, gSpecialVar_ItemId, gPartyMenu.exitCallback);
     }
     else
     {
-        StartUseItemAnim_Normal(gPartyMenu.slotId, gSpecialVar_ItemId, sub_8124E48);
+        StartUseItemAnim_Normal(gPartyMenu.slotId, gSpecialVar_ItemId, CB2_UseItem);
     }
 }
 
-static void sub_8124E48(void)
+static void CB2_UseItem(void)
 {
     if (ItemId_GetPocket(gSpecialVar_ItemId) == POCKET_TM_CASE
      && PSA_IsCancelDisabled() == TRUE)
@@ -4335,7 +4335,7 @@ static void sub_8124E48(void)
     }
 }
 
-static void sub_8124EFC(void)
+static void CB2_UseTMHMAfterForgettingMove(void)
 {
     if (PSA_IsCancelDisabled() == TRUE)
     {
@@ -4501,7 +4501,7 @@ void ItemUseCB_Medicine(u8 taskId, TaskFunc func)
     else
     {
         ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, mon, item, 0xFFFF);
-        sub_8124DC0(taskId);
+        Task_DoUseItemAnim(taskId);
         gItemUseCB = ItemUseCB_MedicineStep;
     }
 }
@@ -4798,7 +4798,7 @@ static void sub_812580C(u8 taskId)
     }
     else
     {
-        sub_8124DC0(taskId);
+        Task_DoUseItemAnim(taskId);
         gItemUseCB = sub_8125898;
     }
 }
@@ -4929,7 +4929,7 @@ void ItemUseCB_TMHM(u8 taskId, UNUSED TaskFunc func)
     if (GiveMoveToMon(mon, move[0]) != MON_HAS_MAX_MOVES)
     {
         ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, mon, item, 0xFFFF);
-        sub_8124DC0(taskId);
+        Task_DoUseItemAnim(taskId);
         gItemUseCB = ItemUseCB_LearnedMove;
     }
     else
@@ -4944,7 +4944,7 @@ static void ItemUseCB_LearnedMove(u8 taskId, UNUSED TaskFunc func)
     Task_LearnedMove(taskId);
 }
 
-static void Task_LearnedMove(u8 taskId)
+static void Task_LearnedMove(u8 taskId) //tm learn move
 {
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     s16 *move = &gPartyMenu.data1;
@@ -4953,8 +4953,8 @@ static void Task_LearnedMove(u8 taskId)
     if (move[1] == 0)
     {
         AdjustFriendship(mon, FRIENDSHIP_EVENT_LEARN_TMHM);
-        if (item < ITEM_HM01_CUT)
-            RemoveBagItem(item, 1);
+        //if (item < ITEM_HM01_CUT)
+          //  RemoveBagItem(item, 1);
     }
     GetMonNickname(mon, gStringVar1);
     StringCopy(gStringVar2, gMoveNames[move[0]]);
@@ -5037,17 +5037,18 @@ static void CB2_ReturnToPartyMenuWhileLearningMove(void)
     u16 move;
     s32 learnMoveState = gPartyMenu.learnMoveState;
 
+
     if (learnMoveState == 0 && moveIdx != MAX_MON_MOVES)
     {
         move = GetMonData(&gPlayerParty[gPartyMenu.slotId], moveIdx + MON_DATA_MOVE1);
-        StartUseItemAnim_ForgetMoveAndLearnTMorHM(gPartyMenu.slotId, gSpecialVar_ItemId, move, sub_8124EFC);
-        gItemUseCB = sub_8125F4C;
+        StartUseItemAnim_ForgetMoveAndLearnTMorHM(gPartyMenu.slotId, gSpecialVar_ItemId, move, CB2_UseTMHMAfterForgettingMove);
+        gItemUseCB = ItemUseCB_ReplaceMoveWithTMHM;
         gPartyMenu.action = learnMoveState;
     }
     else
     {
         InitPartyMenu(PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_CHOOSE_MON, TRUE, PARTY_MSG_NONE, Task_ReturnToPartyMenuWhileLearningMove, gPartyMenu.exitCallback);
-    }
+    }//rare candy or move tutor is this I believe, while otehr is tmhm, this goes to confirm message
 }
 
 //vsonic
@@ -5062,12 +5063,13 @@ static void Task_ReturnToPartyMenuWhileLearningMove(u8 taskId)
     }
 }
 
-static void sub_8125F4C(u8 taskId, UNUSED TaskFunc func)
+static void ItemUseCB_ReplaceMoveWithTMHM(u8 taskId, UNUSED TaskFunc func)
 {
-    sub_8125F5C(taskId);
+    Task_ReplaceMoveWithTMHM(taskId);
 }
 
-static void sub_8125F5C(u8 taskId)
+//tm move learn
+static void Task_ReplaceMoveWithTMHM(u8 taskId)
 {
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     u8 moveIdx = GetMoveSlotToReplace();
@@ -5228,7 +5230,7 @@ void ItemUseCB_RareCandy(u8 taskId, TaskFunc func)
     }
     else
     {
-        sub_8124DC0(taskId);
+        Task_DoUseItemAnim(taskId);
         gItemUseCB = ItemUseCB_RareCandyStep;
     }
 }
@@ -5500,11 +5502,11 @@ void ItemUseCB_EvolutionStone(u8 taskId, TaskFunc func)
     }
     else
     {
-        sub_8124DC0(taskId);
+        Task_DoUseItemAnim(taskId);
     }
 }
 
-static void sub_8126BD4(void)
+static void CB2_UseEvolutionStone(void)
 {
     gCB2_AfterEvolution = gPartyMenu.exitCallback;
     ExecuteTableBasedItemEffect_(gPartyMenu.slotId, gSpecialVar_ItemId, 0);

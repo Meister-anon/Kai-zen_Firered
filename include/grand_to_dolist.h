@@ -1436,6 +1436,32 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   vsonic IMPORTANT  - fixed.   put logic ni functino taht after reading 2nd type will check multiplier, and reset to neutral
   if it read a super and a resist, should work for dual type moves as well without issue I believe
 
+  -realized it was already working that way my entire playtest, so kind of prefer it?
+  will attempt remove message,
+
+  got it working, also using sound for first time, realized the play growl if crit is working, nice
+  that'll be a nice qol upgrade if I can get the move animations to speed up, without breaking audio,
+  so people won't need to speed up.   from ApplyRandomDmgMultiplier
+  //small bit of work tweaking that to do still, just clean it up some and include more effects
+  now sound works correctly, for enemy too, added more space in effect to free sound channels
+  */
+ goto NEW_TYPE_CALC_FORMULA //in battle_util.c keep testing new effectivness remove comment if decide to go back to normal
+
+ /* descivored tm case glitch,  I fixed the mon placement previously but I believe when I go to party menu and then come back
+  because I kept both versions its retruning to the wrong tm case logic
+
+  IMPORTANT major issue w tm case,  canceling tn learning causes weirdm desync w tm case menu
+  1st slot mon drifts as if it was using the mart tm movement logic
+
+  also pressing B when attempting to learn tm, when the tm is on mon forehead,  teaches the move
+  but cancels, the learn animation, and removes the item from the bag, even though I've set it to not remove 
+  tms when learning them. (tms should be reusable)
+
+  and tm learning doesn't follow normal move learn,  so I need to setup the forget move confirmation
+  like I did for party menu but for tms smh
+
+  -sigh status animation for infatuation not playing
+
  note type bug existed before sheen removal so it isn't that
  & also grookey  & scorbunny have wrong palette for their icons+
 

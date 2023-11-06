@@ -519,7 +519,7 @@ BattleScript_BurnUpWorks:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -669,7 +669,7 @@ BattleScript_EffectFling:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -1376,7 +1376,7 @@ BattleScript_SynchronoiseLoop:
 	critcalc
 	damagecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -1516,7 +1516,7 @@ BattleScript_EffectFinalGambit:		@CHANGED effect to do dmg based on missing heal
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -1544,7 +1544,7 @@ BattleScript_EffectHitSwitchTarget:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -2487,7 +2487,7 @@ BattleScript_EffectHitEscape:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -2577,7 +2577,7 @@ BattleScript_HitFromCritCalc::
 	typecalc	@typecalc has issue its only reading first type for some reason, also some other issue with wrap animation? effect? @something weirder absorb always not effective ghost moves always no effect against things it should effect
 	call_if EFFECT_ROLLOUT	@somehow not working its being triggered everytime, when it shouldnt? thought that was a thing but then ran clean and no issue? / change to use nativeargs seems fine now?
 	adjustnormaldamage	@THIS was the issue, forgot the currinstr increment *facepalm so obviously it couldnt continue passed this to animation
-	pause 0x01	@was put after every adjustnormaldamage script, as added playcry pause is to clear values
+	pause 0x5	@was put after every adjustnormaldamage script, as added playcry pause is to clear values
 BattleScript_HitFromAtkAnimation::
 	attackanimation
 	waitanimation
@@ -2616,7 +2616,7 @@ BattleScript_EffectNaturalGift:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -2764,7 +2764,7 @@ BattleScript_EffectAbsorb::  @need setup multi task also make ghost with liquid 
 	damagecalc
 	typecalc
  	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -2831,7 +2831,7 @@ BattleScript_ExplosionLoop::
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	accuracycheck BattleScript_ExplosionMissed, ACC_CURR_MOVE
 	effectivenesssound
 	hitanimation BS_TARGET
@@ -2883,7 +2883,7 @@ BattleScript_DreamEaterWorked::
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -3295,7 +3295,7 @@ BattleScript_EffectFlinchStatus:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -3579,7 +3579,7 @@ BattleScript_TripleArrowsMoveAnimation:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	effectivenesssound
 	hitanimation BS_TARGET
 	waitstate
@@ -4147,7 +4147,7 @@ BattleScript_EffectEerieSpell::	@excluded from multitask
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -4993,7 +4993,7 @@ BattleScript_DoHitAllWithUndergroundBonus::
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -5688,7 +5688,7 @@ BattleScript_BrickBreakWithScreens::
 	critcalc
 	damagecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	jumpifbyte CMP_EQUAL, sB_ANIM_TURN, 0, BattleScript_BrickBreakAnim
 	bicbyte gMoveResultFlags, MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE
 BattleScript_BrickBreakAnim::
@@ -5723,7 +5723,7 @@ BattleScript_BrickBreakNoScreens::
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -6491,7 +6491,7 @@ BattleScript_PursuitDmgOnSwitchOut::
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -9077,7 +9077,7 @@ BattleScript_EffectPhotonGeyser:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	photongeysercheck
 	attackanimation
 	waitanimation
@@ -9245,7 +9245,7 @@ BattleScript_EffectPlasmaFists:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -9273,7 +9273,7 @@ BattleScript_EffectSparklySwirl:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -9301,7 +9301,7 @@ BattleScript_EffectFreezyFrost:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -9329,7 +9329,7 @@ BattleScript_EffectSappySeed:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -9358,7 +9358,7 @@ BattleScript_EffectBaddyBad:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -9386,7 +9386,7 @@ BattleScript_EffectGlitzyGlow:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -9510,7 +9510,7 @@ BattleScript_EffectRemoveTerrain:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
@@ -9635,7 +9635,7 @@ BattleScript_EffectRelicSong:
 	damagecalc
 	typecalc
 	adjustnormaldamage
-	pause 0x01
+	pause 0x05
 	attackanimation
 	waitanimation
 	effectivenesssound
