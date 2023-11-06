@@ -3924,6 +3924,9 @@ static void atk0F_resultmessage(void) //covers the battle message displayed afte
     u8 moveType;
     GET_MOVE_TYPE(gCurrentMove,moveType);
 
+    //if (!(gBattleMoves[gCurrentMove].power) //try skip message  if status move, seems to work
+     //   ++gBattlescriptCurrInstr;
+
     if (!gBattleControllerExecFlags)
     {
         if (gMoveResultFlags & MOVE_RESULT_MISSED && (!(gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE) || gBattleCommunication[6] > 2))
@@ -3933,15 +3936,21 @@ static void atk0F_resultmessage(void) //covers the battle message displayed afte
         }
         else
         {
+
             gBattleCommunication[MSG_DISPLAY] = 1;
             switch (gMoveResultFlags & (u8)(~(MOVE_RESULT_MISSED)))
             {
             case MOVE_RESULT_SUPER_EFFECTIVE:
+            if (!(gBattleMoves[gCurrentMove].power)) //try skip message  if status move, works
+               break;
+            else
                 stringId = STRINGID_SUPEREFFECTIVE;
                 break;
             case MOVE_RESULT_NOT_VERY_EFFECTIVE:
             if (CalcTypeEffectivenessMultiplier(gCurrentMove, moveType, gBattlerAttacker, gBattlerTarget, FALSE) == UQ_4_12_TO_INT((UQ_4_12(1.55) * UQ_4_12(0.5)) + UQ_4_12_ROUND))
                 gBattleCommunication[MSG_DISPLAY] = 0; //should keep effect remove message, keep not very effective sound
+            else if (!(gBattleMoves[gCurrentMove].power)) //try skip message  if status move, seems to work
+               break;
             else
                 stringId = STRINGID_NOTVERYEFFECTIVE;
                 break;
@@ -4012,6 +4021,7 @@ static void atk0F_resultmessage(void) //covers the battle message displayed afte
                 }
             }
         }
+        
         if (stringId)
             PrepareStringBattle(stringId, gBattlerAttacker);
         ++gBattlescriptCurrInstr;
@@ -17681,13 +17691,15 @@ void BS_AttacksThisTurn(void) // Note: returns 1 if it's a charging turn, otherw
 
 //should let multihit moves display effectiveness of first hit
 //causes freeze for no apparent reason
-void BS_Multihit_resultmessage(void) 
+void BS_Multihit_resultmessage(void) //there are no multihit status moves I don't need a fix for this -__-
 {
     NATIVE_ARGS();
     u32 stringId = 0;
+    u8 moveType;
+    GET_MOVE_TYPE(gCurrentMove,moveType);
 
     
-    if (!gBattleControllerExecFlags) 
+    if (!gBattleControllerExecFlags) //need to ues else if, or breaks messaging
     {
         if (gMultiHitCounter > 1 && gMultiHitCounter == gMultiTask) //should be only first hit of multi hit
         {
@@ -17699,8 +17711,13 @@ void BS_Multihit_resultmessage(void)
 
             else if (gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE)
             {
+              if (CalcTypeEffectivenessMultiplier(gCurrentMove, moveType, gBattlerAttacker, gBattlerTarget, FALSE) == UQ_4_12_TO_INT((UQ_4_12(1.55) * UQ_4_12(0.5)) + UQ_4_12_ROUND))
+                gBattleCommunication[MSG_DISPLAY] = 0; //should keep effect remove message, keep not very effective sound
+              else
+              {
                 stringId = STRINGID_NOTVERYEFFECTIVE;
                 gBattleCommunication[MSG_DISPLAY] = 1;
+              }
             }
             else
             {

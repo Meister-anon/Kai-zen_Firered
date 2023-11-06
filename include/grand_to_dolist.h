@@ -1466,6 +1466,28 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  & also grookey  & scorbunny have wrong palette for their icons+
 
  seems weird bug with move pound its ignoring type?
+
+ for eventual setup for loop logic for field_specials, starter selection
+ use if mod/multiplier to check if rival starter is super or greater, to player starter
+  for starter base form or starter final evo  
+  or rival starter or final evo resists  the player starter
+
+  think plan put logic in function, and do for loop for if false
+
+  reworked ABILITY_HONEY_GATHER into free sweet scent field move better ow effect imo and better niche
+  as you fully control effect rather than just a encounter boost
+
+  when do berry encounter logic will need to wrap it into sweet scent setup so
+  it pulls just those encounters w nature etc.
+
+  still need setup field move port stuff, and figure how add stuff withuot repeating
+  need write new ability description for ABILITY_HONEY_GATHER,  also change setup to match new pickup
+  so don't need to keep slot empty to do anything,  just make it add to bag with message display in ow after battle
+
+  thinbk honey gather description, pickup honey blahg blah attracts wild mon honey sent soak into skin or something
+
+  honey pickup isnt setup yet, port from emearld later and then adjust  with my ow pickup function in mind
+  to remove need for held item slot to be empty, jsut have it put into bag
  
 
   identified issue with palette icon, its gMonIconPaletteIndices  //seems can go to 0-5

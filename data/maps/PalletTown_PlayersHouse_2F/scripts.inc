@@ -25,8 +25,6 @@ PalletTown_PlayersHouse_2F_EventScript_NES:: @ 8168CD2
 	msgbox PalletTown_PlayersHouse_2F_Text_PlayedWithNES, MSGBOX_SIGN
 	@givemon SPECIES_CORVISQUIRE, 4, ITEM_NONE @for early game testing, now testing palette indecees
 	givemon SPECIES_ONIX, 8, ITEM_NONE @for early game testing, testing for new bind effect
-	givemon SPECIES_PIDGEY, 8, ITEM_NONE @for early game testing, testing type chart replacement and grounded effects
-	givemon SPECIES_MANKEY, 8, ITEM_NONE @for early game testing,
 	end
 
 PalletTown_PlayersHouse_2F_EventScript_Sign:: @ 8168CDB

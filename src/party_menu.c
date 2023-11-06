@@ -2994,6 +2994,10 @@ static void SetPartyMonSelectionActions(struct Pokemon *mons, u8 slotId, u8 acti
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
     u8 i, j;
+    u16 species = GetMonData(&mons[slotId], MON_DATA_SPECIES2);
+    u8 abilityNum = GetMonData(&mons[slotId], MON_DATA_ABILITY_NUM);
+    u16 ability = GetAbilityBySpecies(species, abilityNum);
+            
 
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
@@ -3007,8 +3011,14 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
                 AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
                 break;
             }
+            
         }
     }
+    //should hopefully give free sweet scent, without needing move - works
+    //still need to setup way to check list to prevent adding things that are already there
+    if (ability == ABILITY_HONEY_GATHER) 
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, FIELD_MOVE_SWEET_SCENT + MENU_FIELD_MOVES);
+
     if (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE)
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SWITCH);
     if (ItemIsMail(GetMonData(&mons[slotId], MON_DATA_HELD_ITEM)))
