@@ -5168,7 +5168,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
-    },
+    },//think want to make into two typed move, make custom effect so can set accuracy drop in bs would drop power to compensate
+    //thinking water//ground bp 65, would still be strong as most things weak to water are also weak to ground
+    
 
     [MOVE_BULLET_SEED] =
     {

@@ -1460,7 +1460,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   and tm learning doesn't follow normal move learn,  so I need to setup the forget move confirmation
   like I did for party menu but for tms smh
 
-  -sigh status animation for infatuation not playing
+  current work:
+  -testing fixes for tm case and setting up confirmation message for it - logic in partymenu.c
+  fix call back, from tm use so doesn't break mon sprites display
+  then finish working on bind
+  fix gen 8  icon palette indicees, 
+  also gen 8 mon (least I tink just them) icons too big, some don't fit w new summar screen move info page
+
+  -sigh status animation for infatuation not playing - tested w cute charm
 
  note type bug existed before sheen removal so it isn't that
  & also grookey  & scorbunny have wrong palette for their icons+
@@ -1488,6 +1495,13 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   honey pickup isnt setup yet, port from emearld later and then adjust  with my ow pickup function in mind
   to remove need for held item slot to be empty, jsut have it put into bag
+
+  planning make muddy water  water groudn EFFECT_TWO_TYPED_MOVE, my versin is already different as two types moves can get stab
+  default version doesnt get that, way move works is if one type has no effect entire move fails
+  even if 2nd type would be super effective, sounds odd, but technically is consistent with other moves
+
+  //think want to make into two typed move, make custom effect so can set accuracy drop in bs would drop power to compensate
+    //thinking water//ground bp 65, would still be strong as most things weak to water are also weak to ground
  
 
   identified issue with palette icon, its gMonIconPaletteIndices  //seems can go to 0-5
