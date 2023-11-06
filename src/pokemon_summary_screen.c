@@ -1147,6 +1147,8 @@ void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, 
     SetMainCallback2(CB2_SetUpPSS);
 }
 
+//can prob use this for in battle show move info, to see split power etc.
+#define SHOW_SUMMARY_SCREEN
 void ShowSelectMovePokemonSummaryScreen(struct Pokemon *party, u8 cursorPos, u8 lastIdx, MainCallback savedCallback, u16 newMove)
 {
     ShowPokemonSummaryScreen(party, cursorPos, lastIdx, savedCallback, PSS_MODE_SELECT_MOVE);

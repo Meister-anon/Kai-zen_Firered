@@ -5047,18 +5047,8 @@ static void CB2_ReturnToPartyMenuWhileLearningMove(void)
     u16 move;
     s32 learnMoveState = gPartyMenu.learnMoveState;
 
+    InitPartyMenu(PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_CHOOSE_MON, TRUE, PARTY_MSG_NONE, Task_ReturnToPartyMenuWhileLearningMove, gPartyMenu.exitCallback);
 
-    if (learnMoveState == 0 && moveIdx != MAX_MON_MOVES)
-    {
-        move = GetMonData(&gPlayerParty[gPartyMenu.slotId], moveIdx + MON_DATA_MOVE1);
-        StartUseItemAnim_ForgetMoveAndLearnTMorHM(gPartyMenu.slotId, gSpecialVar_ItemId, move, CB2_UseTMHMAfterForgettingMove);
-        gItemUseCB = ItemUseCB_ReplaceMoveWithTMHM;
-        gPartyMenu.action = learnMoveState;
-    }
-    else
-    {
-        InitPartyMenu(PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_CHOOSE_MON, TRUE, PARTY_MSG_NONE, Task_ReturnToPartyMenuWhileLearningMove, gPartyMenu.exitCallback);
-    }//rare candy or move tutor is this I believe, while otehr is tmhm, this goes to confirm message
 }
 
 //vsonic
@@ -5161,10 +5151,20 @@ static void Task_StopLearningMoveYesNo(u8 taskId)
 static void Task_HandleConfirmLearningMoveYesNoInput(u8 taskId)
 {
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+    u8 moveIdx = GetMoveSlotToReplace();
+    u16 move;
 
     switch (Menu_ProcessInputNoWrapClearOnChoose()) 
     {
     case 0: //yes
+    if (gPartyMenu.learnMoveState == 0 && moveIdx != MAX_MON_MOVES)
+    {
+        move = GetMonData(&gPlayerParty[gPartyMenu.slotId], moveIdx + MON_DATA_MOVE1);
+        StartUseItemAnim_ForgetMoveAndLearnTMorHM(gPartyMenu.slotId, gSpecialVar_ItemId, move, CB2_UseTMHMAfterForgettingMove);
+        gItemUseCB = ItemUseCB_ReplaceMoveWithTMHM;
+        gPartyMenu.action = gPartyMenu.learnMoveState;
+    }
+    else
         gTasks[taskId].func = DisplayPartyMenuForgotMoveMessage;
         break;
     case MENU_B_PRESSED: //this side shoule be fine

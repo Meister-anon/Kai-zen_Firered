@@ -1446,6 +1446,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   now sound works correctly, for enemy too, added more space in effect to free sound channels
   */
  goto NEW_TYPE_CALC_FORMULA //in battle_util.c keep testing new effectivness remove comment if decide to go back to normal
+ goto SHOW_SUMMARY_SCREEN  //plan see if can use for battle move context, press L to jump to summary screen make callback go back to battle
 
  /* descivored tm case glitch,  I fixed the mon placement previously but I believe when I go to party menu and then come back
   because I kept both versions its retruning to the wrong tm case logic
@@ -1468,6 +1469,8 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   also gen 8 mon (least I tink just them) icons too big, some don't fit w new summar screen move info page
 
   -sigh status animation for infatuation not playing - tested w cute charm
+  pretty sure never finished cupids arrow as well? need check fi that works, should infatuate and target like trace but ignore gender check
+
 
  note type bug existed before sheen removal so it isn't that
  & also grookey  & scorbunny have wrong palette for their icons+
