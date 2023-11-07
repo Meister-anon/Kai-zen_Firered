@@ -8344,10 +8344,6 @@ BattleScript_TryAdrenalineOrb:
 BattleScript_TryAdrenalineOrbRet:
 	return
 
-BattleSscript_ActivateSpectre::
-	setstatchanger STAT_EVASION, 1, FALSE  @think for this want to do emreald style just do w command in funciton
-	end3
-
 BattleScript_IntimidateActivatesEnd3::
 	call BattleScript_DoIntimidateActivationAnim	
 	end3

@@ -5517,6 +5517,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                 }
             break;
+            case ABILITY_SPECTRE:
+            if (!gSpecialStatuses[battler].switchInAbilityDone)
+                {
+                    gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                    SET_STATCHANGER(STAT_EVASION, 1, FALSE);
+                    BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
+                    ++effect;
+                }
+                break;
+            break;
             case ABILITY_DEFEATIST:
                 if (gBattleMons[battler].hp < (gBattleMons[battler].maxHP / 2))
                 {
