@@ -1,5 +1,6 @@
 //ported dex entries kinda suck
 //may check pokemondb for something better.
+//or take something from bulbapedia info
 const u8 gDummyPokedexText[] = _(
     "This is a newly discovered Pokémon.\n"
     "It is currently under investigation.\n"
@@ -1429,10 +1430,16 @@ const u8 gHitmontopPokedexText[] = _(
     "spinning than they do walking.");
 
 const u8 gSmoochumPokedexText[] = _(
-    "It actively runs about, but also falls\n"
+    "It uses its lips to examine objects that it\n"
+    "sees for the first time. It's very active but\n"
+    "falls often. And checks its reflection\n"
+    "often to be sure its face hasn't become dirty.");
+
+/*"It actively runs about, but also falls\n"
     "often. Whenever it falls, it will check its\n"
     "reflection on a lake's surface to make\n"
     "sure its face hasn't become dirty.");
+*/
 
 const u8 gElekidPokedexText[] = _(
     "If it touches metal and discharges the\n"

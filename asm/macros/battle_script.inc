@@ -2146,6 +2146,8 @@
 	manipulatedamage DMG_1_2_ATTACKER_HP
 	.endm
 
+		@think understand this now, 1f is used when uses multiple commands
+		@think the 1f makes it go to 1, so it skips the 2nd command?
 	.macro jumpifflowerveil jumpptr:req
 	jumpifnottype BS_TARGET, TYPE_GRASS, 1f
 	jumpifability BS_TARGET_SIDE, ABILITY_FLOWER_VEIL, \jumpptr
@@ -2172,7 +2174,7 @@
 	.4byte \jumpptr
 	.endm
 
-	@should onlly have 1: argument if has 1f in values
+	@should onlly have the 1: argument if has 1f in values
 	.macro jumpifleafguard jumpptr:req
 	jumpifhalfword CMP_NO_COMMON_BITS, gBattleWeather, WEATHER_SUN_ANY, 1f
 	jumpifability BS_TARGET, ABILITY_LEAF_GUARD, \jumpptr

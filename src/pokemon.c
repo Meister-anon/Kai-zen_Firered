@@ -4212,6 +4212,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         }
     }
 
+    if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_AURA_OF_LIGHT) && type == TYPE_DARK)
+        gBattleMovePower /= 2;  //
+
     //logic didn't work in adjustnormaldamage bs command function, put here bcause is equivalent to where aurora veil damage reducion is done 4 emerald
     //I'm stupid I forgot this was meant to be flat damage reduction, not require contact
     if (gProtectStructs[gBattlerTarget].shieldBashed

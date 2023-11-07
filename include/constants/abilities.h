@@ -27,8 +27,8 @@
 #define ABILITY_SHADOW_TAG 23
 #define ABILITY_ROUGH_SKIN 24
 #define ABILITY_WONDER_GUARD 25
-#define ABILITY_LEVITATE 26 //since removing can replace with something else idk what though possibly anercomps random high roller ability or perhaps a community poll
-#define ABILITY_EFFECT_SPORE 27  //ABILITY_FEMME_FATALE  replacement for levitate
+#define ABILITY_FEMME_FATALE 26 //since removing can replace with something else idk what though possibly anercomps random high roller ability or perhaps a community poll
+#define ABILITY_EFFECT_SPORE 27  //ABILITY_FEMME_FATALE  replacement for levitate  //think will also give to jinx as well
 #define ABILITY_SYNCHRONIZE 28
 #define ABILITY_CLEAR_BODY 29
 #define ABILITY_NATURAL_CURE 30
@@ -325,7 +325,7 @@
 #define ABILITY_FEATHER_JACKET 302	//hisuian decidueye inspired by dex entry and smisonian arcticle cold climate birds have "They had fluffier jackets" to insulate them from cold
 #define ABILITY_POISONED_LEGACY 303 // poison pinch ability, for poipoile as its technically a starter,  inspired by marriagetoxin manga, boost poison in a pinch and if poison target will be bad poison consider set to turn 2 so it does full dmg 1st turn
 #define ABILITY_JEWEL_METABOLISM 304 //can't think of a name right now, this is just a sableye rock absorb based on dex entry, hmm maybe do more boost damage to rock types? ok, instead of raising hp, boosts def as eaten rocks form more crystals ok i like that
-#define ABILITY_INVERSION 305
+#define ABILITY_INVERSION 305 //  - for ditto 
 #define ABILITY_WETIKO 306 // for my version crabominable mix of refrigerate & regenerator
 #define ABILITY_EMPATH 307 // upgraded synchronize, not for umbreon psychic only
 #define ABILITY_EMPATHIC_CURSE 308 //ability for Mespirit - synchronize with pain split
@@ -337,7 +337,10 @@
 #define ABILITY_TOXUNGUE 314    //Likitung line signature paralytic poison touch
 #define ABILITY_OMNIPOTENT_AIDE 315//for Fraeyjta, can use healing moves for itself, but transfers any heal it would receive to battle partner (if heal target mon with this ability change target to battle partner, otherwise fail)
                                     //if this mon uses a healing move its priority gets increased long as it has a living battle partner, for balanve remove priority effect if status 1,  logic is ABILITY_TRIAGE 
-#define ABILITY_FLUORESCENCE 316                                
-#define ABILITIES_COUNT ABILITY_FLUORESCENCE + 1 //   ability count is last ability number + 1 since we have to count ability 0
+#define ABILITY_FLUORESCENCE 316     
+#define ABILITY_SPECTRE 317  //latios & latias ability raise evasiveness on switch in
+#define ABILITY_AURA_OF_LIGHT 318//CRESELIA ABILITY prevent sleep for self and allies, plus reduce dark damage on side - done setup
+
+#define ABILITIES_COUNT ABILITY_AURA_OF_LIGHT + 1 //   ability count is last ability number + 1 since we have to count ability 0
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H

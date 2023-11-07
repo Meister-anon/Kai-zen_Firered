@@ -2402,6 +2402,7 @@ static void atk05_damagecalc(void)
     //pretty much it'll do less dmg at more hits than at lower hits because the divisor lowers the dmg to 0
     //fixing this is simple as just using gDynamicBasePower instead, which honestly is prob better because that's how multihit works anyway
 
+    //think dynamicbasepower here just means if dynamicbasepower not 0, use it instead fo move power? //yup confirmed
     gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker],
                                             &gBattleMons[gBattlerTarget],
                                             gCurrentMove,
@@ -2740,12 +2741,6 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0; //typecalc & typecalc2 are different, tp2 doesn't have this
         gBattleCommunication[6] = B_MSG_GROUND_MISS;
-
-        if (GetBattlerAbility(gBattlerTarget) == ABILITY_LEVITATE)
-        {
-            gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
-            RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
-        }
     }
     if (moveType == TYPE_WATER && GetBattlerAbility(gBattlerTarget) == ABILITY_LIQUID_SOUL) //new buff for liquid soul
     {
@@ -2862,13 +2857,7 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
     argument = gBattleMoves[gCurrentMove].argument;
     GET_MOVE_TYPE(gCurrentMove, moveType);
     //&& !IsBattlerGrounded(battlerDef)
-    if (GetBattlerAbility(gBattlerTarget) == ABILITY_LEVITATE && moveType == TYPE_GROUND)
-    {
-        gLastUsedAbility = ABILITY_LEVITATE;
-        gBattleCommunication[6] = moveType;
-        RecordAbilityBattle(gBattlerTarget, ABILITY_LEVITATE);
-        return;
-    }
+
     if (!(IsBattlerGrounded(gBattlerTarget)) && moveType == TYPE_GROUND && !(gBattleMoves[gCurrentMove].flags & FLAG_DMG_IN_AIR))
     {
         gBattleCommunication[6] = B_MSG_GROUND_MISS;
@@ -3187,7 +3176,6 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
 
     }
 
-    //if (gBattleMons[defender].ability == ABILITY_LEVITATE && moveType == TYPE_GROUND)
     if (!(IsBattlerGrounded(defender)) //set without ! it means if function is TRUE aka non-zero
         && moveType == TYPE_GROUND //just realized grounded already has conditions for levitate so I just need that.
         && !(gBattleMoves[move].flags & FLAG_DMG_IN_AIR)
@@ -3276,7 +3264,7 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
     //moveType = gBattleMoves[move].type; //think don't need to change this since battle_main has function for type change
     GET_MOVE_TYPE(move, moveType);
     multiplier = CalcTypeEffectivenessMultiplier(gCurrentMove, moveType, gBattlerAttacker, gBattlerTarget, FALSE); //cehck this if need change 
-    //if (targetAbility == ABILITY_LEVITATE && moveType == TYPE_GROUND)
+
     if (!(IsBattlerGrounded(gBattlerTarget)) //set without ! it means if function is TRUE aka non-zero
         && moveType == TYPE_GROUND && !(gBattleMoves[move].flags & FLAG_DMG_IN_AIR) && !(gBattleMoves[move].flags & FLAG_DMG_2X_IN_AIR))
     {
@@ -4837,13 +4825,13 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 }
                 break;
             case MOVE_EFFECT_FLINCH:
-                if (battlerAbility == ABILITY_INNER_FOCUS)
+                if (battlerAbility == ABILITY_INNER_FOCUS || battlerAbility == ABILITY_FEMME_FATALE)
                 {
                     if (primary == TRUE || certain == MOVE_EFFECT_CERTAIN)
                     {
-                        gLastUsedAbility = ABILITY_INNER_FOCUS;
+                        gLastUsedAbility = battlerAbility;
                         gBattlerAbility = gEffectBattler;
-                        RecordAbilityBattle(gEffectBattler, ABILITY_INNER_FOCUS);
+                        RecordAbilityBattle(gEffectBattler, battlerAbility);
                         gBattlescriptCurrInstr = BattleScript_FlinchPrevention;
                     }
                     else
@@ -7057,7 +7045,8 @@ static void atk48_playstatchangeanimation(void)
                         && !(ability == ABILITY_RUN_AWAY && currStat == STAT_SPEED)
                         && !(ability == ABILITY_HYPER_CUTTER && currStat == STAT_ATK)
                         && !(ability == ABILITY_BIG_PECKS && currStat == STAT_ATK)
-                        && !(ability == ABILITY_BIG_PECKS && currStat == STAT_DEF))
+                        && !(ability == ABILITY_BIG_PECKS && currStat == STAT_DEF)
+                        && !IsFlowerVeilProtected(gActiveBattler))
                 {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > 0)
                     {
@@ -7952,8 +7941,46 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                     effect = TRUE;
                 }
             }
-            ++gBattleScripting.atk49_state;
+            ++gBattleScripting.atk49_state;  
             break;
+        case MOVE_END_INFATUATION:
+        {
+            struct Pokemon *monAttacker, *monTarget;
+            u16 speciesAttacker, speciesTarget;
+            u32 personalityAttacker, personalityTarget;
+
+            u16 targetAbility = GetBattlerAbility(gBattlerTarget);
+
+            
+
+            if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
+                monAttacker = &gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]];
+            else
+                monAttacker = &gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker]];
+            if (GetBattlerSide(gBattlerTarget) == B_SIDE_PLAYER)
+                monTarget = &gPlayerParty[gBattlerPartyIndexes[gBattlerTarget]];
+            else
+                monTarget = &gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
+            speciesAttacker = GetMonData(monAttacker, MON_DATA_SPECIES);
+            personalityAttacker = GetMonData(monAttacker, MON_DATA_PERSONALITY);
+            speciesTarget = GetMonData(monTarget, MON_DATA_SPECIES);
+            personalityTarget = GetMonData(monTarget, MON_DATA_PERSONALITY);
+
+            if ((gBattleMoves[gCurrentMove].effect == EFFECT_ATTRACT_HIT)
+            && TARGET_TURN_DAMAGED
+            && GetBattlerAbility(gBattlerTarget) != ABILITY_OBLIVIOUS
+            && GetBattlerAbility(gBattlerTarget) != ABILITY_UNAWARE
+            && GetBattlerAbility(gBattlerTarget) != ABILITY_FEMME_FATALE) //if meets conditions for attract hit\  add ABILITY_FEMME_FATALE
+            {
+                if (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) == GetGenderFromSpeciesAndPersonality(speciesTarget, personalityTarget)
+                || GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) == MON_GENDERLESS
+                || GetGenderFromSpeciesAndPersonality(speciesTarget, personalityTarget) == MON_GENDERLESS) //if gender matches for infatuation
+                    PrepareStringBattle(STRINGID_PKMNFELLINLOVE, gActiveBattler); //test
+            }
+        
+        ++gBattleScripting.atk49_state;
+        break;
+        }
         case MOVE_END_NEXT_TARGET: // For moves hitting two opposing Pokemon.
         {
             u16 moveTarget = GetBattlerMoveTargetType(gBattlerAttacker, gCurrentMove);
@@ -8092,11 +8119,6 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
         gLastLandedMoves[gBattlerTarget] = 0;
         gBattleCommunication[6] = moveType;
 
-        if (GetBattlerAbility(gBattlerTarget) == ABILITY_LEVITATE)
-        {
-            gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
-            RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
-        }
     }
     if (moveType == TYPE_WATER && GetBattlerAbility(gBattlerTarget) == ABILITY_LIQUID_SOUL) //new buff for liquid soul
     {
@@ -10438,10 +10460,10 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear)
     return FALSE;
 }
 
-u32 IsFlowerVeilProtected(u32 battler) //prvent stat drop for user & ally
+u32 IsFlowerVeilProtected(u32 battler) //prvent stat drop & status change for user & ally
 {
-    if (IS_BATTLER_OF_TYPE(battler, TYPE_GRASS))
-        return IsAbilityOnSide(battler, ABILITY_FLOWER_VEIL);
+    if (IS_BATTLER_OF_TYPE(battler, TYPE_GRASS) || GetBattlerAbility(battler) == ABILITY_FLOWER_VEIL)
+        return IsAbilityOnSide(battler, ABILITY_FLOWER_VEIL); //will return true or false, based on if ability present
     else
         return 0;
 }
@@ -13203,23 +13225,19 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
             }
             return STAT_CHANGE_DIDNT_WORK;
         }
-        else if ((index = IsFlowerVeilProtected(gActiveBattler)) && !certain)
+        else if ((IsFlowerVeilProtected(gActiveBattler)) && !certain) //thinnk this will work?
         {
             if (flags == STAT_CHANGE_BS_PTR)
             {
-                if (gSpecialStatuses[gActiveBattler].statLowered)
-                {
-                    gBattlescriptCurrInstr = BS_ptr;
-                }
-                else
-                {
+              
                     BattleScriptPush(BS_ptr);
                     gBattleScripting.battler = gActiveBattler;
-                    gBattlerAbility = index - 1;
+                    //gBattlerAbility = index - 1;
+                    gBattlerAbility = ABILITY_FLOWER_VEIL; //think thi sis right?
                     gBattlescriptCurrInstr = BattleScript_FlowerVeilProtectsRet;
                     gLastUsedAbility = ABILITY_FLOWER_VEIL;
-                    gSpecialStatuses[gActiveBattler].statLowered = TRUE;
-                }
+                    //gSpecialStatuses[gActiveBattler].statLowered = TRUE; pretty sure this should be false
+
             }
             return STAT_CHANGE_DIDNT_WORK;
         }
@@ -13900,6 +13918,9 @@ static void atk97_tryinfatuating(void)
     u16 speciesAttacker, speciesTarget;
     u32 personalityAttacker, personalityTarget;
 
+    u16 targetAbility = GetBattlerAbility(gBattlerTarget);
+    
+
     if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
         monAttacker = &gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]];
     else
@@ -13912,11 +13933,17 @@ static void atk97_tryinfatuating(void)
     personalityAttacker = GetMonData(monAttacker, MON_DATA_PERSONALITY);
     speciesTarget = GetMonData(monTarget, MON_DATA_SPECIES);
     personalityTarget = GetMonData(monTarget, MON_DATA_PERSONALITY);
-    if (GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS)
+    if (targetAbility == ABILITY_OBLIVIOUS || targetAbility == ABILITY_UNAWARE) //add ABILITY_FEMME_FATALE in else if, special message femme fatalle prevents infatuation
     {
         gBattlescriptCurrInstr = BattleScript_AbilityPreventsMoodShift;
-        gLastUsedAbility = ABILITY_OBLIVIOUS;
-        RecordAbilityBattle(gBattlerTarget, ABILITY_OBLIVIOUS);
+        gLastUsedAbility = targetAbility;
+        RecordAbilityBattle(gBattlerTarget, targetAbility);
+    }
+    else if (targetAbility == ABILITY_FEMME_FATALE) //add ABILITY_FEMME_FATALE in else if, special message femme fatalle prevents infatuation
+    {
+        gBattlescriptCurrInstr = BateScript_AbilityFemmeFatale;
+        gLastUsedAbility = targetAbility;
+        RecordAbilityBattle(gBattlerTarget, targetAbility);
     }
     else
     {
@@ -13927,9 +13954,9 @@ static void atk97_tryinfatuating(void)
         {
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);   //jump to fail condition
         }
-        else if (gBattleMoves[gCurrentMove].power >= 1) //if not a status move, and meets success condition to attract
+        else if (gBattleMoves[gCurrentMove].effect != EFFECT_ATTRACT && gBattleMoves[gCurrentMove].effect != EFFECT_ATTRACT_HIT) 
         {
-            gBattlescriptCurrInstr += 5;
+            gBattlescriptCurrInstr += 5; //to exclude other effects taht meets success condition to attract
         }
         else
         {
@@ -14272,6 +14299,11 @@ static u8 WeightBoostedDamageFormula(void)
 //actually plan to make new function just for weight scaling similar to flail
 //atkAC_remaininghptopower function  check target level break if they are below a certain level
 //that way it'd only do normal seismic damage for early game
+//would overperform essentially oneshot heavy targets, may rework it into a nerf?
+//can't work on mon two times users weight?
+//then bring in the weight based boost,
+//ran quick check double weight is far too low for how much weight varies think 4x instead is teh limit
+//ex primape is 300,  machoke is 700,  while in oxic is 2400
 static void atk9F_dmgtolevel(void) 
 {
     u8 max_skill_lvl = 50;
@@ -14281,12 +14313,15 @@ static void atk9F_dmgtolevel(void)
 
     if (gCurrentMove == MOVE_SEISMIC_TOSS)
     {
-        if (level_Limiter < max_skill_lvl)
+        if (GetBattlerWeight(gBattlerTarget) > (GetBattlerWeight(gBattlerAttacker) * 4))
+            gMoveResultFlags |= MOVE_RESULT_FAILED;
+
+        else if (level_Limiter < max_skill_lvl)
         {
-            gBattleMoveDamage = ((gBattleMons[gBattlerAttacker].level * lvl_scaling) / 100) + (weightscaling * (level_Limiter / max_skill_lvl));
+            gBattleMoveDamage = ((gBattleMons[gBattlerAttacker].level * lvl_scaling) / 100) + ((weightscaling / 4) * (level_Limiter / max_skill_lvl)); //max 145 or +45% lvl
         }
-        else
-            gBattleMoveDamage = ((gBattleMons[gBattlerAttacker].level * lvl_scaling) / 100) + weightscaling;    //max dmg 205;
+        //else
+          //  gBattleMoveDamage = ((gBattleMons[gBattlerAttacker].level * lvl_scaling) / 100) + weightscaling;    //max dmg 205;
     }
     else
         gBattleMoveDamage = gBattleMons[gBattlerAttacker].level;
@@ -15746,7 +15781,8 @@ static void atkCE_settorment(void)
     if (gBattleMons[gBattlerTarget].status2 & STATUS2_TORMENT
         || GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE
         || GetBattlerAbility(gBattlerTarget) == ABILITY_OWN_TEMPO
-        || GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS)
+        || GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS
+        || GetBattlerAbility(gBattlerTarget) == ABILITY_FEMME_FATALE)
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
@@ -15769,9 +15805,10 @@ static void atkD0_settaunt(void)    //adjusted setup to be more in line with tor
 {
     
     if ((gDisableStructs[gBattlerTarget].tauntTimer != 0)
-        || GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE
+        || GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE 
         || GetBattlerAbility(gBattlerTarget) == ABILITY_OWN_TEMPO
-        || GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS)
+        || GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS
+        || GetBattlerAbility(gBattlerTarget) == ABILITY_FEMME_FATALE)
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
@@ -15951,7 +15988,7 @@ static void atkD6_doubledamagedealtifdamaged(void)
 static void atkD7_setyawn(void)
 {
     if (gStatuses3[gBattlerTarget] & STATUS3_YAWN
-     || gBattleMons[gBattlerTarget].status1 & STATUS1_ANY)  //util.c already blocks comatose sleeping so no need to change this line
+     || !CanSleep(gBattlerTarget))
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }

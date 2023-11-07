@@ -1091,7 +1091,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_STRENGTH] =
     {
         .effect = EFFECT_STRENGTH_UP_HIT,
-        .power = 60,
+        .power = 50,
         .type = TYPE_NORMAL,
         .accuracy = 100,
         .pp = 15,
@@ -3338,7 +3338,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_ATTRACT,
         .power = 0,
         .type = TYPE_NORMAL,
-        .accuracy = 100,
+        .accuracy = 0,
         .pp = 15,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
@@ -7022,7 +7022,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .split = SPLIT_SPECIAL,
-    },
+    }, //did I intend this to eb a gauranteed confuse?
 
     [MOVE_JUDGMENT] =
     {

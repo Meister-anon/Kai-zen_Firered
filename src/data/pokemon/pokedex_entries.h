@@ -1505,7 +1505,7 @@ const struct PokedexEntry gPokedexEntries[] =
 
     [NATIONAL_DEX_JYNX] =
     {
-        .categoryName = _("Human Shape"),
+        .categoryName = _("Temptress"),
         .height = 14,
         .weight = 406,
         .description = gJynxPokedexText,
@@ -2873,8 +2873,8 @@ const struct PokedexEntry gPokedexEntries[] =
 
     [NATIONAL_DEX_SMOOCHUM] =
     {
-        .categoryName = _("Kiss"),
-        .height = 4,
+        .categoryName = _("Kiss"), //feel like I want to change this? changed from kiss, workshop further
+        .height = 4,    //its not exactly kissing, its more like a baby putting things in its mouth/to its lips to examine them, eh kiss is fine I guess
         .weight = 60,
         .description = gSmoochumPokedexText,
         .pokemonScale = 440,

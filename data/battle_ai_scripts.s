@@ -63,7 +63,7 @@ AI_CBM_CheckIfNegatesType::
 	if_equal ABILITY_WATER_ABSORB, CheckIfWaterAbsorbCancelsWater
 	if_equal ABILITY_FLASH_FIRE, CheckIfFlashFireCancelsFire
 	if_equal ABILITY_WONDER_GUARD, CheckIfWonderGuardCancelsMove
-	if_equal ABILITY_LEVITATE, CheckIfLevitateCancelsGroundMove
+	@if_equal ABILITY_LEVITATE, CheckIfLevitateCancelsGroundMove
 	goto AI_CheckBadMove_CheckSoundproof
 
 CheckIfVoltAbsorbCancelsElectric:: @ 81D9CA6
@@ -370,9 +370,10 @@ AI_CBM_OneHitKO:: @ 81DA195
 	if_level_cond 1, Score_Minus10
 	end
 
+	@need change ai soon
 AI_CBM_Magnitude:: @ 81DA1AA
-	get_ability AI_TARGET
-	if_equal ABILITY_LEVITATE, Score_Minus10
+	@get_ability AI_TARGET
+	@if_equal ABILITY_LEVITATE, Score_Minus10
 
 AI_CBM_HighRiskForDamage:: @ 81DA1B2
 	if_type_effectiveness AI_EFFECTIVENESS_x0, Score_Minus10
@@ -3251,8 +3252,8 @@ AI_Roaming:: @ 81DBCA8
 	if_status2 AI_USER, STATUS2_ESCAPE_PREVENTION, AI_Roaming_End
 	get_ability AI_TARGET
 	if_equal ABILITY_SHADOW_TAG, AI_Roaming_End
-	get_ability AI_USER
-	if_equal ABILITY_LEVITATE, AI_Roaming_Flee
+	@get_ability AI_USER
+	@if_equal ABILITY_LEVITATE, AI_Roaming_Flee
 	get_ability AI_TARGET
 	if_equal ABILITY_ARENA_TRAP, AI_Roaming_End
 

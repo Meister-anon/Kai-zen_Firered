@@ -382,6 +382,7 @@ const u16 gTypeEffectivenessTable[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] =
 //DON'T FORGET every time I change below, need to update in the .h / also need to update table above, so ai, and other pre-damage type calcs are accurate
 #define TYPE_CHART
 
+//no longer used for type reading but keeping as its more readable, a good visual
 const u8 gTypeEffectiveness[] = // 336 is number of entries x 3 i.e number of efffectiveness since only super not effective and no effect are included. 
 { // counted from ompen bracket to end of table. so subtract line first entry is on from line closing bracket is on  then multipy by 3.
     TYPE_NORMAL, TYPE_ROCK, TYPE_MUL_NOT_EFFECTIVE,

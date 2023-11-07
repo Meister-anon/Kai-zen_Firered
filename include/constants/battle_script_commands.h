@@ -311,7 +311,7 @@
 #define MOVE_END_ATTACKER_VISIBLE                  12
 #define MOVE_END_TARGET_VISIBLE                    13
 #define MOVE_END_ITEM_EFFECTS_TARGET			   14
-#define MOVE_END_MOVE_EFFECTS2					   15      
+#define MOVE_END_MOVE_EFFECTS2					   15     //extra stuff from setmoveffect that has to be set later 
 #define MOVE_END_ITEM_EFFECTS_ALL                  16
 #define MOVE_END_KINGSROCK						   17  //item effect need to be bfore kingsrock for things like rocky helm I guess
 #define MOVE_END_SUBSTITUTE                        18
@@ -330,9 +330,10 @@
 #define MOVE_END_DANCER							   30
 #define MOVE_END_EMERGENCY_EXIT					   31
 #define MOVE_END_SYMBIOSIS						   32
-#define MOVE_END_NEXT_TARGET                       33 //was last value before count, in base firered
-#define MOVE_END_CLEAR_BITS						   34
-#define MOVE_END_COUNT							   35
+#define MOVE_END_INFATUATION                       33  //to setup for attract hit effect, just need set STRINGID_PKMNFELLINLOVE
+#define MOVE_END_NEXT_TARGET                       34 //was last value before count, in base firered
+#define MOVE_END_CLEAR_BITS						   35
+#define MOVE_END_COUNT							   36
 
 // switch cases - PORTED right now not used, adding red card only for now
 #define B_SWITCH_NORMAL     0

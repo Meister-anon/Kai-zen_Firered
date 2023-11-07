@@ -2235,8 +2235,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(55, 95, 180, 65, 85, 50),
-        .type1 = TYPE_ICE,  //most moves were ice rather than water related plus its a clam which makes pearls so kinda fitting
-        .type2 = TYPE_ROCK,
+        .type1 = TYPE_WATER,  //most moves were ice rather than water related plus its a clam which makes pearls so kinda fitting
+        .type2 = TYPE_ICE, //ice rock was cool idea but doesn't make any sense for this to be a sandstorm mon
         .catchRate = 60,
         .expYield = 184,
         //.evYield_Defense = 2,
@@ -2270,8 +2270,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
-        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
+        .abilities = {ABILITY_CURSED_BODY, ABILITY_UNNERVE}, //think want to add ghost ability that sets curse,
+        .abilityHidden = {ABILITY_SHADOW_TAG, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -2291,7 +2291,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+         .abilities = {ABILITY_CURSED_BODY, ABILITY_UNNERVE},
+        .abilityHidden = {ABILITY_SHADOW_TAG, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -2313,7 +2314,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         //#if P_UPDATED_ABILITIES >= GEN_7
             //#ifdef BATTLE_ENGINE
-                .abilities = {ABILITY_CURSED_BODY, ABILITY_NONE},
+                .abilities = {ABILITY_CURSED_BODY, ABILITY_UNNERVE},
+                 .abilityHidden = {ABILITY_SHADOW_TAG, ABILITY_PERISH_BODY},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
     },
@@ -2868,7 +2870,7 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_WATER_BUBBLE, ABILITY_HYDRATION},
         .safariZoneFleeRate = 50,
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_STALL},//idk why I gaev this stall, its slow but not at all bulky
-        .bodyColor = BODY_COLOR_RED,
+        .bodyColor = BODY_COLOR_RED, //welp nvm its kinda tankin pretty good??
         .noFlip = FALSE,
     },//thinking give unaware, keeping stall on pre evo for eviolite strats taht's about it
 
@@ -3006,7 +3008,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_OBLIVIOUS, ABILITY_FOREWARN},
+            .abilities = {ABILITY_OBLIVIOUS, ABILITY_FOREWARN}, //replace oblivious w ABILITY_FEMME_FATALE
             .abilityHidden = {ABILITY_DRY_SKIN, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -5124,8 +5126,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_PICKUP, ABILITY_QUICK_FEET},
-            .abilityHidden = {ABILITY_HONEY_GATHER, ABILITY_CUTE_CHARM},
+            .abilities = {ABILITY_HONEY_GATHER, ABILITY_QUICK_FEET},
+            .abilityHidden = {ABILITY_PICKUP, ABILITY_CUTE_CHARM},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -5147,7 +5149,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_GUTS, ABILITY_QUICK_FEET},
-            .abilityHidden = {ABILITY_UNNERVE, ABILITY_GORILLA_TACTICS},
+            .abilityHidden = {ABILITY_GORILLA_TACTICS, ABILITY_UNNERVE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -5609,7 +5611,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_SMOOCHUM] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(45, 30, 15, 65, 85, 65),
+         STATS(45, 30, 25, 65, 85, 65),
         .type1 = TYPE_ICE,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 45,
@@ -5622,11 +5624,11 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_OBLIVIOUS, ABILITY_FOREWARN},
-            .abilityHidden = {ABILITY_CUPIDS_ARROW, ABILITY_NONE},//changed ability hydration sucks for this, one time pass on this ability as it makes sense here
-        .bodyColor = BODY_COLOR_PINK,
-        .noFlip = FALSE,
-    },
+            .abilities = {ABILITY_CUTE_CHARM, ABILITY_FOREWARN},
+            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},//changed ability hydration sucks for this, one time pass on this ability as it makes sense here
+        .bodyColor = BODY_COLOR_PINK, //dont know if cupids arrow works for this, ok check bulbapedia and its literally a baby lol, cute charm would work
+        .noFlip = FALSE,    //thematically but  its defense is too low, gave it a little more def, and jynx line more hp overall,...may not need I kinda made ice defenses op...
+    },//need rewrite dex for this, use bulbapedia info,  dex entries for this thing are kinda cursed... vsonic
 
     [SPECIES_ELEKID] =
     { 
@@ -8419,7 +8421,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_AMORPHOUS,
         .eggGroup2 = EGG_GROUP_AMORPHOUS,
         .abilities = {ABILITY_TELEPATHY, ABILITY_NONE},
-        .abilityHidden = {ABILITY_SOLID_ROCK, ABILITY_NONE},
+        .abilityHidden = {ABILITY_FILTER, ABILITY_MAGIC_BOUNCE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -8929,13 +8931,13 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilities = {ABILITY_SPECTRE, ABILITY_NONE},
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },//delve into their ability to turn invisible
     //start battle with +1 evasion so they are just harder to hit without needing a setup
-    //red spector blue spector?  or spectrum blend?  that works, just make it a switch in ability that would increase evasiveness, so they can effectively start boosted +1 potentially +2
+    //red spector blue spector?Spectre  or spectrum blend?  that works, just make it a switch in ability that would increase evasiveness, so they can effectively start boosted +1 potentially +2
 
     [SPECIES_LATIOS] =
     { 
@@ -8952,7 +8954,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilities = {ABILITY_SPECTRE, ABILITY_NONE},
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -10126,7 +10128,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_FAST,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilities = {ABILITY_TELEPATHY, ABILITY_NONE},
+        .abilityHidden = {ABILITY_FILTER, ABILITY_MAGIC_BOUNCE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -10633,7 +10636,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_GRASS,
         .eggGroup2 = EGG_GROUP_GRASS,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilities = {ABILITY_LONG_REACH, ABILITY_STRONG_JAW},
+        .abilityHidden = {ABILITY_CHLOROPHYLL, ABILITY_PHOTOSYNTHESIZE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -11214,7 +11218,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilities = {ABILITY_INTHRALL, ABILITY_NONE}, //effect not yet set, should work like disable but with forewarn logic to choose move
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },//knowledge/ memoery mon  can seal a move when they attack. the enemy
@@ -11231,7 +11235,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_MESPRIT] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(80, 105, 105, 80, 105, 105),
+         STATS(110, 95, 100, 80, 95, 100),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_FAIRY,
         .catchRate = 3,
@@ -11245,7 +11249,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_EMPATHIC_CURSE, ABILITY_NONE},
+        .abilities = {ABILITY_EMPATHIC_CURSE, ABILITY_NONE}, //also given to banette line, but only mesprit best takes advantage of it with stats
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },//empath, emotion pokemon, give efffect of synchronize but also make attaker feel a portion of my pain
@@ -11268,7 +11272,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilities = {ABILITY_IRON_WILL, ABILITY_NONE}, //setup done //need test to make sure works
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },//iron will, will pokemon, paralysis effect, a chance to make opponent lose will to attack facing this mon.
@@ -11372,7 +11376,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_FLASH_FIRE, ABILITY_NONE},
-        .abilityHidden = {ABILITY_FLAME_BODY, ABILITY_NONE},
+        .abilityHidden = {ABILITY_FLAME_BODY, ABILITY_LAVA_FISSURE}, //not setup yet, set fire terrain weaken water
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -11436,7 +11440,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilities = {ABILITY_AURA_OF_LIGHT, ABILITY_NONE}, //effeect should be done, need test switchin wake up
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },//lunar spirit/aura/veil  prevents allies/self from falling asleep,  counter to darkai also reduces dark type damage by 50%
@@ -23662,7 +23666,7 @@ const struct BaseStats gBaseStats[] =
             .eggGroup1 = EGG_GROUP_FIELD,
             .eggGroup2 = EGG_GROUP_FIELD,
             .abilities = {ABILITY_GUTS, ABILITY_BULLETPROOF},
-            .abilityHidden = {ABILITY_UNNERVE, ABILITY_GORILLA_TACTICS},
+            .abilityHidden = {ABILITY_GORILLA_TACTICS, ABILITY_UNNERVE},
             .bodyColor = BODY_COLOR_BROWN,
             .noFlip = FALSE,
         },
@@ -23719,7 +23723,7 @@ const struct BaseStats gBaseStats[] =
             .growthRate = GROWTH_MEDIUM_SLOW,
             .eggGroup1 = EGG_GROUP_FIELD,
             .eggGroup2 = EGG_GROUP_FIELD,
-            .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
+            .abilities = {ABILITY_FEMME_FATALE, ABILITY_FEMME_FATALE},
             .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_NONE},
             .bodyColor = BODY_COLOR_BLUE,
             .noFlip = FALSE,
@@ -25017,7 +25021,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_LEVITATE, ABILITY_LEVITATE},  //vsonic NEED replace for this
+        .abilities = {ABILITY_SPECTRE, ABILITY_SPECTRE},  //vsonic NEED replace for this
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -25045,7 +25049,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_LEVITATE, ABILITY_LEVITATE},
+        .abilities = {ABILITY_SPECTRE, ABILITY_SPECTRE},
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
@@ -26056,14 +26060,15 @@ const struct BaseStats gBaseStats[] =
         .flags = F_GALARIAN_FORM,
     },
 
+    //uses much bigger stalk/leek cant fly so will be grouded
     [SPECIES_FARFETCHD_GALARIAN] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
-        52,
-        95,
-        55,
-        55,
+        57,
+        115,
+        65,
+        50,
         58,
         62
         ),
@@ -26688,8 +26693,8 @@ const struct BaseStats gBaseStats[] =
             .growthRate = GROWTH_MEDIUM_SLOW,
             .eggGroup1 = EGG_GROUP_FIELD,
             .eggGroup2 = EGG_GROUP_FIELD,
-            .abilities = {ABILITY_INNER_FOCUS, ABILITY_KEEN_EYE},
-            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_NONE},
+            .abilities = {ABILITY_PRESSURE, ABILITY_INNER_FOCUS},
+            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_KEEN_EYE}, 
             .bodyColor = BODY_COLOR_BLACK,
             .noFlip = TRUE,
             .flags = F_HISUIAN_FORM,
@@ -27510,7 +27515,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE},
+        .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },

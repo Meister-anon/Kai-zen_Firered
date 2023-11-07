@@ -41,7 +41,7 @@ static u16 GetInverseTypeMultiplier(u16 multiplier);
 static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities);
 static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities, u16 modifier);
 static void UpdateMoveResultFlags(u16 modifier); //only used for accuracycheck command
-static void infatuationchecks(void);//cusotm effect used for cupidarrow
+static void infatuationchecks(u8 target);//cusotm effect used for cupidarrow
 
 static const u16 sSoundMovesTable[] =
 {
@@ -334,25 +334,26 @@ void PressurePPLoseOnUsingPerishSong(u8 attacker)
 // use for cupid's arrow think can just call this function after my conditions are set
 //switch in if effect works string is "targtet name fell in love w attcaker name at first sight"
 //not sure it'll target correctly  so will make custom effect
-
-static void infatuationchecks(void)//cusotm effect used for cupidarrow
+//realized wasn't right, need take target from targetting funciton to set correct battler here
+//if fails to infatuate should end script/effect
+static void infatuationchecks(u8 target)//cusotm effect used for cupidarrow
 {
-    if (GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS)
+    u16 targetAbility = GetBattlerAbility(target);
+
+    if (targetAbility == ABILITY_OBLIVIOUS || targetAbility == ABILITY_UNAWARE) //add femme fatalle
     {
         gBattlescriptCurrInstr = BattleScript_AbilityPreventsMoodShift;
-        gLastUsedAbility = ABILITY_OBLIVIOUS;
-        RecordAbilityBattle(gBattlerTarget, ABILITY_OBLIVIOUS);
+        gLastUsedAbility = targetAbility;
+        RecordAbilityBattle(target, targetAbility);
     }
-    if (gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION)
-
+    if (gBattleMons[target].status2 & STATUS2_INFATUATION) //forgot this isn't bs command need diff arguments
     {
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        gBattlescriptCurrInstr = BattleScript_ButItFailed;
     }
     else
     {
 
-        gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
-        gBattlescriptCurrInstr += 5;
+        gBattleMons[target].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
 
     }
 }
@@ -406,7 +407,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[] =
     [ABILITY_INSOMNIA] = 1,
     [ABILITY_KEEN_EYE] = 1,
     [ABILITY_LEAF_GUARD] = 1,
-    [ABILITY_LEVITATE] = 1,
+    //[ABILITY_LEVITATE] = 1,
     [ABILITY_LIGHTNING_ROD] = 1,
     [ABILITY_LIMBER] = 1,
     [ABILITY_MAGMA_ARMOR] = 1,
@@ -2693,7 +2694,8 @@ u8 DoBattlerEndTurnEffects(void)
                         || battlerAbility == ABILITY_LEAF_GUARD
                         || battlerAbility == ABILITY_FULL_METAL_BODY
                         || battlerAbility == ABILITY_WHITE_SMOKE
-                        || battlerAbility == ABILITY_LIQUID_METAL))
+                        || battlerAbility == ABILITY_LIQUID_METAL
+                        || IsFlowerVeilProtected(gActiveBattler)))
                 {
                     gBattlerTarget = gActiveBattler;
                     BattleScriptExecute(BattleScript_OctolockEndTurn);
@@ -2873,10 +2875,7 @@ u8 DoBattlerEndTurnEffects(void)
                 if (gStatuses3[gActiveBattler] & STATUS3_YAWN)
                 {
                     gStatuses3[gActiveBattler] &= ~STATUS3_YAWN;    //should remove yawn
-                    if (!(gStatuses3[gActiveBattler] & STATUS3_YAWN) && !(gBattleMons[gActiveBattler].status1 & STATUS1_ANY) //vsonic change later
-                        && gBattleMons[gActiveBattler].ability != ABILITY_VITAL_SPIRIT
-                        && gBattleMons[gActiveBattler].ability != ABILITY_COMATOSE
-                        && gBattleMons[gActiveBattler].ability != ABILITY_INSOMNIA && !UproarWakeUpCheck(gActiveBattler))
+                    if (!(gStatuses3[gActiveBattler] & STATUS3_YAWN) && CanSleep(gActiveBattler) && !UproarWakeUpCheck(gActiveBattler))
                     {
                         CancelMultiTurnMoves(gActiveBattler);
                         gBattleMons[gActiveBattler].status1 |= STATUS1_SLEEP; //hopefully works and puts to sleep and sets sleep turns
@@ -3208,6 +3207,7 @@ enum
     CANCELLER_PARALYZED,
     CANCELLER_PRESSURE,
     CANCELLER_SPIRIT_LOCKED,
+    CANCELLER_IRON_WILL,
     CANCELLER_GHOST,
     CANCELLER_IN_LOVE,
     CANCELLER_BIDE,
@@ -3391,7 +3391,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_FLINCH: // flinch
-            if ((IsAbilityOnField(ABILITY_STENCH))
+            if ((IsAbilityOnField(ABILITY_STENCH))  
                 && (GetBattlerAbility(gBattlerAttacker) != ABILITY_STENCH
                 && GetBattlerAbility(gBattlerAttacker) != ABILITY_INNER_FOCUS
                 && GetBattlerAbility(gBattlerAttacker) != ABILITY_OBLIVIOUS
@@ -3414,6 +3414,11 @@ u8 AtkCanceller_UnableToUseMove(void)
                 //gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 //effect = 1;  don'et need set effect it'll be done in flinch case
             }
+
+            //flinch immunity
+            if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_FEMME_FATALE)
+            || GetBattlerAbility(gBattlerAttacker) == ABILITY_INNER_FOCUS) 
+                gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_FLINCHED);
 
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_FLINCHED)
             {
@@ -3633,6 +3638,33 @@ u8 AtkCanceller_UnableToUseMove(void)
             } //vsonic add on to/finish effedct
             ++gBattleStruct->atkCancellerTracker;
             break;
+        case CANCELLER_IRON_WILL:
+        if (GetBattlerAbility(gBattlerTarget) == ABILITY_IRON_WILL)
+            {
+                if ((Random() % 7 == 3)
+                && IsBlackFogNotOnField())
+                {
+                    gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
+                    gBattlescriptCurrInstr = BattleScript_MovePressureCanceler;
+                    gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                    {
+                        ClearRageStatuses(gBattlerAttacker);
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_RageEnds; //need test
+                    }
+                    effect = 1;
+                }
+                else if (Random() % 5 < 2) //40%
+                {
+                    gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+                    gDynamicBasePower = (gDynamicBasePower * 75) / 100;
+                    gBattlescriptCurrInstr = BattleScript_AbilityEffectIronWill;
+                } //should do dmg drop but not cancel move
+
+            }
+            ++gBattleStruct->atkCancellerTracker;
+            break;
         case CANCELLER_GHOST: // GHOST in pokemon tower
             if (IS_BATTLE_TYPE_GHOST_WITHOUT_SCOPE(gBattleTypeFlags))
             {
@@ -3646,8 +3678,8 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_IN_LOVE: // infatuation
-            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION)                
-                //&& gBattleMons[gBattlerAttacker].status2 |= STATUS2_INFATUATED_WITH(gBattlerTarget)) //important change ot add check that the target is the one pokemon is infatuated with
+            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION)      //put more planning into this vsonic          
+                //&& gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATED_WITH(gBattlerTarget)) //important change ot add check that the target is the one pokemon is infatuated with
             {
                 if (IsBlackFogNotOnField()) {
 
@@ -3656,7 +3688,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                     if (Random() & 1) //test if that worked, next step change so infatuation animation only plays if battler their infatuated with is on the field.
                         //well maybe not, if it reminds you each turn, even if not there, its a good reminder the status is still in effect.
                     {
-                        BattleScriptPushCursor(); //unfortunately didn't work, will look into it later
+                        BattleScriptPushCursor(); //attack through infatuation
                     }
                     else
                     {
@@ -3669,7 +3701,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                     effect = 1;
                 }
                 else if (!IsBlackFogNotOnField() //black fog on field
-                    && (GetBattlerAbility(gBattlerTarget) == ABILITY_CUPIDS_ARROW))
+                    && (IsAbilityOnField(ABILITY_CUPIDS_ARROW))) //if cupid arrow infatuation continues even through black fog cant stop cupid
                 {
                     gBattleScripting.battler = CountTrailingZeroBits((gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION) >> 0x10);
 
@@ -4169,9 +4201,6 @@ bool8 IsBattlerGrounded(u8 battlerId)
         && !(gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_ROOST))
         grounded = FALSE;  
 
-    if (gBattleMons[battlerId].ability == ABILITY_LEVITATE) //remove after removing all instances of levitate on mon  vsonic
-        grounded = FALSE;    
-
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
         grounded = FALSE;
     
@@ -4184,7 +4213,9 @@ bool8 IsBattlerGrounded(u8 battlerId)
     if ((species == SPECIES_DODUO) 
     || (species == SPECIES_DODRIO)
     || (species == SPECIES_ARCHEN) 
-    || (species == SPECIES_ARCHEOPS))
+    || (species == SPECIES_ARCHEOPS)
+    || (species == SPECIES_FARFETCHD_GALARIAN)
+    || (species == SPECIES_SIRFETCHD))
         grounded = TRUE;//edit because flightless bird
     
     if ((IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)) && (species == (GROUNDED_GHOSTMON)))   //test GHOST exclusions
@@ -4983,12 +5014,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gSpecialStatuses[battler].tigerMomAttacked = TRUE;
                 }
                 break;
-            case ABILITY_CUPIDS_ARROW: // 
+            case ABILITY_CUPIDS_ARROW: // need test     reworked still need test
                 for (i = 0; i < gBattlersCount; ++i) //handles ability targetting  /think should also stop reactivate? need test
                 {
                     u16 speciesAttacker, speciesTarget1, speciesTarget2;
                     u32 personalityAttacker, personalityTarget1, personalityTarget2;
 
+                    //pretty sur ethis shuold just be if ability on opposite side
+                    //if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_CUPIDS_ARROW)) but leaving for now if it copies trace guess fine?
+                    
                     if (gBattleMons[i].ability == ABILITY_CUPIDS_ARROW)// && (Random() % 1) == 0) //hopefully 50% odds,
                         //using high odds since it can only activate on switch in, and if opposite gender is on other side
                     {//changed to 100% oddds since its weak mon, intend to turn luvdisc into setup/stall mon
@@ -5010,39 +5044,39 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             //end function if all genders are the same  //removed gender check
                             /*if (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) == (GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1) && GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2)))
                             {
-                                break;
+                                break; //don't see why I had target ability not 0, tihnk will remove, its not really doing anything
                             }*/
-                            if (gBattleMons[target1].ability != 0 && gBattleMons[target1].hp != 0
+                            if (gBattleMons[target1].hp != 0
                                 && (GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1) != MON_GENDERLESS)
-                                && gBattleMons[target2].ability != 0 && gBattleMons[target2].hp != 0
+                                && gBattleMons[target2].hp != 0
                                 && (GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2) != MON_GENDERLESS))
                             {
                                 gBattlerTarget = GetBattlerAtPosition(((Random() & 1) * 2) | side); //select on target from enemy 
                                 gBattleScripting.battler = i;
                                 gLastUsedAbility = gBattleMons[i].ability;
-                                infatuationchecks();
+                                infatuationchecks(gBattlerTarget);
                                 PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
                                     BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
                                 ++effect;
                             }
-                            else if (gBattleMons[target1].ability != 0 && gBattleMons[target1].hp != 0
+                            else if (gBattleMons[target1].hp != 0
                                 && (GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1) != MON_GENDERLESS))
                             {
                                 gBattlerTarget = target1;
                                 gBattleScripting.battler = i;
                                 gLastUsedAbility = gBattleMons[i].ability;
-                                infatuationchecks();
+                                infatuationchecks(gBattlerTarget);
                                 PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
                                     BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
                                 ++effect;
                             }
-                            else if (gBattleMons[target2].ability != 0 && gBattleMons[target2].hp != 0
+                            else if (gBattleMons[target2].hp != 0
                                 && (GetGenderFromSpeciesAndPersonality(speciesTarget2, personalityTarget2) != MON_GENDERLESS))
                             {
                                 gBattlerTarget = target2;
                                 gBattleScripting.battler = i;
                                 gLastUsedAbility = gBattleMons[i].ability;
-                                infatuationchecks();
+                                infatuationchecks(gBattlerTarget);
                                 PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
                                     BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
                                 ++effect;
@@ -5051,13 +5085,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         else //single target
                         {
 
-                            if (gBattleMons[target1].ability && gBattleMons[target1].hp
+                            if (gBattleMons[target1].hp
                                 && (GetGenderFromSpeciesAndPersonality(speciesTarget1, personalityTarget1) != MON_GENDERLESS))
                             {
                                 gBattlerTarget = target1;
                                 gBattleScripting.battler = i;
                                 gLastUsedAbility = gBattleMons[i].ability;
-                                infatuationchecks();
+                                infatuationchecks(gBattlerTarget);
                                 PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gBattlerPartyIndexes[gBattlerTarget])
                                     BattleScriptPushCursorAndCallback(BattleScript_CupidsArrowActivates);
                                 ++effect;
@@ -5453,6 +5487,36 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                 }
                 break;
+            case ABILITY_AURA_OF_LIGHT:
+                if (gBattleMons[battler].status2 != STATUS2_CONFUSION)  //switch in ver.
+                {
+                    /*if (gBattleMons[battler].status1 & STATUS1_SLEEP)
+                    {
+
+                        gBattleMons[battler].status1 &= ~(STATUS1_SLEEP);
+                        gBattleMons[battler].status2 &= ~(STATUS2_NIGHTMARE);  // fix nightmare glitch
+                        gBattleScripting.battler = gActiveBattler = battler;
+                        BattleScriptPushCursorAndCallback(BattleScript_PurifyingAuraActivates);
+                        BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
+                        MarkBattlerForControllerExec(gActiveBattler);
+                        ++effect;
+                    }*/ //already immune to sleep so only need clear partner
+
+                    if (IsBattlerAlive(BATTLE_PARTNER(battler))) {
+                        if (gBattleMons[BATTLE_PARTNER(battler)].status1 & STATUS1_SLEEP)    //PARTNER status clear
+                        {
+
+                            gBattleMons[BATTLE_PARTNER(battler)].status1 &= ~(STATUS1_SLEEP);
+                            gBattleMons[BATTLE_PARTNER(battler)].status2 &= ~(STATUS2_NIGHTMARE);  // fix nightmare glitch
+                            gBattleScripting.battler = gActiveBattler = BATTLE_PARTNER(battler);
+                            BattleScriptPushCursorAndCallback(BattleScript_AuraofLightActivatesForPartner);
+                            BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
+                            MarkBattlerForControllerExec(gActiveBattler);
+                            ++effect;
+                        }
+                    }
+                }
+            break;
             case ABILITY_DEFEATIST:
                 if (gBattleMons[battler].hp < (gBattleMons[battler].maxHP / 2))
                 {
@@ -6106,11 +6170,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED)
                 {
-                    gBattleMoveDamage = (gHpDealt) / 3;
+                    gBattleMoveDamage = (gHpDealt * 2) / 3; //shift to 2/3rd rather than 1/3rd,  50% hp should be 1/3rd for enemy, wait its 1/3rd my health as damage
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
                     BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_EmpathicCurseActivates; //vsonic test
+                    gBattlescriptCurrInstr = BattleScript_EmpathicCurseActivates; //vsonic test for balance
                     ++effect;
                 }
                 break;
@@ -6293,6 +6357,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && gBattleMons[gBattlerTarget].hp != 0
                     && (Random() % 3) == 0
                     && GetBattlerAbility(gBattlerAttacker) != ABILITY_OBLIVIOUS
+                    && GetBattlerAbility(gBattlerAttacker) != ABILITY_UNAWARE
+                    //&& GetBattlerAbility(gBattlerAttacker) != ABILITY_FEMME_FATALE
                     && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != GetGenderFromSpeciesAndPersonality(speciesDef, pidDef)
                     && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION)
                     && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != MON_GENDERLESS
@@ -10404,8 +10470,9 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
     if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET)//why would anyone want this?
     {
         mod = UQ_4_12(1.0);
+
         /*if (recordAbilities)
-            RecordItemEffectBattle(battlerDef, HOLD_EFFECT_RING_TARGET);*/
+            RecordItemEffectBattle(battlerDef, HOLD_EFFECT_RING_TARGET);*/  //think effect isn't set yet, uncomment when done item port
     }
     //Ghost hit logic
     else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT && mod == UQ_4_12(0.0))
@@ -10429,16 +10496,13 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
     {
         mod = UQ_4_12(1.0);
     }
-    else if (GetBattlerAbility(battlerAtk) == ABILITY_INVERSE_WORLD)
+    else if (GetBattlerAbility(battlerAtk) == ABILITY_INVERSE_WORLD) //defender w ability logic already setup
     {
         if (mod == UQ_4_12(0.0))
             mod = UQ_4_12(1.0);
 
         else if (mod == UQ_4_12(0.5))
             mod = UQ_4_12(1.55);
-
-        else if (mod == UQ_4_12(1.55))
-            mod = UQ_4_12(0.5);
     }
     else if ((moveType == TYPE_ICE) && GetBattlerAbility(battlerDef) == ABILITY_ECOSYSTEM && defType == TYPE_GRASS && mod == UQ_4_12(1.55))
     {
@@ -10886,8 +10950,9 @@ bool32 CanSleep(u8 battlerId)
         || ability == ABILITY_VITAL_SPIRIT
         || ability == ABILITY_COMATOSE
         || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_SAFEGUARD
-        || gBattleMons[battlerId].status1 & STATUS1_ANY
+        || gBattleMons[battlerId].status1 & STATUS1_ANY 
         || IsAbilityOnSide(battlerId, ABILITY_SWEET_VEIL)
+        || IsAbilityOnSide(battlerId, ABILITY_AURA_OF_LIGHT)
         || IsAbilityStatusProtected(battlerId)
         || IsBattlerTerrainAffected(battlerId, STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_MISTY_TERRAIN))
         return FALSE;

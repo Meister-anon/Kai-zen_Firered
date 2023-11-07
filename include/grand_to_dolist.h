@@ -1469,6 +1469,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   also gen 8 mon (least I tink just them) icons too big, some don't fit w new summar screen move info page
 
   -sigh status animation for infatuation not playing - tested w cute charm
+  -ok looks liek attract works fine, just cute charm was the issue?
   pretty sure never finished cupids arrow as well? need check fi that works, should infatuate and target like trace but ignore gender check
 
 
@@ -1498,6 +1499,19 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   honey pickup isnt setup yet, port from emearld later and then adjust  with my ow pickup function in mind
   to remove need for held item slot to be empty, jsut have it put into bag
+
+  bloodmoon ursaluna looks dumb, change put mark on chest not head, similar to ursarnig where mark was on chest makes it stand out more
+  as an alternate to normal ursaluna  large red ring on chest that glows with mystic power prob make smaller than ursaring's
+  also make green scar eye glow a bit if can, or just really stand out new front sprite reared back instad of hunched
+  to better display symbol on chest
+
+  //reworked infatation set, cupids arrow, flower veil tweak and setup cresselia ability similar to sweet veil fairy aura
+  //doing to remove levitate and setup femme fatale  -done finish setup femme fatale
+
+  setup most abilities for 3 elf spirits, plan think need put grounded icon, for mon in mon summary screen
+  to show that its grounded i.e doduo etc.  mostly for flying type mon
+  
+  separate note planned move cat icons will be physical special, contact and grounding
 
   planning make muddy water  water groudn EFFECT_TWO_TYPED_MOVE, my versin is already different as two types moves can get stab
   default version doesnt get that, way move works is if one type has no effect entire move fails

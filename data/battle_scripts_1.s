@@ -4622,7 +4622,7 @@ BattleScript_EffectAttract::
 	attackcanceler
 	attackstring
 	ppreduce
-	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
+	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE @goes to fail because move has 100 accuracy, think will just make sure hit
 	tryinfatuating BattleScript_ButItFailed
 	attackanimation
 	waitanimation
@@ -4634,9 +4634,9 @@ BattleScript_EffectAttractHit::
 	attackcanceler
 	attackstring
 	ppreduce
-	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	tryinfatuating BattleScript_HitFromAtkAnimation
-	setmoveeffect MOVE_EFFECT_ATTRACT
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	tryinfatuating BattleScript_HitFromAtkAnimation   @removed move effect attract use this command instead
+	@setmoveeffect MOVE_EFFECT_ATTRACT		@plan put fell in love string in move end instead
 	goto BattleScript_HitFromAtkAnimation
 
 BattleScript_EffectReturn::
@@ -4954,7 +4954,7 @@ BattleScript_EffectSkyAttack::
 	jumpifword CMP_COMMON_BITS, gHitMarker, HITMARKER_NO_ATTACKSTRING, BattleScript_TwoTurnMovesSecondTurn
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_SKY_ATTACK
 	call BattleScriptFirstChargingTurn
-	setstatchanger STAT_EVASION, 2, FALSE
+	setstatchanger STAT_EVASION, 2, FALSE  @ give evasion boost on charging turn, since go into sky and give off bright light
 	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_SkyAttackEnd
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 2, BattleScript_SkyAttackEnd
 	setgraphicalstatchangevalues
@@ -7552,6 +7552,13 @@ BattleScript_MovePressureCanceler::
 	cancelmultiturnmoves BS_ATTACKER
 	goto BattleScript_MoveEnd
 
+BattleScript_AbilityEffectIronWill::
+	printstring STRINGID_IRON_WILL
+	waitmessage 0x40
+	playanimation BS_ATTACKER, B_ANIM_MON_SCARED, NULL
+	cancelmultiturnmoves BS_ATTACKER
+	return
+
 BattleScript_PowderMoveNoEffect::
 	attackstring
 	ppreduce
@@ -8245,6 +8252,12 @@ BattleScript_PurifyingAuraActivatesForPartner::
 	updatestatusicon BS_SCRIPTING
 	end3
 
+BattleScript_AuraofLightActivatesForPartner::
+	printstring STRINGID_AURA_OF_LIGHT_AWOKE
+	waitmessage 0x40
+	updatestatusicon BS_SCRIPTING
+	end3
+
 BattleScript_HandleWeatherFormChanges::
 	setbyte sBATTLER, 0
 BattleScript_WeatherFormChangesLoop::
@@ -8331,8 +8344,12 @@ BattleScript_TryAdrenalineOrb:
 BattleScript_TryAdrenalineOrbRet:
 	return
 
+BattleSscript_ActivateSpectre::
+	setstatchanger STAT_EVASION, 1, FALSE  @think for this want to do emreald style just do w command in funciton
+	end3
+
 BattleScript_IntimidateActivatesEnd3::
-	call BattleScript_DoIntimidateActivationAnim
+	call BattleScript_DoIntimidateActivationAnim	
 	end3
 
 @does nothing now, but put here to compile from use in battle_script_commands
@@ -8364,6 +8381,7 @@ BattleScript_IntimidateFailChecks:
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_IntimidateAbilityFail
 	jumpifability BS_TARGET, ABILITY_UNAWARE, BattleScript_IntimidateAbilityFail
+	jumpifability BS_TARGET, ABILITY_FEMME_FATALE, BattleScript_IntimidateAbilityFail
 	jumpifability BS_ATTACKER, ABILITY_INTIMIDATE, BattleScipt_Intimidate_AttackDropExclusions
 	jumpifability BS_ATTACKER, ABILITY_TIGER_MOM, BattleScipt_TigerMom_DefenseDropExclusions	@jump for tigermom to skip atk specific stat drop exclusions
 BattleScript_IntimidateStatDrop::	
@@ -8371,7 +8389,7 @@ BattleScript_IntimidateStatDrop::
 	statbuffchange STAT_CHANGE_BS_PTR | STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_IntimidateFail
 	@jumpifbyte CMP_GREATER_THAN, cMULTISTRING_CHOOSER, 1, BattleScript_IntimidateFail
 	setgraphicalstatchangevalues
-	@jumpifability BS_TARGET, ABILITY_CONTRARY, BattleScript_IntimidateContrary
+	jumpifability BS_TARGET, ABILITY_CONTRARY, BattleScript_IntimidateContrary    @need test
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	jumpifability BS_ATTACKER, ABILITY_TIGER_MOM, BattleScript_TigerMomBattleMessage
 	printstring STRINGID_PKMNCUTSATTACKWITH
@@ -8421,9 +8439,11 @@ BattleScipt_Intimidate_AttackDropExclusions::
 	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_IntimidateAbilityFail
 	goto BattleScript_IntimidateStatDrop
 
-@ported not yet applied to anything
+@ported not yet tested
 BattleScript_IntimidateContrary:
 	@call BattleScript_AbilityPopUpTarget
+	setstatchanger STAT_ATK, 1, FALSE 
+	statbuffchange STAT_CHANGE_BS_PTR | STAT_CHANGE_NOT_PROTECT_AFFECTED, BattleScript_IntimidateFail
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_IntimidateContrary_WontIncrease
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printfromtable gStatUpStringIds
@@ -8705,6 +8725,12 @@ BattleScript_PSNPrevention::
 BattleScript_AbilityPreventsMoodShift::
 	pause 0x20
 	printstring STRINGID_PKMNIGNOREDADVANCESWITH
+	waitmessage 0x40
+	goto BattleScript_MoveEnd
+
+BateScript_AbilityFemmeFatale::
+	pause 0x20
+	printstring STRINGID_FEMME_FATALE
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
