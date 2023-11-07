@@ -808,6 +808,7 @@ static void TMCase_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu *
     if (onInit != TRUE)
     {
         PlaySE(SE_SELECT);
+        if (sSelectTMActionTasks[sTMCaseStaticResources.tmCaseMenuType] == sSelectTMActionTasks[2])
         InitSelectedTMSpriteData(sTMCaseDynamicResources->tmSpriteId, itemId);
     }
     TMCase_MoveCursor_UpdatePrintedDescription(itemIndex);
@@ -935,7 +936,8 @@ static void TMCaseSetup_InitListMenuPositions(void)
     }
 }
 
-static void TMCaseSetup_UpdateVisualMenuOffset(void) //think this is scroll effect, when you scroll passed more than 3 values it "scrolls" to update position
+//think this is scroll effect, when you scroll passed more than 3 values it "scrolls" to update position
+static void TMCaseSetup_UpdateVisualMenuOffset(void) 
 {
     u8 i;
     if (sTMCaseStaticResources.selectedRow > 1) //adjusted for new graphic from 3 to 1, hope work
@@ -1706,6 +1708,7 @@ static u8 CreateTMSprite(u16 itemId)
 {
     u8 spriteId = CreateSprite(&sTMSpriteTemplate, 0x29, 0x23, 0); //think is coord for tm sprite sits in case 
     u8 r5;
+    
     if (itemId == ITEM_NONE)
     {
         UpdateTMSpritePosition(&gSprites[spriteId], 0xFF);

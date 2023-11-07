@@ -376,7 +376,7 @@ static void SetUsedFieldMoveQuestLogEvent(struct Pokemon *mon, u8 fieldMove);
 static void CB2_DoUseItemAnim(void);
 static void CB2_UseItem(void);
 static void sub_812580C(u8 taskId);
-static void sub_8125898(u8 taskId, UNUSED TaskFunc func);
+static void ItemUseCB_RestorePP(u8 taskId, UNUSED TaskFunc func);
 static void ItemUseCB_ReplaceMoveWithTMHM(u8 taskId, UNUSED TaskFunc func);
 static void Task_ReplaceMoveWithTMHM(u8 taskId);
 static void CB2_UseEvolutionStone(void);
@@ -1763,7 +1763,7 @@ static void ResetHPTaskData(u8 taskId, u8 caseId, u32 hp)
 #undef tPartyId
 #undef tStartHP
 
-u8 GetAilmentFromStatus(u32 status)
+u8 GetAilmentFromStatus(u32 status) //vsonic will need add on to
 {
     if (status & STATUS1_PSN_ANY)
         return AILMENT_PSN;
@@ -2648,12 +2648,12 @@ static void FirstBattleEnterParty_DestroyVoiceoverWindow(u8 windowId)
     ScheduleBgCopyTilemapToVram(2);
 }
 
-static void sub_8122138(u8 action)
+static void ToggleFieldMoveDescriptionWindow(u8 action)
 {
     u8 attr;
     struct PartyMenuInternal *ptr = sPartyMenuInternal;
 
-    if (action <= 17)
+    if (action < MENU_FIELD_MOVES) //cusor for field moves
     {
         if (ptr->windowId[2] != 0xFF)
         {
@@ -2755,7 +2755,7 @@ static void SpriteCB_BouncePartyMonIcon(struct Sprite *sprite)
 
     if (animCmd != 0)
     {
-        if (animCmd & 1) // % 2 also matches
+        if (animCmd % 2) // % 2 also matches
             sprite->pos2.y = -3;
         else
             sprite->pos2.y = 1;
@@ -2767,6 +2767,7 @@ static void SpriteCB_UpdatePartyMonIcon(struct Sprite *sprite)
     UpdateMonIconFrame(sprite);
 }
 
+ //potentially replace w pc logci so shows right icons
 static void CreatePartyMonHeldItemSprite(struct Pokemon *mon, struct PartyMenuBox *menuBox)
 {
     if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE)
@@ -3112,7 +3113,7 @@ static void Task_HandleSelectionMenuInput(u8 taskId)
         else
             input = Menu_ProcessInput_other();
         if (data[0] != Menu_GetCursorPos())
-            sub_8122138(sPartyMenuInternal->actions[Menu_GetCursorPos()]);
+            ToggleFieldMoveDescriptionWindow(sPartyMenuInternal->actions[Menu_GetCursorPos()]);
         data[0] = Menu_GetCursorPos();
         switch (input)
         {
@@ -3138,6 +3139,7 @@ static void CursorCB_Summary(u8 taskId)
     Task_ClosePartyMenu(taskId);
 }
 
+//use for move contexzt, make new version with mode move select  vsonic
 static void CB2_ShowPokemonSummaryScreen(void)
 {
     if (gPartyMenu.menuType == PARTY_MENU_TYPE_IN_BATTLE)
@@ -4606,17 +4608,20 @@ static void Task_ClosePartyMenuAfterText(u8 taskId)
 #define tMonId      data[3]
 #define tOldFunc    4
 
-#define ABILITY_CAPSULE_DATA
+#define ABILITY_CAPSULE_DATA   //
 
 void Task_AbilityCapsule(u8 taskId) //important seemed easy enough so ported now, also ftw you can defnie text anywhere FP,
 {
     static const u8 askText[] = _("Would you like to change {STR_VAR_1}'s\nability to {STR_VAR_2}?");
     static const u8 doneText[] = _("{STR_VAR_1}'s ability became\n{STR_VAR_2}!{PAUSE_UNTIL_PRESS}");
     s16* data = gTasks[taskId].data;    //vsonic imporant this is how can define text without having to go to messages
+    u8 abilityNum = GetMonData(&gPlayerParty[tMonId], MON_DATA_ABILITY_NUM);
+    u16 ability = GetAbilityBySpecies(tSpecies, abilityNum);  
 
     switch (tState)//change how works, let it change current ability to any other abilities it has 
     {//make opena dialgoue displaying species abilities in order of slots and print to a box if not equal current ability
     //so should print every possible ability excluding the one it currently has, populate selected ability to str_var_2
+    //use field move as example, looop list of base stats abilities, if doesn't equal mons current ability add to list to display
     case 0:
         // Can't use.   -  made new conditional
         if ((gBaseStats[tSpecies].abilities[0] == gBaseStats[tSpecies].abilities[1] //if both ability slots have same ability
@@ -4809,11 +4814,11 @@ static void sub_812580C(u8 taskId)
     else
     {
         Task_DoUseItemAnim(taskId);
-        gItemUseCB = sub_8125898;
+        gItemUseCB = ItemUseCB_RestorePP;
     }
 }
 
-static void sub_8125898(u8 taskId, UNUSED TaskFunc func)
+static void ItemUseCB_RestorePP(u8 taskId, UNUSED TaskFunc func)
 {
     u16 move;
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
@@ -5043,12 +5048,7 @@ static void CB2_ShowSummaryScreenToForgetMove(void)
 
 static void CB2_ReturnToPartyMenuWhileLearningMove(void)
 {
-    u8 moveIdx = GetMoveSlotToReplace();
-    u16 move;
-    s32 learnMoveState = gPartyMenu.learnMoveState;
-
     InitPartyMenu(PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_CHOOSE_MON, TRUE, PARTY_MSG_NONE, Task_ReturnToPartyMenuWhileLearningMove, gPartyMenu.exitCallback);
-
 }
 
 //vsonic
