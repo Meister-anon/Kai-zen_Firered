@@ -1348,6 +1348,7 @@ bool32 ProteanTryChangeType(u32 battler, u32 ability, u32 move, u32 moveType)
 static void atk00_attackcanceler(void) //vsonic
 {
     s32 i, moveType;
+    u8 j;
     GET_MOVE_TYPE(gCurrentMove,moveType)
 
 
@@ -1391,91 +1392,6 @@ static void atk00_attackcanceler(void) //vsonic
     if (TryAegiFormChange())
         return;
 
-    //change put bind effect here, since similar to disobedient checks, seems don' teven need specific stuff for bind
-    //cant use bindedmove == move none, as that only works for if bind user is slower mon
-    //since I'm not setting bindmove on hit 
-    //move choice logic, and setting of bind move to define etc.
-    if (!(gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND)) //if not bound set bind move, (this way prevents reset move when bound)
-    gDisableStructs[gBattlerAttacker].bindedMove = gCurrentMove; //loads last used move for bind, if switched in it'll be 0 
-                                                                    //believe loads value at move end / trying currentmove as lastmove didn't work
-    if (gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND && gDisableStructs[gBattlerAttacker].bindedMove == MOVE_NONE) //if move not locked in yet
-    {
-
-        /*for (i = 0; i < MAX_MON_MOVES; ++i)
-            if (gBattleMons[gBattlerAttacker].moves[i] == gLastMoves[gBattlerAttacker]) //set i to last used move
-                break;
-        if (gLastMoves[gBattlerAttacker] == MOVE_NONE
-        || gLastMoves[gBattlerAttacker] == MOVE_ENCORE
-        || gLastMoves[gBattlerAttacker] == MOVE_TRANSFORM
-        || gLastMoves[gBattlerAttacker] == MOVE_MIMIC
-        || gLastMoves[gBattlerAttacker] == MOVE_SKETCH
-        || gLastMoves[gBattlerAttacker] == MOVE_SLEEP_TALK
-        || gLastMoves[gBattlerAttacker] == MOVE_MIRROR_MOVE)
-            i = 4;
-        else if (gCurrentMove == MOVE_NONE
-        || gCurrentMove == MOVE_ENCORE
-        || gCurrentMove == MOVE_TRANSFORM
-        || gCurrentMove == MOVE_MIMIC
-        || gCurrentMove == MOVE_SKETCH
-        || gCurrentMove == MOVE_SLEEP_TALK
-        || gCurrentMove == MOVE_MIRROR_MOVE) //extra protection for selected move,
-            i = 4;
-
-        else*/
-            i = Random() % 4;
-
-        if ((gBattleMons[gBattlerAttacker].pp[i] != 0) //if  not forbidden move and move has pp, set random existing move
-        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_NONE //pretty sure don't need this, that pp not 0 would catch it but putting anyway
-        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_ENCORE
-        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_TRANSFORM
-        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_MIMIC
-        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_SKETCH
-        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_SLEEP_TALK
-        && gBattleMons[gBattlerAttacker].moves[i] != MOVE_MIRROR_MOVE)
-        {
-            //gDisableStructs[gBattlerTarget].bindedMove = gBattleMons[gBattlerTarget].moves[i];
-            //gDisableStructs[gBattlerTarget].bindMovepos = i;
-            gCurrMovePos = gDisableStructs[gActiveBattler].bindMovepos = gChosenMovePos = i;
-            gCalledMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
-            gDisableStructs[gBattlerAttacker].bindedMove = gCalledMove; //set bind move
-            gBattlerTarget = GetMoveTarget(gCalledMove, 1);
-            gBattlescriptCurrInstr = BattleScript_PanickedAndUsesRandomMove; //not 100% if bs is needed for this
-            
-        }
-        else //if forbidden move set struggle
-        {
-            //i = Random() % i;
-            gCurrMovePos = gDisableStructs[gActiveBattler].bindMovepos = gChosenMovePos = i;
-            gCalledMove = MOVE_STRUGGLE;
-            gBattlerTarget = GetMoveTarget(gCalledMove, 1);
-            gDisableStructs[gBattlerAttacker].bindedMove = gCalledMove;
-            gBattlescriptCurrInstr = BattleScript_BindDoCalledMove;
-            
-            //gDisableStructs[gBattlerTarget].bindedMove = gBattleMons[gBattlerTarget].moves[i]; //struggle didn't work well so instead pick random move 
-            //DisableStructs[gBattlerTarget].bindedMove = MOVE_STRUGGLE;
-            // gDisableStructs[gActiveBattler].bindMovepos = i;                       
-        } //ok did that it still didn't work , gets overwritten,(forgot to uncomment parrt about move pos so it wasnt setting that/lockign that)
-        
-    }
-    else if (gBattleMons[gBattlerAttacker].status4 & STATUS4_BIND && gDisableStructs[gBattlerAttacker].bindedMove != MOVE_NONE) //if move already set/loced in
-    {
-        if (gBattleMoves[gDisableStructs[gBattlerAttacker].bindedMove].pp != 0) //if the selected move has pp, use it
-        {
-            gCalledMove = gDisableStructs[gBattlerAttacker].bindedMove;
-            gBattlerTarget = GetMoveTarget(gCalledMove, 1);
-            gBattlescriptCurrInstr = BattleScript_BindDoCalledMove;
-
-        } 
-        else if (gBattleMoves[gDisableStructs[gBattlerAttacker].bindedMove].pp == 0) //if the selected move ran out of pp, during bind, use struggle
-        {
-            gCalledMove = MOVE_STRUGGLE;
-            gBattlerTarget = GetMoveTarget(gCalledMove, 1);
-            PREPARE_MOVE_BUFFER(gBattleTextBuff1, gDisableStructs[gBattlerAttacker].bindedMove);
-            gBattlescriptCurrInstr = BattleScript_BindMoveRanoutofPP; //make a bind move ran out of pp message than use struggle
-
-        }//still not working need compare this/disobedience to  encore logic which is set before attack canceler I think
-    }
-    //end of bind effect
 
     gHitMarker &= ~(HITMARKER_ALLOW_NO_PP);
     if (!(gHitMarker & HITMARKER_OBEYS) 
@@ -4924,13 +4840,17 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     }
                     else 
                     {   //just lasting longer seems a bit useless maybe make it a status1 so you can switch out and still trap enemy?
-                        TrapDuration = ((Random() % 5) + 2);   //will do 2-6 turns
+                        //readjusted base duration for strengthened effects
+                        //think this should be 2-4 turns
+                        TrapDuration = ((Random() % 3) + 3);   //will do 2-6 turns , did wrong, need use + 3, with how works value 2 is 1 turn instead of 2 turns of trap
                         
                     } //as will be using separate timers for each wrap move, will put wrap duration on a constant/variable  and then pass it to the relevant timer directly
                     
                     switch (gCurrentMove) //point of all these is just to set status and timer
                     {           //think I can put the skip here,  if move specific timer isn't 0 incrment/skip, otherwise  set duration, set status, and gBattleScripting.moveEffect
                     case MOVE_BIND:
+                    {
+                        u8 k;
                     if (gBattleMons[gEffectBattler].status4 & STATUS4_BIND) //mos things arodn repo use status2 wrapped for if trap set, rework that
                         ++gBattlescriptCurrInstr;       //since added multiple statuses and timers make bool  true/valse set below for if trapped
                     else                                //same as how sturdied focus sashed etc. set battler trapped  when set timers, then clear when clear status
@@ -4938,10 +4858,51 @@ void SetMoveEffect(bool32 primary, u32 certain)
                         gDisableStructs[gEffectBattler].bindTurns = TrapDuration;
                         gBattleMons[gEffectBattler].status4 |= STATUS4_BIND; //moved effect to attk canceler
 
+                        if (gDisableStructs[gBattlerTarget].bindedMove == MOVE_NONE)
+                        {
+                            for (i = 0; i < MAX_MON_MOVES; ++i)
+                                if (gBattleMons[gBattlerTarget].moves[i] == gLastMoves[gBattlerTarget]) //select last used move
+                                    break;
+
+                            for (k = 0; k < MAX_MON_MOVES; ++k)
+                                if (gBattleMons[gBattlerTarget].moves[k] == gChosenMoveByBattler[gBattlerTarget]) //select last used move
+                                    break;
+
+                            if (gLastMoves[gBattlerTarget] == MOVE_STRUGGLE
+                            || gLastMoves[gBattlerTarget] == MOVE_ENCORE
+                            || gLastMoves[gBattlerTarget] == MOVE_TRANSFORM
+                            //|| gLastMoves[gBattlerTarget] == MOVE_NONE
+                            || gLastMoves[gBattlerTarget] == MOVE_MIMIC
+                            || gLastMoves[gBattlerTarget] == MOVE_SKETCH
+                            || gLastMoves[gBattlerTarget] == MOVE_SLEEP_TALK
+                            || gLastMoves[gBattlerTarget] == MOVE_MIRROR_MOVE)
+                                i = 4;
+
+                            if (i != 4
+                            && gLastMoves[gBattlerTarget] != MOVE_NONE
+                            && gBattleMons[gBattlerTarget].pp[i] != 0)
+                            {
+                                gDisableStructs[gBattlerTarget].bindedMove = gBattleMons[gBattlerTarget].moves[i];
+                                gDisableStructs[gBattlerTarget].bindMovepos = i;
+                            }
+                            else if (i == 4) //try pick random move with pp, if bind is faster than enemy
+                            {
+                                gDisableStructs[gBattlerTarget].bindedMove = MOVE_STRUGGLE;
+                                
+                            }
+                            else //think should be move none
+                            {
+                                gDisableStructs[gBattlerTarget].bindedMove = gChosenMoveByBattler[gBattlerTarget];//gBattleMons[gBattlerTarget].moves[j];
+                                gDisableStructs[gBattlerTarget].bindMovepos = k;
+                            }
+                               
+                        }
+
 
                         
                     }
                         break;
+                    }
                     case MOVE_WRAP:
                     if (gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)
                         ++gBattlescriptCurrInstr;
@@ -5014,10 +4975,19 @@ void SetMoveEffect(bool32 primary, u32 certain)
                         ++gBattlescriptCurrInstr;
                     else
                     {
-                        gDisableStructs[gEffectBattler].snaptrapTurns = TrapDuration;
-                        gBattleMons[gEffectBattler].status4 |= STATUS4_SNAP_TRAP;
+                        gDisableStructs[gEffectBattler].snaptrapTurns = Random() % 2 + 4; //since supposed to be 4-5 turns
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_SNAP_TRAP; //effect not setup yet, supposed to 
                     }
-                        break;                    
+                        break; 
+                    case MOVE_THUNDER_CAGE:
+                    if (gBattleMons[gEffectBattler].status4 & STATUS4_THUNDER_CAGE)
+                        ++gBattlescriptCurrInstr;
+                    else
+                    {
+                        gDisableStructs[gEffectBattler].thundercageTurns = TrapDuration;
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_THUNDER_CAGE;
+                    }
+                        break;   //phoned in for now, change to non enviro trapp later, think   
 
                     }
 

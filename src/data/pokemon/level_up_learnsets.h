@@ -277,7 +277,6 @@ static const struct LevelUpMove sPidgeotLevelUpLearnset[] = {
 static const struct LevelUpMove sRattataLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
     LEVEL_UP_MOVE(1, MOVE_TAIL_WHIP),
-    LEVEL_UP_MOVE(1, MOVE_BEAT_UP),
     LEVEL_UP_MOVE(7, MOVE_QUICK_ATTACK),
     LEVEL_UP_MOVE(13, MOVE_HYPER_FANG),
     LEVEL_UP_MOVE(20, MOVE_FOCUS_ENERGY),
@@ -16155,6 +16154,7 @@ static const struct LevelUpMove sRattataAlolanLevelUpLearnset[] = {
     LEVEL_UP_MOVE( 7, MOVE_FOCUS_ENERGY),
     LEVEL_UP_MOVE(10, MOVE_BITE),
     LEVEL_UP_MOVE(13, MOVE_PURSUIT),
+    LEVEL_UP_MOVE(15, MOVE_BEAT_UP),
     LEVEL_UP_MOVE(16, MOVE_HYPER_FANG),
     LEVEL_UP_MOVE(19, MOVE_ASSURANCE),
     LEVEL_UP_MOVE(22, MOVE_CRUNCH),

@@ -3520,8 +3520,25 @@ void SwitchInClearSetData(void) //handles what gets reset on switchout
     {
         if (gBattleMons[i].status2 & STATUS2_INFATUATED_WITH(gActiveBattler))
             gBattleMons[i].status2 &= ~(STATUS2_INFATUATED_WITH(gActiveBattler));
+
         if ((gBattleMons[i].status2 & STATUS2_WRAPPED) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
-            gBattleMons[i].status2 &= ~(STATUS2_WRAPPED);
+            gBattleMons[i].status2 &= ~(STATUS2_WRAPPED); //just realized with giving each trap a status NONE of them get cleared on switch, so fix that here 
+        if ((gBattleMons[i].status4 & STATUS4_BIND) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+            gBattleMons[i].status4 &= ~(STATUS4_BIND); 
+        if ((gBattleMons[i].status4 & STATUS4_CLAMP) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+            gBattleMons[i].status4 &= ~(STATUS4_CLAMP); 
+        if ((gBattleMons[i].status4 & STATUS4_SWARM) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+            gBattleMons[i].status4 &= ~(STATUS4_SWARM); 
+        if ((gBattleMons[i].status4 & STATUS4_THUNDER_CAGE) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+            gBattleMons[i].status4 &= ~(STATUS4_THUNDER_CAGE);  
+        if ((gDisableStructs[i].environmentTrapTurns) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+        {
+            gBattleMons[gActiveBattler].status4 &= ~STATUS4_FIRE_SPIN;
+            gBattleMons[gActiveBattler].status4 &= ~STATUS4_WHIRLPOOL;
+            gBattleMons[gActiveBattler].status4 &= ~STATUS4_SAND_TOMB;
+            gBattleMons[gActiveBattler].status4 &= ~STATUS4_MAGMA_STORM;
+            gBattleMons[gActiveBattler].status4 &= ~STATUS4_THUNDER_CAGE;
+        }//snaptrap not included here, so trap will persist if switch like I want
     }
     gActionSelectionCursor[gActiveBattler] = 0;
     gMoveSelectionCursor[gActiveBattler] = 0;
@@ -4429,7 +4446,7 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                         *(gBattleStruct->chosenMovePositions + gActiveBattler) = gDisableStructs[gActiveBattler].bindMovepos; //without this fainted logic works??
                         gBattleCommunication[gActiveBattler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
                         return;
-                    } 
+                    }  //working
                     else
                     {
                         struct ChooseMoveStruct moveInfo;
@@ -5437,7 +5454,7 @@ static void HandleAction_UseMove(void)
     gBattleCommunication[6] = 0;
     gCurrMovePos = gChosenMovePos = *(gBattleStruct->chosenMovePositions + gBattlerAttacker);
     // choose move
-    if (gProtectStructs[gBattlerAttacker].noValidMoves)
+    if (gProtectStructs[gBattlerAttacker].noValidMoves) //this is what makes it default to sturggle, bindedmove is none, it checks for moves and finds none
     {
         gProtectStructs[gBattlerAttacker].noValidMoves = 0;
         gCurrentMove = gChosenMove = MOVE_STRUGGLE;
@@ -5448,14 +5465,14 @@ static void HandleAction_UseMove(void)
     {
         gCurrentMove = gChosenMove = gLockedMoves[gBattlerAttacker];
     }
-    /*else if (gDisableStructs[gBattlerAttacker].bindedMove != MOVE_NONE
+    else if (gDisableStructs[gBattlerAttacker].bindedMove != MOVE_NONE
         && gDisableStructs[gBattlerAttacker].bindedMove == gBattleMons[gBattlerAttacker].moves[gDisableStructs[gBattlerAttacker].bindMovepos])  //should always be true cuz bs com logic
     {
         gCurrentMove = gChosenMove = gDisableStructs[gBattlerAttacker].bindedMove;  //bind move
         gCurrMovePos = gChosenMovePos = gDisableStructs[gBattlerAttacker].bindMovepos;
         *(gBattleStruct->moveTarget + gBattlerAttacker) = GetMoveTarget(gCurrentMove, 0);
         //return;
-    }*/
+    }
     // encore forces you to use the same move
     else if (gDisableStructs[gBattlerAttacker].encoredMove != MOVE_NONE
           && gDisableStructs[gBattlerAttacker].encoredMove == gBattleMons[gBattlerAttacker].moves[gDisableStructs[gBattlerAttacker].encoredMovePos])

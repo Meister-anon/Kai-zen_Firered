@@ -3922,8 +3922,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(80, 50, 50, 70, 120, 96),
-        .type1 = TYPE_PSYCHIC,
-        .type2 = TYPE_FLYING,
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_PSYCHIC,
         .catchRate = 90,
         .expYield = 158,
         //.evYield_HP = 2,
@@ -19111,7 +19111,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_OWN_TEMPO, ABILITY_STAMINA},
-        .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_NONE},
+        .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_LETHAL_LEGS},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -19143,7 +19143,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_OWN_TEMPO, ABILITY_STAMINA},
-        .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_NONE},
+        .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_LETHAL_LEGS},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },

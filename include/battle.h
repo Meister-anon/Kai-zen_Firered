@@ -250,6 +250,7 @@ struct DisableStruct
     u8 clampTurns;
     u8 swarmTurns;
     u8 snaptrapTurns;
+    u8 thundercageTurns;
     u8 environmentTrapTurns;   //turn counter for environment traps fire spin whirlpool sandtomb magma storm
     u8 FrozenTurns;
     u8 bideTimer;

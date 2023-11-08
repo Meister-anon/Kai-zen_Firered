@@ -18,7 +18,7 @@ const u8 gMoveDescription_Gust[] = _("Strikes the foe\nwith a gust of wind\nwhip
 const u8 gMoveDescription_WingAttack[] = _("The foe is struck\nwith large, imposing\nwings spread wide.");
 const u8 gMoveDescription_Whirlwind[] = _("The foe is made to\nswitch out with an\nally. In the wild,\nthe battle ends.");
 const u8 gMoveDescription_Fly[] = _("A 2-turn move that\nhits on the 2nd\nturn. Use it to fly\nto any known town.");
-const u8 gMoveDescription_Bind[] = _("A long body or\ntentacles are used\nto bind the foe for\ntwo to five turns.");
+const u8 gMoveDescription_Bind[] = _("A long body or\ntentacles are used\nto bind the foe for\ntwo to four turns.\nLocks foe to last\nmove during trap.");
 const u8 gMoveDescription_Slam[] = _("The attacker uses\nan appendage to\nslam the target\nhard.\nIt may make the\nfoe flinch.");
 const u8 gMoveDescription_VineWhip[] = _("The foe is struck\nwith slender, whip-\nlike vines.");
 const u8 gMoveDescription_Stomp[] = _("The foe is stomped\nwith a big foot.\nIt may make the\nfoe flinch.");
@@ -33,7 +33,7 @@ const u8 gMoveDescription_FuryAttack[] = _("The foe is jabbed\nrepeatedly with a
 const u8 gMoveDescription_HornDrill[] = _("User's horn rotates\nlike a drill to ram.\nMay OHKO foe if\nSuper effective or\nthey don't resist.");
 const u8 gMoveDescription_Tackle[] = _("A physical attack\nin which the user\ncharges, full body,\ninto the foe.");
 const u8 gMoveDescription_BodySlam[] = _("The user drops its\nfull body on the\nfoe. It may leave\nthe foe paralyzed.");
-const u8 gMoveDescription_Wrap[] = _("A long body or\nvines are used to\nwrap the foe for\ntwo to five turns.\nSlowing them for\nthe duration.");
+const u8 gMoveDescription_Wrap[] = _("A long body or\nvines are used to\nwrap the foe for\ntwo to four turns.\nSlowing them for\nthe duration.");
 const u8 gMoveDescription_TakeDown[] = _("A reckless, full-\nbody charge attack\nthat also hurts the\nuser a little.");
 const u8 gMoveDescription_Thrash[] = _("The user rampages\nabout for two to\nthree turns, then\nbecomes confused.");
 const u8 gMoveDescription_DoubleEdge[] = _("A reckless, life-\nrisking tackle that\nalso hurts the user\na little.");
@@ -81,7 +81,7 @@ const u8 gMoveDescription_SleepPowder[] = _("A sleep-inducing\ndust is scattered
 const u8 gMoveDescription_PetalDance[] = _("The user attacks\nwith petals for two\nto three turns,\nthen gets confused.");
 const u8 gMoveDescription_StringShot[] = _("The foe is bound\nwith strings shot\nfrom the mouth to\nreduce its SPEED.");
 const u8 gMoveDescription_DragonRage[] = _("The foe is hit with\na shock wave that\nalways inflicts 40-\nHP damage.");
-const u8 gMoveDescription_FireSpin[] = _("The foe is trapped\nin an intense spiral\nof fire that rages\ntwo to five turns.\nIncreases chance of\nburn during trap.");
+const u8 gMoveDescription_FireSpin[] = _("The foe is trapped\nin an intense spiral\nof fire that rages\ntwo to four turns.\nIncreases chance of\nburn during trap.");
 const u8 gMoveDescription_ThunderShock[] = _("An electric shock\nattack that may\nalso leave the foe\nparalyzed.");
 const u8 gMoveDescription_Thunderbolt[] = _("A strong electrical\nattack that may\nalso leave the foe\nparalyzed.");
 const u8 gMoveDescription_ThunderWave[] = _("A weak electric\nshock that is sure\nto cause paralysis\nif it hits.");
@@ -127,7 +127,7 @@ const u8 gMoveDescription_Sludge[] = _("Toxic sludge is\nhurled at the foe.\nIt 
 const u8 gMoveDescription_BoneClub[] = _("The foe is clubbed\nwith a bone held in\nhand. It may make\nthe foe flinch.");
 const u8 gMoveDescription_FireBlast[] = _("The foe is hit with\nan intense flame.\nIt may leave the\ntarget with a burn.");
 const u8 gMoveDescription_Waterfall[] = _("A powerful charge\nattack. It can also\nbe used to climb\na waterfall.");
-const u8 gMoveDescription_Clamp[] = _("The foe is clamped\nand squeezed by\nthe user's shell for\ntwo to five turns.");
+const u8 gMoveDescription_Clamp[] = _("The foe is clamped\nand squeezed by\nthe user's shell for\ntwo to four turns.");
 const u8 gMoveDescription_Swift[] = _("Star-shaped rays\nthat never miss are\nfired at all foes in\nbattle.");
 const u8 gMoveDescription_SkullBash[] = _("The user raises its\nDEFENSE in the 1st\nturn, then attacks\nin the 2nd turn.");
 const u8 gMoveDescription_SpikeCannon[] = _("Sharp spikes are\nfired at the foe to\nstrike two to five\ntimes.");
@@ -249,7 +249,7 @@ const u8 gMoveDescription_AncientPower[] = _("An ancient power is\nused to attac
 const u8 gMoveDescription_ShadowBall[] = _("A shadowy blob is\nhurled at the foe.\nMay also lower the\nfoe's SP. DEF.");
 const u8 gMoveDescription_FutureSight[] = _("Two turns after\nthis move is used,\nthe foe is attacked\npsychically.\nUser can foresee\nup to two attacks.");
 const u8 gMoveDescription_RockSmash[] = _("An attack that may\nalso cut DEFENSE.\nDeals bonus damage\nto rock types.\nIt can also smash\ncracked boulders.");
-const u8 gMoveDescription_Whirlpool[] = _("The foe is trapped\nin a fast, vicious\nwhirlpool for two\nto five turns.\nSlowing them for\nthe duration.");
+const u8 gMoveDescription_Whirlpool[] = _("The foe is trapped\nin a fast, vicious\nwhirlpool for two\nto four turns.\nSlowing them for\nthe duration.");
 const u8 gMoveDescription_BeatUp[] = _("All party POKéMON\njoin in the attack.\nThe more allies,\nthe more damage.");
 const u8 gMoveDescription_FakeOut[] = _("An attack that hits\nfirst and causes\nflinching. Usable\nonly on 1st turn.");
 const u8 gMoveDescription_Uproar[] = _("The user attacks in\nan uproar that\nprevents sleep for\ntwo to five turns.");
@@ -328,7 +328,7 @@ const u8 gMoveDescription_SignalBeam[] = _("The foe is hit with\na flashing beam
 const u8 gMoveDescription_ShadowPunch[] = _("The user throws a\npunch from the\nshadows. It cannot\nbe evaded.");
 const u8 gMoveDescription_Extrasensory[] = _("The user attacks\nwith an odd power\nthat may make the\nfoe flinch.");
 const u8 gMoveDescription_SkyUppercut[] = _("The user attacks\nwith an uppercut\nthrown skywards\nwith force.");
-const u8 gMoveDescription_SandTomb[] = _("The foe is trapped\ninside a painful\nsandstorm for two\nto five turns.\nLowers their Acc\nfor the duration.");
+const u8 gMoveDescription_SandTomb[] = _("The foe is trapped\ninside a painful\nsandstorm for two\nto four turns.\nLowers their Acc\nfor the duration.");
 const u8 gMoveDescription_SheerCold[] = _("The foe is attacked\nwith ultimate cold.\nMay OHKO foe if\nSuper effective or\nthey don't resist.");
 const u8 gMoveDescription_MuddyWater[] = _("The user attacks\nwith muddy water.\nIt may also lower\nthe foe's accuracy.");
 const u8 gMoveDescription_BulletSeed[] = _("The user shoots\nseeds at the foe.\nTwo to five seeds\nare shot at once.");
@@ -586,7 +586,7 @@ const u8 gSPACIAL_RENDDescription
     [] = _("Distorts space to\nslash the foe.\nIt has a high\ncritical-hit ratio.");
 
 const u8 gMAGMA_STORMDescription 
-    [] = _("Traps the foe in a vortex\nof fire for 2 to 5 turns.");
+    [] = _("Traps the foe in a vortex\nof fire for 2 to 4 turns.\nAlways burns foe.");
 
 const u8 gDARK_VOIDDescription 
     [] = _("Drags the foe into total\ndarkness, inducing Sleep.");
@@ -1000,7 +1000,7 @@ const u8 gNUZZLEDescription
     [] = _("Rubs its cheecks against\nthe foe, paralyzing it.");
 
 const u8 gSWARMDescription 
-    [] = _("Foe is surrounded\nby biting insects\nand infested for\n2 to 5 turns.");
+    [] = _("Foe is surrounded\nby biting insects\nand infested for\n2 to 4 turns.");
 
 const u8 gPOWER_UP_PUNCHDescription 
     [] = _("A hard punch that raises\nthe user's Attack.");
@@ -1291,7 +1291,7 @@ const u8 gDRUM_BEATINGDescription
 
         //fill end with new effect
 const u8 gSNAP_TRAPDescription 
-    [] = _("Snares the target\nin a snap trap\nfor 4 to 5 turns.\n");
+    [] = _("Snares the target\nin a snap trap\nfor 4 to 5 turns.\nTrap persists even\nif user switches out");
 
 const u8 gPYRO_BALLDescription 
     [] = _("Launches a fiery\nball at the target.\nIt may cause a burn.");
@@ -1412,7 +1412,7 @@ const u8 gSURGING_STRIKESDescription
     [] = _("The Final technique\nof the Water style.\nFluidly strikes\n3 critical hits.");
 
 const u8 gTHUNDER_CAGEDescription 
-    [] = _("Traps the foe\nin a cage of\nelectricity.\nFor 2 to 5 turns.");
+    [] = _("Traps the foe\nin a cage of\nelectricity.\nFor 2 to 4 turns.");
 
 const u8 gDRAGON_ENERGYDescription 
     [] = _("The higher the\nuser's HP the more\ndamage caused.");

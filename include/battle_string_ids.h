@@ -114,7 +114,7 @@
 #define B_MSG_TURN1_SKY_DROP       11
 #define B_MSG_TURN1_METEOR_BEAM    12
 
-#define NUM_TRAPPING_MOVES 9
+#define NUM_TRAPPING_MOVES 10
 
 // todo: make some of those names less vague: attacker/target vs pkmn, etc.
 #define STRINGID_TRAINER1LOSETEXT 12

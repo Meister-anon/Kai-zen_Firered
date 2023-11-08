@@ -1878,7 +1878,8 @@ const u16 gTrappingMoves[NUM_TRAPPING_MOVES + 1] = {
     MOVE_MAGMA_STORM,   //heatran specific, might buff to give guaranteed burn, don't need lower damage since its lowered from 120 already
     MOVE_SWARM,   //since bug infestations can cause structural integrity issues, think I'll make this lower def & sp def or just def
     MOVE_SNAP_TRAP,     //still to do, effect not made yet, since bear traps hurt more you move, I'll make it hurt attacker every time they use a move just use hurt atacker script
-    0xFFFF              //since its a physical trap I think I'll also make this the only affect that persists if user switches out/faints
+    MOVE_THUNDER_CAGE, //canbelieve I always forget this
+    0xFFFF              //think will make snaptrap the only affect that persists if user switches out/faints as its physical trap
 };
 //logic invaded once again, floating/flying mon should be immunte to trap moves, will exclude magma storm from that as its a legendary move
 //will make these buffs slightly situational but would do a lot for the overall strategy and nuance of the game
