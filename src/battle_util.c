@@ -3127,8 +3127,22 @@ bool8 HandleWishPerishSongOnTurnEnd(void)
                 if (gDisableStructs[gActiveBattler].perishSongTimer == 0)
                 {
                     gStatuses3[gActiveBattler] &= ~STATUS3_PERISH_SONG;
-                    gBattleMoveDamage = gBattleMons[gActiveBattler].hp;
-                    gBattlescriptCurrInstr = BattleScript_PerishSongTakesLife;
+
+                    if (GetBattlerAbility(gActiveBattler) == ABILITY_STURDY
+                    && gBattleMons[gActiveBattler].hp != 1 //lol glad I caught that, almost reintroduced  sturdy bug
+                    && !gSpecialStatuses[gActiveBattler].sturdyhungon)
+                    {
+                        gBattleMoveDamage = (gBattleMons[gActiveBattler].hp - 1);//hopefully limits explosion to once per battle for mon whenever special status are cleared in main
+                        gSpecialStatuses[gActiveBattler].sturdyhungon = TRUE;
+                    // gSpecialStatuses[battlerId].sturdied = TRUE; //sets moveresult sturdy plays mon hung on with sturdy message - wont work destinybond doesnt call moveresult
+                        gBattlescriptCurrInstr = BattleScript_AttackerSturdiedMsg; //need test should call sturdymessage
+                    }
+                    else
+                    {
+                        gBattleMoveDamage = gBattleMons[gActiveBattler].hp;
+                        gBattlescriptCurrInstr = BattleScript_PerishSongTakesLife;
+                    }
+                    
                 }
                 else
                 {
