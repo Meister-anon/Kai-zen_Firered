@@ -1522,6 +1522,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   -note rebalance seismic toss, its too strong, upholding was right, got lvl 100 onix and its max hp is still under 200 
   ... oh then a different one had hp over 260... idk anymore man, guess its fine, onix has one of lowest hp in game anyway
+
+  pokedex issue, for some reason, have repeating entries for some mon, when looking on different dex screens
+  //check enemy damagecalc, think somehow multitask isn't working right on enemy side, damage isn't being cut?
+  //remember to make values to store rival starter data in, i.e personality nature etc. or just personality if everything is based on that
   
 
   -also for mon summary screen need swap placement of name and lvl info,  at lvl 100 it runs together, so just put name on left
@@ -1535,6 +1539,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   code will fill in field and set leve to average of party level - DONE doesn't impact mon caught, or lvl 5 mon
 
   */
+ goto DEX_REGISTER_DATA //plan remove nat dex checks so can show all mon
  goto SUMM_MAIN_WINDOW //main summary screen box, where mon sprite is shown
  goto CUSTOM_SETUP_GIVEMON //change for givemon script command, so don't have to worry about setting level just use whatever and it'll match
  //player average level so mon given can actually be used, excludes lvl 5 mon, as tey are meant to be at that level.

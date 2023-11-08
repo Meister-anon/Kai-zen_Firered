@@ -3214,13 +3214,14 @@ void sub_8106B34(void)
         PlayCry_NormalNoDucking(gUnknown_203ACF0->field_5A, 0, 125, 10);
 }
 
+#define DEX_REGISTER_DATA
 u8 DexScreen_RegisterMonToPokedex(u16 species)
 {
     sub_8104AB0(species, 2, 1);
     sub_8104AB0(species, 3, 1);
 
     if (!IsNationalPokedexEnabled() && SpeciesToNationalPokedexNum(species) > KANTO_DEX_COUNT)
-        return CreateTask(sub_8106BD8, 0);
+        return CreateTask(sub_8106BD8, 0); //couldn't remove this yet, breaks things cuz can't see all connections
 
     sub_810250C();
     gTasks[gUnknown_203ACF0->field_00].func = sub_8106BE8;
