@@ -1536,6 +1536,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  goto CUSTOM_SETUP_GIVEMON //change for givemon script command, so don't have to worry about setting level just use whatever and it'll match
  //player average level so mon given can actually be used, excludes lvl 5 mon, as tey are meant to be at that level.
  //this includes starters, fossils and magikarp given by mt moon.  this change does not effect caught mon 
+ //can use average level function to scale enemy parties i.e level scaling
+
+ //but other idea was use gym badges to scale consider later
 
  /* -double check sturdy effect make sure works fully how I planned
 

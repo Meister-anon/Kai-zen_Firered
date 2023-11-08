@@ -12610,7 +12610,7 @@ static void atk77_setprotectlike(void)
 }
 
 #define NEW_STURDY_EFFECT
-static void atk78_faintifabilitynotdamp(void)
+static void atk78_faintifabilitynotdamp(void) //explosion
 {
     if (!gBattleControllerExecFlags)
     {
@@ -12622,7 +12622,7 @@ static void atk78_faintifabilitynotdamp(void)
             gActiveBattler = gBattlerAttacker;
             if (GetBattlerAbility(gActiveBattler) == ABILITY_STURDY
                 && gBattleMons[gActiveBattler].hp != 1 //lol glad I caught that, almost reintroduced  sturdy bug
-                && !gSpecialStatuses[gActiveBattler].sturdyhungon)
+                && !gSpecialStatuses[gActiveBattler].sturdyhungon) //ok remember this was added to not make it spamable
             {
                 gBattleMoveDamage = (gBattleMons[gActiveBattler].hp - 1);//hopefully limits explosion to once per battle for mon whenever special status are cleared in main
                 gSpecialStatuses[gActiveBattler].sturdyhungon = TRUE;
@@ -12656,15 +12656,20 @@ static void atk79_setatkhptozero(void)
         gActiveBattler = gBattlerAttacker;
         if (GetBattlerAbility(gActiveBattler) == ABILITY_STURDY
             && gBattleMons[gActiveBattler].hp != 1
-            && gBattleMoves[gCurrentMove].effect != EFFECT_HEALING_WISH)
+            && gBattleMoves[gCurrentMove].effect != EFFECT_HEALING_WISH
+            && !gSpecialStatuses[gActiveBattler].sturdyhungon)
             gBattleMons[gActiveBattler].hp = 1;
         else
             gBattleMons[gActiveBattler].hp = 0;
         BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, 0, 2, &gBattleMons[gActiveBattler].hp);
         MarkBattlerForControllerExec(gActiveBattler);
         if (GetBattlerAbility(gActiveBattler) == ABILITY_STURDY
-            && gBattleMoves[gCurrentMove].effect != EFFECT_HEALING_WISH)
-            BattleScriptPushCursorAndCallback(BattleScript_AttackerSturdiedMsg); //not perfect but should display message for sturdy mon surviving
+            && gBattleMoves[gCurrentMove].effect != EFFECT_HEALING_WISH
+            && !gSpecialStatuses[gActiveBattler].sturdyhungon)
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_AttackerSturdiedMsg); //not perfect but should display message for sturdy mon surviving
+                gSpecialStatuses[gActiveBattler].sturdyhungon = TRUE;
+            }
         ++gBattlescriptCurrInstr;
     }
 }
