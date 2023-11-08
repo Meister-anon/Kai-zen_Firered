@@ -4076,31 +4076,34 @@ void StealTargetItem(u8 battlerStealer, u8 battlerItem)
     gLastUsedItem = gBattleMons[battlerItem].item;
     gBattleMons[battlerItem].item = 0;
 
-    RecordItemEffectBattle(battlerItem, 0);
-    RecordItemEffectBattle(battlerStealer, ItemId_GetHoldEffect(gLastUsedItem));
-    gBattleMons[battlerStealer].item = gLastUsedItem;
-
+    RecordItemEffectBattle(battlerItem, 0);    
     CheckSetUnburden(battlerItem);
-    gBattleResources->flags->flags[battlerStealer] &= ~RESOURCE_FLAG_UNBURDEN;
+    
 
     if (gBattleMons[battlerStealer].item == ITEM_NONE)
     {
+        RecordItemEffectBattle(battlerStealer, ItemId_GetHoldEffect(gLastUsedItem));
+        gBattleMons[battlerStealer].item = gLastUsedItem;
+
         gActiveBattler = battlerStealer;
         BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gLastUsedItem), &gLastUsedItem); // set attacker item
         MarkBattlerForControllerExec(battlerStealer);
+
+        gActiveBattler = battlerItem;
+        BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[gBattlerTarget].item), &gBattleMons[battlerItem].item);  // remove target item
+        MarkBattlerForControllerExec(battlerItem);
+
+        gBattleResources->flags->flags[battlerStealer] &= ~RESOURCE_FLAG_UNBURDEN; //this means lose unburden boost as you're gaining an item
+
     }
+
     else if (GET_BATTLER_SIDE(battlerStealer) == B_SIDE_PLAYER) //if side player because don't think bag logic would work for opponent don't want to break something
     {
         AddBagItem(gLastUsedItem, 1); //allows steal item if holding item
     }//ok think that outta do it
-
-    gActiveBattler = battlerItem;
-    BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[gBattlerTarget].item), &gBattleMons[battlerItem].item);  // remove target item
-    MarkBattlerForControllerExec(battlerItem);
-
+    
     gBattleStruct->choicedMove[battlerItem] = MOVE_NONE;
-
-    TrySaveExchangedItem(battlerItem, gLastUsedItem);
+    TrySaveExchangedItem(battlerItem, gLastUsedItem); //if player loses item it tries to save it
 }
 
 static bool32 TryKnockOffBattleScript(u32 battlerDef)
