@@ -694,7 +694,7 @@ BattleScript_EffectFlingConsumeBerry:
 	battleritemtolastuseditem BS_TARGET
 	setbyte sBERRY_OVERRIDE, TRUE @ override the requirements for eating berries
 	orword gHitMarker, HITMARKER_NO_ANIMATIONS
-	consumeberry BS_TARGET
+	consumeberry BS_TARGET, TRUE
 	bicword gHitMarker, HITMARKER_NO_ANIMATIONS
 	setbyte sBERRY_OVERRIDE, FALSE
 	restorebattleritem BS_TARGET
@@ -6207,6 +6207,17 @@ BattleScript_BallFetch::
 	waitmessage 0x40
 	end3
 
+BattleScript_CudChewActivates::
+	pause B_WAIT_TIME_SHORTEST
+	@call BattleScript_AbilityPopUp
+	setbyte sBERRY_OVERRIDE, 1 @ override the requirements for eating berries
+	consumeberry BS_TARGET, FALSE
+	orword gHitMarker, HITMARKER_SKIP_DMG_TRACK | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	setbyte sBERRY_OVERRIDE, 0
+	end3
+
 BattleScript_MagicCoatBouncePrankster::
 	attackstring
 	ppreduce
@@ -9484,7 +9495,7 @@ BattleScript_EffectStuffCheeks::
 BattleScript_StuffCheeksEatBerry:
 	setbyte sBERRY_OVERRIDE, TRUE
 	orword gHitMarker, HITMARKER_NO_ANIMATIONS
-	consumeberry BS_ATTACKER
+	consumeberry BS_ATTACKER, TRUE
 	bicword gHitMarker, HITMARKER_NO_ANIMATIONS
 	setbyte sBERRY_OVERRIDE, FALSE
 	setstatchanger STAT_DEF, 2, FALSE

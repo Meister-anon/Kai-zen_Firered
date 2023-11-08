@@ -12191,6 +12191,24 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         break;
     case VARIOUS_CONSUME_BERRY:
+    {
+        VARIOUS_ARGS(bool8 restoreItem);
+        if (gBattleScripting.overrideBerryRequirements == 2)
+        {
+            gBattlescriptCurrInstr = cmd->nextInstr;
+            return;
+        }
+
+        if (cmd->restoreItem)
+            gLastUsedItem = gBattleMons[gActiveBattler].item;
+
+        gBattleScripting.battler = gEffectBattler = gBattlerTarget = gActiveBattler;    // Cover all berry effect battlerId cases. e.g. ChangeStatBuffs uses target ID
+        if (ItemBattleEffects(ITEMEFFECT_USE_LAST_ITEM, gActiveBattler, FALSE))
+            return;
+        gBattlescriptCurrInstr = cmd->nextInstr;
+        return;
+
+    /*
         if (ItemId_GetHoldEffect(gBattleMons[gActiveBattler].item) == HOLD_EFFECT_NONE)
         {
             gBattlescriptCurrInstr += 4;
@@ -12211,6 +12229,8 @@ static void atk76_various(void) //will need to add all these emerald various com
         
         gBattlescriptCurrInstr += 4;
         return;
+    */
+    }
     case VARIOUS_JUMP_IF_CANT_REVERT_TO_PRIMAL:
     {
         bool8 canDoPrimalReversion = FALSE;

@@ -1517,6 +1517,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   //added setup for grip claw and suction cup idea, so trap duration will be 7 turns and allow user to switch out
   //and still keep the trap effects
 
+  -still to do fix issue with pickup, where it doesn't proplery consume item until 2nd turn
+  -think done, redid item consumption based on emerald and think fixed it
+
   -note rebalance seismic toss, its too strong, upholding was right, got lvl 100 onix and its max hp is still under 200 
   ... oh then a different one had hp over 260... idk anymore man, guess its fine, onix has one of lowest hp in game anyway
   
