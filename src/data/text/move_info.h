@@ -1291,7 +1291,7 @@ const u8 gDRUM_BEATINGDescription
 
         //fill end with new effect
 const u8 gSNAP_TRAPDescription 
-    [] = _("Snares the target\nin a snap trap\nfor 4 to 5 turns.\nTrap persists even\nif user switches out");
+    [] = _("Snares the target\nin a snap trap\nfor 4 turns.\nTrap persists even\nif user switches out");
 
 const u8 gPYRO_BALLDescription 
     [] = _("Launches a fiery\nball at the target.\nIt may cause a burn.");

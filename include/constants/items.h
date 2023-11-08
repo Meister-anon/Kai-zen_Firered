@@ -560,7 +560,7 @@
 #define ITEM_HEAT_ROCK 278
 #define ITEM_DAMP_ROCK 279
 #define ITEM_DESTINY_KNOT 280
-#define ITEM_GRIP_CLAW 281
+#define ITEM_GRIP_CLAW 281      //when do item port, change to description to say reinforce trap effects (to match suction cups and give that better context) last 7 turns and last if user switches
 #define ITEM_LIFE_ORB 282
 #define ITEM_TOXIC_ORB 283
 #define ITEM_FLAME_ORB 284

@@ -45,18 +45,59 @@ void HealPlayerParty(void)
     }
 }
 
-u8 ScriptGiveMon(u16 species, u8 level, u16 item, u32 unused1, u32 unused2, u8 unused3)
+//pretty sure rather than make this void it'd be better
+//to use mon, so it could be used for either party?
+//well no this isnt for battle and only way to swap between is 
+//by filtering for battle side or possibly trainer id, like in battle_main npctrainerparty function
+//but this for now is fine as is
+#define CUSTOM_SETUP_GIVEMON
+u16 GetAveragePlayerPartyLevel(void) //ok so issue seems to be assingment, I guess I can't define and assign multiple values at once?
+{
+    u16 sum, numMons;
+    //u16 numMons = 0;
+    s32 i;
+    u16 averageLevel;
+
+    sum = numMons = 0;
+
+    for (i = 0; i < PARTY_SIZE; ++i)
+    {
+        u32 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
+
+        if (species != SPECIES_EGG)
+        {
+            if (species == SPECIES_NONE)
+                break;
+            
+            sum += GetMonData(&gPlayerParty[i], MON_DATA_LEVEL); //this is the problem no idea why
+           ++numMons; //what its doing instead of returning level is returning 9 for every time function call?
+            
+        }
+    }
+    if (numMons)
+        averageLevel = ((sum) / numMons);
+    else
+        averageLevel = 7; //small fix to ensure works, and doesn't attempt divide by 0, case only exists in test where would give mon before receiving starter
+
+    return averageLevel;
+    
+}
+
+u8 ScriptGiveMon(u16 species, u8 level, u16 item, u32 unused1, u32 unused2, u8 unused3) //only thing worried about is possibility to upset caught mon,
 {
     u16 nationalDexNum;
     int sentToPc;
     u8 heldItem[2];
     struct Pokemon *mon = AllocZeroed(sizeof(struct Pokemon));
 
+    if (level != 5) 
+        level = GetAveragePlayerPartyLevel(); //hopefully works /works testing, for issue with catching generated mon
+
     CreateMon(mon, species, level, 32, 0, 0, OT_ID_PLAYER_ID, 0);
     heldItem[0] = item;
     heldItem[1] = item >> 8;
     SetMonData(mon, MON_DATA_HELD_ITEM, heldItem);
-    sentToPc = GiveMonToPlayer(mon);
+    sentToPc = GiveMonToPlayer(mon);  //catching mon seems to work without issue,  yup no issues
     nationalDexNum = SpeciesToNationalPokedexNum(species);
 
     switch(sentToPc)

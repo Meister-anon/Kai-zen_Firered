@@ -1513,6 +1513,32 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   
   separate note planned move cat icons will be physical special, contact and grounding
 
+  -finished trap effect setup, all working, still need test swarm, but should work.
+  //added setup for grip claw and suction cup idea, so trap duration will be 7 turns and allow user to switch out
+  //and still keep the trap effects
+
+  -note rebalance seismic toss, its too strong, upholding was right, got lvl 100 onix and its max hp is still under 200 
+  ... oh then a different one had hp over 260... idk anymore man, guess its fine, onix has one of lowest hp in game anyway
+  
+
+  -also for mon summary screen need swap placement of name and lvl info,  at lvl 100 it runs together, so just put name on left
+  then level data after? hmm would still look strange for longer name mon, just move name over slightly - done
+
+  -planned new version give pokemon command, rather than having to balance given pokemon via script for progression 
+  instead set given pokemon to average of players current party level. so wheever its done the mon will be on par with what player is using.
+
+  inspiration for idea is lapras you get in celadon, its always too low level, then also mon in safron, and with plan to add more gift mon
+  its a good idea, think will do long as gift mon isn't an egg,,  plan take original command, set it so if level is left blank or 0,
+  code will fill in field and set leve to average of party level - DONE doesn't impact mon caught, or lvl 5 mon
+
+  */
+ goto SUMM_MAIN_WINDOW //main summary screen box, where mon sprite is shown
+ goto CUSTOM_SETUP_GIVEMON //change for givemon script command, so don't have to worry about setting level just use whatever and it'll match
+ //player average level so mon given can actually be used, excludes lvl 5 mon, as tey are meant to be at that level.
+ //this includes starters, fossils and magikarp given by mt moon.  this change does not effect caught mon 
+
+ /* -double check sturdy effect make sure works fully how I planned
+
   planning make muddy water  water groudn EFFECT_TWO_TYPED_MOVE, my versin is already different as two types moves can get stab
   default version doesnt get that, way move works is if one type has no effect entire move fails
   even if 2nd type would be super effective, sounds odd, but technically is consistent with other moves

@@ -3506,7 +3506,7 @@ void SwitchInClearSetData(void) //handles what gets reset on switchout
         if (gStatuses3[gActiveBattler] & STATUS3_POWER_TRICK) //would make it easy to set more swap variants, i.e there isn't a special one
             SWAP(gBattleMons[gActiveBattler].attack, gBattleMons[gActiveBattler].defense, i);
     }
-    else //if not using baton pass clear status 2 & 3 on switch?
+    else //if not using baton pass clear status 2 & 3 on switch? //this is status clear on mon switching out
     {
         gBattleMons[gActiveBattler].status2 = 0;
         gBattleMons[gActiveBattler].status4 = 0;
@@ -3516,29 +3516,32 @@ void SwitchInClearSetData(void) //handles what gets reset on switchout
         //look to wrapped by logic for example, use that as battlerId and check hold effect vsonic
         //should be simple change to trappedby  and use for all traps
     }
-    for (i = 0; i < gBattlersCount; ++i)// is this something that removes wrap, and infatuation if the mon that caused the effect is switched out?
+    for (i = 0; i < gBattlersCount; ++i)// is this something that removes wrap, and infatuation if the mon that caused the effect is switched out? yes
     {
         if (gBattleMons[i].status2 & STATUS2_INFATUATED_WITH(gActiveBattler))
-            gBattleMons[i].status2 &= ~(STATUS2_INFATUATED_WITH(gActiveBattler));
+            gBattleMons[i].status2 &= ~(STATUS2_INFATUATED_WITH(gActiveBattler)); //forgot I planned steup for suction cup and certain held item to make traps persist
 
-        if ((gBattleMons[i].status2 & STATUS2_WRAPPED) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
-            gBattleMons[i].status2 &= ~(STATUS2_WRAPPED); //just realized with giving each trap a status NONE of them get cleared on switch, so fix that here 
-        if ((gBattleMons[i].status4 & STATUS4_BIND) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
-            gBattleMons[i].status4 &= ~(STATUS4_BIND); 
-        if ((gBattleMons[i].status4 & STATUS4_CLAMP) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
-            gBattleMons[i].status4 &= ~(STATUS4_CLAMP); 
-        if ((gBattleMons[i].status4 & STATUS4_SWARM) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
-            gBattleMons[i].status4 &= ~(STATUS4_SWARM); 
-        if ((gBattleMons[i].status4 & STATUS4_THUNDER_CAGE) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
-            gBattleMons[i].status4 &= ~(STATUS4_THUNDER_CAGE);  
-        if ((gDisableStructs[i].environmentTrapTurns) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+        if ((GetBattlerAbility(gActiveBattler) != ABILITY_SUCTION_CUPS) && GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_GRIP_CLAW)
         {
-            gBattleMons[gActiveBattler].status4 &= ~STATUS4_FIRE_SPIN;
-            gBattleMons[gActiveBattler].status4 &= ~STATUS4_WHIRLPOOL;
-            gBattleMons[gActiveBattler].status4 &= ~STATUS4_SAND_TOMB;
-            gBattleMons[gActiveBattler].status4 &= ~STATUS4_MAGMA_STORM;
-            gBattleMons[gActiveBattler].status4 &= ~STATUS4_THUNDER_CAGE;
-        }//snaptrap not included here, so trap will persist if switch like I want
+            if ((gBattleMons[i].status2 & STATUS2_WRAPPED) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+                gBattleMons[i].status2 &= ~(STATUS2_WRAPPED); 
+            if ((gBattleMons[i].status4 & STATUS4_BIND) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+                gBattleMons[i].status4 &= ~(STATUS4_BIND); 
+            if ((gBattleMons[i].status4 & STATUS4_CLAMP) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+                gBattleMons[i].status4 &= ~(STATUS4_CLAMP); 
+            if ((gBattleMons[i].status4 & STATUS4_SWARM) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+                gBattleMons[i].status4 &= ~(STATUS4_SWARM); 
+            if ((gBattleMons[i].status4 & STATUS4_THUNDER_CAGE) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+                gBattleMons[i].status4 &= ~(STATUS4_THUNDER_CAGE);  
+            if ((gDisableStructs[i].environmentTrapTurns) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+            {
+                gDisableStructs[i].environmentTrapTurns = 0;
+                gBattleMons[i].status4 &= ~STATUS4_FIRE_SPIN;
+                gBattleMons[i].status4 &= ~STATUS4_WHIRLPOOL;
+                gBattleMons[i].status4 &= ~STATUS4_SAND_TOMB;
+                gBattleMons[i].status4 &= ~STATUS4_MAGMA_STORM;
+            }//snaptrap not included here, so trap will persist if switch like I want
+        }
     }
     gActionSelectionCursor[gActiveBattler] = 0;
     gMoveSelectionCursor[gActiveBattler] = 0;
@@ -3606,15 +3609,33 @@ void FaintClearSetData(void) //see about make status1 not fade wen faint?
     gBattleMons[gActiveBattler].status4 = 0;
     gStatuses3[gActiveBattler] = 0;
     gStatuses4[gActiveBattler] = 0;
-    for (i = 0; i < gBattlersCount; ++i)
+    for (i = 0; i < gBattlersCount; ++i) //trap etc removal on faint
     {
         if ((gBattleMons[i].status2 & STATUS2_ESCAPE_PREVENTION) && gDisableStructs[i].battlerPreventingEscape == gActiveBattler)
             gBattleMons[i].status2 &= ~STATUS2_ESCAPE_PREVENTION;
         if (gBattleMons[i].status2 & STATUS2_INFATUATED_WITH(gActiveBattler))
             gBattleMons[i].status2 &= ~(STATUS2_INFATUATED_WITH(gActiveBattler));
+
         if ((gBattleMons[i].status2 & STATUS2_WRAPPED) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
             gBattleMons[i].status2 &= ~(STATUS2_WRAPPED);
-    }
+        if ((gBattleMons[i].status4 & STATUS4_BIND) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+            gBattleMons[i].status4 &= ~(STATUS4_BIND); 
+        if ((gBattleMons[i].status4 & STATUS4_CLAMP) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+            gBattleMons[i].status4 &= ~(STATUS4_CLAMP); 
+        if ((gBattleMons[i].status4 & STATUS4_SWARM) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+            gBattleMons[i].status4 &= ~(STATUS4_SWARM); 
+        if ((gBattleMons[i].status4 & STATUS4_THUNDER_CAGE) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+            gBattleMons[i].status4 &= ~(STATUS4_THUNDER_CAGE);  
+        if ((gDisableStructs[i].environmentTrapTurns) && *(gBattleStruct->wrappedBy + i) == gActiveBattler)
+            {
+                gDisableStructs[i].environmentTrapTurns = 0;
+                gBattleMons[i].status4 &= ~STATUS4_FIRE_SPIN;
+                gBattleMons[i].status4 &= ~STATUS4_WHIRLPOOL;
+                gBattleMons[i].status4 &= ~STATUS4_SAND_TOMB;
+                gBattleMons[i].status4 &= ~STATUS4_MAGMA_STORM;
+            }
+    }//leaving snaptrap, as they are separate from the battler's body/control they will still exist even if they faint
+
     gActionSelectionCursor[gActiveBattler] = 0;
     gMoveSelectionCursor[gActiveBattler] = 0;
     ptr = (u8 *)&gDisableStructs[gActiveBattler];

@@ -4833,7 +4833,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
                         || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SUCTION_CUPS))   //BUFF for suction cups
                     {
-                        TrapDuration = 7;
+                        TrapDuration = 8;  //changed to 8 here, as actual trap duration is n - 1,  so this actually matches expected 7 turn duration
                         //gDisableStructs[gEffectBattler].wrapTurns = 7;
                         //gBattleMons[gEffectBattler].status1 |= STATUS1_WRAPPED; //not doing staus1, instead in battle_main where status2 clear is , check for wrap and hold effect of wrapped by
                         //if hold effect of wrappedby is grip claw etc. (checks above) then don't remove status when swithing, won't need to do status1
@@ -4975,8 +4975,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
                         ++gBattlescriptCurrInstr;
                     else
                     {
-                        gDisableStructs[gEffectBattler].snaptrapTurns = Random() % 2 + 4; //since supposed to be 4-5 turns
-                        gBattleMons[gEffectBattler].status4 |= STATUS4_SNAP_TRAP; //effect not setup yet, supposed to 
+                        gDisableStructs[gEffectBattler].snaptrapTurns = 5; //since supposed to be 4-5 turns - done effect lasts 4 turns
+                        gBattleMons[gEffectBattler].status4 |= STATUS4_SNAP_TRAP;
                     }
                         break; 
                     case MOVE_THUNDER_CAGE:
