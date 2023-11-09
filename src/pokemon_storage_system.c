@@ -117,7 +117,7 @@ void BoxMonAtGainExp(struct BoxPokemon * mon)
     //{
         if (GetMonData(&dst, MON_DATA_LEVEL) != MAX_LEVEL) //realize getmondata & getboxmondata have different fields...
         {
-            if (GetMonData(&dst, MON_DATA_LEVEL) <= 10) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
+            if (GetMonData(&dst, MON_DATA_LEVEL) < 10) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
             {
                 experience = GetBoxMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter); //nvm didn't work for some reason because didn't use constant
                 SetBoxMonData(mon, MON_DATA_EXP, &experience);  //replaced setup, now use 17 value wrap around var before counter increments, will need rebalance here
@@ -125,7 +125,7 @@ void BoxMonAtGainExp(struct BoxPokemon * mon)
             }
             else if (GetMonData(&dst, MON_DATA_LEVEL) <= 25) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
             {
-                experience = GetMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * 3);
+                experience = GetMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * 5);
                 SetBoxMonData(mon, MON_DATA_EXP, &experience);
                 ApplyOakRanchExperience(&dst);
             }
