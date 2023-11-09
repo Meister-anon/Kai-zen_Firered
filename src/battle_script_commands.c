@@ -17747,7 +17747,11 @@ void BS_Multihit_resultmessage(void) //there are no multihit status moves I don'
             else if (gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE)
             {
               if (CalcTypeEffectivenessMultiplier(gCurrentMove, moveType, gBattlerAttacker, gBattlerTarget, FALSE) == UQ_4_12_TO_INT((UQ_4_12(1.55) * UQ_4_12(0.5)) + UQ_4_12_ROUND))
-                gBattleCommunication[MSG_DISPLAY] = 0; //should keep effect remove message, keep not very effective sound
+                {
+                    stringId = STRINGID_EMPTYSTRING3;
+                    gBattleCommunication[MSG_DISPLAY] = 1;
+                    gBattlescriptCurrInstr = cmd->nextInstr;
+                }
               else
               {
                 stringId = STRINGID_NOTVERYEFFECTIVE;
