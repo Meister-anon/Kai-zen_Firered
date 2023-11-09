@@ -439,9 +439,9 @@ static const struct LevelUpMove sNidorinaLevelUpLearnset[] = {
 
 static const struct LevelUpMove sNidoqueenLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_SCRATCH),
-    LEVEL_UP_MOVE(1, MOVE_TAIL_WHIP),
+    LEVEL_UP_MOVE(1, MOVE_TRIPLE_KICK),
     LEVEL_UP_MOVE(1, MOVE_DOUBLE_KICK),
-    LEVEL_UP_MOVE(1, MOVE_POISON_STING),
+    LEVEL_UP_MOVE(1, MOVE_TWINEEDLE),
     LEVEL_UP_MOVE(22, MOVE_BODY_SLAM),
     LEVEL_UP_MOVE(43, MOVE_SUPERPOWER),
     LEVEL_UP_END

@@ -24,7 +24,7 @@ PalletTown_PlayersHouse_2F_FirstWarpIn:: @ 8168CC8
 PalletTown_PlayersHouse_2F_EventScript_NES:: @ 8168CD2
 	msgbox PalletTown_PlayersHouse_2F_Text_PlayedWithNES, MSGBOX_SIGN
 	@givemon SPECIES_CORVISQUIRE, 4, ITEM_NONE @for early game testing, now testing palette indecees
-	givemon SPECIES_ONIX, 8, ITEM_NONE @for early game testing, testing for new bind effect
+	givemon SPECIES_NIDOQUEEN, 0, ITEM_NONE @for early game testing, issue with double kick, multihit bug?
 	end
 
 PalletTown_PlayersHouse_2F_EventScript_Sign:: @ 8168CDB

@@ -1526,6 +1526,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   pokedex issue, for some reason, have repeating entries for some mon, when looking on different dex screens
   //check enemy damagecalc, think somehow multitask isn't working right on enemy side, damage isn't being cut?
   //remember to make values to store rival starter data in, i.e personality nature etc. or just personality if everything is based on that
+
+  -nother break double kick is causing game freeze, seems to be just against opponents of certain type combo
+  i.e super effective and resist type, so I'd assume it was something todo with my new type calc, but it doenst effect all moves of that type,
+  jus double kick?   triple kick works perfectly fine
+
+  its something to do with type calc or result message
+  -also result message for wonder guard aren't qutite right, for things that do no effect it just shows no effect, 
+  not wondergaurd prevents, which idk maybe that's correct??
   
 
   -also for mon summary screen need swap placement of name and lvl info,  at lvl 100 it runs together, so just put name on left

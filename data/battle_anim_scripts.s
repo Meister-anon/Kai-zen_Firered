@@ -7201,7 +7201,6 @@ Move_DOUBLE_KICK:: @ 81CFE98
 	createvisualtask AnimTask_ShakeMon, 5, 1, 4, 0, 6, 1
 	playsewithpan SE_M_VITAL_THROW2, SOUND_PAN_TARGET
 	waitforvisualfinish
-	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
 	end

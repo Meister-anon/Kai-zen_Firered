@@ -4172,7 +4172,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                         gMultiTask = 2;
                         break;
                     case EFFECT_TRIPLE_KICK: //triple kick, triple axel, & surging strikes
-                        gMultiTask = 3;
+                        gMultiTask = 3; //not showing result message corrclty, if miss it just ends
                         break;         
                     default:
                     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_MULTI_TASK
