@@ -109,13 +109,11 @@ void ZeroBoxMonAt(u8 boxId, u8 boxPosition)
 void BoxMonAtGainExp(struct BoxPokemon * mon)
 {
     u32 experience;
-    //struct BoxPokemon *mon = &gPokemonStoragePtr->boxes[boxId][boxPosition];
     struct Pokemon dst;
     BoxMonToMon(mon, &dst);
 
-    //if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT) //think replace this with speecies check and not egg
-    //{
-        if (GetMonData(&dst, MON_DATA_LEVEL) != MAX_LEVEL) //realize getmondata & getboxmondata have different fields...
+
+        if (GetMonData(&dst, MON_DATA_LEVEL) != MAX_LEVEL) //realize getmondata & getboxmondata have different fields...so have to use specific function for field I'm looking for
         {
             if (GetMonData(&dst, MON_DATA_LEVEL) < 10) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
             {
@@ -125,7 +123,7 @@ void BoxMonAtGainExp(struct BoxPokemon * mon)
             }
             else if (GetMonData(&dst, MON_DATA_LEVEL) <= 25) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
             {
-                experience = GetMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * 5);
+                experience = GetMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * 4);
                 SetBoxMonData(mon, MON_DATA_EXP, &experience);
                 ApplyOakRanchExperience(&dst);
             }
@@ -143,8 +141,6 @@ void BoxMonAtGainExp(struct BoxPokemon * mon)
             } //but it does or seemingly does if I  use struc Pokemon *mon; ?  but it ignores rule and sets to lvl 100 with FAR more lag for unkown reasons
         }        
 
-
-    //}
         
 }
 

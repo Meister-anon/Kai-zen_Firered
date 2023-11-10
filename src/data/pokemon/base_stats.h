@@ -9665,7 +9665,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_WORMADAM] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(86, 59, 85, 36, 89, 125),
+         STATS(86, 79, 75, 66, 89, 85),
         .type1 = TYPE_BUG,
         .type2 = TYPE_GRASS,
         .catchRate = 45,
@@ -9679,8 +9679,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_BUG,
         .eggGroup2 = EGG_GROUP_BUG,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_ANTICIPATION, ABILITY_NONE},
-            .abilityHidden = {ABILITY_OVERCOAT, ABILITY_NONE},
+            .abilities = {ABILITY_ANTICIPATION, ABILITY_LEAF_GUARD},
+            .abilityHidden = {ABILITY_OVERCOAT, ABILITY_GRASS_PELT},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },
@@ -9688,7 +9688,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_MOTHIM] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(70, 94, 50, 66, 94, 76),
+         STATS(77, 94, 50, 86, 94, 76),
         .type1 = TYPE_BUG,
         .type2 = TYPE_NORMAL,
         .catchRate = 45,
@@ -11313,6 +11313,7 @@ const struct BaseStats gBaseStats[] =
     //my change single turn moves hit twice, once normaly 2nd with reversed animation and a 50% damage cut ...maybe 70% cut that's still 130% dmg
     // can do like multi task, set multihit to 2, divide battlemovedamage by 2/multihit counter,  if multihitcounter == 1 (last hit) battlemovedamage x 120/100
     //simple to do, and would amount to 110% dmg, so a bit more balanced.
+    //.8 x .5 ? 120% total,   gbattlemovedmg = 80%  and then if counter == 1  dmg = /2 hmm
 
     //idea is move goes off, then animation reverses hit effect goes off again and its counted as one move
     //like you attack reverse time and make them get hit again
@@ -11358,6 +11359,8 @@ const struct BaseStats gBaseStats[] =
     //target select if gcurrentmove has flag contact move change targetting to either n=both or enemy fiekd
 
     //in singles moves can't miss  -put  in acc check, cj=heck ability set accuracy to 0
+
+    //since lives in void of space think make new palkia ability make it immune to ice, dmg
     
 
     [SPECIES_HEATRAN] =
@@ -28412,7 +28415,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_CHERRIM_SUNSHINE] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(90, 90, 70, 100, 97, 78),
+         STATS(90, 80, 70, 100, 97, 78),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_GRASS,
         .catchRate = 75,

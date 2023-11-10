@@ -3489,7 +3489,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (!typeOverride)
         type = gBattleMoves[move].type;
     else
-        type = typeOverride & 0x3F;
+        GET_MOVE_TYPE(move, type);
 
     attack = attacker->attack;
     defense = defender->defense;
@@ -3704,7 +3704,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
                                     //using move power just affects move power, gbattlemovedamage affects power stab crit etc. all multipliers inclusively
 
     //in a pinch abilities
-    //since I lowered stab and super, think I may buff these
+    //since I lowered stab and super, think I may buff these  / realized these aren't even working???, didn't work because type overide change, nowworks
     if (attacker->hp <= (attacker->maxHP / 2)) //changed to less or equal to be exact to yellow, more for super fang and effects that exactly do half hp
     {
         if (type == TYPE_GRASS && attacker->ability == ABILITY_OVERGROW)// && attacker->hp < (attacker->maxHP / 3))

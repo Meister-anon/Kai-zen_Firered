@@ -17694,6 +17694,9 @@ void BS_typebaseddmgboost(void)
 //setting of attack this turn is set in battlescript so replace that and make use this
 //make it a call native, battlerId should default to gbattlerattacker/bs_attacker
 //can remove move argument and just replace with gcurrentmove
+//potentially make this defualt script setup for attack this turn, 
+//then can make simple setup for abilities thaat bypass that and just put here.
+//plan setup dialga time ability make also remove recahrge turns for dmg cut
 void BS_AttacksThisTurn(void) // Note: returns 1 if it's a charging turn, otherwise 2
 {
     NATIVE_ARGS(const u8 *ptr);
