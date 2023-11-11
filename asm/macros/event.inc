@@ -872,6 +872,7 @@
 	.endm
 
 	@ Gives the player one of the specified (species) Pokemon at level level holding item. The trailing 0s are unused parameters
+	@redone gives player mon that scales to player team average level, excepting lvl 5 mon
 	.macro givemon species:req, level:req, item:req
 	.byte 0x79
 	.2byte \species
@@ -1451,6 +1452,17 @@
 	.byte 0xd5
 	.byte \out
 	.2byte \species
+	.endm
+
+	@Gives the player one of the specified (species) Pokemon at level level holding item. The trailing 0s are unused parameters
+	.macro givemon2 species:req, level:req, item:req
+	.byte 0xd6
+	.2byte \species
+	.byte \level
+	.2byte \item
+	.4byte 0x0
+	.4byte 0x0
+	.byte 0
 	.endm
 
 

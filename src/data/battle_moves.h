@@ -3693,7 +3693,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
             .power = 1, //change to show varying power
         .effect = EFFECT_HIDDEN_POWER,
-        .type = TYPE_NORMAL,
+        .type = TYPE_MYSTERY,
         .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 0,

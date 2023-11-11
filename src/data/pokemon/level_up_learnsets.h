@@ -330,7 +330,8 @@ static const struct LevelUpMove sEkansLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_WRAP),
     LEVEL_UP_MOVE(1, MOVE_LEER),
     LEVEL_UP_MOVE(8, MOVE_POISON_STING),
-    LEVEL_UP_MOVE(13, MOVE_BITE),
+    LEVEL_UP_MOVE(11, MOVE_COIL),
+    LEVEL_UP_MOVE(12, MOVE_BITE),
     LEVEL_UP_MOVE(20, MOVE_GLARE),
     LEVEL_UP_MOVE(25, MOVE_SCREECH),
     LEVEL_UP_MOVE(32, MOVE_ACID),
@@ -339,14 +340,17 @@ static const struct LevelUpMove sEkansLevelUpLearnset[] = {
     LEVEL_UP_MOVE(37, MOVE_SPIT_UP),
     LEVEL_UP_MOVE(44, MOVE_HAZE),
     LEVEL_UP_END
-};
+};//needs better poison moves, and better moves in general
+//think move haze lower 17?
 
 static const struct LevelUpMove sArbokLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_TOXIC_FANG),
     LEVEL_UP_MOVE(1, MOVE_WRAP),
     LEVEL_UP_MOVE(1, MOVE_LEER),
     LEVEL_UP_MOVE(1, MOVE_POISON_STING),
     LEVEL_UP_MOVE(1, MOVE_BITE),
     LEVEL_UP_MOVE(8, MOVE_POISON_STING),
+    LEVEL_UP_MOVE(11, MOVE_COIL),
     LEVEL_UP_MOVE(13, MOVE_BITE),
     LEVEL_UP_MOVE(20, MOVE_GLARE),
     LEVEL_UP_MOVE(28, MOVE_SCREECH),
@@ -2902,6 +2906,7 @@ static const struct LevelUpMove sMisdreavusLevelUpLearnset[] = {
 static const struct LevelUpMove sUnownLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_HIDDEN_POWER),
     LEVEL_UP_MOVE(1, MOVE_PSYCHIC),
+    LEVEL_UP_MOVE(33, MOVE_DESTINY_BOND),
     LEVEL_UP_END
 };
 

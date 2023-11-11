@@ -12540,11 +12540,14 @@ static void atk76_various(void) //will need to add all these emerald various com
 
 static void atk77_setprotectlike(void)
 {
-    bool8 notLastTurn = TRUE;
-    u16 lastMove = gLastResultingMoves[gBattlerAttacker];   //??? did I remove this, its not used here
+    CMD_ARGS();
+
+    bool32 fail = TRUE;
+    bool32 notLastTurn = TRUE;
 
     if (!(gBattleMoves[gLastResultingMoves[gBattlerAttacker]].flags & FLAG_PROTECTION_MOVE))
         gDisableStructs[gBattlerAttacker].protectUses = 0;
+
     if (gCurrentTurnActionNumber == (gBattlersCount - 1))
         notLastTurn = FALSE;
     if (sProtectSuccessRates[gDisableStructs[gBattlerAttacker].protectUses] >= Random() && notLastTurn)
@@ -12587,7 +12590,7 @@ static void atk77_setprotectlike(void)
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PROTECTED_ITSELF;
             }
             ++gDisableStructs[gBattlerAttacker].protectUses;
-            //fail = FALSE;
+            fail = FALSE;
         }
         else // Protects the whole side.
         {
@@ -12597,39 +12600,39 @@ static void atk77_setprotectlike(void)
                 gSideStatuses[side] |= SIDE_STATUS_WIDE_GUARD;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PROTECTED_TEAM;
                 ++gDisableStructs[gBattlerAttacker].protectUses;
-                //fail = FALSE;
+                fail = FALSE;
             }
             else if (gCurrentMove == MOVE_QUICK_GUARD && !(gSideStatuses[side] & SIDE_STATUS_QUICK_GUARD))
             {
                 gSideStatuses[side] |= SIDE_STATUS_QUICK_GUARD;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PROTECTED_TEAM;
                 ++gDisableStructs[gBattlerAttacker].protectUses;
-                //fail = FALSE;
+                fail = FALSE;
             }
             else if (gCurrentMove == MOVE_CRAFTY_SHIELD && !(gSideStatuses[side] & SIDE_STATUS_CRAFTY_SHIELD))
             {
                 gSideStatuses[side] |= SIDE_STATUS_CRAFTY_SHIELD;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PROTECTED_TEAM;
                 ++gDisableStructs[gBattlerAttacker].protectUses;
-                //fail = FALSE;
+                fail = FALSE;
             }
             else if (gCurrentMove == MOVE_MAT_BLOCK && !(gSideStatuses[side] & SIDE_STATUS_MAT_BLOCK))
             {
                 gSideStatuses[side] |= SIDE_STATUS_MAT_BLOCK;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PROTECTED_TEAM;
-                //fail = FALSE;
+                fail = FALSE;
             }
         }
         
         
     }
-    else
+    if (fail)
     {
         gDisableStructs[gBattlerAttacker].protectUses = 0;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
     }
-    ++gBattlescriptCurrInstr;
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 #define NEW_STURDY_EFFECT

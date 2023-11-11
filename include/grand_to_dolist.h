@@ -1309,6 +1309,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -seems in general gen 8 icons too big? or is it just the starters, 
   it causes issue with move info page icon is too big to fit in box
 
+  reworked box exp gain levels seems balanced across all levels now?
+  and reworked protect like command to hopefully fix issue with bind not working
+
 
   //vsonic add further logic to SetRivalRandomStarterSpecies, in field_speciels.c
   long as player starter randomized first, can reroll this based on that to ensure type alignment matches advantage/disadvantage
@@ -1942,6 +1945,8 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
  //broken leech seed on top of target poison/toxic breaks game..  force switch out weird stuff
 
+ BS_AttacksThisTurn use to repolace normal script logic for attacking this turn
+ 
  fixed intro trainer select text
  ...using constrict on wondergaurd shedinja breaks game...causes freeze   going over changes I realized - think fixed, missed a part of status stuff (double check)
 */

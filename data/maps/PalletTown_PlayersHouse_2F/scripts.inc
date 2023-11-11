@@ -24,8 +24,10 @@ PalletTown_PlayersHouse_2F_FirstWarpIn:: @ 8168CC8
 PalletTown_PlayersHouse_2F_EventScript_NES:: @ 8168CD2
 	msgbox PalletTown_PlayersHouse_2F_Text_PlayedWithNES, MSGBOX_SIGN
 	@givemon SPECIES_CORVISQUIRE, 4, ITEM_NONE @for early game testing, now testing palette indecees
-	@givemon SPECIES_NIDOQUEEN, 0, ITEM_NONE @for early game testing, issue with double kick, multihit bug?
-	@givemon SPECIES_SHEDINJA, 5, ITEM_NONE @TESTING MULTI HIT type issueo seems fixed
+	givemon2 SPECIES_NIDOQUEEN, 40, ITEM_NONE @for early game testing, issue with double kick, multihit bug?
+	givemon2 SPECIES_CORVISQUIRE, 25, ITEM_NONE @TESTING MULTI HIT type issueo seems fixed
+	givemon2 SPECIES_RAICHU, 55, ITEM_NONE
+	givemon2 SPECIES_MORPEKO, 75, ITEM_NONE
 	end
 
 PalletTown_PlayersHouse_2F_EventScript_Sign:: @ 8168CDB

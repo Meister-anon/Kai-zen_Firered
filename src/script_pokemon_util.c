@@ -113,6 +113,36 @@ u8 ScriptGiveMon(u16 species, u8 level, u16 item, u32 unused1, u32 unused2, u8 u
     return sentToPc;
 }
 
+//original script without scaling use for testing
+u8 ScriptGiveMon2(u16 species, u8 level, u16 item, u32 unused1, u32 unused2, u8 unused3) //only thing worried about is possibility to upset caught mon,
+{
+    u16 nationalDexNum;
+    int sentToPc;
+    u8 heldItem[2];
+    struct Pokemon *mon = AllocZeroed(sizeof(struct Pokemon));
+
+    
+
+    CreateMon(mon, species, level, 32, 0, 0, OT_ID_PLAYER_ID, 0);
+    heldItem[0] = item;
+    heldItem[1] = item >> 8;
+    SetMonData(mon, MON_DATA_HELD_ITEM, heldItem);
+    sentToPc = GiveMonToPlayer(mon);  //catching mon seems to work without issue,  yup no issues
+    nationalDexNum = SpeciesToNationalPokedexNum(species);
+
+    switch(sentToPc)
+    {
+    case MON_GIVEN_TO_PARTY:
+    case MON_GIVEN_TO_PC:
+        GetSetPokedexFlag(nationalDexNum, FLAG_SET_SEEN);
+        GetSetPokedexFlag(nationalDexNum, FLAG_SET_CAUGHT);
+        break;
+    }
+
+    Free(mon);
+    return sentToPc;
+}
+
 u8 ScriptGiveEgg(u16 species)
 {
     struct Pokemon *mon = AllocZeroed(sizeof(struct Pokemon));

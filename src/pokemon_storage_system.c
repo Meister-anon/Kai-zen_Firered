@@ -123,19 +123,37 @@ void BoxMonAtGainExp(struct BoxPokemon * mon)
             }
             else if (GetMonData(&dst, MON_DATA_LEVEL) <= 25) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
             {
-                experience = GetMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * 4);
+                experience = GetMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * 3);
+                SetBoxMonData(mon, MON_DATA_EXP, &experience);
+                ApplyOakRanchExperience(&dst);
+            }
+            else if (GetMonData(&dst, MON_DATA_LEVEL) <= 30) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
+            {
+                experience = GetMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * 5);
                 SetBoxMonData(mon, MON_DATA_EXP, &experience);
                 ApplyOakRanchExperience(&dst);
             }
             else if (GetMonData(&dst, MON_DATA_LEVEL) <= 40) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
             {
-                experience = GetBoxMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * gSaveBlock1Ptr->oakRanchStepCounter);
+                experience = GetBoxMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * 8);
                 SetBoxMonData(mon, MON_DATA_EXP, &experience);
                 ApplyOakRanchExperience(&dst);
             }
-            else
+            else if (GetMonData(&dst, MON_DATA_LEVEL) <= 55) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
             {
-                experience = GetBoxMonData(mon, MON_DATA_EXP) + ( 2 * (gSaveBlock1Ptr->oakRanchStepCounter * gSaveBlock1Ptr->oakRanchStepCounter));
+                experience = GetBoxMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * 16);
+                SetBoxMonData(mon, MON_DATA_EXP, &experience);
+                ApplyOakRanchExperience(&dst);
+            }
+            else if (GetMonData(&dst, MON_DATA_LEVEL) <= 75) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
+            {
+                experience = GetBoxMonData(mon, MON_DATA_EXP) + ((gSaveBlock1Ptr->oakRanchStepCounter * gSaveBlock1Ptr->oakRanchStepCounter) / 2);
+                SetBoxMonData(mon, MON_DATA_EXP, &experience);
+                ApplyOakRanchExperience(&dst);
+            }
+            else if (GetMonData(&dst, MON_DATA_LEVEL) < 100)
+            {
+                experience = GetBoxMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * gSaveBlock1Ptr->oakRanchStepCounter);
                 SetBoxMonData(mon, MON_DATA_EXP, &experience);
                 ApplyOakRanchExperience(&dst); //using this is irrelvant for some reason not setting exp evenly to each slot
             } //but it does or seemingly does if I  use struc Pokemon *mon; ?  but it ignores rule and sets to lvl 100 with FAR more lag for unkown reasons
