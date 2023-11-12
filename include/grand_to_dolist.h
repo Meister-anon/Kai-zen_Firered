@@ -1826,6 +1826,22 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
  questioning whether, I should really make joat stack with stab?  its a strong effect and makes normal typing desirable as a boost
  but on the other hand why would you  ever use non stab moves, and the entire point is to capitalize on their flexibility
+
+ theif/steal STILL not working right, tried steal item from pickup mon, for some reason stole it twice,
+ so it didn't remove the item
+
+ -confusion dmg not working properly, I set it back to pound rather than current move but it still seems to be
+ applying move effects on self hit as if using that move, attempted use gchosen move rather tan gcurrent move for power override
+ //as its already overriding the used move
+
+  -issue with move display for last mon in party, instaed its showing data for first mon in party.
+  or its showign the moevs but for the last mon, said thata because hidden power changed from  what it was on the first slot mon
+  -but its readnig teh first mons moves  think has to do with GetMonMoveBySlotId
+  //was able to reproduce happens when mon is in first slot dies and then has to switch with mon in party to continue battle.
+  //think it doesn't clear its data properly from first slot? so treat it as if they are still there or soemthing? - fixed
+  -missed replacing instances of gplayer party w battleindex
+
+  -but based on type for hidden power its reading the mons ivs etc. the correct mon data, but is populating with the wrong moves?
  
 
 //wanted to add small boost to this for joat inclusvive to stab but couldn't do, it had stronger effect on not effective than super
@@ -1883,6 +1899,8 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  tweak for oak ranch/pc exp idea let it activate after the bill event
  after rescue him, add new event where he introduces himself as owner of pc, explains what pc is
  transfer device, rather than a storage device, can store items but not living things obviously.
+
+ - changed, just put script there to bring attention to it
  
  but he's sure professor oak wouldn't mind taking care of them for a bit.
  so have him and player walk over to pc talk with oak, have him say he takes care of them at  his ranch
@@ -1926,7 +1944,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   wonder guard glitch, swaps party data and faints attacker if attacks themself,  very bad
   *notes -
   poison worsening doesn't seem to be working? hard to tell as only poison effect available is 10%
-  //change poison sting to 100% rework script/logic and retry
+  //change poison sting to 100% rework script/logic and retry - fixed
 
   //for berries like pamtre berry that's only use seems to be berry powder
   in ceruleun berry crush/powder man instead of crushing these berries have him 

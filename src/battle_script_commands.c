@@ -4360,7 +4360,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             {
                 gBattlescriptCurrInstr = BattleScript_NotAffected; //do jump
                 break;
-            }//think add poisoned legacy to this 
+            }//think add poisoned legacy to this - done below
             
 
             /*if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_POISON))
@@ -17849,9 +17849,9 @@ void BS_call_if(void) //comparing to jumpifholdeffect
                 //sand attack ground immunity
             case EFFECT_ACCURACY_DOWN:
                 if (gCurrentMove == MOVE_SAND_ATTACK
-                    && (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ROCK)
-                    || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL)
-                    || IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)))
+                    && (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK)
+                    //|| IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_STEEL) steel doesn't need further buff
+                    || IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)))
                     gBattlescriptCurrInstr = BattleScript_NotAffected;
                 break;
             /*case EFFECT_SWARM:

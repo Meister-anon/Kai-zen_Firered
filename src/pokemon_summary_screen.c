@@ -2337,14 +2337,14 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
     {
         u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
         curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
-        slot1_personality = GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY);
-        slot2_personality = GetMonData(&gPlayerParty[1], MON_DATA_PERSONALITY);
+        slot1_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_PERSONALITY);
+        slot2_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_PERSONALITY);
         slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY);
 
         if (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TWO_OPPONENTS))) //found fix, setup before had wrong operation now it works
         {
             if ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
             {
                 abilitydatabattler = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability;
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[0], gAbilityNames[abilitydatabattler]);
@@ -2360,14 +2360,14 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
         else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
         {
             if ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))//slot 1
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))//slot 1
             {
                 abilitydatabattler = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability;
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[0], gAbilityNames[abilitydatabattler]);
                 StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[0], gAbilityDescriptionPointers[abilitydatabattler]);
             }
             else if ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP)) //slot 2
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP)) //slot 2
             {
                 abilitydatabattler2 = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].ability;
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[1], gAbilityNames[abilitydataparty]);
@@ -2387,14 +2387,14 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
             //play low hp music if a mon "on field" has low hp, not just mon out as that would just constantly change
             //abilitydata = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
             if ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
             {
                 abilitydatabattler = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].ability;
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[0], gAbilityNames[abilitydatabattler]);
                 StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[0], gAbilityDescriptionPointers[abilitydatabattler]);
             }
             else if ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP)) //slot 2
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP)) //slot 2
             {
                 abilitydatabattler2 = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].ability;
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[1], gAbilityNames[abilitydataparty]);
@@ -3455,8 +3455,8 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
 
     u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
     curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
-    slot1_personality = GetMonData(&gPlayerParty[0], MON_DATA_PERSONALITY);
-    slot2_personality = GetMonData(&gPlayerParty[1], MON_DATA_PERSONALITY);
+    slot1_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_PERSONALITY);
+    slot2_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_PERSONALITY);
     slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY); //eventually for triple/ rotation battles
 
     if (!gMain.inBattle)
@@ -3476,7 +3476,7 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
         if (!(IsDoubleBattle())) //problem appears to be function always returns 0, I think I need to loop
         {
             if ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))//....changedd if current mon matches party slot and hp not 0, use battle value
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))//....changedd if current mon matches party slot and hp not 0, use battle value
             {
                 FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0); //I think this is clearing window ? so extra safety
 
@@ -3500,7 +3500,7 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
         else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
         {
             if ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
             {
                 FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
@@ -3511,7 +3511,7 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
                     2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[0]);
             }
             else if ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
             {
                 FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
@@ -3535,7 +3535,7 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
         else if (gBattleTypeFlags & BATTLE_TYPE_ROTATION)
         {
             if ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
             {
                 FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
@@ -3546,7 +3546,7 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
                     2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[0]);
             }
             else if ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
             {
                 FillWindowPixelBuffer(sMonSummaryScreen->windowIds[5], 0);
 
@@ -4152,7 +4152,7 @@ static void BufferSelectedMonData(struct Pokemon * mon)
 //looking into potentiallt gBattlerPartyIndexes[] can be used
 //mon = &gPlayerParty[gBattlerPartyIndexes[gActiveBattler]];  taht did it, seems to be working now, but need to check doubles as unsure if it is right,
 //but it shold be
-static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot) 
+static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot) //issue with last mon in party when fainted shows, first mon data instead
 {
     u16 move;
     u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
@@ -4169,29 +4169,29 @@ static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot)
     switch (moveSlot)
     {
     case 0://move 1
-        if (SINGLE_BATTLE && (curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+        if (SINGLE_BATTLE && (curr_personality == slot1_personality) //still ane existing bug with this logic
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
         {
             move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[0];
         }
         else if (DOUBLE_BATTLE)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[0];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[0];
         }
         else if (TRIPLE_ROTATION)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[0];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[0];
 
             if  ((curr_personality == slot3_personality)
@@ -4203,28 +4203,28 @@ static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot)
         break;
     case 1://move 2
         if (SINGLE_BATTLE && (curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
         {
             move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[1];
         }
         else if (DOUBLE_BATTLE)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[1];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[1];
         }
         else if (TRIPLE_ROTATION)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[1];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[1];
 
             if  ((curr_personality == slot3_personality)
@@ -4236,28 +4236,28 @@ static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot)
         break;
     case 2://move 3
         if (SINGLE_BATTLE && (curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
         {
             move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[2];
         }
         else if (DOUBLE_BATTLE)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[2];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[2];
         }
         else if (TRIPLE_ROTATION)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[2];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[2];
 
             if  ((curr_personality == slot3_personality)
@@ -4269,28 +4269,28 @@ static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot)
         break;
     default://move 4
         if (SINGLE_BATTLE && (curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
         {
             move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[3];
         }
         else if (DOUBLE_BATTLE)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[3];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[3];
         }
         else if (TRIPLE_ROTATION)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[3];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].moves[3];
 
             if  ((curr_personality == slot3_personality)
@@ -4322,28 +4322,28 @@ static u16 GetMonPpByMoveSlot(struct Pokemon * mon, u8 moveSlot)
     {
     case 0://move 1
         if (SINGLE_BATTLE && (curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
         {
             pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[0];
         }
         else if (DOUBLE_BATTLE)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[0];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[0];
         }
         else if (TRIPLE_ROTATION)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[0];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[0];
 
             if  ((curr_personality == slot3_personality)
@@ -4355,28 +4355,28 @@ static u16 GetMonPpByMoveSlot(struct Pokemon * mon, u8 moveSlot)
         break;
     case 1://move 2
         if (SINGLE_BATTLE && (curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
         {
             pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[1];
         }
         else if (DOUBLE_BATTLE)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[1];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[1];
         }
         else if (TRIPLE_ROTATION)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[1];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[1];
 
             if  ((curr_personality == slot3_personality)
@@ -4388,28 +4388,28 @@ static u16 GetMonPpByMoveSlot(struct Pokemon * mon, u8 moveSlot)
         break;
     case 2://move 3
         if (SINGLE_BATTLE && (curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
         {
             pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[2];
         }
         else if (DOUBLE_BATTLE)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[2];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[2];
         }
         else if (TRIPLE_ROTATION)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[2];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[2];
 
             if  ((curr_personality == slot3_personality)
@@ -4421,28 +4421,28 @@ static u16 GetMonPpByMoveSlot(struct Pokemon * mon, u8 moveSlot)
         break;
     default://move 4
         if (SINGLE_BATTLE && (curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
         {
             pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[3];
         }
         else if (DOUBLE_BATTLE)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[3];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[3];
         }
         else if (TRIPLE_ROTATION)
         {
             if  ((curr_personality == slot1_personality)
-            && GetMonData(&gPlayerParty[0], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].pp[3];
 
             if  ((curr_personality == slot2_personality)
-            && GetMonData(&gPlayerParty[1], MON_DATA_HP))
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_HP))
                 pp = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)].pp[3];
 
             if  ((curr_personality == slot3_personality)

@@ -3801,7 +3801,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                             //for self damage   so only contact moves would go off and damage the attacker
                             else
                             {
-                                gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, (gBattleMoves[gCurrentMove].power / 2), 0, gBattlerAttacker, gBattlerAttacker);
+                                gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, (gBattleMoves[gChosenMove].power / 2), 0, gBattlerAttacker, gBattlerAttacker);
                                  //should use move against self at half normal power
                                 if (gBattleMoveDamage < gBattleMons[gBattlerTarget].maxHP / 8)
                                     gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 8; //minimum dmg clause
