@@ -4950,7 +4950,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         //Pickup variables needed put above switch start
         u16 PickUpItem, heldItem;
 
-        u16 *changedItem = &gBattleStruct->changedItems[battler];
         if (special)
             gLastUsedAbility = special;
         else
@@ -6005,9 +6004,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                         }
 
-                        //gLastUsedItem = *changedItem = PickUpItem; consuimable pickup items not working right possible putting oin glastused too soon is issue
-                        *changedItem = PickUpItem; //think that was it, item battle effects function passes item to glastuseditem
-                        PREPARE_ITEM_BUFFER(gBattleTextBuff1, PickUpItem)
+
+                        //*changedItem = PickUpItem; //think this was it, item battle effects function passes item to glastuseditem, pretty sure don't need and was actually causing issues...
+                        PREPARE_ITEM_BUFFER(gBattleTextBuff1, PickUpItem) //yup that was the main issue didn't need that above line
                             gBattleMons[battler].item = PickUpItem;
                         BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, battler, sizeof(PickUpItem), &PickUpItem);
                         MarkBattlerForControllerExec(battler);
@@ -6065,15 +6064,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         }
                     }
                     break;
-                case ABILITY_BAD_DREAMS:
-                    if (gBattleMons[battler].status1 & STATUS1_SLEEP
-                        || gBattleMons[BATTLE_OPPOSITE(battler)].status1 & STATUS1_SLEEP
-                        || GetBattlerAbility(battler) == ABILITY_COMATOSE
-                        || GetBattlerAbility(BATTLE_OPPOSITE(battler)) == ABILITY_COMATOSE)
-                    {
-                        BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
-                        ++effect;
-                    }
+                case ABILITY_BAD_DREAMS:                    
+                    BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
+                    ++effect;
                     break;
                 case ABILITY_SOLAR_POWER:
                     if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
@@ -7207,23 +7200,32 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 break;
             case ABILITY_MAGICIAN:    //this and pickpocket should go in abilityeffects function instead, this should only be for   actual move effect only, think wil move the item stuff recently ported from emerald out too
                 if (gCurrentMove != MOVE_FLING && gCurrentMove != MOVE_NATURAL_GIFT
-                    && gBattleMons[gBattlerAttacker].item == ITEM_NONE
                     && gBattleMons[gBattlerTarget].item != ITEM_NONE
                     && IsBattlerAlive(gBattlerAttacker)
                     && TARGET_TURN_DAMAGED
-                    //&& CanStealItem(gBattlerAttacker, gBattlerTarget, gBattleMons[gBattlerTarget].item)
+                    && CanStealItem(gBattlerAttacker, gBattlerTarget, gBattleMons[gBattlerTarget].item)
                     && !gSpecialStatuses[gBattlerAttacker].gemBoost   // In base game, gems are consumed after magician would activate.
                     && !(gWishFutureKnock.knockedOffMons[GetBattlerSide(gBattlerTarget)] & gBitTable[gBattlerPartyIndexes[gBattlerTarget]])
                     && !DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove)
                     && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && (GetBattlerAbility(gBattlerTarget) != ABILITY_STICKY_HOLD || !IsBattlerAlive(gBattlerTarget)))
                 {
-                    StealTargetItem(gBattlerAttacker, gBattlerTarget);
-                    gBattleScripting.battler = gBattlerAbility = gBattlerAttacker;
-                    gEffectBattler = gBattlerTarget;
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_MagicianActivates;
-                    ++effect;
+                    if (gBattleMons[gBattlerAttacker].item == ITEM_NONE)
+                    {
+                        StealTargetItem(gBattlerAttacker, gBattlerTarget);
+                        gBattleScripting.battler = gBattlerAbility = gBattlerAttacker;
+                        gEffectBattler = gBattlerTarget;
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_MagicianActivates;
+                        ++effect;
+                    }
+                    else if (gBattleMons[gBattlerTarget].item != gBattleStruct->itemStolen[gBattlerPartyIndexes[gBattlerAttacker]].originalItem) //if holding item, swap items, but not if target item is original item  
+                    {
+                        gBattleScripting.battler = gBattlerAbility = gBattlerAttacker; //make string for swap items
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_MagicianSwap;
+                        ++effect;
+                    } //original item is set, on battle start it just holds the item yuo starter battle with
                 }
             }
             break;

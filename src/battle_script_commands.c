@@ -4027,10 +4027,11 @@ void TryRestoreStolenItems(void)
 {
     u32 i;
     u16 stolenItem = ITEM_NONE;
-    u16 heldItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
+    u16 heldItem;
 
     for (i = 0; i < PARTY_SIZE; i++)
-    {
+    {   
+        heldItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
         if (gBattleStruct->itemStolen[i].stolen)
         {
             stolenItem = gBattleStruct->itemStolen[i].originalItem;
@@ -4071,13 +4072,18 @@ void TrySaveExchangedItem(u8 battlerId, u16 stolenItem)
 }
 
 // battlerStealer steals the item of battlerItem
+//make script for swapping item, chck fi one exists already
 void StealTargetItem(u8 battlerStealer, u8 battlerItem)
 {
     gLastUsedItem = gBattleMons[battlerItem].item;
-    gBattleMons[battlerItem].item = 0;
+    gBattleMons[battlerItem].item = ITEM_NONE;
 
-    RecordItemEffectBattle(battlerItem, 0);    
-    CheckSetUnburden(battlerItem);
+    RecordItemEffectBattle(battlerItem, 0);    //just for ai
+    CheckSetUnburden(battlerItem);  //target is losing item so give unburden boost, if possible
+
+    gActiveBattler = battlerItem;
+    BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[gBattlerTarget].item), &gBattleMons[battlerItem].item);  // remove target item
+    MarkBattlerForControllerExec(battlerItem);
     
 
     if (gBattleMons[battlerStealer].item == ITEM_NONE)
@@ -4089,11 +4095,13 @@ void StealTargetItem(u8 battlerStealer, u8 battlerItem)
         BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gLastUsedItem), &gLastUsedItem); // set attacker item
         MarkBattlerForControllerExec(battlerStealer);
 
-        gActiveBattler = battlerItem;
+        /*gActiveBattler = battlerItem;
         BtlController_EmitSetMonData(BUFFER_A, REQUEST_HELDITEM_BATTLE, 0, sizeof(gBattleMons[gBattlerTarget].item), &gBattleMons[battlerItem].item);  // remove target item
         MarkBattlerForControllerExec(battlerItem);
+        */
 
         gBattleResources->flags->flags[battlerStealer] &= ~RESOURCE_FLAG_UNBURDEN; //this means lose unburden boost as you're gaining an item
+        TrySaveExchangedItem(battlerItem, gLastUsedItem); //if player loses item it tries to save it
 
     }
 
@@ -4103,7 +4111,7 @@ void StealTargetItem(u8 battlerStealer, u8 battlerItem)
     }//ok think that outta do it
     
     gBattleStruct->choicedMove[battlerItem] = MOVE_NONE;
-    TrySaveExchangedItem(battlerItem, gLastUsedItem); //if player loses item it tries to save it
+    
 }
 
 static bool32 TryKnockOffBattleScript(u32 battlerDef)
@@ -5137,7 +5145,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;
             case MOVE_EFFECT_STEAL_ITEM:
                 {
-                    if (!CanStealItem(gBattlerAttacker, gBattlerTarget, gBattleMons[gBattlerTarget].item))
+                    if (!CanStealItem(gBattlerAttacker, gBattlerTarget, gBattleMons[gBattlerTarget].item)) //thief i think
                     {
                         ++gBattlescriptCurrInstr;
                         break;
@@ -5176,10 +5184,10 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     }
                     else //success condition
                     {
-                        StealTargetItem(gBattlerAttacker, gBattlerTarget);
-                        gBattleMons[gBattlerAttacker].item = ITEM_NONE; // Item assigned later on with thief (see MOVEEND_CHANGED_ITEMS)
-                        gBattleStruct->changedItems[gBattlerAttacker] = gLastUsedItem; // Stolen item to be assigned later
-                        
+                        StealTargetItem(gBattlerAttacker, gBattlerTarget);  // Attacker steals target item
+                       // gBattleMons[gBattlerAttacker].item = ITEM_NONE; // Item assigned later on with thief (see MOVE_END_CHANGED_ITEMS) - is this even needed?
+                       if (gBattleMons[gBattlerAttacker].item == ITEM_NONE)
+                        gBattleStruct->changedItems[gBattlerAttacker] = gLastUsedItem; // Stolen item to be assigned later - onlyh need do if actual assing item to self
                         BattleScriptPush(gBattlescriptCurrInstr + 1);
                         gBattlescriptCurrInstr = BattleScript_ItemSteal;
                         //*(u8 *)((u8 *)(&gBattleStruct->choicedMove[gBattlerTarget]) + 0) = 0;
@@ -7341,10 +7349,10 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             {
                 u16 *changedItem = &gBattleStruct->changedItems[i];
                 
-                if (*changedItem != 0)
+                if (*changedItem != ITEM_NONE)
                 {
                     gBattleMons[i].item = *changedItem;
-                    *changedItem = 0;
+                    *changedItem = ITEM_NONE;
                 }
             }
             ++gBattleScripting.atk49_state;
@@ -7462,8 +7470,9 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             break;
         case MOVE_END_GROUND_TARGET: //for some reason retriggering so think, grounded isn't being set right?
             if (!(IsBattlerGrounded(gBattlerTarget)) && IsBattlerAlive(gBattlerTarget) 
-            && gMultiHitCounter == 0 && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) //should make sure doesn't trigger till end of multihit
-            {
+            && gMultiHitCounter == 0 
+            && TARGET_TURN_DAMAGED)// !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) //should make sure doesn't trigger till end of multihit
+            {           //result no effect didn't work so replace w target must take dmg
                 
                 if (gBattleMoves[gCurrentMove].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)   //using fly
                 {

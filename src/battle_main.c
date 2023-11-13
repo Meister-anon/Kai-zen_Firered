@@ -5316,9 +5316,13 @@ static void HandleEndTurn_FinishBattle(void)
             }
         }
         TrySetQuestLogBattleEvent();
-        TryRestoreStolenItems();    //missing part of knock off, that restorees item.
-        //if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)  //GriffinR helped apparently leaving if statement made battle fade exclusive to trainer only fights
-            //ClearRematchStateByTrainerId();   //vsonic what does this do again?
+        if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER) //might not be needed but just extra protection
+        TryRestoreStolenItems();    //missing part of knock off, that restorees item. //ok this was issue for items returning, potentially put somewhere else then?
+        //beleive working now, pretty sure issue was it was triggering for enemy side and re-restoring the item I had just stolen.
+        //seems if it changes items the same turn I stole it with pickup, it still breaks?  leads me to believe the issue is with my pickup logic then
+        //how its assigning items?  yup looks like it, I set changeditem in my function, and that goes to a move end argument that's AFTER item theft
+        //so its pretty much resetting the item to the battler after I removed it, /confirmed that was issue
+
         BeginFastPaletteFade(3);
         FadeOutMapMusic(5);
 

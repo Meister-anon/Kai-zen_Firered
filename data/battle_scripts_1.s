@@ -8062,6 +8062,7 @@ BattleScript_ItemSteal::
 	printstring STRINGID_PKMNSTOLEITEM
 	waitmessage 0x40
 	return
+	
 
 BattleScript_HailActivates::
 	pause 0x20
@@ -8321,6 +8322,14 @@ BattleScript_StenchExitsLoop:
 BattleScript_MagicianActivates::
 	@call BattleScript_AbilityPopUp
 	call BattleScript_ItemSteal
+	return
+
+BattleScript_MagicianSwap::
+	tryswapitems BattleScript_TargetAbilityStatRaiseRet_End  @essentialy makes it go to next string, so does nothing
+	printstring STRINGID_PKMNSWITCHEDITEMS
+	waitmessage 0x40
+	printfromtable gItemSwapStringIds	@shuld be set by trapswapitems command
+	waitmessage 0x40
 	return
 
 BattleScript_SymbiosisActivates::
@@ -8611,24 +8620,41 @@ BattleScript_LavaDistortionActivates::
 	end3
 
 BattleScript_BadDreamsActivates::
-	setbyte gBattlerTarget, 0	
+	setbyte gBattlerTarget, 0
 BattleScript_BadDreamsLoop:
-	trygetbaddreamstarget BattleScript_BadDreamsEnd
+	jumpiftargetally BattleScript_BadDreamsIncrement
 	jumpifability BS_TARGET, ABILITY_MAGIC_GUARD, BattleScript_BadDreamsIncrement
+	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_BadDreams_Dmg
+	jumpifstatus BS_TARGET, STATUS1_SLEEP, BattleScript_BadDreams_Dmg
+	goto BattleScript_BadDreamsIncrement
 BattleScript_BadDreams_Dmg:
+	@jumpifbyteequal sFIXED_ABILITY_POPUP, sZero, BattleScript_BadDreams_ShowPopUp
+BattleScript_BadDreams_DmgAfterPopUp:
+	printstring STRINGID_BADDREAMSDMG
+	waitmessage B_WAIT_TIME_LONG
 	dmg_1_8_targethp
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
-	printstring STRINGID_BADDREAMSDMG
-	waitmessage 0x40
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
-	tryfaintmon BS_TARGET, FALSE, NULL
-	confirmlosingteam BattleScript_BadDreamsIncrement
+	jumpifhasnohp BS_TARGET, BattleScript_BadDreams_HidePopUp
 BattleScript_BadDreamsIncrement:
 	addbyte gBattlerTarget, 1
-	goto BattleScript_BadDreamsLoop
+	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_BadDreamsLoop
+	@jumpifbyteequal sFIXED_ABILITY_POPUP, sZero, BattleScript_BadDreamsEnd
+	@destroyabilitypopup
+	pause 15
 BattleScript_BadDreamsEnd:
 	end3
+BattleScript_BadDreams_ShowPopUp:
+	@copybyte gBattlerAbility, gBattlerAttacker
+	@call BattleScript_AbilityPopUp
+	@setbyte sFIXED_ABILITY_POPUP, TRUE
+	goto BattleScript_BadDreams_DmgAfterPopUp
+BattleScript_BadDreams_HidePopUp:
+	@destroyabilitypopup
+	tryfaintmon BS_TARGET, FALSE, NULL
+	confirmlosingteam BattleScript_BadDreamsIncrement
+	@goto BattleScript_BadDreamsIncrement
 
 BattleScript_TookAttack::
 	attackstring

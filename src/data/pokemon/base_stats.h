@@ -2359,11 +2359,11 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_INSOMNIA, ABILITY_FOREWARN},
-        .abilityHidden = {ABILITY_BAD_DREAMS, ABILITY_NONE},
+            .abilities = {ABILITY_BAD_DREAMS, ABILITY_FOREWARN},
+        .abilityHidden = {ABILITY_INSOMNIA, ABILITY_GLUTTONY}, //ABILITY_GLUTTONY
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    },
+    }, 
 
     [SPECIES_HYPNO] =
     { 
@@ -2381,8 +2381,8 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_INSOMNIA, ABILITY_FOREWARN},
-        .abilityHidden = {ABILITY_BAD_DREAMS, ABILITY_NONE},
+            .abilities = {ABILITY_BAD_DREAMS, ABILITY_FOREWARN},
+        .abilityHidden = {ABILITY_INSOMNIA, ABILITY_MAGICIAN}, //ABILITY_MAGICIAN  for new new version of magician, swaps held item  if holding steals if not holding
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },

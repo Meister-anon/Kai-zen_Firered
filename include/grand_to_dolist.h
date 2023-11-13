@@ -1959,11 +1959,27 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   ok weird thing changed effect chance, it only happens when its 0, i.e set to certain, but doesn't happen at 100 for some reason??
     -fixed problem was how I setup certain effect in seteffectwithchance
 
-    -need fix multitask setup works for fury cut but not multitask for some reason
+    -need fix multitask setup works for fury cut but not multitask for some reason -fixed
 
- //broken leech seed on top of target poison/toxic breaks game..  force switch out weird stuff
+ //broken leech seed on top of target poison/toxic breaks game..  force switch out weird stuff - fixed
+
+  attempt set caps for box exp, to prevent over leveling, think limit to badge should just be a matter of changing condition, and swapping
+  the exp gain logic used, think use base function (loweresst level) divided by 2, so still gain just much slower
 
  BS_AttacksThisTurn use to repolace normal script logic for attacking this turn
+
+ //issue with grounding effets, its setting them even if move doesn't land?? attempted rock throw, but got paralzed
+ but the enemy grounded message still played, and they got grounded
+
+ didnt' realize bad dreams didn't heal?, and can't add healing to bad dreams withuot making darkrai broken
+
+ potentially change magician to be  swap held item with enemy, if holding an item, store original item,
+ so item doesn't swap back if attack target again,
+ gives it a cool niche, -set base effect still need polish and make script for text activation -did, setup a base 1st attempt 
+ gave magician its own description so not just sharing pickpocket
+
+ //also fixed issue with thief, issue was pickup and restore items
+
  
  fixed intro trainer select text
  ...using constrict on wondergaurd shedinja breaks game...causes freeze   going over changes I realized - think fixed, missed a part of status stuff (double check)
