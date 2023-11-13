@@ -6819,12 +6819,26 @@ BattleScript_MoveUsedIsDisabled::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
+BattleScript_MoveUsedIsInthralled::
+	printstring STRINGID_PKMNMOVESEALED
+	waitmessage 0x40
+	goto BattleScript_MoveEnd
+
+BattleScript_SelectingInthralledMove::
+	printselectionstring STRINGID_PKMNMOVESEALED
+	endselectionscript
+
 BattleScript_SelectingDisabledMove::
 	printselectionstring STRINGID_PKMNMOVEISDISABLED
 	endselectionscript
 
 BattleScript_DisabledNoMore::
 	printstring STRINGID_PKMNMOVEDISABLEDNOMORE
+	waitmessage 0x40
+	end2
+
+BattleScript_InthralledNoMore::
+	printstring STRINGID_PKMNMOVESEALEDNOMORE
 	waitmessage 0x40
 	end2
 

@@ -14102,6 +14102,8 @@ static void atk9B_transformdataexecution(void) //add ability check logic, make n
         gBattleMons[gBattlerAttacker].status2 |= STATUS2_TRANSFORMED;
         gDisableStructs[gBattlerAttacker].disabledMove = MOVE_NONE;
         gDisableStructs[gBattlerAttacker].disableTimer = 0;
+        gDisableStructs[gBattlerAttacker].inthralledMove = MOVE_NONE;
+        gDisableStructs[gBattlerAttacker].inthrallTimer = 0;
         gDisableStructs[gBattlerAttacker].transformedMonPersonality = gBattleMons[gBattlerAttacker].personality; //changed I want to keep my own personality
         gDisableStructs[gBattlerAttacker].mimickedMoves = 0;
 
@@ -14415,7 +14417,7 @@ static void atkA3_disablelastusedattack(void)
     {
         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerTarget].moves[i])
         gDisableStructs[gBattlerTarget].disabledMove = gBattleMons[gBattlerTarget].moves[i];
-        gDisableStructs[gBattlerTarget].disableTimer = (Random() & 3) + 2;
+        gDisableStructs[gBattlerTarget].disableTimer = (Random() % 4) + 2;  //replaced & 3
         gDisableStructs[gBattlerTarget].disableTimerStartValue = gDisableStructs[gBattlerTarget].disableTimer; // used to save the random amount of turns?
         gBattlescriptCurrInstr += 5;
     }

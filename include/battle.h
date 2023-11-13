@@ -254,8 +254,11 @@ struct DisableStruct
     u8 environmentTrapTurns;   //turn counter for environment traps fire spin whirlpool sandtomb magma storm
     u8 FrozenTurns;
     u8 bideTimer;
-    u8 bindMovepos; //stored pos of bind move
+    u8 bindMovepos; //stored pos of bind move   //double check I'm actually using
     u16 bindedMove; //move bind locks you to
+    u8 inthralled;
+    u8 inthrallTimer;
+    u16 inthralledMove;
     //u8 RoostTimerStartValue;  //remove for now until I get 
     /*0x1A*/ u8 unk1A[2];
 }; //think I may not actually need roost start value, long as I have timer

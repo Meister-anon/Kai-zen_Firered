@@ -327,9 +327,9 @@
 #define ABILITY_JEWEL_METABOLISM 304 //can't think of a name right now, this is just a sableye rock absorb based on dex entry, hmm maybe do more boost damage to rock types? ok, instead of raising hp, boosts def as eaten rocks form more crystals ok i like that
 #define ABILITY_INVERSION 305 //  - for ditto 
 #define ABILITY_WETIKO 306 // for my version crabominable mix of refrigerate & regenerator
-#define ABILITY_EMPATH 307 // upgraded synchronize, not for umbreon psychic only
-#define ABILITY_EMPATHIC_CURSE 308 //ability for Mespirit - synchronize with pain split
-#define ABILITY_INTHRALL 309 //ability for Uxie - anticipation except it seals the move so it can't be used/selected
+#define ABILITY_EMPATH 307 // upgraded synchronize, copies stat change too, not for umbreon psychic only
+#define ABILITY_EMPATHIC_CURSE 308 //ability for Mespirit - synchronize with dmg reflect
+#define ABILITY_INTHRALL 309 //ability for Uxie - anticipation except it seals the move so it can't be used/selected  //magician conditions, anticipation function logic
 #define ABILITY_IRON_WILL 310 //abillity for Azelf - mix of pressure where it can paralyze the attacker, but lower odds, as thye also have to break will pressure odds that lower dmg done
 #define ABILITY_LIVEWIRE 311 //for rotom base, weaker version of transistor
 #define ABILITY_GALEFORCE 312
@@ -337,6 +337,7 @@
 #define ABILITY_TOXUNGUE 314    //Likitung line signature paralytic poison touch
 #define ABILITY_OMNIPOTENT_AIDE 315//for Fraeyjta, can use healing moves for itself, but transfers any heal it would receive to battle partner (if heal target mon with this ability change target to battle partner, otherwise fail)
                                     //if this mon uses a healing move its priority gets increased long as it has a living battle partner, for balanve remove priority effect if status 1,  logic is ABILITY_TRIAGE 
+                                    //heal priority setup, target swap is not working yet
 #define ABILITY_FLUORESCENCE 316     
 #define ABILITY_SPECTRE 317  //latios & latias ability raise evasiveness on switch in
 #define ABILITY_AURA_OF_LIGHT 318//CRESELIA ABILITY prevent sleep for self and allies, plus reduce dark damage on side - done setup

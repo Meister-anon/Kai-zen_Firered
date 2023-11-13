@@ -1682,6 +1682,8 @@ static void Cmd_if_any_move_disabled_or_encored(void)
     {
         if (gDisableStructs[battlerId].encoredMove != MOVE_NONE)
             sAIScriptPtr = T1_READ_PTR(sAIScriptPtr + 3);
+        else if (gDisableStructs[battlerId].inthralledMove != MOVE_NONE)
+            sAIScriptPtr = T1_READ_PTR(sAIScriptPtr + 3);
         else
             sAIScriptPtr += 7;
     }

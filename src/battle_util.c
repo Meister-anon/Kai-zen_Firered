@@ -813,6 +813,7 @@ enum   //battler end turn
     ENDTURN_THRASH,
     ENDTURN_FLINCH,
     ENDTURN_DISABLE,
+    ENDTURN_INTHRALL,
     ENDTURN_ENCORE,
     ENDTURN_MAGNET_RISE,
     ENDTURN_TELEKINESIS,
@@ -1116,6 +1117,14 @@ u8 TrySetCantSelectMoveBattleScript(void)
         gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingDisabledMove;
         limitations = 1;
     }
+    if (gDisableStructs[gActiveBattler].inthralledMove == move && move != MOVE_NONE)
+    {
+        gBattleScripting.battler = gActiveBattler;
+        gCurrentMove = move;
+        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gDisableStructs[gActiveBattler].inthralledMove);
+        gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingInthralledMove;
+        limitations = 1;
+    }
     if (move == gLastMoves[gActiveBattler] && move != MOVE_STRUGGLE && (gBattleMons[gActiveBattler].status2 & STATUS2_TORMENT))
     {
         CancelMultiTurnMoves(gActiveBattler);
@@ -1223,6 +1232,8 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
         if (gBattleMons[battlerId].pp[i] == 0 && check & MOVE_LIMITATION_PP)
             unusableMoves |= gBitTable[i];
         if (gBattleMons[battlerId].moves[i] == gDisableStructs[battlerId].disabledMove && check & MOVE_LIMITATION_DISABLED)
+            unusableMoves |= gBitTable[i];
+        if (gBattleMons[battlerId].moves[i] == gDisableStructs[battlerId].inthralledMove && check & MOVE_LIMITATION_DISABLED)
             unusableMoves |= gBitTable[i];
         if (gBattleMons[battlerId].moves[i] == gLastMoves[battlerId] && check & MOVE_LIMITATION_TORMENTED && gBattleMons[battlerId].status2 & STATUS2_TORMENT)
             unusableMoves |= gBitTable[i];
@@ -2860,6 +2871,33 @@ u8 DoBattlerEndTurnEffects(void)
                 }
                 ++gBattleStruct->turnEffectsTracker;
                 break;
+            case ENDTURN_INTHRALL: //inthrall abiliity disable
+            if (gDisableStructs[gActiveBattler].inthrallTimer != 0)
+                {
+                    s32 i;
+
+                    for (i = 0; i < MAX_MON_MOVES; ++i)
+                    {
+                        if (gDisableStructs[gActiveBattler].inthralledMove == gBattleMons[gActiveBattler].moves[i])
+                            break;
+                    }
+                    if (i == MAX_MON_MOVES)  // pokemon does not have the disabled move anymore
+                    {
+                        gDisableStructs[gActiveBattler].inthralledMove = MOVE_NONE;
+                        gDisableStructs[gActiveBattler].inthrallTimer = 0;
+                        gDisableStructs[gActiveBattler].inthralled = FALSE;
+                    }
+                    else if (--gDisableStructs[gActiveBattler].inthrallTimer == 0)  // disable ends //think this is a decrement?
+                    {
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gDisableStructs[gActiveBattler].inthralledMove)
+                        gDisableStructs[gActiveBattler].inthralledMove = MOVE_NONE;
+                        gDisableStructs[gActiveBattler].inthralled = FALSE;
+                        BattleScriptExecute(BattleScript_InthralledNoMore);
+                        ++effect;
+                    }
+                }
+                ++gBattleStruct->turnEffectsTracker;
+                break;
             case ENDTURN_ENCORE:  // encore
                 if (gDisableStructs[gActiveBattler].encoreTimer != 0)
                 {
@@ -3457,6 +3495,7 @@ enum
     CANCELLER_BLACK_FOG,
     CANCELLER_FLINCH,
     CANCELLER_DISABLED,
+    CANCELLER_INTHRALLED,
     CANCELLER_GRAVITY,
     CANCELLER_HEAL_BLOCKED,
     CANCELLER_TAUNTED,
@@ -3694,7 +3733,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 effect = 1; //think doesn't work as would go to move end
                 
             }
-            ++gBattleStruct->atkCancellerTracker;
+            ++gBattleStruct->atkCancellerTracker; 
             break;
         case CANCELLER_DISABLED: // disabled move
             if (gDisableStructs[gBattlerAttacker].disabledMove == gCurrentMove && gDisableStructs[gBattlerAttacker].disabledMove != MOVE_NONE)
@@ -3703,6 +3742,19 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gBattleScripting.battler = gBattlerAttacker;
                 CancelMultiTurnMoves(gBattlerAttacker);
                 gBattlescriptCurrInstr = BattleScript_MoveUsedIsDisabled;
+                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                effect = 1;
+            }
+            ++gBattleStruct->atkCancellerTracker;
+            break;
+        case CANCELLER_INTHRALLED: // INTHRALLED move
+            if (gDisableStructs[gBattlerAttacker].inthralledMove == gCurrentMove && gDisableStructs[gBattlerAttacker].inthralledMove != MOVE_NONE)
+            {
+                gProtectStructs[gBattlerAttacker].usedDisabledMove = 1;
+                gBattleScripting.battler = gBattlerAttacker;
+                CancelMultiTurnMoves(gBattlerAttacker);
+                PREPARE_MOVE_BUFFER(gBattleTextBuff1, gDisableStructs[gBattlerAttacker].inthralledMove);
+                gBattlescriptCurrInstr = BattleScript_MoveUsedIsInthralled; 
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 effect = 1;
             }
@@ -4749,6 +4801,8 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
     };
     u32 i, j, bestId, count;
     struct Forewarn *data = malloc(sizeof(struct Forewarn) * MAX_BATTLERS_COUNT * MAX_MON_MOVES);
+    u8 moveType;
+    GET_MOVE_TYPE(gCurrentMove, moveType);
 
     // Put all moves
     for (count = 0, i = 0; i < MAX_BATTLERS_COUNT; i++)
@@ -4765,18 +4819,14 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
                 {//i.e for archetypes mon with highest stat being speed, or defense etc. high speed mon worrying about paralysis etc.
                     //high phys atk worrying about burn etc.
                 case EFFECT_OHKO:
-                    if (gBattleMons[i].level >= (gBattleMons[battler].level - 7))
+                    if (gBattleMons[i].level >= (gBattleMons[battler].level - 3)
+                    && CalcTypeEffectivenessMultiplier(data[count].moveId, moveType, battler, i, FALSE) >= UQ_4_12(1.55))
                         data[count].power = 150;
                     else
                         data[count].power = 0;
                     break;
                 case EFFECT_EXPLOSION:
-                    if ((data[count].moveId == MOVE_SELF_DESTRUCT
-                        || data[count].moveId == MOVE_EXPLOSION)
-                        && (!(IS_BATTLER_OF_TYPE(battler, TYPE_GHOST))))
-                        data[count].power = 200;
-                    else if (data[count].moveId == MOVE_MISTY_EXPLOSION
-                        && (!(IS_BATTLER_OF_TYPE(battler, TYPE_GRASS))))
+                    if (CalcTypeEffectivenessMultiplier(data[count].moveId, moveType, battler, i, FALSE) > UQ_4_12(0.0))
                         data[count].power = 200;
                     else
                         data[count].power = 0;
@@ -5587,7 +5637,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                       //depending on value  or have different value copied to gBattleTextBuff1 for each
                                 }
                                 else if (gBattleMoves[move].effect == EFFECT_OHKO && (gBattleMons[i].level >= (gBattleMons[battler].level - 3))
-                                && CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) != UQ_4_12(0.0))
+                                && CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(1.55))
                                 {
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_OHKO);
                                     ++effect;//
@@ -7229,6 +7279,111 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
             }
             break;
+            case ABILITY_INTHRALL:    //this and pickpocket should go in abilityeffects function instead, this should only be for   actual move effect only, think wil move the item stuff recently ported from emerald out too
+                if (IsBattlerAlive(gBattlerTarget)
+                    && TARGET_TURN_DAMAGED
+                    && !(gWishFutureKnock.knockedOffMons[GetBattlerSide(gBattlerTarget)] & gBitTable[gBattlerPartyIndexes[gBattlerTarget]])
+                    && !DoesSubstituteBlockMove(gBattlerAttacker, gBattlerTarget, gCurrentMove)
+                    && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && !gDisableStructs[gBattlerTarget].inthralled)
+                {
+                    u32 j, moveSlot;
+                    u8 power = 0; //...wait I don't need to store power, I just need the move.. wait yes I do its to keep a constant throughout the loop
+                    u8 MovePower;
+                    u16 moveId;
+
+                    u8 moveType;
+                    GET_MOVE_TYPE(gCurrentMove, moveType);
+
+                    gDisableStructs[gBattlerTarget].inthralled = TRUE; //put function logic below
+
+                    // Put all moves
+                    if (IsBattlerAlive(gBattlerTarget) && GetBattlerSide(gBattlerTarget) != GetBattlerSide(gBattlerAttacker))  //battler is me, i is opponent
+                    {
+                        for (j = 0; j < MAX_MON_MOVES; j++)
+                        {
+                            if (gBattleMons[gBattlerTarget].moves[j] == MOVE_NONE)
+                                continue;
+
+                            switch (gBattleMoves[gBattleMons[gBattlerTarget].moves[j]].effect)    //add more conditions for move effect for smarter move choice
+                            {//i.e for archetypes mon with highest stat being speed, or defense etc. high speed mon worrying about paralysis etc.
+                                //high phys atk worrying about burn etc.
+                            case EFFECT_OHKO:
+                                if (gBattleMons[gBattlerTarget].level >= (gBattleMons[battler].level - 3)
+                                && CalcTypeEffectivenessMultiplier(gBattleMons[gBattlerTarget].moves[j], moveType, gBattlerAttacker, gBattlerTarget, FALSE) >= UQ_4_12(1.55))
+                                    MovePower = 150;
+                                else
+                                    MovePower = 0;
+
+                                if (MovePower > power)
+                                {
+                                    power = MovePower;
+                                    moveId = gBattleMons[gBattlerTarget].moves[j]; //w this can store move to seal
+                                    moveSlot = j;
+
+                                }
+                                break;
+                            case EFFECT_EXPLOSION:
+                                if (CalcTypeEffectivenessMultiplier(gBattleMons[gBattlerTarget].moves[j], moveType, gBattlerAttacker, gBattlerTarget, FALSE) > UQ_4_12(0.0))
+                                    MovePower = 200;
+                                else
+                                    MovePower = 0;
+                                    
+                                if (MovePower > power)
+                                {
+                                    power = MovePower;
+                                    moveId = gBattleMons[gBattlerTarget].moves[j]; //w this can store move to seal
+                                    moveSlot = j;
+
+                                }
+                            case EFFECT_COUNTER:
+                            case EFFECT_MIRROR_COAT:
+                            case EFFECT_METAL_BURST:
+                                MovePower = 120;
+
+                                if (MovePower > power)
+                                {
+                                    power = MovePower;
+                                    moveId = gBattleMons[gBattlerTarget].moves[j]; //w this can store move to seal
+                                    moveSlot = j;
+
+                                }
+                                break;//add EFFECT_ENDEAVOR logic  for based on enemy hp  115 if below or equal 25% max hp, 100 if 50%
+                            case EFFECT_ENDEAVOR:
+                                if (gBattleMons[gBattlerTarget].hp <= (gBattleMons[gBattlerTarget].maxHP / 4))
+                                    MovePower = 110;
+                                else if (gBattleMons[gBattlerTarget].hp <= (gBattleMons[gBattlerTarget].maxHP / 2))
+                                    MovePower = 100;
+
+                                if (MovePower > power)
+                                {
+                                    power = MovePower;
+                                    moveId = gBattleMons[gBattlerTarget].moves[j]; //w this can store move to seal
+                                    moveSlot = j;
+
+                                }
+                            default:
+                                if (gBattleMoves[gBattleMons[gBattlerTarget].moves[j]].power == 1)
+                                    MovePower = 80;
+                                else
+                                    MovePower = gBattleMoves[gBattleMons[gBattlerTarget].moves[j]].power; //default to actual move power, final thing need setup type check, to alter power
+                                
+                                if (MovePower > power)
+                                {
+                                    power = MovePower;
+                                    moveId = gBattleMons[gBattlerTarget].moves[j]; //w this can store move to seal
+                                    moveSlot = j;  // to store slot 
+
+                                }
+                                break;
+                            }
+                        }
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerTarget].moves[moveSlot])
+                        gDisableStructs[gBattlerTarget].inthralledMove = gBattleMons[gBattlerTarget].moves[moveSlot];
+                        gDisableStructs[gBattlerTarget].inthrallTimer = 3;  //made effect consistent believe decrement at end turn so actual turn is n - 1
+                    }                    
+                }
+                break;
         case ABILITYEFFECT_MOVE_END_OTHER: // Abilities that activate on *another* battler's moveend: Dancer, Soul-Heart, Receiver, Symbiosis
             switch (GetBattlerAbility(battler))
             {

@@ -207,6 +207,8 @@ s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fi
 
 #define THAW_CONDITION(move) ((move == MOVE_SCALD) || (((gBattleMoves[move].type == TYPE_FIRE) || (gBattleMoves[move].argument == TYPE_FIRE)) && (gBattleMoves[move].power >= 60 || gDynamicBasePower >= 60)))
 
+#define HEALING_EFFECT ((EFFECT_RESTORE_HP || EFFECT_REST || EFFECT_MORNING_SUN || EFFECT_MOONLIGHT || EFFECT_SYNTHESIS || EFFECT_HEAL_PULSE || EFFECT_HEALING_WISH || EFFECT_ROOST || EFFECT_SWALLOW || EFFECT_WISH || EFFECT_SOFTBOILED || EFFECT_ABSORB))
+
 // percent in UQ_4_12 format
 extern const u16 gPercentToModifier[101];
 

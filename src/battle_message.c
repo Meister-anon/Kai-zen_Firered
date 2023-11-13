@@ -200,6 +200,8 @@ static const u8 sText_AttackerRageBuilding[] = _("{B_ATK_NAME_WITH_PREFIX}'s RAG
 static const u8 sText_AttackerRageEnded[] = _("{B_ATK_NAME_WITH_PREFIX}'s RAGE\nabated!{PAUSE 32}");
 static const u8 sText_PkmnMoveWasDisabled[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}\nwas disabled!");
 static const u8 sText_PkmnMoveDisabledNoMore[] = _("{B_ATK_NAME_WITH_PREFIX} is disabled\nno more!");
+static const u8 sText_PkmnInthralledNoMore[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1} is\nno longer sealed!");
+static const u8 sText_PkmnIsInthralled[] = _("{B_ATK_NAME_WITH_PREFIX} has lost the memory\nof how to use {B_BUFF1}!");
 static const u8 sText_PkmnGotEncore[] = _("{B_DEF_NAME_WITH_PREFIX} got\nan ENCORE!");
 static const u8 sText_PkmnEncoreEnded[] = _("{B_ATK_NAME_WITH_PREFIX}'s ENCORE\nended!");
 static const u8 sText_PkmnTookAim[] = _("{B_ATK_NAME_WITH_PREFIX} took aim\nat {B_DEF_NAME_WITH_PREFIX}!");
@@ -1460,6 +1462,8 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_FEMME_FATALE - BATTLESTRINGS_TABLE_START]                  = sText_FemmeFataleBlocks,
     [STRINGID_IRON_WILL - BATTLESTRINGS_TABLE_START]                     = sText_IronWillLostResolve,
     [STRINGID_AURA_OF_LIGHT_AWOKE - BATTLESTRINGS_TABLE_START]           = sText_AuraofLightAwaken,
+    [STRINGID_PKMNMOVESEALEDNOMORE  - BATTLESTRINGS_TABLE_START]         = sText_PkmnInthralledNoMore,
+    [STRINGID_PKMNMOVESEALED   - BATTLESTRINGS_TABLE_START]              = sText_PkmnIsInthralled,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,

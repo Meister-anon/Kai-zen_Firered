@@ -1980,6 +1980,15 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
  //also fixed issue with thief, issue was pickup and restore items
 
+ attempted setup for uxie ability, need test custom abilities for 3 elves
+ -don't forget plan to add onto forwarn/anticipation function logic  stuff for toxic etc.
+
+ for setting up omnipotent aide use HEALING_EFFECT constant, compare currenet move effect to it, and pass heal to partner if i have one
+ // use is double battle  and is single battlem, if single battle make the effects fail, effect should still be applied as normal for the move
+ //but the heal would just be passed to my partner, ex.  fraejta use rest, I still go to sleep, but my partner's hp is healed to max instead of mine
+ //if heal is all done within script, think may just be a matter of changing bs_attacker to partner. if single battle or no alive parnter in a double.
+ //just need to skip scripts for hp and hp bar update
+
  
  fixed intro trainer select text
  ...using constrict on wondergaurd shedinja breaks game...causes freeze   going over changes I realized - think fixed, missed a part of status stuff (double check)

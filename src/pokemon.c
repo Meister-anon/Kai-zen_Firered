@@ -3015,7 +3015,7 @@ void CalculateMonStats(struct Pokemon *mon)
 
     if (ability == ABILITY_WONDER_GUARD) {
         //currentHP = 1; //worked correctly without but just an extra protection
-        newMaxHP = 1; //literally just this line above is what broke wondergaurd shedinja ... -__-
+        newMaxHP = 1; //literally just ^this line above is what broke wondergaurd shedinja ... -__-
     }
     
     else if (ability == ABILITY_DISPIRIT_GUARD)

@@ -11214,12 +11214,12 @@ const struct BaseStats gBaseStats[] =
         //.evYield_SpDefense = 1,
         .genderRatio = MON_GENDERLESS,
         .eggCycles = 80,
-         .friendship = 30,
+        .friendship = 30,
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         .abilities = {ABILITY_INTHRALL, ABILITY_NONE}, //effect not yet set, should work like disable but with forewarn logic to choose move
-        .bodyColor = BODY_COLOR_YELLOW,
+        .bodyColor = BODY_COLOR_YELLOW, //beleive should work now? setup, put in ai decision and added all custom messages, still need test
         .noFlip = FALSE,
     },//knowledge/ memoery mon  can seal a move when they attack. the enemy
     //temporarily lose effect to use a move  think I'll make it only work on one move
@@ -11245,7 +11245,7 @@ const struct BaseStats gBaseStats[] =
         //.evYield_SpDefense = 1,
         .genderRatio = MON_GENDERLESS,
         .eggCycles = 80,
-         .friendship = 30,
+        .friendship = 30,
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
@@ -11268,7 +11268,7 @@ const struct BaseStats gBaseStats[] =
         //.evYield_SpAttack = 1,
         .genderRatio = MON_GENDERLESS,
         .eggCycles = 80,
-         .friendship = 30,
+        .friendship = 30,
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
@@ -23845,11 +23845,13 @@ const struct BaseStats gBaseStats[] =
             .eggGroup2 = EGG_GROUP_UNDISCOVERED,
             .abilities = {ABILITY_OMNIPOTENT_AIDE, ABILITY_NONE}, //make ability that passes on any healing received to battle partner, potentially also makes healing effect priority?
             //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_WONDER_GUARD, ABILITY_NONE}, //not able to heal this mon, ok just make it so recovery moves don't work on it, otherwise would be horribly annoying
+            .abilityHidden = {ABILITY_DISPIRIT_GUARD, ABILITY_NONE}, //not able to heal this mon, ok just make it so recovery moves don't work on it, otherwise would be horribly annoying
             // #endif
             .bodyColor = BODY_COLOR_GRAY,
             .noFlip = FALSE,
-        }, //give move powersplit
+        }, //give move powersplit,   //name is a mix of word for fairy,  freya norse goddess of protection/that watches over the dead, body based on priscilla from dark souls
+        //ok ability plan is heal moves don't work on self, if partner alive (and passes normal recurring ability conditions) increase priority by 3, same as triage
+        //heal them instead
 
     [SPECIES_VENUSAUR_MEGA] =
     { 
