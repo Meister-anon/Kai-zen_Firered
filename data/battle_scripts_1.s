@@ -2993,8 +2993,7 @@ BattleScript_EffectSpeedDown::
 	goto BattleScript_EffectStatDown
 
 BattleScript_EffectAccuracyDown::
-	call_if EFFECT_ACCURACY_DOWN	@would prefer put after animation but way stat script works has to be here, stops sandattack from affecting earth types /didnt work
-	setstatchanger STAT_ACC, 1, TRUE @oh its cuz i'm stupid and I set it on attacker instead of target
+	setstatchanger STAT_ACC, 1, TRUE
 	goto BattleScript_EffectStatDown
 
 @HOPE works if eerror would be because setmoveeffectwithchance is not at end of script hope not an issue dont know how else to deal with it

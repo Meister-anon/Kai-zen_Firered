@@ -17857,14 +17857,7 @@ void BS_call_if(void) //comparing to jumpifholdeffect
                 else
                     gBattlescriptCurrInstr = BattleScript_BrickBreakNoScreens;
                 break;//removes screens from start, still need to setup script with screens, need understand how wall animation worked in default script
-                //sand attack ground immunity
-            case EFFECT_ACCURACY_DOWN:
-                if (gCurrentMove == MOVE_SAND_ATTACK
-                    && (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ROCK)
-                    //|| IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_STEEL) steel doesn't need further buff
-                    || IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND)))
-                    gBattlescriptCurrInstr = BattleScript_NotAffected;
-                break;
+                
             /*case EFFECT_SWARM:
             if (!(gDisableStructs[gEffectBattler].swarmTurns)) //for trap status
             {

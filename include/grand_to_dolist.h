@@ -828,13 +828,19 @@ goto TRAINER_REMATCH //stuff
  //normal wont be immune to any status move
  //just look into things moslty tied to element, see if can come up with something thats consistent and logical
 
+ thikn I'm gonna scrap that idea, it'd be too much on top of already making status revolve aroudn type,
+ if you had to worry about type immunity on top of, being able to play the move if the enemy was of same type it'd be too hard to playthem
+ //I think I'd have to do one or the other in that case, either make same type immune to status or make type immunities immune to status
+ //ok I like status being blocked by immunities more so scrap extra stuff and just keep that
+
+
  //in addition to built in nuzlocke/death mechanic, actually setup nuzlocke mode with flag check in options menu
  //exclude fainted mon from pc exp gain, make them stay fainted in pc
  //so setup exp gain logic for that to work only if mon hp isn't 0
  //don't heal party if white out, item effects that revive make cant use put nuzlocke mode
  //flag check not set in item use
 
- //co dependent status - cure cancel out brn cant be with freeze  sleep cant be w spirit lock  psn cant be w toxic
+ //co dependent statusing - cure cancel out brn cant be with freeze  sleep cant be w spirit lock  psn cant be w toxic
  //still working on new version of conversion and inversion ability for ditto
 
  //make sunny day and moon light field moves, to swap day night schedule
@@ -1983,11 +1989,28 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  attempted setup for uxie ability, need test custom abilities for 3 elves
  -don't forget plan to add onto forwarn/anticipation function logic  stuff for toxic etc.
 
+ still need setup brick break correctly - all thats left is the logic for bs if enemy has a screen up
+
+ for party menu status icons, don't update dispayed icon if something already set i.e only if staus1 = 0 should you set/upadte icon
+ don't display multi icons in party menu only show it in summary screen, that way can display lvl in party menu at all times.
+ -//thiknk need to move status icon on rigth side over slightly, to avoid issue with lvl 100s - fixed
+
  for setting up omnipotent aide use HEALING_EFFECT constant, compare currenet move effect to it, and pass heal to partner if i have one
  // use is double battle  and is single battlem, if single battle make the effects fail, effect should still be applied as normal for the move
  //but the heal would just be passed to my partner, ex.  fraejta use rest, I still go to sleep, but my partner's hp is healed to max instead of mine
  //if heal is all done within script, think may just be a matter of changing bs_attacker to partner. if single battle or no alive parnter in a double.
  //just need to skip scripts for hp and hp bar update
+
+ for fixing starter select think I can use  CalcTypeEffectivenessMultiplier and replace movetype arguemnt with the selected mons type 1...I think that works?
+ or I check both, so check type 1 or type 2 is super or resisted
+ ok so check fi type 1 or type 2 is super (>= 1)  then else if type 1 or type 2 is resisted (<= 1)
+ think will check final evo, as target  exclude eevee from the logic
+
+ if pass checks set species to value, if fails at any point reroll rival starter
+ revised first condition is if rival starter not eevee, than do logic above
+ //function name "should reroll/reset rival starter"
+
+ put in another function, if that is true, reset and do random again think do for looop with if should reset is true
 
  
  fixed intro trainer select text

@@ -4450,7 +4450,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(35, 45, 40, 50, 45, 65),
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_FLYING,
+        .type2 = TYPE_FLYING, //keep flying for this, may not be a distance flyer but still good at maneovering itself throug the air
         .catchRate = 255,
         .expYield = 50,
         //.evYield_SpDefense = 1,
@@ -4465,7 +4465,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_INFILTRATOR, ABILITY_PHOTOSYNTHESIZE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-    },
+    }, //think give roost
 
     [SPECIES_SKIPLOOM] =
     { 

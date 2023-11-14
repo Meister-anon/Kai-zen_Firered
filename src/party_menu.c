@@ -2350,13 +2350,13 @@ static void DisplayPartyPokemonLevelCheck(struct Pokemon *mon, struct PartyMenuB
     {
         u8 ailment = GetMonAilment(mon);
 
-        if (ailment == AILMENT_NONE || ailment == AILMENT_PKRS)
-        {
+        //if (ailment == AILMENT_NONE || ailment == AILMENT_PKRS)
+        //{
             if (c != 0)
                 menuBox->infoRects->blitFunc(menuBox->windowId, menuBox->infoRects->dimensions[4] >> 3, (menuBox->infoRects->dimensions[5] >> 3) + 1, menuBox->infoRects->dimensions[6] >> 3, menuBox->infoRects->dimensions[7] >> 3, FALSE);
             if (c != 2)
                 DisplayPartyPokemonLevel(GetMonData(mon, MON_DATA_LEVEL), menuBox);
-        }
+        //}
     }
 }
 
@@ -2936,7 +2936,7 @@ static void CreatePartyMonStatusSprite(struct Pokemon *mon, struct PartyMenuBox 
     if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE)
     {
         menuBox->statusSpriteId = CreateSprite(&sSpriteTemplate_StatusIcons, menuBox->spriteCoords[4], menuBox->spriteCoords[5], 0);
-        SetPartyMonAilmentGfx(mon, menuBox);
+        SetPartyMonAilmentGfx(mon, menuBox);                                                //numbers is telling it what window that's not the position itself
     }
 }
 

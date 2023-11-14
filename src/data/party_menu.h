@@ -93,27 +93,27 @@ static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
 
        [SLOT_2] = {104,  18,    // pokemon coords,
                    108,  28,    // held item coords,
-                   154,  17,    // status coords,
+                   158,  17,    // status coords,
                    102,  25},   // pokeball coords
 
        [SLOT_3] = {104,  42,    // pokemon coords,
                    108,  52,    // held item coords,
-                   154,  41,    // status coords,
+                   158,  41,    // status coords,
                    102,  49},   // pokeball coords
 
        [SLOT_4] = {104,  66,    // pokemon coords,
                    108,  76,    // held item coords,
-                   154,  65,    // status coords,
+                   158,  65,    // status coords,
                    102,  73},   // pokeball coords
 
        [SLOT_5] = {104,  90,    // pokemon coords,
                    108, 100,    // held item coords,
-                   154,  89,    // status coords,
+                   158,  89,    // status coords,
                    102,  97},   // pokeball coords
 
        [SLOT_6] = {104, 114,    // pokemon coords,
                    108, 124,    // held item coords,
-                   154, 113,    // status coords,
+                   158, 113,    // status coords,
                    102, 121},   // pokeball coords
     },
     [PARTY_LAYOUT_DOUBLE] =
@@ -131,22 +131,22 @@ static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
 
        [SLOT_3] = {104,  18,    // pokemon coords,
                    108,  28,    // held item coords,
-                   154,  17,    // status coords,
+                   158,  17,    // status coords,
                    102,  25},   // pokeball coords
 
        [SLOT_4] = {104,  50,    // pokemon coords,
                    108,  60,    // held item coords,
-                   154,  49,    // status coords,
+                   158,  49,    // status coords,
                    102,  57},   // pokeball coords
 
        [SLOT_5] = {104,  82,    // pokemon coords,
                    108,  92,    // held item coords,
-                   154,  81,    // status coords,
+                   158,  81,    // status coords,
                    102,  89},   // pokeball coords
 
        [SLOT_6] = {104, 114,    // pokemon coords,
                    108, 124,    // held item coords,
-                   154, 113,    // status coords,
+                   158, 113,    // status coords,
                    102, 121},   // pokeball coords
     },
     [PARTY_LAYOUT_MULTI] =  //multi battles are partner battles, they are in emerald but not used in fire red by default
@@ -164,32 +164,32 @@ static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
 
        [SLOT_3] = {104,  26,    // pokemon coords,
                    106,  36,    // held item coords,
-                   154,  25,    // status coords,
+                   158,  25,    // status coords,
                    102,  33},   // pokeball coords
 
        [SLOT_4] = {104,  50,    // pokemon coords,
                    106,  60,    // held item coords,
-                   154,  49,    // status coords,
+                   158,  49,    // status coords,
                    102,  57},    // pokeball coords
 
        [SLOT_5] = {104,  82,    // pokemon coords,
                    106,  92,    // held item coords,
-                   154,  81,    // status coords,
+                   158,  81,    // status coords,
                    102,  89},   // pokeball coords
 
        [SLOT_6] = {104,  106,    // pokemon coords,
                    106,  116,    // held item coords,
-                   154,  105,    // status coords,
+                   158,  105,    // status coords,
                    102,  113},   // pokeball coords
     },
     [PARTY_LAYOUT_MULTI_SHOWCASE] =
     {
-       [SLOT_1] = { 16,  32,  20,  42,  38,  44,  16,  26},
-       [SLOT_2] = {104,  34, 106,  44, 154,  43, 102,  41},
-       [SLOT_3] = {104,  58, 106,  68, 154,  67, 102,  65},
+       [SLOT_1] = { 16,  32,  20,  42,  38,  44,  16,  26}, //is in same order pairs as above
+       [SLOT_2] = {104,  34, 106,  44, 158,  43, 102,  41},
+       [SLOT_3] = {104,  58, 106,  68, 158,  67, 102,  65},
        [SLOT_4] = { 16, 104,  20, 114,  38, 116,  16,  98},
-       [SLOT_5] = {104, 106, 106, 116, 154, 115, 102, 113},
-       [SLOT_6] = {104, 130, 106, 140, 154, 139, 102, 137},
+       [SLOT_5] = {104, 106, 106, 116, 158, 115, 102, 113},
+       [SLOT_6] = {104, 130, 106, 140, 158, 139, 102, 137},
     },
 };
 

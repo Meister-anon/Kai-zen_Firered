@@ -8273,7 +8273,7 @@
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_SHEDINJA"
+                "species": "SPECIES_PIDGEY"
               },
               {
                 "min_level": 3,
@@ -8298,7 +8298,7 @@
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_RATTATA"
+                "species": "SPECIES_NIDORAN_F"
               },
               {
                 "min_level": 4,
