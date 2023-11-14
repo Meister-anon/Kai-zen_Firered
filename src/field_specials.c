@@ -1547,7 +1547,7 @@ const u16 sBulbasaurBall[] = {
     SPECIES_RALTS, //resists fire
     SPECIES_MAGNEMITE,
     SPECIES_SCYTHER,
-    SPECIES_ODDISH,
+    SPECIES_HOPPIP, //too common, replacing oddish, replaced with hoppip, also a mon that saw significant changes
     SPECIES_FOMANTIS,
     SPECIES_SWINUB,
     SPECIES_FOONGUS, //doesnt work well, breaks relation of lists, hmm replace w voltorb, pokeball in a pokeball
@@ -1690,7 +1690,7 @@ const u16 sEeveelutionFireStarter[] =
 //so need this to just be run a single time when rival starter should first evolve
 const u16 RivalEeveelutionForPlayerStarter(void)
 {
-    u16 starter = VarGet(VAR_STARTER_MON);
+    u16 starter = GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
 
     if (starter == STARTER_BULBASAUR)
         return sEeveelutionGrassStarter[Random() % NELEMS(sEeveelutionGrassStarter)];
@@ -1737,6 +1737,204 @@ void SetRivalRandomStarterSpecies(void)
     VarSet(VAR_TEMP_8, sCharmanderBall[Random() % NELEMS(sCharmanderBall)]);
     VarSet(VAR_TEMP_9, sBulbasaurBall[Random() % NELEMS(sBulbasaurBall)]);
     VarSet(VAR_TEMP_A, sSquirtleBall[Random() % NELEMS(sSquirtleBall)]);
+}
+
+u8 ShouldResetRivalStarter(void)
+{
+    u16 Playerstarter = GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
+    u16 species,playermon;
+    u8 type1;
+    u8 type2;
+    u8 passedChecks = 0;
+    u16 AtkMultiplierType1 = UQ_4_12(1.0);
+    u16 AtkMultiplierType2 = UQ_4_12(1.0);
+    u16 DefenseMultiplierType1 = UQ_4_12(1.0);
+    u16 DefenseMultiplierType2 = UQ_4_12(1.0);
+
+    //u16 GetTypeModifier(moveType, defType); checked and all I actually need is this  replace movetype with attacking types type
+
+    if (Playerstarter == STARTER_BULBASAUR)
+    {
+        species = VarGet(VAR_TEMP_8);
+        playermon = VarGet(VAR_TEMP_5); //need change this to get final evo, check createnpctrainer for how to do, or not prob fine without it
+        type1 = gBaseStats[species].type1;
+        type2 = gBaseStats[species].type2;
+
+        if (species == SPECIES_EEVEE)
+            passedChecks = TRUE;
+        else
+        {
+            //check for if rival starter super against player starter
+            MulModifier(&AtkMultiplierType1, (GetTypeModifier(type1, gBaseStats[playermon].type1)));
+              if (gBaseStats[playermon].type1 != gBaseStats[playermon].type2)
+                MulModifier(&AtkMultiplierType1, (GetTypeModifier(type1, gBaseStats[playermon].type2)));
+
+            if (type2 != type1)
+            {
+                MulModifier(&AtkMultiplierType2, (GetTypeModifier(type2, gBaseStats[playermon].type1)));
+                if (gBaseStats[playermon].type1 != gBaseStats[playermon].type2)
+                    MulModifier(&AtkMultiplierType2, (GetTypeModifier(type2, gBaseStats[playermon].type2)));
+            }
+
+            //check for if rival starter resists player starter
+            MulModifier(&DefenseMultiplierType1, (GetTypeModifier(gBaseStats[playermon].type1, type1)));
+              if (type1 != type2)
+                MulModifier(&DefenseMultiplierType1, (GetTypeModifier(gBaseStats[playermon].type1, type2)));
+
+            if (gBaseStats[playermon].type2 != gBaseStats[playermon].type1)
+            {
+                MulModifier(&DefenseMultiplierType2, (GetTypeModifier(gBaseStats[playermon].type2, type1)));
+                if (type1 != type2)
+                    MulModifier(&DefenseMultiplierType2, (GetTypeModifier(gBaseStats[playermon].type2, type2)));
+            }
+
+            if (AtkMultiplierType1 < UQ_4_12(1.0)
+            || AtkMultiplierType2 < UQ_4_12(1.0)) //tring and trying but looks like just isn't working?
+                return TRUE;
+            
+            if (AtkMultiplierType1 >= UQ_4_12(1.0)
+            || AtkMultiplierType2 >= UQ_4_12(1.0))
+                ++passedChecks;
+
+            else if (DefenseMultiplierType1 <= UQ_4_12(1.0)
+            || DefenseMultiplierType2 <= UQ_4_12(1.0))
+                ++passedChecks;
+
+            /*||(GetTypeModifier(type2, gBaseStats[playermon].type1) >= UQ_4_12(1.0)
+            && GetTypeModifier(type2, gBaseStats[playermon].type2) >= UQ_4_12(1.0))) //check type 1 against type 1 and 2 of player, then check type 2 if either is passes continue
+                ++passedChecks;
+
+            else if ((GetTypeModifier(gBaseStats[playermon].type1, type1) <= UQ_4_12(1.0)
+            && GetTypeModifier(gBaseStats[playermon].type1, type2) <= UQ_4_12(1.0))
+            ||(GetTypeModifier(gBaseStats[playermon].type2, type1) <= UQ_4_12(1.0)
+            && GetTypeModifier(gBaseStats[playermon].type2, type2) <= UQ_4_12(1.0)))
+                ++passedChecks;*/
+            
+        }
+    }
+
+    else if (Playerstarter == STARTER_SQUIRTLE)
+    {
+        species = VarGet(VAR_TEMP_9);
+        playermon = VarGet(VAR_TEMP_6);
+        type1 = gBaseStats[species].type1;
+        type2 = gBaseStats[species].type2;
+
+        if (species == SPECIES_EEVEE)
+            passedChecks = TRUE;
+        else
+        {
+            //check for if rival starter super against player starter
+            MulModifier(&AtkMultiplierType1, (GetTypeModifier(type1, gBaseStats[playermon].type1)));
+              if (gBaseStats[playermon].type1 != gBaseStats[playermon].type2)
+                MulModifier(&AtkMultiplierType1, (GetTypeModifier(type1, gBaseStats[playermon].type2)));
+
+            if (type2 != type1)
+            {
+                MulModifier(&AtkMultiplierType2, (GetTypeModifier(type2, gBaseStats[playermon].type1)));
+                if (gBaseStats[playermon].type1 != gBaseStats[playermon].type2)
+                    MulModifier(&AtkMultiplierType2, (GetTypeModifier(type2, gBaseStats[playermon].type2)));
+            }
+
+            //check for if rival starter resists player starter
+            MulModifier(&DefenseMultiplierType1, (GetTypeModifier(gBaseStats[playermon].type1, type1)));
+              if (type1 != type2)
+                MulModifier(&DefenseMultiplierType1, (GetTypeModifier(gBaseStats[playermon].type1, type2)));
+
+            if (gBaseStats[playermon].type2 != gBaseStats[playermon].type1)
+            {
+                MulModifier(&DefenseMultiplierType2, (GetTypeModifier(gBaseStats[playermon].type2, type1)));
+                if (type1 != type2)
+                    MulModifier(&DefenseMultiplierType2, (GetTypeModifier(gBaseStats[playermon].type2, type2)));
+            }
+
+            
+            
+            if (AtkMultiplierType1 >= UQ_4_12(1.0)
+            || AtkMultiplierType2 >= UQ_4_12(1.0))
+                ++passedChecks;
+
+            else if (DefenseMultiplierType1 <= UQ_4_12(1.0)
+            || DefenseMultiplierType2 <= UQ_4_12(1.0))
+                ++passedChecks;
+
+            /*else if ((GetTypeModifier(gBaseStats[playermon].type1, type1) <= UQ_4_12(1.0)
+            && GetTypeModifier(gBaseStats[playermon].type1, type2) <= UQ_4_12(1.0))
+            ||(GetTypeModifier(gBaseStats[playermon].type2, type1) <= UQ_4_12(1.0)
+            && GetTypeModifier(gBaseStats[playermon].type2, type2) <= UQ_4_12(1.0)))
+                ++passedChecks; */
+            
+        }
+    }
+
+    else if (Playerstarter == STARTER_CHARMANDER)
+    {
+        species = VarGet(VAR_TEMP_A);
+        playermon = VarGet(VAR_TEMP_7);
+        type1 = gBaseStats[species].type1;
+        type2 = gBaseStats[species].type2;
+
+        if (species == SPECIES_EEVEE)
+            passedChecks = TRUE;
+        else
+        {
+            //check for if rival starter super against player starter
+            MulModifier(&AtkMultiplierType1, (GetTypeModifier(type1, gBaseStats[playermon].type1)));
+              if (gBaseStats[playermon].type1 != gBaseStats[playermon].type2)
+                MulModifier(&AtkMultiplierType1, (GetTypeModifier(type1, gBaseStats[playermon].type2)));
+
+            if (type2 != type1)
+            {
+                MulModifier(&AtkMultiplierType2, (GetTypeModifier(type2, gBaseStats[playermon].type1)));
+                if (gBaseStats[playermon].type1 != gBaseStats[playermon].type2)
+                    MulModifier(&AtkMultiplierType2, (GetTypeModifier(type2, gBaseStats[playermon].type2)));
+            }
+
+            //check for if rival starter resists player starter
+            MulModifier(&DefenseMultiplierType1, (GetTypeModifier(gBaseStats[playermon].type1, type1)));
+              if (type1 != type2)
+                MulModifier(&DefenseMultiplierType1, (GetTypeModifier(gBaseStats[playermon].type1, type2)));
+
+            if (gBaseStats[playermon].type2 != gBaseStats[playermon].type1)
+            {
+                MulModifier(&DefenseMultiplierType2, (GetTypeModifier(gBaseStats[playermon].type2, type1)));
+                if (type1 != type2)
+                    MulModifier(&DefenseMultiplierType2, (GetTypeModifier(gBaseStats[playermon].type2, type2)));
+            }
+
+            
+            //check for if rival starter super against player starter
+            if (AtkMultiplierType1 >= UQ_4_12(1.0)
+            || AtkMultiplierType2 >= UQ_4_12(1.0))
+                ++passedChecks;
+
+            //check for if rival starter resists player starter
+            else if (DefenseMultiplierType1 <= UQ_4_12(1.0)
+            || DefenseMultiplierType2 <= UQ_4_12(1.0))
+                ++passedChecks;
+
+            /*else if ((GetTypeModifier(gBaseStats[playermon].type1, type1) <= UQ_4_12(1.0)
+            && GetTypeModifier(gBaseStats[playermon].type1, type2) <= UQ_4_12(1.0))
+            ||(GetTypeModifier(gBaseStats[playermon].type2, type1) <= UQ_4_12(1.0)
+            && GetTypeModifier(gBaseStats[playermon].type2, type2) <= UQ_4_12(1.0)))
+                ++passedChecks;*/
+            
+        }
+    }
+
+    if (passedChecks) //if meets my conditions don't need to reset
+        return FALSE;
+    else
+        return TRUE;
+}
+
+void RivalStarterConditionCheck(void) //setup better but plan is make loop
+{
+    if (ShouldResetRivalStarter() == TRUE)
+        SetRivalRandomStarterSpecies();
+
+    //for (; ShouldResetRivalStarter() == TRUE; SetRivalRandomStarterSpecies()) //don't know if
+    //;
 }
 
 void SetSeenMon(void)

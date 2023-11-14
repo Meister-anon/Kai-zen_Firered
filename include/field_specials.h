@@ -47,5 +47,8 @@ void SetRivalSquirtleBall(void);
 void SetRivalCharmanderBall(void);*/
 void SetPlayerRandomStarterSpecies(void);
 void SetRivalRandomStarterSpecies(void);
+void RivalStarterConditionCheck(void); //loop for rival starter reset
+u8 ShouldResetRivalStarter(void); //check type relation with player and return true false, plan use loop to reset
+
 
 #endif // GUARD_FIELD_SPECIALS_H

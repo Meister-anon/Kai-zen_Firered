@@ -1220,6 +1220,7 @@ PalletTown_ProfessorOaksLab_EventScript_ChoseStarter:: @ 8169C74
 	compare VAR_RESULT, YES
 	goto_if_eq EventScript_GiveNicknameToStarter
 	compare VAR_RESULT, NO
+	@callnative RivalStarterConditionCheck	@still not working, attempt loop check, to ensure rival starter meets chets type advantage condition
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_RivalPicksStarter
 	end
 
