@@ -1686,6 +1686,20 @@ const u16 sEeveelutionFireStarter[] =
     SPECIES_SYLVEON
 };
 
+const u16 sEeveelutionListing[] =
+{
+    SPECIES_FLAREON,
+    SPECIES_GLACEON,
+    SPECIES_CEFIREON,
+    SPECIES_JOLTEON,
+    SPECIES_LEAFEON,
+    SPECIES_VAPOREON,
+    SPECIES_ESPEON,
+    SPECIES_UMBREON,
+    SPECIES_SYLVEON
+};
+
+
 #define STARTER_BULBASAUR   0
 #define STARTER_SQUIRTLE    1
 #define STARTER_CHARMANDER  2
@@ -1694,16 +1708,117 @@ const u16 sEeveelutionFireStarter[] =
 //as it runs random it can't be run each time rival encountered as evolution species would change each battle
 //so need this to just be run a single time when rival starter should first evolve
 //with changes done gonna need to redo eeveelution setup with logic just added to chose evolution based on type rather than random selection
-const u16 RivalEeveelutionForPlayerStarter(void)
+u16 RivalEeveelutionForPlayerStarter(void) //rather than this can just do like,   other set random from evelution list check fi its super if not loop and redo
 {
-    u16 starter = VarGet(VAR_STARTER_MON);
 
-    if (starter == STARTER_BULBASAUR)
+    u16 ChosenEvolution;
+    u16 viable_Eeveelution = 0;  //assign later make sure use plus 1 when using w random, as it'll be used, nvm w way I used dont need + 1
+    u16 PlayeStarterSpecies = VarGet(VAR_PLAYER_STARTER); //need get final evo  //this is the problem
+
+    
+    //assign random eeveelution compare against player final evo,
+    //if it fails super checks chose another random form and run again
+    for ((ChosenEvolution = Random() % NELEMS(sEeveelutionListing)); ; (ChosenEvolution = Random() % NELEMS(sEeveelutionListing)))
+    {
+        if (CheckSuperEffective(sEeveelutionListing[ChosenEvolution], GetFinalEvo(PlayeStarterSpecies)))
+        {
+            break;
+        }
+            
+    }
+    viable_Eeveelution = sEeveelutionListing[ChosenEvolution];
+
+    return viable_Eeveelution;
+
+    /*if (starter == STARTER_BULBASAUR)
         return sEeveelutionGrassStarter[Random() % NELEMS(sEeveelutionGrassStarter)];
     else if (starter == STARTER_SQUIRTLE)
         return sEeveelutionWaterStarter[Random() % NELEMS(sEeveelutionWaterStarter)];
     else if (starter == STARTER_CHARMANDER)
-        return sEeveelutionFireStarter[Random() % NELEMS(sEeveelutionFireStarter)];
+        return sEeveelutionFireStarter[Random() % NELEMS(sEeveelutionFireStarter)];*/
+}
+
+//mostly for eevee rival check, simple would only work for non branching evo
+//can possibly usefor move relearn nvm for that I need to read evo chart in reverse
+//put learnset of current species at top then loop species for target species that equals my species
+//set that species learnset to list then loop again to check for a mon that has that as the target species, if hit last value stop loop.
+//I know understand why this didn't work if you try to evolve a mon withuot an evo
+//it doesnt return species none, it'll just return the same species, i.e trying to evolve a charizard will just return a charizard
+//so to fix it I need to make my break condition species != targetspecies
+//ok nvm I had that wrong, I was returning species not target species, 
+//when you try to evolve a mon that can't evolve it seems to return garbage data?
+//...ok it seems to return species none...
+u16 GetFinalEvo(u16 species) //well least it works now
+{
+
+    u16 targetSpecies = gEvolutionTable[species][0].targetSpecies;
+
+    for (; targetSpecies != SPECIES_NONE; targetSpecies = gEvolutionTable[species][0].targetSpecies)
+    {
+        species = targetSpecies;        
+    }
+
+    return species; //think should loop first evo method encountered for a species, and go until it can't find an evolution, then stop and return species
+}
+
+u8 CheckSuperEffective(u16 Atk_Species, u16 Target_Species) //is super effective
+{
+    u8 passedChecks = 0;
+    u8 Atktype1 = gBaseStats[Atk_Species].type1;
+    u8 Atktype2 = gBaseStats[Atk_Species].type2;
+    u8 targetType1 = gBaseStats[Target_Species].type1;
+    u8 targetType2 = gBaseStats[Target_Species].type2;
+    u16 AtkMultiplierType1 = UQ_4_12(1.0);
+    u16 AtkMultiplierType2 = UQ_4_12(1.0);
+    u16 DefenseMultiplierType1 = UQ_4_12(1.0);
+    u16 DefenseMultiplierType2 = UQ_4_12(1.0);
+
+
+            //check for if rival starter super against player starter
+            MulModifier(&AtkMultiplierType1, (GetTypeModifier(Atktype1, targetType1)));
+              if (targetType1 != targetType2)
+                MulModifier(&AtkMultiplierType1, (GetTypeModifier(Atktype1, targetType2)));
+
+            if (Atktype2 != Atktype1)
+            {
+                MulModifier(&AtkMultiplierType2, (GetTypeModifier(Atktype2, targetType1)));
+                if (targetType1 != targetType2)
+                    MulModifier(&AtkMultiplierType2, (GetTypeModifier(Atktype2, targetType2)));
+            }
+
+            //check for if rival starter resists player starter
+            MulModifier(&DefenseMultiplierType1, (GetTypeModifier(targetType1, Atktype1)));
+              if (Atktype1 != Atktype2)
+                MulModifier(&DefenseMultiplierType1, (GetTypeModifier(targetType1, Atktype2)));
+
+            if (targetType2 != targetType1)
+            {
+                MulModifier(&DefenseMultiplierType2, (GetTypeModifier(targetType2, Atktype1)));
+                if (Atktype1 != Atktype2)
+                    MulModifier(&DefenseMultiplierType2, (GetTypeModifier(targetType2, Atktype2)));
+            }
+
+            
+            //check for if rival starter super against player starter
+            if (AtkMultiplierType1 > UQ_4_12(1.0)
+            || AtkMultiplierType2 > UQ_4_12(1.0))
+                ++passedChecks;
+
+            if (targetType1 == TYPE_FAIRY)
+            {
+                if (DefenseMultiplierType1 < UQ_4_12(1.0)
+                || DefenseMultiplierType2 < UQ_4_12(1.0))
+                ++passedChecks;
+            } //since umbreon is only option for super against fairy, and umbreon is also weak against fairy, this adds lefeon and flareon to the list
+
+            //check for if rival starter resists player starter
+            /*else if (DefenseMultiplierType1 <= UQ_4_12(1.0)
+            || DefenseMultiplierType2 <= UQ_4_12(1.0))
+                ++passedChecks;*/
+            if (passedChecks)
+                return TRUE;
+            else
+                return FALSE;
 }
 
 
@@ -1748,6 +1863,7 @@ void SetRivalRandomStarterSpecies(void)
 u8 ShouldResetRivalStarter(void)
 {
     u8 Playerstarter = VarGet(VAR_STARTER_MON);
+    u16 PlayeStarterSpecies = VarGet(VAR_PLAYER_STARTER);  //only need to prevent double eevee
     u16 species,playermon;
     u8 type1;
     u8 type2;
@@ -1761,12 +1877,14 @@ u8 ShouldResetRivalStarter(void)
 
     if (Playerstarter == STARTER_BULBASAUR)
     {
-        species = VarGet(VAR_TEMP_8);
-        playermon = VarGet(VAR_TEMP_5); //need change this to get final evo, check createnpctrainer for how to do, or not prob fine without it
+        species = GetFinalEvo(VarGet(VAR_TEMP_8));
+        playermon = GetFinalEvo(VarGet(VAR_TEMP_5)); //need change this to get final evo, check createnpctrainer for how to do, or not prob fine without it
         type1 = gBaseStats[species].type1;
         type2 = gBaseStats[species].type2;
 
-        if (species == SPECIES_EEVEE) //looking at how gettypemod is usuallly used, its assigned to a value and that value is then used w mulmodifier
+        if (species == SPECIES_EEVEE && PlayeStarterSpecies == SPECIES_EEVEE)
+            passedChecks = FALSE;
+        else if (species == SPECIES_EEVEE)
             passedChecks = TRUE;
         else
         {
@@ -1819,12 +1937,14 @@ u8 ShouldResetRivalStarter(void)
 
     else if (Playerstarter == STARTER_SQUIRTLE)
     {
-        species = VarGet(VAR_TEMP_9);
-        playermon = VarGet(VAR_TEMP_6);
+        species = GetFinalEvo(VarGet(VAR_TEMP_9));
+        playermon = GetFinalEvo(VarGet(VAR_TEMP_6));
         type1 = gBaseStats[species].type1;
         type2 = gBaseStats[species].type2;
 
-        if (species == SPECIES_EEVEE)
+        if (species == SPECIES_EEVEE && PlayeStarterSpecies == SPECIES_EEVEE)
+            passedChecks = FALSE;
+        else if (species == SPECIES_EEVEE)
             passedChecks = TRUE;
         else
         {
@@ -1876,12 +1996,14 @@ u8 ShouldResetRivalStarter(void)
 
     else if (Playerstarter == STARTER_CHARMANDER)
     {
-        species = VarGet(VAR_TEMP_A);
-        playermon = VarGet(VAR_TEMP_7);
+        species = GetFinalEvo(VarGet(VAR_TEMP_A));
+        playermon = GetFinalEvo(VarGet(VAR_TEMP_7));
         type1 = gBaseStats[species].type1;
         type2 = gBaseStats[species].type2;
 
-        if (species == SPECIES_EEVEE)
+        if (species == SPECIES_EEVEE && PlayeStarterSpecies == SPECIES_EEVEE)
+            passedChecks = FALSE;
+        else if (species == SPECIES_EEVEE)
             passedChecks = TRUE;
         else
         {

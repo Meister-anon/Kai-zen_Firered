@@ -17,7 +17,7 @@ extern const u16 sTypeExceptions[17]; //update this value when adding to the arr
 s32 CountDigits(s32 number);
 void TV_PrintIntToStringVar(u8 varidx, s32 number);
 u16 GetStarterSpecies(void);
-const u16 RivalEeveelutionForPlayerStarter(void);
+u16 RivalEeveelutionForPlayerStarter(void);
 void StopPokemonLeagueLightingEffectTask(void);
 void nullsub_60(void);
 void nullsub_61(void);
@@ -49,6 +49,8 @@ void SetPlayerRandomStarterSpecies(void);
 void SetRivalRandomStarterSpecies(void);
 void RivalStarterConditionCheck(void); //loop for rival starter reset
 u8 ShouldResetRivalStarter(void); //check type relation with player and return true false, plan use loop to reset
+u16 GetFinalEvo(u16 species); //very basic, does not take into account branching evos, it only uses the first method
+u8 CheckSuperEffective(u16 Atk_Species, u16 Target_Species); //check given species and measures super effectiveness given base stat types
 
 
 #endif // GUARD_FIELD_SPECIALS_H

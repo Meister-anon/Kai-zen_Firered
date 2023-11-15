@@ -3426,7 +3426,7 @@ static bool32 CanEvolve(u32 species) //default use for eviolite but will also us
         if (gEvolutionTable[species][i].method
          && gEvolutionTable[species][i].method != EVO_MEGA_EVOLUTION
          && gEvolutionTable[species][i].method != EVO_MOVE_MEGA_EVOLUTION
-         && gEvolutionTable[species][i].method != EVO_PRIMAL_REVERSION)
+         && gEvolutionTable[species][i].method != EVO_PRIMAL_REVERSION) //technically true if it has a listed method it can evolve
             return TRUE;
     }
     return FALSE;

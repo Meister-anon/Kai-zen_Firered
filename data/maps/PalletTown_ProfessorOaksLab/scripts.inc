@@ -1309,6 +1309,7 @@ PalletTown_ProfessorOaksLab_EventScript_BulbasaurBall:: @ 8169BAB
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 0
 	copyvar PLAYER_STARTER_SPECIES, VAR_TEMP_5
+	copyvar VAR_PLAYER_STARTER, VAR_TEMP_5
 	copyvar VAR_STARTER_MON, PLAYER_STARTER_NUM
 	callnative RivalStarterConditionCheck	@attempt loop check, to ensure rival starter meets chets type advantage condition
 	copyvar VAR_RIVAL_STARTER, VAR_TEMP_8
@@ -1326,6 +1327,7 @@ PalletTown_ProfessorOaksLab_EventScript_SquirtleBall:: @ 8169D78
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 1
 	copyvar PLAYER_STARTER_SPECIES, VAR_TEMP_6
+	copyvar VAR_PLAYER_STARTER, VAR_TEMP_6
 	copyvar VAR_STARTER_MON, PLAYER_STARTER_NUM
 	callnative RivalStarterConditionCheck	@attempt loop check, to ensure rival starter meets chets type advantage condition
 	copyvar VAR_RIVAL_STARTER, VAR_TEMP_9
@@ -1343,6 +1345,7 @@ PalletTown_ProfessorOaksLab_EventScript_CharmanderBall:: @ 8169DAE
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 2
 	copyvar PLAYER_STARTER_SPECIES, VAR_TEMP_7
+	copyvar VAR_PLAYER_STARTER, VAR_TEMP_7
 	copyvar VAR_STARTER_MON, PLAYER_STARTER_NUM
 	callnative RivalStarterConditionCheck	@attempt loop check, to ensure rival starter meets chets type advantage condition
 	copyvar VAR_RIVAL_STARTER, VAR_TEMP_A
