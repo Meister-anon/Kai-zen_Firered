@@ -4539,7 +4539,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(45, 30, 30, 30, 55, 30),
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_FIRE,
+        .type2 = TYPE_NORMAL,
         .catchRate = 235,
         .expYield = 36,
         //.evYield_SpAttack = 1,
@@ -22987,7 +22987,7 @@ const struct BaseStats gBaseStats[] =
         49
         ),
         .type1 = TYPE_STEEL,
-        .type2 = TYPE_STEEL,
+        .type2 = TYPE_NORMAL,
         .catchRate = 190,
         .expYield = 66,
         //.evYield_Attack = 1,
@@ -23002,7 +23002,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MINERAL,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHEER_FORCE, ABILITY_NONE},
-            .abilityHidden = {ABILITY_HEAVY_METAL, ABILITY_NONE},
+            .abilityHidden = {ABILITY_HEAVY_METAL, ABILITY_STALL},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },
@@ -23019,7 +23019,7 @@ const struct BaseStats gBaseStats[] =
         69
         ),
         .type1 = TYPE_STEEL,
-        .type2 = TYPE_STEEL,
+        .type2 = TYPE_NORMAL,
         .catchRate = 90,
         .expYield = 175,
         //.evYield_Attack = 2,
@@ -23034,7 +23034,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_MINERAL,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SHEER_FORCE, ABILITY_NONE},
-            .abilityHidden = {ABILITY_HEAVY_METAL, ABILITY_NONE},
+            .abilityHidden = {ABILITY_HEAVY_METAL, ABILITY_STALL},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
     },

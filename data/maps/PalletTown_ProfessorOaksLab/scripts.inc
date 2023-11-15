@@ -1199,7 +1199,7 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmCharmander:: @ 8169C52
 PalletTown_ProfessorOaksLab_EventScript_DeclinedStarter:: @ 8169C71
 	erasemonpic
 	release
-	@callnative SetPlayerRandomStarterSpecies	@for test, remove this for final version  vsonic
+	@callnative SetPlayerRandomStarterSpecies	@for test, remove this for final version  vsonic use bulbasaur ball, go to swinub or ditto
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_ChoseStarter:: @ 8169C74
@@ -1220,7 +1220,6 @@ PalletTown_ProfessorOaksLab_EventScript_ChoseStarter:: @ 8169C74
 	compare VAR_RESULT, YES
 	goto_if_eq EventScript_GiveNicknameToStarter
 	compare VAR_RESULT, NO
-	@callnative RivalStarterConditionCheck	@still not working, attempt loop check, to ensure rival starter meets chets type advantage condition
 	goto_if_eq PalletTown_ProfessorOaksLab_EventScript_RivalPicksStarter
 	end
 
@@ -1310,6 +1309,8 @@ PalletTown_ProfessorOaksLab_EventScript_BulbasaurBall:: @ 8169BAB
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 0
 	copyvar PLAYER_STARTER_SPECIES, VAR_TEMP_5
+	copyvar VAR_STARTER_MON, PLAYER_STARTER_NUM
+	callnative RivalStarterConditionCheck	@attempt loop check, to ensure rival starter meets chets type advantage condition
 	copyvar VAR_RIVAL_STARTER, VAR_TEMP_8
 	setvar RIVAL_STARTER_ID, LOCALID_CHARMANDER_BALL
 	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3
@@ -1325,6 +1326,8 @@ PalletTown_ProfessorOaksLab_EventScript_SquirtleBall:: @ 8169D78
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 1
 	copyvar PLAYER_STARTER_SPECIES, VAR_TEMP_6
+	copyvar VAR_STARTER_MON, PLAYER_STARTER_NUM
+	callnative RivalStarterConditionCheck	@attempt loop check, to ensure rival starter meets chets type advantage condition
 	copyvar VAR_RIVAL_STARTER, VAR_TEMP_9
 	setvar RIVAL_STARTER_ID, LOCALID_BULBASAUR_BALL
 	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3
@@ -1340,6 +1343,8 @@ PalletTown_ProfessorOaksLab_EventScript_CharmanderBall:: @ 8169DAE
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 2
 	copyvar PLAYER_STARTER_SPECIES, VAR_TEMP_7
+	copyvar VAR_STARTER_MON, PLAYER_STARTER_NUM
+	callnative RivalStarterConditionCheck	@attempt loop check, to ensure rival starter meets chets type advantage condition
 	copyvar VAR_RIVAL_STARTER, VAR_TEMP_A
 	setvar RIVAL_STARTER_ID, LOCALID_SQUIRTLE_BALL
 	compare VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3

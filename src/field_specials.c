@@ -1539,21 +1539,23 @@ const u16 sBulbasaurBall[] = {
     SPECIES_CHESPIN,
     SPECIES_ROWLET,
     SPECIES_GROOKEY,
-    SPECIES_AIPOM, //doesnt make sense I just want to show off, would replace w voltorb but you can get those easily, so keep 
+    SPECIES_AIPOM, //doesnt make sense I just want to show off, would replace w voltorb but you can get those easily, so keep - also not normally available
     SPECIES_PARAS,
-    SPECIES_VULPIX_ALOLAN,
-    SPECIES_DITTO,  //replaced tyrogue w ditto, show off changed transform mechanics, 
+    SPECIES_VULPIX_ALOLAN, //will put ditto in squirtle instead, or just replace it, but keep for now as its best tester for loop as only 3 mon should break out of loop
+    SPECIES_SEEDOT,  //replaced tyrogue w ditto, show off changed transform mechanics, /ditto doesn't make sense here, breaks type check as it resists fire
     SPECIES_EEVEE, //free eevee  lets go style
-    SPECIES_RALTS, //resists fire
+    SPECIES_RALTS, //resists fire - no it doesn't its resisted by fire, I keep confusin the fairy fire relation, but fairy is bad against fire
     SPECIES_MAGNEMITE,
+    SPECIES_SUNKERN,
     SPECIES_SCYTHER,
+    SPECIES_MINCCINO,
     SPECIES_HOPPIP, //too common, replacing oddish, replaced with hoppip, also a mon that saw significant changes
     SPECIES_FOMANTIS,
-    SPECIES_SWINUB,
-    SPECIES_FOONGUS, //doesnt work well, breaks relation of lists, hmm replace w voltorb, pokeball in a pokeball
+    SPECIES_SPRITZEE, //replace
+    SPECIES_FOONGUS, //doesnt work well, breaks relation of lists, hmm replace w voltorb, pokeball in a pokeball - replaced w foongus instead as voltorbn common
     SPECIES_TOGEDEMARU
     //LIST_END
-}; //this list matches the best the others need more work
+}; //this list matches the best the others need more work -think will move swinub and ditto to squirtle list, and just add 2 to other lists
 
 //should beat/resist fire, or be weak to/against grass
 const u16 sSquirtleBall[] = {
@@ -1570,13 +1572,15 @@ const u16 sSquirtleBall[] = {
     SPECIES_EEVEE,
     SPECIES_TEDDIURSA, //replaced lotad
     SPECIES_PHANPY,
-    SPECIES_AZURILL,
+    SPECIES_MARILL, //I like azurill but others maybe not, so replace w just marill, as it works for type checklist, while marill doesn't as its not watter
     SPECIES_ROCKRUFF,
     SPECIES_SKITTY, //with ghost change skitty would be better in squirtle group, I just want it there, starter doesn't work well as not ghost until evoles,
     SPECIES_SANDSHREW, //resist fire weak to grass, but electric in grass ball breaks list
+    SPECIES_SWINUB,
     SPECIES_WOOPER,
     SPECIES_BUNNELBY, //works but I like SPECIES_GOLETT better? is more interesting/popular , replaced rogenrolla //oh right didn't use cuz ghost was free early game wins
     SPECIES_LOTAD,  //REPLACED wailmer
+    SPECIES_DITTO,
     SPECIES_SPHEAL
     //LIST_END
 };
@@ -1596,10 +1600,12 @@ const u16 sCharmanderBall[] = {
     SPECIES_EEVEE,
     SPECIES_MURKROW,    //beats grass no relation to water
     SPECIES_LICKITUNG,
+    SPECIES_RIOLU,
     SPECIES_PONYTA,
     SPECIES_NUMEL, //removed litwick put them in laverge tower
     SPECIES_NOIBAT, //replaced tediursa, looks like a starter but doesn't quite match type since it resists water, but keeping
     SPECIES_FLETCHLING,
+    SPECIES_CUFANT,
     SPECIES_MILTANK,
     SPECIES_GROWLITHE_HISUIAN,    //didn't have graphics just added
     SPECIES_DODUO,  //flyign so beats grass no affiliation to water
@@ -1618,7 +1624,6 @@ const u16 sCharmanderBall[] = {
 const u16 sTypeExceptions[] = {
     SPECIES_BINACLE,
     SPECIES_RALTS,
-    SPECIES_AZURILL,
     SPECIES_SPHEAL,
     SPECIES_MURKROW,
     SPECIES_LICKITUNG,
@@ -1688,9 +1693,10 @@ const u16 sEeveelutionFireStarter[] =
 //condition for this function to run if rival starter species eevee, and var species is currently still eevee.
 //as it runs random it can't be run each time rival encountered as evolution species would change each battle
 //so need this to just be run a single time when rival starter should first evolve
+//with changes done gonna need to redo eeveelution setup with logic just added to chose evolution based on type rather than random selection
 const u16 RivalEeveelutionForPlayerStarter(void)
 {
-    u16 starter = GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
+    u16 starter = VarGet(VAR_STARTER_MON);
 
     if (starter == STARTER_BULBASAUR)
         return sEeveelutionGrassStarter[Random() % NELEMS(sEeveelutionGrassStarter)];
@@ -1741,7 +1747,7 @@ void SetRivalRandomStarterSpecies(void)
 
 u8 ShouldResetRivalStarter(void)
 {
-    u16 Playerstarter = GetStarterSpeciesById(VarGet(VAR_STARTER_MON));
+    u8 Playerstarter = VarGet(VAR_STARTER_MON);
     u16 species,playermon;
     u8 type1;
     u8 type2;
@@ -1760,7 +1766,7 @@ u8 ShouldResetRivalStarter(void)
         type1 = gBaseStats[species].type1;
         type2 = gBaseStats[species].type2;
 
-        if (species == SPECIES_EEVEE)
+        if (species == SPECIES_EEVEE) //looking at how gettypemod is usuallly used, its assigned to a value and that value is then used w mulmodifier
             passedChecks = TRUE;
         else
         {
@@ -1788,27 +1794,25 @@ u8 ShouldResetRivalStarter(void)
                     MulModifier(&DefenseMultiplierType2, (GetTypeModifier(gBaseStats[playermon].type2, type2)));
             }
 
-            if (AtkMultiplierType1 < UQ_4_12(1.0)
-            || AtkMultiplierType2 < UQ_4_12(1.0)) //tring and trying but looks like just isn't working?
-                return TRUE;
             
+            //check for if rival starter super against player starter
             if (AtkMultiplierType1 >= UQ_4_12(1.0)
             || AtkMultiplierType2 >= UQ_4_12(1.0))
                 ++passedChecks;
 
+            //check for if rival starter resists player starter
             else if (DefenseMultiplierType1 <= UQ_4_12(1.0)
             || DefenseMultiplierType2 <= UQ_4_12(1.0))
                 ++passedChecks;
 
-            /*||(GetTypeModifier(type2, gBaseStats[playermon].type1) >= UQ_4_12(1.0)
-            && GetTypeModifier(type2, gBaseStats[playermon].type2) >= UQ_4_12(1.0))) //check type 1 against type 1 and 2 of player, then check type 2 if either is passes continue
-                ++passedChecks;
+            //final catches to ensure rival is not resisted by player
+            if (AtkMultiplierType1 < UQ_4_12(1.0)
+            && AtkMultiplierType2 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
 
-            else if ((GetTypeModifier(gBaseStats[playermon].type1, type1) <= UQ_4_12(1.0)
-            && GetTypeModifier(gBaseStats[playermon].type1, type2) <= UQ_4_12(1.0))
-            ||(GetTypeModifier(gBaseStats[playermon].type2, type1) <= UQ_4_12(1.0)
-            && GetTypeModifier(gBaseStats[playermon].type2, type2) <= UQ_4_12(1.0)))
-                ++passedChecks;*/
+            else if (AtkMultiplierType2 < UQ_4_12(1.0)
+            && AtkMultiplierType1 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
             
         }
     }
@@ -1848,21 +1852,24 @@ u8 ShouldResetRivalStarter(void)
                     MulModifier(&DefenseMultiplierType2, (GetTypeModifier(gBaseStats[playermon].type2, type2)));
             }
 
-            
-            
+            //check for if rival starter super against player starter
             if (AtkMultiplierType1 >= UQ_4_12(1.0)
             || AtkMultiplierType2 >= UQ_4_12(1.0))
                 ++passedChecks;
 
+            //check for if rival starter resists player starter
             else if (DefenseMultiplierType1 <= UQ_4_12(1.0)
             || DefenseMultiplierType2 <= UQ_4_12(1.0))
                 ++passedChecks;
 
-            /*else if ((GetTypeModifier(gBaseStats[playermon].type1, type1) <= UQ_4_12(1.0)
-            && GetTypeModifier(gBaseStats[playermon].type1, type2) <= UQ_4_12(1.0))
-            ||(GetTypeModifier(gBaseStats[playermon].type2, type1) <= UQ_4_12(1.0)
-            && GetTypeModifier(gBaseStats[playermon].type2, type2) <= UQ_4_12(1.0)))
-                ++passedChecks; */
+            //final catches to ensure rival is not resisted by player
+            if (AtkMultiplierType1 < UQ_4_12(1.0)
+            && AtkMultiplierType2 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
+
+            else if (AtkMultiplierType2 < UQ_4_12(1.0)
+            && AtkMultiplierType1 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
             
         }
     }
@@ -1913,28 +1920,37 @@ u8 ShouldResetRivalStarter(void)
             || DefenseMultiplierType2 <= UQ_4_12(1.0))
                 ++passedChecks;
 
-            /*else if ((GetTypeModifier(gBaseStats[playermon].type1, type1) <= UQ_4_12(1.0)
-            && GetTypeModifier(gBaseStats[playermon].type1, type2) <= UQ_4_12(1.0))
-            ||(GetTypeModifier(gBaseStats[playermon].type2, type1) <= UQ_4_12(1.0)
-            && GetTypeModifier(gBaseStats[playermon].type2, type2) <= UQ_4_12(1.0)))
-                ++passedChecks;*/
+            //final catches to ensure rival is not resisted by player
+            if (AtkMultiplierType1 < UQ_4_12(1.0)
+            && AtkMultiplierType2 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
+
+            else if (AtkMultiplierType2 < UQ_4_12(1.0)
+            && AtkMultiplierType1 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
             
         }
     }
 
     if (passedChecks) //if meets my conditions don't need to reset
+    {
         return FALSE;
+    }        
     else
+    {
         return TRUE;
+    }
 }
 
-void RivalStarterConditionCheck(void) //setup better but plan is make loop
+//works issue was just it was in the wrong place within the script
+void RivalStarterConditionCheck(void) 
 {
-    if (ShouldResetRivalStarter() == TRUE)
-        SetRivalRandomStarterSpecies();
 
-    //for (; ShouldResetRivalStarter() == TRUE; SetRivalRandomStarterSpecies()) //don't know if
-    //;
+    while(ShouldResetRivalStarter() == TRUE)
+    {
+        SetRivalRandomStarterSpecies();
+    }
+    
 }
 
 void SetSeenMon(void)
