@@ -346,7 +346,7 @@ But it's only for enemy mons, to do the same with the player you would just swap
 * also do same for electric based on doduo, idea of flying weakness to electricity
 * is them flying high in the air makes them more likely to be hit by lightning
 * but doduo can't fly, so that doesn't make sense, so to account for that,
-* make all grounded flying types neutral to electricity,
+* make all grounded flying types neutral to electricity, - done
 *
 * added that along with tweaking fossil typing for early gen fossils
 * also adjusted primary status setting status moves to add type checks
@@ -1829,6 +1829,30 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
    also think will change castform to normal ghost to make easier to switch in, and remove its ghost type when it transforms
    so use set_battle_type2 macro -done
+
+   -wait that makes less sense than it just keeping the ghost part of  its typing, normal type boosts its dmg,
+   //but thematically ghost is nicer, forecast is also a play on casper the friendly ghost
+   -plus i undid the joat stacking, so there isn't really any benefit
+   -well no I can keep stab no matter what form I'm in so that's much better.
+   //think also make castform imune to the weather dmg drops, pretty much out of necessity, since forecast is changing weather
+   //will link to forecast not castform, just for sake of strategizing, hmm or maybe species instead? yeah ability - done immune to all weather based dmg drops
+
+   -extra plan make holding weather stones, decide what weather gets set, so instead of extending duration
+   //it'll double predict the same weather essentially doubling normal duration, and since idea is that its not summoning weather
+   //castform would be only other mon that uses weather timer, would make castform THE weather setter, but that's fine as its not op
+
+   - done fixed issues with 1st version of forecast that caused freezes, as well as healing abilities like icebody rain dish that had the wrong script ending
+   redid forecast with new setup in mind works perfectly so far.
+   custom strings are still to do and further testing
+   redid cherrim now a grass fire type when blooming
+   -changed starters and flag renames also attempted fixing some issues with calculatebasedamage function, still in progress
+
+   also of note, the wild_encounters.json holds data for both version of game, fire red & leaf green
+   to save space consolidate those things eventually so whatever version people build they get same encounters
+
+  -putting here cuz can't find pc note rn
+  but change pc access in overworld to not allow putting mon in pc that are fainted, to avoid trivializing the game
+
 
  questioning whether, I should really make joat stack with stab?  its a strong effect and makes normal typing desirable as a boost
  but on the other hand why would you  ever use non stab moves, and the entire point is to capitalize on their flexibility
@@ -4034,7 +4058,8 @@ goto EVOLUTION_LOGIC
 * 
 * -ok yeah shelving this ability prankster works fine, and over abundance of flinch would be un fun
 * 
-* look at danny phantom abilities?
+* look at danny phantom abilities? ghostly wail XD  base 120 dual hit, or base 100 ghost version of heatwave, well can make 120 I guess since ghost doesn't get super?
+* bp 10
 * 
 * BUFF for Golisopod Emergency Exit, rather than it being the same as wimp out,
 * keep main effect but tweak it to be more offensive instead of force switch on hp threshold.

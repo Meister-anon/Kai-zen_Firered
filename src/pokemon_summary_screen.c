@@ -141,6 +141,10 @@ static void PokeSum_UpdateMonMarkingsAnim(void);
 static s8 SeekToNextMonInSingleParty(s8);
 static s8 SeekToNextMonInMultiParty(s8);
 
+
+#define SINGLE_BATTLE   (gMain.inBattle && singles)
+#define DOUBLE_BATTLE   (gMain.inBattle && doubles)
+#define TRIPLE_ROTATION (gMain.inBattle && rotation) //update for triple battle add for ability desc list too, need defines from below
 struct PokemonSummaryScreenData
 {
     u16 bg1TilemapBuffer[0x800];
@@ -2337,8 +2341,8 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
     {
         u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
         curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
-        slot1_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_PERSONALITY);
-        slot2_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_PERSONALITY);
+        slot1_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]], MON_DATA_PERSONALITY);
+        slot2_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)]], MON_DATA_PERSONALITY);
         slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY);
 
         if (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TWO_OPPONENTS))) //found fix, setup before had wrong operation now it works
@@ -2350,7 +2354,7 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[0], gAbilityNames[abilitydatabattler]);
                 StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[0], gAbilityDescriptionPointers[abilitydatabattler]);
             }
-            else //party
+            if ((curr_personality != slot1_personality)) //party
             {
                 abilitydataparty = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[3], gAbilityNames[abilitydataparty]);
@@ -2453,8 +2457,17 @@ static void BufferMonMoves(void)
 static void BufferMonMoveI(u8 i)//think this is the menu/function I need has move index and pp ony one in file that uses gMoveNames //transform need change
 {
     u32 powerBits;
-    u32 hiddenpower,power;
+    u32 hiddenpower,power,singles,doubles,rotation;
+    u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
+    curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
+    slot1_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]], MON_DATA_PERSONALITY);
+    slot2_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)]], MON_DATA_PERSONALITY);
+    slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY); //eventually for triple/ rotation battles
     power = gBattleMoves[sMonSummaryScreen->moveIds[i]].power;
+    singles = (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TRIPLE | BATTLE_TYPE_TWO_OPPONENTS)));
+    doubles = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE);
+    rotation = (gBattleTypeFlags & BATTLE_TYPE_ROTATION);
+
     if (i < 4)
         sMonSummaryScreen->moveIds[i] = GetMonMoveBySlotId(&sMonSummaryScreen->currentMon, i);
 
@@ -2485,10 +2498,62 @@ static void BufferMonMoveI(u8 i)//think this is the menu/function I need has mov
         //type |= F_DYNAMIC_TYPE_1 | F_DYNAMIC_TYPE_2; //no idea why removing this fixed it but guess makes sense?
         sMonSummaryScreen->moveTypes[i] = type;
     }
-    else 
-        sMonSummaryScreen->moveTypes[i] = gBattleMoves[sMonSummaryScreen->moveIds[i]].type;// if works right should set hidden power to display its type in summary screen
+    else
+        sMonSummaryScreen->moveTypes[i] = gBattleMoves[sMonSummaryScreen->moveIds[i]].type;
+    /*else if (sMonSummaryScreen->moveIds[i] == MOVE_WEATHER_BALL && (WEATHER_HAS_EFFECT))
+    {
+         if (gBattleWeather & WEATHER_RAIN_ANY) //TEST TO MAKE SURE WORKS - works
+            sMonSummaryScreen->moveTypes[i] = TYPE_WATER;
+        else if (gBattleWeather & WEATHER_SANDSTORM_ANY)
+            sMonSummaryScreen->moveTypes[i] = TYPE_ROCK;
+        else if (gBattleWeather & WEATHER_SUN_ANY)
+            sMonSummaryScreen->moveTypes[i] = TYPE_FIRE;
+        else if (gBattleWeather & WEATHER_HAIL_ANY)
+            sMonSummaryScreen->moveTypes[i] = TYPE_ICE;
+        else
+            sMonSummaryScreen->moveTypes[i] = TYPE_NORMAL;
+    }*/
+    //else
+      //  sMonSummaryScreen->moveTypes[i] = gBattleMoves[sMonSummaryScreen->moveIds[i]].type;// if works right should set hidden power to display its type in summary screen
         //was playing on keeping this unknown to test but realistic people won't want to use it 
         //if they don't know what its doing
+
+    /*else if (SINGLE_BATTLE)
+    {
+        if ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]], MON_DATA_HP))
+        {
+            if (gBattleMoves[sMonSummaryScreen->moveIds[i]].type != ReturnMoveType(sMonSummaryScreen->moveIds[i], gBattlerAttacker))
+                sMonSummaryScreen->moveTypes[i] = ReturnMoveType(sMonSummaryScreen->moveIds[i], gBattlerAttacker);
+            
+        }
+        else
+            sMonSummaryScreen->moveTypes[i] = gBattleMoves[sMonSummaryScreen->moveIds[i]].type;
+            
+    }
+    else if (DOUBLE_BATTLE)
+    {
+        if ((curr_personality == slot1_personality)
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]], MON_DATA_HP))
+        {
+            if (gBattleMoves[sMonSummaryScreen->moveIds[i]].type != ReturnMoveType(sMonSummaryScreen->moveIds[i], gBattlerAttacker))
+                sMonSummaryScreen->moveTypes[i] = ReturnMoveType(sMonSummaryScreen->moveIds[i], gBattlerAttacker);
+            else
+                sMonSummaryScreen->moveTypes[i] = gBattleMoves[sMonSummaryScreen->moveIds[i]].type;
+        }
+        //get battler position then use attacker or partner attacker
+        else if ((curr_personality == slot2_personality)
+            && GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)]], MON_DATA_HP))
+        {
+            if (gBattleMoves[sMonSummaryScreen->moveIds[i]].type != ReturnMoveType(sMonSummaryScreen->moveIds[i], BATTLE_PARTNER(gBattlerAttacker)))
+                sMonSummaryScreen->moveTypes[i] = ReturnMoveType(sMonSummaryScreen->moveIds[i], BATTLE_PARTNER(gBattlerAttacker));
+            else
+                sMonSummaryScreen->moveTypes[i] = gBattleMoves[sMonSummaryScreen->moveIds[i]].type;
+        }
+        else
+            sMonSummaryScreen->moveTypes[i] = gBattleMoves[sMonSummaryScreen->moveIds[i]].type;
+    }*/
+    
 
     sMonSummaryScreen->numMoves++;
     StringCopy(sMonSummaryScreen->summary.moveNameStrBufs[i], gMoveNames[sMonSummaryScreen->moveIds[i]]);
@@ -3450,14 +3515,18 @@ static void PokeSum_PrintAbilityDataOrMoveTypes(void)
 
 //think I was planning to run move values & ability values into a single function?
 //could work/make sense
+//not working
+//works until you have to switch battlers inbattle
 static void PokeSum_PrintAbilityNameAndDesc(void)
 {
 
     u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
-    curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
-    slot1_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_PERSONALITY);
-    slot2_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_PERSONALITY);
-    slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY); //eventually for triple/ rotation battles
+    u32 singles, doubles, rotation;
+    
+
+    singles = (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TRIPLE | BATTLE_TYPE_TWO_OPPONENTS)));
+    doubles = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE);
+    rotation = (gBattleTypeFlags & BATTLE_TYPE_ROTATION);
 
     if (!gMain.inBattle)
     {
@@ -3473,7 +3542,12 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
     //for in battle
     if (gMain.inBattle) //trainer in bnattle, not if mon is in battle
     {
-        if (!(IsDoubleBattle())) //problem appears to be function always returns 0, I think I need to loop
+        curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
+        slot1_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]], MON_DATA_PERSONALITY);
+        slot2_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)]], MON_DATA_PERSONALITY);
+        slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY); //eventually for triple/ rotation battles
+
+        if (singles) //problem appears to be function always returns 0, I think I need to loop
         {
             if ((curr_personality == slot1_personality)
             && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))//....changedd if current mon matches party slot and hp not 0, use battle value
@@ -3497,7 +3571,7 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
                     2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[3]);
             }
         }
-        else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+        else if (doubles)
         {
             if ((curr_personality == slot1_personality)
             && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
@@ -3532,7 +3606,7 @@ static void PokeSum_PrintAbilityNameAndDesc(void)
                     2, 10, sLevelNickTextColors[0], TEXT_SKIP_DRAW, sMonSummaryScreen->summary.abilityDescStrBuf[3]);
             }
         }
-        else if (gBattleTypeFlags & BATTLE_TYPE_ROTATION)
+        else if (rotation)
         {
             if ((curr_personality == slot1_personality)
             && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
@@ -4142,10 +4216,6 @@ static void BufferSelectedMonData(struct Pokemon * mon)
     }
 }
 
-#define SINGLE_BATTLE   (gMain.inBattle && singles)
-#define DOUBLE_BATTLE   (gMain.inBattle && doubles)
-#define TRIPLE_ROTATION (gMain.inBattle && rotation) //update for triple battle add for ability desc list too, need defines from below
-
 //problem identified its these 2 functions that are the issue
 //issue is this GetBattlerAtPosition(B_POSITION_PLAYER_LEFT) want to get this set in place of player party, want to use battle position that was plan
 //issue was with switching, playerparty isn't changed how I thought, so current setup isn't as fool proof as I thought
@@ -4158,8 +4228,8 @@ static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot) //issue with la
     u32 curr_personality, slot1_personality, slot2_personality, slot3_personality;
     u32 singles, doubles, rotation;
     curr_personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
-    slot1_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_PERSONALITY);
-    slot2_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_RIGHT]], MON_DATA_PERSONALITY);
+    slot1_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)]], MON_DATA_PERSONALITY);
+    slot2_personality = GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_PLAYER_RIGHT)]], MON_DATA_PERSONALITY);
     slot3_personality = GetMonData(&gPlayerParty[2], MON_DATA_PERSONALITY); //placehold value setup later
     
     singles = (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TRIPLE | BATTLE_TYPE_TWO_OPPONENTS)));
@@ -4172,7 +4242,7 @@ static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot) //issue with la
         if (SINGLE_BATTLE && (curr_personality == slot1_personality) //still ane existing bug with this logic
             && GetMonData(&gPlayerParty[gBattlerPartyIndexes[B_POSITION_PLAYER_LEFT]], MON_DATA_HP))
         {
-            move = gBattleMons[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)].moves[0];
+            move = gBattleMons[B_POSITION_PLAYER_LEFT].moves[0];
         }
         else if (DOUBLE_BATTLE)
         {
@@ -6132,13 +6202,13 @@ static void Task_PokeSum_SwitchDisplayedPokemon(u8 id)
         sMonSummaryScreen->switchMonTaskState++;
         break;
     case 6:
-        if (!sMonSummaryScreen->isEgg)
+        if (!(sMonSummaryScreen->isEgg))
             BufferMonSkills();
 
         sMonSummaryScreen->switchMonTaskState++;
         break;
     case 7:
-        if (!sMonSummaryScreen->isEgg)
+        if (!(sMonSummaryScreen->isEgg))
             BufferMonMoves();
 
         sMonSummaryScreen->switchMonTaskState++;

@@ -3760,6 +3760,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMovePower *= 2;
     }
 
+    if ((gBattleWeather & WEATHER_ANY) && gBattleMoves[move].effect == EFFECT_WEATHER_BALL) 
+            gBattleMovePower *= 2;
+
     //this isn't working... //ok pretty sure reason wasn't working was because didn't set status in mudsport command correctly
     //works now
     if (IS_BATTLER_OF_TYPE(battlerIdDef, TYPE_GROUND) && (gSideStatuses[GET_BATTLER_SIDE(battlerIdDef)] & SIDE_STATUS_MUDSPORT)) //if done right these should stack
@@ -4241,8 +4244,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         && IsBlackFogNotOnField())
     {
         gBattleMoveDamage /= 2;
-    }
+    } //end of general effects
 
+    //physical specific effects
     // critical hits ignore attack stat's stage drops
     if (usesDefStat)//IS_MOVE_PHYSICAL(move))
     {
@@ -4311,7 +4315,99 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         damage = damage / damageHelper;
         damage /= 50; 
         //defense side of dmg formula
-   
+
+        
+
+    
+        //other damage factors
+
+        //can keep here but just need to use gbattlemovedamage //nvm that didn't seem to work either
+    //using gbattlemovedmage didn't seem to change dmg, only fix I can think of is to reuse and just keep damage
+    //value but put inside both physical and special
+    // are effects of weather negated with cloud nine or air lock
+    if (WEATHER_HAS_EFFECT2 && IsBlackFogNotOnField()) //weather dmg changes weren't working at all, think was becuz I had  below dmg calc
+    {
+        if (gBattleWeather & WEATHER_RAIN_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
+                damage /= 2;
+                break;
+            case TYPE_WATER:
+                damage = (damage * 15) / 10;
+                break;
+            }
+
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_LIQUID_SOUL
+                && gBattleMoves[move].type == TYPE_WATER)  //hopefully checks if move was orginally water and will boost damage in rain even when ghost type
+            {
+                damage = (damage * 15) / 10;
+            }
+        }
+
+        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_FLUORESCENCE        
+        && !IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) && IsBlackFogNotOnField()
+        && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
+        {
+            //damage = (damage * 85) / 100;
+            damage = damage;
+        } //simpler balancing for fluorescence do dmg cut/ nvm removed dmg cut, low bst and forgot lowered super bonus etc., so will mean just avoids dmg cut from other weather
+
+        //moved these here, because they don't have to do with physical or special damage alone anymore.  since I removed the type link
+        // any weather except sun weakens solar beam
+        else if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
+            damage /= 2;
+
+        
+
+        // sunny
+        if (gBattleWeather & WEATHER_SUN_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+                damage = (damage * 15) / 10;  //50% damage increase
+                break;
+            case TYPE_WATER:
+            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
+                damage /= 2;            //50% damage cut
+                break;
+            case TYPE_ICE:
+            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
+                damage = (damage * 10) / 30; //66% dmg cut  this is a grass type buff, especially so for sunflora who is now grass/fire
+                break;
+            }
+        }
+
+        // hail
+        if (gBattleWeather & WEATHER_HAIL_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
+                damage = (damage * 10) / 30;  //33% damage cut, so less of a cut than in rain, edit- actually fires are harder to start in cold so makes sense to have higher drop than rain
+                break;  //changed to 66% cut,  so for mon weak to fire they take slightly less than neutral dmg
+
+            //case TYPE_ICE:
+              //  damage = (damage * 125) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
+              //  break;
+            } //since I made hail a defensive boost, I may remove dmg boost, 
+        }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
+    }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing
+
+    /*In order for a fire to start, your tinderand firewood must reach a combustible temperature.
+    Fires in the summer, even after a summer rain, can be easier to start
+    because the wood will be closer to a combustible temperature than even dry wood in the winter.
+    You will need more heat to get your fire started in the cold.*/  //logic for why fire dmg cut in hail/
+
+    // flash fire triggered
+    if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
+        damage = (damage * 15) / 10;  //how does this work, do I need to move it, or does it auto boost all damage?
+                                        //it boosts all because its not in physical or special formula 
+
 
         
         if ((attacker->status1 & STATUS1_BURN) && IsBlackFogNotOnField() && attacker->ability != ABILITY_GUTS) //nvm don't need is physical because its already in the bracket for that ^
@@ -4340,100 +4436,28 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         // moves always do at least 1 damage.
         if (damage == 0)
             damage = 1;
-    }
+    } //end of physical effects
 
     /*if (type == TYPE_MYSTERY)
         damage = 0; // is ??? type. does 0 damage.
     *///this existed as an extra fail safe, before physical special split, where split &dmg was based on type
     //removed for normalize buff to work
 
-    // are effects of weather negated with cloud nine or air lock
-    if (WEATHER_HAS_EFFECT2 && IsBlackFogNotOnField())
-    {
-        if (gBattleWeather & WEATHER_RAIN_ANY)
-        {
-            switch (type)
-            {
-            case TYPE_FIRE:
-                damage /= 2;
-                break;
-            case TYPE_WATER:
-                damage = (damage * 15) / 10;
-                break;
-            }
-
-            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_LIQUID_SOUL
-                && gBattleMoves[move].type == TYPE_WATER)  //hopefully checks if move was orginally water and will boost damage in rain even when ghost type
-            {
-                damage = (damage * 15) / 10;
-            }
-        }
-        //moved these here, because they don't have to do with physical or special damage alone anymore.  since I removed the type link
-        // any weather except sun weakens solar beam
-        if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
-            damage /= 2;
-
-        else if (GetBattlerAbility(gBattlerAttacker) == ABILITY_FLUORESCENCE 
-        && !IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) && IsBlackFogNotOnField()
-        && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
-        {
-            //damage = (damage * 85) / 100;
-            damage = damage;
-        } //simpler balancing for fluorescence do dmg cut/ nvm removed dmg cut, low bst and forgot lowered super bonus etc., so will mean just avoids dmg cut from other weather
-
-        // sunny
-        if (gBattleWeather & WEATHER_SUN_ANY)
-        {
-            switch (type)
-            {
-            case TYPE_FIRE:
-                damage = (damage * 15) / 10;  //50% damage increase
-                break;
-            case TYPE_WATER:
-                damage /= 2;            //50% damage cut
-                break;
-            case TYPE_ICE:
-                damage = (damage * 10) / 30; //66% dmg cut  this is a grass type buff, especially so for sunflora who is now grass/fire
-                break;
-            }
-        }
-
-        // hail
-        if (gBattleWeather & WEATHER_HAIL_ANY)
-        {
-            switch (type)
-            {
-            case TYPE_FIRE:
-                damage = (damage * 10) / 30;  //33% damage cut, so less of a cut than in rain, edit- actually fires are harder to start in cold so makes sense to have higher drop than rain
-                break;  //changed to 66% cut,  so for mon weak to fire they take slightly less than neutral dmg
-
-            //case TYPE_ICE:
-              //  damage = (damage * 125) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
-              //  break;
-            } //since I made hail a defensive boost, I may remove dmg boost, 
-        }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
-    }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing
-
-    /*In order for a fire to start, your tinderand firewood must reach a combustible temperature.
-    Fires in the summer, even after a summer rain, can be easier to start
-    because the wood will be closer to a combustible temperature than even dry wood in the winter.
-    You will need more heat to get your fire started in the cold.*/  //logic for why fire dmg cut in hail/
-
-    // flash fire triggered
-    if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
-        damage = (damage * 15) / 10;  //how does this work, do I need to move it, or does it auto boost all damage?
-                                        //it boosts all because its not in physical or special formula 
+    
 
     if (gBattleMoves[move].flags & FLAG_DMG_MINIMIZE && gStatuses3[gBattlerTarget] & STATUS3_MINIMIZED)
         gBattleMoveDamage *= 2;
-    if (gBattleMoves[move].flags & FLAG_DMG_UNDERGROUND && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
+    if (gBattleMoves[move].flags & FLAG_DMG_2X_UNDERGROUND && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
         gBattleMoveDamage *= 2;
-    if (gBattleMoves[move].flags & FLAG_DMG_UNDERWATER && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER)
+    if (gBattleMoves[move].flags & FLAG_DMG_2X_UNDERWATER && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER)
         gBattleMoveDamage *= 2;
     if (gBattleMoves[move].flags & FLAG_DMG_2X_IN_AIR && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
         gBattleMoveDamage *= 2;
     //port from emerald simplify battlescript don't need jumps and damage bytes in the script
+    //with realization about weather effects think this may not be working here, and instead may 
+    //need to put directly into damage calc?
 
+    //start of special effects
     if (!usesDefStat)//IS_MOVE_SPECIAL(move))
     {
         // critical hits ignore attack stat's stage drops
@@ -4451,11 +4475,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         //damage *= (2 * attacker->level / 5 + 2); //it isn't, realized that's calc for normal level scaling damage.
         damage *= (((attacker->level * 160) / 100) / 5 + 3);  //alt lower scaling dmg formula
 
-        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNAWARE)
-            damage = spAttack;
-
-        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
-            damage = spAttack;
+        
 
         // critical hits ignore def stat buffs
         if (IS_CRIT)
@@ -4468,8 +4488,11 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         else
             APPLY_STAT_MOD(damageHelper, defender, spDefense, STAT_SPDEF)
 
-        damage = (damage / damageHelper);
-        damage /= 50;
+        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNAWARE)
+            damage = spAttack;
+
+        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
+            damage = spAttack;
 
         if (GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE) //nto sure if right but trying it, may replace with emerald version.
             damageHelper = spDefense;
@@ -4477,6 +4500,101 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
             damageHelper = spDefense;
 
+        damage = (damage / damageHelper);
+        damage /= 50;
+        //defense side of sp. damage formula
+
+        
+
+        //other damage factors
+
+        //can keep here but just need to use gbattlemovedamage //nvm that didn't seem to work either
+    //using gbattlemovedmage didn't seem to change dmg, only fix I can think of is to reuse and just keep damage
+    //value but put inside both physical and special
+    // are effects of weather negated with cloud nine or air lock
+    if (WEATHER_HAS_EFFECT2 && IsBlackFogNotOnField()) //weather dmg changes weren't working at all, think was becuz I had  below dmg calc
+    {
+        if (gBattleWeather & WEATHER_RAIN_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
+                damage /= 2;
+                break;
+            case TYPE_WATER:
+                damage = (damage * 15) / 10;
+                break;
+            }
+
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_LIQUID_SOUL
+                && gBattleMoves[move].type == TYPE_WATER)  //hopefully checks if move was orginally water and will boost damage in rain even when ghost type
+            {
+                damage = (damage * 15) / 10;
+            }
+        }
+
+        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_FLUORESCENCE        
+        && !IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) && IsBlackFogNotOnField()
+        && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
+        {
+            //damage = (damage * 85) / 100;
+            damage = damage;
+        } //simpler balancing for fluorescence do dmg cut/ nvm removed dmg cut, low bst and forgot lowered super bonus etc., so will mean just avoids dmg cut from other weather
+
+        //moved these here, because they don't have to do with physical or special damage alone anymore.  since I removed the type link
+        // any weather except sun weakens solar beam
+        else if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
+            damage /= 2;
+
+        
+
+        // sunny
+        if (gBattleWeather & WEATHER_SUN_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+                damage = (damage * 15) / 10;  //50% damage increase
+                break;
+            case TYPE_WATER:
+            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
+                damage /= 2;            //50% damage cut
+                break;
+            case TYPE_ICE:
+            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
+                damage = (damage * 10) / 30; //66% dmg cut  this is a grass type buff, especially so for sunflora who is now grass/fire
+                break;
+            }
+        }
+
+        // hail
+        if (gBattleWeather & WEATHER_HAIL_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
+                damage = (damage * 10) / 30;  //33% damage cut, so less of a cut than in rain, edit- actually fires are harder to start in cold so makes sense to have higher drop than rain
+                break;  //changed to 66% cut,  so for mon weak to fire they take slightly less than neutral dmg
+
+            //case TYPE_ICE:
+              //  damage = (damage * 125) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
+              //  break;
+            } //since I made hail a defensive boost, I may remove dmg boost, 
+        }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
+    }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing
+
+    /*In order for a fire to start, your tinderand firewood must reach a combustible temperature.
+    Fires in the summer, even after a summer rain, can be easier to start
+    because the wood will be closer to a combustible temperature than even dry wood in the winter.
+    You will need more heat to get your fire started in the cold.*/  //logic for why fire dmg cut in hail/
+
+    // flash fire triggered
+    if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
+        damage = (damage * 15) / 10;  
+
+        
         if ((sideStatus & SIDE_STATUS_LIGHTSCREEN) && !IS_CRIT
             && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR
             && IsBlackFogNotOnField())
@@ -4494,7 +4612,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             damage /= 1; //special verision double battle damage change
 
         
-    }
+    } //end of special effects
 
     return damage + 2;
 }
