@@ -1727,8 +1727,8 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
 
     if ((gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE)//i beleve this is the replacement for the hitmarker values for semi invul, just need to add flags to omve data
         || (!(gBattleMoves[move].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR)) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR && gCurrentMove != MOVE_ROCK_THROW)
-        || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
-        || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER))
+        || (!(gBattleMoves[move].flags & FLAG_DMG_2X_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
+        || (!(gBattleMoves[move].flags & FLAG_DMG_2X_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER))
     {
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         JumpIfMoveFailed(7, move);
@@ -16516,14 +16516,14 @@ static void atkE8_settypebasedhalvers(void) // water and mud sport
         gBattlescriptCurrInstr = cmd->jumpInstr;
 }
 
-
-static void atkE9_setweatherballtype(void)
+//not using now, movedlogic to settypebeforeusingmove
+static void atkE9_setweatherballtype(void)//think move to settypebeforeusemove function so it'll show in sum menu
 {
     if (WEATHER_HAS_EFFECT)
     {
-        if (gBattleWeather & WEATHER_ANY)
-            gBattleScripting.dmgMultiplier = 2;
-        if (gBattleWeather & WEATHER_RAIN_ANY)
+        //if (gBattleWeather & WEATHER_ANY)
+        //    gBattleScripting.dmgMultiplier = 2;  //moved to calcbasdmg function in pokemon c
+        if (gBattleWeather & WEATHER_RAIN_ANY) //TEST TO MAKE SURE WORKS - works
             *(&gBattleStruct->dynamicMoveType) = TYPE_WATER | 0x80;
         else if (gBattleWeather & WEATHER_SANDSTORM_ANY)
             *(&gBattleStruct->dynamicMoveType) = TYPE_ROCK | 0x80;

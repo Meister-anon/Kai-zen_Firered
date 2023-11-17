@@ -1540,7 +1540,7 @@ const u16 sBulbasaurBall[] = {
     SPECIES_ROWLET,
     SPECIES_GROOKEY,
     SPECIES_AIPOM, //doesnt make sense I just want to show off, would replace w voltorb but you can get those easily, so keep - also not normally available
-    SPECIES_PARAS,
+    SPECIES_PARAS, //i love it, but its too common? no keeping it, instead I'll take it out of mt moon and reserve for safari zone, replace w something else female nido
     SPECIES_VULPIX_ALOLAN, //will put ditto in squirtle instead, or just replace it, but keep for now as its best tester for loop as only 3 mon should break out of loop
     SPECIES_SEEDOT,  //replaced tyrogue w ditto, show off changed transform mechanics, /ditto doesn't make sense here, breaks type check as it resists fire
     SPECIES_EEVEE, //free eevee  lets go style
@@ -1580,7 +1580,7 @@ const u16 sSquirtleBall[] = {
     SPECIES_WOOPER,
     SPECIES_BUNNELBY, //works but I like SPECIES_GOLETT better? is more interesting/popular , replaced rogenrolla //oh right didn't use cuz ghost was free early game wins
     SPECIES_LOTAD,  //REPLACED wailmer
-    SPECIES_DITTO,
+    SPECIES_CASTFORM,   //easter egg mon, not really good for starter otherwise/ rebalancing ability effect would be better in squirtle set can swap w ditto
     SPECIES_SPHEAL
     //LIST_END
 };
@@ -1596,7 +1596,7 @@ const u16 sCharmanderBall[] = {
     SPECIES_LITTEN,
     SPECIES_SCORBUNNY,
     SPECIES_GLIGAR, //weak to water, poison beats grass
-    SPECIES_CASTFORM,   //easter egg mon, not really good for starter also seems changing weather too often lower odds of changing weather if weather exists
+    SPECIES_DITTO,
     SPECIES_EEVEE,
     SPECIES_MURKROW,    //beats grass no relation to water
     SPECIES_LICKITUNG,
@@ -1884,7 +1884,7 @@ u8 ShouldResetRivalStarter(void)
 
         if (species == SPECIES_EEVEE && PlayeStarterSpecies == SPECIES_EEVEE)
             passedChecks = FALSE;
-        else if (species == SPECIES_EEVEE)
+        else if (species == SPECIES_EEVEE || species == SPECIES_DITTO)
             passedChecks = TRUE;
         else
         {
@@ -1944,7 +1944,7 @@ u8 ShouldResetRivalStarter(void)
 
         if (species == SPECIES_EEVEE && PlayeStarterSpecies == SPECIES_EEVEE)
             passedChecks = FALSE;
-        else if (species == SPECIES_EEVEE)
+        else if (species == SPECIES_EEVEE || species == SPECIES_DITTO)
             passedChecks = TRUE;
         else
         {
@@ -2003,7 +2003,7 @@ u8 ShouldResetRivalStarter(void)
 
         if (species == SPECIES_EEVEE && PlayeStarterSpecies == SPECIES_EEVEE)
             passedChecks = FALSE;
-        else if (species == SPECIES_EEVEE)
+        else if (species == SPECIES_EEVEE || species == SPECIES_DITTO)
             passedChecks = TRUE;
         else
         {
