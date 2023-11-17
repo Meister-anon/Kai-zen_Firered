@@ -6418,7 +6418,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                 case ABILITY_GALEFORCE:
                     if (gBattleMoves[moveArg].flags & FLAG_WIND_MOVE)
-                        effect = 2, statId = STAT_ATK;
+                        effect = 2, statId = STAT_SPATK;
                 case ABILITY_LAVA_FISSURE:
                 case ABILITY_FLASH_FIRE:
                     if ((moveType == TYPE_FIRE  && gBattleMoves[moveArg].power != 0) && !((gBattleMons[battler].status1 & STATUS1_FREEZE)))// && B_FLASH_FIRE_FROZEN <= GEN_4))

@@ -5709,7 +5709,7 @@ static void HandleAction_UseMove(void)
      && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gSideTimers[side].followmeTarget)
      && gBattleMons[gSideTimers[side].followmeTarget].hp != 0)
     {
-        gBattlerTarget = gSideTimers[side].followmeTarget;
+        gBattlerTarget = gSideTimers[side].followmeTarget;  
     }
     else if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) //VSONIC think important can't remember what does need test, believe part of redirection?
           && gSideTimers[side].followmeTimer == 0
@@ -5726,7 +5726,8 @@ static void HandleAction_UseMove(void)
             && (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_SAP_SIPPER && moveType == TYPE_GRASS)
             && (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_GLACIAL_ICE && moveType == TYPE_ICE)
             && (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_LAVA_FISSURE && moveType == TYPE_FIRE)
-            && (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_FLASH_FIRE && moveType == TYPE_FIRE)))
+            && (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_FLASH_FIRE && moveType == TYPE_FIRE)
+            && (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_GALEFORCE && gBattleMoves[gCurrentMove].flags & FLAG_WIND_MOVE)))
     {
         side = GetBattlerSide(gBattlerAttacker);
         for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
@@ -5743,7 +5744,8 @@ static void HandleAction_UseMove(void)
                  || (GetBattlerAbility(gActiveBattler) == ABILITY_SAP_SIPPER && moveType == TYPE_GRASS && CAN_ABILITY_ABSORB)
                  || (GetBattlerAbility(gActiveBattler) == ABILITY_GLACIAL_ICE && moveType == TYPE_ICE && CAN_ABILITY_ABSORB)
                  || (GetBattlerAbility(gActiveBattler) == ABILITY_LAVA_FISSURE && moveType == TYPE_FIRE && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_FLASH_FIRE && moveType == TYPE_FIRE && CAN_ABILITY_ABSORB))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_FLASH_FIRE && moveType == TYPE_FIRE && CAN_ABILITY_ABSORB)
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_GALEFORCE && gBattleMoves[gCurrentMove].flags & FLAG_WIND_MOVE && CAN_ABILITY_ABSORB))
                 && GetBattlerTurnOrderNum(gActiveBattler) < var
                 && gBattleMoves[gCurrentMove].effect != EFFECT_SNIPE_SHOT
                 && (GetBattlerAbility(gBattlerAttacker) != ABILITY_PROPELLER_TAIL

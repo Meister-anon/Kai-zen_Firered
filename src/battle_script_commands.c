@@ -98,8 +98,6 @@ static void HandleTerrainMove(u32 moveEffect);
 static void RecalcBattlerStats(u32 battler, struct Pokemon *mon);
 static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon);
 static void SetDmgHazardsBattlescript(u8 battlerId, u8 multistringId);
-s16 atk_diff(void);
-s16 spatk_diff(void); //hopefully this works, and I don't actually need to define these in the .h,
 //since its not static
 static bool8 IsBattlerProtected(u8 battlerId, u16 move);//gabe me compiler double definition error so made static
 //static void ProtectBreak(void); add back later when I figure it out
@@ -1851,8 +1849,15 @@ static void atk01_accuracycheck(void)
         moveAcc = gBattleMoves[move].accuracy;
 
         //trap effects
-        if ((gBattleMons[gBattlerAttacker].status4 & STATUS4_SAND_TOMB)
-            && IsBlackFogNotOnField())
+        if (((gBattleMons[gBattlerAttacker].status4 & STATUS4_SAND_TOMB)
+        && IsBlackFogNotOnField())
+        && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ROCK)
+        && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL)
+        && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)
+        && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_RUSH
+        && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_VEIL
+        && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_FORCE
+        && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM)
         {
             moveAcc = (moveAcc * 90) / 100; //since most mon that have this also have access to sandstorm or are in desert made less punishing
             //moveAcc = (moveAcc * 60) / 100; //euivalent of a 2 stage acc drop
@@ -15390,7 +15395,6 @@ static void atkC1_hiddenpowercalc(void)
     s32 powerBits;
     s16 i, j;
     u8 moveSplit = gBattleMoves[gCurrentMove].split;
-    u16 value = Random() % 2;
 
     powerBits = ((gBattleMons[gBattlerAttacker].hpIV & 2) >> 1)
         | ((gBattleMons[gBattlerAttacker].attackIV & 2) << 0)
@@ -15420,49 +15424,9 @@ static void atkC1_hiddenpowercalc(void)
         // stat atk seems to be your stat stage for that specifc stat
       //  u16 move = MOVE_HIDDEN_POWER;
 
-    i = atk_diff();
-    j = spatk_diff();  // since the values are a differnece  the lower stat will actually be the one with the greater value. so I should use greater than for these.
-    // if equal I think I'll just toss up a 50/50 Random() % 2  setting each, like I did for forecast.
-     //so this should boost attack,if atk is lower & split is physical
+      //moved split logic to calculatebasedamage in pokemon.c
+
     
-    if (gCurrentMove == MOVE_HIDDEN_POWER) // also see about putting split condition for hidden power onto the function for getbattlesplit
-    {
-
-        //} this should work much better, split is decided by the lower compoarison of my atk stats to my opponenets
-            //then if that stat is also my lowest atk stat it gets a shonen style damage boost
-        //that was dumb, that would almost guarantee boosted damage.
-        if (gBattleMons[gBattlerAttacker].attack < gBattleMons[gBattlerAttacker].spAttack)
-            moveSplit = SPLIT_PHYSICAL; //may reverse this, and set split to highest attack stat
-        if (gBattleMons[gBattlerAttacker].spAttack < gBattleMons[gBattlerAttacker].attack)
-            moveSplit = SPLIT_SPECIAL;
-        if (gBattleMons[gBattlerAttacker].spAttack == gBattleMons[gBattlerAttacker].attack) // i & j are equal when my stats equal my oppoenenets or both my stats are higher.
-        {
-            if (value == 0) {
-                moveSplit = SPLIT_PHYSICAL;
-            }
-            if (value == 1) {
-                moveSplit = SPLIT_SPECIAL;
-            } //set split here,  put boost below and add split for lower stat to condtion
-        }
-    }
-    //based on feedback from anthroyd, I may just simplify this
-    //and set the boost to apply against stronger opponents in general
-    //so just remove the moveSplit part of the boost function.
-    if ((i == 0 && moveSplit == SPLIT_PHYSICAL) || (j == 0 && moveSplit == SPLIT_SPECIAL)) // to ensure I don't get the boost if my stats are greater than my opponenet
-    { 
-        gBattlescriptCurrInstr = cmd->nextInstr;   //skip dmg boosting
-
-    } //put split logic back
-
-
-    //I hesitate on that beause in that case, the boost would always be active,
-    //unless facing much lower level pokemon.   will need balance test
-    if (i > 0 && moveSplit == SPLIT_PHYSICAL)
-        gDynamicBasePower = gDynamicBasePower * 13 / 10; //boosted from 17 to 50 just to see if it works
-
-    else if (j > 0 && moveSplit == SPLIT_SPECIAL)
-        gDynamicBasePower = gDynamicBasePower * 13 / 10; //doesn't seem to be workign, I'll swap to gdynamic
-    //O.o now it works ...ow   
 
 
     

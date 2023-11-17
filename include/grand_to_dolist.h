@@ -1846,9 +1846,49 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
    custom strings are still to do and further testing
    redid cherrim now a grass fire type when blooming
    -changed starters and flag renames also attempted fixing some issues with calculatebasedamage function, still in progress
+   seems gbattlemovedamage doesn't work, the function only takes gbattlemovepower and damage as damage argumentes
+   //so replace w damage, or move arguments that involve gbattlemovedamage to damagecalc script
+   but if use dmg would need to include things in both physical and special side of function, unless I can consolidate it
+   and just make it jump to physical special at end?
+
+   checked dmg formula and base repo, looks like original game used stat incrases in place of gbattlemovedamage
+   the way damage formula works its about equivalent, doubling relevant attacker stat or cutting it,
+   would be equivalent to doubling or halving total damage
+
+   for damage nullifycation think I would need to make attack stat 0, ?
+
+   ok could make macro that returns attack or special attack stat based on if physical special
+   should be able to allow me put weather effects in a single place before physical special logic
+   and have it filter down properly into either  can't use for everything as some effects should be 
+   explicitly one and not the other
+
+   another argument for making macro, things like explosion, work off effect but early gen is physical
+   while later explosion likes are special, while still using effect explosion (except mind blown?)
+   //so the defense cut wouldn't be appropriate, if it read the approriate split
+   and then returned the correct stat (offense or defense stat macro for each)
+
+   macro use terary operator take operator and value want to use
+   OffensiveModifer(value){ if (usesDefStat) ? attack = (value * attack) / 100; : spAttack = (value * spAttack) / 100;}
+   //great as done this can be used as both a multiplier and a cut
+   OffensiveModifer(200)
+
+   DefenseModifer(value){ if (usesDefStat) ? defense = (value * defense) / 100; : spDefense = (value * spDefense) / 100;}
+    couldn't figure out ternaryu operator so just did normal if else macro, works perfectly
+
+   seems to work, also finished adjusted calculatebasedamage, also swapped hidden power
+   to use the changes  removed fairy type from mime,
+
+   the modifiers don't seem to work when used with an else if conditional but luckily I never needed to
 
    also of note, the wild_encounters.json holds data for both version of game, fire red & leaf green
    to save space consolidate those things eventually so whatever version people build they get same encounters
+
+   take encounters out fo altering cave and give standard locations,  
+   add version exclusive mon as said above,
+   and also some gen 2 mon are just not in the game these include:
+   Snubbull/Granbull, Jynx, Girafarig, Mr. Mime, Chinchou, Farfetch'd,
+   Lickitung, & Corsola
+
 
   -putting here cuz can't find pc note rn
   but change pc access in overworld to not allow putting mon in pc that are fainted, to avoid trivializing the game

@@ -598,6 +598,8 @@ u16 GetFormSpeciesId(u16 speciesId, u8 formId);
 u8 GetFormIdFromFormSpeciesId(u16 formSpeciesId);
 u16 GetBaseStatTotal(u16 species);
 bool8 CanEvioliteActivate(u16 species);
+s16 atk_diff(void);
+s16 spatk_diff(void); //put here, used for hidden power change split
 
 void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst);
 

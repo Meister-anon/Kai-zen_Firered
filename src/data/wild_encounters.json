@@ -10812,9 +10812,9 @@
                 "species": "SPECIES_WEEDLE"
               },
               {
-                "min_level": 7,
-                "max_level": 7,
-                "species": "SPECIES_CATERPIE"
+                "min_level": 12,
+                "max_level": 12,
+                "species": "SPECIES_BELLSPROUT"
               },
               {
                 "min_level": 11,
@@ -10961,9 +10961,9 @@
             "encounter_rate": 21,
             "mons": [
               {
-                "min_level": 8,
-                "max_level": 8,
-                "species": "SPECIES_WEEDLE"
+                "min_level": 12,
+                "max_level": 12,
+                "species": "SPECIES_BELLSPROUT"
               },
               {
                 "min_level": 8,

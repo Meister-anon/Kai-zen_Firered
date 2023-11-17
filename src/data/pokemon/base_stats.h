@@ -2952,7 +2952,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(56, 45, 75, 90, 100, 120),
         .type1 = TYPE_PSYCHIC,
-        .type2 = TYPE_FAIRY,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 161,
         //.evYield_SpDefense = 2,
@@ -2967,7 +2967,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_TECHNICIAN, ABILITY_STALL}, //give more physical moves for troll stall powerswap strats
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-    },
+    }, //doesn't make sense tobe fairy, just makes weaker, doesn't even get any fairy moves usually
 
     [SPECIES_SCYTHER] =
     { 
@@ -10254,7 +10254,7 @@ const struct BaseStats gBaseStats[] =
          STATS(20, 25, 45, 60, 70, 90),
         //#if P_UPDATED_TYPES >= GEN_6
             .type1 = TYPE_PSYCHIC,
-            .type2 = TYPE_FAIRY,
+            .type2 = TYPE_NORMAL,
         .catchRate = 145,
         .expYield = 62,
         //.evYield_SpDefense = 1,
@@ -10266,7 +10266,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_SOUNDPROOF, ABILITY_FILTER},
-            .abilityHidden = {ABILITY_TECHNICIAN, ABILITY_NONE},
+            .abilityHidden = {ABILITY_TECHNICIAN, ABILITY_STALL},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
@@ -28417,7 +28417,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_CHERRIM_SUNSHINE] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(90, 80, 70, 100, 97, 78),
+         STATS(90, 70, 70, 100, 97, 60),
         .type1 = TYPE_GRASS,
         .type2 = TYPE_FIRE, //makes no sense not to do this for grass mon that needs sun
         .catchRate = 75,
@@ -28434,7 +28434,7 @@ const struct BaseStats gBaseStats[] =
             .abilities = {ABILITY_FLOWER_GIFT, ABILITY_NONE},//can't have different ability/hidden ability,  as this form is linked to ability
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = TRUE,
-    },
+    }, //dropped attack back to 70 as ability is meant to boost atk & sp def in sun
 
     [SPECIES_SHELLOS_EAST_SEA] =
     { 

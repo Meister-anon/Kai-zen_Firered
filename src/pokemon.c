@@ -3459,6 +3459,22 @@ bool8 CanEvioliteActivate(u16 species)
     (var) /= (gStatStageRatios)[(mon)->statStages[(statIndex)]][1];                 \
 }
 
+//use to replace gbattlemovedamage in things that can apply for both physical & special
+//can be used for both boost and cut i.e val 200 is double val 50 is half
+//looking at this I've made equivalent of uq modifier there's not actually
+//a reason to use defensemodifier offensemod is enough to shift damage taken
+//nvm there are some abilities/effects that are specifically meant to be defense stat boosters
+#define OffensiveModifer(value)                                 \
+{                                                               \
+    if (usesDefStat){ attack = (value * attack) / 100; }        \
+    else {spAttack = (value * spAttack) / 100;}                 \
+}
+#define DefenseModifer(value)                                   \
+{                                                               \
+    if (usesDefStat){ defense = (value * defense) / 100; }      \
+    else {spDefense = (value * spDefense) / 100;}               \
+}
+
 #define STAT_AND_DAMAGE_ABILITIES_ETC
 
 // seems this is the equivalent of emerald's CalcDefenseStat function
@@ -3468,7 +3484,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     u32 i;
     u32 percentBoost;
     s32 damage = 0;
-    s32 damageHelper;
+    s32 damageHelper,h,j;
+    u16 value = Random() % 2; //for hidden power
     u8 type;
     bool8 usesDefStat;  //determines split, 
     u8 defStage;
@@ -3499,9 +3516,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     if (gBattleMoves[move].effect == EFFECT_PSYSHOCK || gBattleMons[battlerIdAtk].ability == ABILITY_MUSCLE_MAGIC || IS_MOVE_PHYSICAL(move)) // uses defense stat instead of sp.def
     {
-        defStat = defense;
+        defStat = defense; //not used in a calc mostly for visual clarity
         defStage = gBattleMons[battlerIdDef].statStages[STAT_DEF];  //defined these now hopefully it works fine and doens't mess up normla damage calc
-        usesDefStat = TRUE;
+        usesDefStat = TRUE; //only value actually used in calcs
     }
     else if (IS_MOVE_SPECIAL(move)) // is special   //extra redundency for incase I make an effect/move that works the opposite i.e phys does special
     {
@@ -3509,6 +3526,50 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         defStage = gBattleMons[battlerIdDef].statStages[STAT_SPDEF];
         usesDefStat = FALSE; //ported from emerald, will use this later  this wasn't actually the problem can most likely safely bring back in.
     } //sets what defense stat move effects based on if special or physical and sets usesDefStat accordingly
+
+    h = atk_diff();
+    j = spatk_diff();  // since the values are a differnece  the lower stat will actually be the one with the greater value. so I should use greater than for these.
+    // if equal I think I'll just toss up a 50/50 Random() % 2  setting each, like I did for forecast.
+     //so this should boost attack,if atk is lower & split is physical
+    
+    if (gCurrentMove == MOVE_HIDDEN_POWER) // also see about putting split condition for hidden power onto the function for getbattlesplit
+    {
+
+        //} this should work much better, split is decided by the lower compoarison of my atk stats to my opponenets
+            //then if that stat is also my lowest atk stat it gets a shonen style damage boost
+        //that was dumb, that would almost guarantee boosted damage.
+        //think battlemons here is fine and wuoldn't be affected by stat stage changes?
+        if (gBattleMons[gBattlerAttacker].attack < gBattleMons[gBattlerAttacker].spAttack)
+           usesDefStat = TRUE; //may reverse this, and set split to highest attack stat
+        if (gBattleMons[gBattlerAttacker].spAttack < gBattleMons[gBattlerAttacker].attack)
+            usesDefStat = FALSE;
+        if (gBattleMons[gBattlerAttacker].spAttack == gBattleMons[gBattlerAttacker].attack) // i & j are equal when my stats equal my oppoenenets or both my stats are higher.
+        {
+            if (value == 0) {
+                usesDefStat = TRUE;
+            }
+            if (value == 1) {
+                usesDefStat = FALSE;
+            } //set split here,  put boost below and add split for lower stat to condtion
+        }
+    
+        //based on feedback from anthroyd, I may just simplify this
+        //and set the boost to apply against stronger opponents in general
+        //so just remove the moveSplit part of the boost function.
+         //I put split logic back
+
+
+        //I hesitate on that beause in that case, the boost would always be active,
+        //unless facing much lower level pokemon.   will need balance test
+        if (h > 0 && usesDefStat == TRUE)
+            OffensiveModifer(130);
+            //gBattleMovePower = (gBattleMovePower * 130) / 100; //boosted from 17 to 50 just to see if it works
+
+        if (j > 0 && usesDefStat == FALSE)
+            OffensiveModifer(130); //change to use direct stat boost as thematically more fitting test for balance
+            //gBattleMovePower = (gBattleMovePower * 130) / 100; //doesn't seem to be workign, I'll swap to gdynamic
+        //O.o now it works ...ow   
+    }
     
 
     if (attacker->item == ITEM_ENIGMA_BERRY)
@@ -3604,8 +3665,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         case HOLD_EFFECT_EVIOLITE:  //
             if (CanEvioliteActivate)    //
             {
-                spDefense = (170 * spDefense) / 100;
-                defense = (170 * defense) / 100;
+                DefenseModifer(170);
             }
             break;
             
@@ -3657,12 +3717,11 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             if (abilityDef == ABILITY_RIPEN)
                 //MulModifier(&finalModifier, UQ_4_12(0.25));
             {
-                gBattleMoveDamage *= 25;
-                gBattleMoveDamage /= 100;
+                OffensiveModifer(25);
             }
 
             else
-                gBattleMoveDamage /= 2;
+                OffensiveModifer(50);
                 //MulModifier(&finalModifier, UQ_4_12(0.5));
             //if (updateFlags)      //not sure what this does, it may change move result flag & sound effect to match?
                 gSpecialStatuses[battlerIdDef].berryReduced = TRUE;
@@ -3679,8 +3738,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         spAttack = (150 * spAttack) / 100;
     if (attacker->ability == ABILITY_URSURPER && attacker->status1 & STATUS1_ANY && IsBlackFogNotOnField())
     {
-        attack = (125 * attack) / 100;
-        spAttack = (125 * spAttack) / 100;        
+        OffensiveModifer(125);        
     }
     if (attacker->ability == ABILITY_DEFIANT && attacker->status1 & STATUS1_ANY && IsBlackFogNotOnField())
         attack = (130 * attack) / 100;
@@ -3691,7 +3749,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (attacker->ability == ABILITY_MINUS && ABILITY_ON_FIELD2(ABILITY_PLUS))
         spAttack = (150 * spAttack) / 100;
     if (attacker->ability == ABILTY_UNKNOWN_POWER && (BATTLE_PARTNER(attacker->species) == SPECIES_UNOWN))
-        gBattleMoveDamage *= 2;
+        OffensiveModifer(200);
     if (attacker->ability == ABILITY_GUTS && attacker->status1 & STATUS1_ANY && IsBlackFogNotOnField())
         attack = (150 * attack) / 100;
     if (defender->ability == ABILITY_MARVEL_SCALE && defender->status1 & STATUS1_ANY && IsBlackFogNotOnField())
@@ -3735,8 +3793,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     }
 
     //MOVE EFFECTS
-    if (gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)
-        defense /= 2;
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION) //keeps special explosion variants consistent, check if should  include mindblown
+        DefenseModifer(50);
     if (gBattleMoves[gCurrentMove].effect == EFFECT_ASSURANCE
         && (gProtectStructs[battlerIdDef].physicalDmg != 0 || gProtectStructs[battlerIdDef].specialDmg != 0 || gProtectStructs[battlerIdDef].confusionSelfDmg))
         gBattleMovePower *= 2;
@@ -3801,7 +3859,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     case ABILITY_TIGER_CUB:
     case ABILITY_TINTED_LENS:
         if (gMoveResultFlags & MOVE_RESULT_NOT_VERY_EFFECTIVE) //think should work,  it might not work, if move result is foud after damage stepp, it should work 
-            gBattleMoveDamage *= 2; //is right syntax, and type calc always goes before dmg calc
+            OffensiveModifer(200); //is right syntax, and type calc always goes before dmg calc
         break;
     case ABILITY_FLARE_BOOST:
         if (gBattleMons[gBattlerAttacker].status1 & STATUS1_BURN && !usesDefStat //IS_MOVE_SPECIAL(move))
@@ -3861,7 +3919,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_SLOW_START:
         if (gDisableStructs[gBattlerAttacker].slowStartTimer != 0)
-            gBattleMoveDamage /= 2;
+            OffensiveModifer(50);
     case ABILITY_NORMALIZE:
         if (gBattleStruct->ateBoost[gBattlerAttacker])//    if receives altl type damage boost?
             gBattleMovePower = (gBattleMovePower * 120 / 100);  //will do neutral to everything, but keeping this line, as also won't get stab, buffed to 130 from 120
@@ -3884,7 +3942,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_STAKEOUT:
         if (gDisableStructs[gBattlerTarget].isFirstTurn == 2) // just switched in
-            gBattleMoveDamage *= 2;
+            OffensiveModifer(200);
         break;
     case ABILITY_MEGA_LAUNCHER:
         if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
@@ -3903,17 +3961,16 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_HEAVY_METAL:
         if (type == TYPE_STEEL)
-            gBattleMoveDamage = (gBattleMoveDamage * 120) / 100;
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
         break;
     case ABILITY_LIVEWIRE:
         if (type == TYPE_ELECTRIC)
-            gBattleMoveDamage = (gBattleMoveDamage * 120) / 100;
+            gBattleMovePower = (gBattleMovePower * 120 / 100);
         break;
     case ABILITY_TOADSTOOL_NYMPH:
         if (type == TYPE_FAIRY) //Fake stab
         {
-            gBattleMoveDamage = gBattleMoveDamage * 135;
-            gBattleMoveDamage = gBattleMoveDamage / 100;
+            OffensiveModifer(135);
         }
 
     case ABILITY_PIXILATE:
@@ -3938,7 +3995,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_NEUROFORCE:
         if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
-            gBattleMoveDamage = (gBattleMoveDamage * 125 / 100);
+            OffensiveModifer(125);
             //MulModifier(&finalModifier, UQ_4_12(1.25));
         break;
     case ABILITY_PUNK_ROCK:
@@ -3949,8 +4006,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     case ABILITY_SONAR:
         if (gBattleMoves[move].flags & FLAG_SOUND)
         {
-            gBattleMoveDamage = gBattleMoveDamage * 15;
-            gBattleMoveDamage = gBattleMoveDamage / 10;
+            gBattleMovePower = (gBattleMovePower * 150 / 100);
+            //gBattleMoveDamage = gBattleMoveDamage * 15;
+            //gBattleMoveDamage = gBattleMoveDamage / 10;
         }
             //gBattleMoveDamage *= 2; //somce using total dmg 2x may be too much, 1.5 boost on sonic_screech would still be good.
         //MulModifier(&modifier, UQ_4_12(1.3));
@@ -3974,8 +4032,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         //MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case ABILITY_GORILLA_TACTICS:
-        attack = (150 * attack) / 100;
-        spAttack = (150 * spAttack) / 100;
+        OffensiveModifer(150);
         break;
     case ABILITY_FLUORESCENCE:
         if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY))
@@ -4045,30 +4102,33 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     switch (GetBattlerAbility(gBattlerTarget))  //readjusted order of abilities to be numeric order in case I need switch case to flow low to high
     {                          //after examining switches from emerald repo, appears value order of the switch case doesn't matter, can go anywhere
         //don't need put absorb abilities that heal here, as they use gbattlemovedamage todo heal and convert it in the util
-    case ABILITY_LAVA_FISSURE:
+    /*case ABILITY_LAVA_FISSURE:
     case ABILITY_FLASH_FIRE:
         if (type == TYPE_FIRE)  //need to make sure these for hidden power type change, so dynamic type rather than just normal move power? think alrady does
-            gBattleMoveDamage = 0;  //idk if this is needed, THINK It might be, since before the move was canceled, not actually used.
+            //gBattleMoveDamage = 0;  //idk if this is needed, THINK It might be, since before the move was canceled, not actually used.
         break;
     //case ABILITY_VOLT_ABSORB:
     case ABILITY_LIGHTNING_ROD:
     case ABILITY_MOTOR_DRIVE:
         if (type == TYPE_ELECTRIC)  //should work type is move type or type override which I think accounts for things that change movetype
-            gBattleMoveDamage = 0; //think may not need these as damage nullifcation is handled in battle_util
-        break;
+            //gBattleMoveDamage = 0; //think may not need these as damage nullifcation is handled in battle_util
+        break;*/
     case ABILITY_THICK_FAT:
         if (type == (TYPE_FIRE || TYPE_ICE))
-            gBattleMoveDamage /= 2;
+        OffensiveModifer(50);
+            //gBattleMoveDamage /= 2;
         break;
     case ABILITY_FEATHER_JACKET:
         if (type == TYPE_ICE)
-            gBattleMoveDamage /= 2;
+            OffensiveModifer(50);
+            //gBattleMoveDamage /= 2;
         break;
     case ABILITY_DAMP:
     case ABILITY_WATER_BUBBLE:
         if (type == TYPE_FIRE)
         {
-            gBattleMoveDamage /= 2;
+            OffensiveModifer(50);
+            //gBattleMoveDamage /= 2;
             //MulModifier(&modifier, UQ_4_12(0.5));
             //if (updateFlags)
               //  RecordAbilityBattle(gBattlerTarget, ability);
@@ -4076,57 +4136,56 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_HEATPROOF:
         if (type == TYPE_FIRE)
-            gBattleMoveDamage /= 2; //reset from 4 back to 2, with super multiplier change, keeping others as they are
+            OffensiveModifer(50); //reset from 4 back to 2, with super multiplier change, keeping others as they are
         break;
     case ABILITY_AURA_BREAK:
         if (type == TYPE_DARK || type == TYPE_FAIRY)
-            gBattleMoveDamage /= 2;
+            OffensiveModifer(50);
         break;
-    case ABILITY_GLACIAL_ICE:
+    /*case ABILITY_GLACIAL_ICE:
         if (type == TYPE_FIRE)// || TYPE_ICE))
-            gBattleMoveDamage = 0;
+            //gBattleMoveDamage = 0;
         break;
     case ABILITY_SAP_SIPPER:
         if (type == TYPE_GRASS)
-            gBattleMoveDamage = 0;
+            //gBattleMoveDamage = 0;
         break;
     case ABILITY_GALEFORCE:
         if (gBattleMoves[move].flags & FLAG_WIND_MOVE)
-            gBattleMoveDamage = 0;
+            //gBattleMoveDamage = 0;*/
     case ABILITY_DRY_SKIN:
         if (type == TYPE_FIRE)
-            gBattleMoveDamage = (gBattleMoveDamage * 125) / 100;
+            OffensiveModifer(125);
             //MulModifier(&modifier, UQ_4_12(1.25));
        // if (type == TYPE_WATER)
-         //   gBattleMoveDamage = 0;
+            //gBattleMoveDamage = 0;
         break;
     //case ABILITY_WATER_ABSORB:
-    case ABILITY_STORM_DRAIN:
+    /*case ABILITY_STORM_DRAIN:
         if (type == TYPE_WATER)
-            gBattleMoveDamage = 0;
+            //gBattleMoveDamage = 0;//actually dry skin prooves I don't need these //gBattleMoveDamage = 0; values, it defaults to a bs that stops attack
         break;
     case ABILITY_JEWEL_METABOLISM:
         if (type == TYPE_ROCK)
-            gBattleMoveDamage = 0;
-        break;
+            //gBattleMoveDamage = 0;
+        break;*/ //unsure if this will work, previous ability absorb worked by cancel move in atk canceler, then resetting battlemovedmg and using other script need test
     case ABILITY_PICKPOCKET:
         if (IsMoveMakingContact(move, gBattlerAttacker)) //small common sense damage reduction as most mon with this have shit defense,
         {
-            gBattleMoveDamage = (gBattleMoveDamage * 200) / 300;    //makes sense cuz of common pickpocket tacket of bump/run they prepare and intentionally take a hit
+            OffensiveModifer(67);    //makes sense cuz of common pickpocket tacket of bump/run they prepare and intentionally take a hit
         }
         break;
     case ABILITY_FLUFFY:
         if (IsMoveMakingContact(move, gBattlerAttacker))
         {
-            gBattleMoveDamage /= 2;
+            OffensiveModifer(50);
             //MulModifier(&modifier, UQ_4_12(0.5));
             //if (updateFlags)
                 //RecordAbilityBattle(gBattlerTarget, ability);//test if I need this line.
         }
-        if (type == TYPE_FIRE) //changed with super effective rework in mind
+        if (type == TYPE_FIRE) //changed with super effective rework in mind,
         {
-            gBattleMoveDamage = gBattleMoveDamage * 155;
-            gBattleMoveDamage = gBattleMoveDamage / 100;
+            OffensiveModifer(155);
         }
             //MulModifier(&modifier, UQ_4_12(1.5)); //CHeck if need else if, fire contact moves should be 1
         break;  //tested in w3 schools, checks out, it reads top to bottom with ifs, not like switch breaks, its all inclusive
@@ -4134,44 +4193,44 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     case ABILITY_LIQUID_METAL:
         if ((IsMoveMakingContact(move, gBattlerAttacker)) || usesDefStat)   //regi steel exclusive
         {
-            gBattleMoveDamage = (gBattleMoveDamage * 67 / 100);
+            OffensiveModifer(67);
             
         }
         break;
     case ABILITY_MULTISCALE:
     case ABILITY_SHADOW_SHIELD: //lunala exclusive
         if (BATTLER_MAX_HP(gBattlerTarget))
-            gBattleMoveDamage /= 2;
+            OffensiveModifer(50);
         break;
     case ABILITY_FILTER:
     case ABILITY_SOLID_ROCK:
     case ABILITY_PRISM_ARMOR:   //necrozma exclusive
         if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
         {
-            gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
+            OffensiveModifer(75);
         }  // MulModifier(&finalModifier, UQ_4_12(0.75));
         break;    
     case ABILITY_FUR_COAT:
         if (usesDefStat)//IS_MOVE_PHYSICAL(move))
         {
-            gBattleMoveDamage /= 2;
+            OffensiveModifer(50);
         }
         break;
     case ABILITY_KLUTZ:
         if (usesDefStat)//IS_MOVE_PHYSICAL(move))   //klutz used to falling over has higher pain tollereance
         {
-            gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
+            OffensiveModifer(75);
         }
         break;
     case ABILITY_MAGMA_ARMOR:
     case ABILITY_ICE_SCALES:
         if (!usesDefStat)//IS_MOVE_SPECIAL(move))
-            gBattleMoveDamage /= 2;
+            OffensiveModifer(50);   //should be able to safely use as condition already states def stat is false
         break;
     case ABILITY_SLOW_START:
         if (gDisableStructs[gBattlerTarget].slowStartTimer != 0)    //was gonna add crit excluion clause but it seems abilities don't have that, only the moves
-            gBattleMoveDamage /= 2; //so that's an extra bonus of having damage reduction via ability     may do 4 turn timer with 75% damage reduction instead of 50% @ 2 turns
-        break;//yeah like that idea a lot more , that's most likley way to powerful... doing 3 turn timer at 50%
+            OffensiveModifer(67); //so that's an extra bonus of having damage reduction via ability     may do 4 turn timer with 75% damage reduction instead of 50% @ 2 turns
+        break;//yeah like that idea a lot more , that's most likley way to powerful... doing 3 turn timer at 50%, regi has high hp and def changed to 1/3rd cut
     case ABILITY_GRASS_PELT:
         if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN
             && !gProtectStructs[gBattlerAttacker].confusionSelfDmg)
@@ -4185,15 +4244,15 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         break;
     case ABILITY_PUNK_ROCK:
         if (gBattleMoves[move].flags & FLAG_SOUND)
-            gBattleMoveDamage /= 2;
+            OffensiveModifer(50);
         break;
     case ABILITY_WATER_COMPACTION:
         if (type == TYPE_WATER)
-            gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
+            OffensiveModifer(75); //effect I added
         break;
     case ABILITY_OCEAN_MEMORY:
         if (type == TYPE_WATER)
-            gBattleMoveDamage /= 2;
+            OffensiveModifer(50);
         break;
     }
 
@@ -4203,7 +4262,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         switch (GetBattlerAbility(BATTLE_PARTNER(gBattlerTarget)))
         {
         case ABILITY_FRIEND_GUARD:
-            gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
+            OffensiveModifer(75);
+            //gBattleMoveDamage = (gBattleMoveDamage * 75 / 100);
             break;
         case ABILITY_FLOWER_GIFT:
             if (IsBattlerWeatherAffected(BATTLE_PARTNER(gBattlerTarget), WEATHER_SUN_ANY))
@@ -4227,24 +4287,115 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //get wonder guard logic to work here
         {
             //((gBattleMoveDamage *= 15) / 100); //should be 15% damage i.e 85% damage cut
-            gBattleMoveDamage *= 15;
-            gBattleMoveDamage /= 100; //just realized this effectively makes super effective do same damage as normal which since its through a shield guess this is fine
+            OffensiveModifer(15);
+             //just realized this effectively makes super effective do same damage as normal which since its through a shield guess this is fine
         }
         else if (!(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE))  //hopefully works for normal effect and doesn't break fixed damage & oh ko moves
         {
             //((gBattleMoveDamage *= 30) / 100); //should be 30% damage i.e 70% damage cut
-            gBattleMoveDamage *= 30;
-            gBattleMoveDamage /= 100;
+            OffensiveModifer(30);
+            
         }
     }//move animation similar to spike shield use protect effect think combine with harden
 
+    //sidestatus means target side status, checked from bs_commands.c damagecalc function
+    //this is sayign what happens to the attackers damage given said condition so use offesne multiplier
     if (((sideStatus & SIDE_STATUS_AURORA_VEIL) && !IS_CRIT) //not a crit
         && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR
         && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
         && IsBlackFogNotOnField())
     {
-        gBattleMoveDamage /= 2;
+        OffensiveModifer(50);
     } //end of general effects
+
+    //can keep here but just need to use gbattlemovedamage //nvm that didn't seem to work either
+    //using gbattlemovedmage didn't seem to change dmg, only fix I can think of is to reuse and just keep damage
+    //value but put inside both physical and special
+    // are effects of weather negated with cloud nine or air lock
+    if (WEATHER_HAS_EFFECT2 && IsBlackFogNotOnField()) //weather dmg changes weren't working at all, think was becuz I had  below dmg calc
+    {
+        if (gBattleWeather & WEATHER_RAIN_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
+                OffensiveModifer(50); //tested workss perfectly
+                break;
+            case TYPE_WATER:
+                OffensiveModifer(150);
+                break;
+            }
+
+            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_LIQUID_SOUL
+                && gBattleMoves[move].type == TYPE_WATER)  //hopefully checks if move was orginally water and will boost damage in rain even when ghost type
+            {
+                OffensiveModifer(150);
+            }
+        }
+
+        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_FLUORESCENCE        
+        && !IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) && IsBlackFogNotOnField()
+        && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
+        {
+            OffensiveModifer(100);
+        } //simpler balancing for fluorescence do dmg cut/ nvm removed dmg cut, low bst and forgot lowered super bonus etc., so will mean just avoids dmg cut from other weather
+
+        //moved these here, because they don't have to do with physical or special damage alone anymore.  since I removed the type link
+        // any weather except sun weakens solar beam
+        else if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
+            OffensiveModifer(50);
+
+        
+
+        // sunny
+        if (gBattleWeather & WEATHER_SUN_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+                OffensiveModifer(150);
+                break;
+            case TYPE_WATER:
+            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
+                OffensiveModifer(50);
+                break;
+            case TYPE_ICE:
+            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
+                OffensiveModifer(33);
+                 //66% dmg cut  this is a grass type buff, especially so for sunflora who is now grass/fire
+                break;
+            }
+        }
+
+        // hail
+        if (gBattleWeather & WEATHER_HAIL_ANY)
+        {
+            switch (type)
+            {
+            case TYPE_FIRE:
+            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
+                OffensiveModifer(33);
+                //33% damage cut, so less of a cut than in rain, edit- actually fires are harder to start in cold so makes sense to have higher drop than rain
+                break;  //changed to 66% cut,  so for mon weak to fire they take slightly less than neutral dmg
+
+            //case TYPE_ICE:
+              //  damage = (damage * 125) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
+              //  break;
+            } //since I made hail a defensive boost, I may remove dmg boost, 
+        }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
+    }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing
+
+    /*In order for a fire to start, your tinderand firewood must reach a combustible temperature.
+    Fires in the summer, even after a summer rain, can be easier to start
+    because the wood will be closer to a combustible temperature than even dry wood in the winter.
+    You will need more heat to get your fire started in the cold.*/  //logic for why fire dmg cut in hail/
+
+    // flash fire triggered
+    if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
+        OffensiveModifer(150);
+         //how does this work, do I need to move it, or does it auto boost all damage?
+                                        //it boosts all because its not in physical or special formula 
 
     //physical specific effects
     // critical hits ignore attack stat's stage drops
@@ -4321,98 +4472,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     
         //other damage factors
 
-        //can keep here but just need to use gbattlemovedamage //nvm that didn't seem to work either
-    //using gbattlemovedmage didn't seem to change dmg, only fix I can think of is to reuse and just keep damage
-    //value but put inside both physical and special
-    // are effects of weather negated with cloud nine or air lock
-    if (WEATHER_HAS_EFFECT2 && IsBlackFogNotOnField()) //weather dmg changes weren't working at all, think was becuz I had  below dmg calc
-    {
-        if (gBattleWeather & WEATHER_RAIN_ANY)
-        {
-            switch (type)
-            {
-            case TYPE_FIRE:
-            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
-                damage /= 2;
-                break;
-            case TYPE_WATER:
-                damage = (damage * 15) / 10;
-                break;
-            }
-
-            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_LIQUID_SOUL
-                && gBattleMoves[move].type == TYPE_WATER)  //hopefully checks if move was orginally water and will boost damage in rain even when ghost type
-            {
-                damage = (damage * 15) / 10;
-            }
-        }
-
-        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_FLUORESCENCE        
-        && !IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) && IsBlackFogNotOnField()
-        && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
-        {
-            //damage = (damage * 85) / 100;
-            damage = damage;
-        } //simpler balancing for fluorescence do dmg cut/ nvm removed dmg cut, low bst and forgot lowered super bonus etc., so will mean just avoids dmg cut from other weather
-
-        //moved these here, because they don't have to do with physical or special damage alone anymore.  since I removed the type link
-        // any weather except sun weakens solar beam
-        else if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
-            damage /= 2;
-
-        
-
-        // sunny
-        if (gBattleWeather & WEATHER_SUN_ANY)
-        {
-            switch (type)
-            {
-            case TYPE_FIRE:
-                damage = (damage * 15) / 10;  //50% damage increase
-                break;
-            case TYPE_WATER:
-            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
-                damage /= 2;            //50% damage cut
-                break;
-            case TYPE_ICE:
-            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
-                damage = (damage * 10) / 30; //66% dmg cut  this is a grass type buff, especially so for sunflora who is now grass/fire
-                break;
-            }
-        }
-
-        // hail
-        if (gBattleWeather & WEATHER_HAIL_ANY)
-        {
-            switch (type)
-            {
-            case TYPE_FIRE:
-            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
-                damage = (damage * 10) / 30;  //33% damage cut, so less of a cut than in rain, edit- actually fires are harder to start in cold so makes sense to have higher drop than rain
-                break;  //changed to 66% cut,  so for mon weak to fire they take slightly less than neutral dmg
-
-            //case TYPE_ICE:
-              //  damage = (damage * 125) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
-              //  break;
-            } //since I made hail a defensive boost, I may remove dmg boost, 
-        }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
-    }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing
-
-    /*In order for a fire to start, your tinderand firewood must reach a combustible temperature.
-    Fires in the summer, even after a summer rain, can be easier to start
-    because the wood will be closer to a combustible temperature than even dry wood in the winter.
-    You will need more heat to get your fire started in the cold.*/  //logic for why fire dmg cut in hail/
-
-    // flash fire triggered
-    if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
-        damage = (damage * 15) / 10;  //how does this work, do I need to move it, or does it auto boost all damage?
-                                        //it boosts all because its not in physical or special formula 
-
-
-        
         if ((attacker->status1 & STATUS1_BURN) && IsBlackFogNotOnField() && attacker->ability != ABILITY_GUTS) //nvm don't need is physical because its already in the bracket for that ^
         {
-            if (attacker->ability == ABILITY_HEATPROOF) //halves effects from burn & heat/fire
+            if (attacker->ability == ABILITY_HEATPROOF) //halves effects from burn & heat/fire  //so burn atk cut is less
                 damage = (damage * 3) / 4;
             else
                 damage /= 2;
@@ -4446,13 +4508,13 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     
 
     if (gBattleMoves[move].flags & FLAG_DMG_MINIMIZE && gStatuses3[gBattlerTarget] & STATUS3_MINIMIZED)
-        gBattleMoveDamage *= 2;
+        OffensiveModifer(200);
     if (gBattleMoves[move].flags & FLAG_DMG_2X_UNDERGROUND && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
-        gBattleMoveDamage *= 2;
+        OffensiveModifer(200);
     if (gBattleMoves[move].flags & FLAG_DMG_2X_UNDERWATER && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER)
-        gBattleMoveDamage *= 2;
+        OffensiveModifer(200);
     if (gBattleMoves[move].flags & FLAG_DMG_2X_IN_AIR && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
-        gBattleMoveDamage *= 2;
+        OffensiveModifer(200);
     //port from emerald simplify battlescript don't need jumps and damage bytes in the script
     //with realization about weather effects think this may not be working here, and instead may 
     //need to put directly into damage calc?
@@ -4508,94 +4570,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
         //other damage factors
 
-        //can keep here but just need to use gbattlemovedamage //nvm that didn't seem to work either
-    //using gbattlemovedmage didn't seem to change dmg, only fix I can think of is to reuse and just keep damage
-    //value but put inside both physical and special
-    // are effects of weather negated with cloud nine or air lock
-    if (WEATHER_HAS_EFFECT2 && IsBlackFogNotOnField()) //weather dmg changes weren't working at all, think was becuz I had  below dmg calc
-    {
-        if (gBattleWeather & WEATHER_RAIN_ANY)
-        {
-            switch (type)
-            {
-            case TYPE_FIRE:
-            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
-                damage /= 2;
-                break;
-            case TYPE_WATER:
-                damage = (damage * 15) / 10;
-                break;
-            }
-
-            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_LIQUID_SOUL
-                && gBattleMoves[move].type == TYPE_WATER)  //hopefully checks if move was orginally water and will boost damage in rain even when ghost type
-            {
-                damage = (damage * 15) / 10;
-            }
-        }
-
-        if (GetBattlerAbility(gBattlerAttacker) == ABILITY_FLUORESCENCE        
-        && !IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) && IsBlackFogNotOnField()
-        && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
-        {
-            //damage = (damage * 85) / 100;
-            damage = damage;
-        } //simpler balancing for fluorescence do dmg cut/ nvm removed dmg cut, low bst and forgot lowered super bonus etc., so will mean just avoids dmg cut from other weather
-
-        //moved these here, because they don't have to do with physical or special damage alone anymore.  since I removed the type link
-        // any weather except sun weakens solar beam
-        else if ((gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_HAIL)) && gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM)
-            damage /= 2;
-
-        
-
-        // sunny
-        if (gBattleWeather & WEATHER_SUN_ANY)
-        {
-            switch (type)
-            {
-            case TYPE_FIRE:
-                damage = (damage * 15) / 10;  //50% damage increase
-                break;
-            case TYPE_WATER:
-            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
-                damage /= 2;            //50% damage cut
-                break;
-            case TYPE_ICE:
-            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
-                damage = (damage * 10) / 30; //66% dmg cut  this is a grass type buff, especially so for sunflora who is now grass/fire
-                break;
-            }
-        }
-
-        // hail
-        if (gBattleWeather & WEATHER_HAIL_ANY)
-        {
-            switch (type)
-            {
-            case TYPE_FIRE:
-            if (GetBattlerAbility(gBattlerAttacker) != ABILITY_FORECAST)
-                damage = (damage * 10) / 30;  //33% damage cut, so less of a cut than in rain, edit- actually fires are harder to start in cold so makes sense to have higher drop than rain
-                break;  //changed to 66% cut,  so for mon weak to fire they take slightly less than neutral dmg
-
-            //case TYPE_ICE:
-              //  damage = (damage * 125) / 100;  //fixed now is 25% damage increase rather than 50 since hail also does damage
-              //  break;
-            } //since I made hail a defensive boost, I may remove dmg boost, 
-        }// !important slight ice buff, mostly gives glaile options on sandstorm or hail. so here in hail ice types would take 2/3 fire damage
-    }//it makes sense to add hail ice type damage buff. would also make late game  ice routes more punishing
-
-    /*In order for a fire to start, your tinderand firewood must reach a combustible temperature.
-    Fires in the summer, even after a summer rain, can be easier to start
-    because the wood will be closer to a combustible temperature than even dry wood in the winter.
-    You will need more heat to get your fire started in the cold.*/  //logic for why fire dmg cut in hail/
-
-    // flash fire triggered
-    if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
-        damage = (damage * 15) / 10;  
-
-        
-        if ((sideStatus & SIDE_STATUS_LIGHTSCREEN) && !IS_CRIT
+            if ((sideStatus & SIDE_STATUS_LIGHTSCREEN) && !IS_CRIT
             && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR
             && IsBlackFogNotOnField())
         {
