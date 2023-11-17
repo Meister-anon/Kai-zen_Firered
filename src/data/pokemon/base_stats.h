@@ -11509,7 +11509,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_BAD_DREAMS, ABILITY_NONE},
+            .abilities = {ABILITY_BAD_DREAMS, ABILITY_DESPAIR}, //anti heal for opposing side, make work for items too
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -28419,7 +28419,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(90, 80, 70, 100, 97, 78),
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_FIRE, //makes no sense not to do this for grass mon that needs sun
         .catchRate = 75,
         .expYield = 158,
         //.evYield_SpAttack = 2,

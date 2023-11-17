@@ -1521,6 +1521,7 @@ enum
     ENDTURN_SANDSTORM,
     ENDTURN_SUN,
     ENDTURN_HAIL,
+    ENDTURN_FORECAST,
     ENDTURN_GRAVITY,
     ENDTURN_TRICK_ROOM,
     ENDTURN_WONDER_ROOM,
@@ -1900,11 +1901,15 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
                 if (!(gBattleWeather & WEATHER_SANDSTORM_PERMANENT)
                     && !IsAbilityOnField(ABILITY_SAND_STREAM))  //only the abilities that actually call weather directly
                 {
-                        if (--gWishFutureKnock.weatherDuration == 0)  //weather decrement
-                        {
-                            gBattleWeather &= ~WEATHER_SANDSTORM_TEMPORARY;
-                            gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
-                        }
+                    if (--gWishFutureKnock.weatherDuration == 0)  //weather decrement
+                    {
+                        gBattleWeather &= ~WEATHER_SANDSTORM_TEMPORARY;
+                        gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
+                    }
+                    else
+                    {
+                        gBattlescriptCurrInstr = BattleScript_DamagingWeatherContinues;
+                    }
                 }
                 else
                 {
@@ -1926,11 +1931,15 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
                     && !IsAbilityOnField(ABILITY_SUN_DISK))
                 {
 
-                        if (--gWishFutureKnock.weatherDuration == 0) //weathr decrement
-                        {
-                            gBattleWeather &= ~WEATHER_SUN_TEMPORARY;
-                            gBattlescriptCurrInstr = BattleScript_SunlightFaded;
-                        }
+                    if (--gWishFutureKnock.weatherDuration == 0) //weathr decrement
+                    {
+                        gBattleWeather &= ~WEATHER_SUN_TEMPORARY;
+                        gBattlescriptCurrInstr = BattleScript_SunlightFaded;
+                    }
+                    else
+                    {
+                        gBattlescriptCurrInstr = BattleScript_SunlightContinues;
+                    }
 
                 }
                 else
@@ -1954,11 +1963,15 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
 
                     //decided to keep this setup  are below drought/drizzle but still gives reason to use weather crystals its a good middle ground
                     //had to fix, logic hierarchy wasn't right, think wouldn't have properly gone to weather continue
-                        if (--gWishFutureKnock.weatherDuration == 0)    //weather decrement
-                        {
-                            gBattleWeather &= ~WEATHER_HAIL;
-                            gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
-                        }
+                    if (--gWishFutureKnock.weatherDuration == 0)    //weather decrement
+                    {
+                        gBattleWeather &= ~WEATHER_HAIL;
+                        gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
+                    }
+                    else
+                    {
+                        gBattlescriptCurrInstr = BattleScript_DamagingWeatherContinues;
+                    }
                 }
                 else
                 {
@@ -1970,6 +1983,73 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
                 ++effect;
             }
             ++gBattleStruct->turnCountersTracker;
+            break;
+        case ENDTURN_FORECAST:
+            if (!(gBattleTypeFlags & (BATTLE_TYPE_OLD_MAN_TUTORIAL)))
+            {
+                if (gCurrentTurnActionNumber >= gBattlersCount  //need this to prevent loop
+                    && gWishFutureKnock.weatherDuration == 0
+                    && gWishFutureKnock.forecastedWeather)
+                { // trying to make it not switch every turn, and find a good balance.
+                    // trying to store the value returned by random function in one field as per phoenixbound's suggestion. since it seemed I was calling 5 separate random functions
+                    //Random() % 4;   //for prediction change, have value 2 set by a stored value set in switchin
+                    //make this function activate only if weather timer is 0, so it'll set new weather long as no one else has set weather
+                    //if it can't set weather i.e trychangebattleweather fails, then clear stored value
+                    //since no weather would be active condition would be changed, remove hold effect for only in switch in
+
+                    /*if ((value2 == 0 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
+                        && gBattleWeather != (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY)) {
+                        gBattleWeather = (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY);
+                        BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates); //potentiall cange to other ones, so not permanent? need double check how weather setup again
+                        gBattleScripting.battler = battler;
+                        ++effect;
+                    }*/
+                    if (gWishFutureKnock.forecastedWeather == ENUM_WEATHER_RAIN)
+                    {
+                        //battler is only used for getting ability and I've already dealt with that so shouldn't be a problem
+                        if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedWeather, TRUE))
+                        {
+                            //if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
+                            //unique bs, weather predit long time
+                            //else
+                            gBattlescriptCurrInstr = BattleScript_DrizzleActivates;//change to forecast predict weather script
+                            gBattleScripting.battler = gActiveBattler; //make say something like predicted weather start, then use print weather strings
+                            //++effect; //remove check for battler just replace w scritp that doesnt use name firled just use forecasted weather
+                        }
+                    }
+                    else if (gWishFutureKnock.forecastedWeather == ENUM_WEATHER_SANDSTORM)
+                    {
+                        if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedWeather, TRUE))
+                        {
+                            gBattlescriptCurrInstr = BattleScript_SandstreamActivates;
+                            gBattleScripting.battler = gActiveBattler;
+                            //++effect;
+                        }
+                    }
+                    else if (gWishFutureKnock.forecastedWeather == ENUM_WEATHER_SUN)
+                    {
+                        if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedWeather, TRUE))
+                        {
+                            gBattlescriptCurrInstr = BattleScript_DroughtActivates;
+                            gBattleScripting.battler = gActiveBattler;
+                            //++effect;
+                        }
+                    }
+                    else if (gWishFutureKnock.forecastedWeather == ENUM_WEATHER_HAIL)
+                    {
+                        if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedWeather, TRUE))
+                        {
+                            gBattlescriptCurrInstr = BattleScript_SnowWarningActivates;
+                            gBattleScripting.battler = gActiveBattler;
+                            //++effect;
+                        }
+                    }
+                    BattleScriptExecute(gBattlescriptCurrInstr);
+                    ++effect;   
+
+                }
+            }
+        ++gBattleStruct->turnCountersTracker;
             break;
         case ENDTURN_GRAVITY:
             if (gFieldStatuses & STATUS_FIELD_GRAVITY && --gFieldTimers.gravityTimer == 0)
@@ -4655,11 +4735,13 @@ static const u16 sSwitchAbilities[][10] = {
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) //need check where this is used, in emerald its used in sunny day stuff etc.
 {
     u16 battlerAbility = GetBattlerAbility(battler);
+    if (gWishFutureKnock.forecastedWeather && gWishFutureKnock.weatherDuration == 0) //shouldbe activation for forecasted weather
+        battlerAbility = ABILITY_FORECAST;
 
     //for (i = 0; i < NELEMS(sPermanentWeatherAbilities); i++)//changign only primals  and overworld weathr are permanent weather, 
                                                        //drought drizzle is temp but doesn't decrement long as their on field, so effectively permanent
 
-        gWishFutureKnock.weatherDuration = 0;
+        
 
         if (gBattleWeather & WEATHER_PRIMAL_ANY
             && battlerAbility != ABILITY_DESOLATE_LAND
@@ -4692,22 +4774,29 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) 
             gWishFutureKnock.weatherDuration = 5;
             
             if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2]) //2 is weather extending hold effect
-                gWishFutureKnock.weatherDuration += 3;                
+                gWishFutureKnock.weatherDuration = 8;                
 
             return TRUE;
         }//want drought and drizzle to be special with this they can't be overwritten by other temp weather abilities
         //believe this is for squall and sun disk,  if not primal and not permanent weather, set temp weather with ability
 
-        else if ((viaAbility && !(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))
-            && (battlerAbility != ABILITY_DROUGHT && battlerAbility != ABILITY_DRIZZLE))
-            {
-                gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]); //should set temp weather w timer 0
-                //gWishFutureKnock.weatherDuration = 2; //changed mind will set to 2, / double changed mind, like it better with requiring item extender
+        else if ((viaAbility) && battlerAbility == ABILITY_FORECAST)
+        {
+            gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]);
+            gWishFutureKnock.weatherDuration = 5;   
 
-                if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2]) //2 is weather extending hold effect
-                    gWishFutureKnock.weatherDuration += 3; //would give 2 turns of weather after faint/switch out
-                return TRUE;
-            }
+            return TRUE;
+        }//weather extenders don't work with this, instead are used to set weather
+
+        else if (viaAbility && !(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))
+        {
+            gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]); //should set temp weather w timer 0
+            //gWishFutureKnock.weatherDuration = 2; //changed mind will set to 2, / double changed mind, like it better with requiring item extender
+
+            if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2]) //2 is weather extending hold effect
+                gWishFutureKnock.weatherDuration = 3; //would give 2 turns of weather after faint/switch out
+            return TRUE;
+        } //should be ability set, and not same as weather already set
 
         //move based weather change & other normal weather abilities
         else if ((!(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))  //CHECK specific weather isn't alraedy set
@@ -4717,7 +4806,7 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) 
             gWishFutureKnock.weatherDuration = 5;
 
             if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2]) //2 is weather extending hold effect
-                gWishFutureKnock.weatherDuration += 3;       
+                gWishFutureKnock.weatherDuration = 8;       
                 
             return TRUE;
         }
@@ -4874,7 +4963,7 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
 
 enum
 {
-    CASTFORM_NO_CHANGE,
+    CASTFORM_NO_CHANGE, 
     CASTFORM_TO_NORMAL,
     CASTFORM_TO_FIRE,
     CASTFORM_TO_WATER,
@@ -4929,9 +5018,16 @@ u8 CastformDataTypeChange(u8 battler)
         if (gBattleMons[battler].ability != ABILITY_FLOWER_GIFT || gBattleMons[battler].hp == 0)
             formChange = CHERRIM_NO_CHANGE;
         else if (gBattleMonForms[battler] == 0 && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY)
+        {
+            SET_BATTLER_TYPE2(battler, TYPE_FIRE);
             formChange = CHEERRIM_SUNSHINE;
+        }            
         else if (gBattleMonForms[battler] != 0 && (!WEATHER_HAS_EFFECT || !(gBattleWeather & WEATHER_SUN_ANY)))
+        {
+            SET_BATTLER_TYPE2(battler, TYPE_GRASS);
             formChange = CHERRIM_OVERCAST;
+        }
+            
     }
     return formChange;
 
@@ -4999,6 +5095,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
         //Pickup variables needed put above switch start
         u16 PickUpItem, heldItem;
+        u8 weatherEnum; //for forecast
 
         if (special)
             gLastUsedAbility = special;
@@ -5180,55 +5277,98 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             case ABILITY_FORECAST: //think I figured out the switch problem, this case works on switch in,
                 //while the other is after all turns are done, by switching castform in mid battle.
                 //I think I create a situation where both cases are true and both try to activate.
+                //change to use  TryChangeBattleWeather //think need make this use switchin done check, in case loop issue comes back
 
                 //plan setup weather to check if first turn, else if all battlers have completed actions. ok is working on start now.
-                effect = CastformDataTypeChange(battler);// I think if I copy the function values to an else if using random chance to activate & turn ended it should work how I want
-                if (effect)//i,e if (gCurrentTurnActionNumber >= gBattlersCount) && (gBattleMons[battler].hp != 0)  do value and random as before but a higher number and include
-                {// value for setting weather timers to 0, prob should use if for each weather type, and link it with its respective timer.
-                    BattleScriptPushCursorAndCallback(BattleScript_CastformChange);
-                    gBattleScripting.battler = battler;
-                    *(&gBattleStruct->formToChangeInto) = effect - 1;// sandstorm effect is continuing oddly, before I change "while" I'm trying line up
-                    // the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
-                }// before I had 4 separate random functions, so If I used while it could have been because they were returning multiple values at once.
+                // before I had 4 separate random functions, so If I used while it could have been because they were returning multiple values at once.
 
                 //maybe problem was the condition was always true?
+                if (!(gBattleTypeFlags & (BATTLE_TYPE_OLD_MAN_TUTORIAL)))
+                {
+                    if (!(gSpecialStatuses[battler].switchInAbilityDone)) // don't want to change weather every turn but I do want it to change, mid battle, and trigger after all battlers have had their turns. think that's turn action count > battlers count.
+                    { //I want it to trigger once at start of battle I think, but maybe not. Some people could make use of "normal" form castform. i guess
+                    // u16 value;// trying to store the value returned by random function in one field as per phoenixbound's suggestion. since it seemed I was calling 5 separate random functions
+                        u16 predictedWeather;
+                        value = Random() % 4; //and having random() in the if function was causing the effect to only work if true, which means a non 0 value, so a 3/4 chance.
+                        predictedWeather = Random() % 4;
+                        gSpecialStatuses[battler].switchInAbilityDone = TRUE;//use enum in place of static weather enum value
 
-                if (!(gBattleTypeFlags & (BATTLE_TYPE_OLD_MAN_TUTORIAL))) // don't want to change weather every turn but I do want it to change, mid battle, and trigger after all battlers have had their turns. think that's turn action count > battlers count.
-                { //I want it to trigger once at start of battle I think, but maybe not. Some people could make use of "normal" form castform. i guess
-                   // u16 value;// trying to store the value returned by random function in one field as per phoenixbound's suggestion. since it seemed I was calling 5 separate random functions
-                    value = Random() % 4; //and having random() in the if function was causing the effect to only work if true, which means a non 0 value, so a 3/4 chance.
-                    if (value == 0
-                        && (!(gBattleWeather & WEATHER_ANY))) {
-                        gBattleWeather = (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY);
-                        BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
-                        gBattleScripting.battler = battler;
-                        ++effect;
-                    }
-                    if (value == 1
-                        && (!(gBattleWeather & WEATHER_ANY))) {
-                        gBattleWeather = (WEATHER_SANDSTORM_PERMANENT | WEATHER_SANDSTORM_TEMPORARY);
-                        BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
-                        gBattleScripting.battler = battler;
-                        ++effect;
+                        if (predictedWeather == 0 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
+                            gWishFutureKnock.forecastedWeather = ENUM_WEATHER_RAIN;
 
-                    }
-                    if (value == 2
-                        && (!(gBattleWeather & WEATHER_ANY))) {
-                        gBattleWeather = (WEATHER_SUN_PERMANENT | WEATHER_SUN_TEMPORARY);
-                        BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
-                        gBattleScripting.battler = battler;
-                        ++effect;
-                    }
-                    if (value == 3
-                        && (!(gBattleWeather & WEATHER_ANY))) {
-                        gBattleWeather = WEATHER_HAIL;
-                        BattleScriptPushCursorAndCallback(BattleScript_HailActivates);
-                        gBattleScripting.battler = battler;// made battlescript change, got it working now.
-                        ++effect;
+                        else if (predictedWeather == 1 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SMOOTH_ROCK)
+                            gWishFutureKnock.forecastedWeather = ENUM_WEATHER_SANDSTORM;
 
-                    } //since this one is only meant to trigger on switch in,
-                    //I've set it to fail if any weather condition is already present.
-                    //that will at least prevent the looping...I hope
+                        else if (predictedWeather == 2 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_HEAT_ROCK)
+                            gWishFutureKnock.forecastedWeather = ENUM_WEATHER_SUN;
+
+                        else if (predictedWeather == 3 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_ICY_ROCK)
+                            gWishFutureKnock.forecastedWeather = ENUM_WEATHER_HAIL;
+                        
+                        //compare weatherEnum with forecastedWeather makea different message for each option
+                        //so 4 options for each  base condtion plus && forecastedWeather == X  
+                        //else if for each option
+                        if (value == 0 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
+                        {
+                            weatherEnum = ENUM_WEATHER_RAIN;
+                            if (TryChangeBattleWeather(battler, weatherEnum, TRUE))
+                            {
+                                //if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
+                                //unique bs, weather predit long time
+                                //else
+                                BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
+                                gBattleScripting.battler = battler;
+                                //++effect;
+                            }
+                        }
+                        
+                        if (value == 2 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_HEAT_ROCK)
+                        {
+                            weatherEnum = ENUM_WEATHER_SUN;
+                            if (TryChangeBattleWeather(battler, weatherEnum, TRUE))
+                            {
+                                BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
+                                gBattleScripting.battler = battler;
+                                //++effect;
+                            }
+                        }
+                        if (value == 3 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_ICY_ROCK)
+                        {
+                            weatherEnum = ENUM_WEATHER_HAIL;
+                            if (TryChangeBattleWeather(battler, weatherEnum, TRUE))
+                            {
+                                BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
+                                gBattleScripting.battler = battler;
+                                //++effect;
+                            }
+                        } //since this one is only meant to trigger on switch in,
+                        //I've set it to fail if any weather condition is already present.
+                        //that will at least prevent the looping...I hope
+                        // I think if I copy the function values to an else if using random chance to activate & turn ended it should work how I want
+                        
+                        if (value == 1 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SMOOTH_ROCK)
+                        {
+                            weatherEnum = ENUM_WEATHER_SANDSTORM;
+                            if (TryChangeBattleWeather(battler, weatherEnum, TRUE))
+                            {
+                                BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
+                                //gBattlescriptCurrInstr = BattleScript_SandstreamActivates;
+                                gBattleScripting.battler = battler;
+                                effect = 1;
+                            } //works no longer freezes on switch in, doesn't display correctly on battle start no weather effect 
+                        }
+                        else//i,e if (gCurrentTurnActionNumber >= gBattlersCount) && (gBattleMons[battler].hp != 0)  do value and random as before but a higher number and include
+                        {// value for setting weather timers to 0, prob should use if for each weather type, and link it with its respective timer.
+                            effect = CastformDataTypeChange(battler);
+                            if (effect){
+                            BattleScriptPushCursorAndCallback(BattleScript_CastformChange);
+                            gBattleScripting.battler = battler;
+                            *(&gBattleStruct->formToChangeInto) = effect - 1;// sandstorm effect is continuing oddly, before I change "while" I'm trying line up
+                            // the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
+                            }
+                        }
+                        
+                    }
                 }
                 break;
             case ABILITY_FLOWER_GIFT:
@@ -5927,7 +6067,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         && !(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK))
                     {
                         //gLastUsedAbility = ABILITY_PHOTOSYNTHESIZE; 
-                        BattleScriptPushCursorAndCallback(BattleScript_AbilityHpHeal);  //can use same script //but have another from updates
+                        BattleScriptPushCursorAndCallback(BattleScript_EndTurnAbilityHpHeal);  //can use same script //but have another from updates
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 12; //buffed all weather abilities now heal 1/12
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
@@ -5942,7 +6082,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         && !(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK))
                     {
                         //gLastUsedAbility = ABILITY_ICE_BODY; //without this line can use same block for multiple abilities
-                        BattleScriptPushCursorAndCallback(BattleScript_AbilityHpHeal);  //can use same script //but have another from updates
+                        BattleScriptPushCursorAndCallback(BattleScript_EndTurnAbilityHpHeal);  //can use same script //but have another from updates
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 12;  //buffed all weather abilities now heal 1/12
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
@@ -5955,7 +6095,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         && gBattleMons[battler].maxHP > gBattleMons[battler].hp
                         && !(gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK))
                     {
-                        BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
+                        BattleScriptPushCursorAndCallback(BattleScript_EndTurnAbilityHpHeal);
                         gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
@@ -6188,92 +6328,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                 case ABILITY_TRUANT:
                     gDisableStructs[gBattlerAttacker].truantCounter ^= 1;
-                    break;
-
-                    //can conifirm error was entirely because of switch in, not end turn
-                case ABILITY_FORECAST: //plan setup weather to check if first turn, else if all battlers have completed actions. ok is working on start now.
-                   /* effect = CastformDataTypeChange(battler);// I think if I copy the function values to an else if using random chance to activate & turn ended it should work how I want
-                    if (effect)//i,e if (gCurrentTurnActionNumber >= gBattlersCount) && (gBattleMons[battler].hp != 0)  do value and random as before but a higher number and include
-                    {// value for setting weather timers to 0, prob should use if for each weather type, and link it with its respective timer.
-                        BattleScriptPushCursorAndCallback(BattleScript_CastformChange);
-                        gBattleScripting.battler = battler;
-                        *(&gBattleStruct->formToChangeInto) = effect - 1;// sandstorm effect is continuing oddly, before I change "while" I'm trying line up
-                    }*/// the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
-                    if (gCurrentTurnActionNumber >= gBattlersCount
-                        && Random() % 2 == 0) //actually since the bug happens everytime, its most likely do to the first case and not this one.
-                        //since this effect only happens on a chance.
-
-                    { // trying to make it not switch every turn, and find a good balance.
-                        u16 value2;// trying to store the value returned by random function in one field as per phoenixbound's suggestion. since it seemed I was calling 5 separate random functions
-                        value2 = Random() % 5;
-                        if (value2 == 0
-                            && gBattleWeather != (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY)) {
-                            gBattleWeather = (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY);
-                            BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates); //potentiall cange to other ones, so not permanent? need double check how weather setup again
-                            gBattleScripting.battler = battler;
-                            ++effect;
-                        }
-                        if (value2 == 1
-                            && gBattleWeather != (WEATHER_SANDSTORM_PERMANENT | WEATHER_SANDSTORM_TEMPORARY)) {
-                            gBattleWeather = (WEATHER_SANDSTORM_PERMANENT | WEATHER_SANDSTORM_TEMPORARY);
-                            BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
-                            gBattleScripting.battler = battler;
-                            ++effect;
-
-                        }
-                        if (value2 == 2
-                            && gBattleWeather != (WEATHER_SUN_PERMANENT | WEATHER_SUN_TEMPORARY)) {
-                            gBattleWeather = (WEATHER_SUN_PERMANENT | WEATHER_SUN_TEMPORARY);
-                            BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
-                            gBattleScripting.battler = battler;
-                            ++effect;
-                        }
-                        if (value2 == 3
-                            && gBattleWeather != WEATHER_HAIL) {
-                            gBattleWeather = WEATHER_HAIL;
-                            BattleScriptPushCursorAndCallback(BattleScript_HailActivates);
-                            gBattleScripting.battler = battler;// made battlescript change, got it working now.
-                            ++effect;
-
-                        }
-                        if (value2 == 4
-                            && gBattleWeather == WEATHER_ANY)
-                        {
-
-
-                            if (gBattleWeather == WEATHER_RAIN_ANY)
-                            {
-                                gWishFutureKnock.weatherDuration = 0;
-                                gBattleCommunication[MULTISTRING_CHOOSER] = 2;
-                                BattleScriptPushCursorAndCallback(BattleScript_RainContinuesOrEnds);
-                                gBattleScripting.battler = battler;
-                                ++effect;
-                            }
-                            if (gBattleWeather == WEATHER_SANDSTORM_ANY) {
-                                gWishFutureKnock.weatherDuration = 0;
-                                BattleScriptPushCursorAndCallback(BattleScript_SandStormHailEnds);
-                                gBattleScripting.battler = battler;
-                                ++effect;
-                            }
-                            if (gBattleWeather == WEATHER_SUN_ANY) {
-                                gWishFutureKnock.weatherDuration = 0;
-                                BattleScriptPushCursorAndCallback(BattleScript_SunlightFaded);
-                                gBattleScripting.battler = battler;
-                                ++effect;
-                            }
-                            if (gBattleWeather == WEATHER_HAIL_ANY) {
-                                gWishFutureKnock.weatherDuration = 0;
-                                BattleScriptPushCursorAndCallback(BattleScript_SandStormHailEnds);
-                                gBattleScripting.battler = battler;
-                                ++effect;
-
-                            }
-                            // ++effect;
-                        }
-
-
-
-                    }
                     break;
                 }//end of end turn abilities
 

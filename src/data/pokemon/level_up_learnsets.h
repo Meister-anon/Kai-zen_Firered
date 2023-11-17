@@ -5418,12 +5418,15 @@ static const struct LevelUpMove sAggronLevelUpLearnset[] = {
 
 static const struct LevelUpMove sCastformLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
+    LEVEL_UP_MOVE(1, MOVE_WEATHER_BALL),
     LEVEL_UP_MOVE(9, MOVE_WATER_GUN),
     LEVEL_UP_MOVE(9, MOVE_EMBER),
     LEVEL_UP_MOVE(9, MOVE_POWDER_SNOW),
+    LEVEL_UP_MOVE(9, MOVE_MUD_SLAP),
     LEVEL_UP_MOVE(20, MOVE_RAIN_DANCE),
     LEVEL_UP_MOVE(20, MOVE_SUNNY_DAY),
     LEVEL_UP_MOVE(20, MOVE_HAIL),
+    LEVEL_UP_MOVE(20, MOVE_SANDSTORM),
     LEVEL_UP_MOVE(30, MOVE_WEATHER_BALL),
     LEVEL_UP_END
 }; //add more moves and make it so if castform uses weather move
