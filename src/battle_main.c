@@ -1151,6 +1151,19 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
                 gBattleStruct->dynamicMoveType = TYPE_NORMAL;// | F_DYNAMIC_TYPE_2;
         }
     }
+    else if ((move == MOVE_WEATHER_BALL) && (WEATHER_HAS_EFFECT))
+    {
+         if (gBattleWeather & WEATHER_RAIN_ANY) //TEST TO MAKE SURE WORKS - works
+            gBattleStruct->dynamicMoveType = TYPE_WATER;
+        else if (gBattleWeather & WEATHER_SANDSTORM_ANY)
+            gBattleStruct->dynamicMoveType = TYPE_ROCK;
+        else if (gBattleWeather & WEATHER_SUN_ANY)
+            gBattleStruct->dynamicMoveType = TYPE_FIRE;
+        else if (gBattleWeather & WEATHER_HAIL_ANY)
+            gBattleStruct->dynamicMoveType = TYPE_ICE;
+        else
+            gBattleStruct->dynamicMoveType = TYPE_NORMAL;
+    }
 
     attackerAbility = GetBattlerAbility(battlerAtk);
     GET_MOVE_TYPE(move, moveType);
@@ -1246,6 +1259,158 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
         gSpecialStatuses[battlerAtk].gemParam = GetBattlerHoldEffectParam(battlerAtk);
         gSpecialStatuses[battlerAtk].gemBoost = TRUE;
     }
+}
+
+u8 ReturnMoveType(u16 move, u8 battlerAtk)
+{
+    s32 typeBits;
+    u32 moveType, ateType, attackerAbility;
+    u16 holdEffect = GetBattlerHoldEffect(battlerAtk, TRUE);
+
+    if (move == MOVE_STRUGGLE || move == MOVE_BIDE)
+        return;
+
+    gBattleStruct->dynamicMoveType = 0xFF; //change for new setup
+    gBattleStruct->ateBoost[battlerAtk] = 0;
+    gSpecialStatuses[battlerAtk].gemBoost = FALSE;
+
+    
+    if (gBattleMoves[move].effect == EFFECT_CHANGE_TYPE_ON_ITEM) //not fling
+    {
+        if (holdEffect == gBattleMoves[move].argument)
+            gBattleStruct->dynamicMoveType = ItemId_GetSecondaryId(gBattleMons[battlerAtk].item);// | F_DYNAMIC_TYPE_2;
+    }
+    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE)
+    {
+        if (gBattleMons[battlerAtk].type1 != TYPE_MYSTERY)
+            gBattleStruct->dynamicMoveType = gBattleMons[battlerAtk].type1;// | F_DYNAMIC_TYPE_2;
+        else if (gBattleMons[battlerAtk].type2 != TYPE_MYSTERY)
+            gBattleStruct->dynamicMoveType = gBattleMons[battlerAtk].type2;// | F_DYNAMIC_TYPE_2;
+        else if (gBattleMons[battlerAtk].type3 != TYPE_MYSTERY)
+            gBattleStruct->dynamicMoveType = gBattleMons[battlerAtk].type3;// | F_DYNAMIC_TYPE_2;
+    }
+    else if (gBattleMoves[move].effect == EFFECT_NATURAL_GIFT)
+    {
+        if (ItemId_GetPocket(gBattleMons[battlerAtk].item) == POCKET_BERRY_POUCH)
+            gBattleStruct->dynamicMoveType = gNaturalGiftTable[ITEM_TO_BERRY(gBattleMons[battlerAtk].item)].type;
+    }
+    else if (gBattleMoves[move].effect == EFFECT_TERRAIN_PULSE)
+    {
+        if (IsBattlerTerrainAffected(battlerAtk, STATUS_FIELD_TERRAIN_ANY))
+        {
+            if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+                gBattleStruct->dynamicMoveType = TYPE_ELECTRIC;// | F_DYNAMIC_TYPE_2;
+            else if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
+                gBattleStruct->dynamicMoveType = TYPE_GRASS;// | F_DYNAMIC_TYPE_2;
+            else if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)
+                gBattleStruct->dynamicMoveType = TYPE_FAIRY;// | F_DYNAMIC_TYPE_2;
+            else if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN)
+                gBattleStruct->dynamicMoveType = TYPE_PSYCHIC;// | F_DYNAMIC_TYPE_2;
+            else //failsafe
+                gBattleStruct->dynamicMoveType = TYPE_NORMAL;// | F_DYNAMIC_TYPE_2;
+        }
+    }
+    else if ((move == MOVE_WEATHER_BALL) && (WEATHER_HAS_EFFECT))
+    {
+         if (gBattleWeather & WEATHER_RAIN_ANY) //TEST TO MAKE SURE WORKS - works
+            gBattleStruct->dynamicMoveType = TYPE_WATER;
+        else if (gBattleWeather & WEATHER_SANDSTORM_ANY)
+            gBattleStruct->dynamicMoveType = TYPE_ROCK;
+        else if (gBattleWeather & WEATHER_SUN_ANY)
+            gBattleStruct->dynamicMoveType = TYPE_FIRE;
+        else if (gBattleWeather & WEATHER_HAIL_ANY)
+            gBattleStruct->dynamicMoveType = TYPE_ICE;
+        else
+            gBattleStruct->dynamicMoveType = TYPE_NORMAL;
+    }
+
+    attackerAbility = GetBattlerAbility(battlerAtk);
+    GET_MOVE_TYPE(move, moveType);
+
+
+    if (move == MOVE_RAGE) //sets rage type with preference for non normal
+        {
+            if (gBattleMons[battlerAtk].type1 == TYPE_NORMAL 
+            && gBattleMons[battlerAtk].type2 != TYPE_NORMAL)
+                gBattleStruct->dynamicMoveType = gBattleMons[battlerAtk].type2;
+            else //sets rage to type 1
+                gBattleStruct->dynamicMoveType = gBattleMons[battlerAtk].type1; //need make sure use battlerAtk not gbattlerattacker that causes errors for some reason
+        }
+
+    if ((gFieldStatuses & STATUS_FIELD_ION_DELUGE && moveType == TYPE_NORMAL)//add absolute zero, check if ability on field, like stench then do water chance to ice
+        || gStatuses4[battlerAtk] & STATUS4_ELECTRIFIED)
+    {
+        gBattleStruct->dynamicMoveType = TYPE_ELECTRIC;// | F_DYNAMIC_TYPE_2;   //need test if these work without this extra value
+    }
+    else if (IsAbilityOnField(ABILITY_ABSOLUTE_ZERO) && moveType == TYPE_WATER)
+    {
+        gBattleStruct->dynamicMoveType = TYPE_ICE;
+    }
+    else if (gBattleMoves[move].type == TYPE_NORMAL
+             && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
+             && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
+             && gBattleMoves[move].effect != EFFECT_CHANGE_TYPE_ON_ITEM
+             && gBattleMoves[move].effect != EFFECT_NATURAL_GIFT
+             && ((attackerAbility == ABILITY_PIXILATE && (ateType = TYPE_FAIRY))
+                 || (attackerAbility == ABILITY_REFRIGERATE && (ateType = TYPE_ICE))
+                 || (attackerAbility == ABILITY_AERILATE && (ateType = TYPE_FLYING))
+                 || ((attackerAbility == ABILITY_GALVANIZE) && (ateType = TYPE_ELECTRIC))))
+    {
+        gBattleStruct->dynamicMoveType = ateType;// | F_DYNAMIC_TYPE_2; //above should do type change already, dmg boosts are already in pokemon.c
+        gBattleStruct->ateBoost[battlerAtk] = 1;
+    }
+    else if ((gBattleMoves[move].type != TYPE_NORMAL)
+             && (gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
+             && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
+             && gBattleMoves[move].effect != EFFECT_CHANGE_TYPE_ON_ITEM)
+             && attackerAbility == ABILITY_NORMALIZE)   //thought to remove normal exclusion, but would just result in them getting much weaker
+    {                                                   //without stab, so not worth
+        gBattleStruct->dynamicMoveType = TYPE_NORMAL;// | F_DYNAMIC_TYPE_2;    //WILL MAke moves do neutral damage to everything, need exclude from joat.
+        gBattleStruct->ateBoost[battlerAtk] = 1;    //actually I can do this with typecalc function and they can keep stab.
+    }
+    else if (gBattleMoves[move].flags & FLAG_SOUND
+             && attackerAbility == ABILITY_LIQUID_VOICE)
+    {
+        gBattleStruct->dynamicMoveType = TYPE_WATER;// | F_DYNAMIC_TYPE_2;
+    }
+    else if (gBattleMoves[move].type == TYPE_WATER
+        && attackerAbility == ABILITY_LIQUID_SOUL)
+    {
+        gBattleStruct->dynamicMoveType = TYPE_GHOST;// | F_DYNAMIC_TYPE_2;
+    }
+    else if (attackerAbility == ABILITY_WETIKO)
+    {
+        gBattleStruct->dynamicMoveType = TYPE_ICE;// | F_DYNAMIC_TYPE_2;
+    }
+    else if (gStatuses4[battlerAtk] & STATUS4_PLASMA_FISTS && moveType == TYPE_NORMAL)
+    {
+        gBattleStruct->dynamicMoveType = TYPE_ELECTRIC;// | F_DYNAMIC_TYPE_2;
+    }
+    else if (move == MOVE_AURA_WHEEL && gBattleMons[battlerAtk].species == SPECIES_MORPEKO_HANGRY)
+    {
+        gBattleStruct->dynamicMoveType = TYPE_DARK;// | F_DYNAMIC_TYPE_2;
+    }
+
+    else if (move == MOVE_HIDDEN_POWER)
+    {
+
+        typeBits = ((gBattleMons[battlerAtk].hpIV & 1) << 0)
+            | ((gBattleMons[battlerAtk].attackIV & 1) << 1)
+            | ((gBattleMons[battlerAtk].defenseIV & 1) << 2)
+            | ((gBattleMons[battlerAtk].speedIV & 1) << 3)
+            | ((gBattleMons[battlerAtk].spAttackIV & 1) << 4)
+            | ((gBattleMons[battlerAtk].spDefenseIV & 1) << 5);
+
+        //// Subtract 3 instead of 1 below because 2 types are excluded (TYPE_NORMAL and TYPE_MYSTERY)
+         // The final + 1 skips past Normal, and the following conditional skips TYPE_MYSTERY
+        //changed to -4 for sound type addition, need test unsure if fully necessary
+        gBattleStruct->dynamicMoveType = ((NUMBER_OF_MON_TYPES - 4) * typeBits) / 63 + 1; //think changing from 15 to 16 adds one more type to options so now have fairy
+        if (gBattleStruct->dynamicMoveType == TYPE_MYSTERY || gBattleStruct->dynamicMoveType == TYPE_SOUND) //add or for type sound
+            gBattleStruct->dynamicMoveType = TYPE_FAIRY; 
+        gBattleStruct->dynamicMoveType |= F_DYNAMIC_TYPE_1 | F_DYNAMIC_TYPE_2;
+    }
+
+    return gBattleStruct->dynamicMoveType;
 }
 
 static void LinkBattleComputeBattleTypeFlags(u8 numPlayers, u8 multiPlayerId)
@@ -6072,11 +6237,17 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
 
     priority = gBattleMoves[move].priority;
     //if gBattleMoves[move].flags == FLAG_DMG_2X_IN_AIR & target is STATUS3_ON_AIR increment priority (gStatuses3[battler] & STATUS3_SKY_DROPPED)
-    if (gBattleMoves[move].flags == FLAG_DMG_2X_IN_AIR
-        && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR) //done because flying mon are fast, and most mon with this move are slow, so would never land otherwise
+    if ((gBattleMoves[move].flags == FLAG_DMG_2X_IN_AIR && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR) //done because flying mon are fast, and most mon with this move are slow, so would never land otherwise
+    || (gBattleMoves[move].flags & FLAG_DMG_2X_UNDERGROUND && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
+    || (gBattleMoves[move].flags & FLAG_DMG_2X_UNDERWATER && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER))
     {
         priority++;
     }//that's good, just need to figure how to set grounded if by 2x flag move while in air - done in bs command
+
+    /*(!(gBattleMoves[move].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR)) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR && gCurrentMove != MOVE_ROCK_THROW)
+        || (!(gBattleMoves[move].flags & FLAG_DMG_2X_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
+        || (!(gBattleMoves[move].flags & FLAG_DMG_2X_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER))
+    */
 
     if (GetBattlerAbility(battlerId) == ABILITY_GALE_WINGS
         && gBattleMoves[move].type == TYPE_FLYING)

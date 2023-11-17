@@ -111,5 +111,6 @@ s8 GetChosenMovePriority(u8 battlerId);
 bool8 IsRivalBattle(u16 trainerNum);
 bool32 IsWildMonSmart(void);
 void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk);
+u8 ReturnMoveType(u16 move, u8 battlerAtk); //atempt copy of settype function but using return value of move type so can display stuff in sum screen
 
 #endif // GUARD_BATTLE_MAIN_H

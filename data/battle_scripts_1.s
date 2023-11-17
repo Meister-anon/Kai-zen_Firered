@@ -5972,7 +5972,7 @@ BattleScript_EffectPoisonFang::
 	goto BattleScript_EffectHit
 
 BattleScript_EffectWeatherBall::
-	setweatherballtype
+	@setweatherballtype	  @do with function instead
 	goto BattleScript_EffectHit
 
 BattleScript_EffectOverheat::
@@ -8183,6 +8183,7 @@ BattleScript_ReceiverActivates::
 	settracedability BS_ABILITY_BATTLER
 	return
 	
+@since ends in return cant use from function w callback etc. olny to be called from script
 BattleScript_AbilityHpHeal::	
 	printstring STRINGID_PKMNSXRESTOREDHPALITTLE2
 	waitmessage 0x40

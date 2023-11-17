@@ -318,8 +318,8 @@ extern const struct BattleMove gBattleMoves[];
 #define FLAG_MEGA_LAUNCHER_BOOST    (1 << 11)
 #define FLAG_STAT_STAGES_IGNORED    (1 << 12)
 #define FLAG_DMG_MINIMIZE           (1 << 13)
-#define FLAG_DMG_UNDERGROUND        (1 << 14)
-#define FLAG_DMG_UNDERWATER         (1 << 15)
+#define FLAG_DMG_2X_UNDERGROUND        (1 << 14)
+#define FLAG_DMG_2X_UNDERWATER         (1 << 15)
 #define FLAG_SOUND                  (1 << 16)   //2 byte
 #define FLAG_BALLISTIC              (1 << 17)
 #define FLAG_PROTECTION_MOVE        (1 << 18)
