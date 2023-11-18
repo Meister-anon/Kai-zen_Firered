@@ -1862,6 +1862,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
    and have it filter down properly into either  can't use for everything as some effects should be 
    explicitly one and not the other
 
+   //endure still doesn't work, found summary screen works again, changed one thing idk fi tthat was the main issue
+   or if it was forecast
+
    another argument for making macro, things like explosion, work off effect but early gen is physical
    while later explosion likes are special, while still using effect explosion (except mind blown?)
    //so the defense cut wouldn't be appropriate, if it read the approriate split

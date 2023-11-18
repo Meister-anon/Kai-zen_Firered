@@ -2354,7 +2354,7 @@ static void BufferMonSkills(void) // seems to be PSS_PAGE_SKILLS or data for it.
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[0], gAbilityNames[abilitydatabattler]);
                 StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf[0], gAbilityDescriptionPointers[abilitydatabattler]);
             }
-            if ((curr_personality != slot1_personality)) //party
+            else
             {
                 abilitydataparty = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
                 StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf[3], gAbilityNames[abilitydataparty]);
