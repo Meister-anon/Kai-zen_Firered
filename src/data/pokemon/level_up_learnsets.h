@@ -13936,6 +13936,7 @@ static const struct LevelUpMove sJangmooLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sHakamooLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 0, MOVE_VACUUM_WAVE),
     LEVEL_UP_MOVE( 0, MOVE_SKY_UPPERCUT),
     LEVEL_UP_MOVE( 1, MOVE_SKY_UPPERCUT),
     LEVEL_UP_MOVE( 1, MOVE_AUTOTOMIZE),

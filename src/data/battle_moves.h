@@ -10702,8 +10702,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_MULTI_HIT, //TODO   //weird effect, rather than double target, is a single target move that moves on to the next target after landing, think can use intimidate logic
         .power = 50,
-        .type = TYPE_DRAGON,
-        .accuracy = 100,
+        .type = TYPE_DRAGON, //I can chese this actually, since single target effects only hit single target, make target both, and specific bs command for it, put effect in multihit 
+        .accuracy = 100, //switch case, and have it read the number of enemies on enemy side, if 2 set to 1 hit, if 1 set to 2 hits
         .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
@@ -10716,7 +10716,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_SPLASH,   //TODO   //looks like forces evryone to eat their berries, bypasses unnerve & magic guard, fails if no one has berries
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_NORMAL, //loop battlers check has berries if someone does activate loop consume berry else fail need teatime bs command
         .accuracy = 0,
         .pp = 10,
         .secondaryEffectChance = 0,
@@ -10770,7 +10770,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_COURT_CHANGE] =
     {
-        .effect = EFFECT_SPLASH,   //TODO
+        .effect = EFFECT_SPLASH,   //TODO  //check side status enemy side copy to my side and do same for my side to their side? does it keep current timers?
         .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 100,
@@ -11131,7 +11131,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_SCALE_SHOT] =
     {
-        .effect = EFFECT_SPLASH,   //TODO (EFFECT_MULTI_HIT + ABILITY_WEAK_ARMOR,
+        .effect = EFFECT_MULTI_HIT,   //TODO (EFFECT_MULTI_HIT + ABILITY_WEAK_ARMOR,
         .power = 25,
         .type = TYPE_DRAGON,    //me look at how double iron bash was done may be able to do these myself
         .accuracy = 90,
@@ -11142,6 +11142,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
     }, //shold be able to do with bs, just add check for effect or move  and lower defense if found move/effet or potentially put in move end?
+    //yeah doing with moveed,  all have to do is set statchangers in function, (like moody) and use if no move result no effect
 
     [MOVE_METEOR_BEAM] =
     {
@@ -11183,7 +11184,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
-    },
+    }, //buffed was given explosion effect defense stat drop
 
     [MOVE_GRASSY_GLIDE] =
     {
@@ -11384,9 +11385,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_WICKED_BLOW] =
     {
         .effect = EFFECT_HIT,
-        .power = 80,
+        .power = 65,//80,
         .type = TYPE_DARK,
-        .accuracy = 100,
+        .accuracy = 95,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
@@ -11398,16 +11399,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SURGING_STRIKES] =
     {
         .effect = EFFECT_TRIPLE_KICK,   
-        .power = 25,
+        .power = 20,//25,
         .type = TYPE_WATER,
-        .accuracy = 100,
+        .accuracy = 95,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_IRON_FIST_BOOST | FLAG_ALWAYS_CRIT,
         .split = SPLIT_PHYSICAL,
-    }, //only argument that should actually use effect rather than move_effect /CHANGED to only use flag check not effect
+    }, //rebalanced these 2 for og crit
 
     [MOVE_THUNDER_CAGE] =
     {

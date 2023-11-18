@@ -1768,7 +1768,7 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
 #define ACCURACY_BASED_ABILITIES
 static void atk01_accuracycheck(void)
 {
-    u16 move = T2_READ_16(gBattlescriptCurrInstr + 5);
+    u16 move = T2_READ_16(gBattlescriptCurrInstr + 5);  //should be reading acc of current moves,
 
     if ((gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE
         && !BtlCtrl_OakOldMan_TestState2Flag(1)
@@ -1797,7 +1797,8 @@ static void atk01_accuracycheck(void)
             gBattlescriptCurrInstr += 7;
     }
     else if (gSpecialStatuses[gBattlerAttacker].parentalBondState == PARENTAL_BOND_2ND_HIT
-            || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SKILL_LINK && gMultiHitCounter > 0 && gMultiHitCounter != gMultiTask))
+            || (GetBattlerAbility(gBattlerAttacker) == ABILITY_SKILL_LINK && gMultiHitCounter > 0 && gMultiHitCounter != gMultiTask)
+            || move == MOVE_SURGING_STRIKES) //for rebalancing trose moves, to keep in line with wicked blow
     {
         // No acc checks for second hit of Parental Bond or skill linked moves, removed other multihit as I want those to work differently, now all go through acc check on each hit
         gBattlescriptCurrInstr += 7;

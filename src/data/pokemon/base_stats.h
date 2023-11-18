@@ -2576,9 +2576,9 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_HITMONLEE] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(50, 121, 53, 87, 35, 110),
+         STATS(50, 121, 60, 87, 35, 110),
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 159,
         //.evYield_Attack = 2,
@@ -2587,7 +2587,7 @@ const struct BaseStats gBaseStats[] =
          .friendship = 15,
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
-        .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
+        .eggGroup2 = EGG_GROUP_MONSTER,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_LIMBER, ABILITY_LETHAL_LEGS}, //replaced reckless 
             .abilityHidden = {ABILITY_UNBURDEN, ABILITY_MUSCLE_MAGIC},
@@ -2615,7 +2615,9 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_MUSCLE_MAGIC},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-    },
+    }, //giving back normal type as flexibility as actual martial artists
+    //nvm want to keep but flies in face of established normal logic, where normal is for animals, not human likes
+    //best I can do is make it for hitmonlee and hitmontop as they have claws and a tail in case of hitmontop,
 
     [SPECIES_LICKITUNG] =
     { 
@@ -3740,7 +3742,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(68, 64, 58, 87, 80, 70),
         .type1 = TYPE_FIRE,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_NORMAL, //could make fire ground but w my normal change still think fire normal is better?it has a somewhat varied move pool already
         .catchRate = 45,
         .expYield = 142,
         //.evYield_Speed = 1,
@@ -5591,7 +5593,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(57, 95, 95, 70, 35, 115),
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIGHTING,
+        .type2 = TYPE_NORMAL,
         .catchRate = 45,
         .expYield = 159,
         //.evYield_SpDefense = 2,
@@ -5600,7 +5602,7 @@ const struct BaseStats gBaseStats[] =
          .friendship = 15,
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
-        .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
+        .eggGroup2 = EGG_GROUP_MONSTER,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_INTIMIDATE, ABILITY_TECHNICIAN},
             .abilityHidden = {ABILITY_STEADFAST, ABILITY_MULTI_TASK},
@@ -11717,13 +11719,14 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_BLAZE, ABILITY_RATTLED}, //hard to decide think I like rattled better as a consistent effect?
-        .abilityHidden = {ABILITY_THICK_FAT, ABILITY_SAND_RUSH},
+        .abilityHidden = {ABILITY_THICK_FAT, ABILITY_SAND_RUSH}, //hes kind of a slow glass canon? so guess these are fine?
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
     },//could consider adding blaze back, flash fire lets ti sweep fire types, and is good in double batte
     //but blaze would effectively give it 3 type stab  at low hp. which would be really unique, I could buff the hp threshold for 
     //blaze stuff as well. make it less than 50%, plus it works since below 50 is when hp bar turns yellow
     //note could make fire type u turn for doubles to self proc flash fire...hmm
+    //still want to give flash fire
     [SPECIES_EMBOAR] =
     { 
            //hp, atk, def, spd, spatk, spdef

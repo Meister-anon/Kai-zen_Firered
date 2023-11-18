@@ -1863,7 +1863,12 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
    explicitly one and not the other
 
    //endure still doesn't work, found summary screen works again, changed one thing idk fi tthat was the main issue
-   or if it was forecast
+   or if it was forecast / identified teh issue, its something to do with swapping,
+   it replaces the data for whatever mon you swap places with, everyone else is fine.
+   //its just what happens when you swap places
+
+   -fixed it, realized battlemons actually had a personality value I could use this entire time,
+   replaced with that and everything works perfect, was also able to fix weather ball display
 
    another argument for making macro, things like explosion, work off effect but early gen is physical
    while later explosion likes are special, while still using effect explosion (except mind blown?)
