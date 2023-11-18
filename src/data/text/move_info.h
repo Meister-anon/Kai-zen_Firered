@@ -892,7 +892,7 @@ const u8 gFREEZE_DRYDescription
     [] = _("Super effective\non Water-types.\nMay cause freezing.");
 
 const u8 gDISARMING_VOICEDescription 
-    [] = _("Lets out a charming cry\nthat cannot be evaded.");
+    [] = _("Lets out a charming cry\nthat cannot be evaded."); //give better desscription
 
 const u8 gPARTING_SHOTDescription 
     [] = _("Lowers the foe's Attack and\nSp. Atk, then switches out.");

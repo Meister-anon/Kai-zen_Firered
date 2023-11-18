@@ -1545,14 +1545,18 @@ const u16 sBulbasaurBall[] = {
     SPECIES_SEEDOT,  //replaced tyrogue w ditto, show off changed transform mechanics, /ditto doesn't make sense here, breaks type check as it resists fire
     SPECIES_EEVEE, //free eevee  lets go style
     SPECIES_RALTS, //resists fire - no it doesn't its resisted by fire, I keep confusin the fairy fire relation, but fairy is bad against fire
+    SPECIES_TYROGUE,
     SPECIES_MAGNEMITE,
+    SPECIES_BUNEARY,
     SPECIES_SUNKERN,
     SPECIES_SCYTHER,
     SPECIES_MINCCINO,
     SPECIES_HOPPIP, //too common, replacing oddish, replaced with hoppip, also a mon that saw significant changes
+    SPECIES_STUFFUL,
     SPECIES_FOMANTIS,
     SPECIES_SPRITZEE, //replace
     SPECIES_FOONGUS, //doesnt work well, breaks relation of lists, hmm replace w voltorb, pokeball in a pokeball - replaced w foongus instead as voltorbn common
+    SPECIES_PANSAGE,
     SPECIES_TOGEDEMARU
     //LIST_END
 }; //this list matches the best the others need more work -think will move swinub and ditto to squirtle list, and just add 2 to other lists
@@ -1567,20 +1571,24 @@ const u16 sSquirtleBall[] = {
     SPECIES_FROAKIE,
     SPECIES_POPPLIO,
     SPECIES_BINACLE,
+    SPECIES_TRAPINCH, //doesn't work cant use a dragon it resists everything, can put in squirtle bal
     SPECIES_CORSOLA,
     SPECIES_BONSLY, //replaced bonsly put it in a forest, BROUGHT bonsley back  fits cute starters
     SPECIES_EEVEE,
     SPECIES_TEDDIURSA, //replaced lotad
+    SPECIES_HELIOPTILE,
     SPECIES_PHANPY,
-    SPECIES_MARILL, //I like azurill but others maybe not, so replace w just marill, as it works for type checklist, while marill doesn't as its not watter
+    SPECIES_AZURILL, //I like azurill but others maybe not, so replace w just marill, as it works for type checklist, while marill doesn't as its not watter, 'w fix for selection function can put back?
     SPECIES_ROCKRUFF,
     SPECIES_SKITTY, //with ghost change skitty would be better in squirtle group, I just want it there, starter doesn't work well as not ghost until evoles,
+    SPECIES_PANPOUR,
     SPECIES_SANDSHREW, //resist fire weak to grass, but electric in grass ball breaks list
     SPECIES_SWINUB,
     SPECIES_WOOPER,
     SPECIES_BUNNELBY, //works but I like SPECIES_GOLETT better? is more interesting/popular , replaced rogenrolla //oh right didn't use cuz ghost was free early game wins
     SPECIES_LOTAD,  //REPLACED wailmer
     SPECIES_CASTFORM,   //easter egg mon, not really good for starter otherwise/ rebalancing ability effect would be better in squirtle set can swap w ditto
+    SPECIES_SOBBLE,
     SPECIES_SPHEAL
     //LIST_END
 };
@@ -1599,13 +1607,17 @@ const u16 sCharmanderBall[] = {
     SPECIES_DITTO,
     SPECIES_EEVEE,
     SPECIES_MURKROW,    //beats grass no relation to water
+    SPECIES_NICKIT,
     SPECIES_LICKITUNG,
     SPECIES_RIOLU,
+    SPECIES_PANSEAR,
     SPECIES_PONYTA,
     SPECIES_NUMEL, //removed litwick put them in laverge tower
     SPECIES_NOIBAT, //replaced tediursa, looks like a starter but doesn't quite match type since it resists water, but keeping
+    SPECIES_STUNKY, //can show off new ability?
     SPECIES_FLETCHLING,
     SPECIES_CUFANT,
+    SPECIES_TOGEPI,
     SPECIES_MILTANK,
     SPECIES_GROWLITHE_HISUIAN,    //didn't have graphics just added
     SPECIES_DODUO,  //flyign so beats grass no affiliation to water
@@ -1628,7 +1640,8 @@ const u16 sTypeExceptions[] = {
     SPECIES_MURKROW,
     SPECIES_LICKITUNG,
     SPECIES_HOUNDOUR,
-    SPECIES_TYROGUE,
+    SPECIES_AZURILL,
+    SPECIES_TOGEPI,
     SPECIES_DODUO,
     SPECIES_FLETCHLING,
     SPECIES_SANDSHREW,
@@ -1703,6 +1716,44 @@ const u16 sEeveelutionListing[] =
 #define STARTER_BULBASAUR   0
 #define STARTER_SQUIRTLE    1
 #define STARTER_CHARMANDER  2
+
+//NELEMS average doesn't work, whatever happened, it caused the game to reset...on some value.
+//trying it again, may have been parenthesis.
+//it was the parenthesis, cause of how nelems works, needed each one
+//to be separated before adding, group them all in a parenthesis, and then set the divider on the outside
+//but also in parenthesis.
+
+//ok so none of that was actually the issue, the problem seems to be that a pokemon's name
+//is too long for the  buffer and is causing overflow just like brock's text
+
+//#define STARTERCOUNT 13 //(((NELEMS(sBulbasaurBall)) + (NELEMS(sSquirtleBall)) + (NELEMS(sCharmanderBall))) / 3)
+
+//with advice from ExpoSeed, instead of using a define averaging the array, just use NELEMS array in place of n
+
+//eventually make dynamic so it works off of counting and averaging the arrays essentially  (n + n + n) / 3 = n
+void SetPlayerRandomStarterSpecies(void)
+{
+    /*VarSet(VAR_TEMP_5, SPECIES_BONSLY);    //for testing
+    VarSet(VAR_TEMP_6, SPECIES_BONSLY);
+    VarSet(VAR_TEMP_7, SPECIES_BONSLY);*/
+    
+
+    VarSet(VAR_TEMP_5, sBulbasaurBall[Random() % NELEMS(sBulbasaurBall)]);
+    VarSet(VAR_TEMP_6, sSquirtleBall[Random() % NELEMS(sSquirtleBall)]);
+    VarSet(VAR_TEMP_7, sCharmanderBall[Random() % NELEMS(sCharmanderBall)]);
+}
+
+//vsonic add further logic to this, long as player starter randomized first, can reroll this based on that to ensure type alignment matches advantage/disadvantage
+//inspired metronome/pickup logic, just need compare with respective player var i.e  bulb var == sbulbasaurball[value]  
+// && rival chrmanderball var  is scharmanderball[value]  reroll  this way I can preserve the relationship or at the least don't end up with an advantage to rival starter
+//for exmample if I as player roll value that gives me a tyrogue, rival is unable to save value for miltank, which would give me advantage.
+//instead if they landed on that they would reroll.  ...damn I miss vs studio. 
+void SetRivalRandomStarterSpecies(void) 
+{
+    VarSet(VAR_TEMP_8, sCharmanderBall[Random() % NELEMS(sCharmanderBall)]);
+    VarSet(VAR_TEMP_9, sBulbasaurBall[Random() % NELEMS(sBulbasaurBall)]);
+    VarSet(VAR_TEMP_A, sSquirtleBall[Random() % NELEMS(sSquirtleBall)]);
+}
 
 //condition for this function to run if rival starter species eevee, and var species is currently still eevee.
 //as it runs random it can't be run each time rival encountered as evolution species would change each battle
@@ -1823,43 +1874,6 @@ u8 CheckSuperEffective(u16 Atk_Species, u16 Target_Species) //is super effective
 
 
 
-//NELEMS average doesn't work, whatever happened, it caused the game to reset...on some value.
-//trying it again, may have been parenthesis.
-//it was the parenthesis, cause of how nelems works, needed each one
-//to be separated before adding, group them all in a parenthesis, and then set the divider on the outside
-//but also in parenthesis.
-
-//ok so none of that was actually the issue, the problem seems to be that a pokemon's name
-//is too long for the  buffer and is causing overflow just like brock's text
-
-//#define STARTERCOUNT 13 //(((NELEMS(sBulbasaurBall)) + (NELEMS(sSquirtleBall)) + (NELEMS(sCharmanderBall))) / 3)
-
-//with advice from ExpoSeed, instead of using a define averaging the array, just use NELEMS array in place of n
-
-//eventually make dynamic so it works off of counting and averaging the arrays essentially  (n + n + n) / 3 = n
-void SetPlayerRandomStarterSpecies(void)
-{
-    //VarSet(VAR_TEMP_5, SPECIES_BULBASAUR);    //for testing
-    //VarSet(VAR_TEMP_6, SPECIES_SQUIRTLE);
-    //VarSet(VAR_TEMP_7, SPECIES_CHARMANDER);
-
-    VarSet(VAR_TEMP_5, sBulbasaurBall[Random() % NELEMS(sBulbasaurBall)]);
-    VarSet(VAR_TEMP_6, sSquirtleBall[Random() % NELEMS(sSquirtleBall)]);
-    VarSet(VAR_TEMP_7, sCharmanderBall[Random() % NELEMS(sCharmanderBall)]);
-}
-
-//vsonic add further logic to this, long as player starter randomized first, can reroll this based on that to ensure type alignment matches advantage/disadvantage
-//inspired metronome/pickup logic, just need compare with respective player var i.e  bulb var == sbulbasaurball[value]  
-// && rival chrmanderball var  is scharmanderball[value]  reroll  this way I can preserve the relationship or at the least don't end up with an advantage to rival starter
-//for exmample if I as player roll value that gives me a tyrogue, rival is unable to save value for miltank, which would give me advantage.
-//instead if they landed on that they would reroll.  ...damn I miss vs studio. 
-void SetRivalRandomStarterSpecies(void) 
-{
-    VarSet(VAR_TEMP_8, sCharmanderBall[Random() % NELEMS(sCharmanderBall)]);
-    VarSet(VAR_TEMP_9, sBulbasaurBall[Random() % NELEMS(sBulbasaurBall)]);
-    VarSet(VAR_TEMP_A, sSquirtleBall[Random() % NELEMS(sSquirtleBall)]);
-}
-
 u8 ShouldResetRivalStarter(void)
 {
     u8 Playerstarter = VarGet(VAR_STARTER_MON);
@@ -1931,6 +1945,14 @@ u8 ShouldResetRivalStarter(void)
             else if (AtkMultiplierType2 < UQ_4_12(1.0)
             && AtkMultiplierType1 <= UQ_4_12(1.0))
                 passedChecks = FALSE;
+
+            //final final catch to ensure player not super to rival withuot counter
+            //if right should make it so player only allowed to be super to rival if rival is also super to player
+            if ((DefenseMultiplierType1 > UQ_4_12(1.0)
+            || DefenseMultiplierType2 > UQ_4_12(1.0))
+            && AtkMultiplierType1 <= UQ_4_12(1.0)
+            && AtkMultiplierType2 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
             
         }
     }
@@ -1989,6 +2011,18 @@ u8 ShouldResetRivalStarter(void)
 
             else if (AtkMultiplierType2 < UQ_4_12(1.0)
             && AtkMultiplierType1 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
+
+            //final final catch to ensure player not super to rival withuot counter
+            //if right should make it so player only allowed to be super to rival if rival is also super to player
+            if ((DefenseMultiplierType1 > UQ_4_12(1.0)
+            || DefenseMultiplierType2 > UQ_4_12(1.0))
+            && AtkMultiplierType1 <= UQ_4_12(1.0)
+            && AtkMultiplierType2 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
+
+            //specific exception case
+            if (species == SPECIES_SCIZOR && playermon == SPECIES_SUDOWOODO)
                 passedChecks = FALSE;
             
         }
@@ -2049,6 +2083,14 @@ u8 ShouldResetRivalStarter(void)
 
             else if (AtkMultiplierType2 < UQ_4_12(1.0)
             && AtkMultiplierType1 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
+
+            //final final catch to ensure player not super to rival withuot counter
+            //if right should make it so player only allowed to be super to rival if rival is also super to player
+            if ((DefenseMultiplierType1 > UQ_4_12(1.0)
+            || DefenseMultiplierType2 > UQ_4_12(1.0))
+            && AtkMultiplierType1 <= UQ_4_12(1.0)
+            && AtkMultiplierType2 <= UQ_4_12(1.0))
                 passedChecks = FALSE;
             
         }

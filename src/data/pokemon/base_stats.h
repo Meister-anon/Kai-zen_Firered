@@ -4196,12 +4196,8 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(55, 40, 85, 40, 80, 115),
-        /*//#if P_UPDATED_TYPES >= GEN_6
-            .type1 = TYPE_FAIRY,
-            .type2 = TYPE_FLYING,
-       // #ifdef BATTLE_ENGINE*/
-            .type1 = TYPE_NORMAL,
-            .type2 = TYPE_FAIRY,
+        .type1 = TYPE_FAIRY,
+        .type2 = TYPE_FLYING,
         //// #endif
         .catchRate = 75,
         .expYield = 142,
@@ -11798,7 +11794,7 @@ const struct BaseStats gBaseStats[] =
         60
         ),
         .type1 = TYPE_WATER,
-        .type2 = TYPE_WATER,
+        .type2 = TYPE_FIGHTING,
         .catchRate = 45,
         .expYield = 145,
         //.evYield_SpAttack = 2,
@@ -11826,7 +11822,7 @@ const struct BaseStats gBaseStats[] =
         70
         ),
         .type1 = TYPE_WATER,
-        .type2 = TYPE_WATER,
+        .type2 = TYPE_FIGHTING,
         .catchRate = 45,
         .expYield = 238,
         //.evYield_SpAttack = 3,
@@ -11840,7 +11836,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SHELL_ARMOR, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-    },
+    }, //give fighting moves
 
     [SPECIES_PATRAT] =
     { 
@@ -12058,7 +12054,7 @@ const struct BaseStats gBaseStats[] =
         48
         ),
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_NORMAL,
         .catchRate = 190,
         .expYield = 63,
         //.evYield_Speed = 1,
@@ -12087,7 +12083,7 @@ const struct BaseStats gBaseStats[] =
         63
         ),
         .type1 = TYPE_GRASS,
-        .type2 = TYPE_GRASS,
+        .type2 = TYPE_NORMAL,
         .catchRate = 75,
         .expYield = 174,
         //.evYield_Speed = 2,
@@ -12116,7 +12112,7 @@ const struct BaseStats gBaseStats[] =
         48
         ),
         .type1 = TYPE_FIRE,
-        .type2 = TYPE_FIRE,
+        .type2 = TYPE_NORMAL,
         .catchRate = 190,
         .expYield = 63,
         //.evYield_Speed = 1,
@@ -12145,7 +12141,7 @@ const struct BaseStats gBaseStats[] =
         63
         ),
         .type1 = TYPE_FIRE,
-        .type2 = TYPE_FIRE,
+        .type2 = TYPE_NORMAL,
         .catchRate = 75,
         .expYield = 174,
         //.evYield_Speed = 2,
@@ -12174,7 +12170,7 @@ const struct BaseStats gBaseStats[] =
         48
         ),
         .type1 = TYPE_WATER,
-        .type2 = TYPE_WATER,
+        .type2 = TYPE_NORMAL,
         .catchRate = 190,
         .expYield = 63,
         //.evYield_Speed = 1,
@@ -12203,7 +12199,7 @@ const struct BaseStats gBaseStats[] =
         63
         ),
         .type1 = TYPE_WATER,
-        .type2 = TYPE_WATER,
+        .type2 = TYPE_NORMAL,
         .catchRate = 75,
         .expYield = 174,
         //.evYield_Speed = 2,
@@ -16437,7 +16433,7 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
-        38,
+        58,
         36,
         38,
         57,
@@ -16457,7 +16453,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PICKUP, ABILITY_CHEEK_POUCH},
-        .abilityHidden = {ABILITY_HUGE_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_HUGE_POWER, ABILITY_MULTI_TASK},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -16466,7 +16462,7 @@ const struct BaseStats gBaseStats[] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
-        85,
+        100,
         56,
         77,
         78,
@@ -16486,7 +16482,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_PICKUP, ABILITY_CHEEK_POUCH},
-        .abilityHidden = {ABILITY_HUGE_POWER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_HUGE_POWER, ABILITY_MULTI_TASK},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -21489,7 +21485,7 @@ const struct BaseStats gBaseStats[] =
         52
         ),
         .type1 = TYPE_DARK,
-        .type2 = TYPE_DARK,
+        .type2 = TYPE_NORMAL,
         .catchRate = 255,
         .expYield = 49,
         //.evYield_SpDefense = 1,
@@ -21518,7 +21514,7 @@ const struct BaseStats gBaseStats[] =
         92
         ),
         .type1 = TYPE_DARK,
-        .type2 = TYPE_DARK,
+        .type2 = TYPE_NORMAL,
         .catchRate = 127,
         .expYield = 159,
         //.evYield_SpDefense = 2,

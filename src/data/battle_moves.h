@@ -8885,6 +8885,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_FREEZE, //ADDed freeze chance
     },//add to more learnsets
 
     [MOVE_DISARMING_VOICE] =
@@ -8894,13 +8895,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_FAIRY,
         .accuracy = 0,
         .pp = 15,
-        .secondaryEffectChance = 10,
+        .secondaryEffectChance = 0,
         .target = MOVE_TARGET_BOTH,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
-        .argument = MOVE_EFFECT_CONFUSION,
-    },
+        //.argument = MOVE_EFFECT_CONFUSION,
+    }, //doesn't make sense for this to have confusion despite being sound move as its quite
 
     [MOVE_PARTING_SHOT] =
     {

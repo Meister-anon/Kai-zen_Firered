@@ -3123,6 +3123,7 @@ Thunder Wave Electric TM45
 * found out about move "powder" a priority move that makes fire type attacks explode on attacker consuming the attack -_- 
 * INSANE its signature move of vivilion spread around to other mon it makes sense for,  dustox vespiqueen beedrill butterfree etc.
 * I guess flying bugs that could have to do with flowers? but not crawling bugs?  I'll come back to this later
+* think give kleavor as the ace
 * 
 * ...there's no bug type gym in kanto...
 * ...fuck it I'm making a "cool trainer" with  a bug team using that strat SOMEWHERE
