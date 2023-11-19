@@ -1812,6 +1812,43 @@ u16 GetFinalEvo(u16 species) //well least it works now
     return species; //think should loop first evo method encountered for a species, and go until it can't find an evolution, then stop and return species
 }
 
+//make into field command,
+//if this function does not return/equal species_none make setmonspecies with this functions value as species
+u16 De_Evolve(u16 targetSpecies)
+{
+    u32 j;
+    u16 species;
+
+    for (species = 0; species != FORMS_START; species++)
+    {
+        for (j = 0; j != EVOS_PER_MON; j++)
+        {
+           if (gEvolutionTable[species][j].targetSpecies == targetSpecies)
+            {
+                //targetSpecies = species;
+                //species = 0;
+                return species;
+                break;
+            }
+        }
+    }
+    if (species == FORMS_START)
+        return SPECIES_NONE;
+}
+
+u16 Init_movelearn_options(u16 targetSpecies)
+{
+    u16 preEvos;
+    for (; De_Evolve(targetSpecies) != SPECIES_NONE; targetSpecies = De_Evolve(targetSpecies))
+    {
+        preEvos = De_Evolve(targetSpecies);
+        //add preEvos to move learn species list
+
+    }
+
+}
+//plan for these two to be used to setup move learn that checks entire species line
+
 u8 CheckSuperEffective(u16 Atk_Species, u16 Target_Species) //is super effective
 {
     u8 passedChecks = 0;
