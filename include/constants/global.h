@@ -10,6 +10,7 @@
 #define TYPE_NAME_LENGTH 6 //forgot change back as I undid type name expansion
 #define ABILITY_NAME_LENGTH 16 //is 16 in emerald may look into raising - DONE
 #define ABILITY_DESCRIPTION_LENGTH 82   //two lines 41 chars per line
+#define MOVE_DESCRIPTION_LENGTH 114  //approx 19 per line, over 6 lines
 
 #define VERSION_SAPPHIRE    1
 #define VERSION_RUBY        2

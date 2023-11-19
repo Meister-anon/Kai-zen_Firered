@@ -1448,6 +1448,86 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -realized it was already working that way my entire playtest, so kind of prefer it?
   will attempt remove message,
 
+  in move learn page need remove window/buffer for status symbol, 
+  i.e did move tutor with fainted mon, and fnt status icon, was over the place where the new mon icon is
+
+  changed idea for move relearn since I'm planning to remove mon from pc from overworld if I rely on a pokemon center npc
+  for move relearning, I won't be able to do that with the overworld set making it inferior
+  so instead do move learn from within pc, before when you select a mon.
+  //replace the "mark" option with "move learner" or something
+  //and do it as I planned where it pulls up menu where shows pre evos and mon I have selected
+  as options to read moves from
+
+ function that will search pre evos, settigm current species to to target species
+ have u16 species value that will be set to 0 in a loop, up to last species value or better up to mega
+  FORMS_START  
+  
+  for (species = 0; species != FORMS_START; ++species)
+
+  //if species evolves into target species  set targetspecies to species value and then set species to 0 to reset loop
+   think also need a internal loop to make sure it checks every evolution within the species  think put asignemt and break in internal loop
+   EVOS_PER_MON
+   for (j = 0; j != EVOS_PER_MON; ++j)
+   gEvolutionTable[species][j] 
+
+  - functions setup still need test - made devolve function for use in cinnabar script event
+  lab tech setup new research in exchange for 5k
+
+  Start_TutorScriptFromPc
+    msgbox TwoIsland_House_Text_TutorWhichMon
+    special SelectMoveTutorMon
+    waitstate
+    compare VAR_0x8004, PARTY_SIZE
+    goto_if_ge TwoIsland_House_EventScript_EndTutorMove
+    special IsSelectedMonEgg
+    compare VAR_RESULT, TRUE
+    goto_if_eq TwoIsland_House_EventScript_CantTutorEgg
+    compare VAR_0x8005, 0
+    goto_if_eq TwoIsland_House_EventScript_NoMoveToTutorMon
+    goto TwoIsland_House_EventScript_ChooseMoveToTeach
+    end
+
+  TwoIsland_House_EventScript_ChooseMoveToTeach:: @ 81716F4
+    msgbox TwoIsland_House_Text_TeachWhichMove
+    special DisplayMoveTutorMenu
+    waitstate
+    compare VAR_0x8004, 0
+    goto_if_eq TwoIsland_House_EventScript_ChooseMonToTutor
+    end
+
+  /base example of what I'll need, will dig into and see what needs to be adjusted
+
+    //attempt function that will put linebreaks in strings automatically, 
+    take line limit input value i.e 20 chars, and make function read 
+    based on some logic and decide where to put line breaks.
+    1.go forward 20 chars, if the character preceding that char, is the one for a blank space
+    \go back until preceeding character is not space, and insert \n line break character there
+    2. for readability, ensure do not end line with a conjunction/contraction, i.e (or, of, and, if, but, when, then) etc.
+    3.after insertion of linebreak see if you can go forward another 20 chars before you hit end string, and repeat step 1.
+    4.once hit end string, read from start to end string, and ensure there are no spaces after linebreak characters, if there are spaces delete them
+    \go forward from start of string while checking preceding two characters until you find the chars "\n" then check for space charactesr following
+    \and delete them until the character that follows them is a non space character.
+
+   add move description limiter, works perfect, just for max limit
+
+   upgrade calcbasedamage to fix sidestatus argument
+   I setup sp def buff for mud sport in likeness of sandstorm effect but its extrmeely inneffective.
+   ground types typically have overlapping special weaknesses and low special w high defense
+
+   sandstorm buff is 1.5x, I had planned to make it lower but w how sp def goes into damage calc, it already..
+   but I think for it to have effectit needs to be double
+   making 1.7 more than a 1/3rd cut since you need to invest a turn in it, and it doesn't do damage/passive damage
+   to counter replacing sandstorm as the premier ground buff, strength alt effects of sandstorm, 
+   its a buff for groud types and an evasion boost for them as well as adding extra passive dmg, the full package so to speak
+
+
+
+  also looks like stench has issue where it tries to activate on first turn
+
+  hmm could also be a neutralizing gas error? triggered when switched in castform against koffing
+  thinking further probably was issue with neutralizing gas, and how worked with weird setup for forecast,
+  script order is odd
+
   got it working, also using sound for first time, realized the play growl if crit is working, nice
   that'll be a nice qol upgrade if I can get the move animations to speed up, without breaking audio,
   so people won't need to speed up.   from ApplyRandomDmgMultiplier
