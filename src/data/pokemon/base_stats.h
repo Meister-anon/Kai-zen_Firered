@@ -530,7 +530,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_PIDGEOT] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(105, 90, 85, 121, 85, 80),
+         STATS(105, 95, 85, 121, 85, 80),
         .type1 = TYPE_NORMAL,
         .type2 = TYPE_FLYING,
         .catchRate = 45,

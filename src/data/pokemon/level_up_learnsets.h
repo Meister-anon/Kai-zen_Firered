@@ -4022,7 +4022,7 @@ static const struct LevelUpMove sLotadLevelUpLearnset[] = {
     LEVEL_UP_MOVE(3, MOVE_GROWL),
     LEVEL_UP_MOVE(5, MOVE_BUBBLE),
     LEVEL_UP_MOVE(7, MOVE_WATER_SPORT),
-    LEVEL_UP_MOVE(7, MOVE_ABSORB),
+    LEVEL_UP_MOVE(7, MOVE_LEECH_SEED),
     LEVEL_UP_MOVE(13, MOVE_NATURE_POWER),
     LEVEL_UP_MOVE(21, MOVE_MIST),
     LEVEL_UP_MOVE(31, MOVE_RAIN_DANCE),
@@ -4033,6 +4033,7 @@ static const struct LevelUpMove sLotadLevelUpLearnset[] = {
 static const struct LevelUpMove sLombreLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_ASTONISH),
     LEVEL_UP_MOVE(3, MOVE_GROWL),
+    LEVEL_UP_MOVE(7, MOVE_LEECH_SEED),
     LEVEL_UP_MOVE(7, MOVE_ABSORB),
     LEVEL_UP_MOVE(13, MOVE_NATURE_POWER),
     LEVEL_UP_MOVE(19, MOVE_FAKE_OUT),
