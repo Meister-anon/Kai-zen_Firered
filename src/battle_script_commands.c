@@ -1934,7 +1934,7 @@ static void atk01_accuracycheck(void)
         && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_VEIL
         && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_FORCE
         && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM)
-            calc = (calc * 95) / 100; // new 10% sandstorm loss (extra effect given since hail got extra stuff) changed to 5%
+            calc = (calc * 90) / 100; // new 10% sandstorm loss (extra effect given since hail got extra stuff) changed to 5%, changed back given mudsport changes
 
         if (GetBattlerAbility(gBattlerTarget) == ABILITY_SAND_VEIL && IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SANDSTORM_ANY))
             calc = (calc * 80) / 100; // 1.2 sand veil loss
@@ -2296,8 +2296,7 @@ bool8 CanMultiTask(u16 move) //works, but now I need to negate the jump, because
 //fire red puts it all in typecalc
 static void atk05_damagecalc(void)
 {
-    u16 sideStatus = gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)];
-    
+    u32 sideStatus = gSideStatuses[GetBattlerSide(gBattlerTarget)];
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_TRIPLE_KICK
         && gCurrentMove != MOVE_SURGING_STRIKES)    //could put in separate dmg bscommand, but if works for multitask this should also work
@@ -2344,7 +2343,7 @@ static void atk05_damagecalc(void)
 
 s32 AI_CalcDmgFormula(u8 attacker, u8 defender) //made for ai .c update
 {
-    u16 sideStatus = gSideStatuses[GET_BATTLER_SIDE(defender)];
+    u32 sideStatus = gSideStatuses[GetBattlerSide(defender)];
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_TRIPLE_KICK
         && gCurrentMove != MOVE_SURGING_STRIKES)    //could put in separate dmg bscommand, but if works for multitask this should also work
@@ -2386,7 +2385,7 @@ s32 AI_CalcDmgFormula(u8 attacker, u8 defender) //made for ai .c update
 
 void AI_CalcDmg(u8 attacker, u8 defender) //needed for ai script  , brought back upadted to match
 {
-    u16 sideStatus = gSideStatuses[GET_BATTLER_SIDE(defender)];
+    u32 sideStatus = gSideStatuses[GetBattlerSide(defender)];
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_TRIPLE_KICK
         && gCurrentMove != MOVE_SURGING_STRIKES)    //could put in separate dmg bscommand, but if works for multitask this should also work
@@ -12999,7 +12998,7 @@ static void atk86_stockpiletobasedamage(void)
         if (gBattleCommunication[6] != 1)
         {
             gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerTarget], gCurrentMove,
-                                                    gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)], 0,
+                                                    gSideStatuses[GetBattlerSide(gBattlerTarget)], 0,
                                                     0, gBattlerAttacker, gBattlerTarget)
                                 * gDisableStructs[gBattlerAttacker].stockpileCounter;
             gBattleScripting.animTurn = gDisableStructs[gBattlerAttacker].stockpileCounter;
@@ -15472,7 +15471,7 @@ static void atkC3_trysetfutureattack(void)
             gWishFutureKnock.futureSightDmg[gBattlerTarget] = CalculateBaseDamage(&gBattleMons[gBattlerAttacker],
                                                                                 &gBattleMons[gBattlerTarget],
                                                                                 gCurrentMove,
-                                                                                gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)],
+                                                                                gSideStatuses[GetBattlerSide(gBattlerTarget)],
                                                                                 0,
                                                                                 0,
                                                                                 gBattlerAttacker,
@@ -15500,7 +15499,7 @@ static void atkC3_trysetfutureattack(void)
             gWishFutureKnock.futureSightDmg[gBattlerTarget] = CalculateBaseDamage(&gBattleMons[gBattlerAttacker],
                                                                                 &gBattleMons[gBattlerTarget],
                                                                                 gCurrentMove,
-                                                                                gSideStatuses[GET_BATTLER_SIDE(gBattlerTarget)],
+                                                                                gSideStatuses[GetBattlerSide(gBattlerTarget)],
                                                                                 0,
                                                                                 0,
                                                                                 gBattlerAttacker,

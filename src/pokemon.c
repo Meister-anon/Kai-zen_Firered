@@ -3479,7 +3479,7 @@ bool8 CanEvioliteActivate(u16 species)
 
 // seems this is the equivalent of emerald's CalcDefenseStat function
 // actually can put calcmovebasepower aft mod in here too, to set up those abilities.
-s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *defender, u32 move, u16 sideStatus, u16 powerOverride, u8 typeOverride, u8 battlerIdAtk, u8 battlerIdDef)
+s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *defender, u32 move, u32 sideStatus, u16 powerOverride, u8 typeOverride, u8 battlerIdAtk, u8 battlerIdDef)
 {
     u32 i;
     u32 percentBoost;
@@ -3722,7 +3722,6 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             {
                 OffensiveModifer(25);
             }
-
             else
                 OffensiveModifer(50);
                 //MulModifier(&finalModifier, UQ_4_12(0.5));
@@ -3825,10 +3824,11 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             gBattleMovePower *= 2;
 
     //this isn't working... //ok pretty sure reason wasn't working was because didn't set status in mudsport command correctly
-    //works now
-    if (IS_BATTLER_OF_TYPE(battlerIdDef, TYPE_GROUND) && (gSideStatuses[GET_BATTLER_SIDE(battlerIdDef)] & SIDE_STATUS_MUDSPORT)) //if done right these should stack
-     //&& IsBattlerGrounded(gBattlerTarget))//give to more ground types?
-        spDefense = (130 * spDefense) / 100;    //gets to work as its on the ground not in the air
+    //works now //suddenly not working again -_- oh it is working just effect is so low not very noticeable?
+    //sideStatus wasn't working had to use gstatus and realied I hadn't updated the function argument while I made gsidestatus u32
+    //the function was still u16, updated and that fixed it
+    if (IS_BATTLER_OF_TYPE(battlerIdDef, TYPE_GROUND) && (sideStatus & SIDE_STATUS_MUDSPORT)) //if done right these should stack
+        spDefense = (170 * spDefense) / 100;    //gets to work as its on the ground not in the air
                     //changed mind,not as realistic but gives more options, keep just ground affecting, rock/ground are only rocks that really need 
                     //unsure if should buff further
 
@@ -4565,7 +4565,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
             damageHelper = spDefense;
 
-        damage = (damage / damageHelper);
+        damage = damage / damageHelper;
         damage /= 50;
         //defense side of sp. damage formula
 
@@ -4588,6 +4588,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
         if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gBattleMoves[move].target == MOVE_TARGET_BOTH && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) == 2)
             damage /= 1; //special verision double battle damage change
+
+        // moves always do at least 1 damage.
+        if (damage == 0)
+            damage = 1;
 
         
     } //end of special effects
