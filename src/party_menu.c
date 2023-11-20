@@ -2992,9 +2992,73 @@ static void SetPartyMonSelectionActions(struct Pokemon *mons, u8 slotId, u8 acti
     }
 }
 
+static u8 ShouldDisplayHMFieldMove(u8 fieldMove)
+{
+     switch (fieldMove)
+            {
+            case FIELD_MOVE_CUT:
+                if (FlagGet(FLAG_BADGE01_GET) == TRUE)
+                {
+                    return TRUE;
+                }
+                else
+                    return FALSE;
+            break;
+            case FIELD_MOVE_SURF:
+                if (FlagGet(FLAG_BADGE02_GET) == TRUE)
+                {
+                    return TRUE;
+                }
+                else
+                    return FALSE;
+            break;
+            case FIELD_MOVE_FLASH:
+                if (FlagGet(FLAG_BADGE03_GET) == TRUE)
+                {
+                    return TRUE;
+                }
+                else
+                    return FALSE;
+            break;
+            case FIELD_MOVE_STRENGTH:
+                if (FlagGet(FLAG_BADGE04_GET) == TRUE)
+                {
+                    return TRUE;
+                }
+                else
+                    return FALSE;
+            break;
+            case FIELD_MOVE_FLY:
+                if (FlagGet(FLAG_BADGE05_GET) == TRUE)
+                {
+                    return TRUE;
+                }
+                else
+                    return FALSE;
+            break;
+            case FIELD_MOVE_ROCK_SMASH:
+                if (FlagGet(FLAG_BADGE06_GET) == TRUE)
+                {
+                    return TRUE;
+                }
+                else
+                    return FALSE;
+            break;
+            case FIELD_MOVE_WATERFALL:
+                if (FlagGet(FLAG_BADGE07_GET) == TRUE)
+                {
+                    return TRUE;
+                }
+                else
+                    return FALSE;
+            break;
+            }
+}
+
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
-    u8 i, j;
+    u8 i, j,k,l;
+    u8 NumBadges = 0;
     u16 species = GetMonData(&mons[slotId], MON_DATA_SPECIES2);
     u8 abilityNum = GetMonData(&mons[slotId], MON_DATA_ABILITY_NUM);
     u16 ability = GetAbilityBySpecies(species, abilityNum);
@@ -3005,18 +3069,30 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     // Add field moves to action list
     for (i = 0; i < MAX_MON_MOVES; ++i)
     {
-        for (j = 0; sFieldMoves[j] != FIELD_MOVE_END; ++j)
+        for (j = 7; sFieldMoves[j] != FIELD_MOVE_END; ++j)
         {
             if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) == sFieldMoves[j])
             {
                 AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
                 break;
             }
-            
+                        
         }
-    }
-    //should hopefully give free sweet scent, without needing move - works
+        
+    } //setup for non-hm moves
+
+    //setup for hm moves
+    for (j = 0; j < FIELD_MOVE_TELEPORT; ++j)
+    {
+        //should prevent learnable hms from showing in  list until you have the badge to use them(working)
+            if (CanSpeciesLearnTMHM(species, ((j + ITEM_HM01_CUT) - ITEM_TM01)) && ShouldDisplayHMFieldMove(j)) 
+                AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
+                break;
+
+    }//because it was reading item list, & hm 5 did not equal field move 5, had to reorder field move list to match hm item order
+    
     //still need to setup way to check list to prevent adding things that are already there
+    //instead made setup that doesn't have overlap, well things like this honey gather are the only issue w potential overlap now
     if (ability == ABILITY_HONEY_GATHER) 
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, FIELD_MOVE_SWEET_SCENT + MENU_FIELD_MOVES);
 
@@ -3964,7 +4040,9 @@ static void CursorCB_FieldMove(u8 taskId)
     else
     {
         // All field moves before WATERFALL are HMs.
-        if (fieldMove <= FIELD_MOVE_WATERFALL && FlagGet(FLAG_BADGE01_GET + fieldMove) != TRUE)
+        //uses order of field moves to signify what badge unlocks it
+        //could instead do with switch case so don't need to be in specific order
+        if (fieldMove <= FIELD_MOVE_WATERFALL && ShouldDisplayHMFieldMove(fieldMove) != TRUE) 
         {
             DisplayPartyMenuMessage(gText_CantUseUntilNewBadge, TRUE);
             gTasks[taskId].func = Task_ReturnToChooseMonAfterText;

@@ -25,9 +25,10 @@ PewterCity_Gym_Text_BrockDefeat:: @ 8190E4F
     .string "{SIZE}ÇJust having the BOULDERBADGE makes\n"
     .string "your POKéMON more powerful.\p"
     .string "It also enables the use of the\n"
-    .string "move FLASH outside of battle.\p"
-    .string "Of course, a POKéMON must know the\n"
-    .string "move FLASH to use it.$"
+    .string "move CUT outside of battle.\p"
+    .string "Of course, a POKéMON must be able\n"
+    .string "to learn the move CUT to use it.$"
+  
 
 PewterCity_Gym_Text_TakeThisWithYou:: @ 8190FC1
     .string "Wait!\n"

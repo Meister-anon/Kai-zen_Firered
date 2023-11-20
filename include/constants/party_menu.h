@@ -32,11 +32,12 @@
 #define TUTOR_MOVE_BLAST_BURN      16
 #define TUTOR_MOVE_HYDRO_CANNON    17
 
-#define FIELD_MOVE_FLASH        0
-#define FIELD_MOVE_CUT          1
-#define FIELD_MOVE_FLY          2
-#define FIELD_MOVE_STRENGTH     3
-#define FIELD_MOVE_SURF         4
+//had to reorder list to match item hms
+#define FIELD_MOVE_CUT          0//1    //was misty - now brock
+#define FIELD_MOVE_FLY          1//2    //was surge - now koga
+#define FIELD_MOVE_SURF         2//4    //was koga - now misty
+#define FIELD_MOVE_STRENGTH     3       //erika
+#define FIELD_MOVE_FLASH        4//0    //was brock  - now surge
 #define FIELD_MOVE_ROCK_SMASH   5
 #define FIELD_MOVE_WATERFALL    6
 #define FIELD_MOVE_TELEPORT     7

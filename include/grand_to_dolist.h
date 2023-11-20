@@ -1398,6 +1398,12 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  so give surge surf and swap with koga so he gives fly instead
  -makes more sense anyway too, surge is in water town, and koga is a ninja so could "fly"
 
+ new plan
+ brock gives cut,
+ misty gives surf,
+ surge gives flash
+ koga gives fly
+
  mudsport water sport weren't setup correctly fixed
  -fixed roost, fixed hidden power, fixed field/now side sport effects and fixed bide - ikeep eye on bide possibly lower counter by 1 turn
 
@@ -1509,6 +1515,30 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
     \and delete them until the character that follows them is a non space character.
 
    add move description limiter, works perfect, just for max limit
+   was able to setup no learn hm setting, i.e just need to be able to learn hm to use it
+   and have badge that activates it of course, adjusted all scripts to fit,
+   and for open world plans, (as much of that as I plan for) reordered
+   hm acquisition order instead of flash being first cut is first, then surf
+   with luck and repels, should be able to get to cinnabar, and be able to get fossil mon early
+   as 2nd gym, don't plan to be able to do blaines gym etc. so don't think will add level scaling there
+   intead do at later gym badges / more than 2nd badge
+
+   think will need to add flag based npc, in viridian to prevent player from 
+   doubling back and getting to vermillion early and getting stuck
+   maybe not digglett cave should be impossible to get through, hmm
+   but then again, if you're lucky enough w repels to get to the other side of diglet cave
+   it'd be kind of cool, to be able to take on surge then and there hmmm
+
+   with idea that gym leaders scale their teams based on number of badges players have
+   it woudn't be odd exactly if I only level scale the gyms, and not the overworld/
+   yeah that works for me, and with everyone being rematchable
+   you can do them again if you want when you're stronger and have more badges
+
+   so gym would be scaled to a lvl cap rather than your team level, (until 8th badge)
+   think for 8th badge, have toughest team, but scaled to whatever level you bring in.
+
+   if you want to take them with a low level team, but have 8 badges you should be a good enough
+   trainer to handle a tougher team
 
    upgrade calcbasedamage to fix sidestatus argument
    I setup sp def buff for mud sport in likeness of sandstorm effect but its extrmeely inneffective.

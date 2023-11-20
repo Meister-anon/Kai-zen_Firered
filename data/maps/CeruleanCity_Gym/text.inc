@@ -16,10 +16,10 @@ CeruleanCity_Gym_Text_ExplainCascadeBadge:: @ 81922F7
     .string "POKéMON up to Lv. 30 obey.\p"
     .string "That includes even outsiders you\n"
     .string "got in trades.\p"
-    .string "There's more. You can now use CUT\n"
+    .string "There's more. You can now use SURF\n"
     .string "anytime, even out of battle.\p"
-    .string "You can CUT down small trees to\n"
-    .string "open new pathways.\p"
+    .string "You can SURF across calm waters to\n"
+    .string "reach new areas.\p"
     .string "You can also have my favorite TM.$"
 
 CeruleanCity_Gym_Text_ReceivedTM03FromMisty:: @ 81923F1
