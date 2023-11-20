@@ -1,7 +1,7 @@
 EventScript_CutTree:: @ 81BDF13
 	goto_if_questlog EventScript_ReleaseEnd
 	lockall
-	goto_if_unset FLAG_BADGE02_GET, EventScript_CantCutTree
+	goto_if_unset FLAG_BADGE01_GET, EventScript_CantCutTree
 	checkpartymove MOVE_CUT
 	compare VAR_RESULT, PARTY_SIZE
 	goto_if_eq EventScript_CantCutTree
@@ -217,7 +217,8 @@ Text_MonUsedWaterfall:: @ 81BE378
 	.string "{STR_VAR_1} used WATERFALL.$"
 
 @ Unused leftover from R/S
-EventScript_DeepWater:: @ 81BE38B
+@plan to reimplement
+EventScript_DeepWaterDive:: @ 81BE38B
 	lockall
 	checkpartymove MOVE_DIVE
 	compare VAR_RESULT, PARTY_SIZE

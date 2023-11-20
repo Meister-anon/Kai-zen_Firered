@@ -1391,12 +1391,34 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
  -comatose isn't working causes freeze now for some reason smh/ needed end in end2 not return as its an endturn ability -fixed
 
+ - make new evo methods for region variants flag check for region form,
+ method evo_item_flag
+ - evo_level_flag
+
+ - potential telport field move upgrade, I know you can store exact map position, so think change teleport to be a two way.
+ when in overworld wilds it'll teleport to last saved, heal spot.
+ but if used when in a city, it can teleport to last saved location, so when you use teleport to go back, it'll store your 
+ map sec and x y position in the map, and allow you to teleport back.
+ would need to save location to value, and add logic loop to search through map secs and if your map sec matches within a city,
+ if yes, teleport to last stored location if there is one. 
+ if not in a city teleport to last used heal location when you reach city limit teleport location should be set to 0,
+ if location is zero, and you attempt to use it within city, it'll just not work and display fail text/that can't be used now
+
+ ok yeah def doing this, right now, if you use teleport inside city limits it just warps you back to the same heal spot,
+ even if you're already standing on it,  think it also has specific logic for if used within a cave? can't remembver if it fails or warps to entrance
+
  -for play consider swapping badge hm use of brock's gym and  surges gym
  -instead of flash make brock let player use surf (for small chance you spawn npc in pallet that gives you fishing access early)
  -give surge flash, since you don't need flash early, 
  - actually nvm cant get back to pallet until after surge anyway 
  so give surge surf and swap with koga so he gives fly instead
  -makes more sense anyway too, surge is in water town, and koga is a ninja so could "fly"
+
+ check strings for hm activate based on metatile i.e from overworld, potentially issue is just a missing check in function,
+ but can't click on a tree to bring up should use cut message, I have to use it directly from menu
+
+ need fix comatose prevent sleep messag, its displaying stayed awake rather than already asleep
+ case was used hypnosis on abra
 
  new plan
  brock gives cut,
@@ -1502,6 +1524,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
     end
 
   /base example of what I'll need, will dig into and see what needs to be adjusted
+  */
+ HM_USE_SCRIPT //scrcmd  function used to decide if mon can trigger overworld hm use, adjusted to use can learn move not move learned
+ /*
 
     //attempt function that will put linebreaks in strings automatically, 
     take line limit input value i.e 20 chars, and make function read 

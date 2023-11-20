@@ -40,12 +40,13 @@
 #define FIELD_MOVE_FLASH        4//0    //was brock  - now surge
 #define FIELD_MOVE_ROCK_SMASH   5
 #define FIELD_MOVE_WATERFALL    6
-#define FIELD_MOVE_TELEPORT     7
-#define FIELD_MOVE_DIG          8
-#define FIELD_MOVE_MILK_DRINK   9
-#define FIELD_MOVE_SOFT_BOILED  10
-#define FIELD_MOVE_SWEET_SCENT  11
-#define FIELD_MOVE_END          12
+#define FIELD_MOVE_DIVE         7
+#define FIELD_MOVE_TELEPORT     8
+#define FIELD_MOVE_DIG          9
+#define FIELD_MOVE_MILK_DRINK   10
+#define FIELD_MOVE_SOFT_BOILED  11
+#define FIELD_MOVE_SWEET_SCENT  12
+#define FIELD_MOVE_END          13
 
 #define PARTY_LAYOUT_SINGLE          0
 #define PARTY_LAYOUT_DOUBLE          1

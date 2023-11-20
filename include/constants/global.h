@@ -3,7 +3,7 @@
 
 
 #define ITEM_NAME_LENGTH 18
-#define POKEMON_NAME_LENGTH 11
+#define POKEMON_NAME_LENGTH 11 //remember set back to 12 //will break save data
 #define OT_NAME_LENGTH 7    //player name length
 #define MOVE_NAME_LENGTH 16 //longest move name is 16 
 

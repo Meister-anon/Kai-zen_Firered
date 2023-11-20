@@ -3052,6 +3052,14 @@ static u8 ShouldDisplayHMFieldMove(u8 fieldMove)
                 else
                     return FALSE;
             break;
+            case FIELD_MOVE_DIVE:
+                if (FlagGet(FLAG_BADGE05_GET) == TRUE)
+                {
+                    return TRUE;
+                }
+                else
+                    return FALSE;
+            break;
             }
 }
 
@@ -3069,7 +3077,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     // Add field moves to action list
     for (i = 0; i < MAX_MON_MOVES; ++i)
     {
-        for (j = 7; sFieldMoves[j] != FIELD_MOVE_END; ++j)
+        for (j = FIELD_MOVE_TELEPORT; sFieldMoves[j] != FIELD_MOVE_END; ++j)
         {
             if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) == sFieldMoves[j])
             {
@@ -4039,10 +4047,10 @@ static void CursorCB_FieldMove(u8 taskId)
     }
     else
     {
-        // All field moves before WATERFALL are HMs.
+        // All field moves before TELEPORT are HMs.
         //uses order of field moves to signify what badge unlocks it
         //could instead do with switch case so don't need to be in specific order
-        if (fieldMove <= FIELD_MOVE_WATERFALL && ShouldDisplayHMFieldMove(fieldMove) != TRUE) 
+        if (fieldMove < FIELD_MOVE_TELEPORT && ShouldDisplayHMFieldMove(fieldMove) != TRUE) 
         {
             DisplayPartyMenuMessage(gText_CantUseUntilNewBadge, TRUE);
             gTasks[taskId].func = Task_ReturnToChooseMonAfterText;
@@ -4054,7 +4062,7 @@ static void CursorCB_FieldMove(u8 taskId)
             case FIELD_MOVE_MILK_DRINK:
             case FIELD_MOVE_SOFT_BOILED:
                 ChooseMonForSoftboiled(taskId);
-                break;
+                break;//looks like can setup alt teleport effect right here //vsonic, if with saveblock can prob pull location from that, don't need add anything new
             case FIELD_MOVE_TELEPORT:
                 mapHeader = Overworld_GetMapHeaderByGroupAndId(gSaveBlock1Ptr->lastHealLocation.mapGroup, gSaveBlock1Ptr->lastHealLocation.mapNum);
                 GetMapNameGeneric(gStringVar1, mapHeader->regionMapSectionId);

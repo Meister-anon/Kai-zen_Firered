@@ -1804,6 +1804,8 @@ bool8 ScrCmd_setmonmove(struct ScriptContext * ctx)
     return FALSE;
 }
 
+//main part of script overworld HM use
+#define HM_USE_SCRIPT
 bool8 ScrCmd_checkpartymove(struct ScriptContext * ctx)
 {
     u8 i;
@@ -1814,8 +1816,30 @@ bool8 ScrCmd_checkpartymove(struct ScriptContext * ctx)
     {
         u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
         if (!species)
+            break;                 
+        switch (moveId) //use this to translate moveId to tmhm itemid for can Learn function
+        {
+            case MOVE_CUT:
+            moveId = ITEM_HM01_CUT;
             break;
-        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && MonKnowsMove(&gPlayerParty[i], moveId) == TRUE)
+            case MOVE_ROCK_SMASH:
+            moveId = ITEM_HM06_ROCK_SMASH;
+            break;
+            case MOVE_STRENGTH:
+            moveId = ITEM_HM04_STRENGTH;
+            break;
+            case MOVE_SURF:
+            moveId = ITEM_HM03_SURF;
+            break;
+            case MOVE_WATERFALL:
+            moveId = ITEM_HM07_WATERFALL;
+            break;
+            case MOVE_DIVE:
+            moveId = ITEM_HM08_DIVE;
+            break;
+        }    
+                                     //CanSpeciesLearnTMHM(species, moveId)     MonKnowsMove(&gPlayerParty[i], moveId)
+        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && CanSpeciesLearnTMHM(species, moveId - ITEM_TM01))
         {
             gSpecialVar_Result = i;
             gSpecialVar_0x8004 = species;

@@ -352,6 +352,7 @@ const u8 gText_MoveHeavyBoulders[] = _("Move heavy boulders.");
 const u8 gText_LightUpDarkness[] = _("Light up darkness.");
 const u8 gText_ShatterACrackedRock[] = _("Shatter a cracked rock.");
 const u8 gText_ClimbAWaterfall[] = _("Climb a waterfall.");
+const u8 gText_DiveDeep[] = _("Dive into deep water.");
 const u8 gUnknown_84175C1[] = _("すいちゅうに もぐる");
 const u8 gText_EscapeFromHere[] = _("Escape from here.");
 const u8 gText_LureWildPokemon[] = _("Lure wild POKéMON.");

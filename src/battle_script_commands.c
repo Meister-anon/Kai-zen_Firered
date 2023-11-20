@@ -16822,6 +16822,7 @@ static void atkF0_givecaughtmon(void) //useful if I set up alt storage,
     u16 clearItem = ITEM_NONE;
     if (GiveMonToPlayer(&gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker ^ BIT_SIDE]]) != MON_GIVEN_TO_PARTY) //if mon going to pc, is this codeblok
     {
+        
         if (!ShouldShowBoxWasFullMessage())
         {
             gBattleCommunication[MULTISTRING_CHOOSER] = 0;
@@ -16843,7 +16844,6 @@ static void atkF0_givecaughtmon(void) //useful if I set up alt storage,
             
             AddBagItem(heldItem, 1); //need battle message for this
             PREPARE_ITEM_BUFFER(gBattleTextBuff3, heldItem);
-            SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker ^ BIT_SIDE]], MON_DATA_HELD_ITEM, &clearItem); 
             PrepareStringBattle(STRINGID_CAUGHTMONDROPPEDITEM, gBattlerAttacker);
            // gBattlescriptCurrInstr = BattleScript_TakeItemfromCaughtMon; change think use buff3 and end with return 
         }

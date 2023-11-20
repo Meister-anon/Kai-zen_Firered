@@ -3564,12 +3564,12 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
         //I hesitate on that beause in that case, the boost would always be active,
         //unless facing much lower level pokemon.   will need balance test
-        if (h > 0 && usesDefStat == TRUE)
+        if (h > 0 || j > 0)
             OffensiveModifer(130);
             //gBattleMovePower = (gBattleMovePower * 130) / 100; //boosted from 17 to 50 just to see if it works
 
-        if (j > 0 && usesDefStat == FALSE)
-            OffensiveModifer(130); //change to use direct stat boost as thematically more fitting test for balance
+        ////if (j > 0 && usesDefStat == FALSE)
+         //   OffensiveModifer(130); //change to use direct stat boost as thematically more fitting test for balance
             //gBattleMovePower = (gBattleMovePower * 130) / 100; //doesn't seem to be workign, I'll swap to gdynamic
         //O.o now it works ...ow   
     }
@@ -5615,11 +5615,13 @@ static u8 SendMonToPC(struct Pokemon* mon)//follows catching/receiving mon, is n
     {
         for (boxPos = 0; boxPos < IN_BOX_COUNT; boxPos++)
         {
+            u16 HeldItem = ITEM_NONE;
             struct BoxPokemon* checkingMon = GetBoxedMonPtr(boxNo, boxPos);
             if (GetBoxMonData(checkingMon, MON_DATA_SPECIES, NULL) == SPECIES_NONE) //is box spot is empty
             {
 
                 MonRestorePP(mon);
+                SetBoxMonData(&mon->box, MON_DATA_HELD_ITEM, &HeldItem); //attempt remove item when send mon to pc, works
                 CopyMon(checkingMon, &mon->box, sizeof(mon->box));
                 gSpecialVar_MonBoxId = boxNo;
                 gSpecialVar_MonBoxPos = boxPos;
