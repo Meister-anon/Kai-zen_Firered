@@ -1528,6 +1528,8 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
     line I removed was actually necessary and without it, the script fell through 
     to future sight which was below it
 
+    issue with sand tomb its not trapping/preventing escape
+
   /base example of what I'll need, will dig into and see what needs to be adjusted
 
   make field moves for morning sun & moonlight,  use those for changing time think set time to 7am or 7pm respectively

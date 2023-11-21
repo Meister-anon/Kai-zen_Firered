@@ -3095,7 +3095,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
         //should prevent learnable hms from showing in  list until you have the badge to use them(working)
             if (CanSpeciesLearnTMHM(species, ((j + ITEM_HM01_CUT) - ITEM_TM01)) && ShouldDisplayHMFieldMove(j)) 
                 AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
-                break;
+                //break;since I'm trying to check all didn't actually need the break, plus I only have 1 loop not 2
 
     }//because it was reading item list, & hm 5 did not equal field move 5, had to reorder field move list to match hm item order
     

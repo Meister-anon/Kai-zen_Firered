@@ -5675,7 +5675,7 @@ BattleScript_EffectRevenge::
 	goto BattleScript_EffectHit
 
 BattleScript_EffectBrickBreak::
-	call_if	EFFECT_BRICK_BREAK
+	call_if	EFFECT_BRICK_BREAK	@seems like this isn't working its not doing typecalc
 
 @still working on this vsonic
 BattleScript_BrickBreakWithScreens::
