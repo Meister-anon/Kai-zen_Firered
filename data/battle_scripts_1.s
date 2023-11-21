@@ -8668,7 +8668,7 @@ BattleScript_BadDreams_HidePopUp:
 	@destroyabilitypopup
 	tryfaintmon BS_TARGET, FALSE, NULL
 	confirmlosingteam BattleScript_BadDreamsIncrement
-	@goto BattleScript_BadDreamsIncrement
+	goto BattleScript_BadDreamsIncrement
 
 BattleScript_TookAttack::
 	attackstring

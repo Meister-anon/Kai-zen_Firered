@@ -1523,7 +1523,15 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
     goto_if_eq TwoIsland_House_EventScript_ChooseMonToTutor
     end
 
+    bad dreams not working 100%, caused freeze adn triggered enemy ability?
+    and for some reason used future sight text ? -fixed
+    line I removed was actually necessary and without it, the script fell through 
+    to future sight which was below it
+
   /base example of what I'll need, will dig into and see what needs to be adjusted
+
+  make field moves for morning sun & moonlight,  use those for changing time think set time to 7am or 7pm respectively
+
   */
  HM_USE_SCRIPT //scrcmd  function used to decide if mon can trigger overworld hm use, adjusted to use can learn move not move learned
  /*

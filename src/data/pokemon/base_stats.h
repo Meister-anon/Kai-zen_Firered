@@ -1286,7 +1286,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(10, 55, 25, 95, 35, 45),
         .type1 = TYPE_GROUND,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_GROUND,
         .catchRate = 255,
         .expYield = 53,
         //.evYield_Speed = 1,
@@ -1303,14 +1303,14 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-    },//making normal ground for more dmg
+    },//making normal ground for more dmg, think this was before I changed joat, most moves are groud so w revert back
 
     [SPECIES_DUGTRIO] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(35, 105, 50, 120, 50, 70),
         .type1 = TYPE_GROUND,
-        .type2 = TYPE_NORMAL,
+        .type2 = TYPE_GROUND,
         .catchRate = 50,
         .expYield = 149,
         //.evYield_Speed = 2,
@@ -2346,7 +2346,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_DROWZEE] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(70, 48, 45, 42, 43, 90),
+         STATS(70, 58, 60, 42, 53, 90),
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 190,

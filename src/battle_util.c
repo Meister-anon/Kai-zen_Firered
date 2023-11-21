@@ -6254,7 +6254,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         }
                     }
                     break;
-                case ABILITY_BAD_DREAMS:                    
+                case ABILITY_BAD_DREAMS:  
+                if (IsBattlerAlive(gBattleScripting.battler))                  
                     BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
                     ++effect;
                     break;
