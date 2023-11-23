@@ -937,8 +937,21 @@ static void SetDataFromTrainerCard(void)
     for (i = 0, badgeFlag = FLAG_BADGE01_GET; badgeFlag <= FLAG_BADGE08_GET; badgeFlag++, i++)
     {
         if (FlagGet(badgeFlag))
-            sTrainerCardDataPtr->hasBadge[i]++;
+            sTrainerCardDataPtr->hasBadge[i]++; //can potentially use to easily check badge count, think increment is for setting true, not canging i, so cehck if i is true loop 8 times
     }
+}
+
+#define GET_BADGE_COUNT
+u8 GetNumberofBadges(void) //vsonic need test
+{
+    u8 i;
+    u8 NumBadges = 0;
+    for (i = 0; i <= 8; i++)
+    {
+        if (sTrainerCardDataPtr->hasBadge[i] == TRUE)
+            NumBadges++; //can potentially use to easily check badge count, think increment is for setting true, not canging i, so cehck if i is true loop 8 times
+    }
+    return NumBadges;
 }
 
 static void HandleGpuRegs(void)

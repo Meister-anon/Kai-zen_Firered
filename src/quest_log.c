@@ -940,7 +940,7 @@ static u8 GetQuestLogTextDisplayDuration(void)
     return 0xFF;
 }
 
-bool8 sub_8111C2C(void)
+bool8 sub_8111C2C(void) //beleive meens is questlog scene active?
 {
     if (gQuestLogState != QL_STATE_PLAYBACK)
         return FALSE;
@@ -953,13 +953,13 @@ void sub_8111C68(void)
 {
     if (sQuestLogCurrentScene.sceneEndMode == 0)
     {
-        if (JOY_NEW(A_BUTTON))
+        if (JOY_NEW(A_BUTTON)) //end current playback move to next scene
         {
             sQuestLogCurrentScene.sceneEndMode = 2;
             gQuestLogPlaybackState = 0;
             QuestLog_BeginFadeAtEndOfScene(-3);
         }
-        else if (JOY_NEW(B_BUTTON))
+        else if (JOY_NEW(B_BUTTON)) //end all playback
         {
             sQuestLogCurrentScene.sceneEndMode = 1;
             gQuestLogPlaybackState = 0;
@@ -1194,8 +1194,8 @@ static void Task_EndQuestLog(u8 taskId)
 
 #undef tState
 #undef tTimer
-
-static bool8 sub_81121D8(u8 taskId)
+//effect makes things monochrome, if remove lines between the two data[1] vaues vsonic 
+static bool8 sub_81121D8(u8 taskId) //returns color to normal at end of questlog, now see its not an effect, its just a color filter/i.e fades out color
 {
     s16 *data = gTasks[taskId].data;
 

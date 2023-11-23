@@ -1746,7 +1746,7 @@ static bool8 LavaridgeGymB1FWarpEffect_3(struct Task * task, struct ObjectEvent 
     PlaySE(SE_M_EXPLOSION);
     task->data[0]++;
     return TRUE;
-}
+} //sounds like sabrina was planned for laveridge town but was moved to safron?, oh wait lavaridge this is rs logic for flannery fp
 
 static bool8 LavaridgeGymB1FWarpEffect_4(struct Task * task, struct ObjectEvent * objectEvent, struct Sprite * sprite)
 {
@@ -1907,7 +1907,7 @@ u8 FldEff_LavaridgeGymWarp(void)
     gSprites[spriteId].oam.priority = gFieldEffectArguments[3];
     gSprites[spriteId].coordOffsetEnabled = TRUE;
     return spriteId;
-}
+} //is fix for weather setting weather sprite to same oam.priority as player? is that how can make cover? seems thats what this effect does and it covers player?
 
 void SpriteCB_LavaridgeGymWarp(struct Sprite * sprite)
 {

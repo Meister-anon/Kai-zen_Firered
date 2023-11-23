@@ -657,6 +657,8 @@ bool8 ScrCmd_delay(struct ScriptContext * ctx)
     return TRUE;
 }
 
+//will need redo/unremove these cmds think changetrue as well
+#define REMOVED_RS_COMMANDS
 bool8 ScrCmd_initclock(struct ScriptContext * ctx)
 {
 //    u8 hour = VarGet(ScriptReadHalfword(ctx));

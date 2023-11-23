@@ -802,7 +802,7 @@ bool8 MetatileBehavior_IsSpinTile(u8 metatileBehavior)
     return result;
 }
 
-bool8 MetatileBehavior_IsSignpost(u8 metatileBehavior)
+bool8 MetatileBehavior_IsSignpost(u8 metatileBehavior) //so npc and player are object events while signposts are metatiles?
 {
     if(metatileBehavior == MB_SIGNPOST)
         return TRUE;

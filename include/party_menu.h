@@ -86,4 +86,6 @@ void ShowPartyMenuToShowcaseMultiBattleParty(void);
 void ChooseMonForDaycare(void);
 void ChoosePartyMonByMenuType(u8 menuType);
 
+u8 ShouldDisplayHMFieldMove(u8 fieldMove);// for listing badge requirement for hm
+
 #endif // GUARD_PARTY_MENU_H

@@ -4465,15 +4465,16 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
      || (GetBattlerAbility(gActiveBattler) == ABILITY_AVIATOR)
      || (GetBattlerAbility(gActiveBattler) == ABILITY_DEFEATIST
          && gSpecialStatuses[gActiveBattler].defeatistActivated)
-     || holdEffect == HOLD_EFFECT_SHED_SHELL)
+     || holdEffect == HOLD_EFFECT_SHED_SHELL
+     || (IS_BATTLE_TYPE_GHOST_WITHOUT_SCOPE(gBattleTypeFlags))) //added cuz issue created with adding shadow tag to gastly
         return BATTLE_RUN_SUCCESS;
     
     side = GetBattlerSide(gActiveBattler);
     for (i = 0; i < gBattlersCount; ++i)
     {
         if (side != GetBattlerSide(i)
-         && gBattleMons[i].ability == ABILITY_SHADOW_TAG) //since shadow tag is like an exorcism talismon 
-            //meant to keep spirits from escaping it makes sense for shadow tag
+         && gBattleMons[i].ability == ABILITY_SHADOW_TAG //since shadow tag is like an exorcism talismon 
+         && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST))//meant to keep spirits from escaping it makes sense for shadow tag
             // to still lock in ghost types
         {
             gBattleScripting.battler = i;
@@ -4504,9 +4505,9 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
     }//vsonic IMPORTANT do search, for status2_wrapped & wrappedby  implement new trap checks where it makes sense
     //similar to as below
     if (((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))//vsonic need add new trap status here
-     || (gBattleMons[gActiveBattler].status4 == ITS_A_TRAP_STATUS4)
+     || (gBattleMons[gActiveBattler].status4 & (ITS_A_TRAP_STATUS4)
      || (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
-     || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK))//I need to redo this setup,
+     || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK)))//I need to redo this setup,
      /*|| (!IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
         && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING))*/
      && IsBattlerGrounded(gActiveBattler)) // I made it impossible to flee unless not gronded because I used or instead of and -__
@@ -4692,7 +4693,7 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                         || ((IsAbilityOnOpposingSide(gActiveBattler, ABILITY_ARENA_TRAP))
                             // && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
                              //&& gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
-                            && !IsBattlerGrounded(gActiveBattler))
+                            && IsBattlerGrounded(gActiveBattler)) //need test this
                         || (IsAbilityOnOpposingSide(gActiveBattler, ABILITY_MAGNET_PULL)
                             && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL)))
                     {
@@ -6059,7 +6060,8 @@ static void HandleAction_Run(void)
         }
         else
         {
-            if (gBattleMons[gBattlerAttacker].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION))
+            if (gBattleMons[gBattlerAttacker].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION)
+            || gBattleMons[gBattlerAttacker].status4 & (ITS_A_TRAP_STATUS4))
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = 4;
                 gBattlescriptCurrInstr = BattleScript_PrintFailedToRunString;

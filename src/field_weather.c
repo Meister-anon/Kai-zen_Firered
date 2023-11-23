@@ -65,22 +65,26 @@ static bool8 LightenSpritePaletteInFog(u8 paletteIndex);
 
 struct Weather *const gWeatherPtr = &sWeather;
 
+//need add on to this, when add new weather in weather.h
+//this follows values there, will add weather constants to better track this
+//ok this should make it much easier to identify 
 static const struct WeatherCallbacks sWeatherFuncs[] = {
-    {None_Init, None_Main, None_Init, None_Finish},
-    {Clouds_InitVars, Clouds_Main, Clouds_InitAll, Clouds_Finish},
-    {Sunny_InitVars, Sunny_Main, Sunny_InitAll, Sunny_Finish},
-    {Rain_InitVars, Rain_Main, Rain_InitAll, Rain_Finish},
-    {Snow_InitVars, Snow_Main, Snow_InitAll, Snow_Finish},
-    {Thunderstorm_InitVars, Thunderstorm_Main, Thunderstorm_InitAll, Thunderstorm_Finish},
-    {FogHorizontal_InitVars, FogHorizontal_Main, FogHorizontal_InitAll, FogHorizontal_Finish},
-    {Ash_InitVars, Ash_Main, Ash_InitAll, Ash_Finish},
-    {Sandstorm_InitVars, Sandstorm_Main, Sandstorm_InitAll, Sandstorm_Finish},
-    {FogDiagonal_InitVars, FogDiagonal_Main, FogDiagonal_InitAll, FogDiagonal_Finish},
-    {FogHorizontal_InitVars, FogHorizontal_Main, FogHorizontal_InitAll, FogHorizontal_Finish},
-    {Shade_InitVars, Shade_Main, Shade_InitAll, Shade_Finish},
-    {Drought_InitVars, Drought_Main, Drought_InitAll, Drought_Finish},
-    {Downpour_InitVars, Thunderstorm_Main, Downpour_InitAll, Thunderstorm_Finish},
-    {Bubbles_InitVars, Bubbles_Main, Bubbles_InitAll, Bubbles_Finish},
+   [WEATHER_NONE] = {None_Init, None_Main, None_Init, None_Finish},
+   [WEATHER_SUNNY_CLOUDS] = {Clouds_InitVars, Clouds_Main, Clouds_InitAll, Clouds_Finish},
+   [WEATHER_SUNNY] = {Sunny_InitVars, Sunny_Main, Sunny_InitAll, Sunny_Finish},
+   [WEATHER_RAIN] = {Rain_InitVars, Rain_Main, Rain_InitAll, Rain_Finish},
+   [WEATHER_SNOW] = {Snow_InitVars, Snow_Main, Snow_InitAll, Snow_Finish},
+   [WEATHER_RAIN_THUNDERSTORM] = {Thunderstorm_InitVars, Thunderstorm_Main, Thunderstorm_InitAll, Thunderstorm_Finish},
+   [WEATHER_FOG_HORIZONTAL] = {FogHorizontal_InitVars, FogHorizontal_Main, FogHorizontal_InitAll, FogHorizontal_Finish},
+   [WEATHER_DARKFOG_HORIZONTAL] = {FogHorizontal_InitVars, FogHorizontal_Main, FogHorizontal_InitAll, FogHorizontal_Finish}, //this was issue for new weather, with value change it defaulted to ash
+   [WEATHER_VOLCANIC_ASH] = {Ash_InitVars, Ash_Main, Ash_InitAll, Ash_Finish},
+   [WEATHER_SANDSTORM] = {Sandstorm_InitVars, Sandstorm_Main, Sandstorm_InitAll, Sandstorm_Finish},
+   [WEATHER_FOG_DIAGONAL] = {FogDiagonal_InitVars, FogDiagonal_Main, FogDiagonal_InitAll, FogDiagonal_Finish},
+   [WEATHER_UNDERWATER] = {FogHorizontal_InitVars, FogHorizontal_Main, FogHorizontal_InitAll, FogHorizontal_Finish},
+   [WEATHER_SHADE] = {Shade_InitVars, Shade_Main, Shade_InitAll, Shade_Finish},
+   [WEATHER_DROUGHT] = {Drought_InitVars, Drought_Main, Drought_InitAll, Drought_Finish},
+   [WEATHER_DOWNPOUR] = {Downpour_InitVars, Thunderstorm_Main, Downpour_InitAll, Thunderstorm_Finish},
+   [WEATHER_UNDERWATER_BUBBLES] = {Bubbles_InitVars, Bubbles_Main, Bubbles_InitAll, Bubbles_Finish},
 };
 
 static void (*const sWeatherPalStateFuncs[])(void) = {
@@ -374,6 +378,13 @@ static void FadeInScreenWithWeather(void)
         }
         break;
     case WEATHER_FOG_HORIZONTAL:
+        if (FadeInScreen_FogHorizontal() == FALSE)
+        {
+            gWeatherPtr->gammaIndex = 0;
+            gWeatherPtr->palProcessingState = WEATHER_PAL_STATE_IDLE;
+        }
+        break;
+    case WEATHER_DARKFOG_HORIZONTAL:
         if (FadeInScreen_FogHorizontal() == FALSE)
         {
             gWeatherPtr->gammaIndex = 0;
@@ -749,6 +760,7 @@ void FadeScreen(u8 mode, s8 delay)
     case WEATHER_DOWNPOUR:
     case WEATHER_SNOW:
     case WEATHER_FOG_HORIZONTAL:
+    case WEATHER_DARKFOG_HORIZONTAL:
     case WEATHER_SHADE:
     case WEATHER_DROUGHT:
         useWeatherPal = TRUE;
@@ -817,6 +829,7 @@ void FadeSelectedPals(u8 mode, s8 delay, u32 selectedPalettes)
     case WEATHER_DOWNPOUR:
     case WEATHER_SNOW:
     case WEATHER_FOG_HORIZONTAL:
+    case WEATHER_DARKFOG_HORIZONTAL:
     case WEATHER_SHADE:
     case WEATHER_DROUGHT:
         useWeatherPal = TRUE;
@@ -866,7 +879,7 @@ void UpdateSpritePaletteWithWeather(u8 spritePaletteIndex)
     case WEATHER_PAL_STATE_SCREEN_FADING_IN:
         if (gWeatherPtr->unknown_6CA != 0)
         {
-            if (gWeatherPtr->currWeather == WEATHER_FOG_HORIZONTAL)
+            if (gWeatherPtr->currWeather == WEATHER_FOG_HORIZONTAL || gWeatherPtr->currWeather == WEATHER_DARKFOG_HORIZONTAL)
                 MarkFogSpritePalToLighten(paletteIndex);
             paletteIndex *= 16;
             for (i = 0; i < 16; i++)
@@ -881,11 +894,11 @@ void UpdateSpritePaletteWithWeather(u8 spritePaletteIndex)
         // WEATHER_PAL_STATE_CHANGING_WEATHER
         // WEATHER_PAL_STATE_CHANGING_IDLE
     default:
-        if (gWeatherPtr->currWeather != WEATHER_FOG_HORIZONTAL)
+        if (gWeatherPtr->currWeather != WEATHER_FOG_HORIZONTAL && gWeatherPtr->currWeather != WEATHER_DARKFOG_HORIZONTAL) 
         {
             ApplyGammaShift(paletteIndex, 1, gWeatherPtr->gammaIndex);
         }
-        else
+        else if (gWeatherPtr->currWeather == WEATHER_FOG_HORIZONTAL || gWeatherPtr->currWeather == WEATHER_DARKFOG_HORIZONTAL)
         {
             paletteIndex *= 16;
             BlendPalette(paletteIndex, 16, 12, RGB(28, 31, 28));
@@ -951,7 +964,7 @@ void sub_807AC60(void)
     gUnknown_20386A8 = 5;
 }
 
-void sub_807AC98(void)
+void sub_807AC98(void) //used in drought
 {
     switch (gWeatherPtr->unknown_742)
     {
@@ -1033,6 +1046,7 @@ bool8 Weather_UpdateBlend(void)
         }
     }
 
+    //without this weather change doesn't appear
     SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(gWeatherPtr->currBlendEVA, gWeatherPtr->currBlendEVB));
 
     if (gWeatherPtr->currBlendEVA == gWeatherPtr->targetBlendEVA
@@ -1042,7 +1056,7 @@ bool8 Weather_UpdateBlend(void)
     return FALSE;
 }
 
-static void sub_807AF00(u8 a)
+static void sub_807AF00(u8 a) //seems not used? so can ignore for WEATHER_DARKFOG_HORIZONTAL / or at least for now
 {
     switch (a)
     {

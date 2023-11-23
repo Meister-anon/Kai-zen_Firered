@@ -2113,9 +2113,9 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_SEEL] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(65, 45, 55, 55, 45, 70),
+         STATS(65, 45, 55, 45, 45, 70),
         .type1 = TYPE_WATER,
-        .type2 = TYPE_WATER,
+        .type2 = TYPE_ICE,
         .catchRate = 190,
         .expYield = 65,
         //.evYield_SpDefense = 1,
@@ -2127,7 +2127,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_THICK_FAT, ABILITY_HYDRATION},
-            .abilityHidden = {ABILITY_ICE_BODY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_ICE_BODY, ABILITY_SWIFT_SWIM},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },
@@ -2135,7 +2135,7 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_DEWGONG] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(90, 70, 80, 76, 85, 95),
+         STATS(90, 70, 80, 76, 75, 95),
         .type1 = TYPE_WATER,
         .type2 = TYPE_ICE,
         .catchRate = 75,
@@ -2149,7 +2149,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_THICK_FAT, ABILITY_HYDRATION},
-            .abilityHidden = {ABILITY_ICE_BODY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_ICE_BODY, ABILITY_SWIFT_SWIM},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
     },

@@ -1177,14 +1177,17 @@ u8 GetPlayerAvatarGenderByGraphicsId(u8 gfxId)
 bool8 PartyHasMonWithSurf(void)
 {
     u8 i;
+    u16 species;
 
     if (!TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
     {
         for (i = 0; i < PARTY_SIZE; i++)
         {
+            species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
             if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE)
                 break;
-            if (MonKnowsMove(&gPlayerParty[i], MOVE_SURF))
+            if (CanSpeciesLearnTMHM(species, ((FIELD_MOVE_SURF + ITEM_HM01_CUT) - ITEM_TM01)) 
+            && ShouldDisplayHMFieldMove(FIELD_MOVE_SURF))
                 return TRUE;
         }
     }

@@ -52,5 +52,6 @@ void ShowPlayerTrainerCard(void (*callback)(void));
 //void ShowTrainerCardInLink(u8 whoseCard, MainCallback callback);
 u8 GetTrainerCardStars(u8 cardId);
 //void TrainerCard_GenerateCardForLinkPlayer(struct TrainerCard *trainerCard);
+u8 GetNumberofBadges(void); //new function, to get number of badges for effect scaling
 
 #endif //GUARD_TRAINER_CARD_H

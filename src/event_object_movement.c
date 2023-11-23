@@ -9067,7 +9067,7 @@ void FreezeObjectEvents(void)
     u8 i;
     for (i = 0; i < OBJECT_EVENTS_COUNT; i++)
     {
-        if (gObjectEvents[i].active && i != gPlayerAvatar.objectEventId)
+        if (gObjectEvents[i].active && i != gPlayerAvatar.objectEventId) //seems all object events except player?
             FreezeObjectEvent(&gObjectEvents[i]);
     }
 }

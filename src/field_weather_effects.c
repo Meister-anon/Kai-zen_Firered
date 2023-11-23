@@ -1203,18 +1203,23 @@ static const u16 unusedData_839AB1C[] = {0, 6, 6, 12, 18, 42, 300, 300};
 static const struct OamData gOamData_839AB2C = {
     .y = 0,
     .affineMode = ST_OAM_AFFINE_OFF,
-    .objMode = ST_OAM_OBJ_BLEND,
+    .objMode = ST_OAM_OBJ_BLEND,// I guess this blends so everything on a lower priority is visible?
     .mosaic = FALSE,
     .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(64x64),
     .x = 0,
     .matrixNum = 0,
     .size = SPRITE_SIZE(64x64),
-    .tileNum = 0,
-    .priority = 2,
-    .paletteNum = 0,
+    .tileNum = 0, //priority seems to be saying what bg layer effect is on? used mgba view map setting to check
+    .priority = 2, //settingto priority 1 like rain and snow works for what I want, and doesn't cause clipping but removes all object event sprites, makes them invisible
+    .paletteNum = 0, //at priority 1, object events dissapear but windows & map popups still work,at priority 0, map popupsare blacked out
     .affineParam = 0,
-};
+}; //from turing objMode blend off can see effect is completely opaque, would explain why object events dissapear it covers everything even if I can see through it
+//according to Mcgriffin most of these values don't do anything, prety much every 0 value outside of affineMode has no effect/use? -(seems used for some things elsewhere)
+//according to Sbird can't remove, didn't give much reasoning just said no
+//looping at mgba map viewer think reason fog at priority below 2 blocks sprites is because it gets loaded in before the sprites, blocking them 
+//from view as it doesn't have transparency?  object event sprites are priority 2, at same priority level fog is loaded AFTER sprites
+//understand now, solution is putting foag onpriority 3,  but need to change map so it shows through
 
 static const union AnimCmd gSpriteAnim_839AB34[] = {
     ANIMCMD_FRAME(0, 16),
@@ -1312,8 +1317,14 @@ void FogHorizontal_Main(void)
     {
     case 0:
         CreateFogHorizontalSprites();
-        if (gWeatherPtr->currWeather == WEATHER_FOG_HORIZONTAL)
-            Weather_SetTargetBlendCoeffs(12, 8, 3);
+        if (gWeatherPtr->currWeather == WEATHER_DARKFOG_HORIZONTAL) //can't make match same layer, w/o significant tile changes so instead make new weather effect for dark fog
+            Weather_SetTargetBlendCoeffs(7, 9, 3); //is first value opacity? seems higher value means thicker effect?
+            //Weather_SetTargetBlendCoeffs(12, 6, 3);  vsonic like how this looks, opacity (1st value) 9 is also good hmm  prefer 9 6 3
+            //2nd value appears to be akin to brightness, don't understand 3rd value / want to use explicitly for pokemon tower, use other values for norm fog
+            //think 9 11 3, for norm fog potentially higher opacity for deep fog? still haven't figured how to get weather to cover character sprites
+            //want to use dark fog for pokemon tower, thean change to normal fog after clear evil spirits
+        else if (gWeatherPtr->currWeather == WEATHER_FOG_HORIZONTAL) //can't make match same layer, w/o significant tile changes so instead make new weather effect for dark fog
+            Weather_SetTargetBlendCoeffs(11, 7, 3);//9, 7, 3        //6, 10, 3
         else
             Weather_SetTargetBlendCoeffs(4, 16, 0);
         gWeatherPtr->initStep++;
@@ -2194,7 +2205,7 @@ static const s16 sBubbleStartCoords[][2] = {
 
 void Bubbles_InitVars(void)
 {
-    FogHorizontal_InitVars();
+    FogHorizontal_InitVars(); //say fog but believe this is for dive since fog logic is allso in underwater section
     if (!gWeatherPtr->bubblesSpritesCreated)
     {
         LoadSpriteSheet(&sWeatherBubbleSpriteSheet);

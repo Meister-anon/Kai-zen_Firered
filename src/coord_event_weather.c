@@ -20,20 +20,21 @@ static struct {
     u8 weatherId;
     void (*callback)(void);
 } const sWeatherCoordEventFuncs[] = {
-    {WEATHER_SUNNY_CLOUDS,      WeatherCoordEvent_SunnyClouds     },
-    {WEATHER_SUNNY,             WeatherCoordEvent_Sunny           },
-    {WEATHER_RAIN,              WeatherCoordEvent_Rain            },
-    {WEATHER_SNOW,              WeatherCoordEvent_Snow            },
-    {WEATHER_RAIN_THUNDERSTORM, WeatherCoordEvent_RainThunderstorm},
-    {WEATHER_FOG_HORIZONTAL,    WeatherCoordEvent_FogHorizontal   },
-    {WEATHER_VOLCANIC_ASH,      WeatherCoordEvent_VolcanicAsh     },
-    {WEATHER_SANDSTORM,         WeatherCoordEvent_Sandstorm       },
-    {WEATHER_FOG_DIAGONAL,      WeatherCoordEvent_FogDiagonal     },
-    {WEATHER_UNDERWATER,        WeatherCoordEvent_Underwater      },
-    {WEATHER_SHADE,             WeatherCoordEvent_Shade           },
-    {WEATHER_ROUTE119_CYCLE,    WeatherCoordEvent_Route119Cycle   },
-    {WEATHER_ROUTE123_CYCLE,    WeatherCoordEvent_Route123Cycle   }
-};
+    {WEATHER_SUNNY_CLOUDS,          WeatherCoordEvent_SunnyClouds     },
+    {WEATHER_SUNNY,                 WeatherCoordEvent_Sunny           },
+    {WEATHER_RAIN,                  WeatherCoordEvent_Rain            },
+    {WEATHER_SNOW,                  WeatherCoordEvent_Snow            },
+    {WEATHER_RAIN_THUNDERSTORM,     WeatherCoordEvent_RainThunderstorm},
+    {WEATHER_FOG_HORIZONTAL,        WeatherCoordEvent_FogHorizontal   },
+    {WEATHER_VOLCANIC_ASH,          WeatherCoordEvent_VolcanicAsh     },
+    {WEATHER_SANDSTORM,             WeatherCoordEvent_Sandstorm       },
+    {WEATHER_FOG_DIAGONAL,          WeatherCoordEvent_FogDiagonal     },
+    {WEATHER_UNDERWATER,            WeatherCoordEvent_Underwater      },
+    {WEATHER_SHADE,                 WeatherCoordEvent_Shade           },
+    {WEATHER_ROUTE119_CYCLE,        WeatherCoordEvent_Route119Cycle   },
+    {WEATHER_ROUTE123_CYCLE,        WeatherCoordEvent_Route123Cycle   },
+    {WEATHER_DARKFOG_HORIZONTAL,    WeatherCoordEvent_FogHorizontal   }
+};//seems this isn't relevant to anything the sweatherfuncs is the important one
 
 void DoCoordEventWeather(u8 weatherId)
 {

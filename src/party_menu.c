@@ -150,6 +150,7 @@ static void CursorCB_Trade2(u8 taskId);
 static void CursorCB_FieldMove(u8 taskId);
 static bool8 SetUpFieldMove_Fly(void);
 static bool8 SetUpFieldMove_Waterfall(void);
+static bool8 SetUpFieldMove_Dive(void);
 static bool8 SetUpFieldMove_Surf(void);
 static void CB2_InitPartyMenu(void);
 static void ResetPartyMenu(void);
@@ -2992,7 +2993,7 @@ static void SetPartyMonSelectionActions(struct Pokemon *mons, u8 slotId, u8 acti
     }
 }
 
-static u8 ShouldDisplayHMFieldMove(u8 fieldMove)
+u8 ShouldDisplayHMFieldMove(u8 fieldMove)
 {
      switch (fieldMove)
             {
@@ -4194,7 +4195,7 @@ static bool8 SetUpFieldMove_Surf(void)
     GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
     if (MetatileBehavior_IsSemiDeepWater(MapGridGetMetatileBehaviorAt(x, y)) != TRUE
         && IsPlayerFacingSurfableFishableWater() == TRUE
-        && CanMonLearnTMHM(mon, item - ITEM_HM03_SURF)) //hopefully that works
+        && ShouldDisplayHMFieldMove(FIELD_MOVE_SURF)) //hopefully that works
     {
         gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
         gPostMenuFieldCallback = FieldCallback_Surf;
@@ -4244,7 +4245,7 @@ static void FieldCallback_Waterfall(void)
     FieldEffectStart(FLDEFF_USE_WATERFALL);
 }
 
-static bool8 SetUpFieldMove_Waterfall(void)
+static bool8 SetUpFieldMove_Waterfall(void)  
 {
     s16 x, y;
 
@@ -4253,6 +4254,26 @@ static bool8 SetUpFieldMove_Waterfall(void)
     {
         gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
         gPostMenuFieldCallback = FieldCallback_Waterfall;
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static void FieldCallback_Dive(void)
+{
+    gFieldEffectArguments[0] = GetCursorSelectionMonId();
+    FieldEffectStart(FLDEFF_USE_DIVE);
+}
+
+static bool8 SetUpFieldMove_Dive(void)
+{
+    s16 x, y;
+
+    PlayerGetDestCoords(&x, &y);
+    if (MetatileBehavior_IsDeepSemiDeepOrSplashingWater(MapGridGetMetatileBehaviorAt(x, y)) == TRUE) //splashing water isn't a thinig but shouldn't be an issue?
+    {
+        gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
+        gPostMenuFieldCallback = FieldCallback_Dive; //change to dive
         return TRUE;
     }
     return FALSE;

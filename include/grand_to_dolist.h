@@ -1406,13 +1406,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
  ok yeah def doing this, right now, if you use teleport inside city limits it just warps you back to the same heal spot,
  even if you're already standing on it,  think it also has specific logic for if used within a cave? can't remembver if it fails or warps to entrance
+  - think can do with GetCurrentMapType function from overworld.c and the functions below it
 
  -for play consider swapping badge hm use of brock's gym and  surges gym
  -instead of flash make brock let player use surf (for small chance you spawn npc in pallet that gives you fishing access early)
  -give surge flash, since you don't need flash early, 
  - actually nvm cant get back to pallet until after surge anyway 
  so give surge surf and swap with koga so he gives fly instead
- -makes more sense anyway too, surge is in water town, and koga is a ninja so could "fly"
+ -makes more sense anyway too, surge is in water town, and koga is a ninja so could "fly" - done seems to cause no issue?
 
  check strings for hm activate based on metatile i.e from overworld, potentially issue is just a missing check in function,
  but can't click on a tree to bring up should use cut message, I have to use it directly from menu
@@ -1527,21 +1528,105 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
     bad dreams not working 100%, caused freeze adn triggered enemy ability?
     and for some reason used future sight text ? -fixed
-    line I removed was actually necessary and without it, the script fell through 
+    line I removed before was actually necessary and without it, the script fell through 
     to future sight which was below it
 
-    issue with sand tomb its not trapping/preventing escape
+    sticky hold doesn't seem to be working, script plays but doesn't take item
+    if that doesn't work magma armor possibly doens't work
+    but pickpocket seems to work correctly?
+
+    shadow tag not showing proper string data, check SetMonPreventsSwitchingString not sure if that is issue but look there first
+    its showing wrnog battler with string i.e is showing my player mon (battler affected by ability) rather than the mon that used the ability
+    its ex. arbok's shadowtag prevents switching, when the mon with shadow tag is teh enemy gastly
+
+    other issue, shadow tag on gastly caused issue with ghosts in pokemon tower added exception so can always flee,
+    keep eye on for causing other issue w marowak fight
+
+    -want to attemt fog upgrade/weather upgrade w for pokemon tower - think lookinto overworld.c and queslog for intended effect
+    since quest log has a uniform effect that plays even over the player avatar/cast applied to entire screen
+    nvm looks like questlog effect is nothing more than a palette fade, simple but effective. - think can't do,
+    -from what I see the solutionn reuires a great deal of rework of map tiles
+    maps data are split between 4 bgs,  bg 0 is for messages alone, 1-3 are map tiles,
+    the apparent fix is putting everything on tile 1 & 2, and leaving weather effects etc. to layer 3
+
+    -but I don't understand that stuff so I'd probi be better with a dedicated mapper, that can go through all the maps
+    and see about adjusting them to fit to 2 bgs, after that weather can be updated more easily
+
+    issue with sand tomb its not trapping/preventing escape -was most trap effects testing fixes now, cuz i separated them from wrap
+    -fixed  had const logic off, used || instead of bitwise |  now it works
+
+    still need double check arena trap
+
   SUBSTITUTE not completely working, it stops swapping after like 2 turns? not when it actually fades
 
   descovered issue with move learn,  after leave move selection for move to forget if Press A over no to forget move,
   it glitches out, but works correctly if you press B. 
 
   
+-  new repel change make them all same duration but different strength/effect  match duartion to super repel
+normal repel keeps enemies away up to your level
+super repel keeps enemies away up to 1.5x your level
+max repel keeps enemies away up to 2x your level 
+
+gives consistent reason to keep using normal repel even in later game
+in my game the extra repeles will be used for exploring other areas just to get to a gym, 
+or to limit the danger you're in
+
+what I could do also is use it to scale enemies, rather than blocking all enemies the extra repels, could instead scale enemies to your level
+which wuold allow you to catch more mon/explore for mon mon to catch but keep them from being op for the player to use.
+
+Like the lvl 29/31 dugtrio in diglett cave, can potentially add a bst component as well should I need to, since enough money and repels
+could get the player to late content and get a high bst mon, even if at their level it'd still run through thingss.
+idea for super/max, if enemy level is within range, but bst is too high, prevent lowering level
+
+-add first instance of super repel afer 2nd gym badge, that way can use for diglett cave and potential to get to cinnabar
+
+think what could do is have super/max repel lower normal encounter rate and then when you do get an encouter it'll be at your level.
+lower encouter rate, if enemy level is within repel range  set them to player level, if above limit they'll spawn at normal level
+but you still get the benefit of the lowered encounter rate
+
+rather than each mart be different have them all have same wears, just expand based on gym badge count.
+excluding celadon (potentially, celadon may use different mart script)
+that way you don't need to keep flying aruond to different places looking for the item you need
+(use should display hm function logic as template)
+
+ add logic to script for gym guide where he mentions that the gym leaders
+ pick their team based on the number of badges the challenger has.
+
+-
+
+ 
+  need to add script for thunder wave not paralyzing electric types etc.
+  prob, just add extra check before can paralyze logic that goes to script no effect
+
+ for some reason repel scripts stopped working?
+ I had it setup to do black white style reapplication but now it isn't working..
+
+ change prof oak aide in center by rock tunnel to give eviolite rather than everstone
+ - actually give both, have him give 3 of each, change message to if don't want to evovle
+ these items can help
+
+ - see if possible to get flash to activate soon as you enter a cave
+ instead of needing to pull from party menu - not 100% if want to do
+
+ - look into for anthroyd see about havign custom amount of coins to buy
+ from gamble arena in celadon.
+ should be simple, should just be a matter of
+ having conversion i.e pressing up down on dpad increase/decreas coin amount
+ by certain amount, for realism keep fixed amounts but add extra menu option
+ for purchasing custom amount.
+
+ potential issue? notsue the cause I stacked up my atk def boosts and defeated an enemy, 
+ but my boosts seemed to go away? when teh next mon came out?  guessing something to do with dmg function
+ semed to only be doing 1 dmg, so I guess its one of the dmg = 1 things I added?
 
   make field moves for morning sun & moonlight,  use those for changing time think set time to 7am or 7pm respectively
 
   */
- HM_USE_SCRIPT //scrcmd  function used to decide if mon can trigger overworld hm use, adjusted to use can learn move not move learned
+ goto HM_USE_SCRIPT //scrcmd  function used to decide if mon can trigger overworld hm use, adjusted to use can learn move not move learned
+ goto GET_BADGE_COUNT //trainer_card, made funtion to hopefully get badge count, use for repel, mart and other scaled effects
+ goto REMOVED_RS_COMMANDS  //think stubbed function from rs mostly related to rtc & weather, need add back..scrmd 
+
  /*
 
     //attempt function that will put linebreaks in strings automatically, 
@@ -4355,6 +4440,21 @@ goto MOVEICON_ABILITYDESC	//function for displaying move icons & ability info in
 * i.e "Lost in *location* at *lvl* to *cause of death-either mon to kill it, or status that killed it.
 * to severe burns, hypothermia, poison  burn poison & freezee/frostbite are status1s that do dot and can kill
 * if left uncured/healed for a number of steps after mon dies to or with them.
+*
+* plan was revise lavender tower event, make head priest be posessed by evil spirit
+* make it final boss of lavender tower, rockets to show off nuzlocke and revival
+* mechanic, fight priest at top, with ghost team, defeat him,
+* he says S-s....sa-ssave...m-e... 
+* the screen flashses and then you're thrown into another fight,
+* this time just a mismagius lvl 40 say something bout dark spirits 
+* were drawn to the evil deeds of team rocket after cubone's mother was killed.
+* this is a sacred place of renewal and resurection life and death exist here
+* blah blah, to bring balance things must be made right.
+*  priest goes to center screen flashes and marowak sprite appears, apparently resurected
+* cubone walks up they both cry, and then walk off.  
+* then have marowak appear in bottom left house of  lavender town along with the cubone
+* change text of trainer in house to fit 
+* This marowak just appeared here idk where she came from but cubone seems a lot happier now
 */
 
 /* 

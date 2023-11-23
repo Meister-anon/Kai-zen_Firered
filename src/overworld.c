@@ -758,8 +758,8 @@ void LoadMapFromCameraTransition(u8 mapGroup, u8 mapNum)
     ClearTempFieldEventData();
     ResetCyclingRoadChallengeData();
     RestartWildEncounterImmunitySteps();
-    MapResetTrainerRematches(mapGroup, mapNum);
-    SetSav1WeatherFromCurrMapHeader();
+    MapResetTrainerRematches(mapGroup, mapNum);//vsonic
+    SetSav1WeatherFromCurrMapHeader(); //map weather plas without this, so not main effect
     ChooseAmbientCrySpecies();
     SetDefaultFlashLevel();
     Overworld_ClearSavedMusic();
@@ -773,8 +773,8 @@ void LoadMapFromCameraTransition(u8 mapGroup, u8 mapNum)
     InitSecondaryTilesetAnimation();
     UpdateLocationHistoryForRoamer();
     RoamerMove();
-    sub_8110920();
-    DoCurrentWeather();
+    sub_8110920(); //smthngsmthng questlog
+    DoCurrentWeather(); //map weapther also plays without this???
     ResetFieldTasksArgs();
     RunOnResumeMapScript();
     if (GetLastUsedWarpMapSectionId() != gMapHeader.regionMapSectionId)
@@ -794,8 +794,8 @@ static void mli0_load_map(bool32 a1)
     ResetCyclingRoadChallengeData();
     RestartWildEncounterImmunitySteps();
     MapResetTrainerRematches(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum);
-    SetSav1WeatherFromCurrMapHeader();
-    ChooseAmbientCrySpecies();
+    SetSav1WeatherFromCurrMapHeader(); //updates weather from header, without this line weather persists for entire map group
+    ChooseAmbientCrySpecies(); //pokemon tower fog stayed long as was in lavender town
     if (isOutdoors)
         FlagClear(FLAG_SYS_FLASH_ACTIVE);
     SetDefaultFlashLevel();
@@ -946,6 +946,9 @@ bool32 Overworld_IsBikingAllowed(void)
         return TRUE;
 }
 
+//beleive is size of dark circle, that blocks view 
+//you need to remove w flash
+//think 0 is no circle/ ie clear view
 static void SetDefaultFlashLevel(void)
 {
     if (!gMapHeader.cave)
@@ -1208,7 +1211,7 @@ static u8 GetMapTypeByWarpData(struct WarpData *warp)
     return GetMapTypeByGroupAndId(warp->mapGroup, warp->mapNum);
 }
 
-u8 GetCurrentMapType(void)
+u8 GetCurrentMapType(void) //vsonic teleport setup
 {
     return GetMapTypeByWarpData(&gSaveBlock1Ptr->location);
 }
