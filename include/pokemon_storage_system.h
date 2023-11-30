@@ -49,6 +49,8 @@ void DrawTextWindowAndBufferTiles(const u8 *string, void *dst, u8 zero1, u8 zero
 void UpdatePokemonStorageSystemMonExp(void); //boxx exp gain setup - main function call
 void BoxMonAtGainExp(struct BoxPokemon * mon); //box exp gaain setup  //exp setting logic
 
+u8 CanBoxMonGainExp(struct BoxPokemon *mon); //level cap for box gain
+
 u8 CheckIfPcEmpty(void); //check if there is a mon in pc, for resetting pc exp gain counter
 
 #endif // GUARD_POKEMON_STORAGE_SYSTEM_H

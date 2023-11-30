@@ -1588,7 +1588,8 @@ const u16 sSquirtleBall[] = {
     SPECIES_BUNNELBY, //works but I like SPECIES_GOLETT better? is more interesting/popular , replaced rogenrolla //oh right didn't use cuz ghost was free early game wins
     SPECIES_LOTAD,  //REPLACED wailmer
     SPECIES_CASTFORM,   //easter egg mon, not really good for starter otherwise/ rebalancing ability effect would be better in squirtle set can swap w ditto
-    SPECIES_SOBBLE,
+    SPECIES_SANDILE,
+    //SPECIES_SOBBLE,  //make new area sevii island to get all gen starters, rare safari zone, mon will be higher level but all starter form
     SPECIES_SPHEAL
     //LIST_END
 };

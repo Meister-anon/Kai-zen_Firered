@@ -1454,7 +1454,7 @@
 #define FLAG_WORLD_MAP_SEVEN_ISLAND_SEVAULT_CANYON_TANOBY_KEY       (SYS_FLAGS + 0xC1)
 #define FLAG_WORLD_MAP_BIRTH_ISLAND_EXTERIOR                        (SYS_FLAGS + 0xC2)
 
-#define FLAG_0x8C3                                                  (SYS_FLAGS + 0xC3)
+#define FLAG_0x8C3                                                  (SYS_FLAGS + 0xC3) //BELEIVE all these are unused
 #define FLAG_0x8C4                                                  (SYS_FLAGS + 0xC4)
 #define FLAG_0x8C5                                                  (SYS_FLAGS + 0xC5)
 #define FLAG_0x8C6                                                  (SYS_FLAGS + 0xC6)
@@ -1514,9 +1514,10 @@
 #define FLAG_0x8FC                                                  (SYS_FLAGS + 0xFC)
 #define FLAG_0x8FD                                                  (SYS_FLAGS + 0xFD)
 #define FLAG_0x8FE                                                  (SYS_FLAGS + 0xFE)
-#define FLAG_0x8FF                                                  (SYS_FLAGS + 0xFF)
+#define FLAG_NEW_GAME_PLUS                                          (SYS_FLAGS + 0xFF)
 // My New Flags
 #define FLAG_NEW_EXP_SHARE											(SYS_FLAGS + 0x100)
+#define FLAG_START_OAK_RANCH_COUNTER                                (SYS_FLAGS + 0x101)
 #define FLAG_START_OAK_RANCH_COUNTER                                (SYS_FLAGS + 0x101)
 //#define B_SMART_WILD_AI_FLAG											(SYS_FLAGS + 0x100)
 #define FLAGS_COUNT (FLAG_START_OAK_RANCH_COUNTER + 1)

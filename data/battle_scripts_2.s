@@ -261,10 +261,11 @@ BattleScript_WildMonBallBlock::
 @how did I set this up I feel I made it effectively only work when taking damage? 
 @did I just set it to not work if first turn?
 @found it, used playMonwasdamaged in handleballthrow bs command
+@working but skips evo somehow
 BattleScript_ExpOnCatch:: @ can skip safari stusff, but need copy everything till caughtpokemondone
 	incrementgamestat GAME_STAT_POKEMON_CAPTURES
 	printstring STRINGID_GOTCHAPKMNCAUGHT
-	setbyte sGIVEEXP_STATE, 0x0			@ want to set only on damage, but making script is difficult -done
+	setbyte sGIVEEXP_STATE, 0			@ want to set only on damage, but making script is difficult -done
 	getexp BS_TARGET
 	trysetcaughtmondexflags BattleScript_CaughtPokemonSkipNewDex2  @ also couldnt repeat scripts like this one so changed name
 	printstring STRINGID_PKMNDATAADDEDTODEX

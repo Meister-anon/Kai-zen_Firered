@@ -690,7 +690,7 @@
 #define NUM_HIDDEN_MACHINES     8
 
 // Check if the item is one that can be used on a Pokemon.
-#define IS_POKEMON_ITEM(item) ((item) > ITEM_PREMIER_BALL && (item) < ITEM_PROTECTOR)
+#define IS_POKEMON_ITEM(item) ((item) > ITEM_PREMIER_BALL && (item) < ITEM_0B2)
 #define IS_POKEMON_ITEM2(item) ((item) > ITEM_EV_SHACKLES && (item) < ITEM_SEA_INCENSE)
 //BECAUSE of this need to add mega stones in somewhere before to cutoff.
 // or copy function for define and create a new range, for IS_POKEMON_ITEM2

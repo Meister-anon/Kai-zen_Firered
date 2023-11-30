@@ -63,7 +63,7 @@
 #define BATTLE_TYPE_KYOGRE_GROUDON   0x1000
 #define BATTLE_TYPE_LEGENDARY        0x2000
 #define BATTLE_TYPE_GHOST_UNVEILED   0x2000 // Re-use of BATTLE_TYPE_LEGENDARY, when combined with BATTLE_TYPE_GHOST
-#define BATTLE_TYPE_SAFARI           0x4000 //no using regi can replace this
+#define BATTLE_TYPE_SAFARI           0x4000 //no using regi can replace this //replaced w safari
 #define BATTLE_TYPE_GHOST            0x8000
 #define BATTLE_TYPE_POKEDUDE         0x10000
 #define BATTLE_TYPE_WILD_SCRIPTED    0x20000
@@ -156,7 +156,7 @@
 #define STATUS1_FREEZE           (1 << 5)
 #define STATUS1_PARALYSIS        (1 << 6)
 #define STATUS1_TOXIC_POISON     (1 << 7)
-#define STATUS1_TOXIC_COUNTER    (1 << 8 | 1 << 9 | 1 << 10 | 1 << 11)
+//#define STATUS1_TOXIC_COUNTER    (1 << 8 | 1 << 9 | 1 << 10 | 1 << 11)
 #define STATUS1_TOXIC_TURN(num)  ((num) << 8)
 #define STATUS1_SPIRIT_LOCK      (1 << 12)	//redid toxic, put at original value, moved others
 #define STATUS1_INFESTATION		 (1 << 13) //planned bug status keep this remove others
@@ -229,9 +229,11 @@
 #define STATUS3_UNDERWATER              (1 << 18)
 #define STATUS3_INTIMIDATE_POKES        (1 << 19)
 #define STATUS3_TRACE                   (1 << 20)
-#define STATUS3_ROOTED_SHIFT (21)
-#define STATUS3_ROOTED_COUNTER (0xF << STATUS3_ROOTED_SHIFT)
-#define STATUS3_ROOTED_TURN(num) ((num) << STATUS3_ROOTED_SHIFT)
+#define STATUS3_ROOTED_SHIFT (21)   //redone use specila staatus as turn count 
+#define STATUS3_ROOTED_TURN(num) ((num) << STATUS3_ROOTED_SHIFT) //15 there was for max turns new max turns is 8, max turns for aqua ring is 6
+#define STATUS3_AQUARING_SHIFT (22)
+#define STATUS3_AQUARING_TURN(num) ((num) << STATUS3_AQUARING_SHIFT) //way used these aren't really statuses, they don't get set they are more just macros for turn tracking
+
 
 
 #define STATUS3_GASTRO_ACID             (1 << 16)	//is there any reaso this needs to be status3 rather than a status 2?

@@ -111,7 +111,7 @@ struct PartyMenuInternal
     u32 spriteIdCancelPokeball:7;
     u32 messageId:14;
     u8 windowId[3];
-    u8 actions[8];
+    u8 actions[9]; //this is list for menu that filed moves get put on, limit was 8 before vsonic
     u8 numActions;
     u16 palBuffer[BG_PLTT_SIZE / sizeof(u16)];
     s16 data[16];
@@ -3066,11 +3066,11 @@ u8 ShouldDisplayHMFieldMove(u8 fieldMove)
 
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
-    u8 i, j,k,l;
-    u8 NumBadges = 0;
+    u8 i, j;
     u16 species = GetMonData(&mons[slotId], MON_DATA_SPECIES2);
     u8 abilityNum = GetMonData(&mons[slotId], MON_DATA_ABILITY_NUM);
     u16 ability = GetAbilityBySpecies(species, abilityNum);
+    u8 *listsize = sPartyMenuInternal->actions;
             
 
     sPartyMenuInternal->numActions = 0;
@@ -3091,10 +3091,11 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     } //setup for non-hm moves
 
     //setup for hm moves
-    for (j = 0; j < FIELD_MOVE_TELEPORT; ++j)
+    for (j = 0; j < FIELD_MOVE_TELEPORT; ++j) //need do pointer logic to check sPartyMenuInternal->actions, to make sure its not more than 9 entries for this
     {
         //should prevent learnable hms from showing in  list until you have the badge to use them(working)
-            if (CanSpeciesLearnTMHM(species, ((j + ITEM_HM01_CUT) - ITEM_TM01)) && ShouldDisplayHMFieldMove(j)) 
+            if (CanSpeciesLearnTMHM(species, ((j + ITEM_HM01_CUT) - ITEM_TM01)) && ShouldDisplayHMFieldMove(j)
+             && sPartyMenuInternal->numActions <= 5) 
                 AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
                 //break;since I'm trying to check all didn't actually need the break, plus I only have 1 loop not 2
 
@@ -3107,9 +3108,10 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 
     if (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE)
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SWITCH);
-    if (ItemIsMail(GetMonData(&mons[slotId], MON_DATA_HELD_ITEM)))
-        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MAIL);
-    else
+    /*if (ItemIsMail(GetMonData(&mons[slotId], MON_DATA_HELD_ITEM)))
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MAIL);*/
+    //else
+    if (species != SPECIES_NONE && species != SPECIES_EGG)
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_ITEM);
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_CANCEL1);
 }

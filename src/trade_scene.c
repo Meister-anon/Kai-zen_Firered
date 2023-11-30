@@ -27,6 +27,7 @@
 #include "save.h"
 #include "load_save.h"
 #include "random.h"
+#include "script_pokemon_util.h"
 #include "trade_scene.h"
 #include "constants/items.h"
 #include "constants/easy_chat.h"
@@ -2432,9 +2433,10 @@ static void BufferInGameTradeMonName(void)
 static void CreateInGameTradePokemonInternal(u8 playerSlot, u8 inGameTradeIdx) //make sure to remove any mail items from in game trades
 {
     const struct InGameTrade * inGameTrade = &sInGameTrades[inGameTradeIdx];
-    u8 level = GetMonData(&gPlayerParty[playerSlot], MON_DATA_LEVEL);
+    //u8 level = GetMonData(&gPlayerParty[playerSlot], MON_DATA_LEVEL); //assigns level based on lvl of what you give, think want change to use average level function
     //struct MailStruct mail;
-    u8 metLocation = METLOC_IN_GAME_TRADE;
+    u8 level = GetAveragePlayerPartyLevel();
+    u8 metLocation = METLOC_IN_GAME_TRADE; //also getting rid of slot based level would allow me to just use the pc to get mon
     struct Pokemon * tradeMon = &gEnemyParty[0];
     //u8 mailNum;
     CreateMon(tradeMon, inGameTrade->species, level, 32, TRUE, inGameTrade->personality, TRUE, inGameTrade->otId);

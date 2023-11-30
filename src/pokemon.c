@@ -3573,6 +3573,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             //gBattleMovePower = (gBattleMovePower * 130) / 100; //doesn't seem to be workign, I'll swap to gdynamic
         //O.o now it works ...ow   
     }
+
+    if (gCurrentMove == MOVE_TRI_ATTACK)
+    {
+        if (gBattleMons[battlerIdAtk].attack > gBattleMons[battlerIdAtk].spAttack)
+           usesDefStat = TRUE;
+        if (gBattleMons[battlerIdAtk].spAttack > gBattleMons[battlerIdAtk].attack)
+            usesDefStat = FALSE;
+    }
     
 
     if (attacker->item == ITEM_ENIGMA_BERRY)
@@ -3841,9 +3849,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (IS_BATTLER_OF_TYPE(battlerIdDef, TYPE_ICE)
         && IsBattlerWeatherAffected(battlerIdDef, WEATHER_HAIL_ANY))// && !usesDefStat)        
     {
-        spDefense = (125 * spDefense) / 100;
-        defense = (140 * defense) / 100;
+        spDefense = (115 * spDefense) / 100;
+        defense = (135 * defense) / 100;
     }//think safe to make this 50% or at least highre  since 50% is the same as plus 1 stat stage and using harden once, doen't really do much
+    //with type changes, and hail fire cut, had bring this down
     
 
     //put abilities ported here
@@ -4053,6 +4062,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         //if checks work and it pulls species of partner mon need to decide if I boost move power or total move damage
         //move power is less damage than gBattleMoveDamage
             //fix found from DoesSideHaveAbility function from util.c
+            
+    case ABILITY_DREAD_WING:
+        DefenseModifer(67); //if attacking drop defender stats 1 stage, if defending droip attacker attack stat by 1 stage, ist a mon that heavily relies on its abilities
 
     }//put adaptability logic in typecalc in bs command becaus that's where stab is handled
 
@@ -4257,6 +4269,8 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (type == TYPE_WATER)
             OffensiveModifer(50);
         break;
+    case ABILITY_DREAD_WING:
+        attack = (67 * attack) / 100; //equivalent one stat stage drop
     }
 
     // target's ally's abilities
@@ -4414,6 +4428,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         else
             APPLY_STAT_MOD(damage, attacker, attack, STAT_ATK)
 
+        if (GetBattlerAbility(battlerIdAtk) == ABILITY_UNAWARE)
+        {
+            damage = attack;
+        }            
+
+        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
+            damage = attack;
+
         damage = damage * gBattleMovePower;
         //damage *= (2 * attacker->level / 5 + 2); //offense side of damage formula for level scaled damage
         damage *= (((attacker->level * 160) / 100) / 5 + 3);  //alt lower scaling dmg formula
@@ -4445,22 +4467,12 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         else
             APPLY_STAT_MOD(damageHelper, defender, defense, STAT_DEF) //apply stat mod actually sets damgageHelper to value of stat stage
 
-        if (GetBattlerAbility(battlerIdAtk) == ABILITY_UNAWARE)
-        {
-            damage = attack;
-            damageHelper = defense;
-        }
-            
-
-        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
-            damage = attack;
+        
 
         if (GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE)
         {
-            damage = attack;
             damageHelper = defense;
-        }
-            
+        }            
 
         if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
             damageHelper = defense; //doubl check but think these need to go here
@@ -4536,6 +4548,12 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         else
             APPLY_STAT_MOD(damage, attacker, spAttack, STAT_SPATK)
 
+        if (GetBattlerAbility(battlerIdAtk) == ABILITY_UNAWARE)
+            damage = spAttack;
+
+        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
+            damage = spAttack;
+
         damage = damage * gBattleMovePower;
         //damage *= (2 * attacker->level / 5 + 2); //it isn't, realized that's calc for normal level scaling damage.
         damage *= (((attacker->level * 160) / 100) / 5 + 3);  //alt lower scaling dmg formula
@@ -4553,11 +4571,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         else
             APPLY_STAT_MOD(damageHelper, defender, spDefense, STAT_SPDEF)
 
-        if (GetBattlerAbility(battlerIdAtk) == ABILITY_UNAWARE)
-            damage = spAttack;
-
-        if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
-            damage = spAttack;
+        
 
         if (GetBattlerAbility(gBattlerTarget) == ABILITY_UNAWARE) //nto sure if right but trying it, may replace with emerald version.
             damageHelper = spDefense;
@@ -6143,7 +6157,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                     gBattleMons[battleMonId].status2 &= ~STATUS2_NIGHTMARE;
                 retVal = FALSE;
             }
-            if ((itemEffect[cmdIndex] & ITEM3_POISON) && HealStatusConditions(mon, partyIndex, STATUS1_PSN_ANY | STATUS1_TOXIC_COUNTER, battleMonId) == 0)
+            if ((itemEffect[cmdIndex] & ITEM3_POISON) && HealStatusConditions(mon, partyIndex, STATUS1_PSN_ANY, battleMonId) == 0)
                 retVal = FALSE;
             if ((itemEffect[cmdIndex] & ITEM3_BURN) && HealStatusConditions(mon, partyIndex, STATUS1_BURN, battleMonId) == 0)
                 retVal = FALSE;
@@ -6559,7 +6573,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
         gActiveBattler = 0;
         battlerId = 4;
     }
-    if ((!IS_POKEMON_ITEM(item)) && !IS_POKEMON_ITEM2(item))  //based on crit calc this DOES need to be and, not or
+    if (!(IS_POKEMON_ITEM(item)) && !IS_POKEMON_ITEM2(item))  //based on crit calc this DOES need to be and, not or
         return TRUE;
     if (gItemEffectTable[item - ITEM_POTION] == NULL && item != ITEM_ENIGMA_BERRY)
         return TRUE;
@@ -6620,7 +6634,7 @@ bool8 PokemonItemUseNoEffect(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mo
             if ((itemEffect[cmdIndex] & ITEM3_SLEEP)
              && PartyMonHasStatus(mon, partyIndex, STATUS1_SLEEP, battlerId))
                 retVal = FALSE;
-            if ((itemEffect[cmdIndex] & ITEM3_POISON) && PartyMonHasStatus(mon, partyIndex, STATUS1_PSN_ANY | STATUS1_TOXIC_COUNTER, battlerId))
+            if ((itemEffect[cmdIndex] & ITEM3_POISON) && PartyMonHasStatus(mon, partyIndex, STATUS1_PSN_ANY, battlerId))
                 retVal = FALSE;
             if ((itemEffect[cmdIndex] & ITEM3_BURN) && PartyMonHasStatus(mon, partyIndex, STATUS1_BURN, battlerId))
                 retVal = FALSE;
@@ -6996,7 +7010,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
     else
         holdEffect = ItemId_GetHoldEffect(heldItem);
 
-    if (holdEffect == HOLD_EFFECT_PREVENT_EVOLVE && type != EVO_MODE_ITEM_CHECK)
+    if ((holdEffect == HOLD_EFFECT_PREVENT_EVOLVE || holdEffect == HOLD_EFFECT_EVIOLITE) && type != EVO_MODE_ITEM_CHECK) //SET eviolite prevent evo
         return 0;
 
     switch (type)
@@ -7620,11 +7634,12 @@ enum
 
 
 #define EV_GAIN //Made edits, if works, ev changes are done
+//think this isn't working? about 90% sure
 void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function doesn't use exp, it proves ev gain is separate from exp gain.
 { //                                            this means making an item to 0 out exp gain wouldn't break ev gain.
     u16 evs[NUM_STATS]; //per stat evs                
     u16 evIncrease = 0;
-    u16 totalEVs = 0;
+    u16 totalEVs = 0; //eventually replace with this, GetMonEVCount
     u8 MinEv_GAIN = 4;  //adjust this to change how many evs gained by macho brace, trainer items etc.  base multipliers rely on
     u16 heldItem;
     u8 holdEffect;
@@ -7664,31 +7679,21 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
     
     //if holdeffect is a power item, i for switch case equals helditem secondary item  ItemId_GetSecondaryId
 
-    if (holdEffect == HOLD_EFFECT_POWERITEM)    //should be ev gain separate from macho brace loop, so I can safely increase a single stat 
+    if (holdEffect == (HOLD_EFFECT_POWERITEM))    //should be ev gain separate from macho brace loop, so I can safely increase a single stat 
     {
         i = ItemId_GetSecondaryId(heldItem);    //held item guaranteed to be, one of power items, this filters specific one, also used as discriminator for which ev to raise
 
-        switch (i)
+        switch (i) //dumb code, all same 
         {
         case HP:
-            evIncrease = MinEv_GAIN * multiplier;
-            break;
         case ATTACK:
-            evIncrease = MinEv_GAIN * multiplier;
-            break;
         case DEFENSE:
-            evIncrease = MinEv_GAIN * multiplier;
-            break;
         case SPEED:
-            evIncrease = MinEv_GAIN * multiplier;
-            break;
         case SP_ATTACK:
-            evIncrease = MinEv_GAIN * multiplier;
-            break;
         case SP_DEFENSE:
             evIncrease = MinEv_GAIN * multiplier;
             break;
-        }
+        }//ok looks much better
 
         if (totalEVs + (s16)evIncrease > MAX_TOTAL_EVS) //total ev cap
             evIncrease = ((s16)evIncrease + MAX_TOTAL_EVS) - (totalEVs + evIncrease);
@@ -7706,7 +7711,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
 
     }
 
-    for (i = 0; i < NUM_STATS; i++) //adding stats
+    for (i = 0; i < NUM_STATS; i++) //adding stats  //...don't need loop and a switch smh
     {
         
 
@@ -7715,7 +7720,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
 
         
 
-        if (holdEffect == (HOLD_EFFECT_MACHO_BRACE || HOLD_EFFECT_ULTIMA_BRACE))    //should loop each stat and add evs for every stat
+        if ((holdEffect == HOLD_EFFECT_MACHO_BRACE) || (holdEffect == HOLD_EFFECT_ULTIMA_BRACE))    //should loop each stat and add evs for every stat
         {
             switch (i)
             {
@@ -7761,6 +7766,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies) // since this function
         SetMonData(mon, MON_DATA_HP_EV + i, &evs[i]);
 
     }
+   // CalculateMonStats(mon); //put to update stats as gain evs, not just when level up, think shouldn't need this since stats update in ow
     //ev shackles and ultima brace will no longer work with 
     //current change to ev gain, so will have to adjust somehow  maybe make like gen 1 exp share, make it a key item that switches on off
 }
@@ -8203,7 +8209,7 @@ void BoxMonRestorePP(struct BoxPokemon *boxMon) //useful for dead pokemon pc fix
 
 void SetMonPreventsSwitchingString(void)
 {
-    gLastUsedAbility = gBattleStruct -> abilityPreventingSwitchout;
+    gLastUsedAbility = gBattleStruct->abilityPreventingSwitchout;
     gBattleTextBuff1[0] = B_BUFF_PLACEHOLDER_BEGIN;
     gBattleTextBuff1[1] = B_BUFF_MON_NICK_WITH_PREFIX;
     gBattleTextBuff1[2] = gBattleStruct->battlerPreventingSwitchout;

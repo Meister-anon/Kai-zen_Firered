@@ -1535,12 +1535,147 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
     if that doesn't work magma armor possibly doens't work
     but pickpocket seems to work correctly?
 
+    -update bag, make medicine pouch, for heal items & cure items and add items added to bag from mart
+    to top of list rather than going to bottom
+
+    -stench flinch chance seems still too high?
+    might be fine but it can roll high in some battles so maybe try weighting it
+    -seems fine
+
+    -encountered lightning rod, its not playing move animation like I thought it would with my change its also not probperly 
+    displaying the stat that gets boosted, missing some text buffer that showcasses teh stat raised in the string
+    but otherwise the boost appears to work?   - fixed message, still want animation to play so may remve script for (made move useless), well look into
+    not that works may just leave as is, but need doubles test to ensure target swap is working correctly  - doubles not working
+    
+    -attempting to fix, testing with double battle south of fuchisia, goldeen seaking, either can have lightning rod
+    plannign look at metal burst to see, if depends logic can help figure how to set targetting/
+
+    -think almost have a working work aroudn,
+    but also notice unaware isn't working right with infatuation, it diplays ability message rather than it failing if they are same gender
+    -testing but should be fixed
+
+    -worked on atempt to fix cupid arrow
+
+    -ok absorb abilities adn the status exclusions is working, had to ugly code a work around, no idea how much of the existing/original code
+    is still relevant to the effect...
+
+    fuuuuucUUUUUUUCCCCKKKKK 
+    idk why this is happening but now summary screen abilities and moves STOPPED WORKING WTF?!!!    
+
+    ok rather htan a recent change it seems to be an overlooked issue to do with first mon out dying in a double battle?
+    -ok nvm its legit just BEING in a double battle *facepalm
+    not sure why but ability display AND  move dipslay for party is completely broken by this
+    -ok fixed it was copy paste errors, I didn't correclty set the values in place cuz i was tired, also if else errors - but all good now
+
+    same issue for endure -now fixed  (bad operator logic facepalm)
+
+    descovered pursuit bug, raticate pursuited lvl 8 kakuna and for some reason it switched out without taking damage...
+
+    sonic screech (argument effect status seting?) doesn't seem to be working, sonic screech soud move is supposed to have confuse chance
+    but doesn't seem to be applying? - this still not working
+    mightbe working?
+    -been noticing weird thing, when in double battle and first mon uses effet,  folloedup by double target move, usually swift for me,
+    sometimes the 2nd player mon takes the move effect of the first battler?
+
+    which is how sonic screech was used followed by swift and then swift had set confusion??! o.0
+    but I don't know HOW or whythis happens but possibly related to pursuit bug as it could be an issue of targetting and move effect swapping?
+
+    ok on further test I confirm it ISN'T working, what's happening is swift is for some reason setting random effects...
+    but only on the 2nd target? so something to do with move to next target?
+    ok confirmed, swift or any dual target effect with no move effect to set itself 
+    because of the command that swaps target, will take the move effect of the ofthe move last used
+    by first battler, and set it, if there isn't one it'll roll a random effect to attemp tto set
+    and yes it only works on second battle if there is one, so its 100% that script command doing it
+    its the move end command specifically case MOVE_END_NEXT_TARGET
+
+    -keep looking in to moveend_net_taret, seem find issue now multi hit moves aren't properly showing number o fhits
+    it lands, but they just show hti 0 times,  and the animation gets hit twice/moved to second target?
+    yeah think just issue with doubles so think something I just did with getmovetarget and doubles...-annoying
+    -was in battle_controller_player, stuff to do with doubles maybe issue is it uses battle buffer rather than an actual check for double battle?
+
+    ok that wasn't issue it was actually the new argument command being used in multihit, that was wrong need keep old argumenttomoveeffect in that,
+    since it doesnt go to hit  =- fixed
+
+    -ok sonic screech conufsion in argument isn't working because...I didn't proper.y setup argumenttomoveeffect
+    it swaps the argument to move effect and setmoveeffect w chance would properly read it, but it never actually gets there to be read...FACEPALM
+    emerald expansion ALWAYS sets argumenttomove effect before seteffecw chance because it still needs to actually
+    trigger, the setmoveeffect function  - potentially raise odds to 15, maybe not,d as its just meant ot be extra effect
+
+    -keep note, will make bug type moves trigger infested status and dont think fully setup?
+
+    removed extraneous uses, of arguemtntomoveeffect, as long as script goes to effecthit I can just use my new version in its place.
+    also found still need to add script for animation fro phantom force, check battle_script_1.s to see  in BattleScript_EffectSemiInvulnerable
+    -testing to see if works WORKS!!!
+
+    -fixed issue was gBattleScripting.savedMoveEffect, was added from emerald, butthe value wasn't assigned properly, so again set random value.
+    still need to fix whatever is wrong with setmoveeffect that isn't letting sonic screech set confusion correctly
+
+    move forget confirematino doesn't work for in battle evolution *facepalm* - need fix -fixed, 
+    -prob still need check move tutors...
+
+    -major issue, exp gain from catching mon skips seems not to trigger normal lvl up stuff even skipping evolution..
+    ok foudn issue, it does do lvl up the issue is the name screen, it needs a callback to the battle instead of going to overworld,
+    if mon could evolve or something, ok no its not move learn literally just catching mon exp doesn't trigger evo
+    -fixed, issue was logic in FreeResetData_ReturnToOvOrDoEvolutions function ot battle_main, which I forgot to add exception to for catching mon to allow evolution
+
+    -need fix target display and selection for moves,
+    for doubles target and self target, it flashes wrong, flashes before you even select move,
+    and for self target it doesn't let you confirm it auto uses move  - biggest issue
+    -seems to be a cnofusing double effect, as there are 2 different types of highlighting
+    for moves that affect self adn ally, its supposed to flash, before you select it, without confirmation?
+    without doing the other effect which is for single target or double target where it only doe san effect on foe
+    after you select the move, and its a different graphic from the flashing, it "blinks" instead
+    - fixed blink is original effect flash is effect ported from EE, thought flash broke blink 
+    but its working normally, so kept both and setup, double battle confirm on user target moves, got it to do blink as well.
+
+    also working on making weather abilities uniform for setup - next task
+    using this standard
+    /if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
+      {
+          BattleScriptPushCursor();
+          gBattlescriptCurrInstr = BattleScript_BlockedByPrimalWeatherRet;
+          ++effect;
+      }
+      else if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE))
+      {
+          gBattleScripting.battler = gActiveBattler = battler;
+          BattleScriptPushCursor();
+          gBattlescriptCurrInstr = BattleScript_SandSpitActivates;
+          ++effect;
+      }/
+
+      just need replace all instances of weather setting with trychabgebattleweather function,
+      and add exclusion for primal weather - done
+
+      -fixed, done
+      also fixed decrement of weather abilities, and it properly displays, weather fade message
+
+      added new logic to set apart abilties that don't directly set weather i.e abilities that set weather on conact
+      they follow same logic as move based weather setting
+
+      -all that's missing is forecast messages
+
+    -box exp gain seems to be working perfectly, better than exected even, as I progress through the game all my mon are ending up around the same level,
+    even ones I've caught later compared to noes had from teh start of the game.  no one is greatly outpaced.
+    its perfect   - was close needed level cap for when map opened up more and player could explore, added that
+    /also plan add other level cap for new game plus
+
     shadow tag not showing proper string data, check SetMonPreventsSwitchingString not sure if that is issue but look there first
     its showing wrnog battler with string i.e is showing my player mon (battler affected by ability) rather than the mon that used the ability
-    its ex. arbok's shadowtag prevents switching, when the mon with shadow tag is teh enemy gastly
+    its ex. arbok's shadowtag prevents switching, when the mon with shadow tag is the enemy gastly 
+    -fixed
 
-    other issue, shadow tag on gastly caused issue with ghosts in pokemon tower added exception so can always flee,
-    keep eye on for causing other issue w marowak fight
+    - check if I setup planned buff which was to lower speed  -didn't do it, did now, and adjusted ability descriptions
+    -now magnet pull arena trap and shadow tag, if they do trap, they lower speed equiv to one stage drop, 67%
+
+    other issue, shadow tag on gastly caused issue with ghost battle type in pokemon tower added exception so can always flee,
+    keep eye on for causing other issue w marowak fight  - need to check again becuase I forgot to test
+    -I tihnk itd be fine? believe code is ghost battle no silph scope, and I only do marowak when I have silph scope?
+    confirmed escape clause uses, battle type ghost without silph scope so its perfect
+
+    -think add shuppet and duskull to pokemon tower in lavender town and raise base levels up, mon are a bit weak,  like 12-16 
+    //so bumb up to 17-21 (also misdreavus) think just split up between diff levels
+    //put mimikyu in basement of pokemon mansion - done
 
     -want to attemt fog upgrade/weather upgrade w for pokemon tower - think lookinto overworld.c and queslog for intended effect
     since quest log has a uniform effect that plays even over the player avatar/cast applied to entire screen
@@ -1555,14 +1690,169 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
     issue with sand tomb its not trapping/preventing escape -was most trap effects testing fixes now, cuz i separated them from wrap
     -fixed  had const logic off, used || instead of bitwise |  now it works
 
-    still need double check arena trap
+    still need double check arena trap - fixed
 
   SUBSTITUTE not completely working, it stops swapping after like 2 turns? not when it actually fades
 
   descovered issue with move learn,  after leave move selection for move to forget if Press A over no to forget move,
   it glitches out, but works correctly if you press B. 
 
+  //think on move page, (or summary page in general) I want the pokemon's held item, icon to be displayed
+  in top right corner, parallel to the pokeball, its just good useful info i think.
+  but would potentially need to flip item to right to make look reight?
+
+ -hit escape effects not working, victribeel attempted use uproot move worked but then froze when it got ot switch step
+ -fixed issue was jumpifbattlened wasn't set in various
   
+ -ingrain isn't healing right, for some reason now, its not increasing the heal amount
+ -ok so the issue seems to come up only on turns that a healign move is used, in this case giga drain,?
+ -hard to test but seems tobe the case,  looking into GetDrainedBigRootHp to see if that is cause
+
+ -redid setup still mot working, not increasing heal amount per turn
+ - fixed setup issue was use of gspecialstatus, didn't realize, but it gets cleared every turn
+ which prevented it from increasing, replaced w disablestructs and worked perfectly
+ -did the setup, for toxic as well, now should work even if more than one status set 
+ -toxic works, rebalanced ingrain and  aqua ring, maxes at approx 34% max health
+
+ - for fixing move info lines, top two lines need to move down 1 pixel
+ -3rd line is fine, bottom 2 rows need to move up 2 pixels
+
+ -remember need fix thunder wave not working on electric types, display 
+ -used callif, and fixed works now
+
+ -ok anticipation now working right? somehow sabrina alakazaam read an explosion move from my hitmonchan?
+
+ -considered cutting all recovery effects, seems like I do, bulk is increased, healing is too strong
+ lower half health heal to 1/3rd
+
+ -upgrade move belch, (pretty sure I haven't set it up yet either)
+ -move only works after has used a berry, change effect so that if haven't used a berry
+ but is holding a berry instead of failing it'll consume the berry and then use th move
+ -move works but not consumign berry, 
+  made work around for removing berry, need setup actual consume logic, thinkg
+  need add more berry override to things, and call itembattleeffects switchin or something?
+  -continuous use effect works, so if I can figure out consuming berry it'll all be set
+  -ok NOW the work around works, sets ateberry in belch check function, and removes item in script,
+  then jumps consume logic as it reads the item as having been consumed
+
+  -adjusted pokemon tower and pokemon mansion
+
+  - for power plant, make pokeballs w voltorb electrode reset -(works even better with planned recycle ow items)
+  plan setup is make them special that have perfect ivs, set scrcmc macro make perfect iv mon, think that's th strat for that
+  use giveperfectmon, createperfectmon,  givemon for bug gym fightring gym given mons,  and craetemon for special ow encounters like the voltorbs
+  
+  -think make long list of items for recycle list, so when items respawn they can be different, similar to how ow pickup works
+
+  -plan adjust mimikyu disguise make rocky helm, rough skin likes break disguise
+  -need chek order of effects with itemeffects to see how to make this trigger after
+
+  -think would need to add extra endturn effect for that 
+  put after rocky helm, and rough skin effects,  
+  when they activate set hurtbyabilityitem as true, 
+
+  then in disguise logic just check if its true, if so switch to busted form
+  don't do for illusion, as that's not as beneficial/i.e dosen't give immunity otherwise
+
+  check custom move setting for mon with no moves, see about changing setup so it replaces individual slot not all with moves
+  if there isn't one listed allowign full flexibility
+  i.e I could set moves to custom, but only set a single custom move, leaving the other 3 slots to be filled in by normla move learn logic
+  thinking was replace blaines first growlthe with a ninetales, but would want to still make sure it has fire blast
+  (stll do that but ninetales s stone evo so has no moves, so would need to make full custom anyway)
+  -setup ninetales, to replace growlith think may want to change to give hold item so it can hold heat rock, to extend weather
+  if rolls sun disk
+
+  fixed issue with weather abilities, added belly drum for electabuzz, added level cap for box exp gain
+  -realied planned effects for forewarn and anticipation are essentially disguise. 
+  so look at that and make work based on that.
+
+  ok so its really simple, effect is just in atk0B_healthbarupdate & atk0C_datahpupdate
+  -simply prevent health and hp data from being updated on hit,
+  //check how substitute does it to attempt avoid rollout glitch
+  //all I need is a check for if anticipation or forewarn should activate/has activated, and then just put the check in the data and hp bar function
+
+  //swapped anticipation forewarn status effects from special status to protectstatus, to avoid the clear on each turn
+  -need test and see if that fixes effect, its patterned after telepathy not disguise, since its in attack canceler, 
+
+  -fixed brick break,  - fixed belch - still todo is set strings for forecast
+  -remember plan to add berry shop to erika's gym
+
+  -still an issue with koffing, abilities, does some weird error, something with stench or neutralizing gas
+  before froze game, now it causes rain?
+
+  -considering does IV change, invalidate the multiplier change,?  I think know because everyone has access,
+  but rolling a 0 is way more punishing this way hmm
+
+  -setting up moltres ability, added new ability for galarian moltres
+  for normal moltres new ability need fix battle_util setup,  for fix negative status removal/cleanse  -setup need test
+
+  =for illusion
+  //set logic based on in battle, and not a trainer battlle, i.e just wild battle
+    //or just battle with no other alive mon in party, if that's the case  search encounter table for map and gruop
+    //i.e if I'm standing on land tile look for land data if I'm surfing look for water data
+    //and set illusion mon to random mon from table, long as species does not equal actual species of battler
+
+  fixed egg breeding, setup abilities that should speed up egg hatch, (think, should work)
+  also fixed in game bug, where egg hatching took an extra cycle
+
+  -unaware logic in pokemon.c is broken, something keeps it from doing and taking damage correctly
+  -fixed had damage in wrong place, it was below dmg calc
+
+  -was able to  test lightning rod,  redirect isn't working in doubles
+
+  -change spawn legendaries, so now they don't leave after you defaeat them,
+  they disappear but come back soon as you enter cave again,
+  or a day has passed hwen I get timed events working,
+  that way you have some interesting to fight,
+  legendaries will cycle as you catch them/events are triggered
+
+  need check physical models, to make sure I even have enough for all the legendaries
+
+  -added lvl cap for box exp gain, game opens up around 5th gym, so put lvl cap at 6th badge,
+  I think should be fine?
+
+  -look into cleanse tag, doesn't seem to be working? or it doesn't 
+  work like repel which is what I expect, ok doesn't work like repel it lowers encounter rate,
+  lol which is ironically what I want super repels to do
+
+  -give cheek pouch out of battle effeect, when ever using berry on mon, have it also heal
+
+  -figured out sand attack groud immunity, setup like paralyze immunity for electric
+
+  -discover major issue with field move setup? for some reason looking at rhyhorn breaks field learn menu,
+  no idea why and causes freeze when attempt to back out of broken menu
+  -only happened with rhydon, which could hold multiple hms, and had also been taught dig, which would add it 
+  to the field move list,  issue fixed itself after removing dig, so problem seemed tobe a max limit either for the window size
+  or the amount of items that could be added to the list
+  the window appears to have enough physical space for all my option on rhydon ie space for one more field move listed
+  but trying to display 5 field moves, breaks the menu, and has it shrink, and only show 3 options
+  summary dig, and then the first hm only i.e cut  //need adjust party menu function to fix, somehow
+
+  I could leave it as is, and just add a string, to it,
+  like it works and is simple, the issue is youo lose out on nuance, like use belch with a pecha berry 
+  ...hmm well actually this is fine, if you met the condition to eat a berry, it'd already activate,
+  so doing it my way, "consumes" the berry losing you the option to use it.
+  ok think will just add a string saying consumed berry
+
+ -found graphic for purified zone in pokemon tower floor 4, use that for resurection area, looks like a ritual space
+  -put on top floor floor 7, for resurection, eventually remove encouters from floor 7
+  -cool idea but may scrap it, would really interupt the flow of the game
+  and no real way to logically have a mon die that won't feel like horrible rng,
+  or require extreme neglect to the point of being unlikely to ever occur
+
+  -but would make more sense in planned survival game, where you are planned to be facing
+  unreasonable conditions, multi status random status, rough trainer gauntlets
+  and racing to safety of the next town, so keep for that instead
+
+
+ -for tm girl on top of celadon, she gives screen tms, add to script so she also gives magic guarad,
+ to shwo off new buff
+
+ also change items.json for dragon scale and protector, w items.h pokemon use constants to attempt finish setting as
+ evo items but has issue, evolves mon but it becomes lvl 100?
+ - don't know if because using item from before change, or what
+ -well fixed that at leaset, issue was just adding evo stone item effect to item in item_effects.h
+ -knowing that I need to add several more items i.e metal coat, upgrade etc. dubious disk
+
 -  new repel change make them all same duration but different strength/effect  match duartion to super repel
 normal repel keeps enemies away up to your level
 super repel keeps enemies away up to 1.5x your level
@@ -1609,12 +1899,20 @@ that way you don't need to keep flying aruond to different places looking for th
  - see if possible to get flash to activate soon as you enter a cave
  instead of needing to pull from party menu - not 100% if want to do
 
- - look into for anthroyd see about havign custom amount of coins to buy
+ - look into for anthroyd see about havign custom amount of coins to buy 
  from gamble arena in celadon.
  should be simple, should just be a matter of
  having conversion i.e pressing up down on dpad increase/decreas coin amount
  by certain amount, for realism keep fixed amounts but add extra menu option
  for purchasing custom amount.
+ -checked does 20-1 conversion 20 pokedollars per coin
+ with fixed purchase amount at 1,000 for 50 
+ and 10,000 for 500 coins
+ prizes range from 200 to 9,999 coins (porygon)
+
+ - add more prizes to gamecorner, will give reason for replay
+
+ -was able to test and run away excemption to pursuit works
 
  potential issue? notsue the cause I stacked up my atk def boosts and defeated an enemy, 
  but my boosts seemed to go away? when teh next mon came out?  guessing something to do with dmg function
@@ -1626,6 +1924,8 @@ that way you don't need to keep flying aruond to different places looking for th
  goto HM_USE_SCRIPT //scrcmd  function used to decide if mon can trigger overworld hm use, adjusted to use can learn move not move learned
  goto GET_BADGE_COUNT //trainer_card, made funtion to hopefully get badge count, use for repel, mart and other scaled effects
  goto REMOVED_RS_COMMANDS  //think stubbed function from rs mostly related to rtc & weather, need add back..scrmd 
+
+ goto ITEMEFFECT_DATA
 
  /*
 
@@ -1676,13 +1976,39 @@ that way you don't need to keep flying aruond to different places looking for th
    to counter replacing sandstorm as the premier ground buff, strength alt effects of sandstorm, 
    its a buff for groud types and an evasion boost for them as well as adding extra passive dmg, the full package so to speak
 
+    -need fix koga gym, most trainers there are psychic types, add more poison mon
+    -w new poison v poison immunity having psychic is a good counter since the player would likely attempt to bring a part poison type
 
+    give koga better mon variety, add some quilfish (think he doesn't have that)
 
-  also looks like stench has issue where it tries to activate on first turn
+   - fixed in-game trades to givemon at level around average of player team
+   -and fix badge obedience set for taking odd badges, may remove obedience cool idea and realistic,
+   but doesn't really work well? given freedom of play - checked notes attempted setup, adjusted leves and changed checks - test
+
+   -need fix safari ball throw, atkEF_handleballthrow changeto use original ball throw logic for safari zone
+   no need to make that more annoying - looks to be good now
+
+   -take doduo out of safari zone, its literally available on the route outside town,
+   remove common mon frmo safari zone, 
+
+   -also plan buff tri attack, just make use split of whatever is highest attack stat,
+   since many mon that got tri attack in gen 1 were physical attakers and then the type/move became special - done
+
+   -need make sure ev gain setup is working
+
+   also looks like stench has issue where it tries to activate on first turn
+   -bug with copy cat or whatever kadabra's copy ability move is, it takes their health when they copy ability
 
   hmm could also be a neutralizing gas error? triggered when switched in castform against koffing
   thinking further probably was issue with neutralizing gas, and how worked with weird setup for forecast,
-  script order is odd
+  script order is odd - need fix this it causes freeze or stench?
+  -might be a combo of stench & neutralizing gas, what happens is  I take out a mon with one or the other,
+  the leaving message doesn't play and then when the next mon comes in with said ability it causes the game to freeze
+  -can't remmber If I attempted anything but it seems to be working fine now?
+
+  keep eye on bind it mostly works, but when mon confusion hits itself it goes to struggle,
+  need keep an eye on logic that causes struggle may want to remove that option,
+
 
   got it working, also using sound for first time, realized the play growl if crit is working, nice
   that'll be a nice qol upgrade if I can get the move animations to speed up, without breaking audio,
@@ -2232,8 +2558,56 @@ that way you don't need to keep flying aruond to different places looking for th
   along with change to not overwrite moves.   and then boost up sevii island day care to have 6 spaces
   so you can breed 3 pairs.
 
+  -change plan for breeding, instead of special table, use 
+  nvm think I will need table, idea is first species is female mon or ditto,
+  if species is ditto, read species of father species as female species argument,
+  so check for breed method, either normal, which would have same species,
+  or check type if type matches that of alt form, then get alt form mon
+  or if mother species is holding an item that will set which form to create if possible,
+  i.e galar escence  alola escense etc.
+
+  breeding mon to use would still be worth doing becuase of rematch system, so you could go through gym challenge with different teams,
+  and add them to different teams for later.
+
+  -scaling plan number of badges + average level of team, first pass check for number of badges, if you already have the badge for said gym/
+  check average team level, so use more complex team than first time, but level lowered to accomodate
+
+  the only trainers I really care about scaling, are for scaling upwards, i.e if your team level is hiher than their level
+  and for early trainers to get better teams based on your numer of badges
+
+  can group trainers using trainer id, and their association with routes i.e before gym 1
+  before gym 2 etc.
+
+  -setup funciton for evolving last mon in party and for setting party to final evo, using functions made in field_specials.c for evolving mon
+
+  //make new area sevii island to get all gen starters, rare safari zone, mon will be higher level but all starter form
+  change because remove soble from starter choice, still hate that thing, but people will want it, so it'll be available end game
+
+  In FireRed and LeafGreen, the Sevii Islands are accessible from the Vermilion City harbor via a system of boats called the Seagallop Ferries.
+   To be able to access One, Two, and Three Islands, one needs a Tri-Pass, received from Celio after defeating Blaine on Cinnabar Island.
+    To be able to access Four, Five, Six, and Seven Islands, one needs a Rainbow Pass,
+     received from Celio in One Island, after entering the Hall of Fame and obtaining the National Pokédex.
+      To be able to access Navel Rock, one needs a MysticTicket, and to be able to access Birth Island, one needs an AuroraTicket
+      both of which can be obtained promotionally with Mystery Gift.
+
+    have Celio give mysticTicket & AuroraTicket when he gives rainbox pass
+  
+  ok think best place to do that is on 2 island, accessible before pokemon league, also the place
+  where you get the elemental hyper beams for the gen starters
+
+  It has the game corner, which I've removed all teh wifi games, so can use that to instead be extra safari zone,
+  think what will do is have a place you can walk through in the back, w teleport soud,
+  what you do is select the zone you want, Starter zone,  Rare encouter zone, etc.
+  and then you're player will do walk script, into the new area,  a different biom based on what you selected in the menu
+
+  -add little easter egg, for first time encountering lace,  welcome to the 2 islane safari extravaganza
+  we used to be a game corner but no one ever used it so...  after message will set flag that yuo encounter 2 island safari man
+  so it'll default to basic script from then on.
+
+  makes mapping easier as well, as I can just have it teleport to whatever I want,so don't need to use the same map assets for each
+
   change game logic so you can have  0 mon in party, if you are indoors, so you can unload all 6 into daycare.
-  but then just have a block when you try to exit and use oak start text you can't go outside without pokemon/its dangerous etc.
+  but then just have a block when you try to exit (close pc) and use oak start text you can't go outside without pokemon/its dangerous etc.
 
  since expanded move descriptions will have to expand tm case move description window, to fit the 2 extra lines
  remove one line from tm case scroll and bring graphic/values up to match

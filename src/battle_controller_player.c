@@ -551,10 +551,10 @@ void HandleInputChooseMove(void)    //test new targetting setup
     else
         gPlayerDpadHoldFrames = 0;*/
 
-    PreviewDeterminativeMoveTargets();  //not in emerald may be redundent after upgrade test if any issues
-    if (JOY_NEW(A_BUTTON))  //noted this uses pallete fades while emerald doesnt appear to.
-    {
-        //u8 moveTarget;
+    PreviewDeterminativeMoveTargets();  //not in emerald may be redundent after upgrade test if any issues //...may be redundent -_-  this was issue, its the flashing effect
+    if (JOY_NEW(A_BUTTON))  //noted this uses pallete fades while emerald doesnt appear to.     //its actualy fine, I thought itg was messing up speed of normal effect
+    {                                                                   //but it doesn't effect that, it just looks weird naturally with speed up on...
+        //u8 moveTarget;                                //so all I need to do is, add a block for select user, so it doesn't go directly to use move, that will do from this function
 
         PlaySE(SE_SELECT);
         if (moveInfo->moves[gMoveSelectionCursor[gActiveBattler]] == MOVE_CURSE)
@@ -572,27 +572,27 @@ void HandleInputChooseMove(void)    //test new targetting setup
         if (moveTarget & MOVE_TARGET_USER)
             gMultiUsePlayerCursor = gActiveBattler;
         else
-            gMultiUsePlayerCursor = GetBattlerAtPosition((GetBattlerPosition(gActiveBattler) & BIT_SIDE) ^ BIT_SIDE);
+            gMultiUsePlayerCursor = GetBattlerAtPosition((GetBattlerPosition(gActiveBattler) & BIT_SIDE) ^ BIT_SIDE); //seems these had nothign to do with it, effect is after use moveo, not at choose move
 
-        if (!gBattleBufferA[gActiveBattler][1]) // not a double battle
+        if (gMain.inBattle && !(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TWO_OPPONENTS)))//(!gBattleBufferA[gActiveBattler][1]) // not a double battle  //why did they use buffer for this instead of actually using a check for double battle?
         {
-            if (moveTarget & MOVE_TARGET_USER_OR_SELECTED && !gBattleBufferA[gActiveBattler][2])
-                canSelectTarget = TRUE;
+            if (moveTarget & MOVE_TARGET_USER_OR_SELECTED)// && !gBattleBufferA[gActiveBattler][2])
+                canSelectTarget = 1;
         }
-        else // double battle
+        else if (gMain.inBattle && (gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_ROTATION | BATTLE_TYPE_TWO_OPPONENTS)))// double battle - specifically need adjust in here
         {
             if (!(moveTarget & (MOVE_TARGET_RANDOM | MOVE_TARGET_BOTH | MOVE_TARGET_DEPENDS | MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_USER)))
-                canSelectTarget = TRUE; // either selected or user
+                canSelectTarget = 1; // either selected or user
             if (moveTarget == (MOVE_TARGET_USER | MOVE_TARGET_ALLY) && IsBattlerAlive(BATTLE_PARTNER(gActiveBattler)))
-                canSelectTarget = TRUE;
+                canSelectTarget = 1;
             if (moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]] == 0)
             {
-                canSelectTarget = FALSE;
+                canSelectTarget = 0;
             }
             else if (!(moveTarget & (MOVE_TARGET_USER | MOVE_TARGET_USER_OR_SELECTED)) && CountAliveMonsInBattle(BATTLE_ALIVE_EXCEPT_ACTIVE) <= 1)
             {
                 gMultiUsePlayerCursor = GetDefaultMoveTarget(gActiveBattler);
-                canSelectTarget = FALSE;
+                canSelectTarget = 0;
             }
 
             if ((moveTarget & MOVE_TARGET_ALL_BATTLERS) == MOVE_TARGET_ALL_BATTLERS)
@@ -603,13 +603,22 @@ void HandleInputChooseMove(void)    //test new targetting setup
 
                 canSelectTarget = 3;
             }
-            else if (moveTarget & (MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
+            else if (moveTarget & (MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_USER)) //think just this?
             {
-                TryShowAsTarget(gMultiUsePlayerCursor);
-                TryShowAsTarget(BATTLE_PARTNER(gMultiUsePlayerCursor));
-                if (moveTarget & MOVE_TARGET_FOES_AND_ALLY)
-                    TryShowAsTarget(BATTLE_PARTNER(gActiveBattler));
-                canSelectTarget = 2;
+                if (moveTarget & MOVE_TARGET_USER)
+                {
+                    TryShowAsTarget(gMultiUsePlayerCursor); //issue doesn't stop blinking
+                    canSelectTarget = 1; //ok seems to work now
+                }
+                else
+                {
+                    TryShowAsTarget(gMultiUsePlayerCursor);
+                    TryShowAsTarget(BATTLE_PARTNER(gMultiUsePlayerCursor));
+                    if (moveTarget & MOVE_TARGET_FOES_AND_ALLY)
+                        TryShowAsTarget(BATTLE_PARTNER(gActiveBattler));
+                    canSelectTarget = 2;
+                } //no reason use true/false with canselecttarget as they are case values, not bools
+                
             }
         }
         ResetPaletteFadeControl();
@@ -1325,7 +1334,7 @@ static void Task_LaunchLvlUpAnim(u8 taskId)
     if (IsDoubleBattle() == TRUE && monIndex == gBattlerPartyIndexes[battlerId ^ BIT_FLANK])
         battlerId ^= BIT_FLANK;
     //add more conditions make work for more evo methods could change to use pokmeon.c main evo function, or canevolve function
-    //will flash blue if meets condition,but connsider make flash red for mega evo condition.
+    //will flash blue if meets condition,but connsider make flash red for mega evo condition.  //think just leave as is, other conditions wouldn't work w level up
     if (GetEvolutionTargetSpecies(&gPlayerParty[monIndex], EVO_MODE_NORMAL, 0) != SPECIES_NONE)
         InitAndLaunchSpecialAnimation(battlerId, battlerId, battlerId, B_ANIM_LVL_UP_EVOLVE);
     else
@@ -2726,7 +2735,7 @@ static void PlayerHandleChoosePokemon(void)
 
     gBattleControllerData[gActiveBattler] = CreateTask(TaskDummy, 0xFF);
     gTasks[gBattleControllerData[gActiveBattler]].data[0] = gBattleBufferA[gActiveBattler][1] & 0xF;
-    *(&gBattleStruct->battlerPreventingSwitchout) = gBattleBufferA[gActiveBattler][1] >> 4;
+    *(&gBattleStruct->battlerPreventingSwitchout) = (IsAbilityPreventingEscape(gActiveBattler) - 1);
     *(&gBattleStruct->playerPartyIdx) = gBattleBufferA[gActiveBattler][2];
     //*(&gBattleStruct->abilityPreventingSwitchout) = gBattleBufferA[gActiveBattler][3];
     *(&gBattleStruct->abilityPreventingSwitchout) = (gBattleBufferA[gActiveBattler][3] & 0xFF) | (gBattleBufferA[gActiveBattler][7] << 8);  //u16 abilities

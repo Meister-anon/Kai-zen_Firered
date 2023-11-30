@@ -1,3 +1,5 @@
+#define ITEMEFFECT_DATA
+
 static const u8 sItemEffect_Potion[7] = {
     [4] = ITEM4_HEAL_HP,
     [6] = 20, // Amount of HP to recover
@@ -397,6 +399,8 @@ const u8* const gItemEffectTable[] =
     [ITEM_THUNDER_STONE - ITEM_POTION] = sItemEffect_ThunderStone,
     [ITEM_WATER_STONE - ITEM_POTION] = sItemEffect_WaterStone,
     [ITEM_LEAF_STONE - ITEM_POTION] = sItemEffect_LeafStone,
+    [ITEM_DRAGON_SCALE - ITEM_POTION] = sItemEffect_LeafStone,
+    [ITEM_PROTECTOR - ITEM_POTION] = sItemEffect_LeafStone,
     [ITEM_CHERI_BERRY - ITEM_POTION] = sItemEffect_CheriBerry,
     [ITEM_CHESTO_BERRY - ITEM_POTION] = sItemEffect_ChestoBerry,
     [ITEM_PECHA_BERRY - ITEM_POTION] = sItemEffect_PechaBerry,

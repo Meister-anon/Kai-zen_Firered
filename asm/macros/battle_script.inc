@@ -690,7 +690,7 @@
 	.4byte \ptr
 	.endm
 
-	.macro tryhealhalfhealth param0:req, battler:req
+	.macro tryhealthirdhealth param0:req, battler:req
 	.byte 0x7b
 	.4byte \param0
 	.byte \battler
@@ -1313,6 +1313,12 @@
 	.4byte \ptr
 	.endm
 
+	.macro jumpifateberry battler:req, jumpInstr:req
+	callnative BS_jumpifateberry
+	.byte \battler
+	.4byte \jumpInstr
+	.endm
+
 	.macro setroom
 	callnative BS_setroom
 	.endm
@@ -1398,6 +1404,11 @@
 	callnative BS_rageboostcalc
 	.endm
 
+	.macro trysetaquaring ptr:req
+	callnative BS_trysetaquaring
+	.4byte \ptr
+	.endm
+
 	@put future commands above this
 	.macro typebaseddmgboost
 	callnative BS_typebaseddmgboost
@@ -1409,6 +1420,11 @@
 
 	.macro getmoveeffect
 	callnative BS_getmoveeffect
+	.endm
+
+	@actually setting argument effects in hit, should make sound work etc.
+	.macro setargumentwithchance
+	callnative BS_setargumenteffectwithchance
 	.endm
 
 	@case specific fixer
@@ -1676,6 +1692,9 @@
 	various \battler, VARIOUS_POWER_TRICK
 	.endm
 
+	@different from setting actual effect, this goes above setmoveeffectwchance in script
+	@believe for effects that are complex but dont have room to set effect in effect script
+	@so instead does so with argument
 	.macro argumenttomoveeffect
 	various BS_ATTACKER, VARIOUS_ARGUMENT_TO_MOVE_EFFECT
 	.endm

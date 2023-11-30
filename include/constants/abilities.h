@@ -343,7 +343,10 @@
 #define ABILITY_AURA_OF_LIGHT 318//CRESELIA ABILITY prevent sleep for self and allies, plus reduce dark damage on side - done setup
 #define ABILITY_DESPAIR 319 //nother idea true anti heal, gbattlemovedamage *-1  if attempts to heal re-reverses damage formula, so it causes you to take damage instead. 
                                     //give to darkrai //use stringutil to change strings ids like intimidate angerpoint etc. //think put in bigroot function, heal commands and sleep end turn
+#define ABILITY_RISING_PHOENIX 320 //MOLTRES ability,  slight DxD reference
+#define ABILITY_DREAD_WING 321 //aka burnout GALARIAN MOLTRES ABILITY, tweaking status to fit, set similar to unaware, when attacknig lower enemy def/sp def when target lower foe attack
+                            //should be equivalent to amount of 1 stat stage drop
 
-#define ABILITIES_COUNT ABILITY_DESPAIR + 1 //   ability count is last ability number + 1 since we have to count ability 0
+#define ABILITIES_COUNT ABILITY_DREAD_WING + 1 //   ability count is last ability number + 1 since we have to count ability 0
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H

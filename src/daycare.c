@@ -12,6 +12,7 @@
 #include "script.h"
 #include "strings.h"
 #include "party_menu.h"
+#include "pokemon.h"
 #include "list_menu.h"
 #include "overworld.h"
 #include "pokedex.h"
@@ -1141,6 +1142,7 @@ void GiveEggFromDaycare(void)
 static bool8 TryProduceOrHatchEgg(struct DayCare *daycare)
 {
     u32 i, validEggs = 0;
+    u8 fireBoost = FALSE;
 
     for (i = 0; i < DAYCARE_MON_COUNT; i++)
     {
@@ -1156,8 +1158,20 @@ static bool8 TryProduceOrHatchEgg(struct DayCare *daycare)
             TriggerPendingDaycareEgg();
     }
 
+    //check party for mon boosts egg hatch speed
+    for (i = 0; i < gPlayerPartyCount; i++)
+    {
+        if (GetMonAbility(&gPlayerParty[i]) == ABILITY_FLAME_BODY
+        || GetMonAbility(&gPlayerParty[i]) == ABILITY_MAGMA_ARMOR
+        || GetMonAbility(&gPlayerParty[i]) == ABILITY_STEAM_ENGINE
+        || GetMonAbility(&gPlayerParty[i]) == ABILITY_RISING_PHOENIX)
+            fireBoost = TRUE;
+        if (IsMonType(&gPlayerParty[i], TYPE_FIRE))
+            fireBoost = TRUE;
+    }
+
     // Hatch Egg
-    if (++daycare->stepCounter == 255)
+    if (++daycare->stepCounter == 255) //ok so seems steps is mon friendship, but only decrements every 255 steps?
     {
         u32 steps;
 
@@ -1171,10 +1185,13 @@ static bool8 TryProduceOrHatchEgg(struct DayCare *daycare)
             steps = GetMonData(&gPlayerParty[i], MON_DATA_FRIENDSHIP);
             if (steps != 0)
             {
-                steps -= 1;
-                SetMonData(&gPlayerParty[i], MON_DATA_FRIENDSHIP, &steps);
+                if (fireBoost)
+                    steps -= 3; //extra boost 
+                else
+                    steps -= 1;
+                SetMonData(&gPlayerParty[i], MON_DATA_FRIENDSHIP, &steps); //says friendship but its actually egg cycle, already assigned at egg creation
             }
-            else // hatch the egg
+            if (steps == 0) // hatch the egg  //because this uses else, it forces you to go through another cycle before it can hatch the egg, so removing that
             {
                 gSpecialVar_0x8004 = i;
                 return TRUE;

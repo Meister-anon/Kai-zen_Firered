@@ -138,7 +138,7 @@ gBattleScriptsForBattleEffects::	@must match order of battle_effects.h file
 	.4byte BattleScript_EffectForesight
 	.4byte BattleScript_EffectPerishSong
 	.4byte BattleScript_EffectSandstorm
-	.4byte BattleScript_EffectProtect
+	.4byte BattleScript_EffectProtect	@this is endure,
 	.4byte BattleScript_EffectRollout
 	.4byte BattleScript_EffectSwagger
 	.4byte BattleScript_EffectFuryCutter
@@ -348,7 +348,7 @@ gBattleScriptsForBattleEffects::	@must match order of battle_effects.h file
 	.4byte BattleScript_EffectAromaticMist            @ EFFECT_AROMATIC_MIST
 	.4byte BattleScript_EffectPowder                  @ EFFECT_POWDER
 	.4byte BattleScript_EffectSpAtkUpHit              @ EFFECT_SP_ATTACK_UP_HIT
-	.4byte BattleScript_EffectHit                     @ EFFECT_BELCH
+	.4byte BattleScript_EffectBelch                   @ EFFECT_BELCH
 	.4byte BattleScript_EffectPartingShot             @ EFFECT_PARTING_SHOT
 	.4byte BattleScript_EffectSpectralThief           @ EFFECT_SPECTRAL_THIEF
 	.4byte BattleScript_EffectVCreate                 @ EFFECT_V_CREATE
@@ -371,7 +371,7 @@ gBattleScriptsForBattleEffects::	@must match order of battle_effects.h file
 	.4byte BattleScript_EffectFairyLock               @ EFFECT_FAIRY_LOCK
 	.4byte BattleScript_EffectAllySwitch              @ EFFECT_ALLY_SWITCH
 	.4byte BattleScript_EffectRelicSong               @ EFFECT_RELIC_SONG
-	.4byte BattleScript_EffectHitEscape
+	.4byte BattleScript_EffectHitEscape				  @EFFECT_HIT_ESCAPE   u-turn and likes
 	.4byte BattleScript_EffectWorrySeed
 	.4byte BattleScript_EffectFellStinger
 	.4byte BattleScript_EffectCaptivate
@@ -440,15 +440,27 @@ BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
 BattleScript_EffectFusionCombo:
 BattleScript_EffectTwoTypedMove:
-BattleScript_EffectBelch:
 BattleScript_EffectBodyPress:
 BattleScript_EffectChangeTypeOnItem:
 BattleScript_EffectRevelationDance:
 BattleScript_EffectStompingTantrum:
+goto BattleScript_MoveEnd  @just in case this has fallthrough
 
 @BattleScript_EffectSleepHit:
 @	setmoveeffect MOVE_EFFECT_SLEEP
 @	goto BattleScript_EffectHit
+
+BattleScript_EffectBelch::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE @made jankyu logic to set item as ateberry, even without consume but need remove above jump
+	jumpifateberry BS_ATTACKER, BattleScript_AteBerryBelch @if work should jump to atk if already ate berry, otherwise go to next command
+	call_if EFFECT_BELCH
+	printstring STRINGID_ATEBERRY
+	waitmessage 0x40
+	removeitem BS_ATTACKER @temporary work aroudn to remove item, can't setup consume yet think would need, setup new berry override logic
+BattleScript_AteBerryBelch:
+	goto BattleScript_HitFromAtkString
+
 
 @check this make sure it works I dont see a command here	
 BattleScript_EffectAllySwitch:
@@ -559,7 +571,7 @@ BattleScript_PurifyWorks:
 	updatestatusicon BS_TARGET
 	printstring STRINGID_ATTACKERCUREDTARGETSTATUS
 	waitmessage 0x40
-	tryhealhalfhealth BattleScript_AlreadyAtFullHp, BS_ATTACKER
+	tryhealthirdhealth BattleScript_AlreadyAtFullHp, BS_ATTACKER
 	goto BattleScript_RestoreHp
 	
 BattleScript_EffectStrengthSap:
@@ -2373,7 +2385,7 @@ BattleScript_EffectAquaRing:
 	attackcanceler
 	attackstring
 	ppreduce
-	setuserstatus3 STATUS3_AQUA_RING, BattleScript_ButItFailed
+	trysetaquaring BattleScript_ButItFailed
 	attackanimation
 	waitanimation
 	printstring STRINGID_PKMNSURROUNDEDWITHVEILOFWATER
@@ -2439,7 +2451,7 @@ BattleScript_EffectRoost:
 	attackstring
 	ppreduce
 	setroost @just move above heal, and include text message for grounding 
-	tryhealhalfhealth BattleScript_AlreadyAtFullHp, BS_TARGET
+	tryhealthirdhealth BattleScript_AlreadyAtFullHp, BS_TARGET
 	goto BattleScript_PresentHealTarget
 
 BattleScript_Roosting::
@@ -2504,7 +2516,7 @@ BattleScript_EffectHitEscape:
 	tryfaintmon BS_TARGET, FALSE, NULL
 	moveendto MOVE_END_ATTACKER_VISIBLE
 	moveendfrom MOVE_END_TARGET_VISIBLE
-	jumpifbattleend BattleScript_HitEscapeEnd
+	jumpifbattleend BattleScript_HitEscapeEnd	@this command wasn't added to various, prob cause of freeze need test -fixed
 	jumpifbyte CMP_NOT_EQUAL gBattleOutcome 0, BattleScript_HitEscapeEnd
 	@jumpifbattletype BATTLE_TYPE_ARENA, BattleScript_HitEscapeEnd
 	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_HitEscapeEnd
@@ -2592,7 +2604,7 @@ BattleScript_HitFromHpUpdate::
 	resultmessage
 	waitmessage 0x40
 	setmoveeffectwithchance		@seems to be fine
-	argumenttomoveeffect	@seems to be fine
+	setargumentwithchance	@seems to be fine   @this dosent work need make into separate ommand arguentefectwcance  @ok think should work now?
 	tryfaintmon BS_TARGET, 0, NULL	@somehow this is an issue now, player mon isn't fainting animation
 BattleScript_MoveEnd::
 	moveendall
@@ -3025,6 +3037,7 @@ BattleScript_EffectStatDown::
 BattleScript_StatDownFromAttackString::
 	attackstring
 	ppreduce
+	call_if EFFECT_ACCURACY_DOWN	@sand attack groud immunity, worriedabout perception of effect but logically is good
 	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_StatDownEnd
 	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_DECREASE, BattleScript_StatDownDoAnim
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_FELL_EMPTY, BattleScript_StatDownEnd
@@ -3221,7 +3234,7 @@ BattleScript_MultiHitEndMessages:
 	@printstring STRINGID_EMPTYSTRING3
 	@waitmessage 1 @ to clear any buffer issues  / think I'm fine without this, my new result command does about same thing
 	setmoveeffectwithchance
-	argumenttomoveeffect
+	argumenttomoveeffect	@cant use for multihit that doesnt go to hit, need use this
 	@addbyte gBattleScripting + 12, 1   @ updated pret uses this "addbyte sMULTIHIT_STRING + 4, 1"
 	addbyte sMULTIHIT_STRING + 4, 1
 	moveendto MOVE_END_NEXT_TARGET	@check if would trigger new grounding effect if so,  need add gmultihitcounter must equal 0  (it did added to logic)
@@ -3315,7 +3328,7 @@ BattleScript_EffectRestoreHp::
 	attackcanceler
 	attackstring
 	ppreduce
-	tryhealhalfhealth BattleScript_AlreadyAtFullHp, BS_ATTACKER
+	tryhealthirdhealth BattleScript_AlreadyAtFullHp, BS_ATTACKER
 	attackanimation
 	waitanimation
 BattleScript_RestoreHp:
@@ -3442,14 +3455,16 @@ BattleScript_EffectRazorWind::
 	call BattleScriptFirstChargingTurn
 	goto BattleScript_MoveEnd
 
+@check if things stil use this with removal of two turn effect, 
+@still ahve skyu attack skull bash but they go different places I tihnk?
 BattleScript_TwoTurnMovesSecondTurn::
 	attackcanceler
 	setmoveeffect MOVE_EFFECT_CHARGING
 	setbyte sB_ANIM_TURN, 1
 	clearstatusfromeffect BS_ATTACKER
 	orword gHitMarker, HITMARKER_NO_PPDEDUCT
-	argumenttomoveeffect
-	goto BattleScript_HitFromAccCheck
+	@argumenttomoveeffect		@think this is fine?  or would it be an issue when it runs into other argument command in effecthit
+	goto BattleScript_HitFromAccCheck	@nah think because this goes to hit, rather than ending, can just use the command in hit
 
 BattleScriptFirstChargingTurn::
 	attackcanceler
@@ -3589,7 +3604,7 @@ BattleScript_TripleArrowsMoveAnimation:
 	resultmessage
 	waitmessage 0x40
 	setmoveeffectwithchance
-	argumenttomoveeffect
+	setargumentwithchance
 BattleScript_TripleArrowsMoveEnd:
 	tryfaintmon BS_TARGET, 0, NULL
 	goto BattleScript_MoveEnd
@@ -3693,7 +3708,6 @@ BattleScript_EffectSpecialDefenseDown2::
 	goto BattleScript_EffectStatDown
 
 BattleScript_EffectAccuracyDown2::
-	call_if EFFECT_ACCURACY_DOWN
 	setstatchanger STAT_ACC, 2, TRUE
     goto BattleScript_EffectStatDown
 
@@ -3757,6 +3771,7 @@ BattleScript_EffectParalyze::
 	jumpifleafguard BattleScript_LeafGuardProtects
 	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
+	call_if EFFECT_PARALYZE
 	typecalc 
 BattleScript_EndingParalysisChecks:
 	jumpifstatus BS_TARGET, STATUS1_PARALYSIS, BattleScript_AlreadyParalyzed
@@ -4161,7 +4176,7 @@ BattleScript_EffectEerieSpell::	@excluded from multitask
 	printstring STRINGID_PKMNREDUCEDPP
 	waitmessage 0x40
 	setmoveeffectwithchance
-	argumenttomoveeffect
+	setargumentwithchance
 	tryfaintmon BS_TARGET, 0, NULL
 	goto BattleScript_MoveEnd
 
@@ -4391,6 +4406,12 @@ BattleScript_ProtectLikeAtkString::
 	printfromtable gProtectLikeUsedStringIds
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
+
+@for stone axe, similar to my set for spiky shield but reversed
+@potentially take to clean up my setup?  - vsonic still to add for stone axe
+BattleScript_EffectHitSetEntryHazard::
+	@argumenttomoveeffect		@pretty sure w new argument command in hit, don't need this, only need if doesnt go to hit
+	goto BattleScript_EffectHit
 
 BattleScript_EffectSpikes::
 	attackcanceler
@@ -5176,6 +5197,8 @@ BattleScript_EffectSemiInvulnerable::
 	jumpifmove MOVE_FLY, BattleScript_FlyFirstTurn
 	jumpifmove MOVE_DIVE, BattleScript_DiveFirstTurn
 	jumpifmove MOVE_BOUNCE, BattleScript_BounceFirstTurn
+	@jumpifmove MOVE_PHANTOM_FORCE, BattleScript_FirstTurnPhantomForce  @vsonic need add
+	@jumpifmove MOVE_SHADOW_FORCE, BattleScript_FirstTurnPhantomForce
 	@ MOVE_DIG
 	setbyte sTWOTURN_STRINGID, 5
 	goto BattleScript_FirstTurnSemiInvulnerable
@@ -5214,8 +5237,8 @@ BattleScript_SecondTurnSemiInvulnerable::
 	setbyte sB_ANIM_TURN, 1
 	clearstatusfromeffect BS_ATTACKER
 	orword gHitMarker, HITMARKER_NO_PPDEDUCT
-	jumpifnotmove MOVE_BOUNCE, BattleScript_SemiInvulnerableTryHit
-	setmoveeffect MOVE_EFFECT_PARALYSIS
+	@jumpifnotmove MOVE_BOUNCE, BattleScript_SemiInvulnerableTryHit
+	@setmoveeffect MOVE_EFFECT_PARALYSIS  w argument change dont need this
 BattleScript_SemiInvulnerableTryHit::
 	accuracycheck BattleScript_SemiInvulnerableMiss, ACC_CURR_MOVE
 	clearsemiinvulnerablebit
@@ -5242,7 +5265,7 @@ BattleScript_EffectSoftboiled::
 	attackcanceler
 	attackstring
 	ppreduce
-	tryhealhalfhealth BattleScript_AlreadyAtFullHp, BS_TARGET
+	tryhealthirdhealth BattleScript_AlreadyAtFullHp, BS_TARGET
 BattleScript_PresentHealTarget::
 	attackanimation
 	waitanimation
@@ -5607,8 +5630,8 @@ BattleScript_EffectRolePlay::
 	waitanimation
 	printstring STRINGID_PKMNCOPIEDFOE
 	waitmessage 0x40
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER
+	@healthbarupdate BS_ATTACKER	same issue as with ability swap, need do with command
+	@datahpupdate BS_ATTACKER		@lowering health is only meant to be for wonder guard
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectWish::
@@ -5686,18 +5709,18 @@ BattleScript_BrickBreakWithScreens::
 	removelightscreenreflect @check if I added my other effects to this already vsonic
 	critcalc
 	damagecalc
+	typecalc	@with change to typecalc can use normal effect and just change modifier
 	adjustnormaldamage
 	pause 0x05
 	jumpifbyte CMP_EQUAL, sB_ANIM_TURN, 0, BattleScript_BrickBreakAnim
-	bicbyte gMoveResultFlags, MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE
+	@bicbyte gMoveResultFlags, MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE    @think dont' need this now?
 BattleScript_BrickBreakAnim::
 	attackanimation
 	waitanimation
 	jumpifbyte CMP_LESS_THAN, sB_ANIM_TURN, 2, BattleScript_BrickBreakDoHit
 	printstring STRINGID_THEWALLSHATTERED
 	waitmessage 0x40
-BattleScript_BrickBreakDoHit::
-	typecalc2	@apparently still need as move would still work on type immune mon, but just to break the wall, need look into this script is confusing
+BattleScript_BrickBreakDoHit::	
 	effectivenesssound
 	hitanimation BS_TARGET
 	waitstate
@@ -5708,7 +5731,7 @@ BattleScript_BrickBreakDoHit::
 	resultmessage
 	waitmessage 0x40
 	setmoveeffectwithchance
-	argumenttomoveeffect	@added for psychic fangs to add flinch effect, should do nothing for normal brickbreak
+	setargumentwithchance	@added for psychic fangs to add flinch effect, should do nothing for normal brickbreak
 	tryfaintmon BS_TARGET, 0, NULL
 	goto BattleScript_MoveEnd
 
@@ -5735,7 +5758,7 @@ BattleScript_BrickBreakNoScreens::
 	resultmessage
 	waitmessage 0x40
 	setmoveeffectwithchance
-	argumenttomoveeffect	@added for psychic fangs to add flinch effect, should do nothing for normal brickbreak
+	setargumentwithchance	@added for psychic fangs to add flinch effect, should do nothing for normal brickbreak
 	tryfaintmon BS_TARGET, 0, NULL
 	goto BattleScript_MoveEnd
 
@@ -5800,9 +5823,9 @@ BattleScript_EffectSkillSwap::
 	waitanimation
 	printstring STRINGID_PKMNSWAPPEDABILITIES
 	waitmessage 0x40
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER
-	goto BattleScript_MoveEnd
+	@healthbarupdate BS_ATTACKER
+	@datahpupdate BS_ATTACKER @need figure how do this better, leaving as is causes issue 
+	goto BattleScript_MoveEnd	@think try do with command, as its only meant to do for wonder guard
 
 BattleScript_EffectImprison::
 	attackcanceler
@@ -8266,6 +8289,12 @@ BattleScript_ShedSkinActivates::
 	updatestatusicon BS_ATTACKER
 	end3
 
+BattleScript_RisingPhoenixActivates::
+	printstring STRINGID_PHOENIX_CLEANSE
+	waitmessage 0x40
+	updatestatusicon BS_ATTACKER
+	end3
+
 BattleScript_PurifyingAuraActivates::
 	printstring STRINGID_HEALERCURE
 	waitmessage 0x40
@@ -8713,8 +8742,12 @@ BattleScript_MoveStatDrain::
 	setgraphicalstatchangevalues
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	waitanimation
+	statbuffchange STAT_CHANGE_BS_PTR, BattleScript_MoveStatDrain_Cont
+	@printfromtable gStatUpStringIds
+	@waitmessage B_WAIT_TIME_LONG  @small optimization get rid of extraneous strings
 	printstring STRINGID_TARGETABILITYSTATRAISE
 	waitmessage B_WAIT_TIME_LONG
+BattleScript_MoveStatDrain_Cont:
 	clearsemiinvulnerablebit
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	goto BattleScript_MoveEnd
@@ -8775,7 +8808,7 @@ BattleScript_AbilityPreventsMoodShift::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
-BateScript_AbilityFemmeFatale::
+BattleScript_AbilityFemmeFatale::
 	pause 0x20
 	printstring STRINGID_FEMME_FATALE
 	waitmessage 0x40

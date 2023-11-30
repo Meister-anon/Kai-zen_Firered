@@ -53,6 +53,8 @@ struct MultiBattlePokemonTx
 #define BOUNCE_MON          0x0
 #define BOUNCE_HEALTHBOX    0x1
 
+#define CAN_ABILITY_ABSORB(battler) (gBattleMons[battler].status1 == 0 && !(gBattleMons[battler].status2 & STATUS2_CONFUSION))
+
 extern const struct SpriteTemplate gUnknownDebugSprite;
 extern const struct OamData gOamData_BattlerOpponent;
 extern const struct OamData gOamData_BattlerPlayer;

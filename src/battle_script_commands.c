@@ -228,7 +228,7 @@ static void atk77_setprotectlike(void);
 static void atk78_faintifabilitynotdamp(void);
 static void atk79_setatkhptozero(void);
 static void atk7A_jumpifnexttargetvalid(void);
-static void atk7B_tryhealhalfhealth(void);
+static void atk7B_tryhealthirdhealth(void);
 static void atk7C_trymirrormove(void);
 static void atk7D_setrain(void);
 static void atk7E_setreflect(void);
@@ -488,7 +488,7 @@ void (* const gBattleScriptingCommandsTable[])(void) =
     atk78_faintifabilitynotdamp,
     atk79_setatkhptozero,
     atk7A_jumpifnexttargetvalid,
-    atk7B_tryhealhalfhealth,
+    atk7B_tryhealthirdhealth,
     atk7C_trymirrormove,
     atk7D_setrain,
     atk7E_setreflect,
@@ -1410,6 +1410,8 @@ static void atk00_attackcanceler(void) //vsonic
     }
     gHitMarker |= HITMARKER_OBEYS;
 
+    
+
     if (gProtectStructs[gBattlerTarget].bounceMove  //target has magic coat effect/ already setup and should work as sidestatus, could replace with timer check but don't need to
         && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED
         && GetBattlerAbility(gBattlerAttacker) != ABILITY_INFILTRATOR   //since this is a screen-like, needed add infiltrator bypass
@@ -1449,10 +1451,10 @@ static void atk00_attackcanceler(void) //vsonic
     //oh wait I think I can do that like intimidate, like the reset intimmidate stuff in the faintmon battlescript
     //just need to make it only do that if forwarn/anticipate not done. check targetting but I think should be simple.
     else if (GetBattlerAbility(gBattlerTarget) == ABILITY_FOREWARN
-        && (gCurrentMove == gSpecialStatuses[gBattlerTarget].forewarnedMove)
-        && !gSpecialStatuses[gBattlerTarget].forewarnDone)
+        && (gCurrentMove == gProtectStructs[gBattlerTarget].forewarnedMove) //can't use special status for this as it gets cleared each turn
+        && !gProtectStructs[gBattlerTarget].forewarnDone)
     {
-        gSpecialStatuses[gBattlerTarget].forewarnDone = TRUE;
+        gProtectStructs[gBattlerTarget].forewarnDone = TRUE;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0;
@@ -1460,10 +1462,10 @@ static void atk00_attackcanceler(void) //vsonic
         ++gBattlescriptCurrInstr;
     }
     else if (GetBattlerAbility(gBattlerTarget) == ABILITY_ANTICIPATION
-        && (gCurrentMove == gSpecialStatuses[gBattlerTarget].anticipatedMove)
-        && !gSpecialStatuses[gBattlerTarget].anticipationDone)
+        && (gCurrentMove == gProtectStructs[gBattlerTarget].anticipatedMove)
+        && !gProtectStructs[gBattlerTarget].anticipationDone)
     {
-        gSpecialStatuses[gBattlerTarget].anticipationDone = TRUE;
+        gProtectStructs[gBattlerTarget].anticipationDone = TRUE;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0;
@@ -1491,6 +1493,9 @@ static void atk00_attackcanceler(void) //vsonic
         gBattlescriptCurrInstr = BattleScript_TookAttack;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }*/ //should be fine to remove this now, 
+
+    //think I can use attack canceler to reset targetting?
+    //just need loop side for absorb abiliy w check for if can absorb
 
     //ok I don't even remembere what I did regarding this...
 
@@ -3398,32 +3403,31 @@ static void atk07_adjustnormaldamage(void)
     
     //now that I ported other type chart think can just use that actually, should be simple?
 
-    if ((gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE
-        || gProtectStructs[gBattlerTarget].endured
-        || gSpecialStatuses[gBattlerTarget].focusBanded
-        || gSpecialStatuses[gBattlerTarget].focusSashed
-        || gSpecialStatuses[gBattlerTarget].sturdied)
-        && !gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE
-        && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage
-        && gMultiHitCounter == 0
-        )
-    // Handle reducing the dmg to 1 hp.
-        gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1; //not jumping correctly is why hp is 1
-
-    if (gProtectStructs[gBattlerTarget].endured && gMultiHitCounter == 0)
+    if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
+     && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded || gSpecialStatuses[gBattlerTarget].focusSashed || gSpecialStatuses[gBattlerTarget].sturdied)
+     && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage
+     && gMultiHitCounter == 0)
     {
-        gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED;
-    }
-    else if ((gSpecialStatuses[gBattlerTarget].focusBanded || gSpecialStatuses[gBattlerTarget].focusSashed)
-        && gMultiHitCounter == 0)
-    {
-        gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
-        gLastUsedItem = gBattleMons[gBattlerTarget].item;
-    }
-    else if (gSpecialStatuses[gBattlerTarget].sturdied && gMultiHitCounter == 0) //cant believe I forgot htis again
-    {
-        gMoveResultFlags |= MOVE_RESULT_STURDIED;
-        gLastUsedAbility = ABILITY_STURDY;
+        gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
+        if (gProtectStructs[gBattlerTarget].endured)
+        {
+            gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED;
+        }
+        else if (gSpecialStatuses[gBattlerTarget].focusBanded)
+        {
+            gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
+            gLastUsedItem = gBattleMons[gBattlerTarget].item;
+        }
+        else if (gSpecialStatuses[gBattlerTarget].focusSashed)
+        {
+            gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
+            gLastUsedItem = gBattleMons[gBattlerTarget].item;
+        }
+        else if (gSpecialStatuses[gBattlerTarget].sturdied)
+        {
+            gMoveResultFlags |= MOVE_RESULT_STURDIED;
+            gLastUsedAbility = ABILITY_STURDY;
+        }
     }
 
 
@@ -3466,31 +3470,31 @@ static void atk08_adjustnormaldamage2(void)
         gSpecialStatuses[gBattlerTarget].sturdied = TRUE;
     }
 
-     if ((gProtectStructs[gBattlerTarget].endured
-        || gSpecialStatuses[gBattlerTarget].focusBanded
-        || gSpecialStatuses[gBattlerTarget].focusSashed
-        || gSpecialStatuses[gBattlerTarget].sturdied)
-        && !gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE
-        && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage
-        && gMultiHitCounter == 0
-        )
-    // Handle reducing the dmg to 1 hp.
+     if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
+     && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded || gSpecialStatuses[gBattlerTarget].focusSashed || gSpecialStatuses[gBattlerTarget].sturdied)
+     && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage
+     && gMultiHitCounter == 0)
+    {
         gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
-
-    if (gProtectStructs[gBattlerTarget].endured && gMultiHitCounter == 0)
-    {
-        gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED;
-    }
-    else if ((gSpecialStatuses[gBattlerTarget].focusBanded || gSpecialStatuses[gBattlerTarget].focusSashed)
-        && gMultiHitCounter == 0)
-    {
-        gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
-        gLastUsedItem = gBattleMons[gBattlerTarget].item;
-    }
-    else if (gSpecialStatuses[gBattlerTarget].sturdied && gMultiHitCounter == 0)
-    {
-        gMoveResultFlags |= MOVE_RESULT_STURDIED;
-        gLastUsedAbility = ABILITY_STURDY;
+        if (gProtectStructs[gBattlerTarget].endured)
+        {
+            gMoveResultFlags |= MOVE_RESULT_FOE_ENDURED;
+        }
+        else if (gSpecialStatuses[gBattlerTarget].focusBanded)
+        {
+            gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
+            gLastUsedItem = gBattleMons[gBattlerTarget].item;
+        }
+        else if (gSpecialStatuses[gBattlerTarget].focusSashed)
+        {
+            gMoveResultFlags |= MOVE_RESULT_FOE_HUNG_ON;
+            gLastUsedItem = gBattleMons[gBattlerTarget].item;
+        }
+        else if (gSpecialStatuses[gBattlerTarget].sturdied)
+        {
+            gMoveResultFlags |= MOVE_RESULT_STURDIED;
+            gLastUsedAbility = ABILITY_STURDY;
+        }
     }
 
 //END:
@@ -3614,6 +3618,10 @@ static void atk0B_healthbarupdate(void)
             {
                 PrepareStringBattle(STRINGID_SUBSTITUTEDAMAGED, gActiveBattler);
             }
+            else if (DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove)) //added change for easier filtering
+            { //add or logic, for rockyhelmet and rock skin etc. here
+
+            }
             else if (!DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
             {
                 s16 healthValue;
@@ -3636,7 +3644,7 @@ static void atk0B_healthbarupdate(void)
 
 static void atk0C_datahpupdate(void)
 {
-    //u32 moveType; //remove this as its a hold over from when moves didn't use split and instead relied on type order
+    //u32 moveType; //removed this as its a hold over from when moves didn't use split and instead relied on type order
     u16 move = gCurrentMove;
 
     if (!gBattleControllerExecFlags)
@@ -3675,7 +3683,7 @@ static void atk0C_datahpupdate(void)
                     gBattlescriptCurrInstr = BattleScript_SubstituteFade;
                     return;
                 }
-            }
+            }//add or logic, for rockyhelmet and rock skin etc.
             else if (DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove) && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE))
             {
                 gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU_BUSTED;
@@ -3759,7 +3767,7 @@ static void atk0C_datahpupdate(void)
         }
         else //need look into this think may be for status moves? / and with how I changed some status moves to read type this may be an issue
         {
-            gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+            gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]); //no think for no efect stuff that miss etc.
             if (gSpecialStatuses[gActiveBattler].dmg == 0)
                 gSpecialStatuses[gActiveBattler].dmg = 0xFFFF;
         }
@@ -4550,9 +4558,13 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 return;
             }//vsonic IMPORTANT*/
 
+            //ok so seems none of these work, doesn't get here, its all working from typecalc            
+
             if (!(CanBeParalyzed(gEffectBattler)) //thought caused logic error but its fine, there are no gaps
             || (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_ELECTRIC) && movetype == TYPE_ELECTRIC))
                 break;
+
+            
 
             //put no effect check here, below ability checks above status1 check
             if ((gMoveResultFlags & MOVE_RESULT_NO_EFFECT && gBattleMoves[gCurrentMove].split == SPLIT_STATUS)
@@ -5418,8 +5430,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     MarkBattlerForControllerExec(gActiveBattler);
                     BattleScriptPush(gBattlescriptCurrInstr + 1);
                     gBattlescriptCurrInstr = BattleScript_MoveEffectBugBite;
-                }
-                break;
+                } //vsonic potentially, can emulate to make my vers belch work, where consumes users berry if held
+                break;//nvm forgot move effects go at end of move
             case MOVE_EFFECT_RELIC_SONG:
                 if (GetBattlerAbility(gBattlerAttacker) != ABILITY_SHEER_FORCE && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED))
                 {
@@ -5777,17 +5789,17 @@ static void atk19_tryfaintmon(void)
 
                 //just need to store battler id of main functions, and ensure gbattlretarger, matches stored battlerid
             if ((GetBattlerAbility(battlerId) == ABILITY_FOREWARN) && gSpecialStatuses[battlerId].switchInAbilityDone
-                && !gSpecialStatuses[battlerId].forewarnDone
+                && !gProtectStructs[battlerId].forewarnDone
                 && gActiveBattler == gForewarnedBattler)    //if fainted mon is same as forewarn target
             {
-                gSpecialStatuses[battlerId].forewarnedMove = 0;    //clears stored move, 
+                gProtectStructs[battlerId].forewarnedMove = 0;    //clears stored move, 
                 gSpecialStatuses[battlerId].switchInAbilityDone = FALSE; //and allows switchin to reactivate
             }
             else if ((GetBattlerAbility(battlerId) == ABILITY_ANTICIPATION) && gSpecialStatuses[battlerId].switchInAbilityDone
-                && !gSpecialStatuses[battlerId].anticipationDone
+                && !gProtectStructs[battlerId].anticipationDone
                 && gActiveBattler == gAnticipatedBattler)
             {
-                gSpecialStatuses[battlerId].anticipatedMove = 0;   //clears stored move, and allows switchin to reactivate
+                gProtectStructs[battlerId].anticipatedMove = 0;   //clears stored move, and allows switchin to reactivate
                 gSpecialStatuses[battlerId].switchInAbilityDone = FALSE;  //need better setup make sure takes destiny bond into acout vsonic
             }
             if ((gHitMarker & HITMARKER_DESTINYBOND) && gBattleMons[gBattlerAttacker].hp != 0)
@@ -7474,8 +7486,10 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             ++gBattleScripting.atk49_state;
             break;
         case MOVE_END_GROUND_TARGET: //for some reason retriggering so think, grounded isn't being set right?
-            if (!(IsBattlerGrounded(gBattlerTarget)) && IsBattlerAlive(gBattlerTarget) 
+            if (!(IsBattlerGrounded(gBattlerTarget)) 
+            && IsBattlerAlive(gBattlerTarget) 
             && gMultiHitCounter == 0 
+            //&& !gMoveResultFlags & (MOVE_RESULT_NO_EFFECT)
             && TARGET_TURN_DAMAGED)// !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) //should make sure doesn't trigger till end of multihit
             {           //result no effect didn't work so replace w target must take dmg
                 
@@ -7499,7 +7513,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                     effect = TRUE;
                     BattleScriptPush(gBattlescriptCurrInstr);
                     gBattlescriptCurrInstr = BattleScript_MoveEffectSmackDown;
-                }
+                }//for some reason seems doesn't always work?,idk what's going on with this thing...
 
             } //vsonic need test
             ++gBattleScripting.atk49_state;
@@ -7992,8 +8006,8 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
                     gBattleStruct->moveTarget[gBattlerAttacker] = gBattlerTarget = nextTarget; // Fix for moxie spread moves
                     gBattleScripting.atk49_state = 0;
                     MoveValuesCleanUp();
-                    gBattleScripting.moveEffect = gBattleScripting.savedMoveEffect;
-                    BattleScriptPush(gBattleScriptsForBattleEffects[gBattleMoves[gCurrentMove].effect]);
+                    gBattleScripting.moveEffect = gBattleScripting.savedMoveEffect; //this line not in originalfunciton think issue
+                    BattleScriptPush(gBattleScriptsForBattleEffects[gBattleMoves[gCurrentMove].effect]); //issue was saveMoveEffect wasn't assigned, so value was random
                     gBattlescriptCurrInstr = BattleScript_FlushMessageBox;
                     return;
                 }
@@ -9970,7 +9984,8 @@ static void atk69_adjustsetdamage(void)
     }
     if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_SUBSTITUTE)
      && (gBattleMoves[gCurrentMove].effect == EFFECT_FALSE_SWIPE || gProtectStructs[gBattlerTarget].endured || gSpecialStatuses[gBattlerTarget].focusBanded || gSpecialStatuses[gBattlerTarget].focusSashed || gSpecialStatuses[gBattlerTarget].sturdied)
-     && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage)
+     && gBattleMons[gBattlerTarget].hp <= gBattleMoveDamage
+     && gMultiHitCounter == 0)
     {
         gBattleMoveDamage = gBattleMons[gBattlerTarget].hp - 1;
         if (gProtectStructs[gBattlerTarget].endured)
@@ -12527,11 +12542,20 @@ static void atk76_various(void) //will need to add all these emerald various com
         break;
     case VARIOUS_JUMP_IF_EMERGENCY_EXITED:
     {
-        //VARIOUS_ARGS(const u8 * jumpInstr);
+        VARIOUS_ARGS(const u8 *jumpInstr);
         if (gSpecialStatuses[gActiveBattler].EmergencyExit)   //if true
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);   //think shoudl work
+            gBattlescriptCurrInstr = cmd->jumpInstr;
         else
-            gBattlescriptCurrInstr += 7;
+            gBattlescriptCurrInstr = cmd->nextInstr;
+        return;
+    }
+    case VARIOUS_JUMP_IF_BATTLE_END:
+    {
+        VARIOUS_ARGS(const u8 *jumpInstr);
+        if (NoAliveMonsForEitherParty())
+            gBattlescriptCurrInstr = cmd->jumpInstr;
+        else
+            gBattlescriptCurrInstr = cmd->nextInstr;
         return;
     }
     case VARIOUS_CHECK_PARENTAL_BOND_COUNTER:  //vsonic   redo and use emerald setup now that I've porter args
@@ -12734,13 +12758,18 @@ static void atk7A_jumpifnexttargetvalid(void)
     }
 }
 
-static void atk7B_tryhealhalfhealth(void)
+static void atk7B_tryhealthirdhealth(void)
 {
     const u8 *failPtr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 
     if (gBattlescriptCurrInstr[5] == BS_ATTACKER)
         gBattlerTarget = gBattlerAttacker;
-    gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 2;
+        
+    if (gCurrentMove != MOVE_PURIFY)
+        gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 3;
+    else
+        gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 2; //since purify is so specific that gets to keep half health heal
+
     if (gBattleMoveDamage == 0)
         gBattleMoveDamage = 1;
     gBattleMoveDamage *= -1;
@@ -12871,7 +12900,7 @@ static void atk80_manipulatedamage(void)
         break;
     case DMG_BIG_ROOT:  //think handled in util.c can skip
         gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, gBattleMoveDamage);
-        break; //nope this uses the battle_util.c stuff actually
+        break; //nope this uses the battle_util.c stuff actually, gbattlemovedamage argument ie heal amount, is set from sethpdrain bs command
     case DMG_1_2_ATTACKER_HP:
         gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
         break;
@@ -13059,7 +13088,7 @@ static void atk88_sethpdrain(void)
         gBattleMoveDamage = ((gHpDealt * argumentchance) / 100);
 
     if (gBattleMoveDamage == 0)
-        gBattleMoveDamage = 1; //think this is needed to not freeze?  yup
+        gBattleMoveDamage = 1; //think this is needed to not freeze?  yup //try removing, some hp issue 
     
     gBattlescriptCurrInstr = cmd->nextInstr;
 }
@@ -13934,6 +13963,7 @@ static void atk97_tryinfatuating(void)
     u32 personalityAttacker, personalityTarget;
 
     u16 targetAbility = GetBattlerAbility(gBattlerTarget);
+    u16 attackerAbility = GetBattlerAbility(gBattlerAttacker); //attempt set cupid arrow here
     
 
     if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
@@ -13948,17 +13978,34 @@ static void atk97_tryinfatuating(void)
     personalityAttacker = GetMonData(monAttacker, MON_DATA_PERSONALITY);
     speciesTarget = GetMonData(monTarget, MON_DATA_SPECIES);
     personalityTarget = GetMonData(monTarget, MON_DATA_PERSONALITY);
+
+    //cupids arrow works regardless of gender so need figure how do that, or just remove the exclusion for gender from these adn just keep it as it is
     if (targetAbility == ABILITY_OBLIVIOUS || targetAbility == ABILITY_UNAWARE) //add ABILITY_FEMME_FATALE in else if, special message femme fatalle prevents infatuation
     {
-        gBattlescriptCurrInstr = BattleScript_AbilityPreventsMoodShift;
-        gLastUsedAbility = targetAbility;
-        RecordAbilityBattle(gBattlerTarget, targetAbility);
+        if (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) == GetGenderFromSpeciesAndPersonality(speciesTarget, personalityTarget))
+        {
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);   //jump to fail condition
+        }
+        else {
+        
+            gBattlescriptCurrInstr = BattleScript_AbilityPreventsMoodShift;
+            gLastUsedAbility = targetAbility;
+            RecordAbilityBattle(gBattlerTarget, targetAbility);
+        }
     }
     else if (targetAbility == ABILITY_FEMME_FATALE) //add ABILITY_FEMME_FATALE in else if, special message femme fatalle prevents infatuation
     {
-        gBattlescriptCurrInstr = BateScript_AbilityFemmeFatale;
-        gLastUsedAbility = targetAbility;
-        RecordAbilityBattle(gBattlerTarget, targetAbility);
+        if (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) == GetGenderFromSpeciesAndPersonality(speciesTarget, personalityTarget)
+        /*&& attackerAbility != ABILITY_CUPIDS_ARROW*/)  //remember is ability effect done on switchin so separate from this command
+        {
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);   //jump to fail condition
+        }
+        else {
+
+            gBattlescriptCurrInstr = BattleScript_AbilityFemmeFatale;
+            gLastUsedAbility = targetAbility;
+            RecordAbilityBattle(gBattlerTarget, targetAbility);
+        }
     }
     else
     {
@@ -15949,6 +15996,19 @@ static void atkD5_trysetroots(void) // ingrain
     }
 }
 
+void BS_trysetaquaring(void)    //aqua ring
+{
+    if (gStatuses3[gBattlerAttacker] & STATUS3_AQUA_RING)
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    else
+    {
+        gStatuses3[gBattlerAttacker] |= STATUS3_AQUA_RING;
+        gBattlescriptCurrInstr += 5;
+    }
+}
+
 static void atkD6_doubledamagedealtifdamaged(void)
 {
     if ((gProtectStructs[gBattlerAttacker].physicalDmg != 0
@@ -16646,6 +16706,7 @@ static void atkEF_handleballthrow(void) //important changed
             else
                 catchRate = gBaseStats[gBattleMons[gBattlerTarget].species].catchRate;
             if (gLastUsedItem > ITEM_SAFARI_BALL) //pretty much if pokeball is one of the special balls (not poke, great, ultra, or master
+            {
                 switch (gLastUsedItem)
                 {
                 case ITEM_NET_BALL:
@@ -16688,10 +16749,11 @@ static void atkEF_handleballthrow(void) //important changed
                     ballMultiplier = 10;
                     break;
                 }
-
+            }
             else
                 ballMultiplier = sBallCatchBonuses[gLastUsedItem - 2];
             odds = (catchRate * ballMultiplier / 10) * (gBattleMons[gBattlerTarget].maxHP * 3 - gBattleMons[gBattlerTarget].hp * 2) / (3 * gBattleMons[gBattlerTarget].maxHP);
+            
             if ((gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || gDisableStructs[gBattlerTarget].FrozenTurns != 0)) //juset realiszed I could stack statsus bonsu by including status 2, since right now rules exclude status 1 overlap
                 odds *= 2;
             if (gBattleMons[gBattlerTarget].status1 & (STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_SPIRIT_LOCK | STATUS1_TOXIC_POISON | STATUS1_INFESTATION))
@@ -16703,7 +16765,7 @@ static void atkEF_handleballthrow(void) //important changed
                 odds += (odds / 10);  //TO increase catch chance by 10%,
             if (gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
                 odds += (odds / 5);
-            else if (gBattleMons[gBattlerTarget].status4 & (STATUS4_BIND | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL | STATUS4_SAND_TOMB | STATUS4_MAGMA_STORM | STATUS4_SWARM | STATUS4_SNAP_TRAP))
+            else if (gBattleMons[gBattlerTarget].status4 & (ITS_A_TRAP_STATUS4))//(STATUS4_BIND | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL | STATUS4_SAND_TOMB | STATUS4_MAGMA_STORM | STATUS4_SWARM | STATUS4_SNAP_TRAP))
                 odds += (odds / 5);
             if (gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION)
                 odds += (odds / 2);
@@ -16784,7 +16846,7 @@ static void atkEF_handleballthrow(void) //important changed
                     else
                         gBattleCommunication[MULTISTRING_CHOOSER] = 1;
                 }
-                else
+                else if (!(gBattleTypeFlags & BATTLE_TYPE_SAFARI))
                     //ok think my above functions messed up the else, so I had to explicitly define the fail conditions here
 
                     // not caught  think this is the part I need to change to replace shakes with miss or block
@@ -16810,7 +16872,13 @@ static void atkEF_handleballthrow(void) //important changed
                         gBattlescriptCurrInstr = BattleScript_ShakeBallThrow;   //normal catch shake mechanic in case I decide to do, but I want this to be least chosen option
                     }    // so insteaad of %3  I may do %5 and give the first 2 sates 2 success criteria (i.e 0,1 & 2,3   then have this only work on 4.  will have to test odds in effect)
                 }
-            }
+                else 
+                {
+                    BtlController_EmitBallThrowAnim(0, shakes);
+                    MarkBattlerForControllerExec(gActiveBattler);
+                    gBattlescriptCurrInstr = BattleScript_ShakeBallThrow;
+                }//intend to be for safari, works
+            } //dodge animation isn't working for safari mon, want to change to use base game animations
         }
     }
 }
@@ -17334,6 +17402,17 @@ void BS_setgastroacid(void)
     }
 }
 
+void BS_jumpifateberry(void) //for belch,
+{
+    NATIVE_ARGS(u8 battler, const u8 *jumpInstr);
+    u32 battler = GetBattlerForBattleScript(cmd->battler);
+
+    if (gBattleStruct->ateBerry[GetBattlerSide(battler)] & gBitTable[gBattlerPartyIndexes[battler]])
+        gBattlescriptCurrInstr = cmd->jumpInstr;
+    else
+        gBattlescriptCurrInstr = cmd->nextInstr;
+}
+
 static void HandleRoomMove(u32 statusFlag, u8 *timer, u8 stringId)
 {
     if (gFieldStatuses & statusFlag)
@@ -17399,10 +17478,10 @@ bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move) //sound b
         return TRUE;
 }
 
-bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move)
+bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move) //plan add rocky helm rough skin passive dmg to things that can break /vsonic
 {
     if (GetBattlerAbility(battlerDef) != ABILITY_DISGUISE
-        || gBattleMons[battlerDef].species != SPECIES_MIMIKYU
+        || gBattleMons[battlerDef].species != SPECIES_MIMIKYU   //since species transforms to busted afterwards, this is line that makes it one time only
         || gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED
         //|| gBattleMoves[move].power == 0
         || IS_MOVE_STATUS(move)
@@ -17410,7 +17489,7 @@ bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move)
         return FALSE;
     else
         return TRUE;
-}
+} //seems this is main logic for ability effect
 
 //may not need sub block? don't really need it but using will save time
 void BS_jumpifsubstituteblocks(void) {
@@ -17453,6 +17532,17 @@ bool32 IsTelekinesisBannedSpecies(u16 species)
             return TRUE;
     }
     return FALSE;
+}
+
+void BS_setargumenteffectwithchance(void) //different effect for in hit, where actually setting effect
+{
+    NATIVE_ARGS();
+    if (gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE)
+    {
+        gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument; //potentially need make argument field for bs. as well vsonic
+        atk15_setmoveeffectwithchance(); //looks weird but believe its necessary with my setup of argumenttomoveeffect
+    }    
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 void BS_settelekinesis(void) {
@@ -17816,13 +17906,19 @@ void BS_call_if(void) //comparing to jumpifholdeffect
             //and just have the screen check in this function, and set curr instruction based on that for easy clean navigation
             //end result the actual brick break effect script would just be this one command 
             case EFFECT_BRICK_BREAK:
-                 if (TryRemoveScreens(gBattlerAttacker)) //replace with function check for screens / adapted screen cleaner logic, rather than make from scratch
+                if (TryRemoveScreens(gBattlerAttacker)) //replace with function check for screens / adapted screen cleaner logic, rather than make from scratch
+                {
                     gBattlescriptCurrInstr = BattleScript_BrickBreakWithScreens;//may be able to do something similar to fury cutter where anim effects used a stored value to change animation?
+                    return;
+                } 
                 else
+                {
                     gBattlescriptCurrInstr = BattleScript_BrickBreakNoScreens;
+                    return; //addding returns to this seem to make scritp read correctly?
+                }                    
                 break;//removes screens from start, still need to setup script with screens, need understand how wall animation worked in default script
                 
-            /*case EFFECT_SWARM:
+            /*case EFFECT_SWARM:  //think dn't need this set elsewhere
             if (!(gDisableStructs[gEffectBattler].swarmTurns)) //for trap status
             {
                 if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW
@@ -17836,11 +17932,37 @@ void BS_call_if(void) //comparing to jumpifholdeffect
                     gBattleMons[gActiveBattler].status4 |= STATUS4_INFESTATION; //wasn't planning to include status in this but think need it for animation to play properly
             }
                 break;*/
+            case EFFECT_ACCURACY_DOWN:            
+                if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GROUND) && gBattleMoves[gCurrentMove].type == TYPE_GROUND)
+                && gBattleMoves[gCurrentMove].split == SPLIT_STATUS) //for sand attack
+                {
+                    gBattlescriptCurrInstr = BattleScript_NotAffected; 
+                    return;
+                }     
+            
+            break;
             case EFFECT_TARGET_TYPE_DAMAGE:
             if (gCurrentMove == MOVE_ROCK_SMASH)
                 gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
                 gBattlescriptCurrInstr = cmd->nextInstr;
-                break;                
+                break;           
+            case EFFECT_PARALYZE:
+            if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ELECTRIC) && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC)
+            && gBattleMoves[gCurrentMove].split == SPLIT_STATUS) //for thunder wave
+            {
+                gBattlescriptCurrInstr = BattleScript_NotAffected; 
+                return;
+            }     
+            break;
+            case EFFECT_BELCH:
+            if (ItemId_GetPocket(gBattleMons[gBattlerAttacker].item) == POCKET_BERRY_POUCH)
+            {
+                PREPARE_ITEM_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerAttacker].item);
+                gBattleStruct->ateBerry[gBattlerAttacker & BIT_SIDE] |= gBitTable[gBattlerPartyIndexes[gBattlerAttacker]]; //work around attempt direct add to ate
+                gBattlescriptCurrInstr = cmd->nextInstr;
+            }
+            break;
+
         }
     }
     gBattlescriptCurrInstr = cmd->nextInstr;
@@ -17893,6 +18015,9 @@ void BS_getmoveeffect(void)//transfer move effects mostly for multihit but also 
         case EFFECT_TARGET_TYPE_DAMAGE:
             if (gCurrentMove == MOVE_ROCK_SMASH)
                 gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
+            break;
+        case EFFECT_SPEED_DOWN_HIT:
+        gBattleScripting.moveEffect = MOVE_EFFECT_SPD_MINUS_1;
             break;
         //case EFFECT_INFESTATION:      //no longer called this and moved to argument to set this
         //gBattleScripting.moveEffect = MOVE_EFFECT_INFESTATION;

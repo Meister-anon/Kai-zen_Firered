@@ -127,7 +127,7 @@ void BoxMonAtGainExp(struct BoxPokemon * mon)
                 SetBoxMonData(mon, MON_DATA_EXP, &experience);
                 ApplyOakRanchExperience(&dst);
             }
-            else if (GetMonData(&dst, MON_DATA_LEVEL) <= 30) //test see if change works in sub of a wrap around, should make increase 1 for every 30 steps
+            else if (GetMonData(&dst, MON_DATA_LEVEL) <= 30) //keep an eye on this one, may shift to 35 and next to 45
             {
                 experience = GetMonData(mon, MON_DATA_EXP) + (gSaveBlock1Ptr->oakRanchStepCounter * 5);
                 SetBoxMonData(mon, MON_DATA_EXP, &experience);

@@ -3834,6 +3834,10 @@ void FaintClearSetData(void) //see about make status1 not fade wen faint?
     gProtectStructs[gActiveBattler].usesBouncedMove = FALSE;
     gProtectStructs[gActiveBattler].usedGravityPreventedMove = FALSE;
     gProtectStructs[gActiveBattler].usedThroatChopPreventedMove = FALSE; 
+    //gProtectStructs[gActiveBattler].forewarnDone = FALSE;
+    gProtectStructs[gActiveBattler].forewarnedMove = FALSE;
+    //gProtectStructs[gActiveBattler].anticipationDone = FALSE;  //removed these as want them to be once per battle
+    gProtectStructs[gActiveBattler].anticipatedMove = FALSE;
     gDisableStructs[gActiveBattler].isFirstTurn = 2;
     gLastMoves[gActiveBattler] = MOVE_NONE;
     gLastLandedMoves[gActiveBattler] = MOVE_NONE;
@@ -4453,6 +4457,7 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
     u8 holdEffect;
     u8 side;
     s32 i;
+    u8 battler;
 
     if (gBattleMons[gActiveBattler].item == ITEM_ENIGMA_BERRY)
         holdEffect = gEnigmaBerries[gActiveBattler].holdEffect;
@@ -4461,48 +4466,63 @@ u8 IsRunningFromBattleImpossible(void) // equal to emerald is ability preventing
     gPotentialItemEffectBattler = gActiveBattler;
     if (holdEffect == HOLD_EFFECT_CAN_ALWAYS_RUN
      || (gBattleTypeFlags & BATTLE_TYPE_LINK)
-     || (GetBattlerAbility(gActiveBattler) == ABILITY_RUN_AWAY)
-     || (GetBattlerAbility(gActiveBattler) == ABILITY_AVIATOR)
-     || (GetBattlerAbility(gActiveBattler) == ABILITY_DEFEATIST
-         && gSpecialStatuses[gActiveBattler].defeatistActivated)
+     || (GetBattlerAbility(gActiveBattler) == ABILITY_RUN_AWAY) //
+     || (GetBattlerAbility(gActiveBattler) == ABILITY_AVIATOR) //
+     || (GetBattlerAbility(gActiveBattler) == ABILITY_DEFEATIST //
+         && gSpecialStatuses[gActiveBattler].defeatistActivated) //
      || holdEffect == HOLD_EFFECT_SHED_SHELL
      || (IS_BATTLE_TYPE_GHOST_WITHOUT_SCOPE(gBattleTypeFlags))) //added cuz issue created with adding shadow tag to gastly
         return BATTLE_RUN_SUCCESS;
     
-    side = GetBattlerSide(gActiveBattler);
+    /*side = GetBattlerSide(gActiveBattler);
     for (i = 0; i < gBattlersCount; ++i)
     {
-        if (side != GetBattlerSide(i)
+        if (/*side != GetBattlerSide(i)
+         && IsAbilityOnOpposingSide(i, ABILITY_SHADOW_TAG)
          && gBattleMons[i].ability == ABILITY_SHADOW_TAG //since shadow tag is like an exorcism talismon 
+            IsAbilityOnOpposingSide(i, ABILITY_SHADOW_TAG)
          && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST))//meant to keep spirits from escaping it makes sense for shadow tag
             // to still lock in ghost types
         {
-            gBattleScripting.battler = i;
-            gLastUsedAbility = gBattleMons[i].ability;
+            //gBattleScripting.battler = i;
+            gBattleScripting.battler = battler = IsAbilityOnOpposingSide(i, ABILITY_SHADOW_TAG);
+            //gLastUsedAbility = gBattleMons[i].ability;
+            gLastUsedAbility = gBattleMons[battler].ability;
             gBattleCommunication[MULTISTRING_CHOOSER] = 2;//shadow tag isn't an exorcism talisom based on translation its the ghost posessing your shadow, keeping you from moving
             return BATTLE_RUN_FAILURE;  //like seen in horror or movies ghost touching your shadow affects person, logic behind it not affecting ghost is I guess ghosts don't have shadows
         }
         if (side != GetBattlerSide(i)
-         /*&& gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
+         && gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
          && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
-         && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)*/
-         && IsBattlerGrounded(gActiveBattler)
-         && gBattleMons[i].ability == ABILITY_ARENA_TRAP) //need add grounded check for flying  vsonic
+         && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
+         && gBattleMons[i].ability == ABILITY_ARENA_TRAP
+         IsAbilityOnOpposingSide(i, ABILITY_ARENA_TRAP)
+         && IsBattlerGrounded(gActiveBattler)) //need add grounded check for flying  vsonic
         {
-            gBattleScripting.battler = i;
-            gLastUsedAbility = gBattleMons[i].ability;
+            //gBattleScripting.battler = i;
+            gBattleScripting.battler = battler = IsAbilityOnOpposingSide(i, ABILITY_ARENA_TRAP);
+            //gLastUsedAbility = gBattleMons[i].ability;
+            gLastUsedAbility = gBattleMons[battler].ability;
             gBattleCommunication[MULTISTRING_CHOOSER] = 2;
             return BATTLE_RUN_FAILURE;
         }
+    }*/
+    if (IsAbilityPreventingEscape(gActiveBattler)) //if works can remove i, and side
+    {
+        gBattleScripting.battler = battler = (IsAbilityPreventingEscape(gActiveBattler) - 1);
+        gLastUsedAbility = gBattleMons[battler].ability;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+        return BATTLE_RUN_FAILURE;
     }
-    i = AbilityBattleEffects(ABILITYEFFECT_CHECK_FIELD_EXCEPT_BATTLER, gActiveBattler, ABILITY_MAGNET_PULL, 0, 0);
+    /*i = AbilityBattleEffects(ABILITYEFFECT_CHECK_FIELD_EXCEPT_BATTLER, gActiveBattler, ABILITY_MAGNET_PULL, 0, 0);
     if (i != 0 && IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL))
     {
         gBattleScripting.battler = i - 1;
         gLastUsedAbility = gBattleMons[i - 1].ability;
         gBattleCommunication[MULTISTRING_CHOOSER] = 2;
         return BATTLE_RUN_FAILURE;
-    }//vsonic IMPORTANT do search, for status2_wrapped & wrappedby  implement new trap checks where it makes sense
+    }*/
+    //vsonic IMPORTANT do search, for status2_wrapped & wrappedby  implement new trap checks where it makes sense
     //similar to as below
     if (((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))//vsonic need add new trap status here
      || (gBattleMons[gActiveBattler].status4 & (ITS_A_TRAP_STATUS4)
@@ -4935,8 +4955,8 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
         speed *= 2;
     else if (ability == ABILITY_SLOW_START && gDisableStructs[battlerId].slowStartTimer != 0)
         speed /= 2; //so I ironically complete missed adding this...
-    else if (IsAbilityOnOpposingSide(battlerId, ABILITY_MAGNET_PULL) && IS_BATTLER_OF_TYPE(battlerId, TYPE_STEEL))
-        speed /= 2; //magnet pull buff
+    else if (IsAbilityPreventingEscape(battlerId))
+        speed = (speed * 67) / 100; //buff for all of category, magnet pull, arena trap, shadow tag  /equivalent to 1 stage drop
     //gen 9
     /*else if (ability == ABILITY_PROTOSYNTHESIS && gBattleWeather & WEATHER_SUN_ANY && highestStat == STAT_SPEED)
         speed = (speed * 150) / 100;
@@ -5525,10 +5545,10 @@ static void FreeResetData_ReturnToOvOrDoEvolutions(void) //  this causes end bat
     if (!gPaletteFade.active)
     { // Ok it wasn't that simple for some reason, so this leads to one function, which leads to another that actually does the palette fade that triggers the evo...
         ResetSpriteData();
-        if (gLeveledUpInBattle == 0 || gBattleOutcome != B_OUTCOME_WON) //0 is false anything but 0.
+        if (gLeveledUpInBattle == 0 || (gBattleOutcome != B_OUTCOME_WON  && gBattleOutcome != B_OUTCOME_CAUGHT)) //0 is false anything but 0. //ok this is reason for not evoling w exp on catch
             gBattleMainFunc = ReturnFromBattleToOverworld;
         else
-            gBattleMainFunc = TryEvolvePokemon;
+            gBattleMainFunc = TryEvolvePokemon; //hope works should allow evo if caught mon - works
         FreeAllWindowBuffers();
         if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
         {
@@ -5623,13 +5643,15 @@ void RunBattleScriptCommands(void)
         gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
 }
 
-#define CAN_ABILITY_ABSORB (gBattleMons[gActiveBattler].status1 == 0 && !(gBattleMons[gActiveBattler].status2 & STATUS2_CONFUSION))
+
 
 //not exactly sure when this function triggers?
 static void HandleAction_UseMove(void)
 {
-    u32 i, side, moveType, var = 4;
-    u16 moveTarget;
+    u32 i, side, moveType, argument;
+    u32 moveArgument = 0;
+    u32 var = 4; //previously defined wrong, because didn't know couldn't multi initialize and define the value in one line
+    u16 moveTarget; //changing that didn't fix anything, targetting still fails
 
     gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     if (*(&gBattleStruct->absentBattlerFlags) & gBitTable[gBattlerAttacker])
@@ -5643,6 +5665,7 @@ static void HandleAction_UseMove(void)
     gMoveResultFlags = 0;
     gMultiHitCounter = 0;
     gBattleCommunication[6] = 0;
+    gBattleScripting.savedMoveEffect = 0;
     gCurrMovePos = gChosenMovePos = *(gBattleStruct->chosenMovePositions + gBattlerAttacker);
     // choose move
     if (gProtectStructs[gBattlerAttacker].noValidMoves) //this is what makes it default to sturggle, bindedmove is none, it checks for moves and finds none
@@ -5688,18 +5711,31 @@ static void HandleAction_UseMove(void)
         gCurrentMove = gChosenMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos]; //so think need bind logic in else if above this block
         *(gBattleStruct->moveTarget + gBattlerAttacker) = GetMoveTarget(gCurrentMove, 0);
     }
+    else if (ShouldAbilityAbsorb(gBattleMons[gBattlerAttacker].moves[gCurrMovePos])) //tink need add extra condition? makae this else if, cehck for absorb ability on other side then go here, then put else with original condition
+    {
+        gCurrentMove = gChosenMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
+        *(gBattleStruct->moveTarget + gBattlerAttacker) = GetMoveTarget(gCurrentMove, TRUE);  //don't know if there are consequences but putting this her makes work?
+    } //just need to add dynamic type logic to getmovetarget, and  put argument logic below this
+    //using getmovetarget, does cause issue, it makes target swap work, but then for abilities that shouldn't be absorbed/retargetted, they get moved too
+    //ex I use electric move into lightning rod, mon, it gets pulled, then I use non electric move, and it still gets pulled next turn
     else
     {
         gCurrentMove = gChosenMove = gBattleMons[gBattlerAttacker].moves[gCurrMovePos];
-    }
-    if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
+    }//these last two, are relevant for absorb retargetting
+
+    if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER) //and add targetBattler adjust logic to rest of abilities in getmovetarget
         gBattleResults.lastUsedMovePlayer = gCurrentMove;
     else
         gBattleResults.lastUsedMoveOpponent = gCurrentMove;
 
     // Set dynamic move type.
     SetTypeBeforeUsingMove(gChosenMove, gBattlerAttacker);
-    GET_MOVE_TYPE(gChosenMove, moveType);
+    GET_MOVE_TYPE(gChosenMove, moveType); //need add argument type, for two type move
+
+    GET_MOVE_ARGUMENT(gChosenMove, argument);
+
+    if (gBattleMoves[gChosenMove].effect == EFFECT_TWO_TYPED_MOVE)
+        moveArgument = argument;
 
     moveTarget = GetBattlerMoveTargetType(gBattlerAttacker, gCurrentMove);
 
@@ -5710,7 +5746,7 @@ static void HandleAction_UseMove(void)
      && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gSideTimers[side].followmeTarget)
      && gBattleMons[gSideTimers[side].followmeTarget].hp != 0)
     {
-        gBattlerTarget = gSideTimers[side].followmeTarget;  
+        gBattlerTarget = gSideTimers[side].followmeTarget;  //think use gBattlerTarget = GetMoveTarget(gCurrentMove, TRUE); somewhere
     }
     else if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) //VSONIC think important can't remember what does need test, believe part of redirection?
           && gSideTimers[side].followmeTimer == 0
@@ -5734,19 +5770,19 @@ static void HandleAction_UseMove(void)
         for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
              if (side != GetBattlerSide(gActiveBattler) //I think I need to add status clause to below linses?
                 && *(gBattleStruct->moveTarget + gBattlerAttacker) != gActiveBattler
-                && ((GetBattlerAbility(gActiveBattler) == ABILITY_LIGHTNING_ROD && moveType == TYPE_ELECTRIC && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_VOLT_ABSORB && moveType == TYPE_ELECTRIC && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_MOTOR_DRIVE && moveType == TYPE_ELECTRIC && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_STORM_DRAIN && moveType == TYPE_WATER && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_WATER_ABSORB && moveType == TYPE_WATER && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_DRY_SKIN && moveType == TYPE_WATER && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_EROSION && moveType == TYPE_ROCK && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_JEWEL_METABOLISM && moveType == TYPE_ROCK && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_SAP_SIPPER && moveType == TYPE_GRASS && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_GLACIAL_ICE && moveType == TYPE_ICE && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_LAVA_FISSURE && moveType == TYPE_FIRE && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_FLASH_FIRE && moveType == TYPE_FIRE && CAN_ABILITY_ABSORB)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_GALEFORCE && gBattleMoves[gCurrentMove].flags & FLAG_WIND_MOVE && CAN_ABILITY_ABSORB))
+                && ((GetBattlerAbility(gActiveBattler) == ABILITY_LIGHTNING_ROD && moveType == TYPE_ELECTRIC && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_VOLT_ABSORB && moveType == TYPE_ELECTRIC && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_MOTOR_DRIVE && moveType == TYPE_ELECTRIC && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_STORM_DRAIN && moveType == TYPE_WATER && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_WATER_ABSORB && moveType == TYPE_WATER && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_DRY_SKIN && moveType == TYPE_WATER && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_EROSION && moveType == TYPE_ROCK && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_JEWEL_METABOLISM && moveType == TYPE_ROCK && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_SAP_SIPPER && moveType == TYPE_GRASS && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_GLACIAL_ICE && moveType == TYPE_ICE && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_LAVA_FISSURE && moveType == TYPE_FIRE && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_FLASH_FIRE && moveType == TYPE_FIRE && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_GALEFORCE && gBattleMoves[gCurrentMove].flags & FLAG_WIND_MOVE && CAN_ABILITY_ABSORB(gActiveBattler)))
                 && GetBattlerTurnOrderNum(gActiveBattler) < var
                 && gBattleMoves[gCurrentMove].effect != EFFECT_SNIPE_SHOT
                 && (GetBattlerAbility(gBattlerAttacker) != ABILITY_PROPELLER_TAIL
@@ -5794,7 +5830,7 @@ static void HandleAction_UseMove(void)
             gActiveBattler = gBattlerByTurnOrder[var];
             RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);
             //gSpecialStatuses[gActiveBattler].lightningRodRedirected = 1;  //idk why this sets this here, if its also set by getmovetarget in battle_util.c?
-            gBattlerTarget = gActiveBattler;
+            gBattlerTarget = gActiveBattler; //seems because they are used in different places, getmovetarget would rest target but it isn't used with lightning rod stuff here?
         }
     }
     else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
@@ -6199,7 +6235,7 @@ static void HandleAction_ActionFinished(void) //may be important for intimidate 
 {
     ++gCurrentTurnActionNumber;
     gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
-    SpecialStatusesClear(); //yeah the function call here is what resets intimidated mon status,
+    SpecialStatusesClear(); //yeah the function call here is what resets intimidated mon status, each turn
     gHitMarker &= ~(HITMARKER_DESTINYBOND | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_ATTACKSTRING_PRINTED 
                     | HITMARKER_NO_PPDEDUCT | HITMARKER_PASSIVE_DAMAGE
                     | HITMARKER_OBEYS | HITMARKER_WAKE_UP_CLEAR | HITMARKER_SYNCHRONIZE_EFFECT
@@ -6287,7 +6323,7 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
         }
     }
     //sets priority still need setup pass healing  to partner, also add partner mon is alive
-    else if ((GetBattlerAbility(battlerId) == ABILITY_OMNIPOTENT_AIDE) && CAN_ABILITY_ABSORB && IsBattlerAlive(BATTLE_PARTNER(battlerId)))
+    else if ((GetBattlerAbility(battlerId) == ABILITY_OMNIPOTENT_AIDE) && CAN_ABILITY_ABSORB(battlerId) && IsBattlerAlive(BATTLE_PARTNER(battlerId)))
     {
         switch (gBattleMoves[move].effect)
         {

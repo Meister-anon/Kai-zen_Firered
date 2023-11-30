@@ -484,9 +484,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
-        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT | FLAG_ROCK_HEAD_BOOST,
         .split = SPLIT_PHYSICAL,
-    },
+    },//since hit is with horn or beak i.e head
 
     [MOVE_HORN_DRILL] =
     {
@@ -776,7 +776,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
         .argument = MOVE_EFFECT_CONFUSION,
-    },//previously sonic boom
+    },//previously sonic boom / idk but doesn't seem to be setting confuse effect?
 
     [MOVE_DISABLE] =
     {
@@ -3070,7 +3070,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     .secondaryEffectChance = 0,
     .target = MOVE_TARGET_BOTH,
     .priority = 0,
-    .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+    .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_DMG_IN_AIR,
     .split = SPLIT_SPECIAL,
 },
 
@@ -3192,7 +3192,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_USER,
         .flags = FLAG_PROTECTION_MOVE,
         .split = SPLIT_STATUS,
-    },
+    },//still not working for some reason and need fix
 
     [MOVE_CHARM] =
     {
@@ -5781,7 +5781,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_DEPENDS,
+        .target = MOVE_TARGET_DEPENDS, //potentially look at this for figuring  set targetting for lightning rod
         .priority = 0,
         .split = SPLIT_PHYSICAL,
     },
@@ -7503,7 +7503,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_FLAME_BURST] =
     {
         .effect = EFFECT_FLAME_BURST,
-        .power = 70,
+        .power = 75,
         .type = TYPE_FIRE,
         .accuracy = 100,
         .pp = 15,
@@ -7512,6 +7512,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_BURN,
+        .argumentEffectChance = 10,
     },
 
     [MOVE_SLUDGE_WAVE] =
@@ -11578,7 +11580,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_STONE_AXE] =
     {
-        .effect = EFFECT_HIT, // EFFECT_STONE_AXE,
+        .effect = EFFECT_HIT, // EFFECT_STONE_AXE,  //is done in emerald can take
         .power = 65,
         .type = TYPE_ROCK,
         .accuracy = 90,
@@ -12153,7 +12155,7 @@ use wonder gaurd logic to determine its super effective
         .split = SPLIT_SPECIAL,
         .argument = TYPE_FLYING,
     },//Check flying type average stats, see if need to make this physical
-    //idea is user pushes themselves to the limit, and gives everything they have to perform an acrobatic feat
+    //idea is user pushes themselves to the limit, and gives everything they have to perform an acrobatic feat  /vsonic
 
     [MOVE_PLASMA_RAILGUN] =
     {

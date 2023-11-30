@@ -160,7 +160,7 @@ const u8 gMoveDescription_RockSlide[MOVE_DESCRIPTION_LENGTH + 5] = _("Large boul
 const u8 gMoveDescription_HyperFang[MOVE_DESCRIPTION_LENGTH + 5] = _("The foe is attacked\nwith sharp fangs.\nIt may make the\nfoe flinch.");
 const u8 gMoveDescription_Sharpen[MOVE_DESCRIPTION_LENGTH + 5] = _("The user reduces\nits polygon count\nto sharpen edges\nand raise ATTACK.");
 const u8 gMoveDescription_Conversion[MOVE_DESCRIPTION_LENGTH + 5] = _("The user changes\nits type to match\nthe type of one of\nits moves.");
-const u8 gMoveDescription_TriAttack[MOVE_DESCRIPTION_LENGTH + 5] = _("A simultaneous\n3-beam attack that\nmay paralyze, burn,\nor freeze the foe.");
+const u8 gMoveDescription_TriAttack[MOVE_DESCRIPTION_LENGTH + 5] = _("A simultaneous\n3-beam attack that\nmay paralyze, burn,\nor freeze the foe.\nSplit is based on\nhighest Attack stat.");
 const u8 gMoveDescription_SuperFang[MOVE_DESCRIPTION_LENGTH + 5] = _("The user attacks\nwith sharp fangs\nand halves the\nfoe's HP.");
 const u8 gMoveDescription_Slash[MOVE_DESCRIPTION_LENGTH + 5] = _("The foe is slashed\nwith claws, etc.\nIt has a high\ncritical-hit ratio.");
 const u8 gMoveDescription_Substitute[MOVE_DESCRIPTION_LENGTH + 5] = _("The user creates a\ndecoy using one-\nquarter of its full\nHP.");
@@ -300,7 +300,7 @@ const u8 gMoveDescription_FeatherDance[MOVE_DESCRIPTION_LENGTH + 5] = _("The foe
 const u8 gMoveDescription_TeeterDance[MOVE_DESCRIPTION_LENGTH + 5] = _("A wobbly dance\nthat confuses all\nthe POKéMON in\nbattle.");
 const u8 gMoveDescription_BlazeKick[MOVE_DESCRIPTION_LENGTH + 5] = _("A fiery kick with a\nhigh critical-hit\nratio. It may also\nburn the foe.");
 const u8 gMoveDescription_MudSport[MOVE_DESCRIPTION_LENGTH + 5] = _("Weakens ELECTRIC-\ntype attacks that\ntarget your side\nfor five turns.\nAnd raises SP. DEF\nfor GROUND-types.");
-const u8 gMoveDescription_WaterSport[MOVE_DESCRIPTION_LENGTH + 5] = _("Weakens FIRE-type\nattacks that target\nyour side for\nfive turns.\nAnd raises SPEED for\nGRASS-types.");
+const u8 gMoveDescription_WaterSport[MOVE_DESCRIPTION_LENGTH + 5] = _("Weakens FIRE-type\nattacks that target\nyour side for\nfive turns.\nAnd raises SPEED\nfor GRASS-types.");
 const u8 gMoveDescription_IceBall[MOVE_DESCRIPTION_LENGTH + 5] = _("A 5-turn rolling\nattack that becomes\nstronger each time\nit rolls.");
 const u8 gMoveDescription_NeedleArm[MOVE_DESCRIPTION_LENGTH + 5] = _("An attack using\nthorny arms.\nIt may make the\nfoe flinch.");
 const u8 gMoveDescription_SlackOff[MOVE_DESCRIPTION_LENGTH + 5] = _("The user slacks off\nand restores its HP\nby half its full\nHP.");
@@ -859,7 +859,7 @@ const u8 gMAT_BLOCKDescription
     [MOVE_DESCRIPTION_LENGTH + 5] = _("Evades damaging moves\nfor one turn.");
 
 const u8 gBELCHDescription 
-    [MOVE_DESCRIPTION_LENGTH + 5] = _("Lets out a loud belch.\nMust eat a Berry to use it.");
+    [MOVE_DESCRIPTION_LENGTH + 5] = _("The POKéMON\nlets out a\nloud belch.\nMust eat a Berry\nor hold Berry.\nto use it.");
 
 const u8 gROTOTILLERDescription 
     [MOVE_DESCRIPTION_LENGTH + 5] = _("Ups the Attack and Sp. Atk\nof Grass-type POKéMON.");
@@ -1436,7 +1436,7 @@ const u8 gEERIE_SPELLDescription
     [MOVE_DESCRIPTION_LENGTH + 5] = _("Attacks with psychic\npower.\nFoe's last move has\na varying amount\nof PP cut.");
 
 const u8 gMoveDescription_Cocoon 
-    [MOVE_DESCRIPTION_LENGTH + 5] = _("The PKMN wraps\nitself in silk etc.\nRaising its Defense\nand Sp Defense.");
+    [MOVE_DESCRIPTION_LENGTH + 5] = _("The PKMN wraps\nitself in silk etc.\nRaising its Defense\nand Sp Defense.\nBut lowering speed.");
 
 const u8 gMoveDescription_Monotype 
     [MOVE_DESCRIPTION_LENGTH + 5] = _("This move copies\nthe move last used\nby the foe, then\ndisappears.");

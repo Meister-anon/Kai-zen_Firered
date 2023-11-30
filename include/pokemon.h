@@ -434,6 +434,13 @@ struct Evolution
     u16 targetSpecies;
 };
 
+struct Breed
+{
+    u16 method;
+    u16 Malemonparam;
+    u16 targetSpecies;
+};
+
 struct FormChange {
     u16 method;
     u16 targetSpecies;

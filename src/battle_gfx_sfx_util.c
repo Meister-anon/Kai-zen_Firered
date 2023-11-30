@@ -1055,7 +1055,7 @@ bool32 ShouldPlayNormalPokeCry(struct Pokemon *mon)
     s16 hp, maxHP;
     s32 barLevel;
 
-    if (GetMonData(mon, MON_DATA_STATUS) & (STATUS1_ANY | STATUS1_TOXIC_COUNTER))
+    if (GetMonData(mon, MON_DATA_STATUS) & (STATUS1_ANY))
         return FALSE;
     hp = GetMonData(mon, MON_DATA_HP);
     maxHP = GetMonData(mon, MON_DATA_MAX_HP);

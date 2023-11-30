@@ -11,6 +11,7 @@
 #include "script.h"
 #include "strings.h"
 #include "task.h"
+#include "trainer_card.h"
 #include "constants/songs.h"
 #include "constants/field_weather.h"
 #include "constants/help_system.h"
@@ -466,8 +467,14 @@ void UpdatePokemonStorageSystemMonExp(void)
             struct BoxPokemon * checkingMon = GetBoxedMonPtr(boxId, boxPosition);
                 
             if (GetBoxMonData(checkingMon, MON_DATA_SPECIES) != SPECIES_NONE
-                && !GetBoxMonData(checkingMon, MON_DATA_IS_EGG))
-                BoxMonAtGainExp(checkingMon);
+                && !GetBoxMonData(checkingMon, MON_DATA_IS_EGG)
+                && CanBoxMonGainExp(checkingMon))
+                {
+                    //should mon gain exp (checkingMon) //for most part isn't an issue until safrom, the game is wide open then, so that's where I need the cap
+                    //just need cap not be higher than sabrina ace by much so, <= 6 badges level not greater than 41 I guess
+                    //if (CanBoxMonGainExp(checkingMon))
+                        BoxMonAtGainExp(checkingMon); //for level cap use num badges with mon level  /if (GetMonData(&dst, MON_DATA_LEVEL) <= 40)
+                }                
             else
                 continue;
             
@@ -475,6 +482,18 @@ void UpdatePokemonStorageSystemMonExp(void)
             
     }
     gSaveBlock1Ptr->oakRanchStepCounter = 0; //after give exp reset counter
+}
+
+u8 CanBoxMonGainExp(struct BoxPokemon *mon) //lvl cap works
+{
+    struct Pokemon dst;
+    BoxMonToMon(mon, &dst);
+    //if num badges <= 6 and mon level <= 41  yes else no
+    if (GetNumberofBadges() < 6
+    && (GetMonData(&dst, MON_DATA_LEVEL) < 41)) //should freeze box exp gain at lvl 41 until you get sabrina's badge
+        return TRUE;
+    else
+        return FALSE;
 }
 
 void LoadBoxSelectionPopupSpriteGfx(struct UnkPSSStruct_2002370 *a0, u16 tileTag, u16 palTag, u8 a3, bool32 loadPal)

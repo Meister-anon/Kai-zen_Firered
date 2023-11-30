@@ -196,6 +196,8 @@ s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, 
 //learned defined need be on one line, this should be logic for thawing i.e remove frozen status
 //removed fire fang restriction, any heat transafer is good enough
 
+u8 ShouldAbilityAbsorb(u16 move); //ATTEMPT workaroud for absorb abilty/lightning rod targetting
+
 bool32 TryRemoveScreens(u8 battler); //made non-static to use with brick break too
 
 bool32 TestMoveFlags(u16 move, u32 flag);

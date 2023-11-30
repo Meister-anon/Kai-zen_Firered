@@ -232,6 +232,9 @@ struct DisableStruct
     /*0x18*/ u8 unk18_a_2 : 2;
     /*0x18*/ u8 mimickedMoves : 4;
     /*0x19*/ u8 rechargeTimer;
+    u8 toxicTurn; //wit change to statusnig will need move aqua ring ingrain and toxic turn counters to differnet way
+    u8 ingrainTurn;
+    u8 aquaringTurn;
     u8 rageCounter;
     u8 autotomizeCount;
     u8 noRetreat : 1;
@@ -321,6 +324,10 @@ struct ProtectStruct
              u32 touchedProtectLike : 1;
              u32 obstructed : 1;
              u32 disableEjectPack : 1;
+             u16 forewarnedMove; //for storing move from forewarn ability
+             u8 forewarnDone : 1;  //to be set TRUE if predicted move was used by opponent, if not and enemy faints or switches, reactivate forewarn for next opponent 
+             u16 anticipatedMove;    //for storing move from anticipation ability
+             u8 anticipationDone : 1;// same as forwarn clause //also considering moveend & moveendtarget can prob do swithin repeat, by swapping battler and side w new abilityeffet clause?
              u16 fieldE;
 };
 
@@ -364,10 +371,6 @@ struct SpecialStatus    //pretty sure all values
     u8 physicalBattlerId;
     u8 specialBattlerId;
     u8 changedStatsBattlerId; // Battler that was responsible for the latest stat change. Can be self.
-    u16 forewarnedMove; //for storing move from forewarn ability
-    u8 forewarnDone : 1;  //to be set TRUE if predicted move was used by opponent, if not and enemy faints or switches, reactivate forewarn for next opponent 
-    u16 anticipatedMove;    //for storing move from anticipation ability
-    u8 anticipationDone : 1;// same as forwarn clause //also considering moveend & moveendtarget can prob do swithin repeat, by swapping battler and side w new abilityeffet clause?
     u8 parentalBondState : 2; // 0/1/2
     u8 multiHitOn : 1; //think is a state chech, seems most used with parental bond
     u8 firstFuturesightHits;
@@ -741,6 +744,18 @@ extern struct BattleStruct *gBattleStruct;
         typeArg = gBattleStruct->dynamicMoveType & DYNAMIC_TYPE_MASK;   \
     else                                                                \
         typeArg = gBattleMoves[move].type;                              \
+}
+
+//leave else set to 0, as first argument should always be true, 
+//so essentially just means if not two typed move,
+//in which case I don't want to read the argument as a type at all
+#define GET_MOVE_ARGUMENT(move, typeArg)                                   \
+{                                                                          \
+    if ((gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE)               \
+    && gBattleStruct->dynamicMoveType != 0xFF)                             \
+        typeArg = gBattleStruct->dynamicMoveType & DYNAMIC_TYPE_MASK;      \
+    else                                                                   \
+        typeArg = 0;                                                       \
 }
 
 //#define IS_TYPE_PHYSICAL(moveType)(moveType < TYPE_MYSTERY)

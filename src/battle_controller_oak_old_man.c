@@ -1897,7 +1897,7 @@ static void OakOldManHandleChoosePokemon(void)
 
     gBattleControllerData[gActiveBattler] = CreateTask(TaskDummy, 0xFF);
     gTasks[gBattleControllerData[gActiveBattler]].data[0] = gBattleBufferA[gActiveBattler][1] & 0xF;
-    *(&gBattleStruct->battlerPreventingSwitchout) = gBattleBufferA[gActiveBattler][1] >> 4;
+    *(&gBattleStruct->battlerPreventingSwitchout) = (IsAbilityPreventingEscape(gActiveBattler) - 1);
     *(&gBattleStruct->playerPartyIdx) = gBattleBufferA[gActiveBattler][2];
     //*(&gBattleStruct->abilityPreventingSwitchout) = gBattleBufferA[gActiveBattler][3];
     *(&gBattleStruct->abilityPreventingSwitchout) = (gBattleBufferA[gActiveBattler][3] & 0xFF) | (gBattleBufferA[gActiveBattler][7] << 8);  //u16 abilities

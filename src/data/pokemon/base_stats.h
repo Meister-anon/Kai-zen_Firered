@@ -1006,7 +1006,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SUN_DISK, ABILITY_SHADOW_TAG},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-    }, //give shadow ball
+    }, //give shadow ball , forgot I did this, this is horrifying
 
     [SPECIES_JIGGLYPUFF] =
     { 
@@ -1203,9 +1203,9 @@ const struct BaseStats gBaseStats[] =
          STATS(88, 95, 115, 30, 60, 88),
         .type1 = TYPE_BUG,  //think prefer grass for mushroom, as bug is dead the mushroom is the only thing left to be affected
         .type2 = TYPE_GHOST,    //changed back,its the body of a bug its abilities can represent the mushroom effect, plus type strength is about same
-        .catchRate = 75,
-        .expYield = 142,
-        //.evYield_Attack = 2,
+        .catchRate = 75,    //still waffling on this, bug grass have similar weaknesses, bug gets confusion immunity, but the bug is dead
+        .expYield = 142,    //grass gets the fairy immunity, and powder move immunity, which the mushroom would have
+        //.evYield_Attack = 2,      //think keeping bug grass it has more defense strength
         //.evYield_Defense = 1,
         //.item1 = ITEM_TINY_MUSHROOM,
         //.item2 = ITEM_BIG_MUSHROOM,
@@ -1279,7 +1279,7 @@ const struct BaseStats gBaseStats[] =
         .safariZoneFleeRate = 75,
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-    },
+    },  //tis thing is strong AF
 
     [SPECIES_DIGLETT] =
     { 
@@ -1597,6 +1597,7 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },//buffed hp as perma sleep,  buffing comatose w healing as mon can't rest think will attempt to set to have sleep status icon, no reason not to
+    //thought hp was too high, but it doesn't change that much when it evolves, so I guess its fine?
 
     [SPECIES_KADABRA] =
     { 
@@ -1732,7 +1733,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_GRASS,
         .abilities = {ABILITY_CHLOROPHYLL, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_GLUTTONY, ABILITY_NONE},
+            .abilityHidden = {ABILITY_GLUTTONY, ABILITY_NONE}, //replace gluttony with something else
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -3010,11 +3011,11 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_OBLIVIOUS, ABILITY_FOREWARN}, //replace oblivious w ABILITY_FEMME_FATALE
+            .abilities = {ABILITY_FEMME_FATALE, ABILITY_FOREWARN}, //replace oblivious w ABILITY_FEMME_FATALE
             .abilityHidden = {ABILITY_DRY_SKIN, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },
+    }, //need rebalance stats since ice is so much better defensively, oh nvm it was fine
 
     [SPECIES_ELECTABUZZ] =
     { 
@@ -3480,9 +3481,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_REFRIGERATE, ABILITY_NONE},
+        .abilities = {ABILITY_SNOW_WARNING, ABILITY_SNOW_WARNING},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_SNOW_CLOAK, ABILITY_SNOW_WARNING},
+            .abilityHidden = {ABILITY_EARLY_BIRD, ABILITY_REFRIGERATE},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
@@ -3503,7 +3504,8 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
+        .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_VOLT_ABSORB},
+        .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },//based on JPRPokeTrainer98 youtube vid replace pressure for most legendaries, keep for mewtwo 
@@ -3523,12 +3525,13 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
-        .abilityHidden = {ABILITY_FLAME_BODY, ABILITY_NONE},
+        .abilities = {ABILITY_RISING_PHOENIX, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
     },//new abilities based on JPRPokeTrainer98 youtube vid,  volcanic healing or pheonix or primal fire, fire type volt absorb but combine w flame body effect
-    //but with a higher chance to burn,  maybe call it primordial flame/fire  also works as a status cleanse/field cleanse
+    //but with a higher chance to burn,  maybe call it primordial flame/fire  also works as a status cleanse/field cleanse, make status cleanse not field cleanse
+    //hit by fire heals status effects  phoenixification ?  phoenix riser  riser phoenix? lol rising phoenix
 
     [SPECIES_DRATINI] =
     { 
@@ -5903,9 +5906,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_SLOW,
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        .abilities = {ABILITY_HI_PRESSURE, ABILITY_NONE},
+        .abilities = {ABILITY_REGENERATOR, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_REGENERATOR, ABILITY_NONE},
+            .abilityHidden = {ABILITY_RISING_PHOENIX, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
@@ -7736,11 +7739,11 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_BUG,
         //#if P_UPDATED_EGG_GROUPS >= GEN_8
             .eggGroup2 = EGG_GROUP_DRAGON,
-        .abilities = {ABILITY_HYPER_CUTTER, ABILITY_SAND_FORCE},
+        .abilities = {ABILITY_SAND_FORCE, ABILITY_SAND_RUSH},
         .abilityHidden = {ABILITY_SIROCCO, ABILITY_DRY_SKIN},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-    },
+    }, //because of bioligy give vibrava gastro acid  vsonic
 
     [SPECIES_FLYGON] =
     { 
@@ -8304,11 +8307,12 @@ const struct BaseStats gBaseStats[] =
     }, //found at night typically arodn urban areas as it feeds off negativity
     //pressure is good but think  I need, make value check to make sure it can't trigger twice in doubles in a turn
     //lowered odds to balance //I think I prefer illusion for this over pressure? but still need adjust pressure/hi-pressure
+    // - or not its not a field status its target based
 
     [SPECIES_BANETTE] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(64, 115, 65, 65, 93, 63),
+         STATS(64, 115, 65, 65, 83, 63),
         .type1 = TYPE_GHOST,
         .type2 = TYPE_DARK,
         .catchRate = 45,
@@ -8335,7 +8339,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(20, 40, 90, 25, 30, 90),
         .type1 = TYPE_GHOST,
-        .type2 = TYPE_DARK,
+        .type2 = TYPE_GHOST, //think want to keep full ghost so banette is more unique
         .catchRate = 190,
         .expYield = 59,
         //.evYield_SpDefense = 1,
@@ -8359,7 +8363,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(40, 70, 130, 25, 60, 130),
         .type1 = TYPE_GHOST,
-        .type2 = TYPE_DARK,
+        .type2 = TYPE_GHOST,
         .catchRate = 90,
         .expYield = 159,
         //.evYield_Defense = 1,
@@ -11136,7 +11140,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(55, 100, 135, 45, 65, 135),
         .type1 = TYPE_GHOST,
-        .type2 = TYPE_DARK,
+        .type2 = TYPE_DARK, //this keeps ghost dark,
         .catchRate = 45,
         .expYield = 236,
         //.evYield_Defense = 1,
@@ -11860,9 +11864,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_RUN_AWAY, ABILITY_KEEN_EYE},
+        .abilities = {ABILITY_ANTICIPATION, ABILITY_KEEN_EYE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_ANALYTIC, ABILITY_NONE},
+            .abilityHidden = {ABILITY_RUN_AWAY, ABILITY_CHEEK_POUCH},//cheek pouch, anticipation, inner focus is perfect, block crit and intimidate so counter part to lilipup
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -11890,9 +11894,9 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_STEADFAST, ABILITY_KEEN_EYE},
+        .abilities = {ABILITY_ANTICIPATION, ABILITY_ILLUMINATE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_ANALYTIC, ABILITY_NONE},
+            .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_CHEEK_POUCH}, //illuminate makes sense, hard to get rid of run away as its so good now
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
@@ -14495,7 +14499,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_DAMP, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-    },
+    }, //water with tentacruel
 
     [SPECIES_JELLICENT] =
     { 
@@ -15369,7 +15373,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_STURDY, ABILITY_JUSTIFIED},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-    },
+    }, //victory road
 
     [SPECIES_GOLURK] =
     { 
@@ -26229,7 +26233,7 @@ const struct BaseStats gBaseStats[] =
          STATS(
         90,
         85,
-        90,
+        75,
         90,
         100,
         125
@@ -26246,14 +26250,14 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
         //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_BERSERK, ABILITY_NONE},
+            .abilities = {ABILITY_DREAD_WING, ABILITY_NONE}, //more in line with theme, weakens opponents, with aura letting it do more physical/special dmg and take less physical dmg
        // #ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
         .flags = F_GALARIAN_FORM,
-    },
+    }, //lacks special dark moves, as they pretty much don't exist outside of its unique move
 
     [SPECIES_SLOWKING_GALARIAN] =
     { 

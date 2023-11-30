@@ -47,7 +47,7 @@
 
 
 #define sSWITCH_CASE (gBattleScripting + 0x2A)			//u8 switchCase; 1 byte 0x2a    // switchCase  used for red card special swith condition	//FORCED SWITCH?
-#define sBERRY_OVERRIDE	(gBattleScripting + 0x2B)		//u8 overrideBerryRequirements; 1 byte 0x2b  // overrideBerryRequirements
+#define sBERRY_OVERRIDE	(gBattleScripting + 0x2B)		//u8 overrideBerryRequirements; 1 byte 0x2b  // overrideBerryRequirements  //ok this seems to just mean don't consume berry???  
 #define sSTICKY_WEB_STAT_DROP (gBattleScripting + 0x2C) //u8 stickyWebStatDrop; 1 byte 0x2c  // overrideBerryRequirements
 #define sSAVED_DMG gBattleScripting + 0x2D				//s32 savedDmg; 4 byte 0x2d 0x2e 0x2f 0x30
 //#define sMON_CAUGHT     (gBattleScripting + 0x33) // monCaught NOT NEEDED, only used in emerald for succesful captures to incremennt game stat capture
