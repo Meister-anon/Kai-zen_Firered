@@ -1312,7 +1312,7 @@ static const u16 sFieldMoves[] =
 {
     MOVE_CUT, MOVE_FLY, MOVE_SURF, MOVE_STRENGTH, MOVE_FLASH, MOVE_ROCK_SMASH, MOVE_WATERFALL, MOVE_DIVE,
     MOVE_TELEPORT, MOVE_DIG, MOVE_MILK_DRINK, MOVE_SOFT_BOILED, MOVE_SWEET_SCENT, FIELD_MOVE_END // this may be misuse of enum. same in emerald
-};
+};//if add defog rock climb ensure add them to end of list just to not clutter hm menu setting
 
 static struct
 {

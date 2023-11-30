@@ -6516,6 +6516,13 @@ static const struct TrainerMonNoItemCustomMoves sTrainerMons_LeaderBlaine[] = {
         .species = SPECIES_GROWLITHE,
         .moves = {MOVE_BITE, MOVE_ROAR, MOVE_TAKE_DOWN, MOVE_FIRE_BLAST},
     },
+    /*{
+        .iv = 27,
+        .lvl =  39, //lower levl since first and harder than growlithe
+        //.heldItem = ITEM_HEAT_ROCK,  //plannedbut have to leave out for now, its not defined
+        .species = SPECIES_NINETALES,
+        .moves = {MOVE_FIRE_SPIN, MOVE_SHADOW_BALL, MOVE_GRUDGE, MOVE_FLAME_BURST}, //WANT tosue grudge  since its first mon, but over uses it, bad ai logic so replaced  hex
+    },*/
     {
         .iv = 27,
         .lvl = 40,
