@@ -4806,8 +4806,11 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) 
             return TRUE;
         }//weather extenders don't work with this, instead are used to set weather
 
-        else if (viaAbility && !(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1]))
-        && battlerAbility == (ABILITY_SUN_DISK || ABILITY_SQUALL || ABILITY_SNOW_WARNING || ABILITY_SAND_STREAM))
+        else if ((viaAbility && !(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))
+        && (battlerAbility == ABILITY_SUN_DISK 
+        || battlerAbility ==  ABILITY_SQUALL 
+        || battlerAbility ==  ABILITY_SNOW_WARNING 
+        || battlerAbility ==  ABILITY_SAND_STREAM))
         {
             gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]); //should set temp weather w timer 0
             //gWishFutureKnock.weatherDuration = 2; //changed mind will set to 2, / double changed mind, like it better with requiring item extender
