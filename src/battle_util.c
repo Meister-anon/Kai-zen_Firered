@@ -5421,7 +5421,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             *(&gBattleStruct->formToChangeInto) = effect - 1;// sandstorm effect is continuing oddly, before I change "while" I'm trying line up
                             // the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
                             }
-                        }
+                        }//need add string of messages scripts, somehwewre before this
                         
                     }
                 }

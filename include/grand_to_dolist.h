@@ -1658,7 +1658,11 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
     -box exp gain seems to be working perfectly, better than exected even, as I progress through the game all my mon are ending up around the same level,
     even ones I've caught later compared to noes had from teh start of the game.  no one is greatly outpaced.
     its perfect   - was close needed level cap for when map opened up more and player could explore, added that
-    /also plan add other level cap for new game plus
+    /also plan add other level cap for new game plus - need add lvl caps for gym leaders, as players could just run back and forth to over level
+    /least I think I need to do that?or should I just leave it, if they want to do that that's on them...
+
+    //found move learn issue, its on are you sure you want to forget move,
+    i.e confirm forget
 
     shadow tag not showing proper string data, check SetMonPreventsSwitchingString not sure if that is issue but look there first
     its showing wrnog battler with string i.e is showing my player mon (battler affected by ability) rather than the mon that used the ability
@@ -1695,7 +1699,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   SUBSTITUTE not completely working, it stops swapping after like 2 turns? not when it actually fades
 
   descovered issue with move learn,  after leave move selection for move to forget if Press A over no to forget move,
-  it glitches out, but works correctly if you press B. 
+  it glitches out, but works correctly if you press B. -fixed guesss I was tired, just missed writing a line correctly
 
   //think on move page, (or summary page in general) I want the pokemon's held item, icon to be displayed
   in top right corner, parallel to the pokeball, its just good useful info i think.

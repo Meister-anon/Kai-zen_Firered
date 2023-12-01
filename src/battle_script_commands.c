@@ -9533,8 +9533,8 @@ static void atk5A_yesnoboxlearnmove(void)
             if (gBattleCommunication[1] != 0) //if select no
             {
                 //gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1); //follow pointer
-                HandleBattleWindow(24, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
-                cmd->nextInstr;// don't jump don't forget move progress to next script
+                HandleBattleWindow(0x17, 0x8, 0x1D, 0xD, WINDOW_CLEAR);
+                gBattlescriptCurrInstr = cmd->nextInstr;// don't jump don't forget move progress to next script
             }
             else //move to next script if select yes
                 //gBattlescriptCurrInstr += 5;  won't to use pointer and learn move just need to continue in this case
