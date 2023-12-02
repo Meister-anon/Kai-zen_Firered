@@ -733,7 +733,7 @@ extern struct BattleStruct *gBattleStruct;
 
 #define F_DYNAMIC_TYPE_1 (1 << 6)
 #define F_DYNAMIC_TYPE_2 (1 << 7)
-#define DYNAMIC_TYPE_MASK (F_DYNAMIC_TYPE_1 - 1)
+#define DYNAMIC_TYPE_MASK (F_DYNAMIC_TYPE_1 - 1) //how does this work?
 
 //changing this as it is, doesn't work right with things that set 
 //type normal but aren't normal, since normal is type 0

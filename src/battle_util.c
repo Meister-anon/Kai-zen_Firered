@@ -4913,13 +4913,16 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
     u32 i, j, bestId, count;
     struct Forewarn *data = malloc(sizeof(struct Forewarn) * MAX_BATTLERS_COUNT * MAX_MON_MOVES);
     u8 moveType;
-    GET_MOVE_TYPE(gCurrentMove, moveType);
+    
 
     // Put all moves
     for (count = 0, i = 0; i < MAX_BATTLERS_COUNT; i++)
     {
-        if (IsBattlerAlive(i) && GetBattlerSide(i) != GetBattlerSide(battler))  //battler is me, i is opponent
+        if (IsBattlerAlive(i) && GetBattlerSide(i) != GetBattlerSide(battler))  //battler is mon w forewarn, i is opponent
         {
+            SetTypeBeforeUsingMove(gCurrentMove, i); //put here as thinik need w my change to get_move_type to make calc work
+            GET_MOVE_TYPE(gCurrentMove, moveType);
+
             for (j = 0; j < MAX_MON_MOVES; j++)
             {
                 if (gBattleMons[i].moves[j] == MOVE_NONE)
@@ -4937,10 +4940,11 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
                         data[count].power = 0;
                     break;
                 case EFFECT_EXPLOSION:
-                    if (CalcTypeEffectivenessMultiplier(data[count].moveId, moveType, battler, i, FALSE) > UQ_4_12(0.0))
+                    if (CalcTypeEffectivenessMultiplier(data[count].moveId, moveType, battler, i, FALSE) != UQ_4_12(0.0))
                         data[count].power = 200;
                     else
                         data[count].power = 0;
+                    break;
                 case EFFECT_COUNTER:
                 case EFFECT_MIRROR_COAT:
                 case EFFECT_METAL_BURST:
@@ -4951,6 +4955,7 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
                         data[count].power = 110;
                     else if (gBattleMons[count].hp <= (gBattleMons[count].maxHP / 2))
                         data[count].power = 100;
+                    break;
                 default:
                     if (gBattleMoves[data[count].moveId].power == 1)
                         data[count].power = 80;
@@ -5123,6 +5128,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             gLastUsedAbility = special;
         else
             gLastUsedAbility = GetBattlerAbility(battler); //this is what was needed for neutralizing gas to work
+        
+        if (gBattlerAttacker >= gBattlersCount)// this line makes it switch in I think?
+                gBattlerAttacker = battler;
+        
         if (!moveArg)
             moveArg = gCurrentMove;
         GET_MOVE_TYPE(moveArg, moveType);
@@ -5132,8 +5141,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         switch (caseID)
         {
         case ABILITYEFFECT_ON_SWITCHIN: // 0
-            if (gBattlerAttacker >= gBattlersCount)// this line makes it switch in I think?
-                gBattlerAttacker = battler;
+            /*if (gBattlerAttacker >= gBattlersCount)// this line makes it switch in I think?
+                gBattlerAttacker = battler;*/  //this was issue in forewarn text
+                gBattleScripting.battler = battler; //swapped for emerald line
             switch (gLastUsedAbility) //guessing but I think...that each abiltiy switch case is based off the ability getting logged in glastusedability 
             {
             case ABILITYEFFECT_SWITCH_IN_WEATHER:
@@ -5802,28 +5812,41 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (!gSpecialStatuses[battler].switchInAbilityDone)//will have to make cases for these 2, in same place as effect spore, decids a move on switchin,
                 {                                                   //nulls the move if hit by it, or can put in atk canceller, check target switchInAbilityDone, and if currentmove matches ability prediction
                     ForewarnChooseMove(battler);    //for switchin battler is gBattlerAttacker
+                    if (GetBattlerSide(battler) == B_SIDE_PLAYER)
+                    {
+                        PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_PLAYER_FOREWARN); //to the
+                        PREPARE_STRING_BUFFER(gBattleTextBuff3, STRINGID_PLAYER_ALERT); //alerted
+                    }                        
+                    if (GetBattlerSide(battler) != B_SIDE_PLAYER)
+                    {
+                        PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_ENEMY_FOREAWRN); //to
+                        PREPARE_STRING_BUFFER(gBattleTextBuff3, SRINGID_ENEMY_ALERT); //alerted the
+                    }                        
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FOREWARN;
                     gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                     ++effect;
-                }
-                break;
+                }//for some reason use of battler her is what's causing issue, if this is wron gthey may all be wrong, so look into how battler is different from EE
+                break; //other things use the same setup but the script works fine, looking further 
             case ABILITY_ANTICIPATION:  //working on change
                 if (!gSpecialStatuses[battler].switchInAbilityDone)
                 {
                     u32 side = GetBattlerSide(battler);
-
-                    for (i = 0; i < MAX_BATTLERS_COUNT; i++)    //side is me, i is oppononent/target
+                    
+                    
+                    for (i = 0; i < MAX_BATTLERS_COUNT; i++)    //side is mon w anticipation, i is oppononent/target
                     {
                         if (IsBattlerAlive(i) && side != GetBattlerSide(i))//effect is not accurate, anticipation checked for ohko effects and explosion/selfdestruct in gen4
                         {
                             for (j = 0; j < MAX_MON_MOVES; j++)
                             {
                                 move = gBattleMons[i].moves[j];
-                                GET_MOVE_TYPE(move, moveType);
+                                SetTypeBeforeUsingMove(move, i); //usign this fixed it
+                                GET_MOVE_TYPE(move, moveType); //problem seems to be movetype it isn't calcing correctly
+
                                 if (gBattleMoves[move].effect == EFFECT_EXPLOSION //setup multiplier calc think can just use multipier check here.
-                                    && CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) != UQ_4_12(0.0))
-                                {
+                                    && CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) != UQ_4_12(0.0)) //isue is modifier for some reason doesnt work above 1?
+                                {               //ist onlyh returning a value of 1
                                     
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_EXPLOSION);
                                     ++effect;                                    
@@ -5844,8 +5867,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                     ++effect;//
                                     break;
                                 }//if find super effectivemove, increment effect and break for loop, to lock in move/
-                            }//can only return one value, so will need to do an if else based on priority
+                            }//can only return one value, so will need to do an if else based on priority                            
                         }
+                        if (effect)
+                                break;
                     }
 
                     if (effect)//if ability activates  i.e effect not 0
@@ -11078,7 +11103,10 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
         mod = UQ_4_12(1.0);
     else if ((moveType == TYPE_ELECTRIC) && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(1.55))
         mod = UQ_4_12(1.0);
-        
+    /*else if ((moveType == TYPE_ICE) && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(1.55))
+        mod = UQ_4_12(1.0); *///to slightly weaken ice, and because it matches same logic as electric, more dangerous because flying?
+        //perhaps not, seems cold kills birds outright regardless of flying, which is why they migrate
+
     //ability logic
     else if (GetBattlerAbility(battlerAtk) == ABILITY_NORMALIZE)
     {

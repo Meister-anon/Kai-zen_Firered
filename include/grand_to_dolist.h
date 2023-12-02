@@ -1724,10 +1724,11 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  -remember need fix thunder wave not working on electric types, display 
  -used callif, and fixed works now
 
- -ok anticipation now working right? somehow sabrina alakazaam read an explosion move from my hitmonchan?
+ -ok anticipation not working right? somehow sabrina alakazaam read an explosion move from my hitmonchan?
+ -believe fixed anticipation and forewarn messagoing still to do ffect
 
  -considered cutting all recovery effects, seems like I do, bulk is increased, healing is too strong
- lower half health heal to 1/3rd
+ lower half health heal to 1/3rd, for pure recovery moves
 
  -upgrade move belch, (pretty sure I haven't set it up yet either)
  -move only works after has used a berry, change effect so that if haven't used a berry
