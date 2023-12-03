@@ -95,7 +95,7 @@ static void PutMonIconOnLvlUpBox(void);
 static void PutLevelAndGenderOnLvlUpBox(void);
 static bool32 HasAttackerFaintedTarget(void);
 static void HandleTerrainMove(u32 moveEffect);
-static void RecalcBattlerStats(u32 battler, struct Pokemon *mon);
+//static void RecalcBattlerStats(u32 battler, struct Pokemon *mon);  old setup can use emerald version non static now
 static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon);
 static void SetDmgHazardsBattlescript(u8 battlerId, u8 multistringId);
 //since its not static
@@ -1448,29 +1448,34 @@ static void atk00_attackcanceler(void) //vsonic
 
     //need to fill in condition more - DONE 
     //effects are done, need test but should work, what's missing is the reactivation condition, for if it wasn't triggered on previous battler
-    //oh wait I think I can do that like intimidate, like the reset intimmidate stuff in the faintmon battlescript
+    //oh wait I think I can do that like intimidate, like the reset intimmidate stuff in zthe faintmon battlescript
     //just need to make it only do that if forwarn/anticipate not done. check targetting but I think should be simple.
-    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_FOREWARN
-        && (gCurrentMove == gProtectStructs[gBattlerTarget].forewarnedMove) //can't use special status for this as it gets cleared each turn
-        && !gProtectStructs[gBattlerTarget].forewarnDone)
+    if (GetBattlerAbility(gBattlerTarget) == ABILITY_FOREWARN
+        && (gCurrentMove == gProtectStructs[gForewarnedBattler].forewarnedMove) //can't use special status for this as it gets cleared each turn
+        && !(gProtectStructs[gForewarnedBattler].forewarnDone)) //trying to fix forewarn  anticipate effect unsure what right battler value is etc.
+        
+    //if (!(gProtectStructs[gForewarnedBattler].forewarnDone))
     {
-        gProtectStructs[gBattlerTarget].forewarnDone = TRUE;
-        gMoveResultFlags |= MOVE_RESULT_MISSED;
+        gProtectStructs[gForewarnedBattler].forewarnDone = TRUE; //using forewarn battler fixes who gets effect but doesn't make it end, also still need one for forewarn user
+        //gProtectStructs[gBattlerAttacker].forewarnedMove = 0;
+        gMoveResultFlags |= MOVE_RESULT_MISSED;     //in case of two mon w forewarn
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0;
-        gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG;
-        ++gBattlescriptCurrInstr;
+        gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG; //check target matches forewarn user
+        //return;
+        //++gBattlescriptCurrInstr;
     }
     else if (GetBattlerAbility(gBattlerTarget) == ABILITY_ANTICIPATION
         && (gCurrentMove == gProtectStructs[gBattlerTarget].anticipatedMove)
-        && !gProtectStructs[gBattlerTarget].anticipationDone)
+        && !gProtectStructs[gBattlerAttacker].anticipationDone)
     {
         gProtectStructs[gBattlerTarget].anticipationDone = TRUE;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
         gLastLandedMoves[gBattlerTarget] = 0;
         gLastHitByType[gBattlerTarget] = 0;
         gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG;
-        ++gBattlescriptCurrInstr;
+        return;
+        //++gBattlescriptCurrInstr;
     }
 
     for (i = 0; i < gBattlersCount; ++i)
@@ -10562,7 +10567,7 @@ static void HandleTerrainMove(u32 moveEffect)
     }
 }
 
-
+/*
 static void RecalcBattlerStats(u32 battler, struct Pokemon *mon)
 {
     CalculateMonStats(mon);
@@ -10577,7 +10582,7 @@ static void RecalcBattlerStats(u32 battler, struct Pokemon *mon)
     gBattleMons[battler].ability = GetMonAbility(mon);
     gBattleMons[battler].type1 = gBaseStats[gBattleMons[battler].species].type1;
     gBattleMons[battler].type2 = gBaseStats[gBattleMons[battler].species].type2;
-}
+} */  //old version emerald version does same thing, just separated out to be more flexible
 
 static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon)
 {
@@ -10602,6 +10607,36 @@ static void TransformRecalcBattlerStats(u32 battler, struct Pokemon *mon)
     gBattleMons[battler].type2 = gBaseStats[gBattleMons[gBattlerTarget].species].type2;
     //set type 3 in function after this  function is used
 }
+
+//dif between new form change and my transform logic, keep above function for those use these for otheress
+void RecalcBattlerStats(u32 battler, struct Pokemon *mon)
+{
+    CalculateMonStats(mon);
+    CopyMonLevelAndBaseStatsToBattleMon(battler, mon);
+    CopyMonAbilityAndTypesToBattleMon(battler, mon);
+}
+
+void CopyMonLevelAndBaseStatsToBattleMon(u32 battler, struct Pokemon *mon)
+{
+    gBattleMons[battler].level = GetMonData(mon, MON_DATA_LEVEL);
+    gBattleMons[battler].hp = GetMonData(mon, MON_DATA_HP);
+    gBattleMons[battler].maxHP = GetMonData(mon, MON_DATA_MAX_HP);
+    gBattleMons[battler].attack = GetMonData(mon, MON_DATA_ATK);
+    gBattleMons[battler].defense = GetMonData(mon, MON_DATA_DEF);
+    gBattleMons[battler].speed = GetMonData(mon, MON_DATA_SPEED);
+    gBattleMons[battler].spAttack = GetMonData(mon, MON_DATA_SPATK);
+    gBattleMons[battler].spDefense = GetMonData(mon, MON_DATA_SPDEF);
+}
+
+void CopyMonAbilityAndTypesToBattleMon(u32 battler, struct Pokemon *mon)
+{
+    gBattleMons[battler].ability = GetMonAbility(mon);
+    gBattleMons[battler].type1 = gBaseStats[gBattleMons[battler].species].type1;
+    gBattleMons[battler].type2 = gBaseStats[gBattleMons[battler].species].type2;
+    //gBattleMons[battler].type3 = TYPE_MYSTERY;  not adding that as will cause issue with other stuff, if change type 3
+    //type3 will be someting mon not normally able to control themselves
+}
+
 
 u32 GetHighestStatId(u32 battlerId)
 {
@@ -12212,7 +12247,7 @@ static void atk76_various(void) //will need to add all these emerald various com
             && CalculateEnemyPartyCount() > 1)
         {
             PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerAttacker].species);
-            gBattleStruct->changedSpecies[gBattlerPartyIndexes[gBattlerAttacker]] = gBattleMons[gBattlerAttacker].species;
+            gBattleStruct->changedSpecies[GET_BATTLER_SIDE2(gBattlerAttacker)][gBattlerPartyIndexes[gBattlerAttacker]] = gBattleMons[gBattlerAttacker].species;
             gBattleMons[gBattlerAttacker].species = SPECIES_GRENINJA_ASH;
             BattleScriptPushCursor();
             gBattlescriptCurrInstr = BattleScript_BattleBondActivatesOnMoveEndAttacker;
@@ -16700,6 +16735,7 @@ static void atkEF_handleballthrow(void) //important changed
         {
             u32 odds;
             u8 catchRate;
+            u16 targetSpecies = GetFormChangeTargetSpecies(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], FORM_CHANGE_END_BATTLE, 0);
 
             if (gLastUsedItem == ITEM_SAFARI_BALL)
                 catchRate = gBattleStruct->safariCatchFactor * 1275 / 100;
@@ -16794,6 +16830,7 @@ static void atkEF_handleballthrow(void) //important changed
                 && gBattleResults.playerMonWasDamaged == TRUE) // mon caught  //successful capture
             {
                 BtlController_EmitBallThrowAnim(0, BALL_3_SHAKES_SUCCESS);
+                TryBattleFormChange(gBattlerTarget, FORM_CHANGE_END_BATTLE);
                 MarkBattlerForControllerExec(gActiveBattler);
                 gBattlescriptCurrInstr = BattleScript_ExpOnCatch;
                 SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_POKEBALL, &gLastUsedItem);
@@ -16805,6 +16842,7 @@ static void atkEF_handleballthrow(void) //important changed
             else if ((odds > 254) || (gLastUsedItem == ITEM_MASTER_BALL)) // mon caught  //successful capture
             {
                 BtlController_EmitBallThrowAnim(0, BALL_3_SHAKES_SUCCESS);
+                TryBattleFormChange(gBattlerTarget, FORM_CHANGE_END_BATTLE);
                 MarkBattlerForControllerExec(gActiveBattler);
                 gBattlescriptCurrInstr = BattleScript_SuccessBallThrow;
                 SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_POKEBALL, &gLastUsedItem);
@@ -16816,7 +16854,8 @@ static void atkEF_handleballthrow(void) //important changed
             else // mon may be caught, calculate shakes
             {
                 u8 shakes;
-
+                
+        
                 odds = Sqrt(Sqrt(16711680 / odds));
                 odds = 1048560 / odds;
                 for (shakes = 0; shakes < 4 && Random() < odds; ++shakes);
@@ -16827,6 +16866,7 @@ static void atkEF_handleballthrow(void) //important changed
                 if (shakes == BALL_3_SHAKES_SUCCESS && gBattleResults.playerMonWasDamaged == TRUE) // mon caught, copy of the code above
                 {
                     BtlController_EmitBallThrowAnim(0, BALL_3_SHAKES_SUCCESS);
+                    TryBattleFormChange(gBattlerTarget, FORM_CHANGE_END_BATTLE);
                     MarkBattlerForControllerExec(gActiveBattler);
                     gBattlescriptCurrInstr = BattleScript_ExpOnCatch;
                     SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_POKEBALL, &gLastUsedItem);
@@ -16838,6 +16878,7 @@ static void atkEF_handleballthrow(void) //important changed
                 else if (shakes == BALL_3_SHAKES_SUCCESS) // mon caught, copy of the code above
                 {
                     BtlController_EmitBallThrowAnim(0, BALL_3_SHAKES_SUCCESS);
+                    TryBattleFormChange(gBattlerTarget, FORM_CHANGE_END_BATTLE);  //form change fix for mon caught i.e disguise etc.
                     MarkBattlerForControllerExec(gActiveBattler);
                     gBattlescriptCurrInstr = BattleScript_SuccessBallThrow;
                     SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_POKEBALL, &gLastUsedItem);
@@ -17485,8 +17526,9 @@ bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move) //plan add 
         || gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED
         //|| gBattleMoves[move].power == 0
         || IS_MOVE_STATUS(move)
-        || gHitMarker & HITMARKER_IGNORE_DISGUISE)
-        return FALSE;
+        || gHitMarker & HITMARKER_IGNORE_DISGUISE
+        || gProtectStructs[battlerAtk].confusionSelfDmg) //should allow conufusion dmg through without breaking form -works, just makes more sense, 
+        return FALSE; //its not the same as substitute where its a different object, disguise is part of the mon
     else
         return TRUE;
 } //seems this is main logic for ability effect

@@ -2713,13 +2713,13 @@
 #define HOENN_DEX_COUNT 396
 
 // species flags
-#define F_ULTRA_BEAST   (1 << 0)
-#define F_ALOLAN_FORM   (1 << 1)
+#define F_ULTRA_BEAST   (1 << 0) //need for beast ball
+#define F_ALOLAN_FORM   (1 << 1) //need for form change/breeding
 #define F_GALARIAN_FORM (1 << 2)
 #define F_HISUIAN_FORM  (1 << 3)
 #define F_CEFIRIAN_FORM (1 << 4)	//For pokemon opal Cefira region forms
-#define F_MEGA_FORM     (1 << 5)	//to denote mega? may not need, idk
-#define SPECIES_LEGEND_MYSTIC (1 << 6)
+#define F_MEGA_FORM     (1 << 5)	//to denote mega? may not need, idk, ned for EE funtions
+#define SPECIES_FLAG_PRIMAL_REVERSION (1 << 6)  //replaced
 #define SPECIES_FLAG_GENDER_DIFFERENCE (1 << 7)	//only for basculegion
 #define FLAG_ALL_PERFECT_IVS    (1 << 8) //use for giving special mon bug psuedo gym etc. (think use for fighting gym too, special mon trained for fighting sabrina)
 #endif  // GUARD_CONSTANTS_SPECIES_H

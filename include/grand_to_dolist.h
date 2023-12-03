@@ -1768,7 +1768,16 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   fixed issue with weather abilities, added belly drum for electabuzz, added level cap for box exp gain
   -realied planned effects for forewarn and anticipation are essentially disguise. 
-  so look at that and make work based on that.
+  so look at that and make work based on that.+
+
+  working on forewarn anticipate, found disguise glitch,
+  cause is depracated form change setup, need to replace w EE version
+
+  also discovered issue with new moltres ability not working,
+  pretty sure problem is battle_util.c lpogic overlap
+  issue only comes up with contact moves
+
+  as part of update for form chnage, need add F_MEGA_FORM to mon in bsae stats, flag was set but never assigned
 
   ok so its really simple, effect is just in atk0B_healthbarupdate & atk0C_datahpupdate
   -simply prevent health and hp data from being updated on hit,

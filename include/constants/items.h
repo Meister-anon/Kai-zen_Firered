@@ -434,7 +434,7 @@
 #define ITEM_TM_CASE 364
 #define ITEM_BERRY_POUCH 365
 #define ITEM_TEACHY_TV 366
-#define ITEM_LINK_KEY 367 //NEW IDEA make key item call link key, trade evos can level up evolve long as yuo have this item
+#define ITEM_LINK_KEY 367 //NEW IDEA make key item call link key, trade evos can level up evolve long as yuo have this item //remove later don' tneed
 #define ITEM_TRI_PASS 368 //  AND they meet whatever other condition they have
 #define ITEM_RAINBOW_PASS 369
 #define ITEM_TEA 370
@@ -454,8 +454,8 @@
 #define ITEM_DUBIOUS_DISC 382
 #define ITEM_REAPER_CLOTH 383
 #define ITEM_METAL_COAT 384
-//#define ITEM_LINK_CABLE 383 	
-/*#define ITEM_ABOMASITE 384	
+//#define ITEM_LINK_CABLE 383 	// not gonna need this, if can just make use whatever item I want
+
 #define ITEM_ABOMASITE 385
 #define ITEM_ABSOLITE 386
 #define ITEM_AERODACTYLITE 399
@@ -506,6 +506,7 @@
 //K looks like it doesn't matter where I put it except the use items,
 // because effects and bag placement are set in the items.h file.
 #define ITEM_MEGA_BRACELET 444 // should move set as key item.
+/*
 //More hold items
 // Z Crystals
 #define ITEM_Z_RING                   568
@@ -594,10 +595,10 @@
 #define ITEM_GRASSY_SEED 312*/
 //END of 2nd set of Use items
 // Incenses
-#define ITEM_SEA_INCENSE 385 
-#define ITEM_LAX_INCENSE 386
-#define ITEM_BLACK_SLUDGE 387
-#define ITEM_BAD_ONION 388 //  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
+#define ITEM_SEA_INCENSE 445//385 
+#define ITEM_LAX_INCENSE 446
+#define ITEM_BLACK_SLUDGE 447
+#define ITEM_BAD_ONION 448 //  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
 /*#define ITEM_ODD_INCENSE 386
 #define ITEM_ROCK_INCENSE 387
 #define ITEM_FULL_INCENSE 388
@@ -675,7 +676,7 @@
 #define ITEM_ADAMANT_ORB
 #define ITEM_LUSTROUS_ORB
 #define ITEM_GRISEOUS_ORB */
-#define ITEM_N_A 389 // keep this as last item value, needs be +1 last defined item value   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
+#define ITEM_N_A 449 // keep this as last item value, needs be +1 last defined item value   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
 #define ITEMS_COUNT ITEM_N_A +1
 #define ITEM_FIELD_ARROW ITEM_N_A//field arrow isn't defined as an item, it just end of item_menu_icons.c list
 // Emerald   BUT based on list from vanilla its actually ID was equal to items N_A, circumventing that equation.

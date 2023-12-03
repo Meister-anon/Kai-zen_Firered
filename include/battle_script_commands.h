@@ -44,6 +44,11 @@ s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, u32 move);
 bool8 CanMultiTask(u16 move);
 bool8 DoesTargetAbilityBlockCrit(u8 Targetbattler);
 
+//EE function for recalc stats this used in place of transform logic for recalcs outside of transform and ditto
+void RecalcBattlerStats(u32 battler, struct Pokemon *mon);
+void CopyMonLevelAndBaseStatsToBattleMon(u32 battler, struct Pokemon *mon);
+void CopyMonAbilityAndTypesToBattleMon(u32 battler, struct Pokemon *mon);
+
 s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags);
 
 extern const u16 gCriticalHitChance[];	//made global, so can run in ai file

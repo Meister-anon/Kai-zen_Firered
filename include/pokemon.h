@@ -446,6 +446,7 @@ struct FormChange {
     u16 targetSpecies;
     u16 param1;
     u16 param2;
+    u16 param3; //new adition from emerald logic
 }; //may change based on how I use forms
 
 #define EVOS_PER_MON 16 // set to 16 in case I need the shedinja byte change fix
@@ -468,6 +469,8 @@ extern const u8 gFacilityClassToTrainerClass[];
 extern const struct SpriteTemplate gSpriteTemplates_Battlers[];
 extern const u8 gPPUpGetMask[];
 extern const u16 *const gFormSpeciesIdTables[NUM_SPECIES];
+extern const struct FormChange *const gFormChangeTablePointers[NUM_SPECIES];
+
 
 void ZeroBoxMonData(struct BoxPokemon *boxMon);
 void ZeroMonData(struct Pokemon *mon);
@@ -497,6 +500,13 @@ u16 MonTryLearningEvoMove(struct Pokemon *mon, bool8 firstMove); //changing to u
 void DeleteFirstMoveAndGiveMoveToMon(struct Pokemon *mon, u16 move);
 s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *defender, u32 move, u32 sideStatus, u16 powerOverride, u8 typeOverride, u8 battlerIdAtk, u8 battlerIdDef);
 //sidestatus meant to hold gsidestatus but forgot I had to upgrade that to u32 *facepalm
+
+//recent emerald addditions, change for form change (not planning use for ditto/transform)
+void TryToSetBattleFormChangeMoves(struct Pokemon *mon, u16 method);
+bool32 TryFormChange(u32 monId, u32 side, u16 method);
+u16 GetFormChangeTargetSpecies(struct Pokemon *mon, u16 method, u32 arg);
+u16 GetFormChangeTargetSpeciesBoxMon(struct BoxPokemon *boxMon, u16 method, u32 arg);
+bool32 DoesSpeciesHaveFormChangeMethod(u16 species, u16 method);
 
 #define BATTLE_ALIVE_EXCEPT_ACTIVE  0
 #define BATTLE_ALIVE_ATK_SIDE       1

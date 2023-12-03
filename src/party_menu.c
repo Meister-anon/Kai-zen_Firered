@@ -59,6 +59,7 @@
 #include "union_room.h"
 #include "constants/battle.h"
 #include "constants/battle_move_effects.h"
+#include "constants/form_change_types.h"
 #include "constants/easy_chat.h"
 #include "constants/field_effects.h"
 #include "constants/item_effects.h"
@@ -5009,6 +5010,18 @@ bool8 MonKnowsMove(struct Pokemon *mon, u16 move)
     for (i = 0; i < MAX_MON_MOVES; ++i)
     {
         if (GetMonData(mon, MON_DATA_MOVE1 + i) == move)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+bool8 BoxMonKnowsMove(struct BoxPokemon *boxMon, u16 move)  //from EE
+{
+    u8 i;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (GetBoxMonData(boxMon, MON_DATA_MOVE1 + i) == move)
             return TRUE;
     }
     return FALSE;

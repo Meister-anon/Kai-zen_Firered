@@ -134,7 +134,7 @@ u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId);
 u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId);
 u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16 moveId3, u16 moveId4);
 bool32 CanMegaEvolve(u8 battlerId);
-void UndoMegaEvolution(u32 monId);
+//void UndoMegaEvolution(u32 monId);  no longer used
 bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 toxicSpikes);
 void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut);
 bool32 DoBattlersShareType(u32 battler1, u32 battler2);
@@ -201,6 +201,14 @@ u8 ShouldAbilityAbsorb(u16 move); //ATTEMPT workaroud for absorb abilty/lightnin
 bool32 TryRemoveScreens(u8 battler); //made non-static to use with brick break too
 
 bool32 TestMoveFlags(u16 move, u32 flag);
+
+//added from EE for form change update (not planning to use for transform/ditto)
+bool32 TryBattleFormChange(u8 battlerId, u16 method); //actualy doesn't work on transformed mon, just returns false
+bool32 DoesSpeciesUseHoldItemToChangeForm(u16 species, u16 heldItemId);
+bool32 CanBattlerFormChange(u8 battlerId, u16 method);
+u16 GetBattleFormChangeTargetSpecies(u8 battlerId, u16 method);
+bool32 IsBattlerMegaEvolved(u8 battlerId);
+bool32 IsBattlerPrimalReverted(u8 battlerId);
 
 s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower,
     bool32 isCrit, bool32 randomFactor, bool32 updateFlags, u16 typeEffectivenessModifier);

@@ -9,6 +9,7 @@
 #include "fldeff.h"
 #include "party_menu.h"
 #include "field_poison.h"
+#include "constants/form_change_types.h"
 #include "constants/battle.h"
 #include "constants/battle_move_effects.h"
 #include "constants/items.h"

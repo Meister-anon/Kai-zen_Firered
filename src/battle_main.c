@@ -3834,9 +3834,9 @@ void FaintClearSetData(void) //see about make status1 not fade wen faint?
     gProtectStructs[gActiveBattler].usesBouncedMove = FALSE;
     gProtectStructs[gActiveBattler].usedGravityPreventedMove = FALSE;
     gProtectStructs[gActiveBattler].usedThroatChopPreventedMove = FALSE; 
-    //gProtectStructs[gActiveBattler].forewarnDone = FALSE;
+    gProtectStructs[gActiveBattler].forewarnDone = FALSE;
     gProtectStructs[gActiveBattler].forewarnedMove = FALSE;
-    //gProtectStructs[gActiveBattler].anticipationDone = FALSE;  //removed these as want them to be once per battle
+    gProtectStructs[gActiveBattler].anticipationDone = FALSE;  //removed these as want them to be once per battle
     gProtectStructs[gActiveBattler].anticipatedMove = FALSE;
     gDisableStructs[gActiveBattler].isFirstTurn = 2;
     gLastMoves[gActiveBattler] = MOVE_NONE;
@@ -3871,9 +3871,12 @@ void FaintClearSetData(void) //see about make status1 not fade wen faint?
     gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
 
     //Ai_UpdateFaintData(gActiveBattler);
-    UndoFormChange(gBattlerPartyIndexes[gActiveBattler], GET_BATTLER_SIDE(gActiveBattler), FALSE); //vsonic some logic still to do
-    if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
-        UndoMegaEvolution(gBattlerPartyIndexes[gActiveBattler]);
+    TryBattleFormChange(gActiveBattler, FORM_CHANGE_FAINT); //replaced undomegaevolution
+
+    //UndoFormChange(gBattlerPartyIndexes[gActiveBattler], GET_BATTLER_SIDE(gActiveBattler), FALSE); //vsonic some logic still to do
+    /*if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+        UndoMegaEvolution(gBattlerPartyIndexes[gActiveBattler]);*/
+
 
     gBattleStruct->overwrittenAbilities[gActiveBattler] = ABILITY_NONE;
 
@@ -4003,7 +4006,7 @@ static void BattleIntroDrawTrainersOrMonsSprites(void)
                 *hpOnSwitchout = gBattleMons[gActiveBattler].hp;
                 for (i = 0; i < NUM_BATTLE_STATS; ++i)
                     gBattleMons[gActiveBattler].statStages[i] = 6; //important, these two reset stat buffs, and clear status2 effects on switch
-                gBattleMons[gActiveBattler].status2 = 0;
+                gBattleMons[gActiveBattler].status2 = 0; //or is it for batle start?
                 gBattleMons[gActiveBattler].status4 = 0;
             }
             if (GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_LEFT)
@@ -5512,15 +5515,28 @@ static void HandleEndTurn_FinishBattle(void)
         BeginFastPaletteFade(3);
         FadeOutMapMusic(5);
 
-        //if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+        //if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)  //this flag true/false is diff between trainer battle & wilds
          //   TryRestoreStolenItems();  unsure if was unecessary dupe
 
         for (i = 0; i < PARTY_SIZE; i++)
         {
-            UndoMegaEvolution(i);
-            UndoFormChange(i, B_SIDE_PLAYER, FALSE);
+            //UndoMegaEvolution(i);
+            //UndoFormChange(i, B_SIDE_PLAYER, FALSE);
+            //UndoFormChange(i, B_SIDE_OPPONENT, FALSE); //change opponent, for catching transformed mon
             //DoBurmyFormChange(i); don't know why this is here, form change didn't change to my knowledge so not doing that
+
+            bool8 changedForm = FALSE;
+            // Appeared in battle and didn't faint
+            if ((gBattleStruct->appearedInBattle & gBitTable[i]) && GetMonData(&gPlayerParty[i], MON_DATA_HP, NULL) != 0)
+                changedForm = TryFormChange(i, B_SIDE_PLAYER, FORM_CHANGE_END_BATTLE_TERRAIN);
+            if (!changedForm)
+                changedForm = TryFormChange(i, B_SIDE_PLAYER, FORM_CHANGE_END_BATTLE);
+
+            // Clear original species field
+            gBattleStruct->changedSpecies[B_SIDE_PLAYER][i] = SPECIES_NONE;
+            gBattleStruct->changedSpecies[B_SIDE_OPPONENT][i] = SPECIES_NONE;
         }
+
 
         for (i = 0; i < PARTY_SIZE; i++) //erecalc stat after battle
         {
@@ -5530,6 +5546,15 @@ static void HandleEndTurn_FinishBattle(void)
                 CalculateMonStats(&gPlayerParty[i]);
             }
         }
+
+        
+        // Clear battle mon species to avoid a bug on the next battle that causes
+        // healthboxes loading incorrectly due to it trying to create a Mega Indicator
+        // if the previous battler would've had it.
+        for (i = 0; i < MAX_BATTLERS_COUNT; i++)
+        {
+            gBattleMons[i].species = SPECIES_NONE;
+        }  //added from emerald
 
         gBattleMainFunc = FreeResetData_ReturnToOvOrDoEvolutions;
         gCB2_AfterEvolution = BattleMainCB2;
@@ -5902,15 +5927,19 @@ static void HandleAction_Switch(void) //actual switch code
     if (gBattleResults.playerSwitchesCounter < 255)
         ++gBattleResults.playerSwitchesCounter;
 
-    UndoFormChange(gBattlerPartyIndexes[gBattlerAttacker], GetBattlerSide(gBattlerAttacker), TRUE);
+    //doesn't effect transform, that's below
+    //UndoFormChange(gBattlerPartyIndexes[gBattlerAttacker], GetBattlerSide(gBattlerAttacker), TRUE); replaced with EE, but kept separate frmo transform stuff
 
+    //transform logic
     if (GetBattlerSide(gBattlerAttacker) == B_SIDE_OPPONENT) //use this instead taken from mega logic
         party = &gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker]];  //mon being transformed
     else
         party = &gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]];
 
-    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED)
+    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED) //*warning dont mess w this stuff, transform uses custom logic
         CalculateMonStats(party); //for resetting stats to normal
+    else
+        TryBattleFormChange(gBattlerAttacker, FORM_CHANGE_BATTLE_SWITCH);
 }
 
 static void HandleAction_UseItem(void)

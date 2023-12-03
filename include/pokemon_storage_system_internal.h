@@ -2,7 +2,8 @@
 #define GUARD_POKEMON_STORAGE_SYSTEM_INTERNAL_H
 
 #include "pokemon_storage_system.h"
-#include "mon_markings.h"
+#include "mon_markings.h"   //remove markings file eventuallyt
+#include "constants/form_change_types.h"    //added here to hopefully add to every pc file
 
 #define IN_BOX_COLUMNS 5
 #define IN_BOX_ROWS    6

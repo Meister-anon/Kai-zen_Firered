@@ -4,6 +4,7 @@
 #include <limits.h>
 #include "global.h"
 #include "constants/battle.h"
+#include "constants/form_change_types.h"
 #include "constants/battle_move_effects.h"
 #include "battle_util.h"
 #include "battle_script_commands.h"
@@ -659,7 +660,7 @@ struct BattleStruct //fill in unused fields when porting
     u8 soulheartBattlerId;  //Magearna ability
     u8 friskedBattler; // Frisk needs to identify 2 battlers in double battles.
     bool8 friskedAbility; // If identifies two mons, show the ability pop-up only once.
-    u16 changedSpecies[PARTY_SIZE]; // For Zygarde or future forms when multiple mons can change into the same pokemon.
+    u16 changedSpecies[NUM_BATTLE_SIDES][PARTY_SIZE]; // For Zygarde or future forms when multiple mons can change into the same pokemon.
     u8 stringMoveType;
     u8 expGetterBattlerId;
     bool8 ateBoost[MAX_BATTLERS_COUNT];//says that but ateberry seems to only be used by dodriogame
@@ -802,6 +803,19 @@ extern struct BattleStruct *gBattleStruct;
 
 #define SET_STATCHANGER(statId, stage, goesDown)(gBattleScripting.statChanger = (statId) + ((stage) << 3) + (goesDown << 7))
 #define SET_STATCHANGER2(dst, statId, stage, goesDown)(dst = (statId) + ((stage) << 3) + (goesDown << 7)) //for changing 2 different stats in a turn
+
+
+
+static inline struct Pokemon *GetSideParty(u32 side)
+{
+    return side == B_SIDE_PLAYER ? gPlayerParty : gEnemyParty;
+}
+
+static inline struct Pokemon *GetBattlerParty(u32 battlerId)
+{
+    extern u8 GetBattlerSide(u8 battler);
+    return GetSideParty(GetBattlerSide(battlerId));
+}
 
 // NOTE: The members of this struct have hard-coded offsets 
 //       in include/constants/battle_script_commands.h

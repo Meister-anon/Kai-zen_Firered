@@ -471,6 +471,8 @@ static bool8 MonPlaceChange_Shift(void)
         {
         case CURSOR_AREA_IN_PARTY:
             gPSSData->field_D91 = TOTAL_BOXES_COUNT;
+            //gPSSData->cursorMonSpecies =
+            //leave for now dont know what to do with
             break;
         case CURSOR_AREA_IN_BOX:
             gPSSData->field_D91 = StorageGetCurrentBox();
@@ -560,15 +562,16 @@ static void MoveMon(void)
     sIsMonBeingMoved = TRUE;
 }
 
-static void PlaceMon(void)
+static void PlaceMon(void) //think this a good place for form stuff?
 {
     u8 boxId;
 
     switch (sBoxCursorArea)
     {
     case CURSOR_AREA_IN_PARTY:
-        SetPlacedMonData(TOTAL_BOXES_COUNT, sBoxCursorPosition);
+        SetPlacedMonData(TOTAL_BOXES_COUNT, sBoxCursorPosition);  //ok total_boxes_count is usually used for partymon /in party
         sub_8090D58(TOTAL_BOXES_COUNT, sBoxCursorPosition);
+        
         break;
     case CURSOR_AREA_IN_BOX:
         boxId = StorageGetCurrentBox();
@@ -634,7 +637,7 @@ static void SetShiftedMonData(u8 boxId, u8 position)
     sMovingMonOrigBoxPos = position;
 }
 
-bool8 TryStorePartyMonInBox(u8 boxId)
+bool8 TryStorePartyMonInBox(u8 boxId) //think this one place for moving mon form change  vsonic
 {
     s16 boxPosition = GetFirstFreeBoxSpot(boxId);
     if (boxPosition == -1)
@@ -1017,6 +1020,8 @@ static void SetCursorMonData(void *pokemon, u8 mode)
         struct Pokemon *mon = (struct Pokemon *)pokemon;
 
         gPSSData->cursorMonSpecies = GetMonData(mon, MON_DATA_SPECIES2);
+       
+        //strange seems formchange withdrawn only used for hoopa?
         if (gPSSData->cursorMonSpecies != SPECIES_NONE)
         {
             sanityIsBagEgg = GetMonData(mon, MON_DATA_SANITY_IS_BAD_EGG);
@@ -1040,6 +1045,7 @@ static void SetCursorMonData(void *pokemon, u8 mode)
         struct BoxPokemon *boxMon = (struct BoxPokemon *)pokemon;
 
         gPSSData->cursorMonSpecies = GetBoxMonData(pokemon, MON_DATA_SPECIES2);
+
         if (gPSSData->cursorMonSpecies != SPECIES_NONE)
         {
             u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID);

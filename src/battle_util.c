@@ -5096,6 +5096,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
     u32 pidAtk;
     u32 pidDef;
     u16 value;
+    u8 side; //put back here, set in individual cases
 
     if (gBattlerAttacker >= gBattlersCount)
         gBattlerAttacker = battler;
@@ -5117,7 +5118,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
     {
         u8 moveType, move;
         s32 i, j;
-        u8 side;
+        
         u8 target1;
 
         //Pickup variables needed put above switch start
@@ -5533,6 +5534,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     u16 speciesAttacker, speciesTarget1, speciesTarget2;
                     u32 personalityAttacker, personalityTarget1, personalityTarget2;
+                    
 
                     //pretty sur ethis shuold just be if ability on opposite side
                     //if (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_CUPIDS_ARROW)) but leaving for now if it copies trace guess fine?
@@ -5831,7 +5833,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             case ABILITY_ANTICIPATION:  //working on change
                 if (!gSpecialStatuses[battler].switchInAbilityDone)
                 {
-                    u32 side = GetBattlerSide(battler);
+                    side = GetBattlerSide(battler);
                     
                     
                     for (i = 0; i < MAX_BATTLERS_COUNT; i++)    //side is mon w anticipation, i is oppononent/target
@@ -6368,15 +6370,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3); //so has same effect as incrementing effect
                     break;
                 case ABILITY_POWER_CONSTRUCT:
+                {
+                    side = GET_BATTLER_SIDE(battler);
                     if ((gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)
                         && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
                     {
-                        gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
+                        gBattleStruct->changedSpecies[side][gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
                         gBattleMons[battler].species = SPECIES_ZYGARDE_COMPLETE;
                         BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
                         ++effect;
                     }
                     break;
+                }
                 case ABILITY_BALL_FETCH:
                     if (gBattleMons[battler].item == ITEM_NONE
                         && gBattleResults.catchAttempts[gLastUsedBall - ITEM_ULTRA_BALL] >= 1
@@ -6480,7 +6485,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         effect = 1;
                 case ABILITY_RISING_PHOENIX:
                 if (moveType == TYPE_FIRE && gBattleMoves[moveArg].power != 0)
-                        effect = 1;
+                        effect = 4;
                 case ABILITY_JEWEL_METABOLISM:
                     if (moveType == TYPE_ROCK && gBattleMoves[moveArg].power != 0)
                         effect = 2, statId = STAT_DEF;
@@ -6576,6 +6581,78 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         //gBattleMons[battler].statStages[statId]++;
                         PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
                     }
+                }
+                else if (effect == 4) //moltres ability, ABILITY_RISING_PHOENIX heal and stat cleanse
+                {
+
+                    if (BATTLER_MAX_HP(battler) || gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK)
+                    {
+                        if ((gProtectStructs[gBattlerAttacker].notFirstStrike))
+                            gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
+                        else
+                            gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
+                    }
+                    else
+                    {
+                        if (gProtectStructs[gBattlerAttacker].notFirstStrike)
+                            gBattlescriptCurrInstr = BattleScript_MoveHPDrain;
+                        else
+                            gBattlescriptCurrInstr = BattleScript_MoveHPDrain_PPLoss;
+
+                        gBattleMoveDamage = gBattleMons[battler].maxHP / 4;
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                        gBattleMoveDamage *= -1;
+                    } //potentially use ++effect, to make not loop/repeat can put below effect in effect 5 to trigger after?
+
+
+                    if (!(gProtectStructs[gBattlerAttacker].confusionSelfDmg))
+                    {
+                        gBattleMons[battler].status1 = 0;
+                        //need test this, think need be more specific to not remove beneficial status
+                        gBattleMons[battler].status2 &= ~(STATUS2_NIGHTMARE | STATUS2_CONFUSION | STATUS2_WRAPPED | STATUS2_INFATUATION
+                        | STATUS2_ESCAPE_PREVENTION | STATUS2_TORMENT);
+
+                        /*gBattleMons[battler].status2 &= ~(STATUS2_CONFUSION);
+                        gBattleMons[battler].status2 &= ~(STATUS2_WRAPPED);
+                        gBattleMons[battler].status2 &= ~(STATUS2_INFATUATION);
+                        gBattleMons[battler].status2 &= ~(STATUS2_ESCAPE_PREVENTION);
+                        gBattleMons[battler].status2 &= ~(STATUS2_TORMENT);*/
+
+                        gStatuses3[battler] &= ~(STATUS3_LEECHSEED | STATUS3_PERISH_SONG | STATUS3_SMACKED_DOWN | STATUS3_TELEKINESIS
+                        | STATUS3_MIRACLE_EYED);
+
+                        /*gBattleMons[battler].status3 &= ~(STATUS3_LEECHSEED); //hope works right, should be remove leech seed if seeded
+                        gBattleMons[battler].status3 &= ~(STATUS3_PERISH_SONG);
+                        gBattleMons[battler].status3 &= ~(STATUS3_SMACKED_DOWN);
+                        gBattleMons[battler].status3 &= ~(STATUS3_TELEKINESIS);
+                        gBattleMons[battler].status3 &= ~(STATUS3_MIRACLE_EYED);*/
+
+                        gBattleMons[battler].status4 &= ~(STATUS4_BIND | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL
+                        | STATUS4_SAND_TOMB | STATUS4_MAGMA_STORM | STATUS4_SWARM | STATUS4_SNAP_TRAP | STATUS4_THUNDER_CAGE);
+
+                        /*gBattleMons[battler].status4 &= ~(STATUS4_BIND);
+                        gBattleMons[battler].status4 &= ~(STATUS4_FIRE_SPIN);
+                        gBattleMons[battler].status4 &= ~(STATUS4_CLAMP);
+                        gBattleMons[battler].status4 &= ~(STATUS4_WHIRLPOOL);
+                        gBattleMons[battler].status4 &= ~(STATUS4_SAND_TOMB);
+                        gBattleMons[battler].status4 &= ~(STATUS4_MAGMA_STORM);
+                        gBattleMons[battler].status4 &= ~(STATUS4_SWARM);
+                        gBattleMons[battler].status4 &= ~(STATUS4_SNAP_TRAP);
+                        gBattleMons[battler].status4 &= ~(STATUS4_THUNDER_CAGE);*/
+                        
+                        //include reset stats if below 6
+                        for (j = 0; j < NUM_BATTLE_STATS; ++j)
+                        {
+                            if (gBattleMons[battler].statStages[j] < 6)
+                            {
+                                gBattleMons[battler].statStages[j] = 6;
+                            }
+                        }
+
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_RisingPhoenixActivates; //change to ability cleansed all negative effects - done
+                    } //hopefully these work
                 }
             }
             break;// updated ability battle effects for drain abilities 
@@ -6783,56 +6860,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
                     ++effect;
-                }
-                if (!(gProtectStructs[gBattlerAttacker].confusionSelfDmg)
-                    && moveType == TYPE_FIRE)
-                    {
-                        gBattleMons[battler].status1 = 0;
-                        //need test this, think need be more specific to not remove beneficial status
-                        gBattleMons[battler].status2 &= ~(STATUS2_NIGHTMARE | STATUS2_CONFUSION | STATUS2_WRAPPED | STATUS2_INFATUATION
-                        | STATUS2_ESCAPE_PREVENTION | STATUS2_TORMENT);
-
-                        /*gBattleMons[battler].status2 &= ~(STATUS2_CONFUSION);
-                        gBattleMons[battler].status2 &= ~(STATUS2_WRAPPED);
-                        gBattleMons[battler].status2 &= ~(STATUS2_INFATUATION);
-                        gBattleMons[battler].status2 &= ~(STATUS2_ESCAPE_PREVENTION);
-                        gBattleMons[battler].status2 &= ~(STATUS2_TORMENT);*/
-
-                        gStatuses3[battler] &= ~(STATUS3_LEECHSEED | STATUS3_PERISH_SONG | STATUS3_SMACKED_DOWN | STATUS3_TELEKINESIS
-                        | STATUS3_MIRACLE_EYED);
-
-                        /*gBattleMons[battler].status3 &= ~(STATUS3_LEECHSEED); //hope works right, should be remove leech seed if seeded
-                        gBattleMons[battler].status3 &= ~(STATUS3_PERISH_SONG);
-                        gBattleMons[battler].status3 &= ~(STATUS3_SMACKED_DOWN);
-                        gBattleMons[battler].status3 &= ~(STATUS3_TELEKINESIS);
-                        gBattleMons[battler].status3 &= ~(STATUS3_MIRACLE_EYED);*/
-
-                        gBattleMons[battler].status4 &= ~(STATUS4_BIND | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL
-                        | STATUS4_SAND_TOMB | STATUS4_MAGMA_STORM | STATUS4_SWARM | STATUS4_SNAP_TRAP | STATUS4_THUNDER_CAGE);
-
-                        /*gBattleMons[battler].status4 &= ~(STATUS4_BIND);
-                        gBattleMons[battler].status4 &= ~(STATUS4_FIRE_SPIN);
-                        gBattleMons[battler].status4 &= ~(STATUS4_CLAMP);
-                        gBattleMons[battler].status4 &= ~(STATUS4_WHIRLPOOL);
-                        gBattleMons[battler].status4 &= ~(STATUS4_SAND_TOMB);
-                        gBattleMons[battler].status4 &= ~(STATUS4_MAGMA_STORM);
-                        gBattleMons[battler].status4 &= ~(STATUS4_SWARM);
-                        gBattleMons[battler].status4 &= ~(STATUS4_SNAP_TRAP);
-                        gBattleMons[battler].status4 &= ~(STATUS4_THUNDER_CAGE);*/
-                        
-                        //include reset stats if below 6
-                        for (j = 0; j < NUM_BATTLE_STATS; ++j)
-                        {
-                            if (gBattleMons[battler].statStages[j] < 6)
-                            {
-                                gBattleMons[battler].statStages[j] = 6;
-                            }
-                        }
-
-                        BattleScriptPushCursor();
-                        gBattlescriptCurrInstr = BattleScript_RisingPhoenixActivates; //change to ability cleansed all negative effects - done
-                        ++effect;
-                    } //hopefully these work
+                }                
                 break;
             case ABILITY_STICKY_HOLD:
             case ABILITY_MAGMA_ARMOR:
@@ -7308,6 +7336,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             case ABILITY_GULP_MISSILE:
+            {
+                side = GET_BATTLER_SIDE(battler);
+
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
                     && TARGET_TURN_DAMAGED
@@ -7315,7 +7346,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     if (gBattleMons[gBattlerTarget].species == SPECIES_CRAMORANT_GORGING)
                     {
-                        gBattleStruct->changedSpecies[gBattlerPartyIndexes[gBattlerTarget]] = gBattleMons[gBattlerTarget].species;
+                        gBattleStruct->changedSpecies[side][gBattlerPartyIndexes[gBattlerTarget]] = gBattleMons[gBattlerTarget].species;
                         gBattleMons[gBattlerTarget].species = SPECIES_CRAMORANT;
                         if (GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
                         {
@@ -7329,7 +7360,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                     else if (gBattleMons[gBattlerTarget].species == SPECIES_CRAMORANT_GULPING)
                     {
-                        gBattleStruct->changedSpecies[gBattlerPartyIndexes[gBattlerTarget]] = gBattleMons[gBattlerTarget].species;
+                        gBattleStruct->changedSpecies[side][gBattlerPartyIndexes[gBattlerTarget]] = gBattleMons[gBattlerTarget].species;
                         gBattleMons[gBattlerTarget].species = SPECIES_CRAMORANT;
                         if (GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
                         {
@@ -7344,6 +7375,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             }
+            } //end of effet
             break;
         case ABILITYEFFECT_MOVE_END_ATTACKER: // Same as above, but for attacker with ability hits enemy
             switch (gLastUsedAbility)
@@ -10817,6 +10849,29 @@ u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16
     return SPECIES_NONE;
 }
 
+bool32 DoesSpeciesUseHoldItemToChangeForm(u16 species, u16 heldItemId)
+{
+    u32 i;
+    const struct FormChange *formChanges = gFormChangeTablePointers[species];
+
+    if (formChanges != NULL)
+    {
+        for (i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
+        {
+            switch (formChanges[i].method)
+            {
+            case FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM:
+            case FORM_CHANGE_BATTLE_PRIMAL_REVERSION:
+            case FORM_CHANGE_ITEM_HOLD:
+                if (formChanges[i].param1 == heldItemId)
+                    return TRUE;
+                break;
+            }
+        }
+    }
+    return FALSE;
+}
+
 bool32 CanMegaEvolve(u8 battlerId)
 {
     u32 itemId, holdEffect, species;
@@ -10878,6 +10933,109 @@ bool32 CanMegaEvolve(u8 battlerId)
     return FALSE;
 }
 
+bool32 IsBattlerMegaEvolved(u8 battlerId)
+{
+    // While Transform does copy stats and visuals, it shouldn't be counted as true Mega Evolution.
+    if (gBattleMons[battlerId].status2 & STATUS2_TRANSFORMED)
+        return FALSE;
+    return (gBaseStats[gBattleMons[battlerId].species].flags & F_MEGA_FORM); //vsonic
+}
+
+bool32 IsBattlerPrimalReverted(u8 battlerId)
+{
+    // While Transform does copy stats and visuals, it shouldn't be counted as true Primal Revesion.
+    if (gBattleMons[battlerId].status2 & STATUS2_TRANSFORMED)
+        return FALSE;
+    return (gBaseStats[gBattleMons[battlerId].species].flags & SPECIES_FLAG_PRIMAL_REVERSION);
+}
+
+// Returns SPECIES_NONE if no form change is possible
+u16 GetBattleFormChangeTargetSpecies(u8 battlerId, u16 method)
+{
+    u32 i, j;
+    u16 targetSpecies = SPECIES_NONE;
+    u16 species = gBattleMons[battlerId].species;
+    const struct FormChange *formChanges = gFormChangeTablePointers[species];
+    u16 heldItem;
+    u32 ability;
+
+    if (formChanges != NULL)
+    {
+        heldItem = gBattleMons[battlerId].item;
+        ability = GetBattlerAbility(battlerId);
+
+        for (i = 0; formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
+        {
+            if (method == formChanges[i].method && species != formChanges[i].targetSpecies)
+            {
+                switch (method)
+                {
+                case FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM:
+                case FORM_CHANGE_BATTLE_PRIMAL_REVERSION:
+                    if (heldItem == formChanges[i].param1)
+                        targetSpecies = formChanges[i].targetSpecies;
+                    break;
+                case FORM_CHANGE_BATTLE_MEGA_EVOLUTION_MOVE:
+                    if (gBattleMons[battlerId].moves[0] == formChanges[i].param1
+                     || gBattleMons[battlerId].moves[1] == formChanges[i].param1
+                     || gBattleMons[battlerId].moves[2] == formChanges[i].param1
+                     || gBattleMons[battlerId].moves[3] == formChanges[i].param1)
+                        targetSpecies = formChanges[i].targetSpecies;
+                    break;
+                case FORM_CHANGE_BATTLE_SWITCH:
+                    targetSpecies = formChanges[i].targetSpecies;
+                    break;
+                case FORM_CHANGE_BATTLE_HP_PERCENT:
+                    if (formChanges[i].param1 == GetBattlerAbility(battlerId))
+                    {
+                        // We multiply by 100 to make sure that integer division doesn't mess with the health check.
+                        u32 hpCheck = gBattleMons[battlerId].hp * 100 * 100 / gBattleMons[battlerId].maxHP;
+                        switch(formChanges[i].param2)
+                        {
+                        case HP_HIGHER_THAN:
+                            if (hpCheck > formChanges[i].param3 * 100)
+                                targetSpecies = formChanges[i].targetSpecies;
+                            break;
+                        case HP_LOWER_EQ_THAN:
+                            if (hpCheck <= formChanges[i].param3 * 100)
+                                targetSpecies = formChanges[i].targetSpecies;
+                            break;
+                        }
+                    }
+                    break;
+                case FORM_CHANGE_BATTLE_WEATHER:
+                    // Check if there is a required ability and if the battler's ability does not match it
+                    // or is suppressed. If so, revert to the no weather form.
+                    if (formChanges[i].param2
+                        && GetBattlerAbility(battlerId) != formChanges[i].param2
+                        && formChanges[i].param1 == ENUM_WEATHER_NONE)
+                    {
+                        targetSpecies = formChanges[i].targetSpecies;
+                    }
+                    // We need to revert the weather form if the field is under Air Lock, too.
+                    else if (!IsBattlerWeatherAffected(battlerId, formChanges[i].param1) && formChanges[i].param1 == ENUM_WEATHER_NONE) //changed for new weather checks vsonic
+                    {
+                        targetSpecies = formChanges[i].targetSpecies;
+                    }
+                    // Otherwise, just check for a match between the weather and the form change table.
+                    else if (gBattleWeather & formChanges[i].param1
+                        || (gBattleWeather == ENUM_WEATHER_NONE && formChanges[i].param1 == ENUM_WEATHER_NONE))
+                    {
+                        targetSpecies = formChanges[i].targetSpecies;
+                    }
+                    break;
+                case FORM_CHANGE_BATTLE_TURN_END:
+                    if (formChanges[i].param1 == GetBattlerAbility(battlerId))
+                        targetSpecies = formChanges[i].targetSpecies;
+                    break;
+                }
+            }
+        }
+    }
+
+    return targetSpecies;
+}
+
 /*void UndoMegaEvolution(u32 monId)
 {
     if (gBattleStruct->mega.evolvedPartyIds[B_SIDE_PLAYER] & gBitTable[monId])
@@ -10895,9 +11053,10 @@ bool32 CanMegaEvolve(u8 battlerId)
     }
 }*/  //I guess this was an older port?
 
-void UndoMegaEvolution(u32 monId)
+/*void UndoMegaEvolution(u32 monId)
 {
     u16 baseSpecies = GET_BASE_SPECIES_ID(GetMonData(&gPlayerParty[monId], MON_DATA_SPECIES));
+    u8 side = GET_BATTLER_SIDE(battler);
 
     if (gBattleStruct->mega.evolvedPartyIds[B_SIDE_PLAYER] & gBitTable[monId])
     {
@@ -10919,7 +11078,7 @@ void UndoMegaEvolution(u32 monId)
         CalculateMonStats(&gPlayerParty[monId]);
     }
 
-}
+}*/
 
 bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 toxicSpikes)
 {
@@ -11339,6 +11498,70 @@ s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fi
 
     return dmg;
 }
+
+bool32 CanBattlerFormChange(u8 battlerId, u16 method) //huh alraedy doesn't work wen transformed so its safe
+{
+    // Can't change form if transformed.
+    if (gBattleMons[battlerId].status2 & STATUS2_TRANSFORMED)
+        return FALSE;
+    // Mega Evolved Pokémon should always revert to normal upon fainting or ending the battle.
+    if (IsBattlerMegaEvolved(battlerId) && (method == FORM_CHANGE_FAINT || method == FORM_CHANGE_END_BATTLE))
+        return TRUE;
+    else if (IsBattlerPrimalReverted(battlerId) && (method == FORM_CHANGE_END_BATTLE))
+        return TRUE;
+    return DoesSpeciesHaveFormChangeMethod(gBattleMons[battlerId].species, method);
+}
+
+bool32 TryBattleFormChange(u8 battlerId, u16 method)
+{
+    u8 monId = gBattlerPartyIndexes[battlerId];
+    u8 side = GET_BATTLER_SIDE(battlerId);
+    struct Pokemon *party = GetBattlerParty(battlerId);
+    u16 targetSpecies;
+
+    if (!CanBattlerFormChange(battlerId, method))
+        return FALSE;
+
+    targetSpecies = GetBattleFormChangeTargetSpecies(battlerId, method);
+    if (targetSpecies == SPECIES_NONE)
+        targetSpecies = GetFormChangeTargetSpecies(&party[monId], method, 0);
+    if (targetSpecies != SPECIES_NONE)
+    {
+        // Saves the original species on the first form change for the player.
+        if (gBattleStruct->changedSpecies[side][monId] == SPECIES_NONE)
+            gBattleStruct->changedSpecies[side][monId] = gBattleMons[battlerId].species;
+
+        TryToSetBattleFormChangeMoves(&party[monId], method);
+        SetMonData(&party[monId], MON_DATA_SPECIES, &targetSpecies);
+        gBattleMons[battlerId].species = targetSpecies;
+        RecalcBattlerStats(battlerId, &party[monId]);
+        return TRUE;
+    }
+    else if (gBattleStruct->changedSpecies[side][monId] != SPECIES_NONE)
+    {
+        bool8 restoreSpecies = FALSE;
+
+        // Mega Evolved Pokémon should always revert to normal upon fainting or ending the battle, so no need to add it to the form change tables.
+        if (IsBattlerMegaEvolved(battlerId) && (method == FORM_CHANGE_FAINT || method == FORM_CHANGE_END_BATTLE))
+            restoreSpecies = TRUE;//change later for plan for perm mega vsonic
+
+        // Unlike Megas, Primal Reversion isn't canceled on fainting.
+        else if (IsBattlerPrimalReverted(battlerId) && (method == FORM_CHANGE_END_BATTLE))
+            restoreSpecies = TRUE;
+
+        if (restoreSpecies)
+        {
+            // Reverts the original species
+            TryToSetBattleFormChangeMoves(&party[monId], method);
+            SetMonData(&party[monId], MON_DATA_SPECIES, &gBattleStruct->changedSpecies[side][monId]);
+            RecalcBattlerStats(battlerId, &party[monId]);
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 
 
 bool32 DoBattlersShareType(u32 battler1, u32 battler2)
