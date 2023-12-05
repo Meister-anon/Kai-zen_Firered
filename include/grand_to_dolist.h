@@ -1866,6 +1866,51 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   //all I need is a check for if anticipation or forewarn should activate/has activated, and then just put the check in the data and hp bar function
   -dont thinkm will be issue w forewarn etc. but test anyway - prob need mon with only rollout as move
 
+  -testing buterfree plague wings seems work well, need test move that has 100% effect, see if it can still set effect
+  //ok tested still works, so other move effects don't seem to prevent effect at all. hm
+  welp I call this one done then
+
+  -thought wish there was more bug variety, like bug flying rather tan just being a winged bug, would be cool
+  if it was liek some bug bird hybrid, or a jet plane but a bug?  or better a helicpter, and its wings are shaped like properllors
+  also more variety in starfish pokemon, since starfish can be so many different things
+  buzzird,  a fly bird  - buzzing bird pokemon, part fly part bird
+  head of a fly bird wings kinda like griffin
+
+  Bedet Badet   bee droin dreems of bein a flying ace,  bee and pilot idea
+  tandem pokemon  has paired evolution with a airplane/jet like pokemon,  when together Badet evolves 
+  into piloting ace that flies the jet,   is a bug flying type
+
+ Badet recovers crashed jet that can no longer fly on its own, and together they reach the sky
+ -just ideas
+
+ quick claw not woring.. arhauigsngakjrnlksj  had wrong battler values smh,  used battler1 in place was supposed to be battler2
+  also futrther buffed quick claw,  made 55% odds,  tesed w stall feels much better, but not too consisitent, just moderaltey reliable now
+  nvm forget its not just increase priority it makes move before everything, it was a bit hihg, cut back to 45%
+
+ -setup vivillon to be able to access all forms in game,
+ whenever spawned load one of the variant forms,
+  think set spewpa in viridian, make it random chance what form it evolves into
+  or attempt to make it a function based on personality value?
+
+  new mirror move idea
+  //tink want to change ot lastusedmove by whatever target you select, then when call move reset target based on target type of called move
+    //is target user use on self, if target both or selected, swap target opponenet side
+    //that way can copy move from any mon on fied, even your own battle partner, since its meant to just be a copy of what's seen.
+    //think would set priority 1 to increase odds of getting mon you want, 
+    //but then chose when attack goes off based on priority of called move,
+    //i.e spearow used mirror move!,  copied foes Revenge, since  revenge is a -4 priority move,
+    //script should end there, but then at turn order where spearow would attack if it used a minus 4 priority move,
+    //spearow used Revenge!
+    //so miror move goes off at priority one to say what move is copied.
+    //then it checks turn order based on priority of move to see if it can attack now, if not script ends
+    //and picks up to use the move at proper place in turn order
+    //may need to set this with a status, so can just loop through battlers at turn order, and make it attack
+    //if it has the status, similar to bide? without needing further input from player
+    beilve would need to use get who strikesfrst to setup and potentially handleusemove
+
+    if I get working, use setup for all moves that call other moves, so they can have correct priority to work properly
+    may need a mirror move /called move status 
+
 
   -fixed brick break,  - fixed belch - still todo is set strings for forecast
   -remember plan to add berry shop to erika's gym

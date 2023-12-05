@@ -1839,11 +1839,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 0,
         .pp = 20,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_DEPENDS,
+        .target = MOVE_TARGET_DEPENDS, //MOVE_TARGET_SELECTED
         .priority = 0,
         .flags = 0,
         .split = SPLIT_STATUS,
-    },
+    }, //idea birds ability to parrot/copy, move kinda sucks , but is a bit better with my normal type change, as would always get psudo stab if mon is normal
+    //speaking just for spearow/fearow rn
+    
 
     [MOVE_SELF_DESTRUCT] =
     {

@@ -824,7 +824,7 @@ struct BattleScripting  //remember expanding this costs ewram
     s32 painSplitHp;
     s32 bideDmg;
     u8 multihitString[6];
-    u8 dmgMultiplier;
+    u8 dmgMultiplier;   //gBattleScripting.dmgMultiplier  no longer using, but keeping in here for now, aka sDMG_MULTIPLIER
     u8 twoTurnsMoveStringId;
     u8 animArg1;
     u8 animArg2;    //gBattleScripting +12 & +19 only used in multihit scripts in battle_scripts_1.s so somewhat confident of conclusions

@@ -7394,7 +7394,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS)
                     && GetBattlerAbility(gBattlerTarget) != ABILITY_OVERCOAT
                     && GetBattlerHoldEffect(gBattlerTarget, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES
-                    && TARGET_TURN_DAMAGED //if hard to set status can remove this, as it already says not move no efect so would exclude protection and immunities
+                    && TARGET_TURN_DAMAGED //no issue with status set, all is good
                     && (Random() % 3) == 0)
                 {
                     do

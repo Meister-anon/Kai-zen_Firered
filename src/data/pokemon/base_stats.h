@@ -411,7 +411,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_BUG,
         .abilities = {ABILITY_COMPOUND_EYES, ABILITY_PLAGUE_WINGS}, //give new ability does effect spore on attack doesnt require contact
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_TINTED_LENS, ABILITY_ANTICIPATION}, //plague wing
+            .abilityHidden = {ABILITY_TINTED_LENS, ABILITY_ANTICIPATION}, //plague wing, works
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,

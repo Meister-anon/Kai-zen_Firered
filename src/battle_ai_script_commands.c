@@ -987,7 +987,7 @@ static void Cmd_get_how_powerful_move_is(void)
     {
         gDynamicBasePower = 0;
         gBattleStruct->dynamicMoveType = 0;
-        gBattleScripting.dmgMultiplier = 1;
+        //gBattleScripting.dmgMultiplier = 1;
         gMoveResultFlags = 0;
         gCritMultiplier = 1;
 
@@ -1211,7 +1211,7 @@ static void Cmd_get_highest_type_effectiveness(void)
     gDynamicBasePower = 0;
     dynamicMoveType = &gBattleStruct->dynamicMoveType;
     *dynamicMoveType = 0;
-    gBattleScripting.dmgMultiplier = 1;
+    //gBattleScripting.dmgMultiplier = 1;
     gMoveResultFlags = 0;
     gCritMultiplier = 1;
     AI_THINKING_STRUCT->funcResult = 0;
@@ -1252,7 +1252,7 @@ static void Cmd_if_type_effectiveness(void)
 
     gDynamicBasePower = 0;
     gBattleStruct->dynamicMoveType = 0;
-    gBattleScripting.dmgMultiplier = 1;
+    //gBattleScripting.dmgMultiplier = 1;
     gMoveResultFlags = 0;
     gCritMultiplier = 1;
 
@@ -1486,7 +1486,7 @@ static void Cmd_if_can_faint(void)
 
     gDynamicBasePower = 0;
     gBattleStruct->dynamicMoveType = 0;
-    gBattleScripting.dmgMultiplier = 1;
+    //gBattleScripting.dmgMultiplier = 1;
     gMoveResultFlags = 0;
     gCritMultiplier = 1;
     gCurrentMove = AI_THINKING_STRUCT->moveConsidered;
@@ -1515,7 +1515,7 @@ static void Cmd_if_cant_faint(void)
 
     gDynamicBasePower = 0;
     gBattleStruct->dynamicMoveType = 0;
-    gBattleScripting.dmgMultiplier = 1;
+    //gBattleScripting.dmgMultiplier = 1;
     gMoveResultFlags = 0;
     gCritMultiplier = 1;
     gCurrentMove = AI_THINKING_STRUCT->moveConsidered;

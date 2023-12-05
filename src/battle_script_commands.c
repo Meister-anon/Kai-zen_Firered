@@ -2347,11 +2347,11 @@ static void atk05_damagecalc(void)
                                             gBattleStruct->dynamicMoveType,
                                             gBattlerAttacker,
                                             gBattlerTarget);
-    gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier; // this makes it so gcritmultiplier value is how much crit is, so sniper shuold work
+    gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier;// * gBattleScripting.dmgMultiplier; // this makes it so gcritmultiplier value is how much crit is, so sniper shuold work
     if (gStatuses3[gBattlerAttacker] & STATUS3_CHARGED_UP && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC)//pretty sure no longer using dmgMultiplier?
         gBattleMoveDamage *= 2;
-    if (gProtectStructs[gBattlerAttacker].helpingHand)//below works, but because hit still jumps to multihit,  I need to add the below check to jumpifability 
-        gBattleMoveDamage = gBattleMoveDamage * 15 / 10;    //works this is default    
+    if (gProtectStructs[gBattlerAttacker].helpingHand)
+        gBattleMoveDamage = gBattleMoveDamage * 15 / 10; 
     
     ++gBattlescriptCurrInstr;
 }
@@ -2389,7 +2389,7 @@ s32 AI_CalcDmgFormula(u8 attacker, u8 defender) //made for ai .c update
                                             attacker,
                                             defender);
     //gMultiTask = 0;
-    gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier; //so dmgMultiplier isn't used so does it default to 0? vsonic checekd it defaults to 1 so not a problem
+    gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier;// * gBattleScripting.dmgMultiplier; //so dmgMultiplier isn't used so does it default to 0? vsonic checekd it defaults to 1 so not a problem
     if (gStatuses3[attacker] & STATUS3_CHARGED_UP && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC)  //but its actually something I can remove, just replace with gbattlemovedmg *=2 need do not rn
         gBattleMoveDamage *= 2;
     if (gProtectStructs[attacker].helpingHand)
@@ -2431,7 +2431,7 @@ void AI_CalcDmg(u8 attacker, u8 defender) //needed for ai script  , brought back
                                             attacker,
                                             defender);
     //gMultiTask = 0;
-    gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier * gBattleScripting.dmgMultiplier;
+    gBattleMoveDamage = gBattleMoveDamage * gCritMultiplier;// * gBattleScripting.dmgMultiplier;
     if (gStatuses3[attacker] & STATUS3_CHARGED_UP && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC)
         gBattleMoveDamage *= 2;
     if (gProtectStructs[attacker].helpingHand)
@@ -6490,7 +6490,7 @@ static void atk24_confirmlosingteam(void)
 static void MoveValuesCleanUp(void)
 {
     gMoveResultFlags = 0;
-    gBattleScripting.dmgMultiplier = 1;
+    //gBattleScripting.dmgMultiplier = 1;
     gCritMultiplier = 1;
     gBattleScripting.moveEffect = 0;
     gBattleCommunication[6] = 0;
@@ -12804,6 +12804,7 @@ static void atk7B_tryhealthirdhealth(void)
         gBattlescriptCurrInstr += 6;
 }
 
+//nvm plannin gcustom versino if possible
 static void atk7C_trymirrormove(void) //need update with emerald logic  vsonic
 {
     s32 validMovesCount;
@@ -12823,7 +12824,7 @@ static void atk7C_trymirrormove(void) //need update with emerald logic  vsonic
                 movesArray[validMovesCount++] = move;
         }
     }
-    move = gBattleStruct->lastTakenMove[gBattlerAttacker];
+    move = gBattleStruct->lastTakenMove[gBattlerAttacker]; //not quite what it should be, should ne just targetted doesn't have to be hit  by uit
     //move++;move--;  the hell is this??
     if (move != MOVE_NONE && move != 0xFFFF)
     {
@@ -16034,14 +16035,15 @@ void BS_trysetaquaring(void)    //aqua ring
     }
 }
 
-static void atkD6_doubledamagedealtifdamaged(void)
+static void atkD6_doubledamagedealtifdamaged(void) //move revenge, test used call if works
 {
     if ((gProtectStructs[gBattlerAttacker].physicalDmg != 0
         && gProtectStructs[gBattlerAttacker].physicalBattlerId == gBattlerTarget)
      || (gProtectStructs[gBattlerAttacker].specialDmg != 0
         && gProtectStructs[gBattlerAttacker].specialBattlerId == gBattlerTarget))
     {
-        gBattleScripting.dmgMultiplier = 2;
+        gBattleMoveDamage *= 2;
+        //gBattleScripting.dmgMultiplier = 2;
     }
     ++gBattlescriptCurrInstr;
 }
@@ -17987,6 +17989,9 @@ void BS_call_if(void) //comparing to jumpifholdeffect
                 return;
             }     
             break;
+            case EFFECT_REVENGE:
+                atkD6_doubledamagedealtifdamaged();
+                break;
             case EFFECT_BELCH:
             if (ItemId_GetPocket(gBattleMons[gBattlerAttacker].item) == POCKET_BERRY_POUCH)
             {

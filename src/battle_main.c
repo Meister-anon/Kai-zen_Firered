@@ -4277,8 +4277,8 @@ static void TryDoEventsBeforeFirstTurn(void)
             for (i = 0; i < gBattlersCount; ++i)
                 gBattlerByTurnOrder[i] = i;
             for (i = 0; i < gBattlersCount - 1; ++i)
-                for (j = i + 1; j < gBattlersCount; ++j)
-                    if (GetWhoStrikesFirst(gBattlerByTurnOrder[i], gBattlerByTurnOrder[j], TRUE) != 0)
+                for (j = i + 1; j < gBattlersCount; ++j)    //functino is weird, way works if 0 I attack first, 
+                    if (GetWhoStrikesFirst(gBattlerByTurnOrder[i], gBattlerByTurnOrder[j], TRUE) != 0) //which iswhy here it swaps order, 
                         SwapTurnOrder(i, j);
         }
         
@@ -5085,10 +5085,12 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     holdEffectParam1 = ItemId_GetHoldEffectParam(gBattleMons[battler1].item);
   
     
-    //Quick Claw
-    if ((holdEffectBattler1 == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam1) / 100)   //buffed param to 40% rathre than 20
+    //Quick Claw        //ok works now, but doesnt' have activation animation, and even at 40% odds are still pretty lackluster 60% is slihtly too much  55 feels good
+    if ((holdEffectBattler1 == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam1) / 100)   //buffed param to 45% rathre than 20
         || (holdEffectBattler1 == HOLD_EFFECT_CUSTAP_BERRY && HasEnoughHpToEatBerry(battler1, 4, gBattleMons[battler1].item)))
-        gProtectStructs[battler1].usedCustapBerry = TRUE;
+        gProtectStructs[battler1].usedCustapBerry = TRUE; //realize used wrong values for battler 2 may be issue here/seems to have fixed? yup
+
+
     // Quick Draw
     if (!ignoreChosenMoves && ability1 == ABILITY_QUICK_DRAW && !IS_MOVE_STATUS(gChosenMoveByBattler[battler1]) && Random() % 100 < 30)
         gProtectStructs[battler1].quickDraw = TRUE;   //pretty sure can use this rather than needing take memory for struc
@@ -5101,11 +5103,11 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     holdEffectParam2 = ItemId_GetHoldEffectParam(gBattleMons[battler2].item);
     
     // Quick Claw
-    if ((holdEffectBattler1 == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam1) / 100)   //buffed param to 40% rathre than 20
-        || (holdEffectBattler1 == HOLD_EFFECT_CUSTAP_BERRY && HasEnoughHpToEatBerry(battler2, 4, gBattleMons[battler2].item)))
+    if ((holdEffectBattler2 == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam2) / 100)   //buffed param to 45% rathre than 20
+        || (holdEffectBattler2 == HOLD_EFFECT_CUSTAP_BERRY && HasEnoughHpToEatBerry(battler2, 4, gBattleMons[battler2].item)))
         gProtectStructs[battler2].usedCustapBerry = TRUE;
     // Quick Draw
-    if (!ignoreChosenMoves && ability1 == ABILITY_QUICK_DRAW && !IS_MOVE_STATUS(gChosenMoveByBattler[battler2]) && Random() % 100 < 30)
+    if (!ignoreChosenMoves && ability2 == ABILITY_QUICK_DRAW && !IS_MOVE_STATUS(gChosenMoveByBattler[battler2]) && Random() % 100 < 30)
         gProtectStructs[battler2].quickDraw = TRUE;
 
     if (!ignoreChosenMoves)
@@ -5144,7 +5146,8 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         else //trick room logic below to explicitly exclude above  affects from calculation
         {
             if (speedBattler1 == speedBattler2 && Random() & 1)
-                strikesFirst = 2; // same speeds, same priorities
+                strikesFirst = 2; // same speeds, same priorities  is there a point in it being 2?  dont think so, effect is same other than separating it from the normal effect logic
+
             else if (speedBattler1 < speedBattler2)
             {
                 // battler2 has more speed
@@ -5166,7 +5169,8 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     else if (priority1 < priority2)
         strikesFirst = 1; // battler2's move has greater priority
     else
-        strikesFirst = 0; // battler1's move has greater priority
+        strikesFirst = 0; // battler1's move has greater priority   //why is battler1 (me) strikingfirst default to false for when the condition is true? 
+                            //that's just confusing
     
     return strikesFirst;
 }
@@ -5682,7 +5686,7 @@ static void HandleAction_UseMove(void)
         return;
     }
     gCritMultiplier = 1;
-    gBattleScripting.dmgMultiplier = 1;
+    //gBattleScripting.dmgMultiplier = 1;
     gBattleStruct->atkCancellerTracker = 0;
     gMoveResultFlags = 0;
     gMultiHitCounter = 0;
@@ -6288,7 +6292,7 @@ s8 GetChosenMovePriority(u8 battlerId) //made u8 (in test build)
 {
     u16 move;
     gProtectStructs[battlerId].pranksterElevated = 0;
-    if (gProtectStructs[battlerId].noValidMoves)
+    if (gProtectStructs[battlerId].noValidMoves) //think put called move effec here, ad set move to called move rather than used move?
         move = MOVE_STRUGGLE;
     else
         move = gBattleMons[battlerId].moves[*(gBattleStruct->chosenMovePositions + battlerId)];

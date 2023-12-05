@@ -2588,6 +2588,7 @@ BattleScript_HitFromCritCalc::
 	damagecalc
 	typecalc	@typecalc has issue its only reading first type for some reason, also some other issue with wrap animation? effect? @something weirder absorb always not effective ghost moves always no effect against things it should effect
 	call_if EFFECT_ROLLOUT	@somehow not working its being triggered everytime, when it shouldnt? thought that was a thing but then ran clean and no issue? / change to use nativeargs seems fine now?
+	call_if EFFECT_REVENGE	@ double dmg for revenge effects
 	adjustnormaldamage	@THIS was the issue, forgot the currinstr increment *facepalm so obviously it couldnt continue passed this to animation
 	pause 0x5	@was put after every adjustnormaldamage script, as added playcry pause is to clear values
 BattleScript_HitFromAtkAnimation::
@@ -5694,7 +5695,7 @@ BattleScript_EffectRecycle::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectRevenge::
-	doubledamagedealtifdamaged
+	@doubledamagedealtifdamaged	@moved to hit, done w call_if
 	goto BattleScript_EffectHit
 
 BattleScript_EffectBrickBreak::
@@ -6478,7 +6479,7 @@ BattleScript_ActionSwitch::
 	@can put runaway avoiding pursuit here just jump to BattleScript_SkipPursuit vsonic
 	jumpifability BS_ATTACKER, ABILITY_RUN_AWAY, BattleScript_SkipPursuit
 	jumpifability BS_ATTACKER, ABILITY_AVIATOR, BattleScript_SkipPursuit
-	manipulatedamage DOUBLE_DMG @for pursuit hopefully works? 
+	manipulatedamage DOUBLE_DMG @for pursuit hopefully works?  @seems to work
 	@setbyte sDMG_MULTIPLIER, 2
 	jumpifbattletype BATTLE_TYPE_DOUBLE, BattleScript_PursuitSwitchCheckTwice
 	setmultihit 1

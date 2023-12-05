@@ -300,9 +300,10 @@ static const struct LevelUpMove sRaticateLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sSpearowLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_PECK),
     LEVEL_UP_MOVE(1, MOVE_GROWL),
+    LEVEL_UP_MOVE(1, MOVE_PECK),
     LEVEL_UP_MOVE(7, MOVE_LEER),
+    LEVEL_UP_MOVE(9, MOVE_REVENGE),
     LEVEL_UP_MOVE(13, MOVE_FURY_ATTACK),
     LEVEL_UP_MOVE(19, MOVE_PURSUIT),
     LEVEL_UP_MOVE(25, MOVE_AERIAL_ACE),
@@ -310,7 +311,7 @@ static const struct LevelUpMove sSpearowLevelUpLearnset[] = {
     LEVEL_UP_MOVE(37, MOVE_DRILL_PECK),
     LEVEL_UP_MOVE(43, MOVE_AGILITY),
     LEVEL_UP_END
-}; //made normal add more dif type moves
+}; //made normal add more dif type moves //give rivenge, makes sense for their line
 
 static const struct LevelUpMove sFearowLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_PECK),
