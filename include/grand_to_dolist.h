@@ -1773,9 +1773,90 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   working on forewarn anticipate, found disguise glitch,
   cause is depracated form change setup, need to replace w EE version
 
+  -fixed form chjange, think may put forewarna and anticipate back on special status,
+  so everything is stored just for first turn, of switch in.
+  looking at battlestruct touse, think that lasts entire battle?
+  annoying but think would need setup like u16 usedHeldItems[PARTY_SIZE][NUM_BATTLE_SIDES];
+
+  at battle start default to 0, when set activates canceler, then sets to move end so can't reactivate
+
+  use forewarn user to set which battle side
+  setup function hat takes battler argument (to use forewarn/anticipateuser) //can just use gbattlertarget
+  to replace condition logic in attack canceler  CanforewarnActivate  something like that
+ was planning to make this replace forewarned move, but realized can just put store thes the mon id
+ side etc. when the battler is in and activates the forewarn and anticipation logic,
+ don't need store side, can just use a party filter to say store for the party?
+ can probably wrap into a single field rather than needing one for either ability,
+ sometning like used one time ability, if works could pull disguise into this as well
+
+ potentially make small array to store single use abilities make function that checks it and returns true or false
+ if is single use ability, put in every ability checkin battle_util.
+ so it'd  just automatically store when needed?
+
+ would be good future proofing, and shuoldn't add much to processing as if it returns false it'll just do nothing
+ hmm.
+
+ so far I know of disguise anticipation and forewarn potentially zygardes form change?
+ singleUseAbilities
+
+ ex. battlesruct assignment
+ *(&gBattleStruct->multiBuffer.linkPartnerHeader.versionSignatureLo) = 1;
+ gBattleStruct->multiplayerId = playerMultiplayerId;
+ gBattleStruct->dynamicMoveType = TYPE_FAIRY; 
+ gBattleStruct->lastTakenMoveFrom[i][2] = MOVE_NONE;
+
+ gBattleStruct->usedHeldItems[i][B_SIDE_PLAYER] = FALSE;
+ gBattleStruct->usedHeldItems[i][B_SIDE_OPPONENT] = FALSE;
+
+ gBattleStruct->appearedInBattle = 0; //this also potentially useful, tracks all mon, w bitfield
+
+
+ coild potentially do  if ((gBattleStruct->appearedInBattle & gBitTable[i])
+ set used singleuse ability[partyindex[i]] something like that
+
+ but if I'm putting in abilitybattleeffects there's no reason to check appearedinBattle as that's a given, they'd be on the field
+ I don't need a condition filter, I just need what to set
+
+ gBattleStruct->usedHeldItems[gBattlerPartyIndexes[gActiveBattler]][GetBattlerSide(gActiveBattler)] = itemId;
+ think this works  just need to set true
+
+ usedSingleUseAbility UsedOneTimeAbility
+
+ in battlestartclearsetdata, most likely place
+
+ fixed anticipation and forewarn now work properly w new effects
+ but considering balance still unsure of,
+
+ forewarn checks for strongest move, while anticipation checks only for explosive or super effective,
+ in a normal playthrough strongest move is much more useful as ai typically selects the strongest move.
+
+ also every mon has a strongest move, likelihood of a mon having a super move is based on teh weakness of your type.
+ and its on bug which does have several but that still relies on you putting htem up against a disadvantgeous situation just to get use out of teh ability
+ bugs are also weak stat wise etc.
+
+ forewarn is for psychic  types that don't really need it
+
+ to counter think what I can do is add that logic to anticipation,
+ so I get same effect but don't get the benefit of a reveal
+
+ anticipation logic will be
+ check if explosive, check if ohko and can land it, check if super effective, else check strongest, messed sensed a strong move for last argument
+ -done works, : )
+
+
   also discovered issue with new moltres ability not working,
   pretty sure problem is battle_util.c lpogic overlap
   issue only comes up with contact moves
+
+  issue was I forget to put breaks in the absorb effect switch case, and hadn't defined the ability in the battle main absorb logic.
+  also becauase of complexitiy of effect needed to activate multiple battle script at a single time one after another to set effect.
+  First for absorb effect and then for status effects clear.
+  couldn't do 2 bs in a single code block.
+
+  So the solution was to use two different ability effect cases,  
+  I kept normal effect in absorb  then filled the rest in the unused immunity case block
+
+  it now works as planned
 
   as part of update for form chnage, need add F_MEGA_FORM to mon in bsae stats, flag was set but never assigned
 
@@ -1783,15 +1864,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -simply prevent health and hp data from being updated on hit,
   //check how substitute does it to attempt avoid rollout glitch
   //all I need is a check for if anticipation or forewarn should activate/has activated, and then just put the check in the data and hp bar function
+  -dont thinkm will be issue w forewarn etc. but test anyway - prob need mon with only rollout as move
 
-  //swapped anticipation forewarn status effects from special status to protectstatus, to avoid the clear on each turn
-  -need test and see if that fixes effect, its patterned after telepathy not disguise, since its in attack canceler, 
 
   -fixed brick break,  - fixed belch - still todo is set strings for forecast
   -remember plan to add berry shop to erika's gym
 
   -still an issue with koffing, abilities, does some weird error, something with stench or neutralizing gas
-  before froze game, now it causes rain?
+  before froze game, now it causes rain? - think this is fixed?
 
   -considering does IV change, invalidate the multiplier change,?  I think know because everyone has access,
   but rolling a 0 is way more punishing this way hmm

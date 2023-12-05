@@ -74,16 +74,16 @@ const u8 gMetapodPokedexText[] = _(
     "for evolution inside the shell.");
 
 const u8 gButterfreePokedexText[] = _(
-    "It has a superior ability to search for\n"
-    "delicious honey from flowers. It can seek,\n"
-    "extract, and carry honey from flowers\n"
-    "blooming over six miles away.");
+    "It collects honey every day. It rubs honey\n"       
+    "onto the hairs on its legs to carry back\n"      
+    "to its nest. Its wings, covered with\n"
+    "poisonous powders, repel rain.");
 
 const u8 gWeedlePokedexText[] = _(
-    "A Weedle has an extremely acute sense\n"
-    "of smell. It distinguishes its favorite\n"
-    "kinds of leaves from those it dislikes by\n"
-    "sniffing with its big red nose.");
+    "Weedle has an acute sense of smell.\n"
+    "It distinguishes its favorite kinds of\n"
+    "leaves by smell, and attacks foes with\n"
+    "the poison barb on top of its head.");
 
 const u8 gKakunaPokedexText[] = _(
     "It remains virtually immobile while it\n"

@@ -364,7 +364,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_BUG,
         .eggGroup2 = EGG_GROUP_BUG,
-        .abilities = {ABILITY_SHIELD_DUST, ABILITY_NONE},
+        .abilities = {ABILITY_SHIELD_DUST, ABILITY_STENCH}, //Fits 
         .abilityHidden = {ABILITY_RUN_AWAY, ABILITY_ANTICIPATION},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
@@ -409,13 +409,13 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_BUG,
         .eggGroup2 = EGG_GROUP_BUG,
-        .abilities = {ABILITY_COMPOUND_EYES, ABILITY_NONE},
+        .abilities = {ABILITY_COMPOUND_EYES, ABILITY_PLAGUE_WINGS}, //give new ability does effect spore on attack doesnt require contact
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_TINTED_LENS, ABILITY_ANTICIPATION},
+            .abilityHidden = {ABILITY_TINTED_LENS, ABILITY_ANTICIPATION}, //plague wing
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-    },
+    }, //need test plague wings
 
     [SPECIES_WEEDLE] =
     { 
@@ -432,7 +432,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_BUG,
         .eggGroup2 = EGG_GROUP_BUG,
-        .abilities = {ABILITY_SHIELD_DUST, ABILITY_NONE},
+        .abilities = {ABILITY_SHIELD_DUST, ABILITY_POISON_TOUCH},
         .abilityHidden = {ABILITY_RUN_AWAY, ABILITY_ANTICIPATION},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,

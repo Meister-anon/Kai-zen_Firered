@@ -161,10 +161,8 @@ EWRAM_DATA s32 gHpDealt = 0;
 EWRAM_DATA s32 gTakenDmg[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u16 gLastUsedItem = 0;
 EWRAM_DATA u16 gLastUsedAbility = 0;
-EWRAM_DATA u8 gAnticipatedBattler = 0;  
-EWRAM_DATA u8 gForewarnedBattler = 0;   
-EWRAM_DATA u8 gBattlerAttacker = 0;
-EWRAM_DATA u8 gBattlerTarget = 0;
+EWRAM_DATA u8 gBattlerAttacker = 0; 
+EWRAM_DATA u8 gBattlerTarget = 0; 
 EWRAM_DATA u8 gBattlerFainted = 0;
 EWRAM_DATA u8 gEffectBattler = 0;
 EWRAM_DATA u8 gPotentialItemEffectBattler = 0;
@@ -3592,6 +3590,9 @@ static void BattleStartClearSetData(void)
     {
         gBattleStruct->usedHeldItems[i][B_SIDE_PLAYER] = FALSE;
         gBattleStruct->usedHeldItems[i][B_SIDE_OPPONENT] = FALSE;
+
+        gBattleStruct->usedSingleUseAbility[i][B_SIDE_PLAYER] = FALSE;
+        gBattleStruct->usedSingleUseAbility[i][B_SIDE_OPPONENT] = FALSE;
         gBattleStruct->itemStolen[i].originalItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
 
         //gBattleStruct->allowedToChangeFormInWeather[i][B_SIDE_PLAYER] = FALSE;
@@ -3603,7 +3604,7 @@ static void BattleStartClearSetData(void)
     gBattleStruct->mega.triggerSpriteId = 0xFF;
 
     gBattleStruct->stickyWebUser = 0xFF;
-    gBattleStruct->appearedInBattle = 0;
+    gBattleStruct->appearedInBattle = 0;  //not making burmy change form,, will keep whatever form you caught it with
 
     for (i = 0; i < 11; ++i)
         gBattleResults.catchAttempts[i] = 0; //believe these first few are just statistics
@@ -3834,10 +3835,6 @@ void FaintClearSetData(void) //see about make status1 not fade wen faint?
     gProtectStructs[gActiveBattler].usesBouncedMove = FALSE;
     gProtectStructs[gActiveBattler].usedGravityPreventedMove = FALSE;
     gProtectStructs[gActiveBattler].usedThroatChopPreventedMove = FALSE; 
-    gProtectStructs[gActiveBattler].forewarnDone = FALSE;
-    gProtectStructs[gActiveBattler].forewarnedMove = FALSE;
-    gProtectStructs[gActiveBattler].anticipationDone = FALSE;  //removed these as want them to be once per battle
-    gProtectStructs[gActiveBattler].anticipatedMove = FALSE;
     gDisableStructs[gActiveBattler].isFirstTurn = 2;
     gLastMoves[gActiveBattler] = MOVE_NONE;
     gLastLandedMoves[gActiveBattler] = MOVE_NONE;
@@ -5265,7 +5262,7 @@ static void SetActionsAndBattlersTurnOrder(void)
     //gBattleStruct->focusPunchBattlerId = 0;
 }
 
-static void TurnValuesCleanUp(bool8 var0)
+static void TurnValuesCleanUp(bool8 var0) //resets protect structs specific disble structs and folloemetimer at turn end
 {
     s32 i;
     u8 *dataPtr;
@@ -5789,6 +5786,7 @@ static void HandleAction_UseMove(void)
             && (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_GLACIAL_ICE && moveType == TYPE_ICE)
             && (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_LAVA_FISSURE && moveType == TYPE_FIRE)
             && (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_FLASH_FIRE && moveType == TYPE_FIRE)
+            && (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_RISING_PHOENIX && moveType == TYPE_FIRE)
             && (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_GALEFORCE && gBattleMoves[gCurrentMove].flags & FLAG_WIND_MOVE)))
     {
         side = GetBattlerSide(gBattlerAttacker);
@@ -5807,6 +5805,7 @@ static void HandleAction_UseMove(void)
                  || (GetBattlerAbility(gActiveBattler) == ABILITY_GLACIAL_ICE && moveType == TYPE_ICE && CAN_ABILITY_ABSORB(gActiveBattler))
                  || (GetBattlerAbility(gActiveBattler) == ABILITY_LAVA_FISSURE && moveType == TYPE_FIRE && CAN_ABILITY_ABSORB(gActiveBattler))
                  || (GetBattlerAbility(gActiveBattler) == ABILITY_FLASH_FIRE && moveType == TYPE_FIRE && CAN_ABILITY_ABSORB(gActiveBattler))
+                 || (GetBattlerAbility(gActiveBattler) == ABILITY_RISING_PHOENIX && moveType == TYPE_FIRE && CAN_ABILITY_ABSORB(gActiveBattler))
                  || (GetBattlerAbility(gActiveBattler) == ABILITY_GALEFORCE && gBattleMoves[gCurrentMove].flags & FLAG_WIND_MOVE && CAN_ABILITY_ABSORB(gActiveBattler)))
                 && GetBattlerTurnOrderNum(gActiveBattler) < var
                 && gBattleMoves[gCurrentMove].effect != EFFECT_SNIPE_SHOT

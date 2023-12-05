@@ -8292,8 +8292,8 @@ BattleScript_ShedSkinActivates::
 BattleScript_RisingPhoenixActivates::
 	printstring STRINGID_PHOENIX_CLEANSE
 	waitmessage 0x40
-	updatestatusicon BS_ATTACKER
-	end3
+	updatestatusicon BS_SCRIPTING
+	return
 
 BattleScript_PurifyingAuraActivates::
 	printstring STRINGID_HEALERCURE

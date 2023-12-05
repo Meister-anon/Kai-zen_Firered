@@ -671,7 +671,7 @@ static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] =
     ABILITY_LAVA_FISSURE,
 };
 
-u16 GetUsedHeldItem(u8 battler) //vsonic
+u16 GetUsedHeldItem(u8 battler) //vsonic  //looks weird but matches emerald logic so is good
 {
     return gBattleStruct->usedHeldItems[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)];
 }
@@ -4976,13 +4976,14 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
             bestId = i;
     }
 
-    gBattlerTarget = data[bestId].battlerId;    //sets target based on which battler has most dangerous move.
-    gForewarnedBattler = data[bestId].battlerId;    //
+    
+    gDisableStructs[gBattlerTarget].forewarnedBattler = gBattlerTarget = data[bestId].battlerId;    //sets target based on which battler has most dangerous move.
+    
     PREPARE_MOVE_BUFFER(gBattleTextBuff1, data[bestId].moveId)
         //RecordKnownMove(gBattlerTarget, data[bestId].moveId);   //I think this may just be for ai?
 
-    gProtectStructs[battler].forewarnedMove = data[bestId].moveId; //this way can transfer the move perfectly without worrying about random shift from recalling function
-
+    gDisableStructs[battler].forewarnedMove = data[bestId].moveId; //this way can transfer the move perfectly without worrying about random shift from recalling function
+    //sets status to forwarnuser to store the move they'll evade
     free(data);
 }
 
@@ -5811,9 +5812,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 return effect; // Note: It returns effect as to not record the ability if Frisk does not activate.
             case ABILITY_FOREWARN:
-                if (!gSpecialStatuses[battler].switchInAbilityDone)//will have to make cases for these 2, in same place as effect spore, decids a move on switchin,
-                {                                                   //nulls the move if hit by it, or can put in atk canceller, check target switchInAbilityDone, and if currentmove matches ability prediction
-                    ForewarnChooseMove(battler);    //for switchin battler is gBattlerAttacker
+                if (!gSpecialStatuses[battler].switchInAbilityDone
+                && gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] == FALSE)//need understand logical process as want to add && for a negative but seems wrong?
+                {      //only other option is put nested if, arodun code, then continue only if it isn't set
+                        //and directly below that set it //instead make macro put after effect, taht checks if effect and is from one use ability and sets used there                                             
+                    ForewarnChooseMove(battler);    //for switchin battler is gBattlerAttacker  !(true&&false), that should be !(false) and then true. << THIS
                     if (GetBattlerSide(battler) == B_SIDE_PLAYER)
                     {
                         PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_PLAYER_FOREWARN); //to the
@@ -5829,9 +5832,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                     ++effect;
                 }//for some reason use of battler her is what's causing issue, if this is wron gthey may all be wrong, so look into how battler is different from EE
+                if (effect)
+                    gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] = TRUE;
+                
                 break; //other things use the same setup but the script works fine, looking further 
             case ABILITY_ANTICIPATION:  //working on change
-                if (!gSpecialStatuses[battler].switchInAbilityDone)
+            {
+                u16 moveId = MOVE_NONE; //to store moveId of a move
+
+                if (!gSpecialStatuses[battler].switchInAbilityDone
+                && gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] == FALSE)
                 {
                     side = GetBattlerSide(battler);
                     
@@ -5843,8 +5853,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             for (j = 0; j < MAX_MON_MOVES; j++)
                             {
                                 move = gBattleMons[i].moves[j];
-                                SetTypeBeforeUsingMove(move, i); //usign this fixed it
-                                GET_MOVE_TYPE(move, moveType); //problem seems to be movetype it isn't calcing correctly
+                                SetTypeBeforeUsingMove(move, i); //usign this fixed it, with get_mvoe_type change without this it just erad as normal type,cuz dynamicmovetype is 0
+                                GET_MOVE_TYPE(move, moveType); //including set type seems to be correct, as ability is supposed to read for things that change type
+
+                                if (gBattleMoves[move].power > gBattleMoves[moveId].power) //for each move,
+                                    moveId = move;
 
                                 if (gBattleMoves[move].effect == EFFECT_EXPLOSION //setup multiplier calc think can just use multipier check here.
                                     && CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) != UQ_4_12(0.0)) //isue is modifier for some reason doesnt work above 1?
@@ -5869,22 +5882,35 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                     ++effect;//
                                     break;
                                 }//if find super effectivemove, increment effect and break for loop, to lock in move/
+                                
                             }//can only return one value, so will need to do an if else based on priority                            
                         }
                         if (effect)
-                                break;
+                                break; //should be break out of i loop
                     }
+
+                    if (!effect) //if didn't find a move that matched condition
+                    {
+                        PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_STRONGEST_MOVE); //change to return a STrong
+                        if (gBattleMoves[move].power <= gBattleMoves[moveId].power)
+                            move = moveId; //replace move with strongest move found
+                        ++effect;//
+                         //realized can't put this here, would prevent loop from going all the way, needs to be outside
+                    } //works perfectly
+
+                    
 
                     if (effect)//if ability activates  i.e effect not 0
                     {
-                        gProtectStructs[battler].anticipatedMove = move;
-                        gAnticipatedBattler = i; //hopeworks.
+                        gDisableStructs[battler].anticipatedMove = move;
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_ANTICIPATION;
                         gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                        gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] = TRUE;
                         BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                     }
                 }
                 break;
+            }
             case ABILITY_DOWNLOAD:
                 if (!gSpecialStatuses[battler].switchInAbilityDone)
                 {
@@ -6480,15 +6506,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 case ABILITY_GLACIAL_ICE:
                     if (moveType == TYPE_ICE && gBattleMoves[moveArg].power != 0)
                         effect = 1;
+                    break;
                 case ABILITY_EROSION:
                     if (moveType == TYPE_ROCK && gBattleMoves[moveArg].power != 0)
                         effect = 1;
+                    break;
                 case ABILITY_RISING_PHOENIX:
                 if (moveType == TYPE_FIRE && gBattleMoves[moveArg].power != 0)
                         effect = 4;
+                    break;
                 case ABILITY_JEWEL_METABOLISM:
                     if (moveType == TYPE_ROCK && gBattleMoves[moveArg].power != 0)
                         effect = 2, statId = STAT_DEF;
+                    break;
                 case ABILITY_MOTOR_DRIVE:
                     if (moveType == TYPE_ELECTRIC && gBattleMoves[moveArg].power != 0)
                         effect = 2, statId = STAT_SPEED;
@@ -6508,6 +6538,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 case ABILITY_GALEFORCE:
                     if (gBattleMoves[moveArg].flags & FLAG_WIND_MOVE)
                         effect = 2, statId = STAT_SPATK;
+                    break;
                 case ABILITY_LAVA_FISSURE:
                 case ABILITY_FLASH_FIRE:
                     if ((moveType == TYPE_FIRE  && gBattleMoves[moveArg].power != 0) && !((gBattleMons[battler].status1 & STATUS1_FREEZE)))// && B_FLASH_FIRE_FROZEN <= GEN_4))
@@ -6521,7 +6552,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                 gBattlescriptCurrInstr = BattleScript_FlashFireBoost_PPLoss;
 
                             gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_FLASH_FIRE;
-                            effect = 3; //damage unlification handled inpokemon.c
+                            effect = 3; 
                         }
                         else
                         {
@@ -6583,7 +6614,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                 }
                 else if (effect == 4) //moltres ability, ABILITY_RISING_PHOENIX heal and stat cleanse
-                {
+                { //ok issue isn't it being effect 4, double check other absorb abilities are working, then see whats going on
+                    //issue was I'm stupid and I forgot  include breaks in the absorb cases  added so there was major fallthrough
+                    //absorbs correctly but now game resets on activation
+
+                
 
                     if (BATTLER_MAX_HP(battler) || gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK)
                     {
@@ -6603,56 +6638,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         if (gBattleMoveDamage == 0)
                             gBattleMoveDamage = 1;
                         gBattleMoveDamage *= -1;
-                    } //potentially use ++effect, to make not loop/repeat can put below effect in effect 5 to trigger after?
-
-
-                    if (!(gProtectStructs[gBattlerAttacker].confusionSelfDmg))
-                    {
-                        gBattleMons[battler].status1 = 0;
-                        //need test this, think need be more specific to not remove beneficial status
-                        gBattleMons[battler].status2 &= ~(STATUS2_NIGHTMARE | STATUS2_CONFUSION | STATUS2_WRAPPED | STATUS2_INFATUATION
-                        | STATUS2_ESCAPE_PREVENTION | STATUS2_TORMENT);
-
-                        /*gBattleMons[battler].status2 &= ~(STATUS2_CONFUSION);
-                        gBattleMons[battler].status2 &= ~(STATUS2_WRAPPED);
-                        gBattleMons[battler].status2 &= ~(STATUS2_INFATUATION);
-                        gBattleMons[battler].status2 &= ~(STATUS2_ESCAPE_PREVENTION);
-                        gBattleMons[battler].status2 &= ~(STATUS2_TORMENT);*/
-
-                        gStatuses3[battler] &= ~(STATUS3_LEECHSEED | STATUS3_PERISH_SONG | STATUS3_SMACKED_DOWN | STATUS3_TELEKINESIS
-                        | STATUS3_MIRACLE_EYED);
-
-                        /*gBattleMons[battler].status3 &= ~(STATUS3_LEECHSEED); //hope works right, should be remove leech seed if seeded
-                        gBattleMons[battler].status3 &= ~(STATUS3_PERISH_SONG);
-                        gBattleMons[battler].status3 &= ~(STATUS3_SMACKED_DOWN);
-                        gBattleMons[battler].status3 &= ~(STATUS3_TELEKINESIS);
-                        gBattleMons[battler].status3 &= ~(STATUS3_MIRACLE_EYED);*/
-
-                        gBattleMons[battler].status4 &= ~(STATUS4_BIND | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL
-                        | STATUS4_SAND_TOMB | STATUS4_MAGMA_STORM | STATUS4_SWARM | STATUS4_SNAP_TRAP | STATUS4_THUNDER_CAGE);
-
-                        /*gBattleMons[battler].status4 &= ~(STATUS4_BIND);
-                        gBattleMons[battler].status4 &= ~(STATUS4_FIRE_SPIN);
-                        gBattleMons[battler].status4 &= ~(STATUS4_CLAMP);
-                        gBattleMons[battler].status4 &= ~(STATUS4_WHIRLPOOL);
-                        gBattleMons[battler].status4 &= ~(STATUS4_SAND_TOMB);
-                        gBattleMons[battler].status4 &= ~(STATUS4_MAGMA_STORM);
-                        gBattleMons[battler].status4 &= ~(STATUS4_SWARM);
-                        gBattleMons[battler].status4 &= ~(STATUS4_SNAP_TRAP);
-                        gBattleMons[battler].status4 &= ~(STATUS4_THUNDER_CAGE);*/
-                        
-                        //include reset stats if below 6
-                        for (j = 0; j < NUM_BATTLE_STATS; ++j)
-                        {
-                            if (gBattleMons[battler].statStages[j] < 6)
-                            {
-                                gBattleMons[battler].statStages[j] = 6;
-                            }
-                        }
-
-                        BattleScriptPushCursor();
-                        gBattlescriptCurrInstr = BattleScript_RisingPhoenixActivates; //change to ability cleansed all negative effects - done
-                    } //hopefully these work
+                    }
+                    gLastHitByType[battler] = TYPE_FIRE;  //can do this because move gets canceled so it never sets this in this case anyway
                 }
             }
             break;// updated ability battle effects for drain abilities 
@@ -6832,6 +6819,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     ++effect;
                 }
                 break;
+            case ABILITY_RISING_PHOENIX:
             case ABILITY_FLAME_BODY:
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && gBattleMons[gBattlerAttacker].hp != 0
@@ -6846,21 +6834,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
                     ++effect;
                 }
-                break;
-            case ABILITY_RISING_PHOENIX:
-                if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                    && gBattleMons[gBattlerAttacker].hp != 0
-                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
-                    && CanBeBurned(gBattlerAttacker)
-                    && (IsMoveMakingContact(moveArg, gBattlerAttacker))
-                    && TARGET_TURN_DAMAGED
-                    && (Random() % 3) == 0)
-                {
-                    gBattleScripting.moveEffect = MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BURN;
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
-                    ++effect;
-                }                
                 break;
             case ABILITY_STICKY_HOLD:
             case ABILITY_MAGMA_ARMOR:
@@ -7414,6 +7387,32 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     ++effect;
                 }
                 break;
+            case ABILITY_PLAGUE_WINGS:
+            if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && gBattleMons[gBattlerTarget].hp != 0
+                    && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+                    && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS)
+                    && GetBattlerAbility(gBattlerTarget) != ABILITY_OVERCOAT
+                    && GetBattlerHoldEffect(gBattlerTarget, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES
+                    && TARGET_TURN_DAMAGED //if hard to set status can remove this, as it already says not move no efect so would exclude protection and immunities
+                    && (Random() % 3) == 0)
+                {
+                    do
+                        gBattleScripting.moveEffect = Random() % 5; //0-4   /will need test unsure how will stack up, with abilities that have move effects,
+                    while (gBattleScripting.moveEffect == 0); // either will trigger after or not at all, prefer to still trigger, can use move confusion
+
+                    if (gBattleScripting.moveEffect == MOVE_EFFECT_BURN)
+                        gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+
+
+                    if (gBattleScripting.moveEffect == MOVE_EFFECT_FREEZE)
+                        gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION;
+                    
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_ApplySecondaryEffect;
+                    ++effect;
+                }
+                break;
             case ABILITY_STATIC:
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                     && gBattleMons[gBattlerTarget].hp != 0
@@ -7701,10 +7700,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                     break;
                 case ABILITY_LAVA_FISSURE:
-                case ABILITY_RISING_PHOENIX:
+                //case ABILITY_RISING_PHOENIX:
                 case ABILITY_FLAME_BODY:
                 case ABILITY_MAGMA_ARMOR:
-                    if (gBattleMons[battler].status1 & STATUS1_FREEZE)
+                    if (gBattleMons[battler].status1 & STATUS1_FREEZE) //may not even need pretty sure it prevents from even getting the status elsewhere?
                     {
                         StringCopy(gBattleTextBuff1, gStatusConditionString_IceJpn);
                         effect = 1;
@@ -7716,6 +7715,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         StringCopy(gBattleTextBuff1, gStatusConditionString_LoveJpn);
                         effect = 3;
                     }
+                    break;
+                case ABILITY_RISING_PHOENIX:
+                    if (gLastHitByType[battler] == TYPE_FIRE) //hope works /is in right order
+                    {
+                         effect = 4;
+                         gLastHitByType[battler] = TYPE_NORMAL;
+                    }                       
                     break;
                 }
                 if (effect)
@@ -7734,9 +7740,60 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     case 3: // get rid of infatuation
                         gBattleMons[battler].status2 &= ~(STATUS2_INFATUATION);
                         break;
+                    case 4: //clear all negatives
+                    //cleanse effec, separated from other move end to hopefully fix glitch
+                    {
+                        gBattleMons[battler].status1 = 0; 
+                        //need test this, think need be more specific to not remove beneficial status
+                        gBattleMons[battler].status2 &= ~(STATUS2_NIGHTMARE | STATUS2_CONFUSION | STATUS2_WRAPPED | STATUS2_INFATUATION
+                        | STATUS2_ESCAPE_PREVENTION | STATUS2_TORMENT);  //confirmed removes confusion/statuses here
+
+                        /*gBattleMons[battler].status2 &= ~(STATUS2_CONFUSION);
+                        gBattleMons[battler].status2 &= ~(STATUS2_WRAPPED);
+                        gBattleMons[battler].status2 &= ~(STATUS2_INFATUATION);
+                        gBattleMons[battler].status2 &= ~(STATUS2_ESCAPE_PREVENTION);
+                        gBattleMons[battler].status2 &= ~(STATUS2_TORMENT);*/
+
+                        gStatuses3[battler] &= ~(STATUS3_LEECHSEED | STATUS3_PERISH_SONG | STATUS3_SMACKED_DOWN | STATUS3_TELEKINESIS
+                        | STATUS3_MIRACLE_EYED);
+
+                        /*gBattleMons[battler].status3 &= ~(STATUS3_LEECHSEED); //hope works right, should be remove leech seed if seeded
+                        gBattleMons[battler].status3 &= ~(STATUS3_PERISH_SONG);
+                        gBattleMons[battler].status3 &= ~(STATUS3_SMACKED_DOWN);
+                        gBattleMons[battler].status3 &= ~(STATUS3_TELEKINESIS);
+                        gBattleMons[battler].status3 &= ~(STATUS3_MIRACLE_EYED);*/
+
+                        gBattleMons[battler].status4 &= ~(STATUS4_BIND | STATUS4_FIRE_SPIN | STATUS4_CLAMP | STATUS4_WHIRLPOOL
+                        | STATUS4_SAND_TOMB | STATUS4_MAGMA_STORM | STATUS4_SWARM | STATUS4_SNAP_TRAP | STATUS4_THUNDER_CAGE);
+
+                        /*gBattleMons[battler].status4 &= ~(STATUS4_BIND);
+                        gBattleMons[battler].status4 &= ~(STATUS4_FIRE_SPIN);
+                        gBattleMons[battler].status4 &= ~(STATUS4_CLAMP);
+                        gBattleMons[battler].status4 &= ~(STATUS4_WHIRLPOOL);
+                        gBattleMons[battler].status4 &= ~(STATUS4_SAND_TOMB);
+                        gBattleMons[battler].status4 &= ~(STATUS4_MAGMA_STORM);
+                        gBattleMons[battler].status4 &= ~(STATUS4_SWARM);
+                        gBattleMons[battler].status4 &= ~(STATUS4_SNAP_TRAP);
+                        gBattleMons[battler].status4 &= ~(STATUS4_THUNDER_CAGE);*/
+                        
+                        //include reset stats if below 6
+                        for (j = 0; j < NUM_BATTLE_STATS; ++j)
+                        {
+                            if (gBattleMons[battler].statStages[j] < 6)
+                            {
+                                gBattleMons[battler].statStages[j] = 6;
+                            }
+                        }
+
+                        //BattleScriptPushCursor();
+                    }  
+                    break;
                     }
 
                     BattleScriptPushCursor();
+                    if (GetBattlerAbility(battler) == ABILITY_RISING_PHOENIX) //really hope putting here works...
+                        gBattlescriptCurrInstr = BattleScript_RisingPhoenixActivates; //change to ability cleansed all negative effects - done
+                    else
                     gBattlescriptCurrInstr = BattleScript_AbilityCuredStatus;
                     gBattleScripting.battler = battler;
                     gActiveBattler = battler;

@@ -263,6 +263,9 @@ struct DisableStruct
     u8 inthralled;
     u8 inthrallTimer;
     u16 inthralledMove;
+    u16 forewarnedMove; //for storing move from forewarn ability
+    u8 forewarnedBattler;
+    u16 anticipatedMove;    //for storing move from anticipation ability   
     //u8 RoostTimerStartValue;  //remove for now until I get 
     /*0x1A*/ u8 unk1A[2];
 }; //think I may not actually need roost start value, long as I have timer
@@ -324,11 +327,7 @@ struct ProtectStruct
              u32 usedCustapBerry : 1;    // also quick claw
              u32 touchedProtectLike : 1;
              u32 obstructed : 1;
-             u32 disableEjectPack : 1;
-             u16 forewarnedMove; //for storing move from forewarn ability
-             u8 forewarnDone : 1;  //to be set TRUE if predicted move was used by opponent, if not and enemy faints or switches, reactivate forewarn for next opponent 
-             u16 anticipatedMove;    //for storing move from anticipation ability
-             u8 anticipationDone : 1;// same as forwarn clause //also considering moveend & moveendtarget can prob do swithin repeat, by swapping battler and side w new abilityeffet clause?
+             u32 disableEjectPack : 1;    
              u16 fieldE;
 };
 
@@ -686,6 +685,7 @@ struct BattleStruct //fill in unused fields when porting
     u8 atkCancellerTracker;
     //u16 usedHeldItems[MAX_BATTLERS_COUNT]; //original value below is emerald expansion changed version,  
     u16 usedHeldItems[PARTY_SIZE][NUM_BATTLE_SIDES]; // For each party member and side. For harvest, recycle  //think I"m setup to use this? adjusted all values now
+    u16 usedSingleUseAbility[PARTY_SIZE][NUM_BATTLE_SIDES]; ///for abilities that activate once per battle - my addition
     u8 chosenItem[4]; // why is this an u8?
     u8 AI_itemType[2];
     u8 AI_itemFlags[2];
@@ -1038,8 +1038,6 @@ extern void (*gBattleMainFunc)(void);
 extern u8 gMoveSelectionCursor[MAX_BATTLERS_COUNT];
 extern u32 gUnknown_2022B54;
 extern u8 gUnknown_2023DDC;
-extern u8 gAnticipatedBattler;  //for storing battlerId of anticipation target   unsure if need max battler array thing [MAX_BATTLERS_COUNT];
-extern u8 gForewarnedBattler;   //for storing battlerId of forewarn target
 extern u8 gBattlerAttacker;
 extern u8 gEffectBattler;
 extern u8 gMultiHitCounter;

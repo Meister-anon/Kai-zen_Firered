@@ -630,8 +630,15 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TOXUNGUE] = sToxungueDescription,
     [ABILITY_OMNIPOTENT_AIDE] = sOmnipotentAideDescription,
     [ABILITY_FLUORESCENCE] = sFluorescenceDescription,
+    [ABILITY_SPECTRE] = sNoneDescription,
+    [ABILITY_AURA_OF_LIGHT] = sNoneDescription,
+    [ABILITY_DESPAIR] = sNoneDescription,
+    [ABILITY_RISING_PHOENIX] = sNoneDescription,
+    [ABILITY_DREAD_WING] = sNoneDescription,
+    [ABILITY_PLAGUE_WINGS] = sNoneDescription,
 };//last value can have comma
   //FOREWARN should work how I want,for ai make ability check to not use fakeout if have said ability,still need setup reactivation
+  //= sNoneDescription,  To fill in
 
 //now undrestand reason strings (strings are arrays) use that +1 value
 //in the elements is because C always adds an extra "null terminating character"
@@ -959,4 +966,10 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TOXUNGUE] =_("TOXUNGUE"),
     [ABILITY_OMNIPOTENT_AIDE] =_("OMNIPOTENT AIDE"),
     [ABILITY_FLUORESCENCE] =_("FLUORESCENCE"),
+    [ABILITY_SPECTRE] =_("SPECTRE"),
+    [ABILITY_AURA_OF_LIGHT] =_("AURA OF LIGHT"),
+    [ABILITY_DESPAIR] =_("DESPAIR"),
+    [ABILITY_RISING_PHOENIX] =_("RISING PHOENIX"),
+    [ABILITY_DREAD_WING] =_("DREAD WING"),
+    [ABILITY_PLAGUE_WINGS] =_("PLAGUE WINGS"),
 };//can have comma

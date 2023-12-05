@@ -1446,36 +1446,38 @@ static void atk00_attackcanceler(void) //vsonic
         return;
     }
 
-    //need to fill in condition more - DONE 
-    //effects are done, need test but should work, what's missing is the reactivation condition, for if it wasn't triggered on previous battler
-    //oh wait I think I can do that like intimidate, like the reset intimmidate stuff in zthe faintmon battlescript
-    //just need to make it only do that if forwarn/anticipate not done. check targetting but I think should be simple.
-    if (GetBattlerAbility(gBattlerTarget) == ABILITY_FOREWARN
-        && (gCurrentMove == gProtectStructs[gForewarnedBattler].forewarnedMove) //can't use special status for this as it gets cleared each turn
-        && !(gProtectStructs[gForewarnedBattler].forewarnDone)) //trying to fix forewarn  anticipate effect unsure what right battler value is etc.
+    else if ((GetBattlerAbility(gBattlerTarget) == ABILITY_FOREWARN)
+    //&& gBattlerAttacker == gForewarnedBattler  //spefiic condition just for forewarn, extra leway given to anticipation
+    && gBattlerAttacker == gDisableStructs[gBattlerAttacker].forewarnedBattler //redid effect realized as weas would be reset if two forewarn mon on enemy side
+    && gDisableStructs[gBattlerTarget].forewarnedMove != MOVE_UNAVAILABLE // ^ works
+    && gDisableStructs[gBattlerTarget].forewarnedMove != MOVE_NONE) //works perfectly
+    {
+        if (gCurrentMove == gDisableStructs[gBattlerTarget].forewarnedMove)
+        {
+            
+            gMoveResultFlags |= MOVE_RESULT_MISSED;     //that way can make sure it lasts entire battle, not cleard on switch or faingt
+            gLastLandedMoves[gBattlerTarget] = 0;
+            gLastHitByType[gBattlerTarget] = 0;//not sur ethat will work but need figure out how to do ,. can make new struct thats' only cleared on battle start and end
+            gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG; //check target matches forewarn user
+        }
+        gDisableStructs[gBattlerTarget].forewarnedMove = MOVE_UNAVAILABLE; //ensures, only works for first turn
         
-    //if (!(gProtectStructs[gForewarnedBattler].forewarnDone))
-    {
-        gProtectStructs[gForewarnedBattler].forewarnDone = TRUE; //using forewarn battler fixes who gets effect but doesn't make it end, also still need one for forewarn user
-        //gProtectStructs[gBattlerAttacker].forewarnedMove = 0;
-        gMoveResultFlags |= MOVE_RESULT_MISSED;     //in case of two mon w forewarn
-        gLastLandedMoves[gBattlerTarget] = 0;
-        gLastHitByType[gBattlerTarget] = 0;
-        gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG; //check target matches forewarn user
-        //return;
-        //++gBattlescriptCurrInstr;
+        
     }
-    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_ANTICIPATION
-        && (gCurrentMove == gProtectStructs[gBattlerTarget].anticipatedMove)
-        && !gProtectStructs[gBattlerAttacker].anticipationDone)
+    else if ((GetBattlerAbility(gBattlerTarget) == ABILITY_ANTICIPATION)
+    && gDisableStructs[gBattlerTarget].anticipatedMove != MOVE_UNAVAILABLE
+    && gDisableStructs[gBattlerTarget].anticipatedMove != MOVE_NONE)
     {
-        gProtectStructs[gBattlerTarget].anticipationDone = TRUE;
-        gMoveResultFlags |= MOVE_RESULT_MISSED;
-        gLastLandedMoves[gBattlerTarget] = 0;
-        gLastHitByType[gBattlerTarget] = 0;
-        gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG;
-        return;
-        //++gBattlescriptCurrInstr;
+        if (gCurrentMove == gDisableStructs[gBattlerTarget].anticipatedMove)
+        {
+
+            gMoveResultFlags |= MOVE_RESULT_MISSED;
+            gLastLandedMoves[gBattlerTarget] = 0;
+            gLastHitByType[gBattlerTarget] = 0;
+            gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG;
+        }
+        gDisableStructs[gBattlerTarget].anticipatedMove = MOVE_UNAVAILABLE;
+
     }
 
     for (i = 0; i < gBattlersCount; ++i)
@@ -2052,6 +2054,9 @@ static void atk01_accuracycheck(void)
                 gBattleCommunication[MISS_TYPE] = B_MSG_MISSED;
 
             gDisableStructs[gBattlerAttacker].furyCutterCounter = 0;  //reset if miss
+
+            //potentially put forewarn anticipation stuff here, realized what I'm doing is making it miss, 
+            //nto canceling the attack
 
 
             //if (gBattleMoves[move].power)   //i ALREADY have a typecalc I don't need this to update move result flags I think?
@@ -3625,7 +3630,7 @@ static void atk0B_healthbarupdate(void)
             }
             else if (DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove)) //added change for easier filtering
             { //add or logic, for rockyhelmet and rock skin etc. here
-
+                
             }
             else if (!DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
             {
@@ -3691,9 +3696,11 @@ static void atk0C_datahpupdate(void)
             }//add or logic, for rockyhelmet and rock skin etc.
             else if (DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove) && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE))
             {
-                gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU_BUSTED;
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_TargetFormChange;
+                gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU_BUSTED;//  need this line to show correct form
+                //would prefer to pull from form_change_table rather than change species
+                gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[gActiveBattler]][GetBattlerSide(gActiveBattler)] = TRUE; //should keep disguise from working again
+                BattleScriptPushCursor(); //above line works, but doesn't transform into correct form //,keeps species change, above line does have effect
+                gBattlescriptCurrInstr = BattleScript_TargetFormChange; //prevents ability reset on faint
                 return;
             }
             else
@@ -5788,25 +5795,7 @@ static void atk19_tryfaintmon(void)
                 *(u8 *)(&gBattleStruct->field_182) = gBattlerAttacker;  //tracks defeated species
                 gSideTimers[B_SIDE_OPPONENT].retaliateTimer = 2;
             }
-            //ok think I should put anticipate/forewarn logic here actually
-                //that way I can read the battler id of the target fainted, if it matches reset forewarn anticipate
-            //--doing this way don't need macro for resetforewarnanticipationbits, - could be what i need to make intimidate/etc. work how I want
-
-                //just need to store battler id of main functions, and ensure gbattlretarger, matches stored battlerid
-            if ((GetBattlerAbility(battlerId) == ABILITY_FOREWARN) && gSpecialStatuses[battlerId].switchInAbilityDone
-                && !gProtectStructs[battlerId].forewarnDone
-                && gActiveBattler == gForewarnedBattler)    //if fainted mon is same as forewarn target
-            {
-                gProtectStructs[battlerId].forewarnedMove = 0;    //clears stored move, 
-                gSpecialStatuses[battlerId].switchInAbilityDone = FALSE; //and allows switchin to reactivate
-            }
-            else if ((GetBattlerAbility(battlerId) == ABILITY_ANTICIPATION) && gSpecialStatuses[battlerId].switchInAbilityDone
-                && !gProtectStructs[battlerId].anticipationDone
-                && gActiveBattler == gAnticipatedBattler)
-            {
-                gProtectStructs[battlerId].anticipatedMove = 0;   //clears stored move, and allows switchin to reactivate
-                gSpecialStatuses[battlerId].switchInAbilityDone = FALSE;  //need better setup make sure takes destiny bond into acout vsonic
-            }
+            
             if ((gHitMarker & HITMARKER_DESTINYBOND) && gBattleMons[gBattlerAttacker].hp != 0)
             {
                 gHitMarker &= ~(HITMARKER_DESTINYBOND);
@@ -11294,6 +11283,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         else if (gBattlescriptCurrInstr[3] == 1)
         {
             RecalcBattlerStats(gActiveBattler, mon);
+            //TryBattleFormChange(gBattlerAttacker, FORM_CHANGE_BATTLE_SWITCH);
         }
         // Update healthbox.
         else
@@ -17523,6 +17513,7 @@ bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move) //plan add 
 {
     if (GetBattlerAbility(battlerDef) != ABILITY_DISGUISE
         || gBattleMons[battlerDef].species != SPECIES_MIMIKYU   //since species transforms to busted afterwards, this is line that makes it one time only
+        || gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battlerDef]][GetBattlerSide(battlerDef)] == TRUE
         || gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED
         //|| gBattleMoves[move].power == 0
         || IS_MOVE_STATUS(move)

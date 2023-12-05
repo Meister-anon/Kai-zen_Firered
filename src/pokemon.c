@@ -3160,7 +3160,7 @@ void TransformedMonStats(struct Pokemon *mon)
     s32 spDefenseIV = GetMonData(mon, MON_DATA_SPDEF_IV, NULL);
     s32 spDefenseEV = GetMonData(mon, MON_DATA_SPDEF_EV, NULL);
     u16 species = targetSpecies; //used for stat calc but not actually setting species to target as so can still use quick powder for ditto
-    s32 level = GetLevelFromMonExp(mon);
+    s32 level = GetLevelFromMonExp(mon);//using like this doesn't change species, but below takes target species for calculating stats
     s32 newMaxHP;
     u16 ability = GetMonAbility(mon);
 
@@ -4186,17 +4186,6 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     switch (GetBattlerAbility(gBattlerTarget))  //readjusted order of abilities to be numeric order in case I need switch case to flow low to high
     {                          //after examining switches from emerald repo, appears value order of the switch case doesn't matter, can go anywhere
         //don't need put absorb abilities that heal here, as they use gbattlemovedamage todo heal and convert it in the util
-    /*case ABILITY_LAVA_FISSURE:
-    case ABILITY_FLASH_FIRE:
-        if (type == TYPE_FIRE)  //need to make sure these for hidden power type change, so dynamic type rather than just normal move power? think alrady does
-            //gBattleMoveDamage = 0;  //idk if this is needed, THINK It might be, since before the move was canceled, not actually used.
-        break;
-    //case ABILITY_VOLT_ABSORB:
-    case ABILITY_LIGHTNING_ROD:
-    case ABILITY_MOTOR_DRIVE:
-        if (type == TYPE_ELECTRIC)  //should work type is move type or type override which I think accounts for things that change movetype
-            //gBattleMoveDamage = 0; //think may not need these as damage nullifcation is handled in battle_util
-        break;*/
     case ABILITY_THICK_FAT:
         if (type == (TYPE_FIRE || TYPE_ICE))
         OffensiveModifer(50);
