@@ -1452,12 +1452,27 @@ s32 GetDrainedBigRootHp(u32 battler, s32 hp)
             hp = (hp * 130) / 100;
     }
 
+    if (gBattlerTarget == (gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER)) //specific logic to separate leech seed from normal drain effects
+    {
+        if (IS_BATTLER_OF_TYPE(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED, TYPE_GHOST) 
+        && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST)) //w leech seed logic target at this point is mon receiving hp
+        {
+            if ((hp / 2) < gBattleMons[battler].maxHP / 8)
+                ghostdmg = -(gBattleMons[battler].maxHP / 8);
+
+            else if ((hp / 2) > gBattleMons[battler].maxHP / 8)
+                ghostdmg = -(hp / 2);
+
+                hp = ghostdmg;
+        }
+    }
+
      //set ghost drain damg
      //hp argument is gbattlemovedamage 
      //needed change from explicitly only work with x effects because leech seed
     //since function defaults to negative need make these start negative
-    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST)
-        && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST)
+    else if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST) //w leech seed logic target at this point is mon receiving hp
+        && !IS_BATTLER_OF_TYPE(battler, TYPE_GHOST)
         && gBattleMoves[gCurrentMove].effect != EFFECT_DREAM_EATER) //work on physical drain moves, dream eater is mental/dreams not lifeforce
         //should prevent damage for ghost types
     {
@@ -2383,7 +2398,7 @@ u8 DoBattlerEndTurnEffects(void)
                     ++effect;
                 ++gBattleStruct->turnEffectsTracker;
                 break;
-            case ENDTURN_LEECH_SEED:  // leech seed
+            case ENDTURN_LEECH_SEED:  // leech seed  /gActiveBattler is seeded mon, gbattlertarget is mon receiving hp
                 if ((gStatuses3[gActiveBattler] & STATUS3_LEECHSEED) //idea increased healing if in rain or hit with water gBattleMoveDamage *= 2 
                     && gBattleMons[gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER].hp != 0
                     && gBattleMons[gActiveBattler].hp != 0
@@ -2395,12 +2410,13 @@ u8 DoBattlerEndTurnEffects(void)
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;//heal leech target max hp
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
-                    if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST)) //need test
+                    /*if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST)) //need test  //had wrong target should be fixed now
                     {
                         //gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 16; //check if correct, but should heal, and then take 1/16 max health of pokemon healed
                          //take damage based on leech user max hp
                         gBattleMoveDamage *= -1; //wouldnt work how I planned changed, just lose hp, making negatibve shold couter negative swap in bs
-                    }
+                    } *///nothing I do here seems to fix the issue, moving to bigroot function as that's source of logic
+                    
                     gBattleScripting.animArg1 = gBattlerTarget;
                     gBattleScripting.animArg2 = gBattlerAttacker;
                     BattleScriptExecute(BattleScript_LeechSeedTurnDrain); //I'll figure this out, and I think what I want to do is for all these ghost effects

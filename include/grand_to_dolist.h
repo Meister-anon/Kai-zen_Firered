@@ -1887,6 +1887,19 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   also futrther buffed quick claw,  made 55% odds,  tesed w stall feels much better, but not too consisitent, just moderaltey reliable now
   nvm forget its not just increase priority it makes move before everything, it was a bit hihg, cut back to 45%
 
+  ok ghost absorb not working right, but just in case of leech seed
+  when used leech seed on non-ghost  and switched in a ghost type as receiver of heal.
+  it sapped all my hp.
+  -had wrong targetting since leech set target logic was confusing, believe now have it correct,
+  should change leeched hp to dmg only if activebattler is ghost, and target is not ghost, 
+  again target is mon receiving hp
+
+  //curious what benefit/differencec between using .h or .json for items values
+  comparing between enemeral, type and secondary id seem to have different uses.
+  for pokeballs in firered type matches secodnary id, in emerald expansion type is constant as ITEM_USE_BAG_MENU
+
+  -lower text height of, both hyphen, and apostrophe
+
  -setup vivillon to be able to access all forms in game,
  whenever spawned load one of the variant forms,
   think set spewpa in viridian, make it random chance what form it evolves into

@@ -91,7 +91,7 @@ static const u8 sDownloadDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Adjust
 static const u8 sIronFistDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Boosts Punching moves.");
 static const u8 sPoisonHealDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Restores HP if poisoned.");
 static const u8 sAdaptabilityDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Boosts same type attacks.");
-static const u8 sSkillLinkDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Multi-hit moves hit 5 times.");
+static const u8 sSkillLinkDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Multi-hit moves hit 5 times.\nOnly first hit gets accuracy check.");
 static const u8 sHydrationDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Cures status in rain.");
 static const u8 sSolarPowerDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Powers up in sunshine.\nBut is hurt by its uncontrollable power");
 static const u8 sQuickFeetDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Ups Speed if suffering from status.\nPrevents loss of speed except from traps.");
@@ -150,7 +150,7 @@ static const u8 sAnalyticDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Moving
 static const u8 sIllusionDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Appears as a partner.");
 static const u8 sImposterDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Transforms into the foe.");
 static const u8 sInfiltratorDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Stealthily bypasses barriers and walls.");//adjust for non ghost stealthily bypasses walls and barriers
-static const u8 sMummyDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Spreads with contact.");
+static const u8 sMummyDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Spreads with contact.\nOverwriting the attackers ability.");
 static const u8 sMoxieDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("KOs raise Attack.");
 static const u8 sJustifiedDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Dark and Ghost moves raise Attack\nAttack is also raised by intimidation.");
 static const u8 sRattledDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("If hit by dark bug or ghost moves\nor Intimidated raise speed.");
@@ -306,6 +306,8 @@ static const u8 sLethalLegsDescription[ABILITY_DESCRIPTION_LENGTH + 1] = _("Boos
 static const u8 sToxungueDescription[ABILITY_DESCRIPTION_LENGTH + 1] =_("Strikes foe with toxungen covered tongue\nThat may Paralyze on contact.");
 static const u8 sOmnipotentAideDescription[ABILITY_DESCRIPTION_LENGTH + 1] =_("Gives priority to healing effects.\nBut can only heal allies not itself.");
 static const u8 sFluorescenceDescription[ABILITY_DESCRIPTION_LENGTH + 1] =_("Naturally absorbs sunlight.\nBoosts speed and Sp.Atk in sun.");
+
+static const u8 sPlagueWingsDescription[ABILITY_DESCRIPTION_LENGTH + 1] =_("Spreads powder-like scales on attack.\nThat apply a variety of statuses.");
 //checked in fire red limit is 40 chars per line, changing description length to 80/    changed to 82 max
 //based on suction cups I kinda have more space?  so more like 41 per line?
 //template - top line: literal effect\n bottom line: flavor text    -flipped usually put flavor text on top, effect on bottom
@@ -635,7 +637,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_DESPAIR] = sNoneDescription,
     [ABILITY_RISING_PHOENIX] = sNoneDescription,
     [ABILITY_DREAD_WING] = sNoneDescription,
-    [ABILITY_PLAGUE_WINGS] = sNoneDescription,
+    [ABILITY_PLAGUE_WINGS] = sPlagueWingsDescription,
 };//last value can have comma
   //FOREWARN should work how I want,for ai make ability check to not use fakeout if have said ability,still need setup reactivation
   //= sNoneDescription,  To fill in

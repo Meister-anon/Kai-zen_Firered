@@ -6316,11 +6316,6 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
         priority++;
     }//that's good, just need to figure how to set grounded if by 2x flag move while in air - done in bs command
 
-    /*(!(gBattleMoves[move].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR)) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR && gCurrentMove != MOVE_ROCK_THROW)
-        || (!(gBattleMoves[move].flags & FLAG_DMG_2X_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
-        || (!(gBattleMoves[move].flags & FLAG_DMG_2X_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER))
-    */
-
     if (GetBattlerAbility(battlerId) == ABILITY_GALE_WINGS
         && gBattleMoves[move].type == TYPE_FLYING)
     {

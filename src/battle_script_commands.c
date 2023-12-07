@@ -1736,7 +1736,7 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
     }
 
     if ((gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE)//i beleve this is the replacement for the hitmarker values for semi invul, just need to add flags to omve data
-        || (!(gBattleMoves[move].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR)) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR && gCurrentMove != MOVE_ROCK_THROW)
+        || (!(gBattleMoves[move].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR)) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
         || (!(gBattleMoves[move].flags & FLAG_DMG_2X_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
         || (!(gBattleMoves[move].flags & FLAG_DMG_2X_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER))
     {
@@ -1915,9 +1915,6 @@ static void atk01_accuracycheck(void)
 
             moveAcc = gDisableStructs[gBattlerAttacker].furyCutterAccDrop;
         } 
-
-        if (gCurrentMove == MOVE_ROCK_THROW && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
-            moveAcc = 85; // reduced accuracy drop, move is very specific use case, is just more accessible version of smackdown
 
         // check Thunder on sunny weather / need add hail blizzard buff?(IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY)
         //don't rememeber why I used effect thunder instead of gcurrentmove
@@ -12884,7 +12881,7 @@ static void atk7F_setseeded(void)  //removed grass immunity - revisit
     //since grounded isn't necessarily made of earth, just more suited for the dry environment.  also plants can steal nutrients from other plants, typically throughts roots so more or less same
     else
     {
-        gStatuses3[gBattlerTarget] |= gBattlerAttacker;
+        gStatuses3[gBattlerTarget] |= gBattlerAttacker; //figure what this does    //is it hits? STATUS3_LEECHSEED_BATTLER
         gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
         gBattleCommunication[MULTISTRING_CHOOSER] = 0;
     }
@@ -14804,7 +14801,7 @@ static void atkAD_tryspiteppreduce(void) //vsonic need test, for odds and if eff
                 ppToDeduct = gBattleMons[gBattlerTarget].pp[i];
             PREPARE_MOVE_BUFFER(gBattleTextBuff1, gLastMoves[gBattlerTarget])
                 ConvertIntToDecimalStringN(gBattleTextBuff2, ppToDeduct, 0, 1);
-            PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff2, 1, ppToDeduct)//update make new define that will be text "all"
+            PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff2, 2, ppToDeduct)//update make new define that will be text "all"
                 gBattleMons[gBattlerTarget].pp[i] -= ppToDeduct; //make a condition that if true will make gBattleTextBuff2, use that define for all rather than a number
             gActiveBattler = gBattlerTarget;
             if (!(gDisableStructs[gActiveBattler].mimickedMoves & gBitTable[i])

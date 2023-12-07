@@ -3,6 +3,13 @@
 // because of my change to the item table I need to change all values that are ITEM_(some hex value) into ITEM_NONE I think..yeah I do, because they were previously
 //auto aligned with a question mark icon & palette.   actually imma leave it for now, since I plan to fill those placeholders in.
 
+// Note: If moving ball IDs around, updating FIRST_BALL/LAST_BALL is not sufficient
+//       Several places expect the ball IDs to be first and contiguous (e.g. MON_DATA_POKEBALL)
+//       If adding new balls, it's easiest to insert them after the last ball and increment the below IDs (and removing ITEM_034 for example)
+//    this is needed because ball effects rely on secondaryId set in item slot, each on is unique to the ball
+#define FIRST_BALL ITEM_MASTER_BALL
+#define LAST_BALL  ITEM_PREMIER_BALL
+
 //actually I think this file just needs to match the items.json //yup confirmed
 #define ITEM_NONE 0
 #define ITEM_MASTER_BALL 1
@@ -17,6 +24,8 @@
 #define ITEM_TIMER_BALL 10
 #define ITEM_LUXURY_BALL 11
 #define ITEM_PREMIER_BALL 12
+
+//end of ball ids
 #define ITEM_POTION 13
 #define ITEM_ANTIDOTE 14
 #define ITEM_BURN_HEAL 15
