@@ -4730,8 +4730,8 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                                 BtlController_EmitChoosePokemon(0, PARTY_ACTION_CHOOSE_MON, 6, ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
                          }
                         else
-                        BtlController_EmitChoosePokemon(0, ((i - 1) << 4) | PARTY_ACTION_ABILITY_PREVENTS, 6, gLastUsedAbility, gBattleStruct->battlerPartyOrders[gActiveBattler]);
-                    }
+                        BtlController_EmitChoosePokemon(0, ((i - 1) << 4) | PARTY_ACTION_ABILITY_PREVENTS, 6, GetBattlerAbility(IsAbilityPreventingEscape(gActiveBattler) - 1), gBattleStruct->battlerPartyOrders[gActiveBattler]);
+                    } //think issue is using  glastusedability, with being able to switch out, seems to mess withthe buffers, seems to have fixed it
                     else //can switch
                     {
                         if (gActiveBattler == 2 && gChosenActionByBattler[0] == B_ACTION_SWITCH)
