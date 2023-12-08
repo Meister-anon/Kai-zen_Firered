@@ -2547,9 +2547,9 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_MONSTER,
         .abilities = {ABILITY_ROCK_HEAD, ABILITY_LIGHTNING_ROD},
-        .abilityHidden = {ABILITY_BATTLE_ARMOR, ABILITY_NONE},
-        .bodyColor = BODY_COLOR_BROWN,
-        .noFlip = FALSE,
+        .abilityHidden = {ABILITY_BATTLE_ARMOR, ABILITY_PHANTOM_TOUCH}, //scrappy fro sad reason, they want to touch ghosts in attempt to hug their dead mother again..
+        .bodyColor = BODY_COLOR_BROWN, //actually could make its own ability scrappy but just contact moves, mostly for cubone call phantom touch?
+        .noFlip = FALSE, //from strong desire to commune w those lost, gained ability to make contact w ghosts
     },
 
     [SPECIES_MAROWAK] =
@@ -2569,7 +2569,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_MONSTER,
         .eggGroup2 = EGG_GROUP_MONSTER,
         .abilities = {ABILITY_ROCK_HEAD, ABILITY_LIGHTNING_ROD},
-        .abilityHidden = {ABILITY_BATTLE_ARMOR, ABILITY_NONE},
+        .abilityHidden = {ABILITY_BATTLE_ARMOR, ABILITY_PHANTOM_TOUCH},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     }, //cant give muslce magic as that was meant to be main of mega marowak
@@ -5755,7 +5755,7 @@ const struct BaseStats gBaseStats[] =
 
     //do same for flash fire motor drive & sap sipper
     //counter balance by making it only work for partner if mon with ability isn't statused
-    //vsonic
+    //vsonic -did
    
 
     [SPECIES_ENTEI] =
@@ -25915,7 +25915,7 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
         .flags = F_ALOLAN_FORM,
-    },
+    }, //can keep phantom touch to just normal marowak, makes more sense since this version turned the ghost into a flame that's always with them
 
     [SPECIES_MEOWTH_GALARIAN] =
     { 

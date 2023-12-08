@@ -1439,7 +1439,7 @@ bool32 CanThaw(u32 move)
 
 // Ingrain, Leech Seed, Strength Sap and Aqua Ring
 //leech seed has weird targetting so I'm worried it'llc ause issues for ghost drain & leech seed logic
-//but if works for big root which uses battler and is pulled from gbattlerattacker I think it should work
+//but if works for big root which uses battler and is pulled from gbattlerattacker, so I think it should work
 s32 GetDrainedBigRootHp(u32 battler, s32 hp)
 {
     s32 ghostdmg;
@@ -1452,58 +1452,90 @@ s32 GetDrainedBigRootHp(u32 battler, s32 hp)
             hp = (hp * 130) / 100;
     }
 
-    if (gBattlerTarget == (gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER)) //specific logic to separate leech seed from normal drain effects
+    //if (gBattlerTarget == (gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER)) //specific logic to separate leech seed from normal drain effects
+    //specific logic to separate leech seed from normal drain effects
+    //already have dmg set in endurn function only need ghost logic here
+    //wait don'tneed not type, macro isnt setting anything its checking so if it doesn't find type it returns 0, so origial macro is fine...
+    //leech seed against ghost target isn't working
+    //also leech seed messing with messaging for ability escape prevention for some reason
+    //if (gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED_BATTLER) 
+    //if (gBattlerTarget == (gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER)) //ok THIS works not the other one, well teh filter works, ghost leech still not right
+   // if (gBattlerTarget == (gStatuses3[gActiveBattler] & STATUS3_LEECHSEED))
+   // {
+       /*if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST) 
+        && (gStatuses3[gActiveBattler] & STATUS3_LEECHSEED)
+        && (gBattlerTarget == (gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER))
+        && (!IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST))) //w leech seed logic target at this point is mon receiving hp
+        {
+            if ((hp / 2) < gBattleMons[battler].maxHP / 8)
+                ghostdmg = -(gBattleMons[battler].maxHP / 8); //potentially need new macro as ! just maakes it 0 which I think means type normal?
+
+            else if ((hp / 2) > gBattleMons[battler].maxHP / 8)
+                ghostdmg = -(hp / 2);
+
+                hp = ghostdmg; //message hurt by ghost energy
+        } *///it alsmost works I've got everything but leech seed hurting teh target if they aren't a ghost
+   // }//this cancels below, if need set not seeded as below - if below does everything what is thi seven doing? leech seed ghost isn't working either
+    //removed attempt do in endturn
+    if ((!IS_BATTLER_OF_TYPE(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER, TYPE_GHOST)) //mon getting healed no t ghost, this part works
+    && IS_BATTLER_OF_TYPE(battler, TYPE_GHOST)) //IT FINALLY WORKS
     {
-        if (IS_BATTLER_OF_TYPE(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED, TYPE_GHOST) 
-        && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST)) //w leech seed logic target at this point is mon receiving hp
+        if ((hp / 2) < gBattleMons[battler].maxHP / 8)
+            hp = hp; 
+
+        else if ((hp / 2) > gBattleMons[battler].maxHP / 8)
+            hp = (hp / 2);
+
+        hp *= -1;
+    } //still not working , but ghosts aren't getting leech seed drained so idk may just leave it sigh
+    // O.O its working!!!
+
+     //set ghost drain damg
+     //hp argument is gbattlemovedamage 
+     //needed change from explicitly only work with x effects because leech seed
+    //since function defaults to negative need make these start negative
+    //below works for making non ghosts take dmg from draining ghosts, but doesn't work for excluding leech seed
+    //so ghosts still get hurt by leech seed
+
+    //this makes normal drain effects hurt users if use against ghosts
+    //but for some reason also makes leech seed hurt ghosts?
+    
+    if (gBattlerTarget != (gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER))//if (!(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED_BATTLER)) //using this as target was wrong, now I got it right, but leech seed ghost dmg still not rightg 
+    {
+        if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST) //w leech seed logic target at this point is mon receiving hp
+            && !IS_BATTLER_OF_TYPE(battler, TYPE_GHOST)
+            && gBattleMoves[gCurrentMove].effect != EFFECT_DREAM_EATER) //work on physical drain moves, dream eater is mental/dreams not lifeforce
+            //should prevent damage for ghost types
         {
             if ((hp / 2) < gBattleMons[battler].maxHP / 8)
                 ghostdmg = -(gBattleMons[battler].maxHP / 8);
 
             else if ((hp / 2) > gBattleMons[battler].maxHP / 8)
                 ghostdmg = -(hp / 2);
+            //take the greater of the two, changed from else, so I don't have to worry about it
+            if (GetBattlerAbility(gBattlerTarget) == ABILITY_LIQUID_OOZE) //rest fo liquid ooze logic handled in script
+            {
+                hp = -hp;
+                hp += ghostdmg;
 
-                hp = ghostdmg;
+                //if (gBattleMoves[gCurrentMove].effect == EFFECT_STRENGTH_SAP)
+                //    hp = (hp + ghostdmg) / 2; //to try keep this from just being an insta kill
+                    //...nevermnid then -_- liquid ooze was meant to work with strength sap from the start
+                    //so I should let it work as is, not try to scale it back for balance I guess
+            }
+            else
+            {
+                hp = ghostdmg; //since below flips sign need set this negative to properly do damage
+                    //would love a script for this but cant do anything as set in a command? idk I might be able to put
+                    //something below that pushes and returns?
+            }      
+            //if can setup text to say aborb ghostly energy!  it'd go here vsonic  
         }
-    }
-
-     //set ghost drain damg
-     //hp argument is gbattlemovedamage 
-     //needed change from explicitly only work with x effects because leech seed
-    //since function defaults to negative need make these start negative
-    else if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST) //w leech seed logic target at this point is mon receiving hp
-        && !IS_BATTLER_OF_TYPE(battler, TYPE_GHOST)
-        && gBattleMoves[gCurrentMove].effect != EFFECT_DREAM_EATER) //work on physical drain moves, dream eater is mental/dreams not lifeforce
-        //should prevent damage for ghost types
-    {
-        if ((hp / 2) < gBattleMons[battler].maxHP / 8)
-            ghostdmg = -(gBattleMons[battler].maxHP / 8);
-
-        else if ((hp / 2) > gBattleMons[battler].maxHP / 8)
-            ghostdmg = -(hp / 2);
-        //take the greater of the two, changed from else, so I don't have to worry about it
-        if (GetBattlerAbility(gBattlerTarget) == ABILITY_LIQUID_OOZE) //rest fo liquid ooze logic handled in script
+        else if (GetBattlerAbility(gBattlerTarget) == ABILITY_LIQUID_OOZE) //rest fo liquid ooze logic handled in script
         {
             hp = -hp;
-            hp += ghostdmg;
-
-            //if (gBattleMoves[gCurrentMove].effect == EFFECT_STRENGTH_SAP)
-            //    hp = (hp + ghostdmg) / 2; //to try keep this from just being an insta kill
-                 //...nevermnid then -_- liquid ooze was meant to work with strength sap from the start
-                //so I should let it work as is, not try to scale it back for balance I guess
-        }
-        else
-        {
-            hp = ghostdmg; //since below flips sign need set this negative to properly do damage
-                //would love a script for this but cant do anything as set in a command? idk I might be able to put
-                //something below that pushes and returns?
-        }      
-        //if can setup text to say aborb ghostly energy!  it'd go here vsonic  
+        }//think need logic so if liquid ooze mon uses a move on itself like ingrain, this won't trigger
     }
-    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_LIQUID_OOZE) //rest fo liquid ooze logic handled in script
-    {
-        hp = -hp;
-    }//think need logic so if liquid ooze mon uses a move on itself like ingrain, this won't trigger
 
 
     if (hp == 0)
@@ -1531,7 +1563,7 @@ enum
     ENDTURN_MAGIC_COAT,
     ENDTURN_AURORA_VEIL,
     ENDTURN_MIST,
-    ENDTURN_HAZE,
+    //ENDTURN_HAZE,
     ENDTURN_LUCKY_CHANT,
     ENDTURN_SAFEGUARD,
     ENDTURN_HEALBLOCK,
@@ -1543,6 +1575,7 @@ enum
     ENDTURN_SUN,
     ENDTURN_HAIL,
     ENDTURN_FORECAST,
+    ENDTURN_HAZE,
     ENDTURN_GRAVITY,
     ENDTURN_TRICK_ROOM,
     ENDTURN_WONDER_ROOM,
@@ -1723,15 +1756,6 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
                 ++gBattleStruct->turnCountersTracker;
                 gBattleStruct->turnSideTracker = 0;
             }
-            break;
-        case ENDTURN_HAZE: //compiles but check if right
-            if (gFieldStatuses & STATUS_FIELD_BLACK_FOG && --gFieldTimers.HazeTimer == 0)
-            {
-                gFieldStatuses &= ~STATUS_FIELD_BLACK_FOG;
-                BattleScriptExecute(BattleScript_TrickRoomEnds);//MAKE new script for later vsonic
-                ++effect;
-            }
-            ++gBattleStruct->turnCountersTracker;
             break;
         case ENDTURN_LUCKY_CHANT:
             while (gBattleStruct->turnSideTracker < 2)
@@ -2067,6 +2091,34 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
             }
         ++gBattleStruct->turnCountersTracker;
             break;
+        case ENDTURN_HAZE: //compiles but check if right
+        {
+            if (gFieldStatuses & STATUS_FIELD_BLACK_FOG)
+            {
+
+                s32 i, j;
+
+                if (--gFieldTimers.HazeTimer == 0)
+                {
+
+                    gFieldStatuses &= ~STATUS_FIELD_BLACK_FOG;
+                    BattleScriptExecute(BattleScript_TrickRoomEnds);//MAKE new script for later vsonic, I think, could keep? the strange fog faded?
+                    //++effect;
+                }
+                else if (gFieldTimers.HazeTimer != 3) //should be not same turn as first use haze
+                {
+                    for (i = 0; i < gBattlersCount; ++i)
+                        for (j = 0; j < NUM_BATTLE_STATS; ++j)
+                        {
+                            gBattleMons[i].statStages[j] = 6;
+                            BattleScriptExecute(BattleScript_StatChangesRemoved); //not working freezes 
+                        }
+                }                                    
+                ++effect;
+            }
+            ++gBattleStruct->turnCountersTracker;
+        }
+        break;
         case ENDTURN_GRAVITY:
             if (gFieldStatuses & STATUS_FIELD_GRAVITY && --gFieldTimers.gravityTimer == 0)
             {
@@ -2417,11 +2469,25 @@ u8 DoBattlerEndTurnEffects(void)
                         gBattleMoveDamage *= -1; //wouldnt work how I planned changed, just lose hp, making negatibve shold couter negative swap in bs
                     } *///nothing I do here seems to fix the issue, moving to bigroot function as that's source of logic
                     
+                    /*if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST) 
+                    && (!IS_BATTLER_OF_TYPE(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER, TYPE_GHOST))) //w leech seed logic target at this point is mon receiving hp
+                    {
+                        if ((gBattleMoveDamage / 2) < gBattleMons[gBattlerTarget].maxHP / 8)
+                            gBattleMoveDamage = (gBattleMons[gActiveBattler].maxHP / 8); //potentially need new macro as ! just maakes it 0 which I think means type normal?
+
+                        else if ((gBattleMoveDamage / 2) > gBattleMons[gBattlerTarget].maxHP / 8)
+                            gBattleMoveDamage = (gBattleMoveDamage / 2);
+
+                        gBattleMoveDamage *= -1;
+                    }*/ //somehow is affecting wrong battler, is healing the mon with seed status, oh this doesn't have ny effect on heal, instead it just
+                    //sets gbattlemovedamage to seeded hp, which is passed to bigroot command/function to be used for healing
+                    //so it is correct to setup the heal THERE not here
+
                     gBattleScripting.animArg1 = gBattlerTarget;
                     gBattleScripting.animArg2 = gBattlerAttacker;
                     BattleScriptExecute(BattleScript_LeechSeedTurnDrain); //I'll figure this out, and I think what I want to do is for all these ghost effects
                     ++effect; //if absorbign from a ghost just change the color of the effect animation to a purple one
-                }//TODO
+                }//TODO     //new message hurt by ghostly energy look at liquid ooze script
                 ++gBattleStruct->turnEffectsTracker;//ghost drain works need to find proper graphic though/plus do same for if draining poison top
                 break;//pretty sure it uses the water bubble graphic
             case ENDTURN_POISON:  // poison
@@ -3927,73 +3993,80 @@ u8 AtkCanceller_UnableToUseMove(void)
                 u8 target = gBattleMoves[gCurrentMove].target;
                 --gBattleMons[gBattlerAttacker].status2;    //nvm couldn't put bug clause above this line, or confusion wouldn't decrement & be permanent
 
-                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION && IsBlackFogNotOnField()) //&& !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG))
-                {// idea cammymealtee trying setup so tangled feet like bug gets confused but never hits themselves
-                    if (!(IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG)) && GetBattlerAbility(gBattlerAttacker) != ABILITY_TANGLED_FEET) //moved bug exclusion to here, so goes through animations
-                    {
-                        if ((Random() % 2) == 0) //chance confused but used move anyway   think 50% may equal random % 2 not 0
+                if (IsBlackFogNotOnField())
+                {
+
+                    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION) //&& !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG))
+                    {// idea cammymealtee trying setup so tangled feet like bug gets confused but never hits themselves
+                        if (!(IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG)) && GetBattlerAbility(gBattlerAttacker) != ABILITY_TANGLED_FEET) //moved bug exclusion to here, so goes through animations
                         {
-                            if (rando == 0) {
-                                target = MOVE_TARGET_RANDOM;                                
-                            }
-                            if (rando == 2) {
-                                target = MOVE_TARGET_FOES_AND_ALLY;
-                            }
-                            // The MULTISTRING_CHOOSER is used here as a bool to signal
-                            // to BattleScript_MoveUsedIsConfused whether or not damage was taken (by user?)
-                            gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;  //need to say != 0 or something, to make it a 2/3rd conditional
-                            BattleScriptPushCursor();
-                        }
-
-                        else // confusion dmg  //yup oddds are 50%  this is the other side where they attack themselves
-                        { //ok I want to keep the sucess condition the same, but split the failure condition.
-                            //into different effects,
-                            //1 attack a random target
-                            //ok understand what I did, I have to separte activation conditions for if its a status move
-                            //or not and make sure the move does at least 1/16 health damage, 
-                            //if its a status it'll do normal confusion self damage I didn't remove that.
-                            gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
-                            gBattlerTarget = gBattlerAttacker;  //Handles target swap
-                            
-
-                            if (gBattleMovePower == 0) //if status move does default confusion hit 
+                            if ((Random() % 2) == 0) //chance confused but used move anyway   think 50% may equal random % 2 not 0
                             {
+                                if (rando == 0) {
+                                    target = MOVE_TARGET_RANDOM;                                
+                                }
+                                if (rando == 2) {
+                                    target = MOVE_TARGET_FOES_AND_ALLY;
+                                }
+                                // The MULTISTRING_CHOOSER is used here as a bool to signal
+                                // to BattleScript_MoveUsedIsConfused whether or not damage was taken (by user?)
+                                gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;  //need to say != 0 or something, to make it a 2/3rd conditional
+                                BattleScriptPushCursor();
+                            }
+
+                            else // confusion dmg  //yup oddds are 50%  this is the other side where they attack themselves
+                            { //ok I want to keep the sucess condition the same, but split the failure condition.
+                                //into different effects,
+                                //1 attack a random target
+                                //ok understand what I did, I have to separte activation conditions for if its a status move
+                                //or not and make sure the move does at least 1/16 health damage, 
+                                //if its a status it'll do normal confusion self damage I didn't remove that.
+                                gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
+                                gBattlerTarget = gBattlerAttacker;  //Handles target swap
                                 
-                                //gBattlerTarget = gBattlerAttacker;    this line not needed already handled above
-                                gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, 40, 0, gBattlerAttacker, gBattlerAttacker);
-                                gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
-                                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                            }//consider make this status moves (i.e 0 power) & moves without flag makes contact use normal confusion dmg formula 
-                            //for self damage   so only contact moves would go off and damage the attacker
-                            else
-                            {
-                                gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, (gBattleMoves[gChosenMove].power / 2), 0, gBattlerAttacker, gBattlerAttacker);
-                                 //should use move against self at half normal power
-                                if (gBattleMoveDamage < gBattleMons[gBattlerTarget].maxHP / 8)
-                                    gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 8; //minimum dmg clause
-                                gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
-                                gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+
+                                if (gBattleMovePower == 0) //if status move does default confusion hit 
+                                {
+                                    
+                                    //gBattlerTarget = gBattlerAttacker;    this line not needed already handled above
+                                    gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, 40, 0, gBattlerAttacker, gBattlerAttacker);
+                                    gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
+                                    gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                                }//consider make this status moves (i.e 0 power) & moves without flag makes contact use normal confusion dmg formula 
+                                //for self damage   so only contact moves would go off and damage the attacker
+                                else
+                                {
+                                    gBattleMoveDamage = CalculateBaseDamage(&gBattleMons[gBattlerAttacker], &gBattleMons[gBattlerAttacker], MOVE_POUND, 0, (gBattleMoves[gChosenMove].power / 2), 0, gBattlerAttacker, gBattlerAttacker);
+                                    //should use move against self at half normal power
+                                    if (gBattleMoveDamage < gBattleMons[gBattlerTarget].maxHP / 8)
+                                        gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 8; //minimum dmg clause
+                                    gProtectStructs[gBattlerAttacker].confusionSelfDmg = 1;
+                                    gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                                }
                             }
+                            
                         }
                         
-                    }
-                    
-                    
-                    else //should be if bug type, should make bug always use move regardless of being confused
+                        
+                        else //should be if bug type, should make bug always use move regardless of being confused
+                        {
+                            // The MULTISTRING_CHOOSER is used here as a bool to signal
+                            // to BattleScript_MoveUsedIsConfused whether or not damage was taken
+                            gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
+                            BattleScriptPushCursor();
+                        }
+                        gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused; //want to make sure still takes confusion damage 
+                    } //even for status move or 0 power move, it makes sense they attempt ot attack but fail and hurt themselves.
+                    else // snapped out of confusion
                     {
-                        // The MULTISTRING_CHOOSER is used here as a bool to signal
-                        // to BattleScript_MoveUsedIsConfused whether or not damage was taken
-                        gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
                         BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfusedNoMore;
                     }
-                    gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused; //want to make sure still takes confusion damage 
-                } //even for status move or 0 power move, it makes sense they attempt ot attack but fail and hurt themselves.
-                else // snapped out of confusion
-                {
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfusedNoMore;
+                    effect = 1;
                 }
-                effect = 1;
+                else    
+                    gBattleMons[gBattlerAttacker].status2 &= ~STATUS2_CONFUSION; //remove confusion if black fog on field
+
             }
             ++gBattleStruct->atkCancellerTracker;
             break;
@@ -6508,47 +6581,47 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             if (moveArg)    //if said mon isn't statused  if just use status1 can check for all status1 but status1 & staus1_any is stil used in most cases..
             {
                 u8 statId;
-                switch (gLastUsedAbility)
+                switch (gLastUsedAbility) //updated below, to modern as later gen can absorb status moves of type as well, but i'm also trying to make statusing better hmmm
                 {
                 case ABILITY_VOLT_ABSORB:
-                    if (moveType == TYPE_ELECTRIC && gBattleMoves[moveArg].power != 0)
-                        effect = 1;
+                    if (moveType == TYPE_ELECTRIC) //redid drwaws in stauts, but doesn't boost wth them, just nullifies, //doesnt trigeger if target user
+                        effect = 1; 
                     break;
                 case ABILITY_WATER_ABSORB:
                 case ABILITY_DRY_SKIN:
-                    if (moveType == TYPE_WATER && gBattleMoves[moveArg].power != 0)
+                    if (moveType == TYPE_WATER)
                         effect = 1;
                     break;
                 case ABILITY_GLACIAL_ICE:
-                    if (moveType == TYPE_ICE && gBattleMoves[moveArg].power != 0)
+                    if (moveType == TYPE_ICE)
                         effect = 1;
                     break;
                 case ABILITY_EROSION:
-                    if (moveType == TYPE_ROCK && gBattleMoves[moveArg].power != 0)
+                    if (moveType == TYPE_ROCK)
                         effect = 1;
                     break;
                 case ABILITY_RISING_PHOENIX:
-                if (moveType == TYPE_FIRE && gBattleMoves[moveArg].power != 0)
+                if (moveType == TYPE_FIRE)
                         effect = 4;
                     break;
                 case ABILITY_JEWEL_METABOLISM:
-                    if (moveType == TYPE_ROCK && gBattleMoves[moveArg].power != 0)
+                    if (moveType == TYPE_ROCK)
                         effect = 2, statId = STAT_DEF;
                     break;
                 case ABILITY_MOTOR_DRIVE:
-                    if (moveType == TYPE_ELECTRIC && gBattleMoves[moveArg].power != 0)
+                    if (moveType == TYPE_ELECTRIC)
                         effect = 2, statId = STAT_SPEED;
                     break;
                 case ABILITY_LIGHTNING_ROD:
-                    if (moveType == TYPE_ELECTRIC && gBattleMoves[moveArg].power != 0)
+                    if (moveType == TYPE_ELECTRIC)
                         effect = 2, statId = STAT_SPATK;
                     break;
                 case ABILITY_STORM_DRAIN:
-                    if (moveType == TYPE_WATER && gBattleMoves[moveArg].power != 0)
+                    if (moveType == TYPE_WATER)
                         effect = 2, statId = STAT_SPATK;
                     break;
                 case ABILITY_SAP_SIPPER:
-                    if (moveType == TYPE_GRASS && gBattleMoves[moveArg].power != 0)
+                    if (moveType == TYPE_GRASS)
                         effect = 2, statId = STAT_ATK;
                     break;
                 case ABILITY_GALEFORCE:
@@ -6557,7 +6630,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                 case ABILITY_LAVA_FISSURE:
                 case ABILITY_FLASH_FIRE:
-                    if ((moveType == TYPE_FIRE  && gBattleMoves[moveArg].power != 0) && !((gBattleMons[battler].status1 & STATUS1_FREEZE)))// && B_FLASH_FIRE_FROZEN <= GEN_4))
+                    if ((moveType == TYPE_FIRE) && !((gBattleMons[battler].status1 & STATUS1_FREEZE)))// && B_FLASH_FIRE_FROZEN <= GEN_4))
                     {
                         if (!(gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
                         {
@@ -6570,7 +6643,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_FLASH_FIRE;
                             effect = 3; 
                         }
-                        else
+                        else if ((gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE) || (gBattleMoves[moveArg].power == 0))
                         {
                             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_FLASH_FIRE_NO_BOOST;
                             if (gProtectStructs[gBattlerAttacker].notFirstStrike)
@@ -6588,6 +6661,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (effect == 1) // Drain Hp ability.
                 {
                     if (BATTLER_MAX_HP(battler) || gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK)
+                    {
+                        if ((gProtectStructs[gBattlerAttacker].notFirstStrike))
+                            gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
+                        else
+                            gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
+                    }
+                    else if (gBattleMoves[moveArg].power == 0)
                     {
                         if ((gProtectStructs[gBattlerAttacker].notFirstStrike))
                             gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
@@ -6617,6 +6697,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         else
                             gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
                     }
+                    else if (gBattleMoves[moveArg].power == 0)
+                    {
+                        if ((gProtectStructs[gBattlerAttacker].notFirstStrike))
+                            gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
+                        else
+                            gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
+                    }
                     else //ok these are actually new, in gen 3 even though lightning-rod existed it didn't stat boost
                     {
                         if (gProtectStructs[gBattlerAttacker].notFirstStrike)
@@ -6637,6 +6724,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 
 
                     if (BATTLER_MAX_HP(battler) || gSideStatuses[GET_BATTLER_SIDE(battler)] & SIDE_STATUS_HEAL_BLOCK)
+                    {
+                        if ((gProtectStructs[gBattlerAttacker].notFirstStrike))
+                            gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
+                        else
+                            gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
+                    }
+                    else if (gBattleMoves[moveArg].power == 0)
                     {
                         if ((gProtectStructs[gBattlerAttacker].notFirstStrike))
                             gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
@@ -11312,9 +11406,9 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
 
     
 
-    if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET)//why would anyone want this?
+    if (mod == UQ_4_12(0.0) && GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_RING_TARGET)//why would anyone want this? -its for swapping to target
     {
-        mod = UQ_4_12(1.0);
+        mod = UQ_4_12(1.0); //origin giratina may be able to use?
 
         /*if (recordAbilities)
             RecordItemEffectBattle(battlerDef, HOLD_EFFECT_RING_TARGET);*/  //think effect isn't set yet, uncomment when done item port
@@ -11324,7 +11418,9 @@ static void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 batt
     {
         mod = UQ_4_12(1.0);
     }
-    else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && GetBattlerAbility(battlerAtk) == ABILITY_SCRAPPY && mod == UQ_4_12(0.0))
+    else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && mod == UQ_4_12(0.0)
+    && (GetBattlerAbility(battlerAtk) == ABILITY_SCRAPPY
+    || (GetBattlerAbility(battlerAtk) == ABILITY_PHANTOM_TOUCH && IsMoveMakingContact(move, battlerAtk)))) //works
     {
         mod = UQ_4_12(1.0);
         /*if (recordAbilities)

@@ -13940,8 +13940,7 @@ static void atk96_weatherdamage(void)
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_VEIL
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_SAND_FORCE
              && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM)
-             //&& (gBattleMons[gBattlerAttacker].ability != ABILITY_FORECAST && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM))
-            {//doesn't really need the castform logic as it already turns into a type immune to said weather effect also it may be in other battlescript
+            {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                 if (gBattleMoveDamage == 0)
                     gBattleMoveDamage = 1;
@@ -13958,7 +13957,8 @@ static void atk96_weatherdamage(void)
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_SNOW_CLOAK
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_ICE_BODY
              && GetBattlerAbility(gBattlerAttacker) != ABILITY_ABSOLUTE_ZERO
-             && GetBattlerAbility(gBattlerAttacker) != ABILITY_GLACIAL_ICE)
+             && GetBattlerAbility(gBattlerAttacker) != ABILITY_GLACIAL_ICE
+             && gBattleMons[gBattlerAttacker].species != SPECIES_CASTFORM)
             {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 16;
                 if (gBattleMoveDamage == 0)
@@ -14118,21 +14118,24 @@ static void atk99_setmist(void)
     }
     else if (gCurrentMove == MOVE_HAZE)
     {
-        if (gFieldTimers.HazeTimer) //haze timer not 0
+        //if (gFieldTimers.HazeTimer) //haze timer not 0
+        if (gFieldStatuses & STATUS_FIELD_BLACK_FOG)
         {
             gMoveResultFlags |= MOVE_RESULT_FAILED;
             gBattleCommunication[MULTISTRING_CHOOSER] = 1;
         }
         else
         {
-            gFieldTimers.HazeTimer = 4; //is 3 turns,  potentially drop to timer 3?idk 
+            
             gFieldStatuses |= STATUS_FIELD_BLACK_FOG;
-            for (i = 0; i < MAX_BATTLERS_COUNT, ++i;) //since this isn't supposed to change species I'm gonna need to remove status2 one by one to preserve transform
+            gFieldTimers.HazeTimer = 4; //is 3 turns,  potentially drop to timer 3?idk 
+            for (i = 0; i < gBattlersCount; ++i) //since this isn't supposed to change species I'm gonna need to remove status2 one by one to preserve transform
             {
                 //gBattleMons[i].status2 &= ~(STATUS2_WRAPPED); nvm just skip effect in util
                 gBattleMons[i].status2 &= ~(STATUS2_FOCUS_ENERGY);
                 gBattleMons[i].status2 &= ~(STATUS2_RAGE);  //black fog would reset atk boost but this would also let you get a hit in if faster before they use rage again
                 gBattleMons[i].status2 &= ~(STATUS2_SUBSTITUTE); //for further consideration
+                gBattleMons[i].status2 &= ~(STATUS2_CONFUSION); //doing other effect with confusion is annoying so just remove it here
             }
             gBattleCommunication[MULTISTRING_CHOOSER] = 0;
         }
@@ -14783,18 +14786,18 @@ static void atkAD_tryspiteppreduce(void) //vsonic need test, for odds and if eff
         {//if works would fail to do pp drop if eerie spell used on a sheer force mon, and instead jump to damage phase and boost damage.
             
             if (luck == 0) {
-                ppToDeduct = gBattleMons[gBattlerTarget].pp[i];//want to make text for extranormal effects, 1st is mon "had bad luck", other is mon's "luck ran out!"
-                PREPARE_STRING_BUFFER(gBattleTextBuff3, STRINGID_SPITE_TOTAL_LOSS);
+                ppToDeduct = 10;//gBattleMons[gBattlerTarget].pp[i];//want to make text for extranormal effects, 1st is mon "had bad luck", other is mon's "luck ran out!"
+                PREPARE_STRING_BUFFER(gBattleTextBuff3, STRINGID_SPITE_TOTAL_LOSS);//too much
             }
             //these strings would run before the normal sprite text
             else if (luck > 3) { //if 4,5,6,7,8, or 9;  do normal effect  6 out of 10 60% odds  this shuold be perfect, still need test
-                ppToDeduct = (Random() % 2) + 4; //removes 4-5 pp   //new more consistent effect, min 4 drop, on move just used so base 5 pp moves get removed
+                ppToDeduct = ((Random() % 2) + 4); //removes 4-5 pp   //new more consistent effect, min 4 drop, on move just used so base 5 pp moves get removed
                 PREPARE_STRING_BUFFER(gBattleTextBuff3, STRINGID_EMPTYSTRING3);
             }
             else if (luck > 0) {  //might go down to + 3      (should be 3 & below not 0)  3 2 1
-                ppToDeduct = 10;    //bad luck clause, since uses else if, should automatically exclude values above 3  shoudl be 1-3
+                ppToDeduct = 7;//10;    //bad luck clause, since uses else if, should automatically exclude values above 3  shoudl be 1-3
                 PREPARE_STRING_BUFFER(gBattleTextBuff3, STRINGID_SPITE_BADLUCK);
-            }
+            }//rebalanced odds 1-10 to 1-16
             
 
             if (gBattleMons[gBattlerTarget].pp[i] < ppToDeduct)

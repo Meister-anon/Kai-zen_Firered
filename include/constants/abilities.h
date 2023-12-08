@@ -347,7 +347,8 @@
 #define ABILITY_DREAD_WING 321 //aka burnout GALARIAN MOLTRES ABILITY, tweaking status to fit, set similar to unaware, when attacknig lower enemy def/sp def when target lower foe attack
                             //should be equivalent to amount of 1 stat stage drop
 #define ABILITY_PLAGUE_WINGS 322 //butterfree ability, effect spore no contect, work like power move, grass immune
+#define ABILITY_PHANTOM_TOUCH 323  //cubone line, contact only scrappy
 
-#define ABILITIES_COUNT ABILITY_PLAGUE_WINGS + 1 //   ability count is last ability number + 1 since we have to count ability 0
+#define ABILITIES_COUNT ABILITY_PHANTOM_TOUCH + 1 //   ability count is last ability number + 1 since we have to count ability 0
 
 #endif  // GUARD_CONSTANTS_ABILITIES_H

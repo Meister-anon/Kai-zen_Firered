@@ -210,7 +210,7 @@
 // Seems like per-battler statuses. Not quite sure how to categorize these
 //#define STATUS3_SKY_DROPPED             0x1 // Target of Sky Drop
 #define STATUS3_LEECHSEED_BATTLER       (1 << 0 | 1 << 1) // The battler to receive HP from Leech Seed
-#define STATUS3_LEECHSEED                (1 << 2) //The battler that was seeded
+#define STATUS3_LEECHSEED                (1 << 2) //is leech seeded status, doesn't store battler with status
 #define STATUS3_ALWAYS_HITS             (1 << 3 | 1 << 4)    // two bits
 #define STATUS3_ALWAYS_HITS_TURN(num)   (((num) << 3) & STATUS3_ALWAYS_HITS) // "Always Hits" is set as a 2 turn timer, i.e. next turn is the last turn when it's active
 #define STATUS3_PERISH_SONG             (1 << 5)

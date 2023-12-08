@@ -1892,7 +1892,42 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   it sapped all my hp.
   -had wrong targetting since leech set target logic was confusing, believe now have it correct,
   should change leeched hp to dmg only if activebattler is ghost, and target is not ghost, 
-  again target is mon receiving hp
+  again target is mon receiving hp - works  wait works w leech seed but not workin gon normal absorb effects??
+
+  setup black fog, not currently working right, 
+  change effect, make endturn effect, that resets, stats at end turn
+  //reply normalize stats end message
+
+  -haze/black fog freezing w new endturn need to figure out, for now turned off
+
+  shadow tag still not right for some reason, though I fixed all those,
+  not letting me switch if ghost, but I can run - ok fixed switch for ghosts,
+  and text issue seems to have fixed itself, w fix to other code?
+  //seems to be an issue that only appears/reappears when I have bad code elsewhere...
+
+  new cubone line ability phantom touch, contact limited scrappy
+  not for alolan marowak that keeps muscle magic,
+  which is better since its likea witch doctor/mystic
+  and also can't mega evolve to mega marowak
+
+  -need test, if lightning rod etc.draw in status moves, ok yeah it draws them in, so status moves bypass.
+  I think I would keep? need remember what my exclusion were, becUSE i KNOW i set electric can't be effeced by thunder wave,
+  but was that not status of type, or just can't be effected by paralysis setting effects?
+  /don't have another electric status move that targets I can check with, other than eerie impulse
+  -ok was able to test, its just paralysis from electricity that doesn't work, other electric status moves still do their job
+  -so think WILL make absorb abilities absorb status, just to make them special exceptions
+  ...idk I need to consider this, becuase I literall made everything an absorb ability, and a retarget
+  before I don't thjink volt absorb would force electric moves to land on it, it'd only just take them if hit by them
+
+  comparing for balance and my absorb effects even lighting rod are differnet from default versions
+  modern lighting rod raises sp atk and draws in eletric, but it draws in all electic, not just enemy moves also status moves
+
+  so i kinda feel drawing status makes them too strong?
+  but it doesn't make sense for some mon to be affected by the status either
+  //ok I can work hits, what I"ll do is give status immunity but have it not give the normal effect
+  //it'll just do the ability made move useless, so just cancel it out - done
+
+  -set weather dmg to ignore castform regardless of ability, since it was created w weather in mind
 
   //curious what benefit/differencec between using .h or .json for items values
   comparing between enemeral, type and secondary id seem to have different uses.
@@ -2550,6 +2585,7 @@ that way you don't need to keep flying aruond to different places looking for th
    -well no I can keep stab no matter what form I'm in so that's much better.
    //think also make castform imune to the weather dmg drops, pretty much out of necessity, since forecast is changing weather
    //will link to forecast not castform, just for sake of strategizing, hmm or maybe species instead? yeah ability - done immune to all weather based dmg drops
+   -chage make castform immune to weather, forecast just allows it to set it/predict it
 
    -extra plan make holding weather stones, decide what weather gets set, so instead of extending duration
    //it'll double predict the same weather essentially doubling normal duration, and since idea is that its not summoning weather
@@ -3488,6 +3524,8 @@ as well as the effect of increasing trap duration
 * powder was original signature move of vivillion   -giving to accelgor as its like a ninja (also try to change front sprite remove stupid puckered lip thing)
 * 
 *  also plan change grumpig front sprite, made dark type, give someting more sinister looking, saved template images
+*  ...change cloyster shiny so looks more sus, making pearl pink
+* think make shell brownish red?
 *
 * ...*Looks left & right* ... should I buff sturdy so it lets exploding mon survive on 1hp o.0
 * yup I'm DOIN it!!!

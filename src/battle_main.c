@@ -4709,7 +4709,7 @@ static void HandleTurnActionSelectionState(void) //think need add case for my sw
                         else
                         BtlController_EmitChoosePokemon(0, PARTY_ACTION_CANT_SWITCH, 6, ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
                     }
-                    else if ((IsAbilityOnOpposingSide(gActiveBattler, ABILITY_SHADOW_TAG))
+                    else if ((IsAbilityOnOpposingSide(gActiveBattler, ABILITY_SHADOW_TAG) && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST))
                         || ((IsAbilityOnOpposingSide(gActiveBattler, ABILITY_ARENA_TRAP))
                             // && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING)
                              //&& gBattleMons[gActiveBattler].ability != ABILITY_LEVITATE
