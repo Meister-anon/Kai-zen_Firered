@@ -188,7 +188,7 @@ struct BattleTowerPokemon //apparently used for both battle tower leftover from 
              u32 otId;  //if I need to could remove this? I think this is only for the enemy party data, so idk if this is necessary? oh wait that's combined with personality to determine nature?
              u32 hpIV:5; //I think this also goes into createmon function used in battle_main.c createtrainerparty if able to set fixed nature can remove otId & personality then
              u32 attackIV:5; //nmv also sets gender
-             u32 defenseIV:5;
+             u32 defenseIV:5; //bitfiled 5, goes up to 32 bytes guess that explains the 31 iv limit, its 0-31
              u32 speedIV:5;
              u32 spAttackIV:5; //since its restricting to bits, it doesn't much matter the type
              u32 spDefenseIV:5;

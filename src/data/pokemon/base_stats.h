@@ -2324,8 +2324,8 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_ONIX] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(35, 62, 160, 77, 30, 55),
-        .type1 = TYPE_ROCK,
+         STATS(35, 62, 160, 113, 30, 55),//still not up to snuff, but can't do much more to its stats without breaking early game, think can only boost speed
+        .type1 = TYPE_ROCK,         //will be fastest rock type
         .type2 = TYPE_GROUND,
         .catchRate = 45,
         .expYield = 77,

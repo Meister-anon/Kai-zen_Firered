@@ -2988,10 +2988,12 @@ static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon)
     return 0;
 }
 
+//cut down iv boost for balane a bit, now at 31 its equal to max ev investment
+//not higher than possible investment
 #define CALC_STAT(base, iv, ev, statIndex, field)                               \
 {                                                                               \
     u8 baseStat = gBaseStats[species].base;                                     \
-    s32 n = (((2 * baseStat + ((iv * 240) /100) + ev / 4) * level) / 100) + 5;  \
+    s32 n = (((2 * baseStat + ((iv * 210) /100) + ev / 4) * level) / 100) + 5;  \
     u8 nature = GetNature(mon);                                                 \
     n = ModifyStatByNature(nature, n, statIndex);                               \
     SetMonData(mon, field, &n);                                                 \
@@ -4495,8 +4497,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             damage = attack;
 
         damage = damage * gBattleMovePower;
-        //damage *= (2 * attacker->level / 5 + 2); //offense side of damage formula for level scaled damage
-        damage *= (((attacker->level * 160) / 100) / 5 + 3);  //alt lower scaling dmg formula
+        //damage *= (2 * attacker->level / 5 + 2); //offense side of damage formula for level scaled damage  42.92
+        //damage *= (((attacker->level * 160) / 100) / 5 + 3);  //alt lower scaling dmg formula
+
+        damage *= (((attacker->level * 160) / 100) / 5 + 2);  //redone balance
+
+        //damage *= (((attacker->level * 148) / 100) / 4); //the difference in dmg here seems very small, i'm unsure if I should lower? //hmm higher effect the higher your stat is
+        //every little bit helps I guess, //means level matters more than stats? or stats matter mor ethan level?
+        //think the higher multiplier means level is more impactful for damage,
 
         //trap effects & bug status def drop
         if ((gBattleMons[battlerIdDef].status1 & STATUS1_INFESTATION) //this is bug status
@@ -4614,7 +4622,14 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
         damage = damage * gBattleMovePower;
         //damage *= (2 * attacker->level / 5 + 2); //it isn't, realized that's calc for normal level scaling damage.
-        damage *= (((attacker->level * 160) / 100) / 5 + 3);  //alt lower scaling dmg formula
+        //damage *= (((attacker->level * 160) / 100) / 5 + 3);  //alt lower scaling dmg formula
+
+        damage *= (((attacker->level * 160) / 100) / 5 + 2);  //redone balance
+
+        //damage *= (((attacker->level * 148) / 100) / 4); //the difference in dmg here seems very small, i'm unsure if I should lower? //hmm higher effect the higher your stat is
+        //every little bit helps I guess, //means level matters more than stats? or stats matter mor ethan level?
+        //think the higher multiplier means level is more impactful for damage,
+
 
         
 
