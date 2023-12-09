@@ -1460,7 +1460,7 @@ static void atk00_attackcanceler(void) //vsonic
             gLastHitByType[gBattlerTarget] = 0;//not sur ethat will work but need figure out how to do ,. can make new struct thats' only cleared on battle start and end
             gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG; //check target matches forewarn user
         }
-        gDisableStructs[gBattlerTarget].forewarnedMove = MOVE_UNAVAILABLE; //ensures, only works for first turn
+        //gDisableStructs[gBattlerTarget].forewarnedMove = MOVE_UNAVAILABLE; //ensures, only works for first turn - set in battle_main
         
         
     }
@@ -1476,7 +1476,7 @@ static void atk00_attackcanceler(void) //vsonic
             gLastHitByType[gBattlerTarget] = 0;
             gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG;
         }
-        gDisableStructs[gBattlerTarget].anticipatedMove = MOVE_UNAVAILABLE;
+        //gDisableStructs[gBattlerTarget].anticipatedMove = MOVE_UNAVAILABLE; //issue if move used doesn't go through attak canceler this doesn't remove status
 
     }
 

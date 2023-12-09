@@ -1769,7 +1769,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED,
         .split = SPLIT_STATUS,
-    },
+    },//black fog, setup but never put command in sript, now is in need test ...breaks game
+    //fixed, full effect isn't working. , for now commented out mist command
 
     [MOVE_REFLECT] =
     {

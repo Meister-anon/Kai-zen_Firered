@@ -1867,6 +1867,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   //all I need is a check for if anticipation or forewarn should activate/has activated, and then just put the check in the data and hp bar function
   -dont thinkm will be issue w forewarn etc. but test anyway - prob need mon with only rollout as move
 
+  - forewarn anticipation clear not workign right, realized only is triggered if use a mvoe that goes through attack canceler
+  -change filter value, or see if there is an issue with just adding attackcanceler to every script, think that's a bad fix
+  can potentially just put move change in endturn? should work since its a switch in
+
   -testing buterfree plague wings seems work well, need test move that has 100% effect, see if it can still set effect
   //ok tested still works, so other move effects don't seem to prevent effect at all. hm
   welp I call this one done then

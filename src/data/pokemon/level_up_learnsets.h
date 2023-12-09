@@ -302,7 +302,7 @@ static const struct LevelUpMove sRaticateLevelUpLearnset[] = {
 static const struct LevelUpMove sSpearowLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_GROWL),
     LEVEL_UP_MOVE(1, MOVE_PECK),
-    LEVEL_UP_MOVE(7, MOVE_LEER),
+    LEVEL_UP_MOVE(5, MOVE_LEER),
     LEVEL_UP_MOVE(9, MOVE_REVENGE),
     LEVEL_UP_MOVE(13, MOVE_FURY_ATTACK),
     LEVEL_UP_MOVE(19, MOVE_PURSUIT),
@@ -1314,13 +1314,13 @@ static const struct LevelUpMove sShellderLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sCloysterLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(0, MOVE_ROCK_BLAST),
+    LEVEL_UP_MOVE(0, MOVE_SPIKE_CANNON),
     LEVEL_UP_MOVE(1, MOVE_WITHDRAW),
     LEVEL_UP_MOVE(1, MOVE_SUPERSONIC),
     LEVEL_UP_MOVE(1, MOVE_AURORA_BEAM),
     LEVEL_UP_MOVE(1, MOVE_PROTECT),
     LEVEL_UP_MOVE(36, MOVE_SPIKES),
-    LEVEL_UP_MOVE(43, MOVE_SPIKE_CANNON),
+    LEVEL_UP_MOVE(43, MOVE_SPIKE_SHIELD),
     LEVEL_UP_END
 };
 

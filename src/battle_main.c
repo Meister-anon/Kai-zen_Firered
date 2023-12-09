@@ -4390,6 +4390,8 @@ static void HandleEndTurn_ContinueBattle(void)
             //if ((gBattleMons[i].status1 & STATUS1_SLEEP) && (gBattleMons[i].status2 & STATUS2_MULTIPLETURNS))
             if ((gBattleMons[i].status1 & STATUS1_SLEEP)) //pretty sure no reason not to just make it auto run on sleep
                 CancelMultiTurnMoves(i);
+            gDisableStructs[i].forewarnedMove = MOVE_UNAVAILABLE;
+            gDisableStructs[i].anticipatedMove = MOVE_UNAVAILABLE;  //to clear out effects at endturn properly
         }
         gBattleStruct->turnEffectsTracker = 0;
         gBattleStruct->turnEffectsBattlerId = 0;
