@@ -85,7 +85,8 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_EXEGGCUTE] = {{EVO_ITEM, ITEM_LEAF_STONE, SPECIES_EXEGGUTOR},
                                        {EVO_ITEM, ITEM_LEAF_STONE, SPECIES_EXEGGUTOR_ALOLAN}},
     [SPECIES_CUBONE] = {{EVO_LEVEL, 28, SPECIES_MAROWAK},
-                                       {EVO_LEVEL, 28, SPECIES_MAROWAK_ALOLAN}}, //changed from evo level night, since I want same evo method but use flags for alt forms.
+                                       //{EVO_LEVEL, 28, SPECIES_MAROWAK_ALOLAN}
+                                       {EVO_ITEM, ITEM_FIRE_STONE, SPECIES_MAROWAK_ALOLAN}}, //changed from evo level night, since I want same evo method but use flags for alt forms.
     [SPECIES_LICKITUNG] = {{EVO_MOVE, MOVE_ROLLOUT, SPECIES_LICKILICKY}},
     [SPECIES_KOFFING] = {{EVO_LEVEL, 35, SPECIES_WEEZING}},
     [SPECIES_RHYHORN] = {{EVO_LEVEL, 36, SPECIES_RHYDON}}, //lower this
