@@ -3133,12 +3133,19 @@ BattleScript_EffectHaze::
 	attackcanceler
 	attackstring
 	ppreduce
+	@setmist	breaking turning off for now
+	jumpifmovehadnoeffect BattleScript_ButItFailed
 	attackanimation
 	waitanimation
 	normalisebuffs
 	printstring STRINGID_STATCHANGESGONE
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
+
+BattleScript_StatChangesRemoved::
+	printstring STRINGID_STATCHANGESGONE
+	waitmessage 0x40
+	end2
 
 BattleScript_EffectBide::
 	attackcanceler
@@ -10023,6 +10030,17 @@ BattleScript_BerryCureChosenStatusRet::
 	waitmessage 0x40
 	updatestatusicon BS_SCRIPTING
 	removeitem BS_SCRIPTING
+	return
+
+BattleScript_CleanseTagStatusCure::
+	Call BattleScript_CleanseTagRet
+	end2
+
+BattleScript_CleanseTagRet::
+	playanimation BS_SCRIPTING, B_ANIM_ITEM_EFFECT, NULL
+	printfromtable gBerryEffectStringIds
+	waitmessage 0x40
+	updatestatusicon BS_SCRIPTING
 	return
 
 BattleScript_MentalHerbCureRet::

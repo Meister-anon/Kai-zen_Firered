@@ -578,12 +578,13 @@ void FieldUseFunc_BadOnion(u8 taskId)
         DisplayItemMessageInBag(taskId, 2, gUnknown_841659E, Task_ReturnToBagFromContextMenu);
 }
 
-static void sub_80A19E8(u8 taskId)
+static void sub_80A19E8(u8 taskId)//believe set repel use from bag
 {
     if (!IsSEPlaying())
     {
         ItemUse_SetQuestLogEvent(QL_EVENT_USED_ITEM, NULL, gSpecialVar_ItemId, 0xFFFF);
         VarSet(VAR_REPEL_STEP_COUNT, ItemId_GetHoldEffectParam(gSpecialVar_ItemId));
+        VarSet(VAR_LAST_USED_REPEL, gSpecialVar_ItemId);
         sub_80A1A44();
         DisplayItemMessageInBag(taskId, 2, gStringVar4, Task_ReturnToBagFromContextMenu);
     }

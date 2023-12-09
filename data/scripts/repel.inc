@@ -46,7 +46,8 @@ EventScript_AnotherRepel::
 	
 EventScript_UseAnotherRepel::
 	removeitem ITEM_REPEL, 1
-	setvar VAR_REPEL_STEP_COUNT 100
+	setvar VAR_REPEL_STEP_COUNT 150
+	setvar VAR_LAST_USED_REPEL	ITEM_REPEL
 	goto EventScript_FinishNewRepel
 	
 EventScript_UseAnotherBadOnion::
@@ -56,12 +57,14 @@ EventScript_UseAnotherBadOnion::
 	
 EventScript_UseAnotherSuperRepel::
 	removeitem ITEM_SUPER_REPEL, 1
-	setvar VAR_REPEL_STEP_COUNT 200
+	setvar VAR_REPEL_STEP_COUNT 150
+	setvar VAR_LAST_USED_REPEL	ITEM_SUPER_REPEL
 	goto EventScript_FinishNewRepel
 	
 EventScript_UseAnotherMaxRepel::
 	removeitem ITEM_MAX_REPEL, 1
-	setvar VAR_REPEL_STEP_COUNT 250
+	setvar VAR_REPEL_STEP_COUNT 150
+	setvar VAR_LAST_USED_REPEL	ITEM_MAX_REPEL
 	goto EventScript_FinishNewRepel
 	
 EventScript_FinishNewRepel::

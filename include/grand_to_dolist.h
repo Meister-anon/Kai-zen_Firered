@@ -2020,12 +2020,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   the window appears to have enough physical space for all my option on rhydon ie space for one more field move listed
   but trying to display 5 field moves, breaks the menu, and has it shrink, and only show 3 options
   summary dig, and then the first hm only i.e cut  //need adjust party menu function to fix, somehow
+  -fixed, limit was based on old values, expanded party window to 9 and was able to limit to 5 field moves without issue
 
   I could leave it as is, and just add a string, to it,
   like it works and is simple, the issue is youo lose out on nuance, like use belch with a pecha berry 
   ...hmm well actually this is fine, if you met the condition to eat a berry, it'd already activate,
   so doing it my way, "consumes" the berry losing you the option to use it.
-  ok think will just add a string saying consumed berry
+  ok think will just add a string saying consumed berry - when I get it working rework,
+  -to get effect of berry when use belch -this woluld only come into effect for early healing so idk maybe not?
 
  -found graphic for purified zone in pokemon tower floor 4, use that for resurection area, looks like a ritual space
   -put on top floor floor 7, for resurection, eventually remove encouters from floor 7
@@ -2047,6 +2049,12 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  -well fixed that at leaset, issue was just adding evo stone item effect to item in item_effects.h
  -knowing that I need to add several more items i.e metal coat, upgrade etc. dubious disk
 
+ -added mor eitems, adjusted defines, willneed to add more to json to properly display/work etc.
+
+ -similar to cleanse tag  -but would need reason to keep using cleanse tag, think give extra effect similar to shedskin, has chance to cleansae status in battle
+ -done, all seems to work, repel triggers 2/3rd enconter rate uses var to pick whcih repel is active, resets on bag use and eventscript bw repel use,
+ appears tobe properly switching
+ 
 -  new repel change make them all same duration but different strength/effect  match duartion to super repel
 normal repel keeps enemies away up to your level
 super repel keeps enemies away up to 1.5x your level

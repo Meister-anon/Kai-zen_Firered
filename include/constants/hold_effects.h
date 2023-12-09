@@ -34,7 +34,7 @@
 #define HOLD_EFFECT_FLINCH         30
 #define HOLD_EFFECT_BUG_POWER      31
 #define HOLD_EFFECT_DOUBLE_PRIZE   32
-#define HOLD_EFFECT_REPEL          33
+#define HOLD_EFFECT_CLEANSE_TAG    33   //used for cleanse tag only, no real effect rename hold_effect_cleanse tag, add to battle_util.c to do weaker version of shed skin
 #define HOLD_EFFECT_SOUL_DEW       34
 #define HOLD_EFFECT_DEEP_SEA_TOOTH 35
 #define HOLD_EFFECT_DEEP_SEA_SCALE 36

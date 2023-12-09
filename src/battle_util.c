@@ -9407,6 +9407,17 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
                     BattleScriptExecute(BattleScript_BerryCureChosenStatusEnd2);
                     effect = ITEM_STATUS_CHANGE;
                 }
+                break; //ok this seems is actually switchin not just normal turn
+            case HOLD_EFFECT_CLEANSE_TAG:
+            if ((gBattleMons[battlerId].status1 & STATUS1_ANY || gBattleMons[battlerId].status2 & STATUS2_CONFUSION)
+            && (Random() % 3) == 0) //should work like shed skin
+                {                    
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_NORMALIZED_STATUS;    //like this message more
+                    gBattleMons[battlerId].status1 = 0;
+                    gBattleMons[battlerId].status2 &= ~STATUS2_CONFUSION;
+                    BattleScriptExecute(BattleScript_CleanseTagStatusCure); //change this
+                    effect = ITEM_STATUS_CHANGE;
+                }
                 break;
             case HOLD_EFFECT_RESTORE_HP:
                 //if (B_BERRIES_INSTANT >= GEN_4)
@@ -9489,7 +9500,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
         }
         break;
     case ITEMEFFECT_NORMAL:
-        if (gBattleMons[battlerId].hp)
+        if (gBattleMons[battlerId].hp) //this end turn other effect is switchin item effects
         {
             switch (battlerHoldEffect)
             {
@@ -9737,6 +9748,17 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
                     gBattleMons[battlerId].status1 = 0;
                     gBattleMons[battlerId].status2 &= ~STATUS2_CONFUSION;
                     BattleScriptExecute(BattleScript_BerryCureChosenStatusEnd2);
+                    effect = ITEM_STATUS_CHANGE;
+                }
+                break;
+            case HOLD_EFFECT_CLEANSE_TAG:
+            if ((gBattleMons[battlerId].status1 & STATUS1_ANY || gBattleMons[battlerId].status2 & STATUS2_CONFUSION)
+            && (Random() % 3) == 0) //should work like shed skin - works now
+                {
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_NORMALIZED_STATUS;    //like this message more
+                    gBattleMons[battlerId].status1 = 0;
+                    gBattleMons[battlerId].status2 &= ~STATUS2_CONFUSION;
+                    BattleScriptExecute(BattleScript_CleanseTagStatusCure); //change this
                     effect = ITEM_STATUS_CHANGE;
                 }
                 break;

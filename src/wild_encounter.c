@@ -615,19 +615,36 @@ static bool8 IsWildLevelAllowedByRepel(u8 wildLevel)
 {
     u8 i;
 
-    if (!VarGet(VAR_REPEL_STEP_COUNT))
+    if (!VarGet(VAR_REPEL_STEP_COUNT)) //if repel not active
         return TRUE;
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
         if (GetMonData(&gPlayerParty[i], MON_DATA_HP) && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG))
         {
-            u8 ourLevel = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
+            u8 ourLevel = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL); //need check repl type used and set diff level for each
 
-            if (wildLevel < ourLevel)
-                return FALSE;
-            else
-                return TRUE;
+            if (VarGet(VAR_LAST_USED_REPEL) == ITEM_REPEL) //unsure if this would get reset or overwritten and by what, think need make new field lastusedrepel have it set in eventscript
+            {
+                if (wildLevel < ourLevel) //if gSpecialVar_ItemId == ITEM_REPEL think this will work unsure /used var saves memory instead of new storage value
+                    return FALSE;
+                else
+                    return TRUE;
+            }
+            else if (VarGet(VAR_LAST_USED_REPEL) == ITEM_SUPER_REPEL)
+            {
+                if (wildLevel < (ourLevel * 150) / 100)
+                    return FALSE;
+                else
+                    return TRUE;
+            }
+            else if (VarGet(VAR_LAST_USED_REPEL) == ITEM_MAX_REPEL)
+            {
+                if (wildLevel < (ourLevel * 2))
+                    return FALSE;
+                else
+                    return TRUE;
+            }
         }
     }
 
@@ -665,7 +682,8 @@ static void ApplyCleanseTagEncounterRateMod(u32 *encounterRate)
 
 static bool8 IsLeadMonHoldingCleanseTag(void)
 {
-    if (sWildEncounterData.leadMonHeldItem == ITEM_CLEANSE_TAG)
+    if ((sWildEncounterData.leadMonHeldItem == ITEM_CLEANSE_TAG)
+    ||  (VarGet(VAR_REPEL_STEP_COUNT) != 0)) //set lower encounter rate effect for repel
         return TRUE;
     else
         return FALSE;
