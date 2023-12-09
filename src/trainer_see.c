@@ -112,7 +112,7 @@ bool8 UpdateBadOnionCounter(void)
         }
     }
     return FALSE;
-}
+}//did this and yet somehow missed adding normal repel update
 
 bool8 CheckForTrainersWantingBattle(void)
 {

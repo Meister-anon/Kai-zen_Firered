@@ -1859,6 +1859,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   it now works as planned
 
   as part of update for form chnage, need add F_MEGA_FORM to mon in bsae stats, flag was set but never assigned
+  -done
 
   ok so its really simple, effect is just in atk0B_healthbarupdate & atk0C_datahpupdate
   -simply prevent health and hp data from being updated on hit,
@@ -1893,10 +1894,11 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -had wrong targetting since leech set target logic was confusing, believe now have it correct,
   should change leeched hp to dmg only if activebattler is ghost, and target is not ghost, 
   again target is mon receiving hp - works  wait works w leech seed but not workin gon normal absorb effects??
+  -done
 
   setup black fog, not currently working right, 
   change effect, make endturn effect, that resets, stats at end turn
-  //reply normalize stats end message
+  //replay normalize stats end message
 
   -haze/black fog freezing w new endturn need to figure out, for now turned off
 
@@ -1927,7 +1929,8 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   //ok I can work hits, what I"ll do is give status immunity but have it not give the normal effect
   //it'll just do the ability made move useless, so just cancel it out - done
 
-  -set weather dmg to ignore castform regardless of ability, since it was created w weather in mind
+  -set weather dmg to ignore castform regardless of ability, since it was created w weather in mind -done
+  -still need forecast messages
 
   //curious what benefit/differencec between using .h or .json for items values
   comparing between enemeral, type and secondary id seem to have different uses.
@@ -1967,7 +1970,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   before froze game, now it causes rain? - think this is fixed?
 
   -considering does IV change, invalidate the multiplier change,?  I think know because everyone has access,
-  but rolling a 0 is way more punishing this way hmm
+  but rolling a 0 is way more punishing this way hmm - it didn't but it was still way too high, was higher than base game max ev investment
+  -lowered that and instead lowered the dmg formula slightly, to help w balance as onix etc was still getting one shot
+  -but not much I an do with that outside of making faster and giving better late/mid game moves
 
   -setting up moltres ability, added new ability for galarian moltres
   for normal moltres new ability need fix battle_util setup,  for fix negative status removal/cleanse  -setup need test
@@ -1984,7 +1989,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -unaware logic in pokemon.c is broken, something keeps it from doing and taking damage correctly
   -fixed had damage in wrong place, it was below dmg calc
 
-  -was able to  test lightning rod,  redirect isn't working in doubles
+  -was able to  test lightning rod,  redirect isn't working in doubles -fixed
 
   -change spawn legendaries, so now they don't leave after you defaeat them,
   they disappear but come back soon as you enter cave again,
@@ -1996,6 +2001,8 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   -added lvl cap for box exp gain, game opens up around 5th gym, so put lvl cap at 6th badge,
   I think should be fine?
+
+  -readded bw repel system
 
   -look into cleanse tag, doesn't seem to be working? or it doesn't 
   work like repel which is what I expect, ok doesn't work like repel it lowers encounter rate,
