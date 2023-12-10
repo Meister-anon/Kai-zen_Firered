@@ -1736,7 +1736,8 @@ static bool8 AccuracyCalcHelper(u16 move)//fiugure how to add blizzard hail accu
     }
 
     if ((gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE)//i beleve this is the replacement for the hitmarker values for semi invul, just need to add flags to omve data
-        || (!(gBattleMoves[move].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR)) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+        || (!(gBattleMoves[move].flags & FLAG_DMG_IN_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+        || (!(gBattleMoves[move].flags & FLAG_DMG_2X_IN_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
         || (!(gBattleMoves[move].flags & FLAG_DMG_2X_UNDERGROUND) && gStatuses3[gBattlerTarget] & STATUS3_UNDERGROUND)
         || (!(gBattleMoves[move].flags & FLAG_DMG_2X_UNDERWATER) && gStatuses3[gBattlerTarget] & STATUS3_UNDERWATER))
     {
@@ -3850,10 +3851,11 @@ static void atk0F_resultmessage(void) //covers the battle message displayed afte
     u8 moveType;
     GET_MOVE_TYPE(gCurrentMove,moveType);
 
-    //if (!(gBattleMoves[gCurrentMove].power) //try skip message  if status move, seems to work
-     //   ++gBattlescriptCurrInstr;
 
-    if (!gBattleControllerExecFlags)
+    //vsonic //seems to work partially? prevent repeat messages, if kill in one hit with multihit, still shows for 2 hits - decided this is fine
+    //forgot multihit resultmessage was somehting I added, believe just for sake of battle flow?
+    //feels faster to get the effectinvess at start rather than waiting for last hit
+    if (!gBattleControllerExecFlags) //need find a way to better mesh with multihit result message, to prevent replaying string if current/previous string is the same
     {
         if (gMoveResultFlags & MOVE_RESULT_MISSED && (!(gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE) || gBattleCommunication[6] > 2))
         {
@@ -3869,6 +3871,8 @@ static void atk0F_resultmessage(void) //covers the battle message displayed afte
             case MOVE_RESULT_SUPER_EFFECTIVE:
             if (!(gBattleMoves[gCurrentMove].power)) //try skip message  if status move, works
                break;
+            else if (VarGet(VAR_LAST_MULTIHIT_RESULT) == STRINGID_SUPEREFFECTIVE)
+               break;
             else
                 stringId = STRINGID_SUPEREFFECTIVE;
                 break;
@@ -3876,8 +3880,10 @@ static void atk0F_resultmessage(void) //covers the battle message displayed afte
             if (CalcTypeEffectivenessMultiplier(gCurrentMove, moveType, gBattlerAttacker, gBattlerTarget, FALSE) == UQ_4_12_TO_INT((UQ_4_12(1.55) * UQ_4_12(0.5)) + UQ_4_12_ROUND))
                 gBattleCommunication[MSG_DISPLAY] = 0; //should keep effect remove message, keep not very effective sound
             else if (!(gBattleMoves[gCurrentMove].power)) //try skip message  if status move, seems to work
+               break;//think can use var to store multihit result message string id, (at end, if super or not effective)
+            else if (VarGet(VAR_LAST_MULTIHIT_RESULT) == STRINGID_NOTVERYEFFECTIVE)
                break;
-            else
+            else //then here can compare value to be set and do else if  break if they match then just need to reset value of var in endurn continue battle & finish battle
                 stringId = STRINGID_NOTVERYEFFECTIVE;
                 break;
             case MOVE_RESULT_ONE_HIT_KO:
@@ -3949,7 +3955,10 @@ static void atk0F_resultmessage(void) //covers the battle message displayed afte
         }
         
         if (stringId)
+        {
             PrepareStringBattle(stringId, gBattlerAttacker);
+        }
+            
         ++gBattlescriptCurrInstr;
     }
 }
@@ -7484,7 +7493,8 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             && TARGET_TURN_DAMAGED)// !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) //should make sure doesn't trigger till end of multihit
             {           //result no effect didn't work so replace w target must take dmg
                 
-                if (gBattleMoves[gCurrentMove].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)   //using fly
+                if ((gBattleMoves[gCurrentMove].flags & (FLAG_DMG_IN_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR)
+                || (gBattleMoves[gCurrentMove].flags & (FLAG_DMG_2X_IN_AIR) && gStatuses3[gBattlerTarget] & STATUS3_ON_AIR))   //using fly
                 {
                     CancelMultiTurnMoves(gBattlerTarget); //just for fly /skydrop
                     gSprites[gBattlerSpriteIds[gBattlerTarget]].invisible = FALSE;
@@ -7497,13 +7507,14 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
 
                 }//NEW bs for   //didnt need move damage multiplier that's already accounted for by damage calc
 
-                else if (gBattleMoves[gCurrentMove].flags & (FLAG_DMG_IN_AIR | FLAG_DMG_2X_IN_AIR))
+                else if ((gBattleMoves[gCurrentMove].flags & (FLAG_DMG_IN_AIR))
+                || (gBattleMoves[gCurrentMove].flags & (FLAG_DMG_2X_IN_AIR))) //redid thnik tryign bitwise stuff was why this at times failed to set grounding
                 {
                     gStatuses3[gBattlerTarget] |= STATUS3_SMACKED_DOWN;
                     gStatuses3[gBattlerTarget] &= ~(STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS | STATUS3_ON_AIR);
                     effect = TRUE;
                     BattleScriptPush(gBattlescriptCurrInstr);
-                    gBattlescriptCurrInstr = BattleScript_MoveEffectSmackDown;
+                    gBattlescriptCurrInstr = BattleScript_MoveEffectSmackDown; //just a battle message
                 }//for some reason seems doesn't always work?,idk what's going on with this thing...
 
             } //vsonic need test
@@ -13537,7 +13548,7 @@ static void atk8B_setbide(void)
 {
     if (!(gBattleMons[gBattlerAttacker].status2 & STATUS2_BIDE))
     {
-        gDisableStructs[gBattlerAttacker].bideTimer = 3;
+        gDisableStructs[gBattlerAttacker].bideTimer = 3;//would like ot make timer one turn shorter, but then its a near guaranteed kill?
         gTakenDmg[gBattlerAttacker] = 0; //believe resetting damag to 0 so it doesn't count anything from previous turn?
         gBattleMons[gBattlerAttacker].status2 |= STATUS2_BIDE;
     }
@@ -17844,7 +17855,7 @@ void BS_Multihit_resultmessage(void) //there are no multihit status moves I don'
     {
         if (gMultiHitCounter > 1 && gMultiHitCounter == gMultiTask) //should be only first hit of multi hit
         {
-            if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
+            if (gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE) //above works but then when it goes to result on last hit it displays same string again, need to ensure string displayed is not same
             {
                 stringId = STRINGID_SUPEREFFECTIVE;
                 gBattleCommunication[MSG_DISPLAY] = 1;
@@ -17873,7 +17884,6 @@ void BS_Multihit_resultmessage(void) //there are no multihit status moves I don'
         }
         else
         {
-            //gBattleCommunication[MSG_DISPLAY] = 0;
             stringId = STRINGID_EMPTYSTRING3;
             gBattleCommunication[MSG_DISPLAY] = 1;
             gBattlescriptCurrInstr = cmd->nextInstr;
@@ -17891,6 +17901,7 @@ void BS_Multihit_resultmessage(void) //there are no multihit status moves I don'
 
         if (stringId)
         {
+            VarSet(VAR_LAST_MULTIHIT_RESULT, stringId); //store string for resultmessage comparison
             PrepareStringBattle(stringId, gBattlerAttacker);
             gBattlescriptCurrInstr = cmd->nextInstr;
         }

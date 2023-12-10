@@ -4399,6 +4399,8 @@ static void HandleEndTurn_ContinueBattle(void)
         gBattleStruct->wishPerishSongBattlerId = 0;
         gBattleStruct->turnCountersTracker = 0;
         gMoveResultFlags = 0;
+        if (VarGet(VAR_LAST_MULTIHIT_RESULT))
+            VarSet(VAR_LAST_MULTIHIT_RESULT, 0);    //clear last result var for multihit at turn end
     }
 }
 
@@ -5520,6 +5522,8 @@ static void HandleEndTurn_FinishBattle(void)
 
         //if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)  //this flag true/false is diff between trainer battle & wilds
          //   TryRestoreStolenItems();  unsure if was unecessary dupe
+        if (VarGet(VAR_LAST_MULTIHIT_RESULT))
+            VarSet(VAR_LAST_MULTIHIT_RESULT, 0);    //clear last result var for multihit at turn end
 
         for (i = 0; i < PARTY_SIZE; i++)
         {

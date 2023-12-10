@@ -304,7 +304,7 @@
 #define VAR_0x40FB                 0x40FB
 #define VAR_0x40FC                 0x40FC
 #define VAR_0x40FD                 0x40FD
-#define VAR_0x40FE                 0x40FE
+#define VAR_LAST_MULTIHIT_RESULT   0x40FE   //FOR multihit resultmessage fix, store last result and compare to resultmessage command in super and not effective blocks, to prevent overlap
 #define VAR_LAST_USED_REPEL        0x40FF   //for storing repel effect in use, for level filtering
 #define VAR_RIVAL_STARTER		   0x4100 //use rival starter species
 #define VAR_RIVAL_EVO			   0x4101 //use rival starter Evolution

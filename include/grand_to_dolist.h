@@ -1861,6 +1861,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   as part of update for form chnage, need add F_MEGA_FORM to mon in bsae stats, flag was set but never assigned
   -done
 
+  -adjusted battle message for multihit results, removed excessive repeat mostly in csae of multihit that kills in one hit
+  flowsmuch better
+
   ok so its really simple, effect is just in atk0B_healthbarupdate & atk0C_datahpupdate
   -simply prevent health and hp data from being updated on hit,
   //check how substitute does it to attempt avoid rollout glitch
@@ -1869,7 +1872,13 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   - forewarn anticipation clear not workign right, realized only is triggered if use a mvoe that goes through attack canceler
   -change filter value, or see if there is an issue with just adding attackcanceler to every script, think that's a bad fix
-  can potentially just put move change in endturn? should work since its a switch in
+  can potentially just put move change in endturn? should work since its a switch in  --moved clear to edturn and it worked
+
+  -need fix multihit result message, make it not display. well nvm not much I can do if they die the next hit,
+  but I guess I can attempt to do some logic like stringutil
+
+  where if current string isn't same as string I want to display?
+  that way if its displaying not effetive string, and hte enemy dies on next hit, or next hit is last hit, it shouldn't display result again?
 
   -testing buterfree plague wings seems work well, need test move that has 100% effect, see if it can still set effect
   //ok tested still works, so other move effects don't seem to prevent effect at all. hm
