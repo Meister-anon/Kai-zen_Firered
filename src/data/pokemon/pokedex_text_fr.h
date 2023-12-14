@@ -571,6 +571,7 @@ const u8 gGengarPokedexText[] = _(
     "It is actually a Gengar running past\n"
     "you, pretending to be your shadow.");
 
+    //add some comment about speed 50mph
 const u8 gOnixPokedexText[] = _(
     "There is a magnet in its brain that\n"
     "prevents an Onix from losing direction\n"
