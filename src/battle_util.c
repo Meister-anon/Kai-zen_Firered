@@ -1593,7 +1593,10 @@ enum
 };
 
 #define FIELD_ENDTURN
-u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
+// still to do  //vsonic IMPORTANT  done updated //from battle_main field endturn function goes before battlerendturn
+//I THINK my abilitybattleeffects is triggered before this so foreast should be fine?
+//ok forecast is in switchin effects whictch goes firstturn, so that does trigger before this thankfully
+u8 DoFieldEndTurnEffects(void)
 {
     u8 effect = 0;
 
@@ -1913,12 +1916,12 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
                 if (!(gBattleWeather & WEATHER_RAIN_PERMANENT)
                     && !(gBattleWeather & WEATHER_RAIN_PRIMAL))
                 {
-                    if (IsAbilityOnField(ABILITY_DRIZZLE) || IsAbilityOnField(ABILITY_SQUALL))
+                    if (IsAbilityOnField(ABILITY_DRIZZLE) || IsAbilityOnField(ABILITY_SQUALL) || --gWishFutureKnock.weatherDuration != 0)
                     {
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RAIN_CONTINUES;
                     }
 
-                    else if (gWishFutureKnock.weatherDuration == 0 || --gWishFutureKnock.weatherDuration == 0) //weathr decrement //decremennts weather, and does removes weather if equals 0 after decrement
+                    else// if (gWishFutureKnock.weatherDuration == 0 || --gWishFutureKnock.weatherDuration == 0) //weathr decrement //decremennts weather, and does removes weather if equals 0 after decrement
                     {
                         gBattleWeather &= ~WEATHER_RAIN_TEMPORARY;
                         gBattleWeather &= ~WEATHER_RAIN_DOWNPOUR;
@@ -1944,10 +1947,10 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
             {
                 if (!(gBattleWeather & WEATHER_SANDSTORM_PERMANENT))  //only the abilities that actually call weather directly
                 {
-                    if (IsAbilityOnField(ABILITY_SAND_STREAM))
+                    if (IsAbilityOnField(ABILITY_SAND_STREAM) || --gWishFutureKnock.weatherDuration != 0)
                         gBattlescriptCurrInstr = BattleScript_DamagingWeatherContinues;
 
-                    else if (gWishFutureKnock.weatherDuration == 0 || --gWishFutureKnock.weatherDuration == 0) //weathr decrement
+                    else// if (gWishFutureKnock.weatherDuration == 0 || --gWishFutureKnock.weatherDuration == 0) //weathr decrement
                     {
                         gBattleWeather &= ~WEATHER_SANDSTORM_TEMPORARY;
                         gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
@@ -1972,10 +1975,10 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
                     && !(gBattleWeather & WEATHER_SUN_PRIMAL) //ability based permanent
                     )
                 {
-                    if (IsAbilityOnField(ABILITY_DROUGHT) || IsAbilityOnField(ABILITY_SUN_DISK))
+                    if (IsAbilityOnField(ABILITY_DROUGHT) || IsAbilityOnField(ABILITY_SUN_DISK) || --gWishFutureKnock.weatherDuration != 0)
                         gBattlescriptCurrInstr = BattleScript_SunlightContinues;
 
-                    else if (gWishFutureKnock.weatherDuration == 0 || --gWishFutureKnock.weatherDuration == 0) //weathr decrement
+                    else// if (gWishFutureKnock.weatherDuration == 0 || --gWishFutureKnock.weatherDuration == 0) //weathr decrement
                     {
                         gBattleWeather &= ~WEATHER_SUN_TEMPORARY;
                         gBattlescriptCurrInstr = BattleScript_SunlightFaded; //redid these to fix sun persisting effect, but think this string isn't playing?
@@ -2003,10 +2006,10 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
 
                     //decided to keep this setup  are below drought/drizzle but still gives reason to use weather crystals its a good middle ground
                     //had to fix, logic hierarchy wasn't right, think wouldn't have properly gone to weather continue
-                    if (IsAbilityOnField(ABILITY_SNOW_WARNING))
+                    if (IsAbilityOnField(ABILITY_SNOW_WARNING) || --gWishFutureKnock.weatherDuration != 0)
                         gBattlescriptCurrInstr = BattleScript_DamagingWeatherContinues;
 
-                    else if (gWishFutureKnock.weatherDuration == 0 || --gWishFutureKnock.weatherDuration == 0) //weathr decrement
+                    else// if (gWishFutureKnock.weatherDuration == 0 || --gWishFutureKnock.weatherDuration == 0) //weathr decrement
                     {
                         gBattleWeather &= ~WEATHER_HAIL;
                         gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
@@ -2029,25 +2032,20 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
             {
                 if (gCurrentTurnActionNumber >= gBattlersCount  //need this to prevent loop
                     && gWishFutureKnock.weatherDuration == 0 //if weather not existing, set by battler
-                    && gWishFutureKnock.forecastedWeather)
-                { // trying to make it not switch every turn, and find a good balance.
-                    // trying to store the value returned by random function in one field as per phoenixbound's suggestion. since it seemed I was calling 5 separate random functions
-                    //Random() % 4;   //for prediction change, have value 2 set by a stored value set in switchin
+                    && gWishFutureKnock.forecastedNextWeather
+                    && (gWishFutureKnock.forecastedNextWeather != gWishFutureKnock.forecastedCurrWeather)) //extra filter so this only triggers
+                    //when you have separate weather conidtions predicted, so it doesn't repeat weather
+                { 
+                    
                     //make this function activate only if weather timer is 0, so it'll set new weather long as no one else has set weather
                     //if it can't set weather i.e trychangebattleweather fails, then clear stored value
                     //since no weather would be active condition would be changed, remove hold effect for only in switch in
 
-                    /*if ((value2 == 0 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
-                        && gBattleWeather != (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY)) {
-                        gBattleWeather = (WEATHER_RAIN_PERMANENT | WEATHER_RAIN_TEMPORARY);
-                        BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates); //potentiall cange to other ones, so not permanent? need double check how weather setup again
-                        gBattleScripting.battler = battler;
-                        ++effect;
-                    }*/
-                    if (gWishFutureKnock.forecastedWeather == ENUM_WEATHER_RAIN)
+                    
+                    if (gWishFutureKnock.forecastedNextWeather == ENUM_WEATHER_RAIN) //is ned turn weather change, for forecasted weather
                     {
                         //battler is only used for getting ability and I've already dealt with that so shouldn't be a problem
-                        if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedWeather, TRUE))
+                        if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedNextWeather, TRUE))
                         {
                             //if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
                             //unique bs, weather predit long time
@@ -2057,27 +2055,27 @@ u8 DoFieldEndTurnEffects(void)// still to do  //vsonic IMPORTANT  done updated
                             //++effect; //remove check for battler just replace w scritp that doesnt use name firled just use forecasted weather
                         }
                     }
-                    else if (gWishFutureKnock.forecastedWeather == ENUM_WEATHER_SANDSTORM)
+                    else if (gWishFutureKnock.forecastedNextWeather == ENUM_WEATHER_SANDSTORM)
                     {
-                        if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedWeather, TRUE))
+                        if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedNextWeather, TRUE))
                         {
                             gBattlescriptCurrInstr = BattleScript_SandstreamActivates;
                             gBattleScripting.battler = gActiveBattler;
                             //++effect;
                         }
                     }
-                    else if (gWishFutureKnock.forecastedWeather == ENUM_WEATHER_SUN)
+                    else if (gWishFutureKnock.forecastedNextWeather == ENUM_WEATHER_SUN)
                     {
-                        if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedWeather, TRUE))
+                        if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedNextWeather, TRUE))
                         {
                             gBattlescriptCurrInstr = BattleScript_DroughtActivates;
                             gBattleScripting.battler = gActiveBattler;
                             //++effect;
                         }
                     }
-                    else if (gWishFutureKnock.forecastedWeather == ENUM_WEATHER_HAIL)
+                    else if (gWishFutureKnock.forecastedNextWeather == ENUM_WEATHER_HAIL)
                     {
-                        if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedWeather, TRUE))
+                        if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedNextWeather, TRUE))
                         {
                             gBattlescriptCurrInstr = BattleScript_SnowWarningActivates;
                             gBattleScripting.battler = gActiveBattler;
@@ -4842,7 +4840,7 @@ static const u16 sSwitchAbilities[][10] = {
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) //need check where this is used, in emerald its used in sunny day stuff etc.
 {
     u16 battlerAbility = GetBattlerAbility(battler);
-    if (gWishFutureKnock.forecastedWeather && gWishFutureKnock.weatherDuration == 0) //shouldbe activation for forecasted weather
+    if (gWishFutureKnock.forecastedNextWeather && gWishFutureKnock.weatherDuration == 0) //shouldbe activation for forecasted weather
         battlerAbility = ABILITY_FORECAST;
 
     //for (i = 0; i < NELEMS(sPermanentWeatherAbilities); i++)//changign only primals  and overworld weathr are permanent weather, 
@@ -4890,7 +4888,10 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) 
         else if ((viaAbility) && battlerAbility == ABILITY_FORECAST)
         {
             gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]);
-            gWishFutureKnock.weatherDuration = 5;   
+            if (gWishFutureKnock.forecastedNextWeather == gWishFutureKnock.forecastedCurrWeather) //should be able to do as set forecastedNextWeather before this
+                gWishFutureKnock.weatherDuration = 10; //plan have one long weather thing rather than 2 separate turns where weather ends and is reapplied
+            else
+                gWishFutureKnock.weatherDuration = 5;   
 
             return TRUE;
         }//weather extenders don't work with this, instead are used to set weather
@@ -5213,7 +5214,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
         //Pickup variables needed put above switch start
         u16 PickUpItem, heldItem;
-        u8 weatherEnum; //for forecast
+        //u8 weatherEnum; //for forecast  replaced w struct constant
 
         if (special)
             gLastUsedAbility = special;
@@ -5450,24 +5451,25 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gSpecialStatuses[battler].switchInAbilityDone = TRUE;//use enum in place of static weather enum value
 
                         if (predictedWeather == 0 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
-                            gWishFutureKnock.forecastedWeather = ENUM_WEATHER_RAIN;
+                            gWishFutureKnock.forecastedNextWeather = ENUM_WEATHER_RAIN;
 
                         else if (predictedWeather == 1 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SMOOTH_ROCK)
-                            gWishFutureKnock.forecastedWeather = ENUM_WEATHER_SANDSTORM;
+                            gWishFutureKnock.forecastedNextWeather = ENUM_WEATHER_SANDSTORM;
 
                         else if (predictedWeather == 2 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_HEAT_ROCK)
-                            gWishFutureKnock.forecastedWeather = ENUM_WEATHER_SUN;
+                            gWishFutureKnock.forecastedNextWeather = ENUM_WEATHER_SUN;
 
                         else if (predictedWeather == 3 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_ICY_ROCK)
-                            gWishFutureKnock.forecastedWeather = ENUM_WEATHER_HAIL;
+                            gWishFutureKnock.forecastedNextWeather = ENUM_WEATHER_HAIL;
                         
-                        //compare weatherEnum with forecastedWeather makea different message for each option
-                        //so 4 options for each  base condtion plus && forecastedWeather == X  
-                        //else if for each option
+                        //compare weatherEnum with forecastedNextWeather makea different message for each option
+                        //so 4 options for each  base condtion plus && forecastedNextWeather == X  
+                        //else if for each option   //forecastedCurrWeather
                         if (value == 0 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
                         {
-                            weatherEnum = ENUM_WEATHER_RAIN;
-                            if (TryChangeBattleWeather(battler, weatherEnum, TRUE))
+                            //weatherEnum = ENUM_WEATHER_RAIN;
+                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_RAIN;
+                            if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
                             {
                                 //if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
                                 //unique bs, weather predit long time
@@ -5480,8 +5482,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         
                         if (value == 2 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_HEAT_ROCK)
                         {
-                            weatherEnum = ENUM_WEATHER_SUN;
-                            if (TryChangeBattleWeather(battler, weatherEnum, TRUE))
+                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_SUN;
+                            if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
                             {
                                 BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
                                 gBattleScripting.battler = battler;
@@ -5490,8 +5492,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         }
                         if (value == 3 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_ICY_ROCK)
                         {
-                            weatherEnum = ENUM_WEATHER_HAIL;
-                            if (TryChangeBattleWeather(battler, weatherEnum, TRUE))
+                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_HAIL;
+                            if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
                             {
                                 BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
                                 gBattleScripting.battler = battler;
@@ -5504,8 +5506,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         
                         if (value == 1 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SMOOTH_ROCK)
                         {
-                            weatherEnum = ENUM_WEATHER_SANDSTORM;
-                            if (TryChangeBattleWeather(battler, weatherEnum, TRUE))
+                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_SANDSTORM;
+                            if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
                             {
                                 BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
                                 //gBattlescriptCurrInstr = BattleScript_SandstreamActivates;

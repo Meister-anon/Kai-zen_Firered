@@ -446,7 +446,8 @@ struct WishFutureKnock
     u8 wishCounter[MAX_BATTLERS_COUNT];
     u8 wishMonId[MAX_BATTLERS_COUNT];
     u8 weatherDuration;
-    u8 forecastedWeather; //will be second weather effect predicted on switchin by forecast
+    u8 forecastedCurrWeather; //will be 1st weather effect predicted on switchin by forecast, set so can compare effects before set
+    u8 forecastedNextWeather; //will be second weather effect predicted on switchin by forecast
     u8 knockedOffMons[2];
 };
 

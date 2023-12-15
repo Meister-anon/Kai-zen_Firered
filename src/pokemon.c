@@ -3886,6 +3886,9 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || GetBattlerAbility(gBattlerTarget) == ABILITY_COMATOSE)
             gBattleMovePower *= 2;
     }
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_HEX
+    && defender->status1 & STATUS1_ANY && IsBlackFogNotOnField())
+        gBattleMovePower *= 2;
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_SMELLINGSALT)
     {

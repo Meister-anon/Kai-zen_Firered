@@ -1864,6 +1864,35 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -adjusted battle message for multihit results, removed excessive repeat mostly in csae of multihit that kills in one hit
   flowsmuch better
 
+  -new note, create new task setup, for catching,  rather than mon goes to x box
+   open holding mon just caught in box, i.e from cursor selection,
+   so you can just put mon wherever you want instead of having to oranize later
+
+   then after placement and press B, just return to overworld
+   should kick in right after naming task ends, just need to make sure it squares,
+   with my added logic that removes mon held items
+
+  plan for forecast, change separate message and transform into different abilitybattle effects,
+  think make new ab case, just so I can make it work smoothly,
+  think, missing some endturn weather logic, forecast hail is not working, not showing end turn hail,
+  rain works though, ok so sun ALSO doesn't work...think only rain works, just because rain has overworld stuff..
+  ok yeah only rain works... fixed issue was logic order smh
+
+  //from battle_main.c field endturn function goes before battlerendturn
+ //I THINK my abilitybattleeffects is triggered before this so foreast should be fine?
+ //ok forecast is in switchin effects whictch goes firstturn, so that does trigger before this thankfully
+ u8 DoFieldEndTurnEffects(void)  
+ so new changes to forecast should track, setup weather logic so switchin should check and set weather 1st and predicted 
+ and intead of setting twice if they match it'll just use double duration.
+ also changed endturn forecast, so with struct storage of weather values, it can be compared so 
+ shouldn't retrigger the same weather if they are equal, instead it'l just set double duration i.e 10 turns.
+ and like I said before, holding weather extender rocks, don't extend it, they'll instead store set the weather constant
+ - as of now tested works, changes didn't break effect still works as did before, uhhh need test case
+ for they are the same, hard to test but just need confirm it works as planned
+
+ -hex dmg boost doesn't seem tobe working?
+
+
   ok so its really simple, effect is just in atk0B_healthbarupdate & atk0C_datahpupdate
   -simply prevent health and hp data from being updated on hit,
   //check how substitute does it to attempt avoid rollout glitch

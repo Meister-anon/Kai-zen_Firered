@@ -3046,7 +3046,7 @@
       "price": 200,
       "holdEffect": "HOLD_EFFECT_CLEANSE_TAG",
       "holdEffectParam": 0,
-      "description_english": "An held item that can clear status.\\nAnd lowers the wild encounter rate\\nif its holder is first in party.",
+      "description_english": "A held item that can clear status.\\nAnd lowers the wild encounter rate\\nif its holder is first in party.",
       "importance": 0,
       "exitsBagOnUse": 0,
       "pocket": "POCKET_ITEMS",

@@ -7878,7 +7878,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #else
             .power = 50,
         #endif
-        .effect = EFFECT_HEX,
+        .effect = EFFECT_HEX,   //effect not in bs commands, its in pokemon.c effectively just does hit otherwise
         .type = TYPE_GHOST,
         .accuracy = 100,
         .pp = 10,
