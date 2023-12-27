@@ -511,10 +511,12 @@
 #define ITEM_STEELIXITE 440
 #define ITEM_SWAMPERTITE 441
 #define ITEM_TYRANITARITE 442
-#define ITEM_VENUSAURITE 443 //end of mega
+#define ITEM_VENUSAURITE 443 
+#define ITEM_TORTERRAITE 444
+#define ITEM_MAROWAKONITE 445//end of mega
 //K looks like it doesn't matter where I put it except the use items,
 // because effects and bag placement are set in the items.h file.
-#define ITEM_MEGA_BRACELET 444 // should move set as key item.
+#define ITEM_MEGA_BRACELET 446 // should move set as key item.  //updated json item data should match
 /*
 //More hold items
 // Z Crystals
@@ -604,10 +606,10 @@
 #define ITEM_GRASSY_SEED 312*/
 //END of 2nd set of Use items
 // Incenses
-#define ITEM_SEA_INCENSE 445//385 
-#define ITEM_LAX_INCENSE 446
-#define ITEM_BLACK_SLUDGE 447
-#define ITEM_BAD_ONION 448 //  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
+#define ITEM_SEA_INCENSE 447//385 
+#define ITEM_LAX_INCENSE 448
+#define ITEM_BLACK_SLUDGE 449
+#define ITEM_BAD_ONION 450 //  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
 /*#define ITEM_ODD_INCENSE 386
 #define ITEM_ROCK_INCENSE 387
 #define ITEM_FULL_INCENSE 388
@@ -685,7 +687,7 @@
 #define ITEM_ADAMANT_ORB
 #define ITEM_LUSTROUS_ORB
 #define ITEM_GRISEOUS_ORB */
-#define ITEM_N_A 449 // keep this as last item value, needs be +1 last defined item value   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
+#define ITEM_N_A 451 // keep this as last item value, needs be +1 last defined item value   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
 #define ITEMS_COUNT ITEM_N_A +1
 #define ITEM_FIELD_ARROW ITEM_N_A//field arrow isn't defined as an item, it just end of item_menu_icons.c list
 // Emerald   BUT based on list from vanilla its actually ID was equal to items N_A, circumventing that equation.
