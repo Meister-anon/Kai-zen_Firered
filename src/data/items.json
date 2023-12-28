@@ -6427,7 +6427,7 @@
       "secondaryId": 0
     },
     {
-      "english": "CHARIZARDITE_X",
+      "english": "CHARIZARDITE X",
       "itemId": "ITEM_CHARIZARDITE_X",
       "price": 0,
       "holdEffect": "HOLD_EFFECT_NONE",
@@ -6443,7 +6443,7 @@
       "secondaryId": 0
     },
     {
-      "english": "CHARIZARDITE_Y",
+      "english": "CHARIZARDITE Y",
       "itemId": "ITEM_CHARIZARDITE_Y",
       "price": 0,
       "holdEffect": "HOLD_EFFECT_NONE",
@@ -6747,7 +6747,7 @@
       "secondaryId": 0
     },
     {
-      "english": "MEWTWONITE_X",
+      "english": "MEWTWONITE X",
       "itemId": "ITEM_MEWTWONITE_X",
       "price": 0,
       "holdEffect": "HOLD_EFFECT_NONE",
@@ -6763,7 +6763,7 @@
       "secondaryId": 0
     },
     {
-      "english": "MEWTWONITE_Y",
+      "english": "MEWTWONITE Y",
       "itemId": "ITEM_MEWTWONITE_Y",
       "price": 0,
       "holdEffect": "HOLD_EFFECT_NONE",

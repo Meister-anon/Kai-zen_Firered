@@ -467,56 +467,56 @@
 
 #define ITEM_ABOMASITE 385
 #define ITEM_ABSOLITE 386
-#define ITEM_AERODACTYLITE 399
-#define ITEM_AGGRONITE 400
-#define ITEM_ALAKAZITE 401
-#define ITEM_ALTARIANITE 402
-#define ITEM_AMPHAROSITE 403
-#define ITEM_AUDINITE 404
-#define ITEM_BANETTITE 405
-#define ITEM_BEEDRILLITE 406
-#define ITEM_BLASTOISINITE 407
-#define ITEM_BLAZIKENITE 408
-#define ITEM_CAMERUPTITE 409
-#define ITEM_CHARIZARDITE_X 410
-#define ITEM_CHARIZARDITE_Y 411
-#define ITEM_DIANCITE 412
-#define ITEM_GALLADITE 413
-#define ITEM_GARCHOMPITE 414
-#define ITEM_GARDEVOIRITE 415
-#define ITEM_GENGARITE 416
-#define ITEM_GLALITITE 417
-#define ITEM_GYARADOSITE 418
-#define ITEM_HERACRONITE 419
-#define ITEM_HOUNDOOMINITE 420
-#define ITEM_KANGASKHANITE 421
-#define ITEM_LATIASITE 422
-#define ITEM_LATIOSITE 423
-#define ITEM_LOPUNNITE 424
-#define ITEM_LUCARIONITE 425
-#define ITEM_MANECTITE 426
-#define ITEM_MAWILITE 427
-#define ITEM_MEDICHAMITE 428
-#define ITEM_METAGROSSITE 429
-#define ITEM_MEWTWONITE_X 430
-#define ITEM_MEWTWONITE_Y 431
-#define ITEM_PIDGEOTITE 432
-#define ITEM_PINSIRITE 433
-#define ITEM_SABLENITE 434
-#define ITEM_SALAMENCITE 435
-#define ITEM_SCEPTILITE 436
-#define ITEM_SCIZORITE 437
-#define ITEM_SHARPEDONITE 438
-#define ITEM_SLOWBRONITE 439
-#define ITEM_STEELIXITE 440
-#define ITEM_SWAMPERTITE 441
-#define ITEM_TYRANITARITE 442
-#define ITEM_VENUSAURITE 443 
-#define ITEM_TORTERRAITE 444
-#define ITEM_MAROWAKONITE 445//end of mega
+#define ITEM_AERODACTYLITE 387
+#define ITEM_AGGRONITE 388
+#define ITEM_ALAKAZITE 389
+#define ITEM_ALTARIANITE 390
+#define ITEM_AMPHAROSITE 391
+#define ITEM_AUDINITE 392
+#define ITEM_BANETTITE 393
+#define ITEM_BEEDRILLITE 394
+#define ITEM_BLASTOISINITE 395
+#define ITEM_BLAZIKENITE 396
+#define ITEM_CAMERUPTITE 397
+#define ITEM_CHARIZARDITE_X 398
+#define ITEM_CHARIZARDITE_Y 399
+#define ITEM_DIANCITE 400
+#define ITEM_GALLADITE 401
+#define ITEM_GARCHOMPITE 402
+#define ITEM_GARDEVOIRITE 403
+#define ITEM_GENGARITE 404
+#define ITEM_GLALITITE 405
+#define ITEM_GYARADOSITE 406
+#define ITEM_HERACRONITE 407
+#define ITEM_HOUNDOOMINITE 408
+#define ITEM_KANGASKHANITE 409
+#define ITEM_LATIASITE 410
+#define ITEM_LATIOSITE 411
+#define ITEM_LOPUNNITE 412
+#define ITEM_LUCARIONITE 413
+#define ITEM_MANECTITE 414
+#define ITEM_MAWILITE 415
+#define ITEM_MEDICHAMITE 416
+#define ITEM_METAGROSSITE 417
+#define ITEM_MEWTWONITE_X 418
+#define ITEM_MEWTWONITE_Y 419
+#define ITEM_PIDGEOTITE 420
+#define ITEM_PINSIRITE 421
+#define ITEM_SABLENITE 422
+#define ITEM_SALAMENCITE 423
+#define ITEM_SCEPTILITE 424
+#define ITEM_SCIZORITE 425
+#define ITEM_SHARPEDONITE 426
+#define ITEM_SLOWBRONITE 427
+#define ITEM_STEELIXITE 428
+#define ITEM_SWAMPERTITE 429
+#define ITEM_TYRANITARITE 430
+#define ITEM_VENUSAURITE 431 //extra new megas below
+#define ITEM_TORTERRAITE 432
+#define ITEM_MAROWAKONITE 433//end of mega
 //K looks like it doesn't matter where I put it except the use items,
 // because effects and bag placement are set in the items.h file.
-#define ITEM_MEGA_BRACELET 446 // should move set as key item.  //updated json item data should match
+#define ITEM_MEGA_BRACELET 434 // should move set as key item.  //updated json item data should match
 /*
 //More hold items
 // Z Crystals
@@ -606,10 +606,10 @@
 #define ITEM_GRASSY_SEED 312*/
 //END of 2nd set of Use items
 // Incenses
-#define ITEM_SEA_INCENSE 447//385 
-#define ITEM_LAX_INCENSE 448
-#define ITEM_BLACK_SLUDGE 449
-#define ITEM_BAD_ONION 450 //  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
+#define ITEM_SEA_INCENSE 435//385 
+#define ITEM_LAX_INCENSE 436
+#define ITEM_BLACK_SLUDGE 437
+#define ITEM_BAD_ONION 438 //  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
 /*#define ITEM_ODD_INCENSE 386
 #define ITEM_ROCK_INCENSE 387
 #define ITEM_FULL_INCENSE 388
@@ -687,7 +687,7 @@
 #define ITEM_ADAMANT_ORB
 #define ITEM_LUSTROUS_ORB
 #define ITEM_GRISEOUS_ORB */
-#define ITEM_N_A 451 // keep this as last item value, needs be +1 last defined item value   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
+#define ITEM_N_A 439 // keep this as last item value, needs be +1 last defined item value   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
 #define ITEMS_COUNT ITEM_N_A +1
 #define ITEM_FIELD_ARROW ITEM_N_A//field arrow isn't defined as an item, it just end of item_menu_icons.c list
 // Emerald   BUT based on list from vanilla its actually ID was equal to items N_A, circumventing that equation.
