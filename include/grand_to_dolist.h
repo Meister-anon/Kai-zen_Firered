@@ -1891,6 +1891,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   - see about using gMoveWeatherChangeStringIds to pull string from code/file rathe rhtan script?
   rather than use ability made it rain since idea is prediting weather as if its overworld set not abilitys set
 
+  -change no castform transformed message
+  switch in
+  -change data transform castform
+  -message castform predicted so and so weather
+  -normal weather message i.e it started to rain/hail; sunlight turned harsh
+  -end first weather
+  -next weather message "The Forecast came true! n\It started to hail!"
+
   reintroduced old forecast freeze bug thingissue is if elses  
   also need go over starters and make sure all of them have some form of damaging move,
   hoppip only had splash tails whip and sysntehsis for example - fixed, just missed the  old catchon sandstorm 
@@ -2197,6 +2205,8 @@ that way you don't need to keep flying aruond to different places looking for th
  goto REMOVED_RS_COMMANDS  //think stubbed function from rs mostly related to rtc & weather, need add back..scrmd 
 
  goto ITEMEFFECT_DATA
+
+ goto FIX_WARP_RESPAWN_LOGIC //for heal warp location, on whiteout, and think relevant to teleport
 
  /*
 

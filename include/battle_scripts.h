@@ -223,6 +223,22 @@ extern const u8 BattleScript_AuraofLightActivatesForPartner[];
 extern const u8 BattleScript_WeatherFormChanges[];
 extern const u8 BattleScript_WeatherFormChangesLoop[];
 extern const u8 BattleScript_CastformChange[];
+extern const u8 BattleScript_ForecastSwitchin[]; //changed version without pkmn transformed text
+extern const u8 BattleScript_ForecastPredictsBlizzard[];
+extern const u8 BattleScript_ForecastPredictsDustStorm[];
+extern const u8 BattleScript_ForecastPredictsTorrentialRain[];
+extern const u8 BattleScript_ForecastPredictsHeatwave[];
+//decided still needed separte one for each because of animation need play
+extern const u8 BattleScript_ForecastPredictionRain[];
+extern const u8 BattleScript_ForecastPredictionSun[];
+extern const u8 BattleScript_ForecastPredictionSand[];
+extern const u8 BattleScript_ForecastPredictionHail[];
+//2nd weather effect predicted weather
+extern const u8 BattleScript_PredictedSand[];
+extern const u8 BattleScript_PredictedHail[];
+extern const u8 BattleScript_PredictedRain[];
+extern const u8 BattleScript_PredictedSun[];
+
 extern const u8 BattleScript_DroughtActivates[];
 extern const u8 BattleScript_DesolateLandActivates[];
 extern const u8 BattleScript_PrimordialSeaActivates[];

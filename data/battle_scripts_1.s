@@ -8321,6 +8321,8 @@ BattleScript_AuraofLightActivatesForPartner::
 	updatestatusicon BS_SCRIPTING
 	end3
 
+@this is changing asa result of weather,
+@I need to set changing to set weather
 BattleScript_HandleWeatherFormChanges::
 	setbyte sBATTLER, 0
 BattleScript_WeatherFormChangesLoop::
@@ -8339,6 +8341,124 @@ BattleScript_DoCastformChangeAnim::
 	printstring STRINGID_PKMNTRANSFORMED
 	waitmessage 0x40
 	return
+
+BattleScript_ForecastSwitchin::
+	docastformchangeanimation
+	waitstate
+	end3
+
+BattleScript_ForecastPredictsBlizzard::
+	pause 0x20
+	printstring STRINGID_FORECAST_BLIZZARD
+	waitmessage 0x40
+	printfromtable gMoveWeatherChangeStringIds
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_HAIL_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	end3
+
+BattleScript_ForecastPredictsDustStorm::
+	pause 0x20
+	printstring STRINGID_FORECAST_DUST_STORM
+	waitmessage 0x40
+	printfromtable gMoveWeatherChangeStringIds
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_SANDSTORM_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	end3
+
+BattleScript_ForecastPredictsTorrentialRain::
+	pause 0x20
+	printstring STRINGID_FORECAST_TORRENTIAL_RAIN
+	waitmessage 0x40
+	printfromtable gMoveWeatherChangeStringIds
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_RAIN_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	end3
+
+BattleScript_ForecastPredictsHeatwave::
+	pause 0x20
+	printstring STRINGID_FORECAST_HEATWAVE
+	waitmessage 0x40
+	printfromtable gMoveWeatherChangeStringIds
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_SUN_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	end3
+
+BattleScript_ForecastPredictionRain::  
+	pause 0x20
+	printstring STRINGID_FORECAST_PREDICTION
+	waitmessage 0x40
+	printfromtable gMoveWeatherChangeStringIds
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_RAIN_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	end3
+
+BattleScript_ForecastPredictionSun::  
+	pause 0x20
+	printstring STRINGID_FORECAST_PREDICTION
+	waitmessage 0x40
+	printfromtable gMoveWeatherChangeStringIds
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_SUN_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	end3
+
+BattleScript_ForecastPredictionSand::  
+	pause 0x20
+	printstring STRINGID_FORECAST_PREDICTION
+	waitmessage 0x40
+	printfromtable gMoveWeatherChangeStringIds
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_SANDSTORM_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	end3
+
+BattleScript_ForecastPredictionHail::  
+	pause 0x20
+	printstring STRINGID_FORECAST_PREDICTION
+	waitmessage 0x40
+	printfromtable gMoveWeatherChangeStringIds
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_HAIL_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	end3
+
+@2nd effect end turn predicted weather
+BattleScript_PredictedSand::
+	pause 0x20
+	printstring STRINGID_FORECAST_SANDSTORM
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_SANDSTORM_CONTINUES, NULL	@since endturn not switchin, unsure bs_battler_0 is right for this, may exclude to just player
+	call BattleScript_HandleWeatherFormChanges		@function sets bs_scripting.battler so hopefully should be right
+	end3
+
+BattleScript_PredictedHail::
+	pause 0x20
+	printstring STRINGID_FORECAST_HAIL
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_HAIL_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	end3
+
+BattleScript_PredictedRain::
+	pause 0x20
+	printstring STRINGID_FORECAST_RAIN
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_RAIN_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	end3
+
+BattleScript_PredictedSun::
+	pause 0x20
+	printstring STRINGID_FORECAST_SUNNY
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_SUN_CONTINUES, NULL
+	call BattleScript_HandleWeatherFormChanges
+	end3
 
 sByteFour:
 .byte MAX_BATTLERS_COUNT

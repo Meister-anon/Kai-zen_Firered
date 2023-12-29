@@ -2050,7 +2050,7 @@ u8 DoFieldEndTurnEffects(void)
                             //if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
                             //unique bs, weather predit long time
                             //else
-                            gBattlescriptCurrInstr = BattleScript_DrizzleActivates;//change to forecast predict weather script
+                            gBattlescriptCurrInstr = BattleScript_PredictedRain;//change to forecast predict weather script
                             gBattleScripting.battler = gActiveBattler; //make say something like predicted weather start, then use print weather strings
                             //++effect; //remove check for battler just replace w scritp that doesnt use name firled just use forecasted weather
                         }
@@ -2059,7 +2059,7 @@ u8 DoFieldEndTurnEffects(void)
                     {
                         if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedNextWeather, TRUE))
                         {
-                            gBattlescriptCurrInstr = BattleScript_SandstreamActivates;
+                            gBattlescriptCurrInstr = BattleScript_PredictedSand;
                             gBattleScripting.battler = gActiveBattler;
                             //++effect;
                         }
@@ -2068,7 +2068,7 @@ u8 DoFieldEndTurnEffects(void)
                     {
                         if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedNextWeather, TRUE))
                         {
-                            gBattlescriptCurrInstr = BattleScript_DroughtActivates;
+                            gBattlescriptCurrInstr = BattleScript_PredictedSun;
                             gBattleScripting.battler = gActiveBattler;
                             //++effect;
                         }
@@ -2077,7 +2077,7 @@ u8 DoFieldEndTurnEffects(void)
                     {
                         if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedNextWeather, TRUE))
                         {
-                            gBattlescriptCurrInstr = BattleScript_SnowWarningActivates;
+                            gBattlescriptCurrInstr = BattleScript_PredictedHail;
                             gBattleScripting.battler = gActiveBattler;
                             //++effect;
                         }
@@ -4841,7 +4841,7 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility) 
 {
     u16 battlerAbility = GetBattlerAbility(battler);
     if (gWishFutureKnock.forecastedNextWeather && gWishFutureKnock.weatherDuration == 0) //shouldbe activation for forecasted weather
-        battlerAbility = ABILITY_FORECAST;
+        battlerAbility = ABILITY_FORECAST; //this works for setting weather but not for message buffer, which I technically won't need when I change message...
 
     //for (i = 0; i < NELEMS(sPermanentWeatherAbilities); i++)//changign only primals  and overworld weathr are permanent weather, 
                                                        //drought drizzle is temp but doesn't decrement long as their on field, so effectively permanent
@@ -5529,64 +5529,157 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_HAIL;
                         }
 
+                        if (gWishFutureKnock.forecastedCurrWeather == gWishFutureKnock.forecastedNextWeather)
+                        {
+                            if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_RAIN)
+                            {
+                                if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
+                                {
+                                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_STARTED_RAIN;
+                                    BattleScriptPushCursorAndCallback(BattleScript_ForecastPredictsTorrentialRain);
+                                    gBattleScripting.battler = battler;
+                                    effect = 0;
+                                }
+                            }
+                            else if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_SUN)
+                            {
+                                if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
+                                {
+                                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_STARTED_SUNLIGHT;
+                                    BattleScriptPushCursorAndCallback(BattleScript_ForecastPredictsHeatwave);
+                                    gBattleScripting.battler = battler;
+                                    effect = 0;
+                                }
+                            }
+                            else if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_HAIL)
+                            {
+                                if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
+                                {
+                                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_STARTED_HAIL;
+                                    BattleScriptPushCursorAndCallback(BattleScript_ForecastPredictsBlizzard);
+                                    gBattleScripting.battler = battler;
+                                    effect = 0;
+                                }
+                            }
 
-                        if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_RAIN)
-                        {
-                            if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
+                            if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_SANDSTORM)
                             {
-                                //if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
-                                //unique bs, weather predit long time
-                                //else
-                                BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
+                                if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
+                                {
+                                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_STARTED_SANDSTORM;
+                                    BattleScriptPushCursorAndCallback(BattleScript_ForecastPredictsDustStorm);
+                                    gBattleScripting.battler = battler;
+                                    effect = 1;
+                                }
+                            }
+                            else
+                            {
+                                effect = CastformDataTypeChange(battler); //does type change
+                                if (effect){
+                                BattleScriptPushCursorAndCallback(BattleScript_ForecastSwitchin); //does form change, need replace this w forecast equivalent
                                 gBattleScripting.battler = battler;
-                                //++effect;
+                                *(&gBattleStruct->formToChangeInto) = effect - 1;// sandstorm effect is continuing oddly, before I change "while" I'm trying line up
+                                // the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
+                                }
                             }
                         }
-                        
-                        
-                        else if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_SUN)
+                        else
                         {
-                            if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
+                            switch (gWishFutureKnock.forecastedCurrWeather)
                             {
-                                BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
-                                gBattleScripting.battler = battler;
-                                //++effect;
+                            case ENUM_WEATHER_RAIN:
+                            PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_RAIN);
+                                break;
+                            case ENUM_WEATHER_SUN:
+                            PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_SUN);
+                                break;
+                            case ENUM_WEATHER_SANDSTORM:
+                            PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_SAND);
+                                break;
+                            case ENUM_WEATHER_HAIL:
+                            PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_HAIL);
+                                break;                 
                             }
+
+                            switch (gWishFutureKnock.forecastedNextWeather)
+                            {
+                            case ENUM_WEATHER_RAIN:
+                                PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_RAIN);
+                                break;
+                            case ENUM_WEATHER_SUN:
+                            PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_SUN);
+                                break;
+                            case ENUM_WEATHER_SANDSTORM:
+                            PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_SAND);
+                                break;
+                            case ENUM_WEATHER_HAIL:
+                            PREPARE_STRING_BUFFER(gBattleTextBuff2, STRINGID_HAIL);
+                                break;  
+                            }
+
+
+                            if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_RAIN)
+                            {
+                                if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
+                                {
+                                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_STARTED_RAIN;
+                                    BattleScriptPushCursorAndCallback(BattleScript_ForecastPredictionRain);
+                                    gBattleScripting.battler = battler;
+                                    //++effect;
+                                }
+                            }
+                            
+                            
+                            else if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_SUN)
+                            {
+                                if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
+                                {
+                                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_STARTED_SUNLIGHT;
+                                    BattleScriptPushCursorAndCallback(BattleScript_ForecastPredictionSun);
+                                    gBattleScripting.battler = battler;
+                                    //++effect;
+                                }
+                            }
+                            else if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_HAIL)
+                            {
+                                if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
+                                {
+                                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_STARTED_HAIL;
+                                    BattleScriptPushCursorAndCallback(BattleScript_ForecastPredictionHail);
+                                    gBattleScripting.battler = battler;
+                                    //++effect;
+                                }
+                            } //since this one is only meant to trigger on switch in,
+                            //I've set it to fail if any weather condition is already present.
+                            //that will at least prevent the looping...I hope
+                            // I think if I copy the function values to an else if using random chance to activate & turn ended it should work how I want
+                            
+                            if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_SANDSTORM)
+                            {
+                                if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
+                                {
+                                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_STARTED_SANDSTORM;
+                                    BattleScriptPushCursorAndCallback(BattleScript_ForecastPredictionSand);
+                                    //gBattlescriptCurrInstr = BattleScript_SandstreamActivates;
+                                    gBattleScripting.battler = battler;
+                                    effect = 1;
+                                } //works no longer freezes on switch in, doesn't display correctly on battle start no weather effect 
+                            }
+
+                            //thnik will separate this, put in separate effect case
+                            //nvm if i turn it itnto callnative can just run it from battlscript as its essentially doing what transformcastformdata is doing
+                            //
+                            else//i,e if (gCurrentTurnActionNumber >= gBattlersCount) && (gBattleMons[battler].hp != 0)  do value and random as before but a higher number and include
+                            {// value for setting weather timers to 0, prob should use if for each weather type, and link it with its respective timer.
+                                effect = CastformDataTypeChange(battler); //does type change
+                                if (effect){
+                                BattleScriptPushCursorAndCallback(BattleScript_ForecastSwitchin); //does form change, need replace this w forecast equivalent
+                                gBattleScripting.battler = battler;
+                                *(&gBattleStruct->formToChangeInto) = effect - 1;// sandstorm effect is continuing oddly, before I change "while" I'm trying line up
+                                // the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
+                                }
+                            }//need add string of messages scripts, somehwewre before this
                         }
-                        else if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_HAIL)
-                        {
-                            if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
-                            {
-                                BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
-                                gBattleScripting.battler = battler;
-                                //++effect;
-                            }
-                        } //since this one is only meant to trigger on switch in,
-                        //I've set it to fail if any weather condition is already present.
-                        //that will at least prevent the looping...I hope
-                        // I think if I copy the function values to an else if using random chance to activate & turn ended it should work how I want
-                        
-                        if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_SANDSTORM)
-                        {
-                            if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
-                            {
-                                BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
-                                //gBattlescriptCurrInstr = BattleScript_SandstreamActivates;
-                                gBattleScripting.battler = battler;
-                                effect = 1;
-                            } //works no longer freezes on switch in, doesn't display correctly on battle start no weather effect 
-                        }
-                        else//i,e if (gCurrentTurnActionNumber >= gBattlersCount) && (gBattleMons[battler].hp != 0)  do value and random as before but a higher number and include
-                        {// value for setting weather timers to 0, prob should use if for each weather type, and link it with its respective timer.
-                            effect = CastformDataTypeChange(battler);
-                            if (effect){
-                            BattleScriptPushCursorAndCallback(BattleScript_CastformChange);
-                            gBattleScripting.battler = battler;
-                            *(&gBattleStruct->formToChangeInto) = effect - 1;// sandstorm effect is continuing oddly, before I change "while" I'm trying line up
-                            // the dotted linebetween brackets,  I'm assuming for some reason misalignemnt broke it 
-                            }
-                        }//need add string of messages scripts, somehwewre before this
-                        
                     }
                 }
                 break;
@@ -6300,7 +6393,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 break;
 
             }
-            break;  //end of switch-in abilities   switch in
+            break;  //end of switch-in abilities   switch in  /planning put forecast message/transform here, as secondary switchin effects i.e switchin_2...would't work
         case ABILITYEFFECT_ENDTURN: // 1
             if (gBattleMons[battler].hp != 0)
             {

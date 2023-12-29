@@ -58,6 +58,9 @@ const struct HealLocation * GetHealLocation(u32 idx)
     return &sSpawnPoints[idx - 1];
 }
 
+//note for later //idea from lunos question
+//change final else, to direclty below npc one tile below npc location, 
+#define FIX_WARP_RESPAWN_LOGIC
 void SetWhiteoutRespawnWarpAndHealerNpc(struct WarpData * warp)
 {
     u32 healLocationIdx;
@@ -104,7 +107,7 @@ void SetWhiteoutRespawnWarpAndHealerNpc(struct WarpData * warp)
         else
         {
             warp->x = 7;
-            warp->y = 4;
+            warp->y = 4; //this, if can store heal npc location, just be same x  but y - 1
         }
         SetWhiteoutRespawnHealerNpcAsLastTalked(healLocationIdx);
     }

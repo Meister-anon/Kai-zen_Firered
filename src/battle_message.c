@@ -648,7 +648,24 @@ static const u8 sText_SnowWarningHail[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {
 //predits a dust storm /harsh
 //predicts a heatwave / blazing
 //predicts torrential rain / string messages for forecast one long weather i.e curr and next weather same / holding weather item
+static const u8 sText_ForecastBlizzard[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY} predicted\na chilling Blizzard!");
+static const u8 sText_ForecastDuststorm[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY} predicted\na harsh Dust Storm!");
+static const u8 sText_ForecastHeatwave[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY} predicted\na blazing Heatwave!");
+static const u8 sText_ForecastTorrentialrain[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY} predicted\nTorrential Rain!");
 //otherwise use gMoveWeatherChangeStringIds 
+//below is for second weather effect
+static const u8 sText_ForecastSandstorm[] = _("The Forecast came true!\nA sandstorm brewed!"); 
+static const u8 sText_ForecastHail[] = _("The Forecast came true!\nIt started to hail!"); 
+static const u8 sText_ForecastRain[] = _("The Forecast came true!\nIt started to rain!");
+static const u8 sText_ForecastSunny[] = _("The Forecast came true!\nThe sunlight got bright!");
+//simplify just buffer in words for weather can do with switch cases
+//for two diff weather effects from forecast
+static const u8 sText_ForecastPrediction[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY} predicted\n{B_BUFF1} and {B_BUFF2}!");
+static const u8 sText_Rain[] = _("rain");
+static const u8 sText_Sun[] = _("sun");
+static const u8 sText_Sand[] = _("sand");
+static const u8 sText_Hail[] = _("hail"); //based on how did anticipatino/forecast, think won't need strings for these?
+
 static const u8 sText_FriskActivates[] = _("{B_ATK_NAME_WITH_PREFIX} frisked {B_DEF_NAME_WITH_PREFIX} and\nfound its {B_LAST_ITEM}!");
 static const u8 sText_UnnerveEnters[] = _("The opposing team is too nervous\nto eat Berries!");
 static const u8 sText_HarvestBerry[] = _("{B_ATK_NAME_WITH_PREFIX} harvested\nits {B_LAST_ITEM}!");
@@ -1484,6 +1501,19 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_PLAYER_ALERT   - BATTLESTRINGS_TABLE_START]                = sText_PlayerForewarnalert,
     [SRINGID_ENEMY_ALERT   - BATTLESTRINGS_TABLE_START]                  = sText_EnemyForewarnalert,
     [STRINGID_ANTICIPATE_STRONGEST_MOVE   - BATTLESTRINGS_TABLE_START]   = sText_AnticipateStrongestMove,
+    [STRINGID_FORECAST_BLIZZARD   - BATTLESTRINGS_TABLE_START]           = sText_ForecastBlizzard,
+    [STRINGID_FORECAST_DUST_STORM   - BATTLESTRINGS_TABLE_START]         = sText_ForecastDuststorm,
+    [STRINGID_FORECAST_HEATWAVE   - BATTLESTRINGS_TABLE_START]           = sText_ForecastHeatwave,
+    [STRINGID_FORECAST_TORRENTIAL_RAIN   - BATTLESTRINGS_TABLE_START]    = sText_ForecastTorrentialrain,
+    [STRINGID_FORECAST_SANDSTORM   - BATTLESTRINGS_TABLE_START]          = sText_ForecastSandstorm,
+    [STRINGID_FORECAST_HAIL   - BATTLESTRINGS_TABLE_START]               = sText_ForecastHail,
+    [STRINGID_FORECAST_RAIN   - BATTLESTRINGS_TABLE_START]               = sText_ForecastRain,
+    [STRINGID_FORECAST_SUNNY   - BATTLESTRINGS_TABLE_START]              = sText_ForecastSunny,
+    [STRINGID_FORECAST_PREDICTION   - BATTLESTRINGS_TABLE_START]         = sText_ForecastPrediction,
+    [STRINGID_RAIN   - BATTLESTRINGS_TABLE_START]                        = sText_Rain, 
+    [STRINGID_SUN   - BATTLESTRINGS_TABLE_START]                         = sText_Sun, 
+    [STRINGID_SAND   - BATTLESTRINGS_TABLE_START]                        = sText_Sand, 
+    [STRINGID_HAIL   - BATTLESTRINGS_TABLE_START]                        = sText_Hail, 
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
@@ -1559,12 +1589,36 @@ const u16 gNoEscapeStringIds[] = {
 };
 
 const u16 gMoveWeatherChangeStringIds[] = {
-    STRINGID_STARTEDTORAIN,
-    STRINGID_DOWNPOURSTARTED,
-    STRINGID_BUTITFAILED,
-    STRINGID_SANDSTORMBREWED,
-    STRINGID_SUNLIGHTGOTBRIGHT,
-    STRINGID_STARTEDHAIL
+    [B_MSG_STARTED_RAIN]      = STRINGID_STARTEDTORAIN,
+    [B_MSG_STARTED_DOWNPOUR]  = STRINGID_DOWNPOURSTARTED, // Unused
+    [B_MSG_WEATHER_FAILED]    = STRINGID_BUTITFAILED,
+    [B_MSG_STARTED_SANDSTORM] = STRINGID_SANDSTORMBREWED,
+    [B_MSG_STARTED_SUNLIGHT]  = STRINGID_SUNLIGHTGOTBRIGHT,
+    [B_MSG_STARTED_HAIL]      = STRINGID_STARTEDHAIL,
+    //[B_MSG_STARTED_SNOW]      = STRINGID_STARTEDSNOW,
+};
+
+const u16 gForecastPredictionIds[] = {
+    [B_MSG_FORECAST_TORRENTIAL_RAIN] = STRINGID_MOLDBREAKERENTERS,
+    [B_MSG_FORECAST_HEATWAVE] = STRINGID_TERAVOLTENTERS,
+    [B_MSG_FORECAST_DUSTSTORM] = STRINGID_TURBOBLAZEENTERS,
+    [B_MSG_FORECAST_BLIZZARD] = STRINGID_SLOWSTARTENTERS,
+
+    [B_MSG_FORECAST_RAIN_SUN] = STRINGID_DARKAURAENTERS,
+    [B_MSG_FORECAST_RAIN_SAND] = STRINGID_FAIRYAURAENTERS,
+    [B_MSG_FORECAST_RAIN_HAIL] = STRINGID_AURABREAKENTERS,
+
+    [B_MSG_FORECAST_SUN_RAIN] = STRINGID_ANTICIPATIONACTIVATES,
+    [B_MSG_FORECAST_SUN_SAND] = STRINGID_FOREWARNACTIVATES,
+    [B_MSG_FORECAST_SUN_HAIL] = STRINGID_PASTELVEILENTERS,
+
+    [B_MSG_FORECAST_SAND_RAIN] = STRINGID_CURIOUSMEDICINEENTERS,
+    [B_MSG_FORECAST_SAND_SUN] = STRINGID_SCREENCLEANERENTERS,
+    [B_MSG_FORECAST_SAND_HAIL] = STRINGID_COMATOSEENTERS,
+
+    [B_MSG_FORECAST_HAIL_RAIN] = STRINGID_CORRUPTIONENTERS,
+    [B_MSG_FORECAST_HAIL_SUN] = STRINGID_STENCHENTERS,
+    [B_MSG_FORECAST_HAIL_SAND] = STRINGID_STENCHENTERS,
 };
 
 const u16 gSandstormHailContinuesStringIds[] = {
