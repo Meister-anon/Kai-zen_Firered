@@ -2728,9 +2728,11 @@ static const struct LevelUpMove sPolitoedLevelUpLearnset[] = {
 
 static const struct LevelUpMove sHoppipLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_SPLASH),
+    LEVEL_UP_MOVE(3, MOVE_LEAFAGE),
     LEVEL_UP_MOVE(5, MOVE_SYNTHESIS),
     LEVEL_UP_MOVE(5, MOVE_TAIL_WHIP),
     LEVEL_UP_MOVE(10, MOVE_TACKLE),
+    LEVEL_UP_MOVE(11, MOVE_MAGICAL_LEAF),
     LEVEL_UP_MOVE(13, MOVE_POISON_POWDER),
     LEVEL_UP_MOVE(15, MOVE_STUN_SPORE),
     LEVEL_UP_MOVE(17, MOVE_SLEEP_POWDER),

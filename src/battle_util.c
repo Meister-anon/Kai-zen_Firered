@@ -5450,25 +5450,88 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         predictedWeather = Random() % 4;
                         gSpecialStatuses[battler].switchInAbilityDone = TRUE;//use enum in place of static weather enum value
 
-                        if (predictedWeather == 0 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
+                        //not right need separate, make sure hold effect is last as it should have highest priority
+
+                        if (predictedWeather == 0)
                             gWishFutureKnock.forecastedNextWeather = ENUM_WEATHER_RAIN;
 
-                        else if (predictedWeather == 1 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SMOOTH_ROCK)
+                        else if (predictedWeather == 1)
                             gWishFutureKnock.forecastedNextWeather = ENUM_WEATHER_SANDSTORM;
 
-                        else if (predictedWeather == 2 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_HEAT_ROCK)
+                        else if (predictedWeather == 2)
                             gWishFutureKnock.forecastedNextWeather = ENUM_WEATHER_SUN;
 
-                        else if (predictedWeather == 3 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_ICY_ROCK)
+                        else if (predictedWeather == 3)
                             gWishFutureKnock.forecastedNextWeather = ENUM_WEATHER_HAIL;
+
+                        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
+                            gWishFutureKnock.forecastedNextWeather = ENUM_WEATHER_RAIN;
+
+                        else if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SMOOTH_ROCK)
+                            gWishFutureKnock.forecastedNextWeather = ENUM_WEATHER_SANDSTORM;
+
+                        else if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_HEAT_ROCK)
+                            gWishFutureKnock.forecastedNextWeather = ENUM_WEATHER_SUN;
+
+                        else if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_ICY_ROCK)
+                            gWishFutureKnock.forecastedNextWeather = ENUM_WEATHER_HAIL;
+                        
                         
                         //compare weatherEnum with forecastedNextWeather makea different message for each option
                         //so 4 options for each  base condtion plus && forecastedNextWeather == X  
                         //else if for each option   //forecastedCurrWeather
-                        if (value == 0 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
+                        if (value == 0)
                         {
                             //weatherEnum = ENUM_WEATHER_RAIN;
                             gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_RAIN;
+                        }
+
+                        else if (value == 1)
+                        {
+                            //weatherEnum = ENUM_WEATHER_RAIN;
+                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_SANDSTORM;
+                        }
+
+                        else if (value == 2)
+                        {
+                            //weatherEnum = ENUM_WEATHER_RAIN;
+                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_SUN;
+                        }
+
+                        else if (value == 3)
+                        {
+                            //weatherEnum = ENUM_WEATHER_RAIN;
+                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_HAIL;
+                        } //end basic checks
+
+                        //start held effect filter
+                        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
+                        {
+                            //weatherEnum = ENUM_WEATHER_RAIN;
+                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_RAIN;
+                        }
+
+                        else if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SMOOTH_ROCK)
+                        {
+                            //weatherEnum = ENUM_WEATHER_RAIN;
+                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_SANDSTORM;
+                        }
+
+                        else if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_HEAT_ROCK)
+                        {
+                            //weatherEnum = ENUM_WEATHER_RAIN;
+                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_SUN;
+                        }
+
+                        else if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_ICY_ROCK)
+                        {
+                            //weatherEnum = ENUM_WEATHER_RAIN;
+                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_HAIL;
+                        }
+
+
+                        if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_RAIN)
+                        {
                             if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
                             {
                                 //if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
@@ -5480,9 +5543,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             }
                         }
                         
-                        if (value == 2 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_HEAT_ROCK)
+                        
+                        else if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_SUN)
                         {
-                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_SUN;
                             if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
                             {
                                 BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
@@ -5490,9 +5553,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                 //++effect;
                             }
                         }
-                        if (value == 3 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_ICY_ROCK)
+                        else if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_HAIL)
                         {
-                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_HAIL;
                             if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
                             {
                                 BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
@@ -5504,9 +5566,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         //that will at least prevent the looping...I hope
                         // I think if I copy the function values to an else if using random chance to activate & turn ended it should work how I want
                         
-                        if (value == 1 || GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_SMOOTH_ROCK)
+                        if (gWishFutureKnock.forecastedCurrWeather == ENUM_WEATHER_SANDSTORM)
                         {
-                            gWishFutureKnock.forecastedCurrWeather = ENUM_WEATHER_SANDSTORM;
                             if (TryChangeBattleWeather(battler, gWishFutureKnock.forecastedCurrWeather, TRUE))
                             {
                                 BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);

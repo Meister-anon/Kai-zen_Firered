@@ -325,7 +325,7 @@
 #define ABILITY_FEATHER_JACKET 302	//hisuian decidueye inspired by dex entry and smisonian arcticle cold climate birds have "They had fluffier jackets" to insulate them from cold
 #define ABILITY_POISONED_LEGACY 303 // poison pinch ability, for poipoile as its technically a starter,  inspired by marriagetoxin manga, boost poison in a pinch and if poison target will be bad poison consider set to turn 2 so it does full dmg 1st turn
 #define ABILITY_JEWEL_METABOLISM 304 //can't think of a name right now, this is just a sableye rock absorb based on dex entry, hmm maybe do more boost damage to rock types? ok, instead of raising hp, boosts def as eaten rocks form more crystals ok i like that
-#define ABILITY_INVERSION 305 //  - for ditto 
+#define ABILITY_INVERSION 305 //  - for ditto  - still to do 
 #define ABILITY_WETIKO 306 // for my version crabominable mix of refrigerate & regenerator
 #define ABILITY_EMPATH 307 // upgraded synchronize, copies stat change too, not for umbreon psychic only
 #define ABILITY_EMPATHIC_CURSE 308 //ability for Mespirit - synchronize with dmg reflect
@@ -346,7 +346,7 @@
 #define ABILITY_RISING_PHOENIX 320 //MOLTRES ability,  slight DxD reference
 #define ABILITY_DREAD_WING 321 //aka burnout GALARIAN MOLTRES ABILITY, tweaking status to fit, set similar to unaware, when attacknig lower enemy def/sp def when target lower foe attack
                             //should be equivalent to amount of 1 stat stage drop
-#define ABILITY_PLAGUE_WINGS 322 //butterfree ability, effect spore no contect, work like power move, grass immune
+#define ABILITY_PLAGUE_WINGS 322 //butterfree ability, effect spore no contect, work like powder move, grass immune
 #define ABILITY_PHANTOM_TOUCH 323  //cubone line, contact only scrappy
 
 #define ABILITIES_COUNT ABILITY_PHANTOM_TOUCH + 1 //   ability count is last ability number + 1 since we have to count ability 0

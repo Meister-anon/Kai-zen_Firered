@@ -1872,11 +1872,31 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
    should kick in right after naming task ends, just need to make sure it squares,
    with my added logic that removes mon held items
 
+   -get feedback on this idea, while good for ocd/management very time consuming
+   for just catching mon, and potentially unnecessary with planned idea to be able to access pc
+   from overworld, limited though it shall be.
+
+   //plan moving mon around doesn't consume charge, but actually removing mon/putting mon INTO pc would
+   well, no just make it so only removing a mon consumes charge?
+
+   -do that but keep idea of dropping mon where you want, on catch, its not that big of a time consumption.
+   -fix thing before add new, planned changes fix forecast then fix menus, then do this, and check other listings
+
   plan for forecast, change separate message and transform into different abilitybattle effects,
   think make new ab case, just so I can make it work smoothly,
   think, missing some endturn weather logic, forecast hail is not working, not showing end turn hail,
   rain works though, ok so sun ALSO doesn't work...think only rain works, just because rain has overworld stuff..
   ok yeah only rain works... fixed issue was logic order smh
+
+  - see about using gMoveWeatherChangeStringIds to pull string from code/file rathe rhtan script?
+  rather than use ability made it rain since idea is prediting weather as if its overworld set not abilitys set
+
+  reintroduced old forecast freeze bug thingissue is if elses  
+  also need go over starters and make sure all of them have some form of damaging move,
+  hoppip only had splash tails whip and sysntehsis for example - fixed, just missed the  old catchon sandstorm 
+  -will still need to redo to get messages to display correctly
+  -actuallt think shoud eb simple, just a mater of not using drizzle etc.
+  should be able to keep current setup
 
   //from battle_main.c field endturn function goes before battlerendturn
  //I THINK my abilitybattleeffects is triggered before this so foreast should be fine?
@@ -1890,7 +1910,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  - as of now tested works, changes didn't break effect still works as did before, uhhh need test case
  for they are the same, hard to test but just need confirm it works as planned
 
- -hex dmg boost doesn't seem tobe working?
+ -hex dmg boost doesn't seem tobe working? - done
+
+ -for pc move relearn that'll replace marking menu, 
+ make version fo GetEggSpecies function from daycare.c take current species walk backwards appending each species 
+ in evolution chain that isn't same as species to list, to use for move learn
+
+ //for mon rebalance every poison move can set toxic, so don't need toxic to be as pervasive as gen 3,
+ can give more variety with other poison moves that are more fitting.
 
 
   ok so its really simple, effect is just in atk0B_healthbarupdate & atk0C_datahpupdate

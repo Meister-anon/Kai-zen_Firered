@@ -642,7 +642,13 @@ static const u8 sText_AftermathDmg[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_DEF_ABIL
 static const u8 sText_AnticipationActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} sensed {B_BUFF1} move\nand shuddered in anticipation!");
 static const u8 sText_ForewarnActivates[] = _("{B_SCR_ACTIVE_ABILITY} {B_BUFF3} {B_SCR_ACTIVE_NAME_WITH_PREFIX}\n{B_BUFF2} {B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}!");
 static const u8 sText_IceBodyHpGain[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_ATK_ABILITY}\nhealed it a little bit!");
-static const u8 sText_SnowWarningHail[] = _("It started to hail!");
+//static const u8 sText_SnowWarningHail[] = _("It started to hail!");
+static const u8 sText_SnowWarningHail[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nbrought down hail!");
+//predicts a blizzard //chilling
+//predits a dust storm /harsh
+//predicts a heatwave / blazing
+//predicts torrential rain / string messages for forecast one long weather i.e curr and next weather same / holding weather item
+//otherwise use gMoveWeatherChangeStringIds 
 static const u8 sText_FriskActivates[] = _("{B_ATK_NAME_WITH_PREFIX} frisked {B_DEF_NAME_WITH_PREFIX} and\nfound its {B_LAST_ITEM}!");
 static const u8 sText_UnnerveEnters[] = _("The opposing team is too nervous\nto eat Berries!");
 static const u8 sText_HarvestBerry[] = _("{B_ATK_NAME_WITH_PREFIX} harvested\nits {B_LAST_ITEM}!");
