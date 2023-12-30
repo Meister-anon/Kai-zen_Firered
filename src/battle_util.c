@@ -5326,7 +5326,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
                     gBattleScripting.battler = battler;
-                    gBattleStruct->weathersetBy[battler] = battler;
                     ++effect;
                 }
                 break;
@@ -5341,7 +5340,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
                     gBattleScripting.battler = battler;
-                    gBattleStruct->weathersetBy[battler] = battler;
                     ++effect;
                 }
                 break;
@@ -5356,7 +5354,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
                     gBattleScripting.battler = battler;
-                    gBattleStruct->weathersetBy[battler] = battler;
                     ++effect;
                 }
                 break;
@@ -5371,7 +5368,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
                     gBattleScripting.battler = battler;
-                    gBattleStruct->weathersetBy[battler] = battler;
                     ++effect;
                 }
                 break;
@@ -5386,7 +5382,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
                     gBattleScripting.battler = battler;
-                    gBattleStruct->weathersetBy[battler] = battler;
                     ++effect;
                 }
                 break;
@@ -5402,7 +5397,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     //gBattleWeather = WEATHER_HAIL_ANY;
                     BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
                     gBattleScripting.battler = battler;
-                    gBattleStruct->weathersetBy[battler] = battler;
                     ++effect;
                 }                
                 break;
@@ -6976,7 +6970,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     {
                         BattleScriptPushCursorAndCallback(BattleScript_SandSpitActivates);
                         gBattleScripting.battler = battler;
-                        gBattleStruct->weathersetBy[battler] = battler;
                         ++effect;
                     }
                 }
@@ -7569,7 +7562,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     {
                         BattleScriptPushCursorAndCallback(BattleScript_SandSpitActivates);
                         gBattleScripting.battler = battler;
-                        gBattleStruct->weathersetBy[battler] = battler;
                         ++effect;
                     }
                 }

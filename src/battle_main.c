@@ -5112,7 +5112,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         gProtectStructs[battler2].usedCustapBerry = TRUE;
     // Quick Draw
     if (!ignoreChosenMoves && ability2 == ABILITY_QUICK_DRAW && !IS_MOVE_STATUS(gChosenMoveByBattler[battler2]) && Random() % 100 < 30)
-        gProtectStructs[battler2].quickDraw = TRUE;
+        gProtectStructs[battler2].quickDraw = TRUE; //like how came out, item versino has better odds since it takes up an item slot, 
 
     if (!ignoreChosenMoves)
     {

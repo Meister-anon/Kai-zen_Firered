@@ -616,7 +616,6 @@ struct BattleStruct //fill in unused fields when porting
     u8 wildVictorySong;
     u8 dynamicMoveType;
     u8 wrappedBy[MAX_BATTLERS_COUNT];
-    u8 weathersetBy[MAX_BATTLERS_COUNT];    //new member for tracking who set new weather conditions
     u16 assistPossibleMoves[PARTY_SIZE * MAX_MON_MOVES]; // 6 mons, each of them knowing 4 moves
     //u8 focusPunchBattlerId; //don't need as changed focus punch effct
     u8 battlerPreventingSwitchout;
@@ -636,6 +635,7 @@ struct BattleStruct //fill in unused fields when porting
     u8 battlerPartyOrders[MAX_BATTLERS_COUNT][3];
     u8 runTries;
     u8 caughtMonNick[POKEMON_NAME_LENGTH + 1];
+    //u8 caughtMonNick[POKEMON_NAME_LENGTH + 1][2]; //think this will work for catching multiple mon i.e doubles
     struct MegaEvolutionData mega;
     //u8 field_78; // unused
     u8 safariGoNearCounter;
@@ -752,13 +752,17 @@ extern struct BattleStruct *gBattleStruct;
 //leave else set to 0, as first argument should always be true, 
 //so essentially just means if not two typed move,
 //in which case I don't want to read the argument as a type at all
+//changed to read as mystery so if there is an accident and its read it'll 
+//have no effect hopefully - or should I do the opposite and make it very obvious
+//nvm its fine, the is only used in casess where I explicitly say its two typed
+//and it doesnt effect anything else so secondary argument doesn't matter at all
 #define GET_MOVE_ARGUMENT(move, typeArg)                                   \
 {                                                                          \
     if ((gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE)               \
     && gBattleStruct->dynamicMoveType != 0xFF)                             \
         typeArg = gBattleStruct->dynamicMoveType & DYNAMIC_TYPE_MASK;      \
     else                                                                   \
-        typeArg = 0;                                                       \
+        typeArg = gBattleMoves[move].argument;                             \
 }
 
 //#define IS_TYPE_PHYSICAL(moveType)(moveType < TYPE_MYSTERY)

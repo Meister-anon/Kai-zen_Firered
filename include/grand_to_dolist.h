@@ -4349,7 +4349,7 @@ goto TYPE_ICON_DATA //was missing something listing of the types and their order
 * just need to set when ability actiavates like so gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
 * do in ability battle effects just sub effectbattler for battler as ability function already uses battler as aits swithin fun stuff..
 * 
-* - think done, don't need weather wrapped by,  permanent weather doesn't use timer. so dont need special stuct
+* - think done, don't need weather set by,  permanent weather doesn't use timer. so dont need special stuct
 * just need to use plusle minum ability on field check, linked with the weather condition its supposed to set,
 * if weather is current just keep timer from going down - DONE  -revamped
 * = - Changed effect from TryChangeBattleWeather for weather,   
@@ -4370,6 +4370,7 @@ goto TYPE_ICON_DATA //was missing something listing of the types and their order
 * primal weather also sets terrain,  for kyogre & groudon, mega rayquaza would only remove their weather condition
 * where otherwise primal weather can't be changed.  so strengths them a bit as they keep the terrain
 * 
+* just confirming don't need weathersetby weather effects are done never assigned it, I just needed an on field check
 * 
 * change mudsport and watersport to be terrain clears, will still do 
 * normal move effects but they will also clear terrain *idea from Sigel - 
