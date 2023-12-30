@@ -1920,6 +1920,11 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
  -hex dmg boost doesn't seem tobe working? - done
 
+ //fix quick powder work like metal powder for ditto where it would continue working even when transformed
+ // also consider make grass specific text string, i.e x became revitalized , for water sport
+
+ //fixed quick claw now has animation for activation
+
  -for pc move relearn that'll replace marking menu, 
  make version fo GetEggSpecies function from daycare.c take current species walk backwards appending each species 
  in evolution chain that isn't same as species to list, to use for move learn

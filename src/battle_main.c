@@ -4992,8 +4992,8 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
         speed /= 2;
     else if (holdEffect == HOLD_EFFECT_CHOICE_SCARF)
         speed = (speed * 150) / 100;
-    else if (holdEffect == HOLD_EFFECT_QUICK_POWDER && gBattleMons[battlerId].species == SPECIES_DITTO && !(gBattleMons[battlerId].status2 & STATUS2_TRANSFORMED))
-        speed *= 2;
+    else if (holdEffect == HOLD_EFFECT_QUICK_POWDER && gBattleMons[battlerId].species == SPECIES_DITTO /*&& !(gBattleMons[battlerId].status2 & STATUS2_TRANSFORMED)*/)
+        speed *= 2; //fix so keep speed boost even when transformed
 
     // various effects
     if (gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_TAILWIND)
@@ -5001,7 +5001,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
     if (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_UNBURDEN)
         speed *= 2;
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_GRASS) && (gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_WATERSPORT)) //give to more grass types
-        speed = (speed * 150) / 100;
+        speed = (speed * 150) / 100; //should prob make grass specific text string, i.e x became revitalized
 
     // paralysis drop
     if ((gBattleMons[battlerId].status1 & STATUS1_PARALYSIS)
@@ -5266,8 +5266,8 @@ static void SetActionsAndBattlersTurnOrder(void)
             }
         }
     }//emerald replaced below with CheckQuickClaw_CustapBerryActivation & gBattleStruct->quickClawBattlerId = 0;
-    gBattleMainFunc = CheckFocusPunch_ClearVarsBeforeTurnStarts;    //keep also used for rage etc.
-    //gBattleStruct->focusPunchBattlerId = 0;
+    gBattleMainFunc = CheckFocusPunch_ClearVarsBeforeTurnStarts;    //keep also used for rage etc.  
+    gBattleStruct->quickClawBattlerId = 0;
 }
 
 static void TurnValuesCleanUp(bool8 var0) //resets protect structs specific disble structs and folloemetimer at turn end
@@ -5335,6 +5335,45 @@ static void CheckFocusPunch_ClearVarsBeforeTurnStarts(void)
                 return;
             }
         }*/
+        while (gBattleStruct->quickClawBattlerId < gBattlersCount) //port from emerald, to get quick claw activate animation - works, but not how I thought
+        {
+            gActiveBattler = gBattlerAttacker = gBattleStruct->quickClawBattlerId;
+            gBattleStruct->quickClawBattlerId++;
+            if (gChosenActionByBattler[gActiveBattler] == B_ACTION_USE_MOVE
+             //&& gChosenMoveByBattler[gActiveBattler] != MOVE_FOCUS_PUNCH   // quick claw message doesn't need to activate here
+             && (gProtectStructs[gActiveBattler].usedCustapBerry || gProtectStructs[gActiveBattler].quickDraw)
+             && !(gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP)
+             && !(gDisableStructs[gBattlerAttacker].truantCounter)
+             && !(gProtectStructs[gActiveBattler].noValidMoves))
+            {
+                if (gProtectStructs[gActiveBattler].usedCustapBerry)
+                {
+                    gProtectStructs[gActiveBattler].usedCustapBerry = FALSE;
+                    gLastUsedItem = gBattleMons[gActiveBattler].item;
+                    PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem);
+                    if (GetBattlerHoldEffect(gActiveBattler, FALSE) == HOLD_EFFECT_CUSTAP_BERRY)
+                    {
+                        // don't record berry since its gone now
+                        BattleScriptExecute(BattleScript_CustapBerryActivation);
+                    }
+                    else
+                    {
+                        RecordItemEffectBattle(gActiveBattler, GetBattlerHoldEffect(gActiveBattler, FALSE));
+                        BattleScriptExecute(BattleScript_QuickClawActivation);
+                    }
+                }
+                else if (gProtectStructs[gActiveBattler].quickDraw)
+                {
+                    gBattlerAbility = gActiveBattler;
+                    gProtectStructs[gActiveBattler].quickDraw = FALSE;
+                    gLastUsedAbility = gBattleMons[gActiveBattler].ability;
+                    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+                    RecordAbilityBattle(gActiveBattler, gLastUsedAbility);
+                    BattleScriptExecute(BattleScript_QuickDrawActivation);
+                }
+                return;
+            }
+        }
     }
     //TryClearRageStatuses();
     gCurrentTurnActionNumber = 0;
