@@ -337,7 +337,7 @@
 #define ABILITY_TOXUNGUE 314    //Likitung line signature paralytic poison touch
 #define ABILITY_OMNIPOTENT_AIDE 315//for Fraeyjta, can use healing moves for itself, but transfers any heal it would receive to battle partner (if heal target mon with this ability change target to battle partner, otherwise fail)
                                     //if this mon uses a healing move its priority gets increased long as it has a living battle partner, for balanve remove priority effect if status 1,  logic is ABILITY_TRIAGE 
-                                    //heal priority setup, target swap is not working yet
+                                    //heal priority setup, target swap is not working yet - look at lightning rod?
 #define ABILITY_FLUORESCENCE 316     
 #define ABILITY_SPECTRE 317  //latios & latias ability raise evasiveness on switch in
 #define ABILITY_AURA_OF_LIGHT 318//CRESELIA ABILITY prevent sleep for self and allies, plus reduce dark damage on side - done setup

@@ -464,6 +464,7 @@ extern struct SpriteTemplate gMultiuseSpriteTemplate;
 extern struct PokemonStorage* gPokemonStoragePtr;
 extern const u32 gExperienceTables[][MAX_LEVEL + 1];
 extern const struct LevelUpMove *const gLevelUpLearnsets[];
+extern const u16 *const gTMHMLearnsets[];   //for adjusted new setup of tmhms, setup like levelup learnset
 extern const u8 gFacilityClassToPicIndex[];
 extern const u8 gFacilityClassToTrainerClass[];
 extern const struct SpriteTemplate gSpriteTemplates_Battlers[];
@@ -576,7 +577,7 @@ u8 CheckPartyPokerus(struct Pokemon *party, u8 selection);
 u8 CheckPartyHasHadPokerus(struct Pokemon *party, u8 selection);
 void PartySpreadPokerus(struct Pokemon *party);
 bool8 TryIncrementMonLevel(struct Pokemon *mon);
-u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm);
+u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm); //change to u16 for both, later
 u32 CanSpeciesLearnTMHM(u16 species, u8 tm);
 u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves);
 u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves); //keep track of this for rotom forms 

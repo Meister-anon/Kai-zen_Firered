@@ -191,7 +191,7 @@
 #define ITEM_ENIGMA_BERRY 175
 #define ITEM_PROTECTOR 176 // add more evo "use" items below 0B2
 #define ITEM_DRAGON_SCALE 177
-#define ITEM_0B2 178 //last value for can be used on pokemon
+#define ITEM_0B2 178 //last value for can be used on pokemon  //i.e via party menu
 #define ITEM_BRIGHT_POWDER 179
 #define ITEM_WHITE_HERB 180
 #define ITEM_MACHO_BRACE 181
@@ -414,7 +414,7 @@
 #define ITEM_TM47_STEEL_WING ITEM_TM47
 #define ITEM_TM48_SKILL_SWAP ITEM_TM48
 #define ITEM_TM49_SNATCH ITEM_TM49
-#define ITEM_TM50_OVERHEAT ITEM_TM50
+#define ITEM_TM50_OVERHEAT ITEM_TM50 //expand and add onto list at bottom of file
 #define ITEM_HM01_CUT ITEM_HM01
 #define ITEM_HM02_FLY ITEM_HM02
 #define ITEM_HM03_SURF ITEM_HM03

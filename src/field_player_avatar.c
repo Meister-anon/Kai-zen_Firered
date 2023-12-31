@@ -1187,8 +1187,8 @@ bool8 PartyHasMonWithSurf(void)
             if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE)
                 break;
             if (CanSpeciesLearnTMHM(species, ((FIELD_MOVE_SURF + ITEM_HM01_CUT) - ITEM_TM01)) 
-            && ShouldDisplayHMFieldMove(FIELD_MOVE_SURF))
-                return TRUE;
+            && ShouldDisplayHMFieldMove(FIELD_MOVE_SURF)) //for above thing change to just take tm item so can just use that for these?
+                return TRUE;    //should greatly simplify
         }
     }
     return FALSE;

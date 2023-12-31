@@ -2232,6 +2232,7 @@ static const s8 sNatureStatTable[][5] =
 };
 
 #include "data/pokemon/tmhm_learnsets.h"
+#include "data/pokemon/tmhm_learnset_pointers.h"
 #include "data/pokemon/trainer_class_lookups.h"
 #include "data/pokemon/cry_ids.h"
 #include "data/pokemon/experience_tables.h"
@@ -7991,7 +7992,7 @@ u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm)
     }
 }//ok so when I apply the tmhm expansion that does away with the bit stuff will have to adjust these
 
-u32 CanSpeciesLearnTMHM(u16 species, u8 tm)
+u32 CanSpeciesLearnTMHM(u16 species, u8 tm) //for this belive replace with loop to check?
 {
     if (species == SPECIES_EGG)
     {

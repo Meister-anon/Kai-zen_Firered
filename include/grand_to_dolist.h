@@ -1864,6 +1864,15 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -adjusted battle message for multihit results, removed excessive repeat mostly in csae of multihit that kills in one hit
   flowsmuch better
 
+  -remove argumetn/two typed move arguments from absorb abilities, if can't absorb all of it,
+  no sense in nullyfing the whole thing...idk that's kinda how immunites work with it, if immune to one type
+  the whole thing fails
+  but I'd like it to avoid immunities like if one type is immune, ignore it, and just read it as a type all of the other type
+  which makes more sense like make it break, and move on to next type rather than storing 0 multiplier?? yeah that could fowkewlknfew?/sa
+  and if I do that it makes no sense to be able to absorb entire move... sigh
+
+  -going back and forth on this, for now keeping argument absorbption 
+
   -new note, create new task setup, for catching,  rather than mon goes to x box
    open holding mon just caught in box, i.e from cursor selection,
    so you can just put mon wherever you want instead of having to oranize later
